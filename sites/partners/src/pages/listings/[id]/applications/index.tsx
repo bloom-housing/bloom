@@ -25,6 +25,7 @@ import { getColDefs } from "../../../../components/applications/ApplicationsColD
 import {
   EnumApplicationsApiExtraModelOrder,
   EnumApplicationsApiExtraModelOrderBy,
+  ListingStatus,
 } from "@bloom-housing/backend-core/types"
 import { ApplicationsSideNav } from "../../../../components/applications/ApplicationsSideNav"
 import { NavigationHeader } from "../../../../components/shared/NavigationHeader"
@@ -38,12 +39,12 @@ const ApplicationsList = () => {
 
   const { onExport, csvExportLoading, csvExportError, csvExportSuccess } = useApplicationsExport(
     listingId,
-    profile?.roles?.isAdmin ?? false
+    profile?.userRoles?.isAdmin ?? false
   )
 
   /* Data Fetching */
   const { listingDto } = useSingleListingData(listingId)
-  const countyCode = listingDto?.countyCode
+  const countyCode = listingDto?.jurisdictions.name
   const listingName = listingDto?.name
   const isListingOpen = listingDto?.status === "active"
   const { data: flaggedApps } = useFlaggedApplicationsList({
@@ -109,10 +110,9 @@ const ApplicationsList = () => {
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
-      {csvExportSuccess && <SiteAlert type="success" timeout={5000} dismissable sticky={true} />}
+      {csvExportSuccess && <SiteAlert type="success" dismissable sticky={true} />}
       {csvExportError && (
         <SiteAlert
-          timeout={5000}
           dismissable
           sticky={true}
           alertMessage={{ message: t("account.settings.alerts.genericError"), type: "alert" }}
@@ -138,7 +138,7 @@ const ApplicationsList = () => {
         }
       />
 
-      <ListingStatusBar status={listingDto?.status} />
+      <ListingStatusBar status={listingDto?.status as unknown as ListingStatus} />
 
       <section className={"bg-gray-200 pt-4"}>
         <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4 flex-col">

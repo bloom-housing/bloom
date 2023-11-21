@@ -1,5 +1,5 @@
 declare namespace Cypress {
-  type Application = import("@bloom-housing/backend-core/types").Application
+  type Application = import("@bloom-housing/shared-helpers/src/types/backend-swagger").Application
 
   interface Chainable {
     beginApplicationRejectAutofill(listingName: string): Chainable

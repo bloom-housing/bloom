@@ -26,12 +26,15 @@ import {
 } from "@bloom-housing/shared-helpers"
 import { useContext, useEffect } from "react"
 import { UserStatus } from "../../../lib/constants"
-import { ApplicationSection } from "@bloom-housing/backend-core"
+import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const ApplicationVouchers = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("vouchersSubsidies")
-  const currentPageSection = listingSectionQuestions(listing, ApplicationSection.programs)?.length
+  const currentPageSection = listingSectionQuestions(
+    listing,
+    MultiselectQuestionsApplicationSectionEnum.programs
+  )?.length
     ? 4
     : 3
   /* Form Handler */

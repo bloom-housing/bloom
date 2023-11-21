@@ -1,7 +1,9 @@
 import React, { useContext } from "react"
 import { useFormContext } from "react-hook-form"
-import { t, GridSection, GridCell, Field, FieldGroup, Select } from "@bloom-housing/ui-components"
+import { t, Field, FieldGroup, Select } from "@bloom-housing/ui-components"
+import { Grid } from "@bloom-housing/ui-seeds"
 import { RoleOption, AuthContext } from "@bloom-housing/shared-helpers"
+import SectionWithGrid from "../shared/SectionWithGrid"
 
 const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -60,109 +62,120 @@ const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions 
       }
       const jurisdictionLabel = jurisdictionOptions.find((elem) => elem.id === key)?.label
       return (
-        <GridCell key={`listings_${key}`}>
-          <GridSection
-            title={
+        <Grid.Cell key={`listings_${key}`}>
+          <SectionWithGrid
+            heading={
               renderTitle
                 ? t("users.jurisdictionalizedListings", {
                     jurisdiction: jurisdictionLabel,
                   })
                 : ""
             }
-            columns={1}
           >
-            <GridCell ariaLabel={`${jurisdictionLabel} Listing Selection`}>
-              <Field
-                id={`listings_all_${key}`}
-                name={`listings_all_${key}`}
-                label={t("users.alljurisdictionalizedListings", {
-                  jurisdiction: jurisdictionLabel,
-                })}
-                register={register}
-                type="checkbox"
-                inputProps={{
-                  onChange: (e: React.ChangeEvent<HTMLInputElement>) => updateAllCheckboxes(e, key),
-                }}
-              />
+            <Grid.Row>
+              <Grid.Cell>
+                <div aria-label={`${jurisdictionLabel} Listing Selection`}>
+                  <Field
+                    id={`listings_all_${key}`}
+                    name={`listings_all_${key}`}
+                    label={t("users.alljurisdictionalizedListings", {
+                      jurisdiction: jurisdictionLabel,
+                    })}
+                    register={register}
+                    type="checkbox"
+                    inputProps={{
+                      onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                        updateAllCheckboxes(e, key),
+                    }}
+                  />
 
-              <FieldGroup
-                name="user_listings"
-                fields={listingsOptions[key]}
-                type="checkbox"
-                register={register}
-                error={!!errors?.user_listings}
-                errorMessage={t("errors.requiredFieldError")}
-                validation={{ required: true }}
-                dataTestId={`listings_${jurisdictionLabel}`}
-              />
-            </GridCell>
-          </GridSection>
-        </GridCell>
+                  <FieldGroup
+                    name="user_listings"
+                    fields={listingsOptions[key]}
+                    type="checkbox"
+                    register={register}
+                    error={!!errors?.user_listings}
+                    errorMessage={t("errors.requiredFieldError")}
+                    validation={{ required: true }}
+                    dataTestId={`listings_${jurisdictionLabel}`}
+                  />
+                </div>
+              </Grid.Cell>
+            </Grid.Row>
+          </SectionWithGrid>
+        </Grid.Cell>
       )
     })
   }
 
-  if (profile?.roles?.isAdmin) {
+  if (profile?.userRoles?.isAdmin) {
     if (selectedRoles === RoleOption.JurisdictionalAdmin) {
       return (
-        <GridSection title={t("t.jurisdiction")} columns={4}>
-          <GridCell ariaLabel="Jurisdiction Selection">
-            <Select
-              id="jurisdictions"
-              name="jurisdictions"
-              label={t("t.jurisdiction")}
-              placeholder={t("t.selectOne")}
-              labelClassName="sr-only"
-              register={register}
-              controlClassName="control"
-              keyPrefix="users"
-              options={jurisdictionOptions}
-              error={!!errors?.jurisdictions}
-              errorMessage={t("errors.requiredFieldError")}
-              validation={{ required: true }}
-            />
-          </GridCell>
-        </GridSection>
+        <SectionWithGrid heading={t("t.jurisdiction")}>
+          <Grid.Row columns={4}>
+            <Grid.Cell>
+              <Select
+                id="jurisdictions"
+                name="jurisdictions"
+                label={t("t.jurisdiction")}
+                placeholder={t("t.selectOne")}
+                register={register}
+                controlClassName="control"
+                keyPrefix="users"
+                options={jurisdictionOptions}
+                error={!!errors?.jurisdictions}
+                errorMessage={t("errors.requiredFieldError")}
+                validation={{ required: true }}
+              />
+            </Grid.Cell>
+          </Grid.Row>
+        </SectionWithGrid>
       )
     } else if (selectedRoles === RoleOption.Partner) {
       return (
         <>
-          <GridSection title={t("t.jurisdiction")} columns={4}>
-            <GridCell ariaLabel="Jurisdiction Selection">
-              <Field
-                id="jurisdiction_all"
-                name="jurisdiction_all"
-                label={t("users.allJurisdictions")}
-                register={register}
-                type="checkbox"
-                inputProps={{
-                  onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-                    updateAllJurisdictionCheckboxes(e),
-                }}
-              />
+          <SectionWithGrid heading={t("t.jurisdiction")}>
+            <Grid.Row columns={4}>
+              <Grid.Cell>
+                <Field
+                  id="jurisdiction_all"
+                  name="jurisdiction_all"
+                  label={t("users.allJurisdictions")}
+                  register={register}
+                  type="checkbox"
+                  inputProps={{
+                    onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                      updateAllJurisdictionCheckboxes(e),
+                  }}
+                />
 
-              <FieldGroup
-                name="jurisdictions"
-                fields={jurisdictionOptions}
-                type="checkbox"
-                register={register}
-                error={!!errors?.jurisdictions}
-                errorMessage={t("errors.requiredFieldError")}
-                validation={{ required: true }}
-                dataTestId={"jurisdictions"}
-              />
-            </GridCell>
-          </GridSection>
-          {selectedJurisdictions && <GridSection columns={4}>{ListingSection(true)}</GridSection>}
+                <FieldGroup
+                  name="jurisdictions"
+                  fields={jurisdictionOptions}
+                  type="checkbox"
+                  register={register}
+                  error={!!errors?.jurisdictions}
+                  errorMessage={t("errors.requiredFieldError")}
+                  validation={{ required: true }}
+                  dataTestId={"jurisdictions"}
+                />
+              </Grid.Cell>
+            </Grid.Row>
+          </SectionWithGrid>
+          {selectedJurisdictions && (
+            <Grid>
+              <Grid.Row>{ListingSection(true)}</Grid.Row>
+            </Grid>
+          )}
         </>
       )
     }
-  } else if (profile?.roles?.isJurisdictionalAdmin) {
+  } else if (profile?.userRoles?.isJurisdictionalAdmin) {
     if (selectedRoles === RoleOption.Partner && selectedJurisdictions) {
       return (
-        <GridSection title={t("nav.listings")} columns={1}>
-          {ListingSection()}
-        </GridSection>
+        <SectionWithGrid heading={t("nav.listings")}>
+          <Grid.Row columns={1}>{ListingSection()}</Grid.Row>
+        </SectionWithGrid>
       )
     }
   }

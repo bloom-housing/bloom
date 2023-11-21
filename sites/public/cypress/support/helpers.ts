@@ -1,5 +1,5 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
-import { Listing } from "@bloom-housing/backend-core/types"
+import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export const listingsUrl = "http://localhost:3100/listings?limit=all"
 

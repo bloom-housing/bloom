@@ -12,6 +12,8 @@ export const userFactory = async (optionalParams?: {
   confirmedAt?: Date;
   phoneNumber?: string;
   phoneNumberVerified?: boolean;
+  jurisdictionId?: string;
+  listings?: string[];
 }): Promise<Prisma.UserAccountsCreateInput> => ({
   email:
     optionalParams?.email?.toLocaleLowerCase() ||
@@ -24,7 +26,7 @@ export const userFactory = async (optionalParams?: {
       isAdmin: optionalParams?.roles?.isAdmin || false,
       isJurisdictionalAdmin:
         optionalParams?.roles?.isJurisdictionalAdmin || false,
-      isPartner: optionalParams?.roles?.isAdmin || false,
+      isPartner: optionalParams?.roles?.isPartner || false,
     },
   },
   mfaCode: optionalParams?.mfaCode || null,
@@ -33,4 +35,14 @@ export const userFactory = async (optionalParams?: {
   mfaCodeUpdatedAt: optionalParams?.mfaEnabled ? new Date() : undefined,
   phoneNumber: optionalParams?.phoneNumber || null,
   phoneNumberVerified: optionalParams?.phoneNumberVerified || null,
+  listings: optionalParams?.listings
+    ? {
+        connect: optionalParams.listings.map((listing) => {
+          return { id: listing };
+        }),
+      }
+    : undefined,
+  jurisdictions: optionalParams?.jurisdictionId
+    ? { connect: { id: optionalParams?.jurisdictionId } }
+    : undefined,
 });

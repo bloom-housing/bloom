@@ -13,7 +13,6 @@ import {
 import FormsLayout from "../../layouts/forms"
 import FormBackLink from "./FormBackLink"
 import { useFormConductor } from "../../lib/hooks"
-import { ApplicationSection, MultiselectOption } from "@bloom-housing/backend-core/types"
 import {
   OnClientSide,
   PageView,
@@ -31,9 +30,13 @@ import {
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
+import {
+  MultiselectOption,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export interface ApplicationMultiselectQuestionStepProps {
-  applicationSection: ApplicationSection
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
   applicationStep: string
   applicationSectionNumber: number
   strings?: {

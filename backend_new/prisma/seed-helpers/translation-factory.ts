@@ -1,7 +1,14 @@
 import { LanguagesEnum, Prisma } from '@prisma/client';
 
 const translations = (jurisdictionName?: string) => ({
-  t: { hello: 'Hello', seeListing: 'See Listing' },
+  t: {
+    hello: 'Hello',
+    seeListing: 'See Listing',
+    partnersPortal: 'Partners Portal',
+    viewListing: 'View Listing',
+    editListing: 'Edit Listing',
+    reviewListing: 'Review Listing',
+  },
   footer: {
     line1: `${jurisdictionName || 'Bloom'}`,
     line2: '',
@@ -109,6 +116,35 @@ const translations = (jurisdictionName?: string) => ({
       'A request to reset your Bloom Housing Portal website password for %{appUrl} has recently been made.',
     ignoreRequest: "If you didn't request this, please ignore this email.",
     changePassword: 'Change my password',
+  },
+  requestApproval: {
+    header: 'Listing approval requested',
+    partnerRequest:
+      'A Partner has submitted an approval request to publish the %{listingName} listing.',
+    logInToReviewStart: 'Please log into the',
+    logInToReviewEnd:
+      'and navigate to the listing detail page to review and publish.',
+    accessListing:
+      'To access the listing after logging in, please click the link below',
+  },
+  changesRequested: {
+    header: 'Listing changes requested',
+    adminRequestStart:
+      'An administrator is requesting changes to the %{listingName} listing. Please log into the',
+    adminRequestEnd:
+      'and navigate to the listing detail page to view the request and edit the listing.',
+  },
+  listingApproved: {
+    header: 'New published listing',
+    adminApproved:
+      'The %{listingName} listing has been approved and published by an administrator.',
+    viewPublished:
+      'To view the published listing, please click on the link below',
+  },
+  csvExport: {
+    body: 'The attached file is %{fileDescription}. If you have any questions, please reach out to your administrator.',
+    hello: 'Hello,',
+    title: '%{title}',
   },
 });
 

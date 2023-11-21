@@ -1,11 +1,8 @@
 import React from "react"
 import { cleanup } from "@testing-library/react"
 import {
-  EnumJurisdictionLanguages,
   EnumJurisdictionListingApprovalPermissions,
-  Jurisdiction,
   ListingStatus,
-  User,
   Listing,
 } from "@bloom-housing/backend-core"
 import { AuthContext } from "@bloom-housing/shared-helpers"
@@ -15,6 +12,11 @@ import ListingFormActions, {
   ListingFormActionsType,
 } from "../../../src/components/listings/ListingFormActions"
 import { mockNextRouter, render } from "../../testUtils"
+import {
+  Jurisdiction,
+  LanguagesEnum,
+  User,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 afterEach(cleanup)
 
@@ -24,7 +26,7 @@ const mockBaseJurisdiction: Jurisdiction = {
   updatedAt: new Date(),
   name: "San Jose",
   multiselectQuestions: [],
-  languages: [EnumJurisdictionLanguages.en],
+  languages: [LanguagesEnum.en],
   publicUrl: "http://localhost:3000",
   emailFromAddress: "Alameda: Housing Bay Area <bloom-no-reply@exygy.dev>",
   rentalAssistanceDefault:
@@ -32,6 +34,8 @@ const mockBaseJurisdiction: Jurisdiction = {
   enablePartnerSettings: true,
   enableAccessibilityFeatures: false,
   enableUtilitiesIncluded: true,
+  listingApprovalPermissions: [],
+  enableGeocodingPreferences: false,
 }
 
 const mockAdminOnlyJurisdiction: Jurisdiction = {
@@ -60,21 +64,22 @@ const mockUser: User = {
   passwordUpdatedAt: new Date("2020-01-01"),
   passwordValidForDays: 180,
   agreedToTermsOfService: true,
+  listings: [],
 }
 
 let adminUser: User = {
   ...mockUser,
-  roles: { user: { id: "123" }, userId: "123", isAdmin: true },
+  userRoles: { isAdmin: true },
 }
 
 let jurisdictionAdminUser = {
   ...mockUser,
-  roles: { user: { id: "123" }, userId: "123", isJurisdictionalAdmin: true },
+  userRoles: { isJurisdictionalAdmin: true },
 }
 
 let partnerUser: User = {
   ...mockUser,
-  roles: { user: { id: "123" }, userId: "123", isPartner: true },
+  userRoles: { isPartner: true },
 }
 
 describe("<ListingFormActions>", () => {

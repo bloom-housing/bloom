@@ -1,5 +1,4 @@
 import {
-  ApiExtraModels,
   ApiProperty,
   ApiPropertyOptional,
   getSchemaPath,
@@ -16,7 +15,7 @@ import {
 } from 'class-validator';
 import { InputType } from '../../enums/shared/input-type-enum';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { Address } from '../addresses/address.dto';
+import { AddressCreate } from '../addresses/address-create.dto';
 
 export class FormMetadataExtraData {
   @Expose()
@@ -34,9 +33,9 @@ export class AddressInput extends FormMetadataExtraData {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Address)
-  @ApiProperty({ type: Address })
-  value: Address;
+  @Type(() => AddressCreate)
+  @ApiProperty({ type: AddressCreate })
+  value: AddressCreate;
 }
 
 export class BooleanInput extends FormMetadataExtraData {

@@ -9,7 +9,6 @@ import {
   HouseholdMember,
   MultiselectQuestion,
   Accessibility,
-  ApplicationSection,
   Listing,
 } from "@bloom-housing/backend-core/types"
 
@@ -29,7 +28,13 @@ import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
 import customParseFormat from "dayjs/plugin/customParseFormat"
-import { ListingMultiselectQuestion } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  ListingMultiselectQuestion,
+  MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestion as NewMultiselectQuestion,
+  ApplicationMultiselectQuestion,
+  MultiselectOption,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 dayjs.extend(customParseFormat)
 
 /*
@@ -140,27 +145,35 @@ export const mapFormToApi = ({
   })()
 
   const preferencesData = preferences.map((pref: MultiselectQuestion) => {
-    const inputType = getInputType(pref.options)
+    const inputType = getInputType(pref.options as unknown as MultiselectOption[])
     if (inputType === "checkbox") {
-      return mapCheckboxesToApi(data, pref, ApplicationSection.preferences)
+      return mapCheckboxesToApi(
+        data,
+        pref as unknown as NewMultiselectQuestion,
+        MultiselectQuestionsApplicationSectionEnum.preferences
+      )
     }
     if (inputType === "radio") {
       return mapRadiosToApi(
         { [pref.text]: data.application.preferences[pref.text] as string },
-        pref
+        pref as unknown as NewMultiselectQuestion
       )
     }
   })
 
   const programsData = programs.map((program: MultiselectQuestion) => {
-    const inputType = getInputType(program.options)
+    const inputType = getInputType(program.options as unknown as MultiselectOption[])
     if (inputType === "checkbox") {
-      return mapCheckboxesToApi(data, program, ApplicationSection.programs)
+      return mapCheckboxesToApi(
+        data,
+        program as unknown as NewMultiselectQuestion,
+        MultiselectQuestionsApplicationSectionEnum.programs
+      )
     }
     if (inputType === "radio") {
       return mapRadiosToApi(
         { [program.text]: data.application.programs[program.text] as string },
-        program
+        program as unknown as NewMultiselectQuestion
       )
     }
   })
@@ -320,16 +333,17 @@ export const mapApiToForm = (applicationData: ApplicationUpdate, listing: Listin
 
   const preferences =
     mapApiToMultiselectForm(
-      applicationData.preferences,
+      // TODO: remove casting when partner site is connected to new backend
+      applicationData.preferences as unknown as ApplicationMultiselectQuestion[],
       listing?.listingMultiselectQuestions as unknown as ListingMultiselectQuestion[],
-      ApplicationSection.preferences
+      MultiselectQuestionsApplicationSectionEnum.preferences
     ).application.preferences ?? []
 
   const programs =
     mapApiToMultiselectForm(
-      applicationData.programs,
+      applicationData.programs as unknown as ApplicationMultiselectQuestion[],
       listing?.listingMultiselectQuestions as unknown as ListingMultiselectQuestion[],
-      ApplicationSection.programs
+      MultiselectQuestionsApplicationSectionEnum.programs
     ).application.programs ?? []
 
   const application: ApplicationTypes = (() => {

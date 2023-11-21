@@ -14,6 +14,7 @@ export const isPasswordValid = async (
     incomingPassword,
     Buffer.from(salt, 'hex'),
   );
+
   return savedPasswordHash === verifyPasswordHash;
 };
 

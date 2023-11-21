@@ -10,7 +10,7 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
-    "start:dev": "nest start --watch",
+    "dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/src/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -26,7 +26,8 @@
     "generate:client": "ts-node scripts/generate-axios-client.ts && prettier -w ../shared-helpers/src/types/backend-swagger.ts",
     "test:e2e": "yarn db:resetup && yarn db:migration:run && jest --config ./test/jest-e2e.config.js",
     "db:setup": "yarn db:resetup && yarn db:migration:run && yarn db:seed:development",
-    "db:setup:staging": "yarn db:resetup && yarn db:migration:run && yarn db:seed:staging --jurisdictionName Bloomington"
+    "db:setup:staging": "yarn db:resetup && yarn db:migration:run && yarn db:seed:staging --jurisdictionName Bloomington",
+    "setup": "yarn install && yarn prisma generate && yarn build && yarn db:setup:staging"
   },
   "dependencies": {
     "@google-cloud/translate": "^7.2.1",
@@ -41,6 +42,7 @@
     "@nestjs/schedule": "^3.0.4",
     "@prisma/client": "^5.0.0",
     "@sendgrid/mail": "7.7.0",
+    "casbin": "^5.27.1",
     "class-transformer": "~0.5.1",
     "class-validator": "~0.14.0",
     "cloudinary": "^1.37.3",

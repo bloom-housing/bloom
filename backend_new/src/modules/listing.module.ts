@@ -6,11 +6,18 @@ import { PrismaModule } from './prisma.module';
 import { TranslationService } from '../services/translation.service';
 import { GoogleTranslateService } from '../services/google-translate.service';
 import { ApplicationFlaggedSetModule } from './application-flagged-set.module';
+import { EmailModule } from './email.module';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
-  imports: [PrismaModule, HttpModule, ApplicationFlaggedSetModule],
+  imports: [PrismaModule, HttpModule, EmailModule, ApplicationFlaggedSetModule],
   controllers: [ListingController],
-  providers: [ListingService, TranslationService, GoogleTranslateService],
+  providers: [
+    ListingService,
+    TranslationService,
+    GoogleTranslateService,
+    ConfigService,
+  ],
   exports: [ListingService],
 })
 export class ListingModule {}

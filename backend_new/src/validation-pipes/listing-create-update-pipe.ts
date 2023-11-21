@@ -13,6 +13,8 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
     [ListingsStatusEnum.closed]: ListingUpdate,
     [ListingsStatusEnum.pending]: ListingUpdate,
     [ListingsStatusEnum.active]: ListingPublishedUpdate,
+    [ListingsStatusEnum.pendingReview]: ListingUpdate,
+    [ListingsStatusEnum.changesRequested]: ListingUpdate,
   };
 
   statusToListingValidationModelMapForCreate: Record<
@@ -22,6 +24,8 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
     [ListingsStatusEnum.closed]: ListingCreate,
     [ListingsStatusEnum.pending]: ListingCreate,
     [ListingsStatusEnum.active]: ListingPublishedCreate,
+    [ListingsStatusEnum.pendingReview]: ListingCreate,
+    [ListingsStatusEnum.changesRequested]: ListingCreate,
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

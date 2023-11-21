@@ -9,6 +9,7 @@ import {
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { MultiselectLink } from './multiselect-link.dto';
+import { ValidationMethod } from '../../enums/multiselect-questions/validation-method-enum';
 
 export class MultiselectOption {
   @Expose()
@@ -43,6 +44,29 @@ export class MultiselectOption {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   collectAddress?: boolean;
+
+  @Expose()
+  @ApiProperty({
+    required: false,
+    enum: ValidationMethod,
+    enumName: 'ValidationMethodEnum',
+  })
+  validationMethod?: ValidationMethod;
+
+  @Expose()
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  radiusSize?: number;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  collectName?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  collectRelationship?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })

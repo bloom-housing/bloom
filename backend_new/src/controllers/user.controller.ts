@@ -10,6 +10,7 @@ import {
   Put,
   Query,
   Request,
+  UseGuards,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
@@ -35,6 +36,7 @@ import { UserCreateParams } from '../dtos/users/user-create-params.dto';
 import { EmailAndAppUrl } from '../dtos/users/email-and-app-url.dto';
 import { ConfirmationRequest } from '../dtos/users/confirmation-request.dto';
 import { UserInvite } from '../dtos/users/user-invite.dto';
+import { JwtAuthGuard } from '../guards/jwt.guard';
 
 @Controller('user')
 @ApiTags('user')
@@ -44,6 +46,12 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({ type: User })
+  @ApiOperation({
+    summary: 'Get a user from cookies',
+    operationId: 'profile',
+  })
   profile(@Request() req: ExpressRequest): User {
     return mapTo(User, req['user']);
   }
@@ -61,6 +69,19 @@ export class UserController {
     @Query() queryParams: UserQueryParams,
   ): Promise<PaginatedUserDto> {
     return await this.userService.list(queryParams, mapTo(User, req['user']));
+  }
+
+  @Get('/csv')
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOkResponse({ type: SuccessDTO })
+  @ApiOperation({
+    summary: 'List users in CSV',
+    operationId: 'listAsCsv',
+  })
+  @UseGuards(JwtAuthGuard)
+  async listAsCsv(@Request() req: ExpressRequest): Promise<SuccessDTO> {
+    return await this.userService.export(mapTo(User, req['user']));
   }
 
   @Get(`:id`)
@@ -85,8 +106,12 @@ export class UserController {
   @Put(':id')
   @ApiOperation({ summary: 'Update user', operationId: 'update' })
   @ApiOkResponse({ type: User })
-  async update(@Body() dto: UserUpdate): Promise<User> {
-    return await this.userService.update(dto);
+  async update(
+    @Request() req: ExpressRequest,
+    @Body() dto: UserUpdate,
+  ): Promise<User> {
+    const jurisdictionName = req.headers['jurisdictionname'] || '';
+    return await this.userService.update(dto, jurisdictionName as string);
   }
 
   @Delete()
@@ -103,13 +128,16 @@ export class UserController {
   })
   @ApiOkResponse({ type: User })
   async create(
+    @Request() req: ExpressRequest,
     @Body() dto: UserCreate,
     @Query() queryParams: UserCreateParams,
   ): Promise<User> {
+    const jurisdictionName = req.headers['jurisdictionname'] || '';
     return await this.userService.create(
       dto,
       false,
       queryParams.noWelcomeEmail !== true,
+      jurisdictionName as string,
     );
   }
 

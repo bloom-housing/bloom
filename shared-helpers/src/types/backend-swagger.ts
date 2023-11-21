@@ -946,11 +946,7 @@ export class MultiselectQuestionsService {
   list(
     params: {
       /**  */
-      $comparison: string
-      /**  */
-      jurisdiction?: string
-      /**  */
-      applicationSection?: MultiselectQuestionsApplicationSectionEnum
+      filter?: MultiselectQuestionFilterParams[]
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<MultiselectQuestion[]> {
@@ -958,11 +954,7 @@ export class MultiselectQuestionsService {
       let url = basePath + "/multiselectQuestions"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = {
-        $comparison: params["$comparison"],
-        jurisdiction: params["jurisdiction"],
-        applicationSection: params["applicationSection"],
-      }
+      configs.params = { filter: params["filter"] }
 
       /** 适配ios13，get请求不允许带body */
 
@@ -1266,9 +1258,9 @@ export class AssetsService {
 
 export class UserService {
   /**
-   *
+   * Get a user from cookies
    */
-  userControllerProfile(options: IRequestOptions = {}): Promise<any> {
+  profile(options: IRequestOptions = {}): Promise<User> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/user"
 
@@ -1352,6 +1344,20 @@ export class UserService {
         isPortalUser: params["isPortalUser"],
         search: params["search"],
       }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * List users in CSV
+   */
+  listAsCsv(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/csv"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
       /** 适配ios13，get请求不允许带body */
 
@@ -1816,7 +1822,7 @@ export interface ListingFilterParams {
   name?: string
 
   /**  */
-  status?: ListingStatusEnum
+  status?: ListingsStatusEnum
 
   /**  */
   neighborhood?: string
@@ -1884,6 +1890,18 @@ export interface MultiselectOption {
 
   /**  */
   collectAddress?: boolean
+
+  /**  */
+  validationMethod?: ValidationMethodEnum
+
+  /**  */
+  radiusSize?: number
+
+  /**  */
+  collectName?: boolean
+
+  /**  */
+  collectRelationship?: boolean
 
   /**  */
   exclusive?: boolean
@@ -3577,10 +3595,16 @@ export interface JurisdictionCreate {
   enablePartnerSettings?: boolean
 
   /**  */
+  enableGeocodingPreferences?: boolean
+
+  /**  */
   enableAccessibilityFeatures: boolean
 
   /**  */
   enableUtilitiesIncluded: boolean
+
+  /**  */
+  listingApprovalPermissions: EnumJurisdictionCreateListingApprovalPermissions[]
 }
 
 export interface JurisdictionUpdate {
@@ -3612,10 +3636,16 @@ export interface JurisdictionUpdate {
   enablePartnerSettings?: boolean
 
   /**  */
+  enableGeocodingPreferences?: boolean
+
+  /**  */
   enableAccessibilityFeatures: boolean
 
   /**  */
   enableUtilitiesIncluded: boolean
+
+  /**  */
+  listingApprovalPermissions: EnumJurisdictionUpdateListingApprovalPermissions[]
 }
 
 export interface Jurisdiction {
@@ -3656,10 +3686,16 @@ export interface Jurisdiction {
   enablePartnerSettings?: boolean
 
   /**  */
+  enableGeocodingPreferences?: boolean
+
+  /**  */
   enableAccessibilityFeatures: boolean
 
   /**  */
   enableUtilitiesIncluded: boolean
+
+  /**  */
+  listingApprovalPermissions: EnumJurisdictionListingApprovalPermissions[]
 }
 
 export interface MultiselectQuestionCreate {
@@ -3729,6 +3765,11 @@ export interface MultiselectQuestionUpdate {
   applicationSection: MultiselectQuestionsApplicationSectionEnum
 }
 
+export interface MultiselectQuestionQueryParams {
+  /**  */
+  filter?: string[]
+}
+
 export interface MultiselectQuestionFilterParams {
   /**  */
   $comparison: EnumMultiselectQuestionFilterParamsComparison
@@ -3740,11 +3781,6 @@ export interface MultiselectQuestionFilterParams {
   applicationSection?: MultiselectQuestionsApplicationSectionEnum
 }
 
-export interface MultiselectQuestionQueryParams {
-  /**  */
-  filter?: MultiselectQuestionFilterParams[]
-}
-
 export interface AddressInput {
   /**  */
   type: InputType
@@ -3753,7 +3789,7 @@ export interface AddressInput {
   key: string
 
   /**  */
-  value: Address
+  value: AddressCreate
 }
 
 export interface BooleanInput {
@@ -4477,6 +4513,9 @@ export interface User {
   email: string
 
   /**  */
+  firstName: string
+
+  /**  */
   middleName?: string
 
   /**  */
@@ -4498,7 +4537,7 @@ export interface User {
   language?: LanguagesEnum
 
   /**  */
-  jurisdictions: IdDTO[]
+  jurisdictions: Jurisdiction[]
 
   /**  */
   mfaEnabled?: boolean
@@ -4538,6 +4577,9 @@ export interface UserUpdate {
   id: string
 
   /**  */
+  firstName: string
+
+  /**  */
   middleName?: string
 
   /**  */
@@ -4559,7 +4601,7 @@ export interface UserUpdate {
   language?: LanguagesEnum
 
   /**  */
-  jurisdictions: IdDTO[]
+  agreedToTermsOfService: boolean
 
   /**  */
   email?: string
@@ -4575,9 +4617,15 @@ export interface UserUpdate {
 
   /**  */
   appUrl?: string
+
+  /**  */
+  jurisdictions?: IdDTO[]
 }
 
 export interface UserCreate {
+  /**  */
+  firstName: string
+
   /**  */
   middleName?: string
 
@@ -4595,6 +4643,9 @@ export interface UserCreate {
 
   /**  */
   language?: LanguagesEnum
+
+  /**  */
+  agreedToTermsOfService: boolean
 
   /**  */
   newEmail?: string
@@ -4620,6 +4671,9 @@ export interface UserCreate {
 
 export interface UserInvite {
   /**  */
+  firstName: string
+
+  /**  */
   middleName?: string
 
   /**  */
@@ -4641,9 +4695,6 @@ export interface UserInvite {
   language?: LanguagesEnum
 
   /**  */
-  jurisdictions: IdDTO[]
-
-  /**  */
   newEmail?: string
 
   /**  */
@@ -4651,6 +4702,9 @@ export interface UserInvite {
 
   /**  */
   email: string
+
+  /**  */
+  jurisdictions: IdDTO[]
 }
 
 export interface ConfirmationRequest {
@@ -4834,10 +4888,12 @@ export enum OrderByEnum {
   "desc" = "desc",
 }
 
-export enum ListingStatusEnum {
+export enum ListingsStatusEnum {
   "active" = "active",
   "pending" = "pending",
   "closed" = "closed",
+  "pendingReview" = "pendingReview",
+  "changesRequested" = "changesRequested",
 }
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
@@ -4851,16 +4907,16 @@ export enum ApplicationAddressTypeEnum {
   "leasingAgent" = "leasingAgent",
 }
 
-export enum ListingsStatusEnum {
-  "active" = "active",
-  "pending" = "pending",
-  "closed" = "closed",
-}
-
 export enum ReviewOrderTypeEnum {
   "lottery" = "lottery",
   "firstComeFirstServe" = "firstComeFirstServe",
   "waitlist" = "waitlist",
+}
+
+export enum ValidationMethodEnum {
+  "radius" = "radius",
+  "map" = "map",
+  "none" = "none",
 }
 
 export enum MultiselectQuestionsApplicationSectionEnum {
@@ -4915,6 +4971,24 @@ export enum UnitAccessibilityPriorityTypeEnum {
   "hearingAndVisual" = "hearingAndVisual",
   "mobilityAndVisual" = "mobilityAndVisual",
   "mobilityHearingAndVisual" = "mobilityHearingAndVisual",
+}
+export enum EnumJurisdictionCreateListingApprovalPermissions {
+  "user" = "user",
+  "partner" = "partner",
+  "admin" = "admin",
+  "jurisdictionAdmin" = "jurisdictionAdmin",
+}
+export enum EnumJurisdictionUpdateListingApprovalPermissions {
+  "user" = "user",
+  "partner" = "partner",
+  "admin" = "admin",
+  "jurisdictionAdmin" = "jurisdictionAdmin",
+}
+export enum EnumJurisdictionListingApprovalPermissions {
+  "user" = "user",
+  "partner" = "partner",
+  "admin" = "admin",
+  "jurisdictionAdmin" = "jurisdictionAdmin",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {
   "=" = "=",

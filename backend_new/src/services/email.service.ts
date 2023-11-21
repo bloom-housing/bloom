@@ -1,33 +1,39 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { HttpException, Injectable } from '@nestjs/common';
 import { ResponseError } from '@sendgrid/helpers/classes';
+import { MailDataRequired } from '@sendgrid/helpers/classes/mail';
 import fs from 'fs';
 import Handlebars from 'handlebars';
 import Polyglot from 'node-polyglot';
 import path from 'path';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import tz from 'dayjs/plugin/timezone';
+import advanced from 'dayjs/plugin/advancedFormat';
 import { TranslationService } from './translation.service';
 import { JurisdictionService } from './jurisdiction.service';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { LanguagesEnum, ReviewOrderTypeEnum } from '@prisma/client';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { Listing } from '../dtos/listings/listing.dto';
-import { Application } from '../dtos/applications/application.dto';
 import { SendGridService } from './sendgrid.service';
+import { ApplicationCreate } from '../dtos/applications/application-create.dto';
+import { User } from '../dtos/users/user.dto';
+dayjs.extend(utc);
+dayjs.extend(tz);
+dayjs.extend(advanced);
 
-type User = {
-  firstName: string;
-  middleName?: string;
-  lastName: string;
-  email: string;
-  language: LanguagesEnum;
+type EmailAttachmentData = {
+  data: string;
+  name: string;
+  type: string;
 };
+
 @Injectable()
 export class EmailService {
   polyglot: Polyglot;
 
   constructor(
     private readonly sendGrid: SendGridService,
-    private readonly configService: ConfigService,
     private readonly translationService: TranslationService,
     private readonly jurisdictionService: JurisdictionService,
   ) {
@@ -84,33 +90,45 @@ export class EmailService {
   }
 
   private async send(
-    to: string,
+    to: string | string[],
     from: string,
     subject: string,
     body: string,
     retry = 3,
+    attachment?: EmailAttachmentData,
   ) {
-    await this.sendGrid.send(
-      {
-        to: to,
-        from,
-        subject: subject,
-        html: body,
-      },
-      false,
-      (error) => {
-        if (error instanceof ResponseError) {
-          const { response } = error;
-          const { body: errBody } = response;
-          console.error(
-            `Error sending email to: ${to}! Error body: ${errBody}`,
-          );
-          if (retry > 0) {
-            void this.send(to, from, subject, body, retry - 1);
-          }
+    const isMultipleRecipients = Array.isArray(to);
+    const emailParams: MailDataRequired = {
+      to,
+      from,
+      subject,
+      html: body,
+    };
+    if (attachment) {
+      emailParams.attachments = [
+        {
+          content: Buffer.from(attachment.data).toString('base64'),
+          filename: attachment.name,
+          type: attachment.type,
+          disposition: 'attachment',
+        },
+      ];
+    }
+    const handleError = (error) => {
+      if (error instanceof ResponseError) {
+        const { response } = error;
+        const { body: errBody } = response;
+        console.error(
+          `Error sending email to: ${
+            isMultipleRecipients ? to.toString() : to
+          }! Error body: ${errBody}`,
+        );
+        if (retry > 0) {
+          void this.send(to, from, subject, body, retry - 1);
         }
-      },
-    );
+      }
+    };
+    await this.sendGrid.send(emailParams, isMultipleRecipients, handleError);
   }
 
   // TODO: update this to be memoized based on jurisdiction and language
@@ -128,6 +146,7 @@ export class EmailService {
 
   private async getJurisdiction(
     jurisdictionIds: IdDTO[] | null,
+    jurisdictionName?: string,
   ): Promise<Jurisdiction | null> {
     // Only return the jurisdiction if there is one jurisdiction passed in.
     // For example if the user is tied to more than one jurisdiction the user should received the generic translations
@@ -135,24 +154,23 @@ export class EmailService {
       return await this.jurisdictionService.findOne({
         jurisdictionId: jurisdictionIds[0]?.id,
       });
+    } else if (jurisdictionName) {
+      return await this.jurisdictionService.findOne({
+        jurisdictionName: jurisdictionName,
+      });
     }
     return null;
   }
 
   /* Send welcome email to new public users */
   public async welcome(
-    jurisdictionIds: IdDTO[],
+    jurisdictionName: string,
     user: User,
     appUrl: string,
     confirmationUrl: string,
   ) {
-    const jurisdiction = await this.getJurisdiction(jurisdictionIds);
+    const jurisdiction = await this.getJurisdiction(null, jurisdictionName);
     await this.loadTranslations(jurisdiction, user.language);
-    if (this.configService.get<string>('NODE_ENV') === 'production') {
-      Logger.log(
-        `Preparing to send a welcome email to ${user.email} from ${jurisdiction.emailFromAddress}...`,
-      );
-    }
     await this.send(
       user.email,
       jurisdiction.emailFromAddress,
@@ -207,13 +225,13 @@ export class EmailService {
 
   /* send change of email email */
   public async changeEmail(
-    jurisdictionIds: IdDTO[],
+    jurisdictionName: string,
     user: User,
     appUrl: string,
     confirmationUrl: string,
     newEmail: string,
   ) {
-    const jurisdiction = await this.getJurisdiction(jurisdictionIds);
+    const jurisdiction = await this.getJurisdiction(null, jurisdictionName);
     await this.loadTranslations(jurisdiction, user.language);
     await this.send(
       newEmail,
@@ -271,22 +289,15 @@ export class EmailService {
     );
   }
 
-  // TODO: connect to application controller when it is implemented
   public async applicationConfirmation(
     listing: Listing,
-    application: Application,
+    application: ApplicationCreate,
     appUrl: string,
   ) {
     const jurisdiction = await this.getJurisdiction([listing.jurisdictions]);
     void (await this.loadTranslations(jurisdiction, application.language));
     const listingUrl = `${appUrl}/listing/${listing.id}`;
     const compiledTemplate = this.template('confirmation');
-
-    if (this.configService.get<string>('NODE_ENV') == 'production') {
-      Logger.log(
-        `Preparing to send a confirmation email to ${application.applicant.emailAddress} from ${jurisdiction.emailFromAddress}...`,
-      );
-    }
 
     let eligibleText: string;
     let preferenceText: string;
@@ -339,5 +350,127 @@ export class EmailService {
         user,
       }),
     );
+  }
+
+  public async requestApproval(
+    jurisdictionId: IdDTO,
+    listingInfo: IdDTO,
+    emails: string[],
+    appUrl: string,
+  ) {
+    try {
+      const jurisdiction = await this.getJurisdiction([jurisdictionId]);
+      void (await this.loadTranslations(jurisdiction));
+      await this.send(
+        emails,
+        jurisdiction.emailFromAddress,
+        this.polyglot.t('requestApproval.header'),
+        this.template('request-approval')({
+          appOptions: { listingName: listingInfo.name },
+          appUrl: appUrl,
+          listingUrl: `${appUrl}/listings/${listingInfo.id}`,
+        }),
+      );
+    } catch (err) {
+      console.log('Request approval email failed', err);
+      throw new HttpException('email failed', 500);
+    }
+  }
+
+  public async changesRequested(
+    jurisdictionId: IdDTO,
+    listingInfo: IdDTO,
+    emails: string[],
+    appUrl: string,
+  ) {
+    try {
+      const jurisdiction = await this.getJurisdiction([jurisdictionId]);
+      void (await this.loadTranslations(jurisdiction));
+      await this.send(
+        emails,
+        jurisdiction.emailFromAddress,
+        this.polyglot.t('changesRequested.header'),
+        this.template('changes-requested')({
+          appOptions: { listingName: listingInfo.name },
+          appUrl: appUrl,
+          listingUrl: `${appUrl}/listings/${listingInfo.id}`,
+        }),
+      );
+    } catch (err) {
+      console.log('changes requested email failed', err);
+      throw new HttpException('email failed', 500);
+    }
+  }
+
+  public async listingApproved(
+    jurisdictionId: IdDTO,
+    listingInfo: IdDTO,
+    emails: string[],
+    publicUrl: string,
+  ) {
+    try {
+      const jurisdiction = await this.getJurisdiction([jurisdictionId]);
+      void (await this.loadTranslations(jurisdiction));
+      await this.send(
+        emails,
+        jurisdiction.emailFromAddress,
+        this.polyglot.t('listingApproved.header'),
+        this.template('listing-approved')({
+          appOptions: { listingName: listingInfo.name },
+          listingUrl: `${publicUrl}/listing/${listingInfo.id}`,
+        }),
+      );
+    } catch (err) {
+      console.log('listing approval email failed', err);
+      throw new HttpException('email failed', 500);
+    }
+  }
+
+  /**
+   *
+   * @param jurisdictionIds the set of jurisdicitons for the user (sent as IdDTO[]
+   * @param user the user that should received the csv export
+   * @param csvData the data that makes up the content of the csv to be sent as an attachment
+   * @param exportEmailTitle the title of the email ('User Export' is an example)
+   * @param exportEmailFileDescription describes what is being sent. Completes the line:
+     'The attached file is %{fileDescription}. If you have any questions, please reach out to your administrator.
+   */
+  async sendCSV(
+    jurisdictionIds: IdDTO[],
+    user: User,
+    csvData: string,
+    exportEmailTitle: string,
+    exportEmailFileDescription: string,
+  ): Promise<void> {
+    const jurisdiction = await this.getJurisdiction(jurisdictionIds);
+    void (await this.loadTranslations(jurisdiction, user.language));
+
+    await this.send(
+      user.email,
+      jurisdiction.emailFromAddress,
+      exportEmailTitle,
+      this.template('csv-export')({
+        user: user,
+        appOptions: {
+          title: exportEmailTitle,
+          fileDescription: exportEmailFileDescription,
+          appUrl: process.env.PARTNERS_PORTAL_URL,
+        },
+      }),
+      undefined,
+      {
+        data: csvData,
+        name: `users-${this.formatLocalDate(
+          new Date(),
+          'YYYY-MM-DD_HH:mm:ss',
+        )}.csv`,
+        type: 'text/csv',
+      },
+    );
+  }
+
+  formatLocalDate(rawDate: string | Date, format: string): string {
+    const utcDate = dayjs.utc(rawDate);
+    return utcDate.format(format);
   }
 }

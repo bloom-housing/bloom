@@ -7,7 +7,7 @@ import { ListingStatusBar } from "../../../../../components/listings/ListingStat
 import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../components/applications/ApplicationsSideNav"
 import { getLinkCellFormatter } from "../../../../../components/applications/helpers"
-import { Application, ApplicationReviewStatus } from "@bloom-housing/backend-core"
+import { Application, ApplicationReviewStatus, ListingStatus } from "@bloom-housing/backend-core"
 import { NavigationHeader } from "../../../../../components/shared/NavigationHeader"
 
 const ApplicationsList = () => {
@@ -103,7 +103,7 @@ const ApplicationsList = () => {
         }
       />
 
-      <ListingStatusBar status={listingDto?.status} />
+      <ListingStatusBar status={listingDto?.status as unknown as ListingStatus} />
 
       <section className={"bg-gray-200 pt-4"}>
         <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4">

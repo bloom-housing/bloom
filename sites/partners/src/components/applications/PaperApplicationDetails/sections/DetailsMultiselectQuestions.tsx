@@ -1,16 +1,20 @@
 import React, { useContext } from "react"
-import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { t } from "@bloom-housing/ui-components"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import { ApplicationContext } from "../../ApplicationContext"
-import { InputType, AddressCreate, ApplicationSection } from "@bloom-housing/backend-core/types"
+import { InputType, AddressCreate } from "@bloom-housing/backend-core/types"
 import { DetailsAddressColumns, AddressColsType } from "../DetailsAddressColumns"
 import { useSingleListingData } from "../../../../lib/hooks"
-import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
+import {
+  Listing,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type DetailsMultiselectQuestionsProps = {
   listingId: string
-  applicationSection: ApplicationSection
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
   title: string
 }
 
@@ -35,11 +39,14 @@ const DetailsMultiselectQuestions = ({
   const questions = application[applicationSection]
 
   return (
-    <GridSection className="bg-primary-lighter" title={title} inset columns={2}>
-      {listingQuestions?.map((listingQuestion) => {
-        return (
-          <GridCell key={listingQuestion?.multiselectQuestions.text}>
-            <FieldValue label={listingQuestion?.multiselectQuestions.text}>
+    <SectionWithGrid heading={title} inset>
+      <Grid.Row columns={2}>
+        {listingQuestions?.map((listingQuestion) => {
+          return (
+            <FieldValue
+              key={listingQuestion?.multiselectQuestions.text}
+              label={listingQuestion?.multiselectQuestions.text}
+            >
               {(() => {
                 const appQuestion = questions?.find(
                   (question) => question.key === listingQuestion?.multiselectQuestions.text
@@ -62,7 +69,7 @@ const DetailsMultiselectQuestions = ({
                         <FieldValue
                           key={extra.key}
                           label={t(`application.preferences.options.${extra.key}`, {
-                            county: listingDto?.countyCode,
+                            county: listingDto?.listingsBuildingAddress.county,
                           })}
                         >
                           {extra.value ? t("t.yes") : t("t.no")}
@@ -71,18 +78,21 @@ const DetailsMultiselectQuestions = ({
 
                     if (extra.type === InputType.address)
                       return (
-                        <GridSection
+                        <FieldValue
                           key={extra.key}
-                          subtitle={t(`application.preferences.options.address`, {
-                            county: listingDto?.countyCode,
+                          label={t(`application.preferences.options.address`, {
+                            county: listingDto?.listingsBuildingAddress.county,
                           })}
-                          columns={3}
                         >
-                          <DetailsAddressColumns
-                            type={AddressColsType.preferences}
-                            addressObject={extra.value as AddressCreate}
-                          />
-                        </GridSection>
+                          <Grid spacing="lg">
+                            <Grid.Row columns={3}>
+                              <DetailsAddressColumns
+                                type={AddressColsType.preferences}
+                                addressObject={extra.value as AddressCreate}
+                              />
+                            </Grid.Row>
+                          </Grid>
+                        </FieldValue>
                       )
                   })
 
@@ -95,10 +105,10 @@ const DetailsMultiselectQuestions = ({
                 })
               })()}
             </FieldValue>
-          </GridCell>
-        )
-      })}
-    </GridSection>
+          )
+        })}
+      </Grid.Row>
+    </SectionWithGrid>
   )
 }
 

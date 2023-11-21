@@ -1,11 +1,10 @@
-import { coliseumApplication, minimalDataApplication } from "../../mockData/applicationData"
+import { ElmVillageApplication, minimalDataApplication } from "../../mockData/applicationData"
 
 describe("Submit", function () {
-  // Skipping until frontend is connected
-  it.skip("should submit an application for the Test: Coliseum listing", function () {
-    cy.submitApplication("Test: Coliseum", coliseumApplication, false)
+  it("should submit an application for the Elm Village listing", function () {
+    cy.submitApplication("Elm Village", ElmVillageApplication, false)
   })
-  it.skip("should submit a minimal application for the Test: Default, No Preferences", function () {
-    cy.submitApplication("Test: Default, No Preferences", minimalDataApplication, false)
+  it("should submit a minimal application for the Test: Default, No Preferences", function () {
+    cy.submitApplication("Blue Sky Apartments", minimalDataApplication, false)
   })
 })

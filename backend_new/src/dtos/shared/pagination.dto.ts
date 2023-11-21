@@ -50,8 +50,7 @@ export function PaginationFactory<T>(
     items: T[];
 
     @Expose()
-    @ApiProperty({ type: () => PaginationMeta })
-    @Type(() => classType)
+    @ApiProperty()
     meta: PaginationMeta;
   }
   return PaginationHost;

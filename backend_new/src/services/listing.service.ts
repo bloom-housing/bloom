@@ -1,13 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import { PrismaService } from './prisma.service';
+import { ConfigService } from '@nestjs/config';
 import {
   LanguagesEnum,
   ListingsStatusEnum,
   Prisma,
   ReviewOrderTypeEnum,
+  UserRoleEnum,
 } from '@prisma/client';
 import { firstValueFrom } from 'rxjs';
+import { PrismaService } from './prisma.service';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
 import {
   buildPaginationMetaInfo,
@@ -31,6 +33,9 @@ import { ListingCreate } from '../dtos/listings/listing-create.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { ListingUpdate } from '../dtos/listings/listing-update.dto';
 import { ApplicationFlaggedSetService } from './application-flagged-set.service';
+import { User } from '../dtos/users/user.dto';
+import { EmailService } from './email.service';
+import { IdDTO } from '../dtos/shared/id.dto';
 
 export type getListingsArgs = {
   skip: number;
@@ -128,6 +133,8 @@ export class ListingService {
     private translationService: TranslationService,
     private httpService: HttpService,
     private afsService: ApplicationFlaggedSetService,
+    private emailService: EmailService,
+    private configService: ConfigService,
   ) {}
 
   /*
@@ -182,6 +189,114 @@ export class ListingService {
       items: listings,
       meta: paginationInfo,
     };
+  }
+
+  public async getUserEmailInfo(
+    userRoles: UserRoleEnum | UserRoleEnum[],
+    listingId?: string,
+    jurisId?: string,
+    getPublicUrl = false,
+  ): Promise<{ emails: string[]; publicUrl?: string | null }> {
+    // determine where clause(s)
+    const userRolesWhere: Prisma.UserAccountsWhereInput[] = [];
+    if (userRoles.includes(UserRoleEnum.admin))
+      userRolesWhere.push({ userRoles: { isAdmin: true } });
+    if (userRoles.includes(UserRoleEnum.partner))
+      userRolesWhere.push({
+        userRoles: { isPartner: true },
+        listings: { some: { id: listingId } },
+      });
+    if (userRoles.includes(UserRoleEnum.jurisdictionAdmin)) {
+      userRolesWhere.push({
+        userRoles: { isJurisdictionalAdmin: true },
+        jurisdictions: { some: { id: jurisId } },
+      });
+    }
+
+    const userResults = await this.prisma.userAccounts.findMany({
+      include: {
+        jurisdictions: {
+          select: {
+            id: true,
+            publicUrl: getPublicUrl,
+          },
+        },
+      },
+      where: {
+        OR: userRolesWhere,
+      },
+    });
+
+    // account for users having access to multiple jurisdictions
+    const publicUrl = getPublicUrl
+      ? userResults[0]?.jurisdictions?.find((juris) => juris.id === jurisId)
+          ?.publicUrl
+      : null;
+    const userEmails: string[] = [];
+    userResults?.forEach((user) => user?.email && userEmails.push(user.email));
+    return { emails: userEmails, publicUrl };
+  }
+
+  public async listingApprovalNotify(params: {
+    user: User;
+    listingInfo: IdDTO;
+    status: ListingsStatusEnum;
+    approvingRoles: UserRoleEnum[];
+    previousStatus?: ListingsStatusEnum;
+    jurisId?: string;
+  }) {
+    const nonApprovingRoles: UserRoleEnum[] = [UserRoleEnum.partner];
+    if (!params.approvingRoles.includes(UserRoleEnum.jurisdictionAdmin))
+      nonApprovingRoles.push(UserRoleEnum.jurisdictionAdmin);
+    if (params.status === ListingsStatusEnum.pendingReview) {
+      const userInfo = await this.getUserEmailInfo(
+        params.approvingRoles,
+        params.listingInfo.id,
+        params.jurisId,
+      );
+      await this.emailService.requestApproval(
+        params.user,
+        { id: params.listingInfo.id, name: params.listingInfo.name },
+        userInfo.emails,
+        this.configService.get('PARTNERS_PORTAL_URL'),
+      );
+    }
+    // admin updates status to changes requested when approval requires partner changes
+    else if (params.status === ListingsStatusEnum.changesRequested) {
+      const userInfo = await this.getUserEmailInfo(
+        nonApprovingRoles,
+        params.listingInfo.id,
+        params.jurisId,
+      );
+      await this.emailService.changesRequested(
+        params.user,
+        { id: params.listingInfo.id, name: params.listingInfo.name },
+        userInfo.emails,
+        this.configService.get('PARTNERS_PORTAL_URL'),
+      );
+    }
+    // check if status of active requires notification
+    else if (params.status === ListingsStatusEnum.active) {
+      // if newly published listing, notify non-approving users with access
+      if (
+        params.previousStatus === ListingsStatusEnum.pendingReview ||
+        params.previousStatus === ListingsStatusEnum.changesRequested ||
+        params.previousStatus === ListingsStatusEnum.pending
+      ) {
+        const userInfo = await this.getUserEmailInfo(
+          nonApprovingRoles,
+          params.listingInfo.id,
+          params.jurisId,
+          true,
+        );
+        await this.emailService.listingApproved(
+          params.user,
+          { id: params.listingInfo.id, name: params.listingInfo.name },
+          userInfo.emails,
+          userInfo.publicUrl,
+        );
+      }
+    }
   }
 
   /*
@@ -331,7 +446,7 @@ export class ListingService {
   /*
     creates a listing
   */
-  async create(dto: ListingCreate): Promise<Listing> {
+  async create(dto: ListingCreate, user: User): Promise<Listing> {
     // TODO: perms (https://github.com/bloom-housing/bloom/issues/3445)
     const rawListing = await this.prisma.listings.create({
       include: views.details,
@@ -569,6 +684,21 @@ export class ListingService {
       },
     });
 
+    if (rawListing.status === ListingsStatusEnum.pendingReview) {
+      const jurisdiction = await this.prisma.jurisdictions.findFirst({
+        where: {
+          id: rawListing.jurisdictions?.id,
+        },
+      });
+      await this.listingApprovalNotify({
+        user,
+        listingInfo: { id: rawListing.id, name: rawListing.name },
+        status: rawListing.status,
+        approvingRoles: jurisdiction?.listingApprovalPermissions,
+        jurisId: rawListing.jurisdictions.id,
+      });
+    }
+
     return mapTo(Listing, rawListing);
   }
 
@@ -614,7 +744,7 @@ export class ListingService {
   /*
     update a listing
   */
-  async update(dto: ListingUpdate): Promise<Listing> {
+  async update(dto: ListingUpdate, user: User): Promise<Listing> {
     const storedListing = await this.findOrThrow(dto.id, ListingViews.details);
 
     // TODO: perms (https://github.com/bloom-housing/bloom/issues/3445)
@@ -869,6 +999,11 @@ export class ListingService {
           dto.status === ListingsStatusEnum.closed
             ? new Date()
             : storedListing.closedAt,
+        requestedChangesUserId:
+          dto.status === ListingsStatusEnum.changesRequested &&
+          storedListing.status !== ListingsStatusEnum.changesRequested
+            ? user.id
+            : storedListing.requestedChangesUserId,
         listingsResult: dto.listingsResult
           ? {
               create: {
@@ -882,6 +1017,22 @@ export class ListingService {
         id: dto.id,
       },
     });
+
+    const listingApprovalPermissions = (
+      await this.prisma.jurisdictions.findFirst({
+        where: { id: dto.jurisdictions.id },
+      })
+    )?.listingApprovalPermissions;
+
+    if (listingApprovalPermissions?.length > 0)
+      await this.listingApprovalNotify({
+        user,
+        listingInfo: { id: dto.id, name: dto.name },
+        approvingRoles: listingApprovalPermissions,
+        status: dto.status,
+        previousStatus: storedListing.status,
+        jurisId: dto.jurisdictions.id,
+      });
 
     await this.cachePurge(storedListing.status, dto.status, rawListing.id);
 

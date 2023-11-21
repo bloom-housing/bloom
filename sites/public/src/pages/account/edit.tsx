@@ -34,7 +34,7 @@ const Edit = () => {
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, watch } = useForm()
-  const { profile, userProfileService } = useContext(AuthContext)
+  const { profile, userService } = useContext(AuthContext)
   const [passwordAlert, setPasswordAlert] = useState<AlertMessage>()
   const [nameAlert, setNameAlert] = useState<AlertMessage>()
   const [dobAlert, setDobAlert] = useState<AlertMessage>()
@@ -61,7 +61,7 @@ const Edit = () => {
     const { firstName, middleName, lastName } = data
     setNameAlert(null)
     try {
-      await userProfileService.update({
+      await userService.update({
         body: { ...profile, firstName, middleName, lastName },
       })
       setNameAlert({ type: "success", message: `${t("account.settings.alerts.nameSuccess")}` })
@@ -75,7 +75,7 @@ const Edit = () => {
     const { dateOfBirth } = data
     setDobAlert(null)
     try {
-      await userProfileService.update({
+      await userService.update({
         body: {
           ...profile,
           dob: dayjs(
@@ -94,7 +94,7 @@ const Edit = () => {
     const { email } = data
     setEmailAlert(null)
     try {
-      await userProfileService.update({
+      await userService.update({
         body: {
           ...profile,
           appUrl: window.location.origin,
@@ -125,7 +125,7 @@ const Edit = () => {
       return
     }
     try {
-      await userProfileService.update({
+      await userService.update({
         body: { ...profile, password, currentPassword },
       })
       setPasswordAlert({

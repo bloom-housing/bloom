@@ -10,7 +10,7 @@ import {
   IsBoolean,
 } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { LanguagesEnum } from '@prisma/client';
+import { LanguagesEnum, UserRoleEnum } from '@prisma/client';
 import { Expose, Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IdDTO } from '../shared/id.dto';
@@ -80,6 +80,11 @@ export class Jurisdiction extends AbstractDTO {
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  enableGeocodingPreferences?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   enableAccessibilityFeatures: boolean;
@@ -89,4 +94,18 @@ export class Jurisdiction extends AbstractDTO {
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   enableUtilitiesIncluded: boolean;
+
+  @Expose()
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(UserRoleEnum, {
+    groups: [ValidationsGroupsEnum.default],
+    each: true,
+  })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({
+    enum: UserRoleEnum,
+    example: [UserRoleEnum.admin],
+    isArray: true,
+  })
+  listingApprovalPermissions: UserRoleEnum[];
 }

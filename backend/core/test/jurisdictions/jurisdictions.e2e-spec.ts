@@ -91,6 +91,7 @@ describe("Jurisdictions", () => {
         enableAccessibilityFeatures: false,
         enableUtilitiesIncluded: false,
         enablePartnerSettings: false,
+        enableGeocodingPreferences: false,
       })
       .expect(201)
 
@@ -125,6 +126,7 @@ describe("Jurisdictions", () => {
         enableAccessibilityFeatures: false,
         enableUtilitiesIncluded: false,
         enablePartnerSettings: false,
+        enableGeocodingPreferences: false,
       })
       .expect(201)
     expect(res.body).toHaveProperty("id")

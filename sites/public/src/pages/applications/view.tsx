@@ -16,7 +16,7 @@ import {
   AuthContext,
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
-import { ApplicationSection } from "@bloom-housing/backend-core"
+import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const ApplicationView = () => {
   const { application, listing } = useContext(AppSubmissionContext)
@@ -72,9 +72,13 @@ const ApplicationView = () => {
           listing={listing}
           application={application}
           hidePreferences={
-            listingSectionQuestions(listing, ApplicationSection.preferences)?.length === 0
+            listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.preferences)
+              ?.length === 0
           }
-          hidePrograms={listingSectionQuestions(listing, ApplicationSection.programs)?.length === 0}
+          hidePrograms={
+            listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.programs)
+              ?.length === 0
+          }
           editMode={false}
         />
 

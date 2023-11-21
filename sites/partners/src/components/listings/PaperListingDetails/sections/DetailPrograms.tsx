@@ -1,10 +1,13 @@
 import React, { useContext, useMemo } from "react"
-import { t, GridSection, MinimalTable } from "@bloom-housing/ui-components"
+import { t, MinimalTable } from "@bloom-housing/ui-components"
 import { FieldValue } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
-import { ApplicationSection } from "@bloom-housing/backend-core"
 import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
-import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  Listing,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const DetailPrograms = () => {
   const listing = useContext(ListingContext)
@@ -17,7 +20,10 @@ const DetailPrograms = () => {
 
   const programsTableData = useMemo(
     () =>
-      listingSectionQuestions(listing as unknown as Listing, ApplicationSection.programs)
+      listingSectionQuestions(
+        listing as unknown as Listing,
+        MultiselectQuestionsApplicationSectionEnum.programs
+      )
         ?.sort((firstEl, secondEl) => firstEl.ordinal - secondEl.ordinal)
         .map((program, index) => ({
           order: { content: index + 1 },
@@ -28,21 +34,18 @@ const DetailPrograms = () => {
   )
 
   return (
-    <GridSection
-      className="bg-primary-lighter"
-      title={"Housing Programs"}
-      grid={false}
-      tinted
-      inset
-    >
-      <FieldValue label={"Active Programs"} className={"mb-2"}>
-        {programsTableData.length ? (
-          <MinimalTable headers={programsTableHeaders} data={programsTableData} />
-        ) : (
-          <span className="text-base font-semibold pt-4">{t("t.none")}</span>
-        )}
-      </FieldValue>
-    </GridSection>
+    <SectionWithGrid heading="Housing Programs" inset bypassGrid>
+      <SectionWithGrid.HeadingRow>Active Programs</SectionWithGrid.HeadingRow>
+      {programsTableData.length ? (
+        <MinimalTable
+          className="spacer-section-above"
+          headers={programsTableHeaders}
+          data={programsTableData}
+        />
+      ) : (
+        <FieldValue className="spacer-section-above">{t("t.none")}</FieldValue>
+      )}
+    </SectionWithGrid>
   )
 }
 

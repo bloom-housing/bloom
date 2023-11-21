@@ -5,13 +5,11 @@ import { useRouter } from "next/router"
 import { ApplicationStatusProps, isInternalLink } from "@bloom-housing/ui-components"
 import {
   EnumListingFilterParamsComparison,
-  EnumListingFilterParamsStatus,
   Jurisdiction,
-  ListingFilterParams,
-} from "@bloom-housing/backend-core/types"
-import {
   Listing,
+  ListingFilterParams,
   ListingOrderByKeys,
+  ListingsStatusEnum,
   OrderByEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ParsedUrlQuery } from "querystring"
@@ -122,7 +120,7 @@ export async function fetchOpenListings() {
     additionalFilters: [
       {
         $comparison: EnumListingFilterParamsComparison["="],
-        status: EnumListingFilterParamsStatus.active,
+        status: ListingsStatusEnum.active,
       },
     ],
     orderBy: [ListingOrderByKeys.mostRecentlyPublished],
@@ -135,7 +133,7 @@ export async function fetchClosedListings() {
     additionalFilters: [
       {
         $comparison: EnumListingFilterParamsComparison["="],
-        status: EnumListingFilterParamsStatus.closed,
+        status: ListingsStatusEnum.closed,
       },
     ],
     orderBy: [ListingOrderByKeys.mostRecentlyClosed],
@@ -153,7 +151,7 @@ export async function fetchJurisdictionByName() {
 
     const jurisdictionName = process.env.jurisdictionName
     const jurisdictionRes = await axios.get(
-      `${process.env.backendApiBaseNew}/jurisdictions/byName/${jurisdictionName}`
+      `${process.env.backendApiBase}/jurisdictions/byName/${jurisdictionName}`
     )
     jurisdiction = jurisdictionRes?.data
   } catch (error) {

@@ -9,7 +9,6 @@ import { randomName } from './word-generator';
 import { addressFactory } from './address-factory';
 import { unitFactoryMany } from './unit-factory';
 import { reservedCommunityTypeFactory } from './reserved-community-type-factory';
-import { multiselectQuestionFactory } from './multiselect-question-factory';
 
 export const listingFactory = async (
   jurisdictionId: string,
@@ -60,13 +59,16 @@ export const listingFactory = async (
     },
     listingMultiselectQuestions: optionalParams?.multiselectQuestions
       ? {
-          create: optionalParams.multiselectQuestions.map((question) => ({
-            multiselectQuestions: {
-              create: multiselectQuestionFactory(jurisdictionId, {
-                multiselectQuestion: { text: question.text },
-              }),
-            },
-          })),
+          create: optionalParams.multiselectQuestions.map(
+            (question, index) => ({
+              multiselectQuestions: {
+                connect: {
+                  id: question.id,
+                },
+              },
+              ordinal: index + 1,
+            }),
+          ),
         }
       : undefined,
     applications: optionalParams?.applications

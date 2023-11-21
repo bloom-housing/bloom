@@ -7,6 +7,8 @@ import {
   Post,
   Put,
   Query,
+  Request,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -16,6 +18,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { Request as ExpressRequest } from 'express';
 import { ApplicationService } from '../services/application.service';
 import { Application } from '../dtos/applications/application.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
@@ -31,6 +34,9 @@ import {
   TextInput,
 } from '../dtos/applications/application-multiselect-question-option.dto';
 import { ValidationsGroupsEnum } from '../enums/shared/validation-groups-enum';
+import { mapTo } from '../utilities/mapTo';
+import { User } from '../dtos/users/user.dto';
+import { OptionalAuthGuard } from '../guards/optional.guard';
 
 @Controller('applications')
 @ApiTags('applications')
@@ -87,8 +93,13 @@ export class ApplicationController {
       groups: [ValidationsGroupsEnum.default, ValidationsGroupsEnum.applicants],
     }),
   )
-  async submit(@Body() dto: ApplicationCreate): Promise<Application> {
-    return await this.applicationService.create(dto, true);
+  @UseGuards(OptionalAuthGuard)
+  async submit(
+    @Request() req: ExpressRequest,
+    @Body() dto: ApplicationCreate,
+  ): Promise<Application> {
+    const user = mapTo(User, req['user']);
+    return await this.applicationService.create(dto, true, user);
   }
 
   @Post('verify')

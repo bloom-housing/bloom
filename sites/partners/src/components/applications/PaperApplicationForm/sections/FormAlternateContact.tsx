@@ -1,17 +1,9 @@
 import React, { useEffect } from "react"
 import { useFormContext } from "react-hook-form"
-import {
-  t,
-  GridSection,
-  Select,
-  GridCell,
-  Field,
-  emailRegex,
-  PhoneField,
-  FormAddress,
-} from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { t, Select, Field, emailRegex, PhoneField, FormAddress } from "@bloom-housing/ui-components"
+import { Grid } from "@bloom-housing/ui-seeds"
 import { altContactRelationshipKeys, stateKeys } from "@bloom-housing/shared-helpers"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const FormAlternateContact = () => {
   const formMethods = useFormContext()
@@ -32,49 +24,43 @@ const FormAlternateContact = () => {
   }, [setValue, clearErrors, alternatePhoneValue])
 
   return (
-    <GridSection title={t("application.alternateContact.type.label")} grid={false} separator>
-      <GridSection columns={3}>
-        <GridCell>
-          <FieldValue label={t("application.name.firstName")}>
+    <>
+      <hr className="spacer-section-above spacer-section" />
+      <SectionWithGrid heading={t("application.alternateContact.type.label")}>
+        <Grid.Row columns={3}>
+          <Grid.Cell>
             <Field
               id="application.alternateContact.firstName"
               name="application.alternateContact.firstName"
               label={t("application.name.firstName")}
               placeholder={t("application.name.firstName")}
               register={register}
-              readerOnly
             />
-          </FieldValue>
-        </GridCell>
+          </Grid.Cell>
 
-        <GridCell>
-          <FieldValue label={t("application.name.lastName")}>
+          <Grid.Cell>
             <Field
               id="application.alternateContact.lastName"
               name="application.alternateContact.lastName"
               placeholder={t("application.name.lastName")}
               register={register}
               label={t("application.name.lastName")}
-              readerOnly
             />
-          </FieldValue>
-        </GridCell>
+          </Grid.Cell>
 
-        <GridCell>
-          <FieldValue label={t("application.details.agency")}>
+          <Grid.Cell>
             <Field
               id="application.alternateContact.agency"
               name="application.alternateContact.agency"
               label={t("application.details.agency")}
               placeholder={t("application.alternateContact.name.caseManagerAgencyFormPlaceHolder")}
               register={register}
-              readerOnly
             />
-          </FieldValue>
-        </GridCell>
+          </Grid.Cell>
+        </Grid.Row>
 
-        <GridCell>
-          <FieldValue label={t("t.email")}>
+        <Grid.Row>
+          <Grid.Cell>
             <Field
               id="application.alternateContact.emailAddress"
               name="application.alternateContact.emailAddress"
@@ -85,13 +71,10 @@ const FormAlternateContact = () => {
               error={errors.application?.alternateContact?.emailAddress}
               errorMessage={t("errors.emailAddressError")}
               register={register}
-              readerOnly
             />
-          </FieldValue>
-        </GridCell>
+          </Grid.Cell>
 
-        <GridCell>
-          <FieldValue label={t("t.phone")}>
+          <Grid.Cell>
             <PhoneField
               id="application.alternateContact.phoneNumber"
               name="application.alternateContact.phoneNumber"
@@ -101,51 +84,46 @@ const FormAlternateContact = () => {
               control={control}
               controlClassName="control"
               label={t("t.phone")}
-              readerOnly
             />
-          </FieldValue>
-        </GridCell>
+          </Grid.Cell>
 
-        <GridCell>
-          <FieldValue label={t("t.relationship")}>
+          <Grid.Cell>
             <Select
               id="application.alternateContact.type"
               name="application.alternateContact.type"
               label={t("t.relationship")}
-              labelClassName="sr-only"
               register={register}
               controlClassName="control"
               options={altContactRelationshipOptions}
               keyPrefix="application.alternateContact.type.options"
             />
-          </FieldValue>
-        </GridCell>
+          </Grid.Cell>
+        </Grid.Row>
 
         {alternateContactType === "other" && (
-          <GridCell>
-            <FieldValue label={t("t.otherRelationShip")}>
+          <Grid.Row>
+            <Grid.Cell>
               <Field
                 id="application.alternateContact.otherType"
                 name="application.alternateContact.otherType"
                 label={t("t.otherRelationShip")}
                 placeholder={t("t.relationship")}
                 register={register}
-                readerOnly
               />
-            </FieldValue>
-          </GridCell>
+            </Grid.Cell>
+          </Grid.Row>
         )}
-      </GridSection>
 
-      <GridSection grid={false}>
-        <FormAddress
-          subtitle={t("application.contact.mailingAddress")}
-          dataKey="application.alternateContact.mailingAddress"
-          register={register}
-          stateKeys={stateKeys}
-        />
-      </GridSection>
-    </GridSection>
+        <Grid.Row>
+          <FormAddress
+            subtitle={t("application.contact.mailingAddress")}
+            dataKey="application.alternateContact.mailingAddress"
+            register={register}
+            stateKeys={stateKeys}
+          />
+        </Grid.Row>
+      </SectionWithGrid>
+    </>
   )
 }
 

@@ -38,7 +38,13 @@ const createMultiselect = async (
   return multiSelectQuestions;
 };
 
-export const devSeeding = async (prismaClient: PrismaClient) => {
+export const devSeeding = async (
+  prismaClient: PrismaClient,
+  jurisdictionName?: string,
+) => {
+  const jurisdiction = await prismaClient.jurisdictions.create({
+    data: jurisdictionFactory(jurisdictionName),
+  });
   await prismaClient.userAccounts.create({
     data: await userFactory({
       roles: { isAdmin: true },
@@ -46,8 +52,13 @@ export const devSeeding = async (prismaClient: PrismaClient) => {
       confirmedAt: new Date(),
     }),
   });
-  const jurisdiction = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory(),
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isJurisdictionalAdmin: true },
+      email: 'jurisdiction-admin@example.com',
+      confirmedAt: new Date(),
+      jurisdictionId: jurisdiction.id,
+    }),
   });
   // add jurisdiction specific translations and default ones
   await prismaClient.translations.create({

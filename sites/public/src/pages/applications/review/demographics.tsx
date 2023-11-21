@@ -30,14 +30,17 @@ import {
 import FormBackLink from "../../../components/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import { ApplicationSection } from "@bloom-housing/backend-core"
+import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const ApplicationDemographics = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("demographics")
   let currentPageSection = 4
-  if (listingSectionQuestions(listing, ApplicationSection.programs)?.length) currentPageSection += 1
-  if (listingSectionQuestions(listing, ApplicationSection.preferences)?.length)
+  if (listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.programs)?.length)
+    currentPageSection += 1
+  if (
+    listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.preferences)?.length
+  )
     currentPageSection += 1
 
   /* Form Handler */

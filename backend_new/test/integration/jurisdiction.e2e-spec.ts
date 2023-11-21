@@ -92,20 +92,22 @@ describe('Jurisdiction Controller Tests', () => {
   });
 
   it('testing create endpoint', async () => {
+    const createBody: JurisdictionCreate = {
+      name: 'new jurisdiction',
+      notificationsSignUpUrl: `notificationsSignUpUrl: 10`,
+      languages: [LanguagesEnum.en],
+      partnerTerms: `partnerTerms: 10`,
+      publicUrl: `publicUrl: 10`,
+      emailFromAddress: `emailFromAddress: 10`,
+      rentalAssistanceDefault: `rentalAssistanceDefault: 10`,
+      enablePartnerSettings: true,
+      enableAccessibilityFeatures: true,
+      enableUtilitiesIncluded: true,
+      listingApprovalPermissions: [],
+    };
     const res = await request(app.getHttpServer())
       .post('/jurisdictions')
-      .send({
-        name: 'new jurisdiction',
-        notificationsSignUpUrl: `notificationsSignUpUrl: 10`,
-        languages: [LanguagesEnum.en],
-        partnerTerms: `partnerTerms: 10`,
-        publicUrl: `publicUrl: 10`,
-        emailFromAddress: `emailFromAddress: 10`,
-        rentalAssistanceDefault: `rentalAssistanceDefault: 10`,
-        enablePartnerSettings: true,
-        enableAccessibilityFeatures: true,
-        enableUtilitiesIncluded: true,
-      } as JurisdictionCreate)
+      .send(createBody)
       .expect(201);
 
     expect(res.body.name).toEqual('new jurisdiction');
@@ -113,21 +115,23 @@ describe('Jurisdiction Controller Tests', () => {
 
   it("update endpoint with id that doesn't exist should error", async () => {
     const id = randomUUID();
+    const updateBody: JurisdictionUpdate = {
+      id: id,
+      name: 'updated name: 10',
+      notificationsSignUpUrl: `notificationsSignUpUrl: 10`,
+      languages: [LanguagesEnum.en],
+      partnerTerms: `partnerTerms: 10`,
+      publicUrl: `updated publicUrl: 11`,
+      emailFromAddress: `emailFromAddress: 10`,
+      rentalAssistanceDefault: `rentalAssistanceDefault: 10`,
+      enablePartnerSettings: true,
+      enableAccessibilityFeatures: true,
+      enableUtilitiesIncluded: true,
+      listingApprovalPermissions: [],
+    };
     const res = await request(app.getHttpServer())
       .put(`/jurisdictions/${id}`)
-      .send({
-        id: id,
-        name: 'updated name: 10',
-        notificationsSignUpUrl: `notificationsSignUpUrl: 10`,
-        languages: [LanguagesEnum.en],
-        partnerTerms: `partnerTerms: 10`,
-        publicUrl: `updated publicUrl: 11`,
-        emailFromAddress: `emailFromAddress: 10`,
-        rentalAssistanceDefault: `rentalAssistanceDefault: 10`,
-        enablePartnerSettings: true,
-        enableAccessibilityFeatures: true,
-        enableUtilitiesIncluded: true,
-      } as JurisdictionUpdate)
+      .send(updateBody)
       .expect(404);
     expect(res.body.message).toEqual(
       `jurisdictionId ${id} was requested but not found`,
@@ -139,21 +143,24 @@ describe('Jurisdiction Controller Tests', () => {
       data: jurisdictionFactory(),
     });
 
+    const updateJurisdiction: JurisdictionUpdate = {
+      id: jurisdictionA.id,
+      name: 'updated name: 10',
+      notificationsSignUpUrl: `notificationsSignUpUrl: 10`,
+      languages: [LanguagesEnum.en],
+      partnerTerms: `partnerTerms: 10`,
+      publicUrl: `updated publicUrl: 10`,
+      emailFromAddress: `emailFromAddress: 10`,
+      rentalAssistanceDefault: `rentalAssistanceDefault: 10`,
+      enablePartnerSettings: true,
+      enableAccessibilityFeatures: true,
+      enableUtilitiesIncluded: true,
+      listingApprovalPermissions: [],
+    };
+
     const res = await request(app.getHttpServer())
       .put(`/jurisdictions/${jurisdictionA.id}`)
-      .send({
-        id: jurisdictionA.id,
-        name: 'updated name: 10',
-        notificationsSignUpUrl: `notificationsSignUpUrl: 10`,
-        languages: [LanguagesEnum.en],
-        partnerTerms: `partnerTerms: 10`,
-        publicUrl: `updated publicUrl: 10`,
-        emailFromAddress: `emailFromAddress: 10`,
-        rentalAssistanceDefault: `rentalAssistanceDefault: 10`,
-        enablePartnerSettings: true,
-        enableAccessibilityFeatures: true,
-        enableUtilitiesIncluded: true,
-      } as JurisdictionUpdate)
+      .send(updateJurisdiction)
       .expect(200);
 
     expect(res.body.name).toEqual('updated name: 10');

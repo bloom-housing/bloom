@@ -1,10 +1,12 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
-import { t, GridSection, GridCell, Field, FieldGroup } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { t, Field, FieldGroup } from "@bloom-housing/ui-components"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { getUniqueUnitTypes, adaFeatureKeys } from "@bloom-housing/shared-helpers"
-import { Accessibility, Unit, UnitType } from "@bloom-housing/backend-core/types"
+import { Accessibility, UnitType } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../../../lib/helpers"
+import { Unit } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type FormHouseholdDetailsProps = {
   listingUnits: Unit[]
@@ -52,93 +54,95 @@ const FormHouseholdDetails = ({
   })
 
   return (
-    <GridSection title={t("application.review.householdDetails")} separator>
-      <GridCell>
-        <FieldValue label={t("application.details.preferredUnitSizes")}>
-          <FieldGroup
-            type="checkbox"
-            name="application.preferredUnit"
-            fields={preferredUnitOptions}
-            register={register}
-            fieldGroupClassName="grid grid-cols-1 mt-4"
-            fieldClassName="ml-0"
-          />
-        </FieldValue>
-      </GridCell>
-      <GridCell>
-        <FieldValue label={t("application.details.adaPriorities")}>
-          <fieldset>
-            <legend className="sr-only">{t("application.details.adaPriorities")}</legend>
+    <>
+      <hr className="spacer-section-above spacer-section" />
+      <SectionWithGrid heading={t("application.review.householdDetails")}>
+        <Grid.Row>
+          <Grid.Cell>
             <FieldGroup
               type="checkbox"
-              name="application.accessibility"
-              fields={adaFeaturesOptions}
+              name="application.preferredUnit"
+              fields={preferredUnitOptions}
+              groupLabel={t("application.details.preferredUnitSizes")}
               register={register}
               fieldGroupClassName="grid grid-cols-1 mt-4"
               fieldClassName="ml-0"
             />
-          </fieldset>
-        </FieldValue>
-      </GridCell>
-      <GridCell>
-        <FieldValue label={t("application.household.expectingChanges.title")}>
-          <div className="flex h-12 items-center">
-            <Field
-              id="application.householdExpectingChangesYes"
-              name="application.householdExpectingChanges"
-              className="m-0"
-              type="radio"
-              label={t("t.yes")}
-              register={register}
-              inputProps={{
-                value: YesNoAnswer.Yes,
-              }}
-            />
+          </Grid.Cell>
 
-            <Field
-              id="application.householdExpectingChangesNo"
-              name="application.householdExpectingChanges"
-              className="m-0"
-              type="radio"
-              label={t("t.no")}
-              register={register}
-              inputProps={{
-                value: YesNoAnswer.No,
-              }}
-            />
-          </div>
-        </FieldValue>
-      </GridCell>
-      <GridCell>
-        <FieldValue label={t("application.household.householdStudent.title")}>
-          <div className="flex h-12 items-center">
-            <Field
-              id="application.householdStudentYes"
-              name="application.householdStudent"
-              className="m-0"
-              type="radio"
-              label={t("t.yes")}
-              register={register}
-              inputProps={{
-                value: YesNoAnswer.Yes,
-              }}
-            />
+          <Grid.Cell>
+            <fieldset>
+              <FieldGroup
+                type="checkbox"
+                name="application.accessibility"
+                fields={adaFeaturesOptions}
+                register={register}
+                groupLabel={t("application.details.adaPriorities")}
+                fieldGroupClassName="grid grid-cols-1 mt-4"
+                fieldClassName="ml-0"
+              />
+            </fieldset>
+          </Grid.Cell>
 
-            <Field
-              id="application.householdStudentNo"
-              name="application.householdStudent"
-              className="m-0"
-              type="radio"
-              label={t("t.no")}
-              register={register}
-              inputProps={{
-                value: YesNoAnswer.No,
-              }}
-            />
-          </div>
-        </FieldValue>
-      </GridCell>
-    </GridSection>
+          <FieldValue label={t("application.household.expectingChanges.title")}>
+            <div className="flex h-12 items-center">
+              <Field
+                id="application.householdExpectingChangesYes"
+                name="application.householdExpectingChanges"
+                className="m-0"
+                type="radio"
+                label={t("t.yes")}
+                register={register}
+                inputProps={{
+                  value: YesNoAnswer.Yes,
+                }}
+              />
+
+              <Field
+                id="application.householdExpectingChangesNo"
+                name="application.householdExpectingChanges"
+                className="m-0"
+                type="radio"
+                label={t("t.no")}
+                register={register}
+                inputProps={{
+                  value: YesNoAnswer.No,
+                }}
+              />
+            </div>
+          </FieldValue>
+        </Grid.Row>
+        <Grid.Row columns="3">
+          <FieldValue label={t("application.household.householdStudent.title")}>
+            <div className="flex h-12 items-center">
+              <Field
+                id="application.householdStudentYes"
+                name="application.householdStudent"
+                className="m-0"
+                type="radio"
+                label={t("t.yes")}
+                register={register}
+                inputProps={{
+                  value: YesNoAnswer.Yes,
+                }}
+              />
+
+              <Field
+                id="application.householdStudentNo"
+                name="application.householdStudent"
+                className="m-0"
+                type="radio"
+                label={t("t.no")}
+                register={register}
+                inputProps={{
+                  value: YesNoAnswer.No,
+                }}
+              />
+            </div>
+          </FieldValue>
+        </Grid.Row>
+      </SectionWithGrid>
+    </>
   )
 }
 

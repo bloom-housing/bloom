@@ -1,9 +1,10 @@
 import React, { useMemo } from "react"
 import { useFormContext } from "react-hook-form"
-import { t, GridSection, GridCell, Select, FieldGroup } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { t, Select, FieldGroup } from "@bloom-housing/ui-components"
+import { Grid } from "@bloom-housing/ui-seeds"
 import { ethnicityKeys, raceKeys, howDidYouHear } from "@bloom-housing/shared-helpers"
 import { Demographics } from "@bloom-housing/backend-core/types"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type FormDemographicsProps = {
   formValues: Demographics
@@ -60,41 +61,47 @@ const FormDemographics = ({ formValues }: FormDemographicsProps) => {
   }, [register, isKeyIncluded, getCustomValue])
 
   return (
-    <GridSection title={t("application.add.demographicsInformation")} columns={3} separator>
-      <GridCell>
-        <FieldValue label={t("application.add.race")}>
-          <FieldGroup name="race" fields={raceOptions} type="checkbox" register={register} />
-        </FieldValue>
-      </GridCell>
+    <>
+      <hr className="spacer-section-above spacer-section" />
+      <SectionWithGrid heading={t("application.add.demographicsInformation")}>
+        <Grid.Row>
+          <Grid.Cell>
+            <FieldGroup
+              name="race"
+              fields={raceOptions}
+              type="checkbox"
+              register={register}
+              groupLabel={t("application.add.race")}
+            />
+          </Grid.Cell>
 
-      <GridCell>
-        <FieldValue label={t("application.add.ethnicity")}>
-          <Select
-            id="application.demographics.ethnicity"
-            name="application.demographics.ethnicity"
-            placeholder={t("t.selectOne")}
-            label={t("application.add.ethnicity")}
-            labelClassName="sr-only"
-            register={register}
-            controlClassName="control"
-            options={ethnicityKeys}
-            keyPrefix="application.review.demographics.ethnicityOptions"
-          />
-        </FieldValue>
-      </GridCell>
-
-      <GridCell span={2}>
-        <FieldValue label={t("application.add.howDidYouHearAboutUs")}>
-          <FieldGroup
-            type="checkbox"
-            name="application.demographics.howDidYouHear"
-            fields={howDidYouHearOptions}
-            register={register}
-            fieldGroupClassName="grid grid-cols-2 mt-4"
-          />
-        </FieldValue>
-      </GridCell>
-    </GridSection>
+          <Grid.Cell>
+            <Select
+              id="application.demographics.ethnicity"
+              name="application.demographics.ethnicity"
+              placeholder={t("t.selectOne")}
+              label={t("application.add.ethnicity")}
+              register={register}
+              controlClassName="control"
+              options={ethnicityKeys}
+              keyPrefix="application.review.demographics.ethnicityOptions"
+            />
+          </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row columns={2}>
+          <Grid.Cell>
+            <FieldGroup
+              type="checkbox"
+              name="application.demographics.howDidYouHear"
+              fields={howDidYouHearOptions}
+              register={register}
+              groupLabel={t("application.add.howDidYouHearAboutUs")}
+              fieldGroupClassName="grid grid-cols-2 mt-4"
+            />
+          </Grid.Cell>
+        </Grid.Row>
+      </SectionWithGrid>
+    </>
   )
 }
 

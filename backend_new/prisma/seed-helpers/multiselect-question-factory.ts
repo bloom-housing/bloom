@@ -23,7 +23,7 @@ export const multiselectQuestionFactory = (
     text: text,
     subText: `sub text for ${text}`,
     description: `description of ${text}`,
-    links: {},
+    links: [],
     options: multiselectOptionFactory(optionalParams?.numberOfOptions || 0),
     optOutText: optionalParams?.optOut ? "I don't want this preference" : null,
     hideFromListing: false,

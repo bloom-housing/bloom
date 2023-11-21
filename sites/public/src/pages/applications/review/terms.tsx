@@ -15,12 +15,6 @@ import {
   ProgressNav,
   Heading,
 } from "@bloom-housing/ui-components"
-import {
-  ApplicationSection,
-  ApplicationReviewStatus,
-  ListingReviewOrder,
-  ApplicationCreate,
-} from "@bloom-housing/backend-core"
 import { useForm } from "react-hook-form"
 import Markdown from "markdown-to-jsx"
 import {
@@ -34,7 +28,11 @@ import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import { untranslateMultiselectQuestion } from "../../../lib/helpers"
-import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  ApplicationReviewStatusEnum,
+  MultiselectQuestionsApplicationSectionEnum,
+  ReviewOrderTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 const ApplicationTerms = () => {
   const router = useRouter()
   const { conductor, application, listing } = useFormConductor("terms")
@@ -43,8 +41,11 @@ const ApplicationTerms = () => {
   const [submitting, setSubmitting] = useState(false)
 
   let currentPageSection = 4
-  if (listingSectionQuestions(listing, ApplicationSection.programs)?.length) currentPageSection += 1
-  if (listingSectionQuestions(listing, ApplicationSection.preferences)?.length)
+  if (listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.programs)?.length)
+    currentPageSection += 1
+  if (
+    listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.preferences)?.length
+  )
     currentPageSection += 1
   const applicationDueDate = new Date(listing?.applicationDueDate).toDateString()
 
@@ -69,8 +70,8 @@ const ApplicationTerms = () => {
       .submit({
         body: {
           ...application,
-          reviewStatus: ApplicationReviewStatus.pending,
-          listing: {
+          reviewStatus: ApplicationReviewStatusEnum.pending,
+          listings: {
             id: listing.id,
           },
           appUrl: window.location.origin,
@@ -80,7 +81,7 @@ const ApplicationTerms = () => {
             },
           }),
           // TODO remove this once this call is changed to the new backend
-        } as unknown as ApplicationCreate,
+        },
       })
       .then((result) => {
         conductor.currentStep.save({ confirmationCode: result.confirmationCode })
