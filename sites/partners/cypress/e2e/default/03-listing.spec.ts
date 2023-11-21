@@ -8,6 +8,13 @@ describe("Listing Management Tests", () => {
   })
 
   it("full listing publish", () => {
+    cy.intercept("POST", "/api/adapter/upload", {
+      body: {
+        id: "123",
+        url:
+          "https://assets.website-files.com/5fbfdd121e108ea418ede824/5fbfdea9a7287d45a63d821b_Exygy%20Logo.svg",
+      },
+    })
     cy.visit("/")
     cy.get("a > .button").contains("Add Listing").click()
     cy.contains("New Listing")
@@ -31,14 +38,6 @@ describe("Listing Management Tests", () => {
         subjectType: "drag-n-drop",
       }
     )
-
-    cy.intercept("/api/adapter/upload", {
-      body: {
-        id: "123",
-        url:
-          "https://assets.website-files.com/5fbfdd121e108ea418ede824/5fbfdea9a7287d45a63d821b_Exygy%20Logo.svg",
-      },
-    })
 
     cy.getByTestId("drawer-photos-table")
       .find("img")

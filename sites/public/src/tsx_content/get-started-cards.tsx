@@ -54,7 +54,7 @@ export function getStartedLinkableCards(): React.ReactElement<CardProps>[] {
             <ol className="text__medium-normal numbered-list-small ml-5">
               <li>{t("help.getStarted.seeListingsHouseholdResp1")}</li>
               <li>{t("help.getStarted.seeListingsHouseholdResp2")}</li>
-              <ul className="text__medium-normal list-disc ml-5">
+              <ul className="text__medium-normal list-disc ml-5 mb-0">
                 <li>{t("help.getStarted.seeListingsHouseholdResp2a")}</li>
                 <li>{t("help.getStarted.seeListingsHouseholdResp2b")}</li>
                 <li>{t("help.getStarted.seeListingsHouseholdResp2c")}</li>
@@ -71,11 +71,10 @@ export function getStartedLinkableCards(): React.ReactElement<CardProps>[] {
               <li>
                 {t("help.getStarted.applyLotteryWaitlistResp2")}
                 <span className="text__medium-weighted">{t("t.seeDetails")}</span>.
-                <br />
                 {t("help.getStarted.applyLotteryWaitlistResp2a")}
               </li>
               <li>{t("help.getStarted.applyLotteryWaitlistResp3")}</li>
-              <ul className="text__medium-normal list-disc ml-5">
+              <ul className="text__medium-normal list-disc ml-5 mb-0">
                 <li>{t("help.getStarted.applyLotteryWaitlistResp3a")}</li>
                 <li>{t("help.getStarted.applyLotteryWaitlistResp3b")}</li>
                 <li>{t("help.getStarted.applyLotteryWaitlistResp3c")}</li>
@@ -83,7 +82,7 @@ export function getStartedLinkableCards(): React.ReactElement<CardProps>[] {
               </ul>
               <li>{t("help.getStarted.applyLotteryWaitlistResp4")}</li>
               <li>{t("help.getStarted.applyLotteryWaitlistResp5")}</li>
-              <ul className="text__medium-normal list-disc ml-5">
+              <ul className="text__medium-normal list-disc ml-5 mb-0">
                 <li>{t("help.getStarted.applyLotteryWaitlistResp5a")}</li>
                 <li>{t("help.getStarted.applyLotteryWaitlistResp5b")}</li>
                 <li>{t("help.getStarted.applyLotteryWaitlistResp5c")}</li>
