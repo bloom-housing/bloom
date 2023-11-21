@@ -32,6 +32,7 @@ import { TranslationService } from './translation.service';
 import { ListingCreate } from '../dtos/listings/listing-create.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { ListingUpdate } from '../dtos/listings/listing-update.dto';
+import { ApplicationFlaggedSetService } from './application-flagged-set.service';
 import { User } from '../dtos/users/user.dto';
 import { EmailService } from './email.service';
 import { IdDTO } from '../dtos/shared/id.dto';
@@ -131,6 +132,7 @@ export class ListingService {
     private prisma: PrismaService,
     private translationService: TranslationService,
     private httpService: HttpService,
+    private afsService: ApplicationFlaggedSetService,
     private emailService: EmailService,
     private configService: ConfigService,
   ) {}
@@ -757,6 +759,7 @@ export class ListingService {
       dto.status === ListingsStatusEnum.closed
     ) {
       // TODO: afs process (https://github.com/bloom-housing/bloom/issues/3540)
+      await this.afsService.process(dto.id);
     }
 
     const rawListing = await this.prisma.listings.update({

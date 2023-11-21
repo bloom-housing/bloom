@@ -17,15 +17,19 @@ export class PaginationMeta {
   @Expose()
   @ApiProperty()
   currentPage: number;
+
   @Expose()
   @ApiProperty()
   itemCount: number;
+
   @Expose()
   @ApiProperty()
   itemsPerPage: number;
+
   @Expose()
   @ApiProperty()
   totalItems: number;
+
   @Expose()
   @ApiProperty()
   totalPages: number;
@@ -44,6 +48,7 @@ export function PaginationFactory<T>(
     @Expose()
     @Type(() => classType)
     items: T[];
+
     @Expose()
     @ApiProperty()
     meta: PaginationMeta;

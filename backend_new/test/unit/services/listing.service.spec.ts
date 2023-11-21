@@ -30,6 +30,7 @@ import { of } from 'rxjs';
 import { ListingUpdate } from '../../../src/dtos/listings/listing-update.dto';
 import { ListingPublishedCreate } from '../../../src/dtos/listings/listing-published-create.dto';
 import { ListingPublishedUpdate } from '../../../src/dtos/listings/listing-published-update.dto';
+import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
 import { User } from '../../../src/dtos/users/user.dto';
 import { EmailService } from '../../../src/services/email.service';
 import { ConfigService } from '@nestjs/config';
@@ -140,6 +141,10 @@ describe('Testing listing service', () => {
     ),
   };
 
+  const afsMock = {
+    process: jest.fn().mockResolvedValue(true),
+  };
+
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -153,6 +158,10 @@ describe('Testing listing service', () => {
         {
           provide: HttpService,
           useValue: httpServiceMock,
+        },
+        {
+          provide: ApplicationFlaggedSetService,
+          useValue: afsMock,
         },
         {
           provide: EmailService,

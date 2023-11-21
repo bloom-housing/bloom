@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import { randomUUID } from 'crypto';
 import request from 'supertest';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { unitRentTypeFactory } from '../../prisma/seed-helpers/unit-rent-type-factory';
 import { UnitRentTypeCreate } from '../../src/dtos/unit-rent-types/unit-rent-type-create.dto';
 import { UnitRentTypeUpdate } from '../../src/dtos/unit-rent-types/unit-rent-type-update.dto';
-import { IdDTO } from 'src/dtos/shared/id.dto';
-import { randomUUID } from 'crypto';
+import { IdDTO } from '../../src/dtos/shared/id.dto';
 
 describe('UnitRentType Controller Tests', () => {
   let app: INestApplication;

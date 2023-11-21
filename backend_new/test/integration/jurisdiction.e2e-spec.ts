@@ -1,14 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import { LanguagesEnum } from '@prisma/client';
+import { randomUUID } from 'crypto';
 import request from 'supertest';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
 import { JurisdictionCreate } from '../../src/dtos/jurisdictions/jurisdiction-create.dto';
 import { JurisdictionUpdate } from '../../src/dtos/jurisdictions/jurisdiction-update.dto';
-import { IdDTO } from 'src/dtos/shared/id.dto';
-import { LanguagesEnum } from '@prisma/client';
-import { randomUUID } from 'crypto';
+import { IdDTO } from '../../src/dtos/shared/id.dto';
 
 describe('Jurisdiction Controller Tests', () => {
   let app: INestApplication;

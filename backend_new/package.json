@@ -39,6 +39,7 @@
     "@nestjs/passport": "~10.0.1",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/swagger": "~7.1.12",
+    "@nestjs/schedule": "^3.0.4",
     "@prisma/client": "^5.0.0",
     "@sendgrid/mail": "7.7.0",
     "casbin": "^5.27.1",

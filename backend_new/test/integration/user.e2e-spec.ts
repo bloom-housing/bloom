@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import { randomUUID } from 'crypto';
+import { stringify } from 'qs';
 import request from 'supertest';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
-import { randomUUID } from 'crypto';
-import { stringify } from 'qs';
 import cookieParser from 'cookie-parser';
 import { UserQueryParams } from '../../src/dtos/users/user-query-param.dto';
 import { UserUpdate } from '../../src/dtos/users/user-update.dto';

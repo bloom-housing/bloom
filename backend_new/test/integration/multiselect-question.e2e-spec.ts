@@ -1,5 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
+import { randomUUID } from 'crypto';
+import { stringify } from 'qs';
 import request from 'supertest';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
@@ -7,12 +10,9 @@ import { multiselectQuestionFactory } from '../../prisma/seed-helpers/multiselec
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
 import { MultiselectQuestionCreate } from '../../src/dtos/multiselect-questions/multiselect-question-create.dto';
 import { MultiselectQuestionUpdate } from '../../src/dtos/multiselect-questions/multiselect-question-update.dto';
-import { IdDTO } from 'src/dtos/shared/id.dto';
-import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
-import { stringify } from 'qs';
+import { IdDTO } from '../../src/dtos/shared/id.dto';
 import { MultiselectQuestionQueryParams } from '../../src/dtos/multiselect-questions/multiselect-question-query-params.dto';
 import { Compare } from '../../src/dtos/shared/base-filter.dto';
-import { randomUUID } from 'crypto';
 
 describe('MultiselectQuestion Controller Tests', () => {
   let app: INestApplication;
@@ -27,7 +27,6 @@ describe('MultiselectQuestion Controller Tests', () => {
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     await app.init();
-
     const jurisdiction = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });

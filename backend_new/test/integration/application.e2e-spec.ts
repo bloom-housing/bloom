@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import request from 'supertest';
 import {
   ApplicationReviewStatusEnum,
   ApplicationStatusEnum,
@@ -12,6 +11,7 @@ import {
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { stringify } from 'qs';
+import request from 'supertest';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { applicationFactory } from '../../prisma/seed-helpers/application-factory';

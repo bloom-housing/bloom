@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import { randomUUID } from 'crypto';
 import request from 'supertest';
 import { AppModule } from '../../src//modules/app.module';
-import { randomUUID } from 'crypto';
 import { PrismaService } from '../../src/services/prisma.service';
 
 describe('Asset Controller Tests', () => {

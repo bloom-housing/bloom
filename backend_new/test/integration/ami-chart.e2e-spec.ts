@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
+import { stringify } from 'qs';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
-import { stringify } from 'qs';
 import { AmiChartQueryParams } from '../../src/dtos/ami-charts/ami-chart-query-params.dto';
 import { amiChartFactory } from '../../prisma/seed-helpers/ami-chart-factory';
 import { AmiChartCreate } from '../../src/dtos/ami-charts/ami-chart-create.dto';
 import { AmiChartUpdate } from '../../src/dtos/ami-charts/ami-chart-update.dto';
-import { IdDTO } from 'src/dtos/shared/id.dto';
+import { IdDTO } from '../../src/dtos/shared/id.dto';
 
 describe('AmiChart Controller Tests', () => {
   let app: INestApplication;

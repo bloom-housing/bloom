@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import { sign } from 'jsonwebtoken';
+import request from 'supertest';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
