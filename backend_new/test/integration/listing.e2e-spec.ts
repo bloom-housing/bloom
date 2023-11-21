@@ -613,6 +613,34 @@ describe('Listing Controller Tests', () => {
     expect(res.body.name).toEqual(val.name);
   });
 
+  it('should successfully process listings that are passed due', async () => {
+    const jurisdictionA = await prisma.jurisdictions.create({
+      data: jurisdictionFactory(),
+    });
+    const listingData = await listingFactory(jurisdictionA.id, prisma, {
+      status: ListingsStatusEnum.active,
+      applicationDueDate: new Date(0),
+    });
+    const listing = await prisma.listings.create({
+      data: listingData,
+    });
+
+    const res = await request(app.getHttpServer())
+      .put(`/listings/process`)
+      .expect(200);
+
+    expect(res.body.success).toEqual(true);
+
+    const postProcessListing = await prisma.listings.findUnique({
+      where: {
+        id: listing.id,
+      },
+    });
+
+    expect(postProcessListing.status).toEqual(ListingsStatusEnum.closed);
+    expect(postProcessListing.closedAt).not.toBeNull();
+  });
+
   describe('listings approval notification', () => {
     let listing,
       adminUser,

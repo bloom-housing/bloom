@@ -104,6 +104,16 @@ export class ListingController {
     return await this.listingService.delete(dto.id);
   }
 
+  @Put('process')
+  @ApiOperation({
+    summary: 'Trigger the listing process job',
+    operationId: 'process',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async process(): Promise<SuccessDTO> {
+    return await this.listingService.process();
+  }
+
   @Put(':id')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Update listing by id', operationId: 'update' })

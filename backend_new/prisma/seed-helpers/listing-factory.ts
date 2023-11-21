@@ -23,6 +23,7 @@ export const listingFactory = async (
     includeEligibilityRules?: boolean;
     multiselectQuestions?: Partial<MultiselectQuestions>[];
     applications?: Prisma.ApplicationsCreateInput[];
+    applicationDueDate?: Date;
   },
 ): Promise<Prisma.ListingsCreateInput> => {
   const previousListing = optionalParams?.listing || {};
@@ -90,6 +91,7 @@ export const listingFactory = async (
           create: units,
         }
       : undefined,
+    applicationDueDate: optionalParams?.applicationDueDate ?? undefined,
   };
 };
 
