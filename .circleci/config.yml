@@ -131,9 +131,9 @@ jobs:
           command: npx cypress run
           working_directory: sites/partners
       - store_artifacts:
-          path: sites/public/cypress/videos
+          path: sites/partners/cypress/videos
       - store_artifacts:
-          path: sites/public/cypress/screenshots
+          path: sites/partners/cypress/screenshots
   build-public:
     executor: standard-node
     steps:

@@ -3,12 +3,12 @@ import { useFormContext } from "react-hook-form"
 import { t, Field, FieldGroup } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { getUniqueUnitTypes, adaFeatureKeys } from "@bloom-housing/shared-helpers"
-import { YesNoAnswer } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import {
   Accessibility,
   Unit,
   UnitType,
+  YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type FormHouseholdDetailsProps = {
@@ -97,7 +97,7 @@ const FormHouseholdDetails = ({
                 label={t("t.yes")}
                 register={register}
                 inputProps={{
-                  value: YesNoAnswer.Yes,
+                  value: YesNoEnum.yes,
                 }}
               />
 
@@ -109,7 +109,7 @@ const FormHouseholdDetails = ({
                 label={t("t.no")}
                 register={register}
                 inputProps={{
-                  value: YesNoAnswer.No,
+                  value: YesNoEnum.no,
                 }}
               />
             </div>
@@ -126,7 +126,7 @@ const FormHouseholdDetails = ({
                 label={t("t.yes")}
                 register={register}
                 inputProps={{
-                  value: YesNoAnswer.Yes,
+                  value: YesNoEnum.yes,
                 }}
               />
 
@@ -138,7 +138,7 @@ const FormHouseholdDetails = ({
                 label={t("t.no")}
                 register={register}
                 inputProps={{
-                  value: YesNoAnswer.No,
+                  value: YesNoEnum.no,
                 }}
               />
             </div>

@@ -1,9 +1,9 @@
 import React, { useContext, useMemo } from "react"
 import { t, MinimalTable, Button } from "@bloom-housing/ui-components"
 import { FieldValue } from "@bloom-housing/ui-seeds"
+import { YesNoEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ApplicationContext } from "../../ApplicationContext"
 import { MembersDrawer } from "../DetailsMemberDrawer"
-import { YesNoAnswer } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type DetailsHouseholdMembersProps = {
@@ -24,7 +24,7 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
 
   const householdMembersData = useMemo(() => {
     const checkAvailablility = (property) => {
-      if (property === YesNoAnswer.Yes) {
+      if (property === YesNoEnum.yes) {
         return t("t.yes")
       } else if (property === "no") {
         return t("t.no")

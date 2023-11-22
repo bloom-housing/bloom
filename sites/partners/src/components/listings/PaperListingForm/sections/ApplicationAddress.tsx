@@ -12,9 +12,10 @@ import {
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { stateKeys } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
-import { YesNoAnswer, isNullOrUndefined, fieldHasError } from "../../../../lib/helpers"
+import { isNullOrUndefined, fieldHasError } from "../../../../lib/helpers"
 import { FormListing, addressTypes } from "../../../../lib/listings/formTypes"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { YesNoEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type ApplicationAddressProps = {
   listing?: FormListing
@@ -66,40 +67,40 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [leasingAgentAddressExists])
 
-  const postmarksConsidered: YesNoAnswer = useWatch({
+  const postmarksConsidered: YesNoEnum = useWatch({
     control,
     name: "arePostmarksConsidered",
     defaultValue:
       listing && listing?.postmarkedApplicationsReceivedByDate !== null
-        ? YesNoAnswer.Yes
-        : YesNoAnswer.No,
+        ? YesNoEnum.yes
+        : YesNoEnum.no,
   })
 
-  const applicationsMailedIn: YesNoAnswer = useWatch({
+  const applicationsMailedIn: YesNoEnum = useWatch({
     control,
     name: "canApplicationsBeMailedIn",
     defaultValue:
       listing?.listingsApplicationMailingAddress || listing?.applicationMailingAddressType
-        ? YesNoAnswer.Yes
-        : YesNoAnswer.No,
+        ? YesNoEnum.yes
+        : YesNoEnum.no,
   })
 
-  const applicationsPickedUp: YesNoAnswer = useWatch({
+  const applicationsPickedUp: YesNoEnum = useWatch({
     control,
     name: "canPaperApplicationsBePickedUp",
     defaultValue:
       listing?.listingsApplicationPickUpAddress || listing?.applicationPickUpAddressType
-        ? YesNoAnswer.Yes
-        : YesNoAnswer.No,
+        ? YesNoEnum.yes
+        : YesNoEnum.no,
   })
 
-  const applicationsDroppedOff: YesNoAnswer = useWatch({
+  const applicationsDroppedOff: YesNoEnum = useWatch({
     control,
     name: "canApplicationsBeDroppedOff",
     defaultValue:
       listing?.listingsApplicationDropOffAddress || listing?.applicationDropOffAddressType
-        ? YesNoAnswer.Yes
-        : YesNoAnswer.No,
+        ? YesNoEnum.yes
+        : YesNoEnum.no,
   })
 
   const mailedInAddressType = useWatch({
@@ -141,11 +142,11 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
   const yesNoRadioOptions = [
     {
       label: t("t.yes"),
-      value: YesNoAnswer.Yes,
+      value: YesNoEnum.yes,
     },
     {
       label: t("t.no"),
-      value: YesNoAnswer.No,
+      value: YesNoEnum.no,
     },
   ]
 
@@ -254,7 +255,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
           </FieldValue>
         </Grid.Row>
         <Grid.Row columns={3}>
-          {applicationsMailedIn === YesNoAnswer.Yes ? (
+          {applicationsMailedIn === YesNoEnum.yes ? (
             <FieldValue label="Where are applications mailed in?">
               <FieldGroup
                 fieldGroupClassName="grid grid-cols-1"
@@ -273,7 +274,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
             <Grid.Cell> </Grid.Cell>
           )}
 
-          {applicationsPickedUp === YesNoAnswer.Yes ? (
+          {applicationsPickedUp === YesNoEnum.yes ? (
             <FieldValue label={t("listings.wherePickupQuestion")}>
               <FieldGroup
                 fieldGroupClassName="grid grid-cols-1"
@@ -292,7 +293,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
             <Grid.Cell> </Grid.Cell>
           )}
 
-          {applicationsDroppedOff === YesNoAnswer.Yes ? (
+          {applicationsDroppedOff === YesNoEnum.yes ? (
             <FieldValue label={t("listings.whereDropOffQuestion")}>
               <FieldGroup
                 fieldGroupClassName="grid grid-cols-1"
@@ -311,7 +312,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
             <Grid.Cell> </Grid.Cell>
           )}
         </Grid.Row>
-        {applicationsMailedIn === YesNoAnswer.Yes &&
+        {applicationsMailedIn === YesNoEnum.yes &&
           mailedInAddressType === addressTypes.anotherAddress && (
             <>
               <SectionWithGrid.HeadingRow>
@@ -430,7 +431,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
               </Grid.Row>
             </>
           )}
-        {applicationsPickedUp === YesNoAnswer.Yes &&
+        {applicationsPickedUp === YesNoEnum.yes &&
           pickedUpAddressType === addressTypes.anotherAddress && (
             <>
               <SectionWithGrid.HeadingRow>{t("listings.pickupAddress")}</SectionWithGrid.HeadingRow>
@@ -549,7 +550,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
               </Grid.Row>
             </>
           )}
-        {applicationsDroppedOff === YesNoAnswer.Yes &&
+        {applicationsDroppedOff === YesNoEnum.yes &&
           droppedOffAddressType === addressTypes.anotherAddress && (
             <>
               <SectionWithGrid.HeadingRow>
@@ -695,7 +696,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
             />
           </FieldValue>
           <Grid.Cell className={"mt-4"}>
-            {postmarksConsidered === YesNoAnswer.Yes && (
+            {postmarksConsidered === YesNoEnum.yes && (
               <DateField
                 label={t("listings.receivedByDate")}
                 name={"postmarkByDateDateField"}
@@ -718,7 +719,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
             )}
           </Grid.Cell>
           <Grid.Cell className={"mt-4"}>
-            {postmarksConsidered === YesNoAnswer.Yes && (
+            {postmarksConsidered === YesNoEnum.yes && (
               <TimeField
                 label={t("listings.receivedByTime")}
                 name={"postmarkByDateTimeField"}

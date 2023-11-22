@@ -1,5 +1,4 @@
 import { LatitudeLongitude, TimeFieldPeriod } from "@bloom-housing/ui-components"
-import { YesNoAnswer } from "../helpers"
 import {
   ApplicationAddressTypeEnum,
   Listing,
@@ -10,6 +9,7 @@ import {
   PaperApplicationCreate,
   Unit,
   User,
+  YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export enum AnotherAddressEnum {
@@ -37,15 +37,15 @@ export type FormListing = Omit<Listing, "countyCode"> & {
     minutes: string
     period: TimeFieldPeriod
   }
-  arePostmarksConsidered?: YesNoAnswer
-  canApplicationsBeDroppedOff?: YesNoAnswer
-  canPaperApplicationsBePickedUp?: YesNoAnswer
-  canApplicationsBeMailedIn?: YesNoAnswer
-  digitalApplicationChoice?: YesNoAnswer
-  commonDigitalApplicationChoice?: YesNoAnswer
-  paperApplicationChoice?: YesNoAnswer
-  referralOpportunityChoice?: YesNoAnswer
-  dueDateQuestionChoice?: YesNoAnswer
+  arePostmarksConsidered?: YesNoEnum
+  canApplicationsBeDroppedOff?: YesNoEnum
+  canPaperApplicationsBePickedUp?: YesNoEnum
+  canApplicationsBeMailedIn?: YesNoEnum
+  digitalApplicationChoice?: YesNoEnum
+  commonDigitalApplicationChoice?: YesNoEnum
+  paperApplicationChoice?: YesNoEnum
+  referralOpportunityChoice?: YesNoEnum
+  dueDateQuestionChoice?: YesNoEnum
   criteriaAttachType?: string
   lotteryDate?: {
     month: string
@@ -70,8 +70,8 @@ export type FormListing = Omit<Listing, "countyCode"> & {
   }
   reviewOrderQuestion?: string
   listingAvailabilityQuestion?: string
-  waitlistOpenQuestion?: YesNoAnswer
-  waitlistSizeQuestion?: YesNoAnswer
+  waitlistOpenQuestion?: YesNoEnum
+  waitlistSizeQuestion?: YesNoEnum
   whereApplicationsDroppedOff?: ApplicationAddressTypeEnum | AnotherAddressEnum
   whereApplicationsPickedUp?: ApplicationAddressTypeEnum | AnotherAddressEnum
   whereApplicationsMailedIn?: ApplicationAddressTypeEnum | AnotherAddressEnum

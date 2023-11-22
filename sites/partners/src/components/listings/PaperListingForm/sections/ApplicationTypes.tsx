@@ -17,17 +17,13 @@ import {
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { Card, Grid } from "@bloom-housing/ui-seeds"
-import {
-  cloudinaryFileUploader,
-  fieldMessage,
-  fieldHasError,
-  YesNoAnswer,
-} from "../../../../lib/helpers"
+import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../../lib/helpers"
 import { FormListing } from "../../../../lib/listings/formTypes"
 import {
   ApplicationMethodCreate,
   ApplicationMethodsTypeEnum,
   LanguagesEnum,
+  YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
@@ -72,11 +68,11 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   const yesNoRadioOptions = [
     {
       label: t("t.yes"),
-      value: YesNoAnswer.Yes,
+      value: YesNoEnum.yes,
     },
     {
       label: t("t.no"),
-      value: YesNoAnswer.No,
+      value: YesNoEnum.no,
     },
   ]
 
@@ -248,7 +244,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               ]}
             />
           </Grid.Cell>
-          {digitalApplicationChoice === YesNoAnswer.Yes && (
+          {digitalApplicationChoice === YesNoEnum.yes && (
             <Grid.Cell>
               <p className="field-label m-4 ml-0">{t("listings.usingCommonDigitalApplication")}</p>
 
@@ -297,9 +293,9 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
           )}
         </Grid.Row>
         {((commonDigitalApplicationChoice &&
-          commonDigitalApplicationChoice === YesNoAnswer.No &&
-          digitalApplicationChoice === YesNoAnswer.Yes) ||
-          (digitalApplicationChoice === YesNoAnswer.Yes &&
+          commonDigitalApplicationChoice === YesNoEnum.no &&
+          digitalApplicationChoice === YesNoEnum.yes) ||
+          (digitalApplicationChoice === YesNoEnum.yes &&
             !commonDigitalApplicationChoice &&
             listing?.commonDigitalApplication === false)) && (
           <Grid.Row columns={1}>
@@ -383,7 +379,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             />
           </Grid.Cell>
         </Grid.Row>
-        {paperApplicationChoice === YesNoAnswer.Yes && (
+        {paperApplicationChoice === YesNoEnum.yes && (
           <Grid.Row columns={1}>
             <Grid.Cell>
               {methods.paper?.paperApplications?.length > 0 && (
@@ -491,7 +487,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             />
           </Grid.Cell>
         </Grid.Row>
-        {referralOpportunityChoice === YesNoAnswer.Yes && (
+        {referralOpportunityChoice === YesNoEnum.yes && (
           <Grid.Row columns={3}>
             <Grid.Cell>
               <PhoneField
