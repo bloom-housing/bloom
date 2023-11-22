@@ -34,7 +34,6 @@ describe("Preference Management Tests", () => {
     cy.getByTestId("collect-name-yes").click()
     cy.getByTestId("collect-relationship-yes").click()
     cy.getByTestId("preference-option-save").click()
-    cy.getByTestId("preference-option-save").click()
 
     cy.getByTestId("preference-opt-out-label").clear()
     cy.getByTestId("preference-opt-out-label").type("Preference Opt Out Label")

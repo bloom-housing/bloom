@@ -123,8 +123,8 @@ export class MultiselectQuestionService {
             id: juris.id,
           })),
         },
-        links: JSON.stringify(incomingData.links),
-        options: JSON.stringify(incomingData.options),
+        links: JSON.parse(JSON.stringify(incomingData.links)),
+        options: JSON.parse(JSON.stringify(incomingData.options)),
       },
       include: view,
     });
