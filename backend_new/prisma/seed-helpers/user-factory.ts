@@ -14,6 +14,7 @@ export const userFactory = async (optionalParams?: {
   phoneNumberVerified?: boolean;
   jurisdictionId?: string;
   listings?: string[];
+  acceptedTerms?: boolean;
 }): Promise<Prisma.UserAccountsCreateInput> => ({
   email:
     optionalParams?.email?.toLocaleLowerCase() ||
@@ -35,6 +36,7 @@ export const userFactory = async (optionalParams?: {
   mfaCodeUpdatedAt: optionalParams?.mfaEnabled ? new Date() : undefined,
   phoneNumber: optionalParams?.phoneNumber || null,
   phoneNumberVerified: optionalParams?.phoneNumberVerified || null,
+  agreedToTermsOfService: optionalParams.acceptedTerms !== false,
   listings: optionalParams?.listings
     ? {
         connect: optionalParams.listings.map((listing) => {
