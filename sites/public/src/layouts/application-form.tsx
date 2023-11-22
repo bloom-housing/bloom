@@ -42,6 +42,8 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
     )
   }
 
+  if (!props.progressNavProps.mounted) return
+
   return (
     <>
       <Card spacing={"sm"} className={styles["application-form-header"]}>
@@ -87,7 +89,7 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
               {t("t.next")}
             </Button>
 
-            {props.progressNavProps.mounted && props.conductor.canJumpForwardToReview() && (
+            {props.conductor.canJumpForwardToReview() && (
               <div>
                 <Button
                   type="submit"

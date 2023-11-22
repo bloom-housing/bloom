@@ -2,12 +2,14 @@ import React, { ChangeEvent, useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { FieldGroup, Form, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { Alert } from "@bloom-housing/ui-seeds"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { HouseholdSizeField } from "../../../components/applications/HouseholdSizeField"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
+import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationLiveAlone = () => {
   const { profile } = useContext(AuthContext)
@@ -33,12 +35,12 @@ const ApplicationLiveAlone = () => {
   const householdSizeValues = [
     {
       id: "householdSizeLiveAlone",
-      value: "1",
+      value: "liveAlone",
       label: t("application.household.liveAlone.willLiveAlone"),
     },
     {
       id: "householdSizeLiveWithOthers",
-      value: "0",
+      value: "withOthers",
       label: t("application.household.liveAlone.liveWithOtherPeople"),
     },
   ]
@@ -60,6 +62,11 @@ const ApplicationLiveAlone = () => {
           }}
           conductor={conductor}
         >
+          {Object.entries(errors).length > 0 && (
+            <Alert className={styles["message-inside-card"]} variant="alert" fullwidth>
+              {t("errors.errorsToResolve")}
+            </Alert>
+          )}
           <div>
             <HouseholdSizeField
               assistanceUrl={t("application.household.assistanceUrl")}
@@ -76,7 +83,7 @@ const ApplicationLiveAlone = () => {
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset
               onChange={(event: ChangeEvent<any>) => {
-                if (event.target.value === "1") {
+                if (event.target.value === "liveAlone") {
                   application.householdSize = 1
                   application.householdMembers = []
                   setValidateHousehold(true)
@@ -87,7 +94,7 @@ const ApplicationLiveAlone = () => {
               }}
             >
               <legend className={`text__caps-spaced ${errors?.type ? "text-alert" : ""}`}>
-                Household members
+                {t("application.household.householdMembers")}
               </legend>
               <p className="field-note mb-4">{t("t.pleaseSelectOne")}</p>
               <FieldGroup

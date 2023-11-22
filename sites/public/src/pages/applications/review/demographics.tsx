@@ -105,6 +105,9 @@ const ApplicationDemographics = () => {
                     additionalText: subKey.indexOf("other") >= 0,
                   })),
                 }))}
+                strings={{
+                  description: "",
+                }}
                 type="checkbox"
                 dataTestId={"app-demographics-race"}
                 register={register}

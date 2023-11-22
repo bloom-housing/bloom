@@ -59,7 +59,7 @@ const ApplicationWhatToExpect = () => {
         listingName={listing?.name}
         heading={t("application.start.whatToExpect.title")}
         progressNavProps={{
-          currentPageSection: 1,
+          currentPageSection: 0,
           completedSections: 0,
           labels: conductor.config.sections.map((label) => t(`t.${label}`)),
           mounted: OnClientSide(),

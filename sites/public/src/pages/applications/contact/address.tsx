@@ -392,7 +392,7 @@ const ApplicationAddress = () => {
                   <Field
                     id="mailingAddressStreet"
                     name="mailingAddress.street"
-                    placeholder={t("application.contact.streetAddress")}
+                    label={t("application.contact.streetAddress")}
                     defaultValue={application.mailingAddress.street}
                     validation={{ required: true, maxLength: 64 }}
                     error={errors.mailingAddress?.street}
@@ -409,7 +409,6 @@ const ApplicationAddress = () => {
                     id="mailingAddressStreet2"
                     name="mailingAddress.street2"
                     label={t("application.contact.apt")}
-                    placeholder={t("application.contact.apt")}
                     defaultValue={application.mailingAddress.street2}
                     register={register}
                     dataTestId={"app-primary-mailing-address-street2"}
@@ -422,8 +421,7 @@ const ApplicationAddress = () => {
                     <Field
                       id="mailingAddressCity"
                       name="mailingAddress.city"
-                      label={t("application.contact.cityName")}
-                      placeholder={t("application.contact.cityName")}
+                      label={t("application.contact.city")}
                       defaultValue={application.mailingAddress.city}
                       validation={{ required: true, maxLength: 64 }}
                       error={errors.mailingAddress?.city}
@@ -460,7 +458,6 @@ const ApplicationAddress = () => {
                     id="mailingAddressZipCode"
                     name="mailingAddress.zipCode"
                     label={t("application.contact.zip")}
-                    placeholder={t("application.contact.zipCode")}
                     defaultValue={application.mailingAddress.zipCode}
                     validation={{ required: true, maxLength: 64 }}
                     error={errors.mailingAddress?.zipCode}
