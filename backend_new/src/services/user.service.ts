@@ -359,8 +359,6 @@ export class UserService {
       },
     });
 
-    // TODO: THIS IS WHERE I ENDED!
-
     return mapTo(User, res);
   }
 

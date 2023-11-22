@@ -75,12 +75,11 @@ export class ListingController {
     @Param('id', new ParseUUIDPipe({ version: '4' })) listingId: string,
     @Query() queryParams: ListingsRetrieveParams,
   ) {
-    const listing = await this.listingService.findOne(
+    return await this.listingService.findOne(
       listingId,
       language,
       queryParams.view,
     );
-    return listing;
   }
 
   @Post()

@@ -272,8 +272,6 @@ export class EmailService {
   public async sendMfaCode(user: User, mfaCode: string) {
     const jurisdiction = await this.getJurisdiction(user.jurisdictions);
     void (await this.loadTranslations(jurisdiction, user.language));
-    console.log('jurisdiction', jurisdiction);
-    console.log('user juris', user.jurisdictions);
     await this.send(
       user.email,
       jurisdiction.emailFromAddress,
