@@ -94,7 +94,7 @@ jobs:
           path: sites/public/cypress/videos
       - store_artifacts:
           path: sites/public/cypress/screenshots
-   cypress-partners:
+  cypress-partners:
     executor: cypress-node
     resource_class: large
     steps:
