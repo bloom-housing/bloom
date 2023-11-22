@@ -219,3 +219,7 @@ workflows:
           requires:
             - setup
             - setup-backend
+      - cypress-partners:
+          requires:
+            - setup
+            - setup-backend

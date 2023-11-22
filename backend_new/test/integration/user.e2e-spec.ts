@@ -69,6 +69,13 @@ describe('User Controller Tests', () => {
   });
 
   it('should get users from list() when no params', async () => {
+    const adminUser = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: { isAdmin: true },
+        mfaEnabled: false,
+        confirmedAt: new Date(),
+      }),
+    });
     const userA = await prisma.userAccounts.create({
       data: await userFactory(),
     });
@@ -76,8 +83,17 @@ describe('User Controller Tests', () => {
       data: await userFactory(),
     });
 
+    const resLogIn = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({
+        email: adminUser.email,
+        password: 'abcdef',
+      } as Login)
+      .expect(201);
+
     const res = await request(app.getHttpServer())
       .get(`/user/list?`)
+      .set('Cookie', resLogIn.headers['set-cookie'])
       .expect(200);
     expect(res.body.items.length).toBeGreaterThanOrEqual(2);
     const ids = res.body.items.map((item) => item.id);
@@ -86,6 +102,13 @@ describe('User Controller Tests', () => {
   });
 
   it('should get users from list() when params sent', async () => {
+    const adminUser = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: { isAdmin: true },
+        mfaEnabled: false,
+        confirmedAt: new Date(),
+      }),
+    });
     const userA = await prisma.userAccounts.create({
       data: await userFactory({
         roles: { isPartner: true },
@@ -98,6 +121,14 @@ describe('User Controller Tests', () => {
         firstName: '1111',
       }),
     });
+
+    const resLogIn = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({
+        email: adminUser.email,
+        password: 'abcdef',
+      } as Login)
+      .expect(201);
 
     const queryParams: UserQueryParams = {
       limit: 2,
@@ -113,6 +144,7 @@ describe('User Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/user/list?${query}`)
+      .set('Cookie', resLogIn.headers['set-cookie'])
       .expect(200);
     expect(res.body.items.length).toBeGreaterThanOrEqual(2);
     const ids = res.body.items.map((item) => item.id);
