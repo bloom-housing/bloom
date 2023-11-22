@@ -68,7 +68,7 @@ export default () => {
               <Field
                 id="firstName"
                 name="firstName"
-                label={"Given Name"}
+                label={t("application.contact.givenName")}
                 defaultValue={application.alternateContact.firstName}
                 validation={{ required: true, maxLength: 64 }}
                 errorMessage={
@@ -83,7 +83,7 @@ export default () => {
               <Field
                 id="lastName"
                 name="lastName"
-                label={"Family Name"}
+                label={t("application.contact.familyName")}
                 defaultValue={application.alternateContact.lastName}
                 validation={{ required: true, maxLength: 64 }}
                 error={errors.lastName}

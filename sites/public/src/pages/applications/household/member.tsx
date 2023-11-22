@@ -144,7 +144,7 @@ const ApplicationMember = () => {
               <Field
                 id="firstName"
                 name="firstName"
-                label={"Given Name"}
+                label={t("application.contact.givenName")}
                 defaultValue={member.firstName}
                 validation={{ required: true, maxLength: 64 }}
                 error={errors.firstName}
@@ -172,7 +172,7 @@ const ApplicationMember = () => {
               <Field
                 id="lastName"
                 name="lastName"
-                label={"Family Name"}
+                label={t("application.contact.familyName")}
                 defaultValue={member.lastName}
                 validation={{ required: true, maxLength: 64 }}
                 error={errors.lastName}

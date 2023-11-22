@@ -178,7 +178,7 @@ const ApplicationAddress = () => {
                   defaultValue={application.applicant.phoneNumber}
                   disabled={clientLoaded && noPhone}
                   dataTestId={"app-primary-phone-number"}
-                  subNote={"10-digit, for example 999-999-9999"}
+                  subNote={t("application.contact.number.subNote")}
                 />
                 <Select
                   id="applicant.phoneNumberType"
@@ -253,7 +253,7 @@ const ApplicationAddress = () => {
                       defaultValue={application.additionalPhoneNumber}
                       controlClassName="control"
                       dataTestId={"app-primary-additional-phone-number"}
-                      subNote={"10-digit, for example 999-999-9999"}
+                      subNote={t("application.contact.number.subNote")}
                     />
                     <Select
                       id="additionalPhoneNumberType"

@@ -89,7 +89,7 @@ export default () => {
               control={control}
               defaultValue={application.alternateContact.phoneNumber}
               dataTestId={"app-alternate-phone-number"}
-              subNote={"10-digit, for example 999-999-9999"}
+              subNote={t("application.contact.number.subNote")}
             />
           </CardSection>
           <CardSection divider={"inset"}>
