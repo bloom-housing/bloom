@@ -27,6 +27,7 @@ import { AfsResolve } from '../dtos/application-flagged-sets/afs-resolve.dto';
 import { AfsMeta } from '../dtos/application-flagged-sets/afs-meta.dto';
 import { AfsQueryParams } from '../dtos/application-flagged-sets/afs-query-params.dto';
 import { User } from '../dtos/users/user.dto';
+import { mapTo } from '../utilities/mapTo';
 
 @Controller('/applicationFlaggedSets')
 @ApiExtraModels(SuccessDTO)
@@ -83,7 +84,7 @@ export class ApplicationFlaggedSetController {
   ): Promise<ApplicationFlaggedSet> {
     return await this.applicationFlaggedSetService.resolve(
       dto,
-      req.user as User,
+      mapTo(User, req['user']),
     );
   }
 
