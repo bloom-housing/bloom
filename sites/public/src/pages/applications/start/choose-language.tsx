@@ -103,6 +103,7 @@ const ApplicationChooseLanguage = () => {
           labels: conductor.config.sections.map((label) => t(`t.${label}`)),
           mounted: OnClientSide(),
         }}
+        hideBorder={true}
       >
         {listing && (
           <CardSection className={"p-0"}>

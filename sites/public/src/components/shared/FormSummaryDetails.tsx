@@ -457,7 +457,7 @@ const FormSummaryDetails = ({
           {editMode && !validationError && <EditLink href="/applications/financial/vouchers" />}
         </h3>
 
-        <div className="form-card__group mx-0">
+        <div className={`form-card__group mx-0 ${hidePreferences && "border-b"}`}>
           <FieldValue
             testId={"app-summary-income-vouchers"}
             id="incomeVouchers"
@@ -474,7 +474,12 @@ const FormSummaryDetails = ({
               label={t("t.income")}
               className={"pb-4"}
             >
-              ${application.income} {t(`t.${application.incomePeriod}`)}
+              $
+              {parseFloat(application.income).toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}{" "}
+              {t(`t.${application.incomePeriod}`)}
             </FieldValue>
           )}
         </div>

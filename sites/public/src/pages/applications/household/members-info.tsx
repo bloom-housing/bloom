@@ -51,6 +51,7 @@ const ApplicationMembersInfo = () => {
           backLink={{
             url: conductor.determinePreviousUrl(),
           }}
+          hideBorder={true}
         >
           {Object.entries(errors).length > 0 && (
             <Alert className={styles["message-inside-card"]} variant="alert" fullwidth>

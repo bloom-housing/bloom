@@ -104,6 +104,7 @@ export default () => {
         backLink={{
           url: `/applications/start/what-to-expect`,
         }}
+        hideBorder={true}
       >
         <FormSummaryDetails
           application={previousApplication}

@@ -224,7 +224,10 @@ const ApplicationMultiselectQuestionStep = ({
                 <fieldset>
                   <legend className="text__caps-spaced mb-4 sr-only">{question?.text}</legend>
                   {applicationSection === ApplicationSection.preferences && (
-                    <p className="field-note mb-8">{question?.description}</p>
+                    <>
+                      <p className="text__caps-spaced">{question?.text}</p>
+                      <p className="field-note mb-8">{question?.description}</p>
+                    </>
                   )}
                   <p className="field-note mb-8">
                     {t("application.household.preferredUnit.optionsLabel")}

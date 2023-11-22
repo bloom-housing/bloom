@@ -87,6 +87,7 @@ const ApplicationSummary = () => {
           backLink={{
             url: conductor.determinePreviousUrl(),
           }}
+          hideBorder={true}
         >
           {validationError && (
             <Alert className={styles["message-inside-card"]} variant="alert" fullwidth>

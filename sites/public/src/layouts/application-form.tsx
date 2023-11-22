@@ -23,6 +23,7 @@ interface ApplicationFormLayoutProps {
     onClickFxn?: () => void
   }
   conductor?: ApplicationConductor
+  hideBorder?: boolean
 }
 
 const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
@@ -67,7 +68,7 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
         </CardSection>
       </Card>
       <Card spacing={"lg"} className={styles["application-form-body"]}>
-        <CardSection divider={"inset"}>
+        <CardSection divider={"inset"} className={props.hideBorder && "border-none"}>
           {props.backLink && getBackLink(props.backLink.url, props.backLink.onClickFxn)}
           <Heading priority={2} size={"2xl"}>
             {props.heading}
