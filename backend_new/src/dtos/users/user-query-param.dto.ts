@@ -1,6 +1,6 @@
 import { PaginationAllowsAllQueryParams } from '../shared/pagination.dto';
 import { Expose, Type } from 'class-transformer';
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiPropertyOptional, getSchemaPath } from '@nestjs/swagger';
 import { UserFilterParams } from './user-filter-params.dto';
 import {
   ArrayMaxSize,
@@ -15,7 +15,10 @@ export class UserQueryParams extends PaginationAllowsAllQueryParams {
   @Expose()
   @ApiPropertyOptional({
     name: 'filter',
-    type: [UserFilterParams],
+    type: [String],
+    items: {
+      $ref: getSchemaPath(UserFilterParams),
+    },
     example: { isPartner: true },
   })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })

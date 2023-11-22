@@ -528,6 +528,7 @@ describe('Testing listing service', () => {
               {
                 name: {
                   in: ['listing', 'name'],
+                  mode: 'insensitive',
                 },
               },
             ],
@@ -539,6 +540,7 @@ describe('Testing listing service', () => {
                   some: {
                     numBedrooms: {
                       gte: 2,
+                      mode: 'insensitive',
                     },
                   },
                 },
@@ -548,6 +550,7 @@ describe('Testing listing service', () => {
           {
             name: {
               contains: 'simple search',
+              mode: 'insensitive',
             },
           },
         ],
@@ -590,6 +593,7 @@ describe('Testing listing service', () => {
               {
                 name: {
                   in: ['listing', 'name'],
+                  mode: 'insensitive',
                 },
               },
             ],
@@ -601,6 +605,7 @@ describe('Testing listing service', () => {
                   some: {
                     numBedrooms: {
                       gte: 2,
+                      mode: 'insensitive',
                     },
                   },
                 },
@@ -610,6 +615,7 @@ describe('Testing listing service', () => {
           {
             name: {
               contains: 'simple search',
+              mode: 'insensitive',
             },
           },
         ],
@@ -636,6 +642,7 @@ describe('Testing listing service', () => {
             {
               name: {
                 in: ['listing', 'name'],
+                mode: 'insensitive',
               },
             },
           ],
@@ -647,6 +654,7 @@ describe('Testing listing service', () => {
                 some: {
                   numBedrooms: {
                     gte: 2,
+                    mode: 'insensitive',
                   },
                 },
               },
@@ -663,6 +671,7 @@ describe('Testing listing service', () => {
         {
           name: {
             contains: 'simple search',
+            mode: 'insensitive',
           },
         },
       ],
@@ -688,6 +697,7 @@ describe('Testing listing service', () => {
             {
               name: {
                 in: ['listing', 'name'],
+                mode: 'insensitive',
               },
             },
           ],
@@ -699,6 +709,7 @@ describe('Testing listing service', () => {
                 some: {
                   numBedrooms: {
                     gte: 2,
+                    mode: 'insensitive',
                   },
                 },
               },
@@ -708,6 +719,7 @@ describe('Testing listing service', () => {
         {
           name: {
             contains: 'simple search',
+            mode: 'insensitive',
           },
         },
       ],
@@ -998,6 +1010,7 @@ describe('Testing listing service', () => {
               {
                 name: {
                   in: ['listing', 'name'],
+                  mode: 'insensitive',
                 },
               },
             ],
@@ -1009,6 +1022,7 @@ describe('Testing listing service', () => {
                   some: {
                     numBedrooms: {
                       gte: 2,
+                      mode: 'insensitive',
                     },
                   },
                 },
@@ -1018,6 +1032,7 @@ describe('Testing listing service', () => {
           {
             name: {
               contains: 'simple search',
+              mode: 'insensitive',
             },
           },
         ],
@@ -1060,6 +1075,7 @@ describe('Testing listing service', () => {
               {
                 name: {
                   in: ['listing', 'name'],
+                  mode: 'insensitive',
                 },
               },
             ],
@@ -1071,6 +1087,7 @@ describe('Testing listing service', () => {
                   some: {
                     numBedrooms: {
                       gte: 2,
+                      mode: 'insensitive',
                     },
                   },
                 },
@@ -1080,6 +1097,7 @@ describe('Testing listing service', () => {
           {
             name: {
               contains: 'simple search',
+              mode: 'insensitive',
             },
           },
         ],

@@ -180,12 +180,15 @@ const FormUserManage = ({
 
     if (!validation) return
 
-    const roles = (() => ({
-      isAdmin: userRoles.includes(RoleOption.Administrator),
-      isPartner: userRoles.includes(RoleOption.Partner),
-      isJurisdictionalAdmin: userRoles.includes(RoleOption.JurisdictionalAdmin),
-      userId: undefined,
-    }))()
+    const roles = (() => {
+      console.log("userRoles:", userRoles)
+      return {
+        isAdmin: userRoles.includes(RoleOption.Administrator),
+        isPartner: userRoles.includes(RoleOption.Partner),
+        isJurisdictionalAdmin: userRoles.includes(RoleOption.JurisdictionalAdmin),
+        userId: undefined,
+      }
+    })()
 
     const leasingAgentInListings = user_listings?.map((id) => ({ id })) || []
 
@@ -370,8 +373,8 @@ const FormUserManage = ({
 
                 <Grid.Cell>
                   <Select
-                    id="role"
-                    name="role"
+                    id="userRoles"
+                    name="userRoles"
                     label={t("t.role")}
                     placeholder={t("t.role")}
                     register={register}

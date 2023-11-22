@@ -145,7 +145,7 @@ export class UserService {
     }
 
     params.filter.forEach((filter) => {
-      if ('isPortalUser' in filter && filter['isPortalUser']) {
+      if (filter['isPortalUser']) {
         if (user?.userRoles?.isAdmin) {
           filters.push({
             OR: [

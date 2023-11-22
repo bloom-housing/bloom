@@ -633,9 +633,9 @@ const PreferenceDrawer = ({
                         fields={[
                           {
                             label: t("settings.preferenceValidatingAddress.checkWithinRadius"),
-                            value: ValidationMethod.radius,
+                            value: ValidationMethodEnum.radius,
                             defaultChecked:
-                              optionData?.validationMethod === ValidationMethod.radius,
+                              optionData?.validationMethod === ValidationMethodEnum.radius,
                             id: "validationMethodRadius",
                             dataTestId: "validation-method-radius",
                             inputProps: {
@@ -646,8 +646,9 @@ const PreferenceDrawer = ({
                           },
                           {
                             label: t("settings.preferenceValidatingAddress.checkManually"),
-                            value: ValidationMethod.none,
-                            defaultChecked: optionData?.validationMethod === ValidationMethod.none,
+                            value: ValidationMethodEnum.none,
+                            defaultChecked:
+                              optionData?.validationMethod === ValidationMethodEnum.none,
                             id: "validationMethodNone",
                             dataTestId: "validation-method-none",
                             inputProps: {
@@ -827,7 +828,7 @@ const PreferenceDrawer = ({
               newOptionData.collectRelationship = formData.collectRelationship === YesNoAnswer.Yes
               newOptionData.collectName = formData.collectName === YesNoAnswer.Yes
             }
-            if (formData.validationMethod === ValidationMethod.radius && formData?.radiusSize) {
+            if (formData.validationMethod === ValidationMethodEnum.radius && formData?.radiusSize) {
               newOptionData.radiusSize = parseFloat(formData.radiusSize)
             }
             let newOptions = []

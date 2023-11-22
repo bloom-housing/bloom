@@ -1328,7 +1328,7 @@ export class UserService {
       /**  */
       limit?: number | "all"
       /**  */
-      isPortalUser?: boolean
+      filter?: UserFilterParams[]
       /**  */
       search?: string
     } = {} as any,
@@ -1341,7 +1341,7 @@ export class UserService {
       configs.params = {
         page: params["page"],
         limit: params["limit"],
-        isPortalUser: params["isPortalUser"],
+        filter: params["filter"],
         search: params["search"],
       }
 
@@ -4592,6 +4592,11 @@ export interface EmailAndAppUrl {
 
   /**  */
   appUrl?: string
+}
+
+export interface UserFilterParams {
+  /**  */
+  isPortalUser?: boolean
 }
 
 export interface PaginatedUser {
