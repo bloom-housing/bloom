@@ -123,8 +123,12 @@ export class MultiselectQuestionService {
             id: juris.id,
           })),
         },
-        links: JSON.parse(JSON.stringify(incomingData.links)),
-        options: JSON.parse(JSON.stringify(incomingData.options)),
+        links: incomingData.links
+          ? JSON.parse(JSON.stringify(incomingData.links))
+          : undefined,
+        options: incomingData.options
+          ? JSON.parse(JSON.stringify(incomingData.options))
+          : undefined,
       },
       include: view,
     });
@@ -149,8 +153,12 @@ export class MultiselectQuestionService {
             id: juris.id,
           })),
         },
-        links: JSON.stringify(incomingData.links),
-        options: JSON.stringify(incomingData.options),
+        links: incomingData.links
+          ? JSON.parse(JSON.stringify(incomingData.links))
+          : undefined,
+        options: incomingData.options
+          ? JSON.parse(JSON.stringify(incomingData.options))
+          : undefined,
         id: undefined,
       },
       where: {
