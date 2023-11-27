@@ -1,5 +1,5 @@
 export enum GeocodingValues {
-  yes = "yes",
-  no = "no",
+  true = "true",
+  false = "false",
   unknown = "unknown",
 }

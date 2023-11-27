@@ -39,8 +39,8 @@ export class GeocodingService {
         ])
         const calculatedBuffer = buffer(listingPoint.geometry, radius, { units: "miles" })
         return booleanPointInPolygon(preferencePoint, calculatedBuffer)
-          ? GeocodingValues.yes
-          : GeocodingValues.no
+          ? GeocodingValues.true
+          : GeocodingValues.false
       }
     } catch (e) {
       console.log("error happened while calculating radius")

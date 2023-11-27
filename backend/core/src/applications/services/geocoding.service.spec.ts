@@ -57,7 +57,7 @@ describe("GeocodingService", () => {
         )
       ).toBe("unknown")
     })
-    it("should return 'yes' if within radius", () => {
+    it("should return 'true' if within radius", () => {
       expect(
         service.verifyRadius(
           {
@@ -68,9 +68,9 @@ describe("GeocodingService", () => {
           5,
           listingAddress
         )
-      ).toBe("yes")
+      ).toBe("true")
     })
-    it("should return 'no' if within radius", () => {
+    it("should return 'false' if not within radius", () => {
       expect(
         service.verifyRadius(
           {
@@ -81,9 +81,9 @@ describe("GeocodingService", () => {
           5,
           listingAddress
         )
-      ).toBe("no")
+      ).toBe("false")
     })
-    it("should return 'yes' if same lat long", () => {
+    it("should return 'true' if same lat long", () => {
       expect(
         service.verifyRadius(
           {
@@ -92,7 +92,7 @@ describe("GeocodingService", () => {
           5,
           listingAddress
         )
-      ).toBe("yes")
+      ).toBe("true")
     })
   })
   describe("validateRadiusPreferences", () => {
@@ -153,7 +153,7 @@ describe("GeocodingService", () => {
                       type: "address",
                       value: preferenceAddress,
                     },
-                    { key: "geocodingVerified", type: "text", value: "yes" },
+                    { key: "geocodingVerified", type: "text", value: "true" },
                   ],
                   key: "Geocoding option by radius",
                 },
