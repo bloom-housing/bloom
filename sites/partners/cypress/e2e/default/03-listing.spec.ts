@@ -118,7 +118,9 @@ describe("Listing Management Tests", () => {
     cy.get(".mt-6 > .is-primary").contains("Save & Exit").click()
     cy.get("#add-preferences-button").contains("Add Preference").click()
     cy.get(".border > .button").contains("Select Preferences").click()
-    cy.get(":nth-child(1) > .grid-section__inner > .field > div > .label")
+    cy.get(
+      ":nth-child(1) > .seeds-grid > .seeds-grid-row > .seeds-grid-cell > .field > div > .label"
+    )
       .contains("Live/Work in County")
       .click()
     cy.get("#addPreferenceSaveButton").contains("Save").click()

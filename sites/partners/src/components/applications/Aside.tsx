@@ -3,7 +3,6 @@ import dayjs from "dayjs"
 import {
   t,
   Button,
-  GridCell,
   AppearanceStyleType,
   StatusMessages,
   LocalizedLink,
@@ -11,6 +10,7 @@ import {
   LinkButton,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
+import { Grid } from "@bloom-housing/ui-seeds"
 import { ApplicationContext } from "./ApplicationContext"
 import { StatusAside } from "../shared/StatusAside"
 
@@ -41,7 +41,7 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
     const elements = []
 
     const cancel = (
-      <GridCell className="flex" key="btn-cancel">
+      <Grid.Cell className="flex" key="btn-cancel">
         <LinkButton
           unstyled
           fullWidth
@@ -50,19 +50,19 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
         >
           {t("t.cancel")}
         </LinkButton>
-      </GridCell>
+      </Grid.Cell>
     )
 
     if (type === "details") {
       elements.push(
-        <GridCell key="btn-submitNew">
+        <Grid.Cell key="btn-submitNew">
           <LocalizedLink href={`/application/${applicationId}/edit`}>
             <Button styleType={AppearanceStyleType.secondary} fullWidth onClick={() => false}>
               {t("t.edit")}
             </Button>
           </LocalizedLink>
-        </GridCell>,
-        <GridCell className="flex" key="btn-cancel">
+        </Grid.Cell>,
+        <Grid.Cell className="flex" key="btn-cancel">
           <Button
             unstyled
             fullWidth
@@ -71,13 +71,13 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
           >
             {t("t.delete")}
           </Button>
-        </GridCell>
+        </Grid.Cell>
       )
     }
 
     if (type === "add" || type === "edit") {
       elements.push(
-        <GridCell key="btn-submit">
+        <Grid.Cell key="btn-submit">
           <Button
             styleType={AppearanceStyleType.primary}
             fullWidth
@@ -86,12 +86,12 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
           >
             {type === "edit" ? t("application.add.saveAndExit") : t("t.submit")}
           </Button>
-        </GridCell>
+        </Grid.Cell>
       )
 
       if (type === "add") {
         elements.push(
-          <GridCell key="btn-submitNew">
+          <Grid.Cell key="btn-submitNew">
             <Button
               type="button"
               styleType={AppearanceStyleType.secondary}
@@ -100,7 +100,7 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
             >
               {t("t.submitNew")}
             </Button>
-          </GridCell>,
+          </Grid.Cell>,
           cancel
         )
       }
@@ -109,7 +109,7 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
         elements.push(
           <div className="flex justify-center" key="btn-group">
             {cancel}
-            <GridCell className="flex" key="btn-delete">
+            <Grid.Cell className="flex" key="btn-delete">
               <Button
                 type="button"
                 unstyled
@@ -119,7 +119,7 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
               >
                 {t("t.delete")}
               </Button>
-            </GridCell>
+            </Grid.Cell>
           </div>
         )
       }

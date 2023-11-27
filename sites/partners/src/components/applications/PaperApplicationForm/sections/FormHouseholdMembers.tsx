@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useCallback } from "react"
 import {
   t,
-  GridSection,
   MinimalTable,
   Button,
   AppearanceSizeType,
@@ -12,6 +11,7 @@ import {
 import { HouseholdMember } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../../../lib/helpers"
 import { FormMember } from "../FormMember"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type FormHouseholdMembersProps = {
   householdMembers: HouseholdMember[]
@@ -134,24 +134,23 @@ const FormHouseholdMembers = ({
 
   return (
     <>
-      <GridSection title={t("application.household.householdMembers")} grid={false} separator>
-        <div className="bg-gray-300 px-4 py-5">
-          {!!householdMembers.length && (
-            <div className="mb-5">
-              <MinimalTable headers={memberTableHeaders} data={memberTableData} />
-            </div>
-          )}
+      <hr className="spacer-section-above spacer-section" />
+      <SectionWithGrid heading={t("application.household.householdMembers")} bypassGrid inset>
+        {!!householdMembers.length && (
+          <div className="mb-5">
+            <MinimalTable headers={memberTableHeaders} data={memberTableData} />
+          </div>
+        )}
 
-          <Button
-            type="button"
-            size={AppearanceSizeType.normal}
-            onClick={() => setMembersDrawer(householdMembers.length + 1)}
-            dataTestId={"addHouseholdMemberButton"}
-          >
-            {t("application.add.addHouseholdMember")}
-          </Button>
-        </div>
-      </GridSection>
+        <Button
+          type="button"
+          size={AppearanceSizeType.normal}
+          onClick={() => setMembersDrawer(householdMembers.length + 1)}
+          dataTestId={"addHouseholdMemberButton"}
+        >
+          {t("application.add.addHouseholdMember")}
+        </Button>
+      </SectionWithGrid>
 
       <Drawer
         open={!!membersDrawer}

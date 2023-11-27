@@ -19,6 +19,7 @@ import {
 } from "@bloom-housing/backend-core/types"
 import { uploadAssetAndSetData } from "../../../../lib/assets"
 import { getPdfUrlFromAsset } from "@bloom-housing/shared-helpers"
+import { Card } from "@bloom-housing/ui-seeds"
 
 interface LotteryResultsProps {
   submitCallback: (data: { events: ListingEvent[] }) => void
@@ -171,19 +172,21 @@ const LotteryResults = (props: LotteryResultsProps) => {
         </Button>,
       ]}
     >
-      <section className="border rounded-md p-8 bg-white">
-        <Dropzone
-          id="lottery-results-upload"
-          label={t("listings.sections.lotteryResultsHelperText")}
-          helptext={t("listings.pdfHelperText")}
-          uploader={pdfUploader}
-          accept="application/pdf"
-          progress={progressValue}
-        />
-        {cloudinaryData.url !== "" && (
-          <MinimalTable headers={resultsTableHeaders} data={previewTableRows}></MinimalTable>
-        )}
-      </section>
+      <Card spacing="lg" className="spacer-section">
+        <Card.Section>
+          <Dropzone
+            id="lottery-results-upload"
+            label={t("listings.sections.lotteryResultsHelperText")}
+            helptext={t("listings.pdfHelperText")}
+            uploader={pdfUploader}
+            accept="application/pdf"
+            progress={progressValue}
+          />
+          {cloudinaryData.url !== "" && (
+            <MinimalTable headers={resultsTableHeaders} data={previewTableRows}></MinimalTable>
+          )}
+        </Card.Section>
+      </Card>
     </Drawer>
   )
 }

@@ -2,20 +2,19 @@ import React, { useEffect } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import {
   t,
-  GridSection,
   Textarea,
   Field,
-  GridCell,
   Select,
   DateField,
   FieldGroup,
   TimeField,
 } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { stateKeys } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { YesNoAnswer, isNullOrUndefined, fieldHasError } from "../../../../lib/helpers"
 import { FormListing, addressTypes } from "../../../../lib/listings/formTypes"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type ApplicationAddressProps = {
   listing?: FormListing
@@ -177,18 +176,14 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
   const dayjsDate = dayjs(new Date(listing?.postmarkedApplicationsReceivedByDate))
 
   return (
-    <div>
-      <GridSection grid={false}>
-        <hr className="mt-6 mb-6" />
-        <span className="form-section__title">{"Application Address"}</span>
-        <span className="form-section__description">
-          {t("listings.sections.applicationAddressSubtitle")}
-        </span>
-        <GridSection columns={3}>
-          <GridCell>
-            <GridCell span={2}>
-              <p className="field-label m-4 ml-0">{"Can applications be mailed in?"}</p>
-            </GridCell>
+    <>
+      <hr className="spacer-section-above spacer-section" />
+      <SectionWithGrid
+        heading={"Application Address"}
+        subheading={t("listings.sections.applicationAddressSubtitle")}
+      >
+        <Grid.Row columns={3}>
+          <FieldValue label="Can applications be mailed in?">
             <FieldGroup
               name="canApplicationsBeMailedIn"
               type="radio"
@@ -210,11 +205,8 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 },
               ]}
             />
-          </GridCell>
-          <GridCell>
-            <GridCell span={2}>
-              <p className="field-label m-4 ml-0">{t("listings.applicationPickupQuestion")}</p>
-            </GridCell>
+          </FieldValue>
+          <FieldValue label={t("listings.applicationPickupQuestion")}>
             <FieldGroup
               name="canPaperApplicationsBePickedUp"
               type="radio"
@@ -236,11 +228,8 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 },
               ]}
             />
-          </GridCell>
-          <GridCell>
-            <GridCell span={2}>
-              <p className="field-label m-4 ml-0">{t("listings.applicationDropOffQuestion")}</p>
-            </GridCell>
+          </FieldValue>
+          <FieldValue label={t("listings.applicationDropOffQuestion")}>
             <FieldGroup
               name="canApplicationsBeDroppedOff"
               type="radio"
@@ -262,72 +251,74 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 },
               ]}
             />
-          </GridCell>
-        </GridSection>
-        <GridSection columns={3}>
-          <GridCell>
-            {applicationsMailedIn === YesNoAnswer.Yes && (
-              <>
-                <p className="field-label m-4 ml-0">{"Where are applications mailed in?"}</p>
-                <FieldGroup
-                  fieldGroupClassName="grid grid-cols-1"
-                  fieldClassName="ml-0"
-                  name="whereApplicationsMailedIn"
-                  type="radio"
-                  register={register}
-                  fields={getLocationOptions(
-                    "mailIn",
-                    listing?.applicationMailingAddressType,
-                    isNullOrUndefined(listing?.applicationMailingAddress) === false
-                  )}
-                />
-              </>
-            )}
-          </GridCell>
-          <GridCell>
-            {applicationsPickedUp === YesNoAnswer.Yes && (
-              <>
-                <p className="field-label m-4 ml-0">{t("listings.wherePickupQuestion")}</p>
-                <FieldGroup
-                  fieldGroupClassName="grid grid-cols-1"
-                  fieldClassName="ml-0"
-                  name="whereApplicationsPickedUp"
-                  type="radio"
-                  register={register}
-                  fields={getLocationOptions(
-                    "pickUp",
-                    listing?.applicationPickUpAddressType,
-                    isNullOrUndefined(listing?.applicationPickUpAddress) === false
-                  )}
-                />
-              </>
-            )}
-          </GridCell>
-          <GridCell>
-            {applicationsDroppedOff === YesNoAnswer.Yes && (
-              <>
-                <p className="field-label m-4 ml-0">{t("listings.whereDropOffQuestion")}</p>
-                <FieldGroup
-                  fieldGroupClassName="grid grid-cols-1"
-                  fieldClassName="ml-0"
-                  name="whereApplicationsDroppedOff"
-                  type="radio"
-                  register={register}
-                  fields={getLocationOptions(
-                    "dropOff",
-                    listing?.applicationDropOffAddressType,
-                    isNullOrUndefined(listing?.applicationDropOffAddress) === false
-                  )}
-                />
-              </>
-            )}
-          </GridCell>
-        </GridSection>
+          </FieldValue>
+        </Grid.Row>
+        <Grid.Row columns={3}>
+          {applicationsMailedIn === YesNoAnswer.Yes ? (
+            <FieldValue label="Where are applications mailed in?">
+              <FieldGroup
+                fieldGroupClassName="grid grid-cols-1"
+                fieldClassName="ml-0"
+                name="whereApplicationsMailedIn"
+                type="radio"
+                register={register}
+                fields={getLocationOptions(
+                  "mailIn",
+                  listing?.applicationMailingAddressType,
+                  isNullOrUndefined(listing?.applicationMailingAddress) === false
+                )}
+              />
+            </FieldValue>
+          ) : (
+            <Grid.Cell> </Grid.Cell>
+          )}
+
+          {applicationsPickedUp === YesNoAnswer.Yes ? (
+            <FieldValue label={t("listings.wherePickupQuestion")}>
+              <FieldGroup
+                fieldGroupClassName="grid grid-cols-1"
+                fieldClassName="ml-0"
+                name="whereApplicationsPickedUp"
+                type="radio"
+                register={register}
+                fields={getLocationOptions(
+                  "pickUp",
+                  listing?.applicationPickUpAddressType,
+                  isNullOrUndefined(listing?.applicationPickUpAddress) === false
+                )}
+              />
+            </FieldValue>
+          ) : (
+            <Grid.Cell> </Grid.Cell>
+          )}
+
+          {applicationsDroppedOff === YesNoAnswer.Yes ? (
+            <FieldValue label={t("listings.whereDropOffQuestion")}>
+              <FieldGroup
+                fieldGroupClassName="grid grid-cols-1"
+                fieldClassName="ml-0"
+                name="whereApplicationsDroppedOff"
+                type="radio"
+                register={register}
+                fields={getLocationOptions(
+                  "dropOff",
+                  listing?.applicationDropOffAddressType,
+                  isNullOrUndefined(listing?.applicationDropOffAddress) === false
+                )}
+              />
+            </FieldValue>
+          ) : (
+            <Grid.Cell> </Grid.Cell>
+          )}
+        </Grid.Row>
         {applicationsMailedIn === YesNoAnswer.Yes &&
           mailedInAddressType === addressTypes.anotherAddress && (
-            <GridSection grid={false} subtitle={t("application.contact.mailingAddress")}>
-              <GridSection columns={3}>
-                <GridCell span={2}>
+            <>
+              <SectionWithGrid.HeadingRow>
+                {t("application.contact.mailingAddress")}
+              </SectionWithGrid.HeadingRow>
+              <Grid.Row columns={3}>
+                <Grid.Cell className="seeds-grid-span-2">
                   <Field
                     label={t("listings.streetAddressOrPOBox")}
                     name={"applicationMailingAddress.street"}
@@ -349,19 +340,20 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                       onChange: () => clearErrors("applicationMailingAddress"),
                     }}
                   />
-                </GridCell>
-
-                <Field
-                  label={t("application.contact.apt")}
-                  name={"applicationMailingAddress.street2"}
-                  id={"applicationMailingAddress.street2"}
-                  register={register}
-                  placeholder={t("application.contact.apt")}
-                  dataTestId={"mailing-address-street2"}
-                />
-              </GridSection>
-              <GridSection columns={7}>
-                <GridCell span={3}>
+                </Grid.Cell>
+                <Grid.Cell>
+                  <Field
+                    label={t("application.contact.apt")}
+                    name={"applicationMailingAddress.street2"}
+                    id={"applicationMailingAddress.street2"}
+                    register={register}
+                    placeholder={t("application.contact.apt")}
+                    dataTestId={"mailing-address-street2"}
+                  />
+                </Grid.Cell>
+              </Grid.Row>
+              <Grid.Row columns={7}>
+                <Grid.Cell className="seeds-grid-span-3">
                   <Field
                     label={t("application.contact.city")}
                     name={"applicationMailingAddress.city"}
@@ -383,8 +375,8 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                       onChange: () => clearErrors("applicationMailingAddress"),
                     }}
                   />
-                </GridCell>
-                <GridCell span={2}>
+                </Grid.Cell>
+                <Grid.Cell className="seeds-grid-span-2">
                   <FieldValue label={t("application.contact.state")} className="mb-0">
                     <Select
                       id={`applicationMailingAddress.state`}
@@ -411,8 +403,8 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                       }}
                     />
                   </FieldValue>
-                </GridCell>
-                <GridCell span={2}>
+                </Grid.Cell>
+                <Grid.Cell className="seeds-grid-span-2">
                   <Field
                     label={t("application.contact.zip")}
                     name={"applicationMailingAddress.zipCode"}
@@ -434,15 +426,16 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                       onChange: () => clearErrors("applicationMailingAddress"),
                     }}
                   />
-                </GridCell>
-              </GridSection>
-            </GridSection>
+                </Grid.Cell>
+              </Grid.Row>
+            </>
           )}
         {applicationsPickedUp === YesNoAnswer.Yes &&
           pickedUpAddressType === addressTypes.anotherAddress && (
-            <GridSection grid={false} subtitle={t("listings.pickupAddress")}>
-              <GridSection columns={3}>
-                <GridCell span={2}>
+            <>
+              <SectionWithGrid.HeadingRow>{t("listings.pickupAddress")}</SectionWithGrid.HeadingRow>
+              <Grid.Row columns={3}>
+                <Grid.Cell className="seeds-grid-span-2">
                   <Field
                     label={t("listings.streetAddressOrPOBox")}
                     name={"applicationPickUpAddress.street"}
@@ -463,7 +456,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                       onChange: () => clearErrors("applicationPickUpAddress"),
                     }}
                   />
-                </GridCell>
+                </Grid.Cell>
                 <Field
                   label={t("application.contact.apt")}
                   name={"applicationPickUpAddress.street2"}
@@ -471,9 +464,9 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                   register={register}
                   placeholder={t("application.contact.apt")}
                 />
-              </GridSection>
-              <GridSection columns={7}>
-                <GridCell span={3}>
+              </Grid.Row>
+              <Grid.Row columns={7}>
+                <Grid.Cell className="seeds-grid-span-3">
                   <Field
                     label={t("application.contact.city")}
                     name={"applicationPickUpAddress.city"}
@@ -491,8 +484,8 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                       onChange: () => clearErrors("applicationPickUpAddress"),
                     }}
                   />
-                </GridCell>
-                <GridCell span={2}>
+                </Grid.Cell>
+                <Grid.Cell className="seeds-grid-span-2">
                   <FieldValue label={t("application.contact.state")} className="mb-0">
                     <Select
                       id={`applicationPickUpAddress.state`}
@@ -518,8 +511,8 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                       }}
                     />
                   </FieldValue>
-                </GridCell>
-                <GridCell span={2}>
+                </Grid.Cell>
+                <Grid.Cell className="seeds-grid-span-2">
                   <Field
                     label={t("application.contact.zip")}
                     name={"applicationPickUpAddress.zipCode"}
@@ -540,10 +533,10 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                       onChange: () => clearErrors("applicationPickUpAddress"),
                     }}
                   />
-                </GridCell>
-              </GridSection>
-              <GridSection columns={3}>
-                <GridCell span={2}>
+                </Grid.Cell>
+              </Grid.Row>
+              <Grid.Row columns={3}>
+                <Grid.Cell className="seeds-grid-span-2">
                   <Textarea
                     label={t("leasingAgent.officeHours")}
                     name={"applicationPickUpAddressOfficeHours"}
@@ -552,15 +545,18 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     register={register}
                     placeholder={t("leasingAgent.officeHoursPlaceholder")}
                   />
-                </GridCell>
-              </GridSection>
-            </GridSection>
+                </Grid.Cell>
+              </Grid.Row>
+            </>
           )}
         {applicationsDroppedOff === YesNoAnswer.Yes &&
           droppedOffAddressType === addressTypes.anotherAddress && (
-            <GridSection grid={false} subtitle={t("listings.dropOffAddress")}>
-              <GridSection columns={3}>
-                <GridCell span={2}>
+            <>
+              <SectionWithGrid.HeadingRow>
+                {t("listings.dropOffAddress")}
+              </SectionWithGrid.HeadingRow>
+              <Grid.Row columns={3}>
+                <Grid.Cell className="seeds-grid-span-2">
                   <Field
                     label={t("listings.streetAddressOrPOBox")}
                     name={"applicationDropOffAddress.street"}
@@ -581,7 +577,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                       onChange: () => clearErrors("applicationDropOffAddress"),
                     }}
                   />
-                </GridCell>
+                </Grid.Cell>
                 <Field
                   label={t("application.contact.apt")}
                   name={"applicationDropOffAddress.street2"}
@@ -589,9 +585,9 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                   register={register}
                   placeholder={t("application.contact.apt")}
                 />
-              </GridSection>
-              <GridSection columns={7}>
-                <GridCell span={3}>
+              </Grid.Row>
+              <Grid.Row columns={7}>
+                <Grid.Cell className="seeds-grid-span-3">
                   <Field
                     label={t("application.contact.city")}
                     name={"applicationDropOffAddress.city"}
@@ -612,8 +608,8 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                       onChange: () => clearErrors("applicationDropOffAddress"),
                     }}
                   />
-                </GridCell>
-                <GridCell span={2}>
+                </Grid.Cell>
+                <Grid.Cell className="seeds-grid-span-2">
                   <FieldValue label={t("application.contact.state")} className="mb-0">
                     <Select
                       id={`applicationDropOffAddress.state`}
@@ -639,8 +635,8 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                       }}
                     />
                   </FieldValue>
-                </GridCell>
-                <GridCell span={2}>
+                </Grid.Cell>
+                <Grid.Cell className="seeds-grid-span-2">
                   <Field
                     label={t("application.contact.zip")}
                     name={"applicationDropOffAddress.zipCode"}
@@ -661,10 +657,10 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                       onChange: () => clearErrors("applicationDropOffAddress"),
                     }}
                   />
-                </GridCell>
-              </GridSection>
-              <GridSection columns={3}>
-                <GridCell span={2}>
+                </Grid.Cell>
+              </Grid.Row>
+              <Grid.Row columns={3}>
+                <Grid.Cell className="seeds-grid-span-2">
                   <Textarea
                     label={t("leasingAgent.officeHours")}
                     name={"applicationDropOffAddressOfficeHours"}
@@ -673,15 +669,13 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     register={register}
                     placeholder={t("leasingAgent.officeHoursPlaceholder")}
                   />
-                </GridCell>
-              </GridSection>
-            </GridSection>
+                </Grid.Cell>
+              </Grid.Row>
+            </>
           )}
 
-        <GridSection columns={3}>
-          <GridCell>
-            <p className="field-label m-4 ml-0">{t("listings.postmarksConsideredQuestion")}</p>
-
+        <Grid.Row columns={3}>
+          <FieldValue label={t("listings.postmarksConsideredQuestion")}>
             <FieldGroup
               name="arePostmarksConsidered"
               type="radio"
@@ -699,8 +693,8 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 },
               ]}
             />
-          </GridCell>
-          <GridCell className={"mt-4"}>
+          </FieldValue>
+          <Grid.Cell className={"mt-4"}>
             {postmarksConsidered === YesNoAnswer.Yes && (
               <DateField
                 label={t("listings.receivedByDate")}
@@ -722,8 +716,8 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 dataTestId={"postmark-date-field"}
               />
             )}
-          </GridCell>
-          <GridCell className={"mt-4"}>
+          </Grid.Cell>
+          <Grid.Cell className={"mt-4"}>
             {postmarksConsidered === YesNoAnswer.Yes && (
               <TimeField
                 label={t("listings.receivedByTime")}
@@ -749,10 +743,10 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 dataTestId={"postmark-time-field"}
               />
             )}
-          </GridCell>
-        </GridSection>
-        <GridSection columns={3}>
-          <GridCell span={2}>
+          </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row columns={3}>
+          <Grid.Cell className="seeds-grid-span-2">
             <Textarea
               label={t("listings.additionalApplicationSubmissionNotes")}
               name={"additionalApplicationSubmissionNotes"}
@@ -761,10 +755,10 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
               register={register}
               placeholder={t("t.addNotes")}
             />
-          </GridCell>
-        </GridSection>
-      </GridSection>
-    </div>
+          </Grid.Cell>
+        </Grid.Row>
+      </SectionWithGrid>
+    </>
   )
 }
 

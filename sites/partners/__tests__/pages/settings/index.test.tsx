@@ -21,133 +21,217 @@ afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
 describe("settings", () => {
-  it("should render `none` when no preferences exist", async () => {
-    server.use(
-      rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-        return res(ctx.json([]))
-      }),
-      rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-        return res(ctx.json([multiselectQuestionPreference]))
-      })
-    )
-
-    const { getByText, findByText } = render(<Settings />)
-
-    expect(getByText("Settings")).toBeInTheDocument()
-    expect(getByText("Preferences")).toBeInTheDocument()
-
-    await findByText("None")
-    expect(getByText("None")).toBeInTheDocument()
-  })
-
-  it("should render the preference table", async () => {
-    server.use(
-      rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-        return res(ctx.json([multiselectQuestionPreference]))
-      }),
-      rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-        return res(ctx.json([multiselectQuestionPreference]))
-      })
-    )
-    const { getByText, findByText, getByRole } = render(<Settings key="1" />)
-
-    expect(getByText("Settings")).toBeInTheDocument()
-    expect(getByText("Preferences")).toBeInTheDocument()
-
-    await findByText("Name")
-    const table = getByRole("table")
-    const headAndBody = within(table).getAllByRole("rowgroup")
-    expect(headAndBody).toHaveLength(2)
-    const [head, body] = headAndBody
-    expect(within(head).getAllByRole("columnheader")).toHaveLength(4)
-    const rows = within(body).getAllByRole("row")
-    expect(rows).toHaveLength(1)
-    const [name, jurisdiction, updated, actions] = within(rows[0]).getAllByRole("cell")
-    expect(name).toHaveTextContent(multiselectQuestionPreference.text)
-    expect(jurisdiction).toHaveTextContent("Alameda")
-    expect(updated).toHaveTextContent("09/15/2022")
-    const actionButtons = within(actions).getAllByRole("button")
-    expect(actionButtons).toHaveLength(3)
-  })
-
-  it("should delete a preference", async () => {
-    server.use(
-      rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-        return res(ctx.json([multiselectQuestionPreference]))
-      }),
-      rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-        return res(ctx.json([multiselectQuestionPreference]))
-      }),
-      rest.get(
-        "http://localhost/api/adapter/multiselectQuestions/listings/id1",
-        (_req, res, ctx) => {
+  describe("preference table", () => {
+    it("should render `none` when no preferences exist", async () => {
+      server.use(
+        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json([]))
-        }
-      ),
-      rest.delete("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-        return res(ctx.json({}))
-      }),
-      rest.options("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-        return res(ctx.json({}))
-      })
-    )
-    const { findByText, getByTestId, findByRole, queryAllByText } = render(<Settings key={"2"} />)
+        }),
+        rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json([multiselectQuestionPreference]))
+        })
+      )
 
-    await findByText(multiselectQuestionPreference.text)
+      const { getByText, findByText } = render(<Settings />)
 
-    fireEvent.click(getByTestId(`preference-delete-icon: ${multiselectQuestionPreference.text}`))
+      expect(getByText("Settings")).toBeInTheDocument()
+      expect(getByText("Preferences")).toBeInTheDocument()
 
-    // verify modal has all of the correct fields
-    const modal = await findByRole("dialog", { name: "Are you sure?" })
-    expect(within(modal).getByText("Are you sure?")).toBeInTheDocument()
-    expect(within(modal).getByText("Deleting a preference cannot be undone."))
-    expect(within(modal).getByText("Delete")).toBeInTheDocument()
-    expect(within(modal).getByText("Cancel")).toBeInTheDocument()
+      await findByText("None")
+      expect(getByText("None")).toBeInTheDocument()
+    })
 
-    // Press the delete button
-    fireEvent.click(within(modal).getByText("Delete"))
+    it("should render the preference table", async () => {
+      server.use(
+        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json([multiselectQuestionPreference]))
+        }),
+        rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json([multiselectQuestionPreference]))
+        })
+      )
+      const { getByText, findByText, getByRole } = render(<Settings key="1" />)
 
-    // Modal should be closed and the alert popped up
-    const removedToaster = await findByText("Preference Removed")
-    expect(removedToaster).toBeInTheDocument()
-    expect(queryAllByText("Are you sure?")).toHaveLength(0)
+      expect(getByText("Settings")).toBeInTheDocument()
+      expect(getByText("Preferences")).toBeInTheDocument()
+
+      await findByText("Name")
+      const table = getByRole("table")
+      const headAndBody = within(table).getAllByRole("rowgroup")
+      expect(headAndBody).toHaveLength(2)
+      const [head, body] = headAndBody
+      expect(within(head).getAllByRole("columnheader")).toHaveLength(4)
+      const rows = within(body).getAllByRole("row")
+      expect(rows).toHaveLength(1)
+      const [name, jurisdiction, updated, actions] = within(rows[0]).getAllByRole("cell")
+      expect(name).toHaveTextContent(multiselectQuestionPreference.text)
+      expect(jurisdiction).toHaveTextContent("Alameda")
+      expect(updated).toHaveTextContent("09/15/2022")
+      const actionButtons = within(actions).getAllByRole("button")
+      expect(actionButtons).toHaveLength(3)
+    })
   })
-
-  it("should not allow a preference to be deleted when listing is tied to it", async () => {
-    server.use(
-      rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-        return res(ctx.json([multiselectQuestionPreference]))
-      }),
-      rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-        return res(ctx.json([multiselectQuestionPreference]))
-      }),
-      rest.get(
-        "http://localhost/api/adapter/multiselectQuestions/listings/id1",
-        (_req, res, ctx) => {
-          return res(ctx.json([listing]))
-        }
+  describe("deletion", () => {
+    it("should delete a preference", async () => {
+      server.use(
+        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json([multiselectQuestionPreference]))
+        }),
+        rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json([multiselectQuestionPreference]))
+        }),
+        rest.get(
+          "http://localhost/api/adapter/multiselectQuestions/listings/id1",
+          (_req, res, ctx) => {
+            return res(ctx.json([]))
+          }
+        ),
+        rest.delete("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json({}))
+        }),
+        rest.options("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json({}))
+        })
       )
-    )
+      const { findByText, getByTestId, findByRole, queryAllByText } = render(<Settings key={"2"} />)
 
-    const { findByText, getByTestId, findByRole, queryAllByText, getByText } = render(<Settings />)
+      await findByText(multiselectQuestionPreference.text)
 
-    await findByText(multiselectQuestionPreference.text)
+      fireEvent.click(getByTestId(`preference-delete-icon: ${multiselectQuestionPreference.text}`))
 
-    fireEvent.click(getByTestId(`preference-delete-icon: ${multiselectQuestionPreference.text}`))
+      // verify modal has all of the correct fields
+      const modal = await findByRole("dialog", { name: "Are you sure?" })
+      expect(within(modal).getByText("Are you sure?")).toBeInTheDocument()
+      expect(within(modal).getByText("Deleting a preference cannot be undone."))
+      expect(within(modal).getByText("Delete")).toBeInTheDocument()
+      expect(within(modal).getByText("Cancel")).toBeInTheDocument()
 
-    // verify modal is open with applicable text
-    await findByRole("dialog", { name: "Changes required before deleting" })
-    expect(
-      getByText(
-        `This preference is currently added to listings and needs to be removed before being deleted.`
+      // Press the delete button
+      fireEvent.click(within(modal).getByText("Delete"))
+
+      // Modal should be closed and the alert popped up
+      const removedToaster = await findByText("Preference Removed")
+      expect(removedToaster).toBeInTheDocument()
+      expect(queryAllByText("Are you sure?")).toHaveLength(0)
+    })
+
+    it("should not allow a preference to be deleted when listing is tied to it", async () => {
+      server.use(
+        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json([multiselectQuestionPreference]))
+        }),
+        rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json([multiselectQuestionPreference]))
+        }),
+        rest.get(
+          "http://localhost/api/adapter/multiselectQuestions/listings/id1",
+          (_req, res, ctx) => {
+            return res(ctx.json([listing]))
+          }
+        )
       )
-    )
-    expect(getByText(listing.name))
-    // verify delete button is not there
-    expect(queryAllByText("Delete")).toHaveLength(0)
 
-    // close modal
-    fireEvent.click(getByText("Done"))
-    expect(queryAllByText("Changes required before deleting")).toHaveLength(0)
+      const { findByText, getByTestId, findByRole, queryAllByText, getByText } = render(
+        <Settings />
+      )
+
+      await findByText(multiselectQuestionPreference.text)
+
+      fireEvent.click(getByTestId(`preference-delete-icon: ${multiselectQuestionPreference.text}`))
+
+      // verify modal is open with applicable text
+      await findByRole("dialog", { name: "Changes required before deleting" })
+      expect(
+        getByText(
+          `This preference is currently added to listings and needs to be removed before being deleted.`
+        )
+      )
+      expect(getByText(listing.name))
+      // verify delete button is not there
+      expect(queryAllByText("Delete")).toHaveLength(0)
+
+      // close modal
+      fireEvent.click(getByText("Done"))
+      expect(queryAllByText("Changes required before deleting")).toHaveLength(0)
+    })
+  })
+  describe("creating preferences", () => {
+    it("should not show geocoding functionality if not enabled", async () => {
+      server.use(
+        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json([multiselectQuestionPreference]))
+        }),
+        rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json([multiselectQuestionPreference]))
+        }),
+        rest.get(
+          "http://localhost/api/adapter/multiselectQuestions/listings/id1",
+          (_req, res, ctx) => {
+            return res(ctx.json([listing]))
+          }
+        )
+      )
+
+      const { findByText, getByTestId, queryAllByText, getByText } = render(<Settings />)
+
+      await findByText(multiselectQuestionPreference.text)
+
+      // Add a preference
+      fireEvent.click(getByTestId("preference-add-item"))
+      expect(getByText("Add Preference")).toBeInTheDocument()
+
+      // Add a preference option
+      fireEvent.click(getByText("Add Option"))
+      expect(getByText("Do you want to collect address information?")).toBeInTheDocument()
+
+      // Click collect address
+      fireEvent.click(getByTestId("collect-address-yes"))
+      expect(queryAllByText("Do you need help validating the address?")).toHaveLength(0)
+    })
+
+    it("should show geocoding functionality if enabled", async () => {
+      document.cookie = "access-token-available=True"
+      server.use(
+        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json([multiselectQuestionPreference]))
+        }),
+        rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json([multiselectQuestionPreference]))
+        }),
+        rest.get(
+          "http://localhost/api/adapter/multiselectQuestions/listings/id1",
+          (_req, res, ctx) => {
+            return res(ctx.json([listing]))
+          }
+        ),
+        rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+          return res(
+            ctx.json({
+              id: "user1",
+              roles: { id: "user1", isAdmin: false, isPartner: true },
+              jurisdictions: [
+                { id: "jurisdiction1", enableGeocodingPreferences: true, name: "jurisdiction 1" },
+              ],
+            })
+          )
+        })
+      )
+
+      const { findByText, getByTestId, queryAllByText, getByText } = render(<Settings />)
+
+      await findByText(multiselectQuestionPreference.text)
+
+      // Add a preference
+      fireEvent.click(getByTestId("preference-add-item"))
+      expect(getByText("Add Preference")).toBeInTheDocument()
+
+      // Add a preference option
+      fireEvent.click(getByText("Add Option"))
+      expect(getByText("Do you want to collect address information?")).toBeInTheDocument()
+
+      // Click collect address
+      fireEvent.click(getByTestId("collect-address-yes"))
+      expect(queryAllByText("Do you need help validating the address?")).toHaveLength(1)
+    })
   })
 })

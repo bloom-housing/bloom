@@ -2,12 +2,13 @@ import React, { useContext } from "react"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
-import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { t } from "@bloom-housing/ui-components"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getLotteryEvent } from "@bloom-housing/shared-helpers"
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 import { getDetailFieldNumber, getDetailFieldString, getDetailBoolean } from "./helpers"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const DetailRankingsAndResults = () => {
   const listing = useContext(ListingContext)
@@ -21,24 +22,19 @@ const DetailRankingsAndResults = () => {
     }
   }
   return (
-    <GridSection
-      className="bg-primary-lighter"
-      title={t("listings.sections.rankingsResultsTitle")}
-      grid={false}
-      inset
-    >
+    <SectionWithGrid heading={t("listings.sections.rankingsResultsTitle")} inset>
       {listing.reviewOrderType !== ListingReviewOrder.waitlist && (
-        <GridSection columns={2}>
+        <Grid.Row>
           <FieldValue id="reviewOrderQuestion" label={t("listings.reviewOrderQuestion")}>
             {getReviewOrderType() === ListingReviewOrder.firstComeFirstServe
               ? t("listings.firstComeFirstServe")
               : t("listings.lotteryTitle")}
           </FieldValue>
-        </GridSection>
+        </Grid.Row>
       )}
       {lotteryEvent && (
         <>
-          <GridSection columns={3}>
+          <Grid.Row>
             <FieldValue id="lotteryEvent.startTime.date" label={t("listings.lotteryDateQuestion")}>
               {dayjs(new Date(lotteryEvent?.startTime)).utc().format("MM/DD/YYYY")}
             </FieldValue>
@@ -48,44 +44,42 @@ const DetailRankingsAndResults = () => {
             <FieldValue id="lotteryEvent.lotteryEndTime.time" label={t("listings.lotteryEndTime")}>
               {dayjs(new Date(lotteryEvent?.endTime)).format("hh:mm A")}
             </FieldValue>
-          </GridSection>
-          <GridSection columns={2}>
+          </Grid.Row>
+          <Grid.Row>
             <FieldValue id="lotteryDateNotes" label={t("listings.lotteryDateNotes")}>
               {lotteryEvent?.note}
             </FieldValue>
-          </GridSection>
+          </Grid.Row>
         </>
       )}
       {getReviewOrderType() === ListingReviewOrder.firstComeFirstServe && (
-        <GridSection columns={2}>
+        <Grid.Row>
           <FieldValue id="dueDateQuestion" label={t("listings.dueDateQuestion")}>
             {listing.applicationDueDate ? t("t.yes") : t("t.no")}
           </FieldValue>
-        </GridSection>
+        </Grid.Row>
       )}
       {listing.reviewOrderType === ListingReviewOrder.waitlist && (
         <>
-          <GridSection columns={2}>
+          <Grid.Row>
             <FieldValue id="waitlist.openQuestion" label={t("listings.waitlist.openQuestion")}>
               {getDetailBoolean(listing.isWaitlistOpen)}
             </FieldValue>
-          </GridSection>
-          <GridSection columns={3}>
+          </Grid.Row>
+          <Grid.Row>
             <FieldValue id="waitlistOpenSpots" label={t("listings.waitlist.openSize")}>
               {getDetailFieldNumber(listing.waitlistOpenSpots)}
             </FieldValue>
-          </GridSection>
+          </Grid.Row>
         </>
       )}
 
-      <GridSection columns={1}>
-        <GridCell>
-          <FieldValue id="whatToExpect" label={t("listings.whatToExpectLabel")}>
-            {getDetailFieldString(listing.whatToExpect)}
-          </FieldValue>
-        </GridCell>
-      </GridSection>
-    </GridSection>
+      <Grid.Row>
+        <FieldValue id="whatToExpect" label={t("listings.whatToExpectLabel")}>
+          {getDetailFieldString(listing.whatToExpect)}
+        </FieldValue>
+      </Grid.Row>
+    </SectionWithGrid>
   )
 }
 
