@@ -1,10 +1,11 @@
 import React, { useContext, useMemo } from "react"
 import { useFormContext } from "react-hook-form"
-import { t, GridSection, Field, Textarea, FieldGroup, GridCell } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { t, Field, Textarea, FieldGroup } from "@bloom-housing/ui-components"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
 import { AuthContext, listingUtilities } from "@bloom-housing/shared-helpers"
 import { ListingUtilities } from "@bloom-housing/backend-core/types"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type AdditionalFeesProps = {
   existingUtilities: ListingUtilities
@@ -31,54 +32,59 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
     ?.enableUtilitiesIncluded
 
   return (
-    <div>
-      <GridSection
-        grid={false}
-        separator
-        title={t("listings.sections.additionalFees")}
-        description={t("listings.sections.additionalFeesSubtitle")}
+    <>
+      <hr className="spacer-section-above spacer-section" />
+      <SectionWithGrid
+        heading={t("listings.sections.additionalFees")}
+        subheading={t("listings.sections.additionalFeesSubtitle")}
       >
-        <GridSection columns={3}>
-          <Field
-            label={t("listings.applicationFee")}
-            name={"applicationFee"}
-            id={"applicationFee"}
-            register={register}
-            type={"currency"}
-            prepend={"$"}
-            placeholder={"0.00"}
-          />
-          <Field
-            label={t("listings.depositMin")}
-            name={"depositMin"}
-            id={"depositMin"}
-            register={register}
-            type={"currency"}
-            prepend={"$"}
-            placeholder={"0.00"}
-            error={fieldHasError(errors?.depositMin)}
-            errorMessage={fieldMessage(errors?.depositMin)}
-            inputProps={{
-              onChange: () => clearErrors("depositMin"),
-            }}
-          />
-          <Field
-            label={t("listings.depositMax")}
-            name={"depositMax"}
-            id={"depositMax"}
-            register={register}
-            type={"currency"}
-            prepend={"$"}
-            placeholder={"0.00"}
-            error={fieldHasError(errors?.depositMax)}
-            errorMessage={fieldMessage(errors?.depositMax?.message)}
-            inputProps={{
-              onChange: () => clearErrors("depositMax"),
-            }}
-          />
-        </GridSection>
-        <GridSection columns={2}>
-          <GridCell>
+        <Grid.Row>
+          <Grid.Cell>
+            <Field
+              label={t("listings.applicationFee")}
+              name={"applicationFee"}
+              id={"applicationFee"}
+              register={register}
+              type={"currency"}
+              prepend={"$"}
+              placeholder={"0.00"}
+            />
+          </Grid.Cell>
+          <Grid.Cell>
+            <Field
+              label={t("listings.depositMin")}
+              name={"depositMin"}
+              id={"depositMin"}
+              register={register}
+              type={"currency"}
+              prepend={"$"}
+              placeholder={"0.00"}
+              error={fieldHasError(errors?.depositMin)}
+              errorMessage={fieldMessage(errors?.depositMin)}
+              inputProps={{
+                onChange: () => clearErrors("depositMin"),
+              }}
+            />
+          </Grid.Cell>
+          <Grid.Cell>
+            <Field
+              label={t("listings.depositMax")}
+              name={"depositMax"}
+              id={"depositMax"}
+              register={register}
+              type={"currency"}
+              prepend={"$"}
+              placeholder={"0.00"}
+              error={fieldHasError(errors?.depositMax)}
+              errorMessage={fieldMessage(errors?.depositMax?.message)}
+              inputProps={{
+                onChange: () => clearErrors("depositMax"),
+              }}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Cell>
             <Textarea
               label={t("listings.sections.depositHelperText")}
               name={"depositHelperText"}
@@ -87,8 +93,8 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
               fullWidth={true}
               register={register}
             />
-          </GridCell>
-          <GridCell>
+          </Grid.Cell>
+          <Grid.Cell>
             <Textarea
               label={t("listings.sections.costsNotIncluded")}
               name={"costsNotIncluded"}
@@ -97,10 +103,10 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
               fullWidth={true}
               register={register}
             />
-          </GridCell>
-        </GridSection>
+          </Grid.Cell>
+        </Grid.Row>
         {enableUtilitiesIncluded && (
-          <GridSection columns={1}>
+          <Grid.Row>
             <FieldValue label={t("listings.sections.utilities")}>
               <FieldGroup
                 type="checkbox"
@@ -110,10 +116,10 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
                 fieldGroupClassName="grid grid-cols-2 mt-4"
               />
             </FieldValue>
-          </GridSection>
+          </Grid.Row>
         )}
-      </GridSection>
-    </div>
+      </SectionWithGrid>
+    </>
   )
 }
 

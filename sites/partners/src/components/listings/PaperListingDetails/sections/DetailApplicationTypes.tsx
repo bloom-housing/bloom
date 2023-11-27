@@ -1,16 +1,11 @@
 import React, { useContext } from "react"
-import {
-  t,
-  GridSection,
-  GridCell,
-  MinimalTable,
-  StandardTableData,
-} from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { t, MinimalTable, StandardTableData } from "@bloom-housing/ui-components"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ApplicationMethodType } from "@bloom-housing/backend-core/types"
 import { ListingContext } from "../../ListingContext"
 import { getDetailBoolean } from "./helpers"
 import { pdfFileNameFromFileId } from "../../../../lib/helpers"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const DetailApplicationTypes = () => {
   const listing = useContext(ListingContext)
@@ -41,24 +36,15 @@ const DetailApplicationTypes = () => {
   }
 
   return (
-    <GridSection
-      className="bg-primary-lighter"
-      title={t("listings.sections.applicationTypesTitle")}
-      grid={false}
-      inset
-    >
-      <GridSection columns={2}>
-        <GridCell>
-          <FieldValue id="digitalApplication" label={"Online Applications"}>
-            {getDetailBoolean(listing.digitalApplication)}
-          </FieldValue>
-        </GridCell>
+    <SectionWithGrid heading={t("listings.sections.applicationTypesTitle")} inset>
+      <Grid.Row columns={2}>
+        <FieldValue id="digitalApplication" label={"Online Applications"}>
+          {getDetailBoolean(listing.digitalApplication)}
+        </FieldValue>
         {digitalMethod && (
-          <GridCell>
-            <FieldValue id="digitalMethod.type" label={"Common Digital Application"}>
-              {digitalMethod?.type === ApplicationMethodType.ExternalLink ? t("t.no") : t("t.yes")}
-            </FieldValue>
-          </GridCell>
+          <FieldValue id="digitalMethod.type" label={"Common Digital Application"}>
+            {digitalMethod?.type === ApplicationMethodType.ExternalLink ? t("t.no") : t("t.yes")}
+          </FieldValue>
         )}
         {digitalMethod?.type === ApplicationMethodType.ExternalLink && (
           <FieldValue
@@ -68,27 +54,25 @@ const DetailApplicationTypes = () => {
             {digitalMethod.externalReference}
           </FieldValue>
         )}
-      </GridSection>
-      <GridSection columns={1}>
-        <GridCell>
-          <FieldValue id="paperApplication" label={"Paper Applications"}>
-            {getDetailBoolean(listing.paperApplication)}
+      </Grid.Row>
+      <Grid.Row>
+        <FieldValue id="paperApplication" label={"Paper Applications"}>
+          {getDetailBoolean(listing.paperApplication)}
+        </FieldValue>
+      </Grid.Row>
+      {paperApplicationsTableRows.length > 0 && (
+        <Grid.Row>
+          <FieldValue label={"Paper Applications"}>
+            <MinimalTable
+              id="paperApplicationTable"
+              headers={paperApplicationsTableHeaders}
+              data={paperApplicationsTableRows}
+              flushLeft={true}
+            ></MinimalTable>
           </FieldValue>
-        </GridCell>
-        {paperApplicationsTableRows.length > 0 && (
-          <GridCell>
-            <FieldValue label={"Paper Applications"}>
-              <MinimalTable
-                id="paperApplicationTable"
-                headers={paperApplicationsTableHeaders}
-                data={paperApplicationsTableRows}
-                flushLeft={true}
-              ></MinimalTable>
-            </FieldValue>
-          </GridCell>
-        )}
-      </GridSection>
-    </GridSection>
+        </Grid.Row>
+      )}
+    </SectionWithGrid>
   )
 }
 

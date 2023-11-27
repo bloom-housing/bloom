@@ -504,7 +504,7 @@ describe("Listings", () => {
         expect.objectContaining({
           id: adminId,
         }),
-        { id: listing.id, name: listing.name },
+        { id: listing.id, name: listing.name, juris: listing.jurisdiction.id },
         expect.arrayContaining(["admin@example.com", "mfauser@bloom.com"]),
         process.env.PARTNERS_PORTAL_URL
       )
@@ -530,7 +530,7 @@ describe("Listings", () => {
         expect.objectContaining({
           id: adminId,
         }),
-        { id: listing.id, name: listing.name },
+        { id: listing.id, name: listing.name, juris: listing.jurisdiction.id },
         expect.arrayContaining(["leasing-agent-1@example.com", "bayarea-admin@example.com"]),
         process.env.PARTNERS_PORTAL_URL
       )
@@ -561,7 +561,7 @@ describe("Listings", () => {
         expect.objectContaining({
           id: adminId,
         }),
-        { id: listing.id, name: listing.name },
+        { id: listing.id, name: listing.name, juris: listing.jurisdiction.id },
         expect.arrayContaining(["leasing-agent-1@example.com", "bayarea-admin@example.com"]),
         bayArea.publicUrl
       )
@@ -617,7 +617,11 @@ describe("Listings", () => {
         expect.objectContaining({
           id: adminId,
         }),
-        { id: listingResponse.body.id, name: listingResponse.body.name },
+        {
+          id: listingResponse.body.id,
+          name: listingResponse.body.name,
+          juris: listingResponse.body.jurisdiction.id,
+        },
         expect.arrayContaining(["admin@example.com", "mfauser@bloom.com"]),
         process.env.PARTNERS_PORTAL_URL
       )
@@ -650,7 +654,7 @@ describe("Listings", () => {
         expect.objectContaining({
           id: adminId,
         }),
-        { id: listing.id, name: listing.name },
+        { id: listing.id, name: listing.name, juris: listing.jurisdiction.id },
         expect.arrayContaining([
           "admin@example.com",
           "mfauser@bloom.com",

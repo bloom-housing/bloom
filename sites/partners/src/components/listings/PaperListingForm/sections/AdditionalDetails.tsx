@@ -1,6 +1,8 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
-import { t, GridSection, Textarea, GridCell } from "@bloom-housing/ui-components"
+import { Grid } from "@bloom-housing/ui-seeds"
+import { t, Textarea } from "@bloom-housing/ui-components"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const AdditionalDetails = () => {
   const formMethods = useFormContext()
@@ -9,45 +11,48 @@ const AdditionalDetails = () => {
   const { register } = formMethods
 
   return (
-    <div>
-      <GridSection
-        columns={2}
-        separator
-        title={t("listings.sections.additionalDetails")}
-        description={t("listings.sections.additionalDetailsSubtitle")}
+    <>
+      <hr className="spacer-section-above spacer-section" />
+      <SectionWithGrid
+        heading={t("listings.sections.additionalDetails")}
+        subheading={t("listings.sections.additionalDetailsSubtitle")}
       >
-        <GridCell>
-          <Textarea
-            label={t("listings.requiredDocuments")}
-            name={"requiredDocuments"}
-            id={"requiredDocuments"}
-            fullWidth={true}
-            register={register}
-            maxLength={2000}
-          />
-        </GridCell>
-        <GridCell>
-          <Textarea
-            label={t("listings.importantProgramRules")}
-            name={"programRules"}
-            id={"programRules"}
-            fullWidth={true}
-            register={register}
-            maxLength={600}
-          />
-        </GridCell>
-        <GridCell>
-          <Textarea
-            label={t("listings.specialNotes")}
-            name={"specialNotes"}
-            id={"specialNotes"}
-            fullWidth={true}
-            register={register}
-            maxLength={600}
-          />
-        </GridCell>
-      </GridSection>
-    </div>
+        <Grid.Row columns={2}>
+          <Grid.Cell>
+            <Textarea
+              label={t("listings.requiredDocuments")}
+              name={"requiredDocuments"}
+              id={"requiredDocuments"}
+              fullWidth={true}
+              register={register}
+              maxLength={2000}
+            />
+          </Grid.Cell>
+          <Grid.Cell>
+            <Textarea
+              label={t("listings.importantProgramRules")}
+              name={"programRules"}
+              id={"programRules"}
+              fullWidth={true}
+              register={register}
+              maxLength={600}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row columns={2}>
+          <Grid.Cell>
+            <Textarea
+              label={t("listings.specialNotes")}
+              name={"specialNotes"}
+              id={"specialNotes"}
+              fullWidth={true}
+              register={register}
+              maxLength={600}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+      </SectionWithGrid>
+    </>
   )
 }
 

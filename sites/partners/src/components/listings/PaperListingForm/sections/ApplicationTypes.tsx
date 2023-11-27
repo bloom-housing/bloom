@@ -6,8 +6,6 @@ import {
   Button,
   Drawer,
   Dropzone,
-  GridSection,
-  GridCell,
   FieldGroup,
   Field,
   MinimalTable,
@@ -28,6 +26,8 @@ import {
 } from "@bloom-housing/backend-core/types"
 import { FormListing } from "../../../../lib/listings/formTypes"
 import { uploadAssetAndSetData } from "../../../../lib/assets"
+import { Grid } from "@bloom-housing/ui-seeds"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 interface Methods {
   digital: ApplicationMethodCreate
@@ -188,14 +188,13 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   register("applicationMethods")
   return (
     <>
-      <GridSection
-        grid={false}
-        separator
-        title={t("listings.sections.applicationTypesTitle")}
-        description={t("listings.sections.applicationTypesSubtitle")}
+      <hr className="spacer-section-above spacer-section" />
+      <SectionWithGrid
+        heading={t("listings.sections.applicationTypesTitle")}
+        subheading={t("listings.sections.applicationTypesSubtitle")}
       >
-        <GridSection columns={2}>
-          <GridCell>
+        <Grid.Row columns={2}>
+          <Grid.Cell>
             <p
               className={`field-label m-4 ml-0 ${
                 fieldHasError(errors?.digitalApplication) &&
@@ -245,7 +244,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 },
               ]}
             />
-          </GridCell>
+          </Grid.Cell>
           {/*
           When new applications can be done from Doorway, the code below should be uncommented to allow
           the common digital application as an option and only show the custom URL section if the common
@@ -298,7 +297,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             </GridCell>
           )}
               */}
-        </GridSection>
+        </Grid.Row>
         {/* This should be uncommented along with the block above to allow the common digital application in the future.
         {((commonDigitalApplicationChoice &&
           commonDigitalApplicationChoice === YesNoAnswer.No &&
@@ -307,8 +306,8 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             !commonDigitalApplicationChoice &&
             listing?.commonDigitalApplication === false)) && ( */}
         {digitalApplicationChoice === YesNoAnswer.Yes && (
-          <GridSection columns={1}>
-            <GridCell>
+          <Grid.Row columns={1}>
+            <Grid.Cell>
               <Field
                 label={t("listings.customOnlineApplicationUrl")}
                 name="customOnlineApplicationUrl"
@@ -333,12 +332,12 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 error={fieldHasError(errors?.applicationMethods?.[0]?.externalReference)}
                 errorMessage={fieldMessage(errors?.applicationMethods?.[0]?.externalReference)}
               />
-            </GridCell>
-          </GridSection>
+            </Grid.Cell>
+          </Grid.Row>
         )}
 
-        <GridSection columns={2}>
-          <GridCell>
+        <Grid.Row columns={2}>
+          <Grid.Cell>
             <p
               className={`field-label m-4 ml-0 ${
                 fieldHasError(errors?.paperApplication) &&
@@ -388,11 +387,11 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 },
               ]}
             />
-          </GridCell>
-        </GridSection>
+          </Grid.Cell>
+        </Grid.Row>
         {paperApplicationChoice === YesNoAnswer.Yes && (
-          <GridSection columns={1} tinted inset>
-            <GridCell>
+          <Grid.Row columns={1}>
+            <Grid.Cell>
               {methods.paper?.paperApplications?.length > 0 && (
                 <MinimalTable
                   className="mb-8"
@@ -440,10 +439,10 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               >
                 {t("listings.addPaperApplication")}
               </Button>
-            </GridCell>
-          </GridSection>
+            </Grid.Cell>
+          </Grid.Row>
         )}
-      </GridSection>
+      </SectionWithGrid>
 
       <Drawer
         open={drawerState}

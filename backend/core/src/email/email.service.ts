@@ -22,7 +22,7 @@ import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
 import { Language } from "../shared/types/language-enum"
 import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.service"
 import { Translation } from "../translations/entities/translation.entity"
-import { IdName, ListingEventType, Unit } from "../../types"
+import { ListingEventType, Unit } from "../../types"
 import { formatLocalDate } from "../shared/utils/format-local-date"
 import { formatCommunityType } from "../listings/helpers"
 
@@ -60,6 +60,12 @@ const formatUnitDetails = (
     } ${pluralLabel && maxValue === 1 ? pluralLabel : label}`
   }
   return ""
+}
+
+type listingInfo = {
+  id: string
+  name: string
+  juris: string
 }
 
 @Injectable({ scope: Scope.REQUEST })
@@ -552,9 +558,20 @@ export class EmailService {
     )
   }
 
-  public async requestApproval(user: User, listingInfo: IdName, emails: string[], appUrl: string) {
+  public async requestApproval(
+    user: User,
+    listingInfo: listingInfo,
+    emails: string[],
+    appUrl: string
+  ) {
     try {
-      const jurisdiction = await this.getUserJurisdiction(user)
+      const jurisdiction = listingInfo.juris
+        ? await this.jurisdictionService.findOne({
+            where: {
+              id: listingInfo.juris,
+            },
+          })
+        : await this.getUserJurisdiction(user)
       void (await this.loadTranslations(jurisdiction, Language.en))
       await this.send(
         emails,
@@ -572,9 +589,20 @@ export class EmailService {
     }
   }
 
-  public async changesRequested(user: User, listingInfo: IdName, emails: string[], appUrl: string) {
+  public async changesRequested(
+    user: User,
+    listingInfo: listingInfo,
+    emails: string[],
+    appUrl: string
+  ) {
     try {
-      const jurisdiction = await this.getUserJurisdiction(user)
+      const jurisdiction = listingInfo.juris
+        ? await this.jurisdictionService.findOne({
+            where: {
+              id: listingInfo.juris,
+            },
+          })
+        : await this.getUserJurisdiction(user)
       void (await this.loadTranslations(jurisdiction, Language.en))
       await this.send(
         emails,
@@ -594,12 +622,18 @@ export class EmailService {
 
   public async listingApproved(
     user: User,
-    listingInfo: IdName,
+    listingInfo: listingInfo,
     emails: string[],
     publicUrl: string
   ) {
     try {
-      const jurisdiction = await this.getUserJurisdiction(user)
+      const jurisdiction = listingInfo.juris
+        ? await this.jurisdictionService.findOne({
+            where: {
+              id: listingInfo.juris,
+            },
+          })
+        : await this.getUserJurisdiction(user)
       void (await this.loadTranslations(jurisdiction, Language.en))
       await this.send(
         emails,

@@ -1,9 +1,10 @@
 import React, { useContext } from "react"
-import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { t } from "@bloom-housing/ui-components"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const DetailBuildingFeatures = () => {
   const listing = useContext(ListingContext)
@@ -29,64 +30,51 @@ const DetailBuildingFeatures = () => {
   )?.enableAccessibilityFeatures
 
   return (
-    <GridSection
-      className="bg-primary-lighter"
-      title={t("listings.sections.buildingFeaturesTitle")}
-      grid={false}
-      inset
-    >
-      <GridSection columns={1}>
-        <GridCell>
-          <FieldValue id="amenities" label={t("t.propertyAmenities")}>
-            {getDetailFieldString(listing.amenities)}
-          </FieldValue>
-        </GridCell>
-      </GridSection>
-      <GridSection columns={1}>
-        <GridCell>
-          <FieldValue id="unitAmenities" label={t("t.unitAmenities")}>
-            {getDetailFieldString(listing.unitAmenities)}
-          </FieldValue>
-        </GridCell>
-      </GridSection>
-      <GridSection columns={1}>
-        <GridCell>
-          <FieldValue id="accessibility" label={t("t.additionalAccessibility")}>
-            {getDetailFieldString(listing.accessibility)}
-          </FieldValue>
-        </GridCell>
-      </GridSection>
-      <GridSection columns={1}>
-        <GridCell>
-          <FieldValue id="smokingPolicy" label={t("t.smokingPolicy")}>
-            {getDetailFieldString(listing.smokingPolicy)}
-          </FieldValue>
-        </GridCell>
-      </GridSection>
-      <GridSection columns={1}>
-        <GridCell>
-          <FieldValue id="petPolicy" label={t("t.petsPolicy")}>
-            {getDetailFieldString(listing.petPolicy)}
-          </FieldValue>
-        </GridCell>
-      </GridSection>
-      <GridSection columns={1}>
-        <GridCell>
-          <FieldValue id="servicesOffered" label={t("t.servicesOffered")}>
-            {getDetailFieldString(listing.servicesOffered)}
-          </FieldValue>
-        </GridCell>
-      </GridSection>
+    <SectionWithGrid heading={t("listings.sections.buildingFeaturesTitle")} inset>
+      <Grid.Row>
+        <FieldValue id="amenities" label={t("t.propertyAmenities")}>
+          {getDetailFieldString(listing.amenities)}
+        </FieldValue>
+      </Grid.Row>
+
+      <Grid.Row>
+        <FieldValue id="unitAmenities" label={t("t.unitAmenities")}>
+          {getDetailFieldString(listing.unitAmenities)}
+        </FieldValue>
+      </Grid.Row>
+
+      <Grid.Row>
+        <FieldValue id="accessibility" label={t("t.additionalAccessibility")}>
+          {getDetailFieldString(listing.accessibility)}
+        </FieldValue>
+      </Grid.Row>
+
+      <Grid.Row>
+        <FieldValue id="smokingPolicy" label={t("t.smokingPolicy")}>
+          {getDetailFieldString(listing.smokingPolicy)}
+        </FieldValue>
+      </Grid.Row>
+
+      <Grid.Row>
+        <FieldValue id="petPolicy" label={t("t.petsPolicy")}>
+          {getDetailFieldString(listing.petPolicy)}
+        </FieldValue>
+      </Grid.Row>
+
+      <Grid.Row>
+        <FieldValue id="servicesOffered" label={t("t.servicesOffered")}>
+          {getDetailFieldString(listing.servicesOffered)}
+        </FieldValue>
+      </Grid.Row>
+
       {!enableAccessibilityFeatures ? null : (
-        <GridSection columns={1}>
-          <GridCell className={"m-h-1"}>
-            <FieldValue label={"Accessibility Features"}>
-              <ul className={"flex flex-wrap"}>{getAccessibilityFeatures()}</ul>
-            </FieldValue>
-          </GridCell>
-        </GridSection>
+        <Grid.Row>
+          <FieldValue label={"Accessibility Features"}>
+            <ul className={"flex flex-wrap"}>{getAccessibilityFeatures()}</ul>
+          </FieldValue>
+        </Grid.Row>
       )}
-    </GridSection>
+    </SectionWithGrid>
   )
 }
 
