@@ -354,7 +354,10 @@ export class ListingsService {
     const nonApprovingRoles = [UserRoleEnum.partner]
     if (!params.approvingRoles.includes(UserRoleEnum.jurisdictionAdmin))
       nonApprovingRoles.push(UserRoleEnum.jurisdictionAdmin)
-    if (params.status === ListingStatus.pendingReview) {
+    if (
+      params.status === ListingStatus.pendingReview &&
+      params.previousStatus !== ListingStatus.pendingReview
+    ) {
       const userInfo = await this.getUserEmailInfo(
         params.approvingRoles,
         params.listingInfo.id,
@@ -368,7 +371,10 @@ export class ListingsService {
       )
     }
     // admin updates status to changes requested when approval requires partner changes
-    else if (params.status === ListingStatus.changesRequested) {
+    else if (
+      params.status === ListingStatus.changesRequested &&
+      params.previousStatus !== ListingStatus.changesRequested
+    ) {
       const userInfo = await this.getUserEmailInfo(
         nonApprovingRoles,
         params.listingInfo.id,

@@ -61,11 +61,11 @@ export class ApplicationsController {
 
   @Get(`csv`)
   @ApiOperation({ summary: "List applications as csv", operationId: "listAsCsv" })
-  async listAsCsv(
+  listAsCsv(
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationsCsvListQueryParams
-  ): Promise<StatusDto> {
-    return await this.applicationsService.sendExport(queryParams)
+  ): StatusDto {
+    return this.applicationsService.sendExport(queryParams)
   }
 
   @Get(`rawApplicationsList`)

@@ -2,19 +2,18 @@ import React, { useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import {
   t,
-  GridSection,
   DOBField,
   Select,
-  GridCell,
   Field,
   emailRegex,
   PhoneField,
   FieldGroup,
   FormAddress,
 } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { phoneNumberKeys, contactPreferencesKeys, stateKeys } from "@bloom-housing/shared-helpers"
 import { YesNoAnswer } from "../../../../lib/helpers"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const FormPrimaryApplicant = () => {
   const formMethods = useFormContext()
@@ -51,46 +50,38 @@ const FormPrimaryApplicant = () => {
   }, [setValue, clearErrors, additionalPhoneValue])
 
   return (
-    <GridSection title={t("application.household.primaryApplicant")} grid={false} separator>
-      <GridSection columns={3}>
-        <GridCell>
-          <FieldValue label={t("application.name.firstName")}>
+    <>
+      <hr className="spacer-section-above spacer-section" />
+      <SectionWithGrid heading={t("application.household.primaryApplicant")}>
+        <Grid.Row columns={3}>
+          <Grid.Cell>
             <Field
               id="application.applicant.firstName"
               name="application.applicant.firstName"
               label={t("application.name.firstName")}
               placeholder={t("application.name.firstName")}
               register={register}
-              readerOnly
             />
-          </FieldValue>
-        </GridCell>
-        <GridCell>
-          <FieldValue label={t("application.name.middleName")}>
+          </Grid.Cell>
+          <Grid.Cell>
             <Field
               id="application.applicant.middleName"
               name="application.applicant.middleName"
               label={t("application.name.middleNameOptional")}
               placeholder={t("application.name.middleNameOptional")}
               register={register}
-              readerOnly
             />
-          </FieldValue>
-        </GridCell>
-        <GridCell>
-          <FieldValue label={t("application.name.lastName")}>
+          </Grid.Cell>
+          <Grid.Cell>
             <Field
               id="application.applicant.lastName"
               name="application.applicant.lastName"
               label={t("application.name.lastName")}
               placeholder={t("application.name.lastName")}
               register={register}
-              readerOnly
             />
-          </FieldValue>
-        </GridCell>
-        <GridCell>
-          <FieldValue label={t("application.household.member.dateOfBirth")}>
+          </Grid.Cell>
+          <Grid.Cell>
             <DOBField
               id="dateOfBirth"
               name="dateOfBirth"
@@ -99,50 +90,40 @@ const FormPrimaryApplicant = () => {
               errorMessage={t("errors.dateOfBirthErrorAge")}
               watch={watch}
               validateAge18={true}
-              label={t("application.name.yourDateOfBirth")}
-              readerOnly
+              label={t("application.household.member.dateOfBirth")}
             />
-          </FieldValue>
-        </GridCell>
-        <GridCell>
-          <FieldValue label={t("t.email")}>
+          </Grid.Cell>
+          <Grid.Cell>
             <Field
               id="application.applicant.emailAddress"
               name="application.applicant.emailAddress"
               type="email"
               placeholder="example@web.com"
-              label={t("application.name.yourEmailAddress")}
-              readerOnly={true}
+              label={t("t.email")}
               validation={{ pattern: emailRegex }}
               error={errors.application?.applicant?.emailAddress}
               errorMessage={t("errors.emailAddressError")}
               register={register}
             />
-          </FieldValue>
-        </GridCell>
-        <GridCell>
-          <FieldValue label={t("t.phone")}>
+          </Grid.Cell>
+          <Grid.Cell>
             <PhoneField
               id="phoneNumber"
               name="phoneNumber"
-              label={t("application.contact.yourPhoneNumber")}
+              label={t("t.phone")}
               required={false}
               error={errors?.phoneNumber}
               errorMessage={t("errors.phoneNumberError")}
               control={control}
               controlClassName="control"
-              readerOnly
             />
-          </FieldValue>
-        </GridCell>
-        <GridCell>
-          <FieldValue label={t("applications.table.phoneType")}>
+          </Grid.Cell>
+          <Grid.Cell>
             <Select
               id="application.applicant.phoneNumberType"
               name="application.applicant.phoneNumberType"
               placeholder={t("application.contact.phoneNumberTypes.prompt")}
               label={t("application.contact.phoneNumberTypes.prompt")}
-              labelClassName="sr-only"
               error={errors.application?.applicant?.phoneNumberType}
               errorMessage={t("errors.phoneNumberTypeError")}
               register={register}
@@ -152,25 +133,20 @@ const FormPrimaryApplicant = () => {
               validation={{ required: !!phoneValue?.length }}
               disabled={!phoneValue?.length}
             />
-          </FieldValue>
-        </GridCell>
-        <GridCell>
-          <FieldValue label={t("t.additionalPhone")}>
+          </Grid.Cell>
+          <Grid.Cell>
             <PhoneField
               id="application.additionalPhoneNumber"
               name="application.additionalPhoneNumber"
-              label={t("application.contact.yourAdditionalPhoneNumber")}
+              label={t("t.additionalPhone")}
               required={false}
               error={errors.application?.additionalPhoneNumber}
               errorMessage={t("errors.phoneNumberError")}
               control={control}
               controlClassName="control"
-              readerOnly
             />
-          </FieldValue>
-        </GridCell>
-        <GridCell>
-          <FieldValue label={t("applications.table.additionalPhoneType")}>
+          </Grid.Cell>
+          <Grid.Cell>
             <Select
               id="application.additionalPhoneNumberType"
               name="application.additionalPhoneNumberType"
@@ -179,28 +155,24 @@ const FormPrimaryApplicant = () => {
               register={register}
               controlClassName="control"
               placeholder={t("application.contact.phoneNumberTypes.prompt")}
-              label={t("application.contact.phoneNumberTypes.prompt")}
-              labelClassName={"sr-only"}
+              label={t("applications.table.additionalPhoneType")}
               options={phoneNumberKeys}
               keyPrefix="application.contact.phoneNumberTypes"
               validation={{ required: !!additionalPhoneValue?.length }}
               disabled={!additionalPhoneValue?.length}
             />
-          </FieldValue>
-        </GridCell>
+          </Grid.Cell>
 
-        <GridCell>
-          <FieldValue label={t("application.contact.preferredContactType")}>
+          <Grid.Cell>
             <FieldGroup
               name="application.contactPreferences"
               fields={contactPreferencesOptions}
               type="checkbox"
               register={register}
+              groupLabel={t("application.contact.preferredContactType")}
             />
-          </FieldValue>
-        </GridCell>
+          </Grid.Cell>
 
-        <GridCell>
           <FieldValue label={t("application.add.workInRegion")}>
             <div className="flex items-center">
               <Field
@@ -228,35 +200,35 @@ const FormPrimaryApplicant = () => {
               />
             </div>
           </FieldValue>
-        </GridCell>
-      </GridSection>
+        </Grid.Row>
 
-      <FormAddress
-        subtitle={t("application.details.residenceAddress")}
-        dataKey="application.applicant.address"
-        enableMailCheckbox={true}
-        register={register}
-        stateKeys={stateKeys}
-      />
-
-      {mailingAddressValue && (
         <FormAddress
-          subtitle={t("application.contact.mailingAddress")}
-          dataKey="application.mailingAddress"
+          subtitle={t("application.details.residenceAddress")}
+          dataKey="application.applicant.address"
+          enableMailCheckbox={true}
           register={register}
           stateKeys={stateKeys}
         />
-      )}
 
-      {workInRegionValue === YesNoAnswer.Yes && (
-        <FormAddress
-          subtitle={t("application.contact.workAddress")}
-          dataKey="application.applicant.workAddress"
-          register={register}
-          stateKeys={stateKeys}
-        />
-      )}
-    </GridSection>
+        {mailingAddressValue && (
+          <FormAddress
+            subtitle={t("application.contact.mailingAddress")}
+            dataKey="application.mailingAddress"
+            register={register}
+            stateKeys={stateKeys}
+          />
+        )}
+
+        {workInRegionValue === YesNoAnswer.Yes && (
+          <FormAddress
+            subtitle={t("application.contact.workAddress")}
+            dataKey="application.applicant.workAddress"
+            register={register}
+            stateKeys={stateKeys}
+          />
+        )}
+      </SectionWithGrid>
+    </>
   )
 }
 

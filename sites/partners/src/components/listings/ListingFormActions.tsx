@@ -4,7 +4,6 @@ import dayjs from "dayjs"
 import {
   t,
   Button,
-  GridCell,
   AppearanceStyleType,
   AppearanceBorderType,
   StatusMessages,
@@ -13,6 +12,7 @@ import {
   Icon,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
+import { Grid } from "@bloom-housing/ui-seeds"
 import { pdfUrlFromListingEvents, AuthContext } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "./ListingContext"
 import {
@@ -74,7 +74,7 @@ const ListingFormActions = ({
 
   const actions = useMemo(() => {
     const cancelButton = (
-      <GridCell className="flex" key="btn-cancel">
+      <Grid.Cell className="flex" key="btn-cancel">
         <LinkButton
           unstyled
           fullWidth
@@ -84,11 +84,11 @@ const ListingFormActions = ({
         >
           {t("t.cancel")}
         </LinkButton>
-      </GridCell>
+      </Grid.Cell>
     )
 
     const editFromDetailButton = (
-      <GridCell key="btn-edit">
+      <Grid.Cell key="btn-edit">
         <LocalizedLink href={`/listings/${listingId}/edit`}>
           <Button
             styleType={AppearanceStyleType.primary}
@@ -100,11 +100,11 @@ const ListingFormActions = ({
             {t("t.edit")}
           </Button>
         </LocalizedLink>
-      </GridCell>
+      </Grid.Cell>
     )
 
     const publishButton = (
-      <GridCell key="btn-publish">
+      <Grid.Cell key="btn-publish">
         <Button
           id="publishButton"
           styleType={AppearanceStyleType.success}
@@ -116,11 +116,11 @@ const ListingFormActions = ({
         >
           {t("listings.actions.publish")}
         </Button>
-      </GridCell>
+      </Grid.Cell>
     )
 
     const saveDraftButton = (
-      <GridCell key="btn-draft">
+      <Grid.Cell key="btn-draft">
         <Button
           type="button"
           fullWidth
@@ -128,11 +128,11 @@ const ListingFormActions = ({
         >
           {t("listings.actions.draft")}
         </Button>
-      </GridCell>
+      </Grid.Cell>
     )
 
     const saveExitButton = (
-      <GridCell key="btn-save">
+      <Grid.Cell key="btn-save">
         <Button
           styleType={AppearanceStyleType.primary}
           type="button"
@@ -142,11 +142,11 @@ const ListingFormActions = ({
         >
           {t("t.saveExit")}
         </Button>
-      </GridCell>
+      </Grid.Cell>
     )
 
     const closeButton = (
-      <GridCell key="btn-close">
+      <Grid.Cell key="btn-close">
         <Button
           type="button"
           fullWidth
@@ -154,11 +154,11 @@ const ListingFormActions = ({
         >
           {t("listings.actions.close")}
         </Button>
-      </GridCell>
+      </Grid.Cell>
     )
 
     const unpublishButton = (
-      <GridCell key="btn-unpublish">
+      <Grid.Cell key="btn-unpublish">
         <Button
           styleType={AppearanceStyleType.alert}
           fullWidth
@@ -168,11 +168,11 @@ const ListingFormActions = ({
         >
           {t("listings.actions.unpublish")}
         </Button>
-      </GridCell>
+      </Grid.Cell>
     )
 
     const editPostedResultsButton = (lotteryResults) => (
-      <GridCell className="flex" key="btn-edit-lottery">
+      <Grid.Cell className="flex" key="btn-edit-lottery">
         <Button
           type="button"
           unstyled
@@ -184,11 +184,11 @@ const ListingFormActions = ({
           {dayjs(lotteryResults?.startTime).format("MMMM DD, YYYY")}
           <Icon size="medium" symbol="edit" className="ml-2" />
         </Button>
-      </GridCell>
+      </Grid.Cell>
     )
 
     const postResultsButton = (
-      <GridCell key="btn-post-results">
+      <Grid.Cell key="btn-post-results">
         <Button
           type="button"
           fullWidth
@@ -196,11 +196,11 @@ const ListingFormActions = ({
         >
           {t("listings.actions.postResults")}
         </Button>
-      </GridCell>
+      </Grid.Cell>
     )
 
     const previewButton = (
-      <GridCell key="btn-preview">
+      <Grid.Cell key="btn-preview">
         <a
           target="_blank"
           href={`${listing?.jurisdiction.publicUrl}/preview/listings/${listingId}`}
@@ -209,22 +209,22 @@ const ListingFormActions = ({
             {t("listings.actions.preview")}
           </Button>
         </a>
-      </GridCell>
+      </Grid.Cell>
     )
 
     const viewPostedResultsButton = (eventUrl: string) => (
-      <GridCell key="btn-preview-results">
+      <Grid.Cell key="btn-preview-results">
         <a href={eventUrl} target="_blank" className="inline-flex w-full">
           <Button type="button" unstyled fullWidth>
             {t("listings.actions.previewLotteryResults")}{" "}
             <Icon size="medium" symbol="link" className="ml-2" />
           </Button>
         </a>
-      </GridCell>
+      </Grid.Cell>
     )
 
     const submitButton = (
-      <GridCell key="btn-submit">
+      <Grid.Cell key="btn-submit">
         <Button
           id="submitButton"
           styleType={AppearanceStyleType.success}
@@ -234,11 +234,11 @@ const ListingFormActions = ({
         >
           {t("t.submit")}
         </Button>
-      </GridCell>
+      </Grid.Cell>
     )
 
     const approveAndPublishButton = (
-      <GridCell key="btn-approve-and-publish">
+      <Grid.Cell key="btn-approve-and-publish">
         <Button
           id="approveAndPublishButton"
           styleType={AppearanceStyleType.success}
@@ -271,11 +271,11 @@ const ListingFormActions = ({
         >
           {t("listings.approval.approveAndPublish")}
         </Button>
-      </GridCell>
+      </Grid.Cell>
     )
 
     const requestChangesButton = (
-      <GridCell key="btn-request-changes">
+      <Grid.Cell key="btn-request-changes">
         <Button
           id="requestChangesButton"
           styleType={AppearanceStyleType.alert}
@@ -286,11 +286,11 @@ const ListingFormActions = ({
         >
           {t("listings.approval.requestChanges")}
         </Button>
-      </GridCell>
+      </Grid.Cell>
     )
 
     const reopenButton = (
-      <GridCell key="btn-reopen">
+      <Grid.Cell key="btn-reopen">
         <Button
           id="publishButton"
           styleType={AppearanceStyleType.success}
@@ -303,7 +303,7 @@ const ListingFormActions = ({
         >
           {t("listings.approval.reopen")}
         </Button>
-      </GridCell>
+      </Grid.Cell>
     )
 
     const lotteryResultsButton = (elements) => {

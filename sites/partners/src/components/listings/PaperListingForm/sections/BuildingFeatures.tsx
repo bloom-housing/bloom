@@ -1,9 +1,10 @@
 import React, { useMemo, useContext } from "react"
 import { useFormContext } from "react-hook-form"
-import { t, GridSection, Textarea, FieldGroup, GridCell } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { t, Textarea, FieldGroup } from "@bloom-housing/ui-components"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { listingFeatures, AuthContext } from "@bloom-housing/shared-helpers"
 import { ListingFeatures } from "@bloom-housing/backend-core/types"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type BuildingFeaturesProps = {
   existingFeatures: ListingFeatures
@@ -30,75 +31,80 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
     ?.enableAccessibilityFeatures
 
   return (
-    <div>
-      <GridSection
-        columns={2}
-        separator
-        title={t("listings.sections.buildingFeaturesTitle")}
-        description={t("listings.sections.buildingFeaturesSubtitle")}
+    <>
+      <hr className="spacer-section-above spacer-section" />
+      <SectionWithGrid
+        heading={t("listings.sections.buildingFeaturesTitle")}
+        subheading={t("listings.sections.buildingFeaturesSubtitle")}
       >
-        <GridCell>
-          <Textarea
-            label={t("t.propertyAmenities")}
-            name={"amenities"}
-            id={"amenities"}
-            fullWidth={true}
-            register={register}
-            maxLength={600}
-          />
-        </GridCell>
-        <GridCell>
-          <Textarea
-            label={t("t.additionalAccessibility")}
-            name={"accessibility"}
-            id={"accessibility"}
-            fullWidth={true}
-            register={register}
-            maxLength={600}
-          />
-        </GridCell>
-        <GridCell>
-          <Textarea
-            label={t("t.unitAmenities")}
-            name={"unitAmenities"}
-            id={"unitAmenities"}
-            fullWidth={true}
-            register={register}
-            maxLength={600}
-          />
-        </GridCell>
-        <GridCell>
-          <Textarea
-            label={t("t.smokingPolicy")}
-            name={"smokingPolicy"}
-            id={"smokingPolicy"}
-            fullWidth={true}
-            register={register}
-            maxLength={600}
-          />
-        </GridCell>
-        <GridCell>
-          <Textarea
-            label={t("t.petsPolicy")}
-            name={"petPolicy"}
-            id={"petPolicy"}
-            fullWidth={true}
-            register={register}
-            maxLength={600}
-          />
-        </GridCell>
-        <GridCell>
-          <Textarea
-            label={t("t.servicesOffered")}
-            name={"servicesOffered"}
-            id={"servicesOffered"}
-            fullWidth={true}
-            register={register}
-            maxLength={600}
-          />
-        </GridCell>
+        <Grid.Row>
+          <Grid.Cell>
+            <Textarea
+              label={t("t.propertyAmenities")}
+              name={"amenities"}
+              id={"amenities"}
+              fullWidth={true}
+              register={register}
+              maxLength={600}
+            />
+          </Grid.Cell>
+          <Grid.Cell>
+            <Textarea
+              label={t("t.additionalAccessibility")}
+              name={"accessibility"}
+              id={"accessibility"}
+              fullWidth={true}
+              register={register}
+              maxLength={600}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Cell>
+            <Textarea
+              label={t("t.unitAmenities")}
+              name={"unitAmenities"}
+              id={"unitAmenities"}
+              fullWidth={true}
+              register={register}
+              maxLength={600}
+            />
+          </Grid.Cell>
+          <Grid.Cell>
+            <Textarea
+              label={t("t.smokingPolicy")}
+              name={"smokingPolicy"}
+              id={"smokingPolicy"}
+              fullWidth={true}
+              register={register}
+              maxLength={600}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Cell>
+            <Textarea
+              label={t("t.petsPolicy")}
+              name={"petPolicy"}
+              id={"petPolicy"}
+              fullWidth={true}
+              register={register}
+              maxLength={600}
+            />
+          </Grid.Cell>
+          <Grid.Cell>
+            <Textarea
+              label={t("t.servicesOffered")}
+              name={"servicesOffered"}
+              id={"servicesOffered"}
+              fullWidth={true}
+              register={register}
+              maxLength={600}
+            />
+          </Grid.Cell>
+        </Grid.Row>
         {!enableAccessibilityFeatures ? null : (
-          <GridCell span={2}>
+          <Grid.Row>
             <FieldValue label={t("listings.sections.accessibilityFeatures")}>
               <FieldGroup
                 type="checkbox"
@@ -108,10 +114,10 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
                 fieldGroupClassName="grid grid-cols-3 mt-4"
               />
             </FieldValue>
-          </GridCell>
+          </Grid.Row>
         )}
-      </GridSection>
-    </div>
+      </SectionWithGrid>
+    </>
   )
 }
 

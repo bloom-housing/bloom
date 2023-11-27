@@ -1,15 +1,9 @@
 import React, { useEffect } from "react"
-import {
-  t,
-  GridSection,
-  Select,
-  TimeField,
-  DateField,
-  DateFieldValues,
-} from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { t, Select, TimeField, DateField, DateFieldValues } from "@bloom-housing/ui-components"
+import { Grid } from "@bloom-housing/ui-seeds"
 import { applicationLanguageKeys } from "@bloom-housing/shared-helpers"
 import { useFormContext } from "react-hook-form"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const FormApplicationData = () => {
   const formMethods = useFormContext()
@@ -34,9 +28,9 @@ const FormApplicationData = () => {
   }, [dateSubmittedError, isDateRequired, setValue])
 
   return (
-    <GridSection title={t("application.details.applicationData")} grid={false}>
-      <GridSection columns={3}>
-        <FieldValue label={t("application.add.dateSubmitted")}>
+    <SectionWithGrid heading={t("application.details.applicationData")}>
+      <Grid.Row>
+        <Grid.Cell>
           <DateField
             id="dateSubmitted"
             name="dateSubmitted"
@@ -44,14 +38,13 @@ const FormApplicationData = () => {
             error={errors?.dateSubmitted}
             watch={watch}
             label={t("application.add.dateSubmitted")}
-            readerOnly
             errorMessage={t("errors.dateError")}
             required={!!isDateRequired}
             labelClass={"text__caps-spaced"}
           />
-        </FieldValue>
+        </Grid.Cell>
 
-        <FieldValue label={t("application.add.timeSubmitted")}>
+        <Grid.Cell>
           <TimeField
             id="timeSubmitted"
             name="timeSubmitted"
@@ -59,27 +52,25 @@ const FormApplicationData = () => {
             register={register}
             watch={watch}
             error={!!errors?.timeSubmitted}
-            readerOnly
             disabled={!isDateFilled}
             required={!!isDateFilled}
             labelClass={"text__caps-spaced"}
           />
-        </FieldValue>
+        </Grid.Cell>
 
-        <FieldValue label={t("application.add.languageSubmittedIn")}>
+        <Grid.Cell>
           <Select
             id="application.language"
             name="application.language"
             label={t("application.add.languageSubmittedIn")}
-            labelClassName="sr-only"
             register={register}
             controlClassName="control"
             options={["", ...applicationLanguageKeys]}
             keyPrefix="languages"
           />
-        </FieldValue>
-      </GridSection>
-    </GridSection>
+        </Grid.Cell>
+      </Grid.Row>
+    </SectionWithGrid>
   )
 }
 
