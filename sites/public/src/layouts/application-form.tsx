@@ -30,15 +30,13 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
   const getBackLink = (url?: string, onClickFxn?: () => void) => {
     return (
       <div className={"mb-6"}>
-        {onClickFxn ? (
-          <Button leadIcon={<Icon icon={faChevronLeft} />} onClick={onClickFxn} variant={"text"}>
-            {t("t.back")}
-          </Button>
-        ) : (
-          <Button leadIcon={<Icon icon={faChevronLeft} />} variant={"text"} href={url}>
-            {t("t.back")}
-          </Button>
-        )}
+        <Button
+          leadIcon={<Icon icon={faChevronLeft} />}
+          variant={"text"}
+          {...(onClickFxn ? { onClick: onClickFxn } : { href: url })}
+        >
+          {t("t.back")}
+        </Button>
       </div>
     )
   }
