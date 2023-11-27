@@ -91,10 +91,6 @@ const ApplicationMultiselectQuestionStep = ({
     return getAllOptions(question, applicationSection)
   }, [question])
 
-  const backUrl = useMemo(() => {
-    return verifyAddress ? window.location.pathname : conductor.determinePreviousUrl()
-  }, [verifyAddress])
-
   const body = useRef(null)
 
   const onSubmit = (data) => {
@@ -210,16 +206,15 @@ const ApplicationMultiselectQuestionStep = ({
       </FormCard>
       <FormCard>
         <FormBackLink
-          url={backUrl}
+          url={conductor.determinePreviousUrl()}
           onClick={() => {
             if (!verifyAddress) {
-              console.log(verifyAddress)
               conductor.setNavigatedBack(true)
               setPage(page - 1)
               body.current = null
             }
           }}
-          custom={page !== 1}
+          custom={page !== 1 || verifyAddress}
         />
 
         <div className="form-card__lead border-b flex flex-col items-center">
