@@ -91,6 +91,10 @@ const ApplicationMultiselectQuestionStep = ({
     return getAllOptions(question, applicationSection)
   }, [question])
 
+  const backUrl = useMemo(() => {
+    return verifyAddress ? window.location.pathname : conductor.determinePreviousUrl()
+  }, [verifyAddress])
+
   const body = useRef(null)
 
   const onSubmit = (data) => {
@@ -206,9 +210,10 @@ const ApplicationMultiselectQuestionStep = ({
       </FormCard>
       <FormCard>
         <FormBackLink
-          url={conductor.determinePreviousUrl()}
+          url={backUrl}
           onClick={() => {
             if (!verifyAddress) {
+              console.log(verifyAddress)
               conductor.setNavigatedBack(true)
               setPage(page - 1)
               body.current = null
@@ -226,10 +231,7 @@ const ApplicationMultiselectQuestionStep = ({
               : strings?.title ?? question?.text}
           </h2>
           {verifyAddress && body.current.options.filter((option) => option.checked).length > 1 && (
-            <p className="field-note mt-6">
-              Since there are multiple options for this preference, you’ll need to verify multiple
-              addresses.
-            </p>
+            <p className="field-note mt-6">{t("application.contact.verifyMultipleAddresses")}</p>
           )}
           {!verifyAddress && strings?.subTitle && (
             <p className="field-note mt-6">{strings?.subTitle}</p>
