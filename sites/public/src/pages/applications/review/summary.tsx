@@ -77,9 +77,12 @@ const ApplicationSummary = () => {
       .then(() => {
         conductor.routeToNextOrReturnUrl()
       })
-      .catch(() => {
+      .catch((e) => {
         setValidationError(true)
         window.scrollTo(0, 0)
+        throw new Error(
+          `An error occurred while trying to verify the application submission is valid. ${e.message}`
+        )
       })
   }
 
