@@ -115,8 +115,8 @@ const ApplicationAddMembers = () => {
           </Form>
           <CardSection divider={"flush"} className={"border-none"}>
             <Button
-              variant="primary-outlined"
               onClick={onAddMember}
+              variant="primary-outlined"
               id={"app-add-household-member-button"}
               type={"button"}
             >
