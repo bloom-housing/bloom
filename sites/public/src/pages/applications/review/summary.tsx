@@ -80,6 +80,9 @@ const ApplicationSummary = () => {
       .catch(() => {
         setValidationError(true)
         window.scrollTo(0, 0)
+        throw new Error(
+          "An error occurred while trying to verify the application submission is valid"
+        )
       })
   }
 
