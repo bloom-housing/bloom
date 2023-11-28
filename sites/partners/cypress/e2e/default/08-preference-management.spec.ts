@@ -26,7 +26,9 @@ describe("Preference Management Tests", () => {
 
     cy.getByID("preference-add-option-button").click()
     cy.getByTestId("preference-option-title").type("Preference Option Title")
-    cy.getByTestId("preference-option-description").type("Preference Option Description")
+    cy.getByTestId("preference-option-description").type("Preference Option Description", {
+      force: true, // we're not sure why, but without this Cypress claims the textarea is covered and can't be used
+    })
     cy.getByTestId("preference-option-link").type("https://www.example2.com")
     cy.getByTestId("preference-option-link-title").type("Preference Option Link Title")
     cy.getByTestId("collect-address-yes").click()
