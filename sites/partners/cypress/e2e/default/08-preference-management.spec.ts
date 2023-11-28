@@ -18,7 +18,9 @@ describe("Preference Management Tests", () => {
     cy.getByID("preference-add-item").should("be.enabled")
     cy.getByID("preference-add-item").click()
     cy.getByTestId("preference-title").type("Preference Title")
-    cy.getByTestId("preference-description").type("Preference Description")
+    cy.getByTestId("preference-description").type("Preference Description", {
+      force: true, // we're not sure why, but without this Cypress claims the textarea is covered and can't be used
+    })
     cy.getByTestId("preference-link").type("https://www.example.com")
     cy.getByTestId("preference-link-title").type("Preference Link Title")
 
