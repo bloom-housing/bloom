@@ -90,7 +90,12 @@ const ApplicationSummary = () => {
           hideBorder={true}
         >
           {validationError && (
-            <Alert className={styles["message-inside-card"]} variant="alert" fullwidth>
+            <Alert
+              className={styles["message-inside-card"]}
+              variant="alert"
+              fullwidth
+              id={"application-alert-box"}
+            >
               {t("errors.alert.applicationSubmissionVerificationError")}
             </Alert>
           )}

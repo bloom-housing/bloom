@@ -68,7 +68,12 @@ export default () => {
           conductor={conductor}
         >
           {Object.entries(errors).length > 0 && (
-            <Alert className={styles["message-inside-card"]} variant="alert" fullwidth>
+            <Alert
+              className={styles["message-inside-card"]}
+              variant="alert"
+              fullwidth
+              id={"application-alert-box"}
+            >
               {t("errors.errorsToResolve")}
             </Alert>
           )}

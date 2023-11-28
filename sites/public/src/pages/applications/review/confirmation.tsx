@@ -115,7 +115,7 @@ const ApplicationConfirmation = () => {
               onClick={() => {
                 void router.push("/create-account")
               }}
-              data-testid={"app-confirmation-create-account"}
+              id={"app-confirmation-create-account"}
             >
               {t("account.createAccount")}
             </Button>

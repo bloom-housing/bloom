@@ -41,7 +41,7 @@ Cypress.Commands.add("getPhoneFieldByTestId", (testId) => {
 })
 
 Cypress.Commands.add("checkErrorAlert", (command) => {
-  cy.get(`[data-testid="alert-box"]`).should(command)
+  cy.getByID("application-alert-box").should(command)
 })
 
 Cypress.Commands.add("checkErrorMessages", (command) => {
