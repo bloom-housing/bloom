@@ -11,7 +11,7 @@ describe("applications/household/member", function () {
   })
 
   it("should require form input", function () {
-    cy.getByID("save-member").click()
+    cy.getByID("app-household-member-save").click()
     cy.location("pathname").should("include", route)
     cy.checkErrorAlert("be.visible")
   })

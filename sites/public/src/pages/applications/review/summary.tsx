@@ -115,7 +115,7 @@ const ApplicationSummary = () => {
           <CardSection className={"bg-primary-lighter"}>
             <Button
               variant={"primary"}
-              data-testid={"app-summary-confirm"}
+              id={"app-summary-confirm"}
               disabled={validationError}
               type={"submit"}
             >

@@ -137,7 +137,7 @@ export default () => {
                 useDetails = false
               }}
               type={"submit"}
-              data-testid={"autofill-decline"}
+              id={"autofill-decline"}
             >
               {t("application.autofill.reset")}
             </Button>

@@ -449,23 +449,17 @@ const ApplicationMember = () => {
           </CardSection>
 
           <CardSection divider={"flush"} className={"bg-primary-lighter border-none"}>
-            <Button
-              id="save-member"
-              data-testid={"app-household-member-save"}
-              type={"submit"}
-              variant={"primary"}
-            >
+            <Button id={"app-household-member-save"} type={"submit"} variant={"primary"}>
               {saveText}
             </Button>
           </CardSection>
           <CardSection>
             <Button
-              id="cancel-add"
               className="lined text-sm mt-0"
               type="button"
               onClick={deleteMember}
               variant={"text"}
-              data-testid={"app-household-member-cancel"}
+              id={"app-household-member-cancel"}
             >
               {cancelText}
             </Button>

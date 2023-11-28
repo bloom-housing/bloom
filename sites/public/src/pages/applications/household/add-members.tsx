@@ -116,9 +116,8 @@ const ApplicationAddMembers = () => {
           <CardSection divider={"flush"} className={"border-none"}>
             <Button
               variant="primary-outlined"
-              id="btn-add-member"
               onClick={onAddMember}
-              data-testid={"app-add-household-member-button"}
+              id={"app-add-household-member-button"}
               type={"button"}
             >
               {t("application.household.addMembers.addHouseholdMember")}
@@ -126,11 +125,11 @@ const ApplicationAddMembers = () => {
           </CardSection>
           <CardSection className={"bg-primary-lighter"}>
             <Button
-              id="btn-add-done"
               onClick={() => {
                 conductor.returnToReview = false
                 void handleSubmit(onSubmit)()
               }}
+              id={"app-done-household-members-button"}
             >
               {t("t.next")}
             </Button>

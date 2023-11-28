@@ -132,7 +132,7 @@ const ApplicationChooseLanguage = () => {
                     onLanguageSelect(lang)
                   }}
                   key={index}
-                  data-testid={"app-choose-language-button"}
+                  id={"app-choose-language-button"}
                 >
                   {t(`applications.begin.${lang}`)}
                 </Button>
@@ -151,7 +151,7 @@ const ApplicationChooseLanguage = () => {
               <Button
                 variant="primary-outlined"
                 href={`/sign-in?redirectUrl=/applications/start/choose-language&listingId=${listingId?.toString()}`}
-                data-testid={"app-choose-language-sign-in-button"}
+                id={"app-choose-language-sign-in-button"}
                 size="sm"
               >
                 {t("nav.signIn")}
@@ -164,7 +164,7 @@ const ApplicationChooseLanguage = () => {
               <Button
                 variant="primary-outlined"
                 href={"/create-account"}
-                data-testid={"app-choose-language-create-account-button"}
+                id={"app-choose-language-create-account-button"}
                 size="sm"
               >
                 {t("account.createAccount")}

@@ -8,6 +8,7 @@ declare namespace Cypress {
     checkErrorMessages(command: string): Chainable
     getByID(value: string): Chainable<Element>
     getByTestId(testId: string): Chainable<Element>
+    getByID(id: string): Chainable<Element>
     getPhoneFieldByTestId(testId: string): Chainable<Element>
     goNext(): Chainable<Element>
     isNextRouteValid(currentStep: string, skip?: number): Chainable
