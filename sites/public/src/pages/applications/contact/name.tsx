@@ -87,7 +87,7 @@ const ApplicationName = () => {
             </Alert>
           )}
           <CardSection divider={"inset"}>
-            <div data-testid={"application-initial-page"}>
+            <div id={"application-initial-page"}>
               <fieldset>
                 <legend
                   className={`text__caps-spaced ${errors.applicant?.firstName ? "text-alert" : ""}`}

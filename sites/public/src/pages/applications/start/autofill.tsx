@@ -115,7 +115,7 @@ export default () => {
         />
         <Form onSubmit={handleSubmit(onSubmit)}>
           <CardSection
-            data-testid={"application-initial-page"}
+            id={"application-initial-page"}
             className={"bg-primary-lighter border-none"}
             divider={"flush"}
           >

@@ -58,7 +58,7 @@ Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
   cy.get("[data-testid=sign-in-button").click()
   cy.getByID("app-choose-language-button").eq(0).click()
   cy.getByID("app-next-step-button").click()
-  cy.getByTestId("application-initial-page").then(() => {
+  cy.getByID("application-initial-page").then(() => {
     cy.get("h2").then(($header) => {
       const headerText = $header.text()
       if (headerText.includes("Save time by using the details from your last application")) {
