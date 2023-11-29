@@ -28,10 +28,13 @@ export default () => {
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors } = useForm<Record<string, any>>({
+  const { register, handleSubmit, errors, trigger } = useForm<Record<string, any>>({
     shouldFocusError: false,
   })
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    const validation = await trigger()
+    if (!validation) return
+
     application.alternateContact.firstName = data.firstName
     application.alternateContact.lastName = data.lastName
     application.alternateContact.agency = data.agency

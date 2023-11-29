@@ -55,10 +55,13 @@ const ApplicationMember = () => {
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, watch } = useForm({
+  const { register, handleSubmit, errors, watch, trigger } = useForm({
     shouldFocusError: false,
   })
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    const validation = await trigger()
+    if (!validation) return
+
     application.householdMembers[memberId] = { ...member, ...data } as HouseholdMember
     conductor.sync()
     void router.push("/applications/household/add-members")

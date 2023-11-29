@@ -191,8 +191,6 @@ export default class ApplicationConductor {
   }
 
   sync() {
-    console.log("i'm in sync!")
-    console.log(this.application)
     // NOTE: had to remove timeout because of Next doing full-page reloads in
     // some cases. Need to revisit after upgrading to v10
     if (typeof window !== "undefined") {
