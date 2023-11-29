@@ -27,11 +27,14 @@ const ApplicationHouseholdStudent = () => {
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, getValues } = useForm<Record<string, any>>({
+  const { register, handleSubmit, errors, getValues, trigger } = useForm<Record<string, any>>({
     defaultValues: { householdStudent: application.householdStudent?.toString() },
     shouldFocusError: false,
   })
-  const onSubmit = (data) => {
+
+  const onSubmit = async (data) => {
+    const validation = await trigger()
+    if (!validation) return
     const { householdStudent } = data
     conductor.currentStep.save({
       householdStudent: householdStudent === "true",
