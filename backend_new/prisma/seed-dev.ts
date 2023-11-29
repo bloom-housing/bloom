@@ -51,6 +51,7 @@ export const devSeeding = async (
       email: 'admin@example.com',
       confirmedAt: new Date(),
       jurisdictionId: jurisdiction.id,
+      acceptedTerms: true,
     }),
   });
   await prismaClient.userAccounts.create({

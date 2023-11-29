@@ -43,6 +43,7 @@ export const stagingSeed = async (
       email: 'admin@example.com',
       confirmedAt: new Date(),
       jurisdictionId: jurisdiction.id,
+      acceptedTerms: true,
     }),
   });
   // create a jurisdictional admin
@@ -52,6 +53,7 @@ export const stagingSeed = async (
       email: 'jurisdiction-admin@example.com',
       confirmedAt: new Date(),
       jurisdictionId: jurisdiction.id,
+      acceptedTerms: true,
     }),
   });
   await prismaClient.userAccounts.create({

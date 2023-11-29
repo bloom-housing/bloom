@@ -46,7 +46,7 @@ export class JurisdictionController {
   async retrieve(
     @Param('jurisdictionId') jurisdictionId: string,
   ): Promise<Jurisdiction | null> {
-    return jurisdictionId && jurisdictionId != 'undefined'
+    return jurisdictionId && jurisdictionId !== 'undefined'
       ? this.jurisdictionService.findOne({ jurisdictionId })
       : null;
   }
