@@ -45,17 +45,16 @@ export default () => {
       setSubmitted(true)
       if (previousApplication && useDetails) {
         const withUpdatedLang = {
-          ...previousApplication,
+          ...JSON.parse(JSON.stringify(previousApplication)),
           language: router.locale,
         }
 
         conductor.application = withUpdatedLang
       } else {
-        const newApplication = {
-          ...blankApplication,
+        conductor.application = {
+          ...JSON.parse(JSON.stringify(blankApplication)),
           language: router.locale,
         }
-        conductor.application = newApplication
       }
 
       context.syncApplication(conductor.application)
