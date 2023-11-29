@@ -119,7 +119,8 @@ describe("Listing Management Tests", () => {
       .click()
     cy.getByID("criteriaAttachTypeURL").check()
     cy.getByID("buildingSelectionCriteriaURL").type(listing["buildingSelectionCriteriaURL"])
-    cy.get("button").contains("Save").click()
+    // we're not sure why, but without force Cypress claims the button is covered and can't be used:
+    cy.get("button").contains("Save").click({ force: true })
     cy.getByID("requiredDocuments").type(listing["requiredDocuments"])
     cy.getByID("programRules").type(listing["programRules"])
     cy.getByID("specialNotes").type(listing["specialNotes"])

@@ -39,7 +39,7 @@ describe("Preference Management Tests", () => {
     cy.getByTestId("preference-option-radius-size").type("100")
     cy.getByTestId("collect-name-yes").click()
     cy.getByTestId("collect-relationship-yes").click()
-    cy.getByTestId("preference-option-save").click()
+    cy.getByID("preference-option-save").click()
 
     cy.getByTestId("preference-opt-out-label").clear()
     cy.getByTestId("preference-opt-out-label").type("Preference Opt Out Label")
