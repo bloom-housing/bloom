@@ -1,8 +1,9 @@
 import React, { useEffect, useContext } from "react"
 import Layout from "../layouts/application"
 import Head from "next/head"
-import { Hero, LinkButton, MarkdownSection, t } from "@bloom-housing/ui-components"
+import { Hero, MarkdownSection, t } from "@bloom-housing/ui-components"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import { Button } from "@bloom-housing/ui-seeds"
 import { UserStatus } from "../lib/constants"
 
 const ErrorPage = () => {
@@ -30,9 +31,9 @@ const ErrorPage = () => {
         <MarkdownSection fullwidth={true}>
           <>
             <p>{t("welcome.seeMoreOpportunities")}</p>
-            <LinkButton href="/additional-resources">
+            <Button variant="primary-outlined" href="/additional-resources">
               {t("welcome.viewAdditionalHousing")}
-            </LinkButton>
+            </Button>
           </>
         </MarkdownSection>
       </div>

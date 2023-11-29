@@ -3,15 +3,8 @@
 A notice regarding application process and rules
 */
 import React, { useEffect, useContext, useMemo } from "react"
-import {
-  AppearanceStyleType,
-  Button,
-  FormCard,
-  t,
-  ProgressNav,
-  Form,
-  Heading,
-} from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
+import { FormCard, t, ProgressNav, Form, Heading } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
@@ -121,9 +114,10 @@ const ApplicationWhatToExpect = () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                styleType={AppearanceStyleType.primary}
+                type="submit"
+                variant="primary"
                 onClick={() => conductor.setNavigatedBack(false)}
-                data-testid={"app-next-step-button"}
+                id={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>

@@ -4,15 +4,8 @@ Add household members
 */
 import { useContext, useEffect } from "react"
 import { useRouter } from "next/router"
-import {
-  AppearanceStyleType,
-  Button,
-  FormCard,
-  t,
-  Form,
-  ProgressNav,
-  Heading,
-} from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
+import { FormCard, t, Form, ProgressNav, Heading } from "@bloom-housing/ui-components"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import FormsLayout from "../../../layouts/forms"
@@ -129,9 +122,9 @@ const ApplicationAddMembers = () => {
         <div className="form-card__group pt-0 mt-0">
           <div className="text-center">
             <Button
+              variant="primary-outlined"
               id="btn-add-member"
               onClick={onAddMember}
-              data-testid={"app-add-household-member-button"}
               type={"button"}
             >
               {t("application.household.addMembers.addHouseholdMember")}
@@ -142,13 +135,11 @@ const ApplicationAddMembers = () => {
           <div className="form-card__pager-row primary">
             <Button
               id="btn-add-done"
-              styleType={AppearanceStyleType.primary}
-              className=""
+              variant="primary"
               onClick={() => {
                 conductor.returnToReview = false
                 void handleSubmit(onSubmit)()
               }}
-              data-testid={"app-done-household-members-button"}
             >
               {t("application.household.addMembers.done")}
             </Button>
@@ -157,7 +148,7 @@ const ApplicationAddMembers = () => {
           {conductor.canJumpForwardToReview() && (
             <div className="form-card__pager-row">
               <Button
-                unstyled={true}
+                variant="text"
                 className="mb-4"
                 onClick={() => {
                   conductor.returnToReview = true

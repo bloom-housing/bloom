@@ -1,7 +1,5 @@
 import React from "react"
 import {
-  AppearanceStyleType,
-  Button,
   Field,
   Form,
   FormCard,
@@ -11,6 +9,7 @@ import {
   FormSignInErrorBox,
   NetworkStatus,
 } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
 import type { UseFormMethods } from "react-hook-form"
 
 export type FormSignInMFAProps = {
@@ -75,8 +74,9 @@ const FormSignInMFAType = ({
 
           <div className="text-center mt-6">
             <Button
-              styleType={AppearanceStyleType.accentCool}
-              data-testid="verify-by-email"
+              type="submit"
+              variant="primary-outlined"
+              id="verify-by-email"
               onClick={emailOnClick}
             >
               {t("nav.signInMFA.verifyByEmail")}
@@ -84,11 +84,7 @@ const FormSignInMFAType = ({
           </div>
           {process.env.showSmsMfa && (
             <div className="text-center mt-6">
-              <Button
-                styleType={AppearanceStyleType.accentCool}
-                data-testid="verify-by-phone"
-                onClick={smsOnClick}
-              >
+              <Button variant="primary-outlined" id="verify-by-phone" onClick={smsOnClick}>
                 {t("nav.signInMFA.verifyByPhone")}
               </Button>
             </div>

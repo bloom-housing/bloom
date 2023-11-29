@@ -1,10 +1,9 @@
 /*
 2.5 Expecting Household Changes
 */
+import { Button } from "@bloom-housing/ui-seeds"
 import {
-  AppearanceStyleType,
   AlertBox,
-  Button,
   FieldGroup,
   Form,
   FormCard,
@@ -124,9 +123,10 @@ const ApplicationHouseholdChanges = () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                styleType={AppearanceStyleType.primary}
+                type="submit"
+                variant="primary"
                 onClick={() => conductor.setNavigatedBack(false)}
-                data-testid={"app-next-step-button"}
+                id={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>

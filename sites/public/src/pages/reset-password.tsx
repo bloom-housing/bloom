@@ -2,8 +2,6 @@ import React, { useEffect, useState, useContext, useRef } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import {
-  AppearanceStyleType,
-  Button,
   Field,
   Form,
   FormCard,
@@ -13,6 +11,7 @@ import {
   SiteAlert,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
@@ -99,7 +98,7 @@ const ResetPassword = () => {
             />
 
             <div className="text-center mt-6">
-              <Button styleType={AppearanceStyleType.primary}>
+              <Button type="submit" variant="primary">
                 {t("authentication.forgotPassword.changePassword")}
               </Button>
             </div>
