@@ -317,7 +317,7 @@ export class UserService {
           dto.userRoles.isPartner === storedUser.userRoles.isPartner
         )
       ) {
-        this.prisma.userRoles.update({
+        await this.prisma.userRoles.update({
           data: {
             ...dto.userRoles,
           },
@@ -328,7 +328,7 @@ export class UserService {
       }
     }
 
-    const res = this.prisma.userAccounts.update({
+    const res = await this.prisma.userAccounts.update({
       include: view,
       data: {
         agreedToTermsOfService: dto.agreedToTermsOfService,

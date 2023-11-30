@@ -269,13 +269,6 @@ export const listingFeatures = [
   "visual",
 ]
 
-export const applicationLanguageKeys = [
-  LanguagesEnum.en,
-  LanguagesEnum.es,
-  LanguagesEnum.zh,
-  LanguagesEnum.vi,
-]
-
 export enum RoleOption {
   Administrator = "administrator",
   Partner = "partner",

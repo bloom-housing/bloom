@@ -36,7 +36,6 @@ import { ApplicationFlaggedSetService } from './application-flagged-set.service'
 import { User } from '../dtos/users/user.dto';
 import { EmailService } from './email.service';
 import { IdDTO } from '../dtos/shared/id.dto';
-import { ListingImage } from '../dtos/listings/listing-image.dto';
 
 export type getListingsArgs = {
   skip: number;
