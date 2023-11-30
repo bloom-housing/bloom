@@ -47,6 +47,7 @@ import { AmiDefaultMissingAMI } from "../seeder/seeds/ami-charts/missing-househo
 import { AmiDefaultTriton } from "../seeder/seeds/ami-charts/triton-ami-chart"
 import { AmiDefaultSanJose } from "../seeder/seeds/ami-charts/default-ami-chart-san-jose"
 import { AmiDefaultSanMateo } from "../seeder/seeds/ami-charts/default-ami-chart-san-mateo"
+import { AmiDefaultDoorway } from "./seeds/ami-charts/default-ami-chart-doorway"
 import { Asset } from "../assets/entities/asset.entity"
 
 @Module({})
@@ -113,6 +114,7 @@ export class SeederModule {
         AmiDefaultTriton,
         AmiDefaultSanJose,
         AmiDefaultSanMateo,
+        AmiDefaultDoorway,
       ],
     }
   }

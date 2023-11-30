@@ -126,7 +126,6 @@ export async function getServerSideProps(context: {
   locale: string
 }) {
   let response
-
   const listingServiceUrl = runtimeConfig.getListingServiceUrl()
 
   try {

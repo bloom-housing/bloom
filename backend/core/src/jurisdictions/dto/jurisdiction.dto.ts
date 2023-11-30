@@ -1,6 +1,6 @@
 import { OmitType } from "@nestjs/swagger"
 import { Expose, Type } from "class-transformer"
-import { ArrayMaxSize, IsArray, IsString, ValidateNested } from "class-validator"
+import { ArrayMaxSize, IsArray, IsBoolean, IsString, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { Jurisdiction } from "../entities/jurisdiction.entity"
 import { IdDto } from "../../shared/dto/id.dto"
@@ -19,4 +19,12 @@ export class JurisdictionSlimDto extends IdNameDto {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   publicUrl: string
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  enableAccessibilityFeatures: boolean | null
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  enableUtilitiesIncluded: boolean | null
 }

@@ -40,6 +40,7 @@ import { AmiDefaultMissingAMI } from "./seeds/ami-charts/missing-household-ami-l
 import { SeederModule } from "./seeder.module"
 import { AmiDefaultTriton } from "./seeds/ami-charts/triton-ami-chart"
 import { AmiDefaultSanMateo } from "./seeds/ami-charts/default-ami-chart-san-mateo"
+import { AmiDefaultDoorway } from "./seeds/ami-charts/default-ami-chart-doorway"
 import { makeNewApplication } from "./seeds/applications"
 import { UserRoles } from "../auth/entities/user-roles.entity"
 import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
@@ -88,6 +89,7 @@ const amiSeeds: any[] = [
   AmiDefaultTriton,
   AmiDefaultSanJose,
   AmiDefaultSanMateo,
+  AmiDefaultDoorway,
 ]
 
 export function getSeedListingsCount() {

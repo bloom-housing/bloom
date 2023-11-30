@@ -3,25 +3,30 @@ import { JurisdictionCreateDto } from "../../jurisdictions/dto/jurisdiction-crea
 import { Language } from "../../shared/types/language-enum"
 import { JurisdictionsService } from "../../jurisdictions/services/jurisdictions.service"
 import { UserRoleEnum } from "../../../src/auth/enum/user-role-enum"
+import { DoorwayJurisdictions } from "../../../src/shared/types/doorway-jurisdictions"
 
-export const activeJurisdictions: JurisdictionCreateDto[] = [
-  {
-    name: "Bay Area",
-    multiselectQuestions: [],
-    languages: [Language.en],
-    publicUrl: "http://localhost:3000",
-    notificationsSignUpURL: "https://public.govdelivery.com/accounts/CAMTC/signup/36832",
-    emailFromAddress: "Bay Area: Housing Bay Area <bloom-no-reply@exygy.dev>",
-    rentalAssistanceDefault:
-      "[Bay Area seed] Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
-    enablePartnerSettings: true,
-    enableAccessibilityFeatures: false,
-    enableUtilitiesIncluded: true,
-    enableListingOpportunity: false,
-    listingApprovalPermissions: [UserRoleEnum.admin],
-    enableGeocodingPreferences: true,
-  },
-]
+export const basicJurisInfo: JurisdictionCreateDto = {
+  name: "",
+  multiselectQuestions: [],
+  languages: [Language.en],
+  publicUrl: "http://localhost:3000",
+  notificationsSignUpURL: "https://public.govdelivery.com/accounts/CAMTC/signup/36832",
+  emailFromAddress: "Bay Area: Housing Bay Area <bloom-no-reply@exygy.dev>",
+  rentalAssistanceDefault:
+    "[Bay Area seed] Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
+  enablePartnerSettings: true,
+  enableAccessibilityFeatures: false,
+  enableUtilitiesIncluded: true,
+  enableListingOpportunity: false,
+  enableGeocodingPreferences: true,
+  listingApprovalPermissions: [UserRoleEnum.admin],
+}
+
+const activeJurisdictions: JurisdictionCreateDto[] = Object.values(DoorwayJurisdictions).map(
+  (name) => {
+    return { ...basicJurisInfo, name: name }
+  }
+)
 
 export async function createJurisdictions(app: INestApplicationContext) {
   const jurisdictionService = await app.resolve<JurisdictionsService>(JurisdictionsService)

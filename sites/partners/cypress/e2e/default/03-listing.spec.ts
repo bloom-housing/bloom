@@ -27,6 +27,7 @@ describe("Listing Management Tests", () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function fillOutListing(cy: Cypress.cy, listing: any): void {
+    cy.getByID("jurisdiction.id").select(listing["jurisdiction.id"])
     cy.get("#name").type(listing["name"])
     cy.get("#developer").type(listing["developer"])
 

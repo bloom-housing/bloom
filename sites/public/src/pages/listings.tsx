@@ -6,29 +6,28 @@ import ListingsSearchCombined, {
   locations,
 } from "../components/listings/search/ListingsSearchCombined"
 import { FormOption } from "../components/listings/search/ListingsSearchModal"
-import { runtimeConfig } from "../lib/runtime-config"
-import { fetchJurisdictionByName } from "../lib/hooks"
-import { Jurisdiction } from "@bloom-housing/backend-core/types"
 
 import Layout from "../layouts/application"
 
 export interface ListingsProps {
-  jurisdiction: Jurisdiction
   listingsEndpoint: string
   googleMapsApiKey: string
-  initialSearch?: string
   bedrooms: FormOption[]
   bathrooms: FormOption[]
-  locations: FormOption[]
 }
 
 export default function ListingsPage(props: ListingsProps) {
   const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.welcome")
   const metaImage = "" // TODO: replace with hero image
-  let searchString = props.initialSearch || ""
+  let searchString =
+    "counties:Alameda,Contra Costa,Marin,Napa,San Francisco,San Mateo,Santa Clara,Solano,Sonoma"
   const url = new URL(document.location.toString())
   const searchParam = url.searchParams.get("search")
+  const listingsEndpoint = `${process.env.backendProxyBase || process.env.backendApiBase}${
+    process.env.listingsQuery
+  }`
+  const googleMapsApiKey = process.env.googleMapsApiKey
 
   // override the search value if present in url
   if (searchParam) {
@@ -42,33 +41,13 @@ export default function ListingsPage(props: ListingsProps) {
 
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
       <ListingsSearchCombined
-        jurisdiction={props.jurisdiction}
-        listingsEndpoint={props.listingsEndpoint}
-        googleMapsApiKey={props.googleMapsApiKey}
+        listingsEndpoint={listingsEndpoint}
+        googleMapsApiKey={googleMapsApiKey}
         searchString={searchString}
         bedrooms={props.bedrooms}
         bathrooms={props.bathrooms}
-        counties={props.locations}
+        counties={locations}
       />
     </Layout>
   )
-}
-
-export async function getServerSideProps() {
-  const jurisdiction = await fetchJurisdictionByName(
-    runtimeConfig.getBackendApiBase(),
-    runtimeConfig.getJurisdictionName()
-  )
-
-  return {
-    props: {
-      jurisdiction,
-      listingsEndpoint: runtimeConfig.getListingServiceUrl(),
-      googleMapsApiKey: runtimeConfig.getGoogleMapsApiKey(),
-      // show Bloom counties by default
-      initialSearch:
-        "counties:Alameda,Contra Costa,Marin,Napa,San Francisco,San Mateo,Santa Clara,Solano,Sonoma",
-      locations: locations,
-    },
-  }
 }

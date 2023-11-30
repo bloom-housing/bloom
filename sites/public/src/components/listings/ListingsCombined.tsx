@@ -1,12 +1,11 @@
 import React, { useState } from "react"
-import { Jurisdiction, Listing } from "@bloom-housing/backend-core/types"
+import { Listing } from "@bloom-housing/backend-core/types"
 import { ListingsMap } from "./ListingsMap"
 import { ListingsList } from "./ListingsList"
 import { useSwipeable } from "react-swipeable"
 import styles from "./ListingsCombined.module.scss"
 
 type ListingsCombinedProps = {
-  jurisdiction: Jurisdiction
   listings: Listing[]
   currentPage: number
   lastPage: number
@@ -68,7 +67,6 @@ const ListingsCombined = (props: ListingsCombinedProps) => {
         </div>
         <div id="listings-list-expanded" className={styles["listings-list-expanded"]}>
           <ListingsList
-            jurisdiction={props.jurisdiction}
             listings={props.listings}
             currentPage={props.currentPage}
             lastPage={props.lastPage}
@@ -114,7 +112,6 @@ const ListingsCombined = (props: ListingsCombinedProps) => {
           </div>
           <div id="listings-list" className={styles["listings-list"]}>
             <ListingsList
-              jurisdiction={props.jurisdiction}
               listings={props.listings}
               currentPage={props.currentPage}
               lastPage={props.lastPage}

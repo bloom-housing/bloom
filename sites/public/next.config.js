@@ -41,6 +41,9 @@ module.exports = withBundleAnalyzer(
   withTM({
     env: {
       backendApiBase: BACKEND_API_BASE, // this has to be set for tests
+      backendProxyBase: process.env.BACKEND_PROXY_BASE,
+      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+      listingsQuery: LISTINGS_QUERY,
       listingPhotoSize: process.env.LISTING_PHOTO_SIZE || "1302",
       mapBoxToken: MAPBOX_TOKEN,
       housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL,
@@ -50,6 +53,7 @@ module.exports = withBundleAnalyzer(
       cacheRevalidate: process.env.CACHE_REVALIDATE ? Number(process.env.CACHE_REVALIDATE) : 60,
       cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
       showProfessionalPartners: process.env.SHOW_PROFESSIONAL_PARTNERS === "TRUE",
+      notificationsSignUpUrl: process.env.NOTIFICATIONS_SIGN_UP_URL || null,
 
       // start Doorway env variables
       //googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY, // moved to runtime config
