@@ -51,7 +51,7 @@ Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
   cy.getByID("app-choose-language-sign-in-button").click()
   cy.get("[data-testid=sign-in-email-field]").type("admin@example.com")
   cy.get("[data-testid=sign-in-password-field]").type("abcdef")
-  cy.get("[data-testid=sign-in-button").click()
+  cy.getByID("sign-in-button").click()
   cy.getByID("app-choose-language-button").eq(0).click()
   cy.getByID("app-next-step-button").click()
   cy.getByID("application-initial-page").then(() => {
