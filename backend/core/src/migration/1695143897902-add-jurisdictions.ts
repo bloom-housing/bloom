@@ -22,7 +22,7 @@ export class addJurisdictions1695143897902 implements MigrationInterface {
       const jurisValues = Object.values(newJuris)
       await queryRunner.query(
         `INSERT INTO jurisdictions (${jurisKeys}) 
-        VALUES (${jurisValues.map((_, index) => `$${index+1}`).toString()})`,
+        VALUES (${jurisValues.map((_, index) => `$${index + 1}`).toString()})`,
         jurisValues
       )
     })
@@ -39,12 +39,14 @@ export class addJurisdictions1695143897902 implements MigrationInterface {
     )
 
     existingListings.forEach(async (listing) => {
-      const matchingJuris = existingJurisdictions.find((juris) => juris.name === listing.county).id
-      await queryRunner.query(
-        `UPDATE listings
-        SET jurisdiction_id='${matchingJuris}'
-        WHERE id='${listing.id}'`
-      )
+      const matchingJuris = existingJurisdictions.find((juris) => juris.name === listing.county)
+      if (matchingJuris) {
+        await queryRunner.query(
+          `UPDATE listings
+          SET jurisdiction_id='${matchingJuris.id}'
+          WHERE id='${listing.id}'`
+        )
+      }
     })
 
     const existingUsersAndRoles = await queryRunner.query(
@@ -66,24 +68,26 @@ export class addJurisdictions1695143897902 implements MigrationInterface {
             )
           }
         })
-      // Add all jurisdictions tied to listings of partner accounts
+        // Add all jurisdictions tied to listings of partner accounts
       } else if (user.is_partner) {
         const userListings = await queryRunner.query(
           `SELECT listings_id from listings_leasing_agents_user_accounts where user_accounts_id = '${user.user_id}'`
         )
         userListings.forEach(async (listing) => {
-          const matchingListing = existingListings.find(
-            (list) => list.id === listing.listings_id
+          const matchingListing = existingListings.find((list) => list.id === listing.listings_id)
+          const matchingJuris = existingJurisdictions.find(
+            (juris) => juris.name === matchingListing.county
           )
-          const matchingJuris = existingJurisdictions.find((juris) => juris.name === matchingListing.county).id
+          if (matchingJuris) {
             await queryRunner.query(
               `INSERT INTO user_accounts_jurisdictions_jurisdictions
               (user_accounts_id, jurisdictions_id)
               VALUES ($1, $2)
               ON CONFLICT (user_accounts_id, jurisdictions_id) DO NOTHING
               `,
-              [user.user_id, matchingJuris]
+              [user.user_id, matchingJuris.id]
             )
+          }
         })
       }
     })
