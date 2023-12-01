@@ -6,7 +6,6 @@ declare namespace Cypress {
     beginApplicationSignedIn(listingName: string): Chainable
     checkErrorAlert(command: string): Chainable
     checkErrorMessages(command: string): Chainable
-    getByID(value: string): Chainable<Element>
     getByTestId(testId: string): Chainable<Element>
     getByID(id: string): Chainable<Element>
     getPhoneFieldByTestId(testId: string): Chainable<Element>

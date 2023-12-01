@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import Markdown from "markdown-to-jsx"
-import { AppearanceStyleType, t, FieldGroup, Form, AlertBox } from "@bloom-housing/ui-components"
+import { t, FieldGroup, Form, AlertBox } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   ApplicationSection,

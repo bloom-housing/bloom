@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import { Application } from "@bloom-housing/backend-core/types"
-import { AppearanceStyleType, Form, t } from "@bloom-housing/ui-components"
+import { Form, t } from "@bloom-housing/ui-components"
 import {
   blankApplication,
   OnClientSide,
