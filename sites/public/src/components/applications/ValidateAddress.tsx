@@ -73,7 +73,7 @@ export const AddressValidationSelection = (props: AddressValidationSelectionProp
     setVerifyAddressStep,
   } = props
   return (
-    <div className="form-card__group">
+    <>
       {foundAddress.newAddress && (
         <fieldset>
           <legend className="field-note mb-4">{t("application.contact.suggestedAddress")}</legend>
@@ -148,6 +148,6 @@ export const AddressValidationSelection = (props: AddressValidationSelectionProp
           </div>
         </fieldset>
       )}
-    </div>
+    </>
   )
 }

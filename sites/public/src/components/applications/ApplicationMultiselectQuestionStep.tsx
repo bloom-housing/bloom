@@ -187,29 +187,50 @@ const ApplicationMultiselectQuestionStep = ({
     })
   }
 
+  const getSubtitle = () => {
+    if (verifyAddress) {
+      if (body.current.options.filter((option) => option.checked).length > 1) {
+        return t("application.contact.verifyMultipleAddresses")
+      }
+      return null
+    }
+    return strings?.subTitle ?? question?.description
+  }
+
   return (
     <FormsLayout>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <ApplicationFormLayout
           listingName={listing?.name}
-          heading={strings?.title ?? question?.text}
-          subheading={strings?.subTitle ?? question?.description}
+          heading={
+            verifyAddress
+              ? foundAddress.invalid
+                ? t("application.contact.couldntLocateAddress")
+                : t("application.contact.verifyAddressTitle")
+              : strings?.title ?? question?.text
+          }
+          subheading={getSubtitle()}
           progressNavProps={{
             currentPageSection: applicationSectionNumber,
             completedSections: application.completedSections,
             labels: conductor.config.sections.map((label) => t(`t.${label}`)),
             mounted: clientLoaded,
           }}
-          backLink={{
-            url: conductor.determinePreviousUrl(),
-            onClickFxn:
-              page !== 1
-                ? () => {
-                    conductor.setNavigatedBack(true)
-                    setPage(page - 1)
-                  }
-                : undefined,
-          }}
+          backLink={
+            !verifyAddress
+              ? {
+                  url: conductor.determinePreviousUrl(),
+                  onClickFxn:
+                    page !== 1
+                      ? () => {
+                          conductor.setNavigatedBack(true)
+                          setPage(page - 1)
+                          body.current = null
+                        }
+                      : undefined,
+                }
+              : null
+          }
           conductor={conductor}
         >
           {!!Object.keys(errors).length && (
@@ -218,7 +239,7 @@ const ApplicationMultiselectQuestionStep = ({
             </AlertBox>
           )}
 
-          <div key={question?.id}>
+          <div style={{ display: verifyAddress ? "none" : "block" }} key={question?.id}>
             <CardSection>
               {questionSetInputType === "checkbox" ? (
                 <fieldset>
@@ -243,6 +264,19 @@ const ApplicationMultiselectQuestionStep = ({
               )}
             </CardSection>
           </div>
+          <CardSection>
+            {verifyAddress && (
+              <AddressValidationSelection
+                {...{
+                  foundAddress,
+                  newAddressSelected,
+                  setNewAddressSelected,
+                  setVerifyAddress,
+                  setVerifyAddressStep,
+                }}
+              />
+            )}
+          </CardSection>
         </ApplicationFormLayout>
       </Form>
     </FormsLayout>

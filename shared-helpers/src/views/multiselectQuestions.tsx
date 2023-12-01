@@ -291,7 +291,7 @@ export const getCheckboxOption = (
       {watchFields[optionFieldName] && option.collectAddress && (
         <div className="pb-4">
           <FormAddressAlternate
-            subtitle={""}
+            subtitle={t("application.preferences.options.qualifyingAddress")}
             dataKey={fieldName(question.text, applicationSection, `${option.text}-address`)}
             register={register}
             errors={errors}
