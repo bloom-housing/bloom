@@ -4480,7 +4480,7 @@ export interface HouseholdMemberUpdate {
   householdMemberAddress: AddressCreate
 
   /**  */
-  householdMemberWorkAddress: AddressCreate
+  householdMemberWorkAddress?: AddressCreate
 }
 
 export interface ApplicationCreate {

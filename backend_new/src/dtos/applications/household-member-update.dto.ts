@@ -1,4 +1,4 @@
-import { ApiProperty, OmitType } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
@@ -21,6 +21,6 @@ export class HouseholdMemberUpdate extends OmitType(HouseholdMember, [
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreate)
-  @ApiProperty({ type: AddressCreate })
+  @ApiPropertyOptional({ type: AddressCreate })
   householdMemberWorkAddress: AddressCreate;
 }
