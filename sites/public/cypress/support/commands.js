@@ -37,7 +37,7 @@ Cypress.Commands.add("getPhoneFieldByTestId", (testId) => {
 })
 
 Cypress.Commands.add("checkErrorAlert", (command) => {
-  cy.get(`[data-testid="alert-box"]`).should(command)
+  cy.getByID("application-alert-box").should(command)
 })
 
 Cypress.Commands.add("checkErrorMessages", (command) => {
@@ -52,10 +52,10 @@ Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
   cy.get("[data-testid=sign-in-email-field]").type("admin@example.com")
   cy.get("[data-testid=sign-in-password-field]").type("abcdef")
   cy.getByID("sign-in-button").click()
-  cy.get(".language-select").eq(0).click()
+  cy.getByID("app-choose-language-button").eq(0).click()
   cy.getByID("app-next-step-button").click()
-  cy.getByTestId("application-initial-page").then(() => {
-    cy.get(".form-card__title").then(($header) => {
+  cy.getByID("application-initial-page").then(() => {
+    cy.get("h2").then(($header) => {
       const headerText = $header.text()
       if (headerText.includes("Save time by using the details from your last application")) {
         cy.getByID("autofill-decline").click()
@@ -71,7 +71,7 @@ Cypress.Commands.add("beginApplicationSignedIn", (listingName) => {
   cy.visit("/listings")
   cy.get(".is-card-link").contains(listingName).click()
   cy.getByID("listing-view-apply-button").eq(1).click()
-  cy.get(".language-select").eq(0).click()
+  cy.getByID("app-choose-language-button").eq(0).click()
   cy.getByID("app-next-step-button").click()
   cy.getByID("autofill-decline").click()
 })
@@ -206,12 +206,14 @@ Cypress.Commands.add("step5AlternateContactInfo", (application) => {
 
 Cypress.Commands.add("step6HouseholdSize", (application) => {
   if (application.householdMembers.length > 0) {
-    cy.getByID("btn-with-people").click()
+    cy.getByID("householdSizeLiveWithOthers").click()
+    cy.goNext()
     cy.checkErrorAlert("not.exist")
     cy.checkErrorMessages("not.exist")
     cy.location("pathname").should("include", "applications/household/members-info")
   } else {
-    cy.getByID("btn-live-alone").click()
+    cy.getByID("householdSizeLiveAlone").click()
+    cy.goNext()
     cy.checkErrorAlert("not.exist")
     cy.checkErrorMessages("not.exist")
     cy.location("pathname").should("include", "applications/household/preferred-units")
@@ -225,7 +227,7 @@ Cypress.Commands.add("step7AddHouseholdMembers", (application) => {
   cy.location("pathname").should("include", "applications/household/add-members")
 
   application.householdMembers.forEach((householdMember) => {
-    cy.getByID("btn-add-member").click()
+    cy.getByID("app-add-household-member-button").click()
     cy.checkErrorAlert("not.exist")
     cy.checkErrorMessages("not.exist")
     cy.location("pathname").should("include", "applications/household/member")
@@ -271,12 +273,12 @@ Cypress.Commands.add("step7AddHouseholdMembers", (application) => {
 
     cy.getByTestId("app-household-member-relationship").select(householdMember.relationship)
 
-    cy.getByID("save-member").click()
+    cy.getByID("app-household-member-save").click()
     cy.checkErrorAlert("not.exist")
     cy.checkErrorMessages("not.exist")
     cy.location("pathname").should("include", "/applications/household/add-members")
   })
-  cy.getByID("btn-add-done").click()
+  cy.getByID("app-done-household-members-button").click()
 })
 
 Cypress.Commands.add("step8PreferredUnits", (application) => {

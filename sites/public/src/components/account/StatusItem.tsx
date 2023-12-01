@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React from "react"
 import { t } from "@bloom-housing/ui-components"
 import { Button, Link } from "@bloom-housing/ui-seeds"
 import styles from "./StatusItem.module.scss"

@@ -1,7 +1,3 @@
-/*
-4.3 General Pool
-If all preferences are opted out the applicant is shown a screen confirming their placement in the General Pool
-*/
 import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { Button } from "@bloom-housing/ui-seeds"
@@ -17,7 +13,6 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../components/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
-
 import { UserStatus } from "../../../lib/constants"
 
 const ApplicationPreferencesGeneral = () => {
@@ -28,7 +23,6 @@ const ApplicationPreferencesGeneral = () => {
     ? 5
     : 4
 
-  /* Form Handler */
   const { handleSubmit } = useForm()
   const onSubmit = () => {
     if (!conductor.canJumpForwardToReview()) setHideReviewButton(true)

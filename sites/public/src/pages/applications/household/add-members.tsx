@@ -1,19 +1,16 @@
-/*
-2.2 - Add Members
-Add household members
-*/
-import { useContext, useEffect } from "react"
+import React, { useContext, useEffect } from "react"
+import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
 import { Button } from "@bloom-housing/ui-seeds"
-import { FormCard, t, Form, ProgressNav, Heading } from "@bloom-housing/ui-components"
+import { t, Form } from "@bloom-housing/ui-components"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
-import { useForm } from "react-hook-form"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FormsLayout from "../../../layouts/forms"
-import FormBackLink from "../../../components/applications/FormBackLink"
 import { HouseholdSizeField } from "../../../components/applications/HouseholdSizeField"
 import { HouseholdMemberForm } from "../../../components/applications/HouseholdMemberForm"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
+import ApplicationFormLayout from "../../../layouts/application-form"
 
 const ApplicationAddMembers = () => {
   const { profile } = useContext(AuthContext)
@@ -22,7 +19,6 @@ const ApplicationAddMembers = () => {
   const currentPageSection = 2
   const householdSize = application.householdMembers.length + 1
 
-  /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { errors, handleSubmit, register, clearErrors } = useForm()
   const onSubmit = () => {
@@ -30,6 +26,10 @@ const ApplicationAddMembers = () => {
       householdSize: application.householdMembers.length + 1,
     })
     conductor.routeToNextOrReturnUrl()
+  }
+
+  const onError = () => {
+    window.scrollTo(0, 0)
   }
 
   const onAddMember = () => {
@@ -72,95 +72,70 @@ const ApplicationAddMembers = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard>
-        <FormBackLink
-          url={conductor.determinePreviousUrl()}
-          onClick={() => conductor.setNavigatedBack(true)}
-        />
-
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless mt-4">
-            {t("application.household.addMembers.title")}
-          </h2>
-          {application.autofilled && (
-            <p className="mt-4 field-note">{t("application.household.addMembers.doubleCheck")}</p>
-          )}
-        </div>
-
-        <Form>
-          <div>
-            <HouseholdSizeField
-              assistanceUrl={t("application.household.assistanceUrl")}
-              clearErrors={clearErrors}
-              error={errors.householdSize}
-              householdSize={householdSize}
-              householdSizeMax={listing?.householdSizeMax}
-              householdSizeMin={listing?.householdSizeMin}
-              register={register}
-              validate={true}
-            />
-          </div>
-          <div className="form-card__group my-0 mx-0 pb-4 pt-0">
-            <HouseholdMemberForm
-              editMember={editMember}
-              editMode={!application.autofilled}
-              memberFirstName={applicant.firstName}
-              memberLastName={applicant.lastName}
-              subtitle={t("application.household.primaryApplicant")}
-            />
-            {membersSection}
-          </div>
-        </Form>
-        <div className="form-card__group pt-0 mt-0">
-          <div className="text-center">
+      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={t("application.household.addMembers.title")}
+          subheading={
+            application.autofilled ? t("application.household.addMembers.doubleCheck") : null
+          }
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: OnClientSide(),
+          }}
+          backLink={{
+            url: conductor.determinePreviousUrl(),
+          }}
+        >
+          <Form>
+            <div>
+              <HouseholdSizeField
+                assistanceUrl={t("application.household.assistanceUrl")}
+                clearErrors={clearErrors}
+                error={errors.householdSize}
+                householdSize={householdSize}
+                householdSizeMax={listing?.householdSizeMax}
+                householdSizeMin={listing?.householdSizeMin}
+                register={register}
+                validate={true}
+              />
+            </div>
+            <div className="px-8 my-0 mx-0 pb-0 pt-0">
+              <HouseholdMemberForm
+                editMember={editMember}
+                editMode={!application.autofilled}
+                memberFirstName={applicant.firstName}
+                memberLastName={applicant.lastName}
+                subtitle={t("application.household.primaryApplicant")}
+              />
+              {membersSection}
+            </div>
+          </Form>
+          <CardSection divider={"flush"} className={"border-none"}>
             <Button
-              variant="primary-outlined"
-              id="btn-add-member"
               onClick={onAddMember}
+              variant="primary-outlined"
+              id={"app-add-household-member-button"}
               type={"button"}
             >
               {t("application.household.addMembers.addHouseholdMember")}
             </Button>
-          </div>
-        </div>
-        <div className="form-card__pager">
-          <div className="form-card__pager-row primary">
+          </CardSection>
+          <CardSection className={"bg-primary-lighter"}>
             <Button
-              id="btn-add-done"
-              variant="primary"
               onClick={() => {
                 conductor.returnToReview = false
                 void handleSubmit(onSubmit)()
               }}
+              id={"app-done-household-members-button"}
             >
-              {t("application.household.addMembers.done")}
+              {t("t.next")}
             </Button>
-          </div>
-
-          {conductor.canJumpForwardToReview() && (
-            <div className="form-card__pager-row">
-              <Button
-                variant="text"
-                className="mb-4"
-                onClick={() => {
-                  conductor.returnToReview = true
-                  void handleSubmit(onSubmit)()
-                }}
-              >
-                {t("application.form.general.saveAndReturn")}
-              </Button>
-            </div>
-          )}
-        </div>
-      </FormCard>
+          </CardSection>
+        </ApplicationFormLayout>
+      </Form>
     </FormsLayout>
   )
 }

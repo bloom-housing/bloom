@@ -125,11 +125,11 @@ export const getRadioFields = (
       {applicationSection === ApplicationSection.preferences && (
         <legend className="text__caps-spaced mb-4">{question?.text}</legend>
       )}
-      <p className="field-note mb-8">{question?.description}</p>
       <FieldGroup
         fieldGroupClassName="grid grid-cols-1"
         fieldClassName="ml-0"
         type={"radio"}
+        groupNote={t("t.pleaseSelectOne")}
         name={fieldName(question?.text, applicationSection)}
         error={errors && errors?.application?.programs?.[question?.text]}
         errorMessage={errors && t("errors.selectAnOption")}

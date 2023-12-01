@@ -73,7 +73,7 @@ export const AddressValidationSelection = (props: AddressValidationSelectionProp
     setVerifyAddressStep,
   } = props
   return (
-    <div className="form-card__group">
+    <>
       {foundAddress.newAddress && (
         <fieldset>
           <legend className="field-note mb-4">{t("application.contact.suggestedAddress")}</legend>
@@ -135,8 +135,8 @@ export const AddressValidationSelection = (props: AddressValidationSelectionProp
               </label>
             </div>
             <Button
-              variant="text"
-              className="mt-0 mr-0"
+              variant={"text"}
+              className="font-alt-sans font-semibold mt-0 mr-0"
               onClick={() => {
                 setVerifyAddress(false)
                 setVerifyAddressStep?.(0)
@@ -148,6 +148,6 @@ export const AddressValidationSelection = (props: AddressValidationSelectionProp
           </div>
         </fieldset>
       )}
-    </div>
+    </>
   )
 }

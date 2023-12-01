@@ -352,7 +352,11 @@ const FormSummaryDetails = ({
                 className="info-group__item"
                 key={`${member.firstName} - ${member.lastName} - ${index}`}
               >
-                <FieldValue testId={"app-summary-household-member-name"} className={"pb-4"}>
+                <FieldValue
+                  label={t("t.name")}
+                  testId={"app-summary-household-member-name"}
+                  className={"pb-4"}
+                >
                   {member.firstName} {member.lastName}
                 </FieldValue>
                 <div>
@@ -453,7 +457,7 @@ const FormSummaryDetails = ({
           {editMode && !validationError && <EditLink href="/applications/financial/vouchers" />}
         </h3>
 
-        <div className="form-card__group mx-0">
+        <div className={`form-card__group mx-0 ${hidePreferences && "border-b"}`}>
           <FieldValue
             testId={"app-summary-income-vouchers"}
             id="incomeVouchers"
@@ -470,7 +474,12 @@ const FormSummaryDetails = ({
               label={t("t.income")}
               className={"pb-4"}
             >
-              ${application.income} {t(`t.${application.incomePeriod}`)}
+              $
+              {parseFloat(application.income).toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}{" "}
+              {t(`t.${application.incomePeriod}`)}
             </FieldValue>
           )}
         </div>

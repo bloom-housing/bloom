@@ -1,4 +1,4 @@
-import { Modal, t, Form, Field, Icon, emailRegex } from "@bloom-housing/ui-components"
+import { Modal, t, Form, Field, emailRegex } from "@bloom-housing/ui-components"
 import { Button } from "@bloom-housing/ui-seeds"
 import React, { useEffect, useMemo } from "react"
 import { useForm } from "react-hook-form"

@@ -3,12 +3,12 @@ import Head from "next/head"
 import { Button } from "@bloom-housing/ui-seeds"
 import {
   t,
-  LocalizedLink,
   AgTable,
   useAgTable,
   AlertBox,
   SiteAlert,
   Icon,
+  UniversalIconType,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
@@ -218,7 +218,9 @@ export default function ListingsList() {
                       variant="primary-outlined"
                       onClick={() => onExport()}
                       leadIcon={
-                        !zipExportLoading ? <Icon symbol={faFileExport} size="base" /> : null
+                        !zipExportLoading ? (
+                          <Icon symbol={faFileExport as UniversalIconType} size="base" />
+                        ) : null
                       }
                       size="sm"
                       loadingMessage={zipExportLoading && t("t.formSubmitted")}

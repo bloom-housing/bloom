@@ -1,10 +1,7 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
-import { AlertBox, Form, FormCard, t, ProgressNav, Heading } from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
-import FormsLayout from "../../layouts/forms"
-import FormBackLink from "./FormBackLink"
-import { useFormConductor } from "../../lib/hooks"
+import { AlertBox, Form, t } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { ApplicationSection, MultiselectOption } from "@bloom-housing/backend-core/types"
 import {
   AuthContext,
@@ -22,8 +19,12 @@ import {
   PageView,
   pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
+import FormsLayout from "../../layouts/forms"
+import { useFormConductor } from "../../lib/hooks"
+
 import { UserStatus } from "../../lib/constants"
 import { AddressValidationSelection, findValidatedAddress, FoundAddress } from "./ValidateAddress"
+import ApplicationFormLayout from "../../layouts/application-form"
 
 export interface ApplicationMultiselectQuestionStepProps {
   applicationSection: ApplicationSection
@@ -186,112 +187,98 @@ const ApplicationMultiselectQuestionStep = ({
     })
   }
 
+  const getSubtitle = () => {
+    if (verifyAddress) {
+      if (body.current.options.filter((option) => option.checked).length > 1) {
+        return t("application.contact.verifyMultipleAddresses")
+      }
+      return null
+    }
+    return strings?.subTitle ?? question?.description
+  }
+
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={applicationSectionNumber}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={clientLoaded}
-        />
-      </FormCard>
-      <FormCard>
-        <FormBackLink
-          url={conductor.determinePreviousUrl()}
-          onClick={() => {
-            if (!verifyAddress) {
-              conductor.setNavigatedBack(true)
-              setPage(page - 1)
-              body.current = null
-            }
-          }}
-          custom={page !== 1 || verifyAddress}
-        />
-
-        <div className="form-card__lead border-b flex flex-col items-center">
-          <h2 className="form-card__title is-borderless">
-            {verifyAddress
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={
+            verifyAddress
               ? foundAddress.invalid
                 ? t("application.contact.couldntLocateAddress")
                 : t("application.contact.verifyAddressTitle")
-              : strings?.title ?? question?.text}
-          </h2>
-          {verifyAddress && body.current.options.filter((option) => option.checked).length > 1 && (
-            <p className="field-note mt-6">{t("application.contact.verifyMultipleAddresses")}</p>
+              : strings?.title ?? question?.text
+          }
+          subheading={getSubtitle()}
+          progressNavProps={{
+            currentPageSection: applicationSectionNumber,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: clientLoaded,
+          }}
+          backLink={
+            !verifyAddress
+              ? {
+                  url: conductor.determinePreviousUrl(),
+                  onClickFxn:
+                    page !== 1
+                      ? () => {
+                          conductor.setNavigatedBack(true)
+                          setPage(page - 1)
+                          body.current = null
+                        }
+                      : undefined,
+                }
+              : null
+          }
+          conductor={conductor}
+        >
+          {!!Object.keys(errors).length && (
+            <AlertBox type="alert" inverted closeable>
+              {t("errors.errorsToResolve")}
+            </AlertBox>
           )}
-          {!verifyAddress && strings?.subTitle && (
-            <p className="field-note mt-6">{strings?.subTitle}</p>
-          )}
-        </div>
 
-        {!!Object.keys(errors).length && (
-          <AlertBox type="alert" inverted closeable>
-            {t("errors.errorsToResolve")}
-          </AlertBox>
-        )}
-
-        <Form onSubmit={handleSubmit(onSubmit)}>
           <div style={{ display: verifyAddress ? "none" : "block" }} key={question?.id}>
-            <div className={`form-card__group`}>
+            <CardSection>
               {questionSetInputType === "checkbox" ? (
                 <fieldset>
-                  <legend className="text__caps-spaced mb-4">{question?.text}</legend>
-                  <p className="field-note mb-8">{question?.description}</p>
-
-                  {allOptions.map((option) => {
-                    return checkboxOption(option)
-                  })}
+                  <legend className="text__caps-spaced mb-4 sr-only">{question?.text}</legend>
+                  {applicationSection === ApplicationSection.preferences && (
+                    <>
+                      <p className="text__caps-spaced">{question?.text}</p>
+                      <p className="field-note mb-8">{question?.description}</p>
+                    </>
+                  )}
+                  <p className="field-note mb-8">
+                    {t("application.household.preferredUnit.optionsLabel")}
+                  </p>
+                  {allOptions
+                    ?.sort((a, b) => (a.ordinal > b.ordinal ? 1 : -1))
+                    .map((option) => {
+                      return checkboxOption(option)
+                    })}
                 </fieldset>
               ) : (
                 getRadioFields(allOptions, register, question, applicationSection, errors)
               )}
-            </div>
+            </CardSection>
           </div>
-
-          {verifyAddress && (
-            <AddressValidationSelection
-              {...{
-                foundAddress,
-                newAddressSelected,
-                setNewAddressSelected,
-                setVerifyAddress,
-                setVerifyAddressStep,
-              }}
-            />
-          )}
-
-          <div className="form-card__pager">
-            <div className="form-card__pager-row primary">
-              <Button
-                type="submit"
-                variant="primary"
-                onClick={() => {
-                  conductor.returnToReview = false
-                  conductor.setNavigatedBack(false)
+          <CardSection>
+            {verifyAddress && (
+              <AddressValidationSelection
+                {...{
+                  foundAddress,
+                  newAddressSelected,
+                  setNewAddressSelected,
+                  setVerifyAddress,
+                  setVerifyAddressStep,
                 }}
-                id={"app-next-step-button"}
-              >
-                {t("t.next")}
-              </Button>
-            </div>
-
-            {conductor.canJumpForwardToReview() && (
-              <div className="form-card__pager-row">
-                <Button
-                  variant="text"
-                  className="mb-4"
-                  onClick={() => {
-                    conductor.returnToReview = true
-                  }}
-                >
-                  {t("application.form.general.saveAndReturn")}
-                </Button>
-              </div>
+              />
             )}
-          </div>
-        </Form>
-      </FormCard>
+          </CardSection>
+        </ApplicationFormLayout>
+      </Form>
     </FormsLayout>
   )
 }

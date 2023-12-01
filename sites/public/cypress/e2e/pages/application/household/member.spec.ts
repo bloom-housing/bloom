@@ -11,7 +11,7 @@ describe("applications/household/member", function () {
   })
 
   it("should require form input", function () {
-    cy.getByID("save-member").click()
+    cy.getByID("app-household-member-save").click()
     cy.location("pathname").should("include", route)
     cy.checkErrorAlert("be.visible")
   })
@@ -27,7 +27,7 @@ describe("applications/household/member", function () {
   })
 
   it("should go back to members screen without adding current member when user cancels", function () {
-    cy.getByID("cancel-add").click()
+    cy.getByID("app-household-member-cancel").click()
     cy.location("pathname").should("include", "/applications/household/add-members")
   })
 })

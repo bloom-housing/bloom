@@ -4,10 +4,10 @@ Optional application summary
 */
 import Link from "next/link"
 import dayjs from "dayjs"
-import { FormCard, Heading, t } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import { AppSubmissionContext } from "../../lib/applications/AppSubmissionContext"
-import { useContext, useEffect, useMemo } from "react"
+import React, { useContext, useEffect, useMemo } from "react"
 import FormSummaryDetails from "../../components/shared/FormSummaryDetails"
 import { DATE_FORMAT, UserStatus } from "../../lib/constants"
 import {
@@ -17,6 +17,8 @@ import {
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
 import { ApplicationSection } from "@bloom-housing/backend-core"
+import { Card, Heading } from "@bloom-housing/ui-seeds"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 const ApplicationView = () => {
   const { application, listing } = useContext(AppSubmissionContext)
@@ -36,38 +38,42 @@ const ApplicationView = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{t("account.application.confirmation")}</Heading>}>
-        <div className="py-2">
-          {listing && (
-            <span className={"lined text-sm"}>
-              <Link href={`/listing/${listing.id}/${listing.urlSlug}`}>
-                {t("application.confirmation.viewOriginalListing")}
-              </Link>
-            </span>
-          )}
-        </div>
-      </FormCard>
-
-      <FormCard>
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">
+      <Card spacing={"sm"} className={"my-6"}>
+        <CardSection className={"bg-primary px-8 py-4 text-white"}>
+          <Heading priority={1} className={"text-xl font-bold font-alt-sans"}>
+            {t("account.application.confirmation")}
+          </Heading>
+        </CardSection>
+        <CardSection className={"px-8"}>
+          <div>
+            {listing && (
+              <span className={"lined text-sm"}>
+                <Link href={`/listing/${listing.id}/${listing.urlSlug}`}>
+                  {t("application.confirmation.viewOriginalListing")}
+                </Link>
+              </span>
+            )}
+          </div>
+        </CardSection>
+      </Card>
+      <Card spacing={"lg"} className={"mb-6"}>
+        <CardSection divider={"inset"}>
+          <Heading priority={2} size={"2xl"}>
             {t("application.confirmation.informationSubmittedTitle")}
-          </h2>
-          <p className="field-note mt-4 text-center">
+          </Heading>
+          <p className="field-note mt-4">
             {t("application.confirmation.submitted")}
             {confirmationDate}
           </p>
-        </div>
-        <div className="form-card__group text-center">
-          <h3 className="form-card__paragraph-title">
+        </CardSection>
+        <CardSection divider={"inset"} className={"border-none"}>
+          <Heading priority={3} size={"md"}>
             {t("application.confirmation.lotteryNumber")}
-          </h3>
-
+          </Heading>
           <p className="font-serif text-2xl my-0">
             {application.confirmationCode || application.id}
           </p>
-        </div>
-
+        </CardSection>
         <FormSummaryDetails
           listing={listing}
           application={application}
@@ -77,15 +83,14 @@ const ApplicationView = () => {
           hidePrograms={listingSectionQuestions(listing, ApplicationSection.programs)?.length === 0}
           editMode={false}
         />
-
-        <div className="form-card__pager hide-for-print">
-          <div className="form-card__pager-row py-6">
+        <CardSection>
+          <div className="hide-for-print">
             <button className="lined text-sm" onClick={() => window.print()}>
               {t("application.confirmation.printCopy")}
             </button>
           </div>
-        </div>
-      </FormCard>
+        </CardSection>
+      </Card>
     </FormsLayout>
   )
 }
