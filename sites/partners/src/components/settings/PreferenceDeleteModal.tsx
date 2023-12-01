@@ -1,14 +1,6 @@
 import React, { useContext, useMemo } from "react"
-import {
-  AlertTypes,
-  AppearanceSizeType,
-  AppearanceStyleType,
-  Button,
-  LinkButton,
-  MinimalTable,
-  Modal,
-  t,
-} from "@bloom-housing/ui-components"
+import { AlertTypes, MinimalTable, Modal, t } from "@bloom-housing/ui-components"
+import { Button, Link } from "@bloom-housing/ui-seeds"
 import { useListingsMultiselectQuestionList } from "../../lib/hooks"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { MultiselectQuestion } from "@bloom-housing/backend-core"
@@ -31,11 +23,7 @@ export const PreferenceDeleteModal = ({
     () =>
       data?.map((listing) => ({
         name: {
-          content: (
-            <LinkButton href={`/listings/${listing.id}`} unstyled={true}>
-              {listing.name}
-            </LinkButton>
-          ),
+          content: <Link href={`/listings/${listing.id}`}>{listing.name}</Link>,
         },
       })),
     [data]
@@ -68,12 +56,7 @@ export const PreferenceDeleteModal = ({
         onClose={onClose}
         scrollableModal
         actions={[
-          <Button
-            type="button"
-            styleType={AppearanceStyleType.primary}
-            onClick={onClose}
-            size={AppearanceSizeType.small}
-          >
+          <Button type="button" variant="primary" onClick={onClose} size="sm">
             {t("t.done")}
           </Button>,
         ]}
@@ -96,19 +79,15 @@ export const PreferenceDeleteModal = ({
       open={!!multiselectQuestion}
       onClose={onClose}
       actions={[
-        <Button
-          type="button"
-          styleType={AppearanceStyleType.alert}
-          onClick={deletePreference}
-          size={AppearanceSizeType.small}
-        >
+        <Button type="button" variant="alert" onClick={deletePreference} size="sm">
           {t("t.delete")}
         </Button>,
         <Button
           type="button"
           onClick={onClose}
           ariaLabel={t("t.cancel")}
-          size={AppearanceSizeType.small}
+          variant="primary-outlined"
+          size="sm"
         >
           {t("t.cancel")}
         </Button>,

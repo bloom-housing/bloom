@@ -3,11 +3,9 @@
 If any, the applicant can select the type of ADA needed in the household.
 https://github.com/bloom-housing/bloom/issues/266
 */
-import { FormErrorMessage } from "@bloom-housing/ui-seeds"
+import { Button, FormErrorMessage } from "@bloom-housing/ui-seeds"
 import {
-  AppearanceStyleType,
   AlertBox,
-  Button,
   Form,
   FormCard,
   ProgressNav,
@@ -177,12 +175,13 @@ const ApplicationAda = () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                styleType={AppearanceStyleType.primary}
+                type="submit"
+                variant="primary"
                 onClick={() => {
                   conductor.returnToReview = false
                   conductor.setNavigatedBack(false)
                 }}
-                data-testid={"app-next-step-button"}
+                id={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>
@@ -191,7 +190,7 @@ const ApplicationAda = () => {
             {conductor.canJumpForwardToReview() && (
               <div className="form-card__pager-row">
                 <Button
-                  unstyled={true}
+                  variant="text"
                   className="mb-4"
                   onClick={() => {
                     conductor.returnToReview = true

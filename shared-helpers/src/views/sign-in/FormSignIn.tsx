@@ -1,15 +1,6 @@
 import React, { useContext } from "react"
-import {
-  AppearanceStyleType,
-  Button,
-  Field,
-  Form,
-  FormCard,
-  Icon,
-  LinkButton,
-  NavigationContext,
-  t,
-} from "@bloom-housing/ui-components"
+import { Field, Form, FormCard, Icon, NavigationContext, t } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
 import { FormSignInErrorBox } from "./FormSignInErrorBox"
 import { NetworkStatus } from "../../auth/catchNetworkError"
 import type { UseFormMethods } from "react-hook-form"
@@ -87,7 +78,7 @@ const FormSignIn = ({
           />
 
           <div className="text-center mt-6">
-            <Button styleType={AppearanceStyleType.primary} data-testid="sign-in-button">
+            <Button type="submit" variant="primary" id="sign-in-button">
               {t("nav.signIn")}
             </Button>
           </div>
@@ -97,7 +88,9 @@ const FormSignIn = ({
         <div className="form-card__group text-center border-t">
           <h2 className="mb-6">{t("authentication.createAccount.noAccount")}</h2>
 
-          <LinkButton href="/create-account">{t("account.createAccount")}</LinkButton>
+          <Button variant="primary-outlined" href="/create-account">
+            {t("account.createAccount")}
+          </Button>
         </div>
       )}
     </FormCard>

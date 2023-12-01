@@ -1,5 +1,6 @@
 import React, { useContext } from "react"
-import { t, NavigationContext, LinkButton, AppearanceSizeType } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
+import { Button, Link } from "@bloom-housing/ui-seeds"
 import styles from "./StatusItem.module.scss"
 
 interface StatusItemProps {
@@ -21,8 +22,6 @@ interface StatusItemProps {
 }
 
 const StatusItem = (props: StatusItemProps) => {
-  const { LinkComponent } = useContext(NavigationContext)
-
   return (
     <article className={styles["status-item"]}>
       <div className={styles["status-item__inner"]}>
@@ -58,17 +57,15 @@ const StatusItem = (props: StatusItemProps) => {
                 {props.strings?.submittedStatus ?? t("application.statuses.submitted")}
               </span>
             </p>
-            <LinkButton href={props.applicationURL} size={AppearanceSizeType.small}>
+            <Button href={props.applicationURL} size="sm">
               {props.strings?.viewApplication ?? t("application.viewApplication")}
-            </LinkButton>
+            </Button>
           </div>
         </section>
 
         <footer className={styles["status-item__footer"]}>
           <div className={styles["status-item_links"]}>
-            <LinkComponent className={styles["status-item__link"]} href={props.listingURL}>
-              {props.strings?.seeListing ?? t("t.seeListing")}
-            </LinkComponent>
+            <Link href={props.listingURL}>{props.strings?.seeListing ?? t("t.seeListing")}</Link>
           </div>
 
           <div className={styles["status-item__meta"]}>

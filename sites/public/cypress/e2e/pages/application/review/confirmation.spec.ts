@@ -11,7 +11,7 @@ describe("applications/review/confirmation", function () {
   })
 
   it("should redirect to create account page", function () {
-    cy.getByTestId("app-confirmation-create-account").click()
+    cy.getByID("app-confirmation-create-account").click()
     cy.location("pathname").should("equals", "/create-account")
   })
 })

@@ -4,6 +4,7 @@ import qs from "qs"
 import { getConfigs } from "@bloom-housing/backend-core/types"
 import { wrapper } from "axios-cookiejar-support"
 import { CookieJar } from "tough-cookie"
+import { maskAxiosResponse } from "@bloom-housing/shared-helpers"
 
 /*
   This file exists as per https://nextjs.org/docs/api-routes/dynamic-api-routes  
@@ -51,7 +52,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.statusMessage = response.statusText
     res.status(response.status).json(response.data)
   } catch (e) {
-    console.error("partner's backend url adapter error:", { e })
+    console.error(
+      "partner's backend url adapter error:",
+      e.response ? maskAxiosResponse(e.response) : e
+    )
     if (e.response) {
       res.statusMessage = e.response.statusText
       res.status(e.response.status).json(e.response.data)

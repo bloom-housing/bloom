@@ -4,9 +4,8 @@ View of application terms with checkbox
 */
 import React, { useContext, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/router"
+import { Button } from "@bloom-housing/ui-seeds"
 import {
-  AppearanceStyleType,
-  Button,
   FormCard,
   t,
   FieldGroup,
@@ -195,10 +194,10 @@ const ApplicationTerms = () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                loading={submitting}
-                styleType={AppearanceStyleType.primary}
                 type="submit"
-                data-testid={"app-terms-submit-button"}
+                loadingMessage={submitting && t("t.formSubmitted")}
+                variant="primary"
+                id={"app-terms-submit-button"}
               >
                 {t("t.submit")}
               </Button>

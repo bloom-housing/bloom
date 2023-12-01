@@ -1,8 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from "react"
 import {
-  AppearanceSizeType,
-  AppearanceStyleType,
-  Button,
   Drawer,
   Field,
   FieldGroup,
@@ -12,7 +9,7 @@ import {
   MinimalTable,
   StandardTableData,
 } from "@bloom-housing/ui-components"
-import { FormErrorMessage, FieldValue, Card, Grid } from "@bloom-housing/ui-seeds"
+import { Button, FormErrorMessage, FieldValue, Card, Grid } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import { YesNoAnswer } from "../../lib/helpers"
@@ -182,8 +179,8 @@ const PreferenceDrawer = ({
         <Card>
           <Card.Section>
             <SectionWithGrid heading={t("settings.preference")}>
-              <Grid.Row>
-                <Grid.Cell>
+              <Grid.Row columns={3}>
+                <Grid.Cell className="seeds-grid-span-2">
                   <Field
                     id="text"
                     name="text"
@@ -202,8 +199,8 @@ const PreferenceDrawer = ({
                   />
                 </Grid.Cell>
               </Grid.Row>
-              <Grid.Row>
-                <Grid.Cell>
+              <Grid.Row columns={3}>
+                <Grid.Cell className="seeds-grid-span-2">
                   <Textarea
                     label={t("t.descriptionTitle")}
                     name={"description"}
@@ -216,7 +213,7 @@ const PreferenceDrawer = ({
                   />
                 </Grid.Cell>
               </Grid.Row>
-              <Grid.Row>
+              <Grid.Row columns={3}>
                 <Grid.Cell>
                   <Field
                     id="preferenceUrl"
@@ -266,35 +263,30 @@ const PreferenceDrawer = ({
               </div>
             )}
 
-            <Grid.Row columns={2}>
-              <Grid.Cell>
-                <div className="flex flex-col pb-4">
-                  <Button
-                    type="button"
-                    size={AppearanceSizeType.small}
-                    styleType={
-                      errors["questions"] ? AppearanceStyleType.alert : AppearanceStyleType.primary
-                    }
-                    onClick={() => {
-                      clearErrors("questions")
-                      setOptionData(null)
-                      setOptionDrawerOpen("add")
-                    }}
-                    dataTestId={"preference-add-option-button"}
-                  >
-                    {t("settings.preferenceAddOption")}
-                  </Button>
-                  {errors["questions"] && (
-                    <FormErrorMessage className={"pt-1"}>
-                      {errors["questions"].message}
-                    </FormErrorMessage>
-                  )}
-                </div>
-              </Grid.Cell>
-            </Grid.Row>
+            <div className={"mb-5 flex flex-col"}>
+              <Button
+                type="button"
+                size="sm"
+                className="w-max"
+                variant={errors["questions"] ? "alert" : "primary"}
+                onClick={() => {
+                  clearErrors("questions")
+                  setOptionData(null)
+                  setOptionDrawerOpen("add")
+                }}
+                id={"preference-add-option-button"}
+              >
+                {t("settings.preferenceAddOption")}
+              </Button>
+              {errors["questions"] && (
+                <FormErrorMessage className={"pt-1"}>
+                  {errors["questions"].message}
+                </FormErrorMessage>
+              )}
+            </div>
 
             <Grid>
-              <Grid.Row columns={2}>
+              <Grid.Row columns={3}>
                 <Grid.Cell>
                   <div className="pb-4">
                     <FieldGroup
@@ -342,9 +334,7 @@ const PreferenceDrawer = ({
                   </Grid.Cell>
                 )}
               </Grid.Row>
-            </Grid>
-            <Grid>
-              <Grid.Row>
+              <Grid.Row columns={3}>
                 <Grid.Cell>
                   <FieldGroup
                     name="showOnListingQuestion"
@@ -373,8 +363,6 @@ const PreferenceDrawer = ({
                   />
                 </Grid.Cell>
               </Grid.Row>
-            </Grid>
-            <Grid>
               <Grid.Row columns={3}>
                 <Grid.Cell>
                   <Select
@@ -413,48 +401,49 @@ const PreferenceDrawer = ({
             </Grid>
           </Card.Section>
         </Card>
-        <Button
-          type="button"
-          className={"mt-4"}
-          styleType={AppearanceStyleType.primary}
-          size={AppearanceSizeType.normal}
-          loading={isLoading}
-          onClick={async () => {
-            const validation = await trigger()
-            if (!questionData || !questionData?.options?.length) {
-              setError("questions", { message: t("errors.requiredFieldError") })
-              return
-            }
-            if (!validation) return
-            const formValues = getValues()
+        <div className="pb-8">
+          <Button
+            type="button"
+            className={"mt-4"}
+            variant="primary"
+            loadingMessage={isLoading && t("t.formSubmitted")}
+            onClick={async () => {
+              const validation = await trigger()
+              if (!questionData || !questionData?.options?.length) {
+                setError("questions", { message: t("errors.requiredFieldError") })
+                return
+              }
+              if (!validation) return
+              const formValues = getValues()
 
-            const formattedQuestionData: MultiselectQuestionUpdate | MultiselectQuestionCreate = {
-              applicationSection: ApplicationSection.preferences,
-              text: formValues.text,
-              description: formValues.description,
-              hideFromListing: formValues.showOnListingQuestion === YesNoAnswer.No,
-              optOutText:
-                optOutQuestion === YesNoAnswer.Yes &&
-                formValues.optOutText &&
-                formValues.optOutText !== ""
-                  ? formValues.optOutText
-                  : null,
-              options: questionData?.options,
-              jurisdictions: [
-                profile.jurisdictions.find((juris) => juris.id === formValues.jurisdictionId),
-              ],
-              links: formValues.preferenceUrl
-                ? [{ title: formValues.preferenceLinkTitle, url: formValues.preferenceUrl }]
-                : [],
-            }
-            clearErrors()
-            clearErrors("questions")
-            saveQuestion(formattedQuestionData, drawerType)
-          }}
-          dataTestId={"preference-save-button"}
-        >
-          {t("t.save")}
-        </Button>
+              const formattedQuestionData: MultiselectQuestionUpdate | MultiselectQuestionCreate = {
+                applicationSection: ApplicationSection.preferences,
+                text: formValues.text,
+                description: formValues.description,
+                hideFromListing: formValues.showOnListingQuestion === YesNoAnswer.No,
+                optOutText:
+                  optOutQuestion === YesNoAnswer.Yes &&
+                  formValues.optOutText &&
+                  formValues.optOutText !== ""
+                    ? formValues.optOutText
+                    : null,
+                options: questionData?.options,
+                jurisdictions: [
+                  profile.jurisdictions.find((juris) => juris.id === formValues.jurisdictionId),
+                ],
+                links: formValues.preferenceUrl
+                  ? [{ title: formValues.preferenceLinkTitle, url: formValues.preferenceUrl }]
+                  : [],
+              }
+              clearErrors()
+              clearErrors("questions")
+              saveQuestion(formattedQuestionData, drawerType)
+            }}
+            id={"preference-save-button"}
+          >
+            {t("t.save")}
+          </Button>
+        </div>
       </Drawer>
 
       <Drawer
@@ -507,44 +496,40 @@ const PreferenceDrawer = ({
                 </Grid.Cell>
               </Grid.Row>
               <Grid.Row columns={3}>
-                <Grid.Cell>
-                  <FieldValue label={t("t.url")}>
-                    <Field
-                      id="optionUrl"
-                      name="optionUrl"
-                      label={t("t.url")}
-                      placeholder={"https://"}
-                      register={register}
-                      type="url"
-                      error={!!errors?.optionUrl}
-                      errorMessage={
-                        errors?.optionUrl?.type === "https"
-                          ? t("errors.urlHttpsError")
-                          : t("errors.urlError")
-                      }
-                      readerOnly
-                      dataTestId={"preference-option-link"}
-                      defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].url : ""}
-                    />
-                  </FieldValue>
-                </Grid.Cell>
-                <Grid.Cell>
-                  <FieldValue label={t("settings.preferenceLinkTitle")}>
-                    <Field
-                      id="optionLinkTitle"
-                      name="optionLinkTitle"
-                      label={t("settings.preferenceLinkTitle")}
-                      placeholder={t("settings.preferenceLinkTitle")}
-                      register={register}
-                      type="text"
-                      readerOnly
-                      dataTestId={"preference-option-link-title"}
-                      defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].title : ""}
-                    />
-                  </FieldValue>
-                </Grid.Cell>
+                <FieldValue label={t("t.url")}>
+                  <Field
+                    id="optionUrl"
+                    name="optionUrl"
+                    label={t("t.url")}
+                    placeholder={"https://"}
+                    register={register}
+                    type="url"
+                    error={!!errors?.optionUrl}
+                    errorMessage={
+                      errors?.optionUrl?.type === "https"
+                        ? t("errors.urlHttpsError")
+                        : t("errors.urlError")
+                    }
+                    readerOnly
+                    dataTestId={"preference-option-link"}
+                    defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].url : ""}
+                  />
+                </FieldValue>
+                <FieldValue label={t("settings.preferenceLinkTitle")}>
+                  <Field
+                    id="optionLinkTitle"
+                    name="optionLinkTitle"
+                    label={t("settings.preferenceLinkTitle")}
+                    placeholder={t("settings.preferenceLinkTitle")}
+                    register={register}
+                    type="text"
+                    readerOnly
+                    dataTestId={"preference-option-link-title"}
+                    defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].title : ""}
+                  />
+                </FieldValue>
               </Grid.Row>
-              <Grid.Row>
+              <Grid.Row columns={3}>
                 <FieldValue label={t("settings.preferenceExclusiveQuestion")} className="mb-1">
                   <FieldGroup
                     name="exclusiveQuestion"
@@ -777,77 +762,78 @@ const PreferenceDrawer = ({
             </SectionWithGrid>
           </Card.Section>
         </Card>
-        <Button
-          type="button"
-          className={"mt-4"}
-          styleType={AppearanceStyleType.primary}
-          size={AppearanceSizeType.normal}
-          onClick={async () => {
-            const formData = getValues() as OptionForm
-            await trigger()
-            if (!formData.optionTitle || formData.optionTitle === "") {
-              setError("optionTitle", { message: t("errors.requiredFieldError") })
-              return
-            }
-            if (formState.errors.optionUrl) return
-            const existingOptionData = questionData?.options?.find(
-              (option) => optionData?.ordinal === option.ordinal
-            )
-            if (
-              Object.keys(formState.errors).some((field) =>
-                [
-                  "collectAddress",
-                  "collectName",
-                  "collectRelationship",
-                  "validationMethod",
-                  "radiusSize",
-                ].includes(field)
+        <div className="pb-8">
+          <Button
+            type="button"
+            className={"mt-4"}
+            variant="primary"
+            onClick={async () => {
+              const formData = getValues() as OptionForm
+              await trigger()
+              if (!formData.optionTitle || formData.optionTitle === "") {
+                setError("optionTitle", { message: t("errors.requiredFieldError") })
+                return
+              }
+              if (formState.errors.optionUrl) return
+              const existingOptionData = questionData?.options?.find(
+                (option) => optionData?.ordinal === option.ordinal
               )
-            ) {
-              return
-            }
+              if (
+                Object.keys(formState.errors).some((field) =>
+                  [
+                    "collectAddress",
+                    "collectName",
+                    "collectRelationship",
+                    "validationMethod",
+                    "radiusSize",
+                  ].includes(field)
+                )
+              ) {
+                return
+              }
 
-            const getNewOrdinal = () => {
-              if (existingOptionData) return existingOptionData.ordinal
-              return questionData?.options?.length ? questionData?.options.length + 1 : 1
-            }
+              const getNewOrdinal = () => {
+                if (existingOptionData) return existingOptionData.ordinal
+                return questionData?.options?.length ? questionData?.options.length + 1 : 1
+              }
 
-            const newOptionData: MultiselectOption = {
-              text: formData.optionTitle,
-              description: formData.optionDescription,
-              links: formData.optionUrl
-                ? [{ title: formData.optionLinkTitle, url: formData.optionUrl }]
-                : [],
-              ordinal: getNewOrdinal(),
-              exclusive: formData.exclusiveQuestion === "exclusive",
-              collectAddress: formData.collectAddress === YesNoAnswer.Yes,
-            }
-            if (formData.collectAddress === YesNoAnswer.Yes) {
-              newOptionData.validationMethod = formData.validationMethod
-              newOptionData.collectRelationship = formData.collectRelationship === YesNoAnswer.Yes
-              newOptionData.collectName = formData.collectName === YesNoAnswer.Yes
-            }
-            if (formData.validationMethod === ValidationMethod.radius && formData?.radiusSize) {
-              newOptionData.radiusSize = parseFloat(formData.radiusSize)
-            }
-            let newOptions = []
+              const newOptionData: MultiselectOption = {
+                text: formData.optionTitle,
+                description: formData.optionDescription,
+                links: formData.optionUrl
+                  ? [{ title: formData.optionLinkTitle, url: formData.optionUrl }]
+                  : [],
+                ordinal: getNewOrdinal(),
+                exclusive: formData.exclusiveQuestion === "exclusive",
+                collectAddress: formData.collectAddress === YesNoAnswer.Yes,
+              }
+              if (formData.collectAddress === YesNoAnswer.Yes) {
+                newOptionData.validationMethod = formData.validationMethod
+                newOptionData.collectRelationship = formData.collectRelationship === YesNoAnswer.Yes
+                newOptionData.collectName = formData.collectName === YesNoAnswer.Yes
+              }
+              if (formData.validationMethod === ValidationMethod.radius && formData?.radiusSize) {
+                newOptionData.radiusSize = parseFloat(formData.radiusSize)
+              }
 
-            if (existingOptionData) {
-              newOptions = questionData.options.map((option) =>
-                option.ordinal === existingOptionData.ordinal ? newOptionData : option
-              )
-            } else {
-              newOptions = questionData?.options
-                ? [...questionData.options, newOptionData]
-                : [newOptionData]
-            }
-            setQuestionData({ ...questionData, options: newOptions })
-            setOptionDrawerOpen(null)
-          }}
-          dataTestId={"preference-option-save"}
-        >
-          {t("t.save")}
-        </Button>
+              let newOptions = []
+              if (existingOptionData) {
+                newOptions = questionData.options.map((option) =>
+                  option.ordinal === existingOptionData.ordinal ? newOptionData : option
+                )
+              } else {
+                newOptions = questionData?.options
+                  ? [...questionData.options, newOptionData]
+                  : [newOptionData]
+              }
+              setQuestionData({ ...questionData, options: newOptions })
+              setOptionDrawerOpen(null)
+            }}
+            id={"preference-option-save"}
+          >
+            {t("t.save")}
+          </Button>
+        </div>
       </Drawer>
     </>
   )

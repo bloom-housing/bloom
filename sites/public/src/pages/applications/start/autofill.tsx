@@ -1,14 +1,7 @@
 import { useContext, useState, useEffect, useCallback } from "react"
 import { Application } from "@bloom-housing/backend-core/types"
-import {
-  AppearanceStyleType,
-  Button,
-  Form,
-  FormCard,
-  Heading,
-  ProgressNav,
-  t,
-} from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
+import { Form, FormCard, Heading, ProgressNav, t } from "@bloom-housing/ui-components"
 import {
   blankApplication,
   OnClientSide,
@@ -125,23 +118,25 @@ export default () => {
           <div className="form-card__pager" data-testid={"application-initial-page"}>
             <div className="form-card__pager-row primary">
               <Button
-                styleType={AppearanceStyleType.primary}
+                type="submit"
+                variant="primary"
                 onClick={() => {
                   useDetails = true
                 }}
-                data-testid={"autofill-accept"}
+                id={"autofill-accept"}
               >
                 {t("application.autofill.start")}
               </Button>
             </div>
             <div className="form-card__pager-row">
               <Button
-                unstyled={true}
+                type="submit"
+                variant="text"
                 className="mb-4"
                 onClick={() => {
                   useDetails = false
                 }}
-                dataTestId={"autofill-decline"}
+                id={"autofill-decline"}
               >
                 {t("application.autofill.reset")}
               </Button>

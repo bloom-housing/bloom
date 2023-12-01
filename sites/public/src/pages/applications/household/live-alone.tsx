@@ -4,15 +4,8 @@ Asks whether the applicant will be adding any additional household members
 */
 import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import {
-  AppearanceSizeType,
-  Button,
-  Form,
-  FormCard,
-  Heading,
-  ProgressNav,
-  t,
-} from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
+import { Form, FormCard, Heading, ProgressNav, t } from "@bloom-housing/ui-components"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../components/applications/FormBackLink"
@@ -81,29 +74,31 @@ const ApplicationLiveAlone = () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row">
               <Button
+                type="submit"
                 id="btn-live-alone"
-                size={AppearanceSizeType.big}
+                variant="primary-outlined"
+                size="lg"
                 className="w-full md:w-3/4"
                 onClick={() => {
                   application.householdSize = 1
                   application.householdMembers = []
                   setValidateHousehold(true)
                 }}
-                data-testid={"app-household-live-alone"}
               >
                 {t("application.household.liveAlone.willLiveAlone")}
               </Button>
             </div>
             <div className="form-card__pager-row">
               <Button
+                type="submit"
                 id="btn-with-people"
-                size={AppearanceSizeType.big}
+                variant="primary-outlined"
+                size="lg"
                 className="w-full md:w-3/4"
                 onClick={() => {
                   if (application.householdSize === 1) application.householdSize = 0
                   setValidateHousehold(false)
                 }}
-                data-testid={"app-household-live-with-others"}
               >
                 {t("application.household.liveAlone.liveWithOtherPeople")}
               </Button>

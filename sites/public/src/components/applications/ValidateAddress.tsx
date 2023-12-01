@@ -1,4 +1,5 @@
-import { Address, Button, MultiLineAddress, t } from "@bloom-housing/ui-components"
+import { Address, MultiLineAddress, t } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
 import GeocodeService from "@mapbox/mapbox-sdk/services/geocoding"
 
 export interface FoundAddress {
@@ -131,13 +132,13 @@ export const AddressValidationSelection = (props: AddressValidationSelectionProp
               </label>
             </div>
             <Button
-              unstyled
-              className="font-alt-sans uppercase font-semibold mt-0 mr-0"
+              variant="text"
+              className="mt-0 mr-0"
               onClick={() => {
                 setVerifyAddress(false)
                 setVerifyAddressStep?.(0)
               }}
-              data-testid="app-edit-original-address"
+              id="app-edit-original-address"
             >
               {t("t.edit")}
             </Button>

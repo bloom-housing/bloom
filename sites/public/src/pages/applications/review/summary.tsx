@@ -3,9 +3,8 @@
 Display a summary of application fields with edit links per section
 */
 import React, { useContext, useEffect, useState } from "react"
+import { Button } from "@bloom-housing/ui-seeds"
 import {
-  AppearanceStyleType,
-  Button,
   FormCard,
   t,
   Form,
@@ -126,10 +125,9 @@ const ApplicationSummary = () => {
           <div className="form-card__pager-row primary">
             <Form onSubmit={handleSubmit(onSubmit)}>
               <Button
-                styleType={
-                  validationError ? AppearanceStyleType.closed : AppearanceStyleType.primary
-                }
-                data-testid={"app-summary-confirm"}
+                type="submit"
+                variant="primary"
+                id={"app-summary-confirm"}
                 disabled={validationError}
               >
                 {t("t.confirm")}
