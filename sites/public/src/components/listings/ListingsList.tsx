@@ -29,19 +29,21 @@ const ListingsList = (props: ListingsListProps) => {
   const infoCards =
     props.currentPage == props.lastPage || props.lastPage == 0 ? (
       <div>
-        <InfoCard
-          title={t("t.signUpForAlerts")}
-          subtitle={t("t.subscribeToListingAlerts")}
-          className="is-normal-primary-lighter"
-        >
-          <LinkButton
-            href={process.env.notificationsSignUpUrl}
-            newTab={true}
-            className="is-primary"
+        {process.env.notificationsSignUpUrl && (
+          <InfoCard
+            title={t("t.signUpForAlerts")}
+            subtitle={t("t.subscribeToListingAlerts")}
+            className="is-normal-primary-lighter"
           >
-            {t("t.signUp")}
-          </LinkButton>
-        </InfoCard>
+            <LinkButton
+              href={process.env.notificationsSignUpUrl}
+              newTab={true}
+              className="is-primary"
+            >
+              {t("t.signUp")}
+            </LinkButton>
+          </InfoCard>
+        )}
         <InfoCard
           title={t("t.needHelp")}
           subtitle={t("t.emergencyShelter")}

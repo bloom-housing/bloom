@@ -42,7 +42,6 @@ module.exports = withBundleAnalyzer(
     env: {
       backendApiBase: BACKEND_API_BASE, // this has to be set for tests
       backendProxyBase: process.env.BACKEND_PROXY_BASE,
-      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
       listingsQuery: LISTINGS_QUERY,
       listingPhotoSize: process.env.LISTING_PHOTO_SIZE || "1302",
       mapBoxToken: MAPBOX_TOKEN,
