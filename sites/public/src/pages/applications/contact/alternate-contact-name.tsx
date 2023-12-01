@@ -79,7 +79,7 @@ export default () => {
                 errorMessage={
                   errors.firstName?.type === "maxLength"
                     ? t("errors.maxLength")
-                    : t("errors.firstNameError")
+                    : t("errors.givenNameError")
                 }
                 error={errors.firstName}
                 register={register}
@@ -95,7 +95,7 @@ export default () => {
                 errorMessage={
                   errors.lastName?.type === "maxLength"
                     ? t("errors.maxLength")
-                    : t("errors.lastNameError")
+                    : t("errors.familyNameError")
                 }
                 register={register}
                 dataTestId={"app-alternate-last-name"}

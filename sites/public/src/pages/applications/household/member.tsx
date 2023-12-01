@@ -156,7 +156,7 @@ const ApplicationMember = () => {
                 errorMessage={
                   errors.firstName?.type === "maxLength"
                     ? t("errors.maxLength")
-                    : t("errors.firstNameError")
+                    : t("errors.givenNameError")
                 }
                 register={register}
                 dataTestId={"app-household-member-first-name"}
@@ -184,7 +184,7 @@ const ApplicationMember = () => {
                 errorMessage={
                   errors.lastName?.type === "maxLength"
                     ? t("errors.maxLength")
-                    : t("errors.lastNameError")
+                    : t("errors.familyNameError")
                 }
                 register={register}
                 dataTestId={"app-household-member-last-name"}

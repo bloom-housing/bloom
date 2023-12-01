@@ -111,7 +111,7 @@ const ApplicationName = () => {
                   errorMessage={
                     errors.applicant?.firstName?.type === "maxLength"
                       ? t("errors.maxLength")
-                      : t("errors.firstNameError")
+                      : t("errors.givenNameError")
                   }
                   register={register}
                   dataTestId={"app-primary-first-name"}
@@ -139,7 +139,7 @@ const ApplicationName = () => {
                   errorMessage={
                     errors.applicant?.lastName?.type === "maxLength"
                       ? t("errors.maxLength")
-                      : t("errors.lastNameError")
+                      : t("errors.familyNameError")
                   }
                   register={register}
                   dataTestId={"app-primary-last-name"}
@@ -170,6 +170,7 @@ const ApplicationName = () => {
                 </>
               }
             />
+            <p className={"field-sub-note"}>{t("application.name.dobHelper")}</p>
           </CardSection>
           <CardSection divider={"flush"} className={"border-none"}>
             <legend
