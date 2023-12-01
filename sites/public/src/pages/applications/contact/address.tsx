@@ -80,6 +80,8 @@ const ApplicationAddress = () => {
       application.applicant.address.street = foundAddress.newAddress.street
       application.applicant.address.city = foundAddress.newAddress.city
       application.applicant.address.zipCode = foundAddress.newAddress.zipCode
+      application.applicant.address.longitude = foundAddress.newAddress.longitude
+      application.applicant.address.latitude = foundAddress.newAddress.latitude
     }
 
     if (application.applicant.noPhone) {
