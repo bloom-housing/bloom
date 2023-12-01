@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react"
 import { t, MinimalTable, Drawer, Field, StandardTableData } from "@bloom-housing/ui-components"
-import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
+import { Button, Card, Grid, Tag, Icon } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
 import { ApplicationSection, MultiselectQuestion } from "@bloom-housing/backend-core/types"
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons"
 import LinkComponent from "../../../../components/core/LinkComponent"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
@@ -188,11 +189,23 @@ const SelectAndOrder = ({
               })}
             </div>
           )}
+          {option.collectAddress && (
+            <div className={`${isNotLastItem ? "-mt-4" : "mt-0"}`}>
+              ({t("listings.providesAdditionalFields.info")})
+            </div>
+          )}
         </div>
       )
     }
     return (
       <div className="ml-8 -mt-6 mb-4 text-sm">
+        {item.options[optionIndex]?.collectAddress && (
+          <div className="flex mt-6 mb-2">
+            <Tag className="lowercase w-auto" variant="primary">
+              <Icon icon={faInfoCircle} /> {t("listings.providesAdditionalFields")}
+            </Tag>
+          </div>
+        )}
         <div>
           <button
             onClick={() => {

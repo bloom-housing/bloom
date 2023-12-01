@@ -221,6 +221,8 @@
   "listings.pdfHelperText": "Select PDF file",
   "listings.pickupAddress": "Pickup Address",
   "listings.postmarksConsideredQuestion": "Are postmarks considered?",
+  "listings.providesAdditionalFields": "Provides additional fields",
+  "listings.providesAdditionalFields.info": "This preference provides additional details that will be included in the exported data",
   "listings.publishThisListing": "Publishing will push the listing live on the public site.",
   "listings.receivedByDate": "Received by Date",
   "listings.receivedByTime": "Received by Time",
