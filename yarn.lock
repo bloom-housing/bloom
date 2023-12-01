@@ -2085,10 +2085,10 @@
     tailwindcss-rtl "^0.9.0"
     typesafe-actions "^5.1.0"
 
-"@bloom-housing/ui-seeds@1.12.0":
-  version "1.12.0"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.12.0.tgz#d93d565241a855a8699aef8b2b097bbde1024061"
-  integrity sha512-XyCSRCkPyYAb19BYLDrI2JcMW1vMGs1GDrpKNJRsr4RcExbpyL7pIo/J97DsmQRBwfmn9NAjlLkEOYRnd1DrEw==
+"@bloom-housing/ui-seeds@1.12.1":
+  version "1.12.1"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.12.1.tgz#859f234f6383f0680442890868287f915f88902e"
+  integrity sha512-2ex9akp8DwpsWxNKBRTu+/XIUDz064JItFP5NpyJPcHuZbdz75PBIUTQHbGiCudie13MF2WSJmzmR5cclTT2VA==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.3.0"
     "@fortawesome/free-regular-svg-icons" "^6.3.0"
