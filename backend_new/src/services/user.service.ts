@@ -257,7 +257,7 @@ export class UserService {
     this will update a user or error if no user is found with the Id
   */
   async update(dto: UserUpdate, jurisdictionName?: string): Promise<User> {
-    const storedUser = await this.findUserOrError({ userId: dto.id }, false);
+    const storedUser = await this.findUserOrError({ userId: dto.id }, true);
 
     /*
       TODO: perm check
@@ -326,6 +326,36 @@ export class UserService {
           },
         });
       }
+    }
+
+    // disconnect existing connected listings/jurisdictions
+    if (storedUser.listings?.length) {
+      await this.prisma.userAccounts.update({
+        data: {
+          listings: {
+            disconnect: storedUser.listings.map((listing) => ({
+              id: listing.id,
+            })),
+          },
+        },
+        where: {
+          id: dto.id,
+        },
+      });
+    }
+    if (storedUser.jurisdictions?.length) {
+      await this.prisma.userAccounts.update({
+        data: {
+          jurisdictions: {
+            disconnect: storedUser.jurisdictions.map((jurisdiction) => ({
+              id: jurisdiction.id,
+            })),
+          },
+        },
+        where: {
+          id: dto.id,
+        },
+      });
     }
 
     const res = await this.prisma.userAccounts.update({

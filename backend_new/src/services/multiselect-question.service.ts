@@ -124,10 +124,10 @@ export class MultiselectQuestionService {
           })),
         },
         links: incomingData.links
-          ? JSON.parse(JSON.stringify(incomingData.links))
+          ? (incomingData.links as unknown as Prisma.InputJsonArray)
           : undefined,
         options: incomingData.options
-          ? JSON.parse(JSON.stringify(incomingData.options))
+          ? (incomingData.options as unknown as Prisma.InputJsonArray)
           : undefined,
       },
       include: view,
