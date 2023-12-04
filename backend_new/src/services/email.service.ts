@@ -472,10 +472,13 @@ export class EmailService {
   ): Promise<void> {
     const jurisdiction = await this.getJurisdiction(jurisdictionIds);
     void (await this.loadTranslations(jurisdiction, user.language));
-
+    const emailFromAddress = await this.getEmailToSendFrom(
+      user.jurisdictions,
+      jurisdiction,
+    );
     await this.send(
       user.email,
-      jurisdiction.emailFromAddress,
+      emailFromAddress,
       exportEmailTitle,
       this.template('csv-export')({
         user: user,
