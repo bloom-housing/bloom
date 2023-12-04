@@ -12,7 +12,7 @@ export const userFactory = async (optionalParams?: {
   confirmedAt?: Date;
   phoneNumber?: string;
   phoneNumberVerified?: boolean;
-  jurisdictionId?: string;
+  jurisdictionIds?: string[];
   listings?: string[];
   acceptedTerms?: boolean;
 }): Promise<Prisma.UserAccountsCreateInput> => ({
@@ -44,7 +44,13 @@ export const userFactory = async (optionalParams?: {
         }),
       }
     : undefined,
-  jurisdictions: optionalParams?.jurisdictionId
-    ? { connect: { id: optionalParams?.jurisdictionId } }
+  jurisdictions: optionalParams?.jurisdictionIds
+    ? {
+        connect: optionalParams?.jurisdictionIds.map((jurisdiction) => {
+          return {
+            id: jurisdiction,
+          };
+        }),
+      }
     : undefined,
 });

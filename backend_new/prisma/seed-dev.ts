@@ -50,7 +50,7 @@ export const devSeeding = async (
       roles: { isAdmin: true },
       email: 'admin@example.com',
       confirmedAt: new Date(),
-      jurisdictionId: jurisdiction.id,
+      jurisdictionIds: [jurisdiction.id],
       acceptedTerms: true,
     }),
   });
@@ -59,7 +59,7 @@ export const devSeeding = async (
       roles: { isJurisdictionalAdmin: true },
       email: 'jurisdiction-admin@example.com',
       confirmedAt: new Date(),
-      jurisdictionId: jurisdiction.id,
+      jurisdictionIds: [jurisdiction.id],
     }),
   });
   // add jurisdiction specific translations and default ones

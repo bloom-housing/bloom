@@ -32,9 +32,13 @@ export const stagingSeed = async (
   prismaClient: PrismaClient,
   jurisdictionName: string,
 ) => {
-  // create single jurisdiction
+  // create main jurisdiction
   const jurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory(jurisdictionName, [UserRoleEnum.admin]),
+  });
+  // add another jurisdiction
+  const additionalJurisdiction = await prismaClient.jurisdictions.create({
+    data: jurisdictionFactory(),
   });
   // create admin user
   await prismaClient.userAccounts.create({
@@ -42,7 +46,7 @@ export const stagingSeed = async (
       roles: { isAdmin: true },
       email: 'admin@example.com',
       confirmedAt: new Date(),
-      jurisdictionId: jurisdiction.id,
+      jurisdictionIds: [jurisdiction.id, additionalJurisdiction.id],
       acceptedTerms: true,
     }),
   });
@@ -52,7 +56,7 @@ export const stagingSeed = async (
       roles: { isJurisdictionalAdmin: true },
       email: 'jurisdiction-admin@example.com',
       confirmedAt: new Date(),
-      jurisdictionId: jurisdiction.id,
+      jurisdictionIds: [jurisdiction.id],
       acceptedTerms: true,
     }),
   });
@@ -61,7 +65,7 @@ export const stagingSeed = async (
       roles: { isJurisdictionalAdmin: true },
       email: 'unverified@example.com',
       confirmedAt: new Date(),
-      jurisdictionId: jurisdiction.id,
+      jurisdictionIds: [jurisdiction.id],
       acceptedTerms: false,
     }),
   });
