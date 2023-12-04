@@ -640,12 +640,13 @@ const ApplicationAddress = () => {
               )}
             </CardSection>
           </div>
-
-          {verifyAddress && (
-            <AddressValidationSelection
-              {...{ foundAddress, newAddressSelected, setNewAddressSelected, setVerifyAddress }}
-            />
-          )}
+          <CardSection>
+            {verifyAddress && (
+              <AddressValidationSelection
+                {...{ foundAddress, newAddressSelected, setNewAddressSelected, setVerifyAddress }}
+              />
+            )}
+          </CardSection>
         </ApplicationFormLayout>
       </Form>
     </FormsLayout>
