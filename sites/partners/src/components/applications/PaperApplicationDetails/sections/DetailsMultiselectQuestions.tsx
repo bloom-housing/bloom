@@ -3,11 +3,15 @@ import { t } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { AddressHolder, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import { ApplicationContext } from "../../ApplicationContext"
-import { InputType, AddressCreate, ApplicationSection } from "@bloom-housing/backend-core/types"
+import {
+  InputType,
+  AddressCreate,
+  ApplicationSection,
+  GeocodingValues,
+} from "@bloom-housing/backend-core/types"
 import { DetailsAddressColumns, AddressColsType } from "../DetailsAddressColumns"
 import { useSingleListingData } from "../../../../lib/hooks"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
-import { GeocodingValues } from "@bloom-housing/backend-core/dist/src/shared/types/geocoding-values"
 
 type DetailsMultiselectQuestionsProps = {
   listingId: string
