@@ -190,8 +190,15 @@ export class EmailService {
     appUrl: string,
     confirmationUrl: string,
   ) {
-    const jurisdiction = await this.getJurisdiction(jurisdictionIds);
+    let jurisdiction = await this.getJurisdiction(jurisdictionIds);
     void (await this.loadTranslations(jurisdiction, user.language));
+    // An admin will be attached to more than one jurisdiction so we want generic translations
+    // but still need an email to send from
+    if (!jurisdiction && jurisdictionIds.length > 1) {
+      jurisdiction = await this.jurisdictionService.findOne({
+        jurisdictionId: jurisdictionIds[0].id,
+      });
+    }
     await this.send(
       user.email,
       jurisdiction.emailFromAddress,
