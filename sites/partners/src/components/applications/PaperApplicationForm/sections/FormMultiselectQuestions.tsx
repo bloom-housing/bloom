@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import { Field, t, FormAddress, FieldGroup, resolveObject } from "@bloom-housing/ui-components"
+import { Field, t, FieldGroup, resolveObject } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
 import { stateKeys, getInputType, fieldName, AddressHolder } from "@bloom-housing/shared-helpers"
@@ -10,6 +10,7 @@ import {
   MultiselectQuestion,
 } from "@bloom-housing/backend-core/types"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { FormAddressAlternate } from "@bloom-housing/shared-helpers/src/views/address/FormAddressAlternate"
 
 type FormMultiselectQuestionsProps = {
   questions: ListingMultiselectQuestion[]
@@ -96,8 +97,8 @@ const FormMultiselectQuestions = ({
         )}
         {watchQuestions[optionFieldName] && option.collectAddress && (
           <div className="pb-4">
-            <FormAddress
-              subtitle={t("application.preferences.options.address")}
+            <FormAddressAlternate
+              subtitle={t("application.preferences.options.qualifyingAddress")}
               dataKey={fieldName(question.text, applicationSection, `${option.text}-address`)}
               register={register}
               required={true}

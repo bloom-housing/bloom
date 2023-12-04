@@ -1,17 +1,31 @@
 import React, { useContext } from "react"
 import { t } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
+import { AddressHolder, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import { ApplicationContext } from "../../ApplicationContext"
 import { InputType, AddressCreate, ApplicationSection } from "@bloom-housing/backend-core/types"
 import { DetailsAddressColumns, AddressColsType } from "../DetailsAddressColumns"
 import { useSingleListingData } from "../../../../lib/hooks"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { GeocodingValues } from "@bloom-housing/backend-core/dist/src/shared/types/geocoding-values"
 
 type DetailsMultiselectQuestionsProps = {
   listingId: string
   applicationSection: ApplicationSection
   title: string
+}
+
+const formatGeocodingValues = (key: GeocodingValues) => {
+  switch (key) {
+    case GeocodingValues.true:
+      return t("t.yes")
+    case GeocodingValues.false:
+      return t("t.no")
+    case GeocodingValues.unknown:
+      return t("t.error")
+    default:
+      return t("t.error")
+  }
 }
 
 const DetailsMultiselectQuestions = ({
@@ -50,12 +64,31 @@ const DetailsMultiselectQuestions = ({
 
                 return options.map((option) => {
                   const extra = option.extraData?.map((extra) => {
-                    if (extra.type === InputType.text)
+                    if (extra.type === InputType.text) {
+                      let label = ""
+                      let value = extra.value
+
+                      switch (extra.key) {
+                        case AddressHolder.Name:
+                          label = t(`application.preferences.options.${AddressHolder.Name}`)
+                          break
+                        case AddressHolder.Relationship:
+                          label = t(`application.preferences.options.${AddressHolder.Relationship}`)
+                          break
+                        case "geocodingVerified":
+                          label = t("application.details.preferences.passedAddressCheck")
+                          value = formatGeocodingValues(extra.value as GeocodingValues)
+                          break
+                        default:
+                          label = t("t.name")
+                      }
+
                       return (
-                        <FieldValue key={extra.key} label={t("t.name")}>
-                          <>{extra.value}</>
+                        <FieldValue className="mt-5" key={extra.key} label={label}>
+                          <>{value}</>
                         </FieldValue>
                       )
+                    }
 
                     if (extra.type === InputType.boolean)
                       return (
