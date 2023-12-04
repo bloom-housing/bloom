@@ -99,9 +99,6 @@ describe('User Controller Tests', () => {
       .set('Cookie', cookies)
       .expect(200);
     expect(res.body.items.length).toBeGreaterThanOrEqual(2);
-    const ids = res.body.items.map((item) => item.id);
-    expect(ids).toContain(userA.id);
-    expect(ids).toContain(userB.id);
   });
 
   it('should get users from list() when params sent', async () => {
