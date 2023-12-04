@@ -1,16 +1,14 @@
 import React, { useState, useMemo, useCallback, useEffect } from "react"
 import {
   t,
+  AppearanceStyleType,
   MinimalTable,
-  Button,
-  AppearanceSizeType,
   Drawer,
   Modal,
-  AppearanceStyleType,
   FieldGroup,
   StandardTableData,
 } from "@bloom-housing/ui-components"
-import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { Button, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import UnitForm from "../UnitForm"
 import { useFormContext, useWatch } from "react-hook-form"
 import { TempUnit } from "../../../../lib/listings/formTypes"
@@ -114,20 +112,20 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
         priorityType: { content: unit.priorityType?.name },
         action: {
           content: (
-            <div className="flex">
+            <div className="flex gap-3">
               <Button
                 type="button"
-                className="front-semibold uppercase my-0"
+                className="font-semibold"
                 onClick={() => editUnit(unit.tempId)}
-                unstyled
+                variant="text"
               >
                 {t("t.edit")}
               </Button>
               <Button
                 type="button"
-                className="front-semibold uppercase text-alert my-0"
+                className="font-semibold text-alert"
                 onClick={() => setUnitDeleteModal(unit.tempId)}
-                unstyled
+                variant="text"
               >
                 {t("t.delete")}
               </Button>
@@ -208,8 +206,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
             <Button
               id="addUnitsButton"
               type="button"
-              size={AppearanceSizeType.normal}
-              styleType={fieldHasError(errors?.units) ? AppearanceStyleType.alert : null}
+              variant={fieldHasError(errors?.units) ? "alert" : "primary-outlined"}
               onClick={() => {
                 editUnit(units.length + 1)
                 clearErrors("units")
@@ -272,18 +269,15 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
         ariaDescription={t("listings.unit.deleteConf")}
         onClose={() => setUnitDeleteModal(null)}
         actions={[
-          <Button
-            styleType={AppearanceStyleType.alert}
-            onClick={() => deleteUnit(unitDeleteModal)}
-            size={AppearanceSizeType.small}
-          >
+          <Button variant="alert" onClick={() => deleteUnit(unitDeleteModal)} size="sm">
             {t("t.delete")}
           </Button>,
           <Button
             onClick={() => {
               setUnitDeleteModal(null)
             }}
-            size={AppearanceSizeType.small}
+            variant="primary-outlined"
+            size="sm"
           >
             {t("t.cancel")}
           </Button>,

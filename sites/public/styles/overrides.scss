@@ -1,0 +1,11 @@
+:root {
+  .seeds-button {
+    -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
+  }
+  
+  --text-caps-spaced-letter-spacing: var(--bloom-letter-spacing-tight);
+  --text-caps-spaced-font-weight: 700;
+  .text__caps-spaced {
+    text-transform: none;
+  }
+}

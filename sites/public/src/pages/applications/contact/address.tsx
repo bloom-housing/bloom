@@ -1,28 +1,16 @@
-/*
-1.3 - Contact
-Primary applicant contact information
-https://github.com/bloom-housing/bloom/issues/256
-*/
-import { FormErrorMessage } from "@bloom-housing/ui-seeds"
-import {
-  AppearanceStyleType,
-  AlertBox,
-  Button,
-  Field,
-  Form,
-  FormCard,
-  mergeDeep,
-  FieldGroup,
-  ProgressNav,
-  t,
-  Heading,
-} from "@bloom-housing/ui-components"
-import FormsLayout from "../../../layouts/forms"
-import { useContext, useEffect, useState, useMemo, useCallback } from "react"
+import React, { useContext, useEffect, useState, useMemo } from "react"
 import { useForm } from "react-hook-form"
-import { Select } from "@bloom-housing/ui-components/src/forms/Select"
-import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
-import { disableContactFormOption } from "../../../lib/helpers"
+import { Alert, FormErrorMessage } from "@bloom-housing/ui-seeds"
+import {
+  Field,
+  FieldGroup,
+  Form,
+  mergeDeep,
+  PhoneField,
+  Select,
+  t,
+} from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   contactPreferencesKeys,
   phoneNumberKeys,
@@ -33,7 +21,8 @@ import {
   pushGtmEvent,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
-import FormBackLink from "../../../components/applications/FormBackLink"
+import FormsLayout from "../../../layouts/forms"
+import { disableContactFormOption } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import {
   FoundAddress,
@@ -41,6 +30,8 @@ import {
   AddressValidationSelection,
 } from "../../../components/applications/ValidateAddress"
 import { UserStatus } from "../../../lib/constants"
+import ApplicationFormLayout from "../../../layouts/application-form"
+import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationAddress = () => {
   const { profile } = useContext(AuthContext)
@@ -51,7 +42,6 @@ const ApplicationAddress = () => {
   const { conductor, application, listing } = useFormConductor("primaryApplicantAddress")
   const currentPageSection = 1
 
-  /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { control, register, handleSubmit, setValue, watch, errors } = useForm<Record<string, any>>(
     {
@@ -82,6 +72,8 @@ const ApplicationAddress = () => {
       application.applicant.address.street = foundAddress.newAddress.street
       application.applicant.address.city = foundAddress.newAddress.city
       application.applicant.address.zipCode = foundAddress.newAddress.zipCode
+      application.applicant.address.longitude = foundAddress.newAddress.longitude
+      application.applicant.address.latitude = foundAddress.newAddress.latitude
     }
 
     if (application.applicant.noPhone) {
@@ -133,160 +125,165 @@ const ApplicationAddress = () => {
 
   const backUrl = useMemo(() => {
     return verifyAddress ? window.location.pathname : conductor.determinePreviousUrl()
-  }, [verifyAddress])
-
-  const backFunction = useCallback(() => {
-    return verifyAddress ? setVerifyAddress(false) : conductor.setNavigatedBack(true)
-  }, [verifyAddress])
+  }, [verifyAddress, conductor])
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard>
-        <FormBackLink url={backUrl} onClick={backFunction} />
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">
-            {verifyAddress
+      <Form id="applications-address" onSubmit={handleSubmit(onSubmit, onError)}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={
+            verifyAddress
               ? foundAddress.invalid
                 ? t("application.contact.couldntLocateAddress")
                 : t("application.contact.verifyAddressTitle")
-              : t("application.contact.title", { firstName: application.applicant.firstName })}
-          </h2>
-        </div>
-
-        {Object.entries(errors).length > 0 && (
-          <AlertBox type="alert" inverted closeable>
-            {t("errors.errorsToResolve")}
-          </AlertBox>
-        )}
-
-        <Form id="applications-address" onSubmit={handleSubmit(onSubmit, onError)}>
+              : t("application.contact.title", { firstName: application.applicant.firstName })
+          }
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: OnClientSide(),
+          }}
+          backLink={{
+            url: backUrl,
+            onClickFxn: verifyAddress
+              ? () => {
+                  setVerifyAddress(false)
+                }
+              : undefined,
+          }}
+          conductor={conductor}
+        >
+          {Object.entries(errors).length > 0 && (
+            <Alert
+              className={styles["message-inside-card"]}
+              variant="alert"
+              fullwidth
+              id={"application-alert-box"}
+            >
+              {t("errors.errorsToResolve")}
+            </Alert>
+          )}
           <div style={{ display: verifyAddress ? "none" : "block" }}>
-            <div className="form-card__group border-b">
-              <PhoneField
-                label={t("application.contact.yourPhoneNumber")}
-                caps={true}
-                required={true}
-                id="applicant.phoneNumber"
-                name="applicant.phoneNumber"
-                placeholder={clientLoaded && noPhone ? t("t.none") : null}
-                error={!noPhone ? errors.applicant?.phoneNumber : false}
-                errorMessage={t("errors.phoneNumberError")}
-                controlClassName="control"
-                control={control}
-                defaultValue={application.applicant.phoneNumber}
-                disabled={clientLoaded && noPhone}
-                dataTestId={"app-primary-phone-number"}
-              />
+            <CardSection divider={"inset"}>
+              <fieldset>
+                <legend className={"text__caps-spaced"}>
+                  {t("application.contact.yourPhoneNumber")}
+                </legend>
+                <PhoneField
+                  label={t("application.contact.number")}
+                  required={true}
+                  id="applicant.phoneNumber"
+                  name="applicant.phoneNumber"
+                  error={!noPhone ? errors.applicant?.phoneNumber : false}
+                  errorMessage={t("errors.phoneNumberError")}
+                  controlClassName="control"
+                  control={control}
+                  defaultValue={application.applicant.phoneNumber}
+                  disabled={clientLoaded && noPhone}
+                  dataTestId={"app-primary-phone-number"}
+                  subNote={t("application.contact.number.subNote")}
+                />
+                <Select
+                  id="applicant.phoneNumberType"
+                  name="applicant.phoneNumberType"
+                  placeholder={t("t.selectOne")}
+                  label={t("application.contact.phoneNumberTypes.prompt")}
+                  disabled={clientLoaded && noPhone}
+                  validation={{ required: !noPhone }}
+                  defaultValue={application.applicant.phoneNumberType}
+                  error={!noPhone && errors.applicant?.phoneNumberType}
+                  errorMessage={t("errors.phoneNumberTypeError")}
+                  register={register}
+                  controlClassName="control"
+                  options={phoneNumberKeys}
+                  keyPrefix="application.contact.phoneNumberTypes"
+                  dataTestId={"app-primary-phone-number-type"}
+                />
 
-              <Select
-                id="applicant.phoneNumberType"
-                name="applicant.phoneNumberType"
-                placeholder={t("application.contact.phoneNumberTypes.prompt")}
-                label={t("application.contact.phoneNumberTypes.prompt")}
-                labelClassName="sr-only"
-                disabled={clientLoaded && noPhone}
-                validation={{ required: !noPhone }}
-                defaultValue={application.applicant.phoneNumberType}
-                error={!noPhone && errors.applicant?.phoneNumberType}
-                errorMessage={t("errors.phoneNumberTypeError")}
-                register={register}
-                controlClassName="control"
-                options={phoneNumberKeys}
-                keyPrefix="application.contact.phoneNumberTypes"
-                dataTestId={"app-primary-phone-number-type"}
-              />
+                <Field
+                  type="checkbox"
+                  id="noPhone"
+                  name="applicant.noPhone"
+                  label={t("application.contact.noPhoneNumber")}
+                  primary={true}
+                  register={register}
+                  disabled={clientLoaded && phonePresent()}
+                  inputProps={{
+                    defaultChecked: application.applicant.noPhone,
+                    onChange: (e) => {
+                      if (e.target.checked) {
+                        setValue("applicant.phoneNumberType", "")
+                        setValue("additionalPhone", "")
+                        setValue("additionalPhoneNumber", "")
+                        setValue("additionalPhoneNumberType", "")
+                      }
+                    },
+                  }}
+                  dataTestId={"app-primary-no-phone"}
+                  className={"mb-2"}
+                />
 
-              <Field
-                type="checkbox"
-                id="noPhone"
-                name="applicant.noPhone"
-                label={t("application.contact.noPhoneNumber")}
-                primary={true}
-                register={register}
-                disabled={clientLoaded && phonePresent()}
-                inputProps={{
-                  defaultChecked: application.applicant.noPhone,
-                  onChange: (e) => {
-                    if (e.target.checked) {
-                      setValue("applicant.phoneNumberType", "")
-                      setValue("additionalPhone", "")
-                      setValue("additionalPhoneNumber", "")
-                      setValue("additionalPhoneNumberType", "")
-                    }
-                  },
-                }}
-                dataTestId={"app-primary-no-phone"}
-              />
+                <Field
+                  type="checkbox"
+                  id="additionalPhone"
+                  name="additionalPhone"
+                  label={t("application.contact.additionalPhoneNumber")}
+                  disabled={clientLoaded && noPhone}
+                  primary={true}
+                  register={register}
+                  inputProps={{
+                    defaultChecked: application.additionalPhone,
+                    onChange: (e) => {
+                      if (e.target.checked) {
+                        setValue("additionalPhoneNumber", "")
+                        setValue("additionalPhoneNumberType", "")
+                      }
+                    },
+                  }}
+                  dataTestId={"app-primary-additional-phone"}
+                />
 
-              <Field
-                type="checkbox"
-                id="additionalPhone"
-                name="additionalPhone"
-                label={t("application.contact.additionalPhoneNumber")}
-                disabled={clientLoaded && noPhone}
-                primary={true}
-                register={register}
-                inputProps={{
-                  defaultChecked: application.additionalPhone,
-                  onChange: (e) => {
-                    if (e.target.checked) {
-                      setValue("additionalPhoneNumber", "")
-                      setValue("additionalPhoneNumberType", "")
-                    }
-                  },
-                }}
-                dataTestId={"app-primary-additional-phone"}
-              />
-
-              {additionalPhone && (
-                <>
-                  <PhoneField
-                    id="additionalPhoneNumber"
-                    name="additionalPhoneNumber"
-                    label={t("application.contact.yourAdditionalPhoneNumber")}
-                    required={true}
-                    caps={true}
-                    error={errors.additionalPhoneNumber}
-                    errorMessage={t("errors.phoneNumberError")}
-                    control={control}
-                    defaultValue={application.additionalPhoneNumber}
-                    controlClassName="control"
-                    dataTestId={"app-primary-additional-phone-number"}
-                  />
-                  <Select
-                    id="additionalPhoneNumberType"
-                    name="additionalPhoneNumberType"
-                    defaultValue={application.additionalPhoneNumberType}
-                    validation={{ required: true }}
-                    error={errors?.additionalPhoneNumberType}
-                    errorMessage={t("errors.phoneNumberTypeError")}
-                    register={register}
-                    controlClassName="control"
-                    placeholder={t("application.contact.phoneNumberTypes.prompt")}
-                    label={t("application.contact.phoneNumberTypes.prompt")}
-                    labelClassName={"sr-only"}
-                    options={phoneNumberKeys}
-                    keyPrefix="application.contact.phoneNumberTypes"
-                    dataTestId={"app-primary-additional-phone-number-type"}
-                  />
-                </>
-              )}
-            </div>
-
-            <div className="form-card__group border-b">
+                {additionalPhone && (
+                  <>
+                    <PhoneField
+                      id="additionalPhoneNumber"
+                      name="additionalPhoneNumber"
+                      label={t("application.contact.secondNumber")}
+                      required={true}
+                      error={errors.additionalPhoneNumber}
+                      errorMessage={t("errors.phoneNumberError")}
+                      control={control}
+                      defaultValue={application.additionalPhoneNumber}
+                      controlClassName="control"
+                      dataTestId={"app-primary-additional-phone-number"}
+                      subNote={t("application.contact.number.subNote")}
+                    />
+                    <Select
+                      id="additionalPhoneNumberType"
+                      name="additionalPhoneNumberType"
+                      defaultValue={application.additionalPhoneNumberType}
+                      validation={{ required: true }}
+                      error={errors?.additionalPhoneNumberType}
+                      errorMessage={t("errors.phoneNumberTypeError")}
+                      register={register}
+                      controlClassName="control"
+                      label={t("application.contact.phoneNumberTypes.prompt")}
+                      options={phoneNumberKeys}
+                      keyPrefix="application.contact.phoneNumberTypes"
+                      dataTestId={"app-primary-additional-phone-number-type"}
+                    />
+                  </>
+                )}
+              </fieldset>
+            </CardSection>
+            <CardSection divider={"inset"}>
               <fieldset>
                 <legend
                   className={`text__caps-spaced ${errors.applicant?.address ? "text-alert" : ""}`}
                 >
-                  {t("application.contact.address")}
+                  {t("application.contact.yourAddress")}
                 </legend>
 
                 <p className="field-note mb-4">
@@ -297,7 +294,6 @@ const ApplicationAddress = () => {
                   id="addressStreet"
                   name="applicant.address.street"
                   label={t("application.contact.streetAddress")}
-                  placeholder={t("application.contact.streetAddress")}
                   defaultValue={application.applicant.address.street}
                   validation={{ required: true, maxLength: 64 }}
                   errorMessage={
@@ -314,7 +310,6 @@ const ApplicationAddress = () => {
                   id="addressStreet2"
                   name="applicant.address.street2"
                   label={t("application.contact.apt")}
-                  placeholder={t("application.contact.apt")}
                   defaultValue={application.applicant.address.street2}
                   register={register}
                   dataTestId={"app-primary-address-street2"}
@@ -327,8 +322,7 @@ const ApplicationAddress = () => {
                   <Field
                     id="addressCity"
                     name="applicant.address.city"
-                    label={t("application.contact.cityName")}
-                    placeholder={t("application.contact.cityName")}
+                    label={t("application.contact.city")}
                     defaultValue={application.applicant.address.city}
                     validation={{ required: true, maxLength: 64 }}
                     errorMessage={
@@ -363,7 +357,6 @@ const ApplicationAddress = () => {
                   id="addressZipCode"
                   name="applicant.address.zipCode"
                   label={t("application.contact.zip")}
-                  placeholder={t("application.contact.zipCode")}
                   defaultValue={application.applicant.address.zipCode}
                   validation={{ required: true, maxLength: 64 }}
                   errorMessage={
@@ -388,10 +381,10 @@ const ApplicationAddress = () => {
                   dataTestId={"app-primary-send-to-mailing"}
                 />
               </fieldset>
-            </div>
+            </CardSection>
 
             {clientLoaded && (sendMailToMailingAddress || application.sendMailToMailingAddress) && (
-              <div className="form-card__group border-b">
+              <CardSection divider={"inset"}>
                 <fieldset>
                   <legend className="text__caps-spaced">
                     {t("application.contact.mailingAddress")}
@@ -404,7 +397,7 @@ const ApplicationAddress = () => {
                   <Field
                     id="mailingAddressStreet"
                     name="mailingAddress.street"
-                    placeholder={t("application.contact.streetAddress")}
+                    label={t("application.contact.streetAddress")}
                     defaultValue={application.mailingAddress.street}
                     validation={{ required: true, maxLength: 64 }}
                     error={errors.mailingAddress?.street}
@@ -421,7 +414,6 @@ const ApplicationAddress = () => {
                     id="mailingAddressStreet2"
                     name="mailingAddress.street2"
                     label={t("application.contact.apt")}
-                    placeholder={t("application.contact.apt")}
                     defaultValue={application.mailingAddress.street2}
                     register={register}
                     dataTestId={"app-primary-mailing-address-street2"}
@@ -434,8 +426,7 @@ const ApplicationAddress = () => {
                     <Field
                       id="mailingAddressCity"
                       name="mailingAddress.city"
-                      label={t("application.contact.cityName")}
-                      placeholder={t("application.contact.cityName")}
+                      label={t("application.contact.city")}
                       defaultValue={application.mailingAddress.city}
                       validation={{ required: true, maxLength: 64 }}
                       error={errors.mailingAddress?.city}
@@ -472,7 +463,6 @@ const ApplicationAddress = () => {
                     id="mailingAddressZipCode"
                     name="mailingAddress.zipCode"
                     label={t("application.contact.zip")}
-                    placeholder={t("application.contact.zipCode")}
                     defaultValue={application.mailingAddress.zipCode}
                     validation={{ required: true, maxLength: 64 }}
                     error={errors.mailingAddress?.zipCode}
@@ -485,9 +475,10 @@ const ApplicationAddress = () => {
                     dataTestId={"app-primary-mailing-address-zip"}
                   />
                 </fieldset>
-              </div>
+              </CardSection>
             )}
-            <div className="form-card__group border-b">
+
+            <CardSection divider={"inset"}>
               <fieldset>
                 <legend
                   className={`text__caps-spaced ${errors?.contactPreferences ? "text-alert" : ""}`}
@@ -505,9 +496,9 @@ const ApplicationAddress = () => {
                   dataTestId={"app-primary-contact-preference"}
                 />
               </fieldset>
-            </div>
+            </CardSection>
 
-            <div className="form-card__group">
+            <CardSection>
               <fieldset>
                 <legend
                   className={`text__caps-spaced ${
@@ -568,7 +559,6 @@ const ApplicationAddress = () => {
                     <Field
                       id="workAddressStreet"
                       name="applicant.workAddress.street"
-                      placeholder={t("application.contact.streetAddress")}
                       defaultValue={application.applicant.workAddress.street}
                       validation={{ required: true, maxLength: 64 }}
                       error={errors.applicant?.workAddress?.street}
@@ -580,14 +570,12 @@ const ApplicationAddress = () => {
                       register={register}
                       dataTestId={"app-primary-work-address-street"}
                       label={t("application.contact.streetAddress")}
-                      readerOnly={true}
                     />
 
                     <Field
                       id="workAddressStreet2"
                       name="applicant.workAddress.street2"
                       label={t("application.contact.apt")}
-                      placeholder={t("application.contact.apt")}
                       defaultValue={application.applicant.workAddress.street2}
                       register={register}
                       error={errors.applicant?.workAddress?.street2}
@@ -600,8 +588,7 @@ const ApplicationAddress = () => {
                       <Field
                         id="workAddressCity"
                         name="applicant.workAddress.city"
-                        label={t("application.contact.cityName")}
-                        placeholder={t("application.contact.cityName")}
+                        label={t("application.contact.city")}
                         defaultValue={application.applicant.workAddress.city}
                         validation={{ required: true, maxLength: 64 }}
                         error={errors.applicant?.workAddress?.city}
@@ -637,7 +624,6 @@ const ApplicationAddress = () => {
                       id="workAddressZipCode"
                       name="applicant.workAddress.zipCode"
                       label={t("application.contact.zip")}
-                      placeholder={t("application.contact.zipCode")}
                       defaultValue={application.applicant.workAddress.zipCode}
                       validation={{ required: true, maxLength: 64 }}
                       error={errors.applicant?.workAddress?.zipCode}
@@ -652,7 +638,7 @@ const ApplicationAddress = () => {
                   </fieldset>
                 </div>
               )}
-            </div>
+            </CardSection>
           </div>
 
           {verifyAddress && (
@@ -660,38 +646,8 @@ const ApplicationAddress = () => {
               {...{ foundAddress, newAddressSelected, setNewAddressSelected, setVerifyAddress }}
             />
           )}
-
-          <div className="form-card__pager">
-            <div className="form-card__pager-row primary">
-              <Button
-                styleType={AppearanceStyleType.primary}
-                onClick={() => {
-                  conductor.returnToReview = false
-                  conductor.setNavigatedBack(false)
-                }}
-                data-testid={"app-next-step-button"}
-              >
-                {t("t.next")}
-              </Button>
-            </div>
-
-            {conductor.canJumpForwardToReview() && (
-              <div className="form-card__pager-row">
-                <Button
-                  unstyled={true}
-                  className="mb-4"
-                  onClick={() => {
-                    conductor.returnToReview = true
-                    conductor.setNavigatedBack(false)
-                  }}
-                >
-                  {t("application.form.general.saveAndReturn")}
-                </Button>
-              </div>
-            )}
-          </div>
-        </Form>
-      </FormCard>
+        </ApplicationFormLayout>
+      </Form>
     </FormsLayout>
   )
 }

@@ -1,13 +1,5 @@
-import {
-  AppearanceStyleType,
-  Button,
-  Modal,
-  t,
-  Form,
-  Field,
-  emailRegex,
-  AppearanceSizeType,
-} from "@bloom-housing/ui-components"
+import { Modal, t, Form, Field, emailRegex } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
 import React, { useEffect, useMemo } from "react"
 import { useForm } from "react-hook-form"
 
@@ -16,7 +8,7 @@ export type ResendConfirmationModalProps = {
   initialEmailValue: string
   onClose: () => void
   onSubmit: (email: string) => void
-  loading: boolean
+  loadingMessage?: string
 }
 
 export type ResendConfirmationModalForm = {
@@ -26,7 +18,7 @@ export type ResendConfirmationModalForm = {
 const ResendConfirmationModal = ({
   isOpen,
   initialEmailValue,
-  loading,
+  loadingMessage,
   onClose,
   onSubmit,
 }: ResendConfirmationModalProps) => {
@@ -65,21 +57,21 @@ const ResendConfirmationModal = ({
       actions={[
         <Button
           type="button"
-          styleType={AppearanceStyleType.primary}
+          variant="primary"
           onClick={() => onFormSubmit()}
-          loading={loading}
-          size={AppearanceSizeType.small}
+          loadingMessage={loadingMessage}
+          size="sm"
         >
           {t("authentication.createAccount.resendTheEmail")}
         </Button>,
         <Button
           type="button"
-          styleType={AppearanceStyleType.alert}
+          variant="alert"
           onClick={() => {
             onClose()
             window.scrollTo(0, 0)
           }}
-          size={AppearanceSizeType.small}
+          size="sm"
         >
           {t("t.cancel")}
         </Button>,

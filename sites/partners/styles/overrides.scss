@@ -13,6 +13,14 @@
     justify-content: center;
     text-align: center;
   }
+
+  .seeds-button {
+    -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
+  }
+
+  .seeds-button[data-variant="primary"] {
+    color: white; // AG grid styling from UIC was messing up our primary button
+  }
 }
 
 .section-with-grid hgroup p {
@@ -22,6 +30,10 @@
 .grid-inset-section {
   background: var(--seeds-bg-color-surface-primary);
   padding: var(--seeds-spacer-section);
+
+  .text-heading-md {
+    margin-block-end: calc(0rem - var(--seeds-spacer-label));
+  }
 }
 
 .grid-section-row-heading {
@@ -82,7 +94,7 @@
 
 /* Override out-of-date ui-components labeling */
 :is(label, legend).text__caps-spaced {
-  /*  --text-caps-spaced-font-family: var(--bloom-font-sans); */
+/*  --text-caps-spaced-font-family: var(--bloom-font-sans); */
   --text-caps-spaced-letter-spacing: normal;
   --text-caps-spaced-font-weight: normal;
   --text-caps-spaced-margin-bottom: var(--seeds-s2);

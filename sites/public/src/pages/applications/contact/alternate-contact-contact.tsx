@@ -1,23 +1,8 @@
-/*
-1.4 - Alternate Contact
-Type of alternate contact
-*/
-import {
-  AppearanceStyleType,
-  AlertBox,
-  Button,
-  Form,
-  Field,
-  FormCard,
-  t,
-  ProgressNav,
-  emailRegex,
-  Heading,
-} from "@bloom-housing/ui-components"
-import FormsLayout from "../../../layouts/forms"
+import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { Select } from "@bloom-housing/ui-components/src/forms/Select"
-import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
+import { emailRegex, Field, Form, PhoneField, Select, t } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { Alert } from "@bloom-housing/ui-seeds"
 import {
   OnClientSide,
   PageView,
@@ -25,17 +10,17 @@ import {
   stateKeys,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
-import FormBackLink from "../../../components/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
-import { useContext, useEffect } from "react"
 import { UserStatus } from "../../../lib/constants"
+import ApplicationFormLayout from "../../../layouts/application-form"
+import FormsLayout from "../../../layouts/forms"
+import styles from "../../../layouts/application-form.module.scss"
 
 export default () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("alternateContactInfo")
   const currentPageSection = 1
 
-  /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { control, register, handleSubmit, errors } = useForm<Record<string, any>>({
     shouldFocusError: false,
@@ -66,38 +51,34 @@ export default () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard>
-        <FormBackLink
-          url={conductor.determinePreviousUrl()}
-          onClick={() => conductor.setNavigatedBack(true)}
-        />
-
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">
-            {t("application.alternateContact.contact.title")}
-          </h2>
-          <p className="field-note my-4">{t("application.alternateContact.contact.description")}</p>
-        </div>
-
-        {Object.entries(errors).length > 0 && (
-          <AlertBox type="alert" inverted closeable>
-            {t("errors.errorsToResolve")}
-          </AlertBox>
-        )}
-
-        <Form
-          id="applications-contact-alternate-contact"
-          onSubmit={handleSubmit(onSubmit, onError)}
+      <Form id="applications-contact-alternate-contact" onSubmit={handleSubmit(onSubmit, onError)}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={t("application.alternateContact.contact.title")}
+          subheading={t("application.alternateContact.contact.description")}
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: OnClientSide(),
+          }}
+          backLink={{
+            url: conductor.determinePreviousUrl(),
+          }}
+          conductor={conductor}
         >
-          <div className="form-card__group border-b">
+          {Object.entries(errors).length > 0 && (
+            <Alert
+              className={styles["message-inside-card"]}
+              variant="alert"
+              fullwidth
+              id={"application-alert-box"}
+            >
+              {t("errors.errorsToResolve")}
+            </Alert>
+          )}
+
+          <CardSection divider={"inset"}>
             <label className="text__caps-spaced" htmlFor="phoneNumber">
               {t("application.alternateContact.contact.phoneNumberFormLabel")}
             </label>
@@ -113,9 +94,10 @@ export default () => {
               control={control}
               defaultValue={application.alternateContact.phoneNumber}
               dataTestId={"app-alternate-phone-number"}
+              subNote={t("application.contact.number.subNote")}
             />
-          </div>
-          <div className="form-card__group border-b">
+          </CardSection>
+          <CardSection divider={"inset"}>
             <h3 className="text__caps-spaced">
               {t("application.alternateContact.contact.emailAddressFormLabel")}
             </h3>
@@ -124,7 +106,6 @@ export default () => {
               name="emailAddress"
               label={t("application.alternateContact.contact.emailAddressFormLabel")}
               readerOnly={true}
-              placeholder={t("t.emailAddressPlaceholder")}
               defaultValue={application.alternateContact.emailAddress || null}
               register={register}
               type="email"
@@ -132,9 +113,10 @@ export default () => {
               error={errors.emailAddress}
               errorMessage={t("errors.emailAddressError")}
               dataTestId={"app-alternate-email"}
+              subNote={"example@mail.com"}
             />
-          </div>
-          <div className="form-card__group">
+          </CardSection>
+          <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className="text__caps-spaced">
                 {t("application.alternateContact.contact.contactMailingAddressLabel")}
@@ -146,7 +128,6 @@ export default () => {
                 id="mailingAddress.street"
                 name="mailingAddress.street"
                 label={t("application.contact.streetAddress")}
-                placeholder={t("application.contact.streetAddress")}
                 defaultValue={application.alternateContact.mailingAddress.street}
                 register={register}
                 dataTestId={"app-alternate-mailing-address-street"}
@@ -159,7 +140,6 @@ export default () => {
                 name="mailingAddress.street2"
                 label={t("application.contact.apt")}
                 register={register}
-                placeholder={t("application.contact.apt")}
                 dataTestId={"app-alternate-mailing-address-street2"}
                 defaultValue={application.alternateContact.mailingAddress.street2}
                 error={errors.mailingAddress?.street2}
@@ -170,8 +150,7 @@ export default () => {
                 <Field
                   id="mailingAddress.city"
                   name="mailingAddress.city"
-                  label={t("application.contact.cityName")}
-                  placeholder={t("application.contact.cityName")}
+                  label={t("application.contact.city")}
                   defaultValue={application.alternateContact.mailingAddress.city}
                   register={register}
                   dataTestId={"app-alternate-mailing-address-city"}
@@ -199,7 +178,6 @@ export default () => {
                 id="mailingAddress.zipCode"
                 name="mailingAddress.zipCode"
                 label={t("application.contact.zip")}
-                placeholder={t("application.contact.zipCode")}
                 defaultValue={application.alternateContact.mailingAddress.zipCode}
                 register={register}
                 dataTestId={"app-alternate-mailing-address-zip"}
@@ -208,38 +186,9 @@ export default () => {
                 errorMessage={t("errors.maxLength")}
               />
             </fieldset>
-          </div>
-          <div className="form-card__pager">
-            <div className="form-card__pager-row primary">
-              <Button
-                styleType={AppearanceStyleType.primary}
-                onClick={() => {
-                  conductor.returnToReview = false
-                  conductor.setNavigatedBack(false)
-                }}
-                data-testid={"app-next-step-button"}
-              >
-                {t("t.next")}
-              </Button>
-            </div>
-
-            {conductor.canJumpForwardToReview() && (
-              <div className="form-card__pager-row">
-                <Button
-                  unstyled={true}
-                  className="mb-4"
-                  onClick={() => {
-                    conductor.returnToReview = true
-                    conductor.setNavigatedBack(false)
-                  }}
-                >
-                  {t("application.form.general.saveAndReturn")}
-                </Button>
-              </div>
-            )}
-          </div>
-        </Form>
-      </FormCard>
+          </CardSection>
+        </ApplicationFormLayout>
+      </Form>
     </FormsLayout>
   )
 }

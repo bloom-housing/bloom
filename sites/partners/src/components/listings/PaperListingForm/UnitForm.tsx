@@ -1,17 +1,6 @@
 import React, { useEffect, useState, useContext } from "react"
-import {
-  t,
-  Field,
-  Select,
-  AppearanceStyleType,
-  AppearanceBorderType,
-  FieldGroup,
-  Button,
-  Form,
-  numberOptions,
-  AppearanceSizeType,
-} from "@bloom-housing/ui-components"
-import { Card, FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { t, Field, Select, FieldGroup, Form, numberOptions } from "@bloom-housing/ui-components"
+import { Button, Card, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm, useWatch, useFormContext } from "react-hook-form"
 import { TempUnit } from "../../../lib/listings/formTypes"
@@ -653,9 +642,9 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
           <Button
             type="button"
             onClick={() => copyAndNew()}
-            styleType={AppearanceStyleType.secondary}
+            variant="secondary"
             className="mr-4"
-            size={AppearanceSizeType.small}
+            size="sm"
           >
             {t("t.copy")}
           </Button>
@@ -663,9 +652,9 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
           <Button
             type="button"
             onClick={() => onFormSubmit("save")}
-            styleType={AppearanceStyleType.secondary}
+            variant="secondary"
             className="mr-4 mb-4 sm:mb-0"
-            size={AppearanceSizeType.small}
+            size="sm"
           >
             {t("t.save")}
           </Button>
@@ -673,9 +662,9 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
         <Button
           type="button"
           onClick={() => onFormSubmit("saveNew")}
-          styleType={AppearanceStyleType.secondary}
+          variant="secondary"
           className="mr-4 mb-4 sm:mb-0"
-          size={AppearanceSizeType.small}
+          size="sm"
         >
           {t("t.saveNew")}
         </Button>
@@ -683,20 +672,14 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
         <Button
           type="button"
           onClick={() => onFormSubmit("saveExit")}
-          styleType={AppearanceStyleType.primary}
-          size={AppearanceSizeType.small}
-          dataTestId={"unitFormSaveAndExitButton"}
+          variant="primary"
+          size="sm"
+          id={"unitFormSaveAndExitButton"}
         >
           {t("t.saveExit")}
         </Button>
 
-        <Button
-          type="button"
-          onClick={() => onClose(false, false, null)}
-          styleType={AppearanceStyleType.secondary}
-          border={AppearanceBorderType.borderless}
-          size={AppearanceSizeType.small}
-        >
+        <Button type="button" onClick={() => onClose(false, false, null)} variant="text" size="sm">
           {t("t.cancel")}
         </Button>
       </div>
