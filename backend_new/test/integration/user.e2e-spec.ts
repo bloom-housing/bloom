@@ -24,6 +24,7 @@ describe('User Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let userService: UserService;
+  let cookies = '';
 
   const invitePartnerUserMock = jest.fn();
   const testEmailService = {
@@ -53,6 +54,23 @@ describe('User Controller Tests', () => {
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     userService = moduleFixture.get<UserService>(UserService);
     await app.init();
+
+    const storedUser = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: { isAdmin: true },
+        mfaEnabled: false,
+        confirmedAt: new Date(),
+      }),
+    });
+    const resLogIn = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({
+        email: storedUser.email,
+        password: 'abcdef',
+      } as Login)
+      .expect(201);
+
+    cookies = resLogIn.headers['set-cookie'];
   });
 
   afterAll(async () => {
@@ -78,6 +96,7 @@ describe('User Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/user/list?`)
+      .set('Cookie', cookies)
       .expect(200);
     expect(res.body.items.length).toBeGreaterThanOrEqual(2);
     const ids = res.body.items.map((item) => item.id);
@@ -113,6 +132,7 @@ describe('User Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/user/list?${query}`)
+      .set('Cookie', cookies)
       .expect(200);
     expect(res.body.items.length).toBeGreaterThanOrEqual(2);
     const ids = res.body.items.map((item) => item.id);
@@ -124,6 +144,7 @@ describe('User Controller Tests', () => {
     const id = randomUUID();
     const res = await request(app.getHttpServer())
       .get(`/user/${id}`)
+      .set('Cookie', cookies)
       .expect(404);
     expect(res.body.message).toEqual(
       `user id: ${id} was requested but not found`,
@@ -137,6 +158,7 @@ describe('User Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/user/${userA.id}`)
+      .set('Cookie', cookies)
       .expect(200);
 
     expect(res.body.id).toEqual(userA.id);
@@ -154,6 +176,7 @@ describe('User Controller Tests', () => {
         firstName: 'New User First Name',
         lastName: 'New User Last Name',
       } as UserUpdate)
+      .set('Cookie', cookies)
       .expect(200);
 
     expect(res.body.id).toEqual(userA.id);
@@ -173,6 +196,7 @@ describe('User Controller Tests', () => {
         firstName: 'New User First Name',
         lastName: 'New User Last Name',
       } as UserUpdate)
+      .set('Cookie', cookies)
       .expect(404);
 
     expect(res.body.message).toEqual(
@@ -190,6 +214,7 @@ describe('User Controller Tests', () => {
       .send({
         id: userA.id,
       } as IdDTO)
+      .set('Cookie', cookies)
       .expect(200);
 
     expect(res.body.success).toEqual(true);
@@ -202,6 +227,7 @@ describe('User Controller Tests', () => {
       .send({
         id: randomId,
       } as IdDTO)
+      .set('Cookie', cookies)
       .expect(404);
 
     expect(res.body.message).toEqual(
@@ -220,6 +246,7 @@ describe('User Controller Tests', () => {
         email: userA.email,
         appUrl: 'https://www.google.com',
       } as EmailAndAppUrl)
+      .set('Cookie', cookies)
       .expect(201);
 
     expect(res.body.success).toEqual(true);
@@ -250,6 +277,7 @@ describe('User Controller Tests', () => {
         email: userA.email,
         appUrl: 'https://www.google.com',
       } as EmailAndAppUrl)
+      .set('Cookie', cookies)
       .expect(201);
 
     expect(res.body.success).toEqual(true);
@@ -274,6 +302,7 @@ describe('User Controller Tests', () => {
         email: email,
         appUrl: 'https://www.google.com',
       } as EmailAndAppUrl)
+      .set('Cookie', cookies)
       .expect(404);
 
     expect(res.body.message).toEqual(
@@ -296,6 +325,7 @@ describe('User Controller Tests', () => {
         email: userA.email,
         appUrl: 'https://www.google.com',
       } as EmailAndAppUrl)
+      .set('Cookie', cookies)
       .expect(201);
 
     expect(res.body.success).toEqual(true);
@@ -329,6 +359,7 @@ describe('User Controller Tests', () => {
         email: userA.email,
         appUrl: 'https://www.google.com',
       } as EmailAndAppUrl)
+      .set('Cookie', cookies)
       .expect(201);
 
     expect(res.body.success).toEqual(true);
@@ -352,6 +383,7 @@ describe('User Controller Tests', () => {
         email: email,
         appUrl: 'https://www.google.com',
       } as EmailAndAppUrl)
+      .set('Cookie', cookies)
       .expect(404);
 
     expect(res.body.message).toEqual(
@@ -382,6 +414,7 @@ describe('User Controller Tests', () => {
       .send({
         token: confToken,
       } as ConfirmationRequest)
+      .set('Cookie', cookies)
       .expect(201);
 
     expect(res.body.success).toEqual(true);
@@ -424,6 +457,7 @@ describe('User Controller Tests', () => {
       .send({
         token: fakeConfToken,
       } as ConfirmationRequest)
+      .set('Cookie', cookies)
       .expect(201);
 
     expect(res.body.success).toBe(undefined);
@@ -465,6 +499,7 @@ describe('User Controller Tests', () => {
       .send({
         token: fakeConfToken,
       } as ConfirmationRequest)
+      .set('Cookie', cookies)
       .expect(201);
 
     expect(res.body.success).toBe(undefined);
@@ -523,6 +558,7 @@ describe('User Controller Tests', () => {
         email: 'publicUser@email.com',
         jurisdictions: [{ id: juris.id }],
       } as UserCreate)
+      .set('Cookie', cookies)
       .expect(201);
 
     expect(res.body.firstName).toEqual('Public User firstName');
@@ -562,6 +598,7 @@ describe('User Controller Tests', () => {
           isAdmin: true,
         },
       } as UserInvite)
+      .set('Cookie', cookies)
       .expect(201);
 
     expect(res.body.firstName).toEqual('Partner User firstName');

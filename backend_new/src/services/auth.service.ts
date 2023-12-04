@@ -22,6 +22,7 @@ import { IdDTO } from '../dtos/shared/id.dto';
 import { mapTo } from '../utilities/mapTo';
 import { Confirm } from '../dtos/auth/confirm.dto';
 import { SmsService } from './sms.service';
+import { EmailService } from './email.service';
 
 // since our local env doesn't have an https cert we can't be secure. Hosted envs should be secure
 const secure = process.env.NODE_ENV !== 'development';
@@ -57,6 +58,7 @@ export class AuthService {
     private prisma: PrismaService,
     private userService: UserService,
     private smsService: SmsService,
+    private emailService: EmailService,
   ) {}
 
   /*
@@ -230,7 +232,12 @@ export class AuthService {
     });
 
     if (dto.mfaType === MfaType.email) {
-      // TODO: email service (https://github.com/bloom-housing/bloom/pull/3607)
+      this.emailService.sendMfaCode(
+        user.jurisdictions,
+        mapTo(User, user),
+        user.email,
+        mfaCode,
+      );
     } else if (dto.mfaType === MfaType.sms) {
       await this.smsService.sendMfaCode(user.phoneNumber, mfaCode);
     }

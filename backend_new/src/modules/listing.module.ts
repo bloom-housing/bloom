@@ -8,9 +8,16 @@ import { GoogleTranslateService } from '../services/google-translate.service';
 import { ApplicationFlaggedSetModule } from './application-flagged-set.module';
 import { EmailModule } from './email.module';
 import { ConfigService } from '@nestjs/config';
+import { PermissionModule } from './permission.module';
 
 @Module({
-  imports: [PrismaModule, HttpModule, EmailModule, ApplicationFlaggedSetModule],
+  imports: [
+    PrismaModule,
+    HttpModule,
+    EmailModule,
+    ApplicationFlaggedSetModule,
+    PermissionModule,
+  ],
   controllers: [ListingController],
   providers: [
     ListingService,

@@ -120,7 +120,7 @@ export class PermissionService {
     user: User | undefined,
     type: string,
     action: string,
-    obj?: unknown,
+    obj?: any,
   ): Promise<void> {
     if (!(await this.can(user, type, action, obj))) {
       throw new ForbiddenException();

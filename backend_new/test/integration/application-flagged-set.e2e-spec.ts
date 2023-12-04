@@ -26,8 +26,12 @@ describe('Application flagged set Controller Tests', () => {
   let prisma: PrismaService;
 
   const createListing = async (): Promise<string> => {
+    const jurisData = jurisdictionFactory();
     const jurisdiction = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(),
+      data: {
+        ...jurisData,
+        name: `${jurisData.name} ${Math.floor(Math.random() * 100)}`,
+      },
     });
     const listing1 = await listingFactory(jurisdiction.id, prisma, {
       status: ListingsStatusEnum.closed,

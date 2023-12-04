@@ -14,6 +14,8 @@ import { JurisdictionService } from '../../../src/services/jurisdiction.service'
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 import { SendGridService } from '../../../src/services/sendgrid.service';
 import { User } from '../../../src/dtos/users/user.dto';
+import { PermissionService } from '../../../src/services/permission.service';
+import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
 
 describe('Testing user service', () => {
   let service: UserService;
@@ -68,6 +70,8 @@ describe('Testing user service', () => {
     fetch: jest.fn(),
   };
 
+  const canOrThrowMock = jest.fn();
+
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -86,12 +90,22 @@ describe('Testing user service', () => {
           provide: GoogleTranslateService,
           useValue: googleTranslateServiceMock,
         },
+        {
+          provide: PermissionService,
+          useValue: {
+            canOrThrow: canOrThrowMock,
+          },
+        },
       ],
     }).compile();
 
     service = module.get<UserService>(UserService);
     prisma = module.get<PrismaService>(PrismaService);
     emailService = module.get<EmailService>(EmailService);
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
   it('should return users from list() when no params are present', async () => {
@@ -750,7 +764,10 @@ describe('Testing user service', () => {
       id,
     });
 
-    await service.delete(id);
+    await service.delete(id, {
+      id: 'requestingUser id',
+      userRoles: { isAdmin: true },
+    } as unknown as User);
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
       where: {
         id,
@@ -766,6 +783,17 @@ describe('Testing user service', () => {
         userId: id,
       },
     });
+    expect(canOrThrowMock).toHaveBeenCalledWith(
+      {
+        id: 'requestingUser id',
+        userRoles: { isAdmin: true },
+      } as unknown as User,
+      'user',
+      permissionActions.delete,
+      {
+        id,
+      },
+    );
   });
 
   it('should error when trying to delete nonexistent user', async () => {
@@ -775,9 +803,13 @@ describe('Testing user service', () => {
     prisma.userAccounts.delete = jest.fn().mockResolvedValue(null);
     prisma.userRoles.delete = jest.fn().mockResolvedValue(null);
 
-    await expect(async () => await service.delete(id)).rejects.toThrowError(
-      `user id: ${id} was requested but not found`,
-    );
+    await expect(
+      async () =>
+        await service.delete(id, {
+          id: 'requestingUser id',
+          userRoles: { isAdmin: true },
+        } as unknown as User),
+    ).rejects.toThrowError(`user id: ${id} was requested but not found`);
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
       where: {
         id,
@@ -786,6 +818,7 @@ describe('Testing user service', () => {
 
     expect(prisma.userAccounts.delete).not.toHaveBeenCalled();
     expect(prisma.userRoles.delete).not.toHaveBeenCalled();
+    expect(canOrThrowMock).not.toHaveBeenCalled();
   });
 
   it('should update user without updating password or email', async () => {
@@ -799,12 +832,19 @@ describe('Testing user service', () => {
       id,
     });
 
-    await service.update({
-      id,
-      firstName: 'first name',
-      lastName: 'last name',
-      jurisdictions: [{ id: jurisId }],
-    });
+    await service.update(
+      {
+        id,
+        firstName: 'first name',
+        lastName: 'last name',
+        jurisdictions: [{ id: jurisId }],
+        agreedToTermsOfService: false,
+      },
+      {
+        id: 'requestingUser id',
+        userRoles: { isAdmin: true },
+      } as unknown as User,
+    );
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
       where: {
         id,
@@ -827,6 +867,18 @@ describe('Testing user service', () => {
         id,
       },
     });
+    expect(canOrThrowMock).toHaveBeenCalledWith(
+      {
+        id: 'requestingUser id',
+        userRoles: { isAdmin: true },
+      } as unknown as User,
+      'user',
+      permissionActions.update,
+      {
+        id,
+        jurisdictionId: jurisId,
+      },
+    );
   });
 
   it('should update user and update password', async () => {
@@ -842,14 +894,21 @@ describe('Testing user service', () => {
       id,
     });
 
-    await service.update({
-      id,
-      firstName: 'first name',
-      lastName: 'last name',
-      jurisdictions: [{ id: jurisId }],
-      password: 'new password',
-      currentPassword: 'current password',
-    });
+    await service.update(
+      {
+        id,
+        firstName: 'first name',
+        lastName: 'last name',
+        jurisdictions: [{ id: jurisId }],
+        password: 'new password',
+        currentPassword: 'current password',
+        agreedToTermsOfService: false,
+      },
+      {
+        id: 'requestingUser id',
+        userRoles: { isAdmin: true },
+      } as unknown as User,
+    );
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
       where: {
         id,
@@ -874,6 +933,18 @@ describe('Testing user service', () => {
         id,
       },
     });
+    expect(canOrThrowMock).toHaveBeenCalledWith(
+      {
+        id: 'requestingUser id',
+        userRoles: { isAdmin: true },
+      } as unknown as User,
+      'user',
+      permissionActions.update,
+      {
+        id,
+        jurisdictionId: jurisId,
+      },
+    );
   });
 
   it('should throw missing currentPassword error', async () => {
@@ -891,13 +962,20 @@ describe('Testing user service', () => {
 
     await expect(
       async () =>
-        await service.update({
-          id,
-          firstName: 'first name',
-          lastName: 'last name',
-          jurisdictions: [{ id: jurisId }],
-          password: 'new password',
-        }),
+        await service.update(
+          {
+            id,
+            firstName: 'first name',
+            lastName: 'last name',
+            jurisdictions: [{ id: jurisId }],
+            password: 'new password',
+            agreedToTermsOfService: false,
+          },
+          {
+            id: 'requestingUser id',
+            userRoles: { isAdmin: true },
+          } as unknown as User,
+        ),
     ).rejects.toThrowError(`userID ${id}: request missing currentPassword`);
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
       where: {
@@ -905,6 +983,19 @@ describe('Testing user service', () => {
       },
     });
     expect(prisma.userAccounts.update).not.toHaveBeenCalledWith();
+
+    expect(canOrThrowMock).toHaveBeenCalledWith(
+      {
+        id: 'requestingUser id',
+        userRoles: { isAdmin: true },
+      } as unknown as User,
+      'user',
+      permissionActions.update,
+      {
+        id,
+        jurisdictionId: jurisId,
+      },
+    );
   });
 
   it('should throw password mismatch error', async () => {
@@ -922,16 +1013,23 @@ describe('Testing user service', () => {
 
     await expect(
       async () =>
-        await service.update({
-          id,
-          firstName: 'first name',
-          lastName: 'last name',
-          jurisdictions: [{ id: jurisId }],
-          password: 'new password',
-          currentPassword: 'new password',
-        }),
+        await service.update(
+          {
+            id,
+            firstName: 'first name',
+            lastName: 'last name',
+            jurisdictions: [{ id: jurisId }],
+            password: 'new password',
+            currentPassword: 'new password',
+            agreedToTermsOfService: false,
+          },
+          {
+            id: 'requestingUser id',
+            userRoles: { isAdmin: true },
+          } as unknown as User,
+        ),
     ).rejects.toThrowError(
-      `userID ${id}: incoming current password doesn't match stored password`,
+      `userID ${id}: incoming password doesn't match stored password`,
     );
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
       where: {
@@ -939,6 +1037,19 @@ describe('Testing user service', () => {
       },
     });
     expect(prisma.userAccounts.update).not.toHaveBeenCalledWith();
+
+    expect(canOrThrowMock).toHaveBeenCalledWith(
+      {
+        id: 'requestingUser id',
+        userRoles: { isAdmin: true },
+      } as unknown as User,
+      'user',
+      permissionActions.update,
+      {
+        id,
+        jurisdictionId: jurisId,
+      },
+    );
   });
 
   it('should update user and email', async () => {
@@ -953,14 +1064,21 @@ describe('Testing user service', () => {
     });
     emailService.changeEmail = jest.fn();
 
-    await service.update({
-      id,
-      firstName: 'first name',
-      lastName: 'last name',
-      jurisdictions: [{ id: jurisId }],
-      newEmail: 'new@email.com',
-      appUrl: 'www.example.com',
-    });
+    await service.update(
+      {
+        id,
+        firstName: 'first name',
+        lastName: 'last name',
+        jurisdictions: [{ id: jurisId }],
+        newEmail: 'new@email.com',
+        appUrl: 'www.example.com',
+        agreedToTermsOfService: false,
+      },
+      {
+        id: 'requestingUser id',
+        userRoles: { isAdmin: true },
+      } as unknown as User,
+    );
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
       where: {
         id,
@@ -985,6 +1103,18 @@ describe('Testing user service', () => {
       },
     });
     expect(emailService.changeEmail).toHaveBeenCalled();
+    expect(canOrThrowMock).toHaveBeenCalledWith(
+      {
+        id: 'requestingUser id',
+        userRoles: { isAdmin: true },
+      } as unknown as User,
+      'user',
+      permissionActions.update,
+      {
+        id,
+        jurisdictionId: jurisId,
+      },
+    );
   });
 
   it('should error when trying to update nonexistent user', async () => {
@@ -995,12 +1125,19 @@ describe('Testing user service', () => {
 
     await expect(
       async () =>
-        await service.update({
-          id,
-          firstName: 'first name',
-          lastName: 'last name',
-          jurisdictions: [{ id: randomUUID() }],
-        }),
+        await service.update(
+          {
+            id,
+            firstName: 'first name',
+            lastName: 'last name',
+            jurisdictions: [{ id: randomUUID() }],
+            agreedToTermsOfService: false,
+          },
+          {
+            id: 'requestingUser id',
+            userRoles: { isAdmin: true },
+          } as unknown as User,
+        ),
     ).rejects.toThrowError(`user id: ${id} was requested but not found`);
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
       where: {
@@ -1009,6 +1146,8 @@ describe('Testing user service', () => {
     });
 
     expect(prisma.userAccounts.update).not.toHaveBeenCalled();
+
+    expect(canOrThrowMock).not.toHaveBeenCalledWith();
   });
 
   it('should create a partner user with no existing user present', async () => {
@@ -1035,6 +1174,11 @@ describe('Testing user service', () => {
         },
       },
       true,
+      undefined,
+      {
+        id: 'requestingUser id',
+        userRoles: { isAdmin: true },
+      } as unknown as User,
     );
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
       include: {
@@ -1064,6 +1208,17 @@ describe('Testing user service', () => {
       },
     });
     expect(emailService.invitePartnerUser).toHaveBeenCalledTimes(1);
+    expect(canOrThrowMock).toHaveBeenCalledWith(
+      {
+        id: 'requestingUser id',
+        userRoles: { isAdmin: true },
+      } as unknown as User,
+      'user',
+      permissionActions.confirm,
+      {
+        id: undefined,
+      },
+    );
   });
 
   it('should create a partner user with existing public user present', async () => {
@@ -1090,6 +1245,11 @@ describe('Testing user service', () => {
         listings: [{ id: 'listing id' }],
       },
       true,
+      undefined,
+      {
+        id: 'requestingUser id',
+        userRoles: { isAdmin: true },
+      } as unknown as User,
     );
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
       include: {
@@ -1123,6 +1283,17 @@ describe('Testing user service', () => {
         id,
       },
     });
+    expect(canOrThrowMock).toHaveBeenCalledWith(
+      {
+        id: 'requestingUser id',
+        userRoles: { isAdmin: true },
+      } as unknown as User,
+      'user',
+      permissionActions.confirm,
+      {
+        id: undefined,
+      },
+    );
   });
 
   it('should error create a partner user with existing partner user present', async () => {
@@ -1154,6 +1325,11 @@ describe('Testing user service', () => {
             listings: [{ id: 'listing id' }],
           },
           true,
+          undefined,
+          {
+            id: 'requestingUser id',
+            userRoles: { isAdmin: true },
+          } as unknown as User,
         ),
     ).rejects.toThrowError('emailInUse');
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
@@ -1168,6 +1344,17 @@ describe('Testing user service', () => {
     });
     expect(prisma.userAccounts.update).not.toHaveBeenCalled();
     expect(prisma.userAccounts.create).not.toHaveBeenCalled();
+    expect(canOrThrowMock).toHaveBeenCalledWith(
+      {
+        id: 'requestingUser id',
+        userRoles: { isAdmin: true },
+      },
+      'user',
+      permissionActions.confirm,
+      {
+        id: undefined,
+      },
+    );
   });
 
   it('should create a public user', async () => {
@@ -1199,6 +1386,11 @@ describe('Testing user service', () => {
         jurisdictions: [{ id: jurisId }],
       },
       false,
+      undefined,
+      {
+        id: 'requestingUser id',
+        userRoles: { isAdmin: true },
+      } as unknown as User,
     );
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
       include: {
@@ -1267,6 +1459,7 @@ describe('Testing user service', () => {
         id: 'application id 2',
       },
     });
+    expect(canOrThrowMock).not.toHaveBeenCalled();
   });
 
   it('should send csv export', async () => {

@@ -9,6 +9,7 @@ import { SmsModule } from './sms-module';
 import { UserModule } from './user.module';
 import { MfaStrategy } from '../passports/mfa.strategy';
 import { JwtStrategy } from '../passports/jwt.strategy';
+import { EmailModule } from './email.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { JwtStrategy } from '../passports/jwt.strategy';
     JwtModule.register({
       secret: process.env.APP_SECRET,
     }),
+    EmailModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, PermissionService, MfaStrategy, JwtStrategy],

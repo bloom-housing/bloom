@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -22,15 +23,16 @@ import { UnitAccessibilityPriorityTypeUpdate } from '../dtos/unit-accessibility-
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
+import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
+import { JwtAuthGuard } from '../guards/jwt.guard';
+import { PermissionGuard } from '../guards/permission.guard';
 
 @Controller('unitAccessibilityPriorityTypes')
 @ApiTags('unitAccessibilityPriorityTypes')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
-@ApiExtraModels(
-  UnitAccessibilityPriorityTypeCreate,
-  UnitAccessibilityPriorityTypeUpdate,
-  IdDTO,
-)
+@ApiExtraModels(IdDTO)
+@PermissionTypeDecorator('unitAccessibilityPriorityType')
+@UseGuards(JwtAuthGuard, PermissionGuard)
 export class UnitAccessibilityPriorityTypeController {
   constructor(
     private readonly unitAccessibilityPriorityTypeService: UnitAccessibilityPriorityTypeService,

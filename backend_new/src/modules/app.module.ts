@@ -15,6 +15,7 @@ import { AssetModule } from './asset.module';
 import { UserModule } from './user.module';
 import { AuthModule } from './auth.module';
 import { ApplicationFlaggedSetModule } from './application-flagged-set.module';
+// TODO: when we add afs endpoints need to add guard to it (https://github.com/bloom-housing/bloom/issues/3695)
 
 @Module({
   imports: [

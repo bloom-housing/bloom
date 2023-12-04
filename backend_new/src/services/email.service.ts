@@ -269,7 +269,6 @@ export class EmailService {
     );
   }
 
-  // TODO: connect to auth controller when it is implemented
   public async sendMfaCode(
     jurisdictionIds: IdDTO[],
     user: User,

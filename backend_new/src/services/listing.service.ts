@@ -36,6 +36,8 @@ import { ApplicationFlaggedSetService } from './application-flagged-set.service'
 import { User } from '../dtos/users/user.dto';
 import { EmailService } from './email.service';
 import { IdDTO } from '../dtos/shared/id.dto';
+import { PermissionService } from './permission.service';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
 
 export type getListingsArgs = {
   skip: number;
@@ -135,6 +137,7 @@ export class ListingService {
     private afsService: ApplicationFlaggedSetService,
     private emailService: EmailService,
     private configService: ConfigService,
+    private permissionService: PermissionService,
   ) {}
 
   /*
@@ -446,8 +449,16 @@ export class ListingService {
   /*
     creates a listing
   */
-  async create(dto: ListingCreate, user: User): Promise<Listing> {
-    // TODO: perms (https://github.com/bloom-housing/bloom/issues/3445)
+  async create(dto: ListingCreate, requestingUser: User): Promise<Listing> {
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'listing',
+      permissionActions.create,
+      {
+        jurisdictionId: dto.jurisdictions.id,
+      },
+    );
+
     const rawListing = await this.prisma.listings.create({
       include: views.details,
       data: {
@@ -691,7 +702,7 @@ export class ListingService {
         },
       });
       await this.listingApprovalNotify({
-        user,
+        user: requestingUser,
         listingInfo: { id: rawListing.id, name: rawListing.name },
         status: rawListing.status,
         approvingRoles: jurisdiction?.listingApprovalPermissions,
@@ -705,10 +716,18 @@ export class ListingService {
   /*
     deletes a listing
   */
-  async delete(id: string): Promise<SuccessDTO> {
+  async delete(id: string, requestingUser: User): Promise<SuccessDTO> {
     const storedListing = await this.findOrThrow(id);
 
-    // TODO: perms (https://github.com/bloom-housing/bloom/issues/3445)
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'listing',
+      permissionActions.delete,
+      {
+        id: storedListing.id,
+        jurisdictionId: storedListing.jurisdictionId,
+      },
+    );
 
     await this.prisma.listings.delete({
       where: {
@@ -744,10 +763,18 @@ export class ListingService {
   /*
     update a listing
   */
-  async update(dto: ListingUpdate, user: User): Promise<Listing> {
+  async update(dto: ListingUpdate, requestingUser: User): Promise<Listing> {
     const storedListing = await this.findOrThrow(dto.id, ListingViews.details);
 
-    // TODO: perms (https://github.com/bloom-housing/bloom/issues/3445)
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'listing',
+      permissionActions.update,
+      {
+        id: storedListing.id,
+        jurisdictionId: storedListing.jurisdictionId,
+      },
+    );
 
     dto.unitsAvailable =
       dto.reviewOrderType !== ReviewOrderTypeEnum.waitlist && dto.units
@@ -1002,7 +1029,7 @@ export class ListingService {
         requestedChangesUserId:
           dto.status === ListingsStatusEnum.changesRequested &&
           storedListing.status !== ListingsStatusEnum.changesRequested
-            ? user.id
+            ? requestingUser.id
             : storedListing.requestedChangesUserId,
         listingsResult: dto.listingsResult
           ? {
@@ -1026,7 +1053,7 @@ export class ListingService {
 
     if (listingApprovalPermissions?.length > 0)
       await this.listingApprovalNotify({
-        user,
+        user: requestingUser,
         listingInfo: { id: dto.id, name: dto.name },
         approvingRoles: listingApprovalPermissions,
         status: dto.status,

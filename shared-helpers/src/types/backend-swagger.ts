@@ -3450,6 +3450,11 @@ export interface ListingUpdate {
   listingUtilities?: ListingUtilities
 }
 
+export interface AmiChartQueryParams {
+  /**  */
+  jurisdictionId?: string
+}
+
 export interface AmiChartCreate {
   /**  */
   items: AmiChartItem[]
@@ -3470,33 +3475,6 @@ export interface AmiChartUpdate {
 
   /**  */
   name: string
-}
-
-export interface AmiChartQueryParams {
-  /**  */
-  jurisdictionId?: string
-}
-
-export interface ReservedCommunityTypeCreate {
-  /**  */
-  name: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  jurisdictions: IdDTO
-}
-
-export interface ReservedCommunityTypeUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  name: string
-
-  /**  */
-  description?: string
 }
 
 export interface ReservedCommunityTypeQueryParams {
@@ -3522,6 +3500,28 @@ export interface ReservedCommunityType {
 
   /**  */
   jurisdictions: IdDTO
+}
+
+export interface ReservedCommunityTypeCreate {
+  /**  */
+  name: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+export interface ReservedCommunityTypeUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+
+  /**  */
+  description?: string
 }
 
 export interface UnitTypeCreate {
@@ -3696,6 +3696,22 @@ export interface Jurisdiction {
 
   /**  */
   listingApprovalPermissions: EnumJurisdictionListingApprovalPermissions[]
+}
+
+export interface MultiselectQuestionFilterParams {
+  /**  */
+  $comparison: EnumMultiselectQuestionFilterParamsComparison
+
+  /**  */
+  jurisdiction?: string
+
+  /**  */
+  applicationSection?: MultiselectQuestionsApplicationSectionEnum
+}
+
+export interface MultiselectQuestionQueryParams {
+  /**  */
+  filter?: MultiselectQuestionFilterParams[]
 }
 
 export interface MultiselectQuestionCreate {

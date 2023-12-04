@@ -560,6 +560,7 @@ describe('Listing Controller Tests', () => {
       .send({
         id: listing.id,
       } as IdDTO)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     const listingAfterDelete = await prisma.listings.findUnique({
@@ -609,6 +610,7 @@ describe('Listing Controller Tests', () => {
     const res = await request(app.getHttpServer())
       .post('/listings')
       .send(val)
+      .set('Cookie', adminAccessToken)
       .expect(201);
     expect(res.body.name).toEqual(val.name);
   });
