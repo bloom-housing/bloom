@@ -35,9 +35,12 @@ const ApplicationPreferredUnits = () => {
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors } = useForm()
+  const { register, handleSubmit, errors, trigger } = useForm()
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    const validation = await trigger()
+    if (!validation) return
+
     const { preferredUnit } = data
 
     // save units always as an array (when is only one option, react-hook-form stores an option as string)

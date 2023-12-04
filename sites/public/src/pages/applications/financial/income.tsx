@@ -70,7 +70,7 @@ const ApplicationIncome = () => {
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, getValues, setValue } = useForm({
+  const { register, handleSubmit, errors, getValues, setValue, trigger } = useForm({
     defaultValues: {
       income: application.income,
       incomePeriod: application.incomePeriod,
@@ -78,7 +78,10 @@ const ApplicationIncome = () => {
     shouldFocusError: false,
   })
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    const validation = await trigger()
+    if (!validation) return
+
     const { income, incomePeriod } = data
     const incomeValue = income.replaceAll(",", "")
     // Commenting out validation to not have income be a blocker https://github.com/bloom-housing/bloom/issues/3675
@@ -181,12 +184,11 @@ const ApplicationIncome = () => {
             <Field
               id="income"
               name="income"
-              // TODO: Commenting out temporarily due to application issues
-              // type="currency"
+              type="currency"
               label={t("application.financial.income.prompt")}
               caps={true}
               placeholder={t("application.financial.income.placeholder")}
-              validation={{ required: true, min: 0.01 }}
+              validation={{ required: true }}
               error={errors.income}
               register={register}
               errorMessage={t("errors.numberError")}
@@ -204,8 +206,7 @@ const ApplicationIncome = () => {
                 error={errors.incomePeriod}
                 errorMessage={t("errors.selectOption")}
                 register={register}
-                // TODO: Commenting out temporarily due to application issues
-                // validation={{ required: true, min: 0.01 }}
+                validation={{ required: true }}
                 fields={incomePeriodValues}
                 dataTestId={"app-income-period"}
                 fieldGroupClassName="grid grid-cols-1"

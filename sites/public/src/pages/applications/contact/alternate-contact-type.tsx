@@ -35,10 +35,13 @@ const ApplicationAlternateContactType = () => {
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, watch } = useForm<Record<string, any>>({
+  const { register, handleSubmit, errors, watch, trigger } = useForm<Record<string, any>>({
     shouldFocusError: false,
   })
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    const validation = await trigger()
+    if (!validation) return
+
     application.alternateContact.type = data.type
     application.alternateContact.otherType = data.otherType
 

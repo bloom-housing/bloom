@@ -34,14 +34,17 @@ const ApplicationName = () => {
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, watch, errors } = useForm<Record<string, any>>({
+  const { register, handleSubmit, watch, errors, trigger } = useForm<Record<string, any>>({
     shouldFocusError: false,
     defaultValues: {
       "applicant.emailAddress": application.applicant.emailAddress,
       "applicant.noEmail": application.applicant.noEmail,
     },
   })
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    const validation = await trigger()
+    if (!validation) return
+
     if (!autofilled) {
       conductor.currentStep.save({ applicant: { ...application.applicant, ...data.applicant } })
     }

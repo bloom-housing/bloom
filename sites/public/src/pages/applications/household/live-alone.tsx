@@ -29,6 +29,7 @@ const ApplicationLiveAlone = () => {
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, register, errors, clearErrors } = useForm()
+
   const onSubmit = () => {
     conductor.sync()
     conductor.routeToNextOrReturnUrl()
