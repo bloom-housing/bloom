@@ -22,5 +22,5 @@ export class HouseholdMemberUpdate extends OmitType(HouseholdMember, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreate)
   @ApiPropertyOptional({ type: AddressCreate })
-  householdMemberWorkAddress: AddressCreate;
+  householdMemberWorkAddress?: AddressCreate;
 }

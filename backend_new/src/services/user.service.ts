@@ -635,7 +635,7 @@ export class UserService {
           .map((juris) => ({ id: juris.id }))
           .concat(dto.listings);
 
-        const res = this.prisma.userAccounts.update({
+        const res = await this.prisma.userAccounts.update({
           include: view,
           data: {
             jurisdictions: {

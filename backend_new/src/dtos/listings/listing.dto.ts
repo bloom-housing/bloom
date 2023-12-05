@@ -422,6 +422,7 @@ class Listing extends AbstractDTO {
     );
   }
 
+  // This is no longer needed and should be removed https://github.com/bloom-housing/bloom/issues/3747
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => Asset)
