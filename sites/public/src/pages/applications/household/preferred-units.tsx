@@ -1,21 +1,8 @@
-/*
-2.3.2 - Preferred Unit Size
-Applicant can designate which unit sizes they prefer
-*/
 import React, { useContext, useEffect } from "react"
-import {
-  AppearanceStyleType,
-  AlertBox,
-  Button,
-  FieldGroup,
-  Form,
-  FormCard,
-  Heading,
-  ProgressNav,
-  t,
-} from "@bloom-housing/ui-components"
-import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
+import { FieldGroup, Form, t } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { Alert } from "@bloom-housing/ui-seeds"
 import {
   createUnitTypeId,
   getUniqueUnitTypes,
@@ -24,16 +11,17 @@ import {
   pushGtmEvent,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
-import FormBackLink from "../../../components/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
+import ApplicationFormLayout from "../../../layouts/application-form"
+import FormsLayout from "../../../layouts/forms"
+import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationPreferredUnits = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("preferredUnitSize")
   const currentPageSection = 2
 
-  /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
 
@@ -73,35 +61,34 @@ const ApplicationPreferredUnits = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard>
-        <FormBackLink
-          url={conductor.determinePreviousUrl()}
-          onClick={() => conductor.setNavigatedBack(true)}
-        />
+      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={t("application.household.preferredUnit.title")}
+          subheading={t("application.household.preferredUnit.subTitle")}
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: OnClientSide(),
+          }}
+          backLink={{
+            url: conductor.determinePreviousUrl(),
+          }}
+          conductor={conductor}
+        >
+          {Object.entries(errors).length > 0 && (
+            <Alert
+              className={styles["message-inside-card"]}
+              variant="alert"
+              fullwidth
+              id={"application-alert-box"}
+            >
+              {t("errors.errorsToResolve")}
+            </Alert>
+          )}
 
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">
-            {t("application.household.preferredUnit.title")}
-          </h2>
-          <p className="mt-4 field-note">{t("application.household.preferredUnit.subTitle")}</p>
-        </div>
-
-        {Object.entries(errors).length > 0 && (
-          <AlertBox type="alert" inverted closeable>
-            {t("errors.errorsToResolve")}
-          </AlertBox>
-        )}
-
-        <Form onSubmit={handleSubmit(onSubmit, onError)}>
-          <div className="form-card__group is-borderless">
+          <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className="sr-only">{t("application.household.preferredUnit.legend")}</legend>
               <FieldGroup
@@ -118,17 +105,9 @@ const ApplicationPreferredUnits = () => {
                 dataTestId={"app-preferred-units"}
               />
             </fieldset>
-          </div>
-
-          <div className="form-card__pager">
-            <div className="form-card__pager-row primary">
-              <Button styleType={AppearanceStyleType.primary} data-testid={"app-next-step-button"}>
-                {t("t.next")}
-              </Button>
-            </div>
-          </div>
-        </Form>
-      </FormCard>
+          </CardSection>
+        </ApplicationFormLayout>
+      </Form>
     </FormsLayout>
   )
 }

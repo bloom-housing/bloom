@@ -1,5 +1,6 @@
 import React from "react"
-import { Address, Button, MultiLineAddress, t } from "@bloom-housing/ui-components"
+import { Address, MultiLineAddress, t } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
 import GeocodeService from "@mapbox/mapbox-sdk/services/geocoding"
 
 export interface FoundAddress {
@@ -26,6 +27,7 @@ export const findValidatedAddress = (
     .send()
     .then((response) => {
       const [street, city, region] = response.body.features[0].place_name.split(", ")
+      const [longitude, latitude] = response.body.features[0].geometry?.coordinates
       const regionElements = region.split(" ")
       const zipCode = regionElements[regionElements.length - 1]
 
@@ -42,6 +44,8 @@ export const findValidatedAddress = (
             city,
             state: address.state,
             zipCode,
+            longitude,
+            latitude,
           },
         })
       }
@@ -58,12 +62,19 @@ interface AddressValidationSelectionProps {
   newAddressSelected: boolean
   setVerifyAddress: React.Dispatch<React.SetStateAction<boolean>>
   setNewAddressSelected: React.Dispatch<React.SetStateAction<boolean>>
+  setVerifyAddressStep?: React.Dispatch<React.SetStateAction<number>>
 }
 
 export const AddressValidationSelection = (props: AddressValidationSelectionProps) => {
-  const { foundAddress, newAddressSelected, setNewAddressSelected, setVerifyAddress } = props
+  const {
+    foundAddress,
+    newAddressSelected,
+    setNewAddressSelected,
+    setVerifyAddress,
+    setVerifyAddressStep,
+  } = props
   return (
-    <div className="form-card__group">
+    <>
       {foundAddress.newAddress && (
         <fieldset>
           <legend className="field-note mb-4">{t("application.contact.suggestedAddress")}</legend>
@@ -125,18 +136,19 @@ export const AddressValidationSelection = (props: AddressValidationSelectionProp
               </label>
             </div>
             <Button
-              unstyled
-              className="font-alt-sans uppercase font-semibold mt-0 mr-0"
+              variant={"text"}
+              className="font-alt-sans font-semibold mt-0 mr-0"
               onClick={() => {
                 setVerifyAddress(false)
+                setVerifyAddressStep?.(0)
               }}
-              data-testid="app-edit-original-address"
+              id="app-edit-original-address"
             >
               {t("t.edit")}
             </Button>
           </div>
         </fieldset>
       )}
-    </div>
+    </>
   )
 }

@@ -1,20 +1,18 @@
 import React, { useState } from "react"
 import Markdown from "markdown-to-jsx"
-import { useForm } from "react-hook-form"
+
 import {
-  Button,
-  LinkButton,
-  AppearanceStyleType,
   Address,
   Heading,
   t,
   OrDivider,
   ContactAddress,
   Modal,
-  AppearanceSizeType,
   Form,
   FieldGroup,
 } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
+import { useForm } from "react-hook-form"
 import { downloadExternalPDF } from "../../lib/helpers"
 
 export interface PaperApplication {
@@ -86,26 +84,33 @@ const GetApplication = (props: ApplicationsProps) => {
         </p>
       )}
       {props.applicationsOpen && props.onlineApplicationURL && (
-        <>
-          {props.preview ? (
-            <Button disabled className="w-full mb-2" data-testid={"listing-view-apply-button"}>
-              {props.strings?.applyOnline ?? t("listings.apply.applyOnline")}
-            </Button>
-          ) : (
-            <LinkButton
-              styleType={AppearanceStyleType.primary}
-              className="w-full mb-2"
-              href={props.onlineApplicationURL}
-              dataTestId={"listing-view-apply-button"}
-              newTab={true}
-            >
-              {props.strings?.applyOnline ?? t("listings.apply.applyOnline")}
-            </LinkButton>
-          )}
-          <div className="text-gray-800 text-sm">
-            {props.strings?.applyOnlineMessage ?? t("listings.apply.applyOnlineMessage")}
-          </div>
-        </>
+        <div style={{ boxSizing: "border-box" }}>
+          <>
+            {props.preview ? (
+              <Button
+                variant="primary-outlined"
+                disabled
+                className="w-full mb-2"
+                id={"listing-view-apply-button"}
+              >
+                {props.strings?.applyOnline ?? t("listings.apply.applyOnline")}
+              </Button>
+            ) : (
+              <Button
+                variant="primary"
+                className="w-full mb-2"
+                href={props.onlineApplicationURL}
+                id={"listing-view-apply-button"}
+                newWindowTarget={true}
+              >
+                {props.strings?.applyOnline ?? t("listings.apply.applyOnline")}
+              </Button>
+            )}
+            <div className="text-gray-800 text-sm">
+              {props.strings?.applyOnlineMessage ?? t("listings.apply.applyOnlineMessage")}
+            </div>
+          </>
+        </div>
       )}
 
       {props.applicationsOpen && props.paperMethod && !!props.paperApplications?.length && (
@@ -115,13 +120,13 @@ const GetApplication = (props: ApplicationsProps) => {
             {props.strings?.getAPaperApplication ?? t("listings.apply.getAPaperApplication")}
           </div>
           <Button
+            variant="primary"
+            className="w-full mb-2"
             onClick={async () => {
               props.paperApplications.length === 1
                 ? await downloadExternalPDF(props.paperApplications[0].fileURL, props.listingName)
                 : setShowDownloadModal(true)
             }}
-            className={"w-full mb-2"}
-            styleType={AppearanceStyleType.primary}
           >
             {props.strings?.downloadApplication ?? t("listings.apply.downloadApplication")}
           </Button>
@@ -161,20 +166,21 @@ const GetApplication = (props: ApplicationsProps) => {
         onClose={() => setShowDownloadModal(false)}
         actions={[
           <Button
-            size={AppearanceSizeType.small}
+            variant="primary"
+            size="sm"
             onClick={async () => {
               await downloadExternalPDF(paperApplicationURL, props.listingName)
               setShowDownloadModal(false)
             }}
-            styleType={AppearanceStyleType.primary}
           >
             {t("t.download")}
           </Button>,
           <Button
+            variant="primary-outlined"
+            size="sm"
             onClick={() => {
               setShowDownloadModal(false)
             }}
-            size={AppearanceSizeType.small}
           >
             {t("t.cancel")}
           </Button>,

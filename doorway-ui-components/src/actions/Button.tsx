@@ -27,7 +27,6 @@ export interface ButtonProps extends AppearanceProps {
   transition?: boolean
   type?: "button" | "submit" | "reset"
   unstyled?: boolean
-
   isActive?: boolean
   index?: number
   label?: string

@@ -2,8 +2,6 @@ import React, { useState } from "react"
 import { useFormContext } from "react-hook-form"
 import {
   t,
-  AppearanceStyleType,
-  Button,
   Drawer,
   Dropzone,
   Field,
@@ -11,11 +9,10 @@ import {
   TableThumbnail,
   FieldGroup,
   StandardTableData,
-  AppearanceSizeType,
   Icon,
 } from "@bloom-housing/ui-components"
 import { uploadAssetAndSetData } from "../../../../lib/assets"
-import { Card, FieldValue, Grid, Heading } from "@bloom-housing/ui-seeds"
+import { Button, Card, FieldValue, Grid, Heading } from "@bloom-housing/ui-seeds"
 
 const BuildingSelectionCriteria = () => {
   const formMethods = useFormContext()
@@ -94,7 +91,7 @@ const BuildingSelectionCriteria = () => {
         content: (
           <Button
             type="button"
-            className="font-semibold uppercase text-alert my-0"
+            className="font-semibold text-alert"
             onClick={() => {
               setCloudinaryData({
                 id: "",
@@ -102,7 +99,7 @@ const BuildingSelectionCriteria = () => {
               })
               setProgressValue(0)
             }}
-            unstyled
+            variant="text"
           >
             {t("t.delete")}
           </Button>
@@ -131,25 +128,25 @@ const BuildingSelectionCriteria = () => {
       fileName: { content: listingCriteriaFile.fileId.split("/").slice(-1).join() },
       actions: {
         content: (
-          <div className="flex">
+          <div className="flex gap-3">
             <Button
               type="button"
               className="font-semibold uppercase my-0"
               onClick={() => {
                 setDrawerState(true)
               }}
-              unstyled
+              variant="text"
             >
               {t("t.edit")}
             </Button>
             <Button
               type="button"
-              className="font-semibold uppercase text-alert my-0"
+              className="font-semibold text-alert"
               onClick={() => {
                 setCloudinaryData({ ...cloudinaryData, id: "" })
                 deletePDF()
               }}
-              unstyled
+              variant="text"
             >
               {t("t.delete")}
             </Button>
@@ -166,24 +163,24 @@ const BuildingSelectionCriteria = () => {
       fileName: { content: listingCriteriaURL },
       actions: {
         content: (
-          <div className="flex">
+          <div className="flex gap-3">
             <Button
               type="button"
-              className="font-semibold uppercase"
+              className="font-semibold"
               onClick={() => {
                 setDrawerState(true)
               }}
-              unstyled
+              variant="text"
             >
               {t("t.edit")}
             </Button>
             <Button
               type="button"
-              className="font-semibold uppercase text-alert"
+              className="font-semibold text-alert"
               onClick={() => {
                 setValue("buildingSelectionCriteria", "")
               }}
-              unstyled
+              variant="text"
             >
               {t("t.delete")}
             </Button>
@@ -222,6 +219,7 @@ const BuildingSelectionCriteria = () => {
               <Button
                 id="addBuildingSelectionCriteriaButton"
                 type="button"
+                variant="primary-outlined"
                 onClick={() => {
                   setDrawerState(true)
                 }}
@@ -257,8 +255,8 @@ const BuildingSelectionCriteria = () => {
                 resetDrawerState()
               }
             }}
-            styleType={AppearanceStyleType.primary}
-            size={AppearanceSizeType.small}
+            variant="primary"
+            size="sm"
           >
             Save
           </Button>,
@@ -267,7 +265,8 @@ const BuildingSelectionCriteria = () => {
             onClick={() => {
               resetDrawerState()
             }}
-            size={AppearanceSizeType.small}
+            size="sm"
+            variant="primary-outlined"
           >
             {t("t.cancel")}
           </Button>,

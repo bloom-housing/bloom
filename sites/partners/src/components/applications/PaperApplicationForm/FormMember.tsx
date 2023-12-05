@@ -5,13 +5,11 @@ import {
   DOBField,
   Field,
   Select,
-  AppearanceStyleType,
   FieldGroup,
-  Button,
   Form,
   FormAddress,
 } from "@bloom-housing/ui-components"
-import { Card, Grid } from "@bloom-housing/ui-seeds"
+import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
 import { relationshipKeys, stateKeys } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import { YesNoAnswer } from "../../../lib/helpers"
@@ -220,13 +218,13 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
         <Button
           type="button"
           onClick={() => onFormSubmit()}
-          styleType={AppearanceStyleType.primary}
-          dataTestId={"submitAddMemberForm"}
+          variant="primary"
+          id={"submitAddMemberForm"}
         >
           {t("t.submit")}
         </Button>
 
-        <Button type="button" onClick={onClose}>
+        <Button variant="primary-outlined" type="button" onClick={onClose}>
           {t("t.cancel")}
         </Button>
       </div>

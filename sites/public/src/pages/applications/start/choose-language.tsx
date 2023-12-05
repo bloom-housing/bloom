@@ -1,23 +1,7 @@
-/*
- 0.1 - Choose Language
- Applicants are given the option to start the Application in one of a number of languages via button group. Once inside the application the applicant can use the language selection at the top of the page.
- https://github.com/bloom-housing/bloom/issues/277
- */
 import React, { useCallback, useContext, useEffect, useState } from "react"
 import axios from "axios"
 import { useRouter } from "next/router"
-import {
-  Button,
-  ImageCard,
-  LinkButton,
-  ActionBlock,
-  FormCard,
-  ProgressNav,
-  t,
-  Heading,
-  AppearanceSizeType,
-  setSiteAlertMessage,
-} from "@bloom-housing/ui-components"
+import { ImageCard, t, setSiteAlertMessage } from "@bloom-housing/ui-components"
 import {
   imageUrlFromListing,
   OnClientSide,
@@ -25,16 +9,19 @@ import {
   pushGtmEvent,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
-
+import { Language } from "@bloom-housing/backend-core/types"
+import { Heading, Icon, Button, Message } from "@bloom-housing/ui-seeds"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { faClock } from "@fortawesome/free-regular-svg-icons"
 import FormsLayout from "../../../layouts/forms"
 import {
   AppSubmissionContext,
   retrieveApplicationConfig,
 } from "../../../lib/applications/AppSubmissionContext"
-import { Language } from "@bloom-housing/backend-core/types"
 import { useGetApplicationStatusProps } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import { runtimeConfig } from "../../../lib/runtime-config"
+import ApplicationFormLayout from "../../../layouts/application-form"
+import styles from "../../../layouts/application-form.module.scss"
 
 const loadListing = async (
   backendApiBase,
@@ -63,7 +50,7 @@ const ApplicationChooseLanguage = (props: ChooseLanguageProps) => {
   const [listing, setListing] = useState(null)
   const context = useContext(AppSubmissionContext)
   const { initialStateLoaded, profile } = useContext(AuthContext)
-  const { conductor, application } = context
+  const { conductor } = context
 
   const listingId = router.query.listingId
 
@@ -98,8 +85,6 @@ const ApplicationChooseLanguage = (props: ChooseLanguageProps) => {
     }
   }, [listing, router])
 
-  const currentPageSection = 1
-
   const imageUrl = listing?.assets
     ? imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
     : ""
@@ -127,103 +112,87 @@ const ApplicationChooseLanguage = (props: ChooseLanguageProps) => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard className="overflow-hidden">
-        <div className="form-card__lead">
-          <h1 className="form-card__title is-borderless">
-            {t("application.chooseLanguage.letsGetStarted")}
-          </h1>
-        </div>
-
+      <ApplicationFormLayout
+        listingName={listing?.name}
+        heading={t("application.chooseLanguage.letsGetStarted")}
+        progressNavProps={{
+          currentPageSection: 0,
+          completedSections: 0,
+          labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+          mounted: OnClientSide(),
+        }}
+        hideBorder={true}
+      >
         {listing && (
-          <div className="form-card__group p-0 m-0">
-            <ImageCard
-              imageUrl={imageUrl}
-              statuses={[{ content: appStatusContent }]}
-              description={listing.name}
-            />
-          </div>
+          <CardSection className={"p-0"}>
+            <ImageCard imageUrl={imageUrl} description={listing.name} />
+            <Message
+              className={styles["message-inside-card"]}
+              customIcon={<Icon icon={faClock} size="md" />}
+              fullwidth
+            >
+              {appStatusContent}
+            </Message>
+          </CardSection>
         )}
 
-        <div className="form-card__pager">
-          <div className="form-card__pager-row px-4">
-            {listing?.applicationConfig.languages.length > 1 && (
-              <>
-                <div className="w-full">
-                  <Heading styleType="underlineWeighted">
-                    {t("application.chooseLanguage.chooseYourLanguage")}
-                  </Heading>
-                </div>
-                {listing.applicationConfig.languages.map((lang, index) => (
-                  <Button
-                    className="language-select mx-1 mb-2"
-                    onClick={() => {
-                      onLanguageSelect(lang)
-                    }}
-                    key={index}
-                    data-testid={"app-choose-language-button"}
-                  >
-                    {t(`applications.begin.${lang}`)}
-                  </Button>
-                ))}
-              </>
-            )}
-          </div>
-
-          {initialStateLoaded && !profile && (
+        {listing?.applicationConfig.languages.length > 1 && (
+          <CardSection divider={"flush"}>
             <>
-              <ActionBlock
-                className="border-t border-gray-450"
-                header={<Heading priority={2}>{t("account.haveAnAccount")}</Heading>}
-                subheader={t("application.chooseLanguage.signInSaveTime")}
-                background="primary-lighter"
-                actions={[
-                  <LinkButton
-                    href={`/sign-in?redirectUrl=/applications/start/choose-language&listingId=${listingId?.toString()}`}
-                    dataTestId={"app-choose-language-sign-in-button"}
-                    size={AppearanceSizeType.small}
-                  >
-                    {t("nav.signIn")}
-                  </LinkButton>,
-                ]}
-              />
-              <ActionBlock
-                className="border-t border-gray-450"
-                header={
-                  <Heading priority={2}>{t("authentication.createAccount.noAccount")}</Heading>
-                }
-                background="primary-lighter"
-                actions={[
-                  <LinkButton
-                    href={"/create-account"}
-                    dataTestId={"app-choose-language-create-account-button"}
-                    size={AppearanceSizeType.small}
-                  >
-                    {t("account.createAccount")}
-                  </LinkButton>,
-                ]}
-              />
+              <Heading priority={2} size={"lg"} className={"pb-4"}>
+                {t("application.chooseLanguage.chooseYourLanguage")}
+              </Heading>
+              {listing.applicationConfig.languages.map((lang, index) => (
+                <Button
+                  variant="primary-outlined"
+                  className="mr-2 mb-2"
+                  onClick={() => {
+                    onLanguageSelect(lang)
+                  }}
+                  key={index}
+                  id={"app-choose-language-button"}
+                >
+                  {t(`applications.begin.${lang}`)}
+                </Button>
+              ))}
             </>
-          )}
-        </div>
-      </FormCard>
+          </CardSection>
+        )}
+
+        {initialStateLoaded && !profile && (
+          <>
+            <CardSection divider={"flush"} className={"bg-primary-lighter"}>
+              <Heading priority={2} size={"2xl"} className={"pb-4"}>
+                {t("account.haveAnAccount")}
+              </Heading>
+              <p className={"pb-4"}>{t("application.chooseLanguage.signInSaveTime")}</p>
+              <Button
+                variant="primary-outlined"
+                href={`/sign-in?redirectUrl=/applications/start/choose-language&listingId=${listingId?.toString()}`}
+                id={"app-choose-language-sign-in-button"}
+                size="sm"
+              >
+                {t("nav.signIn")}
+              </Button>
+            </CardSection>
+            <CardSection divider={"flush"} className={"bg-primary-lighter"}>
+              <Heading priority={2} size={"2xl"} className={"pb-4"}>
+                {t("authentication.createAccount.noAccount")}
+              </Heading>
+              <Button
+                variant="primary-outlined"
+                href={"/create-account"}
+                id={"app-choose-language-create-account-button"}
+                size="sm"
+              >
+                {t("account.createAccount")}
+              </Button>
+            </CardSection>
+          </>
+        )}
+      </ApplicationFormLayout>
     </FormsLayout>
   )
 }
 
 export default ApplicationChooseLanguage
-
-export function getServerSideProps() {
-  const backendApiBase = runtimeConfig.getBackendApiBase()
-
-  return {
-    props: { backendApiBase: backendApiBase },
-  }
-}
