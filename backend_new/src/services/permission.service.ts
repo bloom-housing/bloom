@@ -36,15 +36,22 @@ export class PermissionService {
     if (user) {
       e = await this.addUserPermissions(e, user);
 
-      if (type === 'user' && obj?.id && !obj?.jurisdictionId) {
+      if (type === 'user' && obj?.id) {
         const accessedUser = await this.prisma.userAccounts.findUnique({
+          select: {
+            id: true,
+            jurisdictions: {
+              where: {
+                id: {
+                  in: user.jurisdictions.map((juris) => juris.id),
+                },
+              },
+            },
+            listings: true,
+            userRoles: true,
+          },
           where: {
             id: obj.id,
-          },
-          include: {
-            listings: true,
-            jurisdictions: true,
-            userRoles: true,
           },
         });
         obj.jurisdictionId = accessedUser.jurisdictions.map(
