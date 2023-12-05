@@ -143,7 +143,22 @@ export class MultiselectQuestionService {
   async update(
     incomingData: MultiselectQuestionUpdate,
   ): Promise<MultiselectQuestion> {
-    await this.findOrThrow(incomingData.id);
+    const existingMultiSelectQ = await this.findOrThrow(incomingData.id);
+
+    if (existingMultiSelectQ.jurisdictions?.length) {
+      await this.prisma.multiselectQuestions.update({
+        data: {
+          jurisdictions: {
+            disconnect: existingMultiSelectQ.jurisdictions.map((juris) => ({
+              id: juris.id,
+            })),
+          },
+        },
+        where: {
+          id: existingMultiSelectQ.id,
+        },
+      });
+    }
 
     const rawResults = await this.prisma.multiselectQuestions.update({
       data: {
@@ -187,9 +202,14 @@ export class MultiselectQuestionService {
   /*
     this will either find a record or throw a customized error
   */
-  async findOrThrow(multiselectQuestionId: string): Promise<boolean> {
+  async findOrThrow(
+    multiselectQuestionId: string,
+  ): Promise<MultiselectQuestion> {
     const multiselectQuestion =
       await this.prisma.multiselectQuestions.findFirst({
+        include: {
+          jurisdictions: true,
+        },
         where: {
           id: multiselectQuestionId,
         },
@@ -201,6 +221,6 @@ export class MultiselectQuestionService {
       );
     }
 
-    return true;
+    return mapTo(MultiselectQuestion, multiselectQuestion);
   }
 }
