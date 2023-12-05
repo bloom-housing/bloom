@@ -18,7 +18,7 @@ export const userFactory = async (optionalParams?: {
 }): Promise<Prisma.UserAccountsCreateInput> => ({
   email:
     optionalParams?.email?.toLocaleLowerCase() ||
-    `${randomNoun().toLowerCase()}@${randomAdjective().toLowerCase()}.com`,
+    `${randomNoun().toLowerCase()}${randomNoun().toLowerCase()}@${randomAdjective().toLowerCase()}.com`,
   firstName: optionalParams?.firstName || 'First',
   lastName: optionalParams?.lastName || 'Last',
   passwordHash: await passwordToHash('abcdef'),
