@@ -5,18 +5,23 @@ import {
   ApplicationSubmissionTypeEnum,
   YesNoEnum,
 } from '@prisma/client';
-import { randomInt } from 'crypto';
 import { generateConfirmationCode } from '../../src/utilities/applications-utilities';
 import { addressFactory } from './address-factory';
 import { randomNoun } from './word-generator';
+import {
+  randomBirthDay,
+  randomBirthMonth,
+  randomBirthYear,
+} from './number-generator';
 
 export const applicationFactory = (optionalParams?: {
-  househouldSize?: number;
+  householdSize?: number;
   unitTypeId?: string;
   applicant?: Prisma.ApplicantCreateWithoutApplicationsInput;
   overrides?: Prisma.ApplicationsCreateInput;
   listingId?: string;
-  householdMember?: Prisma.HouseholdMemberCreateWithoutApplicationsInput;
+  householdMember?: Prisma.HouseholdMemberCreateWithoutApplicationsInput[];
+  demographics?: Prisma.DemographicsCreateWithoutApplicationsInput;
 }): Prisma.ApplicationsCreateInput => {
   let preferredUnitTypes: Prisma.UnitTypesCreateNestedManyWithoutApplicationsInput;
   if (optionalParams?.unitTypeId) {
@@ -34,7 +39,7 @@ export const applicationFactory = (optionalParams?: {
     appUrl: '',
     status: ApplicationStatusEnum.submitted,
     submissionType: ApplicationSubmissionTypeEnum.electronical,
-    householdSize: optionalParams?.househouldSize ?? 1,
+    householdSize: optionalParams?.householdSize ?? 1,
     income: '40000',
     incomePeriod: IncomePeriodEnum.perYear,
     preferences: '{}',
@@ -47,9 +52,15 @@ export const applicationFactory = (optionalParams?: {
         }
       : undefined,
     ...optionalParams?.overrides,
+    // Question: should householdMember be plural?
     householdMember: optionalParams?.householdMember
       ? {
           create: optionalParams.householdMember,
+        }
+      : undefined,
+    demographics: optionalParams?.demographics
+      ? {
+          create: optionalParams.demographics,
         }
       : undefined,
   };
@@ -69,9 +80,9 @@ export const applicantFactory = (
     phoneNumberType: 'home',
     noPhone: false,
     workInRegion: YesNoEnum.no,
-    birthDay: `${randomInt(31) + 1}`, // no zeros
-    birthMonth: `${randomInt(12) + 1}`, // no zeros
-    birthYear: `${randomInt(80) + 1930}`,
+    birthDay: `${randomBirthDay()}`, // no zeros
+    birthMonth: `${randomBirthMonth}`, // no zeros
+    birthYear: `${randomBirthYear()}`,
     applicantAddress: {
       create: addressFactory(),
     },
