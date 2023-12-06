@@ -14,6 +14,8 @@ import { randomInt } from 'node:crypto';
 import { applicationFactory } from './seed-helpers/application-factory';
 import { translationFactory } from './seed-helpers/translation-factory';
 import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
+import { householdMemberFactoryMany } from './seed-helpers/household-member-factory';
+import { demographicsFactory } from './seed-helpers/demographic-factory';
 
 const listingStatusEnumArray = Object.values(ListingsStatusEnum);
 
@@ -70,7 +72,7 @@ export const devSeeding = async (
   await prismaClient.translations.create({
     data: translationFactory(),
   });
-  await unitTypeFactoryAll(prismaClient);
+  const unitTypes = await unitTypeFactoryAll(prismaClient);
   const amiChart = await prismaClient.amiChart.create({
     data: amiChartFactory(10, jurisdiction.id),
   });
@@ -81,6 +83,10 @@ export const devSeeding = async (
   await reservedCommunityTypeFactoryAll(jurisdiction.id, prismaClient);
 
   [...new Array(5)].map(async (_, index) => {
+    const householdMembers = await householdMemberFactoryMany(
+      Math.min(index, 6),
+    );
+    const demographics = await demographicsFactory();
     const listing = await listingFactory(jurisdiction.id, prismaClient, {
       amiChart: amiChart,
       numberOfUnits: index,
@@ -91,7 +97,14 @@ export const devSeeding = async (
         index > 0 ? multiselectQuestions.slice(0, index - 1) : [],
       applications:
         index > 1
-          ? [...new Array(index)].map(() => applicationFactory())
+          ? [...new Array(index)].map(() =>
+              applicationFactory({
+                householdSize: Math.min(index, 6),
+                unitTypeId: unitTypes[Math.min(index, 6)].id,
+                householdMember: householdMembers,
+                demographics,
+              }),
+            )
           : undefined,
     });
     await prismaClient.listings.create({
