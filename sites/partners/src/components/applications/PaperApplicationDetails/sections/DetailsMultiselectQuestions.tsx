@@ -67,64 +67,72 @@ const DetailsMultiselectQuestions = ({
                 const options = appQuestion?.options?.filter((option) => option.checked)
 
                 return options.map((option) => {
-                  const extra = option.extraData?.map((extra) => {
-                    if (extra.type === InputType.text) {
-                      let label = ""
-                      let value = extra.value
+                  const extra = option.extraData
+                    ?.sort((a, b) => {
+                      if (a.type === InputType.address) return 1
+                      if (b.type === InputType.address) return -1
+                      return 0
+                    })
+                    ?.map((extra) => {
+                      if (extra.type === InputType.text) {
+                        let label = ""
+                        let value = extra.value
 
-                      switch (extra.key) {
-                        case AddressHolder.Name:
-                          label = t(`application.preferences.options.${AddressHolder.Name}`)
-                          break
-                        case AddressHolder.Relationship:
-                          label = t(`application.preferences.options.${AddressHolder.Relationship}`)
-                          break
-                        case "geocodingVerified":
-                          label = t("application.details.preferences.passedAddressCheck")
-                          value = formatGeocodingValues(extra.value as GeocodingValues)
-                          break
-                        default:
-                          label = t("t.name")
+                        switch (extra.key) {
+                          case AddressHolder.Name:
+                            label = t(`application.preferences.options.${AddressHolder.Name}`)
+                            break
+                          case AddressHolder.Relationship:
+                            label = t(
+                              `application.preferences.options.${AddressHolder.Relationship}`
+                            )
+                            break
+                          case "geocodingVerified":
+                            label = t("application.details.preferences.passedAddressCheck")
+                            value = formatGeocodingValues(extra.value as GeocodingValues)
+                            break
+                          default:
+                            label = t("t.name")
+                        }
+
+                        return (
+                          <FieldValue className="my-5" key={extra.key} label={label}>
+                            <>{value}</>
+                          </FieldValue>
+                        )
                       }
 
-                      return (
-                        <FieldValue className="mt-5" key={extra.key} label={label}>
-                          <>{value}</>
-                        </FieldValue>
-                      )
-                    }
+                      if (extra.type === InputType.boolean)
+                        return (
+                          <FieldValue
+                            key={extra.key}
+                            label={t(`application.preferences.options.${extra.key}`, {
+                              county: listingDto?.countyCode,
+                            })}
+                          >
+                            {extra.value ? t("t.yes") : t("t.no")}
+                          </FieldValue>
+                        )
 
-                    if (extra.type === InputType.boolean)
-                      return (
-                        <FieldValue
-                          key={extra.key}
-                          label={t(`application.preferences.options.${extra.key}`, {
-                            county: listingDto?.countyCode,
-                          })}
-                        >
-                          {extra.value ? t("t.yes") : t("t.no")}
-                        </FieldValue>
-                      )
-
-                    if (extra.type === InputType.address)
-                      return (
-                        <FieldValue
-                          key={extra.key}
-                          label={t(`application.preferences.options.address`, {
-                            county: listingDto?.countyCode,
-                          })}
-                        >
-                          <Grid spacing="lg">
-                            <Grid.Row columns={3}>
-                              <DetailsAddressColumns
-                                type={AddressColsType.preferences}
-                                addressObject={extra.value as AddressCreate}
-                              />
-                            </Grid.Row>
-                          </Grid>
-                        </FieldValue>
-                      )
-                  })
+                      if (extra.type === InputType.address)
+                        return (
+                          <FieldValue
+                            key={extra.key}
+                            label={t(`application.preferences.options.address`, {
+                              county: listingDto?.countyCode,
+                            })}
+                          >
+                            <Grid spacing="lg">
+                              <Grid.Row columns={3}>
+                                <DetailsAddressColumns
+                                  type={AddressColsType.preferences}
+                                  addressObject={extra.value as AddressCreate}
+                                />
+                              </Grid.Row>
+                            </Grid>
+                          </FieldValue>
+                        )
+                    })
 
                   return (
                     <div key={option.key}>
