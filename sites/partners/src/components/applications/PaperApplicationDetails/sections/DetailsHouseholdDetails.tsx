@@ -18,7 +18,7 @@ const DetailsHouseholdDetails = () => {
     return labels
   }
 
-  const preferredUnits = sortUnitTypes(application?.preferredUnit)
+  const preferredUnits = sortUnitTypes(application?.preferredUnitTypes)
 
   return (
     <SectionWithGrid heading={t("application.review.householdDetails")} inset>

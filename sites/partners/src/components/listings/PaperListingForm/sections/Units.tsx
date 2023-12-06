@@ -11,11 +11,11 @@ import {
   StandardTableData,
 } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import UnitForm from "../UnitForm"
 import { useFormContext, useWatch } from "react-hook-form"
 import { TempUnit } from "../../../../lib/listings/formTypes"
 import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
-import { ListingReviewOrder } from "@bloom-housing/backend-core"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type UnitProps = {
@@ -107,11 +107,11 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
     () =>
       units.map((unit) => ({
         number: { content: unit.number },
-        unitType: { content: unit.unitType && t(`listings.unitTypes.${unit.unitType.name}`) },
+        unitType: { content: unit.unitTypes && t(`listings.unitTypes.${unit.unitTypes.name}`) },
         amiPercentage: { content: unit.amiPercentage },
         monthlyRent: { content: unit.monthlyRent },
         sqFeet: { content: unit.sqFeet },
-        priorityType: { content: unit.priorityType?.name },
+        priorityType: { content: unit.unitAccessibilityPriorityTypes?.name },
         action: {
           content: (
             <div className="flex">
@@ -184,14 +184,14 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
                   value: "availableUnits",
                   id: "availableUnits",
                   dataTestId: "listingAvailability.availableUnits",
-                  defaultChecked: listing?.reviewOrderType !== ListingReviewOrder.waitlist,
+                  defaultChecked: listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlist,
                 },
                 {
                   label: t("listings.waitlist.open"),
                   value: "openWaitlist",
                   id: "openWaitlist",
                   dataTestId: "listingAvailability.openWaitlist",
-                  defaultChecked: listing?.reviewOrderType === ListingReviewOrder.waitlist,
+                  defaultChecked: listing?.reviewOrderType === ReviewOrderTypeEnum.waitlist,
                 },
               ]}
             />

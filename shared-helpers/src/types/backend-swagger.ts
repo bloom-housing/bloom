@@ -277,6 +277,154 @@ export class ListingsService {
   }
 }
 
+export class ApplicationFlaggedSetsService {
+  /**
+   * List application flagged sets
+   */
+  list(
+    params: {
+      /**  */
+      page?: number
+      /**  */
+      limit?: number | "all"
+      /**  */
+      listingId: string
+      /**  */
+      view?: AfsView
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PaginatedAfs> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        listingId: params["listingId"],
+        view: params["view"],
+      }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Meta information for application flagged sets
+   */
+  meta(
+    params: {
+      /**  */
+      page?: number
+      /**  */
+      limit?: number | "all"
+      /**  */
+      listingId: string
+      /**  */
+      view?: AfsView
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<AfsMeta> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/meta"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        listingId: params["listingId"],
+        view: params["view"],
+      }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Retrieve application flagged set by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      afsId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationFlaggedSet> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/{afsId}"
+      url = url.replace("{afsId}", params["afsId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Resolve application flagged set
+   */
+  resolve(
+    params: {
+      /** requestBody */
+      body?: AfsResolve
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationFlaggedSet> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/resolve"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Trigger the duplicate check process
+   */
+  process(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/process"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Reset flagged set confirmation alert
+   */
+  resetConfirmationAlert(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/{id}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export class AmiChartsService {
   /**
    * List amiCharts
@@ -1328,7 +1476,7 @@ export class UserService {
       /**  */
       limit?: number | "all"
       /**  */
-      isPortalUser?: boolean
+      filter?: UserFilterParams[]
       /**  */
       search?: string
     } = {} as any,
@@ -1341,7 +1489,7 @@ export class UserService {
       configs.params = {
         page: params["page"],
         limit: params["limit"],
-        isPortalUser: params["isPortalUser"],
+        filter: params["filter"],
         search: params["search"],
       }
 
@@ -1626,154 +1774,6 @@ export class AuthService {
   ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/auth/confirm"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class ApplicationFlaggedSetsService {
-  /**
-   * List application flagged sets
-   */
-  list(
-    params: {
-      /**  */
-      page?: number
-      /**  */
-      limit?: number | "all"
-      /**  */
-      listingId: string
-      /**  */
-      view?: AfsView
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<PaginatedAfs> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applicationFlaggedSets"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = {
-        page: params["page"],
-        limit: params["limit"],
-        listingId: params["listingId"],
-        view: params["view"],
-      }
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Meta information for application flagged sets
-   */
-  meta(
-    params: {
-      /**  */
-      page?: number
-      /**  */
-      limit?: number | "all"
-      /**  */
-      listingId: string
-      /**  */
-      view?: AfsView
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<AfsMeta> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applicationFlaggedSets/meta"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = {
-        page: params["page"],
-        limit: params["limit"],
-        listingId: params["listingId"],
-        view: params["view"],
-      }
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Retrieve application flagged set by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      afsId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ApplicationFlaggedSet> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applicationFlaggedSets/{afsId}"
-      url = url.replace("{afsId}", params["afsId"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Resolve application flagged set
-   */
-  resolve(
-    params: {
-      /** requestBody */
-      body?: AfsResolve
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applicationFlaggedSets/resolve"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Trigger the duplicate check process
-   */
-  process(options: IRequestOptions = {}): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applicationFlaggedSets/process"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Reset flagged set confirmation alert
-   */
-  resetConfirmationAlert(
-    params: {
-      /** requestBody */
-      body?: IdDTO
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applicationFlaggedSets/{id}"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
@@ -2468,6 +2468,141 @@ export interface UnitsSummary {
   totalAvailable?: number
 }
 
+export interface UserRole {
+  /**  */
+  isAdmin?: boolean
+
+  /**  */
+  isJurisdictionalAdmin?: boolean
+
+  /**  */
+  isPartner?: boolean
+}
+
+export interface Jurisdiction {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  notificationsSignUpUrl?: string
+
+  /**  */
+  languages: LanguagesEnum[]
+
+  /**  */
+  multiselectQuestions: IdDTO[]
+
+  /**  */
+  partnerTerms?: string
+
+  /**  */
+  publicUrl: string
+
+  /**  */
+  emailFromAddress: string
+
+  /**  */
+  rentalAssistanceDefault: string
+
+  /**  */
+  enablePartnerSettings?: boolean
+
+  /**  */
+  enableGeocodingPreferences?: boolean
+
+  /**  */
+  enableAccessibilityFeatures: boolean
+
+  /**  */
+  enableUtilitiesIncluded: boolean
+
+  /**  */
+  listingApprovalPermissions: EnumJurisdictionListingApprovalPermissions[]
+}
+
+export interface User {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  passwordUpdatedAt: Date
+
+  /**  */
+  passwordValidForDays: number
+
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  email: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  listings: IdDTO[]
+
+  /**  */
+  userRoles?: UserRole
+
+  /**  */
+  language?: LanguagesEnum
+
+  /**  */
+  jurisdictions: Jurisdiction[]
+
+  /**  */
+  mfaEnabled?: boolean
+
+  /**  */
+  lastLoginAt?: Date
+
+  /**  */
+  failedLoginAttemptsCount?: number
+
+  /**  */
+  phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
+
+  /**  */
+  activeAccessToken?: string
+
+  /**  */
+  activeRefreshToken?: string
+}
+
 export interface Listing {
   /**  */
   id: string
@@ -2735,6 +2870,15 @@ export interface Listing {
 
   /**  */
   urlSlug?: string
+
+  /**  */
+  requestedChanges?: string
+
+  /**  */
+  requestedChangesDate?: Date
+
+  /**  */
+  requestedChangesUser?: User
 }
 
 export interface PaginationMeta {
@@ -2832,6 +2976,9 @@ export interface AssetCreate {
 
   /**  */
   label: string
+
+  /**  */
+  id?: string
 }
 
 export interface PaperApplicationCreate {
@@ -3163,6 +3310,12 @@ export interface ListingCreate {
   reservedCommunityTypes?: IdDTO
 
   /**  */
+  requestedChanges?: string
+
+  /**  */
+  requestedChangesDate?: Date
+
+  /**  */
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
@@ -3209,6 +3362,9 @@ export interface ListingCreate {
 
   /**  */
   listingUtilities?: ListingUtilities
+
+  /**  */
+  requestedChangesUser?: IdDTO
 }
 
 export interface ListingUpdate {
@@ -3402,6 +3558,12 @@ export interface ListingUpdate {
   reservedCommunityTypes?: IdDTO
 
   /**  */
+  requestedChanges?: string
+
+  /**  */
+  requestedChangesDate?: Date
+
+  /**  */
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
@@ -3448,370 +3610,9 @@ export interface ListingUpdate {
 
   /**  */
   listingUtilities?: ListingUtilities
-}
 
-export interface AmiChartCreate {
   /**  */
-  items: AmiChartItem[]
-
-  /**  */
-  name: string
-
-  /**  */
-  jurisdictions: IdDTO
-}
-
-export interface AmiChartUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  items: AmiChartItem[]
-
-  /**  */
-  name: string
-}
-
-export interface AmiChartQueryParams {
-  /**  */
-  jurisdictionId?: string
-}
-
-export interface ReservedCommunityTypeCreate {
-  /**  */
-  name: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  jurisdictions: IdDTO
-}
-
-export interface ReservedCommunityTypeUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  name: string
-
-  /**  */
-  description?: string
-}
-
-export interface ReservedCommunityTypeQueryParams {
-  /**  */
-  jurisdictionId?: string
-}
-
-export interface ReservedCommunityType {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  jurisdictions: IdDTO
-}
-
-export interface UnitTypeCreate {
-  /**  */
-  name: UnitTypeEnum
-
-  /**  */
-  numBedrooms: number
-}
-
-export interface UnitTypeUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  name: UnitTypeEnum
-
-  /**  */
-  numBedrooms: number
-}
-
-export interface UnitAccessibilityPriorityTypeCreate {
-  /**  */
-  name: UnitAccessibilityPriorityTypeEnum
-}
-
-export interface UnitAccessibilityPriorityTypeUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  name: UnitAccessibilityPriorityTypeEnum
-}
-
-export interface UnitRentTypeCreate {
-  /**  */
-  name: UnitRentTypeEnum
-}
-
-export interface UnitRentTypeUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  name: UnitRentTypeEnum
-}
-
-export interface JurisdictionCreate {
-  /**  */
-  name: string
-
-  /**  */
-  notificationsSignUpUrl?: string
-
-  /**  */
-  languages: LanguagesEnum[]
-
-  /**  */
-  partnerTerms?: string
-
-  /**  */
-  publicUrl: string
-
-  /**  */
-  emailFromAddress: string
-
-  /**  */
-  rentalAssistanceDefault: string
-
-  /**  */
-  enablePartnerSettings?: boolean
-
-  /**  */
-  enableGeocodingPreferences?: boolean
-
-  /**  */
-  enableAccessibilityFeatures: boolean
-
-  /**  */
-  enableUtilitiesIncluded: boolean
-
-  /**  */
-  listingApprovalPermissions: EnumJurisdictionCreateListingApprovalPermissions[]
-}
-
-export interface JurisdictionUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  name: string
-
-  /**  */
-  notificationsSignUpUrl?: string
-
-  /**  */
-  languages: LanguagesEnum[]
-
-  /**  */
-  partnerTerms?: string
-
-  /**  */
-  publicUrl: string
-
-  /**  */
-  emailFromAddress: string
-
-  /**  */
-  rentalAssistanceDefault: string
-
-  /**  */
-  enablePartnerSettings?: boolean
-
-  /**  */
-  enableGeocodingPreferences?: boolean
-
-  /**  */
-  enableAccessibilityFeatures: boolean
-
-  /**  */
-  enableUtilitiesIncluded: boolean
-
-  /**  */
-  listingApprovalPermissions: EnumJurisdictionUpdateListingApprovalPermissions[]
-}
-
-export interface Jurisdiction {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  notificationsSignUpUrl?: string
-
-  /**  */
-  languages: LanguagesEnum[]
-
-  /**  */
-  multiselectQuestions: IdDTO[]
-
-  /**  */
-  partnerTerms?: string
-
-  /**  */
-  publicUrl: string
-
-  /**  */
-  emailFromAddress: string
-
-  /**  */
-  rentalAssistanceDefault: string
-
-  /**  */
-  enablePartnerSettings?: boolean
-
-  /**  */
-  enableGeocodingPreferences?: boolean
-
-  /**  */
-  enableAccessibilityFeatures: boolean
-
-  /**  */
-  enableUtilitiesIncluded: boolean
-
-  /**  */
-  listingApprovalPermissions: EnumJurisdictionListingApprovalPermissions[]
-}
-
-export interface MultiselectQuestionCreate {
-  /**  */
-  text: string
-
-  /**  */
-  untranslatedOptOutText?: string
-
-  /**  */
-  subText?: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  links?: MultiselectLink[]
-
-  /**  */
-  jurisdictions: IdDTO[]
-
-  /**  */
-  options?: MultiselectOption[]
-
-  /**  */
-  optOutText?: string
-
-  /**  */
-  hideFromListing?: boolean
-
-  /**  */
-  applicationSection: MultiselectQuestionsApplicationSectionEnum
-}
-
-export interface MultiselectQuestionUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  text: string
-
-  /**  */
-  untranslatedOptOutText?: string
-
-  /**  */
-  subText?: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  links?: MultiselectLink[]
-
-  /**  */
-  jurisdictions: IdDTO[]
-
-  /**  */
-  options?: MultiselectOption[]
-
-  /**  */
-  optOutText?: string
-
-  /**  */
-  hideFromListing?: boolean
-
-  /**  */
-  applicationSection: MultiselectQuestionsApplicationSectionEnum
-}
-
-export interface MultiselectQuestionQueryParams {
-  /**  */
-  filter?: string[]
-}
-
-export interface MultiselectQuestionFilterParams {
-  /**  */
-  $comparison: EnumMultiselectQuestionFilterParamsComparison
-
-  /**  */
-  jurisdiction?: string
-
-  /**  */
-  applicationSection?: MultiselectQuestionsApplicationSectionEnum
-}
-
-export interface AddressInput {
-  /**  */
-  type: InputType
-
-  /**  */
-  key: string
-
-  /**  */
-  value: AddressCreate
-}
-
-export interface BooleanInput {
-  /**  */
-  type: InputType
-
-  /**  */
-  key: string
-
-  /**  */
-  value: boolean
-}
-
-export interface TextInput {
-  /**  */
-  type: InputType
-
-  /**  */
-  key: string
-
-  /**  */
-  value: string
+  requestedChangesUser?: IdDTO
 }
 
 export interface Accessibility {
@@ -4109,7 +3910,7 @@ export interface Application {
   demographics: Demographic
 
   /**  */
-  preferredUnitTypes: IdDTO[]
+  preferredUnitTypes: UnitType[]
 
   /**  */
   applicant: Applicant
@@ -4128,6 +3929,414 @@ export interface Application {
 
   /**  */
   listings: IdDTO
+}
+
+export interface ApplicationFlaggedSet {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  resolvingUser: IdDTO
+
+  /**  */
+  listing: IdDTO
+
+  /**  */
+  rule: RuleEnum
+
+  /**  */
+  ruleKey: string
+
+  /**  */
+  resolvedTime?: Date
+
+  /**  */
+  listingId: string
+
+  /**  */
+  showConfirmationAlert: boolean
+
+  /**  */
+  status: FlaggedSetStatusEnum
+
+  /**  */
+  applications: Application[]
+}
+
+export interface ApplicationFlaggedSetPaginationMeta {
+  /**  */
+  currentPage: number
+
+  /**  */
+  itemCount: number
+
+  /**  */
+  itemsPerPage: number
+
+  /**  */
+  totalItems: number
+
+  /**  */
+  totalPages: number
+
+  /**  */
+  totalFlagged: number
+}
+
+export interface PaginatedAfs {
+  /**  */
+  items: ApplicationFlaggedSet[]
+
+  /**  */
+  meta: ApplicationFlaggedSetPaginationMeta
+}
+
+export interface AfsMeta {
+  /**  */
+  totalCount?: number
+
+  /**  */
+  totalResolvedCount?: number
+
+  /**  */
+  totalPendingCount?: number
+
+  /**  */
+  totalNamePendingCount?: number
+
+  /**  */
+  totalEmailPendingCount?: number
+}
+
+export interface AfsResolve {
+  /**  */
+  afsId: string
+
+  /**  */
+  status: FlaggedSetStatusEnum
+
+  /**  */
+  applications: IdDTO[]
+}
+
+export interface AmiChartCreate {
+  /**  */
+  items: AmiChartItem[]
+
+  /**  */
+  name: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+export interface AmiChartUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  items: AmiChartItem[]
+
+  /**  */
+  name: string
+}
+
+export interface AmiChartQueryParams {
+  /**  */
+  jurisdictionId?: string
+}
+
+export interface ReservedCommunityTypeCreate {
+  /**  */
+  name: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+export interface ReservedCommunityTypeUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+
+  /**  */
+  description?: string
+}
+
+export interface ReservedCommunityTypeQueryParams {
+  /**  */
+  jurisdictionId?: string
+}
+
+export interface ReservedCommunityType {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+export interface UnitTypeCreate {
+  /**  */
+  name: UnitTypeEnum
+
+  /**  */
+  numBedrooms: number
+}
+
+export interface UnitTypeUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  name: UnitTypeEnum
+
+  /**  */
+  numBedrooms: number
+}
+
+export interface UnitAccessibilityPriorityTypeCreate {
+  /**  */
+  name: UnitAccessibilityPriorityTypeEnum
+}
+
+export interface UnitAccessibilityPriorityTypeUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  name: UnitAccessibilityPriorityTypeEnum
+}
+
+export interface UnitRentTypeCreate {
+  /**  */
+  name: UnitRentTypeEnum
+}
+
+export interface UnitRentTypeUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  name: UnitRentTypeEnum
+}
+
+export interface JurisdictionCreate {
+  /**  */
+  name: string
+
+  /**  */
+  notificationsSignUpUrl?: string
+
+  /**  */
+  languages: LanguagesEnum[]
+
+  /**  */
+  partnerTerms?: string
+
+  /**  */
+  publicUrl: string
+
+  /**  */
+  emailFromAddress: string
+
+  /**  */
+  rentalAssistanceDefault: string
+
+  /**  */
+  enablePartnerSettings?: boolean
+
+  /**  */
+  enableGeocodingPreferences?: boolean
+
+  /**  */
+  enableAccessibilityFeatures: boolean
+
+  /**  */
+  enableUtilitiesIncluded: boolean
+
+  /**  */
+  listingApprovalPermissions: EnumJurisdictionCreateListingApprovalPermissions[]
+}
+
+export interface JurisdictionUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+
+  /**  */
+  notificationsSignUpUrl?: string
+
+  /**  */
+  languages: LanguagesEnum[]
+
+  /**  */
+  partnerTerms?: string
+
+  /**  */
+  publicUrl: string
+
+  /**  */
+  emailFromAddress: string
+
+  /**  */
+  rentalAssistanceDefault: string
+
+  /**  */
+  enablePartnerSettings?: boolean
+
+  /**  */
+  enableGeocodingPreferences?: boolean
+
+  /**  */
+  enableAccessibilityFeatures: boolean
+
+  /**  */
+  enableUtilitiesIncluded: boolean
+
+  /**  */
+  listingApprovalPermissions: EnumJurisdictionUpdateListingApprovalPermissions[]
+}
+
+export interface MultiselectQuestionCreate {
+  /**  */
+  text: string
+
+  /**  */
+  untranslatedOptOutText?: string
+
+  /**  */
+  subText?: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  links?: MultiselectLink[]
+
+  /**  */
+  jurisdictions: IdDTO[]
+
+  /**  */
+  options?: MultiselectOption[]
+
+  /**  */
+  optOutText?: string
+
+  /**  */
+  hideFromListing?: boolean
+
+  /**  */
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
+}
+
+export interface MultiselectQuestionUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  text: string
+
+  /**  */
+  untranslatedOptOutText?: string
+
+  /**  */
+  subText?: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  links?: MultiselectLink[]
+
+  /**  */
+  jurisdictions: IdDTO[]
+
+  /**  */
+  options?: MultiselectOption[]
+
+  /**  */
+  optOutText?: string
+
+  /**  */
+  hideFromListing?: boolean
+
+  /**  */
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
+}
+
+export interface MultiselectQuestionQueryParams {
+  /**  */
+  filter?: string[]
+}
+
+export interface MultiselectQuestionFilterParams {
+  /**  */
+  $comparison: EnumMultiselectQuestionFilterParamsComparison
+
+  /**  */
+  jurisdiction?: string
+
+  /**  */
+  applicationSection?: MultiselectQuestionsApplicationSectionEnum
+}
+
+export interface AddressInput {
+  /**  */
+  type: InputType
+
+  /**  */
+  key: string
+
+  /**  */
+  value: AddressCreate
+}
+
+export interface BooleanInput {
+  /**  */
+  type: InputType
+
+  /**  */
+  key: string
+
+  /**  */
+  value: boolean
+}
+
+export interface TextInput {
+  /**  */
+  type: InputType
+
+  /**  */
+  key: string
+
+  /**  */
+  value: string
 }
 
 export interface PaginatedApplication {
@@ -4271,7 +4480,7 @@ export interface HouseholdMemberUpdate {
   householdMemberAddress: AddressCreate
 
   /**  */
-  householdMemberWorkAddress: AddressCreate
+  householdMemberWorkAddress?: AddressCreate
 }
 
 export interface ApplicationCreate {
@@ -4333,9 +4542,6 @@ export interface ApplicationCreate {
   reviewStatus?: ApplicationReviewStatusEnum
 
   /**  */
-  preferredUnitTypes: IdDTO[]
-
-  /**  */
   preferences?: ApplicationMultiselectQuestion[]
 
   /**  */
@@ -4364,6 +4570,9 @@ export interface ApplicationCreate {
 
   /**  */
   householdMember: HouseholdMemberUpdate[]
+
+  /**  */
+  preferredUnitTypes: IdDTO[]
 }
 
 export interface ApplicationUpdate {
@@ -4428,9 +4637,6 @@ export interface ApplicationUpdate {
   reviewStatus?: ApplicationReviewStatusEnum
 
   /**  */
-  preferredUnitTypes: IdDTO[]
-
-  /**  */
   preferences?: ApplicationMultiselectQuestion[]
 
   /**  */
@@ -4459,6 +4665,9 @@ export interface ApplicationUpdate {
 
   /**  */
   householdMember: HouseholdMemberUpdate[]
+
+  /**  */
+  preferredUnitTypes: IdDTO[]
 }
 
 export interface CreatePresignedUploadMetadata {
@@ -4479,89 +4688,9 @@ export interface EmailAndAppUrl {
   appUrl?: string
 }
 
-export interface UserRole {
+export interface UserFilterParams {
   /**  */
-  isAdmin?: boolean
-
-  /**  */
-  isJurisdictionalAdmin?: boolean
-
-  /**  */
-  isPartner?: boolean
-}
-
-export interface User {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  passwordUpdatedAt: Date
-
-  /**  */
-  passwordValidForDays: number
-
-  /**  */
-  confirmedAt?: Date
-
-  /**  */
-  email: string
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  listings: IdDTO[]
-
-  /**  */
-  userRoles?: UserRole
-
-  /**  */
-  language?: LanguagesEnum
-
-  /**  */
-  jurisdictions: Jurisdiction[]
-
-  /**  */
-  mfaEnabled?: boolean
-
-  /**  */
-  lastLoginAt?: Date
-
-  /**  */
-  failedLoginAttemptsCount?: number
-
-  /**  */
-  phoneNumberVerified?: boolean
-
-  /**  */
-  agreedToTermsOfService: boolean
-
-  /**  */
-  hitConfirmationURL?: Date
-
-  /**  */
-  activeAccessToken?: string
-
-  /**  */
-  activeRefreshToken?: string
+  isPortalUser?: boolean
 }
 
 export interface PaginatedUser {
@@ -4770,100 +4899,6 @@ export interface Confirm {
   password?: string
 }
 
-export interface ApplicationFlaggedSet {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  resolvingUser: IdDTO
-
-  /**  */
-  listing: IdDTO
-
-  /**  */
-  rule: RuleEnum
-
-  /**  */
-  ruleKey: string
-
-  /**  */
-  resolvedTime?: Date
-
-  /**  */
-  listingId: string
-
-  /**  */
-  showConfirmationAlert: boolean
-
-  /**  */
-  status: FlaggedSetStatusEnum
-
-  /**  */
-  applications: Application[]
-}
-
-export interface ApplicationFlaggedSetPaginationMeta {
-  /**  */
-  currentPage: number
-
-  /**  */
-  itemCount: number
-
-  /**  */
-  itemsPerPage: number
-
-  /**  */
-  totalItems: number
-
-  /**  */
-  totalPages: number
-
-  /**  */
-  totalFlagged: number
-}
-
-export interface PaginatedAfs {
-  /**  */
-  items: ApplicationFlaggedSet[]
-
-  /**  */
-  meta: ApplicationFlaggedSetPaginationMeta
-}
-
-export interface AfsMeta {
-  /**  */
-  totalCount?: number
-
-  /**  */
-  totalResolvedCount?: number
-
-  /**  */
-  totalPendingCount?: number
-
-  /**  */
-  totalNamePendingCount?: number
-
-  /**  */
-  totalEmailPendingCount?: number
-}
-
-export interface AfsResolve {
-  /**  */
-  afsId: string
-
-  /**  */
-  status: FlaggedSetStatusEnum
-
-  /**  */
-  applications: IdDTO[]
-}
-
 export enum ListingViews {
   "fundamentals" = "fundamentals",
   "base" = "base",
@@ -4972,44 +5007,28 @@ export enum UnitAccessibilityPriorityTypeEnum {
   "mobilityAndVisual" = "mobilityAndVisual",
   "mobilityHearingAndVisual" = "mobilityHearingAndVisual",
 }
-export enum EnumJurisdictionCreateListingApprovalPermissions {
-  "user" = "user",
-  "partner" = "partner",
-  "admin" = "admin",
-  "jurisdictionAdmin" = "jurisdictionAdmin",
-}
-export enum EnumJurisdictionUpdateListingApprovalPermissions {
-  "user" = "user",
-  "partner" = "partner",
-  "admin" = "admin",
-  "jurisdictionAdmin" = "jurisdictionAdmin",
-}
 export enum EnumJurisdictionListingApprovalPermissions {
   "user" = "user",
   "partner" = "partner",
   "admin" = "admin",
   "jurisdictionAdmin" = "jurisdictionAdmin",
 }
-export enum EnumMultiselectQuestionFilterParamsComparison {
-  "=" = "=",
-  "<>" = "<>",
-  "IN" = "IN",
-  ">=" = ">=",
-  "<=" = "<=",
-  "NA" = "NA",
-}
-export enum InputType {
-  "boolean" = "boolean",
-  "text" = "text",
-  "address" = "address",
-  "hhMemberSelect" = "hhMemberSelect",
+export enum AfsView {
+  "pending" = "pending",
+  "pendingNameAndDoB" = "pendingNameAndDoB",
+  "pendingEmail" = "pendingEmail",
+  "resolved" = "resolved",
 }
 
-export enum ApplicationOrderByKeys {
-  "firstName" = "firstName",
-  "lastName" = "lastName",
-  "submissionDate" = "submissionDate",
-  "createdAt" = "createdAt",
+export enum RuleEnum {
+  "nameAndDOB" = "nameAndDOB",
+  "email" = "email",
+}
+
+export enum FlaggedSetStatusEnum {
+  "flagged" = "flagged",
+  "pending" = "pending",
+  "resolved" = "resolved",
 }
 
 export enum IncomePeriodEnum {
@@ -5040,25 +5059,41 @@ export enum YesNoEnum {
   "no" = "no",
 }
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput
+export enum EnumJurisdictionCreateListingApprovalPermissions {
+  "user" = "user",
+  "partner" = "partner",
+  "admin" = "admin",
+  "jurisdictionAdmin" = "jurisdictionAdmin",
+}
+export enum EnumJurisdictionUpdateListingApprovalPermissions {
+  "user" = "user",
+  "partner" = "partner",
+  "admin" = "admin",
+  "jurisdictionAdmin" = "jurisdictionAdmin",
+}
+export enum EnumMultiselectQuestionFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "<=" = "<=",
+  "NA" = "NA",
+}
+export enum InputType {
+  "boolean" = "boolean",
+  "text" = "text",
+  "address" = "address",
+  "hhMemberSelect" = "hhMemberSelect",
+}
+
+export enum ApplicationOrderByKeys {
+  "firstName" = "firstName",
+  "lastName" = "lastName",
+  "submissionDate" = "submissionDate",
+  "createdAt" = "createdAt",
+}
+
 export enum MfaType {
   "sms" = "sms",
   "email" = "email",
-}
-
-export enum AfsView {
-  "pending" = "pending",
-  "pendingNameAndDoB" = "pendingNameAndDoB",
-  "pendingEmail" = "pendingEmail",
-  "resolved" = "resolved",
-}
-
-export enum RuleEnum {
-  "nameAndDOB" = "nameAndDOB",
-  "email" = "email",
-}
-
-export enum FlaggedSetStatusEnum {
-  "flagged" = "flagged",
-  "pending" = "pending",
-  "resolved" = "resolved",
 }

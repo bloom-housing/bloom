@@ -22,15 +22,17 @@ import { useSingleFlaggedApplication } from "../../../lib/hooks"
 import Layout from "../../../layouts"
 import { getCols } from "./applicationsCols"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+// TODO: remove these when AFS logic is done
 import {
   ApplicationFlaggedSet,
-  ApplicationReviewStatus,
   EnumApplicationFlaggedSetStatus,
   EnumApplicationFlaggedSetResolveStatus,
   ApplicationFlaggedSetResolve,
+  ApplicationReviewStatus,
 } from "@bloom-housing/backend-core/types"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
 import { StatusBar } from "../../../components/shared/StatusBar"
+import { ApplicationReviewStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const Flag = () => {
   const router = useRouter()
@@ -75,8 +77,8 @@ const Flag = () => {
     if (!data || !gridApi) return
     gridApi.forEachNode((row) => {
       row.setSelected(
-        row.data.reviewStatus === ApplicationReviewStatus.pendingAndValid ||
-          row.data.reviewStatus === ApplicationReviewStatus.valid
+        row.data.reviewStatus === ApplicationReviewStatusEnum.pendingAndValid ||
+          row.data.reviewStatus === ApplicationReviewStatusEnum.valid
       )
     })
   }

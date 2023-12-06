@@ -3,8 +3,8 @@ import { t } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ApplicationContext } from "../../ApplicationContext"
 import { DetailsAddressColumns, AddressColsType } from "../DetailsAddressColumns"
-import { YesNoAnswer } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { YesNoEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const DetailsPrimaryApplicant = () => {
   const application = useContext(ApplicationContext)
@@ -82,7 +82,7 @@ const DetailsPrimaryApplicant = () => {
           {(() => {
             if (!application.applicant.workInRegion) return t("t.n/a")
 
-            return application.applicant.workInRegion === YesNoAnswer.Yes ? t("t.yes") : t("t.no")
+            return application.applicant.workInRegion === YesNoEnum.yes ? t("t.yes") : t("t.no")
           })()}
         </FieldValue>
       </Grid.Row>

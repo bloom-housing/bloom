@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   UsePipes,
@@ -44,8 +45,9 @@ export class JurisdictionController {
   })
   @ApiOkResponse({ type: Jurisdiction })
   async retrieve(
-    @Param('jurisdictionId') jurisdictionId: string,
-  ): Promise<Jurisdiction> {
+    @Param('jurisdictionId', new ParseUUIDPipe({ version: '4' }))
+    jurisdictionId: string,
+  ): Promise<Jurisdiction | null> {
     return this.jurisdictionService.findOne({ jurisdictionId });
   }
 

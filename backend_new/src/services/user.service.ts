@@ -145,7 +145,7 @@ export class UserService {
     }
 
     params.filter.forEach((filter) => {
-      if ('isPortalUser' in filter && filter['isPortalUser']) {
+      if (filter['isPortalUser']) {
         if (user?.userRoles?.isAdmin) {
           filters.push({
             OR: [
@@ -257,7 +257,7 @@ export class UserService {
     this will update a user or error if no user is found with the Id
   */
   async update(dto: UserUpdate, jurisdictionName?: string): Promise<User> {
-    const storedUser = await this.findUserOrError({ userId: dto.id }, false);
+    const storedUser = await this.findUserOrError({ userId: dto.id }, true);
 
     /*
       TODO: perm check
@@ -307,9 +307,61 @@ export class UserService {
       );
     }
 
-    const res = this.prisma.userAccounts.update({
+    // only update userRoles if something has changed
+    if (dto.userRoles && storedUser.userRoles) {
+      if (
+        !(
+          dto.userRoles.isAdmin === storedUser.userRoles.isAdmin &&
+          dto.userRoles.isJurisdictionalAdmin ===
+            storedUser.userRoles.isJurisdictionalAdmin &&
+          dto.userRoles.isPartner === storedUser.userRoles.isPartner
+        )
+      ) {
+        await this.prisma.userRoles.update({
+          data: {
+            ...dto.userRoles,
+          },
+          where: {
+            userId: storedUser.id,
+          },
+        });
+      }
+    }
+
+    // disconnect existing connected listings/jurisdictions
+    if (storedUser.listings?.length) {
+      await this.prisma.userAccounts.update({
+        data: {
+          listings: {
+            disconnect: storedUser.listings.map((listing) => ({
+              id: listing.id,
+            })),
+          },
+        },
+        where: {
+          id: dto.id,
+        },
+      });
+    }
+    if (storedUser.jurisdictions?.length) {
+      await this.prisma.userAccounts.update({
+        data: {
+          jurisdictions: {
+            disconnect: storedUser.jurisdictions.map((jurisdiction) => ({
+              id: jurisdiction.id,
+            })),
+          },
+        },
+        where: {
+          id: dto.id,
+        },
+      });
+    }
+
+    const res = await this.prisma.userAccounts.update({
       include: view,
       data: {
+        agreedToTermsOfService: dto.agreedToTermsOfService,
         passwordHash: passwordHash ?? undefined,
         passwordUpdatedAt: passwordUpdatedAt ?? undefined,
         confirmationToken: confirmationToken ?? undefined,
@@ -329,13 +381,6 @@ export class UserService {
               connect: dto.jurisdictions.map((jurisdiction) => ({
                 id: jurisdiction.id,
               })),
-            }
-          : undefined,
-        userRoles: dto.userRoles
-          ? {
-              create: {
-                ...dto.userRoles,
-              },
             }
           : undefined,
       },
@@ -590,7 +635,7 @@ export class UserService {
           .map((juris) => ({ id: juris.id }))
           .concat(dto.listings);
 
-        const res = this.prisma.userAccounts.update({
+        const res = await this.prisma.userAccounts.update({
           include: view,
           data: {
             jurisdictions: {
@@ -725,7 +770,7 @@ export class UserService {
         dto.appUrl,
       );
     } else if (forPartners) {
-      const confirmationUrl = this.getPublicConfirmationUrl(
+      const confirmationUrl = this.getPartnersConfirmationUrl(
         this.configService.get('PARTNERS_PORTAL_URL'),
         confirmationToken,
       );

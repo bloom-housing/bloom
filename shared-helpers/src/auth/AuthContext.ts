@@ -35,6 +35,7 @@ import { ApplicationFlaggedSetsService } from "@bloom-housing/backend-core"
 type ContextProps = {
   amiChartsService: AmiChartsService
   applicationsService: ApplicationsService
+  // TODO: connect this to the AFS service when that exists
   applicationFlaggedSetsService: ApplicationFlaggedSetsService
   listingsService: ListingsService
   jurisdictionsService: JurisdictionsService
@@ -201,7 +202,6 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
   const contextValues: ContextProps = {
     amiChartsService: new AmiChartsService(),
     applicationsService: new ApplicationsService(),
-    // TODO: connect this to the AFS service when that exists
     applicationFlaggedSetsService: new ApplicationFlaggedSetsService(),
     listingsService: new ListingsService(),
     jurisdictionsService: new JurisdictionsService(),

@@ -18,15 +18,18 @@ import {
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { AuthContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
-import { useForm, FormProvider } from "react-hook-form"
 import {
-  ListingStatus,
-  ListingEventType,
-  ApplicationSection,
+  Listing,
+  ListingCreate,
+  ListingEvent,
+  ListingEventsTypeEnum,
+  ListingUpdate,
+  ListingsStatusEnum,
   MultiselectQuestion,
-  User,
-  Jurisdiction,
-} from "@bloom-housing/backend-core/types"
+  MultiselectQuestionsApplicationSectionEnum,
+  Unit,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { useForm, FormProvider } from "react-hook-form"
 import {
   AlertErrorType,
   FormListing,
@@ -35,7 +38,6 @@ import {
   formDefaults,
 } from "../../../lib/listings/formTypes"
 import ListingDataPipeline from "../../../lib/listings/ListingDataPipeline"
-
 import ListingFormActions, { ListingFormActionsType } from "../ListingFormActions"
 import AdditionalDetails from "./sections/AdditionalDetails"
 import AdditionalEligibility from "./sections/AdditionalEligibility"
@@ -59,12 +61,6 @@ import { useJurisdictionalMultiselectQuestionList } from "../../../lib/hooks"
 import { StatusBar } from "../../../components/shared/StatusBar"
 import { getListingStatusTag } from "../helpers"
 import RequestChangesModal from "./RequestChangesModal"
-import {
-  Listing,
-  ListingCreate,
-  ListingUpdate,
-  MultiselectQuestionsApplicationSectionEnum,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type ListingFormProps = {
   listing?: FormListing
@@ -93,7 +89,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       listing as unknown as Listing,
       MultiselectQuestionsApplicationSectionEnum.preferences
     )?.map((listingPref) => {
-      return { ...listingPref?.multiselectQuestions } as unknown as MultiselectQuestion
+      return { ...listingPref?.multiselectQuestions }
     }) ?? []
   )
   const [programs, setPrograms] = useState<MultiselectQuestion[]>(
@@ -101,13 +97,13 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       listing as unknown as Listing,
       MultiselectQuestionsApplicationSectionEnum.programs
     )?.map((listingProg) => {
-      return { ...listingProg?.multiselectQuestions } as unknown as MultiselectQuestion
-    }) ?? []
+      return { ...listingProg?.multiselectQuestions }
+    })
   )
 
   const [latLong, setLatLong] = useState<LatitudeLongitude>({
-    latitude: listing?.buildingAddress?.latitude ?? null,
-    longitude: listing?.buildingAddress?.longitude ?? null,
+    latitude: listing?.listingsBuildingAddress?.latitude ?? null,
+    longitude: listing?.listingsBuildingAddress?.longitude ?? null,
   })
   const [customMapPositionChosen, setCustomMapPositionChosen] = useState(
     listing?.customMapPin || false
@@ -135,10 +131,10 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       setUnits(tempUnits)
     }
 
-    if (listing?.events) {
+    if (listing?.listingEvents) {
       setOpenHouseEvents(
-        listing.events
-          .filter((event) => event.type === ListingEventType.openHouse)
+        listing.listingEvents
+          .filter((event) => event.type === ListingEventsTypeEnum.openHouse)
           .map((event) => {
             return {
               ...event,
@@ -149,18 +145,18 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           .sort((a, b) => (dayjs(a.startTime).isAfter(b.startTime) ? 1 : -1))
       )
     }
-  }, [listing?.units, listing?.events, setUnits, setOpenHouseEvents])
+  }, [listing?.units, listing?.listingEvents, setUnits, setOpenHouseEvents])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getValues, setError, clearErrors, reset } = formMethods
 
   const triggerSubmitWithStatus = (
     confirm?: boolean,
-    status?: ListingStatus,
+    status?: ListingsStatusEnum,
     newData?: Partial<FormListing>
   ) => {
-    if (confirm && status === ListingStatus.active) {
-      if (listing?.status === ListingStatus.active) {
+    if (confirm && status === ListingsStatusEnum.active) {
+      if (listing?.status === ListingsStatusEnum.active) {
         setListingIsAlreadyLiveModal(true)
       } else {
         setPublishModal(true)
@@ -186,8 +182,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             programs,
             units,
             openHouseEvents,
-            //TODO: remove casting when partner site is connected to new backend
-            profile: profile as unknown as User,
+            profile: profile,
             latLong,
             customMapPositionChosen,
           })
@@ -207,16 +202,16 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           reset(formData)
 
           if (result) {
-            const getToast = (oldStatus: ListingStatus, newStatus: ListingStatus) => {
+            const getToast = (oldStatus: ListingsStatusEnum, newStatus: ListingsStatusEnum) => {
               const toasts = {
-                [ListingStatus.pendingReview]: t("listings.approval.submittedForReview"),
-                [ListingStatus.changesRequested]: t("listings.listingStatus.changesRequested"),
-                [ListingStatus.active]: t("listings.approval.listingPublished"),
-                [ListingStatus.pending]: t("listings.approval.listingUnpublished"),
-                [ListingStatus.closed]: t("listings.approval.listingClosed"),
+                [ListingsStatusEnum.pendingReview]: t("listings.approval.submittedForReview"),
+                [ListingsStatusEnum.changesRequested]: t("listings.listingStatus.changesRequested"),
+                [ListingsStatusEnum.active]: t("listings.approval.listingPublished"),
+                [ListingsStatusEnum.pending]: t("listings.approval.listingUnpublished"),
+                [ListingsStatusEnum.closed]: t("listings.approval.listingClosed"),
               }
               if (oldStatus !== newStatus) {
-                if (!listing && newStatus === ListingStatus.pending)
+                if (!listing && newStatus === ListingsStatusEnum.pending)
                   return t("listings.listingUpdated")
                 return toasts[newStatus]
               }
@@ -249,7 +244,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                       setError(fieldName, { message: errorMessage })
                     }
                   }
-                  const address = formData.buildingAddress
+                  const address = formData.listingsBuildingAddress
                   setIfEmpty(`buildingAddress.city`, address.city, readableError)
                   setIfEmpty(`buildingAddress.state`, address.state, readableError)
                   setIfEmpty(`buildingAddress.street`, address.street, readableError)
@@ -258,7 +253,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
               }
             })
             setAlert("form")
-          } else if (data.message === "email failed") {
+          } else if (data?.message === "email failed") {
             setSiteAlertMessage(t("errors.alert.listingsApprovalEmailError"), "warn")
             await router.push(`/listings/${formData.id}/`)
           } else setAlert("api")
@@ -312,10 +307,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           <Tab>Application Process</Tab>
                         </TabList>
                         <TabPanel>
-                          <ListingIntro
-                            // TODO: remove casting when partner site is connected to new backend
-                            jurisdictions={profile.jurisdictions as unknown as Jurisdiction[]}
-                          />
+                          <ListingIntro jurisdictions={profile.jurisdictions} />
                           <ListingPhotos />
                           <BuildingDetails
                             listing={listing}
@@ -341,7 +333,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             drawerButtonText={t("listings.selectPreferences")}
                             dataFetcher={useJurisdictionalMultiselectQuestionList}
                             formKey={"preference"}
-                            applicationSection={ApplicationSection.preferences}
+                            applicationSection={
+                              MultiselectQuestionsApplicationSectionEnum.preferences
+                            }
                           />
                           <SelectAndOrder
                             addText={"Add program"}
@@ -356,10 +350,10 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             drawerButtonText={"Select programs"}
                             dataFetcher={useJurisdictionalMultiselectQuestionList}
                             formKey={"program"}
-                            applicationSection={ApplicationSection.programs}
+                            applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
                           />
-                          <AdditionalFees existingUtilities={listing?.utilities} />
-                          <BuildingFeatures existingFeatures={listing?.features} />
+                          <AdditionalFees existingUtilities={listing?.listingUtilities} />
+                          <BuildingFeatures existingFeatures={listing?.listingFeatures} />
                           <AdditionalEligibility defaultText={listing?.rentalAssistance} />
                           <BuildingSelectionCriteria />
                           <AdditionalDetails />
@@ -403,10 +397,10 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         </TabPanel>
                       </Tabs>
 
-                      {listing?.status === ListingStatus.closed && (
+                      {listing?.status === ListingsStatusEnum.closed && (
                         <LotteryResults
                           submitCallback={(data) => {
-                            triggerSubmitWithStatus(false, ListingStatus.closed, data)
+                            triggerSubmitWithStatus(false, ListingsStatusEnum.closed, data)
                           }}
                           drawerState={lotteryResultsDrawer}
                           showDrawer={(toggle: boolean) => setLotteryResultsDrawer(toggle)}
@@ -443,7 +437,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             styleType={AppearanceStyleType.secondary}
             onClick={() => {
               setCloseModal(false)
-              triggerSubmitWithStatus(false, ListingStatus.closed)
+              triggerSubmitWithStatus(false, ListingsStatusEnum.closed)
             }}
             size={AppearanceSizeType.small}
           >
@@ -475,7 +469,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             styleType={AppearanceStyleType.success}
             onClick={() => {
               setPublishModal(false)
-              triggerSubmitWithStatus(false, ListingStatus.active)
+              triggerSubmitWithStatus(false, ListingsStatusEnum.active)
             }}
             size={AppearanceSizeType.small}
           >
@@ -507,7 +501,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             styleType={AppearanceStyleType.success}
             onClick={() => {
               setListingIsAlreadyLiveModal(false)
-              triggerSubmitWithStatus(false, ListingStatus.active)
+              triggerSubmitWithStatus(false, ListingsStatusEnum.active)
             }}
             size={AppearanceSizeType.small}
             dataTestId={"listingIsAlreadyLiveButton"}
@@ -540,7 +534,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             styleType={AppearanceStyleType.success}
             onClick={() => {
               setSubmitForApprovalModal(false)
-              triggerSubmitWithStatus(false, ListingStatus.pendingReview)
+              triggerSubmitWithStatus(false, ListingsStatusEnum.pendingReview)
             }}
             size={AppearanceSizeType.small}
             dataTestId={"submitForApprovalButton"}

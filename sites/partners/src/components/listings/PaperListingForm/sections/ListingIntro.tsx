@@ -3,7 +3,7 @@ import { useFormContext } from "react-hook-form"
 import { t, Field, SelectOption, Select } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { fieldMessage, fieldHasError } from "../../../../lib/helpers"
-import { Jurisdiction } from "@bloom-housing/backend-core/types"
+import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 interface ListingIntroProps {

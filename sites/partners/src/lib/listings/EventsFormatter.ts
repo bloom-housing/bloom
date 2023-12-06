@@ -3,17 +3,17 @@ import { createDate, createTime } from "../helpers"
 import {
   ListingEvent,
   ListingEventCreate,
-  ListingEventType,
-} from "@bloom-housing/backend-core/types"
+  ListingEventsTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export default class EventsFormatter extends Formatter {
   /** Process public lottery and open house events */
   process() {
-    const events: ListingEventCreate[] = this.data.events?.filter(
+    const events: ListingEventCreate[] = this.data.listingEvents?.filter(
       (event) =>
         !(
-          event?.type === ListingEventType.publicLottery ||
-          event?.type === ListingEventType.openHouse
+          event?.type === ListingEventsTypeEnum.publicLottery ||
+          event?.type === ListingEventsTypeEnum.openHouse
         )
     )
     if (
@@ -24,7 +24,7 @@ export default class EventsFormatter extends Formatter {
       this.data.reviewOrderQuestion === "reviewOrderLottery"
     ) {
       events.push({
-        type: ListingEventType.publicLottery,
+        type: ListingEventsTypeEnum.publicLottery,
         startTime: createTime(createDate(this.data.lotteryDate), this.data.lotteryStartTime),
         startDate: createTime(createDate(this.data.lotteryDate), {
           hours: "12",
@@ -39,12 +39,12 @@ export default class EventsFormatter extends Formatter {
     if (this.metadata.openHouseEvents) {
       this.metadata.openHouseEvents.forEach((event) => {
         events.push({
-          type: ListingEventType.openHouse,
+          type: ListingEventsTypeEnum.openHouse,
           ...event,
         })
       })
     }
 
-    this.data.events = events as ListingEvent[]
+    this.data.listingEvents = events as ListingEvent[]
   }
 }

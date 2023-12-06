@@ -1,4 +1,4 @@
-import { YesNoAnswer } from "../../../src/lib/helpers"
+import { YesNoEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import WaitlistFormatter from "../../../src/lib/listings/WaitlistFormatter"
 import { FormListing, FormMetadata } from "../../../src/lib/listings/formTypes"
 
@@ -8,11 +8,11 @@ const formatData = (data) => {
 }
 
 const setTrue = (data: FormListing) => {
-  data.waitlistOpenQuestion = YesNoAnswer.Yes
+  data.waitlistOpenQuestion = YesNoEnum.yes
   data.listingAvailabilityQuestion = "openWaitlist"
 }
 const setFalse = (data: FormListing) => {
-  data.waitlistOpenQuestion = YesNoAnswer.No
+  data.waitlistOpenQuestion = YesNoEnum.no
   data.listingAvailabilityQuestion = "availableUnits"
 }
 

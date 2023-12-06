@@ -11,9 +11,11 @@ import {
 } from "@bloom-housing/ui-components"
 import { Card, Grid } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
-import { ApplicationSection, MultiselectQuestion } from "@bloom-housing/backend-core/types"
 import LinkComponent from "../../../../components/core/LinkComponent"
-import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  MultiselectQuestion,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type SelectAndOrderSection = MultiselectQuestion
@@ -36,7 +38,7 @@ type SelectAndOrderProps = {
     error: any
   }
   formKey: string
-  applicationSection: ApplicationSection
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
   subNote?: string
 }
 

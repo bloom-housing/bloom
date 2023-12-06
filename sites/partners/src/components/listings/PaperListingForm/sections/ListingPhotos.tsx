@@ -12,11 +12,10 @@ import {
   Drawer,
 } from "@bloom-housing/ui-components"
 import { getUrlForListingImage, CLOUDINARY_BUILDING_LABEL } from "@bloom-housing/shared-helpers"
-
-import { cloudinaryFileUploader, fieldHasError } from "../../../../lib/helpers"
-import { ListingImage, Asset } from "@bloom-housing/backend-core"
-import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { Grid } from "@bloom-housing/ui-seeds"
+import { Asset, ListingImage } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { cloudinaryFileUploader, fieldHasError } from "../../../../lib/helpers"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const ListingPhotos = () => {
   const formMethods = useFormContext()
@@ -25,18 +24,18 @@ const ListingPhotos = () => {
   const { register, watch, errors, clearErrors } = formMethods
 
   const { fields, append, remove } = useFieldArray({
-    name: "images",
+    name: "listingImages",
   })
-  const listingFormPhotos: ListingImage[] = watch("images").sort(
-    (imageA, imageB) => imageA.ordinal - imageB.ordinal
-  )
+  const listingFormPhotos: ListingImage[] = watch("listingImages").sort((imageA, imageB) => {
+    return imageA.ordinal - imageB.ordinal
+  })
 
   const saveImageFields = (images: ListingImage[]) => {
     remove(fields.map((item, index) => index))
     images.forEach((item, index) => {
       append({
         ordinal: index,
-        image: item.image,
+        assets: item.assets,
       })
     })
   }
@@ -62,7 +61,7 @@ const ListingPhotos = () => {
       ...drawerImages,
       {
         ordinal: drawerImages.length,
-        image: { fileId: latestUpload.id, label: CLOUDINARY_BUILDING_LABEL },
+        assets: { fileId: latestUpload.id, label: CLOUDINARY_BUILDING_LABEL } as Asset,
       },
     ])
     setLatestUpload({ id: "", url: "" })
@@ -90,11 +89,11 @@ const ListingPhotos = () => {
       preview: {
         content: (
           <TableThumbnail>
-            <img src={getUrlForListingImage(image.image as Asset)} alt="" />
+            <img src={getUrlForListingImage(image.assets)} alt="" />
           </TableThumbnail>
         ),
       },
-      fileName: { content: image.image.fileId.split("/").slice(-1).join() },
+      fileName: { content: image.assets.fileId.split("/").slice(-1).join() },
       primary: {
         content: index == 0 ? t("listings.sections.photo.primaryPhoto") : "",
       },
@@ -121,7 +120,7 @@ const ListingPhotos = () => {
 
   const drawerTableRows: StandardTableData = useMemo(() => {
     return drawerImages.map((item, index) => {
-      const image = item.image as Asset
+      const image = item.assets
       return {
         ordinal: {
           content: item.ordinal + 1,
@@ -200,7 +199,7 @@ const ListingPhotos = () => {
         <span key={item.id}>
           <input
             type="hidden"
-            name={`images[${index}].image.fileId`}
+            name={`listingImages[${index}].image.fileId`}
             ref={register()}
             defaultValue={item.image.fileId}
           />
@@ -261,7 +260,7 @@ const ListingPhotos = () => {
                     newData.map((item: Record<string, StandardTableCell>, index) => {
                       const foundImage = drawerImages.find(
                         (field) =>
-                          field.image.fileId.split("/").slice(-1).join() == item.fileName.content
+                          field.assets.fileId.split("/").slice(-1).join() == item.fileName.content
                       )
                       return { ...foundImage, ordinal: index }
                     })

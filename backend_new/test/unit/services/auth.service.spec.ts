@@ -32,6 +32,7 @@ describe('Testing auth service', () => {
   let authService: AuthService;
   let smsService: SmsService;
   let prisma: PrismaService;
+  let emailService: EmailService;
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -52,6 +53,7 @@ describe('Testing auth service', () => {
     authService = module.get<AuthService>(AuthService);
     smsService = module.get<SmsService>(SmsService);
     prisma = module.get<PrismaService>(PrismaService);
+    emailService = module.get<EmailService>(EmailService);
   });
 
   it('should return a signed string when generating a new accessToken', () => {
@@ -438,6 +440,7 @@ describe('Testing auth service', () => {
 
   it('should request mfa code through email', async () => {
     const id = randomUUID();
+    emailService.sendMfaCode = jest.fn();
     prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
       id: id,
       mfaEnabled: true,
@@ -456,6 +459,11 @@ describe('Testing auth service', () => {
     });
 
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+      include: expect.objectContaining({
+        listings: true,
+        jurisdictions: true,
+        userRoles: true,
+      }),
       where: {
         email: 'example@exygy.com',
       },
@@ -499,6 +507,11 @@ describe('Testing auth service', () => {
     });
 
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+      include: expect.objectContaining({
+        listings: true,
+        jurisdictions: true,
+        userRoles: true,
+      }),
       where: {
         email: 'example@exygy.com',
       },

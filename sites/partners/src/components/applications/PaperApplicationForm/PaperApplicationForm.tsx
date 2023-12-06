@@ -12,17 +12,11 @@ import { AuthContext, listingSectionQuestions } from "@bloom-housing/shared-help
 import { useForm, FormProvider } from "react-hook-form"
 import {
   Application,
-  ApplicationStatus,
-  MultiselectQuestion,
-  ListingMultiselectQuestion,
-  Listing as OldListing,
-  HouseholdMember,
-} from "@bloom-housing/backend-core/types"
-import {
   ApplicationCreate,
   ApplicationReviewStatusEnum,
+  ApplicationStatusEnum,
   ApplicationUpdate,
-  Listing,
+  HouseholdMember,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { mapFormToApi, mapApiToForm } from "../../../lib/applications/formatApplicationData"
@@ -54,20 +48,18 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   const { listingDto } = useSingleListingData(listingId)
 
   const preferences = listingSectionQuestions(
-    listingDto as unknown as Listing,
+    listingDto,
     MultiselectQuestionsApplicationSectionEnum.preferences
   )
 
   const programs = listingSectionQuestions(
-    listingDto as unknown as Listing,
+    listingDto,
     MultiselectQuestionsApplicationSectionEnum.programs
   )
 
   const units = listingDto?.units
 
-  const defaultValues = editMode
-    ? mapApiToForm(application, listingDto as unknown as OldListing)
-    : {}
+  const defaultValues = editMode ? mapApiToForm(application, listingDto) : {}
 
   const formMethods = useForm<FormTypes>({
     defaultValues,
@@ -82,8 +74,8 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([])
 
   useEffect(() => {
-    if (application?.householdMembers) {
-      setHouseholdMembers(application.householdMembers)
+    if (application?.householdMember) {
+      setHouseholdMembers(application.householdMember)
     }
   }, [application, setHouseholdMembers])
 
@@ -124,13 +116,8 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       data: formData,
       listingId,
       editMode,
-      // TODO: removing the typing when partners is connected to the backend
-      programs: programs.map(
-        (item) => item?.multiselectQuestions
-      ) as unknown[] as MultiselectQuestion[],
-      preferences: preferences.map(
-        (item) => item?.multiselectQuestions
-      ) as unknown[] as MultiselectQuestion[],
+      programs: programs.map((item) => item?.multiselectQuestions),
+      preferences: preferences.map((item) => item?.multiselectQuestions),
     })
 
     try {
@@ -195,7 +182,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       <>
         <StatusBar>
           <Tag
-            variant={application?.status == ApplicationStatus.submitted ? "success" : "primary"}
+            variant={application?.status == ApplicationStatusEnum.submitted ? "success" : "primary"}
             size={"lg"}
           >
             {application?.status
@@ -231,22 +218,20 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
                     <FormHouseholdDetails
                       listingUnits={units}
-                      applicationUnitTypes={application?.preferredUnit}
+                      applicationUnitTypes={application?.preferredUnitTypes}
                       applicationAccessibilityFeatures={application?.accessibility}
                     />
 
-                    {/* TODO: remove the typing on programs when switching to new backend */}
                     <FormMultiselectQuestions
-                      questions={programs as unknown as ListingMultiselectQuestion[]}
+                      questions={programs}
                       applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
                       sectionTitle={t("application.details.programs")}
                     />
 
                     <FormHouseholdIncome />
 
-                    {/* TODO: remove the typing on preferences when switching to new backend */}
                     <FormMultiselectQuestions
-                      questions={preferences as unknown as ListingMultiselectQuestion[]}
+                      questions={preferences}
                       applicationSection={MultiselectQuestionsApplicationSectionEnum.preferences}
                       sectionTitle={t("application.details.preferences")}
                     />

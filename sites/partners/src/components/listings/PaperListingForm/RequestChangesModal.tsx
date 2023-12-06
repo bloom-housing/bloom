@@ -1,5 +1,4 @@
 import React from "react"
-import { ListingStatus } from "@bloom-housing/backend-core"
 import {
   AppearanceSizeType,
   AppearanceStyleType,
@@ -11,6 +10,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { FormListing } from "../../../lib/listings/formTypes"
+import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type FormFields = {
   requestedChanges: string
@@ -22,7 +22,7 @@ type RequestChangesModalProps = {
   setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>
   submitFormWithStatus: (
     confirm?: boolean,
-    status?: ListingStatus,
+    status?: ListingsStatusEnum,
     newData?: Partial<FormListing>
   ) => void
 }
@@ -51,7 +51,7 @@ const RequestChangesModal = ({
             const validation = await trigger()
             if (validation) {
               const formData = getValues()
-              submitFormWithStatus(false, ListingStatus.changesRequested, {
+              submitFormWithStatus(false, ListingsStatusEnum.changesRequested, {
                 requestedChanges: formData.requestedChanges,
                 requestedChangesDate: new Date(),
               })

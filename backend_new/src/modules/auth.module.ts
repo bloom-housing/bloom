@@ -9,6 +9,7 @@ import { SmsModule } from './sms-module';
 import { UserModule } from './user.module';
 import { MfaStrategy } from '../passports/mfa.strategy';
 import { JwtStrategy } from '../passports/jwt.strategy';
+import { EmailModule } from './email.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { JwtStrategy } from '../passports/jwt.strategy';
     UserModule,
     SmsModule,
     PassportModule,
+    EmailModule,
     JwtModule.register({
       secret: process.env.APP_SECRET,
     }),

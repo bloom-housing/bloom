@@ -15,7 +15,7 @@ describe("Jurisdictional Admin User Mangement Tests", () => {
 
     const regex = new RegExp(`${rolesArray.join("|")}`, "g")
 
-    cy.get(`.ag-center-cols-container [col-id="roles"]`).each((role) => {
+    cy.get(`.ag-center-cols-container [col-id="userRoles"]`).each((role) => {
       cy.wrap(role).contains(regex)
     })
   })
@@ -41,7 +41,7 @@ describe("Jurisdictional Admin User Mangement Tests", () => {
         ],
         [
           {
-            id: "role",
+            id: "userRoles",
             fieldKey: "role",
           },
         ],
@@ -74,7 +74,7 @@ describe("Jurisdictional Admin User Mangement Tests", () => {
         ],
         [
           {
-            id: "role",
+            id: "userRoles",
             fieldKey: "role",
           },
         ],
@@ -82,8 +82,8 @@ describe("Jurisdictional Admin User Mangement Tests", () => {
         []
       )
     })
-    cy.getByTestId("listings_Alameda").first().click()
-    cy.getByTestId("listings_Alameda").last().click()
+    cy.getByTestId("listings_Bloomington").first().click()
+    cy.getByTestId("listings_Bloomington").last().click()
     cy.getByTestId("invite-user").click()
     cy.getByTestId("alert-box").contains("Invite sent").should("have.text", "Invite sent")
   })

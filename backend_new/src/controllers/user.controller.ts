@@ -37,6 +37,7 @@ import { EmailAndAppUrl } from '../dtos/users/email-and-app-url.dto';
 import { ConfirmationRequest } from '../dtos/users/confirmation-request.dto';
 import { UserInvite } from '../dtos/users/user-invite.dto';
 import { JwtAuthGuard } from '../guards/jwt.guard';
+import { UserFilterParams } from '../dtos/users/user-filter-params.dto';
 
 @Controller('user')
 @ApiTags('user')
@@ -57,6 +58,7 @@ export class UserController {
   }
 
   @Get('/list')
+  @UseGuards(JwtAuthGuard)
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOkResponse({ type: PaginatedUserDto })
@@ -64,6 +66,7 @@ export class UserController {
     summary: 'Get a paginated set of users',
     operationId: 'list',
   })
+  @ApiExtraModels(UserFilterParams)
   async list(
     @Request() req: ExpressRequest,
     @Query() queryParams: UserQueryParams,

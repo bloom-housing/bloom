@@ -27,10 +27,8 @@ describe("Preference Management Tests", () => {
     cy.getByTestId("preference-option-description").type("Preference Option Description")
     cy.getByTestId("preference-option-link").type("https://www.example2.com")
     cy.getByTestId("preference-option-link-title").type("Preference Option Link Title")
-    cy.getByTestId("collect-address-yes").click()
     cy.getByTestId("exclusive-question-exclusive").check()
-    cy.getByTestId("preference-option-save").click()
-
+    cy.getByTestId("collect-address-yes").click()
     cy.getByTestId("validation-method-radius").click()
     cy.getByTestId("preference-option-radius-size").type("100")
     cy.getByTestId("collect-name-yes").click()
@@ -39,7 +37,7 @@ describe("Preference Management Tests", () => {
 
     cy.getByTestId("preference-opt-out-label").clear()
     cy.getByTestId("preference-opt-out-label").type("Preference Opt Out Label")
-    cy.getByTestId("preference-jurisdiction").select("Alameda")
+    cy.getByTestId("preference-jurisdiction").select("Bloomington")
     cy.getByTestId("preference-save-button").click()
     cy.getByTestId("alert-box")
       .contains("Preference Created")
@@ -76,7 +74,7 @@ describe("Preference Management Tests", () => {
 
     cy.getByTestId("preference-opt-out-label").should("have.value", "Preference Opt Out Label")
     cy.getByTestId("show-on-listing-question-yes").should("have.value", "yes")
-    cy.getByTestId("preference-jurisdiction").contains("Alameda")
+    cy.getByTestId("preference-jurisdiction").contains("Bloomington")
     cy.getByTestId("preference-save-button").click()
   })
 })

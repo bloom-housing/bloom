@@ -1,8 +1,11 @@
 import { t, formatYesNoLabel } from "@bloom-housing/ui-components"
-import { IncomePeriod, ApplicationSubmissionType } from "@bloom-housing/backend-core/types"
 import { convertDataToLocal, formatIncome } from "../../lib/helpers"
 import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
+import {
+  ApplicationSubmissionTypeEnum,
+  IncomePeriodEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 dayjs.extend(customParseFormat)
 
 function compareDates(a, b, node, nextNode, isInverted) {
@@ -52,7 +55,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
 
         const dateTime = convertDataToLocal(
           submissionDate,
-          data?.submissionType || ApplicationSubmissionType.electronical
+          data?.submissionType || ApplicationSubmissionTypeEnum.electronical
         )
 
         return `${dateTime.date} ${t("t.at")} ${dateTime.time}`
@@ -125,8 +128,8 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
 
         const { income, incomePeriod } = row.data
 
-        return incomePeriod === IncomePeriod.perYear
-          ? formatIncome(income, incomePeriod, IncomePeriod.perYear)
+        return incomePeriod === IncomePeriodEnum.perYear
+          ? formatIncome(income, incomePeriod, IncomePeriodEnum.perYear)
           : ""
       },
       comparator: compareStrings,
@@ -145,8 +148,8 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
 
         const { income, incomePeriod } = row.data
 
-        return incomePeriod === IncomePeriod.perMonth
-          ? formatIncome(income, incomePeriod, IncomePeriod.perMonth)
+        return incomePeriod === IncomePeriodEnum.perMonth
+          ? formatIncome(income, incomePeriod, IncomePeriodEnum.perMonth)
           : ""
       },
       comparator: compareStrings,

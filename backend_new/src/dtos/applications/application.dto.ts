@@ -28,6 +28,7 @@ import { Applicant } from './applicant.dto';
 import { ApplicationMultiselectQuestion } from './application-multiselect-question.dto';
 import { Demographic } from './demographic.dto';
 import { HouseholdMember } from './household-member.dto';
+import { UnitType } from '../unit-types/unit-type.dto';
 
 export class Application extends AbstractDTO {
   @Expose()
@@ -215,9 +216,9 @@ export class Application extends AbstractDTO {
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => IdDTO)
-  @ApiProperty({ type: IdDTO, isArray: true })
-  preferredUnitTypes: IdDTO[];
+  @Type(() => UnitType)
+  @ApiProperty({ type: UnitType, isArray: true })
+  preferredUnitTypes: UnitType[];
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })

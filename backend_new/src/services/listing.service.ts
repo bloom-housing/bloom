@@ -153,7 +153,6 @@ export class ListingService {
     };
   }> {
     const whereClause = this.buildWhereClause(params.filter, params.search);
-
     const count = await this.prisma.listings.count({
       where: whereClause,
     });
@@ -316,6 +315,7 @@ export class ListingService {
             $include_nulls: false,
             value: filter[ListingFilterKeys.name],
             key: ListingFilterKeys.name,
+            caseSensitive: false,
           });
           filters.push({
             OR: builtFilter.map((filt) => ({ [ListingFilterKeys.name]: filt })),
@@ -762,19 +762,39 @@ export class ListingService {
       await this.afsService.process(dto.id);
     }
 
+    // We need to save the assets before saving it to the listing_images table
+    let allAssets = [];
+    const unsavedImages = dto.listingImages?.reduce((values, value) => {
+      if (!value.assets.id) {
+        values.push(value);
+      } else {
+        allAssets.push(value);
+      }
+      return values;
+    }, []);
+
+    if (unsavedImages?.length) {
+      const assetCreates = unsavedImages.map((unsavedImage) => {
+        return this.prisma.assets.create({
+          data: unsavedImage.assets,
+        });
+      });
+      const uploadedImages = await Promise.all(assetCreates);
+      allAssets = [
+        ...allAssets,
+        ...uploadedImages.map((image, index) => {
+          return { assets: image, ordinal: unsavedImages[index].ordinal };
+        }),
+      ];
+    }
+
     const rawListing = await this.prisma.listings.update({
       data: {
         ...dto,
         id: undefined,
         createdAt: undefined,
         updatedAt: undefined,
-        assets: dto.assets
-          ? {
-              create: dto.assets.map((asset) => ({
-                ...asset,
-              })),
-            }
-          : undefined,
+        assets: dto.assets as unknown as Prisma.InputJsonArray,
         applicationMethods: dto.applicationMethods
           ? {
               create: dto.applicationMethods.map((applicationMethod) => ({
@@ -814,27 +834,43 @@ export class ListingService {
               })),
             }
           : undefined,
-        listingImages: dto.listingImages
+        listingImages: allAssets.length
           ? {
-              create: dto.listingImages.map((image) => ({
-                assets: {
-                  create: {
-                    ...image.assets,
+              connectOrCreate: allAssets.map((asset) => ({
+                where: {
+                  listingId_imageId: {
+                    listingId: dto.id,
+                    imageId: asset.assets.id,
                   },
                 },
-                ordinal: image.ordinal,
+                create: {
+                  ordinal: asset.ordinal,
+                  assets: {
+                    connect: {
+                      id: asset.assets.id,
+                    },
+                  },
+                },
               })),
             }
           : undefined,
         listingMultiselectQuestions: dto.listingMultiselectQuestions
           ? {
-              create: dto.listingMultiselectQuestions.map(
+              upsert: dto.listingMultiselectQuestions.map(
                 (multiselectQuestion) => ({
-                  ordinal: multiselectQuestion.ordinal,
-                  multiselectQuestions: {
-                    connect: {
-                      id: multiselectQuestion.id,
+                  where: {
+                    listingId_multiselectQuestionId: {
+                      listingId: dto.id,
+                      multiselectQuestionId: multiselectQuestion.id,
                     },
+                  },
+                  update: {
+                    ordinal: multiselectQuestion.ordinal,
+                    multiselectQuestionId: multiselectQuestion.id,
+                  },
+                  create: {
+                    ordinal: multiselectQuestion.ordinal,
+                    multiselectQuestionId: multiselectQuestion.id,
                   },
                 }),
               ),

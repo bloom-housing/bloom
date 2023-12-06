@@ -7,7 +7,8 @@ describe("Listing Management Tests", () => {
     cy.signOut()
   })
 
-  it("full listing publish", () => {
+  // TODO: unskip this when listing publish is connected
+  it.skip("full listing publish", () => {
     cy.visit("/")
     cy.get("a > .button").contains("Add Listing").click()
     cy.contains("New Listing")
