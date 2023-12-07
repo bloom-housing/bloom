@@ -1,22 +1,22 @@
 import React, { useEffect, useState, useContext } from "react"
 import Head from "next/head"
 import { NextRouter, withRouter } from "next/router"
-import {
-  DashBlock,
-  DashBlocks,
-  HeaderBadge,
-  Icon,
-  t,
-  SiteAlert,
-  AlertBox,
-} from "@bloom-housing/ui-components"
+import { Icon, t, SiteAlert, AlertBox, Card, UniversalIconType } from "@bloom-housing/ui-components"
 import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
+import { Button, Heading } from "@bloom-housing/ui-seeds"
 
 interface DashboardProps {
   router: NextRouter
+}
+
+interface AccountCardProps {
+  iconSymbol: UniversalIconType
+  title: string
+  subtitle: string
+  buttonText: string
 }
 
 function Dashboard(props: DashboardProps) {
@@ -44,10 +44,15 @@ function Dashboard(props: DashboardProps) {
     setAlertMessage(null)
   }
 
-  const settingsIcon = (
-    <span className="header-badge">
-      <Icon size="medium" symbol="settings" />
-    </span>
+  const AccountCard = ({ iconSymbol, title, subtitle, buttonText }: AccountCardProps) => (
+    <Card className="w-1/2">
+      <Card.Section>
+        <Icon size="2xl" symbol={iconSymbol} />
+        <h2 className="py-3">{title}</h2>
+        <p className="pb-8">{subtitle}</p>
+        <Button variant="primary-outlined">{buttonText}</Button>
+      </Card.Section>
+    </Card>
   )
 
   return (
@@ -66,24 +71,20 @@ function Dashboard(props: DashboardProps) {
           <div className="max-w-5xl mx-auto md:py-8">
             <SiteAlert type="success" className="md:mb-8" timeout={30000} />
 
-            <div className="flex flex-wrap relative">
+            <div className="flex grow-0 px-6 gap-8">
               <h1 className={"sr-only"}>{t("nav.myDashboard")}</h1>
-              <DashBlocks>
-                <DashBlock
-                  href="/account/applications"
-                  title={t("account.myApplications")}
-                  subtitle={t("account.myApplicationsSubtitle")}
-                  icon={<HeaderBadge />}
-                  dataTestId={"account-dashboard-applications"}
-                ></DashBlock>
-                <DashBlock
-                  href="/account/edit"
-                  title={t("account.accountSettings")}
-                  subtitle={t("account.accountSettingsSubtitle")}
-                  icon={settingsIcon}
-                  dataTestId={"account-dashboard-settings"}
-                ></DashBlock>
-              </DashBlocks>
+              <AccountCard
+                iconSymbol="application"
+                title={t("account.myApplications")}
+                subtitle={t("account.myApplicationsSubtitle")}
+                buttonText={t("account.viewApplications")}
+              />
+              <AccountCard
+                iconSymbol="profile"
+                title={t("account.accountSettings")}
+                subtitle={t("account.accountSettingsSubtitle")}
+                buttonText={t("account.viewApplications")}
+              />
             </div>
           </div>
         </section>

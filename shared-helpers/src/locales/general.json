@@ -1,6 +1,7 @@
 {
   "account.accountSettings": "Account Settings",
   "account.accountSettingsSubtitle": "Account Settings, email and password",
+  "account.accountSettingsUpdate": "Update account settings",
   "account.application.confirmation": "Confirmation",
   "account.application.error": "Error",
   "account.application.noAccessError": "You are unauthorized to view this application",
@@ -10,6 +11,7 @@
   "account.errorFetchingApplications": "Error fetching applications",
   "account.haveAnAccount": "Already have an account?",
   "account.myApplications": "My Applications",
+  "account.viewApplications": "View Applications",
   "account.myApplicationsSubtitle": "See lottery dates and listings for properties for which you've applied",
   "account.noApplications": "It looks like you haven't applied to any listings yet.",
   "account.settings.alerts.currentPassword": "Invalid current password. Please try again.",
