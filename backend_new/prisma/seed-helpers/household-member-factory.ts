@@ -6,13 +6,13 @@ import {
   randomBirthMonth,
   randomBirthYear,
 } from './number-generator';
+import { randomBoolean } from './boolean-generator';
 
 export const householdMemberFactorySingle =
   (): Prisma.HouseholdMemberCreateWithoutApplicationsInput => {
     const firstName = randomNoun();
     const lastName = randomNoun();
-    const randomBoolean = Math.random() < 0.5;
-    const randomYesNo = randomBoolean === true ? YesNoEnum.yes : YesNoEnum.no;
+    const randomYesNo = randomBoolean() === true ? YesNoEnum.yes : YesNoEnum.no;
     return {
       firstName: firstName,
       middleName: randomNoun(),
