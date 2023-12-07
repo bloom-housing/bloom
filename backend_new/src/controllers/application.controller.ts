@@ -42,6 +42,7 @@ import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { PermissionAction } from '../decorators/permission-action.decorator';
+import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
 
 @Controller('applications')
 @ApiTags('applications')
@@ -66,6 +67,18 @@ export class ApplicationController {
   @ApiOkResponse({ type: PaginatedApplicationDto })
   async list(@Query() queryParams: ApplicationQueryParams) {
     return await this.applicationService.list(queryParams);
+  }
+
+  @Get(`csv`)
+  @ApiOperation({
+    summary: 'Get applications as csv',
+    operationId: 'listAsCsv',
+  })
+  listAsCsv(
+    @Query(new ValidationPipe(defaultValidationPipeOptions))
+    queryParams: ApplicationCsvQueryParams,
+  ): Promise<SuccessDTO> {
+    return this.applicationService.export(queryParams);
   }
 
   @Get(`:applicationId`)

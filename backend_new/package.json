@@ -28,7 +28,8 @@
     "db:setup": "yarn db:resetup && yarn db:migration:run && yarn db:seed:development",
     "db:setup:staging": "yarn db:resetup && yarn db:migration:run && yarn db:seed:staging --jurisdictionName Bloomington",
     "setup": "yarn install && yarn prisma generate && yarn build && yarn db:setup:staging",
-    "db:migration:skip": "yarn prisma migrate resolve --applied "
+    "db:migration:skip": "yarn prisma migrate resolve --applied ",
+    "setup:dev": "yarn install && yarn prisma generate && yarn build && yarn db:setup"
   },
   "dependencies": {
     "@google-cloud/translate": "^7.2.1",
