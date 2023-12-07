@@ -195,4 +195,22 @@ export class MultiselectQuestionService {
 
     return true;
   }
+
+  async findByListingId(listingId: string): Promise<MultiselectQuestion[]> {
+    console.log('lisitngId = ', listingId);
+    const questions = await this.prisma.multiselectQuestions.findMany({
+      include: {
+        listings: true,
+      },
+      where: {
+        listings: {
+          every: {
+            listingId,
+          },
+        },
+      },
+    });
+
+    return mapTo(MultiselectQuestion, questions);
+  }
 }

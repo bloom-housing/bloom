@@ -1108,4 +1108,20 @@ export class ListingService {
     });
     return mapTo(Listing, listingsRaw);
   };
+
+  // returns the jurisdiction ID assigned to a listing
+  public async getJurisdictionIdByListingId(
+    listingId: string,
+  ): Promise<string | NotFoundException> {
+    const listing = await this.prisma.listings.findUniqueOrThrow({
+      select: {
+        jurisdictionId: true,
+      },
+      where: {
+        id: listingId,
+      },
+    });
+
+    return listing.jurisdictionId;
+  }
 }

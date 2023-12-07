@@ -37,6 +37,7 @@ import { ValidationsGroupsEnum } from '../enums/shared/validation-groups-enum';
 import { mapTo } from '../utilities/mapTo';
 import { User } from '../dtos/users/user.dto';
 import { OptionalAuthGuard } from '../guards/optional.guard';
+import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
 
 @Controller('applications')
 @ApiTags('applications')
@@ -58,6 +59,18 @@ export class ApplicationController {
   @ApiOkResponse({ type: PaginatedApplicationDto })
   async list(@Query() queryParams: ApplicationQueryParams) {
     return await this.applicationService.list(queryParams);
+  }
+
+  @Get(`csv`)
+  @ApiOperation({
+    summary: 'Get applications as csv',
+    operationId: 'listAsCsv',
+  })
+  listAsCsv(
+    @Query(new ValidationPipe(defaultValidationPipeOptions))
+    queryParams: ApplicationCsvQueryParams,
+  ): Promise<SuccessDTO> {
+    return this.applicationService.export(queryParams);
   }
 
   @Get(`:applicationId`)

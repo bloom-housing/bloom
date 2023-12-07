@@ -1,15 +1,18 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { Request as ExpressRequest } from 'express';
 import crypto from 'crypto';
+import { REQUEST } from '@nestjs/core';
+import { Prisma, YesNoEnum } from '@prisma/client';
 import { PrismaService } from './prisma.service';
 import { Application } from '../dtos/applications/application.dto';
 import { mapTo } from '../utilities/mapTo';
 import { ApplicationQueryParams } from '../dtos/applications/application-query-params.dto';
 import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
-import { Prisma, YesNoEnum } from '@prisma/client';
 import { buildOrderBy } from '../utilities/build-order-by';
 import { buildPaginationInfo } from '../utilities/build-pagination-meta';
 import { IdDTO } from '../dtos/shared/id.dto';
@@ -21,6 +24,9 @@ import { PaginatedApplicationDto } from '../dtos/applications/paginated-applicat
 import { EmailService } from './email.service';
 import Listing from '../dtos/listings/listing.dto';
 import { User } from '../dtos/users/user.dto';
+import { ApplicationCsvQueryParams } from 'src/dtos/applications/application-csv-query-params.dto';
+import { ListingService } from './listing.service';
+import { MultiselectQuestionService } from './multiselect-question.service';
 
 const view: Partial<Record<ApplicationViews, Prisma.ApplicationsInclude>> = {
   partnerList: {
@@ -60,6 +66,12 @@ view.details = {
   userAccounts: true,
 };
 
+view.csv = {
+  ...view.details,
+  applicationFlaggedSet: true,
+  listings: false,
+};
+
 /*
   this is the service for applicationss
   it handles all the backend's business logic for reading/writing/deleting application data
@@ -67,8 +79,11 @@ view.details = {
 @Injectable()
 export class ApplicationService {
   constructor(
+    @Inject(REQUEST) private req: ExpressRequest,
     private prisma: PrismaService,
     private emailService: EmailService,
+    private listingService: ListingService,
+    private multiselectQuestionService: MultiselectQuestionService,
   ) {}
 
   /*
@@ -110,6 +125,61 @@ export class ApplicationService {
         count,
         applications.length,
       ),
+    };
+  }
+
+  /*
+   * Prepares an export and sends a zip file
+   */
+  async export(queryParams: ApplicationCsvQueryParams): Promise<SuccessDTO> {
+    await this.authorizeCSVExport(this.req.user, queryParams.listingId);
+
+    const csvView = view.csv;
+
+    if (queryParams.includeDemographics) {
+      csvView.demographics = true;
+    }
+
+    const applications = await this.prisma.applications.findMany({
+      include: csvView,
+      where: {
+        listingId: queryParams.listingId,
+      },
+    });
+
+    console.log('applications = ', applications);
+
+    // get the max number of household members for csv headers
+    const maxHouseholdMembersRes = await this.prisma.householdMember.groupBy({
+      by: ['applicationId'],
+      _count: {
+        applicationId: true,
+      },
+      orderBy: {
+        _count: {
+          applicationId: 'desc',
+        },
+      },
+      take: 1,
+    });
+
+    const maxHouseholdMembers =
+      maxHouseholdMembersRes && maxHouseholdMembersRes.length
+        ? maxHouseholdMembersRes[0]._count.applicationId
+        : 0;
+
+    console.log('maxHouseholdMembers = ', maxHouseholdMembers);
+
+    // get all multiselect questions of a listing to build csv headers
+    const multiSelectQuestions =
+      await this.multiselectQuestionService.findByListingId(
+        queryParams.listingId,
+      );
+
+    console.log('multiSelectQuestions = ', multiSelectQuestions);
+
+    return {
+      success: true,
     };
   }
 
@@ -564,5 +634,20 @@ export class ApplicationService {
   */
   generateConfirmationCode(): string {
     return crypto.randomBytes(4).toString('hex').toUpperCase();
+  }
+
+  private async authorizeCSVExport(user, listingId): Promise<void> {
+    /**
+     * Checking authorization for each application is very expensive.
+     * By making listingId required, we can check if the user has update permissions for the listing, since right now if a user has that
+     * they also can run the export for that listing
+     */
+    /* const jurisdictionId =
+      await this.listingService.getJurisdictionIdByListingId(listingId);
+
+    await this.authzService.canOrThrow(user, 'listing', authzActions.update, {
+      id: listingId,
+      jurisdictionId,
+    }); */
   }
 }
