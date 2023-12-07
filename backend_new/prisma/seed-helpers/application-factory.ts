@@ -1,3 +1,4 @@
+import { randomInt } from 'crypto';
 import {
   Prisma,
   IncomePeriodEnum,
@@ -13,6 +14,7 @@ import {
   randomBirthMonth,
   randomBirthYear,
 } from './number-generator';
+import { preferenceFactoryMany } from './application-preference-factory';
 
 export const applicationFactory = (optionalParams?: {
   householdSize?: number;
@@ -42,7 +44,8 @@ export const applicationFactory = (optionalParams?: {
     householdSize: optionalParams?.householdSize ?? 1,
     income: '40000',
     incomePeriod: IncomePeriodEnum.perYear,
-    preferences: '{}',
+    preferences: preferenceFactoryMany(randomInt(6)),
+    programs: preferenceFactoryMany(randomInt(2)),
     preferredUnitTypes,
     listings: optionalParams?.listingId
       ? {
