@@ -11,6 +11,7 @@ import {
   RuleEnum,
   YesNoEnum,
 } from '@prisma/client';
+import cookieParser from 'cookie-parser';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
@@ -20,11 +21,12 @@ import { AfsQueryParams } from 'src/dtos/application-flagged-sets/afs-query-para
 import { View } from '../../src/enums/application-flagged-sets/view';
 import { AfsResolve } from '../../src/dtos/application-flagged-sets/afs-resolve.dto';
 import { IdDTO } from '../../src/dtos/shared/id.dto';
+import { userFactory } from '../../prisma/seed-helpers/user-factory';
 
 describe('Application flagged set Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
-
+  let adminAccessToken: string;
   const createListing = async (): Promise<string> => {
     const jurisData = jurisdictionFactory();
     const jurisdiction = await prisma.jurisdictions.create({
@@ -83,9 +85,27 @@ describe('Application flagged set Controller Tests', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    app.use(cookieParser());
     prisma = moduleFixture.get<PrismaService>(PrismaService);
 
     await app.init();
+
+    const adminUser = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: {
+          isAdmin: true,
+        },
+        mfaEnabled: false,
+        confirmedAt: new Date(),
+      }),
+    });
+    const res = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({ email: adminUser.email, password: 'abcdef' })
+      .expect(201);
+    adminAccessToken = res.header?.['set-cookie'].find((cookie) =>
+      cookie.startsWith('access-token='),
+    );
   });
 
   afterAll(async () => {
@@ -142,6 +162,7 @@ describe('Application flagged set Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/applicationFlaggedSets?${query}`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     expect(res.body.items.length).toEqual(1);
@@ -197,6 +218,7 @@ describe('Application flagged set Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/applicationFlaggedSets?${query}`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     expect(res.body.items.length).toEqual(1);
@@ -251,6 +273,7 @@ describe('Application flagged set Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/applicationFlaggedSets/meta?${query}`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     expect(res.body).toEqual({
@@ -305,6 +328,7 @@ describe('Application flagged set Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/applicationFlaggedSets/${resolvedAFS.id}`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     expect(res.body.id).toEqual(resolvedAFS.id);
@@ -316,6 +340,7 @@ describe('Application flagged set Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/applicationFlaggedSets/${id}`)
+      .set('Cookie', adminAccessToken)
       .expect(404);
 
     expect(res.body.message).toEqual(
@@ -375,6 +400,7 @@ describe('Application flagged set Controller Tests', () => {
           },
         ],
       } as AfsResolve)
+      .set('Cookie', adminAccessToken)
       .expect(201);
 
     expect(res.body.id).toEqual(pendingAFS.id);
@@ -460,6 +486,7 @@ describe('Application flagged set Controller Tests', () => {
           },
         ],
       } as AfsResolve)
+      .set('Cookie', adminAccessToken)
       .expect(201);
 
     expect(res.body.id).toEqual(pendingAFS.id);
@@ -545,6 +572,7 @@ describe('Application flagged set Controller Tests', () => {
           },
         ],
       } as AfsResolve)
+      .set('Cookie', adminAccessToken)
       .expect(201);
 
     expect(res.body.id).toEqual(resolvedAFS.id);
@@ -607,6 +635,7 @@ describe('Application flagged set Controller Tests', () => {
       .send({
         id: afs.id,
       } as IdDTO)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     const afsPostReset = await prisma.applicationFlaggedSet.findUnique({
@@ -626,6 +655,7 @@ describe('Application flagged set Controller Tests', () => {
       .send({
         id: id,
       } as IdDTO)
+      .set('Cookie', adminAccessToken)
       .expect(404);
 
     expect(res.body.message).toEqual(
@@ -641,6 +671,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     const afs = await prisma.applicationFlaggedSet.findMany({
@@ -660,6 +691,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     const afs = await prisma.applicationFlaggedSet.findMany({
@@ -681,6 +713,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     const afs = await prisma.applicationFlaggedSet.findMany({
@@ -702,6 +735,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     let afs = await prisma.applicationFlaggedSet.findMany({
@@ -745,6 +779,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     afs = await prisma.applicationFlaggedSet.findMany({
@@ -771,6 +806,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     let afs = await prisma.applicationFlaggedSet.findMany({
@@ -814,6 +850,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     afs = await prisma.applicationFlaggedSet.findMany({
@@ -840,6 +877,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     let afs = await prisma.applicationFlaggedSet.findMany({
@@ -884,6 +922,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     afs = await prisma.applicationFlaggedSet.findMany({
@@ -906,6 +945,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     let afs = await prisma.applicationFlaggedSet.findMany({
@@ -954,6 +994,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     afs = await prisma.applicationFlaggedSet.findMany({
@@ -977,6 +1018,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     let afs = await prisma.applicationFlaggedSet.findMany({
@@ -1025,6 +1067,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     afs = await prisma.applicationFlaggedSet.findMany({
@@ -1051,6 +1094,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     let afs = await prisma.applicationFlaggedSet.findMany({
@@ -1103,6 +1147,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     afs = await prisma.applicationFlaggedSet.findMany({
@@ -1132,6 +1177,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     let afs = await prisma.applicationFlaggedSet.findMany({
@@ -1193,6 +1239,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     afs = await prisma.applicationFlaggedSet.findMany({
@@ -1222,6 +1269,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     let afs = await prisma.applicationFlaggedSet.findMany({
@@ -1287,6 +1335,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     afs = await prisma.applicationFlaggedSet.findMany({
@@ -1321,6 +1370,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     const afs = await prisma.applicationFlaggedSet.findMany({
@@ -1342,6 +1392,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     let afs = await prisma.applicationFlaggedSet.findMany({
@@ -1395,6 +1446,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     afs = await prisma.applicationFlaggedSet.findMany({
@@ -1421,6 +1473,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     let afs = await prisma.applicationFlaggedSet.findMany({
@@ -1474,6 +1527,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     afs = await prisma.applicationFlaggedSet.findMany({
@@ -1500,6 +1554,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     const afs = await prisma.applicationFlaggedSet.findMany({
@@ -1523,6 +1578,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     let afs = await prisma.applicationFlaggedSet.findMany({
@@ -1547,6 +1603,7 @@ describe('Application flagged set Controller Tests', () => {
           },
         ],
       } as AfsResolve)
+      .set('Cookie', adminAccessToken)
       .expect(201);
 
     await createComplexApplication('3', '3', listing);
@@ -1561,6 +1618,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     afs = await prisma.applicationFlaggedSet.findMany({
@@ -1587,6 +1645,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     let afs = await prisma.applicationFlaggedSet.findMany({
@@ -1616,6 +1675,7 @@ describe('Application flagged set Controller Tests', () => {
           },
         ],
       } as AfsResolve)
+      .set('Cookie', adminAccessToken)
       .expect(201);
 
     await request(app.getHttpServer())
@@ -1629,6 +1689,7 @@ describe('Application flagged set Controller Tests', () => {
           },
         ],
       } as AfsResolve)
+      .set('Cookie', adminAccessToken)
       .expect(201);
 
     await createComplexApplication('5', '3', listing);
@@ -1642,6 +1703,7 @@ describe('Application flagged set Controller Tests', () => {
     });
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     afs = await prisma.applicationFlaggedSet.findMany({

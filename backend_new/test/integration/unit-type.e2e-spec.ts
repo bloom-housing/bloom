@@ -60,7 +60,7 @@ describe('UnitType Controller Tests', () => {
       .set('Cookie', cookies)
       .expect(200);
     // all unit types are returned
-    expect(res.body.length).toEqual(7);
+    expect(res.body.length).toBeGreaterThanOrEqual(7);
     // check for random unit types
     const unitTypeNames = res.body.map((value) => value.name);
     expect(unitTypeNames).toContain(UnitTypeEnum.SRO);

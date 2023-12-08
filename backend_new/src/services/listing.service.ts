@@ -785,7 +785,6 @@ export class ListingService {
       storedListing.status === ListingsStatusEnum.active &&
       dto.status === ListingsStatusEnum.closed
     ) {
-      // TODO: afs process (https://github.com/bloom-housing/bloom/issues/3540)
       await this.afsService.process(dto.id);
     }
 
