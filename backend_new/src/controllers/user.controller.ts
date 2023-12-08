@@ -43,6 +43,7 @@ import { PermissionGuard } from '../guards/permission.guard';
 import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction-admin.guard';
 import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
+import { UserFilterParams } from '../dtos/users/user-filter-params.dto';
 
 @Controller('user')
 @ApiTags('user')
@@ -64,6 +65,7 @@ export class UserController {
   }
 
   @Get('/list')
+  @UseGuards(JwtAuthGuard)
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOkResponse({ type: PaginatedUserDto })
@@ -72,6 +74,7 @@ export class UserController {
     operationId: 'list',
   })
   @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
+  @ApiExtraModels(UserFilterParams)
   async list(
     @Request() req: ExpressRequest,
     @Query() queryParams: UserQueryParams,

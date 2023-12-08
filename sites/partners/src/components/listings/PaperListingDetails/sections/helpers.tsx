@@ -1,7 +1,7 @@
 import React from "react"
-import { AddressUpdate } from "@bloom-housing/backend-core/types"
 import { t } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { AddressCreate } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import dayjs from "dayjs"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
@@ -54,7 +54,7 @@ type AddressType =
   | "applicationDropOffAddress"
 
 export const getDetailAddress = (
-  address: AddressUpdate,
+  address: AddressCreate,
   addressName: AddressType,
   subtitle: string
 ) => {

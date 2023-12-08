@@ -5,11 +5,8 @@ import { useFormContext } from "react-hook-form"
 import { stateKeys, getInputType, fieldName } from "@bloom-housing/shared-helpers"
 import {
   ListingMultiselectQuestion,
-  MultiselectQuestion,
-  MultiselectOption as MultiselectOptionOld,
-} from "@bloom-housing/backend-core/types"
-import {
   MultiselectOption,
+  MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
@@ -33,9 +30,9 @@ const FormMultiselectQuestions = ({
   const allOptionFieldNames = useMemo(() => {
     const keys = []
     questions?.forEach((listingQuestion) =>
-      listingQuestion?.multiselectQuestion.options.forEach((option) =>
+      listingQuestion?.multiselectQuestions.options.forEach((option) =>
         keys.push(
-          fieldName(listingQuestion?.multiselectQuestion.text, applicationSection, option.text)
+          fieldName(listingQuestion?.multiselectQuestions.text, applicationSection, option.text)
         )
       )
     )
@@ -49,7 +46,7 @@ const FormMultiselectQuestions = ({
 
   const watchQuestions = watch(allOptionFieldNames)
 
-  const getCheckboxOption = (option: MultiselectOptionOld, question: MultiselectQuestion) => {
+  const getCheckboxOption = (option: MultiselectOption, question: MultiselectQuestion) => {
     const optionFieldName = fieldName(question.text, applicationSection, option.text)
     return (
       <React.Fragment key={option.text}>
@@ -76,7 +73,7 @@ const FormMultiselectQuestions = ({
     )
   }
 
-  const getRadioFields = (options: MultiselectOptionOld[], question: MultiselectQuestion) => {
+  const getRadioFields = (options: MultiselectOption[], question: MultiselectQuestion) => {
     return (
       <fieldset>
         <FieldGroup
@@ -105,7 +102,7 @@ const FormMultiselectQuestions = ({
       <SectionWithGrid heading={sectionTitle}>
         <Grid.Row columns={2}>
           {questions?.map((listingQuestion) => {
-            const question = listingQuestion?.multiselectQuestion
+            const question = listingQuestion?.multiselectQuestions
             const inputType = getInputType(question.options as unknown as MultiselectOption[])
             return (
               <FieldValue label={question.text}>

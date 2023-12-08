@@ -1,8 +1,8 @@
 import Link from "next/link"
 
 import { t } from "@bloom-housing/ui-components"
+import { ApplicationSubmissionTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { convertDataToLocal } from "../../../lib/helpers"
-import { ApplicationSubmissionType } from "@bloom-housing/backend-core/types"
 
 export const getCols = () => [
   {
@@ -73,7 +73,7 @@ export const getCols = () => [
     resizable: true,
     unSortIcon: true,
     valueGetter: ({ data }) => {
-      return data.submissionType === ApplicationSubmissionType.electronical
+      return data.submissionType === ApplicationSubmissionTypeEnum.electronical
         ? t("application.details.submissionType.digital")
         : t("application.details.submissionType.paper")
     },
@@ -92,7 +92,7 @@ export const getCols = () => [
 
       const dateTime = convertDataToLocal(
         submissionDate,
-        data?.submissionType || ApplicationSubmissionType.electronical
+        data?.submissionType || ApplicationSubmissionTypeEnum.electronical
       )
 
       return `${dateTime.date} ${t("t.at")} ${dateTime.time}`

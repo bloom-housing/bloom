@@ -11,8 +11,11 @@ import {
 import { Card, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldDate, getDetailFieldTime } from "./helpers"
-import { ListingEvent, ListingEventType } from "@bloom-housing/backend-core/types"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import {
+  ListingEvent,
+  ListingEventsTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const DetailApplicationDates = () => {
   const listing = useContext(ListingContext)
@@ -29,8 +32,8 @@ const DetailApplicationDates = () => {
 
   const openHouseEvents = useMemo(
     () =>
-      listing.events
-        .filter((item) => item.type === ListingEventType.openHouse)
+      listing.listingEvents
+        .filter((item) => item.type === ListingEventsTypeEnum.openHouse)
         .sort((a, b) => (dayjs(a.startTime).isAfter(b.startTime) ? 1 : -1))
         .map((event) => {
           const { startTime, endTime, url } = event

@@ -87,10 +87,10 @@ describe('User Controller Tests', () => {
   });
 
   it('should get users from list() when no params', async () => {
-    const userA = await prisma.userAccounts.create({
+    await prisma.userAccounts.create({
       data: await userFactory(),
     });
-    const userB = await prisma.userAccounts.create({
+    await prisma.userAccounts.create({
       data: await userFactory(),
     });
 
@@ -614,17 +614,9 @@ describe('User Controller Tests', () => {
       }),
     });
 
-    const resLogIn = await request(app.getHttpServer())
-      .post('/auth/login')
-      .send({
-        email: storedUser.email,
-        password: 'abcdef',
-      } as Login)
-      .expect(201);
-
     const res = await request(app.getHttpServer())
       .get('/user/csv')
-      .set('Cookie', resLogIn.headers['set-cookie'])
+      .set('Cookie', cookies)
       .expect(200);
 
     expect(res.body.success).toEqual(true);

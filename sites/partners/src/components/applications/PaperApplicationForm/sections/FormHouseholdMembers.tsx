@@ -8,8 +8,11 @@ import {
   Modal,
   AppearanceStyleType,
 } from "@bloom-housing/ui-components"
-import { HouseholdMember } from "@bloom-housing/backend-core/types"
-import { YesNoAnswer } from "../../../../lib/helpers"
+import {
+  HouseholdMember,
+  HouseholdMemberUpdate,
+  YesNoEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { FormMember } from "../FormMember"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
@@ -57,25 +60,25 @@ const FormHouseholdMembers = ({
     [setMembersDeleteModal, setHouseholdMembers, householdMembers]
   )
 
-  function saveMember(newMember: HouseholdMember) {
+  function saveMember(newMember: HouseholdMemberUpdate) {
     const isExists = householdMembers.find((member) => member.orderId === newMember.orderId)
 
     if (isExists) {
       const withoutEdited = householdMembers.filter(
         (member) => member.orderId !== newMember.orderId
       )
-      setHouseholdMembers([...withoutEdited, newMember])
+      setHouseholdMembers([...withoutEdited, newMember as HouseholdMember])
     } else {
-      setHouseholdMembers([...householdMembers, newMember])
+      setHouseholdMembers([...householdMembers, newMember as HouseholdMember])
     }
   }
 
   const memberTableData = useMemo(() => {
-    const chooseAddressStatus = (value: YesNoAnswer | null) => {
+    const chooseAddressStatus = (value: YesNoEnum | null) => {
       switch (value) {
-        case YesNoAnswer.Yes:
+        case YesNoEnum.yes:
           return t("t.yes")
-        case YesNoAnswer.No:
+        case YesNoEnum.no:
           return t("t.no")
         default:
           return t("t.n/a")
@@ -84,8 +87,8 @@ const FormHouseholdMembers = ({
 
     return householdMembers.map((member) => {
       const { birthMonth, birthDay, birthYear } = member
-      const sameResidence = member.sameAddress as YesNoAnswer
-      const workInRegion = member.workInRegion as YesNoAnswer
+      const sameResidence = member.sameAddress
+      const workInRegion = member.workInRegion
 
       return {
         name: {

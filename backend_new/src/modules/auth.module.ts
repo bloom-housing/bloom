@@ -17,6 +17,7 @@ import { EmailModule } from './email.module';
     UserModule,
     SmsModule,
     PassportModule,
+    EmailModule,
     JwtModule.register({
       secret: process.env.APP_SECRET,
     }),

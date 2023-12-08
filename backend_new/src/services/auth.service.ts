@@ -58,7 +58,7 @@ export class AuthService {
     private prisma: PrismaService,
     private userService: UserService,
     private smsService: SmsService,
-    private emailService: EmailService,
+    private emailsService: EmailService,
   ) {}
 
   /*
@@ -187,7 +187,7 @@ export class AuthService {
   async requestMfaCode(dto: RequestMfaCode): Promise<RequestMfaCodeResponse> {
     const user = await this.userService.findUserOrError(
       { email: dto.email },
-      false,
+      true,
     );
 
     if (!user.mfaEnabled) {
@@ -232,12 +232,7 @@ export class AuthService {
     });
 
     if (dto.mfaType === MfaType.email) {
-      this.emailService.sendMfaCode(
-        user.jurisdictions,
-        mapTo(User, user),
-        user.email,
-        mfaCode,
-      );
+      await this.emailsService.sendMfaCode(mapTo(User, user), mfaCode);
     } else if (dto.mfaType === MfaType.sms) {
       await this.smsService.sendMfaCode(user.phoneNumber, mfaCode);
     }

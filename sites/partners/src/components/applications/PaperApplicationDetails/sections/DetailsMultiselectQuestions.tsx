@@ -3,11 +3,12 @@ import { t } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import { ApplicationContext } from "../../ApplicationContext"
-import { InputType, AddressCreate } from "@bloom-housing/backend-core/types"
 import { DetailsAddressColumns, AddressColsType } from "../DetailsAddressColumns"
 import { useSingleListingData } from "../../../../lib/hooks"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import {
+  AddressCreate,
+  InputType,
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"

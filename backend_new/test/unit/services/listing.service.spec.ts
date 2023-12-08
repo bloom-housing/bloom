@@ -2128,14 +2128,13 @@ describe('Testing listing service', () => {
       data: {
         name: 'example listing name',
         depositMin: '5',
-        assets: {
-          create: [
-            {
-              fileId: expect.anything(),
-              label: 'example asset',
-            },
-          ],
-        },
+        assets: [
+          {
+            fileId: expect.anything(),
+            label: 'example asset',
+          },
+        ],
+
         jurisdictions: {
           connect: {
             id: expect.anything(),
@@ -2234,9 +2233,7 @@ describe('Testing listing service', () => {
         ...val,
         id: undefined,
         publishedAt: expect.anything(),
-        assets: {
-          create: [exampleAsset],
-        },
+        assets: [exampleAsset],
         applicationMethods: {
           create: [
             {
@@ -2279,25 +2276,41 @@ describe('Testing listing service', () => {
           ],
         },
         listingImages: {
-          create: [
+          connectOrCreate: [
             {
-              assets: {
-                create: {
-                  ...exampleAsset,
+              create: {
+                assets: {
+                  connect: {
+                    id: expect.anything(),
+                  },
+                },
+                ordinal: 0,
+              },
+              where: {
+                listingId_imageId: {
+                  imageId: expect.anything(),
+                  listingId: expect.anything(),
                 },
               },
-              ordinal: 0,
             },
           ],
         },
         listingMultiselectQuestions: {
-          create: [
+          upsert: [
             {
-              ordinal: 0,
-              multiselectQuestions: {
-                connect: {
-                  id: expect.anything(),
+              where: {
+                listingId_multiselectQuestionId: {
+                  listingId: expect.anything(),
+                  multiselectQuestionId: expect.anything(),
                 },
+              },
+              create: {
+                multiselectQuestionId: expect.anything(),
+                ordinal: 0,
+              },
+              update: {
+                multiselectQuestionId: expect.anything(),
+                ordinal: 0,
               },
             },
           ],

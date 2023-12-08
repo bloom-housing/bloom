@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from "react"
 import { useWatch, useFormContext } from "react-hook-form"
-import { YesNoAnswer } from "../../../../lib/helpers"
 import { getDetailFieldDate, getDetailFieldTime } from "../../PaperListingDetails/sections/helpers"
 import dayjs from "dayjs"
 
@@ -20,6 +19,7 @@ import { Grid } from "@bloom-housing/ui-seeds"
 import { FormListing, TempEvent } from "../../../../lib/listings/formTypes"
 import { OpenHouseForm } from "../OpenHouseForm"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { YesNoEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type ApplicationDatesProps = {
   openHouseEvents: TempEvent[]
@@ -132,7 +132,7 @@ const ApplicationDates = ({
               register={register}
               watch={watch}
               note={t("listings.whenApplicationsClose")}
-              disabled={enableDueDate === YesNoAnswer.No}
+              disabled={enableDueDate === YesNoEnum.no}
               defaultDate={{
                 month: listing?.applicationDueDate
                   ? dayjs(new Date(listing?.applicationDueDate)).format("MM")
@@ -153,21 +153,21 @@ const ApplicationDates = ({
               id={"applicationDueTimeField"}
               register={register}
               watch={watch}
-              disabled={enableDueDate === YesNoAnswer.No}
+              disabled={enableDueDate === YesNoEnum.no}
               defaultValues={{
                 hours: listing?.applicationDueDate
                   ? dayjs(new Date(listing?.applicationDueDate)).format("hh")
-                  : enableDueDate === YesNoAnswer.No
+                  : enableDueDate === YesNoEnum.no
                   ? null
                   : "05",
                 minutes: listing?.applicationDueDate
                   ? dayjs(new Date(listing?.applicationDueDate)).format("mm")
-                  : enableDueDate === YesNoAnswer.No
+                  : enableDueDate === YesNoEnum.no
                   ? null
                   : "00",
                 seconds: listing?.applicationDueDate
                   ? dayjs(new Date(listing?.applicationDueDate)).format("ss")
-                  : enableDueDate === YesNoAnswer.No
+                  : enableDueDate === YesNoEnum.no
                   ? null
                   : "00",
                 period: listing?.applicationDueDate

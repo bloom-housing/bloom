@@ -107,8 +107,8 @@ const LeasingAgent = () => {
           <Grid.Cell className="seeds-grid-span-2">
             <Field
               label={t("listings.streetAddressOrPOBox")}
-              name={"leasingAgentAddress.street"}
-              id={"leasingAgentAddress.street"}
+              name={"listingsLeasingAgentAddress.street"}
+              id={"listingsLeasingAgentAddress.street"}
               register={register}
               placeholder={t("application.contact.streetAddress")}
               errorMessage={getErrorMessage("leasingAgentAddress.street")}
@@ -121,8 +121,8 @@ const LeasingAgent = () => {
           <Grid.Cell>
             <Field
               label={t("application.contact.apt")}
-              name={"leasingAgentAddress.street2"}
-              id={"leasingAgentAddress.street2"}
+              name={"listingsLeasingAgentAddress.street2"}
+              id={"listingsLeasingAgentAddress.street2"}
               register={register}
               placeholder={t("application.contact.apt")}
             />
@@ -132,32 +132,32 @@ const LeasingAgent = () => {
           <Grid.Cell className="seeds-grid-span-3">
             <Field
               label={t("application.contact.city")}
-              name={"leasingAgentAddress.city"}
-              id={"leasingAgentAddress.city"}
+              name={"listingsLeasingAgentAddress.city"}
+              id={"listingsLeasingAgentAddress.city"}
               register={register}
               placeholder={t("application.contact.city")}
-              errorMessage={getErrorMessage("leasingAgentAddress.city")}
-              error={!!getErrorMessage("leasingAgentAddress.city")}
+              errorMessage={getErrorMessage("listingsLeasingAgentAddress.city")}
+              error={!!getErrorMessage("listingsLeasingAgentAddress.city")}
               inputProps={{
-                onChange: () => clearErrors("leasingAgentAddress"),
+                onChange: () => clearErrors("listingsLeasingAgentAddress"),
               }}
             />
           </Grid.Cell>
 
           <FieldValue label={t("application.contact.state")} className="seeds-grid-span-2">
             <Select
-              id={`leasingAgentAddress.state`}
-              name={`leasingAgentAddress.state`}
+              id={`listingsLeasingAgentAddress.state`}
+              name={`listingsLeasingAgentAddress.state`}
               label={t("application.contact.state")}
               labelClassName="sr-only"
               register={register}
               controlClassName="control"
               options={stateKeys}
               keyPrefix="states"
-              errorMessage={getErrorMessage("leasingAgentAddress.state")}
-              error={!!getErrorMessage("leasingAgentAddress.state")}
+              errorMessage={getErrorMessage("listingsLeasingAgentAddress.state")}
+              error={!!getErrorMessage("listingsLeasingAgentAddress.state")}
               inputProps={{
-                onChange: () => clearErrors("leasingAgentAddress"),
+                onChange: () => clearErrors("listingsLeasingAgentAddress"),
               }}
             />
           </FieldValue>
@@ -165,14 +165,14 @@ const LeasingAgent = () => {
           <Grid.Cell className="seeds-grid-span-2">
             <Field
               label={t("application.contact.zip")}
-              name={"leasingAgentAddress.zipCode"}
-              id={"leasingAgentAddress.zipCode"}
+              name={"listingsLeasingAgentAddress.zipCode"}
+              id={"listingsLeasingAgentAddress.zipCode"}
               placeholder={t("application.contact.zip")}
-              errorMessage={getErrorMessage("leasingAgentAddress.zipCode")}
-              error={!!getErrorMessage("leasingAgentAddress.zipCode")}
+              errorMessage={getErrorMessage("listingsLeasingAgentAddress.zipCode")}
+              error={!!getErrorMessage("listingsLeasingAgentAddress.zipCode")}
               register={register}
               inputProps={{
-                onChange: () => clearErrors("leasingAgentAddress"),
+                onChange: () => clearErrors("listingsLeasingAgentAddress"),
               }}
             />
           </Grid.Cell>

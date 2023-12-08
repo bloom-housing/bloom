@@ -1,7 +1,7 @@
-import { Listing, ListingEvent, ListingEventType } from "@bloom-housing/backend-core/types"
+import { Listing, ListingEvent, ListingEventsTypeEnum } from "../types/backend-swagger"
 
 export const getLotteryEvent = (listing: Listing): ListingEvent | undefined => {
-  return listing?.events.find(
-    (event) => event.type === ListingEventType.publicLottery && event.startDate
+  return listing?.listingEvents.find(
+    (event) => event.type === ListingEventsTypeEnum.publicLottery && event.startDate
   )
 }

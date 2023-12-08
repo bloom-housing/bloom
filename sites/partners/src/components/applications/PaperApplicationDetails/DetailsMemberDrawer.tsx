@@ -2,11 +2,14 @@ import React from "react"
 import { AppearanceStyleType, t, Button, Drawer } from "@bloom-housing/ui-components"
 import { Card, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { AddressColsType, DetailsAddressColumns } from "./DetailsAddressColumns"
-import { Application, HouseholdMemberUpdate } from "@bloom-housing/backend-core/types"
-import { YesNoAnswer } from "../../../lib/helpers"
 import SectionWithGrid from "../../shared/SectionWithGrid"
+import {
+  Application,
+  HouseholdMember,
+  YesNoEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
-export type MembersDrawer = HouseholdMemberUpdate | null
+export type MembersDrawer = HouseholdMember | null
 
 type DetailsMemberDrawerProps = {
   application: Application
@@ -57,9 +60,9 @@ const DetailsMemberDrawer = ({
               <FieldValue
                 label={t("application.add.sameAddressAsPrimary")}
                 children={
-                  membersDrawer?.sameAddress === YesNoAnswer.Yes
+                  membersDrawer?.sameAddress === YesNoEnum.yes
                     ? t("t.yes")
-                    : membersDrawer?.sameAddress === YesNoAnswer.No
+                    : membersDrawer?.sameAddress === YesNoEnum.no
                     ? t("t.no")
                     : t("t.n/a")
                 }
@@ -68,9 +71,9 @@ const DetailsMemberDrawer = ({
               <FieldValue
                 label={t("application.add.workInRegion")}
                 children={
-                  membersDrawer?.workInRegion === YesNoAnswer.Yes
+                  membersDrawer?.workInRegion === YesNoEnum.yes
                     ? t("t.yes")
-                    : membersDrawer?.workInRegion === YesNoAnswer.No
+                    : membersDrawer?.workInRegion === YesNoEnum.no
                     ? t("t.no")
                     : t("t.n/a")
                 }
@@ -86,7 +89,7 @@ const DetailsMemberDrawer = ({
               />
             </Grid.Row>
 
-            {!(membersDrawer?.sameAddress === YesNoAnswer.Yes) && (
+            {!(membersDrawer?.sameAddress === YesNoEnum.yes) && (
               <>
                 <SectionWithGrid.HeadingRow>
                   {t("application.details.residenceAddress")}
@@ -101,7 +104,7 @@ const DetailsMemberDrawer = ({
               </>
             )}
 
-            {membersDrawer?.workInRegion === YesNoAnswer.Yes && (
+            {membersDrawer?.workInRegion === YesNoEnum.yes && (
               <>
                 <SectionWithGrid.HeadingRow>
                   {t("application.contact.workAddress")}

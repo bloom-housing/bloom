@@ -12,8 +12,8 @@ const DetailBuildingFeatures = () => {
 
   const getAccessibilityFeatures = () => {
     let featuresExist = false
-    const features = Object.keys(listing?.features ?? {}).map((feature) => {
-      if (listing?.features[feature]) {
+    const features = Object.keys(listing?.listingFeatures ?? {}).map((feature) => {
+      if (listing?.listingFeatures[feature]) {
         featuresExist = true
         return (
           <li className={"list-disc mx-5 mb-1 md:w-1/3 w-full grow"}>
@@ -26,7 +26,7 @@ const DetailBuildingFeatures = () => {
   }
 
   const enableAccessibilityFeatures = profile?.jurisdictions?.find(
-    (j) => j.id === listing.jurisdiction.id
+    (j) => j.id === listing.jurisdictions.id
   )?.enableAccessibilityFeatures
 
   return (

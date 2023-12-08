@@ -9,7 +9,7 @@ const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, getValues, setValue, watch } = useFormContext()
   const { profile } = useContext(AuthContext)
-  const selectedRoles = watch("role")
+  const selectedRoles = watch("userRoles")
   const selectedJurisdictions = watch("jurisdictions")
 
   /**

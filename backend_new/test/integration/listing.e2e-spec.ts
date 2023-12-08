@@ -647,7 +647,7 @@ describe('Listing Controller Tests', () => {
           roles: {
             isJurisdictionalAdmin: true,
           },
-          jurisdictionId: jurisdictionB.id,
+          jurisdictionIds: [jurisdictionB.id],
         }),
       });
       jurisAdmin = await prisma.userAccounts.create({
@@ -655,7 +655,7 @@ describe('Listing Controller Tests', () => {
           roles: {
             isJurisdictionalAdmin: true,
           },
-          jurisdictionId: jurisdictionA.id,
+          jurisdictionIds: [jurisdictionA.id],
         }),
       });
 
@@ -673,7 +673,7 @@ describe('Listing Controller Tests', () => {
             isJurisdictionalAdmin: false,
           },
           listings: [listing.id],
-          jurisdictionId: jurisdictionA.id,
+          jurisdictionIds: [jurisdictionA.id],
           confirmedAt: new Date(),
         }),
       });

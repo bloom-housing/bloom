@@ -3,15 +3,15 @@ import { fireEvent, render, within } from "@testing-library/react"
 import { DetailUnits } from "../../../../../src/components/listings/PaperListingDetails/sections/DetailUnits"
 import { ListingContext } from "../../../../../src/components/listings/ListingContext"
 import { listing, unit } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { Listing, ListingReviewOrder } from "@bloom-housing/backend-core"
+import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 describe("DetailUnits", () => {
   it("should render the detail units when no units exist", () => {
     const results = render(
       <ListingContext.Provider
         value={{
-          ...(listing as unknown as Listing),
-          reviewOrderType: ListingReviewOrder.waitlist,
+          ...listing,
+          reviewOrderType: ReviewOrderTypeEnum.waitlist,
           units: [],
         }}
       >
@@ -32,14 +32,13 @@ describe("DetailUnits", () => {
     expect(results.getByText("None")).toBeInTheDocument()
   })
 
-  // Unskip when partner site is connect to new backend
-  it.skip("should render the detail units", () => {
+  it("should render the detail units", () => {
     const callUnitDrawer = jest.fn()
     const results = render(
       <ListingContext.Provider
         value={{
-          ...(listing as unknown as Listing),
-          reviewOrderType: ListingReviewOrder.firstComeFirstServe,
+          ...listing,
+          reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
           disableUnitsAccordion: true,
         }}
       >

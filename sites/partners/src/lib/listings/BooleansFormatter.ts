@@ -1,5 +1,5 @@
+import { YesNoEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Formatter from "./Formatter"
-import { YesNoAnswer } from "../helpers"
 import { addressTypes } from "./formTypes"
 
 export default class BooleansFormatter extends Formatter {
@@ -7,62 +7,61 @@ export default class BooleansFormatter extends Formatter {
   process() {
     this.processBoolean("applicationDropOffAddressType", {
       when:
-        this.data.canApplicationsBeDroppedOff === YesNoAnswer.Yes &&
+        this.data.canApplicationsBeDroppedOff === YesNoEnum.yes &&
         addressTypes[this.data.whereApplicationsDroppedOff] !== addressTypes.anotherAddress,
       trueCase: () => addressTypes[this.data.whereApplicationsDroppedOff],
     })
     this.processBoolean("applicationPickUpAddressType", {
       when:
-        this.data.canPaperApplicationsBePickedUp === YesNoAnswer.Yes &&
+        this.data.canPaperApplicationsBePickedUp === YesNoEnum.yes &&
         addressTypes[this.data.whereApplicationsPickedUp] !== addressTypes.anotherAddress,
       trueCase: () => addressTypes[this.data.whereApplicationsPickedUp],
     })
     this.processBoolean("applicationMailingAddressType", {
       when:
-        this.data.canApplicationsBeMailedIn === YesNoAnswer.Yes &&
+        this.data.canApplicationsBeMailedIn === YesNoEnum.yes &&
         addressTypes[this.data.whereApplicationsMailedIn] !== addressTypes.anotherAddress,
       trueCase: () => addressTypes[this.data.whereApplicationsMailedIn],
     })
     this.processBoolean("applicationDropOffAddress", {
       when:
-        this.data.canApplicationsBeDroppedOff === YesNoAnswer.Yes &&
+        this.data.canApplicationsBeDroppedOff === YesNoEnum.yes &&
         this.data.whereApplicationsDroppedOff === addressTypes.anotherAddress,
-      trueCase: () => this.data.applicationDropOffAddress,
+      trueCase: () => this.data.listingsApplicationDropOffAddress,
     })
     this.processBoolean("applicationPickUpAddress", {
       when:
-        this.data.canPaperApplicationsBePickedUp === YesNoAnswer.Yes &&
+        this.data.canPaperApplicationsBePickedUp === YesNoEnum.yes &&
         this.data.whereApplicationsPickedUp === addressTypes.anotherAddress,
-      trueCase: () => this.data.applicationPickUpAddress,
+      trueCase: () => this.data.listingsApplicationPickUpAddress,
     })
     this.processBoolean("applicationMailingAddress", {
       when:
-        this.data.canApplicationsBeMailedIn === YesNoAnswer.Yes &&
+        this.data.canApplicationsBeMailedIn === YesNoEnum.yes &&
         this.data.whereApplicationsMailedIn === addressTypes.anotherAddress,
-      trueCase: () => this.data.applicationMailingAddress,
+      trueCase: () => this.data.listingsApplicationMailingAddress,
     })
     this.processBoolean("images", {
       when:
-        this.data.images?.length &&
-        !!this.data.images[0].image.fileId &&
-        !!this.data.images[0].image.label,
-      trueCase: () => this.data.images,
+        this.data.listingImages?.length &&
+        !!this.data.listingImages[0].assets.fileId &&
+        !!this.data.listingImages[0].assets.label,
+      trueCase: () => this.data.listingImages,
     })
     this.processBoolean("digitalApplication", {
-      when: this.data.digitalApplicationChoice === YesNoAnswer.Yes,
-      falseCase: () => (this.data.digitalApplicationChoice === YesNoAnswer.No ? false : null),
+      when: this.data.digitalApplicationChoice === YesNoEnum.yes,
+      falseCase: () => (this.data.digitalApplicationChoice === YesNoEnum.no ? false : null),
     })
-    this.data.commonDigitalApplication =
-      this.data.commonDigitalApplicationChoice === YesNoAnswer.Yes
+    this.data.commonDigitalApplication = this.data.commonDigitalApplicationChoice === YesNoEnum.yes
 
     this.processBoolean("paperApplication", {
-      when: this.data.paperApplicationChoice === YesNoAnswer.Yes,
-      falseCase: () => (this.data.paperApplicationChoice === YesNoAnswer.No ? false : null),
+      when: this.data.paperApplicationChoice === YesNoEnum.yes,
+      falseCase: () => (this.data.paperApplicationChoice === YesNoEnum.no ? false : null),
     })
 
     this.processBoolean("referralOpportunity", {
-      when: this.data.referralOpportunityChoice === YesNoAnswer.Yes,
-      falseCase: () => (this.data.referralOpportunityChoice === YesNoAnswer.No ? false : null),
+      when: this.data.referralOpportunityChoice === YesNoEnum.yes,
+      falseCase: () => (this.data.referralOpportunityChoice === YesNoEnum.no ? false : null),
     })
   }
 }
