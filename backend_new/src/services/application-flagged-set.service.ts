@@ -7,8 +7,6 @@ import {
   OnModuleInit,
 } from '@nestjs/common';
 import { SchedulerRegistry } from '@nestjs/schedule';
-import { CronJob } from 'cron';
-import dayjs from 'dayjs';
 import {
   ApplicationReviewStatusEnum,
   ApplicationStatusEnum,
@@ -30,7 +28,8 @@ import { buildPaginationMetaInfo } from '../utilities/pagination-helpers';
 import { AfsResolve } from '../dtos/application-flagged-sets/afs-resolve.dto';
 import { User } from '../dtos/users/user.dto';
 import { Application } from '../dtos/applications/application.dto';
-import { IdDTO } from 'src/dtos/shared/id.dto';
+import { IdDTO } from '../dtos/shared/id.dto';
+import { startCronJob } from '../utilities/cron-job-starter';
 
 /*
   this is the service for application flaged sets
@@ -48,36 +47,14 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
   ) {}
 
   onModuleInit() {
-    // Take the cron job frequency from .env and add a random seconds to it.
-    // That way when there are multiple instances running they won't run at the exact same time.
-    const repeatCron = process.env.AFS_PROCESSING_CRON_STRING;
-    const randomSecond = Math.floor(Math.random() * 30);
-    const newCron = `${randomSecond * 2} ${repeatCron}`;
-    const job = new CronJob(newCron, () => {
-      void (async () => {
-        const currentCronJob = await this.prisma.cronJob.findFirst({
-          where: {
-            name: CRON_JOB_NAME,
-          },
-        });
-        // To prevent multiple overlapped jobs only run if one hasn't started in the last 5 minutes
-        if (
-          !currentCronJob ||
-          currentCronJob.lastRunDate <
-            dayjs(new Date()).subtract(5, 'minutes').toDate()
-        ) {
-          try {
-            await this.process();
-          } catch (e) {
-            this.logger.error(`${CRON_JOB_NAME} failed to run`);
-          }
-        }
-      })();
-    });
-    this.schedulerRegistry.addCronJob(CRON_JOB_NAME, job);
-    if (process.env.NODE_ENV !== 'test') {
-      job.start();
-    }
+    startCronJob(
+      this.prisma,
+      CRON_JOB_NAME,
+      process.env.AFS_PROCESSING_CRON_STRING,
+      this.process,
+      this.logger,
+      this.schedulerRegistry,
+    );
   }
 
   /**
