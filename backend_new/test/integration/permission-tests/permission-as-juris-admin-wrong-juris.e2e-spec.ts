@@ -73,7 +73,6 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the wron
   let prisma: PrismaService;
   let userService: UserService;
   let cookies = '';
-  let userJurisId = '';
   let jurisId = '';
 
   beforeAll(async () => {
@@ -90,14 +89,14 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the wron
     app.use(cookieParser());
     await app.init();
 
-    userJurisId = await generateJurisdiction(prisma, 'permission juris 24');
+    const userJuris = await generateJurisdiction(prisma, 'permission juris 24');
 
     jurisId = await generateJurisdiction(prisma, 'permission juris 25');
 
     const storedUser = await prisma.userAccounts.create({
       data: await userFactory({
         roles: { isJurisdictionalAdmin: true },
-        jurisdictionId: userJurisId,
+        jurisdictionIds: [userJuris],
         mfaEnabled: false,
         confirmedAt: new Date(),
       }),

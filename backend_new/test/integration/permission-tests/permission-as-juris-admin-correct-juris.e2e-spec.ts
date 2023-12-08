@@ -93,7 +93,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
     const storedUser = await prisma.userAccounts.create({
       data: await userFactory({
         roles: { isJurisdictionalAdmin: true },
-        jurisdictionId: jurisId,
+        jurisdictionIds: [jurisId],
         mfaEnabled: false,
         confirmedAt: new Date(),
       }),

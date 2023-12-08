@@ -138,7 +138,7 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
       data: await userFactory({
         roles: { isPartner: true },
         listings: [userListingId, userListingToBeDeleted, closedUserListingId],
-        jurisdictionId: jurisId,
+        jurisdictionIds: [jurisId],
         mfaEnabled: false,
         confirmedAt: new Date(),
       }),

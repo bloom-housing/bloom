@@ -490,7 +490,7 @@ describe('Testing auth service', () => {
         id,
       },
     });
-    expect(sendMfaCodeMock).toHaveBeenCalled();
+    expect(emailService.sendMfaCode).toHaveBeenCalled();
     expect(res).toEqual({
       email: 'example@exygy.com',
       phoneNumberVerified: false,

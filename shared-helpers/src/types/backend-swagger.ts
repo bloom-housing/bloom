@@ -4025,6 +4025,11 @@ export interface AfsResolve {
   applications: IdDTO[]
 }
 
+export interface AmiChartQueryParams {
+  /**  */
+  jurisdictionId?: string
+}
+
 export interface AmiChartCreate {
   /**  */
   items: AmiChartItem[]
@@ -4045,33 +4050,6 @@ export interface AmiChartUpdate {
 
   /**  */
   name: string
-}
-
-export interface AmiChartQueryParams {
-  /**  */
-  jurisdictionId?: string
-}
-
-export interface ReservedCommunityTypeCreate {
-  /**  */
-  name: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  jurisdictions: IdDTO
-}
-
-export interface ReservedCommunityTypeUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  name: string
-
-  /**  */
-  description?: string
 }
 
 export interface ReservedCommunityTypeQueryParams {
@@ -4097,6 +4075,28 @@ export interface ReservedCommunityType {
 
   /**  */
   jurisdictions: IdDTO
+}
+
+export interface ReservedCommunityTypeCreate {
+  /**  */
+  name: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+export interface ReservedCommunityTypeUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+
+  /**  */
+  description?: string
 }
 
 export interface UnitTypeCreate {

@@ -144,7 +144,7 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
       data: await userFactory({
         roles: { isPartner: true },
         listings: [listing3.id],
-        jurisdictionId: jurisId,
+        jurisdictionIds: [jurisId],
         mfaEnabled: false,
         confirmedAt: new Date(),
       }),

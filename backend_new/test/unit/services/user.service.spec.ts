@@ -1072,7 +1072,7 @@ describe('Testing user service', () => {
             } as unknown as User,
           ),
       ).rejects.toThrowError(
-        `userID ${id}: incoming current password doesn't match stored password`,
+        `userID ${id}: incoming password doesn't match stored password`,
       );
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
         include: {
