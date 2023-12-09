@@ -22,6 +22,7 @@ import { useGetApplicationStatusProps } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
+import { runtimeConfig } from "../../../lib/runtime-config"
 
 const loadListing = async (
   backendApiBase,
@@ -196,3 +197,11 @@ const ApplicationChooseLanguage = (props: ChooseLanguageProps) => {
 }
 
 export default ApplicationChooseLanguage
+
+export function getServerSideProps() {
+  const backendApiBase = runtimeConfig.getBackendApiBase()
+
+  return {
+    props: { backendApiBase: backendApiBase },
+  }
+}
