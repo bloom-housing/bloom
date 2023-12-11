@@ -43,21 +43,24 @@ const ApplicationAddress = () => {
   const currentPageSection = 1
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { control, register, handleSubmit, setValue, watch, errors } = useForm<Record<string, any>>(
-    {
-      defaultValues: {
-        "applicant.phoneNumber": application.applicant.phoneNumber,
-        "applicant.noPhone": application.applicant.noPhone,
-        additionalPhone: application.additionalPhone,
-        "applicant.phoneNumberType": application.applicant.phoneNumberType,
-        sendMailToMailingAddress: application.sendMailToMailingAddress,
-        "applicant.workInRegion": application.applicant.workInRegion,
-        "applicant.address.state": application.applicant.address.state,
-      },
-      shouldFocusError: false,
-    }
-  )
-  const onSubmit = (data) => {
+  const { control, register, handleSubmit, setValue, watch, errors, trigger } = useForm<
+    Record<string, any>
+  >({
+    defaultValues: {
+      "applicant.phoneNumber": application.applicant.phoneNumber,
+      "applicant.noPhone": application.applicant.noPhone,
+      additionalPhone: application.additionalPhone,
+      "applicant.phoneNumberType": application.applicant.phoneNumberType,
+      sendMailToMailingAddress: application.sendMailToMailingAddress,
+      "applicant.workInRegion": application.applicant.workInRegion,
+      "applicant.address.state": application.applicant.address.state,
+    },
+    shouldFocusError: false,
+  })
+  const onSubmit = async (data) => {
+    const validation = await trigger()
+    if (!validation) return
+
     if (!verifyAddress) {
       setFoundAddress({})
       setVerifyAddress(true)

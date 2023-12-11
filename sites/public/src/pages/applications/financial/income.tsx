@@ -55,7 +55,7 @@ const ApplicationIncome = () => {
     : 3
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, getValues, setValue } = useForm({
+  const { register, handleSubmit, errors, getValues, setValue, trigger } = useForm({
     defaultValues: {
       income: application.income,
       incomePeriod: application.incomePeriod,
@@ -63,7 +63,10 @@ const ApplicationIncome = () => {
     shouldFocusError: false,
   })
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    const validation = await trigger()
+    if (!validation) return
+
     const { income, incomePeriod } = data
     const incomeValue = income.replaceAll(",", "")
     // Skip validation of total income if the applicant has income vouchers.

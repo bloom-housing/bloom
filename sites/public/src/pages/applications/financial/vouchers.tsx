@@ -25,12 +25,15 @@ const ApplicationVouchers = () => {
     : 3
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, getValues } = useForm({
+  const { register, handleSubmit, errors, getValues, trigger } = useForm({
     defaultValues: { incomeVouchers: application.incomeVouchers?.toString() },
     shouldFocusError: false,
   })
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    const validation = await trigger()
+    if (!validation) return
+
     const { incomeVouchers } = data
     const toSave = { incomeVouchers: JSON.parse(incomeVouchers) }
 
