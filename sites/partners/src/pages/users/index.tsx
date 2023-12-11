@@ -11,6 +11,7 @@ import {
   AlertTypes,
   AlertBox,
   Icon,
+  UniversalIconType,
 } from "@bloom-housing/ui-components"
 import { Button } from "@bloom-housing/ui-seeds"
 import { User } from "@bloom-housing/backend-core/types"
@@ -184,7 +185,11 @@ const Users = () => {
                   <Button
                     className="mx-1"
                     variant="primary-outlined"
-                    leadIcon={!csvExportLoading ? <Icon symbol={faFileExport} size="base" /> : null}
+                    leadIcon={
+                      !csvExportLoading ? (
+                        <Icon symbol={faFileExport as UniversalIconType} size="base" />
+                      ) : null
+                    }
                     onClick={() => onExport()}
                     loadingMessage={csvExportLoading && t("t.formSubmitted")}
                     id={"export-users"}

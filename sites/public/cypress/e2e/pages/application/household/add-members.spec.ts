@@ -16,7 +16,7 @@ describe("applications/household/add-members", function () {
   })
 
   it("should move to correct route on Add Member click", function () {
-    cy.getByID("btn-add-member").click()
+    cy.getByID("app-add-household-member-button").click()
     cy.location("pathname").should("include", "applications/household/member")
   })
 })

@@ -1,26 +1,10 @@
-/*
-3.2 Income
-Total pre-tax household income from all sources
-*/
 import React, { useContext, useEffect, useState } from "react"
 import Link from "next/link"
-import { ApplicationSection, Listing } from "@bloom-housing/backend-core/types"
-import { Button } from "@bloom-housing/ui-seeds"
-import {
-  AlertBox,
-  AlertNotice,
-  Field,
-  FieldGroup,
-  Form,
-  FormCard,
-  ProgressNav,
-  t,
-  Heading,
-} from "@bloom-housing/ui-components"
-import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import FormBackLink from "../../../components/applications/FormBackLink"
-import { useFormConductor } from "../../../lib/hooks"
+import { ApplicationSection, Listing } from "@bloom-housing/backend-core/types"
+import { AlertBox, AlertNotice, Field, FieldGroup, Form, t } from "@bloom-housing/ui-components"
+import { Alert } from "@bloom-housing/ui-seeds"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   OnClientSide,
   PageView,
@@ -28,7 +12,11 @@ import {
   AuthContext,
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
+import FormsLayout from "../../../layouts/forms"
+import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
+import ApplicationFormLayout from "../../../layouts/application-form"
+import styles from "../../../layouts/application-form.module.scss"
 
 type IncomeError = "low" | "high" | null
 type IncomePeriod = "perMonth" | "perYear"
@@ -66,7 +54,6 @@ const ApplicationIncome = () => {
     ? 4
     : 3
 
-  /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, getValues, setValue } = useForm({
     defaultValues: {
@@ -120,68 +107,68 @@ const ApplicationIncome = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard>
-        <FormBackLink
-          url={conductor.determinePreviousUrl()}
-          onClick={() => conductor.setNavigatedBack(true)}
-        />
-
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">
-            {t("application.financial.income.title")}
-          </h2>
-
-          <p className="field-note mt-5 mb-4">{t("application.financial.income.instruction1")}</p>
-
-          <p className="field-note">{t("application.financial.income.instruction2")}</p>
-        </div>
-
-        {Object.entries(errors).length > 0 && (
-          <AlertBox type="alert" inverted closeable>
-            {t("errors.errorsToResolve")}
-          </AlertBox>
-        )}
-
-        {incomeError && (
-          <>
-            <AlertBox type="alert" inverted onClose={() => setIncomeError(null)}>
-              {t("application.household.dontQualifyHeader")}
-            </AlertBox>
-            <AlertNotice
-              title={t(`application.financial.income.validationError.reason.${incomeError}`)}
-              type="alert"
-              inverted
+      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={t("application.financial.income.title")}
+          subheading={
+            <div>
+              <p className="field-note mb-4">{t("application.financial.income.instruction1")}</p>
+              <p className="field-note">{t("application.financial.income.instruction2")}</p>
+            </div>
+          }
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: OnClientSide(),
+          }}
+          backLink={{
+            url: conductor.determinePreviousUrl(),
+          }}
+          conductor={conductor}
+        >
+          {Object.entries(errors).length > 0 && (
+            <Alert
+              className={styles["message-inside-card"]}
+              variant="alert"
+              fullwidth
+              id={"application-alert-box"}
             >
-              <p className="mb-2">
-                {t(`application.financial.income.validationError.instruction1`)}
-              </p>
-              <p className="mb-2">
-                {t(`application.financial.income.validationError.instruction2`)}
-              </p>
-              <p>
-                <Link href={`/get-assistance`}>{t("pageTitle.getAssistance")}</Link>
-              </p>
-            </AlertNotice>
-          </>
-        )}
+              {t("errors.errorsToResolve")}
+            </Alert>
+          )}
 
-        <Form onSubmit={handleSubmit(onSubmit, onError)}>
-          <div className="form-card__group">
+          {incomeError && (
+            <CardSection>
+              <AlertBox type="alert" inverted onClose={() => setIncomeError(null)}>
+                {t("application.household.dontQualifyHeader")}
+              </AlertBox>
+              <AlertNotice
+                title={t(`application.financial.income.validationError.reason.${incomeError}`)}
+                type="alert"
+                inverted
+              >
+                <p className="mb-2">
+                  {t(`application.financial.income.validationError.instruction1`)}
+                </p>
+                <p className="mb-2">
+                  {t(`application.financial.income.validationError.instruction2`)}
+                </p>
+                <p>
+                  <Link href={`/get-assistance`}>{t("pageTitle.getAssistance")}</Link>
+                </p>
+              </AlertNotice>
+            </CardSection>
+          )}
+
+          <CardSection divider={"flush"} className={"border-none"}>
             <Field
               id="income"
               name="income"
               type="currency"
               label={t("application.financial.income.prompt")}
               caps={true}
-              placeholder={t("application.financial.income.placeholder")}
               validation={{ required: true, min: 0.01 }}
               error={errors.income}
               register={register}
@@ -190,6 +177,7 @@ const ApplicationIncome = () => {
               getValues={getValues}
               prepend={"$"}
               dataTestId={"app-income"}
+              subNote={t("application.financial.income.placeholder")}
             />
 
             <fieldset>
@@ -207,40 +195,9 @@ const ApplicationIncome = () => {
                 fieldClassName="ml-0"
               />
             </fieldset>
-          </div>
-
-          <div className="form-card__pager">
-            <div className="form-card__pager-row primary">
-              <Button
-                type="submit"
-                variant="primary"
-                onClick={() => {
-                  conductor.returnToReview = false
-                  conductor.setNavigatedBack(false)
-                }}
-                id={"app-next-step-button"}
-              >
-                {t("t.next")}
-              </Button>
-            </div>
-
-            {conductor.canJumpForwardToReview() && (
-              <div className="form-card__pager-row">
-                <Button
-                  type="submit"
-                  variant="text"
-                  className="mb-4"
-                  onClick={() => {
-                    conductor.returnToReview = true
-                  }}
-                >
-                  {t("application.form.general.saveAndReturn")}
-                </Button>
-              </div>
-            )}
-          </div>
-        </Form>
-      </FormCard>
+          </CardSection>
+        </ApplicationFormLayout>
+      </Form>
     </FormsLayout>
   )
 }

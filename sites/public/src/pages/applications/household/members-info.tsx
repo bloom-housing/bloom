@@ -1,17 +1,14 @@
-/*
-2.1a - Member Info
-A notice regarding adding household members
-*/
-import { useRouter } from "next/router"
-import { Button } from "@bloom-housing/ui-seeds"
-import { AlertBox, Form, FormCard, ProgressNav, t, Heading } from "@bloom-housing/ui-components"
-import FormsLayout from "../../../layouts/forms"
+import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import FormBackLink from "../../../components/applications/FormBackLink"
-import { useFormConductor } from "../../../lib/hooks"
+import { useRouter } from "next/router"
+import { Form, t } from "@bloom-housing/ui-components"
+import { Alert } from "@bloom-housing/ui-seeds"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
-import { useContext, useEffect } from "react"
+import FormsLayout from "../../../layouts/forms"
+import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
+import ApplicationFormLayout from "../../../layouts/application-form"
+import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationMembersInfo = () => {
   const { profile } = useContext(AuthContext)
@@ -19,13 +16,13 @@ const ApplicationMembersInfo = () => {
   const router = useRouter()
   const currentPageSection = 2
 
-  /* Form Handler */
   const { handleSubmit, errors } = useForm({
     shouldFocusError: false,
   })
   const onSubmit = () => {
     void router.push("/applications/household/add-members")
   }
+
   const onError = () => {
     window.scrollTo(0, 0)
   }
@@ -40,49 +37,34 @@ const ApplicationMembersInfo = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard>
-        <FormBackLink
-          url={conductor.determinePreviousUrl()}
-          onClick={() => conductor.setNavigatedBack(true)}
-        />
-
-        <div className="form-card__lead">
-          <h2 className="form-card__title is-borderless mt-4">
-            {t("application.household.membersInfo.title")}
-          </h2>
-        </div>
-
-        {Object.entries(errors).length > 0 && (
-          <AlertBox type="alert" inverted closeable>
-            {t("errors.errorsToResolve")}
-          </AlertBox>
-        )}
-
-        <Form onSubmit={handleSubmit(onSubmit, onError)}>
-          <div className="form-card__pager">
-            <div className="form-card__pager-row primary">
-              <Button
-                type="submit"
-                variant="primary"
-                onClick={() => {
-                  conductor.setNavigatedBack(false)
-                }}
-                id={"app-next-step-button"}
-              >
-                {t("t.next")}
-              </Button>
-            </div>
-          </div>
-        </Form>
-      </FormCard>
+      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={t("application.household.membersInfo.title")}
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: OnClientSide(),
+          }}
+          conductor={conductor}
+          backLink={{
+            url: conductor.determinePreviousUrl(),
+          }}
+          hideBorder={true}
+        >
+          {Object.entries(errors).length > 0 && (
+            <Alert
+              className={styles["message-inside-card"]}
+              variant="alert"
+              fullwidth
+              id={"application-alert-box"}
+            >
+              {t("errors.errorsToResolve")}
+            </Alert>
+          )}
+        </ApplicationFormLayout>
+      </Form>
     </FormsLayout>
   )
 }

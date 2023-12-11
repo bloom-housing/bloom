@@ -1,7 +1,8 @@
-import { useContext, useState, useEffect, useCallback } from "react"
+import React, { useContext, useState, useEffect, useCallback } from "react"
+import { useRouter } from "next/router"
+import { useForm } from "react-hook-form"
 import { Application } from "@bloom-housing/backend-core/types"
-import { Button } from "@bloom-housing/ui-seeds"
-import { Form, FormCard, Heading, ProgressNav, t } from "@bloom-housing/ui-components"
+import { Form, t } from "@bloom-housing/ui-components"
 import {
   blankApplication,
   OnClientSide,
@@ -9,13 +10,14 @@ import {
   pushGtmEvent,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
-import { useForm } from "react-hook-form"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
 import AutofillCleaner from "../../../lib/applications/appAutofill"
-import { useRouter } from "next/router"
 import { UserStatus } from "../../../lib/constants"
+import ApplicationFormLayout from "../../../layouts/application-form"
+import { Button } from "@bloom-housing/ui-seeds"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 export default () => {
   const router = useRouter()
@@ -30,7 +32,6 @@ export default () => {
 
   const mounted = OnClientSide()
 
-  /* Form Handler */
   const { handleSubmit } = useForm()
   const onSubmit = useCallback(() => {
     if (!submitted) {
@@ -90,23 +91,21 @@ export default () => {
 
   return previousApplication ? (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={mounted}
-        />
-      </FormCard>
-      <FormCard>
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless mt-4">
-            {t("application.autofill.saveTime")}
-          </h2>
-        </div>
-        <div className="form-card__pager-row px-16">
-          <p className="field-note py-2">{t("application.autofill.prefillYourApplication")}</p>
-        </div>
+      <ApplicationFormLayout
+        listingName={listing?.name}
+        heading={t("application.autofill.saveTime")}
+        subheading={t("application.autofill.prefillYourApplication")}
+        progressNavProps={{
+          currentPageSection: currentPageSection,
+          completedSections: application.completedSections,
+          labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+          mounted: mounted,
+        }}
+        backLink={{
+          url: `/applications/start/what-to-expect`,
+        }}
+        hideBorder={true}
+      >
         <FormSummaryDetails
           application={previousApplication}
           listing={listing}
@@ -115,35 +114,36 @@ export default () => {
           hidePrograms={true}
         />
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-card__pager" data-testid={"application-initial-page"}>
-            <div className="form-card__pager-row primary">
-              <Button
-                type="submit"
-                variant="primary"
-                onClick={() => {
-                  useDetails = true
-                }}
-                id={"autofill-accept"}
-              >
-                {t("application.autofill.start")}
-              </Button>
-            </div>
-            <div className="form-card__pager-row">
-              <Button
-                type="submit"
-                variant="text"
-                className="mb-4"
-                onClick={() => {
-                  useDetails = false
-                }}
-                id={"autofill-decline"}
-              >
-                {t("application.autofill.reset")}
-              </Button>
-            </div>
-          </div>
+          <CardSection
+            id={"application-initial-page"}
+            className={"bg-primary-lighter border-none"}
+            divider={"flush"}
+          >
+            <Button
+              variant={"primary"}
+              onClick={() => {
+                useDetails = true
+              }}
+              data-testid={"autofill-accept"}
+              type={"submit"}
+            >
+              {t("application.autofill.start")}
+            </Button>
+          </CardSection>
+          <CardSection>
+            <Button
+              variant={"text"}
+              onClick={() => {
+                useDetails = false
+              }}
+              type={"submit"}
+              id={"autofill-decline"}
+            >
+              {t("application.autofill.reset")}
+            </Button>
+          </CardSection>
         </Form>
-      </FormCard>
+      </ApplicationFormLayout>
     </FormsLayout>
   ) : (
     <FormsLayout></FormsLayout>
