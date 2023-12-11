@@ -613,7 +613,7 @@ describe('Listing Controller Tests', () => {
     expect(res.body.name).toEqual(val.name);
   });
 
-  it('should successfully process listings that are passed due', async () => {
+  it('should successfully process listings that are past due', async () => {
     const jurisdictionA = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
@@ -639,6 +639,58 @@ describe('Listing Controller Tests', () => {
 
     expect(postProcessListing.status).toEqual(ListingsStatusEnum.closed);
     expect(postProcessListing.closedAt).not.toBeNull();
+  });
+
+  it('should only process listings that are passed due', async () => {
+    const jurisdictionA = await prisma.jurisdictions.create({
+      data: jurisdictionFactory(),
+    });
+    const pastDueListingData = await listingFactory(jurisdictionA.id, prisma, {
+      status: ListingsStatusEnum.active,
+      applicationDueDate: new Date(0),
+    });
+    const passedDueListing = await prisma.listings.create({
+      data: pastDueListingData,
+    });
+
+    const date = new Date();
+    date.setDate(date.getDate() + 10);
+
+    const futureDueListingData = await listingFactory(
+      jurisdictionA.id,
+      prisma,
+      {
+        status: ListingsStatusEnum.active,
+        applicationDueDate: date,
+      },
+    );
+    const futureDueListing = await prisma.listings.create({
+      data: futureDueListingData,
+    });
+
+    const res = await request(app.getHttpServer())
+      .put(`/listings/process`)
+      .expect(200);
+
+    expect(res.body.success).toEqual(true);
+
+    const postProcessListing = await prisma.listings.findUnique({
+      where: {
+        id: passedDueListing.id,
+      },
+    });
+
+    expect(postProcessListing.status).toEqual(ListingsStatusEnum.closed);
+    expect(postProcessListing.closedAt).not.toBeNull();
+
+    const postProcessListing2 = await prisma.listings.findUnique({
+      where: {
+        id: futureDueListing.id,
+      },
+    });
+
+    expect(postProcessListing2.status).toEqual(ListingsStatusEnum.active);
+    expect(postProcessListing2.closedAt).toBeNull();
   });
 
   describe('listings approval notification', () => {

@@ -51,7 +51,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
       this.prisma,
       CRON_JOB_NAME,
       process.env.AFS_PROCESSING_CRON_STRING,
-      this.process,
+      this.process.bind(this),
       this.logger,
       this.schedulerRegistry,
     );

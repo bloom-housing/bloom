@@ -155,7 +155,7 @@ export class ListingService implements OnModuleInit {
       this.prisma,
       CRON_JOB_NAME,
       process.env.LISTING_PROCESSING_CRON_STRING,
-      this.process,
+      this.process.bind(this),
       this.logger,
       this.schedulerRegistry,
     );

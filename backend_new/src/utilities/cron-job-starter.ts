@@ -44,7 +44,7 @@ export const startCronJob = (
         try {
           await functionToCall();
         } catch (e) {
-          logger.error(`${cronName} failed to run`);
+          logger.error(`${cronName} failed to run. ${e}`);
         }
       }
     })();
