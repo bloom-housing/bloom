@@ -76,19 +76,19 @@ const SelectAndOrder = ({
     [draftListingData]
   )
 
+  const additionalFieldsTag = () => (
+    <Tag className="lowercase w-auto" variant="primary">
+      <Icon icon={faInfoCircle} /> {t("listings.providesAdditionalFields")}
+    </Tag>
+  )
+
   const draggableTableData: StandardTableData = useMemo(
     () =>
       draftListingData.map((item) => ({
         name: { content: item.text },
         additionalFields: {
           content: (
-            <>
-              {item?.options.some((item) => item.collectAddress) && (
-                <Tag className="lowercase w-auto" variant="primary">
-                  <Icon icon={faInfoCircle} /> {t("listings.providesAdditionalFields")}
-                </Tag>
-              )}
-            </>
+            <>{item?.options.some((item) => item.collectAddress) && additionalFieldsTag()}</>
           ),
         },
         action: {
@@ -118,13 +118,7 @@ const SelectAndOrder = ({
         name: { content: item.text },
         additionalFields: {
           content: (
-            <>
-              {item?.options.some((item) => item.collectAddress) && (
-                <Tag className="lowercase w-auto" variant="primary">
-                  <Icon icon={faInfoCircle} /> {t("listings.providesAdditionalFields")}
-                </Tag>
-              )}
-            </>
+            <>{item?.options.some((item) => item.collectAddress) && additionalFieldsTag()}</>
           ),
         },
         action: {
@@ -228,11 +222,7 @@ const SelectAndOrder = ({
     return (
       <div className="ml-8 -mt-6 mb-4 text-sm">
         {item.options.some((option) => option.collectAddress) && (
-          <div className="flex mt-6 mb-2">
-            <Tag className="lowercase w-auto" variant="primary">
-              <Icon icon={faInfoCircle} /> {t("listings.providesAdditionalFields")}
-            </Tag>
-          </div>
+          <div className="flex mt-6 mb-2">{additionalFieldsTag()}</div>
         )}
         <div>
           <button
