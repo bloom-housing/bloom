@@ -80,6 +80,17 @@ const SelectAndOrder = ({
     () =>
       draftListingData.map((item) => ({
         name: { content: item.text },
+        additionalFields: {
+          content: (
+            <>
+              {item?.options.some((item) => item.collectAddress) && (
+                <Tag className="lowercase w-auto" variant="primary">
+                  <Icon icon={faInfoCircle} /> {t("listings.providesAdditionalFields")}
+                </Tag>
+              )}
+            </>
+          ),
+        },
         action: {
           content: (
             <div className="flex">
@@ -105,6 +116,17 @@ const SelectAndOrder = ({
       listingData.map((item, index) => ({
         order: { content: index + 1 },
         name: { content: item.text },
+        additionalFields: {
+          content: (
+            <>
+              {item?.options.some((item) => item.collectAddress) && (
+                <Tag className="lowercase w-auto" variant="primary">
+                  <Icon icon={faInfoCircle} /> {t("listings.providesAdditionalFields")}
+                </Tag>
+              )}
+            </>
+          ),
+        },
         action: {
           content: (
             <div className="flex">
@@ -146,11 +168,17 @@ const SelectAndOrder = ({
   const formTableHeaders = {
     order: "t.order",
     name: "t.name",
+    ...(formKey === "preference" && {
+      additionalFields: "settings.preferenceAdditionalFields",
+    }),
     action: "",
   }
 
   const draggableTableHeaders = {
     name: "t.name",
+    ...(formKey === "preference" && {
+      additionalFields: "settings.preferenceAdditionalFields",
+    }),
     action: "",
   }
 
@@ -199,7 +227,7 @@ const SelectAndOrder = ({
     }
     return (
       <div className="ml-8 -mt-6 mb-4 text-sm">
-        {item.options[optionIndex]?.collectAddress && (
+        {item.options.some((option) => option.collectAddress) && (
           <div className="flex mt-6 mb-2">
             <Tag className="lowercase w-auto" variant="primary">
               <Icon icon={faInfoCircle} /> {t("listings.providesAdditionalFields")}
