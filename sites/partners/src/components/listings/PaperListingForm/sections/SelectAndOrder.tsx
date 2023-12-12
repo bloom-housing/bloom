@@ -77,7 +77,7 @@ const SelectAndOrder = ({
   )
 
   const additionalFieldsTag = () => (
-    <Tag className="lowercase w-auto" variant="primary">
+    <Tag variant="primary">
       <Icon icon={faInfoCircle} /> {t("listings.providesAdditionalFields")}
     </Tag>
   )
@@ -222,7 +222,7 @@ const SelectAndOrder = ({
     return (
       <div className="ml-8 -mt-6 mb-4 text-sm">
         {item.options.some((option) => option.collectAddress) && (
-          <div className="flex mt-6 mb-2">{additionalFieldsTag()}</div>
+          <div className="mt-6 mb-2">{additionalFieldsTag()}</div>
         )}
         <div>
           <button
@@ -279,11 +279,7 @@ const SelectAndOrder = ({
         open={!!tableDrawer}
         title={drawerTitle}
         ariaDescription={drawerTitle}
-        onClose={() => {
-          if (!selectDrawer) {
-            setTableDrawer(null)
-          }
-        }}
+        onClose={() => setTableDrawer(null)}
       >
         <div className="border rounded-md p-8 bg-white">
           {!!draftListingData.length && (
