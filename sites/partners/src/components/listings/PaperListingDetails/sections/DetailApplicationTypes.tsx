@@ -1,10 +1,10 @@
 import React, { useContext } from "react"
 import { t, MinimalTable, StandardTableData } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { ApplicationMethodsTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingContext } from "../../ListingContext"
 import { getDetailBoolean } from "./helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
-import { ApplicationMethodsTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const DetailApplicationTypes = () => {
   const listing = useContext(ListingContext)

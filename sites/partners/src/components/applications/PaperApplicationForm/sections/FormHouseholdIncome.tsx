@@ -2,11 +2,11 @@ import React from "react"
 import { t, Field, Select } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
-import SectionWithGrid from "../../../shared/SectionWithGrid"
 import {
   IncomePeriodEnum,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const FormHouseholdIncome = () => {
   const formMethods = useFormContext()

@@ -4,14 +4,12 @@ import Head from "next/head"
 import {
   AgTable,
   t,
-  Button,
-  LocalizedLink,
   SiteAlert,
   useAgTable,
   Breadcrumbs,
   BreadcrumbLink,
-  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   ApplicationOrderByKeys,
@@ -177,22 +175,22 @@ const ApplicationsList = () => {
                 }}
                 headerContent={
                   <div className="flex-row">
-                    <LocalizedLink href={`/listings/${listingId}/applications/add`}>
-                      <Button
-                        size={AppearanceSizeType.small}
-                        className="mx-1"
-                        onClick={() => false}
-                        dataTestId={"addApplicationButton"}
-                      >
-                        {t("applications.addApplication")}
-                      </Button>
-                    </LocalizedLink>
+                    <Button
+                      href={`/listings/${listingId}/applications/add`}
+                      variant="primary-outlined"
+                      size="sm"
+                      className="mx-1"
+                      id={"addApplicationButton"}
+                    >
+                      {t("applications.addApplication")}
+                    </Button>
 
                     <Button
-                      size={AppearanceSizeType.small}
+                      variant="primary-outlined"
+                      size="sm"
                       className="mx-1"
                       onClick={() => onExport()}
-                      loading={csvExportLoading}
+                      loadingMessage={csvExportLoading && t("t.formSubmitted")}
                     >
                       {t("t.export")}
                     </Button>

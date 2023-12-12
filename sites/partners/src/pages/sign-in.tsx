@@ -225,7 +225,7 @@ const SignIn = () => {
         }}
         initialEmailValue={emailValue.current as string}
         onSubmit={(email) => onResendConfirmationSubmit(email)}
-        loading={isResendConfirmationLoading}
+        loadingMessage={isResendConfirmationLoading && t("t.formSubmitted")}
       />
       <FormsLayout>{formToRender}</FormsLayout>
     </>

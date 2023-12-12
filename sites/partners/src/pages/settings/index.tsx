@@ -3,8 +3,6 @@ import Head from "next/head"
 import { useSWRConfig } from "swr"
 
 import {
-  AppearanceSizeType,
-  Button,
   LoadingOverlay,
   MinimalTable,
   SiteAlert,
@@ -13,8 +11,8 @@ import {
   AlertTypes,
   useMutate,
   Modal,
-  AppearanceStyleType,
 } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts"
@@ -198,12 +196,12 @@ const Settings = () => {
                 emptyStateMessage={t("t.none")}
                 footer={
                   <Button
-                    size={AppearanceSizeType.small}
+                    size="sm"
                     onClick={() => {
                       setQuestionData(null)
                       setPreferenceDrawerOpen("add")
                     }}
-                    dataTestId={"preference-add-item"}
+                    id={"preference-add-item"}
                     disabled={loading}
                   >
                     {t("t.addItem")}
@@ -236,24 +234,25 @@ const Settings = () => {
         actions={[
           <Button
             type="button"
-            styleType={AppearanceStyleType.primary}
+            variant="primary-outlined"
             onClick={() => {
               saveQuestion({ ...copyModalOpen, text: `${copyModalOpen.text} (Copy)` }, "add")
             }}
-            dataTestId={"copy-button-confirm"}
-            loading={isCreateLoading}
-            size={AppearanceSizeType.small}
+            id={"copy-button-confirm"}
+            loadingMessage={isCreateLoading && t("t.formSubmitted")}
+            size="sm"
           >
             {t("settings.copy")}
           </Button>,
           <Button
+            variant="primary-outlined"
             type="button"
             onClick={() => {
               setCopyModalOpen(null)
             }}
             disabled={isCreateLoading}
-            dataTestId={"copy-button-cancel"}
-            size={AppearanceSizeType.small}
+            id={"copy-button-cancel"}
+            size="sm"
           >
             {t("t.cancel")}
           </Button>,

@@ -1,15 +1,13 @@
 import React, { createElement, FunctionComponent, useContext, useEffect, useState } from "react"
 import { AuthContext } from "./AuthContext"
 import { ConfigContext } from "./ConfigContext"
+import { Button } from "@bloom-housing/ui-seeds"
 import {
   NavigationContext,
-  Button,
   Modal,
   setSiteAlertMessage,
   AlertTypes,
   t,
-  AppearanceStyleType,
-  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 
 const PROMPT_TIMEOUT = 60000
@@ -85,12 +83,12 @@ export const IdleTimeout: FunctionComponent<IdleTimeoutProps> = ({
 
   const modalActions = [
     <Button
-      styleType={AppearanceStyleType.primary}
+      variant="primary"
       onClick={() => {
         clearTimeout(promptTimeout)
         setPromptTimeout(undefined)
       }}
-      size={AppearanceSizeType.small}
+      size="sm"
     >
       {promptAction}
     </Button>,

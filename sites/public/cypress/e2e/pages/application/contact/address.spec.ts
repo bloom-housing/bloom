@@ -65,7 +65,7 @@ describe("applications/contact/address", function () {
     cy.get(`[data-testid="app-found-address-label"]`).should("not.exist")
 
     // Let's go back and add other weirdness
-    cy.getByTestId("app-edit-original-address").click()
+    cy.getByID("app-edit-original-address").click()
     cy.getByTestId("app-primary-address-street").clear().type("98765 NW 10")
     cy.getByTestId("app-primary-address-zip").clear().type("54321")
 

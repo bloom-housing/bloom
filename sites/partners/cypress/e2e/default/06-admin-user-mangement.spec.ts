@@ -7,7 +7,7 @@ describe("Admin User Mangement Tests", () => {
     cy.signOut()
   })
 
-  it("as admin user, should show all users regadless of jurisdiction", () => {
+  it("as admin user, should show all users regardless of jurisdiction", () => {
     cy.visit("/")
     cy.getByTestId("Users-1").click()
     const rolesArray = ["Partner", "Administrator", "Jurisdictional Admin"]
@@ -26,7 +26,7 @@ describe("Admin User Mangement Tests", () => {
     })
     cy.visit("/")
     cy.getByTestId("Users-1").click()
-    cy.getByTestId("export-users").click()
+    cy.getByID("export-users").click()
     cy.getByTestId("alert-box").contains(
       "An email containing the exported file has been sent to admin@example.com"
     )
@@ -35,7 +35,7 @@ describe("Admin User Mangement Tests", () => {
   it("as admin user, should be able to create new admin", () => {
     cy.visit("/")
     cy.getByTestId("Users-1").click()
-    cy.getByTestId("add-user").click()
+    cy.getByID("add-user").click()
     cy.fixture("createAdminUser").then((obj) => {
       cy.fillFields(
         obj,
@@ -63,14 +63,14 @@ describe("Admin User Mangement Tests", () => {
         []
       )
     })
-    cy.getByTestId("invite-user").click()
+    cy.getByID("invite-user").click()
     cy.getByTestId("alert-box").contains("Invite sent").should("have.text", "Invite sent")
   })
 
   it("as admin user, should be able to create new jurisidictional admin", () => {
     cy.visit("/")
     cy.getByTestId("Users-1").click()
-    cy.getByTestId("add-user").click()
+    cy.getByID("add-user").click()
     cy.fixture("createJurisdictionalAdminUser").then((obj) => {
       cy.fillFields(
         obj,
@@ -102,14 +102,14 @@ describe("Admin User Mangement Tests", () => {
         []
       )
     })
-    cy.getByTestId("invite-user").click()
+    cy.getByID("invite-user").click()
     cy.getByTestId("alert-box").contains("Invite sent").should("have.text", "Invite sent")
   })
 
   it("as admin user, should be able to create new partner", () => {
     cy.visit("/")
     cy.getByTestId("Users-1").click()
-    cy.getByTestId("add-user").click()
+    cy.getByID("add-user").click()
     cy.fixture("createPartnerUser").then((obj) => {
       cy.fillFields(
         obj,
@@ -140,7 +140,7 @@ describe("Admin User Mangement Tests", () => {
     cy.getByTestId("jurisdictions").first().click()
     cy.getByTestId("listings_Bloomington").first().click()
     cy.getByTestId("listings_Bloomington").last().click()
-    cy.getByTestId("invite-user").click()
+    cy.getByID("invite-user").click()
     cy.getByTestId("alert-box").contains("Invite sent").should("have.text", "Invite sent")
   })
 })
