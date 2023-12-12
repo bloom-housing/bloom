@@ -399,7 +399,7 @@ const ApplicationAddress = () => {
 
                   <Field
                     id="mailingAddressStreet"
-                    name="mailingAddress.street"
+                    name="applicationsMailingAddress.street"
                     defaultValue={application.applicationsMailingAddress.street}
                     label={t("application.contact.streetAddress")}
                     validation={{ required: true, maxLength: 64 }}
@@ -415,7 +415,7 @@ const ApplicationAddress = () => {
 
                   <Field
                     id="mailingAddressStreet2"
-                    name="mailingAddress.street2"
+                    name="applicationsMailingAddress.street2"
                     label={t("application.contact.apt")}
                     defaultValue={application.applicationsMailingAddress.street2}
                     register={register}
@@ -428,7 +428,7 @@ const ApplicationAddress = () => {
                   <div className="flex max-w-2xl">
                     <Field
                       id="mailingAddressCity"
-                      name="mailingAddress.city"
+                      name="applicationsMailingAddress.city"
                       label={t("application.contact.city")}
                       defaultValue={application.applicationsMailingAddress.city}
                       validation={{ required: true, maxLength: 64 }}
@@ -444,7 +444,7 @@ const ApplicationAddress = () => {
 
                     <Select
                       id="mailingAddressState"
-                      name="mailingAddress.state"
+                      name="applicationsMailingAddress.state"
                       label={t("application.contact.state")}
                       defaultValue={application.applicationsMailingAddress.state}
                       validation={{ required: true, maxLength: 64 }}
@@ -464,7 +464,7 @@ const ApplicationAddress = () => {
 
                   <Field
                     id="mailingAddressZipCode"
-                    name="mailingAddress.zipCode"
+                    name="applicationsMailingAddress.zipCode"
                     label={t("application.contact.zip")}
                     defaultValue={application.applicationsMailingAddress.zipCode}
                     validation={{ required: true, maxLength: 64 }}
