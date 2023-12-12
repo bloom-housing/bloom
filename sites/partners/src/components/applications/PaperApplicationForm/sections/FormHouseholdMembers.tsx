@@ -1,18 +1,11 @@
 import React, { useState, useMemo, useCallback } from "react"
 import {
-  t,
-  MinimalTable,
-  Button,
-  AppearanceSizeType,
-  Drawer,
-  Modal,
-  AppearanceStyleType,
-} from "@bloom-housing/ui-components"
-import {
   HouseholdMember,
   HouseholdMemberUpdate,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { t, MinimalTable, Drawer, Modal } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
 import { FormMember } from "../FormMember"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
@@ -111,20 +104,20 @@ const FormHouseholdMembers = ({
         workInRegion: { content: chooseAddressStatus(workInRegion) },
         action: {
           content: (
-            <div className="flex">
+            <div className="flex gap-3">
               <Button
                 type="button"
-                className="font-semibold uppercase my-0"
+                className="font-semibold"
                 onClick={() => editMember(member.orderId)}
-                unstyled
+                variant="text"
               >
                 {t("t.edit")}
               </Button>
               <Button
                 type="button"
-                className="font-semibold uppercase text-alert my-0"
+                className="font-semibold text-alert"
                 onClick={() => setMembersDeleteModal(member.orderId)}
-                unstyled
+                variant="text"
               >
                 {t("t.delete")}
               </Button>
@@ -147,9 +140,10 @@ const FormHouseholdMembers = ({
 
         <Button
           type="button"
-          size={AppearanceSizeType.normal}
+          variant="primary-outlined"
+          size="sm"
           onClick={() => setMembersDrawer(householdMembers.length + 1)}
-          dataTestId={"addHouseholdMemberButton"}
+          id={"addHouseholdMemberButton"}
         >
           {t("application.add.addHouseholdMember")}
         </Button>
@@ -175,18 +169,15 @@ const FormHouseholdMembers = ({
         ariaDescription={t("application.deleteMemberDescription")}
         onClose={() => setMembersDeleteModal(null)}
         actions={[
-          <Button
-            styleType={AppearanceStyleType.alert}
-            onClick={() => deleteMember(membersDeleteModal)}
-            size={AppearanceSizeType.small}
-          >
+          <Button variant="alert" onClick={() => deleteMember(membersDeleteModal)} size="sm">
             {t("t.delete")}
           </Button>,
           <Button
+            variant="primary-outlined"
             onClick={() => {
               setMembersDeleteModal(null)
             }}
-            size={AppearanceSizeType.small}
+            size="sm"
           >
             {t("t.cancel")}
           </Button>,

@@ -1,13 +1,13 @@
 import React from "react"
-import { AppearanceStyleType, t, Button, Drawer } from "@bloom-housing/ui-components"
-import { Card, FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { t, Drawer } from "@bloom-housing/ui-components"
+import { Button, Card, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { AddressColsType, DetailsAddressColumns } from "./DetailsAddressColumns"
-import SectionWithGrid from "../../shared/SectionWithGrid"
 import {
   Application,
   HouseholdMember,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import SectionWithGrid from "../../shared/SectionWithGrid"
 
 export type MembersDrawer = HouseholdMember | null
 
@@ -122,7 +122,7 @@ const DetailsMemberDrawer = ({
         </Card.Section>
       </Card>
 
-      <Button styleType={AppearanceStyleType.primary} onClick={() => setMembersDrawer(null)}>
+      <Button variant="primary" onClick={() => setMembersDrawer(null)}>
         {t("t.done")}
       </Button>
     </Drawer>

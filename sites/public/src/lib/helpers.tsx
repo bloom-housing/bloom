@@ -203,7 +203,9 @@ export const untranslateMultiselectQuestion = (
 
           if (option.extraData) {
             option.extraData.forEach((extra) => {
-              extra.key = selectedOption.untranslatedText ?? selectedOption.text
+              if (!extra.key) {
+                extra.key = selectedOption.untranslatedText ?? selectedOption.text
+              }
             })
           }
         })

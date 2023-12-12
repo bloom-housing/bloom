@@ -1,18 +1,8 @@
 import React, { useContext, useMemo } from "react"
 import { useRouter } from "next/router"
 import dayjs from "dayjs"
-import {
-  t,
-  Button,
-  AppearanceStyleType,
-  AppearanceBorderType,
-  StatusMessages,
-  LocalizedLink,
-  LinkButton,
-  Icon,
-  setSiteAlertMessage,
-} from "@bloom-housing/ui-components"
-import { Grid } from "@bloom-housing/ui-seeds"
+import { t, StatusMessages, Icon, setSiteAlertMessage } from "@bloom-housing/ui-components"
+import { Button, Link, Grid } from "@bloom-housing/ui-seeds"
 import { pdfUrlFromListingEvents, AuthContext } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "./ListingContext"
 import { StatusAside } from "../shared/StatusAside"
@@ -81,31 +71,25 @@ const ListingFormActions = ({
   const actions = useMemo(() => {
     const cancelButton = (
       <Grid.Cell className="flex" key="btn-cancel">
-        <LinkButton
-          unstyled
-          fullWidth
-          className="bg-opacity-0 text-blue-700"
+        <Link
+          className="w-full justify-center p-3"
           href={type === "add" ? "/" : `/listings/${listingId}`}
-          type="button"
         >
           {t("t.cancel")}
-        </LinkButton>
+        </Link>
       </Grid.Cell>
     )
 
     const editFromDetailButton = (
       <Grid.Cell key="btn-edit">
-        <LocalizedLink href={`/listings/${listingId}/edit`}>
-          <Button
-            styleType={AppearanceStyleType.primary}
-            fullWidth
-            onClick={() => false}
-            type="button"
-            dataTestId="listingEditButton"
-          >
-            {t("t.edit")}
-          </Button>
-        </LocalizedLink>
+        <Button
+          className="w-full"
+          href={`/listings/${listingId}/edit`}
+          type="button"
+          id="listingEditButton"
+        >
+          {t("t.edit")}
+        </Button>
       </Grid.Cell>
     )
 
@@ -113,9 +97,9 @@ const ListingFormActions = ({
       <Grid.Cell key="btn-publish">
         <Button
           id="publishButton"
-          styleType={AppearanceStyleType.success}
           type="button"
-          fullWidth
+          variant="success"
+          className="w-full"
           onClick={() => {
             submitFormWithStatus(true, ListingsStatusEnum.active)
           }}
@@ -129,7 +113,8 @@ const ListingFormActions = ({
       <Grid.Cell key="btn-draft">
         <Button
           type="button"
-          fullWidth
+          variant="primary-outlined"
+          className="w-full"
           onClick={() => submitFormWithStatus(false, ListingsStatusEnum.pending)}
         >
           {t("listings.actions.draft")}
@@ -140,11 +125,10 @@ const ListingFormActions = ({
     const saveExitButton = (
       <Grid.Cell key="btn-save">
         <Button
-          styleType={AppearanceStyleType.primary}
           type="button"
-          fullWidth
+          className="w-full"
           onClick={() => submitFormWithStatus(true, listing.status)}
-          dataTestId={"saveAndExitButton"}
+          id={"saveAndExitButton"}
         >
           {t("t.saveExit")}
         </Button>
@@ -155,7 +139,8 @@ const ListingFormActions = ({
       <Grid.Cell key="btn-close">
         <Button
           type="button"
-          fullWidth
+          variant="primary-outlined"
+          className="w-full"
           onClick={() => showCloseListingModal && showCloseListingModal()}
         >
           {t("listings.actions.close")}
@@ -166,11 +151,10 @@ const ListingFormActions = ({
     const unpublishButton = (
       <Grid.Cell key="btn-unpublish">
         <Button
-          styleType={AppearanceStyleType.alert}
-          fullWidth
+          variant="alert-outlined"
+          className="w-full"
           type="button"
           onClick={() => submitFormWithStatus(false, ListingsStatusEnum.pending)}
-          border={AppearanceBorderType.outlined}
         >
           {t("listings.actions.unpublish")}
         </Button>
@@ -181,14 +165,13 @@ const ListingFormActions = ({
       <Grid.Cell className="flex" key="btn-edit-lottery">
         <Button
           type="button"
-          unstyled
-          fullWidth
-          className="bg-opacity-0"
+          variant="text"
+          tailIcon={<Icon size="medium" symbol="edit" className="ml-2" />}
+          className="w-full p-3"
           onClick={() => showLotteryResultsDrawer && showLotteryResultsDrawer()}
         >
           {t("listings.actions.resultsPosted")}{" "}
           {dayjs(lotteryResults?.startTime).format("MMMM DD, YYYY")}
-          <Icon size="medium" symbol="edit" className="ml-2" />
         </Button>
       </Grid.Cell>
     )
@@ -197,7 +180,8 @@ const ListingFormActions = ({
       <Grid.Cell key="btn-post-results">
         <Button
           type="button"
-          fullWidth
+          variant="primary-outlined"
+          className="w-full"
           onClick={() => showLotteryResultsDrawer && showLotteryResultsDrawer()}
         >
           {t("listings.actions.postResults")}
@@ -207,22 +191,25 @@ const ListingFormActions = ({
 
     const previewButton = (
       <Grid.Cell key="btn-preview">
-        <a target="_blank" href={`${listingJurisdiction.publicUrl}/preview/listings/${listingId}`}>
-          <Button fullWidth onClick={() => false} type="button">
-            {t("listings.actions.preview")}
-          </Button>
-        </a>
+        <Button
+          variant="primary-outlined"
+          className="w-full"
+          href={`${listingJurisdiction.publicUrl}/preview/listings/${listingId}`}
+        >
+          {t("listings.actions.preview")}
+        </Button>
       </Grid.Cell>
     )
 
     const viewPostedResultsButton = (eventUrl: string) => (
       <Grid.Cell key="btn-preview-results">
-        <a href={eventUrl} target="_blank" className="inline-flex w-full">
-          <Button type="button" unstyled fullWidth>
-            {t("listings.actions.previewLotteryResults")}{" "}
-            <Icon size="medium" symbol="link" className="ml-2" />
-          </Button>
-        </a>
+        <Link
+          href={eventUrl}
+          tailIcon={<Icon size="medium" symbol="link" className="ml-2" />}
+          className="w-full justify-center p-3"
+        >
+          {t("listings.actions.previewLotteryResults")}{" "}
+        </Link>
       </Grid.Cell>
     )
 
@@ -230,9 +217,8 @@ const ListingFormActions = ({
       <Grid.Cell key="btn-submit">
         <Button
           id="submitButton"
-          styleType={AppearanceStyleType.success}
           type="button"
-          fullWidth
+          className="w-full"
           onClick={() => showSubmitForApprovalModal && showSubmitForApprovalModal()}
         >
           {t("t.submit")}
@@ -244,9 +230,9 @@ const ListingFormActions = ({
       <Grid.Cell key="btn-approve-and-publish">
         <Button
           id="approveAndPublishButton"
-          styleType={AppearanceStyleType.success}
           type="button"
-          fullWidth
+          variant="success"
+          className="w-full"
           onClick={async () => {
             // utilize same submit logic if updating status from edit view
             if (type === ListingFormActionsType.edit) {
@@ -284,10 +270,9 @@ const ListingFormActions = ({
       <Grid.Cell key="btn-request-changes">
         <Button
           id="requestChangesButton"
-          styleType={AppearanceStyleType.alert}
-          border={AppearanceBorderType.outlined}
+          variant="alert-outlined"
           type="button"
-          fullWidth
+          className="w-full"
           onClick={() => showRequestChangesModal && showRequestChangesModal()}
         >
           {t("listings.approval.requestChanges")}
@@ -299,9 +284,8 @@ const ListingFormActions = ({
       <Grid.Cell key="btn-reopen">
         <Button
           id="publishButton"
-          styleType={AppearanceStyleType.success}
           type="button"
-          fullWidth
+          className="w-full"
           onClick={() => {
             // TODO throw a modal
             submitFormWithStatus(true, ListingsStatusEnum.active)

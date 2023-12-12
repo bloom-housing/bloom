@@ -1,7 +1,5 @@
 import React from "react"
 import {
-  AppearanceStyleType,
-  Button,
   Field,
   Form,
   FormCard,
@@ -12,6 +10,7 @@ import {
   NetworkStatus,
   FormSignInControl,
 } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
 
 export enum RequestType {
   email = "email",
@@ -50,11 +49,7 @@ const FormSignInMFACode = ({
     note = (
       <>
         {t("nav.signInMFA.sentTo", { phoneNumber })}{" "}
-        <Button
-          unstyled={true}
-          className=".field-note underline cursor-pointer font-semibold m-0"
-          onClick={() => goBackToPhone()}
-        >
+        <Button variant="text" className="font-semibold" onClick={() => goBackToPhone()}>
           {" "}
           {t("nav.signInMFA.editPhoneNumber")}{" "}
         </Button>
@@ -94,7 +89,7 @@ const FormSignInMFACode = ({
             note={note}
           />
           <div className="text-center mt-10">
-            <Button styleType={AppearanceStyleType.primary} data-testid="verify-and-sign-in">
+            <Button type="submit" variant="primary" id="verify-and-sign-in">
               {t("nav.signInMFA.signIn")}
             </Button>
           </div>

@@ -3,8 +3,8 @@ import { t, ExpandableText } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString, getDetailFieldDate } from "./helpers"
-import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const DetailListingNotes = () => {
   const listing = useContext(ListingContext)

@@ -1,7 +1,7 @@
 import React from "react"
-import { Card, FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import { AppearanceStyleType, t, Button, Drawer } from "@bloom-housing/ui-components"
 import { Unit } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { t, Drawer } from "@bloom-housing/ui-components"
+import { Button, Card, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { getRentType } from "../../../lib/helpers"
 import { useSingleAmiChartData } from "../../../lib/hooks"
 import SectionWithGrid from "../../shared/SectionWithGrid"
@@ -143,7 +143,7 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
         </Card.Section>
       </Card>
 
-      <Button styleType={AppearanceStyleType.primary} onClick={() => setUnitDrawer(null)}>
+      <Button variant="primary" onClick={() => setUnitDrawer(null)}>
         {t("t.done")}
       </Button>
     </Drawer>
