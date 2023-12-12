@@ -302,6 +302,7 @@ export const mapRadiosToApi = (
   })
 
   return {
+    multiselectQuestionId: question.id,
     key,
     claimed: Object.keys(data)?.length !== 0,
     options,
@@ -334,6 +335,7 @@ export const mapCheckboxesToApi = (
     })
 
   return {
+    multiselectQuestionId: question.id,
     key: question.text ?? "",
     claimed,
     options: questionOptions,
