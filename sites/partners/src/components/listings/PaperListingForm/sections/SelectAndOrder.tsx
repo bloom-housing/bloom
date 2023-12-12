@@ -279,7 +279,11 @@ const SelectAndOrder = ({
         open={!!tableDrawer}
         title={drawerTitle}
         ariaDescription={drawerTitle}
-        onClose={() => setTableDrawer(null)}
+        onClose={() => {
+          if (!selectDrawer) {
+            setTableDrawer(null)
+          }
+        }}
       >
         <div className="border rounded-md p-8 bg-white">
           {!!draftListingData.length && (
