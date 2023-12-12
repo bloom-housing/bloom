@@ -23,6 +23,7 @@ import { PermissionService } from './permission.service';
 import Listing from '../dtos/listings/listing.dto';
 import { User } from '../dtos/users/user.dto';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import { GeocodingService } from './geocoding.service';
 
 const view: Partial<Record<ApplicationViews, Prisma.ApplicationsInclude>> = {
   partnerList: {
@@ -72,6 +73,7 @@ export class ApplicationService {
     private prisma: PrismaService,
     private emailService: EmailService,
     private permissionService: PermissionService,
+    private geocodingService: GeocodingService,
   ) {}
 
   /*
@@ -253,6 +255,13 @@ export class ApplicationService {
       },
       include: {
         jurisdictions: true,
+        // multiselect questions and address is needed for geocoding
+        listingMultiselectQuestions: {
+          include: {
+            multiselectQuestions: true,
+          },
+        },
+        listingsBuildingAddress: true,
       },
     });
     // if its a public submission
@@ -270,7 +279,7 @@ export class ApplicationService {
       }
     }
 
-    const rawApplication = this.prisma.applications.create({
+    const rawApplication = await this.prisma.applications.create({
       data: {
         ...dto,
         confirmationCode: this.generateConfirmationCode(),
@@ -384,6 +393,20 @@ export class ApplicationService {
         dto,
         listing.jurisdictions?.publicUrl,
       );
+    }
+
+    // Calculate geocoding preferences after save and email sent
+    if (listing.jurisdictions?.enableGeocodingPreferences) {
+      try {
+        void this.geocodingService.validateGeocodingPreferences(
+          mappedApplication,
+          mapTo(Listing, listing),
+        );
+      } catch (e) {
+        // If the geocoding fails it should not prevent the request from completing so
+        // catching all errors here
+        console.warn('error while validating geocoding preferences');
+      }
     }
 
     return mappedApplication;
