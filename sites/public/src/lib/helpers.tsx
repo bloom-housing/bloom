@@ -407,6 +407,12 @@ export const getSiteFooter = () => {
             >
               {t("pageTitle.languageAssistance")}
             </a>
+            <a
+              href="https://mtc.ca.gov/doorway-housing-portal-accessibility-statement"
+              target="_blank"
+            >
+              {t("footer.accessibilityStatement")}
+            </a>
           </FooterNav>
           <a href="https://twitter.com/mtcbata" target="_blank">
             <img
