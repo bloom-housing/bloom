@@ -8,6 +8,7 @@ import {
   LanguagesEnum,
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
+import dayjs from 'dayjs';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { ApplicationService } from '../../../src/services/application.service';
 import { ApplicationQueryParams } from '../../../src/dtos/applications/application-query-params.dto';
@@ -723,10 +724,9 @@ describe('Testing application service', () => {
   });
 
   it('should create an application from public site', async () => {
-    const submissionDate = new Date();
     prisma.listings.findUnique = jest.fn().mockResolvedValue({
       id: randomUUID(),
-      applicationDueDate: new Date(),
+      applicationDueDate: dayjs(new Date()).add(5, 'days').toDate(),
     });
 
     prisma.applications.create = jest.fn().mockResolvedValue({
@@ -734,7 +734,7 @@ describe('Testing application service', () => {
     });
 
     const exampleAddress = addressFactory() as AddressCreate;
-    const dto = mockCreateApplicationData(exampleAddress, submissionDate);
+    const dto = mockCreateApplicationData(exampleAddress);
 
     prisma.jurisdictions.findFirst = jest
       .fn()
@@ -799,7 +799,8 @@ describe('Testing application service', () => {
         incomePeriod: IncomePeriodEnum.perYear,
         language: LanguagesEnum.en,
         acceptedTerms: true,
-        submissionDate: submissionDate,
+        // Submission date is the moment it was created
+        submissionDate: expect.any(Date),
         reviewStatus: ApplicationReviewStatusEnum.valid,
         confirmationCode: expect.anything(),
         applicant: {
@@ -908,7 +909,7 @@ describe('Testing application service', () => {
             },
           ],
         },
-        programs: JSON.stringify([
+        programs: [
           {
             key: 'example key',
             claimed: true,
@@ -926,8 +927,8 @@ describe('Testing application service', () => {
               },
             ],
           },
-        ]),
-        preferences: JSON.stringify([
+        ],
+        preferences: [
           {
             key: 'example key',
             claimed: true,
@@ -945,7 +946,7 @@ describe('Testing application service', () => {
               },
             ],
           },
-        ]),
+        ],
         userAccounts: {
           connect: {
             id: 'requestingUser id',
@@ -1180,7 +1181,7 @@ describe('Testing application service', () => {
             },
           ],
         },
-        programs: JSON.stringify([
+        programs: [
           {
             key: 'example key',
             claimed: true,
@@ -1198,8 +1199,8 @@ describe('Testing application service', () => {
               },
             ],
           },
-        ]),
-        preferences: JSON.stringify([
+        ],
+        preferences: [
           {
             key: 'example key',
             claimed: true,
@@ -1217,7 +1218,7 @@ describe('Testing application service', () => {
               },
             ],
           },
-        ]),
+        ],
         userAccounts: {
           connect: {
             id: 'requestingUser id',
@@ -1430,7 +1431,7 @@ describe('Testing application service', () => {
             },
           ],
         },
-        programs: JSON.stringify([
+        programs: [
           {
             key: 'example key',
             claimed: true,
@@ -1448,8 +1449,8 @@ describe('Testing application service', () => {
               },
             ],
           },
-        ]),
-        preferences: JSON.stringify([
+        ],
+        preferences: [
           {
             key: 'example key',
             claimed: true,
@@ -1467,7 +1468,7 @@ describe('Testing application service', () => {
               },
             ],
           },
-        ]),
+        ],
       },
       where: {
         id: expect.anything(),

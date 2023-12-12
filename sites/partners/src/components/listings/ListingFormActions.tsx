@@ -57,7 +57,7 @@ const ListingFormActions = ({
   const listingId = listing?.id
 
   const listingJurisdiction = profile?.jurisdictions?.find(
-    (jurisdiction) => jurisdiction.id === listing.jurisdictions?.id
+    (jurisdiction) => jurisdiction.id === listing?.jurisdictions?.id
   )
 
   const recordUpdated = useMemo(() => {
@@ -112,6 +112,7 @@ const ListingFormActions = ({
     const saveDraftButton = (
       <Grid.Cell key="btn-draft">
         <Button
+          id="saveDraftButton"
           type="button"
           variant="primary-outlined"
           className="w-full"
@@ -194,7 +195,7 @@ const ListingFormActions = ({
         <Button
           variant="primary-outlined"
           className="w-full"
-          href={`${listingJurisdiction.publicUrl}/preview/listings/${listingId}`}
+          href={`${listingJurisdiction?.publicUrl}/preview/listings/${listingId}`}
         >
           {t("listings.actions.preview")}
         </Button>

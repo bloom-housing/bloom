@@ -218,18 +218,20 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
       delete data.monthlyRent
     }
 
-    if (data.priorityType?.id) {
-      const priority = unitPriorities.find((priority) => priority.id === data.priorityType.id)
-      data.priorityType = priority
+    if (data.unitAccessibilityPriorityTypes?.id) {
+      const priority = unitPriorities.find(
+        (priority) => priority.id === data.unitAccessibilityPriorityTypes.id
+      )
+      data.unitAccessibilityPriorityTypes = priority
     } else {
-      delete data.priorityType
+      delete data.unitAccessibilityPriorityTypes
     }
 
-    if (data.unitType?.id) {
-      const type = unitTypes.find((type) => type.id === data.unitType.id)
-      data.unitType = type
+    if (data.unitTypes?.id) {
+      const type = unitTypes.find((type) => type.id === data.unitTypes.id)
+      data.unitTypes = type
     } else {
-      delete data.unitType
+      delete data.unitTypes
     }
 
     if (currentAmiChart) {
@@ -332,7 +334,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   // after the unitType options are set
   useEffect(() => {
     if (defaultUnit && unitTypesOptions) {
-      setValue("unitType.id", defaultUnit.unitTypes?.id)
+      setValue("unitTypes.id", defaultUnit.unitTypes?.id)
     }
   }, [defaultUnit, unitTypesOptions, setValue])
 
@@ -392,20 +394,20 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
 
               <FieldValue label={t("listings.unit.type")}>
                 <Select
-                  id="unitType.id"
-                  name="unitType.id"
+                  id="unitTypes.id"
+                  name="unitTypes.id"
                   label={t("listings.unit.type")}
                   placeholder={t("listings.unit.type")}
                   labelClassName="sr-only"
                   register={register}
                   controlClassName="control"
                   options={unitTypesOptions}
-                  error={fieldHasError(errors?.unitType)}
+                  error={fieldHasError(errors?.unitTypes)}
                   errorMessage={t("errors.requiredFieldError")}
                   validation={{ required: true }}
                   inputProps={{
                     onChange: () => {
-                      clearErrors("unitType.id")
+                      clearErrors("unitTypes.id")
                     },
                   }}
                 />
@@ -623,8 +625,8 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
             <Grid.Row columns={4}>
               <Grid.Cell>
                 <Select
-                  id="priorityType.id"
-                  name="priorityType.id"
+                  id="unitAccessibilityPriorityTypes.id"
+                  name="unitAccessibilityPriorityTypes.id"
                   label={t("listings.unit.accessibilityPriorityType")}
                   placeholder={t("listings.unit.accessibilityPriorityType")}
                   register={register}

@@ -1,19 +1,29 @@
 import {
-  Prisma,
   PrismaClient,
   UnitAccessibilityPriorityTypeEnum,
+  UnitAccessibilityPriorityTypes,
 } from '@prisma/client';
 import { randomInt } from 'crypto';
 
-export const unitAccessibilityPriorityTypeFactorySingle = (
+export const unitAccessibilityPriorityTypeFactorySingle = async (
+  prismaClient: PrismaClient,
   type?: UnitAccessibilityPriorityTypeEnum,
-): Prisma.UnitAccessibilityPriorityTypesCreateInput => {
+): Promise<UnitAccessibilityPriorityTypes> => {
   const chosenType =
     type ||
     unitAccesibilityPriorityTypeAsArray[
       randomInt(unitAccesibilityPriorityTypeAsArray.length)
     ];
-  return { name: chosenType };
+
+  const priorityType =
+    await prismaClient.unitAccessibilityPriorityTypes.findFirst({
+      where: {
+        name: {
+          equals: chosenType,
+        },
+      },
+    });
+  return priorityType;
 };
 
 export const unitAccessibilityPriorityTypeFactoryAll = async (

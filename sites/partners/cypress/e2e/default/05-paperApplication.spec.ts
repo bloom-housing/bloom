@@ -10,8 +10,7 @@ describe("Paper Application Tests", () => {
     cy.signOut()
   })
 
-  // TODO: unskip when application flow is connected
-  it.skip("fill paper application form completely", () => {
+  it("fill paper application form completely", () => {
     cy.fixture("application").then((application) => {
       cy.fillPrimaryApplicant(application)
       cy.fillAlternateContact(application)
@@ -42,8 +41,7 @@ describe("Paper Application Tests", () => {
     })
   })
 
-  // TODO: unskip when application flow is connected
-  it.skip("submit different data", () => {
+  it("submit different data", () => {
     cy.fixture("partialApplicationA").then((application) => {
       cy.fillMailingAddress(application)
       cy.fillHouseholdIncome(application, ["incomeMonth"])
@@ -57,8 +55,7 @@ describe("Paper Application Tests", () => {
     })
   })
 
-  // TODO: unskip when application flow is connected
-  it.skip("fill only applicant data", () => {
+  it("fill only applicant data", () => {
     cy.fixture("applicantOnlyData").then((application) => {
       cy.fillPrimaryApplicant(application, [
         "application.additionalPhoneNumber",
@@ -75,8 +72,7 @@ describe("Paper Application Tests", () => {
     })
   })
 
-  // TODO: unskip when application flow is connected
-  it.skip("fill only alternate contact data", () => {
+  it("fill only alternate contact data", () => {
     cy.fixture("alternateContactOnlyData").then((application) => {
       cy.fillAlternateContact(application, ["alternateContact.mailingAddress.street2"])
       cy.fillTerms(application, true)
@@ -89,8 +85,7 @@ describe("Paper Application Tests", () => {
     })
   })
 
-  // TODO: unskip when application flow is connected
-  it.skip("fill only household member data", () => {
+  it("fill only household member data", () => {
     cy.fixture("householdMemberOnlyData").then((application) => {
       cy.fillHouseholdMember(application, [])
       cy.fillTerms(application, true)
@@ -104,8 +99,7 @@ describe("Paper Application Tests", () => {
     })
   })
 
-  // TODO: unskip when application flow is connected
-  it.skip("fill only household detail data", () => {
+  it("fill only household detail data", () => {
     cy.fixture("householdDetailsOnlyData").then((application) => {
       cy.fillHouseholdDetails(application, [])
       cy.fillTerms(application, true)

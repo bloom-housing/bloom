@@ -204,7 +204,7 @@ const FormPrimaryApplicant = () => {
 
         <FormAddress
           subtitle={t("application.details.residenceAddress")}
-          dataKey="application.applicant.address"
+          dataKey="application.applicant.applicantAddress"
           enableMailCheckbox={true}
           register={register}
           stateKeys={stateKeys}
@@ -213,7 +213,7 @@ const FormPrimaryApplicant = () => {
         {mailingAddressValue && (
           <FormAddress
             subtitle={t("application.contact.mailingAddress")}
-            dataKey="application.mailingAddress"
+            dataKey="application.applicationsMailingAddress"
             register={register}
             stateKeys={stateKeys}
           />
@@ -222,7 +222,7 @@ const FormPrimaryApplicant = () => {
         {workInRegionValue === YesNoEnum.yes && (
           <FormAddress
             subtitle={t("application.contact.workAddress")}
-            dataKey="application.applicant.workAddress"
+            dataKey="application.applicant.applicantWorkAddress"
             register={register}
             stateKeys={stateKeys}
           />

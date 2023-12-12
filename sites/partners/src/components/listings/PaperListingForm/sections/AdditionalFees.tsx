@@ -109,6 +109,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
         {enableUtilitiesIncluded && (
           <Grid.Row>
             <FieldValue label={t("listings.sections.utilities")}>
+              {/* TODO: default checked doesn't appear to be working even in main */}
               <FieldGroup
                 type="checkbox"
                 name="listingUtilities"

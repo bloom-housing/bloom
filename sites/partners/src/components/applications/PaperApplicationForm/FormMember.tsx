@@ -89,8 +89,8 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
         birthDay: currentlyEdited?.birthDay,
         birthYear: currentlyEdited?.birthYear,
       },
-      address: currentlyEdited?.householdMemberAddress,
-      workAddress: currentlyEdited?.householdMemberWorkAddress,
+      householdMemberAddress: currentlyEdited?.householdMemberAddress,
+      householdMemberWorkAddress: currentlyEdited?.householdMemberWorkAddress,
     },
   })
 
@@ -245,7 +245,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
           {sameAddressField === YesNoEnum.no && (
             <FormAddress
               subtitle={t("application.details.residenceAddress")}
-              dataKey="address"
+              dataKey="householdMemberAddress"
               register={register}
               stateKeys={stateKeys}
             />
@@ -254,7 +254,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
           {workInRegionField === YesNoEnum.yes && (
             <FormAddress
               subtitle={t("application.contact.workAddress")}
-              dataKey="workAddress"
+              dataKey="householdMemberWorkAddress"
               register={register}
               stateKeys={stateKeys}
             />

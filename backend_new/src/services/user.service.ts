@@ -392,6 +392,7 @@ export class UserService {
     const res = await this.prisma.userAccounts.update({
       include: view,
       data: {
+        email: dto.email,
         agreedToTermsOfService: dto.agreedToTermsOfService,
         passwordHash: passwordHash ?? undefined,
         passwordUpdatedAt: passwordUpdatedAt ?? undefined,

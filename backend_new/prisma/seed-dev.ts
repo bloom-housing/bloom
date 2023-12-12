@@ -13,6 +13,7 @@ import { randomName } from './seed-helpers/word-generator';
 import { randomInt } from 'node:crypto';
 import { applicationFactory } from './seed-helpers/application-factory';
 import { translationFactory } from './seed-helpers/translation-factory';
+import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
 
 const listingStatusEnumArray = Object.values(ListingsStatusEnum);
 
@@ -76,6 +77,8 @@ export const devSeeding = async (
   const multiselectQuestions = await Promise.all(
     await createMultiselect(jurisdiction.id, prismaClient),
   );
+
+  await reservedCommunityTypeFactoryAll(jurisdiction.id, prismaClient);
 
   [...new Array(5)].map(async (_, index) => {
     const listing = await listingFactory(jurisdiction.id, prismaClient, {

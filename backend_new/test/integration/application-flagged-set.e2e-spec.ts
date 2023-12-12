@@ -22,6 +22,7 @@ import { View } from '../../src/enums/application-flagged-sets/view';
 import { AfsResolve } from '../../src/dtos/application-flagged-sets/afs-resolve.dto';
 import { IdDTO } from '../../src/dtos/shared/id.dto';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
+import { reservedCommunityTypeFactoryAll } from '../../prisma/seed-helpers/reserved-community-type-factory';
 
 describe('Application flagged set Controller Tests', () => {
   let app: INestApplication;
@@ -35,6 +36,7 @@ describe('Application flagged set Controller Tests', () => {
         name: `${jurisData.name} ${Math.floor(Math.random() * 100)}`,
       },
     });
+    await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
     const listing1 = await listingFactory(jurisdiction.id, prisma, {
       status: ListingsStatusEnum.closed,
     });

@@ -5,10 +5,7 @@ import { UnitAccessibilityPriorityTypeCreate } from '../../../src/dtos/unit-acce
 import { UnitAccessibilityPriorityTypeUpdate } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-update.dto';
 import { UnitAccessibilityPriorityType } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type.dto';
 import { randomUUID } from 'crypto';
-import {
-  unitAccesibilityPriorityTypeAsArray,
-  unitAccessibilityPriorityTypeFactorySingle,
-} from '../../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
+import { unitAccesibilityPriorityTypeAsArray } from '../../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
 import { UnitAccessibilityPriorityTypeEnum } from '@prisma/client';
 
 describe('Testing unit accessibility priority type service', () => {
@@ -21,7 +18,7 @@ describe('Testing unit accessibility priority type service', () => {
   ) => {
     return {
       id: randomUUID(),
-      name: unitAccessibilityPriorityTypeFactorySingle(uapType).name,
+      name: uapType,
       createdAt: date,
       updatedAt: date,
     };

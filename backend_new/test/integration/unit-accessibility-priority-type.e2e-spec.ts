@@ -1,11 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import { UnitAccessibilityPriorityTypeEnum } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
-import { unitAccessibilityPriorityTypeFactorySingle } from '../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
+import {
+  unitAccessibilityPriorityTypeFactoryAll,
+  unitAccessibilityPriorityTypeFactorySingle,
+} from '../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
 import { UnitAccessibilityPriorityTypeCreate } from '../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-create.dto';
 import { UnitAccessibilityPriorityTypeUpdate } from '../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-update.dto';
 import { IdDTO } from '../../src/dtos/shared/id.dto';
@@ -42,6 +46,7 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
       .expect(201);
 
     cookies = resLogIn.headers['set-cookie'];
+    await unitAccessibilityPriorityTypeFactoryAll(prisma);
   });
 
   afterAll(async () => {
@@ -50,12 +55,8 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
   });
 
   it('testing list endpoint', async () => {
-    const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
-      data: unitAccessibilityPriorityTypeFactorySingle(),
-    });
-    const unitTypeB = await prisma.unitAccessibilityPriorityTypes.create({
-      data: unitAccessibilityPriorityTypeFactorySingle(),
-    });
+    const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(prisma);
+    const unitTypeB = await unitAccessibilityPriorityTypeFactorySingle(prisma);
 
     const res = await request(app.getHttpServer())
       .get(`/unitAccessibilityPriorityTypes?`)
@@ -80,9 +81,7 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
   });
 
   it('testing retrieve endpoint', async () => {
-    const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
-      data: unitAccessibilityPriorityTypeFactorySingle(),
-    });
+    const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(prisma);
 
     const res = await request(app.getHttpServer())
       .get(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
@@ -93,26 +92,27 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
   });
 
   it('testing create endpoint', async () => {
-    const name = unitAccessibilityPriorityTypeFactorySingle().name;
     const res = await request(app.getHttpServer())
       .post('/unitAccessibilityPriorityTypes')
       .send({
-        name: name,
+        name: UnitAccessibilityPriorityTypeEnum.hearing,
       } as UnitAccessibilityPriorityTypeCreate)
       .set('Cookie', cookies)
       .expect(201);
 
-    expect(res.body.name).toEqual(name);
+    expect(res.body.name).toEqual(UnitAccessibilityPriorityTypeEnum.hearing);
   });
 
   it("update endpoint with id that doesn't exist should error", async () => {
-    const name = unitAccessibilityPriorityTypeFactorySingle().name;
+    const priorityType = await unitAccessibilityPriorityTypeFactorySingle(
+      prisma,
+    );
     const id = randomUUID();
     const res = await request(app.getHttpServer())
       .put(`/unitAccessibilityPriorityTypes/${id}`)
       .send({
         id: id,
-        name: name,
+        name: priorityType.name,
       } as UnitAccessibilityPriorityTypeUpdate)
       .set('Cookie', cookies)
       .expect(404);
@@ -122,20 +122,20 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
   });
 
   it('testing update endpoint', async () => {
-    const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
-      data: unitAccessibilityPriorityTypeFactorySingle(),
-    });
-    const name = unitAccessibilityPriorityTypeFactorySingle().name;
+    const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(prisma);
+    const priorityType = await unitAccessibilityPriorityTypeFactorySingle(
+      prisma,
+    );
     const res = await request(app.getHttpServer())
       .put(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
       .send({
         id: unitTypeA.id,
-        name: name,
+        name: priorityType.name,
       } as UnitAccessibilityPriorityTypeUpdate)
       .set('Cookie', cookies)
       .expect(200);
 
-    expect(res.body.name).toEqual(name);
+    expect(res.body.name).toEqual(priorityType.name);
   });
 
   it("delete endpoint with id that doesn't exist should error", async () => {
@@ -153,14 +153,24 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
   });
 
   it('testing delete endpoint', async () => {
-    const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
-      data: unitAccessibilityPriorityTypeFactorySingle(),
+    await request(app.getHttpServer())
+      .post('/unitAccessibilityPriorityTypes')
+      .send({
+        name: UnitAccessibilityPriorityTypeEnum.hearing,
+      } as UnitAccessibilityPriorityTypeCreate)
+      .expect(201);
+    const hearingTypes = await prisma.unitAccessibilityPriorityTypes.findMany({
+      where: {
+        name: {
+          equals: UnitAccessibilityPriorityTypeEnum.hearing,
+        },
+      },
     });
 
     const res = await request(app.getHttpServer())
       .delete(`/unitAccessibilityPriorityTypes`)
       .send({
-        id: unitTypeA.id,
+        id: hearingTypes[hearingTypes.length - 1].id,
       } as IdDTO)
       .set('Cookie', cookies)
       .expect(200);

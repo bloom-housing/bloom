@@ -34,10 +34,11 @@ export const applicationFactory = (optionalParams?: {
     appUrl: '',
     status: ApplicationStatusEnum.submitted,
     submissionType: ApplicationSubmissionTypeEnum.electronical,
+    submissionDate: new Date(),
     householdSize: optionalParams?.househouldSize ?? 1,
     income: '40000',
     incomePeriod: IncomePeriodEnum.perYear,
-    preferences: '{}',
+    preferences: [],
     preferredUnitTypes,
     listings: optionalParams?.listingId
       ? {

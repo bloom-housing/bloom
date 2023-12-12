@@ -71,9 +71,8 @@ export class ListingUpdate extends OmitType(Listing, [
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => AssetCreate)
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ type: AssetCreate, isArray: true })
-  assets: AssetCreate[];
+  @ApiPropertyOptional({ type: AssetCreate, isArray: true })
+  assets?: AssetCreate[];
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })

@@ -1,8 +1,7 @@
 describe("Listings approval feature", () => {
   const uniqueListingName = Date.now().toString()
   const uniqueListingNameEdited = `${uniqueListingName} edited`
-  // TODO: unskip when listing flow is fully connected
-  it.skip("should allow for pending submission, requested changes, and approval", () => {
+  it("should allow for pending submission, requested changes, and approval", () => {
     // Partner: Submit a listing for approval
     cy.login("jurisdictionalAdminUser")
     cy.visit("/")
@@ -15,7 +14,7 @@ describe("Listings approval feature", () => {
     cy.signOut()
 
     // Admin: Request changes
-    cy.loginAndAcceptTerms("user")
+    cy.login("user")
     searchAndOpenListing(cy, uniqueListingName)
     cy.getByID("listing-status-pending-review").should("be.visible")
     cy.getByID("listingEditButton").click()
@@ -71,15 +70,15 @@ describe("Listings approval feature", () => {
       .should("include", "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96")
     cy.getByID("listing-photo-uploaded").contains("Save").click()
 
-    cy.getByID("buildingAddress.street").type(listing["buildingAddress.street"])
+    cy.getByID("listingsBuildingAddress.street").type(listing["buildingAddress.street"])
     cy.getByID("neighborhood").type(listing["neighborhood"])
-    cy.getByID("buildingAddress.city").type(listing["buildingAddress.city"])
-    cy.getByID("buildingAddress.state").select(listing["buildingAddress.state"])
-    cy.getByID("buildingAddress.zipCode").type(listing["buildingAddress.zipCode"])
+    cy.getByID("listingsBuildingAddress.city").type(listing["buildingAddress.city"])
+    cy.getByID("listingsBuildingAddress.state").select(listing["buildingAddress.state"])
+    cy.getByID("listingsBuildingAddress.zipCode").type(listing["buildingAddress.zipCode"])
 
     cy.getByID("addUnitsButton").contains("Add Unit").click()
     cy.getByID("number").type(listing["number"])
-    cy.getByID("unitType.id").select(listing["unitType.id"])
+    cy.getByID("unitTypes.id").select(listing["unitType.id"])
     cy.getByID("unitFormSaveAndExitButton").contains("Save & Exit").click()
     cy.get("button").contains("Application Process").click()
 

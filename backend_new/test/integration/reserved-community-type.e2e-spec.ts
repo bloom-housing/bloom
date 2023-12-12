@@ -8,7 +8,11 @@ import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
 import { ReservedCommunityTypeQueryParams } from '../../src/dtos/reserved-community-types/reserved-community-type-query-params.dto';
-import { reservedCommunityTypeFactory } from '../../prisma/seed-helpers/reserved-community-type-factory';
+import {
+  reservedCommunityTypeFactory,
+  reservedCommunityTypeFactoryAll,
+  reservedCommunityTypeFactoryGet,
+} from '../../prisma/seed-helpers/reserved-community-type-factory';
 import { ReservedCommunityTypeCreate } from '../../src/dtos/reserved-community-types/reserved-community-type-create.dto';
 import { ReservedCommunityTypeUpdate } from '../../src/dtos/reserved-community-types/reserved-community-type-update.dto';
 import { IdDTO } from '../../src/dtos/shared/id.dto';
@@ -50,6 +54,7 @@ describe('ReservedCommunityType Controller Tests', () => {
       .expect(201);
 
     cookies = resLogIn.headers['set-cookie'];
+    await reservedCommunityTypeFactoryAll(jurisdictionAId, prisma);
   });
 
   afterAll(async () => {
@@ -61,16 +66,20 @@ describe('ReservedCommunityType Controller Tests', () => {
     const jurisdictionA = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
-
+    await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
     const jurisdictionB = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
-    const rctJurisdictionA = await prisma.reservedCommunityTypes.create({
-      data: reservedCommunityTypeFactory(jurisdictionA.id),
-    });
-    const rctJurisdictionB = await prisma.reservedCommunityTypes.create({
-      data: reservedCommunityTypeFactory(jurisdictionB.id),
-    });
+    await reservedCommunityTypeFactoryAll(jurisdictionB.id, prisma);
+
+    const rctJurisdictionA = await reservedCommunityTypeFactoryGet(
+      prisma,
+      jurisdictionA.id,
+    );
+    const rctJurisdictionB = await reservedCommunityTypeFactoryGet(
+      prisma,
+      jurisdictionB.id,
+    );
 
     const res = await request(app.getHttpServer())
       .get(`/reservedCommunityTypes`)
@@ -90,11 +99,12 @@ describe('ReservedCommunityType Controller Tests', () => {
     const jurisdictionB = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
-    const reservedCommunityTypeA = await prisma.reservedCommunityTypes.create({
-      data: reservedCommunityTypeFactory(jurisdictionAId),
-    });
+    const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
+      prisma,
+      jurisdictionAId,
+    );
     await prisma.reservedCommunityTypes.create({
-      data: reservedCommunityTypeFactory(jurisdictionB.id),
+      data: reservedCommunityTypeFactory(jurisdictionB.id, 'jurisB RCT'),
     });
     const queryParams: ReservedCommunityTypeQueryParams = {
       jurisdictionId: jurisdictionAId,
@@ -107,8 +117,10 @@ describe('ReservedCommunityType Controller Tests', () => {
       .set('Cookie', cookies)
       .expect(200);
 
-    expect(res.body.length).toEqual(1);
-    expect(res.body[0].name).toEqual(reservedCommunityTypeA.name);
+    expect(res.body.length).toEqual(5);
+    expect(res.body.map((body) => body.name)).toContain(
+      reservedCommunityTypeA.name,
+    );
   });
 
   it("retrieve endpoint with id that doesn't exist should error", async () => {
@@ -123,9 +135,10 @@ describe('ReservedCommunityType Controller Tests', () => {
   });
 
   it('testing retrieve endpoint', async () => {
-    const reservedCommunityTypeA = await prisma.reservedCommunityTypes.create({
-      data: reservedCommunityTypeFactory(jurisdictionAId),
-    });
+    const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
+      prisma,
+      jurisdictionAId,
+    );
 
     const res = await request(app.getHttpServer())
       .get(`/reservedCommunityTypes/${reservedCommunityTypeA.id}`)
@@ -169,9 +182,10 @@ describe('ReservedCommunityType Controller Tests', () => {
   });
 
   it('testing update endpoint', async () => {
-    const reservedCommunityTypeA = await prisma.reservedCommunityTypes.create({
-      data: reservedCommunityTypeFactory(jurisdictionAId),
-    });
+    const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
+      prisma,
+      jurisdictionAId,
+    );
 
     const res = await request(app.getHttpServer())
       .put(`/reservedCommunityTypes/${reservedCommunityTypeA.id}`)
@@ -202,9 +216,14 @@ describe('ReservedCommunityType Controller Tests', () => {
   });
 
   it('testing delete endpoint', async () => {
-    const reservedCommunityTypeA = await prisma.reservedCommunityTypes.create({
-      data: reservedCommunityTypeFactory(jurisdictionAId),
+    const jurisdictionA = await prisma.jurisdictions.create({
+      data: jurisdictionFactory(),
     });
+    await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
+    const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
+      prisma,
+      jurisdictionA.id,
+    );
 
     const res = await request(app.getHttpServer())
       .delete(`/reservedCommunityTypes`)

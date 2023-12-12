@@ -107,6 +107,7 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
         {!enableAccessibilityFeatures ? null : (
           <Grid.Row>
             <FieldValue label={t("listings.sections.accessibilityFeatures")}>
+              {/* TODO: default checked doesn't appear to be working even on main*/}
               <FieldGroup
                 type="checkbox"
                 name="listingFeatures"

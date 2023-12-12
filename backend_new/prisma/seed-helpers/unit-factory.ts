@@ -69,12 +69,21 @@ export const unitFactoryMany = async (
     // create a random priority type with roughly half being null
     const unitAccessibilityPriorityTypes =
       optionalParams?.randomizePriorityType && Math.random() > 0.5
-        ? { create: unitAccessibilityPriorityTypeFactorySingle() }
+        ? await unitAccessibilityPriorityTypeFactorySingle(prismaClient)
         : undefined;
 
     return unitFactorySingle(unitType, {
       ...optionalParams,
-      otherFields: { unitAccessibilityPriorityTypes, numBathrooms: index },
+      otherFields: {
+        unitAccessibilityPriorityTypes: unitAccessibilityPriorityTypes
+          ? {
+              connect: {
+                id: unitAccessibilityPriorityTypes.id,
+              },
+            }
+          : undefined,
+        numBathrooms: index,
+      },
     });
   });
   return await Promise.all(createArray);

@@ -611,7 +611,7 @@ model PaperApplications {
   language            LanguagesEnum
   fileId              String?             @map("file_id") @db.Uuid
   applicationMethodId String?             @map("application_method_id") @db.Uuid
-  assets              Assets?             @relation(fields: [fileId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  assets              Assets?             @relation(fields: [fileId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   applicationMethods  ApplicationMethods? @relation(fields: [applicationMethodId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("paper_applications")

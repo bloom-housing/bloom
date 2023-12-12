@@ -476,6 +476,7 @@ describe('Testing listing service', () => {
         listingsLeasingAgentAddress: true,
         listingsApplicationPickUpAddress: true,
         listingsApplicationDropOffAddress: true,
+        listingsApplicationMailingAddress: true,
         units: {
           include: {
             unitAmiChartOverrides: true,
@@ -831,6 +832,7 @@ describe('Testing listing service', () => {
         listingsLeasingAgentAddress: true,
         listingsApplicationPickUpAddress: true,
         listingsApplicationDropOffAddress: true,
+        listingsApplicationMailingAddress: true,
         units: {
           include: {
             unitAmiChartOverrides: true,
@@ -1577,6 +1579,7 @@ describe('Testing listing service', () => {
         listingUtilities: true,
         listingsApplicationDropOffAddress: true,
         listingsApplicationPickUpAddress: true,
+        listingsApplicationMailingAddress: true,
         listingsBuildingAddress: true,
         listingsBuildingSelectionCriteriaFile: true,
         listingsLeasingAgentAddress: true,
@@ -1674,6 +1677,7 @@ describe('Testing listing service', () => {
         listingUtilities: true,
         listingsApplicationDropOffAddress: true,
         listingsApplicationPickUpAddress: true,
+        listingsApplicationMailingAddress: true,
         listingsBuildingAddress: true,
         listingsBuildingSelectionCriteriaFile: true,
         listingsLeasingAgentAddress: true,
@@ -1865,15 +1869,13 @@ describe('Testing listing service', () => {
               },
               unitAmiChartOverrides: {
                 create: {
-                  items: {
-                    items: [
-                      {
-                        percentOfAmi: 10,
-                        householdSize: 20,
-                        income: 30,
-                      },
-                    ],
-                  },
+                  items: [
+                    {
+                      percentOfAmi: 10,
+                      householdSize: 20,
+                      income: 30,
+                    },
+                  ],
                 },
               },
               unitAccessibilityPriorityTypes: {
@@ -2054,6 +2056,9 @@ describe('Testing listing service', () => {
       id: 'example id',
       name: 'example name',
     });
+    prisma.$transaction = jest
+      .fn()
+      .mockResolvedValue([{ id: 'example id', name: 'example name' }]);
 
     await service.update(
       {
@@ -2110,6 +2115,7 @@ describe('Testing listing service', () => {
         listingsApplicationPickUpAddress: true,
         listingsBuildingAddress: true,
         listingsBuildingSelectionCriteriaFile: true,
+        listingsApplicationMailingAddress: true,
         listingsLeasingAgentAddress: true,
         listingsResult: true,
         reservedCommunityTypes: true,
@@ -2149,6 +2155,9 @@ describe('Testing listing service', () => {
         unitsSummary: undefined,
         listingEvents: {
           create: [],
+        },
+        listingsBuildingSelectionCriteriaFile: {
+          disconnect: true,
         },
         unitsAvailable: 0,
       },
@@ -2212,6 +2221,7 @@ describe('Testing listing service', () => {
         listingUtilities: true,
         listingsApplicationDropOffAddress: true,
         listingsApplicationPickUpAddress: true,
+        listingsApplicationMailingAddress: true,
         listingsBuildingAddress: true,
         listingsBuildingSelectionCriteriaFile: true,
         listingsLeasingAgentAddress: true,
@@ -2280,22 +2290,14 @@ describe('Testing listing service', () => {
           ],
         },
         listingImages: {
-          connectOrCreate: [
+          create: [
             {
-              create: {
-                assets: {
-                  connect: {
-                    id: expect.anything(),
-                  },
-                },
-                ordinal: 0,
-              },
-              where: {
-                listingId_imageId: {
-                  imageId: expect.anything(),
-                  listingId: expect.anything(),
+              assets: {
+                connect: {
+                  id: expect.anything(),
                 },
               },
+              ordinal: 0,
             },
           ],
         },
@@ -2320,8 +2322,8 @@ describe('Testing listing service', () => {
           ],
         },
         listingsApplicationDropOffAddress: {
-          create: {
-            ...exampleAddress,
+          connect: {
+            id: expect.anything(),
           },
         },
         reservedCommunityTypes: {
@@ -2347,13 +2349,13 @@ describe('Testing listing service', () => {
           },
         },
         listingsApplicationMailingAddress: {
-          create: {
-            ...exampleAddress,
+          connect: {
+            id: expect.anything(),
           },
         },
         listingsLeasingAgentAddress: {
-          create: {
-            ...exampleAddress,
+          connect: {
+            id: expect.anything(),
           },
         },
         listingFeatures: {
@@ -2381,13 +2383,13 @@ describe('Testing listing service', () => {
           },
         },
         listingsApplicationPickUpAddress: {
-          create: {
-            ...exampleAddress,
+          connect: {
+            id: expect.anything(),
           },
         },
         listingsBuildingAddress: {
-          create: {
-            ...exampleAddress,
+          connect: {
+            id: expect.anything(),
           },
         },
         units: {
@@ -2419,15 +2421,13 @@ describe('Testing listing service', () => {
               },
               unitAmiChartOverrides: {
                 create: {
-                  items: {
-                    items: [
-                      {
-                        percentOfAmi: 10,
-                        householdSize: 20,
-                        income: 30,
-                      },
-                    ],
-                  },
+                  items: [
+                    {
+                      percentOfAmi: 10,
+                      householdSize: 20,
+                      income: 30,
+                    },
+                  ],
                 },
               },
               unitAccessibilityPriorityTypes: {
@@ -2503,11 +2503,12 @@ describe('Testing listing service', () => {
       listingInfo: { id: 'id', name: 'name' },
       status: ListingsStatusEnum.pendingReview,
       approvingRoles: [UserRoleEnum.admin],
+      jurisId: 'jurisId',
     });
 
-    expect(service.getUserEmailInfo).toBeCalledWith(['admin'], 'id', undefined);
+    expect(service.getUserEmailInfo).toBeCalledWith(['admin'], 'id', 'jurisId');
     expect(requestApprovalMock).toBeCalledWith(
-      user,
+      { id: 'jurisId' },
       { id: 'id', name: 'name' },
       ['admin@email.com'],
       config.get('PARTNERS_PORTAL_URL'),
@@ -2523,12 +2524,13 @@ describe('Testing listing service', () => {
       listingInfo: { id: 'id', name: 'name' },
       status: ListingsStatusEnum.changesRequested,
       approvingRoles: [UserRoleEnum.admin],
+      jurisId: 'jurisId',
     });
 
     expect(service.getUserEmailInfo).toBeCalledWith(
       ['partner', 'jurisdictionAdmin'],
       'id',
-      undefined,
+      'jurisId',
     );
     expect(changesRequestedMock).toBeCalledWith(
       user,
@@ -2549,16 +2551,17 @@ describe('Testing listing service', () => {
       status: ListingsStatusEnum.active,
       previousStatus: ListingsStatusEnum.pendingReview,
       approvingRoles: [UserRoleEnum.admin],
+      jurisId: 'jurisId',
     });
 
     expect(service.getUserEmailInfo).toBeCalledWith(
       ['partner', 'jurisdictionAdmin'],
       'id',
-      undefined,
+      'jurisId',
       true,
     );
     expect(listingApprovedMock).toBeCalledWith(
-      user,
+      expect.objectContaining({ id: 'jurisId' }),
       { id: 'id', name: 'name' },
       ['jurisAdmin@email.com', 'partner@email.com'],
       'public.housing.gov',
@@ -2572,6 +2575,7 @@ describe('Testing listing service', () => {
       status: ListingsStatusEnum.active,
       previousStatus: ListingsStatusEnum.active,
       approvingRoles: [UserRoleEnum.admin],
+      jurisId: 'jurisId',
     });
 
     expect(listingApprovedMock).toBeCalledTimes(0);

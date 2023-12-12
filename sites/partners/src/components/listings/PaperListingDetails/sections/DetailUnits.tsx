@@ -19,7 +19,7 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
     amiPercentage: "listings.unit.ami",
     monthlyRent: "listings.unit.rent",
     sqFeet: "listings.unit.sqft",
-    priorityType: "listings.unit.priorityType",
+    unitAccessibilityPriorityTypes: "listings.unit.priorityType",
     action: "",
   }
 
@@ -31,7 +31,7 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
         amiPercentage: { content: unit.amiPercentage },
         monthlyRent: { content: unit.monthlyRent },
         sqFeet: { content: unit.sqFeet },
-        priorityType: { content: unit.unitAccessibilityPriorityTypes?.name },
+        unitAccessibilityPriorityTypes: { content: unit.unitAccessibilityPriorityTypes?.name },
         action: {
           content: (
             <Button
