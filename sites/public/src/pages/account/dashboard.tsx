@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useContext } from "react"
 import Head from "next/head"
 import { NextRouter, withRouter } from "next/router"
-import { Icon, t, SiteAlert, AlertBox, Card, UniversalIconType } from "@bloom-housing/ui-components"
+import { Icon, t, SiteAlert, AlertBox, UniversalIconType } from "@bloom-housing/ui-components"
 import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
-import { Button, Heading } from "@bloom-housing/ui-seeds"
+import { Button, Card } from "@bloom-housing/ui-seeds"
 
 interface DashboardProps {
   router: NextRouter
@@ -45,11 +45,13 @@ function Dashboard(props: DashboardProps) {
   }
 
   const AccountCard = ({ iconSymbol, title, subtitle, buttonText }: AccountCardProps) => (
-    <Card className="w-1/2">
+    <Card spacing="xl">
       <Card.Section>
         <Icon size="2xl" symbol={iconSymbol} />
         <h2 className="py-3">{title}</h2>
-        <p className="pb-8">{subtitle}</p>
+        <p>{subtitle}</p>
+      </Card.Section>
+      <Card.Section>
         <Button variant="primary-outlined">{buttonText}</Button>
       </Card.Section>
     </Card>
