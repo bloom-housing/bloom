@@ -44,7 +44,6 @@ module.exports = withBundleAnalyzer(
       idleTimeout: process.env.IDLE_TIMEOUT,
       showDuplicates: process.env.SHOW_DUPLICATES === "TRUE",
       showSmsMfa: (process.env.SHOW_SMS_MFA || "TRUE") === "TRUE", // SMS on by default
-      showMandatedAccounts: process.env.SHOW_MANDATED_ACCOUNTS === "TRUE",
       cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
       cloudinaryKey: process.env.CLOUDINARY_KEY,
       cloudinarySignedPreset: process.env.CLOUDINARY_SIGNED_PRESET,
