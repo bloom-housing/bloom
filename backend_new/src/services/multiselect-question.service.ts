@@ -232,7 +232,7 @@ export class MultiselectQuestionService {
       },
       where: {
         listings: {
-          every: {
+          some: {
             listingId,
           },
         },
