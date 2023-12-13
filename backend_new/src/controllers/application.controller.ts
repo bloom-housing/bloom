@@ -3,11 +3,13 @@ import {
   Controller,
   Delete,
   Get,
+  Header,
   Param,
   Post,
   Put,
   Query,
   Request,
+  StreamableFile,
   UseGuards,
   UseInterceptors,
   UsePipes,
@@ -43,6 +45,8 @@ import { PermissionTypeDecorator } from '../decorators/permission-type.decorator
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { PermissionAction } from '../decorators/permission-action.decorator';
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
+import { createReadStream } from 'fs';
+import { join } from 'path';
 
 @Controller('applications')
 @ApiTags('applications')
@@ -74,11 +78,15 @@ export class ApplicationController {
     summary: 'Get applications as csv',
     operationId: 'listAsCsv',
   })
-  listAsCsv(
+  @Header('Content-Type', 'application/json')
+  @Header('Content-Disposition', 'attachment; filename="test.csv.gz"')
+  async listAsCsv(
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationCsvQueryParams,
-  ): Promise<SuccessDTO> {
-    return this.applicationService.export(queryParams);
+  ): Promise<StreamableFile> {
+    await this.applicationService.export(queryParams);
+    const file = createReadStream(join(process.cwd(), 'src/temp/test.csv.gz'));
+    return new StreamableFile(file);
   }
 
   @Get(`:applicationId`)
