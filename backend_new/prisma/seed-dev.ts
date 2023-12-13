@@ -76,8 +76,7 @@ export const devSeeding = async (
   const multiselectQuestions = await Promise.all(
     await createMultiselect(jurisdiction.id, prismaClient),
   );
-
-  [...new Array(5)].map(async (_, index) => {
+  [...new Array(100)].map(async (_, index) => {
     const householdMembers = await householdMemberFactoryMany(
       Math.min(index, 6),
     );
@@ -98,6 +97,7 @@ export const devSeeding = async (
                 unitTypeId: unitTypes[Math.min(index, 6)].id,
                 householdMember: householdMembers,
                 demographics,
+                multiselectQuestions,
               }),
             )
           : undefined,

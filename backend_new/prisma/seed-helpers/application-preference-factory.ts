@@ -1,18 +1,10 @@
-import { randomInt } from 'crypto';
-import { Prisma } from '@prisma/client';
-import { ApplicationMultiselectQuestion } from '../../src/dtos/applications/application-multiselect-question.dto';
-import { randomName, randomNoun } from './word-generator';
+import { MultiselectQuestions, Prisma } from '@prisma/client';
+import { randomNoun } from './word-generator';
 import { randomBoolean } from './boolean-generator';
-import {
-  AddressInput,
-  ApplicationMultiselectQuestionOption,
-  BooleanInput,
-  TextInput,
-} from '../../src/dtos/applications/application-multiselect-question-option.dto';
 import { InputType } from '../../src/enums/shared/input-type-enum';
 
 // TODO map to actual multiselect questions
-const optionFactory = (
+/* const optionFactory = (
   numOptions = 1,
 ): ApplicationMultiselectQuestionOption[] => {
   const options: ApplicationMultiselectQuestionOption[] = [];
@@ -50,24 +42,37 @@ const optionFactory = (
   }
 
   return options;
-};
+}; */
 
-export const preferenceFactorySingle = (
-  numOptions = 1,
-): ApplicationMultiselectQuestion => ({
-  key: randomName(),
-  claimed: randomBoolean(),
-  options: optionFactory(numOptions),
-});
-
-export const preferenceFactoryMany = (
-  numberToMake: number,
+export const preferenceFactory = (
+  multiselectQuestions: Partial<MultiselectQuestions>[],
 ): Prisma.InputJsonValue => {
-  const createJson: Prisma.InputJsonValue = [...new Array(numberToMake)].map(
-    () => {
-      return JSON.stringify(preferenceFactorySingle(randomInt(1, 3)));
-    },
+  return JSON.stringify(
+    multiselectQuestions.map((question) => ({
+      multiselectQuestionId: question.id,
+      key: question.text,
+      claimed: randomBoolean(),
+      options: JSON.parse(JSON.stringify(question.options)).map((option) => {
+        return {
+          key: option.key,
+          checked: randomBoolean(),
+          extraData: option.collectAddress
+            ? [
+                {
+                  key: 'Address',
+                  type: InputType.address,
+                  value: {
+                    city: randomNoun(),
+                    state: randomNoun(),
+                    street: '123 4th St',
+                    street2: 'Apt 5',
+                    zipCode: '67890',
+                  },
+                },
+              ]
+            : [],
+        };
+      }),
+    })),
   );
-
-  return createJson;
 };
