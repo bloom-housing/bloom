@@ -818,7 +818,7 @@ export const stagingSeed = async (
       value: {
         listing: Prisma.ListingsCreateInput;
         units?: Prisma.UnitsCreateWithoutListingsInput[];
-        multiselectQuestions?: Partial<MultiselectQuestions>[];
+        multiselectQuestions?: MultiselectQuestions[];
         applications?: Prisma.ApplicationsCreateInput[];
       },
       index,

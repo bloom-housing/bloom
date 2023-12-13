@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["postgresqlExtensions", "filteredRelationCount"]
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {

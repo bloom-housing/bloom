@@ -1,10 +1,11 @@
-import { randomInt } from 'crypto';
 import {
   Prisma,
   IncomePeriodEnum,
   ApplicationStatusEnum,
   ApplicationSubmissionTypeEnum,
+  MultiselectQuestions,
   YesNoEnum,
+  MultiselectQuestionsApplicationSectionEnum,
 } from '@prisma/client';
 import { generateConfirmationCode } from '../../src/utilities/applications-utilities';
 import { addressFactory } from './address-factory';
@@ -14,7 +15,7 @@ import {
   randomBirthMonth,
   randomBirthYear,
 } from './number-generator';
-import { preferenceFactoryMany } from './application-preference-factory';
+import { preferenceFactory } from './application-preference-factory';
 
 export const applicationFactory = (optionalParams?: {
   householdSize?: number;
@@ -24,6 +25,7 @@ export const applicationFactory = (optionalParams?: {
   listingId?: string;
   householdMember?: Prisma.HouseholdMemberCreateWithoutApplicationsInput[];
   demographics?: Prisma.DemographicsCreateWithoutApplicationsInput;
+  multiselectQuestions?: Partial<MultiselectQuestions>[];
 }): Prisma.ApplicationsCreateInput => {
   let preferredUnitTypes: Prisma.UnitTypesCreateNestedManyWithoutApplicationsInput;
   if (optionalParams?.unitTypeId) {
@@ -45,8 +47,24 @@ export const applicationFactory = (optionalParams?: {
     householdSize: optionalParams?.householdSize ?? 1,
     income: '40000',
     incomePeriod: IncomePeriodEnum.perYear,
-    preferences: preferenceFactoryMany(randomInt(6)),
-    programs: preferenceFactoryMany(randomInt(2)),
+    preferences: preferenceFactory(
+      optionalParams.multiselectQuestions
+        ? optionalParams.multiselectQuestions.filter(
+            (question) =>
+              question.applicationSection ===
+              MultiselectQuestionsApplicationSectionEnum.preferences,
+          )
+        : [],
+    ),
+    programs: preferenceFactory(
+      optionalParams.multiselectQuestions
+        ? optionalParams.multiselectQuestions.filter(
+            (question) =>
+              question.applicationSection ===
+              MultiselectQuestionsApplicationSectionEnum.programs,
+          )
+        : [],
+    ),
     preferredUnitTypes,
     sendMailToMailingAddress: true,
     applicationsMailingAddress: {
@@ -89,7 +107,7 @@ export const applicantFactory = (
     noPhone: false,
     workInRegion: YesNoEnum.no,
     birthDay: `${randomBirthDay()}`, // no zeros
-    birthMonth: `${randomBirthMonth}`, // no zeros
+    birthMonth: `${randomBirthMonth()}`, // no zeros
     birthYear: `${randomBirthYear()}`,
     applicantAddress: {
       create: addressFactory(),

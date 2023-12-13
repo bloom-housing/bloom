@@ -24,7 +24,7 @@ export const multiselectQuestionFactory = (
     subText: `sub text for ${text}`,
     description: `description of ${text}`,
     links: [],
-    options: multiselectOptionFactory(optionalParams?.numberOfOptions || 0),
+    options: multiselectOptionFactory(randomInt(1, 3)),
     optOutText: optionalParams?.optOut ? "I don't want this preference" : null,
     hideFromListing: false,
     applicationSection:
@@ -48,5 +48,6 @@ const multiselectOptionFactory = (
   return [...new Array(numberToMake)].map((_, index) => ({
     text: randomNoun(),
     ordinal: index,
+    collectAddress: index % 2 === 0,
   }));
 };
