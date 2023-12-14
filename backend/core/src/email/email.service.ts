@@ -19,6 +19,7 @@ import { Language } from "../shared/types/language-enum"
 import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.service"
 import { Translation } from "../translations/entities/translation.entity"
 import { formatLocalDate } from "../shared/utils/format-local-date"
+import Excel from "exceljs"
 
 type EmailAttachmentData = {
   data: string
@@ -309,6 +310,32 @@ export class EmailService {
     retry = 3,
     attachment?: EmailAttachmentData
   ) {
+    const workbook = new Excel.Workbook()
+    const worksheet1 = workbook.addWorksheet("Primary")
+    const worksheet2 = workbook.addWorksheet("Secondary")
+
+    const worksheetColumns = [
+      { key: "first", header: "First" },
+      { key: "second", header: "Second" },
+      { key: "third", header: "Third" },
+    ]
+
+    const mockData = [
+      { first: "Test Row 1", second: "Test Row 1", third: "Test Row 1" },
+      { first: "Test Row 2", second: "Test Row 2", third: "Test Row 2" },
+      { first: "Test Row 3", second: "Test Row 3", third: "Test Row 3" },
+    ]
+
+    worksheet1.columns = worksheetColumns
+    worksheet2.columns = worksheetColumns
+
+    mockData.forEach((row) => {
+      worksheet1.addRow(row)
+      worksheet2.addRow(row)
+    })
+
+    const buffer = await workbook.xlsx.writeBuffer()
+
     const multipleRecipients = Array.isArray(to)
     const emailParams: Partial<MailDataRequired> = {
       to,
@@ -319,9 +346,9 @@ export class EmailService {
     if (attachment) {
       emailParams.attachments = [
         {
-          content: Buffer.from(attachment.data).toString("base64"),
-          filename: attachment.name,
-          type: attachment.type,
+          content: Buffer.from(buffer).toString("base64"),
+          filename: "name.xslx",
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
           disposition: "attachment",
         },
       ]
