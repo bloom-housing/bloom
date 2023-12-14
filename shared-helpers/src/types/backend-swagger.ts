@@ -3809,6 +3809,9 @@ export interface ApplicationMultiselectQuestionOption {
 
 export interface ApplicationMultiselectQuestion {
   /**  */
+  multiselectQuestionId: string
+
+  /**  */
   key: string
 
   /**  */

@@ -7,16 +7,15 @@ import {
   AlertBox,
   setSiteAlertMessage,
   LoadingOverlay,
-  AppearanceStyleType,
-  Button,
   Modal,
   Tabs,
   TabList,
   Tab,
   TabPanel,
   LatitudeLongitude,
-  AppearanceSizeType,
+  Icon,
 } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
 import { AuthContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import {
   Listing,
@@ -360,7 +359,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           <div className="text-right -mr-8 -mt-8 relative" style={{ top: "7rem" }}>
                             <Button
                               type="button"
-                              icon="arrowForward"
+                              variant="primary-outlined"
+                              tailIcon={<Icon symbol="arrowForward" size="small" />}
                               onClick={() => {
                                 setTabIndex(1)
                                 window.scrollTo({ top: 0, behavior: "smooth" })
@@ -384,8 +384,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           <div className="-ml-8 -mt-8 relative" style={{ top: "7rem" }}>
                             <Button
                               type="button"
-                              icon="arrowBack"
-                              iconPlacement="left"
+                              variant="primary-outlined"
+                              leadIcon={<Icon symbol="arrowBack" size="small" />}
                               onClick={() => {
                                 setTabIndex(0)
                                 window.scrollTo({ top: 0, behavior: "smooth" })
@@ -434,21 +434,22 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         actions={[
           <Button
             type="button"
-            styleType={AppearanceStyleType.secondary}
+            variant="secondary"
             onClick={() => {
               setCloseModal(false)
               triggerSubmitWithStatus(false, ListingsStatusEnum.closed)
             }}
-            size={AppearanceSizeType.small}
+            size="sm"
           >
             {t("listings.actions.close")}
           </Button>,
           <Button
             type="button"
+            variant="primary-outlined"
             onClick={() => {
               setCloseModal(false)
             }}
-            size={AppearanceSizeType.small}
+            size="sm"
           >
             {t("t.cancel")}
           </Button>,
@@ -466,21 +467,22 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           <Button
             id="publishButtonConfirm"
             type="button"
-            styleType={AppearanceStyleType.success}
+            variant="success"
             onClick={() => {
               setPublishModal(false)
               triggerSubmitWithStatus(false, ListingsStatusEnum.active)
             }}
-            size={AppearanceSizeType.small}
+            size="sm"
           >
             {t("listings.actions.publish")}
           </Button>,
           <Button
             type="button"
+            variant="primary-outlined"
             onClick={() => {
               setPublishModal(false)
             }}
-            size={AppearanceSizeType.small}
+            size="sm"
           >
             {t("t.cancel")}
           </Button>,
@@ -498,22 +500,22 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           <Button
             id="saveAlreadyLiveListingButtonConfirm"
             type="button"
-            styleType={AppearanceStyleType.success}
+            variant="success"
             onClick={() => {
               setListingIsAlreadyLiveModal(false)
               triggerSubmitWithStatus(false, ListingsStatusEnum.active)
             }}
-            size={AppearanceSizeType.small}
-            dataTestId={"listingIsAlreadyLiveButton"}
+            size="sm"
           >
             {t("t.save")}
           </Button>,
           <Button
             type="button"
+            variant="primary-outlined"
             onClick={() => {
               setListingIsAlreadyLiveModal(false)
             }}
-            size={AppearanceSizeType.small}
+            size="sm"
           >
             {t("t.cancel")}
           </Button>,
@@ -531,13 +533,12 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           <Button
             id="submitListingForApprovalButtonConfirm"
             type="button"
-            styleType={AppearanceStyleType.success}
+            variant="success"
             onClick={() => {
               setSubmitForApprovalModal(false)
               triggerSubmitWithStatus(false, ListingsStatusEnum.pendingReview)
             }}
-            size={AppearanceSizeType.small}
-            dataTestId={"submitForApprovalButton"}
+            size="sm"
           >
             {t("t.submit")}
           </Button>,
@@ -546,7 +547,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             onClick={() => {
               setSubmitForApprovalModal(false)
             }}
-            size={AppearanceSizeType.small}
+            size="sm"
           >
             {t("t.cancel")}
           </Button>,

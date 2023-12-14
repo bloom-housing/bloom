@@ -1,12 +1,11 @@
 import * as React from "react"
 import { UseFormMethods } from "react-hook-form"
 import {
-  t,
-  Field,
-  resolveObject,
-  FormAddress,
   ExpandableContent,
+  Field,
   FieldGroup,
+  resolveObject,
+  t,
 } from "@bloom-housing/ui-components"
 import { stateKeys } from "../utilities/formKeys"
 import {
@@ -19,6 +18,8 @@ import {
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
 } from "../types/backend-swagger"
+import { AddressHolder } from "../utilities/constants"
+import { FormAddressAlternate } from "./address/FormAddressAlternate"
 
 export const listingSectionQuestions = (
   listing: Listing,
@@ -125,11 +126,11 @@ export const getRadioFields = (
       {applicationSection === MultiselectQuestionsApplicationSectionEnum.preferences && (
         <legend className="text__caps-spaced mb-4">{question?.text}</legend>
       )}
-      <p className="field-note mb-8">{question?.description}</p>
       <FieldGroup
         fieldGroupClassName="grid grid-cols-1"
         fieldClassName="ml-0"
         type={"radio"}
+        groupNote={t("t.pleaseSelectOne")}
         name={fieldName(question?.text, applicationSection)}
         error={errors && errors?.application?.programs?.[question?.text]}
         errorMessage={errors && t("errors.selectAnOption")}
@@ -236,7 +237,6 @@ export const getCheckboxOption = (
           exclusiveKeys
         )}
       </div>
-
       {option.description && (
         <div className="ml-8 -mt-5 mb-5">
           <ExpandableContent strings={{ readMore: t("t.readMore"), readLess: t("t.readLess") }}>
@@ -258,11 +258,41 @@ export const getCheckboxOption = (
           </ExpandableContent>
         </div>
       )}
-
+      {watchFields[optionFieldName] && option.collectName && (
+        <Field
+          id={AddressHolder.Name}
+          name={`${optionFieldName}-${AddressHolder.Name}`}
+          label={t(`application.preferences.options.${AddressHolder.Name}`)}
+          register={register}
+          validation={{ required: true, maxLength: 64 }}
+          error={!!resolveObject(`${optionFieldName}-${AddressHolder.Name}`, errors)}
+          errorMessage={
+            resolveObject(`${optionFieldName}-${AddressHolder.Name}`, errors)?.type === "maxLength"
+              ? t("errors.maxLength")
+              : t("errors.requiredFieldError")
+          }
+        />
+      )}
+      {watchFields[optionFieldName] && option.collectRelationship && (
+        <Field
+          id={AddressHolder.Relationship}
+          name={`${optionFieldName}-${AddressHolder.Relationship}`}
+          label={t(`application.preferences.options.${AddressHolder.Relationship}`)}
+          register={register}
+          validation={{ required: true, maxLength: 64 }}
+          error={!!resolveObject(`${optionFieldName}-${AddressHolder.Relationship}`, errors)}
+          errorMessage={
+            resolveObject(`${optionFieldName}-${AddressHolder.Relationship}`, errors)?.type ===
+            "maxLength"
+              ? t("errors.maxLength")
+              : t("errors.requiredFieldError")
+          }
+        />
+      )}
       {watchFields[optionFieldName] && option.collectAddress && (
         <div className="pb-4">
-          <FormAddress
-            subtitle={t("application.preferences.options.address")}
+          <FormAddressAlternate
+            subtitle={t("application.preferences.options.qualifyingAddress")}
             dataKey={fieldName(question.text, applicationSection, `${option.text}-address`)}
             register={register}
             errors={errors}
@@ -302,6 +332,7 @@ export const mapRadiosToApi = (
   })
 
   return {
+    multiselectQuestionId: question.id,
     key,
     claimed: Object.keys(data)?.length !== 0,
     options,
@@ -318,22 +349,46 @@ export const mapCheckboxesToApi = (
   const claimed = !!Object.keys(data).filter((key) => data[key] === true).length
 
   const addressFields = Object.keys(data).filter((option) => Object.keys(data[option]))
-
   const questionOptions: ApplicationMultiselectQuestionOption[] = Object.keys(data)
     .filter((option) => !Object.keys(data[option]).length)
     .map((key) => {
+      const extraData = []
       const addressData = addressFields.filter((addressField) => addressField === `${key}-address`)
+      const addressHolderNameData = addressFields.filter(
+        (addressField) => addressField === `${key}-${AddressHolder.Name}`
+      )
+      const addressHolderRelationshipData = addressFields.filter(
+        (addressField) => addressField === `${key}-${AddressHolder.Relationship}`
+      )
+      if (addressData.length) {
+        extraData.push({ type: InputType.address, key: "address", value: data[addressData[0]] })
+
+        if (addressHolderNameData.length) {
+          extraData.push({
+            type: InputType.text,
+            key: AddressHolder.Name,
+            value: data[addressHolderNameData[0]],
+          })
+        }
+
+        if (addressHolderRelationshipData.length) {
+          extraData.push({
+            type: InputType.text,
+            key: AddressHolder.Relationship,
+            value: data[addressHolderRelationshipData[0]],
+          })
+        }
+      }
 
       return {
         key,
         checked: data[key] === true,
-        extraData: addressData.length
-          ? [{ type: InputType.address, key, value: data[addressData[0]] }]
-          : [],
+        extraData: extraData,
       }
     })
 
   return {
+    multiselectQuestionId: question.id,
     key: question.text ?? "",
     claimed,
     options: questionOptions,
@@ -380,11 +435,24 @@ export const mapApiToMultiselectForm = (
     if (appQuestion.inputType === "checkbox") {
       options = question.options.reduce((acc, curr) => {
         const claimed = curr.checked
-
         if (appQuestion.inputType === "checkbox") {
           acc[curr.key] = claimed
           if (curr.extraData?.length) {
             acc[`${curr.key}-address`] = curr.extraData[0].value
+
+            const addressHolderName = curr.extraData?.find(
+              (field) => field.key === AddressHolder.Name
+            )
+            if (addressHolderName) {
+              acc[`${curr.key}-${AddressHolder.Name}`] = addressHolderName.value
+            }
+
+            const addressHolderRelationship = curr.extraData?.find(
+              (field) => field.key === AddressHolder.Relationship
+            )
+            if (addressHolderRelationship) {
+              acc[`${curr.key}-${AddressHolder.Relationship}`] = addressHolderRelationship.value
+            }
           }
         }
 

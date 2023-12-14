@@ -588,7 +588,7 @@ export class ApplicationService {
 
   async authorizeAction(
     user: User,
-    applicaton: Application,
+    application: Application,
     listingId: string,
     action: permissionActions,
   ): Promise<void> {
@@ -602,7 +602,6 @@ export class ApplicationService {
       },
     });
     await this.permissionService.canOrThrow(user, 'application', action, {
-      ...applicaton,
       listingId,
       jurisdictionId: listingJurisdiction.id,
     });

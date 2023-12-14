@@ -2,8 +2,8 @@ import React from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Field } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { YesNoEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const FormTerms = () => {
   const formMethods = useFormContext()

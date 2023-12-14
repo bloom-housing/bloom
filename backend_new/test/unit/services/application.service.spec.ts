@@ -1234,7 +1234,6 @@ describe('Testing application service', () => {
       'application',
       permissionActions.create,
       {
-        ...dto,
         listingId: dto.listings.id,
         jurisdictionId: expect.anything(),
       },

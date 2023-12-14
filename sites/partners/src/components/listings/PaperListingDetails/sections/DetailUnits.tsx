@@ -1,10 +1,10 @@
 import React, { useContext, useMemo } from "react"
-import { t, MinimalTable, Button } from "@bloom-housing/ui-components"
-import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { t, MinimalTable } from "@bloom-housing/ui-components"
+import { Button, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { UnitDrawer } from "../DetailsUnitDrawer"
-import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type DetailUnitsProps = {
   setUnitDrawer: (unit: UnitDrawer) => void
@@ -36,9 +36,9 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
           content: (
             <Button
               type="button"
-              className="font-semibold uppercase my-0"
+              variant="text"
+              className="font-semibold"
               onClick={() => setUnitDrawer(unit)}
-              unstyled
             >
               {t("t.view")}
             </Button>

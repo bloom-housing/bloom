@@ -2,9 +2,9 @@ import React, { useMemo } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Select, FieldGroup } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
-import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { ethnicityKeys, raceKeys, howDidYouHear } from "@bloom-housing/shared-helpers"
 import { Demographic } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type FormDemographicsProps = {
   formValues: Demographic

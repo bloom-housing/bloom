@@ -1,13 +1,6 @@
 import React from "react"
-import {
-  AppearanceSizeType,
-  AppearanceStyleType,
-  Button,
-  Form,
-  Modal,
-  t,
-  Textarea,
-} from "@bloom-housing/ui-components"
+import { Form, Modal, t, Textarea } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
 import { useForm } from "react-hook-form"
 import { FormListing } from "../../../lib/listings/formTypes"
 import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -46,7 +39,7 @@ const RequestChangesModal = ({
         <Button
           id="requestChangesButtonConfirm"
           type="button"
-          styleType={AppearanceStyleType.success}
+          variant="success"
           onClick={async () => {
             const validation = await trigger()
             if (validation) {
@@ -57,17 +50,17 @@ const RequestChangesModal = ({
               })
             }
           }}
-          size={AppearanceSizeType.small}
-          dataTestId={"requestChangesButtonConfirm"}
+          size="sm"
         >
           {t("listings.approval.requestChanges")}
         </Button>,
         <Button
           type="button"
+          variant="primary-outlined"
           onClick={() => {
             setModalIsOpen(false)
           }}
-          size={AppearanceSizeType.small}
+          size="sm"
         >
           {t("t.cancel")}
         </Button>,

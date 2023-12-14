@@ -8,6 +8,13 @@ import { permissionActions } from '../enums/permissions/permission-actions-enum'
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import Listing from '../dtos/listings/listing.dto';
 
+export type permissionCheckingObj = {
+  jurisdictionId?: string;
+  id?: string;
+  listingId?: string;
+  userId?: string;
+};
+
 @Injectable()
 export class PermissionService {
   constructor(private prisma: PrismaService) {}
@@ -26,7 +33,7 @@ export class PermissionService {
     user: User | undefined,
     type: string,
     action: string,
-    obj?: any,
+    obj?: permissionCheckingObj,
   ): Promise<boolean> {
     let e = await newEnforcer(
       path.join(__dirname, '../permission-configs', 'permission_model.conf'),
@@ -127,7 +134,7 @@ export class PermissionService {
     user: User | undefined,
     type: string,
     action: string,
-    obj?: any,
+    obj?: permissionCheckingObj,
   ): Promise<void> {
     if (!(await this.can(user, type, action, obj))) {
       throw new ForbiddenException();

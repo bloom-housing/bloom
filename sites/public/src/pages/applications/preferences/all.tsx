@@ -1,7 +1,7 @@
 import React from "react"
 import { t } from "@bloom-housing/ui-components"
-import ApplicationMultiselectQuestionStep from "../../../components/applications/ApplicationMultiselectQuestionStep"
 import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
+import ApplicationMultiselectQuestionStep from "../../../components/applications/ApplicationMultiselectQuestionStep"
 import { useFormConductor } from "../../../lib/hooks"
 import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 

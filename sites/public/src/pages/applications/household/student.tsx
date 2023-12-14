@@ -1,37 +1,29 @@
-/*
-2.5 Household Student
-*/
-import {
-  AppearanceStyleType,
-  AlertBox,
-  Button,
-  FieldGroup,
-  Form,
-  FormCard,
-  Heading,
-  ProgressNav,
-  t,
-} from "@bloom-housing/ui-components"
-import FormsLayout from "../../../layouts/forms"
+import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import FormBackLink from "../../../components/applications/FormBackLink"
-import { useFormConductor } from "../../../lib/hooks"
+import { FieldGroup, Form, t } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { Alert } from "@bloom-housing/ui-seeds"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
-import { useContext, useEffect } from "react"
+import FormsLayout from "../../../layouts/forms"
+import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
+import ApplicationFormLayout from "../../../layouts/application-form"
+import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationHouseholdStudent = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("householdStudent")
   const currentPageSection = 2
 
-  /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, getValues } = useForm<Record<string, any>>({
+  const { register, handleSubmit, errors, getValues, trigger } = useForm<Record<string, any>>({
     defaultValues: { householdStudent: application.householdStudent?.toString() },
     shouldFocusError: false,
   })
-  const onSubmit = (data) => {
+
+  const onSubmit = async (data) => {
+    const validation = await trigger()
+    if (!validation) return
     const { householdStudent } = data
     conductor.currentStep.save({
       householdStudent: householdStudent === "true",
@@ -67,44 +59,40 @@ const ApplicationHouseholdStudent = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard>
-        <FormBackLink
-          url={conductor.determinePreviousUrl()}
-          onClick={() => conductor.setNavigatedBack(true)}
-        />
-
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">
-            {t("application.household.householdStudent.question")}
-          </h2>
-
-          <p className="field-note mt-5">{t("application.household.genericSubtitle")}</p>
-        </div>
-
-        {Object.entries(errors).length > 0 && (
-          <AlertBox type="alert" inverted closeable>
-            {t("errors.errorsToResolve")}
-          </AlertBox>
-        )}
-
-        <Form onSubmit={handleSubmit(onSubmit, onError)}>
-          <div
-            className={`form-card__group field text-xl ${errors.householdStudent ? "error" : ""}`}
-          >
+      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={t("application.household.householdStudent.question")}
+          subheading={t("application.household.genericSubtitle")}
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: OnClientSide(),
+          }}
+          backLink={{
+            url: conductor.determinePreviousUrl(),
+          }}
+          conductor={conductor}
+        >
+          {Object.entries(errors).length > 0 && (
+            <Alert
+              className={styles["message-inside-card"]}
+              variant="alert"
+              fullwidth
+              id={"application-alert-box"}
+            >
+              {t("errors.errorsToResolve")}
+            </Alert>
+          )}
+          <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <FieldGroup
                 fieldGroupClassName="grid grid-cols-1"
                 fieldClassName="ml-0"
                 type="radio"
                 name="householdStudent"
+                groupNote={t("t.pleaseSelectOne")}
                 error={errors.householdStudent}
                 errorMessage={t("errors.selectAnOption")}
                 register={register}
@@ -117,21 +105,9 @@ const ApplicationHouseholdStudent = () => {
                 }}
               />
             </fieldset>
-          </div>
-
-          <div className="form-card__pager">
-            <div className="form-card__pager-row primary">
-              <Button
-                styleType={AppearanceStyleType.primary}
-                onClick={() => conductor.setNavigatedBack(false)}
-                data-testid={"app-next-step-button"}
-              >
-                {t("t.next")}
-              </Button>
-            </div>
-          </div>
-        </Form>
-      </FormCard>
+          </CardSection>
+        </ApplicationFormLayout>
+      </Form>
     </FormsLayout>
   )
 }

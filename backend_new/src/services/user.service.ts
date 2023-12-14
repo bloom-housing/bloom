@@ -263,7 +263,7 @@ export class UserService {
   async update(
     dto: UserUpdate,
     requestingUser: User,
-    jurisdictionName?: string,
+    jurisdictionName: string,
   ): Promise<User> {
     const storedUser = await this.findUserOrError({ userId: dto.id }, true);
 

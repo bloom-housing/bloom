@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import {
   t,
-  AppearanceStyleType,
-  Button,
   Drawer,
   Dropzone,
   FieldGroup,
@@ -14,17 +12,16 @@ import {
   PhoneField,
   PhoneMask,
   StandardTableData,
-  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
-import { Card, Grid } from "@bloom-housing/ui-seeds"
+import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
 import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../../lib/helpers"
-import { FormListing } from "../../../../lib/listings/formTypes"
 import {
   ApplicationMethodCreate,
   ApplicationMethodsTypeEnum,
   LanguagesEnum,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { FormListing } from "../../../../lib/listings/formTypes"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 interface Methods {
@@ -119,7 +116,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
         content: (
           <Button
             type="button"
-            className="font-semibold uppercase text-alert my-0"
+            className="font-semibold text-alert"
             onClick={() => {
               setCloudinaryData({
                 id: "",
@@ -127,7 +124,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               })
               setProgressValue(0)
             }}
-            unstyled
+            variant="text"
           >
             {t("t.delete")}
           </Button>
@@ -394,7 +391,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                         <div className="flex">
                           <Button
                             type="button"
-                            className="font-semibold uppercase text-alert my-0"
+                            className="font-semibold text-alert"
                             onClick={() => {
                               const items = methods.paper.paperApplications.filter(
                                 (paperApp) => item !== paperApp
@@ -408,7 +405,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                                 },
                               })
                             }}
-                            unstyled
+                            variant="text"
                           >
                             {t("t.delete")}
                           </Button>
@@ -420,6 +417,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               )}
               <Button
                 type="button"
+                variant="primary-outlined"
                 onClick={() => {
                   // default the application to English:
                   setSelectedLanguage(LanguagesEnum.en)
@@ -553,8 +551,8 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               savePaperApplication()
               resetDrawerState()
             }}
-            styleType={AppearanceStyleType.primary}
-            size={AppearanceSizeType.small}
+            variant="primary"
+            size="sm"
           >
             Save
           </Button>,
@@ -563,7 +561,8 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             onClick={() => {
               resetDrawerState()
             }}
-            size={AppearanceSizeType.small}
+            variant="primary-outlined"
+            size="sm"
           >
             Cancel
           </Button>,

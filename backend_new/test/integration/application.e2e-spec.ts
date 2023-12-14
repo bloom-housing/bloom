@@ -6,6 +6,7 @@ import {
   ApplicationSubmissionTypeEnum,
   IncomePeriodEnum,
   LanguagesEnum,
+  MultiselectQuestionsApplicationSectionEnum,
   UnitTypeEnum,
   YesNoEnum,
 } from '@prisma/client';
@@ -34,6 +35,7 @@ import { translationFactory } from '../../prisma/seed-helpers/translation-factor
 import { EmailService } from '../../src/services/email.service';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { Login } from '../../src/dtos/auth/login.dto';
+import { multiselectQuestionFactory } from '../../prisma/seed-helpers/multiselect-question-factory';
 
 describe('Application Controller Tests', () => {
   let app: INestApplication;
@@ -49,6 +51,28 @@ describe('Application Controller Tests', () => {
     testEmailService,
     'applicationConfirmation',
   );
+
+  const createMultiselectQuestion = async (
+    jurisdictionId: string,
+    listingId: string,
+    section: MultiselectQuestionsApplicationSectionEnum,
+  ) => {
+    const res = await prisma.multiselectQuestions.create({
+      data: multiselectQuestionFactory(jurisdictionId, {
+        numberOfOptions: 2,
+        multiselectQuestion: {
+          applicationSection: section,
+          listings: {
+            create: {
+              listingId: listingId,
+            },
+          },
+        },
+      }),
+    });
+
+    return res.id;
+  };
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -279,12 +303,24 @@ describe('Application Controller Tests', () => {
       data: listing1,
     });
 
+    const multiselectQuestionProgram = await createMultiselectQuestion(
+      jurisdiction.id,
+      listing1Created.id,
+      MultiselectQuestionsApplicationSectionEnum.programs,
+    );
+    const multiselectQuestionPreference = await createMultiselectQuestion(
+      jurisdiction.id,
+      listing1Created.id,
+      MultiselectQuestionsApplicationSectionEnum.preferences,
+    );
+
     const submissionDate = new Date();
     const exampleAddress = addressFactory() as AddressCreate;
     const dto: ApplicationCreate = {
       contactPreferences: ['example contact preference'],
       preferences: [
         {
+          multiselectQuestionId: multiselectQuestionPreference,
           key: 'example key',
           claimed: true,
           options: [
@@ -386,6 +422,7 @@ describe('Application Controller Tests', () => {
       reviewStatus: ApplicationReviewStatusEnum.valid,
       programs: [
         {
+          multiselectQuestionId: multiselectQuestionProgram,
           key: 'example key',
           claimed: true,
           options: [
@@ -424,12 +461,24 @@ describe('Application Controller Tests', () => {
       data: listing1,
     });
 
+    const multiselectQuestionProgram = await createMultiselectQuestion(
+      jurisdiction.id,
+      listing1Created.id,
+      MultiselectQuestionsApplicationSectionEnum.programs,
+    );
+    const multiselectQuestionPreference = await createMultiselectQuestion(
+      jurisdiction.id,
+      listing1Created.id,
+      MultiselectQuestionsApplicationSectionEnum.preferences,
+    );
+
     const submissionDate = new Date();
     const exampleAddress = addressFactory() as AddressCreate;
     const dto: ApplicationCreate = {
       contactPreferences: ['example contact preference'],
       preferences: [
         {
+          multiselectQuestionId: multiselectQuestionPreference,
           key: 'example key',
           claimed: true,
           options: [
@@ -531,6 +580,7 @@ describe('Application Controller Tests', () => {
       reviewStatus: ApplicationReviewStatusEnum.valid,
       programs: [
         {
+          multiselectQuestionId: multiselectQuestionProgram,
           key: 'example key',
           claimed: true,
           options: [
@@ -568,6 +618,17 @@ describe('Application Controller Tests', () => {
       data: listing1,
     });
 
+    const multiselectQuestionProgram = await createMultiselectQuestion(
+      jurisdiction.id,
+      listing1Created.id,
+      MultiselectQuestionsApplicationSectionEnum.programs,
+    );
+    const multiselectQuestionPreference = await createMultiselectQuestion(
+      jurisdiction.id,
+      listing1Created.id,
+      MultiselectQuestionsApplicationSectionEnum.preferences,
+    );
+
     const applicationA = await prisma.applications.create({
       data: applicationFactory({
         unitTypeId: unitTypeA.id,
@@ -585,6 +646,7 @@ describe('Application Controller Tests', () => {
       contactPreferences: ['example contact preference'],
       preferences: [
         {
+          multiselectQuestionId: multiselectQuestionPreference,
           key: 'example key',
           claimed: true,
           options: [
@@ -686,6 +748,7 @@ describe('Application Controller Tests', () => {
       reviewStatus: ApplicationReviewStatusEnum.valid,
       programs: [
         {
+          multiselectQuestionId: multiselectQuestionProgram,
           key: 'example key',
           claimed: true,
           options: [
@@ -726,6 +789,17 @@ describe('Application Controller Tests', () => {
       data: listing1,
     });
 
+    const multiselectQuestionProgram = await createMultiselectQuestion(
+      jurisdiction.id,
+      listing1Created.id,
+      MultiselectQuestionsApplicationSectionEnum.programs,
+    );
+    const multiselectQuestionPreference = await createMultiselectQuestion(
+      jurisdiction.id,
+      listing1Created.id,
+      MultiselectQuestionsApplicationSectionEnum.preferences,
+    );
+
     const submissionDate = new Date();
     const exampleAddress = addressFactory() as AddressCreate;
     const dto: ApplicationUpdate = {
@@ -733,6 +807,7 @@ describe('Application Controller Tests', () => {
       contactPreferences: ['example contact preference'],
       preferences: [
         {
+          multiselectQuestionId: multiselectQuestionPreference,
           key: 'example key',
           claimed: true,
           options: [
@@ -834,6 +909,7 @@ describe('Application Controller Tests', () => {
       reviewStatus: ApplicationReviewStatusEnum.valid,
       programs: [
         {
+          multiselectQuestionId: multiselectQuestionProgram,
           key: 'example key',
           claimed: true,
           options: [
@@ -873,12 +949,24 @@ describe('Application Controller Tests', () => {
       data: listing1,
     });
 
+    const multiselectQuestionProgram = await createMultiselectQuestion(
+      jurisdiction.id,
+      listing1Created.id,
+      MultiselectQuestionsApplicationSectionEnum.programs,
+    );
+    const multiselectQuestionPreference = await createMultiselectQuestion(
+      jurisdiction.id,
+      listing1Created.id,
+      MultiselectQuestionsApplicationSectionEnum.preferences,
+    );
+
     const submissionDate = new Date();
     const exampleAddress = addressFactory() as AddressCreate;
     const dto: ApplicationCreate = {
       contactPreferences: ['example contact preference'],
       preferences: [
         {
+          multiselectQuestionId: multiselectQuestionPreference,
           key: 'example key',
           claimed: true,
           options: [
@@ -980,6 +1068,7 @@ describe('Application Controller Tests', () => {
       reviewStatus: ApplicationReviewStatusEnum.valid,
       programs: [
         {
+          multiselectQuestionId: multiselectQuestionProgram,
           key: 'example key',
           claimed: true,
           options: [
