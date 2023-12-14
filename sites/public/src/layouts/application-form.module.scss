@@ -1,4 +1,5 @@
 .application-form-header {
+  border: none;
   margin-block: var(--seeds-s6);
 
   @media (max-width: theme("screens.md")) {
@@ -13,6 +14,13 @@
     border-top-right-radius: 0;
     margin-top: 0;
   }
+}
+
+.application-form-listing-name {
+  background: var(--seeds-color-primary-dark);
+  padding-inline: var(--seeds-s8);
+  padding-block: var(--seeds-s4);
+  color: white;
 }
 
 .application-form-body {
@@ -30,8 +38,13 @@
   }
 }
 
+.listing-image-card {
+  --border-radius: 0;
+}
+
 /* overrides for Seeds Message & Alert */
 .message-inside-card {
+  --seeds-color-primary-light: var(--dwy-color-blue-300);
   --common-message-max-width: auto;
   --common-message-padding: var(--seeds-s4) var(--card-content-padding-inline);
 }

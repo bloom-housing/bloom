@@ -1,7 +1,6 @@
 import React from "react"
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons"
 import { Button, Card, Heading, Icon } from "@bloom-housing/ui-seeds"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { t, ProgressNav, StepHeader } from "@bloom-housing/ui-components"
 import ApplicationConductor from "../lib/applications/ApplicationConductor"
 
@@ -33,6 +32,7 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
         <Button
           leadIcon={<Icon icon={faChevronLeft} />}
           variant={"text"}
+          className="font-bold"
           {...(onClickFxn ? { onClick: onClickFxn } : { href: url })}
         >
           {t("t.back")}
@@ -46,12 +46,12 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
   return (
     <>
       <Card spacing={"sm"} className={styles["application-form-header"]}>
-        <CardSection className={"bg-primary px-8 py-4 text-white"}>
+        <Card.Section className={styles["application-form-listing-name"]}>
           <Heading priority={1} className={"text-xl text-white font-bold font-alt-sans"}>
             {props.listingName}
           </Heading>
-        </CardSection>
-        <CardSection className={"px-8"}>
+        </Card.Section>
+        <Card.Section className={"px-8"}>
           <div className={"hidden md:block"}>
             <ProgressNav {...props.progressNavProps} />
           </div>
@@ -63,19 +63,19 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
               stepLabeling={props.progressNavProps.labels}
             />
           </div>
-        </CardSection>
+        </Card.Section>
       </Card>
-      <Card spacing={"lg"} className={styles["application-form-body"]}>
-        <CardSection divider={"inset"} className={props.hideBorder && "border-none"}>
+      <Card spacing={"lg"} className={`application-form-card ${styles["application-form-body"]}`}>
+        <Card.Section divider={"inset"} className={props.hideBorder && "border-none"}>
           {props.backLink && getBackLink(props.backLink.url, props.backLink.onClickFxn)}
-          <Heading priority={2} size={"2xl"}>
+          <Heading priority={2} size={"2xl"} className="font-bold">
             {props.heading}
           </Heading>
           {props.subheading && <p className="field-note mt-6">{props.subheading}</p>}
-        </CardSection>
+        </Card.Section>
         {props.children}
         {props.conductor && (
-          <CardSection className={"bg-primary-lighter"}>
+          <Card.Section className="bg-primary-lighter">
             <Button
               type="submit"
               variant="primary"
@@ -103,7 +103,7 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
                 </Button>
               </div>
             )}
-          </CardSection>
+          </Card.Section>
         )}
       </Card>
     </>

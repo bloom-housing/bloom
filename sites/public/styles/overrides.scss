@@ -1,3 +1,5 @@
+@import "./colors.scss";
+
 :root {
   .site-header {
     --logo-content-padding: 0;
@@ -85,8 +87,30 @@
       }
     }
   }
+
   .seeds-button {
+    --button-border-radius-sm: var(--seeds-rounded-full);
+    --button-border-radius-md: var(--seeds-rounded-full);
+    --button-border-radius-lg: var(--seeds-rounded-full);
+  
     -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
+  }
+
+  .seeds-card-section.bg-primary-lighter {
+    background: var(--seeds-color-secondary-lighter) !important;
+  }
+
+  .seeds-card-section .text-heading-2xl {
+    font-weight: bold;
+  }
+
+  .seeds-card.application-form-card .image-card {
+    --border-radius: 0;
+  }
+
+  .progress-nav {
+    --dot-font-size-desktop: 0.75rem;
+    --dot-size: 1.05rem;
   }
 
   --text-caps-spaced-letter-spacing: var(--bloom-letter-spacing-tight);
