@@ -30,7 +30,6 @@ import { applicationFactory } from '../../../prisma/seed-helpers/application-fac
 import { addressFactory } from '../../../prisma/seed-helpers/address-factory';
 import { AddressCreate } from '../../../src/dtos/addresses/address-create.dto';
 import { ApplicationCreate } from '../../../src/dtos/applications/application-create.dto';
-import { InputType } from '../../../src/enums/shared/input-type-enum';
 import { ApplicationUpdate } from '../../../src/dtos/applications/application-update.dto';
 import { JurisdictionCreate } from '../../../src/dtos/jurisdictions/jurisdiction-create.dto';
 import { JurisdictionUpdate } from '../../../src/dtos/jurisdictions/jurisdiction-update.dto';
@@ -295,25 +294,7 @@ export const buildApplicationCreateMock = (
 ): ApplicationCreate => {
   return {
     contactPreferences: ['example contact preference'],
-    preferences: [
-      {
-        key: 'example key',
-        claimed: true,
-        options: [
-          {
-            key: 'example key',
-            checked: true,
-            extraData: [
-              {
-                type: InputType.boolean,
-                key: 'example key',
-                value: true,
-              },
-            ],
-          },
-        ],
-      },
-    ],
+    preferences: [],
     status: ApplicationStatusEnum.submitted,
     submissionType: ApplicationSubmissionTypeEnum.electronical,
     applicant: {
@@ -396,25 +377,7 @@ export const buildApplicationCreateMock = (
     acceptedTerms: true,
     submissionDate: submissionDate,
     reviewStatus: ApplicationReviewStatusEnum.valid,
-    programs: [
-      {
-        key: 'example key',
-        claimed: true,
-        options: [
-          {
-            key: 'example key',
-            checked: true,
-            extraData: [
-              {
-                type: InputType.boolean,
-                key: 'example key',
-                value: true,
-              },
-            ],
-          },
-        ],
-      },
-    ],
+    programs: [],
   };
 };
 
@@ -428,25 +391,7 @@ export const buildApplicationUpdateMock = (
   return {
     id: id,
     contactPreferences: ['example contact preference'],
-    preferences: [
-      {
-        key: 'example key',
-        claimed: true,
-        options: [
-          {
-            key: 'example key',
-            checked: true,
-            extraData: [
-              {
-                type: InputType.boolean,
-                key: 'example key',
-                value: true,
-              },
-            ],
-          },
-        ],
-      },
-    ],
+    preferences: [],
     status: ApplicationStatusEnum.submitted,
     submissionType: ApplicationSubmissionTypeEnum.electronical,
     applicant: {
@@ -529,25 +474,7 @@ export const buildApplicationUpdateMock = (
     acceptedTerms: true,
     submissionDate: submissionDate,
     reviewStatus: ApplicationReviewStatusEnum.valid,
-    programs: [
-      {
-        key: 'example key',
-        claimed: true,
-        options: [
-          {
-            key: 'example key',
-            checked: true,
-            extraData: [
-              {
-                type: InputType.boolean,
-                key: 'example key',
-                value: true,
-              },
-            ],
-          },
-        ],
-      },
-    ],
+    programs: [],
   };
 };
 
