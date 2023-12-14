@@ -96,7 +96,7 @@ const DetailsMultiselectQuestions = ({
                         }
 
                         return (
-                          <FieldValue className="my-5" key={extra.key} label={label}>
+                          <FieldValue className="my-8" key={extra.key} label={label}>
                             <>{value}</>
                           </FieldValue>
                         )
@@ -118,7 +118,8 @@ const DetailsMultiselectQuestions = ({
                         return (
                           <FieldValue
                             key={extra.key}
-                            label={t(`application.preferences.options.address`, {
+                            className="field-label-semibold"
+                            label={t(`application.preferences.options.qualifyingAddress`, {
                               county: listingDto?.countyCode,
                             })}
                           >
@@ -127,6 +128,7 @@ const DetailsMultiselectQuestions = ({
                                 <DetailsAddressColumns
                                   type={AddressColsType.preferences}
                                   addressObject={extra.value as AddressCreate}
+                                  small
                                 />
                               </Grid.Row>
                             </Grid>

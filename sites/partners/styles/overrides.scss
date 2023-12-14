@@ -100,3 +100,9 @@
   --text-caps-spaced-margin-bottom: var(--seeds-s2);
   text-transform: none;
 }
+
+.field-label-semibold {
+  > [data-part="label"] {
+    font-weight: var(--seeds-font-weight-semibold);
+  }
+}
