@@ -1,4 +1,6 @@
 .application-form-header {
+  --card-content-padding-inline-desktop: var(--seeds-s11);
+
   border: none;
   margin-block: var(--seeds-s6);
 
@@ -17,13 +19,17 @@
 }
 
 .application-form-listing-name {
+  --card-content-padding-block: var(--seeds-s4);
+
   background: var(--seeds-color-primary-dark);
-  padding-inline: var(--seeds-s8);
-  padding-block: var(--seeds-s4);
+  padding-block-end: var(--card-content-padding-block);
   color: white;
 }
 
 .application-form-body {
+  --card-content-padding-inline-desktop: var(--seeds-s11);
+
+  border: none;
   margin-block-end: var(--seeds-s6);
 
   @media (max-width: theme("screens.md")) {
@@ -47,4 +53,9 @@
   --seeds-color-primary-light: var(--dwy-color-blue-300);
   --common-message-max-width: auto;
   --common-message-padding: var(--seeds-s4) var(--card-content-padding-inline);
+}
+
+.underlined-text-heading {
+  border-bottom: var(--seeds-s1) solid var(--seeds-color-on-surface);
+  padding-bottom: var(--seeds-s2);
 }

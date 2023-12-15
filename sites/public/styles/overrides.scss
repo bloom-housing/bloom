@@ -92,6 +92,9 @@
     --button-border-radius-sm: var(--seeds-rounded-full);
     --button-border-radius-md: var(--seeds-rounded-full);
     --button-border-radius-lg: var(--seeds-rounded-full);
+
+    --button-padding-md: calc(var(--seeds-s3) - 2px) calc(var(--seeds-s6) - 2px);
+    --button-padding-sm: calc(var(--seeds-s3) - 2px) calc(var(--seeds-s6) - 2px);
   
     -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
   }
@@ -100,22 +103,23 @@
     background: var(--seeds-color-secondary-lighter) !important;
   }
 
-  .seeds-card-section .text-heading-2xl {
-    font-weight: bold;
-  }
-
   .seeds-card.application-form-card .image-card {
     --border-radius: 0;
   }
 
   .progress-nav {
-    --dot-font-size-desktop: 0.75rem;
-    --dot-size: 1.05rem;
+    --dot-size: .95rem;
+    --dot-font-size: 0.825rem;
+    --dot-label-padding-top: var(--seeds-s6);
   }
 
   --text-caps-spaced-letter-spacing: var(--bloom-letter-spacing-tight);
   --text-caps-spaced-font-weight: 700;
   .text__caps-spaced {
     text-transform: none;
+  }
+
+  .form--card__sub-header {
+    border-top: none;
   }
 }

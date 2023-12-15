@@ -51,7 +51,7 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
             {props.listingName}
           </Heading>
         </Card.Section>
-        <Card.Section className={"px-8"}>
+        <Card.Section>
           <div className={"hidden md:block"}>
             <ProgressNav {...props.progressNavProps} />
           </div>

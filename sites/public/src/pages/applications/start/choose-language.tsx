@@ -140,8 +140,10 @@ const ApplicationChooseLanguage = (props: ChooseLanguageProps) => {
         {listing?.applicationConfig.languages.length > 1 && (
           <CardSection divider={"flush"}>
             <>
-              <Heading priority={2} size={"lg"} className={"pb-4"}>
-                {t("application.chooseLanguage.chooseYourLanguage")}
+              <Heading priority={2} size={"lg"} className={"mb-10"}>
+                <span className={styles["underlined-text-heading"]}>
+                  {t("application.chooseLanguage.chooseYourLanguage")}
+                </span>
               </Heading>
               {listing.applicationConfig.languages.map((lang, index) => (
                 <Button
