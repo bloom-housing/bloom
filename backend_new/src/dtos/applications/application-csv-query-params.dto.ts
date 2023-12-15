@@ -19,15 +19,6 @@ export class ApplicationCsvQueryParams extends OmitType(AbstractDTO, [
 
   @Expose()
   @ApiProperty({
-    type: String,
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  timeZone?: string;
-
-  @Expose()
-  @ApiProperty({
     type: Boolean,
     example: true,
     required: false,
@@ -35,8 +26,8 @@ export class ApplicationCsvQueryParams extends OmitType(AbstractDTO, [
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @Transform(
-    (value: any) => {
-      return value === 'true' || value === true;
+    (obj: any) => {
+      return obj.value === 'true' || obj.value === true;
     },
     { toClassOnly: true },
   )

@@ -14,7 +14,6 @@ import { randomInt } from 'node:crypto';
 import { applicationFactory } from './seed-helpers/application-factory';
 import { translationFactory } from './seed-helpers/translation-factory';
 import { householdMemberFactoryMany } from './seed-helpers/household-member-factory';
-import { demographicsFactory } from './seed-helpers/demographic-factory';
 import { APPLICATIONS_PER_LISTINGS, LISTINGS_TO_SEED } from './constants';
 
 const listingStatusEnumArray = Object.values(ListingsStatusEnum);
@@ -80,17 +79,15 @@ export const devSeeding = async (
   const householdSize = randomInt(0, 6);
   for (let index = 0; index < LISTINGS_TO_SEED; index++) {
     const householdMembers = await householdMemberFactoryMany(householdSize);
-    const demographics = await demographicsFactory();
 
     const applications = [];
 
     for (let j = 0; j <= APPLICATIONS_PER_LISTINGS; j++) {
       applications.push(
-        applicationFactory({
+        await applicationFactory({
           householdSize,
           unitTypeId: unitTypes[randomInt(0, 5)].id,
           householdMember: householdMembers,
-          demographics,
           multiselectQuestions,
         }),
       );
