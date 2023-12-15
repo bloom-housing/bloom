@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -22,11 +23,16 @@ import { UnitRentTypeUpdate } from '../dtos/unit-rent-types/unit-rent-type-updat
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
+import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
+import { JwtAuthGuard } from '../guards/jwt.guard';
+import { PermissionGuard } from '../guards/permission.guard';
 
 @Controller('unitRentTypes')
 @ApiTags('unitRentTypes')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 @ApiExtraModels(UnitRentTypeCreate, UnitRentTypeUpdate, IdDTO)
+@PermissionTypeDecorator('unitRentType')
+@UseGuards(JwtAuthGuard, PermissionGuard)
 export class UnitRentTypeController {
   constructor(private readonly unitRentTypeService: UnitRentTypeService) {}
 

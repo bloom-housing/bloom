@@ -3,13 +3,22 @@ import { Expose, Type } from 'class-transformer';
 import {
   ArrayMaxSize,
   IsBoolean,
+  IsDefined,
   IsString,
+  IsUUID,
   ValidateNested,
 } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { ApplicationMultiselectQuestionOption } from './application-multiselect-question-option.dto';
 
 export class ApplicationMultiselectQuestion {
+  @Expose()
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
+  multiselectQuestionId: string;
+
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()

@@ -94,6 +94,46 @@ jobs:
           path: sites/public/cypress/videos
       - store_artifacts:
           path: sites/public/cypress/screenshots
+  cypress-partners:
+    executor: cypress-node
+    resource_class: large
+    steps:
+      - checkout
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - node/install-packages:
+          app-dir: sites/partners
+          pkg-manager: yarn
+          cache-version: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - node/install-packages:
+          app-dir: backend_new
+          pkg-manager: yarn
+          cache-version: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - run:
+          name: setup db and seed
+          command: yarn test:backend:new:dbsetup:withseed
+      - run:
+          name: run backend
+          command: yarn dev
+          background: true
+          working_directory: backend_new
+      - run:
+          name: build and run partners
+          command: yarn dev:server-wait-new && yarn build && yarn start
+          background: true
+          working_directory: sites/partners
+      - run:
+          name: wait
+          command: yarn dev:partners-wait
+          working_directory: sites/partners
+      - run:
+          name: Run Cypress
+          command: npx cypress run
+          working_directory: sites/partners
+      - store_artifacts:
+          path: sites/partners/cypress/videos
+      - store_artifacts:
+          path: sites/partners/cypress/screenshots
   build-public:
     executor: standard-node
     steps:
@@ -176,6 +216,10 @@ workflows:
           requires:
             - setup
       - cypress-public:
+          requires:
+            - setup
+            - setup-backend
+      - cypress-partners:
           requires:
             - setup
             - setup-backend

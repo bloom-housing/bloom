@@ -1,4 +1,4 @@
-import { EnumRequestMfaCodeMfaType } from "@bloom-housing/backend-core/types"
+import { MfaType } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export enum EnumRenderStep {
   emailAndPassword = "email and password",
@@ -39,11 +39,11 @@ export const onSubmitMfaType =
     setPhoneNumber,
     resetNetworkError
   ) =>
-  async (data: { mfaType: EnumRequestMfaCodeMfaType }) => {
+  async (data: { mfaType: MfaType }) => {
     const { mfaType: incomingMfaType } = data
     try {
       const res = await requestMfaCode(email, password, incomingMfaType)
-      if (!res.phoneNumberVerified && incomingMfaType === EnumRequestMfaCodeMfaType.sms) {
+      if (!res.phoneNumberVerified && incomingMfaType === MfaType.sms) {
         setAllowPhoneNumberEdit(true)
         setPhoneNumber(res.phoneNumber)
       }

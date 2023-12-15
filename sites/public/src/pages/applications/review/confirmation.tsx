@@ -1,24 +1,16 @@
-/*
-5.4 Confirmation
-Application confirmation with lottery number (confirmation number)
-*/
 import React, { useContext, useEffect, useMemo } from "react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import Markdown from "markdown-to-jsx"
-import {
-  AppearanceStyleType,
-  Button,
-  FormCard,
-  t,
-  ApplicationTimeline,
-} from "@bloom-housing/ui-components"
+import { t, ApplicationTimeline } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   imageUrlFromListing,
   PageView,
   pushGtmEvent,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
+import { Button, Card, Heading } from "@bloom-housing/ui-seeds"
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext } from "../../../lib/applications/AppSubmissionContext"
 import { UserStatus } from "../../../lib/constants"
@@ -60,84 +52,88 @@ const ApplicationConfirmation = () => {
 
   return (
     <FormsLayout>
-      <FormCard>
-        <div className="form-card__lead">
-          <h1 className="form-card__title is-borderless">
+      <Card spacing={"lg"}>
+        <CardSection divider={"flush"}>
+          <Heading priority={1} size={"2xl"}>
             {t("application.review.confirmation.title")}
             {listing?.name}
-          </h1>
-        </div>
+          </Heading>
+        </CardSection>
 
         {imageUrl && <img src={imageUrl} alt={listing?.name} />}
 
-        <div className="form-card__group border-b text-center">
-          <h2 className="form-card__paragraph-title">
+        <CardSection divider={"flush"}>
+          <h2 className="text__caps-spaced">
             {t("application.review.confirmation.lotteryNumber")}
           </h2>
 
           <p
             id="confirmationCode"
-            className="font-serif text-2xl my-1"
+            className="font-serif text-2xl mb-1"
             data-testid={"app-confirmation-id"}
           >
             {application.confirmationCode || application.id}
           </p>
           <p className="field-note">{t("application.review.confirmation.pleaseWriteNumber")}</p>
-        </div>
+        </CardSection>
 
-        <div className="form-card__group border-b markdown markdown-informational">
-          <ApplicationTimeline />
+        <CardSection divider={"inset"}>
+          <div className="markdown markdown-informational">
+            <ApplicationTimeline />
 
-          <Markdown options={{ disableParsingRawHTML: true }}>{content.text}</Markdown>
-        </div>
+            <Markdown options={{ disableParsingRawHTML: true }}>{content.text}</Markdown>
+          </div>
+        </CardSection>
 
-        <div className="form-card__group border-b markdown markdown-informational">
-          <Markdown options={{ disableParsingRawHTML: true }}>
-            {t("application.review.confirmation.needToMakeUpdates", {
-              agentName: listing?.leasingAgentName || "",
-              agentPhone: listing?.leasingAgentPhone || "",
-              agentEmail: listing?.leasingAgentEmail || "",
-              agentOfficeHours: listing?.leasingAgentOfficeHours || "",
-            })}
-          </Markdown>
-        </div>
-
-        {initialStateLoaded && !profile && (
-          <div className="form-card__group markdown markdown-informational">
+        <CardSection divider={"inset"}>
+          <div className="markdown markdown-informational">
             <Markdown options={{ disableParsingRawHTML: true }}>
-              {t("application.review.confirmation.createAccount")}
+              {t("application.review.confirmation.needToMakeUpdates", {
+                agentName: listing?.leasingAgentName || "",
+                agentPhone: listing?.leasingAgentPhone || "",
+                agentEmail: listing?.leasingAgentEmail || "",
+                agentOfficeHours: listing?.leasingAgentOfficeHours || "",
+              })}
             </Markdown>
           </div>
+        </CardSection>
+
+        {initialStateLoaded && !profile && (
+          <CardSection divider={"flush"} className={"border-none"}>
+            <div className="markdown markdown-informational">
+              <Markdown options={{ disableParsingRawHTML: true }}>
+                {t("application.review.confirmation.createAccount")}
+              </Markdown>
+            </div>
+          </CardSection>
         )}
 
-        <div className="form-card__pager">
-          {initialStateLoaded && !profile && (
-            <div className="form-card__pager-row primary">
-              <Button
-                styleType={AppearanceStyleType.primary}
-                onClick={() => {
-                  void router.push("/create-account")
-                }}
-                data-testid={"app-confirmation-create-account"}
-              >
-                {t("account.createAccount")}
-              </Button>
-            </div>
-          )}
+        {initialStateLoaded && !profile && (
+          <CardSection className={"bg-primary-lighter border-none"} divider={"flush"}>
+            <Button
+              variant={"primary"}
+              onClick={() => {
+                void router.push("/create-account")
+              }}
+              id={"app-confirmation-create-account"}
+            >
+              {t("account.createAccount")}
+            </Button>
+          </CardSection>
+        )}
 
-          <div className="form-card__pager-row py-6">
-            <span className="lined text-sm" data-testid={"app-confirmation-browse"}>
-              <Link href="/listings">{t("application.review.confirmation.browseMore")}</Link>
-            </span>
-          </div>
+        <CardSection divider={"flush"}>
+          <span className="underline text-sm" data-testid={"app-confirmation-browse"}>
+            <Link href="/listings">{t("application.review.confirmation.browseMore")}</Link>
+          </span>
+        </CardSection>
 
-          <div className="form-card__pager-row py-6 border-t">
-            <span className="lined text-sm" data-testid={"app-confirmation-print"}>
-              <Link href="/applications/view">{t("application.review.confirmation.print")}</Link>
-            </span>
-          </div>
-        </div>
-      </FormCard>
+        <CardSection>
+          <span className="underline text-sm" data-testid={"app-confirmation-print"}>
+            <Link href="/applications/view">{t("application.review.confirmation.print")}</Link>
+          </span>
+        </CardSection>
+      </Card>
     </FormsLayout>
   )
 }

@@ -39,7 +39,11 @@ import { ListingUpdate } from '../dtos/listings/listing-update.dto';
 import { ListingCreateUpdateValidationPipe } from '../validation-pipes/listing-create-update-pipe';
 import { mapTo } from '../utilities/mapTo';
 import { User } from '../dtos/users/user.dto';
-import { JwtAuthGuard } from '../guards/jwt.guard';
+import { OptionalAuthGuard } from '../guards/optional.guard';
+import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor';
+import { ActivityLogMetadata } from '../decorators/activity-log-metadata.decorator';
+import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
+// TODO: when we add csv export endpoint need to add guard to it (https://github.com/bloom-housing/bloom/issues/3695)
 
 @Controller('listings')
 @ApiTags('listings')
@@ -50,6 +54,10 @@ import { JwtAuthGuard } from '../guards/jwt.guard';
   PaginationAllowsAllQueryParams,
   IdDTO,
 )
+@UseGuards(OptionalAuthGuard)
+@PermissionTypeDecorator('listing')
+@ActivityLogMetadata([{ targetPropertyName: 'status', propertyPath: 'status' }])
+@UseInterceptors(ActivityLogInterceptor)
 export class ListingController {
   constructor(private readonly listingService: ListingService) {}
 
@@ -100,8 +108,11 @@ export class ListingController {
   @Delete()
   @ApiOperation({ summary: 'Delete listing by id', operationId: 'delete' })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
-  async delete(@Body() dto: IdDTO): Promise<SuccessDTO> {
-    return await this.listingService.delete(dto.id);
+  async delete(
+    @Body() dto: IdDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.listingService.delete(dto.id, mapTo(User, req.user));
   }
 
   @Put('process')
@@ -115,7 +126,6 @@ export class ListingController {
   }
 
   @Put(':id')
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Update listing by id', operationId: 'update' })
   @UsePipes(new ListingCreateUpdateValidationPipe(defaultValidationPipeOptions))
   async update(

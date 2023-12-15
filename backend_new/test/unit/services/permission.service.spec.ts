@@ -317,9 +317,16 @@ describe('Testing permission service', () => {
       where: {
         id: 'obj id',
       },
-      include: {
+      select: {
+        id: true,
         listings: true,
-        jurisdictions: true,
+        jurisdictions: {
+          where: {
+            id: {
+              in: ['juris id'],
+            },
+          },
+        },
         userRoles: true,
       },
     });

@@ -11,13 +11,13 @@ const DetailAdditionalFees = () => {
   const { profile } = useContext(AuthContext)
 
   const enableUtilitiesIncluded = profile?.jurisdictions?.find(
-    (j) => j.id === listing.jurisdiction.id
+    (j) => j.id === listing.jurisdictions.id
   )?.enableUtilitiesIncluded
 
   const getUtilitiesIncluded = () => {
     let utilitiesExist = false
-    const utilities = Object.keys(listing?.utilities ?? {}).map((utility) => {
-      if (listing?.utilities[utility]) {
+    const utilities = Object.keys(listing?.listingUtilities ?? {}).map((utility) => {
+      if (listing?.listingUtilities[utility]) {
         utilitiesExist = true
         return (
           <li key={utility} className={"list-disc mx-5 mb-1 md:w-1/3 w-full grow"}>

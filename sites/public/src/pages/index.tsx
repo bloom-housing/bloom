@@ -1,16 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import Head from "next/head"
-import {
-  AlertBox,
-  LinkButton,
-  Hero,
-  Heading,
-  t,
-  SiteAlert,
-  ActionBlock,
-  Icon,
-  AppearanceSizeType,
-} from "@bloom-housing/ui-components"
+import { AlertBox, t, SiteAlert, ActionBlock, Icon } from "@bloom-housing/ui-components"
+import { Button, Heading } from "@bloom-housing/ui-seeds"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
@@ -18,6 +9,7 @@ import { ConfirmationModal } from "../components/account/ConfirmationModal"
 import { MetaTags } from "../components/shared/MetaTags"
 import { fetchJurisdictionByName } from "../lib/hooks"
 import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import PageHero from "../components/page/Hero"
 
 interface IndexProps {
   jurisdiction: Jurisdiction
@@ -67,37 +59,58 @@ export default function Home(props: IndexProps) {
           {alertInfo.alertMessage}
         </AlertBox>
       )}
-      <Hero title={heroTitle} buttonTitle={t("welcome.seeRentalListings")} buttonLink="/listings" />
+      <PageHero>
+        <PageHero.Header>
+          <Heading>{heroTitle}</Heading>
+        </PageHero.Header>
+        <PageHero.Actions>
+          <Button href="/listings" variant="primary-outlined">
+            {t("welcome.seeRentalListings")}
+          </Button>
+        </PageHero.Actions>
+      </PageHero>
       <div className="homepage-extra">
         <div className="action-blocks mt-4 mb-4 w-full">
           {props.jurisdiction && props.jurisdiction.notificationsSignUpUrl && (
             <ActionBlock
               className="flex-1"
-              header={<Heading priority={2}>{t("welcome.signUp")}</Heading>}
+              header={
+                <Heading priority={2} size="2xl">
+                  {t("welcome.signUp")}
+                </Heading>
+              }
               icon={<Icon size="3xl" symbol="mailThin" />}
               actions={[
-                <LinkButton
+                <Button
                   key={"sign-up"}
                   href={props.jurisdiction.notificationsSignUpUrl}
-                  size={AppearanceSizeType.small}
+                  variant="primary-outlined"
+                  size="sm"
+                  className="m-2"
                 >
                   {t("welcome.signUpToday")}
-                </LinkButton>,
+                </Button>,
               ]}
             />
           )}
           <ActionBlock
             className="flex-1"
-            header={<Heading priority={2}>{t("welcome.seeMoreOpportunitiesTruncated")}</Heading>}
+            header={
+              <Heading priority={2} size="2xl">
+                {t("welcome.seeMoreOpportunitiesTruncated")}
+              </Heading>
+            }
             icon={<Icon size="3xl" symbol="building" />}
             actions={[
-              <LinkButton
-                href="/additional-resources"
+              <Button
                 key={"additional-resources"}
-                size={AppearanceSizeType.small}
+                href="/additional-resources"
+                variant="primary-outlined"
+                size="sm"
+                className="m-2"
               >
                 {t("welcome.viewAdditionalHousingTruncated")}
-              </LinkButton>,
+              </Button>,
             ]}
           />
         </div>

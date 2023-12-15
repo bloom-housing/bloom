@@ -5,16 +5,16 @@ import { useSWRConfig } from "swr"
 import {
   AgTable,
   useAgTable,
-  Button,
   t,
   Drawer,
   SiteAlert,
   AlertTypes,
-  AppearanceStyleType,
   AlertBox,
+  Icon,
   UniversalIconType,
 } from "@bloom-housing/ui-components"
-import { Listing, User } from "@bloom-housing/backend-core/types"
+import { User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { Button } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { faFileExport } from "@fortawesome/free-solid-svg-icons"
 import Layout from "../../layouts"
@@ -75,14 +75,14 @@ const Users = () => {
       },
       {
         headerName: t("t.listing"),
-        field: "leasingAgentInListings",
+        field: "listings",
         valueFormatter: ({ value }) => {
-          return value.map((item) => item.name).join(", ")
+          return value?.map((item) => item?.name).join(", ")
         },
       },
       {
         headerName: t("t.role"),
-        field: "roles",
+        field: "userRoles",
         valueFormatter: ({ value }) => {
           const { isAdmin, isPartner, isJurisdictionalAdmin } = value || {}
 
@@ -179,20 +179,25 @@ const Users = () => {
               <div className="flex-row">
                 <Button
                   className="mx-1"
-                  styleType={AppearanceStyleType.primary}
+                  variant="primary"
                   onClick={() => setUserDrawer({ type: "add" })}
                   disabled={!listingDtos}
-                  dataTestId={"add-user"}
+                  id={"add-user"}
                 >
                   {t("users.addUser")}
                 </Button>
                 {(profile?.userRoles?.isAdmin || profile?.userRoles?.isJurisdictionalAdmin) && (
                   <Button
                     className="mx-1"
-                    icon={!csvExportLoading ? (faFileExport as UniversalIconType) : null}
+                    variant="primary-outlined"
+                    leadIcon={
+                      !csvExportLoading ? (
+                        <Icon symbol={faFileExport as UniversalIconType} size="base" />
+                      ) : null
+                    }
                     onClick={() => onExport()}
-                    loading={csvExportLoading}
-                    dataTestId={"export-users"}
+                    loadingMessage={csvExportLoading && t("t.formSubmitted")}
+                    id={"export-users"}
                   >
                     {t("t.exportToCSV")}
                   </Button>
@@ -212,7 +217,7 @@ const Users = () => {
         <FormUserManage
           mode={userDrawer?.type}
           user={userDrawer?.user}
-          listings={listingDtos?.items as unknown as Listing[]}
+          listings={listingDtos?.items}
           onDrawerClose={() => {
             setUserDrawer(null)
             void mutate(cacheKey)

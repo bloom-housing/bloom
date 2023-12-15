@@ -389,6 +389,7 @@
   "t.exportToCSV": "Export to CSV",
   "t.fileName": "File Name",
   "t.filter": "Filter",
+  "t.formSubmitted": "Submitting form, wait",
   "t.hide": "hide",
   "t.invite": "Invite",
   "t.jurisdiction": "Jurisdiction",

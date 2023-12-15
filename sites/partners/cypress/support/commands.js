@@ -28,7 +28,7 @@
 import "cypress-file-upload"
 
 Cypress.Commands.add("getByID", (id, ...args) => {
-  return cy.get(`#${CSS.escape(id)}`, ...args)
+  return cy.get(`[id="${CSS.escape(id)}"]`, ...args)
 })
 
 Cypress.Commands.add("getByTestId", (testId) => {
@@ -40,9 +40,9 @@ Cypress.Commands.add("loginAndAcceptTerms", (fix = "user") => {
   cy.fixture(fix).then((user) => {
     cy.get("input#email").type(user.email)
     cy.get("input#password").type(user.password)
-    cy.get(".button").contains("Sign In").click()
+    cy.get("button").contains("Sign In").click()
     cy.getByTestId("agree").check()
-    cy.getByTestId("form-submit").click()
+    cy.getByID("form-submit").click()
     cy.contains("Listings")
   })
 })
@@ -52,7 +52,7 @@ Cypress.Commands.add("login", (fix = "user") => {
   cy.fixture(fix).then((user) => {
     cy.get("input#email").type(user.email)
     cy.get("input#password").type(user.password)
-    cy.get(".button").contains("Sign In").click()
+    cy.get("button").contains("Sign In").click()
     cy.contains("Listings")
   })
 })
@@ -62,10 +62,10 @@ Cypress.Commands.add("loginWithMfa", () => {
   cy.fixture("mfaUser").then((user) => {
     cy.get("input#email").type(user.email)
     cy.get("input#password").type(user.password)
-    cy.get(".button").contains("Sign In").click()
-    cy.getByTestId("verify-by-email").click()
+    cy.get("button").contains("Sign In").click()
+    cy.getByID("verify-by-email").click()
     cy.getByTestId("sign-in-mfa-code-field").type(user.mfaCode)
-    cy.getByTestId("verify-and-sign-in").click()
+    cy.getByID("verify-and-sign-in").click()
     cy.contains("Listings")
   })
 })
@@ -188,7 +188,7 @@ Cypress.Commands.add("fillAlternateContact", (application, fieldsToSkip = []) =>
 })
 
 Cypress.Commands.add("fillHouseholdMember", (application, fieldsToSkip = []) => {
-  cy.getByTestId("addHouseholdMemberButton").click()
+  cy.getByID("addHouseholdMemberButton").click()
 
   const fieldsToType = [
     { id: "firstName", fieldKey: "firstName" },
@@ -218,7 +218,7 @@ Cypress.Commands.add("fillHouseholdMember", (application, fieldsToSkip = []) => 
     cy.getByTestId("dob-field-year").eq(1).type(application["dob-field-year"])
   }
 
-  cy.getByTestId("submitAddMemberForm").click()
+  cy.getByID("submitAddMemberForm").click()
 })
 
 Cypress.Commands.add("fillHouseholdDetails", (application, fieldsToSkip = []) => {
@@ -282,7 +282,7 @@ Cypress.Commands.add("fillMailingAddress", (application, fieldsToSkip = []) => {
 Cypress.Commands.add("fillTerms", (application, submit) => {
   cy.getByID(`application.acceptedTerms${application["acceptedTerms"]}`).click()
   if (submit) {
-    cy.getByTestId("submitApplicationButton").click()
+    cy.getByID("submitApplicationButton").click()
   }
 })
 

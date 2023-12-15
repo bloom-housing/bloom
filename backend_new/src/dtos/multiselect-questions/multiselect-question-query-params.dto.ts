@@ -1,13 +1,7 @@
 import { Expose, Type } from 'class-transformer';
 import { ApiPropertyOptional, getSchemaPath } from '@nestjs/swagger';
 import { MultiselectQuestionFilterParams } from './multiselect-question-filter-params.dto';
-import {
-  ArrayMaxSize,
-  IsArray,
-  IsString,
-  MinLength,
-  ValidateNested,
-} from 'class-validator';
+import { ArrayMaxSize, IsArray, ValidateNested } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
 export class MultiselectQuestionQueryParams {

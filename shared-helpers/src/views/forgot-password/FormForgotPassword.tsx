@@ -1,7 +1,6 @@
 import React, { useContext } from "react"
+import { Button } from "@bloom-housing/ui-seeds"
 import {
-  AppearanceStyleType,
-  Button,
   Field,
   Form,
   FormCard,
@@ -90,12 +89,10 @@ const FormForgotPassword = ({
           />
           <section>
             <div className="text-center mt-6">
-              <Button styleType={AppearanceStyleType.primary}>
-                {t("authentication.forgotPassword.sendEmail")}
-              </Button>
+              <Button variant="primary">{t("authentication.forgotPassword.sendEmail")}</Button>
             </div>
             <div className="text-center mt-6">
-              <Button onClick={() => router.back()} unstyled={true}>
+              <Button onClick={() => router.back()} variant="text">
                 {t("t.cancel")}
               </Button>
             </div>

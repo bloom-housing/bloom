@@ -12,10 +12,6 @@ import {
 import { useMutate, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import {
-  EnumRequestMfaCodeMfaType,
-  EnumUserErrorExtraModelUserErrorMessages,
-} from "@bloom-housing/backend-core/types"
-import {
   EnumRenderStep,
   onSubmitEmailAndPassword,
   onSubmitMfaType,
@@ -25,7 +21,7 @@ import {
 import { FormSignInMFAType } from "../components/users/FormSignInMFAType"
 import { FormSignInMFACode, RequestType } from "../components/users/FormSignInMFACode"
 import { FormSignInAddPhone } from "../components/users/FormSignInAddPhone"
-import { SuccessDTO } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { MfaType, SuccessDTO } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const SignIn = () => {
   const { login, requestMfaCode, userService } = useContext(AuthContext)
@@ -97,10 +93,7 @@ const SignIn = () => {
   )
 
   useEffect(() => {
-    if (
-      networkError?.error.response.data?.message ===
-      EnumUserErrorExtraModelUserErrorMessages.accountNotConfirmed
-    ) {
+    if (networkError?.error.response.data?.message === "accountConfirmed") {
       setConfirmationStatusModal(true)
     }
   }, [networkError])
@@ -166,8 +159,8 @@ const SignIn = () => {
           setPhoneNumber,
           resetNetworkError
         )}
-        emailOnClick={() => setValue("mfaType", EnumRequestMfaCodeMfaType.email)}
-        smsOnClick={() => setValue("mfaType", EnumRequestMfaCodeMfaType.sms)}
+        emailOnClick={() => setValue("mfaType", MfaType.email)}
+        smsOnClick={() => setValue("mfaType", MfaType.sms)}
         control={{ register, errors, handleSubmit, setValue }}
         networkError={{
           content: { ...networkError, error: !!networkError?.error },
@@ -232,7 +225,7 @@ const SignIn = () => {
         }}
         initialEmailValue={emailValue.current as string}
         onSubmit={(email) => onResendConfirmationSubmit(email)}
-        loading={isResendConfirmationLoading}
+        loadingMessage={isResendConfirmationLoading && t("t.formSubmitted")}
       />
       <FormsLayout>{formToRender}</FormsLayout>
     </>

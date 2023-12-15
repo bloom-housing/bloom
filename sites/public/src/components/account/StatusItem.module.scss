@@ -79,6 +79,7 @@
     @apply flex;
     @apply justify-between;
     @apply text-left;
+    @apply gap-4;
   }
 }
 
@@ -105,13 +106,6 @@
 
 .status-item__label {
   @apply relative;
-}
-
-.status-item__link {
-  @screen md {
-    @apply mr-4;
-  }
-  @apply underline;
 }
 
 .status-item__date {

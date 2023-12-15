@@ -33,6 +33,7 @@ export class ListingUpdate extends OmitType(Listing, [
   'listingEvents',
   'listingFeatures',
   'listingUtilities',
+  'requestedChangesUser',
 
   // fields removed entirely
   'createdAt',
@@ -146,4 +147,10 @@ export class ListingUpdate extends OmitType(Listing, [
   @Type(() => ListingUtilities)
   @ApiPropertyOptional({ type: ListingUtilities })
   listingUtilities?: ListingUtilities;
+
+  @Expose()
+  @ApiPropertyOptional()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => IdDTO)
+  requestedChangesUser?: IdDTO;
 }

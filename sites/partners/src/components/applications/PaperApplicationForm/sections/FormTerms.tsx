@@ -2,7 +2,7 @@ import React from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Field } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import { YesNoAnswer } from "../../../../lib/helpers"
+import { YesNoEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const FormTerms = () => {
@@ -25,7 +25,7 @@ const FormTerms = () => {
                 label={t("t.yes")}
                 register={register}
                 inputProps={{
-                  value: YesNoAnswer.Yes,
+                  value: YesNoEnum.yes,
                 }}
               />
 
@@ -37,7 +37,7 @@ const FormTerms = () => {
                 label={t("t.no")}
                 register={register}
                 inputProps={{
-                  value: YesNoAnswer.No,
+                  value: YesNoEnum.no,
                 }}
               />
             </div>

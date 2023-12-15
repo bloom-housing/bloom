@@ -6,15 +6,11 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import {
-  ApiExtraModels,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UnitTypeService } from '../services/unit-type.service';
 import { UnitType } from '../dtos/unit-types/unit-type.dto';
 import { UnitTypeCreate } from '../dtos/unit-types/unit-type-create.dto';
@@ -22,11 +18,15 @@ import { UnitTypeUpdate } from '../dtos/unit-types/unit-type-update.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
+import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
+import { JwtAuthGuard } from '../guards/jwt.guard';
+import { PermissionGuard } from '../guards/permission.guard';
 
 @Controller('unitTypes')
 @ApiTags('unitTypes')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
-@ApiExtraModels(UnitTypeCreate, UnitTypeUpdate, IdDTO)
+@PermissionTypeDecorator('unitType')
+@UseGuards(JwtAuthGuard, PermissionGuard)
 export class UnitTypeController {
   constructor(private readonly unitTypeService: UnitTypeService) {}
 

@@ -32,17 +32,42 @@ export const stagingSeed = async (
   prismaClient: PrismaClient,
   jurisdictionName: string,
 ) => {
+  // create main jurisdiction
+  const jurisdiction = await prismaClient.jurisdictions.create({
+    data: jurisdictionFactory(jurisdictionName, [UserRoleEnum.admin]),
+  });
+  // add another jurisdiction
+  const additionalJurisdiction = await prismaClient.jurisdictions.create({
+    data: jurisdictionFactory(),
+  });
   // create admin user
   await prismaClient.userAccounts.create({
     data: await userFactory({
       roles: { isAdmin: true },
       email: 'admin@example.com',
       confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id, additionalJurisdiction.id],
+      acceptedTerms: true,
     }),
   });
-  // create single jurisdiction
-  const jurisdiction = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory(jurisdictionName, [UserRoleEnum.admin]),
+  // create a jurisdictional admin
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isJurisdictionalAdmin: true },
+      email: 'jurisdiction-admin@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: true,
+    }),
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isJurisdictionalAdmin: true },
+      email: 'unverified@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: false,
+    }),
   });
   // add jurisdiction specific translations and default ones
   await prismaClient.translations.create({

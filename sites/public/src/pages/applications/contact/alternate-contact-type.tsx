@@ -1,44 +1,34 @@
-/*
-1.4 - Alternate Contact
-Type of alternate contact
-*/
 import React, { Fragment, useContext, useEffect } from "react"
-import { FormErrorMessage } from "@bloom-housing/ui-seeds"
-import {
-  AppearanceStyleType,
-  AlertBox,
-  Button,
-  Field,
-  Form,
-  FormCard,
-  ProgressNav,
-  t,
-  Heading,
-} from "@bloom-housing/ui-components"
+import { useForm } from "react-hook-form"
+import { Alert, FormErrorMessage } from "@bloom-housing/ui-seeds"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { Field, Form, t } from "@bloom-housing/ui-components"
 import {
   altContactRelationshipKeys,
+  AuthContext,
   OnClientSide,
   PageView,
   pushGtmEvent,
-  AuthContext,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
-import { useForm } from "react-hook-form"
-import FormBackLink from "../../../components/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
+import ApplicationFormLayout from "../../../layouts/application-form"
+import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationAlternateContactType = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("alternateContactType")
   const currentPageSection = 1
 
-  /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, watch } = useForm<Record<string, any>>({
+  const { register, handleSubmit, errors, watch, trigger } = useForm<Record<string, any>>({
     shouldFocusError: false,
   })
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    const validation = await trigger()
+    if (!validation) return
+
     application.alternateContact.type = data.type
     application.alternateContact.otherType = data.otherType
 
@@ -62,35 +52,33 @@ const ApplicationAlternateContactType = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard>
-        <FormBackLink
-          url={conductor.determinePreviousUrl()}
-          onClick={() => conductor.setNavigatedBack(true)}
-        />
-
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">
-            {t("application.alternateContact.type.title")}
-          </h2>
-          <p className="field-note mt-4">{t("application.alternateContact.type.description")}</p>
-        </div>
-
-        {Object.entries(errors).length > 0 && (
-          <AlertBox type="alert" inverted closeable>
-            {t("errors.errorsToResolve")}
-          </AlertBox>
-        )}
-
-        <Form id="applications-contact-alternate-type" onSubmit={handleSubmit(onSubmit, onError)}>
-          <div className="form-card__group">
+      <Form id="applications-contact-alternate-type" onSubmit={handleSubmit(onSubmit, onError)}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={t("application.alternateContact.type.title")}
+          subheading={t("application.alternateContact.type.description")}
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: OnClientSide(),
+          }}
+          backLink={{
+            url: conductor.determinePreviousUrl(),
+          }}
+          conductor={conductor}
+        >
+          {Object.entries(errors).length > 0 && (
+            <Alert
+              className={styles["message-inside-card"]}
+              variant="alert"
+              fullwidth
+              id={"application-alert-box"}
+            >
+              {t("errors.errorsToResolve")}
+            </Alert>
+          )}
+          <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className={`text__caps-spaced ${errors?.type ? "text-alert" : ""}`}>
                 {t("application.alternateContact.type.label")}
@@ -122,10 +110,6 @@ const ApplicationAlternateContactType = () => {
                         id="otherType"
                         name="otherType"
                         label={t("application.alternateContact.type.otherTypeFormPlaceholder")}
-                        placeholder={t(
-                          "application.alternateContact.type.otherTypeFormPlaceholder"
-                        )}
-                        readerOnly={true}
                         defaultValue={application.alternateContact.otherType}
                         validation={{ required: true, maxLength: 64 }}
                         error={errors.otherType}
@@ -151,20 +135,9 @@ const ApplicationAlternateContactType = () => {
                 )
               })}
             </fieldset>
-          </div>
-          <div className="form-card__pager">
-            <div className="form-card__pager-row primary">
-              <Button
-                styleType={AppearanceStyleType.primary}
-                onClick={() => conductor.setNavigatedBack(false)}
-                data-testid={"app-next-step-button"}
-              >
-                {t("t.next")}
-              </Button>
-            </div>
-          </div>
-        </Form>
-      </FormCard>
+          </CardSection>
+        </ApplicationFormLayout>
+      </Form>
     </FormsLayout>
   )
 }

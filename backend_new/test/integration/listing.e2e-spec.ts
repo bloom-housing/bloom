@@ -560,6 +560,7 @@ describe('Listing Controller Tests', () => {
       .send({
         id: listing.id,
       } as IdDTO)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     const listingAfterDelete = await prisma.listings.findUnique({
@@ -609,6 +610,7 @@ describe('Listing Controller Tests', () => {
     const res = await request(app.getHttpServer())
       .post('/listings')
       .send(val)
+      .set('Cookie', adminAccessToken)
       .expect(201);
     expect(res.body.name).toEqual(val.name);
   });
@@ -725,7 +727,7 @@ describe('Listing Controller Tests', () => {
           roles: {
             isJurisdictionalAdmin: true,
           },
-          jurisdictionId: jurisdictionB.id,
+          jurisdictionIds: [jurisdictionB.id],
         }),
       });
       jurisAdmin = await prisma.userAccounts.create({
@@ -733,7 +735,7 @@ describe('Listing Controller Tests', () => {
           roles: {
             isJurisdictionalAdmin: true,
           },
-          jurisdictionId: jurisdictionA.id,
+          jurisdictionIds: [jurisdictionA.id],
         }),
       });
 
@@ -751,7 +753,7 @@ describe('Listing Controller Tests', () => {
             isJurisdictionalAdmin: false,
           },
           listings: [listing.id],
-          jurisdictionId: jurisdictionA.id,
+          jurisdictionIds: [jurisdictionA.id],
           confirmedAt: new Date(),
         }),
       });

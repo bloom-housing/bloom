@@ -7,7 +7,8 @@ describe("Application Management Tests", () => {
     cy.signOut()
   })
 
-  it("Application grid should display correct number of results", () => {
+  // TODO: unskip when application flow is connected
+  it.skip("Application grid should display correct number of results", () => {
     cy.visit("/")
     cy.getByTestId("listing-status-cell").eq(1).click()
     cy.getByID("lbTotalPages").contains("24")

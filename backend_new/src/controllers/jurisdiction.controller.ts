@@ -4,8 +4,10 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -22,11 +24,16 @@ import { JurisdictionUpdate } from '../dtos/jurisdictions/jurisdiction-update.dt
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
+import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
+import { OptionalAuthGuard } from '../guards/optional.guard';
+import { PermissionGuard } from '../guards/permission.guard';
 
 @Controller('jurisdictions')
 @ApiTags('jurisdictions')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 @ApiExtraModels(JurisdictionCreate, JurisdictionUpdate, IdDTO)
+@PermissionTypeDecorator('jurisdiction')
+@UseGuards(OptionalAuthGuard, PermissionGuard)
 export class JurisdictionController {
   constructor(private readonly jurisdictionService: JurisdictionService) {}
 
@@ -44,8 +51,9 @@ export class JurisdictionController {
   })
   @ApiOkResponse({ type: Jurisdiction })
   async retrieve(
-    @Param('jurisdictionId') jurisdictionId: string,
-  ): Promise<Jurisdiction> {
+    @Param('jurisdictionId', new ParseUUIDPipe({ version: '4' }))
+    jurisdictionId: string,
+  ): Promise<Jurisdiction | null> {
     return this.jurisdictionService.findOne({ jurisdictionId });
   }
 

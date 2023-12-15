@@ -1,5 +1,5 @@
 import { PaginationAllowsAllQueryParams } from '../shared/pagination.dto';
-import { Expose, Type } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
 import { ApiPropertyOptional, getSchemaPath } from '@nestjs/swagger';
 import { ListingFilterParams } from './listings-filter-params.dto';
 import {
@@ -70,6 +70,9 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(16, { groups: [ValidationsGroupsEnum.default] })
+  @Transform(({ value }) => {
+    return value ? value.map((val) => val.toLowerCase()) : undefined;
+  })
   @IsEnum(OrderByEnum, { groups: [ValidationsGroupsEnum.default], each: true })
   @Validate(OrderQueryParamValidator, {
     groups: [ValidationsGroupsEnum.default],

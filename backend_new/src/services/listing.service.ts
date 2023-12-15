@@ -44,6 +44,8 @@ import { User } from '../dtos/users/user.dto';
 import { EmailService } from './email.service';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { startCronJob } from '../utilities/cron-job-starter';
+import { PermissionService } from './permission.service';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
 
 export type getListingsArgs = {
   skip: number;
@@ -148,6 +150,7 @@ export class ListingService implements OnModuleInit {
     @Inject(Logger)
     private logger = new Logger(ListingService.name),
     private schedulerRegistry: SchedulerRegistry,
+    private permissionService: PermissionService,
   ) {}
 
   onModuleInit() {
@@ -177,7 +180,6 @@ export class ListingService implements OnModuleInit {
     };
   }> {
     const whereClause = this.buildWhereClause(params.filter, params.search);
-
     const count = await this.prisma.listings.count({
       where: whereClause,
     });
@@ -340,6 +342,7 @@ export class ListingService implements OnModuleInit {
             $include_nulls: false,
             value: filter[ListingFilterKeys.name],
             key: ListingFilterKeys.name,
+            caseSensitive: false,
           });
           filters.push({
             OR: builtFilter.map((filt) => ({ [ListingFilterKeys.name]: filt })),
@@ -470,8 +473,16 @@ export class ListingService implements OnModuleInit {
   /*
     creates a listing
   */
-  async create(dto: ListingCreate, user: User): Promise<Listing> {
-    // TODO: perms (https://github.com/bloom-housing/bloom/issues/3445)
+  async create(dto: ListingCreate, requestingUser: User): Promise<Listing> {
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'listing',
+      permissionActions.create,
+      {
+        jurisdictionId: dto.jurisdictions.id,
+      },
+    );
+
     const rawListing = await this.prisma.listings.create({
       include: views.details,
       data: {
@@ -715,7 +726,7 @@ export class ListingService implements OnModuleInit {
         },
       });
       await this.listingApprovalNotify({
-        user,
+        user: requestingUser,
         listingInfo: { id: rawListing.id, name: rawListing.name },
         status: rawListing.status,
         approvingRoles: jurisdiction?.listingApprovalPermissions,
@@ -729,10 +740,18 @@ export class ListingService implements OnModuleInit {
   /*
     deletes a listing
   */
-  async delete(id: string): Promise<SuccessDTO> {
+  async delete(id: string, requestingUser: User): Promise<SuccessDTO> {
     const storedListing = await this.findOrThrow(id);
 
-    // TODO: perms (https://github.com/bloom-housing/bloom/issues/3445)
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'listing',
+      permissionActions.delete,
+      {
+        id: storedListing.id,
+        jurisdictionId: storedListing.jurisdictionId,
+      },
+    );
 
     await this.prisma.listings.delete({
       where: {
@@ -768,10 +787,18 @@ export class ListingService implements OnModuleInit {
   /*
     update a listing
   */
-  async update(dto: ListingUpdate, user: User): Promise<Listing> {
+  async update(dto: ListingUpdate, requestingUser: User): Promise<Listing> {
     const storedListing = await this.findOrThrow(dto.id, ListingViews.details);
 
-    // TODO: perms (https://github.com/bloom-housing/bloom/issues/3445)
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'listing',
+      permissionActions.update,
+      {
+        id: storedListing.id,
+        jurisdictionId: storedListing.jurisdictionId,
+      },
+    );
 
     dto.unitsAvailable =
       dto.reviewOrderType !== ReviewOrderTypeEnum.waitlist && dto.units
@@ -782,8 +809,33 @@ export class ListingService implements OnModuleInit {
       storedListing.status === ListingsStatusEnum.active &&
       dto.status === ListingsStatusEnum.closed
     ) {
-      // TODO: afs process (https://github.com/bloom-housing/bloom/issues/3540)
       await this.afsService.process(dto.id);
+    }
+
+    // We need to save the assets before saving it to the listing_images table
+    let allAssets = [];
+    const unsavedImages = dto.listingImages?.reduce((values, value) => {
+      if (!value.assets.id) {
+        values.push(value);
+      } else {
+        allAssets.push(value);
+      }
+      return values;
+    }, []);
+
+    if (unsavedImages?.length) {
+      const assetCreates = unsavedImages.map((unsavedImage) => {
+        return this.prisma.assets.create({
+          data: unsavedImage.assets,
+        });
+      });
+      const uploadedImages = await Promise.all(assetCreates);
+      allAssets = [
+        ...allAssets,
+        ...uploadedImages.map((image, index) => {
+          return { assets: image, ordinal: unsavedImages[index].ordinal };
+        }),
+      ];
     }
 
     const rawListing = await this.prisma.listings.update({
@@ -792,13 +844,7 @@ export class ListingService implements OnModuleInit {
         id: undefined,
         createdAt: undefined,
         updatedAt: undefined,
-        assets: dto.assets
-          ? {
-              create: dto.assets.map((asset) => ({
-                ...asset,
-              })),
-            }
-          : undefined,
+        assets: dto.assets as unknown as Prisma.InputJsonArray,
         applicationMethods: dto.applicationMethods
           ? {
               create: dto.applicationMethods.map((applicationMethod) => ({
@@ -838,27 +884,43 @@ export class ListingService implements OnModuleInit {
               })),
             }
           : undefined,
-        listingImages: dto.listingImages
+        listingImages: allAssets.length
           ? {
-              create: dto.listingImages.map((image) => ({
-                assets: {
-                  create: {
-                    ...image.assets,
+              connectOrCreate: allAssets.map((asset) => ({
+                where: {
+                  listingId_imageId: {
+                    listingId: dto.id,
+                    imageId: asset.assets.id,
                   },
                 },
-                ordinal: image.ordinal,
+                create: {
+                  ordinal: asset.ordinal,
+                  assets: {
+                    connect: {
+                      id: asset.assets.id,
+                    },
+                  },
+                },
               })),
             }
           : undefined,
         listingMultiselectQuestions: dto.listingMultiselectQuestions
           ? {
-              create: dto.listingMultiselectQuestions.map(
+              upsert: dto.listingMultiselectQuestions.map(
                 (multiselectQuestion) => ({
-                  ordinal: multiselectQuestion.ordinal,
-                  multiselectQuestions: {
-                    connect: {
-                      id: multiselectQuestion.id,
+                  where: {
+                    listingId_multiselectQuestionId: {
+                      listingId: dto.id,
+                      multiselectQuestionId: multiselectQuestion.id,
                     },
+                  },
+                  update: {
+                    ordinal: multiselectQuestion.ordinal,
+                    multiselectQuestionId: multiselectQuestion.id,
+                  },
+                  create: {
+                    ordinal: multiselectQuestion.ordinal,
+                    multiselectQuestionId: multiselectQuestion.id,
                   },
                 }),
               ),
@@ -1026,7 +1088,7 @@ export class ListingService implements OnModuleInit {
         requestedChangesUserId:
           dto.status === ListingsStatusEnum.changesRequested &&
           storedListing.status !== ListingsStatusEnum.changesRequested
-            ? user.id
+            ? requestingUser.id
             : storedListing.requestedChangesUserId,
         listingsResult: dto.listingsResult
           ? {
@@ -1050,7 +1112,7 @@ export class ListingService implements OnModuleInit {
 
     if (listingApprovalPermissions?.length > 0)
       await this.listingApprovalNotify({
-        user,
+        user: requestingUser,
         listingInfo: { id: dto.id, name: dto.name },
         approvingRoles: listingApprovalPermissions,
         status: dto.status,

@@ -36,6 +36,8 @@ import { ListingPublishedUpdate } from '../../../src/dtos/listings/listing-publi
 import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
 import { User } from '../../../src/dtos/users/user.dto';
 import { EmailService } from '../../../src/services/email.service';
+import { PermissionService } from '../../../src/services/permission.service';
+import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
 
 /*
   generates a super simple mock listing for us to test logic with
@@ -118,6 +120,7 @@ const mockListingSet = (
 const requestApprovalMock = jest.fn();
 const changesRequestedMock = jest.fn();
 const listingApprovedMock = jest.fn();
+const canOrThrowMock = jest.fn();
 
 const user = new User();
 user.firstName = 'Test';
@@ -173,6 +176,12 @@ describe('Testing listing service', () => {
             listingApproved: listingApprovedMock,
           },
         },
+        {
+          provide: PermissionService,
+          useValue: {
+            canOrThrow: canOrThrowMock,
+          },
+        },
         ConfigService,
         Logger,
         SchedulerRegistry,
@@ -190,6 +199,7 @@ describe('Testing listing service', () => {
   });
 
   afterEach(() => {
+    jest.resetAllMocks();
     jest.clearAllMocks();
   });
 
@@ -1612,6 +1622,15 @@ describe('Testing listing service', () => {
         },
       },
     });
+
+    expect(canOrThrowMock).toHaveBeenCalledWith(
+      user,
+      'listing',
+      permissionActions.create,
+      {
+        jurisdictionId: expect.anything(),
+      },
+    );
   });
 
   it('should create a complete listing', async () => {
@@ -1907,6 +1926,15 @@ describe('Testing listing service', () => {
         },
       },
     });
+
+    expect(canOrThrowMock).toHaveBeenCalledWith(
+      user,
+      'listing',
+      permissionActions.create,
+      {
+        jurisdictionId: val.jurisdictions.id,
+      },
+    );
   });
 
   it('should delete a listing', async () => {
@@ -1918,7 +1946,22 @@ describe('Testing listing service', () => {
       id,
     });
 
-    await service.delete(id);
+    await service.delete(id, {
+      id: 'requestingUser id',
+      userRoles: { isAdmin: true },
+    } as unknown as User);
+
+    expect(canOrThrowMock).toHaveBeenCalledWith(
+      {
+        id: 'requestingUser id',
+        userRoles: { isAdmin: true },
+      } as unknown as User,
+      'listing',
+      permissionActions.delete,
+      {
+        id,
+      },
+    );
 
     expect(prisma.listings.findUnique).toHaveBeenCalledWith({
       where: {
@@ -1938,8 +1981,14 @@ describe('Testing listing service', () => {
     prisma.listings.delete = jest.fn().mockResolvedValue(null);
 
     await expect(
-      async () => await service.delete(randomUUID()),
+      async () =>
+        await service.delete(randomUUID(), {
+          id: 'requestingUser id',
+          userRoles: { isAdmin: true },
+        } as unknown as User),
     ).rejects.toThrowError();
+
+    expect(canOrThrowMock).not.toHaveBeenCalled();
 
     expect(prisma.listings.findUnique).toHaveBeenCalledWith({
       where: {
@@ -2083,14 +2132,13 @@ describe('Testing listing service', () => {
       data: {
         name: 'example listing name',
         depositMin: '5',
-        assets: {
-          create: [
-            {
-              fileId: expect.anything(),
-              label: 'example asset',
-            },
-          ],
-        },
+        assets: [
+          {
+            fileId: expect.anything(),
+            label: 'example asset',
+          },
+        ],
+
         jurisdictions: {
           connect: {
             id: expect.anything(),
@@ -2108,6 +2156,15 @@ describe('Testing listing service', () => {
         id: expect.anything(),
       },
     });
+
+    expect(canOrThrowMock).toHaveBeenCalledWith(
+      user,
+      'listing',
+      permissionActions.update,
+      {
+        id: 'example id',
+      },
+    );
   });
 
   it('should do a complete listing update', async () => {
@@ -2180,9 +2237,7 @@ describe('Testing listing service', () => {
         ...val,
         id: undefined,
         publishedAt: expect.anything(),
-        assets: {
-          create: [exampleAsset],
-        },
+        assets: [exampleAsset],
         applicationMethods: {
           create: [
             {
@@ -2225,25 +2280,41 @@ describe('Testing listing service', () => {
           ],
         },
         listingImages: {
-          create: [
+          connectOrCreate: [
             {
-              assets: {
-                create: {
-                  ...exampleAsset,
+              create: {
+                assets: {
+                  connect: {
+                    id: expect.anything(),
+                  },
+                },
+                ordinal: 0,
+              },
+              where: {
+                listingId_imageId: {
+                  imageId: expect.anything(),
+                  listingId: expect.anything(),
                 },
               },
-              ordinal: 0,
             },
           ],
         },
         listingMultiselectQuestions: {
-          create: [
+          upsert: [
             {
-              ordinal: 0,
-              multiselectQuestions: {
-                connect: {
-                  id: expect.anything(),
+              where: {
+                listingId_multiselectQuestionId: {
+                  listingId: expect.anything(),
+                  multiselectQuestionId: expect.anything(),
                 },
+              },
+              create: {
+                multiselectQuestionId: expect.anything(),
+                ordinal: 0,
+              },
+              update: {
+                multiselectQuestionId: expect.anything(),
+                ordinal: 0,
               },
             },
           ],
@@ -2412,6 +2483,15 @@ describe('Testing listing service', () => {
         id: expect.anything(),
       },
     });
+
+    expect(canOrThrowMock).toHaveBeenCalledWith(
+      user,
+      'listing',
+      permissionActions.update,
+      {
+        id: 'example id',
+      },
+    );
   });
 
   it('listingApprovalNotify request approval email', async () => {

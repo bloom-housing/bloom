@@ -1,12 +1,9 @@
 import React, { useEffect, useContext, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import {
-  AppearanceStyleType,
-  Button,
   Field,
   FormCard,
   Icon,
-  LinkButton,
   Form,
   emailRegex,
   t,
@@ -15,8 +12,8 @@ import {
   SiteAlert,
   Modal,
   passwordRegex,
-  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
 dayjs.extend(customParseFormat)
@@ -236,7 +233,7 @@ export default () => {
             />
 
             <div className="text-center mt-10">
-              <Button type="submit" styleType={AppearanceStyleType.primary}>
+              <Button type="submit" variant="primary">
                 {t("account.createAccount")}
               </Button>
             </div>
@@ -246,7 +243,9 @@ export default () => {
         <div className="form-card__group text-center">
           <h2 className="mb-6">{t("account.haveAnAccount")}</h2>
 
-          <LinkButton href="/sign-in">{t("nav.signIn")}</LinkButton>
+          <Button variant="primary-outlined" href="/sign-in">
+            {t("nav.signIn")}
+          </Button>
         </div>
       </FormCard>
       <Modal
@@ -261,22 +260,23 @@ export default () => {
         }}
         actions={[
           <Button
-            styleType={AppearanceStyleType.primary}
+            variant="primary"
             onClick={() => {
               void router.push("/")
               window.scrollTo(0, 0)
             }}
-            size={AppearanceSizeType.small}
+            size="sm"
           >
             {t("t.ok")}
           </Button>,
           <Button
+            variant="primary-outlined"
             disabled={confirmationResent}
             onClick={() => {
               setConfirmationResent(true)
               void resendConfirmation(email.current.toString())
             }}
-            size={AppearanceSizeType.small}
+            size="sm"
           >
             {t("authentication.createAccount.resendTheEmail")}
           </Button>,

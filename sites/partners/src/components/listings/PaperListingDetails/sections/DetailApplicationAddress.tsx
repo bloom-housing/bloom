@@ -17,7 +17,7 @@ const DetailApplicationAddress = () => {
     <SectionWithGrid heading={t("listings.sections.applicationAddressTitle")} inset>
       <Grid.Row columns={3}>
         <FieldValue id="applicationMailingSection" label={"Can applications be mailed in?"}>
-          {listing.applicationMailingAddress || listing.applicationMailingAddressType
+          {listing.listingsApplicationMailingAddress || listing.applicationMailingAddressType
             ? t("t.yes")
             : t("t.no")}
         </FieldValue>
@@ -32,9 +32,9 @@ const DetailApplicationAddress = () => {
         )}
       </Grid.Row>
 
-      {listing.applicationMailingAddress &&
+      {listing.listingsApplicationMailingAddress &&
         getDetailAddress(
-          listing.applicationMailingAddress,
+          listing.listingsApplicationMailingAddress,
           "applicationMailingAddress",
           t("application.contact.mailingAddress")
         )}
@@ -43,7 +43,7 @@ const DetailApplicationAddress = () => {
 
       <Grid.Row columns={3}>
         <FieldValue id="applicationPickupQuestion" label={t("listings.applicationPickupQuestion")}>
-          {listing.applicationPickUpAddress || listing.applicationPickUpAddressType
+          {listing.listingsApplicationPickUpAddress || listing.applicationPickUpAddressType
             ? t("t.yes")
             : t("t.no")}
         </FieldValue>
@@ -58,10 +58,10 @@ const DetailApplicationAddress = () => {
         )}
       </Grid.Row>
 
-      {listing.applicationPickUpAddress && (
+      {listing.listingsApplicationPickUpAddress && (
         <>
           {getDetailAddress(
-            listing.applicationPickUpAddress,
+            listing.listingsApplicationPickUpAddress,
             "applicationPickUpAddress",
             t("listings.pickupAddress")
           )}
@@ -84,7 +84,7 @@ const DetailApplicationAddress = () => {
           id="applicationDropOffQuestion"
           label={t("listings.applicationDropOffQuestion")}
         >
-          {listing.applicationDropOffAddress || listing.applicationDropOffAddressType
+          {listing.listingsApplicationDropOffAddress || listing.applicationDropOffAddressType
             ? t("t.yes")
             : t("t.no")}
         </FieldValue>
@@ -99,10 +99,10 @@ const DetailApplicationAddress = () => {
         )}
       </Grid.Row>
 
-      {listing.applicationDropOffAddress && (
+      {listing.listingsApplicationDropOffAddress && (
         <>
           {getDetailAddress(
-            listing.applicationDropOffAddress,
+            listing.listingsApplicationDropOffAddress,
             "applicationDropOffAddress",
             t("listings.dropOffAddress")
           )}

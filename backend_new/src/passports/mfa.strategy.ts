@@ -101,8 +101,7 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
       );
       throw new UnauthorizedException({
         failureCountRemaining:
-          Number(process.env.AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS) +
-          1 -
+          Number(process.env.AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS) -
           rawUser.failedLoginAttemptsCount,
       });
     }

@@ -163,17 +163,18 @@ const BuildingDetails = ({
               error={
                 !!getAddressErrorMessage(
                   "buildingAddress.street",
-                  fieldMessage(errors?.buildingAddress?.street)
+                  fieldMessage(errors?.listingsBuildingAddress?.street)
                 )
               }
               errorMessage={getAddressErrorMessage(
                 "buildingAddress.street",
-                fieldMessage(errors?.buildingAddress?.street)
+                fieldMessage(errors?.listingsBuildingAddress?.street)
               )}
               placeholder={t("application.contact.streetAddress")}
               inputProps={{
                 onChange: () =>
-                  fieldHasError(errors?.buildingAddress?.street) && clearErrors("buildingAddress"),
+                  fieldHasError(errors?.listingsBuildingAddress?.street) &&
+                  clearErrors("buildingAddress"),
               }}
               register={register}
             />
@@ -195,17 +196,18 @@ const BuildingDetails = ({
               error={
                 !!getAddressErrorMessage(
                   "buildingAddress.city",
-                  fieldMessage(errors?.buildingAddress?.city)
+                  fieldMessage(errors?.listingsBuildingAddress?.city)
                 )
               }
               errorMessage={getAddressErrorMessage(
                 "buildingAddress.city",
-                fieldMessage(errors?.buildingAddress?.city)
+                fieldMessage(errors?.listingsBuildingAddress?.city)
               )}
               placeholder={t("application.contact.city")}
               inputProps={{
                 onChange: () =>
-                  fieldHasError(errors?.buildingAddress?.city) && clearErrors("buildingAddress"),
+                  fieldHasError(errors?.listingsBuildingAddress?.city) &&
+                  clearErrors("buildingAddress"),
               }}
               register={register}
             />
@@ -217,7 +219,7 @@ const BuildingDetails = ({
               className={`mb-0 ${
                 getAddressErrorMessage(
                   "buildingAddress.state",
-                  fieldMessage(errors?.buildingAddress?.state)
+                  fieldMessage(errors?.listingsBuildingAddress?.state)
                 )
                   ? "field-value-error"
                   : ""
@@ -229,12 +231,12 @@ const BuildingDetails = ({
                 error={
                   !!getAddressErrorMessage(
                     "buildingAddress.state",
-                    fieldMessage(errors?.buildingAddress?.state)
+                    fieldMessage(errors?.listingsBuildingAddress?.state)
                   )
                 }
                 errorMessage={getAddressErrorMessage(
                   "buildingAddress.state",
-                  fieldMessage(errors?.buildingAddress?.state)
+                  fieldMessage(errors?.listingsBuildingAddress?.state)
                 )}
                 label={t("application.contact.state")}
                 labelClassName="sr-only"
@@ -244,7 +246,8 @@ const BuildingDetails = ({
                 keyPrefix="states"
                 inputProps={{
                   onChange: () =>
-                    fieldHasError(errors?.buildingAddress?.state) && clearErrors("buildingAddress"),
+                    fieldHasError(errors?.listingsBuildingAddress?.state) &&
+                    clearErrors("buildingAddress"),
                 }}
               />
             </FieldValue>
@@ -258,16 +261,17 @@ const BuildingDetails = ({
               error={
                 !!getAddressErrorMessage(
                   "buildingAddress.zipCode",
-                  fieldMessage(errors?.buildingAddress?.zipCode)
+                  fieldMessage(errors?.listingsBuildingAddress?.zipCode)
                 )
               }
               errorMessage={getAddressErrorMessage(
                 "buildingAddress.zipCode",
-                fieldMessage(errors?.buildingAddress?.zipCode)
+                fieldMessage(errors?.listingsBuildingAddress?.zipCode)
               )}
               inputProps={{
                 onChange: () =>
-                  fieldHasError(errors?.buildingAddress?.zipCode) && clearErrors("buildingAddress"),
+                  fieldHasError(errors?.listingsBuildingAddress?.zipCode) &&
+                  clearErrors("buildingAddress"),
               }}
               register={register}
             />

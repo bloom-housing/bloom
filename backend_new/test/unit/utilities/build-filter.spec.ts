@@ -45,10 +45,10 @@ describe('Testing constructFilter', () => {
       }),
     ).toEqual([
       {
+        mode: 'insensitive',
         not: {
           equals: 'example',
         },
-        mode: 'insensitive',
       },
     ]);
   });
@@ -62,10 +62,10 @@ describe('Testing constructFilter', () => {
       }),
     ).toEqual([
       {
+        mode: 'insensitive',
         not: {
           equals: 'example',
         },
-        mode: 'insensitive',
       },
       {
         equals: null,

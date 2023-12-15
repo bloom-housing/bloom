@@ -6,12 +6,14 @@ import {
   ApplicationSubmissionTypeEnum,
   IncomePeriodEnum,
   LanguagesEnum,
+  MultiselectQuestionsApplicationSectionEnum,
   UnitTypeEnum,
   YesNoEnum,
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { stringify } from 'qs';
 import request from 'supertest';
+import cookieParser from 'cookie-parser';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { applicationFactory } from '../../prisma/seed-helpers/application-factory';
@@ -31,10 +33,14 @@ import { AddressCreate } from '../../src/dtos/addresses/address-create.dto';
 import { ApplicationUpdate } from '../../src/dtos/applications/application-update.dto';
 import { translationFactory } from '../../prisma/seed-helpers/translation-factory';
 import { EmailService } from '../../src/services/email.service';
+import { userFactory } from '../../prisma/seed-helpers/user-factory';
+import { Login } from '../../src/dtos/auth/login.dto';
+import { multiselectQuestionFactory } from '../../prisma/seed-helpers/multiselect-question-factory';
 
 describe('Application Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
+  let cookies = '';
 
   const testEmailService = {
     /* eslint-disable @typescript-eslint/no-empty-function */
@@ -46,6 +52,28 @@ describe('Application Controller Tests', () => {
     'applicationConfirmation',
   );
 
+  const createMultiselectQuestion = async (
+    jurisdictionId: string,
+    listingId: string,
+    section: MultiselectQuestionsApplicationSectionEnum,
+  ) => {
+    const res = await prisma.multiselectQuestions.create({
+      data: multiselectQuestionFactory(jurisdictionId, {
+        numberOfOptions: 2,
+        multiselectQuestion: {
+          applicationSection: section,
+          listings: {
+            create: {
+              listingId: listingId,
+            },
+          },
+        },
+      }),
+    });
+
+    return res.id;
+  };
+
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
@@ -56,11 +84,29 @@ describe('Application Controller Tests', () => {
 
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
+    app.use(cookieParser());
     await app.init();
     await unitTypeFactoryAll(prisma);
     await await prisma.translations.create({
       data: translationFactory(),
     });
+
+    const storedUser = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: { isAdmin: true },
+        mfaEnabled: false,
+        confirmedAt: new Date(),
+      }),
+    });
+    const resLogIn = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({
+        email: storedUser.email,
+        password: 'abcdef',
+      } as Login)
+      .expect(201);
+
+    cookies = resLogIn.headers['set-cookie'];
   });
 
   afterAll(async () => {
@@ -218,6 +264,7 @@ describe('Application Controller Tests', () => {
       .send({
         id: applicationA.id,
       })
+      .set('Cookie', cookies)
       .expect(200);
 
     expect(res.body.success).toEqual(true);
@@ -256,12 +303,24 @@ describe('Application Controller Tests', () => {
       data: listing1,
     });
 
+    const multiselectQuestionProgram = await createMultiselectQuestion(
+      jurisdiction.id,
+      listing1Created.id,
+      MultiselectQuestionsApplicationSectionEnum.programs,
+    );
+    const multiselectQuestionPreference = await createMultiselectQuestion(
+      jurisdiction.id,
+      listing1Created.id,
+      MultiselectQuestionsApplicationSectionEnum.preferences,
+    );
+
     const submissionDate = new Date();
     const exampleAddress = addressFactory() as AddressCreate;
     const dto: ApplicationCreate = {
       contactPreferences: ['example contact preference'],
       preferences: [
         {
+          multiselectQuestionId: multiselectQuestionPreference,
           key: 'example key',
           claimed: true,
           options: [
@@ -363,6 +422,7 @@ describe('Application Controller Tests', () => {
       reviewStatus: ApplicationReviewStatusEnum.valid,
       programs: [
         {
+          multiselectQuestionId: multiselectQuestionProgram,
           key: 'example key',
           claimed: true,
           options: [
@@ -384,6 +444,7 @@ describe('Application Controller Tests', () => {
     const res = await request(app.getHttpServer())
       .post(`/applications/submit`)
       .send(dto)
+      .set('Cookie', cookies)
       .expect(201);
 
     expect(res.body.id).not.toBeNull();
@@ -400,12 +461,24 @@ describe('Application Controller Tests', () => {
       data: listing1,
     });
 
+    const multiselectQuestionProgram = await createMultiselectQuestion(
+      jurisdiction.id,
+      listing1Created.id,
+      MultiselectQuestionsApplicationSectionEnum.programs,
+    );
+    const multiselectQuestionPreference = await createMultiselectQuestion(
+      jurisdiction.id,
+      listing1Created.id,
+      MultiselectQuestionsApplicationSectionEnum.preferences,
+    );
+
     const submissionDate = new Date();
     const exampleAddress = addressFactory() as AddressCreate;
     const dto: ApplicationCreate = {
       contactPreferences: ['example contact preference'],
       preferences: [
         {
+          multiselectQuestionId: multiselectQuestionPreference,
           key: 'example key',
           claimed: true,
           options: [
@@ -507,6 +580,7 @@ describe('Application Controller Tests', () => {
       reviewStatus: ApplicationReviewStatusEnum.valid,
       programs: [
         {
+          multiselectQuestionId: multiselectQuestionProgram,
           key: 'example key',
           claimed: true,
           options: [
@@ -528,6 +602,7 @@ describe('Application Controller Tests', () => {
     const res = await request(app.getHttpServer())
       .post(`/applications/`)
       .send(dto)
+      .set('Cookie', cookies)
       .expect(201);
 
     expect(res.body.id).not.toBeNull();
@@ -543,8 +618,22 @@ describe('Application Controller Tests', () => {
       data: listing1,
     });
 
+    const multiselectQuestionProgram = await createMultiselectQuestion(
+      jurisdiction.id,
+      listing1Created.id,
+      MultiselectQuestionsApplicationSectionEnum.programs,
+    );
+    const multiselectQuestionPreference = await createMultiselectQuestion(
+      jurisdiction.id,
+      listing1Created.id,
+      MultiselectQuestionsApplicationSectionEnum.preferences,
+    );
+
     const applicationA = await prisma.applications.create({
-      data: applicationFactory({ unitTypeId: unitTypeA.id }),
+      data: applicationFactory({
+        unitTypeId: unitTypeA.id,
+        listingId: listing1Created.id,
+      }),
       include: {
         applicant: true,
       },
@@ -557,6 +646,7 @@ describe('Application Controller Tests', () => {
       contactPreferences: ['example contact preference'],
       preferences: [
         {
+          multiselectQuestionId: multiselectQuestionPreference,
           key: 'example key',
           claimed: true,
           options: [
@@ -658,6 +748,7 @@ describe('Application Controller Tests', () => {
       reviewStatus: ApplicationReviewStatusEnum.valid,
       programs: [
         {
+          multiselectQuestionId: multiselectQuestionProgram,
           key: 'example key',
           claimed: true,
           options: [
@@ -680,6 +771,7 @@ describe('Application Controller Tests', () => {
     const res = await request(app.getHttpServer())
       .put(`/applications/${applicationA.id}`)
       .send(dto)
+      .set('Cookie', cookies)
       .expect(200);
 
     expect(res.body.applicant.firstName).toEqual(dto.applicant.firstName);
@@ -697,6 +789,17 @@ describe('Application Controller Tests', () => {
       data: listing1,
     });
 
+    const multiselectQuestionProgram = await createMultiselectQuestion(
+      jurisdiction.id,
+      listing1Created.id,
+      MultiselectQuestionsApplicationSectionEnum.programs,
+    );
+    const multiselectQuestionPreference = await createMultiselectQuestion(
+      jurisdiction.id,
+      listing1Created.id,
+      MultiselectQuestionsApplicationSectionEnum.preferences,
+    );
+
     const submissionDate = new Date();
     const exampleAddress = addressFactory() as AddressCreate;
     const dto: ApplicationUpdate = {
@@ -704,6 +807,7 @@ describe('Application Controller Tests', () => {
       contactPreferences: ['example contact preference'],
       preferences: [
         {
+          multiselectQuestionId: multiselectQuestionPreference,
           key: 'example key',
           claimed: true,
           options: [
@@ -805,6 +909,7 @@ describe('Application Controller Tests', () => {
       reviewStatus: ApplicationReviewStatusEnum.valid,
       programs: [
         {
+          multiselectQuestionId: multiselectQuestionProgram,
           key: 'example key',
           claimed: true,
           options: [
@@ -844,12 +949,24 @@ describe('Application Controller Tests', () => {
       data: listing1,
     });
 
+    const multiselectQuestionProgram = await createMultiselectQuestion(
+      jurisdiction.id,
+      listing1Created.id,
+      MultiselectQuestionsApplicationSectionEnum.programs,
+    );
+    const multiselectQuestionPreference = await createMultiselectQuestion(
+      jurisdiction.id,
+      listing1Created.id,
+      MultiselectQuestionsApplicationSectionEnum.preferences,
+    );
+
     const submissionDate = new Date();
     const exampleAddress = addressFactory() as AddressCreate;
     const dto: ApplicationCreate = {
       contactPreferences: ['example contact preference'],
       preferences: [
         {
+          multiselectQuestionId: multiselectQuestionPreference,
           key: 'example key',
           claimed: true,
           options: [
@@ -951,6 +1068,7 @@ describe('Application Controller Tests', () => {
       reviewStatus: ApplicationReviewStatusEnum.valid,
       programs: [
         {
+          multiselectQuestionId: multiselectQuestionProgram,
           key: 'example key',
           claimed: true,
           options: [

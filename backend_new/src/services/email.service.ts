@@ -162,6 +162,24 @@ export class EmailService {
     return null;
   }
 
+  private async getEmailToSendFrom(
+    jurisdictionIds: IdDTO[],
+    jurisdiction: Jurisdiction,
+  ): Promise<string> {
+    if (jurisdiction) {
+      return jurisdiction.emailFromAddress;
+    }
+    // An admin will be attached to more than one jurisdiction so we want generic translations
+    // but still need an email to send from
+    if (jurisdictionIds.length > 1) {
+      const firstJurisdiction = await this.jurisdictionService.findOne({
+        jurisdictionId: jurisdictionIds[0].id,
+      });
+      return firstJurisdiction?.emailFromAddress || '';
+    }
+    return '';
+  }
+
   /* Send welcome email to new public users */
   public async welcome(
     jurisdictionName: string,
@@ -192,9 +210,13 @@ export class EmailService {
   ) {
     const jurisdiction = await this.getJurisdiction(jurisdictionIds);
     void (await this.loadTranslations(jurisdiction, user.language));
+    const emailFromAddress = await this.getEmailToSendFrom(
+      jurisdictionIds,
+      jurisdiction,
+    );
     await this.send(
       user.email,
-      jurisdiction.emailFromAddress,
+      emailFromAddress,
       this.polyglot.t('invite.hello'),
       this.template('invite')({
         user: user,
@@ -212,9 +234,13 @@ export class EmailService {
   ) {
     const jurisdiction = await this.getJurisdiction(jurisdictionIds);
     void (await this.loadTranslations(jurisdiction, user.language));
+    const emailFromAddress = await this.getEmailToSendFrom(
+      jurisdictionIds,
+      jurisdiction,
+    );
     await this.send(
       user.email,
-      jurisdiction.emailFromAddress,
+      emailFromAddress,
       this.polyglot.t('invite.portalAccountUpdate'),
       this.template('portal-account-update')({
         user,
@@ -256,10 +282,14 @@ export class EmailService {
     void (await this.loadTranslations(jurisdiction, user.language));
     const compiledTemplate = this.template('forgot-password');
     const resetUrl = `${appUrl}/reset-password?token=${resetToken}`;
+    const emailFromAddress = await this.getEmailToSendFrom(
+      jurisdictionIds,
+      jurisdiction,
+    );
 
     await this.send(
       user.email,
-      jurisdiction.emailFromAddress,
+      emailFromAddress,
       this.polyglot.t('forgotPassword.subject'),
       compiledTemplate({
         resetUrl: resetUrl,
@@ -269,18 +299,16 @@ export class EmailService {
     );
   }
 
-  // TODO: connect to auth controller when it is implemented
-  public async sendMfaCode(
-    jurisdictionIds: IdDTO[],
-    user: User,
-    email: string,
-    mfaCode: string,
-  ) {
-    const jurisdiction = await this.getJurisdiction(jurisdictionIds);
+  public async sendMfaCode(user: User, mfaCode: string) {
+    const jurisdiction = await this.getJurisdiction(user.jurisdictions);
     void (await this.loadTranslations(jurisdiction, user.language));
+    const emailFromAddress = await this.getEmailToSendFrom(
+      user.jurisdictions,
+      jurisdiction,
+    );
     await this.send(
-      email,
-      jurisdiction.emailFromAddress,
+      user.email,
+      emailFromAddress,
       'Partners Portal account access token',
       this.template('mfa-code')({
         user: user,
@@ -444,10 +472,13 @@ export class EmailService {
   ): Promise<void> {
     const jurisdiction = await this.getJurisdiction(jurisdictionIds);
     void (await this.loadTranslations(jurisdiction, user.language));
-
+    const emailFromAddress = await this.getEmailToSendFrom(
+      user.jurisdictions,
+      jurisdiction,
+    );
     await this.send(
       user.email,
-      jurisdiction.emailFromAddress,
+      emailFromAddress,
       exportEmailTitle,
       this.template('csv-export')({
         user: user,

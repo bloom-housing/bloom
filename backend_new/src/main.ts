@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import cookieParser from 'cookie-parser';
 import { AppModule } from './modules/app.module';
 import { CustomExceptionFilter } from './utilities/custom-exception-filter';
+import { json } from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -16,6 +17,7 @@ async function bootstrap() {
   app.useGlobalFilters(new CustomExceptionFilter(httpAdapter));
   app.enableCors();
   app.use(cookieParser());
+  app.use(json({ limit: '50mb' }));
   const config = new DocumentBuilder()
     .setTitle('Bloom API')
     .setDescription('The API for Bloom')
