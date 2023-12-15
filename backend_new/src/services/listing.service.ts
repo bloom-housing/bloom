@@ -1400,12 +1400,15 @@ export class ListingService implements OnModuleInit {
       });
     }
   }
-
-  // returns the jurisdiction ID assigned to a listing
+  /**
+   *
+   * @param listingId
+   * @returns the jurisdiction ID assigned to a listing
+   */
   public async getJurisdictionIdByListingId(
     listingId: string,
-  ): Promise<string | NotFoundException> {
-    const listing = await this.prisma.listings.findUniqueOrThrow({
+  ): Promise<string> {
+    const listing = await this.prisma.listings.findUnique({
       select: {
         jurisdictionId: true,
       },
@@ -1413,6 +1416,12 @@ export class ListingService implements OnModuleInit {
         id: listingId,
       },
     });
+
+    if (!listing) {
+      throw new NotFoundException(
+        `No jurisdiction for listing ${listingId} found`,
+      );
+    }
 
     return listing.jurisdictionId;
   }

@@ -1,4 +1,3 @@
-import fs from 'fs';
 import {
   Body,
   Controller,
@@ -46,8 +45,6 @@ import { PermissionTypeDecorator } from '../decorators/permission-type.decorator
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { PermissionAction } from '../decorators/permission-action.decorator';
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
-import { createReadStream } from 'fs';
-import { join } from 'path';
 import { ApplicationCsvExporterService } from '../services/application-csv-export.service';
 
 @Controller('applications')
@@ -85,21 +82,11 @@ export class ApplicationController {
   })
   @Header('Content-Type', 'application/json')
   async listAsCsv(
+    @Request() req: ExpressRequest,
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationCsvQueryParams,
   ): Promise<StreamableFile> {
-    await this.applicationCsvExportService.export(queryParams);
-    const filename = join(
-      process.cwd(),
-      `src/temp/listing-${queryParams.listingId}-applications.csv`,
-    );
-    const file = createReadStream(filename);
-    file.on('end', () => {
-      fs.unlink(filename, () => {
-        console.log(`deleted ${filename}`);
-      });
-    });
-    return new StreamableFile(file);
+    return await this.applicationCsvExportService.export(queryParams, req);
   }
 
   @Get(`:applicationId`)

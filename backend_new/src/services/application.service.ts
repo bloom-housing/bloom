@@ -1,12 +1,9 @@
 import {
   BadRequestException,
-  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Request as ExpressRequest } from 'express';
 import crypto from 'crypto';
-import { REQUEST } from '@nestjs/core';
 import { Prisma, YesNoEnum } from '@prisma/client';
 import { PrismaService } from './prisma.service';
 import { Application } from '../dtos/applications/application.dto';
@@ -76,12 +73,10 @@ view.details = {
 @Injectable()
 export class ApplicationService {
   constructor(
-    @Inject(REQUEST) private req: ExpressRequest,
     private prisma: PrismaService,
     private emailService: EmailService,
     private permissionService: PermissionService,
     private geocodingService: GeocodingService,
-    private multiselectQuestionService: MultiselectQuestionService,
   ) {}
 
   /*

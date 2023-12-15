@@ -80,7 +80,6 @@ export const applicationFactory = async (optionalParams?: {
         }
       : undefined,
     ...optionalParams?.overrides,
-    // Question: should householdMember be plural?
     householdMember: optionalParams?.householdMember
       ? {
           create: optionalParams.householdMember,
