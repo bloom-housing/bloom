@@ -1,3 +1,4 @@
+import fs from 'fs';
 import {
   Body,
   Controller,
@@ -75,13 +76,21 @@ export class ApplicationController {
     operationId: 'listAsCsv',
   })
   @Header('Content-Type', 'application/json')
-  @Header('Content-Disposition', 'attachment; filename="test.csv.gz"')
   async listAsCsv(
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationCsvQueryParams,
   ): Promise<StreamableFile> {
     await this.applicationCsvExportService.export(queryParams);
-    const file = createReadStream(join(process.cwd(), 'src/temp/test.csv.gz'));
+    const filename = join(
+      process.cwd(),
+      `src/temp/listing-${queryParams.listingId}-applications.csv`,
+    );
+    const file = createReadStream(filename);
+    file.on('end', () => {
+      fs.unlink(filename, () => {
+        console.log(`deleted ${filename}`);
+      });
+    });
     return new StreamableFile(file);
   }
 
