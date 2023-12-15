@@ -66,118 +66,121 @@ export class ApplicationCsvExporterService {
 
     const filePath = path.join(
       path.resolve(process.cwd()),
-      'src/temp/test.csv',
+      `src/temp/listing-${queryParams.listingId}-applications.csv`,
     );
 
-    const readableStream = fs.createReadStream(filePath);
-    const writableStream = fs.createWriteStream(`${filePath}.gz`);
-    writableStream.on('finish', () => {
-      console.log('finished');
-      writableStream.end();
-    });
+    return new Promise((resolve, reject) => {
+      // create stream
+      const writableStream = fs.createWriteStream(`${filePath}`);
+      writableStream
+        .on('error', (err) => {
+          console.log('csv writestream error');
+          console.log(err);
+          reject(err);
+        })
+        .on('finish', () => {
+          console.log('finished');
+        })
+        .on('close', () => {
+          console.log('stream closed');
+          resolve({
+            success: true,
+          });
+        })
+        .on('open', () => {
+          writableStream.write(
+            csvHeaders.map((header) => header.label).join(',') + '\n',
+          );
 
-    writableStream.write(
-      csvHeaders.map((header) => header.label).join(',') + '\n',
-    );
+          // now loop over applications and write them to file
+          applications.forEach((app) => {
+            let row = '';
+            let preferences: ApplicationMultiselectQuestion[];
+            let programs: ApplicationMultiselectQuestion[];
+            csvHeaders.forEach((header, index) => {
+              let multiselectQuestionValue = false;
+              let parsePreference = false;
+              let parsePrograms = false;
+              let value = header.path.split('.').reduce((acc, curr) => {
+                // return preference/program as value for the format function to accept
+                if (multiselectQuestionValue) {
+                  return acc;
+                }
 
-    // now loop over applications and write them to file
-    applications.forEach((app) => {
-      let row = '';
-      let preferences: ApplicationMultiselectQuestion[];
-      let programs: ApplicationMultiselectQuestion[];
-      csvHeaders.forEach((header, index) => {
-        let multiselectQuestionValue = false;
-        let parsePreference = false;
-        let parsePrograms = false;
-        let value = header.path.split('.').reduce((acc, curr) => {
-          // return preference/program as value for the format function to accept
-          if (multiselectQuestionValue) {
-            return acc;
-          }
+                if (parsePreference) {
+                  // curr should equal the preference id we're pulling from
+                  if (!preferences) {
+                    preferences = JSON.parse(app.preferences as string);
+                  }
+                  parsePreference = false;
+                  // there aren't typically many preferences, but if t
+                  const preference = preferences.find(
+                    (preference) => preference.multiselectQuestionId === curr,
+                  );
+                  multiselectQuestionValue = true;
+                  return preference;
+                }
 
-          if (parsePreference) {
-            // curr should equal the preference id we're pulling from
-            if (!preferences) {
-              preferences = JSON.parse(app.preferences as string);
+                if (parsePrograms) {
+                  // curr should equal the program id we're pulling from
+                  if (!programs) {
+                    programs = JSON.parse(app.programs as string);
+                  }
+                  parsePrograms = false;
+                  const program = programs.find(
+                    (preference) => preference.multiselectQuestionId === curr,
+                  );
+                  multiselectQuestionValue = true;
+                  return program;
+                }
+
+                // sets parsePreference to true, for the next iteration
+                if (curr === 'preferences') {
+                  parsePreference = true;
+                }
+                // sets parsePrograms to true, for the next iteration
+                if (curr === 'programs') {
+                  parsePrograms = true;
+                }
+
+                // handles working with arrays, e.g. householdMember.0.firstName
+                if (!isNaN(Number(curr))) {
+                  const index = Number(curr);
+                  return acc[index];
+                }
+
+                if (acc === null || acc === undefined) {
+                  return '';
+                }
+                return acc[curr];
+              }, app);
+              value = value === undefined ? '' : value === null ? '' : value;
+              if (header.format) {
+                value = header.format(value);
+              }
+
+              row += value;
+              if (index < csvHeaders.length - 1) {
+                row += ',';
+              } else {
+                row += '\n';
+              }
+            });
+
+            try {
+              writableStream.write(row + '\n');
+            } catch (e) {
+              console.log('writeStream write error = ', e);
+              writableStream.once('drain', () => {
+                console.log('drain buffer');
+                writableStream.write(row + '\n');
+              });
             }
-            parsePreference = false;
-            // there aren't typically many preferences, but if t
-            const preference = preferences.find(
-              (preference) => preference.multiselectQuestionId === curr,
-            );
-            multiselectQuestionValue = true;
-            return preference;
-          }
+          });
 
-          if (parsePrograms) {
-            // curr should equal the program id we're pulling from
-            if (!programs) {
-              programs = JSON.parse(app.programs as string);
-            }
-            parsePrograms = false;
-            const program = programs.find(
-              (preference) => preference.multiselectQuestionId === curr,
-            );
-            multiselectQuestionValue = true;
-            return program;
-          }
-
-          // sets parsePreference to true, for the next iteration
-          if (curr === 'preferences') {
-            parsePreference = true;
-          }
-          // sets parsePrograms to true, for the next iteration
-          if (curr === 'programs') {
-            parsePrograms = true;
-          }
-
-          // handles working with arrays, e.g. householdMember.0.firstName
-          if (!isNaN(Number(curr))) {
-            const index = Number(curr);
-            return acc[index];
-          }
-
-          if (acc === null || acc === undefined) {
-            return '';
-          }
-          return acc[curr];
-        }, app);
-        value = value === undefined ? '' : value === null ? '' : value;
-        if (header.format) {
-          value = header.format(value);
-        }
-
-        row += value;
-        if (index < csvHeaders.length - 1) {
-          row += ',';
-        } else {
-          row += '\n';
-        }
-      });
-
-      try {
-        writableStream.write(row + '\n');
-      } catch (e) {
-        console.log('writeStream write error = ', e);
-        writableStream.once('drain', () => {
-          writableStream.write(row + '\n');
+          writableStream.end();
         });
-      }
     });
-
-    const gzip = zlib.createGzip();
-    pipeline(readableStream, gzip, writableStream, (err) => {
-      if (err) {
-        console.log('Error occurred');
-        console.log(err);
-      } else {
-        console.log('Pipeline succeeded');
-      }
-    });
-
-    return {
-      success: true,
-    };
   }
 
   private async maxHouseholdMembers(): Promise<number> {

@@ -2,6 +2,7 @@ import { NestFactory, HttpAdapterHost } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import cookieParser from 'cookie-parser';
+import compression from 'compression';
 import { AppModule } from './modules/app.module';
 import { CustomExceptionFilter } from './utilities/custom-exception-filter';
 import { json } from 'express';
@@ -37,7 +38,14 @@ async function bootstrap() {
     }
     cb(null, options);
   });
-  app.use(cookieParser());
+  app.use(
+    cookieParser(),
+    compression({
+      filter: (_, res) => {
+        return res.req.route.path === '/applications/csv';
+      },
+    }),
+  );
   app.use(json({ limit: '50mb' }));
   const config = new DocumentBuilder()
     .setTitle('Bloom API')
