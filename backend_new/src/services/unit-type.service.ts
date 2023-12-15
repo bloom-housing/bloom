@@ -109,4 +109,16 @@ export class UnitTypeService {
 
     return true;
   }
+
+  unitTypeToReadable(type: string): string {
+    const typeMap = {
+      SRO: 'SRO',
+      studio: 'Studio',
+      oneBdrm: 'One Bedroom',
+      twoBdrm: 'Two Bedroom',
+      threeBdrm: 'Three Bedroom',
+      fourBdrm: 'Four+ Bedroom',
+    };
+    return typeMap[type] ?? type;
+  }
 }

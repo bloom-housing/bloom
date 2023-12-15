@@ -42,6 +42,7 @@ import { OptionalAuthGuard } from '../guards/optional.guard';
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
 import { createReadStream } from 'fs';
 import { join } from 'path';
+import { ApplicationCsvExporterService } from '../services/application-csv-export.service';
 
 @Controller('applications')
 @ApiTags('applications')
@@ -53,7 +54,10 @@ import { join } from 'path';
 )
 @ApiExtraModels(IdDTO, AddressInput, BooleanInput, TextInput)
 export class ApplicationController {
-  constructor(private readonly applicationService: ApplicationService) {}
+  constructor(
+    private readonly applicationService: ApplicationService,
+    private readonly applicationCsvExportService: ApplicationCsvExporterService,
+  ) {}
 
   @Get()
   @ApiOperation({
@@ -76,7 +80,7 @@ export class ApplicationController {
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationCsvQueryParams,
   ): Promise<StreamableFile> {
-    await this.applicationService.export(queryParams);
+    await this.applicationCsvExportService.export(queryParams);
     const file = createReadStream(join(process.cwd(), 'src/temp/test.csv.gz'));
     return new StreamableFile(file);
   }
