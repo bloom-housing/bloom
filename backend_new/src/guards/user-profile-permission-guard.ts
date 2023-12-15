@@ -13,7 +13,7 @@ export class UserProfilePermissionGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
-    const user: User = req.user;
+    const user: User = req['user'];
     const type = this.reflector.getAllAndOverride<string>('permission_type', [
       context.getClass(),
       context.getHandler(),

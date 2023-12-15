@@ -5,7 +5,7 @@ import { User } from '../dtos/users/user.dto';
 export class AdminOrJurisdictionalAdminGuard implements CanActivate {
   canActivate(context: ExecutionContext) {
     const req = context.switchToHttp().getRequest();
-    const authUser: User = req.user;
+    const authUser: User = req['user'];
     return (
       authUser?.userRoles?.isAdmin || authUser?.userRoles?.isJurisdictionalAdmin
     );

@@ -629,8 +629,8 @@ describe('Listing Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .put(`/listings/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
-
     expect(res.body.success).toEqual(true);
 
     const postProcessListing = await prisma.listings.findUnique({
@@ -643,7 +643,7 @@ describe('Listing Controller Tests', () => {
     expect(postProcessListing.closedAt).not.toBeNull();
   });
 
-  it('should only process listings that are passed due', async () => {
+  it('should only process listings that are past due', async () => {
     const jurisdictionA = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
@@ -672,6 +672,7 @@ describe('Listing Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .put(`/listings/process`)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     expect(res.body.success).toEqual(true);

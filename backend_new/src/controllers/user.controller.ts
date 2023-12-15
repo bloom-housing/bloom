@@ -127,7 +127,7 @@ export class UserController {
     const jurisdictionName = req.headers['jurisdictionname'] || '';
     return await this.userService.update(
       dto,
-      mapTo(User, req.user),
+      mapTo(User, req['user']),
       jurisdictionName as string,
     );
   }
