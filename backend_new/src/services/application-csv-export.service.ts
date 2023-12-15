@@ -1,7 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import { pipeline } from 'stream';
-import zlib from 'zlib';
 import { Inject, Injectable, Scope } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Request as ExpressRequest } from 'express';
@@ -15,6 +13,7 @@ import { Address } from '../dtos/addresses/address.dto';
 import { ApplicationMultiselectQuestion } from 'src/dtos/applications/application-multiselect-question.dto';
 import MultiselectQuestion from '../dtos/multiselect-questions/multiselect-question.dto';
 import { ApplicationFlaggedSet } from '../dtos/application-flagged-sets/application-flagged-set.dto';
+import { UnitTypeService } from './unit-type.service';
 
 view.csv = {
   ...view.details,
@@ -34,6 +33,7 @@ export class ApplicationCsvExporterService {
     @Inject(REQUEST) private req: ExpressRequest,
     private prisma: PrismaService,
     private multiselectQuestionService: MultiselectQuestionService,
+    private unitTypeService: UnitTypeService,
   ) {}
 
   /*
@@ -113,7 +113,7 @@ export class ApplicationCsvExporterService {
                     preferences = JSON.parse(app.preferences as string);
                   }
                   parsePreference = false;
-                  // there aren't typically many preferences, but if t
+                  // there aren't typically many preferences, but if there, then a object map should be created and used
                   const preference = preferences.find(
                     (preference) => preference.multiselectQuestionId === curr,
                   );
@@ -162,8 +162,6 @@ export class ApplicationCsvExporterService {
               row += value;
               if (index < csvHeaders.length - 1) {
                 row += ',';
-              } else {
-                row += '\n';
               }
             });
 
@@ -419,7 +417,7 @@ export class ApplicationCsvExporterService {
         label: 'Requested Unit Types',
         format: (val: UnitType[]): string => {
           return val
-            .map((unit) => this.unitTypeToReadable(unit.name))
+            .map((unit) => this.unitTypeService.unitTypeToReadable(unit.name))
             .join(',');
         },
       },
@@ -594,17 +592,5 @@ export class ApplicationCsvExporterService {
       id: listingId,
       jurisdictionId,
     }); */
-  }
-
-  unitTypeToReadable(type: string) {
-    const typeMap = {
-      SRO: 'SRO',
-      studio: 'Studio',
-      oneBdrm: 'One Bedroom',
-      twoBdrm: 'Two Bedroom',
-      threeBdrm: 'Three Bedroom',
-      fourBdrm: 'Four+ Bedroom',
-    };
-    return typeMap[type] ?? type;
   }
 }
