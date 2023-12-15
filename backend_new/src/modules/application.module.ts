@@ -7,6 +7,7 @@ import { PermissionModule } from './permission.module';
 import { EmailModule } from './email.module';
 import { ListingModule } from './listing.module';
 import { MultiselectQuestionModule } from './multiselect-question.module';
+import { ApplicationCsvExporterService } from '../services/application-csv-export.service';
 
 @Module({
   imports: [
@@ -17,7 +18,11 @@ import { MultiselectQuestionModule } from './multiselect-question.module';
     PermissionModule,
   ],
   controllers: [ApplicationController],
-  providers: [ApplicationService, GeocodingService],
+  providers: [
+    ApplicationService,
+    GeocodingService,
+    ApplicationCsvExporterService,
+  ],
   exports: [ApplicationService],
 })
 export class ApplicationModule {}
