@@ -16,8 +16,9 @@ import {
   randomBirthYear,
 } from './number-generator';
 import { preferenceFactory } from './application-preference-factory';
+import { demographicsFactory } from './demographic-factory';
 
-export const applicationFactory = (optionalParams?: {
+export const applicationFactory = async (optionalParams?: {
   householdSize?: number;
   unitTypeId?: string;
   applicant?: Prisma.ApplicantCreateWithoutApplicationsInput;
@@ -26,7 +27,7 @@ export const applicationFactory = (optionalParams?: {
   householdMember?: Prisma.HouseholdMemberCreateWithoutApplicationsInput[];
   demographics?: Prisma.DemographicsCreateWithoutApplicationsInput;
   multiselectQuestions?: Partial<MultiselectQuestions>[];
-}): Prisma.ApplicationsCreateInput => {
+}): Promise<Prisma.ApplicationsCreateInput> => {
   let preferredUnitTypes: Prisma.UnitTypesCreateNestedManyWithoutApplicationsInput;
   if (optionalParams?.unitTypeId) {
     preferredUnitTypes = {
@@ -37,6 +38,7 @@ export const applicationFactory = (optionalParams?: {
       ],
     };
   }
+  const demographics = await demographicsFactory();
   return {
     confirmationCode: generateConfirmationCode(),
     applicant: { create: applicantFactory(optionalParams?.applicant) },
@@ -84,11 +86,9 @@ export const applicationFactory = (optionalParams?: {
           create: optionalParams.householdMember,
         }
       : undefined,
-    demographics: optionalParams?.demographics
-      ? {
-          create: optionalParams.demographics,
-        }
-      : undefined,
+    demographics: {
+      create: demographics,
+    },
   };
 };
 

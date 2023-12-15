@@ -545,14 +545,10 @@ export class ApplicationCsvExporterService {
         {
           path: 'demographics.race',
           label: 'Race',
-        },
-        {
-          path: 'demographics.gender',
-          label: 'Gender',
-        },
-        {
-          path: 'demographics.sexualOrientation',
-          label: 'Sexual Orientation',
+          format: (val: string[]): string =>
+            val
+              .map((race) => this.convertDemographicRaceToReadable(race))
+              .join(','),
         },
         {
           path: 'demographics.howDidYouHear',
@@ -570,13 +566,42 @@ export class ApplicationCsvExporterService {
     }, ${address.state} ${address.zipCode}`;
   }
 
-  multiselectQuestionFormat(question: ApplicationMultiselectQuestion) {
+  multiselectQuestionFormat(question: ApplicationMultiselectQuestion): string {
     if (!question) return '';
     const address = question.options.reduce((_, curr) => {
       const extraData = curr.extraData.find((data) => data.type === 'address');
       return extraData ? extraData.value : '';
     }, {}) as Address;
     return this.addressToString(address);
+  }
+
+  convertDemographicRaceToReadable(type: string): string {
+    const [rootKey, customValue = ''] = type.split(':');
+    const typeMap = {
+      americanIndianAlaskanNative: 'American Indian / Alaskan Native',
+      asian: 'Asian',
+      'asian-asianIndian': 'Asian[Asian Indian]',
+      'asian-otherAsian': `Asian[Other Asian:${customValue}]`,
+      blackAfricanAmerican: 'Black / African American',
+      'asian-chinese': 'Asian[Chinese]',
+      declineToRespond: 'Decline to Respond',
+      'asian-filipino': 'Asian[Filipino]',
+      'nativeHawaiianOtherPacificIslander-guamanianOrChamorro':
+        'Native Hawaiian / Other Pacific Islander[Guamanian or Chamorro]',
+      'asian-japanese': 'Asian[Japanese]',
+      'asian-korean': 'Asian[Korean]',
+      'nativeHawaiianOtherPacificIslander-nativeHawaiian':
+        'Native Hawaiian / Other Pacific Islander[Native Hawaiian]',
+      nativeHawaiianOtherPacificIslander:
+        'Native Hawaiian / Other Pacific Islander',
+      otherMultiracial: `Other / Multiracial:${customValue}`,
+      'nativeHawaiianOtherPacificIslander-otherPacificIslander': `Native Hawaiian / Other Pacific Islander[Other Pacific Islander:${customValue}]`,
+      'nativeHawaiianOtherPacificIslander-samoan':
+        'Native Hawaiian / Other Pacific Islander[Samoan]',
+      'asian-vietnamese': 'Asian[Vietnamese]',
+      white: 'White',
+    };
+    return typeMap[rootKey] ?? rootKey;
   }
 
   private async authorizeCSVExport(user, listingId): Promise<void> {
