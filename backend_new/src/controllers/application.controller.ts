@@ -92,7 +92,7 @@ export class ApplicationController {
     return await this.applicationService.create(
       dto,
       false,
-      mapTo(User, req.user),
+      mapTo(User, req['user']),
     );
   }
 
@@ -149,13 +149,16 @@ export class ApplicationController {
     @Body() dto: ApplicationUpdate,
     @Request() req: ExpressRequest,
   ): Promise<Application> {
-    return await this.applicationService.update(dto, mapTo(User, req.user));
+    return await this.applicationService.update(dto, mapTo(User, req['user']));
   }
 
   @Delete()
   @ApiOperation({ summary: 'Delete application by id', operationId: 'delete' })
   @ApiOkResponse({ type: SuccessDTO })
   async delete(@Body() dto: IdDTO, @Request() req: ExpressRequest) {
-    return await this.applicationService.delete(dto.id, mapTo(User, req.user));
+    return await this.applicationService.delete(
+      dto.id,
+      mapTo(User, req['user']),
+    );
   }
 }

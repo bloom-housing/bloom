@@ -1007,6 +1007,13 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         .set('Cookie', cookies)
         .expect(403);
     });
+
+    it('should succeed for process endpoint', async () => {
+      await request(app.getHttpServer())
+        .put(`/listings/process`)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
   });
 
   describe('Testing application flagged set endpoints', () => {

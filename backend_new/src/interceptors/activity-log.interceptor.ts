@@ -59,7 +59,7 @@ export class ActivityLogInterceptor implements NestInterceptor {
       this.reflector.get<string>('permission_action', context.getHandler()) ||
       httpMethodsToAction[req.method];
 
-    const user: User | null = req.user;
+    const user: User | null = req['user'];
     const activityLogMetadata =
       this.reflector.getAllAndOverride<ActivityLogMetadataType>(
         'activity_log_metadata',

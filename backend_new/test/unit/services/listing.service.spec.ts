@@ -1,12 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaService } from '../../../src/services/prisma.service';
-import { ListingService } from '../../../src/services/listing.service';
-import { ListingsQueryParams } from '../../../src/dtos/listings/listings-query-params.dto';
-import { ListingOrderByKeys } from '../../../src/enums/listings/order-by-enum';
-import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
-import { ListingFilterKeys } from '../../../src/enums/listings/filter-key-enum';
-import { Compare } from '../../../src/dtos/shared/base-filter.dto';
-import { ListingFilterParams } from '../../../src/dtos/listings/listings-filter-params.dto';
 import {
   ApplicationAddressTypeEnum,
   ApplicationMethodsTypeEnum,
@@ -17,6 +9,20 @@ import {
   UnitTypeEnum,
   UserRoleEnum,
 } from '@prisma/client';
+import { Logger } from '@nestjs/common';
+import { SchedulerRegistry } from '@nestjs/schedule';
+import { ConfigService } from '@nestjs/config';
+import { randomUUID } from 'crypto';
+import { HttpModule, HttpService } from '@nestjs/axios';
+import { of } from 'rxjs';
+import { PrismaService } from '../../../src/services/prisma.service';
+import { ListingService } from '../../../src/services/listing.service';
+import { ListingsQueryParams } from '../../../src/dtos/listings/listings-query-params.dto';
+import { ListingOrderByKeys } from '../../../src/enums/listings/order-by-enum';
+import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
+import { ListingFilterKeys } from '../../../src/enums/listings/filter-key-enum';
+import { Compare } from '../../../src/dtos/shared/base-filter.dto';
+import { ListingFilterParams } from '../../../src/dtos/listings/listings-filter-params.dto';
 import { Unit } from '../../../src/dtos/units/unit.dto';
 import { UnitTypeSort } from '../../../src/utilities/unit-utilities';
 import { Listing } from '../../../src/dtos/listings/listing.dto';
@@ -24,16 +30,12 @@ import { ListingViews } from '../../../src/enums/listings/view-enum';
 import { TranslationService } from '../../../src/services/translation.service';
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 import { ListingCreate } from '../../../src/dtos/listings/listing-create.dto';
-import { randomUUID } from 'crypto';
-import { HttpModule, HttpService } from '@nestjs/axios';
-import { of } from 'rxjs';
 import { ListingUpdate } from '../../../src/dtos/listings/listing-update.dto';
 import { ListingPublishedCreate } from '../../../src/dtos/listings/listing-published-create.dto';
 import { ListingPublishedUpdate } from '../../../src/dtos/listings/listing-published-update.dto';
 import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
 import { User } from '../../../src/dtos/users/user.dto';
 import { EmailService } from '../../../src/services/email.service';
-import { ConfigService } from '@nestjs/config';
 import { PermissionService } from '../../../src/services/permission.service';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
 
@@ -181,6 +183,8 @@ describe('Testing listing service', () => {
           },
         },
         ConfigService,
+        Logger,
+        SchedulerRegistry,
       ],
       imports: [HttpModule],
     }).compile();
@@ -2605,5 +2609,123 @@ describe('Testing listing service', () => {
     });
 
     process.env.PROXY_URL = undefined;
+  });
+
+  it('should call the purge if no listings needed to get processed', async () => {
+    prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 2 });
+    prisma.cronJob.findFirst = jest
+      .fn()
+      .mockResolvedValue({ id: randomUUID() });
+    prisma.cronJob.update = jest.fn().mockResolvedValue(true);
+
+    process.env.PROXY_URL = 'https://www.google.com';
+    await service.process();
+    expect(httpServiceMock.request).toHaveBeenCalledWith({
+      baseURL: 'https://www.google.com',
+      method: 'PURGE',
+      url: `/listings?*`,
+    });
+    expect(prisma.listings.updateMany).toHaveBeenCalledWith({
+      data: {
+        status: ListingsStatusEnum.closed,
+        closedAt: expect.anything(),
+      },
+      where: {
+        status: ListingsStatusEnum.active,
+        AND: [
+          {
+            applicationDueDate: {
+              not: null,
+            },
+          },
+          {
+            applicationDueDate: {
+              lte: expect.anything(),
+            },
+          },
+        ],
+      },
+    });
+    expect(prisma.cronJob.findFirst).toHaveBeenCalled();
+    expect(prisma.cronJob.update).toHaveBeenCalled();
+    process.env.PROXY_URL = undefined;
+  });
+
+  it('should not call the purge if no listings needed to get processed', async () => {
+    prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 0 });
+    prisma.cronJob.findFirst = jest
+      .fn()
+      .mockResolvedValue({ id: randomUUID() });
+    prisma.cronJob.update = jest.fn().mockResolvedValue(true);
+
+    process.env.PROXY_URL = 'https://www.google.com';
+    await service.process();
+    expect(httpServiceMock.request).not.toHaveBeenCalled();
+    expect(prisma.listings.updateMany).toHaveBeenCalledWith({
+      data: {
+        status: ListingsStatusEnum.closed,
+        closedAt: expect.anything(),
+      },
+      where: {
+        status: ListingsStatusEnum.active,
+        AND: [
+          {
+            applicationDueDate: {
+              not: null,
+            },
+          },
+          {
+            applicationDueDate: {
+              lte: expect.anything(),
+            },
+          },
+        ],
+      },
+    });
+    expect(prisma.cronJob.findFirst).toHaveBeenCalled();
+    expect(prisma.cronJob.update).toHaveBeenCalled();
+    process.env.PROXY_URL = undefined;
+  });
+
+  it('should create new cronjob entry if none is present', async () => {
+    prisma.cronJob.findFirst = jest.fn().mockResolvedValue(null);
+    prisma.cronJob.create = jest.fn().mockResolvedValue(true);
+
+    await service.markCronJobAsStarted();
+
+    expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
+      where: {
+        name: 'LISTING_CRON_JOB',
+      },
+    });
+    expect(prisma.cronJob.create).toHaveBeenCalledWith({
+      data: {
+        lastRunDate: expect.anything(),
+        name: 'LISTING_CRON_JOB',
+      },
+    });
+  });
+
+  it('should update cronjob entry if one is present', async () => {
+    prisma.cronJob.findFirst = jest
+      .fn()
+      .mockResolvedValue({ id: randomUUID() });
+    prisma.cronJob.update = jest.fn().mockResolvedValue(true);
+
+    await service.markCronJobAsStarted();
+
+    expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
+      where: {
+        name: 'LISTING_CRON_JOB',
+      },
+    });
+    expect(prisma.cronJob.update).toHaveBeenCalledWith({
+      data: {
+        lastRunDate: expect.anything(),
+      },
+      where: {
+        id: expect.anything(),
+      },
+    });
   });
 });

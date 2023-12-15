@@ -60,6 +60,7 @@ import {
   constructFullListingData,
   createSimpleApplication,
 } from './helpers';
+import { ListingService } from '../../../src/services/listing.service';
 
 const testEmailService = {
   confirmation: jest.fn(),
@@ -76,6 +77,7 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
   let app: INestApplication;
   let prisma: PrismaService;
   let userService: UserService;
+  let listingService: ListingService;
   let cookies = '';
   let jurisId = '';
   let userListingId = '';
@@ -94,6 +96,7 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     userService = moduleFixture.get<UserService>(UserService);
+    listingService = moduleFixture.get<ListingService>(ListingService);
     app.use(cookieParser());
     await app.init();
 
@@ -991,6 +994,13 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
         .set('Cookie', cookies)
         .expect(403);
     });
+
+    it('should succeed for process endpoint', async () => {
+      await request(app.getHttpServer())
+        .put(`/listings/process`)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
   });
 
   describe('Testing application flagged set endpoints', () => {
@@ -1102,6 +1112,11 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
     });
 
     it('should succeed for process endpoint', async () => {
+      /*
+        Because so many different iterations of the process endpoint were firing we were running into collisions. 
+        Since this is just testing the permissioning aspect I'm switching to mocking the process function
+      */
+      listingService.process = jest.fn();
       await request(app.getHttpServer())
         .put(`/applicationFlaggedSets/process`)
         .set('Cookie', cookies)
