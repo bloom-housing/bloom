@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { stringify } from 'qs';
+import cookieParser from 'cookie-parser';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
@@ -10,11 +11,14 @@ import { amiChartFactory } from '../../prisma/seed-helpers/ami-chart-factory';
 import { AmiChartCreate } from '../../src/dtos/ami-charts/ami-chart-create.dto';
 import { AmiChartUpdate } from '../../src/dtos/ami-charts/ami-chart-update.dto';
 import { IdDTO } from '../../src/dtos/shared/id.dto';
+import { userFactory } from '../../prisma/seed-helpers/user-factory';
+import { Login } from '../../src/dtos/auth/login.dto';
 
 describe('AmiChart Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let jurisdictionAId: string;
+  let cookies = '';
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -23,12 +27,30 @@ describe('AmiChart Controller Tests', () => {
 
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
+    app.use(cookieParser());
     await app.init();
 
     const jurisdictionA = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
     jurisdictionAId = jurisdictionA.id;
+
+    const storedUser = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: { isAdmin: true },
+        mfaEnabled: false,
+        confirmedAt: new Date(),
+      }),
+    });
+    const resLogIn = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({
+        email: storedUser.email,
+        password: 'abcdef',
+      } as Login)
+      .expect(201);
+
+    cookies = resLogIn.headers['set-cookie'];
   });
 
   afterAll(async () => {
@@ -53,6 +75,7 @@ describe('AmiChart Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/amiCharts?${query}`)
+      .set('Cookie', cookies)
       .expect(200);
 
     expect(res.body.length).toEqual(1);
@@ -66,6 +89,7 @@ describe('AmiChart Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/amiCharts/${amiChartA.id}`)
+      .set('Cookie', cookies)
       .expect(200);
 
     expect(res.body.name).toEqual(amiChartA.name);
@@ -87,6 +111,7 @@ describe('AmiChart Controller Tests', () => {
           id: jurisdictionAId,
         },
       } as AmiChartCreate)
+      .set('Cookie', cookies)
       .expect(201);
 
     expect(res.body.name).toEqual('name: 10');
@@ -117,6 +142,7 @@ describe('AmiChart Controller Tests', () => {
           },
         ],
       } as AmiChartUpdate)
+      .set('Cookie', cookies)
       .expect(200);
 
     expect(res.body.name).toEqual('updated name');
@@ -139,6 +165,7 @@ describe('AmiChart Controller Tests', () => {
       .send({
         id: amiChartA.id,
       } as IdDTO)
+      .set('Cookie', cookies)
       .expect(200);
 
     expect(res.body.success).toEqual(true);

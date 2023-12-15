@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -32,6 +33,8 @@ import { UserInvite } from '../dtos/users/user-invite.dto';
 import { UserCreate } from '../dtos/users/user-create.dto';
 import { EmailService } from './email.service';
 import { buildFromIdIndex } from '../utilities/csv-builder';
+import { PermissionService } from './permission.service';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
 
 /*
   this is the service for users
@@ -56,6 +59,7 @@ export class UserService {
     private prisma: PrismaService,
     private emailService: EmailService,
     private readonly configService: ConfigService,
+    private permissionService: PermissionService,
   ) {
     dayjs.extend(advancedFormat);
   }
@@ -256,12 +260,39 @@ export class UserService {
   /*
     this will update a user or error if no user is found with the Id
   */
-  async update(dto: UserUpdate, jurisdictionName?: string): Promise<User> {
+  async update(
+    dto: UserUpdate,
+    requestingUser: User,
+    jurisdictionName: string,
+  ): Promise<User> {
     const storedUser = await this.findUserOrError({ userId: dto.id }, true);
 
-    /*
-      TODO: perm check
-    */
+    if (dto.jurisdictions?.length) {
+      // if the incoming dto has jurisdictions make sure the user has access to update users in that jurisdiction
+      await Promise.all(
+        dto.jurisdictions.map(async (jurisdiction) => {
+          await this.permissionService.canOrThrow(
+            requestingUser,
+            'user',
+            permissionActions.update,
+            {
+              id: dto.id,
+              jurisdictionId: jurisdiction.id,
+            },
+          );
+        }),
+      );
+    } else {
+      // if the incoming dto has no jurisdictions make sure the user has access to update the user
+      await this.permissionService.canOrThrow(
+        requestingUser,
+        'userProfile',
+        permissionActions.update,
+        {
+          id: dto.id,
+        },
+      );
+    }
 
     let passwordHash: string;
     let passwordUpdatedAt: Date;
@@ -275,7 +306,7 @@ export class UserService {
         !(await isPasswordValid(storedUser.passwordHash, dto.currentPassword))
       ) {
         throw new UnauthorizedException(
-          `userID ${dto.id}: incoming current password doesn't match stored password`,
+          `userID ${dto.id}: incoming password doesn't match stored password`,
         );
       }
 
@@ -290,7 +321,7 @@ export class UserService {
         storedUser.id,
         dto.newEmail,
       );
-      // TODO: should we be resetting confirmedAt ?
+
       const confirmationUrl = this.getPublicConfirmationUrl(
         dto.appUrl,
         confirmationToken,
@@ -395,10 +426,14 @@ export class UserService {
   /*
     this will delete a user or error if no user is found with the Id
   */
-  async delete(userId: string): Promise<SuccessDTO> {
-    await this.findUserOrError({ userId: userId }, false);
+  async delete(userId: string, requestingUser: User): Promise<SuccessDTO> {
+    const targetUser = await this.findUserOrError({ userId: userId }, false);
 
-    // TODO: perms
+    this.authorizeAction(
+      requestingUser,
+      mapTo(User, targetUser),
+      permissionActions.delete,
+    );
 
     await this.prisma.userRoles.delete({
       where: {
@@ -584,10 +619,16 @@ export class UserService {
     dto: UserCreate | UserInvite,
     forPartners: boolean,
     sendWelcomeEmail = false,
+    requestingUser: User,
     jurisdictionName?: string,
   ): Promise<User> {
-    // TODO: perms
-
+    if (forPartners) {
+      await this.authorizeAction(
+        requestingUser,
+        mapTo(User, dto),
+        permissionActions.confirm,
+      );
+    }
     const existingUser = await this.prisma.userAccounts.findUnique({
       include: view,
       where: {
@@ -918,6 +959,48 @@ export class UserService {
     return {
       success: true,
     };
+  }
+
+  async authorizeAction(
+    requestingUser: User,
+    targetUser: User,
+    action: permissionActions,
+  ): Promise<void> {
+    if (!requestingUser) {
+      throw new UnauthorizedException(
+        `User attempted ${action} wihtout being signed in`,
+      );
+    }
+
+    if (!requestingUser.userRoles?.isJurisdictionalAdmin) {
+      // if its an admin, partner, or a user without roles
+      await this.permissionService.canOrThrow(requestingUser, 'user', action, {
+        id: targetUser.id,
+      });
+    } else if (targetUser.userRoles?.isAdmin) {
+      // if its a jurisdictional admin trying to perform an action on an admin user
+      throw new ForbiddenException(
+        `a jurisdictional admin is attempting to ${action} an admin user`,
+      );
+    } else {
+      // jurisdictional admins should only be allowed to perform an action on a user if they share a jurisdiction
+      const requesterJurisdictions = requestingUser.jurisdictions?.map(
+        (juris) => juris.id,
+      );
+      const targetJurisdictions = targetUser.jurisdictions?.map(
+        (juris) => juris.id,
+      );
+
+      if (
+        !requesterJurisdictions.some((juris) =>
+          targetJurisdictions.includes(juris),
+        )
+      ) {
+        throw new ForbiddenException(
+          `a jurisdictional admin is attempting to ${action} a user they do not share a jurisdiction with`,
+        );
+      }
+    }
   }
 
   /*

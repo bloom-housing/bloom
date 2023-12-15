@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -24,16 +25,16 @@ import { defaultValidationPipeOptions } from '../utilities/default-validation-pi
 import { ReservedCommunityTypeQueryParams } from '../dtos/reserved-community-types/reserved-community-type-query-params.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
+import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
+import { JwtAuthGuard } from '../guards/jwt.guard';
+import { PermissionGuard } from '../guards/permission.guard';
 
 @Controller('reservedCommunityTypes')
 @ApiTags('reservedCommunityTypes')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
-@ApiExtraModels(
-  ReservedCommunityTypeCreate,
-  ReservedCommunityTypeUpdate,
-  IdDTO,
-  ReservedCommunityTypeQueryParams,
-)
+@ApiExtraModels(ReservedCommunityTypeQueryParams)
+@PermissionTypeDecorator('reservedCommunityType')
+@UseGuards(JwtAuthGuard, PermissionGuard)
 export class ReservedCommunityTypeController {
   constructor(
     private readonly ReservedCommunityTypeService: ReservedCommunityTypeService,

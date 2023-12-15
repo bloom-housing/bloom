@@ -21,6 +21,7 @@ import { EmailModule } from './email.module';
     JwtModule.register({
       secret: process.env.APP_SECRET,
     }),
+    EmailModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, PermissionService, MfaStrategy, JwtStrategy],

@@ -54,6 +54,7 @@ export class ActivityLogInterceptor implements NestInterceptor {
       context.getClass(),
       context.getHandler(),
     ]);
+
     const action =
       this.reflector.get<string>('permission_action', context.getHandler()) ||
       httpMethodsToAction[req.method];
@@ -73,8 +74,11 @@ export class ActivityLogInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler) {
     const { module, action, user, activityLogMetadata } =
       this.getBasicRequestInfo(context);
-
-    if (action === permissionActions.read) {
+    if (
+      action === permissionActions.read ||
+      action === permissionActions.submit
+    ) {
+      // if the action is a read or a submit we don't need to log the activity
       return next.handle();
     }
 

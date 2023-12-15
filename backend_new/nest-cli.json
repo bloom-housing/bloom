@@ -2,6 +2,9 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
-    "assets": [{ "include": "views/**/*.hbs", "outDir": "dist/src" }]
+    "assets": [
+      { "include": "permission-configs/*.{conf,csv}", "outDir": "dist/src" },
+      { "include": "views/**/*.hbs", "outDir": "dist/src" }
+    ]
   }
 }

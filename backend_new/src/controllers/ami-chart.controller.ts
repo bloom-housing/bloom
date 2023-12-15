@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -24,11 +25,16 @@ import { defaultValidationPipeOptions } from '../utilities/default-validation-pi
 import { AmiChartQueryParams } from '../dtos/ami-charts/ami-chart-query-params.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
+import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
+import { JwtAuthGuard } from '../guards/jwt.guard';
+import { PermissionGuard } from '../guards/permission.guard';
 
 @Controller('/amiCharts')
 @ApiTags('amiCharts')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
-@ApiExtraModels(AmiChartCreate, AmiChartUpdate, IdDTO, AmiChartQueryParams)
+@PermissionTypeDecorator('amiChart')
+@UseGuards(JwtAuthGuard, PermissionGuard)
+@ApiExtraModels(AmiChartQueryParams)
 export class AmiChartController {
   constructor(private readonly AmiChartService: AmiChartService) {}
 

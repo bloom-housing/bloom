@@ -19,8 +19,10 @@ import { ApplicationUpdate } from '../dtos/applications/application-update.dto';
 import { ApplicationCreate } from '../dtos/applications/application-create.dto';
 import { PaginatedApplicationDto } from '../dtos/applications/paginated-application.dto';
 import { EmailService } from './email.service';
+import { PermissionService } from './permission.service';
 import Listing from '../dtos/listings/listing.dto';
 import { User } from '../dtos/users/user.dto';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
 
 const view: Partial<Record<ApplicationViews, Prisma.ApplicationsInclude>> = {
   partnerList: {
@@ -69,6 +71,7 @@ export class ApplicationService {
   constructor(
     private prisma: PrismaService,
     private emailService: EmailService,
+    private permissionService: PermissionService,
   ) {}
 
   /*
@@ -233,9 +236,16 @@ export class ApplicationService {
   async create(
     dto: ApplicationCreate,
     forPublic: boolean,
-    user?: User,
+    requestingUser: User,
   ): Promise<Application> {
-    // TODO: perms https://github.com/bloom-housing/bloom/issues/3445
+    if (!forPublic) {
+      await this.authorizeAction(
+        requestingUser,
+        dto as Application,
+        dto.listings.id,
+        permissionActions.create,
+      );
+    }
 
     const listing = await this.prisma.listings.findUnique({
       where: {
@@ -354,10 +364,10 @@ export class ApplicationService {
           : undefined,
         programs: JSON.stringify(dto.programs),
         preferences: JSON.stringify(dto.preferences),
-        userAccounts: user
+        userAccounts: requestingUser
           ? {
               connect: {
-                id: user.id,
+                id: requestingUser.id,
               },
             }
           : undefined,
@@ -365,6 +375,7 @@ export class ApplicationService {
       include: view.details,
     });
 
+    const mappedApplication = mapTo(Application, rawApplication);
     if (dto.applicant.emailAddress && forPublic) {
       this.emailService.applicationConfirmation(
         mapTo(Listing, listing),
@@ -373,17 +384,25 @@ export class ApplicationService {
       );
     }
 
-    return mapTo(Application, rawApplication);
+    return mappedApplication;
   }
 
   /*
     this will update an application
     if no application has the id of the incoming argument an error is thrown
   */
-  async update(dto: ApplicationUpdate): Promise<Application> {
+  async update(
+    dto: ApplicationUpdate,
+    requestingUser: User,
+  ): Promise<Application> {
     const rawApplication = await this.findOrThrow(dto.id);
 
-    // TODO: perms https://github.com/bloom-housing/bloom/issues/3445
+    await this.authorizeAction(
+      requestingUser,
+      mapTo(Application, rawApplication),
+      rawApplication.listingId,
+      permissionActions.update,
+    );
 
     const res = await this.prisma.applications.update({
       where: {
@@ -495,10 +514,18 @@ export class ApplicationService {
   /*
     this will mark an application as deleted by setting the deletedAt column for the application
   */
-  async delete(applicationId: string): Promise<SuccessDTO> {
+  async delete(
+    applicationId: string,
+    requestingUser: User,
+  ): Promise<SuccessDTO> {
     const application = await this.findOrThrow(applicationId);
 
-    // TODO: perms https://github.com/bloom-housing/bloom/issues/3445
+    await this.authorizeAction(
+      requestingUser,
+      mapTo(Application, application),
+      application.listingId,
+      permissionActions.delete,
+    );
 
     await this.updateListingApplicationEditTimestamp(application.listingId);
     await this.prisma.applications.update({
@@ -556,6 +583,27 @@ export class ApplicationService {
       data: {
         lastApplicationUpdateAt: new Date(),
       },
+    });
+  }
+
+  async authorizeAction(
+    user: User,
+    application: Application,
+    listingId: string,
+    action: permissionActions,
+  ): Promise<void> {
+    const listingJurisdiction = await this.prisma.jurisdictions.findFirst({
+      where: {
+        listings: {
+          some: {
+            id: listingId,
+          },
+        },
+      },
+    });
+    await this.permissionService.canOrThrow(user, 'application', action, {
+      listingId,
+      jurisdictionId: listingJurisdiction.id,
     });
   }
 
