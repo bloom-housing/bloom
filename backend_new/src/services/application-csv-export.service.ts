@@ -1,7 +1,6 @@
-import fs from 'fs';
-import path from 'path';
-import { Inject, Injectable, Scope } from '@nestjs/common';
-import { REQUEST } from '@nestjs/core';
+import fs, { createReadStream } from 'fs';
+import path, { join } from 'path';
+import { Injectable, StreamableFile } from '@nestjs/common';
 import { Request as ExpressRequest } from 'express';
 import { view } from './application.service';
 import { PrismaService } from './prisma.service';
@@ -10,10 +9,9 @@ import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { UnitType } from '../dtos/unit-types/unit-type.dto';
 import { Address } from '../dtos/addresses/address.dto';
-import { ApplicationMultiselectQuestion } from 'src/dtos/applications/application-multiselect-question.dto';
+import { ApplicationMultiselectQuestion } from '../dtos/applications/application-multiselect-question.dto';
 import MultiselectQuestion from '../dtos/multiselect-questions/multiselect-question.dto';
 import { ApplicationFlaggedSet } from '../dtos/application-flagged-sets/application-flagged-set.dto';
-import { UnitTypeService } from './unit-type.service';
 
 view.csv = {
   ...view.details,
@@ -27,21 +25,58 @@ type CsvHeader = {
   format?: (val: unknown) => unknown;
 };
 
-@Injectable({ scope: Scope.REQUEST })
+const typeMap = {
+  SRO: 'SRO',
+  studio: 'Studio',
+  oneBdrm: 'One Bedroom',
+  twoBdrm: 'Two Bedroom',
+  threeBdrm: 'Three Bedroom',
+  fourBdrm: 'Four+ Bedroom',
+};
+
+@Injectable()
 export class ApplicationCsvExporterService {
   constructor(
-    @Inject(REQUEST) private req: ExpressRequest,
     private prisma: PrismaService,
     private multiselectQuestionService: MultiselectQuestionService,
-    private unitTypeService: UnitTypeService,
   ) {}
-
-  /*
-   * Prepares an export and streams file
+  /**
+   *
+   * @param queryParams
+   * @param req
+   * @returns a promise containing a streamable file
    */
-  async export(queryParams: ApplicationCsvQueryParams): Promise<SuccessDTO> {
-    await this.authorizeCSVExport(this.req.user, queryParams.listingId);
+  async export(
+    queryParams: ApplicationCsvQueryParams,
+    req: ExpressRequest,
+  ): Promise<StreamableFile> {
+    await this.authorizeCSVExport(req.user, queryParams.listingId);
+    const filename = join(
+      process.cwd(),
+      `src/temp/listing-${
+        queryParams.listingId
+      }-applications-${new Date().getTime()}.csv`,
+    );
+    await this.createCsv(filename, queryParams);
+    const file = createReadStream(filename);
+    file.on('end', () => {
+      fs.unlink(filename, () => {
+        console.log(`deleted ${filename}`);
+      });
+    });
+    return new StreamableFile(file);
+  }
 
+  /**
+   *
+   * @param filename
+   * @param queryParams
+   * @returns a promise with SuccessDTO
+   */
+  async createCsv(
+    filename: string,
+    queryParams: ApplicationCsvQueryParams,
+  ): Promise<SuccessDTO> {
     if (queryParams.includeDemographics) {
       view.csv.demographics = true;
     }
@@ -64,14 +99,9 @@ export class ApplicationCsvExporterService {
       queryParams.includeDemographics,
     );
 
-    const filePath = path.join(
-      path.resolve(process.cwd()),
-      `src/temp/listing-${queryParams.listingId}-applications.csv`,
-    );
-
     return new Promise((resolve, reject) => {
       // create stream
-      const writableStream = fs.createWriteStream(`${filePath}`);
+      const writableStream = fs.createWriteStream(`${filename}`);
       writableStream
         .on('error', (err) => {
           console.log('csv writestream error');
@@ -181,7 +211,7 @@ export class ApplicationCsvExporterService {
     });
   }
 
-  private async maxHouseholdMembers(): Promise<number> {
+  async maxHouseholdMembers(): Promise<number> {
     // TODO: is there a way to filter on listingId here?
     const maxHouseholdMembersRes = await this.prisma.householdMember.groupBy({
       by: ['applicationId'],
@@ -417,7 +447,7 @@ export class ApplicationCsvExporterService {
         label: 'Requested Unit Types',
         format: (val: UnitType[]): string => {
           return val
-            .map((unit) => this.unitTypeService.unitTypeToReadable(unit.name))
+            .map((unit) => this.unitTypeToReadable(unit.name))
             .join(',');
         },
       },
@@ -602,6 +632,10 @@ export class ApplicationCsvExporterService {
       white: 'White',
     };
     return typeMap[rootKey] ?? rootKey;
+  }
+
+  unitTypeToReadable(type: string): string {
+    return typeMap[type] ?? type;
   }
 
   private async authorizeCSVExport(user, listingId): Promise<void> {

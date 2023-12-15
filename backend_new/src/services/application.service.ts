@@ -1,12 +1,9 @@
 import {
   BadRequestException,
-  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Request as ExpressRequest } from 'express';
 import crypto from 'crypto';
-import { REQUEST } from '@nestjs/core';
 import { Prisma, YesNoEnum } from '@prisma/client';
 import { PrismaService } from './prisma.service';
 import { Application } from '../dtos/applications/application.dto';
@@ -24,8 +21,6 @@ import { PaginatedApplicationDto } from '../dtos/applications/paginated-applicat
 import { EmailService } from './email.service';
 import Listing from '../dtos/listings/listing.dto';
 import { User } from '../dtos/users/user.dto';
-import { ListingService } from './listing.service';
-import { MultiselectQuestionService } from './multiselect-question.service';
 
 export const view: Partial<
   Record<ApplicationViews, Prisma.ApplicationsInclude>
@@ -74,11 +69,8 @@ view.details = {
 @Injectable()
 export class ApplicationService {
   constructor(
-    @Inject(REQUEST) private req: ExpressRequest,
     private prisma: PrismaService,
     private emailService: EmailService,
-    private listingService: ListingService,
-    private multiselectQuestionService: MultiselectQuestionService,
   ) {}
 
   /*

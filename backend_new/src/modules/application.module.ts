@@ -6,7 +6,6 @@ import { EmailModule } from './email.module';
 import { ListingModule } from './listing.module';
 import { MultiselectQuestionModule } from './multiselect-question.module';
 import { ApplicationCsvExporterService } from '../services/application-csv-export.service';
-import { UnitTypeService } from '../services/unit-type.service';
 
 @Module({
   imports: [
@@ -16,11 +15,7 @@ import { UnitTypeService } from '../services/unit-type.service';
     MultiselectQuestionModule,
   ],
   controllers: [ApplicationController],
-  providers: [
-    ApplicationService,
-    ApplicationCsvExporterService,
-    UnitTypeService,
-  ],
+  providers: [ApplicationService, ApplicationCsvExporterService],
   exports: [ApplicationService],
 })
 export class ApplicationModule {}

@@ -1,6 +1,6 @@
 import { Expose, Transform } from 'class-transformer';
-import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { IsBoolean, IsOptional, IsString, IsUUID } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional, OmitType } from '@nestjs/swagger';
+import { IsBoolean, IsOptional, IsUUID } from 'class-validator';
 import { AbstractDTO } from '../shared/abstract.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
@@ -18,7 +18,7 @@ export class ApplicationCsvQueryParams extends OmitType(AbstractDTO, [
   listingId: string;
 
   @Expose()
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: Boolean,
     example: true,
     required: false,
