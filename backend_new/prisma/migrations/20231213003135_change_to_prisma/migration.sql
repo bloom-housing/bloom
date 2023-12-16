@@ -1,46 +1,4 @@
-/*
-  Warnings:
-
-  - The `status` column on the `application_flagged_set` table would be dropped and recreated. This will lead to data loss if there is data in the column.
-  - The `income_period` column on the `applications` table would be dropped and recreated. This will lead to data loss if there is data in the column.
-  - The `language` column on the `applications` table would be dropped and recreated. This will lead to data loss if there is data in the column.
-  - The `review_status` column on the `applications` table would be dropped and recreated. This will lead to data loss if there is data in the column.
-  - You are about to drop the column `listing_approval_permissions` on the `jurisdictions` table. All the data in the column will be lost.
-  - The `languages` column on the `jurisdictions` table would be dropped and recreated. This will lead to data loss if there is data in the column.
-  - The primary key for the `listing_images` table will be changed. If it partially fails, the table could be left without primary key constraint.
-  - You are about to drop the column `created_at` on the `listing_images` table. All the data in the column will be lost.
-  - You are about to drop the column `id` on the `listing_images` table. All the data in the column will be lost.
-  - You are about to drop the column `updated_at` on the `listing_images` table. All the data in the column will be lost.
-  - The primary key for the `listing_multiselect_questions` table will be changed. If it partially fails, the table could be left without primary key constraint.
-  - You are about to drop the column `created_at` on the `listing_multiselect_questions` table. All the data in the column will be lost.
-  - You are about to drop the column `id` on the `listing_multiselect_questions` table. All the data in the column will be lost.
-  - You are about to drop the column `updated_at` on the `listing_multiselect_questions` table. All the data in the column will be lost.
-  - The `application_pick_up_address_type` column on the `listings` table would be dropped and recreated. This will lead to data loss if there is data in the column.
-  - The `application_drop_off_address_type` column on the `listings` table would be dropped and recreated. This will lead to data loss if there is data in the column.
-  - The `application_mailing_address_type` column on the `listings` table would be dropped and recreated. This will lead to data loss if there is data in the column.
-  - The `language` column on the `user_accounts` table would be dropped and recreated. This will lead to data loss if there is data in the column.
-  - You are about to drop the `activity_logs` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `application_flagged_set_applications_applications` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `applications_preferred_unit_unit_types` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `jurisdictions_multiselect_questions_multiselect_questions` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `listings_leasing_agents_user_accounts` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `revoked_tokens` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `user_accounts_jurisdictions_jurisdictions` table. If the table is not empty, all the data it contains will be lost.
-  - A unique constraint covering the columns `[name]` on the table `cron_job` will be added. If there are existing duplicate values, this will fail.
-  - A unique constraint covering the columns `[neighborhood_amenities_id]` on the table `listings` will be added. If there are existing duplicate values, this will fail.
-  - Changed the type of `rule` on the `application_flagged_set` table. No cast exists, the column would be dropped and recreated, which cannot be done if there is data, since the column is required.
-  - Changed the type of `status` on the `applications` table. No cast exists, the column would be dropped and recreated, which cannot be done if there is data, since the column is required.
-  - Changed the type of `submission_type` on the `applications` table. No cast exists, the column would be dropped and recreated, which cannot be done if there is data, since the column is required.
-  - Changed the type of `language` on the `generated_listing_translations` table. No cast exists, the column would be dropped and recreated, which cannot be done if there is data, since the column is required.
-  - Added the required column `same_address` to the `household_member` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `work_in_region` to the `household_member` table without a default value. This is not possible if the table is not empty.
-  - Changed the type of `language` on the `paper_applications` table. No cast exists, the column would be dropped and recreated, which cannot be done if there is data, since the column is required.
-  - Changed the type of `language` on the `translations` table. No cast exists, the column would be dropped and recreated, which cannot be done if there is data, since the column is required.
-  - Changed the type of `name` on the `unit_accessibility_priority_types` table. No cast exists, the column would be dropped and recreated, which cannot be done if there is data, since the column is required.
-  - Changed the type of `name` on the `unit_rent_types` table. No cast exists, the column would be dropped and recreated, which cannot be done if there is data, since the column is required.
-  - Changed the type of `name` on the `unit_types` table. No cast exists, the column would be dropped and recreated, which cannot be done if there is data, since the column is required.
-
-*/ -- CreateEnum
+-- CreateEnum
 
 CREATE TYPE "user_role_enum" AS ENUM ('user', 'partner', 'admin', 'jurisdictionAdmin');
 
