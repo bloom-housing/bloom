@@ -3,7 +3,12 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import { stringify } from 'qs';
-import { FlaggedSetStatusEnum, RuleEnum, UnitTypeEnum } from '@prisma/client';
+import {
+  FlaggedSetStatusEnum,
+  RuleEnum,
+  UnitAccessibilityPriorityTypeEnum,
+  UnitTypeEnum,
+} from '@prisma/client';
 import { AppModule } from '../../../src/modules/app.module';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { userFactory } from '../../../prisma/seed-helpers/user-factory';
@@ -20,11 +25,18 @@ import { translationFactory } from '../../../prisma/seed-helpers/translation-fac
 import { applicationFactory } from '../../../prisma/seed-helpers/application-factory';
 import { addressFactory } from '../../../prisma/seed-helpers/address-factory';
 import { AddressCreate } from '../../../src/dtos/addresses/address-create.dto';
-import { reservedCommunityTypeFactory } from '../../../prisma/seed-helpers/reserved-community-type-factory';
+import {
+  reservedCommunityTypeFactory,
+  reservedCommunityTypeFactoryAll,
+  reservedCommunityTypeFactoryGet,
+} from '../../../prisma/seed-helpers/reserved-community-type-factory';
 import { unitRentTypeFactory } from '../../../prisma/seed-helpers/unit-rent-type-factory';
 import { UnitRentTypeCreate } from '../../../src/dtos/unit-rent-types/unit-rent-type-create.dto';
 import { UnitRentTypeUpdate } from '../../../src/dtos/unit-rent-types/unit-rent-type-update.dto';
-import { unitAccessibilityPriorityTypeFactorySingle } from '../../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
+import {
+  unitAccessibilityPriorityTypeFactoryAll,
+  unitAccessibilityPriorityTypeFactorySingle,
+} from '../../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
 import { UnitAccessibilityPriorityTypeCreate } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-create.dto';
 import { UnitAccessibilityPriorityTypeUpdate } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-update.dto';
 import { UnitTypeCreate } from '../../../src/dtos/unit-types/unit-type-create.dto';
@@ -92,6 +104,8 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
     await app.init();
 
     jurisId = await generateJurisdiction(prisma, 'permission juris 19');
+    await reservedCommunityTypeFactoryAll(jurisId, prisma);
+    await unitAccessibilityPriorityTypeFactoryAll(prisma);
 
     const storedUser = await prisma.userAccounts.create({
       data: await userFactory({
@@ -470,10 +484,9 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
     });
 
     it('should succeed for retrieve endpoint', async () => {
-      const reservedCommunityTypeA = await prisma.reservedCommunityTypes.create(
-        {
-          data: reservedCommunityTypeFactory(jurisId),
-        },
+      const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
+        prisma,
+        jurisId,
       );
 
       await request(app.getHttpServer())
@@ -491,10 +504,9 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
     });
 
     it('should error as forbidden for update endpoint', async () => {
-      const reservedCommunityTypeA = await prisma.reservedCommunityTypes.create(
-        {
-          data: reservedCommunityTypeFactory(jurisId),
-        },
+      const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
+        prisma,
+        jurisId,
       );
 
       await request(app.getHttpServer())
@@ -505,10 +517,9 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
     });
 
     it('should error as forbidden for delete endpoint', async () => {
-      const reservedCommunityTypeA = await prisma.reservedCommunityTypes.create(
-        {
-          data: reservedCommunityTypeFactory(jurisId),
-        },
+      const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
+        prisma,
+        jurisId,
       );
 
       await request(app.getHttpServer())
@@ -590,9 +601,9 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
     });
 
     it('should succeed for retrieve endpoint', async () => {
-      const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
-        data: unitAccessibilityPriorityTypeFactorySingle(),
-      });
+      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
+        prisma,
+      );
 
       await request(app.getHttpServer())
         .get(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
@@ -601,35 +612,33 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
     });
 
     it('should error as forbidden for create endpoint', async () => {
-      const name = unitAccessibilityPriorityTypeFactorySingle().name;
       await request(app.getHttpServer())
         .post('/unitAccessibilityPriorityTypes')
         .send({
-          name: name,
+          name: UnitAccessibilityPriorityTypeEnum.mobilityAndHearing,
         } as UnitAccessibilityPriorityTypeCreate)
         .set('Cookie', cookies)
         .expect(403);
     });
 
     it('should error as forbidden for update endpoint', async () => {
-      const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
-        data: unitAccessibilityPriorityTypeFactorySingle(),
-      });
-      const name = unitAccessibilityPriorityTypeFactorySingle().name;
+      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
+        prisma,
+      );
       await request(app.getHttpServer())
         .put(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
         .send({
           id: unitTypeA.id,
-          name: name,
+          name: UnitAccessibilityPriorityTypeEnum.mobilityHearingAndVisual,
         } as UnitAccessibilityPriorityTypeUpdate)
         .set('Cookie', cookies)
         .expect(403);
     });
 
     it('should error as forbidden for delete endpoint', async () => {
-      const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
-        data: unitAccessibilityPriorityTypeFactorySingle(),
-      });
+      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
+        prisma,
+      );
 
       await request(app.getHttpServer())
         .delete(`/unitAccessibilityPriorityTypes`)

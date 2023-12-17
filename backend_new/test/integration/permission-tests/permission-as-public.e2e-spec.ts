@@ -3,7 +3,12 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import { stringify } from 'qs';
-import { FlaggedSetStatusEnum, RuleEnum, UnitTypeEnum } from '@prisma/client';
+import {
+  FlaggedSetStatusEnum,
+  RuleEnum,
+  UnitAccessibilityPriorityTypeEnum,
+  UnitTypeEnum,
+} from '@prisma/client';
 import { AppModule } from '../../../src/modules/app.module';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { userFactory } from '../../../prisma/seed-helpers/user-factory';
@@ -21,11 +26,17 @@ import { translationFactory } from '../../../prisma/seed-helpers/translation-fac
 import { applicationFactory } from '../../../prisma/seed-helpers/application-factory';
 import { addressFactory } from '../../../prisma/seed-helpers/address-factory';
 import { AddressCreate } from '../../../src/dtos/addresses/address-create.dto';
-import { reservedCommunityTypeFactory } from '../../../prisma/seed-helpers/reserved-community-type-factory';
+import {
+  reservedCommunityTypeFactoryAll,
+  reservedCommunityTypeFactoryGet,
+} from '../../../prisma/seed-helpers/reserved-community-type-factory';
 import { unitRentTypeFactory } from '../../../prisma/seed-helpers/unit-rent-type-factory';
 import { UnitRentTypeCreate } from '../../../src/dtos/unit-rent-types/unit-rent-type-create.dto';
 import { UnitRentTypeUpdate } from '../../../src/dtos/unit-rent-types/unit-rent-type-update.dto';
-import { unitAccessibilityPriorityTypeFactorySingle } from '../../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
+import {
+  unitAccessibilityPriorityTypeFactoryAll,
+  unitAccessibilityPriorityTypeFactorySingle,
+} from '../../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
 import { UnitAccessibilityPriorityTypeCreate } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-create.dto';
 import { UnitAccessibilityPriorityTypeUpdate } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-update.dto';
 import { UnitTypeCreate } from '../../../src/dtos/unit-types/unit-type-create.dto';
@@ -105,6 +116,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
       .expect(201);
 
     cookies = resLogIn.headers['set-cookie'];
+    await unitAccessibilityPriorityTypeFactoryAll(prisma);
   });
 
   afterAll(async () => {
@@ -231,6 +243,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
         prisma,
         'permission juris 41',
       );
+      await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
       const listing1 = await listingFactory(jurisdiction, prisma);
       const listing1Created = await prisma.listings.create({
         data: listing1,
@@ -263,6 +276,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
         prisma,
         'permission juris 42',
       );
+      await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
       const listing1 = await listingFactory(jurisdiction, prisma);
       const listing1Created = await prisma.listings.create({
         data: listing1,
@@ -292,6 +306,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
         prisma,
         'permission juris 43',
       );
+      await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
       const listing1 = await listingFactory(jurisdiction, prisma);
       const listing1Created = await prisma.listings.create({
         data: listing1,
@@ -321,6 +336,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
         prisma,
         'permission juris 44',
       );
+      await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
       const listing1 = await listingFactory(jurisdiction, prisma);
       const listing1Created = await prisma.listings.create({
         data: listing1,
@@ -361,6 +377,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
         prisma,
         'permission juris 45',
       );
+      await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
       const listing1 = await listingFactory(jurisdiction, prisma);
       const listing1Created = await prisma.listings.create({
         data: listing1,
@@ -467,6 +484,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
         prisma,
         'permission juris 50',
       );
+      await reservedCommunityTypeFactoryAll(jurisdictionAId, prisma);
     });
 
     it('should succeed for list endpoint', async () => {
@@ -477,10 +495,9 @@ describe('Testing Permissioning of endpoints as public user', () => {
     });
 
     it('should succeed for retrieve endpoint', async () => {
-      const reservedCommunityTypeA = await prisma.reservedCommunityTypes.create(
-        {
-          data: reservedCommunityTypeFactory(jurisdictionAId),
-        },
+      const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
+        prisma,
+        jurisdictionAId,
       );
 
       await request(app.getHttpServer())
@@ -498,10 +515,9 @@ describe('Testing Permissioning of endpoints as public user', () => {
     });
 
     it('should error as forbidden for update endpoint', async () => {
-      const reservedCommunityTypeA = await prisma.reservedCommunityTypes.create(
-        {
-          data: reservedCommunityTypeFactory(jurisdictionAId),
-        },
+      const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
+        prisma,
+        jurisdictionAId,
       );
 
       await request(app.getHttpServer())
@@ -512,10 +528,9 @@ describe('Testing Permissioning of endpoints as public user', () => {
     });
 
     it('should error as forbidden for delete endpoint', async () => {
-      const reservedCommunityTypeA = await prisma.reservedCommunityTypes.create(
-        {
-          data: reservedCommunityTypeFactory(jurisdictionAId),
-        },
+      const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
+        prisma,
+        jurisdictionAId,
       );
 
       await request(app.getHttpServer())
@@ -597,9 +612,9 @@ describe('Testing Permissioning of endpoints as public user', () => {
     });
 
     it('should succeed for retrieve endpoint', async () => {
-      const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
-        data: unitAccessibilityPriorityTypeFactorySingle(),
-      });
+      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
+        prisma,
+      );
 
       await request(app.getHttpServer())
         .get(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
@@ -608,35 +623,33 @@ describe('Testing Permissioning of endpoints as public user', () => {
     });
 
     it('should error as forbidden for create endpoint', async () => {
-      const name = unitAccessibilityPriorityTypeFactorySingle().name;
       await request(app.getHttpServer())
         .post('/unitAccessibilityPriorityTypes')
         .send({
-          name: name,
+          name: UnitAccessibilityPriorityTypeEnum.visual,
         } as UnitAccessibilityPriorityTypeCreate)
         .set('Cookie', cookies)
         .expect(403);
     });
 
     it('should error as forbidden for update endpoint', async () => {
-      const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
-        data: unitAccessibilityPriorityTypeFactorySingle(),
-      });
-      const name = unitAccessibilityPriorityTypeFactorySingle().name;
+      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
+        prisma,
+      );
       await request(app.getHttpServer())
         .put(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
         .send({
           id: unitTypeA.id,
-          name: name,
+          name: UnitAccessibilityPriorityTypeEnum.mobility,
         } as UnitAccessibilityPriorityTypeUpdate)
         .set('Cookie', cookies)
         .expect(403);
     });
 
     it('should error as forbidden for delete endpoint', async () => {
-      const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
-        data: unitAccessibilityPriorityTypeFactorySingle(),
-      });
+      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
+        prisma,
+      );
 
       await request(app.getHttpServer())
         .delete(`/unitAccessibilityPriorityTypes`)
@@ -936,6 +949,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
         prisma,
         'permission juris 55',
       );
+      await reservedCommunityTypeFactoryAll(jurisdictionAId, prisma);
     });
 
     it('should succeed for list endpoint', async () => {
@@ -975,6 +989,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
         prisma,
         'permission juris 56',
       );
+      await reservedCommunityTypeFactoryAll(jurisdictionA, prisma);
       const listingData = await listingFactory(jurisdictionA, prisma);
       const listing = await prisma.listings.create({
         data: listingData,
@@ -994,6 +1009,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
         prisma,
         'permission juris 57',
       );
+      await reservedCommunityTypeFactoryAll(jurisdictionA, prisma);
       const listingData = await listingFactory(jurisdictionA, prisma);
       const listing = await prisma.listings.create({
         data: listingData,

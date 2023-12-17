@@ -158,6 +158,7 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
       .send({
         name: UnitAccessibilityPriorityTypeEnum.hearing,
       } as UnitAccessibilityPriorityTypeCreate)
+      .set('Cookie', cookies)
       .expect(201);
     const hearingTypes = await prisma.unitAccessibilityPriorityTypes.findMany({
       where: {

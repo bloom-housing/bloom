@@ -2185,6 +2185,20 @@ describe('Testing listing service', () => {
       id: 'example id',
       name: 'example name',
     });
+    const updateMock = jest
+      .fn()
+      .mockResolvedValue({ id: 'example id', name: 'example name' });
+
+    prisma.$transaction = jest
+      .fn()
+      .mockResolvedValue([
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        updateMock,
+      ]);
 
     const val = constructFullListingData(randomUUID());
 

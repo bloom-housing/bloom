@@ -3,7 +3,12 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import { stringify } from 'qs';
-import { FlaggedSetStatusEnum, RuleEnum, UnitTypeEnum } from '@prisma/client';
+import {
+  FlaggedSetStatusEnum,
+  RuleEnum,
+  UnitAccessibilityPriorityTypeEnum,
+  UnitTypeEnum,
+} from '@prisma/client';
 import { AppModule } from '../../../src/modules/app.module';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { userFactory } from '../../../prisma/seed-helpers/user-factory';
@@ -20,11 +25,18 @@ import { translationFactory } from '../../../prisma/seed-helpers/translation-fac
 import { applicationFactory } from '../../../prisma/seed-helpers/application-factory';
 import { addressFactory } from '../../../prisma/seed-helpers/address-factory';
 import { AddressCreate } from '../../../src/dtos/addresses/address-create.dto';
-import { reservedCommunityTypeFactory } from '../../../prisma/seed-helpers/reserved-community-type-factory';
+import {
+  reservedCommunityTypeFactory,
+  reservedCommunityTypeFactoryAll,
+  reservedCommunityTypeFactoryGet,
+} from '../../../prisma/seed-helpers/reserved-community-type-factory';
 import { unitRentTypeFactory } from '../../../prisma/seed-helpers/unit-rent-type-factory';
 import { UnitRentTypeCreate } from '../../../src/dtos/unit-rent-types/unit-rent-type-create.dto';
 import { UnitRentTypeUpdate } from '../../../src/dtos/unit-rent-types/unit-rent-type-update.dto';
-import { unitAccessibilityPriorityTypeFactorySingle } from '../../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
+import {
+  unitAccessibilityPriorityTypeFactoryAll,
+  unitAccessibilityPriorityTypeFactorySingle,
+} from '../../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
 import { UnitAccessibilityPriorityTypeCreate } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-create.dto';
 import { UnitAccessibilityPriorityTypeUpdate } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-update.dto';
 import { UnitTypeCreate } from '../../../src/dtos/unit-types/unit-type-create.dto';
@@ -87,6 +99,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     userService = moduleFixture.get<UserService>(UserService);
     app.use(cookieParser());
     await app.init();
+    await unitAccessibilityPriorityTypeFactoryAll(prisma);
   });
 
   afterAll(async () => {
@@ -213,6 +226,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         prisma,
         'permission juris 59',
       );
+      await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
       const listing1 = await listingFactory(jurisdiction, prisma);
       const listing1Created = await prisma.listings.create({
         data: listing1,
@@ -245,6 +259,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         prisma,
         'permission juris 60',
       );
+      await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
       const listing1 = await listingFactory(jurisdiction, prisma);
       const listing1Created = await prisma.listings.create({
         data: listing1,
@@ -274,6 +289,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         prisma,
         'permission juris 61',
       );
+      await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
       const listing1 = await listingFactory(jurisdiction, prisma);
       const listing1Created = await prisma.listings.create({
         data: listing1,
@@ -303,6 +319,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         prisma,
         'permission juris 62',
       );
+      await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
       const listing1 = await listingFactory(jurisdiction, prisma);
       const listing1Created = await prisma.listings.create({
         data: listing1,
@@ -343,6 +360,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         prisma,
         'permission juris 63',
       );
+      await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
       const listing1 = await listingFactory(jurisdiction, prisma);
       const listing1Created = await prisma.listings.create({
         data: listing1,
@@ -452,6 +470,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         'permission juris 68',
       );
       jurisdictionAId = jurisdictionA;
+      await reservedCommunityTypeFactoryAll(jurisdictionA, prisma);
     });
 
     it('should error as unauthorized for list endpoint', async () => {
@@ -462,10 +481,9 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     });
 
     it('should error as unauthorized for retrieve endpoint', async () => {
-      const reservedCommunityTypeA = await prisma.reservedCommunityTypes.create(
-        {
-          data: reservedCommunityTypeFactory(jurisdictionAId),
-        },
+      const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
+        prisma,
+        jurisdictionAId,
       );
 
       await request(app.getHttpServer())
@@ -483,10 +501,9 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     });
 
     it('should error as unauthorized for update endpoint', async () => {
-      const reservedCommunityTypeA = await prisma.reservedCommunityTypes.create(
-        {
-          data: reservedCommunityTypeFactory(jurisdictionAId),
-        },
+      const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
+        prisma,
+        jurisdictionAId,
       );
 
       await request(app.getHttpServer())
@@ -497,10 +514,9 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     });
 
     it('should error as unauthorized for delete endpoint', async () => {
-      const reservedCommunityTypeA = await prisma.reservedCommunityTypes.create(
-        {
-          data: reservedCommunityTypeFactory(jurisdictionAId),
-        },
+      const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
+        prisma,
+        jurisdictionAId,
       );
 
       await request(app.getHttpServer())
@@ -582,9 +598,9 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     });
 
     it('should error as unauthorized for retrieve endpoint', async () => {
-      const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
-        data: unitAccessibilityPriorityTypeFactorySingle(),
-      });
+      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
+        prisma,
+      );
 
       await request(app.getHttpServer())
         .get(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
@@ -593,35 +609,33 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     });
 
     it('should error as unauthorized for create endpoint', async () => {
-      const name = unitAccessibilityPriorityTypeFactorySingle().name;
       await request(app.getHttpServer())
         .post('/unitAccessibilityPriorityTypes')
         .send({
-          name: name,
+          name: UnitAccessibilityPriorityTypeEnum.hearingAndVisual,
         } as UnitAccessibilityPriorityTypeCreate)
         .set('Cookie', cookies)
         .expect(401);
     });
 
     it('should error as unauthorized for update endpoint', async () => {
-      const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
-        data: unitAccessibilityPriorityTypeFactorySingle(),
-      });
-      const name = unitAccessibilityPriorityTypeFactorySingle().name;
+      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
+        prisma,
+      );
       await request(app.getHttpServer())
         .put(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
         .send({
           id: unitTypeA.id,
-          name: name,
+          name: UnitAccessibilityPriorityTypeEnum.hearing,
         } as UnitAccessibilityPriorityTypeUpdate)
         .set('Cookie', cookies)
         .expect(401);
     });
 
     it('should error as unauthorized for delete endpoint', async () => {
-      const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
-        data: unitAccessibilityPriorityTypeFactorySingle(),
-      });
+      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
+        prisma,
+      );
 
       await request(app.getHttpServer())
         .delete(`/unitAccessibilityPriorityTypes`)
@@ -922,6 +936,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         'permission juris 73',
       );
       jurisdictionAId = jurisdiction;
+      await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
     });
 
     it('should succeed for list endpoint', async () => {
@@ -961,6 +976,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         prisma,
         'permission juris 74',
       );
+      await reservedCommunityTypeFactoryAll(jurisdictionA, prisma);
       const listingData = await listingFactory(jurisdictionA, prisma);
       const listing = await prisma.listings.create({
         data: listingData,
@@ -980,6 +996,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         prisma,
         'permission juris 75',
       );
+      await reservedCommunityTypeFactoryAll(jurisdictionA, prisma);
       const listingData = await listingFactory(jurisdictionA, prisma);
       const listing = await prisma.listings.create({
         data: listingData,
