@@ -684,6 +684,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
     });
 
     it('should succeed for delete endpoint', async () => {
+      await unitAccessibilityPriorityTypeFactoryAll(prisma);
       const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
         prisma,
       );

@@ -926,6 +926,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
       }
     } else {
       // if no flagged set currently exists
+      console.log('ruleKey', ruleKey);
       await this.prisma.applicationFlaggedSet.create({
         data: {
           rule,

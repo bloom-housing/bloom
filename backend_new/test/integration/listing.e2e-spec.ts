@@ -630,6 +630,7 @@ describe('Listing Controller Tests', () => {
     const jurisdictionA = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
+    await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
     const listingData = await listingFactory(jurisdictionA.id, prisma, {
       status: ListingsStatusEnum.active,
       applicationDueDate: new Date(0),
@@ -658,6 +659,7 @@ describe('Listing Controller Tests', () => {
     const jurisdictionA = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
+    await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
     const pastDueListingData = await listingFactory(jurisdictionA.id, prisma, {
       status: ListingsStatusEnum.active,
       applicationDueDate: new Date(0),
