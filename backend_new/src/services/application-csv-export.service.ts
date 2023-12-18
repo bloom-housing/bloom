@@ -60,8 +60,11 @@ export class ApplicationCsvExporterService {
     await this.createCsv(filename, queryParams);
     const file = createReadStream(filename);
     file.on('end', () => {
-      fs.unlink(filename, () => {
-        console.log(`deleted ${filename}`);
+      fs.unlink(filename, (err) => {
+        if (err) {
+          console.error(`Error deleting ${filename}`);
+          throw err;
+        }
       });
     });
     return new StreamableFile(file);
