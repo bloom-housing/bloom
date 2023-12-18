@@ -172,6 +172,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       <>
         <StatusBar>
           <Tag
+            className="tag-uppercase"
             variant={application?.status == ApplicationStatus.submitted ? "success" : "primary"}
             size={"lg"}
           >
