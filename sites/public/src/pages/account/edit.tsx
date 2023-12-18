@@ -162,14 +162,12 @@ const Edit = () => {
               </AlertBox>
             )}
             <div className="form-card__group border-b">
-              <label className="text__caps-spaced" htmlFor="firstName">
-                {t("application.name.yourName")}
-              </label>
+              <label htmlFor="firstName">{t("application.name.yourName")}</label>
 
               <Field
+                label={t("application.contact.givenName")}
                 controlClassName="mt-2"
                 name="firstName"
-                placeholder={`${t("application.name.firstName")}`}
                 error={errors.firstName}
                 validation={{ maxLength: 64 }}
                 errorMessage={
@@ -183,11 +181,9 @@ const Edit = () => {
 
               <Field
                 name="middleName"
-                placeholder={t("application.name.middleNameOptional")}
                 register={register}
                 defaultValue={profile ? profile?.middleName : null}
                 label={t("application.name.middleNameOptional")}
-                readerOnly
                 error={errors.middleName}
                 validation={{ maxLength: 64 }}
                 errorMessage={t("errors.maxLength")}
@@ -199,17 +195,16 @@ const Edit = () => {
                 error={errors.lastName}
                 register={register}
                 defaultValue={profile ? profile.lastName : null}
-                label={t("application.name.lastName")}
+                label={t("application.contact.familyName")}
                 validation={{ maxLength: 64 }}
                 errorMessage={
                   errors.lastName?.type === "maxLength"
                     ? t("errors.maxLength")
                     : t("errors.lastNameError")
                 }
-                readerOnly
               />
-              <div className="text-center">
-                <Button type="submit" variant="primary-outlined" className="items-center">
+              <div>
+                <Button type="submit" variant="primary-outlined">
                   {t("account.settings.update")}
                 </Button>
               </div>
@@ -237,8 +232,8 @@ const Edit = () => {
                 }}
                 label={t("application.name.yourDateOfBirth")}
               />
-              <div className="text-center mt-5">
-                <Button type="submit" variant="primary-outlined" className="items-center">
+              <div className="mt-5">
+                <Button type="submit" variant="primary-outlined">
                   {t("account.settings.update")}
                 </Button>
               </div>
@@ -256,8 +251,8 @@ const Edit = () => {
               </AlertBox>
             )}
             <div className="form-card__group border-b">
+              <label htmlFor="firstName">{t("application.name.yourEmailAddress")}</label>
               <Field
-                caps={true}
                 type="email"
                 name="email"
                 label={`${t("t.email")}`}
@@ -268,8 +263,8 @@ const Edit = () => {
                 register={register}
                 defaultValue={profile ? profile.email : null}
               />
-              <div className="text-center">
-                <Button type="submit" variant="primary-outlined" className={"items-center"}>
+              <div>
+                <Button type="submit" variant="primary-outlined">
                   {t("account.settings.update")}
                 </Button>
               </div>
@@ -288,19 +283,14 @@ const Edit = () => {
             )}
             <div className="form-card__group border-b">
               <fieldset>
-                <legend className="text__caps-spaced">
-                  {t("authentication.createAccount.password")}
-                </legend>
+                <legend>{t("authentication.createAccount.password")}</legend>
                 <p className="field-note mb-4">{t("account.settings.passwordRemember")}</p>
                 <div className={"flex flex-col"}>
                   <Field
-                    caps={true}
                     type="password"
-                    name="currentPassword"
-                    label={t("account.settings.currentPassword")}
-                    readerOnly={true}
-                    placeholder="Current password"
-                    error={errors.currentPassword}
+                    name="oldPassword"
+                    label={t("account.settings.oldPassword")}
+                    error={errors.oldPassword}
                     register={register}
                     className={"mb-1"}
                   />
@@ -315,7 +305,6 @@ const Edit = () => {
                     name="password"
                     label={t("account.settings.newPassword")}
                     note={t("authentication.createAccount.passwordInfo")}
-                    placeholder={t("authentication.createAccount.mustBe8Chars")}
                     validation={{
                       minLength: MIN_PASSWORD_LENGTH,
                       pattern: passwordRegex,
@@ -332,7 +321,6 @@ const Edit = () => {
                     type="password"
                     name="passwordConfirmation"
                     label={t("account.settings.confirmNewPassword")}
-                    placeholder={t("authentication.createAccount.mustBe8Chars")}
                     validation={{
                       validate: (value) =>
                         value === password.current ||
@@ -345,8 +333,8 @@ const Edit = () => {
                   />
                 </div>
 
-                <div className="text-center mt-5">
-                  <Button type="submit" variant="primary-outlined" className={"items-center"}>
+                <div className="mt-5">
+                  <Button type="submit" variant="primary-outlined">
                     {t("account.settings.update")}
                   </Button>
                 </div>
