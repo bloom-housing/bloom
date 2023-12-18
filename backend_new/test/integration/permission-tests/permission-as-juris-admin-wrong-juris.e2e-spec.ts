@@ -68,7 +68,7 @@ import {
   createSimpleApplication,
   createSimpleListing,
 } from './helpers';
-import { ListingService } from '../../../src/services/listing.service';
+import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
 
 const testEmailService = {
   confirmation: jest.fn(),
@@ -85,7 +85,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the wron
   let app: INestApplication;
   let prisma: PrismaService;
   let userService: UserService;
-  let listingService: ListingService;
+  let applicationFlaggedSetService: ApplicationFlaggedSetService;
   let cookies = '';
   let jurisId = '';
 
@@ -100,7 +100,10 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the wron
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     userService = moduleFixture.get<UserService>(UserService);
-    listingService = moduleFixture.get<ListingService>(ListingService);
+    applicationFlaggedSetService =
+      moduleFixture.get<ApplicationFlaggedSetService>(
+        ApplicationFlaggedSetService,
+      );
     app.use(cookieParser());
     await app.init();
 
@@ -1099,7 +1102,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the wron
         Because so many different iterations of the process endpoint were firing we were running into collisions. 
         Since this is just testing the permissioning aspect I'm switching to mocking the process function
       */
-      listingService.process = jest.fn();
+      applicationFlaggedSetService.process = jest.fn();
 
       await request(app.getHttpServer())
         .put(`/applicationFlaggedSets/process`)

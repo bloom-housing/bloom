@@ -68,7 +68,7 @@ import {
   createSimpleApplication,
   createSimpleListing,
 } from './helpers';
-import { ListingService } from '../../../src/services/listing.service';
+import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
 
 const testEmailService = {
   confirmation: jest.fn(),
@@ -85,7 +85,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let userService: UserService;
-  let listingService: ListingService;
+  let applicationFlaggedSetService: ApplicationFlaggedSetService;
   let cookies = '';
 
   beforeAll(async () => {
@@ -96,10 +96,13 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
       .useValue(testEmailService)
       .compile();
 
+    applicationFlaggedSetService =
+      moduleFixture.get<ApplicationFlaggedSetService>(
+        ApplicationFlaggedSetService,
+      );
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     userService = moduleFixture.get<UserService>(UserService);
-    listingService = moduleFixture.get<ListingService>(ListingService);
     app.use(cookieParser());
     await app.init();
 
@@ -1272,7 +1275,9 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
         Because so many different iterations of the process endpoint were firing we were running into collisions. 
         Since this is just testing the permissioning aspect I'm switching to mocking the process function
       */
-      listingService.process = jest.fn();
+      const mockProcess = jest.fn();
+      applicationFlaggedSetService.process = mockProcess;
+
       await request(app.getHttpServer())
         .put(`/applicationFlaggedSets/process`)
         .set('Cookie', cookies)
