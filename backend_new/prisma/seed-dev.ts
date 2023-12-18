@@ -34,7 +34,6 @@ const createMultiselect = async (
               : MultiselectQuestionsApplicationSectionEnum.programs,
         },
         optOut: index > 1,
-        numberOfOptions: index,
       }),
     });
   });

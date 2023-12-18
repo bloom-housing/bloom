@@ -2,7 +2,7 @@ module.exports = {
   moduleFileExtensions: ['js', 'json', 'ts'],
   rootDir: '../',
   testEnvironment: 'node',
-  testRegex: 'application-csv-export\\.service\\.spec.ts$',
+  testRegex: '\\.spec.ts$',
   transform: {
     '^.+\\.(t|j)s$': [
       'ts-jest',
