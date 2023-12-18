@@ -141,7 +141,7 @@ const SelectAndOrder = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dragOrder])
 
-  const jurisdiction: string = watch("jurisdiction.id")
+  const jurisdiction: string = watch("jurisdictions.id")
 
   const { data: fetchedData = [] } = dataFetcher(
     jurisdiction,

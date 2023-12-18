@@ -27,6 +27,7 @@ import {
 } from './seed-helpers/address-factory';
 import { applicationFactory } from './seed-helpers/application-factory';
 import { translationFactory } from './seed-helpers/translation-factory';
+import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
@@ -120,6 +121,7 @@ export const stagingSeed = async (
   // create pre-determined values
   const unitTypes = await unitTypeFactoryAll(prismaClient);
   await unitAccessibilityPriorityTypeFactoryAll(prismaClient);
+  await reservedCommunityTypeFactoryAll(jurisdiction.id, prismaClient);
   // list of predefined listings WARNING: images only work if image setup is cloudinary on exygy account
   [
     {
@@ -269,7 +271,7 @@ export const stagingSeed = async (
         unitAmenities: 'Each unit comes with included central AC.',
         servicesOffered: null,
         yearBuilt: 2021,
-        applicationDueDate: dayjs(new Date()).add(1, 'hours').toDate(),
+        applicationDueDate: dayjs(new Date()).add(30, 'days').toDate(),
         applicationOpenDate: dayjs(new Date()).subtract(7, 'days').toDate(),
         applicationFee: '35',
         applicationOrganization: null,
@@ -436,7 +438,7 @@ export const stagingSeed = async (
         leasingAgentOfficeHours: '9:00am - 5:00pm, Monday-Friday',
         leasingAgentPhone: '(773) 580-5897',
         leasingAgentTitle: 'Senior Leasing Agent',
-        name: 'Blue Sky Apartments ',
+        name: 'Blue Sky Apartments',
         postmarkedApplicationsReceivedByDate: '2025-06-06T23:00:00.000Z',
         programRules: null,
         rentalAssistance:
@@ -489,6 +491,26 @@ export const stagingSeed = async (
           ],
         },
       },
+      units: [
+        {
+          amiPercentage: '30',
+          monthlyIncomeMin: '2000',
+          floor: 1,
+          maxOccupancy: 3,
+          minOccupancy: 1,
+          monthlyRent: '1200',
+          numBathrooms: 1,
+          numBedrooms: 1,
+          number: '101',
+          sqFeet: '750.00',
+          amiChart: { connect: { id: amiChart.id } },
+          unitTypes: {
+            connect: {
+              id: unitTypes[2].id,
+            },
+          },
+        },
+      ],
     },
     {
       listing: {
@@ -706,7 +728,7 @@ export const stagingSeed = async (
             type: ApplicationMethodsTypeEnum.Internal,
           },
         },
-        applicationDueDate: dayjs(new Date()).add(7, 'days').toDate(),
+        applicationDueDate: dayjs(new Date()).add(6, 'months').toDate(),
         applicationOpenDate: dayjs(new Date()).subtract(1, 'days').toDate(),
         applicationFee: null,
         applicationOrganization: null,

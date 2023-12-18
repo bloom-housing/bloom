@@ -25,11 +25,12 @@ export const listingSectionQuestions = (
   listing: Listing,
   applicationSection: MultiselectQuestionsApplicationSectionEnum
 ) => {
-  return listing?.listingMultiselectQuestions?.filter(
+  const selectQuestions = listing?.listingMultiselectQuestions?.filter(
     (question) =>
       question?.multiselectQuestions?.applicationSection ===
       MultiselectQuestionsApplicationSectionEnum[applicationSection]
   )
+  return selectQuestions
 }
 
 // Get a field name for an application multiselect question

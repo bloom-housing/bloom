@@ -60,30 +60,33 @@ const ListingIntro = (props: ListingIntroProps) => {
             } ${defaultJurisdiction ? "hidden" : ""}`}
           >
             <Select
-              id={"jurisdiction.id"}
+              id={"jurisdictions.id"}
               defaultValue={defaultJurisdiction}
-              name={"jurisdiction.id"}
+              name={"jurisdictions.id"}
               label={t("t.jurisdiction")}
               labelClassName="sr-only"
               register={register}
               controlClassName={`control ${defaultJurisdiction ? "hidden" : ""}`}
               error={
-                fieldHasError(errors?.jurisdiction) || fieldHasError(errors?.["jurisdiction.id"])
+                fieldHasError(errors?.jurisdictions) || fieldHasError(errors?.["jurisdictions.id"])
               }
               subNote={t("listings.requiredToPublish")}
               errorMessage={
-                fieldMessage(errors?.jurisdiction) ??
-                fieldMessage(errors?.["jurisdiction.id"]) ??
+                fieldMessage(errors?.jurisdictions) ??
+                fieldMessage(errors?.["jurisdictions.id"]) ??
                 undefined
               }
               keyPrefix={"jurisdictions"}
               options={jurisdictionOptions}
               inputProps={{
                 onChange: () => {
-                  console.log("jurisdiction change")
-                  ;(fieldHasError(errors?.jurisdiction) ||
-                    fieldHasError(errors?.["jurisdiction.id"])) &&
-                    clearErrors("jurisdiction")
+                  if (
+                    fieldHasError(errors?.jurisdictions) ||
+                    fieldHasError(errors?.["jurisdictions.id"])
+                  ) {
+                    clearErrors("jurisdictions.id")
+                    clearErrors("jurisdictions")
+                  }
                 },
               }}
             />

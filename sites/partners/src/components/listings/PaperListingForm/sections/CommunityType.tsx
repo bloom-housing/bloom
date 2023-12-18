@@ -18,7 +18,7 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch } = formMethods
 
-  const reservedCommunityType = watch("reservedCommunityType.id")
+  const reservedCommunityType = watch("reservedCommunityTypes.id")
 
   const [options, setOptions] = useState([])
   const [currentCommunityType, setCurrentCommunityType] = useState(
@@ -35,7 +35,7 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
   }, [reservedCommunityTypes])
 
   useEffect(() => {
-    setValue("reservedCommunityType.id", currentCommunityType)
+    setValue("reservedCommunityTypes.id", currentCommunityType)
   }, [options, setValue, currentCommunityType])
 
   useEffect(() => {
@@ -55,8 +55,8 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
           <FieldValue label={t("listings.reservedCommunityType")}>
             {options && (
               <Select
-                id={`reservedCommunityType.id`}
-                name={`reservedCommunityType.id`}
+                id={`reservedCommunityTypes.id`}
+                name={`reservedCommunityTypes.id`}
                 label={t("listings.reservedCommunityType")}
                 labelClassName="sr-only"
                 register={register}

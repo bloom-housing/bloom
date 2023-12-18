@@ -152,12 +152,18 @@ describe('UnitType Controller Tests', () => {
   });
 
   it('testing delete endpoint', async () => {
-    const unitTypeA = await unitTypeFactorySingle(prisma, UnitTypeEnum.studio);
+    const createRes = await prisma.unitTypes.create({
+      data: {
+        name: UnitTypeEnum.fiveBdrm,
+        numBedrooms: 6,
+      },
+    });
+    // const unitTypeA = await unitTypeFactorySingle(prisma, UnitTypeEnum.studio);
 
     const res = await request(app.getHttpServer())
       .delete(`/unitTypes`)
       .send({
-        id: unitTypeA.id,
+        id: createRes.id,
       } as IdDTO)
       .set('Cookie', cookies)
       .expect(200);

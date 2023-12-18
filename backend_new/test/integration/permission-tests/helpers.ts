@@ -33,7 +33,10 @@ import { ApplicationCreate } from '../../../src/dtos/applications/application-cr
 import { ApplicationUpdate } from '../../../src/dtos/applications/application-update.dto';
 import { JurisdictionCreate } from '../../../src/dtos/jurisdictions/jurisdiction-create.dto';
 import { JurisdictionUpdate } from '../../../src/dtos/jurisdictions/jurisdiction-update.dto';
-import { reservedCommunityTypeFactory } from '../../../prisma/seed-helpers/reserved-community-type-factory';
+import {
+  reservedCommunityTypeFactoryAll,
+  reservedCommunityTypeFactoryGet,
+} from '../../../prisma/seed-helpers/reserved-community-type-factory';
 import { ReservedCommunityTypeCreate } from '../../../src/dtos/reserved-community-types/reserved-community-type-create.dto';
 import { ReservedCommunityTypeUpdate } from '../../../src/dtos/reserved-community-types/reserved-community-type-update.dto';
 import { unitRentTypeFactory } from '../../../prisma/seed-helpers/unit-rent-type-factory';
@@ -491,6 +494,7 @@ export const constructFullListingData = async (
     jurisdictionA = await prisma.jurisdictions.create({
       data: jurisdictionFactory(randomUUID()),
     });
+    await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
   }
 
   await unitTypeFactoryAll(prisma);
@@ -499,18 +503,17 @@ export const constructFullListingData = async (
     data: amiChartFactory(10, jurisdictionA.id),
   });
   const unitAccessibilityPriorityType =
-    await prisma.unitAccessibilityPriorityTypes.create({
-      data: unitAccessibilityPriorityTypeFactorySingle(),
-    });
+    await unitAccessibilityPriorityTypeFactorySingle(prisma);
   const rentType = await prisma.unitRentTypes.create({
     data: unitRentTypeFactory(),
   });
   const multiselectQuestion = await prisma.multiselectQuestions.create({
     data: multiselectQuestionFactory(jurisdictionA.id),
   });
-  const reservedCommunityType = await prisma.reservedCommunityTypes.create({
-    data: reservedCommunityTypeFactory(jurisdictionA.id),
-  });
+  const reservedCommunityType = await reservedCommunityTypeFactoryGet(
+    prisma,
+    jurisdictionA.id,
+  );
 
   const exampleAddress = addressFactory() as AddressCreate;
 
@@ -746,6 +749,7 @@ export const createSimpleListing = async (
       },
     });
     jurisdictionId = jurisdiction.id;
+    await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
   }
 
   const listing1 = await listingFactory(jurisdictionId, prisma, {
@@ -774,6 +778,7 @@ export const createListing = async (
       },
     });
     jurisdictionId = jurisdiction.id;
+    await reservedCommunityTypeFactoryAll(jurisdictionId, prisma);
   }
   const listing1 = await listingFactory(jurisdictionId, prisma, {
     status: ListingsStatusEnum.closed,

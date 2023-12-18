@@ -208,7 +208,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
 
         const claimed = preferences.reduce((acc, curr) => {
           if (curr.claimed) {
-            acc.push(t(`application.preferences.${curr.key}.title`, { county: countyCode }))
+            acc.push(curr.key)
           }
 
           return acc
@@ -286,7 +286,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
     },
     {
       headerName: t("applications.table.residenceStreet"),
-      field: "applicant.address.street",
+      field: "applicant.applicantAddress.street",
       sortable: false,
       filter: false,
       width: 175,
@@ -294,7 +294,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
     },
     {
       headerName: t("applications.table.residenceCity"),
-      field: "applicant.address.city",
+      field: "applicant.applicantAddress.city",
       sortable: false,
       filter: false,
       width: 150,
@@ -302,7 +302,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
     },
     {
       headerName: t("applications.table.residenceState"),
-      field: "applicant.address.state",
+      field: "applicant.applicantAddress.state",
       sortable: false,
       filter: false,
       width: 120,
@@ -310,7 +310,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
     },
     {
       headerName: t("applications.table.residenceZip"),
-      field: "applicant.address.zipCode",
+      field: "applicant.applicantAddress.zipCode",
       sortable: false,
       filter: false,
       width: 120,
@@ -318,7 +318,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
     },
     {
       headerName: t("applications.table.mailingStreet"),
-      field: "mailingAddress.street",
+      field: "applicationsMailingAddress.street",
       sortable: false,
       filter: false,
       width: 175,
@@ -330,7 +330,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
     },
     {
       headerName: t("applications.table.mailingCity"),
-      field: "mailingAddress.city",
+      field: "applicationsMailingAddress.city",
       sortable: false,
       filter: false,
       width: 150,
@@ -343,7 +343,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
     },
     {
       headerName: t("applications.table.mailingState"),
-      field: "mailingAddress.state",
+      field: "applicationsMailingAddress.state",
       sortable: false,
       filter: false,
       width: 120,
@@ -356,7 +356,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
     },
     {
       headerName: t("applications.table.mailingZip"),
-      field: "mailingAddress.zipCode",
+      field: "applicationsMailingAddress.zipCode",
       sortable: false,
       filter: false,
       width: 120,
@@ -369,7 +369,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
     },
     {
       headerName: t("applications.table.workStreet"),
-      field: "applicant.workAddress.street",
+      field: "applicant.applicantWorkAddress.street",
       sortable: false,
       filter: false,
       width: 175,
@@ -377,7 +377,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
     },
     {
       headerName: t("applications.table.workCity"),
-      field: "applicant.workAddress.city",
+      field: "applicant.applicantWorkAddress.city",
       sortable: false,
       filter: false,
       width: 150,
@@ -385,7 +385,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
     },
     {
       headerName: t("applications.table.workState"),
-      field: "applicant.workAddress.state",
+      field: "applicant.applicantWorkAddress.state",
       sortable: false,
       filter: false,
       width: 120,
@@ -393,7 +393,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
     },
     {
       headerName: t("applications.table.workZip"),
-      field: "applicant.workAddress.zipCode",
+      field: "applicant.applicantWorkAddress.zipCode",
       sortable: false,
       filter: false,
       width: 120,
@@ -461,7 +461,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
 
     {
       headerName: t("applications.table.altContactStreetAddress"),
-      field: "alternateContact.mailingAddress.street",
+      field: "alternateContact.address.street",
       sortable: false,
       filter: false,
       width: 150,
@@ -469,7 +469,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
     },
     {
       headerName: t("applications.table.altContactCity"),
-      field: "alternateContact.mailingAddress.city",
+      field: "alternateContact.address.city",
       sortable: false,
       filter: false,
       width: 150,
@@ -477,7 +477,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
     },
     {
       headerName: t("applications.table.altContactState"),
-      field: "alternateContact.mailingAddress.state",
+      field: "alternateContact.address.state",
       sortable: false,
       filter: false,
       width: 150,
@@ -485,7 +485,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
     },
     {
       headerName: t("applications.table.altContactZip"),
-      field: "alternateContact.mailingAddress.zipCode",
+      field: "alternateContact.address.zipCode",
       sortable: false,
       filter: false,
       width: 150,
@@ -501,7 +501,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
     householdCols.push(
       {
         headerName: `${t("application.name.firstName")} HH:${householdIndex}`,
-        field: "householdMembers",
+        field: "householdMember",
         sortable: false,
         filter: false,
         width: 125,
@@ -514,7 +514,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       },
       {
         headerName: `${t("application.name.lastName")} HH:${householdIndex}`,
-        field: "householdMembers",
+        field: "householdMember",
         sortable: false,
         filter: false,
         width: 125,
@@ -527,7 +527,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       },
       {
         headerName: `${t("applications.table.householdDob")} HH:${householdIndex}`,
-        field: "householdMembers",
+        field: "householdMember",
         sortable: false,
         filter: false,
         width: 125,
@@ -544,7 +544,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       },
       {
         headerName: `${t("t.relationship")} HH:${householdIndex}`,
-        field: "householdMembers",
+        field: "householdMember",
         sortable: false,
         filter: false,
         width: 132,
@@ -559,7 +559,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       },
       {
         headerName: `${t("application.add.sameAddressAsPrimary")} HH:${householdIndex}`,
-        field: "householdMembers",
+        field: "householdMember",
         sortable: false,
         filter: false,
         width: 125,
@@ -571,7 +571,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       },
       {
         headerName: `${t("application.details.workInRegion")} HH:${householdIndex}`,
-        field: "householdMembers",
+        field: "householdMember",
         sortable: false,
         filter: false,
         width: 125,

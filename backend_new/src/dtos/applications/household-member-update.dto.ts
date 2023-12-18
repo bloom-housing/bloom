@@ -13,6 +13,10 @@ export class HouseholdMemberUpdate extends OmitType(HouseholdMember, [
   'householdMemberWorkAddress',
 ]) {
   @Expose()
+  @ApiPropertyOptional()
+  id?: string;
+
+  @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreate)
   @ApiProperty({ type: AddressCreate })

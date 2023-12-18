@@ -4,6 +4,7 @@ import {
   Logger,
   NotFoundException,
   OnModuleInit,
+  HttpException,
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
@@ -110,6 +111,7 @@ views.full = {
   listingsLeasingAgentAddress: true,
   listingsApplicationPickUpAddress: true,
   listingsApplicationDropOffAddress: true,
+  listingsApplicationMailingAddress: true,
   units: {
     include: {
       unitAmiChartOverrides: true,
@@ -269,7 +271,7 @@ export class ListingService implements OnModuleInit {
     status: ListingsStatusEnum;
     approvingRoles: UserRoleEnum[];
     previousStatus?: ListingsStatusEnum;
-    jurisId?: string;
+    jurisId: string;
   }) {
     const nonApprovingRoles: UserRoleEnum[] = [UserRoleEnum.partner];
     if (!params.approvingRoles.includes(UserRoleEnum.jurisdictionAdmin))
@@ -281,7 +283,7 @@ export class ListingService implements OnModuleInit {
         params.jurisId,
       );
       await this.emailService.requestApproval(
-        params.user,
+        { id: params.jurisId },
         { id: params.listingInfo.id, name: params.listingInfo.name },
         userInfo.emails,
         this.configService.get('PARTNERS_PORTAL_URL'),
@@ -316,7 +318,7 @@ export class ListingService implements OnModuleInit {
           true,
         );
         await this.emailService.listingApproved(
-          params.user,
+          { id: params.jurisId },
           { id: params.listingInfo.id, name: params.listingInfo.name },
           userInfo.emails,
           userInfo.publicUrl,
@@ -408,6 +410,7 @@ export class ListingService implements OnModuleInit {
             $include_nulls: false,
             value: filter[ListingFilterKeys.leasingAgents],
             key: ListingFilterKeys.leasingAgents,
+            caseSensitive: true,
           });
           filters.push({
             OR: builtFilter.map((filt) => ({
@@ -526,11 +529,13 @@ export class ListingService implements OnModuleInit {
                 url: event.url,
                 note: event.note,
                 label: event.label,
-                assets: {
-                  create: {
-                    ...event.assets,
-                  },
-                },
+                assets: event.assets
+                  ? {
+                      create: {
+                        ...event.assets,
+                      },
+                    }
+                  : undefined,
               })),
             }
           : undefined,
@@ -665,7 +670,7 @@ export class ListingService implements OnModuleInit {
                 unitAmiChartOverrides: unit.unitAmiChartOverrides
                   ? {
                       create: {
-                        items: unit.unitAmiChartOverrides,
+                        items: unit.unitAmiChartOverrides.items,
                       },
                     }
                   : undefined,
@@ -785,6 +790,43 @@ export class ListingService implements OnModuleInit {
   }
 
   /*
+    This should be run for all address fields on an update of a listing.
+    The address either needs to be updated if fields are changed, deleted if no longer attached,
+    or created if it is a new address
+  */
+  async addressUpdate(
+    existingListing,
+    newListing: ListingUpdate,
+    field: string,
+  ) {
+    if (existingListing[field]) {
+      if (newListing[field]) {
+        return await this.prisma.address.update({
+          data: {
+            ...newListing[field],
+          },
+          where: {
+            id: existingListing[field].id,
+          },
+        });
+      } else {
+        await this.prisma.address.delete({
+          where: {
+            id: existingListing[field].id,
+          },
+        });
+      }
+    } else if (newListing[field]) {
+      return await this.prisma.address.create({
+        data: {
+          ...newListing[field],
+        },
+      });
+    }
+    return undefined;
+  }
+
+  /*
     update a listing
   */
   async update(dto: ListingUpdate, requestingUser: User): Promise<Listing> {
@@ -804,13 +846,6 @@ export class ListingService implements OnModuleInit {
       dto.reviewOrderType !== ReviewOrderTypeEnum.waitlist && dto.units
         ? dto.units.length
         : 0;
-
-    if (
-      storedListing.status === ListingsStatusEnum.active &&
-      dto.status === ListingsStatusEnum.closed
-    ) {
-      await this.afsService.process(dto.id);
-    }
 
     // We need to save the assets before saving it to the listing_images table
     let allAssets = [];
@@ -838,272 +873,355 @@ export class ListingService implements OnModuleInit {
       ];
     }
 
-    const rawListing = await this.prisma.listings.update({
-      data: {
-        ...dto,
-        id: undefined,
-        createdAt: undefined,
-        updatedAt: undefined,
-        assets: dto.assets as unknown as Prisma.InputJsonArray,
-        applicationMethods: dto.applicationMethods
-          ? {
-              create: dto.applicationMethods.map((applicationMethod) => ({
-                ...applicationMethod,
-                paperApplications: applicationMethod.paperApplications
-                  ? {
-                      create: applicationMethod.paperApplications.map(
-                        (paperApplication) => ({
-                          ...paperApplication,
-                          assets: {
-                            create: {
-                              ...paperApplication.assets,
+    const pickUpAddress = await this.addressUpdate(
+      storedListing,
+      dto,
+      'listingsApplicationPickUpAddress',
+    );
+    const mailAddress = await this.addressUpdate(
+      storedListing,
+      dto,
+      'listingsApplicationMailingAddress',
+    );
+    const dropOffAddress = await this.addressUpdate(
+      storedListing,
+      dto,
+      'listingsApplicationDropOffAddress',
+    );
+    const leasingAgentAddress = await this.addressUpdate(
+      storedListing,
+      dto,
+      'listingsLeasingAgentAddress',
+    );
+    const buildingAddress = await this.addressUpdate(
+      storedListing,
+      dto,
+      'listingsBuildingAddress',
+    );
+
+    // Wrap the deletion and update in one transaction so that units aren't lost if update fails
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const transactions = await this.prisma.$transaction([
+      // delete all connected units before recreating in update
+      this.prisma.units.deleteMany({
+        where: {
+          listingId: storedListing.id,
+        },
+      }),
+      // Delete all listing images before creating new ones
+      this.prisma.listingImages.deleteMany({
+        where: {
+          listingId: dto.id,
+        },
+      }),
+      // Delete all listing events before creating new ones
+      this.prisma.listingEvents.deleteMany({
+        where: {
+          listingId: dto.id,
+        },
+      }),
+      // Delete all paper applications and methods before creating new ones
+      this.prisma.paperApplications.deleteMany({
+        where: {
+          applicationMethods: {
+            is: {
+              listingId: dto.id,
+            },
+          },
+        },
+      }),
+      this.prisma.applicationMethods.deleteMany({
+        where: {
+          listingId: dto.id,
+        },
+      }),
+      this.prisma.listings.update({
+        data: {
+          ...dto,
+          id: undefined,
+          createdAt: undefined,
+          updatedAt: undefined,
+          assets: dto.assets as unknown as Prisma.InputJsonArray,
+          applicationMethods: dto.applicationMethods
+            ? {
+                create: dto.applicationMethods.map((applicationMethod) => ({
+                  ...applicationMethod,
+                  paperApplications: applicationMethod.paperApplications
+                    ? {
+                        create: applicationMethod.paperApplications.map(
+                          (paperApplication) => ({
+                            ...paperApplication,
+                            assets: {
+                              create: {
+                                ...paperApplication.assets,
+                                id: undefined,
+                              },
                             },
-                          },
-                        }),
-                      ),
-                    }
-                  : undefined,
-              })),
-            }
-          : undefined,
-        listingEvents: dto.listingEvents
-          ? {
-              create: dto.listingEvents.map((event) => ({
-                type: event.type,
-                startDate: event.startDate,
-                startTime: event.startTime,
-                endTime: event.endTime,
-                url: event.url,
-                note: event.note,
-                label: event.label,
-                assets: {
-                  create: {
-                    ...event.assets,
-                  },
-                },
-              })),
-            }
-          : undefined,
-        listingImages: allAssets.length
-          ? {
-              connectOrCreate: allAssets.map((asset) => ({
-                where: {
-                  listingId_imageId: {
-                    listingId: dto.id,
-                    imageId: asset.assets.id,
-                  },
-                },
-                create: {
-                  ordinal: asset.ordinal,
-                  assets: {
-                    connect: {
-                      id: asset.assets.id,
+                          }),
+                        ),
+                      }
+                    : undefined,
+                })),
+              }
+            : undefined,
+          listingEvents: dto.listingEvents
+            ? {
+                create: dto.listingEvents.map((event) => ({
+                  type: event.type,
+                  startDate: event.startDate,
+                  startTime: event.startTime,
+                  endTime: event.endTime,
+                  url: event.url,
+                  note: event.note,
+                  label: event.label,
+                  assets: event.assets
+                    ? {
+                        create: {
+                          ...event.assets,
+                        },
+                      }
+                    : undefined,
+                })),
+              }
+            : undefined,
+          listingImages: allAssets.length
+            ? {
+                create: allAssets.map((asset) => {
+                  return {
+                    ordinal: asset.ordinal,
+                    assets: {
+                      connect: {
+                        id: asset.assets.id,
+                      },
                     },
-                  },
-                },
-              })),
-            }
-          : undefined,
-        listingMultiselectQuestions: dto.listingMultiselectQuestions
-          ? {
-              upsert: dto.listingMultiselectQuestions.map(
-                (multiselectQuestion) => ({
-                  where: {
-                    listingId_multiselectQuestionId: {
-                      listingId: dto.id,
+                  };
+                }),
+              }
+            : undefined,
+          listingMultiselectQuestions: dto.listingMultiselectQuestions
+            ? {
+                upsert: dto.listingMultiselectQuestions.map(
+                  (multiselectQuestion) => ({
+                    where: {
+                      listingId_multiselectQuestionId: {
+                        listingId: dto.id,
+                        multiselectQuestionId: multiselectQuestion.id,
+                      },
+                    },
+                    update: {
+                      ordinal: multiselectQuestion.ordinal,
                       multiselectQuestionId: multiselectQuestion.id,
                     },
-                  },
-                  update: {
-                    ordinal: multiselectQuestion.ordinal,
-                    multiselectQuestionId: multiselectQuestion.id,
-                  },
-                  create: {
-                    ordinal: multiselectQuestion.ordinal,
-                    multiselectQuestionId: multiselectQuestion.id,
-                  },
-                }),
-              ),
-            }
-          : undefined,
-        listingsApplicationDropOffAddress: dto.listingsApplicationDropOffAddress
-          ? {
-              create: {
-                ...dto.listingsApplicationDropOffAddress,
-              },
-            }
-          : undefined,
-        reservedCommunityTypes: dto.reservedCommunityTypes
-          ? {
-              connect: {
-                id: dto.reservedCommunityTypes.id,
-              },
-            }
-          : undefined,
-        listingsBuildingSelectionCriteriaFile:
-          dto.listingsBuildingSelectionCriteriaFile
+                    create: {
+                      ordinal: multiselectQuestion.ordinal,
+                      multiselectQuestionId: multiselectQuestion.id,
+                    },
+                  }),
+                ),
+              }
+            : undefined,
+          listingsApplicationDropOffAddress: dropOffAddress
             ? {
-                create: {
-                  ...dto.listingsBuildingSelectionCriteriaFile,
+                connect: {
+                  id: dropOffAddress.id,
                 },
               }
             : undefined,
-        listingUtilities: dto.listingUtilities
-          ? {
-              create: {
-                ...dto.listingUtilities,
-              },
-            }
-          : undefined,
-        listingsApplicationMailingAddress: dto.listingsApplicationMailingAddress
-          ? {
-              create: {
-                ...dto.listingsApplicationMailingAddress,
-              },
-            }
-          : undefined,
-        listingsLeasingAgentAddress: dto.listingsLeasingAgentAddress
-          ? {
-              create: {
-                ...dto.listingsLeasingAgentAddress,
-              },
-            }
-          : undefined,
-        listingFeatures: dto.listingFeatures
-          ? {
-              create: {
-                ...dto.listingFeatures,
-              },
-            }
-          : undefined,
-        jurisdictions: dto.jurisdictions
-          ? {
-              connect: {
-                id: dto.jurisdictions.id,
-              },
-            }
-          : undefined,
-        listingsApplicationPickUpAddress: dto.listingsApplicationPickUpAddress
-          ? {
-              create: {
-                ...dto.listingsApplicationPickUpAddress,
-              },
-            }
-          : undefined,
-        listingsBuildingAddress: dto.listingsBuildingAddress
-          ? {
-              create: {
-                ...dto.listingsBuildingAddress,
-              },
-            }
-          : undefined,
-        units: dto.units
-          ? {
-              create: dto.units.map((unit) => ({
-                amiPercentage: unit.amiPercentage,
-                annualIncomeMin: unit.annualIncomeMin,
-                monthlyIncomeMin: unit.monthlyIncomeMin,
-                floor: unit.floor,
-                annualIncomeMax: unit.annualIncomeMax,
-                maxOccupancy: unit.maxOccupancy,
-                minOccupancy: unit.minOccupancy,
-                monthlyRent: unit.monthlyRent,
-                numBathrooms: unit.numBathrooms,
-                numBedrooms: unit.numBedrooms,
-                number: unit.number,
-                sqFeet: unit.sqFeet,
-                monthlyRentAsPercentOfIncome: unit.monthlyRentAsPercentOfIncome,
-                bmrProgramChart: unit.bmrProgramChart,
-                unitTypes: unit.unitTypes
-                  ? {
-                      connect: {
-                        id: unit.unitTypes.id,
+          reservedCommunityTypes: dto.reservedCommunityTypes
+            ? {
+                connect: {
+                  id: dto.reservedCommunityTypes.id,
+                },
+              }
+            : undefined,
+          // Three options for the building selection criteria file
+          // create new one, connect existing one, or deleted (disconnect)
+          listingsBuildingSelectionCriteriaFile:
+            dto.listingsBuildingSelectionCriteriaFile
+              ? dto.listingsBuildingSelectionCriteriaFile.id
+                ? {
+                    connectOrCreate: {
+                      where: {
+                        id: dto.listingsBuildingSelectionCriteriaFile.id,
                       },
-                    }
-                  : undefined,
-                amiChart: unit.amiChart
-                  ? {
-                      connect: {
-                        id: unit.amiChart.id,
-                      },
-                    }
-                  : undefined,
-                unitAmiChartOverrides: unit.unitAmiChartOverrides
-                  ? {
                       create: {
-                        items: unit.unitAmiChartOverrides,
+                        ...dto.listingsBuildingSelectionCriteriaFile,
                       },
-                    }
-                  : undefined,
-                unitAccessibilityPriorityTypes:
-                  unit.unitAccessibilityPriorityTypes
+                    },
+                  }
+                : {
+                    create: {
+                      ...dto.listingsBuildingSelectionCriteriaFile,
+                    },
+                  }
+              : {
+                  disconnect: true,
+                },
+          listingUtilities: dto.listingUtilities
+            ? {
+                create: {
+                  ...dto.listingUtilities,
+                },
+              }
+            : undefined,
+          listingsApplicationMailingAddress: mailAddress
+            ? {
+                connect: {
+                  id: mailAddress.id,
+                },
+              }
+            : undefined,
+          listingsLeasingAgentAddress: leasingAgentAddress
+            ? {
+                connect: {
+                  id: leasingAgentAddress.id,
+                },
+              }
+            : undefined,
+          listingFeatures: dto.listingFeatures
+            ? {
+                create: {
+                  ...dto.listingFeatures,
+                },
+              }
+            : undefined,
+          jurisdictions: dto.jurisdictions
+            ? {
+                connect: {
+                  id: dto.jurisdictions.id,
+                },
+              }
+            : undefined,
+          listingsApplicationPickUpAddress: pickUpAddress
+            ? {
+                connect: {
+                  id: pickUpAddress.id,
+                },
+              }
+            : undefined,
+          listingsBuildingAddress: buildingAddress
+            ? {
+                connect: {
+                  id: buildingAddress.id,
+                },
+              }
+            : undefined,
+          units: dto.units
+            ? {
+                create: dto.units.map((unit) => ({
+                  amiPercentage: unit.amiPercentage,
+                  annualIncomeMin: unit.annualIncomeMin,
+                  monthlyIncomeMin: unit.monthlyIncomeMin,
+                  floor: unit.floor,
+                  annualIncomeMax: unit.annualIncomeMax,
+                  maxOccupancy: unit.maxOccupancy,
+                  minOccupancy: unit.minOccupancy,
+                  monthlyRent: unit.monthlyRent,
+                  numBathrooms: unit.numBathrooms,
+                  numBedrooms: unit.numBedrooms,
+                  number: unit.number,
+                  sqFeet: unit.sqFeet,
+                  monthlyRentAsPercentOfIncome:
+                    unit.monthlyRentAsPercentOfIncome,
+                  bmrProgramChart: unit.bmrProgramChart,
+                  unitTypes: unit.unitTypes
                     ? {
                         connect: {
-                          id: unit.unitAccessibilityPriorityTypes.id,
+                          id: unit.unitTypes.id,
                         },
                       }
                     : undefined,
-                unitRentTypes: unit.unitRentTypes
-                  ? {
-                      connect: {
-                        id: unit.unitRentTypes.id,
-                      },
-                    }
-                  : undefined,
-              })),
-            }
-          : undefined,
-        unitsSummary: dto.unitsSummary
-          ? {
-              create: dto.unitsSummary.map((unitSummary) => ({
-                ...unitSummary,
-                unitTypes: unitSummary.unitTypes
-                  ? {
-                      connect: {
-                        id: unitSummary.unitTypes.id,
-                      },
-                    }
-                  : undefined,
-                unitAccessibilityPriorityTypes:
-                  unitSummary.unitAccessibilityPriorityTypes
+                  amiChart: unit.amiChart
                     ? {
                         connect: {
-                          id: unitSummary.unitAccessibilityPriorityTypes.id,
+                          id: unit.amiChart.id,
                         },
                       }
                     : undefined,
-              })),
-            }
-          : undefined,
-        publishedAt:
-          storedListing.status !== ListingsStatusEnum.active &&
-          dto.status === ListingsStatusEnum.active
-            ? new Date()
-            : storedListing.publishedAt,
-        closedAt:
-          storedListing.status !== ListingsStatusEnum.closed &&
-          dto.status === ListingsStatusEnum.closed
-            ? new Date()
-            : storedListing.closedAt,
-        requestedChangesUserId:
-          dto.status === ListingsStatusEnum.changesRequested &&
-          storedListing.status !== ListingsStatusEnum.changesRequested
-            ? requestingUser.id
-            : storedListing.requestedChangesUserId,
-        listingsResult: dto.listingsResult
-          ? {
-              create: {
-                ...dto.listingsResult,
-              },
-            }
-          : undefined,
-      },
-      include: views.details,
-      where: {
-        id: dto.id,
-      },
-    });
+                  unitAmiChartOverrides: unit.unitAmiChartOverrides
+                    ? {
+                        create: {
+                          items: unit.unitAmiChartOverrides.items,
+                        },
+                      }
+                    : undefined,
+                  unitAccessibilityPriorityTypes:
+                    unit.unitAccessibilityPriorityTypes
+                      ? {
+                          connect: {
+                            id: unit.unitAccessibilityPriorityTypes.id,
+                          },
+                        }
+                      : undefined,
+                  unitRentTypes: unit.unitRentTypes
+                    ? {
+                        connect: {
+                          id: unit.unitRentTypes.id,
+                        },
+                      }
+                    : undefined,
+                })),
+              }
+            : undefined,
+          unitsSummary: dto.unitsSummary
+            ? {
+                create: dto.unitsSummary.map((unitSummary) => ({
+                  ...unitSummary,
+                  unitTypes: unitSummary.unitTypes
+                    ? {
+                        connect: {
+                          id: unitSummary.unitTypes.id,
+                        },
+                      }
+                    : undefined,
+                  unitAccessibilityPriorityTypes:
+                    unitSummary.unitAccessibilityPriorityTypes
+                      ? {
+                          connect: {
+                            id: unitSummary.unitAccessibilityPriorityTypes.id,
+                          },
+                        }
+                      : undefined,
+                })),
+              }
+            : undefined,
+          publishedAt:
+            storedListing.status !== ListingsStatusEnum.active &&
+            dto.status === ListingsStatusEnum.active
+              ? new Date()
+              : storedListing.publishedAt,
+          closedAt:
+            storedListing.status !== ListingsStatusEnum.closed &&
+            dto.status === ListingsStatusEnum.closed
+              ? new Date()
+              : storedListing.closedAt,
+          requestedChangesUserId:
+            dto.status === ListingsStatusEnum.changesRequested &&
+            storedListing.status !== ListingsStatusEnum.changesRequested
+              ? requestingUser.id
+              : storedListing.requestedChangesUserId,
+          listingsResult: dto.listingsResult
+            ? {
+                create: {
+                  ...dto.listingsResult,
+                },
+              }
+            : undefined,
+        },
+        include: views.details,
+        where: {
+          id: dto.id,
+        },
+      }),
+    ]);
 
+    const rawListing = transactions[
+      transactions.length - 1
+    ] as unknown as Listing;
+
+    if (!rawListing) {
+      throw new HttpException('listing failed to save', 500);
+    }
     const listingApprovalPermissions = (
       await this.prisma.jurisdictions.findFirst({
         where: { id: dto.jurisdictions.id },
@@ -1119,6 +1237,14 @@ export class ListingService implements OnModuleInit {
         previousStatus: storedListing.status,
         jurisId: dto.jurisdictions.id,
       });
+
+    // if listing is closed for the first time the application flag set job needs to run
+    if (
+      storedListing.status === ListingsStatusEnum.active &&
+      dto.status === ListingsStatusEnum.closed
+    ) {
+      await this.afsService.process(dto.id);
+    }
 
     await this.cachePurge(storedListing.status, dto.status, rawListing.id);
 
@@ -1169,7 +1295,7 @@ export class ListingService implements OnModuleInit {
       const amiChartsRaw = await this.prisma.amiChart.findMany({
         where: {
           id: {
-            in: listing.units.map((unit) => unit.amiChart.id),
+            in: listing.units.map((unit) => unit.amiChart?.id),
           },
         },
       });

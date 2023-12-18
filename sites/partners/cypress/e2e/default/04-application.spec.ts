@@ -7,7 +7,6 @@ describe("Application Management Tests", () => {
     cy.signOut()
   })
 
-  // TODO: unskip when application flow is connected
   it.skip("Application grid should display correct number of results", () => {
     cy.visit("/")
     cy.getByTestId("listing-status-cell").eq(1).click()

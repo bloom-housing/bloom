@@ -50,6 +50,7 @@ export class ListingPublishedUpdate extends OmitType(ListingUpdate, [
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreate)
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ type: AddressCreate })
   listingsBuildingAddress: AddressCreate;
 
@@ -68,29 +69,35 @@ export class ListingPublishedUpdate extends OmitType(ListingUpdate, [
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   developer: string;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   digitalApplication: boolean;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingImageCreate)
+  @ArrayMinSize(1, { groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ type: ListingImageCreate, isArray: true })
   listingImages: ListingImageCreate[];
 
   @Expose()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   @EnforceLowerCase()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   leasingAgentEmail: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   leasingAgentName: string;
 
@@ -98,28 +105,33 @@ export class ListingPublishedUpdate extends OmitType(ListingUpdate, [
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsPhoneNumber('US', { groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   leasingAgentPhone: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   name: string;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   paperApplication: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   referralOpportunity: boolean;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   rentalAssistance: string;
 

@@ -13,14 +13,15 @@ export default class AdditionalMetadataFormatter extends Formatter {
         listingId: this.data.id,
       }
     })
-    const programs = this.metadata.programs.map((program, index) => {
-      return {
-        multiselectQuestions: program,
-        ordinal: index + 1,
-        id: program.id,
-        listingId: this.data.id,
-      }
-    })
+    const programs =
+      this.metadata.programs?.map((program, index) => {
+        return {
+          multiselectQuestions: program,
+          ordinal: index + 1,
+          id: program.id,
+          listingId: this.data.id,
+        }
+      }) || []
 
     this.data.listingMultiselectQuestions = [...preferences, ...programs]
 
@@ -64,21 +65,21 @@ export default class AdditionalMetadataFormatter extends Formatter {
       this.data.reviewOrderType = ReviewOrderTypeEnum.waitlist
     }
 
-    this.data.listingFeatures = listingFeatures.reduce((acc, current) => {
-      return {
-        ...acc,
-        [current]:
-          this.data.listingFeatures &&
-          !!(this.data.listingFeatures as unknown as string[]).find((value) => value === current),
-      }
-    }, {})
-    this.data.listingUtilities = listingUtilities.reduce((acc, current) => {
-      return {
-        ...acc,
-        [current]:
-          this.data.listingUtilities &&
-          !!(this.data.listingUtilities as unknown as string[]).find((value) => value === current),
-      }
-    }, {})
+    if (this.data.listingFeatures) {
+      this.data.listingFeatures = listingFeatures.reduce((acc, current) => {
+        return {
+          ...acc,
+          [current]: this.data.listingFeatures && this.data.listingFeatures[current],
+        }
+      }, {})
+    }
+    if (this.data.listingUtilities) {
+      this.data.listingUtilities = listingUtilities.reduce((acc, current) => {
+        return {
+          ...acc,
+          [current]: this.data.listingUtilities && this.data.listingUtilities[current],
+        }
+      }, {})
+    }
   }
 }

@@ -36,6 +36,7 @@ import { EmailService } from '../../src/services/email.service';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { Login } from '../../src/dtos/auth/login.dto';
 import { multiselectQuestionFactory } from '../../prisma/seed-helpers/multiselect-question-factory';
+import { reservedCommunityTypeFactoryAll } from '../../prisma/seed-helpers/reserved-community-type-factory';
 
 describe('Application Controller Tests', () => {
   let app: INestApplication;
@@ -245,6 +246,7 @@ describe('Application Controller Tests', () => {
     const jurisdiction = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
+    await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
     const listing1 = await listingFactory(jurisdiction.id, prisma);
     const listing1Created = await prisma.listings.create({
       data: listing1,
@@ -298,6 +300,7 @@ describe('Application Controller Tests', () => {
     const jurisdiction = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
+    await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
     const listing1 = await listingFactory(jurisdiction.id, prisma);
     const listing1Created = await prisma.listings.create({
       data: listing1,
@@ -456,6 +459,7 @@ describe('Application Controller Tests', () => {
     const jurisdiction = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
+    await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
     const listing1 = await listingFactory(jurisdiction.id, prisma);
     const listing1Created = await prisma.listings.create({
       data: listing1,
@@ -613,6 +617,7 @@ describe('Application Controller Tests', () => {
     const jurisdiction = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
+    await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
     const listing1 = await listingFactory(jurisdiction.id, prisma);
     const listing1Created = await prisma.listings.create({
       data: listing1,
@@ -784,6 +789,7 @@ describe('Application Controller Tests', () => {
     const jurisdiction = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
+    await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
     const listing1 = await listingFactory(jurisdiction.id, prisma);
     const listing1Created = await prisma.listings.create({
       data: listing1,
@@ -944,6 +950,7 @@ describe('Application Controller Tests', () => {
     const jurisdiction = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
+    await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
     const listing1 = await listingFactory(jurisdiction.id, prisma);
     const listing1Created = await prisma.listings.create({
       data: listing1,

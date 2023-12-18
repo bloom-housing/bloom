@@ -1,10 +1,11 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState, useContext } from "react"
 import { useFormContext } from "react-hook-form"
 import { Grid } from "@bloom-housing/ui-seeds"
 import { t, Textarea } from "@bloom-housing/ui-components"
 import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
-import { useJurisdiction } from "../../../../lib/hooks"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 
 type AdditionalEligibilityProps = {
   defaultText?: string
@@ -12,14 +13,28 @@ type AdditionalEligibilityProps = {
 
 const AdditionalEligibility = (props: AdditionalEligibilityProps) => {
   const formMethods = useFormContext()
-
+  const [currentJurisdiction, setCurrentJurisdiction] = useState<Jurisdiction>()
+  const { jurisdictionsService } = useContext(AuthContext)
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, clearErrors, watch, setValue, getValues } = formMethods
 
-  const jurisdiction: string = watch("jurisdiction.id")
+  const jurisdiction: string = watch("jurisdictions.id")
   const currentValue = getValues().rentalAssistance
 
-  const { data: currentJurisdiction = undefined } = useJurisdiction(jurisdiction)
+  useEffect(() => {
+    // Retrieve the jurisdiction data from the backend whenever the jurisdiction changes
+    async function fetchData() {
+      if (jurisdiction) {
+        const jurisdictionData = await jurisdictionsService.retrieve({
+          jurisdictionId: jurisdiction,
+        })
+        if (jurisdictionData) {
+          setCurrentJurisdiction(jurisdictionData)
+        }
+      }
+    }
+    void fetchData()
+  }, [jurisdiction, jurisdictionsService])
 
   useEffect(() => {
     if (currentJurisdiction && !currentValue) {

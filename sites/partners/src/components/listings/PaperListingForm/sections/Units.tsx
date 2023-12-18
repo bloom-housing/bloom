@@ -46,7 +46,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
     amiPercentage: "listings.unit.ami",
     monthlyRent: "listings.unit.rent",
     sqFeet: "listings.unit.sqft",
-    priorityType: "listings.unit.priorityType",
+    unitAccessibilityPriorityTypes: "listings.unit.priorityType",
     action: "",
   }
 
@@ -109,7 +109,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
         amiPercentage: { content: unit.amiPercentage },
         monthlyRent: { content: unit.monthlyRent },
         sqFeet: { content: unit.sqFeet },
-        priorityType: { content: unit.unitAccessibilityPriorityTypes?.name },
+        unitAccessibilityPriorityTypes: { content: unit.unitAccessibilityPriorityTypes?.name },
         action: {
           content: (
             <div className="flex gap-3">
@@ -220,7 +220,9 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
 
       <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
       {fieldHasError(errors?.units) && (
-        <span className={"text-xs text-alert"}>{t("errors.requiredFieldError")}</span>
+        <span className={"text-xs text-alert"} id="units-error">
+          {t("errors.requiredFieldError")}
+        </span>
       )}
 
       <Drawer

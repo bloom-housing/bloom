@@ -1072,7 +1072,7 @@ ALTER TABLE "listings" ADD CONSTRAINT "listings_application_pick_up_address_id_f
 ALTER TABLE "listings" ADD CONSTRAINT "listings_building_address_id_fkey" FOREIGN KEY ("building_address_id") REFERENCES "address"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "paper_applications" ADD CONSTRAINT "paper_applications_file_id_fkey" FOREIGN KEY ("file_id") REFERENCES "assets"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "paper_applications" ADD CONSTRAINT "paper_applications_file_id_fkey" FOREIGN KEY ("file_id") REFERENCES "assets"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE "paper_applications" ADD CONSTRAINT "paper_applications_application_method_id_fkey" FOREIGN KEY ("application_method_id") REFERENCES "application_methods"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;

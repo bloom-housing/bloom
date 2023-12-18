@@ -692,138 +692,141 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
     const firstNames = this.criteriaBuilderForCheckAgainstNameAndDOB(
       'firstName',
       application,
-    );
+    ).filter((value) => value);
     const lastNames = this.criteriaBuilderForCheckAgainstNameAndDOB(
       'lastName',
       application,
-    );
+    ).filter((value) => value);
     const birthMonths = this.criteriaBuilderForCheckAgainstNameAndDOB(
       'birthMonth',
       application,
-    );
+    ).filter((value) => value);
     const birthDays = this.criteriaBuilderForCheckAgainstNameAndDOB(
       'birthDay',
       application,
-    );
+    ).filter((value) => value);
     const birthYears = this.criteriaBuilderForCheckAgainstNameAndDOB(
       'birthYear',
       application,
-    );
+    ).filter((value) => value);
 
-    const apps = await this.prisma.applications.findMany({
-      select: {
-        id: true,
-      },
-      where: {
-        id: {
-          not: application.id,
-        },
-        status: ApplicationStatusEnum.submitted,
-        listingId: listingId,
-        AND: [
-          {
-            OR: [
-              {
-                householdMember: {
-                  some: {
-                    firstName: {
-                      in: firstNames,
+    const apps =
+      firstNames.length && lastNames.length
+        ? await this.prisma.applications.findMany({
+            select: {
+              id: true,
+            },
+            where: {
+              id: {
+                not: application.id,
+              },
+              status: ApplicationStatusEnum.submitted,
+              listingId: listingId,
+              AND: [
+                {
+                  OR: [
+                    {
+                      householdMember: {
+                        some: {
+                          firstName: {
+                            in: firstNames,
+                          },
+                        },
+                      },
                     },
-                  },
-                },
-              },
-              {
-                applicant: {
-                  firstName: {
-                    in: firstNames,
-                  },
-                },
-              },
-            ],
-          },
-          {
-            OR: [
-              {
-                householdMember: {
-                  some: {
-                    lastName: {
-                      in: lastNames,
+                    {
+                      applicant: {
+                        firstName: {
+                          in: firstNames,
+                        },
+                      },
                     },
-                  },
+                  ],
                 },
-              },
-              {
-                applicant: {
-                  lastName: {
-                    in: lastNames,
-                  },
-                },
-              },
-            ],
-          },
-          {
-            OR: [
-              {
-                householdMember: {
-                  some: {
-                    birthMonth: {
-                      in: birthMonths,
+                {
+                  OR: [
+                    {
+                      householdMember: {
+                        some: {
+                          lastName: {
+                            in: lastNames,
+                          },
+                        },
+                      },
                     },
-                  },
-                },
-              },
-              {
-                applicant: {
-                  birthMonth: {
-                    in: birthMonths,
-                  },
-                },
-              },
-            ],
-          },
-          {
-            OR: [
-              {
-                householdMember: {
-                  some: {
-                    birthDay: {
-                      in: birthDays,
+                    {
+                      applicant: {
+                        lastName: {
+                          in: lastNames,
+                        },
+                      },
                     },
-                  },
+                  ],
                 },
-              },
-              {
-                applicant: {
-                  birthDay: {
-                    in: birthDays,
-                  },
-                },
-              },
-            ],
-          },
-          {
-            OR: [
-              {
-                householdMember: {
-                  some: {
-                    birthYear: {
-                      in: birthYears,
+                {
+                  OR: [
+                    {
+                      householdMember: {
+                        some: {
+                          birthMonth: {
+                            in: birthMonths,
+                          },
+                        },
+                      },
                     },
-                  },
+                    {
+                      applicant: {
+                        birthMonth: {
+                          in: birthMonths,
+                        },
+                      },
+                    },
+                  ],
                 },
-              },
-              {
-                applicant: {
-                  birthYear: {
-                    in: birthYears,
-                  },
+                {
+                  OR: [
+                    {
+                      householdMember: {
+                        some: {
+                          birthDay: {
+                            in: birthDays,
+                          },
+                        },
+                      },
+                    },
+                    {
+                      applicant: {
+                        birthDay: {
+                          in: birthDays,
+                        },
+                      },
+                    },
+                  ],
                 },
-              },
-            ],
-          },
-        ],
-      },
-    });
+                {
+                  OR: [
+                    {
+                      householdMember: {
+                        some: {
+                          birthYear: {
+                            in: birthYears,
+                          },
+                        },
+                      },
+                    },
+                    {
+                      applicant: {
+                        birthYear: {
+                          in: birthYears,
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          })
+        : [];
 
     return mapTo(Application, apps);
   }

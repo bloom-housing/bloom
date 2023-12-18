@@ -67,7 +67,7 @@ export class ApplicationQueryParams extends PaginationAllowsAllQueryParams {
     groups: [ValidationsGroupsEnum.default],
   })
   @Transform((value: TransformFnParams) =>
-    value?.value ? value.value : OrderByEnum.DESC,
+    value?.value ? value.value.toLowerCase() : OrderByEnum.DESC,
   )
   order?: OrderByEnum;
 

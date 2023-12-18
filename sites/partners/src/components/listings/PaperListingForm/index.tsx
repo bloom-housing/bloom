@@ -18,15 +18,12 @@ import {
 import { Button } from "@bloom-housing/ui-seeds"
 import { AuthContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import {
-  Listing,
   ListingCreate,
-  ListingEvent,
   ListingEventsTypeEnum,
   ListingUpdate,
   ListingsStatusEnum,
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
-  Unit,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useForm, FormProvider } from "react-hook-form"
 import {
@@ -84,20 +81,18 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [units, setUnits] = useState<TempUnit[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
   const [preferences, setPreferences] = useState<MultiselectQuestion[]>(
-    listingSectionQuestions(
-      listing as unknown as Listing,
-      MultiselectQuestionsApplicationSectionEnum.preferences
-    )?.map((listingPref) => {
-      return { ...listingPref?.multiselectQuestions }
-    }) ?? []
+    listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.preferences)?.map(
+      (listingPref) => {
+        return { ...listingPref?.multiselectQuestions }
+      }
+    ) ?? []
   )
   const [programs, setPrograms] = useState<MultiselectQuestion[]>(
-    listingSectionQuestions(
-      listing as unknown as Listing,
-      MultiselectQuestionsApplicationSectionEnum.programs
-    )?.map((listingProg) => {
-      return { ...listingProg?.multiselectQuestions }
-    })
+    listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.programs)?.map(
+      (listingProg) => {
+        return { ...listingProg?.multiselectQuestions }
+      }
+    )
   )
 
   const [latLong, setLatLong] = useState<LatitudeLongitude>({
@@ -325,7 +320,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             addText={t("listings.addPreference")}
                             drawerTitle={t("listings.addPreferences")}
                             editText={t("listings.editPreferences")}
-                            listingData={preferences}
+                            listingData={preferences || []}
                             setListingData={setPreferences}
                             subtitle={t("listings.sections.housingPreferencesSubtext")}
                             title={t("listings.sections.housingPreferencesTitle")}
@@ -340,7 +335,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             addText={"Add program"}
                             drawerTitle={"Add programs"}
                             editText={"Edit programs"}
-                            listingData={programs}
+                            listingData={programs || []}
                             setListingData={setPrograms}
                             subtitle={
                               "Tell us about any additional housing programs related to this listing."
@@ -358,6 +353,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           <AdditionalDetails />
                           <div className="text-right -mr-8 -mt-8 relative" style={{ top: "7rem" }}>
                             <Button
+                              id="applicationProcessButton"
                               type="button"
                               variant="primary-outlined"
                               tailIcon={<Icon symbol="arrowForward" size="small" />}

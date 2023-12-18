@@ -21,7 +21,7 @@ const BuildingSelectionCriteria = () => {
   const { register, getValues, setValue, watch, errors, trigger } = formMethods
 
   const listingCriteriaURL = watch("buildingSelectionCriteria")
-  const listingCriteriaFile = watch("buildingSelectionCriteriaFile")
+  const listingCriteriaFile = watch("listingsBuildingSelectionCriteriaFile")
   const criteriaAttachType = watch("criteriaAttachType")
 
   /*
@@ -51,14 +51,14 @@ const BuildingSelectionCriteria = () => {
     setValue("buildingSelectionCriteria", "")
   }
   const savePDF = () => {
-    setValue("buildingSelectionCriteriaFile", {
+    setValue("listingsBuildingSelectionCriteriaFile", {
       fileId: cloudinaryData.id,
       label: "cloudinaryPDF",
     })
     deleteURL()
   }
   const deletePDF = () => {
-    setValue("buildingSelectionCriteriaFile", { fileId: "", label: "" })
+    setValue("listingsBuildingSelectionCriteriaFile", { fileId: "", label: "" })
   }
 
   let criteriaTableHeaders: Record<string, string> = {
@@ -193,8 +193,8 @@ const BuildingSelectionCriteria = () => {
   return (
     <>
       <input type="hidden" {...register("buildingSelectionCriteria")} />
-      <input type="hidden" {...register("buildingSelectionCriteriaFile.fileId")} />
-      <input type="hidden" {...register("buildingSelectionCriteriaFile.label")} />
+      <input type="hidden" {...register("listingsBuildingSelectionCriteriaFile.fileId")} />
+      <input type="hidden" {...register("listingsBuildingSelectionCriteriaFile.label")} />
 
       {((listingCriteriaURL && listingCriteriaURL != "") ||
         (listingCriteriaFile?.fileId && listingCriteriaFile.fileId != "")) && (

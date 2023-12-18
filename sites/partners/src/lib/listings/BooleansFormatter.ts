@@ -41,13 +41,19 @@ export default class BooleansFormatter extends Formatter {
         this.data.whereApplicationsMailedIn === addressTypes.anotherAddress,
       trueCase: () => this.data.listingsApplicationMailingAddress,
     })
-    this.processBoolean("images", {
+    this.processBoolean("listingImages", {
       when:
         this.data.listingImages?.length &&
         !!this.data.listingImages[0].assets.fileId &&
         !!this.data.listingImages[0].assets.label,
-      trueCase: () => this.data.listingImages,
+      trueCase: () => {
+        return this.data.listingImages.map((listingImages) => {
+          return { ordinal: listingImages.ordinal, assets: listingImages.assets }
+        })
+      },
     })
+    // assets are no longer needed and should be removed https://github.com/bloom-housing/bloom/issues/3747
+    this.data.assets = []
     this.processBoolean("digitalApplication", {
       when: this.data.digitalApplicationChoice === YesNoEnum.yes,
       falseCase: () => (this.data.digitalApplicationChoice === YesNoEnum.no ? false : null),

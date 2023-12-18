@@ -199,7 +199,7 @@ const ListingPhotos = () => {
             type="hidden"
             name={`listingImages[${index}].image.fileId`}
             ref={register()}
-            defaultValue={item.image.fileId}
+            defaultValue={item.assets.fileId}
           />
         </span>
       ))}
@@ -221,11 +221,11 @@ const ListingPhotos = () => {
 
             <Button
               type="button"
-              variant={fieldHasError(errors?.images) ? "alert" : "primary-outlined"}
+              variant={fieldHasError(errors?.listingImages) ? "alert" : "primary-outlined"}
               onClick={() => {
                 setDrawerState(true)
                 setDrawerImages([...listingFormPhotos])
-                clearErrors("images")
+                clearErrors("listingImages")
               }}
               id="add-photos-button"
             >
@@ -234,8 +234,11 @@ const ListingPhotos = () => {
           </Grid.Cell>
         </Grid.Row>
       </SectionWithGrid>
-      {fieldHasError(errors?.images) && (
-        <span className={"text-sm text-alert"}>{errors?.images?.nested?.message}</span>
+      <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
+      {fieldHasError(errors?.listingImages) && (
+        <span className={"text-sm text-alert"} id="photos-error">
+          {t("errors.requiredFieldError")}
+        </span>
       )}
 
       {/* Image management and upload drawer */}
