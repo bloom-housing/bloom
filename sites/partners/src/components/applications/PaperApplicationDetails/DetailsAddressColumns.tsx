@@ -12,6 +12,7 @@ type DetailsAddressColumnsProps = {
   application?: Application
   addressObject?: AddressCreate
   householdMember?: HouseholdMemberUpdate
+  small?: boolean
   dataTestId?: string
 }
 
@@ -30,6 +31,7 @@ const DetailsAddressColumns = ({
   application,
   addressObject,
   householdMember,
+  small,
   dataTestId,
 }: DetailsAddressColumnsProps) => {
   const address = {
@@ -91,6 +93,7 @@ const DetailsAddressColumns = ({
   return (
     <>
       <FieldValue
+        className={small && "seeds-grid-span-3"}
         label={t("application.contact.streetAddress")}
         testId={`${dataTestId}.streetAddress`}
       >
@@ -98,14 +101,18 @@ const DetailsAddressColumns = ({
       </FieldValue>
 
       <FieldValue
-        className="seeds-grid-span-2"
+        className={small ? "seeds-grid-span-3" : "seeds-grid-span-2"}
         label={t("application.contact.apt")}
         testId={`${dataTestId}.street2`}
       >
         {address.street2}
       </FieldValue>
 
-      <FieldValue label={t("application.contact.city")} testId={`${dataTestId}.city`}>
+      <FieldValue
+        className={small && "seeds-grid-span-2"}
+        label={t("application.contact.city")}
+        testId={`${dataTestId}.city`}
+      >
         {address.city}
       </FieldValue>
 
@@ -113,7 +120,11 @@ const DetailsAddressColumns = ({
         {address.state}
       </FieldValue>
 
-      <FieldValue label={t("application.contact.zip")} testId={`${dataTestId}.zipCode`}>
+      <FieldValue
+        className={small && "seeds-grid-span-3"}
+        label={t("application.contact.zip")}
+        testId={`${dataTestId}.zipCode`}
+      >
         {address.zipCode}
       </FieldValue>
     </>

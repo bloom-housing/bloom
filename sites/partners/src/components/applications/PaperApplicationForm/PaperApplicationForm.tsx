@@ -57,6 +57,13 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     defaultValues,
   })
 
+  const [initialLoad, setInitialLoad] = useState(true)
+
+  if (editMode && initialLoad && listingDto) {
+    formMethods.reset(defaultValues)
+    setInitialLoad(false)
+  }
+
   const router = useRouter()
 
   const { applicationsService } = useContext(AuthContext)
