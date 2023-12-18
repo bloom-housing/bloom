@@ -438,7 +438,7 @@ export const stagingSeed = async (
         leasingAgentOfficeHours: '9:00am - 5:00pm, Monday-Friday',
         leasingAgentPhone: '(773) 580-5897',
         leasingAgentTitle: 'Senior Leasing Agent',
-        name: 'Blue Sky Apartments ',
+        name: 'Blue Sky Apartments',
         postmarkedApplicationsReceivedByDate: '2025-06-06T23:00:00.000Z',
         programRules: null,
         rentalAssistance:
@@ -491,6 +491,26 @@ export const stagingSeed = async (
           ],
         },
       },
+      units: [
+        {
+          amiPercentage: '30',
+          monthlyIncomeMin: '2000',
+          floor: 1,
+          maxOccupancy: 3,
+          minOccupancy: 1,
+          monthlyRent: '1200',
+          numBathrooms: 1,
+          numBedrooms: 1,
+          number: '101',
+          sqFeet: '750.00',
+          amiChart: { connect: { id: amiChart.id } },
+          unitTypes: {
+            connect: {
+              id: unitTypes[2].id,
+            },
+          },
+        },
+      ],
     },
     {
       listing: {
