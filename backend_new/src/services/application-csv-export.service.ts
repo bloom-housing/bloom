@@ -19,13 +19,13 @@ view.csv = {
   listings: false,
 };
 
-type CsvHeader = {
+export type CsvHeader = {
   path: string;
   label: string;
   format?: (val: unknown) => unknown;
 };
 
-const typeMap = {
+export const typeMap = {
   SRO: 'SRO',
   studio: 'Studio',
   oneBdrm: 'One Bedroom',
@@ -94,7 +94,11 @@ export class ApplicationCsvExporterService {
         queryParams.listingId,
       );
 
+    // get maxHouseholdMembers
+    const maxHouseholdMembers = await this.maxHouseholdMembers();
+
     const csvHeaders = await this.getCsvHeaders(
+      maxHouseholdMembers,
       multiSelectQuestions,
       queryParams.includeDemographics,
     );
@@ -231,7 +235,79 @@ export class ApplicationCsvExporterService {
       : 0;
   }
 
+  getHousholdCsvHeaders(maxHouseholdMembers: number): CsvHeader[] {
+    const headers = [];
+    for (let i = 0; i < maxHouseholdMembers; i++) {
+      const j = i + 1;
+      headers.push(
+        {
+          path: `householdMember.${i}.firstName`,
+          label: `Household Member (${j}) First Name`,
+        },
+        {
+          path: `householdMember.${i}.middleName`,
+          label: `Household Member (${j}) Middle Name`,
+        },
+        {
+          path: `householdMember.${i}.lastName`,
+          label: `Household Member (${j}) Last Name`,
+        },
+        {
+          path: `householdMember.${i}.firstName`,
+          label: `Household Member (${j}) First Name`,
+        },
+        {
+          path: `householdMember.${i}.birthDay`,
+          label: `Household Member (${j}) Birth Day`,
+        },
+        {
+          path: `householdMember.${i}.birthMonth`,
+          label: `Household Member (${j}) Birth Month`,
+        },
+        {
+          path: `householdMember.${i}.birthYear`,
+          label: `Household Member (${j}) Birth Year`,
+        },
+        {
+          path: `householdMember.${i}.sameAddress`,
+          label: `Household Member (${j}) Same as Primary Applicant`,
+        },
+        {
+          path: `householdMember.${i}.relationship`,
+          label: `Household Member (${j}) Relationship`,
+        },
+        {
+          path: `householdMember.${i}.workInRegion`,
+          label: `Household Member (${j}) Work in Region`,
+        },
+        {
+          path: `householdMember.${i}.street`,
+          label: `Household Member (${j}) Street`,
+        },
+        {
+          path: `householdMember.${i}.street2`,
+          label: `Household Member (${j}) Street 2`,
+        },
+        {
+          path: `householdMember.${i}.city`,
+          label: `Household Member (${j}) City`,
+        },
+        {
+          path: `householdMember.${i}.state`,
+          label: `Household Member (${j}) State`,
+        },
+        {
+          path: `householdMember.${i}.zipCode`,
+          label: `Household Member (${j}) Zip Code`,
+        },
+      );
+    }
+
+    return headers;
+  }
+
   async getCsvHeaders(
+    maxHouseholdMembers: number,
     multiSelectQuestions: MultiselectQuestion[],
     includeDemographics = false,
   ): Promise<CsvHeader[]> {
@@ -483,73 +559,9 @@ export class ApplicationCsvExporterService {
       label: 'Household Size',
     });
 
-    const maxHouseholdMembers = await this.maxHouseholdMembers();
-
     // add household member headers to csv
-    for (let i = 0; i < maxHouseholdMembers; i++) {
-      const j = i + 1;
-      headers.push(
-        {
-          path: `householdMember.${i}.firstName`,
-          label: `Household Member (${j}) First Name`,
-        },
-        {
-          path: `householdMember.${i}.middleName`,
-          label: `Household Member (${j}) Middle Name`,
-        },
-        {
-          path: `householdMember.${i}.lastName`,
-          label: `Household Member (${j}) Last Name`,
-        },
-        {
-          path: `householdMember.${i}.firstName`,
-          label: `Household Member (${j}) First Name`,
-        },
-        {
-          path: `householdMember.${i}.birthDay`,
-          label: `Household Member (${j}) Birth Day`,
-        },
-        {
-          path: `householdMember.${i}.birthMonth`,
-          label: `Household Member (${j}) Birth Month`,
-        },
-        {
-          path: `householdMember.${i}.birthYear`,
-          label: `Household Member (${j}) Birth Year`,
-        },
-        {
-          path: `householdMember.${i}.sameAddress`,
-          label: `Household Member (${j}) Same as Primary Applicant`,
-        },
-        {
-          path: `householdMember.${i}.relationship`,
-          label: `Household Member (${j}) Relationship`,
-        },
-        {
-          path: `householdMember.${i}.workInRegion`,
-          label: `Household Member (${j}) Work in Region`,
-        },
-        {
-          path: `householdMember.${i}.street`,
-          label: `Household Member (${j}) Street`,
-        },
-        {
-          path: `householdMember.${i}.street2`,
-          label: `Household Member (${j}) Street 2`,
-        },
-        {
-          path: `householdMember.${i}.city`,
-          label: `Household Member (${j}) City`,
-        },
-        {
-          path: `householdMember.${i}.state`,
-          label: `Household Member (${j}) State`,
-        },
-        {
-          path: `householdMember.${i}.zipCode`,
-          label: `Household Member (${j}) Zip Code`,
-        },
-      );
+    if (maxHouseholdMembers) {
+      headers.push(...this.getHousholdCsvHeaders(maxHouseholdMembers));
     }
 
     headers.push(
