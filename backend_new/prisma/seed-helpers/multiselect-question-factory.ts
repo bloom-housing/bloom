@@ -13,7 +13,6 @@ export const multiselectQuestionFactory = (
   jurisdictionId: string,
   optionalParams?: {
     optOut?: boolean;
-    numberOfOptions?: number;
     multiselectQuestion?: Partial<Prisma.MultiselectQuestionsCreateInput>;
   },
 ): Prisma.MultiselectQuestionsCreateInput => {
