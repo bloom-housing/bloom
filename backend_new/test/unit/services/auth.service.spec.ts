@@ -27,17 +27,26 @@ import { SendGridService } from '../../../src/services/sendgrid.service';
 import { TranslationService } from '../../../src/services/translation.service';
 import { JurisdictionService } from '../../../src/services/jurisdiction.service';
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
+import { PermissionService } from '../../../src/services/permission.service';
+import { Jurisdiction } from '../../../src/dtos/jurisdictions/jurisdiction.dto';
 
 describe('Testing auth service', () => {
   let authService: AuthService;
   let smsService: SmsService;
   let prisma: PrismaService;
+  const sendMfaCodeMock = jest.fn();
+  let emailService: EmailService;
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
         UserService,
-        EmailService,
+        {
+          provide: EmailService,
+          useValue: {
+            sendMfaCode: sendMfaCodeMock,
+          },
+        },
         ConfigService,
         PrismaService,
         SendGridService,
@@ -46,12 +55,18 @@ describe('Testing auth service', () => {
         SmsService,
         MailService,
         GoogleTranslateService,
+        PermissionService,
       ],
     }).compile();
 
     authService = module.get<AuthService>(AuthService);
     smsService = module.get<SmsService>(SmsService);
     prisma = module.get<PrismaService>(PrismaService);
+    emailService = module.get<EmailService>(EmailService);
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
   it('should return a signed string when generating a new accessToken', () => {
@@ -66,7 +81,7 @@ describe('Testing auth service', () => {
         jurisdictions: [
           {
             id: randomUUID(),
-          },
+          } as Jurisdiction,
         ],
         agreedToTermsOfService: false,
         id,
@@ -98,7 +113,7 @@ describe('Testing auth service', () => {
         jurisdictions: [
           {
             id: randomUUID(),
-          },
+          } as Jurisdiction,
         ],
         agreedToTermsOfService: false,
         id,
@@ -134,7 +149,7 @@ describe('Testing auth service', () => {
       jurisdictions: [
         {
           id: randomUUID(),
-        },
+        } as Jurisdiction,
       ],
       agreedToTermsOfService: false,
       id,
@@ -190,7 +205,7 @@ describe('Testing auth service', () => {
         jurisdictions: [
           {
             id: randomUUID(),
-          },
+          } as Jurisdiction,
         ],
         agreedToTermsOfService: false,
         id,
@@ -258,7 +273,7 @@ describe('Testing auth service', () => {
             jurisdictions: [
               {
                 id: randomUUID(),
-              },
+              } as Jurisdiction,
             ],
             agreedToTermsOfService: false,
             id,
@@ -326,7 +341,7 @@ describe('Testing auth service', () => {
             jurisdictions: [
               {
                 id: randomUUID(),
-              },
+              } as Jurisdiction,
             ],
             agreedToTermsOfService: false,
             id: null,
@@ -367,7 +382,7 @@ describe('Testing auth service', () => {
           jurisdictions: [
             {
               id: randomUUID(),
-            },
+            } as Jurisdiction,
           ],
           agreedToTermsOfService: false,
           id: null,
@@ -402,7 +417,7 @@ describe('Testing auth service', () => {
       jurisdictions: [
         {
           id: randomUUID(),
-        },
+        } as Jurisdiction,
       ],
       agreedToTermsOfService: false,
       id,
@@ -438,6 +453,7 @@ describe('Testing auth service', () => {
 
   it('should request mfa code through email', async () => {
     const id = randomUUID();
+    emailService.sendMfaCode = jest.fn();
     prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
       id: id,
       mfaEnabled: true,
@@ -456,6 +472,11 @@ describe('Testing auth service', () => {
     });
 
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+      include: expect.objectContaining({
+        listings: true,
+        jurisdictions: true,
+        userRoles: true,
+      }),
       where: {
         email: 'example@exygy.com',
       },
@@ -469,6 +490,7 @@ describe('Testing auth service', () => {
         id,
       },
     });
+    expect(emailService.sendMfaCode).toHaveBeenCalled();
     expect(res).toEqual({
       email: 'example@exygy.com',
       phoneNumberVerified: false,
@@ -499,6 +521,11 @@ describe('Testing auth service', () => {
     });
 
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+      include: expect.objectContaining({
+        listings: true,
+        jurisdictions: true,
+        userRoles: true,
+      }),
       where: {
         email: 'example@exygy.com',
       },
@@ -513,6 +540,7 @@ describe('Testing auth service', () => {
         id,
       },
     });
+    expect(sendMfaCodeMock).not.toHaveBeenCalled();
     expect(smsService.client.messages.create).toHaveBeenCalledWith({
       body: expect.anything(),
       from: expect.anything(),

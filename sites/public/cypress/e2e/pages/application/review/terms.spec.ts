@@ -2,7 +2,7 @@ describe("applications/review/terms", function () {
   const route = "/applications/review/terms"
 
   function submitApplication() {
-    cy.getByTestId("app-terms-submit-button").click()
+    cy.getByID("app-terms-submit-button").click()
   }
 
   beforeEach(() => {

@@ -4,6 +4,7 @@ import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { stringify } from 'qs';
 import request from 'supertest';
+import cookieParser from 'cookie-parser';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { multiselectQuestionFactory } from '../../prisma/seed-helpers/multiselect-question-factory';
@@ -13,11 +14,14 @@ import { MultiselectQuestionUpdate } from '../../src/dtos/multiselect-questions/
 import { IdDTO } from '../../src/dtos/shared/id.dto';
 import { MultiselectQuestionQueryParams } from '../../src/dtos/multiselect-questions/multiselect-question-query-params.dto';
 import { Compare } from '../../src/dtos/shared/base-filter.dto';
+import { userFactory } from '../../prisma/seed-helpers/user-factory';
+import { Login } from '../../src/dtos/auth/login.dto';
 
 describe('MultiselectQuestion Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let jurisdictionId: string;
+  let cookies = '';
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -26,11 +30,29 @@ describe('MultiselectQuestion Controller Tests', () => {
 
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
+    app.use(cookieParser());
     await app.init();
     const jurisdiction = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
     jurisdictionId = jurisdiction.id;
+
+    const storedUser = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: { isAdmin: true },
+        mfaEnabled: false,
+        confirmedAt: new Date(),
+      }),
+    });
+    const resLogIn = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({
+        email: storedUser.email,
+        password: 'abcdef',
+      } as Login)
+      .expect(201);
+
+    cookies = resLogIn.headers['set-cookie'];
   });
 
   afterAll(async () => {
@@ -160,6 +182,7 @@ describe('MultiselectQuestion Controller Tests', () => {
         hideFromListing: false,
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
       } as MultiselectQuestionCreate)
+      .set('Cookie', cookies)
       .expect(201);
 
     expect(res.body.text).toEqual('example text');
@@ -217,6 +240,7 @@ describe('MultiselectQuestion Controller Tests', () => {
         hideFromListing: false,
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
       } as MultiselectQuestionUpdate)
+      .set('Cookie', cookies)
       .expect(404);
     expect(res.body.message).toEqual(
       `multiselectQuestionId ${id} was requested but not found`,
@@ -278,6 +302,7 @@ describe('MultiselectQuestion Controller Tests', () => {
         hideFromListing: false,
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
       } as MultiselectQuestionUpdate)
+      .set('Cookie', cookies)
       .expect(200);
 
     expect(res.body.text).toEqual('example text');
@@ -290,6 +315,7 @@ describe('MultiselectQuestion Controller Tests', () => {
       .send({
         id: id,
       } as IdDTO)
+      .set('Cookie', cookies)
       .expect(404);
     expect(res.body.message).toEqual(
       `multiselectQuestionId ${id} was requested but not found`,
@@ -306,6 +332,7 @@ describe('MultiselectQuestion Controller Tests', () => {
       .send({
         id: multiselectQuestionA.id,
       } as IdDTO)
+      .set('Cookie', cookies)
       .expect(200);
 
     expect(res.body.success).toEqual(true);

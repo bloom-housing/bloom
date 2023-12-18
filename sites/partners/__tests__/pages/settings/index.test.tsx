@@ -214,7 +214,7 @@ describe("settings", () => {
       await findByText(multiselectQuestionPreference.text)
 
       // Add a preference
-      fireEvent.click(getByTestId("preference-add-item"))
+      fireEvent.click(getByText("Add item"))
       expect(getByText("Add Preference")).toBeInTheDocument()
 
       // Add a preference option
@@ -259,7 +259,7 @@ describe("settings", () => {
       await findByText(multiselectQuestionPreference.text)
 
       // Add a preference
-      fireEvent.click(getByTestId("preference-add-item"))
+      fireEvent.click(getByText("Add item"))
       expect(getByText("Add Preference")).toBeInTheDocument()
 
       // Add a preference option

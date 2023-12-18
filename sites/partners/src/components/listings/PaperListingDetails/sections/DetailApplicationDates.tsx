@@ -1,17 +1,13 @@
 import React, { useContext, useMemo, useState } from "react"
 import dayjs from "dayjs"
+import { t, MinimalTable, Drawer } from "@bloom-housing/ui-components"
+import { Button, Card, FieldValue, Grid, Link } from "@bloom-housing/ui-seeds"
 import {
-  t,
-  MinimalTable,
-  Button,
-  Drawer,
-  AppearanceStyleType,
-  LinkButton,
-} from "@bloom-housing/ui-components"
-import { Card, FieldValue, Grid } from "@bloom-housing/ui-seeds"
+  ListingEvent,
+  ListingEventsTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldDate, getDetailFieldTime } from "./helpers"
-import { ListingEvent, ListingEventType } from "@bloom-housing/backend-core/types"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const DetailApplicationDates = () => {
@@ -29,8 +25,8 @@ const DetailApplicationDates = () => {
 
   const openHouseEvents = useMemo(
     () =>
-      listing.events
-        .filter((item) => item.type === ListingEventType.openHouse)
+      listing.listingEvents
+        .filter((item) => item.type === ListingEventsTypeEnum.openHouse)
         .sort((a, b) => (dayjs(a.startTime).isAfter(b.startTime) ? 1 : -1))
         .map((event) => {
           const { startTime, endTime, url } = event
@@ -40,22 +36,16 @@ const DetailApplicationDates = () => {
             startTime: { content: startTime && getDetailFieldTime(startTime) },
             endTime: { content: endTime && getDetailFieldTime(endTime) },
             url: {
-              content: url ? (
-                <LinkButton className="mx-0" href={url} unstyled>
-                  {t("t.url")}
-                </LinkButton>
-              ) : (
-                t("t.n/a")
-              ),
+              content: url ? <Link href={url}>{t("t.url")}</Link> : t("t.n/a"),
             },
             view: {
               content: (
                 <div className="flex">
                   <Button
                     type="button"
-                    className="front-semibold uppercase my-0"
+                    variant="text"
+                    className="font-semibold"
                     onClick={() => setDrawer(event)}
-                    unstyled
                   >
                     {t("t.view")}
                   </Button>
@@ -117,9 +107,9 @@ const DetailApplicationDates = () => {
                   </FieldValue>
                   <FieldValue id="drawer.url" label={t("t.url")}>
                     {drawer?.url ? (
-                      <LinkButton className="mx-0 my-0" href={drawer.url} unstyled>
+                      <Link className="mx-0 my-0" href={drawer.url}>
                         {drawer?.label ?? t("t.url")}
-                      </LinkButton>
+                      </Link>
                     ) : (
                       t("t.n/a")
                     )}
@@ -135,7 +125,7 @@ const DetailApplicationDates = () => {
             </Card.Section>
           </Card>
 
-          <Button styleType={AppearanceStyleType.primary} onClick={() => setDrawer(null)}>
+          <Button variant="primary" onClick={() => setDrawer(null)}>
             {t("t.done")}
           </Button>
         </Drawer>

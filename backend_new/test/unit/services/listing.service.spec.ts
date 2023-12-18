@@ -1,12 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaService } from '../../../src/services/prisma.service';
-import { ListingService } from '../../../src/services/listing.service';
-import { ListingsQueryParams } from '../../../src/dtos/listings/listings-query-params.dto';
-import { ListingOrderByKeys } from '../../../src/enums/listings/order-by-enum';
-import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
-import { ListingFilterKeys } from '../../../src/enums/listings/filter-key-enum';
-import { Compare } from '../../../src/dtos/shared/base-filter.dto';
-import { ListingFilterParams } from '../../../src/dtos/listings/listings-filter-params.dto';
 import {
   ApplicationAddressTypeEnum,
   ApplicationMethodsTypeEnum,
@@ -17,6 +9,20 @@ import {
   UnitTypeEnum,
   UserRoleEnum,
 } from '@prisma/client';
+import { Logger } from '@nestjs/common';
+import { SchedulerRegistry } from '@nestjs/schedule';
+import { ConfigService } from '@nestjs/config';
+import { randomUUID } from 'crypto';
+import { HttpModule, HttpService } from '@nestjs/axios';
+import { of } from 'rxjs';
+import { PrismaService } from '../../../src/services/prisma.service';
+import { ListingService } from '../../../src/services/listing.service';
+import { ListingsQueryParams } from '../../../src/dtos/listings/listings-query-params.dto';
+import { ListingOrderByKeys } from '../../../src/enums/listings/order-by-enum';
+import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
+import { ListingFilterKeys } from '../../../src/enums/listings/filter-key-enum';
+import { Compare } from '../../../src/dtos/shared/base-filter.dto';
+import { ListingFilterParams } from '../../../src/dtos/listings/listings-filter-params.dto';
 import { Unit } from '../../../src/dtos/units/unit.dto';
 import { UnitTypeSort } from '../../../src/utilities/unit-utilities';
 import { Listing } from '../../../src/dtos/listings/listing.dto';
@@ -24,16 +30,14 @@ import { ListingViews } from '../../../src/enums/listings/view-enum';
 import { TranslationService } from '../../../src/services/translation.service';
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 import { ListingCreate } from '../../../src/dtos/listings/listing-create.dto';
-import { randomUUID } from 'crypto';
-import { HttpModule, HttpService } from '@nestjs/axios';
-import { of } from 'rxjs';
 import { ListingUpdate } from '../../../src/dtos/listings/listing-update.dto';
 import { ListingPublishedCreate } from '../../../src/dtos/listings/listing-published-create.dto';
 import { ListingPublishedUpdate } from '../../../src/dtos/listings/listing-published-update.dto';
 import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
 import { User } from '../../../src/dtos/users/user.dto';
 import { EmailService } from '../../../src/services/email.service';
-import { ConfigService } from '@nestjs/config';
+import { PermissionService } from '../../../src/services/permission.service';
+import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
 
 /*
   generates a super simple mock listing for us to test logic with
@@ -116,6 +120,7 @@ const mockListingSet = (
 const requestApprovalMock = jest.fn();
 const changesRequestedMock = jest.fn();
 const listingApprovedMock = jest.fn();
+const canOrThrowMock = jest.fn();
 
 const user = new User();
 user.firstName = 'Test';
@@ -171,7 +176,15 @@ describe('Testing listing service', () => {
             listingApproved: listingApprovedMock,
           },
         },
+        {
+          provide: PermissionService,
+          useValue: {
+            canOrThrow: canOrThrowMock,
+          },
+        },
         ConfigService,
+        Logger,
+        SchedulerRegistry,
       ],
       imports: [HttpModule],
     }).compile();
@@ -186,6 +199,7 @@ describe('Testing listing service', () => {
   });
 
   afterEach(() => {
+    jest.resetAllMocks();
     jest.clearAllMocks();
   });
 
@@ -462,6 +476,7 @@ describe('Testing listing service', () => {
         listingsLeasingAgentAddress: true,
         listingsApplicationPickUpAddress: true,
         listingsApplicationDropOffAddress: true,
+        listingsApplicationMailingAddress: true,
         units: {
           include: {
             unitAmiChartOverrides: true,
@@ -817,6 +832,7 @@ describe('Testing listing service', () => {
         listingsLeasingAgentAddress: true,
         listingsApplicationPickUpAddress: true,
         listingsApplicationDropOffAddress: true,
+        listingsApplicationMailingAddress: true,
         units: {
           include: {
             unitAmiChartOverrides: true,
@@ -1563,6 +1579,7 @@ describe('Testing listing service', () => {
         listingUtilities: true,
         listingsApplicationDropOffAddress: true,
         listingsApplicationPickUpAddress: true,
+        listingsApplicationMailingAddress: true,
         listingsBuildingAddress: true,
         listingsBuildingSelectionCriteriaFile: true,
         listingsLeasingAgentAddress: true,
@@ -1608,6 +1625,15 @@ describe('Testing listing service', () => {
         },
       },
     });
+
+    expect(canOrThrowMock).toHaveBeenCalledWith(
+      user,
+      'listing',
+      permissionActions.create,
+      {
+        jurisdictionId: expect.anything(),
+      },
+    );
   });
 
   it('should create a complete listing', async () => {
@@ -1651,6 +1677,7 @@ describe('Testing listing service', () => {
         listingUtilities: true,
         listingsApplicationDropOffAddress: true,
         listingsApplicationPickUpAddress: true,
+        listingsApplicationMailingAddress: true,
         listingsBuildingAddress: true,
         listingsBuildingSelectionCriteriaFile: true,
         listingsLeasingAgentAddress: true,
@@ -1842,15 +1869,13 @@ describe('Testing listing service', () => {
               },
               unitAmiChartOverrides: {
                 create: {
-                  items: {
-                    items: [
-                      {
-                        percentOfAmi: 10,
-                        householdSize: 20,
-                        income: 30,
-                      },
-                    ],
-                  },
+                  items: [
+                    {
+                      percentOfAmi: 10,
+                      householdSize: 20,
+                      income: 30,
+                    },
+                  ],
                 },
               },
               unitAccessibilityPriorityTypes: {
@@ -1903,6 +1928,15 @@ describe('Testing listing service', () => {
         },
       },
     });
+
+    expect(canOrThrowMock).toHaveBeenCalledWith(
+      user,
+      'listing',
+      permissionActions.create,
+      {
+        jurisdictionId: val.jurisdictions.id,
+      },
+    );
   });
 
   it('should delete a listing', async () => {
@@ -1914,7 +1948,22 @@ describe('Testing listing service', () => {
       id,
     });
 
-    await service.delete(id);
+    await service.delete(id, {
+      id: 'requestingUser id',
+      userRoles: { isAdmin: true },
+    } as unknown as User);
+
+    expect(canOrThrowMock).toHaveBeenCalledWith(
+      {
+        id: 'requestingUser id',
+        userRoles: { isAdmin: true },
+      } as unknown as User,
+      'listing',
+      permissionActions.delete,
+      {
+        id,
+      },
+    );
 
     expect(prisma.listings.findUnique).toHaveBeenCalledWith({
       where: {
@@ -1934,8 +1983,14 @@ describe('Testing listing service', () => {
     prisma.listings.delete = jest.fn().mockResolvedValue(null);
 
     await expect(
-      async () => await service.delete(randomUUID()),
+      async () =>
+        await service.delete(randomUUID(), {
+          id: 'requestingUser id',
+          userRoles: { isAdmin: true },
+        } as unknown as User),
     ).rejects.toThrowError();
+
+    expect(canOrThrowMock).not.toHaveBeenCalled();
 
     expect(prisma.listings.findUnique).toHaveBeenCalledWith({
       where: {
@@ -2001,6 +2056,9 @@ describe('Testing listing service', () => {
       id: 'example id',
       name: 'example name',
     });
+    prisma.$transaction = jest
+      .fn()
+      .mockResolvedValue([{ id: 'example id', name: 'example name' }]);
 
     await service.update(
       {
@@ -2057,6 +2115,7 @@ describe('Testing listing service', () => {
         listingsApplicationPickUpAddress: true,
         listingsBuildingAddress: true,
         listingsBuildingSelectionCriteriaFile: true,
+        listingsApplicationMailingAddress: true,
         listingsLeasingAgentAddress: true,
         listingsResult: true,
         reservedCommunityTypes: true,
@@ -2079,14 +2138,13 @@ describe('Testing listing service', () => {
       data: {
         name: 'example listing name',
         depositMin: '5',
-        assets: {
-          create: [
-            {
-              fileId: expect.anything(),
-              label: 'example asset',
-            },
-          ],
-        },
+        assets: [
+          {
+            fileId: expect.anything(),
+            label: 'example asset',
+          },
+        ],
+
         jurisdictions: {
           connect: {
             id: expect.anything(),
@@ -2098,12 +2156,24 @@ describe('Testing listing service', () => {
         listingEvents: {
           create: [],
         },
+        listingsBuildingSelectionCriteriaFile: {
+          disconnect: true,
+        },
         unitsAvailable: 0,
       },
       where: {
         id: expect.anything(),
       },
     });
+
+    expect(canOrThrowMock).toHaveBeenCalledWith(
+      user,
+      'listing',
+      permissionActions.update,
+      {
+        id: 'example id',
+      },
+    );
   });
 
   it('should do a complete listing update', async () => {
@@ -2115,6 +2185,20 @@ describe('Testing listing service', () => {
       id: 'example id',
       name: 'example name',
     });
+    const updateMock = jest
+      .fn()
+      .mockResolvedValue({ id: 'example id', name: 'example name' });
+
+    prisma.$transaction = jest
+      .fn()
+      .mockResolvedValue([
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        updateMock,
+      ]);
 
     const val = constructFullListingData(randomUUID());
 
@@ -2151,6 +2235,7 @@ describe('Testing listing service', () => {
         listingUtilities: true,
         listingsApplicationDropOffAddress: true,
         listingsApplicationPickUpAddress: true,
+        listingsApplicationMailingAddress: true,
         listingsBuildingAddress: true,
         listingsBuildingSelectionCriteriaFile: true,
         listingsLeasingAgentAddress: true,
@@ -2176,9 +2261,7 @@ describe('Testing listing service', () => {
         ...val,
         id: undefined,
         publishedAt: expect.anything(),
-        assets: {
-          create: [exampleAsset],
-        },
+        assets: [exampleAsset],
         applicationMethods: {
           create: [
             {
@@ -2224,8 +2307,8 @@ describe('Testing listing service', () => {
           create: [
             {
               assets: {
-                create: {
-                  ...exampleAsset,
+                connect: {
+                  id: expect.anything(),
                 },
               },
               ordinal: 0,
@@ -2233,20 +2316,28 @@ describe('Testing listing service', () => {
           ],
         },
         listingMultiselectQuestions: {
-          create: [
+          upsert: [
             {
-              ordinal: 0,
-              multiselectQuestions: {
-                connect: {
-                  id: expect.anything(),
+              where: {
+                listingId_multiselectQuestionId: {
+                  listingId: expect.anything(),
+                  multiselectQuestionId: expect.anything(),
                 },
+              },
+              create: {
+                multiselectQuestionId: expect.anything(),
+                ordinal: 0,
+              },
+              update: {
+                multiselectQuestionId: expect.anything(),
+                ordinal: 0,
               },
             },
           ],
         },
         listingsApplicationDropOffAddress: {
-          create: {
-            ...exampleAddress,
+          connect: {
+            id: expect.anything(),
           },
         },
         reservedCommunityTypes: {
@@ -2272,13 +2363,13 @@ describe('Testing listing service', () => {
           },
         },
         listingsApplicationMailingAddress: {
-          create: {
-            ...exampleAddress,
+          connect: {
+            id: expect.anything(),
           },
         },
         listingsLeasingAgentAddress: {
-          create: {
-            ...exampleAddress,
+          connect: {
+            id: expect.anything(),
           },
         },
         listingFeatures: {
@@ -2306,13 +2397,13 @@ describe('Testing listing service', () => {
           },
         },
         listingsApplicationPickUpAddress: {
-          create: {
-            ...exampleAddress,
+          connect: {
+            id: expect.anything(),
           },
         },
         listingsBuildingAddress: {
-          create: {
-            ...exampleAddress,
+          connect: {
+            id: expect.anything(),
           },
         },
         units: {
@@ -2344,15 +2435,13 @@ describe('Testing listing service', () => {
               },
               unitAmiChartOverrides: {
                 create: {
-                  items: {
-                    items: [
-                      {
-                        percentOfAmi: 10,
-                        householdSize: 20,
-                        income: 30,
-                      },
-                    ],
-                  },
+                  items: [
+                    {
+                      percentOfAmi: 10,
+                      householdSize: 20,
+                      income: 30,
+                    },
+                  ],
                 },
               },
               unitAccessibilityPriorityTypes: {
@@ -2408,6 +2497,15 @@ describe('Testing listing service', () => {
         id: expect.anything(),
       },
     });
+
+    expect(canOrThrowMock).toHaveBeenCalledWith(
+      user,
+      'listing',
+      permissionActions.update,
+      {
+        id: 'example id',
+      },
+    );
   });
 
   it('listingApprovalNotify request approval email', async () => {
@@ -2419,11 +2517,12 @@ describe('Testing listing service', () => {
       listingInfo: { id: 'id', name: 'name' },
       status: ListingsStatusEnum.pendingReview,
       approvingRoles: [UserRoleEnum.admin],
+      jurisId: 'jurisId',
     });
 
-    expect(service.getUserEmailInfo).toBeCalledWith(['admin'], 'id', undefined);
+    expect(service.getUserEmailInfo).toBeCalledWith(['admin'], 'id', 'jurisId');
     expect(requestApprovalMock).toBeCalledWith(
-      user,
+      { id: 'jurisId' },
       { id: 'id', name: 'name' },
       ['admin@email.com'],
       config.get('PARTNERS_PORTAL_URL'),
@@ -2439,12 +2538,13 @@ describe('Testing listing service', () => {
       listingInfo: { id: 'id', name: 'name' },
       status: ListingsStatusEnum.changesRequested,
       approvingRoles: [UserRoleEnum.admin],
+      jurisId: 'jurisId',
     });
 
     expect(service.getUserEmailInfo).toBeCalledWith(
       ['partner', 'jurisdictionAdmin'],
       'id',
-      undefined,
+      'jurisId',
     );
     expect(changesRequestedMock).toBeCalledWith(
       user,
@@ -2465,16 +2565,17 @@ describe('Testing listing service', () => {
       status: ListingsStatusEnum.active,
       previousStatus: ListingsStatusEnum.pendingReview,
       approvingRoles: [UserRoleEnum.admin],
+      jurisId: 'jurisId',
     });
 
     expect(service.getUserEmailInfo).toBeCalledWith(
       ['partner', 'jurisdictionAdmin'],
       'id',
-      undefined,
+      'jurisId',
       true,
     );
     expect(listingApprovedMock).toBeCalledWith(
-      user,
+      expect.objectContaining({ id: 'jurisId' }),
       { id: 'id', name: 'name' },
       ['jurisAdmin@email.com', 'partner@email.com'],
       'public.housing.gov',
@@ -2488,6 +2589,7 @@ describe('Testing listing service', () => {
       status: ListingsStatusEnum.active,
       previousStatus: ListingsStatusEnum.active,
       approvingRoles: [UserRoleEnum.admin],
+      jurisId: 'jurisId',
     });
 
     expect(listingApprovedMock).toBeCalledTimes(0);
@@ -2525,5 +2627,123 @@ describe('Testing listing service', () => {
     });
 
     process.env.PROXY_URL = undefined;
+  });
+
+  it('should call the purge if no listings needed to get processed', async () => {
+    prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 2 });
+    prisma.cronJob.findFirst = jest
+      .fn()
+      .mockResolvedValue({ id: randomUUID() });
+    prisma.cronJob.update = jest.fn().mockResolvedValue(true);
+
+    process.env.PROXY_URL = 'https://www.google.com';
+    await service.process();
+    expect(httpServiceMock.request).toHaveBeenCalledWith({
+      baseURL: 'https://www.google.com',
+      method: 'PURGE',
+      url: `/listings?*`,
+    });
+    expect(prisma.listings.updateMany).toHaveBeenCalledWith({
+      data: {
+        status: ListingsStatusEnum.closed,
+        closedAt: expect.anything(),
+      },
+      where: {
+        status: ListingsStatusEnum.active,
+        AND: [
+          {
+            applicationDueDate: {
+              not: null,
+            },
+          },
+          {
+            applicationDueDate: {
+              lte: expect.anything(),
+            },
+          },
+        ],
+      },
+    });
+    expect(prisma.cronJob.findFirst).toHaveBeenCalled();
+    expect(prisma.cronJob.update).toHaveBeenCalled();
+    process.env.PROXY_URL = undefined;
+  });
+
+  it('should not call the purge if no listings needed to get processed', async () => {
+    prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 0 });
+    prisma.cronJob.findFirst = jest
+      .fn()
+      .mockResolvedValue({ id: randomUUID() });
+    prisma.cronJob.update = jest.fn().mockResolvedValue(true);
+
+    process.env.PROXY_URL = 'https://www.google.com';
+    await service.process();
+    expect(httpServiceMock.request).not.toHaveBeenCalled();
+    expect(prisma.listings.updateMany).toHaveBeenCalledWith({
+      data: {
+        status: ListingsStatusEnum.closed,
+        closedAt: expect.anything(),
+      },
+      where: {
+        status: ListingsStatusEnum.active,
+        AND: [
+          {
+            applicationDueDate: {
+              not: null,
+            },
+          },
+          {
+            applicationDueDate: {
+              lte: expect.anything(),
+            },
+          },
+        ],
+      },
+    });
+    expect(prisma.cronJob.findFirst).toHaveBeenCalled();
+    expect(prisma.cronJob.update).toHaveBeenCalled();
+    process.env.PROXY_URL = undefined;
+  });
+
+  it('should create new cronjob entry if none is present', async () => {
+    prisma.cronJob.findFirst = jest.fn().mockResolvedValue(null);
+    prisma.cronJob.create = jest.fn().mockResolvedValue(true);
+
+    await service.markCronJobAsStarted();
+
+    expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
+      where: {
+        name: 'LISTING_CRON_JOB',
+      },
+    });
+    expect(prisma.cronJob.create).toHaveBeenCalledWith({
+      data: {
+        lastRunDate: expect.anything(),
+        name: 'LISTING_CRON_JOB',
+      },
+    });
+  });
+
+  it('should update cronjob entry if one is present', async () => {
+    prisma.cronJob.findFirst = jest
+      .fn()
+      .mockResolvedValue({ id: randomUUID() });
+    prisma.cronJob.update = jest.fn().mockResolvedValue(true);
+
+    await service.markCronJobAsStarted();
+
+    expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
+      where: {
+        name: 'LISTING_CRON_JOB',
+      },
+    });
+    expect(prisma.cronJob.update).toHaveBeenCalledWith({
+      data: {
+        lastRunDate: expect.anything(),
+      },
+      where: {
+        id: expect.anything(),
+      },
+    });
   });
 });

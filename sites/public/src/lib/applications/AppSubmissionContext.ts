@@ -116,7 +116,7 @@ export const retrieveApplicationConfig = (listing: Listing) => {
 
 export const AppSubmissionContext = createContext({
   conductor: {} as ApplicationConductor,
-  application: { ...blankApplication },
+  application: JSON.parse(JSON.stringify(blankApplication)),
   listing: null as Listing,
   /* eslint-disable */
   syncApplication: (data) => {},

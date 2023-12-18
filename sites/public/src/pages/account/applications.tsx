@@ -1,13 +1,7 @@
 import React, { useEffect, useState, Fragment, useContext } from "react"
 import Head from "next/head"
-import {
-  DashBlock,
-  DashBlocks,
-  HeaderBadge,
-  LinkButton,
-  t,
-  LoadingOverlay,
-} from "@bloom-housing/ui-components"
+import { DashBlock, DashBlocks, HeaderBadge, t, LoadingOverlay } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
 import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
 import { StatusItemWrapper, AppWithListing } from "./StatusItemWrapper"
@@ -71,7 +65,9 @@ const Applications = () => {
     ) : (
       <div className="p-8">
         <h1 className="pb-4 text-2xl">{t("account.noApplications")}</h1>
-        <LinkButton href="/listings">{t("listings.browseListings")}</LinkButton>
+        <Button variant="primary-outlined" href="/listings">
+          {t("listings.browseListings")}
+        </Button>
       </div>
     )
   }

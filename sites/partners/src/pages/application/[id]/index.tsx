@@ -6,7 +6,6 @@ import { Tag } from "@bloom-housing/ui-seeds"
 import { useSingleApplicationData, useSingleListingData } from "../../../lib/hooks"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import Layout from "../../../layouts"
-import { Application } from "@bloom-housing/backend-core/types"
 import {
   DetailsMemberDrawer,
   MembersDrawer,
@@ -77,7 +76,7 @@ export default function ApplicationsList() {
   if (!application) return null
 
   return (
-    <ApplicationContext.Provider value={application as unknown as Application}>
+    <ApplicationContext.Provider value={application}>
       <Layout>
         <Head>
           <title>{t("nav.siteTitlePartners")}</title>
@@ -172,7 +171,7 @@ export default function ApplicationsList() {
       </Layout>
 
       <DetailsMemberDrawer
-        application={application as unknown as Application}
+        application={application}
         membersDrawer={membersDrawer}
         setMembersDrawer={setMembersDrawer}
       />

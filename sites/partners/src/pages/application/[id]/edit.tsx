@@ -7,7 +7,6 @@ import PaperApplicationForm from "../../../components/applications/PaperApplicat
 import { useSingleApplicationData, useSingleListingData } from "../../../lib/hooks"
 import { ApplicationContext } from "../../../components/applications/ApplicationContext"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
-import { Application } from "@bloom-housing/backend-core"
 
 const NewApplication = () => {
   const router = useRouter()
@@ -23,7 +22,7 @@ const NewApplication = () => {
   if (!application) return false
 
   return (
-    <ApplicationContext.Provider value={application as unknown as Application}>
+    <ApplicationContext.Provider value={application}>
       <Layout>
         <Head>
           <title>{t("nav.siteTitlePartners")}</title>
@@ -62,7 +61,7 @@ const NewApplication = () => {
 
         <PaperApplicationForm
           listingId={application.listings.id}
-          application={application as unknown as Application}
+          application={application}
           editMode
         />
       </Layout>

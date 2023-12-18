@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Post,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -11,6 +12,9 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
+import { JwtAuthGuard } from '../guards/jwt.guard';
+import { PermissionGuard } from '../guards/permission.guard';
 import { CreatePresignedUploadMetadataResponse } from '../dtos/assets/create-presign-upload-meta-response.dto';
 import { CreatePresignedUploadMetadata } from '../dtos/assets/create-presigned-upload-meta.dto';
 import { AssetService } from '../services/asset.service';
@@ -23,6 +27,8 @@ import { defaultValidationPipeOptions } from '../utilities/default-validation-pi
   CreatePresignedUploadMetadata,
   CreatePresignedUploadMetadataResponse,
 )
+@PermissionTypeDecorator('asset')
+@UseGuards(JwtAuthGuard, PermissionGuard)
 export class AssetController {
   constructor(private readonly assetService: AssetService) {}
 

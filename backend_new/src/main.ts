@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import { AppModule } from './modules/app.module';
 import { CustomExceptionFilter } from './utilities/custom-exception-filter';
+import { json } from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -23,6 +24,7 @@ async function bootstrap() {
         return res.req.route.path === '/applications/csv';
       },
     }),
+    json({ limit: '50mb' }),
   );
   const config = new DocumentBuilder()
     .setTitle('Bloom API')

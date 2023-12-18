@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ApplicationController } from '../controllers/application.controller';
 import { ApplicationService } from '../services/application.service';
 import { PrismaModule } from './prisma.module';
+import { PermissionModule } from './permission.module';
 import { EmailModule } from './email.module';
 import { ListingModule } from './listing.module';
 import { MultiselectQuestionModule } from './multiselect-question.module';
@@ -13,6 +14,7 @@ import { ApplicationCsvExporterService } from '../services/application-csv-expor
     EmailModule,
     ListingModule,
     MultiselectQuestionModule,
+    PermissionModule,
   ],
   controllers: [ApplicationController],
   providers: [ApplicationService, ApplicationCsvExporterService],

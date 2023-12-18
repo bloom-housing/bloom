@@ -7,30 +7,30 @@ import { GridApi } from "ag-grid-community"
 import { useForm } from "react-hook-form"
 import {
   t,
-  Button,
   AlertBox,
-  AppearanceStyleType,
   useMutate,
   AgTable,
   useAgTable,
   Modal,
   Field,
-  AppearanceSizeType,
+  Icon,
 } from "@bloom-housing/ui-components"
-import { Tag } from "@bloom-housing/ui-seeds"
+import { Button, Tag } from "@bloom-housing/ui-seeds"
 import { useSingleFlaggedApplication } from "../../../lib/hooks"
 import Layout from "../../../layouts"
 import { getCols } from "./applicationsCols"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+// TODO: remove these when AFS logic is done
 import {
   ApplicationFlaggedSet,
-  ApplicationReviewStatus,
   EnumApplicationFlaggedSetStatus,
   EnumApplicationFlaggedSetResolveStatus,
   ApplicationFlaggedSetResolve,
+  ApplicationReviewStatus,
 } from "@bloom-housing/backend-core/types"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
 import { StatusBar } from "../../../components/shared/StatusBar"
+import { ApplicationReviewStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const Flag = () => {
   const router = useRouter()
@@ -75,8 +75,8 @@ const Flag = () => {
     if (!data || !gridApi) return
     gridApi.forEachNode((row) => {
       row.setSelected(
-        row.data.reviewStatus === ApplicationReviewStatus.pendingAndValid ||
-          row.data.reviewStatus === ApplicationReviewStatus.valid
+        row.data.reviewStatus === ApplicationReviewStatusEnum.pendingAndValid ||
+          row.data.reviewStatus === ApplicationReviewStatusEnum.valid
       )
     })
   }
@@ -116,7 +116,13 @@ const Flag = () => {
       <div>
         <StatusBar
           backButton={
-            <Button inlineIcon="left" icon="arrowBack" onClick={() => router.back()}>
+            <Button
+              leadIcon={<Icon symbol="arrowBack" size="small" />}
+              variant="text"
+              size="sm"
+              className="font-semibold no-underline"
+              onClick={() => router.back()}
+            >
               {t("t.back")}
             </Button>
           }
@@ -195,9 +201,9 @@ const Flag = () => {
             <aside className="md:w-3/12 md:pl-6">
               <section className={"w-full"}>
                 <Button
-                  styleType={AppearanceStyleType.primary}
+                  variant="primary"
                   onClick={() => setSaveModalOpen(true)}
-                  dataTestId={"save-set-button"}
+                  id={"save-set-button"}
                 >
                   {t("t.save")}
                 </Button>
@@ -219,9 +225,9 @@ const Flag = () => {
         actions={[
           <Button
             type="button"
-            styleType={AppearanceStyleType.primary}
-            size={AppearanceSizeType.small}
-            loading={isSaveLoading}
+            variant="primary"
+            size="sm"
+            loadingMessage={isSaveLoading && t("t.formSubmitted")}
             onClick={() => {
               const selectedData = gridApi.getSelectedRows()
               const status = getValues()["setStatus"]
@@ -242,7 +248,8 @@ const Flag = () => {
           </Button>,
           <Button
             type="button"
-            size={AppearanceSizeType.small}
+            variant="primary-outlined"
+            size="sm"
             onClick={() => {
               setSaveModalOpen(false)
             }}

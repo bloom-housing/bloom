@@ -11,6 +11,7 @@ import {
   Request,
   StreamableFile,
   UseGuards,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -36,11 +37,15 @@ import {
   TextInput,
 } from '../dtos/applications/application-multiselect-question-option.dto';
 import { ValidationsGroupsEnum } from '../enums/shared/validation-groups-enum';
+import { OptionalAuthGuard } from '../guards/optional.guard';
 import { mapTo } from '../utilities/mapTo';
 import { User } from '../dtos/users/user.dto';
-import { OptionalAuthGuard } from '../guards/optional.guard';
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
 import { ApplicationCsvExporterService } from '../services/application-csv-export.service';
+import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor';
+import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import { PermissionAction } from '../decorators/permission-action.decorator';
 
 @Controller('applications')
 @ApiTags('applications')
@@ -51,6 +56,9 @@ import { ApplicationCsvExporterService } from '../services/application-csv-expor
   }),
 )
 @ApiExtraModels(IdDTO, AddressInput, BooleanInput, TextInput)
+@UseGuards(OptionalAuthGuard)
+@PermissionTypeDecorator('application')
+@UseInterceptors(ActivityLogInterceptor)
 export class ApplicationController {
   constructor(
     private readonly applicationService: ApplicationService,
@@ -98,8 +106,15 @@ export class ApplicationController {
     operationId: 'create',
   })
   @ApiOkResponse({ type: Application })
-  async create(@Body() dto: ApplicationCreate): Promise<Application> {
-    return await this.applicationService.create(dto, false);
+  async create(
+    @Body() dto: ApplicationCreate,
+    @Request() req: ExpressRequest,
+  ): Promise<Application> {
+    return await this.applicationService.create(
+      dto,
+      false,
+      mapTo(User, req['user']),
+    );
   }
 
   @Post(`submit`)
@@ -115,6 +130,8 @@ export class ApplicationController {
     }),
   )
   @UseGuards(OptionalAuthGuard)
+  @PermissionAction(permissionActions.submit)
+  @UseInterceptors(ActivityLogInterceptor)
   async submit(
     @Request() req: ExpressRequest,
     @Body() dto: ApplicationCreate,
@@ -135,6 +152,8 @@ export class ApplicationController {
       groups: [ValidationsGroupsEnum.default, ValidationsGroupsEnum.applicants],
     }),
   )
+  @PermissionAction(permissionActions.submit)
+  @UseInterceptors(ActivityLogInterceptor)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   submissionValidation(@Body() dto: ApplicationCreate): SuccessDTO {
     // if we succeeded then the record is good to submit
@@ -149,14 +168,18 @@ export class ApplicationController {
   async update(
     @Param('id') applicationId: string,
     @Body() dto: ApplicationUpdate,
+    @Request() req: ExpressRequest,
   ): Promise<Application> {
-    return await this.applicationService.update(dto);
+    return await this.applicationService.update(dto, mapTo(User, req['user']));
   }
 
   @Delete()
   @ApiOperation({ summary: 'Delete application by id', operationId: 'delete' })
   @ApiOkResponse({ type: SuccessDTO })
-  async delete(@Body() dto: IdDTO) {
-    return await this.applicationService.delete(dto.id);
+  async delete(@Body() dto: IdDTO, @Request() req: ExpressRequest) {
+    return await this.applicationService.delete(
+      dto.id,
+      mapTo(User, req['user']),
+    );
   }
 }

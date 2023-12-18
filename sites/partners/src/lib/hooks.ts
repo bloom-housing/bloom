@@ -4,20 +4,16 @@ import qs from "qs"
 import dayjs from "dayjs"
 import JSZip from "jszip"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import {
-  EnumApplicationsApiExtraModelOrder,
-  EnumApplicationsApiExtraModelOrderBy,
-  EnumListingFilterParamsComparison,
-  EnumUserFilterParamsComparison,
-  MultiselectQuestion,
-  UserRolesOnly,
-} from "@bloom-housing/backend-core/types"
 import { setSiteAlertMessage, t } from "@bloom-housing/ui-components"
 import {
+  ApplicationOrderByKeys,
+  EnumListingFilterParamsComparison,
   EnumMultiselectQuestionFilterParamsComparison,
   ListingViews,
   MultiselectQuestionFilterParams,
   MultiselectQuestionsApplicationSectionEnum,
+  OrderByEnum,
+  UserRole,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 export interface PaginationProps {
   page?: number
@@ -46,7 +42,7 @@ type UseListingsDataProps = PaginationProps & {
   userId?: string
   search?: string
   sort?: ColumnOrder[]
-  roles?: UserRolesOnly
+  roles?: UserRole
   userJurisidctionIds?: string[]
 }
 
@@ -219,8 +215,8 @@ export function useApplicationsData(
   delayedFilterValue: string,
   limit: number,
   listingId: string,
-  orderBy?: EnumApplicationsApiExtraModelOrderBy,
-  order?: EnumApplicationsApiExtraModelOrder
+  orderBy?: ApplicationOrderByKeys,
+  order?: OrderByEnum
 ) {
   const { applicationsService } = useContext(AuthContext)
 
@@ -235,7 +231,7 @@ export function useApplicationsData(
   }
 
   if (orderBy) {
-    Object.assign(params, { orderBy, order: order || EnumApplicationsApiExtraModelOrder.ASC })
+    Object.assign(params, { orderBy, order: order || OrderByEnum.asc })
   }
 
   const paramsString = qs.stringify(params)
@@ -425,8 +421,7 @@ export function useJurisdictionalMultiselectQuestionList(
 
   return {
     cacheKey,
-    // TODO: remove casting when connecting partner site to new backend
-    data: data as unknown as MultiselectQuestion[],
+    data: data,
     loading: !error && !data,
     error,
   }
@@ -472,7 +467,7 @@ export function useUserList({ page, limit, search = "" }: UseUserListProps) {
     filter: [
       {
         isPortalUser: true,
-        $comparison: EnumUserFilterParamsComparison["="],
+        $comparison: EnumListingFilterParamsComparison["="],
       },
     ],
     search,
@@ -547,14 +542,40 @@ export const useApplicationsExport = (listingId: string, includeDemographics: bo
 }
 
 export const useUsersExport = () => {
-  // const { userService } = useContext(AuthContext)
+  const { userService, profile } = useContext(AuthContext)
 
-  return useCsvExport(
-    // TODO: reconnect when csv endpoint is implemented
-    // () => userService.listAsCsv(),
-    () => Promise.resolve(""),
-    `users-${createDateStringFromNow("YYYY-MM-DD_HH:mm")}.csv`
-  )
+  const [csvExportLoading, setCsvExportLoading] = useState(false)
+  const [csvExportError, setCsvExportError] = useState(false)
+  const [csvExportSuccess, setCsvExportSuccess] = useState(false)
+
+  const onExport = useCallback(async () => {
+    setCsvExportError(false)
+    setCsvExportSuccess(false)
+    setCsvExportLoading(true)
+
+    try {
+      await userService.listAsCsv()
+      setCsvExportSuccess(true)
+      setSiteAlertMessage(
+        t("t.emailingExportSuccess", {
+          email: profile?.email,
+        }),
+        "success"
+      )
+    } catch (err) {
+      console.log(err)
+      setCsvExportError(true)
+    }
+
+    setCsvExportLoading(false)
+  }, [userService, profile?.email])
+
+  return {
+    onExport,
+    csvExportLoading,
+    csvExportError,
+    csvExportSuccess,
+  }
 }
 
 const useCsvExport = (endpoint: () => Promise<string>, fileName: string) => {

@@ -1,17 +1,6 @@
 import React, { useEffect, useState, useContext } from "react"
-import {
-  t,
-  Field,
-  Select,
-  AppearanceStyleType,
-  AppearanceBorderType,
-  FieldGroup,
-  Button,
-  Form,
-  numberOptions,
-  AppearanceSizeType,
-} from "@bloom-housing/ui-components"
-import { Card, FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { t, Field, Select, FieldGroup, Form, numberOptions } from "@bloom-housing/ui-components"
+import { Button, Card, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm, useWatch, useFormContext } from "react-hook-form"
 import { TempUnit } from "../../../lib/listings/formTypes"
@@ -20,7 +9,7 @@ import {
   AmiChartItem,
   UnitAccessibilityPriorityType,
   UnitType,
-} from "@bloom-housing/backend-core/types"
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useAmiChartList, useUnitPriorityList, useUnitTypeList } from "../../../lib/hooks"
 import { arrayToFormOptions, getRentType, fieldHasError } from "../../../lib/helpers"
 import SectionWithGrid from "../../shared/SectionWithGrid"
@@ -127,8 +116,8 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
       Object.keys(defaultUnit).forEach((key) => {
         setValue(key, defaultUnit[key])
       })
-      if (defaultUnit.amiChartOverride) {
-        defaultUnit.amiChartOverride.items.forEach((override) => {
+      if (defaultUnit.unitAmiChartOverrides) {
+        defaultUnit.unitAmiChartOverrides.items.forEach((override) => {
           setValue(`maxIncomeHouseholdSize${override.householdSize}`, override.income)
         })
       }
@@ -229,18 +218,20 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
       delete data.monthlyRent
     }
 
-    if (data.priorityType?.id) {
-      const priority = unitPriorities.find((priority) => priority.id === data.priorityType.id)
-      data.priorityType = priority
+    if (data.unitAccessibilityPriorityTypes?.id) {
+      const priority = unitPriorities.find(
+        (priority) => priority.id === data.unitAccessibilityPriorityTypes.id
+      )
+      data.unitAccessibilityPriorityTypes = priority
     } else {
-      delete data.priorityType
+      delete data.unitAccessibilityPriorityTypes
     }
 
-    if (data.unitType?.id) {
-      const type = unitTypes.find((type) => type.id === data.unitType.id)
-      data.unitType = type
+    if (data.unitTypes?.id) {
+      const type = unitTypes.find((type) => type.id === data.unitTypes.id)
+      data.unitTypes = type
     } else {
-      delete data.unitType
+      delete data.unitTypes
     }
 
     if (currentAmiChart) {
@@ -343,7 +334,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   // after the unitType options are set
   useEffect(() => {
     if (defaultUnit && unitTypesOptions) {
-      setValue("unitType.id", defaultUnit.unitType?.id)
+      setValue("unitTypes.id", defaultUnit.unitTypes?.id)
     }
   }, [defaultUnit, unitTypesOptions, setValue])
 
@@ -364,10 +355,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   // sets the options for the ami charts
   useEffect(() => {
     if (amiCharts.length === 0 || amiChartsOptions.length) return
-    setAmiChartsOptions(
-      // TODO: remove the casting when partner site is connected to the new backend
-      arrayToFormOptions<AmiChart>(amiCharts as unknown as AmiChart[], "name", "id")
-    )
+    setAmiChartsOptions(arrayToFormOptions<AmiChart>(amiCharts, "name", "id"))
   }, [amiCharts, amiChartsOptions])
 
   // sets the options for the unit priorities
@@ -406,20 +394,20 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
 
               <FieldValue label={t("listings.unit.type")}>
                 <Select
-                  id="unitType.id"
-                  name="unitType.id"
+                  id="unitTypes.id"
+                  name="unitTypes.id"
                   label={t("listings.unit.type")}
                   placeholder={t("listings.unit.type")}
                   labelClassName="sr-only"
                   register={register}
                   controlClassName="control"
                   options={unitTypesOptions}
-                  error={fieldHasError(errors?.unitType)}
+                  error={fieldHasError(errors?.unitTypes)}
                   errorMessage={t("errors.requiredFieldError")}
                   validation={{ required: true }}
                   inputProps={{
                     onChange: () => {
-                      clearErrors("unitType.id")
+                      clearErrors("unitTypes.id")
                     },
                   }}
                 />
@@ -637,8 +625,8 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
             <Grid.Row columns={4}>
               <Grid.Cell>
                 <Select
-                  id="priorityType.id"
-                  name="priorityType.id"
+                  id="unitAccessibilityPriorityTypes.id"
+                  name="unitAccessibilityPriorityTypes.id"
                   label={t("listings.unit.accessibilityPriorityType")}
                   placeholder={t("listings.unit.accessibilityPriorityType")}
                   register={register}
@@ -656,9 +644,9 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
           <Button
             type="button"
             onClick={() => copyAndNew()}
-            styleType={AppearanceStyleType.secondary}
+            variant="secondary"
             className="mr-4"
-            size={AppearanceSizeType.small}
+            size="sm"
           >
             {t("t.copy")}
           </Button>
@@ -666,9 +654,9 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
           <Button
             type="button"
             onClick={() => onFormSubmit("save")}
-            styleType={AppearanceStyleType.secondary}
+            variant="secondary"
             className="mr-4 mb-4 sm:mb-0"
-            size={AppearanceSizeType.small}
+            size="sm"
           >
             {t("t.save")}
           </Button>
@@ -676,9 +664,9 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
         <Button
           type="button"
           onClick={() => onFormSubmit("saveNew")}
-          styleType={AppearanceStyleType.secondary}
+          variant="secondary"
           className="mr-4 mb-4 sm:mb-0"
-          size={AppearanceSizeType.small}
+          size="sm"
         >
           {t("t.saveNew")}
         </Button>
@@ -686,20 +674,14 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
         <Button
           type="button"
           onClick={() => onFormSubmit("saveExit")}
-          styleType={AppearanceStyleType.primary}
-          size={AppearanceSizeType.small}
-          dataTestId={"unitFormSaveAndExitButton"}
+          variant="primary"
+          size="sm"
+          id={"unitFormSaveAndExitButton"}
         >
           {t("t.saveExit")}
         </Button>
 
-        <Button
-          type="button"
-          onClick={() => onClose(false, false, null)}
-          styleType={AppearanceStyleType.secondary}
-          border={AppearanceBorderType.borderless}
-          size={AppearanceSizeType.small}
-        >
+        <Button type="button" onClick={() => onClose(false, false, null)} variant="text" size="sm">
           {t("t.cancel")}
         </Button>
       </div>

@@ -15,6 +15,7 @@ import { applicationFactory } from './seed-helpers/application-factory';
 import { translationFactory } from './seed-helpers/translation-factory';
 import { householdMemberFactoryMany } from './seed-helpers/household-member-factory';
 import { APPLICATIONS_PER_LISTINGS, LISTINGS_TO_SEED } from './constants';
+import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
 
 const listingStatusEnumArray = Object.values(ListingsStatusEnum);
 
@@ -52,6 +53,8 @@ export const devSeeding = async (
       roles: { isAdmin: true },
       email: 'admin@example.com',
       confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: true,
     }),
   });
   await prismaClient.userAccounts.create({
@@ -59,7 +62,7 @@ export const devSeeding = async (
       roles: { isJurisdictionalAdmin: true },
       email: 'jurisdiction-admin@example.com',
       confirmedAt: new Date(),
-      jurisdictionId: jurisdiction.id,
+      jurisdictionIds: [jurisdiction.id],
     }),
   });
   // add jurisdiction specific translations and default ones
@@ -77,6 +80,7 @@ export const devSeeding = async (
     await createMultiselect(jurisdiction.id, prismaClient),
   );
   const householdSize = randomInt(0, 6);
+  await reservedCommunityTypeFactoryAll(jurisdiction.id, prismaClient);
   for (let index = 0; index < LISTINGS_TO_SEED; index++) {
     const householdMembers = await householdMemberFactoryMany(householdSize);
 

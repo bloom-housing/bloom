@@ -2,8 +2,6 @@ import React, { useState } from "react"
 import { useFormContext } from "react-hook-form"
 import {
   t,
-  AppearanceStyleType,
-  Button,
   Drawer,
   Dropzone,
   Field,
@@ -11,9 +9,8 @@ import {
   TableThumbnail,
   FieldGroup,
   StandardTableData,
-  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
-import { Card, FieldValue, Grid, Heading } from "@bloom-housing/ui-seeds"
+import { Button, Card, FieldValue, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 import { cloudinaryFileUploader } from "../../../../lib/helpers"
 
@@ -24,7 +21,7 @@ const BuildingSelectionCriteria = () => {
   const { register, getValues, setValue, watch, errors, trigger } = formMethods
 
   const listingCriteriaURL = watch("buildingSelectionCriteria")
-  const listingCriteriaFile = watch("buildingSelectionCriteriaFile")
+  const listingCriteriaFile = watch("listingsBuildingSelectionCriteriaFile")
   const criteriaAttachType = watch("criteriaAttachType")
 
   /*
@@ -54,14 +51,14 @@ const BuildingSelectionCriteria = () => {
     setValue("buildingSelectionCriteria", "")
   }
   const savePDF = () => {
-    setValue("buildingSelectionCriteriaFile", {
+    setValue("listingsBuildingSelectionCriteriaFile", {
       fileId: cloudinaryData.id,
       label: "cloudinaryPDF",
     })
     deleteURL()
   }
   const deletePDF = () => {
-    setValue("buildingSelectionCriteriaFile", { fileId: "", label: "" })
+    setValue("listingsBuildingSelectionCriteriaFile", { fileId: "", label: "" })
   }
 
   let criteriaTableHeaders: Record<string, string> = {
@@ -89,7 +86,7 @@ const BuildingSelectionCriteria = () => {
         content: (
           <Button
             type="button"
-            className="font-semibold uppercase text-alert my-0"
+            className="font-semibold text-alert"
             onClick={() => {
               setCloudinaryData({
                 id: "",
@@ -97,7 +94,7 @@ const BuildingSelectionCriteria = () => {
               })
               setProgressValue(0)
             }}
-            unstyled
+            variant="text"
           >
             {t("t.delete")}
           </Button>
@@ -124,25 +121,25 @@ const BuildingSelectionCriteria = () => {
       fileName: { content: listingCriteriaFile.fileId.split("/").slice(-1).join() },
       actions: {
         content: (
-          <div className="flex">
+          <div className="flex gap-3">
             <Button
               type="button"
               className="font-semibold uppercase my-0"
               onClick={() => {
                 setDrawerState(true)
               }}
-              unstyled
+              variant="text"
             >
               {t("t.edit")}
             </Button>
             <Button
               type="button"
-              className="font-semibold uppercase text-alert my-0"
+              className="font-semibold text-alert"
               onClick={() => {
                 setCloudinaryData({ ...cloudinaryData, id: "" })
                 deletePDF()
               }}
-              unstyled
+              variant="text"
             >
               {t("t.delete")}
             </Button>
@@ -159,24 +156,24 @@ const BuildingSelectionCriteria = () => {
       fileName: { content: listingCriteriaURL },
       actions: {
         content: (
-          <div className="flex">
+          <div className="flex gap-3">
             <Button
               type="button"
-              className="font-semibold uppercase"
+              className="font-semibold"
               onClick={() => {
                 setDrawerState(true)
               }}
-              unstyled
+              variant="text"
             >
               {t("t.edit")}
             </Button>
             <Button
               type="button"
-              className="font-semibold uppercase text-alert"
+              className="font-semibold text-alert"
               onClick={() => {
                 setValue("buildingSelectionCriteria", "")
               }}
-              unstyled
+              variant="text"
             >
               {t("t.delete")}
             </Button>
@@ -196,8 +193,8 @@ const BuildingSelectionCriteria = () => {
   return (
     <>
       <input type="hidden" {...register("buildingSelectionCriteria")} />
-      <input type="hidden" {...register("buildingSelectionCriteriaFile.fileId")} />
-      <input type="hidden" {...register("buildingSelectionCriteriaFile.label")} />
+      <input type="hidden" {...register("listingsBuildingSelectionCriteriaFile.fileId")} />
+      <input type="hidden" {...register("listingsBuildingSelectionCriteriaFile.label")} />
 
       {((listingCriteriaURL && listingCriteriaURL != "") ||
         (listingCriteriaFile?.fileId && listingCriteriaFile.fileId != "")) && (
@@ -215,6 +212,7 @@ const BuildingSelectionCriteria = () => {
               <Button
                 id="addBuildingSelectionCriteriaButton"
                 type="button"
+                variant="primary-outlined"
                 onClick={() => {
                   setDrawerState(true)
                 }}
@@ -250,8 +248,8 @@ const BuildingSelectionCriteria = () => {
                 resetDrawerState()
               }
             }}
-            styleType={AppearanceStyleType.primary}
-            size={AppearanceSizeType.small}
+            variant="primary"
+            size="sm"
           >
             Save
           </Button>,
@@ -260,7 +258,8 @@ const BuildingSelectionCriteria = () => {
             onClick={() => {
               resetDrawerState()
             }}
-            size={AppearanceSizeType.small}
+            size="sm"
+            variant="primary-outlined"
           >
             {t("t.cancel")}
           </Button>,

@@ -7,6 +7,7 @@ import {
   Put,
   Query,
   Request,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -28,10 +29,15 @@ import { AfsMeta } from '../dtos/application-flagged-sets/afs-meta.dto';
 import { AfsQueryParams } from '../dtos/application-flagged-sets/afs-query-params.dto';
 import { User } from '../dtos/users/user.dto';
 import { mapTo } from '../utilities/mapTo';
+import { OptionalAuthGuard } from '../guards/optional.guard';
+import { PermissionGuard } from '../guards/permission.guard';
+import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 
 @Controller('/applicationFlaggedSets')
 @ApiExtraModels(SuccessDTO)
 @ApiTags('applicationFlaggedSets')
+@UseGuards(OptionalAuthGuard, PermissionGuard)
+@PermissionTypeDecorator('applicationFlaggedSet')
 @UsePipes(
   new ValidationPipe({
     ...defaultValidationPipeOptions,

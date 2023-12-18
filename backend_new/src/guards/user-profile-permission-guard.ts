@@ -5,7 +5,7 @@ import { User } from '../dtos/users/user.dto';
 import { PermissionService } from '../services/permission.service';
 
 @Injectable()
-export class PermissionGuard implements CanActivate {
+export class UserProfilePermissionGuard implements CanActivate {
   constructor(
     private permissionService: PermissionService,
     private reflector: Reflector,
@@ -13,7 +13,7 @@ export class PermissionGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
-    const user: User = req.user;
+    const user: User = req['user'];
     const type = this.reflector.getAllAndOverride<string>('permission_type', [
       context.getClass(),
       context.getHandler(),

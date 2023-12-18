@@ -68,7 +68,12 @@ export const user = {
   passwordValidForDays: 180,
   phoneNumber: undefined,
   phoneNumberVerified: false,
-  roles: { user: { id: "user_1" }, isAdmin: true, isJurisdictionalAdmin: false, isPartner: false },
+  userRoles: {
+    user: { id: "user_1" },
+    isAdmin: true,
+    isJurisdictionalAdmin: false,
+    isPartner: false,
+  },
   updatedAt: new Date(),
 }
 

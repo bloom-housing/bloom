@@ -49,7 +49,7 @@ export class MultiselectQuestionService {
       };
     }
     params.filter.forEach((filter) => {
-      if (MultiselectQuestionFilterKeys.jurisdiction in filter) {
+      if (filter[MultiselectQuestionFilterKeys.jurisdiction]) {
         const builtFilter = buildFilter({
           $comparison: filter.$comparison,
           $include_nulls: false,
@@ -66,7 +66,7 @@ export class MultiselectQuestionService {
             },
           })),
         });
-      } else if (MultiselectQuestionFilterKeys.applicationSection in filter) {
+      } else if (filter[MultiselectQuestionFilterKeys.applicationSection]) {
         const builtFilter = buildFilter({
           $comparison: filter.$comparison,
           $include_nulls: false,
@@ -123,8 +123,12 @@ export class MultiselectQuestionService {
             id: juris.id,
           })),
         },
-        links: JSON.stringify(incomingData.links),
-        options: JSON.stringify(incomingData.options),
+        links: incomingData.links
+          ? (incomingData.links as unknown as Prisma.InputJsonArray)
+          : undefined,
+        options: incomingData.options
+          ? (incomingData.options as unknown as Prisma.InputJsonArray)
+          : undefined,
       },
       include: view,
     });
@@ -139,7 +143,22 @@ export class MultiselectQuestionService {
   async update(
     incomingData: MultiselectQuestionUpdate,
   ): Promise<MultiselectQuestion> {
-    await this.findOrThrow(incomingData.id);
+    const existingMultiSelectQ = await this.findOrThrow(incomingData.id);
+
+    if (existingMultiSelectQ.jurisdictions?.length) {
+      await this.prisma.multiselectQuestions.update({
+        data: {
+          jurisdictions: {
+            disconnect: existingMultiSelectQ.jurisdictions.map((juris) => ({
+              id: juris.id,
+            })),
+          },
+        },
+        where: {
+          id: existingMultiSelectQ.id,
+        },
+      });
+    }
 
     const rawResults = await this.prisma.multiselectQuestions.update({
       data: {
@@ -149,8 +168,12 @@ export class MultiselectQuestionService {
             id: juris.id,
           })),
         },
-        links: JSON.stringify(incomingData.links),
-        options: JSON.stringify(incomingData.options),
+        links: incomingData.links
+          ? JSON.parse(JSON.stringify(incomingData.links))
+          : undefined,
+        options: incomingData.options
+          ? JSON.parse(JSON.stringify(incomingData.options))
+          : undefined,
         id: undefined,
       },
       where: {
@@ -179,9 +202,14 @@ export class MultiselectQuestionService {
   /*
     this will either find a record or throw a customized error
   */
-  async findOrThrow(multiselectQuestionId: string): Promise<boolean> {
+  async findOrThrow(
+    multiselectQuestionId: string,
+  ): Promise<MultiselectQuestion> {
     const multiselectQuestion =
       await this.prisma.multiselectQuestions.findFirst({
+        include: {
+          jurisdictions: true,
+        },
         where: {
           id: multiselectQuestionId,
         },
@@ -193,7 +221,7 @@ export class MultiselectQuestionService {
       );
     }
 
-    return true;
+    return mapTo(MultiselectQuestion, multiselectQuestion);
   }
 
   async findByListingId(listingId: string): Promise<MultiselectQuestion[]> {

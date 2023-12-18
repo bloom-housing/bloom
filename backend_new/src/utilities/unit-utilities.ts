@@ -71,7 +71,7 @@ export const mergeAmiChartWithOverrides = (
   override: UnitAmiChartOverride,
 ) => {
   const householdAmiPercentageOverrideMap: Map<string, AmiChartItem> =
-    override.items.reduce((acc, amiChartItem) => {
+    override.items?.reduce((acc, amiChartItem) => {
       acc.set(getAmiChartItemUniqueKey(amiChartItem), amiChartItem);
       return acc;
     }, new Map());
@@ -132,25 +132,27 @@ export const generateHmiData = (
   );
 
   // All unique combinations of an AMI percentage and an AMI chart across all units
-  const uniquePercentageChartSet: ChartAndPercentage[] = [
-    ...new Set(
-      units
-        .filter((unit) => amiChartMap[unit.amiChart.id])
-        .map((unit) => {
-          let amiChart = amiChartMap[unit.amiChart.id];
-          if (unit.unitAmiChartOverrides) {
-            amiChart = mergeAmiChartWithOverrides(
-              amiChart,
-              unit.unitAmiChartOverrides,
-            );
-          }
-          return JSON.stringify({
-            percentage: parseInt(unit.amiPercentage, 10),
-            chart: amiChart,
-          });
-        }),
-    ),
-  ].map((uniqueSetString) => JSON.parse(uniqueSetString));
+  const uniquePercentageChartSet: ChartAndPercentage[] = amiCharts.length
+    ? [
+        ...new Set(
+          units
+            .filter((unit) => amiChartMap[unit.amiChart.id])
+            .map((unit) => {
+              let amiChart = amiChartMap[unit.amiChart.id];
+              if (unit.unitAmiChartOverrides) {
+                amiChart = mergeAmiChartWithOverrides(
+                  amiChart,
+                  unit.unitAmiChartOverrides,
+                );
+              }
+              return JSON.stringify({
+                percentage: parseInt(unit.amiPercentage, 10),
+                chart: amiChart,
+              });
+            }),
+        ),
+      ].map((uniqueSetString) => JSON.parse(uniqueSetString))
+    : [];
 
   const hmiHeaders = {
     sizeColumn: showUnitType ? 't.unitType' : 'listings.householdSize',

@@ -30,10 +30,16 @@ import {
   unitTypeFactorySingle,
 } from '../../prisma/seed-helpers/unit-type-factory';
 import { amiChartFactory } from '../../prisma/seed-helpers/ami-chart-factory';
-import { unitAccessibilityPriorityTypeFactorySingle } from '../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
+import {
+  unitAccessibilityPriorityTypeFactoryAll,
+  unitAccessibilityPriorityTypeFactorySingle,
+} from '../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
 import { unitRentTypeFactory } from '../../prisma/seed-helpers/unit-rent-type-factory';
 import { multiselectQuestionFactory } from '../../prisma/seed-helpers/multiselect-question-factory';
-import { reservedCommunityTypeFactory } from '../../prisma/seed-helpers/reserved-community-type-factory';
+import {
+  reservedCommunityTypeFactoryAll,
+  reservedCommunityTypeFactoryGet,
+} from '../../prisma/seed-helpers/reserved-community-type-factory';
 import { ListingPublishedCreate } from '../../src/dtos/listings/listing-published-create.dto';
 import { addressFactory } from '../../prisma/seed-helpers/address-factory';
 import { AddressCreate } from '../../src/dtos/addresses/address-create.dto';
@@ -72,6 +78,8 @@ describe('Listing Controller Tests', () => {
       data: jurisdictionFactory(),
     });
     jurisdictionAId = jurisdiction.id;
+    await reservedCommunityTypeFactoryAll(jurisdictionAId, prisma);
+    await unitAccessibilityPriorityTypeFactoryAll(prisma);
     const adminUser = await prisma.userAccounts.create({
       data: await userFactory({
         roles: {
@@ -115,18 +123,19 @@ describe('Listing Controller Tests', () => {
       data: amiChartFactory(10, jurisdictionA.id),
     });
     const unitAccessibilityPriorityType =
-      await prisma.unitAccessibilityPriorityTypes.create({
-        data: unitAccessibilityPriorityTypeFactorySingle(),
-      });
+      await unitAccessibilityPriorityTypeFactorySingle(prisma);
+
     const rentType = await prisma.unitRentTypes.create({
       data: unitRentTypeFactory(),
     });
     const multiselectQuestion = await prisma.multiselectQuestions.create({
       data: multiselectQuestionFactory(jurisdictionA.id),
     });
-    const reservedCommunityType = await prisma.reservedCommunityTypes.create({
-      data: reservedCommunityTypeFactory(jurisdictionA.id),
-    });
+    await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
+    const reservedCommunityType = await reservedCommunityTypeFactoryGet(
+      prisma,
+      jurisdictionA.id,
+    );
 
     const exampleAddress = addressFactory() as AddressCreate;
 
@@ -550,6 +559,7 @@ describe('Listing Controller Tests', () => {
     const jurisdictionA = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
+    await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
     const listingData = await listingFactory(jurisdictionA.id, prisma);
     const listing = await prisma.listings.create({
       data: listingData,
@@ -560,6 +570,7 @@ describe('Listing Controller Tests', () => {
       .send({
         id: listing.id,
       } as IdDTO)
+      .set('Cookie', adminAccessToken)
       .expect(200);
 
     const listingAfterDelete = await prisma.listings.findUnique({
@@ -587,6 +598,7 @@ describe('Listing Controller Tests', () => {
     const jurisdictionA = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
+    await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
     const listingData = await listingFactory(jurisdictionA.id, prisma);
     const listing = await prisma.listings.create({
       data: listingData,
@@ -609,8 +621,92 @@ describe('Listing Controller Tests', () => {
     const res = await request(app.getHttpServer())
       .post('/listings')
       .send(val)
+      .set('Cookie', adminAccessToken)
       .expect(201);
     expect(res.body.name).toEqual(val.name);
+  });
+
+  it('should successfully process listings that are past due', async () => {
+    const jurisdictionA = await prisma.jurisdictions.create({
+      data: jurisdictionFactory(),
+    });
+    await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
+    const listingData = await listingFactory(jurisdictionA.id, prisma, {
+      status: ListingsStatusEnum.active,
+      applicationDueDate: new Date(0),
+    });
+    const listing = await prisma.listings.create({
+      data: listingData,
+    });
+
+    const res = await request(app.getHttpServer())
+      .put(`/listings/process`)
+      .set('Cookie', adminAccessToken)
+      .expect(200);
+    expect(res.body.success).toEqual(true);
+
+    const postProcessListing = await prisma.listings.findUnique({
+      where: {
+        id: listing.id,
+      },
+    });
+
+    expect(postProcessListing.status).toEqual(ListingsStatusEnum.closed);
+    expect(postProcessListing.closedAt).not.toBeNull();
+  });
+
+  it('should only process listings that are past due', async () => {
+    const jurisdictionA = await prisma.jurisdictions.create({
+      data: jurisdictionFactory(),
+    });
+    await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
+    const pastDueListingData = await listingFactory(jurisdictionA.id, prisma, {
+      status: ListingsStatusEnum.active,
+      applicationDueDate: new Date(0),
+    });
+    const passedDueListing = await prisma.listings.create({
+      data: pastDueListingData,
+    });
+
+    const date = new Date();
+    date.setDate(date.getDate() + 10);
+
+    const futureDueListingData = await listingFactory(
+      jurisdictionA.id,
+      prisma,
+      {
+        status: ListingsStatusEnum.active,
+        applicationDueDate: date,
+      },
+    );
+    const futureDueListing = await prisma.listings.create({
+      data: futureDueListingData,
+    });
+
+    const res = await request(app.getHttpServer())
+      .put(`/listings/process`)
+      .set('Cookie', adminAccessToken)
+      .expect(200);
+
+    expect(res.body.success).toEqual(true);
+
+    const postProcessListing = await prisma.listings.findUnique({
+      where: {
+        id: passedDueListing.id,
+      },
+    });
+
+    expect(postProcessListing.status).toEqual(ListingsStatusEnum.closed);
+    expect(postProcessListing.closedAt).not.toBeNull();
+
+    const postProcessListing2 = await prisma.listings.findUnique({
+      where: {
+        id: futureDueListing.id,
+      },
+    });
+
+    expect(postProcessListing2.status).toEqual(ListingsStatusEnum.active);
+    expect(postProcessListing2.closedAt).toBeNull();
   });
 
   describe('listings approval notification', () => {
@@ -645,7 +741,7 @@ describe('Listing Controller Tests', () => {
           roles: {
             isJurisdictionalAdmin: true,
           },
-          jurisdictionId: jurisdictionB.id,
+          jurisdictionIds: [jurisdictionB.id],
         }),
       });
       jurisAdmin = await prisma.userAccounts.create({
@@ -653,10 +749,11 @@ describe('Listing Controller Tests', () => {
           roles: {
             isJurisdictionalAdmin: true,
           },
-          jurisdictionId: jurisdictionA.id,
+          jurisdictionIds: [jurisdictionA.id],
         }),
       });
 
+      await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
       const listingData = await listingFactory(jurisdictionA.id, prisma, {
         status: ListingsStatusEnum.pending,
       });
@@ -671,7 +768,7 @@ describe('Listing Controller Tests', () => {
             isJurisdictionalAdmin: false,
           },
           listings: [listing.id],
-          jurisdictionId: jurisdictionA.id,
+          jurisdictionIds: [jurisdictionA.id],
           confirmedAt: new Date(),
         }),
       });
@@ -711,7 +808,7 @@ describe('Listing Controller Tests', () => {
       );
       expect(mockRequestApproval).toBeCalledWith(
         expect.objectContaining({
-          id: partnerUser.id,
+          id: jurisdictionA.id,
         }),
         { id: listing.id, name: val.name },
         expect.arrayContaining([adminUser.email, jurisAdmin.email]),
@@ -741,7 +838,7 @@ describe('Listing Controller Tests', () => {
       );
       expect(mockListingApproved).toBeCalledWith(
         expect.objectContaining({
-          id: adminUser.id,
+          id: jurisdictionA.id,
         }),
         { id: listing.id, name: val.name },
         expect.arrayContaining([partnerUser.email]),

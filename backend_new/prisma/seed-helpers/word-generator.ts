@@ -224,6 +224,21 @@ const nouns = [
   'Blossomview',
   'Blossomshade',
   'Blossomglade',
+  'Residences',
+  'Towers',
+  'Mirage',
+  'Estates',
+  'Plaza',
+  'Villas',
+  'Apartments',
+  'Suites',
+  'Manor',
+  'Courtyard',
+  'Retreat',
+  'Homes',
+  'Gardens',
+  'Lofts',
+  'Terrace',
 ];
 
 // Random list of adjectives
@@ -437,6 +452,9 @@ const adjectives = [
   'Terrific',
   'Fantastic',
   'Phenomenal',
+  'Celestial',
+  'Vintage',
+  'Cosmopolitan',
 ];
 
 export const randomNoun = () => {

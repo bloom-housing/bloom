@@ -1,7 +1,5 @@
 import React from "react"
 import {
-  AppearanceStyleType,
-  Button,
   Form,
   FormCard,
   Icon,
@@ -11,6 +9,7 @@ import {
   FormSignInErrorBox,
   NetworkStatus,
 } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
 import type { UseFormMethods } from "react-hook-form"
 
 export type FormSignInAddPhoneProps = {
@@ -71,10 +70,7 @@ const FormSignInAddPhone = ({
           />
 
           <div className="text-center mt-10">
-            <Button
-              styleType={AppearanceStyleType.primary}
-              data-testid="request-mfa-code-and-add-phone"
-            >
+            <Button variant="primary" id="request-mfa-code-and-add-phone">
               {t("nav.signInMFA.addPhoneNumber")}
             </Button>
           </div>

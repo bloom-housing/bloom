@@ -19,8 +19,10 @@ import { ApplicationUpdate } from '../dtos/applications/application-update.dto';
 import { ApplicationCreate } from '../dtos/applications/application-create.dto';
 import { PaginatedApplicationDto } from '../dtos/applications/paginated-application.dto';
 import { EmailService } from './email.service';
+import { PermissionService } from './permission.service';
 import Listing from '../dtos/listings/listing.dto';
 import { User } from '../dtos/users/user.dto';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
 
 export const view: Partial<
   Record<ApplicationViews, Prisma.ApplicationsInclude>
@@ -71,6 +73,7 @@ export class ApplicationService {
   constructor(
     private prisma: PrismaService,
     private emailService: EmailService,
+    private permissionService: PermissionService,
   ) {}
 
   /*
@@ -235,9 +238,16 @@ export class ApplicationService {
   async create(
     dto: ApplicationCreate,
     forPublic: boolean,
-    user?: User,
+    requestingUser: User,
   ): Promise<Application> {
-    // TODO: perms https://github.com/bloom-housing/bloom/issues/3445
+    if (!forPublic) {
+      await this.authorizeAction(
+        requestingUser,
+        dto as Application,
+        dto.listings.id,
+        permissionActions.create,
+      );
+    }
 
     const listing = await this.prisma.listings.findUnique({
       where: {
@@ -247,13 +257,15 @@ export class ApplicationService {
         jurisdictions: true,
       },
     });
+    // if its a public submission
     if (forPublic) {
-      // if its a public submission
+      // SubmissionDate is time the application was created for public
+      dto.submissionDate = new Date();
+      // if the submission is after the application due date
       if (
         listing?.applicationDueDate &&
         dto.submissionDate > listing.applicationDueDate
       ) {
-        // if the submission is after the application due date
         throw new BadRequestException(
           `Listing is not open for application submission`,
         );
@@ -354,12 +366,12 @@ export class ApplicationService {
               })),
             }
           : undefined,
-        programs: JSON.stringify(dto.programs),
-        preferences: JSON.stringify(dto.preferences),
-        userAccounts: user
+        programs: dto.programs as unknown as Prisma.JsonArray,
+        preferences: dto.preferences as unknown as Prisma.JsonArray,
+        userAccounts: requestingUser
           ? {
               connect: {
-                id: user.id,
+                id: requestingUser.id,
               },
             }
           : undefined,
@@ -367,6 +379,7 @@ export class ApplicationService {
       include: view.details,
     });
 
+    const mappedApplication = mapTo(Application, rawApplication);
     if (dto.applicant.emailAddress && forPublic) {
       this.emailService.applicationConfirmation(
         mapTo(Listing, listing),
@@ -375,17 +388,33 @@ export class ApplicationService {
       );
     }
 
-    return mapTo(Application, rawApplication);
+    return mappedApplication;
   }
 
   /*
     this will update an application
     if no application has the id of the incoming argument an error is thrown
   */
-  async update(dto: ApplicationUpdate): Promise<Application> {
+  async update(
+    dto: ApplicationUpdate,
+    requestingUser: User,
+  ): Promise<Application> {
     const rawApplication = await this.findOrThrow(dto.id);
 
-    // TODO: perms https://github.com/bloom-housing/bloom/issues/3445
+    await this.authorizeAction(
+      requestingUser,
+      mapTo(Application, rawApplication),
+      rawApplication.listingId,
+      permissionActions.update,
+    );
+
+    // All connected household members should be deleted so they can be recreated in the update below.
+    // This solves for all cases of deleted members, updated members, and new members
+    await this.prisma.householdMember.deleteMany({
+      where: {
+        applicationId: dto.id,
+      },
+    });
 
     const res = await this.prisma.applications.update({
       where: {
@@ -485,8 +514,8 @@ export class ApplicationService {
               })),
             }
           : undefined,
-        programs: JSON.stringify(dto.programs),
-        preferences: JSON.stringify(dto.preferences),
+        programs: dto.programs as unknown as Prisma.JsonArray,
+        preferences: dto.preferences as unknown as Prisma.JsonArray,
       },
     });
 
@@ -497,10 +526,18 @@ export class ApplicationService {
   /*
     this will mark an application as deleted by setting the deletedAt column for the application
   */
-  async delete(applicationId: string): Promise<SuccessDTO> {
+  async delete(
+    applicationId: string,
+    requestingUser: User,
+  ): Promise<SuccessDTO> {
     const application = await this.findOrThrow(applicationId);
 
-    // TODO: perms https://github.com/bloom-housing/bloom/issues/3445
+    await this.authorizeAction(
+      requestingUser,
+      mapTo(Application, application),
+      application.listingId,
+      permissionActions.delete,
+    );
 
     await this.updateListingApplicationEditTimestamp(application.listingId);
     await this.prisma.applications.update({
@@ -534,14 +571,6 @@ export class ApplicationService {
       );
     }
 
-    // convert the programs and preferences back to json
-    if (res.programs) {
-      res.programs = JSON.parse(res.programs as string);
-    }
-    if (res.preferences) {
-      res.preferences = JSON.parse(res.preferences as string);
-    }
-
     return res;
   }
 
@@ -558,6 +587,27 @@ export class ApplicationService {
       data: {
         lastApplicationUpdateAt: new Date(),
       },
+    });
+  }
+
+  async authorizeAction(
+    user: User,
+    application: Application,
+    listingId: string,
+    action: permissionActions,
+  ): Promise<void> {
+    const listingJurisdiction = await this.prisma.jurisdictions.findFirst({
+      where: {
+        listings: {
+          some: {
+            id: listingId,
+          },
+        },
+      },
+    });
+    await this.permissionService.canOrThrow(user, 'application', action, {
+      listingId,
+      jurisdictionId: listingJurisdiction.id,
     });
   }
 

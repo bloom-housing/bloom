@@ -1,17 +1,17 @@
 import { t } from "@bloom-housing/ui-components"
-import {
-  Application,
-  HouseholdMemberUpdate,
-  AddressCreate,
-} from "@bloom-housing/backend-core/types"
 import { FieldValue } from "@bloom-housing/ui-seeds"
-import { YesNoAnswer } from "../../../lib/helpers"
+import {
+  AddressCreate,
+  Application,
+  HouseholdMember,
+  YesNoEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type DetailsAddressColumnsProps = {
   type: AddressColsType
   application?: Application
   addressObject?: AddressCreate
-  householdMember?: HouseholdMemberUpdate
+  householdMember?: HouseholdMember
   dataTestId?: string
 }
 
@@ -42,44 +42,46 @@ const DetailsAddressColumns = ({
 
   Object.keys(address).forEach((item) => {
     if (type === AddressColsType.residence) {
-      address[item] = application.applicant.address[item] || t("t.n/a")
+      address[item] = application.applicant.applicantAddress[item] || t("t.n/a")
     }
 
     if (type === AddressColsType.mailing) {
       if (application.sendMailToMailingAddress) {
-        address[item] = application.mailingAddress[item]
+        address[item] = application.applicationsMailingAddress[item]
       } else {
-        address[item] = application.applicant.address[item] || t("t.n/a")
+        address[item] = application.applicant.applicantAddress[item] || t("t.n/a")
       }
     }
 
     if (type === AddressColsType.work) {
-      if (application.applicant.workInRegion === YesNoAnswer.Yes) {
-        address[item] = application.applicant.workAddress[item] || t("t.n/a")
+      if (application.applicant.workInRegion === YesNoEnum.yes) {
+        address[item] = application.applicant.applicantWorkAddress[item] || t("t.n/a")
       } else {
         address[item] = t("t.n/a")
       }
     }
 
     if (type === AddressColsType.alternateAddress) {
-      address[item] = application.alternateContact.mailingAddress[item]
-        ? application.alternateContact.mailingAddress[item]
+      address[item] = application.alternateContact.address[item]
+        ? application.alternateContact.address[item]
         : t("t.n/a")
     }
 
     if (type === AddressColsType.memberWork) {
-      address[item] = householdMember?.workAddress[item]
-        ? householdMember?.workAddress[item]
+      address[item] = householdMember?.householdMemberWorkAddress[item]
+        ? householdMember.householdMemberWorkAddress[item]
         : t("t.n/a")
     }
 
     if (type === AddressColsType.memberResidence) {
       if (householdMember?.sameAddress === "yes") {
-        address[item] = application.applicant.address[item]
-          ? application.applicant.address[item]
+        address[item] = application.applicant.applicantAddress[item]
+          ? application.applicant.applicantAddress[item]
           : t("t.n/a")
       } else {
-        address[item] = householdMember?.address[item] ? householdMember?.address[item] : t("t.n/a")
+        address[item] = householdMember?.householdMemberAddress[item]
+          ? householdMember.householdMemberAddress[item]
+          : t("t.n/a")
       }
     }
 

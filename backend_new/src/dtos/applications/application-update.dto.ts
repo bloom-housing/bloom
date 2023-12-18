@@ -9,6 +9,7 @@ import { ApplicantUpdate } from './applicant-update.dto';
 import { Application } from './application.dto';
 import { DemographicUpdate } from './demographic-update.dto';
 import { HouseholdMemberUpdate } from './household-member-update.dto';
+import { IdDTO } from '../shared/id.dto';
 
 export class ApplicationUpdate extends OmitType(Application, [
   'createdAt',
@@ -24,6 +25,7 @@ export class ApplicationUpdate extends OmitType(Application, [
   'markedAsDuplicate',
   'flagged',
   'confirmationCode',
+  'preferredUnitTypes',
 ]) {
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
@@ -67,4 +69,10 @@ export class ApplicationUpdate extends OmitType(Application, [
   @Type(() => HouseholdMemberUpdate)
   @ApiProperty({ type: HouseholdMemberUpdate, isArray: true })
   householdMember: HouseholdMemberUpdate[];
+
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => IdDTO)
+  @ApiProperty({ type: IdDTO, isArray: true })
+  preferredUnitTypes: IdDTO[];
 }

@@ -1,6 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  Logger,
+  NotFoundException,
+  OnModuleInit,
+  HttpException,
+} from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
+import { SchedulerRegistry } from '@nestjs/schedule';
 import {
   LanguagesEnum,
   ListingsStatusEnum,
@@ -36,6 +44,9 @@ import { ApplicationFlaggedSetService } from './application-flagged-set.service'
 import { User } from '../dtos/users/user.dto';
 import { EmailService } from './email.service';
 import { IdDTO } from '../dtos/shared/id.dto';
+import { startCronJob } from '../utilities/cron-job-starter';
+import { PermissionService } from './permission.service';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
 
 export type getListingsArgs = {
   skip: number;
@@ -100,6 +111,7 @@ views.full = {
   listingsLeasingAgentAddress: true,
   listingsApplicationPickUpAddress: true,
   listingsApplicationDropOffAddress: true,
+  listingsApplicationMailingAddress: true,
   units: {
     include: {
       unitAmiChartOverrides: true,
@@ -122,12 +134,14 @@ views.details = {
   ...views.full,
 };
 
+const CRON_JOB_NAME = 'LISTING_CRON_JOB';
+
 /*
   this is the service for listings
   it handles all the backend's business logic for reading in listing(s)
 */
 @Injectable()
-export class ListingService {
+export class ListingService implements OnModuleInit {
   constructor(
     private prisma: PrismaService,
     private translationService: TranslationService,
@@ -135,7 +149,22 @@ export class ListingService {
     private afsService: ApplicationFlaggedSetService,
     private emailService: EmailService,
     private configService: ConfigService,
+    @Inject(Logger)
+    private logger = new Logger(ListingService.name),
+    private schedulerRegistry: SchedulerRegistry,
+    private permissionService: PermissionService,
   ) {}
+
+  onModuleInit() {
+    startCronJob(
+      this.prisma,
+      CRON_JOB_NAME,
+      process.env.LISTING_PROCESSING_CRON_STRING,
+      this.process.bind(this),
+      this.logger,
+      this.schedulerRegistry,
+    );
+  }
 
   /*
     this will get a set of listings given the params passed in
@@ -153,7 +182,6 @@ export class ListingService {
     };
   }> {
     const whereClause = this.buildWhereClause(params.filter, params.search);
-
     const count = await this.prisma.listings.count({
       where: whereClause,
     });
@@ -243,7 +271,7 @@ export class ListingService {
     status: ListingsStatusEnum;
     approvingRoles: UserRoleEnum[];
     previousStatus?: ListingsStatusEnum;
-    jurisId?: string;
+    jurisId: string;
   }) {
     const nonApprovingRoles: UserRoleEnum[] = [UserRoleEnum.partner];
     if (!params.approvingRoles.includes(UserRoleEnum.jurisdictionAdmin))
@@ -255,7 +283,7 @@ export class ListingService {
         params.jurisId,
       );
       await this.emailService.requestApproval(
-        params.user,
+        { id: params.jurisId },
         { id: params.listingInfo.id, name: params.listingInfo.name },
         userInfo.emails,
         this.configService.get('PARTNERS_PORTAL_URL'),
@@ -290,7 +318,7 @@ export class ListingService {
           true,
         );
         await this.emailService.listingApproved(
-          params.user,
+          { id: params.jurisId },
           { id: params.listingInfo.id, name: params.listingInfo.name },
           userInfo.emails,
           userInfo.publicUrl,
@@ -316,6 +344,7 @@ export class ListingService {
             $include_nulls: false,
             value: filter[ListingFilterKeys.name],
             key: ListingFilterKeys.name,
+            caseSensitive: false,
           });
           filters.push({
             OR: builtFilter.map((filt) => ({ [ListingFilterKeys.name]: filt })),
@@ -381,6 +410,7 @@ export class ListingService {
             $include_nulls: false,
             value: filter[ListingFilterKeys.leasingAgents],
             key: ListingFilterKeys.leasingAgents,
+            caseSensitive: true,
           });
           filters.push({
             OR: builtFilter.map((filt) => ({
@@ -446,8 +476,16 @@ export class ListingService {
   /*
     creates a listing
   */
-  async create(dto: ListingCreate, user: User): Promise<Listing> {
-    // TODO: perms (https://github.com/bloom-housing/bloom/issues/3445)
+  async create(dto: ListingCreate, requestingUser: User): Promise<Listing> {
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'listing',
+      permissionActions.create,
+      {
+        jurisdictionId: dto.jurisdictions.id,
+      },
+    );
+
     const rawListing = await this.prisma.listings.create({
       include: views.details,
       data: {
@@ -491,11 +529,13 @@ export class ListingService {
                 url: event.url,
                 note: event.note,
                 label: event.label,
-                assets: {
-                  create: {
-                    ...event.assets,
-                  },
-                },
+                assets: event.assets
+                  ? {
+                      create: {
+                        ...event.assets,
+                      },
+                    }
+                  : undefined,
               })),
             }
           : undefined,
@@ -630,7 +670,7 @@ export class ListingService {
                 unitAmiChartOverrides: unit.unitAmiChartOverrides
                   ? {
                       create: {
-                        items: unit.unitAmiChartOverrides,
+                        items: unit.unitAmiChartOverrides.items,
                       },
                     }
                   : undefined,
@@ -691,7 +731,7 @@ export class ListingService {
         },
       });
       await this.listingApprovalNotify({
-        user,
+        user: requestingUser,
         listingInfo: { id: rawListing.id, name: rawListing.name },
         status: rawListing.status,
         approvingRoles: jurisdiction?.listingApprovalPermissions,
@@ -705,10 +745,18 @@ export class ListingService {
   /*
     deletes a listing
   */
-  async delete(id: string): Promise<SuccessDTO> {
+  async delete(id: string, requestingUser: User): Promise<SuccessDTO> {
     const storedListing = await this.findOrThrow(id);
 
-    // TODO: perms (https://github.com/bloom-housing/bloom/issues/3445)
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'listing',
+      permissionActions.delete,
+      {
+        id: storedListing.id,
+        jurisdictionId: storedListing.jurisdictionId,
+      },
+    );
 
     await this.prisma.listings.delete({
       where: {
@@ -742,282 +790,438 @@ export class ListingService {
   }
 
   /*
+    This should be run for all address fields on an update of a listing.
+    The address either needs to be updated if fields are changed, deleted if no longer attached,
+    or created if it is a new address
+  */
+  async addressUpdate(
+    existingListing,
+    newListing: ListingUpdate,
+    field: string,
+  ) {
+    if (existingListing[field]) {
+      if (newListing[field]) {
+        return await this.prisma.address.update({
+          data: {
+            ...newListing[field],
+          },
+          where: {
+            id: existingListing[field].id,
+          },
+        });
+      } else {
+        await this.prisma.address.delete({
+          where: {
+            id: existingListing[field].id,
+          },
+        });
+      }
+    } else if (newListing[field]) {
+      return await this.prisma.address.create({
+        data: {
+          ...newListing[field],
+        },
+      });
+    }
+    return undefined;
+  }
+
+  /*
     update a listing
   */
-  async update(dto: ListingUpdate, user: User): Promise<Listing> {
+  async update(dto: ListingUpdate, requestingUser: User): Promise<Listing> {
     const storedListing = await this.findOrThrow(dto.id, ListingViews.details);
 
-    // TODO: perms (https://github.com/bloom-housing/bloom/issues/3445)
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'listing',
+      permissionActions.update,
+      {
+        id: storedListing.id,
+        jurisdictionId: storedListing.jurisdictionId,
+      },
+    );
 
     dto.unitsAvailable =
       dto.reviewOrderType !== ReviewOrderTypeEnum.waitlist && dto.units
         ? dto.units.length
         : 0;
 
-    if (
-      storedListing.status === ListingsStatusEnum.active &&
-      dto.status === ListingsStatusEnum.closed
-    ) {
-      // TODO: afs process (https://github.com/bloom-housing/bloom/issues/3540)
-      await this.afsService.process(dto.id);
+    // We need to save the assets before saving it to the listing_images table
+    let allAssets = [];
+    const unsavedImages = dto.listingImages?.reduce((values, value) => {
+      if (!value.assets.id) {
+        values.push(value);
+      } else {
+        allAssets.push(value);
+      }
+      return values;
+    }, []);
+
+    if (unsavedImages?.length) {
+      const assetCreates = unsavedImages.map((unsavedImage) => {
+        return this.prisma.assets.create({
+          data: unsavedImage.assets,
+        });
+      });
+      const uploadedImages = await Promise.all(assetCreates);
+      allAssets = [
+        ...allAssets,
+        ...uploadedImages.map((image, index) => {
+          return { assets: image, ordinal: unsavedImages[index].ordinal };
+        }),
+      ];
     }
 
-    const rawListing = await this.prisma.listings.update({
-      data: {
-        ...dto,
-        id: undefined,
-        createdAt: undefined,
-        updatedAt: undefined,
-        assets: dto.assets
-          ? {
-              create: dto.assets.map((asset) => ({
-                ...asset,
-              })),
-            }
-          : undefined,
-        applicationMethods: dto.applicationMethods
-          ? {
-              create: dto.applicationMethods.map((applicationMethod) => ({
-                ...applicationMethod,
-                paperApplications: applicationMethod.paperApplications
-                  ? {
-                      create: applicationMethod.paperApplications.map(
-                        (paperApplication) => ({
-                          ...paperApplication,
-                          assets: {
-                            create: {
-                              ...paperApplication.assets,
-                            },
-                          },
-                        }),
-                      ),
-                    }
-                  : undefined,
-              })),
-            }
-          : undefined,
-        listingEvents: dto.listingEvents
-          ? {
-              create: dto.listingEvents.map((event) => ({
-                type: event.type,
-                startDate: event.startDate,
-                startTime: event.startTime,
-                endTime: event.endTime,
-                url: event.url,
-                note: event.note,
-                label: event.label,
-                assets: {
-                  create: {
-                    ...event.assets,
-                  },
-                },
-              })),
-            }
-          : undefined,
-        listingImages: dto.listingImages
-          ? {
-              create: dto.listingImages.map((image) => ({
-                assets: {
-                  create: {
-                    ...image.assets,
-                  },
-                },
-                ordinal: image.ordinal,
-              })),
-            }
-          : undefined,
-        listingMultiselectQuestions: dto.listingMultiselectQuestions
-          ? {
-              create: dto.listingMultiselectQuestions.map(
-                (multiselectQuestion) => ({
-                  ordinal: multiselectQuestion.ordinal,
-                  multiselectQuestions: {
-                    connect: {
-                      id: multiselectQuestion.id,
-                    },
-                  },
-                }),
-              ),
-            }
-          : undefined,
-        listingsApplicationDropOffAddress: dto.listingsApplicationDropOffAddress
-          ? {
-              create: {
-                ...dto.listingsApplicationDropOffAddress,
-              },
-            }
-          : undefined,
-        reservedCommunityTypes: dto.reservedCommunityTypes
-          ? {
-              connect: {
-                id: dto.reservedCommunityTypes.id,
-              },
-            }
-          : undefined,
-        listingsBuildingSelectionCriteriaFile:
-          dto.listingsBuildingSelectionCriteriaFile
+    const pickUpAddress = await this.addressUpdate(
+      storedListing,
+      dto,
+      'listingsApplicationPickUpAddress',
+    );
+    const mailAddress = await this.addressUpdate(
+      storedListing,
+      dto,
+      'listingsApplicationMailingAddress',
+    );
+    const dropOffAddress = await this.addressUpdate(
+      storedListing,
+      dto,
+      'listingsApplicationDropOffAddress',
+    );
+    const leasingAgentAddress = await this.addressUpdate(
+      storedListing,
+      dto,
+      'listingsLeasingAgentAddress',
+    );
+    const buildingAddress = await this.addressUpdate(
+      storedListing,
+      dto,
+      'listingsBuildingAddress',
+    );
+
+    // Wrap the deletion and update in one transaction so that units aren't lost if update fails
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const transactions = await this.prisma.$transaction([
+      // delete all connected units before recreating in update
+      this.prisma.units.deleteMany({
+        where: {
+          listingId: storedListing.id,
+        },
+      }),
+      // Delete all listing images before creating new ones
+      this.prisma.listingImages.deleteMany({
+        where: {
+          listingId: dto.id,
+        },
+      }),
+      // Delete all listing events before creating new ones
+      this.prisma.listingEvents.deleteMany({
+        where: {
+          listingId: dto.id,
+        },
+      }),
+      // Delete all paper applications and methods before creating new ones
+      this.prisma.paperApplications.deleteMany({
+        where: {
+          applicationMethods: {
+            is: {
+              listingId: dto.id,
+            },
+          },
+        },
+      }),
+      this.prisma.applicationMethods.deleteMany({
+        where: {
+          listingId: dto.id,
+        },
+      }),
+      this.prisma.listings.update({
+        data: {
+          ...dto,
+          id: undefined,
+          createdAt: undefined,
+          updatedAt: undefined,
+          assets: dto.assets as unknown as Prisma.InputJsonArray,
+          applicationMethods: dto.applicationMethods
             ? {
-                create: {
-                  ...dto.listingsBuildingSelectionCriteriaFile,
+                create: dto.applicationMethods.map((applicationMethod) => ({
+                  ...applicationMethod,
+                  paperApplications: applicationMethod.paperApplications
+                    ? {
+                        create: applicationMethod.paperApplications.map(
+                          (paperApplication) => ({
+                            ...paperApplication,
+                            assets: {
+                              create: {
+                                ...paperApplication.assets,
+                                id: undefined,
+                              },
+                            },
+                          }),
+                        ),
+                      }
+                    : undefined,
+                })),
+              }
+            : undefined,
+          listingEvents: dto.listingEvents
+            ? {
+                create: dto.listingEvents.map((event) => ({
+                  type: event.type,
+                  startDate: event.startDate,
+                  startTime: event.startTime,
+                  endTime: event.endTime,
+                  url: event.url,
+                  note: event.note,
+                  label: event.label,
+                  assets: event.assets
+                    ? {
+                        create: {
+                          ...event.assets,
+                        },
+                      }
+                    : undefined,
+                })),
+              }
+            : undefined,
+          listingImages: allAssets.length
+            ? {
+                create: allAssets.map((asset) => {
+                  return {
+                    ordinal: asset.ordinal,
+                    assets: {
+                      connect: {
+                        id: asset.assets.id,
+                      },
+                    },
+                  };
+                }),
+              }
+            : undefined,
+          listingMultiselectQuestions: dto.listingMultiselectQuestions
+            ? {
+                upsert: dto.listingMultiselectQuestions.map(
+                  (multiselectQuestion) => ({
+                    where: {
+                      listingId_multiselectQuestionId: {
+                        listingId: dto.id,
+                        multiselectQuestionId: multiselectQuestion.id,
+                      },
+                    },
+                    update: {
+                      ordinal: multiselectQuestion.ordinal,
+                      multiselectQuestionId: multiselectQuestion.id,
+                    },
+                    create: {
+                      ordinal: multiselectQuestion.ordinal,
+                      multiselectQuestionId: multiselectQuestion.id,
+                    },
+                  }),
+                ),
+              }
+            : undefined,
+          listingsApplicationDropOffAddress: dropOffAddress
+            ? {
+                connect: {
+                  id: dropOffAddress.id,
                 },
               }
             : undefined,
-        listingUtilities: dto.listingUtilities
-          ? {
-              create: {
-                ...dto.listingUtilities,
-              },
-            }
-          : undefined,
-        listingsApplicationMailingAddress: dto.listingsApplicationMailingAddress
-          ? {
-              create: {
-                ...dto.listingsApplicationMailingAddress,
-              },
-            }
-          : undefined,
-        listingsLeasingAgentAddress: dto.listingsLeasingAgentAddress
-          ? {
-              create: {
-                ...dto.listingsLeasingAgentAddress,
-              },
-            }
-          : undefined,
-        listingFeatures: dto.listingFeatures
-          ? {
-              create: {
-                ...dto.listingFeatures,
-              },
-            }
-          : undefined,
-        jurisdictions: dto.jurisdictions
-          ? {
-              connect: {
-                id: dto.jurisdictions.id,
-              },
-            }
-          : undefined,
-        listingsApplicationPickUpAddress: dto.listingsApplicationPickUpAddress
-          ? {
-              create: {
-                ...dto.listingsApplicationPickUpAddress,
-              },
-            }
-          : undefined,
-        listingsBuildingAddress: dto.listingsBuildingAddress
-          ? {
-              create: {
-                ...dto.listingsBuildingAddress,
-              },
-            }
-          : undefined,
-        units: dto.units
-          ? {
-              create: dto.units.map((unit) => ({
-                amiPercentage: unit.amiPercentage,
-                annualIncomeMin: unit.annualIncomeMin,
-                monthlyIncomeMin: unit.monthlyIncomeMin,
-                floor: unit.floor,
-                annualIncomeMax: unit.annualIncomeMax,
-                maxOccupancy: unit.maxOccupancy,
-                minOccupancy: unit.minOccupancy,
-                monthlyRent: unit.monthlyRent,
-                numBathrooms: unit.numBathrooms,
-                numBedrooms: unit.numBedrooms,
-                number: unit.number,
-                sqFeet: unit.sqFeet,
-                monthlyRentAsPercentOfIncome: unit.monthlyRentAsPercentOfIncome,
-                bmrProgramChart: unit.bmrProgramChart,
-                unitTypes: unit.unitTypes
-                  ? {
-                      connect: {
-                        id: unit.unitTypes.id,
+          reservedCommunityTypes: dto.reservedCommunityTypes
+            ? {
+                connect: {
+                  id: dto.reservedCommunityTypes.id,
+                },
+              }
+            : undefined,
+          // Three options for the building selection criteria file
+          // create new one, connect existing one, or deleted (disconnect)
+          listingsBuildingSelectionCriteriaFile:
+            dto.listingsBuildingSelectionCriteriaFile
+              ? dto.listingsBuildingSelectionCriteriaFile.id
+                ? {
+                    connectOrCreate: {
+                      where: {
+                        id: dto.listingsBuildingSelectionCriteriaFile.id,
                       },
-                    }
-                  : undefined,
-                amiChart: unit.amiChart
-                  ? {
-                      connect: {
-                        id: unit.amiChart.id,
-                      },
-                    }
-                  : undefined,
-                unitAmiChartOverrides: unit.unitAmiChartOverrides
-                  ? {
                       create: {
-                        items: unit.unitAmiChartOverrides,
+                        ...dto.listingsBuildingSelectionCriteriaFile,
                       },
-                    }
-                  : undefined,
-                unitAccessibilityPriorityTypes:
-                  unit.unitAccessibilityPriorityTypes
+                    },
+                  }
+                : {
+                    create: {
+                      ...dto.listingsBuildingSelectionCriteriaFile,
+                    },
+                  }
+              : {
+                  disconnect: true,
+                },
+          listingUtilities: dto.listingUtilities
+            ? {
+                create: {
+                  ...dto.listingUtilities,
+                },
+              }
+            : undefined,
+          listingsApplicationMailingAddress: mailAddress
+            ? {
+                connect: {
+                  id: mailAddress.id,
+                },
+              }
+            : undefined,
+          listingsLeasingAgentAddress: leasingAgentAddress
+            ? {
+                connect: {
+                  id: leasingAgentAddress.id,
+                },
+              }
+            : undefined,
+          listingFeatures: dto.listingFeatures
+            ? {
+                create: {
+                  ...dto.listingFeatures,
+                },
+              }
+            : undefined,
+          jurisdictions: dto.jurisdictions
+            ? {
+                connect: {
+                  id: dto.jurisdictions.id,
+                },
+              }
+            : undefined,
+          listingsApplicationPickUpAddress: pickUpAddress
+            ? {
+                connect: {
+                  id: pickUpAddress.id,
+                },
+              }
+            : undefined,
+          listingsBuildingAddress: buildingAddress
+            ? {
+                connect: {
+                  id: buildingAddress.id,
+                },
+              }
+            : undefined,
+          units: dto.units
+            ? {
+                create: dto.units.map((unit) => ({
+                  amiPercentage: unit.amiPercentage,
+                  annualIncomeMin: unit.annualIncomeMin,
+                  monthlyIncomeMin: unit.monthlyIncomeMin,
+                  floor: unit.floor,
+                  annualIncomeMax: unit.annualIncomeMax,
+                  maxOccupancy: unit.maxOccupancy,
+                  minOccupancy: unit.minOccupancy,
+                  monthlyRent: unit.monthlyRent,
+                  numBathrooms: unit.numBathrooms,
+                  numBedrooms: unit.numBedrooms,
+                  number: unit.number,
+                  sqFeet: unit.sqFeet,
+                  monthlyRentAsPercentOfIncome:
+                    unit.monthlyRentAsPercentOfIncome,
+                  bmrProgramChart: unit.bmrProgramChart,
+                  unitTypes: unit.unitTypes
                     ? {
                         connect: {
-                          id: unit.unitAccessibilityPriorityTypes.id,
+                          id: unit.unitTypes.id,
                         },
                       }
                     : undefined,
-                unitRentTypes: unit.unitRentTypes
-                  ? {
-                      connect: {
-                        id: unit.unitRentTypes.id,
-                      },
-                    }
-                  : undefined,
-              })),
-            }
-          : undefined,
-        unitsSummary: dto.unitsSummary
-          ? {
-              create: dto.unitsSummary.map((unitSummary) => ({
-                ...unitSummary,
-                unitTypes: unitSummary.unitTypes
-                  ? {
-                      connect: {
-                        id: unitSummary.unitTypes.id,
-                      },
-                    }
-                  : undefined,
-                unitAccessibilityPriorityTypes:
-                  unitSummary.unitAccessibilityPriorityTypes
+                  amiChart: unit.amiChart
                     ? {
                         connect: {
-                          id: unitSummary.unitAccessibilityPriorityTypes.id,
+                          id: unit.amiChart.id,
                         },
                       }
                     : undefined,
-              })),
-            }
-          : undefined,
-        publishedAt:
-          storedListing.status !== ListingsStatusEnum.active &&
-          dto.status === ListingsStatusEnum.active
-            ? new Date()
-            : storedListing.publishedAt,
-        closedAt:
-          storedListing.status !== ListingsStatusEnum.closed &&
-          dto.status === ListingsStatusEnum.closed
-            ? new Date()
-            : storedListing.closedAt,
-        requestedChangesUserId:
-          dto.status === ListingsStatusEnum.changesRequested &&
-          storedListing.status !== ListingsStatusEnum.changesRequested
-            ? user.id
-            : storedListing.requestedChangesUserId,
-        listingsResult: dto.listingsResult
-          ? {
-              create: {
-                ...dto.listingsResult,
-              },
-            }
-          : undefined,
-      },
-      include: views.details,
-      where: {
-        id: dto.id,
-      },
-    });
+                  unitAmiChartOverrides: unit.unitAmiChartOverrides
+                    ? {
+                        create: {
+                          items: unit.unitAmiChartOverrides.items,
+                        },
+                      }
+                    : undefined,
+                  unitAccessibilityPriorityTypes:
+                    unit.unitAccessibilityPriorityTypes
+                      ? {
+                          connect: {
+                            id: unit.unitAccessibilityPriorityTypes.id,
+                          },
+                        }
+                      : undefined,
+                  unitRentTypes: unit.unitRentTypes
+                    ? {
+                        connect: {
+                          id: unit.unitRentTypes.id,
+                        },
+                      }
+                    : undefined,
+                })),
+              }
+            : undefined,
+          unitsSummary: dto.unitsSummary
+            ? {
+                create: dto.unitsSummary.map((unitSummary) => ({
+                  ...unitSummary,
+                  unitTypes: unitSummary.unitTypes
+                    ? {
+                        connect: {
+                          id: unitSummary.unitTypes.id,
+                        },
+                      }
+                    : undefined,
+                  unitAccessibilityPriorityTypes:
+                    unitSummary.unitAccessibilityPriorityTypes
+                      ? {
+                          connect: {
+                            id: unitSummary.unitAccessibilityPriorityTypes.id,
+                          },
+                        }
+                      : undefined,
+                })),
+              }
+            : undefined,
+          publishedAt:
+            storedListing.status !== ListingsStatusEnum.active &&
+            dto.status === ListingsStatusEnum.active
+              ? new Date()
+              : storedListing.publishedAt,
+          closedAt:
+            storedListing.status !== ListingsStatusEnum.closed &&
+            dto.status === ListingsStatusEnum.closed
+              ? new Date()
+              : storedListing.closedAt,
+          requestedChangesUserId:
+            dto.status === ListingsStatusEnum.changesRequested &&
+            storedListing.status !== ListingsStatusEnum.changesRequested
+              ? requestingUser.id
+              : storedListing.requestedChangesUserId,
+          listingsResult: dto.listingsResult
+            ? {
+                create: {
+                  ...dto.listingsResult,
+                },
+              }
+            : undefined,
+        },
+        include: views.details,
+        where: {
+          id: dto.id,
+        },
+      }),
+    ]);
 
+    const rawListing = transactions[
+      transactions.length - 1
+    ] as unknown as Listing;
+
+    if (!rawListing) {
+      throw new HttpException('listing failed to save', 500);
+    }
     const listingApprovalPermissions = (
       await this.prisma.jurisdictions.findFirst({
         where: { id: dto.jurisdictions.id },
@@ -1026,7 +1230,7 @@ export class ListingService {
 
     if (listingApprovalPermissions?.length > 0)
       await this.listingApprovalNotify({
-        user,
+        user: requestingUser,
         listingInfo: { id: dto.id, name: dto.name },
         approvingRoles: listingApprovalPermissions,
         status: dto.status,
@@ -1034,11 +1238,25 @@ export class ListingService {
         jurisId: dto.jurisdictions.id,
       });
 
+    // if listing is closed for the first time the application flag set job needs to run
+    if (
+      storedListing.status === ListingsStatusEnum.active &&
+      dto.status === ListingsStatusEnum.closed
+    ) {
+      await this.afsService.process(dto.id);
+    }
+
     await this.cachePurge(storedListing.status, dto.status, rawListing.id);
 
     return mapTo(Listing, rawListing);
   }
 
+  /**
+    clears the listing cache of either 1 listing or all listings
+     @param storedListingStatus the status that was stored for the listing
+     @param incomingListingStatus the incoming "new" status for a listing
+     @param savedResponseId the id of the listing   
+  */
   async cachePurge(
     storedListingStatus: ListingsStatusEnum,
     incomingListingStatus: ListingsStatusEnum,
@@ -1077,7 +1295,7 @@ export class ListingService {
       const amiChartsRaw = await this.prisma.amiChart.findMany({
         where: {
           id: {
-            in: listing.units.map((unit) => unit.amiChart.id),
+            in: listing.units.map((unit) => unit.amiChart?.id),
           },
         },
       });
@@ -1109,8 +1327,7 @@ export class ListingService {
     return mapTo(Listing, listingsRaw);
   };
 
-  /**
-   *
+  /***
    * @param listingId
    * @returns the jurisdiction ID assigned to a listing
    */
@@ -1133,5 +1350,78 @@ export class ListingService {
     }
 
     return listing.jurisdictionId;
+  }
+
+  /**
+    runs the job to auto close listings that are passed their due date
+    will call the the cache purge to purge all listings as long as updates had to be made
+  */
+  async process(): Promise<SuccessDTO> {
+    this.logger.warn('changeOverdueListingsStatusCron job running');
+    await this.markCronJobAsStarted();
+    const res = await this.prisma.listings.updateMany({
+      data: {
+        status: ListingsStatusEnum.closed,
+        closedAt: new Date(),
+      },
+      where: {
+        status: ListingsStatusEnum.active,
+        AND: [
+          {
+            applicationDueDate: {
+              not: null,
+            },
+          },
+          {
+            applicationDueDate: {
+              lte: new Date(),
+            },
+          },
+        ],
+      },
+    });
+    this.logger.warn(`Changed the status of ${res?.count} listings`);
+    if (res?.count) {
+      await this.cachePurge(
+        ListingsStatusEnum.closed,
+        ListingsStatusEnum.active,
+        '',
+      );
+    }
+
+    return {
+      success: true,
+    };
+  }
+
+  /**
+    marks the db record for this cronjob as begun or creates a cronjob that
+    is marked as begun if one does not already exist 
+  */
+  async markCronJobAsStarted(): Promise<void> {
+    const job = await this.prisma.cronJob.findFirst({
+      where: {
+        name: CRON_JOB_NAME,
+      },
+    });
+    if (job) {
+      // if a job exists then we update db entry
+      await this.prisma.cronJob.update({
+        data: {
+          lastRunDate: new Date(),
+        },
+        where: {
+          id: job.id,
+        },
+      });
+    } else {
+      // if no job we create a new entry
+      await this.prisma.cronJob.create({
+        data: {
+          lastRunDate: new Date(),
+          name: CRON_JOB_NAME,
+        },
+      });
+    }
   }
 }

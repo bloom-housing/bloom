@@ -8,7 +8,10 @@ import {
 import { randomName } from './word-generator';
 import { addressFactory } from './address-factory';
 import { unitFactoryMany } from './unit-factory';
-import { reservedCommunityTypeFactory } from './reserved-community-type-factory';
+import {
+  reservedCommunityTypeFactory,
+  reservedCommunityTypeFactoryGet,
+} from './reserved-community-type-factory';
 
 export const listingFactory = async (
   jurisdictionId: string,
@@ -23,6 +26,7 @@ export const listingFactory = async (
     includeEligibilityRules?: boolean;
     multiselectQuestions?: Partial<MultiselectQuestions>[];
     applications?: Prisma.ApplicationsCreateInput[];
+    applicationDueDate?: Date;
   },
 ): Promise<Prisma.ListingsCreateInput> => {
   const previousListing = optionalParams?.listing || {};
@@ -33,6 +37,10 @@ export const listingFactory = async (
       amiChart: optionalParams?.amiChart,
     });
   }
+  const reservedCommunityType = await reservedCommunityTypeFactoryGet(
+    prismaClient,
+    jurisdictionId,
+  );
   return {
     createdAt: new Date(),
     assets: [],
@@ -55,7 +63,9 @@ export const listingFactory = async (
       create: addressFactory(),
     },
     reservedCommunityTypes: {
-      create: reservedCommunityTypeFactory(jurisdictionId),
+      connect: {
+        id: reservedCommunityType.id,
+      },
     },
     listingMultiselectQuestions: optionalParams?.multiselectQuestions
       ? {
@@ -90,6 +100,7 @@ export const listingFactory = async (
           create: units,
         }
       : undefined,
+    applicationDueDate: optionalParams?.applicationDueDate ?? undefined,
   };
 };
 

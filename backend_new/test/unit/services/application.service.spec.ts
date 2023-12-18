@@ -8,6 +8,7 @@ import {
   LanguagesEnum,
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
+import dayjs from 'dayjs';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { ApplicationService } from '../../../src/services/application.service';
 import { ApplicationQueryParams } from '../../../src/dtos/applications/application-query-params.dto';
@@ -19,9 +20,10 @@ import { addressFactory } from '../../../prisma/seed-helpers/address-factory';
 import { AddressCreate } from '../../../src/dtos/addresses/address-create.dto';
 import { InputType } from '../../../src/enums/shared/input-type-enum';
 import { ApplicationUpdate } from '../../../src/dtos/applications/application-update.dto';
-import { EmailModule } from '../../../src/modules/email.module';
-import { PrismaModule } from '../../../src/modules/prisma.module';
 import { EmailService } from '../../../src/services/email.service';
+import { PermissionService } from '../../../src/services/permission.service';
+import { User } from '../../../src/dtos/users/user.dto';
+import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
 
 describe('Testing application service', () => {
   let service: ApplicationService;
@@ -228,6 +230,8 @@ describe('Testing application service', () => {
     } as ApplicationCreate;
   };
 
+  const canOrThrowMock = jest.fn();
+
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -239,11 +243,21 @@ describe('Testing application service', () => {
             applicationConfirmation: jest.fn(),
           },
         },
+        {
+          provide: PermissionService,
+          useValue: {
+            canOrThrow: canOrThrowMock,
+          },
+        },
       ],
     }).compile();
 
     service = module.get<ApplicationService>(ApplicationService);
     prisma = module.get<PrismaService>(PrismaService);
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
   it('should get applications from list() when applications are available', async () => {
@@ -645,7 +659,14 @@ describe('Testing application service', () => {
       .fn()
       .mockResolvedValue({ id: randomUUID() });
 
-    await service.delete('example Id');
+    prisma.jurisdictions.findFirst = jest
+      .fn()
+      .mockResolvedValue({ id: randomUUID() });
+
+    await service.delete('example Id', {
+      id: 'requestingUser id',
+      userRoles: { isAdmin: true },
+    } as unknown as User);
 
     expect(prisma.applications.findUnique).toHaveBeenCalledWith({
       where: {
@@ -668,13 +689,27 @@ describe('Testing application service', () => {
         deletedAt: expect.anything(),
       },
     });
+
+    expect(canOrThrowMock).toHaveBeenCalledWith(
+      {
+        id: 'requestingUser id',
+        userRoles: { isAdmin: true },
+      } as unknown as User,
+      'application',
+      permissionActions.delete,
+      expect.anything(),
+    );
   });
 
   it("should throw error when trying to delete application that doesen't exist", async () => {
     prisma.applications.findUnique = jest.fn().mockResolvedValue(null);
 
     await expect(
-      async () => await service.delete('example Id'),
+      async () =>
+        await service.delete('example Id', {
+          id: 'requestingUser id',
+          userRoles: { isAdmin: true },
+        } as unknown as User),
     ).rejects.toThrowError(
       'applicationId example Id was requested but not found',
     );
@@ -684,13 +719,14 @@ describe('Testing application service', () => {
         id: 'example Id',
       },
     });
+
+    expect(canOrThrowMock).not.toHaveBeenCalled();
   });
 
   it('should create an application from public site', async () => {
-    const submissionDate = new Date();
     prisma.listings.findUnique = jest.fn().mockResolvedValue({
       id: randomUUID(),
-      applicationDueDate: new Date(),
+      applicationDueDate: dayjs(new Date()).add(5, 'days').toDate(),
     });
 
     prisma.applications.create = jest.fn().mockResolvedValue({
@@ -698,9 +734,16 @@ describe('Testing application service', () => {
     });
 
     const exampleAddress = addressFactory() as AddressCreate;
-    const dto = mockCreateApplicationData(exampleAddress, submissionDate);
+    const dto = mockCreateApplicationData(exampleAddress);
 
-    await service.create(dto, true);
+    prisma.jurisdictions.findFirst = jest
+      .fn()
+      .mockResolvedValue({ id: randomUUID() });
+
+    await service.create(dto, true, {
+      id: 'requestingUser id',
+      userRoles: { isAdmin: true },
+    } as unknown as User);
 
     expect(prisma.listings.findUnique).toHaveBeenCalledWith({
       where: {
@@ -756,7 +799,8 @@ describe('Testing application service', () => {
         incomePeriod: IncomePeriodEnum.perYear,
         language: LanguagesEnum.en,
         acceptedTerms: true,
-        submissionDate: submissionDate,
+        // Submission date is the moment it was created
+        submissionDate: expect.any(Date),
         reviewStatus: ApplicationReviewStatusEnum.valid,
         confirmationCode: expect.anything(),
         applicant: {
@@ -865,7 +909,7 @@ describe('Testing application service', () => {
             },
           ],
         },
-        programs: JSON.stringify([
+        programs: [
           {
             key: 'example key',
             claimed: true,
@@ -883,8 +927,8 @@ describe('Testing application service', () => {
               },
             ],
           },
-        ]),
-        preferences: JSON.stringify([
+        ],
+        preferences: [
           {
             key: 'example key',
             claimed: true,
@@ -902,9 +946,16 @@ describe('Testing application service', () => {
               },
             ],
           },
-        ]),
+        ],
+        userAccounts: {
+          connect: {
+            id: 'requestingUser id',
+          },
+        },
       },
     });
+
+    expect(canOrThrowMock).not.toHaveBeenCalled();
   });
 
   it('should error while creating an application from public site because submissions are closed', async () => {
@@ -920,8 +971,16 @@ describe('Testing application service', () => {
     const exampleAddress = addressFactory() as AddressCreate;
     const dto = mockCreateApplicationData(exampleAddress, new Date());
 
+    prisma.jurisdictions.findFirst = jest
+      .fn()
+      .mockResolvedValue({ id: randomUUID() });
+
     await expect(
-      async () => await service.create(dto, true),
+      async () =>
+        await service.create(dto, true, {
+          id: 'requestingUser id',
+          userRoles: { isAdmin: true },
+        } as unknown as User),
     ).rejects.toThrowError('Listing is not open for application submission');
 
     expect(prisma.listings.findUnique).toHaveBeenCalledWith({
@@ -934,6 +993,8 @@ describe('Testing application service', () => {
     });
 
     expect(prisma.applications.create).not.toHaveBeenCalled();
+
+    expect(canOrThrowMock).not.toHaveBeenCalled();
   });
 
   it('should create an application from partner site', async () => {
@@ -945,10 +1006,17 @@ describe('Testing application service', () => {
       id: randomUUID(),
     });
 
+    prisma.jurisdictions.findFirst = jest
+      .fn()
+      .mockResolvedValue({ id: randomUUID() });
+
     const exampleAddress = addressFactory() as AddressCreate;
     const dto = mockCreateApplicationData(exampleAddress, new Date());
 
-    await service.create(dto, false);
+    await service.create(dto, false, {
+      id: 'requestingUser id',
+      userRoles: { isAdmin: true },
+    } as unknown as User);
 
     expect(prisma.listings.findUnique).toHaveBeenCalledWith({
       where: {
@@ -1113,7 +1181,7 @@ describe('Testing application service', () => {
             },
           ],
         },
-        programs: JSON.stringify([
+        programs: [
           {
             key: 'example key',
             claimed: true,
@@ -1131,8 +1199,8 @@ describe('Testing application service', () => {
               },
             ],
           },
-        ]),
-        preferences: JSON.stringify([
+        ],
+        preferences: [
           {
             key: 'example key',
             claimed: true,
@@ -1150,9 +1218,27 @@ describe('Testing application service', () => {
               },
             ],
           },
-        ]),
+        ],
+        userAccounts: {
+          connect: {
+            id: 'requestingUser id',
+          },
+        },
       },
     });
+
+    expect(canOrThrowMock).toHaveBeenCalledWith(
+      {
+        id: 'requestingUser id',
+        userRoles: { isAdmin: true },
+      } as unknown as User,
+      'application',
+      permissionActions.create,
+      {
+        listingId: dto.listings.id,
+        jurisdictionId: expect.anything(),
+      },
+    );
   });
 
   it('should update an application when one exists', async () => {
@@ -1177,7 +1263,14 @@ describe('Testing application service', () => {
       id: randomUUID(),
     };
 
-    await service.update(dto);
+    prisma.jurisdictions.findFirst = jest
+      .fn()
+      .mockResolvedValue({ id: randomUUID() });
+
+    await service.update(dto, {
+      id: 'requestingUser id',
+      userRoles: { isAdmin: true },
+    } as unknown as User);
 
     expect(prisma.applications.findUnique).toHaveBeenCalledWith({
       where: {
@@ -1338,7 +1431,7 @@ describe('Testing application service', () => {
             },
           ],
         },
-        programs: JSON.stringify([
+        programs: [
           {
             key: 'example key',
             claimed: true,
@@ -1356,8 +1449,8 @@ describe('Testing application service', () => {
               },
             ],
           },
-        ]),
-        preferences: JSON.stringify([
+        ],
+        preferences: [
           {
             key: 'example key',
             claimed: true,
@@ -1375,7 +1468,7 @@ describe('Testing application service', () => {
               },
             ],
           },
-        ]),
+        ],
       },
       where: {
         id: expect.anything(),
@@ -1390,6 +1483,16 @@ describe('Testing application service', () => {
         lastApplicationUpdateAt: expect.anything(),
       },
     });
+
+    expect(canOrThrowMock).toHaveBeenCalledWith(
+      {
+        id: 'requestingUser id',
+        userRoles: { isAdmin: true },
+      } as unknown as User,
+      'application',
+      permissionActions.update,
+      expect.anything(),
+    );
   });
 
   it("should error trying to update an application when one doesn't exists", async () => {
@@ -1412,9 +1515,17 @@ describe('Testing application service', () => {
       id: randomUUID(),
     };
 
-    await expect(async () => await service.update(dto)).rejects.toThrowError(
-      expect.anything(),
-    );
+    prisma.jurisdictions.findFirst = jest
+      .fn()
+      .mockResolvedValue({ id: randomUUID() });
+
+    await expect(
+      async () =>
+        await service.update(dto, {
+          id: 'requestingUser id',
+          userRoles: { isAdmin: true },
+        } as unknown as User),
+    ).rejects.toThrowError(expect.anything());
 
     expect(prisma.applications.findUnique).toHaveBeenCalledWith({
       where: {
@@ -1425,5 +1536,7 @@ describe('Testing application service', () => {
     expect(prisma.applications.update).not.toHaveBeenCalled();
 
     expect(prisma.listings.update).not.toHaveBeenCalled();
+
+    expect(canOrThrowMock).not.toHaveBeenCalled();
   });
 });

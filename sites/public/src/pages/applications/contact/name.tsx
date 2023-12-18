@@ -1,29 +1,22 @@
-/*
-1.2 - Name
-Primary applicant details. Name, DOB and Email Address
-https://github.com/bloom-housing/bloom/issues/255
-*/
 import React, { useContext, useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
 import {
-  AppearanceStyleType,
-  AlertBox,
-  Button,
   DOBField,
   Field,
   Form,
-  FormCard,
   Icon,
   IconFillColors,
   t,
-  ProgressNav,
   emailRegex,
-  Heading,
 } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { Alert } from "@bloom-housing/ui-seeds"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
-import { useForm } from "react-hook-form"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
+import ApplicationFormLayout from "../../../layouts/application-form"
+import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationName = () => {
   const { profile } = useContext(AuthContext)
@@ -32,16 +25,18 @@ const ApplicationName = () => {
 
   const currentPageSection = 1
 
-  /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, watch, errors } = useForm<Record<string, any>>({
+  const { register, handleSubmit, watch, errors, trigger } = useForm<Record<string, any>>({
     shouldFocusError: false,
     defaultValues: {
       "applicant.emailAddress": application.applicant.emailAddress,
       "applicant.noEmail": application.applicant.noEmail,
     },
   })
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    const validation = await trigger()
+    if (!validation) return
+
     if (!autofilled) {
       conductor.currentStep.save({ applicant: { ...application.applicant, ...data.applicant } })
     }
@@ -74,88 +69,88 @@ const ApplicationName = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard>
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">{t("application.name.title")}</h2>
-        </div>
+      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={t("application.name.title")}
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: OnClientSide(),
+          }}
+          backLink={{
+            url: autofilled ? `/applications/start/autofill` : `/applications/start/what-to-expect`,
+          }}
+          conductor={conductor}
+        >
+          {Object.entries(errors).length > 0 && (
+            <Alert
+              className={styles["message-inside-card"]}
+              variant="alert"
+              fullwidth
+              id={"application-alert-box"}
+            >
+              {t("errors.errorsToResolve")}
+            </Alert>
+          )}
+          <CardSection divider={"inset"}>
+            <div id={"application-initial-page"}>
+              <fieldset>
+                <legend
+                  className={`text__caps-spaced ${errors.applicant?.firstName ? "text-alert" : ""}`}
+                >
+                  {t("application.name.yourName")}
+                  <LockIcon />
+                </legend>
 
-        {Object.entries(errors).length > 0 && (
-          <AlertBox type="alert" inverted closeable>
-            {t("errors.errorsToResolve")}
-          </AlertBox>
-        )}
+                <Field
+                  name="applicant.firstName"
+                  label={t("application.contact.givenName")}
+                  disabled={autofilled}
+                  defaultValue={application.applicant.firstName}
+                  validation={{ required: true, maxLength: 64 }}
+                  error={errors.applicant?.firstName}
+                  errorMessage={
+                    errors.applicant?.firstName?.type === "maxLength"
+                      ? t("errors.maxLength")
+                      : t("errors.givenNameError")
+                  }
+                  register={register}
+                  dataTestId={"app-primary-first-name"}
+                />
 
-        <Form onSubmit={handleSubmit(onSubmit, onError)}>
-          <div className="form-card__group border-b" data-testid={"application-initial-page"}>
-            <fieldset>
-              <legend
-                className={`text__caps-spaced ${errors.applicant?.firstName ? "text-alert" : ""}`}
-              >
-                {t("application.name.yourName")}
-                <LockIcon />
-              </legend>
+                <Field
+                  name="applicant.middleName"
+                  label={t("application.name.middleNameOptional")}
+                  disabled={autofilled}
+                  defaultValue={application.applicant.middleName}
+                  register={register}
+                  dataTestId={"app-primary-middle-name"}
+                  validation={{ maxLength: 64 }}
+                  error={errors.applicant?.middleName}
+                  errorMessage={t("errors.maxLength")}
+                />
 
-              <Field
-                name="applicant.firstName"
-                label={t("application.name.firstName")}
-                placeholder={t("application.name.firstName")}
-                readerOnly={true}
-                disabled={autofilled}
-                defaultValue={application.applicant.firstName}
-                validation={{ required: true, maxLength: 64 }}
-                error={errors.applicant?.firstName}
-                errorMessage={
-                  errors.applicant?.firstName?.type === "maxLength"
-                    ? t("errors.maxLength")
-                    : t("errors.firstNameError")
-                }
-                register={register}
-                dataTestId={"app-primary-first-name"}
-              />
-
-              <Field
-                name="applicant.middleName"
-                label={t("application.name.middleNameOptional")}
-                placeholder={t("application.name.middleNameOptional")}
-                disabled={autofilled}
-                readerOnly={true}
-                defaultValue={application.applicant.middleName}
-                register={register}
-                dataTestId={"app-primary-middle-name"}
-                validation={{ maxLength: 64 }}
-                error={errors.applicant?.middleName}
-                errorMessage={t("errors.maxLength")}
-              />
-
-              <Field
-                name="applicant.lastName"
-                label={t("application.name.lastName")}
-                placeholder={t("application.name.lastName")}
-                disabled={autofilled}
-                readerOnly={true}
-                defaultValue={application.applicant.lastName}
-                validation={{ required: true, maxLength: 64 }}
-                error={errors.applicant?.lastName}
-                errorMessage={
-                  errors.applicant?.lastName?.type === "maxLength"
-                    ? t("errors.maxLength")
-                    : t("errors.lastNameError")
-                }
-                register={register}
-                dataTestId={"app-primary-last-name"}
-              />
-            </fieldset>
-          </div>
-
-          <div className="form-card__group border-b">
+                <Field
+                  name="applicant.lastName"
+                  label={t("application.contact.familyName")}
+                  disabled={autofilled}
+                  defaultValue={application.applicant.lastName}
+                  validation={{ required: true, maxLength: 64 }}
+                  error={errors.applicant?.lastName}
+                  errorMessage={
+                    errors.applicant?.lastName?.type === "maxLength"
+                      ? t("errors.maxLength")
+                      : t("errors.familyNameError")
+                  }
+                  register={register}
+                  dataTestId={"app-primary-last-name"}
+                />
+              </fieldset>
+            </div>
+          </CardSection>
+          <CardSection divider={"inset"}>
             <DOBField
               defaultDOB={{
                 birthDay: application.applicant.birthDay,
@@ -178,9 +173,9 @@ const ApplicationName = () => {
                 </>
               }
             />
-          </div>
-
-          <div className="form-card__group">
+            <p className={"field-sub-note"}>{t("application.name.dobHelper")}</p>
+          </CardSection>
+          <CardSection divider={"flush"} className={"border-none"}>
             <legend
               className={`text__caps-spaced ${errors.applicant?.emailAddress ? "text-alert" : ""}`}
             >
@@ -193,7 +188,6 @@ const ApplicationName = () => {
             <Field
               type="email"
               name="applicant.emailAddress"
-              placeholder={clientLoaded && noEmail ? t("t.none") : "example@web.com"}
               label={t("application.name.yourEmailAddress")}
               readerOnly={true}
               defaultValue={application.applicant.emailAddress}
@@ -203,6 +197,7 @@ const ApplicationName = () => {
               register={register}
               disabled={clientLoaded && (noEmail || autofilled)}
               dataTestId={"app-primary-email"}
+              subNote={"example@mail.com"}
             />
 
             <Field
@@ -218,38 +213,9 @@ const ApplicationName = () => {
               }}
               dataTestId={"app-primary-no-email"}
             />
-          </div>
-
-          <div className="form-card__pager">
-            <div className="form-card__pager-row primary">
-              <Button
-                styleType={AppearanceStyleType.primary}
-                onClick={() => {
-                  conductor.returnToReview = false
-                  conductor.setNavigatedBack(false)
-                }}
-                data-testid={"app-next-step-button"}
-              >
-                {t("t.next")}
-              </Button>
-            </div>
-
-            {conductor.canJumpForwardToReview() && (
-              <div className="form-card__pager-row">
-                <Button
-                  unstyled={true}
-                  className="mb-4"
-                  onClick={() => {
-                    conductor.returnToReview = true
-                  }}
-                >
-                  {t("application.form.general.saveAndReturn")}
-                </Button>
-              </div>
-            )}
-          </div>
-        </Form>
-      </FormCard>
+          </CardSection>
+        </ApplicationFormLayout>
+      </Form>
     </FormsLayout>
   )
 }

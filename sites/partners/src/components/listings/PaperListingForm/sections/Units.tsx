@@ -1,21 +1,19 @@
 import React, { useState, useMemo, useCallback, useEffect } from "react"
 import {
   t,
+  AppearanceStyleType,
   MinimalTable,
-  Button,
-  AppearanceSizeType,
   Drawer,
   Modal,
-  AppearanceStyleType,
   FieldGroup,
   StandardTableData,
 } from "@bloom-housing/ui-components"
-import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { Button, FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import UnitForm from "../UnitForm"
 import { useFormContext, useWatch } from "react-hook-form"
 import { TempUnit } from "../../../../lib/listings/formTypes"
 import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
-import { ListingReviewOrder } from "@bloom-housing/backend-core"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type UnitProps = {
@@ -48,7 +46,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
     amiPercentage: "listings.unit.ami",
     monthlyRent: "listings.unit.rent",
     sqFeet: "listings.unit.sqft",
-    priorityType: "listings.unit.priorityType",
+    unitAccessibilityPriorityTypes: "listings.unit.priorityType",
     action: "",
   }
 
@@ -107,27 +105,27 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
     () =>
       units.map((unit) => ({
         number: { content: unit.number },
-        unitType: { content: unit.unitType && t(`listings.unitTypes.${unit.unitType.name}`) },
+        unitType: { content: unit.unitTypes && t(`listings.unitTypes.${unit.unitTypes.name}`) },
         amiPercentage: { content: unit.amiPercentage },
         monthlyRent: { content: unit.monthlyRent },
         sqFeet: { content: unit.sqFeet },
-        priorityType: { content: unit.priorityType?.name },
+        unitAccessibilityPriorityTypes: { content: unit.unitAccessibilityPriorityTypes?.name },
         action: {
           content: (
-            <div className="flex">
+            <div className="flex gap-3">
               <Button
                 type="button"
-                className="front-semibold uppercase my-0"
+                className="font-semibold"
                 onClick={() => editUnit(unit.tempId)}
-                unstyled
+                variant="text"
               >
                 {t("t.edit")}
               </Button>
               <Button
                 type="button"
-                className="front-semibold uppercase text-alert my-0"
+                className="font-semibold text-alert"
                 onClick={() => setUnitDeleteModal(unit.tempId)}
-                unstyled
+                variant="text"
               >
                 {t("t.delete")}
               </Button>
@@ -184,14 +182,14 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
                   value: "availableUnits",
                   id: "availableUnits",
                   dataTestId: "listingAvailability.availableUnits",
-                  defaultChecked: listing?.reviewOrderType !== ListingReviewOrder.waitlist,
+                  defaultChecked: listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlist,
                 },
                 {
                   label: t("listings.waitlist.open"),
                   value: "openWaitlist",
                   id: "openWaitlist",
                   dataTestId: "listingAvailability.openWaitlist",
-                  defaultChecked: listing?.reviewOrderType === ListingReviewOrder.waitlist,
+                  defaultChecked: listing?.reviewOrderType === ReviewOrderTypeEnum.waitlist,
                 },
               ]}
             />
@@ -208,8 +206,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
             <Button
               id="addUnitsButton"
               type="button"
-              size={AppearanceSizeType.normal}
-              styleType={fieldHasError(errors?.units) ? AppearanceStyleType.alert : null}
+              variant={fieldHasError(errors?.units) ? "alert" : "primary-outlined"}
               onClick={() => {
                 editUnit(units.length + 1)
                 clearErrors("units")
@@ -223,7 +220,9 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
 
       <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
       {fieldHasError(errors?.units) && (
-        <span className={"text-xs text-alert"}>{t("errors.requiredFieldError")}</span>
+        <span className={"text-xs text-alert"} id="units-error">
+          {t("errors.requiredFieldError")}
+        </span>
       )}
 
       <Drawer
@@ -272,18 +271,15 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
         ariaDescription={t("listings.unit.deleteConf")}
         onClose={() => setUnitDeleteModal(null)}
         actions={[
-          <Button
-            styleType={AppearanceStyleType.alert}
-            onClick={() => deleteUnit(unitDeleteModal)}
-            size={AppearanceSizeType.small}
-          >
+          <Button variant="alert" onClick={() => deleteUnit(unitDeleteModal)} size="sm">
             {t("t.delete")}
           </Button>,
           <Button
             onClick={() => {
               setUnitDeleteModal(null)
             }}
-            size={AppearanceSizeType.small}
+            variant="primary-outlined"
+            size="sm"
           >
             {t("t.cancel")}
           </Button>,

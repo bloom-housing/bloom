@@ -3,16 +3,20 @@ import { INestApplication } from '@nestjs/common';
 import { LanguagesEnum } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import request from 'supertest';
+import cookieParser from 'cookie-parser';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
 import { JurisdictionCreate } from '../../src/dtos/jurisdictions/jurisdiction-create.dto';
 import { JurisdictionUpdate } from '../../src/dtos/jurisdictions/jurisdiction-update.dto';
 import { IdDTO } from '../../src/dtos/shared/id.dto';
+import { userFactory } from '../../prisma/seed-helpers/user-factory';
+import { Login } from '../../src/dtos/auth/login.dto';
 
 describe('Jurisdiction Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
+  let cookies = '';
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -21,7 +25,24 @@ describe('Jurisdiction Controller Tests', () => {
 
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
+    app.use(cookieParser());
     await app.init();
+    const storedUser = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: { isAdmin: true },
+        mfaEnabled: false,
+        confirmedAt: new Date(),
+      }),
+    });
+    const resLogIn = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({
+        email: storedUser.email,
+        password: 'abcdef',
+      } as Login)
+      .expect(201);
+
+    cookies = resLogIn.headers['set-cookie'];
   });
 
   afterAll(async () => {
@@ -108,6 +129,7 @@ describe('Jurisdiction Controller Tests', () => {
     const res = await request(app.getHttpServer())
       .post('/jurisdictions')
       .send(createBody)
+      .set('Cookie', cookies)
       .expect(201);
 
     expect(res.body.name).toEqual('new jurisdiction');
@@ -132,6 +154,7 @@ describe('Jurisdiction Controller Tests', () => {
     const res = await request(app.getHttpServer())
       .put(`/jurisdictions/${id}`)
       .send(updateBody)
+      .set('Cookie', cookies)
       .expect(404);
     expect(res.body.message).toEqual(
       `jurisdictionId ${id} was requested but not found`,
@@ -161,6 +184,7 @@ describe('Jurisdiction Controller Tests', () => {
     const res = await request(app.getHttpServer())
       .put(`/jurisdictions/${jurisdictionA.id}`)
       .send(updateJurisdiction)
+      .set('Cookie', cookies)
       .expect(200);
 
     expect(res.body.name).toEqual('updated name: 10');
@@ -174,6 +198,7 @@ describe('Jurisdiction Controller Tests', () => {
       .send({
         id: id,
       } as IdDTO)
+      .set('Cookie', cookies)
       .expect(404);
     expect(res.body.message).toEqual(
       `jurisdictionId ${id} was requested but not found`,
@@ -190,6 +215,7 @@ describe('Jurisdiction Controller Tests', () => {
       .send({
         id: jurisdictionA.id,
       } as IdDTO)
+      .set('Cookie', cookies)
       .expect(200);
 
     expect(res.body.success).toEqual(true);

@@ -16,5 +16,6 @@ export const jurisdictionFactory = (
   enablePartnerSettings: true,
   enableAccessibilityFeatures: true,
   enableUtilitiesIncluded: true,
+  enableGeocodingPreferences: true,
   listingApprovalPermissions: listingApprovalPermissions || [],
 });

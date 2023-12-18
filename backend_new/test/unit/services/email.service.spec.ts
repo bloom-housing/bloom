@@ -15,6 +15,7 @@ import { translationFactory } from '../../../prisma/seed-helpers/translation-fac
 import { whiteHouse } from '../../../prisma/seed-helpers/address-factory';
 import { Application } from '../../../src/dtos/applications/application.dto';
 import { User } from '../../../src/dtos/users/user.dto';
+import { ApplicationCreate } from '../../../src/dtos/applications/application-create.dto';
 
 let sendMock;
 const translationServiceMock = {
@@ -71,7 +72,7 @@ describe('Testing email service', () => {
 
   it('testing welcome email', async () => {
     await service.welcome(
-      [{ name: 'test', id: '1234' }],
+      'test',
       user as unknown as User,
       'http://localhost:3000',
       'http://localhost:3000/?token=',
@@ -86,7 +87,10 @@ describe('Testing email service', () => {
 
   it('testing invite email', async () => {
     await service.invitePartnerUser(
-      [{ name: 'test', id: '1234' }],
+      [
+        { name: 'test', id: '1234' },
+        { name: 'second one', id: '2345' },
+      ],
       user,
       'http://localhost:3001',
       'http://localhost:3001/?token=',
@@ -106,7 +110,7 @@ describe('Testing email service', () => {
 
   it('testing change email', async () => {
     await service.changeEmail(
-      [{ name: 'test', id: '1234' }],
+      'test',
       user,
       'http://localhost:3001',
       'http://localhost:3001/confirmation',
@@ -130,7 +134,11 @@ describe('Testing email service', () => {
 
   it('testing forgot password', async () => {
     await service.forgotPassword(
-      [{ name: 'test', id: '1234' }],
+      [
+        { name: 'test', id: '1234' },
+        { name: 'second', id: '1234' },
+        { name: 'third', id: '1234' },
+      ],
       user,
       'http://localhost:3001',
       'resetToken',
@@ -213,7 +221,7 @@ describe('Testing email service', () => {
     it('Test first come first serve', async () => {
       await service.applicationConfirmation(
         listing,
-        application,
+        application as ApplicationCreate,
         'http://localhost:3001',
       );
       expect(sendMock).toHaveBeenCalled();
@@ -243,7 +251,7 @@ describe('Testing email service', () => {
     it('Test lottery', async () => {
       await service.applicationConfirmation(
         { ...listing, reviewOrderType: ReviewOrderTypeEnum.lottery },
-        application,
+        application as ApplicationCreate,
         'http://localhost:3001',
       );
       expect(sendMock).toHaveBeenCalled();
@@ -276,7 +284,7 @@ describe('Testing email service', () => {
     it('Test waitlist', async () => {
       await service.applicationConfirmation(
         { ...listing, reviewOrderType: ReviewOrderTypeEnum.waitlist },
-        application,
+        application as ApplicationCreate,
         'http://localhost:3001',
       );
       expect(sendMock).toHaveBeenCalled();
