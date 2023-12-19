@@ -14,6 +14,7 @@ import {
 import { Button } from "@bloom-housing/ui-seeds"
 import { useForm } from "react-hook-form"
 import { downloadExternalPDF } from "../../lib/helpers"
+import { isExternalLink } from "@bloom-housing/ui-seeds/src/global/NavigationContext"
 
 export interface PaperApplication {
   fileURL: string
@@ -101,7 +102,7 @@ const GetApplication = (props: ApplicationsProps) => {
                 className="w-full mb-2"
                 href={props.onlineApplicationURL}
                 id={"listing-view-apply-button"}
-                newWindowTarget={true}
+                newWindowTarget={isExternalLink(props.onlineApplicationURL)}
               >
                 {props.strings?.applyOnline ?? t("listings.apply.applyOnline")}
               </Button>
