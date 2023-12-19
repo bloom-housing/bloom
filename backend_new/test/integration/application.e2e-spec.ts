@@ -62,7 +62,6 @@ describe('Application Controller Tests', () => {
   ) => {
     const res = await prisma.multiselectQuestions.create({
       data: multiselectQuestionFactory(jurisdictionId, {
-        numberOfOptions: 2,
         multiselectQuestion: {
           applicationSection: section,
           listings: {

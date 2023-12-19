@@ -540,7 +540,7 @@ describe('User Controller Tests', () => {
       data: jurisdictionFactory(),
     });
 
-    const data = applicationFactory();
+    const data = await applicationFactory();
     data.applicant.create.emailAddress = 'publicuser@email.com';
     const application = await prisma.applications.create({
       data,
