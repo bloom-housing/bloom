@@ -361,7 +361,8 @@ export const mapApiToForm = (applicationData: ApplicationUpdate, listing: Listin
     const preferredUnit = applicationData?.preferredUnitTypes?.map((unit) => unit.id)
 
     const accessibility: string[] = adaFeatureKeys.filter(
-      (feature) => applicationData?.accessibility[feature] === true
+      (feature) =>
+        applicationData?.accessibility && applicationData?.accessibility[feature] === true
     )
 
     const result: ApplicationTypes = {

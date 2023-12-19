@@ -64,9 +64,10 @@ const DetailsAddressColumns = ({
     }
 
     if (type === AddressColsType.alternateAddress) {
-      address[item] = application.alternateContact.address[item]
-        ? application.alternateContact.address[item]
-        : t("t.n/a")
+      address[item] =
+        application.alternateContact && application.alternateContact.address[item]
+          ? application.alternateContact.address[item]
+          : t("t.n/a")
     }
 
     if (type === AddressColsType.memberWork) {
