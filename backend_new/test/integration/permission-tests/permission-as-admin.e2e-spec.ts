@@ -228,7 +228,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
       );
 
       const applicationA = await prisma.applications.create({
-        data: applicationFactory({ unitTypeId: unitTypeA.id }),
+        data: await applicationFactory({ unitTypeId: unitTypeA.id }),
         include: {
           applicant: true,
         },
@@ -255,7 +255,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
         data: listing1,
       });
       const applicationA = await prisma.applications.create({
-        data: applicationFactory({
+        data: await applicationFactory({
           unitTypeId: unitTypeA.id,
           listingId: listing1Created.id,
         }),
@@ -369,7 +369,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
       });
 
       const applicationA = await prisma.applications.create({
-        data: applicationFactory({
+        data: await applicationFactory({
           unitTypeId: unitTypeA.id,
           listingId: listing1Created.id,
         }),
@@ -982,7 +982,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
     it('should succeed for public create endpoint', async () => {
       const juris = await generateJurisdiction(prisma, 'permission juris 13');
 
-      const data = applicationFactory();
+      const data = await applicationFactory();
       data.applicant.create.emailAddress = 'publicuser@email.com';
       await prisma.applications.create({
         data,

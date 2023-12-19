@@ -60,7 +60,6 @@ describe('Application Controller Tests', () => {
   ) => {
     const res = await prisma.multiselectQuestions.create({
       data: multiselectQuestionFactory(jurisdictionId, {
-        numberOfOptions: 2,
         multiselectQuestion: {
           applicationSection: section,
           listings: {
@@ -144,13 +143,13 @@ describe('Application Controller Tests', () => {
     const unitTypeA = await unitTypeFactorySingle(prisma, UnitTypeEnum.oneBdrm);
 
     const applicationA = await prisma.applications.create({
-      data: applicationFactory({ unitTypeId: unitTypeA.id }),
+      data: await applicationFactory({ unitTypeId: unitTypeA.id }),
       include: {
         applicant: true,
       },
     });
     const applicationB = await prisma.applications.create({
-      data: applicationFactory({ unitTypeId: unitTypeA.id }),
+      data: await applicationFactory({ unitTypeId: unitTypeA.id }),
       include: {
         applicant: true,
       },
@@ -183,13 +182,13 @@ describe('Application Controller Tests', () => {
     const unitTypeA = await unitTypeFactorySingle(prisma, UnitTypeEnum.oneBdrm);
 
     const applicationA = await prisma.applications.create({
-      data: applicationFactory({ unitTypeId: unitTypeA.id }),
+      data: await applicationFactory({ unitTypeId: unitTypeA.id }),
       include: {
         applicant: true,
       },
     });
     const applicationB = await prisma.applications.create({
-      data: applicationFactory({ unitTypeId: unitTypeA.id }),
+      data: await applicationFactory({ unitTypeId: unitTypeA.id }),
       include: {
         applicant: true,
       },
@@ -214,7 +213,7 @@ describe('Application Controller Tests', () => {
     const unitTypeA = await unitTypeFactorySingle(prisma, UnitTypeEnum.oneBdrm);
 
     const applicationA = await prisma.applications.create({
-      data: applicationFactory({ unitTypeId: unitTypeA.id }),
+      data: await applicationFactory({ unitTypeId: unitTypeA.id }),
       include: {
         applicant: true,
       },
@@ -252,7 +251,7 @@ describe('Application Controller Tests', () => {
       data: listing1,
     });
     const applicationA = await prisma.applications.create({
-      data: applicationFactory({
+      data: await applicationFactory({
         unitTypeId: unitTypeA.id,
         listingId: listing1Created.id,
       }),
@@ -635,7 +634,7 @@ describe('Application Controller Tests', () => {
     );
 
     const applicationA = await prisma.applications.create({
-      data: applicationFactory({
+      data: await applicationFactory({
         unitTypeId: unitTypeA.id,
         listingId: listing1Created.id,
       }),

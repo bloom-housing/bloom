@@ -272,7 +272,7 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
       );
 
       const applicationA = await prisma.applications.create({
-        data: applicationFactory({ unitTypeId: unitTypeA.id }),
+        data: await applicationFactory({ unitTypeId: unitTypeA.id }),
         include: {
           applicant: true,
         },
@@ -290,7 +290,7 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
         UnitTypeEnum.oneBdrm,
       );
       const applicationA = await prisma.applications.create({
-        data: applicationFactory({
+        data: await applicationFactory({
           unitTypeId: unitTypeA.id,
           listingId: listingId,
         }),
@@ -357,7 +357,7 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
       );
 
       const applicationA = await prisma.applications.create({
-        data: applicationFactory({
+        data: await applicationFactory({
           unitTypeId: unitTypeA.id,
           listingId: listingId,
         }),
@@ -889,7 +889,7 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
     it('should succeed for public create endpoint', async () => {
       const juris = await generateJurisdiction(prisma, 'permission juris 37');
 
-      const data = applicationFactory();
+      const data = await applicationFactory();
       data.applicant.create.emailAddress = 'publicuser@email.com';
       await prisma.applications.create({
         data,

@@ -50,7 +50,7 @@ export const applicationFactory = async (optionalParams?: {
     income: '40000',
     incomePeriod: IncomePeriodEnum.perYear,
     preferences: preferenceFactory(
-      optionalParams.multiselectQuestions
+      optionalParams?.multiselectQuestions
         ? optionalParams.multiselectQuestions.filter(
             (question) =>
               question.applicationSection ===
@@ -59,7 +59,7 @@ export const applicationFactory = async (optionalParams?: {
         : [],
     ),
     programs: preferenceFactory(
-      optionalParams.multiselectQuestions
+      optionalParams?.multiselectQuestions
         ? optionalParams.multiselectQuestions.filter(
             (question) =>
               question.applicationSection ===

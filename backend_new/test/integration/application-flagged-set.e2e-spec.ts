@@ -49,7 +49,7 @@ describe('Application flagged set Controller Tests', () => {
 
   const createSimpleApplication = async () => {
     return await prisma.applications.create({
-      data: applicationFactory(),
+      data: await applicationFactory(),
       include: {
         applicant: true,
       },
@@ -63,7 +63,7 @@ describe('Application flagged set Controller Tests', () => {
     householdMember?: Prisma.HouseholdMemberCreateWithoutApplicationsInput,
   ) => {
     return await prisma.applications.create({
-      data: applicationFactory({
+      data: await applicationFactory({
         applicant: {
           emailAddress: `${listing}-email${emailIndicator}@email.com`,
           firstName: `${listing}-firstName${nameAndDOBIndicator}`,
@@ -73,7 +73,7 @@ describe('Application flagged set Controller Tests', () => {
           birthYear: nameAndDOBIndicator,
         },
         listingId: listing,
-        householdMember,
+        householdMember: [householdMember],
       }),
       include: {
         applicant: true,

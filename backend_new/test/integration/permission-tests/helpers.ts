@@ -724,7 +724,7 @@ export const createSimpleApplication = async (
   prisma: PrismaService,
 ): Promise<string> => {
   const res = await prisma.applications.create({
-    data: applicationFactory(),
+    data: await applicationFactory(),
     include: {
       applicant: true,
     },
@@ -798,7 +798,7 @@ export const createComplexApplication = async (
   householdMember?: Prisma.HouseholdMemberCreateWithoutApplicationsInput,
 ) => {
   return await prisma.applications.create({
-    data: applicationFactory({
+    data: await applicationFactory({
       applicant: {
         emailAddress: `${listing}-email${emailIndicator}@email.com`,
         firstName: `${listing}-firstName${nameAndDOBIndicator}`,
@@ -808,7 +808,7 @@ export const createComplexApplication = async (
         birthYear: nameAndDOBIndicator,
       },
       listingId: listing,
-      householdMember,
+      householdMember: [householdMember],
     }),
     include: {
       applicant: true,
