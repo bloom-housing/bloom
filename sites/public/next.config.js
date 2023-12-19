@@ -53,7 +53,6 @@ module.exports = withBundleAnalyzer({
     "@bloom-housing/ui-seeds",
     "@bloom-housing/shared-helpers",
     "@bloom-housing/ui-components",
-    "@bloom-housing/backend-core",
   ],
   webpack: (config) => {
     config.module.rules.push({
