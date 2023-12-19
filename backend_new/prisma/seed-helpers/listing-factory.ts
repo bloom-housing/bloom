@@ -8,10 +8,7 @@ import {
 import { randomName } from './word-generator';
 import { addressFactory } from './address-factory';
 import { unitFactoryMany } from './unit-factory';
-import {
-  reservedCommunityTypeFactory,
-  reservedCommunityTypeFactoryGet,
-} from './reserved-community-type-factory';
+import { reservedCommunityTypeFactoryGet } from './reserved-community-type-factory';
 
 export const listingFactory = async (
   jurisdictionId: string,
@@ -27,6 +24,7 @@ export const listingFactory = async (
     multiselectQuestions?: Partial<MultiselectQuestions>[];
     applications?: Prisma.ApplicationsCreateInput[];
     applicationDueDate?: Date;
+    afsLastRunSetInPast?: boolean;
   },
 ): Promise<Prisma.ListingsCreateInput> => {
   const previousListing = optionalParams?.listing || {};
@@ -67,6 +65,11 @@ export const listingFactory = async (
         id: reservedCommunityType.id,
       },
     },
+    // For application flagged set tests the date needs to be before the updated timestamp
+    // All others should be a newer timestamp so that they are not picked up by AFS tests
+    afsLastRunAt: optionalParams?.afsLastRunSetInPast
+      ? new Date(0)
+      : new Date(),
     listingMultiselectQuestions: optionalParams?.multiselectQuestions
       ? {
           create: optionalParams.multiselectQuestions.map(

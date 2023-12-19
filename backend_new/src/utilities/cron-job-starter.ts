@@ -23,6 +23,13 @@ export const startCronJob = (
   logger: Logger,
   schedulerRegistry: SchedulerRegistry,
 ): void => {
+  if (!cronString) {
+    // If missing cron string an error should throw but not prevent the app from starting up
+    logger.error(
+      `${cronName} cron string does not exist and ${cronName} job will not run`,
+    );
+    return;
+  }
   // Take the cron job frequency from .env and add a random seconds to it.
   // That way when there are multiple instances running they won't run at the exact same time.
   const repeatCron = cronString;

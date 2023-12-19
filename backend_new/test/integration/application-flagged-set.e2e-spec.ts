@@ -39,6 +39,7 @@ describe('Application flagged set Controller Tests', () => {
     await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
     const listing1 = await listingFactory(jurisdiction.id, prisma, {
       status: ListingsStatusEnum.closed,
+      afsLastRunSetInPast: true,
     });
     const listing1Created = await prisma.listings.create({
       data: listing1,
@@ -47,9 +48,9 @@ describe('Application flagged set Controller Tests', () => {
     return listing1Created.id;
   };
 
-  const createSimpleApplication = async () => {
+  const createSimpleApplication = async (listingId: string) => {
     return await prisma.applications.create({
-      data: applicationFactory(),
+      data: applicationFactory({ listingId }),
       include: {
         applicant: true,
       },
@@ -118,9 +119,9 @@ describe('Application flagged set Controller Tests', () => {
   it('should return a list of flagged sets that are resolved', async () => {
     const listing = await createListing();
 
-    const applicationA = await createSimpleApplication();
+    const applicationA = await createSimpleApplication(listing);
 
-    const applicationB = await createSimpleApplication();
+    const applicationB = await createSimpleApplication(listing);
 
     const afsResolved = await prisma.applicationFlaggedSet.create({
       data: {
@@ -174,9 +175,9 @@ describe('Application flagged set Controller Tests', () => {
   it('should return a list of flagged sets that are pending and flagged by nameAndDOB', async () => {
     const listing = await createListing();
 
-    const applicationA = await createSimpleApplication();
+    const applicationA = await createSimpleApplication(listing);
 
-    const applicationB = await createSimpleApplication();
+    const applicationB = await createSimpleApplication(listing);
 
     await prisma.applicationFlaggedSet.create({
       data: {
@@ -230,9 +231,9 @@ describe('Application flagged set Controller Tests', () => {
   it("should correctly gather meta data for a listing's flagged sets", async () => {
     const listing = await createListing();
 
-    const applicationA = await createSimpleApplication();
+    const applicationA = await createSimpleApplication(listing);
 
-    const applicationB = await createSimpleApplication();
+    const applicationB = await createSimpleApplication(listing);
 
     await prisma.applicationFlaggedSet.create({
       data: {
@@ -290,9 +291,9 @@ describe('Application flagged set Controller Tests', () => {
   it('should get flagged set by id', async () => {
     const listing = await createListing();
 
-    const applicationA = await createSimpleApplication();
+    const applicationA = await createSimpleApplication(listing);
 
-    const applicationB = await createSimpleApplication();
+    const applicationB = await createSimpleApplication(listing);
 
     const resolvedAFS = await prisma.applicationFlaggedSet.create({
       data: {
@@ -353,9 +354,9 @@ describe('Application flagged set Controller Tests', () => {
   it('should get flagged set by id', async () => {
     const listing = await createListing();
 
-    const applicationA = await createSimpleApplication();
+    const applicationA = await createSimpleApplication(listing);
 
-    const applicationB = await createSimpleApplication();
+    const applicationB = await createSimpleApplication(listing);
 
     await prisma.applicationFlaggedSet.create({
       data: {
@@ -439,9 +440,9 @@ describe('Application flagged set Controller Tests', () => {
   it('should resolve a flagged set as resolved', async () => {
     const listing = await createListing();
 
-    const applicationA = await createSimpleApplication();
+    const applicationA = await createSimpleApplication(listing);
 
-    const applicationB = await createSimpleApplication();
+    const applicationB = await createSimpleApplication(listing);
 
     await prisma.applicationFlaggedSet.create({
       data: {
@@ -525,9 +526,9 @@ describe('Application flagged set Controller Tests', () => {
   it('should resolve a flagged set as pending', async () => {
     const listing = await createListing();
 
-    const applicationA = await createSimpleApplication();
+    const applicationA = await createSimpleApplication(listing);
 
-    const applicationB = await createSimpleApplication();
+    const applicationB = await createSimpleApplication(listing);
 
     const resolvedAFS = await prisma.applicationFlaggedSet.create({
       data: {
@@ -611,9 +612,9 @@ describe('Application flagged set Controller Tests', () => {
   it('should reset confirmation alert', async () => {
     const listing = await createListing();
 
-    const applicationA = await createSimpleApplication();
+    const applicationA = await createSimpleApplication(listing);
 
-    const applicationB = await createSimpleApplication();
+    const applicationB = await createSimpleApplication(listing);
 
     const afs = await prisma.applicationFlaggedSet.create({
       data: {

@@ -15,6 +15,7 @@ import { ConfigContext } from "./ConfigContext"
 import { createAction, createReducer } from "typesafe-actions"
 import {
   AmiChartsService,
+  ApplicationFlaggedSetsService,
   ApplicationsService,
   AuthService,
   JurisdictionsService,
@@ -30,12 +31,10 @@ import {
   UserService,
   serviceOptions,
 } from "../types/backend-swagger"
-import { ApplicationFlaggedSetsService } from "@bloom-housing/backend-core"
 
 type ContextProps = {
   amiChartsService: AmiChartsService
   applicationsService: ApplicationsService
-  // TODO: connect this to the AFS service when that exists
   applicationFlaggedSetsService: ApplicationFlaggedSetsService
   listingsService: ListingsService
   jurisdictionsService: JurisdictionsService
