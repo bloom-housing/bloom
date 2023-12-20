@@ -361,6 +361,7 @@ export const ListingView = (props: ListingProps) => {
         applicationPickUpAddress={getAddress(listing.applicationPickUpAddressType, "pickUp")}
         preview={props.preview}
         listingName={listing.name}
+        listingStatus={listing.status}
       />
       {!(
         listing.status === ListingStatus.closed ||
