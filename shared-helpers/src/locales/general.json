@@ -621,6 +621,7 @@
   "errors.zipCodeError": "Please enter a zip code",
   "filter.goToDahlia": "For San Francisco listings, go to ",
   "filter.goToDahliaLink": "DAHLIA",
+  "footer.accessibilityStatement": "Accessibility Statement",
   "footer.bahfaCopyright": "Copyright © 2023 Bay Area Housing Finance Authority. All rights reserved.",
   "footer.bahfaLogo": "Bay Area Housing Finance Authority Logo",
   "footer.contact": "Contact",
