@@ -394,6 +394,8 @@ export class ApplicationService {
         listing.jurisdictions?.publicUrl,
       );
     }
+    // Update the lastApplicationUpdateAt to now after every submission
+    await this.updateListingApplicationEditTimestamp(listing.id);
 
     // Calculate geocoding preferences after save and email sent
     if (listing.jurisdictions?.enableGeocodingPreferences) {
