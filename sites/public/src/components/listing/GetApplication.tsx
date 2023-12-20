@@ -84,25 +84,14 @@ const GetApplication = (props: ApplicationsProps) => {
       )}
       {props.applicationsOpen && props.onlineApplicationURL && (
         <div style={{ boxSizing: "border-box" }}>
-          {props.preview ? (
-            <Button
-              variant="primary-outlined"
-              disabled
-              className="w-full mb-2"
-              id={"listing-view-apply-button"}
-            >
-              {props.strings?.applyOnline ?? t("listings.apply.applyOnline")}
-            </Button>
-          ) : (
-            <Button
-              variant="primary"
-              className="w-full mb-2"
-              href={props.onlineApplicationURL}
-              id={"listing-view-apply-button"}
-            >
-              {props.strings?.applyOnline ?? t("listings.apply.applyOnline")}
-            </Button>
-          )}
+          <Button
+            variant="primary"
+            className="w-full mb-2"
+            href={`${props.onlineApplicationURL}${props.preview ? "&preview=true" : ""}`}
+            id={"listing-view-apply-button"}
+          >
+            {props.strings?.applyOnline ?? t("listings.apply.applyOnline")}
+          </Button>
         </div>
       )}
 
