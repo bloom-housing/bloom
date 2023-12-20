@@ -26,6 +26,7 @@ describe("<Applications>", () => {
           zipCode: "90210",
         }}
         preview={false}
+        listingStatus="active"
         listingName={"Listing name"}
       />
     )
@@ -56,12 +57,40 @@ describe("<Applications>", () => {
           zipCode: "90210",
         }}
         preview={false}
+        listingStatus="active"
         listingName={"Listing name"}
       />
     )
     expect(queryByTestId("get-application-section")).toBeNull()
   })
-  it("disables apply online button in preview state", () => {
+  it("disables apply online button if draft listing", () => {
+    const { getByText } = render(
+      <GetApplication
+        onlineApplicationURL={"online-app-url"}
+        applicationsOpen={true}
+        applicationsOpenDate={"November 20th, 2021"}
+        paperApplications={[
+          { fileURL: "file-url-en", languageString: "English" },
+          { fileURL: "file-url-es", languageString: "Spanish" },
+        ]}
+        paperMethod={true}
+        postmarkedApplicationsReceivedByDate={"November 30th, 2021"}
+        applicationPickUpAddressOfficeHours={"M-F 9am-5pm"}
+        applicationPickUpAddress={{
+          city: "City",
+          state: "State",
+          street2: "Street 2",
+          street: "Pick Up Address Street",
+          zipCode: "90210",
+        }}
+        preview={false}
+        listingStatus="pending"
+        listingName={"Listing name"}
+      />
+    )
+    expect(getByText("Apply Online").closest("button")?.disabled).toBe(true)
+  })
+  it("enables preview url param on apply online button in preview state", () => {
     const { getByText } = render(
       <GetApplication
         onlineApplicationURL={"online-app-url"}
@@ -82,10 +111,13 @@ describe("<Applications>", () => {
           zipCode: "90210",
         }}
         preview={true}
+        listingStatus="pending"
         listingName={"Listing name"}
       />
     )
-    expect(getByText("Apply Online").closest("button")?.disabled).toBe(true)
+    expect(getByText("Apply Online").closest("a")?.getAttribute("href")).toBe(
+      "online-app-url&preview=true"
+    )
   })
   it("hides buttons if application is not open", () => {
     const { getByText, queryByText } = render(
@@ -108,6 +140,7 @@ describe("<Applications>", () => {
           zipCode: "90210",
         }}
         preview={false}
+        listingStatus="active"
         listingName={"Listing name"}
       />
     )
