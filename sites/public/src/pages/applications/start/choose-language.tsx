@@ -9,7 +9,7 @@ import {
   pushGtmEvent,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
-import { Language } from "@bloom-housing/backend-core/types"
+import { Language, ListingStatus } from "@bloom-housing/backend-core/types"
 import { Heading, Icon, Button, Message } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { faClock } from "@fortawesome/free-regular-svg-icons"
@@ -69,7 +69,7 @@ const ApplicationChooseLanguage = () => {
 
   useEffect(() => {
     if (router.isReady) {
-      if (listing?.status !== "active" && !router.query.preview) {
+      if (listing?.status !== ListingStatus.active && router.query.preview !== "true") {
         setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
         void router.push(`/${router.locale}/listing/${listing?.id}/${listing?.urlSlug}`)
       }

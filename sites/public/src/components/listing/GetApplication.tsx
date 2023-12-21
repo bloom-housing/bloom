@@ -14,6 +14,7 @@ import {
 import { Button } from "@bloom-housing/ui-seeds"
 import { useForm } from "react-hook-form"
 import { downloadExternalPDF } from "../../lib/helpers"
+import { ListingStatus } from "@bloom-housing/backend-core"
 
 export interface PaperApplication {
   fileURL: string
@@ -59,7 +60,7 @@ const GetApplication = (props: ApplicationsProps) => {
   const showSection =
     props.onlineApplicationURL ||
     (props.applicationsOpen && props.paperMethod && !!props.paperApplications?.length)
-  const disableApplyButton = !props.preview && props.listingStatus !== "active"
+  const disableApplyButton = !props.preview && props.listingStatus !== ListingStatus.active
   const [showDownloadModal, setShowDownloadModal] = useState(false)
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
