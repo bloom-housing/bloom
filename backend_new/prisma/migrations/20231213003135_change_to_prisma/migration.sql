@@ -77,15 +77,15 @@ CREATE TYPE "unit_type_enum" AS ENUM (
 );
 
 -- CreateEnum
-CREATE TYPE "unit_accessibility_priority_type_enum" AS ENUM (
-    'mobility',
-    'mobilityAndHearing',
-    'hearing',
-    'visual',
-    'hearingAndVisual',
-    'mobilityAndVisual',
-    'mobilityHearingAndVisual'
-);
+-- CREATE TYPE "unit_accessibility_priority_type_enum" AS ENUM (
+--     'mobility',
+--     'mobilityAndHearing',
+--     'hearing',
+--     'visual',
+--     'hearingAndVisual',
+--     'mobilityAndVisual',
+--     'mobilityHearingAndVisual'
+-- );
 
 -- DropForeignKey
 ALTER TABLE
@@ -132,7 +132,9 @@ ALTER TABLE
     "user_accounts_jurisdictions_jurisdictions" DROP CONSTRAINT "FK_fe359f4430f9e0e7b278e03f0f3";
 
 -- DropIndex
-DROP INDEX "UQ_87b8888186ca9769c960e926870";
+-- TODO: figure out if this is needed
+-- ALTER TABLE
+--     "user_roles" DROP CONSTRAINT "UQ_87b8888186ca9769c960e926870";
 
 -- AlterTable "accessibility"
 ALTER TABLE
@@ -217,7 +219,7 @@ ALTER COLUMN
 ALTER TABLE
     "application_flagged_set"
 ADD
-    COLUMN "rule_TEMP" VARCHAR NOT NULL;
+    COLUMN "rule_TEMP" VARCHAR NOT NULL DEFAULT '';
 
 ALTER TABLE
     "application_flagged_set"
@@ -236,7 +238,9 @@ ALTER TABLE
 ALTER TABLE
     "application_flagged_set"
 ADD
-    COLUMN "rule" "rule_enum" NOT NULL;
+    COLUMN "rule" "rule_enum";
+    -- TODO: add null check back in
+    -- NOT NULL;
 
 ALTER TABLE
     "application_flagged_set" DROP COLUMN "status";
@@ -308,7 +312,7 @@ ALTER TABLE
 ALTER TABLE
     "applications"
 ADD
-    COLUMN "status_TEMP" VARCHAR NOT NULL;
+    COLUMN "status_TEMP" VARCHAR;
 
 UPDATE
     "applications"
@@ -321,7 +325,7 @@ ALTER TABLE
 ALTER TABLE
     "applications"
 ADD
-    COLUMN "status" "application_status_enum" NOT NULL;
+    COLUMN "status" "application_status_enum";
 
 UPDATE
     "applications"
@@ -360,7 +364,7 @@ ALTER TABLE
 ALTER TABLE
     "applications"
 ADD
-    COLUMN "submission_type_TEMP" VARCHAR NOT NULL;
+    COLUMN "submission_type_TEMP" VARCHAR;
 
 UPDATE
     "applications"
@@ -373,7 +377,7 @@ ALTER TABLE
 ALTER TABLE
     "applications"
 ADD
-    COLUMN "submission_type" "application_submission_type_enum" NOT NULL;
+    COLUMN "submission_type" "application_submission_type_enum";
 
 UPDATE
     "applications"
@@ -394,6 +398,14 @@ UPDATE
     "applications"
 SET
     "review_status_TEMP" = "review_status";
+
+
+-- Setting all applications with "flagged" to "duplicate"
+UPDATE
+    "applications"
+SET
+    "review_status_TEMP" = 'duplicate'
+WHERE "review_status" = 'flagged';
 
 ALTER TABLE
     "applications" DROP COLUMN "review_status";
@@ -453,7 +465,7 @@ ALTER COLUMN
 ALTER TABLE
     "generated_listing_translations"
 ADD
-    COLUMN "language_TEMP" VARCHAR NOT NULL;
+    COLUMN "language_TEMP" VARCHAR;
 
 UPDATE
     "generated_listing_translations"
@@ -466,7 +478,7 @@ ALTER TABLE
 ALTER TABLE
     "generated_listing_translations"
 ADD
-    COLUMN "language" "languages_enum" NOT NULL;
+    COLUMN "language" "languages_enum";
 
 UPDATE
     "generated_listing_translations"
@@ -480,25 +492,26 @@ ALTER TABLE
 ALTER TABLE
     "household_member" RENAME CONSTRAINT "PK_84e1d1f2553646d38e7c8b72a10" TO "household_member_pkey";
 
-ALTER TABLE
-    "household_member"
-ADD
-    COLUMN "email_address" TEXT;
+-- TODO: figure out why these were here
+-- ALTER TABLE
+--     "household_member"
+-- ADD
+--     COLUMN "email_address" TEXT;
 
-ALTER TABLE
-    "household_member"
-ADD
-    COLUMN "no_phone" BOOLEAN;
+-- ALTER TABLE
+--     "household_member"
+-- ADD
+--     COLUMN "no_phone" BOOLEAN;
 
-ALTER TABLE
-    "household_member"
-ADD
-    COLUMN "phone_number" TEXT;
+-- ALTER TABLE
+--     "household_member"
+-- ADD
+--     COLUMN "phone_number" TEXT;
 
-ALTER TABLE
-    "household_member"
-ADD
-    COLUMN "phone_number_type" TEXT;
+-- ALTER TABLE
+--     "household_member"
+-- ADD
+--     COLUMN "phone_number_type" TEXT;
 
 ALTER TABLE
     "household_member"
@@ -521,7 +534,7 @@ ALTER TABLE
 ALTER TABLE
     "household_member"
 ADD
-    COLUMN "same_address" "yes_no_enum" NOT NULL;
+    COLUMN "same_address" "yes_no_enum";
 
 UPDATE
     "household_member"
@@ -547,7 +560,7 @@ ALTER TABLE
 ALTER TABLE
     "household_member"
 ADD
-    COLUMN "work_in_region" "yes_no_enum" NOT NULL;
+    COLUMN "work_in_region" "yes_no_enum";
 
 UPDATE
     "household_member"
@@ -931,7 +944,7 @@ ALTER COLUMN
 ALTER TABLE
     "paper_applications"
 ADD
-    COLUMN "language_TEMP" VARCHAR NOT NULL;
+    COLUMN "language_TEMP" VARCHAR;
 
 UPDATE
     "paper_applications"
@@ -944,7 +957,7 @@ ALTER TABLE
 ALTER TABLE
     "paper_applications"
 ADD
-    COLUMN "language" "languages_enum" NOT NULL;
+    COLUMN "language" "languages_enum";
 
 UPDATE
     "paper_applications"
@@ -980,9 +993,10 @@ ALTER TABLE
 ALTER TABLE
     "user_roles" RENAME CONSTRAINT "PK_87b8888186ca9769c960e926870" TO "user_roles_pkey";
 
+-- TODO: see if this is needed
 -- AlterTable "translations"
-ALTER TABLE
-    "translations" RENAME CONSTRAINT "PK_aca248c72ae1fb2390f1bf4cd87" TO "translations_pkey";
+-- ALTER TABLE
+--     "translations" RENAME CONSTRAINT "PK_aca248c72ae1fb2390f1bf4cd87" TO "translations_pkey";
 
 ALTER TABLE
     "translations"
@@ -992,7 +1006,7 @@ ALTER COLUMN
 ALTER TABLE
     "translations"
 ADD
-    COLUMN "language_TEMP" VARCHAR NOT NULL;
+    COLUMN "language_TEMP" VARCHAR;
 
 UPDATE
     "translations"
@@ -1005,7 +1019,7 @@ ALTER TABLE
 ALTER TABLE
     "translations"
 ADD
-    COLUMN "language" "languages_enum" NOT NULL;
+    COLUMN "language" "languages_enum";
 
 UPDATE
     "translations"
@@ -1024,33 +1038,34 @@ ALTER TABLE
 ALTER COLUMN
     "updated_at" DROP DEFAULT;
 
-ALTER TABLE
-    "unit_accessibility_priority_types"
-ADD
-    COLUMN "name_TEMP" TEXT NOT NULL;
+-- TODO: see if this is actually needed
+-- ALTER TABLE
+--     "unit_accessibility_priority_types"
+-- ADD
+--     COLUMN "name_TEMP" TEXT;
 
-UPDATE
-    "unit_accessibility_priority_types"
-SET
-    "name_TEMP" = "name";
+-- UPDATE
+--     "unit_accessibility_priority_types"
+-- SET
+--     "name_TEMP" = "name";
 
-ALTER TABLE
-    "unit_accessibility_priority_types" DROP COLUMN "name";
+-- ALTER TABLE
+--     "unit_accessibility_priority_types" DROP COLUMN "name";
 
-ALTER TABLE
-    "unit_accessibility_priority_types"
-ADD
-    COLUMN "name" "unit_accessibility_priority_type_enum" NOT NULL;
+-- ALTER TABLE
+--     "unit_accessibility_priority_types"
+-- ADD
+--     COLUMN "name" "unit_accessibility_priority_type_enum";
 
-UPDATE
-    "unit_accessibility_priority_types"
-SET
-    "name" = CAST(
-        "name_TEMP" AS "unit_accessibility_priority_type_enum"
-    );
+-- UPDATE
+--     "unit_accessibility_priority_types"
+-- SET
+--     "name" = CAST(
+--         "name_TEMP" AS "unit_accessibility_priority_type_enum"
+--     );
 
-ALTER TABLE
-    "unit_accessibility_priority_types" DROP COLUMN "name_TEMP";
+-- ALTER TABLE
+--     "unit_accessibility_priority_types" DROP COLUMN "name_TEMP";
 
 -- AlterTable "unit_rent_types"
 ALTER TABLE
@@ -1064,7 +1079,7 @@ ALTER COLUMN
 ALTER TABLE
     "unit_rent_types"
 ADD
-    COLUMN "name_TEMP" TEXT NOT NULL;
+    COLUMN "name_TEMP" TEXT;
 
 UPDATE
     "unit_rent_types"
@@ -1077,7 +1092,7 @@ ALTER TABLE
 ALTER TABLE
     "unit_rent_types"
 ADD
-    COLUMN "name" "unit_rent_type_enum" NOT NULL;
+    COLUMN "name" "unit_rent_type_enum";
 
 UPDATE
     "unit_rent_types"
@@ -1099,7 +1114,7 @@ ALTER COLUMN
 ALTER TABLE
     "unit_types"
 ADD
-    COLUMN "name_TEMP" TEXT NOT NULL;
+    COLUMN "name_TEMP" TEXT;
 
 UPDATE
     "unit_types"
@@ -1112,7 +1127,7 @@ ALTER TABLE
 ALTER TABLE
     "unit_types"
 ADD
-    COLUMN "name" "unit_type_enum" NOT NULL;
+    COLUMN "name" "unit_type_enum";
 
 UPDATE
     "unit_types"
@@ -1208,17 +1223,18 @@ FROM
 -- DropTable
 DROP TABLE "activity_logs";
 
+-- TODO: figure out why this is here
 -- CreateTable
-CREATE TABLE "ami_chart_item" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
-    "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "percent_of_ami" INTEGER NOT NULL,
-    "household_size" INTEGER NOT NULL,
-    "income" INTEGER NOT NULL,
-    "ami_chart_id" UUID,
-    CONSTRAINT "ami_chart_item_pkey" PRIMARY KEY ("id")
-);
+-- CREATE TABLE "ami_chart_item" (
+--     "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+--     "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+--     "updated_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+--     "percent_of_ami" INTEGER NOT NULL,
+--     "household_size" INTEGER NOT NULL,
+--     "income" INTEGER NOT NULL,
+--     "ami_chart_id" UUID,
+--     CONSTRAINT "ami_chart_item_pkey" PRIMARY KEY ("id")
+-- );
 
 -- CreateTable
 CREATE TABLE "listing_neighborhood_amenities" (
@@ -1850,8 +1866,9 @@ ADD
 DELETE CASCADE ON
 UPDATE CASCADE;
 
+-- TODO: figure this one out
 -- RenameIndex
-ALTER INDEX "REL_5eb038a51b9cd6872359a687b1" RENAME TO "alternate_contact_mailing_address_id_key";
+-- ALTER INDEX "REL_5eb038a51b9cd6872359a687b1" RENAME TO "alternate_contact_mailing_address_id_key";
 
 -- RenameIndex
 ALTER INDEX "REL_7d357035705ebbbe91b5034678" RENAME TO "applicant_work_address_id_key";
@@ -1868,23 +1885,19 @@ ALTER INDEX "UQ_2983d3205a16bfae28323d021ea" RENAME TO "application_flagged_set_
 -- RenameIndex
 ALTER INDEX "IDX_cc9d65c58d8deb0ef5353e9037" RENAME TO "applications_listing_id_idx";
 
+-- TODO: figure this out
 -- RenameIndex
-ALTER INDEX "REL_194d0fca275b8661a56e486cb6" RENAME TO "applications_applicant_id_key";
-
+-- ALTER INDEX "REL_194d0fca275b8661a56e486cb6" RENAME TO "applications_applicant_id_key";
 -- RenameIndex
-ALTER INDEX "REL_3a4c71bc34dce9f6c196f11093" RENAME TO "applications_accessibility_id_key";
-
+-- ALTER INDEX "REL_3a4c71bc34dce9f6c196f11093" RENAME TO "applications_accessibility_id_key";
 -- RenameIndex
-ALTER INDEX "REL_56abaa378952856aaccc64d7eb" RENAME TO "applications_alternate_contact_id_key";
-
+-- ALTER INDEX "REL_56abaa378952856aaccc64d7eb" RENAME TO "applications_alternate_contact_id_key";
 -- RenameIndex
-ALTER INDEX "REL_7fc41f89f22ca59ffceab5da80" RENAME TO "applications_alternate_address_id_key";
-
+-- ALTER INDEX "REL_7fc41f89f22ca59ffceab5da80" RENAME TO "applications_alternate_address_id_key";
 -- RenameIndex
-ALTER INDEX "REL_b72ba26ebc88981f441b30fe3c" RENAME TO "applications_mailing_address_id_key";
-
+-- ALTER INDEX "REL_b72ba26ebc88981f441b30fe3c" RENAME TO "applications_mailing_address_id_key";
 -- RenameIndex
-ALTER INDEX "REL_fed5da45b7b4dafd9f025a37dd" RENAME TO "applications_demographics_id_key";
+-- ALTER INDEX "REL_fed5da45b7b4dafd9f025a37dd" RENAME TO "applications_demographics_id_key";
 
 -- RenameIndex
 ALTER INDEX "UQ_556c258a4439f1b7f53de2ed74f" RENAME TO "applications_listing_id_confirmation_code_key";
@@ -1907,14 +1920,46 @@ ALTER INDEX "IDX_94041359df3c1b14c4420808d1" RENAME TO "listing_images_listing_i
 -- RenameIndex
 ALTER INDEX "IDX_ba0026e02ecfe91791aed1a481" RENAME TO "listings_jurisdiction_id_idx";
 
+-- TODO: figure why this was here
 -- RenameIndex
-ALTER INDEX "REL_61b80a947c9db249548ba3c73a" RENAME TO "listings_utilities_id_key";
-
+-- ALTER INDEX "REL_61b80a947c9db249548ba3c73a" RENAME TO "listings_utilities_id_key";
 -- RenameIndex
-ALTER INDEX "REL_ac59a58a02199c57a588f04583" RENAME TO "listings_features_id_key";
-
+-- ALTER INDEX "REL_ac59a58a02199c57a588f04583" RENAME TO "listings_features_id_key";
 -- RenameIndex
-ALTER INDEX "REL_4ca3d4c823e6bd5149ecaad363" RENAME TO "units_ami_chart_override_id_key";
+-- ALTER INDEX "REL_4ca3d4c823e6bd5149ecaad363" RENAME TO "units_ami_chart_override_id_key";
 
 -- RenameIndex
 ALTER INDEX "UQ_df3802ec9c31dd9491e3589378d" RENAME TO "user_accounts_email_key";
+
+-- DropForeignKey
+ALTER TABLE
+      "paper_applications" DROP CONSTRAINT "paper_applications_file_id_fkey";
+
+-- AddForeignKey
+ALTER TABLE
+      "paper_applications"
+ADD
+      CONSTRAINT "paper_applications_file_id_fkey" FOREIGN KEY ("file_id") REFERENCES "assets"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- Re-add non-null fields
+
+-- AlterTable
+ALTER TABLE "application_flagged_set" ALTER COLUMN "rule" SET NOT NULL;
+
+-- AlterTable
+ALTER TABLE "applications" ALTER COLUMN "status" SET NOT NULL,
+ALTER COLUMN "submission_type" SET NOT NULL;
+
+-- AlterTable
+ALTER TABLE "translations" ALTER COLUMN "language" SET NOT NULL;
+
+-- AlterTable
+ALTER TABLE "unit_rent_types" ALTER COLUMN "name" SET NOT NULL;
+
+-- AlterTable
+ALTER TABLE "unit_types" ALTER COLUMN "name" SET NOT NULL;
+
+ALTER TABLE "generated_listing_translations" ALTER COLUMN "language" SET NOT NULL;
+
+-- AlterTable
+ALTER TABLE "paper_applications" ALTER COLUMN "language" SET NOT NULL;

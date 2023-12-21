@@ -113,6 +113,17 @@ CREATE TABLE "ami_chart" (
       CONSTRAINT "PK_e079bbfad233fdc79072acb33b5" PRIMARY KEY ("id")
 );
 
+CREATE TABLE "ami_chart_item" (
+    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "percent_of_ami" INTEGER NOT NULL,
+    "household_size" INTEGER NOT NULL,
+    "income" INTEGER NOT NULL,
+    "ami_chart_id" UUID,
+    CONSTRAINT "ami_chart_item_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateTable
 CREATE TABLE "applicant" (
       "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
@@ -288,6 +299,10 @@ CREATE TABLE "household_member" (
       "address_id" UUID,
       "work_address_id" UUID,
       "application_id" UUID,
+      "email_address" TEXT,
+      "no_phone" BOOLEAN,
+      "phone_number" TEXT,
+      "phone_number_type" TEXT,
       CONSTRAINT "PK_84e1d1f2553646d38e7c8b72a10" PRIMARY KEY ("id")
 );
 
@@ -740,10 +755,7 @@ CREATE UNIQUE INDEX "REL_fed5da45b7b4dafd9f025a37dd" ON "applications"("demograp
 CREATE INDEX "IDX_cc9d65c58d8deb0ef5353e9037" ON "applications"("listing_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "UQ_556c258a4439f1b7f53de2ed74f" ON "applications"(
-      "listing_id",
-      "confirmation_code"
-);
+CREATE UNIQUE INDEX "UQ_556c258a4439f1b7f53de2ed74f" ON "applications"("listing_id", "confirmation_code");
 
 -- CreateIndex
 CREATE INDEX "IDX_5838635fbe9294cac64d1a0b60" ON "applications_preferred_unit_unit_types"("unit_types_id");
@@ -788,10 +800,7 @@ CREATE INDEX "IDX_de53131bc8a08f824a5d3dd51e" ON "listings_leasing_agents_user_a
 CREATE INDEX "IDX_f7b22af2c421e823f60c5f7d28" ON "listings_leasing_agents_user_accounts"("listings_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "IDX_4655e7b2c26deb4b8156ea8100" ON "translations"(
-      "jurisdiction_id",
-      "language"
-);
+CREATE UNIQUE INDEX "IDX_4655e7b2c26deb4b8156ea8100" ON "translations"("jurisdiction_id", "language");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "REL_4ca3d4c823e6bd5149ecaad363" ON "units"("ami_chart_override_id");
@@ -1169,7 +1178,7 @@ ALTER TABLE
       "paper_applications"
 ADD
       CONSTRAINT "FK_493291d04c708dda2ffe5b521e7" FOREIGN KEY ("file_id") REFERENCES "assets"("id") ON
-DELETE CASCADE ON
+DELETE NO ACTION ON
 UPDATE NO ACTION;
 
 -- AddForeignKey

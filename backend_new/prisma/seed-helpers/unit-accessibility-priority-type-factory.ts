@@ -1,13 +1,9 @@
-import {
-  PrismaClient,
-  UnitAccessibilityPriorityTypeEnum,
-  UnitAccessibilityPriorityTypes,
-} from '@prisma/client';
+import { PrismaClient, UnitAccessibilityPriorityTypes } from '@prisma/client';
 import { randomInt } from 'crypto';
 
 export const unitAccessibilityPriorityTypeFactorySingle = async (
   prismaClient: PrismaClient,
-  type?: UnitAccessibilityPriorityTypeEnum,
+  type?: string,
 ): Promise<UnitAccessibilityPriorityTypes> => {
   const chosenType =
     type ||
@@ -34,6 +30,12 @@ export const unitAccessibilityPriorityTypeFactoryAll = async (
   });
 };
 
-export const unitAccesibilityPriorityTypeAsArray = Object.values(
-  UnitAccessibilityPriorityTypeEnum,
-);
+export const unitAccesibilityPriorityTypeAsArray = [
+  'Mobility',
+  'Hearing',
+  'Visual',
+  'Hearing and Visual',
+  'Mobility and Hearing',
+  'Mobility and Visual',
+  'Mobility, Hearing and Visual',
+];
