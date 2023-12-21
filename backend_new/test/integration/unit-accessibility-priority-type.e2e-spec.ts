@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { UnitAccessibilityPriorityTypeEnum } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
@@ -95,12 +94,12 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
     const res = await request(app.getHttpServer())
       .post('/unitAccessibilityPriorityTypes')
       .send({
-        name: UnitAccessibilityPriorityTypeEnum.hearing,
+        name: 'hearing',
       } as UnitAccessibilityPriorityTypeCreate)
       .set('Cookie', cookies)
       .expect(201);
 
-    expect(res.body.name).toEqual(UnitAccessibilityPriorityTypeEnum.hearing);
+    expect(res.body.name).toEqual('hearing');
   });
 
   it("update endpoint with id that doesn't exist should error", async () => {
@@ -156,14 +155,14 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
     await request(app.getHttpServer())
       .post('/unitAccessibilityPriorityTypes')
       .send({
-        name: UnitAccessibilityPriorityTypeEnum.hearing,
+        name: 'hearing',
       } as UnitAccessibilityPriorityTypeCreate)
       .set('Cookie', cookies)
       .expect(201);
     const hearingTypes = await prisma.unitAccessibilityPriorityTypes.findMany({
       where: {
         name: {
-          equals: UnitAccessibilityPriorityTypeEnum.hearing,
+          equals: 'hearing',
         },
       },
     });

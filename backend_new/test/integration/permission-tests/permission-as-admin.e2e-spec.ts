@@ -3,12 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import { stringify } from 'qs';
-import {
-  FlaggedSetStatusEnum,
-  RuleEnum,
-  UnitAccessibilityPriorityTypeEnum,
-  UnitTypeEnum,
-} from '@prisma/client';
+import { FlaggedSetStatusEnum, RuleEnum, UnitTypeEnum } from '@prisma/client';
 import { AppModule } from '../../../src/modules/app.module';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { userFactory } from '../../../prisma/seed-helpers/user-factory';
@@ -666,7 +661,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
       await request(app.getHttpServer())
         .post('/unitAccessibilityPriorityTypes')
         .send({
-          name: UnitAccessibilityPriorityTypeEnum.hearingAndVisual,
+          name: 'hearing And Visual',
         } as UnitAccessibilityPriorityTypeCreate)
         .set('Cookie', cookies)
         .expect(201);
@@ -680,7 +675,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
         .put(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
         .send({
           id: unitTypeA.id,
-          name: UnitAccessibilityPriorityTypeEnum.hearingAndVisual,
+          name: 'hearing And Visual',
         } as UnitAccessibilityPriorityTypeUpdate)
         .set('Cookie', cookies)
         .expect(200);

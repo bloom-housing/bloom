@@ -3,12 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import { stringify } from 'qs';
-import {
-  FlaggedSetStatusEnum,
-  RuleEnum,
-  UnitAccessibilityPriorityTypeEnum,
-  UnitTypeEnum,
-} from '@prisma/client';
+import { FlaggedSetStatusEnum, RuleEnum, UnitTypeEnum } from '@prisma/client';
 import { AppModule } from '../../../src/modules/app.module';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { userFactory } from '../../../prisma/seed-helpers/user-factory';
@@ -26,7 +21,6 @@ import { applicationFactory } from '../../../prisma/seed-helpers/application-fac
 import { addressFactory } from '../../../prisma/seed-helpers/address-factory';
 import { AddressCreate } from '../../../src/dtos/addresses/address-create.dto';
 import {
-  reservedCommunityTypeFactory,
   reservedCommunityTypeFactoryAll,
   reservedCommunityTypeFactoryGet,
 } from '../../../prisma/seed-helpers/reserved-community-type-factory';
@@ -590,7 +584,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the wron
       await request(app.getHttpServer())
         .post('/unitAccessibilityPriorityTypes')
         .send({
-          name: UnitAccessibilityPriorityTypeEnum.hearing,
+          name: 'hearing',
         } as UnitAccessibilityPriorityTypeCreate)
         .set('Cookie', cookies)
         .expect(403);
@@ -604,7 +598,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the wron
         .put(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
         .send({
           id: unitTypeA.id,
-          name: UnitAccessibilityPriorityTypeEnum.hearing,
+          name: 'hearing',
         } as UnitAccessibilityPriorityTypeUpdate)
         .set('Cookie', cookies)
         .expect(403);

@@ -612,7 +612,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
       await request(app.getHttpServer())
         .post('/unitAccessibilityPriorityTypes')
         .send({
-          name: UnitAccessibilityPriorityTypeEnum.mobilityAndHearing,
+          name: 'mobility And Hearing',
         } as UnitAccessibilityPriorityTypeCreate)
         .set('Cookie', cookies)
         .expect(403);
@@ -626,7 +626,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         .put(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
         .send({
           id: unitTypeA.id,
-          name: UnitAccessibilityPriorityTypeEnum.mobilityHearingAndVisual,
+          name: 'mobility Hearing And Visual',
         } as UnitAccessibilityPriorityTypeUpdate)
         .set('Cookie', cookies)
         .expect(403);

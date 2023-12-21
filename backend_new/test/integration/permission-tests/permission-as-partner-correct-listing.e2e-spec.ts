@@ -7,7 +7,6 @@ import {
   FlaggedSetStatusEnum,
   ListingsStatusEnum,
   RuleEnum,
-  UnitAccessibilityPriorityTypeEnum,
   UnitTypeEnum,
 } from '@prisma/client';
 import { AppModule } from '../../../src/modules/app.module';
@@ -637,7 +636,7 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
       await request(app.getHttpServer())
         .post('/unitAccessibilityPriorityTypes')
         .send({
-          name: UnitAccessibilityPriorityTypeEnum.hearing,
+          name: 'hearing',
         } as UnitAccessibilityPriorityTypeCreate)
         .set('Cookie', cookies)
         .expect(403);
@@ -651,7 +650,7 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
         .put(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
         .send({
           id: unitTypeA.id,
-          name: UnitAccessibilityPriorityTypeEnum.mobilityAndHearing,
+          name: 'Mobility And Hearing',
         } as UnitAccessibilityPriorityTypeUpdate)
         .set('Cookie', cookies)
         .expect(403);
