@@ -131,11 +131,6 @@ ALTER TABLE
 ALTER TABLE
     "user_accounts_jurisdictions_jurisdictions" DROP CONSTRAINT "FK_fe359f4430f9e0e7b278e03f0f3";
 
--- DropIndex
--- TODO: figure out if this is needed
--- ALTER TABLE
---     "user_roles" DROP CONSTRAINT "UQ_87b8888186ca9769c960e926870";
-
 -- AlterTable "accessibility"
 ALTER TABLE
     "accessibility" RENAME CONSTRAINT "PK_9729339e162bc7ec98a8815758c" TO "accessibility_pkey";
@@ -239,8 +234,6 @@ ALTER TABLE
     "application_flagged_set"
 ADD
     COLUMN "rule" "rule_enum";
-    -- TODO: add null check back in
-    -- NOT NULL;
 
 ALTER TABLE
     "application_flagged_set" DROP COLUMN "status";
@@ -400,7 +393,8 @@ SET
     "review_status_TEMP" = "review_status";
 
 
--- Setting all applications with "flagged" to "duplicate"
+-- Setting all applications with "flagged" to "duplicate". The "flagged" enum hasn't been used
+-- since before the duplicates v2 refactor in 2022
 UPDATE
     "applications"
 SET
@@ -415,7 +409,6 @@ ALTER TABLE
 ADD
     COLUMN "review_status" "application_review_status_enum" NOT NULL DEFAULT 'valid';
 
--- TODO: unsure about this data
 UPDATE
     "applications"
 SET
@@ -491,27 +484,6 @@ ALTER TABLE
 -- AlterTable "household_member"
 ALTER TABLE
     "household_member" RENAME CONSTRAINT "PK_84e1d1f2553646d38e7c8b72a10" TO "household_member_pkey";
-
--- TODO: figure out why these were here
--- ALTER TABLE
---     "household_member"
--- ADD
---     COLUMN "email_address" TEXT;
-
--- ALTER TABLE
---     "household_member"
--- ADD
---     COLUMN "no_phone" BOOLEAN;
-
--- ALTER TABLE
---     "household_member"
--- ADD
---     COLUMN "phone_number" TEXT;
-
--- ALTER TABLE
---     "household_member"
--- ADD
---     COLUMN "phone_number_type" TEXT;
 
 ALTER TABLE
     "household_member"
@@ -993,11 +965,6 @@ ALTER TABLE
 ALTER TABLE
     "user_roles" RENAME CONSTRAINT "PK_87b8888186ca9769c960e926870" TO "user_roles_pkey";
 
--- TODO: see if this is needed
--- AlterTable "translations"
--- ALTER TABLE
---     "translations" RENAME CONSTRAINT "PK_aca248c72ae1fb2390f1bf4cd87" TO "translations_pkey";
-
 ALTER TABLE
     "translations"
 ALTER COLUMN
@@ -1037,35 +1004,6 @@ ALTER TABLE
     "unit_accessibility_priority_types"
 ALTER COLUMN
     "updated_at" DROP DEFAULT;
-
--- TODO: see if this is actually needed
--- ALTER TABLE
---     "unit_accessibility_priority_types"
--- ADD
---     COLUMN "name_TEMP" TEXT;
-
--- UPDATE
---     "unit_accessibility_priority_types"
--- SET
---     "name_TEMP" = "name";
-
--- ALTER TABLE
---     "unit_accessibility_priority_types" DROP COLUMN "name";
-
--- ALTER TABLE
---     "unit_accessibility_priority_types"
--- ADD
---     COLUMN "name" "unit_accessibility_priority_type_enum";
-
--- UPDATE
---     "unit_accessibility_priority_types"
--- SET
---     "name" = CAST(
---         "name_TEMP" AS "unit_accessibility_priority_type_enum"
---     );
-
--- ALTER TABLE
---     "unit_accessibility_priority_types" DROP COLUMN "name_TEMP";
 
 -- AlterTable "unit_rent_types"
 ALTER TABLE
@@ -1222,19 +1160,6 @@ FROM
 
 -- DropTable
 DROP TABLE "activity_logs";
-
--- TODO: figure out why this is here
--- CreateTable
--- CREATE TABLE "ami_chart_item" (
---     "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
---     "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
---     "updated_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
---     "percent_of_ami" INTEGER NOT NULL,
---     "household_size" INTEGER NOT NULL,
---     "income" INTEGER NOT NULL,
---     "ami_chart_id" UUID,
---     CONSTRAINT "ami_chart_item_pkey" PRIMARY KEY ("id")
--- );
 
 -- CreateTable
 CREATE TABLE "listing_neighborhood_amenities" (
@@ -1706,13 +1631,6 @@ ADD
 DELETE NO ACTION ON
 UPDATE NO ACTION;
 
--- AddForeignKey
-ALTER TABLE
-    "ami_chart_item"
-ADD
-    CONSTRAINT "ami_chart_item_ami_chart_id_fkey" FOREIGN KEY ("ami_chart_id") REFERENCES "ami_chart"("id") ON
-DELETE NO ACTION ON
-UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE
@@ -1866,9 +1784,6 @@ ADD
 DELETE CASCADE ON
 UPDATE CASCADE;
 
--- TODO: figure this one out
--- RenameIndex
--- ALTER INDEX "REL_5eb038a51b9cd6872359a687b1" RENAME TO "alternate_contact_mailing_address_id_key";
 
 -- RenameIndex
 ALTER INDEX "REL_7d357035705ebbbe91b5034678" RENAME TO "applicant_work_address_id_key";
@@ -1884,20 +1799,6 @@ ALTER INDEX "UQ_2983d3205a16bfae28323d021ea" RENAME TO "application_flagged_set_
 
 -- RenameIndex
 ALTER INDEX "IDX_cc9d65c58d8deb0ef5353e9037" RENAME TO "applications_listing_id_idx";
-
--- TODO: figure this out
--- RenameIndex
--- ALTER INDEX "REL_194d0fca275b8661a56e486cb6" RENAME TO "applications_applicant_id_key";
--- RenameIndex
--- ALTER INDEX "REL_3a4c71bc34dce9f6c196f11093" RENAME TO "applications_accessibility_id_key";
--- RenameIndex
--- ALTER INDEX "REL_56abaa378952856aaccc64d7eb" RENAME TO "applications_alternate_contact_id_key";
--- RenameIndex
--- ALTER INDEX "REL_7fc41f89f22ca59ffceab5da80" RENAME TO "applications_alternate_address_id_key";
--- RenameIndex
--- ALTER INDEX "REL_b72ba26ebc88981f441b30fe3c" RENAME TO "applications_mailing_address_id_key";
--- RenameIndex
--- ALTER INDEX "REL_fed5da45b7b4dafd9f025a37dd" RENAME TO "applications_demographics_id_key";
 
 -- RenameIndex
 ALTER INDEX "UQ_556c258a4439f1b7f53de2ed74f" RENAME TO "applications_listing_id_confirmation_code_key";
@@ -1919,14 +1820,6 @@ ALTER INDEX "IDX_94041359df3c1b14c4420808d1" RENAME TO "listing_images_listing_i
 
 -- RenameIndex
 ALTER INDEX "IDX_ba0026e02ecfe91791aed1a481" RENAME TO "listings_jurisdiction_id_idx";
-
--- TODO: figure why this was here
--- RenameIndex
--- ALTER INDEX "REL_61b80a947c9db249548ba3c73a" RENAME TO "listings_utilities_id_key";
--- RenameIndex
--- ALTER INDEX "REL_ac59a58a02199c57a588f04583" RENAME TO "listings_features_id_key";
--- RenameIndex
--- ALTER INDEX "REL_4ca3d4c823e6bd5149ecaad363" RENAME TO "units_ami_chart_override_id_key";
 
 -- RenameIndex
 ALTER INDEX "UQ_df3802ec9c31dd9491e3589378d" RENAME TO "user_accounts_email_key";
@@ -1963,3 +1856,31 @@ ALTER TABLE "generated_listing_translations" ALTER COLUMN "language" SET NOT NUL
 
 -- AlterTable
 ALTER TABLE "paper_applications" ALTER COLUMN "language" SET NOT NULL;
+
+-- The following don't exist on prod DBs but in our 0_init and the /backend/core/src/migration/1675268723433-migration-reset.ts file
+-- -- AlterTable
+-- ALTER TABLE "translations" RENAME CONSTRAINT "PK_aca248c72ae1fb2390f1bf4cd87" TO "translations_pkey";
+-- -- RenameIndex
+-- ALTER INDEX "REL_5eb038a51b9cd6872359a687b1" RENAME TO "alternate_contact_mailing_address_id_key";
+-- -- RenameIndex
+-- ALTER INDEX "REL_194d0fca275b8661a56e486cb6" RENAME TO "applications_applicant_id_key";
+-- -- RenameIndex
+-- ALTER INDEX "REL_3a4c71bc34dce9f6c196f11093" RENAME TO "applications_accessibility_id_key";
+-- -- RenameIndex
+-- ALTER INDEX "REL_56abaa378952856aaccc64d7eb" RENAME TO "applications_alternate_contact_id_key";
+-- -- RenameIndex
+-- ALTER INDEX "REL_7fc41f89f22ca59ffceab5da80" RENAME TO "applications_alternate_address_id_key";
+-- -- RenameIndex
+-- ALTER INDEX "REL_b72ba26ebc88981f441b30fe3c" RENAME TO "applications_mailing_address_id_key";
+-- -- RenameIndex
+-- ALTER INDEX "REL_fed5da45b7b4dafd9f025a37dd" RENAME TO "applications_demographics_id_key";
+-- -- RenameIndex
+-- ALTER INDEX "REL_61b80a947c9db249548ba3c73a" RENAME TO "listings_utilities_id_key";
+-- -- RenameIndex
+-- ALTER INDEX "REL_ac59a58a02199c57a588f04583" RENAME TO "listings_features_id_key";
+-- -- RenameIndex
+-- ALTER INDEX "REL_4ca3d4c823e6bd5149ecaad363" RENAME TO "units_ami_chart_override_id_key";
+
+-- The following is in our prod HBA db but not everywhere else
+-- ALTER TABLE
+--     "user_roles" DROP CONSTRAINT "UQ_87b8888186ca9769c960e926870";

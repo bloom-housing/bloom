@@ -113,17 +113,6 @@ CREATE TABLE "ami_chart" (
       CONSTRAINT "PK_e079bbfad233fdc79072acb33b5" PRIMARY KEY ("id")
 );
 
-CREATE TABLE "ami_chart_item" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
-    "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "percent_of_ami" INTEGER NOT NULL,
-    "household_size" INTEGER NOT NULL,
-    "income" INTEGER NOT NULL,
-    "ami_chart_id" UUID,
-    CONSTRAINT "ami_chart_item_pkey" PRIMARY KEY ("id")
-);
-
 -- CreateTable
 CREATE TABLE "applicant" (
       "id" UUID NOT NULL DEFAULT uuid_generate_v4(),

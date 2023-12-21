@@ -95,7 +95,6 @@ model AmiChart {
   name               String               @db.VarChar
   jurisdictionId     String               @map("jurisdiction_id") @db.Uuid
   jurisdictions      Jurisdictions        @relation(fields: [jurisdictionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  amiChartItem       AmiChartItem[]
   unitGroupAmiLevels UnitGroupAmiLevels[]
   units              Units[]
 
@@ -805,18 +804,6 @@ model UserRoles {
   @@map("user_roles")
 }
 
-model AmiChartItem {
-  id            String    @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt     DateTime  @default(now()) @map("updated_at") @db.Timestamp(6)
-  percentOfAmi  Int       @map("percent_of_ami")
-  householdSize Int       @map("household_size")
-  income        Int
-  amiChartId    String?   @map("ami_chart_id") @db.Uuid
-  amiChart      AmiChart? @relation(fields: [amiChartId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@map("ami_chart_item")
-}
 
 // START DETROIT SPECIFIC
 model ListingNeighborhoodAmenities {
