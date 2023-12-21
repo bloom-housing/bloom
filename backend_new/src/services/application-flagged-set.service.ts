@@ -204,6 +204,8 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
       this.prisma.applications.count({
         where: {
           listingId: params.listingId,
+          // We only should display non-deleted applications
+          deletedAt: null,
         },
       }),
       this.metaDataQueryBuilder(

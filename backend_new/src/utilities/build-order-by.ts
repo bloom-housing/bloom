@@ -1,3 +1,4 @@
+import { ApplicationOrderByKeys } from '../enums/applications/order-by-enum';
 import { ListingOrderByKeys } from '../enums/listings/order-by-enum';
 import { OrderByEnum } from '../enums/shared/order-by-enum';
 import { Prisma } from '@prisma/client';
@@ -43,6 +44,33 @@ export const buildOrderByForListings = (
         return { applicationDueDate: orderDir[index] };
     }
   }) as Prisma.ListingsOrderByWithRelationInput[];
+};
+
+/* 
+  Constructs the "orderBy" part of the prisma query and maps the values to
+  the appropriate application field
+*/
+export const buildOrderByForApplications = (
+  orderBy?: string[],
+  orderDir?: OrderByEnum[],
+): Prisma.ApplicationsOrderByWithRelationInput[] => {
+  if (!orderBy?.length || orderBy.length !== orderDir?.length) {
+    return undefined;
+  }
+
+  return orderBy.map((param, index) => {
+    switch (param) {
+      case ApplicationOrderByKeys.firstName:
+        return { applicant: { firstName: orderDir[index] } };
+      case ApplicationOrderByKeys.lastName:
+        return { applicant: { lastName: orderDir[index] } };
+      case ApplicationOrderByKeys.createdAt:
+        return { createdAt: orderDir[index] };
+      case ApplicationOrderByKeys.submissionDate:
+      case undefined:
+        return { submissionDate: orderDir[index] };
+    }
+  }) as Prisma.ApplicationsOrderByWithRelationInput[];
 };
 
 /*
