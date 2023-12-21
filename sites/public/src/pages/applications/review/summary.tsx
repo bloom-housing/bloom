@@ -44,9 +44,11 @@ const ApplicationSummary = () => {
   }, [profile])
 
   useEffect(() => {
-    if (listing?.status !== ListingStatus.active) {
-      setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
-      void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
+    if (listing && router.isReady) {
+      if (listing?.status !== ListingStatus.active) {
+        setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
+        void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
+      }
     }
   }, [listing, router])
 
