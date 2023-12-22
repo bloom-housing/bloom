@@ -63,7 +63,7 @@ describe("<Applications>", () => {
     )
     expect(queryByTestId("get-application-section")).toBeNull()
   })
-  it("disables apply online button if draft listing", () => {
+  it("disables apply online button if draft listing and not in preview state", () => {
     const { getByText } = render(
       <GetApplication
         onlineApplicationURL={"online-app-url"}
@@ -90,7 +90,7 @@ describe("<Applications>", () => {
     )
     expect(getByText("Apply Online").closest("button")?.disabled).toBe(true)
   })
-  it("enables preview url param on apply online button in preview state", () => {
+  it("enables apply online button if draft listing and in preview state", () => {
     const { getByText } = render(
       <GetApplication
         onlineApplicationURL={"online-app-url"}
