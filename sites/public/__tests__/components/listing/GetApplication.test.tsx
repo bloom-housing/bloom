@@ -115,9 +115,7 @@ describe("<Applications>", () => {
         listingName={"Listing name"}
       />
     )
-    expect(getByText("Apply Online").closest("a")?.getAttribute("href")).toBe(
-      "online-app-url&preview=true"
-    )
+    expect(getByText("Apply Online").closest("a")?.getAttribute("href")).toBe("online-app-url")
   })
   it("hides buttons if application is not open", () => {
     const { getByText, queryByText } = render(
