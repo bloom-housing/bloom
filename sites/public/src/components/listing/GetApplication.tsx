@@ -100,7 +100,7 @@ const GetApplication = (props: ApplicationsProps) => {
             <Button
               variant="primary"
               className="w-full mb-2"
-              href={`${props.onlineApplicationURL}${props.preview ? "&preview=true" : ""}`}
+              href={props.onlineApplicationURL}
               id={"listing-view-apply-button"}
             >
               {props.strings?.applyOnline ?? t("listings.apply.applyOnline")}
