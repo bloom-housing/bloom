@@ -16,6 +16,7 @@ import {
   FieldGroup,
 } from "@bloom-housing/ui-components"
 import { downloadExternalPDF } from "../../lib/helpers"
+import { ListingStatus } from "@bloom-housing/backend-core"
 
 export interface PaperApplication {
   fileURL: string
@@ -41,7 +42,9 @@ export interface ApplicationsProps {
   paperMethod?: boolean
   /** The date mailed applications must be received by */
   postmarkedApplicationsReceivedByDate?: string
-  /** Whether or not to hide actionable application buttons */
+  /** Informs whether or not to hide actionable application buttons */
+  listingStatus?: string
+  /** Whether or not to block submission of test application */
   preview?: boolean
   strings?: {
     applicationsOpenInFuture?: string
@@ -59,8 +62,8 @@ const GetApplication = (props: ApplicationsProps) => {
   const showSection =
     props.onlineApplicationURL ||
     (props.applicationsOpen && props.paperMethod && !!props.paperApplications?.length)
+  const disableApplyButton = !props.preview && props.listingStatus !== ListingStatus.active
   const [showDownloadModal, setShowDownloadModal] = useState(false)
-
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
   const paperApplicationURL: string = watch(
@@ -86,7 +89,7 @@ const GetApplication = (props: ApplicationsProps) => {
       )}
       {props.applicationsOpen && props.onlineApplicationURL && (
         <>
-          {props.preview ? (
+          {disableApplyButton ? (
             <Button disabled className="w-full mb-2" data-testid={"listing-view-apply-button"}>
               {props.strings?.applyOnline ?? t("listings.apply.applyOnline")}
             </Button>

@@ -26,7 +26,11 @@ import {
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
-import { ApplicationReviewStatus, ApplicationSection } from "@bloom-housing/backend-core"
+import {
+  ApplicationReviewStatus,
+  ApplicationSection,
+  ListingStatus,
+} from "@bloom-housing/backend-core"
 import { useRouter } from "next/router"
 
 const ApplicationSummary = () => {
@@ -51,9 +55,11 @@ const ApplicationSummary = () => {
   }, [profile])
 
   useEffect(() => {
-    if (listing?.status === "closed") {
-      setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
-      void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
+    if (listing && router.isReady) {
+      if (listing?.status !== ListingStatus.active) {
+        setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
+        void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
+      }
     }
   }, [listing, router])
 

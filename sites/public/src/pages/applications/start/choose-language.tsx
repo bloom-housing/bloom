@@ -24,14 +24,13 @@ import {
   pushGtmEvent,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
-
 import FormsLayout from "../../../layouts/forms"
 import {
   AppSubmissionContext,
   retrieveApplicationConfig,
 } from "../../../lib/applications/AppSubmissionContext"
 import React, { useCallback, useContext, useEffect, useState } from "react"
-import { Language } from "@bloom-housing/backend-core/types"
+import { Language, ListingStatus } from "@bloom-housing/backend-core/types"
 import { useGetApplicationStatusProps } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 
@@ -82,9 +81,11 @@ const ApplicationChooseLanguage = () => {
   }, [router, conductor, context, listingId])
 
   useEffect(() => {
-    if (listing?.status === "closed") {
-      setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
-      void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
+    if (listing && router.isReady) {
+      if (listing?.status !== ListingStatus.active && router.query.preview !== "true") {
+        setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
+        void router.push(`/${router.locale}/listing/${listing?.id}/${listing?.urlSlug}`)
+      }
     }
   }, [listing, router])
 
