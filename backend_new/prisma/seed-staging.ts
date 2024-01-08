@@ -830,6 +830,7 @@ export const stagingSeed = async (
         units: value.units,
         multiselectQuestions: value.multiselectQuestions,
         applications: value.applications,
+        afsLastRunSetInPast: true,
       });
       await prismaClient.listings.create({
         data: listing,

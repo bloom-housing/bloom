@@ -104,7 +104,7 @@ const ApplicationAddress = () => {
   const noPhone: boolean = watch("applicant.noPhone")
   const phoneNumber: string = watch("applicant.phoneNumber")
   const phonePresent = () => {
-    return phoneNumber.replace(/[()\-_ ]/g, "").length > 0
+    return phoneNumber && phoneNumber.replace(/[()\-_ ]/g, "").length > 0
   }
   const additionalPhone = watch("additionalPhone")
   const sendMailToMailingAddress = watch("sendMailToMailingAddress")

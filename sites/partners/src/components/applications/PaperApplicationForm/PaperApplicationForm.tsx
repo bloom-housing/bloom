@@ -131,15 +131,13 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       const result = editMode
         ? await applicationsService.update({
             id: application.id,
-            // TODO: update this to the new types when migrate to new backend
             body: {
               id: application.id,
               ...body,
-              reviewStatus: application.reviewStatus as unknown as ApplicationReviewStatusEnum,
+              reviewStatus: application.reviewStatus,
             } as unknown as ApplicationUpdate,
           })
         : await applicationsService.create({
-            // TODO: update this to the new types when migrate to new backend
             body: {
               ...body,
               reviewStatus: ApplicationReviewStatusEnum.valid,
