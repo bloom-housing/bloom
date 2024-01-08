@@ -128,6 +128,11 @@ export class ListingsService {
         jurisId: listing.jurisdiction.id,
       })
     }
+    await this.cachePurgeService.cachePurgeForSingleListing(
+      ListingStatus.closed,
+      listing.status,
+      saveResponse
+    )
     return saveResponse
   }
 
