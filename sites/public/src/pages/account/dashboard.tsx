@@ -48,12 +48,17 @@ function Dashboard(props: DashboardProps) {
   }
 
   const AccountCard = ({ iconSymbol, title, subtitle, buttonText, link }: AccountCardProps) => (
-    <Card spacing="xl" className={styles.accountCard}>
-      <Card.Section>
-        <Icon size="2xl" symbol={iconSymbol} />
-        <HeadingGroup size="2xl" heading={title} subheading={subtitle}></HeadingGroup>
-      </Card.Section>
-      <Card.Section>
+    <Card spacing="lg" className={styles["account-card"]}>
+      <Card.Header>
+        <Icon size="2xl" className={styles["account-card-icon"]} symbol={iconSymbol} />
+        <HeadingGroup
+          size="2xl"
+          heading={title}
+          subheading={subtitle}
+          className={styles["account-card-header"]}
+        />
+      </Card.Header>
+      <Card.Section className={styles["account-card-section"]}>
         <Button href={link} variant="primary-outlined">
           {buttonText}
         </Button>
@@ -76,8 +81,7 @@ function Dashboard(props: DashboardProps) {
         <section className="bg-gray-300 border-t border-gray-450">
           <div className="max-w-5xl mx-auto md:py-8">
             <SiteAlert type="success" className="md:mb-8" timeout={30000} />
-
-            <div className="flex px-6 gap-8">
+            <div className={styles["account-card-container"]}>
               <h1 className={"sr-only"}>{t("nav.myDashboard")}</h1>
               <AccountCard
                 iconSymbol="application"
