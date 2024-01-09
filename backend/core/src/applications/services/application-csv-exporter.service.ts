@@ -5,7 +5,8 @@ import { formatBoolean } from "../../shared/utils/format-boolean"
 import { ApplicationMultiselectQuestion } from "../entities/application-multiselect-question.entity"
 import { AddressCreateDto } from "../../shared/dto/address.dto"
 import { ApplicationReviewStatus } from "../types/application-review-status-enum"
-import { formatApplicationDate } from "../helpers"
+import { formatApplicationDate, formatGeocodingValues } from "../helpers"
+import { GeocodingValues } from "../../shared/types/geocoding-values"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationCsvExporterService {
@@ -88,20 +89,44 @@ export class ApplicationCsvExporterService {
           claimedString = claimedString.concat(`${option.key}, `)
         }
         if (option.extraData?.length) {
-          const extraKey = `${root}: ${option.key} - Address`
+          let extraKey
           let extraString = ""
-          option.extraData.forEach((extra) => {
-            if (extra.type === "address") {
-              extraString += `${(extra.value as AddressCreateDto).street}, ${
-                (extra.value as AddressCreateDto).street2
-                  ? `${(extra.value as AddressCreateDto).street2},`
-                  : ""
-              } ${(extra.value as AddressCreateDto).city}, ${
-                (extra.value as AddressCreateDto).state
-              }, ${(extra.value as AddressCreateDto).zipCode}`
-            }
-          })
-          extraData[extraKey] = extraString
+          const order = [
+            "address",
+            "geocodingVerified",
+            "addressHolderName",
+            "addressHolderRelationship",
+          ]
+
+          option.extraData
+            .sort((a, b) => order.indexOf(a.key) - order.indexOf(b.key))
+            .forEach((extra) => {
+              if (extra.type === "address") {
+                extraKey = `${root}: ${option.key} - Provided Address`
+                extraString += `${(extra.value as AddressCreateDto).street}, ${
+                  (extra.value as AddressCreateDto).street2
+                    ? `${(extra.value as AddressCreateDto).street2},`
+                    : ""
+                } ${(extra.value as AddressCreateDto).city}, ${
+                  (extra.value as AddressCreateDto).state
+                }, ${(extra.value as AddressCreateDto).zipCode}`
+              }
+              if (extra.type === "text") {
+                if (extra.key === "geocodingVerified") {
+                  extraKey = `${root}: ${option.key} - Passed Address Check`
+                  extraString = formatGeocodingValues(extra.value as GeocodingValues)
+                }
+                if (extra.key === "addressHolderName") {
+                  extraKey = `${root}: ${option.key} - Name of Address Holder`
+                  extraString = extra.value as string
+                }
+                if (extra.key === "addressHolderRelationship") {
+                  extraKey = `${root}: ${option.key} - Relationship to Address Holder`
+                  extraString = extra.value as string
+                }
+              }
+              extraData[extraKey] = extraString
+            })
         }
       })
       preferenceKeys[root] = 1

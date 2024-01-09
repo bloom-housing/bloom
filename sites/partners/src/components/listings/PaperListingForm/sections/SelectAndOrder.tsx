@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react"
 import { t, MinimalTable, Drawer, Field, StandardTableData } from "@bloom-housing/ui-components"
-import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
 import {
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { Button, Card, Grid, Tag, Icon } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons"
 import LinkComponent from "../../../../components/core/LinkComponent"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
@@ -78,10 +79,21 @@ const SelectAndOrder = ({
     [draftListingData]
   )
 
+  const additionalFieldsTag = () => (
+    <Tag variant="primary">
+      <Icon icon={faInfoCircle} /> {t("listings.providesAdditionalFields")}
+    </Tag>
+  )
+
   const draggableTableData: StandardTableData = useMemo(
     () =>
       draftListingData.map((item) => ({
         name: { content: item.text },
+        additionalFields: {
+          content: (
+            <>{item?.options.some((item) => item.collectAddress) && additionalFieldsTag()}</>
+          ),
+        },
         action: {
           content: (
             <div className="flex">
@@ -107,6 +119,11 @@ const SelectAndOrder = ({
       listingData.map((item, index) => ({
         order: { content: index + 1 },
         name: { content: item.text },
+        additionalFields: {
+          content: (
+            <>{item?.options.some((item) => item.collectAddress) && additionalFieldsTag()}</>
+          ),
+        },
         action: {
           content: (
             <div className="flex">
@@ -151,11 +168,17 @@ const SelectAndOrder = ({
   const formTableHeaders = {
     order: "t.order",
     name: "t.name",
+    ...(formKey === "preference" && {
+      additionalFields: "settings.preferenceAdditionalFields",
+    }),
     action: "",
   }
 
   const draggableTableHeaders = {
     name: "t.name",
+    ...(formKey === "preference" && {
+      additionalFields: "settings.preferenceAdditionalFields",
+    }),
     action: "",
   }
 
@@ -194,11 +217,19 @@ const SelectAndOrder = ({
               })}
             </div>
           )}
+          {option.collectAddress && (
+            <div className={`${isNotLastItem ? "-mt-4" : "mt-0"}`}>
+              ({t("listings.providesAdditionalFields.info")})
+            </div>
+          )}
         </div>
       )
     }
     return (
       <div className="ml-8 -mt-6 mb-4 text-sm">
+        {item.options.some((option) => option.collectAddress) && (
+          <div className="mt-6 mb-2">{additionalFieldsTag()}</div>
+        )}
         <div>
           <button
             onClick={() => {

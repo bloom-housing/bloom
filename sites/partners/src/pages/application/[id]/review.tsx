@@ -128,6 +128,7 @@ const Flag = () => {
           }
         >
           <Tag
+            className="tag-uppercase"
             variant={
               data?.status === EnumApplicationFlaggedSetStatus.resolved ? "success" : "primary"
             }

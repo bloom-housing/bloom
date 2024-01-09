@@ -7,31 +7,51 @@ export const getListingStatusTag = (listingStatus: ListingsStatusEnum) => {
   switch (listingStatus) {
     case ListingsStatusEnum.active:
       return (
-        <Tag variant={"success"} size={"lg"} id={"listing-status-active"}>
+        <Tag className="tag-uppercase" variant={"success"} size={"lg"} id={"listing-status-active"}>
           {t(`listings.listingStatus.active`)}
         </Tag>
       )
     case ListingsStatusEnum.closed:
       return (
-        <Tag variant={"secondary"} size={"lg"} id={"listing-status-closed"}>
+        <Tag
+          className="tag-uppercase"
+          variant={"secondary"}
+          size={"lg"}
+          id={"listing-status-closed"}
+        >
           {t(`listings.listingStatus.closed`)}
         </Tag>
       )
     case ListingsStatusEnum.pendingReview:
       return (
-        <Tag variant={"in-process"} size={"lg"} id={"listing-status-pending-review"}>
+        <Tag
+          className="tag-uppercase"
+          variant={"in-process"}
+          size={"lg"}
+          id={"listing-status-pending-review"}
+        >
           {t(`applications.pendingReview`)}
         </Tag>
       )
     case ListingsStatusEnum.changesRequested:
       return (
-        <Tag variant={"highlight-warm"} size={"lg"} id={"listing-status-changes-requested"}>
+        <Tag
+          className="tag-uppercase"
+          variant={"highlight-warm"}
+          size={"lg"}
+          id={"listing-status-changes-requested"}
+        >
           {t(`listings.listingStatus.changesRequested`)}
         </Tag>
       )
     default:
       return (
-        <Tag variant={"primary"} size={"lg"} id={"listing-status-pending"}>
+        <Tag
+          className="tag-uppercase"
+          variant={"primary"}
+          size={"lg"}
+          id={"listing-status-pending"}
+        >
           {t(`listings.listingStatus.pending`)}
         </Tag>
       )
