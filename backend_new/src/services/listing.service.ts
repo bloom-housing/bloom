@@ -81,11 +81,7 @@ views.base = {
     include: {
       unitTypes: true,
       unitAmiChartOverrides: true,
-      amiChart: {
-        include: {
-          amiChartItem: true,
-        },
-      },
+      amiChart: true,
     },
   },
 };
@@ -121,7 +117,6 @@ views.full = {
       amiChart: {
         include: {
           jurisdictions: true,
-          amiChartItem: true,
           unitGroupAmiLevels: true,
         },
       },
