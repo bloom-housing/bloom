@@ -276,7 +276,10 @@ export class ListingService implements OnModuleInit {
     const nonApprovingRoles: UserRoleEnum[] = [UserRoleEnum.partner];
     if (!params.approvingRoles.includes(UserRoleEnum.jurisdictionAdmin))
       nonApprovingRoles.push(UserRoleEnum.jurisdictionAdmin);
-    if (params.status === ListingsStatusEnum.pendingReview) {
+    if (
+      params.status === ListingsStatusEnum.pendingReview &&
+      params.previousStatus !== ListingsStatusEnum.pendingReview
+    ) {
       const userInfo = await this.getUserEmailInfo(
         params.approvingRoles,
         params.listingInfo.id,
@@ -290,7 +293,10 @@ export class ListingService implements OnModuleInit {
       );
     }
     // admin updates status to changes requested when approval requires partner changes
-    else if (params.status === ListingsStatusEnum.changesRequested) {
+    else if (
+      params.status === ListingsStatusEnum.changesRequested &&
+      params.previousStatus !== ListingsStatusEnum.changesRequested
+    ) {
       const userInfo = await this.getUserEmailInfo(
         nonApprovingRoles,
         params.listingInfo.id,

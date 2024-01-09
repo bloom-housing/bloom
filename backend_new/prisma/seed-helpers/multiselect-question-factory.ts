@@ -44,7 +44,7 @@ export const multiselectQuestionFactory = (
 const multiselectOptionFactory = (
   numberToMake: number,
 ): Prisma.InputJsonValue => {
-  if (!numberToMake) return {};
+  if (!numberToMake) return [];
   return [...new Array(numberToMake)].map((_, index) => ({
     text: randomNoun(),
     ordinal: index,

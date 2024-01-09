@@ -24,6 +24,7 @@ import { EmailService } from '../../../src/services/email.service';
 import { PermissionService } from '../../../src/services/permission.service';
 import { User } from '../../../src/dtos/users/user.dto';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
+import { GeocodingService } from '../../../src/services/geocoding.service';
 
 describe('Testing application service', () => {
   let service: ApplicationService;
@@ -237,6 +238,7 @@ describe('Testing application service', () => {
       providers: [
         ApplicationService,
         PrismaService,
+        GeocodingService,
         {
           provide: EmailService,
           useValue: {
@@ -751,6 +753,12 @@ describe('Testing application service', () => {
       },
       include: {
         jurisdictions: true,
+        listingsBuildingAddress: true,
+        listingMultiselectQuestions: {
+          include: {
+            multiselectQuestions: true,
+          },
+        },
       },
     });
 
@@ -989,6 +997,12 @@ describe('Testing application service', () => {
       },
       include: {
         jurisdictions: true,
+        listingsBuildingAddress: true,
+        listingMultiselectQuestions: {
+          include: {
+            multiselectQuestions: true,
+          },
+        },
       },
     });
 
@@ -1024,6 +1038,12 @@ describe('Testing application service', () => {
       },
       include: {
         jurisdictions: true,
+        listingsBuildingAddress: true,
+        listingMultiselectQuestions: {
+          include: {
+            multiselectQuestions: true,
+          },
+        },
       },
     });
 
