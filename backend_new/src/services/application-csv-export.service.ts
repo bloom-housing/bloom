@@ -1,5 +1,6 @@
 import fs, { createReadStream } from 'fs';
 import path, { join } from 'path';
+import Excel from 'exceljs';
 import { Injectable, StreamableFile } from '@nestjs/common';
 import { Request as ExpressRequest } from 'express';
 import { view } from './application.service';
@@ -49,25 +50,35 @@ export class ApplicationCsvExporterService {
   async export(
     queryParams: ApplicationCsvQueryParams,
     req: ExpressRequest,
-  ): Promise<StreamableFile> {
+  ): Promise<string> {
     await this.authorizeCSVExport(req.user, queryParams.listingId);
     const filename = join(
       process.cwd(),
       `src/temp/listing-${
         queryParams.listingId
-      }-applications-${new Date().getTime()}.csv`,
+      }-applications-${new Date().getTime()}`,
     );
-    await this.createCsv(filename, queryParams);
-    const file = createReadStream(filename);
-    file.on('end', () => {
-      fs.unlink(filename, (err) => {
-        if (err) {
-          console.error(`Error deleting ${filename}`);
-          throw err;
-        }
-      });
+
+    const CSV_FILE = `${filename}.csv`;
+    const XLSX_FILE = `${filename}.xlsx`;
+
+    await this.createCsv(CSV_FILE, queryParams);
+
+    const workbook = new Excel.Workbook();
+
+    workbook.csv.readFile(CSV_FILE).then(async () => {
+      workbook.getWorksheet(1).name = 'Primary Sheet';
+      await workbook.xlsx.writeFile(XLSX_FILE);
     });
-    return new StreamableFile(file);
+
+    workbook.csv.readFile(CSV_FILE).then(async () => {
+      workbook.getWorksheet(2).name = 'Secondary Sheet';
+      await workbook.xlsx.writeFile(XLSX_FILE);
+    });
+
+    const buffer = await workbook.xlsx.writeBuffer(); // would love to stream
+
+    return buffer as any; // coming through as invalid file type
   }
 
   /**

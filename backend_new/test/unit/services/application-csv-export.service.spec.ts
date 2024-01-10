@@ -399,7 +399,7 @@ describe('Testing ami chart service', () => {
     expect(JSON.stringify(headers)).toEqual(JSON.stringify(testHeaders));
   });
 
-  it('tests getCsvHeaders with houshold members and no  multiselect questions or demographics', async () => {
+  it('tests getCsvHeaders with houshold members and no multiselect questions or demographics', async () => {
     const headers = await service.getCsvHeaders(3, []);
     const testHeaders = [
       ...csvHeaders,

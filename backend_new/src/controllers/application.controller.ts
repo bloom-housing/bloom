@@ -85,7 +85,7 @@ export class ApplicationController {
     @Request() req: ExpressRequest,
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationCsvQueryParams,
-  ): Promise<StreamableFile> {
+  ): Promise<string> {
     return await this.applicationCsvExportService.export(queryParams, req);
   }
 

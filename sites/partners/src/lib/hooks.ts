@@ -3,6 +3,8 @@ import useSWR from "swr"
 import qs from "qs"
 import dayjs from "dayjs"
 import JSZip from "jszip"
+import Excel from "exceljs"
+import { saveAs } from "file-saver"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { setSiteAlertMessage, t } from "@bloom-housing/ui-components"
 import {
@@ -510,21 +512,49 @@ export const useApplicationsExport = (listingId: string, includeDemographics: bo
   const [csvExportError, setCsvExportError] = useState(false)
   const [csvExportSuccess, setCsvExportSuccess] = useState(false)
 
-  const onExport = useCallback(() => {
+  const onExport = useCallback(async () => {
     setCsvExportError(false)
     setCsvExportSuccess(false)
     setCsvExportLoading(true)
 
     try {
-      // TODO: uncomment this for partner integration
-      // await applicationsService.listAsCsv({ listingId, timeZone, includeDemographics })
+      // const workbook = new Excel.Workbook()
+      // const worksheet1 = workbook.addWorksheet("Primary")
+      // const worksheet2 = workbook.addWorksheet("Secondary")
+
+      // const worksheetColumns = [
+      //   { key: "first", header: "First" },
+      //   { key: "second", header: "Second" },
+      //   { key: "third", header: "Third" },
+      // ]
+
+      // const mockData = [
+      //   { first: "Test Row 1", second: "Test Row 1", third: "Test Row 1" },
+      //   { first: "Test Row 2", second: "Test Row 2", third: "Test Row 2" },
+      //   { first: "Test Row 3", second: "Test Row 3", third: "Test Row 3" },
+      // ]
+
+      // worksheet1.columns = worksheetColumns
+      // worksheet2.columns = worksheetColumns
+
+      // mockData.forEach((row) => {
+      //   worksheet1.addRow(row)
+      //   worksheet2.addRow(row)
+      // })
+
+      // const buffer = await workbook.xlsx.writeBuffer()
+
+      const content = await applicationsService.listAsCsv({ listingId, includeDemographics })
+      // const dateString = dayjs(new Date()).format("YYYY-MM-DD_HH-mm")
+
+      const blob = new Blob([content], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      })
+
+      saveAs(blob, `abc.xlsx`)
+
       setCsvExportSuccess(true)
-      setSiteAlertMessage(
-        t("t.emailingExportSuccess", {
-          email: profile?.email,
-        }),
-        "success"
-      )
+      setSiteAlertMessage(t("t.exportSuccess"), "success")
     } catch (err) {
       console.log(err)
       setCsvExportError(true)
