@@ -71,7 +71,7 @@
 }
 
 @font-face {
-    font-family: 'Metropolis Extra';
+    font-family: 'Metropolis';
     src: url('Metropolis-ExtraLightItalic.woff2') format('woff2'),
         url('Metropolis-ExtraLightItalic.woff') format('woff');
     font-weight: 200;
@@ -107,7 +107,7 @@
 }
 
 @font-face {
-    font-family: 'Metropolis Semi';
+    font-family: 'Metropolis';
     src: url('Metropolis-SemiBold.woff2') format('woff2'),
         url('Metropolis-SemiBold.woff') format('woff');
     font-weight: 600;
@@ -116,7 +116,7 @@
 }
 
 @font-face {
-    font-family: 'Metropolis Extra';
+    font-family: 'Metropolis';
     src: url('Metropolis-ExtraLight.woff2') format('woff2'),
         url('Metropolis-ExtraLight.woff') format('woff');
     font-weight: 200;
@@ -134,7 +134,7 @@
 }
 
 @font-face {
-    font-family: 'Metropolis Semi';
+    font-family: 'Metropolis';
     src: url('Metropolis-SemiBoldItalic.woff2') format('woff2'),
         url('Metropolis-SemiBoldItalic.woff') format('woff');
     font-weight: 600;

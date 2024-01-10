@@ -68,7 +68,7 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
       <Card spacing={"lg"} className={`application-form-card ${styles["application-form-body"]}`}>
         <Card.Section divider={"inset"} className={props.hideBorder && "border-none"}>
           {props.backLink && getBackLink(props.backLink.url, props.backLink.onClickFxn)}
-          <Heading priority={2} size={"2xl"} className="font-bold">
+          <Heading priority={2} size={"2xl"} className="font-semibold">
             {props.heading}
           </Heading>
           {props.subheading && <p className="field-note mt-6">{props.subheading}</p>}

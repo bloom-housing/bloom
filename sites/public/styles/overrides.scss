@@ -113,6 +113,12 @@
     --dot-label-padding-top: var(--seeds-s6);
   }
 
+  /* TODO: would be nice to have CSS variables for this too */
+  .progress-nav__dot-item::after {
+    top: 0.35rem;
+    height: 3px;
+  }
+
   --text-caps-spaced-letter-spacing: var(--bloom-letter-spacing-tight);
   --text-caps-spaced-font-weight: 700;
   .text__caps-spaced {
