@@ -228,7 +228,7 @@ CREATE TABLE "applications" (
     "submission_date" TIMESTAMPTZ(6),
     "marked_as_duplicate" BOOLEAN NOT NULL DEFAULT false,
     "confirmation_code" TEXT NOT NULL,
-    "review_status" "application_review_status_enum" NOT NULL DEFAULT 'valid',
+    "review_status" "application_review_status_enum" NOT NULL DEFAULT 'pending',
     "user_id" UUID,
     "listing_id" UUID,
     "applicant_id" UUID,

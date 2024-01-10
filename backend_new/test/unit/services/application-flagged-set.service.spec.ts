@@ -529,9 +529,10 @@ describe('Testing application flagged set service', () => {
       .mockResolvedValueOnce(3);
 
     prisma.applicationFlaggedSet.count = mockCount;
+    prisma.applications.count = jest.fn().mockResolvedValueOnce(12);
 
     expect(await service.meta({ listingId: 'example id' })).toEqual({
-      totalCount: 6,
+      totalCount: 12,
       totalResolvedCount: 1,
       totalPendingCount: 5,
       totalNamePendingCount: 2,

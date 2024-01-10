@@ -10,7 +10,10 @@ import { mapTo } from '../utilities/mapTo';
 import { ApplicationQueryParams } from '../dtos/applications/application-query-params.dto';
 import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
 import { Prisma, YesNoEnum } from '@prisma/client';
-import { buildOrderBy } from '../utilities/build-order-by';
+import {
+  buildOrderBy,
+  buildOrderByForApplications,
+} from '../utilities/build-order-by';
 import { buildPaginationInfo } from '../utilities/build-pagination-meta';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
@@ -91,7 +94,7 @@ export class ApplicationService {
     const rawApplications = await this.prisma.applications.findMany({
       skip: calculateSkip(params.limit, params.page),
       take: calculateTake(params.limit),
-      orderBy: buildOrderBy([params.orderBy], [params.order]),
+      orderBy: buildOrderByForApplications([params.orderBy], [params.order]),
       include: view[params.listingId ? 'partnerList' : 'base'],
       where: whereClause,
     });
@@ -196,6 +199,10 @@ export class ApplicationService {
         markedAsDuplicate: params.markedAsDuplicate,
       });
     }
+    // We only should display non-deleted applications
+    toReturn.push({
+      deletedAt: null,
+    });
     return {
       AND: toReturn,
     };
@@ -394,6 +401,8 @@ export class ApplicationService {
         listing.jurisdictions?.publicUrl,
       );
     }
+    // Update the lastApplicationUpdateAt to now after every submission
+    await this.updateListingApplicationEditTimestamp(listing.id);
 
     // Calculate geocoding preferences after save and email sent
     if (listing.jurisdictions?.enableGeocodingPreferences) {

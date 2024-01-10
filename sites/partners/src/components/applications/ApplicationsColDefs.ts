@@ -325,7 +325,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       minWidth: 150,
       valueFormatter: function ({ data, value }) {
         if (!value) return ""
-        return `${data.sendMailToMailingAddress ? value : data.applicant.address.street}`
+        return `${data.sendMailToMailingAddress ? value : data.applicant.applicantAddress.street}`
       },
     },
     {
@@ -338,7 +338,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       valueFormatter: function ({ data, value }) {
         if (!value) return ""
 
-        return `${data.sendMailToMailingAddress ? value : data.applicant.address.city}`
+        return `${data.sendMailToMailingAddress ? value : data.applicant.applicantAddress.city}`
       },
     },
     {
@@ -351,7 +351,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       valueFormatter: function ({ data, value }) {
         if (!value) return ""
 
-        return `${data.sendMailToMailingAddress ? value : data.applicant.address.state}`
+        return `${data.sendMailToMailingAddress ? value : data.applicant.applicantAddress.state}`
       },
     },
     {
@@ -364,7 +364,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       valueFormatter: function ({ data, value }) {
         if (!value) return ""
 
-        return `${data.sendMailToMailingAddress ? value : data.applicant.address.zipCode}`
+        return `${data.sendMailToMailingAddress ? value : data.applicant.applicantAddress.zipCode}`
       },
     },
     {

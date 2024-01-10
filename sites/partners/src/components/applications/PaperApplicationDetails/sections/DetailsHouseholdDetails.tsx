@@ -37,12 +37,13 @@ const DetailsHouseholdDetails = () => {
         </FieldValue>
 
         <FieldValue label={t("application.details.adaPriorities")} testId="adaPriorities">
-          {accessibilityLabels(application.accessibility).map((item) => (
-            <Fragment key={item}>
-              {item}
-              <br />
-            </Fragment>
-          ))}
+          {application.accessibility &&
+            accessibilityLabels(application.accessibility).map((item) => (
+              <Fragment key={item}>
+                {item}
+                <br />
+              </Fragment>
+            ))}
         </FieldValue>
 
         <FieldValue

@@ -7,17 +7,17 @@ describe("Application Management Tests", () => {
     cy.signOut()
   })
 
-  it.skip("Application grid should display correct number of results", () => {
+  it("Application grid should display correct number of results", () => {
     cy.visit("/")
-    cy.getByTestId("listing-status-cell").eq(1).click()
-    cy.getByID("lbTotalPages").contains("24")
+    cy.getByTestId("listing-status-cell-Hollywood Hills Heights").click()
+    cy.getByID("lbTotalPages").contains("2")
     cy.get(".applications-table")
       .first()
       .find(".ag-center-cols-container")
       .first()
       .find(".ag-row")
       .should((elems) => {
-        expect(elems).to.have.length(8)
+        expect(elems).to.have.length(2)
       })
   })
 })

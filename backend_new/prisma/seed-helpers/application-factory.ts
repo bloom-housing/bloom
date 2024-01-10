@@ -40,6 +40,10 @@ export const applicationFactory = (optionalParams?: {
     incomePeriod: IncomePeriodEnum.perYear,
     preferences: [],
     preferredUnitTypes,
+    sendMailToMailingAddress: true,
+    applicationsMailingAddress: {
+      create: addressFactory(),
+    },
     listings: optionalParams?.listingId
       ? {
           connect: {

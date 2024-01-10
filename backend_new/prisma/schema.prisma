@@ -203,7 +203,7 @@ model Applications {
   // meaning that the record in the application flagged set table has a status of duplicate
   markedAsDuplicate            Boolean                       @default(false) @map("marked_as_duplicate")
   confirmationCode             String                        @map("confirmation_code")
-  reviewStatus                 ApplicationReviewStatusEnum   @default(valid) @map("review_status")
+  reviewStatus                 ApplicationReviewStatusEnum   @default(pending) @map("review_status")
   userId                       String?                       @map("user_id") @db.Uuid
   listingId                    String?                       @map("listing_id") @db.Uuid
   applicantId                  String?                       @unique() @map("applicant_id") @db.Uuid

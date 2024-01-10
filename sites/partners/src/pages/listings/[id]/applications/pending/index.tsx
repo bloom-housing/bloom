@@ -1,6 +1,9 @@
 import React from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+dayjs.extend(utc)
 import {
   AgTable,
   t,
@@ -14,7 +17,6 @@ import { ListingStatusBar } from "../../../../../components/listings/ListingStat
 import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../components/applications/ApplicationsSideNav"
 import { formatDateTime } from "@bloom-housing/shared-helpers"
-import dayjs from "dayjs"
 import { NavigationHeader } from "../../../../../components/shared/NavigationHeader"
 
 const ApplicationsList = () => {
@@ -114,10 +116,13 @@ const ApplicationsList = () => {
     formatLinkCell: isListingOpen ? formatDisabledCell : formatEnabledCell,
   }
 
-  const dayjsDate = dayjs(listingDto?.afsLastRunAt)
-  const afsLastRun = {
-    date: dayjsDate.utc().format("MM/DD/YY"),
-    time: dayjsDate.utc().format("hh:mma"),
+  let afsLastRun
+  if (listingDto?.afsLastRunAt) {
+    const dayjsDate = dayjs(listingDto?.afsLastRunAt)
+    afsLastRun = {
+      date: dayjsDate?.format("MM/DD/YY"),
+      time: dayjsDate?.format("hh:mma"),
+    }
   }
 
   return (

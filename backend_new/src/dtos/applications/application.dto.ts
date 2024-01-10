@@ -79,7 +79,6 @@ export class Application extends AbstractDTO {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
-  @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
   @ApiPropertyOptional()
   housingStatus?: string;
 

@@ -296,6 +296,9 @@ describe('Testing application service', () => {
           {
             listingId: 'example listing id',
           },
+          {
+            deletedAt: null,
+          },
         ],
       },
     });
@@ -441,7 +444,13 @@ describe('Testing application service', () => {
 
   it('should return no filters when no params passed to buildWhereClause()', () => {
     const res = service.buildWhereClause({});
-    expect(res).toEqual({ AND: [] });
+    expect(res).toEqual({
+      AND: [
+        {
+          deletedAt: null,
+        },
+      ],
+    });
   });
 
   it('should return userId filter when userId param passed to buildWhereClause()', () => {
@@ -454,6 +463,9 @@ describe('Testing application service', () => {
           userAccounts: {
             id: 'example user id',
           },
+        },
+        {
+          deletedAt: null,
         },
       ],
     });
@@ -468,6 +480,9 @@ describe('Testing application service', () => {
         {
           listingId: 'example listing id',
         },
+        {
+          deletedAt: null,
+        },
       ],
     });
   });
@@ -480,6 +495,9 @@ describe('Testing application service', () => {
       AND: [
         {
           markedAsDuplicate: false,
+        },
+        {
+          deletedAt: null,
         },
       ],
     });
@@ -503,6 +521,9 @@ describe('Testing application service', () => {
         },
         {
           markedAsDuplicate: false,
+        },
+        {
+          deletedAt: null,
         },
       ],
     });
@@ -561,6 +582,9 @@ describe('Testing application service', () => {
               },
             },
           ],
+        },
+        {
+          deletedAt: null,
         },
       ],
     });

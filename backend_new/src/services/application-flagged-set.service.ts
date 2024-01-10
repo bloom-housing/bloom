@@ -196,18 +196,22 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
   */
   async meta(params: AfsQueryParams): Promise<AfsMeta> {
     const [
-      // totalCount,
+      totalCount,
       totalResolvedCount,
-      // totalPendingCount,
       totalNamePendingCount,
       totalEmailPendingCount,
     ] = await Promise.all([
-      // this.metaDataQueryBuilder(params.listingId),
+      this.prisma.applications.count({
+        where: {
+          listingId: params.listingId,
+          // We only should display non-deleted applications
+          deletedAt: null,
+        },
+      }),
       this.metaDataQueryBuilder(
         params.listingId,
         FlaggedSetStatusEnum.resolved,
       ),
-      // this.metaDataQueryBuilder(params.listingId, FlaggedSetStatusEnum.pending),
       this.metaDataQueryBuilder(
         params.listingId,
         FlaggedSetStatusEnum.pending,
@@ -221,8 +225,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
     ]);
 
     return {
-      totalCount:
-        totalResolvedCount + totalNamePendingCount + totalEmailPendingCount,
+      totalCount,
       totalResolvedCount,
       totalPendingCount: totalNamePendingCount + totalEmailPendingCount,
       totalNamePendingCount,

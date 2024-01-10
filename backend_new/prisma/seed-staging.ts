@@ -70,6 +70,17 @@ export const stagingSeed = async (
       acceptedTerms: false,
     }),
   });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isJurisdictionalAdmin: true },
+      email: 'mfauser@bloom.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: true,
+      mfaEnabled: true,
+      mfaCode: '12345',
+    }),
+  });
   // add jurisdiction specific translations and default ones
   await prismaClient.translations.create({
     data: translationFactory(jurisdiction.id, jurisdiction.name),
@@ -819,6 +830,7 @@ export const stagingSeed = async (
         units: value.units,
         multiselectQuestions: value.multiselectQuestions,
         applications: value.applications,
+        afsLastRunSetInPast: true,
       });
       await prismaClient.listings.create({
         data: listing,
