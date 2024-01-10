@@ -738,7 +738,7 @@ export class ListingService implements OnModuleInit {
         jurisId: rawListing.jurisdictions.id,
       });
     }
-    await this.cachePurge(ListingsStatusEnum.closed, dto.status, rawListing.id);
+    await this.cachePurge(undefined, dto.status, rawListing.id);
     return mapTo(Listing, rawListing);
   }
 
@@ -1258,7 +1258,7 @@ export class ListingService implements OnModuleInit {
      @param savedResponseId the id of the listing   
   */
   async cachePurge(
-    storedListingStatus: ListingsStatusEnum,
+    storedListingStatus: ListingsStatusEnum | undefined,
     incomingListingStatus: ListingsStatusEnum,
     savedResponseId: string,
   ): Promise<void> {
