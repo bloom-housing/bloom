@@ -14,6 +14,7 @@ import {
 import {
   ApplicationCreate,
   ApplicationReviewStatusEnum,
+  ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import FormsLayout from "../../../layouts/forms"
@@ -47,9 +48,11 @@ const ApplicationSummary = () => {
   }, [profile])
 
   useEffect(() => {
-    if (listing?.status === "closed") {
-      setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
-      void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
+    if (listing && router.isReady) {
+      if (listing?.status !== ListingsStatusEnum.active) {
+        setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
+        void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
+      }
     }
   }, [listing, router])
 

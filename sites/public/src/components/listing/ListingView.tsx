@@ -306,6 +306,7 @@ export const ListingView = (props: ListingProps) => {
     let onlineApplicationURL
     if (hasMethod(listing.applicationMethods, ApplicationMethodsTypeEnum.Internal)) {
       onlineApplicationURL = `/applications/start/choose-language?listingId=${listing.id}`
+      onlineApplicationURL += `${props.preview ? "&preview=true" : ""}`
     } else if (hasMethod(listing.applicationMethods, ApplicationMethodsTypeEnum.ExternalLink)) {
       onlineApplicationURL =
         getMethod(listing.applicationMethods, ApplicationMethodsTypeEnum.ExternalLink)
@@ -367,6 +368,7 @@ export const ListingView = (props: ListingProps) => {
         applicationPickUpAddress={getAddress(listing.applicationPickUpAddressType, "pickUp")}
         preview={props.preview}
         listingName={listing.name}
+        listingStatus={listing.status}
       />
       {!(
         listing.status === ListingsStatusEnum.closed ||

@@ -39,7 +39,7 @@ export default function ListingPage(props: ListingProps) {
       >
         {t("listings.listingPreviewOnly")}
       </AlertBox>
-      <ListingView listing={listing} preview={false} jurisdiction={props.jurisdiction} />
+      <ListingView listing={listing} preview={true} jurisdiction={props.jurisdiction} />
     </Layout>
   )
 }

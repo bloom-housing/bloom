@@ -89,7 +89,9 @@ const FormForgotPassword = ({
           />
           <section>
             <div className="text-center mt-6">
-              <Button variant="primary">{t("authentication.forgotPassword.sendEmail")}</Button>
+              <Button type="submit" variant="primary">
+                {t("authentication.forgotPassword.sendEmail")}
+              </Button>
             </div>
             <div className="text-center mt-6">
               <Button onClick={() => router.back()} variant="text">
