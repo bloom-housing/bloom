@@ -299,10 +299,6 @@ model HouseholdMember {
   birthMonth                 String?       @map("birth_month")
   birthDay                   String?       @map("birth_day")
   birthYear                  String?       @map("birth_year")
-  emailAddress               String?       @map("email_address")
-  phoneNumber                String?       @map("phone_number")
-  phoneNumberType            String?       @map("phone_number_type")
-  noPhone                    Boolean?      @map("no_phone")
   sameAddress                YesNoEnum?    @map("same_address")
   relationship               String?
   workInRegion               YesNoEnum?    @map("work_in_region")

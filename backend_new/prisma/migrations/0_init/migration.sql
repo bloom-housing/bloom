@@ -288,10 +288,6 @@ CREATE TABLE "household_member" (
       "address_id" UUID,
       "work_address_id" UUID,
       "application_id" UUID,
-      "email_address" TEXT,
-      "no_phone" BOOLEAN,
-      "phone_number" TEXT,
-      "phone_number_type" TEXT,
       CONSTRAINT "PK_84e1d1f2553646d38e7c8b72a10" PRIMARY KEY ("id")
 );
 
