@@ -2,19 +2,15 @@ import React, { useState } from "react"
 import { useFormContext } from "react-hook-form"
 import {
   t,
-  AppearanceStyleType,
-  Button,
   Drawer,
   Dropzone,
   Field,
-  GridCell,
-  GridSection,
   MinimalTable,
   TableThumbnail,
   FieldGroup,
   StandardTableData,
-  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
+import { Button, Card, FieldValue, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 import { cloudinaryFileUploader } from "../../../../lib/helpers"
 
@@ -90,7 +86,7 @@ const BuildingSelectionCriteria = () => {
         content: (
           <Button
             type="button"
-            className="font-semibold uppercase text-alert my-0"
+            className="font-semibold text-alert"
             onClick={() => {
               setCloudinaryData({
                 id: "",
@@ -98,7 +94,7 @@ const BuildingSelectionCriteria = () => {
               })
               setProgressValue(0)
             }}
-            unstyled
+            variant="text"
           >
             {t("t.delete")}
           </Button>
@@ -125,25 +121,25 @@ const BuildingSelectionCriteria = () => {
       fileName: { content: listingCriteriaFile.fileId.split("/").slice(-1).join() },
       actions: {
         content: (
-          <div className="flex">
+          <div className="flex gap-3">
             <Button
               type="button"
               className="font-semibold uppercase my-0"
               onClick={() => {
                 setDrawerState(true)
               }}
-              unstyled
+              variant="text"
             >
               {t("t.edit")}
             </Button>
             <Button
               type="button"
-              className="font-semibold uppercase text-alert my-0"
+              className="font-semibold text-alert"
               onClick={() => {
                 setCloudinaryData({ ...cloudinaryData, id: "" })
                 deletePDF()
               }}
-              unstyled
+              variant="text"
             >
               {t("t.delete")}
             </Button>
@@ -160,24 +156,24 @@ const BuildingSelectionCriteria = () => {
       fileName: { content: listingCriteriaURL },
       actions: {
         content: (
-          <div className="flex">
+          <div className="flex gap-3">
             <Button
               type="button"
-              className="font-semibold uppercase"
+              className="font-semibold"
               onClick={() => {
                 setDrawerState(true)
               }}
-              unstyled
+              variant="text"
             >
               {t("t.edit")}
             </Button>
             <Button
               type="button"
-              className="font-semibold uppercase text-alert"
+              className="font-semibold text-alert"
               onClick={() => {
                 setValue("buildingSelectionCriteria", "")
               }}
-              unstyled
+              variant="text"
             >
               {t("t.delete")}
             </Button>
@@ -200,31 +196,33 @@ const BuildingSelectionCriteria = () => {
       <input type="hidden" {...register("buildingSelectionCriteriaFile.fileId")} />
       <input type="hidden" {...register("buildingSelectionCriteriaFile.label")} />
 
-      <div className="field mt-8 mb-2">
-        {((listingCriteriaURL && listingCriteriaURL != "") ||
-          (listingCriteriaFile?.fileId && listingCriteriaFile.fileId != "")) && (
-          <label className="label">{t("listings.buildingSelectionCriteria")}</label>
-        )}
-      </div>
-
-      <GridSection columns={1} tinted inset>
-        <GridCell>
-          {(listingCriteriaURL && listingCriteriaURL != "") ||
-          (listingCriteriaFile?.fileId && listingCriteriaFile.fileId != "") ? (
-            <MinimalTable headers={criteriaTableHeaders} data={criteriaTableRows}></MinimalTable>
-          ) : (
-            <Button
-              id="addBuildingSelectionCriteriaButton"
-              type="button"
-              onClick={() => {
-                setDrawerState(true)
-              }}
-            >
-              {t("listings.addBuildingSelectionCriteria")}
-            </Button>
-          )}
-        </GridCell>
-      </GridSection>
+      {((listingCriteriaURL && listingCriteriaURL != "") ||
+        (listingCriteriaFile?.fileId && listingCriteriaFile.fileId != "")) && (
+        <Heading size="lg" priority={3} className="spacer-header">
+          {t("listings.buildingSelectionCriteria")}
+        </Heading>
+      )}
+      <Grid spacing="lg" className="grid-inset-section">
+        <Grid.Row>
+          <Grid.Cell>
+            {(listingCriteriaURL && listingCriteriaURL != "") ||
+            (listingCriteriaFile?.fileId && listingCriteriaFile.fileId != "") ? (
+              <MinimalTable headers={criteriaTableHeaders} data={criteriaTableRows}></MinimalTable>
+            ) : (
+              <Button
+                id="addBuildingSelectionCriteriaButton"
+                type="button"
+                variant="primary-outlined"
+                onClick={() => {
+                  setDrawerState(true)
+                }}
+              >
+                {t("listings.addBuildingSelectionCriteria")}
+              </Button>
+            )}
+          </Grid.Cell>
+        </Grid.Row>
+      </Grid>
 
       <Drawer
         open={drawerState}
@@ -250,8 +248,8 @@ const BuildingSelectionCriteria = () => {
                 resetDrawerState()
               }
             }}
-            styleType={AppearanceStyleType.primary}
-            size={AppearanceSizeType.small}
+            variant="primary"
+            size="sm"
           >
             Save
           </Button>,
@@ -260,73 +258,76 @@ const BuildingSelectionCriteria = () => {
             onClick={() => {
               resetDrawerState()
             }}
-            size={AppearanceSizeType.small}
+            size="sm"
+            variant="primary-outlined"
           >
             {t("t.cancel")}
           </Button>,
         ]}
       >
-        <section className="border rounded-md p-8 bg-white">
-          <div className={!criteriaAttachType ? "" : "hidden"}>
-            <span className="grid-section__description">
-              {t("listings.addBuildingSelectionCriteriaSubtitle")}
-            </span>
-            <FieldGroup
-              name="criteriaAttachType"
-              type="radio"
-              register={register}
-              fields={[
-                {
-                  label: "Upload PDF",
-                  value: "upload",
-                  id: "criteriaAttachTypeUpload",
-                  defaultChecked: false,
-                },
-                {
-                  label: "Webpage URL",
-                  value: "url",
-                  id: "criteriaAttachTypeURL",
-                  defaultChecked: false,
-                },
-              ]}
-            />
-          </div>
-
-          {criteriaAttachType === "upload" && (
-            <>
-              <Dropzone
-                id="listing-building-selection-criteria-upload"
-                label={t("t.uploadFile")}
-                helptext={t("listings.pdfHelperText")}
-                uploader={pdfUploader}
-                accept="application/pdf"
-                progress={progressValue}
+        <Card spacing="lg" className="spacer-section">
+          <Card.Section>
+            <FieldValue
+              label={t("listings.addBuildingSelectionCriteriaSubtitle")}
+              className={!criteriaAttachType ? "" : "hidden"}
+            >
+              <FieldGroup
+                name="criteriaAttachType"
+                type="radio"
+                register={register}
+                fields={[
+                  {
+                    label: "Upload PDF",
+                    value: "upload",
+                    id: "criteriaAttachTypeUpload",
+                    defaultChecked: false,
+                  },
+                  {
+                    label: "Webpage URL",
+                    value: "url",
+                    id: "criteriaAttachTypeURL",
+                    defaultChecked: false,
+                  },
+                ]}
               />
-              {cloudinaryData.url !== "" && (
-                <MinimalTable
-                  headers={previewCriteriaTableHeaders}
-                  data={previewTableRows}
-                ></MinimalTable>
-              )}
-            </>
-          )}
-          {criteriaAttachType === "url" && (
-            <Field
-              type="url"
-              placeholder="https://"
-              label="Informational Webpage URL"
-              name="buildingSelectionCriteriaURL"
-              id="buildingSelectionCriteriaURL"
-              register={register}
-              error={errors?.buildingSelectionCriteriaURL}
-              errorMessage={
-                errors?.buildingSelectionCriteriaURL?.type === "https"
-                  ? t("errors.urlHttpsError")
-                  : t("errors.urlError")
-              }
-            />
-          )}
-        </section>
+            </FieldValue>
+
+            {criteriaAttachType === "upload" && (
+              <>
+                <Dropzone
+                  id="listing-building-selection-criteria-upload"
+                  label={t("t.uploadFile")}
+                  helptext={t("listings.pdfHelperText")}
+                  uploader={pdfUploader}
+                  accept="application/pdf"
+                  progress={progressValue}
+                />
+                {cloudinaryData.url !== "" && (
+                  <MinimalTable
+                    headers={previewCriteriaTableHeaders}
+                    data={previewTableRows}
+                  ></MinimalTable>
+                )}
+              </>
+            )}
+            {criteriaAttachType === "url" && (
+              <Field
+                type="url"
+                placeholder="https://"
+                label="Informational Webpage URL"
+                name="buildingSelectionCriteriaURL"
+                id="buildingSelectionCriteriaURL"
+                register={register}
+                error={errors?.buildingSelectionCriteriaURL}
+                errorMessage={
+                  errors?.buildingSelectionCriteriaURL?.type === "https"
+                    ? t("errors.urlHttpsError")
+                    : t("errors.urlError")
+                }
+              />
+            )}
+          </Card.Section>
+        </Card>
       </Drawer>
     </>
   )

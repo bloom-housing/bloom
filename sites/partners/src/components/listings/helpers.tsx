@@ -7,31 +7,51 @@ export const getListingStatusTag = (listingStatus: ListingStatus) => {
   switch (listingStatus) {
     case ListingStatus.active:
       return (
-        <Tag variant={"success"} size={"lg"} id={"listing-status-active"}>
+        <Tag className="tag-uppercase" variant={"success"} size={"lg"} id={"listing-status-active"}>
           {t(`listings.listingStatus.active`)}
         </Tag>
       )
     case ListingStatus.closed:
       return (
-        <Tag variant={"secondary"} size={"lg"} id={"listing-status-closed"}>
+        <Tag
+          className="tag-uppercase"
+          variant={"secondary"}
+          size={"lg"}
+          id={"listing-status-closed"}
+        >
           {t(`listings.listingStatus.closed`)}
         </Tag>
       )
     case ListingStatus.pendingReview:
       return (
-        <Tag variant={"in-process"} size={"lg"} id={"listing-status-pending-review"}>
+        <Tag
+          className="tag-uppercase"
+          variant={"in-process"}
+          size={"lg"}
+          id={"listing-status-pending-review"}
+        >
           {t(`applications.pendingReview`)}
         </Tag>
       )
     case ListingStatus.changesRequested:
       return (
-        <Tag variant={"highlight-warm"} size={"lg"} id={"listing-status-changes-requested"}>
+        <Tag
+          className="tag-uppercase"
+          variant={"highlight-warm"}
+          size={"lg"}
+          id={"listing-status-changes-requested"}
+        >
           {t(`listings.listingStatus.changesRequested`)}
         </Tag>
       )
     default:
       return (
-        <Tag variant={"primary"} size={"lg"} id={"listing-status-pending"}>
+        <Tag
+          className="tag-uppercase"
+          variant={"primary"}
+          size={"lg"}
+          id={"listing-status-pending"}
+        >
           {t(`listings.listingStatus.pending`)}
         </Tag>
       )

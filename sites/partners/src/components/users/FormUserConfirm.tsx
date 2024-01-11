@@ -6,13 +6,12 @@ import {
   Icon,
   Form,
   Field,
-  Button,
   passwordRegex,
-  AppearanceStyleType,
   useMutate,
   AlertBox,
   Modal,
 } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import { Status } from "@bloom-housing/backend-core/types"
@@ -171,9 +170,9 @@ const FormUserConfirm = () => {
             <div className="form-card__pager-row primary">
               <Button
                 type="submit"
-                styleType={AppearanceStyleType.primary}
+                variant="primary"
                 className={"items-center"}
-                loading={isConfirmLoading || loading}
+                loadingMessage={(isConfirmLoading || loading) && t("t.formSubmitted")}
               >
                 {t("users.confirmAccount")}
               </Button>

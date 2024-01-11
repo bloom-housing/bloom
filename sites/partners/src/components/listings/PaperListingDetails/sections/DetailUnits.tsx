@@ -1,9 +1,10 @@
 import React, { useContext, useMemo } from "react"
-import { t, GridSection, MinimalTable, Button, GridCell } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { t, MinimalTable } from "@bloom-housing/ui-components"
+import { Button, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { UnitDrawer } from "../DetailsUnitDrawer"
 import { ListingReviewOrder } from "@bloom-housing/backend-core"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type DetailUnitsProps = {
   setUnitDrawer: (unit: UnitDrawer) => void
@@ -35,9 +36,9 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
           content: (
             <Button
               type="button"
-              className="font-semibold uppercase my-0"
+              variant="text"
+              className="font-semibold"
               onClick={() => setUnitDrawer(unit)}
-              unstyled
             >
               {t("t.view")}
             </Button>
@@ -57,15 +58,8 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
   }, [listing])
 
   return (
-    <GridSection
-      className="bg-primary-lighter"
-      title={t("listings.units")}
-      grid={true}
-      tinted
-      inset
-      columns={2}
-    >
-      <GridCell span={1}>
+    <SectionWithGrid heading={t("listings.units")} inset>
+      <Grid.Row>
         <FieldValue
           id="unitTypesOrIndividual"
           testId={"unit-types-or-individual"}
@@ -76,26 +70,26 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
               : t("listings.unit.individualUnits")
           }
         />
-      </GridCell>
-      <GridCell span={1}>
         <FieldValue
           id="listings.listingAvailabilityQuestion"
           testId={"listing-availability-question"}
           label={t("listings.listingAvailabilityQuestion")}
           children={listingAvailabilityText}
         />
-      </GridCell>
-      <GridCell span={2}>
-        {listing.units.length ? (
-          <MinimalTable id="unitTable" headers={unitTableHeaders} data={unitTableData} />
-        ) : (
-          <>
-            <hr className={"mt-4 mb-4"} />
-            <span className="text-base font-semibold pt-4">{t("t.none")}</span>
-          </>
-        )}
-      </GridCell>
-    </GridSection>
+      </Grid.Row>
+      <Grid.Row>
+        <Grid.Cell>
+          {listing.units.length ? (
+            <MinimalTable id="unitTable" headers={unitTableHeaders} data={unitTableData} />
+          ) : (
+            <>
+              <hr className="spacer-header" />
+              <span className="text-base font-semibold pt-4">{t("t.none")}</span>
+            </>
+          )}
+        </Grid.Cell>
+      </Grid.Row>
+    </SectionWithGrid>
   )
 }
 

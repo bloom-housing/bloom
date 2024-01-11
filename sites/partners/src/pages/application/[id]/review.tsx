@@ -7,18 +7,15 @@ import { GridApi } from "ag-grid-community"
 import { useForm } from "react-hook-form"
 import {
   t,
-  Button,
   AlertBox,
-  AppearanceStyleType,
   useMutate,
   AgTable,
   useAgTable,
-  GridSection,
   Modal,
   Field,
-  AppearanceSizeType,
+  Icon,
 } from "@bloom-housing/ui-components"
-import { Tag } from "@bloom-housing/ui-seeds"
+import { Button, Tag } from "@bloom-housing/ui-seeds"
 import { useSingleFlaggedApplication } from "../../../lib/hooks"
 import Layout from "../../../layouts"
 import { getCols } from "./applicationsCols"
@@ -117,12 +114,19 @@ const Flag = () => {
       <div>
         <StatusBar
           backButton={
-            <Button inlineIcon="left" icon="arrowBack" onClick={() => router.back()}>
+            <Button
+              leadIcon={<Icon symbol="arrowBack" size="small" />}
+              variant="text"
+              size="sm"
+              className="font-semibold no-underline"
+              onClick={() => router.back()}
+            >
               {t("t.back")}
             </Button>
           }
         >
           <Tag
+            className="tag-uppercase"
             variant={
               data?.status === EnumApplicationFlaggedSetStatus.resolved ? "success" : "primary"
             }
@@ -194,11 +198,11 @@ const Flag = () => {
             </div>
 
             <aside className="md:w-3/12 md:pl-6">
-              <GridSection columns={1} className={"w-full"}>
+              <section className={"w-full"}>
                 <Button
-                  styleType={AppearanceStyleType.primary}
+                  variant="primary"
                   onClick={() => setSaveModalOpen(true)}
-                  dataTestId={"save-set-button"}
+                  id={"save-set-button"}
                 >
                   {t("t.save")}
                 </Button>
@@ -207,7 +211,7 @@ const Flag = () => {
                     {t("t.lastUpdated")}: {dayjs(data?.updatedAt).format("MMMM DD, YYYY")}
                   </div>
                 )}
-              </GridSection>
+              </section>
             </aside>
           </div>
         </div>
@@ -220,9 +224,9 @@ const Flag = () => {
         actions={[
           <Button
             type="button"
-            styleType={AppearanceStyleType.primary}
-            size={AppearanceSizeType.small}
-            loading={isSaveLoading}
+            variant="primary"
+            size="sm"
+            loadingMessage={isSaveLoading && t("t.formSubmitted")}
             onClick={() => {
               const selectedData = gridApi.getSelectedRows()
               const status = getValues()["setStatus"]
@@ -243,7 +247,8 @@ const Flag = () => {
           </Button>,
           <Button
             type="button"
-            size={AppearanceSizeType.small}
+            variant="primary-outlined"
+            size="sm"
             onClick={() => {
               setSaveModalOpen(false)
             }}

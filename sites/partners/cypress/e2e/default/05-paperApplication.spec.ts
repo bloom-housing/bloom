@@ -3,7 +3,7 @@ describe("Paper Application Tests", () => {
     cy.login()
     cy.visit("/")
     cy.getByTestId("listing-status-cell").eq(1).click()
-    cy.getByTestId("addApplicationButton").contains("Add Application").click()
+    cy.getByID("addApplicationButton").contains("Add Application").click()
   })
 
   afterEach(() => {

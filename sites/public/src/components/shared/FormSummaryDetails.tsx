@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react"
 import { LocalizedLink, MultiLineAddress, t } from "@bloom-housing/ui-components"
 import { FieldValue } from "@bloom-housing/ui-seeds"
-import { getUniqueUnitTypes } from "@bloom-housing/shared-helpers"
+import { getUniqueUnitTypes, AddressHolder } from "@bloom-housing/shared-helpers"
 import {
   Address,
   AllExtraDataTypes,
@@ -88,21 +88,23 @@ const FormSummaryDetails = ({
     }
   }
 
-  const multiselectQuestionAddress = (extraData?: AllExtraDataTypes[]) => {
+  const multiselectQuestionHelpText = (extraData?: AllExtraDataTypes[]) => {
     if (!extraData) return
-    return extraData.reduce((acc, item) => {
+    const helperText = extraData.reduce((acc, item) => {
       if (item.type === InputType.address && typeof item.value === "object") {
-        acc += `
-          ${item.value.street}${!item.value.street2 && ","}
-          ${item.value.street2 ? `${item.value.street2},` : ""}
-          ${item.value.city},
-          ${item.value.state}
-          ${item.value.zipCode}
-          `
+        acc += `${item.value.street} ${!item.value.street2 ? "," : ""} ${
+          item.value.street2 ? `${item.value.street2},` : ""
+        } ${item.value.city}, ${item.value.state} ${item.value.zipCode}`
       }
 
       return acc
     }, "")
+
+    const name = extraData.find((field) => field.key === AddressHolder.Name)?.value as string
+    const relationship = extraData.find((field) => field.key === AddressHolder.Relationship)
+      ?.value as string
+
+    return `${name ? `${name}\n` : ""}${relationship ? `${relationship}\n` : ""}${helperText}`
   }
 
   const multiselectQuestionSection = (
@@ -134,10 +136,10 @@ const FormSummaryDetails = ({
                     .map((option: ApplicationMultiselectQuestionOption, index) => (
                       <FieldValue
                         label={question.key}
-                        helpText={multiselectQuestionAddress(option?.extraData)}
+                        helpText={multiselectQuestionHelpText(option?.extraData)}
                         key={index}
                         testId={"app-summary-preference"}
-                        className={"pb-4"}
+                        className={"pb-6 whitespace-pre-wrap"}
                       >
                         {option.key}
                       </FieldValue>
@@ -350,7 +352,11 @@ const FormSummaryDetails = ({
                 className="info-group__item"
                 key={`${member.firstName} - ${member.lastName} - ${index}`}
               >
-                <FieldValue testId={"app-summary-household-member-name"} className={"pb-4"}>
+                <FieldValue
+                  label={t("t.name")}
+                  testId={"app-summary-household-member-name"}
+                  className={"pb-4"}
+                >
                   {member.firstName} {member.lastName}
                 </FieldValue>
                 <div>
@@ -451,7 +457,7 @@ const FormSummaryDetails = ({
           {editMode && !validationError && <EditLink href="/applications/financial/vouchers" />}
         </h3>
 
-        <div className="form-card__group mx-0">
+        <div className={`form-card__group mx-0 ${hidePreferences && "border-b"}`}>
           <FieldValue
             testId={"app-summary-income-vouchers"}
             id="incomeVouchers"
@@ -468,7 +474,12 @@ const FormSummaryDetails = ({
               label={t("t.income")}
               className={"pb-4"}
             >
-              ${application.income} {t(`t.${application.incomePeriod}`)}
+              $
+              {parseFloat(application.income).toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}{" "}
+              {t(`t.${application.incomePeriod}`)}
             </FieldValue>
           )}
         </div>

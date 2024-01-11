@@ -4,12 +4,12 @@ import { mutate } from "swr"
 import {
   AgTable,
   useAgTable,
-  Button,
   t,
-  AppearanceStyleType,
   AlertBox,
+  Icon,
   UniversalIconType,
 } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { faFileExport } from "@fortawesome/free-solid-svg-icons"
 import { useUserList, useListingsData, useUsersExport } from "../../lib/hooks"
@@ -151,20 +151,25 @@ const UserDataTable = ({ setUserDrawer, drawerOpen }) => {
           <div className="flex-row">
             <Button
               className="mx-1"
-              styleType={AppearanceStyleType.primary}
+              variant="primary"
               onClick={() => setUserDrawer({ type: "add" })}
               disabled={!listingDtos}
-              dataTestId={"add-user"}
+              id={"add-user"}
             >
               {t("users.addUser")}
             </Button>
             {(profile?.roles?.isAdmin || profile?.roles?.isJurisdictionalAdmin) && (
               <Button
                 className="mx-1"
-                icon={!csvExportLoading ? (faFileExport as UniversalIconType) : null}
+                variant="primary-outlined"
+                leadIcon={
+                  !csvExportLoading ? (
+                    <Icon symbol={faFileExport as UniversalIconType} size="base" />
+                  ) : null
+                }
                 onClick={() => onExport()}
-                loading={csvExportLoading}
-                dataTestId={"export-users"}
+                loadingMessage={csvExportLoading && t("t.formSubmitted")}
+                id={"export-users"}
               >
                 {t("t.exportToCSV")}
               </Button>

@@ -1,9 +1,10 @@
 import React from "react"
-import { t, GridSection, GridCell, FieldGroup } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { t, FieldGroup } from "@bloom-housing/ui-components"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
 import { getInputType } from "@bloom-housing/shared-helpers"
 import { ListingMultiselectQuestion } from "@bloom-housing/backend-core"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type FormProgramsProps = {
   programs: ListingMultiselectQuestion[]
@@ -16,11 +17,12 @@ const FormPrograms = ({ programs }: FormProgramsProps) => {
   const { register } = formMethods
 
   return (
-    <GridSection title={t("application.details.programs")} separator grid={false}>
-      <GridSection columns={2}>
-        {programs?.map((listingProgram) => {
-          return (
-            <GridCell key={listingProgram?.multiselectQuestion?.text}>
+    <>
+      <hr className="spacer-section-above spacer-section" />
+      <SectionWithGrid heading={t("application.details.programs")}>
+        <Grid.Row columns={2}>
+          {programs?.map((listingProgram) => {
+            return (
               <FieldValue label={listingProgram?.multiselectQuestion?.text}>
                 <fieldset>
                   <FieldGroup
@@ -39,11 +41,11 @@ const FormPrograms = ({ programs }: FormProgramsProps) => {
                   />
                 </fieldset>
               </FieldValue>
-            </GridCell>
-          )
-        })}
-      </GridSection>
-    </GridSection>
+            )
+          })}
+        </Grid.Row>
+      </SectionWithGrid>
+    </>
   )
 }
 

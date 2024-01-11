@@ -4,21 +4,11 @@ import { YesNoAnswer } from "../../../../lib/helpers"
 import { getDetailFieldDate, getDetailFieldTime } from "../../PaperListingDetails/sections/helpers"
 import dayjs from "dayjs"
 
-import {
-  t,
-  GridSection,
-  DateField,
-  TimeField,
-  Drawer,
-  Button,
-  LinkButton,
-  AppearanceSizeType,
-  MinimalTable,
-  Modal,
-  AppearanceStyleType,
-} from "@bloom-housing/ui-components"
+import { t, DateField, TimeField, Drawer, MinimalTable, Modal } from "@bloom-housing/ui-components"
+import { Button, Link, Grid } from "@bloom-housing/ui-seeds"
 import { FormListing, TempEvent } from "../../../../lib/listings/formTypes"
 import { OpenHouseForm } from "../OpenHouseForm"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type ApplicationDatesProps = {
   openHouseEvents: TempEvent[]
@@ -48,30 +38,24 @@ const ApplicationDates = ({
         startTime: { content: startTime && getDetailFieldTime(startTime) },
         endTime: { content: endTime && getDetailFieldTime(endTime) },
         url: {
-          content: url?.length ? (
-            <LinkButton className="mx-0 my-0" href={url} unstyled>
-              {t("t.url")}
-            </LinkButton>
-          ) : (
-            t("t.n/a")
-          ),
+          content: url?.length ? <Link href={url}>{t("t.url")}</Link> : t("t.n/a"),
         },
         action: {
           content: (
-            <div className="flex">
+            <div className="flex gap-3">
               <Button
                 type="button"
-                className="front-semibold uppercase my-0"
+                className="font-semibold"
                 onClick={() => setDrawerOpenHouse(event)}
-                unstyled
+                variant="text"
               >
                 {t("t.edit")}
               </Button>
               <Button
                 type="button"
-                className="font-semibold uppercase text-alert my-0"
+                className="font-semibold text-alert"
                 onClick={() => setModalDeleteOpenHouse(event)}
-                unstyled
+                variant="text"
               >
                 {t("t.delete")}
               </Button>
@@ -117,66 +101,69 @@ const ApplicationDates = ({
 
   return (
     <>
-      <GridSection
-        grid={false}
-        separator
-        title={t("listings.sections.applicationDatesTitle")}
-        description={t("listings.sections.applicationDatesSubtitle")}
+      <hr className="spacer-section-above spacer-section" />
+      <SectionWithGrid
+        heading={t("listings.sections.applicationDatesTitle")}
+        subheading={t("listings.sections.applicationDatesSubtitle")}
       >
-        <GridSection columns={2}>
-          <DateField
-            label={t("listings.applicationDeadline")}
-            name={"applicationDueDateField"}
-            id={"applicationDueDateField"}
-            register={register}
-            watch={watch}
-            note={t("listings.whenApplicationsClose")}
-            disabled={enableDueDate === YesNoAnswer.No}
-            defaultDate={{
-              month: listing?.applicationDueDate
-                ? dayjs(new Date(listing?.applicationDueDate)).format("MM")
-                : null,
-              day: listing?.applicationDueDate
-                ? dayjs(new Date(listing?.applicationDueDate)).format("DD")
-                : null,
-              year: listing?.applicationDueDate
-                ? dayjs(new Date(listing?.applicationDueDate)).format("YYYY")
-                : null,
-            }}
-          />
-          <TimeField
-            label={t("listings.applicationDueTime")}
-            name={"applicationDueTimeField"}
-            id={"applicationDueTimeField"}
-            register={register}
-            watch={watch}
-            disabled={enableDueDate === YesNoAnswer.No}
-            defaultValues={{
-              hours: listing?.applicationDueDate
-                ? dayjs(new Date(listing?.applicationDueDate)).format("hh")
-                : enableDueDate === YesNoAnswer.No
-                ? null
-                : "05",
-              minutes: listing?.applicationDueDate
-                ? dayjs(new Date(listing?.applicationDueDate)).format("mm")
-                : enableDueDate === YesNoAnswer.No
-                ? null
-                : "00",
-              seconds: listing?.applicationDueDate
-                ? dayjs(new Date(listing?.applicationDueDate)).format("ss")
-                : enableDueDate === YesNoAnswer.No
-                ? null
-                : "00",
-              period: listing?.applicationDueDate
-                ? new Date(listing?.applicationDueDate).getHours() >= 12
-                  ? "pm"
-                  : "am"
-                : "pm",
-            }}
-          />
-        </GridSection>
-        <div className="mt-5">
-          <div className="bg-gray-300 px-4 py-5 mt-5">
+        <Grid.Row columns={2}>
+          <Grid.Cell>
+            <DateField
+              label={t("listings.applicationDeadline")}
+              name={"applicationDueDateField"}
+              id={"applicationDueDateField"}
+              register={register}
+              watch={watch}
+              note={t("listings.whenApplicationsClose")}
+              disabled={enableDueDate === YesNoAnswer.No}
+              defaultDate={{
+                month: listing?.applicationDueDate
+                  ? dayjs(new Date(listing?.applicationDueDate)).format("MM")
+                  : null,
+                day: listing?.applicationDueDate
+                  ? dayjs(new Date(listing?.applicationDueDate)).format("DD")
+                  : null,
+                year: listing?.applicationDueDate
+                  ? dayjs(new Date(listing?.applicationDueDate)).format("YYYY")
+                  : null,
+              }}
+            />
+          </Grid.Cell>
+          <Grid.Cell>
+            <TimeField
+              label={t("listings.applicationDueTime")}
+              name={"applicationDueTimeField"}
+              id={"applicationDueTimeField"}
+              register={register}
+              watch={watch}
+              disabled={enableDueDate === YesNoAnswer.No}
+              defaultValues={{
+                hours: listing?.applicationDueDate
+                  ? dayjs(new Date(listing?.applicationDueDate)).format("hh")
+                  : enableDueDate === YesNoAnswer.No
+                  ? null
+                  : "05",
+                minutes: listing?.applicationDueDate
+                  ? dayjs(new Date(listing?.applicationDueDate)).format("mm")
+                  : enableDueDate === YesNoAnswer.No
+                  ? null
+                  : "00",
+                seconds: listing?.applicationDueDate
+                  ? dayjs(new Date(listing?.applicationDueDate)).format("ss")
+                  : enableDueDate === YesNoAnswer.No
+                  ? null
+                  : "00",
+                period: listing?.applicationDueDate
+                  ? new Date(listing?.applicationDueDate).getHours() >= 12
+                    ? "pm"
+                    : "am"
+                  : "pm",
+              }}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Cell className="grid-inset-section">
             {!!openHouseTableData.length && (
               <div className="mb-5">
                 <MinimalTable headers={openHouseHeaders} data={openHouseTableData} />
@@ -186,14 +173,15 @@ const ApplicationDates = ({
             <Button
               id="addOpenHouseButton"
               type="button"
-              size={AppearanceSizeType.normal}
+              variant="primary-outlined"
+              size="sm"
               onClick={() => setDrawerOpenHouse(true)}
             >
               {t("listings.sections.addOpenHouse")}
             </Button>
-          </div>
-        </div>
-      </GridSection>
+          </Grid.Cell>
+        </Grid.Row>
+      </SectionWithGrid>
 
       <Drawer
         open={!!drawerOpenHouse}
@@ -214,9 +202,9 @@ const ApplicationDates = ({
         onClose={() => setModalDeleteOpenHouse(null)}
         actions={[
           <Button
-            styleType={AppearanceStyleType.alert}
+            variant="alert"
             onClick={() => onOpenHouseEventDelete(modalDeleteOpenHouse)}
-            size={AppearanceSizeType.small}
+            size="sm"
           >
             {t("t.delete")}
           </Button>,
@@ -224,7 +212,8 @@ const ApplicationDates = ({
             onClick={() => {
               setModalDeleteOpenHouse(null)
             }}
-            size={AppearanceSizeType.small}
+            variant="primary-outlined"
+            size="sm"
           >
             {t("t.cancel")}
           </Button>,

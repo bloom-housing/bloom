@@ -6,7 +6,6 @@ import customParseFormat from "dayjs/plugin/customParseFormat"
 dayjs.extend(customParseFormat)
 import { useForm } from "react-hook-form"
 import {
-  Button,
   Field,
   FormCard,
   Icon,
@@ -20,6 +19,7 @@ import {
   DOBField,
   DOBFieldValues,
 } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
 import Link from "next/link"
 import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
@@ -209,7 +209,9 @@ const Edit = () => {
                 readerOnly
               />
               <div className="text-center">
-                <Button className="items-center">{t("account.settings.update")}</Button>
+                <Button type="submit" variant="primary-outlined" className="items-center">
+                  {t("account.settings.update")}
+                </Button>
               </div>
             </div>
           </Form>
@@ -236,7 +238,9 @@ const Edit = () => {
                 label={t("application.name.yourDateOfBirth")}
               />
               <div className="text-center mt-5">
-                <Button className="items-center">{t("account.settings.update")}</Button>
+                <Button type="submit" variant="primary-outlined" className="items-center">
+                  {t("account.settings.update")}
+                </Button>
               </div>
             </div>
           </Form>
@@ -265,7 +269,9 @@ const Edit = () => {
                 defaultValue={profile ? profile.email : null}
               />
               <div className="text-center">
-                <Button className={"items-center"}>{t("account.settings.update")}</Button>
+                <Button type="submit" variant="primary-outlined" className={"items-center"}>
+                  {t("account.settings.update")}
+                </Button>
               </div>
             </div>
           </Form>
@@ -340,7 +346,9 @@ const Edit = () => {
                 </div>
 
                 <div className="text-center mt-5">
-                  <Button className={"items-center"}>{t("account.settings.update")}</Button>
+                  <Button type="submit" variant="primary-outlined" className={"items-center"}>
+                    {t("account.settings.update")}
+                  </Button>
                 </div>
               </fieldset>
             </div>

@@ -29,6 +29,7 @@ import { Listing } from "../../listings/entities/listing.entity"
 import { ApplicationCsvExporterService } from "./application-csv-exporter.service"
 import { User } from "../../auth/entities/user.entity"
 import { StatusDto } from "../../shared/dto/status.dto"
+import { GeocodingService } from "./geocoding.service"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationsService {
@@ -38,6 +39,7 @@ export class ApplicationsService {
     private readonly listingsService: ListingsService,
     private readonly emailService: EmailService,
     private readonly applicationCsvExporter: ApplicationCsvExporterService,
+    private readonly geocodingService: GeocodingService,
     @InjectRepository(Application) private readonly repository: Repository<Application>,
     @InjectRepository(Listing) private readonly listingsRepository: Repository<Listing>
   ) {}
@@ -255,7 +257,15 @@ export class ApplicationsService {
     return await this.repository.softRemove({ id: applicationId })
   }
 
-  async sendExport(queryParams: ApplicationsCsvListQueryParams): Promise<StatusDto> {
+  sendExport(queryParams: ApplicationsCsvListQueryParams): StatusDto {
+    void this.sendExportHelper(queryParams)
+
+    return {
+      status: "Success",
+    }
+  }
+
+  async sendExportHelper(queryParams: ApplicationsCsvListQueryParams): Promise<void> {
     const applications = await this.rawListWithFlagged(queryParams)
     const csvString = this.applicationCsvExporter.exportFromObject(
       applications,
@@ -269,9 +279,6 @@ export class ApplicationsService {
       listing.id,
       csvString
     )
-    return {
-      status: "Success",
-    }
   }
 
   private _getQb(params: PaginatedApplicationListQueryParams, view = "base", withSelect = true) {
@@ -415,6 +422,15 @@ export class ApplicationsService {
     const listing = await this.listingsService.findOne(applicationCreateDto.listing.id)
     if (application.applicant.emailAddress && shouldSendConfirmation) {
       await this.emailService.confirmation(listing, application, applicationCreateDto.appUrl)
+    }
+
+    // Calculate geocoding preferences after save and email sent
+    if (listing.jurisdiction?.enableGeocodingPreferences) {
+      try {
+        void this.geocodingService.validateGeocodingPreferences(application, listing)
+      } catch (e) {
+        console.warn("error while validating geocoding preferences")
+      }
     }
     return application
   }

@@ -1,21 +1,20 @@
 import React, { useState } from "react"
 import Markdown from "markdown-to-jsx"
-import { useForm } from "react-hook-form"
+
 import {
-  Button,
-  LinkButton,
-  AppearanceStyleType,
   Address,
   Heading,
   t,
   OrDivider,
   ContactAddress,
   Modal,
-  AppearanceSizeType,
   Form,
   FieldGroup,
 } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
+import { useForm } from "react-hook-form"
 import { downloadExternalPDF } from "../../lib/helpers"
+import { ListingStatus } from "@bloom-housing/backend-core"
 
 export interface PaperApplication {
   fileURL: string
@@ -41,7 +40,9 @@ export interface ApplicationsProps {
   paperMethod?: boolean
   /** The date mailed applications must be received by */
   postmarkedApplicationsReceivedByDate?: string
-  /** Whether or not to hide actionable application buttons */
+  /** Informs whether or not to hide actionable application buttons */
+  listingStatus?: string
+  /** Whether or not to block submission of test application */
   preview?: boolean
   strings?: {
     applicationsOpenInFuture?: string
@@ -59,8 +60,8 @@ const GetApplication = (props: ApplicationsProps) => {
   const showSection =
     props.onlineApplicationURL ||
     (props.applicationsOpen && props.paperMethod && !!props.paperApplications?.length)
+  const disableApplyButton = !props.preview && props.listingStatus !== ListingStatus.active
   const [showDownloadModal, setShowDownloadModal] = useState(false)
-
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
   const paperApplicationURL: string = watch(
@@ -85,22 +86,27 @@ const GetApplication = (props: ApplicationsProps) => {
         </p>
       )}
       {props.applicationsOpen && props.onlineApplicationURL && (
-        <>
-          {props.preview ? (
-            <Button disabled className="w-full mb-2" data-testid={"listing-view-apply-button"}>
+        <div style={{ boxSizing: "border-box" }}>
+          {disableApplyButton ? (
+            <Button
+              variant="primary-outlined"
+              className="w-full mb-2"
+              disabled
+              id={"listing-view-apply-button"}
+            >
               {props.strings?.applyOnline ?? t("listings.apply.applyOnline")}
             </Button>
           ) : (
-            <LinkButton
-              styleType={AppearanceStyleType.primary}
+            <Button
+              variant="primary"
               className="w-full mb-2"
               href={props.onlineApplicationURL}
-              dataTestId={"listing-view-apply-button"}
+              id={"listing-view-apply-button"}
             >
               {props.strings?.applyOnline ?? t("listings.apply.applyOnline")}
-            </LinkButton>
+            </Button>
           )}
-        </>
+        </div>
       )}
 
       {props.applicationsOpen && props.paperMethod && !!props.paperApplications?.length && (
@@ -110,13 +116,13 @@ const GetApplication = (props: ApplicationsProps) => {
             {props.strings?.getAPaperApplication ?? t("listings.apply.getAPaperApplication")}
           </div>
           <Button
+            variant="primary"
+            className="w-full mb-2"
             onClick={async () => {
               props.paperApplications.length === 1
                 ? await downloadExternalPDF(props.paperApplications[0].fileURL, props.listingName)
                 : setShowDownloadModal(true)
             }}
-            className={"w-full mb-2"}
-            styleType={AppearanceStyleType.primary}
           >
             {props.strings?.downloadApplication ?? t("listings.apply.downloadApplication")}
           </Button>
@@ -156,20 +162,21 @@ const GetApplication = (props: ApplicationsProps) => {
         onClose={() => setShowDownloadModal(false)}
         actions={[
           <Button
-            size={AppearanceSizeType.small}
+            variant="primary"
+            size="sm"
             onClick={async () => {
               await downloadExternalPDF(paperApplicationURL, props.listingName)
               setShowDownloadModal(false)
             }}
-            styleType={AppearanceStyleType.primary}
           >
             {t("t.download")}
           </Button>,
           <Button
+            variant="primary-outlined"
+            size="sm"
             onClick={() => {
               setShowDownloadModal(false)
             }}
-            size={AppearanceSizeType.small}
           >
             {t("t.cancel")}
           </Button>,

@@ -2,12 +2,8 @@ import React, { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import {
   t,
-  AppearanceStyleType,
-  Button,
   Drawer,
   Dropzone,
-  GridSection,
-  GridCell,
   FieldGroup,
   Field,
   MinimalTable,
@@ -16,8 +12,8 @@ import {
   PhoneField,
   PhoneMask,
   StandardTableData,
-  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
+import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
 import {
   cloudinaryFileUploader,
   fieldMessage,
@@ -30,6 +26,7 @@ import {
   Language,
 } from "@bloom-housing/backend-core/types"
 import { FormListing } from "../../../../lib/listings/formTypes"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 interface Methods {
   digital: ApplicationMethodCreate
@@ -123,7 +120,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
         content: (
           <Button
             type="button"
-            className="font-semibold uppercase text-alert my-0"
+            className="font-semibold text-alert"
             onClick={() => {
               setCloudinaryData({
                 id: "",
@@ -131,7 +128,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               })
               setProgressValue(0)
             }}
-            unstyled
+            variant="text"
           >
             {t("t.delete")}
           </Button>
@@ -191,14 +188,13 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   register("applicationMethods")
   return (
     <>
-      <GridSection
-        grid={false}
-        separator
-        title={t("listings.sections.applicationTypesTitle")}
-        description={t("listings.sections.applicationTypesSubtitle")}
+      <hr className="spacer-section-above spacer-section" />
+      <SectionWithGrid
+        heading={t("listings.sections.applicationTypesTitle")}
+        subheading={t("listings.sections.applicationTypesSubtitle")}
       >
-        <GridSection columns={2}>
-          <GridCell>
+        <Grid.Row columns={2}>
+          <Grid.Cell>
             <p
               className={`field-label m-4 ml-0 ${
                 fieldHasError(errors?.digitalApplication) &&
@@ -248,9 +244,9 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 },
               ]}
             />
-          </GridCell>
+          </Grid.Cell>
           {digitalApplicationChoice === YesNoAnswer.Yes && (
-            <GridCell>
+            <Grid.Cell>
               <p className="field-label m-4 ml-0">{t("listings.usingCommonDigitalApplication")}</p>
 
               <FieldGroup
@@ -294,17 +290,17 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   },
                 ]}
               />
-            </GridCell>
+            </Grid.Cell>
           )}
-        </GridSection>
+        </Grid.Row>
         {((commonDigitalApplicationChoice &&
           commonDigitalApplicationChoice === YesNoAnswer.No &&
           digitalApplicationChoice === YesNoAnswer.Yes) ||
           (digitalApplicationChoice === YesNoAnswer.Yes &&
             !commonDigitalApplicationChoice &&
             listing?.commonDigitalApplication === false)) && (
-          <GridSection columns={1}>
-            <GridCell>
+          <Grid.Row columns={1}>
+            <Grid.Cell>
               <Field
                 label={t("listings.customOnlineApplicationUrl")}
                 name="customOnlineApplicationUrl"
@@ -327,12 +323,12 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 error={fieldHasError(errors?.applicationMethods?.[0]?.externalReference)}
                 errorMessage={fieldMessage(errors?.applicationMethods?.[0]?.externalReference)}
               />
-            </GridCell>
-          </GridSection>
+            </Grid.Cell>
+          </Grid.Row>
         )}
 
-        <GridSection columns={2}>
-          <GridCell>
+        <Grid.Row columns={2}>
+          <Grid.Cell>
             <p
               className={`field-label m-4 ml-0 ${
                 fieldHasError(errors?.paperApplication) &&
@@ -382,11 +378,11 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 },
               ]}
             />
-          </GridCell>
-        </GridSection>
+          </Grid.Cell>
+        </Grid.Row>
         {paperApplicationChoice === YesNoAnswer.Yes && (
-          <GridSection columns={1} tinted inset>
-            <GridCell>
+          <Grid.Row columns={1}>
+            <Grid.Cell>
               {methods.paper?.paperApplications?.length > 0 && (
                 <MinimalTable
                   className="mb-8"
@@ -399,7 +395,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                         <div className="flex">
                           <Button
                             type="button"
-                            className="font-semibold uppercase text-alert my-0"
+                            className="font-semibold text-alert"
                             onClick={() => {
                               const items = methods.paper.paperApplications.filter(
                                 (paperApp) => item !== paperApp
@@ -413,7 +409,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                                 },
                               })
                             }}
-                            unstyled
+                            variant="text"
                           >
                             {t("t.delete")}
                           </Button>
@@ -425,6 +421,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               )}
               <Button
                 type="button"
+                variant="primary-outlined"
                 onClick={() => {
                   // default the application to English:
                   setSelectedLanguage(Language.en)
@@ -433,12 +430,12 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               >
                 {t("listings.addPaperApplication")}
               </Button>
-            </GridCell>
-          </GridSection>
+            </Grid.Cell>
+          </Grid.Row>
         )}
 
-        <GridSection columns={1}>
-          <GridCell>
+        <Grid.Row columns={1}>
+          <Grid.Cell>
             <p
               className={`field-label m-4 ml-0 ${
                 fieldHasError(errors?.referralOpportunity) &&
@@ -490,11 +487,11 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 },
               ]}
             />
-          </GridCell>
-        </GridSection>
+          </Grid.Cell>
+        </Grid.Row>
         {referralOpportunityChoice === YesNoAnswer.Yes && (
-          <GridSection columns={3}>
-            <GridCell>
+          <Grid.Row columns={3}>
+            <Grid.Cell>
               <PhoneField
                 label={t("listings.referralContactPhone")}
                 name="referralContactPhone"
@@ -518,8 +515,8 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 )}
                 controlClassName={"control"}
               />
-            </GridCell>
-            <GridCell span={2}>
+            </Grid.Cell>
+            <Grid.Cell className="seeds-grid-span-2">
               <Textarea
                 label={t("listings.referralSummary")}
                 rows={3}
@@ -541,10 +538,10 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   },
                 }}
               />
-            </GridCell>
-          </GridSection>
+            </Grid.Cell>
+          </Grid.Row>
         )}
-      </GridSection>
+      </SectionWithGrid>
 
       <Drawer
         open={drawerState}
@@ -558,8 +555,8 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               savePaperApplication()
               resetDrawerState()
             }}
-            styleType={AppearanceStyleType.primary}
-            size={AppearanceSizeType.small}
+            variant="primary"
+            size="sm"
           >
             Save
           </Button>,
@@ -568,48 +565,51 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             onClick={() => {
               resetDrawerState()
             }}
-            size={AppearanceSizeType.small}
+            variant="primary-outlined"
+            size="sm"
           >
             Cancel
           </Button>,
         ]}
       >
-        <section className="border rounded-md p-8 bg-white">
-          {cloudinaryData.url === "" && (
-            <div className="field">
-              <p className="mb-2">
-                <label className="label">{t("t.language")}</label>
-              </p>
-              <Select
-                name="paperApplicationLanguage"
-                options={Object.values(Language).map((item) => ({
-                  label: t(`languages.${item}`),
-                  value: item,
-                }))}
-                defaultValue={selectedLanguage}
-                inputProps={{
-                  onChange: (e) => {
-                    setSelectedLanguage(e.target.value)
-                  },
-                }}
-              />
-            </div>
-          )}
-          <Dropzone
-            id="listing-paper-application-upload"
-            label={t("t.uploadFile")}
-            helptext={t("listings.pdfHelperText")}
-            uploader={pdfUploader}
-            accept="application/pdf"
-            progress={progressValue}
-          />
-          {cloudinaryData.url !== "" && (
-            <MinimalTable
-              headers={paperApplicationsTableHeaders}
-              data={previewPaperApplicationsTableRows}
-            ></MinimalTable>
-          )}
-        </section>
+        <Card spacing="lg" className="spacer-section">
+          <Card.Section>
+            {cloudinaryData.url === "" && (
+              <div className="field">
+                <p className="mb-2">
+                  <label className="label">{t("t.language")}</label>
+                </p>
+                <Select
+                  name="paperApplicationLanguage"
+                  options={Object.values(Language).map((item) => ({
+                    label: t(`languages.${item}`),
+                    value: item,
+                  }))}
+                  defaultValue={selectedLanguage}
+                  inputProps={{
+                    onChange: (e) => {
+                      setSelectedLanguage(e.target.value)
+                    },
+                  }}
+                />
+              </div>
+            )}
+            <Dropzone
+              id="listing-paper-application-upload"
+              label={t("t.uploadFile")}
+              helptext={t("listings.pdfHelperText")}
+              uploader={pdfUploader}
+              accept="application/pdf"
+              progress={progressValue}
+            />
+            {cloudinaryData.url !== "" && (
+              <MinimalTable
+                headers={paperApplicationsTableHeaders}
+                data={previewPaperApplicationsTableRows}
+              ></MinimalTable>
+            )}
+          </Card.Section>
+        </Card>
       </Drawer>
     </>
   )

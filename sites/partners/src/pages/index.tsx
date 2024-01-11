@@ -1,15 +1,13 @@
 import React, { useMemo, useContext, useState, useEffect } from "react"
 import Head from "next/head"
+import { Button } from "@bloom-housing/ui-seeds"
 import {
   t,
-  Button,
-  LocalizedLink,
   AgTable,
   useAgTable,
-  AppearanceSizeType,
   AlertBox,
   SiteAlert,
-  AppearanceStyleType,
+  Icon,
   UniversalIconType,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
@@ -206,24 +204,27 @@ export default function ListingsList() {
               <div className="flex-row">
                 {isAdmin && (
                   <div className="flex-row">
-                    <LocalizedLink href={`/listings/add`}>
-                      <Button
-                        size={AppearanceSizeType.small}
-                        className="mx-1"
-                        styleType={AppearanceStyleType.primary}
-                        onClick={() => false}
-                        dataTestId={"addListingButton"}
-                      >
-                        {t("listings.addListing")}
-                      </Button>
-                    </LocalizedLink>
+                    <Button
+                      size="sm"
+                      className="mx-1"
+                      variant="primary"
+                      href="/listings/add"
+                      id="addListingButton"
+                    >
+                      {t("listings.addListing")}
+                    </Button>
                     <Button
                       className="mx-1"
-                      dataTestId="export-listings"
+                      id="export-listings"
+                      variant="primary-outlined"
                       onClick={() => onExport()}
-                      icon={!zipExportLoading ? (faFileExport as UniversalIconType) : null}
-                      size={AppearanceSizeType.small}
-                      loading={zipExportLoading}
+                      leadIcon={
+                        !zipExportLoading ? (
+                          <Icon symbol={faFileExport as UniversalIconType} size="base" />
+                        ) : null
+                      }
+                      size="sm"
+                      loadingMessage={zipExportLoading && t("t.formSubmitted")}
                     >
                       {t("t.exportToCSV")}
                     </Button>

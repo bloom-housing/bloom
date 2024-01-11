@@ -1,18 +1,11 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react"
-import {
-  t,
-  GridSection,
-  MinimalTable,
-  Button,
-  AppearanceSizeType,
-  Drawer,
-  AppearanceStyleType,
-  Field,
-  StandardTableData,
-} from "@bloom-housing/ui-components"
+import { t, MinimalTable, Drawer, Field, StandardTableData } from "@bloom-housing/ui-components"
+import { Button, Card, Grid, Tag, Icon } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
 import { ApplicationSection, MultiselectQuestion } from "@bloom-housing/backend-core/types"
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons"
 import LinkComponent from "../../../../components/core/LinkComponent"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type SelectAndOrderSection = MultiselectQuestion
 
@@ -83,20 +76,31 @@ const SelectAndOrder = ({
     [draftListingData]
   )
 
+  const additionalFieldsTag = () => (
+    <Tag variant="primary">
+      <Icon icon={faInfoCircle} /> {t("listings.providesAdditionalFields")}
+    </Tag>
+  )
+
   const draggableTableData: StandardTableData = useMemo(
     () =>
       draftListingData.map((item) => ({
         name: { content: item.text },
+        additionalFields: {
+          content: (
+            <>{item?.options.some((item) => item.collectAddress) && additionalFieldsTag()}</>
+          ),
+        },
         action: {
           content: (
             <div className="flex">
               <Button
                 type="button"
-                className="front-semibold uppercase text-alert my-0"
+                className="font-semibold text-alert"
                 onClick={() => {
                   deleteItem(item, false)
                 }}
-                unstyled
+                variant="text"
               >
                 {t("t.delete")}
               </Button>
@@ -112,16 +116,21 @@ const SelectAndOrder = ({
       listingData.map((item, index) => ({
         order: { content: index + 1 },
         name: { content: item.text },
+        additionalFields: {
+          content: (
+            <>{item?.options.some((item) => item.collectAddress) && additionalFieldsTag()}</>
+          ),
+        },
         action: {
           content: (
             <div className="flex">
               <Button
                 type="button"
-                className="front-semibold uppercase text-alert my-0"
+                className="font-semibold text-alert"
                 onClick={() => {
                   deleteItem(item, true)
                 }}
-                unstyled
+                variant="text"
               >
                 {t("t.delete")}
               </Button>
@@ -153,11 +162,17 @@ const SelectAndOrder = ({
   const formTableHeaders = {
     order: "t.order",
     name: "t.name",
+    ...(formKey === "preference" && {
+      additionalFields: "settings.preferenceAdditionalFields",
+    }),
     action: "",
   }
 
   const draggableTableHeaders = {
     name: "t.name",
+    ...(formKey === "preference" && {
+      additionalFields: "settings.preferenceAdditionalFields",
+    }),
     action: "",
   }
 
@@ -196,11 +211,19 @@ const SelectAndOrder = ({
               })}
             </div>
           )}
+          {option.collectAddress && (
+            <div className={`${isNotLastItem ? "-mt-4" : "mt-0"}`}>
+              ({t("listings.providesAdditionalFields.info")})
+            </div>
+          )}
         </div>
       )
     }
     return (
-      <div className="ml-8 -mt-4 md:-mt-12 mb-4 text-sm">
+      <div className="ml-8 -mt-6 mb-4 text-sm">
+        {item.options.some((option) => option.collectAddress) && (
+          <div className="mt-6 mb-2">{additionalFieldsTag()}</div>
+        )}
         <div>
           <button
             onClick={() => {
@@ -229,25 +252,28 @@ const SelectAndOrder = ({
 
   return (
     <>
-      <GridSection title={title} description={subtitle} grid={false} separator>
-        <div className="bg-gray-300 px-4 py-5">
-          {!!listingData.length && (
-            <div className="mb-5">
-              <MinimalTable headers={formTableHeaders} data={formTableData} />
-            </div>
-          )}
+      <hr className="spacer-section-above spacer-section" />
+      <SectionWithGrid heading={title} subheading={subtitle} inset>
+        <Grid.Row>
+          <Grid.Cell>
+            {!!listingData.length && (
+              <div className="mb-5">
+                <MinimalTable headers={formTableHeaders} data={formTableData} />
+              </div>
+            )}
 
-          <Button
-            id={`add-${applicationSection}-button`}
-            type="button"
-            size={AppearanceSizeType.normal}
-            onClick={() => setTableDrawer(true)}
-          >
-            {listingData.length ? editText : addText}
-          </Button>
-        </div>
-        {subNote && <p className="field-sub-note">{subNote}</p>}
-      </GridSection>
+            <Button
+              id={`add-${applicationSection}-button`}
+              type="button"
+              variant="primary-outlined"
+              onClick={() => setTableDrawer(true)}
+            >
+              {listingData.length ? editText : addText}
+            </Button>
+            {subNote && <p className="field-sub-note">{subNote}</p>}
+          </Grid.Cell>
+        </Grid.Row>
+      </SectionWithGrid>
 
       <Drawer
         open={!!tableDrawer}
@@ -272,7 +298,7 @@ const SelectAndOrder = ({
           )}
           <Button
             type="button"
-            size={AppearanceSizeType.normal}
+            variant="primary-outlined"
             onClick={() => {
               setSelectDrawer(true)
             }}
@@ -283,8 +309,8 @@ const SelectAndOrder = ({
         <Button
           type="button"
           className={"mt-4"}
-          styleType={AppearanceStyleType.primary}
-          size={AppearanceSizeType.small}
+          variant="primary"
+          size="sm"
           onClick={() => {
             setListingData(draftListingData)
             setTableDrawer(null)
@@ -304,38 +330,43 @@ const SelectAndOrder = ({
         }}
         className={"drawer__small"}
       >
-        <div className="border rounded-md p-8 bg-white">
-          {jurisdiction
-            ? fetchedData.map((item, index) => {
-                const previewShown = openPreviews.some((preview) => preview === index)
-                return (
-                  <GridSection columns={1} key={index} className={"md:-mb-6"}>
-                    <Field
-                      className={"font-semibold"}
-                      id={`${formKey}.${item.id}`}
-                      name={`${formKey}.${item.id}`}
-                      type="checkbox"
-                      label={item.text}
-                      register={register}
-                      inputProps={{
-                        defaultChecked: draftListingData.some(
-                          (existingItem) => existingItem.text === item.text
-                        ),
-                      }}
-                    />
-                    {getPreviewSection(previewShown, index, item)}
-                  </GridSection>
-                )
-              })
-            : t("listings.selectJurisdiction")}
-        </div>
+        <Card>
+          <Card.Section>
+            {jurisdiction
+              ? fetchedData.map((item, index) => {
+                  const previewShown = openPreviews.some((preview) => preview === index)
+                  return (
+                    <Grid key={index}>
+                      <Grid.Row>
+                        <Grid.Cell>
+                          <Field
+                            className={"font-semibold"}
+                            id={`${formKey}.${item.id}`}
+                            name={`${formKey}.${item.id}`}
+                            type="checkbox"
+                            label={item.text}
+                            register={register}
+                            inputProps={{
+                              defaultChecked: draftListingData.some(
+                                (existingItem) => existingItem.text === item.text
+                              ),
+                            }}
+                          />
+                          {getPreviewSection(previewShown, index, item)}
+                        </Grid.Cell>
+                      </Grid.Row>
+                    </Grid>
+                  )
+                })
+              : t("listings.selectJurisdiction")}
+          </Card.Section>
+        </Card>
         {jurisdiction && (
           <Button
             id="addPreferenceSaveButton"
             type="button"
             className={"mt-4"}
-            styleType={AppearanceStyleType.primary}
-            size={AppearanceSizeType.normal}
+            variant="primary"
             onClick={() => {
               const formData = getValues()
               const formItems = []

@@ -1,12 +1,6 @@
 /* eslint-env node */
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-const withTM = require("next-transpile-modules")([
-  "@bloom-housing/ui-seeds",
-  "@bloom-housing/shared-helpers",
-  "@bloom-housing/ui-components",
-  "@bloom-housing/backend-core",
-])
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 })
@@ -34,41 +28,44 @@ const HOUSING_COUNSELOR_SERVICE_URL = process.env.HOUSING_COUNSELOR_SERVICE_URL
 const bloomTheme = require("./tailwind.config.js")
 const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(bloomTheme)
 
-// Tell webpack to compile the ui components package
-// https://www.npmjs.com/package/next-transpile-modules
-module.exports = withBundleAnalyzer(
-  withTM({
-    env: {
-      backendApiBase: BACKEND_API_BASE,
-      listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
-      listingPhotoSize: process.env.LISTING_PHOTO_SIZE || "1302",
-      mapBoxToken: MAPBOX_TOKEN,
-      housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL,
-      gtmKey: process.env.GTM_KEY || null,
-      idleTimeout: process.env.IDLE_TIMEOUT,
-      jurisdictionName: process.env.JURISDICTION_NAME,
-      cacheRevalidate: process.env.CACHE_REVALIDATE ? Number(process.env.CACHE_REVALIDATE) : 60,
-      cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
-    },
-    i18n: {
-      locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],
-      defaultLocale: "en",
-    },
-    sassOptions: {
-      additionalData: tailwindVars,
-    },
-    webpack: (config) => {
-      config.module.rules.push({
-        test: /\.md$/,
-        type: "asset/source",
-      })
+module.exports = withBundleAnalyzer({
+  env: {
+    backendApiBase: BACKEND_API_BASE,
+    listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
+    listingPhotoSize: process.env.LISTING_PHOTO_SIZE || "1302",
+    mapBoxToken: MAPBOX_TOKEN,
+    housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL,
+    gtmKey: process.env.GTM_KEY || null,
+    idleTimeout: process.env.IDLE_TIMEOUT,
+    jurisdictionName: process.env.JURISDICTION_NAME,
+    cacheRevalidate: process.env.CACHE_REVALIDATE ? Number(process.env.CACHE_REVALIDATE) : 60,
+    cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
+    showMandatedAccounts: process.env.SHOW_MANDATED_ACCOUNTS === "TRUE",
+  },
+  i18n: {
+    locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],
+    defaultLocale: "en",
+  },
+  sassOptions: {
+    additionalData: tailwindVars,
+  },
+  transpilePackages: [
+    "@bloom-housing/ui-seeds",
+    "@bloom-housing/shared-helpers",
+    "@bloom-housing/ui-components",
+    "@bloom-housing/backend-core",
+  ],
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.md$/,
+      type: "asset/source",
+    })
 
-      return config
-    },
-    // Uncomment line below before building when using symlink for UI-C
-    // experimental: { esmExternals: "loose" },
-  })
-)
+    return config
+  },
+  // Uncomment line below before building when using symlink for UI-C
+  // experimental: { esmExternals: "loose" },
+})
 
 if (process.env.SENTRY_ORG) {
   // Injected content via Sentry wizard below

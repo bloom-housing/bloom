@@ -1,23 +1,9 @@
-/*
-5.2 Summary
-Display a summary of application fields with edit links per section
-*/
 import React, { useContext, useEffect, useState } from "react"
-import {
-  AppearanceStyleType,
-  Button,
-  FormCard,
-  t,
-  Form,
-  ProgressNav,
-  Heading,
-  AlertBox,
-  setSiteAlertMessage,
-} from "@bloom-housing/ui-components"
-import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
-import { useFormConductor } from "../../../lib/hooks"
+import { useRouter } from "next/router"
+import { Alert, Button } from "@bloom-housing/ui-seeds"
+import { Form, setSiteAlertMessage, t } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   OnClientSide,
   PageView,
@@ -25,9 +11,17 @@ import {
   AuthContext,
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
+import {
+  ApplicationReviewStatus,
+  ApplicationSection,
+  ListingStatus,
+} from "@bloom-housing/backend-core"
+import FormsLayout from "../../../layouts/forms"
+import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
+import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import { ApplicationReviewStatus, ApplicationSection } from "@bloom-housing/backend-core"
-import { useRouter } from "next/router"
+import ApplicationFormLayout from "../../../layouts/application-form"
+import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationSummary = () => {
   const router = useRouter()
@@ -39,7 +33,6 @@ const ApplicationSummary = () => {
   if (listingSectionQuestions(listing, ApplicationSection.preferences)?.length)
     currentPageSection += 1
 
-  /* Form Handler */
   const { handleSubmit } = useForm()
 
   useEffect(() => {
@@ -51,9 +44,11 @@ const ApplicationSummary = () => {
   }, [profile])
 
   useEffect(() => {
-    if (listing?.status === "closed") {
-      setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
-      void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
+    if (listing && router.isReady) {
+      if (listing?.status !== ListingStatus.active) {
+        setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
+        void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
+      }
     }
   }, [listing, router])
 
@@ -85,59 +80,61 @@ const ApplicationSummary = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard>
-        <div className="form-card__lead">
-          <h2 className="form-card__title is-borderless">
-            {t("application.review.takeAMomentToReview")}
-          </h2>
-        </div>
-        {validationError && (
-          <AlertBox type="alert" inverted>
-            {t("errors.alert.applicationSubmissionVerificationError")}
-          </AlertBox>
-        )}
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={t("application.review.takeAMomentToReview")}
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: OnClientSide(),
+          }}
+          backLink={{
+            url: conductor.determinePreviousUrl(),
+          }}
+          hideBorder={true}
+        >
+          {validationError && (
+            <Alert
+              className={styles["message-inside-card"]}
+              variant="alert"
+              fullwidth
+              id={"application-alert-box"}
+            >
+              {t("errors.alert.applicationSubmissionVerificationError")}
+            </Alert>
+          )}
 
-        <FormSummaryDetails
-          application={application}
-          listing={listing}
-          hidePreferences={
-            listingSectionQuestions(listing, ApplicationSection.preferences)?.length === 0
-          }
-          hidePrograms={listingSectionQuestions(listing, ApplicationSection.programs)?.length === 0}
-          editMode
-          validationError={validationError}
-        />
+          <FormSummaryDetails
+            application={application}
+            listing={listing}
+            hidePreferences={
+              listingSectionQuestions(listing, ApplicationSection.preferences)?.length === 0
+            }
+            hidePrograms={
+              listingSectionQuestions(listing, ApplicationSection.programs)?.length === 0
+            }
+            editMode
+            validationError={validationError}
+          />
 
-        <div className="form-card__group">
-          <p className="field-note text-gray-800 text-center">
-            {t("application.review.lastChanceToEdit")}
-          </p>
-        </div>
+          <CardSection divider={"flush"} className={"border-none"}>
+            <p className="field-note text-gray-800">{t("application.review.lastChanceToEdit")}</p>
+          </CardSection>
 
-        <div className="form-card__pager">
-          <div className="form-card__pager-row primary">
-            <Form onSubmit={handleSubmit(onSubmit)}>
-              <Button
-                styleType={
-                  validationError ? AppearanceStyleType.closed : AppearanceStyleType.primary
-                }
-                data-testid={"app-summary-confirm"}
-                disabled={validationError}
-              >
-                {t("t.confirm")}
-              </Button>
-            </Form>
-          </div>
-        </div>
-      </FormCard>
+          <CardSection className={"bg-primary-lighter"}>
+            <Button
+              variant={"primary"}
+              id={"app-summary-confirm"}
+              disabled={validationError}
+              type={"submit"}
+            >
+              {t("t.confirm")}
+            </Button>
+          </CardSection>
+        </ApplicationFormLayout>
+      </Form>
     </FormsLayout>
   )
 }

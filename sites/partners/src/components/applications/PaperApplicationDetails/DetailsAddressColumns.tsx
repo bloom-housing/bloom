@@ -1,4 +1,4 @@
-import { t, GridCell } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 import {
   Application,
   HouseholdMemberUpdate,
@@ -12,6 +12,7 @@ type DetailsAddressColumnsProps = {
   application?: Application
   addressObject?: AddressCreate
   householdMember?: HouseholdMemberUpdate
+  small?: boolean
   dataTestId?: string
 }
 
@@ -30,6 +31,7 @@ const DetailsAddressColumns = ({
   application,
   addressObject,
   householdMember,
+  small,
   dataTestId,
 }: DetailsAddressColumnsProps) => {
   const address = {
@@ -90,38 +92,41 @@ const DetailsAddressColumns = ({
 
   return (
     <>
-      <GridCell>
-        <FieldValue
-          label={t("application.contact.streetAddress")}
-          testId={`${dataTestId}.streetAddress`}
-        >
-          {address.street}
-        </FieldValue>
-      </GridCell>
+      <FieldValue
+        className={small && "seeds-grid-span-3"}
+        label={t("application.contact.streetAddress")}
+        testId={`${dataTestId}.streetAddress`}
+      >
+        {address.street}
+      </FieldValue>
 
-      <GridCell span={2}>
-        <FieldValue label={t("application.contact.apt")} testId={`${dataTestId}.street2`}>
-          {address.street2}
-        </FieldValue>
-      </GridCell>
+      <FieldValue
+        className={small ? "seeds-grid-span-3" : "seeds-grid-span-2"}
+        label={t("application.contact.apt")}
+        testId={`${dataTestId}.street2`}
+      >
+        {address.street2}
+      </FieldValue>
 
-      <GridCell>
-        <FieldValue label={t("application.contact.city")} testId={`${dataTestId}.city`}>
-          {address.city}
-        </FieldValue>
-      </GridCell>
+      <FieldValue
+        className={small && "seeds-grid-span-2"}
+        label={t("application.contact.city")}
+        testId={`${dataTestId}.city`}
+      >
+        {address.city}
+      </FieldValue>
 
-      <GridCell>
-        <FieldValue label={t("application.contact.state")} testId={`${dataTestId}.state`}>
-          {address.state}
-        </FieldValue>
-      </GridCell>
+      <FieldValue label={t("application.contact.state")} testId={`${dataTestId}.state`}>
+        {address.state}
+      </FieldValue>
 
-      <GridCell>
-        <FieldValue label={t("application.contact.zip")} testId={`${dataTestId}.zipCode`}>
-          {address.zipCode}
-        </FieldValue>
-      </GridCell>
+      <FieldValue
+        className={small && "seeds-grid-span-3"}
+        label={t("application.contact.zip")}
+        testId={`${dataTestId}.zipCode`}
+      >
+        {address.zipCode}
+      </FieldValue>
     </>
   )
 }
