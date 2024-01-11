@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useRef, useState, useCallback } from "react"
 import { useForm } from "react-hook-form"
 import { t, setSiteAlertMessage, useMutate, FormSignIn } from "@bloom-housing/ui-components"
-import FormsLayout from "../layouts/forms"
 import { useRedirectToPrevPage } from "../lib/hooks"
+import { faStopwatch, faEye, faLock } from "@fortawesome/free-solid-svg-icons"
+
 import {
   PageView,
   pushGtmEvent,
@@ -14,7 +15,9 @@ import {
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import { EnumUserErrorExtraModelUserErrorMessages } from "@bloom-housing/backend-core/types"
-import SignUpBenefits from "../components/account/SignUpBenefits"
+// import SignUpBenefits from "../components/account/SignUpBenefits"
+import { HeadingGroup, Icon } from "@bloom-housing/ui-seeds"
+import FormLayout from "../layouts/forms"
 
 const SignIn = () => {
   const { login, userService } = useContext(AuthContext)
@@ -126,28 +129,73 @@ const SignIn = () => {
     }
   }, [networkError])
 
+  const iconListItems = [
+    { icon: faStopwatch, text: "Apply faster with saved application details" },
+    { icon: faEye, text: "Check on the status of an application at any time" },
+    { icon: faLock, text: "Simply reset your password if you forget it" },
+  ]
+
   return (
     <>
-      <FormsLayout>
-        <div className="flex flex-row w-max">
-          <FormSignIn
-            onSubmit={(data) => void onSubmit(data)}
-            control={{ register, errors, handleSubmit, watch }}
-            networkStatus={{
-              content: networkStatusContent,
-              type: networkStatusType,
-              reset: () => {
-                reset()
-                resetNetworkError()
-                setConfirmationStatusMessage(undefined)
-              },
-            }}
-            showRegisterBtn={true}
+      <FormLayout className="sm:max-w-lg md:max-w-full">
+        <div className="flex flex-col md:flex-row">
+          <HeadingGroup
+            heading={"Sign up quickly and check application status at anytime"}
+            subheading={
+              "Having an account will save you time by using saved application details, and allow you to check the status of an application at anytime."
+            }
+            size="xl"
+            className="p-4 -order-1 md:hidden"
           />
-          <SignUpBenefits />
-        </div>
-      </FormsLayout>
+          <div className="grow-1 shrink-0 w-full md:ml-20">
+            <FormSignIn
+              onSubmit={(data) => void onSubmit(data)}
+              control={{ register, errors, handleSubmit, watch }}
+              networkStatus={{
+                content: networkStatusContent,
+                type: networkStatusType,
+              }}
+            />
+          </div>
 
+          <ul className="flex flex-col p-4 md:hidden">
+            {iconListItems.map((item) => (
+              <li className="flex flex-row mb-2 items-center">
+                <Icon
+                  icon={item.icon}
+                  size="xl"
+                  className="border border-white bg-white rounded-full p-2.5"
+                  key={item.text}
+                />
+                <p className="ml-2">{item.text}</p>
+              </li>
+            ))}
+          </ul>
+          <div className="hidden md:display md:flex md:flex-col grow-0 shrink-1 p-5">
+            <HeadingGroup
+              heading={"Sign up quickly and check application status at anytime"}
+              subheading={
+                "Having an account will save you time by using saved application details, and allow you to check the status of an application at anytime."
+              }
+              size="xl"
+              className=""
+            />
+            <ul className="flex flex-col">
+              {iconListItems.map((item) => (
+                <li className="flex flex-row mb-2 items-center">
+                  <Icon
+                    icon={item.icon}
+                    size="xl"
+                    className="border border-white bg-white rounded-full p-2.5"
+                    key={item.text}
+                  />
+                  <p className="ml-2">{item.text}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </FormLayout>
       <ResendConfirmationModal
         isOpen={confirmationStatusModal}
         onClose={() => {
