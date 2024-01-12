@@ -162,20 +162,16 @@ export class ApplicationCsvExporterService {
                   parsePreference = true;
                 }
 
+                if (acc === null || acc === undefined) {
+                  return '';
+                }
+
                 // handles working with arrays, e.g. householdMember.0.firstName
-                console.log(curr);
                 if (!isNaN(Number(curr))) {
-                  console.log(isNaN(Number(curr)));
-                  console.log(acc);
-                  console.log(Number(curr));
-                  console.log('------');
                   const index = Number(curr);
                   return acc[index];
                 }
 
-                if (acc === null || acc === undefined) {
-                  return '';
-                }
                 return acc[curr];
               }, app);
               value = value === undefined ? '' : value === null ? '' : value;
