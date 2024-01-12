@@ -86,7 +86,10 @@ export class ApplicationController {
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationCsvQueryParams,
   ): Promise<StreamableFile> {
-    return await this.applicationCsvExportService.export(queryParams, req);
+    return await this.applicationCsvExportService.export(
+      queryParams,
+      mapTo(User, req['user']),
+    );
   }
 
   @Get(`:applicationId`)

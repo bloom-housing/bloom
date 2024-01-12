@@ -1,4 +1,5 @@
 import { randomUUID } from 'crypto';
+import { PassThrough } from 'stream';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
 import { PrismaService } from '../../../src/services/prisma.service';
@@ -13,10 +14,14 @@ import { InputType } from '../../../src/enums/shared/input-type-enum';
 import { UnitType } from 'src/dtos/unit-types/unit-type.dto';
 import { Address } from '../../../src/dtos/addresses/address.dto';
 import { ApplicationFlaggedSet } from '../../../src/dtos/application-flagged-sets/application-flagged-set.dto';
+import { User } from '../../../src/dtos/users/user.dto';
+import { mockApplicationSet } from './application.service.spec';
+import { mockMultiselectQuestion } from './multiselect-question.service.spec';
 
-describe('Testing ami chart service', () => {
+describe('Testing application CSV export service', () => {
   let service: ApplicationCsvExporterService;
   let address: Address;
+  let prisma: PrismaService;
   const csvHeaders: CsvHeader[] = [
     {
       path: 'id',
@@ -247,6 +252,7 @@ describe('Testing ami chart service', () => {
     service = module.get<ApplicationCsvExporterService>(
       ApplicationCsvExporterService,
     );
+    prisma = module.get<PrismaService>(PrismaService);
 
     address = {
       id: randomUUID(),
@@ -258,6 +264,7 @@ describe('Testing ami chart service', () => {
       state: 'State',
       zipCode: '67890',
     };
+
     const multiselectQuestions: MultiselectQuestion[] = [
       {
         id: randomUUID(),
@@ -399,7 +406,7 @@ describe('Testing ami chart service', () => {
     expect(JSON.stringify(headers)).toEqual(JSON.stringify(testHeaders));
   });
 
-  it('tests getCsvHeaders with houshold members and no  multiselect questions or demographics', async () => {
+  it('tests getCsvHeaders with household members and no multiselect questions or demographics', async () => {
     const headers = await service.getCsvHeaders(3, []);
     const testHeaders = [
       ...csvHeaders,
@@ -421,5 +428,112 @@ describe('Testing ami chart service', () => {
       },
     ];
     expect(JSON.stringify(headers)).toEqual(JSON.stringify(testHeaders));
+  });
+
+  it('should build csv headers without demographics', async () => {
+    const requestingUser = {
+      firstName: 'requesting fName',
+      lastName: 'requesting lName',
+      email: 'requestingUser@email.com',
+      jurisdictions: [{ id: 'juris id' }],
+    } as unknown as User;
+
+    prisma.applications.findMany = jest
+      .fn()
+      .mockReturnValue(mockApplicationSet(5, new Date()));
+
+    prisma.multiselectQuestions.findMany = jest.fn().mockReturnValue([
+      {
+        ...mockMultiselectQuestion(
+          0,
+          new Date(),
+          MultiselectQuestionsApplicationSectionEnum.preferences,
+        ),
+        options: [
+          { id: 1, text: 'text' },
+          { id: 2, text: 'text', collectAddress: true },
+        ],
+      },
+      {
+        ...mockMultiselectQuestion(
+          1,
+          new Date(),
+          MultiselectQuestionsApplicationSectionEnum.programs,
+        ),
+        options: [{ id: 1, text: 'text' }],
+      },
+    ]);
+
+    service.unitTypeToReadable = jest.fn().mockReturnValue('Studio');
+
+    const exportResponse = await service.export(
+      { listingId: 'test', includeDemographics: false },
+      requestingUser,
+    );
+
+    const headerRow = `Application Id,Application Confirmation Code,Application Type,Application Submission Date,Primary Applicant First Name,Primary Applicant Middle Name,Primary Applicant Last Name,Primary Applicant Birth Day,Primary Applicant Birth Month,Primary Applicant Birth Year,Primary Applicant Email Address,Primary Applicant Phone Number,Primary Applicant Phone Type,Primary Applicant Additional Phone Number,Primary Applicant Preferred Contact Type,Primary Applicant Street,Primary Applicant Street 2,Primary Applicant City,Primary Applicant State,Primary Applicant Zip Code,Primary Applicant Mailing Street,Primary Applicant Mailing Street 2,Primary Applicant Mailing City,Primary Applicant Mailing State,Primary Applicant Mailing Zip Code,Primary Applicant Work Street,Primary Applicant Work Street 2,Primary Applicant Work City,Primary Applicant Work State,Primary Applicant Work Zip Code,Alternate Contact First Name,Alternate Contact Middle Name,Alternate Contact Last Name,Alternate Contact Type,Alternate Contact Agency,Alternate Contact Other Type,Alternate Contact Email Address,Alternate Contact Phone Number,Alternate Contact Street,Alternate Contact Street 2,Alternate Contact City,Alternate Contact State,Alternate Contact Zip Code,Income,Income Period,Accessibility Mobility,Accessibility Vision,Accessibility Hearing,Expecting Household Changes,Household Includes Student or Member Nearing 18,Vouchers or Subsidies,Requested Unit Types,Preference text 0,Preference text 0 - Address,Household Size,Marked As Duplicate,Flagged As Duplicate`;
+
+    const firstApp = `application 0 firstName,application 0 middleName,application 0 lastName,application 0 birthDay,application 0 birthMonth,application 0 birthYear,application 0 emailaddress,application 0 phoneNumber,application 0 phoneNumberType,additionalPhoneNumber 0,,application 0 applicantAddress street,application 0 applicantAddress street2,application 0 applicantAddress city,application 0 applicantAddress state,application 0 applicantAddress zipCode,,,,,,application 0 applicantWorkAddress street,application 0 applicantWorkAddress street2,application 0 applicantWorkAddress city,application 0 applicantWorkAddress state,application 0 applicantWorkAddress zipCode,,,,,,,,,,,,,,income 0,per month,,,,true,true,true,Studio,Studio,,,0,false,false`;
+
+    const mockedStream = new PassThrough();
+    exportResponse.getStream().pipe(mockedStream);
+    let readable;
+    mockedStream.on('data', async (d) => {
+      readable = Buffer.from(d).toString();
+      await expect(readable).toContain(headerRow);
+      await expect(readable).toContain(firstApp);
+      mockedStream.end();
+      mockedStream.destroy();
+    });
+  });
+
+  it('should build csv headers with demographics', async () => {
+    const requestingUser = {
+      firstName: 'requesting fName',
+      lastName: 'requesting lName',
+      email: 'requestingUser@email.com',
+      jurisdictions: [{ id: 'juris id' }],
+    } as unknown as User;
+
+    const apps = mockApplicationSet(3, new Date());
+
+    prisma.applications.findMany = jest.fn().mockReturnValue(apps);
+
+    prisma.multiselectQuestions.findMany = jest
+      .fn()
+      .mockReturnValue([
+        mockMultiselectQuestion(
+          0,
+          new Date(),
+          MultiselectQuestionsApplicationSectionEnum.preferences,
+        ),
+        mockMultiselectQuestion(
+          1,
+          new Date(),
+          MultiselectQuestionsApplicationSectionEnum.programs,
+        ),
+      ]);
+
+    service.unitTypeToReadable = jest.fn().mockReturnValue('Studio');
+
+    const exportResponse = await service.export(
+      { listingId: 'test', includeDemographics: true },
+      requestingUser,
+    );
+
+    const headerRow = `Application Id,Application Confirmation Code,Application Type,Application Submission Date,Primary Applicant First Name,Primary Applicant Middle Name,Primary Applicant Last Name,Primary Applicant Birth Day,Primary Applicant Birth Month,Primary Applicant Birth Year,Primary Applicant Email Address,Primary Applicant Phone Number,Primary Applicant Phone Type,Primary Applicant Additional Phone Number,Primary Applicant Preferred Contact Type,Primary Applicant Street,Primary Applicant Street 2,Primary Applicant City,Primary Applicant State,Primary Applicant Zip Code,Primary Applicant Mailing Street,Primary Applicant Mailing Street 2,Primary Applicant Mailing City,Primary Applicant Mailing State,Primary Applicant Mailing Zip Code,Primary Applicant Work Street,Primary Applicant Work Street 2,Primary Applicant Work City,Primary Applicant Work State,Primary Applicant Work Zip Code,Alternate Contact First Name,Alternate Contact Middle Name,Alternate Contact Last Name,Alternate Contact Type,Alternate Contact Agency,Alternate Contact Other Type,Alternate Contact Email Address,Alternate Contact Phone Number,Alternate Contact Street,Alternate Contact Street 2,Alternate Contact City,Alternate Contact State,Alternate Contact Zip Code,Income,Income Period,Accessibility Mobility,Accessibility Vision,Accessibility Hearing,Expecting Household Changes,Household Includes Student or Member Nearing 18,Vouchers or Subsidies,Requested Unit Types,Preference text 0,Household Size,Marked As Duplicate,Flagged As Duplicate,Ethnicity,Race,How did you Hear?`;
+
+    const firstApp = `application 0 firstName,application 0 middleName,application 0 lastName,application 0 birthDay,application 0 birthMonth,application 0 birthYear,application 0 emailaddress,application 0 phoneNumber,application 0 phoneNumberType,additionalPhoneNumber 0,,application 0 applicantAddress street,application 0 applicantAddress street2,application 0 applicantAddress city,application 0 applicantAddress state,application 0 applicantAddress zipCode,,,,,,application 0 applicantWorkAddress street,application 0 applicantWorkAddress street2,application 0 applicantWorkAddress city,application 0 applicantWorkAddress state,application 0 applicantWorkAddress zipCode,,,,,,,,,,,,,,income 0,per month,,,,true,true,true,Studio,Studio,,0,false,false,,Decline to Respond`;
+
+    const mockedStream = new PassThrough();
+    exportResponse.getStream().pipe(mockedStream);
+    let readable;
+    mockedStream.on('data', async (d) => {
+      readable = Buffer.from(d).toString();
+      await expect(readable).toContain(headerRow);
+      await expect(readable).toContain(firstApp);
+      mockedStream.end();
+      mockedStream.destroy();
+    });
   });
 });
