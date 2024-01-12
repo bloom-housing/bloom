@@ -72,182 +72,307 @@ export default () => {
 
   return (
     <FormsLayout>
-      <FormCard>
-        <div className="form-card__lead text-center border-b mx-0">
-          <Icon size="2xl" symbol="profile" />
-          <h1 className="form-card__title">{t("account.createAccount")}</h1>
-          {requestError && (
-            <AlertBox className="" onClose={() => setRequestError(undefined)} type="alert">
-              {requestError}
-            </AlertBox>
-          )}
-          <SiteAlert type="notice" dismissable />
-        </div>
-
-        <Form id="create-account" onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-card__group border-b">
-            <label className="text__caps-spaced" htmlFor="firstName">
-              {t("application.name.yourName")}
-            </label>
-
-            <Field
-              controlClassName="mt-2"
-              name="firstName"
-              placeholder={t("application.name.firstName")}
-              validation={{ required: true, maxLength: 64 }}
-              error={errors.firstName}
-              errorMessage={
-                errors.firstName?.type === "maxLength"
-                  ? t("errors.maxLength")
-                  : t("errors.firstNameError")
-              }
-              register={register}
-            />
-
-            <Field
-              name="middleName"
-              placeholder={t("application.name.middleNameOptional")}
-              register={register}
-              label={t("application.name.middleNameOptional")}
-              readerOnly
-              error={errors.middleName}
-              validation={{ maxLength: 64 }}
-              errorMessage={t("errors.maxLength")}
-            />
-
-            <Field
-              name="lastName"
-              placeholder={t("application.name.lastName")}
-              validation={{ required: true, maxLength: 64 }}
-              error={errors.lastName}
-              register={register}
-              label={t("application.name.lastName")}
-              errorMessage={
-                errors.lastName?.type === "maxLength"
-                  ? t("errors.maxLength")
-                  : t("errors.lastNameError")
-              }
-              readerOnly
-            />
+      {process.env.showMandatedAccounts ? (
+        <FormCard>
+          <div className="form-card__lead text-center border-b mx-0">
+            <Icon size="2xl" symbol="profile" />
+            <h1 className="form-card__title">{t("account.createAccount.title")}</h1>
+            {requestError && (
+              <AlertBox className="" onClose={() => setRequestError(undefined)} type="alert">
+                {requestError}
+              </AlertBox>
+            )}
+            <SiteAlert type="notice" dismissable />
           </div>
+          <Form id="create-account" onSubmit={handleSubmit(onSubmit)}>
+            <div className="form-card__group border-b">
+              <label className="text__caps-spaced" htmlFor="firstName">
+                {t("application.name.yourName")}
+              </label>
 
-          <div className="form-card__group border-b">
-            <DOBField
-              register={register}
-              required={true}
-              error={errors.dob}
-              name="dob"
-              id="dob"
-              watch={watch}
-              validateAge18={true}
-              errorMessage={t("errors.dateOfBirthErrorAge")}
-              label={t("application.name.yourDateOfBirth")}
-            />
-          </div>
+              <Field
+                controlClassName="mt-2"
+                name="givenName"
+                placeholder={t("application.name.givenName")}
+                validation={{ required: true, maxLength: 64 }}
+                error={errors.givenName}
+                errorMessage={
+                  errors.givenName?.type === "maxLength"
+                    ? t("errors.maxLength")
+                    : t("errors.firstNameError")
+                }
+                register={register}
+              />
 
-          <div className="form-card__group border-b">
-            <Field
-              caps={true}
-              type="email"
-              name="email"
-              label={t("t.email")}
-              placeholder="example@web.com"
-              validation={{ required: true, pattern: emailRegex }}
-              error={errors.email}
-              errorMessage={t("authentication.signIn.loginError")}
-              register={register}
-            />
-            <p className="text text-gray-750 text-sm pb-2">
-              {t("authentication.createAccount.reEnterEmail")}
-            </p>
-            <Field
-              type="email"
-              name="emailConfirmation"
-              placeholder="example@web.com"
-              validation={{
-                validate: (value) =>
-                  value === email.current || t("authentication.createAccount.errors.emailMismatch"),
-              }}
-              onPaste={(e) => {
-                e.preventDefault()
-                e.nativeEvent.stopImmediatePropagation()
-                return false
-              }}
-              onDrop={(e) => {
-                e.preventDefault()
-                e.nativeEvent.stopImmediatePropagation()
-                return false
-              }}
-              error={errors.emailConfirmation}
-              errorMessage={t("authentication.createAccount.errors.emailMismatch")}
-              register={register}
-              label={t("authentication.createAccount.reEnterEmail")}
-              readerOnly
-            />
-          </div>
+              <Field
+                name="middleName"
+                placeholder={t("application.name.middleNameOptional")}
+                register={register}
+                label={t("application.name.middleNameOptional")}
+                readerOnly
+                error={errors.middleName}
+                validation={{ maxLength: 64 }}
+                errorMessage={t("errors.maxLength")}
+              />
 
-          <div className="form-card__group border-b">
-            <Field
-              caps={true}
-              type="password"
-              name="password"
-              note={t("authentication.createAccount.passwordInfo")}
-              label={t("authentication.createAccount.password")}
-              placeholder={t("authentication.createAccount.mustBe8Chars")}
-              validation={{
-                required: true,
-                minLength: 8,
-                pattern: passwordRegex,
-              }}
-              error={errors.password}
-              errorMessage={t("authentication.signIn.passwordError")}
-              register={register}
-            />
-            <p className="text text-gray-750 text-sm pb-2">
-              {t("authentication.createAccount.reEnterPassword")}
-            </p>
-            <Field
-              type="password"
-              name="passwordConfirmation"
-              placeholder={t("authentication.createAccount.mustBe8Chars")}
-              validation={{
-                validate: (value) =>
-                  value === password.current ||
-                  t("authentication.createAccount.errors.passwordMismatch"),
-              }}
-              onPaste={(e) => {
-                e.preventDefault()
-                e.nativeEvent.stopImmediatePropagation()
-                return false
-              }}
-              onDrop={(e) => {
-                e.preventDefault()
-                e.nativeEvent.stopImmediatePropagation()
-                return false
-              }}
-              error={errors.passwordConfirmation}
-              errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
-              register={register}
-              label={t("authentication.createAccount.reEnterPassword")}
-              readerOnly
-            />
-
-            <div className="text-center mt-10">
-              <Button type="submit" variant="primary">
-                {t("account.createAccount")}
-              </Button>
+              <Field
+                name="familyName"
+                placeholder={t("application.name.familyName")}
+                validation={{ required: true, maxLength: 64 }}
+                error={errors.familyName}
+                register={register}
+                label={t("application.name.familyName")}
+                errorMessage={
+                  errors.familyName?.type === "maxLength"
+                    ? t("errors.maxLength")
+                    : t("errors.lastNameError")
+                }
+                readerOnly
+              />
             </div>
+
+            <div className="form-card__group border-b">
+              <DOBField
+                register={register}
+                required={true}
+                error={errors.dob}
+                name="dob"
+                id="dob"
+                watch={watch}
+                validateAge18={true}
+                errorMessage={t("errors.dateOfBirthErrorAge")}
+                label={t("application.name.yourDateOfBirth")}
+              />
+              <p className={"field-sub-note"}>{t("application.name.yourDateOfBirthExample")}</p>
+            </div>
+
+            <div className="form-card__group border-b">
+              <Field
+                caps={true}
+                type="email"
+                name="email"
+                label={t("application.name.yourEmailAddress")}
+                validation={{ required: true, pattern: emailRegex }}
+                error={errors.email}
+                errorMessage={t("authentication.signIn.loginError")}
+                register={register}
+              />
+            </div>
+            <div className="form-card__group border-b">
+              <Field
+                caps={true}
+                type="password"
+                name="password"
+                note={t("authentication.createAccount.passwordInfo")}
+                label={t("authentication.createAccount.passwordCreate")}
+                validation={{
+                  required: true,
+                  minLength: 8,
+                  pattern: passwordRegex,
+                }}
+                error={errors.password}
+                errorMessage={t("authentication.signIn.passwordError")}
+                register={register}
+              />
+              <Field
+                type="checkbox"
+                name="showPassword"
+                label={t("authentication.createAccount.passwordShow")}
+                register={register}
+              />
+              <div className="text-center mt-10">
+                <Button type="submit" variant="primary">
+                  {t("account.createAccount.label")}
+                </Button>
+              </div>
+            </div>
+          </Form>
+          <div className="form-card__group text-center">
+            <h2 className="mb-6">{t("account.haveAnAccount")}</h2>
+
+            <Button variant="primary-outlined" href="/sign-in">
+              {t("nav.signIn")}
+            </Button>
           </div>
-        </Form>
+        </FormCard>
+      ) : (
+        <FormCard>
+          <div className="form-card__lead text-center border-b mx-0">
+            <Icon size="2xl" symbol="profile" />
+            <h1 className="form-card__title">{t("account.createAccount")}</h1>
+            {requestError && (
+              <AlertBox className="" onClose={() => setRequestError(undefined)} type="alert">
+                {requestError}
+              </AlertBox>
+            )}
+            <SiteAlert type="notice" dismissable />
+          </div>
+          <Form id="create-account" onSubmit={handleSubmit(onSubmit)}>
+            <div className="form-card__group border-b">
+              <label className="text__caps-spaced" htmlFor="firstName">
+                {t("application.name.yourName")}
+              </label>
 
-        <div className="form-card__group text-center">
-          <h2 className="mb-6">{t("account.haveAnAccount")}</h2>
+              <Field
+                controlClassName="mt-2"
+                name="firstName"
+                placeholder={t("application.name.firstName")}
+                validation={{ required: true, maxLength: 64 }}
+                error={errors.firstName}
+                errorMessage={
+                  errors.firstName?.type === "maxLength"
+                    ? t("errors.maxLength")
+                    : t("errors.firstNameError")
+                }
+                register={register}
+              />
 
-          <Button variant="primary-outlined" href="/sign-in">
-            {t("nav.signIn")}
-          </Button>
-        </div>
-      </FormCard>
+              <Field
+                name="middleName"
+                placeholder={t("application.name.middleNameOptional")}
+                register={register}
+                label={t("application.name.middleNameOptional")}
+                readerOnly
+                error={errors.middleName}
+                validation={{ maxLength: 64 }}
+                errorMessage={t("errors.maxLength")}
+              />
+
+              <Field
+                name="lastName"
+                placeholder={t("application.name.lastName")}
+                validation={{ required: true, maxLength: 64 }}
+                error={errors.lastName}
+                register={register}
+                label={t("application.name.lastName")}
+                errorMessage={
+                  errors.lastName?.type === "maxLength"
+                    ? t("errors.maxLength")
+                    : t("errors.lastNameError")
+                }
+                readerOnly
+              />
+            </div>
+
+            <div className="form-card__group border-b">
+              <DOBField
+                register={register}
+                required={true}
+                error={errors.dob}
+                name="dob"
+                id="dob"
+                watch={watch}
+                validateAge18={true}
+                errorMessage={t("errors.dateOfBirthErrorAge")}
+                label={t("application.name.yourDateOfBirth")}
+              />
+            </div>
+
+            <div className="form-card__group border-b">
+              <Field
+                caps={true}
+                type="email"
+                name="email"
+                label={t("t.email")}
+                placeholder="example@web.com"
+                validation={{ required: true, pattern: emailRegex }}
+                error={errors.email}
+                errorMessage={t("authentication.signIn.loginError")}
+                register={register}
+              />
+              <p className="text text-gray-750 text-sm pb-2">
+                {t("authentication.createAccount.reEnterEmail")}
+              </p>
+              <Field
+                type="email"
+                name="emailConfirmation"
+                placeholder="example@web.com"
+                validation={{
+                  validate: (value) =>
+                    value === email.current ||
+                    t("authentication.createAccount.errors.emailMismatch"),
+                }}
+                onPaste={(e) => {
+                  e.preventDefault()
+                  e.nativeEvent.stopImmediatePropagation()
+                  return false
+                }}
+                onDrop={(e) => {
+                  e.preventDefault()
+                  e.nativeEvent.stopImmediatePropagation()
+                  return false
+                }}
+                error={errors.emailConfirmation}
+                errorMessage={t("authentication.createAccount.errors.emailMismatch")}
+                register={register}
+                label={t("authentication.createAccount.reEnterEmail")}
+                readerOnly
+              />
+            </div>
+
+            <div className="form-card__group border-b">
+              <Field
+                caps={true}
+                type="password"
+                name="password"
+                note={t("authentication.createAccount.passwordInfo")}
+                label={t("authentication.createAccount.password")}
+                placeholder={t("authentication.createAccount.mustBe8Chars")}
+                validation={{
+                  required: true,
+                  minLength: 8,
+                  pattern: passwordRegex,
+                }}
+                error={errors.password}
+                errorMessage={t("authentication.signIn.passwordError")}
+                register={register}
+              />
+              <p className="text text-gray-750 text-sm pb-2">
+                {t("authentication.createAccount.reEnterPassword")}
+              </p>
+              <Field
+                type="password"
+                name="passwordConfirmation"
+                placeholder={t("authentication.createAccount.mustBe8Chars")}
+                validation={{
+                  validate: (value) =>
+                    value === password.current ||
+                    t("authentication.createAccount.errors.passwordMismatch"),
+                }}
+                onPaste={(e) => {
+                  e.preventDefault()
+                  e.nativeEvent.stopImmediatePropagation()
+                  return false
+                }}
+                onDrop={(e) => {
+                  e.preventDefault()
+                  e.nativeEvent.stopImmediatePropagation()
+                  return false
+                }}
+                error={errors.passwordConfirmation}
+                errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
+                register={register}
+                label={t("authentication.createAccount.reEnterPassword")}
+                readerOnly
+              />
+
+              <div className="text-center mt-10">
+                <Button type="submit" variant="primary">
+                  {t("account.createAccount")}
+                </Button>
+              </div>
+            </div>
+          </Form>
+
+          <div className="form-card__group text-center">
+            <h2 className="mb-6">{t("account.haveAnAccount")}</h2>
+
+            <Button variant="primary-outlined" href="/sign-in">
+              {t("nav.signIn")}
+            </Button>
+          </div>
+        </FormCard>
+      )}
       <Modal
         open={openModal}
         title={t("authentication.createAccount.confirmationNeeded")}
