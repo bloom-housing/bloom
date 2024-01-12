@@ -34,6 +34,7 @@ export default () => {
   const language = router.locale
   const email = useRef({})
   const password = useRef({})
+  const [passwordShown, setPasswordShown] = useState(false)
   email.current = watch("email", "")
   password.current = watch("password", "")
 
@@ -74,7 +75,7 @@ export default () => {
     <FormsLayout>
       {process.env.showMandatedAccounts ? (
         <FormCard>
-          <div className="form-card__lead text-center border-b mx-0">
+          <div className="form-card__lead">
             <Icon size="2xl" symbol="profile" />
             <h1 className="form-card__title">{t("account.createAccount.title")}</h1>
             {requestError && (
@@ -161,7 +162,7 @@ export default () => {
             <div className="form-card__group border-b">
               <Field
                 caps={true}
-                type="password"
+                type={passwordShown ? "text" : "password"}
                 name="password"
                 note={t("authentication.createAccount.passwordInfo")}
                 label={t("authentication.createAccount.passwordCreate")}
@@ -179,6 +180,11 @@ export default () => {
                 name="showPassword"
                 label={t("authentication.createAccount.passwordShow")}
                 register={register}
+                inputProps={{
+                  onChange: () => {
+                    setPasswordShown(!passwordShown)
+                  },
+                }}
               />
               <div className="text-center mt-10">
                 <Button type="submit" variant="primary">
