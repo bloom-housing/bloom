@@ -221,7 +221,7 @@ export class ApplicationCsvExporterService {
       : 0;
   }
 
-  getHousholdCsvHeaders(maxHouseholdMembers: number): CsvHeader[] {
+  getHouseholdCsvHeaders(maxHouseholdMembers: number): CsvHeader[] {
     const headers = [];
     for (let i = 0; i < maxHouseholdMembers; i++) {
       const j = i + 1;
@@ -547,7 +547,7 @@ export class ApplicationCsvExporterService {
 
     // add household member headers to csv
     if (maxHouseholdMembers) {
-      headers.push(...this.getHousholdCsvHeaders(maxHouseholdMembers));
+      headers.push(...this.getHouseholdCsvHeaders(maxHouseholdMembers));
     }
 
     headers.push(
