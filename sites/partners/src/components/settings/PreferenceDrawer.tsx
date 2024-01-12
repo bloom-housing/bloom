@@ -695,13 +695,6 @@ const PreferenceDrawer = ({
                     <FieldValue label={t("settings.preferenceValidatingAddress.selectMapLayer")}>
                       <p className={s.helperText}>
                         {t("settings.preferenceValidatingAddress.selectMapLayerDescription")}
-                        {` `}
-                        <a
-                          className="text-blue-500 underline whitespace-nowrap"
-                          href="mailto:bloom@exygy.dev"
-                        >
-                          {t("t.contactUs")}
-                        </a>
                       </p>
                       <Select
                         id={"mapLayerId"}
