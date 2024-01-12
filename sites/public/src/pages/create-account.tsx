@@ -99,7 +99,7 @@ export default () => {
                 errorMessage={
                   errors.givenName?.type === "maxLength"
                     ? t("errors.maxLength")
-                    : t("errors.firstNameError")
+                    : t("errors.givenNameError")
                 }
                 register={register}
               />
@@ -125,7 +125,7 @@ export default () => {
                 errorMessage={
                   errors.familyName?.type === "maxLength"
                     ? t("errors.maxLength")
-                    : t("errors.lastNameError")
+                    : t("errors.familyNameError")
                 }
                 readerOnly
               />
