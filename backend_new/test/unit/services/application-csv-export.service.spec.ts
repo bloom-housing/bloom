@@ -438,9 +438,8 @@ describe('Testing application CSV export service', () => {
       jurisdictions: [{ id: 'juris id' }],
     } as unknown as User;
 
-    prisma.applications.findMany = jest
-      .fn()
-      .mockReturnValue(mockApplicationSet(5, new Date()));
+    const applications = mockApplicationSet(5, new Date());
+    prisma.applications.findMany = jest.fn().mockReturnValue(applications);
 
     prisma.multiselectQuestions.findMany = jest.fn().mockReturnValue([
       {
@@ -495,9 +494,9 @@ describe('Testing application CSV export service', () => {
       jurisdictions: [{ id: 'juris id' }],
     } as unknown as User;
 
-    const apps = mockApplicationSet(3, new Date());
-
-    prisma.applications.findMany = jest.fn().mockReturnValue(apps);
+    const applications = mockApplicationSet(3, new Date());
+    prisma.applications.findMany = jest.fn().mockReturnValue(applications);
+    console.log(applications);
 
     prisma.multiselectQuestions.findMany = jest
       .fn()
