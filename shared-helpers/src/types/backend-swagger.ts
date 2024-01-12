@@ -255,6 +255,22 @@ export class ListingsService {
     })
   }
   /**
+   * Trigger the listing process job
+   */
+  process(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/process"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Get listings by multiselect question id
    */
   retrieveListings(
@@ -2249,7 +2265,7 @@ export interface UnitAccessibilityPriorityType {
   updatedAt: Date
 
   /**  */
-  name: UnitAccessibilityPriorityTypeEnum
+  name: string
 }
 
 export interface UnitAmiChartOverride {
@@ -3325,7 +3341,7 @@ export interface ListingCreate {
   applicationMethods?: ApplicationMethodCreate[]
 
   /**  */
-  assets: AssetCreate[]
+  assets?: AssetCreate[]
 
   /**  */
   unitsSummary: UnitsSummaryCreate[]
@@ -3573,7 +3589,7 @@ export interface ListingUpdate {
   applicationMethods?: ApplicationMethodCreate[]
 
   /**  */
-  assets: AssetCreate[]
+  assets?: AssetCreate[]
 
   /**  */
   unitsSummary: UnitsSummaryCreate[]
@@ -4123,7 +4139,7 @@ export interface UnitTypeUpdate {
 
 export interface UnitAccessibilityPriorityTypeCreate {
   /**  */
-  name: UnitAccessibilityPriorityTypeEnum
+  name: string
 }
 
 export interface UnitAccessibilityPriorityTypeUpdate {
@@ -4131,7 +4147,7 @@ export interface UnitAccessibilityPriorityTypeUpdate {
   id: string
 
   /**  */
-  name: UnitAccessibilityPriorityTypeEnum
+  name: string
 }
 
 export interface UnitRentTypeCreate {
@@ -4478,6 +4494,9 @@ export interface HouseholdMemberUpdate {
 
   /**  */
   workInRegion?: YesNoEnum
+
+  /**  */
+  id?: string
 
   /**  */
   householdMemberAddress: AddressCreate
@@ -4999,16 +5018,6 @@ export enum UnitTypeEnum {
 export enum UnitRentTypeEnum {
   "fixed" = "fixed",
   "percentageOfIncome" = "percentageOfIncome",
-}
-
-export enum UnitAccessibilityPriorityTypeEnum {
-  "mobility" = "mobility",
-  "mobilityAndHearing" = "mobilityAndHearing",
-  "hearing" = "hearing",
-  "visual" = "visual",
-  "hearingAndVisual" = "hearingAndVisual",
-  "mobilityAndVisual" = "mobilityAndVisual",
-  "mobilityHearingAndVisual" = "mobilityHearingAndVisual",
 }
 export enum EnumJurisdictionListingApprovalPermissions {
   "user" = "user",

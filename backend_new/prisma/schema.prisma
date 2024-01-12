@@ -95,7 +95,6 @@ model AmiChart {
   name               String               @db.VarChar
   jurisdictionId     String               @map("jurisdiction_id") @db.Uuid
   jurisdictions      Jurisdictions        @relation(fields: [jurisdictionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  amiChartItem       AmiChartItem[]
   unitGroupAmiLevels UnitGroupAmiLevels[]
   units              Units[]
 
@@ -300,13 +299,9 @@ model HouseholdMember {
   birthMonth                 String?       @map("birth_month")
   birthDay                   String?       @map("birth_day")
   birthYear                  String?       @map("birth_year")
-  emailAddress               String?       @map("email_address")
-  phoneNumber                String?       @map("phone_number")
-  phoneNumberType            String?       @map("phone_number_type")
-  noPhone                    Boolean?      @map("no_phone")
-  sameAddress                YesNoEnum     @map("same_address")
+  sameAddress                YesNoEnum?    @map("same_address")
   relationship               String?
-  workInRegion               YesNoEnum     @map("work_in_region")
+  workInRegion               YesNoEnum?    @map("work_in_region")
   addressId                  String?       @unique() @map("address_id") @db.Uuid
   workAddressId              String?       @unique() @map("work_address_id") @db.Uuid
   applicationId              String?       @map("application_id") @db.Uuid
@@ -649,7 +644,7 @@ model UnitAccessibilityPriorityTypes {
   id           String                            @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt    DateTime                          @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt    DateTime                          @updatedAt @map("updated_at") @db.Timestamp(6)
-  name         UnitAccessibilityPriorityTypeEnum
+  name         String
   units        Units[]
   unitGroup    UnitGroup[]
   unitsSummary UnitsSummary[]
@@ -805,18 +800,6 @@ model UserRoles {
   @@map("user_roles")
 }
 
-model AmiChartItem {
-  id            String    @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt     DateTime  @default(now()) @map("updated_at") @db.Timestamp(6)
-  percentOfAmi  Int       @map("percent_of_ami")
-  householdSize Int       @map("household_size")
-  income        Int
-  amiChartId    String?   @map("ami_chart_id") @db.Uuid
-  amiChart      AmiChart? @relation(fields: [amiChartId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@map("ami_chart_item")
-}
 
 // START DETROIT SPECIFIC
 model ListingNeighborhoodAmenities {
@@ -1065,16 +1048,4 @@ enum UnitTypeEnum {
   fiveBdrm
 
   @@map("unit_type_enum")
-}
-
-enum UnitAccessibilityPriorityTypeEnum {
-  mobility
-  mobilityAndHearing
-  hearing
-  visual
-  hearingAndVisual
-  mobilityAndVisual
-  mobilityHearingAndVisual
-
-  @@map("unit_accessibility_priority_type_enum")
 }

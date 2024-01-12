@@ -486,7 +486,6 @@ describe('Testing listing service', () => {
             amiChart: {
               include: {
                 jurisdictions: true,
-                amiChartItem: true,
                 unitGroupAmiLevels: true,
               },
             },
@@ -590,11 +589,7 @@ describe('Testing listing service', () => {
           include: {
             unitTypes: true,
             unitAmiChartOverrides: true,
-            amiChart: {
-              include: {
-                amiChartItem: true,
-              },
-            },
+            amiChart: true,
           },
         },
       },
@@ -770,11 +765,7 @@ describe('Testing listing service', () => {
           include: {
             unitTypes: true,
             unitAmiChartOverrides: true,
-            amiChart: {
-              include: {
-                amiChartItem: true,
-              },
-            },
+            amiChart: true,
           },
         },
       },
@@ -842,7 +833,6 @@ describe('Testing listing service', () => {
             amiChart: {
               include: {
                 jurisdictions: true,
-                amiChartItem: true,
                 unitGroupAmiLevels: true,
               },
             },
@@ -1073,11 +1063,7 @@ describe('Testing listing service', () => {
           include: {
             unitTypes: true,
             unitAmiChartOverrides: true,
-            amiChart: {
-              include: {
-                amiChartItem: true,
-              },
-            },
+            amiChart: true,
           },
         },
       },
@@ -1471,11 +1457,7 @@ describe('Testing listing service', () => {
           include: {
             unitTypes: true,
             unitAmiChartOverrides: true,
-            amiChart: {
-              include: {
-                amiChartItem: true,
-              },
-            },
+            amiChart: true,
           },
         },
       },
@@ -1589,7 +1571,6 @@ describe('Testing listing service', () => {
           include: {
             amiChart: {
               include: {
-                amiChartItem: true,
                 jurisdictions: true,
                 unitGroupAmiLevels: true,
               },
@@ -1687,7 +1668,6 @@ describe('Testing listing service', () => {
           include: {
             amiChart: {
               include: {
-                amiChartItem: true,
                 jurisdictions: true,
                 unitGroupAmiLevels: true,
               },
@@ -2123,7 +2103,6 @@ describe('Testing listing service', () => {
           include: {
             amiChart: {
               include: {
-                amiChartItem: true,
                 jurisdictions: true,
                 unitGroupAmiLevels: true,
               },
@@ -2245,7 +2224,6 @@ describe('Testing listing service', () => {
           include: {
             amiChart: {
               include: {
-                amiChartItem: true,
                 jurisdictions: true,
                 unitGroupAmiLevels: true,
               },
