@@ -2,8 +2,6 @@ import React, { useContext, useEffect, useRef, useState, useCallback } from "rea
 import { useForm } from "react-hook-form"
 import { t, setSiteAlertMessage, useMutate, FormSignIn } from "@bloom-housing/ui-components"
 import { useRedirectToPrevPage } from "../lib/hooks"
-import { faStopwatch, faEye, faLock } from "@fortawesome/free-solid-svg-icons"
-
 import {
   PageView,
   pushGtmEvent,
@@ -16,8 +14,9 @@ import {
 import { UserStatus } from "../lib/constants"
 import { EnumUserErrorExtraModelUserErrorMessages } from "@bloom-housing/backend-core/types"
 // import SignUpBenefits from "../components/account/SignUpBenefits"
-import { HeadingGroup, Icon } from "@bloom-housing/ui-seeds"
+import { HeadingGroup } from "@bloom-housing/ui-seeds"
 import FormLayout from "../layouts/forms"
+import SignUpBenefits from "../components/account/SignUpBenefits"
 
 const SignIn = () => {
   const { login, userService } = useContext(AuthContext)
@@ -25,7 +24,7 @@ const SignIn = () => {
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
   // https://github.com/react-hook-form/react-hook-form/issues/2887
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, watch, reset } = useForm()
+  const { register, handleSubmit, errors, watch } = useForm()
   const redirectToPage = useRedirectToPrevPage("/account/dashboard")
   const { networkError, determineNetworkError, resetNetworkError } = useCatchNetworkError()
 
@@ -129,12 +128,6 @@ const SignIn = () => {
     }
   }, [networkError])
 
-  const iconListItems = [
-    { icon: faStopwatch, text: t("account.signUpSaveTime.applyFaster") },
-    { icon: faEye, text: t("account.signUpSaveTime.checkStatus") },
-    { icon: faLock, text: t("account.signUpSaveTime.resetPassword") },
-  ]
-
   const MobileComponent = () => {
     return (
       <>
@@ -154,19 +147,7 @@ const SignIn = () => {
             }}
           />
         </div>
-        <ul className="flex flex-col p-4">
-          {iconListItems.map((item) => (
-            <li className="flex flex-row mb-2 items-center">
-              <Icon
-                icon={item.icon}
-                size="xl"
-                className="border border-white bg-white rounded-full p-2.5"
-                key={item.text}
-              />
-              <p className="ml-2">{item.text}</p>
-            </li>
-          ))}
-        </ul>
+        <SignUpBenefits />
       </>
     )
   }
@@ -185,26 +166,12 @@ const SignIn = () => {
       </div>
       <div className="flex flex-col grow-0 shrink-1 p-5 max-w-lg w-full">
         <HeadingGroup
-          heading={"Sign up quickly and check application status at anytime"}
-          subheading={
-            "Having an account will save you time by using saved application details, and allow you to check the status of an application at anytime."
-          }
+          heading={t("account.signUpSaveTime.title")}
+          subheading={t("account.signUpSaveTime.subTitle")}
           size="xl"
           className="grow-0 shrink-1"
         />
-        <ul className="flex flex-col grow-0 shrink-1">
-          {iconListItems.map((item) => (
-            <li className="flex flex-row mb-2 items-center">
-              <Icon
-                icon={item.icon}
-                size="xl"
-                className="border border-white bg-white rounded-full p-2.5"
-                key={item.text}
-              />
-              <p className="ml-2">{item.text}</p>
-            </li>
-          ))}
-        </ul>
+        <SignUpBenefits />
       </div>
     </>
   )
