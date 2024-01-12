@@ -54,6 +54,7 @@ import { UnitTypesService } from "../unit-types/unit-types.service"
 import dayjs from "dayjs"
 import { CountyCode } from "../shared/types/county-code"
 import { ApplicationFlaggedSetsCronjobService } from "../application-flagged-sets/application-flagged-sets-cronjob.service"
+import { MapLayerSeeder } from "./seeds/map-layers"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -223,6 +224,9 @@ async function seed() {
   const jurisdictions = await createJurisdictions(app)
   await seedAmiCharts(app)
   const listings = await seedListings(app, rolesRepo, jurisdictions)
+
+  const mapLayerSeeder = app.get<MapLayerSeeder>(MapLayerSeeder)
+  await mapLayerSeeder.seed(jurisdictions)
 
   const user1 = await userService.createPublicUser(
     plainToClass(UserCreateDto, {
