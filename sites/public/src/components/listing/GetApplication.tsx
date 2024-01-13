@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import Markdown from "markdown-to-jsx"
 
 import {
@@ -15,6 +15,7 @@ import { Button } from "@bloom-housing/ui-seeds"
 import { useForm } from "react-hook-form"
 import { downloadExternalPDF } from "../../lib/helpers"
 import { ListingStatus } from "@bloom-housing/backend-core"
+import { AuthContext } from "@bloom-housing/shared-helpers/src/auth/AuthContext"
 
 export interface PaperApplication {
   fileURL: string
@@ -32,6 +33,8 @@ export interface ApplicationsProps {
   applicationsOpenDate?: string
   /** The name of the listing */
   listingName: string
+  /** The id of the listing */
+  listingId: string
   /** The URL for an online applications */
   onlineApplicationURL?: string
   /** Any number of paper application objects, including their URL and language */
@@ -44,6 +47,8 @@ export interface ApplicationsProps {
   listingStatus?: string
   /** Whether or not to block submission of test application */
   preview?: boolean
+  /** Whether or not to direct user to sign in page before applying*/
+  signedIn?: boolean
   strings?: {
     applicationsOpenInFuture?: string
     applyOnline?: string
@@ -57,6 +62,8 @@ export interface ApplicationsProps {
 }
 /** Displays information regarding how to apply, including an online application link button, paper application downloads, and a paper application pickup address */
 const GetApplication = (props: ApplicationsProps) => {
+  const { initialStateLoaded, profile } = useContext(AuthContext)
+
   const showSection =
     props.onlineApplicationURL ||
     (props.applicationsOpen && props.paperMethod && !!props.paperApplications?.length)
@@ -100,7 +107,11 @@ const GetApplication = (props: ApplicationsProps) => {
             <Button
               variant="primary"
               className="w-full mb-2"
-              href={props.onlineApplicationURL}
+              href={
+                initialStateLoaded && profile
+                  ? props.onlineApplicationURL
+                  : `/sign-in?redirectUrl=/applications/start/choose-language&listingId=${props.listingId?.toString()}`
+              }
               id={"listing-view-apply-button"}
             >
               {props.strings?.applyOnline ?? t("listings.apply.applyOnline")}
