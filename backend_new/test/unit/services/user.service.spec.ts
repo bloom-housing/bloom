@@ -144,7 +144,7 @@ describe('Testing user service', () => {
       const date = new Date();
       const mockedValue = mockUserSet(3, date);
       prisma.userAccounts.findMany = jest.fn().mockResolvedValue(mockedValue);
-      prisma.userAccounts.count = jest.fn().mockResolvedValue(3);
+      prisma.userAccounts.count = jest.fn().mockResolvedValue(6);
 
       expect(
         await service.list(
@@ -166,8 +166,8 @@ describe('Testing user service', () => {
           currentPage: 2,
           itemCount: 3,
           itemsPerPage: 5,
-          totalItems: 3,
-          totalPages: 1,
+          totalItems: 6,
+          totalPages: 2,
         },
       });
 
@@ -215,6 +215,46 @@ describe('Testing user service', () => {
               ],
             },
           ],
+        },
+      });
+    });
+
+    it('should return first page if params are more than count', async () => {
+      const date = new Date();
+      const mockedValue = mockUserSet(3, date);
+      prisma.userAccounts.findMany = jest.fn().mockResolvedValue(mockedValue);
+      prisma.userAccounts.count = jest.fn().mockResolvedValue(3);
+
+      expect(
+        await service.list(
+          {
+            page: 2,
+            limit: 5,
+          },
+          null,
+        ),
+      ).toEqual({
+        items: mockedValue,
+        meta: {
+          currentPage: 2,
+          itemCount: 3,
+          itemsPerPage: 5,
+          totalItems: 3,
+          totalPages: 1,
+        },
+      });
+
+      expect(prisma.userAccounts.findMany).toHaveBeenCalledWith({
+        include: {
+          jurisdictions: true,
+          listings: true,
+          userRoles: true,
+        },
+        orderBy: [{ firstName: 'asc' }, { lastName: 'asc' }],
+        skip: 0,
+        take: 5,
+        where: {
+          AND: [],
         },
       });
     });

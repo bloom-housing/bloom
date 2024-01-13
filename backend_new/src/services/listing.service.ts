@@ -185,7 +185,7 @@ export class ListingService implements OnModuleInit {
     // revert back to the first page
     let page = params.page;
     if (count && params.limit && params.limit !== 'all' && params.page > 1) {
-      if (count / params.limit < params.page) {
+      if (Math.ceil(count / params.limit) < params.page) {
         page = 1;
       }
     }
