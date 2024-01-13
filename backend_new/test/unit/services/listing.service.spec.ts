@@ -633,6 +633,65 @@ describe('Testing listing service', () => {
     });
   });
 
+  it('should return first page if params are more than count', async () => {
+    prisma.listings.findMany = jest.fn().mockResolvedValue(mockListingSet(10));
+
+    prisma.listings.count = jest.fn().mockResolvedValue(20);
+
+    const params: ListingsQueryParams = {
+      view: ListingViews.base,
+      page: 2,
+      limit: 30,
+      orderBy: [ListingOrderByKeys.name],
+      orderDir: [OrderByEnum.ASC],
+    };
+
+    await service.list(params);
+
+    expect(prisma.listings.findMany).toHaveBeenCalledWith({
+      skip: 0,
+      take: 30,
+      orderBy: [
+        {
+          name: 'asc',
+        },
+      ],
+      where: {
+        AND: [],
+      },
+      include: {
+        jurisdictions: true,
+        listingsBuildingAddress: true,
+        reservedCommunityTypes: true,
+        listingImages: {
+          include: {
+            assets: true,
+          },
+        },
+        listingMultiselectQuestions: {
+          include: {
+            multiselectQuestions: true,
+          },
+        },
+        listingFeatures: true,
+        listingUtilities: true,
+        units: {
+          include: {
+            unitTypes: true,
+            unitAmiChartOverrides: true,
+            amiChart: true,
+          },
+        },
+      },
+    });
+
+    expect(prisma.listings.count).toHaveBeenCalledWith({
+      where: {
+        AND: [],
+      },
+    });
+  });
+
   it('should build where clause when only params sent', async () => {
     const params: ListingFilterParams[] = [
       {
