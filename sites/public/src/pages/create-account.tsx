@@ -13,7 +13,7 @@ import {
   Modal,
   passwordRegex,
 } from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
+import { Button, Heading } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
 dayjs.extend(customParseFormat)
@@ -21,6 +21,7 @@ import { useRouter } from "next/router"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
+import styles from "../../styles/create-account.module.scss"
 
 export default () => {
   const { createUser, resendConfirmation } = useContext(AuthContext)
@@ -75,9 +76,11 @@ export default () => {
     <FormsLayout>
       {process.env.showMandatedAccounts ? (
         <FormCard>
-          <div className="form-card__lead">
+          <div className="form-card__lead pb-8 border-b mx-12 px-0">
             <Icon size="2xl" symbol="profile" />
-            <h1 className="form-card__title">{t("account.createAccount.title")}</h1>
+            <Heading size="2xl" className="font-semibold mt-3">
+              {t("account.createAccount.title")}
+            </Heading>
             {requestError && (
               <AlertBox className="" onClose={() => setRequestError(undefined)} type="alert">
                 {requestError}
@@ -86,15 +89,17 @@ export default () => {
             <SiteAlert type="notice" dismissable />
           </div>
           <Form id="create-account" onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-card__group border-b">
-              <label className="text__caps-spaced" htmlFor="firstName">
+            <div className="form-card__group border-b space-y-3 mx-12 p-0 py-8">
+              <label className={styles["create-account-header"]} htmlFor="firstName">
                 {t("application.name.yourName")}
               </label>
 
+              <label className={styles["create-account-field"]} htmlFor="givenName">
+                {t("application.name.givenName")}
+              </label>
               <Field
                 controlClassName="mt-2"
                 name="givenName"
-                placeholder={t("application.name.givenName")}
                 validation={{ required: true, maxLength: 64 }}
                 error={errors.givenName}
                 errorMessage={
@@ -105,9 +110,11 @@ export default () => {
                 register={register}
               />
 
+              <label className={styles["create-account-field"]} htmlFor="middleName">
+                {t("application.name.middleNameOptional")}
+              </label>
               <Field
                 name="middleName"
-                placeholder={t("application.name.middleNameOptional")}
                 register={register}
                 label={t("application.name.middleNameOptional")}
                 readerOnly
@@ -116,9 +123,11 @@ export default () => {
                 errorMessage={t("errors.maxLength")}
               />
 
+              <label className={styles["create-account-field"]} htmlFor="familyName">
+                {t("application.name.familyName")}
+              </label>
               <Field
                 name="familyName"
-                placeholder={t("application.name.familyName")}
                 validation={{ required: true, maxLength: 64 }}
                 error={errors.familyName}
                 register={register}
@@ -132,7 +141,7 @@ export default () => {
               />
             </div>
 
-            <div className="form-card__group border-b">
+            <div className="form-card__group border-b mx-12 p-0 py-8">
               <DOBField
                 register={register}
                 required={true}
@@ -147,7 +156,7 @@ export default () => {
               <p className={"field-sub-note"}>{t("application.name.yourDateOfBirthExample")}</p>
             </div>
 
-            <div className="form-card__group border-b">
+            <div className="form-card__group border-b mx-12 p-0 py-8">
               <Field
                 caps={true}
                 type="email"
@@ -159,7 +168,7 @@ export default () => {
                 register={register}
               />
             </div>
-            <div className="form-card__group border-b">
+            <div className="form-card__group border-b mx-12 p-0 py-8">
               <Field
                 caps={true}
                 type={passwordShown ? "text" : "password"}
@@ -186,14 +195,12 @@ export default () => {
                   },
                 }}
               />
-              <div className="text-center mt-10">
-                <Button type="submit" variant="primary">
-                  {t("account.createAccount.label")}
-                </Button>
-              </div>
+              <Button type="submit" variant="primary">
+                {t("account.createAccount.label")}
+              </Button>
             </div>
           </Form>
-          <div className="form-card__group text-center">
+          <div className="form-card__group mx-12 p-0 py-8">
             <h2 className="mb-6">{t("account.haveAnAccount")}</h2>
 
             <Button variant="primary-outlined" href="/sign-in">
