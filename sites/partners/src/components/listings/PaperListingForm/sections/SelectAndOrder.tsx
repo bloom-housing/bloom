@@ -183,7 +183,6 @@ const SelectAndOrder = ({
   ) => {
     const getInfoSection = (option, index) => {
       const isNotLastItem = index < item.options.length - 1
-      console.log(option)
       return (
         <div key={index} className={isNotLastItem ? "mb-5" : "mb-1"}>
           <div className={"font-semibold mb-1 text-gray-800"}>
