@@ -47,8 +47,6 @@ export interface ApplicationsProps {
   listingStatus?: string
   /** Whether or not to block submission of test application */
   preview?: boolean
-  /** Whether or not to direct user to sign in page before applying*/
-  signedIn?: boolean
   strings?: {
     applicationsOpenInFuture?: string
     applyOnline?: string
