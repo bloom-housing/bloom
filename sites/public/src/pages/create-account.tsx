@@ -78,7 +78,7 @@ export default () => {
         <FormCard>
           <div className="form-card__lead pb-8 border-b mx-12 px-0">
             <Icon size="2xl" symbol="profile" />
-            <Heading size="2xl" className="font-semibold mt-3">
+            <Heading size="3xl" className="font-semibold mt-3">
               {t("account.createAccount.title")}
             </Heading>
             {requestError && (
@@ -98,7 +98,7 @@ export default () => {
                 {t("application.name.givenName")}
               </label>
               <Field
-                controlClassName="mt-2"
+                controlClassName={styles["create-account-input"]}
                 name="givenName"
                 validation={{ required: true, maxLength: 64 }}
                 error={errors.givenName}
@@ -121,6 +121,7 @@ export default () => {
                 error={errors.middleName}
                 validation={{ maxLength: 64 }}
                 errorMessage={t("errors.maxLength")}
+                controlClassName={styles["create-account-input"]}
               />
 
               <label className={styles["create-account-field"]} htmlFor="familyName">
@@ -138,9 +139,9 @@ export default () => {
                     : t("errors.familyNameError")
                 }
                 readerOnly
+                controlClassName={styles["create-account-input"]}
               />
             </div>
-
             <div className="form-card__group border-b mx-12 p-0 py-8">
               <DOBField
                 register={register}
@@ -166,6 +167,7 @@ export default () => {
                 error={errors.email}
                 errorMessage={t("authentication.signIn.loginError")}
                 register={register}
+                controlClassName={styles["create-account-input"]}
               />
             </div>
             <div className="form-card__group border-b mx-12 p-0 py-8">
@@ -183,6 +185,7 @@ export default () => {
                 error={errors.password}
                 errorMessage={t("authentication.signIn.passwordError")}
                 register={register}
+                controlClassName={styles["create-account-input"]}
               />
               <Field
                 type="checkbox"
@@ -201,9 +204,10 @@ export default () => {
             </div>
           </Form>
           <div className="form-card__group mx-12 p-0 py-8">
-            <h2 className="mb-6">{t("account.haveAnAccount")}</h2>
-
-            <Button variant="primary-outlined" href="/sign-in">
+            <Heading size="3xl" className="mb-6 font-semibold">
+              {t("account.haveAnAccount")}
+            </Heading>
+            <Button href="/sign-in" variant="primary-outlined">
               {t("nav.signIn")}
             </Button>
           </div>
@@ -227,7 +231,7 @@ export default () => {
               </label>
 
               <Field
-                controlClassName="mt-2"
+                controlClassName={styles["account-creation-input"]}
                 name="firstName"
                 placeholder={t("application.name.firstName")}
                 validation={{ required: true, maxLength: 64 }}
