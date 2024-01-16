@@ -10,8 +10,6 @@ export const unitAccessibilityPriorityTypeFactorySingle = async (
     unitAccesibilityPriorityTypeAsArray[
       randomInt(unitAccesibilityPriorityTypeAsArray.length)
     ];
-  console.log({ unitAccesibilityPriorityTypeAsArray });
-  console.log({ chosenType });
 
   const priorityType =
     await prismaClient.unitAccessibilityPriorityTypes.findFirst({
