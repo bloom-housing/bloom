@@ -12,6 +12,7 @@ import { Address } from '../dtos/addresses/address.dto';
 import { ApplicationMultiselectQuestion } from '../dtos/applications/application-multiselect-question.dto';
 import MultiselectQuestion from '../dtos/multiselect-questions/multiselect-question.dto';
 import { ApplicationFlaggedSet } from '../dtos/application-flagged-sets/application-flagged-set.dto';
+import { User } from '../dtos/users/user.dto';
 
 view.csv = {
   ...view.details,
@@ -48,9 +49,9 @@ export class ApplicationCsvExporterService {
    */
   async export(
     queryParams: ApplicationCsvQueryParams,
-    req: ExpressRequest,
+    requestingUser: User,
   ): Promise<StreamableFile> {
-    await this.authorizeCSVExport(req.user, queryParams.listingId);
+    await this.authorizeCSVExport(requestingUser, queryParams.listingId);
     const filename = join(
       process.cwd(),
       `src/temp/listing-${
@@ -133,11 +134,9 @@ export class ApplicationCsvExporterService {
           applications.forEach((app) => {
             let row = '';
             let preferences: ApplicationMultiselectQuestion[];
-            let programs: ApplicationMultiselectQuestion[];
             csvHeaders.forEach((header, index) => {
               let multiselectQuestionValue = false;
               let parsePreference = false;
-              let parsePrograms = false;
               let value = header.path.split('.').reduce((acc, curr) => {
                 // return preference/program as value for the format function to accept
                 if (multiselectQuestionValue) {
@@ -158,26 +157,13 @@ export class ApplicationCsvExporterService {
                   return preference;
                 }
 
-                if (parsePrograms) {
-                  // curr should equal the program id we're pulling from
-                  if (!programs) {
-                    programs = JSON.parse(app.programs as string);
-                  }
-                  parsePrograms = false;
-                  const program = programs.find(
-                    (preference) => preference.multiselectQuestionId === curr,
-                  );
-                  multiselectQuestionValue = true;
-                  return program;
-                }
-
                 // sets parsePreference to true, for the next iteration
                 if (curr === 'preferences') {
                   parsePreference = true;
                 }
-                // sets parsePrograms to true, for the next iteration
-                if (curr === 'programs') {
-                  parsePrograms = true;
+
+                if (acc === null || acc === undefined) {
+                  return '';
                 }
 
                 // handles working with arrays, e.g. householdMember.0.firstName
@@ -186,9 +172,6 @@ export class ApplicationCsvExporterService {
                   return acc[index];
                 }
 
-                if (acc === null || acc === undefined) {
-                  return '';
-                }
                 return acc[curr];
               }, app);
               value = value === undefined ? '' : value === null ? '' : value;
@@ -238,7 +221,7 @@ export class ApplicationCsvExporterService {
       : 0;
   }
 
-  getHousholdCsvHeaders(maxHouseholdMembers: number): CsvHeader[] {
+  getHouseholdCsvHeaders(maxHouseholdMembers: number): CsvHeader[] {
     const headers = [];
     for (let i = 0; i < maxHouseholdMembers; i++) {
       const j = i + 1;
@@ -546,7 +529,7 @@ export class ApplicationCsvExporterService {
          * that are not used on the old backend, but could be added here
          */
         question.options
-          .filter((option) => option.collectAddress)
+          ?.filter((option) => option.collectAddress)
           .forEach(() => {
             headers.push({
               path: `preferences.${question.id}.address`,
@@ -564,7 +547,7 @@ export class ApplicationCsvExporterService {
 
     // add household member headers to csv
     if (maxHouseholdMembers) {
-      headers.push(...this.getHousholdCsvHeaders(maxHouseholdMembers));
+      headers.push(...this.getHouseholdCsvHeaders(maxHouseholdMembers));
     }
 
     headers.push(

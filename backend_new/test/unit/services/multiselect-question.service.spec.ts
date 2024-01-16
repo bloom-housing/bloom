@@ -8,26 +8,31 @@ import { MultiselectQuestionQueryParams } from '../../../src/dtos/multiselect-qu
 import { Compare } from '../../../src/dtos/shared/base-filter.dto';
 import { randomUUID } from 'crypto';
 
+export const mockMultiselectQuestion = (
+  position: number,
+  date: Date,
+  section?: MultiselectQuestionsApplicationSectionEnum,
+) => {
+  return {
+    id: randomUUID(),
+    createdAt: date,
+    updatedAt: date,
+    text: `text ${position}`,
+    subText: `subText ${position}`,
+    description: `description ${position}`,
+    links: [],
+    options: [],
+    optOutText: `optOutText ${position}`,
+    hideFromListing: false,
+    applicationSection:
+      section ?? MultiselectQuestionsApplicationSectionEnum.programs,
+    jurisdictions: [{ name: `jurisdiction${position}`, id: randomUUID() }],
+  };
+};
+
 describe('Testing multiselect question service', () => {
   let service: MultiselectQuestionService;
   let prisma: PrismaService;
-
-  const mockMultiselectQuestion = (position: number, date: Date) => {
-    return {
-      id: randomUUID(),
-      createdAt: date,
-      updatedAt: date,
-      text: `text ${position}`,
-      subText: `subText ${position}`,
-      description: `description ${position}`,
-      links: `{}`,
-      options: `{}`,
-      optOutText: `optOutText ${position}`,
-      hideFromListing: false,
-      applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
-      jurisdictions: [{ name: `jurisdiction${position}`, id: randomUUID() }],
-    };
-  };
 
   const mockMultiselectQuestionSet = (numberToCreate: number, date: Date) => {
     const toReturn = [];
@@ -64,8 +69,8 @@ describe('Testing multiselect question service', () => {
           text: `text 0`,
           subText: `subText 0`,
           description: `description 0`,
-          links: `{}`,
-          options: `{}`,
+          links: [],
+          options: [],
           optOutText: `optOutText 0`,
           hideFromListing: false,
           applicationSection:
@@ -85,8 +90,8 @@ describe('Testing multiselect question service', () => {
           text: `text 1`,
           subText: `subText 1`,
           description: `description 1`,
-          links: `{}`,
-          options: `{}`,
+          links: [],
+          options: [],
           optOutText: `optOutText 1`,
           hideFromListing: false,
           applicationSection:
@@ -106,8 +111,8 @@ describe('Testing multiselect question service', () => {
           text: `text 2`,
           subText: `subText 2`,
           description: `description 2`,
-          links: `{}`,
-          options: `{}`,
+          links: [],
+          options: [],
           optOutText: `optOutText 2`,
           hideFromListing: false,
           applicationSection:
@@ -157,8 +162,8 @@ describe('Testing multiselect question service', () => {
           text: `text 0`,
           subText: `subText 0`,
           description: `description 0`,
-          links: `{}`,
-          options: `{}`,
+          links: [],
+          options: [],
           optOutText: `optOutText 0`,
           hideFromListing: false,
           applicationSection:
@@ -178,8 +183,8 @@ describe('Testing multiselect question service', () => {
           text: `text 1`,
           subText: `subText 1`,
           description: `description 1`,
-          links: `{}`,
-          options: `{}`,
+          links: [],
+          options: [],
           optOutText: `optOutText 1`,
           hideFromListing: false,
           applicationSection:
@@ -199,8 +204,8 @@ describe('Testing multiselect question service', () => {
           text: `text 2`,
           subText: `subText 2`,
           description: `description 2`,
-          links: `{}`,
-          options: `{}`,
+          links: [],
+          options: [],
           optOutText: `optOutText 2`,
           hideFromListing: false,
           applicationSection:
@@ -251,8 +256,8 @@ describe('Testing multiselect question service', () => {
         text: `text 3`,
         subText: `subText 3`,
         description: `description 3`,
-        links: `{}`,
-        options: `{}`,
+        links: [],
+        options: [],
         optOutText: `optOutText 3`,
         hideFromListing: false,
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
@@ -324,8 +329,8 @@ describe('Testing multiselect question service', () => {
         text: `text 3`,
         subText: `subText 3`,
         description: `description 3`,
-        links: `{}`,
-        options: `{}`,
+        links: [],
+        options: [],
         optOutText: `optOutText 3`,
         hideFromListing: false,
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
@@ -389,8 +394,8 @@ describe('Testing multiselect question service', () => {
         text: '',
         subText: `subText 3`,
         description: `description 3`,
-        links: `{}`,
-        options: `{}`,
+        links: [],
+        options: [],
         optOutText: `optOutText 3`,
         hideFromListing: false,
         applicationSection:
