@@ -317,7 +317,6 @@ export class EmailService {
       html: body,
     }
     if (attachment) {
-      console.log("Buffer ", Buffer.from(attachment.data).toString("base64"))
       emailParams.attachments = [
         {
           content: Buffer.from(attachment.data).toString("base64"),
@@ -329,7 +328,6 @@ export class EmailService {
     }
     const handleError = (error) => {
       if (error instanceof ResponseError) {
-        console.log("Error ", error)
         const { response } = error
         const { body: errBody } = response
         console.error(

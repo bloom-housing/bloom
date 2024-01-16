@@ -110,7 +110,7 @@ const GetApplication = (props: ApplicationsProps) => {
               href={
                 initialStateLoaded && profile
                   ? props.onlineApplicationURL
-                  : `/sign-in?redirectUrl=/applications/start/choose-language&listingId=${props.listingId?.toString()}`
+                  : `/sign-in?redirectUrl=/applications/start/choose-language&listingId=${props.listingId}`
               }
               id={"listing-view-apply-button"}
             >
