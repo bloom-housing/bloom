@@ -1,52 +1,44 @@
-import React, { FunctionComponent, createElement, useRef, useState } from "react"
+import React, { FunctionComponent, createContext, createElement, useState, useRef } from "react"
+import { CommonMessageProps } from "@bloom-housing/ui-seeds/src/blocks/shared/CommonMessage"
 
-export enum alertTypes {
-  success = "success",
-  alert = "alert",
-  notice = "notice",
-  primary = "primary",
+// TODO: this should be exportable from seeds directly
+interface ToastProps extends Omit<CommonMessageProps, "role" | "closeable"> {
+  hideTimeout?: number
 }
 
 const defaultContext = {
-  getToastMessage: (): string | null => "",
-  getToastProps: (): object => {
-    return {}
-  },
   /* eslint-disable @typescript-eslint/no-empty-function */
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  addToast: (message: string, props: ToastProps): void => {},
   /* eslint-disable @typescript-eslint/no-explicit-any */
-  setToast: (_message: string, _toastProps: any): void => {},
-  toastMessage: "" as string,
+  toastMessagesRef: {} as React.MutableRefObject<Record<string, any>[]>,
 }
 
-export const MessageContext = React.createContext(defaultContext)
+export const MessageContext = createContext(defaultContext)
 
 export const MessageProvider: FunctionComponent<React.PropsWithChildren> = ({ children }) => {
-  const [toastMessage, setToastMessage] = useState<string>("")
-  const [toastProps, setToastProps] = useState<object>({})
-  const pendingToast = useRef<boolean>(false)
+  const [_, setToastMessages] = useState<Record<string, any>[]>([])
+  const toastMessagesRef = useRef<Record<string, any>[]>([])
 
-  const getToastProps = () => {
-    if (!pendingToast) return {}
-    return toastProps
+  // Toast timeouts default to 5 seconds, unless otherwise specified in props
+  const addToast = (message: string, props: ToastProps) => {
+    const newMsg = { message, props: { hideTimeout: 5000, ...props }, timestamp: Date.now() }
+    const msgs = [...toastMessagesRef.current, newMsg]
+
+    // We need a stable ref so live toast messages can be read outside of this function
+    toastMessagesRef.current = msgs
+    setToastMessages(msgs)
+
+    // Clean up messages after they're expired
+    setTimeout(() => {
+      toastMessagesRef.current = toastMessagesRef.current.filter(
+        (msg) => msg.timestamp != newMsg.timestamp
+      )
+    }, newMsg.props.hideTimeout)
   }
-
-  const getToastMessage = () => {
-    if (pendingToast.current === false) return null
-    pendingToast.current = false
-    return toastMessage
-  }
-
-  const setToast = (message: string, toastProps: object) => {
-    setToastMessage(message)
-    setToastProps(toastProps)
-    pendingToast.current = true
-  }
-
   const contextValues = {
-    getToastProps,
-    getToastMessage,
-    setToast,
-    toastMessage,
+    addToast,
+    toastMessagesRef,
   }
   return createElement(
     MessageContext.Provider,

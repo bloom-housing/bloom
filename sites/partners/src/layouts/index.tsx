@@ -15,7 +15,7 @@ import { Toast } from "@bloom-housing/ui-seeds"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
-  const { getToastMessage, getToastProps } = useContext(MessageContext)
+  const { toastMessagesRef } = useContext(MessageContext)
   const router = useRouter()
   const currentYear = new Date().getFullYear()
   const menuLinks: MenuLink[] = []
@@ -66,10 +66,11 @@ const Layout = (props) => {
           homeURL={"/"}
         />
         <main>
-          {/* KEY is set to a random number to force a re-render. This is not ideal and I do not recommend it */}
-          <Toast {...getToastProps()} testId="toast-alert" key={Math.random()}>
-            {getToastMessage()}
-          </Toast>
+          {toastMessagesRef.current.map((toastMessage) => (
+            <Toast {...toastMessage.props} testId="toast-alert" key={toastMessage.timestamp}>
+              {toastMessage.message}
+            </Toast>
+          ))}
           {props.children}
         </main>
         <SiteFooter>

@@ -2,15 +2,7 @@ import React, { useState, useContext, useRef } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import { Button } from "@bloom-housing/ui-seeds"
-import {
-  Field,
-  Form,
-  FormCard,
-  Icon,
-  t,
-  AlertBox,
-  SiteAlert,
-} from "@bloom-housing/ui-components"
+import { Field, Form, FormCard, Icon, t, AlertBox, SiteAlert } from "@bloom-housing/ui-components"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../layouts/forms"
 
@@ -18,7 +10,7 @@ const ResetPassword = () => {
   const router = useRouter()
   const { token } = router.query
   const { resetPassword } = useContext(AuthContext)
-  const { setToast } = useContext(MessageContext)
+  const { addToast } = useContext(MessageContext)
   /* Form Handler */
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
   // https://github.com/react-hook-form/react-hook-form/issues/2887
@@ -37,7 +29,7 @@ const ResetPassword = () => {
       await router.push("/")
       window.scrollTo(0, 0)
       // TODO: convert this to an alert https://github.com/bloom-housing/bloom/issues/3433
-      setToast(t(`authentication.signIn.success`, { name: user.firstName }), "success")
+      addToast(t(`authentication.signIn.success`, { name: user.firstName }), "success")
     } catch (err) {
       const { status, data } = err.response || {}
       if (status === 400) {

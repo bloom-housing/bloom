@@ -13,7 +13,7 @@ export interface ConfirmationModalProps {
 const ConfirmationModal = (props: ConfirmationModalProps) => {
   const { setSiteAlertMessage } = props
   const { resendConfirmation, profile, confirmAccount } = useContext(AuthContext)
-  const { setToast } = useContext(MessageContext)
+  const { addToast } = useContext(MessageContext)
   const [openModal, setOpenModal] = useState(false)
   const [modalMessage, setModalMessage] = useState(null)
   const router = useRouter()
@@ -30,7 +30,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
     try {
       await resendConfirmation(email)
 
-      setToast(t(`authentication.createAccount.emailSent`), { variant: "success" })
+      addToast(t(`authentication.createAccount.emailSent`), { variant: "success" })
       setOpenModal(false)
     } catch (err) {
       const { data } = err.response || {}

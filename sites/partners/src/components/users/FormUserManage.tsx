@@ -2,13 +2,7 @@ import React, { useMemo, useContext, useState, useCallback } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { t, Form, Field, Select, useMutate, emailRegex, Modal } from "@bloom-housing/ui-components"
 import { Button, Card, Grid, Tag } from "@bloom-housing/ui-seeds"
-import {
-  RoleOption,
-  roleKeys,
-  AuthContext,
-  alertTypes,
-  MessageContext,
-} from "@bloom-housing/shared-helpers"
+import { RoleOption, roleKeys, AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { Listing, User, UserRolesCreate } from "@bloom-housing/backend-core/types"
 import { JurisdictionAndListingSelection } from "./JurisdictionAndListingSelection"
 import SectionWithGrid from "../shared/SectionWithGrid"
@@ -53,7 +47,7 @@ const FormUserManage = ({
   setAlertMessage,
 }: FormUserManageProps) => {
   const { userService, profile } = useContext(AuthContext)
-  const { setToast } = useContext(MessageContext)
+  const { addToast } = useContext(MessageContext)
   const jurisdictionList = profile.jurisdictions
 
   const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false)
@@ -219,7 +213,7 @@ const FormUserManage = ({
           body,
         })
         .then(() => {
-          setToast(t(`users.inviteSent`), { variant: alertTypes.success, hideTimeout: 3000 })
+          addToast(t(`users.inviteSent`), { variant: "success" })
         })
         .catch((e) => {
           if (e?.response?.status === 409) {
