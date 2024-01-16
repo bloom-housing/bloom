@@ -2353,22 +2353,10 @@ describe('Testing listing service', () => {
           ],
         },
         listingMultiselectQuestions: {
-          upsert: [
+          create: [
             {
-              where: {
-                listingId_multiselectQuestionId: {
-                  listingId: expect.anything(),
-                  multiselectQuestionId: expect.anything(),
-                },
-              },
-              create: {
-                multiselectQuestionId: expect.anything(),
-                ordinal: 0,
-              },
-              update: {
-                multiselectQuestionId: expect.anything(),
-                ordinal: 0,
-              },
+              multiselectQuestionId: expect.anything(),
+              ordinal: 0,
             },
           ],
         },

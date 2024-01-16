@@ -945,6 +945,11 @@ export class ListingService implements OnModuleInit {
           listingId: dto.id,
         },
       }),
+      this.prisma.listingMultiselectQuestions.deleteMany({
+        where: {
+          listingId: dto.id,
+        },
+      }),
       this.prisma.listings.update({
         data: {
           ...dto,
@@ -1010,22 +1015,10 @@ export class ListingService implements OnModuleInit {
             : undefined,
           listingMultiselectQuestions: dto.listingMultiselectQuestions
             ? {
-                upsert: dto.listingMultiselectQuestions.map(
+                create: dto.listingMultiselectQuestions.map(
                   (multiselectQuestion) => ({
-                    where: {
-                      listingId_multiselectQuestionId: {
-                        listingId: dto.id,
-                        multiselectQuestionId: multiselectQuestion.id,
-                      },
-                    },
-                    update: {
-                      ordinal: multiselectQuestion.ordinal,
-                      multiselectQuestionId: multiselectQuestion.id,
-                    },
-                    create: {
-                      ordinal: multiselectQuestion.ordinal,
-                      multiselectQuestionId: multiselectQuestion.id,
-                    },
+                    ordinal: multiselectQuestion.ordinal,
+                    multiselectQuestionId: multiselectQuestion.id,
                   }),
                 ),
               }
