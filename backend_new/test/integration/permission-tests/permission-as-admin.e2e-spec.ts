@@ -683,9 +683,12 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
 
     it('should succeed for delete endpoint', async () => {
       await unitAccessibilityPriorityTypeFactoryAll(prisma);
-      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
-        prisma,
-      );
+      const unitTypeA =
+        await await prisma.unitAccessibilityPriorityTypes.create({
+          data: {
+            name: 'unit type A',
+          },
+        });
 
       await request(app.getHttpServer())
         .delete(`/unitAccessibilityPriorityTypes`)
@@ -744,10 +747,12 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
     });
 
     it('should succeed for delete endpoint', async () => {
-      const unitTypeA = await unitTypeFactorySingle(
-        prisma,
-        UnitTypeEnum.fiveBdrm,
-      );
+      const unitTypeA = await prisma.unitTypes.create({
+        data: {
+          name: UnitTypeEnum.studio,
+          numBedrooms: 23,
+        },
+      });
 
       await request(app.getHttpServer())
         .delete(`/unitTypes`)
