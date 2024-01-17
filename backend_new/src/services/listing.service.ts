@@ -181,8 +181,17 @@ export class ListingService implements OnModuleInit {
       where: whereClause,
     });
 
+    // if passed in page and limit would result in no results because there aren't that many listings
+    // revert back to the first page
+    let page = params.page;
+    if (count && params.limit && params.limit !== 'all' && params.page > 1) {
+      if (Math.ceil(count / params.limit) < params.page) {
+        page = 1;
+      }
+    }
+
     const listingsRaw = await this.prisma.listings.findMany({
-      skip: calculateSkip(params.limit, params.page),
+      skip: calculateSkip(params.limit, page),
       take: calculateTake(params.limit),
       orderBy: buildOrderByForListings(params.orderBy, params.orderDir),
       include: views[params.view ?? 'full'],
@@ -936,6 +945,11 @@ export class ListingService implements OnModuleInit {
           listingId: dto.id,
         },
       }),
+      this.prisma.listingMultiselectQuestions.deleteMany({
+        where: {
+          listingId: dto.id,
+        },
+      }),
       this.prisma.listings.update({
         data: {
           ...dto,
@@ -1001,22 +1015,10 @@ export class ListingService implements OnModuleInit {
             : undefined,
           listingMultiselectQuestions: dto.listingMultiselectQuestions
             ? {
-                upsert: dto.listingMultiselectQuestions.map(
+                create: dto.listingMultiselectQuestions.map(
                   (multiselectQuestion) => ({
-                    where: {
-                      listingId_multiselectQuestionId: {
-                        listingId: dto.id,
-                        multiselectQuestionId: multiselectQuestion.id,
-                      },
-                    },
-                    update: {
-                      ordinal: multiselectQuestion.ordinal,
-                      multiselectQuestionId: multiselectQuestion.id,
-                    },
-                    create: {
-                      ordinal: multiselectQuestion.ordinal,
-                      multiselectQuestionId: multiselectQuestion.id,
-                    },
+                    ordinal: multiselectQuestion.ordinal,
+                    multiselectQuestionId: multiselectQuestion.id,
                   }),
                 ),
               }

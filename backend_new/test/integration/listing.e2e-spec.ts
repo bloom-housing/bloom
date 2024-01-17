@@ -342,371 +342,391 @@ describe('Listing Controller Tests', () => {
     };
   };
 
-  // without clearing the db between runs this test is flaky
-  it.skip('should not get listings from list endpoint when no params are sent', async () => {
-    const res = await request(app.getHttpServer()).get('/listings').expect(200);
+  describe('list endpoint', () => {
+    // without clearing the db between runs this test is flaky
+    it.skip('should not get listings from list endpoint when no params are sent', async () => {
+      const res = await request(app.getHttpServer())
+        .get('/listings')
+        .expect(200);
 
-    expect(res.body).toEqual({
-      items: [],
-      meta: {
+      expect(res.body).toEqual({
+        items: [],
+        meta: {
+          currentPage: 1,
+          itemCount: 0,
+          itemsPerPage: 10,
+          totalItems: 0,
+          totalPages: 0,
+        },
+      });
+    });
+
+    // without clearing the db between runs this test is flaky
+    it.skip('should get listings from list endpoint when no params are sent', async () => {
+      const listing1 = await listingFactory(jurisdictionAId, prisma);
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+
+      const listing2 = await listingFactory(jurisdictionAId, prisma);
+      const listing2Created = await prisma.listings.create({
+        data: listing2,
+      });
+
+      const res = await request(app.getHttpServer())
+        .get('/listings')
+        .expect(200);
+
+      expect(res.body.meta.currentPage).toEqual(1);
+      expect(res.body.meta.itemCount).toBeGreaterThanOrEqual(2);
+      expect(res.body.meta.itemsPerPage).toEqual(10);
+      expect(res.body.meta.totalItems).toBeGreaterThanOrEqual(2);
+      expect(res.body.meta.totalPages).toBeGreaterThanOrEqual(1);
+
+      const items = res.body.items.map((item) => item.name);
+
+      expect(items.length).toBeGreaterThanOrEqual(2);
+      expect(items).toContain(listing1Created.name);
+      expect(items).toContain(listing2Created.name);
+    });
+
+    it('should not get listings from list endpoint when params are sent but do not match anything', async () => {
+      const queryParams: ListingsQueryParams = {
+        limit: 1,
+        page: 1,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare['='],
+            jurisdiction: randomUUID(),
+          },
+          {
+            $comparison: Compare.IN,
+            name: 'random name',
+          },
+          {
+            $comparison: Compare['='],
+            status: 'active',
+          },
+        ],
+      };
+      const query = stringify(queryParams as any);
+
+      const res = await request(app.getHttpServer())
+        .get(`/listings?${query}`)
+        .expect(200);
+
+      expect(res.body).toEqual({
+        items: [],
+        meta: {
+          currentPage: 1,
+          itemCount: 0,
+          itemsPerPage: 1,
+          totalItems: 0,
+          totalPages: 0,
+        },
+      });
+    });
+
+    it('should get listings from list endpoint when params are sent', async () => {
+      const listing1 = await listingFactory(jurisdictionAId, prisma);
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+
+      const listing2 = await listingFactory(jurisdictionAId, prisma);
+      const listing2Created = await prisma.listings.create({
+        data: listing2,
+      });
+
+      const orderedNames = [listing1Created.name, listing2Created.name].sort(
+        (a, b) => a.localeCompare(b),
+      );
+
+      let queryParams: ListingsQueryParams = {
+        limit: 1,
+        page: 1,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare.IN,
+            name: orderedNames.toString(),
+          },
+        ],
+        orderBy: [ListingOrderByKeys.name],
+        orderDir: [OrderByEnum.ASC],
+      };
+      let query = stringify(queryParams as any);
+
+      let res = await request(app.getHttpServer())
+        .get(`/listings?${query}`)
+        .expect(200);
+
+      expect(res.body.meta).toEqual({
         currentPage: 1,
-        itemCount: 0,
-        itemsPerPage: 10,
-        totalItems: 0,
-        totalPages: 0,
-      },
-    });
-  });
-
-  // without clearing the db between runs this test is flaky
-  it.skip('should get listings from list endpoint when no params are sent', async () => {
-    const listing1 = await listingFactory(jurisdictionAId, prisma);
-    const listing1Created = await prisma.listings.create({
-      data: listing1,
-    });
-
-    const listing2 = await listingFactory(jurisdictionAId, prisma);
-    const listing2Created = await prisma.listings.create({
-      data: listing2,
-    });
-
-    const res = await request(app.getHttpServer()).get('/listings').expect(200);
-
-    expect(res.body.meta.currentPage).toEqual(1);
-    expect(res.body.meta.itemCount).toBeGreaterThanOrEqual(2);
-    expect(res.body.meta.itemsPerPage).toEqual(10);
-    expect(res.body.meta.totalItems).toBeGreaterThanOrEqual(2);
-    expect(res.body.meta.totalPages).toBeGreaterThanOrEqual(1);
-
-    const items = res.body.items.map((item) => item.name);
-
-    expect(items.length).toBeGreaterThanOrEqual(2);
-    expect(items).toContain(listing1Created.name);
-    expect(items).toContain(listing2Created.name);
-  });
-
-  it('should not get listings from list endpoint when params are sent but do not match anything', async () => {
-    const queryParams: ListingsQueryParams = {
-      limit: 1,
-      page: 1,
-      view: ListingViews.base,
-      filter: [
-        {
-          $comparison: Compare['='],
-          jurisdiction: randomUUID(),
-        },
-        {
-          $comparison: Compare.IN,
-          name: 'random name',
-        },
-        {
-          $comparison: Compare['='],
-          status: 'active',
-        },
-      ],
-    };
-    const query = stringify(queryParams as any);
-
-    const res = await request(app.getHttpServer())
-      .get(`/listings?${query}`)
-      .expect(200);
-
-    expect(res.body).toEqual({
-      items: [],
-      meta: {
-        currentPage: 1,
-        itemCount: 0,
+        itemCount: 1,
         itemsPerPage: 1,
-        totalItems: 0,
-        totalPages: 0,
-      },
+        totalItems: 2,
+        totalPages: 2,
+      });
+
+      expect(res.body.items.length).toEqual(1);
+      expect(res.body.items[0].name).toEqual(orderedNames[0]);
+
+      queryParams = {
+        limit: 1,
+        page: 2,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare.IN,
+            name: orderedNames.toString(),
+          },
+        ],
+        orderBy: [ListingOrderByKeys.name],
+        orderDir: [OrderByEnum.ASC],
+      };
+      query = stringify(queryParams as any);
+
+      res = await request(app.getHttpServer())
+        .get(`/listings?${query}`)
+        .expect(200);
+
+      expect(res.body.meta).toEqual({
+        currentPage: 2,
+        itemCount: 1,
+        itemsPerPage: 1,
+        totalItems: 2,
+        totalPages: 2,
+      });
+      expect(res.body.items.length).toEqual(1);
+      expect(res.body.items[0].name).toEqual(orderedNames[1]);
     });
   });
 
-  it('should get listings from list endpoint when params are sent', async () => {
-    const listing1 = await listingFactory(jurisdictionAId, prisma);
-    const listing1Created = await prisma.listings.create({
-      data: listing1,
-    });
-
-    const listing2 = await listingFactory(jurisdictionAId, prisma);
-    const listing2Created = await prisma.listings.create({
-      data: listing2,
-    });
-
-    const orderedNames = [listing1Created.name, listing2Created.name].sort(
-      (a, b) => a.localeCompare(b),
-    );
-
-    let queryParams: ListingsQueryParams = {
-      limit: 1,
-      page: 1,
-      view: ListingViews.base,
-      filter: [
-        {
-          $comparison: Compare.IN,
-          name: orderedNames.toString(),
+  describe('retrieve listings endpoint', () => {
+    it('should get listings from retrieveListings endpoint', async () => {
+      const multiselectQuestion1 = await prisma.multiselectQuestions.create({
+        data: multiselectQuestionFactory(jurisdictionAId, {
+          multiselectQuestion: {
+            text: 'example a',
+          },
+        }),
+      });
+      const listingA = await listingFactory(jurisdictionAId, prisma, {
+        multiselectQuestions: [multiselectQuestion1],
+      });
+      const listingACreated = await prisma.listings.create({
+        data: listingA,
+        include: {
+          listingMultiselectQuestions: true,
         },
-      ],
-      orderBy: [ListingOrderByKeys.name],
-      orderDir: [OrderByEnum.ASC],
-    };
-    let query = stringify(queryParams as any);
-
-    let res = await request(app.getHttpServer())
-      .get(`/listings?${query}`)
-      .expect(200);
-
-    expect(res.body.meta).toEqual({
-      currentPage: 1,
-      itemCount: 1,
-      itemsPerPage: 1,
-      totalItems: 2,
-      totalPages: 2,
-    });
-
-    expect(res.body.items.length).toEqual(1);
-    expect(res.body.items[0].name).toEqual(orderedNames[0]);
-
-    queryParams = {
-      limit: 1,
-      page: 2,
-      view: ListingViews.base,
-      filter: [
-        {
-          $comparison: Compare.IN,
-          name: orderedNames.toString(),
+      });
+      const multiselectQuestion2 = await prisma.multiselectQuestions.create({
+        data: multiselectQuestionFactory(jurisdictionAId, {
+          multiselectQuestion: {
+            text: 'example b',
+          },
+        }),
+      });
+      const listingB = await listingFactory(jurisdictionAId, prisma, {
+        multiselectQuestions: [multiselectQuestion2],
+      });
+      await prisma.listings.create({
+        data: listingB,
+        include: {
+          listingMultiselectQuestions: true,
         },
-      ],
-      orderBy: [ListingOrderByKeys.name],
-      orderDir: [OrderByEnum.ASC],
-    };
-    query = stringify(queryParams as any);
+      });
 
-    res = await request(app.getHttpServer())
-      .get(`/listings?${query}`)
-      .expect(200);
+      const res = await request(app.getHttpServer())
+        .get(
+          `/listings/byMultiselectQuestion/${listingACreated.listingMultiselectQuestions[0].multiselectQuestionId}`,
+        )
+        .expect(200);
 
-    expect(res.body.meta).toEqual({
-      currentPage: 2,
-      itemCount: 1,
-      itemsPerPage: 1,
-      totalItems: 2,
-      totalPages: 2,
+      expect(res.body.length).toEqual(1);
+      expect(res.body[0].name).toEqual(listingA.name);
     });
-    expect(res.body.items.length).toEqual(1);
-    expect(res.body.items[0].name).toEqual(orderedNames[1]);
   });
 
-  it('should get listings from retrieveListings endpoint', async () => {
-    const multiselectQuestion1 = await prisma.multiselectQuestions.create({
-      data: multiselectQuestionFactory(jurisdictionAId, {
-        multiselectQuestion: {
-          text: 'example a',
-        },
-      }),
-    });
-    const listingA = await listingFactory(jurisdictionAId, prisma, {
-      multiselectQuestions: [multiselectQuestion1],
-    });
-    const listingACreated = await prisma.listings.create({
-      data: listingA,
-      include: {
-        listingMultiselectQuestions: true,
-      },
-    });
-    const multiselectQuestion2 = await prisma.multiselectQuestions.create({
-      data: multiselectQuestionFactory(jurisdictionAId, {
-        multiselectQuestion: {
-          text: 'example b',
-        },
-      }),
-    });
-    const listingB = await listingFactory(jurisdictionAId, prisma, {
-      multiselectQuestions: [multiselectQuestion2],
-    });
-    await prisma.listings.create({
-      data: listingB,
-      include: {
-        listingMultiselectQuestions: true,
-      },
+  describe('delete endpoint', () => {
+    it("should error when trying to delete listing that doesn't exist", async () => {
+      const id = randomUUID();
+      const res = await request(app.getHttpServer())
+        .delete(`/listings`)
+        .send({
+          id: id,
+        } as IdDTO)
+        .expect(404);
+      expect(res.body.message).toEqual(
+        `listingId ${id} was requested but not found`,
+      );
     });
 
-    const res = await request(app.getHttpServer())
-      .get(
-        `/listings/byMultiselectQuestion/${listingACreated.listingMultiselectQuestions[0].multiselectQuestionId}`,
-      )
-      .expect(200);
+    it('should delete listing', async () => {
+      const jurisdictionA = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
+      const listingData = await listingFactory(jurisdictionA.id, prisma);
+      const listing = await prisma.listings.create({
+        data: listingData,
+      });
 
-    expect(res.body.length).toEqual(1);
-    expect(res.body[0].name).toEqual(listingA.name);
+      const res = await request(app.getHttpServer())
+        .delete(`/listings/`)
+        .send({
+          id: listing.id,
+        } as IdDTO)
+        .set('Cookie', adminAccessToken)
+        .expect(200);
+
+      const listingAfterDelete = await prisma.listings.findUnique({
+        where: { id: listing.id },
+      });
+      expect(listingAfterDelete).toBeNull();
+      expect(res.body.success).toEqual(true);
+    });
   });
 
-  it("should error when trying to delete listing that doesn't exist", async () => {
-    const id = randomUUID();
-    const res = await request(app.getHttpServer())
-      .delete(`/listings`)
-      .send({
-        id: id,
-      } as IdDTO)
-      .expect(404);
-    expect(res.body.message).toEqual(
-      `listingId ${id} was requested but not found`,
-    );
+  describe('update endpoint', () => {
+    it("should error when trying to update listing that doesn't exist", async () => {
+      const id = randomUUID();
+      const res = await request(app.getHttpServer())
+        .put(`/listings/${id}`)
+        .send({
+          id: id,
+        } as IdDTO)
+        .set('Cookie', adminAccessToken)
+        .expect(404);
+      expect(res.body.message).toEqual(
+        `listingId ${id} was requested but not found`,
+      );
+    });
+
+    it('should update listing', async () => {
+      const jurisdictionA = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
+      const listingData = await listingFactory(jurisdictionA.id, prisma);
+      const listing = await prisma.listings.create({
+        data: listingData,
+      });
+
+      const val = await constructFullListingData(listing.id, jurisdictionA.id);
+
+      const res = await request(app.getHttpServer())
+        .put(`/listings/${listing.id}`)
+        .send(val)
+        .set('Cookie', adminAccessToken)
+        .expect(200);
+      expect(res.body.id).toEqual(listing.id);
+      expect(res.body.name).toEqual(val.name);
+    });
   });
 
-  it('should delete listing', async () => {
-    const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(),
-    });
-    await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
-    const listingData = await listingFactory(jurisdictionA.id, prisma);
-    const listing = await prisma.listings.create({
-      data: listingData,
-    });
+  describe('create endpoint', () => {
+    it('should create listing', async () => {
+      const val = await constructFullListingData();
 
-    const res = await request(app.getHttpServer())
-      .delete(`/listings/`)
-      .send({
-        id: listing.id,
-      } as IdDTO)
-      .set('Cookie', adminAccessToken)
-      .expect(200);
-
-    const listingAfterDelete = await prisma.listings.findUnique({
-      where: { id: listing.id },
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .send(val)
+        .set('Cookie', adminAccessToken)
+        .expect(201);
+      expect(res.body.name).toEqual(val.name);
     });
-    expect(listingAfterDelete).toBeNull();
-    expect(res.body.success).toEqual(true);
   });
 
-  it("should error when trying to update listing that doesn't exist", async () => {
-    const id = randomUUID();
-    const res = await request(app.getHttpServer())
-      .put(`/listings/${id}`)
-      .send({
-        id: id,
-      } as IdDTO)
-      .set('Cookie', adminAccessToken)
-      .expect(404);
-    expect(res.body.message).toEqual(
-      `listingId ${id} was requested but not found`,
-    );
-  });
-
-  it('should update listing', async () => {
-    const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(),
-    });
-    await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
-    const listingData = await listingFactory(jurisdictionA.id, prisma);
-    const listing = await prisma.listings.create({
-      data: listingData,
-    });
-
-    const val = await constructFullListingData(listing.id, jurisdictionA.id);
-
-    const res = await request(app.getHttpServer())
-      .put(`/listings/${listing.id}`)
-      .send(val)
-      .set('Cookie', adminAccessToken)
-      .expect(200);
-    expect(res.body.id).toEqual(listing.id);
-    expect(res.body.name).toEqual(val.name);
-  });
-
-  it('should create listing', async () => {
-    const val = await constructFullListingData();
-
-    const res = await request(app.getHttpServer())
-      .post('/listings')
-      .send(val)
-      .set('Cookie', adminAccessToken)
-      .expect(201);
-    expect(res.body.name).toEqual(val.name);
-  });
-
-  it('should successfully process listings that are past due', async () => {
-    const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(),
-    });
-    await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
-    const listingData = await listingFactory(jurisdictionA.id, prisma, {
-      status: ListingsStatusEnum.active,
-      applicationDueDate: new Date(0),
-    });
-    const listing = await prisma.listings.create({
-      data: listingData,
-    });
-
-    const res = await request(app.getHttpServer())
-      .put(`/listings/process`)
-      .set('Cookie', adminAccessToken)
-      .expect(200);
-    expect(res.body.success).toEqual(true);
-
-    const postProcessListing = await prisma.listings.findUnique({
-      where: {
-        id: listing.id,
-      },
-    });
-
-    expect(postProcessListing.status).toEqual(ListingsStatusEnum.closed);
-    expect(postProcessListing.closedAt).not.toBeNull();
-  });
-
-  it('should only process listings that are past due', async () => {
-    const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(),
-    });
-    await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
-    const pastDueListingData = await listingFactory(jurisdictionA.id, prisma, {
-      status: ListingsStatusEnum.active,
-      applicationDueDate: new Date(0),
-    });
-    const passedDueListing = await prisma.listings.create({
-      data: pastDueListingData,
-    });
-
-    const date = new Date();
-    date.setDate(date.getDate() + 10);
-
-    const futureDueListingData = await listingFactory(
-      jurisdictionA.id,
-      prisma,
-      {
+  describe('process endpoint', () => {
+    it('should successfully process listings that are past due', async () => {
+      const jurisdictionA = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
+      const listingData = await listingFactory(jurisdictionA.id, prisma, {
         status: ListingsStatusEnum.active,
-        applicationDueDate: date,
-      },
-    );
-    const futureDueListing = await prisma.listings.create({
-      data: futureDueListingData,
+        applicationDueDate: new Date(0),
+      });
+      const listing = await prisma.listings.create({
+        data: listingData,
+      });
+
+      const res = await request(app.getHttpServer())
+        .put(`/listings/process`)
+        .set('Cookie', adminAccessToken)
+        .expect(200);
+      expect(res.body.success).toEqual(true);
+
+      const postProcessListing = await prisma.listings.findUnique({
+        where: {
+          id: listing.id,
+        },
+      });
+
+      expect(postProcessListing.status).toEqual(ListingsStatusEnum.closed);
+      expect(postProcessListing.closedAt).not.toBeNull();
     });
 
-    const res = await request(app.getHttpServer())
-      .put(`/listings/process`)
-      .set('Cookie', adminAccessToken)
-      .expect(200);
+    it('should only process listings that are past due', async () => {
+      const jurisdictionA = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
+      const pastDueListingData = await listingFactory(
+        jurisdictionA.id,
+        prisma,
+        {
+          status: ListingsStatusEnum.active,
+          applicationDueDate: new Date(0),
+        },
+      );
+      const passedDueListing = await prisma.listings.create({
+        data: pastDueListingData,
+      });
 
-    expect(res.body.success).toEqual(true);
+      const date = new Date();
+      date.setDate(date.getDate() + 10);
 
-    const postProcessListing = await prisma.listings.findUnique({
-      where: {
-        id: passedDueListing.id,
-      },
+      const futureDueListingData = await listingFactory(
+        jurisdictionA.id,
+        prisma,
+        {
+          status: ListingsStatusEnum.active,
+          applicationDueDate: date,
+        },
+      );
+      const futureDueListing = await prisma.listings.create({
+        data: futureDueListingData,
+      });
+
+      const res = await request(app.getHttpServer())
+        .put(`/listings/process`)
+        .set('Cookie', adminAccessToken)
+        .expect(200);
+
+      expect(res.body.success).toEqual(true);
+
+      const postProcessListing = await prisma.listings.findUnique({
+        where: {
+          id: passedDueListing.id,
+        },
+      });
+
+      expect(postProcessListing.status).toEqual(ListingsStatusEnum.closed);
+      expect(postProcessListing.closedAt).not.toBeNull();
+
+      const postProcessListing2 = await prisma.listings.findUnique({
+        where: {
+          id: futureDueListing.id,
+        },
+      });
+
+      expect(postProcessListing2.status).toEqual(ListingsStatusEnum.active);
+      expect(postProcessListing2.closedAt).toBeNull();
     });
-
-    expect(postProcessListing.status).toEqual(ListingsStatusEnum.closed);
-    expect(postProcessListing.closedAt).not.toBeNull();
-
-    const postProcessListing2 = await prisma.listings.findUnique({
-      where: {
-        id: futureDueListing.id,
-      },
-    });
-
-    expect(postProcessListing2.status).toEqual(ListingsStatusEnum.active);
-    expect(postProcessListing2.closedAt).toBeNull();
   });
 
   describe('listings approval notification', () => {
