@@ -49,8 +49,9 @@ describe('Application flagged set Controller Tests', () => {
   };
 
   const createSimpleApplication = async (listingId: string) => {
+    const app = await applicationFactory({ listingId });
     return await prisma.applications.create({
-      data: applicationFactory({ listingId }),
+      data: app,
       include: {
         applicant: true,
       },
