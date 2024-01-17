@@ -40,7 +40,7 @@ const FormSignIn = ({
     <FormCard>
       {process.env.showMandatedAccounts ? (
         <>
-          <div className="form-card__lead ml-16 space-y-3">
+          <div className="form-card__lead mx-12 space-y-3 pt-8">
             <Icon size="2xl" symbol="profile" />
             <Heading size="3xl" className="font-semibold">
               {t("nav.signInLowercase")}
@@ -51,13 +51,13 @@ const FormSignIn = ({
             networkStatus={networkStatus}
             errorMessageId={"main-sign-in"}
           />
-          <div className="form-card__group">
-            <Form id="sign-in" onSubmit={handleSubmit(onSubmit, onError)}>
+          <div className="form-card__group mx-4">
+            <Form id="sign-in" onSubmit={handleSubmit(onSubmit, onError)} className="space-y-6">
               <Field
                 caps={true}
                 name="email"
                 label={t("t.email")}
-                labelClassName="font-semibold"
+                labelClassName="font-semibold p-0"
                 validation={{ required: true }}
                 error={errors.email}
                 errorMessage={t("authentication.signIn.enterLoginEmail")}
@@ -75,7 +75,7 @@ const FormSignIn = ({
                 caps={true}
                 name="password"
                 label={t("authentication.createAccount.password")}
-                labelClassName="font-semibold"
+                labelClassName="font-semibold p-0"
                 validation={{ required: true }}
                 error={errors.password}
                 errorMessage={t("authentication.signIn.enterLoginPassword")}
@@ -107,7 +107,7 @@ const FormSignIn = ({
             </Form>
           </div>
           {showRegisterBtn && (
-            <div className="form-card__group border-t">
+            <div className="form-card__group border-t mx-4">
               <Heading size="3xl" className="font-semibold mb-6">
                 {t("authentication.createAccount.noAccount")}
               </Heading>
