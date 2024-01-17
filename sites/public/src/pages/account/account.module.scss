@@ -1,12 +1,14 @@
 .account-card-container {
-  display: grid;
-  gap: 2rem;
-  grid-template-columns: repeat(2, 1fr);
   padding-inline: 1.5rem;
+  @media (max-width: theme("screens.md")) {
+    padding-inline: 0rem;
+    padding-block: 1rem;
+  }
 }
 
 .account-card {
   --card-header-padding-inline: var(--seeds-s12);
+  width: 100%;
 }
 
 .acccount-card-icon {

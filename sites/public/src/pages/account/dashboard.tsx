@@ -1,25 +1,18 @@
 import React, { useEffect, useState, useContext } from "react"
 import Head from "next/head"
 import { NextRouter, withRouter } from "next/router"
-import { t, SiteAlert, AlertBox, Icon, UniversalIconType } from "@bloom-housing/ui-components"
+import { t, SiteAlert, AlertBox } from "@bloom-housing/ui-components"
 import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
-import { Button, Card, HeadingGroup } from "@bloom-housing/ui-seeds"
+import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
+import { AccountCard } from "./AccountCard"
 
 import styles from "./account.module.scss"
 
 interface DashboardProps {
   router: NextRouter
-}
-
-interface AccountCardProps {
-  iconSymbol: UniversalIconType
-  title: string
-  subtitle: string
-  buttonText: string
-  link: string
 }
 
 function Dashboard(props: DashboardProps) {
@@ -47,25 +40,6 @@ function Dashboard(props: DashboardProps) {
     setAlertMessage(null)
   }
 
-  const AccountCard = ({ iconSymbol, title, subtitle, buttonText, link }: AccountCardProps) => (
-    <Card spacing="lg" className={styles["account-card"]}>
-      <Card.Header>
-        <Icon size="2xl" className={styles["account-card-icon"]} symbol={iconSymbol} />
-        <HeadingGroup
-          size="2xl"
-          heading={title}
-          subheading={subtitle}
-          className={styles["account-card-header"]}
-        />
-      </Card.Header>
-      <Card.Section className={styles["account-card-section"]}>
-        <Button href={link} variant="primary-outlined">
-          {buttonText}
-        </Button>
-      </Card.Section>
-    </Card>
-  )
-
   return (
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
       <Layout>
@@ -81,23 +55,37 @@ function Dashboard(props: DashboardProps) {
         <section className="bg-gray-300 border-t border-gray-450">
           <div className="max-w-5xl mx-auto md:py-8">
             <SiteAlert type="success" className="md:mb-8" timeout={30000} />
-            <div className={styles["account-card-container"]}>
-              <h1 className={"sr-only"}>{t("nav.myDashboard")}</h1>
-              <AccountCard
-                iconSymbol="application"
-                title={t("account.myApplications")}
-                subtitle={t("account.myApplicationsSubtitle")}
-                buttonText={t("account.viewApplications")}
-                link="/account/applications"
-              />
-              <AccountCard
-                iconSymbol="profile"
-                title={t("account.accountSettings")}
-                subtitle={t("account.accountSettingsSubtitle")}
-                buttonText={t("account.accountSettingsUpdate")}
-                link="/account/edit"
-              />
-            </div>
+            <h1 className={"sr-only"}>{t("nav.myDashboard")}</h1>
+            <Grid spacing="xl" className={styles["account-card-container"]}>
+              <Grid.Row columns={2}>
+                <Grid.Cell>
+                  <AccountCard
+                    iconSymbol="application"
+                    title={t("account.myApplications")}
+                    subtitle={t("account.myApplicationsSubtitle")}
+                  >
+                    <Card.Section className={styles["account-card-section"]}>
+                      <Button href={"/account/applications"} variant="primary-outlined">
+                        {t("account.viewApplications")}
+                      </Button>
+                    </Card.Section>
+                  </AccountCard>
+                </Grid.Cell>
+                <Grid.Cell>
+                  <AccountCard
+                    iconSymbol="profile"
+                    title={t("account.accountSettings")}
+                    subtitle={t("account.accountSettingsSubtitle")}
+                  >
+                    <Card.Section className={styles["account-card-section"]}>
+                      <Button href={"/account/edit"} variant="primary-outlined">
+                        {t("account.accountSettingsUpdate")}
+                      </Button>
+                    </Card.Section>
+                  </AccountCard>
+                </Grid.Cell>
+              </Grid.Row>
+            </Grid>
           </div>
         </section>
       </Layout>
