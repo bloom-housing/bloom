@@ -106,14 +106,10 @@ const SignIn = () => {
     if (confirmationStatusModal) return undefined
 
     // the confirmation form has been sent, show success or error
-    if (confirmationStatusMessage)
-      return {
-        ...confirmationStatusMessage?.message,
-        error: !!confirmationStatusMessage?.message?.error,
-      }
+    if (confirmationStatusMessage) return confirmationStatusMessage?.message
 
     // show default sign-in form network status
-    return { ...networkError, error: !!networkError.error }
+    return networkError
   })()
 
   const networkStatusType = (() => {
