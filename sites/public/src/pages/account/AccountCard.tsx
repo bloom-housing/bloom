@@ -11,6 +11,7 @@ interface AccountCardProps {
   children: React.ReactElement
   id?: string
   divider?: "flush" | "inset"
+  headingPriority?: 1 | 2 | 3 | 4 | 5 | 6
   className?: string
 }
 
@@ -27,6 +28,7 @@ const AccountCard = (props: AccountCardProps) => {
           heading={props.title}
           subheading={props.subtitle}
           className={styles["account-card-header"]}
+          headingPriority={props.headingPriority}
         />
       </Card.Header>
       {props.children}

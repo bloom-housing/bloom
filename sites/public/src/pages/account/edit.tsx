@@ -7,8 +7,6 @@ dayjs.extend(customParseFormat)
 import { useForm } from "react-hook-form"
 import {
   Field,
-  FormCard,
-  Icon,
   Form,
   emailRegex,
   t,
@@ -19,11 +17,14 @@ import {
   DOBField,
   DOBFieldValues,
 } from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
+import { Button, Card } from "@bloom-housing/ui-seeds"
 import Link from "next/link"
 import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
 import FormsLayout from "../../layouts/forms"
+import { AccountCard } from "./AccountCard"
+
+import styles from "./account.module.scss"
 
 type AlertMessage = {
   type: AlertTypes
@@ -149,97 +150,109 @@ const Edit = () => {
   return (
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
       <FormsLayout>
-        <FormCard>
-          <div className="form-card__lead text-center border-b mx-0">
-            <Icon size="2xl" symbol="settings" />
-            <h1 className="form-card__title">{t("account.accountSettings")}</h1>
-          </div>
-          <SiteAlert type="notice" dismissable />
-          <Form id="update-name" onSubmit={handleSubmit(onNameSubmit)}>
+        <AccountCard
+          iconSymbol="profile"
+          title={t("account.accountSettings")}
+          subtitle={t("account.accountSettingsSubtitle")}
+          divider="inset"
+          headingPriority={1}
+        >
+          <>
+            <SiteAlert type="notice" dismissable />
             {nameAlert && (
-              <AlertBox type={nameAlert.type} onClose={() => setNameAlert(null)} inverted closeable>
+              <AlertBox
+                type={nameAlert.type}
+                onClose={() => setNameAlert(null)}
+                className="my-0"
+                inverted
+                closeable
+              >
                 {nameAlert.message}
               </AlertBox>
             )}
-            <div className="form-card__group border-b">
-              <label htmlFor="firstName">{t("application.name.yourName")}</label>
+            <Card.Section divider="inset" className={styles["account-card-section"]}>
+              <Form id="update-name" onSubmit={handleSubmit(onNameSubmit)}>
+                <label htmlFor="firstName">{t("application.name.yourName")}</label>
+                <Field
+                  label={t("application.contact.givenName")}
+                  className="my-3"
+                  controlClassName="mt-2"
+                  name="firstName"
+                  error={errors.firstName}
+                  validation={{ maxLength: 64 }}
+                  errorMessage={
+                    errors.firstName?.type === "maxLength"
+                      ? t("errors.maxLength")
+                      : t("errors.firstNameError")
+                  }
+                  register={register}
+                  defaultValue={profile ? profile.firstName : null}
+                />
 
-              <Field
-                label={t("application.contact.givenName")}
-                controlClassName="mt-2"
-                name="firstName"
-                error={errors.firstName}
-                validation={{ maxLength: 64 }}
-                errorMessage={
-                  errors.firstName?.type === "maxLength"
-                    ? t("errors.maxLength")
-                    : t("errors.firstNameError")
-                }
-                register={register}
-                defaultValue={profile ? profile.firstName : null}
-              />
+                <Field
+                  name="middleName"
+                  className="mb-3"
+                  register={register}
+                  defaultValue={profile ? profile?.middleName : null}
+                  label={t("application.name.middleNameOptional")}
+                  error={errors.middleName}
+                  validation={{ maxLength: 64 }}
+                  errorMessage={t("errors.maxLength")}
+                />
 
-              <Field
-                name="middleName"
-                register={register}
-                defaultValue={profile ? profile?.middleName : null}
-                label={t("application.name.middleNameOptional")}
-                error={errors.middleName}
-                validation={{ maxLength: 64 }}
-                errorMessage={t("errors.maxLength")}
-              />
-
-              <Field
-                name="lastName"
-                placeholder={t("application.name.lastName")}
-                error={errors.lastName}
-                register={register}
-                defaultValue={profile ? profile.lastName : null}
-                label={t("application.contact.familyName")}
-                validation={{ maxLength: 64 }}
-                errorMessage={
-                  errors.lastName?.type === "maxLength"
-                    ? t("errors.maxLength")
-                    : t("errors.lastNameError")
-                }
-              />
-              <div>
+                <Field
+                  name="lastName"
+                  placeholder={t("application.name.lastName")}
+                  className="mb-6"
+                  error={errors.lastName}
+                  register={register}
+                  defaultValue={profile ? profile.lastName : null}
+                  label={t("application.contact.familyName")}
+                  validation={{ maxLength: 64 }}
+                  errorMessage={
+                    errors.lastName?.type === "maxLength"
+                      ? t("errors.maxLength")
+                      : t("errors.lastNameError")
+                  }
+                />
                 <Button type="submit" variant="primary-outlined">
                   {t("account.settings.update")}
                 </Button>
-              </div>
-            </div>
-          </Form>
-          <Form id="update-birthdate" onSubmit={handleSubmit(onBirthdateSubmit)}>
+              </Form>
+            </Card.Section>
             {dobAlert && (
-              <AlertBox type={dobAlert.type} onClose={() => setDobAlert(null)} inverted closeable>
+              <AlertBox
+                type={dobAlert.type}
+                onClose={() => setDobAlert(null)}
+                className="my-0"
+                inverted
+                closeable
+              >
                 {dobAlert.message}
               </AlertBox>
             )}
-            <div className="form-card__group border-b">
-              <DOBField
-                id="dateOfBirth"
-                name="dateOfBirth"
-                register={register}
-                error={errors?.dateOfBirth}
-                watch={watch}
-                validateAge18={true}
-                errorMessage={t("errors.dateOfBirthErrorAge")}
-                defaultDOB={{
-                  birthDay: profile ? dayjs(new Date(profile.dob)).utc().format("DD") : null,
-                  birthMonth: profile ? dayjs(new Date(profile.dob)).utc().format("MM") : null,
-                  birthYear: profile ? dayjs(new Date(profile.dob)).utc().format("YYYY") : null,
-                }}
-                label={t("application.name.yourDateOfBirth")}
-              />
-              <div className="mt-5">
-                <Button type="submit" variant="primary-outlined">
+            <Card.Section divider="inset" className={styles["account-card-section"]}>
+              <Form id="update-birthdate" onSubmit={handleSubmit(onBirthdateSubmit)}>
+                <DOBField
+                  id="dateOfBirth"
+                  name="dateOfBirth"
+                  register={register}
+                  error={errors?.dateOfBirth}
+                  watch={watch}
+                  validateAge18={true}
+                  errorMessage={t("errors.dateOfBirthErrorAge")}
+                  defaultDOB={{
+                    birthDay: profile ? dayjs(new Date(profile.dob)).utc().format("DD") : null,
+                    birthMonth: profile ? dayjs(new Date(profile.dob)).utc().format("MM") : null,
+                    birthYear: profile ? dayjs(new Date(profile.dob)).utc().format("YYYY") : null,
+                  }}
+                  label={t("application.name.yourDateOfBirth")}
+                />
+                <Button type="submit" variant="primary-outlined" className="mt-6">
                   {t("account.settings.update")}
                 </Button>
-              </div>
-            </div>
-          </Form>
-          <Form id="update-email" onSubmit={handleSubmit(onEmailSubmit)}>
+              </Form>
+            </Card.Section>
             {emailAlert && (
               <AlertBox
                 type={emailAlert.type}
@@ -250,60 +263,64 @@ const Edit = () => {
                 {emailAlert.message}
               </AlertBox>
             )}
-            <div className="form-card__group border-b">
-              <label htmlFor="firstName">{t("application.name.yourEmailAddress")}</label>
-              <Field
-                type="email"
-                name="email"
-                label={`${t("t.email")}`}
-                placeholder="example@web.com"
-                validation={{ pattern: emailRegex }}
-                error={errors.email}
-                errorMessage={`${t("errors.emailAddressError")}`}
-                register={register}
-                defaultValue={profile ? profile.email : null}
-              />
-              <div>
+            <Card.Section divider="inset" className={styles["account-card-section"]}>
+              <Form id="update-email" onSubmit={handleSubmit(onEmailSubmit)}>
+                <label htmlFor="firstName">{t("application.name.yourEmailAddress")}</label>
+                <Field
+                  type="email"
+                  name="email"
+                  label={`${t("t.email")}`}
+                  placeholder="example@web.com"
+                  className="mb-6"
+                  validation={{ pattern: emailRegex }}
+                  error={errors.email}
+                  errorMessage={`${t("errors.emailAddressError")}`}
+                  register={register}
+                  defaultValue={profile ? profile.email : null}
+                />
                 <Button type="submit" variant="primary-outlined">
                   {t("account.settings.update")}
                 </Button>
-              </div>
-            </div>
-          </Form>
-          <Form id="update-password" onSubmit={handleSubmit(onPasswordSubmit)}>
+              </Form>
+            </Card.Section>
             {passwordAlert && (
               <AlertBox
                 type={passwordAlert.type}
                 onClose={() => setPasswordAlert(null)}
+                className="my-0"
                 inverted
                 closeable
               >
                 {passwordAlert.message}
               </AlertBox>
             )}
-            <div className="form-card__group border-b">
-              <fieldset>
-                <legend>{t("authentication.createAccount.password")}</legend>
-                <p className="field-note mb-4">{t("account.settings.passwordRemember")}</p>
-                <div className={"flex flex-col"}>
-                  <Field
-                    type="password"
-                    name="oldPassword"
-                    label={t("account.settings.oldPassword")}
-                    error={errors.oldPassword}
-                    register={register}
-                    className={"mb-1"}
-                  />
-                  <div className="float-left text-sm font-semibold">
-                    <Link href="/forgot-password">{t("authentication.signIn.forgotPassword")}</Link>
+            <Card.Section divider="inset" className={styles["account-card-section"]}>
+              <Form id="update-password" onSubmit={handleSubmit(onPasswordSubmit)}>
+                <fieldset>
+                  <legend>{t("authentication.createAccount.password")}</legend>
+                  <p className="field-note mt-2 mb-3">{t("account.settings.passwordRemember")}</p>
+                  <div className={"flex flex-col"}>
+                    <Field
+                      type="password"
+                      name="oldPassword"
+                      label={t("account.settings.oldPassword")}
+                      error={errors.oldPassword}
+                      register={register}
+                      className={"mb-1"}
+                    />
+                    <span className="float-left text-sm font-semibold mt-2">
+                      <Link href="/forgot-password">
+                        {t("authentication.signIn.forgotPassword")}
+                      </Link>
+                    </span>
                   </div>
-                </div>
 
-                <div className="mt-5">
                   <Field
                     type="password"
                     name="password"
                     label={t("account.settings.newPassword")}
+                    labelClassName="mt-4"
+                    className="mt-4"
                     note={t("authentication.createAccount.passwordInfo")}
                     validation={{
                       minLength: MIN_PASSWORD_LENGTH,
@@ -312,15 +329,13 @@ const Edit = () => {
                     error={errors.password}
                     errorMessage={t("authentication.signIn.passwordError")}
                     register={register}
-                    className={"mb-1"}
                   />
-                </div>
 
-                <div className="mt-5">
                   <Field
                     type="password"
                     name="passwordConfirmation"
                     label={t("account.settings.confirmNewPassword")}
+                    className="mt-4 mb-6"
                     validation={{
                       validate: (value) =>
                         value === password.current ||
@@ -329,19 +344,16 @@ const Edit = () => {
                     error={errors.passwordConfirmation}
                     errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
                     register={register}
-                    className={"mb-1"}
                   />
-                </div>
 
-                <div className="mt-5">
                   <Button type="submit" variant="primary-outlined">
                     {t("account.settings.update")}
                   </Button>
-                </div>
-              </fieldset>
-            </div>
-          </Form>
-        </FormCard>
+                </fieldset>
+              </Form>
+            </Card.Section>
+          </>
+        </AccountCard>
       </FormsLayout>
     </RequireLogin>
   )
