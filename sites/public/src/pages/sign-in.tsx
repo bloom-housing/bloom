@@ -13,7 +13,6 @@ import {
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import { EnumUserErrorExtraModelUserErrorMessages } from "@bloom-housing/backend-core/types"
-// import SignUpBenefits from "../components/account/SignUpBenefits"
 import { HeadingGroup } from "@bloom-housing/ui-seeds"
 import FormLayout from "../layouts/forms"
 import SignUpBenefits from "../components/account/SignUpBenefits"
@@ -24,7 +23,7 @@ const SignIn = () => {
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
   // https://github.com/react-hook-form/react-hook-form/issues/2887
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, watch } = useForm()
+  const { register, handleSubmit, errors, watch, reset } = useForm()
   const redirectToPage = useRedirectToPrevPage("/account/dashboard")
   const { networkError, determineNetworkError, resetNetworkError } = useCatchNetworkError()
 
@@ -107,10 +106,14 @@ const SignIn = () => {
     if (confirmationStatusModal) return undefined
 
     // the confirmation form has been sent, show success or error
-    if (confirmationStatusMessage) return confirmationStatusMessage?.message
+    if (confirmationStatusMessage)
+      return {
+        ...confirmationStatusMessage?.message,
+        error: !!confirmationStatusMessage?.message?.error,
+      }
 
     // show default sign-in form network status
-    return networkError
+    return { ...networkError, error: !!networkError.error }
   })()
 
   const networkStatusType = (() => {
@@ -144,6 +147,7 @@ const SignIn = () => {
             networkStatus={{
               content: networkStatusContent,
               type: networkStatusType,
+              reset,
             }}
           />
         </div>
@@ -161,6 +165,7 @@ const SignIn = () => {
           networkStatus={{
             content: networkStatusContent,
             type: networkStatusType,
+            reset,
           }}
         />
       </div>
