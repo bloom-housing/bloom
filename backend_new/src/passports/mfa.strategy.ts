@@ -171,9 +171,15 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
   }
 
   async updateFailedLoginCount(count: number, userId: string): Promise<void> {
+    let lastLoginAt = undefined;
+    if (count === 1) {
+      // if the count went from 0 -> 1 then we update the lastLoginAt so the count of failed attempts falls off properly
+      lastLoginAt = new Date();
+    }
     await this.prisma.userAccounts.update({
       data: {
         failedLoginAttemptsCount: count,
+        lastLoginAt,
       },
       where: {
         id: userId,

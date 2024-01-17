@@ -5,7 +5,7 @@ p, anonymous, application, true, submit
 
 p, admin, user, true, .*
 p, admin, userProfile, true, .*
-p, user, user, r.sub == r.obj.id, read
+p, user, user, r.sub == r.obj.id, (read|update)
 p, user, userProfile, r.sub == r.obj.id, (read|update)
 p, anonymous, user, true, create
 

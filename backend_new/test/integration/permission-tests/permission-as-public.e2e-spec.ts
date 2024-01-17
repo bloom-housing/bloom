@@ -80,6 +80,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let userService: UserService;
+  let storedUserId: string;
   let cookies = '';
 
   beforeAll(async () => {
@@ -109,7 +110,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
         password: 'abcdef',
       } as Login)
       .expect(201);
-
+    storedUserId = storedUser.id;
     cookies = resLogIn.headers['set-cookie'];
     await unitAccessibilityPriorityTypeFactoryAll(prisma);
   });
@@ -818,6 +819,18 @@ describe('Testing Permissioning of endpoints as public user', () => {
         } as UserUpdate)
         .set('Cookie', cookies)
         .expect(403);
+    });
+
+    it('should succeed for update endpoint targeting self', async () => {
+      await request(app.getHttpServer())
+        .put(`/user/${storedUserId}`)
+        .send({
+          id: storedUserId,
+          firstName: 'New User First Name',
+          lastName: 'New User Last Name',
+        } as UserUpdate)
+        .set('Cookie', cookies)
+        .expect(200);
     });
 
     it('should error as forbidden for delete endpoint', async () => {
