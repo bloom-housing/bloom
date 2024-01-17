@@ -198,6 +198,7 @@ describe('Testing mfa strategy', () => {
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({
       data: {
         failedLoginAttemptsCount: 1,
+        lastLoginAt: expect.anything(),
       },
       where: {
         id,
