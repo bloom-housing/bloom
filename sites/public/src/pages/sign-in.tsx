@@ -58,7 +58,7 @@ const SignIn = () => {
       setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
       await redirectToPage()
     } catch (error) {
-      const { status } = error.response || {}
+      const { status } = error?.response || {}
       determineNetworkError(status, error)
     }
   }
@@ -124,7 +124,7 @@ const SignIn = () => {
 
   useEffect(() => {
     if (
-      networkError?.error.response.data?.message ===
+      networkError?.error?.response?.data?.message ===
       EnumUserErrorExtraModelUserErrorMessages.accountNotConfirmed
     ) {
       setConfirmationStatusModal(true)
