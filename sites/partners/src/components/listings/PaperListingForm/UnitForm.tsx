@@ -582,7 +582,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                     <Field
                       id="monthlyIncomeMin"
                       name="monthlyIncomeMin"
-                      label={t("t.minimumIncome")}
+                      label={t("t.monthlyMinimumIncome")}
                       placeholder="0.00"
                       register={register}
                       type="number"

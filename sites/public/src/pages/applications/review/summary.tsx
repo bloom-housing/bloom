@@ -11,7 +11,11 @@ import {
   AuthContext,
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
-import { ApplicationReviewStatus, ApplicationSection } from "@bloom-housing/backend-core"
+import {
+  ApplicationReviewStatus,
+  ApplicationSection,
+  ListingStatus,
+} from "@bloom-housing/backend-core"
 import FormsLayout from "../../../layouts/forms"
 import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
 import { useFormConductor } from "../../../lib/hooks"
@@ -40,9 +44,11 @@ const ApplicationSummary = () => {
   }, [profile])
 
   useEffect(() => {
-    if (listing?.status === "closed") {
-      setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
-      void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
+    if (listing && router.isReady) {
+      if (listing?.status !== ListingStatus.active) {
+        setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
+        void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
+      }
     }
   }, [listing, router])
 

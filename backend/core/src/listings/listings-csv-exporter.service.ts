@@ -177,7 +177,7 @@ export class ListingsCsvExporterService {
         "Minimum Occupancy": hideZero(listing.unit?.minOccupancy),
         "Max Occupancy": hideZero(listing.unit?.maxOccupancy),
         "AMI Chart": listing.unit?.amiChart?.name,
-        "AMI Level": listing.unit?.amiChart?.items[0]?.percentOfAmi,
+        "AMI Level": listing.unit?.amiPercentage,
         "Rent Type": formatRentType(
           listing.unit?.monthlyRentAsPercentOfIncome,
           listing.unit?.monthlyRent

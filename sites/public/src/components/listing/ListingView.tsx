@@ -302,6 +302,7 @@ export const ListingView = (props: ListingProps) => {
     let onlineApplicationURL
     if (hasMethod(listing.applicationMethods, ApplicationMethodType.Internal)) {
       onlineApplicationURL = `/applications/start/choose-language?listingId=${listing.id}`
+      onlineApplicationURL += `${props.preview ? "&preview=true" : ""}`
     } else if (hasMethod(listing.applicationMethods, ApplicationMethodType.ExternalLink)) {
       onlineApplicationURL =
         getMethod(listing.applicationMethods, ApplicationMethodType.ExternalLink)
@@ -361,6 +362,7 @@ export const ListingView = (props: ListingProps) => {
         applicationPickUpAddress={getAddress(listing.applicationPickUpAddressType, "pickUp")}
         preview={props.preview}
         listingName={listing.name}
+        listingStatus={listing.status}
       />
       {!(
         listing.status === ListingStatus.closed ||
