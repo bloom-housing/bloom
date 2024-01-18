@@ -50,11 +50,13 @@ const FormSignIn = ({
             errors={errors}
             networkStatus={networkStatus}
             errorMessageId={"main-sign-in"}
+            className="p-0 mx-12"
           />
           <div className="form-card__group mx-4">
-            <Form id="sign-in" onSubmit={handleSubmit(onSubmit, onError)} className="space-y-6">
+            <Form id="sign-in" onSubmit={handleSubmit(onSubmit, onError)}>
               <Field
                 caps={true}
+                className="mb-6"
                 name="email"
                 label={t("t.email")}
                 labelClassName="font-semibold p-0"
@@ -73,6 +75,7 @@ const FormSignIn = ({
 
               <Field
                 caps={true}
+                className="mb-3"
                 name="password"
                 label={t("authentication.createAccount.password")}
                 labelClassName="font-semibold p-0"
@@ -107,7 +110,7 @@ const FormSignIn = ({
             </Form>
           </div>
           {showRegisterBtn && (
-            <div className="form-card__group border-t mx-4">
+            <div className="form-card__group border-t px-0 mx-12">
               <Heading size="3xl" className="font-semibold mb-6">
                 {t("authentication.createAccount.noAccount")}
               </Heading>
