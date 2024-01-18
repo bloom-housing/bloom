@@ -6,10 +6,6 @@
   @apply border-gray-450;
   @apply bg-primary-lighter;
   @apply p-4;
-
-  &:last-of-type {
-    @apply border-b-0;
-  }
 }
 
 .status-item__header {
