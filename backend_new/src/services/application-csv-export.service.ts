@@ -33,6 +33,7 @@ export const typeMap = {
   twoBdrm: 'Two Bedroom',
   threeBdrm: 'Three Bedroom',
   fourBdrm: 'Four+ Bedroom',
+  fiveBdrm: 'Five Bedroom',
 };
 
 @Injectable()
@@ -127,7 +128,9 @@ export class ApplicationCsvExporterService {
         })
         .on('open', () => {
           writableStream.write(
-            csvHeaders.map((header) => header.label).join(',') + '\n',
+            csvHeaders
+              .map((header) => `"${header.label.replace(/"/g, `""`)}"`)
+              .join(',') + '\n',
           );
 
           // now loop over applications and write them to file
@@ -146,7 +149,8 @@ export class ApplicationCsvExporterService {
                 if (parsePreference) {
                   // curr should equal the preference id we're pulling from
                   if (!preferences) {
-                    preferences = JSON.parse(app.preferences as string);
+                    preferences =
+                      app.preferences as unknown as ApplicationMultiselectQuestion[];
                   }
                   parsePreference = false;
                   // there aren't typically many preferences, but if there, then a object map should be created and used
@@ -179,7 +183,7 @@ export class ApplicationCsvExporterService {
                 value = header.format(value);
               }
 
-              row += value;
+              row += value ? `"${value.toString().replace(/"/g, `""`)}"` : '';
               if (index < csvHeaders.length - 1) {
                 row += ',';
               }

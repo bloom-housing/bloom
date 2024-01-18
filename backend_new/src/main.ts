@@ -42,7 +42,7 @@ async function bootstrap() {
     cookieParser(),
     compression({
       filter: (_, res) => {
-        return res.req.route.path === '/applications/csv';
+        return res.req.route?.path === '/applications/csv';
       },
     }),
   );
