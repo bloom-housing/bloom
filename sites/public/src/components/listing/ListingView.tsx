@@ -61,7 +61,6 @@ import { getGenericAddress, openInFuture } from "../../lib/helpers"
 import { GetApplication } from "./GetApplication"
 import { DownloadLotteryResults } from "./DownloadLotteryResults"
 import { SubmitApplication } from "./SubmitApplication"
-import { Toast } from "@bloom-housing/ui-seeds"
 interface ListingProps {
   listing: Listing
   preview?: boolean
@@ -71,7 +70,6 @@ interface ListingProps {
 export const ListingView = (props: ListingProps) => {
   let buildingSelectionCriteria, preferencesSection
   const { listing } = props
-  const { getToastMessage, getToastProps } = useContext(MessageContext)
   const {
     content: appStatusContent,
     subContent: appStatusSubContent,
@@ -510,7 +508,6 @@ export const ListingView = (props: ListingProps) => {
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">
       <header className="image-card--leader">
-        <Toast {...getToastProps()}> {getToastMessage()} </Toast>
         <ImageCard
           images={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize)).map(
             (imageUrl: string) => {

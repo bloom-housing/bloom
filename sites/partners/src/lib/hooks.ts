@@ -519,7 +519,7 @@ export const useApplicationsExport = (listingId: string, includeDemographics: bo
         t("t.emailingExportSuccess", {
           email: profile?.email,
         }),
-        { variant: alertTypes.success }
+        { variant: "success" }
       )
     } catch (err) {
       console.log(err)
