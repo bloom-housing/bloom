@@ -172,6 +172,7 @@ jobs:
       - run: yarn test:shared:helpers
   jest-backend:
     executor: standard-node
+    resource_class: large
     steps:
       - restore_cache:
           key: build-cache-new-{{ .Environment.CIRCLE_SHA1 }}
