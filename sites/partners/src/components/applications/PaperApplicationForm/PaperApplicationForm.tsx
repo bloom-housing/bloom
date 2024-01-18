@@ -1,14 +1,8 @@
 import React, { useState, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
-import {
-  t,
-  Form,
-  AlertBox,
-  setSiteAlertMessage,
-  LoadingOverlay,
-} from "@bloom-housing/ui-components"
+import { t, Form, AlertBox, LoadingOverlay } from "@bloom-housing/ui-components"
 import { Tag } from "@bloom-housing/ui-seeds"
-import { AuthContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
+import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import { useForm, FormProvider } from "react-hook-form"
 import {
   HouseholdMember,
@@ -67,6 +61,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   const router = useRouter()
 
   const { applicationsService } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
 
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
@@ -132,11 +127,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       setLoading(false)
 
       if (result) {
-        setSiteAlertMessage(
+        addToast(
           editMode
             ? t("application.add.applicationUpdated")
             : t("application.add.applicationSubmitted"),
-          "success"
+          { variant: "success" }
         )
 
         if (redirect === "details") {

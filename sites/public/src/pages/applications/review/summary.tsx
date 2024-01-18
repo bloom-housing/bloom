@@ -2,13 +2,14 @@ import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
 import { Alert, Button } from "@bloom-housing/ui-seeds"
-import { Form, setSiteAlertMessage, t } from "@bloom-housing/ui-components"
+import { Form, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   OnClientSide,
   PageView,
   pushGtmEvent,
   AuthContext,
+  MessageContext,
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
 import {
@@ -26,6 +27,7 @@ import styles from "../../../layouts/application-form.module.scss"
 const ApplicationSummary = () => {
   const router = useRouter()
   const { profile, applicationsService } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
   const [validationError, setValidationError] = useState(false)
   const { conductor, application, listing } = useFormConductor("summary")
   let currentPageSection = 4
@@ -46,7 +48,7 @@ const ApplicationSummary = () => {
   useEffect(() => {
     if (listing && router.isReady) {
       if (listing?.status !== ListingStatus.active) {
-        setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
+        addToast(t("listings.applicationsClosedRedirect"), { variant: "alert" })
         void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
       }
     }

@@ -1,13 +1,14 @@
 import React, { useCallback, useContext, useEffect, useState } from "react"
 import axios from "axios"
 import { useRouter } from "next/router"
-import { ImageCard, t, setSiteAlertMessage } from "@bloom-housing/ui-components"
+import { ImageCard, t } from "@bloom-housing/ui-components"
 import {
   imageUrlFromListing,
   OnClientSide,
   PageView,
   pushGtmEvent,
   AuthContext,
+  MessageContext,
 } from "@bloom-housing/shared-helpers"
 import { Language, ListingStatus } from "@bloom-housing/backend-core/types"
 import { Heading, Icon, Button, Message } from "@bloom-housing/ui-seeds"
@@ -39,6 +40,7 @@ const ApplicationChooseLanguage = () => {
   const [listing, setListing] = useState(null)
   const context = useContext(AppSubmissionContext)
   const { initialStateLoaded, profile } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
   const { conductor } = context
 
   const listingId = router.query.listingId
@@ -70,7 +72,7 @@ const ApplicationChooseLanguage = () => {
   useEffect(() => {
     if (listing && router.isReady) {
       if (listing?.status !== ListingStatus.active && router.query.preview !== "true") {
-        setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
+        addToast(t("listings.applicationsClosedRedirect"), { variant: "alert" })
         void router.push(`/${router.locale}/listing/${listing?.id}/${listing?.urlSlug}`)
       }
     }

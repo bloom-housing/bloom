@@ -8,14 +8,13 @@ import {
   FooterSection,
   t,
   MenuLink,
-  setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
 import { AuthContext, ExygyFooter, MessageContext } from "@bloom-housing/shared-helpers"
 import { Toast } from "@bloom-housing/ui-seeds"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
-  const { toastMessagesRef } = useContext(MessageContext)
+  const { toastMessagesRef, addToast } = useContext(MessageContext)
   const router = useRouter()
   const currentYear = new Date().getFullYear()
   const menuLinks: MenuLink[] = []
@@ -44,7 +43,7 @@ const Layout = (props) => {
     menuLinks.push({
       title: t("nav.signOut"),
       onClick: async () => {
-        setSiteAlertMessage(t(`authentication.signOut.success`), "notice")
+        addToast(t(`authentication.signOut.success`), { variant: "primary" })
         await router.push("/sign-in")
         signOut()
       },

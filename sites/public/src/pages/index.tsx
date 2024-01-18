@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react"
 import Head from "next/head"
 import { Jurisdiction } from "@bloom-housing/backend-core/types"
-import { Button, Heading, Toast } from "@bloom-housing/ui-seeds"
-import { AlertBox, t, SiteAlert, ActionBlock, Icon } from "@bloom-housing/ui-components"
-import { PageView, pushGtmEvent, AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import { Button, Heading } from "@bloom-housing/ui-seeds"
+import { AlertBox, t, ActionBlock, Icon } from "@bloom-housing/ui-components"
+import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
 import { ConfirmationModal } from "../components/account/ConfirmationModal"
@@ -21,7 +21,6 @@ export default function Home(props: IndexProps) {
     alertType: null,
   }
   const { profile } = useContext(AuthContext)
-  const { getToastMessage, getToastProps } = useContext(MessageContext)
   const [alertInfo, setAlertInfo] = useState(blankAlertInfo)
 
   useEffect(() => {
@@ -40,20 +39,13 @@ export default function Home(props: IndexProps) {
 
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
-  const alertClasses = "flex-grow mt-6 max-w-6xl w-full"
+
   return (
     <Layout>
       <Head>
         <title>{t("nav.siteTitle")}</title>
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <div className="flex absolute w-full flex-col items-center">
-        <SiteAlert type="alert" className={alertClasses} />
-        <SiteAlert type="success" />
-        <Toast {...getToastProps()} className={alertClasses} hideTimeout={30000}>
-          {getToastMessage()}
-        </Toast>
-      </div>
       {alertInfo.alertMessage && (
         <AlertBox
           className=""
