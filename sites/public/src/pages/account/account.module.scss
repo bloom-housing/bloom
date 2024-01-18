@@ -7,8 +7,10 @@
 }
 
 .account-card {
-  --card-header-padding-inline: var(--seeds-s12);
   width: 100%;
+  @media (min-width: theme("screens.md")) {
+    --card-header-padding-inline: var(--seeds-s12);
+  }
 }
 
 .acccount-card-icon {
@@ -20,5 +22,11 @@
 }
 
 .account-card-section {
-  --card-content-padding-inline: var(--seeds-s12);
+  @media (min-width: theme("screens.md")) {
+    --card-content-padding-inline: var(--seeds-s12);
+  }
+}
+
+.application-card-section {
+  --card-content-padding-block: var(--seeds-s6);
 }
