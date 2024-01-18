@@ -76,7 +76,7 @@ const ApplicationChooseLanguage = () => {
         void router.push(`/${router.locale}/listing/${listing?.id}/${listing?.urlSlug}`)
       }
     }
-  }, [listing, router])
+  }, [listing, router, addToast])
 
   const imageUrl = listing?.assets
     ? imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]

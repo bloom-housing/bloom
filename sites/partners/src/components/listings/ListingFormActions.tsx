@@ -448,6 +448,7 @@ const ListingFormActions = ({
     listingId,
     listingsService,
     router,
+    addToast,
     showCloseListingModal,
     showLotteryResultsDrawer,
     showRequestChangesModal,

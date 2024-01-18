@@ -52,7 +52,7 @@ const ApplicationSummary = () => {
         void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
       }
     }
-  }, [listing, router])
+  }, [listing, router, addToast])
 
   const onSubmit = () => {
     applicationsService
