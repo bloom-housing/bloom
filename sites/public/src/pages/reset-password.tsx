@@ -1,15 +1,7 @@
 import React, { useEffect, useState, useContext, useRef } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
-import {
-  Field,
-  Form,
-  FormCard,
-  Icon,
-  t,
-  AlertBox,
-  SiteAlert,
-} from "@bloom-housing/ui-components"
+import { Field, Form, FormCard, Icon, t, AlertBox, SiteAlert } from "@bloom-housing/ui-components"
 import { Button } from "@bloom-housing/ui-seeds"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
