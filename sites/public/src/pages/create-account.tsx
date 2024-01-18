@@ -35,7 +35,6 @@ export default () => {
   const language = router.locale
   const email = useRef({})
   const password = useRef({})
-  const [passwordShown, setPasswordShown] = useState(false)
   email.current = watch("email", "")
   password.current = watch("password", "")
 
@@ -170,10 +169,10 @@ export default () => {
                 controlClassName={styles["create-account-input"]}
               />
             </div>
-            <div className="form-card__group border-b mx-12 p-0 py-8">
+            <div className="form-card__group border-b mx-12 p-0 py-8 space-y-3">
               <Field
                 caps={true}
-                type={passwordShown ? "text" : "password"}
+                type={"password"}
                 name="password"
                 note={t("authentication.createAccount.passwordInfo")}
                 label={t("authentication.createAccount.passwordCreate")}
@@ -187,16 +186,33 @@ export default () => {
                 register={register}
                 controlClassName={styles["create-account-input"]}
               />
+              <label className={styles["create-account-field"]} htmlFor="passwordConfirmation">
+                {t("authentication.createAccount.reEnterPassword")}
+              </label>
               <Field
-                type="checkbox"
-                name="showPassword"
-                label={t("authentication.createAccount.passwordShow")}
-                register={register}
-                inputProps={{
-                  onChange: () => {
-                    setPasswordShown(!passwordShown)
-                  },
+                type="password"
+                name="passwordConfirmation"
+                validation={{
+                  validate: (value) =>
+                    value === password.current ||
+                    t("authentication.createAccount.errors.passwordMismatch"),
                 }}
+                onPaste={(e) => {
+                  e.preventDefault()
+                  e.nativeEvent.stopImmediatePropagation()
+                  return false
+                }}
+                onDrop={(e) => {
+                  e.preventDefault()
+                  e.nativeEvent.stopImmediatePropagation()
+                  return false
+                }}
+                error={errors.passwordConfirmation}
+                errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
+                register={register}
+                controlClassName={styles["create-account-input"]}
+                label={t("authentication.createAccount.reEnterPassword")}
+                readerOnly
               />
               <Button type="submit" variant="primary">
                 {t("account.createAccount.label")}
