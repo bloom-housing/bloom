@@ -65,7 +65,11 @@ function Dashboard(props: DashboardProps) {
                     subtitle={t("account.myApplicationsSubtitle")}
                   >
                     <Card.Section className={styles["account-card-section"]}>
-                      <Button href={"/account/applications"} variant="primary-outlined">
+                      <Button
+                        href={"/account/applications"}
+                        variant="primary-outlined"
+                        id="account-dashboard-applications"
+                      >
                         {t("account.viewApplications")}
                       </Button>
                     </Card.Section>
@@ -76,6 +80,7 @@ function Dashboard(props: DashboardProps) {
                     iconSymbol="profile"
                     title={t("account.accountSettings")}
                     subtitle={t("account.accountSettingsSubtitle")}
+                    id="account-dashboard-settings"
                   >
                     <Card.Section className={styles["account-card-section"]}>
                       <Button href={"/account/edit"} variant="primary-outlined">

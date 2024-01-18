@@ -12,7 +12,7 @@ interface StatusItemProps {
   listingName: string
   listingURL: string
   strings?: {
-    applicationDeadline?: string
+    applicationClose?: string
     edited?: string
     seeListing?: string
     status?: string
@@ -58,7 +58,7 @@ const StatusItem = (props: StatusItemProps) => {
           <div className={styles["status-item__action"]}>
             {props.applicationDueDate && (
               <p className={styles["status-item__due"]}>
-                {props.strings?.applicationDeadline ?? t("listings.applicationClose")}:{" "}
+                {props.strings?.applicationClose ?? t("listings.applicationClose")}:{" "}
                 {props.applicationDueDate}
               </p>
             )}

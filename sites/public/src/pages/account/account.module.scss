@@ -7,10 +7,14 @@
 }
 
 .account-card {
-  width: 100%;
-  @media (min-width: theme("screens.md")) {
-    --card-header-padding-inline: var(--seeds-s12);
+  --card-header-padding-inline-desktop: var(--seeds-s12);
+  --card-header-padding-inline-mobile: var(--seeds-s4);
+  --card-content-padding-inline-mobile: var(--seeds-s4);
+  @media (max-width: theme("screens.md")) {
+    --card-spacing-lg: var(--seeds-s6);
   }
+
+  width: 100%;
 }
 
 .acccount-card-icon {
