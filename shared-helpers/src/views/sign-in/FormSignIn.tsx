@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext } from "react"
 import { Field, Form, FormCard, Icon, NavigationContext, t } from "@bloom-housing/ui-components"
 import { Button, Heading } from "@bloom-housing/ui-seeds"
 import { FormSignInErrorBox } from "./FormSignInErrorBox"
@@ -35,12 +35,11 @@ const FormSignIn = ({
     window.scrollTo(0, 0)
   }
   const { LinkComponent } = useContext(NavigationContext)
-  const [passwordShown, setPasswordShown] = useState(false)
   return (
     <FormCard>
       {process.env.showMandatedAccounts ? (
         <>
-          <div className="form-card__lead mx-12 space-y-3 pt-8">
+          <div className="form-card__lead mx-12 space-y-3 pl-0 pt-8">
             <Icon size="2xl" symbol="profile" />
             <Heading size="3xl" className="font-semibold">
               {t("nav.signInLowercase")}
@@ -83,24 +82,8 @@ const FormSignIn = ({
                 error={errors.password}
                 errorMessage={t("authentication.signIn.enterLoginPassword")}
                 register={register}
-                type={passwordShown ? "text" : "password"}
+                type={"password"}
                 dataTestId="sign-in-password-field"
-                inputProps={{
-                  onChange: () => {
-                    setPasswordShown(!passwordShown)
-                  },
-                }}
-              />
-              <Field
-                type="checkbox"
-                name="showPassword"
-                label={t("authentication.signIn.showPassword")}
-                register={register}
-                inputProps={{
-                  onChange: () => {
-                    setPasswordShown(!passwordShown)
-                  },
-                }}
               />
               <div className="mt-6">
                 <Button type="submit" variant="primary" id="sign-in-button">
