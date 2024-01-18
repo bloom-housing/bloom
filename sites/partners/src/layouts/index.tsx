@@ -65,7 +65,7 @@ const Layout = (props) => {
           homeURL={"/"}
         />
         <main>
-          {toastMessagesRef.current.map((toastMessage) => (
+          {toastMessagesRef.current?.map((toastMessage) => (
             <Toast {...toastMessage.props} testId="toast-alert" key={toastMessage.timestamp}>
               {toastMessage.message}
             </Toast>
