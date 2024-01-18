@@ -713,7 +713,7 @@ const PreferenceDrawer = ({
                             : [{ label: "", value: "" }]
                         }
                         dataTestId={"preference-map-layer"}
-                        defaultValue={optionData.mapLayerId ?? null}
+                        defaultValue={optionData?.mapLayerId ?? null}
                         errorMessage={t("errors.requiredFieldError")}
                         error={errors.mapLayerId}
                         validation={{ required: true }}
