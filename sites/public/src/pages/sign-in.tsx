@@ -148,7 +148,7 @@ const SignIn = () => {
     />
   )
 
-  return (
+  const MandatedAccountsSignIn = () => (
     <>
       <FormLayout className="sm:max-w-lg md:max-w-full">
         <div className="flex flex-col md:flex-row md:ml-20 justify-center">
@@ -188,6 +188,38 @@ const SignIn = () => {
       />
     </>
   )
+  const DefaultSignIn = () => (
+    <>
+      <FormLayout>
+        <FormSignIn
+          onSubmit={(data) => void onSubmit(data)}
+          control={{ register, errors, handleSubmit, watch }}
+          networkStatus={{
+            content: networkStatusContent,
+            type: networkStatusType,
+            reset: () => {
+              reset()
+              resetNetworkError()
+              setConfirmationStatusMessage(undefined)
+            },
+          }}
+          showRegisterBtn={true}
+        />
+      </FormLayout>
+      <ResendConfirmationModal
+        isOpen={confirmationStatusModal}
+        onClose={() => {
+          setConfirmationStatusModal(false)
+          resetResendConfirmation()
+          resetNetworkError()
+        }}
+        initialEmailValue={emailValue.current as string}
+        onSubmit={(email) => onResendConfirmationSubmit(email)}
+        loadingMessage={isResendConfirmationLoading && t("t.formSubmitted")}
+      />
+    </>
+  )
+  return process.env.showMandatedAccounts ? <MandatedAccountsSignIn /> : <DefaultSignIn />
 }
 
 export { SignIn as default, SignIn }
