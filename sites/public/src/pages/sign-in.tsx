@@ -130,64 +130,49 @@ const SignIn = () => {
 
   const MobileComponent = () => {
     return (
-      <>
-        <HeadingGroup
-          heading={t("account.signUpSaveTime.title")}
-          subheading={t("account.signUpSaveTime.subTitle")}
-          size="xl"
-          className="p-4 -order-1"
-        />
-        <div className="md:max-w-lg w-full">
-          <FormSignIn
-            onSubmit={(data) => void onSubmit(data)}
-            control={{ register, errors, handleSubmit, watch }}
-            networkStatus={{
-              content: networkStatusContent,
-              type: networkStatusType,
-              reset,
-            }}
-          />
-        </div>
-        <SignUpBenefits />
-      </>
+      <HeadingGroup
+        heading={t("account.signUpSaveTime.title")}
+        subheading={t("account.signUpSaveTime.subTitle")}
+        size="xl"
+        className="p-4 -order-1"
+      />
     )
   }
 
   const DesktopComponent = () => (
-    <>
-      <div className="max-w-lg w-full">
-        <FormSignIn
-          onSubmit={(data) => void onSubmit(data)}
-          control={{ register, errors, handleSubmit, watch }}
-          networkStatus={{
-            content: networkStatusContent,
-            type: networkStatusType,
-            reset,
-          }}
-        />
-      </div>
-      <div className="flex flex-col grow-0 shrink-1 p-5 max-w-lg w-full">
-        <HeadingGroup
-          heading={t("account.signUpSaveTime.title")}
-          subheading={t("account.signUpSaveTime.subTitle")}
-          size="xl"
-          className="grow-0 shrink-1"
-        />
-        <SignUpBenefits />
-      </div>
-    </>
+    <HeadingGroup
+      heading={t("account.signUpSaveTime.title")}
+      subheading={t("account.signUpSaveTime.subTitle")}
+      size="xl"
+      className="grow-0 shrink-1"
+    />
   )
 
   return (
     <>
       <FormLayout className="sm:max-w-lg md:max-w-full">
         <div className="flex flex-col md:flex-row md:ml-20 justify-center">
-          <div className="hidden md:flex ">
-            <DesktopComponent />
-          </div>
-          <div className="display md:hidden">
+          <div id="mobile" className="display md:hidden ">
             <MobileComponent />
           </div>
+          <div className="md:max-w-lg w-full justify-center">
+            <FormSignIn
+              onSubmit={(data) => void onSubmit(data)}
+              control={{ register, errors, handleSubmit, watch }}
+              networkStatus={{
+                content: networkStatusContent,
+                type: networkStatusType,
+                reset,
+              }}
+            />
+          </div>
+          <div id="desktop" className="hidden md:flex">
+            <div className="md:flex md:flex-col md:grow-0 md:shrink-1 md:p-5 md:max-w-lg md:w-full ">
+              <DesktopComponent />
+              <SignUpBenefits id="desktop" />
+            </div>
+          </div>
+          <SignUpBenefits id="mobile" className="display md:hidden" />
         </div>
       </FormLayout>
       <ResendConfirmationModal
