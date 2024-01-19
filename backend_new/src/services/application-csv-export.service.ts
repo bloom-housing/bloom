@@ -12,6 +12,9 @@ import { ApplicationMultiselectQuestion } from '../dtos/applications/application
 import MultiselectQuestion from '../dtos/multiselect-questions/multiselect-question.dto';
 import { ApplicationFlaggedSet } from '../dtos/application-flagged-sets/application-flagged-set.dto';
 import { User } from '../dtos/users/user.dto';
+import { ListingService } from './listing.service';
+import { PermissionService } from './permission.service';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
 
 view.csv = {
   ...view.details,
@@ -40,6 +43,8 @@ export class ApplicationCsvExporterService {
   constructor(
     private prisma: PrismaService,
     private multiselectQuestionService: MultiselectQuestionService,
+    private listingService: ListingService,
+    private permissionService: PermissionService,
   ) {}
   /**
    *
@@ -98,8 +103,10 @@ export class ApplicationCsvExporterService {
         queryParams.listingId,
       );
 
-    // get maxHouseholdMembers
-    const maxHouseholdMembers = await this.maxHouseholdMembers();
+    // get maxHouseholdMembers or associated to the selected applications
+    const maxHouseholdMembers = await this.maxHouseholdMembers(
+      applications.map((application) => application.id),
+    );
 
     const csvHeaders = await this.getCsvHeaders(
       maxHouseholdMembers,
@@ -204,12 +211,16 @@ export class ApplicationCsvExporterService {
     });
   }
 
-  async maxHouseholdMembers(): Promise<number> {
-    // TODO: is there a way to filter on listingId here?
+  async maxHouseholdMembers(applicationIds: string[]): Promise<number> {
     const maxHouseholdMembersRes = await this.prisma.householdMember.groupBy({
       by: ['applicationId'],
       _count: {
         applicationId: true,
+      },
+      where: {
+        OR: applicationIds.map((id) => {
+          return { applicationId: id };
+        }),
       },
       orderBy: {
         _count: {
@@ -645,12 +656,17 @@ export class ApplicationCsvExporterService {
      * By making listingId required, we can check if the user has update permissions for the listing, since right now if a user has that
      * they also can run the export for that listing
      */
-    /* const jurisdictionId =
+    const jurisdictionId =
       await this.listingService.getJurisdictionIdByListingId(listingId);
 
-    await this.authzService.canOrThrow(user, 'listing', authzActions.update, {
-      id: listingId,
-      jurisdictionId,
-    }); */
+    await this.permissionService.canOrThrow(
+      user,
+      'listing',
+      permissionActions.update,
+      {
+        id: listingId,
+        jurisdictionId,
+      },
+    );
   }
 }

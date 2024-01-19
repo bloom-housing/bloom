@@ -8,7 +8,7 @@ import { EmailModule } from './email.module';
 import { ListingModule } from './listing.module';
 import { MultiselectQuestionModule } from './multiselect-question.module';
 import { ApplicationCsvExporterService } from '../services/application-csv-export.service';
-import { UnitTypeService } from '../services/unit-type.service';
+import { UnitTypeModule } from './unit-type.module';
 
 @Module({
   imports: [
@@ -17,13 +17,13 @@ import { UnitTypeService } from '../services/unit-type.service';
     ListingModule,
     MultiselectQuestionModule,
     PermissionModule,
+    UnitTypeModule,
   ],
   controllers: [ApplicationController],
   providers: [
     ApplicationService,
     GeocodingService,
     ApplicationCsvExporterService,
-    UnitTypeService,
   ],
   exports: [ApplicationService],
 })

@@ -80,7 +80,7 @@ export class ApplicationController {
     summary: 'Get applications as csv',
     operationId: 'listAsCsv',
   })
-  @Header('Content-Type', 'application/json')
+  @Header('Content-Type', 'text/csv')
   async listAsCsv(
     @Request() req: ExpressRequest,
     @Query(new ValidationPipe(defaultValidationPipeOptions))

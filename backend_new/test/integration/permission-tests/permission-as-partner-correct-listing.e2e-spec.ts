@@ -424,6 +424,13 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
         .set('Cookie', cookies)
         .expect(201);
     });
+
+    it('should succeed for csv endpoint', async () => {
+      await request(app.getHttpServer())
+        .get(`/applications/csv?listingId=${userListingId}`)
+        .set('Cookie', cookies)
+        .expect(200);
+    });
   });
 
   describe('Testing asset endpoints', () => {

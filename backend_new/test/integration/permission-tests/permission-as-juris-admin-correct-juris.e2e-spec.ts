@@ -400,6 +400,20 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         .set('Cookie', cookies)
         .expect(201);
     });
+
+    it('should succeed for csv endpoint', async () => {
+      const application = await applicationFactory();
+      const listing1 = await listingFactory(jurisId, prisma, {
+        applications: [application],
+      });
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+      await request(app.getHttpServer())
+        .get(`/applications/csv?listingId=${listing1Created.id}`)
+        .set('Cookie', cookies)
+        .expect(200);
+    });
   });
 
   describe('Testing asset endpoints', () => {

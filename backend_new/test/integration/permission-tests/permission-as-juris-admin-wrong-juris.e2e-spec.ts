@@ -373,6 +373,25 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the wron
         .set('Cookie', cookies)
         .expect(201);
     });
+
+    it('should error as forbidden for csv endpoint', async () => {
+      const jurisdiction = await generateJurisdiction(
+        prisma,
+        'permission juris csv endpoint',
+      );
+      await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
+      const application = await applicationFactory();
+      const listing1 = await listingFactory(jurisdiction, prisma, {
+        applications: [application],
+      });
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+      await request(app.getHttpServer())
+        .get(`/applications/csv?listingId=${listing1Created.id}`)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
   });
 
   describe('Testing asset endpoints', () => {
