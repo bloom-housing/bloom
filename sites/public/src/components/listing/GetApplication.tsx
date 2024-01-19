@@ -61,6 +61,8 @@ export interface ApplicationsProps {
 /** Displays information regarding how to apply, including an online application link button, paper application downloads, and a paper application pickup address */
 const GetApplication = (props: ApplicationsProps) => {
   const { initialStateLoaded, profile } = useContext(AuthContext)
+  const redirectIfSignedOut = () =>
+    process.env.showMandatedAccounts && initialStateLoaded && !profile
 
   const showSection =
     props.onlineApplicationURL ||
@@ -106,9 +108,9 @@ const GetApplication = (props: ApplicationsProps) => {
               variant="primary"
               className="w-full mb-2"
               href={
-                initialStateLoaded && profile
-                  ? props.onlineApplicationURL
-                  : `/sign-in?redirectUrl=/applications/start/choose-language&listingId=${props.listingId}`
+                redirectIfSignedOut()
+                  ? `/sign-in?redirectUrl=/applications/start/choose-language&listingId=${props.listingId}`
+                  : props.onlineApplicationURL
               }
               id={"listing-view-apply-button"}
             >
