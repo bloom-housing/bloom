@@ -111,6 +111,8 @@
     --dot-size: .95rem;
     --dot-font-size: 0.825rem;
     --dot-label-padding-top: var(--seeds-s6);
+    --active-step-color: var(--seeds-color-primary-dark);
+    --completed-step-color: var(--seeds-color-primary-dark);
   }
 
   /* TODO: would be nice to have CSS variables for this too */
