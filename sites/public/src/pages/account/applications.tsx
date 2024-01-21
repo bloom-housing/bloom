@@ -1,13 +1,15 @@
 import React, { useEffect, useState, Fragment, useContext } from "react"
 import Head from "next/head"
 import { t, LoadingOverlay } from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
+import { Button, Card } from "@bloom-housing/ui-seeds"
 import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
 import { StatusItemWrapper, AppWithListing } from "./StatusItemWrapper"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
 import { AccountCard } from "./AccountCard"
+
+import styles from "../../pages/account/account.module.scss"
 
 const Applications = () => {
   const { applicationsService, listingsService, profile } = useContext(AuthContext)
@@ -58,17 +60,23 @@ const Applications = () => {
   }, [applications, listLoading, listingsService])
 
   const noApplicationsSection = () => {
-    return error ? (
-      <div className="p-8">
-        <h1 className="pb-4 text-2xl">{`${t("account.errorFetchingApplications")}`}</h1>
-      </div>
-    ) : (
-      <div className="p-8">
-        <h1 className="pb-4 text-2xl">{t("account.noApplications")}</h1>
-        <Button variant="primary-outlined" href="/listings">
-          {t("listings.browseListings")}
-        </Button>
-      </div>
+    return (
+      <Card.Section
+        className={`${styles["account-card-section"]} ${styles["application-card-section"]}`}
+      >
+        {error ? (
+          <div className="p-8">
+            <h1 className="pb-4 text-2xl">{`${t("account.errorFetchingApplications")}`}</h1>
+          </div>
+        ) : (
+          <>
+            <h1 className="pb-4 text-2xl">{t("account.noApplications")}</h1>
+            <Button variant="primary-outlined" href="/listings">
+              {t("listings.browseListings")}
+            </Button>
+          </>
+        )}
+      </Card.Section>
     )
   }
   return (
