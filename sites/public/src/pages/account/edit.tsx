@@ -308,9 +308,9 @@ const Edit = () => {
                   <div className={"flex flex-col"}>
                     <Field
                       type="password"
-                      name="oldPassword"
-                      label={t("account.settings.oldPassword")}
-                      error={errors.oldPassword}
+                      name="currentPassword"
+                      label={t("account.settings.currentPassword")}
+                      error={errors.currentPassword}
                       register={register}
                       className={"mb-1"}
                     />

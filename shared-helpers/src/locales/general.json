@@ -25,7 +25,6 @@
   "account.settings.alerts.passwordSuccess": "Password update successful",
   "account.settings.confirmNewPassword": "Confirm new password",
   "account.settings.currentPassword": "Current password",
-  "account.settings.oldPassword": "Old password",
   "account.settings.newPassword": "New password",
   "account.settings.passwordRemember": "When changing your password make sure you make note of it so you remember it in the future.",
   "account.settings.placeholders.day": "DD",
