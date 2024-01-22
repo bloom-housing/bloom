@@ -12,7 +12,7 @@ interface StatusItemProps {
   listingName: string
   listingURL: string
   strings?: {
-    applicationsClose?: string
+    applicationsDeadline?: string
     edited?: string
     seeListing?: string
     status?: string
@@ -56,7 +56,7 @@ const StatusItem = (props: StatusItemProps) => {
           <div className={styles["status-item__action"]}>
             {props.applicationDueDate && (
               <p className={styles["status-item__due"]}>
-                {props.strings?.applicationsClose ?? t("listings.applicationsClose")}:{" "}
+                {props.strings?.applicationsDeadline ?? t("listings.applicationDeadline")}:{" "}
                 {props.applicationDueDate}
               </p>
             )}
@@ -66,12 +66,12 @@ const StatusItem = (props: StatusItemProps) => {
         <footer className={styles["status-item__footer"]}>
           <div>
             <Button href={props.applicationURL} variant="primary-outlined" size="sm">
-              {props.strings?.viewApplication ?? t("application.viewYourApplication")}
+              {props.strings?.viewApplication ?? t("application.viewApplication")}
             </Button>
           </div>
           <div>
             <Button href={props.listingURL} variant="primary-outlined" size="sm">
-              {props.strings?.seeListing ?? t("t.viewListing")}
+              {props.strings?.seeListing ?? t("t.seeListing")}
             </Button>
           </div>
         </footer>

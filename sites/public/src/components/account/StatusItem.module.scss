@@ -33,6 +33,7 @@
   font-size: var(--seeds-font-size-sm);
   @media (max-width: theme("screens.md")) {
     text-align: left;
+    padding-top: var(--seeds-s2_5);
   }
 }
 
