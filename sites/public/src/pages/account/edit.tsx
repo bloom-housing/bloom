@@ -22,7 +22,7 @@ import Link from "next/link"
 import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
 import FormsLayout from "../../layouts/forms"
-import { AccountCard } from "./AccountCard"
+import { AccountCard } from "../../components/account/AccountCard"
 
 import styles from "./account.module.scss"
 

@@ -7,7 +7,7 @@ import Layout from "../../layouts/application"
 import { StatusItemWrapper, AppWithListing } from "./StatusItemWrapper"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
-import { AccountCard } from "./AccountCard"
+import { AccountCard } from "../../components/account/AccountCard"
 
 import styles from "../../pages/account/account.module.scss"
 

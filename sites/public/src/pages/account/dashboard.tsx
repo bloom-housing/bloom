@@ -7,7 +7,7 @@ import Layout from "../../layouts/application"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
 import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
-import { AccountCard } from "./AccountCard"
+import { AccountCard } from "../../components/account/AccountCard"
 
 import styles from "./account.module.scss"
 
