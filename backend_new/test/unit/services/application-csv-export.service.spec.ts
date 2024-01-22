@@ -2,6 +2,7 @@ import { randomUUID } from 'crypto';
 import { PassThrough } from 'stream';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
+import { HttpModule } from '@nestjs/axios';
 import { PrismaService } from '../../../src/services/prisma.service';
 import {
   ApplicationCsvExporterService,
@@ -17,11 +18,21 @@ import { ApplicationFlaggedSet } from '../../../src/dtos/application-flagged-set
 import { User } from '../../../src/dtos/users/user.dto';
 import { mockApplicationSet } from './application.service.spec';
 import { mockMultiselectQuestion } from './multiselect-question.service.spec';
+import { ListingService } from '../../../src/services/listing.service';
+import { PermissionService } from '../../../src/services/permission.service';
+import { TranslationService } from '../../../src/services/translation.service';
+import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
+import { EmailService } from '../../../src/services/email.service';
+import { ConfigService } from '@nestjs/config';
+import { Logger } from '@nestjs/common';
+import { SchedulerRegistry } from '@nestjs/schedule';
+import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 
 describe('Testing application CSV export service', () => {
   let service: ApplicationCsvExporterService;
   let address: Address;
   let prisma: PrismaService;
+  let permissionService: PermissionService;
   const csvHeaders: CsvHeader[] = [
     {
       path: 'id',
@@ -246,13 +257,31 @@ describe('Testing application CSV export service', () => {
         ApplicationCsvExporterService,
         PrismaService,
         MultiselectQuestionService,
+        ListingService,
+        PermissionService,
+        TranslationService,
+        ApplicationFlaggedSetService,
+        {
+          provide: EmailService,
+          useValue: {
+            requestApproval: jest.fn(),
+            changesRequested: jest.fn(),
+            listingApproved: jest.fn(),
+          },
+        },
+        ConfigService,
+        Logger,
+        SchedulerRegistry,
+        GoogleTranslateService,
       ],
+      imports: [HttpModule],
     }).compile();
 
     service = module.get<ApplicationCsvExporterService>(
       ApplicationCsvExporterService,
     );
     prisma = module.get<PrismaService>(PrismaService);
+    permissionService = module.get<PermissionService>(PermissionService);
 
     address = {
       id: randomUUID(),
@@ -440,6 +469,8 @@ describe('Testing application CSV export service', () => {
 
     const applications = mockApplicationSet(5, new Date());
     prisma.applications.findMany = jest.fn().mockReturnValue(applications);
+    prisma.listings.findUnique = jest.fn().mockResolvedValue({});
+    permissionService.canOrThrow = jest.fn().mockResolvedValue(true);
 
     service.maxHouseholdMembers = jest.fn().mockReturnValue(1);
 
@@ -468,7 +499,7 @@ describe('Testing application CSV export service', () => {
     service.unitTypeToReadable = jest.fn().mockReturnValue('Studio');
 
     const exportResponse = await service.export(
-      { listingId: 'test', includeDemographics: false },
+      { listingId: randomUUID(), includeDemographics: false },
       requestingUser,
     );
 
@@ -501,6 +532,8 @@ describe('Testing application CSV export service', () => {
     const applications = mockApplicationSet(3, new Date());
     prisma.applications.findMany = jest.fn().mockReturnValue(applications);
     service.maxHouseholdMembers = jest.fn().mockReturnValue(0);
+    prisma.listings.findUnique = jest.fn().mockResolvedValue({});
+    permissionService.canOrThrow = jest.fn().mockResolvedValue(true);
 
     prisma.multiselectQuestions.findMany = jest
       .fn()
