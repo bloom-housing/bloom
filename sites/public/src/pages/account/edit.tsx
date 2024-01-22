@@ -172,7 +172,9 @@ const Edit = () => {
             )}
             <Card.Section divider="inset" className={styles["account-card-section"]}>
               <Form id="update-name" onSubmit={handleSubmit(onNameSubmit)}>
-                <label htmlFor="firstName">{t("application.name.yourName")}</label>
+                <label className={styles["account-settings-label"]} htmlFor="firstName">
+                  {t("application.name.yourName")}
+                </label>
                 <Field
                   label={t("application.contact.givenName")}
                   className="my-3"
@@ -265,13 +267,15 @@ const Edit = () => {
             )}
             <Card.Section divider="inset" className={styles["account-card-section"]}>
               <Form id="update-email" onSubmit={handleSubmit(onEmailSubmit)}>
-                <label htmlFor="firstName">{t("application.name.yourEmailAddress")}</label>
+                <label className={styles["account-settings-label"]} htmlFor="email">
+                  {t("application.name.yourEmailAddress")}
+                </label>
                 <Field
                   type="email"
                   name="email"
                   label={`${t("t.email")}`}
                   placeholder="example@web.com"
-                  className="mb-6"
+                  className="mt-3 mb-6"
                   validation={{ pattern: emailRegex }}
                   error={errors.email}
                   errorMessage={`${t("errors.emailAddressError")}`}
@@ -297,7 +301,9 @@ const Edit = () => {
             <Card.Section divider="inset" className={styles["account-card-section"]}>
               <Form id="update-password" onSubmit={handleSubmit(onPasswordSubmit)}>
                 <fieldset>
-                  <legend>{t("authentication.createAccount.password")}</legend>
+                  <legend className={styles["account-settings-label"]}>
+                    {t("authentication.createAccount.password")}
+                  </legend>
                   <p className="field-note mt-2 mb-3">{t("account.settings.passwordRemember")}</p>
                   <div className={"flex flex-col"}>
                     <Field

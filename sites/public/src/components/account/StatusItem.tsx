@@ -31,17 +31,15 @@ const StatusItem = (props: StatusItemProps) => {
         <header className={styles["status-item__header"]}>
           <h3 className={styles["status-item__title"]}>{props.listingName}</h3>
           <p className={styles["status-item__status"]}>
-            <span className={styles["status-item-label"]}>
-              {props.strings?.status ?? t("application.status")}:{" "}
-              <Tag variant="primary">
-                {props.strings?.submittedStatus ?? t("application.statuses.submitted")}
-              </Tag>
-            </span>
+            {props.strings?.status ?? t("application.status")}:{" "}
+            <Tag variant="primary">
+              {props.strings?.submittedStatus ?? t("application.statuses.submitted")}
+            </Tag>
           </p>
         </header>
 
         <section className={styles["status-item__content"]}>
-          <div className={styles["status-item__details"]}>
+          <div>
             {props.confirmationNumber && (
               <>
                 <span className={styles["status-item__confirm-text"]}>
@@ -66,12 +64,16 @@ const StatusItem = (props: StatusItemProps) => {
         </section>
 
         <footer className={styles["status-item__footer"]}>
-          <Button href={props.applicationURL} variant="primary-outlined" size="sm">
-            {props.strings?.viewApplication ?? t("application.viewYourApplication")}
-          </Button>
-          <Button href={props.listingURL} variant="primary-outlined" size="sm">
-            {props.strings?.seeListing ?? t("t.viewListing")}
-          </Button>
+          <div>
+            <Button href={props.applicationURL} variant="primary-outlined" size="sm">
+              {props.strings?.viewApplication ?? t("application.viewYourApplication")}
+            </Button>
+          </div>
+          <div>
+            <Button href={props.listingURL} variant="primary-outlined" size="sm">
+              {props.strings?.seeListing ?? t("t.viewListing")}
+            </Button>
+          </div>
         </footer>
       </article>
     </Card.Section>

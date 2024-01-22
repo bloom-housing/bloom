@@ -56,7 +56,7 @@ function Dashboard(props: DashboardProps) {
           <div className="max-w-5xl mx-auto md:py-8">
             <SiteAlert type="success" className="md:mb-8" timeout={30000} />
             <h1 className={"sr-only"}>{t("nav.myDashboard")}</h1>
-            <Grid spacing="xl" className={styles["account-card-container"]}>
+            <Grid spacing="lg" className={styles["account-card-container"]}>
               <Grid.Row columns={2}>
                 <Grid.Cell>
                   <AccountCard
