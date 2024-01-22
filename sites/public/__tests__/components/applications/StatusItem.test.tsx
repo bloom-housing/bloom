@@ -19,7 +19,7 @@ describe("<StatusItem>", () => {
     )
 
     expect(getByText("Listing Name")).not.toBeNull()
-    expect(getByText(t("listings.applicationsClose"), { exact: false })).not.toBeNull()
+    expect(getByText(t("listings.applicationDeadline"), { exact: false })).not.toBeNull()
     expect(getByText(t("application.yourLotteryNumber"), { exact: false })).not.toBeNull()
   })
   it("renders without a confirmation number or due date if not provided", () => {

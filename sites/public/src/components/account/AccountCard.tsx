@@ -2,7 +2,7 @@ import { HeadingGroup, Icon } from "@bloom-housing/ui-seeds"
 import Card from "@bloom-housing/ui-seeds/src/blocks/Card"
 import React from "react"
 import styles from "./AccountCard.module.scss"
-import { applicationIcon, profileIcon } from "../shared/CustomIcons"
+import { CustomIconMap } from "../shared/CustomIconMap"
 
 interface AccountCardProps {
   iconSymbol: "application" | "profile"
@@ -19,7 +19,7 @@ const AccountCard = (props: AccountCardProps) => {
   const classNames = [styles["account-card"]]
   if (props.className) classNames.push(props.className)
 
-  const customIcon = props.iconSymbol === "application" ? applicationIcon : profileIcon
+  const customIcon = CustomIconMap[props.iconSymbol]
 
   return (
     <Card spacing="lg" className={classNames.join(" ")}>
