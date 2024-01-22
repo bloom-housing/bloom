@@ -32,8 +32,8 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
     const elements = []
 
     const cancel = (
-      <Grid.Cell className="flex" key="btn-cancel">
-        <Link className="w-100" href={`/listings/${listingId}/applications`}>
+      <Grid.Cell key="btn-cancel">
+        <Link className="w-full justify-center" href={`/listings/${listingId}/applications`}>
           {t("t.cancel")}
         </Link>
       </Grid.Cell>
@@ -42,12 +42,16 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
     if (type === "details") {
       elements.push(
         <Grid.Cell key="btn-submitNew">
-          <Button href={`/application/${applicationId}/edit`} variant="secondary" className="w-100">
+          <Button
+            href={`/application/${applicationId}/edit`}
+            variant="secondary"
+            className="w-full"
+          >
             {t("t.edit")}
           </Button>
         </Grid.Cell>,
-        <Grid.Cell className="flex" key="btn-cancel">
-          <Button variant="text" className="text-alert w-100" onClick={() => setDeleteModal(true)}>
+        <Grid.Cell key="btn-cancel">
+          <Button variant="text" className="text-alert w-full" onClick={() => setDeleteModal(true)}>
             {t("t.delete")}
           </Button>
         </Grid.Cell>
@@ -60,7 +64,7 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
           <Button
             type="submit"
             variant="primary"
-            className="w-100"
+            className="w-full"
             onClick={() => false}
             id={"submitApplicationButton"}
           >
@@ -75,7 +79,7 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
             <Button
               type="button"
               variant="secondary"
-              className="w-100"
+              className="w-full"
               onClick={() => triggerSubmitAndRedirect()}
             >
               {t("t.submitNew")}
@@ -87,19 +91,17 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
 
       if (type === "edit") {
         elements.push(
-          <div className="flex justify-center" key="btn-group">
-            {cancel}
-            <Grid.Cell className="flex" key="btn-delete">
-              <Button
-                type="button"
-                variant="text"
-                className="text-alert w-100"
-                onClick={() => setDeleteModal(true)}
-              >
-                {t("t.delete")}
-              </Button>
-            </Grid.Cell>
-          </div>
+          cancel,
+          <Grid.Cell key="btn-delete">
+            <Button
+              type="button"
+              variant="text"
+              className="text-alert w-full"
+              onClick={() => setDeleteModal(true)}
+            >
+              {t("t.delete")}
+            </Button>
+          </Grid.Cell>
         )
       }
     }

@@ -37,6 +37,7 @@ import { PaperApplicationsModule } from "./paper-applications/paper-applications
 import { ActivityLogModule } from "./activity-log/activity-log.module"
 import { logger } from "./shared/middlewares/logger.middleware"
 import { CatchAllFilter } from "./shared/filters/catch-all-filter"
+import { MapLayersModule } from "./map-layers/map-layers.module"
 
 export function applicationSetup(app: INestApplication) {
   const { httpAdapter } = app.get(HttpAdapterHost)
@@ -106,6 +107,7 @@ export class AppModule {
         UnitTypesModule,
         UnitRentTypesModule,
         UnitAccessibilityPriorityTypesModule,
+        MapLayersModule,
       ],
     }
   }

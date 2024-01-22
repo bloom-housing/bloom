@@ -24,6 +24,8 @@ import {
 import ManageIconSection from "./ManageIconSection"
 import { DrawerType } from "../../pages/settings/index"
 import SectionWithGrid from "../shared/SectionWithGrid"
+import s from "./PreferenceDrawer.module.scss"
+import { useMapLayersList } from "../../lib/hooks"
 
 type PreferenceDrawerProps = {
   drawerOpen: boolean
@@ -49,6 +51,7 @@ type OptionForm = {
   optionLinkTitle: string
   optionTitle: string
   optionUrl: string
+  mapLayerId?: string
 }
 
 const PreferenceDrawer = ({
@@ -65,7 +68,6 @@ const PreferenceDrawer = ({
   const [dragOrder, setDragOrder] = useState([])
 
   const { profile } = useContext(AuthContext)
-
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const {
     register,
@@ -78,6 +80,8 @@ const PreferenceDrawer = ({
     setValue,
     formState,
   } = useForm()
+
+  const { mapLayers } = useMapLayersList(watch("jurisdictionId"))
 
   useEffect(() => {
     if (!optOutQuestion) {
@@ -103,6 +107,11 @@ const PreferenceDrawer = ({
     (optionData?.validationMethod === ValidationMethod.radius &&
       watch("validationMethod") === undefined) ||
     watch("validationMethod") === ValidationMethod.radius
+
+  const mapExpand =
+    (optionData?.validationMethod === ValidationMethod.map &&
+      watch("validationMethod") === undefined) ||
+    watch("validationMethod") === ValidationMethod.map
 
   // Update local state with dragged state
   useEffect(() => {
@@ -630,6 +639,18 @@ const PreferenceDrawer = ({
                             },
                           },
                           {
+                            label: t("settings.preferenceValidatingAddress.checkWithArcGisMap"),
+                            value: ValidationMethod.map,
+                            defaultChecked: optionData?.validationMethod === ValidationMethod.map,
+                            id: "validationMethodMap",
+                            dataTestId: "validation-method-map",
+                            inputProps: {
+                              onChange: () => {
+                                clearErrors("validationMethod")
+                              },
+                            },
+                          },
+                          {
                             label: t("settings.preferenceValidatingAddress.checkManually"),
                             value: ValidationMethod.none,
                             defaultChecked: optionData?.validationMethod === ValidationMethod.none,
@@ -666,6 +687,38 @@ const PreferenceDrawer = ({
                         dataTestId={"preference-option-radius-size"}
                         inputProps={{
                           onChange: () => clearErrors("radiusSize"),
+                        }}
+                      />
+                    </FieldValue>
+                  )}
+                  {collectAddressExpand && mapExpand && (
+                    <FieldValue label={t("settings.preferenceValidatingAddress.selectMapLayer")}>
+                      <p className={s.helperText}>
+                        {t("settings.preferenceValidatingAddress.selectMapLayerDescription")}
+                      </p>
+                      <Select
+                        id={"mapLayerId"}
+                        name={"mapLayerId"}
+                        register={register}
+                        controlClassName={"control"}
+                        options={
+                          mapLayers
+                            ? [
+                                { label: "", value: "" },
+                                ...mapLayers.map((layer) => ({
+                                  label: layer.name,
+                                  value: layer.id,
+                                })),
+                              ]
+                            : [{ label: "", value: "" }]
+                        }
+                        dataTestId={"preference-map-layer"}
+                        defaultValue={optionData?.mapLayerId ?? null}
+                        errorMessage={t("errors.requiredFieldError")}
+                        error={errors.mapLayerId}
+                        validation={{ required: true }}
+                        inputProps={{
+                          onChange: () => clearErrors("mapLayerId"),
                         }}
                       />
                     </FieldValue>
@@ -786,6 +839,7 @@ const PreferenceDrawer = ({
                     "collectRelationship",
                     "validationMethod",
                     "radiusSize",
+                    "mapLayerId",
                   ].includes(field)
                 )
               ) {
@@ -814,6 +868,9 @@ const PreferenceDrawer = ({
               }
               if (formData.validationMethod === ValidationMethod.radius && formData?.radiusSize) {
                 newOptionData.radiusSize = parseFloat(formData.radiusSize)
+              }
+              if (formData.validationMethod === ValidationMethod.map && formData?.mapLayerId) {
+                newOptionData.mapLayerId = formData.mapLayerId
               }
 
               let newOptions = []

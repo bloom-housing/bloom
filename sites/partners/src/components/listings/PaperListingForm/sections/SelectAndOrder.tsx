@@ -212,7 +212,11 @@ const SelectAndOrder = ({
             </div>
           )}
           {option.collectAddress && (
-            <div className={`${isNotLastItem ? "-mt-4" : "mt-0"}`}>
+            <div
+              className={`${
+                isNotLastItem && (option.description || option.links.length > 0) ? "-mt-4" : "mt-0"
+              }`}
+            >
               ({t("listings.providesAdditionalFields.info")})
             </div>
           )}
