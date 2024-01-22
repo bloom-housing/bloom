@@ -2,6 +2,10 @@
   .seeds-button {
     -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
   }
+
+  #seeds-toast-stack {
+    --toast-stack-inset-top: 10.5rem;
+  }
   
   --text-caps-spaced-letter-spacing: var(--bloom-letter-spacing-tight);
   --text-caps-spaced-font-weight: 700;
