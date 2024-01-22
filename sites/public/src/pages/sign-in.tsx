@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState, useCallback } from "react"
 import { useForm } from "react-hook-form"
 import { t, setSiteAlertMessage, useMutate } from "@bloom-housing/ui-components"
+import FormsLayout from "../layouts/forms"
 import { useRedirectToPrevPage } from "../lib/hooks"
 import {
   PageView,
@@ -9,13 +10,12 @@ import {
   NetworkStatusType,
   NetworkStatusContent,
   AuthContext,
-  ResendConfirmationModal,
   FormSignIn,
+  ResendConfirmationModal,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import { EnumUserErrorExtraModelUserErrorMessages } from "@bloom-housing/backend-core/types"
 import { HeadingGroup } from "@bloom-housing/ui-seeds"
-import FormLayout from "../layouts/forms"
 import SignUpBenefits from "../components/account/SignUpBenefits"
 
 const SignIn = () => {
@@ -59,7 +59,7 @@ const SignIn = () => {
       setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
       await redirectToPage()
     } catch (error) {
-      const { status } = error?.response || {}
+      const { status } = error.response || {}
       determineNetworkError(status, error)
     }
   }
@@ -150,9 +150,9 @@ const SignIn = () => {
 
   const MandatedAccountsSignIn = () => (
     <>
-      <FormLayout className="sm:max-w-lg md:max-w-full">
+      <FormsLayout className="sm:max-w-lg md:max-w-full">
         <div className="flex flex-col md:flex-row md:ml-20 justify-center">
-          <div id="mobile" className="display md:hidden ">
+          <div className="display md:hidden ">
             <MobileComponent />
           </div>
           <div className="md:max-w-lg w-full justify-center">
@@ -162,35 +162,29 @@ const SignIn = () => {
               networkStatus={{
                 content: networkStatusContent,
                 type: networkStatusType,
-                reset,
+                reset: () => {
+                  reset()
+                  resetNetworkError()
+                  setConfirmationStatusMessage(undefined)
+                },
               }}
+              showRegisterBtn={true}
             />
           </div>
-          <div id="desktop" className="hidden md:flex">
+          <div className="hidden md:flex">
             <div className="md:flex md:flex-col md:grow-0 md:shrink-1 md:p-5 md:max-w-lg md:w-full ">
               <DesktopComponent />
-              <SignUpBenefits id="desktop" />
+              <SignUpBenefits idTag="desktop" />
             </div>
           </div>
-          <SignUpBenefits id="mobile" className="display md:hidden" />
+          <SignUpBenefits idTag="mobile" className="display md:hidden" />
         </div>
-      </FormLayout>
-      <ResendConfirmationModal
-        isOpen={confirmationStatusModal}
-        onClose={() => {
-          setConfirmationStatusModal(false)
-          resetResendConfirmation()
-          resetNetworkError()
-        }}
-        initialEmailValue={emailValue.current as string}
-        onSubmit={(email) => onResendConfirmationSubmit(email)}
-        loadingMessage={isResendConfirmationLoading && t("t.formSubmitted")}
-      />
+      </FormsLayout>
     </>
   )
   const DefaultSignIn = () => (
     <>
-      <FormLayout>
+      <FormsLayout>
         <FormSignIn
           onSubmit={(data) => void onSubmit(data)}
           control={{ register, errors, handleSubmit, watch }}
@@ -205,7 +199,12 @@ const SignIn = () => {
           }}
           showRegisterBtn={true}
         />
-      </FormLayout>
+      </FormsLayout>
+    </>
+  )
+  return (
+    <>
+      {process.env.showMandatedAccounts ? <MandatedAccountsSignIn /> : <DefaultSignIn />}
       <ResendConfirmationModal
         isOpen={confirmationStatusModal}
         onClose={() => {
@@ -219,7 +218,6 @@ const SignIn = () => {
       />
     </>
   )
-  return process.env.showMandatedAccounts ? <MandatedAccountsSignIn /> : <DefaultSignIn />
 }
 
 export { SignIn as default, SignIn }

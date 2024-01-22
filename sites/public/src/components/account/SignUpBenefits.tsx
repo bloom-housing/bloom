@@ -4,7 +4,7 @@ import { t } from "@bloom-housing/ui-components"
 
 type SignUpBenefitsProps = {
   className?: string
-  id?: string
+  idTag?: string
 }
 const SignUpBenefits = (props: SignUpBenefitsProps) => {
   const iconListItems = [
@@ -17,7 +17,7 @@ const SignUpBenefits = (props: SignUpBenefitsProps) => {
   return (
     <ul className={classNames.join(" ")}>
       {iconListItems.map((item) => (
-        <li className="flex flex-row mb-2 items-center" key={`${item.text}-${props.id}`}>
+        <li className="flex flex-row mb-2 items-center" key={`${item.text}-${props.idTag}`}>
           <Icon
             icon={item.icon}
             size="xl"
