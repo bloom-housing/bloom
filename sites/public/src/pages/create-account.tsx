@@ -13,7 +13,7 @@ import {
   Modal,
   passwordRegex,
 } from "@bloom-housing/ui-components"
-import { Button, Heading } from "@bloom-housing/ui-seeds"
+import { Button, Heading, Card } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
 dayjs.extend(customParseFormat)
@@ -74,7 +74,7 @@ export default () => {
   return (
     <FormsLayout>
       {process.env.showMandatedAccounts ? (
-        <FormCard>
+        <Card>
           <div className="form-card__lead pb-8 border-b mx-12 px-0">
             <Icon size="2xl" symbol="profile" />
             <Heading size="3xl" className="font-semibold mt-3">
@@ -227,7 +227,7 @@ export default () => {
               {t("nav.signIn")}
             </Button>
           </div>
-        </FormCard>
+        </Card>
       ) : (
         <FormCard>
           <div className="form-card__lead text-center border-b mx-0">
