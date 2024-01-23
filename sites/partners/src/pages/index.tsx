@@ -190,8 +190,8 @@ export default function ListingsList() {
             data={{
               items: listingDtos?.items,
               loading: listingsLoading,
-              totalItems: listingDtos?.meta.totalItems,
-              totalPages: listingDtos?.meta.totalPages,
+              totalItems: listingDtos?.meta?.totalItems,
+              totalPages: listingDtos?.meta?.totalPages,
             }}
             search={{
               setSearch: tableOptions.filter.setFilterValue,

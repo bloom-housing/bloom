@@ -1,29 +1,31 @@
 import fs, { createReadStream } from 'fs';
-import path, { join } from 'path';
-import Excel from 'exceljs';
+import { join } from 'path';
 import { Injectable, StreamableFile } from '@nestjs/common';
 import { Request as ExpressRequest } from 'express';
+import archiver from 'archiver';
 import { view } from './application.service';
 import { PrismaService } from './prisma.service';
 import { MultiselectQuestionService } from './multiselect-question.service';
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
-import { SuccessDTO } from '../dtos/shared/success.dto';
 import { UnitType } from '../dtos/unit-types/unit-type.dto';
 import { Address } from '../dtos/addresses/address.dto';
 import { ApplicationMultiselectQuestion } from '../dtos/applications/application-multiselect-question.dto';
 import MultiselectQuestion from '../dtos/multiselect-questions/multiselect-question.dto';
 import { ApplicationFlaggedSet } from '../dtos/application-flagged-sets/application-flagged-set.dto';
+import { User } from '../dtos/users/user.dto';
+import { ListingService } from './listing.service';
+import { PermissionService } from './permission.service';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import {
+  CsvExporterServiceInterface,
+  CsvHeader,
+} from '../types/CsvExportInterface';
+import { mapTo } from '../utilities/mapTo';
 
 view.csv = {
   ...view.details,
   applicationFlaggedSet: true,
   listings: false,
-};
-
-export type CsvHeader = {
-  path: string;
-  label: string;
-  format?: (val: unknown) => unknown;
 };
 
 export const typeMap = {
@@ -36,10 +38,14 @@ export const typeMap = {
 };
 
 @Injectable()
-export class ApplicationCsvExporterService {
+export class ApplicationCsvExporterService
+  implements CsvExporterServiceInterface
+{
   constructor(
     private prisma: PrismaService,
     private multiselectQuestionService: MultiselectQuestionService,
+    private listingService: ListingService,
+    private permissionService: PermissionService,
   ) {}
   /**
    *
@@ -47,11 +53,15 @@ export class ApplicationCsvExporterService {
    * @param req
    * @returns a promise containing a streamable file
    */
-  async export(
-    queryParams: ApplicationCsvQueryParams,
+  async exportFile<QueryParams extends ApplicationCsvQueryParams>(
     req: ExpressRequest,
-  ): Promise<string> {
-    await this.authorizeCSVExport(req.user, queryParams.listingId);
+    queryParams: QueryParams,
+    zipFilePath: string,
+  ): Promise<StreamableFile> {
+    await this.authorizeCSVExport(
+      mapTo(User, req['user']),
+      queryParams.listingId,
+    );
     const filename = join(
       process.cwd(),
       `src/temp/listing-${
@@ -64,21 +74,59 @@ export class ApplicationCsvExporterService {
 
     await this.createCsv(CSV_FILE, queryParams);
 
-    const workbook = new Excel.Workbook();
+    // const workbook = new Excel.Workbook();
 
-    workbook.csv.readFile(CSV_FILE).then(async () => {
-      workbook.getWorksheet(1).name = 'Primary Sheet';
-      await workbook.xlsx.writeFile(XLSX_FILE);
+    // workbook.csv.readFile(CSV_FILE).then(async () => {
+    //   workbook.getWorksheet(1).name = 'Primary Sheet';
+    //   await workbook.xlsx.writeFile(XLSX_FILE);
+    // });
+
+    // workbook.csv.readFile(CSV_FILE).then(async () => {
+    //   workbook.getWorksheet(2).name = 'Secondary Sheet';
+    //   await workbook.xlsx.writeFile(XLSX_FILE);
+    // });
+
+    // const applicationsWorkbook = createReadStream(XLSX_FILE);
+    // applicationsWorkbook.on('end', () => {
+    //   fs.unlink(XLSX_FILE, (err) => {
+    //     if (err) {
+    //       console.error(`Error deleting ${XLSX_FILE}`);
+    //       throw err;
+    //     }
+    //   });
+    // });
+
+    const applicationsCsv = createReadStream(CSV_FILE);
+    applicationsCsv.on('end', () => {
+      fs.unlink(CSV_FILE, (err) => {
+        if (err) {
+          console.error(`Error deleting ${CSV_FILE}`);
+          throw err;
+        }
+      });
     });
 
-    workbook.csv.readFile(CSV_FILE).then(async () => {
-      workbook.getWorksheet(2).name = 'Secondary Sheet';
-      await workbook.xlsx.writeFile(XLSX_FILE);
+    return new Promise((resolve) => {
+      // Create a writable stream to the zip file
+      const output = fs.createWriteStream(zipFilePath);
+      const archive = archiver('zip', {
+        zlib: { level: 9 },
+      });
+      output.on('close', () => {
+        const zipFile = createReadStream(zipFilePath);
+        resolve(new StreamableFile(zipFile));
+        fs.unlink(zipFilePath, (err) => {
+          if (err) {
+            console.error(`Error deleting ${zipFilePath}`);
+            throw err;
+          }
+        });
+      });
+
+      archive.pipe(output);
+      archive.append(CSV_FILE, { name: 'applications.csv' });
+      archive.finalize();
     });
-
-    const buffer = await workbook.xlsx.writeBuffer(); // would love to stream
-
-    return buffer as any; // coming through as invalid file type
   }
 
   /**
@@ -90,7 +138,7 @@ export class ApplicationCsvExporterService {
   async createCsv(
     filename: string,
     queryParams: ApplicationCsvQueryParams,
-  ): Promise<SuccessDTO> {
+  ): Promise<void> {
     if (queryParams.includeDemographics) {
       view.csv.demographics = true;
     }
@@ -108,8 +156,10 @@ export class ApplicationCsvExporterService {
         queryParams.listingId,
       );
 
-    // get maxHouseholdMembers
-    const maxHouseholdMembers = await this.maxHouseholdMembers();
+    // get maxHouseholdMembers or associated to the selected applications
+    const maxHouseholdMembers = await this.maxHouseholdMembers(
+      applications.map((application) => application.id),
+    );
 
     const csvHeaders = await this.getCsvHeaders(
       maxHouseholdMembers,
@@ -131,24 +181,22 @@ export class ApplicationCsvExporterService {
         })
         .on('close', () => {
           console.log('stream closed');
-          resolve({
-            success: true,
-          });
+          resolve();
         })
         .on('open', () => {
           writableStream.write(
-            csvHeaders.map((header) => header.label).join(',') + '\n',
+            csvHeaders
+              .map((header) => `"${header.label.replace(/"/g, `""`)}"`)
+              .join(',') + '\n',
           );
 
           // now loop over applications and write them to file
           applications.forEach((app) => {
             let row = '';
             let preferences: ApplicationMultiselectQuestion[];
-            let programs: ApplicationMultiselectQuestion[];
             csvHeaders.forEach((header, index) => {
               let multiselectQuestionValue = false;
               let parsePreference = false;
-              let parsePrograms = false;
               let value = header.path.split('.').reduce((acc, curr) => {
                 // return preference/program as value for the format function to accept
                 if (multiselectQuestionValue) {
@@ -162,33 +210,20 @@ export class ApplicationCsvExporterService {
                   }
                   parsePreference = false;
                   // there aren't typically many preferences, but if there, then a object map should be created and used
-                  const preference = preferences.find(
+                  const preference = preferences?.find(
                     (preference) => preference.multiselectQuestionId === curr,
                   );
                   multiselectQuestionValue = true;
                   return preference;
                 }
 
-                if (parsePrograms) {
-                  // curr should equal the program id we're pulling from
-                  if (!programs) {
-                    programs = JSON.parse(app.programs as string);
-                  }
-                  parsePrograms = false;
-                  const program = programs.find(
-                    (preference) => preference.multiselectQuestionId === curr,
-                  );
-                  multiselectQuestionValue = true;
-                  return program;
-                }
-
                 // sets parsePreference to true, for the next iteration
                 if (curr === 'preferences') {
                   parsePreference = true;
                 }
-                // sets parsePrograms to true, for the next iteration
-                if (curr === 'programs') {
-                  parsePrograms = true;
+
+                if (acc === null || acc === undefined) {
+                  return '';
                 }
 
                 // handles working with arrays, e.g. householdMember.0.firstName
@@ -197,9 +232,6 @@ export class ApplicationCsvExporterService {
                   return acc[index];
                 }
 
-                if (acc === null || acc === undefined) {
-                  return '';
-                }
                 return acc[curr];
               }, app);
               value = value === undefined ? '' : value === null ? '' : value;
@@ -207,7 +239,7 @@ export class ApplicationCsvExporterService {
                 value = header.format(value);
               }
 
-              row += value;
+              row += value ? `"${value.toString().replace(/"/g, `""`)}"` : '';
               if (index < csvHeaders.length - 1) {
                 row += ',';
               }
@@ -229,12 +261,16 @@ export class ApplicationCsvExporterService {
     });
   }
 
-  async maxHouseholdMembers(): Promise<number> {
-    // TODO: is there a way to filter on listingId here?
+  async maxHouseholdMembers(applicationIds: string[]): Promise<number> {
     const maxHouseholdMembersRes = await this.prisma.householdMember.groupBy({
       by: ['applicationId'],
       _count: {
         applicationId: true,
+      },
+      where: {
+        OR: applicationIds.map((id) => {
+          return { applicationId: id };
+        }),
       },
       orderBy: {
         _count: {
@@ -249,7 +285,7 @@ export class ApplicationCsvExporterService {
       : 0;
   }
 
-  getHousholdCsvHeaders(maxHouseholdMembers: number): CsvHeader[] {
+  getHouseholdCsvHeaders(maxHouseholdMembers: number): CsvHeader[] {
     const headers = [];
     for (let i = 0; i < maxHouseholdMembers; i++) {
       const j = i + 1;
@@ -295,23 +331,23 @@ export class ApplicationCsvExporterService {
           label: `Household Member (${j}) Work in Region`,
         },
         {
-          path: `householdMember.${i}.street`,
+          path: `householdMember.${i}.householdMemberAddress.street`,
           label: `Household Member (${j}) Street`,
         },
         {
-          path: `householdMember.${i}.street2`,
+          path: `householdMember.${i}.householdMemberAddress.street2`,
           label: `Household Member (${j}) Street 2`,
         },
         {
-          path: `householdMember.${i}.city`,
+          path: `householdMember.${i}.householdMemberAddress.city`,
           label: `Household Member (${j}) City`,
         },
         {
-          path: `householdMember.${i}.state`,
+          path: `householdMember.${i}.householdMemberAddress.state`,
           label: `Household Member (${j}) State`,
         },
         {
-          path: `householdMember.${i}.zipCode`,
+          path: `householdMember.${i}.householdMemberAddress.zipCode`,
           label: `Household Member (${j}) Zip Code`,
         },
       );
@@ -509,15 +545,15 @@ export class ApplicationCsvExporterService {
           val === 'perMonth' ? 'per month' : 'per year',
       },
       {
-        path: 'accessibilityMobility',
+        path: 'accessibility.mobility',
         label: 'Accessibility Mobility',
       },
       {
-        path: 'accessibilityVision',
+        path: 'accessibility.vision',
         label: 'Accessibility Vision',
       },
       {
-        path: 'accessibilityHearing',
+        path: 'accessibility.hearing',
         label: 'Accessibility Hearing',
       },
       {
@@ -557,7 +593,7 @@ export class ApplicationCsvExporterService {
          * that are not used on the old backend, but could be added here
          */
         question.options
-          .filter((option) => option.collectAddress)
+          ?.filter((option) => option.collectAddress)
           .forEach(() => {
             headers.push({
               path: `preferences.${question.id}.address`,
@@ -575,7 +611,7 @@ export class ApplicationCsvExporterService {
 
     // add household member headers to csv
     if (maxHouseholdMembers) {
-      headers.push(...this.getHousholdCsvHeaders(maxHouseholdMembers));
+      headers.push(...this.getHouseholdCsvHeaders(maxHouseholdMembers));
     }
 
     headers.push(
@@ -664,18 +700,23 @@ export class ApplicationCsvExporterService {
     return typeMap[type] ?? type;
   }
 
-  private async authorizeCSVExport(user, listingId): Promise<void> {
+  async authorizeCSVExport(user, listingId): Promise<void> {
     /**
      * Checking authorization for each application is very expensive.
      * By making listingId required, we can check if the user has update permissions for the listing, since right now if a user has that
      * they also can run the export for that listing
      */
-    /* const jurisdictionId =
+    const jurisdictionId =
       await this.listingService.getJurisdictionIdByListingId(listingId);
 
-    await this.authzService.canOrThrow(user, 'listing', authzActions.update, {
-      id: listingId,
-      jurisdictionId,
-    }); */
+    await this.permissionService.canOrThrow(
+      user,
+      'listing',
+      permissionActions.update,
+      {
+        id: listingId,
+        jurisdictionId,
+      },
+    );
   }
 }

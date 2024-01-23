@@ -3,8 +3,6 @@ import useSWR from "swr"
 import qs from "qs"
 import dayjs from "dayjs"
 import JSZip from "jszip"
-import Excel from "exceljs"
-import { saveAs } from "file-saver"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { setSiteAlertMessage, t } from "@bloom-housing/ui-components"
 import {
@@ -545,13 +543,17 @@ export const useApplicationsExport = (listingId: string, includeDemographics: bo
       // const buffer = await workbook.xlsx.writeBuffer()
 
       const content = await applicationsService.listAsCsv({ listingId, includeDemographics })
-      // const dateString = dayjs(new Date()).format("YYYY-MM-DD_HH-mm")
 
-      const blob = new Blob([content], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      })
-
-      saveAs(blob, `abc.xlsx`)
+      const blob = new Blob([new Uint8Array(content)], { type: "application/zip" })
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement("a")
+      link.href = url
+      const now = new Date()
+      const dateString = dayjs(now).format("YYYY-MM-DD_HH-mm")
+      link.setAttribute("download", `${dateString}-applications-data.zip`)
+      document.body.appendChild(link)
+      link.click()
+      link.parentNode.removeChild(link)
 
       setCsvExportSuccess(true)
       setSiteAlertMessage(t("t.exportSuccess"), "success")

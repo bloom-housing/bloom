@@ -8,6 +8,7 @@ import {
   Post,
   Put,
   Query,
+  Res,
   Request,
   StreamableFile,
   UseGuards,
@@ -21,7 +22,8 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { Request as ExpressRequest } from 'express';
+import { join } from 'path';
+import { Request as ExpressRequest, Response } from 'express';
 import { ApplicationService } from '../services/application.service';
 import { Application } from '../dtos/applications/application.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
@@ -38,6 +40,7 @@ import {
 } from '../dtos/applications/application-multiselect-question-option.dto';
 import { ValidationsGroupsEnum } from '../enums/shared/validation-groups-enum';
 import { OptionalAuthGuard } from '../guards/optional.guard';
+import { PermissionGuard } from '../guards/permission.guard';
 import { mapTo } from '../utilities/mapTo';
 import { User } from '../dtos/users/user.dto';
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
@@ -80,13 +83,26 @@ export class ApplicationController {
     summary: 'Get applications as csv',
     operationId: 'listAsCsv',
   })
-  @Header('Content-Type', 'application/json')
+  @Header('Content-Type', 'application/zip')
+  @UseGuards(OptionalAuthGuard, PermissionGuard)
   async listAsCsv(
     @Request() req: ExpressRequest,
+    @Res({ passthrough: true }) res: Response,
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationCsvQueryParams,
-  ): Promise<string> {
-    return await this.applicationCsvExportService.export(queryParams, req);
+  ): Promise<StreamableFile> {
+    const zipFileName = `applications-${new Date().getTime()}.zip`;
+    const zipFilePath = join(process.cwd(), `src/temp/${zipFileName}`);
+    res.set({
+      'Content-Type': 'application/zip',
+      'Content-Disposition': `attachment; filename: ${zipFileName}`,
+    });
+
+    return await this.applicationCsvExportService.exportFile(
+      req,
+      queryParams,
+      zipFilePath,
+    );
   }
 
   @Get(`:applicationId`)

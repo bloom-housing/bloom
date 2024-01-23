@@ -21,10 +21,6 @@ export const householdMemberFactorySingle =
       birthMonth: randomBirthMonth().toString(),
       birthDay: randomBirthDay().toString(),
       birthYear: randomBirthYear().toString(),
-      emailAddress: `${firstName}.${lastName}@example.com`,
-      phoneNumber: '(123) 123-1231',
-      // Question: should this be an enum?
-      phoneNumberType: 'home',
       sameAddress: randomYesNo,
       // Question: should this be an enum?
       relationship: randomAdjective(),
