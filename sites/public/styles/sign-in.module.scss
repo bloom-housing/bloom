@@ -1,6 +1,7 @@
 .forgot-password {
-    @apply float-right;
-    @apply text-sm;
-    @apply underline;
+    float: right;
+    font-size: 0.875rem; 
+    line-height: 1.25rem; 
+    text-decoration-line: underline;
     color: var(--seeds-color-blue-900);
 }
