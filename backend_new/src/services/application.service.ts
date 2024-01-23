@@ -4,16 +4,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import crypto from 'crypto';
+import { Prisma, YesNoEnum } from '@prisma/client';
 import { PrismaService } from './prisma.service';
 import { Application } from '../dtos/applications/application.dto';
 import { mapTo } from '../utilities/mapTo';
 import { ApplicationQueryParams } from '../dtos/applications/application-query-params.dto';
 import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
-import { Prisma, YesNoEnum } from '@prisma/client';
-import {
-  buildOrderBy,
-  buildOrderByForApplications,
-} from '../utilities/build-order-by';
+import { buildOrderByForApplications } from '../utilities/build-order-by';
 import { buildPaginationInfo } from '../utilities/build-pagination-meta';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
@@ -27,8 +24,11 @@ import Listing from '../dtos/listings/listing.dto';
 import { User } from '../dtos/users/user.dto';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { GeocodingService } from './geocoding.service';
+import { MultiselectQuestionService } from './multiselect-question.service';
 
-const view: Partial<Record<ApplicationViews, Prisma.ApplicationsInclude>> = {
+export const view: Partial<
+  Record<ApplicationViews, Prisma.ApplicationsInclude>
+> = {
   partnerList: {
     applicant: {
       include: {

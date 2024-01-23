@@ -26,210 +26,215 @@ import { User } from '../../../src/dtos/users/user.dto';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
 import { GeocodingService } from '../../../src/services/geocoding.service';
 
-describe('Testing application service', () => {
-  let service: ApplicationService;
-  let prisma: PrismaService;
-
-  const mockApplication = (position: number, date: Date) => {
-    return {
-      id: randomUUID(),
-      appUrl: `appUrl ${position}`,
-      additionalPhone: true,
-      additionalPhoneNumber: `additionalPhoneNumber ${position}`,
-      additionalPhoneNumberType: `additionalPhoneNumberType ${position}`,
-      householdSize: position,
-      housingStatus: `housingStatus ${position}`,
-      sendMailToMailingAddress: true,
-      householdExpectingChanges: true,
-      householdStudent: true,
-      incomeVouchers: true,
-      income: `income ${position}`,
-      incomePeriod: IncomePeriodEnum.perMonth,
-      preferences: '{ "claimed": true, "key": "example key", "options": null}',
-      status: ApplicationStatusEnum.submitted,
-      submissionType: ApplicationSubmissionTypeEnum.electronical,
-      acceptedTerms: true,
-      submissionDate: date,
-      markedAsDuplicate: false,
-      confirmationCode: `confirmationCode ${position}`,
-      reviewStatus: ApplicationReviewStatusEnum.valid,
-      applicant: {
-        firstName: `application ${position} firstName`,
-        middleName: `application ${position} middleName`,
-        lastName: `application ${position} lastName`,
-        birthMonth: `application ${position} birthMonth`,
-        birthDay: `application ${position} birthDay`,
-        birthYear: `application ${position} birthYear`,
-        emailAddress: `application ${position} emailaddress`,
-        noEmail: false,
-        phoneNumber: `application ${position} phoneNumber`,
-        phoneNumberType: `application ${position} phoneNumberType`,
-        noPhone: false,
-        workInRegion: YesNoEnum.yes,
-        applicantWorkAddress: {
-          placeName: `application ${position} applicantWorkAddress placeName`,
-          city: `application ${position} applicantWorkAddress city`,
-          county: `application ${position} applicantWorkAddress county`,
-          state: `application ${position} applicantWorkAddress state`,
-          street: `application ${position} applicantWorkAddress street`,
-          street2: `application ${position} applicantWorkAddress street2`,
-          zipCode: `application ${position} applicantWorkAddress zipCode`,
-          latitude: position,
-          longitude: position,
-        },
-        applicantAddress: {
-          placeName: `application ${position} applicantAddress placeName`,
-          city: `application ${position} applicantAddress city`,
-          county: `application ${position} applicantAddress county`,
-          state: `application ${position} applicantAddress state`,
-          street: `application ${position} applicantAddress street`,
-          street2: `application ${position} applicantAddress street2`,
-          zipCode: `application ${position} applicantAddress zipCode`,
-          latitude: position,
-          longitude: position,
-        },
+export const mockApplication = (position: number, date: Date) => {
+  return {
+    id: randomUUID(),
+    appUrl: `appUrl ${position}`,
+    additionalPhone: true,
+    additionalPhoneNumber: `additionalPhoneNumber ${position}`,
+    additionalPhoneNumberType: `additionalPhoneNumberType ${position}`,
+    householdSize: position,
+    housingStatus: `housingStatus ${position}`,
+    sendMailToMailingAddress: true,
+    householdExpectingChanges: true,
+    householdStudent: true,
+    incomeVouchers: true,
+    income: `income ${position}`,
+    incomePeriod: IncomePeriodEnum.perMonth,
+    preferences: [{ claimed: true, key: 'example key', options: null }],
+    programs: [{ claimed: true, key: 'example key', options: null }],
+    preferredUnitTypes: ['studio', 'oneBdrm'],
+    status: ApplicationStatusEnum.submitted,
+    submissionType: ApplicationSubmissionTypeEnum.electronical,
+    acceptedTerms: true,
+    submissionDate: date,
+    markedAsDuplicate: false,
+    confirmationCode: `confirmationCode ${position}`,
+    reviewStatus: ApplicationReviewStatusEnum.valid,
+    applicant: {
+      firstName: `application ${position} firstName`,
+      middleName: `application ${position} middleName`,
+      lastName: `application ${position} lastName`,
+      birthMonth: `application ${position} birthMonth`,
+      birthDay: `application ${position} birthDay`,
+      birthYear: `application ${position} birthYear`,
+      emailAddress: `application ${position} emailaddress`,
+      noEmail: false,
+      phoneNumber: `application ${position} phoneNumber`,
+      phoneNumberType: `application ${position} phoneNumberType`,
+      noPhone: false,
+      workInRegion: YesNoEnum.yes,
+      applicantWorkAddress: {
+        placeName: `application ${position} applicantWorkAddress placeName`,
+        city: `application ${position} applicantWorkAddress city`,
+        county: `application ${position} applicantWorkAddress county`,
+        state: `application ${position} applicantWorkAddress state`,
+        street: `application ${position} applicantWorkAddress street`,
+        street2: `application ${position} applicantWorkAddress street2`,
+        zipCode: `application ${position} applicantWorkAddress zipCode`,
+        latitude: position,
+        longitude: position,
       },
-      createdAt: date,
-      updatedAt: date,
-    };
+      applicantAddress: {
+        placeName: `application ${position} applicantAddress placeName`,
+        city: `application ${position} applicantAddress city`,
+        county: `application ${position} applicantAddress county`,
+        state: `application ${position} applicantAddress state`,
+        street: `application ${position} applicantAddress street`,
+        street2: `application ${position} applicantAddress street2`,
+        zipCode: `application ${position} applicantAddress zipCode`,
+        latitude: position,
+        longitude: position,
+      },
+    },
+    demographics: {
+      race: ['declineToRespond'],
+    },
+    createdAt: date,
+    updatedAt: date,
   };
+};
 
-  const mockApplicationSet = (numberToCreate: number, date: Date) => {
-    const toReturn = [];
-    for (let i = 0; i < numberToCreate; i++) {
-      toReturn.push(mockApplication(i, date));
-    }
-    return toReturn;
-  };
+export const mockApplicationSet = (numberToCreate: number, date: Date) => {
+  const toReturn = [];
+  for (let i = 0; i < numberToCreate; i++) {
+    toReturn.push(mockApplication(i, date));
+  }
+  return toReturn;
+};
 
-  const mockCreateApplicationData = (
-    exampleAddress: AddressCreate,
-    submissionDate: Date,
-  ): ApplicationCreate => {
-    return {
-      contactPreferences: ['example contact preference'],
-      preferences: [
-        {
-          key: 'example key',
-          claimed: true,
-          options: [
-            {
-              key: 'example key',
-              checked: true,
-              extraData: [
-                {
-                  type: InputType.boolean,
-                  key: 'example key',
-                  value: true,
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      status: ApplicationStatusEnum.submitted,
-      submissionType: ApplicationSubmissionTypeEnum.electronical,
-      applicant: {
-        firstName: 'applicant first name',
-        middleName: 'applicant middle name',
-        lastName: 'applicant last name',
+export const mockCreateApplicationData = (
+  exampleAddress: AddressCreate,
+  submissionDate: Date,
+): ApplicationCreate => {
+  return {
+    contactPreferences: ['example contact preference'],
+    preferences: [
+      {
+        key: 'example key',
+        claimed: true,
+        options: [
+          {
+            key: 'example key',
+            checked: true,
+            extraData: [
+              {
+                type: InputType.boolean,
+                key: 'example key',
+                value: true,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    status: ApplicationStatusEnum.submitted,
+    submissionType: ApplicationSubmissionTypeEnum.electronical,
+    applicant: {
+      firstName: 'applicant first name',
+      middleName: 'applicant middle name',
+      lastName: 'applicant last name',
+      birthMonth: '12',
+      birthDay: '17',
+      birthYear: '1993',
+      emailAddress: 'example@email.com',
+      noEmail: false,
+      phoneNumber: '111-111-1111',
+      phoneNumberType: 'Cell',
+      noPhone: false,
+      workInRegion: YesNoEnum.yes,
+      applicantWorkAddress: exampleAddress,
+      applicantAddress: exampleAddress,
+    },
+    accessibility: {
+      mobility: false,
+      vision: false,
+      hearing: false,
+    },
+    alternateContact: {
+      type: 'example type',
+      otherType: 'example other type',
+      firstName: 'example first name',
+      lastName: 'example last name',
+      agency: 'example agency',
+      phoneNumber: '111-111-1111',
+      emailAddress: 'example@email.com',
+      address: exampleAddress,
+    },
+    applicationsAlternateAddress: exampleAddress,
+    applicationsMailingAddress: exampleAddress,
+    listings: {
+      id: randomUUID(),
+    },
+    demographics: {
+      ethnicity: 'example ethnicity',
+      gender: 'example gender',
+      sexualOrientation: 'example sexual orientation',
+      howDidYouHear: ['example how did you hear'],
+      race: ['example race'],
+    },
+    preferredUnitTypes: [
+      {
+        id: randomUUID(),
+      },
+    ],
+    householdMember: [
+      {
+        orderId: 0,
+        firstName: 'example first name',
+        middleName: 'example middle name',
+        lastName: 'example last name',
         birthMonth: '12',
         birthDay: '17',
         birthYear: '1993',
-        emailAddress: 'example@email.com',
-        noEmail: false,
-        phoneNumber: '111-111-1111',
-        phoneNumberType: 'Cell',
-        noPhone: false,
+        sameAddress: YesNoEnum.yes,
+        relationship: 'example relationship',
         workInRegion: YesNoEnum.yes,
-        applicantWorkAddress: exampleAddress,
-        applicantAddress: exampleAddress,
+        householdMemberWorkAddress: exampleAddress,
+        householdMemberAddress: exampleAddress,
       },
-      accessibility: {
-        mobility: false,
-        vision: false,
-        hearing: false,
+    ],
+    appUrl: 'http://www.example.com',
+    additionalPhone: true,
+    additionalPhoneNumber: '111-111-1111',
+    additionalPhoneNumberType: 'example additional phone number type',
+    householdSize: 2,
+    housingStatus: 'example housing status',
+    sendMailToMailingAddress: true,
+    householdExpectingChanges: false,
+    householdStudent: false,
+    incomeVouchers: false,
+    income: '36000',
+    incomePeriod: IncomePeriodEnum.perYear,
+    language: LanguagesEnum.en,
+    acceptedTerms: true,
+    submissionDate: submissionDate,
+    reviewStatus: ApplicationReviewStatusEnum.valid,
+    programs: [
+      {
+        key: 'example key',
+        claimed: true,
+        options: [
+          {
+            key: 'example key',
+            checked: true,
+            extraData: [
+              {
+                type: InputType.boolean,
+                key: 'example key',
+                value: true,
+              },
+            ],
+          },
+        ],
       },
-      alternateContact: {
-        type: 'example type',
-        otherType: 'example other type',
-        firstName: 'example first name',
-        lastName: 'example last name',
-        agency: 'example agency',
-        phoneNumber: '111-111-1111',
-        emailAddress: 'example@email.com',
-        address: exampleAddress,
-      },
-      applicationsAlternateAddress: exampleAddress,
-      applicationsMailingAddress: exampleAddress,
-      listings: {
-        id: randomUUID(),
-      },
-      demographics: {
-        ethnicity: 'example ethnicity',
-        gender: 'example gender',
-        sexualOrientation: 'example sexual orientation',
-        howDidYouHear: ['example how did you hear'],
-        race: ['example race'],
-      },
-      preferredUnitTypes: [
-        {
-          id: randomUUID(),
-        },
-      ],
-      householdMember: [
-        {
-          orderId: 0,
-          firstName: 'example first name',
-          middleName: 'example middle name',
-          lastName: 'example last name',
-          birthMonth: '12',
-          birthDay: '17',
-          birthYear: '1993',
-          sameAddress: YesNoEnum.yes,
-          relationship: 'example relationship',
-          workInRegion: YesNoEnum.yes,
-          householdMemberWorkAddress: exampleAddress,
-          householdMemberAddress: exampleAddress,
-        },
-      ],
-      appUrl: 'http://www.example.com',
-      additionalPhone: true,
-      additionalPhoneNumber: '111-111-1111',
-      additionalPhoneNumberType: 'example additional phone number type',
-      householdSize: 2,
-      housingStatus: 'example housing status',
-      sendMailToMailingAddress: true,
-      householdExpectingChanges: false,
-      householdStudent: false,
-      incomeVouchers: false,
-      income: '36000',
-      incomePeriod: IncomePeriodEnum.perYear,
-      language: LanguagesEnum.en,
-      acceptedTerms: true,
-      submissionDate: submissionDate,
-      reviewStatus: ApplicationReviewStatusEnum.valid,
-      programs: [
-        {
-          key: 'example key',
-          claimed: true,
-          options: [
-            {
-              key: 'example key',
-              checked: true,
-              extraData: [
-                {
-                  type: InputType.boolean,
-                  key: 'example key',
-                  value: true,
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    } as ApplicationCreate;
-  };
+    ],
+  } as ApplicationCreate;
+};
+
+describe('Testing application service', () => {
+  let service: ApplicationService;
+  let prisma: PrismaService;
 
   const canOrThrowMock = jest.fn();
 
@@ -760,7 +765,7 @@ describe('Testing application service', () => {
     });
 
     const exampleAddress = addressFactory() as AddressCreate;
-    const dto = mockCreateApplicationData(exampleAddress);
+    const dto = mockCreateApplicationData(exampleAddress, new Date());
 
     prisma.jurisdictions.findFirst = jest
       .fn()

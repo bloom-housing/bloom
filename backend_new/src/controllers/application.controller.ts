@@ -3,11 +3,13 @@ import {
   Controller,
   Delete,
   Get,
+  Header,
   Param,
   Post,
   Put,
   Query,
   Request,
+  StreamableFile,
   UseGuards,
   UseInterceptors,
   UsePipes,
@@ -42,6 +44,8 @@ import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { PermissionAction } from '../decorators/permission-action.decorator';
+import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
+import { ApplicationCsvExporterService } from '../services/application-csv-export.service';
 
 @Controller('applications')
 @ApiTags('applications')
@@ -56,7 +60,10 @@ import { PermissionAction } from '../decorators/permission-action.decorator';
 @PermissionTypeDecorator('application')
 @UseInterceptors(ActivityLogInterceptor)
 export class ApplicationController {
-  constructor(private readonly applicationService: ApplicationService) {}
+  constructor(
+    private readonly applicationService: ApplicationService,
+    private readonly applicationCsvExportService: ApplicationCsvExporterService,
+  ) {}
 
   @Get()
   @ApiOperation({
@@ -66,6 +73,23 @@ export class ApplicationController {
   @ApiOkResponse({ type: PaginatedApplicationDto })
   async list(@Query() queryParams: ApplicationQueryParams) {
     return await this.applicationService.list(queryParams);
+  }
+
+  @Get(`csv`)
+  @ApiOperation({
+    summary: 'Get applications as csv',
+    operationId: 'listAsCsv',
+  })
+  @Header('Content-Type', 'text/csv')
+  async listAsCsv(
+    @Request() req: ExpressRequest,
+    @Query(new ValidationPipe(defaultValidationPipeOptions))
+    queryParams: ApplicationCsvQueryParams,
+  ): Promise<StreamableFile> {
+    return await this.applicationCsvExportService.export(
+      queryParams,
+      mapTo(User, req['user']),
+    );
   }
 
   @Get(`:applicationId`)

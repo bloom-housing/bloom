@@ -3,21 +3,31 @@ import {
   IncomePeriodEnum,
   ApplicationStatusEnum,
   ApplicationSubmissionTypeEnum,
+  MultiselectQuestions,
   YesNoEnum,
+  MultiselectQuestionsApplicationSectionEnum,
 } from '@prisma/client';
-import { randomInt } from 'crypto';
 import { generateConfirmationCode } from '../../src/utilities/applications-utilities';
 import { addressFactory } from './address-factory';
 import { randomNoun } from './word-generator';
+import {
+  randomBirthDay,
+  randomBirthMonth,
+  randomBirthYear,
+} from './number-generator';
+import { preferenceFactory } from './application-preference-factory';
+import { demographicsFactory } from './demographic-factory';
 
-export const applicationFactory = (optionalParams?: {
-  househouldSize?: number;
+export const applicationFactory = async (optionalParams?: {
+  householdSize?: number;
   unitTypeId?: string;
   applicant?: Prisma.ApplicantCreateWithoutApplicationsInput;
   overrides?: Prisma.ApplicationsCreateInput;
   listingId?: string;
-  householdMember?: Prisma.HouseholdMemberCreateWithoutApplicationsInput;
-}): Prisma.ApplicationsCreateInput => {
+  householdMember?: Prisma.HouseholdMemberCreateWithoutApplicationsInput[];
+  demographics?: Prisma.DemographicsCreateWithoutApplicationsInput;
+  multiselectQuestions?: Partial<MultiselectQuestions>[];
+}): Promise<Prisma.ApplicationsCreateInput> => {
   let preferredUnitTypes: Prisma.UnitTypesCreateNestedManyWithoutApplicationsInput;
   if (optionalParams?.unitTypeId) {
     preferredUnitTypes = {
@@ -28,6 +38,7 @@ export const applicationFactory = (optionalParams?: {
       ],
     };
   }
+  const demographics = await demographicsFactory();
   return {
     confirmationCode: generateConfirmationCode(),
     applicant: { create: applicantFactory(optionalParams?.applicant) },
@@ -35,10 +46,27 @@ export const applicationFactory = (optionalParams?: {
     status: ApplicationStatusEnum.submitted,
     submissionType: ApplicationSubmissionTypeEnum.electronical,
     submissionDate: new Date(),
-    householdSize: optionalParams?.househouldSize ?? 1,
+    householdSize: optionalParams?.householdSize ?? 1,
     income: '40000',
     incomePeriod: IncomePeriodEnum.perYear,
-    preferences: [],
+    preferences: preferenceFactory(
+      optionalParams?.multiselectQuestions
+        ? optionalParams.multiselectQuestions.filter(
+            (question) =>
+              question.applicationSection ===
+              MultiselectQuestionsApplicationSectionEnum.preferences,
+          )
+        : [],
+    ),
+    programs: preferenceFactory(
+      optionalParams?.multiselectQuestions
+        ? optionalParams.multiselectQuestions.filter(
+            (question) =>
+              question.applicationSection ===
+              MultiselectQuestionsApplicationSectionEnum.programs,
+          )
+        : [],
+    ),
     preferredUnitTypes,
     sendMailToMailingAddress: true,
     applicationsMailingAddress: {
@@ -57,6 +85,9 @@ export const applicationFactory = (optionalParams?: {
           create: optionalParams.householdMember,
         }
       : undefined,
+    demographics: {
+      create: demographics,
+    },
   };
 };
 
@@ -74,9 +105,9 @@ export const applicantFactory = (
     phoneNumberType: 'home',
     noPhone: false,
     workInRegion: YesNoEnum.no,
-    birthDay: `${randomInt(31) + 1}`, // no zeros
-    birthMonth: `${randomInt(12) + 1}`, // no zeros
-    birthYear: `${randomInt(80) + 1930}`,
+    birthDay: `${randomBirthDay()}`, // no zeros
+    birthMonth: `${randomBirthMonth()}`, // no zeros
+    birthYear: `${randomBirthYear()}`,
     applicantAddress: {
       create: addressFactory(),
     },

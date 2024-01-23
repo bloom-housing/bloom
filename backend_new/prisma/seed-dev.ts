@@ -14,6 +14,8 @@ import { randomInt } from 'node:crypto';
 import { applicationFactory } from './seed-helpers/application-factory';
 import { translationFactory } from './seed-helpers/translation-factory';
 import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
+import { householdMemberFactoryMany } from './seed-helpers/household-member-factory';
+import { APPLICATIONS_PER_LISTINGS, LISTINGS_TO_SEED } from './constants';
 
 const listingStatusEnumArray = Object.values(ListingsStatusEnum);
 
@@ -32,7 +34,6 @@ const createMultiselect = async (
               : MultiselectQuestionsApplicationSectionEnum.programs,
         },
         optOut: index > 1,
-        numberOfOptions: index,
       }),
     });
   });
@@ -70,7 +71,7 @@ export const devSeeding = async (
   await prismaClient.translations.create({
     data: translationFactory(),
   });
-  await unitTypeFactoryAll(prismaClient);
+  const unitTypes = await unitTypeFactoryAll(prismaClient);
   const amiChart = await prismaClient.amiChart.create({
     data: amiChartFactory(10, jurisdiction.id),
   });
@@ -80,7 +81,23 @@ export const devSeeding = async (
 
   await reservedCommunityTypeFactoryAll(jurisdiction.id, prismaClient);
 
-  [...new Array(5)].map(async (_, index) => {
+  const householdSize = randomInt(0, 6);
+  for (let index = 0; index < LISTINGS_TO_SEED; index++) {
+    const householdMembers = await householdMemberFactoryMany(householdSize);
+
+    const applications = [];
+
+    for (let j = 0; j <= APPLICATIONS_PER_LISTINGS; j++) {
+      applications.push(
+        await applicationFactory({
+          householdSize,
+          unitTypeId: unitTypes[randomInt(0, 5)].id,
+          householdMember: householdMembers,
+          multiselectQuestions,
+        }),
+      );
+    }
+
     const listing = await listingFactory(jurisdiction.id, prismaClient, {
       amiChart: amiChart,
       numberOfUnits: index,
@@ -89,13 +106,10 @@ export const devSeeding = async (
       status: listingStatusEnumArray[randomInt(listingStatusEnumArray.length)],
       multiselectQuestions:
         index > 0 ? multiselectQuestions.slice(0, index - 1) : [],
-      applications:
-        index > 1
-          ? [...new Array(index)].map(() => applicationFactory())
-          : undefined,
+      applications,
     });
     await prismaClient.listings.create({
       data: listing,
     });
-  });
+  }
 };

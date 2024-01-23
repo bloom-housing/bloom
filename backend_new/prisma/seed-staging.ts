@@ -259,7 +259,7 @@ export const stagingSeed = async (
         },
       ],
       multiselectQuestions: [multiselectQuestion1, multiselectQuestion2],
-      applications: [applicationFactory(), applicationFactory()],
+      applications: [await applicationFactory(), await applicationFactory()],
     },
     {
       listing: {
@@ -390,14 +390,14 @@ export const stagingSeed = async (
       multiselectQuestions: [multiselectQuestion1],
       // has applications that are the same email
       applications: [
-        applicationFactory({
+        await applicationFactory({
           applicant: { emailAddress: 'user1@example.com' },
         }),
-        applicationFactory({
+        await applicationFactory({
           applicant: { emailAddress: 'user1@example.com' },
         }),
-        applicationFactory(),
-        applicationFactory(),
+        await applicationFactory(),
+        await applicationFactory(),
       ],
     },
     {
@@ -818,7 +818,7 @@ export const stagingSeed = async (
       value: {
         listing: Prisma.ListingsCreateInput;
         units?: Prisma.UnitsCreateWithoutListingsInput[];
-        multiselectQuestions?: Partial<MultiselectQuestions>[];
+        multiselectQuestions?: MultiselectQuestions[];
         applications?: Prisma.ApplicationsCreateInput[];
       },
       index,

@@ -1402,4 +1402,29 @@ export class ListingService implements OnModuleInit {
       });
     }
   }
+  /**
+   *
+   * @param listingId
+   * @returns the jurisdiction ID assigned to a listing
+   */
+  public async getJurisdictionIdByListingId(
+    listingId: string,
+  ): Promise<string> {
+    const listing = await this.prisma.listings.findUnique({
+      select: {
+        jurisdictionId: true,
+      },
+      where: {
+        id: listingId,
+      },
+    });
+
+    if (!listing) {
+      throw new NotFoundException(
+        `No jurisdiction for listing ${listingId} found`,
+      );
+    }
+
+    return listing.jurisdictionId;
+  }
 }
