@@ -16,7 +16,6 @@ import LinkComponent from "../components/core/LinkComponent"
 import { translations, overrideTranslations } from "../lib/translations"
 
 import "../../styles/overrides.scss"
-import { pageChangeHandler } from "../lib/customScripts"
 
 const signInMessage = "Login is required to view this page."
 
@@ -38,19 +37,13 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   // fix for rehydration
   const [hasMounted, setHasMounted] = useState(false)
   useEffect(() => {
-    console.log("beginning of useEffect")
-    if (!document.body.dataset.customScriptsLoaded) {
-      router.events.on("routeChangeComplete", pageChangeHandler)
-
-      const heapNode = heapScript()
-      if (heapNode) {
-        console.log("hasHeap", heapNode)
-        document.head.append(heapNode)
-      }
-      document.body.dataset.customScriptsLoaded = "true"
-      setHasMounted(true)
+    const heapNode = heapScript()
+    if (heapNode) {
+      document.head.append(heapNode)
     }
-  }, [router.events])
+    document.body.dataset.customScriptsLoaded = "true"
+    setHasMounted(true)
+  }, [])
 
   useMemo(() => {
     addTranslation(translations.general, true)
@@ -71,7 +64,6 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   //     void axe(React, ReactDOM, 1000)
   //   }
   // }, [])
-  console.log(process.env.heapKey?.length)
   return (
     <SWRConfig
       value={{
