@@ -41,7 +41,6 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     if (heapNode) {
       document.head.append(heapNode)
     }
-    document.body.dataset.customScriptsLoaded = "true"
     setHasMounted(true)
   }, [])
 
