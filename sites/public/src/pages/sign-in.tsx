@@ -148,63 +148,58 @@ const SignIn = () => {
     />
   )
 
-  const MandatedAccountsSignIn = () => (
-    <>
-      <FormsLayout className="sm:max-w-lg md:max-w-full">
-        <div className="flex flex-col md:flex-row md:ml-20 justify-center">
-          <div className="display md:hidden ">
-            <MobileComponent />
-          </div>
-          <div className="md:max-w-lg w-full justify-center">
-            <FormSignIn
-              onSubmit={(data) => void onSubmit(data)}
-              control={{ register, errors, handleSubmit, watch }}
-              networkStatus={{
-                content: networkStatusContent,
-                type: networkStatusType,
-                reset: () => {
-                  reset()
-                  resetNetworkError()
-                  setConfirmationStatusMessage(undefined)
-                },
-              }}
-              showRegisterBtn={true}
-            />
-          </div>
-          <div className="hidden md:flex">
-            <div className="md:flex md:flex-col md:grow-0 md:shrink-1 md:p-5 md:max-w-lg md:w-full ">
-              <DesktopComponent />
-              <SignUpBenefits idTag="desktop" />
-            </div>
-          </div>
-          <SignUpBenefits idTag="mobile" className="display md:hidden" />
-        </div>
-      </FormsLayout>
-    </>
-  )
-  const DefaultSignIn = () => (
-    <>
-      <FormsLayout>
-        <FormSignIn
-          onSubmit={(data) => void onSubmit(data)}
-          control={{ register, errors, handleSubmit, watch }}
-          networkStatus={{
-            content: networkStatusContent,
-            type: networkStatusType,
-            reset: () => {
-              reset()
-              resetNetworkError()
-              setConfirmationStatusMessage(undefined)
-            },
-          }}
-          showRegisterBtn={true}
-        />
-      </FormsLayout>
-    </>
-  )
   return (
     <>
-      {process.env.showMandatedAccounts ? <MandatedAccountsSignIn /> : <DefaultSignIn />}
+      {process.env.showMandatedAccounts ? (
+        <FormsLayout className="sm:max-w-lg md:max-w-full">
+          <div className="flex flex-col md:flex-row md:ml-20 justify-center">
+            <div className="display md:hidden ">
+              <MobileComponent />
+            </div>
+            <div className="md:max-w-lg w-full justify-center">
+              <FormSignIn
+                onSubmit={(data) => void onSubmit(data)}
+                control={{ register, errors, handleSubmit, watch }}
+                networkStatus={{
+                  content: networkStatusContent,
+                  type: networkStatusType,
+                  reset: () => {
+                    reset()
+                    resetNetworkError()
+                    setConfirmationStatusMessage(undefined)
+                  },
+                }}
+                showRegisterBtn={true}
+              />
+            </div>
+            <div className="hidden md:flex">
+              <div className="md:flex md:flex-col md:grow-0 md:shrink-1 md:p-5 md:max-w-lg md:w-full ">
+                <DesktopComponent />
+                <SignUpBenefits idTag="desktop" />
+              </div>
+            </div>
+            <SignUpBenefits idTag="mobile" className="display md:hidden" />
+          </div>
+        </FormsLayout>
+      ) : (
+        <FormsLayout>
+          <FormSignIn
+            onSubmit={(data) => void onSubmit(data)}
+            control={{ register, errors, handleSubmit, watch }}
+            networkStatus={{
+              content: networkStatusContent,
+              type: networkStatusType,
+              reset: () => {
+                reset()
+                resetNetworkError()
+                setConfirmationStatusMessage(undefined)
+              },
+            }}
+            showRegisterBtn={true}
+          />
+        </FormsLayout>
+      )}
+
       <ResendConfirmationModal
         isOpen={confirmationStatusModal}
         onClose={() => {
