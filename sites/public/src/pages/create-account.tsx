@@ -90,7 +90,7 @@ export default () => {
           <Form id="create-account" onSubmit={handleSubmit(onSubmit)}>
             <div className="form-card__group border-b space-y-3 mx-12 p-0 py-8">
               <label className={styles["create-account-header"]} htmlFor="firstName">
-                {t("application.name.yourName")}
+                {t("application.name.yourNameLowercase")}
               </label>
 
               <label className={styles["create-account-field"]} htmlFor="givenName">
@@ -110,12 +110,12 @@ export default () => {
               />
 
               <label className={styles["create-account-field"]} htmlFor="middleName">
-                {t("application.name.middleNameOptional")}
+                {t("application.name.middleNameOptionalLowercase")}
               </label>
               <Field
                 name="middleName"
                 register={register}
-                label={t("application.name.middleNameOptional")}
+                label={t("application.name.middleNameOptionalLowercase")}
                 readerOnly
                 error={errors.middleName}
                 validation={{ maxLength: 64 }}
@@ -151,7 +151,7 @@ export default () => {
                 watch={watch}
                 validateAge18={true}
                 errorMessage={t("errors.dateOfBirthErrorAge")}
-                label={t("application.name.yourDateOfBirth")}
+                label={t("application.name.yourDateOfBirthLowercase")}
               />
               <p className={"field-sub-note"}>{t("application.name.yourDateOfBirthExample")}</p>
             </div>
@@ -161,7 +161,7 @@ export default () => {
                 caps={true}
                 type="email"
                 name="email"
-                label={t("application.name.yourEmailAddress")}
+                label={t("application.name.yourEmailAddressLowercase")}
                 validation={{ required: true, pattern: emailRegex }}
                 error={errors.email}
                 errorMessage={t("authentication.signIn.loginError")}
