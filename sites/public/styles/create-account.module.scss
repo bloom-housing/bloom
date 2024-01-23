@@ -2,19 +2,19 @@
     color: var(--seeds-color-gray-750);
     font-size: var(--seeds-font-size-sm);
     font-weight: var(--seeds-font-weight-semibold);
-    @apply block;
+    display: block;
 }
 
 .create-account-field {
     color: var(--seeds-color-gray-750);
     font-size: var(--seeds-font-size-sm);
-    @apply block;
-    @apply mt-3;
+    display: block;
+    margin-top: 0.75rem;
 }
 
 .create-account-input {
     border: 2px solid var(--seeds-color-gray-500);
     background: var(--seeds-color-gray-100);
-    @apply rounded-lg;
-    @apply mt-2;
+    border-radius: 0.5rem;
+    margin-top: 0.5rem;
 }
