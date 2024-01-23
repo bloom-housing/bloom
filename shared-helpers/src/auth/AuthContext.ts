@@ -19,6 +19,7 @@ import {
   RequestMfaCodeResponse,
   EnumRequestMfaCodeMfaType,
   EnumLoginMfaType,
+  MapLayersService,
 } from "@bloom-housing/backend-core/types"
 import { GenericRouter, NavigationContext } from "@bloom-housing/ui-components"
 import {
@@ -46,9 +47,10 @@ type ContextProps = {
   userProfileService: UserProfileService
   authService: AuthService
   multiselectQuestionsService: MultiselectQuestionsService
+  unitTypesService: UnitTypesService
   reservedCommunityTypeService: ReservedCommunityTypesService
   unitPriorityService: UnitAccessibilityPriorityTypesService
-  unitTypesService: UnitTypesService
+  mapLayersService: MapLayersService
   loadProfile: (redirect?: string) => void
   login: (
     email: string,
@@ -213,6 +215,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
     userProfileService: new UserProfileService(),
     authService: new AuthService(),
     multiselectQuestionsService: new MultiselectQuestionsService(),
+    mapLayersService: new MapLayersService(),
     reservedCommunityTypeService: new ReservedCommunityTypesService(),
     unitPriorityService: new UnitAccessibilityPriorityTypesService(),
     unitTypesService: new UnitTypesService(),
