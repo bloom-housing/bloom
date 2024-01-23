@@ -71,7 +71,7 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   //     void axe(React, ReactDOM, 1000)
   //   }
   // }, [])
-
+  console.log(process.env.heapKey?.length)
   return (
     <SWRConfig
       value={{
