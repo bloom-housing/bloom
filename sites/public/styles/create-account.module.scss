@@ -9,12 +9,12 @@
     color: var(--seeds-color-gray-750);
     font-size: var(--seeds-font-size-sm);
     display: block;
-    margin-top: 0.75rem;
+    margin-top: var(--bloom-s3);
 }
 
 .create-account-input {
     border: 2px solid var(--seeds-color-gray-500);
     background: var(--seeds-color-gray-100);
-    border-radius: 0.5rem;
-    margin-top: 0.5rem;
+    border-radius: var(--bloom-rounded-lg);
+    margin-top: var(--bloom-s2);
 }
