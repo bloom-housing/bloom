@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  Header,
   Headers,
   Param,
   ParseUUIDPipe,
@@ -11,6 +12,8 @@ import {
   Put,
   Query,
   Request,
+  Res,
+  StreamableFile,
   UseGuards,
   UseInterceptors,
   UsePipes,
@@ -23,6 +26,7 @@ import {
   ApiOkResponse,
 } from '@nestjs/swagger';
 import { Request as ExpressRequest } from 'express';
+import type { Response } from 'express';
 import { ListingService } from '../services/listing.service';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
@@ -46,7 +50,10 @@ import { PermissionTypeDecorator } from '../decorators/permission-type.decorator
 import { PermissionAction } from '../decorators/permission-action.decorator';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction-admin.guard';
-// TODO: when we add csv export endpoint need to add guard to it (https://github.com/bloom-housing/bloom/issues/3695)
+import { ListingCsvExporterService } from '../services/listing-csv-export.service';
+import { ListingCsvQueryParams } from '../dtos/listings/listing-csv-query-params.dto';
+import { join } from 'path';
+import { PermissionGuard } from '../guards/permission.guard';
 
 @Controller('listings')
 @ApiTags('listings')
@@ -62,7 +69,10 @@ import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction
 @ActivityLogMetadata([{ targetPropertyName: 'status', propertyPath: 'status' }])
 @UseInterceptors(ActivityLogInterceptor)
 export class ListingController {
-  constructor(private readonly listingService: ListingService) {}
+  constructor(
+    private readonly listingService: ListingService,
+    private readonly listingCsvExportService: ListingCsvExporterService,
+  ) {}
 
   @Get()
   @ApiOperation({
@@ -74,6 +84,33 @@ export class ListingController {
   @ApiOkResponse({ type: PaginatedListingDto })
   public async getPaginatedSet(@Query() queryParams: ListingsQueryParams) {
     return await this.listingService.list(queryParams);
+  }
+
+  @Get(`csv`)
+  @ApiOperation({
+    summary: 'Get applications as csv',
+    operationId: 'listAsCsv',
+  })
+  @Header('Content-Type', 'application/zip')
+  @UseGuards(OptionalAuthGuard, PermissionGuard)
+  async listAsCsv(
+    @Request() req: ExpressRequest,
+    @Res({ passthrough: true }) res: Response,
+    @Query(new ValidationPipe(defaultValidationPipeOptions))
+    queryParams: ListingCsvQueryParams,
+  ): Promise<StreamableFile> {
+    const zipFileName = `listings-units-${new Date().getTime()}.zip`;
+    const zipFilePath = join(process.cwd(), `src/temp/${zipFileName}`);
+    res.set({
+      'Content-Type': 'application/zip',
+      'Content-Disposition': `attachment; filename: ${zipFileName}`,
+    });
+
+    return await this.listingCsvExportService.exportFile(
+      req,
+      queryParams,
+      zipFilePath,
+    );
   }
 
   @Get(`:id`)

@@ -983,11 +983,18 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
         .expect(403);
     });
 
-    it('should succeed for process endpoint', async () => {
+    it('should error as forbidden for process endpoint', async () => {
       await request(app.getHttpServer())
         .put(`/listings/process`)
         .set('Cookie', cookies)
         .expect(403);
+    });
+
+    it('should succeed for csv endpoint', async () => {
+      await request(app.getHttpServer())
+        .get(`/listings/csv`)
+        .set('Cookie', cookies)
+        .expect(200);
     });
   });
 

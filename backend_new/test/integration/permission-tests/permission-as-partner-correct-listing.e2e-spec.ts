@@ -1015,6 +1015,13 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
         .set('Cookie', cookies)
         .expect(403);
     });
+
+    it('should succeed for csv endpoint', async () => {
+      await request(app.getHttpServer())
+        .get(`/listings/csv`)
+        .set('Cookie', cookies)
+        .expect(200);
+    });
   });
 
   describe('Testing application flagged set endpoints', () => {

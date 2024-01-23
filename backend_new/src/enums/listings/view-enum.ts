@@ -3,4 +3,5 @@ export enum ListingViews {
   base = 'base',
   full = 'full',
   details = 'details',
+  csv = 'csv',
 }

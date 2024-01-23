@@ -1044,6 +1044,13 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         .set('Cookie', cookies)
         .expect(403);
     });
+
+    it('should error as forbidden for csv endpoint', async () => {
+      await request(app.getHttpServer())
+        .get(`/listings/csv`)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
   });
 
   describe('Testing application flagged set endpoints', () => {

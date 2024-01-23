@@ -3,6 +3,7 @@ import { PassThrough } from 'stream';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
 import { HttpModule } from '@nestjs/axios';
+import { Request as ExpressRequest } from 'express';
 import { PrismaService } from '../../../src/services/prisma.service';
 import {
   ApplicationCsvExporterService,
@@ -493,10 +494,12 @@ describe('Testing application CSV export service', () => {
     ]);
 
     service.unitTypeToReadable = jest.fn().mockReturnValue('Studio');
-
-    const exportResponse = await service.export(
-      { listingId: randomUUID(), includeDemographics: false },
-      requestingUser,
+    const exportResponse = await service.exportFile(
+      { user: requestingUser } as unknown as ExpressRequest,
+      {
+        listingId: randomUUID(),
+        includeDemographics: false,
+      },
     );
 
     const headerRow =
@@ -548,9 +551,9 @@ describe('Testing application CSV export service', () => {
 
     service.unitTypeToReadable = jest.fn().mockReturnValue('Studio');
 
-    const exportResponse = await service.export(
+    const exportResponse = await service.exportFile(
+      { user: requestingUser } as unknown as ExpressRequest,
       { listingId: 'test', includeDemographics: true },
-      requestingUser,
     );
 
     const headerRow =

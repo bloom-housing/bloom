@@ -1,11 +1,11 @@
 import fs, { createReadStream } from 'fs';
 import { join } from 'path';
 import { Injectable, StreamableFile } from '@nestjs/common';
+import { Request as ExpressRequest } from 'express';
 import { view } from './application.service';
 import { PrismaService } from './prisma.service';
 import { MultiselectQuestionService } from './multiselect-question.service';
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
-import { SuccessDTO } from '../dtos/shared/success.dto';
 import { UnitType } from '../dtos/unit-types/unit-type.dto';
 import { Address } from '../dtos/addresses/address.dto';
 import { ApplicationMultiselectQuestion } from '../dtos/applications/application-multiselect-question.dto';
@@ -15,17 +15,16 @@ import { User } from '../dtos/users/user.dto';
 import { ListingService } from './listing.service';
 import { PermissionService } from './permission.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import {
+  CsvExporterServiceInterface,
+  CsvHeader,
+} from '../types/CsvExportInterface';
+import { mapTo } from '../utilities/mapTo';
 
 view.csv = {
   ...view.details,
   applicationFlaggedSet: true,
   listings: false,
-};
-
-export type CsvHeader = {
-  path: string;
-  label: string;
-  format?: (val: unknown) => unknown;
 };
 
 export const typeMap = {
@@ -39,7 +38,9 @@ export const typeMap = {
 };
 
 @Injectable()
-export class ApplicationCsvExporterService {
+export class ApplicationCsvExporterService
+  implements CsvExporterServiceInterface
+{
   constructor(
     private prisma: PrismaService,
     private multiselectQuestionService: MultiselectQuestionService,
@@ -52,11 +53,14 @@ export class ApplicationCsvExporterService {
    * @param req
    * @returns a promise containing a streamable file
    */
-  async export(
-    queryParams: ApplicationCsvQueryParams,
-    requestingUser: User,
+  async exportFile<QueryParams extends ApplicationCsvQueryParams>(
+    req: ExpressRequest,
+    queryParams: QueryParams,
   ): Promise<StreamableFile> {
-    await this.authorizeCSVExport(requestingUser, queryParams.listingId);
+    await this.authorizeCSVExport(
+      mapTo(User, req['user']),
+      queryParams.listingId,
+    );
     const filename = join(
       process.cwd(),
       `src/temp/listing-${
@@ -82,10 +86,10 @@ export class ApplicationCsvExporterService {
    * @param queryParams
    * @returns a promise with SuccessDTO
    */
-  async createCsv(
+  async createCsv<QueryParams extends ApplicationCsvQueryParams>(
     filename: string,
-    queryParams: ApplicationCsvQueryParams,
-  ): Promise<SuccessDTO> {
+    queryParams: QueryParams,
+  ): Promise<void> {
     if (queryParams.includeDemographics) {
       view.csv.demographics = true;
     }
@@ -128,9 +132,7 @@ export class ApplicationCsvExporterService {
         })
         .on('close', () => {
           console.log('stream closed');
-          resolve({
-            success: true,
-          });
+          resolve();
         })
         .on('open', () => {
           writableStream.write(
@@ -646,7 +648,7 @@ export class ApplicationCsvExporterService {
     return typeMap[type] ?? type;
   }
 
-  private async authorizeCSVExport(user, listingId): Promise<void> {
+  async authorizeCSVExport(user, listingId): Promise<void> {
     /**
      * Checking authorization for each application is very expensive.
      * By making listingId required, we can check if the user has update permissions for the listing, since right now if a user has that

@@ -25,6 +25,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       paramsSerializer: (params) => {
         return qs.stringify(params)
       },
+      responseType: "arraybuffer",
       jar,
     })
   )
@@ -50,7 +51,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const cookies = await jar.getSetCookieStrings(process.env.BACKEND_API_BASE || "")
     res.setHeader("Set-Cookie", cookies)
     res.statusMessage = response.statusText
-    res.status(response.status).json(response.data)
+    if (response.headers) {
+      if (response.headers["content-type"]) {
+        res.setHeader("content-type", response.headers["content-type"])
+      }
+      if (response.headers["content-disposition"]) {
+        res.setHeader("content-disposition", response.headers["content-disposition"])
+      }
+      if (response.headers["connection"]) {
+        res.setHeader("connection", response.headers["connection"])
+      }
+    }
+    res.status(response.status).send(response.data)
   } catch (e) {
     console.error(
       "partner's backend url adapter error:",

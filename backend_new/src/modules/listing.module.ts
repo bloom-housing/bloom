@@ -10,6 +10,7 @@ import { GoogleTranslateService } from '../services/google-translate.service';
 import { ApplicationFlaggedSetModule } from './application-flagged-set.module';
 import { EmailModule } from './email.module';
 import { PermissionModule } from './permission.module';
+import { ListingCsvExporterService } from '../services/listing-csv-export.service';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { PermissionModule } from './permission.module';
     ConfigService,
     Logger,
     SchedulerRegistry,
+    ListingCsvExporterService,
   ],
   exports: [ListingService],
 })

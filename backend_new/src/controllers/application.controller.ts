@@ -44,8 +44,8 @@ import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { PermissionAction } from '../decorators/permission-action.decorator';
-import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
 import { ApplicationCsvExporterService } from '../services/application-csv-export.service';
+import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
 
 @Controller('applications')
 @ApiTags('applications')
@@ -86,10 +86,7 @@ export class ApplicationController {
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationCsvQueryParams,
   ): Promise<StreamableFile> {
-    return await this.applicationCsvExportService.export(
-      queryParams,
-      mapTo(User, req['user']),
-    );
+    return await this.applicationCsvExportService.exportFile(req, queryParams);
   }
 
   @Get(`:applicationId`)

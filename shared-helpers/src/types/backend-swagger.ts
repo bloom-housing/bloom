@@ -206,6 +206,27 @@ export class ListingsService {
     })
   }
   /**
+   * Get applications as csv
+   */
+  listAsCsv(
+    params: {
+      /**  */
+      timeZone?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/csv"
+
+      const configs: IRequestConfig = getConfigs("get", "application/zip", url, options)
+      configs.params = { timeZone: params["timeZone"] }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios({ ...configs, responseType: "arraybuffer" }, resolve, reject)
+    })
+  }
+  /**
    * Get listing by id
    */
   retrieve(
@@ -1547,11 +1568,11 @@ export class UserService {
     return new Promise((resolve, reject) => {
       let url = basePath + "/user/csv"
 
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      const configs: IRequestConfig = getConfigs("get", "application/zip", url, options)
 
       /** 适配ios13，get请求不允许带body */
 
-      axios(configs, resolve, reject)
+      axios({ ...configs, responseType: "arraybuffer" }, resolve, reject)
     })
   }
   /**
@@ -4952,6 +4973,7 @@ export enum ListingViews {
   "base" = "base",
   "full" = "full",
   "details" = "details",
+  "csv" = "csv",
 }
 
 export enum ListingOrderByKeys {

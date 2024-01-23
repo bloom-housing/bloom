@@ -129,6 +129,36 @@ export const stagingSeed = async (
       },
     }),
   });
+  const multiselectQuestionPrograms =
+    await prismaClient.multiselectQuestions.create({
+      data: multiselectQuestionFactory(jurisdiction.id, {
+        multiselectQuestion: {
+          text: 'Housing Situation',
+          description:
+            'Thinking about the past 30 days, do either of these describe your housing situation?',
+          applicationSection:
+            MultiselectQuestionsApplicationSectionEnum.programs,
+          options: [
+            {
+              text: 'Not Permanent',
+              ordinal: 0,
+            },
+            {
+              text: 'Homeless',
+              ordinal: 1,
+            },
+            {
+              text: 'Do Not Consider',
+              ordinal: 2,
+            },
+            {
+              text: 'Prefer not to say',
+              ordinal: 3,
+            },
+          ],
+        },
+      }),
+    });
   // create pre-determined values
   const unitTypes = await unitTypeFactoryAll(prismaClient);
   await unitAccessibilityPriorityTypeFactoryAll(prismaClient);
@@ -258,7 +288,11 @@ export const stagingSeed = async (
           },
         },
       ],
-      multiselectQuestions: [multiselectQuestion1, multiselectQuestion2],
+      multiselectQuestions: [
+        multiselectQuestion1,
+        multiselectQuestion2,
+        multiselectQuestionPrograms,
+      ],
       applications: [await applicationFactory(), await applicationFactory()],
     },
     {
