@@ -437,10 +437,6 @@ export class ApplicationCsvExporterService {
         label: 'Alternate Contact First Name',
       },
       {
-        path: 'alternateContact.middleName',
-        label: 'Alternate Contact Middle Name',
-      },
-      {
         path: 'alternateContact.lastName',
         label: 'Alternate Contact Last Name',
       },
