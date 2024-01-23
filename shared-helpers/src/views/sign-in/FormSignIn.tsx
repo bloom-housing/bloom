@@ -41,7 +41,7 @@ const FormSignIn = ({
         <>
           <div className="form-card__lead mx-12 space-y-3 pl-0 pt-8">
             <Icon size="2xl" symbol="profile" />
-            <Heading size="3xl" className="font-semibold">
+            <Heading size="2xl" className="font-semibold">
               {t("nav.signInLowercase")}
             </Heading>
           </div>
@@ -94,7 +94,7 @@ const FormSignIn = ({
           </div>
           {showRegisterBtn && (
             <div className="form-card__group border-t px-0 mx-12">
-              <Heading size="3xl" className="font-semibold mb-6">
+              <Heading size="2xl" className="font-semibold mb-6">
                 {t("authentication.createAccount.noAccount")}
               </Heading>
 
