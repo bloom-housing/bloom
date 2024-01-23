@@ -16,6 +16,7 @@ import LinkComponent from "../components/core/LinkComponent"
 import { translations, overrideTranslations } from "../lib/translations"
 
 import "../../styles/overrides.scss"
+import { pageChangeHandler } from "../lib/customScripts"
 
 const signInMessage = "Login is required to view this page."
 
@@ -37,12 +38,17 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   // fix for rehydration
   const [hasMounted, setHasMounted] = useState(false)
   useEffect(() => {
-    const heapNode = heapScript()
-    if (heapNode) {
-      document.head.append(heapNode)
+    if (!document.body.dataset.customScriptsLoaded) {
+      router.events.on("routeChangeComplete", pageChangeHandler)
+
+      const heapNode = heapScript()
+      if (heapNode) {
+        document.head.append(heapNode)
+      }
+      document.body.dataset.customScriptsLoaded = "true"
+      setHasMounted(true)
     }
-    setHasMounted(true)
-  }, [])
+  }, [router.events])
 
   useMemo(() => {
     addTranslation(translations.general, true)
