@@ -1,6 +1,6 @@
 import React, { useContext } from "react"
-import { Field, Form, FormCard, Icon, NavigationContext, t } from "@bloom-housing/ui-components"
-import { Button, Heading } from "@bloom-housing/ui-seeds"
+import { Field, Form, Icon, NavigationContext, t } from "@bloom-housing/ui-components"
+import { Button, Heading, Card } from "@bloom-housing/ui-seeds"
 import { FormSignInErrorBox } from "./FormSignInErrorBox"
 import { NetworkStatus } from "../../auth/catchNetworkError"
 import type { UseFormMethods } from "react-hook-form"
@@ -36,7 +36,7 @@ const FormSignIn = ({
   }
   const { LinkComponent } = useContext(NavigationContext)
   return (
-    <FormCard>
+    <Card>
       {process.env.showMandatedAccounts ? (
         <>
           <div className="form-card__lead mx-12 space-y-3 pl-0 pt-8">
@@ -164,7 +164,7 @@ const FormSignIn = ({
           )}
         </>
       )}
-    </FormCard>
+    </Card>
   )
 }
 
