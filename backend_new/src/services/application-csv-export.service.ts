@@ -495,15 +495,15 @@ export class ApplicationCsvExporterService {
           val === 'perMonth' ? 'per month' : 'per year',
       },
       {
-        path: 'accessibilityMobility',
+        path: 'accessibility.mobility',
         label: 'Accessibility Mobility',
       },
       {
-        path: 'accessibilityVision',
+        path: 'accessibility.vision',
         label: 'Accessibility Vision',
       },
       {
-        path: 'accessibilityHearing',
+        path: 'accessibility.hearing',
         label: 'Accessibility Hearing',
       },
       {
