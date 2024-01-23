@@ -77,7 +77,7 @@ export default () => {
         <Card>
           <div className="form-card__lead pb-8 border-b mx-12 px-0">
             <Icon size="2xl" symbol="profile" />
-            <Heading size="3xl" className="font-semibold mt-3">
+            <Heading size="2xl" className="font-semibold mt-3">
               {t("account.createAccount.title")}
             </Heading>
             {requestError && (
@@ -220,7 +220,7 @@ export default () => {
             </div>
           </Form>
           <div className="form-card__group mx-12 p-0 py-8">
-            <Heading size="3xl" className="mb-6 font-semibold">
+            <Heading size="2xl" className="mb-6 font-semibold">
               {t("account.haveAnAccount")}
             </Heading>
             <Button href="/sign-in" variant="primary-outlined">
