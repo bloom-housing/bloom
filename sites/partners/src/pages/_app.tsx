@@ -37,8 +37,10 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   // fix for rehydration
   const [hasMounted, setHasMounted] = useState(false)
   useEffect(() => {
+    console.log("beginning of useEffect")
     const heapNode = heapScript()
     if (heapNode) {
+      console.log("hasHeap", heapNode)
       document.head.append(heapNode)
     }
     setHasMounted(true)
