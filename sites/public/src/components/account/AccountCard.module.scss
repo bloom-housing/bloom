@@ -5,13 +5,12 @@
   @media (max-width: theme("screens.md")) {
     --card-spacing-lg: var(--seeds-s6);
   }
-
-  width: 100%;
 }
 
 .acccount-card-icon {
   margin-bottom: var(--seeds-s3);
 }
+
 .account-card-header {
   --subheading-margin: var(--seeds-s3);
   --heading-margin: var(--seeds-s3);
