@@ -281,23 +281,23 @@ export class ApplicationCsvExporterService {
           label: `Household Member (${j}) Work in Region`,
         },
         {
-          path: `householdMember.${i}.street`,
+          path: `householdMember.${i}.householdMemberAddress.street`,
           label: `Household Member (${j}) Street`,
         },
         {
-          path: `householdMember.${i}.street2`,
+          path: `householdMember.${i}.householdMemberAddress.street2`,
           label: `Household Member (${j}) Street 2`,
         },
         {
-          path: `householdMember.${i}.city`,
+          path: `householdMember.${i}.householdMemberAddress.city`,
           label: `Household Member (${j}) City`,
         },
         {
-          path: `householdMember.${i}.state`,
+          path: `householdMember.${i}.householdMemberAddress.state`,
           label: `Household Member (${j}) State`,
         },
         {
-          path: `householdMember.${i}.zipCode`,
+          path: `householdMember.${i}.householdMemberAddress.zipCode`,
           label: `Household Member (${j}) Zip Code`,
         },
       );
