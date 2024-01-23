@@ -2,13 +2,9 @@ import { coliseumApplication, minimalDataApplication } from "../../mockData/appl
 
 describe("Submit", function () {
   it("should submit an application for the Test: Coliseum listing", function () {
-    cy.visit("/sign-in")
-    cy.signIn()
-    cy.submitApplication("Test: Coliseum", coliseumApplication, true)
+    cy.submitApplication("Test: Coliseum", coliseumApplication, false)
   })
   it("should submit a minimal application for the Test: Default, No Preferences", function () {
-    cy.visit("/sign-in")
-    cy.signIn()
-    cy.submitApplication("Test: Default, No Preferences", minimalDataApplication, true)
+    cy.submitApplication("Test: Default, No Preferences", minimalDataApplication, false)
   })
 })
