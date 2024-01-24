@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { Field, t, FieldGroup, resolveObject } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
@@ -11,6 +11,10 @@ import {
 } from "@bloom-housing/backend-core/types"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { FormAddressAlternate } from "@bloom-housing/shared-helpers/src/views/address/FormAddressAlternate"
+import GeocodeService, {
+  GeocodeService as GeocodeServiceType,
+} from "@mapbox/mapbox-sdk/services/geocoding"
+import MultiselectQuestionsMap from "../MultiselectQuestionsMap"
 
 type FormMultiselectQuestionsProps = {
   questions: ListingMultiselectQuestion[]
@@ -44,6 +48,18 @@ const FormMultiselectQuestions = ({
 
     return keys
   }, [questions, applicationSection])
+
+  const [geocodingClient, setGeocodingClient] = useState<GeocodeServiceType>()
+
+  useEffect(() => {
+    if (process.env.mapBoxToken || process.env.MAPBOX_TOKEN) {
+      setGeocodingClient(
+        GeocodeService({
+          accessToken: process.env.mapBoxToken || process.env.MAPBOX_TOKEN,
+        })
+      )
+    }
+  }, [])
 
   if (questions?.length === 0) {
     return null
@@ -105,6 +121,10 @@ const FormMultiselectQuestions = ({
               errors={errors}
               stateKeys={stateKeys}
               data-testid={"app-question-extra-field"}
+            />
+            <MultiselectQuestionsMap
+              dataKey={fieldName(question.text, applicationSection, `${option.text}`)}
+              geocodingClient={geocodingClient}
             />
           </div>
         )}
