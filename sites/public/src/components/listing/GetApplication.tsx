@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useState } from "react"
 import Markdown from "markdown-to-jsx"
 
 import {
@@ -15,8 +15,6 @@ import { Button } from "@bloom-housing/ui-seeds"
 import { useForm } from "react-hook-form"
 import { downloadExternalPDF } from "../../lib/helpers"
 import { ListingStatus } from "@bloom-housing/backend-core"
-import { AuthContext } from "@bloom-housing/shared-helpers/src/auth/AuthContext"
-
 export interface PaperApplication {
   fileURL: string
   languageString: string
@@ -60,10 +58,6 @@ export interface ApplicationsProps {
 }
 /** Displays information regarding how to apply, including an online application link button, paper application downloads, and a paper application pickup address */
 const GetApplication = (props: ApplicationsProps) => {
-  const { initialStateLoaded, profile } = useContext(AuthContext)
-  const redirectIfSignedOut = () =>
-    process.env.showMandatedAccounts && initialStateLoaded && !profile
-
   const showSection =
     props.onlineApplicationURL ||
     (props.applicationsOpen && props.paperMethod && !!props.paperApplications?.length)
@@ -107,11 +101,7 @@ const GetApplication = (props: ApplicationsProps) => {
             <Button
               variant="primary"
               className="w-full mb-2"
-              href={
-                redirectIfSignedOut()
-                  ? `/sign-in?redirectUrl=/applications/start/choose-language&listingId=${props.listingId}`
-                  : props.onlineApplicationURL
-              }
+              href={props.onlineApplicationURL}
               id={"listing-view-apply-button"}
             >
               {props.strings?.applyOnline ?? t("listings.apply.applyOnline")}
