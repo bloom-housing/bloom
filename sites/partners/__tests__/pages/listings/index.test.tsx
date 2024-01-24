@@ -1,4 +1,4 @@
-import { AuthProvider, ConfigProvider } from "@bloom-housing/shared-helpers"
+import { AuthProvider, ConfigProvider, MessageProvider } from "@bloom-housing/shared-helpers"
 
 import { fireEvent, render } from "@testing-library/react"
 import { rest } from "msw"
@@ -146,7 +146,9 @@ describe("listings", () => {
     const { findByText, getByText } = render(
       <ConfigProvider apiUrl={"http://localhost:3100"}>
         <AuthProvider>
-          <ListingsList />
+          <MessageProvider>
+            <ListingsList />
+          </MessageProvider>
         </AuthProvider>
       </ConfigProvider>
     )

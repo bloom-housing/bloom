@@ -3,7 +3,7 @@ import useSWR from "swr"
 import qs from "qs"
 import dayjs from "dayjs"
 import JSZip from "jszip"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import {
   ApplicationSection,
   EnumApplicationsApiExtraModelOrder,
@@ -13,7 +13,7 @@ import {
   EnumUserFilterParamsComparison,
   UserRolesOnly,
 } from "@bloom-housing/backend-core/types"
-import { setSiteAlertMessage, t } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 export interface PaginationProps {
   page?: number
   limit: number | "all"
@@ -120,6 +120,7 @@ export function useListingsData({
 
 export const useListingZip = () => {
   const { listingsService } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
 
   const [zipExportLoading, setZipExportLoading] = useState(false)
   const [zipExportError, setZipExportError] = useState(false)
@@ -145,12 +146,12 @@ export const useListingZip = () => {
         fileLink.click()
       })
       setZipCompleted(true)
-      setSiteAlertMessage(t("t.exportSuccess"), "success")
+      addToast(t("t.exportSuccess"), { variant: "success" })
     } catch (err) {
       setZipExportError(true)
     }
     setZipExportLoading(false)
-  }, [listingsService])
+  }, [listingsService, addToast])
 
   return {
     onExport,
@@ -499,6 +500,7 @@ export const createDateStringFromNow = (format = "YYYY-MM-DD_HH:mm:ss"): string 
 
 export const useApplicationsExport = (listingId: string, includeDemographics: boolean) => {
   const { applicationsService, profile } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone.replace("/", "-")
 
   const [csvExportLoading, setCsvExportLoading] = useState(false)
@@ -513,11 +515,11 @@ export const useApplicationsExport = (listingId: string, includeDemographics: bo
     try {
       await applicationsService.listAsCsv({ listingId, timeZone, includeDemographics })
       setCsvExportSuccess(true)
-      setSiteAlertMessage(
+      addToast(
         t("t.emailingExportSuccess", {
           email: profile?.email,
         }),
-        "success"
+        { variant: "success" }
       )
     } catch (err) {
       console.log(err)
@@ -525,7 +527,7 @@ export const useApplicationsExport = (listingId: string, includeDemographics: bo
     }
 
     setCsvExportLoading(false)
-  }, [applicationsService, includeDemographics, listingId, profile?.email, timeZone])
+  }, [applicationsService, includeDemographics, listingId, profile?.email, addToast, timeZone])
 
   return {
     onExport,
@@ -548,6 +550,7 @@ const useCsvExport = (endpoint: () => Promise<string>, fileName: string) => {
   const [csvExportLoading, setCsvExportLoading] = useState(false)
   const [csvExportError, setCsvExportError] = useState(false)
   const [csvExportSuccess, setCsvExportSuccess] = useState(false)
+  const { addToast } = useContext(MessageContext)
 
   const onExport = useCallback(async () => {
     setCsvExportError(false)
@@ -562,14 +565,14 @@ const useCsvExport = (endpoint: () => Promise<string>, fileName: string) => {
       fileLink.href = URL.createObjectURL(blob)
       fileLink.click()
       setCsvExportSuccess(true)
-      setSiteAlertMessage(t("t.exportSuccess"), "success")
+      addToast(t("t.exportSuccess"), { variant: "success" })
     } catch (err) {
       console.log(err)
       setCsvExportError(true)
     }
 
     setCsvExportLoading(false)
-  }, [endpoint, fileName])
+  }, [endpoint, fileName, addToast])
 
   return {
     onExport,

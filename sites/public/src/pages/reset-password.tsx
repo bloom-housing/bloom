@@ -1,16 +1,7 @@
 import React, { useEffect, useState, useContext, useRef } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
-import {
-  Field,
-  Form,
-  FormCard,
-  Icon,
-  t,
-  AlertBox,
-  SiteAlert,
-  setSiteAlertMessage,
-} from "@bloom-housing/ui-components"
+import { Field, Form, FormCard, Icon, t, AlertBox, SiteAlert } from "@bloom-housing/ui-components"
 import { Button } from "@bloom-housing/ui-seeds"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
@@ -43,8 +34,10 @@ const ResetPassword = () => {
 
     try {
       const user = await resetPassword(token.toString(), password, passwordConfirmation)
-      setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
-      await router.push("/account/applications")
+      await router.push({
+        pathname: "/account/dashboard",
+        query: { alert: t(`authentication.signIn.success`, { name: user.firstName }) },
+      })
     } catch (err) {
       const { status, data } = err.response || {}
       if (status === 400) {

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useContext } from "react"
 import ReactDOMServer from "react-dom/server"
 import Markdown from "markdown-to-jsx"
 import {
@@ -39,7 +39,6 @@ import {
   EventType,
   StandardTableData,
   ExpandableSection,
-  SiteAlert,
 } from "@bloom-housing/ui-components"
 import {
   cloudinaryPdfFromId,
@@ -53,6 +52,7 @@ import {
   UnitTables,
   getSummariesTable,
   IMAGE_FALLBACK_URL,
+  MessageContext,
 } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { ErrorPage } from "../../pages/_error"
@@ -61,7 +61,6 @@ import { getGenericAddress, openInFuture } from "../../lib/helpers"
 import { GetApplication } from "./GetApplication"
 import { DownloadLotteryResults } from "./DownloadLotteryResults"
 import { SubmitApplication } from "./SubmitApplication"
-
 interface ListingProps {
   listing: Listing
   preview?: boolean
@@ -509,7 +508,6 @@ export const ListingView = (props: ListingProps) => {
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">
       <header className="image-card--leader">
-        <SiteAlert type="alert" dismissable />
         <ImageCard
           images={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize)).map(
             (imageUrl: string) => {
