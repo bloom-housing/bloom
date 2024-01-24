@@ -23,7 +23,7 @@ const SignUpBenefits = (props: SignUpBenefitsProps) => {
             size="xl"
             className="border border-white bg-white rounded-full p-2.5"
           />
-          <p className="ml-2">{item.text}</p>
+          <p className="ml-3">{item.text}</p>
         </li>
       ))}
     </ul>

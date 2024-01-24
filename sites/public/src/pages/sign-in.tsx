@@ -134,7 +134,7 @@ const SignIn = () => {
       <HeadingGroup
         heading={t("account.signUpSaveTime.title")}
         subheading={t("account.signUpSaveTime.subTitle")}
-        size="xl"
+        size="2xl"
         className={classNames}
       />
     )
@@ -165,7 +165,7 @@ const SignIn = () => {
               />
             </div>
             <div className="hidden md:flex">
-              <div className="md:flex md:flex-col md:grow-0 md:shrink-1 md:p-5 md:max-w-lg md:w-full ">
+              <div className="md:flex md:flex-col md:grow-0 md:shrink-1 md:p-8 md:max-w-lg md:w-full ">
                 <SignUpBenefitsHeadingGroup mobileView={false} />
                 <SignUpBenefits idTag="desktop" />
               </div>
