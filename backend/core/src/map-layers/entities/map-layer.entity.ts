@@ -20,4 +20,9 @@ export class MapLayer {
   @Column()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   jurisdictionId: string
+
+  @Column("jsonb")
+  @Expose()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  featureCollection: any
 }
