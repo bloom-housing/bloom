@@ -180,8 +180,10 @@ export class GeocodingService {
                 },
               ],
             })
+            return
           }
         }
+        preferenceOptions.push(option)
       })
       return preferenceOptions
     }
