@@ -128,25 +128,17 @@ const SignIn = () => {
     }
   }, [networkError])
 
-  const MobileComponent = () => {
+  const SignUpBenefitsHeadingGroup = (props: { mobileView: boolean }) => {
+    const classNames = props.mobileView ? "p-4 -order-1" : "grow-0 shrink-1"
     return (
       <HeadingGroup
         heading={t("account.signUpSaveTime.title")}
         subheading={t("account.signUpSaveTime.subTitle")}
         size="xl"
-        className="p-4 -order-1"
+        className={classNames}
       />
     )
   }
-
-  const DesktopComponent = () => (
-    <HeadingGroup
-      heading={t("account.signUpSaveTime.title")}
-      subheading={t("account.signUpSaveTime.subTitle")}
-      size="xl"
-      className="grow-0 shrink-1"
-    />
-  )
 
   return (
     <>
@@ -154,7 +146,7 @@ const SignIn = () => {
         <FormsLayout className="sm:max-w-lg md:max-w-full">
           <div className="flex flex-col md:flex-row md:ml-20 justify-center">
             <div className="display md:hidden ">
-              <MobileComponent />
+              <SignUpBenefitsHeadingGroup mobileView={true} />
             </div>
             <div className="md:max-w-lg w-full justify-center">
               <FormSignIn
@@ -174,7 +166,7 @@ const SignIn = () => {
             </div>
             <div className="hidden md:flex">
               <div className="md:flex md:flex-col md:grow-0 md:shrink-1 md:p-5 md:max-w-lg md:w-full ">
-                <DesktopComponent />
+                <SignUpBenefitsHeadingGroup mobileView={false} />
                 <SignUpBenefits idTag="desktop" />
               </div>
             </div>
