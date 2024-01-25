@@ -14,6 +14,7 @@ import {
   passwordRegex,
 } from "@bloom-housing/ui-components"
 import { Button, Heading, Card } from "@bloom-housing/ui-seeds"
+import { CardSection, CardHeader, CardFooter } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
 dayjs.extend(customParseFormat)
@@ -75,7 +76,7 @@ export default () => {
     <FormsLayout>
       {process.env.showMandatedAccounts ? (
         <Card>
-          <div className="form-card__lead pb-8 border-b mx-12 px-0">
+          <CardHeader divider={"inset"} className="pb-8 mx-12 px-0">
             <Icon size="2xl" symbol="profile" />
             <Heading size="2xl" className="font-semibold mt-3">
               {t("account.createAccount.title")}
@@ -86,9 +87,9 @@ export default () => {
               </AlertBox>
             )}
             <SiteAlert type="notice" dismissable />
-          </div>
+          </CardHeader>
           <Form id="create-account" onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-card__group border-b space-y-3 mx-12 p-0 py-8">
+            <CardSection divider={"inset"} className="space-y-3 mx-12 p-0 py-8">
               <label className={styles["create-account-header"]} htmlFor="firstName">
                 {t("application.name.yourNameLowercase")}
               </label>
@@ -140,8 +141,8 @@ export default () => {
                 readerOnly
                 controlClassName={styles["create-account-input"]}
               />
-            </div>
-            <div className="form-card__group border-b mx-12 p-0 py-8">
+            </CardSection>
+            <CardSection divider={"inset"} className="mx-12 p-0 py-8">
               <DOBField
                 register={register}
                 required={true}
@@ -154,9 +155,9 @@ export default () => {
                 label={t("application.name.yourDateOfBirthLowercase")}
               />
               <p className={"field-sub-note"}>{t("application.name.yourDateOfBirthExample")}</p>
-            </div>
+            </CardSection>
 
-            <div className="form-card__group border-b mx-12 p-0 py-8">
+            <CardSection divider={"inset"} className="mx-12 p-0 py-8">
               <Field
                 caps={true}
                 type="email"
@@ -168,8 +169,8 @@ export default () => {
                 register={register}
                 controlClassName={styles["create-account-input"]}
               />
-            </div>
-            <div className="form-card__group border-b mx-12 p-0 py-8 space-y-3">
+            </CardSection>
+            <CardSection className="mx-12 p-0 py-8 space-y-3">
               <Field
                 caps={true}
                 type={"password"}
@@ -217,16 +218,16 @@ export default () => {
               <Button type="submit" variant="primary">
                 {t("account.createAccount.label")}
               </Button>
-            </div>
+            </CardSection>
           </Form>
-          <div className="form-card__group mx-12 p-0 py-8">
+          <CardFooter className="border-t mx-12 m-0 py-8">
             <Heading size="2xl" className="mb-6 font-semibold">
               {t("account.haveAnAccount")}
             </Heading>
             <Button href="/sign-in" variant="primary-outlined">
               {t("nav.signIn")}
             </Button>
-          </div>
+          </CardFooter>
         </Card>
       ) : (
         <FormCard>
