@@ -1,6 +1,7 @@
 import React, { useContext } from "react"
 import { Field, Form, Icon, NavigationContext, t } from "@bloom-housing/ui-components"
 import { Button, Heading, Card } from "@bloom-housing/ui-seeds"
+import { CardHeader, CardSection, CardFooter } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { FormSignInErrorBox } from "./FormSignInErrorBox"
 import { NetworkStatus } from "../../auth/catchNetworkError"
 import type { UseFormMethods } from "react-hook-form"
@@ -39,19 +40,19 @@ const FormSignIn = ({
     <Card>
       {process.env.showMandatedAccounts ? (
         <>
-          <div className="form-card__lead mx-12 space-y-3 pl-0 pt-8">
+          <CardHeader className="mx-12 space-y-3 pl-0 py-8">
             <Icon size="2xl" symbol="profile" />
             <Heading size="2xl" className="font-semibold">
               {t("nav.signInLowercase")}
             </Heading>
-          </div>
+          </CardHeader>
           <FormSignInErrorBox
             errors={errors}
             networkStatus={networkStatus}
             errorMessageId={"main-sign-in"}
-            className="p-0 mx-12"
+            className="mx-12"
           />
-          <div className="form-card__group mx-4">
+          <CardSection className="mx-6">
             <Form id="sign-in" onSubmit={handleSubmit(onSubmit, onError)}>
               <Field
                 caps={true}
@@ -91,9 +92,9 @@ const FormSignIn = ({
                 </Button>
               </div>
             </Form>
-          </div>
+          </CardSection>
           {showRegisterBtn && (
-            <div className="form-card__group border-t px-0 mx-12">
+            <CardFooter className="border-t py-8 mx-12">
               <Heading size="2xl" className="font-semibold mb-6">
                 {t("authentication.createAccount.noAccount")}
               </Heading>
@@ -101,7 +102,7 @@ const FormSignIn = ({
               <Button variant="primary-outlined" href="/create-account">
                 {t("account.createAccount")}
               </Button>
-            </div>
+            </CardFooter>
           )}
         </>
       ) : (
