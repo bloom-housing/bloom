@@ -1,0 +1,61 @@
+.application-form-header {
+  --card-content-padding-inline-desktop: var(--seeds-s11);
+
+  border: none;
+  margin-block: var(--seeds-s6);
+
+  @media (max-width: theme("screens.md")) {
+    margin-block-end: 0;
+    border-bottom: none;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  @media (max-width: theme("screens.sm")) {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    margin-top: 0;
+  }
+}
+
+.application-form-listing-name {
+  --card-content-padding-block: var(--seeds-s4);
+
+  background: var(--seeds-color-primary-dark);
+  padding-block-end: var(--card-content-padding-block);
+  color: white;
+}
+
+.application-form-body {
+  --card-content-padding-inline-desktop: var(--seeds-s11);
+
+  border: none;
+  margin-block-end: var(--seeds-s6);
+
+  @media (max-width: theme("screens.md")) {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  @media (max-width: theme("screens.sm")) {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-bottom: 0;
+  }
+}
+
+.listing-image-card {
+  --border-radius: 0;
+}
+
+/* overrides for Seeds Message & Alert */
+.message-inside-card {
+  --seeds-color-primary-light: var(--dwy-color-blue-300);
+  --common-message-max-width: auto;
+  --common-message-padding: var(--seeds-s4) var(--card-content-padding-inline);
+}
+
+.underlined-text-heading {
+  border-bottom: var(--seeds-s1) solid var(--seeds-color-primary-dark);
+  padding-bottom: var(--seeds-s2);
+}

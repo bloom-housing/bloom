@@ -86,10 +86,13 @@
     }
 
     input.input {
-      @apply px-3;
+      padding-inline: var(--bloom-s3);
+      padding-block: var(--bloom-s4);
       border-width: 2px;
-      border-color: var(--bloom-color-gray-450);
-      font-size: 0.75rem;
+      background-color: var(--bloom-color-gray-200);
+      border-color: var(--bloom-color-gray-500);
+      border-radius: var(--bloom-rounded-lg);
+      font-size: 0.9rem;
     }
 
     .prepend {
@@ -124,7 +127,7 @@
       text-decoration: none;
       // Appears to be for the case of no label
       outline: none;
-      box-shadow: 0 0 0 2px #ffffff, 0 0 3px 4px $tailwind-primary;
+      box-shadow: 0 0 0 2px #ffffff, 0 0 3px 4px var(--bloom-color-primary);
     }
   }
 
@@ -140,7 +143,7 @@
   input[type="radio"] + label::before {
     background: white;
     border-radius: 4px;
-    box-shadow: 0 0 0 1px white, 0 0 0 2px map-get($tailwind-gray, 550);
+    box-shadow: 0 0 0 1px white, 0 0 0 2px var(--bloom-color-gray-500);
     content: "\a0";
     display: inline-block;
     height: 1.25rem;
@@ -159,17 +162,17 @@
 
   input[type="checkbox"]:checked + label::before,
   input[type="radio"]:checked + label::before {
-    background-color: var(--bloom-color-accent-cool-light);
-    box-shadow: 0 0 0 1px var(--bloom-color-accent-cool-light);
+    background-color: var(--bloom-color-primary);
+    box-shadow: 0 0 0 2px var(--bloom-color-primary);
   }
 
   input[type="radio"]:checked + label::before {
-    box-shadow: 0 0 0 1px white, 0 0 0 2px $tailwind-primary;
+    box-shadow: 0 0 0 2px white, 0 0 0 3px var(--bloom-color-gray-500);
   }
 
   input[type="checkbox"]:checked + label::before {
     background-image: url("/images/check.png");
-    background-image: url("/images/check-black.svg");
+    background-image: url("/images/check.svg");
     background-position: 50%;
     background-repeat: no-repeat;
   }
@@ -192,17 +195,16 @@
 
   select {
     @apply text-gray-950;
-    @apply rounded;
     @apply border;
     @apply border-gray-500;
     @apply bg-gray-200;
     @apply text-gray-950;
     @apply leading-tight;
-    @apply py-2;
+    @apply py-4;
     @apply px-3;
-    height: 3em;
+    height: 3.5em;
     font-family: inherit;
-    font-size: 1rem;
+    font-size: 0.9rem !important;
     line-height: normal;
     -moz-appearance: none;
     -webkit-appearance: none;
@@ -213,6 +215,8 @@
     background-repeat: no-repeat;
     background-size: 0.75rem;
     padding-right: 2.25rem;
+    border-radius: var(--bloom-rounded-lg);
+    border-width: 2px !important;
   }
 
   input:disabled,

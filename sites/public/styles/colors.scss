@@ -1,0 +1,26 @@
+:root {
+  --dwy-color-blue-1100: #0D223B;
+  --dwy-color-blue-900: #133258;
+  --dwy-color-blue-700: #205493;
+  --dwy-color-blue-500: #0077DA;
+  --dwy-color-blue-300: #DAEEFF;
+
+  --dwy-color-cyan-900: #009DB0;
+  --dwy-color-cyan-700: #00BED5;
+  --dwy-color-cyan-500: #C8F1FF;
+  --dwy-color-cyan-300: #EAFDFF;
+  --dwy-color-cyan-100: #F5FEFF;
+
+  /* Semantic Colors */
+  --seeds-color-primary-darker: var(--dwy-color-blue-1100);
+  --seeds-color-primary-dark: var(--dwy-color-blue-900);
+  --seeds-color-primary: var(--dwy-color-blue-700);
+  --seeds-color-primary-light: var(--dwy-color-blue-500);
+  --seeds-color-primary-lighter: var(--dwy-color-blue-300);
+
+  --seeds-color-secondary-darker: var(--dwy-color-cyan-900);
+  --seeds-color-secondary-dark: var(--dwy-color-cyan-700);
+  --seeds-color-secondary: var(--dwy-color-cyan-500);
+  --seeds-color-secondary-light: var(--dwy-color-cyan-300);
+  --seeds-color-secondary-lighter: var(--dwy-color-cyan-100);
+}

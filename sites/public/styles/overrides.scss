@@ -1,3 +1,5 @@
+@import "./colors.scss";
+
 :root {
   .site-header {
     --logo-content-padding: 0;
@@ -84,5 +86,48 @@
         font-weight: var(--title-font-weight-normal);
       }
     }
+  }
+
+  .seeds-button {
+    --button-border-radius-sm: var(--seeds-rounded-full);
+    --button-border-radius-md: var(--seeds-rounded-full);
+    --button-border-radius-lg: var(--seeds-rounded-full);
+
+    --button-padding-md: calc(var(--seeds-s3) - 2px) calc(var(--seeds-s6) - 2px);
+    --button-padding-sm: calc(var(--seeds-s3) - 2px) calc(var(--seeds-s6) - 2px);
+  
+    -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
+  }
+
+  .seeds-card-section.bg-primary-lighter {
+    background: var(--seeds-color-secondary-lighter) !important;
+  }
+
+  .seeds-card.application-form-card .image-card {
+    --border-radius: 0;
+  }
+
+  .progress-nav {
+    --dot-size: .95rem;
+    --dot-font-size: 0.825rem;
+    --dot-label-padding-top: var(--seeds-s6);
+    --active-step-color: var(--seeds-color-primary-dark);
+    --completed-step-color: var(--seeds-color-primary-dark);
+  }
+
+  /* TODO: would be nice to have CSS variables for this too */
+  .progress-nav__dot-item::after {
+    top: 0.35rem;
+    height: 3px;
+  }
+
+  --text-caps-spaced-letter-spacing: var(--bloom-letter-spacing-tight);
+  --text-caps-spaced-font-weight: 700;
+  .text__caps-spaced {
+    text-transform: none;
+  }
+
+  .form--card__sub-header {
+    border-top: none;
   }
 }

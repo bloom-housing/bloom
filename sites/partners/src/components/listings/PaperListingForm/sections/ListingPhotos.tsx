@@ -2,21 +2,20 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { useFieldArray, useFormContext } from "react-hook-form"
 import {
   t,
-  AppearanceStyleType,
   Dropzone,
   MinimalTable,
   TableThumbnail,
   StandardTableData,
   StandardTableCell,
-  Button,
   Drawer,
 } from "@bloom-housing/ui-components"
 import { CLOUDINARY_BUILDING_LABEL, getImageUrlFromAsset } from "@bloom-housing/shared-helpers"
 import { fieldHasError } from "../../../../lib/helpers"
 import { uploadAssetAndSetData } from "../../../../lib/assets"
+import { Button, Grid } from "@bloom-housing/ui-seeds"
+
 import { ListingImage, Asset } from "@bloom-housing/backend-core"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
-import { Grid } from "@bloom-housing/ui-seeds"
 
 const ListingPhotos = () => {
   const formMethods = useFormContext()
@@ -103,11 +102,11 @@ const ListingPhotos = () => {
         content: (
           <Button
             type="button"
-            className="font-semibold uppercase text-red-700"
+            className="text-alert"
             onClick={() => {
               saveImageFields(fields.filter((item, i2) => i2 != index) as ListingImage[])
             }}
-            unstyled
+            variant="text"
           >
             {t("t.delete")}
           </Button>
@@ -142,7 +141,7 @@ const ListingPhotos = () => {
               t("listings.sections.photo.primaryPhoto")
             ) : (
               <Button
-                unstyled
+                variant="text"
                 className="ml-0"
                 onClick={() => {
                   const resortedImages = [
@@ -163,7 +162,7 @@ const ListingPhotos = () => {
           content: (
             <Button
               type="button"
-              className="font-semibold uppercase text-red-700"
+              className="text-alert"
               onClick={() => {
                 const filteredImages = drawerImages.filter((item, i2) => i2 != index)
                 filteredImages.forEach((item, i2) => {
@@ -171,7 +170,7 @@ const ListingPhotos = () => {
                 })
                 setDrawerImages(filteredImages)
               }}
-              unstyled
+              variant="text"
             >
               {t("t.delete")}
             </Button>
@@ -222,13 +221,13 @@ const ListingPhotos = () => {
 
             <Button
               type="button"
-              styleType={fieldHasError(errors?.images) ? AppearanceStyleType.alert : null}
+              variant={fieldHasError(errors?.images) ? "alert" : "primary-outlined"}
               onClick={() => {
                 setDrawerState(true)
                 setDrawerImages([...listingFormPhotos])
                 clearErrors("images")
               }}
-              dataTestId="add-photos-button"
+              id="add-photos-button"
             >
               {t(listingFormPhotos.length > 0 ? "listings.editPhotos" : "listings.addPhoto")}
             </Button>
@@ -284,14 +283,14 @@ const ListingPhotos = () => {
           )}
         </section>
         <Button
+          variant="primary"
           type="button"
           className={"mt-4"}
           onClick={() => {
             saveImageFields(drawerImages)
             resetDrawerState()
           }}
-          styleType={AppearanceStyleType.primary}
-          dataTestId={drawerImages.length > 0 ? "listing-photo-uploaded" : "listing-photo-empty"}
+          id={drawerImages.length > 0 ? "listing-photo-uploaded" : "listing-photo-empty"}
         >
           {t("t.save")}
         </Button>

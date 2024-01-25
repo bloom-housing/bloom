@@ -8,7 +8,7 @@ Bloom consists of a client/server architecture using [Next.js](https://nextjs.or
 
 The frontend apps can easily be deployed to any Jamstack-friendly web host such as [Netlify](https://www.netlify.com/) or Vercel. The frontend build process performs a static rendering of as much of the React page component trees as possible based on API data available at the time of the build. Additional real-time interactivity is made possible by React components at run-time.
 
-The backend can be simultaenously deployed to PaaS-style hosts such as Heroku. Its primary architectural dependency is a PostgreSQL database.
+The backend can be simultaneously deployed to PaaS-style hosts such as Heroku. Its primary architectural dependency is a PostgreSQL database.
 
 ### Structure
 
