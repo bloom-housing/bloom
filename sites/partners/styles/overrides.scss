@@ -3,7 +3,7 @@
     --field-value-label-color: var(--seeds-color-alert);
   }
 
-  .seeds-tag {
+  .tag-uppercase {
     text-transform: uppercase;
     letter-spacing: var(--seeds-letter-spacing-wider);
     // Allows for status tags to take up the full width of their container
@@ -12,6 +12,14 @@
     align-items: center;
     justify-content: center;
     text-align: center;
+  }
+
+  .seeds-button {
+    -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
+  }
+
+  .seeds-button[data-variant="primary"] {
+    color: white; // AG grid styling from UIC was messing up our primary button
   }
 }
 
@@ -22,6 +30,10 @@
 .grid-inset-section {
   background: var(--seeds-bg-color-surface-primary);
   padding: var(--seeds-spacer-section);
+
+  .text-heading-md {
+    margin-block-end: calc(0rem - var(--seeds-spacer-label));
+  }
 }
 
 .grid-section-row-heading {
@@ -82,9 +94,15 @@
 
 /* Override out-of-date ui-components labeling */
 :is(label, legend).text__caps-spaced {
-  /*  --text-caps-spaced-font-family: var(--bloom-font-sans); */
+/*  --text-caps-spaced-font-family: var(--bloom-font-sans); */
   --text-caps-spaced-letter-spacing: normal;
   --text-caps-spaced-font-weight: normal;
   --text-caps-spaced-margin-bottom: var(--seeds-s2);
   text-transform: none;
+}
+
+.field-label-semibold {
+  > [data-part="label"] {
+    font-weight: var(--seeds-font-weight-semibold);
+  }
 }

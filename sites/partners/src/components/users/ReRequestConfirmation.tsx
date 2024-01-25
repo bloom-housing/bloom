@@ -1,5 +1,6 @@
 import React, { useContext } from "react"
-import { AppearanceStyleType, Button, Field, Form, FormCard, t } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
+import { Field, Form, FormCard, t } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 
@@ -69,14 +70,11 @@ const ReRequestConfirmation = ({
 
         <div className="form-card__pager mt-8">
           <div className="form-card__pager-row primary">
-            <Button
-              type="submit"
-              styleType={AppearanceStyleType.primary}
-              className={"items-center"}
-            >
+            <Button type="submit" variant="primary" className={"items-center"}>
               {t("users.requestResend")}
             </Button>
             <Button
+              variant="primary-outlined"
               onClick={() => {
                 clearErrors(), onClose(false)
               }}

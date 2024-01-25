@@ -1,0 +1,80 @@
+.page-hero {
+  --background-color: var(--seeds-color-primary-darker);
+  --border-radius: inherit;
+  --font-weight: inherit;
+  --inner-background-color: inherit;
+  --margin-desktop: inherit;
+  --margin-mobile: inherit;
+  --max-width: 41rem;
+  --subtitle-desktop-font-size: var(--seeds-font-size-xl);
+  --subtitle-font-weight: inherit;
+  --subtitle-margin: 0 auto var(--seeds-s8) auto;
+  --subtitle-mobile-font-size: var(--seeds-font-size-base);
+  --subtitle-text-color: var(--seeds-color-gray-100);
+  --subtitle-text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.5);
+  --text-color: var(--seeds-color-white);
+  --title-desktop-font-size: var(--seeds-font-size-5xl);
+  --title-letter-spacing: -0.04em;
+  --title-line-height: inherit;
+  --title-margin-desktop: 0 0 var(--seeds-s8) 0;
+  --title-margin-mobile: 0 auto var(--seeds-s5) auto;
+  --title-mobile-font-size: var(--seeds-font-size-3xl);
+  --title-text-color: inherit;
+
+  background-color: var(--background-color);
+  background-size: cover;
+  color: var(--text-color);
+  margin: var(--margin-desktop);
+  padding: var(--seeds-s20) var(--seeds-s5);
+
+  @media (max-width: $screen-md) {
+    padding: var(--bloom-s10) var(--bloom-s5);
+    margin: var(--margin-mobile);
+  }
+
+  &.centered {
+    background-position: center center;
+  }
+
+  & > section {
+    max-inline-size: var(--max-width);
+    margin-inline: auto;
+    background-color: var(--inner-background-color);
+  }
+}
+
+.page-hero-header {
+  text-align: center;
+  margin: var(--title-margin-desktop);
+
+  & > h1 {
+    color: var(--title-text-color);
+    font-size: var(--title-desktop-font-size);
+    letter-spacing: var(--title-letter-spacing);
+    line-height: var(--title-line-height);
+    margin: var(--title-margin-desktop);
+    max-width: var(--max-width);
+    text-align: center;
+
+    @media (max-width: $screen-md) {
+      font-size: var(--title-mobile-font-size);
+      margin: var(--title-margin-mobile);
+    }
+
+    em {
+      font-style: normal;
+      text-decoration: underline;
+      -webkit-text-decoration-color: var(--seeds-color-warn);
+      -moz-text-decoration-color: var(--seeds-color-warn);
+      text-decoration-color: var(--seeds-color-warn);
+    }
+  }
+}
+
+.page-hero-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--seeds-s5);
+}

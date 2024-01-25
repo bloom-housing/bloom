@@ -1,18 +1,7 @@
 import React, { useMemo, useContext, useState, useCallback } from "react"
 import { FormProvider, useForm } from "react-hook-form"
-import {
-  Button,
-  t,
-  Form,
-  Field,
-  Select,
-  useMutate,
-  AppearanceStyleType,
-  emailRegex,
-  AppearanceSizeType,
-  Modal,
-} from "@bloom-housing/ui-components"
-import { Card, Grid, Tag } from "@bloom-housing/ui-seeds"
+import { t, Form, Field, Select, useMutate, emailRegex, Modal } from "@bloom-housing/ui-components"
+import { Button, Card, Grid, Tag } from "@bloom-housing/ui-seeds"
 import { RoleOption, roleKeys, AuthContext } from "@bloom-housing/shared-helpers"
 import { Listing, User, UserRolesCreate } from "@bloom-housing/backend-core/types"
 import { JurisdictionAndListingSelection } from "./JurisdictionAndListingSelection"
@@ -317,7 +306,10 @@ const FormUserManage = ({
 
                   {mode === "edit" && (
                     <div className="ml-2 mt-1 flex items-center justify-center">
-                      <Tag variant={user.confirmedAt ? "success" : "primary"}>
+                      <Tag
+                        className="tag-uppercase"
+                        variant={user.confirmedAt ? "success" : "primary"}
+                      >
                         {user.confirmedAt ? t("users.confirmed") : t("users.unconfirmed")}
                       </Tag>
                     </div>
@@ -405,8 +397,8 @@ const FormUserManage = ({
               type="button"
               className="mx-1"
               onClick={() => onSave()}
-              styleType={AppearanceStyleType.primary}
-              loading={isUpdateUserLoading}
+              variant="primary"
+              loadingMessage={isUpdateUserLoading && t("t.formSubmitted")}
             >
               {t("t.save")}
             </Button>
@@ -417,9 +409,9 @@ const FormUserManage = ({
               type="button"
               className="mx-1"
               onClick={() => onInvite()}
-              styleType={AppearanceStyleType.primary}
-              loading={isSendInviteLoading}
-              dataTestId={"invite-user"}
+              variant="primary"
+              loadingMessage={isSendInviteLoading && t("t.formSubmitted")}
+              id={"invite-user"}
             >
               {t("t.invite")}
             </Button>
@@ -430,7 +422,8 @@ const FormUserManage = ({
               type="button"
               className="mx-1"
               onClick={() => onInviteResend()}
-              loading={isResendConfirmationLoading}
+              variant="primary-outlined"
+              loadingMessage={isResendConfirmationLoading && t("t.formSubmitted")}
             >
               {t("users.resendInvite")}
             </Button>
@@ -441,7 +434,7 @@ const FormUserManage = ({
               type="button"
               className="bg-opacity-0 text-alert"
               onClick={() => setDeleteModalActive(true)}
-              unstyled
+              variant="text"
             >
               {t("t.delete")}
             </Button>
@@ -457,12 +450,12 @@ const FormUserManage = ({
         actions={[
           <Button
             type="button"
-            styleType={AppearanceStyleType.alert}
-            loading={isDeleteUserLoading}
+            variant="alert"
+            loadingMessage={isDeleteUserLoading && t("t.formSubmitted")}
             onClick={() => {
               onDelete()
             }}
-            size={AppearanceSizeType.small}
+            size="sm"
           >
             {t("t.delete")}
           </Button>,
@@ -471,7 +464,8 @@ const FormUserManage = ({
             onClick={() => {
               setDeleteModalActive(false)
             }}
-            size={AppearanceSizeType.small}
+            variant="primary-outlined"
+            size="sm"
           >
             {t("t.cancel")}
           </Button>,

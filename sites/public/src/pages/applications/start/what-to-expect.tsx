@@ -1,33 +1,22 @@
-/*
-0.2 - What To Expect
-A notice regarding application process and rules
-*/
 import React, { useEffect, useContext, useMemo } from "react"
-import {
-  AppearanceStyleType,
-  Button,
-  FormCard,
-  t,
-  ProgressNav,
-  Form,
-  Heading,
-} from "@bloom-housing/ui-components"
-import FormsLayout from "../../../layouts/forms"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
-import { useFormConductor } from "../../../lib/hooks"
-import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
-import { UserStatus } from "../../../lib/constants"
 import Markdown from "markdown-to-jsx"
+import { t, Form } from "@bloom-housing/ui-components"
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
+import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import FormsLayout from "../../../layouts/forms"
+import { useFormConductor } from "../../../lib/hooks"
+import { UserStatus } from "../../../lib/constants"
+import ApplicationFormLayout from "../../../layouts/application-form"
+import { Button } from "@bloom-housing/ui-seeds"
 
 const ApplicationWhatToExpect = () => {
   const { profile } = useContext(AuthContext)
-  const { conductor, application, listing } = useFormConductor("whatToExpect")
+  const { conductor, listing } = useFormConductor("whatToExpect")
   const router = useRouter()
-  const currentPageSection = 1
 
-  /* Form Handler */
   const { handleSubmit } = useForm()
   const onSubmit = () => {
     conductor.routeToNextOrReturnUrl()
@@ -66,22 +55,21 @@ const ApplicationWhatToExpect = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard>
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless mt-4">
-            {t("application.start.whatToExpect.title")}
-          </h2>
-        </div>
-        <div className="form-card__pager-row px-16">
-          <div className="markdown mt-4">
+      <ApplicationFormLayout
+        listingName={listing?.name}
+        heading={t("application.start.whatToExpect.title")}
+        progressNavProps={{
+          currentPageSection: 0,
+          completedSections: 0,
+          labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+          mounted: OnClientSide(),
+        }}
+        backLink={{
+          url: `/applications/start/choose-language?listingId=${listing?.id}`,
+        }}
+      >
+        <CardSection>
+          <div className="markdown">
             <Markdown
               options={{
                 disableParsingRawHTML: true,
@@ -116,21 +104,20 @@ const ApplicationWhatToExpect = () => {
               {content.finePrint}
             </Markdown>
           </div>
-        </div>
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-card__pager">
-            <div className="form-card__pager-row primary">
-              <Button
-                styleType={AppearanceStyleType.primary}
-                onClick={() => conductor.setNavigatedBack(false)}
-                data-testid={"app-next-step-button"}
-              >
-                {t("t.next")}
-              </Button>
-            </div>
-          </div>
-        </Form>
-      </FormCard>
+        </CardSection>
+        <CardSection className={"bg-primary-lighter"}>
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <Button
+              type="submit"
+              variant="primary"
+              onClick={() => conductor.setNavigatedBack(false)}
+              id={"app-next-step-button"}
+            >
+              {t("t.next")}
+            </Button>
+          </Form>
+        </CardSection>
+      </ApplicationFormLayout>
     </FormsLayout>
   )
 }

@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from "react"
-import { t, MinimalTable, Button } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { t, MinimalTable } from "@bloom-housing/ui-components"
+import { Button, FieldValue } from "@bloom-housing/ui-seeds"
 import { ApplicationContext } from "../../ApplicationContext"
 import { MembersDrawer } from "../DetailsMemberDrawer"
 import { YesNoAnswer } from "../../../../lib/helpers"
@@ -51,9 +51,9 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
         content: (
           <Button
             type="button"
-            className="font-semibold uppercase my-0"
+            className="font-semibold"
             onClick={() => setMembersDrawer(item)}
-            unstyled
+            variant="text"
           >
             {t("t.view")}
           </Button>

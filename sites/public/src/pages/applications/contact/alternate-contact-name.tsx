@@ -1,32 +1,20 @@
-/*
-1.4 - Alternate Contact
-Type of alternate contact
-*/
-import {
-  AppearanceStyleType,
-  AlertBox,
-  Button,
-  Form,
-  Field,
-  FormCard,
-  ProgressNav,
-  t,
-  Heading,
-} from "@bloom-housing/ui-components"
-import FormsLayout from "../../../layouts/forms"
+import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import FormBackLink from "../../../components/applications/FormBackLink"
-import { useFormConductor } from "../../../lib/hooks"
+import { Form, Field, t } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { Alert } from "@bloom-housing/ui-seeds"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
-import { useContext, useEffect } from "react"
+import FormsLayout from "../../../layouts/forms"
+import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
+import ApplicationFormLayout from "../../../layouts/application-form"
+import styles from "../../../layouts/application-form.module.scss"
 
 export default () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("alternateContactName")
   const currentPageSection = 1
 
-  /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, trigger } = useForm<Record<string, any>>({
     shouldFocusError: false,
@@ -55,34 +43,32 @@ export default () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard>
-        <FormBackLink
-          url={conductor.determinePreviousUrl()}
-          onClick={() => conductor.setNavigatedBack(true)}
-        />
-
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">
-            {t("application.alternateContact.name.title")}
-          </h2>
-        </div>
-
-        {Object.entries(errors).length > 0 && (
-          <AlertBox type="alert" inverted closeable>
-            {t("errors.errorsToResolve")}
-          </AlertBox>
-        )}
-
-        <Form id="applications-contact-alternate-name" onSubmit={handleSubmit(onSubmit, onError)}>
-          <div className="form-card__group">
+      <Form id="applications-contact-alternate-name" onSubmit={handleSubmit(onSubmit, onError)}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={t("application.alternateContact.name.title")}
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: OnClientSide(),
+          }}
+          backLink={{
+            url: conductor.determinePreviousUrl(),
+          }}
+          conductor={conductor}
+        >
+          {Object.entries(errors).length > 0 && (
+            <Alert
+              className={styles["message-inside-card"]}
+              variant="alert"
+              fullwidth
+              id={"application-alert-box"}
+            >
+              {t("errors.errorsToResolve")}
+            </Alert>
+          )}
+          <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className="text__caps-spaced">
                 {t("application.alternateContact.name.alternateContactFormLabel")}
@@ -90,15 +76,13 @@ export default () => {
               <Field
                 id="firstName"
                 name="firstName"
-                label={t("application.name.firstName")}
-                readerOnly={true}
-                placeholder={t("application.name.firstName")}
+                label={t("application.contact.givenName")}
                 defaultValue={application.alternateContact.firstName}
                 validation={{ required: true, maxLength: 64 }}
                 errorMessage={
                   errors.firstName?.type === "maxLength"
                     ? t("errors.maxLength")
-                    : t("errors.firstNameError")
+                    : t("errors.givenNameError")
                 }
                 error={errors.firstName}
                 register={register}
@@ -107,30 +91,27 @@ export default () => {
               <Field
                 id="lastName"
                 name="lastName"
-                label={t("application.name.lastName")}
-                readerOnly={true}
-                placeholder={t("application.name.lastName")}
+                label={t("application.contact.familyName")}
                 defaultValue={application.alternateContact.lastName}
                 validation={{ required: true, maxLength: 64 }}
                 error={errors.lastName}
                 errorMessage={
                   errors.lastName?.type === "maxLength"
                     ? t("errors.maxLength")
-                    : t("errors.lastNameError")
+                    : t("errors.familyNameError")
                 }
                 register={register}
                 dataTestId={"app-alternate-last-name"}
               />
               {application.alternateContact.type === "caseManager" && (
                 <div className="mt-6">
+                  <p className="text__caps-spaced">
+                    {t("application.alternateContact.name.caseManagerAgencyFormLabel")}
+                  </p>
                   <Field
                     id="agency"
                     name="agency"
-                    label={t("application.alternateContact.name.caseManagerAgencyFormLabel")}
-                    caps={true}
-                    placeholder={t(
-                      "application.alternateContact.name.caseManagerAgencyFormPlaceHolder"
-                    )}
+                    label={t("application.alternateContact.name.caseManagerAgencyFormPlaceHolder")}
                     defaultValue={application.alternateContact.agency}
                     validation={{ required: true }}
                     error={errors.agency}
@@ -143,38 +124,9 @@ export default () => {
                 </div>
               )}
             </fieldset>
-          </div>
-          <div className="form-card__pager">
-            <div className="form-card__pager-row primary">
-              <Button
-                styleType={AppearanceStyleType.primary}
-                onClick={() => {
-                  conductor.returnToReview = false
-                  conductor.setNavigatedBack(false)
-                }}
-                data-testid={"app-next-step-button"}
-              >
-                {t("t.next")}
-              </Button>
-            </div>
-
-            {conductor.canJumpForwardToReview() && (
-              <div className="form-card__pager-row">
-                <Button
-                  unstyled={true}
-                  className="mb-4"
-                  onClick={() => {
-                    conductor.returnToReview = true
-                    conductor.setNavigatedBack(false)
-                  }}
-                >
-                  {t("application.form.general.saveAndReturn")}
-                </Button>
-              </div>
-            )}
-          </div>
-        </Form>
-      </FormCard>
+          </CardSection>
+        </ApplicationFormLayout>
+      </Form>
     </FormsLayout>
   )
 }

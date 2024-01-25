@@ -51,19 +51,19 @@ export default function ApplicationsList() {
     switch (application?.status) {
       case ApplicationStatus.submitted:
         return (
-          <Tag variant={"success"} size={"lg"}>
+          <Tag className="tag-uppercase" variant={"success"} size={"lg"}>
             {t(`application.details.applicationStatus.submitted`)}
           </Tag>
         )
       case ApplicationStatus.removed:
         return (
-          <Tag variant={"highlight-warm"} size={"lg"}>
+          <Tag className="tag-uppercase" variant={"highlight-warm"} size={"lg"}>
             {t(`application.details.applicationStatus.removed`)}
           </Tag>
         )
       default:
         return (
-          <Tag variant={"primary"} size={"lg"}>
+          <Tag className="tag-uppercase" variant={"primary"} size={"lg"}>
             {t(`application.details.applicationStatus.draft`)}
           </Tag>
         )

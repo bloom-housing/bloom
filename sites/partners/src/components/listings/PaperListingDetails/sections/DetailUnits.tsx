@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from "react"
-import { t, MinimalTable, Button } from "@bloom-housing/ui-components"
-import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { t, MinimalTable } from "@bloom-housing/ui-components"
+import { Button, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { UnitDrawer } from "../DetailsUnitDrawer"
 import { ListingReviewOrder } from "@bloom-housing/backend-core"
@@ -36,9 +36,9 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
           content: (
             <Button
               type="button"
-              className="font-semibold uppercase my-0"
+              variant="text"
+              className="font-semibold"
               onClick={() => setUnitDrawer(unit)}
-              unstyled
             >
               {t("t.view")}
             </Button>

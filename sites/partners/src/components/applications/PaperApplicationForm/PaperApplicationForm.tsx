@@ -57,6 +57,13 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     defaultValues,
   })
 
+  const [initialLoad, setInitialLoad] = useState(true)
+
+  if (editMode && initialLoad && listingDto) {
+    formMethods.reset(defaultValues)
+    setInitialLoad(false)
+  }
+
   const router = useRouter()
 
   const { applicationsService } = useContext(AuthContext)
@@ -165,6 +172,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       <>
         <StatusBar>
           <Tag
+            className="tag-uppercase"
             variant={application?.status == ApplicationStatus.submitted ? "success" : "primary"}
             size={"lg"}
           >

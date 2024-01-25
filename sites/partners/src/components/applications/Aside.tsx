@@ -1,16 +1,7 @@
 import React, { useContext, useMemo, useState } from "react"
 import dayjs from "dayjs"
-import {
-  t,
-  Button,
-  AppearanceStyleType,
-  StatusMessages,
-  LocalizedLink,
-  Modal,
-  LinkButton,
-  AppearanceSizeType,
-} from "@bloom-housing/ui-components"
-import { Grid } from "@bloom-housing/ui-seeds"
+import { t, StatusMessages, Modal } from "@bloom-housing/ui-components"
+import { Button, Grid, Link } from "@bloom-housing/ui-seeds"
 import { ApplicationContext } from "./ApplicationContext"
 import { StatusAside } from "../shared/StatusAside"
 
@@ -41,34 +32,26 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
     const elements = []
 
     const cancel = (
-      <Grid.Cell className="flex" key="btn-cancel">
-        <LinkButton
-          unstyled
-          fullWidth
-          className="bg-opacity-0 text-blue-900"
-          href={`/listings/${listingId}/applications`}
-        >
+      <Grid.Cell key="btn-cancel">
+        <Link className="w-full justify-center" href={`/listings/${listingId}/applications`}>
           {t("t.cancel")}
-        </LinkButton>
+        </Link>
       </Grid.Cell>
     )
 
     if (type === "details") {
       elements.push(
         <Grid.Cell key="btn-submitNew">
-          <LocalizedLink href={`/application/${applicationId}/edit`}>
-            <Button styleType={AppearanceStyleType.secondary} fullWidth onClick={() => false}>
-              {t("t.edit")}
-            </Button>
-          </LocalizedLink>
-        </Grid.Cell>,
-        <Grid.Cell className="flex" key="btn-cancel">
           <Button
-            unstyled
-            fullWidth
-            className="bg-opacity-0 text-red-750"
-            onClick={() => setDeleteModal(true)}
+            href={`/application/${applicationId}/edit`}
+            variant="secondary"
+            className="w-full"
           >
+            {t("t.edit")}
+          </Button>
+        </Grid.Cell>,
+        <Grid.Cell key="btn-cancel">
+          <Button variant="text" className="text-alert w-full" onClick={() => setDeleteModal(true)}>
             {t("t.delete")}
           </Button>
         </Grid.Cell>
@@ -79,10 +62,11 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
       elements.push(
         <Grid.Cell key="btn-submit">
           <Button
-            styleType={AppearanceStyleType.primary}
-            fullWidth
+            type="submit"
+            variant="primary"
+            className="w-full"
             onClick={() => false}
-            dataTestId={"submitApplicationButton"}
+            id={"submitApplicationButton"}
           >
             {type === "edit" ? t("application.add.saveAndExit") : t("t.submit")}
           </Button>
@@ -94,8 +78,8 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
           <Grid.Cell key="btn-submitNew">
             <Button
               type="button"
-              styleType={AppearanceStyleType.secondary}
-              fullWidth
+              variant="secondary"
+              className="w-full"
               onClick={() => triggerSubmitAndRedirect()}
             >
               {t("t.submitNew")}
@@ -107,20 +91,17 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
 
       if (type === "edit") {
         elements.push(
-          <div className="flex justify-center" key="btn-group">
-            {cancel}
-            <Grid.Cell className="flex" key="btn-delete">
-              <Button
-                type="button"
-                unstyled
-                fullWidth
-                className="bg-opacity-0 text-alert"
-                onClick={() => setDeleteModal(true)}
-              >
-                {t("t.delete")}
-              </Button>
-            </Grid.Cell>
-          </div>
+          cancel,
+          <Grid.Cell key="btn-delete">
+            <Button
+              type="button"
+              variant="text"
+              className="text-alert w-full"
+              onClick={() => setDeleteModal(true)}
+            >
+              {t("t.delete")}
+            </Button>
+          </Grid.Cell>
         )
       }
     }
@@ -141,20 +122,21 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
         onClose={() => setDeleteModal(false)}
         actions={[
           <Button
-            styleType={AppearanceStyleType.alert}
+            variant="alert"
             onClick={() => {
               onDelete()
               setDeleteModal(false)
             }}
-            size={AppearanceSizeType.small}
+            size="sm"
           >
             {t("t.delete")}
           </Button>,
           <Button
+            variant="primary-outlined"
             onClick={() => {
               setDeleteModal(false)
             }}
-            size={AppearanceSizeType.small}
+            size="sm"
           >
             {t("t.cancel")}
           </Button>,
