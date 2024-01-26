@@ -65,7 +65,7 @@ type ContextProps = {
   ) => Promise<User | undefined>
   signOut: () => void
   confirmAccount: (token: string) => Promise<User | undefined>
-  forgotPassword: (email: string) => Promise<string | undefined>
+  forgotPassword: (email: string, listingIdRedirect?: string) => Promise<string | undefined>
   createUser: (user: UserCreate) => Promise<UserBasic | undefined>
   resendConfirmation: (email: string) => Promise<Status | undefined>
   initialStateLoaded: boolean
@@ -311,11 +311,15 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
         dispatch(stopLoading())
       }
     },
-    forgotPassword: async (email) => {
+    forgotPassword: async (email, listingIdRedirect) => {
       dispatch(startLoading())
       try {
+        const appUrl =
+          listingIdRedirect && process.env.showMandatedAccounts
+            ? `${window.location.origin}?redirectUrl=/applications/start/choose-language&listingId=${listingIdRedirect}`
+            : window.location.origin
         const response = await userService?.forgotPassword({
-          body: { email, appUrl: window.location.origin },
+          body: { email, appUrl: appUrl },
         })
         return response?.message
       } finally {

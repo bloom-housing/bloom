@@ -4,6 +4,7 @@ import { Button } from "@bloom-housing/ui-seeds"
 import { FormSignInErrorBox } from "./FormSignInErrorBox"
 import { NetworkStatus } from "../../auth/catchNetworkError"
 import type { UseFormMethods } from "react-hook-form"
+import { useRouter } from "next/router"
 
 export type FormSignInProps = {
   control: FormSignInControl
@@ -34,7 +35,12 @@ const FormSignIn = ({
     window.scrollTo(0, 0)
   }
   const { LinkComponent } = useContext(NavigationContext)
-
+  const router = useRouter()
+  const listingIdRedirect = router.query?.listingId as string
+  const forgetPasswordURL =
+    listingIdRedirect && process.env.showMandatedAccounts
+      ? `/forgot-password?redirectUrl=/applications/start/choose-language&listingId=${listingIdRedirect}`
+      : "/forgot-password"
   return (
     <FormCard>
       <div className="form-card__lead text-center">
@@ -60,7 +66,7 @@ const FormSignIn = ({
           />
 
           <aside className="float-right text-sm font-semibold">
-            <LinkComponent href="/forgot-password">
+            <LinkComponent href={forgetPasswordURL}>
               {t("authentication.signIn.forgotPassword")}
             </LinkComponent>
           </aside>

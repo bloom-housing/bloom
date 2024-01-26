@@ -207,7 +207,15 @@ export class EmailService {
     const jurisdiction = await this.getUserJurisdiction(user)
     void (await this.loadTranslations(jurisdiction, user.language))
     const compiledTemplate = this.template("forgot-password")
-    const resetUrl = `${appUrl}/reset-password?token=${user.resetToken}`
+    const urlObj = new URL(appUrl)
+
+    const redirectUrl = urlObj.searchParams.get("redirectUrl")
+    const listingId = urlObj.searchParams.get("listingId")
+
+    const resetUrl =
+      redirectUrl && listingId && process.env.SHOW_MANDATED_ACCOUNTS
+        ? `${urlObj.origin}${urlObj.pathname}/reset-password?token=${user.resetToken}&redirectUrl=${redirectUrl}&listingId=${listingId}`
+        : `${appUrl}/reset-password?token=${user.resetToken}`
 
     if (this.configService.get<string>("NODE_ENV") == "production") {
       Logger.log(
