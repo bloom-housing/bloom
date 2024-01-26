@@ -1,13 +1,13 @@
 .account-card-container {
-  padding-inline: 1.5rem;
-  @media (max-width: theme("screens.md")) {
+  padding-inline: var(--seeds-s6);
+  @media (max-width: theme("screens.sm")) {
     padding-inline: 0rem;
-    padding-block: 1rem;
+    padding-block: var(--seeds-s4);
   }
 }
 
 .account-card-section {
-  @media (min-width: theme("screens.md")) {
+  @media (min-width: theme("screens.sm")) {
     --card-content-padding-inline: var(--seeds-s12);
   }
 }
@@ -19,4 +19,8 @@
 .account-settings-label {
   font-size: var(--seeds-font-size-sm);
   font-weight: var(--seeds-font-weight-bold);
+}
+
+.application-no-results {
+  padding-bottom: var(--seeds-s4);
 }

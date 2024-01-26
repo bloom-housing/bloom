@@ -1,7 +1,7 @@
 import React, { useEffect, useState, Fragment, useContext } from "react"
 import Head from "next/head"
 import { t, LoadingOverlay } from "@bloom-housing/ui-components"
-import { Button, Card } from "@bloom-housing/ui-seeds"
+import { Button, Card, Heading } from "@bloom-housing/ui-seeds"
 import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
 import { StatusItemWrapper, AppWithListing } from "./StatusItemWrapper"
@@ -65,12 +65,12 @@ const Applications = () => {
         className={`${styles["account-card-section"]} ${styles["application-card-section"]}`}
       >
         {error ? (
-          <div className="p-8">
-            <h1 className="pb-4 text-2xl">{`${t("account.errorFetchingApplications")}`}</h1>
-          </div>
+          <Heading size="2xl">{`${t("account.errorFetchingApplications")}`}</Heading>
         ) : (
           <>
-            <h1 className="pb-4 text-2xl">{t("account.noApplications")}</h1>
+            <Heading className={styles["application-no-results"]} size="2xl">
+              {t("account.noApplications")}
+            </Heading>
             <Button variant="primary-outlined" href="/listings">
               {t("listings.browseListings")}
             </Button>
