@@ -70,7 +70,7 @@ const FormSignInAddPhone = ({
           />
 
           <div className="text-center mt-10">
-            <Button variant="primary" id="request-mfa-code-and-add-phone">
+            <Button type="submit" variant="primary" id="request-mfa-code-and-add-phone">
               {t("nav.signInMFA.addPhoneNumber")}
             </Button>
           </div>
