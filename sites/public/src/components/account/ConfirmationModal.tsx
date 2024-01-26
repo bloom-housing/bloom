@@ -28,7 +28,8 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
 
   const onSubmit = async ({ email }) => {
     try {
-      await resendConfirmation(email)
+      const listingId = router.query?.listingId as string
+      await resendConfirmation(email, listingId)
 
       setSiteAlertMessage(t(`authentication.createAccount.emailSent`), "success")
       setOpenModal(false)
@@ -59,7 +60,9 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
         .then(() => {
           void router.push({
             pathname: routerRedirectUrl,
-            query: { alert: `authentication.createAccount.accountConfirmed`, listingId: listingId },
+            query: process.env.showMandatedAccounts
+              ? { listingId: listingId }
+              : { alert: `authentication.createAccount.accountConfirmed` },
           })
           window.scrollTo(0, 0)
         })

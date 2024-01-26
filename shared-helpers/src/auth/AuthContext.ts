@@ -67,7 +67,7 @@ type ContextProps = {
   confirmAccount: (token: string) => Promise<User | undefined>
   forgotPassword: (email: string, listingIdRedirect?: string) => Promise<string | undefined>
   createUser: (user: UserCreate, listingIdRedirect?: string) => Promise<UserBasic | undefined>
-  resendConfirmation: (email: string) => Promise<Status | undefined>
+  resendConfirmation: (email: string, listingIdRedirect?: string) => Promise<Status | undefined>
   initialStateLoaded: boolean
   loading: boolean
   profile?: User
@@ -304,11 +304,15 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
         dispatch(stopLoading())
       }
     },
-    resendConfirmation: async (email: string) => {
+    resendConfirmation: async (email: string, listingIdRedirect) => {
       dispatch(startLoading())
+      const appUrl =
+        listingIdRedirect && process.env.showMandatedAccounts
+          ? `${window.location.origin}?redirectUrl=/applications/start/choose-language&listingId=${listingIdRedirect}`
+          : window.location.origin
       try {
         const response = await userService?.resendConfirmation({
-          body: { email, appUrl: window.location.origin },
+          body: { email, appUrl: appUrl },
         })
         return response
       } finally {
