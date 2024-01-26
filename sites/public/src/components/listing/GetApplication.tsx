@@ -32,6 +32,8 @@ export interface ApplicationsProps {
   applicationsOpenDate?: string
   /** The name of the listing */
   listingName: string
+  /** The id of the listing */
+  listingId: string
   /** The URL for an online applications */
   onlineApplicationURL?: string
   /** Any number of paper application objects, including their URL and language */
@@ -40,6 +42,8 @@ export interface ApplicationsProps {
   paperMethod?: boolean
   /** The date mailed applications must be received by */
   postmarkedApplicationsReceivedByDate?: string
+  /** Informs whether or not to hide actionable application buttons */
+  listingStatus?: string
   /** Whether or not to hide actionable application buttons */
   preview?: boolean
   strings?: {
