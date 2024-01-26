@@ -8,6 +8,7 @@ import { Listing } from "../../listings/entities/listing.entity"
 import { InputType } from "../../shared/types/input-type"
 import { MapLayer } from "../../map-layers/entities/map-layer.entity"
 import { FeatureCollection } from "@turf/helpers"
+import { ApplicationMultiselectQuestion } from "../entities/application-multiselect-question.entity"
 
 describe("GeocodingService", () => {
   let service: GeocodingService
@@ -175,7 +176,7 @@ describe("GeocodingService", () => {
           multiselectQuestion: {
             options: [
               {
-                text: "Geocoding option by radius",
+                text: "Geocoding option by Radius",
                 collectAddress: true,
                 radiusSize: 5,
                 validationMethod: ValidationMethod.radius,
@@ -186,54 +187,46 @@ describe("GeocodingService", () => {
       ],
     }
     const preferenceAddress = { ...address, latitude: 38.89485, longitude: -77.04251 }
-    const application = {
-      id: "applicationId",
-      preferences: [
+    const preferences = [
+      {
+        key: "Geocoding preference",
+        options: [
+          {
+            key: "Geocoding option by Radius",
+            checked: true,
+            extraData: [
+              {
+                type: InputType.address,
+                value: preferenceAddress,
+              },
+            ],
+          },
+        ],
+      },
+    ]
+    it("should save the validated value as extraData", () => {
+      const response = service.validateRadiusPreferences(
+        (preferences as unknown) as ApplicationMultiselectQuestion[],
+        listing as Listing
+      )
+      expect(response).toEqual([
         {
           key: "Geocoding preference",
           options: [
             {
-              key: "Geocoding option by radius",
+              key: "Geocoding option by Radius",
               checked: true,
               extraData: [
                 {
                   type: InputType.address,
                   value: preferenceAddress,
                 },
+                { key: "geocodingVerified", type: InputType.text, value: "true" },
               ],
             },
           ],
         },
-      ],
-    }
-    it("should save the validated value as extraData", async () => {
-      await service.validateRadiusPreferences(
-        (application as unknown) as Application,
-        listing as Listing
-      )
-      expect(applicationRepoUpdate).toBeCalledWith(
-        { id: "applicationId" },
-        {
-          preferences: expect.arrayContaining([
-            expect.objectContaining({
-              key: "Geocoding preference",
-              options: [
-                {
-                  checked: true,
-                  extraData: [
-                    {
-                      type: "address",
-                      value: preferenceAddress,
-                    },
-                    { key: "geocodingVerified", type: "text", value: "true" },
-                  ],
-                  key: "Geocoding option by radius",
-                },
-              ],
-            }),
-          ]),
-        }
-      )
+      ])
     })
   })
   describe("validateGeoLayerPreferences", () => {
@@ -255,9 +248,28 @@ describe("GeocodingService", () => {
       ],
     }
     const preferenceAddress = { ...address, latitude: 38.89485, longitude: -77.04251 }
-    const application = {
-      id: "applicationId",
-      preferences: [
+
+    const preference = {
+      key: "Geocoding preference",
+      options: [
+        {
+          key: "Geocoding option by map",
+          checked: true,
+          extraData: [
+            {
+              type: InputType.address,
+              value: preferenceAddress,
+            },
+          ],
+        },
+      ],
+    }
+    it("should save the validated value as extraData for map layer", async () => {
+      const response = await service.validateGeoLayerPreferences(
+        ([preference] as unknown) as ApplicationMultiselectQuestion[],
+        listing as Listing
+      )
+      expect(response).toEqual([
         {
           key: "Geocoding preference",
           options: [
@@ -269,23 +281,114 @@ describe("GeocodingService", () => {
                   type: InputType.address,
                   value: preferenceAddress,
                 },
+                { key: "geocodingVerified", type: InputType.text, value: "true" },
               ],
             },
           ],
         },
+      ])
+    })
+  })
+  describe("validateGeocodingPreferences", () => {
+    const listing = {
+      buildingAddress: address,
+      listingMultiselectQuestions: [
+        {
+          multiselectQuestion: {
+            options: [
+              {
+                text: "Geocoding option by radius",
+                collectAddress: true,
+                radiusSize: 5,
+                validationMethod: ValidationMethod.radius,
+              },
+            ],
+          },
+        },
+        {
+          multiselectQuestion: {
+            options: [
+              {
+                text: "Geocoding option by map",
+                collectAddress: true,
+                mapLayerId: "mapLayerId",
+                validationMethod: ValidationMethod.map,
+              },
+            ],
+          },
+        },
+        {
+          multiselectQuestion: {
+            options: [
+              {
+                text: "non-geocoding option",
+              },
+            ],
+          },
+        },
       ],
     }
-    it("should save the validated value as extraData for map layer", async () => {
-      await service.validateGeoLayerPreferences(
+
+    const preferenceAddress = { ...address, latitude: 38.89485, longitude: -77.04251 }
+    const preferences = [
+      {
+        key: "Geocoding preference by map",
+        options: [
+          {
+            key: "Geocoding option by map",
+            checked: true,
+            extraData: [
+              {
+                type: InputType.address,
+                value: preferenceAddress,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        key: "Geocoding preference by radius",
+        options: [
+          {
+            key: "Geocoding option by radius",
+            checked: true,
+            extraData: [
+              {
+                type: InputType.address,
+                value: preferenceAddress,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        key: "non-geocoding preference",
+        options: [
+          {
+            key: "non-geocoding option",
+            checked: true,
+          },
+        ],
+      },
+    ]
+
+    const application = {
+      id: "applicationId",
+      preferences: preferences,
+    }
+
+    it("should save all updated preferences", async () => {
+      await service.validateGeocodingPreferences(
         (application as unknown) as Application,
-        listing as Listing
+        (listing as unknown) as Listing
       )
+
       expect(applicationRepoUpdate).toBeCalledWith(
         { id: "applicationId" },
         {
           preferences: expect.arrayContaining([
             expect.objectContaining({
-              key: "Geocoding preference",
+              key: "Geocoding preference by map",
               options: [
                 {
                   checked: true,
@@ -297,6 +400,31 @@ describe("GeocodingService", () => {
                     { key: "geocodingVerified", type: "text", value: "true" },
                   ],
                   key: "Geocoding option by map",
+                },
+              ],
+            }),
+            expect.objectContaining({
+              key: "Geocoding preference by radius",
+              options: [
+                {
+                  checked: true,
+                  extraData: [
+                    {
+                      type: "address",
+                      value: preferenceAddress,
+                    },
+                    { key: "geocodingVerified", type: "text", value: "true" },
+                  ],
+                  key: "Geocoding option by radius",
+                },
+              ],
+            }),
+            expect.objectContaining({
+              key: "non-geocoding preference",
+              options: [
+                {
+                  checked: true,
+                  key: "non-geocoding option",
                 },
               ],
             }),

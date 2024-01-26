@@ -2675,6 +2675,9 @@ export interface ApplicationMultiselectQuestionOption {
   checked: boolean
 
   /**  */
+  mapPinPosition?: string
+
+  /**  */
   extraData?: AllExtraDataTypes[]
 }
 
@@ -4564,6 +4567,9 @@ export interface MultiselectOption {
 
   /**  */
   collectRelationship?: boolean
+
+  /**  */
+  mapPinPosition?: string
 
   /**  */
   exclusive?: boolean

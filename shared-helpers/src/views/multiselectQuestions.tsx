@@ -358,7 +358,7 @@ export const mapCheckboxesToApi = (
       const addressHolderRelationshipData = addressFields.filter(
         (addressField) => addressField === `${key}-${AddressHolder.Relationship}`
       )
-      if (addressData.length) {
+      if (data[key] === true && addressData.length) {
         extraData.push({ type: InputType.address, key: "address", value: data[addressData[0]] })
 
         if (addressHolderNameData.length) {
@@ -380,6 +380,7 @@ export const mapCheckboxesToApi = (
 
       return {
         key,
+        mapPinPosition: data?.[`${key}-mapPinPosition`],
         checked: data[key] === true,
         extraData: extraData,
       }
@@ -449,6 +450,9 @@ export const mapApiToMultiselectForm = (
             )
             if (addressHolderRelationship) {
               acc[`${curr.key}-${AddressHolder.Relationship}`] = addressHolderRelationship.value
+            }
+            if (curr?.mapPinPosition) {
+              acc[`${curr.key}-mapPinPosition`] = curr.mapPinPosition
             }
           }
         }

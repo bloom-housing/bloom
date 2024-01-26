@@ -15,7 +15,6 @@ import { Button } from "@bloom-housing/ui-seeds"
 import { useForm } from "react-hook-form"
 import { downloadExternalPDF } from "../../lib/helpers"
 import { ListingStatus } from "@bloom-housing/backend-core"
-
 export interface PaperApplication {
   fileURL: string
   languageString: string
@@ -32,6 +31,8 @@ export interface ApplicationsProps {
   applicationsOpenDate?: string
   /** The name of the listing */
   listingName: string
+  /** The id of the listing */
+  listingId: string
   /** The URL for an online applications */
   onlineApplicationURL?: string
   /** Any number of paper application objects, including their URL and language */
