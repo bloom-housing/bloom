@@ -22,8 +22,11 @@ export class GeocodingService {
   ) {}
 
   public async validateGeocodingPreferences(application: Application, listing: Listing) {
-    await this.validateRadiusPreferences(application, listing)
-    await this.validateGeoLayerPreferences(application, listing)
+    let preferences = application.preferences
+    preferences = this.validateRadiusPreferences(preferences, listing)
+    preferences = await this.validateGeoLayerPreferences(preferences, listing)
+
+    await this.applicationRepository.update({ id: application.id }, { preferences: preferences })
   }
 
   verifyRadius(
@@ -89,7 +92,18 @@ export class GeocodingService {
     return GeocodingValues.unknown
   }
 
-  public async validateRadiusPreferences(application: Application, listing: Listing) {
+  /**
+   * Checks if there are any preferences that have a validation method of radius, validates those preferences addresses,
+   * and then adds the appropriate validation check field to those preferences
+   *
+   * @param preferences
+   * @param listing
+   * @returns the preferences with the geocoding verified field added to preferences that have validation method of radius
+   */
+  public validateRadiusPreferences(
+    preferences: ApplicationMultiselectQuestion[],
+    listing: Listing
+  ): ApplicationMultiselectQuestion[] {
     // Get all radius preferences from the listing
     const radiusPreferenceOptions: MultiselectOption[] = listing.listingMultiselectQuestions.reduce(
       (options, multiselectQuestion) => {
@@ -102,45 +116,55 @@ export class GeocodingService {
     )
     // If there are any radius preferences do the calculation and save the new preferences
     if (radiusPreferenceOptions.length) {
-      const preferences: ApplicationMultiselectQuestion[] = application.preferences.map(
-        (preference) => {
-          const newPreferenceOptions: ApplicationMultiselectQuestionOption[] = preference.options.map(
-            (option) => {
-              const addressData = option.extraData.find((data) => data.type === InputType.address)
-              if (option.checked && addressData) {
-                const foundOption = radiusPreferenceOptions.find(
-                  (preferenceOption) => preferenceOption.text === option.key
+      const newPreferences: ApplicationMultiselectQuestion[] = preferences.map((preference) => {
+        const newPreferenceOptions: ApplicationMultiselectQuestionOption[] = preference.options.map(
+          (option) => {
+            const addressData = option.extraData?.find((data) => data.type === InputType.address)
+            if (option.checked && addressData) {
+              const foundOption = radiusPreferenceOptions.find(
+                (preferenceOption) => preferenceOption.text === option.key
+              )
+              if (foundOption) {
+                const geocodingVerified = this.verifyRadius(
+                  addressData.value as Address,
+                  foundOption.radiusSize,
+                  listing.buildingAddress
                 )
-                if (foundOption) {
-                  const geocodingVerified = this.verifyRadius(
-                    addressData.value as Address,
-                    foundOption.radiusSize,
-                    listing.buildingAddress
-                  )
-                  return {
-                    ...option,
-                    extraData: [
-                      ...option.extraData,
-                      {
-                        key: "geocodingVerified",
-                        type: InputType.text,
-                        value: geocodingVerified,
-                      },
-                    ],
-                  }
+                return {
+                  ...option,
+                  extraData: [
+                    ...option.extraData,
+                    {
+                      key: "geocodingVerified",
+                      type: InputType.text,
+                      value: geocodingVerified,
+                    },
+                  ],
                 }
               }
-              return option
             }
-          )
-          return { ...preference, options: newPreferenceOptions }
-        }
-      )
-      await this.applicationRepository.update({ id: application.id }, { preferences: preferences })
+            return option
+          }
+        )
+        return { ...preference, options: newPreferenceOptions }
+      })
+      return newPreferences
     }
+    return preferences
   }
 
-  public async validateGeoLayerPreferences(application: Application, listing: Listing) {
+  /**
+   * Checks if there are any preferences that have a validation method of 'map', validates those preferences addresses,
+   * and then adds the appropriate validation check field to those preferences
+   *
+   * @param preferences
+   * @param listing
+   * @returns all preferences on the application
+   */
+  public async validateGeoLayerPreferences(
+    preferences: ApplicationMultiselectQuestion[],
+    listing: Listing
+  ): Promise<ApplicationMultiselectQuestion[]> {
     // Get all map layer preferences from the listing
     const mapPreferenceOptions: MultiselectOption[] = listing.listingMultiselectQuestions?.reduce(
       (options, multiselectQuestion) => {
@@ -158,7 +182,7 @@ export class GeocodingService {
     ): ApplicationMultiselectQuestionOption[] => {
       const preferenceOptions = []
       preference.options.forEach((option) => {
-        const addressData = option.extraData.find((data) => data.type === InputType.address)
+        const addressData = option.extraData?.find((data) => data.type === InputType.address)
         if (option.checked && addressData) {
           const foundOption = mapPreferenceOptions.find(
             (preferenceOption) => preferenceOption.text === option.key
@@ -188,16 +212,16 @@ export class GeocodingService {
       return preferenceOptions
     }
     if (mapPreferenceOptions?.length) {
-      const preferences = []
+      const newPreferences = []
       const mapLayers = await this.mapLayerRepository.findBy({
         id: In(mapPreferenceOptions.map((option) => option.mapLayerId)),
       })
-      application.preferences.forEach((preference) => {
+      preferences.forEach((preference) => {
         const newPreferenceOptions = preferencesOptions(preference, mapLayers)
-        preferences.push({ ...preference, options: newPreferenceOptions })
+        newPreferences.push({ ...preference, options: newPreferenceOptions })
       })
-
-      await this.applicationRepository.update({ id: application.id }, { preferences: preferences })
+      return newPreferences
     }
+    return preferences
   }
 }
