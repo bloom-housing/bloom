@@ -621,7 +621,16 @@ export class UserService {
   }
 
   private static getPublicConfirmationUrl(appUrl: string, user: User) {
-    return `${appUrl}?token=${user.confirmationToken}`
+    const urlObj = new URL(appUrl)
+
+    const redirectUrl = urlObj.searchParams.get("redirectUrl")
+    const listingId = urlObj.searchParams.get("listingId")
+
+    const confirmationUrl =
+      redirectUrl && listingId && process.env.SHOW_MANDATED_ACCOUNTS
+        ? `${urlObj.origin}${urlObj.pathname}?token=${user.confirmationToken}&redirectUrl=${redirectUrl}&listingId=${listingId}`
+        : `${appUrl}?token=${user.confirmationToken}`
+    return confirmationUrl
   }
 
   private static getPartnersConfirmationUrl(appUrl: string, user: User) {

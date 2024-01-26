@@ -41,6 +41,10 @@ const FormSignIn = ({
     listingIdRedirect && process.env.showMandatedAccounts
       ? `/forgot-password?redirectUrl=/applications/start/choose-language&listingId=${listingIdRedirect}`
       : "/forgot-password"
+  const createAccountUrl =
+    listingIdRedirect && process.env.showMandatedAccounts
+      ? `/create-account?redirectUrl=/applications/start/choose-language&listingId=${listingIdRedirect}`
+      : "/create-account"
   return (
     <FormCard>
       <div className="form-card__lead text-center">
@@ -94,7 +98,7 @@ const FormSignIn = ({
         <div className="form-card__group text-center border-t">
           <h2 className="mb-6">{t("authentication.createAccount.noAccount")}</h2>
 
-          <Button variant="primary-outlined" href="/create-account">
+          <Button variant="primary-outlined" href={createAccountUrl}>
             {t("account.createAccount")}
           </Button>
         </div>

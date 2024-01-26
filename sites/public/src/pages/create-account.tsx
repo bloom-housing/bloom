@@ -48,11 +48,17 @@ export default () => {
   const onSubmit = async (data) => {
     try {
       const { dob, ...rest } = data
-      await createUser({
-        ...rest,
-        dob: dayjs(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
-        language,
-      })
+      const listingId = router.query?.listingId as string
+      const listingIdRedirect =
+        listingId && process.env.showMandatedAccounts ? listingId : undefined
+      await createUser(
+        {
+          ...rest,
+          dob: dayjs(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
+          language,
+        },
+        listingIdRedirect
+      )
 
       setOpenModal(true)
     } catch (err) {
@@ -255,14 +261,14 @@ export default () => {
           email: email.current,
         })}
         onClose={() => {
-          void router.push("/")
+          void router.push("/sign-in")
           window.scrollTo(0, 0)
         }}
         actions={[
           <Button
             variant="primary"
             onClick={() => {
-              void router.push("/")
+              void router.push("/sign-in")
               window.scrollTo(0, 0)
             }}
             size="sm"

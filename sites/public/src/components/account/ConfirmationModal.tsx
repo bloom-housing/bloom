@@ -5,6 +5,7 @@ import { useRouter } from "next/router"
 import { useContext, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { emailRegex } from "../../lib/helpers"
+import { ParsedUrlQuery } from "querystring"
 
 export interface ConfirmationModalProps {
   setSiteAlertMessage: (message: string, alertType: string) => void
@@ -38,13 +39,27 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
     window.scrollTo(0, 0)
   }
 
+  const handleQueryParams = (query: ParsedUrlQuery) => {
+    const redirectUrl = query?.redirectUrl
+    const listingId = query?.listingId
+    return typeof redirectUrl === "string" && typeof listingId === "string"
+      ? { redirectUrl, listingId }
+      : { redirectUrl: undefined, listingId: undefined }
+  }
+
   useEffect(() => {
+    const { redirectUrl, listingId } = handleQueryParams(router.query)
+
+    const routerRedirectUrl =
+      redirectUrl && listingId && process.env.showMandatedAccounts
+        ? `${redirectUrl}`
+        : "/account/dashboard"
     if (router?.query?.token && !profile) {
       confirmAccount(router.query.token.toString())
         .then(() => {
           void router.push({
-            pathname: "/account/dashboard",
-            query: { alert: `authentication.createAccount.accountConfirmed` },
+            pathname: routerRedirectUrl,
+            query: { alert: `authentication.createAccount.accountConfirmed`, listingId: listingId },
           })
           window.scrollTo(0, 0)
         })
