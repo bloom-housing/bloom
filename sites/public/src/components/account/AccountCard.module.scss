@@ -12,7 +12,11 @@
   margin-bottom: var(--seeds-s3);
 }
 
-.account-card-header {
+.account-card-heading-group {
   --subheading-margin: var(--seeds-s3);
   --heading-margin: var(--seeds-s3);
+}
+
+.account-card-heading {
+  margin-top: var(--seeds-s3);
 }

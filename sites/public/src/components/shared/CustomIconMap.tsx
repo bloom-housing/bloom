@@ -60,3 +60,5 @@ export const CustomIconMap = {
     </svg>
   ),
 }
+
+export type CustomIconType = keyof typeof CustomIconMap

@@ -1,13 +1,13 @@
-import { HeadingGroup, Icon } from "@bloom-housing/ui-seeds"
+import { Heading, HeadingGroup, Icon } from "@bloom-housing/ui-seeds"
 import Card from "@bloom-housing/ui-seeds/src/blocks/Card"
 import React from "react"
 import styles from "./AccountCard.module.scss"
-import { CustomIconMap } from "../shared/CustomIconMap"
+import { CustomIconMap, CustomIconType } from "../shared/CustomIconMap"
 
 interface AccountCardProps {
-  iconSymbol: "application" | "profile"
+  iconSymbol: CustomIconType
   title: string
-  subtitle: string
+  subtitle?: string
   children: React.ReactElement
   id?: string
   divider?: "flush" | "inset"
@@ -27,13 +27,19 @@ const AccountCard = (props: AccountCardProps) => {
         <Icon size="2xl" className={styles["account-card-icon"]}>
           {customIcon}
         </Icon>
-        <HeadingGroup
-          size="2xl"
-          heading={props.title}
-          subheading={props.subtitle}
-          className={styles["account-card-header"]}
-          headingPriority={props.headingPriority}
-        />
+        {props.subtitle ? (
+          <HeadingGroup
+            size="2xl"
+            heading={props.title}
+            subheading={props.subtitle}
+            className={styles["account-card-heading-group"]}
+            headingPriority={props.headingPriority}
+          />
+        ) : (
+          <Heading size="2xl" className={styles["account-card-heading"]}>
+            {props.title}
+          </Heading>
+        )}
       </Card.Header>
       {props.children}
     </Card>
