@@ -128,7 +128,7 @@ const MultiselectQuestionsMap = ({ geocodingClient, dataKey }: MultiselectQuesti
 
   return (
     <>
-      <Grid.Row className="seeds-grid-span-2">
+      <Grid.Row>
         <FieldValue label={t("listings.mapPreview")}>
           {displayMapPreview() ? (
             <ListingMap
