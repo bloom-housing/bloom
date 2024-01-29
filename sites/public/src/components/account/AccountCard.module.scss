@@ -3,8 +3,9 @@
   --card-header-padding-inline-mobile: var(--seeds-s4);
   --card-content-padding-inline-mobile: var(--seeds-s4);
   width: 100%;
-  @media (max-width: theme("screens.md")) {
+  @media (max-width: theme("screens.sm")) {
     --card-spacing-lg: var(--seeds-s6);
+    --card-border-radius: 0rem;
   }
 }
 
