@@ -132,7 +132,7 @@ export const useListingExport = () => {
     setCsvExportLoading(true)
 
     try {
-      const content = await listingsService.listAsCsv()
+      const content = await listingsService.listAsCsv({}, { responseType: "arraybuffer" })
       const blob = new Blob([new Uint8Array(content)], { type: "application/zip" })
       const url = window.URL.createObjectURL(blob)
       const link = document.createElement("a")
