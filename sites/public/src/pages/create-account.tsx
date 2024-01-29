@@ -32,6 +32,7 @@ export default () => {
   const [openModal, setOpenModal] = useState<boolean>(false)
   const router = useRouter()
   const language = router.locale
+  const listingId = router.query?.listingId as string
   const email = useRef({})
   const password = useRef({})
   email.current = watch("email", "")
@@ -48,7 +49,6 @@ export default () => {
   const onSubmit = async (data) => {
     try {
       const { dob, ...rest } = data
-      const listingId = router.query?.listingId as string
       const listingIdRedirect =
         listingId && process.env.showMandatedAccounts ? listingId : undefined
       await createUser(
@@ -280,7 +280,7 @@ export default () => {
             disabled={confirmationResent}
             onClick={() => {
               setConfirmationResent(true)
-              void resendConfirmation(email.current.toString())
+              void resendConfirmation(email.current.toString(), listingId)
             }}
             size="sm"
           >
