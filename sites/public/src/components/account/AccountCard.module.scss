@@ -2,6 +2,7 @@
   --card-header-padding-inline-desktop: var(--seeds-s12);
   --card-header-padding-inline-mobile: var(--seeds-s4);
   --card-content-padding-inline-mobile: var(--seeds-s4);
+  --card-border-width: 0rem;
   width: 100%;
   @media (max-width: theme("screens.sm")) {
     --card-spacing-lg: var(--seeds-s6);
