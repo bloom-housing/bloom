@@ -3,6 +3,7 @@
   --card-header-padding-inline-mobile: var(--seeds-s4);
   --card-content-padding-inline-mobile: var(--seeds-s4);
   --card-border-width: 0rem;
+  --card-divider-width: var(--seeds-border-1);
   width: 100%;
   @media (max-width: theme("screens.sm")) {
     --card-spacing-lg: var(--seeds-s6);
