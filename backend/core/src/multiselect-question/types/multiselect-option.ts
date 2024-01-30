@@ -76,6 +76,12 @@ export class MultiselectOption {
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ required: false })
+  mapPinPosition?: string
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ required: false })
   exclusive?: boolean | null
