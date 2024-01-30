@@ -12,7 +12,7 @@ const SignUpBenefits = (props: SignUpBenefitsProps) => {
     { icon: faEye, text: t("account.signUpSaveTime.checkStatus") },
     { icon: faLock, text: t("account.signUpSaveTime.resetPassword") },
   ]
-  const classNames = ["flex flex-col grow-0 shrink-1 pt-6 pb-6 pr-4 pl-4 md:p-0"]
+  const classNames = ["flex flex-col pt-6 pb-6 pr-4 pl-4 md:p-0"]
   if (props.className) classNames.push(props.className)
   return (
     <ul className={classNames.join(" ")}>
