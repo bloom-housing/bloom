@@ -129,7 +129,7 @@ const SignIn = () => {
   }, [networkError])
 
   const SignUpBenefitsHeadingGroup = (props: { mobileView: boolean }) => {
-    const classNames = props.mobileView ? "p-4 -order-1" : "grow-0 shrink-1"
+    const classNames = props.mobileView ? "py-6 px-4 -order-1" : "grow-0 shrink-1"
     return (
       <HeadingGroup
         heading={t("account.signUpSaveTime.title")}
