@@ -213,7 +213,7 @@ export class EmailService {
     const listingId = urlObj.searchParams.get("listingId")
 
     const resetUrl =
-      process.env.SHOW_MANDATED_ACCOUNTS == "TRUE" && redirectUrl && listingId
+      redirectUrl && listingId
         ? `${urlObj.origin}${urlObj.pathname}/reset-password?token=${user.resetToken}&redirectUrl=${redirectUrl}&listingId=${listingId}`
         : `${urlObj.origin}${urlObj.pathname}/reset-password?token=${user.resetToken}`
 
