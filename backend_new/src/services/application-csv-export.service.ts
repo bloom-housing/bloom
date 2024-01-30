@@ -1,7 +1,7 @@
 import fs, { createReadStream } from 'fs';
 import { join } from 'path';
 import { Injectable, StreamableFile } from '@nestjs/common';
-import { Request as ExpressRequest } from 'express';
+import { Request as ExpressRequest, Response } from 'express';
 import { view } from './application.service';
 import { PrismaService } from './prisma.service';
 import { MultiselectQuestionService } from './multiselect-question.service';
@@ -55,28 +55,19 @@ export class ApplicationCsvExporterService
    */
   async exportFile<QueryParams extends ApplicationCsvQueryParams>(
     req: ExpressRequest,
+    res: Response,
     queryParams: QueryParams,
   ): Promise<StreamableFile> {
-    await this.authorizeCSVExport(
-      mapTo(User, req['user']),
-      queryParams.listingId,
-    );
+    const user = mapTo(User, req['user']);
+    await this.authorizeCSVExport(user, queryParams.listingId);
     const filename = join(
       process.cwd(),
-      `src/temp/listing-${
-        queryParams.listingId
-      }-applications-${new Date().getTime()}.csv`,
+      `src/temp/listing-${queryParams.listingId}-applications-${
+        user.id
+      }-${new Date().getTime()}.csv`,
     );
     await this.createCsv(filename, queryParams);
     const file = createReadStream(filename);
-    file.on('end', () => {
-      fs.unlink(filename, (err) => {
-        if (err) {
-          console.error(`Error deleting ${filename}`);
-          throw err;
-        }
-      });
-    });
     return new StreamableFile(file);
   }
 
@@ -127,11 +118,7 @@ export class ApplicationCsvExporterService
           console.log(err);
           reject(err);
         })
-        .on('finish', () => {
-          console.log('finished');
-        })
         .on('close', () => {
-          console.log('stream closed');
           resolve();
         })
         .on('open', () => {

@@ -7,7 +7,7 @@ export class ListingCsvQueryParams {
   @Expose()
   @ApiPropertyOptional({
     type: String,
-    example: true,
+    example: 'America/Los_Angeles',
     required: false,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

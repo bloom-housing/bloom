@@ -2,7 +2,6 @@ import { useCallback, useContext, useState } from "react"
 import useSWR from "swr"
 import qs from "qs"
 import dayjs from "dayjs"
-import JSZip from "jszip"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { setSiteAlertMessage, t } from "@bloom-housing/ui-components"
 import {

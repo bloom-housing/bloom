@@ -25,8 +25,7 @@ import {
   ApiTags,
   ApiOkResponse,
 } from '@nestjs/swagger';
-import { Request as ExpressRequest } from 'express';
-import type { Response } from 'express';
+import { Request as ExpressRequest, Response } from 'express';
 import { ListingService } from '../services/listing.service';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
@@ -52,7 +51,6 @@ import { permissionActions } from '../enums/permissions/permission-actions-enum'
 import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction-admin.guard';
 import { ListingCsvExporterService } from '../services/listing-csv-export.service';
 import { ListingCsvQueryParams } from '../dtos/listings/listing-csv-query-params.dto';
-import { join } from 'path';
 import { PermissionGuard } from '../guards/permission.guard';
 
 @Controller('listings')
@@ -88,7 +86,7 @@ export class ListingController {
 
   @Get(`csv`)
   @ApiOperation({
-    summary: 'Get applications as csv',
+    summary: 'Get listings and units as zip',
     operationId: 'listAsCsv',
   })
   @Header('Content-Type', 'application/zip')
@@ -99,18 +97,7 @@ export class ListingController {
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ListingCsvQueryParams,
   ): Promise<StreamableFile> {
-    const zipFileName = `listings-units-${new Date().getTime()}.zip`;
-    const zipFilePath = join(process.cwd(), `src/temp/${zipFileName}`);
-    res.set({
-      'Content-Type': 'application/zip',
-      'Content-Disposition': `attachment; filename: ${zipFileName}`,
-    });
-
-    return await this.listingCsvExportService.exportFile(
-      req,
-      queryParams,
-      zipFilePath,
-    );
+    return await this.listingCsvExportService.exportFile(req, res, queryParams);
   }
 
   @Get(`:id`)
@@ -166,6 +153,19 @@ export class ListingController {
   @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
   async process(): Promise<SuccessDTO> {
     return await this.listingService.process();
+  }
+
+  @Put('clearCSV')
+  @ApiOperation({
+    summary: 'Trigger the removal of CSVs job',
+    operationId: 'clearCSV',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  @PermissionAction(permissionActions.submit)
+  @UseInterceptors(ActivityLogInterceptor)
+  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
+  async clearCSV(): Promise<SuccessDTO> {
+    return await this.listingCsvExportService.clearCSV();
   }
 
   @Put(':id')

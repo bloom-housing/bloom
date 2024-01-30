@@ -1,5 +1,5 @@
 import { StreamableFile } from '@nestjs/common';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
 import { ListingCsvQueryParams } from '../dtos/listings/listing-csv-query-params.dto';
 import Listing from '../dtos/listings/listing.dto';
@@ -7,7 +7,7 @@ import Listing from '../dtos/listings/listing.dto';
 export type CsvHeader = {
   path: string;
   label: string;
-  format?: (val: unknown) => unknown;
+  format?: (val: unknown, fullObject?: unknown) => unknown;
 };
 
 type OneOrMoreArgs<T> = { 0: T } & Array<T>;
@@ -17,8 +17,8 @@ export interface CsvExporterServiceInterface {
     QueryParams extends ApplicationCsvQueryParams & ListingCsvQueryParams,
   >(
     req: Request,
+    res: Response,
     queryParams?: QueryParams,
-    zipFilePath?: string,
   ) => Promise<StreamableFile>;
   createCsv<
     QueryParams extends ApplicationCsvQueryParams & ListingCsvQueryParams,

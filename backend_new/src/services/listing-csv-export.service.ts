@@ -1,12 +1,23 @@
+import archiver from 'archiver';
 import fs, { createReadStream } from 'fs';
 import { join } from 'path';
-import { ForbiddenException, Injectable, StreamableFile } from '@nestjs/common';
-import { Request as ExpressRequest } from 'express';
+import {
+  ForbiddenException,
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  StreamableFile,
+} from '@nestjs/common';
+import { SchedulerRegistry } from '@nestjs/schedule';
+import {
+  Request as ExpressRequest,
+  Response as ExpressResponse,
+} from 'express';
 import {
   ApplicationMethodsTypeEnum,
   ListingEventsTypeEnum,
 } from '@prisma/client';
-import archiver from 'archiver';
 import { views } from './listing.service';
 import { PrismaService } from './prisma.service';
 import {
@@ -23,7 +34,9 @@ import { ApplicationMethod } from '../dtos/application-methods/application-metho
 import Unit from '../dtos/units/unit.dto';
 import Listing from '../dtos/listings/listing.dto';
 import { mapTo } from '../utilities/mapTo';
-import { ListingMultiselectQuestion } from 'src/dtos/listings/listing-multiselect-question.dto';
+import { ListingMultiselectQuestion } from '../dtos/listings/listing-multiselect-question.dto';
+import { startCronJob } from '../utilities/cron-job-starter';
+import { SuccessDTO } from '../dtos/shared/success.dto';
 
 views.csv = {
   ...views.details,
@@ -44,11 +57,29 @@ export const formatCommunityType = {
   specialNeeds: 'Special Needs',
 };
 
+const CRON_JOB_NAME = 'LISTING_CSV_CLEAR_CRON_JOB';
+
 @Injectable()
 export class ListingCsvExporterService implements CsvExporterServiceInterface {
   readonly dateFormat: string = 'MM-DD-YYYY hh:mm:ssA z';
   timeZone = 'America/Los_Angeles';
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    @Inject(Logger)
+    private logger = new Logger(ListingCsvExporterService.name),
+    private schedulerRegistry: SchedulerRegistry,
+  ) {}
+
+  onModuleInit() {
+    startCronJob(
+      this.prisma,
+      CRON_JOB_NAME,
+      process.env.LISTING_PROCESSING_CRON_STRING,
+      this.clearCSV.bind(this),
+      this.logger,
+      this.schedulerRegistry,
+    );
+  }
   /**
    *
    * @param queryParams
@@ -57,18 +88,27 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
    */
   async exportFile<QueryParams extends ListingCsvQueryParams>(
     req: ExpressRequest,
+    res: ExpressResponse,
     queryParams: QueryParams,
-    zipFilePath: string,
   ): Promise<StreamableFile> {
+    this.logger.warn('Generating Listing-Unit Zip');
     const user = mapTo(User, req['user']);
     await this.authorizeCSVExport(mapTo(User, req['user']));
+
+    const zipFileName = `listings-units-${user.id}-${new Date().getTime()}.zip`;
+    const zipFilePath = join(process.cwd(), `src/temp/${zipFileName}`);
+    res.set({
+      'Content-Type': 'application/zip',
+      'Content-Disposition': `attachment; filename: ${zipFileName}`,
+    });
+
     const listingFilePath = join(
       process.cwd(),
-      `src/temp/listings-${new Date().getTime()}.csv`,
+      `src/temp/listings-${user.id}-${new Date().getTime()}.csv`,
     );
     const unitFilePath = join(
       process.cwd(),
-      `src/temp/units-${new Date().getTime()}.csv`,
+      `src/temp/units-${user.id}-${new Date().getTime()}.csv`,
     );
 
     if (queryParams.timeZone) {
@@ -98,26 +138,9 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       listings as unknown as Listing[],
     );
     const listingCsv = createReadStream(listingFilePath);
-    listingCsv.on('end', () => {
-      fs.unlink(listingFilePath, (err) => {
-        if (err) {
-          console.error(`Error deleting ${listingFilePath}`);
-          throw err;
-        }
-      });
-    });
 
     await this.createUnitCsv(unitFilePath, listings as unknown as Listing[]);
     const unitCsv = createReadStream(unitFilePath);
-    unitCsv.on('end', () => {
-      fs.unlink(unitFilePath, (err) => {
-        if (err) {
-          console.error(`Error deleting ${unitFilePath}`);
-          throw err;
-        }
-      });
-    });
-
     return new Promise((resolve) => {
       // Create a writable stream to the zip file
       const output = fs.createWriteStream(zipFilePath);
@@ -127,12 +150,6 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       output.on('close', () => {
         const zipFile = createReadStream(zipFilePath);
         resolve(new StreamableFile(zipFile));
-        fs.unlink(zipFilePath, (err) => {
-          if (err) {
-            console.error(`Error deleting ${zipFilePath}`);
-            throw err;
-          }
-        });
       });
 
       archive.pipe(output);
@@ -164,11 +181,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           console.log(err);
           reject(err);
         })
-        .on('finish', () => {
-          console.log('finished');
-        })
         .on('close', () => {
-          console.log('stream closed');
           resolve();
         })
         .on('open', () => {
@@ -194,7 +207,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
               }, listing);
               value = value === undefined ? '' : value === null ? '' : value;
               if (header.format) {
-                value = header.format(value);
+                value = header.format(value, listing);
               }
 
               row += value ? `"${value.toString().replace(/"/g, `""`)}"` : '';
@@ -208,7 +221,6 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
             } catch (e) {
               console.log('writeStream write error = ', e);
               writableStream.once('drain', () => {
-                console.log('drain buffer');
                 writableStream.write(row + '\n');
               });
             }
@@ -240,11 +252,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           console.log(err);
           reject(err);
         })
-        .on('finish', () => {
-          console.log('finished');
-        })
         .on('close', () => {
-          console.log('stream closed');
           resolve();
         })
         .on('open', () => {
@@ -282,7 +290,6 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
             } catch (e) {
               console.log('writeStream write error = ', e);
               writableStream.once('drain', () => {
-                console.log('drain buffer');
                 writableStream.write(row + '\n');
               });
             }
@@ -297,11 +304,16 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     return value ? `$${value}` : '';
   }
 
-  cloudinaryPdfFromId(publicId: string): string {
-    if (!publicId) return '';
-    const cloudName =
-      process.env.cloudinaryCloudName || process.env.CLOUDINARY_CLOUD_NAME;
-    return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}.pdf`;
+  cloudinaryPdfFromId(publicId: string, listing?: Listing): string {
+    if (publicId) {
+      const cloudName =
+        process.env.cloudinaryCloudName || process.env.CLOUDINARY_CLOUD_NAME;
+      return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}.pdf`;
+    } else if (!publicId && listing?.buildingSelectionCriteria) {
+      return listing.buildingSelectionCriteria;
+    }
+
+    return '';
   }
 
   formatYesNo = (value: boolean | null): string => {
@@ -620,23 +632,23 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         label: 'Leasing Agent Zip',
       },
       {
-        path: 'listingsApplicationMailingAddress.street',
+        path: 'listingsLeasingAgentAddress.street',
         label: 'Leasing Agency Mailing Address',
       },
       {
-        path: 'listingsApplicationMailingAddress.street2',
+        path: 'listingsLeasingAgentAddress.street2',
         label: 'Leasing Agency Mailing Address Street 2',
       },
       {
-        path: 'listingsApplicationMailingAddress.city',
+        path: 'listingsLeasingAgentAddress.city',
         label: 'Leasing Agency Mailing Address City',
       },
       {
-        path: 'listingsApplicationMailingAddress.state',
+        path: 'listingsLeasingAgentAddress.state',
         label: 'Leasing Agency Mailing Address State',
       },
       {
-        path: 'listingsApplicationMailingAddress.zipCode',
+        path: 'listingsLeasingAgentAddress.zipCode',
         label: 'Leasing Agency Mailing Address Zip',
       },
       {
@@ -861,6 +873,66 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       return;
     } else {
       throw new ForbiddenException();
+    }
+  }
+
+  /**
+    runs the job to remove existing csvs and zip files
+  */
+  async clearCSV(): Promise<SuccessDTO> {
+    this.logger.warn('listing csv clear job running');
+    await this.markCronJobAsStarted();
+
+    await fs.readdir(join(process.cwd(), 'src/temp/'), (err, files) => {
+      if (err) {
+        throw new InternalServerErrorException(err);
+      }
+      Promise.all(
+        files.map((f) => {
+          if (!f.includes('.git')) {
+            fs.unlink(join(process.cwd(), 'src/temp/', f), (err) => {
+              if (err) {
+                throw new InternalServerErrorException(err);
+              }
+            });
+          }
+        }),
+      );
+    });
+
+    return {
+      success: true,
+    };
+  }
+
+  /**
+    marks the db record for this cronjob as begun or creates a cronjob that
+    is marked as begun if one does not already exist 
+  */
+  async markCronJobAsStarted(): Promise<void> {
+    const job = await this.prisma.cronJob.findFirst({
+      where: {
+        name: CRON_JOB_NAME,
+      },
+    });
+    if (job) {
+      // if a job exists then we update db entry
+      await this.prisma.cronJob.update({
+        data: {
+          lastRunDate: new Date(),
+        },
+        where: {
+          id: job.id,
+        },
+      });
+    } else {
+      // if no job we create a new entry
+      await this.prisma.cronJob.create({
+        data: {
+          lastRunDate: new Date(),
+          name: CRON_JOB_NAME,
+        },
+      });
     }
   }
 }
