@@ -15,6 +15,7 @@ import { AssetModule } from './asset.module';
 import { UserModule } from './user.module';
 import { AuthModule } from './auth.module';
 import { ApplicationFlaggedSetModule } from './application-flagged-set.module';
+import { MapLayerModule } from './map-layer.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { ApplicationFlaggedSetModule } from './application-flagged-set.module';
     PrismaModule,
     AuthModule,
     ApplicationFlaggedSetModule,
+    MapLayerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -50,6 +52,7 @@ import { ApplicationFlaggedSetModule } from './application-flagged-set.module';
     PrismaModule,
     AuthModule,
     ApplicationFlaggedSetModule,
+    MapLayerModule,
   ],
 })
 export class AppModule {}

@@ -1865,6 +1865,30 @@ export class AuthService {
   }
 }
 
+export class MapLayersService {
+  /**
+   * List map layers
+   */
+  list(
+    params: {
+      /**  */
+      jurisdictionId?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/mapLayers"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { jurisdictionId: params["jurisdictionId"] }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export interface SuccessDTO {
   /**  */
   success: boolean
@@ -1984,6 +2008,12 @@ export interface MultiselectOption {
 
   /**  */
   exclusive?: boolean
+
+  /**  */
+  mapLayerId?: string
+
+  /**  */
+  mapPinPosition?: string
 }
 
 export interface MultiselectQuestion {
@@ -3881,6 +3911,9 @@ export interface ApplicationMultiselectQuestionOption {
 
   /**  */
   checked: boolean
+
+  /**  */
+  mapPinPosition?: string
 
   /**  */
   extraData?: AllExtraDataTypes[]

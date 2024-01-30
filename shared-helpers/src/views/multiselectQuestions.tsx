@@ -272,6 +272,7 @@ export const getCheckboxOption = (
               ? t("errors.maxLength")
               : t("errors.requiredFieldError")
           }
+          dataTestId="addressHolder-name"
         />
       )}
       {watchFields[optionFieldName] && option.collectRelationship && (
@@ -288,6 +289,7 @@ export const getCheckboxOption = (
               ? t("errors.maxLength")
               : t("errors.requiredFieldError")
           }
+          dataTestId="addressHolder-relationship"
         />
       )}
       {watchFields[optionFieldName] && option.collectAddress && (

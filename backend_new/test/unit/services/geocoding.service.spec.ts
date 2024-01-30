@@ -1,18 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { randomUUID } from 'crypto';
 import { GeocodingService } from '../../../src/services/geocoding.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { Address } from '../../../src/dtos/addresses/address.dto';
 import { ValidationMethod } from '../../../src/enums/multiselect-questions/validation-method-enum';
 import { InputType } from '../../../src/enums/shared/input-type-enum';
-import { Application } from '../../../src/dtos/applications/application.dto';
 import Listing from '../../../src/dtos/listings/listing.dto';
-import { randomUUID } from 'crypto';
+import { simplifiedDCMap } from '../../../prisma/seed-helpers/map-layer-factory';
+import { FeatureCollection } from '@turf/helpers';
+import { ApplicationMultiselectQuestion } from '../../../src/dtos/applications/application-multiselect-question.dto';
+import { Application } from '../../../src/dtos/applications/application.dto';
 
 describe('GeocodingService', () => {
   let service: GeocodingService;
   let prisma: PrismaService;
   const date = new Date();
-  const listingAddress: Address = {
+  const address: Address = {
     id: 'id',
     createdAt: date,
     updatedAt: date,
@@ -25,6 +28,7 @@ describe('GeocodingService', () => {
     latitude: 38.8977,
     longitude: -77.0365,
   };
+  const featureCollection = simplifiedDCMap as unknown as FeatureCollection;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -40,12 +44,12 @@ describe('GeocodingService', () => {
       expect(
         service.verifyRadius(
           {
-            ...listingAddress,
+            ...address,
             latitude: null,
             longitude: null,
           },
           5,
-          listingAddress,
+          address,
         ),
       ).toBe(null);
     });
@@ -53,12 +57,12 @@ describe('GeocodingService', () => {
       expect(
         service.verifyRadius(
           {
-            ...listingAddress,
+            ...address,
             latitude: 38.89485,
             longitude: -77.04251,
           },
           5,
-          listingAddress,
+          address,
         ),
       ).toBe(true);
     });
@@ -66,12 +70,12 @@ describe('GeocodingService', () => {
       expect(
         service.verifyRadius(
           {
-            ...listingAddress,
+            ...address,
             latitude: 39.284205,
             longitude: -76.621698,
           },
           5,
-          listingAddress,
+          address,
         ),
       ).toBe(false);
     });
@@ -79,17 +83,44 @@ describe('GeocodingService', () => {
       expect(
         service.verifyRadius(
           {
-            ...listingAddress,
+            ...address,
           },
           5,
-          listingAddress,
+          address,
         ),
       ).toBe(true);
     });
   });
+
+  describe('verifyLayers', () => {
+    it('should return null if no lat/long', () => {
+      expect(
+        service.verifyLayers(
+          {
+            ...address,
+            latitude: null,
+            longitude: null,
+          },
+          featureCollection,
+        ),
+      ).toBe(null);
+    });
+    it("should return 'true' if address is within layer", () => {
+      expect(service.verifyLayers(address, featureCollection)).toBe(true);
+    });
+    it("should return 'false' if address is within layer", () => {
+      expect(
+        service.verifyLayers(
+          { ...address, latitude: 39.284205, longitude: -76.621698 },
+          featureCollection,
+        ),
+      ).toBe(false);
+    });
+  });
+
   describe('validateRadiusPreferences', () => {
     const listing = {
-      listingsBuildingAddress: listingAddress,
+      listingsBuildingAddress: address,
       listingMultiselectQuestions: [
         {
           multiselectQuestions: {
@@ -105,49 +136,307 @@ describe('GeocodingService', () => {
         },
       ],
     };
-
-    const application = (address) => {
-      return {
-        id: 'applicationId',
-        preferences: [
+    const preferenceAddress = {
+      ...address,
+      latitude: 38.89485,
+      longitude: -77.04251,
+    };
+    const preferences = [
+      {
+        key: 'Geocoding preference',
+        options: [
           {
-            key: 'Geocoding preference',
-            options: [
+            key: 'Geocoding option by radius',
+            checked: true,
+            extraData: [
               {
-                key: 'Geocoding option by radius',
-                checked: true,
-                extraData: [
-                  {
-                    type: InputType.address,
-                    value: address,
-                  },
-                ],
+                type: InputType.address,
+                value: preferenceAddress,
               },
             ],
           },
         ],
-      };
-    };
+      },
+    ];
 
     it('should save the validated value as extraData', async () => {
-      const preferenceAddress = {
-        ...listingAddress,
-        latitude: 38.89485,
-        longitude: -77.04251,
-      };
-      prisma.applications.update = jest
-        .fn()
-        .mockResolvedValue({ id: randomUUID() });
-      await service.validateRadiusPreferences(
-        application(preferenceAddress) as unknown as Application,
+      const response = service.validateRadiusPreferences(
+        preferences as unknown as ApplicationMultiselectQuestion[],
+        listing as Listing,
+      );
+      expect(response).toEqual([
+        {
+          key: 'Geocoding preference',
+          options: [
+            {
+              key: 'Geocoding option by radius',
+              checked: true,
+              extraData: [
+                {
+                  type: InputType.address,
+                  value: preferenceAddress,
+                },
+                {
+                  key: 'geocodingVerified',
+                  type: InputType.text,
+                  value: true,
+                },
+              ],
+            },
+          ],
+        },
+      ]);
+    });
+
+    it('should save unknown as value in extraData', async () => {
+      const preferences = [
+        {
+          key: 'Geocoding preference',
+          options: [
+            {
+              key: 'Geocoding option by radius',
+              checked: true,
+              extraData: [
+                {
+                  type: InputType.address,
+                  value: {
+                    ...preferenceAddress,
+                    latitude: null,
+                    longitude: null,
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      ];
+      const response = service.validateRadiusPreferences(
+        preferences as unknown as ApplicationMultiselectQuestion[],
+        listing as Listing,
+      );
+      expect(response).toEqual([
+        {
+          key: 'Geocoding preference',
+          options: [
+            {
+              key: 'Geocoding option by radius',
+              checked: true,
+              extraData: [
+                {
+                  type: InputType.address,
+                  value: {
+                    ...preferenceAddress,
+                    latitude: null,
+                    longitude: null,
+                  },
+                },
+                {
+                  key: 'geocodingVerified',
+                  type: InputType.text,
+                  value: 'unknown',
+                },
+              ],
+            },
+          ],
+        },
+      ]);
+    });
+  });
+
+  describe('validateGeoLayerPreferences', () => {
+    const mapLayer = { id: randomUUID(), featureCollection: simplifiedDCMap };
+    const listing = {
+      buildingAddress: address,
+      listingMultiselectQuestions: [
+        {
+          multiselectQuestions: {
+            options: [
+              {
+                text: 'Geocoding option by map',
+                collectAddress: true,
+                mapLayerId: mapLayer.id,
+                validationMethod: ValidationMethod.map,
+              },
+            ],
+          },
+        },
+      ],
+    };
+    const preferenceAddress = {
+      ...address,
+      latitude: 38.89485,
+      longitude: -77.04251,
+    };
+
+    const preference = {
+      key: 'Geocoding preference',
+      options: [
+        {
+          key: 'Geocoding option by map',
+          checked: true,
+          extraData: [
+            {
+              type: InputType.address,
+              value: preferenceAddress,
+            },
+          ],
+        },
+      ],
+    };
+    it('should save the validated value as extraData for map layer', async () => {
+      prisma.mapLayer.findMany = jest.fn().mockResolvedValue([mapLayer]);
+      const response = await service.validateGeoLayerPreferences(
+        [preference] as unknown as ApplicationMultiselectQuestion[],
         listing as unknown as Listing,
       );
+      expect(response).toEqual([
+        {
+          key: 'Geocoding preference',
+          options: [
+            {
+              key: 'Geocoding option by map',
+              checked: true,
+              extraData: [
+                {
+                  type: InputType.address,
+                  value: preferenceAddress,
+                },
+                {
+                  key: 'geocodingVerified',
+                  type: InputType.text,
+                  value: true,
+                },
+              ],
+            },
+          ],
+        },
+      ]);
+    });
+  });
+
+  describe('validateGeocodingPreferences', () => {
+    const mapLayer = { id: randomUUID(), featureCollection: simplifiedDCMap };
+    const listing = {
+      listingsBuildingAddress: address,
+      listingMultiselectQuestions: [
+        {
+          multiselectQuestions: {
+            options: [
+              {
+                text: 'Geocoding option by radius',
+                collectAddress: true,
+                radiusSize: 5,
+                validationMethod: ValidationMethod.radius,
+              },
+            ],
+          },
+        },
+        {
+          multiselectQuestions: {
+            options: [
+              {
+                text: 'Geocoding option by map',
+                collectAddress: true,
+                mapLayerId: mapLayer.id,
+                validationMethod: ValidationMethod.map,
+              },
+            ],
+          },
+        },
+        {
+          multiselectQuestions: {
+            options: [
+              {
+                text: 'non-geocoding option',
+              },
+            ],
+          },
+        },
+      ],
+    };
+
+    const preferenceAddress = {
+      ...address,
+      latitude: 38.89485,
+      longitude: -77.04251,
+    };
+    const preferences = [
+      {
+        key: 'Geocoding preference by map',
+        options: [
+          {
+            key: 'Geocoding option by map',
+            checked: true,
+            extraData: [
+              {
+                type: InputType.address,
+                value: preferenceAddress,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        key: 'Geocoding preference by radius',
+        options: [
+          {
+            key: 'Geocoding option by radius',
+            checked: true,
+            extraData: [
+              {
+                type: InputType.address,
+                value: preferenceAddress,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        key: 'non-geocoding preference',
+        options: [
+          {
+            key: 'non-geocoding option',
+            checked: true,
+          },
+        ],
+      },
+    ];
+
+    const application = {
+      id: 'applicationId',
+      preferences: preferences,
+    };
+
+    it('should save all updated preferences', async () => {
+      prisma.mapLayer.findMany = jest.fn().mockResolvedValue([mapLayer]);
+      prisma.applications.update = jest.fn().mockResolvedValue('');
+      await service.validateGeocodingPreferences(
+        application as unknown as Application,
+        listing as unknown as Listing,
+      );
+
       expect(prisma.applications.update).toBeCalledWith({
         where: { id: 'applicationId' },
         data: {
           preferences: expect.arrayContaining([
             expect.objectContaining({
-              key: 'Geocoding preference',
+              key: 'Geocoding preference by map',
+              options: [
+                {
+                  checked: true,
+                  extraData: [
+                    {
+                      type: 'address',
+                      value: preferenceAddress,
+                    },
+                    { key: 'geocodingVerified', type: 'text', value: true },
+                  ],
+                  key: 'Geocoding option by map',
+                },
+              ],
+            }),
+            expect.objectContaining({
+              key: 'Geocoding preference by radius',
               options: [
                 {
                   checked: true,
@@ -162,45 +451,12 @@ describe('GeocodingService', () => {
                 },
               ],
             }),
-          ]),
-        },
-      });
-    });
-
-    it('should save unknown as value in extraData', async () => {
-      const preferenceAddress = {
-        ...listingAddress,
-        latitude: null,
-        longitude: null,
-      };
-      prisma.applications.update = jest
-        .fn()
-        .mockResolvedValue({ id: randomUUID() });
-      await service.validateRadiusPreferences(
-        application(preferenceAddress) as unknown as Application,
-        listing as unknown as Listing,
-      );
-      expect(prisma.applications.update).toBeCalledWith({
-        where: { id: 'applicationId' },
-        data: {
-          preferences: expect.arrayContaining([
             expect.objectContaining({
-              key: 'Geocoding preference',
+              key: 'non-geocoding preference',
               options: [
                 {
                   checked: true,
-                  extraData: [
-                    {
-                      type: 'address',
-                      value: preferenceAddress,
-                    },
-                    {
-                      key: 'geocodingVerified',
-                      type: 'text',
-                      value: 'unknown',
-                    },
-                  ],
-                  key: 'Geocoding option by radius',
+                  key: 'non-geocoding option',
                 },
               ],
             }),

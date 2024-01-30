@@ -397,6 +397,24 @@ Cypress.Commands.add("step15SelectPreferences", (application) => {
       if (option.checked) {
         cy.getByTestId("app-question-option").eq(index).check()
       }
+      if (option.address) {
+        cy.get(`[data-testid="address-street"]`).eq(index).type(option.address.street)
+        cy.get(`[data-testid="address-city"]`).eq(index).type(option.address.city)
+        cy.get(`[data-testid="address-state"]`).eq(index).select(option.address.state)
+        cy.get(`[data-testid="address-zipcode"]`).eq(index).type(option.address.zipCode)
+      }
+      if (option.addressHolder) {
+        cy.get(`[data-testid="addressHolder-name"]`).eq(index).type(option.addressHolder.name)
+        cy.get(`[data-testid="addressHolder-relationship"]`)
+          .eq(index)
+          .type(option.addressHolder.relationship)
+      }
+    })
+
+    // All options with an address need to have it verified
+    const optionsWithAddress = preference.options.filter((option) => option.address)
+    optionsWithAddress?.forEach(() => {
+      cy.goNext()
     })
 
     cy.goNext()

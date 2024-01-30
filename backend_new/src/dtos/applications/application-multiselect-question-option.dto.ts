@@ -65,6 +65,11 @@ export class ApplicationMultiselectQuestionOption {
   checked: boolean;
 
   @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional({ required: false })
+  mapPinPosition?: string;
+
+  @Expose()
   @ApiPropertyOptional({
     type: 'array',
     items: {

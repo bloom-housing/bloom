@@ -570,6 +570,15 @@ model Listings {
   @@map("listings")
 }
 
+model MapLayers {
+  id                String      @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name              String
+  jurisdictionId    String      @map("jurisdiction_id")
+  featureCollection Json        @map("feature_collection") @default("{}")
+
+  @@map("map_layers")
+}
+
 // Note: hold over from TypeORM 
 model Migrations {
   id        Int    @id() @default(autoincrement())

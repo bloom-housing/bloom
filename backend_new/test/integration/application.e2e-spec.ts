@@ -642,16 +642,20 @@ describe('Application Controller Tests', () => {
 
       expect(res.body.id).not.toBeNull();
 
-      const savedApplication = await prisma.applications.findFirst({
+      const savedApplication = await prisma.applications.findMany({
         where: {
           id: res.body.id,
         },
       });
-      const savedPreferences = savedApplication.preferences;
+      const savedPreferences = savedApplication[0].preferences;
       expect(savedPreferences).toHaveLength(1);
-      const geocoding = savedPreferences[0].options[0].extraData[1];
-      expect(geocoding.key).toEqual('geocodingVerified');
-      expect(geocoding.value).toEqual(true);
+      const geocodingOptions = savedPreferences[0].options[0];
+      expect(geocodingOptions.extraData).toHaveLength(2);
+      expect(geocodingOptions.extraData).toContainEqual({
+        key: 'geocodingVerified',
+        type: 'text',
+        value: true,
+      });
     });
   });
 

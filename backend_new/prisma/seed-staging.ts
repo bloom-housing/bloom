@@ -28,6 +28,12 @@ import {
 import { applicationFactory } from './seed-helpers/application-factory';
 import { translationFactory } from './seed-helpers/translation-factory';
 import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
+import {
+  mapLayerFactory,
+  redlinedMap,
+  simplifiedDCMap,
+} from './seed-helpers/map-layer-factory';
+import { ValidationMethod } from '../src/enums/multiselect-questions/validation-method-enum';
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
@@ -92,6 +98,12 @@ export const stagingSeed = async (
   const amiChart = await prismaClient.amiChart.create({
     data: amiChartFactory(10, jurisdiction.id),
   });
+  await prismaClient.mapLayers.create({
+    data: mapLayerFactory(jurisdiction.id, 'Redlined Districts', redlinedMap),
+  });
+  const mapLayer = await prismaClient.mapLayers.create({
+    data: mapLayerFactory(jurisdiction.id, 'Washington DC', simplifiedDCMap),
+  });
   const multiselectQuestion1 = await prismaClient.multiselectQuestions.create({
     data: multiselectQuestionFactory(jurisdiction.id, {
       multiselectQuestion: {
@@ -102,7 +114,7 @@ export const stagingSeed = async (
         options: [
           {
             text: 'At least one member of my household is a city employee',
-            collectAddress: true,
+            collectAddress: false,
             ordinal: 0,
           },
         ],
@@ -120,10 +132,16 @@ export const stagingSeed = async (
           {
             text: 'At least one member of my household works in the city',
             ordinal: 0,
+            collectAddress: true,
+            collectName: true,
+            collectRelationship: true,
+            mapLayerId: mapLayer.id,
+            validationMethod: ValidationMethod.map,
           },
           {
             text: 'All members of the household work in the city',
             ordinal: 1,
+            collectAddress: true,
           },
         ],
       },

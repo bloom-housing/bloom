@@ -697,6 +697,14 @@ CREATE TABLE "user_roles" (
       CONSTRAINT "PK_87b8888186ca9769c960e926870" PRIMARY KEY ("user_id")
 );
 
+CREATE TABLE "map_layers" (
+      "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+      "name" TEXT NOT NULL,
+      "jurisdiction_id" TEXT NOT NULL,
+      "feature_collection" JSONB NOT NULL DEFAULT '{}',
+      CONSTRAINT "PK_d1bcb10041ba88ffea330dc10d9" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "REL_5eb038a51b9cd6872359a687b1" ON "alternate_contact"("mailing_address_id");
 

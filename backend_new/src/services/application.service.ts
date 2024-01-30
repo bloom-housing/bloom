@@ -24,7 +24,6 @@ import Listing from '../dtos/listings/listing.dto';
 import { User } from '../dtos/users/user.dto';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { GeocodingService } from './geocoding.service';
-import { MultiselectQuestionService } from './multiselect-question.service';
 
 export const view: Partial<
   Record<ApplicationViews, Prisma.ApplicationsInclude>
@@ -549,8 +548,28 @@ export class ApplicationService {
       },
     });
 
+    const listing = await this.prisma.listings.findFirst({
+      where: { id: dto.id },
+      include: { jurisdictions: true },
+    });
+    const application = mapTo(Application, res);
+
+    // Calculate geocoding preferences after save and email sent
+    if (listing.jurisdictions?.enableGeocodingPreferences) {
+      try {
+        void this.geocodingService.validateGeocodingPreferences(
+          application,
+          mapTo(Listing, listing),
+        );
+      } catch (e) {
+        // If the geocoding fails it should not prevent the request from completing so
+        // catching all errors here
+        console.warn('error while validating geocoding preferences');
+      }
+    }
+
     await this.updateListingApplicationEditTimestamp(res.listingId);
-    return mapTo(Application, res);
+    return application;
   }
 
   /*

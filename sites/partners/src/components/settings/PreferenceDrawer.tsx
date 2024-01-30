@@ -109,9 +109,9 @@ const PreferenceDrawer = ({
     watch("validationMethod") === ValidationMethodEnum.radius
 
   const mapExpand =
-    (optionData?.validationMethod === ValidationMethod.map &&
+    (optionData?.validationMethod === ValidationMethodEnum.map &&
       watch("validationMethod") === undefined) ||
-    watch("validationMethod") === ValidationMethod.map
+    watch("validationMethod") === ValidationMethodEnum.map
 
   // Update local state with dragged state
   useEffect(() => {
@@ -640,8 +640,9 @@ const PreferenceDrawer = ({
                           },
                           {
                             label: t("settings.preferenceValidatingAddress.checkWithArcGisMap"),
-                            value: ValidationMethod.map,
-                            defaultChecked: optionData?.validationMethod === ValidationMethod.map,
+                            value: ValidationMethodEnum.map,
+                            defaultChecked:
+                              optionData?.validationMethod === ValidationMethodEnum.map,
                             id: "validationMethodMap",
                             dataTestId: "validation-method-map",
                             inputProps: {
@@ -873,7 +874,7 @@ const PreferenceDrawer = ({
               ) {
                 newOptionData.radiusSize = parseFloat(formData.radiusSize)
               }
-              if (formData.validationMethod === ValidationMethod.map && formData?.mapLayerId) {
+              if (formData.validationMethod === ValidationMethodEnum.map && formData?.mapLayerId) {
                 newOptionData.mapLayerId = formData.mapLayerId
               }
 

@@ -1689,3 +1689,4 @@ ALTER TABLE "paper_applications"
 ALTER COLUMN "language"
 SET NOT NULL;
 
+ALTER TABLE "map_layers" RENAME CONSTRAINT "PK_d1bcb10041ba88ffea330dc10d9" TO "map_layers_pkey";
