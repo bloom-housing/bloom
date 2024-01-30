@@ -79,7 +79,7 @@ export default () => {
         <>
           <AccountCard
             iconSymbol="profile"
-            title={t("account.createAccount.title")}
+            title={t("account.createAccount")}
             divider="inset"
             headingPriority={1}
           >
@@ -93,32 +93,32 @@ export default () => {
               <Form id="create-account" onSubmit={handleSubmit(onSubmit)}>
                 <CardSection divider={"inset"} className="space-y-3 mx-12 p-0 py-8">
                   <label className={styles["create-account-header"]} htmlFor="firstName">
-                    {t("application.name.yourNameLowercase")}
+                    {t("application.name.yourName")}
                   </label>
 
-                  <label className={styles["create-account-field"]} htmlFor="givenName">
-                    {t("application.name.givenName")}
+                  <label className={styles["create-account-field"]} htmlFor="firstName">
+                    {t("application.name.firstName")}
                   </label>
                   <Field
                     controlClassName={styles["create-account-input"]}
-                    name="givenName"
+                    name="firstName"
                     validation={{ required: true, maxLength: 64 }}
                     error={errors.givenName}
                     errorMessage={
                       errors.givenName?.type === "maxLength"
                         ? t("errors.maxLength")
-                        : t("errors.givenNameError")
+                        : t("errors.firstNameError")
                     }
                     register={register}
                   />
 
                   <label className={styles["create-account-field"]} htmlFor="middleName">
-                    {t("application.name.middleNameOptionalLowercase")}
+                    {t("application.name.middleNameOptional")}
                   </label>
                   <Field
                     name="middleName"
                     register={register}
-                    label={t("application.name.middleNameOptionalLowercase")}
+                    label={t("application.name.middleNameOptional")}
                     readerOnly
                     error={errors.middleName}
                     validation={{ maxLength: 64 }}
@@ -126,19 +126,19 @@ export default () => {
                     controlClassName={styles["create-account-input"]}
                   />
 
-                  <label className={styles["create-account-field"]} htmlFor="familyName">
-                    {t("application.name.familyName")}
+                  <label className={styles["create-account-field"]} htmlFor="lastName">
+                    {t("application.name.lastName")}
                   </label>
                   <Field
-                    name="familyName"
+                    name="lastName"
                     validation={{ required: true, maxLength: 64 }}
-                    error={errors.familyName}
+                    error={errors.lastName}
                     register={register}
-                    label={t("application.name.familyName")}
+                    label={t("application.name.lastName")}
                     errorMessage={
-                      errors.familyName?.type === "maxLength"
+                      errors.lastName?.type === "maxLength"
                         ? t("errors.maxLength")
-                        : t("errors.familyNameError")
+                        : t("errors.lastNameError")
                     }
                     readerOnly
                     controlClassName={styles["create-account-input"]}
@@ -154,9 +154,9 @@ export default () => {
                     watch={watch}
                     validateAge18={true}
                     errorMessage={t("errors.dateOfBirthErrorAge")}
-                    label={t("application.name.yourDateOfBirthLowercase")}
+                    label={t("application.name.yourDateOfBirth")}
                   />
-                  <p className={"field-sub-note"}>{t("application.name.yourDateOfBirthExample")}</p>
+                  <p className={"field-sub-note"}>{t("application.name.dobHelper")}</p>
                 </CardSection>
 
                 <CardSection divider={"inset"} className="mx-12 p-0 py-8">
@@ -164,7 +164,7 @@ export default () => {
                     caps={true}
                     type="email"
                     name="email"
-                    label={t("application.name.yourEmailAddressLowercase")}
+                    label={t("application.name.yourEmailAddress")}
                     validation={{ required: true, pattern: emailRegex }}
                     error={errors.email}
                     errorMessage={t("authentication.signIn.loginError")}
@@ -178,7 +178,7 @@ export default () => {
                     type={"password"}
                     name="password"
                     note={t("authentication.createAccount.passwordInfo")}
-                    label={t("authentication.createAccount.passwordCreate")}
+                    label={t("authentication.createAccount.password")}
                     validation={{
                       required: true,
                       minLength: 8,
@@ -218,7 +218,7 @@ export default () => {
                     readerOnly
                   />
                   <Button type="submit" variant="primary">
-                    {t("account.createAccount.label")}
+                    {t("account.createAccount")}
                   </Button>
                 </CardSection>
               </Form>
