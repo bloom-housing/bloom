@@ -194,26 +194,6 @@ const ApplicationMultiselectQuestionStep = ({
       }
       return null
     }
-    if (question?.links) {
-      return (
-        <>
-          {strings?.subTitle ?? <p>{question?.description}</p>}
-          <div className="pt-4">
-            {question.links.map((link) => (
-              <a
-                key={link.url}
-                className="block text-base pt-2 text-blue-500 underline"
-                href={link.url}
-                target={"_blank"}
-                rel="noreferrer noopener"
-              >
-                {link.title}
-              </a>
-            ))}
-          </div>
-        </>
-      )
-    }
     return strings?.subTitle ?? question?.description
   }
 
@@ -265,10 +245,23 @@ const ApplicationMultiselectQuestionStep = ({
                 <fieldset>
                   <legend className="text__caps-spaced mb-4 sr-only">{question?.text}</legend>
                   {applicationSection === ApplicationSection.preferences && (
-                    <>
-                      <p className="text__caps-spaced">{question?.text}</p>
-                      <p className="field-note mb-8">{question?.description}</p>
-                    </>
+                    <div className="mb-8">
+                      <p className="text__caps-spaced m-0">{question?.text}</p>
+                      {question?.description && (
+                        <p className="field-note mt-3">{question?.description}</p>
+                      )}
+                      {question.links.map((link) => (
+                        <a
+                          key={link.url}
+                          className="block text-base mt-3 text-blue-500 underline"
+                          href={link.url}
+                          target={"_blank"}
+                          rel="noreferrer noopener"
+                        >
+                          {link.title}
+                        </a>
+                      ))}
+                    </div>
                   )}
                   <p className="field-note mb-8">
                     {t("application.household.preferredUnit.optionsLabel")}
