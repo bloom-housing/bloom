@@ -38,11 +38,11 @@ const FormSignIn = ({
   const router = useRouter()
   const listingIdRedirect = router.query?.listingId as string
   const forgetPasswordURL =
-    listingIdRedirect && process.env.showMandatedAccounts
+    process.env.showMandatedAccounts && listingIdRedirect
       ? `/forgot-password?redirectUrl=/applications/start/choose-language&listingId=${listingIdRedirect}`
       : "/forgot-password"
   const createAccountUrl =
-    listingIdRedirect && process.env.showMandatedAccounts
+    process.env.showMandatedAccounts && listingIdRedirect
       ? `/create-account?redirectUrl=/applications/start/choose-language&listingId=${listingIdRedirect}`
       : "/create-account"
   return (

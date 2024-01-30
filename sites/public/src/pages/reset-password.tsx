@@ -55,7 +55,7 @@ const ResetPassword = () => {
 
       const { redirectUrl, listingId } = handleQueryParams(router.query)
       const routerRedirectUrl =
-        redirectUrl && listingId && process.env.showMandatedAccounts
+        process.env.showMandatedAccounts && redirectUrl && listingId
           ? `${redirectUrl}?listingId=${listingId}`
           : "/account/applications"
 

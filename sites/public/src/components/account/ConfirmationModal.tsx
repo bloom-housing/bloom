@@ -52,7 +52,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
     const { redirectUrl, listingId } = handleQueryParams(router.query)
 
     const routerRedirectUrl =
-      redirectUrl && listingId && process.env.showMandatedAccounts
+      process.env.showMandatedAccounts && redirectUrl && listingId
         ? `${redirectUrl}`
         : "/account/dashboard"
     if (router?.query?.token && !profile) {

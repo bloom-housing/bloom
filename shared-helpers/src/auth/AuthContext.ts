@@ -292,12 +292,12 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
     createUser: async (user: UserCreate, listingIdRedirect) => {
       dispatch(startLoading())
       const appUrl =
-        listingIdRedirect && process.env.showMandatedAccounts
+        process.env.showMandatedAccounts && listingIdRedirect
           ? `${window.location.origin}?redirectUrl=/applications/start/choose-language&listingId=${listingIdRedirect}`
           : window.location.origin
       try {
         const response = await userService?.create({
-          body: { ...user, appUrl: appUrl },
+          body: { ...user, appUrl },
         })
         return response
       } finally {
@@ -307,7 +307,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
     resendConfirmation: async (email: string, listingIdRedirect) => {
       dispatch(startLoading())
       const appUrl =
-        listingIdRedirect && process.env.showMandatedAccounts
+        process.env.showMandatedAccounts && listingIdRedirect
           ? `${window.location.origin}?redirectUrl=/applications/start/choose-language&listingId=${listingIdRedirect}`
           : window.location.origin
       try {
@@ -323,7 +323,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
       dispatch(startLoading())
       try {
         const appUrl =
-          listingIdRedirect && process.env.showMandatedAccounts
+          process.env.showMandatedAccounts && listingIdRedirect
             ? `${window.location.origin}?redirectUrl=/applications/start/choose-language&listingId=${listingIdRedirect}`
             : window.location.origin
         const response = await userService?.forgotPassword({

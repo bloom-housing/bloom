@@ -50,7 +50,7 @@ export default () => {
     try {
       const { dob, ...rest } = data
       const listingIdRedirect =
-        listingId && process.env.showMandatedAccounts ? listingId : undefined
+        process.env.showMandatedAccounts && listingId ? listingId : undefined
       await createUser(
         {
           ...rest,
