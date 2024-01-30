@@ -213,9 +213,9 @@ export class EmailService {
     const listingId = urlObj.searchParams.get("listingId")
 
     const resetUrl =
-      redirectUrl && listingId && process.env.SHOW_MANDATED_ACCOUNTS
+      process.env.SHOW_MANDATED_ACCOUNTS == "TRUE" && redirectUrl && listingId
         ? `${urlObj.origin}${urlObj.pathname}/reset-password?token=${user.resetToken}&redirectUrl=${redirectUrl}&listingId=${listingId}`
-        : `${appUrl}/reset-password?token=${user.resetToken}`
+        : `${urlObj.origin}${urlObj.pathname}/reset-password?token=${user.resetToken}`
 
     if (this.configService.get<string>("NODE_ENV") == "production") {
       Logger.log(

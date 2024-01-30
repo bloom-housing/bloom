@@ -627,9 +627,9 @@ export class UserService {
     const listingId = urlObj.searchParams.get("listingId")
 
     const confirmationUrl =
-      process.env.SHOW_MANDATED_ACCOUNTS && redirectUrl && listingId
+      process.env.SHOW_MANDATED_ACCOUNTS == "TRUE" && redirectUrl && listingId
         ? `${urlObj.origin}${urlObj.pathname}?token=${user.confirmationToken}&redirectUrl=${redirectUrl}&listingId=${listingId}`
-        : `${appUrl}?token=${user.confirmationToken}`
+        : `${urlObj.origin}${urlObj.pathname}?token=${user.confirmationToken}`
     return confirmationUrl
   }
 
