@@ -12,7 +12,7 @@ import {
   passwordRegex,
 } from "@bloom-housing/ui-components"
 import { Button, Heading } from "@bloom-housing/ui-seeds"
-import { CardSection, CardFooter } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
 dayjs.extend(customParseFormat)
@@ -87,7 +87,7 @@ export default () => {
           )}
           <SiteAlert type="notice" dismissable />
           <Form id="create-account" onSubmit={handleSubmit(onSubmit)}>
-            <CardSection divider={"inset"} className="space-y-3 mx-12 p-0 py-8">
+            <CardSection divider={"inset"}>
               <label className={styles["create-account-header"]} htmlFor="firstName">
                 {t("application.name.yourName")}
               </label>
@@ -140,7 +140,7 @@ export default () => {
                 controlClassName={styles["create-account-input"]}
               />
             </CardSection>
-            <CardSection divider={"inset"} className="mx-12 p-0 py-8">
+            <CardSection divider={"inset"}>
               <DOBField
                 register={register}
                 required={true}
@@ -155,7 +155,7 @@ export default () => {
               <p className={"field-sub-note"}>{t("application.name.dobHelper")}</p>
             </CardSection>
 
-            <CardSection divider={"inset"} className="mx-12 p-0 py-8">
+            <CardSection divider={"inset"}>
               <Field
                 caps={true}
                 type="email"
@@ -168,7 +168,7 @@ export default () => {
                 controlClassName={styles["create-account-input"]}
               />
             </CardSection>
-            <CardSection className="mx-12 p-0 py-8 space-y-3">
+            <CardSection divider={"inset"}>
               <Field
                 caps={true}
                 type={"password"}
@@ -218,14 +218,14 @@ export default () => {
               </Button>
             </CardSection>
           </Form>
-          <CardFooter className="border-t mx-12 m-0 py-8">
+          <CardSection divider={"inset"}>
             <Heading size="2xl" className="mb-6">
               {t("account.haveAnAccount")}
             </Heading>
             <Button href="/sign-in" variant="primary-outlined">
               {t("nav.signIn")}
             </Button>
-          </CardFooter>
+          </CardSection>
         </>
       </AccountCard>
       <Modal
