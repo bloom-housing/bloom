@@ -4,16 +4,19 @@ import { ApplicationTimeout } from "../components/applications/ApplicationTimeou
 
 interface FormLayoutProps {
   children?: React.ReactNode
+  className?: string
 }
 const FormLayout = (props: FormLayoutProps) => {
+  const classNames = [
+    "md:mb-20 md:mt-12 mx-auto sm:max-w-lg max-w-full print:my-0 print:max-w-full",
+  ]
+  if (props.className) classNames.push(props.className)
   return (
     <>
       <ApplicationTimeout />
       <Layout>
         <section className="bg-gray-300 border-t border-gray-450">
-          <div className="md:mb-20 md:mt-12 mx-auto sm:max-w-lg max-w-full print:my-0 print:max-w-full">
-            {props.children}
-          </div>
+          <div className={classNames.join(" ")}>{props.children}</div>
         </section>
       </Layout>
     </>
