@@ -55,6 +55,10 @@ const ApplicationChooseLanguage = () => {
   }, [profile])
 
   useEffect(() => {
+    if (process.env.showMandatedAccounts && initialStateLoaded && !profile) {
+      void conductor.routeTo("/sign-in")
+      return
+    }
     conductor.reset()
     if (!router.isReady && !listingId) return
     if (router.isReady && !listingId) {
@@ -62,7 +66,6 @@ const ApplicationChooseLanguage = () => {
         ? undefined
         : void router.push("/")
     }
-
     if (!context.listing || context.listing.id !== listingId) {
       void loadListing(listingId, setListing, conductor, context, "en")
     } else {

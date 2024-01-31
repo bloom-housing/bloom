@@ -15,6 +15,7 @@ import {
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./applications/AppSubmissionContext"
 import { getListingApplicationStatus } from "./helpers"
+import { useRequireLoggedInUser } from "@bloom-housing/shared-helpers"
 
 export const useRedirectToPrevPage = (defaultPath = "/") => {
   const router = useRouter()
@@ -32,6 +33,7 @@ export const useRedirectToPrevPage = (defaultPath = "/") => {
 }
 
 export const useFormConductor = (stepName: string) => {
+  useRequireLoggedInUser("/sign-in")
   const context = useContext(AppSubmissionContext)
   const conductor = context.conductor
 
