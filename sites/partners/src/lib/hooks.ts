@@ -2,6 +2,8 @@ import { useCallback, useContext, useState } from "react"
 import useSWR from "swr"
 import qs from "qs"
 import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+import tz from "dayjs/plugin/timezone"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { setSiteAlertMessage, t } from "@bloom-housing/ui-components"
 import {
@@ -14,6 +16,10 @@ import {
   OrderByEnum,
   UserRole,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+
+dayjs.extend(utc)
+dayjs.extend(tz)
+
 export interface PaginationProps {
   page?: number
   limit: number | "all"
@@ -131,7 +137,10 @@ export const useListingExport = () => {
     setCsvExportLoading(true)
 
     try {
-      const content = await listingsService.listAsCsv({}, { responseType: "arraybuffer" })
+      const content = await listingsService.listAsCsv(
+        { timeZone: dayjs.tz.guess() },
+        { responseType: "arraybuffer" }
+      )
       const blob = new Blob([new Uint8Array(content)], { type: "application/zip" })
       const url = window.URL.createObjectURL(blob)
       const link = document.createElement("a")

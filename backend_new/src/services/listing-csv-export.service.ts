@@ -882,7 +882,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
   async clearCSV(): Promise<SuccessDTO> {
     this.logger.warn('listing csv clear job running');
     await this.markCronJobAsStarted();
-
+    let filesDeletedCount = 0;
     await fs.readdir(join(process.cwd(), 'src/temp/'), (err, files) => {
       if (err) {
         throw new InternalServerErrorException(err);
@@ -890,6 +890,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       Promise.all(
         files.map((f) => {
           if (!f.includes('.git')) {
+            filesDeletedCount++;
             fs.unlink(join(process.cwd(), 'src/temp/', f), (err) => {
               if (err) {
                 throw new InternalServerErrorException(err);
@@ -899,7 +900,9 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         }),
       );
     });
-
+    this.logger.warn(
+      `listing csv clear job completed: ${filesDeletedCount} files were deleted`,
+    );
     return {
       success: true,
     };
