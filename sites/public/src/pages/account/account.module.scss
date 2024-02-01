@@ -12,15 +12,15 @@
   }
 }
 
-.application-card-section {
-  --card-content-padding-block: var(--seeds-s6);
-}
-
 .account-settings-label {
   font-size: var(--seeds-font-size-sm);
   font-weight: var(--seeds-font-weight-bold);
 }
 
 .application-no-results {
-  padding-bottom: var(--seeds-s4);
+  padding: var(--seeds-s4);
+  background-color: var(--seeds-color-secondary-lighter);
+}
+.application-no-results-text {
+  padding-bottom: var(--seeds-s6);
 }

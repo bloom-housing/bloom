@@ -66,6 +66,7 @@ function Dashboard(props: DashboardProps) {
                   >
                     <Card.Section className={styles["account-card-section"]}>
                       <Button
+                        size="sm"
                         href={"/account/applications"}
                         variant="primary-outlined"
                         id="account-dashboard-applications"
@@ -83,7 +84,7 @@ function Dashboard(props: DashboardProps) {
                     id="account-dashboard-settings"
                   >
                     <Card.Section className={styles["account-card-section"]}>
-                      <Button href={"/account/edit"} variant="primary-outlined">
+                      <Button size="sm" href={"/account/edit"} variant="primary-outlined">
                         {t("account.accountSettingsUpdate")}
                       </Button>
                     </Card.Section>
