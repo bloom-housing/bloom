@@ -534,7 +534,7 @@ describe('Application Controller Tests', () => {
         preferences: [
           {
             multiselectQuestionId: multiselectQuestionPreference.id,
-            key: 'geocoding preference',
+            key: multiselectQuestionPreference.text,
             claimed: true,
             options: [
               {
@@ -543,7 +543,7 @@ describe('Application Controller Tests', () => {
                 extraData: [
                   {
                     type: InputType.address,
-                    key: 'geocoding preference',
+                    key: 'address',
                     value: exampleAddress,
                   },
                 ],
@@ -642,14 +642,24 @@ describe('Application Controller Tests', () => {
 
       expect(res.body.id).not.toBeNull();
 
-      const savedApplication = await prisma.applications.findMany({
+      let savedApplication = await prisma.applications.findMany({
         where: {
           id: res.body.id,
         },
       });
       const savedPreferences = savedApplication[0].preferences;
       expect(savedPreferences).toHaveLength(1);
-      const geocodingOptions = savedPreferences[0].options[0];
+      let geocodingOptions = savedPreferences[0].options[0];
+      // This catches the edge case where the geocoding hasn't completed yet
+      if (geocodingOptions.extraData.length === 1) {
+        console.log('');
+        savedApplication = await prisma.applications.findMany({
+          where: {
+            id: res.body.id,
+          },
+        });
+      }
+      geocodingOptions = savedApplication[0].preferences[0].options[0];
       expect(geocodingOptions.extraData).toHaveLength(2);
       expect(geocodingOptions.extraData).toContainEqual({
         key: 'geocodingVerified',

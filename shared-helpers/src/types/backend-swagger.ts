@@ -1875,7 +1875,7 @@ export class MapLayersService {
       jurisdictionId?: string
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<any> {
+  ): Promise<MapLayer[]> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/mapLayers"
 
@@ -5015,6 +5015,17 @@ export interface Confirm {
 
   /**  */
   password?: string
+}
+
+export interface MapLayer {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+
+  /**  */
+  jurisdictionId: string
 }
 
 export enum ListingViews {

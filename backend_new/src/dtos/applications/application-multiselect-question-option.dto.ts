@@ -66,7 +66,7 @@ export class ApplicationMultiselectQuestionOption {
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional({ required: false })
+  @ApiPropertyOptional()
   mapPinPosition?: string;
 
   @Expose()

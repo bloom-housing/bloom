@@ -278,17 +278,19 @@ describe('GeocodingService', () => {
             {
               type: InputType.address,
               value: preferenceAddress,
+              key: 'address',
             },
           ],
         },
       ],
     };
     it('should save the validated value as extraData for map layer', async () => {
-      prisma.mapLayer.findMany = jest.fn().mockResolvedValue([mapLayer]);
+      prisma.mapLayers.findMany = jest.fn().mockResolvedValue([mapLayer]);
       const response = await service.validateGeoLayerPreferences(
         [preference] as unknown as ApplicationMultiselectQuestion[],
         listing as unknown as Listing,
       );
+
       expect(response).toEqual([
         {
           key: 'Geocoding preference',
@@ -300,6 +302,7 @@ describe('GeocodingService', () => {
                 {
                   type: InputType.address,
                   value: preferenceAddress,
+                  key: 'address',
                 },
                 {
                   key: 'geocodingVerified',
@@ -408,7 +411,7 @@ describe('GeocodingService', () => {
     };
 
     it('should save all updated preferences', async () => {
-      prisma.mapLayer.findMany = jest.fn().mockResolvedValue([mapLayer]);
+      prisma.mapLayers.findMany = jest.fn().mockResolvedValue([mapLayer]);
       prisma.applications.update = jest.fn().mockResolvedValue('');
       await service.validateGeocodingPreferences(
         application as unknown as Application,

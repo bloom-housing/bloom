@@ -555,7 +555,7 @@ export class ApplicationService {
     const application = mapTo(Application, res);
 
     // Calculate geocoding preferences after save and email sent
-    if (listing.jurisdictions?.enableGeocodingPreferences) {
+    if (listing?.jurisdictions?.enableGeocodingPreferences) {
       try {
         void this.geocodingService.validateGeocodingPreferences(
           application,

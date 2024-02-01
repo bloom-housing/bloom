@@ -529,13 +529,57 @@ export class ApplicationCsvExporterService
          */
         question.options
           ?.filter((option) => option.collectAddress)
-          .forEach(() => {
+          .forEach((option) => {
             headers.push({
               path: `preferences.${question.id}.address`,
-              label: `Preference ${question.text} - Address`,
-              format: (val: ApplicationMultiselectQuestion): string =>
-                this.multiselectQuestionFormat(val),
+              label: `Preference ${question.text} - ${option.text} - Address`,
+              format: (val: ApplicationMultiselectQuestion): string => {
+                return this.multiselectQuestionFormat(
+                  val,
+                  option.text,
+                  'address',
+                );
+              },
             });
+            if (option.validationMethod) {
+              headers.push({
+                path: `preferences.${question.id}.address`,
+                label: `Preference ${question.text} - ${option.text} - Passed Address Check`,
+                format: (val: ApplicationMultiselectQuestion): string => {
+                  return this.multiselectQuestionFormat(
+                    val,
+                    option.text,
+                    'geocodingVerified',
+                  );
+                },
+              });
+            }
+            if (option.collectName) {
+              headers.push({
+                path: `preferences.${question.id}.address`,
+                label: `Preference ${question.text} - ${option.text} - Name of Address Holder`,
+                format: (val: ApplicationMultiselectQuestion): string => {
+                  return this.multiselectQuestionFormat(
+                    val,
+                    option.text,
+                    'addressHolderName',
+                  );
+                },
+              });
+            }
+            if (option.collectRelationship) {
+              headers.push({
+                path: `preferences.${question.id}.address`,
+                label: `Preference ${question.text} - ${option.text} - Relationship to Address Holder`,
+                format: (val: ApplicationMultiselectQuestion): string => {
+                  return this.multiselectQuestionFormat(
+                    val,
+                    option.text,
+                    'addressHolderRelationship',
+                  );
+                },
+              });
+            }
           });
       });
 
@@ -593,14 +637,50 @@ export class ApplicationCsvExporterService
     }, ${address.state} ${address.zipCode}`;
   }
 
-  multiselectQuestionFormat(question: ApplicationMultiselectQuestion): string {
+  multiselectQuestionFormat(
+    question: ApplicationMultiselectQuestion,
+    optionText: string,
+    key: string,
+  ): string {
     if (!question) return '';
-    const address = question.options.reduce((_, curr) => {
-      const extraData = curr.extraData.find((data) => data.type === 'address');
-      return extraData ? extraData.value : '';
-    }, {}) as Address;
-    return this.addressToString(address);
+    const selectedOption = question.options.find(
+      (option) => option.key === optionText,
+    );
+    const extraData = selectedOption?.extraData.find(
+      (data) => data.key === key,
+    );
+    if (!extraData) {
+      return '';
+    }
+    if (key === 'address') {
+      return this.addressToString(extraData.value as Address);
+    }
+    if (key === 'geocodingVerified') {
+      return extraData.value === 'unknown'
+        ? 'Needs Manual Verification'
+        : extraData.value.toString();
+    }
+    return extraData.value as string;
   }
+
+  // multiselectQuestionGeocodingVerifiedFormat(
+  //   question: ApplicationMultiselectQuestion,
+  //   optionText: string,
+  // ): string {
+  //   if (!question) return '';
+  //   const selectedOption = question.options.find(
+  //     (option) => option.key === optionText,
+  //   );
+  //   const extraData = selectedOption.extraData.find(
+  //     (data) => data.key === 'geocodingVerified',
+  //   );
+  //   if (extraData) {
+  //     return extraData.value === 'unknown'
+  //       ? 'Needs Manual Verification'
+  //       : extraData.value.toString();
+  //   }
+  //   return '';
+  // }
 
   convertDemographicRaceToReadable(type: string): string {
     const [rootKey, customValue = ''] = type.split(':');

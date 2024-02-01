@@ -113,8 +113,7 @@ describe("Paper Application Tests", () => {
     })
   })
 
-  // TODO: unskip when application flow is connected
-  it.skip("fill only household income data", () => {
+  it("fill only household income data", () => {
     cy.fixture("householdIncomeOnlyData").then((application) => {
       cy.fillHouseholdIncome(application, [])
       cy.fillTerms(application, true)
@@ -127,8 +126,7 @@ describe("Paper Application Tests", () => {
     })
   })
 
-  // TODO: unskip when application flow is connected
-  it.skip("fill only demographic data", () => {
+  it("fill only demographic data", () => {
     cy.fixture("demographicsOnlyData").then((application) => {
       cy.fillDemographics(application, [])
       cy.fillTerms(application, true)

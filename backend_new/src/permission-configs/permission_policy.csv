@@ -79,6 +79,9 @@ p, admin, paperApplication, true, .*
 p, jurisdictionAdmin, paperApplication, true, .*
 p, anonymous, paperApplication, true, read
 
+p, admin, mapLayers, true, .*
+p, jurisdictionAdmin, mapLayers, true, .*
+
 g, admin, jurisdictionAdmin
 g, jurisdictionAdmin, partner
 g, partner, user

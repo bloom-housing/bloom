@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { MapLayers } from '@prisma/client';
 import { MapLayersQueryParams } from '../dtos/map-layers/map-layers-query-params.dto';
+import { MapLayerDto } from '../dtos/map-layers/map-layer.dto';
 
 @Injectable()
 export class MapLayersService {
   constructor(private prisma: PrismaService) {}
 
-  list(queryParams: MapLayersQueryParams): Promise<MapLayers[]> {
+  async list(queryParams: MapLayersQueryParams): Promise<MapLayerDto[]> {
     if (queryParams.jurisdictionId) {
-      return this.prisma.mapLayers.findMany({
+      return await this.prisma.mapLayers.findMany({
         where: {
           jurisdictionId: queryParams.jurisdictionId,
         },
       });
     }
-    return this.prisma.mapLayers.findMany();
+    return await this.prisma.mapLayers.findMany();
   }
 }
