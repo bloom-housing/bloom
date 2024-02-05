@@ -1,5 +1,5 @@
 name: Version packages
-
+permissions: read-all
 on:
   # Triggers the workflow on push only for the main branch
   push:

@@ -1,5 +1,5 @@
 name: Partners Cypress
-
+permissions: read-all
 on:
   pull_request:
     branches:

@@ -1,5 +1,5 @@
 name: Backend Integration
-
+permissions: read-all
 on:
   pull_request:
     branches:

@@ -1,5 +1,5 @@
 name: Shared Helpers Unit
-
+permissions: read-all
 on:
   pull_request:
     branches:

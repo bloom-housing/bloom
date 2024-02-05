@@ -1,5 +1,5 @@
 name: Lint
-
+permissions: read-all
 on:
   # Trigger the workflow on pull request,
   # but only for the main branch

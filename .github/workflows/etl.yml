@@ -1,5 +1,5 @@
 name: Listings import
-
+permissions: read-all
 # This is mostly copied from the root lint action (lint.yml)
 
 # It's kept separate to: 
