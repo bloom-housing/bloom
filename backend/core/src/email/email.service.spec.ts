@@ -188,7 +188,13 @@ const translationServiceMock = {
               minIncome: "Minimum Income",
               maxIncome: "Maximum Income",
               lottery: "Lottery Date",
-              viewButton: "View Listing & Apply",
+              viewButton: {
+                en: "View listing & apply",
+                es: "Ver listado y aplicar",
+                zh: "查看列表并申请",
+                vi: "Xem danh sách và áp dụng",
+                tl: "Tingnan ang listahan at mag-apply",
+              },
               studio: "Studios",
               oneBdrm: "1 Bedrooms",
               twoBdrm: "2 Bedrooms",
@@ -547,7 +553,11 @@ describe("EmailService", () => {
       expect(emailMock[1]).toMatch("$1,438 - $2,208 per month")
       expect(emailMock[1]).toMatch("Maximum Income")
       expect(emailMock[1]).toMatch("$2,562.5 - $3,843.75 per month")
-      expect(emailMock[1]).toMatch("View Listing & Apply")
+      expect(emailMock[1]).toMatch("View listing &amp; apply")
+      expect(emailMock[1]).toMatch("Ver listado y aplicar")
+      expect(emailMock[1]).toMatch("查看列表并申请")
+      expect(emailMock[1]).toMatch("Xem danh sách và áp dụng")
+      expect(emailMock[1]).toMatch("Tingnan ang listahan at mag-apply")
       expect(emailMock[1]).toMatch("Alameda County Housing Portal")
       expect(emailMock[1]).toMatch("Alameda County Housing Portal is a project of the")
       expect(emailMock[1]).toMatch(

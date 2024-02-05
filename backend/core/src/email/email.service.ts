@@ -366,10 +366,25 @@ export class EmailService {
       }
     }
 
+    const languages = [
+      { name: this.polyglot.t("rentalOpportunity.viewButton.en"), code: Language.en },
+      { name: this.polyglot.t("rentalOpportunity.viewButton.es"), code: Language.es },
+      { name: this.polyglot.t("rentalOpportunity.viewButton.zh"), code: Language.zh },
+      { name: this.polyglot.t("rentalOpportunity.viewButton.vi"), code: Language.vi },
+      { name: this.polyglot.t("rentalOpportunity.viewButton.tl"), code: Language.tl },
+    ]
+
+    const languageUrls = languages.map((language) => {
+      return {
+        name: language.name,
+        url: `${jurisdiction.publicUrl}/${language.code}/listing/${listing.id}`,
+      }
+    })
+
     const compiled = compiledTemplate({
       listingName: listing.name,
-      listingUrl: `${jurisdiction.publicUrl}/listing/${listing.id}`,
       tableRows,
+      languageUrls,
     })
 
     await this.govSend(compiled, "New rental opportunity")
