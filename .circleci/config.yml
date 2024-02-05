@@ -173,6 +173,7 @@ jobs:
   jest-backend:
     executor: standard-node
     steps:
+      - checkout
       - restore_cache:
           key: build-cache-new-{{ .Environment.CIRCLE_SHA1 }}
       - run:
