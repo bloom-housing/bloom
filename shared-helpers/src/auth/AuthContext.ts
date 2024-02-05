@@ -36,6 +36,7 @@ import qs from "qs"
 import axiosStatic from "axios"
 import { ConfigContext } from "./ConfigContext"
 import { createAction, createReducer } from "typesafe-actions"
+import { getListingRedirectUrl } from "../utilities/getListingRedirectUrl"
 
 type ContextProps = {
   amiChartsService: AmiChartsService
@@ -291,10 +292,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
     },
     createUser: async (user: UserCreate, listingIdRedirect) => {
       dispatch(startLoading())
-      const appUrl =
-        process.env.showMandatedAccounts && listingIdRedirect
-          ? `${window.location.origin}?redirectUrl=/applications/start/choose-language&listingId=${listingIdRedirect}`
-          : window.location.origin
+      const appUrl = getListingRedirectUrl(listingIdRedirect)
       try {
         const response = await userService?.create({
           body: { ...user, appUrl },
@@ -306,13 +304,10 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
     },
     resendConfirmation: async (email: string, listingIdRedirect) => {
       dispatch(startLoading())
-      const appUrl =
-        process.env.showMandatedAccounts && listingIdRedirect
-          ? `${window.location.origin}?redirectUrl=/applications/start/choose-language&listingId=${listingIdRedirect}`
-          : window.location.origin
+      const appUrl = getListingRedirectUrl(listingIdRedirect)
       try {
         const response = await userService?.resendConfirmation({
-          body: { email, appUrl: appUrl },
+          body: { email, appUrl },
         })
         return response
       } finally {
@@ -322,12 +317,10 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
     forgotPassword: async (email, listingIdRedirect) => {
       dispatch(startLoading())
       try {
-        const appUrl =
-          process.env.showMandatedAccounts && listingIdRedirect
-            ? `${window.location.origin}?redirectUrl=/applications/start/choose-language&listingId=${listingIdRedirect}`
-            : window.location.origin
+        const appUrl = getListingRedirectUrl(listingIdRedirect)
+
         const response = await userService?.forgotPassword({
-          body: { email, appUrl: appUrl },
+          body: { email, appUrl },
         })
         return response?.message
       } finally {

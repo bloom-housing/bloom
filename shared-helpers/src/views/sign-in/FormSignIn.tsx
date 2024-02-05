@@ -5,6 +5,7 @@ import { FormSignInErrorBox } from "./FormSignInErrorBox"
 import { NetworkStatus } from "../../auth/catchNetworkError"
 import type { UseFormMethods } from "react-hook-form"
 import { useRouter } from "next/router"
+import { getListingRedirectUrl } from "../../utilities/getListingRedirectUrl"
 
 export type FormSignInProps = {
   control: FormSignInControl
@@ -37,14 +38,9 @@ const FormSignIn = ({
   const { LinkComponent } = useContext(NavigationContext)
   const router = useRouter()
   const listingIdRedirect = router.query?.listingId as string
-  const forgetPasswordURL =
-    process.env.showMandatedAccounts && listingIdRedirect
-      ? `/forgot-password?redirectUrl=/applications/start/choose-language&listingId=${listingIdRedirect}`
-      : "/forgot-password"
-  const createAccountUrl =
-    process.env.showMandatedAccounts && listingIdRedirect
-      ? `/create-account?redirectUrl=/applications/start/choose-language&listingId=${listingIdRedirect}`
-      : "/create-account"
+  const forgetPasswordURL = getListingRedirectUrl(listingIdRedirect, "/forgot-password")
+  const createAccountUrl = getListingRedirectUrl(listingIdRedirect, "/create-account")
+
   return (
     <FormCard>
       <div className="form-card__lead text-center">

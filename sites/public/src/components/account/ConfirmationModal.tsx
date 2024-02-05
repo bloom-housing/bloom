@@ -5,7 +5,6 @@ import { useRouter } from "next/router"
 import { useContext, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { emailRegex } from "../../lib/helpers"
-import { ParsedUrlQuery } from "querystring"
 
 export interface ConfirmationModalProps {
   setSiteAlertMessage: (message: string, alertType: string) => void
@@ -40,16 +39,9 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
     window.scrollTo(0, 0)
   }
 
-  const handleQueryParams = (query: ParsedUrlQuery) => {
-    const redirectUrl = query?.redirectUrl
-    const listingId = query?.listingId
-    return typeof redirectUrl === "string" && typeof listingId === "string"
-      ? { redirectUrl, listingId }
-      : { redirectUrl: undefined, listingId: undefined }
-  }
-
   useEffect(() => {
-    const { redirectUrl, listingId } = handleQueryParams(router.query)
+    const redirectUrl = router.query?.redirectUrl as string
+    const listingId = router.query?.listingId as string
 
     const routerRedirectUrl =
       process.env.showMandatedAccounts && redirectUrl && listingId

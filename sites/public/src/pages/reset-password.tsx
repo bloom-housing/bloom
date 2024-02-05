@@ -15,7 +15,6 @@ import { Button } from "@bloom-housing/ui-seeds"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
-import { ParsedUrlQuery } from "querystring"
 
 const ResetPassword = () => {
   const router = useRouter()
@@ -39,13 +38,6 @@ const ResetPassword = () => {
     })
   }, [])
 
-  const handleQueryParams = (query: ParsedUrlQuery) => {
-    const redirectUrl = query?.redirectUrl
-    const listingId = query?.listingId
-    return typeof redirectUrl === "string" && typeof listingId === "string"
-      ? { redirectUrl, listingId }
-      : { redirectUrl: undefined, listingId: undefined }
-  }
   const onSubmit = async (data: { password: string; passwordConfirmation: string }) => {
     const { password, passwordConfirmation } = data
 
@@ -53,7 +45,9 @@ const ResetPassword = () => {
       const user = await resetPassword(token.toString(), password, passwordConfirmation)
       setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
 
-      const { redirectUrl, listingId } = handleQueryParams(router.query)
+      const redirectUrl = router.query?.redirectUrl as string
+      const listingId = router.query?.listingId as string
+
       const routerRedirectUrl =
         process.env.showMandatedAccounts && redirectUrl && listingId
           ? `${redirectUrl}?listingId=${listingId}`
