@@ -24,19 +24,15 @@
     </tbody>
   </table>
 
-  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+  <table class="my3" role="presentation" border="0" cellpadding="0" cellspacing="0">
     <tbody>
-      <tr>
-        <td align="center">
-          <a
-            class="btn btn-primary"
-            href="{{listingUrl}}"
-            target="_blank"
-            style="color:white"
-            >View Listing & Apply
-          </a>
-        </td>
-      </tr>
+      {{#each languageUrls}}
+        <tr>
+          <td align="center">
+            <a href="{{this.url}}" class="btn btn-primary btn-submit" target="_blank" style="color:white">{{this.name}}</a>
+          </td>
+        </tr>
+      {{/each}}
     </tbody>
   </table>
 {{/layout_default }}

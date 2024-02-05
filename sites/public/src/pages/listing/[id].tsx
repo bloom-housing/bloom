@@ -10,7 +10,10 @@ export default function ListingRedirect(props: Record<string, string>) {
   )
 }
 
-export async function getServerSideProps(context: { params: Record<string, string> }) {
+export async function getServerSideProps(context: {
+  params: Record<string, string>
+  locale: string
+}) {
   let response
 
   const listingServiceUrl = runtimeConfig.getListingServiceUrl()
@@ -21,5 +24,9 @@ export async function getServerSideProps(context: { params: Record<string, strin
     return { notFound: true }
   }
 
-  return { props: { to: `/listing/${context.params.id}/${response.data.urlSlug}` } }
+  const localeString = context.locale === "en" ? "" : `/${context.locale}`
+
+  return {
+    props: { to: `${localeString}/listing/${context.params.id}/${response.data.urlSlug}` },
+  }
 }
