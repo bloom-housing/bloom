@@ -193,32 +193,32 @@ jobs:
 workflows:
   build:
     jobs:
-      # - setup
-      # - setup-backend
-      # - lint:
-      #     requires:
-      #       - setup
-      # - jest-shared-helpers:
-      #     requires:
-      #       - setup
+      - setup
+      - setup-backend
+      - lint:
+          requires:
+            - setup
+      - jest-shared-helpers:
+          requires:
+            - setup
       - jest-backend
-      # - build-public:
-      #     requires:
-      #       - setup
-      # - unit-test-public:
-      #     requires:
-      #       - setup
-      # - build-partners:
-      #     requires:
-      #       - setup
-      # - unit-test-partners:
-      #     requires:
-      #       - setup
-      # - cypress-public:
-      #     requires:
-      #       - setup
-      #       - setup-backend
-      # - cypress-partners:
-      #     requires:
-      #       - setup
-      #       - setup-backend
+      - build-public:
+          requires:
+            - setup
+      - unit-test-public:
+          requires:
+            - setup
+      - build-partners:
+          requires:
+            - setup
+      - unit-test-partners:
+          requires:
+            - setup
+      - cypress-public:
+          requires:
+            - setup
+            - setup-backend
+      - cypress-partners:
+          requires:
+            - setup
+            - setup-backend
