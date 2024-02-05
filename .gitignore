@@ -95,3 +95,5 @@ dump.rdb
 
 # pg dumps
 *.dump
+#ignore trunk for now
+.trunk
