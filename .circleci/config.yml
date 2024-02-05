@@ -181,7 +181,7 @@ jobs:
           working_directory: backend_new
           command: |
             yarn install
-            yarn test:cov
+            yarn test:cov-ci
           environment:
             PORT: "3100"
             EMAIL_API_KEY: "SG.SOME-LONG-SECRET-KEY"
