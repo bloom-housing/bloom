@@ -91,7 +91,7 @@ jobs:
         run: yarn import:run:local:dev
 
       - name: Cypress run
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v6
         with:
           working-directory: ./sites/partners
           spec: cypress/e2e/listings-approval/*.spec.ts
