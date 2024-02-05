@@ -6,15 +6,17 @@ on:
       - main
 env:
   PORT: 3100
-  EMAIL_API_KEY: 'SG.SOME-LONG-SECRET-KEY'
-  APP_SECRET: 'SOME-LONG-SECRET-KEY'
+  EMAIL_API_KEY: SG.SOME-LONG-SECRET-KEY
+  # trunk-ignore(checkov/CKV_SECRET_6): Key is just a placeholder for real secret
+  APP_SECRET: SOME-LONG-SECRET-KEY
   CLOUDINARY_SECRET: CLOUDINARY_SECRET
   CLOUDINARY_KEY: CLOUDINARY_KEY
   PARTNERS_PORTAL_URL: http://127.0.0.1:3001
+  # trunk-ignore(checkov/CKV_SECRET_4): localhost for testing. basic auth is fine
   DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom
   TEST_DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom_test
   BLOOM_API_BASE: https://fake_website.fake
-  BLOOM_LISTINGS_QUERY: "/fake"
+  BLOOM_LISTINGS_QUERY: /fake
 
 jobs:
   backend-integration:
@@ -36,7 +38,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Check postgres
-        run: pg_isready -h 127.0.0.1 -p ${{ job.services.postgres.ports[5432] }}
+        run: pg_isready -h 127.0.0.1 -p ${{ job.services.postgres.ports['5432'] }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -54,7 +56,7 @@ jobs:
         run: pg_isready -h 127.0.0.1 -p 5432
 
       - name: Not sure why but there is a dependency on this database existing
-        run: psql -c 'CREATE DATABASE bloom_test;'
+        run: psql -c CREATE DATABASE bloom_test;
         env:
           PGHOST: 127.0.0.1
           PGPASSWORD: bloom
