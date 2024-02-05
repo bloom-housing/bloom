@@ -52,7 +52,7 @@
     "version:all": "lerna version --yes --no-commit-hooks --ignore-scripts --conventional-graduate --include-merged-tags --force-git-tag",
     "test:backend:new": "cd backend_new && yarn test --detectOpenHandles",
     "test:backend:new:e2e": "cd backend_new && yarn jest --config ./test/jest-e2e.config.js --detectOpenHandles",
-    "test:backend:new:cov": "cd backend_new && yarn jest --config ./test/jest-with-coverage.config.js --detectOpenHandles --runInBand --logHeapUsage",
+    "test:backend:new:cov": "cd backend_new && yarn jest --config ./test/jest-with-coverage.config.js --detectOpenHandles --logHeapUsage",
     "test:backend:new:dbsetup": "cd backend_new && yarn db:migration:run",
     "test:backend:new:dbsetup:withseed": "cd backend_new && yarn db:migration:run && yarn db:seed:staging --jurisdictionName Bloomington",
     "backend:new:install": "cd backend_new && yarn install",
