@@ -12,6 +12,8 @@ import {
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
 import { AuthContext, ExygyFooter } from "@bloom-housing/shared-helpers"
+import styles from "./application.module.scss"
+import { Alert } from "@bloom-housing/ui-seeds"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
@@ -77,6 +79,11 @@ const Layout = (props) => {
         <Head>
           <title>{t("nav.siteTitle")}</title>
         </Head>
+        <div className={styles["site-alert-banner-container"]}>
+          <Alert className={styles["site-alert-banner-content"]} variant={"alert"}>
+            {t("alert.maintenance", { date: "date", time: "time", hoursDuration: "3" })}
+          </Alert>
+        </div>
         <SiteHeader
           logoSrc="/images/logo_glyph.svg"
           homeURL="/"

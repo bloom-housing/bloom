@@ -37,6 +37,7 @@
   "account.settings.placeholders.year": "YYYY",
   "account.settings.update": "Update",
   "account.settings.iconTitle": "generic user",
+  "alert.maintenance": "This site will be undergoing scheduled maintenance on %{date} at %{time} for approximately %{hoursDuration} hours. We apologize for any inconvenience caused during this time.",
   "application.ada.hearing": "For Hearing Impairments",
   "application.ada.label": "ADA Accessible Units",
   "application.ada.mobility": "For Mobility Impairments",

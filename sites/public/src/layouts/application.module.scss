@@ -1,0 +1,13 @@
+.site-alert-banner-container {
+  width: 100%;
+  background-color: var(--seeds-color-alert-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.site-alert-banner-content {
+  max-width: var(--seeds-width-5xl);
+  width: 100%;
+  font-size: var(--seeds-font-size-base);
+}
