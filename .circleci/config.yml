@@ -179,6 +179,7 @@ jobs:
           name: DB Setup + New Backend Core Tests
           working_directory: backend_new
           command: |
+            yarn install
             yarn test:cov
           environment:
             PORT: "3100"
@@ -192,16 +193,14 @@ workflows:
   build:
     jobs:
       # - setup
-      - setup-backend
+      # - setup-backend
       # - lint:
       #     requires:
       #       - setup
       # - jest-shared-helpers:
       #     requires:
       #       - setup
-      - jest-backend:
-          requires:
-            - setup-backend
+      - jest-backend
       # - build-public:
       #     requires:
       #       - setup
