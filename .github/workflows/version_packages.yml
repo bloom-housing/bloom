@@ -17,7 +17,7 @@ jobs:
         run: git config --global user.email "github-actions@github.com"
 
       - name: Check out git repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.ADMIN_TOKEN }}

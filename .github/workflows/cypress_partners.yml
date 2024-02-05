@@ -44,7 +44,7 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Check postgres
         run: pg_isready -h 127.0.0.1 -p ${{ job.services.postgres.ports[5432] }}
