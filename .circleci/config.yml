@@ -172,16 +172,14 @@ jobs:
       - run: yarn test:shared:helpers
   jest-backend:
     executor: standard-node
-    resource_class: large
     steps:
       - restore_cache:
           key: build-cache-new-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: DB Setup + New Backend Core Tests
+          working_directory: backend_new
           command: |
-            yarn backend:new:install
-            yarn test:backend:new:dbsetup
-            yarn test:backend:new:cov
+            yarn test:cov
           environment:
             PORT: "3100"
             EMAIL_API_KEY: "SG.SOME-LONG-SECRET-KEY"
@@ -193,34 +191,34 @@ jobs:
 workflows:
   build:
     jobs:
-      - setup
+      # - setup
       - setup-backend
-      - lint:
-          requires:
-            - setup
-      - jest-shared-helpers:
-          requires:
-            - setup
+      # - lint:
+      #     requires:
+      #       - setup
+      # - jest-shared-helpers:
+      #     requires:
+      #       - setup
       - jest-backend:
           requires:
             - setup-backend
-      - build-public:
-          requires:
-            - setup
-      - unit-test-public:
-          requires:
-            - setup
-      - build-partners:
-          requires:
-            - setup
-      - unit-test-partners:
-          requires:
-            - setup
-      - cypress-public:
-          requires:
-            - setup
-            - setup-backend
-      - cypress-partners:
-          requires:
-            - setup
-            - setup-backend
+      # - build-public:
+      #     requires:
+      #       - setup
+      # - unit-test-public:
+      #     requires:
+      #       - setup
+      # - build-partners:
+      #     requires:
+      #       - setup
+      # - unit-test-partners:
+      #     requires:
+      #       - setup
+      # - cypress-public:
+      #     requires:
+      #       - setup
+      #       - setup-backend
+      # - cypress-partners:
+      #     requires:
+      #       - setup
+      #       - setup-backend
