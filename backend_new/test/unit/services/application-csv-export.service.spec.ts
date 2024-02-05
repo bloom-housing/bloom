@@ -3,13 +3,10 @@ import { PassThrough } from 'stream';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
 import { HttpModule } from '@nestjs/axios';
+import { Request as ExpressRequest, Response } from 'express';
 import { PrismaService } from '../../../src/services/prisma.service';
-import {
-  ApplicationCsvExporterService,
-  CsvHeader,
-} from '../../../src/services/application-csv-export.service';
+import { ApplicationCsvExporterService } from '../../../src/services/application-csv-export.service';
 import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
-import MultiselectQuestion from '../../../src/dtos/multiselect-questions/multiselect-question.dto';
 import { ApplicationMultiselectQuestion } from '../../../src/dtos/applications/application-multiselect-question.dto';
 import { InputType } from '../../../src/enums/shared/input-type-enum';
 import { UnitType } from 'src/dtos/unit-types/unit-type.dto';
@@ -27,6 +24,7 @@ import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
+import { CsvHeader } from '../../../src/types/CsvExportInterface';
 
 describe('Testing application CSV export service', () => {
   let service: ApplicationCsvExporterService;
@@ -289,25 +287,6 @@ describe('Testing application CSV export service', () => {
       state: 'State',
       zipCode: '67890',
     };
-
-    const multiselectQuestions: MultiselectQuestion[] = [
-      {
-        id: randomUUID(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        jurisdictions: [],
-        text: 'Test Preference 1',
-        applicationSection:
-          MultiselectQuestionsApplicationSectionEnum.preferences,
-        options: [
-          {
-            text: 'option 1',
-            collectAddress: true,
-            ordinal: 0,
-          },
-        ],
-      },
-    ];
   });
 
   it('tests unitTypeToReadable with type in typeMap', () => {
@@ -493,10 +472,13 @@ describe('Testing application CSV export service', () => {
     ]);
 
     service.unitTypeToReadable = jest.fn().mockReturnValue('Studio');
-
-    const exportResponse = await service.export(
-      { listingId: randomUUID(), includeDemographics: false },
-      requestingUser,
+    const exportResponse = await service.exportFile(
+      { user: requestingUser } as unknown as ExpressRequest,
+      {} as unknown as Response,
+      {
+        listingId: randomUUID(),
+        includeDemographics: false,
+      },
     );
 
     const headerRow =
@@ -548,9 +530,10 @@ describe('Testing application CSV export service', () => {
 
     service.unitTypeToReadable = jest.fn().mockReturnValue('Studio');
 
-    const exportResponse = await service.export(
+    const exportResponse = await service.exportFile(
+      { user: requestingUser } as unknown as ExpressRequest,
+      {} as unknown as Response,
       { listingId: 'test', includeDemographics: true },
-      requestingUser,
     );
 
     const headerRow =

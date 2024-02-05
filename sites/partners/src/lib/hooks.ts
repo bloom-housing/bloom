@@ -2,7 +2,8 @@ import { useCallback, useContext, useState } from "react"
 import useSWR from "swr"
 import qs from "qs"
 import dayjs from "dayjs"
-import JSZip from "jszip"
+import utc from "dayjs/plugin/utc"
+import tz from "dayjs/plugin/timezone"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { setSiteAlertMessage, t } from "@bloom-housing/ui-components"
 import {
@@ -15,6 +16,10 @@ import {
   OrderByEnum,
   UserRole,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+
+dayjs.extend(utc)
+dayjs.extend(tz)
+
 export interface PaginationProps {
   page?: number
   limit: number | "all"
@@ -119,47 +124,48 @@ export function useListingsData({
   }
 }
 
-export const useListingZip = () => {
+export const useListingExport = () => {
   const { listingsService } = useContext(AuthContext)
 
-  const [zipExportLoading, setZipExportLoading] = useState(false)
-  const [zipExportError, setZipExportError] = useState(false)
-  const [zipCompleted, setZipCompleted] = useState(false)
+  const [csvExportLoading, setCsvExportLoading] = useState(false)
+  const [csvExportError, setCsvExportError] = useState(false)
+  const [csvExportSuccess, setCsvExportSuccess] = useState(false)
 
   const onExport = useCallback(async () => {
-    setZipExportError(false)
-    setZipCompleted(false)
-    setZipExportLoading(true)
-    // const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone.replace("/", "-")
+    setCsvExportError(false)
+    setCsvExportSuccess(false)
+    setCsvExportLoading(true)
 
     try {
-      // TODO: connect to the csv endpoint when it is implemented
-      // const content = await listingsService.listAsCsv({ timeZone })
-      const content = { listingCsv: "", unitCsv: "" }
+      const content = await listingsService.listAsCsv(
+        { timeZone: dayjs.tz.guess() },
+        { responseType: "arraybuffer" }
+      )
+      const blob = new Blob([new Uint8Array(content)], { type: "application/zip" })
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement("a")
+      link.href = url
       const now = new Date()
       const dateString = dayjs(now).format("YYYY-MM-DD_HH-mm")
-      const zip = new JSZip()
-      zip.file(dateString + "_listing_data.csv", content?.listingCsv)
-      zip.file(dateString + "_unit_data.csv", content?.unitCsv)
-      await zip.generateAsync({ type: "blob" }).then(function (blob) {
-        const fileLink = document.createElement("a")
-        fileLink.setAttribute("download", `${dateString}-complete-listing-data.zip`)
-        fileLink.href = URL.createObjectURL(blob)
-        fileLink.click()
-      })
-      setZipCompleted(true)
+      link.setAttribute("download", `${dateString}-complete-listing-data.zip`)
+      document.body.appendChild(link)
+      link.click()
+      link.parentNode.removeChild(link)
+      setCsvExportSuccess(true)
       setSiteAlertMessage(t("t.exportSuccess"), "success")
     } catch (err) {
-      setZipExportError(true)
+      console.log(err)
+      setCsvExportError(true)
     }
-    setZipExportLoading(false)
-  }, [listingsService])
+
+    setCsvExportLoading(false)
+  }, [])
 
   return {
     onExport,
-    zipCompleted,
-    zipExportLoading,
-    zipExportError,
+    csvExportLoading,
+    csvExportError,
+    csvExportSuccess,
   }
 }
 

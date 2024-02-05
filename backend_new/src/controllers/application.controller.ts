@@ -9,6 +9,7 @@ import {
   Put,
   Query,
   Request,
+  Res,
   StreamableFile,
   UseGuards,
   UseInterceptors,
@@ -21,7 +22,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { Request as ExpressRequest } from 'express';
+import { Request as ExpressRequest, Response } from 'express';
 import { ApplicationService } from '../services/application.service';
 import { Application } from '../dtos/applications/application.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
@@ -44,8 +45,8 @@ import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { PermissionAction } from '../decorators/permission-action.decorator';
-import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
 import { ApplicationCsvExporterService } from '../services/application-csv-export.service';
+import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
 
 @Controller('applications')
 @ApiTags('applications')
@@ -83,12 +84,14 @@ export class ApplicationController {
   @Header('Content-Type', 'text/csv')
   async listAsCsv(
     @Request() req: ExpressRequest,
+    @Res({ passthrough: true }) res: Response,
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationCsvQueryParams,
   ): Promise<StreamableFile> {
-    return await this.applicationCsvExportService.export(
+    return await this.applicationCsvExportService.exportFile(
+      req,
+      res,
       queryParams,
-      mapTo(User, req['user']),
     );
   }
 

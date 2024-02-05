@@ -55,7 +55,7 @@ export type getListingsArgs = {
   where: Prisma.ListingsWhereInput;
 };
 
-const views: Partial<Record<ListingViews, Prisma.ListingsInclude>> = {
+export const views: Partial<Record<ListingViews, Prisma.ListingsInclude>> = {
   fundamentals: {
     jurisdictions: true,
     listingsBuildingAddress: true,
@@ -127,6 +127,12 @@ views.full = {
 views.details = {
   ...views.base,
   ...views.full,
+};
+
+views.csv = {
+  ...views.base,
+  ...views.full,
+  userAccounts: true,
 };
 
 const CRON_JOB_NAME = 'LISTING_CRON_JOB';

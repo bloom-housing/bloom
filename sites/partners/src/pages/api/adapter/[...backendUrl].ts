@@ -12,6 +12,9 @@ import { maskAxiosResponse } from "@bloom-housing/shared-helpers"
   This file functionally works as a proxy to work in the new cookie paradigm
 */
 
+// all endpoints that return a zip file
+const zipEndpoints = ["listings/csv"]
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const jar = new CookieJar()
   const axios = wrapper(
@@ -45,12 +48,29 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     configs.data = req.body || {}
 
     // send request to backend
-    const response = await axios.request(configs)
+    // the zip endpoints also require a responseType of arraybuffer
+    const response = await axios.request({
+      ...configs,
+      responseType: zipEndpoints.includes(req.url.replace("/api/adapter/", ""))
+        ? "arraybuffer"
+        : undefined,
+    })
     // set up response from next api based on response from backend
     const cookies = await jar.getSetCookieStrings(process.env.BACKEND_API_BASE || "")
     res.setHeader("Set-Cookie", cookies)
     res.statusMessage = response.statusText
-    res.status(response.status).json(response.data)
+    if (response.headers) {
+      if (response.headers["content-type"]) {
+        res.setHeader("content-type", response.headers["content-type"])
+      }
+      if (response.headers["content-disposition"]) {
+        res.setHeader("content-disposition", response.headers["content-disposition"])
+      }
+      if (response.headers["connection"]) {
+        res.setHeader("connection", response.headers["connection"])
+      }
+    }
+    res.status(response.status).send(response.data)
   } catch (e) {
     console.error(
       "partner's backend url adapter error:",
