@@ -3,6 +3,7 @@ module.exports = {
   rootDir: '../',
   testEnvironment: 'node',
   testRegex: 'spec.ts$',
+  workerIdleMemoryLimit: '500M',
   transform: {
     '^.+\\.(t|j)s$': [
       'ts-jest',

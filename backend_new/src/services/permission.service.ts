@@ -61,9 +61,10 @@ export class PermissionService {
             id: obj.id,
           },
         });
-        obj.jurisdictionId = accessedUser.jurisdictions.map(
-          (jurisdiction) => jurisdiction.id,
-        )[0];
+        obj.jurisdictionId =
+          accessedUser?.jurisdictions.map(
+            (jurisdiction) => jurisdiction.id,
+          )[0] || '';
       }
     }
     return await e.enforce(user ? user.id : 'anonymous', type, action, obj);

@@ -172,16 +172,16 @@ jobs:
       - run: yarn test:shared:helpers
   jest-backend:
     executor: standard-node
-    resource_class: large
     steps:
+      - checkout
       - restore_cache:
           key: build-cache-new-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: DB Setup + New Backend Core Tests
+          working_directory: backend_new
           command: |
-            yarn backend:new:install
-            yarn test:backend:new:dbsetup
-            yarn test:backend:new:cov
+            yarn install
+            yarn test:cov-ci
           environment:
             PORT: "3100"
             EMAIL_API_KEY: "SG.SOME-LONG-SECRET-KEY"
@@ -201,9 +201,7 @@ workflows:
       - jest-shared-helpers:
           requires:
             - setup
-      - jest-backend:
-          requires:
-            - setup-backend
+      - jest-backend
       - build-public:
           requires:
             - setup
