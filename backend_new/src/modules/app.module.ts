@@ -1,4 +1,5 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
+import { SchedulerRegistry } from '@nestjs/schedule';
 import { AppController } from '../controllers/app.controller';
 import { AppService } from '../services/app.service';
 import { PrismaModule } from './prisma.module';
@@ -36,7 +37,7 @@ import { MapLayerModule } from './map-layer.module';
     MapLayerModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, Logger, SchedulerRegistry],
   exports: [
     ListingModule,
     AmiChartModule,

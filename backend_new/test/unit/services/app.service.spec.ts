@@ -1,4 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { Logger } from '@nestjs/common';
+import { SchedulerRegistry } from '@nestjs/schedule';
 import { AppService } from '../../../src/services/app.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 
@@ -7,7 +9,7 @@ describe('Testing app service', () => {
   let prisma: PrismaService;
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [AppService, PrismaService],
+      providers: [AppService, PrismaService, Logger, SchedulerRegistry],
     }).compile();
 
     service = module.get<AppService>(AppService);
