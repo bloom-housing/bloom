@@ -1,13 +1,16 @@
 .site-alert-banner-container {
-  width: 100%;
   background-color: var(--seeds-color-alert-light);
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .site-alert-banner-content {
-  max-width: var(--seeds-width-5xl);
+  --common-message-max-width: var(--seeds-width-5xl);
+  --common-message-font-size: var(--seeds-font-size-base);
+  @media (--sm-only) {
+    --common-message-font-size: var(--seeds-font-size-sm);
+  }
   width: 100%;
-  font-size: var(--seeds-font-size-base);
 }

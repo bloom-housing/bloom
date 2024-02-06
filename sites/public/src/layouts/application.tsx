@@ -1,4 +1,5 @@
 import React, { useContext } from "react"
+import dayjs from "dayjs"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import Head from "next/head"
@@ -73,17 +74,31 @@ const Layout = (props) => {
     })
   }
 
+  const getInMaintenance = () => {
+    let inMaintenance = false
+    const maintenanceWindow = process.env.maintenanceWindow?.split(",")
+    if (maintenanceWindow.length === 2) {
+      const startWindow = dayjs(maintenanceWindow[0], "YYYY-MM-DD HH:mm Z")
+      const endWindow = dayjs(maintenanceWindow[1], "YYYY-MM-DD HH:mm Z")
+      const now = dayjs()
+      inMaintenance = now > startWindow && now < endWindow
+    }
+    return inMaintenance
+  }
+
   return (
     <div className="site-wrapper">
       <div className="site-content">
         <Head>
           <title>{t("nav.siteTitle")}</title>
         </Head>
-        <div className={styles["site-alert-banner-container"]}>
-          <Alert className={styles["site-alert-banner-content"]} variant={"alert"}>
-            {t("alert.maintenance", { date: "date", time: "time", hoursDuration: "3" })}
-          </Alert>
-        </div>
+        {getInMaintenance() && (
+          <div className={styles["site-alert-banner-container"]}>
+            <Alert className={styles["site-alert-banner-content"]} variant={"alert"}>
+              {t("alert.maintenance")}
+            </Alert>
+          </div>
+        )}
         <SiteHeader
           logoSrc="/images/logo_glyph.svg"
           homeURL="/"

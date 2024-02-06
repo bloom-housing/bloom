@@ -28,7 +28,7 @@
   "account.settings.placeholders.month": "Tháng",
   "account.settings.placeholders.year": "Năm",
   "account.settings.update": "Cập nhật",
-  "alert.maintenace": "Trang web này sẽ được bảo trì theo lịch trình vào %{date} lúc %{time} trong khoảng %{hoursDuration} giờ. Chúng tôi xin lỗi vì bất kỳ sự bất tiện nào gây ra trong thời gian này",
+  "alert.maintenace": "Trang web này đang được bảo trì theo lịch trình. Chúng tôi xin lỗi vì bất kỳ sự bất tiện nào gây ra trong thời gian này.",
   "application.ada.hearing": "Dành cho các cư dân bị Suy giảm Thính lực",
   "application.ada.label": "Các Căn nhà Dễ tiếp cập của ADA",
   "application.ada.mobility": "Dành cho các cư dân Vận động Khó khăn",
