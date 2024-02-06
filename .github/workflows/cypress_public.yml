@@ -102,7 +102,7 @@ jobs:
           start: yarn dev:listings, yarn start
           # trunk-ignore(yamllint/quoted-strings)
           wait-on: 'http://localhost:3100/jurisdictions'
-          record: false # set this value to true to record videos in cypress cloud for debugging purposes - skip passing tests
+          record: true # set this value to true to record videos in cypress cloud for debugging purposes - skip passing tests
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.PUBLIC_CYPRESS_RECORD_KEY }}
 
