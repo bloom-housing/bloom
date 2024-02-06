@@ -117,6 +117,22 @@ export class RootService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Trigger the removal of CSVs job
+   */
+  clearCsv(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/clearCSV"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class ListingsService {
@@ -281,22 +297,6 @@ export class ListingsService {
   process(options: IRequestOptions = {}): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/listings/process"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Trigger the removal of CSVs job
-   */
-  clearCsv(options: IRequestOptions = {}): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/listings/clearCSV"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
