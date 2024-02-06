@@ -21,6 +21,11 @@ import { stateKeys } from "../utilities/formKeys"
 import { AddressHolder } from "../utilities/constants"
 import { FormAddressAlternate } from "./address/FormAddressAlternate"
 
+// Removes periods, commas, and apostrophes
+export const cleanMultiselectString = (name: string | undefined) => {
+  return name?.replace(/\.|,|'/g, "")
+}
+
 export const listingSectionQuestions = (
   listing: Listing,
   applicationSection: ApplicationSection
@@ -37,8 +42,8 @@ export const fieldName = (
   applicationSection: ApplicationSection,
   optionName?: string
 ) => {
-  return `application.${applicationSection}.${questionName?.replace(/'/g, "")}${
-    optionName ? `.${optionName?.replace(/'/g, "")}` : ""
+  return `application.${applicationSection}.${cleanMultiselectString(questionName)}${
+    optionName ? `.${cleanMultiselectString(optionName)}` : ""
   }`
 }
 
@@ -343,7 +348,8 @@ export const mapCheckboxesToApi = (
   question: MultiselectQuestion,
   applicationSection: ApplicationSection
 ): ApplicationMultiselectQuestion => {
-  const data = formData["application"][applicationSection][question.text.replace(/'/g, "")]
+  const data =
+    formData["application"][applicationSection][cleanMultiselectString(question.text) || ""]
   const claimed = !!Object.keys(data).filter((key) => data[key] === true).length
 
   const addressFields = Object.keys(data).filter((option) => Object.keys(data[option]))
@@ -378,8 +384,17 @@ export const mapCheckboxesToApi = (
         }
       }
 
+      const getFinalKey = () => {
+        const optionKey = question?.options?.find(
+          (elem) => cleanMultiselectString(elem.text) === key
+        )?.text
+        const cleanOptOutKey = cleanMultiselectString(question?.optOutText)
+        if (cleanOptOutKey === key) return question?.optOutText || key
+        return optionKey || key
+      }
+
       return {
-        key,
+        key: getFinalKey(),
         mapPinPosition: data?.[`${key}-mapPinPosition`],
         checked: data[key] === true,
         extraData: extraData,
@@ -433,26 +448,27 @@ export const mapApiToMultiselectForm = (
     if (appQuestion.inputType === "checkbox") {
       options = question.options.reduce((acc, curr) => {
         const claimed = curr.checked
+        const cleanKey = cleanMultiselectString(curr.key) || ""
         if (appQuestion.inputType === "checkbox") {
-          acc[curr.key] = claimed
+          acc[cleanKey] = claimed
           if (curr.extraData?.length) {
-            acc[`${curr.key}-address`] = curr.extraData[0].value
+            acc[`${cleanKey}-address`] = curr.extraData[0].value
 
             const addressHolderName = curr.extraData?.find(
               (field) => field.key === AddressHolder.Name
             )
             if (addressHolderName) {
-              acc[`${curr.key}-${AddressHolder.Name}`] = addressHolderName.value
+              acc[`${cleanKey}-${AddressHolder.Name}`] = addressHolderName.value
             }
 
             const addressHolderRelationship = curr.extraData?.find(
               (field) => field.key === AddressHolder.Relationship
             )
             if (addressHolderRelationship) {
-              acc[`${curr.key}-${AddressHolder.Relationship}`] = addressHolderRelationship.value
+              acc[`${cleanKey}-${AddressHolder.Relationship}`] = addressHolderRelationship.value
             }
             if (curr?.mapPinPosition) {
-              acc[`${curr.key}-mapPinPosition`] = curr.mapPinPosition
+              acc[`${cleanKey}-mapPinPosition`] = curr.mapPinPosition
             }
           }
         }
