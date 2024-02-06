@@ -28,6 +28,7 @@ describe("<Applications>", () => {
         preview={false}
         listingStatus="active"
         listingName={"Listing name"}
+        listingId="123"
       />
     )
     expect(getByText("How to Apply")).toBeTruthy()
@@ -59,6 +60,7 @@ describe("<Applications>", () => {
         preview={false}
         listingStatus="active"
         listingName={"Listing name"}
+        listingId="123"
       />
     )
     expect(queryByTestId("get-application-section")).toBeNull()
@@ -86,6 +88,7 @@ describe("<Applications>", () => {
         preview={false}
         listingStatus="pending"
         listingName={"Listing name"}
+        listingId="123"
       />
     )
     expect(getByText("Apply Online").closest("button")?.disabled).toBe(true)
@@ -113,6 +116,7 @@ describe("<Applications>", () => {
         preview={true}
         listingStatus="pending"
         listingName={"Listing name"}
+        listingId="123"
       />
     )
     expect(getByText("Apply Online").closest("a")?.getAttribute("href")).toBe("online-app-url")
@@ -140,6 +144,7 @@ describe("<Applications>", () => {
         preview={false}
         listingStatus="active"
         listingName={"Listing name"}
+        listingId="123"
       />
     )
     expect(queryByText("Apply Online")).toBe(null)

@@ -16,6 +16,17 @@ beforeAll(() => {
   mockNextRouter()
 })
 
+beforeEach(() => {
+  server.use(
+    rest.get("http://localhost/api/adapter/mapLayers", (_req, res, ctx) => {
+      return res(ctx.json({}))
+    }),
+    rest.get("http://localhost:3100/mapLayers", (_req, res, ctx) => {
+      return res(ctx.json({}))
+    })
+  )
+})
+
 afterEach(() => server.resetHandlers())
 
 afterAll(() => server.close())

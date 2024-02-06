@@ -41,9 +41,10 @@ type ContextProps = {
   userService: UserService
   authService: AuthService
   multiselectQuestionsService: MultiselectQuestionsService
+  unitTypesService: UnitTypesService
   reservedCommunityTypeService: ReservedCommunityTypesService
   unitPriorityService: UnitAccessibilityPriorityTypesService
-  unitTypesService: UnitTypesService
+  mapLayersService: MapLayersService
   loadProfile: (redirect?: string) => void
   login: (
     email: string,
@@ -207,6 +208,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
     userService: new UserService(),
     authService: new AuthService(),
     multiselectQuestionsService: new MultiselectQuestionsService(),
+    mapLayersService: new MapLayersService(),
     reservedCommunityTypeService: new ReservedCommunityTypesService(),
     unitPriorityService: new UnitAccessibilityPriorityTypesService(),
     unitTypesService: new UnitTypesService(),

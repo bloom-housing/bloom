@@ -196,6 +196,26 @@ const ApplicationMultiselectQuestionStep = ({
       }
       return null
     }
+    if (question?.links) {
+      return (
+        <>
+          {strings?.subTitle ?? <p>{question?.description}</p>}
+          <div className="pt-4">
+            {question.links.map((link) => (
+              <a
+                key={link.url}
+                className="block text-base pt-2 text-blue-500 underline"
+                href={link.url}
+                target={"_blank"}
+                rel="noreferrer noopener"
+              >
+                {link.title}
+              </a>
+            ))}
+          </div>
+        </>
+      )
+    }
     return strings?.subTitle ?? question?.description
   }
 

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useContext } from "react"
 import ReactDOMServer from "react-dom/server"
 import Markdown from "markdown-to-jsx"
 import {
@@ -41,6 +41,7 @@ import {
   getSummariesTable,
   IMAGE_FALLBACK_URL,
   pdfUrlFromListingEvents,
+  AuthContext,
 } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { ErrorPage } from "../../pages/_error"
@@ -70,6 +71,7 @@ interface ListingProps {
 }
 
 export const ListingView = (props: ListingProps) => {
+  const { initialStateLoaded, profile } = useContext(AuthContext)
   let buildingSelectionCriteria, preferencesSection
   const { listing } = props
   const { content: appStatusContent, subContent: appStatusSubContent } =
@@ -350,10 +352,17 @@ export const ListingView = (props: ListingProps) => {
     return date ? dayjs(date).format(format) : null
   }
 
+  const redirectIfSignedOut = () =>
+    process.env.showMandatedAccounts && initialStateLoaded && !profile
+
   const applySidebar = () => (
     <>
       <GetApplication
-        onlineApplicationURL={getOnlineApplicationURL()}
+        onlineApplicationURL={
+          redirectIfSignedOut()
+            ? `/sign-in?redirectUrl=/applications/start/choose-language&listingId=${listing.id}`
+            : getOnlineApplicationURL()
+        }
         applicationsOpen={!appOpenInFuture}
         applicationsOpenDate={getDateString(listing.applicationOpenDate, "MMMM D, YYYY")}
         paperApplications={getPaperApplications()}
@@ -368,6 +377,7 @@ export const ListingView = (props: ListingProps) => {
         applicationPickUpAddress={getAddress(listing.applicationPickUpAddressType, "pickUp")}
         preview={props.preview}
         listingName={listing.name}
+        listingId={listing.id}
         listingStatus={listing.status}
       />
       {!(

@@ -588,3 +588,17 @@ const useCsvExport = (endpoint: () => Promise<string>, fileName: string) => {
     csvExportSuccess,
   }
 }
+
+export function useMapLayersList(jurisdictionId?: string) {
+  const { mapLayersService } = useContext(AuthContext)
+  const backendMapLayersUrl = `/api/adapter/mapLayers/${jurisdictionId}`
+
+  const fetcher = () => mapLayersService.list({ jurisdictionId })
+  const { data, error } = useSWR(backendMapLayersUrl, fetcher)
+
+  return {
+    mapLayers: data,
+    mapLayersLoading: !error && !data,
+    mapLayersError: error,
+  }
+}

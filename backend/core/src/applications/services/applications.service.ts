@@ -235,6 +235,17 @@ export class ApplicationsService {
         return await applicationsRepository.findOne({ where: { id: newApplication.id } })
       }
     )
+
+    const listing = await this.listingsService.findOne(application.listingId)
+
+    // Calculate geocoding preferences after save
+    if (listing.jurisdiction?.enableGeocodingPreferences) {
+      try {
+        void this.geocodingService.validateGeocodingPreferences(application, listing)
+      } catch (e) {
+        console.warn("error while validating geocoding preferences")
+      }
+    }
     return app
   }
 
