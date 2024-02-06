@@ -220,7 +220,7 @@ export default () => {
             </CardSection>
           </Form>
           <CardSection divider={"inset"} className={accountCardStyles["account-card-section"]}>
-            <Heading size="2xl" className="mb-6">
+            <Heading priority={2} size="2xl" className="mb-6">
               {t("account.haveAnAccount")}
             </Heading>
             <Button href="/sign-in" variant="primary-outlined">
