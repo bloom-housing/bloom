@@ -19,6 +19,7 @@ import {
   imageUrlFromListing,
   getSummariesTable,
   IMAGE_FALLBACK_URL,
+  cleanMultiselectString,
 } from "@bloom-housing/shared-helpers"
 
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -184,7 +185,9 @@ export const untranslateMultiselectQuestion = (
 
   data.forEach((datum) => {
     const question = multiselectQuestions.find(
-      (elem) => elem.multiselectQuestion.text === datum.key
+      (elem) =>
+        elem.multiselectQuestion.text === datum.key ||
+        elem.multiselectQuestion.untranslatedText === datum.key
     )?.multiselectQuestion
 
     if (question) {
@@ -192,11 +195,14 @@ export const untranslateMultiselectQuestion = (
 
       if (datum.options) {
         datum.options.forEach((option) => {
-          const selectedOption = question.options.find((elem) => elem.text === option.key)
-
+          const selectedOption = question.options.find((elem) => {
+            return cleanMultiselectString(elem.text) === cleanMultiselectString(option.key)
+          })
           if (selectedOption) {
             option.key = selectedOption.untranslatedText ?? selectedOption.text
-          } else if (question.optOutText === option.key) {
+          } else if (
+            cleanMultiselectString(question?.optOutText) === cleanMultiselectString(option.key)
+          ) {
             option.key = question.untranslatedOptOutText ?? question.optOutText
           }
 
