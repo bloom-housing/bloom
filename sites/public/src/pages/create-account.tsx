@@ -21,6 +21,7 @@ import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpe
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
 import { AccountCard } from "../components/account/AccountCard"
+import accountCardStyles from "./account/account.module.scss"
 import styles from "../../styles/create-account.module.scss"
 
 export default () => {
@@ -87,7 +88,7 @@ export default () => {
           )}
           <SiteAlert type="notice" dismissable />
           <Form id="create-account" onSubmit={handleSubmit(onSubmit)}>
-            <CardSection divider={"inset"}>
+            <CardSection divider={"inset"} className={accountCardStyles["account-card-section"]}>
               <label className={styles["create-account-header"]} htmlFor="firstName">
                 {t("application.name.yourName")}
               </label>
@@ -140,7 +141,7 @@ export default () => {
                 controlClassName={styles["create-account-input"]}
               />
             </CardSection>
-            <CardSection divider={"inset"}>
+            <CardSection divider={"inset"} className={accountCardStyles["account-card-section"]}>
               <DOBField
                 register={register}
                 required={true}
@@ -155,7 +156,7 @@ export default () => {
               <p className={"field-sub-note"}>{t("application.name.dobHelper")}</p>
             </CardSection>
 
-            <CardSection divider={"inset"}>
+            <CardSection divider={"inset"} className={accountCardStyles["account-card-section"]}>
               <Field
                 caps={true}
                 type="email"
@@ -168,7 +169,7 @@ export default () => {
                 controlClassName={styles["create-account-input"]}
               />
             </CardSection>
-            <CardSection divider={"inset"}>
+            <CardSection divider={"inset"} className={accountCardStyles["account-card-section"]}>
               <Field
                 caps={true}
                 type={"password"}
@@ -218,7 +219,7 @@ export default () => {
               </Button>
             </CardSection>
           </Form>
-          <CardSection divider={"inset"}>
+          <CardSection divider={"inset"} className={accountCardStyles["account-card-section"]}>
             <Heading size="2xl" className="mb-6">
               {t("account.haveAnAccount")}
             </Heading>
