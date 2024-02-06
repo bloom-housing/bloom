@@ -21,8 +21,8 @@ const SubmittedApplicationView = ({ application, listing }: SubmittedApplication
     <>
       <Card spacing={"sm"} className={"my-6"}>
         <Card.Section className={"bg-primary px-8 py-4"}>
-          <Heading priority={1} className={"text-xl font-bold font-alt-sans text-white"}>
-            {t("account.application.confirmation")}
+          <Heading priority={1} size="xl" className={"font-bold font-alt-sans text-white"}>
+            {listing.name}
           </Heading>
         </Card.Section>
         <Card.Section className={"px-8"}>

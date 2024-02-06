@@ -65,10 +65,10 @@ const Applications = () => {
       <Card.Section className={styles["account-card-section"]}>
         <div className={styles["application-no-results"]}>
           {error ? (
-            <Heading size="xl">{`${t("account.errorFetchingApplications")}`}</Heading>
+            <Heading priority={2} size="xl">{`${t("account.errorFetchingApplications")}`}</Heading>
           ) : (
             <>
-              <Heading className={styles["application-no-results-text"]} size="xl">
+              <Heading priority={2} className={styles["application-no-results-text"]} size="xl">
                 {t("account.noApplications")}
               </Heading>
               <Button size="sm" variant="primary-outlined" href="/listings">
@@ -93,6 +93,7 @@ const Applications = () => {
               iconSymbol="application"
               title={t("account.myApplications")}
               subtitle={t("account.myApplicationsSubtitle")}
+              headingPriority={1}
               divider="inset"
             >
               <>
