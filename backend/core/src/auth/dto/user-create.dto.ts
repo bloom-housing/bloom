@@ -38,6 +38,7 @@ export class UserCreateDto extends OmitType(UserDto, [
   passwordConfirmation: string
 
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   @Match("email", { groups: [ValidationsGroupsEnum.default] })
   @EnforceLowerCase()
