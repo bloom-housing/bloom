@@ -77,7 +77,7 @@ const Layout = (props) => {
   const getInMaintenance = () => {
     let inMaintenance = false
     const maintenanceWindow = process.env.maintenanceWindow?.split(",")
-    if (maintenanceWindow.length === 2) {
+    if (maintenanceWindow?.length === 2) {
       const startWindow = dayjs(maintenanceWindow[0], "YYYY-MM-DD HH:mm Z")
       const endWindow = dayjs(maintenanceWindow[1], "YYYY-MM-DD HH:mm Z")
       const now = dayjs()
