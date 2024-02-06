@@ -51,7 +51,7 @@ export const stagingSeed = async (
   await prismaClient.userAccounts.create({
     data: await userFactory({
       roles: { isAdmin: true },
-      email: 'admin@example.com',
+      email: 'morgan.ludtke@exygy.com',
       confirmedAt: new Date(),
       jurisdictionIds: [jurisdiction.id, additionalJurisdiction.id],
       acceptedTerms: true,
