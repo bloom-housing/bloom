@@ -1,23 +1,28 @@
+# trunk-ignore-all(checkov/CKV2_GHA_1)
 name: Public Cypress
-permissions: read-all
+
 on:
   pull_request:
     branches:
       - main
 env:
   PORT: 3100
-  # trunk-ignore(checkov/CKV_SECRET_6): Key is just a placeholder for real secret
-  EMAIL_API_KEY: SOME-LONG-SECRET-KEY
-  APP_SECRET: SOME-LONG-SECRET-KEY
+  # trunk-ignore(yamllint/quoted-strings)
+  # trunk-ignore(checkov/CKV_SECRET_6)
+  EMAIL_API_KEY: 'SOME-LONG-SECRET-KEY'
+  # trunk-ignore(yamllint/quoted-strings)
+  APP_SECRET: 'SOME-LONG-SECRET-KEY'
   CLOUDINARY_SECRET: CLOUDINARY_SECRET
   CLOUDINARY_KEY: CLOUDINARY_KEY
   PARTNERS_PORTAL_URL: http://localhost:3001
-  # trunk-ignore(checkov/CKV_SECRET_4): localhost for testing. basic auth is fine
+  # trunk-ignore(checkov/CKV_SECRET_4)
   DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom
   TEST_DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom_test
   BLOOM_API_BASE: https://api.housingbayarea.bloom.exygy.dev
-  BLOOM_LISTINGS_QUERY: /fake
-  JURISDICTION_NAME: Bay Area
+  # trunk-ignore(yamllint/quoted-strings)
+  BLOOM_LISTINGS_QUERY: "/fake"
+  # trunk-ignore(yamllint/quoted-strings)
+  JURISDICTION_NAME: 'Bay Area'
   BACKEND_API_BASE: http://localhost:3100
   LISTINGS_QUERY: /listings
   NEXTJS_PORT: 3000
@@ -27,7 +32,7 @@ env:
   LISTINGS_ENDPOINT_PATH: /listings
   EXTERNAL_API_BASE: https://api.housingbayarea.bloom.exygy.dev
   MAPBOX_TOKEN: ${{ secrets.MAPBOX_TOKEN }}
-  DISABLE_CORS: TRUE
+  DISABLE_CORS: "TRUE"
   LANGUAGES: en,es,zh,vi,tl
   NOTIFICATIONS_SIGN_UP_URL: http://example.com
 
@@ -48,14 +53,14 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Check postgres
-      # trunk-ignore(actionlint)
+        # trunk-ignore(actionlint/expression)
         run: pg_isready -h 127.0.0.1 -p ${{ job.services.postgres.ports[5432] }}
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v1
         with:
           node-version: 18
 
@@ -95,14 +100,14 @@ jobs:
         run: yarn import:run:local:dev
 
       - name: Cypress run
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v5
         with:
           working-directory: ./sites/public
           build: yarn build
           start: yarn dev:listings, yarn start
           # trunk-ignore(yamllint/quoted-strings)
           wait-on: 'http://localhost:3100/jurisdictions'
-          record: true # set this value to true to record videos in cypress cloud for debugging purposes - skip passing tests
+          record: false # set this value to true to record videos in cypress cloud for debugging purposes - skip passing tests
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.PUBLIC_CYPRESS_RECORD_KEY }}
 
