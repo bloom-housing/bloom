@@ -73,13 +73,14 @@ const Layout = (props) => {
       href: "/sign-in",
     })
   }
-
   const getInMaintenance = () => {
     let inMaintenance = false
     const maintenanceWindow = process.env.maintenanceWindow?.split(",")
     if (maintenanceWindow?.length === 2) {
-      const startWindow = dayjs(maintenanceWindow[0], "YYYY-MM-DD HH:mm Z")
-      const endWindow = dayjs(maintenanceWindow[1], "YYYY-MM-DD HH:mm Z")
+      const convertWindowToDate = (windowString: string) =>
+        dayjs(windowString, "YYYY-MM-DD HH:mm Z")
+      const startWindow = convertWindowToDate(maintenanceWindow[0])
+      const endWindow = convertWindowToDate(maintenanceWindow[1])
       const now = dayjs()
       inMaintenance = now > startWindow && now < endWindow
     }
