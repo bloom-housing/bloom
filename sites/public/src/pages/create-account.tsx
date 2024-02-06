@@ -218,6 +218,7 @@ export default () => {
                 {t("account.createAccount")}
               </Button>
             </CardSection>
+            <hr className="mx-12"></hr>
           </Form>
           <CardSection divider={"inset"} className={accountCardStyles["account-card-section"]}>
             <Heading priority={2} size="2xl" className="mb-6">
