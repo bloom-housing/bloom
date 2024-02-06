@@ -7,20 +7,17 @@ on:
       - main
 env:
   PORT: 3100
-  # trunk-ignore(yamllint/quoted-strings)
-  # trunk-ignore(checkov/CKV_SECRET_6)
-  EMAIL_API_KEY: 'SOME-LONG-SECRET-KEY'
-  # trunk-ignore(yamllint/quoted-strings)
-  APP_SECRET: 'SOME-LONG-SECRET-KEY'
+  # trunk-ignore(checkov/CKV_SECRET_6): this is just a placeholder
+  EMAIL_API_KEY: SOME-LONG-SECRET-KEY
+  APP_SECRET: SOME-LONG-SECRET-KEY
   CLOUDINARY_SECRET: CLOUDINARY_SECRET
   CLOUDINARY_KEY: CLOUDINARY_KEY
   PARTNERS_PORTAL_URL: http://localhost:3001
-  # trunk-ignore(checkov/CKV_SECRET_4)
+  # trunk-ignore(checkov/CKV_SECRET_4): local test basic auth is fine. 
   DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom
   TEST_DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom_test
   BLOOM_API_BASE: https://api.housingbayarea.bloom.exygy.dev
-  # trunk-ignore(yamllint/quoted-strings)
-  BLOOM_LISTINGS_QUERY: "/fake"
+  BLOOM_LISTINGS_QUERY: /fake
   # trunk-ignore(yamllint/quoted-strings)
   JURISDICTION_NAME: 'Bay Area'
   BACKEND_API_BASE: http://localhost:3100
