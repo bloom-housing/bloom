@@ -120,9 +120,9 @@ export class RootService {
   /**
    * Trigger the removal of CSVs job
    */
-  clearCsv(options: IRequestOptions = {}): Promise<SuccessDTO> {
+  clearTempFiles(options: IRequestOptions = {}): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/clearCSV"
+      let url = basePath + "/clearTempFiles"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 

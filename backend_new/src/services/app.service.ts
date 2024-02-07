@@ -28,7 +28,7 @@ export class AppService implements OnModuleInit {
       this.prisma,
       CRON_JOB_NAME,
       process.env.TEMP_FILE_CLEAR_CRON_STRING,
-      this.clearCSV.bind(this),
+      this.clearTempFiles.bind(this),
       this.logger,
       this.schedulerRegistry,
     );
@@ -44,7 +44,7 @@ export class AppService implements OnModuleInit {
   /**
     runs the job to remove existing csvs and zip files
   */
-  async clearCSV(): Promise<SuccessDTO> {
+  async clearTempFiles(): Promise<SuccessDTO> {
     this.logger.warn('listing csv clear job running');
     await this.markCronJobAsStarted();
     let filesDeletedCount = 0;
@@ -56,18 +56,26 @@ export class AppService implements OnModuleInit {
         files.map((f) => {
           if (!f.includes('.git')) {
             filesDeletedCount++;
-            fs.unlink(join(process.cwd(), 'src/temp/', f), (err) => {
-              if (err) {
-                throw new InternalServerErrorException(err);
-              }
-            });
+            try {
+              fs.rm(
+                join(process.cwd(), 'src/temp/', f),
+                { recursive: true },
+                (err) => {
+                  if (err) {
+                    throw new InternalServerErrorException(err);
+                  }
+                },
+              );
+            } catch (e) {
+              throw new InternalServerErrorException(e);
+            }
           }
         }),
       );
+      this.logger.warn(
+        `listing csv clear job completed: ${filesDeletedCount} files were deleted`,
+      );
     });
-    this.logger.warn(
-      `listing csv clear job completed: ${filesDeletedCount} files were deleted`,
-    );
     return {
       success: true,
     };

@@ -35,16 +35,16 @@ export class AppController {
     return await this.appService.healthCheck();
   }
 
-  @Put('clearCSV')
+  @Put('clearTempFiles')
   @ApiOperation({
     summary: 'Trigger the removal of CSVs job',
-    operationId: 'clearCSV',
+    operationId: 'clearTempFiles',
   })
   @ApiOkResponse({ type: SuccessDTO })
   @PermissionAction(permissionActions.submit)
   @UseInterceptors(ActivityLogInterceptor)
   @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
-  async clearCSV(): Promise<SuccessDTO> {
-    return await this.appService.clearCSV();
+  async clearTempFiles(): Promise<SuccessDTO> {
+    return await this.appService.clearTempFiles();
   }
 }
