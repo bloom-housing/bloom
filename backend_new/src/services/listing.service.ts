@@ -502,6 +502,11 @@ export class ListingService implements OnModuleInit {
       },
     );
 
+    dto.unitsAvailable =
+      dto.reviewOrderType !== ReviewOrderTypeEnum.waitlist && dto.units
+        ? dto.units.length
+        : 0;
+
     const rawListing = await this.prisma.listings.create({
       include: views.details,
       data: {

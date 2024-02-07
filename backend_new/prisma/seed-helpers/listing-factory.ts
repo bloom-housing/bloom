@@ -89,6 +89,7 @@ export const listingFactory = async (
           create: optionalParams.applications,
         }
       : undefined,
+    unitsAvailable: units?.length || 0,
     ...featuresAndUtilites(),
     ...buildingFeatures(optionalParams?.includeBuildingFeatures),
     ...additionalEligibilityRules(optionalParams?.includeEligibilityRules),

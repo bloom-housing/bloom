@@ -1660,6 +1660,7 @@ describe('Testing listing service', () => {
         status: ListingsStatusEnum.pending,
         displayWaitlistSize: false,
         unitsSummary: undefined,
+        unitsAvailable: 0,
         listingEvents: {
           create: [],
         },

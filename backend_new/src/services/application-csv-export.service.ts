@@ -89,6 +89,7 @@ export class ApplicationCsvExporterService
       include: view.csv,
       where: {
         listingId: queryParams.listingId,
+        deletedAt: null,
       },
     });
 

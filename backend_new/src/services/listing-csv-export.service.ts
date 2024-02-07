@@ -899,10 +899,10 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           }
         }),
       );
+      this.logger.warn(
+        `listing csv clear job completed: ${filesDeletedCount} files were deleted`,
+      );
     });
-    this.logger.warn(
-      `listing csv clear job completed: ${filesDeletedCount} files were deleted`,
-    );
     return {
       success: true,
     };
