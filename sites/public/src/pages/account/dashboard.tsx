@@ -63,8 +63,9 @@ function Dashboard(props: DashboardProps) {
                     iconSymbol="application"
                     title={t("account.myApplications")}
                     subtitle={t("account.myApplicationsSubtitle")}
+                    thinDesktop
                   >
-                    <Card.Section className={styles["account-card-section"]}>
+                    <Card.Section>
                       <Button
                         size="sm"
                         href={"/account/applications"}
@@ -82,8 +83,9 @@ function Dashboard(props: DashboardProps) {
                     title={t("account.accountSettings")}
                     subtitle={t("account.accountSettingsSubtitle")}
                     id="account-dashboard-settings"
+                    thinDesktop
                   >
-                    <Card.Section className={styles["account-card-section"]}>
+                    <Card.Section>
                       <Button size="sm" href={"/account/edit"} variant="primary-outlined">
                         {t("account.accountSettingsUpdate")}
                       </Button>

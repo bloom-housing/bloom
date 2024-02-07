@@ -13,11 +13,15 @@ interface AccountCardProps {
   divider?: "flush" | "inset"
   headingPriority?: 1 | 2 | 3 | 4 | 5 | 6
   className?: string
+  thinDesktop?: boolean
+  thinMobile?: boolean
 }
 
 const AccountCard = (props: AccountCardProps) => {
   const classNames = [styles["account-card"]]
   if (props.className) classNames.push(props.className)
+  if (!props.thinDesktop) classNames.push(styles["account-card-inline-desktop"])
+  if (props.thinMobile) classNames.push(styles["account-card-inline-mobile"])
 
   const customIcon = CustomIconMap[props.iconSymbol]
 

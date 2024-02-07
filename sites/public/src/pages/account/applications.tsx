@@ -62,7 +62,7 @@ const Applications = () => {
 
   const noApplicationsSection = () => {
     return (
-      <Card.Section className={styles["account-card-section"]}>
+      <Card.Section className={styles["account-card-applications-section"]}>
         <div className={styles["application-no-results"]}>
           {error ? (
             <Heading priority={2} size="xl">{`${t("account.errorFetchingApplications")}`}</Heading>
@@ -95,6 +95,7 @@ const Applications = () => {
               subtitle={t("account.myApplicationsSubtitle")}
               headingPriority={1}
               divider="inset"
+              thinMobile
             >
               <>
                 <LoadingOverlay isLoading={loading}>

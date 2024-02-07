@@ -170,7 +170,7 @@ const Edit = () => {
                 {nameAlert.message}
               </AlertBox>
             )}
-            <Card.Section divider="inset" className={styles["account-card-section"]}>
+            <Card.Section divider="inset" className={styles["account-card-edit-section"]}>
               <Form id="update-name" onSubmit={handleSubmit(onNameSubmit)}>
                 <label className={styles["account-settings-label"]} htmlFor="firstName">
                   {t("application.name.yourName")}
@@ -233,7 +233,7 @@ const Edit = () => {
                 {dobAlert.message}
               </AlertBox>
             )}
-            <Card.Section divider="inset" className={styles["account-card-section"]}>
+            <Card.Section divider="inset" className={styles["account-card-edit-section"]}>
               <Form id="update-birthdate" onSubmit={handleSubmit(onBirthdateSubmit)}>
                 <DOBField
                   id="dateOfBirth"
@@ -265,7 +265,7 @@ const Edit = () => {
                 {emailAlert.message}
               </AlertBox>
             )}
-            <Card.Section divider="inset" className={styles["account-card-section"]}>
+            <Card.Section divider="inset" className={styles["account-card-edit-section"]}>
               <Form id="update-email" onSubmit={handleSubmit(onEmailSubmit)}>
                 <label className={styles["account-settings-label"]} htmlFor="email">
                   {t("application.name.yourEmailAddress")}
@@ -298,7 +298,7 @@ const Edit = () => {
                 {passwordAlert.message}
               </AlertBox>
             )}
-            <Card.Section divider="inset" className={styles["account-card-section"]}>
+            <Card.Section divider="inset" className={styles["account-card-edit-section"]}>
               <Form id="update-password" onSubmit={handleSubmit(onPasswordSubmit)}>
                 <fieldset>
                   <legend className={styles["account-settings-label"]}>
