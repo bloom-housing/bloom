@@ -155,19 +155,6 @@ export class ListingController {
     return await this.listingService.process();
   }
 
-  @Put('clearCSV')
-  @ApiOperation({
-    summary: 'Trigger the removal of CSVs job',
-    operationId: 'clearCSV',
-  })
-  @ApiOkResponse({ type: SuccessDTO })
-  @PermissionAction(permissionActions.submit)
-  @UseInterceptors(ActivityLogInterceptor)
-  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
-  async clearCSV(): Promise<SuccessDTO> {
-    return await this.listingCsvExportService.clearCSV();
-  }
-
   @Put(':id')
   @ApiOperation({ summary: 'Update listing by id', operationId: 'update' })
   @UsePipes(new ListingCreateUpdateValidationPipe(defaultValidationPipeOptions))
