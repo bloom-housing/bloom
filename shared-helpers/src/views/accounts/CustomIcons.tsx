@@ -1,4 +1,5 @@
 import { t } from "@bloom-housing/ui-components"
+import React from "react"
 
 export const Application = (
   <svg
