@@ -15,8 +15,6 @@ import {
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import { EnumUserErrorExtraModelUserErrorMessages } from "@bloom-housing/backend-core/types"
-import { HeadingGroup } from "@bloom-housing/ui-seeds"
-import SignUpBenefits from "../components/account/SignUpBenefits"
 
 const SignIn = () => {
   const { login, userService } = useContext(AuthContext)
@@ -121,76 +119,31 @@ const SignIn = () => {
 
   useEffect(() => {
     if (
-      networkError?.error?.response?.data?.message ===
+      networkError?.error.response.data?.message ===
       EnumUserErrorExtraModelUserErrorMessages.accountNotConfirmed
     ) {
       setConfirmationStatusModal(true)
     }
   }, [networkError])
 
-  const SignUpBenefitsHeadingGroup = (props: { mobileView: boolean }) => {
-    const classNames = props.mobileView ? "py-6 px-4" : ""
-    return (
-      <HeadingGroup
-        heading={t("account.signUpSaveTime.title")}
-        subheading={t("account.signUpSaveTime.subTitle")}
-        size="2xl"
-        className={classNames}
-      />
-    )
-  }
-
   return (
     <>
-      {process.env.showMandatedAccounts ? (
-        <FormsLayout className="sm:max-w-lg md:max-w-full">
-          <div className="flex flex-col md:flex-row md:ml-20 justify-center">
-            <div className="display md:hidden ">
-              <SignUpBenefitsHeadingGroup mobileView={true} />
-            </div>
-            <div className="md:max-w-lg w-full justify-center">
-              <FormSignIn
-                onSubmit={(data) => void onSubmit(data)}
-                control={{ register, errors, handleSubmit, watch }}
-                networkStatus={{
-                  content: networkStatusContent,
-                  type: networkStatusType,
-                  reset: () => {
-                    reset()
-                    resetNetworkError()
-                    setConfirmationStatusMessage(undefined)
-                  },
-                }}
-                showRegisterBtn={true}
-              />
-            </div>
-            <div className="hidden md:flex">
-              <div className="md:flex md:flex-col md:p-8 md:max-w-lg md:w-full ">
-                <SignUpBenefitsHeadingGroup mobileView={false} />
-                <SignUpBenefits idTag="desktop" />
-              </div>
-            </div>
-            <SignUpBenefits idTag="mobile" className="display md:hidden" />
-          </div>
-        </FormsLayout>
-      ) : (
-        <FormsLayout>
-          <FormSignIn
-            onSubmit={(data) => void onSubmit(data)}
-            control={{ register, errors, handleSubmit, watch }}
-            networkStatus={{
-              content: networkStatusContent,
-              type: networkStatusType,
-              reset: () => {
-                reset()
-                resetNetworkError()
-                setConfirmationStatusMessage(undefined)
-              },
-            }}
-            showRegisterBtn={true}
-          />
-        </FormsLayout>
-      )}
+      <FormsLayout>
+        <FormSignIn
+          onSubmit={(data) => void onSubmit(data)}
+          control={{ register, errors, handleSubmit, watch }}
+          networkStatus={{
+            content: networkStatusContent,
+            type: networkStatusType,
+            reset: () => {
+              reset()
+              resetNetworkError()
+              setConfirmationStatusMessage(undefined)
+            },
+          }}
+          showRegisterBtn={true}
+        />
+      </FormsLayout>
 
       <ResendConfirmationModal
         isOpen={confirmationStatusModal}
