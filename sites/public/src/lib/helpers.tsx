@@ -11,6 +11,7 @@ import {
   imageUrlFromListing,
   getSummariesTable,
   IMAGE_FALLBACK_URL,
+  cleanMultiselectString,
 } from "@bloom-housing/shared-helpers"
 import {
   Address,
@@ -185,7 +186,9 @@ export const untranslateMultiselectQuestion = (
 
   data.forEach((datum) => {
     const question = multiselectQuestions.find(
-      (elem) => elem.multiselectQuestions.text === datum.key
+      (elem) =>
+        elem.multiselectQuestions.text === datum.key ||
+        elem.multiselectQuestions.untranslatedText === datum.key
     )?.multiselectQuestions
 
     if (question) {
@@ -193,11 +196,14 @@ export const untranslateMultiselectQuestion = (
 
       if (datum.options) {
         datum.options.forEach((option) => {
-          const selectedOption = question.options.find((elem) => elem.text === option.key)
-
+          const selectedOption = question.options.find((elem) => {
+            return cleanMultiselectString(elem.text) === cleanMultiselectString(option.key)
+          })
           if (selectedOption) {
             option.key = selectedOption.untranslatedText ?? selectedOption.text
-          } else if (question.optOutText === option.key) {
+          } else if (
+            cleanMultiselectString(question?.optOutText) === cleanMultiselectString(option.key)
+          ) {
             option.key = question.untranslatedOptOutText ?? question.optOutText
           }
 
@@ -227,6 +233,7 @@ export const downloadExternalPDF = async (fileURL: string, fileName: string) => 
         const url = window.URL.createObjectURL(new Blob([blob]))
         const link = document.createElement("a")
         link.href = url
+        link.target = "_blank"
         link.setAttribute("download", `${fileName}.pdf`)
 
         document.body.appendChild(link)
