@@ -1,18 +1,24 @@
 import { t } from "@bloom-housing/ui-components"
-import { Button, Card, Heading, Link } from "@bloom-housing/ui-seeds"
+import { Button, Card, Heading, Icon } from "@bloom-housing/ui-seeds"
 import FormSummaryDetails from "../shared/FormSummaryDetails"
 import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import { Application, ApplicationSection, Listing } from "@bloom-housing/backend-core"
 import { useMemo } from "react"
 import { DATE_FORMAT } from "../../lib/constants"
 import dayjs from "dayjs"
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons"
 
 interface SubmittedApplicationViewProps {
   application: Application
   listing: Listing
+  backHref: string
 }
 
-const SubmittedApplicationView = ({ application, listing }: SubmittedApplicationViewProps) => {
+const SubmittedApplicationView = ({
+  application,
+  listing,
+  backHref,
+}: SubmittedApplicationViewProps) => {
   const confirmationDate = useMemo(() => {
     return dayjs().format(DATE_FORMAT)
   }, [])
@@ -22,24 +28,35 @@ const SubmittedApplicationView = ({ application, listing }: SubmittedApplication
       <Card spacing={"sm"} className={"my-6"}>
         <Card.Section className={"bg-primary px-8 py-4"}>
           <Heading priority={1} size="xl" className={"font-bold font-alt-sans text-white"}>
-            {listing.name}
+            {listing?.name}
           </Heading>
         </Card.Section>
         <Card.Section className={"px-8"}>
           <div>
             {listing && (
-              <span className={"lined text-sm"}>
-                <Link href={`/listing/${listing.id}/${listing.urlSlug}`}>
-                  {t("application.confirmation.viewOriginalListing")}
-                </Link>
-              </span>
+              <Button
+                size="sm"
+                leadIcon={<Icon icon={faChevronLeft} />}
+                variant={"text"}
+                href={`/listing/${listing.id}/${listing?.urlSlug}`}
+              >
+                {t("application.confirmation.viewOriginalListing")}
+              </Button>
             )}
           </div>
         </Card.Section>
       </Card>
       <Card spacing={"lg"} className={"mb-6"}>
         <Card.Section divider={"inset"}>
-          <Heading priority={2} size={"2xl"}>
+          <Button
+            size="sm"
+            leadIcon={<Icon icon={faChevronLeft} />}
+            variant={"text"}
+            href={backHref}
+          >
+            {t("t.back")}
+          </Button>
+          <Heading priority={2} size={"2xl"} className="mt-6">
             {t("application.confirmation.informationSubmittedTitle")}
           </Heading>
           <p className="field-note mt-4">
@@ -48,11 +65,9 @@ const SubmittedApplicationView = ({ application, listing }: SubmittedApplication
           </p>
         </Card.Section>
         <Card.Section divider={"inset"} className={"border-none"}>
-          <Heading priority={3} size={"md"}>
-            {t("application.confirmation.lotteryNumber")}
-          </Heading>
-          <p className="font-serif text-2xl my-0">
-            {application.confirmationCode || application.id}
+          <p>{`${t("application.yourLotteryNumber")}:`}</p>
+          <p className="font-serif text-lg mt-3">
+            {application?.confirmationCode || application?.id}
           </p>
         </Card.Section>
         <FormSummaryDetails
@@ -66,7 +81,7 @@ const SubmittedApplicationView = ({ application, listing }: SubmittedApplication
         />
         <Card.Section>
           <div className="hide-for-print">
-            <Button variant="primary-outlined" size="sm" onClick={() => window.print()}>
+            <Button variant="text" size="sm" onClick={() => window.print()}>
               {t("application.confirmation.printCopy")}
             </Button>
           </div>
