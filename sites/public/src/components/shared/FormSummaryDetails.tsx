@@ -1,7 +1,11 @@
 import React, { Fragment, useEffect, useState } from "react"
 import { LocalizedLink, MultiLineAddress, t } from "@bloom-housing/ui-components"
 import { FieldValue } from "@bloom-housing/ui-seeds"
-import { getUniqueUnitTypes, AddressHolder } from "@bloom-housing/shared-helpers"
+import {
+  getUniqueUnitTypes,
+  AddressHolder,
+  cleanMultiselectString,
+} from "@bloom-housing/shared-helpers"
 import {
   Address,
   AllExtraDataTypes,
@@ -107,6 +111,28 @@ const FormSummaryDetails = ({
     return `${name ? `${name}\n` : ""}${relationship ? `${relationship}\n` : ""}${helperText}`
   }
 
+  const getOptionText = (
+    question: ApplicationMultiselectQuestion,
+    option: ApplicationMultiselectQuestionOption
+  ) => {
+    const initialMultiselectQuestion = listing.listingMultiselectQuestions.find(
+      (elem) =>
+        cleanMultiselectString(elem.multiselectQuestion.text) ===
+        cleanMultiselectString(question.key)
+    )
+
+    const initialOption = initialMultiselectQuestion?.multiselectQuestion.options.find(
+      (elem) => cleanMultiselectString(elem.text) === option.key
+    )
+
+    const initialOptOut = initialMultiselectQuestion?.multiselectQuestion.optOutText
+
+    const optOutOption =
+      option.key === cleanMultiselectString(initialOptOut) ? initialOptOut : undefined
+
+    return initialOption?.text || optOutOption || option.key
+  }
+
   const multiselectQuestionSection = (
     applicationSection: ApplicationSection,
     appLink: string,
@@ -141,7 +167,7 @@ const FormSummaryDetails = ({
                         testId={"app-summary-preference"}
                         className={"pb-6 whitespace-pre-wrap"}
                       >
-                        {option.key}
+                        {getOptionText(question, option)}
                       </FieldValue>
                     ))
                 )}

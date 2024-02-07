@@ -2,7 +2,13 @@ import React, { useEffect, useMemo, useState } from "react"
 import { Field, t, FieldGroup, resolveObject } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
-import { stateKeys, getInputType, fieldName, AddressHolder } from "@bloom-housing/shared-helpers"
+import {
+  stateKeys,
+  getInputType,
+  fieldName,
+  AddressHolder,
+  cleanMultiselectString,
+} from "@bloom-housing/shared-helpers"
 import {
   ApplicationSection,
   ListingMultiselectQuestion,
@@ -41,7 +47,11 @@ const FormMultiselectQuestions = ({
     questions?.forEach((listingQuestion) =>
       listingQuestion?.multiselectQuestion.options.forEach((option) =>
         keys.push(
-          fieldName(listingQuestion?.multiselectQuestion.text, applicationSection, option.text)
+          fieldName(
+            listingQuestion?.multiselectQuestion.text,
+            applicationSection,
+            cleanMultiselectString(option.text)
+          )
         )
       )
     )
@@ -68,7 +78,11 @@ const FormMultiselectQuestions = ({
   const watchQuestions = watch(allOptionFieldNames)
 
   const getCheckboxOption = (option: MultiselectOption, question: MultiselectQuestion) => {
-    const optionFieldName = fieldName(question.text, applicationSection, option.text)
+    const optionFieldName = fieldName(
+      question.text,
+      applicationSection,
+      cleanMultiselectString(option.text)
+    )
     return (
       <React.Fragment key={option.text}>
         <Field
