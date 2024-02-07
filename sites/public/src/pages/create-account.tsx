@@ -255,60 +255,60 @@ export default () => {
               </Form>
             </>
           </AccountCard>
-          {signUpCopy && (
-            <div className={signUpBenefitsStyles["benefits-hide-display"]}>
-              <div className={signUpBenefitsStyles["benefits-desktop-container"]}>
-                <SignUpBenefitsHeadingGroup mobileView={false} />
-                <SignUpBenefits idTag="desktop" />
-              </div>
-            </div>
-          )}
-          {signUpCopy && (
-            <div className={signUpBenefitsStyles["benefits-display-hide"]}>
-              <SignUpBenefits idTag="mobile" />
-            </div>
-          )}
         </div>
-        <Modal
-          open={openModal}
-          title={t("authentication.createAccount.confirmationNeeded")}
-          ariaDescription={t("authentication.createAccount.anEmailHasBeenSent", {
-            email: email.current,
-          })}
-          onClose={() => {
-            void router.push("/")
-            window.scrollTo(0, 0)
-          }}
-          actions={[
-            <Button
-              variant="primary"
-              onClick={() => {
-                void router.push("/")
-                window.scrollTo(0, 0)
-              }}
-              size="sm"
-            >
-              {t("t.ok")}
-            </Button>,
-            <Button
-              variant="primary-outlined"
-              disabled={confirmationResent}
-              onClick={() => {
-                setConfirmationResent(true)
-                void resendConfirmation(email.current.toString())
-              }}
-              size="sm"
-            >
-              {t("authentication.createAccount.resendTheEmail")}
-            </Button>,
-          ]}
-        >
-          <>
-            <p>{t("authentication.createAccount.anEmailHasBeenSent", { email: email.current })}</p>
-            <p>{t("authentication.createAccount.confirmationInstruction")}</p>
-          </>
-        </Modal>
+        {signUpCopy && (
+          <div className={signUpBenefitsStyles["benefits-hide-display"]}>
+            <div className={signUpBenefitsStyles["benefits-desktop-container"]}>
+              <SignUpBenefitsHeadingGroup mobileView={false} />
+              <SignUpBenefits idTag="desktop" />
+            </div>
+          </div>
+        )}
+        {signUpCopy && (
+          <div className={signUpBenefitsStyles["benefits-display-hide"]}>
+            <SignUpBenefits idTag="mobile" />
+          </div>
+        )}
       </div>
+      <Modal
+        open={openModal}
+        title={t("authentication.createAccount.confirmationNeeded")}
+        ariaDescription={t("authentication.createAccount.anEmailHasBeenSent", {
+          email: email.current,
+        })}
+        onClose={() => {
+          void router.push("/")
+          window.scrollTo(0, 0)
+        }}
+        actions={[
+          <Button
+            variant="primary"
+            onClick={() => {
+              void router.push("/")
+              window.scrollTo(0, 0)
+            }}
+            size="sm"
+          >
+            {t("t.ok")}
+          </Button>,
+          <Button
+            variant="primary-outlined"
+            disabled={confirmationResent}
+            onClick={() => {
+              setConfirmationResent(true)
+              void resendConfirmation(email.current.toString())
+            }}
+            size="sm"
+          >
+            {t("authentication.createAccount.resendTheEmail")}
+          </Button>,
+        ]}
+      >
+        <>
+          <p>{t("authentication.createAccount.anEmailHasBeenSent", { email: email.current })}</p>
+          <p>{t("authentication.createAccount.confirmationInstruction")}</p>
+        </>
+      </Modal>
     </FormsLayout>
   )
 }
