@@ -51,7 +51,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // the zip endpoints also require a responseType of arraybuffer
     const response = await axios.request({
       ...configs,
-      responseType: zipEndpoints.includes(req.url.replace("/api/adapter/", ""))
+      // Remove adapter prefix and query params from the url
+      responseType: zipEndpoints.includes(req.url.replace("/api/adapter/", "").split("?")[0])
         ? "arraybuffer"
         : undefined,
     })
