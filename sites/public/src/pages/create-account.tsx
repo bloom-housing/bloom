@@ -218,16 +218,15 @@ export default () => {
                 {t("account.createAccount")}
               </Button>
             </CardSection>
-            <hr className="mx-12"></hr>
+            <CardSection divider={"inset"} className={accountCardStyles["account-card-section"]}>
+              <Heading priority={2} size="2xl" className="mb-6">
+                {t("account.haveAnAccount")}
+              </Heading>
+              <Button href="/sign-in" variant="primary-outlined">
+                {t("nav.signIn")}
+              </Button>
+            </CardSection>
           </Form>
-          <CardSection divider={"inset"} className={accountCardStyles["account-card-section"]}>
-            <Heading priority={2} size="2xl" className="mb-6">
-              {t("account.haveAnAccount")}
-            </Heading>
-            <Button href="/sign-in" variant="primary-outlined">
-              {t("nav.signIn")}
-            </Button>
-          </CardSection>
         </>
       </AccountCard>
       <Modal
