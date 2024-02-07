@@ -1,8 +1,8 @@
 .status-item {
   position: relative;
   padding: var(--seeds-s4);
-  background-color: var(--seeds-color-primary-lighter);
-  color: var(--seeds-gray-800);
+  background-color: var(--seeds-bg-color-muted);
+  color: var(--seeds-color-gray-900);
   border-bottom-width: 0.0625rem;
   border-style: solid;
   border-color: var(--seeds-color-gray-450);
@@ -31,10 +31,15 @@
   text-align: right;
   align-self: center;
   font-size: var(--seeds-font-size-sm);
+  color: var(--seeds-color-gray-750);
   @media (max-width: theme("screens.md")) {
     text-align: left;
     padding-top: var(--seeds-s2_5);
   }
+}
+
+.status-item__due-date {
+  font-weight: var(--seeds-font-weight-semibold);
 }
 
 .status-item__content {
@@ -76,6 +81,7 @@
 .status-item__status {
   padding-block: 0;
   font-size: var(--seeds-font-size-sm);
+  color: var(--seeds-color-gray-750);
   @media (max-width: theme("screens.md")) {
     padding-block: var(--seeds-s4);
   }
@@ -88,5 +94,6 @@
 
 .status-item__confirm-number {
   font-size: var(--seeds-font-size-lg);
+  font-weight: var(--seeds-font-weight-semibold);
   padding-top: var(--seeds-s2);
 }

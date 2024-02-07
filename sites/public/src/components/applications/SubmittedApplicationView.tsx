@@ -66,7 +66,7 @@ const SubmittedApplicationView = ({
         </Card.Section>
         <Card.Section divider={"inset"} className={"border-none"}>
           <p>{`${t("application.yourLotteryNumber")}:`}</p>
-          <p className="font-serif text-lg mt-3">
+          <p className="font-semibold text-lg mt-3">
             {application?.confirmationCode || application?.id}
           </p>
         </Card.Section>
