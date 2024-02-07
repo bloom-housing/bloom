@@ -221,7 +221,7 @@ export const getCheckboxOption = (
 ) => {
   const optionFieldName = fieldName(question.text, applicationSection, option.text)
   return (
-    <div className={`mb-3 ${option.ordinal !== 1 ? "pt-3" : ""}`} key={option.text}>
+    <div className="mb-3" key={option.text}>
       <div className={`mb-3 field ${resolveObject(optionFieldName, errors) ? "error" : ""}`}>
         {getCheckboxField(
           option,
@@ -237,7 +237,7 @@ export const getCheckboxOption = (
         )}
       </div>
       {option.description && (
-        <div className="ml-8 -mt-3 mb-3">
+        <div className="ml-8 -mt-3 mb-6">
           <ExpandableContent strings={{ readMore: t("t.readMore"), readLess: t("t.readLess") }}>
             <p className="field-note mb-2">
               {option.description}
