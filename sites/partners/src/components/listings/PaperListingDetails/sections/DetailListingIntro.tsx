@@ -16,8 +16,8 @@ const DetailListingIntro = () => {
         </FieldValue>
       </Grid.Row>
       <Grid.Row>
-        <FieldValue id="jurisdiction.name" label={t("t.jurisdiction")}>
-          {getDetailFieldString(listing.jurisdiction.name)}
+        <FieldValue id="jurisdictions.name" label={t("t.jurisdiction")}>
+          {getDetailFieldString(listing.jurisdictions.name)}
         </FieldValue>
         <FieldValue id="developer" label={t("listings.developer")}>
           {getDetailFieldString(listing.developer)}

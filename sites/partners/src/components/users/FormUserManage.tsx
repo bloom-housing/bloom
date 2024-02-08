@@ -3,7 +3,7 @@ import { FormProvider, useForm } from "react-hook-form"
 import { t, Form, Field, Select, useMutate, emailRegex, Modal } from "@bloom-housing/ui-components"
 import { Button, Card, Grid, Tag } from "@bloom-housing/ui-seeds"
 import { RoleOption, roleKeys, AuthContext } from "@bloom-housing/shared-helpers"
-import { Listing, User, UserRolesCreate } from "@bloom-housing/backend-core/types"
+import { Listing, User, UserRole } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { JurisdictionAndListingSelection } from "./JurisdictionAndListingSelection"
 import SectionWithGrid from "../shared/SectionWithGrid"
 
@@ -24,13 +24,13 @@ type FormUserManageValues = {
   firstName?: string
   lastName?: string
   email?: string
-  role?: string
+  userRoles?: string
   user_listings?: string[]
   jurisdiction_all?: boolean
   jurisdictions?: string[]
 }
 
-const determineUserRole = (roles: UserRolesCreate) => {
+const determineUserRole = (roles: UserRole) => {
   if (roles?.isAdmin) {
     return RoleOption.Administrator
   } else if (roles?.isJurisdictionalAdmin) {
@@ -57,12 +57,12 @@ const FormUserManage = ({
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      role: determineUserRole(user.roles),
-      user_listings: user.leasingAgentInListings?.map((item) => item.id) ?? [],
+      userRoles: determineUserRole(user.userRoles),
+      user_listings: user.listings?.map((item) => item.id) ?? [],
       jurisdiction_all: jurisdictionList.length === user.jurisdictions.length,
       jurisdictions: user.jurisdictions.map((elem) => elem.id),
     }
-  } else if (profile?.roles?.isJurisdictionalAdmin) {
+  } else if (profile?.userRoles?.isJurisdictionalAdmin) {
     defaultValues = {
       jurisdictions: [jurisdictionList[0].id],
     }
@@ -100,9 +100,9 @@ const FormUserManage = ({
     })
     listings.sort((a, b) => a.name.localeCompare(b.name))
     listings.forEach((listing) => {
-      if (jurisdictionalizedListings[listing.jurisdiction.id]) {
+      if (jurisdictionalizedListings[listing.jurisdictions.id]) {
         // if the user has access to the jurisdiction
-        jurisdictionalizedListings[listing.jurisdiction.id].push({
+        jurisdictionalizedListings[listing.jurisdictions.id].push({
           id: listing.id,
           label: listing.name,
           value: listing.id,
@@ -144,7 +144,7 @@ const FormUserManage = ({
   const { mutate: deleteUser, isLoading: isDeleteUserLoading } = useMutate()
 
   const createUserBody = useCallback(async () => {
-    const { firstName, lastName, email, role, jurisdictions } = getValues()
+    const { firstName, lastName, email, userRoles, jurisdictions } = getValues()
 
     /**
      * react-hook form returns:
@@ -169,12 +169,14 @@ const FormUserManage = ({
 
     if (!validation) return
 
-    const roles = (() => ({
-      isAdmin: role.includes(RoleOption.Administrator),
-      isPartner: role.includes(RoleOption.Partner),
-      isJurisdictionalAdmin: role.includes(RoleOption.JurisdictionalAdmin),
-      userId: undefined,
-    }))()
+    const roles = (() => {
+      return {
+        isAdmin: userRoles.includes(RoleOption.Administrator),
+        isPartner: userRoles.includes(RoleOption.Partner),
+        isJurisdictionalAdmin: userRoles.includes(RoleOption.JurisdictionalAdmin),
+        userId: undefined,
+      }
+    })()
 
     const leasingAgentInListings = user_listings?.map((id) => ({ id })) || []
 
@@ -193,8 +195,8 @@ const FormUserManage = ({
       firstName,
       lastName,
       email,
-      roles,
-      leasingAgentInListings: leasingAgentInListings,
+      userRoles: roles,
+      listings: leasingAgentInListings,
       jurisdictions: selectedJurisdictions,
       agreedToTermsOfService: user?.agreedToTermsOfService ?? false,
     }
@@ -209,7 +211,7 @@ const FormUserManage = ({
     void sendInvite(() =>
       userService
         .invite({
-          body,
+          body: body,
         })
         .then(() => {
           setAlertMessage({ message: t(`users.inviteSent`), type: "success" })
@@ -259,7 +261,7 @@ const FormUserManage = ({
     void updateUser(() =>
       userService
         .update({
-          body,
+          body: body,
         })
         .then(() => {
           setAlertMessage({ message: t(`users.userUpdated`), type: "success" })
@@ -362,8 +364,8 @@ const FormUserManage = ({
 
                 <Grid.Cell>
                   <Select
-                    id="role"
-                    name="role"
+                    id="userRoles"
+                    name="userRoles"
                     label={t("t.role")}
                     placeholder={t("t.role")}
                     register={register}
@@ -371,13 +373,13 @@ const FormUserManage = ({
                     keyPrefix="users"
                     options={roleKeys
                       .filter((elem) => {
-                        if (profile?.roles?.isJurisdictionalAdmin) {
+                        if (profile?.userRoles?.isJurisdictionalAdmin) {
                           return elem !== RoleOption.Administrator
                         }
                         return true
                       })
                       .sort((a, b) => (a < b ? -1 : 1))}
-                    error={!!errors?.role}
+                    error={!!errors?.userRoles}
                     errorMessage={t("errors.requiredFieldError")}
                     validation={{ required: true }}
                   />

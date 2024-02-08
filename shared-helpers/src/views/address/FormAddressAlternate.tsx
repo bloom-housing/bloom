@@ -36,6 +36,7 @@ export const FormAddressAlternate = ({
         }
         error={!!resolveObject(`${dataKey}.street`, errors)}
         register={register}
+        dataTestId="address-street"
       />
 
       <Field
@@ -61,6 +62,7 @@ export const FormAddressAlternate = ({
               ? t("errors.maxLength")
               : t("errors.cityError")
           }
+          dataTestId="address-city"
         />
 
         <Select
@@ -78,6 +80,7 @@ export const FormAddressAlternate = ({
           controlClassName="control"
           options={stateKeys}
           keyPrefix="states"
+          dataTestId="address-state"
         />
       </div>
       <Field
@@ -92,6 +95,7 @@ export const FormAddressAlternate = ({
             ? t("errors.maxLength")
             : t("errors.zipCodeError")
         }
+        dataTestId="address-zipcode"
       />
     </>
   )

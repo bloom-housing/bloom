@@ -1,14 +1,4 @@
 import * as React from "react"
-import {
-  ApplicationMultiselectQuestion,
-  ApplicationMultiselectQuestionOption,
-  ApplicationSection,
-  InputType,
-  Listing,
-  ListingMultiselectQuestion,
-  MultiselectOption,
-  MultiselectQuestion,
-} from "@bloom-housing/backend-core/types"
 import { UseFormMethods } from "react-hook-form"
 import {
   ExpandableContent,
@@ -18,6 +8,16 @@ import {
   t,
 } from "@bloom-housing/ui-components"
 import { stateKeys } from "../utilities/formKeys"
+import {
+  ApplicationMultiselectQuestion,
+  ApplicationMultiselectQuestionOption,
+  InputType,
+  Listing,
+  ListingMultiselectQuestion,
+  MultiselectOption,
+  MultiselectQuestion,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "../types/backend-swagger"
 import { AddressHolder } from "../utilities/constants"
 import { FormAddressAlternate } from "./address/FormAddressAlternate"
 
@@ -28,18 +28,20 @@ export const cleanMultiselectString = (name: string | undefined) => {
 
 export const listingSectionQuestions = (
   listing: Listing,
-  applicationSection: ApplicationSection
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
 ) => {
-  return listing?.listingMultiselectQuestions?.filter(
+  const selectQuestions = listing?.listingMultiselectQuestions?.filter(
     (question) =>
-      question?.multiselectQuestion?.applicationSection === ApplicationSection[applicationSection]
+      question?.multiselectQuestions?.applicationSection ===
+      MultiselectQuestionsApplicationSectionEnum[applicationSection]
   )
+  return selectQuestions
 }
 
 // Get a field name for an application multiselect question
 export const fieldName = (
   questionName: string,
-  applicationSection: ApplicationSection,
+  applicationSection: MultiselectQuestionsApplicationSectionEnum,
   optionName?: string
 ) => {
   return `application.${applicationSection}.${cleanMultiselectString(questionName)}${
@@ -50,7 +52,7 @@ export const fieldName = (
 // Get an array of option field name strings for all options within a single question that are exclusive
 export const getExclusiveKeys = (
   question: MultiselectQuestion,
-  applicationSection: ApplicationSection
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
 ): string[] => {
   const exclusive: string[] = []
   question?.options?.forEach((option: MultiselectOption) => {
@@ -101,13 +103,13 @@ export const getPageQuestion = (questions: ListingMultiselectQuestion[], page: n
     return item.ordinal === page
   })
 
-  return ordinalQuestions?.length ? ordinalQuestions[0]?.multiselectQuestion : null
+  return ordinalQuestions?.length ? ordinalQuestions[0]?.multiselectQuestions : null
 }
 
 // Get all option field names for a question, including the potential opt out option
 export const getAllOptions = (
   question: MultiselectQuestion,
-  applicationSection: ApplicationSection
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
 ) => {
   const optionPaths =
     question?.options?.map((option) => fieldName(question.text, applicationSection, option.text)) ??
@@ -122,12 +124,12 @@ export const getRadioFields = (
   options: MultiselectOption[],
   register: UseFormMethods["register"],
   question: MultiselectQuestion,
-  applicationSection: ApplicationSection,
+  applicationSection: MultiselectQuestionsApplicationSectionEnum,
   errors?: UseFormMethods["errors"]
 ) => {
   return (
     <fieldset>
-      {applicationSection === ApplicationSection.preferences && (
+      {applicationSection === MultiselectQuestionsApplicationSectionEnum.preferences && (
         <legend className="text__caps-spaced mb-4">{question?.text}</legend>
       )}
       <FieldGroup
@@ -157,7 +159,7 @@ export const getRadioFields = (
 const getCheckboxField = (
   option: MultiselectOption,
   question: MultiselectQuestion,
-  applicationSection: ApplicationSection,
+  applicationSection: MultiselectQuestionsApplicationSectionEnum,
   register: UseFormMethods["register"],
   setValue: UseFormMethods["setValue"],
   getValues: UseFormMethods["getValues"],
@@ -211,7 +213,7 @@ const getCheckboxField = (
 export const getCheckboxOption = (
   option: MultiselectOption,
   question: MultiselectQuestion,
-  applicationSection: ApplicationSection,
+  applicationSection: MultiselectQuestionsApplicationSectionEnum,
   register: UseFormMethods["register"],
   setValue: UseFormMethods["setValue"],
   getValues: UseFormMethods["getValues"],
@@ -275,6 +277,7 @@ export const getCheckboxOption = (
               ? t("errors.maxLength")
               : t("errors.requiredFieldError")
           }
+          dataTestId="addressHolder-name"
         />
       )}
       {watchFields[optionFieldName] && option.collectRelationship && (
@@ -291,6 +294,7 @@ export const getCheckboxOption = (
               ? t("errors.maxLength")
               : t("errors.requiredFieldError")
           }
+          dataTestId="addressHolder-relationship"
         />
       )}
       {watchFields[optionFieldName] && option.collectAddress && (
@@ -336,6 +340,7 @@ export const mapRadiosToApi = (
   })
 
   return {
+    multiselectQuestionId: question.id,
     key,
     claimed: Object.keys(data)?.length !== 0,
     options,
@@ -346,7 +351,7 @@ export const mapCheckboxesToApi = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formData: { [name: string]: any },
   question: MultiselectQuestion,
-  applicationSection: ApplicationSection
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
 ): ApplicationMultiselectQuestion => {
   const data =
     formData["application"][applicationSection][cleanMultiselectString(question.text) || ""]
@@ -402,6 +407,7 @@ export const mapCheckboxesToApi = (
     })
 
   return {
+    multiselectQuestionId: question.id,
     key: question.text ?? "",
     claimed,
     options: questionOptions,
@@ -411,7 +417,7 @@ export const mapCheckboxesToApi = (
 export const mapApiToMultiselectForm = (
   applicationQuestions: ApplicationMultiselectQuestion[],
   listingQuestions: ListingMultiselectQuestion[],
-  applicationSection: ApplicationSection
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
 ) => {
   const questionsFormData = { application: { [applicationSection]: Object.create(null) } }
 
@@ -423,8 +429,8 @@ export const mapApiToMultiselectForm = (
       question,
       inputType: getInputType(
         listingQuestions?.filter(
-          (listingQuestion) => listingQuestion?.multiselectQuestion?.text === question.key
-        )[0]?.multiselectQuestion?.options ?? []
+          (listingQuestion) => listingQuestion?.multiselectQuestions?.text === question.key
+        )[0]?.multiselectQuestions?.options ?? []
       ),
     }
   })

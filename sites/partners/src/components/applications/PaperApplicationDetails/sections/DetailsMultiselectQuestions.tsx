@@ -3,29 +3,31 @@ import { t } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { AddressHolder, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import { ApplicationContext } from "../../ApplicationContext"
-import {
-  InputType,
-  AddressCreate,
-  ApplicationSection,
-  GeocodingValues,
-} from "@bloom-housing/backend-core/types"
 import { DetailsAddressColumns, AddressColsType } from "../DetailsAddressColumns"
 import { useSingleListingData } from "../../../../lib/hooks"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import {
+  AddressCreate,
+  InputType,
+  Listing,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type DetailsMultiselectQuestionsProps = {
   listingId: string
-  applicationSection: ApplicationSection
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
   title: string
 }
 
-const formatGeocodingValues = (key: GeocodingValues) => {
+const formatGeocodingValues = (key: string | boolean) => {
   switch (key) {
-    case GeocodingValues.true:
+    case "true":
+    case true:
       return t("t.yes")
-    case GeocodingValues.false:
+    case "false":
+    case false:
       return t("t.no")
-    case GeocodingValues.unknown:
+    case "unknown":
       return t("t.error")
     default:
       return t("t.error")
@@ -41,7 +43,10 @@ const DetailsMultiselectQuestions = ({
 
   const application = useContext(ApplicationContext)
 
-  const listingQuestions = listingSectionQuestions(listingDto, applicationSection)
+  const listingQuestions = listingSectionQuestions(
+    listingDto as unknown as Listing,
+    applicationSection
+  )
 
   if (listingQuestions?.length === 0) {
     return <></>
@@ -55,12 +60,12 @@ const DetailsMultiselectQuestions = ({
         {listingQuestions?.map((listingQuestion) => {
           return (
             <FieldValue
-              key={listingQuestion?.multiselectQuestion.text}
-              label={listingQuestion?.multiselectQuestion.text}
+              key={listingQuestion?.multiselectQuestions.text}
+              label={listingQuestion?.multiselectQuestions.text}
             >
               {(() => {
                 const appQuestion = questions?.find(
-                  (question) => question.key === listingQuestion?.multiselectQuestion.text
+                  (question) => question.key === listingQuestion?.multiselectQuestions.text
                 )
                 if (!appQuestion?.claimed) return t("t.none")
 
@@ -89,7 +94,7 @@ const DetailsMultiselectQuestions = ({
                             break
                           case "geocodingVerified":
                             label = t("application.details.preferences.passedAddressCheck")
-                            value = formatGeocodingValues(extra.value as GeocodingValues)
+                            value = formatGeocodingValues(extra.value as string)
                             break
                           default:
                             label = t("t.name")
@@ -107,7 +112,7 @@ const DetailsMultiselectQuestions = ({
                           <FieldValue
                             key={extra.key}
                             label={t(`application.preferences.options.${extra.key}`, {
-                              county: listingDto?.countyCode,
+                              county: listingDto?.listingsBuildingAddress.county,
                             })}
                           >
                             {extra.value ? t("t.yes") : t("t.no")}
@@ -120,7 +125,7 @@ const DetailsMultiselectQuestions = ({
                             key={extra.key}
                             className="field-label-semibold"
                             label={t(`application.preferences.options.qualifyingAddress`, {
-                              county: listingDto?.countyCode,
+                              county: listingDto?.listingsBuildingAddress.county,
                             })}
                           >
                             <Grid spacing="lg">

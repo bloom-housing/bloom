@@ -117,7 +117,7 @@ const FormAlternateContact = () => {
         <Grid.Row>
           <FormAddress
             subtitle={t("application.contact.mailingAddress")}
-            dataKey="application.alternateContact.mailingAddress"
+            dataKey="application.alternateContact.address"
             register={register}
             stateKeys={stateKeys}
           />

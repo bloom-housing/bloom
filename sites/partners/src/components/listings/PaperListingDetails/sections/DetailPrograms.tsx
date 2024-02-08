@@ -2,8 +2,11 @@ import React, { useContext, useMemo } from "react"
 import { t, MinimalTable } from "@bloom-housing/ui-components"
 import { FieldValue } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
-import { ApplicationSection } from "@bloom-housing/backend-core"
 import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
+import {
+  Listing,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const DetailPrograms = () => {
@@ -17,12 +20,15 @@ const DetailPrograms = () => {
 
   const programsTableData = useMemo(
     () =>
-      listingSectionQuestions(listing, ApplicationSection.programs)
+      listingSectionQuestions(
+        listing as unknown as Listing,
+        MultiselectQuestionsApplicationSectionEnum.programs
+      )
         ?.sort((firstEl, secondEl) => firstEl.ordinal - secondEl.ordinal)
         .map((program, index) => ({
           order: { content: index + 1 },
-          name: { content: program?.multiselectQuestion?.text },
-          description: { content: program?.multiselectQuestion?.description },
+          name: { content: program?.multiselectQuestions?.text },
+          description: { content: program?.multiselectQuestions?.description },
         })),
     [listing]
   )

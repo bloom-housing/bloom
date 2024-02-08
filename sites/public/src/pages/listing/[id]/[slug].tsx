@@ -1,7 +1,6 @@
 import React, { useEffect, useContext } from "react"
 import Head from "next/head"
 import axios from "axios"
-import { Jurisdiction, Listing } from "@bloom-housing/backend-core/types"
 import { t } from "@bloom-housing/ui-components"
 import {
   imageUrlFromListing,
@@ -16,6 +15,7 @@ import { MetaTags } from "../../../components/shared/MetaTags"
 import { ErrorPage } from "../../_error"
 import dayjs from "dayjs"
 import { fetchJurisdictionByName } from "../../../lib/hooks"
+import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 interface ListingProps {
   listing: Listing

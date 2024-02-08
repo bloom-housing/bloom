@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react"
 import { t, MinimalTable, Drawer, Field, StandardTableData } from "@bloom-housing/ui-components"
+import {
+  MultiselectQuestion,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Card, Grid, Tag, Icon } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
-import { ApplicationSection, MultiselectQuestion } from "@bloom-housing/backend-core/types"
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons"
 import LinkComponent from "../../../../components/core/LinkComponent"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
@@ -20,14 +23,14 @@ type SelectAndOrderProps = {
   drawerButtonText: string
   dataFetcher: (
     jurisdiction?: string,
-    applicationSection?: ApplicationSection
+    applicationSection?: MultiselectQuestionsApplicationSectionEnum
   ) => {
     data: SelectAndOrderSection[]
     loading: boolean
     error: any
   }
   formKey: string
-  applicationSection: ApplicationSection
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
   subNote?: string
 }
 
@@ -155,9 +158,12 @@ const SelectAndOrder = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dragOrder])
 
-  const jurisdiction: string = watch("jurisdiction.id")
+  const jurisdiction: string = watch("jurisdictions.id")
 
-  const { data: fetchedData = [] } = dataFetcher(jurisdiction, applicationSection)
+  const { data: fetchedData = [] } = dataFetcher(
+    jurisdiction,
+    applicationSection as unknown as MultiselectQuestionsApplicationSectionEnum
+  )
 
   const formTableHeaders = {
     order: "t.order",

@@ -1,9 +1,9 @@
 import React, { useContext, useMemo } from "react"
 import { t, MinimalTable } from "@bloom-housing/ui-components"
 import { Button, FieldValue } from "@bloom-housing/ui-seeds"
+import { YesNoEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ApplicationContext } from "../../ApplicationContext"
 import { MembersDrawer } from "../DetailsMemberDrawer"
-import { YesNoAnswer } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type DetailsHouseholdMembersProps = {
@@ -24,7 +24,7 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
 
   const householdMembersData = useMemo(() => {
     const checkAvailablility = (property) => {
-      if (property === YesNoAnswer.Yes) {
+      if (property === YesNoEnum.yes) {
         return t("t.yes")
       } else if (property === "no") {
         return t("t.no")
@@ -32,7 +32,7 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
 
       return t("t.n/a")
     }
-    return application?.householdMembers?.map((item) => ({
+    return application?.householdMember?.map((item) => ({
       name: { content: `${item.firstName} ${item.middleName} ${item.lastName}` },
       relationship: {
         content: item.relationship
@@ -64,7 +64,7 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
 
   return (
     <SectionWithGrid heading={t("application.household.householdMembers")} bypassGrid inset>
-      {application?.householdMembers?.length ? (
+      {application?.householdMember?.length ? (
         <MinimalTable headers={householdMembersHeaders} data={householdMembersData} />
       ) : (
         <FieldValue>{t("t.none")}</FieldValue>

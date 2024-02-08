@@ -17,13 +17,13 @@ const ApplicationAddMembers = () => {
   const { conductor, application, listing } = useFormConductor("addMembers")
   const router = useRouter()
   const currentPageSection = 2
-  const householdSize = parseInt(application.householdMembers.length) + 1
+  const householdSize = parseInt(application.householdMember.length) + 1
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { errors, handleSubmit, register, clearErrors } = useForm()
   const onSubmit = () => {
     conductor.currentStep.save({
-      householdSize: parseInt(application.householdMembers.length) + 1,
+      householdSize: parseInt(application.householdMember.length) + 1,
     })
     conductor.routeToNextOrReturnUrl()
   }
@@ -49,7 +49,7 @@ const ApplicationAddMembers = () => {
     }
   }
 
-  const membersSection = application.householdMembers.map((member, index) => {
+  const membersSection = application.householdMember.map((member, index) => {
     return (
       <HouseholdMemberForm
         editMember={editMember}

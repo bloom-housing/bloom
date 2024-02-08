@@ -371,16 +371,14 @@ export const summarizeUnitsByTypeAndRent = (units: Units, listing: Listing): Uni
 
 // One row per unit type
 export const summarizeUnitsByType = (units: Units, unitTypes: UnitTypeDto[]): UnitSummary[] => {
-  const summaries = unitTypes.map(
-    (unitType: UnitTypeDto): UnitSummary => {
-      const summary = {} as UnitSummary
-      const unitsByType = units.filter((unit: Unit) => unit.unitType.name == unitType.name)
-      const finalSummary = Array.from(unitsByType).reduce((summary, unit, index) => {
-        return getUnitsSummary(unit, index === 0 ? null : summary)
-      }, summary)
-      return finalSummary
-    }
-  )
+  const summaries = unitTypes.map((unitType: UnitTypeDto): UnitSummary => {
+    const summary = {} as UnitSummary
+    const unitsByType = units.filter((unit: Unit) => unit.unitType.name == unitType.name)
+    const finalSummary = Array.from(unitsByType).reduce((summary, unit, index) => {
+      return getUnitsSummary(unit, index === 0 ? null : summary)
+    }, summary)
+    return finalSummary
+  })
   return summaries.sort((a, b) => {
     return (
       UnitTypeSort.indexOf(a.unitType.name) - UnitTypeSort.indexOf(b.unitType.name) ||

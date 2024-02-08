@@ -1,7 +1,8 @@
 import { TimeFieldPeriod } from "@bloom-housing/ui-components"
-import { YesNoAnswer, createTime } from "../../../src/lib/helpers"
+import { createTime } from "../../../src/lib/helpers"
 import DatesFormatter from "../../../src/lib/listings/DatesFormatter"
 import { FormMetadata } from "../../../src/lib/listings/formTypes"
+import { YesNoEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 // test helpers
 const metadata = {} as FormMetadata
@@ -38,10 +39,10 @@ describe("DatesFormatter", () => {
     data = {
       postmarkByDateDateField: dueDate,
       postmarkByDateTimeField: dueTime,
-      arePostmarksConsidered: YesNoAnswer.Yes,
+      arePostmarksConsidered: YesNoEnum.yes,
     }
 
-    expect(formatData(data).postmarkedApplicationsReceivedByDate.toISOString()).toEqual(
+    expect(formatData(data).postmarkedApplicationsReceivedByDate?.toISOString()).toEqual(
       "2021-10-20T10:30:00.000Z"
     )
   })

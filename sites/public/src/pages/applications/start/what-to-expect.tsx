@@ -2,8 +2,8 @@ import React, { useEffect, useContext, useMemo } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import Markdown from "markdown-to-jsx"
+import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t, Form } from "@bloom-housing/ui-components"
-import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FormsLayout from "../../../layouts/forms"
@@ -24,17 +24,17 @@ const ApplicationWhatToExpect = () => {
 
   const content = useMemo(() => {
     switch (listing?.reviewOrderType) {
-      case ListingReviewOrder.firstComeFirstServe:
+      case ReviewOrderTypeEnum.firstComeFirstServe:
         return {
           steps: t("application.start.whatToExpect.fcfs.steps"),
           finePrint: t("application.start.whatToExpect.fcfs.finePrint"),
         }
-      case ListingReviewOrder.lottery:
+      case ReviewOrderTypeEnum.lottery:
         return {
           steps: t("application.start.whatToExpect.lottery.steps"),
           finePrint: t("application.start.whatToExpect.lottery.finePrint"),
         }
-      case ListingReviewOrder.waitlist:
+      case ReviewOrderTypeEnum.waitlist:
         return {
           steps: t("application.start.whatToExpect.waitlist.steps"),
           finePrint: t("application.start.whatToExpect.waitlist.finePrint"),

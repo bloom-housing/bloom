@@ -14,17 +14,13 @@ import {
   StandardTableData,
 } from "@bloom-housing/ui-components"
 import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
-import {
-  cloudinaryFileUploader,
-  fieldMessage,
-  fieldHasError,
-  YesNoAnswer,
-} from "../../../../lib/helpers"
+import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../../lib/helpers"
 import {
   ApplicationMethodCreate,
-  ApplicationMethodType,
-  Language,
-} from "@bloom-housing/backend-core/types"
+  ApplicationMethodsTypeEnum,
+  LanguagesEnum,
+  YesNoEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { FormListing } from "../../../../lib/listings/formTypes"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
@@ -50,7 +46,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
     paper: null,
     referral: null,
   })
-  const [selectedLanguage, setSelectedLanguage] = useState(Language.en)
+  const [selectedLanguage, setSelectedLanguage] = useState(LanguagesEnum.en)
   const [drawerState, setDrawerState] = useState(false)
   const [progressValue, setProgressValue] = useState(0)
   const [cloudinaryData, setCloudinaryData] = useState({
@@ -69,11 +65,11 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   const yesNoRadioOptions = [
     {
       label: t("t.yes"),
-      value: YesNoAnswer.Yes,
+      value: YesNoEnum.yes,
     },
     {
       label: t("t.no"),
-      value: YesNoAnswer.No,
+      value: YesNoEnum.no,
     },
   ]
 
@@ -86,7 +82,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   const savePaperApplication = () => {
     const paperApplications = methods.paper?.paperApplications ?? []
     paperApplications.push({
-      file: {
+      assets: {
         fileId: cloudinaryData.id,
         label: selectedLanguage,
       },
@@ -154,14 +150,14 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
 
     applicationMethods?.forEach((method) => {
       switch (method.type) {
-        case ApplicationMethodType.Internal:
-        case ApplicationMethodType.ExternalLink:
+        case ApplicationMethodsTypeEnum.Internal:
+        case ApplicationMethodsTypeEnum.ExternalLink:
           temp["digital"] = method
           break
-        case ApplicationMethodType.FileDownload:
+        case ApplicationMethodsTypeEnum.FileDownload:
           temp["paper"] = method
           break
-        case ApplicationMethodType.Referral:
+        case ApplicationMethodsTypeEnum.Referral:
           temp["referral"] = method
           break
         default:
@@ -223,7 +219,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                         ...methods,
                         digital: {
                           ...methods.digital,
-                          type: ApplicationMethodType.Internal,
+                          type: ApplicationMethodsTypeEnum.Internal,
                         },
                       })
                     },
@@ -245,7 +241,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               ]}
             />
           </Grid.Cell>
-          {digitalApplicationChoice === YesNoAnswer.Yes && (
+          {digitalApplicationChoice === YesNoEnum.yes && (
             <Grid.Cell>
               <p className="field-label m-4 ml-0">{t("listings.usingCommonDigitalApplication")}</p>
 
@@ -258,14 +254,14 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                     ...yesNoRadioOptions[0],
                     id: "commonDigitalApplicationChoiceYes",
                     defaultChecked:
-                      methods?.digital?.type === ApplicationMethodType.Internal ?? null,
+                      methods?.digital?.type === ApplicationMethodsTypeEnum.Internal ?? null,
                     inputProps: {
                       onChange: () => {
                         setMethods({
                           ...methods,
                           digital: {
                             ...methods.digital,
-                            type: ApplicationMethodType.Internal,
+                            type: ApplicationMethodsTypeEnum.Internal,
                           },
                         })
                       },
@@ -275,14 +271,14 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                     ...yesNoRadioOptions[1],
                     id: "commonDigitalApplicationChoiceNo",
                     defaultChecked:
-                      methods?.digital?.type === ApplicationMethodType.ExternalLink ?? null,
+                      methods?.digital?.type === ApplicationMethodsTypeEnum.ExternalLink ?? null,
                     inputProps: {
                       onChange: () => {
                         setMethods({
                           ...methods,
                           digital: {
                             ...methods.digital,
-                            type: ApplicationMethodType.ExternalLink,
+                            type: ApplicationMethodsTypeEnum.ExternalLink,
                           },
                         })
                       },
@@ -294,9 +290,9 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
           )}
         </Grid.Row>
         {((commonDigitalApplicationChoice &&
-          commonDigitalApplicationChoice === YesNoAnswer.No &&
-          digitalApplicationChoice === YesNoAnswer.Yes) ||
-          (digitalApplicationChoice === YesNoAnswer.Yes &&
+          commonDigitalApplicationChoice === YesNoEnum.no &&
+          digitalApplicationChoice === YesNoEnum.yes) ||
+          (digitalApplicationChoice === YesNoEnum.yes &&
             !commonDigitalApplicationChoice &&
             listing?.commonDigitalApplication === false)) && (
           <Grid.Row columns={1}>
@@ -357,7 +353,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                         ...methods,
                         paper: {
                           ...methods.paper,
-                          type: ApplicationMethodType.FileDownload,
+                          type: ApplicationMethodsTypeEnum.FileDownload,
                         },
                       })
                     },
@@ -380,7 +376,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             />
           </Grid.Cell>
         </Grid.Row>
-        {paperApplicationChoice === YesNoAnswer.Yes && (
+        {paperApplicationChoice === YesNoEnum.yes && (
           <Grid.Row columns={1}>
             <Grid.Cell>
               {methods.paper?.paperApplications?.length > 0 && (
@@ -388,7 +384,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   className="mb-8"
                   headers={paperApplicationsTableHeaders}
                   data={methods.paper.paperApplications.map((item) => ({
-                    fileName: { content: `${item.file.fileId.split("/").slice(-1).join()}.pdf` },
+                    fileName: { content: `${item.assets.fileId.split("/").slice(-1).join()}.pdf` },
                     language: { content: t(`languages.${item.language}`) },
                     actions: {
                       content: (
@@ -424,7 +420,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 variant="primary-outlined"
                 onClick={() => {
                   // default the application to English:
-                  setSelectedLanguage(Language.en)
+                  setSelectedLanguage(LanguagesEnum.en)
                   setDrawerState(true)
                 }}
               >
@@ -466,7 +462,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                         ...methods,
                         referral: {
                           ...methods.referral,
-                          type: ApplicationMethodType.Referral,
+                          type: ApplicationMethodsTypeEnum.Referral,
                         },
                       })
                     },
@@ -489,7 +485,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             />
           </Grid.Cell>
         </Grid.Row>
-        {referralOpportunityChoice === YesNoAnswer.Yes && (
+        {referralOpportunityChoice === YesNoEnum.yes && (
           <Grid.Row columns={3}>
             <Grid.Cell>
               <PhoneField
@@ -581,7 +577,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 </p>
                 <Select
                   name="paperApplicationLanguage"
-                  options={Object.values(Language).map((item) => ({
+                  options={Object.values(LanguagesEnum).map((item) => ({
                     label: t(`languages.${item}`),
                     value: item,
                   }))}

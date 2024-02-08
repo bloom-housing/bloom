@@ -118,16 +118,14 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
       name: "Test: Default, Missing Household Levels in AMI",
     })
 
-    const unitsToBeCreated: Array<Omit<
-      UnitCreateDto,
-      keyof BaseEntity
-    >> = missingAmiLevelsUnits.map((unit) => {
-      return {
-        ...unit,
-        amiChart,
-        listing: { id: newListing.id },
-      }
-    })
+    const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> =
+      missingAmiLevelsUnits.map((unit) => {
+        return {
+          ...unit,
+          amiChart,
+          listing: { id: newListing.id },
+        }
+      })
 
     unitsToBeCreated.forEach((unit) => {
       unit.unitType = unitTypeOneBdrm

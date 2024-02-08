@@ -9,7 +9,7 @@ export default class UnitsFormatter extends Formatter {
     this.data.units = this.metadata.units.map((unitValue) => {
       const unit = { ...unitValue } // make a copy of the unit before transformation
 
-      switch (unit.unitType?.name) {
+      switch (unit.unitTypes?.name) {
         case "fiveBdrm":
           unit.numBedrooms = 5
           break
@@ -32,15 +32,15 @@ export default class UnitsFormatter extends Formatter {
       Object.keys(unit).forEach((key) => {
         if (key.indexOf("maxIncomeHouseholdSize") >= 0) {
           if (parseInt(unit[key])) {
-            if (!unit.amiChartOverride) {
-              unit.amiChartOverride = {
+            if (!unit.unitAmiChartOverrides) {
+              unit.unitAmiChartOverrides = {
                 id: undefined,
                 createdAt: undefined,
                 updatedAt: undefined,
                 items: [],
               }
             }
-            unit.amiChartOverride.items.push({
+            unit.unitAmiChartOverrides.items.push({
               percentOfAmi: parseInt(unit.amiPercentage),
               householdSize: parseInt(key[key.length - 1]),
               income: parseInt(unit[key]),

@@ -1,10 +1,10 @@
+import { blankApplication } from "@bloom-housing/shared-helpers"
 import {
   Address,
   Application,
-  ApplicationStatus,
-  ApplicationSubmissionType,
-} from "@bloom-housing/backend-core/types"
-import { blankApplication } from "@bloom-housing/shared-helpers"
+  ApplicationStatusEnum,
+  ApplicationSubmissionTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 class AutofillCleaner {
   application: Application = null
@@ -31,9 +31,9 @@ class AutofillCleaner {
     this.application["confirmationCode"] = "" // only used on frontend
     this.application["completedSections"] = 0 // only used on frontend
     this.application["autofilled"] = true // only used on frontend
-    this.application.submissionType = ApplicationSubmissionType.electronical
+    this.application.submissionType = ApplicationSubmissionTypeEnum.electronical
     this.application.acceptedTerms = false
-    this.application.status = ApplicationStatus.submitted
+    this.application.status = ApplicationStatusEnum.submitted
     this.application.preferences = []
     this.application.programs = []
 
@@ -49,24 +49,25 @@ class AutofillCleaner {
 
     unsetIdentifiers(this.application.accessibility)
     unsetIdentifiers(this.application.applicant)
-    unsetIdentifiers(this.application.mailingAddress)
+    unsetIdentifiers(this.application.applicationsMailingAddress)
 
-    if (this.application.alternateAddress) unsetIdentifiers(this.application.alternateAddress)
+    if (this.application.applicationsAlternateAddress)
+      unsetIdentifiers(this.application.applicationsAlternateAddress)
 
-    this.application.householdMembers
+    this.application.householdMember
       .sort((a, b) => a.orderId - b.orderId)
       .forEach((member, index) => {
         unsetIdentifiers(member)
         member.orderId = index
-        if (member.address) unsetIdentifiers(member.address)
-        if (member.workAddress) unsetIdentifiers(member.workAddress)
+        if (member.householdMemberAddress) unsetIdentifiers(member.householdMemberAddress)
+        if (member.householdMemberWorkAddress) unsetIdentifiers(member.householdMemberWorkAddress)
       })
     unsetIdentifiers(this.application.demographics)
 
     if (this.application.alternateContact) {
       unsetIdentifiers(this.application.alternateContact)
-      if (this.application.alternateContact.mailingAddress) {
-        unsetIdentifiers(this.application.alternateContact.mailingAddress)
+      if (this.application.alternateContact.address) {
+        unsetIdentifiers(this.application.alternateContact.address)
       }
     }
 
@@ -75,7 +76,8 @@ class AutofillCleaner {
 
   removeLiveWorkAddresses() {
     this.application.applicant.workInRegion = null
-    this.application.applicant.workAddress = blankApplication.applicant.workAddress as Address
+    this.application.applicant.applicantWorkAddress = blankApplication.applicant
+      .applicantWorkAddress as Address
 
     return this
   }

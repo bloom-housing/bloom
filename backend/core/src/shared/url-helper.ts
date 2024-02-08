@@ -24,8 +24,14 @@ export const listingUrlSlug = (listing: Listing): string => {
   const { name } = listing
 
   if (listing?.buildingAddress) {
-    const { city, street, state } = listing?.buildingAddress
-    return formatUrlSlug([name, street, city, state].join(" "))
+    return formatUrlSlug(
+      [
+        name,
+        listing?.buildingAddress?.street,
+        listing?.buildingAddress?.city,
+        listing?.buildingAddress?.state,
+      ].join(" ")
+    )
   } else {
     return formatUrlSlug(name)
   }

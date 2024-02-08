@@ -285,7 +285,7 @@ export class ApplicationsService {
     )
     const listing = await this.listingsRepository.findOne({ where: { id: queryParams.listingId } })
     await this.emailService.sendCSV(
-      (this.req.user as unknown) as User,
+      this.req.user as unknown as User,
       listing.name,
       listing.id,
       csvString

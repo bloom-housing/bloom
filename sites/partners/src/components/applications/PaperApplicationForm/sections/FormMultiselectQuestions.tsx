@@ -10,11 +10,11 @@ import {
   cleanMultiselectString,
 } from "@bloom-housing/shared-helpers"
 import {
-  ApplicationSection,
   ListingMultiselectQuestion,
   MultiselectOption,
   MultiselectQuestion,
-} from "@bloom-housing/backend-core/types"
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { FormAddressAlternate } from "@bloom-housing/shared-helpers/src/views/address/FormAddressAlternate"
 import GeocodeService, {
@@ -24,7 +24,7 @@ import MultiselectQuestionsMap from "../MultiselectQuestionsMap"
 
 type FormMultiselectQuestionsProps = {
   questions: ListingMultiselectQuestion[]
-  applicationSection: ApplicationSection
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
   sectionTitle: string
 }
 
@@ -45,10 +45,10 @@ const FormMultiselectQuestions = ({
   const allOptionFieldNames = useMemo(() => {
     const keys = []
     questions?.forEach((listingQuestion) =>
-      listingQuestion?.multiselectQuestion.options.forEach((option) =>
+      listingQuestion?.multiselectQuestions.options.forEach((option) =>
         keys.push(
           fieldName(
-            listingQuestion?.multiselectQuestion.text,
+            listingQuestion?.multiselectQuestions.text,
             applicationSection,
             cleanMultiselectString(option.text)
           )
@@ -175,8 +175,8 @@ const FormMultiselectQuestions = ({
       <SectionWithGrid heading={sectionTitle}>
         <Grid.Row columns={2}>
           {questions?.map((listingQuestion) => {
-            const question = listingQuestion?.multiselectQuestion
-            const inputType = getInputType(question.options)
+            const question = listingQuestion?.multiselectQuestions
+            const inputType = getInputType(question.options as unknown as MultiselectOption[])
             return (
               <FieldValue label={question.text}>
                 {inputType === "checkbox" ? (

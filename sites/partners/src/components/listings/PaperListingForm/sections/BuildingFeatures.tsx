@@ -3,7 +3,7 @@ import { useFormContext } from "react-hook-form"
 import { t, Textarea, FieldGroup } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { listingFeatures, AuthContext } from "@bloom-housing/shared-helpers"
-import { ListingFeatures } from "@bloom-housing/backend-core/types"
+import { ListingFeatures } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type BuildingFeaturesProps = {
@@ -27,8 +27,9 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
     }))
   }, [register, props.existingFeatures])
 
-  const enableAccessibilityFeatures = profile?.jurisdictions?.find((j) => j.id === jurisdiction)
-    ?.enableAccessibilityFeatures
+  const enableAccessibilityFeatures = profile?.jurisdictions?.find(
+    (j) => j.id === jurisdiction
+  )?.enableAccessibilityFeatures
 
   return (
     <>
@@ -106,6 +107,7 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
         {!enableAccessibilityFeatures ? null : (
           <Grid.Row>
             <FieldValue label={t("listings.sections.accessibilityFeatures")}>
+              {/* TODO: default checked doesn't appear to be working even on main*/}
               <FieldGroup
                 type="checkbox"
                 name="listingFeatures"

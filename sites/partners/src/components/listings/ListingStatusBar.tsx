@@ -1,10 +1,10 @@
 import React from "react"
-import { ListingStatus } from "@bloom-housing/backend-core/types"
+import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { getListingStatusTag } from "./helpers"
 
 export interface ListingStatusBarProps {
   className?: string
-  status: ListingStatus
+  status: ListingsStatusEnum
 }
 
 const ListingStatusBar = ({ className, status }: ListingStatusBarProps) => {

@@ -2,9 +2,12 @@ import React, { useContext, useMemo, useState } from "react"
 import dayjs from "dayjs"
 import { t, MinimalTable, Drawer } from "@bloom-housing/ui-components"
 import { Button, Card, FieldValue, Grid, Link } from "@bloom-housing/ui-seeds"
+import {
+  ListingEvent,
+  ListingEventsTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldDate, getDetailFieldTime } from "./helpers"
-import { ListingEvent, ListingEventType } from "@bloom-housing/backend-core/types"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const DetailApplicationDates = () => {
@@ -22,8 +25,8 @@ const DetailApplicationDates = () => {
 
   const openHouseEvents = useMemo(
     () =>
-      listing.events
-        .filter((item) => item.type === ListingEventType.openHouse)
+      listing.listingEvents
+        .filter((item) => item.type === ListingEventsTypeEnum.openHouse)
         .sort((a, b) => (dayjs(a.startTime).isAfter(b.startTime) ? 1 : -1))
         .map((event) => {
           const { startTime, endTime, url } = event
