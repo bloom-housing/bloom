@@ -117,15 +117,15 @@ const FormSummaryDetails = ({
   ) => {
     const initialMultiselectQuestion = listing.listingMultiselectQuestions.find(
       (elem) =>
-        cleanMultiselectString(elem.multiselectQuestion.text) ===
+        cleanMultiselectString(elem.multiselectQuestions.text) ===
         cleanMultiselectString(question.key)
     )
 
-    const initialOption = initialMultiselectQuestion?.multiselectQuestion.options.find(
+    const initialOption = initialMultiselectQuestion?.multiselectQuestions.options.find(
       (elem) => cleanMultiselectString(elem.text) === option.key
     )
 
-    const initialOptOut = initialMultiselectQuestion?.multiselectQuestion.optOutText
+    const initialOptOut = initialMultiselectQuestion?.multiselectQuestions.optOutText
 
     const optOutOption =
       option.key === cleanMultiselectString(initialOptOut) ? initialOptOut : undefined
