@@ -66,7 +66,7 @@ jobs:
           pkg-manager: yarn
           cache-version: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - node/install-packages:
-          app-dir: backend_new
+          app-dir: api
           pkg-manager: yarn
           cache-version: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run:
@@ -76,7 +76,7 @@ jobs:
           name: run backend
           command: yarn dev
           background: true
-          working_directory: backend_new
+          working_directory: api
       - run:
           name: build and run public
           command: yarn dev:server-wait-new && yarn build && yarn start
@@ -106,7 +106,7 @@ jobs:
           pkg-manager: yarn
           cache-version: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - node/install-packages:
-          app-dir: backend_new
+          app-dir: api
           pkg-manager: yarn
           cache-version: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run:
@@ -116,7 +116,7 @@ jobs:
           name: run backend
           command: yarn dev
           background: true
-          working_directory: backend_new
+          working_directory: api
       - run:
           name: build and run partners
           command: yarn dev:server-wait-new && yarn build && yarn start
@@ -178,7 +178,7 @@ jobs:
           key: build-cache-new-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: DB Setup + New Backend Core Tests
-          working_directory: backend_new
+          working_directory: api
           command: |
             yarn install
             yarn test:cov-ci
