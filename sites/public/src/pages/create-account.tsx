@@ -98,6 +98,7 @@ export default () => {
               </label>
               <Field
                 controlClassName={styles["create-account-input"]}
+                className={styles["create-account-gap"]}
                 name="firstName"
                 validation={{ required: true, maxLength: 64 }}
                 error={errors.givenName}
@@ -121,6 +122,7 @@ export default () => {
                 validation={{ maxLength: 64 }}
                 errorMessage={t("errors.maxLength")}
                 controlClassName={styles["create-account-input"]}
+                className={styles["create-account-gap"]}
               />
 
               <label className={styles["create-account-field"]} htmlFor="lastName">
@@ -167,6 +169,7 @@ export default () => {
                 errorMessage={t("authentication.signIn.loginError")}
                 register={register}
                 controlClassName={styles["create-account-input"]}
+                labelClassName={styles["create-account-label"]}
               />
             </CardSection>
             <CardSection divider={"inset"} className={accountCardStyles["account-card-section"]}>
