@@ -1286,19 +1286,23 @@ export class ListingService implements OnModuleInit {
       this.httpService.request({
         baseURL: process.env.PROXY_URL,
         method: 'PURGE',
-        url: shouldPurgeAllListings
-          ? '/listings?*'
-          : `/listings/${savedResponseId}*`,
+        url: `/listings/${savedResponseId}*`,
       }),
       undefined,
     ).catch((e) =>
-      console.error(
-        shouldPurgeAllListings
-          ? 'purge all listings error = '
-          : `purge listing ${savedResponseId} error = `,
-        e,
-      ),
+      console.error(`purge listing ${savedResponseId} error = `, e),
     );
+
+    if (shouldPurgeAllListings) {
+      await firstValueFrom(
+        this.httpService.request({
+          baseURL: process.env.PROXY_URL,
+          method: 'PURGE',
+          url: '/listings?*',
+        }),
+        undefined,
+      ).catch((e) => console.error('purge all listings error = ', e));
+    }
   }
 
   /*
