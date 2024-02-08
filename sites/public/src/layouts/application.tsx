@@ -3,7 +3,7 @@ import dayjs from "dayjs"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import Head from "next/head"
-import { Alert } from "@bloom-housing/ui-seeds"
+import { Message } from "@bloom-housing/ui-seeds"
 import {
   SiteHeader,
   SiteFooter,
@@ -95,9 +95,9 @@ const Layout = (props) => {
         </Head>
         {getInMaintenance() && (
           <div className={styles["site-alert-banner-container"]}>
-            <Alert className={styles["site-alert-banner-content"]} variant={"alert"}>
+            <Message className={styles["site-alert-banner-content"]} variant={"alert"}>
               {t("alert.maintenance")}
-            </Alert>
+            </Message>
           </div>
         )}
         <SiteHeader
