@@ -20,7 +20,7 @@ import { useRouter } from "next/router"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
-import { AccountCard } from "../components/account/AccountCard"
+import { AccountCard } from "@bloom-housing/shared-helpers/src/views/accounts/AccountCard"
 import accountCardStyles from "./account/account.module.scss"
 import styles from "../../styles/create-account.module.scss"
 
