@@ -50,7 +50,7 @@ module.exports = {
     "storybook-static",
     ".next",
     "dist",
-    "backend_new",
+    "api",
     "migration/",
     "**/*.stories.tsx",
     "**/.eslintrc.js",
