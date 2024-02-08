@@ -250,6 +250,7 @@ const Edit = () => {
                   }}
                   label={t("application.name.yourDateOfBirth")}
                 />
+                <p className={"field-sub-note"}>{t("application.name.dobHelper")}</p>
                 <Button type="submit" variant="primary-outlined" className="mt-6">
                   {t("account.settings.update")}
                 </Button>
