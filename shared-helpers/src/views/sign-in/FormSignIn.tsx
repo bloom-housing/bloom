@@ -67,18 +67,11 @@ const FormSignIn = ({
               register={register}
               dataTestId="sign-in-email-field"
             />
-
             <aside>
-              <LinkComponent href="/forgot-password" className={styles["forgot-password"]}>
+              <LinkComponent href={forgetPasswordURL} className={styles["forgot-password"]}>
                 {t("authentication.signIn.forgotPassword")}
               </LinkComponent>
             </aside>
-          <aside className="float-right text-sm font-semibold">
-            <LinkComponent href={forgetPasswordURL}>
-              {t("authentication.signIn.forgotPassword")}
-            </LinkComponent>
-          </aside>
-
             <Field
               caps={true}
               className="mb-3"
@@ -105,26 +98,13 @@ const FormSignIn = ({
               {t("authentication.createAccount.noAccount")}
             </Heading>
 
-            <Button variant="primary-outlined" href="/create-account">
+            <Button variant="primary-outlined" href={createAccountUrl}>
               {t("account.createAccount")}
             </Button>
           </CardFooter>
         )}
       </>
     </AccountCard>
-          </div>
-        </Form>
-      </div>
-      {showRegisterBtn && (
-        <div className="form-card__group text-center border-t">
-          <h2 className="mb-6">{t("authentication.createAccount.noAccount")}</h2>
-
-          <Button variant="primary-outlined" href={createAccountUrl}>
-            {t("account.createAccount")}
-          </Button>
-        </div>
-      )}
-    </FormCard>
   )
 }
 
