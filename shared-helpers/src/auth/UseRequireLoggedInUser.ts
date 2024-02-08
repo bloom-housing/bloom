@@ -1,6 +1,6 @@
 import { useContext } from "react"
 import { AuthContext } from "./AuthContext"
-import { useRouter } from "next/router"
+import { NavigationContext } from "@bloom-housing/ui-components"
 
 /**
  * Require a logged in user. Waits on initial load, then initiates a redirect to `redirectPath` if user is not
@@ -8,7 +8,7 @@ import { useRouter } from "next/router"
  */
 function useRequireLoggedInUser(redirectPath: string) {
   const { profile, initialStateLoaded } = useContext(AuthContext)
-  const router = useRouter()
+  const { router } = useContext(NavigationContext)
 
   if (process.env.showMandatedAccounts && initialStateLoaded && !profile) {
     void router.push(redirectPath)
