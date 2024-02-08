@@ -2,8 +2,6 @@ import React, { useEffect, useContext, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import {
   Field,
-  FormCard,
-  Icon,
   Form,
   emailRegex,
   t,
@@ -13,7 +11,8 @@ import {
   Modal,
   passwordRegex,
 } from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
+import { Button, Heading } from "@bloom-housing/ui-seeds"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
 dayjs.extend(customParseFormat)
@@ -21,6 +20,9 @@ import { useRouter } from "next/router"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
+import { AccountCard } from "../components/account/AccountCard"
+import accountCardStyles from "./account/account.module.scss"
+import styles from "../../styles/create-account.module.scss"
 
 export default () => {
   const { createUser, resendConfirmation } = useContext(AuthContext)
@@ -78,182 +80,164 @@ export default () => {
 
   return (
     <FormsLayout>
-      <FormCard>
-        <div className="form-card__lead text-center border-b mx-0">
-          <Icon size="2xl" symbol="profile" />
-          <h1 className="form-card__title">{t("account.createAccount")}</h1>
+      <AccountCard
+        iconSymbol="profile"
+        title={t("account.createAccount")}
+        divider="inset"
+        headingPriority={1}
+      >
+        <>
           {requestError && (
             <AlertBox className="" onClose={() => setRequestError(undefined)} type="alert">
               {requestError}
             </AlertBox>
           )}
           <SiteAlert type="notice" dismissable />
-        </div>
+          <Form id="create-account" onSubmit={handleSubmit(onSubmit)}>
+            <CardSection divider={"inset"} className={accountCardStyles["account-card-section"]}>
+              <label className={styles["create-account-header"]} htmlFor="firstName">
+                {t("application.name.yourName")}
+              </label>
 
-        <Form id="create-account" onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-card__group border-b">
-            <label className="text__caps-spaced" htmlFor="firstName">
-              {t("application.name.yourName")}
-            </label>
+              <label className={styles["create-account-field"]} htmlFor="firstName">
+                {t("application.name.firstName")}
+              </label>
+              <Field
+                controlClassName={styles["create-account-input"]}
+                className={styles["create-account-gap"]}
+                name="firstName"
+                validation={{ required: true, maxLength: 64 }}
+                error={errors.givenName}
+                errorMessage={
+                  errors.givenName?.type === "maxLength"
+                    ? t("errors.maxLength")
+                    : t("errors.firstNameError")
+                }
+                register={register}
+              />
 
-            <Field
-              controlClassName="mt-2"
-              name="firstName"
-              placeholder={t("application.name.firstName")}
-              validation={{ required: true, maxLength: 64 }}
-              error={errors.firstName}
-              errorMessage={
-                errors.firstName?.type === "maxLength"
-                  ? t("errors.maxLength")
-                  : t("errors.firstNameError")
-              }
-              register={register}
-            />
+              <label className={styles["create-account-field"]} htmlFor="middleName">
+                {t("application.name.middleNameOptional")}
+              </label>
+              <Field
+                name="middleName"
+                register={register}
+                label={t("application.name.middleNameOptional")}
+                readerOnly
+                error={errors.middleName}
+                validation={{ maxLength: 64 }}
+                errorMessage={t("errors.maxLength")}
+                controlClassName={styles["create-account-input"]}
+                className={styles["create-account-gap"]}
+              />
 
-            <Field
-              name="middleName"
-              placeholder={t("application.name.middleNameOptional")}
-              register={register}
-              label={t("application.name.middleNameOptional")}
-              readerOnly
-              error={errors.middleName}
-              validation={{ maxLength: 64 }}
-              errorMessage={t("errors.maxLength")}
-            />
+              <label className={styles["create-account-field"]} htmlFor="lastName">
+                {t("application.name.lastName")}
+              </label>
+              <Field
+                name="lastName"
+                validation={{ required: true, maxLength: 64 }}
+                error={errors.lastName}
+                register={register}
+                label={t("application.name.lastName")}
+                errorMessage={
+                  errors.lastName?.type === "maxLength"
+                    ? t("errors.maxLength")
+                    : t("errors.lastNameError")
+                }
+                readerOnly
+                controlClassName={styles["create-account-input"]}
+              />
+            </CardSection>
+            <CardSection divider={"inset"} className={accountCardStyles["account-card-section"]}>
+              <DOBField
+                register={register}
+                required={true}
+                error={errors.dob}
+                name="dob"
+                id="dob"
+                watch={watch}
+                validateAge18={true}
+                errorMessage={t("errors.dateOfBirthErrorAge")}
+                label={t("application.name.yourDateOfBirth")}
+              />
+              <p className={"field-sub-note"}>{t("application.name.dobHelper")}</p>
+            </CardSection>
 
-            <Field
-              name="lastName"
-              placeholder={t("application.name.lastName")}
-              validation={{ required: true, maxLength: 64 }}
-              error={errors.lastName}
-              register={register}
-              label={t("application.name.lastName")}
-              errorMessage={
-                errors.lastName?.type === "maxLength"
-                  ? t("errors.maxLength")
-                  : t("errors.lastNameError")
-              }
-              readerOnly
-            />
-          </div>
-
-          <div className="form-card__group border-b">
-            <DOBField
-              register={register}
-              required={true}
-              error={errors.dob}
-              name="dob"
-              id="dob"
-              watch={watch}
-              validateAge18={true}
-              errorMessage={t("errors.dateOfBirthErrorAge")}
-              label={t("application.name.yourDateOfBirth")}
-            />
-          </div>
-
-          <div className="form-card__group border-b">
-            <Field
-              caps={true}
-              type="email"
-              name="email"
-              label={t("t.email")}
-              placeholder="example@web.com"
-              validation={{ required: true, pattern: emailRegex }}
-              error={errors.email}
-              errorMessage={t("authentication.signIn.loginError")}
-              register={register}
-            />
-            <p className="text text-gray-750 text-sm pb-2">
-              {t("authentication.createAccount.reEnterEmail")}
-            </p>
-            <Field
-              type="email"
-              name="emailConfirmation"
-              placeholder="example@web.com"
-              validation={{
-                validate: (value) =>
-                  value === email.current || t("authentication.createAccount.errors.emailMismatch"),
-              }}
-              onPaste={(e) => {
-                e.preventDefault()
-                e.nativeEvent.stopImmediatePropagation()
-                return false
-              }}
-              onDrop={(e) => {
-                e.preventDefault()
-                e.nativeEvent.stopImmediatePropagation()
-                return false
-              }}
-              error={errors.emailConfirmation}
-              errorMessage={t("authentication.createAccount.errors.emailMismatch")}
-              register={register}
-              label={t("authentication.createAccount.reEnterEmail")}
-              readerOnly
-            />
-          </div>
-
-          <div className="form-card__group border-b">
-            <Field
-              caps={true}
-              type="password"
-              name="password"
-              note={t("authentication.createAccount.passwordInfo")}
-              label={t("authentication.createAccount.password")}
-              placeholder={t("authentication.createAccount.mustBe8Chars")}
-              validation={{
-                required: true,
-                minLength: 8,
-                pattern: passwordRegex,
-              }}
-              error={errors.password}
-              errorMessage={t("authentication.signIn.passwordError")}
-              register={register}
-            />
-            <p className="text text-gray-750 text-sm pb-2">
-              {t("authentication.createAccount.reEnterPassword")}
-            </p>
-            <Field
-              type="password"
-              name="passwordConfirmation"
-              placeholder={t("authentication.createAccount.mustBe8Chars")}
-              validation={{
-                validate: (value) =>
-                  value === password.current ||
-                  t("authentication.createAccount.errors.passwordMismatch"),
-              }}
-              onPaste={(e) => {
-                e.preventDefault()
-                e.nativeEvent.stopImmediatePropagation()
-                return false
-              }}
-              onDrop={(e) => {
-                e.preventDefault()
-                e.nativeEvent.stopImmediatePropagation()
-                return false
-              }}
-              error={errors.passwordConfirmation}
-              errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
-              register={register}
-              label={t("authentication.createAccount.reEnterPassword")}
-              readerOnly
-            />
-
-            <div className="text-center mt-10">
+            <CardSection divider={"inset"} className={accountCardStyles["account-card-section"]}>
+              <Field
+                caps={true}
+                type="email"
+                name="email"
+                label={t("application.name.yourEmailAddress")}
+                validation={{ required: true, pattern: emailRegex }}
+                error={errors.email}
+                errorMessage={t("authentication.signIn.loginError")}
+                register={register}
+                controlClassName={styles["create-account-input"]}
+                labelClassName={styles["create-account-label"]}
+              />
+            </CardSection>
+            <CardSection divider={"inset"} className={accountCardStyles["account-card-section"]}>
+              <Field
+                caps={true}
+                type={"password"}
+                name="password"
+                note={t("authentication.createAccount.passwordInfo")}
+                label={t("authentication.createAccount.password")}
+                validation={{
+                  required: true,
+                  minLength: 8,
+                  pattern: passwordRegex,
+                }}
+                error={errors.password}
+                errorMessage={t("authentication.signIn.passwordError")}
+                register={register}
+                controlClassName={styles["create-account-input"]}
+              />
+              <label className={styles["create-account-field"]} htmlFor="passwordConfirmation">
+                {t("authentication.createAccount.reEnterPassword")}
+              </label>
+              <Field
+                type="password"
+                name="passwordConfirmation"
+                validation={{
+                  validate: (value) =>
+                    value === password.current ||
+                    t("authentication.createAccount.errors.passwordMismatch"),
+                }}
+                onPaste={(e) => {
+                  e.preventDefault()
+                  e.nativeEvent.stopImmediatePropagation()
+                  return false
+                }}
+                onDrop={(e) => {
+                  e.preventDefault()
+                  e.nativeEvent.stopImmediatePropagation()
+                  return false
+                }}
+                error={errors.passwordConfirmation}
+                errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
+                register={register}
+                controlClassName={styles["create-account-input"]}
+                label={t("authentication.createAccount.reEnterPassword")}
+                readerOnly
+              />
               <Button type="submit" variant="primary">
                 {t("account.createAccount")}
               </Button>
-            </div>
-          </div>
-        </Form>
-
-        <div className="form-card__group text-center">
-          <h2 className="mb-6">{t("account.haveAnAccount")}</h2>
-
-          <Button variant="primary-outlined" href="/sign-in">
-            {t("nav.signIn")}
-          </Button>
-        </div>
-      </FormCard>
+            </CardSection>
+            <CardSection divider={"inset"} className={accountCardStyles["account-card-section"]}>
+              <Heading priority={2} size="2xl" className="mb-6">
+                {t("account.haveAnAccount")}
+              </Heading>
+              <Button href="/sign-in" variant="primary-outlined">
+                {t("nav.signIn")}
+              </Button>
+            </CardSection>
+          </Form>
+        </>
+      </AccountCard>
       <Modal
         open={openModal}
         title={t("authentication.createAccount.confirmationNeeded")}
