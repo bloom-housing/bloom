@@ -1,7 +1,7 @@
 import React, { useContext } from "react"
 import { t, MinimalTable, StandardTableData } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import { ApplicationMethodType } from "@bloom-housing/backend-core/types"
+import { ApplicationMethodsTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingContext } from "../../ListingContext"
 import { getDetailBoolean } from "./helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
@@ -11,14 +11,14 @@ const DetailApplicationTypes = () => {
 
   const digitalMethod = listing.applicationMethods.find(
     (method) =>
-      method.type === ApplicationMethodType.Internal ||
-      method.type === ApplicationMethodType.ExternalLink
+      method.type === ApplicationMethodsTypeEnum.Internal ||
+      method.type === ApplicationMethodsTypeEnum.ExternalLink
   )
   const paperMethod = listing.applicationMethods.find(
-    (method) => method.type === ApplicationMethodType.FileDownload
+    (method) => method.type === ApplicationMethodsTypeEnum.FileDownload
   )
   const referralMethod = listing.applicationMethods.find(
-    (method) => method.type === ApplicationMethodType.Referral
+    (method) => method.type === ApplicationMethodsTypeEnum.Referral
   )
 
   const paperApplicationsTableHeaders = {
@@ -31,7 +31,7 @@ const DetailApplicationTypes = () => {
   if (paperMethod) {
     paperMethod.paperApplications.forEach((item) => {
       paperApplicationsTableRows.push({
-        fileName: { content: `${item.file.fileId.split("/").slice(-1).join()}.pdf` },
+        fileName: { content: `${item.assets.fileId.split("/").slice(-1).join()}.pdf` },
         language: { content: t(`languages.${item.language}`) },
       })
     })
@@ -45,10 +45,12 @@ const DetailApplicationTypes = () => {
         </FieldValue>
         {digitalMethod && (
           <FieldValue id="digitalMethod.type" label={"Common Digital Application"}>
-            {digitalMethod?.type === ApplicationMethodType.ExternalLink ? t("t.no") : t("t.yes")}
+            {digitalMethod?.type === ApplicationMethodsTypeEnum.ExternalLink
+              ? t("t.no")
+              : t("t.yes")}
           </FieldValue>
         )}
-        {digitalMethod?.type === ApplicationMethodType.ExternalLink && (
+        {digitalMethod?.type === ApplicationMethodsTypeEnum.ExternalLink && (
           <FieldValue
             id="customOnlineApplicationUrl"
             label={t("listings.customOnlineApplicationUrl")}

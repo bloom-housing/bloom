@@ -127,17 +127,17 @@ Cypress.Commands.add("fillPrimaryApplicant", (application, fieldsToSkip = []) =>
     { id: "application.applicant.emailAddress", fieldKey: "applicant.emailAddress" },
     { id: "phoneNumber", fieldKey: "phoneNumber" },
     { id: "application.additionalPhoneNumber", fieldKey: "additionalPhoneNumber" },
-    { id: "application.applicant.address.street", fieldKey: "applicant.address.street" },
-    { id: "application.applicant.address.street2", fieldKey: "applicant.address.street2" },
-    { id: "application.applicant.address.city", fieldKey: "applicant.address.city" },
-    { id: "application.applicant.address.zipCode", fieldKey: "applicant.address.zipCode" },
+    { id: "application.applicant.applicantAddress.street", fieldKey: "applicant.address.street" },
+    { id: "application.applicant.applicantAddress.street2", fieldKey: "applicant.address.street2" },
+    { id: "application.applicant.applicantAddress.city", fieldKey: "applicant.address.city" },
+    { id: "application.applicant.applicantAddress.zipCode", fieldKey: "applicant.address.zipCode" },
   ]
 
   const fieldsToSelect = [
     { id: "application.language", fieldKey: "language" },
     { id: "application.applicant.phoneNumberType", fieldKey: "applicant.phoneNumberType" },
     { id: "application.additionalPhoneNumberType", fieldKey: "additionalPhoneNumberType" },
-    { id: "application.applicant.address.state", fieldKey: "applicant.address.state" },
+    { id: "application.applicant.applicantAddress.state", fieldKey: "applicant.address.state" },
   ]
 
   const fieldsToClick = [
@@ -159,19 +159,19 @@ Cypress.Commands.add("fillAlternateContact", (application, fieldsToSkip = []) =>
     { id: "application.alternateContact.emailAddress", fieldKey: "alternateContact.emailAddress" },
     { id: "application.alternateContact.phoneNumber", fieldKey: "alternateContact.phoneNumber" },
     {
-      id: "application.alternateContact.mailingAddress.street",
+      id: "application.alternateContact.address.street",
       fieldKey: "alternateContact.mailingAddress.street",
     },
     {
-      id: "application.alternateContact.mailingAddress.street2",
+      id: "application.alternateContact.address.street2",
       fieldKey: "alternateContact.mailingAddress.street2",
     },
     {
-      id: "application.alternateContact.mailingAddress.city",
+      id: "application.alternateContact.address.city",
       fieldKey: "alternateContact.mailingAddress.city",
     },
     {
-      id: "application.alternateContact.mailingAddress.zipCode",
+      id: "application.alternateContact.address.zipCode",
       fieldKey: "alternateContact.mailingAddress.zipCode",
     },
   ]
@@ -179,7 +179,7 @@ Cypress.Commands.add("fillAlternateContact", (application, fieldsToSkip = []) =>
   const fieldsToSelect = [
     { id: "application.alternateContact.type", fieldKey: "alternateContact.type" },
     {
-      id: "application.alternateContact.mailingAddress.state",
+      id: "application.alternateContact.address.state",
       fieldKey: "alternateContact.mailingAddress.state",
     },
   ]
@@ -266,14 +266,14 @@ Cypress.Commands.add("fillMailingAddress", (application, fieldsToSkip = []) => {
   cy.getByID("application.sendMailToMailingAddress").click()
 
   const fieldsToType = [
-    { id: "application.mailingAddress.street", fieldKey: "mailingAddress.street" },
-    { id: "application.mailingAddress.street2", fieldKey: "mailingAddress.street2" },
-    { id: "application.mailingAddress.city", fieldKey: "mailingAddress.city" },
-    { id: "application.mailingAddress.zipCode", fieldKey: "mailingAddress.zipCode" },
+    { id: "application.applicationsMailingAddress.street", fieldKey: "mailingAddress.street" },
+    { id: "application.applicationsMailingAddress.street2", fieldKey: "mailingAddress.street2" },
+    { id: "application.applicationsMailingAddress.city", fieldKey: "mailingAddress.city" },
+    { id: "application.applicationsMailingAddress.zipCode", fieldKey: "mailingAddress.zipCode" },
   ]
 
   const fieldsToSelect = [
-    { id: "application.mailingAddress.state", fieldKey: "mailingAddress.state" },
+    { id: "application.applicationsMailingAddress.state", fieldKey: "mailingAddress.state" },
   ]
 
   fillFields(application, fieldsToType, fieldsToSelect, [], fieldsToSkip)

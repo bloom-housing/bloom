@@ -1,4 +1,4 @@
-import { Asset, Listing } from "@bloom-housing/backend-core/types"
+import { Asset, Listing } from "../types/backend-swagger"
 
 export const CLOUDINARY_BUILDING_LABEL = "cloudinaryBuilding"
 export const IMAGE_FALLBACK_URL = "/images/listing-fallback.png"
@@ -20,10 +20,10 @@ export const getUrlForListingImage = (image: Asset, size = 400) => {
 
 export const imageUrlFromListing = (listing: Listing, size = 400): string[] => {
   const imageAssets =
-    listing?.images?.length && listing.images[0].image
-      ? listing.images
+    listing?.listingImages?.length && listing.listingImages[0].assets
+      ? listing.listingImages
           .sort((imageA, imageB) => (imageA.ordinal ?? 10) - (imageB?.ordinal ?? 10))
-          .map((imageObj) => imageObj.image)
+          .map((imageObj) => imageObj.assets)
       : listing?.assets
 
   const imageUrls = imageAssets

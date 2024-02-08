@@ -11,14 +11,14 @@ describe("JurisdictionFormatter", () => {
     const data = {} as FormListing
 
     const formatter = new JurisdictionFormatter(data, metadata).format()
-    expect(formatter.data.jurisdiction).toEqual({ name: "Alameda" })
+    expect(formatter.data.jurisdictions).toEqual({ name: "Alameda" })
   })
   it("should use data when present and ignore profile", () => {
     const data = {
-      jurisdiction: { name: "San Jose" },
+      jurisdictions: { name: "San Jose" },
     } as FormListing
 
     const formatter = new JurisdictionFormatter(data, metadata).format()
-    expect(formatter.data.jurisdiction).toEqual({ name: "San Jose" })
+    expect(formatter.data.jurisdictions).toEqual({ name: "San Jose" })
   })
 })

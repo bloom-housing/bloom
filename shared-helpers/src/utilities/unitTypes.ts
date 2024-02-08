@@ -1,4 +1,4 @@
-import { Unit, UnitType } from "@bloom-housing/backend-core/types"
+import { Unit, UnitType } from "../types/backend-swagger"
 
 type GetUnitTypeNamesReturn = {
   id: string
@@ -25,7 +25,7 @@ export const getUniqueUnitTypes = (units: Unit[]): GetUnitTypeNamesReturn[] => {
   if (!units) return []
 
   const unitTypes = units.reduce((acc, curr) => {
-    const { id, name } = curr.unitType || {}
+    const { id, name } = curr.unitTypes || {}
 
     if (!id || !name) return acc
 

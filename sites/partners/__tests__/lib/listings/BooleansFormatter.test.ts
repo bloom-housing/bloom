@@ -1,5 +1,7 @@
-import { ListingApplicationAddressType } from "@bloom-housing/backend-core/types"
-import { YesNoAnswer } from "../../../src/lib/helpers"
+import {
+  ApplicationAddressTypeEnum,
+  YesNoEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import BooleansFormatter from "../../../src/lib/listings/BooleansFormatter"
 import { AnotherAddressEnum, FormListing, FormMetadata } from "../../../src/lib/listings/formTypes"
 
@@ -15,10 +17,10 @@ describe("BooleansFormatter", () => {
 
     expect(formatData(data).applicationDropOffAddressType).toBeNull()
 
-    data.canApplicationsBeDroppedOff = YesNoAnswer.Yes
-    data.whereApplicationsDroppedOff = ListingApplicationAddressType.leasingAgent
+    data.canApplicationsBeDroppedOff = YesNoEnum.yes
+    data.whereApplicationsDroppedOff = ApplicationAddressTypeEnum.leasingAgent
     expect(formatData(data).applicationDropOffAddressType).toEqual(
-      ListingApplicationAddressType.leasingAgent
+      ApplicationAddressTypeEnum.leasingAgent
     )
 
     data.whereApplicationsDroppedOff = AnotherAddressEnum.anotherAddress
@@ -30,10 +32,10 @@ describe("BooleansFormatter", () => {
 
     expect(formatData(data).digitalApplication).toBeNull()
 
-    data.digitalApplicationChoice = YesNoAnswer.Yes
+    data.digitalApplicationChoice = YesNoEnum.yes
     expect(formatData(data).digitalApplication).toBe(true)
 
-    data.digitalApplicationChoice = YesNoAnswer.No
+    data.digitalApplicationChoice = YesNoEnum.no
     expect(formatData(data).digitalApplication).toBe(false)
   })
 })

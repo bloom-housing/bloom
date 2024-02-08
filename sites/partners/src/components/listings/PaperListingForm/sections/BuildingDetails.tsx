@@ -60,7 +60,7 @@ const BuildingDetails = ({
 
   const buildingAddress: BuildingAddress = useWatch({
     control,
-    name: "buildingAddress",
+    name: "listingsBuildingAddress",
   })
 
   const mapPinPosition = useWatch({
@@ -139,7 +139,7 @@ const BuildingDetails = ({
   }, [mapPinPosition])
 
   const getAddressErrorMessage = (fieldKey: string, defaultMessage: string) => {
-    return errors?.buildingAddress && !getValues("buildingAddress.street")
+    return errors?.listingsBuildingAddress && !getValues(fieldKey)
       ? t("errors.partialAddress")
       : defaultMessage
   }
@@ -158,22 +158,23 @@ const BuildingDetails = ({
           <Grid.Cell className="seeds-grid-span-2">
             <Field
               label={t("application.contact.streetAddress")}
-              name={"buildingAddress.street"}
-              id={"buildingAddress.street"}
+              name={"listingsBuildingAddress.street"}
+              id={"listingsBuildingAddress.street"}
               error={
                 !!getAddressErrorMessage(
-                  "buildingAddress.street",
-                  fieldMessage(errors?.buildingAddress?.street)
+                  "listingsBuildingAddress.street",
+                  fieldMessage(errors?.listingsBuildingAddress?.street)
                 )
               }
               errorMessage={getAddressErrorMessage(
-                "buildingAddress.street",
-                fieldMessage(errors?.buildingAddress?.street)
+                "listingsBuildingAddress.street",
+                fieldMessage(errors?.listingsBuildingAddress?.street)
               )}
               placeholder={t("application.contact.streetAddress")}
               inputProps={{
                 onChange: () =>
-                  fieldHasError(errors?.buildingAddress?.street) && clearErrors("buildingAddress"),
+                  fieldHasError(errors?.listingsBuildingAddress?.street) &&
+                  clearErrors("listingsBuildingAddress"),
               }}
               register={register}
             />
@@ -190,22 +191,23 @@ const BuildingDetails = ({
           <Grid.Cell className="seeds-grid-span-2">
             <Field
               label={t("application.contact.city")}
-              name={"buildingAddress.city"}
-              id={"buildingAddress.city"}
+              name={"listingsBuildingAddress.city"}
+              id={"listingsBuildingAddress.city"}
               error={
                 !!getAddressErrorMessage(
-                  "buildingAddress.city",
-                  fieldMessage(errors?.buildingAddress?.city)
+                  "listingsBuildingAddress.city",
+                  fieldMessage(errors?.listingsBuildingAddress?.city)
                 )
               }
               errorMessage={getAddressErrorMessage(
-                "buildingAddress.city",
-                fieldMessage(errors?.buildingAddress?.city)
+                "listingsBuildingAddress.city",
+                fieldMessage(errors?.listingsBuildingAddress?.city)
               )}
               placeholder={t("application.contact.city")}
               inputProps={{
                 onChange: () =>
-                  fieldHasError(errors?.buildingAddress?.city) && clearErrors("buildingAddress"),
+                  fieldHasError(errors?.listingsBuildingAddress?.city) &&
+                  clearErrors("listingsBuildingAddress"),
               }}
               register={register}
             />
@@ -216,25 +218,25 @@ const BuildingDetails = ({
               label={t("application.contact.state")}
               className={`mb-0 ${
                 getAddressErrorMessage(
-                  "buildingAddress.state",
-                  fieldMessage(errors?.buildingAddress?.state)
+                  "listingsBuildingAddress.state",
+                  fieldMessage(errors?.listingsBuildingAddress?.state)
                 )
                   ? "field-value-error"
                   : ""
               }`}
             >
               <Select
-                id={`buildingAddress.state`}
-                name={`buildingAddress.state`}
+                id={`listingsBuildingAddress.state`}
+                name={`listingsBuildingAddress.state`}
                 error={
                   !!getAddressErrorMessage(
-                    "buildingAddress.state",
-                    fieldMessage(errors?.buildingAddress?.state)
+                    "listingsBuildingAddress.state",
+                    fieldMessage(errors?.listingsBuildingAddress?.state)
                   )
                 }
                 errorMessage={getAddressErrorMessage(
-                  "buildingAddress.state",
-                  fieldMessage(errors?.buildingAddress?.state)
+                  "listingsBuildingAddress.state",
+                  fieldMessage(errors?.listingsBuildingAddress?.state)
                 )}
                 label={t("application.contact.state")}
                 labelClassName="sr-only"
@@ -244,7 +246,8 @@ const BuildingDetails = ({
                 keyPrefix="states"
                 inputProps={{
                   onChange: () =>
-                    fieldHasError(errors?.buildingAddress?.state) && clearErrors("buildingAddress"),
+                    fieldHasError(errors?.listingsBuildingAddress?.state) &&
+                    clearErrors("listingsBuildingAddress"),
                 }}
               />
             </FieldValue>
@@ -252,22 +255,23 @@ const BuildingDetails = ({
           <Grid.Cell>
             <Field
               label={t("application.contact.zip")}
-              name={"buildingAddress.zipCode"}
-              id={"buildingAddress.zipCode"}
+              name={"listingsBuildingAddress.zipCode"}
+              id={"listingsBuildingAddress.zipCode"}
               placeholder={t("application.contact.zip")}
               error={
                 !!getAddressErrorMessage(
-                  "buildingAddress.zipCode",
-                  fieldMessage(errors?.buildingAddress?.zipCode)
+                  "listingsBuildingAddress.zipCode",
+                  fieldMessage(errors?.listingsBuildingAddress?.zipCode)
                 )
               }
               errorMessage={getAddressErrorMessage(
-                "buildingAddress.zipCode",
-                fieldMessage(errors?.buildingAddress?.zipCode)
+                "listingsBuildingAddress.zipCode",
+                fieldMessage(errors?.listingsBuildingAddress?.zipCode)
               )}
               inputProps={{
                 onChange: () =>
-                  fieldHasError(errors?.buildingAddress?.zipCode) && clearErrors("buildingAddress"),
+                  fieldHasError(errors?.listingsBuildingAddress?.zipCode) &&
+                  clearErrors("listingsBuildingAddress"),
               }}
               register={register}
             />

@@ -15,24 +15,20 @@ describe("Admin User Mangement Tests", () => {
 
     const regex = new RegExp(`${rolesArray.join("|")}`, "g")
 
-    cy.get(`.ag-center-cols-container [col-id="roles"]`).each((role) => {
+    cy.get(`.ag-center-cols-container [col-id="userRoles"]`).each((role) => {
       cy.wrap(role).contains(regex)
     })
   })
 
   it("as admin user, should be able to download export", () => {
+    cy.intercept("GET", "api/adapter/user/csv", {
+      success: true,
+    })
     cy.visit("/")
     cy.getByTestId("Users-1").click()
     cy.getByID("export-users").click()
-    const convertToString = (value: number) => {
-      return value < 10 ? `0${value}` : `${value}`
-    }
-    const now = new Date()
-    const month = now.getMonth() + 1
-    cy.readFile(
-      `cypress/downloads/users-${now.getFullYear()}-${convertToString(month)}-${convertToString(
-        now.getDate()
-      )}_${convertToString(now.getHours())}_${convertToString(now.getMinutes())}.csv`
+    cy.getByTestId("alert-box").contains(
+      "An email containing the exported file has been sent to admin@example.com"
     )
   })
 
@@ -59,7 +55,7 @@ describe("Admin User Mangement Tests", () => {
         ],
         [
           {
-            id: "role",
+            id: "userRoles",
             fieldKey: "role",
           },
         ],
@@ -94,7 +90,7 @@ describe("Admin User Mangement Tests", () => {
         ],
         [
           {
-            id: "role",
+            id: "userRoles",
             fieldKey: "role",
           },
           {
@@ -133,7 +129,7 @@ describe("Admin User Mangement Tests", () => {
         ],
         [
           {
-            id: "role",
+            id: "userRoles",
             fieldKey: "role",
           },
         ],
@@ -142,8 +138,8 @@ describe("Admin User Mangement Tests", () => {
       )
     })
     cy.getByTestId("jurisdictions").first().click()
-    cy.getByTestId("listings_Alameda").first().click()
-    cy.getByTestId("listings_Alameda").last().click()
+    cy.getByTestId("listings_Bloomington").first().click()
+    cy.getByTestId("listings_Bloomington").last().click()
     cy.getByID("invite-user").click()
     cy.getByTestId("alert-box").contains("Invite sent").should("have.text", "Invite sent")
   })

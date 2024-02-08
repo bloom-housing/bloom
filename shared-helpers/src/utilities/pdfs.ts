@@ -1,4 +1,4 @@
-import { ListingEvent, ListingEventType } from "@bloom-housing/backend-core/types"
+import { ListingEvent, ListingEventsTypeEnum } from "../types/backend-swagger"
 
 export const cloudinaryPdfFromId = (publicId: string, cloudName: string) => {
   return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}.pdf`
@@ -6,13 +6,13 @@ export const cloudinaryPdfFromId = (publicId: string, cloudName: string) => {
 
 export const pdfUrlFromListingEvents = (
   events: ListingEvent[],
-  listingEventType: ListingEventType,
+  listingEventType: ListingEventsTypeEnum,
   cloudName: string
 ) => {
   const event = events.find((event) => event?.type === listingEventType)
   if (event) {
-    return event.file?.label == "cloudinaryPDF"
-      ? cloudinaryPdfFromId(event.file.fileId, cloudName)
+    return event.assets?.label == "cloudinaryPDF"
+      ? cloudinaryPdfFromId(event.assets.fileId, cloudName)
       : event.url ?? null
   }
   return null

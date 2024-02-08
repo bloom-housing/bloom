@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
-import { ApplicationSection, Listing } from "@bloom-housing/backend-core/types"
 import { AlertBox, AlertNotice, Field, FieldGroup, Form, t } from "@bloom-housing/ui-components"
 import { Alert } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
@@ -12,6 +11,10 @@ import {
   AuthContext,
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
+import {
+  Listing,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
@@ -50,7 +53,10 @@ const ApplicationIncome = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("income")
   const [incomeError, setIncomeError] = useState<IncomeError>(null)
-  const currentPageSection = listingSectionQuestions(listing, ApplicationSection.programs)?.length
+  const currentPageSection = listingSectionQuestions(
+    listing,
+    MultiselectQuestionsApplicationSectionEnum.programs
+  )?.length
     ? 4
     : 3
 

@@ -3,7 +3,7 @@ import { AlertTypes, MinimalTable, Modal, t } from "@bloom-housing/ui-components
 import { Button, Link } from "@bloom-housing/ui-seeds"
 import { useListingsMultiselectQuestionList } from "../../lib/hooks"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { MultiselectQuestion } from "@bloom-housing/backend-core"
+import { MultiselectQuestion } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type PreferenceDeleteModalProps = {
   onClose: () => void

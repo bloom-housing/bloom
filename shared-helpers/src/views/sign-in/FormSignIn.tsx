@@ -7,6 +7,8 @@ import { NetworkStatus } from "../../auth/catchNetworkError"
 import type { UseFormMethods } from "react-hook-form"
 import { AccountCard } from "../accounts/AccountCard"
 import styles from "../../../../sites/public/styles/sign-in.module.scss"
+import { useRouter } from "next/router"
+import { getListingRedirectUrl } from "../../utilities/getListingRedirectUrl"
 
 export type FormSignInProps = {
   control: FormSignInControl
@@ -37,6 +39,11 @@ const FormSignIn = ({
     window.scrollTo(0, 0)
   }
   const { LinkComponent } = useContext(NavigationContext)
+  const router = useRouter()
+  const listingIdRedirect = router.query?.listingId as string
+  const forgetPasswordURL = getListingRedirectUrl(listingIdRedirect, "/forgot-password")
+  const createAccountUrl = getListingRedirectUrl(listingIdRedirect, "/create-account")
+
   return (
     <AccountCard iconSymbol="profile" title={t("nav.signIn")} divider="inset" headingPriority={1}>
       <>
@@ -66,6 +73,11 @@ const FormSignIn = ({
                 {t("authentication.signIn.forgotPassword")}
               </LinkComponent>
             </aside>
+          <aside className="float-right text-sm font-semibold">
+            <LinkComponent href={forgetPasswordURL}>
+              {t("authentication.signIn.forgotPassword")}
+            </LinkComponent>
+          </aside>
 
             <Field
               caps={true}
@@ -100,6 +112,19 @@ const FormSignIn = ({
         )}
       </>
     </AccountCard>
+          </div>
+        </Form>
+      </div>
+      {showRegisterBtn && (
+        <div className="form-card__group text-center border-t">
+          <h2 className="mb-6">{t("authentication.createAccount.noAccount")}</h2>
+
+          <Button variant="primary-outlined" href={createAccountUrl}>
+            {t("account.createAccount")}
+          </Button>
+        </div>
+      )}
+    </FormCard>
   )
 }
 
