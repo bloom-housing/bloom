@@ -32,6 +32,7 @@ export default () => {
   const [openModal, setOpenModal] = useState<boolean>(false)
   const router = useRouter()
   const language = router.locale
+  const listingId = router.query?.listingId as string
   const email = useRef({})
   const password = useRef({})
   email.current = watch("email", "")
@@ -48,11 +49,16 @@ export default () => {
   const onSubmit = async (data) => {
     try {
       const { dob, ...rest } = data
-      await createUser({
-        ...rest,
-        dob: dayjs(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
-        language,
-      })
+      const listingIdRedirect =
+        process.env.showMandatedAccounts && listingId ? listingId : undefined
+      await createUser(
+        {
+          ...rest,
+          dob: dayjs(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
+          language,
+        },
+        listingIdRedirect
+      )
 
       setOpenModal(true)
     } catch (err) {
@@ -255,14 +261,14 @@ export default () => {
           email: email.current,
         })}
         onClose={() => {
-          void router.push("/")
+          void router.push("/sign-in")
           window.scrollTo(0, 0)
         }}
         actions={[
           <Button
             variant="primary"
             onClick={() => {
-              void router.push("/")
+              void router.push("/sign-in")
               window.scrollTo(0, 0)
             }}
             size="sm"
@@ -274,7 +280,7 @@ export default () => {
             disabled={confirmationResent}
             onClick={() => {
               setConfirmationResent(true)
-              void resendConfirmation(email.current.toString())
+              void resendConfirmation(email.current.toString(), listingId)
             }}
             size="sm"
           >
