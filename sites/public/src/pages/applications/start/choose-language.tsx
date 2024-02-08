@@ -67,8 +67,9 @@ const ApplicationChooseLanguage = (props: ChooseLanguageProps) => {
     conductor.reset()
     if (!router.isReady && !listingId) return
     if (router.isReady && !listingId) {
-      void router.push("/")
-      return
+      return process.env.showMandatedAccounts && initialStateLoaded && profile
+        ? undefined
+        : void router.push("/")
     }
 
     if (!context.listing || context.listing.id !== listingId) {
@@ -77,7 +78,7 @@ const ApplicationChooseLanguage = (props: ChooseLanguageProps) => {
       conductor.listing = context.listing
       setListing(context.listing)
     }
-  }, [router, conductor, context, listingId, props])
+  }, [router, conductor, context, listingId, props, initialStateLoaded, profile])
 
   useEffect(() => {
     if (listing?.status === "closed") {

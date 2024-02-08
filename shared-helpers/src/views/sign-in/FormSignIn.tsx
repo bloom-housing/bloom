@@ -4,6 +4,8 @@ import { Button } from "@bloom-housing/ui-seeds"
 import { FormSignInErrorBox } from "./FormSignInErrorBox"
 import { NetworkStatus } from "../../auth/catchNetworkError"
 import type { UseFormMethods } from "react-hook-form"
+import { useRouter } from "next/router"
+import { getListingRedirectUrl } from "../../utilities/getListingRedirectUrl"
 
 export type FormSignInProps = {
   control: FormSignInControl
@@ -34,6 +36,10 @@ const FormSignIn = ({
     window.scrollTo(0, 0)
   }
   const { LinkComponent } = useContext(NavigationContext)
+  const router = useRouter()
+  const listingIdRedirect = router.query?.listingId as string
+  const forgetPasswordURL = getListingRedirectUrl(listingIdRedirect, "/forgot-password")
+  const createAccountUrl = getListingRedirectUrl(listingIdRedirect, "/create-account")
 
   return (
     <FormCard>
@@ -60,7 +66,7 @@ const FormSignIn = ({
           />
 
           <aside className="float-right text-sm font-semibold">
-            <LinkComponent href="/forgot-password">
+            <LinkComponent href={forgetPasswordURL}>
               {t("authentication.signIn.forgotPassword")}
             </LinkComponent>
           </aside>
@@ -88,7 +94,7 @@ const FormSignIn = ({
         <div className="form-card__group text-center border-t">
           <h2 className="mb-6">{t("authentication.createAccount.noAccount")}</h2>
 
-          <Button variant="primary-outlined" href="/create-account">
+          <Button variant="primary-outlined" href={createAccountUrl}>
             {t("account.createAccount")}
           </Button>
         </div>

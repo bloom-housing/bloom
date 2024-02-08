@@ -25,6 +25,7 @@ import { Translation } from "../translations/entities/translation.entity"
 import { ListingEventType, Unit } from "../../types"
 import { formatLocalDate } from "../shared/utils/format-local-date"
 import { formatCommunityType } from "../listings/helpers"
+import { getPublicEmailURL } from "../shared/utils/get-public-email-url"
 
 type EmailAttachmentData = {
   data: string
@@ -244,8 +245,8 @@ export class EmailService {
     const jurisdiction = await this.getUserJurisdiction(user)
     void (await this.loadTranslations(jurisdiction, user.language))
     const compiledTemplate = this.template("forgot-password")
-    const resetUrl = `${appUrl}/reset-password?token=${user.resetToken}`
 
+    const resetUrl = getPublicEmailURL(appUrl, user.resetToken, "/reset-password")
     if (this.configService.get<string>("NODE_ENV") == "production") {
       Logger.log(
         `Preparing to send a forget password email to ${user.email} from ${jurisdiction.emailFromAddress}...`
