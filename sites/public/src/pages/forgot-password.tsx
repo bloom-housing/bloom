@@ -33,9 +33,10 @@ const ForgotPassword = () => {
 
   const onSubmit = async (data: { email: string }) => {
     const { email } = data
-
+    const listingId = router.query?.listingId as string
+    const listingIdRedirect = listingId && process.env.showMandatedAccounts ? listingId : undefined
     try {
-      await forgotPassword(email)
+      await forgotPassword(email, listingIdRedirect)
     } catch (error) {
       const { status } = error.response || {}
       determineNetworkError(status, error)

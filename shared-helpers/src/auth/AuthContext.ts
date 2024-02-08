@@ -32,6 +32,7 @@ import {
   UserService,
   serviceOptions,
 } from "../types/backend-swagger"
+import { getListingRedirectUrl } from "../utilities/getListingRedirectUrl"
 
 type ContextProps = {
   amiChartsService: AmiChartsService
@@ -60,9 +61,9 @@ type ContextProps = {
   ) => Promise<User | undefined>
   signOut: () => void
   confirmAccount: (token: string) => Promise<User | undefined>
-  forgotPassword: (email: string) => Promise<boolean | undefined>
-  createUser: (user: UserCreate) => Promise<User | undefined>
-  resendConfirmation: (email: string) => Promise<boolean | undefined>
+  forgotPassword: (email: string, listingIdRedirect?: string) => Promise<boolean | undefined>
+  createUser: (user: UserCreate, listingIdRedirect?: string) => Promise<User | undefined>
+  resendConfirmation: (email: string, listingIdRedirect?: string) => Promise<boolean | undefined>
   initialStateLoaded: boolean
   loading: boolean
   profile?: User
@@ -283,33 +284,37 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
         dispatch(stopLoading())
       }
     },
-    createUser: async (user: UserCreate) => {
+    createUser: async (user: UserCreate, listingIdRedirect) => {
       dispatch(startLoading())
+      const appUrl = getListingRedirectUrl(listingIdRedirect)
       try {
         const response = await userService?.create({
-          body: { ...user, appUrl: window.location.origin },
+          body: { ...user, appUrl },
         })
         return response
       } finally {
         dispatch(stopLoading())
       }
     },
-    resendConfirmation: async (email: string) => {
+    resendConfirmation: async (email: string, listingIdRedirect) => {
       dispatch(startLoading())
+      const appUrl = getListingRedirectUrl(listingIdRedirect)
       try {
         const response = await userService?.resendConfirmation({
-          body: { email, appUrl: window.location.origin },
+          body: { email, appUrl },
         })
         return response.success
       } finally {
         dispatch(stopLoading())
       }
     },
-    forgotPassword: async (email) => {
+    forgotPassword: async (email, listingIdRedirect) => {
       dispatch(startLoading())
       try {
+        const appUrl = getListingRedirectUrl(listingIdRedirect)
+
         const response = await userService?.forgotPassword({
-          body: { email, appUrl: window.location.origin },
+          body: { email, appUrl },
         })
         return response.success
       } finally {

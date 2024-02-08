@@ -50,6 +50,7 @@ import { Request as ExpressRequest, Response } from "express"
 import { UserProfileUpdateDto } from "../dto/user-profile.dto"
 import { Listing } from "../../listings/entities/listing.entity"
 import { ListingsService } from "../../listings/listings.service"
+import { getPublicEmailURL } from "../../shared/utils/get-public-email-url"
 
 dayjs.extend(advancedFormat)
 
@@ -621,7 +622,7 @@ export class UserService {
   }
 
   private static getPublicConfirmationUrl(appUrl: string, user: User) {
-    return `${appUrl}?token=${user.confirmationToken}`
+    return getPublicEmailURL(appUrl, user.confirmationToken)
   }
 
   private static getPartnersConfirmationUrl(appUrl: string, user: User) {

@@ -27,7 +27,8 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
 
   const onSubmit = async ({ email }) => {
     try {
-      await resendConfirmation(email)
+      const listingId = router.query?.listingId as string
+      await resendConfirmation(email, listingId)
 
       setSiteAlertMessage(t(`authentication.createAccount.emailSent`), "success")
       setOpenModal(false)
@@ -39,12 +40,21 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
   }
 
   useEffect(() => {
+    const redirectUrl = router.query?.redirectUrl as string
+    const listingId = router.query?.listingId as string
+
+    const routerRedirectUrl =
+      process.env.showMandatedAccounts && redirectUrl && listingId
+        ? `${redirectUrl}`
+        : "/account/dashboard"
     if (router?.query?.token && !profile) {
       confirmAccount(router.query.token.toString())
         .then(() => {
           void router.push({
-            pathname: "/account/dashboard",
-            query: { alert: `authentication.createAccount.accountConfirmed` },
+            pathname: routerRedirectUrl,
+            query: process.env.showMandatedAccounts
+              ? { listingId: listingId }
+              : { alert: `authentication.createAccount.accountConfirmed` },
           })
           window.scrollTo(0, 0)
         })
