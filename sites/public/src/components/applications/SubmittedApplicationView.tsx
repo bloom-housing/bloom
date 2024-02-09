@@ -2,7 +2,11 @@ import { t } from "@bloom-housing/ui-components"
 import { Button, Card, Heading, Icon } from "@bloom-housing/ui-seeds"
 import FormSummaryDetails from "../shared/FormSummaryDetails"
 import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
-import { Application, ApplicationSection, Listing } from "@bloom-housing/backend-core"
+import {
+  Application,
+  Listing,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useMemo } from "react"
 import { DATE_FORMAT } from "../../lib/constants"
 import dayjs from "dayjs"
@@ -74,9 +78,13 @@ const SubmittedApplicationView = ({
           listing={listing}
           application={application}
           hidePreferences={
-            listingSectionQuestions(listing, ApplicationSection.preferences)?.length === 0
+            listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.preferences)
+              ?.length === 0
           }
-          hidePrograms={listingSectionQuestions(listing, ApplicationSection.programs)?.length === 0}
+          hidePrograms={
+            listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.programs)
+              ?.length === 0
+          }
           editMode={false}
         />
         <Card.Section>
