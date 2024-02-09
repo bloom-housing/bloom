@@ -26,6 +26,7 @@ const ApplicationView = () => {
       <SubmittedApplicationView
         application={application}
         listing={listing}
+        backHref={"/applications/review/confirmation"}
       ></SubmittedApplicationView>
     </FormsLayout>
   )
