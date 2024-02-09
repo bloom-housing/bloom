@@ -3,9 +3,9 @@ import { t, FormCard, dateToString, Heading } from "@bloom-housing/ui-components
 import Link from "next/link"
 import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
 import FormsLayout from "../../../layouts/forms"
-import { Application, Listing } from "@bloom-housing/backend-core/types"
 import { useRouter } from "next/router"
 import { AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
+import { Application, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export default () => {
   const router = useRouter()
@@ -19,13 +19,14 @@ export default () => {
   useEffect(() => {
     if (profile) {
       applicationsService
-        .retrieve({ id: applicationId })
+        .retrieve({ applicationId })
         .then((app) => {
           setApplication(app)
           listingsService
-            ?.retrieve({ id: app.listing.id })
+            ?.retrieve({ id: app.listings.id })
             .then((retrievedListing) => {
-              setListing(retrievedListing)
+              // TODO: fix this once this page is migrated
+              setListing(retrievedListing as unknown as Listing)
             })
             .catch((err) => {
               console.error(`Error fetching listing: ${err}`)

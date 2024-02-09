@@ -2,8 +2,10 @@ import React from "react"
 import { t, Field, Select } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
-import { IncomePeriod } from "@bloom-housing/backend-core/types"
-import { YesNoAnswer } from "../../../../lib/helpers"
+import {
+  IncomePeriodEnum,
+  YesNoEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const FormHouseholdIncome = () => {
@@ -29,7 +31,7 @@ const FormHouseholdIncome = () => {
                 label={t("t.perYear")}
                 register={register}
                 inputProps={{
-                  value: IncomePeriod.perYear,
+                  value: IncomePeriodEnum.perYear,
                   onChange: () => {
                     setValue("incomeMonth", "")
                     setValue("incomeYear", "")
@@ -45,7 +47,7 @@ const FormHouseholdIncome = () => {
                 label={t("t.perMonth")}
                 register={register}
                 inputProps={{
-                  value: IncomePeriod.perMonth,
+                  value: IncomePeriodEnum.perMonth,
                   onChange: () => {
                     setValue("incomeMonth", "")
                     setValue("incomeYear", "")
@@ -65,7 +67,7 @@ const FormHouseholdIncome = () => {
               label={t("application.details.annualIncome")}
               placeholder={t("t.enterAmount")}
               register={register}
-              disabled={incomePeriodValue !== IncomePeriod.perYear}
+              disabled={incomePeriodValue !== IncomePeriodEnum.perYear}
             />
           </Grid.Cell>
 
@@ -77,7 +79,7 @@ const FormHouseholdIncome = () => {
               label={t("application.details.monthlyIncome")}
               placeholder={t("t.enterAmount")}
               register={register}
-              disabled={incomePeriodValue !== IncomePeriod.perMonth}
+              disabled={incomePeriodValue !== IncomePeriodEnum.perMonth}
             />
           </Grid.Cell>
 
@@ -89,7 +91,7 @@ const FormHouseholdIncome = () => {
               label={t("application.details.vouchers")}
               register={register}
               controlClassName="control"
-              options={[YesNoAnswer.Yes, YesNoAnswer.No]}
+              options={[YesNoEnum.yes, YesNoEnum.no]}
               keyPrefix="t"
             />
           </Grid.Cell>

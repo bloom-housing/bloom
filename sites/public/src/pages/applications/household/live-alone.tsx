@@ -93,7 +93,7 @@ const ApplicationLiveAlone = () => {
               onChange={(event: ChangeEvent<any>) => {
                 if (event.target.value === "liveAlone") {
                   application.householdSize = 1
-                  application.householdMembers = []
+                  application.householdMember = []
                   setValidateHousehold(true)
                 } else {
                   if (application.householdSize === 1) application.householdSize = 0

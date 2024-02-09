@@ -41,6 +41,7 @@ module.exports = withBundleAnalyzer({
     cacheRevalidate: process.env.CACHE_REVALIDATE ? Number(process.env.CACHE_REVALIDATE) : 60,
     cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
     showMandatedAccounts: process.env.SHOW_MANDATED_ACCOUNTS === "TRUE",
+    maintenanceWindow: process.env.MAINTENANCE_WINDOW,
   },
   i18n: {
     locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],
@@ -53,7 +54,6 @@ module.exports = withBundleAnalyzer({
     "@bloom-housing/ui-seeds",
     "@bloom-housing/shared-helpers",
     "@bloom-housing/ui-components",
-    "@bloom-housing/backend-core",
   ],
   webpack: (config) => {
     config.module.rules.push({

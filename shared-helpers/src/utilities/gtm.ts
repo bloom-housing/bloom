@@ -1,4 +1,4 @@
-import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
+import { ReviewOrderTypeEnum } from "../types/backend-swagger"
 
 declare global {
   interface Window {
@@ -21,7 +21,7 @@ export type ListingDetail = PageView & {
   listingStartDate: string
   listingStatus: string
   listingID: string
-  listingType: ListingReviewOrder
+  listingType: ReviewOrderTypeEnum
   applicationDueDate: string
   digitalApplication: boolean
   paperApplication: boolean

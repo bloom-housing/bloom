@@ -11,7 +11,11 @@ import {
   t,
 } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { HouseholdMember, Member } from "@bloom-housing/backend-core/types"
+import {
+  HouseholdMember,
+  HouseholdMemberUpdate,
+  YesNoEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   OnClientSide,
   PageView,
@@ -27,6 +31,51 @@ import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
 
+export class Member implements HouseholdMemberUpdate {
+  id: string
+  orderId = undefined as number | undefined
+  firstName = ""
+  middleName = ""
+  lastName = ""
+  birthMonth = undefined
+  birthDay = undefined
+  birthYear = undefined
+  emailAddress = ""
+  noEmail = undefined
+  phoneNumber = ""
+  phoneNumberType = ""
+  noPhone = undefined
+
+  constructor(orderId: number) {
+    this.orderId = orderId
+  }
+  householdMemberAddress = {
+    placeName: undefined,
+    city: "",
+    county: "",
+    state: "",
+    street: "",
+    street2: "",
+    zipCode: "",
+    latitude: undefined,
+    longitude: undefined,
+  }
+  householdMemberWorkAddress = {
+    placeName: undefined,
+    city: "",
+    county: "",
+    state: "",
+    street: "",
+    street2: "",
+    zipCode: "",
+    latitude: undefined,
+    longitude: undefined,
+  }
+  sameAddress?: YesNoEnum
+  relationship?: string
+  workInRegion?: YesNoEnum
+}
+
 const ApplicationMember = () => {
   const { profile } = useContext(AuthContext)
   let memberId, member, saveText, cancelText
@@ -36,11 +85,11 @@ const ApplicationMember = () => {
 
   if (router.query.memberId) {
     memberId = parseInt(router.query.memberId.toString())
-    member = application.householdMembers[memberId]
+    member = application.householdMember[memberId]
     saveText = t("application.household.member.updateHouseholdMember")
     cancelText = t("application.household.member.deleteThisPerson")
   } else {
-    memberId = application.householdMembers.length
+    memberId = application.householdMember.length
     member = new Member(memberId)
     saveText = t("application.household.member.saveHouseholdMember")
     cancelText = t("application.household.member.cancelAddingThisPerson")
@@ -54,7 +103,7 @@ const ApplicationMember = () => {
     const validation = await trigger()
     if (!validation) return
 
-    application.householdMembers[memberId] = { ...member, ...data } as HouseholdMember
+    application.householdMember[memberId] = { ...member, ...data } as HouseholdMember
     conductor.sync()
     void router.push("/applications/household/add-members")
   }
@@ -63,7 +112,7 @@ const ApplicationMember = () => {
   }
   const deleteMember = () => {
     if (member.orderId != undefined) {
-      application.householdMembers = application.householdMembers.reduce((acc, householdMember) => {
+      application.householdMember = application.householdMember.reduce((acc, householdMember) => {
         if (householdMember.orderId !== member.orderId) {
           acc.push({
             ...householdMember,
@@ -237,7 +286,7 @@ const ApplicationMember = () => {
                 <Field
                   id="addressStreet"
                   name="address.street"
-                  defaultValue={member.address.street}
+                  defaultValue={member.householdMemberAddress.street}
                   validation={{ required: true, maxLength: 64 }}
                   errorMessage={
                     errors.address?.street?.type === "maxLength"
@@ -254,7 +303,7 @@ const ApplicationMember = () => {
                   id="addressStreet2"
                   name="address.street2"
                   label={t("application.contact.apt")}
-                  defaultValue={member.address.street2}
+                  defaultValue={member.householdMemberAddress.street2}
                   error={errors.address?.street2}
                   validation={{ maxLength: 64 }}
                   errorMessage={t("errors.maxLength")}
@@ -267,7 +316,7 @@ const ApplicationMember = () => {
                     id="addressCity"
                     name="address.city"
                     label={t("application.contact.city")}
-                    defaultValue={member.address.city}
+                    defaultValue={member.householdMemberAddress.city}
                     validation={{ required: true, maxLength: 64 }}
                     errorMessage={
                       errors.address?.city?.type === "maxLength"
@@ -283,7 +332,7 @@ const ApplicationMember = () => {
                     id="addressState"
                     name="address.state"
                     label={t("application.contact.state")}
-                    defaultValue={member.address.state}
+                    defaultValue={member.householdMemberAddress.state}
                     validation={{ required: true, maxLength: 64 }}
                     error={errors.address?.state}
                     errorMessage={
@@ -303,7 +352,7 @@ const ApplicationMember = () => {
                   id="addressZipCode"
                   name="address.zipCode"
                   label={t("application.contact.zip")}
-                  defaultValue={member.address.zipCode}
+                  defaultValue={member.householdMemberAddress.zipCode}
                   validation={{ required: true, maxLength: 64 }}
                   error={errors.address?.zipCode}
                   errorMessage={
@@ -322,7 +371,7 @@ const ApplicationMember = () => {
             <fieldset>
               <legend className="text__caps-spaced">
                 {t("application.household.member.workInRegion", {
-                  county: listing?.countyCode,
+                  county: listing?.listingsBuildingAddress?.county || listing?.jurisdictions?.name,
                 })}
               </legend>
               <FieldGroup
@@ -348,7 +397,7 @@ const ApplicationMember = () => {
                   id="workAddress.street"
                   name="workAddress.street"
                   label={t("application.contact.streetAddress")}
-                  defaultValue={member.workAddress.street}
+                  defaultValue={member.householdMemberWorkAddress.street}
                   validation={{ required: true, maxLength: 64 }}
                   error={errors.workAddress?.street}
                   errorMessage={
@@ -364,7 +413,7 @@ const ApplicationMember = () => {
                   id="workAddress.street2"
                   name="workAddress.street2"
                   label={t("application.contact.apt")}
-                  defaultValue={member.workAddress.street2}
+                  defaultValue={member.householdMemberWorkAddress.street2}
                   error={errors.workAddress?.street2}
                   errorMessage={t("errors.maxLength")}
                   validation={{ maxLength: 64 }}
@@ -377,7 +426,7 @@ const ApplicationMember = () => {
                     id="workAddress.city"
                     name="workAddress.city"
                     label={t("application.contact.city")}
-                    defaultValue={member.workAddress.city}
+                    defaultValue={member.householdMemberWorkAddress.city}
                     validation={{ required: true, maxLength: 64 }}
                     error={errors.workAddress?.city}
                     errorMessage={
@@ -393,7 +442,7 @@ const ApplicationMember = () => {
                     id="workAddress.state"
                     name="workAddress.state"
                     label={t("application.contact.state")}
-                    defaultValue={member.workAddress.state}
+                    defaultValue={member.householdMemberWorkAddress.state}
                     validation={{ required: true, maxLength: 64 }}
                     error={errors.workAddress?.state}
                     errorMessage={
@@ -413,7 +462,7 @@ const ApplicationMember = () => {
                   id="workAddress.zipCode"
                   name="workAddress.zipCode"
                   label={t("application.contact.zip")}
-                  defaultValue={member.workAddress.zipCode}
+                  defaultValue={member.householdMemberWorkAddress.zipCode}
                   validation={{ required: true, maxLength: 64 }}
                   error={errors.workAddress?.zipCode}
                   errorMessage={

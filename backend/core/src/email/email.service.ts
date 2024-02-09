@@ -19,6 +19,7 @@ import { Language } from "../shared/types/language-enum"
 import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.service"
 import { Translation } from "../translations/entities/translation.entity"
 import { formatLocalDate } from "../shared/utils/format-local-date"
+import { getPublicEmailURL } from "../shared/utils/get-public-email-url"
 
 type EmailAttachmentData = {
   data: string
@@ -47,12 +48,12 @@ export class EmailService {
       phrases: {},
     })
     const polyglot = this.polyglot
-    Handlebars.registerHelper("t", function (
-      phrase: string,
-      options?: number | Polyglot.InterpolationOptions
-    ) {
-      return polyglot.t(phrase, options)
-    })
+    Handlebars.registerHelper(
+      "t",
+      function (phrase: string, options?: number | Polyglot.InterpolationOptions) {
+        return polyglot.t(phrase, options)
+      }
+    )
     const parts = this.partials()
     Handlebars.registerPartial(parts)
   }
@@ -207,8 +208,8 @@ export class EmailService {
     const jurisdiction = await this.getUserJurisdiction(user)
     void (await this.loadTranslations(jurisdiction, user.language))
     const compiledTemplate = this.template("forgot-password")
-    const resetUrl = `${appUrl}/reset-password?token=${user.resetToken}`
 
+    const resetUrl = getPublicEmailURL(appUrl, user.resetToken, "/reset-password")
     if (this.configService.get<string>("NODE_ENV") == "production") {
       Logger.log(
         `Preparing to send a forget password email to ${user.email} from ${jurisdiction.emailFromAddress}...`
@@ -234,28 +235,32 @@ export class EmailService {
 
     if (language && language !== Language.en) {
       if (jurisdiction) {
-        jurisdictionalTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
-          language,
-          jurisdiction.id
-        )
+        jurisdictionalTranslations =
+          await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+            language,
+            jurisdiction.id
+          )
       }
-      genericTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
-        language,
-        null
-      )
+      genericTranslations =
+        await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+          language,
+          null
+        )
     }
 
     if (jurisdiction) {
-      jurisdictionalDefaultTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
-        Language.en,
-        jurisdiction.id
-      )
+      jurisdictionalDefaultTranslations =
+        await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+          Language.en,
+          jurisdiction.id
+        )
     }
 
-    const genericDefaultTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
-      Language.en,
-      null
-    )
+    const genericDefaultTranslations =
+      await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+        Language.en,
+        null
+      )
 
     // Deep merge
     const translations = merge(

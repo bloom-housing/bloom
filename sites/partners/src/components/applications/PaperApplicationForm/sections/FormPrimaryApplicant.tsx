@@ -12,7 +12,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { phoneNumberKeys, contactPreferencesKeys, stateKeys } from "@bloom-housing/shared-helpers"
-import { YesNoAnswer } from "../../../../lib/helpers"
+import { YesNoEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const FormPrimaryApplicant = () => {
@@ -27,7 +27,7 @@ const FormPrimaryApplicant = () => {
   }))
 
   const mailingAddressValue: boolean = watch("application.sendMailToMailingAddress")
-  const workInRegionValue: YesNoAnswer = watch("application.applicant.workInRegion")
+  const workInRegionValue: YesNoEnum = watch("application.applicant.workInRegion")
   const phoneValue: string = watch("phoneNumber")
   const additionalPhoneValue: string = watch("application.additionalPhoneNumber")
 
@@ -183,7 +183,7 @@ const FormPrimaryApplicant = () => {
                 label={t("t.yes")}
                 register={register}
                 inputProps={{
-                  value: YesNoAnswer.Yes,
+                  value: YesNoEnum.yes,
                 }}
               />
 
@@ -195,7 +195,7 @@ const FormPrimaryApplicant = () => {
                 label={t("t.no")}
                 register={register}
                 inputProps={{
-                  value: YesNoAnswer.No,
+                  value: YesNoEnum.no,
                 }}
               />
             </div>
@@ -204,7 +204,7 @@ const FormPrimaryApplicant = () => {
 
         <FormAddress
           subtitle={t("application.details.residenceAddress")}
-          dataKey="application.applicant.address"
+          dataKey="application.applicant.applicantAddress"
           enableMailCheckbox={true}
           register={register}
           stateKeys={stateKeys}
@@ -213,16 +213,16 @@ const FormPrimaryApplicant = () => {
         {mailingAddressValue && (
           <FormAddress
             subtitle={t("application.contact.mailingAddress")}
-            dataKey="application.mailingAddress"
+            dataKey="application.applicationsMailingAddress"
             register={register}
             stateKeys={stateKeys}
           />
         )}
 
-        {workInRegionValue === YesNoAnswer.Yes && (
+        {workInRegionValue === YesNoEnum.yes && (
           <FormAddress
             subtitle={t("application.contact.workAddress")}
-            dataKey="application.applicant.workAddress"
+            dataKey="application.applicant.applicantWorkAddress"
             register={register}
             stateKeys={stateKeys}
           />

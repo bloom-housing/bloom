@@ -1,5 +1,9 @@
 import React, { useMemo } from "react"
-import { HouseholdMember, Member } from "@bloom-housing/backend-core/types"
+import {
+  HouseholdMember,
+  HouseholdMemberUpdate,
+  YesNoEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   t,
   DOBField,
@@ -12,11 +16,55 @@ import {
 import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
 import { relationshipKeys, stateKeys } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
-import { YesNoAnswer } from "../../../lib/helpers"
 import SectionWithGrid from "../../shared/SectionWithGrid"
 
+export class Member implements HouseholdMemberUpdate {
+  id: string
+  orderId = undefined as number | undefined
+  firstName = ""
+  middleName = ""
+  lastName = ""
+  birthMonth = undefined
+  birthDay = undefined
+  birthYear = undefined
+  emailAddress = ""
+  noEmail = undefined
+  phoneNumber = ""
+  phoneNumberType = ""
+  noPhone = undefined
+
+  constructor(orderId: number) {
+    this.orderId = orderId
+  }
+  householdMemberAddress = {
+    placeName: undefined,
+    city: "",
+    county: "",
+    state: "",
+    street: "",
+    street2: "",
+    zipCode: "",
+    latitude: undefined,
+    longitude: undefined,
+  }
+  householdMemberWorkAddress = {
+    placeName: undefined,
+    city: "",
+    county: "",
+    state: "",
+    street: "",
+    street2: "",
+    zipCode: "",
+    latitude: undefined,
+    longitude: undefined,
+  }
+  sameAddress?: YesNoEnum
+  relationship?: string
+  workInRegion?: YesNoEnum
+}
+
 type ApplicationFormMemberProps = {
-  onSubmit: (member: HouseholdMember) => void
+  onSubmit: (member: HouseholdMemberUpdate) => void
   onClose: () => void
   members: HouseholdMember[]
   editedMemberId?: number
@@ -41,8 +89,8 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
         birthDay: currentlyEdited?.birthDay,
         birthYear: currentlyEdited?.birthYear,
       },
-      address: currentlyEdited?.address,
-      workAddress: currentlyEdited?.workAddress,
+      householdMemberAddress: currentlyEdited?.householdMemberAddress,
+      householdMemberWorkAddress: currentlyEdited?.householdMemberWorkAddress,
     },
   })
 
@@ -85,12 +133,12 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
     {
       id: "sameAddressYes",
       label: t("t.yes"),
-      value: YesNoAnswer.Yes,
+      value: YesNoEnum.yes,
     },
     {
       id: "sameAddressNo",
       label: t("t.no"),
-      value: YesNoAnswer.No,
+      value: YesNoEnum.no,
     },
   ]
 
@@ -98,12 +146,12 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
     {
       id: "workInRegionYes",
       label: t("t.yes"),
-      value: YesNoAnswer.Yes,
+      value: YesNoEnum.yes,
     },
     {
       id: "workInRegionNo",
       label: t("t.no"),
-      value: YesNoAnswer.No,
+      value: YesNoEnum.no,
     },
   ]
 
@@ -194,19 +242,19 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
             </Grid.Row>
           </SectionWithGrid>
 
-          {sameAddressField === YesNoAnswer.No && (
+          {sameAddressField === YesNoEnum.no && (
             <FormAddress
               subtitle={t("application.details.residenceAddress")}
-              dataKey="address"
+              dataKey="householdMemberAddress"
               register={register}
               stateKeys={stateKeys}
             />
           )}
 
-          {workInRegionField === YesNoAnswer.Yes && (
+          {workInRegionField === YesNoEnum.yes && (
             <FormAddress
               subtitle={t("application.contact.workAddress")}
-              dataKey="workAddress"
+              dataKey="householdMemberWorkAddress"
               register={register}
               stateKeys={stateKeys}
             />

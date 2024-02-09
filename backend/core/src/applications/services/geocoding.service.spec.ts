@@ -206,7 +206,7 @@ describe("GeocodingService", () => {
     ]
     it("should save the validated value as extraData", () => {
       const response = service.validateRadiusPreferences(
-        (preferences as unknown) as ApplicationMultiselectQuestion[],
+        preferences as unknown as ApplicationMultiselectQuestion[],
         listing as Listing
       )
       expect(response).toEqual([
@@ -266,7 +266,7 @@ describe("GeocodingService", () => {
     }
     it("should save the validated value as extraData for map layer", async () => {
       const response = await service.validateGeoLayerPreferences(
-        ([preference] as unknown) as ApplicationMultiselectQuestion[],
+        [preference] as unknown as ApplicationMultiselectQuestion[],
         listing as Listing
       )
       expect(response).toEqual([
@@ -379,8 +379,8 @@ describe("GeocodingService", () => {
 
     it("should save all updated preferences", async () => {
       await service.validateGeocodingPreferences(
-        (application as unknown) as Application,
-        (listing as unknown) as Listing
+        application as unknown as Application,
+        listing as unknown as Listing
       )
 
       expect(applicationRepoUpdate).toBeCalledWith(

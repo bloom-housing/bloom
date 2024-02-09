@@ -14,7 +14,7 @@ import {
   ResendConfirmationModal,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
-import { EnumUserErrorExtraModelUserErrorMessages } from "@bloom-housing/backend-core/types"
+import { SuccessDTO } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { HeadingGroup } from "@bloom-housing/ui-seeds"
 import SignUpBenefits from "../components/account/SignUpBenefits"
 
@@ -41,7 +41,7 @@ const SignIn = () => {
     mutate: mutateResendConfirmation,
     reset: resetResendConfirmation,
     isLoading: isResendConfirmationLoading,
-  } = useMutate<{ status: string }>()
+  } = useMutate<SuccessDTO>()
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -120,10 +120,7 @@ const SignIn = () => {
   })()
 
   useEffect(() => {
-    if (
-      networkError?.error?.response?.data?.message ===
-      EnumUserErrorExtraModelUserErrorMessages.accountNotConfirmed
-    ) {
+    if (networkError?.error?.response?.data?.message === "accountNotConfirmed") {
       setConfirmationStatusModal(true)
     }
   }, [networkError])

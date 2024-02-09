@@ -1,10 +1,9 @@
 import {
-  Application,
-  ApplicationStatus,
-  ApplicationSubmissionType,
-  IncomePeriod,
-  Language,
-} from "@bloom-housing/backend-core/types"
+  ApplicationStatusEnum,
+  ApplicationSubmissionTypeEnum,
+  IncomePeriodEnum,
+  LanguagesEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const idDefaults = {
   id: "abcd1234",
@@ -60,7 +59,7 @@ export const raceCheckboxesOrder = [
   "declineToRespond",
 ]
 
-export const coliseumApplication: Application = {
+export const ElmVillageApplication = {
   markedAsDuplicate: false,
   ...idDefaults,
   listing: {
@@ -154,7 +153,7 @@ export const coliseumApplication: Application = {
   },
   incomeVouchers: false,
   income: "3000.00",
-  incomePeriod: IncomePeriod.perMonth,
+  incomePeriod: IncomePeriodEnum.perMonth,
   householdMembers: [
     {
       ...idDefaults,
@@ -215,69 +214,38 @@ export const coliseumApplication: Application = {
           key: "live",
           checked: true,
           extraData: [],
+          address: {
+            street: "1600 pennsylvania ave",
+            city: "Washington",
+            state: "District Of Columbia",
+            zipCode: "20005",
+          },
+          addressHolder: {
+            name: "first last",
+            relationship: "Friend",
+          },
         },
         {
           key: "work",
           checked: true,
           extraData: [],
+          address: {
+            street: "1600 pennsylvania ave",
+            city: "Washington",
+            state: "District Of Columbia",
+            zipCode: "20005",
+          },
         },
       ],
     },
     {
-      key: "PBV",
+      key: "cityEmployee",
       claimed: true,
       options: [
         {
-          key: "residency",
-          checked: true,
-        },
-        {
-          key: "family",
-          checked: true,
-        },
-        {
-          key: "veteran",
+          key: "cityEmployee",
           checked: false,
-        },
-        {
-          key: "homeless",
-          checked: true,
-        },
-        {
-          key: "noneApplyButConsider",
-          checked: false,
-        },
-        {
-          key: "doNotConsider",
-          checked: false,
-        },
-      ],
-    },
-    {
-      key: "HOPWA",
-      claimed: true,
-      options: [
-        {
-          key: "hopwa",
-          checked: true,
-        },
-        {
-          key: "doNotConsider",
-          checked: false,
-        },
-      ],
-    },
-    {
-      key: "displaceeHousing",
-      claimed: false,
-      options: [
-        {
-          key: "mission",
-          checked: false,
-        },
-        {
-          key: "general",
-          checked: false,
+          extraData: [],
         },
       ],
     },
@@ -321,12 +289,12 @@ export const coliseumApplication: Application = {
     },
   ],
   confirmationCode: "",
-  status: ApplicationStatus.draft,
-  submissionType: ApplicationSubmissionType.electronical,
-  language: Language.en,
+  status: ApplicationStatusEnum.draft,
+  submissionType: ApplicationSubmissionTypeEnum.electronical,
+  language: LanguagesEnum.en,
 }
 
-export const minimalDataApplication: Application = {
+export const minimalDataApplication = {
   markedAsDuplicate: false,
   ...idDefaults,
   listing: {
@@ -415,7 +383,7 @@ export const minimalDataApplication: Application = {
   },
   incomeVouchers: false,
   income: "50000",
-  incomePeriod: IncomePeriod.perYear,
+  incomePeriod: IncomePeriodEnum.perYear,
   householdMembers: [],
   preferredUnit: [
     {
@@ -524,9 +492,9 @@ export const minimalDataApplication: Application = {
     },
   ],
   confirmationCode: "",
-  status: ApplicationStatus.draft,
-  submissionType: ApplicationSubmissionType.electronical,
-  language: Language.en,
+  status: ApplicationStatusEnum.draft,
+  submissionType: ApplicationSubmissionTypeEnum.electronical,
+  language: LanguagesEnum.en,
 }
 
 export const applicationStepOrder = [

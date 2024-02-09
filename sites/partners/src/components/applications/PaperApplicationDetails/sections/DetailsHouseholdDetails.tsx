@@ -18,7 +18,7 @@ const DetailsHouseholdDetails = () => {
     return labels
   }
 
-  const preferredUnits = sortUnitTypes(application?.preferredUnit)
+  const preferredUnits = sortUnitTypes(application?.preferredUnitTypes)
 
   return (
     <SectionWithGrid heading={t("application.review.householdDetails")} inset>
@@ -37,12 +37,13 @@ const DetailsHouseholdDetails = () => {
         </FieldValue>
 
         <FieldValue label={t("application.details.adaPriorities")} testId="adaPriorities">
-          {accessibilityLabels(application.accessibility).map((item) => (
-            <Fragment key={item}>
-              {item}
-              <br />
-            </Fragment>
-          ))}
+          {application.accessibility &&
+            accessibilityLabels(application.accessibility).map((item) => (
+              <Fragment key={item}>
+                {item}
+                <br />
+              </Fragment>
+            ))}
         </FieldValue>
 
         <FieldValue

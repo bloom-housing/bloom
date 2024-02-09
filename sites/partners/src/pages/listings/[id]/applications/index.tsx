@@ -12,6 +12,10 @@ import {
 import { Button } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
+  ApplicationOrderByKeys,
+  OrderByEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
   useSingleListingData,
   useFlaggedApplicationsList,
   useApplicationsData,
@@ -20,10 +24,6 @@ import {
 import { ListingStatusBar } from "../../../../components/listings/ListingStatusBar"
 import Layout from "../../../../layouts"
 import { getColDefs } from "../../../../components/applications/ApplicationsColDefs"
-import {
-  EnumApplicationsApiExtraModelOrder,
-  EnumApplicationsApiExtraModelOrderBy,
-} from "@bloom-housing/backend-core/types"
 import { ApplicationsSideNav } from "../../../../components/applications/ApplicationsSideNav"
 import { NavigationHeader } from "../../../../components/shared/NavigationHeader"
 
@@ -36,12 +36,12 @@ const ApplicationsList = () => {
 
   const { onExport, csvExportLoading, csvExportError, csvExportSuccess } = useApplicationsExport(
     listingId,
-    profile?.roles?.isAdmin ?? false
+    profile?.userRoles?.isAdmin ?? false
   )
 
   /* Data Fetching */
   const { listingDto } = useSingleListingData(listingId)
-  const countyCode = listingDto?.countyCode
+  const countyCode = listingDto?.jurisdictions.name
   const listingName = listingDto?.name
   const isListingOpen = listingDto?.status === "active"
   const { data: flaggedApps } = useFlaggedApplicationsList({
@@ -55,8 +55,8 @@ const ApplicationsList = () => {
     tableOptions.filter.filterValue,
     tableOptions.pagination.itemsPerPage,
     listingId,
-    tableOptions.sort.sortOptions?.[0]?.orderBy as EnumApplicationsApiExtraModelOrderBy,
-    tableOptions.sort.sortOptions?.[0]?.orderDir as EnumApplicationsApiExtraModelOrder
+    tableOptions.sort.sortOptions?.[0]?.orderBy as ApplicationOrderByKeys,
+    tableOptions.sort.sortOptions?.[0]?.orderDir as OrderByEnum
   )
 
   class formatLinkCell {

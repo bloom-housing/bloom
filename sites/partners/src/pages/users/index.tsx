@@ -13,8 +13,8 @@ import {
   Icon,
   UniversalIconType,
 } from "@bloom-housing/ui-components"
+import { User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button } from "@bloom-housing/ui-seeds"
-import { User } from "@bloom-housing/backend-core/types"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { faFileExport } from "@fortawesome/free-solid-svg-icons"
 import Layout from "../../layouts"
@@ -75,14 +75,14 @@ const Users = () => {
       },
       {
         headerName: t("t.listing"),
-        field: "leasingAgentInListings",
+        field: "listings",
         valueFormatter: ({ value }) => {
-          return value.map((item) => item.name).join(", ")
+          return value?.map((item) => item?.name).join(", ")
         },
       },
       {
         headerName: t("t.role"),
-        field: "roles",
+        field: "userRoles",
         valueFormatter: ({ value }) => {
           const { isAdmin, isPartner, isJurisdictionalAdmin } = value || {}
 
@@ -116,7 +116,12 @@ const Users = () => {
     ]
   }, [])
 
-  const { data: userList, loading, error, cacheKey } = useUserList({
+  const {
+    data: userList,
+    loading,
+    error,
+    cacheKey,
+  } = useUserList({
     page: tableOptions.pagination.currentPage,
     limit: tableOptions.pagination.itemsPerPage,
     search: tableOptions.filter.filterValue,
@@ -181,7 +186,7 @@ const Users = () => {
                 >
                   {t("users.addUser")}
                 </Button>
-                {(profile?.roles?.isAdmin || profile?.roles?.isJurisdictionalAdmin) && (
+                {(profile?.userRoles?.isAdmin || profile?.userRoles?.isJurisdictionalAdmin) && (
                   <Button
                     className="mx-1"
                     variant="primary-outlined"

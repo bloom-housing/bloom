@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useState } from "react"
 import Head from "next/head"
-import { Jurisdiction } from "@bloom-housing/backend-core/types"
-import { Button, Heading } from "@bloom-housing/ui-seeds"
 import { AlertBox, t, SiteAlert, ActionBlock, Icon } from "@bloom-housing/ui-components"
+import { Button, Heading } from "@bloom-housing/ui-seeds"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
 import { ConfirmationModal } from "../components/account/ConfirmationModal"
 import { MetaTags } from "../components/shared/MetaTags"
 import { fetchJurisdictionByName } from "../lib/hooks"
+import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import PageHero from "../components/page/Hero"
 
 interface IndexProps {
@@ -71,7 +71,7 @@ export default function Home(props: IndexProps) {
       </PageHero>
       <div className="homepage-extra">
         <div className="action-blocks mt-4 mb-4 w-full">
-          {props.jurisdiction && props.jurisdiction.notificationsSignUpURL && (
+          {props.jurisdiction && props.jurisdiction.notificationsSignUpUrl && (
             <ActionBlock
               className="flex-1"
               header={
@@ -83,7 +83,7 @@ export default function Home(props: IndexProps) {
               actions={[
                 <Button
                   key={"sign-up"}
-                  href={props.jurisdiction.notificationsSignUpURL}
+                  href={props.jurisdiction.notificationsSignUpUrl}
                   variant="primary-outlined"
                   size="sm"
                   className="m-2"

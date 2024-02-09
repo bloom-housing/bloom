@@ -9,7 +9,10 @@ import {
   pushGtmEvent,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
-import { Language, ListingStatus } from "@bloom-housing/backend-core/types"
+import {
+  LanguagesEnum,
+  ListingsStatusEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Heading, Icon, Button, Message } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { faClock } from "@fortawesome/free-regular-svg-icons"
@@ -55,8 +58,9 @@ const ApplicationChooseLanguage = () => {
     conductor.reset()
     if (!router.isReady && !listingId) return
     if (router.isReady && !listingId) {
-      void router.push("/")
-      return
+      return process.env.showMandatedAccounts && initialStateLoaded && profile
+        ? undefined
+        : void router.push("/")
     }
 
     if (!context.listing || context.listing.id !== listingId) {
@@ -65,11 +69,11 @@ const ApplicationChooseLanguage = () => {
       conductor.listing = context.listing
       setListing(context.listing)
     }
-  }, [router, conductor, context, listingId])
+  }, [router, conductor, context, listingId, initialStateLoaded, profile])
 
   useEffect(() => {
     if (listing && router.isReady) {
-      if (listing?.status !== ListingStatus.active && router.query.preview !== "true") {
+      if (listing?.status !== ListingsStatusEnum.active && router.query.preview !== "true") {
         setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
         void router.push(`/${router.locale}/listing/${listing?.id}/${listing?.urlSlug}`)
       }
@@ -81,7 +85,7 @@ const ApplicationChooseLanguage = () => {
     : ""
 
   const onLanguageSelect = useCallback(
-    (language: Language) => {
+    (language: LanguagesEnum) => {
       conductor.currentStep.save({
         language,
       })
@@ -100,7 +104,7 @@ const ApplicationChooseLanguage = () => {
         listingName={listing?.name}
         heading={t("application.chooseLanguage.letsGetStarted")}
         progressNavProps={{
-          currentPageSection: 0,
+          currentPageSection: 1,
           completedSections: 0,
           labels: conductor.config.sections.map((label) => t(`t.${label}`)),
           mounted: OnClientSide(),
