@@ -14,6 +14,7 @@ import {
   ResendConfirmationModal,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
+import { SuccessDTO } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SignUpBenefits from "../components/account/SignUpBenefits"
 import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
 import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
@@ -42,7 +43,7 @@ const SignIn = () => {
     mutate: mutateResendConfirmation,
     reset: resetResendConfirmation,
     isLoading: isResendConfirmationLoading,
-  } = useMutate<{ status: string }>()
+  } = useMutate<SuccessDTO>()
 
   useEffect(() => {
     pushGtmEvent<PageView>({
