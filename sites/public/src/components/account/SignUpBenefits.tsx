@@ -17,7 +17,7 @@ const SignUpBenefits = (props: SignUpBenefitsProps) => {
   return (
     <ul className={classNames.join(" ")}>
       {iconListItems.map((item) => (
-        <li className="flex flex-row mb-2 items-center" key={`${item.text}-${props.idTag}`}>
+        <li className="flex flex-row mb-3 items-center" key={`${item.text}-${props.idTag}`}>
           <Icon
             icon={item.icon}
             size="xl"
