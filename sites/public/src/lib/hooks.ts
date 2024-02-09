@@ -33,7 +33,7 @@ export const useRedirectToPrevPage = (defaultPath = "/") => {
 }
 
 export const useFormConductor = (stepName: string) => {
-  useRequireLoggedInUser("/", !process.env.showMandatedAccounts)
+  useRequireLoggedInUser("/")
   const context = useContext(AppSubmissionContext)
   const conductor = context.conductor
 
