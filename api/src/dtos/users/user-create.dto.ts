@@ -47,11 +47,11 @@ export class UserCreate extends OmitType(UserUpdate, [
   email: string;
 
   @Expose()
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   @Match('email', { groups: [ValidationsGroupsEnum.default] })
   @EnforceLowerCase()
-  emailConfirmation: string;
+  emailConfirmation?: string;
 
   @Expose()
   @Type(() => IdDTO)
