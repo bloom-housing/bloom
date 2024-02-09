@@ -128,7 +128,7 @@ const SignIn = () => {
 
   return (
     <>
-      <FormsLayout className="sm:max-w-lg md:max-w-full">
+      <FormsLayout className={signUpCopy && "sm:max-w-lg md:max-w-full"}>
         <div className={signUpCopy && signUpBenefitsStyles["benefits-container"]}>
           {signUpCopy && (
             <div className={signUpBenefitsStyles["benefits-display-hide"]}>
