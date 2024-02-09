@@ -104,7 +104,7 @@ const ApplicationChooseLanguage = () => {
         listingName={listing?.name}
         heading={t("application.chooseLanguage.letsGetStarted")}
         progressNavProps={{
-          currentPageSection: 0,
+          currentPageSection: 1,
           completedSections: 0,
           labels: conductor.config.sections.map((label) => t(`t.${label}`)),
           mounted: OnClientSide(),
