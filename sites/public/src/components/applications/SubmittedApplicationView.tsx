@@ -40,7 +40,6 @@ const SubmittedApplicationView = ({
             {listing && (
               <Button
                 size="sm"
-                leadIcon={<Icon icon={faChevronLeft} />}
                 variant={"text"}
                 href={`/listing/${listing.id}/${listing?.urlSlug}`}
               >
