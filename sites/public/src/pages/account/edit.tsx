@@ -217,7 +217,7 @@ const Edit = () => {
                       : t("errors.lastNameError")
                   }
                 />
-                <Button type="submit" variant="primary-outlined">
+                <Button type="submit" size="sm" variant="primary-outlined">
                   {t("account.settings.update")}
                 </Button>
               </Form>
@@ -251,7 +251,7 @@ const Edit = () => {
                   label={t("application.name.yourDateOfBirth")}
                 />
                 <p className={"field-sub-note"}>{t("application.name.dobHelper")}</p>
-                <Button type="submit" variant="primary-outlined" className="mt-6">
+                <Button type="submit" size="sm" variant="primary-outlined" className="mt-6">
                   {t("account.settings.update")}
                 </Button>
               </Form>
@@ -283,7 +283,7 @@ const Edit = () => {
                   register={register}
                   defaultValue={profile ? profile.email : null}
                 />
-                <Button type="submit" variant="primary-outlined">
+                <Button type="submit" size="sm" variant="primary-outlined">
                   {t("account.settings.update")}
                 </Button>
               </Form>
@@ -353,7 +353,7 @@ const Edit = () => {
                     register={register}
                   />
 
-                  <Button type="submit" variant="primary-outlined">
+                  <Button type="submit" size="sm" variant="primary-outlined">
                     {t("account.settings.update")}
                   </Button>
                 </fieldset>
