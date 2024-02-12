@@ -2,7 +2,13 @@ import React, { useMemo } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Select, FieldGroup } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
-import { raceKeys, spokenLanguageKeys, howDidYouHear } from "@bloom-housing/shared-helpers"
+import {
+  raceKeys,
+  spokenLanguageKeys,
+  genderKeys,
+  sexualOrientationKeys,
+  howDidYouHear,
+} from "@bloom-housing/shared-helpers"
 import { Demographics } from "@bloom-housing/backend-core/types"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
@@ -66,9 +72,6 @@ const FormDemographics = ({ formValues }: FormDemographicsProps) => {
       <SectionWithGrid heading={t("application.add.demographicsInformation")}>
         <Grid.Row>
           <Grid.Cell>
-            {
-              Object.values(formValues).map(item => <li>{item}</li>)
-            }
             <FieldGroup
               name="race"
               fields={raceOptions}
@@ -77,16 +80,38 @@ const FormDemographics = ({ formValues }: FormDemographicsProps) => {
               groupLabel={t("application.add.race")}
             />
           </Grid.Cell>
-          <Grid.Cell>d
+          <Grid.Cell>
             <Select
               id="application.demographics.spokenLanguage"
-              name="spokenLanguage"
+              name="application.demographics.spokenLanguage"
               placeholder={t("t.selectOne")}
               label={t("application.add.spokenLanguage")}
               register={register}
               controlClassName="control"
               options={spokenLanguageKeys}
               keyPrefix="application.review.demographics.spokenLanguageOptions"
+            />
+
+            <Select
+              id="application.demographics.gender"
+              name="application.demographics.gender"
+              placeholder={t("t.selectOne")}
+              label={t("application.add.gender")}
+              register={register}
+              controlClassName="control"
+              options={genderKeys}
+              keyPrefix="application.review.demographics.genderOptions"
+            />
+
+            <Select
+              id="application.demographics.sexualOrientation"
+              name="application.demographics.sexualOrientation"
+              placeholder={t("t.selectOne")}
+              label={t("application.add.sexualOrientation")}
+              register={register}
+              controlClassName="control"
+              options={sexualOrientationKeys}
+              keyPrefix="application.review.demographics.sexualOrientationOptions"
             />
           </Grid.Cell>
         </Grid.Row>
