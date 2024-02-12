@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, Fragment } from "react"
 import { t } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ApplicationContext } from "../../ApplicationContext"
@@ -32,16 +32,15 @@ const DetailsHouseholdIncome = () => {
             : t("t.n/a")}
         </FieldValue>
 
-        <FieldValue label={t("application.details.vouchers")} testId="vouchers">
-          {(() => {
-            if (application.incomeVouchers === null) return t("t.n/a")
+        <FieldValue label={"Issued Vouchers or Rental Assistance"} testId="vouchers">
+          {(!application.incomeVouchers || application.incomeVouchers.length === 0) && t("t.n/a")}
 
-            if (application.incomeVouchers) {
-              return t("t.yes")
-            }
-
-            return t("t.no")
-          })()}
+          {application.incomeVouchers?.map((item) => (
+            <Fragment key={item}>
+              {t(`application.financial.vouchers.options.${item}`)}
+              <br />
+            </Fragment>
+          ))}
         </FieldValue>
       </Grid.Row>
     </SectionWithGrid>

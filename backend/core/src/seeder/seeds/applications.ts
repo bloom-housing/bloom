@@ -143,7 +143,7 @@ const getApplicationCreateDtoTemplate = (
     housingStatus: "status",
     income: "5000.00",
     incomePeriod: IncomePeriod.perMonth,
-    incomeVouchers: false,
+    incomeVouchers: [],
     householdExpectingChanges: false,
     householdStudent: false,
     language: Language.en,

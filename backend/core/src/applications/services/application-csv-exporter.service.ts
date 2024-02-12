@@ -200,7 +200,9 @@ export class ApplicationCsvExporterService {
           "Household Includes Student or Member Nearing 18": formatBoolean(
             app.application_household_student
           ),
-          "Vouchers or Subsidies": formatBoolean(app.application_income_vouchers),
+          "Vouchers or Subsidies": app.application_income_vouchers
+            ? app.application_income_vouchers.join(",")
+            : "n/a",
           "Requested Unit Types": {
             [app.preferredUnit_id]: this.unitTypeToReadable(app.preferredUnit_name),
           },

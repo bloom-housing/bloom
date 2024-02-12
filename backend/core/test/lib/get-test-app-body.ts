@@ -100,7 +100,7 @@ export const getTestAppBody: (listingId?: string) => ApplicationUpdate = (listin
       sexualOrientation: "",
       howDidYouHear: [],
     },
-    incomeVouchers: true,
+    incomeVouchers: [],
     income: "100.00",
     incomePeriod: IncomePeriod.perMonth,
     householdStudent: false,

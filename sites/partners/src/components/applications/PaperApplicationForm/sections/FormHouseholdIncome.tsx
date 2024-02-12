@@ -1,9 +1,9 @@
 import React from "react"
-import { t, Field, Select } from "@bloom-housing/ui-components"
+import { t, Field, FieldGroup } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { vouchersOrRentalAssistanceKeys } from "@bloom-housing/shared-helpers"
 import { useFormContext } from "react-hook-form"
 import { IncomePeriod } from "@bloom-housing/backend-core/types"
-import { YesNoAnswer } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const FormHouseholdIncome = () => {
@@ -11,6 +11,11 @@ const FormHouseholdIncome = () => {
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch } = formMethods
+
+  const incomeVouchersOptions = vouchersOrRentalAssistanceKeys.map((item) => ({
+    id: item,
+    label: t(`application.financial.vouchers.options.${item}`),
+  }))
 
   const incomePeriodValue: string = watch("application.incomePeriod")
 
@@ -82,15 +87,14 @@ const FormHouseholdIncome = () => {
           </Grid.Cell>
 
           <Grid.Cell>
-            <Select
-              id="application.incomeVouchers"
+            <FieldGroup
               name="application.incomeVouchers"
-              placeholder={t("t.selectOne")}
-              label={t("application.details.vouchers")}
+              fields={incomeVouchersOptions}
+              groupLabel={"Issued Vouchers or Rental Assistance"}
+              type="checkbox"
+              validation={{ required: true }}
               register={register}
-              controlClassName="control"
-              options={[YesNoAnswer.Yes, YesNoAnswer.No]}
-              keyPrefix="t"
+              dataTestId={"app-income-vouchers"}
             />
           </Grid.Cell>
         </Grid.Row>

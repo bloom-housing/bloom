@@ -5,8 +5,8 @@ import { FieldGroup, Form, Select, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { ApplicationSection } from "@bloom-housing/backend-core"
 import {
-  ethnicityKeys,
   raceKeys,
+  spokenLanguageKeys,
   howDidYouHear,
   fieldGroupObjectToArray,
   OnClientSide,
@@ -14,6 +14,8 @@ import {
   pushGtmEvent,
   AuthContext,
   listingSectionQuestions,
+  genderKeys,
+  sexualOrientationKeys,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
@@ -115,16 +117,44 @@ const ApplicationDemographics = () => {
             </fieldset>
             <div className={"pt-4"}>
               <Select
-                id="ethnicity"
-                name="ethnicity"
-                label={t("application.review.demographics.ethnicityLabel")}
+                id="spokenLanguage"
+                name="spokenLanguage"
+                label={t("application.review.demographics.spokenLanguageLabel")}
                 placeholder={t("t.selectOne")}
                 register={register}
                 labelClassName="text__caps-spaced mb-3"
                 controlClassName="control"
-                options={ethnicityKeys}
-                keyPrefix="application.review.demographics.ethnicityOptions"
-                dataTestId={"app-demographics-ethnicity"}
+                options={spokenLanguageKeys}
+                keyPrefix="application.review.demographics.spokenLanguageOptions"
+                dataTestId={"app-demographics-spoken-language"}
+              />
+            </div>
+            <div className={"pt-4"}>
+              <Select
+                id="gender"
+                name="gender"
+                label={t("application.review.demographics.genderLabel")}
+                placeholder={t("t.selectOne")}
+                register={register}
+                labelClassName="text__caps-spaced mb-3"
+                controlClassName="control"
+                options={genderKeys}
+                keyPrefix="application.review.demographics.genderOptions"
+                dataTestId={"app-demographics-spoken-language"}
+              />
+            </div>
+            <div className={"pt-4"}>
+              <Select
+                id="sexualOrientation"
+                name="sexualOrientation"
+                label={t("application.review.demographics.sexualOrientationLabel")}
+                placeholder={t("t.selectOne")}
+                register={register}
+                labelClassName="text__caps-spaced mb-3"
+                controlClassName="control"
+                options={sexualOrientationKeys}
+                keyPrefix="application.review.demographics.sexualOrientationOptions"
+                dataTestId={"app-demographics-sexual-orientation"}
               />
             </div>
           </CardSection>

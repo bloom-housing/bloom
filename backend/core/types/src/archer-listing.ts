@@ -584,6 +584,8 @@ export const ArcherListing: Listing = {
     id: "id",
     name: "Bay Area",
     publicUrl: "",
+    enableAccessibilityFeatures: false,
+    enableUtilitiesIncluded: false,
   },
   events: [],
   urlSlug: "listing-slug-abcdef",
