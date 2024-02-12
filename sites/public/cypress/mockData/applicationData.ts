@@ -42,22 +42,13 @@ export const howDidYouHearCheckboxesOrder = [
 ]
 
 export const raceCheckboxesOrder = [
-  "americanIndianAlaskanNative",
   "asian",
-  "asian-asianIndian",
-  "asian-chinese",
-  "asian-filipino",
-  "asian-korean",
-  "asian-vietnamese",
-  "asian-otherAsian",
-  "blackAfricanAmerican",
-  "nativeHawaiianOtherPacificIslander",
-  "nativeHawaiianOtherPacificIslander-nativeHawaiian",
-  "nativeHawaiianOtherPacificIslander-guamanianOrChamorro",
-  "nativeHawaiianOtherPacificIslander-samoan",
+  "black",
+  "indigenous",
+  "latino",
+  "middleEasternOrAfrican",
+  "pacificIslander",
   "white",
-  "otherMultiracial",
-  "declineToRespond",
 ]
 
 export const coliseumApplication: Application = {
@@ -152,7 +143,7 @@ export const coliseumApplication: Application = {
     vision: false,
     hearing: false,
   },
-  incomeVouchers: false,
+  incomeVouchers: "none",
   income: "3000.00",
   incomePeriod: IncomePeriod.perMonth,
   householdMembers: [
@@ -201,7 +192,6 @@ export const coliseumApplication: Application = {
   demographics: {
     ...idDefaults,
     race: ["race-white"],
-    ethnicity: "hispanicLatino",
     gender: "",
     sexualOrientation: "",
     spokenLanguage: "",
