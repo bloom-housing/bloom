@@ -251,11 +251,13 @@ Cypress.Commands.add("fillHouseholdIncome", (application, fieldsToSkip = []) => 
 })
 
 Cypress.Commands.add("fillDemographics", (application, fieldsToSkip = []) => {
-  if (!fieldsToSkip.includes("application.demographics.ethnicity")) {
-    cy.getByID("application.demographics.ethnicity").select(application["demographics.ethnicity"])
+  if (!fieldsToSkip.includes("application.demographics.spokenLanguage")) {
+    cy.getByID("application.demographics.spokenLanguage").select(
+      application["demographics.spokenLanguage"]
+    )
   }
-  if (!fieldsToSkip.includes("americanIndianAlaskanNative")) {
-    cy.getByID("americanIndianAlaskanNative").click()
+  if (!fieldsToSkip.includes("indigenous")) {
+    cy.getByID("indigenous").click()
   }
   if (!fieldsToSkip.includes("jurisdictionWebsite")) {
     cy.getByID("jurisdictionWebsite").click()
