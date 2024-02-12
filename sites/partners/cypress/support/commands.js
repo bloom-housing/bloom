@@ -246,9 +246,7 @@ Cypress.Commands.add("fillHouseholdIncome", (application, fieldsToSkip = []) => 
     cy.getByID("incomeYear").type(application["incomeYear"])
   }
   if (!fieldsToSkip.includes("application.incomeVouchers")) {
-    cy.getByTestId("app-income-vouchers")
-      .get(`input[type="radio"]`)
-      .check(application["incomeVouchers"])
+    cy.getByTestId("app-income-vouchers").parent().contains(application["incomeVouchers"]).click()
   }
 })
 
@@ -261,8 +259,8 @@ Cypress.Commands.add("fillDemographics", (application, fieldsToSkip = []) => {
   if (!fieldsToSkip.includes("indigenous")) {
     cy.getByID("indigenous").click()
   }
-  if (!fieldsToSkip.includes("jurisdictionWebsite")) {
-    cy.getByID("jurisdictionWebsite").click()
+  if (!fieldsToSkip.includes("governmentWebsite")) {
+    cy.getByID("governmentWebsite").click()
   }
 })
 

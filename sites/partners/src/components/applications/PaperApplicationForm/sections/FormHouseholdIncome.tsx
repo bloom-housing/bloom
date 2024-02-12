@@ -92,7 +92,6 @@ const FormHouseholdIncome = () => {
               fields={incomeVouchersOptions}
               groupLabel={"Issued Vouchers or Rental Assistance"}
               type="checkbox"
-              validation={{ required: true }}
               register={register}
               dataTestId={"app-income-vouchers"}
             />
