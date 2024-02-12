@@ -250,10 +250,10 @@ export const raceKeys: subCheckboxes = {
 
 export const howDidYouHear = [
   {
-    id: "jurisdictionWebsite",
+    id: "governmentWebsite",
   },
   {
-    id: "developerWebsite",
+    id: "propertyWebsite",
   },
   {
     id: "flyer",

@@ -205,7 +205,7 @@ export const coliseumApplication: Application = {
     gender: "",
     sexualOrientation: "",
     spokenLanguage: "",
-    howDidYouHear: ["jurisdictionWebsite", "developerWebsite"],
+    howDidYouHear: ["governmentWebsite", "propertyWebsite"],
   },
   preferences: [
     {

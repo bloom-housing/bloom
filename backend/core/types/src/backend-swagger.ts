@@ -2629,13 +2629,13 @@ export interface Demographics {
   ethnicity?: string
 
   /**  */
+  spokenLanguage?: string
+
+  /**  */
   gender?: string
 
   /**  */
   sexualOrientation?: string
-
-  /**  */
-  spokenLanguage?: string
 
   /**  */
   howDidYouHear: string[]
@@ -3262,6 +3262,9 @@ export interface DemographicsCreate {
   ethnicity?: string
 
   /**  */
+  spokenLanguage?: string
+
+  /**  */
   gender?: string
 
   /**  */
@@ -3562,6 +3565,9 @@ export interface DemographicsUpdate {
 
   /**  */
   ethnicity?: string
+
+  /**  */
+  spokenLanguage?: string
 
   /**  */
   gender?: string

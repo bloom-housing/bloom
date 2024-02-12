@@ -416,6 +416,8 @@
   "application.review.demographics.howDidYouHearLabel": "How did you hear about this listing?",
   "application.review.demographics.howDidYouHearOptions.busAd": "Bus Ad",
   "application.review.demographics.howDidYouHearOptions.developerWebsite": "Developer Website",
+  "application.review.demographics.howDidYouHearOptions.governmentWebsite": "Government Website",
+  "application.review.demographics.howDidYouHearOptions.propertyWebsite": "Property Website",
   "application.review.demographics.howDidYouHearOptions.emailAlert": "Email Alert",
   "application.review.demographics.howDidYouHearOptions.flyer": "Flyer",
   "application.review.demographics.howDidYouHearOptions.friend": "Friend",

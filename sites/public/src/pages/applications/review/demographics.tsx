@@ -40,6 +40,7 @@ const ApplicationDemographics = () => {
   const onSubmit = (data) => {
     conductor.currentStep.save({
       demographics: {
+        ethnicity: "",
         race: fieldGroupObjectToArray(data, "race"),
         spokenLanguage: data.spokenLanguage,
         gender: data.gender,

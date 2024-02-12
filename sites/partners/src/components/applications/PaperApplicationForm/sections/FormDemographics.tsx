@@ -2,7 +2,7 @@ import React, { useMemo } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Select, FieldGroup } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
-import { ethnicityKeys, raceKeys, howDidYouHear } from "@bloom-housing/shared-helpers"
+import { raceKeys, spokenLanguageKeys, howDidYouHear } from "@bloom-housing/shared-helpers"
 import { Demographics } from "@bloom-housing/backend-core/types"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
@@ -66,6 +66,9 @@ const FormDemographics = ({ formValues }: FormDemographicsProps) => {
       <SectionWithGrid heading={t("application.add.demographicsInformation")}>
         <Grid.Row>
           <Grid.Cell>
+            {
+              Object.values(formValues).map(item => <li>{item}</li>)
+            }
             <FieldGroup
               name="race"
               fields={raceOptions}
@@ -74,17 +77,16 @@ const FormDemographics = ({ formValues }: FormDemographicsProps) => {
               groupLabel={t("application.add.race")}
             />
           </Grid.Cell>
-
-          <Grid.Cell>
+          <Grid.Cell>d
             <Select
-              id="application.demographics.ethnicity"
-              name="application.demographics.ethnicity"
+              id="application.demographics.spokenLanguage"
+              name="spokenLanguage"
               placeholder={t("t.selectOne")}
-              label={t("application.add.ethnicity")}
+              label={t("application.add.spokenLanguage")}
               register={register}
               controlClassName="control"
-              options={ethnicityKeys}
-              keyPrefix="application.review.demographics.ethnicityOptions"
+              options={spokenLanguageKeys}
+              keyPrefix="application.review.demographics.spokenLanguageOptions"
             />
           </Grid.Cell>
         </Grid.Row>
