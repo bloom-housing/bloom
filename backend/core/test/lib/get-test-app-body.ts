@@ -98,6 +98,7 @@ export const getTestAppBody: (listingId?: string) => ApplicationUpdate = (listin
       race: [],
       gender: "",
       sexualOrientation: "",
+      spokenLanguage: "",
       howDidYouHear: [],
     },
     incomeVouchers: [],

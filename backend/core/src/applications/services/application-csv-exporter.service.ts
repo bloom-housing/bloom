@@ -132,8 +132,10 @@ export class ApplicationCsvExporterService {
       if (obj[app.application_id] === undefined) {
         if (includeDemographics) {
           demographics = {
-            Ethnicity: app.demographics_ethnicity,
             Race: app.demographics_race.map((race) => this.raceToReadable(race)),
+            "Spoken Language": app.demographics_spoken_language,
+            Gender: app.demographics_gender,
+            "Sexual Orientation": app.demographics_sexual_orientation,
             "How Did You Hear": app.demographics_how_did_you_hear.join(", "),
           }
         }

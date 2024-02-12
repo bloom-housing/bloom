@@ -102,6 +102,7 @@ const getApplicationCreateDtoTemplate = (
       howDidYouHear: ["email", "facebook"],
       race: ["asian", "filipino"],
       sexualOrientation: null,
+      spokenLanguage: null,
     },
     householdMembers: [
       {

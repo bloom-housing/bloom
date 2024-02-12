@@ -204,6 +204,7 @@ export const coliseumApplication: Application = {
     ethnicity: "hispanicLatino",
     gender: "",
     sexualOrientation: "",
+    spokenLanguage: "",
     howDidYouHear: ["jurisdictionWebsite", "developerWebsite"],
   },
   preferences: [

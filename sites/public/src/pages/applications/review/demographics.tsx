@@ -33,7 +33,6 @@ const ApplicationDemographics = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit } = useForm({
     defaultValues: {
-      ethnicity: application.demographics.ethnicity,
       race: application.demographics.race,
     },
   })
@@ -41,11 +40,11 @@ const ApplicationDemographics = () => {
   const onSubmit = (data) => {
     conductor.currentStep.save({
       demographics: {
-        ethnicity: data.ethnicity,
-        gender: "",
-        sexualOrientation: "",
-        howDidYouHear: data.howDidYouHear,
         race: fieldGroupObjectToArray(data, "race"),
+        spokenLanguage: data.spokenLanguage,
+        gender: data.gender,
+        sexualOrientation: data.sexualOrientation,
+        howDidYouHear: data.howDidYouHear,
       },
     })
     conductor.routeToNextOrReturnUrl()
