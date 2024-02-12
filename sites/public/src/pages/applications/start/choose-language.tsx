@@ -66,12 +66,11 @@ const ApplicationChooseLanguage = (props: ChooseLanguageProps) => {
   useEffect(() => {
     conductor.reset()
     if (!router.isReady && !listingId) return
-    if (router.isReady && !listingId) {
-      return process.env.showMandatedAccounts && initialStateLoaded && profile
-        ? undefined
-        : void router.push("/")
+    if (router.isReady) {
+      if (!listingId || (process.env.showMandatedAccounts && initialStateLoaded && !profile)) {
+        void router.push("/")
+      }
     }
-
     if (!context.listing || context.listing.id !== listingId) {
       void loadListing(props.backendApiBase, listingId, setListing, conductor, context, "en")
     } else {
