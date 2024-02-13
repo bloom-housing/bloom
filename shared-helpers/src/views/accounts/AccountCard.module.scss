@@ -1,13 +1,19 @@
 .account-card {
-  --card-header-padding-inline-desktop: var(--seeds-s12);
-  --card-header-padding-inline-mobile: var(--seeds-s4);
-  --card-content-padding-inline-mobile: var(--seeds-s4);
-  --card-border-width: 0rem;
-  --card-divider-width: var(--seeds-border-1);
   width: 100%;
+  height: 100%;
+  justify-content: space-between;
   @media (max-width: theme("screens.sm")) {
     --card-spacing-lg: var(--seeds-s6);
-    --card-border-radius: 0rem;
+  }
+}
+
+.account-card-inline-desktop {
+  --card-header-padding-inline-desktop: var(--seeds-s12);
+}
+
+.account-card-inline-mobile {
+  @media (max-width: theme("screens.sm")) {
+    --card-header-padding-inline-mobile: var(--seeds-s4);
   }
 }
 
@@ -16,8 +22,11 @@
 }
 
 .account-card-heading-group {
-  --subheading-margin: var(--seeds-s3);
   --heading-margin: var(--seeds-s3);
+  --subheading-color: var(--seeds-text-color-light);
+  @media (max-width: theme("screens.sm")) {
+    --subheading-margin: var(--seeds-s3);
+  }
 }
 
 .account-card-heading {

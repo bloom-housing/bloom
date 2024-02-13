@@ -61,21 +61,21 @@ const Applications = () => {
 
   const noApplicationsSection = () => {
     return (
-      <Card.Section
-        className={`${styles["account-card-section"]} ${styles["application-card-section"]}`}
-      >
-        {error ? (
-          <Heading size="2xl">{`${t("account.errorFetchingApplications")}`}</Heading>
-        ) : (
-          <>
-            <Heading className={styles["application-no-results"]} size="2xl">
-              {t("account.noApplications")}
-            </Heading>
-            <Button variant="primary-outlined" href="/listings">
-              {t("listings.browseListings")}
-            </Button>
-          </>
-        )}
+      <Card.Section className={styles["account-card-applications-section"]}>
+        <div className={styles["application-no-results"]}>
+          {error ? (
+            <Heading priority={2} size="xl">{`${t("account.errorFetchingApplications")}`}</Heading>
+          ) : (
+            <>
+              <Heading priority={2} className={styles["application-no-results-text"]} size="xl">
+                {t("account.noApplications")}
+              </Heading>
+              <Button size="sm" variant="primary-outlined" href="/listings">
+                {t("listings.browseListings")}
+              </Button>
+            </>
+          )}
+        </div>
       </Card.Section>
     )
   }
@@ -92,7 +92,9 @@ const Applications = () => {
               iconSymbol="application"
               title={t("account.myApplications")}
               subtitle={t("account.myApplicationsSubtitle")}
+              headingPriority={1}
               divider="inset"
+              thinMobile
             >
               <>
                 <LoadingOverlay isLoading={loading}>

@@ -11,11 +11,11 @@ interface StatusItemWrapperProps {
 }
 
 const StatusItemWrapper = (props: StatusItemWrapperProps) => {
+  const applicationDueDate = props.application?.fullListing?.applicationDueDate
+
   return (
     <StatusItem
-      applicationDueDate={dayjs(props.application?.fullListing?.applicationDueDate).format(
-        "MMMM D, YYYY"
-      )}
+      applicationDueDate={applicationDueDate && dayjs(applicationDueDate).format("MMMM D, YYYY")}
       applicationURL={`application/${props.application?.id}`}
       applicationUpdatedAt={dayjs(props.application?.updatedAt).format("MMMM D, YYYY")}
       confirmationNumber={props.application?.confirmationCode || props.application?.id}

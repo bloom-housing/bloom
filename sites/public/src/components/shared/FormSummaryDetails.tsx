@@ -116,7 +116,7 @@ const FormSummaryDetails = ({
   ) => {
     return (
       <>
-        <h3 className="form--card__sub-header">
+        <h3 className="form--card__sub-header border-none text-xl">
           {header}
           {editMode && !validationError && <EditLink href={appLink} />}
         </h3>
@@ -161,7 +161,7 @@ const FormSummaryDetails = ({
 
   return (
     <>
-      <h3 className="form--card__sub-header">
+      <h3 className="form--card__sub-header border-none text-xl">
         {t("t.you")}
         {editMode && <EditLink href="/applications/contact/name" />}
       </h3>
@@ -278,7 +278,7 @@ const FormSummaryDetails = ({
       {application.alternateContact.type !== "" &&
         application.alternateContact.type !== "noContact" && (
           <div id="alternateContact">
-            <h3 className="form--card__sub-header">
+            <h3 className="form--card__sub-header border-none text-xl">
               {t("application.alternateContact.type.label")}
               {editMode && !validationError && (
                 <EditLink href="/applications/contact/alternate-contact-type" />
@@ -339,7 +339,7 @@ const FormSummaryDetails = ({
 
       {application.householdSize > 1 && (
         <div id="householdMembers">
-          <h3 className="form--card__sub-header">
+          <h3 className="form--card__sub-header border-none text-xl">
             {t("application.household.householdMembers")}
             {editMode && !validationError && (
               <EditLink href="/applications/household/add-members" />
@@ -391,7 +391,7 @@ const FormSummaryDetails = ({
       )}
 
       <div id="householdDetails">
-        <h3 className="form--card__sub-header">
+        <h3 className="form--card__sub-header border-none text-xl">
           {t("application.review.householdDetails")}
           {editMode && !validationError && (
             <EditLink href="/applications/household/preferred-units" />
@@ -452,7 +452,7 @@ const FormSummaryDetails = ({
               : null
           )}
 
-        <h3 className="form--card__sub-header">
+        <h3 className="form--card__sub-header border-none text-xl">
           {t("t.income")}
           {editMode && !validationError && <EditLink href="/applications/financial/vouchers" />}
         </h3>

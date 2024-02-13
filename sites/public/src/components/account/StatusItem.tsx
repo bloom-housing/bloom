@@ -24,9 +24,7 @@ interface StatusItemProps {
 
 const StatusItem = (props: StatusItemProps) => {
   return (
-    <Card.Section
-      className={`${accountStyles["account-card-section"]} ${accountStyles["application-card-section"]}`}
-    >
+    <Card.Section className={accountStyles["account-card-applications-section"]}>
       <article className={styles["status-item"]}>
         <header className={styles["status-item__header"]}>
           <h3 className={styles["status-item__title"]}>{props.listingName}</h3>
@@ -57,7 +55,7 @@ const StatusItem = (props: StatusItemProps) => {
             {props.applicationDueDate && (
               <p className={styles["status-item__due"]}>
                 {props.strings?.applicationsDeadline ?? t("listings.applicationDeadline")}:{" "}
-                {props.applicationDueDate}
+                <span className={styles["status-item__due-date"]}>{props.applicationDueDate}</span>
               </p>
             )}
           </div>
@@ -70,7 +68,7 @@ const StatusItem = (props: StatusItemProps) => {
             </Button>
           </div>
           <div>
-            <Button href={props.listingURL} variant="primary-outlined" size="sm">
+            <Button href={props.listingURL} variant="secondary-outlined" size="sm">
               {props.strings?.seeListing ?? t("t.seeListing")}
             </Button>
           </div>

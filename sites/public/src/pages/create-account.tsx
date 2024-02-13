@@ -96,6 +96,7 @@ export default () => {
             title={t("account.createAccount")}
             divider="inset"
             headingPriority={1}
+            thinMobile
           >
             <>
               {requestError && (
@@ -107,7 +108,7 @@ export default () => {
               <Form id="create-account" onSubmit={handleSubmit(onSubmit)}>
                 <CardSection
                   divider={"inset"}
-                  className={accountCardStyles["account-card-section"]}
+                  className={accountCardStyles["account-card-settings-section"]}
                 >
                   <label className={styles["create-account-header"]} htmlFor="firstName">
                     {t("application.name.yourName")}
@@ -163,7 +164,7 @@ export default () => {
                 </CardSection>
                 <CardSection
                   divider={"inset"}
-                  className={accountCardStyles["account-card-section"]}
+                  className={accountCardStyles["account-card-settings-section"]}
                 >
                   <DOBField
                     register={register}
@@ -181,7 +182,7 @@ export default () => {
 
                 <CardSection
                   divider={"inset"}
-                  className={accountCardStyles["account-card-section"]}
+                  className={accountCardStyles["account-card-settings-section"]}
                 >
                   <Field
                     caps={true}
@@ -197,7 +198,7 @@ export default () => {
                 </CardSection>
                 <CardSection
                   divider={"inset"}
-                  className={accountCardStyles["account-card-section"]}
+                  className={accountCardStyles["account-card-settings-section"]}
                 >
                   <Field
                     caps={true}
@@ -249,7 +250,7 @@ export default () => {
                 </CardSection>
                 <CardSection
                   divider={"inset"}
-                  className={accountCardStyles["account-card-section"]}
+                  className={accountCardStyles["account-card-settings-section"]}
                 >
                   <Heading priority={2} size="2xl" className="mb-6">
                     {t("account.haveAnAccount")}
