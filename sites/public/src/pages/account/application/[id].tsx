@@ -1,17 +1,16 @@
 import React, { useEffect, useState, useContext } from "react"
-import { t, FormCard, dateToString, Heading } from "@bloom-housing/ui-components"
-import Link from "next/link"
-import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
+import { t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useRouter } from "next/router"
 import { AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import { Application, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { SubmittedApplicationView } from "../../../components/applications/SubmittedApplicationView"
+import { Card, Button, Heading } from "@bloom-housing/ui-seeds"
 
 export default () => {
   const router = useRouter()
   const applicationId = router.query.id as string
-  const { applicationsService, listingsService } = useContext(AuthContext)
-  const { profile } = useContext(AuthContext)
+  const { applicationsService, listingsService, profile } = useContext(AuthContext)
   const [application, setApplication] = useState<Application>()
   const [listing, setListing] = useState<Listing>()
   const [unauthorized, setUnauthorized] = useState(false)
@@ -50,71 +49,41 @@ export default () => {
       <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
         <FormsLayout>
           {noApplication && (
-            <FormCard header={<Heading priority={1}>{t("account.application.error")}</Heading>}>
-              <p className="field-note mb-5">{t("account.application.noApplicationError")}</p>
-              <a href={`applications`} className="button is-small">
-                {t("account.application.return")}
-              </a>
-            </FormCard>
+            <Card spacing={"sm"} className={"my-6"}>
+              <Card.Section className={"bg-primary px-8 py-4"}>
+                <Heading priority={1} className={"text-xl font-bold font-alt-sans text-white"}>
+                  {t("account.application.error")}
+                </Heading>
+              </Card.Section>
+              <Card.Section className={"px-8"}>
+                <p className="field-note mb-5">{t("account.application.noApplicationError")}</p>
+                <Button href={`applications`} size="sm" variant="primary-outlined">
+                  {t("account.application.return")}
+                </Button>
+              </Card.Section>
+            </Card>
           )}
           {unauthorized && (
-            <FormCard header={<Heading priority={1}>{t("account.application.error")}</Heading>}>
-              <p className="field-note mb-5">{t("account.application.noAccessError")}</p>
-              <a href={`applications`} className="button is-small">
-                {t("account.application.return")}
-              </a>
-            </FormCard>
+            <Card spacing={"sm"} className={"my-6"}>
+              <Card.Section className={"bg-primary px-8 py-4"}>
+                <Heading priority={1} className={"text-xl font-bold font-alt-sans text-white"}>
+                  {t("account.application.error")}
+                </Heading>
+              </Card.Section>
+              <Card.Section className={"px-8"}>
+                <p className="field-note mb-5">{t("account.application.noAccessError")}</p>
+                <Button href={`applications`} size="sm" variant="primary-outlined">
+                  {t("account.application.return")}
+                </Button>
+              </Card.Section>
+            </Card>
           )}
           {application && (
-            <>
-              <FormCard
-                header={<Heading priority={1}>{t("account.application.confirmation")}</Heading>}
-              >
-                <div className="py-2">
-                  {listing && (
-                    <span className="lined text-sm">
-                      <Link
-                        href={`listing/id=${listing.id}`}
-                        as={`${origin}/listing/${listing.id}/${listing.urlSlug}`}
-                      >
-                        {t("application.confirmation.viewOriginalListing")}
-                      </Link>
-                    </span>
-                  )}
-                </div>
-              </FormCard>
-
-              <FormCard>
-                <div className="form-card__lead border-b">
-                  <h2 className="form-card__title is-borderless">
-                    {t("application.confirmation.informationSubmittedTitle")}
-                  </h2>
-                  <p className="field-note mt-4 text-center">
-                    {t("application.confirmation.submitted")}
-                    {dateToString(application.submissionDate)}
-                  </p>
-                </div>
-                <div className="form-card__group text-center">
-                  <h3 className="form-card__paragraph-title">
-                    {t("application.confirmation.lotteryNumber")}
-                  </h3>
-
-                  <p className="font-serif text-2xl my-0">
-                    {application.confirmationCode || application.id}
-                  </p>
-                </div>
-
-                <FormSummaryDetails listing={listing} application={application} />
-
-                <div className="form-card__pager hide-for-print">
-                  <div className="form-card__pager-row py-6">
-                    <button className="lined text-sm" onClick={() => window.print()}>
-                      {t("application.confirmation.printCopy")}
-                    </button>
-                  </div>
-                </div>
-              </FormCard>
-            </>
+            <SubmittedApplicationView
+              application={application}
+              listing={listing}
+              backHref={"/account/applications"}
+            />
           )}
         </FormsLayout>
       </RequireLogin>

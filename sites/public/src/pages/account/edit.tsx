@@ -156,6 +156,7 @@ const Edit = () => {
           subtitle={t("account.accountSettingsSubtitle")}
           divider="inset"
           headingPriority={1}
+          thinMobile
         >
           <>
             <SiteAlert type="notice" dismissable />
@@ -170,7 +171,7 @@ const Edit = () => {
                 {nameAlert.message}
               </AlertBox>
             )}
-            <Card.Section divider="inset" className={styles["account-card-section"]}>
+            <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
               <Form id="update-name" onSubmit={handleSubmit(onNameSubmit)}>
                 <label className={styles["account-settings-label"]} htmlFor="firstName">
                   {t("application.name.yourName")}
@@ -217,7 +218,7 @@ const Edit = () => {
                       : t("errors.lastNameError")
                   }
                 />
-                <Button type="submit" variant="primary-outlined">
+                <Button type="submit" size="sm" variant="primary-outlined">
                   {t("account.settings.update")}
                 </Button>
               </Form>
@@ -233,7 +234,7 @@ const Edit = () => {
                 {dobAlert.message}
               </AlertBox>
             )}
-            <Card.Section divider="inset" className={styles["account-card-section"]}>
+            <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
               <Form id="update-birthdate" onSubmit={handleSubmit(onBirthdateSubmit)}>
                 <DOBField
                   id="dateOfBirth"
@@ -250,7 +251,8 @@ const Edit = () => {
                   }}
                   label={t("application.name.yourDateOfBirth")}
                 />
-                <Button type="submit" variant="primary-outlined" className="mt-6">
+                <p className={"field-sub-note"}>{t("application.name.dobHelper")}</p>
+                <Button type="submit" size="sm" variant="primary-outlined" className="mt-6">
                   {t("account.settings.update")}
                 </Button>
               </Form>
@@ -265,7 +267,7 @@ const Edit = () => {
                 {emailAlert.message}
               </AlertBox>
             )}
-            <Card.Section divider="inset" className={styles["account-card-section"]}>
+            <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
               <Form id="update-email" onSubmit={handleSubmit(onEmailSubmit)}>
                 <label className={styles["account-settings-label"]} htmlFor="email">
                   {t("application.name.yourEmailAddress")}
@@ -282,7 +284,7 @@ const Edit = () => {
                   register={register}
                   defaultValue={profile ? profile.email : null}
                 />
-                <Button type="submit" variant="primary-outlined">
+                <Button type="submit" size="sm" variant="primary-outlined">
                   {t("account.settings.update")}
                 </Button>
               </Form>
@@ -298,7 +300,7 @@ const Edit = () => {
                 {passwordAlert.message}
               </AlertBox>
             )}
-            <Card.Section divider="inset" className={styles["account-card-section"]}>
+            <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
               <Form id="update-password" onSubmit={handleSubmit(onPasswordSubmit)}>
                 <fieldset>
                   <legend className={styles["account-settings-label"]}>
@@ -352,7 +354,7 @@ const Edit = () => {
                     register={register}
                   />
 
-                  <Button type="submit" variant="primary-outlined">
+                  <Button type="submit" size="sm" variant="primary-outlined">
                     {t("account.settings.update")}
                   </Button>
                 </fieldset>
