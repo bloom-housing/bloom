@@ -604,34 +604,4 @@ describe('User Controller Tests', () => {
     ]);
     expect(res.body.email).toEqual('partneruser@email.com');
   });
-
-  it('should send a csv export', async () => {
-    const storedUser = await prisma.userAccounts.create({
-      data: await userFactory({
-        roles: { isAdmin: true },
-        mfaEnabled: false,
-        confirmedAt: new Date(),
-      }),
-    });
-
-    const res = await request(app.getHttpServer())
-      .get('/user/csv')
-      .set('Cookie', cookies)
-      .expect(200);
-
-    expect(res.body.success).toEqual(true);
-    expect(testEmailService.sendCSV).toHaveBeenCalledWith(
-      [],
-      expect.anything(),
-      expect.anything(),
-      'User Export',
-      'an export of all users',
-    );
-    expect(testEmailService.sendCSV.mock.calls[0][2]).toContain(
-      `\"First Name\",\"Last Name\",\"Email\",\"Role\",\"Date Created\",\"Status\",\"Listing Names\",\"Listing Ids\",\"Last Logged In\"`,
-    );
-    expect(testEmailService.sendCSV.mock.calls[0][2]).toContain(
-      `\"${storedUser.firstName}\",\"${storedUser.lastName}\",\"${storedUser.email}\",\"Administrator\"`,
-    );
-  });
 });

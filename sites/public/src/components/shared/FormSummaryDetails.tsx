@@ -115,7 +115,7 @@ const FormSummaryDetails = ({
     question: ApplicationMultiselectQuestion,
     option: ApplicationMultiselectQuestionOption
   ) => {
-    const initialMultiselectQuestion = listing.listingMultiselectQuestions.find(
+    const initialMultiselectQuestion = listing?.listingMultiselectQuestions.find(
       (elem) =>
         cleanMultiselectString(elem.multiselectQuestions.text) ===
         cleanMultiselectString(question.key)

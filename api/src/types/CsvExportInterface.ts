@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
 import { ListingCsvQueryParams } from '../dtos/listings/listing-csv-query-params.dto';
 import Listing from '../dtos/listings/listing.dto';
+import { User } from '../dtos/users/user.dto';
 
 export type CsvHeader = {
   path: string;
@@ -25,7 +26,7 @@ export interface CsvExporterServiceInterface {
   >(
     filename: string,
     queryParams?: QueryParams,
-    listings?: Listing[],
+    optionalParams?: { listings?: Listing[]; user?: User },
   ): Promise<void>;
   getCsvHeaders(...args: OneOrMoreArgs<unknown>): Promise<CsvHeader[]>;
   authorizeCSVExport(user: unknown, id?: string): Promise<void>;

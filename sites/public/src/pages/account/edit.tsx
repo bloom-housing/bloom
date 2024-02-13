@@ -242,6 +242,7 @@ const Edit = () => {
                   error={errors?.dateOfBirth}
                   watch={watch}
                   validateAge18={true}
+                  required={true}
                   errorMessage={t("errors.dateOfBirthErrorAge")}
                   defaultDOB={{
                     birthDay: profile ? dayjs(new Date(profile.dob)).utc().format("DD") : null,

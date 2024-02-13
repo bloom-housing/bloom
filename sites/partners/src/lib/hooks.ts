@@ -518,40 +518,12 @@ export const useApplicationsExport = (listingId: string, includeDemographics: bo
 }
 
 export const useUsersExport = () => {
-  const { userService, profile } = useContext(AuthContext)
+  const { userService } = useContext(AuthContext)
 
-  const [csvExportLoading, setCsvExportLoading] = useState(false)
-  const [csvExportError, setCsvExportError] = useState(false)
-  const [csvExportSuccess, setCsvExportSuccess] = useState(false)
-
-  const onExport = useCallback(async () => {
-    setCsvExportError(false)
-    setCsvExportSuccess(false)
-    setCsvExportLoading(true)
-
-    try {
-      await userService.listAsCsv()
-      setCsvExportSuccess(true)
-      setSiteAlertMessage(
-        t("t.emailingExportSuccess", {
-          email: profile?.email,
-        }),
-        "success"
-      )
-    } catch (err) {
-      console.log(err)
-      setCsvExportError(true)
-    }
-
-    setCsvExportLoading(false)
-  }, [userService, profile?.email])
-
-  return {
-    onExport,
-    csvExportLoading,
-    csvExportError,
-    csvExportSuccess,
-  }
+  return useCsvExport(
+    () => userService.listAsCsv(),
+    `users-${createDateStringFromNow("YYYY-MM-DD_HH:mm")}.csv`
+  )
 }
 
 const useCsvExport = (endpoint: () => Promise<string>, fileName: string) => {
