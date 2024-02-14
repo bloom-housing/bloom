@@ -32,7 +32,7 @@ const DetailsHouseholdIncome = () => {
             : t("t.n/a")}
         </FieldValue>
 
-        <FieldValue label={"Issued Vouchers or Rental Assistance"} testId="vouchers">
+        <FieldValue label={t("application.details.incomeVouchers")} testId="vouchers">
           {(!application.incomeVouchers || application.incomeVouchers.length === 0) && t("t.n/a")}
 
           {application.incomeVouchers?.map((item) => (

@@ -90,7 +90,7 @@ const FormHouseholdIncome = () => {
             <FieldGroup
               name="application.incomeVouchers"
               fields={incomeVouchersOptions}
-              groupLabel={"Issued Vouchers or Rental Assistance"}
+              groupLabel={t("application.details.incomeVouchers")}
               type="checkbox"
               register={register}
               dataTestId={"app-income-vouchers"}
