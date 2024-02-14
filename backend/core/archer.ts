@@ -253,6 +253,8 @@ export const ArcherListing: Listing = {
     id: "id",
     name: "Bay Area",
     publicUrl: "",
+    enableAccessibilityFeatures: false,
+    enableUtilitiesIncluded: false,
   },
   depositMax: "",
   disableUnitsAccordion: false,

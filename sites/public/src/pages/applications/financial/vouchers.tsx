@@ -10,6 +10,7 @@ import {
   pushGtmEvent,
   AuthContext,
   listingSectionQuestions,
+  vouchersOrRentalAssistanceKeys,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
@@ -26,13 +27,12 @@ const ApplicationVouchers = () => {
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, getValues } = useForm({
-    defaultValues: { incomeVouchers: application.incomeVouchers?.toString() },
     shouldFocusError: false,
   })
 
   const onSubmit = (data) => {
     const { incomeVouchers } = data
-    const toSave = { incomeVouchers: JSON.parse(incomeVouchers) }
+    const toSave = { incomeVouchers }
 
     conductor.currentStep.save(toSave)
     conductor.routeToNextOrReturnUrl()
@@ -41,18 +41,11 @@ const ApplicationVouchers = () => {
     window.scrollTo(0, 0)
   }
 
-  const incomeVouchersValues = [
-    {
-      id: "incomeVouchersYes",
-      value: "true",
-      label: t("t.yes"),
-    },
-    {
-      id: "incomeVouchersNo",
-      value: "false",
-      label: t("t.no"),
-    },
-  ]
+  const incomeVouchersOptions = vouchersOrRentalAssistanceKeys.map((item) => ({
+    id: item,
+    label: t(`application.financial.vouchers.options.${item}`),
+    defaultChecked: application?.incomeVouchers?.includes(item) || false,
+  }))
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -68,22 +61,7 @@ const ApplicationVouchers = () => {
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.financial.vouchers.title")}
-          subheading={
-            <div>
-              <p className="field-note mb-4">
-                <strong>{t("application.financial.vouchers.housingVouchers.strong")}</strong>
-                {` ${t("application.financial.vouchers.housingVouchers.text")}`}
-              </p>
-              <p className="field-note mb-4">
-                <strong>{t("application.financial.vouchers.nonTaxableIncome.strong")}</strong>
-                {` ${t("application.financial.vouchers.nonTaxableIncome.text")}`}
-              </p>
-              <p className="field-note">
-                <strong>{t("application.financial.vouchers.rentalSubsidies.strong")}</strong>
-                {` ${t("application.financial.vouchers.rentalSubsidies.text")}`}
-              </p>
-            </div>
-          }
+          subheading={t("application.financial.vouchers.subTitle")}
           progressNavProps={{
             currentPageSection: currentPageSection,
             completedSections: application.completedSections,
@@ -108,23 +86,19 @@ const ApplicationVouchers = () => {
 
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
-              <legend className="sr-only">{t("application.financial.vouchers.legend")}</legend>
+              <legend className="field-note mb-4">
+                {t("application.financial.vouchers.legend")}
+              </legend>
+
               <FieldGroup
-                fieldGroupClassName="grid grid-cols-1"
-                fieldClassName="ml-0"
-                type="radio"
                 name="incomeVouchers"
-                groupNote={t("t.pleaseSelectOne")}
-                error={errors.incomeVouchers}
-                errorMessage={t("errors.selectAnOption")}
+                fields={incomeVouchersOptions}
+                type="checkbox"
+                validation={{ required: true }}
+                error={errors?.incomeVouchers}
+                errorMessage={t("errors.selectAtLeastOne")}
                 register={register}
-                fields={incomeVouchersValues}
                 dataTestId={"app-income-vouchers"}
-                validation={{
-                  validate: () => {
-                    return !!Object.values(getValues()).filter((value) => value).length
-                  },
-                }}
               />
             </fieldset>
           </CardSection>

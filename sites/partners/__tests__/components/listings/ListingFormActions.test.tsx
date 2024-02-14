@@ -32,6 +32,7 @@ const mockBaseJurisdiction: Jurisdiction = {
   enableAccessibilityFeatures: false,
   enableUtilitiesIncluded: true,
   enableGeocodingPreferences: false,
+  enableListingOpportunity: false,
 }
 
 const mockAdminOnlyJurisdiction: Jurisdiction = {

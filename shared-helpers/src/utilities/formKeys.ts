@@ -114,50 +114,95 @@ export const altContactRelationshipKeys = [
   "noContact",
 ]
 
-export const ethnicityKeys = ["hispanicLatino", "notHispanicLatino"]
+export const vouchersOrRentalAssistanceKeys = ["issuedVouchers", "rentalAssistance", "none"]
 
 export const rootRaceKeys = [
-  "americanIndianAlaskanNative",
   "asian",
-  "blackAfricanAmerican",
-  "nativeHawaiianOtherPacificIslander",
+  "black",
+  "indigenous",
+  "latino",
+  "middleEasternOrAfrican",
+  "pacificIslander",
   "white",
-  "otherMultiracial",
-  "declineToRespond",
 ]
 
 export const asianKeys = [
-  "asianIndian",
   "chinese",
   "filipino",
   "japanese",
   "korean",
+  "mongolian",
   "vietnamese",
+  "centralAsian",
+  "southAsian",
+  "southeastAsian",
   "otherAsian",
 ]
 
-export const nativeHawaiianOtherPacificIslanderKeys = [
-  "nativeHawaiian",
-  "guamanianOrChamorro",
-  "samoan",
-  "otherPacificIslander",
+export const blackKeys = [
+  "african",
+  "africanAmerican",
+  "caribbeanCentralSouthAmericanMexican",
+  "otherBlack",
 ]
 
-export const genderKeys = [
-  "female",
-  "male",
-  "genderqueerGenderNon-Binary",
-  "transFemale",
-  "transMale",
+export const indigenousKeys = [
+  "alaskanNative",
+  "nativeAmerican",
+  "indigenousFromMexicoCaribbeanCentralSouthAmerica",
+  "otherIndigenous",
+]
+
+export const latinoKeys = [
+  "caribbean",
+  "centralAmerican",
+  "mexican",
+  "southAmerican",
+  "otherLatino",
+]
+
+export const middleEasternOrAfricanKeys = [
+  "northAfrican",
+  "westAsian",
+  "otherMiddleEasternNorthAfrican",
+]
+
+export const pacificIslanderKeys = ["chamorro", "nativeHawaiian", "samoan", "otherPacificIslander"]
+
+export const whiteKeys = ["european", "otherWhite"]
+
+export const spokenLanguageKeys = [
+  "chineseCantonese",
+  "chineseMandarin",
+  "english",
+  "filipino",
+  "korean",
+  "russian",
+  "spanish",
+  "vietnamese",
   "notListed",
 ]
 
-export const sexualOrientation = [
+export const genderKeys = [
+  "genderqueerGenderNon-Binary",
+  "transMale",
+  "transFemale",
+  "male",
+  "female",
+  "differentTerm",
+  "dontKnow",
+  "preferNoResponse",
+]
+
+export const sexualOrientationKeys = [
+  "asexual",
   "bisexual",
   "gayLesbianSameGenderLoving",
   "questioningUnsure",
   "straightHeterosexual",
-  "notListed",
+  "differentTerm",
+  "dontKnow",
+  "preferNoResponse",
 ]
 
 export const prependRoot = (root: string, subKeys: string[]) => {
@@ -194,24 +239,21 @@ export const fieldGroupObjectToArray = (
 }
 
 export const raceKeys: subCheckboxes = {
-  americanIndianAlaskanNative: [],
   asian: prependRoot("asian", asianKeys),
-  blackAfricanAmerican: [],
-  nativeHawaiianOtherPacificIslander: prependRoot(
-    "nativeHawaiianOtherPacificIslander",
-    nativeHawaiianOtherPacificIslanderKeys
-  ),
-  white: [],
-  otherMultiracial: [],
-  declineToRespond: [],
+  black: prependRoot("black", blackKeys),
+  indigenous: prependRoot("indigenous", indigenousKeys),
+  latino: prependRoot("latino", latinoKeys),
+  middleEasternOrAfrican: prependRoot("middleEasternOrAfrican", middleEasternOrAfricanKeys),
+  pacificIslander: prependRoot("pacificIslander", pacificIslanderKeys),
+  white: prependRoot("white", whiteKeys),
 }
 
 export const howDidYouHear = [
   {
-    id: "jurisdictionWebsite",
+    id: "governmentWebsite",
   },
   {
-    id: "developerWebsite",
+    id: "propertyWebsite",
   },
   {
     id: "flyer",

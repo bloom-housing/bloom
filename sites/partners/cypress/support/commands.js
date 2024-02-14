@@ -246,19 +246,21 @@ Cypress.Commands.add("fillHouseholdIncome", (application, fieldsToSkip = []) => 
     cy.getByID("incomeYear").type(application["incomeYear"])
   }
   if (!fieldsToSkip.includes("application.incomeVouchers")) {
-    cy.getByID("application.incomeVouchers").select(application["incomeVouchers"])
+    cy.getByTestId("app-income-vouchers").parent().contains(application["incomeVouchers"]).click()
   }
 })
 
 Cypress.Commands.add("fillDemographics", (application, fieldsToSkip = []) => {
-  if (!fieldsToSkip.includes("application.demographics.ethnicity")) {
-    cy.getByID("application.demographics.ethnicity").select(application["demographics.ethnicity"])
+  if (!fieldsToSkip.includes("application.demographics.spokenLanguage")) {
+    cy.getByID("application.demographics.spokenLanguage").select(
+      application["demographics.spokenLanguage"]
+    )
   }
-  if (!fieldsToSkip.includes("americanIndianAlaskanNative")) {
-    cy.getByID("americanIndianAlaskanNative").click()
+  if (!fieldsToSkip.includes("indigenous")) {
+    cy.getByID("indigenous").click()
   }
-  if (!fieldsToSkip.includes("jurisdictionWebsite")) {
-    cy.getByID("jurisdictionWebsite").click()
+  if (!fieldsToSkip.includes("governmentWebsite")) {
+    cy.getByID("governmentWebsite").click()
   }
 })
 

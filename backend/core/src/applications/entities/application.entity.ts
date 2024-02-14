@@ -181,11 +181,12 @@ export class Application extends AbstractEntity {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   householdStudent?: boolean | null
 
-  @Column({ type: "bool", nullable: true })
+  @Column("text", { array: true })
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  incomeVouchers?: boolean | null
+  @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ArrayMaxSize(8, { groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default], each: true })
+  incomeVouchers: string[]
 
   @Column({ type: "text", nullable: true })
   @Expose()

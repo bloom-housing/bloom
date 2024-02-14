@@ -169,6 +169,7 @@ export const mapFormToApi = ({
     additionalPhoneNumber,
     contactPreferences,
     sendMailToMailingAddress,
+    incomeVouchers,
   } = data.application
 
   const additionalPhone = !additionalPhoneNumberData
@@ -196,7 +197,6 @@ export const mapFormToApi = ({
   const incomePeriod: IncomePeriod | null = data.application?.incomePeriod || null
 
   const income = incomePeriod === IncomePeriod.perMonth ? incomeMonth : incomeYear || null
-  const incomeVouchers = getBooleanValue(data.application.incomeVouchers)
   const acceptedTerms = getBooleanValue(data.application.acceptedTerms)
   const householdExpectingChanges = getBooleanValue(data.application.householdExpectingChanges)
   const householdStudent = getBooleanValue(data.application.householdStudent)
@@ -337,13 +337,13 @@ export const mapApiToForm = (applicationData: ApplicationUpdate, listing: Listin
       sendMailToMailingAddress,
       mailingAddress,
       incomePeriod,
+      incomeVouchers,
       demographics,
       additionalPhoneNumber,
       additionalPhoneNumberType,
       alternateContact,
     } = applicationData
 
-    const incomeVouchers = getYesNoValue(applicationData.incomeVouchers)
     const acceptedTerms = getYesNoValue(applicationData.acceptedTerms)
     const householdExpectingChanges = getYesNoValue(applicationData.householdExpectingChanges)
     const householdStudent = getYesNoValue(applicationData.householdStudent)

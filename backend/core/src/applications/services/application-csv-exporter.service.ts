@@ -46,32 +46,126 @@ export class ApplicationCsvExporterService {
     return typeMap[type] ?? type
   }
 
+  incomeVouchersToReadable(type) {
+    const typeMap = {
+      issuedVouchers: "Section 8 or Housing Authority Issued Vouchers",
+      rentalAssistance: "Rental assistance from other sources",
+      none: "None of the above",
+    }
+    return typeMap[type] ?? type
+  }
+
   raceToReadable(type) {
     const [rootKey, customValue = ""] = type.split(":")
     const typeMap = {
-      americanIndianAlaskanNative: "American Indian / Alaskan Native",
       asian: "Asian",
       "asian-asianIndian": "Asian[Asian Indian]",
-      "asian-otherAsian": `Asian[Other Asian:${customValue}]`,
-      blackAfricanAmerican: "Black / African American",
       "asian-chinese": "Asian[Chinese]",
-      declineToRespond: "Decline to Respond",
       "asian-filipino": "Asian[Filipino]",
-      "nativeHawaiianOtherPacificIslander-guamanianOrChamorro":
-        "Native Hawaiian / Other Pacific Islander[Guamanian or Chamorro]",
       "asian-japanese": "Asian[Japanese]",
       "asian-korean": "Asian[Korean]",
-      "nativeHawaiianOtherPacificIslander-nativeHawaiian":
-        "Native Hawaiian / Other Pacific Islander[Native Hawaiian]",
-      nativeHawaiianOtherPacificIslander: "Native Hawaiian / Other Pacific Islander",
-      otherMultiracial: `Other / Multiracial:${customValue}`,
-      "nativeHawaiianOtherPacificIslander-otherPacificIslander": `Native Hawaiian / Other Pacific Islander[Other Pacific Islander:${customValue}]`,
-      "nativeHawaiianOtherPacificIslander-samoan":
-        "Native Hawaiian / Other Pacific Islander[Samoan]",
+      "asian-mongolian": "Asian[Mongolian]",
+      "asian-otherAsian": `Asian[Other Asian:${customValue}]`,
       "asian-vietnamese": "Asian[Vietnamese]",
+      "asian-centralAsian": "Asian[Central Asian]",
+      "asian-southAsian": "Asian[South Asian]",
+      "asian-southeastAsian": "Asian[Southeast Asian]",
+      black: "Black",
+      "black-african": "Black[African]",
+      "black-africanAmerican": "Black[African American]",
+      "black-caribbeanCentralSouthAmericanMexican":
+        "Black[Caribbean, Central American, South American or Mexican]",
+      "black-otherBlack": `Black[Other Black:${customValue}]`,
+      indigenous: "Indigenous",
+      "indigenous-alaskanNative": "Indigenous[Alaskan Native]",
+      "indigenous-nativeAmerican": "Indigenous[American Indian/Native American]",
+      "indigenous-indigenousFromMexicoCaribbeanCentralSouthAmerica":
+        "Indigenous[Indigenous from Mexico, the Caribbean, Central America, or South America]",
+      "indigenous-otherIndigenous": `Indigenous[Other Indigenous:${customValue}]`,
+      latino: "Latino",
+      "latino-caribbean": "Latino[Caribbean]",
+      "latino-centralAmerican": "Latino[Central American]",
+      "latino-mexican": "Latino[Mexican]",
+      "latino-southAmerican": "Latino[South American]",
+      "latino-otherLatino": `Latino[Other Latino:${customValue}]`,
+      middleEasternOrAfrican: "Middle Eastern, West African or North African",
+      "middleEasternOrAfrican-northAfrican":
+        "Middle Eastern, West African or North African[North African]",
+      "middleEasternOrAfrican-westAsian":
+        "Middle Eastern, West African or North African[West Asian]",
+      "middleEasternOrAfrican-otherMiddleEasternNorthAfrican": `Middle Eastern, West African or North African[Other Middle Eastern or North African:${customValue}]`,
+      pacificIslander: "Pacific Islander",
+      "pacificIslander-chamorro": "Pacific Islander[Chamorro]",
+      "pacificIslander-nativeHawaiian": "Pacific Islander[Native Hawaiian]",
+      "pacificIslander-samoan": "Pacific Islander[Samoan]",
+      "pacificIslander-otherPacificIslander": `Pacific Islander[Other Pacific Islander:${customValue}]`,
       white: "White",
+      "white-european": "White[European]",
+      "white-otherWhite": `White[Other White:${customValue}]`,
     }
     return typeMap[rootKey] ?? rootKey
+  }
+
+  spokenLanguageToReadable(type) {
+    const typeMap = {
+      chineseCantonese: "Chinese - Cantonese",
+      chineseMandarin: "Chinese - Mandarin",
+      english: "English",
+      filipino: "Filipino",
+      korean: "Korean",
+      russian: "Russian",
+      spanish: "Spanish",
+      vietnamese: "Vietnamese",
+      notListed: "Not Listed",
+    }
+    return typeMap[type] ?? type
+  }
+
+  genderToReadable(type) {
+    const typeMap = {
+      differentTerm: "I use a different term",
+      dontKnow: "I don’t know or don’t understand the question",
+      preferNoResponse: "Prefer not to respond",
+      female: "Woman",
+      "genderqueerGenderNon-Binary": "Genderqueer / Gender Nonbinary",
+      male: "Man",
+      notListed: "Not Listed",
+      transFemale: "Trans Woman / Transfeminine / Trans Female",
+      transMale: "Trans Man / Transmasculine / Trans Male",
+    }
+    return typeMap[type] ?? type
+  }
+
+  sexualOrientationToReadable(type) {
+    const typeMap = {
+      asexual: "Asexual",
+      bisexual: "Bisexual",
+      differentTerm: "I use a different term",
+      dontKnow: "I don’t understand the question",
+      preferNoResponse: "Prefer not to respond",
+      gayLesbianSameGenderLoving: "Gay / Lesbian / Same-Gender Loving",
+      notListed: "Not Listed",
+      questioningUnsure: "Questioning / Unsure",
+      straightHeterosexual: "Straight / Heterosexual",
+    }
+    return typeMap[type] ?? type
+  }
+
+  howDidYouHearToReadable(type) {
+    const typeMap = {
+      busAd: "Bus Ad",
+      developerWebsite: "Developer Website",
+      governmentWebsite: "Government Website",
+      propertyWebsite: "Property Website",
+      emailAlert: "Email Alert",
+      flyer: "Flyer",
+      friend: "Friend",
+      housingCounselor: "Housing Counselor",
+      jurisdictionWebsite: "Alameda County HCD Website",
+      other: "Other",
+      radioAd: "Radio Ad",
+    }
+    return typeMap[type] ?? type
   }
 
   buildMultiselectQuestion(items: ApplicationMultiselectQuestion[], preferenceKeys: KeyNumber) {
@@ -132,9 +226,15 @@ export class ApplicationCsvExporterService {
       if (obj[app.application_id] === undefined) {
         if (includeDemographics) {
           demographics = {
-            Ethnicity: app.demographics_ethnicity,
-            Race: app.demographics_race.map((race) => this.raceToReadable(race)),
-            "How Did You Hear": app.demographics_how_did_you_hear.join(", "),
+            Race: app.demographics_race.map((race) => this.raceToReadable(race)).join(", "),
+            "Spoken Language": this.spokenLanguageToReadable(app.demographics_spoken_language),
+            Gender: this.genderToReadable(app.demographics_gender),
+            "Sexual Orientation": this.sexualOrientationToReadable(
+              app.demographics_sexual_orientation
+            ),
+            "How Did You Hear": app.demographics_how_did_you_hear
+              .map((answer) => this.howDidYouHearToReadable(answer))
+              .join(", "),
           }
         }
 
@@ -200,7 +300,11 @@ export class ApplicationCsvExporterService {
           "Household Includes Student or Member Nearing 18": formatBoolean(
             app.application_household_student
           ),
-          "Vouchers or Subsidies": formatBoolean(app.application_income_vouchers),
+          "Vouchers or Subsidies": app.application_income_vouchers
+            ? app.application_income_vouchers
+                .map((answer) => this.incomeVouchersToReadable(answer))
+                .join(",")
+            : "n/a",
           "Requested Unit Types": {
             [app.preferredUnit_id]: this.unitTypeToReadable(app.preferredUnit_name),
           },

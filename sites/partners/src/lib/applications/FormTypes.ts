@@ -19,7 +19,7 @@ export type ApplicationTypes = {
   contactPreferences?: string[]
   acceptedTerms?: YesNoAnswer
   incomePeriod?: IncomePeriod
-  incomeVouchers?: YesNoAnswer
+  incomeVouchers?: string[]
   preferredUnit?: string[]
   householdExpectingChanges?: YesNoAnswer
   householdStudent?: YesNoAnswer
@@ -29,6 +29,7 @@ export type ApplicationTypes = {
     race?: string[]
     gender?: string
     sexualOrientation?: string
+    spokenLanguage?: string
     howDidYouHear: string[]
   }
   alternateContact: {

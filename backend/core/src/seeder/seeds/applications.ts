@@ -102,6 +102,7 @@ const getApplicationCreateDtoTemplate = (
       howDidYouHear: ["email", "facebook"],
       race: ["asian", "filipino"],
       sexualOrientation: null,
+      spokenLanguage: null,
     },
     householdMembers: [
       {
@@ -143,7 +144,7 @@ const getApplicationCreateDtoTemplate = (
     housingStatus: "status",
     income: "5000.00",
     incomePeriod: IncomePeriod.perMonth,
-    incomeVouchers: false,
+    incomeVouchers: [],
     householdExpectingChanges: false,
     householdStudent: false,
     language: Language.en,
