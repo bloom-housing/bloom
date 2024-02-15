@@ -67,40 +67,42 @@ const Layout = (props) => {
       ],
     })
   }
-  if (profile) {
-    menuLinks.push({
-      title: t("nav.myAccount"),
-      subMenuLinks: [
-        {
-          title: t("nav.myDashboard"),
-          href: "/account/dashboard",
-        },
-        {
-          title: t("account.myApplications"),
-          href: "/account/applications",
-        },
-        {
-          title: t("account.accountSettings"),
-          href: "/account/edit",
-        },
-        {
-          title: t("nav.signOut"),
-          onClick: () => {
-            const signOutFxn = async () => {
-              setSiteAlertMessage(t(`authentication.signOut.success`), "notice")
-              await router.push("/sign-in")
-              signOut()
-            }
-            void signOutFxn()
+  if (process.env.showMandatedAccounts) {
+    if (profile) {
+      menuLinks.push({
+        title: t("nav.myAccount"),
+        subMenuLinks: [
+          {
+            title: t("nav.myDashboard"),
+            href: "/account/dashboard",
           },
-        },
-      ],
-    })
-  } else {
-    menuLinks.push({
-      title: t("nav.signIn"),
-      href: "/sign-in",
-    })
+          {
+            title: t("account.myApplications"),
+            href: "/account/applications",
+          },
+          {
+            title: t("account.accountSettings"),
+            href: "/account/edit",
+          },
+          {
+            title: t("nav.signOut"),
+            onClick: () => {
+              const signOutFxn = async () => {
+                setSiteAlertMessage(t(`authentication.signOut.success`), "notice")
+                await router.push("/sign-in")
+                signOut()
+              }
+              void signOutFxn()
+            },
+          },
+        ],
+      })
+    } else {
+      menuLinks.push({
+        title: t("nav.signIn"),
+        href: "/sign-in",
+      })
+    }
   }
 
   return (
