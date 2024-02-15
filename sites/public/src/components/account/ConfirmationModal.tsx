@@ -40,7 +40,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
   }
 
   useEffect(() => {
-    const redirectUrl = router.query?.redirectUrl as string
+    const redirectUrl = "/applications/start/choose-language"
     const listingId = router.query?.listingId as string
 
     const routerRedirectUrl =

@@ -45,7 +45,7 @@ const ResetPassword = () => {
       const user = await resetPassword(token.toString(), password, passwordConfirmation)
       setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
 
-      const redirectUrl = router.query?.redirectUrl as string
+      const redirectUrl = "/applications/start/choose-language"
       const listingId = router.query?.listingId as string
 
       const routerRedirectUrl =
