@@ -21,7 +21,7 @@ const FormSignInErrorBox = ({
   errorMessageId,
   className,
 }: FormSignInErrorBoxProps) => {
-  const classNames = ["border-b"]
+  const classNames = []
   if (className) classNames.push(className)
   return (
     <div className={classNames.join(" ")}>

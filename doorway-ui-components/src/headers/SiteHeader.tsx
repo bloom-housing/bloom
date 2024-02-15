@@ -63,7 +63,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
     const logoOffset = document.getElementById("site-header-logo")?.offsetLeft
     const linksOffset = document.getElementById("site-header-links")?.offsetLeft
     if (linksOffset === undefined || logoOffset === undefined) return
-    return linksOffset === 0 || linksOffset === logoOffset
+    return linksOffset === 0
       ? setNavbarClass("site-header__navbar-wrapped")
       : setNavbarClass("site-header__navbar-inline")
   }

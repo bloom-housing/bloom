@@ -30,7 +30,7 @@ const StatusItem = (props: StatusItemProps) => {
           <h3 className={styles["status-item__title"]}>{props.listingName}</h3>
           <p className={styles["status-item__status"]}>
             {props.strings?.status ?? t("application.status")}:{" "}
-            <Tag variant="primary">
+            <Tag variant="primary-inverse">
               {props.strings?.submittedStatus ?? t("application.statuses.submitted")}
             </Tag>
           </p>
@@ -68,7 +68,7 @@ const StatusItem = (props: StatusItemProps) => {
             </Button>
           </div>
           <div>
-            <Button href={props.listingURL} variant="secondary-outlined" size="sm">
+            <Button href={props.listingURL} variant="primary-outlined" size="sm">
               {props.strings?.seeListing ?? t("t.seeListing")}
             </Button>
           </div>

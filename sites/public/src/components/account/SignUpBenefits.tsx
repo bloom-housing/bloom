@@ -1,3 +1,4 @@
+import React from "react"
 import { Icon } from "@bloom-housing/ui-seeds"
 import { faStopwatch, faEye, faLock } from "@fortawesome/free-solid-svg-icons"
 import { t } from "@bloom-housing/ui-components"

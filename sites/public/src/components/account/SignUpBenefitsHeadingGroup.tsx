@@ -1,3 +1,4 @@
+import React from "react"
 import { t } from "@bloom-housing/ui-components"
 import { HeadingGroup } from "@bloom-housing/ui-seeds"
 

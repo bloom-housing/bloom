@@ -51,9 +51,8 @@ const FormSignIn = ({
           errors={errors}
           networkStatus={networkStatus}
           errorMessageId={"main-sign-in"}
-          className="mx-12"
         />
-        <CardSection className="mx-4">
+        <CardSection className="sm:mx-4">
           <Form id="sign-in" onSubmit={handleSubmit(onSubmit, onError)}>
             <Field
               caps={true}
@@ -93,7 +92,7 @@ const FormSignIn = ({
           </Form>
         </CardSection>
         {showRegisterBtn && (
-          <CardFooter className="border-t py-8 mx-12">
+          <CardFooter className="border-t py-8 mx-6 sm:mx-12">
             <Heading priority={2} size="2xl" className="mb-6">
               {t("authentication.createAccount.noAccount")}
             </Heading>

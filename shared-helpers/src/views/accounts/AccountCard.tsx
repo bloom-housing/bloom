@@ -34,7 +34,11 @@ const AccountCard = (props: AccountCardProps) => {
         {props.subtitle ? (
           <HeadingGroup
             size="2xl"
-            heading={props.title}
+            heading={
+              <Heading size="2xl" className={styles["account-card-heading"]}>
+                {props.title}
+              </Heading>
+            }
             subheading={props.subtitle}
             className={styles["account-card-heading-group"]}
             headingPriority={props.headingPriority}

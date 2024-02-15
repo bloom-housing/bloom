@@ -2,7 +2,7 @@ import { Modal, t, Form, Field, AlertBox } from "@bloom-housing/ui-components"
 import { Button } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useRouter } from "next/router"
-import { useContext, useEffect, useRef, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { emailRegex } from "../../lib/helpers"
 

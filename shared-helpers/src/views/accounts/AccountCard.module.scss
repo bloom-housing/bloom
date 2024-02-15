@@ -2,6 +2,8 @@
   width: 100%;
   height: 100%;
   justify-content: space-between;
+  --card-border-width: 0rem;
+  --card-divider-width: var(--seeds-border-1);
   @media (max-width: theme("screens.sm")) {
     --card-spacing-lg: var(--seeds-s6);
   }
@@ -30,5 +32,6 @@
 }
 
 .account-card-heading {
+  font-weight: var(--seeds-font-weight-semibold);
   margin-top: var(--seeds-s3);
 }
