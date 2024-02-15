@@ -86,7 +86,7 @@ const ApplicationDemographics = () => {
           }}
           conductor={conductor}
         >
-          <CardSection divider={"inset"}>
+          <CardSection divider={"flush"} className="border-none">
             <fieldset>
               <legend className="text__caps-spaced">
                 {t("application.review.demographics.raceLabel")}
@@ -98,12 +98,12 @@ const ApplicationDemographics = () => {
                   label: t(`application.review.demographics.raceOptions.${rootKey}`),
                   value: rootKey,
                   additionalText: rootKey.indexOf("other") >= 0,
-                  defaultChecked: application[`race-${rootKey}`],
+                  defaultChecked: application.demographics.race?.includes(rootKey),
                   subFields: raceKeys[rootKey].map((subKey) => ({
                     id: subKey,
                     label: t(`application.review.demographics.raceOptions.${subKey}`),
                     value: subKey,
-                    defaultChecked: application[`race-${subKey}`],
+                    defaultChecked: application.demographics.race?.includes(subKey),
                     additionalText: subKey.indexOf("other") >= 0,
                   })),
                 }))}
@@ -119,6 +119,7 @@ const ApplicationDemographics = () => {
               <Select
                 id="spokenLanguage"
                 name="spokenLanguage"
+                defaultValue={application.demographics.spokenLanguage}
                 label={t("application.review.demographics.spokenLanguageLabel")}
                 placeholder={t("t.selectOne")}
                 register={register}
@@ -134,6 +135,7 @@ const ApplicationDemographics = () => {
                 id="gender"
                 name="gender"
                 label={t("application.review.demographics.genderLabel")}
+                defaultValue={application.demographics.gender}
                 placeholder={t("t.selectOne")}
                 register={register}
                 labelClassName="text__caps-spaced mb-3"
@@ -148,6 +150,7 @@ const ApplicationDemographics = () => {
                 id="sexualOrientation"
                 name="sexualOrientation"
                 label={t("application.review.demographics.sexualOrientationLabel")}
+                defaultValue={application.demographics.sexualOrientation}
                 placeholder={t("t.selectOne")}
                 register={register}
                 labelClassName="text__caps-spaced mb-3"
@@ -159,7 +162,7 @@ const ApplicationDemographics = () => {
             </div>
           </CardSection>
 
-          <CardSection divider={"flush"} className={"border-none"}>
+          <CardSection divider={"flush"} className="hidden">
             <fieldset>
               <legend className="text__caps-spaced">
                 {t("application.review.demographics.howDidYouHearLabel")}

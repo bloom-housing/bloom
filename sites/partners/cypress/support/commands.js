@@ -259,9 +259,6 @@ Cypress.Commands.add("fillDemographics", (application, fieldsToSkip = []) => {
   if (!fieldsToSkip.includes("indigenous")) {
     cy.getByID("indigenous").click()
   }
-  if (!fieldsToSkip.includes("governmentWebsite")) {
-    cy.getByID("governmentWebsite").click()
-  }
 })
 
 Cypress.Commands.add("fillMailingAddress", (application, fieldsToSkip = []) => {
