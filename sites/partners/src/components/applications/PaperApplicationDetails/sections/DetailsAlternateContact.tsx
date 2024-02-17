@@ -12,16 +12,16 @@ const DetailsAlternateContact = () => {
     <SectionWithGrid heading={t("application.alternateContact.type.label")} inset>
       <Grid.Row columns={3}>
         <FieldValue label={t("application.name.firstName")} testId="alternateContact.firstName">
-          {application.alternateContact.firstName || t("t.n/a")}
+          {application.alternateContact?.firstName || t("t.n/a")}
         </FieldValue>
         <FieldValue label={t("application.name.lastName")} testId="alternateContact.lastName">
-          {application.alternateContact.lastName || t("t.n/a")}
+          {application.alternateContact?.lastName || t("t.n/a")}
         </FieldValue>
         <FieldValue label={t("t.relationship")} testId="relationship">
           {(() => {
-            if (!application.alternateContact.type) return t("t.n/a")
+            if (!application.alternateContact?.type) return t("t.n/a")
 
-            if (application.alternateContact.otherType)
+            if (application.alternateContact?.otherType)
               return application.alternateContact.otherType
 
             return t(
@@ -32,16 +32,16 @@ const DetailsAlternateContact = () => {
 
         {
           <FieldValue label={t("application.details.agency")} testId="alternateContact.agency">
-            {application.alternateContact.agency || t("t.n/a")}
+            {application.alternateContact?.agency || t("t.n/a")}
           </FieldValue>
         }
 
         <FieldValue label={t("t.email")} testId="alternateContact.emailAddress">
-          {application.alternateContact.emailAddress || t("t.n/a")}
+          {application.alternateContact?.emailAddress || t("t.n/a")}
         </FieldValue>
 
         <FieldValue label={t("t.phone")} testId="alternateContact.phoneNumber">
-          {application.alternateContact.phoneNumber || t("t.n/a")}
+          {application.alternateContact?.phoneNumber || t("t.n/a")}
         </FieldValue>
       </Grid.Row>
       <SectionWithGrid.HeadingRow>{t("application.contact.address")} </SectionWithGrid.HeadingRow>

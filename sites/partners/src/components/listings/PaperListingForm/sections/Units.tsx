@@ -9,11 +9,11 @@ import {
   StandardTableData,
 } from "@bloom-housing/ui-components"
 import { Button, FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import UnitForm from "../UnitForm"
 import { useFormContext, useWatch } from "react-hook-form"
 import { TempUnit } from "../../../../lib/listings/formTypes"
 import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
-import { ListingReviewOrder } from "@bloom-housing/backend-core"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type UnitProps = {
@@ -46,7 +46,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
     amiPercentage: "listings.unit.ami",
     monthlyRent: "listings.unit.rent",
     sqFeet: "listings.unit.sqft",
-    priorityType: "listings.unit.priorityType",
+    unitAccessibilityPriorityTypes: "listings.unit.priorityType",
     action: "",
   }
 
@@ -105,11 +105,11 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
     () =>
       units.map((unit) => ({
         number: { content: unit.number },
-        unitType: { content: unit.unitType && t(`listings.unitTypes.${unit.unitType.name}`) },
+        unitType: { content: unit.unitTypes && t(`listings.unitTypes.${unit.unitTypes.name}`) },
         amiPercentage: { content: unit.amiPercentage },
         monthlyRent: { content: unit.monthlyRent },
         sqFeet: { content: unit.sqFeet },
-        priorityType: { content: unit.priorityType?.name },
+        unitAccessibilityPriorityTypes: { content: unit.unitAccessibilityPriorityTypes?.name },
         action: {
           content: (
             <div className="flex gap-3">
@@ -182,14 +182,14 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
                   value: "availableUnits",
                   id: "availableUnits",
                   dataTestId: "listingAvailability.availableUnits",
-                  defaultChecked: listing?.reviewOrderType !== ListingReviewOrder.waitlist,
+                  defaultChecked: listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlist,
                 },
                 {
                   label: t("listings.waitlist.open"),
                   value: "openWaitlist",
                   id: "openWaitlist",
                   dataTestId: "listingAvailability.openWaitlist",
-                  defaultChecked: listing?.reviewOrderType === ListingReviewOrder.waitlist,
+                  defaultChecked: listing?.reviewOrderType === ReviewOrderTypeEnum.waitlist,
                 },
               ]}
             />
@@ -220,7 +220,9 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
 
       <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
       {fieldHasError(errors?.units) && (
-        <span className={"text-xs text-alert"}>{t("errors.requiredFieldError")}</span>
+        <span className={"text-xs text-alert"} id="units-error">
+          {t("errors.requiredFieldError")}
+        </span>
       )}
 
       <Drawer

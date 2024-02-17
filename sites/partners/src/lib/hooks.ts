@@ -2,18 +2,24 @@ import { useCallback, useContext, useState } from "react"
 import useSWR from "swr"
 import qs from "qs"
 import dayjs from "dayjs"
-import JSZip from "jszip"
+import utc from "dayjs/plugin/utc"
+import tz from "dayjs/plugin/timezone"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import {
-  ApplicationSection,
-  EnumApplicationsApiExtraModelOrder,
-  EnumApplicationsApiExtraModelOrderBy,
-  EnumListingFilterParamsComparison,
-  EnumMultiselectQuestionsFilterParamsComparison,
-  EnumUserFilterParamsComparison,
-  UserRolesOnly,
-} from "@bloom-housing/backend-core/types"
 import { setSiteAlertMessage, t } from "@bloom-housing/ui-components"
+import {
+  ApplicationOrderByKeys,
+  EnumListingFilterParamsComparison,
+  EnumMultiselectQuestionFilterParamsComparison,
+  ListingViews,
+  MultiselectQuestionFilterParams,
+  MultiselectQuestionsApplicationSectionEnum,
+  OrderByEnum,
+  UserRole,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+
+dayjs.extend(utc)
+dayjs.extend(tz)
+
 export interface PaginationProps {
   page?: number
   limit: number | "all"
@@ -41,7 +47,7 @@ type UseListingsDataProps = PaginationProps & {
   userId?: string
   search?: string
   sort?: ColumnOrder[]
-  roles?: UserRolesOnly
+  roles?: UserRole
   userJurisidctionIds?: string[]
 }
 
@@ -72,7 +78,7 @@ export function useListingsData({
     limit,
     filter: [],
     search,
-    view: "base",
+    view: ListingViews.base,
   }
 
   if (sort) {
@@ -118,45 +124,48 @@ export function useListingsData({
   }
 }
 
-export const useListingZip = () => {
+export const useListingExport = () => {
   const { listingsService } = useContext(AuthContext)
 
-  const [zipExportLoading, setZipExportLoading] = useState(false)
-  const [zipExportError, setZipExportError] = useState(false)
-  const [zipCompleted, setZipCompleted] = useState(false)
+  const [csvExportLoading, setCsvExportLoading] = useState(false)
+  const [csvExportError, setCsvExportError] = useState(false)
+  const [csvExportSuccess, setCsvExportSuccess] = useState(false)
 
   const onExport = useCallback(async () => {
-    setZipExportError(false)
-    setZipCompleted(false)
-    setZipExportLoading(true)
-    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone.replace("/", "-")
+    setCsvExportError(false)
+    setCsvExportSuccess(false)
+    setCsvExportLoading(true)
 
     try {
-      const content = await listingsService.listAsCsv({ timeZone })
+      const content = await listingsService.listAsCsv(
+        { timeZone: dayjs.tz.guess() },
+        { responseType: "arraybuffer" }
+      )
+      const blob = new Blob([new Uint8Array(content)], { type: "application/zip" })
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement("a")
+      link.href = url
       const now = new Date()
       const dateString = dayjs(now).format("YYYY-MM-DD_HH-mm")
-      const zip = new JSZip()
-      zip.file(dateString + "_listing_data.csv", content?.listingCsv)
-      zip.file(dateString + "_unit_data.csv", content?.unitCsv)
-      await zip.generateAsync({ type: "blob" }).then(function (blob) {
-        const fileLink = document.createElement("a")
-        fileLink.setAttribute("download", `${dateString}-complete-listing-data.zip`)
-        fileLink.href = URL.createObjectURL(blob)
-        fileLink.click()
-      })
-      setZipCompleted(true)
+      link.setAttribute("download", `${dateString}-complete-listing-data.zip`)
+      document.body.appendChild(link)
+      link.click()
+      link.parentNode.removeChild(link)
+      setCsvExportSuccess(true)
       setSiteAlertMessage(t("t.exportSuccess"), "success")
     } catch (err) {
-      setZipExportError(true)
+      console.log(err)
+      setCsvExportError(true)
     }
-    setZipExportLoading(false)
-  }, [listingsService])
+
+    setCsvExportLoading(false)
+  }, [])
 
   return {
     onExport,
-    zipCompleted,
-    zipExportLoading,
-    zipExportError,
+    csvExportLoading,
+    csvExportError,
+    csvExportSuccess,
   }
 }
 
@@ -164,7 +173,7 @@ export function useSingleApplicationData(applicationId: string) {
   const { applicationsService } = useContext(AuthContext)
   const backendSingleApplicationsEndpointUrl = `/api/adapter/applications/${applicationId}`
 
-  const fetcher = () => applicationsService.retrieve({ id: applicationId })
+  const fetcher = () => applicationsService.retrieve({ applicationId: applicationId })
   const { data, error } = useSWR(backendSingleApplicationsEndpointUrl, fetcher)
 
   return {
@@ -198,8 +207,7 @@ export function useFlaggedApplicationsList({
 
   const fetcher = () => applicationFlaggedSetsService.list(params)
 
-  // only make the call if duplicates should be shown
-  const { data, error } = useSWR(process.env.showDuplicates ? endpoint : null, fetcher)
+  const { data, error } = useSWR(endpoint, fetcher)
 
   return {
     data,
@@ -213,8 +221,8 @@ export function useApplicationsData(
   delayedFilterValue: string,
   limit: number,
   listingId: string,
-  orderBy?: EnumApplicationsApiExtraModelOrderBy,
-  order?: EnumApplicationsApiExtraModelOrder
+  orderBy?: ApplicationOrderByKeys,
+  order?: OrderByEnum
 ) {
   const { applicationsService } = useContext(AuthContext)
 
@@ -229,7 +237,7 @@ export function useApplicationsData(
   }
 
   if (orderBy) {
-    Object.assign(params, { orderBy, order: order || EnumApplicationsApiExtraModelOrder.ASC })
+    Object.assign(params, { orderBy, order: order || OrderByEnum.asc })
   }
 
   const paramsString = qs.stringify(params)
@@ -389,20 +397,22 @@ export function useMultiselectQuestionList() {
 
 export function useJurisdictionalMultiselectQuestionList(
   jurisdictionId: string,
-  applicationSection?: ApplicationSection
+  applicationSection?: MultiselectQuestionsApplicationSectionEnum
 ) {
   const { multiselectQuestionsService } = useContext(AuthContext)
 
-  const params = {
+  const params: {
+    filter: MultiselectQuestionFilterParams[]
+  } = {
     filter: [],
   }
   params.filter.push({
-    $comparison: EnumMultiselectQuestionsFilterParamsComparison["IN"],
+    $comparison: EnumMultiselectQuestionFilterParamsComparison["IN"],
     jurisdiction: jurisdictionId && jurisdictionId !== "" ? jurisdictionId : undefined,
   })
   if (applicationSection) {
     params.filter.push({
-      $comparison: EnumMultiselectQuestionsFilterParamsComparison["="],
+      $comparison: EnumMultiselectQuestionFilterParamsComparison["="],
       applicationSection,
     })
   }
@@ -417,17 +427,17 @@ export function useJurisdictionalMultiselectQuestionList(
 
   return {
     cacheKey,
-    data,
+    data: data,
     loading: !error && !data,
     error,
   }
 }
 
 export function useListingsMultiselectQuestionList(multiselectQuestionId: string) {
-  const { multiselectQuestionsService } = useContext(AuthContext)
+  const { listingsService } = useContext(AuthContext)
 
   const fetcher = () =>
-    multiselectQuestionsService.retrieveListings({
+    listingsService.retrieveListings({
       multiselectQuestionId,
     })
 
@@ -463,7 +473,7 @@ export function useUserList({ page, limit, search = "" }: UseUserListProps) {
     filter: [
       {
         isPortalUser: true,
-        $comparison: EnumUserFilterParamsComparison["="],
+        $comparison: EnumListingFilterParamsComparison["="],
       },
     ],
     search,
@@ -499,8 +509,16 @@ export const createDateStringFromNow = (format = "YYYY-MM-DD_HH:mm:ss"): string 
 }
 
 export const useApplicationsExport = (listingId: string, includeDemographics: boolean) => {
-  const { applicationsService, profile } = useContext(AuthContext)
-  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone.replace("/", "-")
+  const { applicationsService } = useContext(AuthContext)
+
+  return useCsvExport(
+    () => applicationsService.listAsCsv({ listingId, includeDemographics }),
+    `applications-${listingId}-${createDateStringFromNow()}.csv`
+  )
+}
+
+export const useUsersExport = () => {
+  const { userService, profile } = useContext(AuthContext)
 
   const [csvExportLoading, setCsvExportLoading] = useState(false)
   const [csvExportError, setCsvExportError] = useState(false)
@@ -512,7 +530,7 @@ export const useApplicationsExport = (listingId: string, includeDemographics: bo
     setCsvExportLoading(true)
 
     try {
-      await applicationsService.listAsCsv({ listingId, timeZone, includeDemographics })
+      await userService.listAsCsv()
       setCsvExportSuccess(true)
       setSiteAlertMessage(
         t("t.emailingExportSuccess", {
@@ -526,7 +544,7 @@ export const useApplicationsExport = (listingId: string, includeDemographics: bo
     }
 
     setCsvExportLoading(false)
-  }, [applicationsService, includeDemographics, listingId, profile?.email, timeZone])
+  }, [userService, profile?.email])
 
   return {
     onExport,
@@ -534,15 +552,6 @@ export const useApplicationsExport = (listingId: string, includeDemographics: bo
     csvExportError,
     csvExportSuccess,
   }
-}
-
-export const useUsersExport = () => {
-  const { userService } = useContext(AuthContext)
-
-  return useCsvExport(
-    () => userService.listAsCsv(),
-    `users-${createDateStringFromNow("YYYY-MM-DD_HH:mm")}.csv`
-  )
 }
 
 const useCsvExport = (endpoint: () => Promise<string>, fileName: string) => {

@@ -3,7 +3,6 @@
 // get changed at some point.
 // eslint-disable-next-line import/no-named-as-default
 import Router from "next/router"
-import { Listing } from "@bloom-housing/backend-core/types"
 import { blankApplication } from "@bloom-housing/shared-helpers"
 import { ApplicationFormConfig, StepRoute } from "./configInterfaces"
 import StepDefinition from "./StepDefinition"
@@ -13,6 +12,7 @@ import HouseholdMemberStep from "./HouseholdMemberStep"
 import SelectedPreferencesStep from "./SelectedPreferencesStep"
 import PreferencesAllStep from "./PreferencesAllStep"
 import ProgramsStep from "./ProgramsStep"
+import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export const loadApplicationFromAutosave = () => {
   if (typeof window !== "undefined") {

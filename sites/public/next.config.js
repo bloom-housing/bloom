@@ -28,8 +28,6 @@ const HOUSING_COUNSELOR_SERVICE_URL = process.env.HOUSING_COUNSELOR_SERVICE_URL
 const bloomTheme = require("./tailwind.config.js")
 const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(bloomTheme)
 
-// Tell webpack to compile the ui components package
-// https://www.npmjs.com/package/next-transpile-modules
 module.exports = withBundleAnalyzer({
   env: {
     backendApiBase: BACKEND_API_BASE,
@@ -42,8 +40,8 @@ module.exports = withBundleAnalyzer({
     jurisdictionName: process.env.JURISDICTION_NAME,
     cacheRevalidate: process.env.CACHE_REVALIDATE ? Number(process.env.CACHE_REVALIDATE) : 60,
     cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
-    doorwayUrl: process.env.DOORWAY_URL,
     showMandatedAccounts: process.env.SHOW_MANDATED_ACCOUNTS === "TRUE",
+    maintenanceWindow: process.env.MAINTENANCE_WINDOW,
   },
   i18n: {
     locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],
@@ -56,7 +54,6 @@ module.exports = withBundleAnalyzer({
     "@bloom-housing/ui-seeds",
     "@bloom-housing/shared-helpers",
     "@bloom-housing/ui-components",
-    "@bloom-housing/backend-core",
   ],
   webpack: (config) => {
     config.module.rules.push({

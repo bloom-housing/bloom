@@ -7,7 +7,7 @@ import Layout from "../../layouts/application"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
 import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
-import { AccountCard } from "../../components/account/AccountCard"
+import { AccountCard } from "@bloom-housing/shared-helpers/src/views/accounts/AccountCard"
 
 import styles from "./account.module.scss"
 
@@ -63,9 +63,11 @@ function Dashboard(props: DashboardProps) {
                     iconSymbol="application"
                     title={t("account.myApplications")}
                     subtitle={t("account.myApplicationsSubtitle")}
+                    thinDesktop
                   >
-                    <Card.Section className={styles["account-card-section"]}>
+                    <Card.Section>
                       <Button
+                        size="sm"
                         href={"/account/applications"}
                         variant="primary-outlined"
                         id="account-dashboard-applications"
@@ -81,9 +83,10 @@ function Dashboard(props: DashboardProps) {
                     title={t("account.accountSettings")}
                     subtitle={t("account.accountSettingsSubtitle")}
                     id="account-dashboard-settings"
+                    thinDesktop
                   >
-                    <Card.Section className={styles["account-card-section"]}>
-                      <Button href={"/account/edit"} variant="primary-outlined">
+                    <Card.Section>
+                      <Button size="sm" href={"/account/edit"} variant="primary-outlined">
                         {t("account.accountSettingsUpdate")}
                       </Button>
                     </Card.Section>

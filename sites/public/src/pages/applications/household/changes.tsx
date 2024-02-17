@@ -20,11 +20,9 @@ const ApplicationHouseholdChanges = () => {
     defaultValues: { householdExpectingChanges: application.householdExpectingChanges?.toString() },
     shouldFocusError: false,
   })
-
   const onSubmit = async (data) => {
     const validation = await trigger()
     if (!validation) return
-
     const { householdExpectingChanges } = data
     conductor.currentStep.save({
       householdExpectingChanges: householdExpectingChanges === "true",

@@ -1,4 +1,5 @@
 import React, { useContext } from "react"
+import dayjs from "dayjs"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import { JurisdictionFooterSection as SanMateoFooter } from "../page_content/jurisdiction_overrides/san_mateo/jurisdiction-footer-section"
@@ -7,8 +8,10 @@ import { JurisdictionFooterSection as AlamedaFooter } from "../page_content/juri
 import { JursidictionSiteNotice as SanJoseNotice } from "../page_content/jurisdiction_overrides/san_jose/jurisdiction-site-notice"
 import { JursidictionSiteNotice as AlamedaNotice } from "../page_content/jurisdiction_overrides/alameda/jurisdiction-site-notice"
 import { JursidictionSiteNotice as SanMateoNotice } from "../page_content/jurisdiction_overrides/san_mateo/jurisdiction-site-notice"
+import { Message } from "@bloom-housing/ui-seeds"
 import { SiteHeader, MenuLink, t, setSiteAlertMessage } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+import styles from "./application.module.scss"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
@@ -67,6 +70,19 @@ const Layout = (props) => {
       href: "/sign-in",
     })
   }
+  const getInMaintenance = () => {
+    let inMaintenance = false
+    const maintenanceWindow = process.env.maintenanceWindow?.split(",")
+    if (maintenanceWindow?.length === 2) {
+      const convertWindowToDate = (windowString: string) =>
+        dayjs(windowString, "YYYY-MM-DD HH:mm Z")
+      const startWindow = convertWindowToDate(maintenanceWindow[0])
+      const endWindow = convertWindowToDate(maintenanceWindow[1])
+      const now = dayjs()
+      inMaintenance = now > startWindow && now < endWindow
+    }
+    return inMaintenance
+  }
 
   let siteNotice = <div></div>
   if (process.env.jurisdictionName === "Alameda") {
@@ -85,6 +101,13 @@ const Layout = (props) => {
         <Head>
           <title>{t("nav.siteTitle")}</title>
         </Head>
+        {getInMaintenance() && (
+          <div className={styles["site-alert-banner-container"]}>
+            <Message className={styles["site-alert-banner-content"]} variant={"alert"}>
+              {t("alert.maintenance")}
+            </Message>
+          </div>
+        )}
         <SiteHeader
           logoSrc="/images/logo_glyph.svg"
           homeURL="/"

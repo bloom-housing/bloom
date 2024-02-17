@@ -5,10 +5,13 @@ dayjs.extend(utc)
 import { useFormContext, useWatch } from "react-hook-form"
 import { t, Field, FieldGroup, Textarea, DateField, TimeField } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
-import { YesNoAnswer } from "../../../../lib/helpers"
 import { FormListing } from "../../../../lib/listings/formTypes"
-import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 import { getLotteryEvent } from "@bloom-housing/shared-helpers"
+import {
+  Listing,
+  ReviewOrderTypeEnum,
+  YesNoEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type RankingsAndResultsProps = {
@@ -21,15 +24,15 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, control } = formMethods
 
-  const lotteryEvent = getLotteryEvent(listing)
+  const lotteryEvent = getLotteryEvent(listing as unknown as Listing)
 
   const waitlistOpen = useWatch({
     control,
     name: "waitlistOpenQuestion",
     defaultValue: listing?.isWaitlistOpen
-      ? YesNoAnswer.Yes
+      ? YesNoEnum.yes
       : listing?.isWaitlistOpen === false
-      ? YesNoAnswer.No
+      ? YesNoEnum.no
       : null,
   })
 
@@ -37,7 +40,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
     control,
     name: "reviewOrderQuestion",
     defaultValue:
-      listing?.reviewOrderType === ListingReviewOrder.lottery
+      listing?.reviewOrderType === ReviewOrderTypeEnum.lottery
         ? "reviewOrderLottery"
         : "reviewOrderFCFS",
   })
@@ -50,11 +53,11 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
   const yesNoRadioOptions = [
     {
       label: t("t.yes"),
-      value: YesNoAnswer.Yes,
+      value: YesNoEnum.yes,
     },
     {
       label: t("t.no"),
-      value: YesNoAnswer.No,
+      value: YesNoEnum.no,
     },
   ]
   return (
@@ -77,13 +80,13 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
                     value: "reviewOrderFCFS",
                     id: "reviewOrderFCFS",
                     defaultChecked:
-                      listing?.reviewOrderType === ListingReviewOrder.firstComeFirstServe,
+                      listing?.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe,
                   },
                   {
                     label: t("listings.lotteryTitle"),
                     value: "reviewOrderLottery",
                     id: "reviewOrderLottery",
-                    defaultChecked: listing?.reviewOrderType === ListingReviewOrder.lottery,
+                    defaultChecked: listing?.reviewOrderType === ReviewOrderTypeEnum.lottery,
                   },
                 ]}
               />
@@ -197,7 +200,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
             />
           </Grid.Cell>
         </Grid.Row>
-        {waitlistOpen === YesNoAnswer.Yes && availabilityQuestion === "openWaitlist" && (
+        {waitlistOpen === YesNoEnum.yes && availabilityQuestion === "openWaitlist" && (
           <Grid.Row columns={3}>
             <Field
               name="waitlistOpenSpots"

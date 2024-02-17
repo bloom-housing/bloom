@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { ApplicationSection } from "@bloom-housing/backend-core"
 import { Form, t, FieldGroup } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { Alert } from "@bloom-housing/ui-seeds"
@@ -11,6 +10,7 @@ import {
   AuthContext,
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
+import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
@@ -20,7 +20,10 @@ import styles from "../../../layouts/application-form.module.scss"
 const ApplicationVouchers = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("vouchersSubsidies")
-  const currentPageSection = listingSectionQuestions(listing, ApplicationSection.programs)?.length
+  const currentPageSection = listingSectionQuestions(
+    listing,
+    MultiselectQuestionsApplicationSectionEnum.programs
+  )?.length
     ? 4
     : 3
 

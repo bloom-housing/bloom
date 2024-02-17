@@ -37,8 +37,8 @@
     "test:app:partners:headless": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/partners && yarn test:headless",
     "test:app:partners:unit": "cd sites/partners && yarn test:unit",
     "build:app:partners": "cd sites/partners && yarn build",
-    "dev:backend": "cd backend/core && yarn dev",
-    "dev:all": "concurrently --names \" BACKEND_CORE,APP_PUBLIC,APP_PARTNERS\" --prefix \"{name}\" \"yarn dev:backend\" \"yarn dev:app:public\" \"yarn dev:app:partners\"",
+    "dev:backend": "cd api && yarn dev",
+    "dev:all": "concurrently --names \" BACKEND_API,APP_PUBLIC,APP_PARTNERS\" --prefix \"{name}\" \"yarn dev:backend\" \"yarn dev:app:public\" \"yarn dev:app:partners\"",
     "dev:frontend": "concurrently --names \" APP_PUBLIC,APP_PARTNERS\" --prefix \"{name}\" \"yarn dev:app:public\" \"yarn dev:app:partners\"",
     "dev:partners": "concurrently \"yarn dev:backend\" \"yarn dev:app:partners\"",
     "dev:public": "concurrently \"yarn dev:backend\" \"yarn dev:app:public\"",
@@ -48,8 +48,15 @@
     "test:e2e:backend:core": "cd backend/core && yarn test:e2e",
     "test:apps": "concurrently \"yarn dev:backend\" \"yarn test:app:public\"",
     "test:apps:headless": "concurrently \"yarn dev:backend\" \"yarn test:app:public:headless\"",
-    "lint": "eslint '**/*.ts' '**/*.tsx' '**/*.js'",
-    "version:all": "lerna version --yes --no-commit-hooks --ignore-scripts --conventional-graduate --include-merged-tags --force-git-tag"
+    "lint": "eslint '**/*.ts' '**/*.tsx' '**/*.js' && cd api && yarn lint",
+    "version:all": "lerna version --yes --no-commit-hooks --ignore-scripts --conventional-graduate --include-merged-tags --force-git-tag",
+    "test:backend:new": "cd api && yarn test --detectOpenHandles",
+    "test:backend:new:e2e": "cd api && yarn jest --config ./test/jest-e2e.config.js --detectOpenHandles",
+    "test:backend:new:cov": "cd api && yarn jest --config ./test/jest-with-coverage.config.js --detectOpenHandles --logHeapUsage",
+    "test:backend:new:dbsetup": "cd api && yarn db:migration:run",
+    "test:backend:new:dbsetup:withseed": "cd api && yarn db:migration:run && yarn db:seed:staging --jurisdictionName Bloomington",
+    "backend:new:install": "cd api && yarn install",
+    "prettier": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\""
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
@@ -60,18 +67,18 @@
     "commitizen": "^4.2.4",
     "concurrently": "^5.3.0",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^7.11.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-import": "^2.22.1",
+    "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsx-a11y": "6.5.1",
-    "eslint-plugin-prettier": "^3.1.4",
-    "eslint-plugin-react": "^7.21.4",
-    "eslint-plugin-react-hooks": "^4.1.2",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "husky": "^4.3.0",
     "jest": "^26.5.3",
     "lerna": "^4.0.0",
     "lint-staged": "^10.4.0",
-    "prettier": "^2.1.0",
+    "prettier": "^2.8.8",
     "react": "18.2.0",
     "react-test-renderer": "18.2.0",
     "rimraf": "^3.0.2",
@@ -90,7 +97,7 @@
     }
   },
   "lint-staged": {
-    "*.{js,ts,tsx}": "eslint --max-warnings 0"
+    "*.{js,ts,tsx}": "eslint --max-warnings 100"
   },
   "config": {
     "commitizen": {

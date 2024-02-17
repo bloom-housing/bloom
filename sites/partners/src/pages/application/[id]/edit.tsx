@@ -17,7 +17,7 @@ const NewApplication = () => {
   {
     /* TODO: add listing name in a listing response */
   }
-  const { listingDto } = useSingleListingData(application?.listing.id)
+  const { listingDto } = useSingleListingData(application?.listings.id)
 
   if (!application) return false
 
@@ -43,10 +43,10 @@ const NewApplication = () => {
           breadcrumbs={
             <Breadcrumbs>
               <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
-              <BreadcrumbLink href={`/listings/${application?.listing?.id}`}>
+              <BreadcrumbLink href={`/listings/${application?.listings?.id}`}>
                 {listingDto?.name}
               </BreadcrumbLink>
-              <BreadcrumbLink href={`/listings/${application?.listing?.id}/applications`}>
+              <BreadcrumbLink href={`/listings/${application?.listings?.id}/applications`}>
                 {t("nav.applications")}
               </BreadcrumbLink>
               <BreadcrumbLink href={`/application/${application.id}`}>
@@ -60,7 +60,7 @@ const NewApplication = () => {
         />
 
         <PaperApplicationForm
-          listingId={application.listing.id}
+          listingId={application.listings.id}
           application={application}
           editMode
         />

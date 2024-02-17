@@ -6,7 +6,7 @@ import { t } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getLotteryEvent } from "@bloom-housing/shared-helpers"
-import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
+import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { getDetailFieldNumber, getDetailFieldString, getDetailBoolean } from "./helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
@@ -16,17 +16,17 @@ const DetailRankingsAndResults = () => {
   const lotteryEvent = getLotteryEvent(listing)
   const getReviewOrderType = () => {
     if (!listing.reviewOrderType) {
-      return lotteryEvent ? ListingReviewOrder.lottery : ListingReviewOrder.firstComeFirstServe
+      return lotteryEvent ? ReviewOrderTypeEnum.lottery : ReviewOrderTypeEnum.firstComeFirstServe
     } else {
       return listing.reviewOrderType
     }
   }
   return (
     <SectionWithGrid heading={t("listings.sections.rankingsResultsTitle")} inset>
-      {listing.reviewOrderType !== ListingReviewOrder.waitlist && (
+      {listing.reviewOrderType !== ReviewOrderTypeEnum.waitlist && (
         <Grid.Row>
           <FieldValue id="reviewOrderQuestion" label={t("listings.reviewOrderQuestion")}>
-            {getReviewOrderType() === ListingReviewOrder.firstComeFirstServe
+            {getReviewOrderType() === ReviewOrderTypeEnum.firstComeFirstServe
               ? t("listings.firstComeFirstServe")
               : t("listings.lotteryTitle")}
           </FieldValue>
@@ -52,14 +52,14 @@ const DetailRankingsAndResults = () => {
           </Grid.Row>
         </>
       )}
-      {getReviewOrderType() === ListingReviewOrder.firstComeFirstServe && (
+      {getReviewOrderType() === ReviewOrderTypeEnum.firstComeFirstServe && (
         <Grid.Row>
           <FieldValue id="dueDateQuestion" label={t("listings.dueDateQuestion")}>
             {listing.applicationDueDate ? t("t.yes") : t("t.no")}
           </FieldValue>
         </Grid.Row>
       )}
-      {listing.reviewOrderType === ListingReviewOrder.waitlist && (
+      {listing.reviewOrderType === ReviewOrderTypeEnum.waitlist && (
         <>
           <Grid.Row>
             <FieldValue id="waitlist.openQuestion" label={t("listings.waitlist.openQuestion")}>

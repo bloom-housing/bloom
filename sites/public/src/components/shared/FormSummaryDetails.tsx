@@ -11,10 +11,10 @@ import {
   AllExtraDataTypes,
   ApplicationMultiselectQuestion,
   ApplicationMultiselectQuestionOption,
-  ApplicationSection,
   InputType,
   Listing,
-} from "@bloom-housing/backend-core/types"
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type FormSummaryDetailsProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -117,15 +117,15 @@ const FormSummaryDetails = ({
   ) => {
     const initialMultiselectQuestion = listing.listingMultiselectQuestions.find(
       (elem) =>
-        cleanMultiselectString(elem.multiselectQuestion.text) ===
+        cleanMultiselectString(elem.multiselectQuestions.text) ===
         cleanMultiselectString(question.key)
     )
 
-    const initialOption = initialMultiselectQuestion?.multiselectQuestion.options.find(
+    const initialOption = initialMultiselectQuestion?.multiselectQuestions.options.find(
       (elem) => cleanMultiselectString(elem.text) === option.key
     )
 
-    const initialOptOut = initialMultiselectQuestion?.multiselectQuestion.optOutText
+    const initialOptOut = initialMultiselectQuestion?.multiselectQuestions.optOutText
 
     const optOutOption =
       option.key === cleanMultiselectString(initialOptOut) ? initialOptOut : undefined
@@ -134,7 +134,7 @@ const FormSummaryDetails = ({
   }
 
   const multiselectQuestionSection = (
-    applicationSection: ApplicationSection,
+    applicationSection: MultiselectQuestionsApplicationSectionEnum,
     appLink: string,
     header: string,
     emptyText?: string,
@@ -142,7 +142,7 @@ const FormSummaryDetails = ({
   ) => {
     return (
       <>
-        <h3 className="form--card__sub-header">
+        <h3 className="form--card__sub-header border-none text-xl">
           {header}
           {editMode && !validationError && <EditLink href={appLink} />}
         </h3>
@@ -187,7 +187,7 @@ const FormSummaryDetails = ({
 
   return (
     <>
-      <h3 className="form--card__sub-header">
+      <h3 className="form--card__sub-header border-none text-xl">
         {t("t.you")}
         {editMode && <EditLink href="/applications/contact/name" />}
       </h3>
@@ -259,7 +259,7 @@ const FormSummaryDetails = ({
         >
           <MultiLineAddress
             data-testid={"app-summary-address"}
-            address={reformatAddress(application.applicant.address)}
+            address={reformatAddress(application.applicant.applicantAddress)}
           />
         </FieldValue>
 
@@ -271,7 +271,7 @@ const FormSummaryDetails = ({
           >
             <MultiLineAddress
               data-testid={"app-summary-mailing-address"}
-              address={reformatAddress(application.mailingAddress)}
+              address={reformatAddress(application.applicationsMailingAddress)}
             />
           </FieldValue>
         )}
@@ -284,7 +284,7 @@ const FormSummaryDetails = ({
           >
             <MultiLineAddress
               data-testid={"app-summary-work-address"}
-              address={reformatAddress(application.applicant.workAddress)}
+              address={reformatAddress(application.applicant.applicantWorkAddress)}
             />
           </FieldValue>
         )}
@@ -304,7 +304,7 @@ const FormSummaryDetails = ({
       {application.alternateContact.type !== "" &&
         application.alternateContact.type !== "noContact" && (
           <div id="alternateContact">
-            <h3 className="form--card__sub-header">
+            <h3 className="form--card__sub-header border-none text-xl">
               {t("application.alternateContact.type.label")}
               {editMode && !validationError && (
                 <EditLink href="/applications/contact/alternate-contact-type" />
@@ -347,7 +347,7 @@ const FormSummaryDetails = ({
                 </FieldValue>
               )}
 
-              {Object.values(application.alternateContact.mailingAddress).some(
+              {Object.values(application.alternateContact.address).some(
                 (value) => value !== ""
               ) && (
                 <FieldValue
@@ -356,7 +356,7 @@ const FormSummaryDetails = ({
                   label={t("application.contact.address")}
                   className={"pb-4"}
                 >
-                  <MultiLineAddress address={application.alternateContact.mailingAddress} />
+                  <MultiLineAddress address={application.alternateContact.address} />
                 </FieldValue>
               )}
             </div>
@@ -365,7 +365,7 @@ const FormSummaryDetails = ({
 
       {application.householdSize > 1 && (
         <div id="householdMembers">
-          <h3 className="form--card__sub-header">
+          <h3 className="form--card__sub-header border-none text-xl">
             {t("application.household.householdMembers")}
             {editMode && !validationError && (
               <EditLink href="/applications/household/add-members" />
@@ -373,7 +373,7 @@ const FormSummaryDetails = ({
           </h3>
 
           <div id="members" className="form-card__group info-group mx-0">
-            {application.householdMembers.map((member, index) => (
+            {application.householdMember.map((member, index) => (
               <div
                 className="info-group__item"
                 key={`${member.firstName} - ${member.lastName} - ${index}`}
@@ -397,7 +397,7 @@ const FormSummaryDetails = ({
                     <FieldValue label={t("application.contact.address")} className={"pb-4"}>
                       <MultiLineAddress
                         data-testid={"app-summary-household-member-address"}
-                        address={reformatAddress(member.address)}
+                        address={reformatAddress(member.householdMemberAddress)}
                       />
                     </FieldValue>
                   )}
@@ -417,7 +417,7 @@ const FormSummaryDetails = ({
       )}
 
       <div id="householdDetails">
-        <h3 className="form--card__sub-header">
+        <h3 className="form--card__sub-header border-none text-xl">
           {t("application.review.householdDetails")}
           {editMode && !validationError && (
             <EditLink href="/applications/household/preferred-units" />
@@ -468,17 +468,17 @@ const FormSummaryDetails = ({
 
         {!hidePrograms &&
           multiselectQuestionSection(
-            ApplicationSection.programs,
+            MultiselectQuestionsApplicationSectionEnum.programs,
             "/applications/programs/programs",
             t("t.programs"),
             application.programs.filter((item) => item.claimed == true).length == 0
               ? `${t("application.preferences.general.title", {
-                  county: listing?.countyCode,
+                  county: listing?.listingsBuildingAddress?.county || listing?.jurisdictions?.name,
                 })} ${t("application.preferences.general.preamble")}`
               : null
           )}
 
-        <h3 className="form--card__sub-header">
+        <h3 className="form--card__sub-header border-none text-xl">
           {t("t.income")}
           {editMode && !validationError && <EditLink href="/applications/financial/vouchers" />}
         </h3>
@@ -512,12 +512,12 @@ const FormSummaryDetails = ({
 
         {!hidePreferences &&
           multiselectQuestionSection(
-            ApplicationSection.preferences,
+            MultiselectQuestionsApplicationSectionEnum.preferences,
             "/applications/preferences/all",
             t("t.preferences"),
             application.preferences.filter((item) => item.claimed == true).length == 0
               ? `${t("application.preferences.general.title", {
-                  county: listing?.countyCode,
+                  county: listing?.listingsBuildingAddress?.county || listing?.jurisdictions?.name,
                 })} ${t("application.preferences.general.preamble")}`
               : null,
             "border-b"

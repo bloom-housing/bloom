@@ -2,7 +2,6 @@ import React, { useState, useMemo } from "react"
 import { useFormContext } from "react-hook-form"
 import { getDetailFieldDate, getDetailFieldTime } from "../../PaperListingDetails/sections/helpers"
 import dayjs from "dayjs"
-
 import { t, DateField, TimeField, Drawer, MinimalTable, Modal } from "@bloom-housing/ui-components"
 import { Button, Link, Grid } from "@bloom-housing/ui-seeds"
 import { FormListing, TempEvent } from "../../../../lib/listings/formTypes"

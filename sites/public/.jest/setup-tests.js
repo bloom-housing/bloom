@@ -1,10 +1,8 @@
 // Future home of additional Jest config
 import { addTranslation } from "@bloom-housing/ui-components"
 import generalTranslations from "../../../shared-helpers/src/locales/general.json"
-import { serviceOptions } from "@bloom-housing/backend-core"
-import axios from "axios"
 import "@testing-library/jest-dom/extend-expect"
-import general from "../src/page_content/locale_overrides/general.json"
+import general from "../page_content/locale_overrides/general.json"
 addTranslation({ ...generalTranslations, ...general })
 import "@testing-library/jest-dom"
 
@@ -23,12 +21,6 @@ window.matchMedia = jest.fn().mockImplementation((query) => {
 })
 
 process.env.backendApiBase = "http://localhost:3100"
-
-global.beforeEach(() => {
-  serviceOptions.axios = axios.create({
-    baseURL: "http://localhost:3000",
-  })
-})
 
 // Need to set __next on base div to handle the overlay
 const portalRoot = document.createElement("div")

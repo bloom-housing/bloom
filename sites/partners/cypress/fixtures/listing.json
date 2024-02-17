@@ -1,5 +1,5 @@
 {
-  "jurisdiction.id": "San Jose",
+  "jurisdiction.id": "Bloomington",
   "name": "Basic Test Listing",
   "developer": "Basic Test Developer",
   "buildingAddress.street": "548 Market St. #59930",
@@ -8,7 +8,7 @@
   "buildingAddress.state": "California",
   "buildingAddress.zipCode": "94104",
   "yearBuilt": "2021",
-  "reservedCommunityType.id": "Special Needs",
+  "reservedCommunityType.id": "Seniors",
   "reservedCommunityDescription": "Basic Test Description",
   "number": "2",
   "unitType.id": "One Bedroom",

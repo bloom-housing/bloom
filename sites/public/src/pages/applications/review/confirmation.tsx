@@ -4,7 +4,6 @@ import { useRouter } from "next/router"
 import Markdown from "markdown-to-jsx"
 import { t, ApplicationTimeline } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 import {
   imageUrlFromListing,
   PageView,
@@ -15,6 +14,7 @@ import { Button, Card, Heading } from "@bloom-housing/ui-seeds"
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext } from "../../../lib/applications/AppSubmissionContext"
 import { UserStatus } from "../../../lib/constants"
+import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const ApplicationConfirmation = () => {
   const { application, listing } = useContext(AppSubmissionContext)
@@ -26,22 +26,22 @@ const ApplicationConfirmation = () => {
 
   const content = useMemo(() => {
     switch (listing?.reviewOrderType) {
-      case ListingReviewOrder.firstComeFirstServe:
+      case ReviewOrderTypeEnum.firstComeFirstServe:
         return {
           text: t("application.review.confirmation.whatHappensNext.fcfs"),
         }
-      case ListingReviewOrder.lottery:
+      case ReviewOrderTypeEnum.lottery:
         return {
           text: t("application.review.confirmation.whatHappensNext.lottery"),
         }
-      case ListingReviewOrder.waitlist:
+      case ReviewOrderTypeEnum.waitlist:
         return {
           text: t("application.review.confirmation.whatHappensNext.waitlist"),
         }
       default:
         return { text: "" }
     }
-  }, [listing])
+  }, [listing, router.locale])
 
   useEffect(() => {
     pushGtmEvent<PageView>({

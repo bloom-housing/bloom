@@ -12,29 +12,29 @@ The backend can be simultaenously deployed to PaaS-style hosts such as Heroku. I
 
 ### Structure
 
-Bloom uses a monorepo-style repository containing multiple user-facing applications and backend services. The three main high-level packages are `backend/core`, `sites`, and `shared-helpers`. Additionally, Bloom's UI leverages the in-house npm package `@bloom-housing/ui-components`.
+Bloom uses a monorepo-style repository containing multiple user-facing applications and backend services. The three main high-level packages are `api`, `sites`, and `shared-helpers`. Additionally, Bloom's UI leverages the in-house npm package `@bloom-housing/ui-components`.
 
 The `sites` package contains reference implementations for the two user-facing applications in the system:
 
 ---
 
 - `sites/public` is the applicant-facing site available to the general public. It provides the ability to browse available listings and to apply for listings either using the Common Application (which we build and maintain) or an external link to a third-party online or paper application.
-- Visit [sites/public/README](https://github.com/bloom-housing/bloom/blob/dev/sites/public/README.md) for more details.
+- Visit [sites/public/README](https://github.com/bloom-housing/bloom/blob/main/sites/public/README.md) for more details.
 
 - `sites/partners` is the site designed for housing developers, property managers, and city/county (jurisdiction) employees. For application management, it offers the ability to view, edit, and export applications for listings and other administrative tasks. For listing management, it offers the ability to create, edit, and publish listings. A login is required to use the Partners Portal.
-- Visit [sites/partners/README](https://github.com/bloom-housing/bloom/blob/dev/sites/partners/README.md) for more details.
+- Visit [sites/partners/README](https://github.com/bloom-housing/bloom/blob/main/sites/partners/README.md) for more details.
 
 In some cases the sites diverge slightly to accomodate jurisdictional customizations. The [housingbayarea Bloom fork](https://github.com/housingbayarea/bloom) is a fork of Bloom core for Bay Area jurisdictions which is loosely customized for that location. In this fork, our jurisdictions are each a separate branch.
 
 ---
 
-- `backend/core` is the container for the key backend services (e.g. listings, applications, users). Information is stored in a Postgres database and served over HTTPS to the front-end (either at build time for things that can be server-rendered, or at run time). Most services are part of a NestJS application which allows for consolidated operation in one runtime environment. Services expose a REST API, and aren't expected to have any UI other than for debugging.
-- Visit [backend/core/README](https://github.com/bloom-housing/bloom/blob/dev/backend/core/README.md) for more details.
+- `api` is the container for the key backend services (e.g. listings, applications, users). Information is stored in a Postgres database and served over HTTPS to the front-end (either at build time for things that can be server-rendered, or at run time). Most services are part of a NestJS application which allows for consolidated operation in one runtime environment. Services expose a REST API, and aren't expected to have any UI other than for debugging.
+- Visit [api/README](https://github.com/bloom-housing/bloom/blob/main/api/README.md) for more details.
 
 ---
 
 - `shared-helpers` contains types and functions intended for shared use between the public and partners sites.
-- Visit [shared-helpers/README](https://github.com/bloom-housing/bloom/blob/dev/shared-helpers/README.md) for more details.
+- Visit [shared-helpers/README](https://github.com/bloom-housing/bloom/blob/main/shared-helpers/README.md) for more details.
 
 ---
 
@@ -42,7 +42,7 @@ In some cases the sites diverge slightly to accomodate jurisdictional customizat
 
 ## Getting Started for Developers
 
-If this is your first time working with Bloom, please be sure to check out the `sites/public`, `sites/partners` and `backend/core` README files for important configuration information specific to those pieces.
+If this is your first time working with Bloom, please be sure to check out the `sites/public`, `sites/partners` and `api` README files for important configuration information specific to those pieces.
 
 ## General Local Setup
 
@@ -66,7 +66,32 @@ This runs 3 processes for both apps and the backend services on 3 different port
 
 - 3000 for the public app
 - 3001 for the partners app
-- 3100 for backend/core
+- 3100 for api
+
+There is a chance that this won't work on your machine. If that is the case you can run each individually on separate terminals with the following command in each directory.
+
+```
+yarn dev
+```
+
+### Bloom's UI-Component Development
+- Because Bloom's ui-components package is a separate open source repository, developing within both repos locally requires linking the folders with the following steps:
+### Directory Setup
+1. Clone both Bloom and the [ui-components repository](https://github.com/bloom-housing/ui-components) on the same directory level. 
+### Symlinking UI-C
+1. In the Bloom directory, run `yarn link:uic`.
+2. Open the next.config.js file in the public and partner's directory.
+3. Uncomment the experimental property at the bottom of each file.
+4. Follow the directions above to run Bloom locally.
+These steps allow for two development patterns. You can edit ui-components within the node_modules of Bloom and the changes will be reflected in your local version of ui-components. Alternatively, you can edit the local version of ui-components and the changes will be reflected in the node_modules in Bloom. Both patterns will display up-to-date changes on the local server.
+
+### Unlinking UI-C
+1. In the Bloom directory, run `yarn unlink:uic`.
+2. Open the next.config.js file in the public and partner's directory.
+3. Comment out the experimental property at the bottom of each file.
+4. Follow the directions above to run Bloom locally.
+Bloom will now be consuming the published version of @bloom-housing/ui-components specified in package.json and no local ui-component changes will be reflected.
+
 
 ### Bloom's UI-Component Development
 - Because Bloom's ui-components package is a separate open source repository, developing within both repos locally requires linking the folders with the following steps:
@@ -103,15 +128,11 @@ On commit, two steps automatically run: (1) linting and (2) a verification of th
 
 In addition to commits needing to be formatted as conventional commits, if you are making different levels of version change across multiple packages, your commits must also be separated by package in order to avoid improperly versioning a package.
 
-On every merge to dev, our Netlify `development` environment is updated and a pre-release of the ui-components package is automatically published to npm.
-
-On every merge to master (roughly bi-weekly), a release of the backend/core and ui-components packages are automatically published to npm and our Netlify `staging` environment is updated.
-
-Once staging has been QAed, we manually update `production`.
+On every merge to `main`, our Netlify and Heroku environment automatically deploys.
 
 ### Pull Requests
 
-Pull requests are opened to the dev branch, not to master. When opening a pull request please fill out the entire pull request template which includes tagging the issue your PR is related to, a description of your PR, indicating the type of change, including details for the reviewer about how to test your PR, and a testing checklist. Additionally, officially link the issue to the PR using GitHub's linking UI.
+Pull requests are opened to the main branch. When opening a pull request please fill out the entire pull request template which includes tagging the issue your PR is related to, a description of your PR, indicating the type of change, including details for the reviewer about how to test your PR, and a testing checklist. Additionally, officially link the issue to the PR using GitHub's linking UI.
 
 When your PR is ready for review, add the `needs review(s)` label to help surface it to our internal team. You can assign people as reviewers to surface the work further. If you put up a PR that is not yet ready for eyes, add the `wip` label.
 

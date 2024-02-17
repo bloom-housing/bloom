@@ -2,7 +2,6 @@ import React, { useContext } from "react"
 import { t, MinimalTable, TableThumbnail } from "@bloom-housing/ui-components"
 import { getUrlForListingImage } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "../../ListingContext"
-import { Asset } from "@bloom-housing/backend-core/types"
 import { FieldValue } from "@bloom-housing/ui-seeds"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
@@ -14,9 +13,9 @@ const photoTableHeaders = {
 const DetailListingPhotos = () => {
   const listing = useContext(ListingContext)
 
-  const listingFormPhotos = listing.images
+  const listingFormPhotos = listing.listingImages
     .sort((imageA, imageB) => imageA.ordinal - imageB.ordinal)
-    .map((image) => image.image as Asset)
+    .map((image) => image.assets)
 
   const photoTableData = listingFormPhotos.map((image, index) => {
     return {
@@ -35,7 +34,7 @@ const DetailListingPhotos = () => {
 
   return (
     <SectionWithGrid heading={t("listings.sections.photoTitle")} inset bypassGrid>
-      {listing.images.length > 0 ? (
+      {listing.listingImages.length > 0 ? (
         <MinimalTable id="listingPhotoTable" headers={photoTableHeaders} data={photoTableData} />
       ) : (
         <FieldValue>{t("t.none")}</FieldValue>

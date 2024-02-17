@@ -5,16 +5,17 @@ import { useRouter } from "next/router"
 import { ApplicationStatusProps, isInternalLink } from "@bloom-housing/ui-components"
 import {
   EnumListingFilterParamsComparison,
-  EnumListingFilterParamsStatus,
   Jurisdiction,
   Listing,
   ListingFilterParams,
-  OrderByFieldsEnum,
-  OrderParam,
-} from "@bloom-housing/backend-core/types"
+  ListingOrderByKeys,
+  ListingsStatusEnum,
+  OrderByEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./applications/AppSubmissionContext"
 import { getListingApplicationStatus } from "./helpers"
+import { useRequireLoggedInUser } from "@bloom-housing/shared-helpers"
 
 export const useRedirectToPrevPage = (defaultPath = "/") => {
   const router = useRouter()
@@ -32,6 +33,7 @@ export const useRedirectToPrevPage = (defaultPath = "/") => {
 }
 
 export const useFormConductor = (stepName: string) => {
+  useRequireLoggedInUser("/", !process.env.showMandatedAccounts)
   const context = useContext(AppSubmissionContext)
   const conductor = context.conductor
 
@@ -63,8 +65,8 @@ export async function fetchBaseListingData({
   orderDir,
 }: {
   additionalFilters?: ListingFilterParams[]
-  orderBy?: OrderByFieldsEnum[]
-  orderDir?: OrderParam[]
+  orderBy?: ListingOrderByKeys[]
+  orderDir?: OrderByEnum[]
 }) {
   let listings = []
   try {
@@ -87,8 +89,8 @@ export async function fetchBaseListingData({
       view: string
       limit: string
       filter: ListingFilterParams[]
-      orderBy?: OrderByFieldsEnum[]
-      orderDir?: OrderParam[]
+      orderBy?: ListingOrderByKeys[]
+      orderDir?: OrderByEnum[]
     } = {
       view: "base",
       limit: "all",
@@ -120,11 +122,11 @@ export async function fetchOpenListings() {
     additionalFilters: [
       {
         $comparison: EnumListingFilterParamsComparison["="],
-        status: EnumListingFilterParamsStatus.active,
+        status: ListingsStatusEnum.active,
       },
     ],
-    orderBy: [OrderByFieldsEnum.mostRecentlyPublished],
-    orderDir: [OrderParam.DESC],
+    orderBy: [ListingOrderByKeys.mostRecentlyPublished],
+    orderDir: [OrderByEnum.desc],
   })
 }
 
@@ -133,11 +135,11 @@ export async function fetchClosedListings() {
     additionalFilters: [
       {
         $comparison: EnumListingFilterParamsComparison["="],
-        status: EnumListingFilterParamsStatus.closed,
+        status: ListingsStatusEnum.closed,
       },
     ],
-    orderBy: [OrderByFieldsEnum.mostRecentlyClosed],
-    orderDir: [OrderParam.DESC],
+    orderBy: [ListingOrderByKeys.mostRecentlyClosed],
+    orderDir: [OrderByEnum.desc],
   })
 }
 

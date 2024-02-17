@@ -4,22 +4,17 @@ import { FormTerms } from "../../components/users/FormTerms"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 
 const TermsPage = () => {
-  const { profile, userProfileService, loadProfile } = useContext(AuthContext)
+  const { profile, userService, loadProfile } = useContext(AuthContext)
 
   const onSubmit = useCallback(async () => {
     if (!profile) return
 
-    const jurisdictionIds =
-      profile?.jurisdictions.map((item) => ({
-        id: item.id,
-      })) || []
-
-    await userProfileService?.update({
-      body: { ...profile, jurisdictions: jurisdictionIds, agreedToTermsOfService: true },
+    await userService?.update({
+      body: { ...profile, agreedToTermsOfService: true },
     })
 
     loadProfile?.("/")
-  }, [loadProfile, profile, userProfileService])
+  }, [loadProfile, profile, userService])
 
   const jurisdictionTerms = useMemo(() => {
     const jurisdiction = profile?.jurisdictions.find((jurisdiction) => jurisdiction.partnerTerms)

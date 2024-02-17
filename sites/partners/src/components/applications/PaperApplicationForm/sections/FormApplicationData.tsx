@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { t, Select, TimeField, DateField, DateFieldValues } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
-import { applicationLanguageKeys } from "@bloom-housing/shared-helpers"
+import { LanguagesEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useFormContext } from "react-hook-form"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
@@ -65,7 +65,7 @@ const FormApplicationData = () => {
             label={t("application.add.languageSubmittedIn")}
             register={register}
             controlClassName="control"
-            options={["", ...applicationLanguageKeys]}
+            options={["", ...Object.values(LanguagesEnum)]}
             keyPrefix="languages"
           />
         </Grid.Cell>

@@ -24,7 +24,6 @@ const ApplicationHouseholdStudent = () => {
   const onSubmit = async (data) => {
     const validation = await trigger()
     if (!validation) return
-
     const { householdStudent } = data
     conductor.currentStep.save({
       householdStudent: householdStudent === "true",

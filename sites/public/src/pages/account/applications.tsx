@@ -7,7 +7,7 @@ import Layout from "../../layouts/application"
 import { StatusItemWrapper, AppWithListing } from "./StatusItemWrapper"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
-import { AccountCard } from "../../components/account/AccountCard"
+import { AccountCard } from "@bloom-housing/shared-helpers/src/views/accounts/AccountCard"
 
 import styles from "../../pages/account/account.module.scss"
 
@@ -40,9 +40,10 @@ const Applications = () => {
 
   useEffect(() => {
     if (!applications || (applications && !listLoading)) return
+
     void Promise.all(
       applications?.map(async (app) => {
-        const retrievedListing = await listingsService.retrieve({ id: app?.listing.id })
+        const retrievedListing = await listingsService.retrieve({ id: app?.listings.id })
         app.fullListing = retrievedListing
         return app
       })
@@ -61,21 +62,21 @@ const Applications = () => {
 
   const noApplicationsSection = () => {
     return (
-      <Card.Section
-        className={`${styles["account-card-section"]} ${styles["application-card-section"]}`}
-      >
-        {error ? (
-          <Heading size="2xl">{`${t("account.errorFetchingApplications")}`}</Heading>
-        ) : (
-          <>
-            <Heading className={styles["application-no-results"]} size="2xl">
-              {t("account.noApplications")}
-            </Heading>
-            <Button variant="primary-outlined" href="/listings">
-              {t("listings.browseListings")}
-            </Button>
-          </>
-        )}
+      <Card.Section className={styles["account-card-applications-section"]}>
+        <div className={styles["application-no-results"]}>
+          {error ? (
+            <Heading priority={2} size="xl">{`${t("account.errorFetchingApplications")}`}</Heading>
+          ) : (
+            <>
+              <Heading priority={2} className={styles["application-no-results-text"]} size="xl">
+                {t("account.noApplications")}
+              </Heading>
+              <Button size="sm" variant="primary-outlined" href="/listings">
+                {t("listings.browseListings")}
+              </Button>
+            </>
+          )}
+        </div>
       </Card.Section>
     )
   }
@@ -92,7 +93,9 @@ const Applications = () => {
               iconSymbol="application"
               title={t("account.myApplications")}
               subtitle={t("account.myApplicationsSubtitle")}
+              headingPriority={1}
               divider="inset"
+              thinMobile
             >
               <>
                 <LoadingOverlay isLoading={loading}>

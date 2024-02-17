@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useMemo, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { AlertBox, Form, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { ApplicationSection, MultiselectOption } from "@bloom-housing/backend-core/types"
 import {
   AuthContext,
   getAllOptions,
@@ -19,15 +18,18 @@ import {
   PageView,
   pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
+import {
+  MultiselectOption,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import FormsLayout from "../../layouts/forms"
 import { useFormConductor } from "../../lib/hooks"
-
 import { UserStatus } from "../../lib/constants"
 import { AddressValidationSelection, findValidatedAddress, FoundAddress } from "./ValidateAddress"
 import ApplicationFormLayout from "../../layouts/application-form"
 
 export interface ApplicationMultiselectQuestionStepProps {
-  applicationSection: ApplicationSection
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
   applicationStep: string
   applicationSectionNumber: number
   strings?: {
@@ -175,7 +177,7 @@ const ApplicationMultiselectQuestionStep = ({
     )
   }
 
-  const allOptions = question ? [...question?.options] : []
+  const allOptions = question?.options ? [...question.options] : []
   if (question?.optOutText) {
     allOptions.push({
       text: question?.optOutText,
@@ -193,26 +195,6 @@ const ApplicationMultiselectQuestionStep = ({
         return t("application.contact.verifyMultipleAddresses")
       }
       return null
-    }
-    if (question?.links) {
-      return (
-        <>
-          {strings?.subTitle ?? <p>{question?.description}</p>}
-          <div className="pt-4">
-            {question.links.map((link) => (
-              <a
-                key={link.url}
-                className="block text-base pt-2 text-blue-500 underline"
-                href={link.url}
-                target={"_blank"}
-                rel="noreferrer noopener"
-              >
-                {link.title}
-              </a>
-            ))}
-          </div>
-        </>
-      )
     }
     return strings?.subTitle ?? question?.description
   }
@@ -264,11 +246,25 @@ const ApplicationMultiselectQuestionStep = ({
               {questionSetInputType === "checkbox" ? (
                 <fieldset>
                   <legend className="text__caps-spaced mb-4 sr-only">{question?.text}</legend>
-                  {applicationSection === ApplicationSection.preferences && (
-                    <>
-                      <p className="text__caps-spaced">{question?.text}</p>
-                      <p className="field-note mb-8">{question?.description}</p>
-                    </>
+                  {applicationSection ===
+                    MultiselectQuestionsApplicationSectionEnum.preferences && (
+                    <div className="mb-8">
+                      <p className="text__caps-spaced m-0">{question?.text}</p>
+                      {question?.description && (
+                        <p className="field-note mt-3">{question?.description}</p>
+                      )}
+                      {question.links.map((link) => (
+                        <a
+                          key={link.url}
+                          className="block text-base mt-3 text-blue-500 underline"
+                          href={link.url}
+                          target={"_blank"}
+                          rel="noreferrer noopener"
+                        >
+                          {link.title}
+                        </a>
+                      ))}
+                    </div>
                   )}
                   <p className="field-note mb-8">
                     {t("application.household.preferredUnit.optionsLabel")}

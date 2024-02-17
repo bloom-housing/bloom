@@ -26,7 +26,7 @@ export const findValidatedAddress = (
     .send()
     .then((response) => {
       const [street, city, region] = response.body.features[0].place_name.split(", ")
-      const [longitude, latitude] = response.body.features[0].geometry?.coordinates
+      const coordinates = response.body.features[0].geometry?.coordinates
       const regionElements = region.split(" ")
       const zipCode = regionElements[regionElements.length - 1]
 
@@ -43,8 +43,8 @@ export const findValidatedAddress = (
             city,
             state: address.state,
             zipCode,
-            longitude,
-            latitude,
+            longitude: coordinates ? coordinates[0] : undefined,
+            latitude: coordinates ? coordinates[1] : undefined,
           },
         })
       }

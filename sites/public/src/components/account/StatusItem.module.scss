@@ -1,8 +1,8 @@
 .status-item {
   position: relative;
   padding: var(--seeds-s4);
-  background-color: var(--seeds-color-primary-lighter);
-  color: var(--seeds-gray-800);
+  background-color: var(--seeds-bg-color-muted);
+  color: var(--seeds-color-gray-900);
   border-bottom-width: 0.0625rem;
   border-style: solid;
   border-color: var(--seeds-color-gray-450);
@@ -16,7 +16,7 @@
   border-style: solid;
   border-color: var(--seeds-color-gray-450);
   margin-bottom: var(seeds-s4);
-  @media (max-width: theme("screens.md")) {
+  @media (max-width: theme("screens.sm")) {
     padding-bottom: var(--seeds-s2);
     display: block;
   }
@@ -31,17 +31,22 @@
   text-align: right;
   align-self: center;
   font-size: var(--seeds-font-size-sm);
-  @media (max-width: theme("screens.md")) {
+  color: var(--seeds-color-gray-750);
+  @media (max-width: theme("screens.sm")) {
     text-align: left;
     padding-top: var(--seeds-s2_5);
   }
+}
+
+.status-item__due-date {
+  font-weight: var(--seeds-font-weight-semibold);
 }
 
 .status-item__content {
   display: flex;
   justify-content: space-between;
   padding-top: var(--seeds-s4);
-  @media (max-width: theme("screens.md")) {
+  @media (max-width: theme("screens.sm")) {
     display: grid;
   }
 }
@@ -54,10 +59,9 @@
   padding-top: 0;
   text-align: right;
 
-  @media (max-width: theme("screens.md")) {
+  @media (max-width: theme("screens.sm")) {
     text-align: center;
     padding-top: var(seeds-s4);
-    margin-bottom: var(--seeds-s4);
   }
 }
 
@@ -68,15 +72,17 @@
   justify-content: flex-start;
   padding-top: var(--seeds-s4);
   width: fit-content;
-  @media (max-width: theme("screens.md")) {
+  @media (max-width: theme("screens.sm")) {
     flex-direction: column;
+    padding-top: var(--seeds-s6);
   }
 }
 
 .status-item__status {
   padding-block: 0;
   font-size: var(--seeds-font-size-sm);
-  @media (max-width: theme("screens.md")) {
+  color: var(--seeds-color-gray-750);
+  @media (max-width: theme("screens.sm")) {
     padding-block: var(--seeds-s4);
   }
 }
@@ -88,5 +94,6 @@
 
 .status-item__confirm-number {
   font-size: var(--seeds-font-size-lg);
+  font-weight: var(--seeds-font-weight-semibold);
   padding-top: var(--seeds-s2);
 }

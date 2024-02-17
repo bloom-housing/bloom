@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/public",
-  "version": "7.3.1",
+  "version": "7.7.1",
   "author": "Sean Albert <sean.albert@exygy.com>",
   "description": "Public web app reference implementation for the Bloom affordable housing system",
   "main": "index.js",
@@ -18,14 +18,17 @@
     "test:coverage": "yarn nyc report --reporter=text-summary --check-coverage",
     "test:unit": "jest -w 1",
     "start": "next start -p ${NEXTJS_PORT:-3000}",
+    "test:backend:core:dbsetup": "cd ../../ && yarn test:backend:core:dbsetup",
     "dev:listings": "cd ../../backend/core && yarn dev",
+    "dev:new-backend": "cd ../../api && yarn dev",
     "dev:server-wait": "wait-on \"http-get://localhost:${PORT:-3100}/listings\"  --httpTimeout 60000 --tcpTimeout 1500 -v --interval 15000 && yarn dev",
+    "dev:server-wait-new": "wait-on \"http-get://localhost:3100/listings\"",
     "dev:server-wait-cypress": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" --httpTimeout 60000 --tcpTimeout 1500 -v --interval 15000 && yarn build && yarn start",
-    "dev:all-cypress": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait-cypress\"",
+    "dev:all-cypress": "concurrently \"yarn dev:new-backend\" \"yarn dev:server-wait\"",
+    "dev:public-wait": "wait-on \"http://0.0.0.0:3000\"",
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\""
   },
   "dependencies": {
-    "@bloom-housing/backend-core": "^7.13.0",
     "@bloom-housing/shared-helpers": "^7.7.1",
     "@bloom-housing/ui-components": "12.1.0",
     "@bloom-housing/ui-seeds": "1.12.1",

@@ -20,11 +20,11 @@ import { User } from "../auth/entities/user.entity"
 import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
 import { ListingsQueryBuilder } from "./db/listing-query-builder"
 import { CachePurgeService } from "./cache-purge.service"
-import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.service"
-import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
 import { EmailService } from "../email/email.service"
+import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.service"
 import { ConfigService } from "@nestjs/config"
 import { UserRoleEnum } from "../../src/auth/enum/user-role-enum"
+import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ListingsService {
@@ -37,7 +37,6 @@ export class ListingsService {
     @Inject(REQUEST) private req: ExpressRequest,
     private readonly afsService: ApplicationFlaggedSetsService,
     private readonly cachePurgeService: CachePurgeService,
-    private readonly jurisdictionService: JurisdictionsService,
     private readonly emailService: EmailService,
     private readonly jurisdictionsService: JurisdictionsService,
     private readonly configService: ConfigService
@@ -126,7 +125,7 @@ export class ListingsService {
     // on the listing details page. Only needed while Doorway is pulling listings from HBA
     let buildingAddress = listingDto.buildingAddress
     if (buildingAddress) {
-      const jurisdiction = await this.jurisdictionService.findOne({
+      const jurisdiction = await this.jurisdictionsService.findOne({
         where: { id: listingDto.jurisdiction.id },
       })
       buildingAddress = { ...buildingAddress, county: this.getCountyName(jurisdiction) }
@@ -202,7 +201,7 @@ export class ListingsService {
     // on the listing details page. Only needed while Doorway is pulling listings from HBA
     let buildingAddress = listingDto.buildingAddress
     if (buildingAddress) {
-      const jurisdiction = await this.jurisdictionService.findOne({
+      const jurisdiction = await this.jurisdictionsService.findOne({
         where: { id: listingDto.jurisdiction.id },
       })
       buildingAddress = { ...buildingAddress, county: this.getCountyName(jurisdiction) }

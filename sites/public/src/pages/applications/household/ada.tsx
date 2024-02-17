@@ -37,7 +37,6 @@ const ApplicationAda = () => {
   const onSubmit = async (data) => {
     const validation = await trigger()
     if (!validation) return
-
     conductor.currentStep.save({
       accessibility: {
         mobility: !!data["app-accessibility-mobility"],
