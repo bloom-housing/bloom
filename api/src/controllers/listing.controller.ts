@@ -100,6 +100,26 @@ export class ListingController {
     return await this.listingCsvExportService.exportFile(req, res, queryParams);
   }
 
+  @Get(`external/:id`)
+  @ApiOperation({
+    summary: 'Get listing for external consumption by id',
+    operationId: 'externalRetrieve',
+  })
+  @UseInterceptors(ClassSerializerInterceptor)
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  @ApiOkResponse({ type: String })
+  async retrieveForExternalConsumption(
+    @Headers('language') language: LanguagesEnum,
+    @Param('id', new ParseUUIDPipe({ version: '4' })) listingId: string,
+    @Query() queryParams: ListingsRetrieveParams,
+  ) {
+    return await this.listingService.findOneAndExternalize(
+      listingId,
+      language,
+      queryParams.view,
+    );
+  }
+
   @Get(`:id`)
   @ApiOperation({ summary: 'Get listing by id', operationId: 'retrieve' })
   @UseInterceptors(ClassSerializerInterceptor)

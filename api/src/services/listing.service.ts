@@ -489,6 +489,148 @@ export class ListingService implements OnModuleInit {
     return result;
   }
 
+  /**
+   *
+   * @param listingId id for the listing we are querying for
+   * @param lang language that the translated listing should come back as
+   * @param view the form the listing should come back as (what data is returned)
+   * @returns an externalized version of the listing as a json object
+   */
+  async findOneAndExternalize(
+    listingId: string,
+    lang: LanguagesEnum = LanguagesEnum.en,
+    view: ListingViews = ListingViews.full,
+  ): Promise<string> {
+    const listing: any = await this.findOne(listingId, lang, view);
+    if (!listing) {
+      return JSON.stringify(listing);
+    }
+
+    if (listing.applicationMethods) {
+      listing.applicationMethods.forEach((applicationMethod) => {
+        if (applicationMethod?.paperApplications) {
+          applicationMethod.paperApplications.forEach((paperApp) => {
+            paperApp.file = paperApp.assets;
+          });
+        }
+      });
+    }
+    if (listing.referralApplication) {
+      if (listing?.referralApplication.paperApplications) {
+        listing?.referralApplication.paperApplications.forEach((paperApp) => {
+          paperApp.file = paperApp.assets;
+        });
+      }
+    }
+    if (listing.listingsResult) {
+      listing.result = listing.listingsResult;
+    }
+    if (listing.listingsBuildingSelectionCriteriaFile) {
+      listing.buildingSelectionCriteriaFile =
+        listing.listingsBuildingSelectionCriteriaFile;
+    }
+    if (listing.listingsBuildingAddress) {
+      listing.buildingAddress = listing.listingsBuildingAddress;
+    }
+    if (listing.listingsApplicationPickUpAddress) {
+      listing.applicationPickUpAddress =
+        listing.listingsApplicationPickUpAddress;
+    }
+    if (listing.listingsApplicationDropOffAddress) {
+      listing.applicationDropOffAddress =
+        listing.listingsApplicationDropOffAddress;
+    }
+    if (listing.listingsApplicationMailingAddress) {
+      listing.applicationMailingAddress =
+        listing.listingsApplicationMailingAddress;
+    }
+    if (listing.listingsLeasingAgentAddress) {
+      listing.leasingAgentAddress = listing.listingsLeasingAgentAddress;
+    }
+    if (listing.listingUtilities) {
+      listing.utilities = listing.listingUtilities;
+    }
+    if (listing.listingFeatures) {
+      listing.features = listing.listingFeatures;
+    }
+    if (listing.jurisdictions) {
+      listing.jurisdiction = listing.jurisdictions;
+    }
+    if (listing.reservedCommunityTypes) {
+      listing.reservedCommunityType = listing.reservedCommunityTypes;
+    }
+    if (listing.listingEvents) {
+      listing.listingEvents.forEach((event) => {
+        if (event.assets) {
+          event.file = event.assets;
+        }
+      });
+      listing.events = listing.listingEvents;
+    }
+    if (listing.listingImages) {
+      listing.listingImages.forEach((image) => {
+        if (image.assets) {
+          image.image = image.assets;
+        }
+      });
+      listing.images = listing.listingImages;
+    }
+    if (listing.requestedChangesUser) {
+      delete listing.requestedChangesUser;
+    }
+    if (listing.listingMultiselectQuestions) {
+      listing.listingMultiselectQuestions.forEach(
+        (listingMultiselectQuestion) => {
+          listingMultiselectQuestion.multiselectQuestion =
+            listingMultiselectQuestion.multiselectQuestions;
+        },
+      );
+    }
+    if (listing.units) {
+      listing.units.forEach((unit) => {
+        if (unit.unitTypes) {
+          unit.unitType = unit.unitTypes;
+        }
+        if (unit.unitRentTypes) {
+          unit.unitRentType = unit.unitRentTypes;
+        }
+        if (unit.unitAccessibilityPriorityTypes) {
+          unit.priorityType = unit.unitAccessibilityPriorityTypes;
+        }
+        if (unit.unitAmiChartOverrides) {
+          unit.amiChartOverride = unit.unitAmiChartOverrides;
+        }
+      });
+    }
+    if (listing.unitsSummary) {
+      listing.unitsSummary.forEach((unitsSummary) => {
+        unitsSummary.unitType = unitsSummary.unitTypes;
+      });
+    }
+    if (listing.unitsSummarized) {
+      if (listing.unitsSummarized.byUnitTypeAndRent) {
+        listing.unitsSummarized.byUnitTypeAndRent.forEach((unitsSummary) => {
+          unitsSummary.unitType = unitsSummary.unitTypes;
+        });
+      }
+      if (listing.unitsSummarized.byUnitType) {
+        listing.unitsSummarized.byUnitType.forEach((unitsSummary) => {
+          unitsSummary.unitType = unitsSummary.unitTypes;
+        });
+      }
+      if (listing.unitsSummarized.byAMI) {
+        listing.unitsSummarized.byAMI.forEach((byAMI) => {
+          if (byAMI.byUnitType) {
+            byAMI.byUnitType.forEach((unitSummary) => {
+              unitSummary.unitType = unitSummary.unitTypes;
+            });
+          }
+        });
+      }
+    }
+    return JSON.stringify(listing);
+  }
+
   /*
     creates a listing
   */

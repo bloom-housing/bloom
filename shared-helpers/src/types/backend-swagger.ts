@@ -243,6 +243,30 @@ export class ListingsService {
     })
   }
   /**
+   * Get listing for external consumption by id
+   */
+  externalRetrieve(
+    params: {
+      /**  */
+      id: string
+      /**  */
+      view?: ListingViews
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/external/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { view: params["view"] }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Get listing by id
    */
   retrieve(
@@ -4910,7 +4934,7 @@ export interface UserCreate {
   email: string
 
   /**  */
-  emailConfirmation: string
+  emailConfirmation?: string
 
   /**  */
   jurisdictions?: IdDTO[]
