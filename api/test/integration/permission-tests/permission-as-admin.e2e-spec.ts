@@ -1085,6 +1085,20 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
         .expect(200);
     });
 
+    it('should succeed for external listing endpoint', async () => {
+      const listingA = await listingFactory(jurisdictionAId, prisma);
+      const listingACreated = await prisma.listings.create({
+        data: listingA,
+        include: {
+          listingMultiselectQuestions: true,
+        },
+      });
+      await request(app.getHttpServer())
+        .get(`/listings/external/${listingACreated.id}`)
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+
     it('should succeed for delete endpoint & create an activity log entry', async () => {
       const jurisdictionA = await generateJurisdiction(
         prisma,
