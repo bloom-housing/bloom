@@ -23,11 +23,11 @@
     "db:migration:run": "yarn prisma migrate deploy",
     "db:seed:production": "npx prisma db seed -- --environment production",
     "db:seed:staging": "npx prisma db seed -- --environment staging",
-    "db:seed:development": "npx prisma db seed -- --environment development --jurisdictionName Bloomington",
+    "db:seed:development": "npx prisma db seed -- --environment development --jurisdictionName Alameda",
     "generate:client": "ts-node scripts/generate-axios-client.ts && prettier -w ../shared-helpers/src/types/backend-swagger.ts",
     "test:e2e": "yarn db:resetup && yarn db:migration:run && jest --config ./test/jest-e2e.config.js",
     "db:setup": "yarn db:resetup && yarn db:migration:run && yarn db:seed:development",
-    "db:setup:staging": "yarn db:resetup && yarn db:migration:run && yarn db:seed:staging --jurisdictionName Bloomington",
+    "db:setup:staging": "yarn db:resetup && yarn db:migration:run && yarn db:seed:staging --jurisdictionName Alameda",
     "setup": "yarn install && yarn prisma generate && yarn build && yarn db:setup:staging",
     "db:migration:skip": "yarn prisma migrate resolve --applied ",
     "setup:dev": "yarn install && yarn prisma generate && yarn build && yarn db:setup"
