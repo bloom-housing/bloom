@@ -8,6 +8,7 @@ import dayjs from "dayjs"
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons"
 import { ApplicationSection, Listing } from "@bloom-housing/backend-core/types"
 interface SubmittedApplicationViewProps {
+  // TODO change to use Prisma application type instead of any
   application: any
   listing: Listing
   backHref: string

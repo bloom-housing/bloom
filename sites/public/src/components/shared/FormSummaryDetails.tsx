@@ -13,6 +13,7 @@ import {
 } from "@bloom-housing/backend-core/types"
 
 type FormSummaryDetailsProps = {
+  // TODO change to use Prisma application type instead of any
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   application: any
   listing: Listing
