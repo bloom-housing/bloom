@@ -503,7 +503,7 @@ export class ListingService implements OnModuleInit {
   ): Promise<string> {
     const listing: any = await this.findOne(listingId, lang, view);
     if (!listing) {
-      return JSON.stringify(listing);
+      return '';
     }
 
     if (listing.applicationMethods) {
