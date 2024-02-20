@@ -7,6 +7,7 @@ export default defineConfig({
   video: true,
   videoUploadOnPasses: false,
   numTestsKeptInMemory: 0,
+  scrollBehavior: "bottom",
 
   env: {
     codeCoverage: {

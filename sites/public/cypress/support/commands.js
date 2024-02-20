@@ -416,7 +416,6 @@ Cypress.Commands.add("step15SelectPreferences", (application) => {
     optionsWithAddress?.forEach(() => {
       cy.goNext()
     })
-
     cy.goNext()
   })
   if (preferenceClaimed) {

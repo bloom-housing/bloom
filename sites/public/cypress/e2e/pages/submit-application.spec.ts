@@ -2,6 +2,7 @@ import { ElmVillageApplication, minimalDataApplication } from "../../mockData/ap
 
 describe("Submit", function () {
   it("should submit an application for the Elm Village listing", function () {
+    cy.intercept("GET", "/geocoding/v5/**", { fixture: "address" })
     cy.submitApplication("Elm Village", ElmVillageApplication, false)
   })
   it("should submit a minimal application for the Test: Default, No Preferences", function () {

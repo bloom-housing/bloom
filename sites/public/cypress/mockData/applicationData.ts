@@ -230,10 +230,10 @@ export const ElmVillageApplication = {
           checked: true,
           extraData: [],
           address: {
-            street: "1600 pennsylvania ave",
+            street: "2 15th St NW",
             city: "Washington",
             state: "District Of Columbia",
-            zipCode: "20005",
+            zipCode: "20024",
           },
         },
       ],
@@ -246,20 +246,6 @@ export const ElmVillageApplication = {
           key: "cityEmployee",
           checked: false,
           extraData: [],
-        },
-      ],
-    },
-    {
-      key: "displaceeHousing",
-      claimed: false,
-      options: [
-        {
-          key: "mission",
-          checked: false,
-        },
-        {
-          key: "general",
-          checked: false,
         },
       ],
     },
