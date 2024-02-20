@@ -1604,7 +1604,7 @@ export class UserService {
   /**
    * List users in CSV
    */
-  listAsCsv(options: IRequestOptions = {}): Promise<SuccessDTO> {
+  listAsCsv(options: IRequestOptions = {}): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/user/csv"
 

@@ -117,11 +117,9 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       where: whereClause,
     });
 
-    await this.createCsv(
-      listingFilePath,
-      queryParams,
-      listings as unknown as Listing[],
-    );
+    await this.createCsv(listingFilePath, queryParams, {
+      listings: listings as unknown as Listing[],
+    });
     const listingCsv = createReadStream(listingFilePath);
 
     await this.createUnitCsv(unitFilePath, listings as unknown as Listing[]);
@@ -153,7 +151,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
   async createCsv<QueryParams extends ListingCsvQueryParams>(
     filename: string,
     queryParams: QueryParams,
-    listings: Listing[],
+    optionParams: { listings: Listing[] },
   ): Promise<void> {
     const csvHeaders = await this.getCsvHeaders();
 
@@ -175,7 +173,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           );
 
           // now loop over listings and write them to file
-          listings.forEach((listing) => {
+          optionParams.listings.forEach((listing) => {
             let row = '';
             csvHeaders.forEach((header, index) => {
               let value = header.path.split('.').reduce((acc, curr) => {

@@ -32,9 +32,9 @@ import { IdDTO } from '../dtos/shared/id.dto';
 import { UserInvite } from '../dtos/users/user-invite.dto';
 import { UserCreate } from '../dtos/users/user-create.dto';
 import { EmailService } from './email.service';
-import { buildFromIdIndex } from '../utilities/csv-builder';
 import { PermissionService } from './permission.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import { buildWhereClause } from '../utilities/build-user-where';
 
 /*
   this is the service for users
@@ -70,7 +70,7 @@ export class UserService {
     This means we don't need to account for a user with only the partner role when it comes to accessing this function
   */
   async list(params: UserQueryParams, user: User): Promise<PaginatedUserDto> {
-    const whereClause = this.buildWhereClause(params, user);
+    const whereClause = buildWhereClause(params, user);
     const count = await this.prisma.userAccounts.count({
       where: whereClause,
     });
@@ -102,157 +102,6 @@ export class UserService {
     return {
       items: users,
       meta: paginationInfo,
-    };
-  }
-
-  /*
-    this helps build the where clause for the list()
-  */
-  buildWhereClause(
-    params: UserQueryParams,
-    user: User,
-  ): Prisma.UserAccountsWhereInput {
-    const filters: Prisma.UserAccountsWhereInput[] = [];
-
-    if (params.search) {
-      filters.push({
-        OR: [
-          {
-            firstName: {
-              contains: params.search,
-              mode: Prisma.QueryMode.insensitive,
-            },
-          },
-          {
-            lastName: {
-              contains: params.search,
-              mode: Prisma.QueryMode.insensitive,
-            },
-          },
-          {
-            email: {
-              contains: params.search,
-              mode: Prisma.QueryMode.insensitive,
-            },
-          },
-          {
-            listings: {
-              some: {
-                name: {
-                  contains: params.search,
-                  mode: Prisma.QueryMode.insensitive,
-                },
-              },
-            },
-          },
-        ],
-      });
-    }
-
-    if (!params.filter?.length) {
-      return {
-        AND: filters,
-      };
-    }
-
-    params.filter.forEach((filter) => {
-      if (filter['isPortalUser']) {
-        if (user?.userRoles?.isAdmin) {
-          filters.push({
-            OR: [
-              {
-                userRoles: {
-                  isPartner: true,
-                },
-              },
-              {
-                userRoles: {
-                  isAdmin: true,
-                },
-              },
-              {
-                userRoles: {
-                  isJurisdictionalAdmin: true,
-                },
-              },
-            ],
-          });
-        } else if (user?.userRoles?.isJurisdictionalAdmin) {
-          filters.push({
-            OR: [
-              {
-                userRoles: {
-                  isPartner: true,
-                },
-              },
-              {
-                userRoles: {
-                  isJurisdictionalAdmin: true,
-                },
-              },
-            ],
-          });
-          filters.push({
-            jurisdictions: {
-              some: {
-                id: {
-                  in: user?.jurisdictions?.map((juris) => juris.id),
-                },
-              },
-            },
-          });
-        }
-      } else if ('isPortalUser' in filter) {
-        filters.push({
-          AND: [
-            {
-              OR: [
-                {
-                  userRoles: {
-                    isPartner: null,
-                  },
-                },
-                {
-                  userRoles: {
-                    isPartner: false,
-                  },
-                },
-              ],
-            },
-            {
-              OR: [
-                {
-                  userRoles: {
-                    isJurisdictionalAdmin: null,
-                  },
-                },
-                {
-                  userRoles: {
-                    isJurisdictionalAdmin: false,
-                  },
-                },
-              ],
-            },
-            {
-              OR: [
-                {
-                  userRoles: {
-                    isAdmin: null,
-                  },
-                },
-                {
-                  userRoles: {
-                    isAdmin: false,
-                  },
-                },
-              ],
-            },
-          ],
-        });
-      }
-    });
-    return {
-      AND: filters,
     };
   }
 
@@ -900,73 +749,6 @@ export class UserService {
     }
 
     return rawUser;
-  }
-
-  /*
-    gets and formats user data to be handed to the csv builder helper
-    this data will be emailed to the requesting user
-  */
-  async export(requestingUser: User): Promise<SuccessDTO> {
-    const users = await this.list(
-      {
-        page: 1,
-        limit: 'all',
-        filter: [
-          {
-            isPortalUser: true,
-          },
-        ],
-      },
-      requestingUser,
-    );
-
-    const parsedUsers = users.items.reduce((accum, user) => {
-      const roles: string[] = [];
-      if (user.userRoles?.isAdmin) {
-        roles.push('Administrator');
-      }
-      if (user.userRoles?.isPartner) {
-        roles.push('Partner');
-      }
-      if (user.userRoles?.isJurisdictionalAdmin) {
-        roles.push('Jurisdictional Admin');
-      }
-
-      const listingNames: string[] = [];
-      const listingIds: string[] = [];
-
-      user.listings?.forEach((listing) => {
-        listingNames.push(listing.name);
-        listingIds.push(listing.id);
-      });
-
-      accum[user.id] = {
-        'First Name': user.firstName,
-        'Last Name': user.lastName,
-        Email: user.email,
-        Role: roles.join(', '),
-        'Date Created': dayjs(user.createdAt).format('MM-DD-YYYY HH:mmZ[Z]'),
-        Status: user.confirmedAt ? 'Confirmed' : 'Unconfirmed',
-        'Listing Names': listingNames.join(', '),
-        'Listing Ids': listingIds.join(', '),
-        'Last Logged In': dayjs(user.lastLoginAt).format(
-          'MM-DD-YYYY HH:mmZ[Z]',
-        ),
-      };
-      return accum;
-    }, {});
-
-    const csvData = buildFromIdIndex(parsedUsers);
-    await this.emailService.sendCSV(
-      requestingUser.jurisdictions,
-      requestingUser,
-      csvData,
-      'User Export',
-      'an export of all users',
-    );
-    return {
-      success: true,
-    };
   }
 
   async authorizeAction(
