@@ -44,7 +44,16 @@ const ResetPassword = () => {
     try {
       const user = await resetPassword(token.toString(), password, passwordConfirmation)
       setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
-      await router.push("/account/applications")
+
+      const redirectUrl = "/applications/start/choose-language"
+      const listingId = router.query?.listingId as string
+
+      const routerRedirectUrl =
+        process.env.showMandatedAccounts && redirectUrl && listingId
+          ? `${redirectUrl}?listingId=${listingId}`
+          : "/account/applications"
+
+      await router.push(routerRedirectUrl)
     } catch (err) {
       const { status, data } = err.response || {}
       if (status === 400) {

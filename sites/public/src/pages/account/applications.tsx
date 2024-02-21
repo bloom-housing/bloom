@@ -1,12 +1,15 @@
 import React, { useEffect, useState, Fragment, useContext } from "react"
 import Head from "next/head"
-import { DashBlock, DashBlocks, HeaderBadge, t, LoadingOverlay } from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
+import { t, LoadingOverlay } from "@bloom-housing/ui-components"
+import { Button, Card, Heading } from "@bloom-housing/ui-seeds"
 import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
 import { StatusItemWrapper, AppWithListing } from "./StatusItemWrapper"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
+import { AccountCard } from "@bloom-housing/shared-helpers/src/views/accounts/AccountCard"
+
+import styles from "../../pages/account/account.module.scss"
 
 const Applications = () => {
   const { applicationsService, listingsService, profile } = useContext(AuthContext)
@@ -57,17 +60,23 @@ const Applications = () => {
   }, [applications, listLoading, listingsService])
 
   const noApplicationsSection = () => {
-    return error ? (
-      <div className="p-8">
-        <h1 className="pb-4 text-2xl">{`${t("account.errorFetchingApplications")}`}</h1>
-      </div>
-    ) : (
-      <div className="p-8">
-        <h1 className="pb-4 text-2xl">{t("account.noApplications")}</h1>
-        <Button variant="primary-outlined" href="/listings">
-          {t("listings.browseListings")}
-        </Button>
-      </div>
+    return (
+      <Card.Section className={styles["account-card-applications-section"]}>
+        <div className={styles["application-no-results"]}>
+          {error ? (
+            <Heading priority={2} size="xl">{`${t("account.errorFetchingApplications")}`}</Heading>
+          ) : (
+            <>
+              <Heading priority={2} className={styles["application-no-results-text"]} size="xl">
+                {t("account.noApplications")}
+              </Heading>
+              <Button size="sm" variant="primary-outlined" href="/listings">
+                {t("listings.browseListings")}
+              </Button>
+            </>
+          )}
+        </div>
+      </Card.Section>
     )
   }
   return (
@@ -79,8 +88,15 @@ const Applications = () => {
         <MetaTags title={t("account.myApplications")} description="" />
         <section className="bg-gray-300 border-t border-gray-450">
           <div className="flex flex-wrap relative max-w-3xl mx-auto md:py-8">
-            <DashBlocks>
-              <DashBlock title={t("account.myApplications")} icon={<HeaderBadge />}>
+            <AccountCard
+              iconSymbol="application"
+              title={t("account.myApplications")}
+              subtitle={t("account.myApplicationsSubtitle")}
+              headingPriority={1}
+              divider="inset"
+              thinMobile
+            >
+              <>
                 <LoadingOverlay isLoading={loading}>
                   <Fragment>
                     {applications?.map((application, index) => {
@@ -88,9 +104,10 @@ const Applications = () => {
                     })}
                   </Fragment>
                 </LoadingOverlay>
+
                 {!applications && !loading && noApplicationsSection()}
-              </DashBlock>
-            </DashBlocks>
+              </>
+            </AccountCard>
           </div>
         </section>
       </Layout>

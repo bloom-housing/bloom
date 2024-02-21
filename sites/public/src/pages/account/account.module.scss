@@ -1,0 +1,38 @@
+.account-card-container {
+  padding-inline: var(--seeds-s6);
+  @media (max-width: theme("screens.sm")) {
+    padding: var(--seeds-s4);
+  }
+}
+
+.account-card-applications-section {
+  --card-content-padding-inline: var(--seeds-s12);
+  @media (max-width: theme("screens.sm")) {
+    --card-content-padding-inline: var(--seeds-s4);
+    --card-content-padding-block: var(--seeds-s4);
+  }
+}
+
+.account-card-settings-section {
+  --card-content-padding-inline: var(--seeds-s12);
+  @media (max-width: theme("screens.sm")) {
+    --card-content-padding-inline: var(--seeds-s4);
+    --card-content-padding-block: var(--seeds-s6);
+  }
+}
+
+.account-settings-label {
+  font-size: var(--seeds-font-size-sm);
+  font-weight: var(--seeds-font-weight-bold);
+}
+
+.application-no-results {
+  padding: var(--seeds-s8);
+  background-color: var(--seeds-bg-color-muted);
+  @media (max-width: theme("screens.sm")) {
+    padding: var(--seeds-s6);
+  }
+}
+.application-no-results-text {
+  padding-bottom: var(--seeds-s6);
+}

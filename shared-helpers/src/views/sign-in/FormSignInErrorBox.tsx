@@ -7,6 +7,7 @@ export type FormSignInErrorBoxProps = {
   errors: FormSignInErrorBoxControl["errors"]
   networkStatus: NetworkStatus
   errorMessageId: string
+  className?: string
 }
 
 export type FormSignInErrorBoxControl = {
@@ -14,9 +15,16 @@ export type FormSignInErrorBoxControl = {
   control: UseFormMethods["control"]
 }
 
-const FormSignInErrorBox = ({ networkStatus, errors, errorMessageId }: FormSignInErrorBoxProps) => {
+const FormSignInErrorBox = ({
+  networkStatus,
+  errors,
+  errorMessageId,
+  className,
+}: FormSignInErrorBoxProps) => {
+  const classNames = []
+  if (className) classNames.push(className)
   return (
-    <div className="border-b">
+    <div className={classNames.join(" ")}>
       {Object.entries(errors).length > 0 && !networkStatus.content && (
         <AlertBox type="alert" inverted closeable>
           {errors.authentication ? errors.authentication.message : t("errors.errorsToResolve")}

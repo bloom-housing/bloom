@@ -2,7 +2,7 @@ import { Modal, t, Form, Field, AlertBox } from "@bloom-housing/ui-components"
 import { Button } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useRouter } from "next/router"
-import { useContext, useEffect, useRef, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { emailRegex } from "../../lib/helpers"
 
@@ -27,7 +27,8 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
 
   const onSubmit = async ({ email }) => {
     try {
-      await resendConfirmation(email)
+      const listingId = router.query?.listingId as string
+      await resendConfirmation(email, listingId)
 
       setSiteAlertMessage(t(`authentication.createAccount.emailSent`), "success")
       setOpenModal(false)
@@ -39,12 +40,21 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
   }
 
   useEffect(() => {
+    const redirectUrl = "/applications/start/choose-language"
+    const listingId = router.query?.listingId as string
+
+    const routerRedirectUrl =
+      process.env.showMandatedAccounts && redirectUrl && listingId
+        ? `${redirectUrl}`
+        : "/account/dashboard"
     if (router?.query?.token && !profile) {
       confirmAccount(router.query.token.toString())
         .then(() => {
           void router.push({
-            pathname: "/account/dashboard",
-            query: { alert: `authentication.createAccount.accountConfirmed` },
+            pathname: routerRedirectUrl,
+            query: process.env.showMandatedAccounts
+              ? { listingId: listingId }
+              : { alert: `authentication.createAccount.accountConfirmed` },
           })
           window.scrollTo(0, 0)
         })

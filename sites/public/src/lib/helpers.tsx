@@ -1,6 +1,5 @@
 import React from "react"
 import dayjs from "dayjs"
-import { NextRouter } from "next/router"
 import {
   Address,
   Listing,
@@ -9,13 +8,12 @@ import {
   ListingStatus,
   ApplicationMultiselectQuestion,
 } from "@bloom-housing/backend-core/types"
-import { t, ApplicationStatusType, MenuLink, StatusBarType } from "@bloom-housing/ui-components"
+import { t, ApplicationStatusType, StatusBarType } from "@bloom-housing/ui-components"
 import {
   FooterNav,
   FooterSection,
   ListingCard,
   SiteFooter,
-  SiteHeader,
 } from "@bloom-housing/doorway-ui-components"
 import {
   imageUrlFromListing,
@@ -243,130 +241,6 @@ export const untranslateMultiselectQuestion = (
       }
     }
   })
-}
-
-// FYI when auth/logging in is re-enabled, you'll need to pass in
-// call `const { profile, signOut } = useContext(AuthContext)`
-// from the layout and pass into this function.
-export const getSiteHeader = (router: NextRouter) => {
-  const languages =
-    router?.locales?.map((item) => ({
-      prefix: item === "en" ? "" : item,
-      label: t(`languages.${item}`),
-    })) || []
-
-  const menuLinks: MenuLink[] = [
-    {
-      title: t("pageTitle.welcome"),
-      href: "/",
-    },
-    {
-      title: t("nav.viewListings"),
-      href: "/listings",
-    },
-    {
-      title: t("nav.helpCenter"),
-      href: "#",
-      subMenuLinks: [
-        {
-          title: t("pageTitle.getStarted"),
-          href: "/help/get-started",
-        },
-        {
-          title: t("pageTitle.housingHelp"),
-          href: "/help/housing-help",
-        },
-        {
-          title: t("pageTitle.questions"),
-          href: "/help/questions",
-        },
-      ],
-    },
-  ]
-  if (process.env.housingCounselorServiceUrl) {
-    menuLinks.push({
-      title: t("pageTitle.getAssistance"),
-      href: process.env.housingCounselorServiceUrl,
-    })
-  }
-  if (process.env.showProfessionalPartners) {
-    menuLinks.push({
-      title: t("nav.professionalPartners"),
-      href: "#",
-      subMenuLinks: [
-        {
-          title: t("pageTitle.developersAndPropertyManagers"),
-          href: "/professional-partners/developers-and-property-managers",
-        },
-        {
-          title: t("pageTitle.jurisdictions"),
-          href: "/professional-partners/jurisdictions",
-        },
-      ],
-    })
-  }
-  // TODO: Uncomment when applications are re-enabled
-  // if (profile) {
-  //   menuLinks.push({
-  //     title: t("nav.myAccount"),
-  //     subMenuLinks: [
-  //       {
-  //         title: t("nav.myDashboard"),
-  //         href: "/account/dashboard",
-  //       },
-  //       {
-  //         title: t("account.myApplications"),
-  //         href: "/account/applications",
-  //       },
-  //       {
-  //         title: t("account.accountSettings"),
-  //         href: "/account/edit",
-  //       },
-  //       {
-  //         title: t("nav.signOut"),
-  //         onClick: () => {
-  //           const signOutFxn = async () => {
-  //             setSiteAlertMessage(t(`authentication.signOut.success`), "notice")
-  //             await router.push("/sign-in")
-  //             signOut()
-  //           }
-  //           void signOutFxn()
-  //         },
-  //       },
-  //     ],
-  //   })
-  // } else {
-  // menuLinks.push({
-  //   title: t("nav.signIn"),
-  //   href: "/sign-in",
-  // })
-  // }
-  return (
-    <SiteHeader
-      logoSrc="/images/doorway-logo.png"
-      homeURL="/"
-      mainContentId="main-content"
-      languages={languages.map((lang) => {
-        return {
-          label: lang.label,
-          onClick: () =>
-            void router.push(router.asPath, router.asPath, { locale: lang.prefix || "en" }),
-          active: t("config.routePrefix") === lang.prefix,
-        }
-      })}
-      menuLinks={menuLinks.map((menuLink) => {
-        return {
-          ...menuLink,
-          className:
-            router.pathname === menuLink.href ||
-            menuLink.subMenuLinks?.map((link) => link.href).indexOf(router.pathname) >= 0
-              ? "secondary"
-              : "",
-        }
-      })}
-      strings={{ skipToMainContent: t("t.skipToMainContent") }}
-    />
-  )
 }
 
 export const getSiteFooter = () => {

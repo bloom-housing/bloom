@@ -3979,7 +3979,7 @@ export interface UserCreate {
   passwordConfirmation: string
 
   /**  */
-  emailConfirmation: string
+  emailConfirmation?: string
 
   /**  */
   appUrl?: string

@@ -27,6 +27,7 @@ describe("<Applications>", () => {
         }}
         preview={false}
         listingName={"Listing name"}
+        listingId="123"
       />
     )
     expect(getByText("How to Apply")).toBeTruthy()
@@ -57,6 +58,7 @@ describe("<Applications>", () => {
         }}
         preview={false}
         listingName={"Listing name"}
+        listingId="123"
       />
     )
     expect(queryByTestId("get-application-section")).toBeNull()
@@ -83,6 +85,7 @@ describe("<Applications>", () => {
         }}
         preview={true}
         listingName={"Listing name"}
+        listingId="123"
       />
     )
     expect(getByText("Apply Online").closest("button")?.disabled).toBe(true)
@@ -109,6 +112,7 @@ describe("<Applications>", () => {
         }}
         preview={false}
         listingName={"Listing name"}
+        listingId="123"
       />
     )
     expect(queryByText("Apply Online")).toBe(null)

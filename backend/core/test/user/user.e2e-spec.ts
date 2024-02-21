@@ -111,6 +111,7 @@ describe("UsersService", () => {
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
+      appUrl: "http://localhost",
     }
     await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(400)
   })
@@ -129,6 +130,7 @@ describe("UsersService", () => {
       lastName: "Last",
       dob: new Date(),
       confirmedAt: new Date(),
+      appUrl: "http://localhost",
     }
     await supertest(app.getHttpServer())
       .post(`/user/`)
@@ -190,6 +192,7 @@ describe("UsersService", () => {
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
+      appUrl: "http://localhost",
     }
     const mockWelcome = jest.spyOn(testEmailService, "welcome")
     const res = await supertest(app.getHttpServer())
@@ -216,6 +219,7 @@ describe("UsersService", () => {
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
+      appUrl: "http://localhost",
     }
     await supertest(app.getHttpServer())
       .post(`/user/`)
@@ -250,6 +254,7 @@ describe("UsersService", () => {
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
+      appUrl: "http://localhost",
     }
     await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(400)
     userCreateDto.passwordConfirmation = "Abcdef1!"
@@ -273,6 +278,7 @@ describe("UsersService", () => {
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
+      appUrl: "http://localhost",
     }
     const res = await supertest(app.getHttpServer())
       .post(`/user`)
@@ -299,6 +305,7 @@ describe("UsersService", () => {
       email: "test2@example.com",
       agreedToTermsOfService: false,
       jurisdictions: [],
+      appUrl: "http://localhost",
     }
     await supertest(app.getHttpServer())
       .put(`/user/${user2UpdateDto.id}`)
@@ -321,6 +328,7 @@ describe("UsersService", () => {
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
+      appUrl: "http://localhost",
     }
     await supertest(app.getHttpServer())
       .post(`/user/`)
@@ -329,7 +337,7 @@ describe("UsersService", () => {
       .expect(201)
     await supertest(app.getHttpServer())
       .post("/user/resend-confirmation")
-      .send({ email: userCreateDto.email })
+      .send({ email: userCreateDto.email, appUrl: "http://localhost" })
       .expect(201)
   })
 
@@ -343,6 +351,7 @@ describe("UsersService", () => {
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
+      appUrl: "http://localhost",
     }
     await supertest(app.getHttpServer())
       .post(`/user/`)
@@ -358,14 +367,14 @@ describe("UsersService", () => {
       .expect(200)
     await supertest(app.getHttpServer())
       .post("/user/resend-confirmation")
-      .send({ email: userCreateDto.email })
+      .send({ email: userCreateDto.email, appUrl: "http://localhost" })
       .expect(406)
   })
 
   it("should return 404 if there is no user to resend confirmation to", async () => {
     await supertest(app.getHttpServer())
       .post("/user/resend-confirmation")
-      .send({ email: "unknown@email.com" })
+      .send({ email: "unknown@email.com", appUrl: "http://localhost" })
       .expect(404)
   })
 
@@ -379,6 +388,7 @@ describe("UsersService", () => {
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
+      appUrl: "http://localhost",
     }
     const mockWelcome = jest.spyOn(testEmailService, "welcome")
     await supertest(app.getHttpServer())
@@ -450,6 +460,7 @@ describe("UsersService", () => {
       lastName: "Last",
       dob: new Date(),
       language: Language.en,
+      appUrl: "http://localhost",
     }
 
     const userCreateResponse = await supertest(app.getHttpServer())
@@ -527,6 +538,7 @@ describe("UsersService", () => {
       lastName: "Last",
       dob: new Date(),
       language: Language.en,
+      appUrl: "http://localhost",
     }
 
     const userBCreateDto: UserCreateDto = {
@@ -539,6 +551,7 @@ describe("UsersService", () => {
       lastName: "Last",
       dob: new Date(),
       language: Language.en,
+      appUrl: "http://localhost",
     }
 
     const { userId: userAId } = await createAndConfirmUser(userACreateDto)
@@ -685,6 +698,7 @@ describe("UsersService", () => {
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
+      appUrl: "http://localhost",
     }
     const res = await supertest(app.getHttpServer())
       .post(`/user`)
@@ -725,6 +739,7 @@ describe("UsersService", () => {
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
+      appUrl: "http://localhost",
     }
 
     await supertest(app.getHttpServer())
@@ -821,6 +836,7 @@ describe("UsersService", () => {
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
+      appUrl: "http://localhost",
     }
 
     await supertest(app.getHttpServer())
@@ -896,6 +912,7 @@ describe("UsersService", () => {
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
+      appUrl: "http://localhost",
     }
 
     await supertest(app.getHttpServer())
@@ -980,6 +997,7 @@ describe("UsersService", () => {
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
+      appUrl: "http://localhost",
     }
 
     const userCreateResponse = await supertest(app.getHttpServer())
@@ -1066,6 +1084,7 @@ describe("UsersService", () => {
       middleName: "Mid",
       lastName: "Last",
       dob: new Date(),
+      appUrl: "http://localhost",
     }
 
     await supertest(app.getHttpServer())
