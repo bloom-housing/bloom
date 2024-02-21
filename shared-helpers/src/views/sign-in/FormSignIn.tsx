@@ -6,7 +6,7 @@ import { FormSignInErrorBox } from "./FormSignInErrorBox"
 import { NetworkStatus } from "../../auth/catchNetworkError"
 import type { UseFormMethods } from "react-hook-form"
 import { AccountCard } from "../accounts/AccountCard"
-import styles from "../../../../sites/public/styles/sign-in.module.scss"
+import styles from "./sign-in.module.scss"
 import { useRouter } from "next/router"
 import { getListingRedirectUrl } from "../../utilities/getListingRedirectUrl"
 
