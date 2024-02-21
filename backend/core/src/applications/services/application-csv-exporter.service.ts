@@ -107,6 +107,8 @@ export class ApplicationCsvExporterService {
   }
 
   spokenLanguageToReadable(type) {
+    const [rootKey, customValue = ""] = type.split(":")
+
     const typeMap = {
       chineseCantonese: "Chinese - Cantonese",
       chineseMandarin: "Chinese - Mandarin",
@@ -116,9 +118,9 @@ export class ApplicationCsvExporterService {
       russian: "Russian",
       spanish: "Spanish",
       vietnamese: "Vietnamese",
-      notListed: "Not Listed",
+      notListed: `Not Listed[${customValue}]`,
     }
-    return typeMap[type] ?? type
+    return typeMap[rootKey] ?? rootKey
   }
 
   genderToReadable(type) {

@@ -182,6 +182,15 @@ export const mapFormToApi = ({
     race: fieldGroupObjectToArray(data, "race"),
   }
 
+  if (demographics.spokenLanguage === "notListed") {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    demographics.spokenLanguage = `${demographics.spokenLanguage}:${demographics.spokenLanguageNotListed}`
+  }
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  delete demographics.spokenLanguageNotListed
+
   const mailingAddress = getAddress(sendMailToMailingAddress, mailingAddressData)
 
   const alternateContact = data.application.alternateContact
@@ -360,6 +369,14 @@ export const mapApiToForm = (applicationData: ApplicationUpdate, listing: Listin
     const accessibility: string[] = adaFeatureKeys.filter(
       (feature) => applicationData?.accessibility[feature] === true
     )
+
+    if (demographics.spokenLanguage.startsWith("notListed:")) {
+      const [spokenLanguage, customValue] = demographics.spokenLanguage.split(":")
+      demographics.spokenLanguage = spokenLanguage
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      demographics.spokenLanguageNotListed = customValue
+    }
 
     const result = {
       applicant,

@@ -45,12 +45,21 @@ const ApplicationTerms = () => {
     application.acceptedTerms = acceptedTerms
     application.completedSections = 6
 
-    if (application?.programs?.length) {
+    if (application.programs?.length) {
       untranslateMultiselectQuestion(application.programs, listing)
     }
-    if (application?.preferences?.length) {
+    if (application.preferences?.length) {
       untranslateMultiselectQuestion(application.preferences, listing)
     }
+
+    if (application.demographics.spokenLanguage === "notListed") {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      application.demographics.spokenLanguage = `${application.demographics.spokenLanguage}:${application.demographics.spokenLanguageNotListed}`
+    }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    delete application.demographics.spokenLanguageNotListed
 
     applicationsService
       .submit({

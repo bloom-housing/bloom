@@ -413,6 +413,7 @@
   "application.review.demographics.ethnicityOptions.notHispanicLatino": "Not Hispanic / Latino",
   "application.review.demographics.genderInfo": "Select one that best describes your current gender identity.",
   "application.review.demographics.genderLabel": "Which best describes your gender identity? Please select one:",
+  "application.review.demographics.genderSpecify": "Please specify:",
   "application.review.demographics.genderOptions.differentTerm": "I use a different term",
   "application.review.demographics.genderOptions.dontKnow": "I don’t know or don’t understand the question",
   "application.review.demographics.genderOptions.preferNoResponse": "Prefer not to respond",

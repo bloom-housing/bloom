@@ -1,6 +1,6 @@
 import React, { useMemo } from "react"
 import { useFormContext } from "react-hook-form"
-import { t, Select, FieldGroup } from "@bloom-housing/ui-components"
+import { t, Select, Field, FieldGroup } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
 import {
   raceKeys,
@@ -20,7 +20,9 @@ const FormDemographics = ({ formValues }: FormDemographicsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register } = formMethods
+  const { register, watch } = formMethods
+
+  const spokenLanguageValue: string = watch("application.demographics.spokenLanguage")
 
   const howDidYouHearOptions = useMemo(() => {
     return howDidYouHear?.map((item) => ({
@@ -91,6 +93,15 @@ const FormDemographics = ({ formValues }: FormDemographicsProps) => {
               options={spokenLanguageKeys}
               keyPrefix="application.review.demographics.spokenLanguageOptions"
             />
+            {spokenLanguageValue === "notListed" && (
+              <Field
+                id="application.demographics.spokenLanguageNotListed"
+                name="application.demographics.spokenLanguageNotListed"
+                label={t("application.review.demographics.genderSpecify")}
+                validation={{ required: true }}
+                register={register}
+              />
+            )}
 
             <Select
               id="application.demographics.gender"
