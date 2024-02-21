@@ -34,6 +34,7 @@ import {
   simplifiedDCMap,
 } from './seed-helpers/map-layer-factory';
 import { ValidationMethod } from '../src/enums/multiselect-questions/validation-method-enum';
+import { randomNoun } from './seed-helpers/word-generator';
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
@@ -72,7 +73,7 @@ export const stagingSeed = async (
   });
   await prismaClient.userAccounts.create({
     data: await userFactory({
-      roles: { isJurisdictionalAdmin: true },
+      roles: { isAdmin: true },
       email: 'unverified@example.com',
       confirmedAt: new Date(),
       jurisdictionIds: [jurisdiction.id],
@@ -81,7 +82,7 @@ export const stagingSeed = async (
   });
   await prismaClient.userAccounts.create({
     data: await userFactory({
-      roles: { isJurisdictionalAdmin: true },
+      roles: { isAdmin: true },
       email: 'mfauser@bloom.com',
       confirmedAt: new Date(),
       jurisdictionIds: [jurisdiction.id],
@@ -885,9 +886,25 @@ export const stagingSeed = async (
         applications: value.applications,
         afsLastRunSetInPast: true,
       });
-      await prismaClient.listings.create({
+      const savedListing = await prismaClient.listings.create({
         data: listing,
       });
+      if (index === 0) {
+        await prismaClient.userAccounts.create({
+          data: await userFactory({
+            roles: {
+              isAdmin: false,
+              isPartner: true,
+              isJurisdictionalAdmin: false,
+            },
+            email: 'partner-user@example.com',
+            confirmedAt: new Date(),
+            jurisdictionIds: [jurisdiction.id, additionalJurisdiction.id],
+            acceptedTerms: true,
+            listings: [savedListing.id],
+          }),
+        });
+      }
     },
   );
 };

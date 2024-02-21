@@ -26,7 +26,6 @@ import { applicationFactory } from '../../../prisma/seed-helpers/application-fac
 import { addressFactory } from '../../../prisma/seed-helpers/address-factory';
 import { AddressCreate } from '../../../src/dtos/addresses/address-create.dto';
 import {
-  reservedCommunityTypeFactory,
   reservedCommunityTypeFactoryAll,
   reservedCommunityTypeFactoryGet,
 } from '../../../prisma/seed-helpers/reserved-community-type-factory';
@@ -961,6 +960,13 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
     it('should succeed for retrieveListings endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/listings/byMultiselectQuestion/${listingMulitselectQuestion}`)
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+
+    it('should succeed for external listing endpoint', async () => {
+      await request(app.getHttpServer())
+        .get(`/listings/external/${userListingId}`)
         .set('Cookie', cookies)
         .expect(200);
     });

@@ -1011,6 +1011,20 @@ describe('Testing Permissioning of endpoints as public user', () => {
         .expect(200);
     });
 
+    it('should succeed for retrieveListings endpoint', async () => {
+      const listingA = await listingFactory(jurisdictionAId, prisma);
+      const listingACreated = await prisma.listings.create({
+        data: listingA,
+        include: {
+          listingMultiselectQuestions: true,
+        },
+      });
+      await request(app.getHttpServer())
+        .get(`/listings/external/${listingACreated.id}`)
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+
     it('should error as forbidden for delete endpoint', async () => {
       const jurisdictionA = await generateJurisdiction(
         prisma,

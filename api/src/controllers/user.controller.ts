@@ -4,12 +4,15 @@ import {
   Controller,
   Delete,
   Get,
+  Header,
   Param,
   ParseUUIDPipe,
   Post,
   Put,
   Query,
   Request,
+  Res,
+  StreamableFile,
   UseGuards,
   UseInterceptors,
   UsePipes,
@@ -28,7 +31,7 @@ import { IdDTO } from '../dtos/shared/id.dto';
 import { mapTo } from '../utilities/mapTo';
 import { PaginatedUserDto } from '../dtos/users/paginated-user.dto';
 import { UserQueryParams } from '../dtos/users/user-query-param.dto';
-import { Request as ExpressRequest } from 'express';
+import { Request as ExpressRequest, Response } from 'express';
 import { UserUpdate } from '../dtos/users/user-update.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { UserCreate } from '../dtos/users/user-create.dto';
@@ -44,6 +47,7 @@ import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction
 import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { UserFilterParams } from '../dtos/users/user-filter-params.dto';
+import { UserCsvExporterService } from '../services/user-csv-export.service';
 
 @Controller('user')
 @ApiTags('user')
@@ -51,7 +55,10 @@ import { UserFilterParams } from '../dtos/users/user-filter-params.dto';
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 @ApiExtraModels(IdDTO, EmailAndAppUrl)
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly userCSVExportService: UserCsvExporterService,
+  ) {}
 
   @Get()
   @UseGuards(JwtAuthGuard, UserProfilePermissionGuard)
@@ -85,14 +92,17 @@ export class UserController {
   @Get('/csv')
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @UseInterceptors(ClassSerializerInterceptor)
-  @ApiOkResponse({ type: SuccessDTO })
   @ApiOperation({
     summary: 'List users in CSV',
     operationId: 'listAsCsv',
   })
+  @Header('Content-Type', 'text/csv')
   @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
-  async listAsCsv(@Request() req: ExpressRequest): Promise<SuccessDTO> {
-    return await this.userService.export(mapTo(User, req['user']));
+  async listAsCsv(
+    @Request() req: ExpressRequest,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<StreamableFile> {
+    return await this.userCSVExportService.exportFile(req, res);
   }
 
   @Get(`:id`)

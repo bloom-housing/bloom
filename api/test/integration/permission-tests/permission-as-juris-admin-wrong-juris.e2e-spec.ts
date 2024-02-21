@@ -951,6 +951,20 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the wron
         .expect(200);
     });
 
+    it('should succeed for external listing endpoint', async () => {
+      const listingA = await listingFactory(jurisId, prisma);
+      const listingACreated = await prisma.listings.create({
+        data: listingA,
+        include: {
+          listingMultiselectQuestions: true,
+        },
+      });
+      await request(app.getHttpServer())
+        .get(`/listings/external/${listingACreated.id}`)
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+
     it('should error as forbidden for delete endpoint', async () => {
       const listingData = await listingFactory(jurisId, prisma);
       const listing = await prisma.listings.create({

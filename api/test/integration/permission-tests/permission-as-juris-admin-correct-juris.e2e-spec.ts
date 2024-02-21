@@ -974,6 +974,20 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         .expect(200);
     });
 
+    it('should succeed for external listing endpoint', async () => {
+      const listingA = await listingFactory(jurisId, prisma);
+      const listingACreated = await prisma.listings.create({
+        data: listingA,
+        include: {
+          listingMultiselectQuestions: true,
+        },
+      });
+      await request(app.getHttpServer())
+        .get(`/listings/external/${listingACreated.id}`)
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+
     it('should succeed for delete endpoint & create an activity log entry', async () => {
       const listingData = await listingFactory(jurisId, prisma);
       const listing = await prisma.listings.create({
