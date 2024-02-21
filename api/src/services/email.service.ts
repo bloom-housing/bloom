@@ -299,7 +299,7 @@ export class EmailService {
     );
   }
 
-  public async sendMfaCode(user: User, mfaCode: string) {
+  public async sendMfaCode(user: User, singleUseCode: string) {
     const jurisdiction = await this.getJurisdiction(user.jurisdictions);
     void (await this.loadTranslations(jurisdiction, user.language));
     const emailFromAddress = await this.getEmailToSendFrom(
@@ -312,7 +312,7 @@ export class EmailService {
       'Partners Portal account access token',
       this.template('mfa-code')({
         user: user,
-        mfaCodeOptions: { mfaCode },
+        mfaCodeOptions: { singleUseCode },
       }),
     );
   }
