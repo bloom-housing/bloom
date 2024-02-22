@@ -91,6 +91,29 @@ export class ListingsController {
     return { listingCsv, unitCsv }
   }
 
+  @Get(`external/:id`)
+  @ApiOperation({
+    summary: "Get listing for external consumption by id",
+    operationId: "externalRetrieve",
+  })
+  @UseInterceptors(ClassSerializerInterceptor)
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  async retrieveForExternalConsumption(
+    @Headers("language") language: Language,
+    @Param("id", new ParseUUIDPipe({ version: "4" })) listingId: string,
+    @Query() queryParams: ListingsRetrieveQueryParams
+  ) {
+    if (listingId === undefined || listingId === "undefined") {
+      return mapTo(ListingDto, {})
+    }
+    const listing = mapTo(
+      ListingDto,
+      await this.listingsService.findOne(listingId, language, queryParams.view)
+    )
+
+    return JSON.stringify(listing)
+  }
+
   @Get(`:id`)
   @ApiOperation({ summary: "Get listing by id", operationId: "retrieve" })
   @UseInterceptors(ClassSerializerInterceptor)

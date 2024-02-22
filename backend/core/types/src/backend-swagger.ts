@@ -89,6 +89,425 @@ export class PagedResult<T> implements IPagedResult<T> {
 // customer definition
 // empty
 
+export class AuthService {
+  /**
+   * Login
+   */
+  login(
+    params: {
+      /** requestBody */
+      body?: Login
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/auth/login"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Logout
+   */
+  logout(options: IRequestOptions = {}): Promise<LogoutResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/auth/logout"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Request mfa code
+   */
+  requestMfaCode(
+    params: {
+      /** requestBody */
+      body?: RequestMfaCode
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<RequestMfaCodeResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/auth/request-mfa-code"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get mfa info
+   */
+  getMfaInfo(
+    params: {
+      /** requestBody */
+      body?: GetMfaInfo
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<GetMfaInfoResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/auth/mfa-info"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Requests a new token given a refresh token
+   */
+  requestNewToken(options: IRequestOptions = {}): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/auth/requestNewToken"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class UserService {
+  /**
+   *
+   */
+  userControllerProfile(options: IRequestOptions = {}): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Create user
+   */
+  create(
+    params: {
+      /**  */
+      noWelcomeEmail?: boolean
+      /** requestBody */
+      body?: UserCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UserBasic> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+      configs.params = { noWelcomeEmail: params["noWelcomeEmail"] }
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete user by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: Id
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Resend confirmation
+   */
+  resendPartnerConfirmation(
+    params: {
+      /** requestBody */
+      body?: Email
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/resend-partner-confirmation"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Verifies token is valid
+   */
+  isUserConfirmationTokenValid(
+    params: {
+      /** requestBody */
+      body?: Confirm
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/is-confirmation-token-valid"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Resend confirmation
+   */
+  resendConfirmation(
+    params: {
+      /** requestBody */
+      body?: Email
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/resend-confirmation"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Confirm email
+   */
+  confirm(
+    params: {
+      /** requestBody */
+      body?: Confirm
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/confirm"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Forgot Password
+   */
+  forgotPassword(
+    params: {
+      /** requestBody */
+      body?: ForgotPassword
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ForgotPasswordResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/forgot-password"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update Password
+   */
+  updatePassword(
+    params: {
+      /** requestBody */
+      body?: UpdatePassword
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/update-password"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update user
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: UserUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/{id}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get user by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      id: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * List users
+   */
+  list(
+    params: {
+      /**  */
+      page?: number
+      /**  */
+      limit?: number | "all"
+      /**  */
+      filter?: UserFilterParams[]
+      /**  */
+      search?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PaginatedUserList> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/list"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        filter: params["filter"],
+        search: params["search"],
+      }
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * List users in CSV
+   */
+  listAsCsv(options: IRequestOptions = {}): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/csv"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Invite user
+   */
+  invite(
+    params: {
+      /** requestBody */
+      body?: UserInvite
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UserBasic> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/invite"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class UserProfileService {
+  /**
+   * Update profile user
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: UserProfileUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/userProfile/{id}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export class AmiChartsService {
   /**
    * List amiCharts
@@ -590,6 +1009,35 @@ export class ApplicationsService {
     })
   }
   /**
+   * Raw list of applications
+   */
+  rawApplicationsList(
+    params: {
+      /**  */
+      listingId: string
+      /**  */
+      timeZone?: string
+      /**  */
+      includeDemographics?: boolean
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<object[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/rawApplicationsList"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        listingId: params["listingId"],
+        timeZone: params["timeZone"],
+        includeDemographics: params["includeDemographics"],
+      }
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Get application by id
    */
   retrieve(
@@ -762,425 +1210,6 @@ export class AssetsService {
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
       let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class AuthService {
-  /**
-   * Login
-   */
-  login(
-    params: {
-      /** requestBody */
-      body?: Login
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Status> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/auth/login"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Logout
-   */
-  logout(options: IRequestOptions = {}): Promise<LogoutResponse> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/auth/logout"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Request mfa code
-   */
-  requestMfaCode(
-    params: {
-      /** requestBody */
-      body?: RequestMfaCode
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<RequestMfaCodeResponse> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/auth/request-mfa-code"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get mfa info
-   */
-  getMfaInfo(
-    params: {
-      /** requestBody */
-      body?: GetMfaInfo
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<GetMfaInfoResponse> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/auth/mfa-info"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Requests a new token given a refresh token
-   */
-  requestNewToken(options: IRequestOptions = {}): Promise<Status> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/auth/requestNewToken"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class UserService {
-  /**
-   *
-   */
-  userControllerProfile(options: IRequestOptions = {}): Promise<User> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Create user
-   */
-  create(
-    params: {
-      /**  */
-      noWelcomeEmail?: boolean
-      /** requestBody */
-      body?: UserCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<UserBasic> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-      configs.params = { noWelcomeEmail: params["noWelcomeEmail"] }
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete user by id
-   */
-  delete(
-    params: {
-      /** requestBody */
-      body?: Id
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user"
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Resend confirmation
-   */
-  resendPartnerConfirmation(
-    params: {
-      /** requestBody */
-      body?: Email
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Status> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/resend-partner-confirmation"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Verifies token is valid
-   */
-  isUserConfirmationTokenValid(
-    params: {
-      /** requestBody */
-      body?: Confirm
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/is-confirmation-token-valid"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Resend confirmation
-   */
-  resendConfirmation(
-    params: {
-      /** requestBody */
-      body?: Email
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Status> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/resend-confirmation"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Confirm email
-   */
-  confirm(
-    params: {
-      /** requestBody */
-      body?: Confirm
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Status> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/confirm"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Forgot Password
-   */
-  forgotPassword(
-    params: {
-      /** requestBody */
-      body?: ForgotPassword
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ForgotPasswordResponse> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/forgot-password"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update Password
-   */
-  updatePassword(
-    params: {
-      /** requestBody */
-      body?: UpdatePassword
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Status> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/update-password"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update user
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: UserUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<User> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/{id}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get user by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      id: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<User> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/{id}"
-      url = url.replace("{id}", params["id"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * List users
-   */
-  list(
-    params: {
-      /**  */
-      page?: number
-      /**  */
-      limit?: number | "all"
-      /**  */
-      filter?: UserFilterParams[]
-      /**  */
-      search?: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<PaginatedUserList> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/list"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = {
-        page: params["page"],
-        limit: params["limit"],
-        filter: params["filter"],
-        search: params["search"],
-      }
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * List users in CSV
-   */
-  listAsCsv(options: IRequestOptions = {}): Promise<string> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/csv"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Invite user
-   */
-  invite(
-    params: {
-      /** requestBody */
-      body?: UserInvite
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<UserBasic> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/invite"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class UserProfileService {
-  /**
-   * Update profile user
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: UserProfileUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<User> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/userProfile/{id}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -1412,6 +1441,30 @@ export class ListingsService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = { timeZone: params["timeZone"] }
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get listing for external consumption by id
+   */
+  externalRetrieve(
+    params: {
+      /**  */
+      id: string
+      /**  */
+      view?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/external/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { view: params["view"] }
       let data = null
 
       configs.data = data
@@ -2353,6 +2406,578 @@ export class MapLayersService {
   }
 }
 
+export interface UserErrorExtraModel {
+  /**  */
+  userErrorMessages: EnumUserErrorExtraModelUserErrorMessages
+}
+
+export interface Login {
+  /**  */
+  email: string
+
+  /**  */
+  password: string
+
+  /**  */
+  mfaCode?: string
+
+  /**  */
+  mfaType?: EnumLoginMfaType
+}
+
+export interface Status {
+  /**  */
+  status: string
+}
+
+export interface LogoutResponse {
+  /**  */
+  success: boolean
+}
+
+export interface RequestMfaCode {
+  /**  */
+  email: string
+
+  /**  */
+  password: string
+
+  /**  */
+  mfaType: EnumRequestMfaCodeMfaType
+
+  /**  */
+  phoneNumber?: string
+}
+
+export interface RequestMfaCodeResponse {
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  email?: string
+
+  /**  */
+  phoneNumberVerified?: boolean
+}
+
+export interface GetMfaInfo {
+  /**  */
+  email: string
+
+  /**  */
+  password: string
+}
+
+export interface GetMfaInfoResponse {
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  email?: string
+
+  /**  */
+  isMfaEnabled: boolean
+
+  /**  */
+  mfaUsedInThePast: boolean
+}
+
+export interface IdName {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+}
+
+export interface Id {
+  /**  */
+  id: string
+}
+
+export interface UserRoles {
+  /**  */
+  user: Id
+
+  /**  */
+  userId: string
+
+  /**  */
+  isAdmin?: boolean
+
+  /**  */
+  isJurisdictionalAdmin?: boolean
+
+  /**  */
+  isPartner?: boolean
+}
+
+export interface Jurisdiction {
+  /**  */
+  multiselectQuestions: Id[]
+
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  notificationsSignUpURL?: string
+
+  /**  */
+  languages: EnumJurisdictionLanguages[]
+
+  /**  */
+  listingApprovalPermissions?: EnumJurisdictionListingApprovalPermissions[]
+
+  /**  */
+  partnerTerms?: string
+
+  /**  */
+  publicUrl: string
+
+  /**  */
+  emailFromAddress: string
+
+  /**  */
+  rentalAssistanceDefault: string
+
+  /**  */
+  enablePartnerSettings?: boolean
+
+  /**  */
+  enableAccessibilityFeatures: boolean
+
+  /**  */
+  enableUtilitiesIncluded: boolean
+
+  /**  */
+  enableGeocodingPreferences: boolean
+}
+
+export interface User {
+  /**  */
+  language?: Language
+
+  /**  */
+  leasingAgentInListings?: IdName[]
+
+  /**  */
+  roles?: CombinedRolesTypes
+
+  /**  */
+  jurisdictions: Jurisdiction[]
+
+  /**  */
+  id: string
+
+  /**  */
+  passwordUpdatedAt: Date
+
+  /**  */
+  passwordValidForDays: number
+
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  email: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  mfaEnabled?: boolean
+
+  /**  */
+  lastLoginAt?: Date
+
+  /**  */
+  failedLoginAttemptsCount?: number
+
+  /**  */
+  phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
+
+  /**  */
+  activeAccessToken?: string
+
+  /**  */
+  activeRefreshToken?: string
+}
+
+export interface UserCreate {
+  /**  */
+  language?: Language
+
+  /**  */
+  password: string
+
+  /**  */
+  passwordConfirmation: string
+
+  /**  */
+  emailConfirmation: string
+
+  /**  */
+  appUrl?: string
+
+  /**  */
+  jurisdictions?: Id[]
+
+  /**  */
+  email: string
+
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  phoneNumberVerified?: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
+
+  /**  */
+  activeAccessToken?: string
+
+  /**  */
+  activeRefreshToken?: string
+}
+
+export interface UserBasic {
+  /**  */
+  language?: Language
+
+  /**  */
+  roles: UserRoles
+
+  /**  */
+  jurisdictions: Jurisdiction[]
+
+  /**  */
+  leasingAgentInListings?: Id[]
+
+  /**  */
+  id: string
+
+  /**  */
+  email: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  phoneNumber?: string
+}
+
+export interface Email {
+  /**  */
+  email: string
+
+  /**  */
+  appUrl?: string
+}
+
+export interface Confirm {
+  /**  */
+  token: string
+
+  /**  */
+  password?: string
+}
+
+export interface ForgotPassword {
+  /**  */
+  email: string
+
+  /**  */
+  appUrl?: string
+}
+
+export interface ForgotPasswordResponse {
+  /**  */
+  message: string
+}
+
+export interface UpdatePassword {
+  /**  */
+  password: string
+
+  /**  */
+  passwordConfirmation: string
+
+  /**  */
+  token: string
+}
+
+export interface UserRolesOnly {
+  /**  */
+  isAdmin?: boolean
+
+  /**  */
+  isJurisdictionalAdmin?: boolean
+
+  /**  */
+  isPartner?: boolean
+}
+
+export interface UserUpdate {
+  /**  */
+  language?: Language
+
+  /**  */
+  id?: string
+
+  /**  */
+  email?: string
+
+  /**  */
+  password?: string
+
+  /**  */
+  currentPassword?: string
+
+  /**  */
+  leasingAgentInListings?: Id[]
+
+  /**  */
+  newEmail?: string
+
+  /**  */
+  appUrl?: string
+
+  /**  */
+  jurisdictions: Id[]
+
+  /**  */
+  roles?: UserRolesOnly
+
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
+
+  /**  */
+  activeAccessToken?: string
+
+  /**  */
+  activeRefreshToken?: string
+}
+
+export interface UserFilterParams {
+  /**  */
+  $comparison: EnumUserFilterParamsComparison
+
+  /**  */
+  isPartner?: boolean
+
+  /**  */
+  isPortalUser?: boolean
+}
+
+export interface PaginationMeta {
+  /**  */
+  currentPage: number
+
+  /**  */
+  itemCount: number
+
+  /**  */
+  itemsPerPage: number
+
+  /**  */
+  totalItems: number
+
+  /**  */
+  totalPages: number
+}
+
+export interface PaginatedUserList {
+  /**  */
+  items: User[]
+
+  /**  */
+  meta: PaginationMeta
+}
+
+export interface UserRolesCreate {
+  /**  */
+  isAdmin?: boolean
+
+  /**  */
+  isJurisdictionalAdmin?: boolean
+
+  /**  */
+  isPartner?: boolean
+}
+
+export interface UserInvite {
+  /**  */
+  language?: Language
+
+  /**  */
+  jurisdictions: Id[]
+
+  /**  */
+  leasingAgentInListings?: Id[]
+
+  /**  */
+  roles?: UserRolesCreate
+
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  email: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  phoneNumberVerified?: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
+
+  /**  */
+  activeAccessToken?: string
+
+  /**  */
+  activeRefreshToken?: string
+}
+
+export interface UserProfileUpdate {
+  /**  */
+  language?: Language
+
+  /**  */
+  password?: string
+
+  /**  */
+  currentPassword?: string
+
+  /**  */
+  jurisdictions: Id[]
+
+  /**  */
+  newEmail?: string
+
+  /**  */
+  appUrl?: string
+
+  /**  */
+  id: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  agreedToTermsOfService: boolean
+}
+
 export interface AmiChartItem {
   /**  */
   percentOfAmi: number
@@ -2362,11 +2987,6 @@ export interface AmiChartItem {
 
   /**  */
   income: number
-}
-
-export interface Id {
-  /**  */
-  id: string
 }
 
 export interface AmiChart {
@@ -2885,11 +3505,6 @@ export interface ApplicationFlaggedSetResolve {
   status: EnumApplicationFlaggedSetResolveStatus
 }
 
-export interface Status {
-  /**  */
-  status: string
-}
-
 export interface Asset {
   /**  */
   id: string
@@ -3111,23 +3726,6 @@ export interface ApplicationsApiExtraModel {
 
   /**  */
   order?: EnumApplicationsApiExtraModelOrder
-}
-
-export interface PaginationMeta {
-  /**  */
-  currentPage: number
-
-  /**  */
-  itemCount: number
-
-  /**  */
-  itemsPerPage: number
-
-  /**  */
-  totalItems: number
-
-  /**  */
-  totalPages: number
 }
 
 export interface PaginatedApplication {
@@ -3699,551 +4297,6 @@ export interface PaginatedAssets {
 
   /**  */
   meta: PaginationMeta
-}
-
-export interface UserErrorExtraModel {
-  /**  */
-  userErrorMessages: EnumUserErrorExtraModelUserErrorMessages
-}
-
-export interface Login {
-  /**  */
-  email: string
-
-  /**  */
-  password: string
-
-  /**  */
-  mfaCode?: string
-
-  /**  */
-  mfaType?: EnumLoginMfaType
-}
-
-export interface LogoutResponse {
-  /**  */
-  success: boolean
-}
-
-export interface RequestMfaCode {
-  /**  */
-  email: string
-
-  /**  */
-  password: string
-
-  /**  */
-  mfaType: EnumRequestMfaCodeMfaType
-
-  /**  */
-  phoneNumber?: string
-}
-
-export interface RequestMfaCodeResponse {
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  email?: string
-
-  /**  */
-  phoneNumberVerified?: boolean
-}
-
-export interface GetMfaInfo {
-  /**  */
-  email: string
-
-  /**  */
-  password: string
-}
-
-export interface GetMfaInfoResponse {
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  email?: string
-
-  /**  */
-  isMfaEnabled: boolean
-
-  /**  */
-  mfaUsedInThePast: boolean
-}
-
-export interface IdName {
-  /**  */
-  id: string
-
-  /**  */
-  name: string
-}
-
-export interface UserRoles {
-  /**  */
-  user: Id
-
-  /**  */
-  userId: string
-
-  /**  */
-  isAdmin?: boolean
-
-  /**  */
-  isJurisdictionalAdmin?: boolean
-
-  /**  */
-  isPartner?: boolean
-}
-
-export interface Jurisdiction {
-  /**  */
-  multiselectQuestions: Id[]
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  notificationsSignUpURL?: string
-
-  /**  */
-  languages: EnumJurisdictionLanguages[]
-
-  /**  */
-  listingApprovalPermissions?: EnumJurisdictionListingApprovalPermissions[]
-
-  /**  */
-  partnerTerms?: string
-
-  /**  */
-  publicUrl: string
-
-  /**  */
-  emailFromAddress: string
-
-  /**  */
-  rentalAssistanceDefault: string
-
-  /**  */
-  enablePartnerSettings?: boolean
-
-  /**  */
-  enableAccessibilityFeatures: boolean
-
-  /**  */
-  enableUtilitiesIncluded: boolean
-
-  /**  */
-  enableGeocodingPreferences: boolean
-}
-
-export interface User {
-  /**  */
-  language?: Language
-
-  /**  */
-  leasingAgentInListings?: IdName[]
-
-  /**  */
-  roles?: CombinedRolesTypes
-
-  /**  */
-  jurisdictions: Jurisdiction[]
-
-  /**  */
-  id: string
-
-  /**  */
-  passwordUpdatedAt: Date
-
-  /**  */
-  passwordValidForDays: number
-
-  /**  */
-  confirmedAt?: Date
-
-  /**  */
-  email: string
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  mfaEnabled?: boolean
-
-  /**  */
-  lastLoginAt?: Date
-
-  /**  */
-  failedLoginAttemptsCount?: number
-
-  /**  */
-  phoneNumberVerified?: boolean
-
-  /**  */
-  agreedToTermsOfService: boolean
-
-  /**  */
-  hitConfirmationURL?: Date
-
-  /**  */
-  activeAccessToken?: string
-
-  /**  */
-  activeRefreshToken?: string
-}
-
-export interface UserCreate {
-  /**  */
-  language?: Language
-
-  /**  */
-  password: string
-
-  /**  */
-  passwordConfirmation: string
-
-  /**  */
-  emailConfirmation: string
-
-  /**  */
-  appUrl?: string
-
-  /**  */
-  jurisdictions?: Id[]
-
-  /**  */
-  email: string
-
-  /**  */
-  confirmedAt?: Date
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  phoneNumberVerified?: boolean
-
-  /**  */
-  hitConfirmationURL?: Date
-
-  /**  */
-  activeAccessToken?: string
-
-  /**  */
-  activeRefreshToken?: string
-}
-
-export interface UserBasic {
-  /**  */
-  language?: Language
-
-  /**  */
-  roles: UserRoles
-
-  /**  */
-  jurisdictions: Jurisdiction[]
-
-  /**  */
-  leasingAgentInListings?: Id[]
-
-  /**  */
-  id: string
-
-  /**  */
-  email: string
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  phoneNumber?: string
-}
-
-export interface Email {
-  /**  */
-  email: string
-
-  /**  */
-  appUrl?: string
-}
-
-export interface Confirm {
-  /**  */
-  token: string
-
-  /**  */
-  password?: string
-}
-
-export interface ForgotPassword {
-  /**  */
-  email: string
-
-  /**  */
-  appUrl?: string
-}
-
-export interface ForgotPasswordResponse {
-  /**  */
-  message: string
-}
-
-export interface UpdatePassword {
-  /**  */
-  password: string
-
-  /**  */
-  passwordConfirmation: string
-
-  /**  */
-  token: string
-}
-
-export interface UserRolesOnly {
-  /**  */
-  isAdmin?: boolean
-
-  /**  */
-  isJurisdictionalAdmin?: boolean
-
-  /**  */
-  isPartner?: boolean
-}
-
-export interface UserUpdate {
-  /**  */
-  language?: Language
-
-  /**  */
-  id?: string
-
-  /**  */
-  email?: string
-
-  /**  */
-  password?: string
-
-  /**  */
-  currentPassword?: string
-
-  /**  */
-  leasingAgentInListings?: Id[]
-
-  /**  */
-  newEmail?: string
-
-  /**  */
-  appUrl?: string
-
-  /**  */
-  jurisdictions: Id[]
-
-  /**  */
-  roles?: UserRolesOnly
-
-  /**  */
-  confirmedAt?: Date
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  phoneNumberVerified?: boolean
-
-  /**  */
-  agreedToTermsOfService: boolean
-
-  /**  */
-  hitConfirmationURL?: Date
-
-  /**  */
-  activeAccessToken?: string
-
-  /**  */
-  activeRefreshToken?: string
-}
-
-export interface UserFilterParams {
-  /**  */
-  $comparison: EnumUserFilterParamsComparison
-
-  /**  */
-  isPartner?: boolean
-
-  /**  */
-  isPortalUser?: boolean
-}
-
-export interface PaginatedUserList {
-  /**  */
-  items: User[]
-
-  /**  */
-  meta: PaginationMeta
-}
-
-export interface UserRolesCreate {
-  /**  */
-  isAdmin?: boolean
-
-  /**  */
-  isJurisdictionalAdmin?: boolean
-
-  /**  */
-  isPartner?: boolean
-}
-
-export interface UserInvite {
-  /**  */
-  language?: Language
-
-  /**  */
-  jurisdictions: Id[]
-
-  /**  */
-  leasingAgentInListings?: Id[]
-
-  /**  */
-  roles?: UserRolesCreate
-
-  /**  */
-  confirmedAt?: Date
-
-  /**  */
-  email: string
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  phoneNumberVerified?: boolean
-
-  /**  */
-  hitConfirmationURL?: Date
-
-  /**  */
-  activeAccessToken?: string
-
-  /**  */
-  activeRefreshToken?: string
-}
-
-export interface UserProfileUpdate {
-  /**  */
-  language?: Language
-
-  /**  */
-  password?: string
-
-  /**  */
-  currentPassword?: string
-
-  /**  */
-  jurisdictions: Id[]
-
-  /**  */
-  newEmail?: string
-
-  /**  */
-  appUrl?: string
-
-  /**  */
-  id: string
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  agreedToTermsOfService: boolean
 }
 
 export interface JurisdictionCreate {
@@ -6229,7 +6282,52 @@ export interface MapLayer {
   /**  */
   jurisdictionId: string
 }
-
+export enum EnumUserErrorExtraModelUserErrorMessages {
+  "accountConfirmed" = "accountConfirmed",
+  "accountNotConfirmed" = "accountNotConfirmed",
+  "errorSaving" = "errorSaving",
+  "emailNotFound" = "emailNotFound",
+  "tokenExpired" = "tokenExpired",
+  "tokenMissing" = "tokenMissing",
+  "emailInUse" = "emailInUse",
+  "passwordOutdated" = "passwordOutdated",
+}
+export enum EnumLoginMfaType {
+  "sms" = "sms",
+  "email" = "email",
+}
+export enum EnumRequestMfaCodeMfaType {
+  "sms" = "sms",
+  "email" = "email",
+}
+export enum Language {
+  "en" = "en",
+  "es" = "es",
+  "vi" = "vi",
+  "zh" = "zh",
+  "tl" = "tl",
+}
+export enum EnumJurisdictionLanguages {
+  "en" = "en",
+  "es" = "es",
+  "vi" = "vi",
+  "zh" = "zh",
+  "tl" = "tl",
+}
+export enum EnumJurisdictionListingApprovalPermissions {
+  "user" = "user",
+  "partner" = "partner",
+  "admin" = "admin",
+  "jurisdictionAdmin" = "jurisdictionAdmin",
+}
+export type CombinedRolesTypes = UserRoles
+export enum EnumUserFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "NA" = "NA",
+}
 export enum IncomePeriod {
   "perMonth" = "perMonth",
   "perYear" = "perYear",
@@ -6239,14 +6337,6 @@ export enum ApplicationStatus {
   "draft" = "draft",
   "submitted" = "submitted",
   "removed" = "removed",
-}
-
-export enum Language {
-  "en" = "en",
-  "es" = "es",
-  "vi" = "vi",
-  "zh" = "zh",
-  "tl" = "tl",
 }
 
 export enum ApplicationSubmissionType {
@@ -6300,45 +6390,6 @@ export enum EnumApplicationsApiExtraModelOrderBy {
 export enum EnumApplicationsApiExtraModelOrder {
   "ASC" = "ASC",
   "DESC" = "DESC",
-}
-export enum EnumUserErrorExtraModelUserErrorMessages {
-  "accountConfirmed" = "accountConfirmed",
-  "accountNotConfirmed" = "accountNotConfirmed",
-  "errorSaving" = "errorSaving",
-  "emailNotFound" = "emailNotFound",
-  "tokenExpired" = "tokenExpired",
-  "tokenMissing" = "tokenMissing",
-  "emailInUse" = "emailInUse",
-  "passwordOutdated" = "passwordOutdated",
-}
-export enum EnumLoginMfaType {
-  "sms" = "sms",
-  "email" = "email",
-}
-export enum EnumRequestMfaCodeMfaType {
-  "sms" = "sms",
-  "email" = "email",
-}
-export enum EnumJurisdictionLanguages {
-  "en" = "en",
-  "es" = "es",
-  "vi" = "vi",
-  "zh" = "zh",
-  "tl" = "tl",
-}
-export enum EnumJurisdictionListingApprovalPermissions {
-  "user" = "user",
-  "partner" = "partner",
-  "admin" = "admin",
-  "jurisdictionAdmin" = "jurisdictionAdmin",
-}
-export type CombinedRolesTypes = UserRoles
-export enum EnumUserFilterParamsComparison {
-  "=" = "=",
-  "<>" = "<>",
-  "IN" = "IN",
-  ">=" = ">=",
-  "NA" = "NA",
 }
 export enum EnumJurisdictionCreateLanguages {
   "en" = "en",
