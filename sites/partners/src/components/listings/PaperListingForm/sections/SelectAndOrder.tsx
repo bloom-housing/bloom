@@ -220,7 +220,7 @@ const SelectAndOrder = ({
           {option.collectAddress && (
             <div
               className={`${
-                isNotLastItem && (option.description || option.links.length > 0) ? "-mt-4" : "mt-0"
+                isNotLastItem && (option.description || option.links?.length > 0) ? "-mt-4" : "mt-0"
               }`}
             >
               ({t("listings.providesAdditionalFields.info")})
