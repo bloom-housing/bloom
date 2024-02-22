@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Listing } from "../../types"
 
 /*
@@ -108,6 +109,7 @@ export type MapValue = string | ResolveFunction
 export type RecordMap = Record<string, MapValue>
 export type RecordValue = string | number | boolean | object
 
+// TODO: add typing back to this RecordMap
 export const defaultMap: RecordMap = {
   id: "id",
   assets: (listing: Listing) => jsonOrNull(listing.assets),
@@ -124,19 +126,74 @@ export const defaultMap: RecordMap = {
   closed_at: "closedAt",
   updated_at: "updatedAt", // not available on view=base but needed for sorting
 
-  //county: "countyCode",
-  //city: (listing: Listing) => listing.buildingAddress?.city,
   neighborhood: (listing: Listing) => listing.neighborhood,
-  reserved_community_type_name: (listing: Listing) => listing.reservedCommunityType?.name,
+  reserved_community_type_name: (listing: any) =>
+    listing.reservedCommunityType?.name || listing.reservedCommunityTypes?.name,
 
   url_slug: "urlSlug",
 
-  units_summarized: (listing: Listing) => jsonOrNull(listing.unitsSummarized),
-  images: (listing: Listing) => jsonOrNull(listing.images),
-  multiselect_questions: (listing: Listing) => jsonOrNull(listing.listingMultiselectQuestions),
-  jurisdiction: (listing: Listing) => jsonOrNull(listing.jurisdiction),
-  reserved_community_type: (listing: Listing) => jsonOrNull(listing.reservedCommunityType),
-  units: (listing: Listing) => {
+  units_summarized: (listing: any) => {
+    const listingData = listing.unitsSummarized
+    if (listingData?.byUnitTypeAndRent) {
+      listingData.byUnitTypeAndRent.forEach((elem) => {
+        if (elem.unitTypes) {
+          elem.unitType = elem.unitTypes
+        }
+      })
+    }
+    if (listingData?.byUnitType) {
+      listingData.byUnitType.forEach((elem) => {
+        if (elem.unitTypes) {
+          elem.unitType = elem.unitTypes
+        }
+      })
+    }
+    if (listingData?.byAMI) {
+      listingData.byAMI.forEach((byAmi) => {
+        if (byAmi?.byUnitType) {
+          byAmi?.byUnitType.forEach((elem) => {
+            if (elem.unitTypes) {
+              elem.unitType = elem.unitTypes
+            }
+          })
+        }
+      })
+    }
+
+    return jsonOrNull(listingData)
+  },
+  images: (listing: any) => {
+    let listingImageData = listing.images
+    if (listing.listingImages) {
+      listingImageData = listing.listingImages
+      // `assets` (type: Asset) has to be mapped to `images` (type: AssetUpdateDto)
+      listingImageData.image = listingImageData.assets
+    }
+    return jsonOrNull(listingImageData)
+  },
+  multiselect_questions: (listing: any) => {
+    if (!listing.listingMultiselectQuestions) {
+      return jsonOrNull(listing.listingMultiselectQuestions)
+    }
+    const listingData = listing.listingMultiselectQuestions.map((elem) => {
+      if (elem.multiselectQuestion) {
+        // if its a listing with typeorm data
+        return elem
+      } else {
+        // if its a listing with prisma data
+        return {
+          ...elem,
+          multiselectQuestion: elem.multiselect_questions,
+        }
+      }
+    })
+
+    return jsonOrNull(listingData)
+  },
+  jurisdiction: (listing: any) => jsonOrNull(listing.jurisdiction || listing.jurisdictions),
+  reserved_community_type: (listing: any) =>
+    jsonOrNull(listing.reservedCommunityType || listing.reservedCommunityTypes),
+  units: (listing: any) => {
     const units = listing.units
 
     // Add numeric values for some string fields
@@ -163,19 +220,33 @@ export const defaultMap: RecordMap = {
             unit[newPropName] = isNaN(numVal) ? null : numVal
           }
         })
+
+        // convert from prisma to typeorm
+        if (unit.unitTypes) {
+          unit.unitType = unit.unitTypes
+        }
+        if (unit.unitRentTypes) {
+          unit.unitRentType = unit.unitRentTypes
+        }
+        if (unit.unitAccessibilityPriorityTypes) {
+          unit.priorityType = unit.unitAccessibilityPriorityTypes
+        }
+        if (unit.unitAmiChartOverrides) {
+          unit.amiChartOverride = unit.unitAmiChartOverrides
+        }
       })
     }
 
     return jsonOrNull(units)
   },
-  building_address: (listing: Listing) => {
-    const address = listing.buildingAddress
+  building_address: (listing: any) => {
+    const address = listing.buildingAddress || listing.listingsBuildingAddress
 
     // if we don't have an address, ignore
     if (!address) return
 
     if (!address?.county) {
-      const jurisdiction = listing.jurisdiction
+      const jurisdiction = listing.jurisdiction || listing.jurisdictions
 
       switch (jurisdiction.name) {
         case "San Jose":
@@ -194,6 +265,6 @@ export const defaultMap: RecordMap = {
 
     return jsonOrNull(address)
   },
-  features: (listing: Listing) => jsonOrNull(listing.features),
-  utilities: (listing: Listing) => jsonOrNull(listing.utilities),
+  features: (listing: any) => jsonOrNull(listing.features || listing.listingFeatures),
+  utilities: (listing: any) => jsonOrNull(listing.utilities || listing.listingUtilities),
 }
