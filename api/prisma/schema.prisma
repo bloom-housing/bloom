@@ -329,6 +329,7 @@ model Jurisdictions {
   enableAccessibilityFeatures Boolean                  @default(false) @map("enable_accessibility_features")
   enableUtilitiesIncluded     Boolean                  @default(false) @map("enable_utilities_included")
   enableGeocodingPreferences  Boolean                  @default(false) @map("enable_geocoding_preferences")
+  allowSingleUseCodeLogin     Boolean                  @default(false) @map("allow_single_use_code_login")
   amiChart                    AmiChart[]
   multiselectQuestions        MultiselectQuestions[]
   listings                    Listings[]
