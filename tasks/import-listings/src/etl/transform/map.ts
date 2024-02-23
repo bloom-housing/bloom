@@ -167,7 +167,9 @@ export const defaultMap: RecordMap = {
     if (listing.listingImages) {
       listingImageData = listing.listingImages
       // `assets` (type: Asset) has to be mapped to `images` (type: AssetUpdateDto)
-      listingImageData.image = listingImageData.assets
+      listingImageData.forEach((image, index) => {
+        listingImageData[index].image = image.assets
+      })
     }
     return jsonOrNull(listingImageData)
   },
