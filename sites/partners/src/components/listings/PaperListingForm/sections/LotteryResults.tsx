@@ -12,14 +12,14 @@ import {
 import {
   ListingEvent,
   ListingEventCreate,
-  ListingEventType,
-} from "@bloom-housing/backend-core/types"
+  ListingEventsTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Card } from "@bloom-housing/ui-seeds"
 import { getPdfUrlFromAsset } from "@bloom-housing/shared-helpers"
 import { uploadAssetAndSetData } from "../../../../lib/assets"
 
 interface LotteryResultsProps {
-  submitCallback: (data: { events: ListingEvent[] }) => void
+  submitCallback: (data: { listingEvents: ListingEvent[] }) => void
   drawerState: boolean
   showDrawer: (toggle: boolean) => void
 }
@@ -37,9 +37,9 @@ const LotteryResults = (props: LotteryResultsProps) => {
     url: "",
   })
 
-  const listingEvents = watch("events")
+  const listingEvents = watch("listingEvents")
   const uploadedPDF = listingEvents.find(
-    (event: ListingEvent) => event.type === ListingEventType.lotteryResults
+    (event: ListingEvent) => event.type === ListingEventsTypeEnum.lotteryResults
   )
 
   useEffect(() => {
@@ -66,7 +66,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
     const updatedEvents = [...listingEvents]
 
     const lotteryIndex = updatedEvents.findIndex(
-      (event) => event.type === ListingEventType.lotteryResults
+      (event) => event.type === ListingEventsTypeEnum.lotteryResults
     )
     if (lotteryIndex > -1) {
       updatedEvents.splice(lotteryIndex, 1)
@@ -74,9 +74,9 @@ const LotteryResults = (props: LotteryResultsProps) => {
 
     if (cloudinaryData.id) {
       const newEvent: ListingEventCreate = {
-        type: ListingEventType.lotteryResults,
+        type: ListingEventsTypeEnum.lotteryResults,
         startTime: new Date(),
-        file: {
+        assets: {
           fileId: cloudinaryData.id,
           label: "cloudinaryPDF",
         },
@@ -84,7 +84,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
       updatedEvents.push(newEvent as ListingEvent)
     }
 
-    submitCallback({ events: updatedEvents })
+    submitCallback({ listingEvents: updatedEvents })
   }
 
   const resultsTableHeaders = {

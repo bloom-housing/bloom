@@ -35,10 +35,11 @@ const DetailAdditionalEligibility = () => {
         </FieldValue>
       </Grid.Row>
 
-      {(listing.buildingSelectionCriteria || listing.buildingSelectionCriteriaFile?.fileId) && (
+      {(listing.buildingSelectionCriteria ||
+        listing.listingsBuildingSelectionCriteriaFile?.fileId) && (
         <Grid.Row columns={1}>
           <FieldValue label={t("listings.buildingSelectionCriteria")}>
-            {listing.buildingSelectionCriteriaFile?.fileId ? (
+            {listing.listingsBuildingSelectionCriteriaFile?.fileId ? (
               <MinimalTable
                 id="buildingSelectionCriteriaTable"
                 headers={{ preview: "t.preview", fileName: "t.fileName" }}
@@ -47,12 +48,17 @@ const DetailAdditionalEligibility = () => {
                     preview: {
                       content: (
                         <TableThumbnail>
-                          <Icon size="md-large" symbol="document" />
+                          <img
+                            alt="PDF preview"
+                            src={listing.listingsBuildingSelectionCriteriaFile.fileId}
+                          />
                         </TableThumbnail>
                       ),
                     },
                     fileName: {
-                      content: pdfFileNameFromFileId(listing.buildingSelectionCriteriaFile.fileId),
+                      content: pdfFileNameFromFileId(
+                        listing.listingsBuildingSelectionCriteriaFile.fileId
+                      ),
                     },
                   },
                 ]}

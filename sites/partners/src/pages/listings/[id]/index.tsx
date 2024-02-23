@@ -2,7 +2,10 @@ import React, { useState } from "react"
 import Head from "next/head"
 import axios from "axios"
 import { t, AlertBox, SiteAlert, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
-import { Listing, ListingStatus } from "@bloom-housing/backend-core/types"
+import {
+  Listing,
+  ListingsStatusEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingStatusBar } from "../../../components/listings/ListingStatusBar"
 import ListingGuard from "../../../components/shared/ListingGuard"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
@@ -58,7 +61,7 @@ export default function ListingDetail(props: ListingProps) {
               title={listing.name}
               listingId={listing.id}
               tabs={{
-                show: listing.status !== ListingStatus.pending,
+                show: listing.status !== ListingsStatusEnum.pending,
                 listingLabel: t("t.listingSingle"),
                 applicationsLabel: t("nav.applications"),
               }}

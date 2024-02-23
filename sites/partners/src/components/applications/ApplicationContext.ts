@@ -1,5 +1,5 @@
 import React from "react"
-import { Application } from "@bloom-housing/backend-core/types"
+import { Application } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export const ApplicationContext = React.createContext<Application | null>(null)
 

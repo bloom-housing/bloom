@@ -1,7 +1,7 @@
 import React from "react"
 import dayjs from "dayjs"
-import { Application, Listing } from "@bloom-housing/backend-core"
 import { StatusItem } from "../../components/account/StatusItem"
+import { Application, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export interface AppWithListing extends Application {
   fullListing?: Listing

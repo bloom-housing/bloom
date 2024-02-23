@@ -1,6 +1,6 @@
 import * as React from "react"
 import { StandardTableData, t } from "@bloom-housing/ui-components"
-import { Listing } from "@bloom-housing/backend-core/types"
+import { Listing, UnitTypeEnum } from "../types/backend-swagger"
 
 export const occupancyTable = (listing: Listing): StandardTableData => {
   let occupancyData: StandardTableData = []
@@ -22,7 +22,7 @@ export const occupancyTable = (listing: Listing): StandardTableData => {
 
       return {
         unitType: {
-          content: <strong>{t("listings.unitTypes." + unitSummary.unitType.name)}</strong>,
+          content: <strong>{t("listings.unitTypes." + unitSummary.unitTypes.name)}</strong>,
         },
         occupancy: { content: occupancy },
       }
@@ -37,7 +37,7 @@ export const getOccupancyDescription = (listing: Listing) => {
   if (
     unitsSummarized &&
     unitsSummarized.unitTypes &&
-    unitsSummarized.unitTypes.map((unitType) => unitType.name).includes("SRO")
+    unitsSummarized.unitTypes.map((unitType) => unitType.name).includes(UnitTypeEnum.SRO)
   ) {
     return unitsSummarized.unitTypes.length == 1
       ? t("listings.occupancyDescriptionAllSro")

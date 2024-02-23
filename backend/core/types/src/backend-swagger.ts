@@ -2391,6 +2391,30 @@ export class UnitAccessibilityPriorityTypesService {
   }
 }
 
+export class MapLayersService {
+  /**
+   * List map layers
+   */
+  list(
+    params: {
+      /**  */
+      jurisdictionId?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<MapLayer[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/mapLayers"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { jurisdictionId: params["jurisdictionId"] }
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export interface AmiChartItem {
   /**  */
   percentOfAmi: number
@@ -2714,6 +2738,9 @@ export interface ApplicationMultiselectQuestionOption {
 
   /**  */
   checked: boolean
+
+  /**  */
+  mapPinPosition?: string
 
   /**  */
   extraData?: AllExtraDataTypes[]
@@ -4613,10 +4640,16 @@ export interface MultiselectOption {
   radiusSize?: number
 
   /**  */
+  mapLayerId?: string
+
+  /**  */
   collectName?: boolean
 
   /**  */
   collectRelationship?: boolean
+
+  /**  */
+  mapPinPosition?: string
 
   /**  */
   exclusive?: boolean
@@ -6430,6 +6463,17 @@ export interface UnitAccessibilityPriorityTypeUpdate {
 
   /**  */
   id: string
+}
+
+export interface MapLayer {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+
+  /**  */
+  jurisdictionId: string
 }
 
 export enum IncomePeriod {

@@ -7,8 +7,11 @@ import { ListingStatusBar } from "../../../../../components/listings/ListingStat
 import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../components/applications/ApplicationsSideNav"
 import { getLinkCellFormatter } from "../../../../../components/applications/helpers"
-import { Application, ApplicationReviewStatus } from "@bloom-housing/backend-core"
 import { NavigationHeader } from "../../../../../components/shared/NavigationHeader"
+import {
+  Application,
+  ApplicationReviewStatusEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const ApplicationsList = () => {
   const router = useRouter()
@@ -55,7 +58,7 @@ const ApplicationsList = () => {
       field: "",
       valueGetter: ({ data }) => {
         return data?.applications?.filter(
-          (app: Application) => app.reviewStatus === ApplicationReviewStatus.duplicate
+          (app: Application) => app.reviewStatus === ApplicationReviewStatusEnum.duplicate
         ).length
       },
       type: "rightAligned",
@@ -66,7 +69,7 @@ const ApplicationsList = () => {
       field: "",
       valueGetter: ({ data }) => {
         return data?.applications?.filter(
-          (app: Application) => app.reviewStatus === ApplicationReviewStatus.valid
+          (app: Application) => app.reviewStatus === ApplicationReviewStatusEnum.valid
         ).length
       },
       type: "rightAligned",

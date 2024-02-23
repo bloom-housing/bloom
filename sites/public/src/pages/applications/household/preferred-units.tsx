@@ -23,16 +23,18 @@ const ApplicationPreferredUnits = () => {
   const currentPageSection = 2
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors } = useForm()
+  const { register, handleSubmit, errors, trigger } = useForm()
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    const validation = await trigger()
+    if (!validation) return
     const { preferredUnit } = data
 
     // save units always as an array (when is only one option, react-hook-form stores an option as string)
     if (Array.isArray(preferredUnit)) {
-      application.preferredUnit = createUnitTypeId(preferredUnit)
+      application.preferredUnitTypes = createUnitTypeId(preferredUnit)
     } else {
-      application.preferredUnit = createUnitTypeId([preferredUnit])
+      application.preferredUnitTypes = createUnitTypeId([preferredUnit])
     }
 
     conductor.sync()
@@ -48,7 +50,7 @@ const ApplicationPreferredUnits = () => {
     id: item.id,
     label: t(`application.household.preferredUnit.options.${item.name}`),
     value: item.id,
-    defaultChecked: !!application.preferredUnit?.find((unit) => unit.id === item.id),
+    defaultChecked: !!application.preferredUnitTypes?.find((unit) => unit.id === item.id),
   }))
 
   useEffect(() => {

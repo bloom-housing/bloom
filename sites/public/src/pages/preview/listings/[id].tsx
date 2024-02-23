@@ -1,14 +1,13 @@
 import React from "react"
 import Head from "next/head"
 import axios from "axios"
-import { Jurisdiction, Listing } from "@bloom-housing/backend-core/types"
 import { AlertBox, t } from "@bloom-housing/ui-components"
 import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
-
 import Layout from "../../../layouts/application"
 import { ListingView } from "../../../components/listing/ListingView"
 import { MetaTags } from "../../../components/shared/MetaTags"
 import { runtimeConfig } from "../../../lib/runtime-config"
+import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 interface ListingProps {
   listing: Listing
@@ -41,7 +40,7 @@ export default function ListingPage(props: ListingProps) {
       </AlertBox>
       <ListingView
         listing={listing}
-        preview={false}
+        preview={true}
         jurisdiction={props.jurisdiction}
         googleMapsApiKey={props.googleMapsApiKey}
         isExternal={false}

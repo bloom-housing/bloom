@@ -6,10 +6,13 @@ import React, { useMemo } from "react"
 import { DATE_FORMAT } from "../../lib/constants"
 import dayjs from "dayjs"
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons"
-import { ApplicationSection, Listing } from "@bloom-housing/backend-core/types"
+import {
+  Application,
+  Listing,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 interface SubmittedApplicationViewProps {
-  // TODO change to use Prisma application type instead of any
-  application: any
+  application: Application
   listing: Listing
   backHref: string
 }
@@ -73,9 +76,13 @@ const SubmittedApplicationView = ({
           listing={listing}
           application={application}
           hidePreferences={
-            listingSectionQuestions(listing, ApplicationSection.preferences)?.length === 0
+            listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.preferences)
+              ?.length === 0
           }
-          hidePrograms={listingSectionQuestions(listing, ApplicationSection.programs)?.length === 0}
+          hidePrograms={
+            listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.programs)
+              ?.length === 0
+          }
           editMode={false}
         />
         <Card.Section>

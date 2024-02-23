@@ -55,6 +55,7 @@ import dayjs from "dayjs"
 import { CountyCode } from "../shared/types/county-code"
 import { ApplicationFlaggedSetsCronjobService } from "../application-flagged-sets/application-flagged-sets-cronjob.service"
 import { ExternalListingSeed } from "./seeds/listings/external-listings-seed"
+import { MapLayerSeeder } from "./seeds/map-layers"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -237,6 +238,8 @@ async function seed() {
 
   // REMOVE_WHEN_EXTERNAL_NOT_NEEDED
   await seedExternalListings(app)
+  const mapLayerSeeder = app.get<MapLayerSeeder>(MapLayerSeeder)
+  await mapLayerSeeder.seed(jurisdictions)
 
   const user1 = await userService.createPublicUser(
     plainToClass(UserCreateDto, {

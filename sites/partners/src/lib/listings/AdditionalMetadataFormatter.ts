@@ -1,5 +1,5 @@
-import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 import { listingFeatures, listingUtilities } from "@bloom-housing/shared-helpers"
+import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Formatter from "./Formatter"
 
 export default class AdditionalMetadataFormatter extends Formatter {
@@ -7,26 +7,27 @@ export default class AdditionalMetadataFormatter extends Formatter {
   process() {
     const preferences = this.metadata.preferences.map((preference, index) => {
       return {
-        multiselectQuestion: preference,
+        multiselectQuestions: preference,
         ordinal: index + 1,
-        multiselectQuestionId: preference.id,
+        id: preference.id,
         listingId: this.data.id,
       }
     })
-    const programs = this.metadata.programs.map((program, index) => {
-      return {
-        multiselectQuestion: program,
-        ordinal: index + 1,
-        multiselectQuestionId: program.id,
-        listingId: this.data.id,
-      }
-    })
+    const programs =
+      this.metadata.programs?.map((program, index) => {
+        return {
+          multiselectQuestions: program,
+          ordinal: index + 1,
+          id: program.id,
+          listingId: this.data.id,
+        }
+      }) || []
 
     this.data.listingMultiselectQuestions = [...preferences, ...programs]
 
-    if (this.data.buildingAddress) {
-      this.data.buildingAddress = {
-        ...this.data.buildingAddress,
+    if (this.data.listingsBuildingAddress) {
+      this.data.listingsBuildingAddress = {
+        ...this.data.listingsBuildingAddress,
         latitude: this.metadata.latLong.latitude ?? null,
         longitude: this.metadata.latLong.longitude ?? null,
       }
@@ -54,27 +55,31 @@ export default class AdditionalMetadataFormatter extends Formatter {
 
     this.data.customMapPin = this.metadata.customMapPositionChosen
     this.data.yearBuilt = this.data.yearBuilt ? Number(this.data.yearBuilt) : null
-    if (!this.data.reservedCommunityType?.id) this.data.reservedCommunityType = null
+    if (!this.data.reservedCommunityTypes?.id) this.data.reservedCommunityTypes = null
     this.data.reviewOrderType =
       this.data.reviewOrderQuestion === "reviewOrderLottery"
-        ? ListingReviewOrder.lottery
-        : ListingReviewOrder.firstComeFirstServe
+        ? ReviewOrderTypeEnum.lottery
+        : ReviewOrderTypeEnum.firstComeFirstServe
 
     if (this.data.listingAvailabilityQuestion === "openWaitlist") {
-      this.data.reviewOrderType = ListingReviewOrder.waitlist
+      this.data.reviewOrderType = ReviewOrderTypeEnum.waitlist
     }
 
-    this.data.features = listingFeatures.reduce((acc, current) => {
-      return {
-        ...acc,
-        [current]: this.data.listingFeatures && this.data.listingFeatures.indexOf(current) >= 0,
-      }
-    }, {})
-    this.data.utilities = listingUtilities.reduce((acc, current) => {
-      return {
-        ...acc,
-        [current]: this.data.listingUtilities && this.data.listingUtilities.indexOf(current) >= 0,
-      }
-    }, {})
+    if (this.data.listingFeatures) {
+      this.data.listingFeatures = listingFeatures.reduce((acc, current) => {
+        return {
+          ...acc,
+          [current]: this.data.listingFeatures && this.data.listingFeatures[current],
+        }
+      }, {})
+    }
+    if (this.data.listingUtilities) {
+      this.data.listingUtilities = listingUtilities.reduce((acc, current) => {
+        return {
+          ...acc,
+          [current]: this.data.listingUtilities && this.data.listingUtilities[current],
+        }
+      }, {})
+    }
   }
 }

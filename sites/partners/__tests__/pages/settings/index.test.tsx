@@ -16,6 +16,17 @@ beforeAll(() => {
   mockNextRouter()
 })
 
+beforeEach(() => {
+  server.use(
+    rest.get("http://localhost/api/adapter/mapLayers", (_req, res, ctx) => {
+      return res(ctx.json({}))
+    }),
+    rest.get("http://localhost:3100/mapLayers", (_req, res, ctx) => {
+      return res(ctx.json({}))
+    })
+  )
+})
+
 afterEach(() => server.resetHandlers())
 
 afterAll(() => server.close())
@@ -29,7 +40,13 @@ describe("settings", () => {
         }),
         rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json([multiselectQuestionPreference]))
-        })
+        }),
+        rest.get(
+          "http://localhost/api/adapter/multiselectQuestions/listings/id1",
+          (_req, res, ctx) => {
+            return res(ctx.json([listing]))
+          }
+        )
       )
 
       const { getByText, findByText } = render(<Settings />)
@@ -48,7 +65,13 @@ describe("settings", () => {
         }),
         rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json([multiselectQuestionPreference]))
-        })
+        }),
+        rest.get(
+          "http://localhost/api/adapter/multiselectQuestions/listings/id1",
+          (_req, res, ctx) => {
+            return res(ctx.json([listing]))
+          }
+        )
       )
       const { getByText, findByText, getByRole } = render(<Settings key="1" />)
 
@@ -71,21 +94,30 @@ describe("settings", () => {
       expect(actionButtons).toHaveLength(3)
     })
   })
+
   describe("deletion", () => {
     it("should delete a preference", async () => {
+      window.URL.createObjectURL = jest.fn()
+      document.cookie = "access-token-available=True"
       server.use(
-        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
-        }),
-        rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+        rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+          return res(
+            ctx.json({
+              id: "user1",
+              roles: { id: "user1", isAdmin: true, isPartner: false },
+              jurisdictions: [{ id: "id1" }],
+            })
+          )
         }),
         rest.get(
-          "http://localhost/api/adapter/multiselectQuestions/listings/id1",
+          "http://localhost/api/adapter/listings/byMultiselectQuestion/id1",
           (_req, res, ctx) => {
             return res(ctx.json([]))
           }
         ),
+        rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json([multiselectQuestionPreference]))
+        }),
         rest.delete("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json({}))
         }),
@@ -116,15 +148,23 @@ describe("settings", () => {
     })
 
     it("should not allow a preference to be deleted when listing is tied to it", async () => {
+      window.URL.createObjectURL = jest.fn()
+      document.cookie = "access-token-available=True"
       server.use(
-        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+        rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+          return res(
+            ctx.json({
+              id: "user1",
+              roles: { id: "user1", isAdmin: true, isPartner: false },
+              jurisdictions: [{ id: "id1" }],
+            })
+          )
         }),
         rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json([multiselectQuestionPreference]))
         }),
         rest.get(
-          "http://localhost/api/adapter/multiselectQuestions/listings/id1",
+          "http://localhost/api/adapter/listings/byMultiselectQuestion/id1",
           (_req, res, ctx) => {
             return res(ctx.json([listing]))
           }
@@ -132,7 +172,7 @@ describe("settings", () => {
       )
 
       const { findByText, getByTestId, findByRole, queryAllByText, getByText } = render(
-        <Settings />
+        <Settings key="5" />
       )
 
       await findByText(multiselectQuestionPreference.text)
@@ -157,9 +197,17 @@ describe("settings", () => {
   })
   describe("creating preferences", () => {
     it("should not show geocoding functionality if not enabled", async () => {
+      window.URL.createObjectURL = jest.fn()
+      document.cookie = "access-token-available=True"
       server.use(
-        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+        rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+          return res(
+            ctx.json({
+              id: "user1",
+              roles: { id: "user1", isAdmin: true, isPartner: false },
+              jurisdictions: [{ id: "id1" }],
+            })
+          )
         }),
         rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json([multiselectQuestionPreference]))
@@ -172,7 +220,7 @@ describe("settings", () => {
         )
       )
 
-      const { findByText, getByTestId, queryAllByText, getByText } = render(<Settings />)
+      const { findByText, getByTestId, queryAllByText, getByText } = render(<Settings key="6" />)
 
       await findByText(multiselectQuestionPreference.text)
 
@@ -217,7 +265,7 @@ describe("settings", () => {
         })
       )
 
-      const { findByText, getByTestId, queryAllByText, getByText } = render(<Settings />)
+      const { findByText, getByTestId, queryAllByText, getByText } = render(<Settings key="7" />)
 
       await findByText(multiselectQuestionPreference.text)
 

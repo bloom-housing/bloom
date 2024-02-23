@@ -1,20 +1,20 @@
 import {
-  ApplicationStatus,
-  ApplicationSubmissionType,
-  Language,
   ApplicationMultiselectQuestion,
-} from "@bloom-housing/backend-core/types"
+  ApplicationStatusEnum,
+  ApplicationSubmissionTypeEnum,
+  LanguagesEnum,
+} from "../types/backend-swagger"
 
 export const blankApplication = {
   loaded: false,
   autofilled: false,
   completedSections: 0,
-  submissionType: ApplicationSubmissionType.electronical,
-  language: Language.en,
+  submissionType: ApplicationSubmissionTypeEnum.electronical,
+  language: LanguagesEnum.en,
   acceptedTerms: false,
-  status: ApplicationStatus.submitted,
+  status: ApplicationStatusEnum.submitted,
   applicant: {
-    orderId: undefined,
+    // orderId: undefined,
     firstName: "",
     middleName: "",
     lastName: "",
@@ -27,25 +27,25 @@ export const blankApplication = {
     phoneNumberType: "",
     noPhone: false,
     workInRegion: null,
-    address: {
+    applicantAddress: {
       street: "",
       street2: "",
       city: "",
       state: "",
       zipCode: "",
       county: "",
-      latitude: null,
-      longitude: null,
+      latitude: undefined,
+      longitude: undefined,
     },
-    workAddress: {
+    applicantWorkAddress: {
       street: "",
       street2: "",
       city: "",
       state: "",
       zipCode: "",
       county: "",
-      latitude: null,
-      longitude: null,
+      latitude: undefined,
+      longitude: undefined,
     },
   },
   additionalPhone: false,
@@ -55,14 +55,14 @@ export const blankApplication = {
   householdSize: 0,
   housingStatus: "",
   sendMailToMailingAddress: false,
-  mailingAddress: {
+  applicationsMailingAddress: {
     street: "",
     street2: "",
     city: "",
     state: "",
     zipCode: "",
   },
-  alternateAddress: {
+  applicationsAlternateAddress: {
     street: "",
     street2: "",
     city: "",
@@ -77,7 +77,7 @@ export const blankApplication = {
     agency: "",
     phoneNumber: "",
     emailAddress: null,
-    mailingAddress: {
+    address: {
       street: "",
       street2: "",
       city: "",
@@ -95,8 +95,8 @@ export const blankApplication = {
   incomeVouchers: [],
   income: null,
   incomePeriod: null,
-  householdMembers: [],
-  preferredUnit: [],
+  householdMember: [],
+  preferredUnitTypes: [],
   demographics: {
     ethnicity: "",
     race: [],

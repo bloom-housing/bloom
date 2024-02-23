@@ -15,25 +15,28 @@ describe("Admin User Mangement Tests", () => {
 
     const regex = new RegExp(`${rolesArray.join("|")}`, "g")
 
-    cy.get(`.ag-center-cols-container [col-id="roles"]`).each((role) => {
+    cy.get(`.ag-center-cols-container [col-id="userRoles"]`).each((role) => {
       cy.wrap(role).contains(regex)
     })
   })
 
   it("as admin user, should be able to download export", () => {
-    cy.visit("/")
-    cy.getByTestId("Users-1").click()
-    cy.getByID("export-users").click()
     const convertToString = (value: number) => {
       return value < 10 ? `0${value}` : `${value}`
     }
+    cy.visit("/")
+    cy.getByTestId("Users-1").click()
+    cy.getByID("export-users").click()
     const now = new Date()
-    const month = now.getMonth() + 1
-    cy.readFile(
-      `cypress/downloads/users-${now.getFullYear()}-${convertToString(month)}-${convertToString(
-        now.getDate()
-      )}_${convertToString(now.getHours())}_${convertToString(now.getMinutes())}.csv`
-    )
+    const dateString = `${now.getFullYear()}-${convertToString(
+      now.getMonth() + 1
+    )}-${convertToString(now.getDate())}`
+    const csvName = `users-${dateString}_${convertToString(now.getHours())}_${convertToString(
+      now.getMinutes()
+    )}.csv`
+    const downloadFolder = Cypress.config("downloadsFolder")
+    const completeZipPath = `${downloadFolder}/${csvName}`
+    cy.readFile(completeZipPath)
   })
 
   it("as admin user, should be able to create new admin", () => {
@@ -59,7 +62,7 @@ describe("Admin User Mangement Tests", () => {
         ],
         [
           {
-            id: "role",
+            id: "userRoles",
             fieldKey: "role",
           },
         ],
@@ -94,7 +97,7 @@ describe("Admin User Mangement Tests", () => {
         ],
         [
           {
-            id: "role",
+            id: "userRoles",
             fieldKey: "role",
           },
           {
@@ -133,7 +136,7 @@ describe("Admin User Mangement Tests", () => {
         ],
         [
           {
-            id: "role",
+            id: "userRoles",
             fieldKey: "role",
           },
         ],

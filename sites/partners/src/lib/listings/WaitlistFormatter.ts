@@ -1,16 +1,16 @@
+import { YesNoEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Formatter from "./Formatter"
-import { YesNoAnswer } from "../helpers"
 
 export default class WaitlistFormatter extends Formatter {
   /** Process all of the waitlist settings */
   process() {
     const showWaitlist =
-      this.data.waitlistOpenQuestion === YesNoAnswer.Yes &&
+      this.data.waitlistOpenQuestion === YesNoEnum.yes &&
       this.data.listingAvailabilityQuestion === "openWaitlist"
 
     this.processBoolean("isWaitlistOpen", {
       when: showWaitlist,
-      falseCase: () => (this.data.waitlistOpenQuestion === YesNoAnswer.No ? false : null),
+      falseCase: () => (this.data.waitlistOpenQuestion === YesNoEnum.no ? false : null),
     })
     this.processBoolean("waitlistCurrentSize", {
       when: this.data.waitlistCurrentSize && showWaitlist,

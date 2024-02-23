@@ -1,4 +1,4 @@
-import { Language } from "@bloom-housing/backend-core/types"
+import { LanguagesEnum } from "../types/backend-swagger"
 
 export const stateKeys = [
   "",
@@ -298,7 +298,15 @@ export const preferredUnit = [
   },
 ]
 
-export const bedroomKeys = ["SRO", "studio", "oneBdrm", "twoBdrm", "threeBdrm"]
+export const bedroomKeys = [
+  "SRO",
+  "studio",
+  "oneBdrm",
+  "twoBdrm",
+  "threeBdrm",
+  "fourBdrm",
+  "fiveBdrm",
+]
 
 export const listingFeatures = [
   "wheelchairRamp",
@@ -317,8 +325,6 @@ export const listingFeatures = [
   "mobility",
   "visual",
 ]
-
-export const applicationLanguageKeys = [Language.en, Language.es, Language.zh, Language.vi]
 
 export enum RoleOption {
   Administrator = "administrator",

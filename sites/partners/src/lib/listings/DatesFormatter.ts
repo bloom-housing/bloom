@@ -1,5 +1,6 @@
+import { YesNoEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Formatter from "./Formatter"
-import { createDate, createTime, YesNoAnswer } from "../helpers"
+import { createDate, createTime } from "../helpers"
 
 export default class DatesFormatter extends Formatter {
   /** Set dates/times for certain fields */
@@ -14,7 +15,7 @@ export default class DatesFormatter extends Formatter {
             period: "pm",
           })
 
-    if (this.data.arePostmarksConsidered === YesNoAnswer.Yes && this.data.postmarkByDateDateField) {
+    if (this.data.arePostmarksConsidered === YesNoEnum.yes && this.data.postmarkByDateDateField) {
       const postmarkByDateFormatted = createDate(this.data.postmarkByDateDateField)
       this.data.postmarkedApplicationsReceivedByDate =
         this.data.postmarkByDateTimeField?.hours && this.data.postmarkByDateTimeField?.minutes

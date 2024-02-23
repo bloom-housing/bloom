@@ -1,14 +1,15 @@
 import {
-  ApplicationSection,
-  Listing,
-  ListingReviewOrder,
-  ListingStatus,
-  MultiselectQuestion,
-  Unit,
+  ApplicationMethodsTypeEnum,
   Jurisdiction,
-  EnumJurisdictionLanguages,
-  ApplicationMethodType,
-} from "@bloom-housing/backend-core"
+  LanguagesEnum,
+  Listing,
+  ListingsStatusEnum,
+  MultiselectQuestion,
+  MultiselectQuestionsApplicationSectionEnum,
+  ReviewOrderTypeEnum,
+  Unit,
+  UnitTypeEnum,
+} from "../src/types/backend-swagger"
 
 export const multiselectQuestionPreference: MultiselectQuestion = {
   id: "id1",
@@ -40,7 +41,7 @@ export const multiselectQuestionPreference: MultiselectQuestion = {
     },
     { text: "Work in County", ordinal: 1, collectAddress: false },
   ],
-  applicationSection: ApplicationSection.preferences,
+  applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
 }
 
 export const user = {
@@ -67,7 +68,12 @@ export const user = {
   passwordValidForDays: 180,
   phoneNumber: undefined,
   phoneNumberVerified: false,
-  roles: { user: { id: "user_1" }, isAdmin: true, isJurisdictionalAdmin: false, isPartner: false },
+  userRoles: {
+    user: { id: "user_1" },
+    isAdmin: true,
+    isJurisdictionalAdmin: false,
+    isPartner: false,
+  },
   updatedAt: new Date(),
 }
 
@@ -84,14 +90,14 @@ export const unit: Unit = {
   numBathrooms: undefined,
   numBedrooms: undefined,
   number: undefined,
-  priorityType: undefined,
+  unitAccessibilityPriorityTypes: undefined,
   sqFeet: "285",
 
-  unitType: {
+  unitTypes: {
     id: "random_id_35edf",
     createdAt: new Date(),
     updatedAt: new Date(),
-    name: "studio",
+    name: UnitTypeEnum.studio,
     numBedrooms: 0,
   },
   createdAt: new Date("2019-07-09T21:20:05.783Z"),
@@ -101,8 +107,8 @@ export const unit: Unit = {
 
 export const jurisdiction: Jurisdiction = {
   name: "Alameda",
-  notificationsSignUpURL: "https://public.govdelivery.com/accounts/CAMTC/signup/36832",
-  languages: [EnumJurisdictionLanguages.en],
+  notificationsSignUpUrl: "https://public.govdelivery.com/accounts/CAMTC/signup/36832",
+  languages: [LanguagesEnum.en],
   partnerTerms: undefined,
   publicUrl: "",
   emailFromAddress: "Alameda: Housing Bay Area <bloom-no-reply@exygy.dev>",
@@ -116,6 +122,7 @@ export const jurisdiction: Jurisdiction = {
   id: "67c22813-6080-441d-a496-03f2d06f2635",
   createdAt: new Date("2023-02-06T22:32:30.397Z"),
   updatedAt: new Date("2023-02-21T21:57:58.346Z"),
+  listingApprovalPermissions: [],
   multiselectQuestions: [
     {
       id: "d2553d08-6095-40b9-a1e2-c95349effe72",
@@ -151,13 +158,12 @@ export const listing: Listing = {
   id: "Uvbk5qurpB2WI9V6WnNdH",
   applicationConfig: undefined,
   applicationOpenDate: new Date("2019-12-31T15:22:57.000-07:00"),
-  applicationPickUpAddress: undefined,
+  listingsApplicationPickUpAddress: undefined,
   applicationPickUpAddressOfficeHours: "",
-  applicationDropOffAddress: null,
+  listingsApplicationDropOffAddress: undefined,
   applicationDropOffAddressOfficeHours: undefined,
-  applicationMailingAddress: null,
-  countyCode: "San Jose",
-  jurisdiction: {
+  listingsApplicationMailingAddress: undefined,
+  jurisdictions: {
     id: "id",
     name: "San Jose",
     publicUrl: "",
@@ -166,17 +172,17 @@ export const listing: Listing = {
   },
   depositMax: "",
   disableUnitsAccordion: false,
-  events: [],
+  listingEvents: [],
   showWaitlist: false,
-  reviewOrderType: ListingReviewOrder.firstComeFirstServe,
+  reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
   urlSlug: "listing-slug-abcdef",
   whatToExpect: "Applicant will be contacted. All info will be verified. Be prepared if chosen.",
-  status: ListingStatus.active,
+  status: ListingsStatusEnum.active,
   postmarkedApplicationsReceivedByDate: new Date("2019-12-05"),
   applicationDueDate: new Date("2019-12-31T15:22:57.000-07:00"),
   applicationMethods: [
     {
-      type: ApplicationMethodType.Internal,
+      type: ApplicationMethodsTypeEnum.Internal,
       label: "Label",
       externalReference: "",
       acceptsPostmarkedApplications: false,
@@ -185,12 +191,14 @@ export const listing: Listing = {
       createdAt: new Date(),
       updatedAt: new Date(),
       paperApplications: [],
-      listing: { id: "Uvbk5qurpB2WI9V6WnNdH" },
     },
   ],
   applicationOrganization: "98 Archer Place",
   assets: [
     {
+      id: "1234",
+      createdAt: new Date(),
+      updatedAt: new Date(),
       label: "building",
       fileId:
         "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
@@ -217,7 +225,7 @@ export const listing: Listing = {
   applicationFee: "30.0",
   criminalBackground:
     "A criminal background investigation will be obtained on each applicant.  As criminal background checks are done county by county and will be ran for all counties in which the applicant lived,  Applicants will be disqualified for tenancy if they have been convicted of a felony or misdemeanor.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process. ",
-  leasingAgentAddress: {
+  listingsLeasingAgentAddress: {
     id: "id",
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -242,7 +250,7 @@ export const listing: Listing = {
   smokingPolicy: "Non-smoking building",
   unitsAvailable: 0,
   unitsSummary: [],
-  unitsSummarized: null,
+  unitsSummarized: undefined,
   unitAmenities: "Dishwasher",
   developer: "Charities Housing ",
   yearBuilt: 2012,
@@ -251,7 +259,7 @@ export const listing: Listing = {
   amenities:
     "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
   buildingTotalUnits: 35,
-  buildingAddress: {
+  listingsBuildingAddress: {
     id: "buildingId",
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -281,14 +289,14 @@ export const listing: Listing = {
       numBathrooms: undefined,
       numBedrooms: undefined,
       number: undefined,
-      priorityType: undefined,
+      unitAccessibilityPriorityTypes: undefined,
       sqFeet: "285",
 
-      unitType: {
+      unitTypes: {
         id: "random_id_35edf",
         createdAt: new Date(),
         updatedAt: new Date(),
-        name: "studio",
+        name: UnitTypeEnum.studio,
         numBedrooms: 0,
       },
       createdAt: new Date("2019-08-14T22:53:09.982Z"),
@@ -308,14 +316,14 @@ export const listing: Listing = {
       numBathrooms: undefined,
       numBedrooms: undefined,
       number: undefined,
-      priorityType: undefined,
+      unitAccessibilityPriorityTypes: undefined,
       sqFeet: "285",
 
-      unitType: {
+      unitTypes: {
         id: "random_id_35edf",
         createdAt: new Date(),
         updatedAt: new Date(),
-        name: "studio",
+        name: UnitTypeEnum.studio,
         numBedrooms: 0,
       },
       createdAt: new Date("2019-08-14T22:52:08.758Z"),
@@ -335,14 +343,14 @@ export const listing: Listing = {
       numBathrooms: undefined,
       numBedrooms: undefined,
       number: undefined,
-      priorityType: undefined,
+      unitAccessibilityPriorityTypes: undefined,
       sqFeet: "285",
 
-      unitType: {
+      unitTypes: {
         id: "random_id_35edf",
         createdAt: new Date(),
         updatedAt: new Date(),
-        name: "studio",
+        name: UnitTypeEnum.studio,
         numBedrooms: 0,
       },
       createdAt: new Date("2019-08-14T22:52:08.766Z"),
@@ -362,14 +370,14 @@ export const listing: Listing = {
       numBathrooms: undefined,
       numBedrooms: undefined,
       number: undefined,
-      priorityType: undefined,
+      unitAccessibilityPriorityTypes: undefined,
       sqFeet: "285",
 
-      unitType: {
+      unitTypes: {
         id: "random_id_35edf",
         createdAt: new Date(),
         updatedAt: new Date(),
-        name: "studio",
+        name: UnitTypeEnum.studio,
         numBedrooms: 0,
       },
       createdAt: new Date("2019-08-14T22:52:08.771Z"),
@@ -390,14 +398,14 @@ export const listing: Listing = {
       numBathrooms: undefined,
       numBedrooms: undefined,
       number: undefined,
-      priorityType: undefined,
+      unitAccessibilityPriorityTypes: undefined,
       sqFeet: "285",
 
-      unitType: {
+      unitTypes: {
         id: "random_id_35edf",
         createdAt: new Date(),
         updatedAt: new Date(),
-        name: "studio",
+        name: UnitTypeEnum.studio,
         numBedrooms: 0,
       },
       createdAt: new Date("2019-08-14T22:52:08.777Z"),

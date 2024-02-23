@@ -1,5 +1,6 @@
 import { cleanup } from "@testing-library/react"
 import { getUniqueUnitTypes, sortUnitTypes } from "../src/utilities/unitTypes"
+import { UnitTypeEnum } from "../src/types/backend-swagger"
 
 afterEach(cleanup)
 
@@ -86,19 +87,19 @@ describe("unit type: getUniqueUnitTypes helper", () => {
           id: "example id",
           createdAt: new Date(),
           updatedAt: new Date(),
-          unitType: {
+          unitTypes: {
             id: "Test",
             createdAt: new Date(),
             updatedAt: new Date(),
             numBedrooms: 2,
-            name: "Example Name",
+            name: UnitTypeEnum.oneBdrm,
           },
         },
       ])
     ).toStrictEqual([
       {
         id: "Test",
-        name: "Example Name",
+        name: UnitTypeEnum.oneBdrm,
       },
     ])
   })

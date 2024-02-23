@@ -1,14 +1,6 @@
 import React from "react"
 import dayjs from "dayjs"
-import {
-  Address,
-  Listing,
-  ListingReviewOrder,
-  UnitsSummarized,
-  ListingStatus,
-  ApplicationMultiselectQuestion,
-} from "@bloom-housing/backend-core/types"
-import { t, ApplicationStatusType, StatusBarType } from "@bloom-housing/ui-components"
+import { ApplicationStatusType, StatusBarType, t } from "@bloom-housing/ui-components"
 import {
   FooterNav,
   FooterSection,
@@ -19,7 +11,16 @@ import {
   imageUrlFromListing,
   getSummariesTable,
   IMAGE_FALLBACK_URL,
+  cleanMultiselectString,
 } from "@bloom-housing/shared-helpers"
+import {
+  Address,
+  ApplicationMultiselectQuestion,
+  Listing,
+  ListingsStatusEnum,
+  ReviewOrderTypeEnum,
+  UnitsSummarized,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
@@ -58,7 +59,7 @@ const getListingCardSubtitle = (address: Address) => {
 
 const getListingTableData = (
   unitsSummarized: UnitsSummarized,
-  listingReviewOrder: ListingReviewOrder,
+  listingReviewOrder: ReviewOrderTypeEnum,
   includeRentandMinimumIncome: boolean
 ) => {
   return unitsSummarized !== undefined
@@ -90,7 +91,7 @@ export const getListingApplicationStatus = (listing: Listing): StatusBarType => 
     formattedDate = openDate.format("MMM D, YYYY")
     content = t("listings.applicationOpenPeriod")
   } else {
-    if (listing.status === ListingStatus.closed) {
+    if (listing.status === ListingsStatusEnum.closed) {
       status = ApplicationStatusType.Closed
       content = t("listings.applicationsClosed")
     } else if (listing.applicationDueDate) {
@@ -112,7 +113,7 @@ export const getListingApplicationStatus = (listing: Listing): StatusBarType => 
     content = content + `: ${formattedDate}`
   }
 
-  if (listing.reviewOrderType === ListingReviewOrder.firstComeFirstServe) {
+  if (listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe) {
     subContent = content
     content = t("listings.applicationFCFS")
   }
@@ -142,13 +143,13 @@ export const getListingCard = (listing: Listing, index: number) => {
   return (
     <ListingCard
       key={index}
-      preheader={getCountyName(listing?.buildingAddress?.county)}
+      preheader={getCountyName(listing?.listingsBuildingAddress?.county)}
       imageCardProps={{
         imageUrl: imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0],
-        tags: listing.reservedCommunityType
+        tags: listing.reservedCommunityTypes
           ? [
               {
-                text: t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`),
+                text: t(`listings.reservedCommunityTypes.${listing.reservedCommunityTypes.name}`),
               },
             ]
           : undefined,
@@ -175,7 +176,7 @@ export const getListingCard = (listing: Listing, index: number) => {
           href: uri,
           makeCardClickable: true,
         },
-        contentSubheader: { content: getListingCardSubtitle(listing.buildingAddress) },
+        contentSubheader: { content: getListingCardSubtitle(listing.listingsBuildingAddress) },
       }}
     />
   )
@@ -214,19 +215,24 @@ export const untranslateMultiselectQuestion = (
 
   data.forEach((datum) => {
     const question = multiselectQuestions.find(
-      (elem) => elem.multiselectQuestion.text === datum.key
-    )?.multiselectQuestion
+      (elem) =>
+        elem.multiselectQuestions.text === datum.key ||
+        elem.multiselectQuestions.untranslatedText === datum.key
+    )?.multiselectQuestions
 
     if (question) {
       datum.key = question.untranslatedText ?? question.text
 
       if (datum.options) {
         datum.options.forEach((option) => {
-          const selectedOption = question.options.find((elem) => elem.text === option.key)
-
+          const selectedOption = question.options.find((elem) => {
+            return cleanMultiselectString(elem.text) === cleanMultiselectString(option.key)
+          })
           if (selectedOption) {
             option.key = selectedOption.untranslatedText ?? selectedOption.text
-          } else if (question.optOutText === option.key) {
+          } else if (
+            cleanMultiselectString(question?.optOutText) === cleanMultiselectString(option.key)
+          ) {
             option.key = question.untranslatedOptOutText ?? question.optOutText
           }
 
@@ -356,6 +362,7 @@ export const downloadExternalPDF = async (fileURL: string, fileName: string) => 
         const url = window.URL.createObjectURL(new Blob([blob]))
         const link = document.createElement("a")
         link.href = url
+        link.target = "_blank"
         link.setAttribute("download", `${fileName}.pdf`)
 
         document.body.appendChild(link)

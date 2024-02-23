@@ -1,10 +1,13 @@
 import React, { useContext } from "react"
+import dayjs from "dayjs"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import { MenuLink, setSiteAlertMessage, t } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { getSiteFooter } from "../lib/helpers"
 import { SiteHeader } from "@bloom-housing/doorway-ui-components/src/headers/SiteHeader"
+import { Message } from "@bloom-housing/ui-seeds"
+import styles from "./application.module.scss"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
@@ -104,6 +107,19 @@ const Layout = (props) => {
       })
     }
   }
+  const getInMaintenance = () => {
+    let inMaintenance = false
+    const maintenanceWindow = process.env.maintenanceWindow?.split(",")
+    if (maintenanceWindow?.length === 2) {
+      const convertWindowToDate = (windowString: string) =>
+        dayjs(windowString, "YYYY-MM-DD HH:mm Z")
+      const startWindow = convertWindowToDate(maintenanceWindow[0])
+      const endWindow = convertWindowToDate(maintenanceWindow[1])
+      const now = dayjs()
+      inMaintenance = now > startWindow && now < endWindow
+    }
+    return inMaintenance
+  }
 
   return (
     <div className="site-wrapper">
@@ -111,6 +127,13 @@ const Layout = (props) => {
         <Head>
           <title>{t("nav.siteTitle")}</title>
         </Head>
+        {getInMaintenance() && (
+          <div className={styles["site-alert-banner-container"]}>
+            <Message className={styles["site-alert-banner-content"]} variant={"alert"}>
+              {t("alert.maintenance")}
+            </Message>
+          </div>
+        )}
         <SiteHeader
           logoSrc="/images/doorway-logo.png"
           homeURL="/"

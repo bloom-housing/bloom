@@ -1,14 +1,4 @@
 import * as React from "react"
-import {
-  ApplicationMultiselectQuestion,
-  ApplicationMultiselectQuestionOption,
-  ApplicationSection,
-  InputType,
-  Listing,
-  ListingMultiselectQuestion,
-  MultiselectOption,
-  MultiselectQuestion,
-} from "@bloom-housing/backend-core/types"
 import { UseFormMethods } from "react-hook-form"
 import {
   ExpandableContent,
@@ -18,34 +8,51 @@ import {
   t,
 } from "@bloom-housing/ui-components"
 import { stateKeys } from "../utilities/formKeys"
+import {
+  ApplicationMultiselectQuestion,
+  ApplicationMultiselectQuestionOption,
+  InputType,
+  Listing,
+  ListingMultiselectQuestion,
+  MultiselectOption,
+  MultiselectQuestion,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "../types/backend-swagger"
 import { AddressHolder } from "../utilities/constants"
 import { FormAddressAlternate } from "./address/FormAddressAlternate"
 
+// Removes periods, commas, and apostrophes
+export const cleanMultiselectString = (name: string | undefined) => {
+  return name?.replace(/\.|,|'/g, "")
+}
+
 export const listingSectionQuestions = (
   listing: Listing,
-  applicationSection: ApplicationSection
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
 ) => {
-  return listing?.listingMultiselectQuestions?.filter(
+  const selectQuestions = listing?.listingMultiselectQuestions?.filter(
     (question) =>
-      question?.multiselectQuestion?.applicationSection === ApplicationSection[applicationSection]
+      question?.multiselectQuestions?.applicationSection ===
+      MultiselectQuestionsApplicationSectionEnum[applicationSection]
   )
+  return selectQuestions
 }
 
 // Get a field name for an application multiselect question
 export const fieldName = (
   questionName: string,
-  applicationSection: ApplicationSection,
+  applicationSection: MultiselectQuestionsApplicationSectionEnum,
   optionName?: string
 ) => {
-  return `application.${applicationSection}.${questionName?.replace(/'/g, "")}${
-    optionName ? `.${optionName?.replace(/'/g, "")}` : ""
+  return `application.${applicationSection}.${cleanMultiselectString(questionName)}${
+    optionName ? `.${cleanMultiselectString(optionName)}` : ""
   }`
 }
 
 // Get an array of option field name strings for all options within a single question that are exclusive
 export const getExclusiveKeys = (
   question: MultiselectQuestion,
-  applicationSection: ApplicationSection
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
 ): string[] => {
   const exclusive: string[] = []
   question?.options?.forEach((option: MultiselectOption) => {
@@ -96,13 +103,13 @@ export const getPageQuestion = (questions: ListingMultiselectQuestion[], page: n
     return item.ordinal === page
   })
 
-  return ordinalQuestions?.length ? ordinalQuestions[0]?.multiselectQuestion : null
+  return ordinalQuestions?.length ? ordinalQuestions[0]?.multiselectQuestions : null
 }
 
 // Get all option field names for a question, including the potential opt out option
 export const getAllOptions = (
   question: MultiselectQuestion,
-  applicationSection: ApplicationSection
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
 ) => {
   const optionPaths =
     question?.options?.map((option) => fieldName(question.text, applicationSection, option.text)) ??
@@ -117,12 +124,12 @@ export const getRadioFields = (
   options: MultiselectOption[],
   register: UseFormMethods["register"],
   question: MultiselectQuestion,
-  applicationSection: ApplicationSection,
+  applicationSection: MultiselectQuestionsApplicationSectionEnum,
   errors?: UseFormMethods["errors"]
 ) => {
   return (
     <fieldset>
-      {applicationSection === ApplicationSection.preferences && (
+      {applicationSection === MultiselectQuestionsApplicationSectionEnum.preferences && (
         <legend className="text__caps-spaced mb-4">{question?.text}</legend>
       )}
       <FieldGroup
@@ -152,7 +159,7 @@ export const getRadioFields = (
 const getCheckboxField = (
   option: MultiselectOption,
   question: MultiselectQuestion,
-  applicationSection: ApplicationSection,
+  applicationSection: MultiselectQuestionsApplicationSectionEnum,
   register: UseFormMethods["register"],
   setValue: UseFormMethods["setValue"],
   getValues: UseFormMethods["getValues"],
@@ -206,7 +213,7 @@ const getCheckboxField = (
 export const getCheckboxOption = (
   option: MultiselectOption,
   question: MultiselectQuestion,
-  applicationSection: ApplicationSection,
+  applicationSection: MultiselectQuestionsApplicationSectionEnum,
   register: UseFormMethods["register"],
   setValue: UseFormMethods["setValue"],
   getValues: UseFormMethods["getValues"],
@@ -270,6 +277,7 @@ export const getCheckboxOption = (
               ? t("errors.maxLength")
               : t("errors.requiredFieldError")
           }
+          dataTestId="addressHolder-name"
         />
       )}
       {watchFields[optionFieldName] && option.collectRelationship && (
@@ -286,6 +294,7 @@ export const getCheckboxOption = (
               ? t("errors.maxLength")
               : t("errors.requiredFieldError")
           }
+          dataTestId="addressHolder-relationship"
         />
       )}
       {watchFields[optionFieldName] && option.collectAddress && (
@@ -331,6 +340,7 @@ export const mapRadiosToApi = (
   })
 
   return {
+    multiselectQuestionId: question.id,
     key,
     claimed: Object.keys(data)?.length !== 0,
     options,
@@ -341,9 +351,10 @@ export const mapCheckboxesToApi = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formData: { [name: string]: any },
   question: MultiselectQuestion,
-  applicationSection: ApplicationSection
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
 ): ApplicationMultiselectQuestion => {
-  const data = formData["application"][applicationSection][question.text.replace(/'/g, "")]
+  const data =
+    formData["application"][applicationSection][cleanMultiselectString(question.text) || ""]
   const claimed = !!Object.keys(data).filter((key) => data[key] === true).length
 
   const addressFields = Object.keys(data).filter((option) => Object.keys(data[option]))
@@ -358,7 +369,7 @@ export const mapCheckboxesToApi = (
       const addressHolderRelationshipData = addressFields.filter(
         (addressField) => addressField === `${key}-${AddressHolder.Relationship}`
       )
-      if (addressData.length) {
+      if (data[key] === true && addressData.length) {
         extraData.push({ type: InputType.address, key: "address", value: data[addressData[0]] })
 
         if (addressHolderNameData.length) {
@@ -378,14 +389,25 @@ export const mapCheckboxesToApi = (
         }
       }
 
+      const getFinalKey = () => {
+        const optionKey = question?.options?.find(
+          (elem) => cleanMultiselectString(elem.text) === key
+        )?.text
+        const cleanOptOutKey = cleanMultiselectString(question?.optOutText)
+        if (cleanOptOutKey === key) return question?.optOutText || key
+        return optionKey || key
+      }
+
       return {
-        key,
+        key: getFinalKey(),
+        mapPinPosition: data?.[`${key}-mapPinPosition`],
         checked: data[key] === true,
         extraData: extraData,
       }
     })
 
   return {
+    multiselectQuestionId: question.id,
     key: question.text ?? "",
     claimed,
     options: questionOptions,
@@ -395,7 +417,7 @@ export const mapCheckboxesToApi = (
 export const mapApiToMultiselectForm = (
   applicationQuestions: ApplicationMultiselectQuestion[],
   listingQuestions: ListingMultiselectQuestion[],
-  applicationSection: ApplicationSection
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
 ) => {
   const questionsFormData = { application: { [applicationSection]: Object.create(null) } }
 
@@ -407,8 +429,8 @@ export const mapApiToMultiselectForm = (
       question,
       inputType: getInputType(
         listingQuestions?.filter(
-          (listingQuestion) => listingQuestion?.multiselectQuestion?.text === question.key
-        )[0]?.multiselectQuestion?.options ?? []
+          (listingQuestion) => listingQuestion?.multiselectQuestions?.text === question.key
+        )[0]?.multiselectQuestions?.options ?? []
       ),
     }
   })
@@ -432,23 +454,27 @@ export const mapApiToMultiselectForm = (
     if (appQuestion.inputType === "checkbox") {
       options = question.options.reduce((acc, curr) => {
         const claimed = curr.checked
+        const cleanKey = cleanMultiselectString(curr.key) || ""
         if (appQuestion.inputType === "checkbox") {
-          acc[curr.key] = claimed
+          acc[cleanKey] = claimed
           if (curr.extraData?.length) {
-            acc[`${curr.key}-address`] = curr.extraData[0].value
+            acc[`${cleanKey}-address`] = curr.extraData[0].value
 
             const addressHolderName = curr.extraData?.find(
               (field) => field.key === AddressHolder.Name
             )
             if (addressHolderName) {
-              acc[`${curr.key}-${AddressHolder.Name}`] = addressHolderName.value
+              acc[`${cleanKey}-${AddressHolder.Name}`] = addressHolderName.value
             }
 
             const addressHolderRelationship = curr.extraData?.find(
               (field) => field.key === AddressHolder.Relationship
             )
             if (addressHolderRelationship) {
-              acc[`${curr.key}-${AddressHolder.Relationship}`] = addressHolderRelationship.value
+              acc[`${cleanKey}-${AddressHolder.Relationship}`] = addressHolderRelationship.value
+            }
+            if (curr?.mapPinPosition) {
+              acc[`${cleanKey}-mapPinPosition`] = curr.mapPinPosition
             }
           }
         }

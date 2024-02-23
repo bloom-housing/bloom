@@ -11,7 +11,12 @@ import {
   AuthContext,
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
-import { ApplicationReviewStatus, ApplicationSection } from "@bloom-housing/backend-core"
+import {
+  ApplicationCreate,
+  ApplicationReviewStatusEnum,
+  ListingsStatusEnum,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import FormsLayout from "../../../layouts/forms"
 import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
 import { useFormConductor } from "../../../lib/hooks"
@@ -25,8 +30,11 @@ const ApplicationSummary = () => {
   const [validationError, setValidationError] = useState(false)
   const { conductor, application, listing } = useFormConductor("summary")
   let currentPageSection = 4
-  if (listingSectionQuestions(listing, ApplicationSection.programs)?.length) currentPageSection += 1
-  if (listingSectionQuestions(listing, ApplicationSection.preferences)?.length)
+  if (listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.programs)?.length)
+    currentPageSection += 1
+  if (
+    listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.preferences)?.length
+  )
     currentPageSection += 1
 
   const { handleSubmit } = useForm()
@@ -40,9 +48,11 @@ const ApplicationSummary = () => {
   }, [profile])
 
   useEffect(() => {
-    if (listing?.status === "closed") {
-      setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
-      void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
+    if (listing && router.isReady) {
+      if (listing?.status !== ListingsStatusEnum.active) {
+        setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
+        void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
+      }
     }
   }, [listing, router])
 
@@ -51,7 +61,7 @@ const ApplicationSummary = () => {
       .submissionValidation({
         body: {
           ...application,
-          reviewStatus: ApplicationReviewStatus.pending,
+          reviewStatus: ApplicationReviewStatusEnum.pending,
           listing: {
             id: listing.id,
           },
@@ -61,7 +71,7 @@ const ApplicationSummary = () => {
               id: profile.id,
             },
           }),
-        },
+        } as unknown as ApplicationCreate,
       })
       .then(() => {
         conductor.routeToNextOrReturnUrl()
@@ -104,10 +114,14 @@ const ApplicationSummary = () => {
             application={application}
             listing={listing}
             hidePreferences={
-              listingSectionQuestions(listing, ApplicationSection.preferences)?.length === 0
+              listingSectionQuestions(
+                listing,
+                MultiselectQuestionsApplicationSectionEnum.preferences
+              )?.length === 0
             }
             hidePrograms={
-              listingSectionQuestions(listing, ApplicationSection.programs)?.length === 0
+              listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.programs)
+                ?.length === 0
             }
             editMode
             validationError={validationError}

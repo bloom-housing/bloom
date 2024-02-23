@@ -10,7 +10,7 @@ const DetailBuildingDetails = () => {
   return (
     <SectionWithGrid heading={t("listings.sections.buildingDetailsTitle")} inset>
       <SectionWithGrid.HeadingRow>Building Address</SectionWithGrid.HeadingRow>
-      {listing.buildingAddress ? (
+      {listing.listingsBuildingAddress ? (
         <>
           <Grid.Row columns={3}>
             <FieldValue
@@ -18,7 +18,7 @@ const DetailBuildingDetails = () => {
               className="seeds-grid-span-2"
               label={t("application.contact.streetAddress")}
             >
-              {listing.buildingAddress?.street}
+              {listing.listingsBuildingAddress?.street}
             </FieldValue>
             <FieldValue id="neighborhood" label={t("t.neighborhood")}>
               {listing?.neighborhood}
@@ -30,13 +30,13 @@ const DetailBuildingDetails = () => {
               className="seeds-grid-span-2"
               label={t("application.contact.city")}
             >
-              {listing.buildingAddress?.city}
+              {listing.listingsBuildingAddress?.city}
             </FieldValue>
             <FieldValue id="buildingAddress.state" label={t("application.contact.state")}>
-              {listing.buildingAddress?.state}
+              {listing.listingsBuildingAddress?.state}
             </FieldValue>
             <FieldValue id="buildingAddress.zipCode" label={t("application.contact.zip")}>
-              {listing.buildingAddress?.zipCode}
+              {listing.listingsBuildingAddress?.zipCode}
             </FieldValue>
             <FieldValue
               id="yearBuilt"
@@ -51,10 +51,12 @@ const DetailBuildingDetails = () => {
               {t(`counties.${listing.buildingAddress.county}`)}
             </FieldValue>
             <FieldValue id="longitude" label={t("listings.longitude")}>
-              {listing.buildingAddress?.longitude && listing.buildingAddress.longitude.toString()}
+              {listing.listingsBuildingAddress?.longitude &&
+                listing.listingsBuildingAddress.longitude.toString()}
             </FieldValue>
             <FieldValue id="latitude" label={t("listings.latitude")}>
-              {listing.buildingAddress?.latitude && listing.buildingAddress.latitude.toString()}
+              {listing.listingsBuildingAddress?.latitude &&
+                listing.listingsBuildingAddress.latitude.toString()}
             </FieldValue>
           </Grid.Row>
         </>

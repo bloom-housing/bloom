@@ -12,18 +12,20 @@ import {
 import { Button, FormErrorMessage, FieldValue, Card, Grid } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
-import { YesNoAnswer } from "../../lib/helpers"
 import {
-  ApplicationSection,
   MultiselectOption,
   MultiselectQuestion,
   MultiselectQuestionCreate,
   MultiselectQuestionUpdate,
-  ValidationMethod,
-} from "@bloom-housing/backend-core"
+  MultiselectQuestionsApplicationSectionEnum,
+  ValidationMethodEnum,
+  YesNoEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import ManageIconSection from "./ManageIconSection"
 import { DrawerType } from "../../pages/settings/index"
 import SectionWithGrid from "../shared/SectionWithGrid"
+import s from "./PreferenceDrawer.module.scss"
+import { useMapLayersList } from "../../lib/hooks"
 
 type PreferenceDrawerProps = {
   drawerOpen: boolean
@@ -39,16 +41,17 @@ type PreferenceDrawerProps = {
 }
 
 type OptionForm = {
-  collectAddress: YesNoAnswer
-  validationMethod?: ValidationMethod
+  collectAddress: YesNoEnum
+  validationMethod?: ValidationMethodEnum
   radiusSize?: string
-  collectRelationship?: YesNoAnswer
-  collectName?: YesNoAnswer
+  collectRelationship?: YesNoEnum
+  collectName?: YesNoEnum
   exclusiveQuestion: "exclusive" | "multiselect"
   optionDescription: string
   optionLinkTitle: string
   optionTitle: string
   optionUrl: string
+  mapLayerId?: string
 }
 
 const PreferenceDrawer = ({
@@ -65,7 +68,6 @@ const PreferenceDrawer = ({
   const [dragOrder, setDragOrder] = useState([])
 
   const { profile } = useContext(AuthContext)
-
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const {
     register,
@@ -79,11 +81,13 @@ const PreferenceDrawer = ({
     formState,
   } = useForm()
 
+  const { mapLayers } = useMapLayersList(watch("jurisdictionId"))
+
   useEffect(() => {
     if (!optOutQuestion) {
       setValue(
         "canYouOptOutQuestion",
-        questionData?.optOutText !== null ? YesNoAnswer.Yes : YesNoAnswer.No
+        questionData?.optOutText !== null ? YesNoEnum.yes : YesNoEnum.no
       )
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -97,12 +101,17 @@ const PreferenceDrawer = ({
 
   const collectAddressExpand =
     ((optionData?.collectAddress && watch("collectAddress") === undefined) ||
-      watch("collectAddress") === YesNoAnswer.Yes) &&
+      watch("collectAddress") === YesNoEnum.yes) &&
     isAdditionalDetailsEnabled
   const readiusExpand =
-    (optionData?.validationMethod === ValidationMethod.radius &&
+    (optionData?.validationMethod === ValidationMethodEnum.radius &&
       watch("validationMethod") === undefined) ||
-    watch("validationMethod") === ValidationMethod.radius
+    watch("validationMethod") === ValidationMethodEnum.radius
+
+  const mapExpand =
+    (optionData?.validationMethod === ValidationMethodEnum.map &&
+      watch("validationMethod") === undefined) ||
+    watch("validationMethod") === ValidationMethodEnum.map
 
   // Update local state with dragged state
   useEffect(() => {
@@ -298,7 +307,7 @@ const PreferenceDrawer = ({
                         {
                           id: "optOutYes",
                           label: t("t.yes"),
-                          value: YesNoAnswer.Yes,
+                          value: YesNoEnum.yes,
                           defaultChecked:
                             questionData === null || questionData?.optOutText !== null,
                           dataTestId: "opt-out-question-yes",
@@ -306,7 +315,7 @@ const PreferenceDrawer = ({
                         {
                           id: "optOutNo",
                           label: t("t.no"),
-                          value: YesNoAnswer.No,
+                          value: YesNoEnum.no,
                           defaultChecked: questionData && questionData?.optOutText === null,
                           dataTestId: "opt-out-question-no",
                         },
@@ -317,7 +326,7 @@ const PreferenceDrawer = ({
                     />
                   </div>
                 </Grid.Cell>
-                {optOutQuestion === YesNoAnswer.Yes && (
+                {optOutQuestion === YesNoEnum.yes && (
                   <Grid.Cell>
                     <Field
                       id="optOutText"
@@ -345,14 +354,14 @@ const PreferenceDrawer = ({
                       {
                         id: "showOnListingYes",
                         label: t("t.yes"),
-                        value: YesNoAnswer.Yes,
+                        value: YesNoEnum.yes,
                         defaultChecked: questionData === null || !questionData?.hideFromListing,
                         dataTestId: "show-on-listing-question-yes",
                       },
                       {
                         id: "showOnListingNo",
                         label: t("t.no"),
-                        value: YesNoAnswer.No,
+                        value: YesNoEnum.no,
                         defaultChecked: questionData?.hideFromListing,
                         dataTestId: "show-on-listing-question-no",
                       },
@@ -417,12 +426,12 @@ const PreferenceDrawer = ({
               const formValues = getValues()
 
               const formattedQuestionData: MultiselectQuestionUpdate | MultiselectQuestionCreate = {
-                applicationSection: ApplicationSection.preferences,
+                applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
                 text: formValues.text,
                 description: formValues.description,
-                hideFromListing: formValues.showOnListingQuestion === YesNoAnswer.No,
+                hideFromListing: formValues.showOnListingQuestion === YesNoEnum.no,
                 optOutText:
-                  optOutQuestion === YesNoAnswer.Yes &&
+                  optOutQuestion === YesNoEnum.yes &&
                   formValues.optOutText &&
                   formValues.optOutText !== ""
                     ? formValues.optOutText
@@ -575,7 +584,7 @@ const PreferenceDrawer = ({
                       fields={[
                         {
                           label: t("t.yes"),
-                          value: YesNoAnswer.Yes,
+                          value: YesNoEnum.yes,
                           defaultChecked: optionData?.collectAddress,
                           id: "collectAddressYes",
                           dataTestId: "collect-address-yes",
@@ -587,7 +596,7 @@ const PreferenceDrawer = ({
                         },
                         {
                           label: t("t.no"),
-                          value: YesNoAnswer.No,
+                          value: YesNoEnum.no,
                           defaultChecked:
                             optionData?.collectAddress !== undefined &&
                             optionData?.collectAddress === false,
@@ -618,9 +627,9 @@ const PreferenceDrawer = ({
                         fields={[
                           {
                             label: t("settings.preferenceValidatingAddress.checkWithinRadius"),
-                            value: ValidationMethod.radius,
+                            value: ValidationMethodEnum.radius,
                             defaultChecked:
-                              optionData?.validationMethod === ValidationMethod.radius,
+                              optionData?.validationMethod === ValidationMethodEnum.radius,
                             id: "validationMethodRadius",
                             dataTestId: "validation-method-radius",
                             inputProps: {
@@ -630,9 +639,23 @@ const PreferenceDrawer = ({
                             },
                           },
                           {
+                            label: t("settings.preferenceValidatingAddress.checkWithArcGisMap"),
+                            value: ValidationMethodEnum.map,
+                            defaultChecked:
+                              optionData?.validationMethod === ValidationMethodEnum.map,
+                            id: "validationMethodMap",
+                            dataTestId: "validation-method-map",
+                            inputProps: {
+                              onChange: () => {
+                                clearErrors("validationMethod")
+                              },
+                            },
+                          },
+                          {
                             label: t("settings.preferenceValidatingAddress.checkManually"),
-                            value: ValidationMethod.none,
-                            defaultChecked: optionData?.validationMethod === ValidationMethod.none,
+                            value: ValidationMethodEnum.none,
+                            defaultChecked:
+                              optionData?.validationMethod === ValidationMethodEnum.none,
                             id: "validationMethodNone",
                             dataTestId: "validation-method-none",
                             inputProps: {
@@ -670,6 +693,38 @@ const PreferenceDrawer = ({
                       />
                     </FieldValue>
                   )}
+                  {collectAddressExpand && mapExpand && (
+                    <FieldValue label={t("settings.preferenceValidatingAddress.selectMapLayer")}>
+                      <p className={s.helperText}>
+                        {t("settings.preferenceValidatingAddress.selectMapLayerDescription")}
+                      </p>
+                      <Select
+                        id={"mapLayerId"}
+                        name={"mapLayerId"}
+                        register={register}
+                        controlClassName={"control"}
+                        options={
+                          mapLayers
+                            ? [
+                                { label: "", value: "" },
+                                ...mapLayers.map((layer) => ({
+                                  label: layer.name,
+                                  value: layer.id,
+                                })),
+                              ]
+                            : [{ label: "", value: "" }]
+                        }
+                        dataTestId={"preference-map-layer"}
+                        defaultValue={optionData?.mapLayerId ?? null}
+                        errorMessage={t("errors.requiredFieldError")}
+                        error={errors.mapLayerId}
+                        validation={{ required: true }}
+                        inputProps={{
+                          onChange: () => clearErrors("mapLayerId"),
+                        }}
+                      />
+                    </FieldValue>
+                  )}
                 </Grid.Cell>
               </Grid.Row>
               {collectAddressExpand && (
@@ -685,7 +740,7 @@ const PreferenceDrawer = ({
                         fields={[
                           {
                             label: t("t.yes"),
-                            value: YesNoAnswer.Yes,
+                            value: YesNoEnum.yes,
                             defaultChecked: optionData?.collectName,
                             id: "collectNameYes",
                             dataTestId: "collect-name-yes",
@@ -697,7 +752,7 @@ const PreferenceDrawer = ({
                           },
                           {
                             label: t("t.no"),
-                            value: YesNoAnswer.No,
+                            value: YesNoEnum.no,
                             defaultChecked:
                               optionData?.collectName !== undefined && !optionData?.collectName,
                             id: "collectNameNo",
@@ -726,7 +781,7 @@ const PreferenceDrawer = ({
                         fields={[
                           {
                             label: t("t.yes"),
-                            value: YesNoAnswer.Yes,
+                            value: YesNoEnum.yes,
                             defaultChecked: optionData?.collectRelationship,
                             id: "collectRelationshipYes",
                             dataTestId: "collect-relationship-yes",
@@ -738,7 +793,7 @@ const PreferenceDrawer = ({
                           },
                           {
                             label: t("t.no"),
-                            value: YesNoAnswer.No,
+                            value: YesNoEnum.no,
                             defaultChecked:
                               optionData?.collectRelationship !== undefined &&
                               !optionData?.collectRelationship,
@@ -786,6 +841,7 @@ const PreferenceDrawer = ({
                     "collectRelationship",
                     "validationMethod",
                     "radiusSize",
+                    "mapLayerId",
                   ].includes(field)
                 )
               ) {
@@ -805,15 +861,21 @@ const PreferenceDrawer = ({
                   : [],
                 ordinal: getNewOrdinal(),
                 exclusive: formData.exclusiveQuestion === "exclusive",
-                collectAddress: formData.collectAddress === YesNoAnswer.Yes,
+                collectAddress: formData.collectAddress === YesNoEnum.yes,
               }
-              if (formData.collectAddress === YesNoAnswer.Yes) {
+              if (formData.collectAddress === YesNoEnum.yes) {
                 newOptionData.validationMethod = formData.validationMethod
-                newOptionData.collectRelationship = formData.collectRelationship === YesNoAnswer.Yes
-                newOptionData.collectName = formData.collectName === YesNoAnswer.Yes
+                newOptionData.collectRelationship = formData.collectRelationship === YesNoEnum.yes
+                newOptionData.collectName = formData.collectName === YesNoEnum.yes
               }
-              if (formData.validationMethod === ValidationMethod.radius && formData?.radiusSize) {
+              if (
+                formData.validationMethod === ValidationMethodEnum.radius &&
+                formData?.radiusSize
+              ) {
                 newOptionData.radiusSize = parseFloat(formData.radiusSize)
+              }
+              if (formData.validationMethod === ValidationMethodEnum.map && formData?.mapLayerId) {
+                newOptionData.mapLayerId = formData.mapLayerId
               }
 
               let newOptions = []

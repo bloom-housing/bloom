@@ -1,6 +1,10 @@
 import { DateFieldValues, DOBFieldValues, TimeFieldValues } from "@bloom-housing/ui-components"
-import { Language, IncomePeriod, ApplicationReviewStatus } from "@bloom-housing/backend-core/types"
-import { YesNoAnswer } from "../helpers"
+import {
+  ApplicationReviewStatusEnum,
+  IncomePeriodEnum,
+  LanguagesEnum,
+  YesNoEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export type Address = {
   street: string
@@ -11,18 +15,18 @@ export type Address = {
 }
 
 export type ApplicationTypes = {
-  mailingAddress: Address
+  applicationsMailingAddress: Address
   sendMailToMailingAddress?: boolean
-  language?: Language
+  language?: LanguagesEnum
   additionalPhoneNumber?: string
   additionalPhoneNumberType?: string
   contactPreferences?: string[]
-  acceptedTerms?: YesNoAnswer
-  incomePeriod?: IncomePeriod
+  acceptedTerms?: YesNoEnum
+  incomePeriod?: IncomePeriodEnum
   incomeVouchers?: string[]
   preferredUnit?: string[]
-  householdExpectingChanges?: YesNoAnswer
-  householdStudent?: YesNoAnswer
+  householdExpectingChanges?: YesNoEnum
+  householdStudent?: YesNoEnum
   accessibility: string[]
   demographics: {
     ethnicity?: string
@@ -40,21 +44,22 @@ export type ApplicationTypes = {
     phoneNumber?: string
     type?: string
     otherType?: string
-    mailingAddress: Address
+    address: Address
   }
   applicant: {
     firstName?: string
     middleName?: string
     lastName?: string
     emailAddress?: string
-    workInRegion?: YesNoAnswer
-    address: Address
-    workAddress: Address
+    workInRegion?: YesNoEnum
+    applicantAddress: Address
+    applicantWorkAddress: Address
     phoneNumberType?: string
   }
   preferences?: Record<string, string | unknown>
   programs?: Record<string, string | unknown>
-  reviewStatus?: ApplicationReviewStatus
+  reviewStatus?: ApplicationReviewStatusEnum
+  phoneNumber?: string
 }
 
 export type FormTypes = {

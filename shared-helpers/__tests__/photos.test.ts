@@ -1,10 +1,10 @@
-import { Listing } from "@bloom-housing/backend-core/types"
 import { cleanup } from "@testing-library/react"
 import {
   cloudinaryUrlFromId,
   getImageUrlFromAsset,
   imageUrlFromListing,
 } from "../src/utilities/photos"
+import { Listing, ListingsStatusEnum } from "../src/types/backend-swagger"
 
 afterEach(cleanup)
 
@@ -17,10 +17,15 @@ describe("photos helper", () => {
 
   it("should return correct cloudinary url from a listing with new image field", () => {
     const testListing = {
-      images: [
+      id: "id123",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      name: "listing with images",
+      status: ListingsStatusEnum.active,
+      listingImages: [
         {
           ordinal: 0,
-          image: {
+          assets: {
             fileId: "1234",
             label: "cloudinaryBuilding",
           },

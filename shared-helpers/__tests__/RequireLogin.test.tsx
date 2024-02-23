@@ -2,8 +2,8 @@ import React from "react"
 import { render } from "@testing-library/react"
 import { RequireLogin } from "../src/auth/RequireLogin"
 import { AuthContext } from "../src/auth/AuthContext"
-import { User } from "@bloom-housing/backend-core/types"
 import { GenericRouter, NavigationContext } from "@bloom-housing/ui-components"
+import { User } from "../src/types/backend-swagger"
 
 // Helpers
 
@@ -30,6 +30,7 @@ const mockUser: User = {
   passwordUpdatedAt: new Date("2020-01-01"),
   passwordValidForDays: 180,
   agreedToTermsOfService: true,
+  listings: [],
 }
 
 let initialStateLoaded = false
@@ -42,7 +43,7 @@ beforeEach(() => {
 
 const itShouldRender = () =>
   test("it renders successfully", () => {
-    const { getByLabelText } = render(
+    const { getByText } = render(
       <NavigationContext.Provider
         value={{
           router: mockRouter,
@@ -51,17 +52,17 @@ const itShouldRender = () =>
       >
         <AuthContext.Provider value={{ initialStateLoaded, profile }}>
           <RequireLogin signInPath={"/sign-in"} signInMessage={"Test Sign-In Message"} {...props}>
-            <div aria-label="child" />
+            <div>child</div>
           </RequireLogin>
         </AuthContext.Provider>
       </NavigationContext.Provider>
     )
-    expect(getByLabelText("child")).toBeTruthy()
+    expect(getByText("child")).toBeInTheDocument()
   })
 
 const itShouldNotRenderChildren = () =>
   test("it should not render children", () => {
-    const { queryByLabelText } = render(
+    const { queryByText } = render(
       <NavigationContext.Provider
         value={{
           router: mockRouter,
@@ -70,12 +71,12 @@ const itShouldNotRenderChildren = () =>
       >
         <AuthContext.Provider value={{ initialStateLoaded, profile }}>
           <RequireLogin signInPath={"/sign-in"} signInMessage={"Test Sign-In Message"} {...props}>
-            <div id="child" />
+            <div>child</div>
           </RequireLogin>
         </AuthContext.Provider>
       </NavigationContext.Provider>
     )
-    expect(queryByLabelText("child")).toBeFalsy()
+    expect(queryByText("child")).toBeFalsy()
   })
 
 const itShouldRedirect = () =>

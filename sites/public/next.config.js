@@ -44,6 +44,7 @@ module.exports = withBundleAnalyzer({
     showProfessionalPartners: process.env.SHOW_PROFESSIONAL_PARTNERS === "TRUE",
     showMandatedAccounts: process.env.SHOW_MANDATED_ACCOUNTS === "TRUE",
     notificationsSignUpUrl: process.env.NOTIFICATIONS_SIGN_UP_URL || null,
+    maintenanceWindow: process.env.MAINTENANCE_WINDOW,
     // start Doorway env variables
     //googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY, // moved to runtime config
     awsS3BucketName: process.env.AWS_S3_BUCKET_NAME,
@@ -63,7 +64,6 @@ module.exports = withBundleAnalyzer({
     "@bloom-housing/ui-seeds",
     "@bloom-housing/shared-helpers",
     "@bloom-housing/ui-components",
-    "@bloom-housing/backend-core",
     "@bloom-housing/doorway-ui-components",
   ],
   webpack: (config) => {

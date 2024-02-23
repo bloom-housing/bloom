@@ -44,7 +44,7 @@ export interface ApplicationsProps {
   postmarkedApplicationsReceivedByDate?: string
   /** Informs whether or not to hide actionable application buttons */
   listingStatus?: string
-  /** Whether or not to hide actionable application buttons */
+  /** Whether or not to block submission of test application */
   preview?: boolean
   strings?: {
     applicationsOpenInFuture?: string
@@ -63,8 +63,8 @@ const GetApplication = (props: ApplicationsProps) => {
   const showSection =
     props.onlineApplicationURL ||
     (props.applicationsOpen && props.paperMethod && !!props.paperApplications?.length)
+  const disableApplyButton = !props.preview && props.listingStatus !== ListingStatus.active
   const [showDownloadModal, setShowDownloadModal] = useState(false)
-
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
   const paperApplicationURL: string = watch(
@@ -90,31 +90,29 @@ const GetApplication = (props: ApplicationsProps) => {
       )}
       {props.applicationsOpen && props.onlineApplicationURL && (
         <div style={{ boxSizing: "border-box" }}>
-          <>
-            {props.preview ? (
-              <Button
-                variant="primary-outlined"
-                disabled
-                className="w-full mb-2"
-                id={"listing-view-apply-button"}
-              >
-                {props.strings?.applyOnline ?? t("listings.apply.applyOnline")}
-              </Button>
-            ) : (
-              <Button
-                variant="primary"
-                className="w-full mb-2"
-                href={props.onlineApplicationURL}
-                id={"listing-view-apply-button"}
-                newWindowTarget={isExternalLink(props.onlineApplicationURL)}
-              >
-                {props.strings?.applyOnline ?? t("listings.apply.applyOnline")}
-              </Button>
-            )}
-            <div className="text-gray-800 text-sm">
-              {props.strings?.applyOnlineMessage ?? t("listings.apply.applyOnlineMessage")}
-            </div>
-          </>
+          {disableApplyButton ? (
+            <Button
+              variant="primary-outlined"
+              className="w-full mb-2"
+              disabled
+              id={"listing-view-apply-button"}
+            >
+              {props.strings?.applyOnline ?? t("listings.apply.applyOnline")}
+            </Button>
+          ) : (
+            <Button
+              variant="primary"
+              className="w-full mb-2"
+              href={props.onlineApplicationURL}
+              id={"listing-view-apply-button"}
+              newWindowTarget={isExternalLink(props.onlineApplicationURL)}
+            >
+              {props.strings?.applyOnline ?? t("listings.apply.applyOnline")}
+            </Button>
+          )}
+          <div className="text-gray-800 text-sm">
+            {props.strings?.applyOnlineMessage ?? t("listings.apply.applyOnlineMessage")}
+          </div>
         </div>
       )}
 

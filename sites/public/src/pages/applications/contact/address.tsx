@@ -43,21 +43,24 @@ const ApplicationAddress = () => {
   const currentPageSection = 1
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { control, register, handleSubmit, setValue, watch, errors } = useForm<Record<string, any>>(
-    {
-      defaultValues: {
-        "applicant.phoneNumber": application.applicant.phoneNumber,
-        "applicant.noPhone": application.applicant.noPhone,
-        additionalPhone: application.additionalPhone,
-        "applicant.phoneNumberType": application.applicant.phoneNumberType,
-        sendMailToMailingAddress: application.sendMailToMailingAddress,
-        "applicant.workInRegion": application.applicant.workInRegion,
-        "applicant.address.state": application.applicant.address.state,
-      },
-      shouldFocusError: false,
-    }
-  )
-  const onSubmit = (data) => {
+  const { control, register, handleSubmit, setValue, watch, errors, trigger } = useForm<
+    Record<string, any>
+  >({
+    defaultValues: {
+      "applicant.phoneNumber": application.applicant.phoneNumber,
+      "applicant.noPhone": application.applicant.noPhone,
+      additionalPhone: application.additionalPhone,
+      "applicant.phoneNumberType": application.applicant.phoneNumberType,
+      sendMailToMailingAddress: application.sendMailToMailingAddress,
+      "applicant.workInRegion": application.applicant.workInRegion,
+      "applicant.address.state": application.applicant.applicantAddress.state,
+    },
+    shouldFocusError: false,
+  })
+  const onSubmit = async (data) => {
+    const validation = await trigger()
+    if (!validation) return
+
     if (!verifyAddress) {
       setFoundAddress({})
       setVerifyAddress(true)
@@ -67,13 +70,13 @@ const ApplicationAddress = () => {
     }
 
     mergeDeep(application, data)
-
     if (newAddressSelected && foundAddress.newAddress) {
-      application.applicant.address.street = foundAddress.newAddress.street
-      application.applicant.address.city = foundAddress.newAddress.city
-      application.applicant.address.zipCode = foundAddress.newAddress.zipCode
-      application.applicant.address.longitude = foundAddress.newAddress.longitude
-      application.applicant.address.latitude = foundAddress.newAddress.latitude
+      application.applicant.applicantAddress.street = foundAddress.newAddress.street
+      application.applicant.applicantAddress.city = foundAddress.newAddress.city
+      application.applicant.applicantAddress.zipCode = foundAddress.newAddress.zipCode
+      application.applicant.applicantAddress.state = foundAddress.newAddress.state
+      application.applicant.applicantAddress.longitude = foundAddress.newAddress.longitude
+      application.applicant.applicantAddress.latitude = foundAddress.newAddress.latitude
     }
 
     if (application.applicant.noPhone) {
@@ -85,10 +88,10 @@ const ApplicationAddress = () => {
       application.additionalPhoneNumberType = ""
     }
     if (!application.sendMailToMailingAddress) {
-      application.mailingAddress = blankApplication.mailingAddress
+      application.applicationsMailingAddress = blankApplication.applicationsMailingAddress
     }
     if (!application.applicant.workInRegion) {
-      application.applicant.workAddress = blankApplication.applicant.workAddress
+      application.applicant.applicantWorkAddress = blankApplication.applicant.applicantWorkAddress
     }
     conductor.sync()
 
@@ -101,7 +104,7 @@ const ApplicationAddress = () => {
   const noPhone: boolean = watch("applicant.noPhone")
   const phoneNumber: string = watch("applicant.phoneNumber")
   const phonePresent = () => {
-    return phoneNumber.replace(/[()\-_ ]/g, "").length > 0
+    return phoneNumber && phoneNumber.replace(/[()\-_ ]/g, "").length > 0
   }
   const additionalPhone = watch("additionalPhone")
   const sendMailToMailingAddress = watch("sendMailToMailingAddress")
@@ -294,7 +297,7 @@ const ApplicationAddress = () => {
                   id="addressStreet"
                   name="applicant.address.street"
                   label={t("application.contact.streetAddress")}
-                  defaultValue={application.applicant.address.street}
+                  defaultValue={application.applicant.applicantAddress.street}
                   validation={{ required: true, maxLength: 64 }}
                   errorMessage={
                     errors.applicant?.address?.street?.type === "maxLength"
@@ -310,7 +313,7 @@ const ApplicationAddress = () => {
                   id="addressStreet2"
                   name="applicant.address.street2"
                   label={t("application.contact.apt")}
-                  defaultValue={application.applicant.address.street2}
+                  defaultValue={application.applicant.applicantAddress.street2}
                   register={register}
                   dataTestId={"app-primary-address-street2"}
                   error={errors.applicant?.address?.street2}
@@ -322,8 +325,8 @@ const ApplicationAddress = () => {
                   <Field
                     id="addressCity"
                     name="applicant.address.city"
-                    label={t("application.contact.city")}
-                    defaultValue={application.applicant.address.city}
+                    label={t("application.contact.cityName")}
+                    defaultValue={application.applicant.applicantAddress.city}
                     validation={{ required: true, maxLength: 64 }}
                     errorMessage={
                       errors.applicant?.address?.city?.type === "maxLength"
@@ -357,7 +360,7 @@ const ApplicationAddress = () => {
                   id="addressZipCode"
                   name="applicant.address.zipCode"
                   label={t("application.contact.zip")}
-                  defaultValue={application.applicant.address.zipCode}
+                  defaultValue={application.applicant.applicantAddress.zipCode}
                   validation={{ required: true, maxLength: 64 }}
                   errorMessage={
                     errors.applicant?.address?.zipCode?.type === "maxLength"
@@ -396,9 +399,9 @@ const ApplicationAddress = () => {
 
                   <Field
                     id="mailingAddressStreet"
-                    name="mailingAddress.street"
+                    name="applicationsMailingAddress.street"
+                    defaultValue={application.applicationsMailingAddress.street}
                     label={t("application.contact.streetAddress")}
-                    defaultValue={application.mailingAddress.street}
                     validation={{ required: true, maxLength: 64 }}
                     error={errors.mailingAddress?.street}
                     errorMessage={
@@ -412,9 +415,9 @@ const ApplicationAddress = () => {
 
                   <Field
                     id="mailingAddressStreet2"
-                    name="mailingAddress.street2"
+                    name="applicationsMailingAddress.street2"
                     label={t("application.contact.apt")}
-                    defaultValue={application.mailingAddress.street2}
+                    defaultValue={application.applicationsMailingAddress.street2}
                     register={register}
                     dataTestId={"app-primary-mailing-address-street2"}
                     validation={{ maxLength: 64 }}
@@ -425,9 +428,9 @@ const ApplicationAddress = () => {
                   <div className="flex max-w-2xl">
                     <Field
                       id="mailingAddressCity"
-                      name="mailingAddress.city"
+                      name="applicationsMailingAddress.city"
                       label={t("application.contact.city")}
-                      defaultValue={application.mailingAddress.city}
+                      defaultValue={application.applicationsMailingAddress.city}
                       validation={{ required: true, maxLength: 64 }}
                       error={errors.mailingAddress?.city}
                       errorMessage={
@@ -441,9 +444,9 @@ const ApplicationAddress = () => {
 
                     <Select
                       id="mailingAddressState"
-                      name="mailingAddress.state"
+                      name="applicationsMailingAddress.state"
                       label={t("application.contact.state")}
-                      defaultValue={application.mailingAddress.state}
+                      defaultValue={application.applicationsMailingAddress.state}
                       validation={{ required: true, maxLength: 64 }}
                       errorMessage={
                         errors.mailingAddress?.state?.type === "maxLength"
@@ -461,9 +464,9 @@ const ApplicationAddress = () => {
 
                   <Field
                     id="mailingAddressZipCode"
-                    name="mailingAddress.zipCode"
+                    name="applicationsMailingAddress.zipCode"
                     label={t("application.contact.zip")}
-                    defaultValue={application.mailingAddress.zipCode}
+                    defaultValue={application.applicationsMailingAddress.zipCode}
                     validation={{ required: true, maxLength: 64 }}
                     error={errors.mailingAddress?.zipCode}
                     errorMessage={
@@ -505,7 +508,10 @@ const ApplicationAddress = () => {
                     errors?.applicant?.workInRegion ? "text-alert" : ""
                   }`}
                 >
-                  {t("application.contact.doYouWorkIn", { county: listing?.countyCode })}
+                  {t("application.contact.doYouWorkIn", {
+                    county:
+                      listing?.listingsBuildingAddress?.county || listing?.jurisdictions?.name,
+                  })}
                 </legend>
 
                 <p className="field-note mb-4">{t("application.contact.doYouWorkInDescription")}</p>
@@ -559,7 +565,7 @@ const ApplicationAddress = () => {
                     <Field
                       id="workAddressStreet"
                       name="applicant.workAddress.street"
-                      defaultValue={application.applicant.workAddress.street}
+                      defaultValue={application.applicant.applicantWorkAddress.street}
                       validation={{ required: true, maxLength: 64 }}
                       error={errors.applicant?.workAddress?.street}
                       errorMessage={
@@ -576,7 +582,7 @@ const ApplicationAddress = () => {
                       id="workAddressStreet2"
                       name="applicant.workAddress.street2"
                       label={t("application.contact.apt")}
-                      defaultValue={application.applicant.workAddress.street2}
+                      defaultValue={application.applicant.applicantWorkAddress.street2}
                       register={register}
                       error={errors.applicant?.workAddress?.street2}
                       validation={{ maxLength: 64 }}
@@ -589,7 +595,7 @@ const ApplicationAddress = () => {
                         id="workAddressCity"
                         name="applicant.workAddress.city"
                         label={t("application.contact.city")}
-                        defaultValue={application.applicant.workAddress.city}
+                        defaultValue={application.applicant.applicantWorkAddress.city}
                         validation={{ required: true, maxLength: 64 }}
                         error={errors.applicant?.workAddress?.city}
                         errorMessage={
@@ -605,7 +611,7 @@ const ApplicationAddress = () => {
                         id="workAddressState"
                         name="applicant.workAddress.state"
                         label={t("application.contact.state")}
-                        defaultValue={application.applicant.workAddress.state}
+                        defaultValue={application.applicant.applicantWorkAddress.state}
                         validation={{ required: true, maxLength: 64 }}
                         errorMessage={
                           errors.applicant?.workAddress?.state?.type === "maxLength"
@@ -624,7 +630,7 @@ const ApplicationAddress = () => {
                       id="workAddressZipCode"
                       name="applicant.workAddress.zipCode"
                       label={t("application.contact.zip")}
-                      defaultValue={application.applicant.workAddress.zipCode}
+                      defaultValue={application.applicant.applicantWorkAddress.zipCode}
                       validation={{ required: true, maxLength: 64 }}
                       error={errors.applicant?.workAddress?.zipCode}
                       errorMessage={

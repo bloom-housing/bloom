@@ -27,7 +27,7 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   const { locale } = router
   //  const initialized = useState(true)
   const [application, setApplication] = useState(() => {
-    return loadApplicationFromAutosave() || { ...blankApplication }
+    return loadApplicationFromAutosave() || JSON.parse(JSON.stringify(blankApplication))
   })
   const [savedListing, setSavedListing] = useState(() => {
     return loadSavedListing()

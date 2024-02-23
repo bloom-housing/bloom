@@ -15,8 +15,7 @@ export class ListingDefaultLotteryPending extends ListingDefaultSeed {
           startTime: getDate(10),
           startDate: getDate(10),
           endTime: getDate(10),
-          note:
-            "Custom public lottery event note. This is a long note and should take up more space.",
+          note: "Custom public lottery event note. This is a long note and should take up more space.",
           type: ListingEventType.openHouse,
           url: "https://www.example.com",
           label: "Custom Event URL Label",

@@ -13,8 +13,8 @@ const DetailCommunityType = () => {
       <Grid.Row>
         <FieldValue id="reservedCommunityType" label={t("listings.reservedCommunityType")}>
           {getDetailFieldString(
-            listing.reservedCommunityType
-              ? t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`)
+            listing.reservedCommunityTypes
+              ? t(`listings.reservedCommunityTypes.${listing.reservedCommunityTypes.name}`)
               : null
           )}
         </FieldValue>

@@ -4,7 +4,7 @@ import { t, Field, Textarea, FieldGroup } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
 import { AuthContext, listingUtilities } from "@bloom-housing/shared-helpers"
-import { ListingUtilities } from "@bloom-housing/backend-core/types"
+import { ListingUtilities } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type AdditionalFeesProps = {
@@ -28,8 +28,9 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
     }))
   }, [props.existingUtilities, register])
 
-  const enableUtilitiesIncluded = profile?.jurisdictions?.find((j) => j.id === jurisdiction)
-    ?.enableUtilitiesIncluded
+  const enableUtilitiesIncluded = profile?.jurisdictions?.find(
+    (j) => j.id === jurisdiction
+  )?.enableUtilitiesIncluded
 
   return (
     <>
@@ -108,6 +109,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
         {enableUtilitiesIncluded && (
           <Grid.Row>
             <FieldValue label={t("listings.sections.utilities")}>
+              {/* TODO: default checked doesn't appear to be working even in main */}
               <FieldGroup
                 type="checkbox"
                 name="listingUtilities"
