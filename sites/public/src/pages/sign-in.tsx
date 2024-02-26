@@ -11,6 +11,8 @@ import {
   NetworkStatusContent,
   AuthContext,
   FormSignIn,
+  FormSignInDefault,
+  FormSignInPwdless,
   ResendConfirmationModal,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
@@ -138,8 +140,7 @@ const SignIn = () => {
           )}
           <div className={signUpCopy && signUpBenefitsStyles["benefits-form-container"]}>
             <FormSignIn
-              onSubmit={(data) => void onSubmit(data)}
-              control={{ register, errors, handleSubmit, watch }}
+              control={{ errors }}
               networkStatus={{
                 content: networkStatusContent,
                 type: networkStatusType,
@@ -150,7 +151,19 @@ const SignIn = () => {
                 },
               }}
               showRegisterBtn={true}
-            />
+            >
+              {process.env.showPwdless ? (
+                <FormSignInPwdless
+                  onSubmit={(data) => void onSubmit(data)}
+                  control={{ register, errors, handleSubmit }}
+                />
+              ) : (
+                <FormSignInDefault
+                  onSubmit={(data) => void onSubmit(data)}
+                  control={{ register, errors, handleSubmit }}
+                />
+              )}
+            </FormSignIn>
           </div>
           {signUpCopy && (
             <div className={signUpBenefitsStyles["benefits-hide-display"]}>
