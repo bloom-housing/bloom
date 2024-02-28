@@ -136,7 +136,7 @@ export const generateHmiData = (
     ? [
         ...new Set(
           units
-            .filter((unit) => amiChartMap[unit.amiChart.id])
+            .filter((unit) => unit.amiChart && amiChartMap[unit.amiChart.id])
             .map((unit) => {
               let amiChart = amiChartMap[unit.amiChart.id];
               if (unit.unitAmiChartOverrides) {
