@@ -479,6 +479,15 @@ export class UserService {
     requestingUser: User,
     jurisdictionName?: string,
   ): Promise<User> {
+    if (
+      this.containsInvalidCharacters(dto.firstName) ||
+      this.containsInvalidCharacters(dto.lastName)
+    ) {
+      throw new ForbiddenException(
+        `${dto.firstName} ${dto.lastName} was found to be invalid`,
+      );
+    }
+
     if (forPartners) {
       await this.authorizeAction(
         requestingUser,
@@ -848,5 +857,9 @@ export class UserService {
       }
       return misMatched;
     }, []);
+  }
+
+  containsInvalidCharacters(value: string): boolean {
+    return value.includes('.') || value.includes('http');
   }
 }
