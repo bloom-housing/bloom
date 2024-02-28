@@ -131,13 +131,6 @@ views.details = {
 views.csv = {
   ...views.base,
   ...views.full,
-  units: {
-    include: {
-      unitTypes: true,
-      unitAmiChartOverrides: true,
-      amiChart: true,
-    },
-  },
   userAccounts: true,
 };
 
