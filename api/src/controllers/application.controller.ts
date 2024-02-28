@@ -47,6 +47,7 @@ import { permissionActions } from '../enums/permissions/permission-actions-enum'
 import { PermissionAction } from '../decorators/permission-action.decorator';
 import { ApplicationCsvExporterService } from '../services/application-csv-export.service';
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
+import { MostRecentApplicationQueryParams } from '../dtos/applications/most-recent-application-query-params.dto';
 
 @Controller('applications')
 @ApiTags('applications')
@@ -74,6 +75,18 @@ export class ApplicationController {
   @ApiOkResponse({ type: PaginatedApplicationDto })
   async list(@Query() queryParams: ApplicationQueryParams) {
     return await this.applicationService.list(queryParams);
+  }
+
+  @Get(`mostRecentlyCreated`)
+  @ApiOperation({
+    summary: 'Get the most recent application submitted by the user',
+    operationId: 'mostRecentlyCreated',
+  })
+  @ApiOkResponse({ type: Application })
+  async mostRecentlyCreated(
+    @Query() queryParams: MostRecentApplicationQueryParams,
+  ): Promise<Application> {
+    return await this.applicationService.mostRecentlyCreated(queryParams);
   }
 
   @Get(`csv`)
