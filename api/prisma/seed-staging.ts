@@ -21,6 +21,7 @@ import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { unitAccessibilityPriorityTypeFactoryAll } from './seed-helpers/unit-accessibility-priority-type-factory';
 import { multiselectQuestionFactory } from './seed-helpers/multiselect-question-factory';
 import {
+  goldenGateBridge,
   lincolnMemorial,
   washingtonMonument,
   whiteHouse,
@@ -42,11 +43,34 @@ export const stagingSeed = async (
 ) => {
   // create main jurisdiction
   const jurisdiction = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory(jurisdictionName, [UserRoleEnum.admin]),
+    data: jurisdictionFactory(jurisdictionName || 'Bay Area', [
+      UserRoleEnum.admin,
+    ]),
   });
   // add another jurisdiction
   const additionalJurisdiction = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory(randomNoun()),
+    data: jurisdictionFactory('Contra Costa'),
+  });
+  await prismaClient.jurisdictions.create({
+    data: jurisdictionFactory('Marin'),
+  });
+  await prismaClient.jurisdictions.create({
+    data: jurisdictionFactory('Napa'),
+  });
+  await prismaClient.jurisdictions.create({
+    data: jurisdictionFactory('San Mateo'),
+  });
+  await prismaClient.jurisdictions.create({
+    data: jurisdictionFactory('Santa Clara'),
+  });
+  await prismaClient.jurisdictions.create({
+    data: jurisdictionFactory('Solano'),
+  });
+  await prismaClient.jurisdictions.create({
+    data: jurisdictionFactory('Sonoma'),
+  });
+  await prismaClient.jurisdictions.create({
+    data: jurisdictionFactory('San Francisco'),
   });
   // create admin user
   await prismaClient.userAccounts.create({
@@ -86,6 +110,14 @@ export const stagingSeed = async (
       acceptedTerms: true,
       mfaEnabled: true,
       mfaCode: '12345',
+    }),
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      email: 'public-user@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: false,
     }),
   });
   // add jurisdiction specific translations and default ones
@@ -185,6 +217,10 @@ export const stagingSeed = async (
   const unitTypes = await unitTypeFactoryAll(prismaClient);
   await unitAccessibilityPriorityTypeFactoryAll(prismaClient);
   await reservedCommunityTypeFactoryAll(jurisdiction.id, prismaClient);
+  await reservedCommunityTypeFactoryAll(
+    additionalJurisdiction.id,
+    prismaClient,
+  );
   // list of predefined listings WARNING: images only work if image setup is cloudinary on exygy account
   [
     {
@@ -527,7 +563,7 @@ export const stagingSeed = async (
         customMapPin: false,
         publishedAt: new Date(),
         listingsBuildingAddress: {
-          create: whiteHouse,
+          create: goldenGateBridge,
         },
         listingsApplicationMailingAddress: {
           create: lincolnMemorial,
@@ -874,7 +910,9 @@ export const stagingSeed = async (
       },
       index,
     ) => {
-      const listing = await listingFactory(jurisdiction.id, prismaClient, {
+      const jurisdictionId =
+        index > 2 ? additionalJurisdiction.id : jurisdiction.id;
+      const listing = await listingFactory(jurisdictionId, prismaClient, {
         amiChart: amiChart,
         numberOfUnits: index,
         listing: value.listing,

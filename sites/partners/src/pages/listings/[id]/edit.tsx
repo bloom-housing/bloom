@@ -9,6 +9,7 @@ import { ListingContext } from "../../../components/listings/ListingContext"
 import { MetaTags } from "../../../components/shared/MetaTags"
 import ListingGuard from "../../../components/shared/ListingGuard"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
+import { FormListing } from "../../../lib/listings/formTypes"
 
 const EditListing = (props: { listing: Listing }) => {
   const metaDescription = ""
@@ -53,7 +54,7 @@ const EditListing = (props: { listing: Listing }) => {
             }
           />
 
-          <PaperListingForm listing={listing} editMode />
+          <PaperListingForm listing={listing as FormListing} editMode />
         </Layout>
       </ListingGuard>
     </ListingContext.Provider>

@@ -5,8 +5,7 @@ describe("Listings approval feature", () => {
     cy.intercept("/api/adapter/upload", {
       body: {
         id: "123",
-        url:
-          "https://assets.website-files.com/5fbfdd121e108ea418ede824/5fbfdea9a7287d45a63d821b_Exygy%20Logo.svg",
+        url: "https://assets.website-files.com/5fbfdd121e108ea418ede824/5fbfdea9a7287d45a63d821b_Exygy%20Logo.svg",
       },
     })
     // Partner: Submit a listing for approval

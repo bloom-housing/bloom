@@ -425,7 +425,7 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
   describe('Testing asset endpoints', () => {
     it('should succeed for presigned endpoint', async () => {
       await request(app.getHttpServer())
-        .post('/assets/presigned-upload-metadata/')
+        .post('/asset/presigned-upload-metadata/')
         .send(buildPresignedEndpointMock())
         .set('Cookie', cookies)
         .expect(201);

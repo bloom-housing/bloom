@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Listing } from "@bloom-housing/backend-core/types"
+import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingsMap } from "./ListingsMap"
 import { ListingsList } from "./ListingsList"
 import { useSwipeable } from "react-swipeable"

@@ -15,6 +15,12 @@ env:
   TEST_DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom_test
   BLOOM_API_BASE: https://fake_website.fake
   BLOOM_LISTINGS_QUERY: "/fake"
+  TWILIO_ACCOUNT_SID: 'AC.TEST'
+  TWILIO_AUTH_TOKEN: 'TEST'
+  MFA_CODE_VALID: '600000'
+  MFA_CODE_LENGTH: 5
+  AUTH_LOCK_LOGIN_COOLDOWN: '1800000'
+  AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS: '5'
 
 jobs:
   backend-integration:
@@ -43,26 +49,23 @@ jobs:
         with:
           node-version: 18
 
-      - name: yarn in root dir
-        run: yarn
-
-      - name: yarn in backend/core dir
-        working-directory: ./backend/core
+      - name: yarn in api dir
+        working-directory: ./api
         run: yarn
 
       - name: Check postgres
         run: pg_isready -h 127.0.0.1 -p 5432
 
-      - name: Not sure why but there is a dependency on this database existing
-        run: psql -c 'CREATE DATABASE bloom_test;'
-        env:
-          PGHOST: 127.0.0.1
-          PGPASSWORD: bloom
-          PGUSER: bloom-dev
+      # - name: Not sure why but there is a dependency on this database existing
+      #   run: psql -c 'CREATE DATABASE bloom_test;'
+      #   env:
+      #     PGHOST: 127.0.0.1
+      #     PGPASSWORD: bloom
+      #     PGUSER: bloom-dev
 
-      - name: yarn e2e tests backend
-        working-directory: ./backend/core
-        run: yarn test:e2e:local
+      - name: yarn e2e tests api
+        working-directory: ./api
+        run: yarn test:e2e
         env:
           PGHOST: 127.0.0.1
           PGPASSWORD: bloom

@@ -25,7 +25,7 @@ export default () => {
             ?.retrieve({ id: app.listings.id })
             .then((retrievedListing) => {
               // TODO: fix this once this page is migrated
-              setListing((retrievedListing as unknown) as Listing)
+              setListing(retrievedListing as unknown as Listing)
             })
             .catch((err) => {
               console.error(`Error fetching listing: ${err}`)

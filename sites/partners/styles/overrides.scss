@@ -106,7 +106,14 @@
   margin-block-end: var(--seeds-spacer-text);
 }
 
-:is(.spacer-container, .spacer-section, .spacer-content, .spacer-header, .spacer-label, .spacer-text):last-child {
+:is(
+    .spacer-container,
+    .spacer-section,
+    .spacer-content,
+    .spacer-header,
+    .spacer-label,
+    .spacer-text
+  ):last-child {
   margin-block-end: 0;
 }
 
@@ -180,7 +187,14 @@
   margin-block-end: var(--seeds-spacer-text);
 }
 
-:is(.spacer-container, .spacer-section, .spacer-content, .spacer-header, .spacer-label, .spacer-text):last-child {
+:is(
+    .spacer-container,
+    .spacer-section,
+    .spacer-content,
+    .spacer-header,
+    .spacer-label,
+    .spacer-text
+  ):last-child {
   margin-block-end: 0;
 }
 

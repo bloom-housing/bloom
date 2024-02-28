@@ -398,7 +398,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
   describe('Testing asset endpoints', () => {
     it('should error as unauthorized for presigned endpoint', async () => {
       await request(app.getHttpServer())
-        .post('/assets/presigned-upload-metadata/')
+        .post('/asset/presigned-upload-metadata/')
         .send(buildPresignedEndpointMock())
         .set('Cookie', cookies)
         .expect(401);

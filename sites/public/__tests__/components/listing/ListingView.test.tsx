@@ -7,12 +7,14 @@ import { ApplicationMethodsTypeEnum } from "@bloom-housing/shared-helpers/src/ty
 
 describe("<ListingView>", () => {
   describe("'Apply Online' button visibility", () => {
+    const jurisditionWithPublicUrl = { ...jurisdiction, publicUrl: "www.example.com" }
     it("does not show if the due date is in the past", () => {
       const pastDate = dayjs().subtract(7, "day").toDate()
       const view = render(
         <ListingView
           listing={{
             ...listing,
+            jurisdictions: jurisditionWithPublicUrl,
             applicationDueDate: pastDate,
           }}
           jurisdiction={jurisdiction}
@@ -29,6 +31,7 @@ describe("<ListingView>", () => {
         <ListingView
           listing={{
             ...listing,
+            jurisdictions: jurisditionWithPublicUrl,
             applicationDueDate: futureDate,
           }}
           jurisdiction={jurisdiction}
@@ -44,6 +47,7 @@ describe("<ListingView>", () => {
         <ListingView
           listing={{
             ...listing,
+            jurisdictions: jurisditionWithPublicUrl,
             applicationDueDate: futureDate,
             applicationMethods: [
               {

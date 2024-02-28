@@ -102,12 +102,12 @@ export function generateSearchQuery(params: ListingSearchParams) {
 
   // Find listings that have units with greater than or equal number of bedrooms
   if (params.bedrooms != null) {
-    qb.whereGreaterThanEqual("numBedrooms", params.bedrooms)
+    qb.whereGreaterThanEqual("bedrooms", params.bedrooms)
   }
 
   // Find listings that have units with greater than or equal number of bathrooms
   if (params.bathrooms != null) {
-    qb.whereGreaterThanEqual("numBathrooms", params.bathrooms)
+    qb.whereGreaterThanEqual("bathrooms", params.bathrooms)
   }
 
   if (params.minRent && params.minRent != "") {

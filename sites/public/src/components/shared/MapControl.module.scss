@@ -1,4 +1,3 @@
-
 .map-control {
   --control-border-color: var(--bloom-color-primary);
   --control-border-radius: var(--bloom-rounded-full);
@@ -18,14 +17,14 @@
   }
 
   .in-style {
-    border-width: var(--control-border-width) var(--control-border-width) calc(var(--control-border-width) / 2)
-      var(--control-border-width);
+    border-width: var(--control-border-width) var(--control-border-width)
+      calc(var(--control-border-width) / 2) var(--control-border-width);
     border-radius: var(--control-border-radius) var(--control-border-radius) 0 0;
   }
 
   .out-style {
-    border-width: calc(var(--control-border-width) / 2) var(--control-border-width) var(--control-border-width)
-      var(--control-border-width);
+    border-width: calc(var(--control-border-width) / 2) var(--control-border-width)
+      var(--control-border-width) var(--control-border-width);
     border-radius: 0px 0px var(--control-border-radius) var(--control-border-radius);
   }
 }

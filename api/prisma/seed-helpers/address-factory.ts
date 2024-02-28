@@ -14,7 +14,7 @@ export const addressFactory =
 export const whiteHouse = {
   placeName: 'White House',
   city: 'Washington',
-  county: null,
+  county: 'Santa Clara',
   state: 'DC',
   street: '1600 Pennsylvania Avenue',
   street2: null,
@@ -26,7 +26,7 @@ export const whiteHouse = {
 export const yellowstone = {
   placeName: 'Yellowstone National Park',
   city: 'Yellowstone National Park',
-  county: null,
+  county: 'Marin',
   state: 'WY',
   street: '3200 Old Faithful Inn Rd',
   street2: null,
@@ -38,7 +38,7 @@ export const yellowstone = {
 export const goldenGateBridge = {
   placeName: 'Golden Gate Bridge',
   city: 'San Francisco',
-  county: null,
+  county: 'Santa Clara',
   state: 'CA',
   street: 'Golden Gate Brg',
   street2: null,
@@ -50,7 +50,7 @@ export const goldenGateBridge = {
 export const washingtonMonument = {
   placeName: 'Washington Monument',
   city: 'Washington',
-  county: null,
+  county: 'Contra Costa',
   state: 'DC',
   street: '2 15th St NW',
   street2: null,
@@ -62,7 +62,7 @@ export const washingtonMonument = {
 export const lincolnMemorial = {
   placeName: 'Lincoln Memorial',
   city: 'Washington',
-  county: null,
+  county: 'Sonoma',
   state: 'DC',
   street: '2 Lincoln Memorial Cir NW',
   street2: null,

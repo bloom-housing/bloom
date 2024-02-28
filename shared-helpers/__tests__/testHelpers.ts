@@ -166,9 +166,6 @@ export const listing: Listing = {
   jurisdictions: {
     id: "id",
     name: "San Jose",
-    publicUrl: "",
-    enableAccessibilityFeatures: false,
-    enableUtilitiesIncluded: false,
   },
   depositMax: "",
   disableUnitsAccordion: false,

@@ -2096,6 +2096,7 @@ describe('Testing listing service', () => {
       id: 'example id',
       name: 'example name',
     });
+    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue([]);
     prisma.$transaction = jest
       .fn()
       .mockResolvedValue([{ id: 'example id', name: 'example name' }]);
@@ -2223,6 +2224,16 @@ describe('Testing listing service', () => {
     prisma.listings.update = jest.fn().mockResolvedValue({
       id: 'example id',
       name: 'example name',
+    });
+    prisma.assets.create = jest
+      .fn()
+      .mockResolvedValue({ oridinal: 1, id: randomUUID() });
+    prisma.address.create = jest.fn().mockResolvedValue({
+      id: randomUUID(),
+      city: 'Exygy',
+      state: 'CA',
+      zipCode: '94104',
+      street: '548 Market St',
     });
     const updateMock = jest
       .fn()

@@ -1,0 +1,39 @@
+name: Backend Unit
+
+on:
+  pull_request:
+    branches:
+      - main
+env:
+  APP_SECRET: 'SOME-LONG-SECRET-KEY'
+  DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom
+  EMAIL_API_KEY: 'SG.SOME-LONG-SECRET-KEY'
+  TWILIO_ACCOUNT_SID: 'AC.TEST'
+  TWILIO_AUTH_TOKEN: 'TEST'
+  MFA_CODE_VALID: '600000'
+  MFA_CODE_LENGTH: 5
+  AUTH_LOCK_LOGIN_COOLDOWN: '1800000'
+  AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS: '5'
+  TWILIO_PHONE_NUMBER: '123456789'
+
+jobs:
+  backend-unit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18
+
+      - name: yarn in api
+        working-directory: ./api
+        run: yarn
+
+      # Tests
+      - name: yarn unit test api
+        working-directory: ./api
+        run: yarn test

@@ -451,7 +451,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
   describe('Testing asset endpoints', () => {
     it('should succeed for presigned endpoint', async () => {
       await request(app.getHttpServer())
-        .post('/assets/presigned-upload-metadata/')
+        .post('/asset/presigned-upload-metadata/')
         .send(buildPresignedEndpointMock())
         .set('Cookie', cookies)
         .expect(201);
@@ -907,7 +907,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
 
     it('should succeed for delete endpoint & create an activity log entry', async () => {
       const userA = await prisma.userAccounts.create({
-        data: await userFactory(),
+        data: await userFactory({ roles: { isPartner: true } }),
       });
 
       await request(app.getHttpServer())

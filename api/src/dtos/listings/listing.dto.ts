@@ -549,6 +549,11 @@ class Listing extends AbstractDTO {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => User)
   requestedChangesUser?: User;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  isExternal?: boolean;
 }
 
 export { Listing as default, Listing };

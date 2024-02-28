@@ -16,8 +16,7 @@ const translations = (jurisdictionName?: string) => ({
     footer: `${jurisdictionName || 'Bloom Housing'}`,
   },
   header: {
-    logoUrl:
-      'https://res.cloudinary.com/exygy/image/upload/v1692118607/core/bloom_housing_logo.png',
+    logoUrl: 'https://housingbayarea.mtc.ca.gov/images/doorway-logo.png',
     logoTitle: 'Bloom Housing Portal',
   },
   invite: {

@@ -48,7 +48,7 @@ const DetailBuildingDetails = () => {
           </Grid.Row>
           <Grid.Row columns={3}>
             <FieldValue id="buildingAddress.county" label={t("application.contact.county")}>
-              {t(`counties.${listing.buildingAddress.county}`)}
+              {t(`counties.${listing.listingsBuildingAddress.county}`)}
             </FieldValue>
             <FieldValue id="longitude" label={t("listings.longitude")}>
               {listing.listingsBuildingAddress?.longitude &&

@@ -1,7 +1,13 @@
 import { BaseFilter } from '../shared/base-filter.dto';
-import { Expose } from 'class-transformer';
+import { Expose, Transform, TransformFnParams } from 'class-transformer';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsNumberString, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsEnum,
+  IsNumberString,
+  IsString,
+} from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { ListingFilterKeys } from '../../enums/listings/filter-key-enum';
 import { ListingsStatusEnum } from '@prisma/client';
@@ -39,6 +45,13 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiPropertyOptional({
+    example: '3',
+  })
+  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.bathrooms]?: number;
+
+  @Expose()
+  @ApiPropertyOptional({
     example: '48211',
   })
   [ListingFilterKeys.zipcode]?: string;
@@ -56,4 +69,46 @@ export class ListingFilterParams extends BaseFilter {
   })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   [ListingFilterKeys.jurisdiction]?: string;
+
+  @Expose()
+  @ApiPropertyOptional({
+    type: Boolean,
+    example: false,
+  })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @Transform((params: TransformFnParams) => {
+    switch (params.value) {
+      case 'true':
+        return true;
+      case 'false':
+        return false;
+      default:
+        return undefined;
+    }
+  })
+  [ListingFilterKeys.isExternal]?: boolean;
+
+  @Expose()
+  @ApiPropertyOptional({
+    type: String,
+    example: 'San Jose',
+  })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.city]?: string;
+
+  @Expose()
+  @ApiPropertyOptional({
+    type: Number,
+    example: '1000',
+  })
+  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.monthlyRent]?: number;
+
+  @Expose()
+  @ApiPropertyOptional({
+    type: Array,
+    example: ['Santa Clara'],
+  })
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.counties]?: string[];
 }

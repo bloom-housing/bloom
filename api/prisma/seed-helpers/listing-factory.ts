@@ -25,6 +25,7 @@ export const listingFactory = async (
     applications?: Prisma.ApplicationsCreateInput[];
     applicationDueDate?: Date;
     afsLastRunSetInPast?: boolean;
+    reservedCommunityType?: string;
   },
 ): Promise<Prisma.ListingsCreateInput> => {
   const previousListing = optionalParams?.listing || {};
@@ -38,6 +39,7 @@ export const listingFactory = async (
   const reservedCommunityType = await reservedCommunityTypeFactoryGet(
     prismaClient,
     jurisdictionId,
+    optionalParams?.reservedCommunityType,
   );
   return {
     createdAt: new Date(),

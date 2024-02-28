@@ -1,14 +1,14 @@
-import {
-  CombinedListingFilterParams,
-  EnumListingFilterParamsStatus,
-  Listing,
-  OrderByFieldsEnum,
-  OrderParam,
-  PaginatedListing,
-} from "@bloom-housing/backend-core"
 import axios from "axios"
 import qs from "qs"
 import { ListingQueryBuilder } from "./listing-query-builder"
+import {
+  Listing,
+  ListingFilterParams,
+  ListingOrderByKeys,
+  ListingsStatusEnum,
+  OrderByEnum,
+  PaginatedListing,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 /**
  * Consolidates listing API calls into a single class
@@ -77,9 +77,9 @@ export class ListingService {
       view: string
       limit: string
       page: number
-      filter: CombinedListingFilterParams[]
-      orderBy?: OrderByFieldsEnum[]
-      orderDir?: OrderParam[]
+      filter: ListingFilterParams[]
+      orderBy?: ListingOrderByKeys[]
+      orderDir?: OrderByEnum[]
     } = {
       view: "base",
       limit: limit,
@@ -118,9 +118,9 @@ export class ListingService {
   async fetchOpenListings(): Promise<Array<Listing>> {
     const qb = new ListingQueryBuilder()
 
-    qb.whereEqual("status", EnumListingFilterParamsStatus.active).addOrderBy(
-      OrderByFieldsEnum.mostRecentlyPublished,
-      OrderParam.DESC
+    qb.whereEqual("status", ListingsStatusEnum.active).addOrderBy(
+      ListingOrderByKeys.mostRecentlyPublished,
+      OrderByEnum.desc
     )
 
     // We just want the listings, not the extra stuff

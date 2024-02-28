@@ -83,7 +83,7 @@ describe("LotteryResults", () => {
     const lotteryResultEvent: ListingEvent = {
       type: ListingEventsTypeEnum.lotteryResults,
       id: "lotteryId",
-      file: {
+      assets: {
         id: "id",
         createdAt: new Date(),
         updatedAt: new Date(),

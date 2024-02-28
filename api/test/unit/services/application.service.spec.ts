@@ -1304,6 +1304,9 @@ describe('Testing application service', () => {
       listingId: randomUUID(),
     });
 
+    prisma.householdMember.deleteMany = jest.fn().mockResolvedValue(null);
+    prisma.listings.findFirst = jest.fn().mockResolvedValue(null);
+
     const exampleAddress = addressFactory() as AddressCreate;
     const submissionDate = new Date();
 

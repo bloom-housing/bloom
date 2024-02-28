@@ -1,3 +1,4 @@
+FROM --platform=linux/amd64 node:16.3.0
 
 # The source stage will contain only the necessary source code
 FROM node:18.14-alpine AS source
@@ -5,19 +6,8 @@ FROM node:18.14-alpine AS source
 # WORKDIR doesn't need to be fancy, but it needs to be consistent
 WORKDIR /app
 
-# Putting this first enables us to change code files without having to rerun the
-# next step to install dependencies. Dependencies only get reinstalled if one of
-# these files changes.
-COPY --chown=node:node *.json yarn*.lock *config.js ./
-
 # Bring in backend code
-COPY --chown=node:node backend/core ./backend/core
-
-# This is only needed for a single import in a single unit test
-COPY --chown=node:node shared-helpers ./shared-helpers
-
-# And this has to be brought in as a depency for shared-helpers
-COPY --chown=node:node doorway-ui-components ./doorway-ui-components
+COPY --chown=node:node api ./api
 
 
 #####################
@@ -27,12 +17,13 @@ COPY --chown=node:node doorway-ui-components ./doorway-ui-components
 # The deps stage installs full dependencies
 FROM source AS deps
 
-# Go deep into backend/core due to shared-helpers dependency
-WORKDIR /app/backend/core
+# Go deep into api due to shared-helpers dependency
+WORKDIR /app/api
 
 # Install dependencies
 RUN yarn install --frozen-lockfile
 
+RUN yarn prisma generate
 
 #####################
 ##### NEW STAGE #####
@@ -42,7 +33,7 @@ RUN yarn install --frozen-lockfile
 FROM deps AS test
 
 # Go deep into backend/core due to shared-helpers dependency
-WORKDIR /app/backend/core
+WORKDIR /app/api
 
 # When running this image, make sure to use the built-in node user
 USER node
@@ -64,8 +55,8 @@ WORKDIR /app
 # We have to copy over all of the files due to the way dependencies are scattered across directories
 COPY --from=deps --chown=node:node /app .
 
-# Go into backend/core to build
-WORKDIR /app/backend/core
+# Go into api to build
+WORKDIR /app/api
 
 # Build the app
 RUN yarn build
@@ -83,8 +74,9 @@ WORKDIR /app
 
 # Pull in package files again
 COPY --from=source --chown=node:node \
-    /app/backend/core/package*.json \
-    /app/backend/core/tsconfig*.json ./
+    /app/api/package*.json \
+    /app/api/tsconfig*.json \
+    /app/api/prisma ./
 
 # Set the NODE_ENV variable
 # Setting it to production can enable optimizations in code
@@ -93,6 +85,7 @@ ENV NODE_ENV=${NODE_ENV}
 
 # Reinstall only dependencies required to run the application
 RUN yarn install --frozen-lockfile --only=production
+RUN yarn prisma generate
 
 
 #####################
@@ -107,20 +100,24 @@ WORKDIR /app
 
 # Pull in package files again
 COPY --from=source --chown=node:node \
-    /app/backend/core/package*.json \
-    /app/backend/core/tsconfig*.json \
-    /app/backend/core/ormconfig.* ./
+    /app/api/package*.json \
+    /app/api/tsconfig*.json ./
 
 # Add only dependencies required to run the application
 COPY --from=optimize --chown=node:node /app/node_modules ./node_modules
+RUN yarn prisma generate
 
 # Add the compiled code from the build image
-COPY --from=build --chown=node:node /app/backend/core/dist ./dist
+COPY --from=build --chown=node:node /app/api/dist ./dist
+RUN mkdir ./src
+RUN mkdir ./src/temp
 
 # When running this image, make sure to use the built-in node user
 USER node
 
-CMD yarn start
+RUN yarn prisma generate
+
+CMD yarn start:prod
 
 #####################
 ##### NEW STAGE #####
@@ -139,11 +136,10 @@ RUN apk update
 RUN apk add postgresql
 
 # Add src and types so migrations can run
-COPY --from=source --chown=node:node /app/backend/core/index.ts ./
-COPY --from=source --chown=node:node /app/backend/core/src ./src
-COPY --from=source --chown=node:node /app/backend/core/types ./types
-COPY --from=source --chown=node:node /app/backend/core/ormDataSource.ts ./ormDataSource.ts
-COPY --from=source --chown=node:node /app/backend/core/scripts ./scripts
+COPY --from=source --chown=node:node /app/api/index.ts ./
+COPY --from=source --chown=node:node /app/api/src ./src
+COPY --from=source --chown=node:node /app/api/prisma ./prisma
+COPY --from=source --chown=node:node /app/api/scripts ./scripts
 
 ## This CMD should be run as the node user
 USER node

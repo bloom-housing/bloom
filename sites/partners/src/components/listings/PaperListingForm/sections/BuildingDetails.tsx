@@ -308,17 +308,17 @@ const BuildingDetails = ({
               // error={fieldHasError(errors?.buildingAddress?.county)}
             >
               <Select
-                id={`buildingAddress.county`}
-                name={`buildingAddress.county`}
+                id={`listingsBuildingAddress.county`}
+                name={`listingsBuildingAddress.county`}
                 error={
                   !!getAddressErrorMessage(
-                    "buildingAddress.county",
-                    fieldMessage(errors?.buildingAddress?.county)
+                    "listingsBuildingAddress.county",
+                    fieldMessage(errors?.listingsBuildingAddress?.county)
                   )
                 }
                 errorMessage={getAddressErrorMessage(
-                  "buildingAddress.county",
-                  fieldMessage(errors?.buildingAddress?.county)
+                  "listingsBuildingAddress.county",
+                  fieldMessage(errors?.listingsBuildingAddress?.county)
                 )}
                 label={t("application.contact.county")}
                 labelClassName="sr-only"
@@ -328,8 +328,8 @@ const BuildingDetails = ({
                 keyPrefix="counties"
                 inputProps={{
                   onChange: () =>
-                    fieldHasError(errors?.buildingAddress?.county) &&
-                    clearErrors("buildingAddress"),
+                    fieldHasError(errors?.listingsBuildingAddress?.county) &&
+                    clearErrors("listingsBuildingAddress"),
                 }}
               />
             </FieldValue>

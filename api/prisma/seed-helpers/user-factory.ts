@@ -22,14 +22,16 @@ export const userFactory = async (optionalParams?: {
   firstName: optionalParams?.firstName || 'First',
   lastName: optionalParams?.lastName || 'Last',
   passwordHash: await passwordToHash('abcdef'),
-  userRoles: {
-    create: {
-      isAdmin: optionalParams?.roles?.isAdmin || false,
-      isJurisdictionalAdmin:
-        optionalParams?.roles?.isJurisdictionalAdmin || false,
-      isPartner: optionalParams?.roles?.isPartner || false,
-    },
-  },
+  userRoles: optionalParams?.roles
+    ? {
+        create: {
+          isAdmin: optionalParams?.roles?.isAdmin || false,
+          isJurisdictionalAdmin:
+            optionalParams?.roles?.isJurisdictionalAdmin || false,
+          isPartner: optionalParams?.roles?.isPartner || false,
+        },
+      }
+    : undefined,
   mfaCode: optionalParams?.mfaCode || null,
   mfaEnabled: optionalParams?.mfaEnabled || false,
   confirmedAt: optionalParams?.confirmedAt || null,

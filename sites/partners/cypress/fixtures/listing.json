@@ -9,6 +9,7 @@
   "buildingAddress.state": "California",
   "buildingAddress.zipCode": "94583",
   "yearBuilt": "2021",
+  "reservedCommunityType.value": 2,
   "reservedCommunityType.id": "Seniors",
   "reservedCommunityDescription": "Basic Test Description",
   "number": "2",

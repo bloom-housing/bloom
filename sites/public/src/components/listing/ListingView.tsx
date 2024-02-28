@@ -71,8 +71,15 @@ const nextConfig = getConfig()
 const publicRuntimeConfig = nextConfig?.publicRuntimeConfig
 const cloudinaryCloudName = publicRuntimeConfig?.cloudinaryCloudName
 
+export type ListingViewListing = Listing & {
+  jurisdictions: {
+    id: string
+    name: string
+    publicUrl?: string
+  }
+}
 interface ListingProps {
-  listing: Listing
+  listing: ListingViewListing
   preview?: boolean
   jurisdiction?: Jurisdiction
   googleMapsApiKey: string
@@ -83,10 +90,8 @@ export const ListingView = (props: ListingProps) => {
   const { initialStateLoaded, profile } = useContext(AuthContext)
   let buildingSelectionCriteria, preferencesSection
   const { listing } = props
-  const {
-    content: appStatusContent,
-    subContent: appStatusSubContent,
-  } = useGetApplicationStatusProps(listing)
+  const { content: appStatusContent, subContent: appStatusSubContent } =
+    useGetApplicationStatusProps(listing)
 
   const appOpenInFuture = openInFuture(listing)
   const hasNonReferralMethods = listing?.applicationMethods

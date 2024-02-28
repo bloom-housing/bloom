@@ -58,8 +58,8 @@ jobs:
       - name: yarn in root dir
         run: yarn
 
-      - name: yarn in backend/core dir
-        working-directory: ./backend/core
+      - name: yarn in api dir
+        working-directory: ./api
         run: yarn
 
       - name: Check postgres
@@ -72,7 +72,7 @@ jobs:
           PGPASSWORD: bloom
 
       - name: Setup backend
-        run: yarn test:backend:core:dbsetup
+        run: yarn test:backend:new:dbsetup:withseed
         env:
           PGHOST: 127.0.0.1
           PGPASSWORD: bloom
@@ -96,7 +96,7 @@ jobs:
           working-directory: ./sites/partners
           spec: cypress/e2e/listings-approval/*.spec.ts
           build: yarn build
-          start: yarn dev:listings, yarn start
+          start: yarn dev:new-backend, yarn start
           wait-on: 'http://localhost:3100/listings'
           record: false # set this value to true to record videos in cypress cloud for debugging purposes - skip passing tests
         env:

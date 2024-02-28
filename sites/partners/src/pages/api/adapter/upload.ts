@@ -48,7 +48,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // }
 
     // Hardcode the backend endpoint since there's only one
-    const backendUrl = "/assets/upload"
+    const backendUrl = "/asset/upload"
 
     // Since the body wasn't parsed, we have to copy the raw value from the request
     // Create an array to hold the chunks

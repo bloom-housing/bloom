@@ -222,6 +222,47 @@ export class ListingsService {
     })
   }
   /**
+   * List all local and external listings
+   */
+  listCombined(
+    params: {
+      /**  */
+      page?: number
+      /**  */
+      limit?: number | "all"
+      /**  */
+      filter?: ListingFilterParams[]
+      /**  */
+      view?: ListingViews
+      /**  */
+      orderBy?: ListingOrderByKeys
+      /**  */
+      orderDir?: OrderByEnum
+      /**  */
+      search?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/combined"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        filter: params["filter"],
+        view: params["view"],
+        orderBy: params["orderBy"],
+        orderDir: params["orderDir"],
+        search: params["search"],
+      }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Get listings and units as zip
    */
   listAsCsv(
@@ -1482,7 +1523,68 @@ export class ApplicationsService {
   }
 }
 
-export class AssetsService {
+export class AssetService {
+  /**
+   * Create asset
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: AssetCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/asset"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * List assets
+   */
+  list(
+    params: {
+      /**  */
+      page?: number
+      /**  */
+      limit?: number
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/asset"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { page: params["page"], limit: params["limit"] }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Upload asset
+   */
+  upload(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/asset/upload"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
   /**
    * Create presigned upload metadata
    */
@@ -1492,15 +1594,36 @@ export class AssetsService {
       body?: CreatePresignedUploadMetadata
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<CreatePresignedUploadMetadataResponse> {
+  ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/assets/presigned-upload-metadata"
+      let url = basePath + "/asset/presigned-upload-metadata"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
       let data = params.body
 
       configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get asset by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      assetId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/asset/{assetId}"
+      url = url.replace("{assetId}", params["assetId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -1958,6 +2081,9 @@ export interface ListingFilterParams {
   bedrooms?: number
 
   /**  */
+  bathrooms?: number
+
+  /**  */
   zipcode?: string
 
   /**  */
@@ -1965,6 +2091,18 @@ export interface ListingFilterParams {
 
   /**  */
   jurisdiction?: string
+
+  /**  */
+  isExternal?: boolean
+
+  /**  */
+  city?: string
+
+  /**  */
+  monthlyRent?: number
+
+  /**  */
+  counties?: string[]
 }
 
 export interface ListingsRetrieveParams {
@@ -2650,6 +2788,9 @@ export interface Jurisdiction {
   enablePartnerSettings?: boolean
 
   /**  */
+  enableListingOpportunity?: boolean
+
+  /**  */
   enableGeocodingPreferences?: boolean
 
   /**  */
@@ -3012,6 +3153,9 @@ export interface Listing {
 
   /**  */
   requestedChangesUser?: User
+
+  /**  */
+  isExternal?: boolean
 }
 
 export interface PaginationMeta {
@@ -3449,6 +3593,9 @@ export interface ListingCreate {
   requestedChangesDate?: Date
 
   /**  */
+  isExternal?: boolean
+
+  /**  */
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
@@ -3697,6 +3844,9 @@ export interface ListingUpdate {
   requestedChangesDate?: Date
 
   /**  */
+  isExternal?: boolean
+
+  /**  */
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
@@ -3792,6 +3942,9 @@ export interface Demographic {
 
   /**  */
   race: string[]
+
+  /**  */
+  spokenLanguage?: string
 }
 
 export interface Applicant {
@@ -4001,7 +4154,7 @@ export interface Application {
   householdStudent?: boolean
 
   /**  */
-  incomeVouchers?: boolean
+  incomeVouchers?: string[]
 
   /**  */
   income?: string
@@ -4309,6 +4462,9 @@ export interface JurisdictionCreate {
   enablePartnerSettings?: boolean
 
   /**  */
+  enableListingOpportunity?: boolean
+
+  /**  */
   enableGeocodingPreferences?: boolean
 
   /**  */
@@ -4348,6 +4504,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   enablePartnerSettings?: boolean
+
+  /**  */
+  enableListingOpportunity?: boolean
 
   /**  */
   enableGeocodingPreferences?: boolean
@@ -4582,6 +4741,9 @@ export interface DemographicUpdate {
 
   /**  */
   race: string[]
+
+  /**  */
+  spokenLanguage?: string
 }
 
 export interface HouseholdMemberUpdate {
@@ -4657,7 +4819,7 @@ export interface ApplicationCreate {
   householdStudent?: boolean
 
   /**  */
-  incomeVouchers?: boolean
+  incomeVouchers?: string[]
 
   /**  */
   income?: string
@@ -4752,7 +4914,7 @@ export interface ApplicationUpdate {
   householdStudent?: boolean
 
   /**  */
-  incomeVouchers?: boolean
+  incomeVouchers?: string[]
 
   /**  */
   income?: string
@@ -4815,11 +4977,6 @@ export interface ApplicationUpdate {
 export interface CreatePresignedUploadMetadata {
   /**  */
   parametersToSign: object
-}
-
-export interface CreatePresignedUploadMetadataResponse {
-  /**  */
-  signature: string
 }
 
 export interface EmailAndAppUrl {

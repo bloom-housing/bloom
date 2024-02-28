@@ -1,3 +1,10 @@
+// dotenv is a dev dependency, so conditionally import it (don't need it in Prod).
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  require('dotenv').config();
+} catch {
+  // Pass
+}
 import { NestFactory, HttpAdapterHost } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
@@ -6,6 +13,7 @@ import compression from 'compression';
 import { AppModule } from './modules/app.module';
 import { CustomExceptionFilter } from './utilities/custom-exception-filter';
 import { json } from 'express';
+import { logger } from './middleware/logger.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -31,6 +39,7 @@ async function bootstrap() {
     };
 
     if (
+      process.env.DISABLE_CORS === 'TRUE' ||
       allowList.indexOf(req.header('Origin')) !== -1 ||
       regexAllowList.some((regex) => regex.test(req.header('Origin')))
     ) {
@@ -38,6 +47,7 @@ async function bootstrap() {
     }
     cb(null, options);
   });
+  app.use(logger);
   app.use(
     cookieParser(),
     compression({

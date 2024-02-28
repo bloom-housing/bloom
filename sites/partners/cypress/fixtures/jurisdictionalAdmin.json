@@ -1,6 +1,6 @@
 {
-  "email": "bayarea-admin@example.com",
-  "emailConfirmation": "bayarea-admin@example.com",
+  "email": "jurisdiction-admin@example.com",
+  "emailConfirmation": "jurisdiction-admin@example.com",
   "firstName": "Bay Area",
   "middleName": "Admin",
   "lastName": "MFA",

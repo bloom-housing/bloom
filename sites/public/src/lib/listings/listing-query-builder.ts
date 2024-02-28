@@ -1,18 +1,18 @@
 import {
-  CombinedListingFilterParams,
-  EnumCombinedListingFilterParamsComparison,
-  OrderByFieldsEnum,
-  OrderParam,
-} from "@bloom-housing/backend-core"
+  EnumListingFilterParamsComparison,
+  ListingFilterParams,
+  ListingOrderByKeys,
+  OrderByEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type OrderBy = {
-  field: OrderByFieldsEnum
-  direction: OrderParam
+  field: ListingOrderByKeys
+  direction: OrderByEnum
 }
 
 type OrderByParams = {
-  fields: OrderByFieldsEnum[]
-  direction: OrderParam[]
+  fields: ListingOrderByKeys[]
+  direction: OrderByEnum[]
 }
 
 export class ListingQueryBuilder {
@@ -21,7 +21,7 @@ export class ListingQueryBuilder {
 
   addFilter(
     field: string,
-    comparison: EnumCombinedListingFilterParamsComparison,
+    comparison: EnumListingFilterParamsComparison,
     value: string | string[]
   ) {
     this.filters.push(new Filter(field, comparison, value))
@@ -33,26 +33,26 @@ export class ListingQueryBuilder {
   // external listings are no longer required.
 
   whereEqual(field: string, value: string) {
-    return this.addFilter(field, EnumCombinedListingFilterParamsComparison["="], value)
+    return this.addFilter(field, EnumListingFilterParamsComparison["="], value)
   }
 
   whereNotEqual(field: string, value: string) {
-    return this.addFilter(field, EnumCombinedListingFilterParamsComparison["<>"], value)
+    return this.addFilter(field, EnumListingFilterParamsComparison["<>"], value)
   }
 
   whereIn(field: string, value: string[]) {
-    return this.addFilter(field, EnumCombinedListingFilterParamsComparison["IN"], value)
+    return this.addFilter(field, EnumListingFilterParamsComparison["IN"], value)
   }
 
   whereGreaterThanEqual(field: string, value: string) {
-    return this.addFilter(field, EnumCombinedListingFilterParamsComparison[">="], value)
+    return this.addFilter(field, EnumListingFilterParamsComparison[">="], value)
   }
 
   whereLessThanEqual(field: string, value: string) {
-    return this.addFilter(field, EnumCombinedListingFilterParamsComparison["<="], value)
+    return this.addFilter(field, EnumListingFilterParamsComparison["<="], value)
   }
 
-  addOrderBy(field: OrderByFieldsEnum, direction: OrderParam) {
+  addOrderBy(field: ListingOrderByKeys, direction: OrderByEnum) {
     this.orderBy.push({
       field: field,
       direction: direction,
@@ -60,7 +60,7 @@ export class ListingQueryBuilder {
     return this
   }
 
-  getFilterParams(): CombinedListingFilterParams[] {
+  getFilterParams(): ListingFilterParams[] {
     return this.filters.map((filter) => {
       return filter.toFilterParams()
     })
@@ -87,12 +87,12 @@ export class ListingQueryBuilder {
 
 class Filter {
   field: string
-  comparison: EnumCombinedListingFilterParamsComparison
+  comparison: EnumListingFilterParamsComparison
   value: string | string[]
 
   constructor(
     field: string,
-    comparison: EnumCombinedListingFilterParamsComparison,
+    comparison: EnumListingFilterParamsComparison,
     value: string[] | string
   ) {
     this.field = field
@@ -100,7 +100,7 @@ class Filter {
     this.value = value
   }
 
-  toFilterParams(): CombinedListingFilterParams {
+  toFilterParams(): ListingFilterParams {
     // Set the comparison type
     const value = {
       $comparison: this.comparison,

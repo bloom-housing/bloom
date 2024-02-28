@@ -15,6 +15,7 @@ import { Button } from "@bloom-housing/ui-seeds"
 import { useForm } from "react-hook-form"
 import { downloadExternalPDF } from "../../lib/helpers"
 import { isExternalLink } from "@bloom-housing/ui-seeds/src/global/NavigationContext"
+import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export interface PaperApplication {
   fileURL: string
@@ -63,7 +64,7 @@ const GetApplication = (props: ApplicationsProps) => {
   const showSection =
     props.onlineApplicationURL ||
     (props.applicationsOpen && props.paperMethod && !!props.paperApplications?.length)
-  const disableApplyButton = !props.preview && props.listingStatus !== ListingStatus.active
+  const disableApplyButton = !props.preview && props.listingStatus !== ListingsStatusEnum.active
   const [showDownloadModal, setShowDownloadModal] = useState(false)
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()

@@ -18,7 +18,7 @@ describe("Listing Management Tests", () => {
     cy.getByID("name-error").contains("This field is required")
     cy.getByID("jurisdictions.id-error").contains("This field is required")
     // Fill out minimum fields and errors get removed
-    cy.getByID("jurisdictions.id").select("Bloomington")
+    cy.getByID("jurisdictions.id").select("Bay Area")
     cy.getByID("jurisdictions.id-error").should("have.length", 0)
     cy.getByID("name").type("Test - error messaging")
     cy.getByID("name-error").should("to.be.empty")
@@ -48,15 +48,13 @@ describe("Listing Management Tests", () => {
     cy.getByID("leasingAgentPhone-error").contains("This field is required")
     cy.getByID("digitalApplicationChoice-error").contains("This field is required")
     cy.getByID("paperApplicationChoice-error").contains("This field is required")
-    cy.getByID("referralOpportunityChoice-error").contains("This field is required")
   })
 
   it("full listing publish", () => {
     cy.intercept("POST", "/api/adapter/upload", {
       body: {
         id: "123",
-        url:
-          "https://assets.website-files.com/5fbfdd121e108ea418ede824/5fbfdea9a7287d45a63d821b_Exygy%20Logo.svg",
+        url: "https://assets.website-files.com/5fbfdd121e108ea418ede824/5fbfdea9a7287d45a63d821b_Exygy%20Logo.svg",
       },
     })
     cy.visit("/")
@@ -109,8 +107,7 @@ describe("Listing Management Tests", () => {
     cy.intercept("/api/adapter/upload", {
       body: {
         id: "123",
-        url:
-          "https://assets.website-files.com/5fbfdd121e108ea418ede824/5fd24fe68d7d2422b6297ed4_Frame%2085.svg",
+        url: "https://assets.website-files.com/5fbfdd121e108ea418ede824/5fd24fe68d7d2422b6297ed4_Frame%2085.svg",
       },
     })
     cy.getByTestId("drawer-photos-table")
@@ -142,7 +139,7 @@ describe("Listing Management Tests", () => {
     cy.getByID("listingsBuildingAddress.zipCode").type(listing["buildingAddress.zipCode"])
     cy.getByID("yearBuilt").type(listing["yearBuilt"])
     cy.get(".addressPopup").contains(listing["buildingAddress.street"])
-    cy.getByID("reservedCommunityTypes.id").select(listing["reservedCommunityType.id"])
+    cy.getByID("reservedCommunityTypes.id").select(listing["reservedCommunityType.value"])
     cy.getByID("reservedCommunityDescription").type(listing["reservedCommunityDescription"])
     cy.getByTestId("unit-types").check()
     cy.getByTestId("listingAvailability.availableUnits").check()

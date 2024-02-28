@@ -51,7 +51,7 @@ describe('Asset Controller Tests', () => {
     const eager = 'eager';
 
     const res = await request(app.getHttpServer())
-      .post('/assets/presigned-upload-metadata/')
+      .post('/asset/presigned-upload-metadata/')
       .send({ parametersToSign: { publicId, eager } })
       .set('Cookie', cookies)
       .expect(201);

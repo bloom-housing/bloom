@@ -47,6 +47,7 @@ import { IdDTO } from '../dtos/shared/id.dto';
 import { startCronJob } from '../utilities/cron-job-starter';
 import { PermissionService } from './permission.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import Unit from '../dtos/units/unit.dto';
 
 export type getListingsArgs = {
   skip: number;
@@ -225,6 +226,122 @@ export class ListingService implements OnModuleInit {
 
     return {
       items: listings,
+      meta: paginationInfo,
+    };
+  }
+
+  async listCombined(params: ListingsQueryParams): Promise<{
+    items: Listing[];
+    meta: {
+      currentPage: number;
+      itemCount: number;
+      itemsPerPage: number;
+      totalItems: number;
+      totalPages: number;
+    };
+  }> {
+    const onlyLettersPattern = /^[A-Za-z ]+$/;
+    const whereClauseArray = [];
+    if (params?.filter?.length) {
+      params.filter.forEach((filter) => {
+        if (filter[ListingFilterKeys.counties]) {
+          const countyArray = [];
+          // check to remove potential malicous strings such as sql injection by only allowing letters and spaces
+          filter[ListingFilterKeys.counties].forEach((county) => {
+            if (county.match(onlyLettersPattern)) {
+              countyArray.push(`'${county}'`);
+            }
+          });
+          whereClauseArray.push(
+            `(combined.listings_building_address->>'county') in (${countyArray})`,
+          );
+        }
+        if (filter[ListingFilterKeys.bedrooms]) {
+          whereClauseArray.push(
+            `(combined_units->>'numBedrooms') =  '${
+              filter[ListingFilterKeys.bedrooms]
+            }'`,
+          );
+        }
+        if (filter[ListingFilterKeys.bathrooms]) {
+          whereClauseArray.push(
+            `(combined_units->>'numBathrooms') =  '${
+              filter[ListingFilterKeys.bathrooms]
+            }'`,
+          );
+        }
+        if (filter[ListingFilterKeys.monthlyRent]) {
+          const comparison = filter['$comparison'];
+          whereClauseArray.push(
+            `(combined_units->>'monthlyRent')::INTEGER ${comparison} '${
+              filter[ListingFilterKeys.monthlyRent]
+            }'`,
+          );
+        }
+      });
+    }
+
+    // Only return active listings
+    whereClauseArray.push("combined.status = 'active'");
+
+    const whereClause = whereClauseArray?.length
+      ? `where ${whereClauseArray.join(' AND ')}`
+      : '';
+    const rawQuery = `select DISTINCT combined.id AS id
+    From combined_listings combined, jsonb_array_elements(combined.units) combined_units
+    ${whereClause}`;
+
+    // The raw unsafe query is not ideal. But for the use case we have it is the only way
+    // to do the constructed query. SQL injections are safeguarded by dto validation to type check
+    // and the ones that are strings are checked to only be appropriate characters above
+    const listingIds: { id: string }[] = await this.prisma.$queryRawUnsafe(
+      rawQuery,
+    );
+
+    const count = listingIds?.length;
+
+    // if passed in page and limit would result in no results because there aren't that many listings
+    // revert back to the first page
+    let page = params.page;
+    if (count && params.limit && params.limit !== 'all' && params.page > 1) {
+      if (Math.ceil(count / params.limit) < params.page) {
+        page = 1;
+      }
+    }
+
+    const listingsRaw = await this.prisma.combinedListings.findMany({
+      skip: calculateSkip(params.limit, page),
+      take: calculateTake(params.limit),
+      where: {
+        id: {
+          in: listingIds.map((listing) => listing.id),
+        },
+      },
+    });
+
+    listingsRaw.forEach((listing) => {
+      if (
+        !listing.unitsSummarized &&
+        Array.isArray(listing.units) &&
+        listing.units.length > 0
+      ) {
+        listing.unitsSummarized = {
+          byUnitTypeAndRent: summarizeUnitsByTypeAndRent(
+            listing.units as unknown as Unit[],
+            listing as unknown as Listing,
+          ),
+        } as unknown as Prisma.JsonObject;
+      }
+    });
+
+    const paginationInfo = buildPaginationMetaInfo(
+      params,
+      count,
+      listingsRaw.length,
+    );
+
+    return {
+      items: listingsRaw as unknown as Listing[],
       meta: paginationInfo,
     };
   }

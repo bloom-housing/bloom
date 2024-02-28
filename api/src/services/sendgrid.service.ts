@@ -13,7 +13,7 @@ export class SendGridService {
     private readonly mailService: MailService,
     private readonly configService: ConfigService,
   ) {
-    this.mailService.setApiKey(configService.get<string>('EMAIL_API_KEY'));
+    this.mailService.setApiKey(this.configService.get<string>('EMAIL_API_KEY'));
   }
 
   public async send(

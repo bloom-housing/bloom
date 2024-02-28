@@ -84,6 +84,25 @@ export class ListingController {
     return await this.listingService.list(queryParams);
   }
 
+  // REMOVE_WHEN_EXTERNAL_NOT_NEEDED
+  @Get('combined')
+  // @ApiExtraModels(CombinedListingFilterParams, CombinedListingsQueryParams)
+  @ApiOperation({
+    summary: 'List all local and external listings',
+    operationId: 'listCombined',
+  })
+  @UseInterceptors(ClassSerializerInterceptor)
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  public async getCombined(
+    @Query() queryParams: ListingsQueryParams,
+  ): Promise<PaginatedListingDto> {
+    mapTo(ListingsQueryParams, queryParams, {
+      excludeExtraneousValues: true,
+    });
+    const list = await this.listingService.listCombined(queryParams);
+    return mapTo(PaginatedListingDto, list);
+  }
+
   @Get(`csv`)
   @ApiOperation({
     summary: 'Get listings and units as zip',

@@ -155,7 +155,7 @@ export const formDefaults: FormListing = {
   // showWaitlist: false,
   reviewOrderType: null,
   unitsSummary: [],
-  isExternal: false,
+  // isExternal: false,
   referralOpportunity: false,
   // unitsSummarized: {
   //   unitTypes: [],

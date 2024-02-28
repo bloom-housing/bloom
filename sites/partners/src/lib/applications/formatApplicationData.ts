@@ -90,8 +90,11 @@ export const mapFormToApi = ({
     const TIME_24H_FORMAT = "MM/DD/YYYY HH:mm:ss"
 
     // rename default (wrong property names)
-    const { day: submissionDay, month: submissionMonth, year: submissionYear } =
-      data.dateSubmitted || {}
+    const {
+      day: submissionDay,
+      month: submissionMonth,
+      year: submissionYear,
+    } = data.dateSubmitted || {}
     const { hours, minutes = 0, seconds = 0, period } = data?.timeSubmitted || {}
 
     if (!submissionDay || !submissionMonth || !submissionYear) return null
@@ -138,7 +141,7 @@ export const mapFormToApi = ({
   })()
 
   const preferencesData = preferences.map((pref: MultiselectQuestion) => {
-    const inputType = getInputType((pref.options as unknown) as MultiselectOption[])
+    const inputType = getInputType(pref.options as unknown as MultiselectOption[])
     if (inputType === "checkbox") {
       return mapCheckboxesToApi(data, pref, MultiselectQuestionsApplicationSectionEnum.preferences)
     }
@@ -151,7 +154,7 @@ export const mapFormToApi = ({
   })
 
   const programsData = programs.map((program: MultiselectQuestion) => {
-    const inputType = getInputType((program.options as unknown) as MultiselectOption[])
+    const inputType = getInputType(program.options as unknown as MultiselectOption[])
     if (inputType === "checkbox") {
       return mapCheckboxesToApi(data, program, MultiselectQuestionsApplicationSectionEnum.programs)
     }
@@ -231,13 +234,11 @@ export const mapFormToApi = ({
     }
   }
 
-  const accessibility: Omit<
-    Accessibility,
-    "id" | "createdAt" | "updatedAt"
-  > = adaFeatureKeys.reduce((acc, feature) => {
-    acc[feature] = data.application.accessibility.includes(feature)
-    return acc
-  }, {})
+  const accessibility: Omit<Accessibility, "id" | "createdAt" | "updatedAt"> =
+    adaFeatureKeys.reduce((acc, feature) => {
+      acc[feature] = data.application.accessibility.includes(feature)
+      return acc
+    }, {})
 
   const result = {
     submissionDate,

@@ -198,6 +198,9 @@ describe('Testing translations service', () => {
     prisma.generatedListingTranslations.findFirst = jest
       .fn()
       .mockResolvedValue(null);
+    prisma.generatedListingTranslations.create = jest
+      .fn()
+      .mockResolvedValue(null);
 
     const result = await service.translateListing(
       mockListing() as Listing,
