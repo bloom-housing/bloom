@@ -648,6 +648,8 @@ describe('Testing auth service', () => {
         passwordHash: expect.anything(),
         passwordUpdatedAt: expect.anything(),
         resetToken: null,
+        confirmedAt: expect.anything(),
+        confirmationToken: null,
       },
       where: {
         id,

@@ -1588,4 +1588,57 @@ describe('Testing application service', () => {
 
     expect(canOrThrowMock).not.toHaveBeenCalled();
   });
+
+  it('should get most recent application for a user', async () => {
+    const date = new Date();
+    const mockedValue = mockApplication(3, date);
+    prisma.applications.findUnique = jest.fn().mockResolvedValue(mockedValue);
+    prisma.applications.findFirst = jest
+      .fn()
+      .mockResolvedValue({ id: mockedValue.id });
+
+    expect(await service.mostRecentlyCreated({ userId: 'example Id' })).toEqual(
+      mockedValue,
+    );
+    expect(prisma.applications.findFirst).toHaveBeenCalledWith({
+      select: {
+        id: true,
+      },
+      orderBy: { createdAt: 'desc' },
+      where: {
+        userId: 'example Id',
+      },
+    });
+    expect(prisma.applications.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: mockedValue.id,
+      },
+      include: {
+        userAccounts: true,
+        applicant: {
+          include: {
+            applicantAddress: true,
+            applicantWorkAddress: true,
+          },
+        },
+        applicationsMailingAddress: true,
+        applicationsAlternateAddress: true,
+        alternateContact: {
+          include: {
+            address: true,
+          },
+        },
+        accessibility: true,
+        demographics: true,
+        householdMember: {
+          include: {
+            householdMemberAddress: true,
+            householdMemberWorkAddress: true,
+          },
+        },
+        listings: true,
+        preferredUnitTypes: true,
+      },
+    });
+  });
 });

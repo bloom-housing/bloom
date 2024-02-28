@@ -1365,6 +1365,27 @@ export class ApplicationsService {
     })
   }
   /**
+   * Get the most recent application submitted by the user
+   */
+  mostRecentlyCreated(
+    params: {
+      /**  */
+      userId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Application> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/mostRecentlyCreated"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { userId: params["userId"] }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Get applications as csv
    */
   listAsCsv(
