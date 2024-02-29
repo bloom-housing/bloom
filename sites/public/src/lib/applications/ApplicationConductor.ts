@@ -187,7 +187,7 @@ export default class ApplicationConductor {
   }
 
   canJumpForwardToReview() {
-    return this.application.completedSections === this.totalNumberOfSections - 1
+    return this.application.reachedReviewStep
   }
 
   sync() {
