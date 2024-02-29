@@ -18,6 +18,7 @@ import { Listing } from '../dtos/listings/listing.dto';
 import { SendGridService } from './sendgrid.service';
 import { ApplicationCreate } from '../dtos/applications/application-create.dto';
 import { User } from '../dtos/users/user.dto';
+import { getPublicEmailURL } from 'src/utilities/get-public-email-url';
 dayjs.extend(utc);
 dayjs.extend(tz);
 dayjs.extend(advanced);
@@ -281,7 +282,7 @@ export class EmailService {
     const jurisdiction = await this.getJurisdiction(jurisdictionIds);
     void (await this.loadTranslations(jurisdiction, user.language));
     const compiledTemplate = this.template('forgot-password');
-    const resetUrl = `${appUrl}/reset-password?token=${resetToken}`;
+    const resetUrl = getPublicEmailURL(appUrl, resetToken, '/reset-password');
     const emailFromAddress = await this.getEmailToSendFrom(
       jurisdictionIds,
       jurisdiction,
