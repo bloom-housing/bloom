@@ -44,7 +44,7 @@ describe('Auth Controller Tests', () => {
     const storedUser = await prisma.userAccounts.create({
       data: await userFactory({
         roles: { isAdmin: true },
-        mfaCode: 'abcdef',
+        singleUseCode: 'abcdef',
         mfaEnabled: true,
         confirmedAt: new Date(),
       }),
@@ -54,7 +54,7 @@ describe('Auth Controller Tests', () => {
       .send({
         email: storedUser.email,
         password: 'abcdef',
-        mfaCode: storedUser.mfaCode,
+        mfaCode: storedUser.singleUseCode,
         mfaType: MfaType.email,
       } as Login)
       .expect(201);
@@ -78,7 +78,7 @@ describe('Auth Controller Tests', () => {
     });
 
     expect(loggedInUser.lastLoginAt).not.toBeNull();
-    expect(loggedInUser.mfaCode).toBeNull();
+    expect(loggedInUser.singleUseCode).toBeNull();
     expect(loggedInUser.activeAccessToken).not.toBeNull();
     expect(loggedInUser.activeRefreshToken).not.toBeNull();
   });
@@ -118,7 +118,7 @@ describe('Auth Controller Tests', () => {
     });
 
     expect(loggedInUser.lastLoginAt).not.toBeNull();
-    expect(loggedInUser.mfaCode).toBeNull();
+    expect(loggedInUser.singleUseCode).toBeNull();
     expect(loggedInUser.activeAccessToken).not.toBeNull();
     expect(loggedInUser.activeRefreshToken).not.toBeNull();
   });
@@ -163,7 +163,7 @@ describe('Auth Controller Tests', () => {
     });
 
     expect(loggedInUser.lastLoginAt).not.toBeNull();
-    expect(loggedInUser.mfaCode).toBeNull();
+    expect(loggedInUser.singleUseCode).toBeNull();
     expect(loggedInUser.activeAccessToken).toBeNull();
     expect(loggedInUser.activeRefreshToken).toBeNull();
   });
@@ -208,8 +208,8 @@ describe('Auth Controller Tests', () => {
       },
     });
 
-    expect(user.mfaCode).not.toBeNull();
-    expect(user.mfaCodeUpdatedAt).not.toBeNull();
+    expect(user.singleUseCode).not.toBeNull();
+    expect(user.singleUseCodeUpdatedAt).not.toBeNull();
   });
 
   it('should update password', async () => {

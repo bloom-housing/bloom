@@ -483,8 +483,8 @@ describe('Testing auth service', () => {
     });
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({
       data: {
-        mfaCode: expect.anything(),
-        mfaCodeUpdatedAt: expect.anything(),
+        singleUseCode: expect.anything(),
+        singleUseCodeUpdatedAt: expect.anything(),
       },
       where: {
         id,
@@ -532,8 +532,8 @@ describe('Testing auth service', () => {
     });
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({
       data: {
-        mfaCode: expect.anything(),
-        mfaCodeUpdatedAt: expect.anything(),
+        singleUseCode: expect.anything(),
+        singleUseCodeUpdatedAt: expect.anything(),
         phoneNumber: '520-781-8711',
       },
       where: {
@@ -609,7 +609,7 @@ describe('Testing auth service', () => {
   });
 
   it('should generate mfa code', () => {
-    expect(authService.generateMfaCode().length).toEqual(
+    expect(authService.generateSingleUseCode().length).toEqual(
       Number(process.env.MFA_CODE_LENGTH),
     );
   });

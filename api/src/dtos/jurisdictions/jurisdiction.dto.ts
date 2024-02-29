@@ -96,6 +96,12 @@ export class Jurisdiction extends AbstractDTO {
   enableUtilitiesIncluded: boolean;
 
   @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
+  allowSingleUseCodeLogin: boolean;
+
+  @Expose()
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @IsEnum(UserRoleEnum, {
     groups: [ValidationsGroupsEnum.default],

@@ -113,8 +113,12 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
     }
 
     let authSuccess = true;
-    if (!dto.mfaCode || !rawUser.mfaCode || !rawUser.mfaCodeUpdatedAt) {
-      // if an mfaCode was not sent, and an mfaCode wasn't stored in the db for the user
+    if (
+      !dto.mfaCode ||
+      !rawUser.singleUseCode ||
+      !rawUser.singleUseCodeUpdatedAt
+    ) {
+      // if an mfaCode was not sent, and a singleUseCode wasn't stored in the db for the user
       // signal to the front end to request an mfa code
       await this.updateFailedLoginCount(0, rawUser.id);
       throw new UnauthorizedException({
@@ -122,24 +126,25 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
       });
     } else if (
       new Date(
-        rawUser.mfaCodeUpdatedAt.getTime() + Number(process.env.MFA_CODE_VALID),
+        rawUser.singleUseCodeUpdatedAt.getTime() +
+          Number(process.env.MFA_CODE_VALID),
       ) < new Date() ||
-      rawUser.mfaCode !== dto.mfaCode
+      rawUser.singleUseCode !== dto.mfaCode
     ) {
       // if mfaCode TTL has expired, or if the mfa code input was incorrect
       authSuccess = false;
     } else {
       // if mfaCode login was a success
-      rawUser.mfaCode = null;
-      rawUser.mfaCodeUpdatedAt = new Date();
+      rawUser.singleUseCode = null;
+      rawUser.singleUseCodeUpdatedAt = new Date();
     }
 
     if (!authSuccess) {
       // if we failed login validation
       rawUser.failedLoginAttemptsCount += 1;
       await this.updateStoredUser(
-        rawUser.mfaCode,
-        rawUser.mfaCodeUpdatedAt,
+        rawUser.singleUseCode,
+        rawUser.singleUseCodeUpdatedAt,
         rawUser.phoneNumberVerified,
         rawUser.failedLoginAttemptsCount,
         rawUser.id,
@@ -161,8 +166,8 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
     }
 
     await this.updateStoredUser(
-      rawUser.mfaCode,
-      rawUser.mfaCodeUpdatedAt,
+      rawUser.singleUseCode,
+      rawUser.singleUseCodeUpdatedAt,
       rawUser.phoneNumberVerified,
       rawUser.failedLoginAttemptsCount,
       rawUser.id,
@@ -188,16 +193,16 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
   }
 
   async updateStoredUser(
-    mfaCode: string,
-    mfaCodeUpdatedAt: Date,
+    singleUseCode: string,
+    singleUseCodeUpdatedAt: Date,
     phoneNumberVerified: boolean,
     failedLoginAttemptsCount: number,
     userId: string,
   ): Promise<void> {
     await this.prisma.userAccounts.update({
       data: {
-        mfaCode,
-        mfaCodeUpdatedAt,
+        singleUseCode,
+        singleUseCodeUpdatedAt,
         phoneNumberVerified,
         failedLoginAttemptsCount,
         lastLoginAt: new Date(),

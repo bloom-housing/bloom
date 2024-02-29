@@ -85,7 +85,7 @@ export const stagingSeed = async (
       jurisdictionIds: [jurisdiction.id],
       acceptedTerms: true,
       mfaEnabled: true,
-      mfaCode: '12345',
+      singleUseCode: '12345',
     }),
   });
   // add jurisdiction specific translations and default ones
