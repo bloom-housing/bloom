@@ -5,7 +5,7 @@ import Markdown from "markdown-to-jsx"
 import { useForm } from "react-hook-form"
 import { AccountCard } from "../../../../../shared-helpers/src/views/accounts/AccountCard"
 import { CardSection, CardFooter } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import styles from "../../../styles/form-terms.module.scss"
+import styles from "../../../../../shared-helpers/src/views/terms/form-terms.module.scss"
 
 type FormTermsInValues = {
   agree: boolean
