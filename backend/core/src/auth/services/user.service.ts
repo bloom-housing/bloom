@@ -384,7 +384,17 @@ export class UserService {
     return await this.userRepository.save(newUser)
   }
 
+  containsInvalidCharacters(value: string): boolean {
+    return value.includes(".") || value.includes("http")
+  }
+
   public async createPublicUser(dto: UserCreateDto, sendWelcomeEmail = false) {
+    if (
+      this.containsInvalidCharacters(dto.firstName) ||
+      this.containsInvalidCharacters(dto.lastName)
+    ) {
+      throw new HttpException("Forbidden", HttpStatus.FORBIDDEN)
+    }
     const newUser = await this._createUser({
       ...dto,
       passwordHash: await this.passwordService.passwordToHash(dto.password),
