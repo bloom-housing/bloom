@@ -7,12 +7,13 @@ import { CustomIconMap, CustomIconType } from "../accounts/CustomIconMap"
 interface BloomCardProps {
   iconSymbol?: CustomIconType
   title: string
-  subtitle?: string
+  subtitle?: string | React.ReactNode
   children: React.ReactElement
   id?: string
   headingPriority?: 1 | 2 | 3 | 4 | 5 | 6
   className?: string
   variant?: "form" | "block"
+  headerLink?: React.ReactNode
 }
 
 const BloomCard = (props: BloomCardProps) => {
@@ -29,6 +30,7 @@ const BloomCard = (props: BloomCardProps) => {
             {customIcon}
           </Icon>
         )}
+        {props.headerLink && props.headerLink}
         {props.subtitle ? (
           <HeadingGroup
             size="2xl"
