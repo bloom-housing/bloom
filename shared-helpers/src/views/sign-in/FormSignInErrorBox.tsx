@@ -21,12 +21,13 @@ const FormSignInErrorBox = ({
   errorMessageId,
   className,
 }: FormSignInErrorBoxProps) => {
-  const classNames = ["border-b"]
+  const classNames = [""]
   if (className) classNames.push(className)
+
   return (
     <div className={classNames.join(" ")}>
       {Object.entries(errors).length > 0 && !networkStatus.content && (
-        <AlertBox type="alert" inverted closeable>
+        <AlertBox type="alert" inverted closeable className={"mt-6"}>
           {errors.authentication ? errors.authentication.message : t("errors.errorsToResolve")}
         </AlertBox>
       )}
@@ -35,7 +36,7 @@ const FormSignInErrorBox = ({
         <ErrorMessage
           id={`form-sign-in-${errorMessageId}-error`}
           error={!!networkStatus.content}
-          className="block mt-0 leading-normal text-alert"
+          className="block mt-0 leading-normal text-alert mt-6"
         >
           <AlertBox type={"alert"} inverted onClose={() => networkStatus.reset()}>
             {networkStatus.content.title}
@@ -49,7 +50,12 @@ const FormSignInErrorBox = ({
 
       {networkStatus.type === "success" && (
         <>
-          <AlertBox type="success" inverted onClose={() => networkStatus.reset()}>
+          <AlertBox
+            type="success"
+            inverted
+            onClose={() => networkStatus.reset()}
+            className={"mt-6"}
+          >
             {networkStatus.content?.title}
           </AlertBox>
 
@@ -59,7 +65,7 @@ const FormSignInErrorBox = ({
         </>
       )}
 
-      <SiteAlert type="notice" dismissable />
+      <SiteAlert type="notice" dismissable className={"mt-6"} />
     </div>
   )
 }

@@ -8,9 +8,11 @@ interface FormLayoutProps {
 }
 const FormLayout = (props: FormLayoutProps) => {
   const classNames = [
-    "md:mb-20 md:mt-12 mx-auto sm:max-w-lg max-w-full print:my-0 print:max-w-full",
+    "sm:mb-20 sm:mt-12 mx-auto sm:max-w-lg max-w-full print:my-0 print:max-w-full",
   ]
+
   if (props.className) classNames.push(props.className)
+
   return (
     <>
       <ApplicationTimeout />

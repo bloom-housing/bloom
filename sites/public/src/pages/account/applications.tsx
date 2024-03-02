@@ -2,12 +2,17 @@ import React, { useEffect, useState, Fragment, useContext } from "react"
 import Head from "next/head"
 import { t, LoadingOverlay } from "@bloom-housing/ui-components"
 import { Button, Card, Heading } from "@bloom-housing/ui-seeds"
-import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
+import {
+  PageView,
+  pushGtmEvent,
+  AuthContext,
+  RequireLogin,
+  BloomCard,
+} from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
 import { StatusItemWrapper, AppWithListing } from "./StatusItemWrapper"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
-import { AccountCard } from "@bloom-housing/shared-helpers/src/views/accounts/AccountCard"
 
 import styles from "../../pages/account/account.module.scss"
 
@@ -89,13 +94,11 @@ const Applications = () => {
         <MetaTags title={t("account.myApplications")} description="" />
         <section className="bg-gray-300 border-t border-gray-450">
           <div className="flex flex-wrap relative max-w-3xl mx-auto md:py-8">
-            <AccountCard
+            <BloomCard
               iconSymbol="application"
               title={t("account.myApplications")}
               subtitle={t("account.myApplicationsSubtitle")}
               headingPriority={1}
-              divider="inset"
-              thinMobile
             >
               <>
                 <LoadingOverlay isLoading={loading}>
@@ -108,7 +111,7 @@ const Applications = () => {
 
                 {!applications && !loading && noApplicationsSection()}
               </>
-            </AccountCard>
+            </BloomCard>
           </div>
         </section>
       </Layout>

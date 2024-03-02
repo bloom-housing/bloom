@@ -16,6 +16,7 @@ module.exports = {
       "./pages/**/*.tsx",
       "./src/**/*.tsx",
       "../../node_modules/@bloom-housing/ui-components/src/**/*.tsx",
+      "../../node_modules/@bloom-housing/shared-helpers/src/**/*.tsx",
     ],
     safelist: [/grid-cols-/],
   },

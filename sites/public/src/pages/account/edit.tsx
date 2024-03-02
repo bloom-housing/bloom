@@ -19,10 +19,15 @@ import {
 } from "@bloom-housing/ui-components"
 import { Button, Card } from "@bloom-housing/ui-seeds"
 import Link from "next/link"
-import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
+import {
+  PageView,
+  pushGtmEvent,
+  AuthContext,
+  RequireLogin,
+  BloomCard,
+} from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
 import FormsLayout from "../../layouts/forms"
-import { AccountCard } from "@bloom-housing/shared-helpers/src/views/accounts/AccountCard"
 
 import styles from "./account.module.scss"
 
@@ -150,13 +155,11 @@ const Edit = () => {
   return (
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
       <FormsLayout>
-        <AccountCard
+        <BloomCard
           iconSymbol="profile"
           title={t("account.accountSettings")}
           subtitle={t("account.accountSettingsSubtitle")}
-          divider="inset"
           headingPriority={1}
-          thinMobile
         >
           <>
             <SiteAlert type="notice" dismissable />
@@ -362,7 +365,7 @@ const Edit = () => {
               </Form>
             </Card.Section>
           </>
-        </AccountCard>
+        </BloomCard>
       </FormsLayout>
     </RequireLogin>
   )
