@@ -184,7 +184,9 @@ const ApplicationMultiselectQuestionStep = ({
       setValue,
       allOptionNames,
       watchQuestions,
-      errors
+      getValues,
+      errors,
+      trigger
     )
   }
 

@@ -120,7 +120,9 @@ const getRadioField = (
   register: UseFormMethods["register"],
   setValue: UseFormMethods["setValue"],
   allOptions: string[],
-  optionFieldName: string
+  optionFieldName: string,
+  getValues: UseFormMethods["getValues"],
+  trigger?: UseFormMethods["trigger"]
 ) => {
   return (
     <>
@@ -133,11 +135,21 @@ const getRadioField = (
         inputProps={{
           value: !!option.text,
           onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+            if (e.target.checked && trigger) {
+              void trigger()
+            }
             uncheckOptions(allOptions, setValue)
             setValue(optionFieldName, e.target.value)
           },
         }}
         dataTestId={"app-question-option"}
+        validation={{
+          validate: {
+            somethingIsChecked: (value) => {
+              return !!value || !!allOptions.find((option) => getValues(option))
+            },
+          },
+        }}
       />
     </>
   )
@@ -340,10 +352,20 @@ export const getRadioOption = (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [x: string]: any
   },
-  errors?: UseFormMethods["errors"]
+  getValues: UseFormMethods["getValues"],
+  errors?: UseFormMethods["errors"],
+  trigger?: UseFormMethods["trigger"]
 ) => {
   const optionFieldName = fieldName(question.text, applicationSection, option.text)
-  const radioField = getRadioField(option, register, setValue, allOptions, optionFieldName)
+  const radioField = getRadioField(
+    option,
+    register,
+    setValue,
+    allOptions,
+    optionFieldName,
+    getValues,
+    trigger
+  )
 
   return multiselectOptionWrapper(
     radioField,
