@@ -339,7 +339,7 @@
   "authentication.signIn.changeYourPassword": "Maaari mong palitan ang iyong password",
   "authentication.signIn.enterLoginEmail": "Pakilagay ang iyong email sa pag-login",
   "authentication.signIn.enterLoginPassword": "Pakilagay ang iyong password sa pag-log in",
-  "authentication.signIn.enterValidEmailAndPasswordAndMFA": "Pakilagay ang tamang code.",
+  "authentication.signIn.enterValidEmailAndPasswordAndMFA": "Pakilagay ang tamang code",
   "authentication.signIn.enterValidEmailAndPassword": "Pakilagay ang tamang email at password.",
   "authentication.signIn.errorGenericMessage": "Pakisubukang muli_ o makipag-ugnayan sa suporta para humingi ng tulong.",
   "authentication.signIn.error": "Nagkaproblema sa iyong pag-sign in",

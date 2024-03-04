@@ -386,7 +386,7 @@
   "authentication.signIn.changeYourPassword": "您可以變更密碼",
   "authentication.signIn.enterLoginEmail": "請輸入您的登入電子郵件",
   "authentication.signIn.enterLoginPassword": "請輸入您的登入密碼",
-  "authentication.signIn.enterValidEmailAndPasswordAndMFA": "請輸入有效的代碼。",
+  "authentication.signIn.enterValidEmailAndPasswordAndMFA": "請輸入有效的代碼",
   "authentication.signIn.enterValidEmailAndPassword": "請輸入有效的電子郵件和密碼。",
   "authentication.signIn.errorGenericMessage": "請再試一次，或聯絡支援人員尋求協助。",
   "authentication.signIn.error": "您在登入時出現錯誤",

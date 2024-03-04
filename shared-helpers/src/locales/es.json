@@ -386,7 +386,7 @@
   "authentication.signIn.changeYourPassword": "Puede cambiar su contraseña",
   "authentication.signIn.enterLoginEmail": "Por favor_ escriba su correo electrónico de inicio de sesión",
   "authentication.signIn.enterLoginPassword": "Por favor_ escriba su contraseña de inicio de sesión",
-  "authentication.signIn.enterValidEmailAndPasswordAndMFA": "Por favo_ escriba un código válido.",
+  "authentication.signIn.enterValidEmailAndPasswordAndMFA": "Por favor escriba un código válido",
   "authentication.signIn.enterValidEmailAndPassword": "Por favor_ escriba un correo electrónico y una contraseña válidos.",
   "authentication.signIn.errorGenericMessage": "Por favor inténtelo de nuevo, o comuníquese con servicio al cliente para recibir asistencia.",
   "authentication.signIn.error": "Hubo un error cuando usted inició sesión",
