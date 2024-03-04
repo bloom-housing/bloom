@@ -2,8 +2,10 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  ForbiddenException,
 } from '@nestjs/common';
 import crypto from 'crypto';
+import { Request as ExpressRequest } from 'express';
 import { Prisma, YesNoEnum } from '@prisma/client';
 import { PrismaService } from './prisma.service';
 import { Application } from '../dtos/applications/application.dto';
@@ -84,7 +86,14 @@ export class ApplicationService {
     this set can either be paginated or not depending on the params
     it will return both the set of applications, and some meta information to help with pagination
   */
-  async list(params: ApplicationQueryParams): Promise<PaginatedApplicationDto> {
+  async list(
+    params: ApplicationQueryParams,
+    req: ExpressRequest,
+  ): Promise<PaginatedApplicationDto> {
+    const user = mapTo(User, req['user']);
+    if (!user) {
+      throw new ForbiddenException();
+    }
     const whereClause = this.buildWhereClause(params);
 
     const count = await this.prisma.applications.count({
