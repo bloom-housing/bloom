@@ -1,12 +1,6 @@
 import * as React from "react"
 import { UseFormMethods } from "react-hook-form"
-import {
-  ExpandableContent,
-  Field,
-  FieldGroup,
-  resolveObject,
-  t,
-} from "@bloom-housing/ui-components"
+import { ExpandableContent, Field, resolveObject, t } from "@bloom-housing/ui-components"
 import { stateKeys } from "../utilities/formKeys"
 import {
   ApplicationMultiselectQuestion,
@@ -167,6 +161,7 @@ const getCheckboxField = (
       name={optionFieldName}
       type={"checkbox"}
       label={option.text}
+      labelClassName="font-semibold"
       register={register}
       inputProps={{
         onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
