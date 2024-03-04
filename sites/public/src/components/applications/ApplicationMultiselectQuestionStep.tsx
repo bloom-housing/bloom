@@ -52,8 +52,6 @@ const ApplicationMultiselectQuestionStep = ({
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor(applicationStep)
 
-  console.log(conductor)
-
   const questions = listingSectionQuestions(listing, applicationSection)
   const [page, setPage] = useState(conductor.navigatedThroughBack ? questions.length : 1)
   const [applicationQuestions, setApplicationQuestions] = useState(application[applicationSection])
