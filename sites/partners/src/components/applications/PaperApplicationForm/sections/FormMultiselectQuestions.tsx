@@ -241,6 +241,19 @@ const FormMultiselectQuestions = ({
                         .map((option) => {
                           return getRadioOption(option, question, setValue)
                         })}
+                      {question?.optOutText &&
+                        getRadioOption(
+                          {
+                            text: question.optOutText,
+                            description: null,
+                            links: [],
+                            collectAddress: false,
+                            exclusive: true,
+                            ordinal: question.options.length,
+                          },
+                          question,
+                          setValue
+                        )}
                     </>
                   )}
                 </fieldset>
