@@ -219,11 +219,11 @@ export class AuthService {
       }
     }
 
-    const mfaCode = this.generateMfaCode();
+    const singleUseCode = this.generateSingleUseCode();
     await this.prisma.userAccounts.update({
       data: {
-        mfaCode,
-        mfaCodeUpdatedAt: new Date(),
+        singleUseCode,
+        singleUseCodeUpdatedAt: new Date(),
         phoneNumber: user.phoneNumber,
       },
       where: {
@@ -232,9 +232,9 @@ export class AuthService {
     });
 
     if (dto.mfaType === MfaType.email) {
-      await this.emailsService.sendMfaCode(mapTo(User, user), mfaCode);
+      await this.emailsService.sendMfaCode(mapTo(User, user), singleUseCode);
     } else if (dto.mfaType === MfaType.sms) {
-      await this.smsService.sendMfaCode(user.phoneNumber, mfaCode);
+      await this.smsService.sendMfaCode(user.phoneNumber, singleUseCode);
     }
 
     return dto.mfaType === MfaType.email
@@ -328,7 +328,7 @@ export class AuthService {
   /*
     generates a numeric mfa code
   */
-  generateMfaCode() {
+  generateSingleUseCode() {
     let out = '';
     const characters = '0123456789';
     for (let i = 0; i < Number(process.env.MFA_CODE_LENGTH); i++) {

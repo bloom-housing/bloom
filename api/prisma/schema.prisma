@@ -329,6 +329,7 @@ model Jurisdictions {
   enableAccessibilityFeatures Boolean                  @default(false) @map("enable_accessibility_features")
   enableUtilitiesIncluded     Boolean                  @default(false) @map("enable_utilities_included")
   enableGeocodingPreferences  Boolean                  @default(false) @map("enable_geocoding_preferences")
+  allowSingleUseCodeLogin     Boolean                  @default(false) @map("allow_single_use_code_login")
   amiChart                    AmiChart[]
   multiselectQuestions        MultiselectQuestions[]
   listings                    Listings[]
@@ -571,10 +572,10 @@ model Listings {
 }
 
 model MapLayers {
-  id                String      @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id                String @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   name              String
-  jurisdictionId    String      @map("jurisdiction_id")
-  featureCollection Json        @map("feature_collection") @default("{}")
+  jurisdictionId    String @map("jurisdiction_id")
+  featureCollection Json   @default("{}") @map("feature_collection")
 
   @@map("map_layers")
 }
@@ -650,9 +651,9 @@ model Translations {
 
 // Note: [name] formerly max length 256
 model UnitAccessibilityPriorityTypes {
-  id           String                            @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  createdAt    DateTime                          @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt    DateTime                          @updatedAt @map("updated_at") @db.Timestamp(6)
+  id           String         @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt    DateTime       @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt    DateTime       @updatedAt @map("updated_at") @db.Timestamp(6)
   name         String
   units        Units[]
   unitGroup    UnitGroup[]
@@ -779,8 +780,8 @@ model UserAccounts {
   updatedAt                DateTime                @updatedAt @map("updated_at") @db.Timestamp(6)
   language                 LanguagesEnum?
   mfaEnabled               Boolean                 @default(false) @map("mfa_enabled")
-  mfaCode                  String?                 @map("mfa_code") @db.VarChar
-  mfaCodeUpdatedAt         DateTime?               @map("mfa_code_updated_at") @db.Timestamptz(6)
+  singleUseCode            String?                 @map("single_use_code") @db.VarChar
+  singleUseCodeUpdatedAt   DateTime?               @map("single_use_code_updated_at") @db.Timestamptz(6)
   lastLoginAt              DateTime                @default(now()) @map("last_login_at") @db.Timestamp(6)
   failedLoginAttemptsCount Int                     @default(0) @map("failed_login_attempts_count")
   phoneNumberVerified      Boolean?                @default(false) @map("phone_number_verified")
@@ -808,7 +809,6 @@ model UserRoles {
 
   @@map("user_roles")
 }
-
 
 // START DETROIT SPECIFIC
 model ListingNeighborhoodAmenities {
