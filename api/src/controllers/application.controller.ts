@@ -73,8 +73,11 @@ export class ApplicationController {
     operationId: 'list',
   })
   @ApiOkResponse({ type: PaginatedApplicationDto })
-  async list(@Query() queryParams: ApplicationQueryParams) {
-    return await this.applicationService.list(queryParams);
+  async list(
+    @Request() req: ExpressRequest,
+    @Query() queryParams: ApplicationQueryParams,
+  ) {
+    return await this.applicationService.list(queryParams, req);
   }
 
   @Get(`mostRecentlyCreated`)

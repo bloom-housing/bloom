@@ -9,6 +9,7 @@ import {
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import dayjs from 'dayjs';
+import { Request as ExpressRequest } from 'express';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { ApplicationService } from '../../../src/services/application.service';
 import { ApplicationQueryParams } from '../../../src/dtos/applications/application-query-params.dto';
@@ -268,6 +269,12 @@ describe('Testing application service', () => {
   });
 
   it('should get applications from list() when applications are available', async () => {
+    const requestingUser = {
+      firstName: 'requesting fName',
+      lastName: 'requesting lName',
+      email: 'requestingUser@email.com',
+      jurisdictions: [{ id: 'juris id' }],
+    } as unknown as User;
     const date = new Date();
     const mockedValue = mockApplicationSet(3, date);
     prisma.applications.findMany = jest.fn().mockResolvedValue(mockedValue);
@@ -284,7 +291,11 @@ describe('Testing application service', () => {
       page: 1,
     };
 
-    expect(await service.list(params)).toEqual({
+    expect(
+      await service.list(params, {
+        user: requestingUser,
+      } as unknown as ExpressRequest),
+    ).toEqual({
       items: mockedValue.map((mock) => ({ ...mock, flagged: true })),
       meta: {
         currentPage: 1,
