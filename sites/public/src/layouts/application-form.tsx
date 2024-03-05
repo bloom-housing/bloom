@@ -6,6 +6,7 @@ import { t, ProgressNav, StepHeader } from "@bloom-housing/ui-components"
 import ApplicationConductor from "../lib/applications/ApplicationConductor"
 
 import styles from "./application-form.module.scss"
+import { BloomCard } from "@bloom-housing/shared-helpers"
 
 interface ApplicationFormLayoutProps {
   listingName: string
@@ -65,47 +66,48 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
           </div>
         </CardSection>
       </Card>
-      <Card spacing={"lg"} className={styles["application-form-body"]}>
-        <CardSection divider={"inset"} className={props.hideBorder && "border-none"}>
-          {props.backLink && getBackLink(props.backLink.url, props.backLink.onClickFxn)}
-          <Heading priority={2} size={"2xl"}>
-            {props.heading}
-          </Heading>
-          {props.subheading && <p className="field-note mt-6">{props.subheading}</p>}
-        </CardSection>
-        {props.children}
-        {props.conductor && (
-          <CardSection className={"bg-primary-lighter"}>
-            <Button
-              type="submit"
-              variant="primary"
-              onClick={() => {
-                props.conductor.returnToReview = false
-                props.conductor.setNavigatedBack(false)
-              }}
-              id={"app-next-step-button"}
-            >
-              {t("t.next")}
-            </Button>
+      <BloomCard
+        title={props.heading}
+        headingPriority={2}
+        subtitle={props.subheading}
+        headerLink={props.backLink && getBackLink(props.backLink.url, props.backLink.onClickFxn)}
+        className={styles["application-form-body"]}
+      >
+        <>
+          {props.children}
+          {props.conductor && (
+            <CardSection className={"bg-primary-lighter"}>
+              <Button
+                type="submit"
+                variant="primary"
+                onClick={() => {
+                  props.conductor.returnToReview = false
+                  props.conductor.setNavigatedBack(false)
+                }}
+                id={"app-next-step-button"}
+              >
+                {t("t.next")}
+              </Button>
 
-            {props.conductor.canJumpForwardToReview() && (
-              <div>
-                <Button
-                  type="submit"
-                  variant="text"
-                  className="mt-4"
-                  onClick={() => {
-                    props.conductor.returnToReview = true
-                    props.conductor.setNavigatedBack(false)
-                  }}
-                >
-                  {t("application.form.general.saveAndReturn")}
-                </Button>
-              </div>
-            )}
-          </CardSection>
-        )}
-      </Card>
+              {props.conductor.canJumpForwardToReview() && (
+                <div>
+                  <Button
+                    type="submit"
+                    variant="text"
+                    className="mt-4"
+                    onClick={() => {
+                      props.conductor.returnToReview = true
+                      props.conductor.setNavigatedBack(false)
+                    }}
+                  >
+                    {t("application.form.general.saveAndReturn")}
+                  </Button>
+                </div>
+              )}
+            </CardSection>
+          )}
+        </>
+      </BloomCard>
     </>
   )
 }

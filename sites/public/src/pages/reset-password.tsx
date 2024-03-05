@@ -4,15 +4,14 @@ import { useForm } from "react-hook-form"
 import {
   Field,
   Form,
-  FormCard,
-  Icon,
   t,
   AlertBox,
   SiteAlert,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
 import { Button } from "@bloom-housing/ui-seeds"
-import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { PageView, pushGtmEvent, AuthContext, BloomCard } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
 
@@ -67,53 +66,47 @@ const ResetPassword = () => {
 
   return (
     <FormsLayout>
-      <FormCard>
-        <div className="form-card__lead text-center border-b mx-0">
-          <Icon size="2xl" symbol="profile" />
-          <h2 className="form-card__title">{t("authentication.forgotPassword.changePassword")}</h2>
-        </div>
-        {requestError && (
-          <AlertBox className="" onClose={() => setRequestError(undefined)} type="alert">
-            {requestError}
-          </AlertBox>
-        )}
-        <SiteAlert type="notice" dismissable />
-        <div className="form-card__group pt-0 border-b">
-          <Form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
-            <Field
-              caps={true}
-              name="password"
-              label={t("authentication.createAccount.password")}
-              validation={{ required: true }}
-              error={errors.password}
-              errorMessage={t("authentication.forgotPassword.enterNewLoginPassword")}
-              register={register}
-              type="password"
-            />
+      <BloomCard title={t("authentication.forgotPassword.changePassword")} iconSymbol={"profile"}>
+        <>
+          {requestError && (
+            <AlertBox className="mt-6" onClose={() => setRequestError(undefined)} type="alert">
+              {requestError}
+            </AlertBox>
+          )}
+          <SiteAlert type="notice" dismissable />
+          <CardSection>
+            <Form id="sign-in" onSubmit={handleSubmit(onSubmit)}>
+              <Field
+                name="password"
+                label={t("authentication.createAccount.password")}
+                validation={{ required: true }}
+                error={errors.password}
+                errorMessage={t("authentication.forgotPassword.enterNewLoginPassword")}
+                register={register}
+                type="password"
+              />
 
-            <Field
-              caps={true}
-              name="passwordConfirmation"
-              label={t("authentication.forgotPassword.passwordConfirmation")}
-              validation={{
-                validate: (value) =>
-                  value === passwordValue.current ||
-                  t("authentication.createAccount.errors.passwordMismatch"),
-              }}
-              error={errors.passwordConfirmation}
-              errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
-              register={register}
-              type="password"
-            />
+              <Field
+                name="passwordConfirmation"
+                label={t("authentication.forgotPassword.passwordConfirmation")}
+                validation={{
+                  validate: (value) =>
+                    value === passwordValue.current ||
+                    t("authentication.createAccount.errors.passwordMismatch"),
+                }}
+                error={errors.passwordConfirmation}
+                errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
+                register={register}
+                type="password"
+              />
 
-            <div className="text-center mt-6">
               <Button type="submit" variant="primary">
                 {t("authentication.forgotPassword.changePassword")}
               </Button>
-            </div>
-          </Form>
-        </div>
-      </FormCard>
+            </Form>
+          </CardSection>
+        </>
+      </BloomCard>
     </FormsLayout>
   )
 }

@@ -16,8 +16,6 @@
 }
 
 .application-form-body {
-  margin-block-end: var(--seeds-s6);
-
   @media (max-width: theme("screens.md")) {
     border-top-left-radius: 0;
     border-top-right-radius: 0;

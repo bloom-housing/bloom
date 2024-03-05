@@ -1,14 +1,14 @@
 import React, { useContext } from "react"
+import type { UseFormMethods } from "react-hook-form"
 import { Field, Form, NavigationContext, t } from "@bloom-housing/ui-components"
 import { Button, Heading } from "@bloom-housing/ui-seeds"
-import { CardSection, CardFooter } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { FormSignInErrorBox } from "./FormSignInErrorBox"
 import { NetworkStatus } from "../../auth/catchNetworkError"
-import type { UseFormMethods } from "react-hook-form"
-import { AccountCard } from "../accounts/AccountCard"
-import styles from "../../../../sites/public/styles/sign-in.module.scss"
+import { BloomCard } from "../components/BloomCard"
 import { useRouter } from "next/router"
 import { getListingRedirectUrl } from "../../utilities/getListingRedirectUrl"
+import styles from "../../../../sites/public/styles/sign-in.module.scss"
 
 export type FormSignInProps = {
   control: FormSignInControl
@@ -45,7 +45,7 @@ const FormSignIn = ({
   const createAccountUrl = getListingRedirectUrl(listingIdRedirect, "/create-account")
 
   return (
-    <AccountCard iconSymbol="profile" title={t("nav.signIn")} divider="inset" headingPriority={1}>
+    <BloomCard iconSymbol="profile" title={t("nav.signIn")} headingPriority={1}>
       <>
         <FormSignInErrorBox
           errors={errors}
@@ -53,7 +53,7 @@ const FormSignIn = ({
           errorMessageId={"main-sign-in"}
           className="mx-12"
         />
-        <CardSection className="mx-4">
+        <CardSection divider={"inset"}>
           <Form id="sign-in" onSubmit={handleSubmit(onSubmit, onError)}>
             <Field
               caps={true}
@@ -93,7 +93,7 @@ const FormSignIn = ({
           </Form>
         </CardSection>
         {showRegisterBtn && (
-          <CardFooter className="border-t py-8 mx-12">
+          <CardSection className="mb-3" divider={"inset"}>
             <Heading priority={2} size="2xl" className="mb-6">
               {t("authentication.createAccount.noAccount")}
             </Heading>
@@ -101,10 +101,10 @@ const FormSignIn = ({
             <Button variant="primary-outlined" href={createAccountUrl}>
               {t("account.createAccount")}
             </Button>
-          </CardFooter>
+          </CardSection>
         )}
       </>
-    </AccountCard>
+    </BloomCard>
   )
 }
 
