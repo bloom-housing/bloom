@@ -112,7 +112,6 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
         )}
         <Form id="resend-confirmation" onSubmit={handleSubmit(onSubmit)}>
           <Field
-            caps={true}
             type="email"
             name="email"
             label={t("authentication.createAccount.resendAnEmailTo")}

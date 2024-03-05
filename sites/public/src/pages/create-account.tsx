@@ -178,7 +178,6 @@ export default () => {
                   className={accountCardStyles["account-card-settings-section"]}
                 >
                   <Field
-                    caps={true}
                     type="email"
                     name="email"
                     label={t("application.name.yourEmailAddress")}
@@ -187,6 +186,7 @@ export default () => {
                     errorMessage={t("authentication.signIn.loginError")}
                     register={register}
                     controlClassName={styles["create-account-input"]}
+                    labelClassName={"text__caps-spaced"}
                   />
                 </CardSection>
                 <CardSection
@@ -194,7 +194,7 @@ export default () => {
                   className={accountCardStyles["account-card-settings-section"]}
                 >
                   <Field
-                    caps={true}
+                    labelClassName={"text__caps-spaced"}
                     type={"password"}
                     name="password"
                     note={t("authentication.createAccount.passwordInfo")}

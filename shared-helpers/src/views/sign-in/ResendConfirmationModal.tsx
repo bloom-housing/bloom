@@ -80,7 +80,6 @@ const ResendConfirmationModal = ({
       <>
         <Form>
           <Field
-            caps={true}
             type="email"
             name="emailResend"
             label={t("authentication.createAccount.resendAnEmailTo")}

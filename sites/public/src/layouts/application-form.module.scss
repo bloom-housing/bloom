@@ -61,7 +61,9 @@
 }
 
 .application-form-header-no-border {
-  --card-divider-width: 0;
+  header {
+    --card-divider-width: 0;
+  }
 }
 
 .application-form-action-footer {

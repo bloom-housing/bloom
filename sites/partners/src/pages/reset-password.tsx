@@ -64,7 +64,6 @@ const ResetPassword = () => {
         <div className="form-card__group pt-0 border-b">
           <Form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
             <Field
-              caps={true}
               name="password"
               label={t("authentication.createAccount.password")}
               validation={{ required: true }}
@@ -74,7 +73,6 @@ const ResetPassword = () => {
               type="password"
             />
             <Field
-              caps={true}
               name="passwordConfirmation"
               label={t("authentication.forgotPassword.passwordConfirmation")}
               validation={{

@@ -56,11 +56,9 @@ const FormSignIn = ({
         <CardSection divider={"inset"}>
           <Form id="sign-in" onSubmit={handleSubmit(onSubmit, onError)}>
             <Field
-              caps={true}
               className="mb-6"
               name="email"
               label={t("t.email")}
-              labelClassName="font-semibold p-0"
               validation={{ required: true }}
               error={errors.email}
               errorMessage={t("authentication.signIn.enterLoginEmail")}
@@ -73,11 +71,9 @@ const FormSignIn = ({
               </LinkComponent>
             </aside>
             <Field
-              caps={true}
               className="mb-3"
               name="password"
               label={t("authentication.createAccount.password")}
-              labelClassName="font-semibold p-0"
               validation={{ required: true }}
               error={errors.password}
               errorMessage={t("authentication.signIn.enterLoginPassword")}
