@@ -127,6 +127,7 @@ views.full = {
 views.details = {
   ...views.base,
   ...views.full,
+  requestedChangesUser: true,
 };
 
 views.csv = {
@@ -884,6 +885,13 @@ export class ListingService implements OnModuleInit {
               },
             }
           : undefined,
+        requestedChangesUser: dto.requestedChangesUser
+          ? {
+              connect: {
+                id: dto.requestedChangesUser.id,
+              },
+            }
+          : undefined,
       },
     });
 
@@ -1351,11 +1359,15 @@ export class ListingService implements OnModuleInit {
             dto.status === ListingsStatusEnum.closed
               ? new Date()
               : storedListing.closedAt,
-          requestedChangesUserId:
+          requestedChangesUser:
             dto.status === ListingsStatusEnum.changesRequested &&
             storedListing.status !== ListingsStatusEnum.changesRequested
-              ? requestingUser.id
-              : storedListing.requestedChangesUserId,
+              ? {
+                  connect: {
+                    id: requestingUser.id,
+                  },
+                }
+              : undefined,
           listingsResult: dto.listingsResult
             ? {
                 create: {

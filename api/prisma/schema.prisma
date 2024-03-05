@@ -566,6 +566,7 @@ model Listings {
   requestedChanges                      String?                       @map("requested_changes")
   requestedChangesDate                  DateTime?                     @default(dbgenerated("'1970-01-01 00:00:00-07'::timestamp with time zone")) @map("requested_changes_date") @db.Timestamptz(6)
   requestedChangesUserId                String?                       @map("requested_changes_user_id") @db.Uuid
+  requestedChangesUser                  UserAccounts?                 @relation("requested_changes_user", fields: [requestedChangesUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([jurisdictionId])
   @@map("listings")
@@ -796,6 +797,7 @@ model UserAccounts {
   jurisdictions            Jurisdictions[]
   userPreferences          UserPreferences?
   userRoles                UserRoles?
+  requestedChangesListings Listings[]              @relation("requested_changes_user")
 
   @@map("user_accounts")
 }
