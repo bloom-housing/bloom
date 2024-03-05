@@ -6,7 +6,7 @@ import { CustomIconMap, CustomIconType } from "../accounts/CustomIconMap"
 
 interface BloomCardProps {
   iconSymbol?: CustomIconType
-  title: string
+  title?: string
   subtitle?: string | React.ReactNode
   children: React.ReactElement
   id?: string
@@ -22,29 +22,48 @@ const BloomCard = (props: BloomCardProps) => {
 
   const customIcon = props.iconSymbol ? CustomIconMap[props.iconSymbol] : undefined
 
-  return (
-    <Card spacing="lg" className={classNames.join(" ")}>
-      <Card.Header divider={props.variant === "block" ? undefined : "inset"}>
-        {customIcon && (
-          <Icon size="2xl" className={styles["card-icon"]}>
-            {customIcon}
-          </Icon>
-        )}
-        {props.headerLink && props.headerLink}
-        {props.subtitle ? (
+  const getTitle = () => {
+    if (props.title) {
+      if (props.subtitle) {
+        return (
           <HeadingGroup
             size="2xl"
             heading={props.title}
             subheading={props.subtitle}
             className={styles["card-heading-group"]}
-            headingPriority={props.headingPriority}
+            headingPriority={props.headingPriority || 1}
           />
-        ) : (
-          <Heading size="2xl" className={styles["card-form-heading"]}>
-            {props.title}
-          </Heading>
-        )}
-      </Card.Header>
+        )
+      }
+      return (
+        <Heading
+          size="2xl"
+          className={styles["card-form-heading"]}
+          priority={props.headingPriority || 1}
+        >
+          {props.title}
+        </Heading>
+      )
+    }
+    return null
+  }
+
+  const title = getTitle()
+
+  return (
+    <Card spacing="lg" className={classNames.join(" ")}>
+      {title && (
+        <Card.Header divider={props.variant === "block" ? undefined : "inset"}>
+          {customIcon && (
+            <Icon size="2xl" className={styles["card-icon"]}>
+              {customIcon}
+            </Icon>
+          )}
+          {props.headerLink && props.headerLink}
+          {title}
+        </Card.Header>
+      )}
+
       {props.children}
     </Card>
   )

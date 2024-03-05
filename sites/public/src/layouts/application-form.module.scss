@@ -13,6 +13,38 @@
     border-top-right-radius: 0;
     margin-top: 0;
   }
+
+  .application-form-header-title {
+    background-color: var(--seeds-color-primary);
+    padding-block: var(--seeds-s4);
+    color: var(--seeds-color-white);
+  }
+
+  .application-form-header-heading {
+    font-size: var(--seeds-type-heading-size-xl);
+    color: var(--seeds-color-white);
+    font-weight: var(--seeds-font-weight-bold);
+    font-family: var(--seeds-font-alt-sans);
+  }
+
+  .application-form-header-progress {
+    padding-block: var(--seeds-s4);
+    --card-content-padding-block: var(--seeds-s4);
+
+    .desktop-nav {
+      display: block;
+      @media (max-width: theme("screens.sm")) {
+        display: none;
+      }
+    }
+
+    .mobile-nav {
+      display: none;
+      @media (max-width: theme("screens.sm")) {
+        display: block;
+      }
+    }
+  }
 }
 
 .application-form-body {
@@ -26,6 +58,22 @@
     border-bottom-right-radius: 0;
     margin-bottom: 0;
   }
+}
+
+.application-form-header-no-border {
+  --card-divider-width: 0;
+}
+
+.application-form-action-footer {
+  background-color: var(--seeds-color-primary-lighter);
+}
+
+.application-form-save-and-return {
+  margin-top: var(--seeds-s4);
+}
+
+.application-form-back-link {
+  margin-bottom: var(--seeds-s6);
 }
 
 /* overrides for Seeds Message & Alert */

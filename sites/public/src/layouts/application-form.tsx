@@ -30,7 +30,7 @@ interface ApplicationFormLayoutProps {
 const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
   const getBackLink = (url?: string, onClickFxn?: () => void) => {
     return (
-      <div className={"mb-6"}>
+      <div className={styles["application-form-back-link"]}>
         <Button
           leadIcon={<Icon icon={faChevronLeft} />}
           variant={"text"}
@@ -46,37 +46,41 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
 
   return (
     <>
-      <Card spacing={"sm"} className={styles["application-form-header"]}>
-        <CardSection className={"bg-primary px-8 py-4 text-white"}>
-          <Heading priority={1} className={"text-xl text-white font-bold font-alt-sans"}>
-            {props.listingName}
-          </Heading>
-        </CardSection>
-        <CardSection className={"px-8"}>
-          <div className={"hidden md:block"}>
-            <ProgressNav {...props.progressNavProps} />
-          </div>
-          <div className={"block md:hidden"}>
-            <StepHeader
-              currentStep={props.progressNavProps.currentPageSection}
-              totalSteps={props.progressNavProps.labels.length}
-              stepPreposition={"of"}
-              stepLabeling={props.progressNavProps.labels}
-            />
-          </div>
-        </CardSection>
-      </Card>
+      <BloomCard className={styles["application-form-header"]}>
+        <>
+          <CardSection className={styles["application-form-header-title"]}>
+            <Heading priority={1} className={styles["application-form-header-heading"]}>
+              {props.listingName}
+            </Heading>
+          </CardSection>
+          <CardSection className={styles["application-form-header-progress"]}>
+            <div className={styles["desktop-nav"]}>
+              <ProgressNav {...props.progressNavProps} />
+            </div>
+            <div className={styles["mobile-nav"]}>
+              <StepHeader
+                currentStep={props.progressNavProps.currentPageSection}
+                totalSteps={props.progressNavProps.labels.length}
+                stepPreposition={"of"}
+                stepLabeling={props.progressNavProps.labels}
+              />
+            </div>
+          </CardSection>
+        </>
+      </BloomCard>
       <BloomCard
         title={props.heading}
         headingPriority={2}
         subtitle={props.subheading}
         headerLink={props.backLink && getBackLink(props.backLink.url, props.backLink.onClickFxn)}
-        className={styles["application-form-body"]}
+        className={`${styles["application-form-body"]} ${
+          props.hideBorder && styles["application-form-header-no-border"]
+        }`}
       >
         <>
           {props.children}
           {props.conductor && (
-            <CardSection className={"bg-primary-lighter"}>
+            <CardSection className={styles["application-form-action-footer"]}>
               <Button
                 type="submit"
                 variant="primary"
@@ -94,7 +98,7 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
                   <Button
                     type="submit"
                     variant="text"
-                    className="mt-4"
+                    className={styles["application-form-save-and-return"]}
                     onClick={() => {
                       props.conductor.returnToReview = true
                       props.conductor.setNavigatedBack(false)
