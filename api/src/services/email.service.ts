@@ -327,7 +327,9 @@ export class EmailService {
     await this.send(
       user.email,
       emailFromAddress,
-      'Partners Portal account access token',
+      user.confirmedAt
+        ? `Code for your ${jurisdiction.name} sign-in`
+        : `${jurisdiction.name} verification code`,
       this.template('single-use-code')({
         user: user,
         singleUseCodeOptions: {
