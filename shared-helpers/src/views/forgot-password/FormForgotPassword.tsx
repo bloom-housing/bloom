@@ -81,6 +81,7 @@ const FormForgotPassword = ({
               errorMessage={errors.email ? t("authentication.signIn.loginError") : undefined}
               register={register}
               onChange={() => networkError.reset()}
+              labelClassName={"text__caps-spaced"}
             />
 
             <Button type="submit" variant="primary">

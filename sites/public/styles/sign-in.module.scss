@@ -1,6 +1,14 @@
 .forgot-password {
-    float: right;
-    font-size: var(--seeds-font-size-sm); 
-    text-decoration-line: underline;
-    color: var(--seeds-color-blue-900);
+  float: right;
+  font-size: var(--seeds-font-size-sm);
+  text-decoration-line: underline;
+  color: var(--seeds-color-blue-900);
+}
+
+.sign-in-error {
+  margin-inline: var(--seeds-s4);
+
+  @media (min-width: theme("screens.sm")) {
+    margin-inline: var(--seeds-s12);
+  }
 }

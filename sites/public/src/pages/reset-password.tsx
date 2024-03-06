@@ -84,6 +84,7 @@ const ResetPassword = () => {
                 errorMessage={t("authentication.forgotPassword.enterNewLoginPassword")}
                 register={register}
                 type="password"
+                labelClassName={"text__caps-spaced"}
               />
 
               <Field
@@ -98,6 +99,7 @@ const ResetPassword = () => {
                 errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
                 register={register}
                 type="password"
+                labelClassName={"text__caps-spaced"}
               />
 
               <Button type="submit" variant="primary">

@@ -51,7 +51,7 @@ const FormSignIn = ({
           errors={errors}
           networkStatus={networkStatus}
           errorMessageId={"main-sign-in"}
-          className="mx-12"
+          className={styles["sign-in-error"]}
         />
         <CardSection divider={"inset"}>
           <Form id="sign-in" onSubmit={handleSubmit(onSubmit, onError)}>
@@ -64,6 +64,7 @@ const FormSignIn = ({
               errorMessage={t("authentication.signIn.enterLoginEmail")}
               register={register}
               dataTestId="sign-in-email-field"
+              labelClassName={"text__caps-spaced"}
             />
             <aside>
               <LinkComponent href={forgetPasswordURL} className={styles["forgot-password"]}>
@@ -80,6 +81,7 @@ const FormSignIn = ({
               register={register}
               type={"password"}
               dataTestId="sign-in-password-field"
+              labelClassName={"text__caps-spaced"}
             />
             <div className="mt-6">
               <Button type="submit" variant="primary" id="sign-in-button">
