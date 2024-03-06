@@ -36,11 +36,7 @@ const BloomCard = (props: BloomCardProps) => {
         )
       }
       return (
-        <Heading
-          size="2xl"
-          className={styles["card-form-heading"]}
-          priority={props.headingPriority || 1}
-        >
+        <Heading size="2xl" priority={props.headingPriority || 1}>
           {props.title}
         </Heading>
       )

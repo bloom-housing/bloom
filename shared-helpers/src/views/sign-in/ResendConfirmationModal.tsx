@@ -88,6 +88,7 @@ const ResendConfirmationModal = ({
             error={!!errors.emailResend}
             errorMessage={t("authentication.signIn.loginError")}
             register={register}
+            labelClassName={"text__caps-spaced"}
           />
         </Form>
 

@@ -69,6 +69,7 @@ function Dashboard(props: DashboardProps) {
                     title={t("account.myApplications")}
                     subtitle={t("account.myApplicationsSubtitle")}
                     variant={"block"}
+                    headingPriority={2}
                   >
                     <Card.Section>
                       <Button
@@ -89,6 +90,7 @@ function Dashboard(props: DashboardProps) {
                     subtitle={t("account.accountSettingsSubtitle")}
                     id="account-dashboard-settings"
                     variant={"block"}
+                    headingPriority={2}
                   >
                     <Card.Section>
                       <Button size="sm" href={"/account/edit"} variant="primary-outlined">

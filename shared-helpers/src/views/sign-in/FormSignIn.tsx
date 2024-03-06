@@ -8,7 +8,7 @@ import { NetworkStatus } from "../../auth/catchNetworkError"
 import { BloomCard } from "../components/BloomCard"
 import { useRouter } from "next/router"
 import { getListingRedirectUrl } from "../../utilities/getListingRedirectUrl"
-import styles from "../../../../sites/public/styles/sign-in.module.scss"
+import styles from "./FormSignIn.module.scss"
 
 export type FormSignInProps = {
   control: FormSignInControl
@@ -51,7 +51,7 @@ const FormSignIn = ({
           errors={errors}
           networkStatus={networkStatus}
           errorMessageId={"main-sign-in"}
-          className={styles["sign-in-error"]}
+          className={styles["sign-in-error-container"]}
         />
         <CardSection divider={"inset"}>
           <Form id="sign-in" onSubmit={handleSubmit(onSubmit, onError)}>
@@ -91,7 +91,7 @@ const FormSignIn = ({
           </Form>
         </CardSection>
         {showRegisterBtn && (
-          <CardSection className="mb-3" divider={"inset"}>
+          <CardSection divider={"inset"}>
             <Heading priority={2} size="2xl" className="mb-6">
               {t("authentication.createAccount.noAccount")}
             </Heading>

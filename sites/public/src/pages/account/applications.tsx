@@ -93,7 +93,7 @@ const Applications = () => {
         </Head>
         <MetaTags title={t("account.myApplications")} description="" />
         <section className="bg-gray-300 border-t border-gray-450">
-          <div className="flex flex-wrap relative max-w-3xl mx-auto md:py-8">
+          <div className="flex flex-wrap relative max-w-3xl mx-auto sm:p-8">
             <BloomCard
               iconSymbol="application"
               title={t("account.myApplications")}

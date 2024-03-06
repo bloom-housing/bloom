@@ -120,6 +120,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
             error={errors.email}
             errorMessage={t("authentication.signIn.loginError")}
             register={register}
+            labelClassName={"text__caps-spaced"}
           />
         </Form>
         <p className="pt-4">{t("authentication.createAccount.resendEmailInfo")}</p>
