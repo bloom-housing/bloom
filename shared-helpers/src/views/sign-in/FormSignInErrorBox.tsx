@@ -62,7 +62,7 @@ const FormSignInErrorBox = ({
           </AlertNotice>
         </>
       )}
-      <SiteAlert type="notice" dismissable />
+      <SiteAlert type="notice" dismissable className={styles["sign-in-error"]} />
     </div>
   )
 }

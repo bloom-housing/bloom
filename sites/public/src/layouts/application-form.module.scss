@@ -1,5 +1,6 @@
 .application-form-header {
   margin-block: var(--seeds-s6);
+  color: var(--seeds-color-gray-700);
 
   @media (max-width: theme("screens.md")) {
     margin-block-end: 0;
