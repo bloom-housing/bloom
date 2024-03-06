@@ -27,9 +27,9 @@ model ActivityLog {
   createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt    DateTime      @updatedAt @map("updated_at") @db.Timestamp(6)
   module       String        @db.VarChar
-  recordId     String        @map("record_id") @db.Uuid
   action       String        @db.VarChar
   metadata     Json?
+  recordId     String?        @map("record_id") @db.Uuid
   userId       String?       @map("user_id") @db.Uuid
   userAccounts UserAccounts? @relation(fields: [userId], references: [id], onUpdate: NoAction)
 
