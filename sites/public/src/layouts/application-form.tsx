@@ -1,12 +1,11 @@
 import React from "react"
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons"
-import { Button, Card, Heading, Icon } from "@bloom-housing/ui-seeds"
+import { Button, Heading, Icon } from "@bloom-housing/ui-seeds"
+import { BloomCard } from "@bloom-housing/shared-helpers"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { t, ProgressNav, StepHeader } from "@bloom-housing/ui-components"
 import ApplicationConductor from "../lib/applications/ApplicationConductor"
-
 import styles from "./application-form.module.scss"
-import { BloomCard } from "@bloom-housing/shared-helpers"
 
 interface ApplicationFormLayoutProps {
   listingName: string
