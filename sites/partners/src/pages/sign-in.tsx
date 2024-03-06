@@ -8,6 +8,7 @@ import {
   AuthContext,
   FormSignIn,
   ResendConfirmationModal,
+  FormSignInDefault,
 } from "@bloom-housing/shared-helpers"
 import { useMutate, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
@@ -124,16 +125,6 @@ const SignIn = () => {
 
     formToRender = (
       <FormSignIn
-        onSubmit={onSubmitEmailAndPassword(
-          setEmail,
-          setPassword,
-          setRenderStep,
-          determineNetworkError,
-          login,
-          router,
-          resetNetworkError
-        )}
-        control={{ register, errors, handleSubmit, watch }}
         networkStatus={{
           content: networkStatusContent,
           type: networkStatusType,
@@ -143,7 +134,21 @@ const SignIn = () => {
             setConfirmationStatusMessage(undefined)
           },
         }}
-      />
+        control={{ errors }}
+      >
+        <FormSignInDefault
+          onSubmit={onSubmitEmailAndPassword(
+            setEmail,
+            setPassword,
+            setRenderStep,
+            determineNetworkError,
+            login,
+            router,
+            resetNetworkError
+          )}
+          control={{ register, errors, handleSubmit }}
+        />
+      </FormSignIn>
     )
   } else if (renderStep === EnumRenderStep.mfaType) {
     formToRender = (
