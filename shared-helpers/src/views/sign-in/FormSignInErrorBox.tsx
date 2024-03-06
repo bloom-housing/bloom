@@ -22,11 +22,8 @@ const FormSignInErrorBox = ({
   errorMessageId,
   className,
 }: FormSignInErrorBoxProps) => {
-  const classNames = [""]
-  if (className) classNames.push(className)
-
   return (
-    <div className={classNames.join(" ")}>
+    <div className={className ? className : ""}>
       {Object.entries(errors).length > 0 && !networkStatus.content && (
         <AlertBox type="alert" inverted closeable className={styles["sign-in-error"]}>
           {errors.authentication ? errors.authentication.message : t("errors.errorsToResolve")}
