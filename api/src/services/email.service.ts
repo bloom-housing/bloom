@@ -317,6 +317,29 @@ export class EmailService {
     );
   }
 
+  public async sendSingleUseCode(user: User, singleUseCode: string) {
+    const jurisdiction = await this.getJurisdiction(user.jurisdictions);
+    void (await this.loadTranslations(jurisdiction, user.language));
+    const emailFromAddress = await this.getEmailToSendFrom(
+      user.jurisdictions,
+      jurisdiction,
+    );
+    await this.send(
+      user.email,
+      emailFromAddress,
+      user.confirmedAt
+        ? `Code for your ${jurisdiction.name} sign-in`
+        : `${jurisdiction.name} verification code`,
+      this.template('single-use-code')({
+        user: user,
+        singleUseCodeOptions: {
+          singleUseCode,
+          jurisdictionName: jurisdiction.name,
+        },
+      }),
+    );
+  }
+
   public async applicationConfirmation(
     listing: Listing,
     application: ApplicationCreate,
