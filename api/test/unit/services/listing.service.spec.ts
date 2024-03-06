@@ -444,6 +444,7 @@ describe('Testing listing service', () => {
       include: {
         jurisdictions: true,
         listingsBuildingAddress: true,
+        requestedChangesUser: true,
         reservedCommunityTypes: true,
         listingImages: {
           include: {
@@ -850,6 +851,7 @@ describe('Testing listing service', () => {
       include: {
         jurisdictions: true,
         listingsBuildingAddress: true,
+        requestedChangesUser: true,
         reservedCommunityTypes: true,
         listingImages: {
           include: {
@@ -1625,6 +1627,7 @@ describe('Testing listing service', () => {
         listingsBuildingSelectionCriteriaFile: true,
         listingsLeasingAgentAddress: true,
         listingsResult: true,
+        requestedChangesUser: true,
         reservedCommunityTypes: true,
         units: {
           include: {
@@ -1723,6 +1726,7 @@ describe('Testing listing service', () => {
         listingsBuildingSelectionCriteriaFile: true,
         listingsLeasingAgentAddress: true,
         listingsResult: true,
+        requestedChangesUser: true,
         reservedCommunityTypes: true,
         units: {
           include: {
@@ -2158,6 +2162,7 @@ describe('Testing listing service', () => {
         listingsApplicationMailingAddress: true,
         listingsLeasingAgentAddress: true,
         listingsResult: true,
+        requestedChangesUser: true,
         reservedCommunityTypes: true,
         units: {
           include: {
@@ -2280,6 +2285,7 @@ describe('Testing listing service', () => {
         listingsLeasingAgentAddress: true,
         listingsResult: true,
         reservedCommunityTypes: true,
+        requestedChangesUser: true,
         units: {
           include: {
             amiChart: {

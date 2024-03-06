@@ -885,14 +885,7 @@ export class ListingService implements OnModuleInit {
               },
             }
           : undefined,
-        requestedChangesUser: dto.requestedChangesUser
-          ? {
-              connect: {
-                id: dto.requestedChangesUser.id,
-              },
-            }
-          : undefined,
-        // TODO: Speak to team if this will ever be called
+        requestedChangesUser: undefined,
       },
     });
 

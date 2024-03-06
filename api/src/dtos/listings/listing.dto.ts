@@ -33,7 +33,6 @@ import { UnitsSummarized } from '../units/unit-summarized.dto';
 import { UnitsSummary } from '../units/units-summary.dto';
 import { IdDTO } from '../shared/id.dto';
 import { listingUrlSlug } from '../../utilities/listing-url-slug';
-import { User } from '../users/user.dto';
 
 class Listing extends AbstractDTO {
   @Expose()
