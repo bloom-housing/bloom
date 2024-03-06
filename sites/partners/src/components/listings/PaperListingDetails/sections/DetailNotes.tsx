@@ -31,7 +31,7 @@ const DetailListingNotes = () => {
 
         {listing.requestedChangesUser && (
           <FieldValue id="requestedChangesUser" label={t("listings.approval.requestedBy")}>
-            {`${listing.requestedChangesUser?.firstName} ${listing.requestedChangesUser?.lastName}`}
+            {`${listing.requestedChangesUser}`}
           </FieldValue>
         )}
       </Grid.Row>

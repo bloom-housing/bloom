@@ -108,6 +108,7 @@ views.full = {
   listingsApplicationPickUpAddress: true,
   listingsApplicationDropOffAddress: true,
   listingsApplicationMailingAddress: true,
+  requestedChangesUser: true,
   units: {
     include: {
       unitAmiChartOverrides: true,
@@ -127,7 +128,6 @@ views.full = {
 views.details = {
   ...views.base,
   ...views.full,
-  requestedChangesUser: true,
 };
 
 views.csv = {
@@ -892,6 +892,7 @@ export class ListingService implements OnModuleInit {
               },
             }
           : undefined,
+        // TODO: Speak to team if this will ever be called
       },
     });
 

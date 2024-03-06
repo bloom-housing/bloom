@@ -3011,7 +3011,7 @@ export interface Listing {
   requestedChangesDate?: Date
 
   /**  */
-  requestedChangesUser?: User
+  requestedChangesUser?: string
 }
 
 export interface PaginationMeta {
