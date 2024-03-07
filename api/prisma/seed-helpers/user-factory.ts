@@ -7,7 +7,7 @@ export const userFactory = async (optionalParams?: {
   firstName?: string;
   lastName?: string;
   email?: string;
-  mfaCode?: string;
+  singleUseCode?: string;
   mfaEnabled?: boolean;
   confirmedAt?: Date;
   phoneNumber?: string;
@@ -30,10 +30,10 @@ export const userFactory = async (optionalParams?: {
       isPartner: optionalParams?.roles?.isPartner || false,
     },
   },
-  mfaCode: optionalParams?.mfaCode || null,
+  singleUseCode: optionalParams?.singleUseCode || null,
   mfaEnabled: optionalParams?.mfaEnabled || false,
   confirmedAt: optionalParams?.confirmedAt || null,
-  mfaCodeUpdatedAt: optionalParams?.mfaEnabled ? new Date() : undefined,
+  singleUseCodeUpdatedAt: optionalParams?.mfaEnabled ? new Date() : undefined,
   phoneNumber: optionalParams?.phoneNumber || null,
   phoneNumberVerified: optionalParams?.phoneNumberVerified || null,
   agreedToTermsOfService: optionalParams?.acceptedTerms || false,

@@ -15,13 +15,13 @@ export class SmsService {
   }
   public async sendMfaCode(
     phoneNumber: string,
-    mfaCode: string,
+    singleUseCode: string,
   ): Promise<void> {
     if (!this.client) {
       return;
     }
     await this.client.messages.create({
-      body: `Your Partners Portal account access token: ${mfaCode}`,
+      body: `Your Partners Portal account access token: ${singleUseCode}`,
       from: process.env.TWILIO_PHONE_NUMBER,
       to: phoneNumber,
     });

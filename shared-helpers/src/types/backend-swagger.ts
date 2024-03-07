@@ -1851,6 +1851,28 @@ export class AuthService {
     })
   }
   /**
+   * Request single use code
+   */
+  requestSingleUseCode(
+    params: {
+      /** requestBody */
+      body?: RequestSingleUseCode
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/auth/request-single-use-code"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Requests a new token given a refresh token
    */
   requestNewToken(options: IRequestOptions = {}): Promise<SuccessDTO> {
@@ -2678,6 +2700,9 @@ export interface Jurisdiction {
 
   /**  */
   enableUtilitiesIncluded: boolean
+
+  /**  */
+  allowSingleUseCodeLogin: boolean
 
   /**  */
   listingApprovalPermissions: EnumJurisdictionListingApprovalPermissions[]
@@ -4339,6 +4364,9 @@ export interface JurisdictionCreate {
   enableUtilitiesIncluded: boolean
 
   /**  */
+  allowSingleUseCodeLogin: boolean
+
+  /**  */
   listingApprovalPermissions: EnumJurisdictionCreateListingApprovalPermissions[]
 }
 
@@ -4378,6 +4406,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   enableUtilitiesIncluded: boolean
+
+  /**  */
+  allowSingleUseCodeLogin: boolean
 
   /**  */
   listingApprovalPermissions: EnumJurisdictionUpdateListingApprovalPermissions[]
@@ -5041,6 +5072,11 @@ export interface RequestMfaCodeResponse {
 
   /**  */
   phoneNumberVerified?: boolean
+}
+
+export interface RequestSingleUseCode {
+  /**  */
+  email: string
 }
 
 export interface UpdatePassword {

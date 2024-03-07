@@ -48,6 +48,7 @@ import { PermissionAction } from '../decorators/permission-action.decorator';
 import { ApplicationCsvExporterService } from '../services/application-csv-export.service';
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
 import { MostRecentApplicationQueryParams } from '../dtos/applications/most-recent-application-query-params.dto';
+import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
 
 @Controller('applications')
 @ApiTags('applications')
@@ -98,6 +99,7 @@ export class ApplicationController {
     operationId: 'listAsCsv',
   })
   @Header('Content-Type', 'text/csv')
+  @UseInterceptors(ExportLogInterceptor)
   async listAsCsv(
     @Request() req: ExpressRequest,
     @Res({ passthrough: true }) res: Response,

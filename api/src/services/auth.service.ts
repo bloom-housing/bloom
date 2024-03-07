@@ -4,8 +4,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Response } from 'express';
-import { CookieOptions } from 'express';
+import { CookieOptions, Request, Response } from 'express';
 import { sign, verify } from 'jsonwebtoken';
 import { randomInt } from 'crypto';
 import { Prisma } from '@prisma/client';
@@ -23,6 +22,7 @@ import { mapTo } from '../utilities/mapTo';
 import { Confirm } from '../dtos/auth/confirm.dto';
 import { SmsService } from './sms.service';
 import { EmailService } from './email.service';
+import { RequestSingleUseCode } from '../dtos/single-use-code/request-single-use-code.dto';
 
 // since our local env doesn't have an https cert we can't be secure. Hosted envs should be secure
 const secure = process.env.NODE_ENV !== 'development';
@@ -219,11 +219,11 @@ export class AuthService {
       }
     }
 
-    const mfaCode = this.generateMfaCode();
+    const singleUseCode = this.generateSingleUseCode();
     await this.prisma.userAccounts.update({
       data: {
-        mfaCode,
-        mfaCodeUpdatedAt: new Date(),
+        singleUseCode,
+        singleUseCodeUpdatedAt: new Date(),
         phoneNumber: user.phoneNumber,
       },
       where: {
@@ -232,9 +232,9 @@ export class AuthService {
     });
 
     if (dto.mfaType === MfaType.email) {
-      await this.emailsService.sendMfaCode(mapTo(User, user), mfaCode);
+      await this.emailsService.sendMfaCode(mapTo(User, user), singleUseCode);
     } else if (dto.mfaType === MfaType.sms) {
-      await this.smsService.sendMfaCode(user.phoneNumber, mfaCode);
+      await this.smsService.sendMfaCode(user.phoneNumber, singleUseCode);
     }
 
     return dto.mfaType === MfaType.email
@@ -243,6 +243,65 @@ export class AuthService {
           phoneNumber: user.phoneNumber,
           phoneNumberVerified: user.phoneNumberVerified,
         };
+  }
+
+  /**
+   *
+   * @param dto the incoming request with the email
+   * @returns a SuccessDTO always, and if the user exists it will send a code to the requester
+   */
+  async requestSingleUseCode(
+    dto: RequestSingleUseCode,
+    req: Request,
+  ): Promise<SuccessDTO> {
+    const user = await this.prisma.userAccounts.findFirst({
+      where: { email: dto.email },
+      include: {
+        jurisdictions: true,
+      },
+    });
+    if (!user) {
+      return { success: true };
+    }
+
+    if (!req?.headers?.jurisdictionname) {
+      throw new BadRequestException(
+        'jurisdictionname is missing from the request headers',
+      );
+    }
+
+    const jurisName = req.headers['jurisdictionname'];
+    const juris = await this.prisma.jurisdictions.findFirst({
+      where: {
+        name: {
+          in: Array.isArray(jurisName) ? jurisName : [jurisName],
+        },
+        allowSingleUseCodeLogin: true,
+      },
+    });
+    if (!juris) {
+      throw new BadRequestException(
+        'Single use code login is not setup for this jurisdiction',
+      );
+    }
+
+    const singleUseCode = this.generateSingleUseCode();
+    await this.prisma.userAccounts.update({
+      data: {
+        singleUseCode,
+        singleUseCodeUpdatedAt: new Date(),
+      },
+      where: {
+        id: user.id,
+      },
+    });
+
+    await this.emailsService.sendSingleUseCode(
+      mapTo(User, user),
+      singleUseCode,
+    );
+
+    return { success: true };
   }
 
   /*
@@ -330,7 +389,7 @@ export class AuthService {
   /*
     generates a numeric mfa code
   */
-  generateMfaCode() {
+  generateSingleUseCode() {
     let out = '';
     const characters = '0123456789';
     for (let i = 0; i < Number(process.env.MFA_CODE_LENGTH); i++) {
