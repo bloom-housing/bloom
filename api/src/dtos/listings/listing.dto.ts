@@ -34,7 +34,7 @@ import { UnitsSummary } from '../units/units-summary.dto';
 import { IdDTO } from '../shared/id.dto';
 import { listingUrlSlug } from '../../utilities/listing-url-slug';
 import { User } from '../users/user.dto';
-import { requestedChangesUserMapper } from 'src/utilities/requested-changes-user';
+import { requestedChangesUserMapper } from '../../utilities/requested-changes-user';
 
 class Listing extends AbstractDTO {
   @Expose()
