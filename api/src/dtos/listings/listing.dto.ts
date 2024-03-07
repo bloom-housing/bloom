@@ -33,6 +33,8 @@ import { UnitsSummarized } from '../units/unit-summarized.dto';
 import { UnitsSummary } from '../units/units-summary.dto';
 import { IdDTO } from '../shared/id.dto';
 import { listingUrlSlug } from '../../utilities/listing-url-slug';
+import { User } from '../users/user.dto';
+import { requestedChangesUserMapper } from 'src/utilities/requested-changes-user';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -548,14 +550,12 @@ class Listing extends AbstractDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @Transform(
     (obj: any) =>
-      obj.obj?.requestedChangesUser?.firstName +
-      ' ' +
-      obj.obj?.requestedChangesUser?.lastName,
+      requestedChangesUserMapper(obj.obj.requestedChangesUser as User),
     {
       toClassOnly: true,
     },
   )
-  requestedChangesUser?: string;
+  requestedChangesUser?: IdDTO;
 }
 
 export { Listing as default, Listing };
