@@ -910,11 +910,21 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the wron
         .expect(403);
     });
 
-    it('should succeed for csv export endpoint', async () => {
+    it('should succeed for csv export endpoint & create an activity log entry', async () => {
       await request(app.getHttpServer())
         .get('/user/csv')
         .set('Cookie', cookies)
         .expect(200);
+
+      const activityLogResult = await prisma.activityLog.findFirst({
+        where: {
+          module: 'user',
+          action: 'export',
+          recordId: null,
+        },
+      });
+
+      expect(activityLogResult).not.toBeNull();
     });
   });
 
@@ -1012,11 +1022,20 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the wron
         .expect(200);
     });
 
-    it('should succeed for csv endpoint', async () => {
+    it('should succeed for csv endpoint & create an activity log entry', async () => {
       await request(app.getHttpServer())
         .get(`/listings/csv`)
         .set('Cookie', cookies)
         .expect(200);
+      const activityLogResult = await prisma.activityLog.findFirst({
+        where: {
+          module: 'listing',
+          action: 'export',
+          recordId: null,
+        },
+      });
+
+      expect(activityLogResult).not.toBeNull();
     });
   });
 
