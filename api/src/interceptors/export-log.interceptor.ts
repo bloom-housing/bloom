@@ -1,7 +1,7 @@
 import { CallHandler, ExecutionContext, Injectable } from '@nestjs/common';
 import { ActivityLogInterceptor } from './activity-log.interceptor';
 import { endWith, from, ignoreElements, mergeMap } from 'rxjs';
-import { PrismaService } from 'src/services/prisma.service';
+import { PrismaService } from '../services/prisma.service';
 import { Reflector } from '@nestjs/core';
 
 @Injectable()
