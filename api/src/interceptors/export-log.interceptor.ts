@@ -15,7 +15,7 @@ export class ExportLogInterceptor extends ActivityLogInterceptor {
     return next.handle().pipe(
       mergeMap((value) => {
         let resourceId;
-        // only export tied to a single resourceId
+        // only export type tied to a single resourceId
         if (module === 'application') {
           const req = context.switchToHttp().getRequest();
           resourceId = req.query.listingId;
