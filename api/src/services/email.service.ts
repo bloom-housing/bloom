@@ -28,6 +28,12 @@ type EmailAttachmentData = {
   type: string;
 };
 
+type listingInfo = {
+  id: string;
+  name: string;
+  juris: string;
+};
+
 @Injectable()
 export class EmailService {
   polyglot: Polyglot;
@@ -429,13 +435,15 @@ export class EmailService {
   }
 
   public async changesRequested(
-    jurisdictionId: IdDTO,
-    listingInfo: IdDTO,
+    user: User,
+    listingInfo: listingInfo,
     emails: string[],
     appUrl: string,
   ) {
     try {
-      const jurisdiction = await this.getJurisdiction([jurisdictionId]);
+      const jurisdiction = listingInfo.juris
+        ? await this.getJurisdiction([{ id: listingInfo.juris }])
+        : user.jurisdictions[0];
       void (await this.loadTranslations(jurisdiction));
       await this.send(
         emails,

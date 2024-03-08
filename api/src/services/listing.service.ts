@@ -313,7 +313,11 @@ export class ListingService implements OnModuleInit {
       );
       await this.emailService.changesRequested(
         params.user,
-        { id: params.listingInfo.id, name: params.listingInfo.name },
+        {
+          id: params.listingInfo.id,
+          name: params.listingInfo.name,
+          juris: params.jurisId,
+        },
         userInfo.emails,
         this.configService.get('PARTNERS_PORTAL_URL'),
       );
