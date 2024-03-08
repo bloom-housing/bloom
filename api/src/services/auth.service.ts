@@ -334,6 +334,8 @@ export class AuthService {
         passwordHash: await passwordToHash(dto.password),
         passwordUpdatedAt: new Date(),
         resetToken: null,
+        confirmedAt: user.confirmedAt || new Date(),
+        confirmationToken: null,
       },
       where: {
         id: user.id,

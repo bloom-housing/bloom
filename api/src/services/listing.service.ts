@@ -81,7 +81,6 @@ views.base = {
     include: {
       unitTypes: true,
       unitAmiChartOverrides: true,
-      amiChart: true,
     },
   },
 };
@@ -628,7 +627,11 @@ export class ListingService implements OnModuleInit {
         });
       }
     }
-    return JSON.stringify(listing);
+    // add additional jurisdiction fields for external purpose
+    const jurisdiction = await this.prisma.jurisdictions.findFirst({
+      where: { id: listing.jurisdictions.id },
+    });
+    return JSON.stringify({ ...listing, jurisdiction: jurisdiction });
   }
 
   /*
