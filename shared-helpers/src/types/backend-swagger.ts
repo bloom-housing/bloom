@@ -2650,6 +2650,9 @@ export interface Jurisdiction {
   enablePartnerSettings?: boolean
 
   /**  */
+  enablePartnerDemographics?: boolean
+
+  /**  */
   enableGeocodingPreferences?: boolean
 
   /**  */
@@ -2657,6 +2660,9 @@ export interface Jurisdiction {
 
   /**  */
   enableUtilitiesIncluded: boolean
+
+  /**  */
+  allowSingleUseCodeLogin: boolean
 
   /**  */
   listingApprovalPermissions: EnumJurisdictionListingApprovalPermissions[]
@@ -4309,6 +4315,9 @@ export interface JurisdictionCreate {
   enablePartnerSettings?: boolean
 
   /**  */
+  enablePartnerDemographics?: boolean
+
+  /**  */
   enableGeocodingPreferences?: boolean
 
   /**  */
@@ -4316,6 +4325,9 @@ export interface JurisdictionCreate {
 
   /**  */
   enableUtilitiesIncluded: boolean
+
+  /**  */
+  allowSingleUseCodeLogin: boolean
 
   /**  */
   listingApprovalPermissions: EnumJurisdictionCreateListingApprovalPermissions[]
@@ -4350,6 +4362,9 @@ export interface JurisdictionUpdate {
   enablePartnerSettings?: boolean
 
   /**  */
+  enablePartnerDemographics?: boolean
+
+  /**  */
   enableGeocodingPreferences?: boolean
 
   /**  */
@@ -4357,6 +4372,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   enableUtilitiesIncluded: boolean
+
+  /**  */
+  allowSingleUseCodeLogin: boolean
 
   /**  */
   listingApprovalPermissions: EnumJurisdictionUpdateListingApprovalPermissions[]

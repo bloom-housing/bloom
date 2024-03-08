@@ -101,7 +101,7 @@ model AmiChart {
   @@map("ami_chart")
 }
 
-// Note: [birth_month, birth_day, birth_year] formerly max length 8; [phone_number, phone_number_type] formerly max length 16; 
+// Note: [birth_month, birth_day, birth_year] formerly max length 8; [phone_number, phone_number_type] formerly max length 16;
 //       [first_name, middle_name, last_name] formerly max length 64
 // Note: [first_name, last_name] formerly min length 1
 // Note: [email_address] needs to have lower case enforcement and needs isEmail validator
@@ -167,9 +167,9 @@ model ApplicationMethods {
   @@map("application_methods")
 }
 
-// Note: [additional_phone_number, additional_phone_number_type, household_size] formerly max length 16; 
+// Note: [additional_phone_number, additional_phone_number_type, household_size] formerly max length 16;
 //       [contact_preferences, income] formerly max length 64;
-//       [app_url] formerly max length 256; 
+//       [app_url] formerly max length 256;
 // Note: [contact_preferences] formerly max array length of 8
 // Note: [household_member] formerly had max array lenght of 32
 // Note: missing virtual [flagged] field
@@ -284,7 +284,7 @@ model GeneratedListingTranslations {
   @@map("generated_listing_translations")
 }
 
-// Note: [birth_month, birth_day, birth_year] formerly max length 8; 
+// Note: [birth_month, birth_day, birth_year] formerly max length 8;
 //       [phone_number, phone_number_type] formerly max length 16
 //       [first_name, middle_name, last_name, relationship] formerly max length 64;
 // Note: [email_address] formerly enforced lower case
@@ -326,6 +326,7 @@ model Jurisdictions {
   emailFromAddress            String?                  @map("email_from_address")
   rentalAssistanceDefault     String                   @map("rental_assistance_default")
   enablePartnerSettings       Boolean                  @default(false) @map("enable_partner_settings")
+  enablePartnerDemographics   Boolean                  @default(false) @map("enable_partner_demographics")
   enableAccessibilityFeatures Boolean                  @default(false) @map("enable_accessibility_features")
   enableUtilitiesIncluded     Boolean                  @default(false) @map("enable_utilities_included")
   enableGeocodingPreferences  Boolean                  @default(false) @map("enable_geocoding_preferences")
@@ -580,7 +581,7 @@ model MapLayers {
   @@map("map_layers")
 }
 
-// Note: hold over from TypeORM 
+// Note: hold over from TypeORM
 model Migrations {
   id        Int    @id() @default(autoincrement())
   timestamp BigInt
