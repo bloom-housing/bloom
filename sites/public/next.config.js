@@ -31,6 +31,7 @@ const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(
 module.exports = withBundleAnalyzer({
   env: {
     backendApiBase: BACKEND_API_BASE,
+    doorwayUrl: process.env.DOORWAY_URL,
     listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
     listingPhotoSize: process.env.LISTING_PHOTO_SIZE || "1302",
     mapBoxToken: MAPBOX_TOKEN,
