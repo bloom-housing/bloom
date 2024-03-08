@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { randomUUID } from 'crypto';
 import { sign } from 'jsonwebtoken';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { MailService } from '@sendgrid/mail';
 import {
@@ -648,6 +648,8 @@ describe('Testing auth service', () => {
         passwordHash: expect.anything(),
         passwordUpdatedAt: expect.anything(),
         resetToken: null,
+        confirmedAt: expect.anything(),
+        confirmationToken: null,
       },
       where: {
         id,
@@ -837,5 +839,165 @@ describe('Testing auth service', () => {
       'True',
       ACCESS_TOKEN_AVAILABLE_OPTIONS,
     );
+  });
+
+  it('should request single use code but user does not exist', async () => {
+    const id = randomUUID();
+    emailService.sendSingleUseCode = jest.fn();
+    prisma.userAccounts.findFirst = jest.fn().mockResolvedValue(null);
+    prisma.userAccounts.update = jest.fn().mockResolvedValue({
+      id,
+    });
+
+    const res = await authService.requestSingleUseCode(
+      {
+        email: 'example@exygy.com',
+      },
+      { headers: { jurisdictionname: 'juris 1' } } as unknown as Request,
+    );
+
+    expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
+      where: {
+        email: 'example@exygy.com',
+      },
+      include: {
+        jurisdictions: true,
+      },
+    });
+    expect(prisma.userAccounts.update).not.toHaveBeenCalled();
+    expect(emailService.sendSingleUseCode).not.toHaveBeenCalled();
+    expect(res).toEqual({
+      success: true,
+    });
+  });
+
+  it('should request single use code but jurisdiction does not allow', async () => {
+    const id = randomUUID();
+    emailService.sendSingleUseCode = jest.fn();
+    prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
+      id,
+    });
+    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
+    prisma.userAccounts.update = jest.fn().mockResolvedValue({
+      id,
+    });
+
+    await expect(
+      async () =>
+        await authService.requestSingleUseCode(
+          {
+            email: 'example@exygy.com',
+          },
+          { headers: { jurisdictionname: 'juris 1' } } as unknown as Request,
+        ),
+    ).rejects.toThrowError(
+      'Single use code login is not setup for this jurisdiction',
+    );
+
+    expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
+      where: {
+        email: 'example@exygy.com',
+      },
+      include: {
+        jurisdictions: true,
+      },
+    });
+    expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
+      where: {
+        name: {
+          in: ['juris 1'],
+        },
+        allowSingleUseCodeLogin: true,
+      },
+    });
+    expect(prisma.userAccounts.update).not.toHaveBeenCalled();
+    expect(emailService.sendSingleUseCode).not.toHaveBeenCalled();
+  });
+
+  it('should request single use code but jurisdictionname was not sent', async () => {
+    const id = randomUUID();
+    emailService.sendSingleUseCode = jest.fn();
+    prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
+      id,
+    });
+    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+      id,
+    });
+    prisma.userAccounts.update = jest.fn().mockResolvedValue({
+      id,
+    });
+
+    await expect(
+      async () =>
+        await authService.requestSingleUseCode(
+          {
+            email: 'example@exygy.com',
+          },
+          {} as unknown as Request,
+        ),
+    ).rejects.toThrowError(
+      'jurisdictionname is missing from the request headers',
+    );
+
+    expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
+      where: {
+        email: 'example@exygy.com',
+      },
+      include: {
+        jurisdictions: true,
+      },
+    });
+    expect(prisma.jurisdictions.findFirst).not.toHaveBeenCalled();
+    expect(prisma.userAccounts.update).not.toHaveBeenCalled();
+    expect(emailService.sendSingleUseCode).not.toHaveBeenCalled();
+  });
+
+  it('should successfully request single use code', async () => {
+    const id = randomUUID();
+    emailService.sendSingleUseCode = jest.fn();
+    prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
+      id,
+    });
+    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+      id,
+    });
+    prisma.userAccounts.update = jest.fn().mockResolvedValue({
+      id,
+    });
+
+    const res = await authService.requestSingleUseCode(
+      {
+        email: 'example@exygy.com',
+      },
+      { headers: { jurisdictionname: 'juris 1' } } as unknown as Request,
+    );
+
+    expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
+      where: {
+        email: 'example@exygy.com',
+      },
+      include: {
+        jurisdictions: true,
+      },
+    });
+    expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
+      where: {
+        name: {
+          in: ['juris 1'],
+        },
+        allowSingleUseCodeLogin: true,
+      },
+    });
+    expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+      data: {
+        singleUseCode: expect.anything(),
+        singleUseCodeUpdatedAt: expect.anything(),
+      },
+      where: {
+        id,
+      },
+    });
+    expect(emailService.sendSingleUseCode).toHaveBeenCalled();
+    expect(res.success).toEqual(true);
   });
 });

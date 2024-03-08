@@ -4,8 +4,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Response } from 'express';
-import { CookieOptions } from 'express';
+import { CookieOptions, Request, Response } from 'express';
 import { sign, verify } from 'jsonwebtoken';
 import { randomInt } from 'crypto';
 import { Prisma } from '@prisma/client';
@@ -23,6 +22,7 @@ import { mapTo } from '../utilities/mapTo';
 import { Confirm } from '../dtos/auth/confirm.dto';
 import { SmsService } from './sms.service';
 import { EmailService } from './email.service';
+import { RequestSingleUseCode } from '../dtos/single-use-code/request-single-use-code.dto';
 
 // since our local env doesn't have an https cert we can't be secure. Hosted envs should be secure
 const secure = process.env.NODE_ENV !== 'development';
@@ -245,6 +245,65 @@ export class AuthService {
         };
   }
 
+  /**
+   *
+   * @param dto the incoming request with the email
+   * @returns a SuccessDTO always, and if the user exists it will send a code to the requester
+   */
+  async requestSingleUseCode(
+    dto: RequestSingleUseCode,
+    req: Request,
+  ): Promise<SuccessDTO> {
+    const user = await this.prisma.userAccounts.findFirst({
+      where: { email: dto.email },
+      include: {
+        jurisdictions: true,
+      },
+    });
+    if (!user) {
+      return { success: true };
+    }
+
+    if (!req?.headers?.jurisdictionname) {
+      throw new BadRequestException(
+        'jurisdictionname is missing from the request headers',
+      );
+    }
+
+    const jurisName = req.headers['jurisdictionname'];
+    const juris = await this.prisma.jurisdictions.findFirst({
+      where: {
+        name: {
+          in: Array.isArray(jurisName) ? jurisName : [jurisName],
+        },
+        allowSingleUseCodeLogin: true,
+      },
+    });
+    if (!juris) {
+      throw new BadRequestException(
+        'Single use code login is not setup for this jurisdiction',
+      );
+    }
+
+    const singleUseCode = this.generateSingleUseCode();
+    await this.prisma.userAccounts.update({
+      data: {
+        singleUseCode,
+        singleUseCodeUpdatedAt: new Date(),
+      },
+      where: {
+        id: user.id,
+      },
+    });
+
+    await this.emailsService.sendSingleUseCode(
+      mapTo(User, user),
+      singleUseCode,
+    );
+
+    return { success: true };
+  }
+
   /*
     updates a user's password and logs them in
   */
@@ -275,6 +334,8 @@ export class AuthService {
         passwordHash: await passwordToHash(dto.password),
         passwordUpdatedAt: new Date(),
         resetToken: null,
+        confirmedAt: user.confirmedAt || new Date(),
+        confirmationToken: null,
       },
       where: {
         id: user.id,
