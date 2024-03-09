@@ -107,6 +107,7 @@ export const buildJurisdictionCreateMock = (
     enablePartnerSettings: true,
     enableAccessibilityFeatures: true,
     enableUtilitiesIncluded: true,
+    allowSingleUseCodeLogin: true,
     listingApprovalPermissions: [],
   };
 };
@@ -127,6 +128,7 @@ export const buildJurisdictionUpdateMock = (
     enablePartnerSettings: true,
     enableAccessibilityFeatures: true,
     enableUtilitiesIncluded: true,
+    allowSingleUseCodeLogin: true,
     listingApprovalPermissions: [],
   };
 };

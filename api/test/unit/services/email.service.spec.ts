@@ -363,7 +363,7 @@ describe('Testing email service', () => {
       const service = await module.resolve(EmailService);
       await service.changesRequested(
         { name: 'test', id: '1234' },
-        { name: 'listing name', id: 'listingId' },
+        { name: 'listing name', id: 'listingId', juris: 'jurisId' },
         emailArr,
         'http://localhost:3001',
       );

@@ -82,7 +82,6 @@ views.base = {
     include: {
       unitTypes: true,
       unitAmiChartOverrides: true,
-      amiChart: true,
     },
   },
 };
@@ -431,7 +430,11 @@ export class ListingService implements OnModuleInit {
       );
       await this.emailService.changesRequested(
         params.user,
-        { id: params.listingInfo.id, name: params.listingInfo.name },
+        {
+          id: params.listingInfo.id,
+          name: params.listingInfo.name,
+          juris: params.jurisId,
+        },
         userInfo.emails,
         this.configService.get('PARTNERS_PORTAL_URL'),
       );
@@ -745,7 +748,11 @@ export class ListingService implements OnModuleInit {
         });
       }
     }
-    return JSON.stringify(listing);
+    // add additional jurisdiction fields for external purpose
+    const jurisdiction = await this.prisma.jurisdictions.findFirst({
+      where: { id: listing.jurisdictions.id },
+    });
+    return JSON.stringify({ ...listing, jurisdiction: jurisdiction });
   }
 
   /*

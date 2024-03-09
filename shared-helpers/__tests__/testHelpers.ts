@@ -152,6 +152,7 @@ export const jurisdiction: Jurisdiction = {
       id: "e847c9bf-4c32-4f02-8746-e9b20e0872af",
     },
   ],
+  allowSingleUseCodeLogin: false,
 }
 
 export const listing: Listing = {

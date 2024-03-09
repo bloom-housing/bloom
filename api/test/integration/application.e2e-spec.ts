@@ -129,6 +129,7 @@ describe('Application Controller Tests', () => {
 
       const res = await request(app.getHttpServer())
         .get(`/applications?${query}`)
+        .set('Cookie', cookies)
         .expect(200);
       expect(res.body.items.length).toBe(0);
     });
@@ -174,6 +175,7 @@ describe('Application Controller Tests', () => {
 
       const res = await request(app.getHttpServer())
         .get(`/applications?${query}`)
+        .set('Cookie', cookies)
         .expect(200);
 
       expect(res.body.items.length).toBeGreaterThanOrEqual(2);
@@ -211,6 +213,7 @@ describe('Application Controller Tests', () => {
 
       const res = await request(app.getHttpServer())
         .get(`/applications`)
+        .set('Cookie', cookies)
         .expect(200);
 
       expect(res.body.items.length).toBeGreaterThanOrEqual(2);
@@ -652,6 +655,7 @@ describe('Application Controller Tests', () => {
       let geocodingOptions = savedPreferences[0].options[0];
       // This catches the edge case where the geocoding hasn't completed yet
       if (geocodingOptions.extraData.length === 1) {
+        // I'm unsure why removing this console log makes this test fail. This should be looked into
         console.log('');
         savedApplication = await prisma.applications.findMany({
           where: {

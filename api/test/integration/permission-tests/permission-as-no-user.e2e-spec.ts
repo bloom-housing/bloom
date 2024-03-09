@@ -185,11 +185,11 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       });
     });
 
-    it('should succeed for list endpoint', async () => {
+    it('should be forbidden for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/applications?`)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
     it('should succeed for retrieve endpoint', async () => {

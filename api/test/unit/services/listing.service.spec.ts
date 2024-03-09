@@ -589,7 +589,6 @@ describe('Testing listing service', () => {
           include: {
             unitTypes: true,
             unitAmiChartOverrides: true,
-            amiChart: true,
           },
         },
       },
@@ -679,7 +678,6 @@ describe('Testing listing service', () => {
           include: {
             unitTypes: true,
             unitAmiChartOverrides: true,
-            amiChart: true,
           },
         },
       },
@@ -824,7 +822,6 @@ describe('Testing listing service', () => {
           include: {
             unitTypes: true,
             unitAmiChartOverrides: true,
-            amiChart: true,
           },
         },
       },
@@ -1122,7 +1119,6 @@ describe('Testing listing service', () => {
           include: {
             unitTypes: true,
             unitAmiChartOverrides: true,
-            amiChart: true,
           },
         },
       },
@@ -1516,7 +1512,6 @@ describe('Testing listing service', () => {
           include: {
             unitTypes: true,
             unitAmiChartOverrides: true,
-            amiChart: true,
           },
         },
       },
@@ -2585,7 +2580,7 @@ describe('Testing listing service', () => {
     );
     expect(changesRequestedMock).toBeCalledWith(
       user,
-      { id: 'id', name: 'name' },
+      { id: 'id', name: 'name', juris: 'jurisId' },
       ['jurisAdmin@email.com', 'partner@email.com'],
       config.get('PARTNERS_PORTAL_URL'),
     );

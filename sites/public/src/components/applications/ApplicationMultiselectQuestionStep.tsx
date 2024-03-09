@@ -248,7 +248,7 @@ const ApplicationMultiselectQuestionStep = ({
                   <legend className="text__caps-spaced mb-4 sr-only">{question?.text}</legend>
                   {applicationSection ===
                     MultiselectQuestionsApplicationSectionEnum.preferences && (
-                    <div className="mb-8">
+                    <div className="mb-6">
                       <p className="text__caps-spaced m-0">{question?.text}</p>
                       {question?.description && (
                         <p className="field-note mt-3">{question?.description}</p>
@@ -266,7 +266,7 @@ const ApplicationMultiselectQuestionStep = ({
                       ))}
                     </div>
                   )}
-                  <p className="field-note mb-8">
+                  <p className="field-note mb-3">
                     {t("application.household.preferredUnit.optionsLabel")}
                   </p>
                   {allOptions
@@ -280,8 +280,8 @@ const ApplicationMultiselectQuestionStep = ({
               )}
             </CardSection>
           </div>
-          <CardSection>
-            {verifyAddress && (
+          {verifyAddress && (
+            <CardSection>
               <AddressValidationSelection
                 {...{
                   foundAddress,
@@ -291,8 +291,8 @@ const ApplicationMultiselectQuestionStep = ({
                   setVerifyAddressStep,
                 }}
               />
-            )}
-          </CardSection>
+            </CardSection>
+          )}
         </ApplicationFormLayout>
       </Form>
     </FormsLayout>

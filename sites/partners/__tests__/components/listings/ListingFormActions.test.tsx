@@ -34,6 +34,7 @@ const mockBaseJurisdiction: Jurisdiction = {
   listingApprovalPermissions: [],
   enableGeocodingPreferences: false,
   enableListingOpportunity: false,
+  allowSingleUseCodeLogin: false,
 }
 
 const mockAdminOnlyJurisdiction: Jurisdiction = {

@@ -29,6 +29,7 @@ import { OptionalAuthGuard } from '../guards/optional.guard';
 import { Login } from '../dtos/auth/login.dto';
 import { mapTo } from '../utilities/mapTo';
 import { User } from '../dtos/users/user.dto';
+import { RequestSingleUseCode } from '../dtos/single-use-code/request-single-use-code.dto';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -69,6 +70,19 @@ export class AuthController {
     @Body() dto: RequestMfaCode,
   ): Promise<RequestMfaCodeResponse> {
     return await this.authService.requestMfaCode(dto);
+  }
+
+  @Post('request-single-use-code')
+  @ApiOperation({
+    summary: 'Request single use code',
+    operationId: 'requestSingleUseCode',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async requestSingleUseCode(
+    @Request() req: ExpressRequest,
+    @Body() dto: RequestSingleUseCode,
+  ): Promise<SuccessDTO> {
+    return await this.authService.requestSingleUseCode(dto, req);
   }
 
   @Get('requestNewToken')

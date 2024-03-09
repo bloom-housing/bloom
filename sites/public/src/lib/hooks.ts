@@ -67,10 +67,12 @@ export async function fetchBaseListingData({
   additionalFilters,
   orderBy,
   orderDir,
+  limit,
 }: {
   additionalFilters?: ListingFilterParams[]
   orderBy?: ListingOrderByKeys[]
   orderDir?: OrderByEnum[]
+  limit?: string
 }) {
   let listings = []
   try {
@@ -87,7 +89,7 @@ export async function fetchBaseListingData({
       orderDir?: OrderByEnum[]
     } = {
       view: "base",
-      limit: "all",
+      limit: limit || "all",
       filter,
     }
     if (orderBy) {
@@ -135,6 +137,7 @@ export async function fetchClosedListings() {
     ],
     orderBy: [ListingOrderByKeys.mostRecentlyClosed],
     orderDir: [OrderByEnum.desc],
+    limit: "10",
   })
 }
 */

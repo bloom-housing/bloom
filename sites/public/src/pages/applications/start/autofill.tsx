@@ -73,15 +73,12 @@ export default () => {
     if (!previousApplication && initialStateLoaded) {
       if (profile) {
         void applicationsService
-          .list({
+          .mostRecentlyCreated({
             userId: profile.id,
-            orderBy: ApplicationOrderByKeys.createdAt,
-            order: OrderByEnum.desc,
-            limit: 1,
           })
           .then((res) => {
-            if (res && res?.items?.length) {
-              setPreviousApplication(new AutofillCleaner(res.items[0]).clean())
+            if (res) {
+              setPreviousApplication(new AutofillCleaner(res).clean())
             } else {
               onSubmit()
             }
