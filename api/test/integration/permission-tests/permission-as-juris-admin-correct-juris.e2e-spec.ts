@@ -1008,7 +1008,9 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
     });
 
     it('should succeed for delete endpoint & create an activity log entry', async () => {
-      const listingData = await listingFactory(jurisId, prisma);
+      const listingData = await listingFactory(jurisId, prisma, {
+        noImage: true,
+      });
       const listing = await prisma.listings.create({
         data: listingData,
       });

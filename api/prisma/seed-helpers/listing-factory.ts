@@ -39,6 +39,7 @@ export const listingFactory = async (
     applicationDueDate?: Date;
     afsLastRunSetInPast?: boolean;
     digitalApp?: boolean;
+    noImage?: boolean;
   },
 ): Promise<Prisma.ListingsCreateInput> => {
   const previousListing = optionalParams?.listing || {};
@@ -141,17 +142,19 @@ export const listingFactory = async (
           },
         }
       : {},
-    listingImages: {
-      create: {
-        ordinal: 0,
-        assets: {
+    listingImages: !optionalParams?.noImage
+      ? {
           create: {
-            label: 'cloudinaryBuilding',
-            fileId: cloudinaryIds[randomInt(cloudinaryIds.length)],
+            ordinal: 0,
+            assets: {
+              create: {
+                label: 'cloudinaryBuilding',
+                fileId: cloudinaryIds[randomInt(cloudinaryIds.length)],
+              },
+            },
           },
-        },
-      },
-    },
+        }
+      : {},
     ...previousListing,
   };
 };
