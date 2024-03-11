@@ -15,6 +15,7 @@ import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { NetworkErrorReset, NetworkStatusContent } from "../../auth/catchNetworkError"
 import type { UseFormMethods } from "react-hook-form"
 import BloomCard from "../components/BloomCard"
+import styles from "./FormForgotPassword.module.scss"
 
 export type FormForgotPasswordProps = {
   control: FormForgotPasswordControl
@@ -84,7 +85,11 @@ const FormForgotPassword = ({
               labelClassName={"text__caps-spaced"}
             />
 
-            <Button type="submit" variant="primary">
+            <Button
+              type="submit"
+              variant="primary"
+              className={styles["forgot-password-submit-button"]}
+            >
               {t("authentication.forgotPassword.sendEmail")}
             </Button>
 

@@ -19,6 +19,10 @@
     background-color: var(--seeds-color-primary);
     padding-block: var(--seeds-s4);
     color: var(--seeds-color-white);
+    --card-content-padding-inline: var(--seeds-s8);
+    @media (max-width: theme("screens.sm")) {
+      --card-content-padding-inline: var(--seeds-s4);
+    }
   }
 
   .application-form-header-heading {
@@ -31,6 +35,10 @@
   .application-form-header-progress {
     padding-block: var(--seeds-s4);
     --card-content-padding-block: var(--seeds-s4);
+    --card-content-padding-inline: var(--seeds-s8);
+    @media (max-width: theme("screens.sm")) {
+      --card-content-padding-inline: var(--seeds-s4);
+    }
 
     .desktop-nav {
       display: block;
