@@ -54,7 +54,7 @@ export const listingFactory = async (
     jurisdictionId,
   );
 
-  const digitalApp = !!optionalParams.digitalApp
+  const digitalApp = !!optionalParams?.digitalApp
     ? optionalParams.digitalApp
     : Math.random() < 0.5;
 
