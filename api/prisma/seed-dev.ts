@@ -107,8 +107,8 @@ export const devSeeding = async (
         index < 4
           ? ListingsStatusEnum.active
           : listingStatusEnumArray[
-              index + 1 < listingStatusEnumArray.length
-                ? index
+              index - 3 < listingStatusEnumArray.length
+                ? index - 3
                 : randomInt(listingStatusEnumArray.length - 1)
             ],
       multiselectQuestions:
