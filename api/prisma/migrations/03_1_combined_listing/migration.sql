@@ -1,5 +1,3 @@
-DROP TABLE IF EXISTS combined_listings;
-
 CREATE VIEW "combined_listings" AS (
     SELECT
         l.id,

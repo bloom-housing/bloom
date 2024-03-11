@@ -136,7 +136,6 @@ RUN apk update
 RUN apk add postgresql
 
 # Add src and types so migrations can run
-COPY --from=source --chown=node:node /app/api/index.ts ./
 COPY --from=source --chown=node:node /app/api/src ./src
 COPY --from=source --chown=node:node /app/api/prisma ./prisma
 COPY --from=source --chown=node:node /app/api/scripts ./scripts
@@ -144,4 +143,7 @@ COPY --from=source --chown=node:node /app/api/scripts ./scripts
 ## This CMD should be run as the node user
 USER node
 
-CMD yarn db:migration:run
+# We need to skip all migrations that are just for local development (changes already exist in deployed environment)
+CMD yarn db:migration:skip 00_init || true && yarn db:migration:skip 02_hba_to_prisma || true && yarn db:migration:skip 03_0_external_listing || true && yarn db:migration:run
+## uncomment the below if starting on a new environment
+# CMD yarn db:migration:run

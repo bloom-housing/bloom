@@ -1,3 +1,6 @@
+-- Doorway specific
+DROP VIEW IF EXISTS combined_listings;
+
 -- CreateEnum
 
 CREATE TYPE "user_role_enum" AS ENUM ('user', 'partner', 'admin', 'jurisdictionAdmin');
