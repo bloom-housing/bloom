@@ -372,6 +372,7 @@
   "authentication.createAccount.password": "Mật khẩu",
   "authentication.createAccount.reEnterEmail": "Nhập lại địa chỉ Email",
   "authentication.createAccount.reEnterPassword": "Nhập lại mật khẩu của bạn",
+
   "authentication.createAccount.resendAnEmailTo": "Gửi lại email đến",
   "authentication.createAccount.resendEmailInfo": "Vui lòng nhấp vào liên kết trong email mà chúng tôi gửi cho quý vị trong vòng 24 giờ để hoàn tất việc tạo tài khoản.",
   "authentication.createAccount.resendTheEmail": "Gửi lại Email",
@@ -386,8 +387,8 @@
   "authentication.signIn.changeYourPassword": "Quý vị có thể đổi mật khẩu",
   "authentication.signIn.enterLoginEmail": "Vui lòng nhập email đăng nhập của quý vị",
   "authentication.signIn.enterLoginPassword": "Vui lòng nhập mật khẩu đăng nhập của quý vị",
-  "authentication.signIn.enterValidEmailAndPasswordAndMFA": "Vui lòng nhập mã hợp lệ.",
-  "authentication.signIn.enterValidEmailAndPassword": "Vui lòng nhập email và mật khẩu hợp lệ.",
+  "authentication.signIn.enterValidEmailAndPasswordAndMFA": "Vui lòng nhập mã hợp lệ",
+  "authentication.signIn.enterValidEmailAndPassword": "Vui lòng nhập email và mật khẩu hợp lệ",
   "authentication.signIn.errorGenericMessage": "Vui lòng thử lại hoặc liên lạc với bộ phận hỗ trợ để được trợ giúp.",
   "authentication.signIn.error": "Đã xảy ra lỗi khi quý vị đăng nhập",
   "authentication.signIn.forgotPassword": "Quên mật khẩu",
