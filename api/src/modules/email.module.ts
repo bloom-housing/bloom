@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { MailService } from '@sendgrid/mail';
 import { EmailService } from '../services/email.service';
@@ -8,7 +9,7 @@ import { GoogleTranslateService } from '../services/google-translate.service';
 import { SendGridService } from '../services/sendgrid.service';
 
 @Module({
-  imports: [],
+  imports: [HttpModule],
   controllers: [],
   providers: [
     EmailService,

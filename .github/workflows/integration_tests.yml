@@ -56,13 +56,6 @@ jobs:
       - name: Check postgres
         run: pg_isready -h 127.0.0.1 -p 5432
 
-      # - name: Not sure why but there is a dependency on this database existing
-      #   run: psql -c 'CREATE DATABASE bloom_test;'
-      #   env:
-      #     PGHOST: 127.0.0.1
-      #     PGPASSWORD: bloom
-      #     PGUSER: bloom-dev
-
       - name: yarn e2e tests api
         working-directory: ./api
         run: yarn test:e2e

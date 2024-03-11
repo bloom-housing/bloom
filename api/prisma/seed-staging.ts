@@ -35,7 +35,6 @@ import {
   simplifiedDCMap,
 } from './seed-helpers/map-layer-factory';
 import { ValidationMethod } from '../src/enums/multiselect-questions/validation-method-enum';
-import { randomNoun } from './seed-helpers/word-generator';
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
@@ -49,28 +48,28 @@ export const stagingSeed = async (
   });
   // add another jurisdiction
   const additionalJurisdiction = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory('Contra Costa'),
+    data: jurisdictionFactory('Contra Costa', [UserRoleEnum.admin]),
   });
   await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory('Marin'),
+    data: jurisdictionFactory('Marin', [UserRoleEnum.admin]),
   });
   await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory('Napa'),
+    data: jurisdictionFactory('Napa', [UserRoleEnum.admin]),
   });
   await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory('San Mateo'),
+    data: jurisdictionFactory('San Mateo', [UserRoleEnum.admin]),
   });
   await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory('Santa Clara'),
+    data: jurisdictionFactory('Santa Clara', [UserRoleEnum.admin]),
   });
   await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory('Solano'),
+    data: jurisdictionFactory('Solano', [UserRoleEnum.admin]),
   });
   await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory('Sonoma'),
+    data: jurisdictionFactory('Sonoma', [UserRoleEnum.admin]),
   });
   await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory('San Francisco'),
+    data: jurisdictionFactory('San Francisco', [UserRoleEnum.admin]),
   });
   // create admin user
   await prismaClient.userAccounts.create({

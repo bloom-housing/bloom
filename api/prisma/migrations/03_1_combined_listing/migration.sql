@@ -1,51 +1,4 @@
-ALTER TABLE
-    "applications" DROP COLUMN "income_vouchers",
-ADD
-    COLUMN "income_vouchers" TEXT [];
-
-ALTER TABLE
-    "demographics"
-ADD
-    COLUMN "spoken_language" TEXT;
-
-ALTER TABLE
-    "jurisdictions"
-ADD
-    COLUMN "enable_listing_preferences" BOOLEAN NOT NULL DEFAULT false;
-
--- CreateTable
-CREATE TABLE "external_listings" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
-    "assets" JSONB NOT NULL,
-    "household_size_min" INTEGER,
-    "household_size_max" INTEGER,
-    "units_available" INTEGER,
-    "application_due_date" TIMESTAMP(6),
-    "application_open_date" TIMESTAMP(6),
-    "name" TEXT NOT NULL,
-    "waitlist_current_size" INTEGER,
-    "waitlist_max_size" INTEGER,
-    "is_waitlist_open" BOOLEAN,
-    "status" TEXT NOT NULL,
-    "review_order_type" TEXT NOT NULL,
-    "closed_at" TIMESTAMP(6),
-    "updated_at" TIMESTAMP(6),
-    "published_at" TIMESTAMP(6),
-    "last_application_update_at" TIMESTAMP(6) DEFAULT '1970-01-01 00:00:00-07' :: timestamp with time zone,
-    "neighborhood" TEXT,
-    "reserved_community_type_name" TEXT,
-    "url_slug" TEXT NOT NULL,
-    "units_summarized" JSONB,
-    "images" JSONB,
-    "multiselect_questions" JSONB,
-    "jurisdiction" JSONB,
-    "reserved_community_type" JSONB,
-    "units" JSONB,
-    "building_address" JSONB,
-    "features" JSONB,
-    "utilities" JSONB,
-    CONSTRAINT "ExternalListing_pkey" PRIMARY KEY ("id")
-);
+DROP TABLE IF EXISTS combined_listings;
 
 CREATE VIEW "combined_listings" AS (
     SELECT
@@ -67,7 +20,12 @@ CREATE VIEW "combined_listings" AS (
         l.updated_at,
         l.last_application_update_at,
         l.neighborhood,
+        rct.name as "reserved_community_type_name",
         jsonb_build_object('id', j.id, 'name', j.name) AS "jurisdiction",
+        CASE
+            WHEN rct.id IS NOT NULL THEN jsonb_build_object('name', rct.name, 'id', rct.id)
+            ELSE NULL
+        END AS "reserved_community_types",
         units.json AS "units",
         jsonb_build_object(
             'city',
@@ -207,6 +165,7 @@ CREATE VIEW "combined_listings" AS (
             GROUP BY
                 listing_id
         ) as imgs ON l.id = imgs.listing_id
+        LEFT JOIN reserved_community_types rct ON l.reserved_community_type_id = rct.id
 )
 UNION
 (
@@ -229,16 +188,16 @@ UNION
         "updated_at",
         "last_application_update_at",
         "neighborhood",
-        -- "reserved_community_type_name",
+        "reserved_community_type_name",
         -- "url_slug",
-        -- "multiselect_questions",
+        -- "multiselect_questions", 
         "jurisdiction",
-        -- "reserved_community_type",
+        "reserved_community_type",
         "units",
         "building_address",
-        -- "features",
+        -- "features", commenting out for now as not being used
         "images",
-        -- "utilities",
+        -- "utilities", commenting out for now as not being used
         "units_summarized" -- null -- leasing_agents; not available in base view and probably not useful anyway
         -- true
     FROM

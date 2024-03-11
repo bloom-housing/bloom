@@ -1,3 +1,4 @@
+import { HttpService } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../../../src/services/prisma.service';
@@ -16,6 +17,7 @@ import { SendGridService } from '../../../src/services/sendgrid.service';
 import { User } from '../../../src/dtos/users/user.dto';
 import { PermissionService } from '../../../src/services/permission.service';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
+import { of } from 'rxjs';
 
 describe('Testing user service', () => {
   let service: UserService;
@@ -69,6 +71,14 @@ describe('Testing user service', () => {
     isConfigured: () => true,
     fetch: jest.fn(),
   };
+  const httpServiceMock = {
+    request: jest.fn().mockReturnValue(
+      of({
+        status: 200,
+        statusText: 'OK',
+      }),
+    ),
+  };
 
   const canOrThrowMock = jest.fn();
 
@@ -76,12 +86,17 @@ describe('Testing user service', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UserService,
+        HttpService,
         PrismaService,
         EmailService,
         ConfigService,
         SendGridService,
         TranslationService,
         JurisdictionService,
+        {
+          provide: HttpService,
+          useValue: httpServiceMock,
+        },
         {
           provide: SendGridService,
           useValue: SendGridServiceMock,

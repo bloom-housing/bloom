@@ -1,9 +1,13 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { HttpService } from '@nestjs/axios';
 import { ResponseError } from '@sendgrid/helpers/classes';
 import { MailDataRequired } from '@sendgrid/helpers/classes/mail';
 import fs from 'fs';
 import Handlebars from 'handlebars';
+import juice from 'juice';
 import Polyglot from 'node-polyglot';
+import { firstValueFrom } from 'rxjs';
 import path from 'path';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -12,12 +16,17 @@ import advanced from 'dayjs/plugin/advancedFormat';
 import { TranslationService } from './translation.service';
 import { JurisdictionService } from './jurisdiction.service';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
-import { LanguagesEnum, ReviewOrderTypeEnum } from '@prisma/client';
+import {
+  LanguagesEnum,
+  ListingEventsTypeEnum,
+  ReviewOrderTypeEnum,
+} from '@prisma/client';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { Listing } from '../dtos/listings/listing.dto';
 import { SendGridService } from './sendgrid.service';
 import { ApplicationCreate } from '../dtos/applications/application-create.dto';
 import { User } from '../dtos/users/user.dto';
+import Unit from '../dtos/units/unit.dto';
 dayjs.extend(utc);
 dayjs.extend(tz);
 dayjs.extend(advanced);
@@ -40,8 +49,10 @@ export class EmailService {
 
   constructor(
     private readonly sendGrid: SendGridService,
+    private readonly configService: ConfigService,
     private readonly translationService: TranslationService,
     private readonly jurisdictionService: JurisdictionService,
+    private readonly httpService: HttpService,
   ) {
     this.polyglot = new Polyglot({
       phrases: {},
@@ -93,6 +104,42 @@ export class EmailService {
     });
 
     return partials;
+  }
+
+  async govSend(rawHtml: string, subject: string) {
+    const {
+      GOVDELIVERY_API_URL,
+      GOVDELIVERY_USERNAME,
+      GOVDELIVERY_PASSWORD,
+      GOVDELIVERY_TOPIC,
+    } = process.env;
+    const isGovConfigured =
+      !!GOVDELIVERY_API_URL &&
+      !!GOVDELIVERY_USERNAME &&
+      !!GOVDELIVERY_PASSWORD &&
+      !!GOVDELIVERY_TOPIC;
+    if (!isGovConfigured) {
+      console.warn(
+        'failed to configure Govdelivery, ensure that all env variables are provided',
+      );
+      return;
+    }
+
+    // juice inlines css to allow for email styling
+    const inlineHtml = juice(rawHtml);
+    const govEmailXml = `<bulletin>\n <subject>${subject}</subject>\n  <body><![CDATA[\n     
+      ${inlineHtml}\n   ]]></body>\n   <sms_body nil='true'></sms_body>\n   <publish_rss type='boolean'>false</publish_rss>\n   <open_tracking type='boolean'>true</open_tracking>\n   <click_tracking type='boolean'>true</click_tracking>\n   <share_content_enabled type='boolean'>true</share_content_enabled>\n   <topics type='array'>\n     <topic>\n       <code>${GOVDELIVERY_TOPIC}</code>\n     </topic>\n   </topics>\n   <categories type='array' />\n </bulletin>`;
+
+    await firstValueFrom(
+      this.httpService.post(GOVDELIVERY_API_URL, govEmailXml, {
+        headers: {
+          'Content-Type': 'application/xml',
+          Authorization: `Basic ${Buffer.from(
+            `${GOVDELIVERY_USERNAME}:${GOVDELIVERY_PASSWORD}`,
+          ).toString('base64')}`,
+        },
+      }),
+    );
   }
 
   private async send(
@@ -531,8 +578,188 @@ export class EmailService {
     );
   }
 
+  public async listingOpportunity(listing: Listing) {
+    const jurisdiction = await this.getJurisdiction([listing.jurisdictions]);
+    void (await this.loadTranslations(jurisdiction, LanguagesEnum.en));
+    const compiledTemplate = this.template('listing-opportunity');
+
+    if (this.configService.get<string>('NODE_ENV') == 'production') {
+      Logger.log(
+        `Preparing to send a listing opportunity email for ${listing.name} from ${jurisdiction.emailFromAddress}...`,
+      );
+    }
+
+    // Gather all variables from each unit into one place
+    const units: {
+      bedrooms: { [key: number]: Unit[] };
+      rent: number[];
+      minIncome: number[];
+      maxIncome: number[];
+    } = listing.units?.reduce(
+      (summaries, unit) => {
+        if (unit.monthlyIncomeMin) {
+          summaries.minIncome.push(Number.parseFloat(unit.monthlyIncomeMin));
+        }
+        if (unit.annualIncomeMax) {
+          summaries.maxIncome.push(
+            Number.parseFloat(unit.annualIncomeMax) / 12.0,
+          );
+        }
+        if (unit.monthlyRent) {
+          summaries.rent.push(Number.parseFloat(unit.monthlyRent));
+        }
+        const thisBedroomInfo = summaries.bedrooms[unit.unitTypes?.name];
+        summaries.bedrooms[unit.unitTypes?.name] = thisBedroomInfo
+          ? [...thisBedroomInfo, unit]
+          : [unit];
+        return summaries;
+      },
+      {
+        bedrooms: {},
+        rent: [],
+        minIncome: [],
+        maxIncome: [],
+      },
+    );
+    const tableRows = [];
+    if (listing.reservedCommunityTypes?.name) {
+      tableRows.push({
+        label: this.polyglot.t('rentalOpportunity.community'),
+        value: this.formatCommunityType[listing.reservedCommunityTypes.name],
+      });
+    }
+    if (listing.applicationDueDate) {
+      tableRows.push({
+        label: this.polyglot.t('rentalOpportunity.applicationsDue'),
+        value: dayjs(listing.applicationDueDate).format('MMMM D, YYYY'),
+      });
+    }
+    tableRows.push({
+      label: this.polyglot.t('rentalOpportunity.address'),
+      value: `${listing.listingsBuildingAddress.street}, ${listing.listingsBuildingAddress.city} ${listing.listingsBuildingAddress.state} ${listing.listingsBuildingAddress.zipCode}`,
+    });
+    Object.entries(units.bedrooms).forEach(([key, bedroom]) => {
+      const sqFtString = this.formatUnitDetails(bedroom, 'sqFeet', 'sqft');
+      const bathroomstring = this.formatUnitDetails(
+        bedroom,
+        'numBathrooms',
+        'bath',
+        'baths',
+      );
+      tableRows.push({
+        label: this.polyglot.t(`rentalOpportunity.${key}`),
+        value: `${bedroom.length} unit${
+          bedroom.length > 1 ? 's' : ''
+        }${bathroomstring}${sqFtString}`,
+      });
+    });
+    if (units.rent?.length) {
+      tableRows.push({
+        label: this.polyglot.t('rentalOpportunity.rent'),
+        value: this.formatPricing(units.rent),
+      });
+    }
+    if (units.minIncome?.length) {
+      tableRows.push({
+        label: this.polyglot.t('rentalOpportunity.minIncome'),
+        value: this.formatPricing(units.minIncome),
+      });
+    }
+    if (units.maxIncome?.length) {
+      tableRows.push({
+        label: this.polyglot.t('rentalOpportunity.maxIncome'),
+        value: this.formatPricing(units.maxIncome),
+      });
+    }
+    if (listing.listingEvents && listing.listingEvents.length > 0) {
+      const lotteryEvent = listing.listingEvents.find(
+        (event) => event.type === ListingEventsTypeEnum.publicLottery,
+      );
+      if (lotteryEvent && lotteryEvent.startDate) {
+        tableRows.push({
+          label: this.polyglot.t('rentalOpportunity.lottery'),
+          value: dayjs(lotteryEvent.startDate).format('MMMM D, YYYY'),
+        });
+      }
+    }
+
+    const languages = [
+      {
+        name: this.polyglot.t('rentalOpportunity.viewButton.en'),
+        code: LanguagesEnum.en,
+      },
+      {
+        name: this.polyglot.t('rentalOpportunity.viewButton.es'),
+        code: LanguagesEnum.es,
+      },
+      {
+        name: this.polyglot.t('rentalOpportunity.viewButton.zh'),
+        code: LanguagesEnum.zh,
+      },
+      {
+        name: this.polyglot.t('rentalOpportunity.viewButton.vi'),
+        code: LanguagesEnum.vi,
+      },
+      {
+        name: this.polyglot.t('rentalOpportunity.viewButton.tl'),
+        code: LanguagesEnum.tl,
+      },
+    ];
+
+    const languageUrls = languages.map((language) => {
+      return {
+        name: language.name,
+        url: `${jurisdiction.publicUrl}/${language.code}/listing/${listing.id}`,
+      };
+    });
+
+    const compiled = compiledTemplate({
+      listingName: listing.name,
+      tableRows,
+      languageUrls,
+    });
+
+    await this.govSend(compiled, 'New rental opportunity');
+  }
+
   formatLocalDate(rawDate: string | Date, format: string): string {
     const utcDate = dayjs.utc(rawDate);
     return utcDate.format(format);
   }
+
+  formatPricing = (values: number[]): string => {
+    const minPrice = Math.min(...values);
+    const maxPrice = Math.max(...values);
+    return `$${minPrice.toLocaleString()}${
+      minPrice !== maxPrice ? ' - $' + maxPrice.toLocaleString() : ''
+    } per month`;
+  };
+
+  formatUnitDetails = (
+    units: Unit[],
+    field: string,
+    label: string,
+    pluralLabel?: string,
+  ): string => {
+    const mappedField = units.reduce((values, unit) => {
+      if (unit[field]) {
+        values.push(Number.parseFloat(unit[field]));
+      }
+      return values;
+    }, []);
+    if (mappedField?.length) {
+      const minValue = Math.min(...mappedField);
+      const maxValue = Math.max(...mappedField);
+      return `, ${minValue.toLocaleString()}${
+        minValue !== maxValue ? ' - ' + maxValue.toLocaleString() : ''
+      } ${pluralLabel && maxValue === 1 ? pluralLabel : label}`;
+    }
+    return '';
+  };
+
+  formatCommunityType = {
+    senior55: 'Seniors 55+',
+    senior62: 'Seniors 62+',
+    specialNeeds: 'Special Needs',
+  };
 }

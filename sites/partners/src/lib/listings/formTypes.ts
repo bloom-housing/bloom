@@ -151,24 +151,9 @@ export const formDefaults: FormListing = {
   unitAmenities: "",
   servicesOffered: "",
   yearBuilt: null,
-  // urlSlug: undefined,
-  // showWaitlist: false,
   reviewOrderType: null,
   unitsSummary: [],
-  // isExternal: false,
   referralOpportunity: false,
-  // unitsSummarized: {
-  //   unitTypes: [],
-  //   priorityTypes: [],
-  //   amiPercentages: [],
-  //   byUnitTypeAndRent: [],
-  //   byUnitType: [],
-  //   byAMI: [],
-  //   hmi: {
-  //     columns: [],
-  //     rows: [],
-  //   },
-  // },
 }
 
 export type TempUnit = Unit & {

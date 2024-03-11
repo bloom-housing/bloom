@@ -16,6 +16,8 @@ import { whiteHouse } from '../../../prisma/seed-helpers/address-factory';
 import { Application } from '../../../src/dtos/applications/application.dto';
 import { User } from '../../../src/dtos/users/user.dto';
 import { ApplicationCreate } from '../../../src/dtos/applications/application-create.dto';
+import { of } from 'rxjs';
+import { HttpService } from '@nestjs/axios';
 
 let sendMock;
 const translationServiceMock = {
@@ -28,6 +30,14 @@ const jurisdictionServiceMock = {
   findOne: (id) => {
     return { name: 'Jurisdiction 1' };
   },
+};
+const httpServiceMock = {
+  request: jest.fn().mockReturnValue(
+    of({
+      status: 200,
+      statusText: 'OK',
+    }),
+  ),
 };
 
 describe('Testing email service', () => {
@@ -50,6 +60,7 @@ describe('Testing email service', () => {
           provide: JurisdictionService,
           useValue: jurisdictionServiceMock,
         },
+        { provide: HttpService, useValue: httpServiceMock },
         GoogleTranslateService,
       ],
     }).compile();

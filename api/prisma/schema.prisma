@@ -866,17 +866,11 @@ view CombinedListings {
   lastApplicationUpdateAt   DateTime?       @map("last_application_update_at") @db.Timestamp(6)  @default(dbgenerated("'1970-01-01 00:00:00-07'::timestamp with time zone"))
   neighborhood        String?         
   listingsBuildingAddress     Json?         @map("listings_building_address")
-  // reservedCommunityTypeName String?         @map("reserved_community_type_name") 
-  // urlSlug             String                @map("url_slug") 
+  reservedCommunityTypeName String?         @map("reserved_community_type_name") 
   unitsSummarized     Json?                 @map("units_summarized") 
   listingImages         Json?                @map("listing_images") 
-  // multiselectQuestions     Json?            @map("multiselect_questions") 
-  // jurisdiction        Json?                 
-  // reservedCommunityType    Json?            @map("reserved_community_type") 
+  reservedCommunityTypes    Json?            @map("reserved_community_types") 
   units               Json?                 
-  // buildingAddress     Json?                 @map("building_address") 
-  // features            Json?                
-  // utilities           Json?
 
   @@map("combined_listings")  
 }

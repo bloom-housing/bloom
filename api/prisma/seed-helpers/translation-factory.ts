@@ -151,6 +151,31 @@ const translations = (jurisdictionName?: string) => ({
       'Use the following code to sign in to your %{jurisdictionName} account. This code will be valid for 5 minutes. Never share this code.',
     singleUseCode: '%{singleUseCode}',
   },
+  rentalOpportunity: {
+    subject: 'New rental opportunity',
+    intro: 'Rental opportunity at',
+    applicationsDue: 'Applications Due',
+    community: 'Community',
+    address: 'Address',
+    rent: 'Rent',
+    minIncome: 'Minimum Income',
+    maxIncome: 'Maximum Income',
+    lottery: 'Lottery Date',
+    studio: 'Studios',
+    oneBdrm: '1 Bedrooms',
+    twoBdrm: '2 Bedrooms',
+    threeBdrm: '3 Bedrooms',
+    fourBdrm: '4 Bedrooms',
+    fiveBdrm: '5 Bedrooms',
+    SRO: 'SROs',
+    viewButton: {
+      en: 'View listing & apply',
+      es: 'Ver listado y aplicar',
+      zh: '查看列表并申请',
+      vi: 'Xem danh sách và áp dụng',
+      tl: 'Tingnan ang listahan at mag-apply',
+    },
+  },
 });
 
 export const translationFactory = (

@@ -17,7 +17,6 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
-// import { ResourceType } from '../auth/decorators/resource-type.decorator';
 import { Express, Request } from 'express';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { mapTo } from '../utilities/mapTo';

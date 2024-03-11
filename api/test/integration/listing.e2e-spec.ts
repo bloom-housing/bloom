@@ -57,10 +57,15 @@ describe('Listing Controller Tests', () => {
     requestApproval: async () => {},
     changesRequested: async () => {},
     listingApproved: async () => {},
+    listingOpportunity: async () => {},
   };
   const mockChangesRequested = jest.spyOn(testEmailService, 'changesRequested');
   const mockRequestApproval = jest.spyOn(testEmailService, 'requestApproval');
   const mockListingApproved = jest.spyOn(testEmailService, 'listingApproved');
+  const mockListingOpportunity = jest.spyOn(
+    testEmailService,
+    'listingOpportunity',
+  );
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -841,8 +846,15 @@ describe('Listing Controller Tests', () => {
     });
 
     it('update status to listing approved and notify appropriate users', async () => {
+      // turn on enableListingOpportunity
+      jurisdictionA.enableListingOpportunity = true;
       const val = await constructFullListingData(listing.id, jurisdictionA.id);
       val.status = ListingsStatusEnum.active;
+      await request(app.getHttpServer())
+        .put(`/jurisdictions/${jurisdictionA.id}`)
+        .send(jurisdictionA)
+        .set('Cookie', adminAccessToken)
+        .expect(200);
       const putApprovedResponse = await request(app.getHttpServer())
         .put(`/listings/${listing.id}`)
         .send(val)
@@ -864,6 +876,19 @@ describe('Listing Controller Tests', () => {
         expect.arrayContaining([partnerUser.email]),
         jurisdictionA.publicUrl,
       );
+      expect(mockListingOpportunity).toBeCalledWith(
+        expect.objectContaining({
+          id: listing.id,
+          name: val.name,
+        }),
+      );
+      // re-disable listing opportunity
+      jurisdictionA.enableListingOpportunity = false;
+      await request(app.getHttpServer())
+        .put(`/jurisdictions/${jurisdictionA.id}`)
+        .send(jurisdictionA)
+        .set('Cookie', adminAccessToken)
+        .expect(200);
     });
 
     it('update status to changes requested and notify appropriate users', async () => {

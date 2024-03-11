@@ -1026,6 +1026,23 @@ export class ListingService implements OnModuleInit {
       });
     }
     await this.cachePurge(undefined, dto.status, rawListing.id);
+    if (rawListing.status === ListingsStatusEnum.active) {
+      // The email send to gov delivery should not be a blocker from the normal flow so wrapping this in a try catch
+      try {
+        const jurisdiction = await this.prisma.jurisdictions.findFirst({
+          where: {
+            id: rawListing.jurisdictions?.id,
+          },
+        });
+        if (jurisdiction.enableListingOpportunity) {
+          await this.emailService.listingOpportunity(
+            rawListing as unknown as Listing,
+          );
+        }
+      } catch (error) {
+        console.error(`Error: unable to send to govDelivery ${error}`);
+      }
+    }
     return mapTo(Listing, rawListing);
   }
 
@@ -1528,6 +1545,26 @@ export class ListingService implements OnModuleInit {
 
     await this.cachePurge(storedListing.status, dto.status, rawListing.id);
 
+    if (
+      dto.status === ListingsStatusEnum.active &&
+      storedListing.status !== ListingsStatusEnum.active
+    ) {
+      // The email send to gov delivery should not be a blocker from the normal flow so wrapping this in a try catch
+      try {
+        const jurisdiction = await this.prisma.jurisdictions.findFirst({
+          where: {
+            id: rawListing.jurisdictions?.id,
+          },
+        });
+        if (jurisdiction.enableListingOpportunity) {
+          await this.emailService.listingOpportunity(
+            rawListing as unknown as Listing,
+          );
+        }
+      } catch (error) {
+        console.error(`Error: unable to send to govDelivery ${error}`);
+      }
+    }
     return mapTo(Listing, rawListing);
   }
 
