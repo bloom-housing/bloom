@@ -1,0 +1,30 @@
+.form-card {
+  --card-content-padding-inline: var(--seeds-s12);
+  --card-header-padding-inline: var(--seeds-s12);
+  @media (max-width: theme("screens.sm")) {
+    --card-content-padding-inline: var(--seeds-s4);
+    --card-header-padding-inline: var(--seeds-s4);
+    --card-border-radius: 0;
+    --card-content-padding-block: var(--seeds-s6);
+  }
+  width: 100%;
+}
+
+.block-card {
+  width: 100%;
+  height: 100%;
+  justify-content: space-between;
+  --subheading-color: var(--seeds-text-color-light);
+  --heading-margin: var(--seeds-s3);
+  @media (max-width: theme("screens.sm")) {
+    --card-spacing-lg: var(--seeds-s6);
+  }
+}
+
+.card-icon {
+  margin-bottom: var(--seeds-s3);
+}
+
+.card-heading-group {
+  --subheading-color: var(--seeds-text-color-light);
+}

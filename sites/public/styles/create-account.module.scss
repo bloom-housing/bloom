@@ -1,26 +1,26 @@
 .create-account-header {
-    color: var(--seeds-color-gray-750);
-    font-size: var(--seeds-font-size-sm);
-    font-weight: var(--seeds-font-weight-bold);
-    display: block;
+  color: var(--seeds-input-text-label-color);
+  font-size: var(--seeds-font-size-sm);
+  font-weight: var(--seeds-font-weight-bold);
+  display: block;
 }
 
 .create-account-field {
-    color: var(--seeds-color-gray-750);
-    font-size: var(--seeds-font-size-sm);
-    display: block;
-    margin-top: var(--bloom-s3);
+  color: var(--seeds-input-text-label-color);
+  font-size: var(--seeds-font-size-sm);
+  display: block;
+  margin-top: var(--bloom-s3);
 }
 
 .create-account-input {
-    border-radius: var(--bloom-rounded-lg);
-    margin-top: var(--bloom-s2);
+  border-radius: var(--bloom-rounded-lg);
+  margin-top: var(--bloom-s2);
 }
 
 .create-account-gap {
-    margin-bottom: var(--bloom-s4);
+  margin-bottom: var(--bloom-s4);
 }
 
 .create-account-label {
-    margin-bottom: var(--bloom-s1);
+  margin-bottom: var(--bloom-s1);
 }
