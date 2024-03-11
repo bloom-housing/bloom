@@ -2,8 +2,10 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  ForbiddenException,
 } from '@nestjs/common';
 import crypto from 'crypto';
+import { Request as ExpressRequest } from 'express';
 import { Prisma, YesNoEnum } from '@prisma/client';
 import { PrismaService } from './prisma.service';
 import { Application } from '../dtos/applications/application.dto';
@@ -24,6 +26,7 @@ import Listing from '../dtos/listings/listing.dto';
 import { User } from '../dtos/users/user.dto';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { GeocodingService } from './geocoding.service';
+import { MostRecentApplicationQueryParams } from '../dtos/applications/most-recent-application-query-params.dto';
 
 export const view: Partial<
   Record<ApplicationViews, Prisma.ApplicationsInclude>
@@ -83,7 +86,14 @@ export class ApplicationService {
     this set can either be paginated or not depending on the params
     it will return both the set of applications, and some meta information to help with pagination
   */
-  async list(params: ApplicationQueryParams): Promise<PaginatedApplicationDto> {
+  async list(
+    params: ApplicationQueryParams,
+    req: ExpressRequest,
+  ): Promise<PaginatedApplicationDto> {
+    const user = mapTo(User, req['user']);
+    if (!user) {
+      throw new ForbiddenException();
+    }
     const whereClause = this.buildWhereClause(params);
 
     const count = await this.prisma.applications.count({
@@ -118,6 +128,29 @@ export class ApplicationService {
         applications.length,
       ),
     };
+  }
+
+  /*
+    this will the most recent application the user has submitted
+  */
+  async mostRecentlyCreated(
+    params: MostRecentApplicationQueryParams,
+  ): Promise<Application> {
+    const rawApplication = await this.prisma.applications.findFirst({
+      select: {
+        id: true,
+      },
+      orderBy: { createdAt: 'desc' },
+      where: {
+        userId: params.userId,
+      },
+    });
+
+    if (!rawApplication) {
+      return null;
+    }
+
+    return await this.findOne(rawApplication.id);
   }
 
   /*
