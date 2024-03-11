@@ -4,12 +4,15 @@
  */
 
 export const getPublicEmailURL = (url: string, token: string, actionPath?: string): string => {
+  if (!url) {
+    return
+  }
   const urlObj = new URL(url)
 
   const redirectUrl = urlObj.searchParams.get("redirectUrl")
   const listingId = urlObj.searchParams.get("listingId")
 
-  let emailUrl = `${urlObj.origin}${urlObj.pathname}/${actionPath ? actionPath : ""}?token=${token}`
+  let emailUrl = `${urlObj.origin}/${actionPath ? actionPath : ""}?token=${token}`
 
   if (!!redirectUrl && !!listingId) {
     emailUrl = emailUrl.concat(`&redirectUrl=${redirectUrl}&listingId=${listingId}`)

@@ -8,12 +8,14 @@ export const getPublicEmailURL = (
   token: string,
   actionPath?: string,
 ): string => {
+  if (!url) {
+    return;
+  }
   const urlObj = new URL(url);
-
   const redirectUrl = urlObj.searchParams.get('redirectUrl');
   const listingId = urlObj.searchParams.get('listingId');
 
-  let emailUrl = `${urlObj.origin}${urlObj.pathname}/${
+  let emailUrl = `${urlObj.origin}${
     actionPath ? actionPath : ''
   }?token=${token}`;
 

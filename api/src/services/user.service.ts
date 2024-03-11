@@ -35,7 +35,7 @@ import { EmailService } from './email.service';
 import { PermissionService } from './permission.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { buildWhereClause } from '../utilities/build-user-where';
-import { getPublicEmailURL } from 'src/utilities/get-public-email-url';
+import { getPublicEmailURL } from '../utilities/get-public-email-url';
 
 /*
   this is the service for users

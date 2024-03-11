@@ -18,7 +18,7 @@ import { Listing } from '../dtos/listings/listing.dto';
 import { SendGridService } from './sendgrid.service';
 import { ApplicationCreate } from '../dtos/applications/application-create.dto';
 import { User } from '../dtos/users/user.dto';
-import { getPublicEmailURL } from 'src/utilities/get-public-email-url';
+import { getPublicEmailURL } from '../utilities/get-public-email-url';
 dayjs.extend(utc);
 dayjs.extend(tz);
 dayjs.extend(advanced);
