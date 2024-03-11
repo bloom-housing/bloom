@@ -163,18 +163,19 @@ const Edit = () => {
         >
           <>
             <SiteAlert type="notice" dismissable />
-            {nameAlert && (
-              <AlertBox
-                type={nameAlert.type}
-                onClose={() => setNameAlert(null)}
-                className="my-0"
-                inverted
-                closeable
-              >
-                {nameAlert.message}
-              </AlertBox>
-            )}
+
             <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
+              {nameAlert && (
+                <AlertBox
+                  type={nameAlert.type}
+                  onClose={() => setNameAlert(null)}
+                  className="mb-4"
+                  inverted
+                  closeable
+                >
+                  {nameAlert.message}
+                </AlertBox>
+              )}
               <Form id="update-name" onSubmit={handleSubmit(onNameSubmit)}>
                 <label className={styles["account-settings-label"]} htmlFor="firstName">
                   {t("application.name.yourName")}
@@ -226,18 +227,19 @@ const Edit = () => {
                 </Button>
               </Form>
             </Card.Section>
-            {dobAlert && (
-              <AlertBox
-                type={dobAlert.type}
-                onClose={() => setDobAlert(null)}
-                className="my-0"
-                inverted
-                closeable
-              >
-                {dobAlert.message}
-              </AlertBox>
-            )}
+
             <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
+              {dobAlert && (
+                <AlertBox
+                  type={dobAlert.type}
+                  onClose={() => setDobAlert(null)}
+                  className="mb-4"
+                  inverted
+                  closeable
+                >
+                  {dobAlert.message}
+                </AlertBox>
+              )}
               <Form id="update-birthdate" onSubmit={handleSubmit(onBirthdateSubmit)}>
                 <DOBField
                   id="dateOfBirth"
@@ -261,17 +263,19 @@ const Edit = () => {
                 </Button>
               </Form>
             </Card.Section>
-            {emailAlert && (
-              <AlertBox
-                type={emailAlert.type}
-                onClose={() => setEmailAlert(null)}
-                inverted
-                closeable
-              >
-                {emailAlert.message}
-              </AlertBox>
-            )}
+
             <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
+              {emailAlert && (
+                <AlertBox
+                  type={emailAlert.type}
+                  onClose={() => setEmailAlert(null)}
+                  inverted
+                  closeable
+                  className={"mb-4"}
+                >
+                  {emailAlert.message}
+                </AlertBox>
+              )}
               <Form id="update-email" onSubmit={handleSubmit(onEmailSubmit)}>
                 <label className={styles["account-settings-label"]} htmlFor="email">
                   {t("application.name.yourEmailAddress")}
@@ -293,18 +297,19 @@ const Edit = () => {
                 </Button>
               </Form>
             </Card.Section>
-            {passwordAlert && (
-              <AlertBox
-                type={passwordAlert.type}
-                onClose={() => setPasswordAlert(null)}
-                className="my-0"
-                inverted
-                closeable
-              >
-                {passwordAlert.message}
-              </AlertBox>
-            )}
+
             <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
+              {passwordAlert && (
+                <AlertBox
+                  type={passwordAlert.type}
+                  onClose={() => setPasswordAlert(null)}
+                  className="mb-4"
+                  inverted
+                  closeable
+                >
+                  {passwordAlert.message}
+                </AlertBox>
+              )}
               <Form id="update-password" onSubmit={handleSubmit(onPasswordSubmit)}>
                 <fieldset>
                   <legend className={styles["account-settings-label"]}>
