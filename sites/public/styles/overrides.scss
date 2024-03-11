@@ -95,7 +95,7 @@
 
     --button-padding-md: calc(var(--seeds-s3) - 2px) calc(var(--seeds-s6) - 2px);
     --button-padding-sm: calc(var(--seeds-s3) - 2px) calc(var(--seeds-s6) - 2px);
-  
+
     -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
   }
 
@@ -108,7 +108,7 @@
   }
 
   .progress-nav {
-    --dot-size: .95rem;
+    --dot-size: 0.95rem;
     --dot-font-size: 0.825rem;
     --dot-label-padding-top: var(--seeds-s6);
     --active-step-color: var(--seeds-color-primary-dark);

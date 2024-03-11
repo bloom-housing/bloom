@@ -235,6 +235,17 @@ export class ApplicationsService {
         return await applicationsRepository.findOne({ where: { id: newApplication.id } })
       }
     )
+
+    const listing = await this.listingsService.findOne(application.listingId)
+
+    // Calculate geocoding preferences after save
+    if (listing.jurisdiction?.enableGeocodingPreferences) {
+      try {
+        void this.geocodingService.validateGeocodingPreferences(application, listing)
+      } catch (e) {
+        console.warn("error while validating geocoding preferences")
+      }
+    }
     return app
   }
 
@@ -274,7 +285,7 @@ export class ApplicationsService {
     )
     const listing = await this.listingsRepository.findOne({ where: { id: queryParams.listingId } })
     await this.emailService.sendCSV(
-      (this.req.user as unknown) as User,
+      this.req.user as unknown as User,
       listing.name,
       listing.id,
       csvString

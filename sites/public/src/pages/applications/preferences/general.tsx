@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { Button } from "@bloom-housing/ui-seeds"
 import { FormCard, Heading, t, Form, ProgressNav } from "@bloom-housing/ui-components"
-import { ApplicationSection } from "@bloom-housing/backend-core"
 import {
   OnClientSide,
   PageView,
@@ -14,12 +13,16 @@ import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../components/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
+import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const ApplicationPreferencesGeneral = () => {
   const { profile } = useContext(AuthContext)
   const [hideReviewButton, setHideReviewButton] = useState(false)
   const { conductor, application, listing } = useFormConductor("generalPool")
-  const currentPageSection = listingSectionQuestions(listing, ApplicationSection.programs)?.length
+  const currentPageSection = listingSectionQuestions(
+    listing,
+    MultiselectQuestionsApplicationSectionEnum.programs
+  )?.length
     ? 5
     : 4
 

@@ -13,8 +13,7 @@ import { CLOUDINARY_BUILDING_LABEL, getImageUrlFromAsset } from "@bloom-housing/
 import { fieldHasError } from "../../../../lib/helpers"
 import { uploadAssetAndSetData } from "../../../../lib/assets"
 import { Button, Grid } from "@bloom-housing/ui-seeds"
-
-import { ListingImage, Asset } from "@bloom-housing/backend-core"
+import { Asset, ListingImage } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const ListingPhotos = () => {
@@ -24,18 +23,18 @@ const ListingPhotos = () => {
   const { register, watch, errors, clearErrors } = formMethods
 
   const { fields, append, remove } = useFieldArray({
-    name: "images",
+    name: "listingImages",
   })
-  const listingFormPhotos: ListingImage[] = watch("images").sort(
-    (imageA, imageB) => imageA.ordinal - imageB.ordinal
-  )
+  const listingFormPhotos: ListingImage[] = watch("listingImages").sort((imageA, imageB) => {
+    return imageA.ordinal - imageB.ordinal
+  })
 
   const saveImageFields = (images: ListingImage[]) => {
     remove(fields.map((item, index) => index))
     images.forEach((item, index) => {
       append({
         ordinal: index,
-        image: item.image,
+        assets: item.assets,
       })
     })
   }
@@ -61,7 +60,7 @@ const ListingPhotos = () => {
       ...drawerImages,
       {
         ordinal: drawerImages.length,
-        image: { fileId: latestUpload.id, label: CLOUDINARY_BUILDING_LABEL },
+        assets: { fileId: latestUpload.id, label: CLOUDINARY_BUILDING_LABEL } as Asset,
       },
     ])
     setLatestUpload({ id: "", url: "" })
@@ -85,7 +84,7 @@ const ListingPhotos = () => {
 
   const listingPhotoTableRows: StandardTableData = []
   listingFormPhotos.forEach((image, index) => {
-    const listingPhotoUrl = getImageUrlFromAsset(image.image)
+    const listingPhotoUrl = getImageUrlFromAsset(image.assets)
     listingPhotoTableRows.push({
       preview: {
         content: (
@@ -94,7 +93,7 @@ const ListingPhotos = () => {
           </TableThumbnail>
         ),
       },
-      fileName: { content: image.image.fileId.split("/").slice(-1).join() },
+      fileName: { content: image.assets.fileId.split("/").slice(-1).join() },
       primary: {
         content: index == 0 ? t("listings.sections.photo.primaryPhoto") : "",
       },
@@ -121,7 +120,7 @@ const ListingPhotos = () => {
 
   const drawerTableRows: StandardTableData = useMemo(() => {
     return drawerImages.map((item, index) => {
-      const image = item.image as Asset
+      const image = item.assets
       const imageUrl = getImageUrlFromAsset(image)
       return {
         ordinal: {
@@ -197,9 +196,9 @@ const ListingPhotos = () => {
         <span key={item.id}>
           <input
             type="hidden"
-            name={`images[${index}].image.fileId`}
+            name={`listingImages[${index}].image.fileId`}
             ref={register()}
-            defaultValue={item.image.fileId}
+            defaultValue={item.assets.fileId}
           />
         </span>
       ))}
@@ -221,11 +220,11 @@ const ListingPhotos = () => {
 
             <Button
               type="button"
-              variant={fieldHasError(errors?.images) ? "alert" : "primary-outlined"}
+              variant={fieldHasError(errors?.listingImages) ? "alert" : "primary-outlined"}
               onClick={() => {
                 setDrawerState(true)
                 setDrawerImages([...listingFormPhotos])
-                clearErrors("images")
+                clearErrors("listingImages")
               }}
               id="add-photos-button"
             >
@@ -234,8 +233,11 @@ const ListingPhotos = () => {
           </Grid.Cell>
         </Grid.Row>
       </SectionWithGrid>
-      {fieldHasError(errors?.images) && (
-        <span className={"text-sm text-alert"}>{errors?.images?.nested?.message}</span>
+      <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
+      {fieldHasError(errors?.listingImages) && (
+        <span className={"text-sm text-alert"} id="photos-error">
+          {t("errors.requiredFieldError")}
+        </span>
       )}
 
       {/* Image management and upload drawer */}
@@ -258,7 +260,7 @@ const ListingPhotos = () => {
                     newData.map((item: Record<string, StandardTableCell>, index) => {
                       const foundImage = drawerImages.find(
                         (field) =>
-                          field.image.fileId.split("/").slice(-1).join() == item.fileName.content
+                          field.assets.fileId.split("/").slice(-1).join() == item.fileName.content
                       )
                       return { ...foundImage, ordinal: index }
                     })

@@ -28,7 +28,7 @@ export function AbstractServiceFactory<T, TCreateDto, TUpdateDto extends Generic
     }
 
     async create(dto: TCreateDto): Promise<T> {
-      return await this.repository.save((dto as unknown) as T)
+      return await this.repository.save(dto as unknown as T)
     }
 
     async findOne(findConditions: FindOneOptions<T>): Promise<T> {

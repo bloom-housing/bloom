@@ -368,7 +368,7 @@ describe("Applications", () => {
     expect(Array.isArray(res.body.items)).toBe(true)
     expect(res.body.items.length).toBe(1)
     expect(res.body.items[0].id === createRes.body.id)
-    expect(res.body.items[0]).toMatchObject(createRes.body)
+    expect(res.body.items[0]).toMatchObject({ ...createRes.body, updatedAt: expect.anything() })
   })
 
   it(`should not allow an admin to search for users application using a search query param of less than 3 characters`, async () => {
@@ -408,7 +408,7 @@ describe("Applications", () => {
     expect(Array.isArray(res.body.items)).toBe(true)
     expect(res.body.items.length).toBe(1)
     expect(res.body.items[0].id === createRes.body.id)
-    expect(res.body.items[0]).toMatchObject(createRes.body)
+    expect(res.body.items[0]).toMatchObject({ ...createRes.body, updatedAt: expect.anything() })
   })
 
   it(`should allow an admin to search for users application using email as textquery`, async () => {
@@ -431,7 +431,7 @@ describe("Applications", () => {
     expect(Array.isArray(res.body.items)).toBe(true)
     expect(res.body.items.length).toBe(1)
     expect(res.body.items[0].id === createRes.body.id)
-    expect(res.body.items[0]).toMatchObject(createRes.body)
+    expect(res.body.items[0]).toMatchObject({ ...createRes.body, updatedAt: expect.anything() })
   })
 
   // because we changed this to be done async to the request this is causing some problems with the tests
@@ -574,7 +574,7 @@ describe("Applications", () => {
       const { createRes, firstName } = responses[index]
 
       expect(item.id === createRes.body.id)
-      expect(item).toMatchObject(createRes.body)
+      expect(item).toMatchObject({ ...createRes.body, updatedAt: expect.anything() })
       expect(item.applicant).toMatchObject(createRes.body.applicant)
       expect(item.applicant.firstName === firstName)
     }

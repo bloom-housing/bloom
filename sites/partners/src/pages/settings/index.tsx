@@ -3,12 +3,6 @@ import Head from "next/head"
 import { useSWRConfig } from "swr"
 
 import {
-  ApplicationSection,
-  MultiselectQuestion,
-  MultiselectQuestionCreate,
-  MultiselectQuestionUpdate,
-} from "@bloom-housing/backend-core"
-import {
   LoadingOverlay,
   MinimalTable,
   SiteAlert,
@@ -27,6 +21,12 @@ import { useJurisdictionalMultiselectQuestionList } from "../../lib/hooks"
 import ManageIconSection from "../../components/settings/ManageIconSection"
 import { PreferenceDeleteModal } from "../../components/settings/PreferenceDeleteModal"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
+import {
+  MultiselectQuestion,
+  MultiselectQuestionCreate,
+  MultiselectQuestionUpdate,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export type DrawerType = "add" | "edit"
 
@@ -52,10 +52,8 @@ const Settings = () => {
   )
 
   const { data, loading, cacheKey } = useJurisdictionalMultiselectQuestionList(
-    profile?.jurisdictions?.reduce((acc, curr) => {
-      return `${acc}${","}${curr.id}`
-    }, ""),
-    ApplicationSection.preferences
+    profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id).toString(),
+    MultiselectQuestionsApplicationSectionEnum.preferences
   )
 
   const tableData = useMemo(() => {
@@ -107,15 +105,15 @@ const Settings = () => {
     }
   }, [isCreateLoading])
 
-  const saveQuestion = (
-    formattedData: MultiselectQuestionCreate | MultiselectQuestionUpdate,
-    requestType: DrawerType
-  ) => {
+  const saveQuestion = (formattedData: MultiselectQuestionCreate, requestType: DrawerType) => {
     if (requestType === "edit") {
       void updateQuestion(() =>
         multiselectQuestionsService
           .update({
-            body: { ...formattedData, id: questionData.id },
+            body: {
+              ...(formattedData as unknown as MultiselectQuestionUpdate),
+              id: questionData.id,
+            },
           })
           .then((result) => {
             setUpdatedIds(
@@ -138,7 +136,7 @@ const Settings = () => {
       void createQuestion(() =>
         multiselectQuestionsService
           .create({
-            body: formattedData,
+            body: formattedData as unknown as MultiselectQuestionCreate,
           })
           .then((result) => {
             setUpdatedIds(

@@ -5,8 +5,7 @@ describe("Listings approval feature", () => {
     cy.intercept("/api/adapter/upload", {
       body: {
         id: "123",
-        url:
-          "https://assets.website-files.com/5fbfdd121e108ea418ede824/5fbfdea9a7287d45a63d821b_Exygy%20Logo.svg",
+        url: "https://assets.website-files.com/5fbfdd121e108ea418ede824/5fbfdea9a7287d45a63d821b_Exygy%20Logo.svg",
       },
     })
     // Partner: Submit a listing for approval
@@ -21,7 +20,7 @@ describe("Listings approval feature", () => {
     cy.signOut()
 
     // Admin: Request changes
-    cy.loginAndAcceptTerms("user")
+    cy.login("user")
     searchAndOpenListing(cy, uniqueListingName)
     cy.getByID("listing-status-pending-review").should("be.visible")
     cy.getByID("listingEditButton").click()
@@ -88,16 +87,16 @@ describe("Listings approval feature", () => {
         "https://assets.website-files.com/5fbfdd121e108ea418ede824/5fbfdea9a7287d45a63d821b_Exygy%20Logo.svg"
       )
 
-    cy.getByID("buildingAddress.street").type(listing["buildingAddress.street"])
+    cy.getByID("listingsBuildingAddress.street").type(listing["buildingAddress.street"])
     cy.getByID("neighborhood").type(listing["neighborhood"])
-    cy.getByID("buildingAddress.city").type(listing["buildingAddress.city"])
-    cy.getByID("buildingAddress.state").select(listing["buildingAddress.state"])
-    cy.getByID("buildingAddress.zipCode").type(listing["buildingAddress.zipCode"])
-    cy.getByID("buildingAddress.county").select(listing["buildingAddress.county"])
+    cy.getByID("listingsBuildingAddress.city").type(listing["buildingAddress.city"])
+    cy.getByID("listingsBuildingAddress.state").select(listing["buildingAddress.state"])
+    cy.getByID("listingsBuildingAddress.zipCode").type(listing["buildingAddress.zipCode"])
+    cy.getByID("listingsBuildingAddress.county").type(listing["buildingAddress.county"])
 
     cy.getByID("addUnitsButton").contains("Add Unit").click()
     cy.getByID("number").type(listing["number"])
-    cy.getByID("unitType.id").select(listing["unitType.id"])
+    cy.getByID("unitTypes.id").select(listing["unitType.id"])
     cy.getByID("unitFormSaveAndExitButton").contains("Save & Exit").click()
     cy.get("button").contains("Application Process").click()
 

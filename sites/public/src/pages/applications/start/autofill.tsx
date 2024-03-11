@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
-import { Application } from "@bloom-housing/backend-core/types"
 import { Form, t } from "@bloom-housing/ui-components"
 import {
   blankApplication,
@@ -15,6 +14,11 @@ import { useFormConductor } from "../../../lib/hooks"
 import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
 import AutofillCleaner from "../../../lib/applications/appAutofill"
 import { UserStatus } from "../../../lib/constants"
+import {
+  Application,
+  ApplicationOrderByKeys,
+  OrderByEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import ApplicationFormLayout from "../../../layouts/application-form"
 import { Button } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
@@ -39,17 +43,16 @@ export default () => {
       setSubmitted(true)
       if (previousApplication && useDetails) {
         const withUpdatedLang = {
-          ...previousApplication,
+          ...JSON.parse(JSON.stringify(previousApplication)),
           language: router.locale,
         }
 
         conductor.application = withUpdatedLang
       } else {
-        const newApplication = {
-          ...blankApplication,
+        conductor.application = {
+          ...JSON.parse(JSON.stringify(blankApplication)),
           language: router.locale,
         }
-        conductor.application = newApplication
       }
 
       context.syncApplication(conductor.application)
@@ -70,15 +73,12 @@ export default () => {
     if (!previousApplication && initialStateLoaded) {
       if (profile) {
         void applicationsService
-          .list({
+          .mostRecentlyCreated({
             userId: profile.id,
-            orderBy: "createdAt",
-            order: "DESC",
-            limit: 1,
           })
           .then((res) => {
-            if (res && res?.items?.length) {
-              setPreviousApplication(new AutofillCleaner(res.items[0]).clean())
+            if (res) {
+              setPreviousApplication(new AutofillCleaner(res).clean())
             } else {
               onSubmit()
             }

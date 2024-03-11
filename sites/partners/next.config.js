@@ -5,7 +5,6 @@ const withTM = require("next-transpile-modules")([
   "@bloom-housing/ui-seeds",
   "@bloom-housing/shared-helpers",
   "@bloom-housing/ui-components",
-  "@bloom-housing/backend-core",
   "@bloom-housing/doorway-ui-components",
 ])
 const withBundleAnalyzer = require("@next/bundle-analyzer")({

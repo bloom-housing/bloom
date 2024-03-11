@@ -9,7 +9,7 @@
     "test": "jest --runInBand --detectOpenHandles",
     "test:cov": "jest --coverage",
     "import:run": "node ./.build/index.js",
-    "import:run:local": "DATABASE_URL=\"${DATABASE_URL:-postgres://localhost/bloom}\" JURISDICTION_INCLUDE_LIST=\"${JURISDICTION_INCLUDE_LIST:-San Jose,San Mateo,Alameda}\" yarn import:run",
+    "import:run:local": "DATABASE_URL=\"${DATABASE_URL:-postgres://localhost/bloom_prisma}\" JURISDICTION_INCLUDE_LIST=\"${JURISDICTION_INCLUDE_LIST:-San Jose,San Mateo,Alameda}\" yarn import:run",
     "import:run:local:dev": "EXTERNAL_API_BASE=https://api.housingbayarea.bloom.exygy.dev LISTING_VIEW=full yarn import:run:local",
     "import:run:local:prod": "EXTERNAL_API_BASE=https://proxy.housingbayarea.org yarn import:run:local"
   },

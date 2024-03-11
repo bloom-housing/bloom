@@ -1,6 +1,6 @@
 import React from "react"
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api"
-import { Listing } from "@bloom-housing/backend-core/types"
+import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type ListingGoogleMapProps = {
   listing: Listing
@@ -22,8 +22,8 @@ const ListingGoogleMap = (props: ListingGoogleMapProps) => {
 
   const listing = props.listing
   const latitudeLongitude = {
-    lat: listing.buildingAddress.latitude,
-    lng: listing.buildingAddress.longitude,
+    lat: listing.listingsBuildingAddress.latitude,
+    lng: listing.listingsBuildingAddress.longitude,
   }
   const marker = (
     <Marker

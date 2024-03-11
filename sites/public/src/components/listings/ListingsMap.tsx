@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { GoogleMap, InfoWindow, Marker, useJsApiLoader } from "@react-google-maps/api"
 import { getListingUrl, getListingCard } from "../../lib/helpers"
-import { Listing } from "@bloom-housing/backend-core"
 import styles from "./ListingsCombined.module.scss"
 import { MapControl } from "../shared/MapControl"
 import { t } from "@bloom-housing/ui-components"
+import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type ListingsMapProps = {
   listings?: Listing[]
@@ -58,8 +58,8 @@ const ListingsMap = (props: ListingsMapProps) => {
   const markers = []
   let index = 0
   props.listings.forEach((listing: Listing) => {
-    const lat = listing.buildingAddress.latitude
-    const lng = listing.buildingAddress.longitude
+    const lat = listing.listingsBuildingAddress.latitude
+    const lng = listing.listingsBuildingAddress.longitude
     const uri = getListingUrl(listing)
     const key = ++index
 

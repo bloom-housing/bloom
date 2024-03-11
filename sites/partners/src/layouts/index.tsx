@@ -23,7 +23,7 @@ const Layout = (props) => {
       href: "/",
     })
   }
-  if (profile?.roles?.isAdmin || profile?.roles?.isJurisdictionalAdmin) {
+  if (profile?.userRoles?.isAdmin || profile?.userRoles?.isJurisdictionalAdmin) {
     menuLinks.push({
       title: t("nav.users"),
       href: "/users",
@@ -31,7 +31,7 @@ const Layout = (props) => {
   }
   if (
     profile?.jurisdictions?.some((jurisdiction) => !!jurisdiction.enablePartnerSettings) &&
-    (profile?.roles?.isAdmin || profile?.roles?.isJurisdictionalAdmin)
+    (profile?.userRoles?.isAdmin || profile?.userRoles?.isJurisdictionalAdmin)
   ) {
     menuLinks.push({
       title: t("t.settings"),

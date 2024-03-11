@@ -1,18 +1,20 @@
 import React from "react"
 import dayjs from "dayjs"
-import { ApplicationMethodType } from "@bloom-housing/backend-core/types"
 import { render } from "@testing-library/react"
 import { ListingView } from "../../../src/components/listing/ListingView"
 import { listing, jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { ApplicationMethodsTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 describe("<ListingView>", () => {
   describe("'Apply Online' button visibility", () => {
+    const jurisditionWithPublicUrl = { ...jurisdiction, publicUrl: "www.example.com" }
     it("does not show if the due date is in the past", () => {
       const pastDate = dayjs().subtract(7, "day").toDate()
       const view = render(
         <ListingView
           listing={{
             ...listing,
+            jurisdictions: jurisditionWithPublicUrl,
             applicationDueDate: pastDate,
           }}
           jurisdiction={jurisdiction}
@@ -29,6 +31,7 @@ describe("<ListingView>", () => {
         <ListingView
           listing={{
             ...listing,
+            jurisdictions: jurisditionWithPublicUrl,
             applicationDueDate: futureDate,
           }}
           jurisdiction={jurisdiction}
@@ -44,11 +47,12 @@ describe("<ListingView>", () => {
         <ListingView
           listing={{
             ...listing,
+            jurisdictions: jurisditionWithPublicUrl,
             applicationDueDate: futureDate,
             applicationMethods: [
               {
                 ...listing.applicationMethods[0],
-                type: ApplicationMethodType.PaperPickup,
+                type: ApplicationMethodsTypeEnum.PaperPickup,
               },
             ],
           }}

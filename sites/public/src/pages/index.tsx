@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
 import Head from "next/head"
-import { Jurisdiction } from "@bloom-housing/backend-core/types"
 import {
   AlertBox,
   LinkButton,
@@ -10,7 +9,7 @@ import {
   InfoCard,
 } from "@bloom-housing/ui-components"
 import { ActionBlock, DoorwayHero } from "@bloom-housing/doorway-ui-components"
-import { Button, Heading } from "@bloom-housing/ui-seeds"
+import { Heading } from "@bloom-housing/ui-seeds"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
@@ -19,6 +18,7 @@ import { MetaTags } from "../components/shared/MetaTags"
 import { LandingSearch } from "../components/listings/search/LandingSearch"
 import { FormOption } from "../components/listings/search/ListingsSearchModal"
 import { locations } from "../components/listings/search/ListingsSearchCombined"
+import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 interface IndexProps {
   jurisdiction: Jurisdiction

@@ -1,6 +1,6 @@
 import * as React from "react"
 import { getListings } from "../../lib/helpers"
-import { Listing } from "@bloom-housing/backend-core"
+import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { LinkButton, ZeroListingsItem } from "@bloom-housing/doorway-ui-components"
 import { Pagination } from "./Pagination"
 import { LoadingOverlay, t, InfoCard } from "@bloom-housing/ui-components"

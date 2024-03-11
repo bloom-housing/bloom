@@ -5,12 +5,13 @@ import { t, StatusMessages, Icon, setSiteAlertMessage } from "@bloom-housing/ui-
 import { Button, Link, Grid } from "@bloom-housing/ui-seeds"
 import { pdfUrlFromListingEvents, AuthContext } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "./ListingContext"
-import {
-  EnumJurisdictionListingApprovalPermissions,
-  ListingEventType,
-  ListingStatus,
-} from "@bloom-housing/backend-core/types"
 import { StatusAside } from "../shared/StatusAside"
+import {
+  ListingEventsTypeEnum,
+  ListingUpdate,
+  ListingsStatusEnum,
+  EnumJurisdictionListingApprovalPermissions,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export enum ListingFormActionsType {
   add = "add",
@@ -24,7 +25,7 @@ type ListingFormActionsProps = {
   showLotteryResultsDrawer?: () => void
   showRequestChangesModal?: () => void
   showSubmitForApprovalModal?: () => void
-  submitFormWithStatus?: (confirm?: boolean, status?: ListingStatus) => void
+  submitFormWithStatus?: (confirm?: boolean, status?: ListingsStatusEnum) => void
 }
 
 const ListingFormActions = ({
@@ -40,19 +41,24 @@ const ListingFormActions = ({
   const router = useRouter()
 
   // single jurisdiction check covers jurisAdmin adding a listing (listing is undefined then)
-  const listingApprovalPermissions = (profile?.jurisdictions?.length === 1
-    ? profile?.jurisdictions[0]
-    : profile?.jurisdictions?.find((juris) => juris.id === listing?.jurisdiction?.id)
+  const listingApprovalPermissions = (
+    profile?.jurisdictions?.length === 1
+      ? profile?.jurisdictions[0]
+      : profile?.jurisdictions?.find((juris) => juris.id === listing?.jurisdictions?.id)
   )?.listingApprovalPermissions
 
   const isListingApprover =
-    profile?.roles.isAdmin ||
-    (profile?.roles.isJurisdictionalAdmin &&
+    profile?.userRoles.isAdmin ||
+    (profile?.userRoles.isJurisdictionalAdmin &&
       listingApprovalPermissions?.includes(
         EnumJurisdictionListingApprovalPermissions.jurisdictionAdmin
       ))
 
   const listingId = listing?.id
+
+  const listingJurisdiction = profile?.jurisdictions?.find(
+    (jurisdiction) => jurisdiction.id === listing?.jurisdictions?.id
+  )
 
   const recordUpdated = useMemo(() => {
     if (!listing) return null
@@ -95,7 +101,7 @@ const ListingFormActions = ({
           variant="success"
           className="w-full"
           onClick={() => {
-            submitFormWithStatus(true, ListingStatus.active)
+            submitFormWithStatus(true, ListingsStatusEnum.active)
           }}
         >
           {t("listings.actions.publish")}
@@ -106,10 +112,11 @@ const ListingFormActions = ({
     const saveDraftButton = (
       <Grid.Cell key="btn-draft">
         <Button
+          id="saveDraftButton"
           type="button"
           variant="primary-outlined"
           className="w-full"
-          onClick={() => submitFormWithStatus(false, ListingStatus.pending)}
+          onClick={() => submitFormWithStatus(false, ListingsStatusEnum.pending)}
         >
           {t("listings.actions.draft")}
         </Button>
@@ -148,7 +155,7 @@ const ListingFormActions = ({
           variant="alert-outlined"
           className="w-full"
           type="button"
-          onClick={() => submitFormWithStatus(false, ListingStatus.pending)}
+          onClick={() => submitFormWithStatus(false, ListingsStatusEnum.pending)}
         >
           {t("listings.actions.unpublish")}
         </Button>
@@ -188,7 +195,7 @@ const ListingFormActions = ({
         <Button
           variant="primary-outlined"
           className="w-full"
-          href={`${listing?.jurisdiction.publicUrl}/preview/listings/${listingId}`}
+          href={`${listingJurisdiction?.publicUrl}/preview/listings/${listingId}`}
         >
           {t("listings.actions.preview")}
         </Button>
@@ -198,7 +205,7 @@ const ListingFormActions = ({
     const viewPostedResultsButton = (eventUrl: string) => (
       <Grid.Cell key="btn-preview-results">
         <Link
-          href={`${listing?.jurisdiction.publicUrl}/preview/listings/${listingId}`}
+          href={eventUrl}
           tailIcon={<Icon size="medium" symbol="link" className="ml-2" />}
           className="w-full justify-center p-3"
         >
@@ -230,12 +237,15 @@ const ListingFormActions = ({
           onClick={async () => {
             // utilize same submit logic if updating status from edit view
             if (type === ListingFormActionsType.edit) {
-              submitFormWithStatus(false, ListingStatus.active)
+              submitFormWithStatus(false, ListingsStatusEnum.active)
             } else {
               try {
                 const result = await listingsService.update({
                   id: listing.id,
-                  body: { ...listing, status: ListingStatus.active },
+                  body: {
+                    ...(listing as unknown as ListingUpdate),
+                    status: ListingsStatusEnum.active,
+                  },
                 })
                 if (result) {
                   setSiteAlertMessage(t("listings.approval.listingPublished"), "success")
@@ -279,7 +289,7 @@ const ListingFormActions = ({
           className="w-full"
           onClick={() => {
             // TODO throw a modal
-            submitFormWithStatus(true, ListingStatus.active)
+            submitFormWithStatus(true, ListingsStatusEnum.active)
           }}
         >
           {t("listings.approval.reopen")}
@@ -288,8 +298,13 @@ const ListingFormActions = ({
     )
 
     const lotteryResultsButton = (elements) => {
-      if (listing.events.find((event) => event.type === ListingEventType.lotteryResults)) {
-        const eventUrl = pdfUrlFromListingEvents(listing?.events, ListingEventType.lotteryResults)
+      if (
+        listing.listingEvents?.find((event) => event.type === ListingEventsTypeEnum.lotteryResults)
+      ) {
+        const eventUrl = pdfUrlFromListingEvents(
+          listing?.listingEvents,
+          ListingEventsTypeEnum.lotteryResults
+        )
         elements.push(viewPostedResultsButton(eventUrl))
       }
     }
@@ -301,15 +316,16 @@ const ListingFormActions = ({
         if (isListingApprover) {
           // admins can approve and publish if pending approval or changes requested
           if (
-            listing.status === ListingStatus.pendingReview ||
-            listing.status === ListingStatus.changesRequested
+            listing.status === ListingsStatusEnum.pendingReview ||
+            listing.status === ListingsStatusEnum.changesRequested
           )
             elements.push(approveAndPublishButton)
           // admins can always edit
           elements.push(editFromDetailButton)
         } else {
           // partners cannot edit if pending approval
-          if (listing.status !== ListingStatus.pendingReview) elements.push(editFromDetailButton)
+          if (listing.status !== ListingsStatusEnum.pendingReview)
+            elements.push(editFromDetailButton)
         }
 
         // all users can preview
@@ -332,20 +348,20 @@ const ListingFormActions = ({
       if (type === ListingFormActionsType.edit) {
         if (isListingApprover) {
           // admins can publish a draft
-          if (listing.status === ListingStatus.pending) elements.push(publishButton)
+          if (listing.status === ListingsStatusEnum.pending) elements.push(publishButton)
           // admins can approve and publish a pending approval or changes requested listing
           if (
-            listing.status === ListingStatus.pendingReview ||
-            listing.status === ListingStatus.changesRequested
+            listing.status === ListingsStatusEnum.pendingReview ||
+            listing.status === ListingsStatusEnum.changesRequested
           )
             elements.push(approveAndPublishButton)
           // admins can reopen a closed listing
-          if (listing.status === ListingStatus.closed) elements.push(reopenButton)
+          if (listing.status === ListingsStatusEnum.closed) elements.push(reopenButton)
         } else {
           // partners can submit for approval a draft or changes requested listing
           if (
-            listing.status === ListingStatus.pending ||
-            listing.status === ListingStatus.changesRequested
+            listing.status === ListingsStatusEnum.pending ||
+            listing.status === ListingsStatusEnum.changesRequested
           )
             elements.push(submitButton)
         }
@@ -354,28 +370,28 @@ const ListingFormActions = ({
         elements.push(saveExitButton)
 
         // admins can request changes on pending review listings
-        if (isListingApprover && listing.status === ListingStatus.pendingReview)
+        if (isListingApprover && listing.status === ListingsStatusEnum.pendingReview)
           elements.push(requestChangesButton)
 
         // all users can unpublish a closed listing
-        if (listing.status === ListingStatus.closed) {
+        if (listing.status === ListingsStatusEnum.closed) {
           elements.push(unpublishButton)
         }
 
         // all users can close or unpublish open listings
-        if (listing.status === ListingStatus.active) {
+        if (listing.status === ListingsStatusEnum.active) {
           elements.push(closeButton)
           elements.push(unpublishButton)
         }
 
-        const lotteryResults = listing?.events?.find(
-          (event) => event.type === ListingEventType.lotteryResults
+        const lotteryResults = listing?.listingEvents?.find(
+          (event) => event.type === ListingEventsTypeEnum.lotteryResults
         )
 
         // all users can manage lottery results on closed listings
         if (lotteryResults) {
           elements.push(editPostedResultsButton(lotteryResults))
-        } else if (listing.status === ListingStatus.closed) {
+        } else if (listing.status === ListingsStatusEnum.closed) {
           elements.push(postResultsButton)
         }
 
@@ -403,29 +419,32 @@ const ListingFormActions = ({
 
       // listing saved at least once
       if (type === ListingFormActionsType.edit) {
-        if (listing.status === ListingStatus.pending) {
+        if (listing.status === ListingsStatusEnum.pending) {
           elements.push(publishButton)
         }
-        if (listing.status === ListingStatus.closed) {
+        if (listing.status === ListingsStatusEnum.closed) {
           elements.push(reopenButton)
         }
         elements.push(saveExitButton)
 
-        if (listing.status === ListingStatus.active) {
+        if (listing.status === ListingsStatusEnum.active) {
           elements.push(closeButton)
         }
 
-        if (listing.status === ListingStatus.closed || listing.status === ListingStatus.active) {
+        if (
+          listing.status === ListingsStatusEnum.closed ||
+          listing.status === ListingsStatusEnum.active
+        ) {
           elements.push(unpublishButton)
         }
 
-        const lotteryResults = listing?.events?.find(
-          (event) => event.type === ListingEventType.lotteryResults
+        const lotteryResults = listing?.listingEvents?.find(
+          (event) => event.type === ListingEventsTypeEnum.lotteryResults
         )
 
         if (lotteryResults) {
           elements.push(editPostedResultsButton(lotteryResults))
-        } else if (listing.status === ListingStatus.closed) {
+        } else if (listing.status === ListingsStatusEnum.closed) {
           elements.push(postResultsButton)
         }
 

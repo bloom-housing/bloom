@@ -1,7 +1,6 @@
 import React, { useEffect, useContext } from "react"
 import Head from "next/head"
 import axios from "axios"
-import { Jurisdiction, Listing } from "@bloom-housing/backend-core/types"
 import { t } from "@bloom-housing/ui-components"
 import {
   imageUrlFromListing,
@@ -11,11 +10,12 @@ import {
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
 import Layout from "../../../layouts/application"
-import { ListingView } from "../../../components/listing/ListingView"
+import { ListingView, ListingViewListing } from "../../../components/listing/ListingView"
 import { MetaTags } from "../../../components/shared/MetaTags"
 import { ErrorPage } from "../../_error"
 import dayjs from "dayjs"
 import { runtimeConfig } from "../../../lib/runtime-config"
+import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 interface ListingProps {
   listing: Listing
@@ -71,7 +71,7 @@ export default function ListingPage(props: ListingProps) {
       </Head>
       <MetaTags title={listing.name} image={metaImage} description={metaDescription} />
       <ListingView
-        listing={listing}
+        listing={listing as ListingViewListing}
         jurisdiction={props.jurisdiction}
         googleMapsApiKey={props.googleMapsApiKey}
         isExternal={false}
@@ -138,7 +138,7 @@ export async function getServerSideProps(context: {
   return {
     props: {
       listing: response.data,
-      jurisdiction: response.data.jurisdiction,
+      jurisdiction: response.data.jurisdictions,
       googleMapsApiKey: runtimeConfig.getGoogleMapsApiKey(),
     },
   }

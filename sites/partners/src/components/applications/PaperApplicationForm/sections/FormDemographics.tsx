@@ -9,11 +9,11 @@ import {
   sexualOrientationKeys,
   howDidYouHear,
 } from "@bloom-housing/shared-helpers"
-import { Demographics } from "@bloom-housing/backend-core/types"
+import { Demographic } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type FormDemographicsProps = {
-  formValues: Demographics
+  formValues: Demographic
 }
 
 const FormDemographics = ({ formValues }: FormDemographicsProps) => {

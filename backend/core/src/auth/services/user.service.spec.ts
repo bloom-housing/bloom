@@ -320,7 +320,7 @@ describe("UserService", () => {
     it("should return 400 if email is not found", async () => {
       jest.spyOn(service, "findByResetToken").mockResolvedValueOnce(null)
       await expect(
-        service.updatePassword(updateDto, (mockRes as unknown) as Response)
+        service.updatePassword(updateDto, mockRes as unknown as Response)
       ).rejects.toThrow(
         new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
       )
@@ -336,7 +336,7 @@ describe("UserService", () => {
       jest.spyOn(service, "findByResetToken").mockResolvedValueOnce(mockedUser as User)
       // Sets resetToken
       await service.forgotPassword({ email: "abc@xyz.com" })
-      const accessToken = await service.updatePassword(updateDto, (mockRes as unknown) as Response)
+      const accessToken = await service.updatePassword(updateDto, mockRes as unknown as Response)
       expect(accessToken).toBeDefined()
     })
   })

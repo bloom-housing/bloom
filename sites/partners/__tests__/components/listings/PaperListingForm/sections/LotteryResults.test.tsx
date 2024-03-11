@@ -6,7 +6,10 @@ import { setupServer } from "msw/node"
 import LotteryResults from "../../../../../src/components/listings/PaperListingForm/sections/LotteryResults"
 import { FormProvider, useForm } from "react-hook-form"
 import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
-import { ListingEvent, ListingEventType } from "@bloom-housing/backend-core"
+import {
+  ListingEvent,
+  ListingEventsTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const FormComponent = ({ children, values }: { values?: FormListing; children }) => {
   const formMethods = useForm<FormListing>({
@@ -78,9 +81,9 @@ describe("LotteryResults", () => {
 
   it("Should show Edit result when one exists on load", () => {
     const lotteryResultEvent: ListingEvent = {
-      type: ListingEventType.lotteryResults,
+      type: ListingEventsTypeEnum.lotteryResults,
       id: "lotteryId",
-      file: {
+      assets: {
         id: "id",
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -93,7 +96,7 @@ describe("LotteryResults", () => {
     const submitFn = jest.fn()
     const showDrawerFn = jest.fn()
     const results = render(
-      <FormComponent values={{ ...formDefaults, events: [lotteryResultEvent] }}>
+      <FormComponent values={{ ...formDefaults, listingEvents: [lotteryResultEvent] }}>
         <LotteryResults submitCallback={submitFn} drawerState={true} showDrawer={showDrawerFn} />
       </FormComponent>
     )

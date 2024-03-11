@@ -2,13 +2,14 @@ import React from "react"
 import Head from "next/head"
 import axios from "axios"
 import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
-import { Listing } from "@bloom-housing/backend-core/types"
+import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Layout from "../../../layouts"
 import PaperListingForm from "../../../components/listings/PaperListingForm"
 import { ListingContext } from "../../../components/listings/ListingContext"
 import { MetaTags } from "../../../components/shared/MetaTags"
 import ListingGuard from "../../../components/shared/ListingGuard"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
+import { FormListing } from "../../../lib/listings/formTypes"
 
 const EditListing = (props: { listing: Listing }) => {
   const metaDescription = ""
@@ -53,7 +54,7 @@ const EditListing = (props: { listing: Listing }) => {
             }
           />
 
-          <PaperListingForm listing={listing} editMode />
+          <PaperListingForm listing={listing as FormListing} editMode />
         </Layout>
       </ListingGuard>
     </ListingContext.Provider>

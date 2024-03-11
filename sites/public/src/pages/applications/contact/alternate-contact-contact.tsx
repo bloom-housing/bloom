@@ -22,17 +22,20 @@ export default () => {
   const currentPageSection = 1
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { control, register, handleSubmit, errors } = useForm<Record<string, any>>({
+  const { control, register, handleSubmit, errors, trigger } = useForm<Record<string, any>>({
     shouldFocusError: false,
   })
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    const validation = await trigger()
+    if (!validation) return
+
     application.alternateContact.phoneNumber = data.phoneNumber
     application.alternateContact.emailAddress = data.emailAddress || null
-    application.alternateContact.mailingAddress.street = data.mailingAddress.street
-    application.alternateContact.mailingAddress.street2 = data.mailingAddress.street2
-    application.alternateContact.mailingAddress.state = data.mailingAddress.state
-    application.alternateContact.mailingAddress.zipCode = data.mailingAddress.zipCode
-    application.alternateContact.mailingAddress.city = data.mailingAddress.city
+    application.alternateContact.address.street = data.mailingAddress.street
+    application.alternateContact.address.street2 = data.mailingAddress.street2
+    application.alternateContact.address.state = data.mailingAddress.state
+    application.alternateContact.address.zipCode = data.mailingAddress.zipCode
+    application.alternateContact.address.city = data.mailingAddress.city
     conductor.completeSection(1)
     conductor.sync()
     conductor.routeToNextOrReturnUrl()
@@ -128,7 +131,7 @@ export default () => {
                 id="mailingAddress.street"
                 name="mailingAddress.street"
                 label={t("application.contact.streetAddress")}
-                defaultValue={application.alternateContact.mailingAddress.street}
+                defaultValue={application.alternateContact.address.street}
                 register={register}
                 dataTestId={"app-alternate-mailing-address-street"}
                 error={errors.mailingAddress?.street}
@@ -141,7 +144,7 @@ export default () => {
                 label={t("application.contact.apt")}
                 register={register}
                 dataTestId={"app-alternate-mailing-address-street2"}
-                defaultValue={application.alternateContact.mailingAddress.street2}
+                defaultValue={application.alternateContact.address.street2}
                 error={errors.mailingAddress?.street2}
                 validation={{ maxLength: 64 }}
                 errorMessage={t("errors.maxLength")}
@@ -150,8 +153,8 @@ export default () => {
                 <Field
                   id="mailingAddress.city"
                   name="mailingAddress.city"
+                  defaultValue={application.alternateContact.address.city}
                   label={t("application.contact.city")}
-                  defaultValue={application.alternateContact.mailingAddress.city}
                   register={register}
                   dataTestId={"app-alternate-mailing-address-city"}
                   error={errors.mailingAddress?.city}
@@ -163,7 +166,7 @@ export default () => {
                   id="mailingAddress.state"
                   name="mailingAddress.state"
                   label={t("application.contact.state")}
-                  defaultValue={application.alternateContact.mailingAddress.state}
+                  defaultValue={application.alternateContact.address.state}
                   register={register}
                   controlClassName="control"
                   options={stateKeys}
@@ -178,7 +181,7 @@ export default () => {
                 id="mailingAddress.zipCode"
                 name="mailingAddress.zipCode"
                 label={t("application.contact.zip")}
-                defaultValue={application.alternateContact.mailingAddress.zipCode}
+                defaultValue={application.alternateContact.address.zipCode}
                 register={register}
                 dataTestId={"app-alternate-mailing-address-zip"}
                 error={errors.mailingAddress?.zipCode}

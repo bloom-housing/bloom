@@ -28,7 +28,6 @@ export const FormAddressAlternate = ({
         id={`${dataKey}.street`}
         name={`${dataKey}.street`}
         label={t("application.contact.streetAddress")}
-        placeholder={t("application.contact.streetAddress")}
         validation={{ required: true, maxLength: 64 }}
         errorMessage={
           resolveObject(`${dataKey}.street`, errors)?.type === "maxLength"
@@ -37,13 +36,13 @@ export const FormAddressAlternate = ({
         }
         error={!!resolveObject(`${dataKey}.street`, errors)}
         register={register}
+        dataTestId="address-street"
       />
 
       <Field
         id={`${dataKey}.street2`}
         name={`${dataKey}.street2`}
         label={t("application.contact.apt")}
-        placeholder={t("application.contact.apt")}
         register={register}
         error={!!resolveObject(`${dataKey}.street2`, errors)}
         validation={{ maxLength: 64 }}
@@ -54,8 +53,7 @@ export const FormAddressAlternate = ({
         <Field
           id={`${dataKey}.city`}
           name={`${dataKey}.city`}
-          label={t("application.contact.cityName")}
-          placeholder={t("application.contact.cityName")}
+          label={t("application.contact.city")}
           register={register}
           validation={{ required, maxLength: 64 }}
           error={!!resolveObject(`${dataKey}.city`, errors)}
@@ -64,6 +62,7 @@ export const FormAddressAlternate = ({
               ? t("errors.maxLength")
               : t("errors.cityError")
           }
+          dataTestId="address-city"
         />
 
         <Select
@@ -81,13 +80,13 @@ export const FormAddressAlternate = ({
           controlClassName="control"
           options={stateKeys}
           keyPrefix="states"
+          dataTestId="address-state"
         />
       </div>
       <Field
         id={`${dataKey}.zipCode`}
         name={`${dataKey}.zipCode`}
         label={t("application.contact.zip")}
-        placeholder={t("application.contact.zipCode")}
         register={register}
         validation={{ required, maxLength: 64 }}
         error={!!resolveObject(`${dataKey}.zipCode`, errors)}
@@ -96,6 +95,7 @@ export const FormAddressAlternate = ({
             ? t("errors.maxLength")
             : t("errors.zipCodeError")
         }
+        dataTestId="address-zipcode"
       />
     </>
   )

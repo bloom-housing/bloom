@@ -13,7 +13,7 @@ import {
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { ColDef, ColGroupDef } from "ag-grid-community"
-import { useListingsData, useListingZip } from "../lib/hooks"
+import { useListingExport, useListingsData } from "../lib/hooks"
 import Layout from "../layouts"
 import { MetaTags } from "../components/shared/MetaTags"
 import { NavigationHeader } from "../components/shared/NavigationHeader"
@@ -53,7 +53,7 @@ class ApplicationsLink extends formatLinkCell {
   init(params) {
     super.init(params)
     this.link.setAttribute("href", `/listings/${params.data.id}/applications`)
-    this.link.setAttribute("data-testid", "listing-status-cell")
+    this.link.setAttribute("data-testid", `listing-status-cell-${params.data.name}`)
   }
 }
 
@@ -69,11 +69,11 @@ export default function ListingsList() {
   const metaDescription = t("pageDescription.welcome")
   const [errorAlert, setErrorAlert] = useState(false)
   const { profile } = useContext(AuthContext)
-  const isAdmin = profile?.roles?.isAdmin || profile?.roles?.isJurisdictionalAdmin || false
-  const { onExport, zipCompleted, zipExportLoading, zipExportError } = useListingZip()
+  const isAdmin = profile?.userRoles?.isAdmin || profile?.userRoles?.isJurisdictionalAdmin || false
+  const { onExport, csvExportLoading, csvExportError, csvExportSuccess } = useListingExport()
   useEffect(() => {
-    setErrorAlert(zipExportError)
-  }, [zipExportError])
+    setErrorAlert(csvExportError)
+  }, [csvExportError])
 
   const tableOptions = useAgTable()
 
@@ -143,7 +143,7 @@ export default function ListingsList() {
     search: tableOptions.filter.filterValue,
     userId: profile?.id,
     sort: tableOptions.sort.sortOptions,
-    roles: profile?.roles,
+    roles: profile?.userRoles,
     userJurisidctionIds: profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id),
   })
 
@@ -155,7 +155,7 @@ export default function ListingsList() {
       <SiteAlert type="success" timeout={5000} dismissable sticky={true} />
       <MetaTags title={t("nav.siteTitlePartners")} description={metaDescription} />
       <NavigationHeader title={t("nav.listings")}>
-        {zipCompleted && (
+        {csvExportSuccess && (
           <div className="flex absolute right-4 z-50 flex-col items-center">
             <SiteAlert dismissable timeout={5000} sticky={true} type="success" />
           </div>
@@ -218,12 +218,12 @@ export default function ListingsList() {
                       variant="primary-outlined"
                       onClick={() => onExport()}
                       leadIcon={
-                        !zipExportLoading ? (
+                        !csvExportLoading ? (
                           <Icon symbol={faFileExport as UniversalIconType} size="base" />
                         ) : null
                       }
                       size="sm"
-                      loadingMessage={zipExportLoading && t("t.formSubmitted")}
+                      loadingMessage={csvExportLoading && t("t.formSubmitted")}
                     >
                       {t("t.exportToCSV")}
                     </Button>

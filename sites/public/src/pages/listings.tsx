@@ -7,7 +7,6 @@ import ListingsSearchCombined, {
 } from "../components/listings/search/ListingsSearchCombined"
 import { FormOption } from "../components/listings/search/ListingsSearchModal"
 import { runtimeConfig } from "../lib/runtime-config"
-
 import Layout from "../layouts/application"
 
 export interface ListingsProps {

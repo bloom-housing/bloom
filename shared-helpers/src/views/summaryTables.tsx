@@ -7,7 +7,7 @@ import {
   getTranslationWithArguments,
 } from "@bloom-housing/ui-components"
 import { ContentAccordion } from "@bloom-housing/doorway-ui-components"
-import { MinMax, UnitSummary, Unit, ListingReviewOrder } from "@bloom-housing/backend-core/types"
+import { MinMax, ReviewOrderTypeEnum, Unit, UnitSummary } from "../types/backend-swagger"
 
 const getTranslationFromCurrencyString = (value: string) => {
   if (value.startsWith("t.")) return getTranslationWithArguments(value)
@@ -16,7 +16,7 @@ const getTranslationFromCurrencyString = (value: string) => {
 
 export const unitSummariesTable = (
   summaries: UnitSummary[],
-  listingReviewOrder: ListingReviewOrder,
+  listingReviewOrder: ReviewOrderTypeEnum,
   includeRentandMinimumIncome = true
 ): StandardTableData => {
   const unitSummaries = summaries?.map((unitSummary) => {
@@ -67,7 +67,7 @@ export const unitSummariesTable = (
 
     let availability = null
     if (includeRentandMinimumIncome) {
-      if (listingReviewOrder !== ListingReviewOrder.waitlist) {
+      if (listingReviewOrder !== ReviewOrderTypeEnum.waitlist) {
         availability = (
           <span>
             {unitSummary.totalAvailable > 0 ? (
@@ -79,13 +79,13 @@ export const unitSummariesTable = (
             )}
           </span>
         )
-      } else if (listingReviewOrder === ListingReviewOrder.waitlist) {
+      } else if (listingReviewOrder === ReviewOrderTypeEnum.waitlist) {
         availability = <span>{t("listings.waitlist.open")}</span>
       }
     }
     return {
       unitType: {
-        content: t(`listings.unitTypes.${unitSummary.unitType?.name}`),
+        content: t(`listings.unitTypes.${unitSummary.unitTypes?.name}`),
       },
       minimumIncome: {
         content: <span>{minIncome}</span>,
@@ -102,7 +102,7 @@ export const unitSummariesTable = (
 
 export const getSummariesTable = (
   summaries: UnitSummary[],
-  listingReviewOrder: ListingReviewOrder,
+  listingReviewOrder: ReviewOrderTypeEnum,
   includeRentandMinimumIncome = true
 ): StandardTableData => {
   let unitSummaries: StandardTableData = []
@@ -154,7 +154,7 @@ export const UnitTables = (props: UnitTablesProps) => {
     <>
       {unitSummaries.map((unitSummary: UnitSummary, index) => {
         const units = props.units.filter(
-          (unit: Unit) => unit.unitType?.name == unitSummary.unitType.name
+          (unit: Unit) => unit.unitTypes?.name == unitSummary.unitTypes.name
         )
         const unitsFormatted = [] as StandardTableData
         let floorSection: React.ReactNode
@@ -199,7 +199,7 @@ export const UnitTables = (props: UnitTablesProps) => {
         const getBarContent = () => {
           return (
             <h3 className={"toggle-header-content"}>
-              {t("listings.unitTypes." + unitSummary.unitType.name)}:&nbsp;
+              {t("listings.unitTypes." + unitSummary.unitTypes.name)}:&nbsp;
               {unitsLabel(units)}
               {areaRangeSection}
               {floorSection}

@@ -22,7 +22,7 @@ const ApplicationAda = () => {
   const currentPageSection = 2
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, setValue, errors, getValues, clearErrors } = useForm<
+  const { register, handleSubmit, setValue, errors, getValues, clearErrors, trigger } = useForm<
     Record<string, any>
   >({
     defaultValues: {
@@ -34,7 +34,9 @@ const ApplicationAda = () => {
     shouldFocusError: false,
   })
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    const validation = await trigger()
+    if (!validation) return
     conductor.currentStep.save({
       accessibility: {
         mobility: !!data["app-accessibility-mobility"],

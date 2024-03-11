@@ -49,6 +49,8 @@ import { AmiDefaultSanJose } from "../seeder/seeds/ami-charts/default-ami-chart-
 import { AmiDefaultSanMateo } from "../seeder/seeds/ami-charts/default-ami-chart-san-mateo"
 import { AmiDefaultDoorway } from "./seeds/ami-charts/default-ami-chart-doorway"
 import { Asset } from "../assets/entities/asset.entity"
+import { MapLayer } from "../map-layers/entities/map-layer.entity"
+import { MapLayerSeeder } from "./seeds/map-layers"
 
 @Module({})
 export class SeederModule {
@@ -77,6 +79,7 @@ export class SeederModule {
           ApplicationMethod,
           PaperApplication,
           Jurisdiction,
+          MapLayer,
         ]),
         ThrottlerModule.forRoot({
           ttl: 60,
@@ -115,6 +118,7 @@ export class SeederModule {
         AmiDefaultSanJose,
         AmiDefaultSanMateo,
         AmiDefaultDoorway,
+        MapLayerSeeder,
       ],
     }
   }

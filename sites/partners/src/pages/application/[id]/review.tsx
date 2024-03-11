@@ -16,17 +16,17 @@ import {
   Icon,
 } from "@bloom-housing/ui-components"
 import { Button, Tag } from "@bloom-housing/ui-seeds"
+import {
+  AfsResolve,
+  ApplicationFlaggedSet,
+  ApplicationReviewStatusEnum,
+  FlaggedSetStatusEnum,
+  RuleEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useSingleFlaggedApplication } from "../../../lib/hooks"
 import Layout from "../../../layouts"
 import { getCols } from "./applicationsCols"
-import { AuthContext } from "@bloom-housing/shared-helpers"
-import {
-  ApplicationFlaggedSet,
-  ApplicationReviewStatus,
-  EnumApplicationFlaggedSetStatus,
-  EnumApplicationFlaggedSetResolveStatus,
-  ApplicationFlaggedSetResolve,
-} from "@bloom-housing/backend-core/types"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
 import { StatusBar } from "../../../components/shared/StatusBar"
 
@@ -47,7 +47,7 @@ const Flag = () => {
 
   const { mutate: saveSetMutate, isLoading: isSaveLoading } = useMutate()
 
-  const saveSet = (formattedData: ApplicationFlaggedSetResolve) => {
+  const saveSet = (formattedData: AfsResolve) => {
     void saveSetMutate(() =>
       applicationFlaggedSetsService
         .resolve({
@@ -73,8 +73,8 @@ const Flag = () => {
     if (!data || !gridApi) return
     gridApi.forEachNode((row) => {
       row.setSelected(
-        row.data.reviewStatus === ApplicationReviewStatus.pendingAndValid ||
-          row.data.reviewStatus === ApplicationReviewStatus.valid
+        row.data.reviewStatus === ApplicationReviewStatusEnum.pendingAndValid ||
+          row.data.reviewStatus === ApplicationReviewStatusEnum.valid
       )
     })
   }
@@ -84,11 +84,11 @@ const Flag = () => {
   if (!data) return null
 
   const getTitle = () => {
-    if (data.rule === "Email") {
+    if (data.rule === RuleEnum.email) {
       return t(`flags.emailRule`, {
         email: data?.applications[0].applicant.emailAddress,
       })
-    } else if (data?.rule === "Name and DOB") {
+    } else if (data?.rule === RuleEnum.nameAndDOB) {
       return t("flags.nameDobRule", {
         name: `${data?.applications[0].applicant.firstName} ${data?.applications[0].applicant.lastName}`,
       })
@@ -97,7 +97,7 @@ const Flag = () => {
   }
 
   const numberConfirmedApps = data?.applications?.filter(
-    (app) => app.reviewStatus === ApplicationReviewStatus.valid
+    (app) => app.reviewStatus === ApplicationReviewStatusEnum.valid
   ).length
 
   return (
@@ -126,12 +126,11 @@ const Flag = () => {
           }
         >
           <Tag
-            variant={
-              data?.status === EnumApplicationFlaggedSetStatus.resolved ? "success" : "primary"
-            }
+            className="tag-uppercase"
+            variant={data?.status === FlaggedSetStatusEnum.resolved ? "success" : "primary"}
             size={"lg"}
           >
-            {data?.status === EnumApplicationFlaggedSetStatus.resolved
+            {data?.status === FlaggedSetStatusEnum.resolved
               ? t("t.resolved")
               : t("applications.pendingReview")}
           </Tag>
@@ -236,8 +235,8 @@ const Flag = () => {
                 }),
                 status:
                   status === "pending"
-                    ? EnumApplicationFlaggedSetResolveStatus.pending
-                    : EnumApplicationFlaggedSetResolveStatus.resolved,
+                    ? FlaggedSetStatusEnum.pending
+                    : FlaggedSetStatusEnum.resolved,
               })
               setSaveModalOpen(false)
             }}
@@ -265,7 +264,7 @@ const Flag = () => {
           register={register}
           inputProps={{
             value: "pending",
-            defaultChecked: data?.status === EnumApplicationFlaggedSetStatus.pending,
+            defaultChecked: data?.status === FlaggedSetStatusEnum.pending,
           }}
         />
         <p className={"mb-6 ml-8 text-xs text-gray-800"}>{t("flags.pendingDescription")}</p>
@@ -279,7 +278,7 @@ const Flag = () => {
           register={register}
           inputProps={{
             value: "resolved",
-            defaultChecked: data?.status === EnumApplicationFlaggedSetStatus.resolved,
+            defaultChecked: data?.status === FlaggedSetStatusEnum.resolved,
           }}
         />
         <p className={"ml-8 text-xs text-gray-800"}>{t("flags.resolvedDescription")}</p>

@@ -16,11 +16,13 @@ const ApplicationHouseholdChanges = () => {
   const currentPageSection = 2
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, getValues } = useForm<Record<string, any>>({
+  const { register, handleSubmit, errors, getValues, trigger } = useForm<Record<string, any>>({
     defaultValues: { householdExpectingChanges: application.householdExpectingChanges?.toString() },
     shouldFocusError: false,
   })
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    const validation = await trigger()
+    if (!validation) return
     const { householdExpectingChanges } = data
     conductor.currentStep.save({
       householdExpectingChanges: householdExpectingChanges === "true",

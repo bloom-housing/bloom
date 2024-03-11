@@ -11,12 +11,14 @@ import { Tag } from "@bloom-housing/ui-seeds"
 import { AuthContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import { useForm, FormProvider } from "react-hook-form"
 import {
-  HouseholdMember,
   Application,
-  ApplicationStatus,
-  ApplicationSection,
-  ApplicationReviewStatus,
-} from "@bloom-housing/backend-core/types"
+  ApplicationCreate,
+  ApplicationReviewStatusEnum,
+  ApplicationStatusEnum,
+  ApplicationUpdate,
+  HouseholdMember,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { mapFormToApi, mapApiToForm } from "../../../lib/applications/formatApplicationData"
 import { useSingleListingData } from "../../../lib/hooks"
 import { FormApplicationData } from "./sections/FormApplicationData"
@@ -45,9 +47,15 @@ type AlertErrorType = "api" | "form"
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
   const { listingDto } = useSingleListingData(listingId)
 
-  const preferences = listingSectionQuestions(listingDto, ApplicationSection.preferences)
+  const preferences = listingSectionQuestions(
+    listingDto,
+    MultiselectQuestionsApplicationSectionEnum.preferences
+  )
 
-  const programs = listingSectionQuestions(listingDto, ApplicationSection.programs)
+  const programs = listingSectionQuestions(
+    listingDto,
+    MultiselectQuestionsApplicationSectionEnum.programs
+  )
 
   const units = listingDto?.units
 
@@ -56,6 +64,13 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   const formMethods = useForm<FormTypes>({
     defaultValues,
   })
+
+  const [initialLoad, setInitialLoad] = useState(true)
+
+  if (editMode && initialLoad && listingDto) {
+    formMethods.reset(defaultValues)
+    setInitialLoad(false)
+  }
 
   const router = useRouter()
 
@@ -66,8 +81,8 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([])
 
   useEffect(() => {
-    if (application?.householdMembers) {
-      setHouseholdMembers(application.householdMembers)
+    if (application?.householdMember) {
+      setHouseholdMembers(application.householdMember)
     }
   }, [application, setHouseholdMembers])
 
@@ -108,18 +123,25 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       data: formData,
       listingId,
       editMode,
-      programs: programs.map((item) => item?.multiselectQuestion),
-      preferences: preferences.map((item) => item?.multiselectQuestion),
+      programs: programs.map((item) => item?.multiselectQuestions),
+      preferences: preferences.map((item) => item?.multiselectQuestions),
     })
 
     try {
       const result = editMode
         ? await applicationsService.update({
             id: application.id,
-            body: { id: application.id, ...body, reviewStatus: application.reviewStatus },
+            body: {
+              id: application.id,
+              ...body,
+              reviewStatus: application.reviewStatus,
+            } as unknown as ApplicationUpdate,
           })
         : await applicationsService.create({
-            body: { ...body, reviewStatus: ApplicationReviewStatus.valid },
+            body: {
+              ...body,
+              reviewStatus: ApplicationReviewStatusEnum.valid,
+            } as unknown as ApplicationCreate,
           })
 
       setLoading(false)
@@ -165,7 +187,8 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       <>
         <StatusBar>
           <Tag
-            variant={application?.status == ApplicationStatus.submitted ? "success" : "primary"}
+            className="tag-uppercase"
+            variant={application?.status == ApplicationStatusEnum.submitted ? "success" : "primary"}
             size={"lg"}
           >
             {application?.status
@@ -201,13 +224,13 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
                     <FormHouseholdDetails
                       listingUnits={units}
-                      applicationUnitTypes={application?.preferredUnit}
+                      applicationUnitTypes={application?.preferredUnitTypes}
                       applicationAccessibilityFeatures={application?.accessibility}
                     />
 
                     <FormMultiselectQuestions
                       questions={programs}
-                      applicationSection={ApplicationSection.programs}
+                      applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
                       sectionTitle={t("application.details.programs")}
                     />
 
@@ -215,7 +238,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
                     <FormMultiselectQuestions
                       questions={preferences}
-                      applicationSection={ApplicationSection.preferences}
+                      applicationSection={MultiselectQuestionsApplicationSectionEnum.preferences}
                       sectionTitle={t("application.details.preferences")}
                     />
 

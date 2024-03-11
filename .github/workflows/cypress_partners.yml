@@ -26,6 +26,12 @@ env:
   EXTERNAL_API_BASE: https://api.housingbayarea.bloom.exygy.dev
   MAPBOX_TOKEN: ${{ secrets.MAPBOX_TOKEN }}
   DISABLE_CORS: "TRUE"
+  TWILIO_ACCOUNT_SID: 'AC.TEST'
+  TWILIO_AUTH_TOKEN: 'TEST'
+  MFA_CODE_VALID: '600000'
+  MFA_CODE_LENGTH: 5
+  AUTH_LOCK_LOGIN_COOLDOWN: '1800000'
+  AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS: '5'
 
 
 jobs:
@@ -57,8 +63,8 @@ jobs:
       - name: yarn in root dir
         run: yarn
 
-      - name: yarn in backend/core dir
-        working-directory: ./backend/core
+      - name: yarn in api dir
+        working-directory: ./api
         run: yarn
 
       - name: Check postgres
@@ -71,7 +77,7 @@ jobs:
           PGPASSWORD: bloom
 
       - name: Setup backend
-        run: yarn test:backend:core:dbsetup
+        run: yarn test:backend:new:dbsetup:withseed
         env:
           PGHOST: 127.0.0.1
           PGPASSWORD: bloom
@@ -95,7 +101,7 @@ jobs:
           working-directory: ./sites/partners
           spec: cypress/e2e/default/*.spec.ts
           build: yarn build
-          start: yarn dev:listings, yarn start
+          start: yarn dev:new-backend, yarn start
           wait-on: 'http://localhost:3100/listings'
           record: false # set this value to true to record videos in cypress cloud for debugging purposes - skip passing tests
         env:

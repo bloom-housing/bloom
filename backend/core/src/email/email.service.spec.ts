@@ -77,15 +77,13 @@ const translationServiceMock = {
               applicationPeriodCloses:
                 "JURISDICTION: Once the application period closes, the property manager will begin processing applications.",
               eligibleApplicants: {
-                FCFS:
-                  "Eligible applicants will be placed in order based on <strong>first come first serve</strong> basis.",
+                FCFS: "Eligible applicants will be placed in order based on <strong>first come first serve</strong> basis.",
                 lotteryDate: "The lottery will be held on %{lotteryDate}.",
                 lottery:
                   "Eligible applicants will be placed in order <strong>based on preference and lottery rank</strong>.",
               },
               eligible: {
-                fcfs:
-                  "Eligible applicants will be contacted on a first come first serve basis until vacancies are filled.",
+                fcfs: "Eligible applicants will be contacted on a first come first serve basis until vacancies are filled.",
                 fcfsPreference:
                   "Housing preferences, if applicable, will affect first come first serve order.",
                 lottery:

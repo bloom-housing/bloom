@@ -46,9 +46,10 @@ export class ListingDefaultSanJoseSeed {
 
   async seed() {
     const priorityTypeMobilityAndHearing = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail(
-      { where: { name: PriorityTypes.mobilityHearing } }
+      {
+        where: { name: PriorityTypes.mobilityHearing },
+      }
     )
-
     const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({
       where: { name: "oneBdrm" },
     })

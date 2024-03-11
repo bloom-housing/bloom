@@ -1,10 +1,10 @@
-import { ListingEventType, ListingEvent } from "@bloom-housing/backend-core/types"
 import { cleanup } from "@testing-library/react"
 import {
   cloudinaryPdfFromId,
   getPdfUrlFromAsset,
   pdfUrlFromListingEvents,
 } from "../src/utilities/pdfs"
+import { ListingEvent, ListingEventsTypeEnum } from "../src/types/backend-swagger"
 
 afterEach(cleanup)
 
@@ -21,10 +21,13 @@ describe("pdfs helpers", () => {
     process.env.CLOUDINARY_CLOUD_NAME = "exygy"
 
     const listingEvents = [
-      { type: ListingEventType.lotteryResults, file: { fileId: "1234", label: "cloudinaryPDF" } },
-      { type: ListingEventType.openHouse, file: { fileId: "5678", label: "cloudinaryPDF" } },
+      {
+        type: ListingEventsTypeEnum.lotteryResults,
+        assets: { fileId: "1234", label: "cloudinaryPDF" },
+      },
+      { type: ListingEventsTypeEnum.openHouse, assets: { fileId: "5678", label: "cloudinaryPDF" } },
     ] as ListingEvent[]
-    expect(pdfUrlFromListingEvents(listingEvents, ListingEventType.lotteryResults)).toBe(
+    expect(pdfUrlFromListingEvents(listingEvents, ListingEventsTypeEnum.lotteryResults)).toBe(
       `https://res.cloudinary.com/exygy/image/upload/1234.pdf`
     )
 
@@ -34,17 +37,17 @@ describe("pdfs helpers", () => {
 
   it.skip("should return null if event type exists but is not cloudinary type", () => {
     const listingEvents = [
-      { type: ListingEventType.lotteryResults, file: { fileId: "1234" } },
+      { type: ListingEventsTypeEnum.lotteryResults, assets: { fileId: "1234" } },
     ] as ListingEvent[]
-    expect(pdfUrlFromListingEvents(listingEvents, ListingEventType.lotteryResults)).toBe(null)
+    expect(pdfUrlFromListingEvents(listingEvents, ListingEventsTypeEnum.lotteryResults)).toBe(null)
   })
 
   it("should return null if no event of type exists", () => {
     const listingEvents = [
-      { type: ListingEventType.lotteryResults },
-      { type: ListingEventType.openHouse },
+      { type: ListingEventsTypeEnum.lotteryResults },
+      { type: ListingEventsTypeEnum.openHouse },
     ] as ListingEvent[]
-    expect(pdfUrlFromListingEvents(listingEvents, ListingEventType.publicLottery)).toBe(null)
+    expect(pdfUrlFromListingEvents(listingEvents, ListingEventsTypeEnum.publicLottery)).toBe(null)
   })
 
   it.skip("should return correct urls from AssetCreate", () => {

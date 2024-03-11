@@ -58,6 +58,12 @@ export class MultiselectOption {
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ required: false })
+  mapLayerId?: string
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ required: false })
   collectName?: boolean
@@ -67,6 +73,12 @@ export class MultiselectOption {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ required: false })
   collectRelationship?: boolean
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ required: false })
+  mapPinPosition?: string
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

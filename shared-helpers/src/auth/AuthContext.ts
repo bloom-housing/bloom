@@ -1,25 +1,3 @@
-import {
-  ApplicationsService,
-  ApplicationFlaggedSetsService,
-  AuthService,
-  ListingsService,
-  User,
-  UserBasic,
-  UserCreate,
-  UserService,
-  UserProfileService,
-  serviceOptions,
-  Status,
-  AmiChartsService,
-  ReservedCommunityTypesService,
-  UnitAccessibilityPriorityTypesService,
-  UnitTypesService,
-  MultiselectQuestionsService,
-  JurisdictionsService,
-  RequestMfaCodeResponse,
-  EnumRequestMfaCodeMfaType,
-  EnumLoginMfaType,
-} from "@bloom-housing/backend-core/types"
 import { GenericRouter, NavigationContext } from "@bloom-housing/ui-components"
 import {
   createContext,
@@ -35,6 +13,25 @@ import qs from "qs"
 import axiosStatic from "axios"
 import { ConfigContext } from "./ConfigContext"
 import { createAction, createReducer } from "typesafe-actions"
+import {
+  AmiChartsService,
+  ApplicationFlaggedSetsService,
+  ApplicationsService,
+  AuthService,
+  JurisdictionsService,
+  ListingsService,
+  MapLayersService,
+  MfaType,
+  MultiselectQuestionsService,
+  RequestMfaCodeResponse,
+  ReservedCommunityTypesService,
+  UnitAccessibilityPriorityTypesService,
+  UnitTypesService,
+  User,
+  UserCreate,
+  UserService,
+  serviceOptions,
+} from "../types/backend-swagger"
 import { getListingRedirectUrl } from "../utilities/getListingRedirectUrl"
 
 type ContextProps = {
@@ -44,18 +41,18 @@ type ContextProps = {
   listingsService: ListingsService
   jurisdictionsService: JurisdictionsService
   userService: UserService
-  userProfileService: UserProfileService
   authService: AuthService
   multiselectQuestionsService: MultiselectQuestionsService
+  unitTypesService: UnitTypesService
   reservedCommunityTypeService: ReservedCommunityTypesService
   unitPriorityService: UnitAccessibilityPriorityTypesService
-  unitTypesService: UnitTypesService
+  mapLayersService: MapLayersService
   loadProfile: (redirect?: string) => void
   login: (
     email: string,
     password: string,
     mfaCode?: string,
-    mfaType?: EnumLoginMfaType
+    mfaType?: MfaType
   ) => Promise<User | undefined>
   resetPassword: (
     token: string,
@@ -64,16 +61,16 @@ type ContextProps = {
   ) => Promise<User | undefined>
   signOut: () => void
   confirmAccount: (token: string) => Promise<User | undefined>
-  forgotPassword: (email: string, listingIdRedirect?: string) => Promise<string | undefined>
-  createUser: (user: UserCreate, listingIdRedirect?: string) => Promise<UserBasic | undefined>
-  resendConfirmation: (email: string, listingIdRedirect?: string) => Promise<Status | undefined>
+  forgotPassword: (email: string, listingIdRedirect?: string) => Promise<boolean | undefined>
+  createUser: (user: UserCreate, listingIdRedirect?: string) => Promise<User | undefined>
+  resendConfirmation: (email: string, listingIdRedirect?: string) => Promise<boolean | undefined>
   initialStateLoaded: boolean
   loading: boolean
   profile?: User
   requestMfaCode: (
     email: string,
     password: string,
-    mfaType: EnumRequestMfaCodeMfaType,
+    mfaType: MfaType,
     phoneNumber?: string
   ) => Promise<RequestMfaCodeResponse | undefined>
 }
@@ -176,7 +173,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
             .some((cookie) => cookie.startsWith("access-token-available=True"))
         ) {
           // if we have an access token
-          profile = await userService?.userControllerProfile()
+          profile = await userService?.profile()
         } else {
           dispatch(saveProfile(null))
         }
@@ -211,9 +208,9 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
     listingsService: new ListingsService(),
     jurisdictionsService: new JurisdictionsService(),
     userService: new UserService(),
-    userProfileService: new UserProfileService(),
     authService: new AuthService(),
     multiselectQuestionsService: new MultiselectQuestionsService(),
+    mapLayersService: new MapLayersService(),
     reservedCommunityTypeService: new ReservedCommunityTypesService(),
     unitPriorityService: new UnitAccessibilityPriorityTypesService(),
     unitTypesService: new UnitTypesService(),
@@ -225,13 +222,13 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
       email,
       password,
       mfaCode: string | undefined = undefined,
-      mfaType: EnumLoginMfaType | undefined = undefined
+      mfaType: MfaType | undefined = undefined
     ) => {
       dispatch(startLoading())
       try {
         const response = await authService?.login({ body: { email, password, mfaCode, mfaType } })
         if (response) {
-          const profile = await userService?.userControllerProfile()
+          const profile = await userService?.profile()
           if (profile) {
             dispatch(saveProfile(profile))
             return profile
@@ -250,7 +247,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
     resetPassword: async (token, password, passwordConfirmation) => {
       dispatch(startLoading())
       try {
-        const response = await userService?.updatePassword({
+        const response = await authService?.updatePassword({
           body: {
             token,
             password,
@@ -258,7 +255,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
           },
         })
         if (response) {
-          const profile = await userService?.userControllerProfile()
+          const profile = await userService?.profile()
           if (profile) {
             dispatch(saveProfile(profile))
             return profile
@@ -274,9 +271,9 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
       try {
         serviceOptions.axios = axiosConfig(router)
 
-        const response = await userService?.confirm({ body: { token } })
+        const response = await authService?.confirm({ body: { token } })
         if (response) {
-          const profile = await userService?.userControllerProfile()
+          const profile = await userService?.profile()
           if (profile) {
             dispatch(saveProfile(profile))
             return profile
@@ -306,7 +303,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
         const response = await userService?.resendConfirmation({
           body: { email, appUrl },
         })
-        return response
+        return response.success
       } finally {
         dispatch(stopLoading())
       }
@@ -319,7 +316,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
         const response = await userService?.forgotPassword({
           body: { email, appUrl },
         })
-        return response?.message
+        return response.success
       } finally {
         dispatch(stopLoading())
       }
