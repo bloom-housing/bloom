@@ -2693,6 +2693,9 @@ export interface Jurisdiction {
   enablePartnerSettings?: boolean
 
   /**  */
+  enablePartnerDemographics?: boolean
+
+  /**  */
   enableGeocodingPreferences?: boolean
 
   /**  */
@@ -4355,6 +4358,9 @@ export interface JurisdictionCreate {
   enablePartnerSettings?: boolean
 
   /**  */
+  enablePartnerDemographics?: boolean
+
+  /**  */
   enableGeocodingPreferences?: boolean
 
   /**  */
@@ -4397,6 +4403,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   enablePartnerSettings?: boolean
+
+  /**  */
+  enablePartnerDemographics?: boolean
 
   /**  */
   enableGeocodingPreferences?: boolean
