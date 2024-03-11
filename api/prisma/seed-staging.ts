@@ -855,7 +855,7 @@ export const stagingSeed = async (
               assets: {
                 create: {
                   label: 'cloudinaryBuilding',
-                  fileId: 'dev/blake-wheeler-zBHU08hdzhY-unsplash_swqash	',
+                  fileId: 'dev/blake-wheeler-zBHU08hdzhY-unsplash_swqash',
                 },
               },
             },

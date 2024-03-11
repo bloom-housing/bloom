@@ -100,13 +100,21 @@ export const devSeeding = async (
 
     const listing = await listingFactory(jurisdiction.id, prismaClient, {
       amiChart: amiChart,
-      numberOfUnits: index,
+      numberOfUnits: index + 1,
       includeBuildingFeatures: index > 1,
       includeEligibilityRules: index > 2,
-      status: listingStatusEnumArray[randomInt(listingStatusEnumArray.length)],
+      status:
+        index < 4
+          ? ListingsStatusEnum.active
+          : listingStatusEnumArray[
+              index + 1 < listingStatusEnumArray.length
+                ? index
+                : randomInt(listingStatusEnumArray.length - 1)
+            ],
       multiselectQuestions:
         index > 0 ? multiselectQuestions.slice(0, index - 1) : [],
       applications,
+      digitalApp: !!(index % 2),
     });
     await prismaClient.listings.create({
       data: listing,
