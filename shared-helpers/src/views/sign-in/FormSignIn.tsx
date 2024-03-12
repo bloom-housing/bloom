@@ -48,11 +48,17 @@ const FormSignIn = ({
         <CardSection divider={"inset"}>{children}</CardSection>
         {showRegisterBtn && (
           <CardSection divider={"inset"}>
-            <Heading priority={2} size="2xl" className="mb-6">
+            <Heading
+              priority={2}
+              size="2xl"
+              className={
+                process.env.showPwdless ? styles["pwdless-header"] : styles["default-header"]
+              }
+            >
               {t("authentication.createAccount.noAccount")}
             </Heading>
             {process.env.showPwdless && (
-              <div className={"text-label pb-6 text-gray-700"}>
+              <div className={styles["create-account-copy"]}>
                 {t("authentication.signIn.pwdless.createAccountCopy")}
               </div>
             )}
