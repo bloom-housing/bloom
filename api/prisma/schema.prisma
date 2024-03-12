@@ -29,7 +29,7 @@ model ActivityLog {
   module       String        @db.VarChar
   action       String        @db.VarChar
   metadata     Json?
-  recordId     String?        @map("record_id") @db.Uuid
+  recordId     String?       @map("record_id") @db.Uuid
   userId       String?       @map("user_id") @db.Uuid
   userAccounts UserAccounts? @relation(fields: [userId], references: [id], onUpdate: NoAction)
 
@@ -143,7 +143,7 @@ model ApplicationFlaggedSet {
   status                FlaggedSetStatusEnum @default(pending)
   resolvingUserId       String?              @map("resolving_user_id") @db.Uuid
   userAccounts          UserAccounts?        @relation(fields: [resolvingUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  listings              Listings             @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings              Listings             @relation(fields: [listingId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   applications          Applications[]
 
   @@index([listingId])
@@ -161,7 +161,7 @@ model ApplicationMethods {
   acceptsPostmarkedApplications Boolean?                   @map("accepts_postmarked_applications")
   phoneNumber                   String?                    @map("phone_number")
   listingId                     String?                    @map("listing_id") @db.Uuid
-  listings                      Listings?                  @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings                      Listings?                  @relation(fields: [listingId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   paperApplications             PaperApplications[]
 
   @@map("application_methods")
@@ -218,7 +218,7 @@ model Applications {
   applicationsAlternateAddress Address?                      @relation("applications_alternate_address", fields: [alternateAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   userAccounts                 UserAccounts?                 @relation(fields: [userId], references: [id], onUpdate: NoAction)
   applicationsMailingAddress   Address?                      @relation("applications_mailing_address", fields: [mailingAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  listings                     Listings?                     @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings                     Listings?                     @relation(fields: [listingId], references: [id], onDelete: SetNull, onUpdate: NoAction)
   demographics                 Demographics?                 @relation(fields: [demographicsId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   preferredUnitTypes           UnitTypes[]
   householdMember              HouseholdMember[]
@@ -305,7 +305,7 @@ model HouseholdMember {
   addressId                  String?       @unique() @map("address_id") @db.Uuid
   workAddressId              String?       @unique() @map("work_address_id") @db.Uuid
   applicationId              String?       @map("application_id") @db.Uuid
-  applications               Applications? @relation(fields: [applicationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  applications               Applications? @relation(fields: [applicationId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   householdMemberAddress     Address?      @relation("household_member_address", fields: [addressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   householdMemberWorkAddress Address?      @relation("household_member_work_address", fields: [workAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
@@ -365,7 +365,7 @@ model ListingEvents {
   listingId String?               @map("listing_id") @db.Uuid
   fileId    String?               @map("file_id") @db.Uuid
   assets    Assets?               @relation(fields: [fileId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  listings  Listings?             @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings  Listings?             @relation(fields: [listingId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@map("listing_events")
 }
@@ -404,7 +404,7 @@ model ListingImages {
   listingId String   @map("listing_id") @db.Uuid
   imageId   String   @map("image_id") @db.Uuid
   assets    Assets   @relation(fields: [imageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  listings  Listings @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings  Listings @relation(fields: [listingId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@id([listingId, imageId])
   @@index([listingId])
@@ -416,7 +416,7 @@ model ListingMultiselectQuestions {
   listingId             String               @map("listing_id") @db.Uuid
   multiselectQuestionId String               @map("multiselect_question_id") @db.Uuid
   multiselectQuestions  MultiselectQuestions @relation(fields: [multiselectQuestionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  listings              Listings             @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings              Listings             @relation(fields: [listingId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@id([listingId, multiselectQuestionId])
   @@map("listing_multiselect_questions")
@@ -618,7 +618,7 @@ model PaperApplications {
   fileId              String?             @map("file_id") @db.Uuid
   applicationMethodId String?             @map("application_method_id") @db.Uuid
   assets              Assets?             @relation(fields: [fileId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  applicationMethods  ApplicationMethods? @relation(fields: [applicationMethodId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  applicationMethods  ApplicationMethods? @relation(fields: [applicationMethodId], references: [id], onDelete: SetNull, onUpdate: NoAction)
 
   @@map("paper_applications")
 }
@@ -755,7 +755,7 @@ model UnitsSummary {
   priorityTypeId                 String?                         @map("priority_type_id") @db.Uuid
   unitTypes                      UnitTypes?                      @relation(fields: [unitTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   unitAccessibilityPriorityTypes UnitAccessibilityPriorityTypes? @relation(fields: [priorityTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  listings                       Listings?                       @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings                       Listings?                       @relation(fields: [listingId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@map("units_summary")
 }
