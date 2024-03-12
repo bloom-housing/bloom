@@ -16,7 +16,6 @@ p, partner, asset, true, .*
 p, admin, multiselectQuestion, true, .*
 p, jurisdictionAdmin, multiselectQuestion, true, .*
 p, partner, multiselectQuestion, true, .*
-p, anonymous, multiselectQuestion, true, read
 
 p, admin, applicationMethod, true, .*
 p, jurisdictionAdmin, applicationMethod, true, .*
@@ -40,7 +39,7 @@ p, partner, propertyGroup, true, read
 
 p, admin, amiChart, true, .*
 p, jurisdictionAdmin, amiChart, true, .*
-p, anonymous, amiChart, true, read
+p, partner, amiChart, true, read
 
 p, admin, applicationFlaggedSet, true, .*
 p, jurisdictionAdmin, applicationFlaggedSet, true, .*
@@ -57,27 +56,27 @@ p, anonymous, listing, true, read
 
 p, admin, reservedCommunityType, true, .*
 p, jurisdictionAdmin, reservedCommunityType, true, read
-p, anonymous, reservedCommunityType, true, read
+p, partner, reservedCommunityType, true, read
 
 p, admin, unitType, true, .*
 p, admin, jurisdictionAdmin, true, read
-p, anonymous, unitType, true, read
+p, partner, unitType, true, read
 
 p, admin, unitRentType, true, .*
 p, jurisdictionAdmin, jurisdictionAdmin, true, read
-p, anonymous, unitRentType, true, read
+p, partner, unitRentType, true, read
 
 p, admin, unitAccessibilityPriorityType, true, .*
 p, jurisdictionAdmin, jurisdictionAdmin, true, .*
-p, anonymous, unitAccessibilityPriorityType, true, read
+p, partner, unitAccessibilityPriorityType, true, read
 
 p, admin, applicationMethod, true, .*
 p, jurisdictionAdmin, applicationMethod, true, .*
-p, anonymous, applicationMethod, true, read
+p, partner, applicationMethod, true, read
 
 p, admin, paperApplication, true, .*
 p, jurisdictionAdmin, paperApplication, true, .*
-p, anonymous, paperApplication, true, read
+p, partner, paperApplication, true, read
 
 p, admin, mapLayers, true, .*
 p, jurisdictionAdmin, mapLayers, true, .*

@@ -108,6 +108,17 @@ export class ApplicationService {
       where: whereClause,
     });
 
+    await Promise.all(
+      rawApplications.map(async (application) => {
+        await this.authorizeAction(
+          user,
+          application.listings?.id,
+          permissionActions.read,
+          application.userId,
+        );
+      }),
+    );
+
     const applications = mapTo(Application, rawApplications);
 
     const promiseArray = applications.map((application) =>
@@ -135,6 +146,7 @@ export class ApplicationService {
   */
   async mostRecentlyCreated(
     params: MostRecentApplicationQueryParams,
+    req: ExpressRequest,
   ): Promise<Application> {
     const rawApplication = await this.prisma.applications.findFirst({
       select: {
@@ -150,7 +162,7 @@ export class ApplicationService {
       return null;
     }
 
-    return await this.findOne(rawApplication.id);
+    return await this.findOne(rawApplication.id, req);
   }
 
   /*
@@ -262,13 +274,30 @@ export class ApplicationService {
   /*
     this will return 1 application or error
   */
-  async findOne(applicationId: string): Promise<Application> {
+  async findOne(
+    applicationId: string,
+    req: ExpressRequest,
+  ): Promise<Application> {
+    const user = mapTo(User, req['user']);
+    if (!user) {
+      throw new ForbiddenException();
+    }
+
     const rawApplication = await this.findOrThrow(
       applicationId,
       ApplicationViews.details,
     );
 
-    return mapTo(Application, rawApplication);
+    const application = mapTo(Application, rawApplication);
+
+    await this.authorizeAction(
+      user,
+      application.listings?.id,
+      permissionActions.read,
+      rawApplication.userId,
+    );
+
+    return application;
   }
 
   /*
@@ -282,7 +311,6 @@ export class ApplicationService {
     if (!forPublic) {
       await this.authorizeAction(
         requestingUser,
-        dto as Application,
         dto.listings.id,
         permissionActions.create,
       );
@@ -465,7 +493,6 @@ export class ApplicationService {
 
     await this.authorizeAction(
       requestingUser,
-      mapTo(Application, rawApplication),
       rawApplication.listingId,
       permissionActions.update,
     );
@@ -616,7 +643,6 @@ export class ApplicationService {
 
     await this.authorizeAction(
       requestingUser,
-      mapTo(Application, application),
       application.listingId,
       permissionActions.delete,
     );
@@ -674,9 +700,9 @@ export class ApplicationService {
 
   async authorizeAction(
     user: User,
-    application: Application,
     listingId: string,
     action: permissionActions,
+    applicantUserId?: string,
   ): Promise<void> {
     const listingJurisdiction = await this.prisma.jurisdictions.findFirst({
       where: {
@@ -689,7 +715,8 @@ export class ApplicationService {
     });
     await this.permissionService.canOrThrow(user, 'application', action, {
       listingId,
-      jurisdictionId: listingJurisdiction.id,
+      jurisdictionId: listingJurisdiction?.id,
+      userId: applicantUserId,
     });
   }
 

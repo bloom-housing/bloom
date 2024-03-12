@@ -245,6 +245,7 @@ describe('Application Controller Tests', () => {
 
       const res = await request(app.getHttpServer())
         .get(`/applications/${applicationA.id}`)
+        .set('Cookie', cookies)
         .expect(200);
 
       expect(res.body.applicant.firstName).toEqual(
@@ -257,6 +258,7 @@ describe('Application Controller Tests', () => {
 
       const res = await request(app.getHttpServer())
         .get(`/applications/${id}`)
+        .set('Cookie', cookies)
         .expect(404);
 
       expect(res.body.message).toEqual(
