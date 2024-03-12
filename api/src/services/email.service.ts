@@ -189,6 +189,7 @@ export class EmailService {
     confirmationUrl: string,
   ) {
     const jurisdiction = await this.getJurisdiction(null, jurisdictionName);
+    const baseUrl = appUrl ? new URL(appUrl).origin : undefined;
     await this.loadTranslations(jurisdiction, user.language);
     await this.send(
       user.email,
@@ -197,7 +198,7 @@ export class EmailService {
       this.template('register-email')({
         user: user,
         confirmationUrl: confirmationUrl,
-        appOptions: { appUrl: appUrl },
+        appOptions: { appUrl: baseUrl },
       }),
     );
   }
@@ -283,6 +284,7 @@ export class EmailService {
     void (await this.loadTranslations(jurisdiction, user.language));
     const compiledTemplate = this.template('forgot-password');
     const resetUrl = getPublicEmailURL(appUrl, resetToken, '/reset-password');
+    const baseUrl = appUrl ? new URL(appUrl).origin : undefined;
     const emailFromAddress = await this.getEmailToSendFrom(
       jurisdictionIds,
       jurisdiction,
@@ -294,7 +296,7 @@ export class EmailService {
       this.polyglot.t('forgotPassword.subject'),
       compiledTemplate({
         resetUrl: resetUrl,
-        resetOptions: { appUrl: appUrl },
+        resetOptions: { appUrl: baseUrl },
         user: user,
       }),
     );
