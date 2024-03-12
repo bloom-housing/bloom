@@ -126,6 +126,8 @@ CMD yarn start:prod
 # The run stage contains an optimized image for running the application
 FROM run AS migrate
 
+ENV SKIP_MIGRATIONS=TRUE
+
 WORKDIR /app
 
 # These parts have to be run as root
@@ -144,6 +146,6 @@ COPY --from=source --chown=node:node /app/api/scripts ./scripts
 USER node
 
 # We need to skip all migrations that are just for local development (changes already exist in deployed environment)
-CMD yarn db:migration:skip 00_init || true && yarn db:migration:skip 02_hba_to_prisma || true && yarn db:migration:skip 03_0_external_listing || true && yarn db:migration:run
-## uncomment the below if starting on a new environment
-# CMD yarn db:migration:run
+CMD if [ "$SKIP_MIGRATIONS" = TRUE ]; then yarn db:migration:skip 00_init || true && yarn db:migration:skip 02_hba_to_prisma || true && yarn db:migration:skip 03_0_external_listing || true && yarn db:migration:run; \
+    else yarn db:migration:run; \
+    fi

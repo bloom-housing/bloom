@@ -26,6 +26,7 @@
     "db:seed:staging": "npx prisma db seed -- --environment staging",
     "db:seed:development": "npx prisma db seed -- --environment development --jurisdictionName 'Bay Area'",
     "db:reseed:with-external:dev": "yarn db:setup:staging && IMPORT_ENV=dev yarn db:import-listings",
+    "db:reseed:ci": "SUPPRESS_NOTICE=true PGDATABASE=template1 yarn db:setup:staging",
     "generate:client": "ts-node scripts/generate-axios-client.ts && prettier -w ../shared-helpers/src/types/backend-swagger.ts",
     "test:e2e": "yarn db:resetup && yarn db:migration:run && jest --config ./test/jest-e2e.config.js",
     "db:setup": "yarn db:resetup && yarn db:migration:run && yarn db:seed:development",

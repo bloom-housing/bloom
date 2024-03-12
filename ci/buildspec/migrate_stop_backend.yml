@@ -68,6 +68,7 @@ phases:
         --env CLOUDINARY_KEY="${CLOUDINARY_KEY:-dummy_key}"
         --env PARTNERS_BASE_URL="${PARTNERS_BASE_URL:-http://localhost:3001/not-used}"
         --env PARTNERS_PORTAL_URL="${PARTNERS_PORTAL_URL:-http://localhost:3001/not-used}"
+        --env SKIP_MIGRATIONS=FALSE
         "${MIGRATION_IMAGE}" sh -c "yarn ${MIGRATION_CMD}"
 
       # Start the backend back up with the previous number of desired containers
