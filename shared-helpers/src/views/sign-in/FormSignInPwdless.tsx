@@ -39,10 +39,10 @@ const FormSignInPwdless = ({
   return (
     <Form id="sign-in" onSubmit={handleSubmit(onSubmit, onError)}>
       <Field
-        className="mb-6"
+        className={styles["sign-in-email-input"]}
         name="email"
         label={t("t.email")}
-        labelClassName="text__caps-spaced pb-0"
+        labelClassName={`text__caps-spaced ${useCode && "pb-0"}`}
         validation={{ required: true }}
         error={errors.email}
         errorMessage={t("authentication.signIn.enterLoginEmail")}
@@ -59,7 +59,7 @@ const FormSignInPwdless = ({
             </LinkComponent>
           </aside>
           <Field
-            className="mb-3"
+            className={styles["sign-in-password-input"]}
             name="password"
             label={t("authentication.createAccount.password")}
             labelClassName="text__caps-spaced"
@@ -72,12 +72,12 @@ const FormSignInPwdless = ({
           />
         </>
       )}
-      <div className="mt-6">
+      <div className={styles["sign-in-action"]}>
         <Button type="submit" variant="primary" id="sign-in-button">
           {useCode ? t("authentication.signIn.pwdless.getCode") : t("nav.signIn")}
         </Button>
       </div>
-      <div className="mt-6">
+      <div className={styles["sign-in-action"]}>
         <Button variant={"text"} onClick={() => setUseCode(!useCode)}>
           {useCode
             ? t("authentication.signIn.pwdless.usePassword")

@@ -37,7 +37,7 @@ const FormSignInDefault = ({
   return (
     <Form id="sign-in" onSubmit={handleSubmit(onSubmit, onError)}>
       <Field
-        className="mb-6"
+        className={styles["sign-in-email-input"]}
         name="email"
         label={t("t.email")}
         labelClassName="text__caps-spaced"
@@ -53,7 +53,7 @@ const FormSignInDefault = ({
         </LinkComponent>
       </aside>
       <Field
-        className="mb-3"
+        className={styles["sign-in-password-input"]}
         name="password"
         label={t("authentication.createAccount.password")}
         labelClassName="text__caps-spaced"

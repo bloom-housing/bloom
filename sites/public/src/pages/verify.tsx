@@ -26,7 +26,7 @@ const Verify = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [alertMessage, setAlertMessage] = useState(
     t("account.pwdless.codeAlert", { email: "example@email.com" })
-  )
+  ) // This copy will change based on coming from the sign in flow or create account flow
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -40,14 +40,12 @@ const Verify = () => {
     // const { code } = data
 
     try {
-      // attempt to either create account or sign in
+      // Attempt to either create an account or sign in
     } catch (error) {
       const { status } = error.response || {}
       determineNetworkError(status, error)
       // "The code you've used is invalid or expired"
     }
-    // setSiteAlertMessage(t(`authentication.forgotPassword.message`), "notice")
-    // await router.push("/sign-in")
   }
 
   return (
@@ -102,7 +100,7 @@ const Verify = () => {
           <Button
             size={"sm"}
             onClick={() => {
-              // actually resend the code
+              // Resend the code
               setAlertMessage(t("account.pwdless.codeNewAlert", { email: "example@email.com" }))
               setIsModalOpen(false)
             }}
