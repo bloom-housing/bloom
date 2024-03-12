@@ -64,7 +64,7 @@ const FormSignInDefault = ({
         type={"password"}
         dataTestId="sign-in-password-field"
       />
-      <div className="mt-6">
+      <div className={styles["sign-in-action"]}>
         <Button type="submit" variant="primary" id="sign-in-button">
           {t("nav.signIn")}
         </Button>
