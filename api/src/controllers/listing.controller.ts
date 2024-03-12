@@ -52,6 +52,7 @@ import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction
 import { ListingCsvExporterService } from '../services/listing-csv-export.service';
 import { ListingCsvQueryParams } from '../dtos/listings/listing-csv-query-params.dto';
 import { PermissionGuard } from '../guards/permission.guard';
+import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
 
 @Controller('listings')
 @ApiTags('listings')
@@ -91,6 +92,7 @@ export class ListingController {
   })
   @Header('Content-Type', 'application/zip')
   @UseGuards(OptionalAuthGuard, PermissionGuard)
+  @UseInterceptors(ExportLogInterceptor)
   async listAsCsv(
     @Request() req: ExpressRequest,
     @Res({ passthrough: true }) res: Response,

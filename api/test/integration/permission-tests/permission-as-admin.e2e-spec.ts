@@ -428,7 +428,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
         .expect(201);
     });
 
-    it('should succeed for csv endpoint', async () => {
+    it('should succeed for csv endpoint & create an activity log entry', async () => {
       const jurisdiction = await generateJurisdiction(
         prisma,
         'permission juris csv endpoint admin',
@@ -445,6 +445,15 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
         .get(`/applications/csv?listingId=${listing1Created.id}`)
         .set('Cookie', cookies)
         .expect(200);
+      const activityLogResult = await prisma.activityLog.findFirst({
+        where: {
+          module: 'application',
+          action: 'export',
+          recordId: listing1Created.id,
+        },
+      });
+
+      expect(activityLogResult).not.toBeNull();
     });
   });
 
@@ -1034,11 +1043,21 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
       expect(activityLogResult).not.toBeNull();
     });
 
-    it('should succeed for csv export endpoint', async () => {
+    it('should succeed for csv export endpoint & create an activity log entry', async () => {
       await request(app.getHttpServer())
         .get('/user/csv')
         .set('Cookie', cookies)
         .expect(200);
+
+      const activityLogResult = await prisma.activityLog.findFirst({
+        where: {
+          module: 'user',
+          action: 'export',
+          recordId: null,
+        },
+      });
+
+      expect(activityLogResult).not.toBeNull();
     });
   });
 
@@ -1191,11 +1210,20 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
         .expect(200);
     });
 
-    it('should succeed for csv endpoint', async () => {
+    it('should succeed for csv endpoint & create an activity log entry', async () => {
       await request(app.getHttpServer())
         .get(`/listings/csv`)
         .set('Cookie', cookies)
         .expect(200);
+      const activityLogResult = await prisma.activityLog.findFirst({
+        where: {
+          module: 'listing',
+          action: 'export',
+          recordId: null,
+        },
+      });
+
+      expect(activityLogResult).not.toBeNull();
     });
   });
 

@@ -1,0 +1,13 @@
+.sign-up-benefits-heading-group {
+  padding-top: var(--seeds-s6);
+  padding-inline: var(--seeds-s4);
+  padding-bottom: var(--seeds-s2);
+
+  @media (min-width: theme("screens.md")) {
+    padding-bottom: var(--seeds-s6);
+  }
+
+  @media (min-width: theme("screens.sm")) {
+    padding-top: 0;
+  }
+}

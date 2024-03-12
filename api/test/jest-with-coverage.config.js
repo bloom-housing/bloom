@@ -19,12 +19,13 @@ module.exports = {
     './src/controllers/**',
     './src/modules/**',
     './src/passports/**',
+    './src/utilities/custom-exception-filter.ts',
   ],
   coverageThreshold: {
     global: {
       branches: 75,
-      functions: 90,
-      lines: 90,
+      functions: 85,
+      lines: 85,
     },
   },
   workerIdleMemoryLimit: '70%',

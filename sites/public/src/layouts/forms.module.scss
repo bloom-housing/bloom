@@ -1,0 +1,14 @@
+.form-layout-container {
+  background-color: var(--seeds-bg-color-canvas);
+  border-top: 1px solid var(--seeds-border-color);
+}
+
+.form-layout {
+  margin-inline: auto;
+  max-width: 100%;
+  @media (min-width: theme("screens.sm")) {
+    margin-bottom: var(--seeds-s20);
+    margin-top: var(--seeds-s12);
+    max-width: var(--seeds-width-lg);
+  }
+}
