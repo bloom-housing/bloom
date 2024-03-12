@@ -80,7 +80,6 @@ const ResendConfirmationModal = ({
       <>
         <Form>
           <Field
-            caps={true}
             type="email"
             name="emailResend"
             label={t("authentication.createAccount.resendAnEmailTo")}
@@ -89,6 +88,7 @@ const ResendConfirmationModal = ({
             error={!!errors.emailResend}
             errorMessage={t("authentication.signIn.loginError")}
             register={register}
+            labelClassName={"text__caps-spaced"}
           />
         </Form>
 

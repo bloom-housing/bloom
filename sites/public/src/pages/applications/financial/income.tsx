@@ -177,7 +177,7 @@ const ApplicationIncome = () => {
               name="income"
               type="currency"
               label={t("application.financial.income.prompt")}
-              caps={true}
+              labelClassName={"text__caps-spaced"}
               validation={{ required: true, min: 0.01 }}
               error={errors.income}
               register={register}
