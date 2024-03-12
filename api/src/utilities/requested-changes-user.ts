@@ -1,5 +1,5 @@
-import { IdDTO } from 'src/dtos/shared/id.dto';
-import { User } from 'src/dtos/users/user.dto';
+import { IdDTO } from '../dtos/shared/id.dto';
+import { User } from '../dtos/users/user.dto';
 
 /*
     This maps a user that has requested changes on a listing to a limited IdDTO 

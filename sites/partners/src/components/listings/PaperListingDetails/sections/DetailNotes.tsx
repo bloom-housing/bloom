@@ -29,7 +29,7 @@ const DetailListingNotes = () => {
           {getDetailFieldDate(listing.requestedChangesDate)}
         </FieldValue>
 
-        {listing.requestedChangesUser && listing.requestedChangesUser.name && (
+        {listing?.requestedChangesUser?.name && (
           <FieldValue id="requestedChangesUser" label={t("listings.approval.requestedBy")}>
             {`${listing.requestedChangesUser.name}`}
           </FieldValue>

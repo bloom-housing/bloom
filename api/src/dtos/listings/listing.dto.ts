@@ -549,8 +549,11 @@ class Listing extends AbstractDTO {
   @ApiPropertyOptional()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @Transform(
-    (obj: any) =>
-      requestedChangesUserMapper(obj.obj.requestedChangesUser as User),
+    (obj: any) => {
+      obj.obj.requestedChangesUser
+        ? requestedChangesUserMapper(obj.obj.requestedChangesUser as User)
+        : undefined;
+    },
     {
       toClassOnly: true,
     },
