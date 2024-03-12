@@ -420,7 +420,7 @@ describe('Auth Controller Tests', () => {
       .expect(400);
 
     expect(res.body.message).toEqual(
-      'Single use code login is not setup for this jurisdiction',
+      'Single use code login is not setup for single_use_code_2',
     );
 
     expect(emailService.sendSingleUseCode).not.toHaveBeenCalled();

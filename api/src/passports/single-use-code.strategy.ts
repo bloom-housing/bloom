@@ -3,8 +3,6 @@ import { Request } from 'express';
 import { PassportStrategy } from '@nestjs/passport';
 import {
   BadRequestException,
-  HttpException,
-  HttpStatus,
   Injectable,
   UnauthorizedException,
   ValidationPipe,
@@ -14,6 +12,12 @@ import { PrismaService } from '../services/prisma.service';
 import { mapTo } from '../utilities/mapTo';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { LoginViaSingleUseCode } from '../dtos/auth/login-single-use-code.dto';
+import { OrderByEnum } from '../enums/shared/order-by-enum';
+import {
+  isUserLockedOut,
+  singleUseCodePresent,
+  singleUseCodeValid,
+} from '../utilities/passport-validator-utilities';
 
 @Injectable()
 export class SingleUseCodeStrategy extends PassportStrategy(
@@ -41,25 +45,34 @@ export class SingleUseCodeStrategy extends PassportStrategy(
         metatype: LoginViaSingleUseCode,
       },
     );
-
-    if (!req?.headers?.jurisdictionname) {
+    const jurisName = req?.headers?.jurisdictionname;
+    if (!jurisName) {
       throw new BadRequestException(
         'jurisdictionname is missing from the request headers',
       );
     }
 
-    const jurisName = req.headers['jurisdictionname'];
     const juris = await this.prisma.jurisdictions.findFirst({
-      where: {
-        name: {
-          in: Array.isArray(jurisName) ? jurisName : [jurisName],
-        },
+      select: {
+        id: true,
         allowSingleUseCodeLogin: true,
+      },
+      where: {
+        name: jurisName as string,
+      },
+      orderBy: {
+        allowSingleUseCodeLogin: OrderByEnum.DESC,
       },
     });
     if (!juris) {
       throw new BadRequestException(
-        'Single use code login is not setup for this jurisdiction',
+        `Jurisidiction ${jurisName} does not exists`,
+      );
+    }
+
+    if (!juris.allowSingleUseCodeLogin) {
+      throw new BadRequestException(
+        `Single use code login is not setup for ${jurisName}`,
       );
     }
 
@@ -77,38 +90,22 @@ export class SingleUseCodeStrategy extends PassportStrategy(
       throw new UnauthorizedException(
         `user ${dto.email} attempted to log in, but does not exist`,
       );
-    } else if (
-      rawUser.lastLoginAt &&
-      rawUser.failedLoginAttemptsCount >=
-        Number(process.env.AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS)
-    ) {
-      // if a user has logged in, but has since gone over their max failed login attempts
-      const retryAfter = new Date(
-        rawUser.lastLoginAt.getTime() +
-          Number(process.env.AUTH_LOCK_LOGIN_COOLDOWN),
-      );
-      if (retryAfter <= new Date()) {
-        // if we have passed the login lock TTL, reset login lock countdown
-        rawUser.failedLoginAttemptsCount = 0;
-      } else {
-        // if the login lock is still a valid lock, error
-        throw new HttpException(
-          {
-            statusCode: HttpStatus.TOO_MANY_REQUESTS,
-            error: 'Too Many Requests',
-            message: 'Failed login attempts exceeded.',
-            retryAfter,
-          },
-          429,
-        );
-      }
     }
+
+    isUserLockedOut(
+      rawUser.lastLoginAt,
+      rawUser.failedLoginAttemptsCount,
+      Number(process.env.AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS),
+      Number(process.env.AUTH_LOCK_LOGIN_COOLDOWN),
+    );
 
     let authSuccess = true;
     if (
-      !dto.singleUseCode ||
-      !rawUser.singleUseCode ||
-      !rawUser.singleUseCodeUpdatedAt
+      !singleUseCodePresent(
+        dto.singleUseCode,
+        rawUser.singleUseCode,
+        rawUser.singleUseCodeUpdatedAt,
+      )
     ) {
       // if a singleUseCode was not sent, or a singleUseCode wasn't stored in the db for the user
       // signal to the front end to request an single use code
@@ -117,11 +114,12 @@ export class SingleUseCodeStrategy extends PassportStrategy(
         name: 'singleUseCodeIsMissing',
       });
     } else if (
-      new Date(
-        rawUser.singleUseCodeUpdatedAt.getTime() +
-          Number(process.env.MFA_CODE_VALID),
-      ) < new Date() ||
-      rawUser.singleUseCode !== dto.singleUseCode
+      singleUseCodeValid(
+        rawUser.singleUseCodeUpdatedAt,
+        Number(process.env.MFA_CODE_VALID),
+        dto.singleUseCode,
+        rawUser.singleUseCode,
+      )
     ) {
       // if singleUseCode TTL has expired, or if the code input was incorrect
       authSuccess = false;

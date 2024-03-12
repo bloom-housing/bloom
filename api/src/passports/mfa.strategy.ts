@@ -2,8 +2,6 @@ import { Strategy } from 'passport-local';
 import { Request } from 'express';
 import { PassportStrategy } from '@nestjs/passport';
 import {
-  HttpException,
-  HttpStatus,
   Injectable,
   UnauthorizedException,
   ValidationPipe,
@@ -18,6 +16,11 @@ import {
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { Login } from '../dtos/auth/login.dto';
 import { MfaType } from '../enums/mfa/mfa-type-enum';
+import {
+  isUserLockedOut,
+  singleUseCodePresent,
+  singleUseCodeValid,
+} from '../utilities/passport-validator-utilities';
 
 @Injectable()
 export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
@@ -53,32 +56,14 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
       throw new UnauthorizedException(
         `user ${dto.email} attempted to log in, but does not exist`,
       );
-    } else if (
-      rawUser.lastLoginAt &&
-      rawUser.failedLoginAttemptsCount >=
-        Number(process.env.AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS)
-    ) {
-      // if a user has logged in, but has since gone over their max failed login attempts
-      const retryAfter = new Date(
-        rawUser.lastLoginAt.getTime() +
-          Number(process.env.AUTH_LOCK_LOGIN_COOLDOWN),
-      );
-      if (retryAfter <= new Date()) {
-        // if we have passed the login lock TTL, reset login lock countdown
-        rawUser.failedLoginAttemptsCount = 0;
-      } else {
-        // if the login lock is still a valid lock, error
-        throw new HttpException(
-          {
-            statusCode: HttpStatus.TOO_MANY_REQUESTS,
-            error: 'Too Many Requests',
-            message: 'Failed login attempts exceeded.',
-            retryAfter,
-          },
-          429,
-        );
-      }
-    } else if (!rawUser.confirmedAt) {
+    }
+    isUserLockedOut(
+      rawUser.lastLoginAt,
+      rawUser.failedLoginAttemptsCount,
+      Number(process.env.AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS),
+      Number(process.env.AUTH_LOCK_LOGIN_COOLDOWN),
+    );
+    if (!rawUser.confirmedAt) {
       // if user is not confirmed already
       throw new UnauthorizedException(
         `user ${rawUser.id} attempted to login, but is not confirmed`,
@@ -114,9 +99,11 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
 
     let authSuccess = true;
     if (
-      !dto.mfaCode ||
-      !rawUser.singleUseCode ||
-      !rawUser.singleUseCodeUpdatedAt
+      !singleUseCodePresent(
+        dto.mfaCode,
+        rawUser.singleUseCode,
+        rawUser.singleUseCodeUpdatedAt,
+      )
     ) {
       // if an mfaCode was not sent, and a singleUseCode wasn't stored in the db for the user
       // signal to the front end to request an mfa code
@@ -125,11 +112,12 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
         name: 'mfaCodeIsMissing',
       });
     } else if (
-      new Date(
-        rawUser.singleUseCodeUpdatedAt.getTime() +
-          Number(process.env.MFA_CODE_VALID),
-      ) < new Date() ||
-      rawUser.singleUseCode !== dto.mfaCode
+      singleUseCodeValid(
+        rawUser.singleUseCodeUpdatedAt,
+        Number(process.env.MFA_CODE_VALID),
+        dto.mfaCode,
+        rawUser.singleUseCode,
+      )
     ) {
       // if mfaCode TTL has expired, or if the mfa code input was incorrect
       authSuccess = false;
