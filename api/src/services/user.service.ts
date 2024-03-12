@@ -35,7 +35,7 @@ import { EmailService } from './email.service';
 import { PermissionService } from './permission.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { buildWhereClause } from '../utilities/build-user-where';
-import { UserRole } from 'src/dtos/users/user-role.dto';
+import { UserRole } from '../dtos/users/user-role.dto';
 
 /*
   this is the service for users
