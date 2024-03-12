@@ -550,7 +550,7 @@ class Listing extends AbstractDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @Transform(
     (obj: any) => {
-      obj.obj.requestedChangesUser
+      return obj.obj.requestedChangesUser
         ? requestedChangesUserMapper(obj.obj.requestedChangesUser as User)
         : undefined;
     },
