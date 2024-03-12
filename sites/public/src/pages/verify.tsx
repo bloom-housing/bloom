@@ -36,7 +36,7 @@ const Verify = () => {
     })
   }, [])
 
-  const onSubmit = async (data: { code: string }) => {
+  const onSubmit = (data: { code: string }) => {
     // const { code } = data
 
     try {
