@@ -27,6 +27,7 @@ export const applicationFactory = async (optionalParams?: {
   householdMember?: Prisma.HouseholdMemberCreateWithoutApplicationsInput[];
   demographics?: Prisma.DemographicsCreateWithoutApplicationsInput;
   multiselectQuestions?: Partial<MultiselectQuestions>[];
+  userId?: string;
 }): Promise<Prisma.ApplicationsCreateInput> => {
   let preferredUnitTypes: Prisma.UnitTypesCreateNestedManyWithoutApplicationsInput;
   if (optionalParams?.unitTypeId) {
@@ -88,6 +89,13 @@ export const applicationFactory = async (optionalParams?: {
     demographics: {
       create: demographics,
     },
+    userAccounts: optionalParams?.userId
+      ? {
+          connect: {
+            id: optionalParams.userId,
+          },
+        }
+      : undefined,
   };
 };
 
