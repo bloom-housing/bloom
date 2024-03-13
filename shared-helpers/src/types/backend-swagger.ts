@@ -3060,7 +3060,7 @@ export interface Listing {
   requestedChangesDate?: Date
 
   /**  */
-  requestedChangesUser?: User
+  requestedChangesUser?: IdDTO
 }
 
 export interface PaginationMeta {
@@ -5223,6 +5223,7 @@ export enum EnumJurisdictionListingApprovalPermissions {
   "admin" = "admin",
   "jurisdictionAdmin" = "jurisdictionAdmin",
 }
+
 export enum AfsView {
   "pending" = "pending",
   "pendingNameAndDoB" = "pendingNameAndDoB",
