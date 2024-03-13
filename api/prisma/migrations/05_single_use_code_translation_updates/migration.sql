@@ -5,6 +5,8 @@ SET translations = jsonb_set(translations, '{singleUseCodeEmail}', '{"greeting":
 WHERE jurisdiction_id IS NULL
     and language = 'en';
 
+
 UPDATE translations
-    SET translations = jsonb_set(translations, '{mfaCodeEmail, mfaCode}', '{"mfaCode": "Your access code is: %{singleUseCode}"}')
+SET translations = jsonb_set(translations, '{mfaCodeEmail, mfaCode}', '"Your access code is: %{singleUseCode}"')
 WHERE language = 'en';
+

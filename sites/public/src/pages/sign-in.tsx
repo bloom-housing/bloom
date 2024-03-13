@@ -122,7 +122,7 @@ const SignIn = () => {
   })()
 
   useEffect(() => {
-    if (networkError?.error?.response?.data?.message === "accountNotConfirmed") {
+    if (networkError?.error?.response?.data?.message.includes("but is not confirmed")) {
       setConfirmationStatusModal(true)
     }
   }, [networkError])

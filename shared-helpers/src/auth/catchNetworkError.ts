@@ -29,7 +29,6 @@ export type NetworkErrorReset = () => void
 export enum NetworkErrorMessage {
   PasswordOutdated = "but password is no longer valid",
   MfaUnauthorized = "mfaUnauthorized",
-  AccountUnconfirmed = "but is not confirmed",
 }
 
 /**
@@ -48,15 +47,6 @@ export const useCatchNetworkError = () => {
         error,
       })
     } else if (message === NetworkErrorMessage.MfaUnauthorized) {
-      setNetworkError({
-        title: t("authentication.signIn.enterValidEmailAndPasswordAndMFA"),
-        description: t("authentication.signIn.afterFailedAttempts", {
-          count: error?.response?.data?.failureCountRemaining || 5,
-        }),
-        error,
-      })
-    } else if (message.includes(NetworkErrorMessage.AccountUnconfirmed)) {
-      // TODO: update copy
       setNetworkError({
         title: t("authentication.signIn.enterValidEmailAndPasswordAndMFA"),
         description: t("authentication.signIn.afterFailedAttempts", {
