@@ -31,7 +31,7 @@ const ErrorPage = () => {
         <MarkdownSection fullwidth={true}>
           <>
             <p>{t("welcome.seeMoreOpportunities")}</p>
-            <Button variant="primary-outlined" href="/additional-resources">
+            <Button variant="primary-outlined" href="/help/housing-help">
               {t("welcome.viewAdditionalHousing")}
             </Button>
           </>

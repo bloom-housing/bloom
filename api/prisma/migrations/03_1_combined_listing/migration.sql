@@ -1,3 +1,5 @@
+DROP VIEW IF EXISTS "combined_listings";
+
 CREATE VIEW "combined_listings" AS (
     SELECT
         l.id,
@@ -44,7 +46,8 @@ CREATE VIEW "combined_listings" AS (
             addr.longitude
         ) AS "listings_building_address",
         imgs.json AS "listing_images",
-        null as "units_summarized" -- units_summarized, intentionally null
+        null as "units_summarized",
+        false as "is_external"
     FROM
         listings l
         LEFT JOIN "address" addr ON l.building_address_id = addr.id -- Some columns representing numeric data use the "text" type
@@ -196,8 +199,9 @@ UNION
         -- "features", commenting out for now as not being used
         "images",
         -- "utilities", commenting out for now as not being used
-        "units_summarized" -- null -- leasing_agents; not available in base view and probably not useful anyway
-        -- true
+        "units_summarized",
+        -- null -- leasing_agents; not available in base view and probably not useful anyway
+        true
     FROM
         "external_listings"
 )

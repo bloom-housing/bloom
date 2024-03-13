@@ -870,7 +870,8 @@ view CombinedListings {
   unitsSummarized     Json?                 @map("units_summarized") 
   listingImages         Json?                @map("listing_images") 
   reservedCommunityTypes    Json?            @map("reserved_community_types") 
-  units               Json?                 
+  units               Json?      
+  isExternal          Boolean?              @map("is_external")           
 
   @@map("combined_listings")  
 }
