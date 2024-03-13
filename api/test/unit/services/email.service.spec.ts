@@ -175,7 +175,7 @@ describe('Testing email service', () => {
     expect(sendMock.mock.calls[0][0].to).toEqual(user.email);
     expect(sendMock.mock.calls[0][0].subject).toEqual('Forgot your password?');
     expect(sendMock.mock.calls[0][0].html).toContain(
-      'A request to reset your Bloom Housing Portal website password for http://localhost:3001?redirectUrl&#x3D;redirect&amp;listingId&#x3D;123 has recently been made.',
+      'A request to reset your Bloom Housing Portal website password for http://localhost:3001 has recently been made.',
     );
     expect(sendMock.mock.calls[0][0].html).toContain(
       'If you did make this request, please click on the link below to reset your password:',
