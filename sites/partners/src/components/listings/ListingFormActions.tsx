@@ -41,10 +41,9 @@ const ListingFormActions = ({
   const router = useRouter()
 
   // single jurisdiction check covers jurisAdmin adding a listing (listing is undefined then)
-  const listingApprovalPermissions = (
-    profile?.jurisdictions?.length === 1
-      ? profile?.jurisdictions[0]
-      : profile?.jurisdictions?.find((juris) => juris.id === listing?.jurisdictions?.id)
+  const listingApprovalPermissions = (profile?.jurisdictions?.length === 1
+    ? profile?.jurisdictions[0]
+    : profile?.jurisdictions?.find((juris) => juris.id === listing?.jurisdictions?.id)
   )?.listingApprovalPermissions
 
   const isListingApprover =
@@ -177,7 +176,8 @@ const ListingFormActions = ({
       </Grid.Cell>
     )
 
-    const postResultsButton = (
+    // Disabled for Doorway
+    /* const postResultsButton = (
       <Grid.Cell key="btn-post-results">
         <Button
           type="button"
@@ -188,7 +188,7 @@ const ListingFormActions = ({
           {t("listings.actions.postResults")}
         </Button>
       </Grid.Cell>
-    )
+    ) */
 
     const previewButton = (
       <Grid.Cell key="btn-preview">
@@ -243,7 +243,7 @@ const ListingFormActions = ({
                 const result = await listingsService.update({
                   id: listing.id,
                   body: {
-                    ...(listing as unknown as ListingUpdate),
+                    ...((listing as unknown) as ListingUpdate),
                     status: ListingsStatusEnum.active,
                   },
                 })
@@ -392,7 +392,8 @@ const ListingFormActions = ({
         if (lotteryResults) {
           elements.push(editPostedResultsButton(lotteryResults))
         } else if (listing.status === ListingsStatusEnum.closed) {
-          elements.push(postResultsButton)
+          // Disabled for Doorway
+          // elements.push(postResultsButton)
         }
 
         elements.push(cancelButton)
@@ -445,7 +446,8 @@ const ListingFormActions = ({
         if (lotteryResults) {
           elements.push(editPostedResultsButton(lotteryResults))
         } else if (listing.status === ListingsStatusEnum.closed) {
-          elements.push(postResultsButton)
+          // Disabled for Doorway:
+          // elements.push(postResultsButton)
         }
 
         elements.push(cancelButton)
