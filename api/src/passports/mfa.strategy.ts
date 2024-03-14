@@ -63,7 +63,18 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
       Number(process.env.AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS),
       Number(process.env.AUTH_LOCK_LOGIN_COOLDOWN),
     );
-    if (!rawUser.confirmedAt) {
+    if (!(await isPasswordValid(rawUser.passwordHash, dto.password))) {
+      // if incoming password does not match
+      await this.updateFailedLoginCount(
+        rawUser.failedLoginAttemptsCount + 1,
+        rawUser.id,
+      );
+      throw new UnauthorizedException({
+        failureCountRemaining:
+          Number(process.env.AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS) -
+          rawUser.failedLoginAttemptsCount,
+      });
+    } else if (!rawUser.confirmedAt) {
       // if user is not confirmed already
       throw new UnauthorizedException(
         `user ${rawUser.id} attempted to login, but is not confirmed`,
@@ -78,17 +89,6 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
       throw new UnauthorizedException(
         `user ${rawUser.id} attempted to login, but password is no longer valid`,
       );
-    } else if (!(await isPasswordValid(rawUser.passwordHash, dto.password))) {
-      // if incoming password does not match
-      await this.updateFailedLoginCount(
-        rawUser.failedLoginAttemptsCount + 1,
-        rawUser.id,
-      );
-      throw new UnauthorizedException({
-        failureCountRemaining:
-          Number(process.env.AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS) -
-          rawUser.failedLoginAttemptsCount,
-      });
     }
 
     if (!rawUser.mfaEnabled) {

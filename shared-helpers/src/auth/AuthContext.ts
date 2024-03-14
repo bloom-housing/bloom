@@ -52,7 +52,8 @@ type ContextProps = {
     email: string,
     password: string,
     mfaCode?: string,
-    mfaType?: MfaType
+    mfaType?: MfaType,
+    forPartners?: boolean
   ) => Promise<User | undefined>
   resetPassword: (
     token: string,
@@ -223,16 +224,25 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
       email,
       password,
       mfaCode: string | undefined = undefined,
-      mfaType: MfaType | undefined = undefined
+      mfaType: MfaType | undefined = undefined,
+      forPartners: boolean | undefined = undefined
     ) => {
       dispatch(startLoading())
       try {
         const response = await authService?.login({ body: { email, password, mfaCode, mfaType } })
         if (response) {
           const profile = await userService?.profile()
-          if (profile) {
+          if (
+            profile &&
+            (!forPartners ||
+              profile.userRoles?.isAdmin ||
+              profile.userRoles?.isJurisdictionalAdmin ||
+              profile.userRoles?.isPartner)
+          ) {
             dispatch(saveProfile(profile))
             return profile
+          } else {
+            throw Error("User cannot log in")
           }
         }
         return undefined

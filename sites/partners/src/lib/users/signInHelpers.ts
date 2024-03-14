@@ -12,7 +12,7 @@ export const onSubmitEmailAndPassword =
   async (data: { email: string; password: string }) => {
     const { email, password } = data
     try {
-      await login(email, password)
+      await login(email, password, undefined, undefined, true)
       await router.push("/")
     } catch (error) {
       if (error?.response?.data?.name === "mfaCodeIsMissing") {
@@ -86,7 +86,7 @@ export const onSubmitMfaCode =
   async (data: { mfaCode: string }) => {
     const { mfaCode } = data
     try {
-      await login(email, password, mfaCode, mfaType)
+      await login(email, password, mfaCode, mfaType, true)
       resetNetworkError()
       await router.push("/")
     } catch (error) {
