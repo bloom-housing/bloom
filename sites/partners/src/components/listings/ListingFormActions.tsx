@@ -162,7 +162,8 @@ const ListingFormActions = ({
       </Grid.Cell>
     )
 
-    const editPostedResultsButton = (lotteryResults) => (
+    // Disabled for Doorway
+    /* const editPostedResultsButton = (lotteryResults) => (
       <Grid.Cell className="flex" key="btn-edit-lottery">
         <Button
           type="button"
@@ -177,8 +178,7 @@ const ListingFormActions = ({
       </Grid.Cell>
     )
 
-    // Disabled for Doorway
-    /* const postResultsButton = (
+    const postResultsButton = (
       <Grid.Cell key="btn-post-results">
         <Button
           type="button"
@@ -385,17 +385,17 @@ const ListingFormActions = ({
           elements.push(unpublishButton)
         }
 
-        const lotteryResults = listing?.listingEvents?.find(
+        // Disabled for Doorway
+        /* const lotteryResults = listing?.listingEvents?.find(
           (event) => event.type === ListingEventsTypeEnum.lotteryResults
-        )
+        ) */
 
         // all users can manage lottery results on closed listings
-        if (lotteryResults) {
+        /* if (lotteryResults) {
           elements.push(editPostedResultsButton(lotteryResults))
         } else if (listing.status === ListingsStatusEnum.closed) {
-          // Disabled for Doorway
-          // elements.push(postResultsButton)
-        }
+          elements.push(postResultsButton)
+        } */
 
         elements.push(cancelButton)
       }
@@ -440,16 +440,16 @@ const ListingFormActions = ({
           elements.push(unpublishButton)
         }
 
-        const lotteryResults = listing?.listingEvents?.find(
+        // Disabled for Doorway:
+        /* const lotteryResults = listing?.listingEvents?.find(
           (event) => event.type === ListingEventsTypeEnum.lotteryResults
-        )
+        ) */
 
-        if (lotteryResults) {
+        /* if (lotteryResults) {
           elements.push(editPostedResultsButton(lotteryResults))
         } else if (listing.status === ListingsStatusEnum.closed) {
-          // Disabled for Doorway:
           // elements.push(postResultsButton)
-        }
+        } */
 
         elements.push(cancelButton)
       }
