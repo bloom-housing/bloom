@@ -29,6 +29,7 @@ describe("Listings approval feature", () => {
     searchAndOpenListing(cy, uniqueListingName)
     cy.getByID("listing-status-changes-requested").should("be.visible")
     cy.getByID("requestedChanges").contains("Requested changes test summary")
+    cy.getByID("requestedChangesUser").contains("First Last")
     cy.getByID("listingEditButton").click()
     cy.getByTestId("nameField").should("be.visible").click().clear().type(uniqueListingNameEdited)
     cy.getByID("submitButton").contains("Submit").click()

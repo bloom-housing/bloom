@@ -185,14 +185,14 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       });
     });
 
-    it('should succeed for list endpoint', async () => {
+    it('should be forbidden for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/applications?`)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
-    it('should succeed for retrieve endpoint', async () => {
+    it('should error as for retrieve endpoint', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
@@ -208,7 +208,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       await request(app.getHttpServer())
         .get(`/applications/${applicationA.id}`)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
     it('should error as forbidden for delete endpoint', async () => {
@@ -731,14 +731,14 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       );
     });
 
-    it('should succeed for list endpoint', async () => {
+    it('should error as forbidden for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/multiselectQuestions?`)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
-    it('should succeed for retrieve endpoint', async () => {
+    it('should error as forbidden for retrieve endpoint', async () => {
       const multiselectQuestionA = await prisma.multiselectQuestions.create({
         data: multiselectQuestionFactory(jurisdictionId),
       });
@@ -746,7 +746,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       await request(app.getHttpServer())
         .get(`/multiselectQuestions/${multiselectQuestionA.id}`)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
     it('should error as forbidden for create endpoint', async () => {
@@ -1052,7 +1052,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         .expect(403);
     });
 
-    it('should succeed for process endpoint', async () => {
+    it('should error as forbidden for process endpoint', async () => {
       await request(app.getHttpServer())
         .put(`/listings/process`)
         .set('Cookie', cookies)

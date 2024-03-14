@@ -444,6 +444,7 @@ describe('Testing listing service', () => {
       include: {
         jurisdictions: true,
         listingsBuildingAddress: true,
+        requestedChangesUser: true,
         reservedCommunityTypes: true,
         listingImages: {
           include: {
@@ -589,7 +590,6 @@ describe('Testing listing service', () => {
           include: {
             unitTypes: true,
             unitAmiChartOverrides: true,
-            amiChart: true,
           },
         },
       },
@@ -679,7 +679,6 @@ describe('Testing listing service', () => {
           include: {
             unitTypes: true,
             unitAmiChartOverrides: true,
-            amiChart: true,
           },
         },
       },
@@ -824,14 +823,13 @@ describe('Testing listing service', () => {
           include: {
             unitTypes: true,
             unitAmiChartOverrides: true,
-            amiChart: true,
           },
         },
       },
     });
   });
 
-  it('should handle no records returned when findOne() is called with base view', async () => {
+  it('should handle no records returned when findOne() is called with details view', async () => {
     prisma.listings.findUnique = jest.fn().mockResolvedValue(null);
 
     await expect(
@@ -850,6 +848,7 @@ describe('Testing listing service', () => {
       include: {
         jurisdictions: true,
         listingsBuildingAddress: true,
+        requestedChangesUser: true,
         reservedCommunityTypes: true,
         listingImages: {
           include: {
@@ -1122,7 +1121,6 @@ describe('Testing listing service', () => {
           include: {
             unitTypes: true,
             unitAmiChartOverrides: true,
-            amiChart: true,
           },
         },
       },
@@ -1516,7 +1514,136 @@ describe('Testing listing service', () => {
           include: {
             unitTypes: true,
             unitAmiChartOverrides: true,
-            amiChart: true,
+          },
+        },
+      },
+    });
+
+    expect(prisma.amiChart.findMany).toHaveBeenCalledWith({
+      where: {
+        id: {
+          in: mockedListing.units.map((unit) => unit.amiChart.id),
+        },
+      },
+    });
+  });
+
+  it('should get records from findOne() with details view found and units', async () => {
+    const date = new Date();
+
+    const mockedListing = mockListing(0, { numberToMake: 1, date });
+
+    prisma.listings.findUnique = jest.fn().mockResolvedValue(mockedListing);
+
+    prisma.amiChart.findMany = jest.fn().mockResolvedValue([
+      {
+        id: 'AMI0',
+        items: [],
+        name: '`AMI Name 0`',
+      },
+      {
+        id: 'AMI1',
+        items: [],
+        name: '`AMI Name 1`',
+      },
+    ]);
+
+    const listing: Listing = await service.findOne(
+      'listingId',
+      LanguagesEnum.en,
+      ListingViews.details,
+    );
+
+    expect(listing.id).toEqual('0');
+    expect(listing.name).toEqual('listing 1');
+    expect(listing.units).toEqual(mockedListing.units);
+    expect(listing.unitsSummarized.amiPercentages).toEqual(['0']);
+    expect(listing.unitsSummarized?.byAMI).toEqual([
+      {
+        percent: '0',
+        byUnitType: [
+          {
+            areaRange: { min: 0, max: 0 },
+            minIncomeRange: { min: '$0', max: '$0' },
+            occupancyRange: { min: 0, max: 0 },
+            rentRange: { min: '$0', max: '$0' },
+            rentAsPercentIncomeRange: { min: 0, max: 0 },
+            floorRange: { min: 0, max: 0 },
+            unitTypes: {
+              id: 'unitType 0',
+              createdAt: date,
+              updatedAt: date,
+              name: 'SRO',
+              numBedrooms: 0,
+            },
+            totalAvailable: 1,
+          },
+        ],
+      },
+    ]);
+    expect(listing.unitsSummarized.unitTypes).toEqual([
+      {
+        createdAt: date,
+        id: 'unitType 0',
+        name: 'SRO',
+        numBedrooms: 0,
+        updatedAt: date,
+      },
+    ]);
+
+    expect(prisma.listings.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: 'listingId',
+      },
+      include: {
+        jurisdictions: true,
+        listingsBuildingAddress: true,
+        requestedChangesUser: true,
+        reservedCommunityTypes: true,
+        listingImages: {
+          include: {
+            assets: true,
+          },
+        },
+        listingMultiselectQuestions: {
+          include: {
+            multiselectQuestions: true,
+          },
+        },
+        listingFeatures: true,
+        listingUtilities: true,
+        applicationMethods: {
+          include: {
+            paperApplications: {
+              include: {
+                assets: true,
+              },
+            },
+          },
+        },
+        listingsBuildingSelectionCriteriaFile: true,
+        listingEvents: {
+          include: {
+            assets: true,
+          },
+        },
+        listingsResult: true,
+        listingsLeasingAgentAddress: true,
+        listingsApplicationPickUpAddress: true,
+        listingsApplicationDropOffAddress: true,
+        listingsApplicationMailingAddress: true,
+        units: {
+          include: {
+            unitAmiChartOverrides: true,
+            unitTypes: true,
+            unitRentTypes: true,
+            unitAccessibilityPriorityTypes: true,
+            amiChart: {
+              include: {
+                jurisdictions: true,
+                unitGroupAmiLevels: true,
+              },
+            },
           },
         },
       },
@@ -1625,6 +1752,7 @@ describe('Testing listing service', () => {
         listingsBuildingSelectionCriteriaFile: true,
         listingsLeasingAgentAddress: true,
         listingsResult: true,
+        requestedChangesUser: true,
         reservedCommunityTypes: true,
         units: {
           include: {
@@ -1723,6 +1851,7 @@ describe('Testing listing service', () => {
         listingsBuildingSelectionCriteriaFile: true,
         listingsLeasingAgentAddress: true,
         listingsResult: true,
+        requestedChangesUser: true,
         reservedCommunityTypes: true,
         units: {
           include: {
@@ -2158,6 +2287,7 @@ describe('Testing listing service', () => {
         listingsApplicationMailingAddress: true,
         listingsLeasingAgentAddress: true,
         listingsResult: true,
+        requestedChangesUser: true,
         reservedCommunityTypes: true,
         units: {
           include: {
@@ -2280,6 +2410,7 @@ describe('Testing listing service', () => {
         listingsLeasingAgentAddress: true,
         listingsResult: true,
         reservedCommunityTypes: true,
+        requestedChangesUser: true,
         units: {
           include: {
             amiChart: {
@@ -2574,7 +2705,7 @@ describe('Testing listing service', () => {
     );
     expect(changesRequestedMock).toBeCalledWith(
       user,
-      { id: 'id', name: 'name' },
+      { id: 'id', name: 'name', juris: 'jurisId' },
       ['jurisAdmin@email.com', 'partner@email.com'],
       config.get('PARTNERS_PORTAL_URL'),
     );

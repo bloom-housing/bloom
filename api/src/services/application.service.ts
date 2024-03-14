@@ -2,8 +2,10 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  ForbiddenException,
 } from '@nestjs/common';
 import crypto from 'crypto';
+import { Request as ExpressRequest } from 'express';
 import { Prisma, YesNoEnum } from '@prisma/client';
 import { PrismaService } from './prisma.service';
 import { Application } from '../dtos/applications/application.dto';
@@ -24,6 +26,7 @@ import Listing from '../dtos/listings/listing.dto';
 import { User } from '../dtos/users/user.dto';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { GeocodingService } from './geocoding.service';
+import { MostRecentApplicationQueryParams } from '../dtos/applications/most-recent-application-query-params.dto';
 
 export const view: Partial<
   Record<ApplicationViews, Prisma.ApplicationsInclude>
@@ -83,7 +86,14 @@ export class ApplicationService {
     this set can either be paginated or not depending on the params
     it will return both the set of applications, and some meta information to help with pagination
   */
-  async list(params: ApplicationQueryParams): Promise<PaginatedApplicationDto> {
+  async list(
+    params: ApplicationQueryParams,
+    req: ExpressRequest,
+  ): Promise<PaginatedApplicationDto> {
+    const user = mapTo(User, req['user']);
+    if (!user) {
+      throw new ForbiddenException();
+    }
     const whereClause = this.buildWhereClause(params);
 
     const count = await this.prisma.applications.count({
@@ -97,6 +107,17 @@ export class ApplicationService {
       include: view[params.listingId ? 'partnerList' : 'base'],
       where: whereClause,
     });
+
+    await Promise.all(
+      rawApplications.map(async (application) => {
+        await this.authorizeAction(
+          user,
+          application.listings?.id,
+          permissionActions.read,
+          application.userId,
+        );
+      }),
+    );
 
     const applications = mapTo(Application, rawApplications);
 
@@ -118,6 +139,30 @@ export class ApplicationService {
         applications.length,
       ),
     };
+  }
+
+  /*
+    this will the most recent application the user has submitted
+  */
+  async mostRecentlyCreated(
+    params: MostRecentApplicationQueryParams,
+    req: ExpressRequest,
+  ): Promise<Application> {
+    const rawApplication = await this.prisma.applications.findFirst({
+      select: {
+        id: true,
+      },
+      orderBy: { createdAt: 'desc' },
+      where: {
+        userId: params.userId,
+      },
+    });
+
+    if (!rawApplication) {
+      return null;
+    }
+
+    return await this.findOne(rawApplication.id, req);
   }
 
   /*
@@ -229,13 +274,30 @@ export class ApplicationService {
   /*
     this will return 1 application or error
   */
-  async findOne(applicationId: string): Promise<Application> {
+  async findOne(
+    applicationId: string,
+    req: ExpressRequest,
+  ): Promise<Application> {
+    const user = mapTo(User, req['user']);
+    if (!user) {
+      throw new ForbiddenException();
+    }
+
     const rawApplication = await this.findOrThrow(
       applicationId,
       ApplicationViews.details,
     );
 
-    return mapTo(Application, rawApplication);
+    const application = mapTo(Application, rawApplication);
+
+    await this.authorizeAction(
+      user,
+      application.listings?.id,
+      permissionActions.read,
+      rawApplication.userId,
+    );
+
+    return application;
   }
 
   /*
@@ -249,7 +311,6 @@ export class ApplicationService {
     if (!forPublic) {
       await this.authorizeAction(
         requestingUser,
-        dto as Application,
         dto.listings.id,
         permissionActions.create,
       );
@@ -432,7 +493,6 @@ export class ApplicationService {
 
     await this.authorizeAction(
       requestingUser,
-      mapTo(Application, rawApplication),
       rawApplication.listingId,
       permissionActions.update,
     );
@@ -583,7 +643,6 @@ export class ApplicationService {
 
     await this.authorizeAction(
       requestingUser,
-      mapTo(Application, application),
       application.listingId,
       permissionActions.delete,
     );
@@ -641,9 +700,9 @@ export class ApplicationService {
 
   async authorizeAction(
     user: User,
-    application: Application,
     listingId: string,
     action: permissionActions,
+    applicantUserId?: string,
   ): Promise<void> {
     const listingJurisdiction = await this.prisma.jurisdictions.findFirst({
       where: {
@@ -656,7 +715,8 @@ export class ApplicationService {
     });
     await this.permissionService.canOrThrow(user, 'application', action, {
       listingId,
-      jurisdictionId: listingJurisdiction.id,
+      jurisdictionId: listingJurisdiction?.id,
+      userId: applicantUserId,
     });
   }
 

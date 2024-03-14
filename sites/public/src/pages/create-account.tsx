@@ -17,10 +17,9 @@ import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
 dayjs.extend(customParseFormat)
 import { useRouter } from "next/router"
-import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent, AuthContext, BloomCard } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
-import { AccountCard } from "@bloom-housing/shared-helpers/src/views/accounts/AccountCard"
 import accountCardStyles from "./account/account.module.scss"
 import styles from "../../styles/create-account.module.scss"
 import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
@@ -91,13 +90,7 @@ export default () => {
           </div>
         )}
         <div className={signUpCopy && signUpBenefitsStyles["benefits-form-container"]}>
-          <AccountCard
-            iconSymbol="profile"
-            title={t("account.createAccount")}
-            divider="inset"
-            headingPriority={1}
-            thinMobile
-          >
+          <BloomCard iconSymbol="profile" title={t("account.createAccount")} headingPriority={1}>
             <>
               {requestError && (
                 <AlertBox className="" onClose={() => setRequestError(undefined)} type="alert">
@@ -185,7 +178,6 @@ export default () => {
                   className={accountCardStyles["account-card-settings-section"]}
                 >
                   <Field
-                    caps={true}
                     type="email"
                     name="email"
                     label={t("application.name.yourEmailAddress")}
@@ -194,6 +186,7 @@ export default () => {
                     errorMessage={t("authentication.signIn.loginError")}
                     register={register}
                     controlClassName={styles["create-account-input"]}
+                    labelClassName={"text__caps-spaced"}
                   />
                 </CardSection>
                 <CardSection
@@ -201,7 +194,7 @@ export default () => {
                   className={accountCardStyles["account-card-settings-section"]}
                 >
                   <Field
-                    caps={true}
+                    labelClassName={"text__caps-spaced"}
                     type={"password"}
                     name="password"
                     note={t("authentication.createAccount.passwordInfo")}
@@ -261,7 +254,7 @@ export default () => {
                 </CardSection>
               </Form>
             </>
-          </AccountCard>
+          </BloomCard>
         </div>
         {signUpCopy && (
           <div className={signUpBenefitsStyles["benefits-hide-display"]}>

@@ -20,7 +20,7 @@ export type ActivityLogMetadataType = Array<{
 
 @Injectable()
 export class ActivityLogInterceptor implements NestInterceptor {
-  constructor(private reflector: Reflector, private prisma: PrismaService) {}
+  constructor(private reflector: Reflector, protected prisma: PrismaService) {}
 
   /*
     builds the metadata that gets stored in the activity log

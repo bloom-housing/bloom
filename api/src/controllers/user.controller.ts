@@ -48,6 +48,7 @@ import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { UserFilterParams } from '../dtos/users/user-filter-params.dto';
 import { UserCsvExporterService } from '../services/user-csv-export.service';
+import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
 
 @Controller('user')
 @ApiTags('user')
@@ -98,6 +99,7 @@ export class UserController {
   })
   @Header('Content-Type', 'text/csv')
   @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
+  @UseInterceptors(ExportLogInterceptor)
   async listAsCsv(
     @Request() req: ExpressRequest,
     @Res({ passthrough: true }) res: Response,

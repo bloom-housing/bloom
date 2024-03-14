@@ -17,7 +17,7 @@ const translations = (jurisdictionName?: string) => ({
   },
   header: {
     logoUrl:
-      'https://res.cloudinary.com/exygy/image/upload/v1692118607/core/bloom_housing_logo.png',
+      'https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg',
     logoTitle: 'Bloom Housing Portal',
   },
   invite: {
@@ -104,7 +104,7 @@ const translations = (jurisdictionName?: string) => ({
   },
   mfaCodeEmail: {
     message: 'Access code for your account has been requested.',
-    mfaCode: 'Your access code is: %{mfaCode}',
+    mfaCode: 'Your access code is: %{singleUseCode}',
   },
   forgotPassword: {
     subject: 'Forgot your password?',
@@ -145,6 +145,12 @@ const translations = (jurisdictionName?: string) => ({
     body: 'The attached file is %{fileDescription}. If you have any questions, please reach out to your administrator.',
     hello: 'Hello,',
     title: '%{title}',
+  },
+  singleUseCodeEmail: {
+    greeting: 'Hi',
+    message:
+      'Use the following code to sign in to your %{jurisdictionName} account. This code will be valid for 5 minutes. Never share this code.',
+    singleUseCode: '%{singleUseCode}',
   },
 });
 

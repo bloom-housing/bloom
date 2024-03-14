@@ -81,6 +81,11 @@ export class Jurisdiction extends AbstractDTO {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
+  enablePartnerDemographics?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
   enableGeocodingPreferences?: boolean;
 
   @Expose()

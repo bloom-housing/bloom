@@ -886,7 +886,7 @@ describe('Listing Controller Tests', () => {
         expect.objectContaining({
           id: adminUser.id,
         }),
-        { id: listing.id, name: val.name },
+        { id: listing.id, name: val.name, juris: expect.anything() },
         expect.arrayContaining([partnerUser.email]),
         process.env.PARTNERS_PORTAL_URL,
       );

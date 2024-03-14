@@ -360,7 +360,7 @@ describe('Testing email service', () => {
       expect(emailMock.to).toEqual(emailArr);
       expect(emailMock.subject).toEqual('Listing approval requested');
       expect(emailMock.html).toMatch(
-        `<img src="https://res.cloudinary.com/exygy/image/upload/v1692118607/core/bloom_housing_logo.png" alt="Bloom Housing Portal" width="254" height="137" />`,
+        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" width="254" height="137" />`,
       );
       expect(emailMock.html).toMatch('Hello,');
       expect(emailMock.html).toMatch('Listing approval requested');
@@ -391,7 +391,7 @@ describe('Testing email service', () => {
       const service = await module.resolve(EmailService);
       await service.changesRequested(
         { name: 'test', id: '1234' },
-        { name: 'listing name', id: 'listingId' },
+        { name: 'listing name', id: 'listingId', juris: 'jurisId' },
         emailArr,
         'http://localhost:3001',
       );
@@ -401,7 +401,7 @@ describe('Testing email service', () => {
       expect(emailMock.to).toEqual(emailArr);
       expect(emailMock.subject).toEqual('Listing changes requested');
       expect(emailMock.html).toMatch(
-        `<img src="https://res.cloudinary.com/exygy/image/upload/v1692118607/core/bloom_housing_logo.png" alt="Bloom Housing Portal" width="254" height="137" />`,
+        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" width="254" height="137" />`,
       );
       expect(emailMock.html).toMatch('Listing changes requested');
       expect(emailMock.html).toMatch('Hello,');
@@ -446,7 +446,7 @@ describe('Testing email service', () => {
       expect(emailMock.to).toEqual(emailArr);
       expect(emailMock.subject).toEqual('New published listing');
       expect(emailMock.html).toMatch(
-        `<img src="https://res.cloudinary.com/exygy/image/upload/v1692118607/core/bloom_housing_logo.png" alt="Bloom Housing Portal" width="254" height="137" />`,
+        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" width="254" height="137" />`,
       );
       expect(emailMock.html).toMatch('New published listing');
       expect(emailMock.html).toMatch('Hello,');
