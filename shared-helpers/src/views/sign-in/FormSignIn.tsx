@@ -92,7 +92,7 @@ const FormSignIn = ({
         </CardSection>
         {showRegisterBtn && (
           <CardSection divider={"inset"}>
-            <Heading priority={2} size="2xl" className="mb-6">
+            <Heading priority={2} size="2xl" className={styles["create-account-header"]}>
               {t("authentication.createAccount.noAccount")}
             </Heading>
 
