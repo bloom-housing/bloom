@@ -166,6 +166,8 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
       .expect(201);
 
     cookies = resLogIn.headers['set-cookie'];
+
+    await unitTypeFactoryAll(prisma);
   });
 
   afterAll(async () => {
@@ -243,7 +245,6 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
 
   describe('Testing application endpoints', () => {
     beforeAll(async () => {
-      await unitTypeFactoryAll(prisma);
       await await prisma.translations.create({
         data: translationFactory(),
       });
@@ -251,7 +252,7 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
 
     it('should succeed for list endpoint', async () => {
       await request(app.getHttpServer())
-        .get(`/applications?`)
+        .get(`/applications?listingId=${userListingId}`)
         .set('Cookie', cookies)
         .expect(200);
     });
@@ -263,7 +264,10 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
       );
 
       const applicationA = await prisma.applications.create({
-        data: await applicationFactory({ unitTypeId: unitTypeA.id }),
+        data: await applicationFactory({
+          unitTypeId: unitTypeA.id,
+          listingId: userListingId,
+        }),
         include: {
           applicant: true,
         },
@@ -1015,7 +1019,7 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
         .expect(403);
     });
 
-    it('should succeed for process endpoint', async () => {
+    it('should error as forbidden for process endpoint', async () => {
       await request(app.getHttpServer())
         .put(`/listings/process`)
         .set('Cookie', cookies)

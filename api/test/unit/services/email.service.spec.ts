@@ -160,6 +160,34 @@ describe('Testing email service', () => {
     );
   });
 
+  it('testing forgot password with query params', async () => {
+    await service.forgotPassword(
+      [
+        { name: 'test', id: '1234' },
+        { name: 'second', id: '1234' },
+        { name: 'third', id: '1234' },
+      ],
+      user,
+      'http://localhost:3001?redirectUrl=redirect&listingId=123',
+      'resetToken',
+    );
+    expect(sendMock).toHaveBeenCalled();
+    expect(sendMock.mock.calls[0][0].to).toEqual(user.email);
+    expect(sendMock.mock.calls[0][0].subject).toEqual('Forgot your password?');
+    expect(sendMock.mock.calls[0][0].html).toContain(
+      'A request to reset your Bloom Housing Portal website password for http://localhost:3001 has recently been made.',
+    );
+    expect(sendMock.mock.calls[0][0].html).toContain(
+      'If you did make this request, please click on the link below to reset your password:',
+    );
+    expect(sendMock.mock.calls[0][0].html).toContain(
+      '<a href="http://localhost:3001/reset-password?token&#x3D;resetToken&amp;redirectUrl&#x3D;redirect&amp;listingId&#x3D;123">Change my password</a>',
+    );
+    expect(sendMock.mock.calls[0][0].html).toContain(
+      'Your password won&#x27;t change until you access the link above and create a new one.',
+    );
+  });
+
   it('should send csv data email', async () => {
     await service.sendCSV(
       [{ name: 'test', id: '1234' }],

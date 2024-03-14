@@ -74,6 +74,7 @@ type ContextProps = {
     mfaType: MfaType,
     phoneNumber?: string
   ) => Promise<RequestMfaCodeResponse | undefined>
+  loginViaSingleUseCode: (email: string, singleUseCode: string) => Promise<User | undefined>
 }
 
 // Internal Provider State
@@ -242,6 +243,24 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
             return profile
           } else {
             throw Error("User cannot log in")
+          }
+        }
+        return undefined
+      } finally {
+        dispatch(stopLoading())
+      }
+    },
+    loginViaSingleUseCode: async (email, singleUseCode) => {
+      dispatch(startLoading())
+      try {
+        const response = await authService?.loginViaASingleUseCode({
+          body: { email, singleUseCode },
+        })
+        if (response) {
+          const profile = await userService?.profile()
+          if (profile) {
+            dispatch(saveProfile(profile))
+            return profile
           }
         }
         return undefined
