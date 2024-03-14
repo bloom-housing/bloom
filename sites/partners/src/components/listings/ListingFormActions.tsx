@@ -162,7 +162,8 @@ const ListingFormActions = ({
       </Grid.Cell>
     )
 
-    const editPostedResultsButton = (lotteryResults) => (
+    // Disabled for Doorway
+    /* const editPostedResultsButton = (lotteryResults) => (
       <Grid.Cell className="flex" key="btn-edit-lottery">
         <Button
           type="button"
@@ -188,7 +189,7 @@ const ListingFormActions = ({
           {t("listings.actions.postResults")}
         </Button>
       </Grid.Cell>
-    )
+    ) */
 
     const previewButton = (
       <Grid.Cell key="btn-preview">
@@ -384,16 +385,17 @@ const ListingFormActions = ({
           elements.push(unpublishButton)
         }
 
-        const lotteryResults = listing?.listingEvents?.find(
+        // Disabled for Doorway
+        /* const lotteryResults = listing?.listingEvents?.find(
           (event) => event.type === ListingEventsTypeEnum.lotteryResults
-        )
+        ) */
 
         // all users can manage lottery results on closed listings
-        if (lotteryResults) {
+        /* if (lotteryResults) {
           elements.push(editPostedResultsButton(lotteryResults))
         } else if (listing.status === ListingsStatusEnum.closed) {
           elements.push(postResultsButton)
-        }
+        } */
 
         elements.push(cancelButton)
       }
@@ -438,15 +440,16 @@ const ListingFormActions = ({
           elements.push(unpublishButton)
         }
 
-        const lotteryResults = listing?.listingEvents?.find(
+        // Disabled for Doorway:
+        /* const lotteryResults = listing?.listingEvents?.find(
           (event) => event.type === ListingEventsTypeEnum.lotteryResults
-        )
+        ) */
 
-        if (lotteryResults) {
+        /* if (lotteryResults) {
           elements.push(editPostedResultsButton(lotteryResults))
         } else if (listing.status === ListingsStatusEnum.closed) {
-          elements.push(postResultsButton)
-        }
+          // elements.push(postResultsButton)
+        } */
 
         elements.push(cancelButton)
       }
