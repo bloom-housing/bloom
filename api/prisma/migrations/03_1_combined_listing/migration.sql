@@ -21,6 +21,7 @@ CREATE VIEW "combined_listings" AS (
         l.last_application_update_at,
         l.neighborhood,
         rct.name as "reserved_community_type_name",
+        null as "url_slug",
         jsonb_build_object('id', j.id, 'name', j.name) AS "jurisdiction",
         CASE
             WHEN rct.id IS NOT NULL THEN jsonb_build_object('name', rct.name, 'id', rct.id)
@@ -190,7 +191,7 @@ UNION
         "last_application_update_at",
         "neighborhood",
         "reserved_community_type_name",
-        -- "url_slug",
+        "url_slug",
         -- "multiselect_questions", 
         "jurisdiction",
         "reserved_community_type",

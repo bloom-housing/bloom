@@ -111,6 +111,7 @@ RUN yarn prisma generate
 COPY --from=build --chown=node:node /app/api/dist ./dist
 RUN mkdir ./src
 RUN mkdir ./src/temp
+RUN chmod 777 ./src/temp
 
 # When running this image, make sure to use the built-in node user
 USER node

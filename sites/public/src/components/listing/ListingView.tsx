@@ -325,7 +325,8 @@ export const ListingView = (props: ListingProps) => {
     if (hasMethod(listing.applicationMethods, ApplicationMethodsTypeEnum.Internal)) {
       let urlBase
       if (props.isExternal) {
-        urlBase = listing.jurisdictions.publicUrl
+        // for backward compatibility we need to check both "jurisdiction" and "jurisdictions"
+        urlBase = listing["jurisdiction"]?.publicUrl || listing.jurisdictions.publicUrl
       } else {
         urlBase = ""
       }
@@ -369,7 +370,7 @@ export const ListingView = (props: ListingProps) => {
   }
 
   const redirectIfSignedOut = () =>
-    process.env.showMandatedAccounts && initialStateLoaded && !profile
+    process.env.showMandatedAccounts && initialStateLoaded && !profile && props.isExternal !== true
 
   const applySidebar = () => (
     <>

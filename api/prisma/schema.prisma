@@ -871,7 +871,8 @@ view CombinedListings {
   listingImages         Json?                @map("listing_images") 
   reservedCommunityTypes    Json?            @map("reserved_community_types") 
   units               Json?      
-  isExternal          Boolean?              @map("is_external")           
+  isExternal          Boolean?              @map("is_external")   
+  urlSlug             String?               @map("url_slug")        
 
   @@map("combined_listings")  
 }
