@@ -10,6 +10,7 @@ import { UserModule } from './user.module';
 import { MfaStrategy } from '../passports/mfa.strategy';
 import { JwtStrategy } from '../passports/jwt.strategy';
 import { EmailModule } from './email.module';
+import { SingleUseCodeStrategy } from '../passports/single-use-code.strategy';
 
 @Module({
   imports: [
@@ -24,7 +25,13 @@ import { EmailModule } from './email.module';
     EmailModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, PermissionService, MfaStrategy, JwtStrategy],
+  providers: [
+    AuthService,
+    PermissionService,
+    MfaStrategy,
+    JwtStrategy,
+    SingleUseCodeStrategy,
+  ],
   exports: [AuthService, PermissionService],
 })
 export class AuthModule {}

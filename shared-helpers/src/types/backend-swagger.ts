@@ -1938,6 +1938,28 @@ export class AuthService {
     })
   }
   /**
+   * LoginViaSingleUseCode
+   */
+  loginViaASingleUseCode(
+    params: {
+      /** requestBody */
+      body?: LoginViaSingleUseCode
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/auth/loginViaSingleUseCode"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Logout
    */
   logout(options: IRequestOptions = {}): Promise<SuccessDTO> {
@@ -5213,6 +5235,14 @@ export interface Login {
 
   /**  */
   mfaType?: MfaType
+}
+
+export interface LoginViaSingleUseCode {
+  /**  */
+  email: string
+
+  /**  */
+  singleUseCode: string
 }
 
 export interface RequestMfaCode {

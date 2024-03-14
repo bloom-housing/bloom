@@ -2,33 +2,36 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { randomUUID } from 'crypto';
 import { Request } from 'express';
 import { PrismaService } from '../../../src/services/prisma.service';
-import { MfaStrategy } from '../../../src/passports/mfa.strategy';
-import { MfaType } from '../../../src/enums/mfa/mfa-type-enum';
-import { Login } from '../../../src/dtos/auth/login.dto';
 import { passwordToHash } from '../../../src/utilities/password-helpers';
+import { SingleUseCodeStrategy } from '../../../src/passports/single-use-code.strategy';
+import { LoginViaSingleUseCode } from '../../../src/dtos/auth/login-single-use-code.dto';
+import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
 
-describe('Testing mfa strategy', () => {
-  let strategy: MfaStrategy;
+describe('Testing single-use-code strategy', () => {
+  let strategy: SingleUseCodeStrategy;
   let prisma: PrismaService;
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [MfaStrategy, PrismaService],
+      providers: [SingleUseCodeStrategy, PrismaService],
     }).compile();
 
-    strategy = module.get<MfaStrategy>(MfaStrategy);
+    strategy = module.get<SingleUseCodeStrategy>(SingleUseCodeStrategy);
     prisma = module.get<PrismaService>(PrismaService);
   });
 
   it('should fail because user does not exist', async () => {
     prisma.userAccounts.findFirst = jest.fn().mockResolvedValue(null);
+    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+      id: randomUUID(),
+      allowSingleUseCodeLogin: true,
+    });
 
     const request = {
       body: {
         email: 'example@exygy.com',
-        password: 'abcdef',
-        mfaCode: 'zyxwv',
-        mfaType: MfaType.sms,
-      } as Login,
+        singleUseCode: 'zyxwv',
+      } as LoginViaSingleUseCode,
+      headers: { jurisdictionname: 'juris 1' },
     };
 
     await expect(
@@ -47,6 +50,18 @@ describe('Testing mfa strategy', () => {
         email: 'example@exygy.com',
       },
     });
+    expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
+      select: {
+        id: true,
+        allowSingleUseCodeLogin: true,
+      },
+      where: {
+        name: 'juris 1',
+      },
+      orderBy: {
+        allowSingleUseCodeLogin: OrderByEnum.DESC,
+      },
+    });
   });
 
   it('should fail because user is locked out', async () => {
@@ -55,14 +70,17 @@ describe('Testing mfa strategy', () => {
       lastLoginAt: new Date(),
       failedLoginAttemptsCount: 10,
     });
+    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+      id: randomUUID(),
+      allowSingleUseCodeLogin: true,
+    });
 
     const request = {
       body: {
         email: 'example@exygy.com',
-        password: 'abcdef',
-        mfaCode: 'zyxwv',
-        mfaType: MfaType.sms,
-      } as Login,
+        singleUseCode: 'zyxwv',
+      } as LoginViaSingleUseCode,
+      headers: { jurisdictionname: 'juris 1' },
     };
 
     await expect(
@@ -79,189 +97,21 @@ describe('Testing mfa strategy', () => {
         email: 'example@exygy.com',
       },
     });
-  });
-
-  it('should fail because user is not confirmed', async () => {
-    const id = randomUUID();
-    prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
-      id: id,
-      lastLoginAt: new Date(),
-      failedLoginAttemptsCount: 0,
-      confirmedAt: null,
-      passwordHash: await passwordToHash('abcdef'),
-    });
-
-    const request = {
-      body: {
-        email: 'example@exygy.com',
-        password: 'abcdef',
-        mfaCode: 'zyxwv',
-        mfaType: MfaType.sms,
-      } as Login,
-    };
-
-    await expect(
-      async () => await strategy.validate(request as unknown as Request),
-    ).rejects.toThrowError(
-      `user ${id} attempted to login, but is not confirmed`,
-    );
-
-    expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
-      include: {
-        userRoles: true,
-        listings: true,
-        jurisdictions: true,
+    expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
+      select: {
+        id: true,
+        allowSingleUseCodeLogin: true,
       },
       where: {
-        email: 'example@exygy.com',
+        name: 'juris 1',
+      },
+      orderBy: {
+        allowSingleUseCodeLogin: OrderByEnum.DESC,
       },
     });
   });
 
-  it('should fail because password is outdated', async () => {
-    const id = randomUUID();
-    prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
-      id: id,
-      lastLoginAt: new Date(),
-      failedLoginAttemptsCount: 0,
-      confirmedAt: new Date(),
-      passwordValidForDays: 0,
-      passwordUpdatedAt: new Date(0),
-      userRoles: { isAdmin: true },
-      passwordHash: await passwordToHash('abcdef'),
-    });
-
-    const request = {
-      body: {
-        email: 'example@exygy.com',
-        password: 'abcdef',
-        mfaCode: 'zyxwv',
-        mfaType: MfaType.sms,
-      } as Login,
-    };
-
-    await expect(
-      async () => await strategy.validate(request as unknown as Request),
-    ).rejects.toThrowError(
-      `user ${id} attempted to login, but password is no longer valid`,
-    );
-
-    expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
-      include: {
-        userRoles: true,
-        listings: true,
-        jurisdictions: true,
-      },
-      where: {
-        email: 'example@exygy.com',
-      },
-    });
-  });
-
-  it('should fail because user password is invalid', async () => {
-    const id = randomUUID();
-    prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
-      id: id,
-      lastLoginAt: new Date(),
-      failedLoginAttemptsCount: 0,
-      confirmedAt: new Date(),
-      passwordValidForDays: 100,
-      passwordUpdatedAt: new Date(),
-      userRoles: { isAdmin: false },
-      passwordHash: await passwordToHash('abcdef123'),
-    });
-
-    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
-
-    const request = {
-      body: {
-        email: 'example@exygy.com',
-        password: 'abcdef',
-        mfaCode: 'zyxwv',
-        mfaType: MfaType.sms,
-      } as Login,
-    };
-
-    await expect(
-      async () => await strategy.validate(request as unknown as Request),
-    ).rejects.toThrowError(`Unauthorized Exception`);
-
-    expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
-      include: {
-        userRoles: true,
-        listings: true,
-        jurisdictions: true,
-      },
-      where: {
-        email: 'example@exygy.com',
-      },
-    });
-
-    expect(prisma.userAccounts.update).toHaveBeenCalledWith({
-      data: {
-        failedLoginAttemptsCount: 1,
-        lastLoginAt: expect.anything(),
-      },
-      where: {
-        id,
-      },
-    });
-  });
-
-  it('should succeed if not an mfa user', async () => {
-    const id = randomUUID();
-    prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
-      id: id,
-      lastLoginAt: new Date(),
-      failedLoginAttemptsCount: 0,
-      confirmedAt: new Date(),
-      passwordValidForDays: 100,
-      passwordUpdatedAt: new Date(),
-      userRoles: { isAdmin: false },
-      passwordHash: await passwordToHash('abcdef'),
-      mfaEnabled: false,
-      phoneNumberVerified: false,
-    });
-
-    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
-
-    const request = {
-      body: {
-        email: 'example@exygy.com',
-        password: 'abcdef',
-        mfaCode: 'zyxwv',
-        mfaType: MfaType.sms,
-      } as Login,
-    };
-
-    await strategy.validate(request as unknown as Request);
-
-    expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
-      include: {
-        userRoles: true,
-        listings: true,
-        jurisdictions: true,
-      },
-      where: {
-        email: 'example@exygy.com',
-      },
-    });
-
-    expect(prisma.userAccounts.update).toHaveBeenCalledWith({
-      data: {
-        singleUseCode: null,
-        singleUseCodeUpdatedAt: null,
-        phoneNumberVerified: null,
-        lastLoginAt: expect.anything(),
-        failedLoginAttemptsCount: 0,
-      },
-      where: {
-        id,
-      },
-    });
-  });
-
-  it('should fail if no mfaCode is stored', async () => {
+  it('should fail if no singleUseCode is stored', async () => {
     const id = randomUUID();
     prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
       id: id,
@@ -279,13 +129,17 @@ describe('Testing mfa strategy', () => {
 
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
 
+    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+      id: randomUUID(),
+      allowSingleUseCodeLogin: true,
+    });
+
     const request = {
       body: {
         email: 'example@exygy.com',
-        password: 'abcdef',
-        mfaCode: 'zyxwv',
-        mfaType: MfaType.sms,
-      } as Login,
+        singleUseCode: 'zyxwv',
+      } as LoginViaSingleUseCode,
+      headers: { jurisdictionname: 'juris 1' },
     };
 
     await expect(
@@ -311,9 +165,22 @@ describe('Testing mfa strategy', () => {
         id,
       },
     });
+
+    expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
+      select: {
+        id: true,
+        allowSingleUseCodeLogin: true,
+      },
+      where: {
+        name: 'juris 1',
+      },
+      orderBy: {
+        allowSingleUseCodeLogin: OrderByEnum.DESC,
+      },
+    });
   });
 
-  it('should fail if no mfaCodeUpdatedAt is stored', async () => {
+  it('should fail if no singleUseCodeUpdatedAt is stored', async () => {
     const id = randomUUID();
     prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
       id: id,
@@ -331,13 +198,17 @@ describe('Testing mfa strategy', () => {
 
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
 
+    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+      id: randomUUID(),
+      allowSingleUseCodeLogin: true,
+    });
+
     const request = {
       body: {
         email: 'example@exygy.com',
-        password: 'abcdef',
-        mfaCode: 'zyxwv',
-        mfaType: MfaType.sms,
-      } as Login,
+        singleUseCode: 'zyxwv',
+      } as LoginViaSingleUseCode,
+      headers: { jurisdictionname: 'juris 1' },
     };
 
     await expect(
@@ -363,9 +234,22 @@ describe('Testing mfa strategy', () => {
         id,
       },
     });
+
+    expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
+      select: {
+        id: true,
+        allowSingleUseCodeLogin: true,
+      },
+      where: {
+        name: 'juris 1',
+      },
+      orderBy: {
+        allowSingleUseCodeLogin: OrderByEnum.DESC,
+      },
+    });
   });
 
-  it('should fail if no mfaCode is sent', async () => {
+  it('should fail if no singleUseCode is sent', async () => {
     const id = randomUUID();
     prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
       id: id,
@@ -384,12 +268,16 @@ describe('Testing mfa strategy', () => {
 
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
 
+    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+      id: randomUUID(),
+      allowSingleUseCodeLogin: true,
+    });
+
     const request = {
       body: {
         email: 'example@exygy.com',
-        password: 'abcdef',
-        mfaType: MfaType.sms,
-      } as Login,
+      } as LoginViaSingleUseCode,
+      headers: { jurisdictionname: 'juris 1' },
     };
 
     await expect(
@@ -415,9 +303,22 @@ describe('Testing mfa strategy', () => {
         id,
       },
     });
+
+    expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
+      select: {
+        id: true,
+        allowSingleUseCodeLogin: true,
+      },
+      where: {
+        name: 'juris 1',
+      },
+      orderBy: {
+        allowSingleUseCodeLogin: OrderByEnum.DESC,
+      },
+    });
   });
 
-  it('should fail if no mfaCode is incorrect', async () => {
+  it('should fail if singleUseCode is incorrect', async () => {
     const id = randomUUID();
     prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
       id: id,
@@ -436,18 +337,22 @@ describe('Testing mfa strategy', () => {
 
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
 
+    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+      id: randomUUID(),
+      allowSingleUseCodeLogin: true,
+    });
+
     const request = {
       body: {
         email: 'example@exygy.com',
-        password: 'abcdef',
-        mfaCode: 'zyxwv1',
-        mfaType: MfaType.sms,
-      } as Login,
+        singleUseCode: 'zyxwv1',
+      } as LoginViaSingleUseCode,
+      headers: { jurisdictionname: 'juris 1' },
     };
 
     await expect(
       async () => await strategy.validate(request as unknown as Request),
-    ).rejects.toThrowError(`mfaUnauthorized`);
+    ).rejects.toThrowError(`singleUseCodeUnauthorized`);
 
     expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
       include: {
@@ -464,7 +369,6 @@ describe('Testing mfa strategy', () => {
       data: {
         singleUseCode: 'zyxwv',
         singleUseCodeUpdatedAt: expect.anything(),
-        phoneNumberVerified: false,
         lastLoginAt: expect.anything(),
         failedLoginAttemptsCount: 1,
       },
@@ -472,9 +376,22 @@ describe('Testing mfa strategy', () => {
         id,
       },
     });
+
+    expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
+      select: {
+        id: true,
+        allowSingleUseCodeLogin: true,
+      },
+      where: {
+        name: 'juris 1',
+      },
+      orderBy: {
+        allowSingleUseCodeLogin: OrderByEnum.DESC,
+      },
+    });
   });
 
-  it('should fail if no mfaCode is expired', async () => {
+  it('should fail if singleUseCode is expired', async () => {
     const id = randomUUID();
     prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
       id: id,
@@ -493,18 +410,22 @@ describe('Testing mfa strategy', () => {
 
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
 
+    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+      id: randomUUID(),
+      allowSingleUseCodeLogin: true,
+    });
+
     const request = {
       body: {
         email: 'example@exygy.com',
-        password: 'abcdef',
-        mfaCode: 'zyxwv',
-        mfaType: MfaType.sms,
-      } as Login,
+        singleUseCode: 'zyxwv',
+      } as LoginViaSingleUseCode,
+      headers: { jurisdictionname: 'juris 1' },
     };
 
     await expect(
       async () => await strategy.validate(request as unknown as Request),
-    ).rejects.toThrowError(`mfaUnauthorized`);
+    ).rejects.toThrowError(`singleUseCodeUnauthorized`);
 
     expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
       include: {
@@ -521,7 +442,6 @@ describe('Testing mfa strategy', () => {
       data: {
         singleUseCode: 'zyxwv',
         singleUseCodeUpdatedAt: expect.anything(),
-        phoneNumberVerified: false,
         lastLoginAt: expect.anything(),
         failedLoginAttemptsCount: 1,
       },
@@ -529,9 +449,168 @@ describe('Testing mfa strategy', () => {
         id,
       },
     });
+
+    expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
+      select: {
+        id: true,
+        allowSingleUseCodeLogin: true,
+      },
+      where: {
+        name: 'juris 1',
+      },
+      orderBy: {
+        allowSingleUseCodeLogin: OrderByEnum.DESC,
+      },
+    });
   });
 
-  it('should succeed and set phoneNumberVerified', async () => {
+  it('should fail if jurisdiction does not exist', async () => {
+    const id = randomUUID();
+    prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
+      id: id,
+      lastLoginAt: new Date(),
+      failedLoginAttemptsCount: 0,
+      confirmedAt: new Date(),
+      passwordValidForDays: 100,
+      passwordUpdatedAt: new Date(),
+      userRoles: { isAdmin: false },
+      passwordHash: await passwordToHash('abcdef'),
+      mfaEnabled: true,
+      phoneNumberVerified: false,
+      singleUseCode: 'zyxwv',
+      singleUseCodeUpdatedAt: new Date(0),
+    });
+
+    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+
+    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
+
+    const request = {
+      body: {
+        email: 'example@exygy.com',
+        singleUseCode: 'zyxwv',
+      } as LoginViaSingleUseCode,
+      headers: { jurisdictionname: 'juris 1' },
+    };
+
+    await expect(
+      async () => await strategy.validate(request as unknown as Request),
+    ).rejects.toThrowError(`Jurisidiction juris 1 does not exists`);
+
+    expect(prisma.userAccounts.findFirst).not.toHaveBeenCalled();
+
+    expect(prisma.userAccounts.update).not.toHaveBeenCalled();
+
+    expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
+      select: {
+        id: true,
+        allowSingleUseCodeLogin: true,
+      },
+      where: {
+        name: 'juris 1',
+      },
+      orderBy: {
+        allowSingleUseCodeLogin: OrderByEnum.DESC,
+      },
+    });
+  });
+
+  it('should fail if jurisdiction disallows single use code login', async () => {
+    const id = randomUUID();
+    prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
+      id: id,
+      lastLoginAt: new Date(),
+      failedLoginAttemptsCount: 0,
+      confirmedAt: new Date(),
+      passwordValidForDays: 100,
+      passwordUpdatedAt: new Date(),
+      userRoles: { isAdmin: false },
+      passwordHash: await passwordToHash('abcdef'),
+      mfaEnabled: true,
+      phoneNumberVerified: false,
+      singleUseCode: 'zyxwv',
+      singleUseCodeUpdatedAt: new Date(0),
+    });
+
+    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+
+    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+      id: randomUUID(),
+      allowSingleUseCodeLogin: false,
+    });
+
+    const request = {
+      body: {
+        email: 'example@exygy.com',
+        singleUseCode: 'zyxwv',
+      } as LoginViaSingleUseCode,
+      headers: { jurisdictionname: 'juris 1' },
+    };
+
+    await expect(
+      async () => await strategy.validate(request as unknown as Request),
+    ).rejects.toThrowError(`Single use code login is not setup for juris 1`);
+
+    expect(prisma.userAccounts.findFirst).not.toHaveBeenCalled();
+
+    expect(prisma.userAccounts.update).not.toHaveBeenCalled();
+
+    expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
+      select: {
+        id: true,
+        allowSingleUseCodeLogin: true,
+      },
+      where: {
+        name: 'juris 1',
+      },
+      orderBy: {
+        allowSingleUseCodeLogin: OrderByEnum.DESC,
+      },
+    });
+  });
+
+  it('should fail if jurisdiction is missing from header', async () => {
+    const id = randomUUID();
+    prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
+      id: id,
+      lastLoginAt: new Date(),
+      failedLoginAttemptsCount: 0,
+      confirmedAt: new Date(),
+      passwordValidForDays: 100,
+      passwordUpdatedAt: new Date(),
+      userRoles: { isAdmin: false },
+      passwordHash: await passwordToHash('abcdef'),
+      mfaEnabled: true,
+      phoneNumberVerified: false,
+      singleUseCode: 'zyxwv',
+      singleUseCodeUpdatedAt: new Date(0),
+    });
+
+    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+
+    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
+
+    const request = {
+      body: {
+        email: 'example@exygy.com',
+        singleUseCode: 'zyxwv',
+      } as LoginViaSingleUseCode,
+    };
+
+    await expect(
+      async () => await strategy.validate(request as unknown as Request),
+    ).rejects.toThrowError(
+      `jurisdictionname is missing from the request headers`,
+    );
+
+    expect(prisma.userAccounts.findFirst).not.toHaveBeenCalled();
+
+    expect(prisma.userAccounts.update).not.toHaveBeenCalled();
+
+    expect(prisma.jurisdictions.findFirst).not.toHaveBeenCalled();
+  });
+
+  it('should succeed', async () => {
     const id = randomUUID();
     prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
       id: id,
@@ -550,13 +629,17 @@ describe('Testing mfa strategy', () => {
 
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
 
+    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+      id: randomUUID(),
+      allowSingleUseCodeLogin: true,
+    });
+
     const request = {
       body: {
         email: 'example@exygy.com',
-        password: 'abcdef',
-        mfaCode: 'zyxwv',
-        mfaType: MfaType.sms,
-      } as Login,
+        singleUseCode: 'zyxwv',
+      } as LoginViaSingleUseCode,
+      headers: { jurisdictionname: 'juris 1' },
     };
 
     await strategy.validate(request as unknown as Request);
@@ -576,7 +659,6 @@ describe('Testing mfa strategy', () => {
       data: {
         singleUseCode: null,
         singleUseCodeUpdatedAt: expect.anything(),
-        phoneNumberVerified: true,
         lastLoginAt: expect.anything(),
         failedLoginAttemptsCount: 0,
       },
@@ -584,59 +666,17 @@ describe('Testing mfa strategy', () => {
         id,
       },
     });
-  });
 
-  it('should succeed and leave phoneNumberVerified false', async () => {
-    const id = randomUUID();
-    prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
-      id: id,
-      lastLoginAt: new Date(),
-      failedLoginAttemptsCount: 0,
-      confirmedAt: new Date(),
-      passwordValidForDays: 100,
-      passwordUpdatedAt: new Date(),
-      userRoles: { isAdmin: false },
-      passwordHash: await passwordToHash('abcdef'),
-      mfaEnabled: true,
-      phoneNumberVerified: false,
-      singleUseCode: 'zyxwv',
-      singleUseCodeUpdatedAt: new Date(),
-    });
-
-    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
-
-    const request = {
-      body: {
-        email: 'example@exygy.com',
-        password: 'abcdef',
-        mfaCode: 'zyxwv',
-        mfaType: MfaType.email,
-      } as Login,
-    };
-
-    await strategy.validate(request as unknown as Request);
-
-    expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
-      include: {
-        userRoles: true,
-        listings: true,
-        jurisdictions: true,
+    expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
+      select: {
+        id: true,
+        allowSingleUseCodeLogin: true,
       },
       where: {
-        email: 'example@exygy.com',
+        name: 'juris 1',
       },
-    });
-
-    expect(prisma.userAccounts.update).toHaveBeenCalledWith({
-      data: {
-        singleUseCode: null,
-        singleUseCodeUpdatedAt: expect.anything(),
-        phoneNumberVerified: false,
-        lastLoginAt: expect.anything(),
-        failedLoginAttemptsCount: 0,
-      },
-      where: {
-        id,
+      orderBy: {
+        allowSingleUseCodeLogin: OrderByEnum.DESC,
       },
     });
   });
