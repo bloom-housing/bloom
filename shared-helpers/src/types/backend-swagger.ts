@@ -2834,6 +2834,9 @@ export interface Jurisdiction {
   enableListingOpportunity?: boolean
 
   /**  */
+  enablePartnerDemographics?: boolean
+
+  /**  */
   enableGeocodingPreferences?: boolean
 
   /**  */
@@ -3198,7 +3201,7 @@ export interface Listing {
   requestedChangesDate?: Date
 
   /**  */
-  requestedChangesUser?: User
+  requestedChangesUser?: IdDTO
 
   /**  */
   isExternal?: boolean
@@ -4511,6 +4514,9 @@ export interface JurisdictionCreate {
   enableListingOpportunity?: boolean
 
   /**  */
+  enablePartnerDemographics?: boolean
+
+  /**  */
   enableGeocodingPreferences?: boolean
 
   /**  */
@@ -4556,6 +4562,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   enableListingOpportunity?: boolean
+
+  /**  */
+  enablePartnerDemographics?: boolean
 
   /**  */
   enableGeocodingPreferences?: boolean
@@ -5371,6 +5380,7 @@ export enum EnumJurisdictionListingApprovalPermissions {
   "admin" = "admin",
   "jurisdictionAdmin" = "jurisdictionAdmin",
 }
+
 export enum AfsView {
   "pending" = "pending",
   "pendingNameAndDoB" = "pendingNameAndDoB",

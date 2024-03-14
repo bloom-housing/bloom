@@ -64,7 +64,6 @@ const ResetPassword = () => {
         <div className="form-card__group pt-0 border-b">
           <Form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
             <Field
-              caps={true}
               name="password"
               label={t("authentication.createAccount.password")}
               validation={{ required: true }}
@@ -72,9 +71,9 @@ const ResetPassword = () => {
               errorMessage={t("authentication.forgotPassword.enterNewLoginPassword")}
               register={register}
               type="password"
+              labelClassName={"text__caps-spaced"}
             />
             <Field
-              caps={true}
               name="passwordConfirmation"
               label={t("authentication.forgotPassword.passwordConfirmation")}
               validation={{
@@ -86,6 +85,7 @@ const ResetPassword = () => {
               errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
               register={register}
               type="password"
+              labelClassName={"text__caps-spaced"}
             />
 
             <div className="text-center mt-6">

@@ -129,7 +129,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
       );
     });
 
-    it('should succeed for list endpoint', async () => {
+    it('should error as forbidden for list endpoint', async () => {
       await prisma.amiChart.create({
         data: amiChartFactory(10, jurisdictionAId),
       });
@@ -141,10 +141,10 @@ describe('Testing Permissioning of endpoints as public user', () => {
       await request(app.getHttpServer())
         .get(`/amiCharts?${query}`)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
-    it('should succeed for retrieve endpoint', async () => {
+    it('should error as forbidden for retrieve endpoint', async () => {
       const amiChartA = await prisma.amiChart.create({
         data: amiChartFactory(10, jurisdictionAId),
       });
@@ -152,7 +152,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
       await request(app.getHttpServer())
         .get(`/amiCharts/${amiChartA.id}`)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
     it('should error as forbidden for create endpoint', async () => {
@@ -205,8 +205,18 @@ describe('Testing Permissioning of endpoints as public user', () => {
     });
 
     it('should succeed for list endpoint', async () => {
+      const jurisdiction = await generateJurisdiction(
+        prisma,
+        'permission juris public 1',
+      );
+      await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
+      const listing1 = await listingFactory(jurisdiction, prisma);
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+
       await request(app.getHttpServer())
-        .get(`/applications?`)
+        .get(`/applications?listingId=${listing1Created.id}`)
         .set('Cookie', cookies)
         .expect(200);
     });
@@ -217,8 +227,22 @@ describe('Testing Permissioning of endpoints as public user', () => {
         UnitTypeEnum.oneBdrm,
       );
 
+      const jurisdiction = await generateJurisdiction(
+        prisma,
+        'permission juris public 2',
+      );
+      await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
+      const listing1 = await listingFactory(jurisdiction, prisma);
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+
       const applicationA = await prisma.applications.create({
-        data: await applicationFactory({ unitTypeId: unitTypeA.id }),
+        data: await applicationFactory({
+          unitTypeId: unitTypeA.id,
+          listingId: listing1Created.id,
+          userId: storedUserId,
+        }),
         include: {
           applicant: true,
         },
@@ -502,14 +526,14 @@ describe('Testing Permissioning of endpoints as public user', () => {
       await reservedCommunityTypeFactoryAll(jurisdictionAId, prisma);
     });
 
-    it('should succeed for list endpoint', async () => {
+    it('should error as forbidden for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/reservedCommunityTypes`)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
-    it('should succeed for retrieve endpoint', async () => {
+    it('should error as forbidden for retrieve endpoint', async () => {
       const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
         prisma,
         jurisdictionAId,
@@ -518,7 +542,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
       await request(app.getHttpServer())
         .get(`/reservedCommunityTypes/${reservedCommunityTypeA.id}`)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
     it('should error as forbidden for create endpoint', async () => {
@@ -559,14 +583,14 @@ describe('Testing Permissioning of endpoints as public user', () => {
   });
 
   describe('Testing unit rent types endpoints', () => {
-    it('should succeed for list endpoint', async () => {
+    it('should error as forbidden for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/unitRentTypes?`)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
-    it('should succeed for retrieve endpoint', async () => {
+    it('should error as forbidden for retrieve endpoint', async () => {
       const unitRentTypeA = await prisma.unitRentTypes.create({
         data: unitRentTypeFactory(),
       });
@@ -574,7 +598,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
       await request(app.getHttpServer())
         .get(`/unitRentTypes/${unitRentTypeA.id}`)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
     it('should error as forbidden for create endpoint', async () => {
@@ -619,14 +643,14 @@ describe('Testing Permissioning of endpoints as public user', () => {
   });
 
   describe('Testing unit accessibility priority types endpoints', () => {
-    it('should succeed for list endpoint', async () => {
+    it('should error as forbidden for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/unitAccessibilityPriorityTypes?`)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
-    it('should succeed for retrieve endpoint', async () => {
+    it('should error as forbidden for retrieve endpoint', async () => {
       const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
         prisma,
       );
@@ -634,7 +658,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
       await request(app.getHttpServer())
         .get(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
     it('should error as forbidden for create endpoint', async () => {
@@ -677,14 +701,14 @@ describe('Testing Permissioning of endpoints as public user', () => {
   });
 
   describe('Testing unit types endpoints', () => {
-    it('should succeed for list endpoint', async () => {
+    it('should error as forbidden for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/unitTypes?`)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
-    it('should succeed for retrieve endpoint', async () => {
+    it('should error as forbidden for retrieve endpoint', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
@@ -693,7 +717,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
       await request(app.getHttpServer())
         .get(`/unitTypes/${unitTypeA.id}`)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
     it('should error as forbidden for create endpoint', async () => {
@@ -747,14 +771,14 @@ describe('Testing Permissioning of endpoints as public user', () => {
       );
     });
 
-    it('should succeed for list endpoint', async () => {
+    it('should error as forbidden for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/multiselectQuestions?`)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
-    it('should succeed for retrieve endpoint', async () => {
+    it('should error as forbidden for retrieve endpoint', async () => {
       const multiselectQuestionA = await prisma.multiselectQuestions.create({
         data: multiselectQuestionFactory(jurisdictionId),
       });
@@ -762,7 +786,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
       await request(app.getHttpServer())
         .get(`/multiselectQuestions/${multiselectQuestionA.id}`)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
     it('should error as forbidden for create endpoint', async () => {
@@ -1079,7 +1103,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
         .expect(403);
     });
 
-    it('should succeed for process endpoint', async () => {
+    it('should error as forbidden for process endpoint', async () => {
       await request(app.getHttpServer())
         .put(`/listings/process`)
         .set('Cookie', cookies)

@@ -88,9 +88,10 @@ export class ApplicationController {
   })
   @ApiOkResponse({ type: Application })
   async mostRecentlyCreated(
+    @Request() req: ExpressRequest,
     @Query() queryParams: MostRecentApplicationQueryParams,
   ): Promise<Application> {
-    return await this.applicationService.mostRecentlyCreated(queryParams);
+    return await this.applicationService.mostRecentlyCreated(queryParams, req);
   }
 
   @Get(`csv`)
@@ -119,8 +120,11 @@ export class ApplicationController {
     operationId: 'retrieve',
   })
   @ApiOkResponse({ type: Application })
-  async retrieve(@Param('applicationId') applicationId: string) {
-    return this.applicationService.findOne(applicationId);
+  async retrieve(
+    @Request() req: ExpressRequest,
+    @Param('applicationId') applicationId: string,
+  ) {
+    return this.applicationService.findOne(applicationId, req);
   }
 
   @Post()
