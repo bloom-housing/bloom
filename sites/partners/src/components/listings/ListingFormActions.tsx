@@ -41,9 +41,10 @@ const ListingFormActions = ({
   const router = useRouter()
 
   // single jurisdiction check covers jurisAdmin adding a listing (listing is undefined then)
-  const listingApprovalPermissions = (profile?.jurisdictions?.length === 1
-    ? profile?.jurisdictions[0]
-    : profile?.jurisdictions?.find((juris) => juris.id === listing?.jurisdictions?.id)
+  const listingApprovalPermissions = (
+    profile?.jurisdictions?.length === 1
+      ? profile?.jurisdictions[0]
+      : profile?.jurisdictions?.find((juris) => juris.id === listing?.jurisdictions?.id)
   )?.listingApprovalPermissions
 
   const isListingApprover =
@@ -243,7 +244,7 @@ const ListingFormActions = ({
                 const result = await listingsService.update({
                   id: listing.id,
                   body: {
-                    ...((listing as unknown) as ListingUpdate),
+                    ...(listing as unknown as ListingUpdate),
                     status: ListingsStatusEnum.active,
                   },
                 })
