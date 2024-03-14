@@ -81,6 +81,7 @@ export function getStartedLinkableCards(): React.ReactElement<CardProps>[] {
                 <li>{t("help.getStarted.applyLotteryWaitlistResp3d")}</li>
               </ul>
               <li>{t("help.getStarted.applyLotteryWaitlistResp4")}</li>
+              <li>{t("help.getStarted.applyLotteryWaitlistResp4a")}</li>
               <li>{t("help.getStarted.applyLotteryWaitlistResp5")}</li>
               <ul className="text__medium-normal list-disc ml-5 mb-0">
                 <li>{t("help.getStarted.applyLotteryWaitlistResp5a")}</li>
@@ -94,6 +95,9 @@ export function getStartedLinkableCards(): React.ReactElement<CardProps>[] {
         <DoorwayCollapsibleSection title={t("help.getStarted.checkApplications")}>
           <span>
             {t("help.getStarted.checkApplicationsResp")}
+            <br />
+            <br />
+            {t("help.getStarted.checkApplicationsResp4")}
             <ul className="text__medium-normal list-disc ml-5">
               <li>
                 <a href="https://housing.acgov.org" target="_blank">
@@ -111,7 +115,6 @@ export function getStartedLinkableCards(): React.ReactElement<CardProps>[] {
                 </a>
               </li>
             </ul>
-            {t("help.getStarted.checkApplicationsResp4")}
           </span>
         </DoorwayCollapsibleSection>
       </Card.Section>

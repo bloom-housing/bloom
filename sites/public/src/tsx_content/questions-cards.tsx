@@ -168,6 +168,7 @@ export function questionsLinkableCards(): React.ReactElement<CardProps>[] {
             <ul className="text__medium-normal list-disc ml-5">
               <li>{t("help.faq.longProcessResp3")}</li>
               <li>{t("help.faq.longProcessResp4")}</li>
+              <li>{t("help.faq.longProcessResp4a")}</li>
             </ul>
             {t("help.faq.longProcessResp5")}
             <br />
@@ -231,6 +232,7 @@ export function questionsLinkableCards(): React.ReactElement<CardProps>[] {
               <li>{t("help.faq.whatMakesAffordableResp6")}</li>
               <li>{t("help.faq.whatMakesAffordableResp7")}</li>
               <li>{t("help.faq.whatMakesAffordableResp8")}</li>
+              <li>{t("help.faq.whatMakesAffordableResp9")}</li>
             </ul>
           </span>
         </DoorwayCollapsibleSection>
