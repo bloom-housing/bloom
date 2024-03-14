@@ -35,6 +35,7 @@ import { EmailService } from './email.service';
 import { PermissionService } from './permission.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { buildWhereClause } from '../utilities/build-user-where';
+import { getPublicEmailURL } from '../utilities/get-public-email-url';
 import { UserRole } from '../dtos/users/user-role.dto';
 
 /*
@@ -815,7 +816,7 @@ export class UserService {
     constructs the url to confirm a public site user
   */
   getPublicConfirmationUrl(appUrl: string, confirmationToken: string) {
-    return `${appUrl}?token=${confirmationToken}`;
+    return getPublicEmailURL(appUrl, confirmationToken);
   }
 
   /*
