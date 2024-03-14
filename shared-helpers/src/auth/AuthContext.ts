@@ -268,6 +268,24 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
         dispatch(stopLoading())
       }
     },
+    loginViaSingleUseCode: async (email, singleUseCode) => {
+      dispatch(startLoading())
+      try {
+        const response = await authService?.loginViaASingleUseCode({
+          body: { email, singleUseCode },
+        })
+        if (response) {
+          const profile = await userService?.profile()
+          if (profile) {
+            dispatch(saveProfile(profile))
+            return profile
+          }
+        }
+        return undefined
+      } finally {
+        dispatch(stopLoading())
+      }
+    },
     signOut: async () => {
       await authService.logout()
       dispatch(saveProfile(null))
