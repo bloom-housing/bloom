@@ -8,14 +8,14 @@ import {
   SiteAlert,
   AlertNotice,
   ErrorMessage,
-  NavigationContext,
   emailRegex,
 } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { NetworkErrorReset, NetworkStatusContent } from "../../auth/catchNetworkError"
 import type { UseFormMethods } from "react-hook-form"
-import BloomCard from "../components/BloomCard"
+import { BloomCard } from "../components/BloomCard"
 import styles from "./FormForgotPassword.module.scss"
+import { useRouter } from "next/router"
 
 export type FormForgotPasswordProps = {
   control: FormForgotPasswordControl
@@ -47,7 +47,7 @@ const FormForgotPassword = ({
     window.scrollTo(0, 0)
   }
 
-  const { router } = useContext(NavigationContext)
+  const router = useRouter()
 
   return (
     <BloomCard title={t("authentication.forgotPassword.sendEmail")} iconSymbol={"profile"}>
@@ -93,7 +93,7 @@ const FormForgotPassword = ({
                 {t("authentication.forgotPassword.sendEmail")}
               </Button>
 
-              <div className={"mt-4 ml-6"}>
+              <div className={styles["forgot-password-cancel-button"]}>
                 <Button onClick={() => router.back()} variant="text">
                   {t("t.cancel")}
                 </Button>
