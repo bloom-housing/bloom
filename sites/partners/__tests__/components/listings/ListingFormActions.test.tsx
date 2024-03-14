@@ -333,7 +333,8 @@ describe("<ListingFormActions>", () => {
         expect(getByText("Reopen")).toBeTruthy()
         expect(getByText("Save & Exit")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
-        expect(getByText("Post Results")).toBeTruthy()
+        // Disabled for Doorway
+        // expect(getByText("Post Results")).toBeTruthy()
         expect(getByText("Cancel")).toBeTruthy()
       })
     })
@@ -475,7 +476,8 @@ describe("<ListingFormActions>", () => {
         expect(queryByText("Reopen")).toBeFalsy()
         expect(getByText("Save & Exit")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
-        expect(getByText("Post Results")).toBeTruthy()
+        // Disabled for Doorway
+        // expect(getByText("Post Results")).toBeTruthy()
         expect(getByText("Cancel")).toBeTruthy()
       })
     })
@@ -614,7 +616,8 @@ describe("<ListingFormActions>", () => {
         expect(queryByText("Reopen")).toBeFalsy()
         expect(getByText("Save & Exit")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
-        expect(getByText("Post Results")).toBeTruthy()
+        // Disabled for Doorway
+        // expect(getByText("Post Results")).toBeTruthy()
         expect(getByText("Cancel")).toBeTruthy()
       })
     })
@@ -776,7 +779,8 @@ describe("<ListingFormActions>", () => {
         expect(getByText("Reopen")).toBeTruthy()
         expect(getByText("Save & Exit")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
-        expect(getByText("Post Results")).toBeTruthy()
+        // Disabled for Doorway
+        // expect(getByText("Post Results")).toBeTruthy()
         expect(getByText("Cancel")).toBeTruthy()
       })
     })
@@ -935,7 +939,8 @@ describe("<ListingFormActions>", () => {
         expect(getByText("Reopen")).toBeTruthy()
         expect(getByText("Save & Exit")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
-        expect(getByText("Post Results")).toBeTruthy()
+        // Disabled for Doorway
+        // expect(getByText("Post Results")).toBeTruthy()
         expect(getByText("Cancel")).toBeTruthy()
       })
     })
@@ -1074,7 +1079,8 @@ describe("<ListingFormActions>", () => {
         expect(queryByText("Reopen")).toBeFalsy()
         expect(getByText("Save & Exit")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
-        expect(getByText("Post Results")).toBeTruthy()
+        // Disabled for Doorway
+        // expect(getByText("Post Results")).toBeTruthy()
         expect(getByText("Cancel")).toBeTruthy()
       })
     })
