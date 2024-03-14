@@ -277,6 +277,9 @@ describe('Testing application service', () => {
     } as unknown as User;
     const date = new Date();
     const mockedValue = mockApplicationSet(3, date);
+    prisma.jurisdictions.findFirst = jest
+      .fn()
+      .mockResolvedValue({ name: 'jurisdiction', id: 'jurisdictionID' });
     prisma.applications.findMany = jest.fn().mockResolvedValue(mockedValue);
     prisma.applications.count = jest.fn().mockResolvedValue(3);
     prisma.applications.findFirst = jest.fn().mockResolvedValue({
@@ -363,6 +366,9 @@ describe('Testing application service', () => {
     } as unknown as User;
     const date = new Date();
     const mockedValue = mockApplication(3, date);
+    prisma.jurisdictions.findFirst = jest
+      .fn()
+      .mockResolvedValue({ name: 'jurisdiction', id: 'jurisdictionID' });
     prisma.applications.findUnique = jest.fn().mockResolvedValue(mockedValue);
 
     expect(
