@@ -23,6 +23,7 @@ import { Confirm } from '../dtos/auth/confirm.dto';
 import { SmsService } from './sms.service';
 import { EmailService } from './email.service';
 import { RequestSingleUseCode } from '../dtos/single-use-code/request-single-use-code.dto';
+import { OrderByEnum } from '../enums/shared/order-by-enum';
 
 // since our local env doesn't have an https cert we can't be secure. Hosted envs should be secure
 const secure = process.env.NODE_ENV !== 'development';
@@ -264,24 +265,35 @@ export class AuthService {
       return { success: true };
     }
 
-    if (!req?.headers?.jurisdictionname) {
+    const jurisName = req?.headers?.jurisdictionname;
+    if (!jurisName) {
       throw new BadRequestException(
         'jurisdictionname is missing from the request headers',
       );
     }
 
-    const jurisName = req.headers['jurisdictionname'];
     const juris = await this.prisma.jurisdictions.findFirst({
-      where: {
-        name: {
-          in: Array.isArray(jurisName) ? jurisName : [jurisName],
-        },
+      select: {
+        id: true,
         allowSingleUseCodeLogin: true,
       },
+      where: {
+        name: jurisName as string,
+      },
+      orderBy: {
+        allowSingleUseCodeLogin: OrderByEnum.DESC,
+      },
     });
+
     if (!juris) {
       throw new BadRequestException(
-        'Single use code login is not setup for this jurisdiction',
+        `Jurisidiction ${jurisName} does not exists`,
+      );
+    }
+
+    if (!juris.allowSingleUseCodeLogin) {
+      throw new BadRequestException(
+        `Single use code login is not setup for ${jurisName}`,
       );
     }
 

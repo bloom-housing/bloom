@@ -2,6 +2,7 @@ import { Strategy } from 'passport-local';
 import { Request } from 'express';
 import { PassportStrategy } from '@nestjs/passport';
 import {
+  BadRequestException,
   Injectable,
   UnauthorizedException,
   ValidationPipe,
@@ -9,13 +10,9 @@ import {
 import { User } from '../dtos/users/user.dto';
 import { PrismaService } from '../services/prisma.service';
 import { mapTo } from '../utilities/mapTo';
-import {
-  isPasswordOutdated,
-  isPasswordValid,
-} from '../utilities/password-helpers';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
-import { Login } from '../dtos/auth/login.dto';
-import { MfaType } from '../enums/mfa/mfa-type-enum';
+import { LoginViaSingleUseCode } from '../dtos/auth/login-single-use-code.dto';
+import { OrderByEnum } from '../enums/shared/order-by-enum';
 import {
   isUserLockedOut,
   singleUseCodePresent,
@@ -23,10 +20,14 @@ import {
 } from '../utilities/passport-validator-utilities';
 
 @Injectable()
-export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
+export class SingleUseCodeStrategy extends PassportStrategy(
+  Strategy,
+  'single-use-code',
+) {
   constructor(private prisma: PrismaService) {
     super({
       usernameField: 'email',
+      passwordField: 'singleUseCode',
       passReqToCallback: true,
     });
   }
@@ -37,10 +38,43 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
   */
   async validate(req: Request): Promise<User> {
     const validationPipe = new ValidationPipe(defaultValidationPipeOptions);
-    const dto: Login = await validationPipe.transform(req.body, {
-      type: 'body',
-      metatype: Login,
+    const dto: LoginViaSingleUseCode = await validationPipe.transform(
+      req.body,
+      {
+        type: 'body',
+        metatype: LoginViaSingleUseCode,
+      },
+    );
+    const jurisName = req?.headers?.jurisdictionname;
+    if (!jurisName) {
+      throw new BadRequestException(
+        'jurisdictionname is missing from the request headers',
+      );
+    }
+
+    const juris = await this.prisma.jurisdictions.findFirst({
+      select: {
+        id: true,
+        allowSingleUseCodeLogin: true,
+      },
+      where: {
+        name: jurisName as string,
+      },
+      orderBy: {
+        allowSingleUseCodeLogin: OrderByEnum.DESC,
+      },
     });
+    if (!juris) {
+      throw new BadRequestException(
+        `Jurisidiction ${jurisName} does not exists`,
+      );
+    }
+
+    if (!juris.allowSingleUseCodeLogin) {
+      throw new BadRequestException(
+        `Single use code login is not setup for ${jurisName}`,
+      );
+    }
 
     const rawUser = await this.prisma.userAccounts.findFirst({
       include: {
@@ -57,72 +91,40 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
         `user ${dto.email} attempted to log in, but does not exist`,
       );
     }
+
     isUserLockedOut(
       rawUser.lastLoginAt,
       rawUser.failedLoginAttemptsCount,
       Number(process.env.AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS),
       Number(process.env.AUTH_LOCK_LOGIN_COOLDOWN),
     );
-    if (!rawUser.confirmedAt) {
-      // if user is not confirmed already
-      throw new UnauthorizedException(
-        `user ${rawUser.id} attempted to login, but is not confirmed`,
-      );
-    } else if (
-      isPasswordOutdated(
-        rawUser.passwordValidForDays,
-        rawUser.passwordUpdatedAt,
-      )
-    ) {
-      // if password TTL is expired
-      throw new UnauthorizedException(
-        `user ${rawUser.id} attempted to login, but password is no longer valid`,
-      );
-    } else if (!(await isPasswordValid(rawUser.passwordHash, dto.password))) {
-      // if incoming password does not match
-      await this.updateFailedLoginCount(
-        rawUser.failedLoginAttemptsCount + 1,
-        rawUser.id,
-      );
-      throw new UnauthorizedException({
-        failureCountRemaining:
-          Number(process.env.AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS) -
-          rawUser.failedLoginAttemptsCount,
-      });
-    }
-
-    if (!rawUser.mfaEnabled) {
-      // if user is not an mfaEnabled user
-      await this.updateStoredUser(null, null, null, 0, rawUser.id);
-      return mapTo(User, rawUser);
-    }
 
     let authSuccess = true;
     if (
       !singleUseCodePresent(
-        dto.mfaCode,
+        dto.singleUseCode,
         rawUser.singleUseCode,
         rawUser.singleUseCodeUpdatedAt,
       )
     ) {
-      // if an mfaCode was not sent, and a singleUseCode wasn't stored in the db for the user
-      // signal to the front end to request an mfa code
+      // if a singleUseCode was not sent, or a singleUseCode wasn't stored in the db for the user
+      // signal to the front end to request an single use code
       await this.updateFailedLoginCount(0, rawUser.id);
       throw new UnauthorizedException({
-        name: 'mfaCodeIsMissing',
+        name: 'singleUseCodeIsMissing',
       });
     } else if (
       singleUseCodeValid(
         rawUser.singleUseCodeUpdatedAt,
         Number(process.env.MFA_CODE_VALID),
-        dto.mfaCode,
+        dto.singleUseCode,
         rawUser.singleUseCode,
       )
     ) {
-      // if mfaCode TTL has expired, or if the mfa code input was incorrect
+      // if singleUseCode TTL has expired, or if the code input was incorrect
       authSuccess = false;
     } else {
-      // if mfaCode login was a success
+      // if login was a success
       rawUser.singleUseCode = null;
       rawUser.singleUseCodeUpdatedAt = new Date();
     }
@@ -133,30 +135,24 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
       await this.updateStoredUser(
         rawUser.singleUseCode,
         rawUser.singleUseCodeUpdatedAt,
-        rawUser.phoneNumberVerified,
         rawUser.failedLoginAttemptsCount,
         rawUser.id,
       );
       throw new UnauthorizedException({
-        message: 'mfaUnauthorized',
+        message: 'singleUseCodeUnauthorized',
         failureCountRemaining:
           Number(process.env.AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS) +
           1 -
           rawUser.failedLoginAttemptsCount,
       });
     }
-    // if the password and mfa code was valid
+
+    // if the password and single use code was valid
     rawUser.failedLoginAttemptsCount = 0;
-    if (!rawUser.phoneNumberVerified && dto.mfaType === MfaType.sms) {
-      // if the phone number was not verfied, but this mfa login was done through sms
-      // then we should consider the phone number verified
-      rawUser.phoneNumberVerified = true;
-    }
 
     await this.updateStoredUser(
       rawUser.singleUseCode,
       rawUser.singleUseCodeUpdatedAt,
-      rawUser.phoneNumberVerified,
       rawUser.failedLoginAttemptsCount,
       rawUser.id,
     );
@@ -183,7 +179,6 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
   async updateStoredUser(
     singleUseCode: string,
     singleUseCodeUpdatedAt: Date,
-    phoneNumberVerified: boolean,
     failedLoginAttemptsCount: number,
     userId: string,
   ): Promise<void> {
@@ -191,7 +186,6 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
       data: {
         singleUseCode,
         singleUseCodeUpdatedAt,
-        phoneNumberVerified,
         failedLoginAttemptsCount,
         lastLoginAt: new Date(),
       },
