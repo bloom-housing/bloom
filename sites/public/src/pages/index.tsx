@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react"
 import Head from "next/head"
-import { AlertBox, t, SiteAlert, ActionBlock, Icon } from "@bloom-housing/ui-components"
-import { Button, Heading } from "@bloom-housing/ui-seeds"
-import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import { AlertBox, t, SiteAlert, ActionBlock } from "@bloom-housing/ui-components"
+import { Button, Heading, Icon } from "@bloom-housing/ui-seeds"
+import { PageView, pushGtmEvent, AuthContext, CustomIconMap } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
 import { ConfirmationModal } from "../components/account/ConfirmationModal"
@@ -79,7 +79,7 @@ export default function Home(props: IndexProps) {
                   {t("welcome.signUp")}
                 </Heading>
               }
-              icon={<Icon size="3xl" symbol="mailThin" />}
+              icon={<Icon size="2xl">{CustomIconMap.envelope}</Icon>}
               actions={[
                 <Button
                   key={"sign-up"}
@@ -100,7 +100,7 @@ export default function Home(props: IndexProps) {
                 {t("welcome.seeMoreOpportunitiesTruncated")}
               </Heading>
             }
-            icon={<Icon size="3xl" symbol="building" />}
+            icon={<Icon size="2xl">{CustomIconMap.home}</Icon>}
             actions={[
               <Button
                 key={"additional-resources"}

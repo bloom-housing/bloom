@@ -2,15 +2,15 @@ import React from "react"
 import {
   Form,
   FormCard,
-  Icon,
   t,
   SiteAlert,
   PhoneField,
   FormSignInErrorBox,
   NetworkStatus,
 } from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
+import { Button, Icon } from "@bloom-housing/ui-seeds"
 import type { UseFormMethods } from "react-hook-form"
+import { CustomIconMap } from "@bloom-housing/shared-helpers"
 
 export type FormSignInAddPhoneProps = {
   control: FormSignInAddPhoneControl
@@ -42,7 +42,7 @@ const FormSignInAddPhone = ({
   return (
     <FormCard>
       <div className="form-card__lead text-center">
-        <Icon size="2xl" symbol="profile" className="form-card__header-icon" />
+        <Icon size="2xl">{CustomIconMap.profile}</Icon>
         <h2 className="form-card__title is-borderless">{t("nav.signInMFA.addNumber")}</h2>
         <p className="form-card__sub-title">{t("nav.signInMFA.addNumberSecondaryTitle")}</p>
       </div>

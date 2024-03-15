@@ -1,7 +1,6 @@
 import React from "react"
 import { render, cleanup, fireEvent } from "@testing-library/react"
-import { Button } from "@bloom-housing/ui-components"
-import { Tag } from "@bloom-housing/ui-seeds"
+import { Button, Tag } from "@bloom-housing/ui-seeds"
 import { StatusBar } from "../../../src/components/shared/StatusBar"
 
 afterEach(cleanup)
@@ -22,7 +21,7 @@ describe("<StatusBar>", () => {
     const { getByText } = render(
       <StatusBar
         backButton={
-          <Button inlineIcon="left" icon="arrowBack" onClick={onClickSpy}>
+          <Button onClick={onClickSpy}>
             Back
           </Button>
         }
