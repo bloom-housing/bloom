@@ -102,7 +102,9 @@ const FormUserConfirm = () => {
     <>
       <FormCard>
         <div className="form-card__lead text-center border-b mx-0 px-5">
-          <Icon size="2xl"><Cog8ToothIcon /></Icon>
+          <Icon size="2xl">
+            <Cog8ToothIcon />
+          </Icon>
           <h2 className="form-card__title">{t("users.addPassword")}</h2>
           <p className="mt-4 field-note">{t("users.needUniquePassword")}</p>
 

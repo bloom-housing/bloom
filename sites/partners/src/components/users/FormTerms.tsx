@@ -22,7 +22,9 @@ const FormTerms = (props: FormTermsProps) => {
     <Form id="terms" className="mt-10" onSubmit={handleSubmit(props.onSubmit)}>
       <FormCard>
         <div className="form-card__lead text-center">
-          <Icon size="2xl"><Cog8ToothIcon /></Icon>
+          <Icon size="2xl">
+            <Cog8ToothIcon />
+          </Icon>
           <h2 className="form-card__title">{t(`authentication.terms.reviewToc`)}</h2>
           <p className="field-note mt-4 text-center">
             {t(`authentication.terms.youMustAcceptToc`)}

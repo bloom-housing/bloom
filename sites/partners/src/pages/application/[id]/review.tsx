@@ -12,7 +12,7 @@ import {
   AgTable,
   useAgTable,
   Modal,
-  Field
+  Field,
 } from "@bloom-housing/ui-components"
 import { Button, Icon, Tag } from "@bloom-housing/ui-seeds"
 import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
@@ -115,7 +115,11 @@ const Flag = () => {
         <StatusBar
           backButton={
             <Button
-              leadIcon={<Icon size="sm"><ChevronLeftIcon /></Icon>}
+              leadIcon={
+                <Icon size="sm">
+                  <ChevronLeftIcon />
+                </Icon>
+              }
               variant="text"
               size="sm"
               className="font-semibold no-underline"
