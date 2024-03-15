@@ -48,6 +48,7 @@ import { PermissionAction } from '../decorators/permission-action.decorator';
 import { ApplicationCsvExporterService } from '../services/application-csv-export.service';
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
 import { MostRecentApplicationQueryParams } from '../dtos/applications/most-recent-application-query-params.dto';
+import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
 
 @Controller('applications')
 @ApiTags('applications')
@@ -87,9 +88,10 @@ export class ApplicationController {
   })
   @ApiOkResponse({ type: Application })
   async mostRecentlyCreated(
+    @Request() req: ExpressRequest,
     @Query() queryParams: MostRecentApplicationQueryParams,
   ): Promise<Application> {
-    return await this.applicationService.mostRecentlyCreated(queryParams);
+    return await this.applicationService.mostRecentlyCreated(queryParams, req);
   }
 
   @Get(`csv`)
@@ -98,6 +100,7 @@ export class ApplicationController {
     operationId: 'listAsCsv',
   })
   @Header('Content-Type', 'text/csv')
+  @UseInterceptors(ExportLogInterceptor)
   async listAsCsv(
     @Request() req: ExpressRequest,
     @Res({ passthrough: true }) res: Response,
@@ -117,8 +120,11 @@ export class ApplicationController {
     operationId: 'retrieve',
   })
   @ApiOkResponse({ type: Application })
-  async retrieve(@Param('applicationId') applicationId: string) {
-    return this.applicationService.findOne(applicationId);
+  async retrieve(
+    @Request() req: ExpressRequest,
+    @Param('applicationId') applicationId: string,
+  ) {
+    return this.applicationService.findOne(applicationId, req);
   }
 
   @Post()

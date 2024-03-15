@@ -21,11 +21,11 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
   // https://github.com/react-hook-form/react-hook-form/issues/2887
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, watch } = useForm()
+  const { register, handleSubmit, errors, watch, getValues } = useForm()
   const email = useRef({})
   email.current = watch("email", "")
 
-  const onSubmit = async ({ email }) => {
+  const onSubmit = async (email) => {
     try {
       const listingId = router.query?.listingId as string
       await resendConfirmation(email, listingId)
@@ -37,6 +37,11 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
       setModalMessage(t(`authentication.createAccount.errors.${data.message}`))
     }
     window.scrollTo(0, 0)
+  }
+
+  const onFormSubmit = async () => {
+    const { email } = getValues()
+    await onSubmit(email)
   }
 
   useEffect(() => {
@@ -83,15 +88,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
         window.scrollTo(0, 0)
       }}
       actions={[
-        <Button
-          variant="primary"
-          onClick={() => {
-            document
-              .getElementById("resend-confirmation")
-              .dispatchEvent(new Event("submit", { cancelable: true }))
-          }}
-          size="sm"
-        >
+        <Button type="submit" variant="primary" onClick={() => onFormSubmit()} size="sm">
           {t("authentication.createAccount.resendTheEmail")}
         </Button>,
         <Button
@@ -115,7 +112,6 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
         )}
         <Form id="resend-confirmation" onSubmit={handleSubmit(onSubmit)}>
           <Field
-            caps={true}
             type="email"
             name="email"
             label={t("authentication.createAccount.resendAnEmailTo")}
@@ -124,6 +120,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
             error={errors.email}
             errorMessage={t("authentication.signIn.loginError")}
             register={register}
+            labelClassName={"text__caps-spaced"}
           />
         </Form>
         <p className="pt-4">{t("authentication.createAccount.resendEmailInfo")}</p>

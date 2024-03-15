@@ -74,6 +74,7 @@ describe('MultiselectQuestion Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/multiselectQuestions?`)
+      .set('Cookie', cookies)
       .expect(200);
 
     expect(res.body.length).toBeGreaterThanOrEqual(2);
@@ -102,6 +103,7 @@ describe('MultiselectQuestion Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/multiselectQuestions?${query}`)
+      .set('Cookie', cookies)
       .expect(200);
 
     expect(res.body.length).toBeGreaterThanOrEqual(2);
@@ -114,6 +116,7 @@ describe('MultiselectQuestion Controller Tests', () => {
     const id = randomUUID();
     const res = await request(app.getHttpServer())
       .get(`/multiselectQuestions/${id}`)
+      .set('Cookie', cookies)
       .expect(404);
     expect(res.body.message).toEqual(
       `multiselectQuestionId ${id} was requested but not found`,
@@ -127,6 +130,7 @@ describe('MultiselectQuestion Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/multiselectQuestions/${multiselectQuestionA.id}`)
+      .set('Cookie', cookies)
       .expect(200);
 
     expect(res.body.text).toEqual(multiselectQuestionA.text);

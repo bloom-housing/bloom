@@ -56,6 +56,11 @@ const ApplicationSummary = () => {
     }
   }, [listing, router])
 
+  useEffect(() => {
+    conductor.application.reachedReviewStep = true
+    conductor.sync()
+  }, [conductor])
+
   const onSubmit = () => {
     applicationsService
       .submissionValidation({

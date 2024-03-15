@@ -107,6 +107,7 @@ views.full = {
   listingsApplicationPickUpAddress: true,
   listingsApplicationDropOffAddress: true,
   listingsApplicationMailingAddress: true,
+  requestedChangesUser: true,
   units: {
     include: {
       unitAmiChartOverrides: true,
@@ -313,7 +314,11 @@ export class ListingService implements OnModuleInit {
       );
       await this.emailService.changesRequested(
         params.user,
-        { id: params.listingInfo.id, name: params.listingInfo.name },
+        {
+          id: params.listingInfo.id,
+          name: params.listingInfo.name,
+          juris: params.jurisId,
+        },
         userInfo.emails,
         this.configService.get('PARTNERS_PORTAL_URL'),
       );
@@ -887,6 +892,7 @@ export class ListingService implements OnModuleInit {
               },
             }
           : undefined,
+        requestedChangesUser: undefined,
       },
     });
 
@@ -1354,11 +1360,15 @@ export class ListingService implements OnModuleInit {
             dto.status === ListingsStatusEnum.closed
               ? new Date()
               : storedListing.closedAt,
-          requestedChangesUserId:
+          requestedChangesUser:
             dto.status === ListingsStatusEnum.changesRequested &&
             storedListing.status !== ListingsStatusEnum.changesRequested
-              ? requestingUser.id
-              : storedListing.requestedChangesUserId,
+              ? {
+                  connect: {
+                    id: requestingUser.id,
+                  },
+                }
+              : undefined,
           listingsResult: dto.listingsResult
             ? {
                 create: {

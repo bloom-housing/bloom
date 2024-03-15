@@ -35,6 +35,8 @@ import { EmailService } from './email.service';
 import { PermissionService } from './permission.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { buildWhereClause } from '../utilities/build-user-where';
+import { getPublicEmailURL } from '../utilities/get-public-email-url';
+import { UserRole } from '../dtos/users/user-role.dto';
 
 /*
   this is the service for users
@@ -197,7 +199,7 @@ export class UserService {
     // only update userRoles if something has changed
     if (dto.userRoles && storedUser.userRoles) {
       if (
-        requestingUser.userRoles.isAdmin &&
+        this.isUserRoleChangeAllowed(requestingUser, dto.userRoles) &&
         !(
           dto.userRoles.isAdmin === storedUser.userRoles.isAdmin &&
           dto.userRoles.isJurisdictionalAdmin ===
@@ -814,7 +816,7 @@ export class UserService {
     constructs the url to confirm a public site user
   */
   getPublicConfirmationUrl(appUrl: string, confirmationToken: string) {
-    return `${appUrl}?token=${confirmationToken}`;
+    return getPublicEmailURL(appUrl, confirmationToken);
   }
 
   /*
@@ -857,5 +859,21 @@ export class UserService {
 
   containsInvalidCharacters(value: string): boolean {
     return value.includes('.') || value.includes('http');
+  }
+
+  isUserRoleChangeAllowed(
+    requestingUser: User,
+    userRoleChange: UserRole,
+  ): boolean {
+    if (requestingUser?.userRoles?.isAdmin) {
+      return true;
+    } else if (requestingUser?.userRoles?.isJurisdictionalAdmin) {
+      if (userRoleChange?.isAdmin) {
+        return false;
+      }
+      return true;
+    }
+
+    return false;
   }
 }

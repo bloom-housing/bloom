@@ -2,12 +2,17 @@ import React, { useEffect, useState, useContext } from "react"
 import Head from "next/head"
 import { NextRouter, withRouter } from "next/router"
 import { t, SiteAlert, AlertBox } from "@bloom-housing/ui-components"
-import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
+import {
+  PageView,
+  pushGtmEvent,
+  AuthContext,
+  RequireLogin,
+  BloomCard,
+} from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
 import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
-import { AccountCard } from "@bloom-housing/shared-helpers/src/views/accounts/AccountCard"
 
 import styles from "./account.module.scss"
 
@@ -59,11 +64,12 @@ function Dashboard(props: DashboardProps) {
             <Grid spacing="lg" className={styles["account-card-container"]}>
               <Grid.Row columns={2}>
                 <Grid.Cell>
-                  <AccountCard
+                  <BloomCard
                     iconSymbol="application"
                     title={t("account.myApplications")}
                     subtitle={t("account.myApplicationsSubtitle")}
-                    thinDesktop
+                    variant={"block"}
+                    headingPriority={2}
                   >
                     <Card.Section>
                       <Button
@@ -75,22 +81,23 @@ function Dashboard(props: DashboardProps) {
                         {t("account.viewApplications")}
                       </Button>
                     </Card.Section>
-                  </AccountCard>
+                  </BloomCard>
                 </Grid.Cell>
                 <Grid.Cell>
-                  <AccountCard
+                  <BloomCard
                     iconSymbol="profile"
                     title={t("account.accountSettings")}
                     subtitle={t("account.accountSettingsSubtitle")}
                     id="account-dashboard-settings"
-                    thinDesktop
+                    variant={"block"}
+                    headingPriority={2}
                   >
                     <Card.Section>
                       <Button size="sm" href={"/account/edit"} variant="primary-outlined">
                         {t("account.accountSettingsUpdate")}
                       </Button>
                     </Card.Section>
-                  </AccountCard>
+                  </BloomCard>
                 </Grid.Cell>
               </Grid.Row>
             </Grid>

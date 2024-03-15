@@ -1815,6 +1815,28 @@ export class AuthService {
     })
   }
   /**
+   * LoginViaSingleUseCode
+   */
+  loginViaASingleUseCode(
+    params: {
+      /** requestBody */
+      body?: LoginViaSingleUseCode
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/auth/loginViaSingleUseCode"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Logout
    */
   logout(options: IRequestOptions = {}): Promise<SuccessDTO> {
@@ -1840,6 +1862,28 @@ export class AuthService {
   ): Promise<RequestMfaCodeResponse> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/auth/request-mfa-code"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Request single use code
+   */
+  requestSingleUseCode(
+    params: {
+      /** requestBody */
+      body?: RequestSingleUseCode
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/auth/request-single-use-code"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
@@ -2671,6 +2715,9 @@ export interface Jurisdiction {
   enablePartnerSettings?: boolean
 
   /**  */
+  enablePartnerDemographics?: boolean
+
+  /**  */
   enableGeocodingPreferences?: boolean
 
   /**  */
@@ -2678,6 +2725,9 @@ export interface Jurisdiction {
 
   /**  */
   enableUtilitiesIncluded: boolean
+
+  /**  */
+  allowSingleUseCodeLogin: boolean
 
   /**  */
   listingApprovalPermissions: EnumJurisdictionListingApprovalPermissions[]
@@ -3032,7 +3082,7 @@ export interface Listing {
   requestedChangesDate?: Date
 
   /**  */
-  requestedChangesUser?: User
+  requestedChangesUser?: IdDTO
 }
 
 export interface PaginationMeta {
@@ -4330,6 +4380,9 @@ export interface JurisdictionCreate {
   enablePartnerSettings?: boolean
 
   /**  */
+  enablePartnerDemographics?: boolean
+
+  /**  */
   enableGeocodingPreferences?: boolean
 
   /**  */
@@ -4337,6 +4390,9 @@ export interface JurisdictionCreate {
 
   /**  */
   enableUtilitiesIncluded: boolean
+
+  /**  */
+  allowSingleUseCodeLogin: boolean
 
   /**  */
   listingApprovalPermissions: EnumJurisdictionCreateListingApprovalPermissions[]
@@ -4371,6 +4427,9 @@ export interface JurisdictionUpdate {
   enablePartnerSettings?: boolean
 
   /**  */
+  enablePartnerDemographics?: boolean
+
+  /**  */
   enableGeocodingPreferences?: boolean
 
   /**  */
@@ -4378,6 +4437,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   enableUtilitiesIncluded: boolean
+
+  /**  */
+  allowSingleUseCodeLogin: boolean
 
   /**  */
   listingApprovalPermissions: EnumJurisdictionUpdateListingApprovalPermissions[]
@@ -5018,6 +5080,14 @@ export interface Login {
   mfaType?: MfaType
 }
 
+export interface LoginViaSingleUseCode {
+  /**  */
+  email: string
+
+  /**  */
+  singleUseCode: string
+}
+
 export interface RequestMfaCode {
   /**  */
   email: string
@@ -5041,6 +5111,11 @@ export interface RequestMfaCodeResponse {
 
   /**  */
   phoneNumberVerified?: boolean
+}
+
+export interface RequestSingleUseCode {
+  /**  */
+  email: string
 }
 
 export interface UpdatePassword {
@@ -5178,6 +5253,7 @@ export enum EnumJurisdictionListingApprovalPermissions {
   "admin" = "admin",
   "jurisdictionAdmin" = "jurisdictionAdmin",
 }
+
 export enum AfsView {
   "pending" = "pending",
   "pendingNameAndDoB" = "pendingNameAndDoB",

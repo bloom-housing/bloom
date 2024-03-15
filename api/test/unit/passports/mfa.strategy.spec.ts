@@ -88,6 +88,7 @@ describe('Testing mfa strategy', () => {
       lastLoginAt: new Date(),
       failedLoginAttemptsCount: 0,
       confirmedAt: null,
+      passwordHash: await passwordToHash('abcdef'),
     });
 
     const request = {
@@ -127,6 +128,7 @@ describe('Testing mfa strategy', () => {
       passwordValidForDays: 0,
       passwordUpdatedAt: new Date(0),
       userRoles: { isAdmin: true },
+      passwordHash: await passwordToHash('abcdef'),
     });
 
     const request = {
@@ -247,8 +249,8 @@ describe('Testing mfa strategy', () => {
 
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({
       data: {
-        mfaCode: null,
-        mfaCodeUpdatedAt: null,
+        singleUseCode: null,
+        singleUseCodeUpdatedAt: null,
         phoneNumberVerified: null,
         lastLoginAt: expect.anything(),
         failedLoginAttemptsCount: 0,
@@ -428,8 +430,8 @@ describe('Testing mfa strategy', () => {
       passwordHash: await passwordToHash('abcdef'),
       mfaEnabled: true,
       phoneNumberVerified: false,
-      mfaCode: 'zyxwv',
-      mfaCodeUpdatedAt: new Date(),
+      singleUseCode: 'zyxwv',
+      singleUseCodeUpdatedAt: new Date(),
     });
 
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
@@ -460,8 +462,8 @@ describe('Testing mfa strategy', () => {
 
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({
       data: {
-        mfaCode: 'zyxwv',
-        mfaCodeUpdatedAt: expect.anything(),
+        singleUseCode: 'zyxwv',
+        singleUseCodeUpdatedAt: expect.anything(),
         phoneNumberVerified: false,
         lastLoginAt: expect.anything(),
         failedLoginAttemptsCount: 1,
@@ -485,8 +487,8 @@ describe('Testing mfa strategy', () => {
       passwordHash: await passwordToHash('abcdef'),
       mfaEnabled: true,
       phoneNumberVerified: false,
-      mfaCode: 'zyxwv',
-      mfaCodeUpdatedAt: new Date(0),
+      singleUseCode: 'zyxwv',
+      singleUseCodeUpdatedAt: new Date(0),
     });
 
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
@@ -517,8 +519,8 @@ describe('Testing mfa strategy', () => {
 
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({
       data: {
-        mfaCode: 'zyxwv',
-        mfaCodeUpdatedAt: expect.anything(),
+        singleUseCode: 'zyxwv',
+        singleUseCodeUpdatedAt: expect.anything(),
         phoneNumberVerified: false,
         lastLoginAt: expect.anything(),
         failedLoginAttemptsCount: 1,
@@ -542,8 +544,8 @@ describe('Testing mfa strategy', () => {
       passwordHash: await passwordToHash('abcdef'),
       mfaEnabled: true,
       phoneNumberVerified: false,
-      mfaCode: 'zyxwv',
-      mfaCodeUpdatedAt: new Date(),
+      singleUseCode: 'zyxwv',
+      singleUseCodeUpdatedAt: new Date(),
     });
 
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
@@ -572,8 +574,8 @@ describe('Testing mfa strategy', () => {
 
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({
       data: {
-        mfaCode: null,
-        mfaCodeUpdatedAt: expect.anything(),
+        singleUseCode: null,
+        singleUseCodeUpdatedAt: expect.anything(),
         phoneNumberVerified: true,
         lastLoginAt: expect.anything(),
         failedLoginAttemptsCount: 0,
@@ -597,8 +599,8 @@ describe('Testing mfa strategy', () => {
       passwordHash: await passwordToHash('abcdef'),
       mfaEnabled: true,
       phoneNumberVerified: false,
-      mfaCode: 'zyxwv',
-      mfaCodeUpdatedAt: new Date(),
+      singleUseCode: 'zyxwv',
+      singleUseCodeUpdatedAt: new Date(),
     });
 
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
@@ -627,8 +629,8 @@ describe('Testing mfa strategy', () => {
 
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({
       data: {
-        mfaCode: null,
-        mfaCodeUpdatedAt: expect.anything(),
+        singleUseCode: null,
+        singleUseCodeUpdatedAt: expect.anything(),
         phoneNumberVerified: false,
         lastLoginAt: expect.anything(),
         failedLoginAttemptsCount: 0,

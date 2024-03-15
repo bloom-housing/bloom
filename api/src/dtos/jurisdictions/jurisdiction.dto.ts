@@ -81,6 +81,11 @@ export class Jurisdiction extends AbstractDTO {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
+  enablePartnerDemographics?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
   enableGeocodingPreferences?: boolean;
 
   @Expose()
@@ -94,6 +99,12 @@ export class Jurisdiction extends AbstractDTO {
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   enableUtilitiesIncluded: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
+  allowSingleUseCodeLogin: boolean;
 
   @Expose()
   @IsArray({ groups: [ValidationsGroupsEnum.default] })

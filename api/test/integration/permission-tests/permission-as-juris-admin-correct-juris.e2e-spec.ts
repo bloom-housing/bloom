@@ -205,8 +205,13 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
     });
 
     it('should succeed for list endpoint', async () => {
+      const listing1 = await listingFactory(jurisId, prisma);
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+
       await request(app.getHttpServer())
-        .get(`/applications?`)
+        .get(`/applications?listingId=${listing1Created.id}`)
         .set('Cookie', cookies)
         .expect(200);
     });
@@ -217,8 +222,16 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         UnitTypeEnum.oneBdrm,
       );
 
+      const listing1 = await listingFactory(jurisId, prisma);
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+
       const applicationA = await prisma.applications.create({
-        data: await applicationFactory({ unitTypeId: unitTypeA.id }),
+        data: await applicationFactory({
+          unitTypeId: unitTypeA.id,
+          listingId: listing1Created.id,
+        }),
         include: {
           applicant: true,
         },
@@ -401,7 +414,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         .expect(201);
     });
 
-    it('should succeed for csv endpoint', async () => {
+    it('should succeed for csv endpoint & create an activity log entry', async () => {
       const application = await applicationFactory();
       const listing1 = await listingFactory(jurisId, prisma, {
         applications: [application],
@@ -413,6 +426,15 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         .get(`/applications/csv?listingId=${listing1Created.id}`)
         .set('Cookie', cookies)
         .expect(200);
+      const activityLogResult = await prisma.activityLog.findFirst({
+        where: {
+          module: 'application',
+          action: 'export',
+          recordId: listing1Created.id,
+        },
+      });
+
+      expect(activityLogResult).not.toBeNull();
     });
   });
 
@@ -933,11 +955,21 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         .expect(403);
     });
 
-    it('should succeed for csv export endpoint', async () => {
+    it('should succeed for csv export endpoint & create an activity log entry', async () => {
       await request(app.getHttpServer())
         .get('/user/csv')
         .set('Cookie', cookies)
         .expect(200);
+
+      const activityLogResult = await prisma.activityLog.findFirst({
+        where: {
+          module: 'user',
+          action: 'export',
+          recordId: null,
+        },
+      });
+
+      expect(activityLogResult).not.toBeNull();
     });
   });
 
@@ -989,7 +1021,9 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
     });
 
     it('should succeed for delete endpoint & create an activity log entry', async () => {
-      const listingData = await listingFactory(jurisId, prisma);
+      const listingData = await listingFactory(jurisId, prisma, {
+        noImage: true,
+      });
       const listing = await prisma.listings.create({
         data: listingData,
       });
@@ -1065,11 +1099,20 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         .expect(200);
     });
 
-    it('should succeed for csv endpoint', async () => {
+    it('should succeed for csv endpoint & create an activity log entry', async () => {
       await request(app.getHttpServer())
         .get(`/listings/csv`)
         .set('Cookie', cookies)
         .expect(200);
+      const activityLogResult = await prisma.activityLog.findFirst({
+        where: {
+          module: 'listing',
+          action: 'export',
+          recordId: null,
+        },
+      });
+
+      expect(activityLogResult).not.toBeNull();
     });
   });
 

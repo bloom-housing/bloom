@@ -124,6 +124,7 @@ describe('Jurisdiction Controller Tests', () => {
       enablePartnerSettings: true,
       enableAccessibilityFeatures: true,
       enableUtilitiesIncluded: true,
+      allowSingleUseCodeLogin: true,
       listingApprovalPermissions: [],
     };
     const res = await request(app.getHttpServer())
@@ -149,6 +150,7 @@ describe('Jurisdiction Controller Tests', () => {
       enablePartnerSettings: true,
       enableAccessibilityFeatures: true,
       enableUtilitiesIncluded: true,
+      allowSingleUseCodeLogin: true,
       listingApprovalPermissions: [],
     };
     const res = await request(app.getHttpServer())
@@ -178,6 +180,7 @@ describe('Jurisdiction Controller Tests', () => {
       enablePartnerSettings: true,
       enableAccessibilityFeatures: true,
       enableUtilitiesIncluded: true,
+      allowSingleUseCodeLogin: true,
       listingApprovalPermissions: [],
     };
 

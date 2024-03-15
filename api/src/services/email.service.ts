@@ -18,6 +18,7 @@ import { Listing } from '../dtos/listings/listing.dto';
 import { SendGridService } from './sendgrid.service';
 import { ApplicationCreate } from '../dtos/applications/application-create.dto';
 import { User } from '../dtos/users/user.dto';
+import { getPublicEmailURL } from '../utilities/get-public-email-url';
 dayjs.extend(utc);
 dayjs.extend(tz);
 dayjs.extend(advanced);
@@ -26,6 +27,12 @@ type EmailAttachmentData = {
   data: string;
   name: string;
   type: string;
+};
+
+type listingInfo = {
+  id: string;
+  name: string;
+  juris: string;
 };
 
 @Injectable()
@@ -188,6 +195,7 @@ export class EmailService {
     confirmationUrl: string,
   ) {
     const jurisdiction = await this.getJurisdiction(null, jurisdictionName);
+    const baseUrl = appUrl ? new URL(appUrl).origin : undefined;
     await this.loadTranslations(jurisdiction, user.language);
     await this.send(
       user.email,
@@ -196,7 +204,7 @@ export class EmailService {
       this.template('register-email')({
         user: user,
         confirmationUrl: confirmationUrl,
-        appOptions: { appUrl: appUrl },
+        appOptions: { appUrl: baseUrl },
       }),
     );
   }
@@ -281,7 +289,8 @@ export class EmailService {
     const jurisdiction = await this.getJurisdiction(jurisdictionIds);
     void (await this.loadTranslations(jurisdiction, user.language));
     const compiledTemplate = this.template('forgot-password');
-    const resetUrl = `${appUrl}/reset-password?token=${resetToken}`;
+    const resetUrl = getPublicEmailURL(appUrl, resetToken, '/reset-password');
+    const baseUrl = appUrl ? new URL(appUrl).origin : undefined;
     const emailFromAddress = await this.getEmailToSendFrom(
       jurisdictionIds,
       jurisdiction,
@@ -293,13 +302,13 @@ export class EmailService {
       this.polyglot.t('forgotPassword.subject'),
       compiledTemplate({
         resetUrl: resetUrl,
-        resetOptions: { appUrl: appUrl },
+        resetOptions: { appUrl: baseUrl },
         user: user,
       }),
     );
   }
 
-  public async sendMfaCode(user: User, mfaCode: string) {
+  public async sendMfaCode(user: User, singleUseCode: string) {
     const jurisdiction = await this.getJurisdiction(user.jurisdictions);
     void (await this.loadTranslations(jurisdiction, user.language));
     const emailFromAddress = await this.getEmailToSendFrom(
@@ -312,7 +321,30 @@ export class EmailService {
       'Partners Portal account access token',
       this.template('mfa-code')({
         user: user,
-        mfaCodeOptions: { mfaCode },
+        mfaCodeOptions: { singleUseCode },
+      }),
+    );
+  }
+
+  public async sendSingleUseCode(user: User, singleUseCode: string) {
+    const jurisdiction = await this.getJurisdiction(user.jurisdictions);
+    void (await this.loadTranslations(jurisdiction, user.language));
+    const emailFromAddress = await this.getEmailToSendFrom(
+      user.jurisdictions,
+      jurisdiction,
+    );
+    await this.send(
+      user.email,
+      emailFromAddress,
+      user.confirmedAt
+        ? `Code for your ${jurisdiction.name} sign-in`
+        : `${jurisdiction.name} verification code`,
+      this.template('single-use-code')({
+        user: user,
+        singleUseCodeOptions: {
+          singleUseCode,
+          jurisdictionName: jurisdiction.name,
+        },
       }),
     );
   }
@@ -406,13 +438,15 @@ export class EmailService {
   }
 
   public async changesRequested(
-    jurisdictionId: IdDTO,
-    listingInfo: IdDTO,
+    user: User,
+    listingInfo: listingInfo,
     emails: string[],
     appUrl: string,
   ) {
     try {
-      const jurisdiction = await this.getJurisdiction([jurisdictionId]);
+      const jurisdiction = listingInfo.juris
+        ? await this.getJurisdiction([{ id: listingInfo.juris }])
+        : user.jurisdictions[0];
       void (await this.loadTranslations(jurisdiction));
       await this.send(
         emails,
