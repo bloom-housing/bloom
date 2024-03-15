@@ -19,13 +19,7 @@ describe("<StatusBar>", () => {
   it("can render with a back button", () => {
     const onClickSpy = jest.fn()
     const { getByText } = render(
-      <StatusBar
-        backButton={
-          <Button onClick={onClickSpy}>
-            Back
-          </Button>
-        }
-      >
+      <StatusBar backButton={<Button onClick={onClickSpy}>Back</Button>}>
         <Tag variant={"success"}>Submitted</Tag>
       </StatusBar>
     )
