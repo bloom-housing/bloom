@@ -1,6 +1,8 @@
 import React from "react"
-import { faClone, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
-import { Icon, IconFillColors, UniversalIconType } from "@bloom-housing/ui-components"
+import { Icon } from "@bloom-housing/ui-seeds"
+import DocumentDuplicateIcon from "@heroicons/react/24/solid/DocumentDuplicateIcon"
+import PencilSquareIcon from "@heroicons/react/24/solid/PencilSquareIcon"
+import TrashIcon from "@heroicons/react/24/solid/TrashIcon"
 
 type IconContentProps = {
   onCopy: () => void
@@ -13,34 +15,39 @@ type IconContentProps = {
 
 const ManageIconSection = (props: IconContentProps) => {
   return (
-    <div className={"flex justify-end"}>
-      <div className={"w-max"}>
-        <button onClick={props.onEdit} aria-label={"Edit"} data-testid={props.editTestId}>
-          <Icon
-            symbol={faPenToSquare as UniversalIconType}
-            size={"medium"}
-            fill={IconFillColors.primary}
-            className={"mr-5"}
-          />
+    <div className={"flex justify-end gap-5"}>
+      <button
+        className="text-primary"
+        onClick={props.onEdit}
+        aria-label={"Edit"}
+        data-testid={props.editTestId}
+      >
+        <Icon size="md">
+          <PencilSquareIcon />
+        </Icon>
+      </button>
+      <button
+        className="text-primary"
+        onClick={props.onCopy}
+        aria-label={"Copy"}
+        data-testid={props.copyTestId}
+      >
+        <Icon size="md">
+          <DocumentDuplicateIcon />
+        </Icon>
+      </button>
+      {props.onDelete && (
+        <button
+          className="text-alert"
+          onClick={props.onDelete}
+          aria-label={"Delete"}
+          data-testid={props.deleteTestId}
+        >
+          <Icon size="md">
+            <TrashIcon />
+          </Icon>
         </button>
-        <button onClick={props.onCopy} aria-label={"Copy"} data-testid={props.copyTestId}>
-          <Icon
-            symbol={faClone as UniversalIconType}
-            size={"medium"}
-            fill={IconFillColors.primary}
-            className={`${props.onDelete && "mr-5"}`}
-          />
-        </button>
-        {props.onDelete && (
-          <button onClick={props.onDelete} aria-label={"Delete"} data-testid={props.deleteTestId}>
-            <Icon
-              symbol={faTrashCan as UniversalIconType}
-              size={"medium"}
-              fill={IconFillColors.alert}
-            />
-          </button>
-        )}
-      </div>
+      )}
     </div>
   )
 }

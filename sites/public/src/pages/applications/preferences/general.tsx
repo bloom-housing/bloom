@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import { Button } from "@bloom-housing/ui-seeds"
-import { FormCard, Heading, t, Form, ProgressNav } from "@bloom-housing/ui-components"
+import { t, Form } from "@bloom-housing/ui-components"
 import {
   OnClientSide,
   PageView,
@@ -10,10 +9,10 @@ import {
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
-import FormBackLink from "../../../components/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import ApplicationFormLayout from "../../../layouts/application-form"
 
 const ApplicationPreferencesGeneral = () => {
   const { profile } = useContext(AuthContext)
@@ -44,61 +43,24 @@ const ApplicationPreferencesGeneral = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={t("application.preferences.general.title")}
+          subheading={t("application.preferences.general.preamble")}
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: OnClientSide(),
+          }}
+          backLink={{
+            url: conductor.determinePreviousUrl(),
+          }}
+          conductor={conductor}
+          hideBorder={true}
         />
-      </FormCard>
-      <FormCard>
-        <FormBackLink
-          url={conductor.determinePreviousUrl()}
-          onClick={() => conductor.setNavigatedBack(true)}
-        />
-
-        <div className="form-card__lead">
-          <h2 className="form-card__title is-borderless">
-            {t("application.preferences.general.title")}
-          </h2>
-
-          <p className="field-note mt-5">{t("application.preferences.general.preamble")}</p>
-        </div>
-
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-card__pager">
-            <div className="form-card__pager-row primary">
-              <Button
-                type="submit"
-                variant="primary"
-                onClick={() => {
-                  conductor.returnToReview = false
-                  conductor.setNavigatedBack(false)
-                }}
-                id={"app-next-step-button"}
-              >
-                {t("t.next")}
-              </Button>
-            </div>
-
-            {!hideReviewButton && conductor.canJumpForwardToReview() && (
-              <div className="form-card__pager-row">
-                <Button
-                  type="submit"
-                  variant="text"
-                  className="mb-4"
-                  onClick={() => {
-                    conductor.returnToReview = true
-                  }}
-                >
-                  {t("application.form.general.saveAndReturn")}
-                </Button>
-              </div>
-            )}
-          </div>
-        </Form>
-      </FormCard>
+      </Form>
     </FormsLayout>
   )
 }

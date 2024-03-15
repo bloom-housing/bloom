@@ -10,17 +10,15 @@ import {
   SiteAlert,
   AlertTypes,
   AlertBox,
-  Icon,
-  UniversalIconType,
 } from "@bloom-housing/ui-components"
 import { User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { Button } from "@bloom-housing/ui-seeds"
+import { Button, Icon } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { faFileExport } from "@fortawesome/free-solid-svg-icons"
 import Layout from "../../layouts"
 import { useUserList, useListingsData, useUsersExport } from "../../lib/hooks"
 import { FormUserManage } from "../../components/users/FormUserManage"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
+import DocumentArrowDownIcon from "@heroicons/react/24/solid/DocumentArrowDownIcon"
 
 type UserDrawerValue = {
   type: "add" | "edit"
@@ -192,7 +190,9 @@ const Users = () => {
                     variant="primary-outlined"
                     leadIcon={
                       !csvExportLoading ? (
-                        <Icon symbol={faFileExport as UniversalIconType} size="base" />
+                        <Icon>
+                          <DocumentArrowDownIcon />
+                        </Icon>
                       ) : null
                     }
                     onClick={() => onExport()}

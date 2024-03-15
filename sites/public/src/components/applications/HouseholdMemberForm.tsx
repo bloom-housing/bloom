@@ -1,6 +1,7 @@
 import React from "react"
-import { Icon, IconFillColors, t } from "@bloom-housing/ui-components"
-import { Button, FieldValue } from "@bloom-housing/ui-seeds"
+import { t } from "@bloom-housing/ui-components"
+import { Button, FieldValue, Icon } from "@bloom-housing/ui-seeds"
+import { CustomIconMap } from "@bloom-housing/shared-helpers"
 
 export interface HouseholdMemberFormProps {
   editMember?: (memberId: number | undefined) => void
@@ -34,12 +35,9 @@ const HouseholdMemberForm = (props: HouseholdMemberFormProps) => {
             {props.strings?.edit ?? t("t.edit")}
           </Button>
         ) : (
-          <Icon
-            className="ml-2 pt-4 block"
-            size="medium"
-            symbol="lock"
-            fill={IconFillColors.primary}
-          />
+          <Icon className="ml-2 mt-4 text-primary" size="md">
+            {CustomIconMap.lockClosed}
+          </Icon>
         )}
       </div>
     </div>

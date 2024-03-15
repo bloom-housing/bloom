@@ -6,7 +6,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Card, Grid, Tag, Icon } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons"
+import InformationCircleIcon from "@heroicons/react/24/solid/InformationCircleIcon"
 import LinkComponent from "../../../../components/core/LinkComponent"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
@@ -81,7 +81,10 @@ const SelectAndOrder = ({
 
   const additionalFieldsTag = () => (
     <Tag variant="primary">
-      <Icon icon={faInfoCircle} /> {t("listings.providesAdditionalFields")}
+      <Icon>
+        <InformationCircleIcon />
+      </Icon>{" "}
+      {t("listings.providesAdditionalFields")}
     </Tag>
   )
 
