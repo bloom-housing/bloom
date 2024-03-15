@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import {
-  DOBField,
-  Field,
-  Form,
-  t,
-  emailRegex,
-} from "@bloom-housing/ui-components"
+import { DOBField, Field, Form, t, emailRegex } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { Alert, Icon } from "@bloom-housing/ui-seeds"
-import { OnClientSide, PageView, pushGtmEvent, AuthContext, CustomIconMap } from "@bloom-housing/shared-helpers"
+import {
+  OnClientSide,
+  PageView,
+  pushGtmEvent,
+  AuthContext,
+  CustomIconMap,
+} from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
@@ -52,7 +52,9 @@ const ApplicationName = () => {
   const LockIcon = () => {
     return (
       autofilled && (
-        <Icon className="ml-2 text-primary" size="md">{CustomIconMap.lockClosed}</Icon>
+        <Icon className="ml-2 text-primary" size="md">
+          {CustomIconMap.lockClosed}
+        </Icon>
       )
     )
   }
