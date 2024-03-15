@@ -409,6 +409,7 @@ describe('Testing application flagged set service', () => {
       orderBy: {
         id: OrderByEnum.DESC,
       },
+      skip: 0,
     });
 
     expect(prisma.applicationFlaggedSet.count).toHaveBeenNthCalledWith(1, {
