@@ -27,13 +27,14 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { OptionalAuthGuard } from '../guards/optional.guard';
 import { PermissionGuard } from '../guards/permission.guard';
+import { ThrottleGuard } from '../guards/throttler.guard';
 
 @Controller('jurisdictions')
 @ApiTags('jurisdictions')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 @ApiExtraModels(JurisdictionCreate, JurisdictionUpdate, IdDTO)
 @PermissionTypeDecorator('jurisdiction')
-@UseGuards(OptionalAuthGuard, PermissionGuard)
+@UseGuards(ThrottleGuard, OptionalAuthGuard, PermissionGuard)
 export class JurisdictionController {
   constructor(private readonly jurisdictionService: JurisdictionService) {}
 

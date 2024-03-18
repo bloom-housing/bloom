@@ -49,8 +49,10 @@ import { PermissionTypeDecorator } from '../decorators/permission-type.decorator
 import { UserFilterParams } from '../dtos/users/user-filter-params.dto';
 import { UserCsvExporterService } from '../services/user-csv-export.service';
 import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
+import { ThrottleGuard } from '../guards/throttler.guard';
 
 @Controller('user')
+@UseGuards(ThrottleGuard)
 @ApiTags('user')
 @PermissionTypeDecorator('user')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
