@@ -9,4 +9,7 @@
     text-transform: none;
     color: var(--seeds-input-text-label-color);
   }
+  .label.text__caps-spaced {
+    margin-bottom: var(--seeds-s1);
+  }
 }
