@@ -105,6 +105,7 @@ describe("Listings approval feature", () => {
     cy.getByID("leasingAgentEmail").type(listing["leasingAgentEmail"])
     cy.getByID("leasingAgentPhone").type(listing["leasingAgentPhone"])
     cy.getByID("digitalApplicationChoiceYes").check()
+    cy.getByID("commonDigitalApplicationChoiceYes").check()
     cy.getByID("paperApplicationNo").check()
 
     cy.getByID("submitButton").contains("Submit").click()

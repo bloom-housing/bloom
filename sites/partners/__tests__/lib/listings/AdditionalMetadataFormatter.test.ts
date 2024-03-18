@@ -1,6 +1,6 @@
 import { LatitudeLongitude } from "@bloom-housing/ui-components"
 import AdditionalMetadataFormatter from "../../../src/lib/listings/AdditionalMetadataFormatter"
-import { FormListing, FormMetadata } from "../../../src/lib/listings/formTypes"
+import { FormMetadata } from "../../../src/lib/listings/formTypes"
 
 const latLong: LatitudeLongitude = {
   latitude: 37.44522,

@@ -47,6 +47,8 @@ export interface ApplicationsProps {
   listingStatus?: string
   /** Whether or not to block submission of test application */
   preview?: boolean
+  /** Whether or not to show apply online helper text */
+  isExternal?: boolean
   strings?: {
     applicationsOpenInFuture?: string
     applyOnline?: string
@@ -112,7 +114,8 @@ const GetApplication = (props: ApplicationsProps) => {
             </Button>
           )}
           <div className="text-gray-800 text-sm">
-            {props.strings?.applyOnlineMessage ?? t("listings.apply.applyOnlineMessage")}
+            {props.isExternal &&
+              (props.strings?.applyOnlineMessage ?? t("listings.apply.applyOnlineMessage"))}
           </div>
         </div>
       )}

@@ -202,6 +202,7 @@ describe("Listing Management Tests", () => {
     cy.getByID("leasingAgentTitle").type(listing["leasingAgentTitle"])
     cy.getByID("leasingAgentOfficeHours").type(listing["leasingAgentOfficeHours"])
     cy.getByID("digitalApplicationChoiceYes").check()
+    cy.getByID("commonDigitalApplicationChoiceNo").check()
     cy.getByID("customOnlineApplicationUrl").type(listing["url"])
     cy.getByID("paperApplicationNo").check()
 
