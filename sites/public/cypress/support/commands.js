@@ -5,6 +5,7 @@ import {
   applicationStepOrder,
   contactPreferencesCheckboxesOrder,
   alternateContactTypeRadioOrder,
+  howDidYouHearCheckboxesOrder,
   raceCheckboxesOrder,
 } from "./../mockData/applicationData"
 
@@ -442,6 +443,11 @@ Cypress.Commands.add("step17Demographics", (application) => {
   if (application.demographics.ethnicity) {
     cy.getByTestId("app-demographics-ethnicity").select(application.demographics.ethnicity)
   }
+
+  application.demographics.howDidYouHear.forEach((howDidYouHear) => {
+    const howDidYouHearIndex = howDidYouHearCheckboxesOrder.indexOf(howDidYouHear)
+    cy.getByTestId("app-demographics-how-did-you-hear").eq(howDidYouHearIndex).check()
+  })
 
   cy.goNext()
   cy.checkErrorAlert("not.exist")
