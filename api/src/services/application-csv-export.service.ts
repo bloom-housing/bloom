@@ -15,6 +15,8 @@ import { User } from '../dtos/users/user.dto';
 import { ListingService } from './listing.service';
 import { PermissionService } from './permission.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import { formatLocalDate } from '../utilities/format-local-date';
+
 import {
   CsvExporterServiceInterface,
   CsvHeader,
@@ -41,12 +43,15 @@ export const typeMap = {
 export class ApplicationCsvExporterService
   implements CsvExporterServiceInterface
 {
+  readonly dateFormat: string = 'MM-DD-YYYY hh:mm:ssA z';
+  timeZone = 'America/Los_Angeles';
   constructor(
     private prisma: PrismaService,
     private multiselectQuestionService: MultiselectQuestionService,
     private listingService: ListingService,
     private permissionService: PermissionService,
   ) {}
+
   /**
    *
    * @param queryParams
@@ -60,12 +65,18 @@ export class ApplicationCsvExporterService
   ): Promise<StreamableFile> {
     const user = mapTo(User, req['user']);
     await this.authorizeCSVExport(user, queryParams.listingId);
+
     const filename = join(
       process.cwd(),
       `src/temp/listing-${queryParams.listingId}-applications-${
         user.id
       }-${new Date().getTime()}.csv`,
     );
+
+    if (queryParams.timeZone) {
+      this.timeZone = queryParams.timeZone;
+    }
+
     await this.createCsv(filename, queryParams);
     const file = createReadStream(filename);
     return new StreamableFile(file);
@@ -317,6 +328,8 @@ export class ApplicationCsvExporterService
       {
         path: 'submissionDate',
         label: 'Application Submission Date',
+        format: (val: string): string =>
+          formatLocalDate(val, this.dateFormat, this.timeZone),
       },
       {
         path: 'applicant.firstName',

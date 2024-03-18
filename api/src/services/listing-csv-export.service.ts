@@ -319,7 +319,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       },
       {
         path: 'createdAt',
-        label: 'Crated At Date',
+        label: 'Created At Date',
         format: (val: string): string =>
           formatLocalDate(val, this.dateFormat, this.timeZone),
       },

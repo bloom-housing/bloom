@@ -1,14 +1,9 @@
 import { Expose, Transform } from 'class-transformer';
-import { ApiProperty, ApiPropertyOptional, OmitType } from '@nestjs/swagger';
-import { IsBoolean, IsOptional, IsUUID } from 'class-validator';
-import { AbstractDTO } from '../shared/abstract.dto';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsBoolean, IsOptional, IsString, IsUUID } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
-export class ApplicationCsvQueryParams extends OmitType(AbstractDTO, [
-  'id',
-  'createdAt',
-  'updatedAt',
-]) {
+export class ApplicationCsvQueryParams {
   @Expose()
   @ApiProperty({
     type: String,
@@ -32,4 +27,14 @@ export class ApplicationCsvQueryParams extends OmitType(AbstractDTO, [
     { toClassOnly: true },
   )
   includeDemographics?: boolean;
+
+  @Expose()
+  @ApiPropertyOptional({
+    type: String,
+    example: 'America/Los_Angeles',
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  timeZone?: string;
 }

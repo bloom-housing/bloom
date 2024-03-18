@@ -1394,6 +1394,8 @@ export class ApplicationsService {
       listingId: string
       /**  */
       includeDemographics?: boolean
+      /**  */
+      timeZone?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
@@ -1404,6 +1406,7 @@ export class ApplicationsService {
       configs.params = {
         listingId: params["listingId"],
         includeDemographics: params["includeDemographics"],
+        timeZone: params["timeZone"],
       }
 
       /** 适配ios13，get请求不允许带body */
