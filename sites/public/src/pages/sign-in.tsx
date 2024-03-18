@@ -83,7 +83,16 @@ const SignIn = () => {
       if (useCode) {
         clearErrors()
         await requestSingleUseCode(email)
-        await router.push({ pathname: "/verify", query: { email, flowType: "login" } })
+        const redirectUrl = router.query?.redirectUrl as string
+        const listingId = router.query?.listingId as string
+        let queryParams: { [key: string]: string } = { email, flowType: "login" }
+        if (redirectUrl) queryParams = { ...queryParams, redirectUrl }
+        if (listingId) queryParams = { ...queryParams, listingId }
+
+        await router.push({
+          pathname: "/verify",
+          query: queryParams,
+        })
       } else {
         const user = await login(email, password)
         setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
