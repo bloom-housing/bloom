@@ -600,6 +600,7 @@
   "authentication.signIn.yourAccountIsNotConfirmed": "Your account is not confirmed",
   "authentication.signOut.success": "You have successfully logged out of your account.",
   "authentication.terms.acceptToc": "I accept the Terms of Service",
+  "authentication.terms.acceptExtended": "I have reviewed, understand and agree to the Terms of Use.",
   "authentication.terms.reviewToc": "Review Terms of Service",
   "authentication.terms.termsOfService": "View the Terms of Service here",
   "authentication.terms.youMustAcceptToc": "To continue you must accept the Terms of Service",
