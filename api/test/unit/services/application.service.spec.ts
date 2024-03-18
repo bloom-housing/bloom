@@ -204,7 +204,7 @@ export const mockCreateApplicationData = (
     sendMailToMailingAddress: true,
     householdExpectingChanges: false,
     householdStudent: false,
-    incomeVouchers: false,
+    incomeVouchers: [],
     income: '36000',
     incomePeriod: IncomePeriodEnum.perYear,
     language: LanguagesEnum.en,
@@ -277,6 +277,9 @@ describe('Testing application service', () => {
     } as unknown as User;
     const date = new Date();
     const mockedValue = mockApplicationSet(3, date);
+    prisma.jurisdictions.findFirst = jest
+      .fn()
+      .mockResolvedValue({ name: 'jurisdiction', id: 'jurisdictionID' });
     prisma.applications.findMany = jest.fn().mockResolvedValue(mockedValue);
     prisma.applications.count = jest.fn().mockResolvedValue(3);
     prisma.applications.findFirst = jest.fn().mockResolvedValue({
@@ -355,11 +358,24 @@ describe('Testing application service', () => {
   });
 
   it('should get an application when findOne() is called and Id exists', async () => {
+    const requestingUser = {
+      firstName: 'requesting fName',
+      lastName: 'requesting lName',
+      email: 'requestingUser@email.com',
+      jurisdictions: [{ id: 'juris id' }],
+    } as unknown as User;
     const date = new Date();
     const mockedValue = mockApplication(3, date);
+    prisma.jurisdictions.findFirst = jest
+      .fn()
+      .mockResolvedValue({ name: 'jurisdiction', id: 'jurisdictionID' });
     prisma.applications.findUnique = jest.fn().mockResolvedValue(mockedValue);
 
-    expect(await service.findOne('example Id')).toEqual(mockedValue);
+    expect(
+      await service.findOne('example Id', {
+        user: requestingUser,
+      } as unknown as ExpressRequest),
+    ).toEqual(mockedValue);
 
     expect(prisma.applications.findUnique).toHaveBeenCalledWith({
       where: {
@@ -395,10 +411,19 @@ describe('Testing application service', () => {
   });
 
   it("should throw error when findOne() is called and Id doens't exists", async () => {
+    const requestingUser = {
+      firstName: 'requesting fName',
+      lastName: 'requesting lName',
+      email: 'requestingUser@email.com',
+      jurisdictions: [{ id: 'juris id' }],
+    } as unknown as User;
     prisma.applications.findUnique = jest.fn().mockResolvedValue(null);
 
     await expect(
-      async () => await service.findOne('example Id'),
+      async () =>
+        await service.findOne('example Id', {
+          user: requestingUser,
+        } as unknown as ExpressRequest),
     ).rejects.toThrowError(
       'applicationId example Id was requested but not found',
     );
@@ -842,7 +867,7 @@ describe('Testing application service', () => {
         sendMailToMailingAddress: true,
         householdExpectingChanges: false,
         householdStudent: false,
-        incomeVouchers: false,
+        incomeVouchers: [],
         income: '36000',
         incomePeriod: IncomePeriodEnum.perYear,
         language: LanguagesEnum.en,
@@ -1127,7 +1152,7 @@ describe('Testing application service', () => {
         sendMailToMailingAddress: true,
         householdExpectingChanges: false,
         householdStudent: false,
-        incomeVouchers: false,
+        incomeVouchers: [],
         income: '36000',
         incomePeriod: IncomePeriodEnum.perYear,
         language: LanguagesEnum.en,
@@ -1381,7 +1406,7 @@ describe('Testing application service', () => {
         sendMailToMailingAddress: true,
         householdExpectingChanges: false,
         householdStudent: false,
-        incomeVouchers: false,
+        incomeVouchers: [],
         income: '36000',
         incomePeriod: IncomePeriodEnum.perYear,
         language: LanguagesEnum.en,
@@ -1604,6 +1629,12 @@ describe('Testing application service', () => {
   });
 
   it('should get most recent application for a user', async () => {
+    const requestingUser = {
+      firstName: 'requesting fName',
+      lastName: 'requesting lName',
+      email: 'requestingUser@email.com',
+      jurisdictions: [{ id: 'juris id' }],
+    } as unknown as User;
     const date = new Date();
     const mockedValue = mockApplication(3, date);
     prisma.applications.findUnique = jest.fn().mockResolvedValue(mockedValue);
@@ -1611,9 +1642,11 @@ describe('Testing application service', () => {
       .fn()
       .mockResolvedValue({ id: mockedValue.id });
 
-    expect(await service.mostRecentlyCreated({ userId: 'example Id' })).toEqual(
-      mockedValue,
-    );
+    expect(
+      await service.mostRecentlyCreated({ userId: 'example Id' }, {
+        user: requestingUser,
+      } as unknown as ExpressRequest),
+    ).toEqual(mockedValue);
     expect(prisma.applications.findFirst).toHaveBeenCalledWith({
       select: {
         id: true,

@@ -574,7 +574,9 @@ describe('Listing Controller Tests', () => {
         data: jurisdictionFactory(),
       });
       await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
-      const listingData = await listingFactory(jurisdictionA.id, prisma);
+      const listingData = await listingFactory(jurisdictionA.id, prisma, {
+        noImage: true,
+      });
       const listing = await prisma.listings.create({
         data: listingData,
       });

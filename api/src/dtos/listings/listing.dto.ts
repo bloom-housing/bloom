@@ -34,6 +34,7 @@ import { UnitsSummary } from '../units/units-summary.dto';
 import { IdDTO } from '../shared/id.dto';
 import { listingUrlSlug } from '../../utilities/listing-url-slug';
 import { User } from '../users/user.dto';
+import { requestedChangesUserMapper } from '../../utilities/requested-changes-user';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -546,9 +547,18 @@ class Listing extends AbstractDTO {
 
   @Expose()
   @ApiPropertyOptional()
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => User)
-  requestedChangesUser?: User;
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @Transform(
+    (obj: any) => {
+      return obj.obj.requestedChangesUser
+        ? requestedChangesUserMapper(obj.obj.requestedChangesUser as User)
+        : undefined;
+    },
+    {
+      toClassOnly: true,
+    },
+  )
+  requestedChangesUser?: IdDTO;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })

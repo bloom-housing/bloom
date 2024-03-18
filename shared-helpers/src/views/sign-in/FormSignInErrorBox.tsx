@@ -2,6 +2,7 @@ import React from "react"
 import { t, AlertBox, SiteAlert, AlertNotice, ErrorMessage } from "@bloom-housing/ui-components"
 import type { UseFormMethods } from "react-hook-form"
 import { NetworkStatus } from "../../auth/catchNetworkError"
+import styles from "./FormSignIn.module.scss"
 
 export type FormSignInErrorBoxProps = {
   errors: FormSignInErrorBoxControl["errors"]
@@ -21,12 +22,10 @@ const FormSignInErrorBox = ({
   errorMessageId,
   className,
 }: FormSignInErrorBoxProps) => {
-  const classNames = []
-  if (className) classNames.push(className)
   return (
-    <div className={classNames.join(" ")}>
+    <div className={className ? className : ""}>
       {Object.entries(errors).length > 0 && !networkStatus.content && (
-        <AlertBox type="alert" inverted closeable>
+        <AlertBox type="alert" inverted closeable className={styles["sign-in-error"]}>
           {errors.authentication ? errors.authentication.message : t("errors.errorsToResolve")}
         </AlertBox>
       )}
@@ -35,7 +34,7 @@ const FormSignInErrorBox = ({
         <ErrorMessage
           id={`form-sign-in-${errorMessageId}-error`}
           error={!!networkStatus.content}
-          className="block mt-0 leading-normal text-alert"
+          className={styles["sign-in-error"]}
         >
           <AlertBox type={"alert"} inverted onClose={() => networkStatus.reset()}>
             {networkStatus.content.title}
@@ -49,7 +48,12 @@ const FormSignInErrorBox = ({
 
       {networkStatus.type === "success" && (
         <>
-          <AlertBox type="success" inverted onClose={() => networkStatus.reset()}>
+          <AlertBox
+            type="success"
+            inverted
+            onClose={() => networkStatus.reset()}
+            className={styles["sign-in-error"]}
+          >
             {networkStatus.content?.title}
           </AlertBox>
 
@@ -58,8 +62,7 @@ const FormSignInErrorBox = ({
           </AlertNotice>
         </>
       )}
-
-      <SiteAlert type="notice" dismissable />
+      <SiteAlert type="notice" dismissable className={styles["sign-in-error"]} />
     </div>
   )
 }

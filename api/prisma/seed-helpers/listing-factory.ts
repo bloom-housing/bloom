@@ -4,11 +4,24 @@ import {
   MultiselectQuestions,
   PrismaClient,
   ListingsStatusEnum,
+  ApplicationMethodsTypeEnum,
 } from '@prisma/client';
+import { randomInt } from 'crypto';
 import { randomName } from './word-generator';
 import { addressFactory } from './address-factory';
 import { unitFactoryMany } from './unit-factory';
 import { reservedCommunityTypeFactoryGet } from './reserved-community-type-factory';
+
+const cloudinaryIds = [
+  'dev/blake-wheeler-zBHU08hdzhY-unsplash_swqash',
+  'dev/krzysztof-hepner-V7Q0Oh3Az-c-unsplash_xoj7sr',
+  'dev/dillon-kydd-2keCPb73aQY-unsplash_lm7krp',
+  'dev/inside_qo9wre',
+  'dev/interior_mc9erd',
+  'dev/apartment_ez3yyz',
+  'dev/trayan-xIOYJSVEZ8c-unsplash_f1axsg',
+  'dev/apartment_building_2_b7ujdd',
+];
 
 export const listingFactory = async (
   jurisdictionId: string,
@@ -26,6 +39,8 @@ export const listingFactory = async (
     applicationDueDate?: Date;
     afsLastRunSetInPast?: boolean;
     reservedCommunityType?: string;
+    digitalApp?: boolean;
+    noImage?: boolean;
   },
 ): Promise<Prisma.ListingsCreateInput> => {
   const previousListing = optionalParams?.listing || {};
@@ -41,6 +56,11 @@ export const listingFactory = async (
     jurisdictionId,
     optionalParams?.reservedCommunityType,
   );
+
+  const digitalApp = !!optionalParams?.digitalApp
+    ? optionalParams.digitalApp
+    : Math.random() < 0.5;
+
   return {
     createdAt: new Date(),
     assets: [],
@@ -62,11 +82,14 @@ export const listingFactory = async (
     listingsApplicationDropOffAddress: {
       create: addressFactory(),
     },
-    reservedCommunityTypes: {
-      connect: {
-        id: reservedCommunityType.id,
-      },
-    },
+    reservedCommunityTypes:
+      Math.random() < 0.5
+        ? {
+            connect: {
+              id: reservedCommunityType.id,
+            },
+          }
+        : {},
     // For application flagged set tests the date needs to be before the updated timestamp
     // All others should be a newer timestamp so that they are not picked up by AFS tests
     afsLastRunAt: optionalParams?.afsLastRunSetInPast
@@ -95,7 +118,6 @@ export const listingFactory = async (
     ...featuresAndUtilites(),
     ...buildingFeatures(optionalParams?.includeBuildingFeatures),
     ...additionalEligibilityRules(optionalParams?.includeEligibilityRules),
-    ...previousListing,
     jurisdictions: {
       connect: {
         id: jurisdictionId,
@@ -107,6 +129,35 @@ export const listingFactory = async (
         }
       : undefined,
     applicationDueDate: optionalParams?.applicationDueDate ?? undefined,
+    developer: randomName(),
+    leasingAgentName: randomName(),
+    leasingAgentEmail: 'leasing-agent@example.com',
+    leasingAgentPhone: '515-604-0183',
+    digitalApplication: digitalApp,
+    commonDigitalApplication: digitalApp,
+    paperApplication: Math.random() < 0.5,
+    referralOpportunity: Math.random() < 0.5,
+    applicationMethods: digitalApp
+      ? {
+          create: {
+            type: ApplicationMethodsTypeEnum.Internal,
+          },
+        }
+      : {},
+    listingImages: !optionalParams?.noImage
+      ? {
+          create: {
+            ordinal: 0,
+            assets: {
+              create: {
+                label: 'cloudinaryBuilding',
+                fileId: cloudinaryIds[randomInt(cloudinaryIds.length)],
+              },
+            },
+          },
+        }
+      : {},
+    ...previousListing,
   };
 };
 

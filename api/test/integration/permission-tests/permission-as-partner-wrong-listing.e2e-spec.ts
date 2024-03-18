@@ -258,19 +258,22 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
 
     it('should succeed for list endpoint', async () => {
       await request(app.getHttpServer())
-        .get(`/applications?`)
+        .get(`/applications?listingId=${listingId}`)
         .set('Cookie', cookies)
         .expect(200);
     });
 
-    it('should succeed for retrieve endpoint', async () => {
+    it('should error as forbidden for retrieve endpoint', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
       );
 
       const applicationA = await prisma.applications.create({
-        data: await applicationFactory({ unitTypeId: unitTypeA.id }),
+        data: await applicationFactory({
+          unitTypeId: unitTypeA.id,
+          listingId: listingId,
+        }),
         include: {
           applicant: true,
         },
@@ -279,7 +282,7 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
       await request(app.getHttpServer())
         .get(`/applications/${applicationA.id}`)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
     it('should error as forbidden for delete endpoint', async () => {

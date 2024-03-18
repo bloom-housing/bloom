@@ -38,7 +38,7 @@ export const useCatchNetworkError = () => {
   const [networkError, setNetworkError] = useState<NetworkStatusContent>(null)
 
   const check401Error = (message: string, error: AxiosError) => {
-    if (message.includes(NetworkErrorMessage.PasswordOutdated)) {
+    if (message?.includes(NetworkErrorMessage.PasswordOutdated)) {
       setNetworkError({
         title: t("authentication.signIn.passwordOutdated"),
         description: `${t(

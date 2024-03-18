@@ -3,18 +3,19 @@ import { Button } from "@bloom-housing/ui-seeds"
 import {
   Field,
   Form,
-  FormCard,
-  Icon,
   t,
   AlertBox,
   SiteAlert,
   AlertNotice,
   ErrorMessage,
-  NavigationContext,
   emailRegex,
 } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { NetworkErrorReset, NetworkStatusContent } from "../../auth/catchNetworkError"
 import type { UseFormMethods } from "react-hook-form"
+import { BloomCard } from "../components/BloomCard"
+import styles from "./FormForgotPassword.module.scss"
+import { useRouter } from "next/router"
 
 export type FormForgotPasswordProps = {
   control: FormForgotPasswordControl
@@ -46,62 +47,62 @@ const FormForgotPassword = ({
     window.scrollTo(0, 0)
   }
 
-  const { router } = useContext(NavigationContext)
+  const router = useRouter()
 
   return (
-    <FormCard>
-      <div className="form-card__lead text-center border-b mx-0">
-        <Icon size="2xl" symbol="profile" />
-        <h1 className="form-card__title">{t("authentication.forgotPassword.sendEmail")}</h1>
-      </div>
-
-      {Object.entries(errors).length > 0 && !networkError.error && (
-        <AlertBox type="alert" inverted closeable>
-          {errors.authentication ? errors.authentication.message : t("errors.errorsToResolve")}
-        </AlertBox>
-      )}
-
-      {!!networkError.error?.error && Object.entries(errors).length === 0 && (
-        <ErrorMessage id={"forgotpasswordemail-error"} error={!!networkError.error}>
-          <AlertBox type="alert" inverted onClose={() => networkError.reset()}>
-            {networkError.error.title}
+    <BloomCard title={t("authentication.forgotPassword.sendEmail")} iconSymbol={"profile"}>
+      <>
+        {Object.entries(errors).length > 0 && !networkError.error && (
+          <AlertBox type="alert" inverted closeable>
+            {errors.authentication ? errors.authentication.message : t("errors.errorsToResolve")}
           </AlertBox>
+        )}
 
-          <AlertNotice title="" type="alert" inverted>
-            {networkError.error.description}
-          </AlertNotice>
-        </ErrorMessage>
-      )}
+        {!!networkError.error?.error && Object.entries(errors).length === 0 && (
+          <ErrorMessage id={"forgotpasswordemail-error"} error={!!networkError.error}>
+            <AlertBox type="alert" inverted onClose={() => networkError.reset()}>
+              {networkError.error.title}
+            </AlertBox>
 
-      <SiteAlert type="notice" dismissable />
+            <AlertNotice title="" type="alert" inverted>
+              {networkError.error.description}
+            </AlertNotice>
+          </ErrorMessage>
+        )}
 
-      <div className="form-card__group pt-0">
-        <Form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit, onError)}>
-          <Field
-            caps={true}
-            name="email"
-            label={t("t.email")}
-            validation={{ required: true, pattern: emailRegex }}
-            error={errors.email}
-            errorMessage={errors.email ? t("authentication.signIn.loginError") : undefined}
-            register={register}
-            onChange={() => networkError.reset()}
-          />
-          <section>
-            <div className="text-center mt-6">
-              <Button type="submit" variant="primary">
+        <SiteAlert type="notice" dismissable />
+
+        <CardSection>
+          <Form id="sign-in" onSubmit={handleSubmit(onSubmit, onError)}>
+            <Field
+              name="email"
+              label={t("t.email")}
+              validation={{ required: true, pattern: emailRegex }}
+              error={errors.email}
+              errorMessage={errors.email ? t("authentication.signIn.loginError") : undefined}
+              register={register}
+              onChange={() => networkError.reset()}
+              labelClassName={"text__caps-spaced"}
+            />
+            <div className={styles["forgot-password-footer"]}>
+              <Button
+                type="submit"
+                variant="primary"
+                className={styles["forgot-password-submit-button"]}
+              >
                 {t("authentication.forgotPassword.sendEmail")}
               </Button>
+
+              <div className={styles["forgot-password-cancel-button"]}>
+                <Button onClick={() => router.back()} variant="text">
+                  {t("t.cancel")}
+                </Button>
+              </div>
             </div>
-            <div className="text-center mt-6">
-              <Button onClick={() => router.back()} variant="text">
-                {t("t.cancel")}
-              </Button>
-            </div>
-          </section>
-        </Form>
-      </div>
-    </FormCard>
+          </Form>
+        </CardSection>
+      </>
+    </BloomCard>
   )
 }
 
