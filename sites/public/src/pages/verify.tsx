@@ -130,7 +130,7 @@ const Verify = () => {
               <Button
                 type="submit"
                 variant="primary"
-                loadingMessage={isLoginLoading ? "Loading" : null}
+                loadingMessage={isLoginLoading ? t("t.loading") : null}
               >
                 {t("account.pwdless.continue")}
               </Button>
@@ -156,7 +156,7 @@ const Verify = () => {
                 determineNetworkError(status, error)
               }
             }}
-            loadingMessage={isResendLoading ? "Loading" : null}
+            loadingMessage={isResendLoading ? t("t.loading") : null}
           >
             {t("account.pwdless.resendCodeButton")}
           </Button>
