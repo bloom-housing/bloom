@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext } from "react"
 import { useRouter } from "next/router"
 import type { UseFormMethods } from "react-hook-form"
 import { Field, Form, NavigationContext, t } from "@bloom-housing/ui-components"
@@ -9,6 +9,8 @@ import styles from "./FormSignIn.module.scss"
 export type FormSignInPwdlessProps = {
   control: FormSignInPwdlessControl
   onSubmit: (data: FormSignInPwdlessValues) => void
+  useCode: boolean
+  setUseCode: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export type FormSignInPwdlessValues = {
@@ -25,6 +27,8 @@ export type FormSignInPwdlessControl = {
 const FormSignInPwdless = ({
   onSubmit,
   control: { errors, register, handleSubmit },
+  useCode,
+  setUseCode,
 }: FormSignInPwdlessProps) => {
   const onError = () => {
     window.scrollTo(0, 0)
@@ -34,15 +38,13 @@ const FormSignInPwdless = ({
   const listingIdRedirect = router.query?.listingId as string
   const forgetPasswordURL = getListingRedirectUrl(listingIdRedirect, "/forgot-password")
 
-  const [useCode, setUseCode] = useState(true)
-
   return (
     <Form id="sign-in" onSubmit={handleSubmit(onSubmit, onError)}>
       <Field
         className={styles["sign-in-email-input"]}
         name="email"
         label={t("t.email")}
-        labelClassName={`text__caps-spaced ${useCode && "pb-0"}`}
+        labelClassName={`text__caps-spaced`}
         validation={{ required: true }}
         error={errors.email}
         errorMessage={t("authentication.signIn.enterLoginEmail")}
@@ -63,7 +65,7 @@ const FormSignInPwdless = ({
             name="password"
             label={t("authentication.createAccount.password")}
             labelClassName="text__caps-spaced"
-            validation={{ required: !useCode }}
+            validation={{ required: useCode === false }}
             error={errors.password}
             errorMessage={t("authentication.signIn.enterLoginPassword")}
             register={register}
