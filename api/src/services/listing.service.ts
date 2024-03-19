@@ -602,7 +602,7 @@ export class ListingService implements OnModuleInit {
 
     let result = mapTo(Listing, listingRaw);
 
-    if (lang !== LanguagesEnum.en) {
+    if (lang && lang !== LanguagesEnum.en) {
       result = await this.translationService.translateListing(result, lang);
     }
 
