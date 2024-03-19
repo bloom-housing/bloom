@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires, import/no-unresolved */
+
 // Usage:
 // ts-node --skip-project src/scripts/import-new-translations.ts tl Tagalog.csv
 //
