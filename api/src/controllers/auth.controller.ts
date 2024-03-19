@@ -63,8 +63,10 @@ export class AuthController {
     @Request() req: ExpressRequest,
     @Response({ passthrough: true }) res: ExpressResponse,
   ): Promise<SuccessDTO> {
-    const user = mapTo(User, req['user']);
-    return await this.authService.confirmAndSetCredentials(user, res);
+    return await this.authService.confirmAndSetCredentials(
+      mapTo(User, req['user']),
+      res,
+    );
   }
 
   @Get('logout')
