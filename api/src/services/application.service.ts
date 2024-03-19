@@ -47,6 +47,11 @@ export const view: Partial<
         address: true,
       },
     },
+    listings: {
+      select: {
+        id: true,
+      },
+    },
   },
 };
 

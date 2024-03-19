@@ -17,6 +17,9 @@ import { UserModule } from './user.module';
 import { AuthModule } from './auth.module';
 import { ApplicationFlaggedSetModule } from './application-flagged-set.module';
 import { MapLayerModule } from './map-layer.module';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { ThrottleGuard } from '../guards/throttler.guard';
 
 @Module({
   imports: [
@@ -35,9 +38,23 @@ import { MapLayerModule } from './map-layer.module';
     AuthModule,
     ApplicationFlaggedSetModule,
     MapLayerModule,
+    ThrottlerModule.forRoot([
+      {
+        ttl: Number(process.env.THROTTLE_TTL),
+        limit: Number(process.env.THROTTLE_LIMIT),
+      },
+    ]),
   ],
   controllers: [AppController],
-  providers: [AppService, Logger, SchedulerRegistry],
+  providers: [
+    AppService,
+    Logger,
+    SchedulerRegistry,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottleGuard,
+    },
+  ],
   exports: [
     ListingModule,
     AmiChartModule,

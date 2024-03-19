@@ -33,6 +33,7 @@ import { OptionalAuthGuard } from '../guards/optional.guard';
 import { PermissionGuard } from '../guards/permission.guard';
 import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction-admin.guard';
 import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor';
+import { ThrottleGuard } from '../guards/throttler.guard';
 
 @Controller('multiselectQuestions')
 @ApiTags('multiselectQuestions')
@@ -46,7 +47,7 @@ import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor
   IdDTO,
 )
 @PermissionTypeDecorator('multiselectQuestion')
-@UseGuards(OptionalAuthGuard, PermissionGuard)
+@UseGuards(ThrottleGuard, OptionalAuthGuard, PermissionGuard)
 export class MultiselectQuestionController {
   constructor(
     private readonly multiselectQuestionService: MultiselectQuestionService,
