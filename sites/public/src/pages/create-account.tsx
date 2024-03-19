@@ -65,7 +65,20 @@ export default () => {
         listingIdRedirect
       )
 
-      setOpenModal(true)
+      if (process.env.showPwdless) {
+        const redirectUrl = router.query?.redirectUrl as string
+        const listingId = router.query?.listingId as string
+        let queryParams: { [key: string]: string } = { email: data.email, flowType: "login" }
+        if (redirectUrl) queryParams = { ...queryParams, redirectUrl }
+        if (listingId) queryParams = { ...queryParams, listingId }
+
+        await router.push({
+          pathname: "/verify",
+          query: queryParams,
+        })
+      } else {
+        setOpenModal(true)
+      }
     } catch (err) {
       const { status, data } = err.response || {}
       if (status === 400) {

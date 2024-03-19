@@ -11,6 +11,8 @@ import dayjs from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import crypto from 'crypto';
 import { verify, sign } from 'jsonwebtoken';
+import { Request } from 'express';
+
 import { PrismaService } from './prisma.service';
 import { User } from '../dtos/users/user.dto';
 import { mapTo } from '../utilities/mapTo';
@@ -37,6 +39,8 @@ import { permissionActions } from '../enums/permissions/permission-actions-enum'
 import { buildWhereClause } from '../utilities/build-user-where';
 import { getPublicEmailURL } from '../utilities/get-public-email-url';
 import { UserRole } from '../dtos/users/user-role.dto';
+import { RequestSingleUseCode } from '../dtos/single-use-code/request-single-use-code.dto';
+import { generateSingleUseCode } from '../utilities/generate-single-use-code';
 
 /*
   this is the service for users
@@ -480,6 +484,7 @@ export class UserService {
     forPartners: boolean,
     sendWelcomeEmail = false,
     requestingUser: User,
+    req: Request,
     jurisdictionName?: string,
   ): Promise<User> {
     if (
@@ -646,16 +651,27 @@ export class UserService {
 
     // Public user that needs email
     if (!forPartners && sendWelcomeEmail) {
-      const confirmationUrl = this.getPublicConfirmationUrl(
-        dto.appUrl,
-        confirmationToken,
-      );
-      this.emailService.welcome(
-        jurisdictionName,
-        mapTo(User, newUser),
-        dto.appUrl,
-        confirmationUrl,
-      );
+      const fullJurisdiction = await this.prisma.jurisdictions.findFirst({
+        where: {
+          name: jurisdictionName as string,
+        },
+      });
+
+      if (fullJurisdiction.allowSingleUseCodeLogin) {
+        this.requestSingleUseCode(dto, req);
+      } else {
+        const confirmationUrl = this.getPublicConfirmationUrl(
+          dto.appUrl,
+          confirmationToken,
+        );
+        this.emailService.welcome(
+          jurisdictionName,
+          mapTo(User, newUser),
+          dto.appUrl,
+          confirmationUrl,
+        );
+      }
+
       // Partner user that is given access to an additional jurisdiction
     } else if (
       forPartners &&
@@ -875,5 +891,72 @@ export class UserService {
     }
 
     return false;
+  }
+
+  /**
+   *
+   * @param dto the incoming request with the email
+   * @returns a SuccessDTO always, and if the user exists it will send a code to the requester
+   */
+  async requestSingleUseCode(
+    dto: RequestSingleUseCode,
+    req: Request,
+  ): Promise<SuccessDTO> {
+    const user = await this.prisma.userAccounts.findFirst({
+      where: { email: dto.email },
+      include: {
+        jurisdictions: true,
+      },
+    });
+    if (!user) {
+      return { success: true };
+    }
+
+    const jurisName = req?.headers?.jurisdictionname;
+    if (!jurisName) {
+      throw new BadRequestException(
+        'jurisdictionname is missing from the request headers',
+      );
+    }
+
+    const juris = await this.prisma.jurisdictions.findFirst({
+      select: {
+        id: true,
+        allowSingleUseCodeLogin: true,
+      },
+      where: {
+        name: jurisName as string,
+      },
+      orderBy: {
+        allowSingleUseCodeLogin: OrderByEnum.DESC,
+      },
+    });
+
+    if (!juris) {
+      throw new BadRequestException(
+        `Jurisidiction ${jurisName} does not exists`,
+      );
+    }
+
+    if (!juris.allowSingleUseCodeLogin) {
+      throw new BadRequestException(
+        `Single use code login is not setup for ${jurisName}`,
+      );
+    }
+
+    const singleUseCode = generateSingleUseCode();
+    await this.prisma.userAccounts.update({
+      data: {
+        singleUseCode,
+        singleUseCodeUpdatedAt: new Date(),
+      },
+      where: {
+        id: user.id,
+      },
+    });
+
+    await this.emailService.sendSingleUseCode(mapTo(User, user), singleUseCode);
+
+    return { success: true };
   }
 }

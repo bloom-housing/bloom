@@ -63,7 +63,8 @@ export class AuthController {
     @Request() req: ExpressRequest,
     @Response({ passthrough: true }) res: ExpressResponse,
   ): Promise<SuccessDTO> {
-    return await this.authService.setCredentials(res, mapTo(User, req['user']));
+    const user = mapTo(User, req['user']);
+    return await this.authService.confirmAndSetCredentials(user, res);
   }
 
   @Get('logout')
@@ -87,19 +88,6 @@ export class AuthController {
     @Body() dto: RequestMfaCode,
   ): Promise<RequestMfaCodeResponse> {
     return await this.authService.requestMfaCode(dto);
-  }
-
-  @Post('request-single-use-code')
-  @ApiOperation({
-    summary: 'Request single use code',
-    operationId: 'requestSingleUseCode',
-  })
-  @ApiOkResponse({ type: SuccessDTO })
-  async requestSingleUseCode(
-    @Request() req: ExpressRequest,
-    @Body() dto: RequestSingleUseCode,
-  ): Promise<SuccessDTO> {
-    return await this.authService.requestSingleUseCode(dto, req);
   }
 
   @Get('requestNewToken')

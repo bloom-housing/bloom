@@ -49,6 +49,7 @@ import { PermissionTypeDecorator } from '../decorators/permission-type.decorator
 import { UserFilterParams } from '../dtos/users/user-filter-params.dto';
 import { UserCsvExporterService } from '../services/user-csv-export.service';
 import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
+import { RequestSingleUseCode } from '../dtos/single-use-code/request-single-use-code.dto';
 
 @Controller('user')
 @ApiTags('user')
@@ -174,6 +175,7 @@ export class UserController {
       false,
       queryParams.noWelcomeEmail !== true,
       mapTo(User, req['user']),
+      req,
       jurisdictionName as string,
     );
   }
@@ -192,7 +194,21 @@ export class UserController {
       true,
       undefined,
       mapTo(User, req['user']),
+      req,
     );
+  }
+
+  @Post('request-single-use-code')
+  @ApiOperation({
+    summary: 'Request single use code',
+    operationId: 'requestSingleUseCode',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async requestSingleUseCode(
+    @Request() req: ExpressRequest,
+    @Body() dto: RequestSingleUseCode,
+  ): Promise<SuccessDTO> {
+    return await this.userService.requestSingleUseCode(dto, req);
   }
 
   @Post('resend-confirmation')

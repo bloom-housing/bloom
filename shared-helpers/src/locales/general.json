@@ -20,6 +20,7 @@
   "account.signUpSaveTime.applyFaster": "Apply faster with saved application details",
   "account.signUpSaveTime.checkStatus": "Check on the status of an application at any time",
   "account.signUpSaveTime.resetPassword": "Simply reset your password if you forget it",
+  "account.signUpSaveTime.useACode": "Use a code to sign in without a password",
   "account.signUpSaveTime.subTitle": "Having an account will save you time by using saved application details, and allow you to check the status of an application at anytime.",
   "account.signUpSaveTime.title": "Sign up quickly and check application status at anytime",
   "account.settings.alerts.currentPassword": "Invalid current password. Please try again.",
