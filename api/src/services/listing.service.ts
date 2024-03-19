@@ -5,6 +5,7 @@ import {
   NotFoundException,
   OnModuleInit,
   HttpException,
+  BadRequestException,
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
@@ -256,10 +257,44 @@ export class ListingService implements OnModuleInit {
           );
         }
         if (filter[ListingFilterKeys.bedrooms]) {
+          const bedroomsWhere = '';
+          const inclusiveWhereArray = [];
+          filter[ListingFilterKeys.bedrooms].forEach((bedroom) => {
+            switch (bedroom) {
+              case 'Studio':
+                inclusiveWhereArray.push(
+                  "((combined_units->>'numBedrooms')::INTEGER =0)",
+                );
+                break;
+              case '1':
+                inclusiveWhereArray.push(
+                  "((combined_units->>'numBedrooms')::INTEGER =1)",
+                );
+                break;
+              case '2':
+                inclusiveWhereArray.push(
+                  "((combined_units->>'numBedrooms')::INTEGER =2)",
+                );
+                break;
+              case '3':
+                inclusiveWhereArray.push(
+                  "((combined_units->>'numBedrooms')::INTEGER =3)",
+                );
+                break;
+              case '4+':
+                inclusiveWhereArray.push(
+                  "((combined_units->>'numBedrooms')::INTEGER >=4)",
+                );
+                break;
+              default:
+                throw new BadRequestException(
+                  `Invalid input for bedrooms filter: "${bedroom}"`,
+                );
+            }
+          });
+
           whereClauseArray.push(
-            `(combined_units->>'numBedrooms') =  '${
-              filter[ListingFilterKeys.bedrooms]
-            }'`,
+            `(${bedroomsWhere}${inclusiveWhereArray.join(' OR ')})`,
           );
         }
         if (filter[ListingFilterKeys.bathrooms]) {

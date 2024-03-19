@@ -38,17 +38,17 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiPropertyOptional({
-    example: '3',
+    example: ['3'],
   })
-  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.bedrooms]?: number;
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.bedrooms]?: string[];
 
   @Expose()
   @ApiPropertyOptional({
-    example: '3',
+    example: ['3'],
   })
-  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.bathrooms]?: number;
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.bathrooms]?: string[];
 
   @Expose()
   @ApiPropertyOptional({
