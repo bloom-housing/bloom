@@ -1,6 +1,6 @@
 import { Modal, t, Form, Field, AlertBox } from "@bloom-housing/ui-components"
 import { Button } from "@bloom-housing/ui-seeds"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { useRouter } from "next/router"
 import { useContext, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -13,6 +13,7 @@ export interface ConfirmationModalProps {
 const ConfirmationModal = (props: ConfirmationModalProps) => {
   const { setSiteAlertMessage } = props
   const { resendConfirmation, profile, confirmAccount } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
   const [openModal, setOpenModal] = useState(false)
   const [modalMessage, setModalMessage] = useState(null)
   const router = useRouter()
@@ -30,7 +31,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
       const listingId = router.query?.listingId as string
       await resendConfirmation(email, listingId)
 
-      setSiteAlertMessage(t(`authentication.createAccount.emailSent`), "success")
+      addToast(t(`authentication.createAccount.emailSent`), { variant: "success" })
       setOpenModal(false)
     } catch (err) {
       const { data } = err.response || {}

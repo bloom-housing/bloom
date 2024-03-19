@@ -4,8 +4,8 @@ import qs from "qs"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
-import { AuthContext } from "@bloom-housing/shared-helpers"
-import { setSiteAlertMessage, t } from "@bloom-housing/ui-components"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import { t } from "@bloom-housing/ui-components"
 import {
   ApplicationOrderByKeys,
   EnumListingFilterParamsComparison,
@@ -126,6 +126,7 @@ export function useListingsData({
 
 export const useListingExport = () => {
   const { listingsService } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
 
   const [csvExportLoading, setCsvExportLoading] = useState(false)
   const [csvExportError, setCsvExportError] = useState(false)
@@ -152,7 +153,7 @@ export const useListingExport = () => {
       link.click()
       link.parentNode.removeChild(link)
       setCsvExportSuccess(true)
-      setSiteAlertMessage(t("t.exportSuccess"), "success")
+      addToast(t("t.exportSuccess"), { variant: "success" })
     } catch (err) {
       console.log(err)
       setCsvExportError(true)
@@ -530,6 +531,7 @@ const useCsvExport = (endpoint: () => Promise<string>, fileName: string) => {
   const [csvExportLoading, setCsvExportLoading] = useState(false)
   const [csvExportError, setCsvExportError] = useState(false)
   const [csvExportSuccess, setCsvExportSuccess] = useState(false)
+  const { addToast } = useContext(MessageContext)
 
   const onExport = useCallback(async () => {
     setCsvExportError(false)
@@ -544,14 +546,14 @@ const useCsvExport = (endpoint: () => Promise<string>, fileName: string) => {
       fileLink.href = URL.createObjectURL(blob)
       fileLink.click()
       setCsvExportSuccess(true)
-      setSiteAlertMessage(t("t.exportSuccess"), "success")
+      addToast(t("t.exportSuccess"), { variant: "success" })
     } catch (err) {
       console.log(err)
       setCsvExportError(true)
     }
 
     setCsvExportLoading(false)
-  }, [endpoint, fileName])
+  }, [endpoint, fileName, addToast])
 
   return {
     onExport,

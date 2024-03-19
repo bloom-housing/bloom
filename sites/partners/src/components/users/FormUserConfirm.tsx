@@ -7,7 +7,6 @@ import {
   Form,
   Field,
   passwordRegex,
-  setSiteAlertMessage,
   useMutate,
   AlertBox,
   Modal,
@@ -79,7 +78,6 @@ const FormUserConfirm = () => {
 
       if (response) {
         loadProfile("/")
-        setSiteAlertMessage(t(`users.accountConfirmed`), "success")
       }
     } catch (err) {
       setSubmitting(false)

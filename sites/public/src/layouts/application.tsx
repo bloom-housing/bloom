@@ -11,13 +11,14 @@ import {
   FooterSection,
   MenuLink,
   t,
-  setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
-import { AuthContext, ExygyFooter } from "@bloom-housing/shared-helpers"
+import { AuthContext, ExygyFooter, MessageContext } from "@bloom-housing/shared-helpers"
 import styles from "./application.module.scss"
+import { Toast } from "@bloom-housing/ui-seeds"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
+  const { toastMessagesRef, addToast } = useContext(MessageContext)
   const router = useRouter()
 
   const languages =
@@ -58,7 +59,7 @@ const Layout = (props) => {
           title: t("nav.signOut"),
           onClick: () => {
             const signOutFxn = async () => {
-              setSiteAlertMessage(t(`authentication.signOut.success`), "notice")
+              addToast(t(`authentication.signOut.success`), { variant: "primary" })
               await router.push("/sign-in")
               signOut()
             }
@@ -123,6 +124,11 @@ const Layout = (props) => {
           strings={{ skipToMainContent: t("t.skipToMainContent") }}
         />
         <main id="main-content" className="md:overflow-x-hidden">
+          {toastMessagesRef.current.map((toastMessage) => (
+            <Toast {...toastMessage.props} testId="toast-alert" key={toastMessage.timestamp}>
+              {toastMessage.message}
+            </Toast>
+          ))}
           {props.children}
         </main>
       </div>
