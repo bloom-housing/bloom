@@ -13,7 +13,7 @@ import { maskAxiosResponse } from "@bloom-housing/shared-helpers"
 */
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log("16:", req)
+  console.log("16:", req.headers)
   const jar = new CookieJar()
   const axios = wrapper(
     axiosStatic.create({
@@ -22,6 +22,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         jurisdictionName: req.headers.jurisdictionname,
         language: req.headers.language,
         appUrl: req.headers.appurl,
+        "x-forwarded-for": req.headers["x-forwarded-for"] || "",
       },
       paramsSerializer: (params) => {
         return qs.stringify(params)
