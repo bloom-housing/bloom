@@ -13,7 +13,6 @@ import { maskAxiosResponse } from "@bloom-housing/shared-helpers"
 */
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log("16:", req.headers)
   const jar = new CookieJar()
   const axios = wrapper(
     axiosStatic.create({
