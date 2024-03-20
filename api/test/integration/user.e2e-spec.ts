@@ -19,11 +19,19 @@ import { applicationFactory } from '../../prisma/seed-helpers/application-factor
 import { UserInvite } from '../../src/dtos/users/user-invite.dto';
 import { EmailService } from '../../src/services/email.service';
 import { Login } from '../../src/dtos/auth/login.dto';
+import { LoginViaSingleUseCode } from '../../src/dtos/auth/login-single-use-code.dto';
+import { RequestMfaCode } from '../../src/dtos/mfa/request-mfa-code.dto';
+import {
+  ACCESS_TOKEN_AVAILABLE_NAME,
+  REFRESH_COOKIE_NAME,
+  TOKEN_COOKIE_NAME,
+} from '../../src/services/auth.service';
 
 describe('User Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let userService: UserService;
+  let emailService: EmailService;
   let cookies = '';
 
   const invitePartnerUserMock = jest.fn();
@@ -603,5 +611,163 @@ describe('User Controller Tests', () => {
       expect.objectContaining({ id: juris.id, name: juris.name }),
     ]);
     expect(res.body.email).toEqual('partneruser@email.com');
+  });
+
+  it('should request single use code successfully', async () => {
+    const storedUser = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: { isAdmin: true },
+        mfaEnabled: true,
+        confirmedAt: new Date(),
+        phoneNumber: '111-111-1111',
+        phoneNumberVerified: true,
+      }),
+    });
+
+    const jurisdiction = await prisma.jurisdictions.create({
+      data: {
+        name: 'single_use_code_1',
+        allowSingleUseCodeLogin: true,
+        rentalAssistanceDefault: 'test',
+      },
+    });
+    emailService.sendSingleUseCode = jest.fn();
+
+    const res = await request(app.getHttpServer())
+      .post('/auth/request-single-use-code')
+      .send({
+        email: storedUser.email,
+      } as RequestMfaCode)
+      .set({ jurisdictionname: jurisdiction.name })
+      .expect(201);
+
+    expect(res.body).toEqual({ success: true });
+
+    expect(emailService.sendSingleUseCode).toHaveBeenCalled();
+
+    const user = await prisma.userAccounts.findUnique({
+      where: {
+        id: storedUser.id,
+      },
+    });
+
+    expect(user.singleUseCode).not.toBeNull();
+    expect(user.singleUseCodeUpdatedAt).not.toBeNull();
+  });
+
+  it('should request single use code, but jurisdiction does not allow', async () => {
+    const storedUser = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: { isAdmin: true },
+        mfaEnabled: true,
+        confirmedAt: new Date(),
+        phoneNumber: '111-111-1111',
+        phoneNumberVerified: true,
+      }),
+    });
+
+    const jurisdiction = await prisma.jurisdictions.create({
+      data: {
+        name: 'single_use_code_2',
+        allowSingleUseCodeLogin: false,
+        rentalAssistanceDefault: 'test',
+      },
+    });
+    emailService.sendSingleUseCode = jest.fn();
+
+    const res = await request(app.getHttpServer())
+      .post('/auth/request-single-use-code')
+      .send({
+        email: storedUser.email,
+      } as RequestMfaCode)
+      .set({ jurisdictionname: jurisdiction.name })
+      .expect(400);
+
+    expect(res.body.message).toEqual(
+      'Single use code login is not setup for single_use_code_2',
+    );
+
+    expect(emailService.sendSingleUseCode).not.toHaveBeenCalled();
+
+    const user = await prisma.userAccounts.findUnique({
+      where: {
+        id: storedUser.id,
+      },
+    });
+
+    expect(user.singleUseCode).toBeNull();
+  });
+
+  it('should request single use code, but user does not exist', async () => {
+    const jurisdiction = await prisma.jurisdictions.create({
+      data: {
+        name: 'single_use_code_3',
+        allowSingleUseCodeLogin: true,
+        rentalAssistanceDefault: 'test',
+      },
+    });
+    emailService.sendSingleUseCode = jest.fn();
+
+    const res = await request(app.getHttpServer())
+      .post('/auth/request-single-use-code')
+      .send({
+        email: 'thisEmailDoesNotExist@exygy.com',
+      } as RequestMfaCode)
+      .set({ jurisdictionname: jurisdiction.name })
+      .expect(201);
+    expect(res.body.success).toEqual(true);
+
+    expect(emailService.sendSingleUseCode).not.toHaveBeenCalled();
+  });
+
+  it('should login successfully through single use code', async () => {
+    const jurisdiction = await prisma.jurisdictions.create({
+      data: {
+        name: 'single_use_code_login_test',
+        allowSingleUseCodeLogin: true,
+        rentalAssistanceDefault: 'test',
+      },
+    });
+
+    const storedUser = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: { isAdmin: true },
+        singleUseCode: 'abcdef',
+        mfaEnabled: true,
+        confirmedAt: new Date(),
+        jurisdictionIds: [jurisdiction.id],
+      }),
+    });
+    const res = await request(app.getHttpServer())
+      .post('/auth/loginViaSingleUseCode')
+      .send({
+        email: storedUser.email,
+        singleUseCode: storedUser.singleUseCode,
+      } as LoginViaSingleUseCode)
+      .set({ jurisdictionname: jurisdiction.name })
+      .expect(201);
+
+    expect(res.body).toEqual({
+      success: true,
+    });
+
+    const cookies = res.headers['set-cookie'].map(
+      (cookie) => cookie.split('=')[0],
+    );
+
+    expect(cookies).toContain(TOKEN_COOKIE_NAME);
+    expect(cookies).toContain(REFRESH_COOKIE_NAME);
+    expect(cookies).toContain(ACCESS_TOKEN_AVAILABLE_NAME);
+
+    const loggedInUser = await prisma.userAccounts.findUnique({
+      where: {
+        id: storedUser.id,
+      },
+    });
+
+    expect(loggedInUser.lastLoginAt).not.toBeNull();
+    expect(loggedInUser.singleUseCode).toBeNull();
+    expect(loggedInUser.activeAccessToken).not.toBeNull();
+    expect(loggedInUser.activeRefreshToken).not.toBeNull();
   });
 });

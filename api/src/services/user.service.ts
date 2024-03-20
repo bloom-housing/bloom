@@ -657,7 +657,7 @@ export class UserService {
         },
       });
 
-      if (fullJurisdiction.allowSingleUseCodeLogin) {
+      if (fullJurisdiction?.allowSingleUseCodeLogin) {
         this.requestSingleUseCode(dto, req);
       } else {
         const confirmationUrl = this.getPublicConfirmationUrl(
