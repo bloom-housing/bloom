@@ -5,6 +5,7 @@ import { ThrottlerLimitDetail } from '@nestjs/throttler/dist/throttler.guard.int
 @Injectable()
 export class ThrottleGuard extends ThrottlerGuard {
   protected async getTracker(req: Record<string, any>): Promise<string> {
+    console.log('req.headers:', req?.headers);
     console.log('req:', req);
 
     if (req?.headers && req.headers['X-Forwarded-For']) {
