@@ -6,7 +6,7 @@ import { ThrottlerLimitDetail } from '@nestjs/throttler/dist/throttler.guard.int
 export class ThrottleGuard extends ThrottlerGuard {
   protected async getTracker(req: Record<string, any>): Promise<string> {
     console.log('req.headers:', req?.headers);
-    console.log('req:', req);
+    console.log('req :', req);
 
     if (req?.headers && req.headers['X-Forwarded-For']) {
       // if we are passing through the proxy use forwarded for
