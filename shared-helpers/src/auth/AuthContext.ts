@@ -365,7 +365,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
     requestSingleUseCode: async (email) => {
       dispatch(startLoading())
       try {
-        return await authService?.requestSingleUseCode({
+        return await userService?.requestSingleUseCode({
           body: { email },
         })
       } finally {

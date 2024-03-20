@@ -38,10 +38,11 @@ const Verify = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isResendLoading, setIsResendLoading] = useState(false)
   const [isLoginLoading, setIsLoginLoading] = useState(false)
-  const alertMessage =
+  const [alertMessage, setAlertMessage] = useState(
     flowType === "create"
       ? t("account.pwdless.createMessage", { email })
       : t("account.pwdless.loginMessage", { email })
+  )
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -58,7 +59,11 @@ const Verify = () => {
       setIsLoginLoading(true)
       const user = await loginViaSingleUseCode(email, code)
       setIsLoginLoading(false)
-      setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
+      if (flowType === "login") {
+        setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
+      } else {
+        setSiteAlertMessage(t("authentication.createAccount.accountConfirmed"), "success")
+      }
       await redirectToPage()
     } catch (error) {
       setIsLoginLoading(false)
@@ -149,9 +154,11 @@ const Verify = () => {
                 setIsResendLoading(true)
                 await requestSingleUseCode(email)
                 setIsResendLoading(false)
+                setAlertMessage(t("account.pwdless.codeNewAlert", { email }))
                 setIsModalOpen(false)
               } catch (error) {
                 setIsResendLoading(false)
+                setIsModalOpen(false)
                 const { status } = error.response || {}
                 determineNetworkError(status, error)
               }
