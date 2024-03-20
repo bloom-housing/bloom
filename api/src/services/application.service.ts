@@ -33,18 +33,125 @@ export const view: Partial<
 > = {
   partnerList: {
     applicant: {
-      include: {
-        applicantAddress: true,
-        applicantWorkAddress: true,
+      select: {
+        id: true,
+        firstName: true,
+        middleName: true,
+        lastName: true,
+        birthMonth: true,
+        birthDay: true,
+        birthYear: true,
+        emailAddress: true,
+        noEmail: true,
+        phoneNumber: true,
+        phoneNumberType: true,
+        noPhone: true,
+        workInRegion: true,
+        applicantAddress: {
+          select: {
+            id: true,
+            placeName: true,
+            city: true,
+            county: true,
+            state: true,
+            street: true,
+            street2: true,
+            zipCode: true,
+            latitude: true,
+            longitude: true,
+          },
+        },
+        applicantWorkAddress: {
+          select: {
+            id: true,
+            placeName: true,
+            city: true,
+            county: true,
+            state: true,
+            street: true,
+            street2: true,
+            zipCode: true,
+            latitude: true,
+            longitude: true,
+          },
+        },
       },
     },
-    householdMember: true,
-    accessibility: true,
-    applicationsMailingAddress: true,
-    applicationsAlternateAddress: true,
+    householdMember: {
+      select: {
+        id: true,
+        orderId: true,
+        firstName: true,
+        middleName: true,
+        lastName: true,
+        birthMonth: true,
+        birthDay: true,
+        birthYear: true,
+        sameAddress: true,
+        relationship: true,
+        workInRegion: true,
+      },
+    },
+    accessibility: {
+      select: {
+        id: true,
+        mobility: true,
+        vision: true,
+        hearing: true,
+      },
+    },
+    applicationsMailingAddress: {
+      select: {
+        id: true,
+        placeName: true,
+        city: true,
+        county: true,
+        state: true,
+        street: true,
+        street2: true,
+        zipCode: true,
+        latitude: true,
+        longitude: true,
+      },
+    },
+    applicationsAlternateAddress: {
+      select: {
+        id: true,
+        placeName: true,
+        city: true,
+        county: true,
+        state: true,
+        street: true,
+        street2: true,
+        zipCode: true,
+        latitude: true,
+        longitude: true,
+      },
+    },
     alternateContact: {
-      include: {
-        address: true,
+      select: {
+        id: true,
+        type: true,
+        otherType: true,
+        firstName: true,
+        lastName: true,
+        agency: true,
+        phoneNumber: true,
+        emailAddress: true,
+        address: {
+          select: {
+            id: true,
+            placeName: true,
+            city: true,
+            county: true,
+            state: true,
+            street: true,
+            street2: true,
+            zipCode: true,
+            latitude: true,
+            longitude: true,
+          },
+        },
       },
     },
   },
@@ -52,20 +159,92 @@ export const view: Partial<
 
 view.base = {
   ...view.partnerList,
-  demographics: true,
-  preferredUnitTypes: true,
-  listings: true,
+  demographics: {
+    select: {
+      id: true,
+      createdAt: true,
+      updatedAt: true,
+      ethnicity: true,
+      gender: true,
+      sexualOrientation: true,
+      howDidYouHear: true,
+      race: true,
+    },
+  },
+  preferredUnitTypes: {
+    select: {
+      id: true,
+      name: true,
+      numBedrooms: true,
+    },
+  },
+  listings: {
+    select: {
+      id: true,
+      name: true,
+      jurisdictions: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+  },
   householdMember: {
-    include: {
-      householdMemberAddress: true,
-      householdMemberWorkAddress: true,
+    select: {
+      id: true,
+      orderId: true,
+      firstName: true,
+      middleName: true,
+      lastName: true,
+      birthMonth: true,
+      birthDay: true,
+      birthYear: true,
+      sameAddress: true,
+      relationship: true,
+      workInRegion: true,
+      householdMemberAddress: {
+        select: {
+          id: true,
+          placeName: true,
+          city: true,
+          county: true,
+          state: true,
+          street: true,
+          street2: true,
+          zipCode: true,
+          latitude: true,
+          longitude: true,
+        },
+      },
+      householdMemberWorkAddress: {
+        select: {
+          id: true,
+          placeName: true,
+          city: true,
+          county: true,
+          state: true,
+          street: true,
+          street2: true,
+          zipCode: true,
+          latitude: true,
+          longitude: true,
+        },
+      },
     },
   },
 };
 
 view.details = {
   ...view.base,
-  userAccounts: true,
+  userAccounts: {
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      email: true,
+    },
+  },
 };
 
 /*
