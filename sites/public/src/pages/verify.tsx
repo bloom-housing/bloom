@@ -59,7 +59,11 @@ const Verify = () => {
       setIsLoginLoading(true)
       const user = await loginViaSingleUseCode(email, code)
       setIsLoginLoading(false)
-      setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
+      if (flowType === "login") {
+        setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
+      } else {
+        setSiteAlertMessage(t("authentication.createAccount.accountConfirmed"), "success")
+      }
       await redirectToPage()
     } catch (error) {
       setIsLoginLoading(false)

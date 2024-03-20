@@ -636,7 +636,7 @@ describe('User Controller Tests', () => {
     emailService.sendSingleUseCode = jest.fn();
 
     const res = await request(app.getHttpServer())
-      .post('/auth/request-single-use-code')
+      .post('/user/request-single-use-code')
       .send({
         email: storedUser.email,
       } as RequestMfaCode)
@@ -678,7 +678,7 @@ describe('User Controller Tests', () => {
     emailService.sendSingleUseCode = jest.fn();
 
     const res = await request(app.getHttpServer())
-      .post('/auth/request-single-use-code')
+      .post('/user/request-single-use-code')
       .send({
         email: storedUser.email,
       } as RequestMfaCode)
@@ -711,7 +711,7 @@ describe('User Controller Tests', () => {
     emailService.sendSingleUseCode = jest.fn();
 
     const res = await request(app.getHttpServer())
-      .post('/auth/request-single-use-code')
+      .post('/user/request-single-use-code')
       .send({
         email: 'thisEmailDoesNotExist@exygy.com',
       } as RequestMfaCode)

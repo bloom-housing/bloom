@@ -121,7 +121,7 @@ export default () => {
                   </label>
 
                   <label className={styles["create-account-field"]} htmlFor="firstName">
-                    {t("application.name.firstName")}
+                    {t("application.name.firstOrGivenName")}
                   </label>
                   <Field
                     controlClassName={styles["create-account-input"]}
@@ -142,8 +142,6 @@ export default () => {
                   <Field
                     name="middleName"
                     register={register}
-                    label={t("application.name.middleNameOptional")}
-                    readerOnly
                     error={errors.middleName}
                     validation={{ maxLength: 64 }}
                     errorMessage={t("errors.maxLength")}
@@ -151,20 +149,18 @@ export default () => {
                   />
 
                   <label className={styles["create-account-field"]} htmlFor="lastName">
-                    {t("application.name.lastName")}
+                    {t("application.name.lastOrFamilyName")}
                   </label>
                   <Field
                     name="lastName"
                     validation={{ required: true, maxLength: 64 }}
                     error={errors.lastName}
                     register={register}
-                    label={t("application.name.lastName")}
                     errorMessage={
                       errors.lastName?.type === "maxLength"
                         ? t("errors.maxLength")
                         : t("errors.lastNameError")
                     }
-                    readerOnly
                     controlClassName={styles["create-account-input"]}
                   />
                 </CardSection>
