@@ -43,6 +43,7 @@ module.exports = withBundleAnalyzer({
     cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
     showProfessionalPartners: process.env.SHOW_PROFESSIONAL_PARTNERS === "TRUE",
     showMandatedAccounts: process.env.SHOW_MANDATED_ACCOUNTS === "TRUE",
+    showPwdless: process.env.SHOW_PWDLESS === "TRUE",
     notificationsSignUpUrl: process.env.NOTIFICATIONS_SIGN_UP_URL || null,
     maintenanceWindow: process.env.MAINTENANCE_WINDOW,
     // start Doorway env variables

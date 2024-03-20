@@ -13,12 +13,46 @@
   }
 }
 
+.create-account-header {
+  font-weight: var(--seeds-font-weight-semibold);
+  margin-bottom: var(--seeds-s6);
+}
+
+.forgot-password {
+  float: right;
+  font-size: var(--seeds-font-size-sm);
+  text-decoration-line: underline;
+  color: var(--seeds-color-blue-900);
+}
+
 .sign-in-error {
   margin-top: var(--seeds-s6);
   width: 100%;
 }
 
-.create-account-header {
-  font-weight: var(--seeds-font-weight-semibold);
+.sign-in-email-input {
+  margin-bottom: var(--seeds-s6);
+}
+
+.sign-in-password-input {
+  margin-bottom: var(--seeds-s6);
+}
+
+.sign-in-action {
+  margin-top: var(--seeds-s6);
+  color: var(--seeds-color-blue-500);
+}
+
+.create-account-copy {
+  padding-bottom: var(--seeds-s6);
+  color: var(--seeds-text-color-light);
+  font-size: var(--seeds-type-label-size);
+}
+
+.pwdless-header {
+  margin-bottom: var(--seeds-s3);
+}
+
+.default-header {
   margin-bottom: var(--seeds-s6);
 }

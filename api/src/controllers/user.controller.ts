@@ -50,7 +50,6 @@ import { UserFilterParams } from '../dtos/users/user-filter-params.dto';
 import { UserCsvExporterService } from '../services/user-csv-export.service';
 import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
 import { RequestSingleUseCode } from '../dtos/single-use-code/request-single-use-code.dto';
-import { ThrottleGuard } from '../guards/throttler.guard';
 
 @Controller('user')
 @ApiTags('user')

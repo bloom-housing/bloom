@@ -135,4 +135,12 @@
   .label.text__caps-spaced {
     margin-bottom: var(--seeds-s1);
   }
+
+  --notice-background-color: var(--seeds-color-blue-300);
+
+  .seeds-message {
+    &[data-variant="primary"] {
+      background: var(--seeds-color-blue-300);
+    }
+  }
 }
