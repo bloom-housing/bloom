@@ -348,6 +348,6 @@ export class AuthService {
       });
     }
 
-    return await this.setCredentials(res, mapTo(User, user));
+    return await this.setCredentials(res, user);
   }
 }

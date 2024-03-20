@@ -171,14 +171,11 @@ export class UserController {
     @Body() dto: UserCreate,
     @Query() queryParams: UserCreateParams,
   ): Promise<User> {
-    const jurisdictionName = req.headers['jurisdictionname'] || '';
     return await this.userService.create(
       dto,
       false,
       queryParams.noWelcomeEmail !== true,
-      mapTo(User, req['user']),
       req,
-      jurisdictionName as string,
     );
   }
 
@@ -191,13 +188,7 @@ export class UserController {
     @Body() dto: UserInvite,
     @Request() req: ExpressRequest,
   ): Promise<User> {
-    return await this.userService.create(
-      dto,
-      true,
-      undefined,
-      mapTo(User, req['user']),
-      req,
-    );
+    return await this.userService.create(dto, true, undefined, req);
   }
 
   @Post('request-single-use-code')

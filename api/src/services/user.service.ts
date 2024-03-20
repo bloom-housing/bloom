@@ -483,10 +483,11 @@ export class UserService {
     dto: UserCreate | UserInvite,
     forPartners: boolean,
     sendWelcomeEmail = false,
-    requestingUser: User,
     req: Request,
-    jurisdictionName?: string,
   ): Promise<User> {
+    const requestingUser = mapTo(User, req['user']);
+    const jurisdictionName = (req.headers['jurisdictionname'] as string) || '';
+
     if (
       this.containsInvalidCharacters(dto.firstName) ||
       this.containsInvalidCharacters(dto.lastName)
@@ -912,8 +913,8 @@ export class UserService {
       return { success: true };
     }
 
-    const jurisName = req?.headers?.jurisdictionname;
-    if (!jurisName) {
+    const jurisdictionName = req?.headers?.jurisdictionname;
+    if (!jurisdictionName) {
       throw new BadRequestException(
         'jurisdictionname is missing from the request headers',
       );
@@ -925,7 +926,7 @@ export class UserService {
         allowSingleUseCodeLogin: true,
       },
       where: {
-        name: jurisName as string,
+        name: jurisdictionName as string,
       },
       orderBy: {
         allowSingleUseCodeLogin: OrderByEnum.DESC,
@@ -934,13 +935,13 @@ export class UserService {
 
     if (!juris) {
       throw new BadRequestException(
-        `Jurisidiction ${jurisName} does not exists`,
+        `Jurisidiction ${jurisdictionName} does not exists`,
       );
     }
 
     if (!juris.allowSingleUseCodeLogin) {
       throw new BadRequestException(
-        `Single use code login is not setup for ${jurisName}`,
+        `Single use code login is not setup for ${jurisdictionName}`,
       );
     }
 
