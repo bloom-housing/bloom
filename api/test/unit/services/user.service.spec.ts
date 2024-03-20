@@ -1644,13 +1644,19 @@ describe('Testing user service', () => {
       });
       expect(prisma.userAccounts.create).toHaveBeenCalledWith({
         data: {
+          dob: undefined,
           passwordHash: expect.anything(),
+          phoneNumber: undefined,
+          userRoles: undefined,
           email: 'publicUser@email.com',
           firstName: 'public User firstName',
           lastName: 'public User lastName',
+          language: undefined,
+          listings: undefined,
+          middleName: undefined,
           mfaEnabled: false,
           jurisdictions: {
-            connect: [{ id: jurisId }],
+            connect: { name: 'juris 1' },
           },
         },
       });

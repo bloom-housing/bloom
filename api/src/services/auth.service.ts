@@ -22,7 +22,6 @@ import { generateSingleUseCode } from '../utilities/generate-single-use-code';
 import { Confirm } from '../dtos/auth/confirm.dto';
 import { SmsService } from './sms.service';
 import { EmailService } from './email.service';
-import { OrderByEnum } from '../enums/shared/order-by-enum';
 
 // since our local env doesn't have an https cert we can't be secure. Hosted envs should be secure
 const secure = process.env.NODE_ENV !== 'development';
