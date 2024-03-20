@@ -68,7 +68,7 @@ export default () => {
       if (process.env.showPwdless) {
         const redirectUrl = router.query?.redirectUrl as string
         const listingId = router.query?.listingId as string
-        let queryParams: { [key: string]: string } = { email: data.email, flowType: "login" }
+        let queryParams: { [key: string]: string } = { email: data.email, flowType: "create" }
         if (redirectUrl) queryParams = { ...queryParams, redirectUrl }
         if (listingId) queryParams = { ...queryParams, listingId }
 
@@ -183,7 +183,8 @@ export default () => {
                     errorMessage={t("errors.dateOfBirthErrorAge")}
                     label={t("application.name.yourDateOfBirth")}
                   />
-                  <p className={"field-sub-note"}>{t("application.name.dobHelper")}</p>
+                  <p className={"field-note mt-4"}>{t("application.name.dobHelper2")}</p>
+                  <p className={"field-note mt-2"}>{t("application.name.dobHelper")}</p>
                 </CardSection>
 
                 <CardSection
@@ -200,6 +201,11 @@ export default () => {
                     register={register}
                     controlClassName={styles["create-account-input"]}
                     labelClassName={"text__caps-spaced"}
+                    note={
+                      process.env.showPwdless
+                        ? t("application.name.yourEmailAddressPwdlessHelper")
+                        : null
+                    }
                   />
                 </CardSection>
                 <CardSection
