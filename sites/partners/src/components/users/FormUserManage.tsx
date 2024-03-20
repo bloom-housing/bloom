@@ -12,12 +12,6 @@ type FormUserManageProps = {
   user?: User
   listings: Listing[]
   onDrawerClose: () => void
-  setAlertMessage: React.Dispatch<
-    React.SetStateAction<{
-      type: string
-      message: string
-    }>
-  >
 }
 
 type FormUserManageValues = {
@@ -44,7 +38,6 @@ const FormUserManage = ({
   user,
   listings,
   onDrawerClose,
-  setAlertMessage,
 }: FormUserManageProps) => {
   const { userService, profile } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
@@ -219,9 +212,9 @@ const FormUserManage = ({
         })
         .catch((e) => {
           if (e?.response?.status === 409) {
-            setAlertMessage({ message: t(`errors.alert.emailConflict`), type: "alert" })
+            addToast(t(`errors.alert.emailConflict`), { variant: "alert" })
           } else {
-            setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
+            addToast(t(`errors.alert.badRequest`), { variant: "alert" })
           }
         })
         .finally(() => {
@@ -239,10 +232,10 @@ const FormUserManage = ({
       userService
         .resendPartnerConfirmation({ body })
         .then(() => {
-          setAlertMessage({ message: t(`users.confirmationSent`), type: "success" })
+          addToast(t(`users.confirmationSent`), { variant: "success" })
         })
         .catch(() => {
-          setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
+          addToast(t(`errors.alert.badRequest`), { variant: "alert" })
         })
         .finally(() => {
           onDrawerClose()
@@ -265,16 +258,16 @@ const FormUserManage = ({
           body: body,
         })
         .then(() => {
-          setAlertMessage({ message: t(`users.userUpdated`), type: "success" })
+          addToast(t(`users.userUpdated`), { variant: "success" })
         })
         .catch(() => {
-          setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
+          addToast(t(`errors.alert.badRequest`), { variant: "alert" })
         })
         .finally(() => {
           onDrawerClose()
         })
     )
-  }, [createUserBody, onDrawerClose, updateUser, userService, user, setAlertMessage])
+  }, [createUserBody, onDrawerClose, updateUser, userService, user])
 
   const onDelete = () => {
     void deleteUser(() =>
@@ -285,10 +278,10 @@ const FormUserManage = ({
           },
         })
         .then(() => {
-          setAlertMessage({ message: t(`users.userDeleted`), type: "success" })
+          addToast(t(`users.userDeleted`), { variant: "success" })
         })
         .catch(() => {
-          setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
+          addToast(t(`errors.alert.badRequest`), { variant: "alert" })
         })
         .finally(() => {
           onDrawerClose()

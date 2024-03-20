@@ -7,7 +7,6 @@ import {
   t,
   DOBField,
   AlertBox,
-  SiteAlert,
   Modal,
   passwordRegex,
 } from "@bloom-housing/ui-components"
@@ -97,7 +96,6 @@ export default () => {
                   {requestError}
                 </AlertBox>
               )}
-              <SiteAlert type="notice" dismissable />
               <Form id="create-account" onSubmit={handleSubmit(onSubmit)}>
                 <CardSection
                   divider={"inset"}

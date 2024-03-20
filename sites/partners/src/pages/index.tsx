@@ -5,8 +5,6 @@ import {
   t,
   AgTable,
   useAgTable,
-  AlertBox,
-  SiteAlert,
   Icon,
   UniversalIconType,
 } from "@bloom-housing/ui-components"
@@ -67,13 +65,9 @@ class ListingsLink extends formatLinkCell {
 
 export default function ListingsList() {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
-  const [errorAlert, setErrorAlert] = useState(false)
   const { profile } = useContext(AuthContext)
   const isAdmin = profile?.userRoles?.isAdmin || profile?.userRoles?.isJurisdictionalAdmin || false
-  const { onExport, csvExportLoading, csvExportError, csvExportSuccess } = useListingExport()
-  useEffect(() => {
-    setErrorAlert(csvExportError)
-  }, [csvExportError])
+  const { onExport, csvExportLoading } = useListingExport()
 
   const tableOptions = useAgTable()
 
@@ -152,28 +146,11 @@ export default function ListingsList() {
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
-      <SiteAlert type="success" timeout={5000} dismissable sticky={true} />
       <MetaTags title={t("nav.siteTitlePartners")} description={metaDescription} />
       <NavigationHeader title={t("nav.listings")}>
-        {csvExportSuccess && (
-          <div className="flex absolute right-4 z-50 flex-col items-center">
-            <SiteAlert dismissable timeout={5000} sticky={true} type="success" />
-          </div>
-        )}
       </NavigationHeader>
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
-          {errorAlert && (
-            <AlertBox
-              className="mb-8"
-              onClose={() => setErrorAlert(false)}
-              closeable
-              type="alert"
-              inverted
-            >
-              {t("account.settings.alerts.genericError")}
-            </AlertBox>
-          )}
           <AgTable
             id="listings-table"
             pagination={{

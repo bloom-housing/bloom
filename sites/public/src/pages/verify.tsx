@@ -7,7 +7,7 @@ import {
   DialogFooter,
   DialogHeader,
 } from "@bloom-housing/ui-seeds/src/overlays/Dialog"
-import { Field, Form, t, SiteAlert } from "@bloom-housing/ui-components"
+import { Field, Form, t } from "@bloom-housing/ui-components"
 import {
   PageView,
   pushGtmEvent,
@@ -52,8 +52,6 @@ const Verify = () => {
     <FormsLayout>
       <BloomCard title={t("account.pwdless.verifyTitle")} iconSymbol={"profile"}>
         <>
-          <SiteAlert type="notice" dismissable />
-
           <CardSection>
             {!!Object.keys(errors).length && (
               <Alert

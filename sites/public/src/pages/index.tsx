@@ -46,15 +46,6 @@ export default function Home(props: IndexProps) {
         <title>{t("nav.siteTitle")}</title>
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      {alertInfo.alertMessage && (
-        <AlertBox
-          className=""
-          onClose={() => setAlertInfo(blankAlertInfo)}
-          type={alertInfo.alertType}
-        >
-          {alertInfo.alertMessage}
-        </AlertBox>
-      )}
       <PageHero>
         <PageHero.Header>
           <Heading>{heroTitle}</Heading>
@@ -111,9 +102,7 @@ export default function Home(props: IndexProps) {
           />
         </div>
       </div>
-      <ConfirmationModal
-        setSiteAlertMessage={(alertMessage, alertType) => setAlertInfo({ alertMessage, alertType })}
-      />
+      <ConfirmationModal />
     </Layout>
   )
 }

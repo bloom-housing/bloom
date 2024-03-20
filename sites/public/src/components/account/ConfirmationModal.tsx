@@ -7,15 +7,12 @@ import { useForm } from "react-hook-form"
 import { emailRegex } from "../../lib/helpers"
 
 export interface ConfirmationModalProps {
-  setSiteAlertMessage: (message: string, alertType: string) => void
 }
 
 const ConfirmationModal = (props: ConfirmationModalProps) => {
-  const { setSiteAlertMessage } = props
   const { resendConfirmation, profile, confirmAccount } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
   const [openModal, setOpenModal] = useState(false)
-  const [modalMessage, setModalMessage] = useState(null)
   const router = useRouter()
 
   /* Form Handler */
@@ -35,7 +32,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
       setOpenModal(false)
     } catch (err) {
       const { data } = err.response || {}
-      setModalMessage(t(`authentication.createAccount.errors.${data.message}`))
+      addToast(t(`authentication.createAccount.errors.${data.message}`), { variant: "alert" })
     }
     window.scrollTo(0, 0)
   }
@@ -69,7 +66,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
             response: { data },
           } = error
           if (data.statusCode === 406) {
-            setSiteAlertMessage(t(`authentication.createAccount.errors.${data.message}`), "alert")
+            addToast(t(`authentication.createAccount.errors.${data.message}`), { variant: "alert" })
           } else {
             setOpenModal(true)
           }
@@ -106,11 +103,6 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
       ]}
     >
       <>
-        {modalMessage && (
-          <AlertBox className="" onClose={() => setModalMessage(null)} type="alert">
-            {modalMessage}
-          </AlertBox>
-        )}
         <Form id="resend-confirmation" onSubmit={handleSubmit(onSubmit)}>
           <Field
             type="email"

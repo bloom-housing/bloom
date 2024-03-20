@@ -2,7 +2,7 @@ import React, { useState, useContext, useRef } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import { Button } from "@bloom-housing/ui-seeds"
-import { Field, Form, FormCard, Icon, t, AlertBox, SiteAlert } from "@bloom-housing/ui-components"
+import { Field, Form, FormCard, Icon, t, AlertBox } from "@bloom-housing/ui-components"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../layouts/forms"
 
@@ -53,7 +53,6 @@ const ResetPassword = () => {
             {requestError}
           </AlertBox>
         )}
-        <SiteAlert type="notice" dismissable />
         <div className="form-card__group pt-0 border-b">
           <Form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
             <Field
