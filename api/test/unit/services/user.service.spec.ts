@@ -1402,11 +1402,14 @@ describe('Testing user service', () => {
         },
         true,
         undefined,
+
         {
-          id: 'requestingUser id',
-          userRoles: { isAdmin: true },
-        } as unknown as User,
-        { headers: { jurisdictionname: 'juris 1' } } as unknown as Request,
+          headers: { jurisdictionname: 'juris 1' },
+          user: {
+            id: 'requestingUser id',
+            userRoles: { isAdmin: true },
+          } as unknown as User,
+        } as unknown as Request,
       );
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
         include: {
@@ -1475,10 +1478,12 @@ describe('Testing user service', () => {
         true,
         undefined,
         {
-          id: 'requestingUser id',
-          userRoles: { isAdmin: true },
-        } as unknown as User,
-        { headers: { jurisdictionname: 'juris 1' } } as unknown as Request,
+          headers: { jurisdictionname: 'juris 1' },
+          user: {
+            id: 'requestingUser id',
+            userRoles: { isAdmin: true },
+          } as unknown as User,
+        } as unknown as Request,
       );
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
         include: {
@@ -1556,10 +1561,12 @@ describe('Testing user service', () => {
             true,
             undefined,
             {
-              id: 'requestingUser id',
-              userRoles: { isAdmin: true },
-            } as unknown as User,
-            { headers: { jurisdictionname: 'juris 1' } } as unknown as Request,
+              headers: { jurisdictionname: 'juris 1' },
+              user: {
+                id: 'requestingUser id',
+                userRoles: { isAdmin: true },
+              } as unknown as User,
+            } as unknown as Request,
           ),
       ).rejects.toThrowError('emailInUse');
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
@@ -1618,10 +1625,12 @@ describe('Testing user service', () => {
         false,
         undefined,
         {
-          id: 'requestingUser id',
-          userRoles: { isAdmin: true },
-        } as unknown as User,
-        { headers: { jurisdictionname: 'juris 1' } } as unknown as Request,
+          headers: { jurisdictionname: 'juris 1' },
+          user: {
+            id: 'requestingUser id',
+            userRoles: { isAdmin: true },
+          } as unknown as User,
+        } as unknown as Request,
       );
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
         include: {
