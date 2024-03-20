@@ -61,6 +61,8 @@ describe('User Controller Tests', () => {
     app.use(cookieParser());
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     userService = moduleFixture.get<UserService>(UserService);
+    emailService = moduleFixture.get<EmailService>(EmailService);
+
     await app.init();
 
     const storedUser = await prisma.userAccounts.create({
