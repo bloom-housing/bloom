@@ -22,6 +22,7 @@ import {
   CsvHeader,
 } from '../types/CsvExportInterface';
 import { mapTo } from '../utilities/mapTo';
+import { ApplicationSubmissionTypeEnum } from '@prisma/client';
 
 view.csv = {
   ...view.details,
@@ -324,6 +325,10 @@ export class ApplicationCsvExporterService
       {
         path: 'submissionType',
         label: 'Application Type',
+        format: (val: string): string =>
+          val === ApplicationSubmissionTypeEnum.electronical
+            ? 'electronic'
+            : val,
       },
       {
         path: 'submissionDate',
