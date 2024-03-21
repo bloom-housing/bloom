@@ -28,6 +28,7 @@ export const applicationFactory = async (optionalParams?: {
   demographics?: Prisma.DemographicsCreateWithoutApplicationsInput;
   multiselectQuestions?: Partial<MultiselectQuestions>[];
   userId?: string;
+  submissionType?: ApplicationSubmissionTypeEnum;
 }): Promise<Prisma.ApplicationsCreateInput> => {
   let preferredUnitTypes: Prisma.UnitTypesCreateNestedManyWithoutApplicationsInput;
   if (optionalParams?.unitTypeId) {
@@ -45,7 +46,9 @@ export const applicationFactory = async (optionalParams?: {
     applicant: { create: applicantFactory(optionalParams?.applicant) },
     appUrl: '',
     status: ApplicationStatusEnum.submitted,
-    submissionType: ApplicationSubmissionTypeEnum.electronical,
+    submissionType: optionalParams?.submissionType
+      ? optionalParams?.submissionType
+      : ApplicationSubmissionTypeEnum.electronical,
     submissionDate: new Date(),
     householdSize: optionalParams?.householdSize ?? 1,
     income: '40000',
