@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from "react"
+import React, { useContext, useMemo, useState } from "react"
 import Head from "next/head"
 import dayjs from "dayjs"
 import { useSWRConfig } from "swr"

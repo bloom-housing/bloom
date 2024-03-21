@@ -98,7 +98,9 @@ const SignIn = () => {
         })
       } else {
         const user = await login(email, password)
-        addToast(t(`authentication.signIn.success`, { name: user.firstName }), { variant: "success" })
+        addToast(t(`authentication.signIn.success`, { name: user.firstName }), {
+          variant: "success",
+        })
         await redirectToPage()
       }
     } catch (error) {

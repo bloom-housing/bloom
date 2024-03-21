@@ -1,13 +1,7 @@
-import React, { useMemo, useContext, useState, useEffect } from "react"
+import React, { useMemo, useContext } from "react"
 import Head from "next/head"
 import { Button } from "@bloom-housing/ui-seeds"
-import {
-  t,
-  AgTable,
-  useAgTable,
-  Icon,
-  UniversalIconType,
-} from "@bloom-housing/ui-components"
+import { t, AgTable, useAgTable, Icon, UniversalIconType } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { ColDef, ColGroupDef } from "ag-grid-community"
@@ -147,8 +141,7 @@ export default function ListingsList() {
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
       <MetaTags title={t("nav.siteTitlePartners")} description={metaDescription} />
-      <NavigationHeader title={t("nav.listings")}>
-      </NavigationHeader>
+      <NavigationHeader title={t("nav.listings")}></NavigationHeader>
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <AgTable

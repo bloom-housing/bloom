@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
 import Head from "next/head"
-import { AlertBox, t, ActionBlock, Icon } from "@bloom-housing/ui-components"
+import { t, ActionBlock, Icon } from "@bloom-housing/ui-components"
 import { Button, Heading } from "@bloom-housing/ui-seeds"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"

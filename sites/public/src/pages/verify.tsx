@@ -62,7 +62,9 @@ const Verify = () => {
       const user = await loginViaSingleUseCode(email, code)
       setIsLoginLoading(false)
       if (flowType === "login") {
-        addToast(t(`authentication.signIn.success`, { name: user.firstName }), { variant: "success" })
+        addToast(t(`authentication.signIn.success`, { name: user.firstName }), {
+          variant: "success",
+        })
       } else {
         addToast(t("authentication.createAccount.accountConfirmed"), { variant: "success" })
       }

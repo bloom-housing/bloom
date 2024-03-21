@@ -3,7 +3,7 @@ import dayjs from "dayjs"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import Head from "next/head"
-import { Message } from "@bloom-housing/ui-seeds"
+import { Message, Toast } from "@bloom-housing/ui-seeds"
 import {
   SiteHeader,
   SiteFooter,
@@ -14,7 +14,6 @@ import {
 } from "@bloom-housing/ui-components"
 import { AuthContext, ExygyFooter, MessageContext } from "@bloom-housing/shared-helpers"
 import styles from "./application.module.scss"
-import { Toast } from "@bloom-housing/ui-seeds"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)

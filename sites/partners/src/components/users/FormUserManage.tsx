@@ -33,12 +33,7 @@ const determineUserRole = (roles: UserRole) => {
   return RoleOption.Partner
 }
 
-const FormUserManage = ({
-  mode,
-  user,
-  listings,
-  onDrawerClose,
-}: FormUserManageProps) => {
+const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageProps) => {
   const { userService, profile } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
   const jurisdictionList = profile.jurisdictions
@@ -267,7 +262,7 @@ const FormUserManage = ({
           onDrawerClose()
         })
     )
-  }, [createUserBody, onDrawerClose, updateUser, userService, user])
+  }, [createUserBody, onDrawerClose, updateUser, userService, user, addToast])
 
   const onDelete = () => {
     void deleteUser(() =>

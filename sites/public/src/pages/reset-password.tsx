@@ -1,15 +1,16 @@
 import React, { useEffect, useState, useContext, useRef } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
-import {
-  Field,
-  Form,
-  t,
-  AlertBox,
-} from "@bloom-housing/ui-components"
+import { Field, Form, t, AlertBox } from "@bloom-housing/ui-components"
 import { Button } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { PageView, pushGtmEvent, AuthContext, BloomCard, MessageContext } from "@bloom-housing/shared-helpers"
+import {
+  PageView,
+  pushGtmEvent,
+  AuthContext,
+  BloomCard,
+  MessageContext,
+} from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
 
