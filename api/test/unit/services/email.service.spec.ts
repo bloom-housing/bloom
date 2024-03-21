@@ -371,7 +371,7 @@ describe('Testing email service', () => {
       expect(emailMock.to).toEqual(emailArr);
       expect(emailMock.subject).toEqual('Listing approval requested');
       expect(emailMock.html).toMatch(
-        `<img src="https://housingbayarea.mtc.ca.gov/images/doorway-logo.png" alt="Bloom Housing Portal" width="254" height="137" />`,
+        `<img src="https://housingbayarea.mtc.ca.gov/images/doorway-logo.png" alt="Bloom Housing Portal" width="300" height="65" />`,
       );
       expect(emailMock.html).toMatch('Hello,');
       expect(emailMock.html).toMatch('Listing approval requested');
@@ -412,7 +412,7 @@ describe('Testing email service', () => {
       expect(emailMock.to).toEqual(emailArr);
       expect(emailMock.subject).toEqual('Listing changes requested');
       expect(emailMock.html).toMatch(
-        `<img src="https://housingbayarea.mtc.ca.gov/images/doorway-logo.png" alt="Bloom Housing Portal" width="254" height="137" />`,
+        `<img src="https://housingbayarea.mtc.ca.gov/images/doorway-logo.png" alt="Bloom Housing Portal" width="300" height="65" />`,
       );
       expect(emailMock.html).toMatch('Listing changes requested');
       expect(emailMock.html).toMatch('Hello,');
@@ -457,7 +457,7 @@ describe('Testing email service', () => {
       expect(emailMock.to).toEqual(emailArr);
       expect(emailMock.subject).toEqual('New published listing');
       expect(emailMock.html).toMatch(
-        `<img src="https://housingbayarea.mtc.ca.gov/images/doorway-logo.png" alt="Bloom Housing Portal" width="254" height="137" />`,
+        `<img src="https://housingbayarea.mtc.ca.gov/images/doorway-logo.png" alt="Bloom Housing Portal" width="300" height="65" />`,
       );
       expect(emailMock.html).toMatch('New published listing');
       expect(emailMock.html).toMatch('Hello,');

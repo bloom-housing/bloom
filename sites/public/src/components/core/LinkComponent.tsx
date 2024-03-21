@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react"
+import React, { PropsWithChildren } from "react"
 import Link from "next/link"
 
 const LinkComponent = (props: PropsWithChildren<React.AnchorHTMLAttributes<HTMLAnchorElement>>) => {
