@@ -37,7 +37,7 @@ const FormSignIn = ({
   const createAccountUrl = getListingRedirectUrl(listingIdRedirect, "/create-account")
 
   return (
-    <BloomCard iconSymbol="profile" title={t("nav.signIn")} headingPriority={1}>
+    <BloomCard customIcon="profile" title={t("nav.signIn")} headingPriority={1}>
       <>
         <FormSignInErrorBox
           errors={errors}

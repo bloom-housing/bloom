@@ -66,7 +66,7 @@ const ResetPassword = () => {
 
   return (
     <FormsLayout>
-      <BloomCard title={t("authentication.forgotPassword.changePassword")} iconSymbol={"profile"}>
+      <BloomCard title={t("authentication.forgotPassword.changePassword")} customIcon={"profile"}>
         <>
           {requestError && (
             <AlertBox className="mt-6" onClose={() => setRequestError(undefined)} type="alert">

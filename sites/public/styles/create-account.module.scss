@@ -32,3 +32,20 @@
 .create-account-dob-example {
   margin-top: var(--seeds-s2);
 }
+
+.create-account-modal-subheader {
+  margin-bottom: var(--seeds-s2);
+  font-size: var(--seeds-font-size-lg);
+  font-weight: var(--seeds-font-weight-semibold);
+  font-family: var(--seeds-font-sans);
+  color: var(--seeds-text-color);
+}
+
+.create-account-terms-checkbox {
+  margin-bottom: 0;
+}
+
+.create-account-terms-label {
+  font-weight: var(--seeds-font-weight-semibold);
+  color: var(--seeds-text-color);
+}

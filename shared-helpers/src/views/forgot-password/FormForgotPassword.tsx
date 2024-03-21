@@ -50,7 +50,7 @@ const FormForgotPassword = ({
   const router = useRouter()
 
   return (
-    <BloomCard title={t("authentication.forgotPassword.sendEmail")} iconSymbol={"profile"}>
+    <BloomCard title={t("authentication.forgotPassword.sendEmail")} customIcon={"profile"}>
       <>
         {Object.entries(errors).length > 0 && !networkError.error && (
           <AlertBox type="alert" inverted closeable>

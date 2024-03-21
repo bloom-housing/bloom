@@ -95,7 +95,7 @@ const Applications = () => {
         <section className="bg-gray-300 border-t border-gray-450">
           <div className="flex flex-wrap relative max-w-3xl mx-auto sm:p-8">
             <BloomCard
-              iconSymbol="application"
+              customIcon="application"
               title={t("account.myApplications")}
               subtitle={t("account.myApplicationsSubtitle")}
               headingPriority={1}

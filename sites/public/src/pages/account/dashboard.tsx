@@ -65,7 +65,7 @@ function Dashboard(props: DashboardProps) {
               <Grid.Row columns={2}>
                 <Grid.Cell>
                   <BloomCard
-                    iconSymbol="application"
+                    customIcon="application"
                     title={t("account.myApplications")}
                     subtitle={t("account.myApplicationsSubtitle")}
                     variant={"block"}
@@ -85,7 +85,7 @@ function Dashboard(props: DashboardProps) {
                 </Grid.Cell>
                 <Grid.Cell>
                   <BloomCard
-                    iconSymbol="profile"
+                    customIcon="profile"
                     title={t("account.accountSettings")}
                     subtitle={t("account.accountSettingsSubtitle")}
                     id="account-dashboard-settings"

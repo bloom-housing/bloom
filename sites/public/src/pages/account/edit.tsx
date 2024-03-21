@@ -156,7 +156,7 @@ const Edit = () => {
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
       <FormsLayout>
         <BloomCard
-          iconSymbol="profile"
+          customIcon="profile"
           title={t("account.accountSettings")}
           subtitle={t("account.accountSettingsSubtitle")}
           headingPriority={1}

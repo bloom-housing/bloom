@@ -8,23 +8,25 @@ import {
   DOBField,
   AlertBox,
   SiteAlert,
-  Modal,
   passwordRegex,
+  Modal,
 } from "@bloom-housing/ui-components"
-import { Button, Heading } from "@bloom-housing/ui-seeds"
+import { Button, Heading, Dialog } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import dayjs from "dayjs"
+import Markdown from "markdown-to-jsx"
 import customParseFormat from "dayjs/plugin/customParseFormat"
 dayjs.extend(customParseFormat)
 import { useRouter } from "next/router"
 import { PageView, pushGtmEvent, AuthContext, BloomCard } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
-import accountCardStyles from "./account/account.module.scss"
-import styles from "../../styles/create-account.module.scss"
+import BloomCardStyles from "./account/account.module.scss"
+import accountStyles from "../../styles/create-account.module.scss"
 import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
 import SignUpBenefits from "../components/account/SignUpBenefits"
 import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
+import { LanguagesEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export default () => {
   const { createUser, resendConfirmation } = useContext(AuthContext)
@@ -32,9 +34,12 @@ export default () => {
   const signUpCopy = process.env.showMandatedAccounts
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, watch } = useForm()
+  const { register, handleSubmit, errors, watch, trigger } = useForm()
   const [requestError, setRequestError] = useState<string>()
-  const [openModal, setOpenModal] = useState<boolean>(false)
+  const [openTermsModal, setOpenTermsModal] = useState<boolean>(false)
+  const [openEmailModal, setOpenEmailModal] = useState<boolean>(false)
+  const [isTermsLoading, setIsTermsLoading] = useState(false)
+  const [notChecked, setChecked] = useState(true)
   const router = useRouter()
   const language = router.locale
   const listingId = router.query?.listingId as string
@@ -52,19 +57,18 @@ export default () => {
   }, [])
 
   const onSubmit = async (data) => {
+    setChecked(true)
     try {
+      setIsTermsLoading(true)
       const { dob, ...rest } = data
       const listingIdRedirect =
         process.env.showMandatedAccounts && listingId ? listingId : undefined
-      await createUser(
-        {
-          ...rest,
-          dob: dayjs(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
-          language,
-        },
-        listingIdRedirect
-      )
-
+      const createUserObj = {
+        ...rest,
+        dob: dayjs(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`).toDate(),
+        language: language as LanguagesEnum,
+      }
+      await createUser(createUserObj, listingIdRedirect)
       if (process.env.showPwdless) {
         const redirectUrl = router.query?.redirectUrl as string
         const listingId = router.query?.listingId as string
@@ -76,10 +80,13 @@ export default () => {
           pathname: "/verify",
           query: queryParams,
         })
-      } else {
-        setOpenModal(true)
       }
+      setOpenEmailModal(true)
+      setIsTermsLoading(false)
+      setOpenTermsModal(false)
     } catch (err) {
+      setIsTermsLoading(false)
+      setOpenTermsModal(false)
       const { status, data } = err.response || {}
       if (status === 400) {
         setRequestError(`${t(`authentication.createAccount.errors.${data.message}`)}`)
@@ -103,7 +110,7 @@ export default () => {
           </div>
         )}
         <div className={signUpCopy && signUpBenefitsStyles["benefits-form-container"]}>
-          <BloomCard iconSymbol="profile" title={t("account.createAccount")} headingPriority={1}>
+          <BloomCard customIcon="profile" title={t("account.createAccount")} headingPriority={1}>
             <>
               {requestError && (
                 <AlertBox className="" onClose={() => setRequestError(undefined)} type="alert">
@@ -111,20 +118,20 @@ export default () => {
                 </AlertBox>
               )}
               <SiteAlert type="notice" dismissable />
-              <Form id="create-account" onSubmit={handleSubmit(onSubmit)}>
+              <Form id="create-account">
                 <CardSection
                   divider={"inset"}
-                  className={accountCardStyles["account-card-settings-section"]}
+                  className={BloomCardStyles["account-card-settings-section"]}
                 >
-                  <label className={styles["create-account-header"]} htmlFor="firstName">
+                  <label className={accountStyles["create-account-header"]} htmlFor="firstName">
                     {t("application.name.yourName")}
                   </label>
 
-                  <label className={styles["create-account-field"]} htmlFor="firstName">
+                  <label className={accountStyles["create-account-field"]} htmlFor="firstName">
                     {t("application.name.firstOrGivenName")}
                   </label>
                   <Field
-                    controlClassName={styles["create-account-input"]}
+                    controlClassName={accountStyles["create-account-input"]}
                     name="firstName"
                     validation={{ required: true, maxLength: 64 }}
                     error={errors.givenName}
@@ -136,7 +143,7 @@ export default () => {
                     register={register}
                   />
 
-                  <label className={styles["create-account-field"]} htmlFor="middleName">
+                  <label className={accountStyles["create-account-field"]} htmlFor="middleName">
                     {t("application.name.middleNameOptional")}
                   </label>
                   <Field
@@ -145,10 +152,10 @@ export default () => {
                     error={errors.middleName}
                     validation={{ maxLength: 64 }}
                     errorMessage={t("errors.maxLength")}
-                    controlClassName={styles["create-account-input"]}
+                    controlClassName={accountStyles["create-account-input"]}
                   />
 
-                  <label className={styles["create-account-field"]} htmlFor="lastName">
+                  <label className={accountStyles["create-account-field"]} htmlFor="lastName">
                     {t("application.name.lastOrFamilyName")}
                   </label>
                   <Field
@@ -161,12 +168,12 @@ export default () => {
                         ? t("errors.maxLength")
                         : t("errors.lastNameError")
                     }
-                    controlClassName={styles["create-account-input"]}
+                    controlClassName={accountStyles["create-account-input"]}
                   />
                 </CardSection>
                 <CardSection
                   divider={"inset"}
-                  className={accountCardStyles["account-card-settings-section"]}
+                  className={BloomCardStyles["account-card-settings-section"]}
                 >
                   <DOBField
                     register={register}
@@ -179,17 +186,17 @@ export default () => {
                     errorMessage={t("errors.dateOfBirthErrorAge")}
                     label={t("application.name.yourDateOfBirth")}
                   />
-                  <p className={`field-note ${styles["create-account-dob-age-helper"]}`}>
+                  <p className={`field-note ${accountStyles["create-account-dob-age-helper"]}`}>
                     {t("application.name.dobHelper2")}
                   </p>
-                  <p className={`field-note ${styles["create-account-dob-example"]}`}>
+                  <p className={`field-note ${accountStyles["create-account-dob-example"]}`}>
                     {t("application.name.dobHelper")}
                   </p>
                 </CardSection>
 
                 <CardSection
                   divider={"inset"}
-                  className={accountCardStyles["account-card-settings-section"]}
+                  className={BloomCardStyles["account-card-settings-section"]}
                 >
                   <Field
                     type="email"
@@ -199,7 +206,7 @@ export default () => {
                     error={errors.email}
                     errorMessage={t("authentication.signIn.loginError")}
                     register={register}
-                    controlClassName={styles["create-account-input"]}
+                    controlClassName={accountStyles["create-account-input"]}
                     labelClassName={"text__caps-spaced"}
                     note={
                       process.env.showPwdless
@@ -210,7 +217,7 @@ export default () => {
                 </CardSection>
                 <CardSection
                   divider={"inset"}
-                  className={accountCardStyles["account-card-settings-section"]}
+                  className={BloomCardStyles["account-card-settings-section"]}
                 >
                   <Field
                     labelClassName={"text__caps-spaced"}
@@ -226,9 +233,12 @@ export default () => {
                     error={errors.password}
                     errorMessage={t("authentication.signIn.passwordError")}
                     register={register}
-                    controlClassName={styles["create-account-input"]}
+                    controlClassName={accountStyles["create-account-input"]}
                   />
-                  <label className={styles["create-account-field"]} htmlFor="passwordConfirmation">
+                  <label
+                    className={accountStyles["create-account-field"]}
+                    htmlFor="passwordConfirmation"
+                  >
                     {t("authentication.createAccount.reEnterPassword")}
                   </label>
                   <Field
@@ -252,17 +262,22 @@ export default () => {
                     error={errors.passwordConfirmation}
                     errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
                     register={register}
-                    controlClassName={styles["create-account-input"]}
+                    controlClassName={accountStyles["create-account-input"]}
                     label={t("authentication.createAccount.reEnterPassword")}
                     readerOnly
                   />
-                  <Button type="submit" variant="primary">
+                  <Button
+                    onClick={() => {
+                      void trigger().then((res) => res && setOpenTermsModal(true))
+                    }}
+                    variant="primary"
+                  >
                     {t("account.createAccount")}
                   </Button>
                 </CardSection>
                 <CardSection
                   divider={"inset"}
-                  className={accountCardStyles["account-card-settings-section"]}
+                  className={BloomCardStyles["account-card-settings-section"]}
                 >
                   <Heading priority={2} size="2xl" className="mb-6">
                     {t("account.haveAnAccount")}
@@ -271,6 +286,53 @@ export default () => {
                     {t("nav.signIn")}
                   </Button>
                 </CardSection>
+                {/* Terms disclaimer modal */}
+                <Dialog
+                  isOpen={openTermsModal}
+                  onClose={() => {
+                    setOpenTermsModal(false)
+                  }}
+                >
+                  <Dialog.Header>{t("authentication.terms.reviewTou")}</Dialog.Header>
+                  <Dialog.Content>
+                    <>
+                      <p>{t("authentication.terms.publicAccept")}</p>
+                      <Heading
+                        size="lg"
+                        priority={2}
+                        className={accountStyles["create-account-modal-subheader"]}
+                      >
+                        {t("authentication.terms.termsOfUse")}
+                      </Heading>
+                      <Markdown>{t("authentication.terms.publicTerms")}</Markdown>
+                      <Field
+                        id="agreedToTermsOfService"
+                        name="agreedToTermsOfService"
+                        type="checkbox"
+                        label={t(`authentication.terms.acceptExtended`)}
+                        register={register}
+                        validation={{ required: true }}
+                        error={!!errors.agree}
+                        errorMessage={t("errors.agreeError")}
+                        dataTestId="agree"
+                        onChange={() => setChecked(!notChecked)}
+                        className={accountStyles["create-account-terms-checkbox"]}
+                        labelClassName={accountStyles["create-account-terms-label"]}
+                      />
+                    </>
+                  </Dialog.Content>
+                  <Dialog.Footer>
+                    <Button
+                      disabled={notChecked}
+                      type="submit"
+                      variant="primary"
+                      onClick={handleSubmit(onSubmit)}
+                      loadingMessage={isTermsLoading ? t("t.loading") : undefined}
+                    >
+                      {t("t.finish")}
+                    </Button>
+                  </Dialog.Footer>
+                </Dialog>
               </Form>
             </>
           </BloomCard>
@@ -289,8 +351,9 @@ export default () => {
           </div>
         )}
       </div>
+      {/* Email confirmation modal */}
       <Modal
-        open={openModal}
+        open={openEmailModal}
         title={t("authentication.createAccount.confirmationNeeded")}
         ariaDescription={t("authentication.createAccount.anEmailHasBeenSent", {
           email: email.current,

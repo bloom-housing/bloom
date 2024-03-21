@@ -57,9 +57,10 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
         .then(() => {
           void router.push({
             pathname: routerRedirectUrl,
-            query: process.env.showMandatedAccounts
-              ? { listingId: listingId }
-              : { alert: `authentication.createAccount.accountConfirmed` },
+            query:
+              process.env.showMandatedAccounts && listingId
+                ? { listingId: listingId }
+                : { alert: `authentication.createAccount.accountConfirmed` },
           })
           window.scrollTo(0, 0)
         })
