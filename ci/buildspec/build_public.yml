@@ -41,6 +41,7 @@ phases:
         --build-arg "SHOW_PROFESSIONAL_PARTNERS=$SHOW_PROFESSIONAL_PARTNERS"
         --build-arg "NOTIFICATIONS_SIGN_UP_URL=$NOTIFICATIONS_SIGN_UP_URL"
         --build-arg "SHOW_MANDATED_ACCOUNTS=$SHOW_MANDATED_ACCOUNTS"
+        --build-arg "SHOW_PWDLESS=$SHOW_PWDLESS"
         --target test
         -t sites/public:test
         .
@@ -66,6 +67,7 @@ phases:
         --build-arg "SHOW_PROFESSIONAL_PARTNERS=$SHOW_PROFESSIONAL_PARTNERS"
         --build-arg "NOTIFICATIONS_SIGN_UP_URL=$NOTIFICATIONS_SIGN_UP_URL"
         --build-arg "SHOW_MANDATED_ACCOUNTS=$SHOW_MANDATED_ACCOUNTS"
+        --build-arg "SHOW_PWDLESS=$SHOW_PWDLESS"
         --target run
         -t sites/public:run-candidate
         .
