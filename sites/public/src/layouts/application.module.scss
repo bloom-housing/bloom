@@ -1,5 +1,6 @@
 .site-alert-banner-container {
-  background-color: var(--seeds-color-alert-light);
+  // temp launch change, replace with --seeds-color-alert-light after advertising window
+  background-color: var(--seeds-color-primary-lighter);
   width: 100%;
   display: flex;
   align-items: center;

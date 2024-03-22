@@ -28,6 +28,7 @@
   "account.settings.placeholders.month": "MM",
   "account.settings.placeholders.year": "YYYY",
   "account.settings.update": "I-update",
+  "alert.applicationMessage": "Ang mga aplikasyon ay magagamit na ngayon para sa higit pang mga listahan! Maaaring kailanganin kang gumawa ng account. Pakisuri ang <a href='https://mtc.ca.gov/doorway-housing-portal-terms-use' target='_blank'>Mga Tuntunin ng Paggamit</a> at <a href='https://mtc.ca.gov/doorway-housing-portal-privacy-policy' target='_blank'>Patakaran sa Privacy</a>, na parehong nagbago.",
   "alert.maintenance": "Ang site na ito ay sumasailalim sa naka-iskedyul na pagpapanatili. Humihingi kami ng paumanhin para sa anumang abala.",
   "application.ada.hearing": "Para Sa Mga Kapansanan Sa Pandinig",
   "application.ada.label": "Mga Accessible Unit ng ADA",

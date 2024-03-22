@@ -8,6 +8,7 @@ import { getSiteFooter } from "../lib/helpers"
 import { SiteHeader } from "@bloom-housing/doorway-ui-components/src/headers/SiteHeader"
 import { Message } from "@bloom-housing/ui-seeds"
 import styles from "./application.module.scss"
+import Markdown from "markdown-to-jsx"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
@@ -129,8 +130,9 @@ const Layout = (props) => {
         </Head>
         {getInMaintenance() && (
           <div className={styles["site-alert-banner-container"]}>
-            <Message className={styles["site-alert-banner-content"]} variant={"alert"}>
-              {t("alert.maintenance")}
+            <Message className={styles["site-alert-banner-content"]} variant={"primary"}>
+              {/* temporary change to support doorway launch, should return to alert.maintenance and variant=alert after advertisig window */}
+              <Markdown>{t("alert.applicationMessage")}</Markdown>
             </Message>
           </div>
         )}

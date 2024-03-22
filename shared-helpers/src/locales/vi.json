@@ -28,6 +28,7 @@
   "account.settings.placeholders.month": "Tháng",
   "account.settings.placeholders.year": "Năm",
   "account.settings.update": "Cập nhật",
+  "alert.applicationMessage": "Các ứng dụng hiện có sẵn cho nhiều danh sách hơn! Bạn có thể được yêu cầu tạo một tài khoản. Vui lòng xem lại <a href='https://mtc.ca.gov/doorway-housing-portal-terms-use' target='_blank'>Điều khoản sử dụng</a> và <a href='https://mtc.ca.gov/doorway-housing-portal-privacy-policy' target='_blank'>Chính sách quyền riêng tư</a>, cả hai đều đã thay đổi.",
   "alert.maintenance": "Trang web này đang được bảo trì theo lịch trình. Chúng tôi xin lỗi vì bất cứ sự bất tiện nào.",
   "application.ada.hearing": "Dành cho các cư dân bị Suy giảm Thính lực",
   "application.ada.label": "Các Căn nhà Dễ tiếp cập của ADA",

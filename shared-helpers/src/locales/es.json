@@ -28,6 +28,7 @@
   "account.settings.placeholders.month": "MM",
   "account.settings.placeholders.year": "AAAA",
   "account.settings.update": "Actualizar",
+  "alert.applicationMessage": "¡Las solicitudes ya están disponibles para más listados! Es posible que deba crear una cuenta. Revise los <a href='https://mtc.ca.gov/doorway-housing-portal-terms-use' target='_blank'>Términos de uso</a> y la <a href='https://mtc.ca.gov/doorway-housing-portal-privacy-policy' target='_blank'>Política de privacidad</a>, los cuales han cambiado.",
   "alert.maintenance": "Este sitio está en mantenimiento programado. Nos disculpamos por cualquier inconveniente.",
   "application.ada.hearing": "Para dificultades auditivas",
   "application.ada.label": "Viviendas accesibles de conformidad con ADA",
