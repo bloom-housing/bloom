@@ -6,6 +6,7 @@ import { useContext, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { emailRegex } from "../../lib/helpers"
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ConfirmationModalProps {}
 
 const ConfirmationModal = (props: ConfirmationModalProps) => {

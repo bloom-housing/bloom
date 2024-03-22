@@ -21,7 +21,6 @@ export default function Home(props: IndexProps) {
     alertType: null,
   }
   const { profile } = useContext(AuthContext)
-  const [alertInfo, setAlertInfo] = useState(blankAlertInfo)
 
   useEffect(() => {
     pushGtmEvent<PageView>({
