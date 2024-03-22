@@ -45,7 +45,7 @@ describe("Preference Management Tests", () => {
     cy.getByTestId("preference-opt-out-label").type("Preference Opt Out Label")
     cy.getByTestId("preference-jurisdiction").select("Bloomington")
     cy.getByID("preference-save-button").click()
-    cy.getByTestId("alert-box")
+    cy.getByTestId("toast-alert")
       .contains("Preference Created")
       .should("have.text", "Preference Created")
 
