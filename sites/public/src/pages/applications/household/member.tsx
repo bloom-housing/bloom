@@ -378,7 +378,6 @@ const ApplicationMember = () => {
                 name="workInRegion"
                 fieldGroupClassName="grid grid-cols-1"
                 fieldClassName="ml-0"
-                groupNote={t("application.household.member.workInRegionNote")}
                 type="radio"
                 register={register}
                 validation={{ required: true }}

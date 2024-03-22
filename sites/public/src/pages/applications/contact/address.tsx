@@ -514,8 +514,6 @@ const ApplicationAddress = () => {
                   })}
                 </legend>
 
-                <p className="field-note mb-4">{t("application.contact.doYouWorkInDescription")}</p>
-
                 <Field
                   className="mb-1"
                   type="radio"
