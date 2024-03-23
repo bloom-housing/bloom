@@ -28,7 +28,6 @@ const ResetPassword = () => {
       const user = await resetPassword(token.toString(), password, passwordConfirmation)
       await router.push("/")
       window.scrollTo(0, 0)
-      // TODO: convert this to an alert https://github.com/bloom-housing/bloom/issues/3433
       addToast(t(`authentication.signIn.success`, { name: user.firstName }), { variant: "success" })
     } catch (err) {
       const { status, data } = err.response || {}

@@ -102,8 +102,8 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
         >
           <ConfigProvider apiUrl={process.env.backendApiBase}>
             <AuthProvider>
-              <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
               <MessageProvider>
+                <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
                 <Component {...pageProps} />
               </MessageProvider>
             </AuthProvider>

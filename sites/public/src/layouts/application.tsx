@@ -58,9 +58,9 @@ const Layout = (props) => {
           title: t("nav.signOut"),
           onClick: () => {
             const signOutFxn = async () => {
-              addToast(t(`authentication.signOut.success`), { variant: "primary" })
               await router.push("/sign-in")
-              signOut()
+              await signOut()
+              addToast(t(`authentication.signOut.success`), { variant: "primary" })
             }
             void signOutFxn()
           },
