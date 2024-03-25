@@ -563,13 +563,13 @@ const ApplicationAddress = () => {
                     </legend>
 
                     <Field
-                      id="workAddressStreet"
-                      name="applicant.workAddress.street"
+                      id="applicantWorkAddressStreet"
+                      name="applicant.applicantWorkAddress.street"
                       defaultValue={application.applicant.applicantWorkAddress.street}
                       validation={{ required: true, maxLength: 64 }}
                       error={errors.applicant?.workAddress?.street}
                       errorMessage={
-                        errors.applicant?.workAddress?.street?.type === "maxLength"
+                        errors.applicant?.applicantWorkAddress?.street?.type === "maxLength"
                           ? t("errors.maxLength")
                           : t("errors.streetError")
                       }
@@ -579,12 +579,12 @@ const ApplicationAddress = () => {
                     />
 
                     <Field
-                      id="workAddressStreet2"
-                      name="applicant.workAddress.street2"
+                      id="applicantWorkAddressStreet2"
+                      name="applicant.applicantWorkAddress.street2"
                       label={t("application.contact.apt")}
                       defaultValue={application.applicant.applicantWorkAddress.street2}
                       register={register}
-                      error={errors.applicant?.workAddress?.street2}
+                      error={errors.applicant?.applicantWorkAddress?.street2}
                       validation={{ maxLength: 64 }}
                       errorMessage={"errors.maxLength"}
                       dataTestId={"app-primary-work-address-street2"}
@@ -592,14 +592,14 @@ const ApplicationAddress = () => {
 
                     <div className="flex max-w-2xl">
                       <Field
-                        id="workAddressCity"
-                        name="applicant.workAddress.city"
+                        id="applicantWorkAddressCity"
+                        name="applicant.applicantWorkAddress.city"
                         label={t("application.contact.city")}
                         defaultValue={application.applicant.applicantWorkAddress.city}
                         validation={{ required: true, maxLength: 64 }}
-                        error={errors.applicant?.workAddress?.city}
+                        error={errors.applicant?.applicantWorkAddress?.city}
                         errorMessage={
-                          errors.applicant?.workAddress?.city?.type === "maxLength"
+                          errors.applicant?.applicantWorkAddress?.city?.type === "maxLength"
                             ? t("errors.maxLength")
                             : t("errors.cityError")
                         }
@@ -608,13 +608,13 @@ const ApplicationAddress = () => {
                       />
 
                       <Select
-                        id="workAddressState"
-                        name="applicant.workAddress.state"
+                        id="applicantWorkAddressState"
+                        name="applicant.applicantWorkAddress.state"
                         label={t("application.contact.state")}
                         defaultValue={application.applicant.applicantWorkAddress.state}
                         validation={{ required: true, maxLength: 64 }}
                         errorMessage={
-                          errors.applicant?.workAddress?.state?.type === "maxLength"
+                          errors.applicant?.applicantWorkAddress?.state?.type === "maxLength"
                             ? t("errors.maxLength")
                             : t("errors.stateError")
                         }
@@ -627,14 +627,14 @@ const ApplicationAddress = () => {
                     </div>
 
                     <Field
-                      id="workAddressZipCode"
-                      name="applicant.workAddress.zipCode"
+                      id="applicantWorkAddressZipCode"
+                      name="applicant.applicantWorkAddress.zipCode"
                       label={t("application.contact.zip")}
                       defaultValue={application.applicant.applicantWorkAddress.zipCode}
                       validation={{ required: true, maxLength: 64 }}
-                      error={errors.applicant?.workAddress?.zipCode}
+                      error={errors.applicant?.applicantWorkAddress?.zipCode}
                       errorMessage={
-                        errors.applicant?.workAddress?.zipCode?.type === "maxLength"
+                        errors.applicant?.applicantWorkAddress?.zipCode?.type === "maxLength"
                           ? t("errors.maxLength")
                           : t("errors.zipCodeError")
                       }
