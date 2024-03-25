@@ -567,7 +567,7 @@ const ApplicationAddress = () => {
                       name="applicant.applicantWorkAddress.street"
                       defaultValue={application.applicant.applicantWorkAddress.street}
                       validation={{ required: true, maxLength: 64 }}
-                      error={errors.applicant?.workAddress?.street}
+                      error={errors.applicant?.applicantWorkAddress?.street}
                       errorMessage={
                         errors.applicant?.applicantWorkAddress?.street?.type === "maxLength"
                           ? t("errors.maxLength")
@@ -613,6 +613,7 @@ const ApplicationAddress = () => {
                         label={t("application.contact.state")}
                         defaultValue={application.applicant.applicantWorkAddress.state}
                         validation={{ required: true, maxLength: 64 }}
+                        error={errors.applicant?.applicantWorkAddress?.state}
                         errorMessage={
                           errors.applicant?.applicantWorkAddress?.state?.type === "maxLength"
                             ? t("errors.maxLength")
