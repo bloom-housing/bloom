@@ -3,21 +3,21 @@ import {
   Drawer,
   Field,
   FieldGroup,
-  Select,
-  Textarea,
-  t,
   MinimalTable,
+  Select,
   StandardTableData,
+  t,
+  Textarea,
 } from "@bloom-housing/ui-components"
-import { Button, FormErrorMessage, FieldValue, Card, Grid } from "@bloom-housing/ui-seeds"
+import { Button, Card, FieldValue, FormErrorMessage, Grid } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import {
   MultiselectOption,
   MultiselectQuestion,
   MultiselectQuestionCreate,
-  MultiselectQuestionUpdate,
   MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionUpdate,
   ValidationMethodEnum,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -103,6 +103,9 @@ const PreferenceDrawer = ({
     ((optionData?.collectAddress && watch("collectAddress") === undefined) ||
       watch("collectAddress") === YesNoEnum.yes) &&
     isAdditionalDetailsEnabled
+  const isValidationRadiusVisible = profile?.jurisdictions.find(
+    (juris) => juris.id === watch("jurisdictionId")
+  )?.enableGeocodingRadiusMethod
   const readiusExpand =
     (optionData?.validationMethod === ValidationMethodEnum.radius &&
       watch("validationMethod") === undefined) ||
@@ -172,6 +175,51 @@ const PreferenceDrawer = ({
   const selectDrawerTitle = optionData
     ? t("settings.preferenceEditOption")
     : t("settings.preferenceAddOption")
+
+  let validationMethodsFields = [
+    {
+      label: t("settings.preferenceValidatingAddress.checkWithinRadius"),
+      value: ValidationMethodEnum.radius,
+      defaultChecked: optionData?.validationMethod === ValidationMethodEnum.radius,
+      id: "validationMethodRadius",
+      dataTestId: "validation-method-radius",
+      inputProps: {
+        onChange: () => {
+          clearErrors("validationMethod")
+        },
+      },
+    },
+    {
+      label: t("settings.preferenceValidatingAddress.checkWithArcGisMap"),
+      value: ValidationMethodEnum.map,
+      defaultChecked: optionData?.validationMethod === ValidationMethodEnum.map,
+      id: "validationMethodMap",
+      dataTestId: "validation-method-map",
+      inputProps: {
+        onChange: () => {
+          clearErrors("validationMethod")
+        },
+      },
+    },
+    {
+      label: t("settings.preferenceValidatingAddress.checkManually"),
+      value: ValidationMethodEnum.none,
+      defaultChecked: optionData?.validationMethod === ValidationMethodEnum.none,
+      id: "validationMethodNone",
+      dataTestId: "validation-method-none",
+      inputProps: {
+        onChange: () => {
+          clearErrors("validationMethod")
+        },
+      },
+    },
+  ]
+
+  if (!isValidationRadiusVisible) {
+    validationMethodsFields = validationMethodsFields.filter(
+      (field) => field.id !== "validationMethodRadius"
+    )
+  }
 
   return (
     <>
@@ -424,6 +472,17 @@ const PreferenceDrawer = ({
               }
               if (!validation) return
               const formValues = getValues()
+              if (!isValidationRadiusVisible) {
+                questionData.options = questionData?.options.map((option) =>
+                  option.validationMethod === ValidationMethodEnum.radius
+                    ? {
+                        ...option,
+                        validationMethod: ValidationMethodEnum.none,
+                        radiusSize: undefined,
+                      }
+                    : option
+                )
+              }
 
               const formattedQuestionData: MultiselectQuestionUpdate | MultiselectQuestionCreate = {
                 applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
@@ -624,47 +683,7 @@ const PreferenceDrawer = ({
                         register={register}
                         validation={{ required: true }}
                         error={errors.validationMethod}
-                        fields={[
-                          {
-                            label: t("settings.preferenceValidatingAddress.checkWithinRadius"),
-                            value: ValidationMethodEnum.radius,
-                            defaultChecked:
-                              optionData?.validationMethod === ValidationMethodEnum.radius,
-                            id: "validationMethodRadius",
-                            dataTestId: "validation-method-radius",
-                            inputProps: {
-                              onChange: () => {
-                                clearErrors("validationMethod")
-                              },
-                            },
-                          },
-                          {
-                            label: t("settings.preferenceValidatingAddress.checkWithArcGisMap"),
-                            value: ValidationMethodEnum.map,
-                            defaultChecked:
-                              optionData?.validationMethod === ValidationMethodEnum.map,
-                            id: "validationMethodMap",
-                            dataTestId: "validation-method-map",
-                            inputProps: {
-                              onChange: () => {
-                                clearErrors("validationMethod")
-                              },
-                            },
-                          },
-                          {
-                            label: t("settings.preferenceValidatingAddress.checkManually"),
-                            value: ValidationMethodEnum.none,
-                            defaultChecked:
-                              optionData?.validationMethod === ValidationMethodEnum.none,
-                            id: "validationMethodNone",
-                            dataTestId: "validation-method-none",
-                            inputProps: {
-                              onChange: () => {
-                                clearErrors("validationMethod")
-                              },
-                            },
-                          },
-                        ]}
+                        fields={validationMethodsFields}
                         fieldClassName="m-0"
                         fieldGroupClassName="flex flex-col"
                         dataTestId={"preference-option-validation-method"}
@@ -673,7 +692,7 @@ const PreferenceDrawer = ({
                   )}
                 </Grid.Cell>
                 <Grid.Cell className="pr-8">
-                  {collectAddressExpand && readiusExpand && (
+                  {collectAddressExpand && readiusExpand && isValidationRadiusVisible && (
                     <FieldValue label={t("settings.preferenceValidatingAddress.howManyMiles")}>
                       <Field
                         id="radiusSize"
