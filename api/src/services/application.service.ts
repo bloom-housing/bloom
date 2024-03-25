@@ -159,11 +159,6 @@ export const view: Partial<
         id: true,
       },
     },
-    listings: {
-      select: {
-        id: true,
-      },
-    },
   },
 };
 
