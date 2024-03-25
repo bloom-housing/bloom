@@ -172,10 +172,10 @@ const translations = (jurisdictionName?: string, language?: LanguagesEnum) => {
         SRO: 'SROs',
         viewButton: {
           en: 'View listing & apply',
-          es: 'Ver listado y aplicar',
-          zh: '查看列表并申请',
-          vi: 'Xem danh sách và áp dụng',
-          tl: 'Tingnan ang listahan at mag-apply',
+          es: 'Ver anuncio y solicitar',
+          zh: '查看房源和申請',
+          vi: 'Xem tin đăng & nộp đơn',
+          tl: 'Tingnan ang Listahan at Mag-apply',
         },
       },
     };

@@ -81,14 +81,14 @@ export function getStartedLinkableCards(): React.ReactElement<CardProps>[] {
                 <li>{t("help.getStarted.applyLotteryWaitlistResp3d")}</li>
               </ul>
               <li>{t("help.getStarted.applyLotteryWaitlistResp4")}</li>
-              <li>{t("help.getStarted.applyLotteryWaitlistResp4a")}</li>
               <li>{t("help.getStarted.applyLotteryWaitlistResp5")}</li>
-              <ul className="text__medium-normal list-disc ml-5 mb-0">
-                <li>{t("help.getStarted.applyLotteryWaitlistResp5a")}</li>
-                <li>{t("help.getStarted.applyLotteryWaitlistResp5b")}</li>
-                <li>{t("help.getStarted.applyLotteryWaitlistResp5c")}</li>
-              </ul>
               <li>{t("help.getStarted.applyLotteryWaitlistResp6")}</li>
+              <ul className="text__medium-normal list-disc ml-5 mb-0">
+                <li>{t("help.getStarted.applyLotteryWaitlistResp6a")}</li>
+                <li>{t("help.getStarted.applyLotteryWaitlistResp6b")}</li>
+                <li>{t("help.getStarted.applyLotteryWaitlistResp6c")}</li>
+              </ul>
+              <li>{t("help.getStarted.applyLotteryWaitlistResp7")}</li>
             </ol>
           </span>
         </DoorwayCollapsibleSection>
@@ -97,21 +97,21 @@ export function getStartedLinkableCards(): React.ReactElement<CardProps>[] {
             {t("help.getStarted.checkApplicationsResp")}
             <br />
             <br />
-            {t("help.getStarted.checkApplicationsResp4")}
+            {t("help.getStarted.checkApplicationsResp1")}
             <ul className="text__medium-normal list-disc ml-5">
               <li>
                 <a href="https://housing.acgov.org" target="_blank">
-                  {t("help.getStarted.checkApplicationsResp1")}
-                </a>
-              </li>
-              <li>
-                <a href="https://housing.sanjoseca.gov" target="_blank">
                   {t("help.getStarted.checkApplicationsResp2")}
                 </a>
               </li>
               <li>
-                <a href="https://smc.housingbayarea.org" target="_blank">
+                <a href="https://housing.sanjoseca.gov" target="_blank">
                   {t("help.getStarted.checkApplicationsResp3")}
+                </a>
+              </li>
+              <li>
+                <a href="https://smc.housingbayarea.org" target="_blank">
+                  {t("help.getStarted.checkApplicationsResp4")}
                 </a>
               </li>
             </ul>
