@@ -1,0 +1,28 @@
+.sign-up-benefits-container {
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--seeds-s6);
+  padding-bottom: var(--seeds-s4);
+  padding-inline: var(--seeds-s4);
+  @media (min-width: theme("screens.md")) {
+    padding: 0;
+  }
+}
+
+.sign-up-benefits-item {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: var(--seeds-s3);
+  align-items: center;
+
+  .icon {
+    border: 1px solid var(--seeds-color-white);
+    background-color: var(--seeds-color-white);
+    border-radius: var(--seeds-rounded-full);
+    padding: var(--seeds-s2_5);
+  }
+
+  .text {
+    margin-left: var(--seeds-s3);
+  }
+}

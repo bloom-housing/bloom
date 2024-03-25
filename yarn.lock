@@ -9010,6 +9010,13 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.16.4.tgz#dfb38f0f3fb045fca84ffa7783233c63009d8a92"
   integrity sha512-LUhvPmAKAbgm+p/K11IWszLZVoZDlMF4NRmqbhEzDz/CnCuehPkZXwZbBCKGJsgjnuVejotBwM7B3Scrq4EqDw==
 
+"@types/node@^20.11.24":
+  version "20.11.24"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.24.tgz#cc207511104694e84e9fb17f9a0c4c42d4517792"
+  integrity sha512-Kza43ewS3xoLgCEpQrsT+xRo/EJej1y0kVYGiLFE1NEODXGzTfwiC6tXTLMQskn1X4/Rjlh0MQUvx9W+L9long==
+  dependencies:
+    undici-types "~5.26.4"
+
 "@types/node@^8.0.0":
   version "8.10.66"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.66.tgz#dd035d409df322acc83dff62a602f12a5783bbb3"
@@ -13278,6 +13285,11 @@ csv-parse@^4.15.3:
   version "4.16.3"
   resolved "https://registry.npmjs.org/csv-parse/-/csv-parse-4.16.3.tgz"
   integrity sha512-cO1I/zmz4w2dcKHVvpCr7JVRu8/FymG5OEpmvsZYlccYolPBLoVGKUHgNoc4ZGkFeFlWGEDmMyBM+TTqRdW/wg==
+
+csv-parse@^5.5.5:
+  version "5.5.5"
+  resolved "https://registry.yarnpkg.com/csv-parse/-/csv-parse-5.5.5.tgz#68a271a9092877b830541805e14c8a80e6a22517"
+  integrity sha512-erCk7tyU3yLWAhk6wvKxnyPtftuy/6Ak622gOO7BCJ05+TYffnPCJF905wmOQm+BpkX54OdAl8pveJwUdpnCXQ==
 
 currently-unhandled@^0.4.1:
   version "0.4.1"
@@ -17851,9 +17863,9 @@ ip-regex@^4.1.0:
   integrity sha512-B9ZWJxHHOHUhUjCPrMpLD4xEq35bUTClHM1S6CBU5ixQnkZmwipwgc96vAd7AAGM9TGHvJR+Uss+/Ak6UphK+Q==
 
 ip@^1.1.5:
-  version "1.1.5"
-  resolved "https://registry.npmjs.org/ip/-/ip-1.1.5.tgz"
-  integrity sha1-vd7XARQpCCjAoDnnLvJfWq7ENUo=
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/ip/-/ip-1.1.9.tgz#8dfbcc99a754d07f425310b86a99546b1151e396"
+  integrity sha512-cyRxvOEpNHNtchU3Ln9KC/auJgup87llfQpQ+t5ghoC/UhL16SWzbueiCsdTnWmqAWl7LadfuwhlqmtOaqMHdQ==
 
 ip@^2.0.0:
   version "2.0.0"
@@ -28740,6 +28752,11 @@ underscore@~1.13.2:
   version "1.13.6"
   resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.13.6.tgz#04786a1f589dc6c09f761fc5f45b89e935136441"
   integrity sha512-+A5Sja4HP1M08MaXya7p5LvjuM7K6q/2EaC0+iovj/wOcMsTzMvDFbasi/oSapiwOlt252IqsKqPjCl7huKS0A==
+
+undici-types@~5.26.4:
+  version "5.26.5"
+  resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-5.26.5.tgz#bcd539893d00b56e964fd2657a4866b221a65617"
+  integrity sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==
 
 unenv@^1.9.0:
   version "1.9.0"

@@ -256,9 +256,6 @@ export const howDidYouHear = [
     id: "propertyWebsite",
   },
   {
-    id: "flyer",
-  },
-  {
     id: "emailAlert",
   },
   {
@@ -266,6 +263,9 @@ export const howDidYouHear = [
   },
   {
     id: "housingCounselor",
+  },
+  {
+    id: "flyer",
   },
   {
     id: "radioAd",

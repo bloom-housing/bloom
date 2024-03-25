@@ -16,7 +16,7 @@ import {
   YesNoAnswer,
   pdfFileNameFromFileId,
 } from "../../../../lib/helpers"
-import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
+import { Button, Grid } from "@bloom-housing/ui-seeds"
 import {
   ApplicationMethodCreate,
   ApplicationMethodsTypeEnum,
@@ -38,6 +38,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   const { register, setValue, watch, errors, getValues } = useFormContext()
   // watch fields
   const digitalApplicationChoice = watch("digitalApplicationChoice")
+  const commonDigitalApplicationChoice = watch("commonDigitalApplicationChoice")
   const paperApplicationChoice = watch("paperApplicationChoice")
   /*
     Set state for methods, drawer, upload progress, and more
@@ -243,12 +244,9 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               ]}
             />
           </Grid.Cell>
-          {/*
-          When new applications can be done from Doorway, the code below should be uncommented to allow
-          the common digital application as an option and only show the custom URL section if the common
-          digital application is not used.
-          {digitalApplicationChoice === YesNoEnum.Yes && (
-            <GridCell>
+
+          {digitalApplicationChoice === YesNoAnswer.Yes && (
+            <Grid.Cell>
               <p className="field-label m-4 ml-0">{t("listings.usingCommonDigitalApplication")}</p>
 
               <FieldGroup
@@ -292,18 +290,16 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   },
                 ]}
               />
-            </GridCell>
+            </Grid.Cell>
           )}
-              */}
         </Grid.Row>
-        {/* This should be uncommented along with the block above to allow the common digital application in the future.
+
         {((commonDigitalApplicationChoice &&
           commonDigitalApplicationChoice === YesNoEnum.no &&
           digitalApplicationChoice === YesNoEnum.yes) ||
           (digitalApplicationChoice === YesNoEnum.yes &&
             !commonDigitalApplicationChoice &&
-            listing?.commonDigitalApplication === false)) && ( */}
-        {digitalApplicationChoice === YesNoAnswer.Yes && (
+            listing?.commonDigitalApplication === false)) && (
           <Grid.Row columns={1}>
             <Grid.Cell>
               <Field

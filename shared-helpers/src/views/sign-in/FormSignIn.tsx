@@ -1,14 +1,14 @@
 import React, { useContext } from "react"
+import type { UseFormMethods } from "react-hook-form"
 import { Field, Form, NavigationContext, t } from "@bloom-housing/ui-components"
 import { Button, Heading } from "@bloom-housing/ui-seeds"
-import { CardSection, CardFooter } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { FormSignInErrorBox } from "./FormSignInErrorBox"
 import { NetworkStatus } from "../../auth/catchNetworkError"
-import type { UseFormMethods } from "react-hook-form"
-import { AccountCard } from "../accounts/AccountCard"
-import styles from "./sign-in.module.scss"
+import { BloomCard } from "../components/BloomCard"
 import { useRouter } from "next/router"
 import { getListingRedirectUrl } from "../../utilities/getListingRedirectUrl"
+import styles from "./FormSignIn.module.scss"
 
 export type FormSignInProps = {
   control: FormSignInControl
@@ -45,26 +45,26 @@ const FormSignIn = ({
   const createAccountUrl = getListingRedirectUrl(listingIdRedirect, "/create-account")
 
   return (
-    <AccountCard iconSymbol="profile" title={t("nav.signIn")} divider="inset" headingPriority={1}>
+    <BloomCard iconSymbol="profile" title={t("nav.signIn")} headingPriority={1}>
       <>
         <FormSignInErrorBox
           errors={errors}
           networkStatus={networkStatus}
           errorMessageId={"main-sign-in"}
+          className={styles["sign-in-error-container"]}
         />
-        <CardSection className="sm:mx-4">
+        <CardSection divider={"inset"}>
           <Form id="sign-in" onSubmit={handleSubmit(onSubmit, onError)}>
             <Field
-              caps={true}
               className="mb-6"
               name="email"
               label={t("t.email")}
-              labelClassName="font-semibold p-0"
               validation={{ required: true }}
               error={errors.email}
               errorMessage={t("authentication.signIn.enterLoginEmail")}
               register={register}
               dataTestId="sign-in-email-field"
+              labelClassName={"text__caps-spaced"}
             />
             <aside>
               <LinkComponent href={forgetPasswordURL} className={styles["forgot-password"]}>
@@ -72,17 +72,16 @@ const FormSignIn = ({
               </LinkComponent>
             </aside>
             <Field
-              caps={true}
               className="mb-3"
               name="password"
               label={t("authentication.createAccount.password")}
-              labelClassName="font-semibold p-0"
               validation={{ required: true }}
               error={errors.password}
               errorMessage={t("authentication.signIn.enterLoginPassword")}
               register={register}
               type={"password"}
               dataTestId="sign-in-password-field"
+              labelClassName={"text__caps-spaced"}
             />
             <div className="mt-6">
               <Button type="submit" variant="primary" id="sign-in-button">
@@ -92,18 +91,18 @@ const FormSignIn = ({
           </Form>
         </CardSection>
         {showRegisterBtn && (
-          <CardFooter className="border-t py-8 mx-6 sm:mx-12">
-            <Heading priority={2} size="2xl" className="mb-6">
+          <CardSection divider={"inset"}>
+            <Heading priority={2} size="2xl" className={styles["create-account-header"]}>
               {t("authentication.createAccount.noAccount")}
             </Heading>
 
             <Button variant="primary-outlined" href={createAccountUrl}>
               {t("account.createAccount")}
             </Button>
-          </CardFooter>
+          </CardSection>
         )}
       </>
-    </AccountCard>
+    </BloomCard>
   )
 }
 

@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from "react"
+import React, { useContext, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import {
@@ -26,21 +26,29 @@ import Layout from "../../../../layouts"
 import { getColDefs } from "../../../../components/applications/ApplicationsColDefs"
 import { ApplicationsSideNav } from "../../../../components/applications/ApplicationsSideNav"
 import { NavigationHeader } from "../../../../components/shared/NavigationHeader"
-
+import { ExportTermsDialog } from "../../../../components/shared/ExportTermsDialog"
+import styles from "../../../../components/shared/ExportTermsDialog.module.scss"
 const ApplicationsList = () => {
   const { profile } = useContext(AuthContext)
+  const [isTermsOpen, setIsTermsOpen] = useState(false)
   const router = useRouter()
   const listingId = router.query.id as string
-
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const tableOptions = useAgTable()
-
-  const { onExport, csvExportLoading, csvExportError, csvExportSuccess } = useApplicationsExport(
-    listingId,
-    profile?.userRoles?.isAdmin ?? false
-  )
 
   /* Data Fetching */
   const { listingDto } = useSingleListingData(listingId)
+
+  const listingJurisdiction = profile.jurisdictions.find(
+    (jurisdiction) => jurisdiction.id === listingDto?.jurisdictions.id
+  )
+  const includeDemographicsPartner =
+    profile?.userRoles?.isPartner && listingJurisdiction?.enablePartnerDemographics
+  const { onExport, csvExportLoading, csvExportError, csvExportSuccess } = useApplicationsExport(
+    listingId,
+    (profile?.userRoles?.isAdmin || includeDemographicsPartner) ?? false
+  )
+
   const countyCode = listingDto?.jurisdictions.name
   const listingName = listingDto?.name
   const isListingOpen = listingDto?.status === "active"
@@ -98,6 +106,16 @@ const ApplicationsList = () => {
 
   const gridComponents = {
     formatLinkCell,
+  }
+
+  const onSubmit = async () => {
+    try {
+      await onExport()
+    } catch (e) {
+      console.log(e)
+    } finally {
+      setIsTermsOpen(false)
+    }
   }
 
   if (!applications || appsError) return "An error has occurred."
@@ -189,7 +207,7 @@ const ApplicationsList = () => {
                       variant="primary-outlined"
                       size="sm"
                       className="mx-1"
-                      onClick={() => onExport()}
+                      onClick={() => setIsTermsOpen(true)}
                       loadingMessage={csvExportLoading && t("t.formSubmitted")}
                     >
                       {t("t.export")}
@@ -197,6 +215,31 @@ const ApplicationsList = () => {
                   </div>
                 }
               />
+              <ExportTermsDialog
+                dialogHeader={t("applications.export.dialogHeader")}
+                isOpen={isTermsOpen}
+                onClose={() => setIsTermsOpen(false)}
+                onSubmit={onSubmit}
+              >
+                <p>{t("applications.export.dialogSubheader")}</p>
+                <h2 className={styles["terms-of-use-text"]}>
+                  {t("applications.export.termsOfUse")}
+                </h2>
+                <span>
+                  {t("applications.export.termsBodyOne")}
+                  <a href="https://mtc.ca.gov/doorway-housing-portal-terms-use" target="_blank">
+                    {t("applications.export.termsOfUse")}
+                  </a>
+                  {t("applications.export.termsBodyTwo")}
+                  <a
+                    href="https://docs.google.com/document/d/1W4tIMtUMwz4KqdcO5f4yZi0R5AU74P3B/edit?usp=sharing&ouid=105961542504967611474&rtpof=true&sd=true"
+                    target="_blank"
+                  >
+                    {t("applications.export.doorwayPartnersManual")}
+                  </a>
+                  {t("applications.export.termsBodyThree")}
+                </span>
+              </ExportTermsDialog>
             </>
           )}
         </article>

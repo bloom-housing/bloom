@@ -27,6 +27,7 @@ import { SendGridService } from './sendgrid.service';
 import { ApplicationCreate } from '../dtos/applications/application-create.dto';
 import { User } from '../dtos/users/user.dto';
 import Unit from '../dtos/units/unit.dto';
+import { getPublicEmailURL } from '../utilities/get-public-email-url';
 dayjs.extend(utc);
 dayjs.extend(tz);
 dayjs.extend(advanced);
@@ -241,6 +242,7 @@ export class EmailService {
     confirmationUrl: string,
   ) {
     const jurisdiction = await this.getJurisdiction(null, jurisdictionName);
+    const baseUrl = appUrl ? new URL(appUrl).origin : undefined;
     await this.loadTranslations(jurisdiction, user.language);
     await this.send(
       user.email,
@@ -249,7 +251,7 @@ export class EmailService {
       this.template('register-email')({
         user: user,
         confirmationUrl: confirmationUrl,
-        appOptions: { appUrl: appUrl },
+        appOptions: { appUrl: baseUrl },
       }),
     );
   }
@@ -334,7 +336,8 @@ export class EmailService {
     const jurisdiction = await this.getJurisdiction(jurisdictionIds);
     void (await this.loadTranslations(jurisdiction, user.language));
     const compiledTemplate = this.template('forgot-password');
-    const resetUrl = `${appUrl}/reset-password?token=${resetToken}`;
+    const resetUrl = getPublicEmailURL(appUrl, resetToken, '/reset-password');
+    const baseUrl = appUrl ? new URL(appUrl).origin : undefined;
     const emailFromAddress = await this.getEmailToSendFrom(
       jurisdictionIds,
       jurisdiction,
@@ -346,7 +349,7 @@ export class EmailService {
       this.polyglot.t('forgotPassword.subject'),
       compiledTemplate({
         resetUrl: resetUrl,
-        resetOptions: { appUrl: appUrl },
+        resetOptions: { appUrl: baseUrl },
         user: user,
       }),
     );

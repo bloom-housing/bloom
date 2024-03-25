@@ -6,7 +6,6 @@ import { UserService } from '../../../src/services/user.service';
 import { randomUUID } from 'crypto';
 import { LanguagesEnum } from '@prisma/client';
 import { verify } from 'jsonwebtoken';
-import dayjs from 'dayjs';
 import { passwordToHash } from '../../../src/utilities/password-helpers';
 import { IdDTO } from '../../../src/dtos/shared/id.dto';
 import { EmailService } from '../../../src/services/email.service';
@@ -327,15 +326,36 @@ describe('Testing user service', () => {
 
   describe('getPublicConfirmationUrl', () => {
     it('should build public confirmation url', () => {
-      const res = service.getPublicConfirmationUrl('url', 'tokenExample');
-      expect(res).toEqual('url?token=tokenExample');
+      const res = service.getPublicConfirmationUrl(
+        'https://www.example.com',
+        'tokenExample',
+      );
+      expect(res).toEqual('https://www.example.com?token=tokenExample');
+    });
+    it('should build public confirmation url with query params', () => {
+      const res = service.getPublicConfirmationUrl(
+        'https://www.example.com?redirectUrl=redirect&listingId=123',
+        'tokenExample',
+      );
+      expect(res).toEqual(
+        'https://www.example.com?token=tokenExample&redirectUrl=redirect&listingId=123',
+      );
+    });
+    it('should return undefined when url is undefined', () => {
+      const res = service.getPublicConfirmationUrl(undefined, 'tokenExample');
+      expect(res).toEqual(undefined);
     });
   });
 
   describe('getPartnersConfirmationUrl', () => {
     it('should build partner confirmation url', () => {
-      const res = service.getPartnersConfirmationUrl('url', 'tokenExample');
-      expect(res).toEqual('url/users/confirm?token=tokenExample');
+      const res = service.getPartnersConfirmationUrl(
+        'https://www.example.com',
+        'tokenExample',
+      );
+      expect(res).toEqual(
+        'https://www.example.com/users/confirm?token=tokenExample',
+      );
     });
   });
 
@@ -926,6 +946,7 @@ describe('Testing user service', () => {
           id: 'requestingUser id',
           userRoles: { isAdmin: true },
         } as unknown as User,
+        'jurisdictionName',
       );
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
         include: {
@@ -996,6 +1017,7 @@ describe('Testing user service', () => {
           id: 'requestingUser id',
           userRoles: { isAdmin: true },
         } as unknown as User,
+        'jurisdictionName',
       );
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
         include: {
@@ -1069,6 +1091,7 @@ describe('Testing user service', () => {
               id: 'requestingUser id',
               userRoles: { isAdmin: true },
             } as unknown as User,
+            'jurisdictionName',
           ),
       ).rejects.toThrowError(`userID ${id}: request missing currentPassword`);
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
@@ -1125,6 +1148,7 @@ describe('Testing user service', () => {
               id: 'requestingUser id',
               userRoles: { isAdmin: true },
             } as unknown as User,
+            'jurisdictionName',
           ),
       ).rejects.toThrowError(
         `userID ${id}: incoming password doesn't match stored password`,
@@ -1173,13 +1197,14 @@ describe('Testing user service', () => {
           lastName: 'last name',
           jurisdictions: [{ id: jurisId }],
           newEmail: 'new@email.com',
-          appUrl: 'www.example.com',
+          appUrl: 'https://www.example.com',
           agreedToTermsOfService: true,
         },
         {
           id: 'requestingUser id',
           userRoles: { isAdmin: true },
         } as unknown as User,
+        'jurisdictionName',
       );
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
         include: {
@@ -1253,6 +1278,7 @@ describe('Testing user service', () => {
           id: 'requestingUser id',
           userRoles: { isAdmin: true },
         } as unknown as User,
+        'jurisdictionName',
       );
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
         include: {
@@ -1344,6 +1370,7 @@ describe('Testing user service', () => {
               id: 'requestingUser id',
               userRoles: { isAdmin: true },
             } as unknown as User,
+            'jurisdictionName',
           ),
       ).rejects.toThrowError(`user id: ${id} was requested but not found`);
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
@@ -1673,6 +1700,104 @@ describe('Testing user service', () => {
         },
       });
       expect(canOrThrowMock).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('isUserRoleChangeAllowed', () => {
+    it('should allow admin to promote to admin', () => {
+      const res = service.isUserRoleChangeAllowed(
+        { userRoles: { isAdmin: true } } as unknown as User,
+        { isAdmin: true },
+      );
+      expect(res).toEqual(true);
+    });
+
+    it('should allow admin to promote to jurisdictional admin', () => {
+      const res = service.isUserRoleChangeAllowed(
+        { userRoles: { isAdmin: true } } as unknown as User,
+        { isJurisdictionalAdmin: true },
+      );
+      expect(res).toEqual(true);
+    });
+
+    it('should allow admin to promote to partner', () => {
+      const res = service.isUserRoleChangeAllowed(
+        { userRoles: { isAdmin: true } } as unknown as User,
+        { isPartner: true },
+      );
+      expect(res).toEqual(true);
+    });
+
+    it('should allow admin to demote', () => {
+      const res = service.isUserRoleChangeAllowed(
+        { userRoles: { isAdmin: true } } as unknown as User,
+        {},
+      );
+      expect(res).toEqual(true);
+    });
+
+    it('should disallow juris admin to promote to jurisdictional admin', () => {
+      const res = service.isUserRoleChangeAllowed(
+        { userRoles: { isJurisdictionalAdmin: true } } as unknown as User,
+        { isAdmin: true },
+      );
+      expect(res).toEqual(false);
+    });
+
+    it('should allow juris admin to promote to jurisdictional admin', () => {
+      const res = service.isUserRoleChangeAllowed(
+        { userRoles: { isJurisdictionalAdmin: true } } as unknown as User,
+        { isJurisdictionalAdmin: true },
+      );
+      expect(res).toEqual(true);
+    });
+
+    it('should allow juris admin to promote to partner', () => {
+      const res = service.isUserRoleChangeAllowed(
+        { userRoles: { isJurisdictionalAdmin: true } } as unknown as User,
+        { isPartner: true },
+      );
+      expect(res).toEqual(true);
+    });
+
+    it('should allow juris admin to demote', () => {
+      const res = service.isUserRoleChangeAllowed(
+        { userRoles: { isJurisdictionalAdmin: true } } as unknown as User,
+        {},
+      );
+      expect(res).toEqual(true);
+    });
+
+    it('should disallow partner to promote to jurisdictional admin', () => {
+      const res = service.isUserRoleChangeAllowed(
+        { userRoles: { isPartner: true } } as unknown as User,
+        { isAdmin: true },
+      );
+      expect(res).toEqual(false);
+    });
+
+    it('should disallow partner to promote to jurisdictional admin', () => {
+      const res = service.isUserRoleChangeAllowed(
+        { userRoles: { isPartner: true } } as unknown as User,
+        { isJurisdictionalAdmin: true },
+      );
+      expect(res).toEqual(false);
+    });
+
+    it('should disallow partner to promote to partner', () => {
+      const res = service.isUserRoleChangeAllowed(
+        { userRoles: { isPartner: true } } as unknown as User,
+        { isPartner: true },
+      );
+      expect(res).toEqual(false);
+    });
+
+    it('should disallow partner to demote', () => {
+      const res = service.isUserRoleChangeAllowed(
+        { userRoles: { isPartner: true } } as unknown as User,
+        {},
+      );
+      expect(res).toEqual(false);
     });
   });
 });

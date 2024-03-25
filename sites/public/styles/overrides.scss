@@ -125,6 +125,7 @@
   --text-caps-spaced-font-weight: 700;
   .text__caps-spaced {
     text-transform: none;
+    color: var(--seeds-input-text-label-color);
   }
 
   .form--card__sub-header {

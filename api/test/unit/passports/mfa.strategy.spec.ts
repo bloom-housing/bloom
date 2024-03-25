@@ -88,6 +88,7 @@ describe('Testing mfa strategy', () => {
       lastLoginAt: new Date(),
       failedLoginAttemptsCount: 0,
       confirmedAt: null,
+      passwordHash: await passwordToHash('abcdef'),
     });
 
     const request = {
@@ -127,6 +128,7 @@ describe('Testing mfa strategy', () => {
       passwordValidForDays: 0,
       passwordUpdatedAt: new Date(0),
       userRoles: { isAdmin: true },
+      passwordHash: await passwordToHash('abcdef'),
     });
 
     const request = {

@@ -1,6 +1,7 @@
 import {
   ApplicationAddressTypeEnum,
   ApplicationMethodsTypeEnum,
+  LanguagesEnum,
   ListingsStatusEnum,
   MultiselectQuestions,
   MultiselectQuestionsApplicationSectionEnum,
@@ -122,6 +123,9 @@ export const stagingSeed = async (
   // add jurisdiction specific translations and default ones
   await prismaClient.translations.create({
     data: translationFactory(jurisdiction.id, jurisdiction.name),
+  });
+  await prismaClient.translations.create({
+    data: translationFactory(undefined, undefined, LanguagesEnum.es),
   });
   await prismaClient.translations.create({
     data: translationFactory(),
@@ -890,7 +894,7 @@ export const stagingSeed = async (
               assets: {
                 create: {
                   label: 'cloudinaryBuilding',
-                  fileId: 'dev/blake-wheeler-zBHU08hdzhY-unsplash_swqash	',
+                  fileId: 'dev/blake-wheeler-zBHU08hdzhY-unsplash_swqash',
                 },
               },
             },

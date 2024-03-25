@@ -1,11 +1,4 @@
-import {
-  BadRequestException,
-  Inject,
-  Injectable,
-  NotFoundException,
-  Scope,
-  UnauthorizedException,
-} from "@nestjs/common"
+import { Inject, Injectable, NotFoundException, Scope, UnauthorizedException } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
 import { Brackets, In, Repository } from "typeorm"
@@ -155,12 +148,6 @@ export class ListingsService {
       publishedAt: listingDto.status === ListingStatus.active ? new Date() : null,
       closedAt: listingDto.status === ListingStatus.closed ? new Date() : null,
     })
-
-    if (listing.commonDigitalApplication === true) {
-      throw new BadRequestException(
-        "Not currently accepting new listings using the common digital application"
-      )
-    }
 
     const saveResponse = await listing.save()
     // only listings approval state possible from creation
