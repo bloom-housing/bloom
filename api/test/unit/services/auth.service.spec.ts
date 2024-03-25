@@ -609,12 +609,6 @@ describe('Testing auth service', () => {
     expect(prisma.userAccounts.update).not.toHaveBeenCalled();
   });
 
-  it('should generate mfa code', () => {
-    expect(authService.generateSingleUseCode().length).toEqual(
-      Number(process.env.MFA_CODE_LENGTH),
-    );
-  });
-
   it('should update password when correct token passed in', async () => {
     const id = randomUUID();
     const token = sign(

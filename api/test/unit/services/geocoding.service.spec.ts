@@ -6,7 +6,10 @@ import { Address } from '../../../src/dtos/addresses/address.dto';
 import { ValidationMethod } from '../../../src/enums/multiselect-questions/validation-method-enum';
 import { InputType } from '../../../src/enums/shared/input-type-enum';
 import Listing from '../../../src/dtos/listings/listing.dto';
-import { simplifiedDCMap } from '../../../prisma/seed-helpers/map-layer-factory';
+import {
+  redlinedMap,
+  simplifiedDCMap,
+} from '../../../prisma/seed-helpers/map-layer-factory';
 import { FeatureCollection } from '@turf/helpers';
 import { ApplicationMultiselectQuestion } from '../../../src/dtos/applications/application-multiselect-question.dto';
 import { Application } from '../../../src/dtos/applications/application.dto';
@@ -29,6 +32,7 @@ describe('GeocodingService', () => {
     longitude: -77.0365,
   };
   const featureCollection = simplifiedDCMap as unknown as FeatureCollection;
+  const featureCollection2 = redlinedMap as unknown as FeatureCollection;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -107,14 +111,25 @@ describe('GeocodingService', () => {
     });
     it("should return 'true' if address is within layer", () => {
       expect(service.verifyLayers(address, featureCollection)).toBe(true);
+      expect(
+        service.verifyLayers(
+          {
+            ...address,
+            latitude: 37.870318963458324,
+            longitude: -122.30141799736678,
+          },
+          featureCollection2,
+        ),
+      ).toBe(true);
     });
-    it("should return 'false' if address is within layer", () => {
+    it("should return 'false' if address is not within layer", () => {
       expect(
         service.verifyLayers(
           { ...address, latitude: 39.284205, longitude: -76.621698 },
           featureCollection,
         ),
       ).toBe(false);
+      expect(service.verifyLayers(address, featureCollection2)).toBe(false);
     });
   });
 

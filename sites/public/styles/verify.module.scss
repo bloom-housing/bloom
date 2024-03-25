@@ -1,0 +1,26 @@
+.verify-resend-link {
+  margin-bottom: var(--seeds-s6);
+  font-size: var(--seeds-type-caption-size);
+  color: var(--seeds-text-color);
+}
+
+.verify-message {
+  max-width: 100%;
+  margin-bottom: var(--seeds-s8);
+}
+
+.verify-error {
+  margin-bottom: var(--seeds-s4);
+}
+
+.verify-code {
+  margin-bottom: 0;
+}
+
+.verify-error-container {
+  margin-inline: var(--seeds-s4);
+
+  @media (min-width: theme("screens.sm")) {
+    margin-inline: var(--seeds-s12);
+  }
+}
