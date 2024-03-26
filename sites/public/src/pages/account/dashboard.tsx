@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react"
 import Head from "next/head"
 import { NextRouter, withRouter } from "next/router"
-import { t, SiteAlert, AlertBox } from "@bloom-housing/ui-components"
+import { t, AlertBox } from "@bloom-housing/ui-components"
 import {
   PageView,
   pushGtmEvent,
@@ -59,7 +59,6 @@ function Dashboard(props: DashboardProps) {
         )}
         <section className="bg-gray-300 border-t border-gray-450">
           <div className="max-w-5xl mx-auto sm:py-8">
-            <SiteAlert type="success" className="md:mb-8" timeout={30000} />
             <h1 className={"sr-only"}>{t("nav.myDashboard")}</h1>
             <Grid spacing="lg" className={styles["account-card-container"]}>
               <Grid.Row columns={2}>

@@ -109,7 +109,7 @@ const ApplicationTerms = () => {
       default:
         return { text: "" }
     }
-  }, [listing, router.locale])
+  }, [listing])
 
   useEffect(() => {
     pushGtmEvent<PageView>({

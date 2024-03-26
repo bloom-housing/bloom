@@ -4,7 +4,6 @@ import {
   FormCard,
   Icon,
   t,
-  SiteAlert,
   PhoneField,
   FormSignInErrorBox,
   NetworkStatus,
@@ -52,7 +51,6 @@ const FormSignInAddPhone = ({
         errorMessageId={"add-phone"}
       />
 
-      <SiteAlert type="notice" dismissable />
       <div className="form-card__group pt-0">
         <Form id="sign-in-mfa" className="mt-10" onSubmit={handleSubmit(onSubmit, onError)}>
           <PhoneField

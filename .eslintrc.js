@@ -24,7 +24,7 @@ module.exports = {
     "@typescript-eslint/camelcase": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
-    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
     "@typescript-eslint/no-var-requires": "off",
     "react/jsx-uses-vars": "warn",
     "react/jsx-uses-react": "warn",

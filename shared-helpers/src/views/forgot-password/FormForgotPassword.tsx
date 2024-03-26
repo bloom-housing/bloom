@@ -5,7 +5,6 @@ import {
   Form,
   t,
   AlertBox,
-  SiteAlert,
   AlertNotice,
   ErrorMessage,
   NavigationContext,
@@ -69,8 +68,6 @@ const FormForgotPassword = ({
             </AlertNotice>
           </ErrorMessage>
         )}
-
-        <SiteAlert type="notice" dismissable />
 
         <CardSection>
           <Form id="sign-in" onSubmit={handleSubmit(onSubmit, onError)}>

@@ -8,12 +8,13 @@ import {
   FooterSection,
   t,
   MenuLink,
-  setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
-import { AuthContext, ExygyFooter } from "@bloom-housing/shared-helpers"
+import { AuthContext, ExygyFooter, MessageContext } from "@bloom-housing/shared-helpers"
+import { Toast } from "@bloom-housing/ui-seeds"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
+  const { toastMessagesRef, addToast } = useContext(MessageContext)
   const router = useRouter()
   const currentYear = new Date().getFullYear()
   const menuLinks: MenuLink[] = []
@@ -42,19 +43,19 @@ const Layout = (props) => {
     menuLinks.push({
       title: t("nav.signOut"),
       onClick: async () => {
-        setSiteAlertMessage(t(`authentication.signOut.success`), "notice")
         await router.push("/sign-in")
-        signOut()
+        await signOut()
+        addToast(t(`authentication.signOut.success`), { variant: "primary" })
       },
     })
   }
+
   return (
     <div className="site-wrapper">
       <div className="site-content site-content--wide-content">
         <Head>
           <title>{t("nav.siteTitlePartners")}</title>
         </Head>
-
         <SiteHeader
           logoSrc="/images/logo_glyph.svg"
           title={t("nav.siteTitlePartners")}
@@ -63,9 +64,14 @@ const Layout = (props) => {
           siteHeaderWidth={"wide"}
           homeURL={"/"}
         />
-
-        <main>{props.children}</main>
-
+        <main>
+          {toastMessagesRef.current?.map((toastMessage) => (
+            <Toast {...toastMessage.props} testId="toast-alert" key={toastMessage.timestamp}>
+              {toastMessage.message}
+            </Toast>
+          ))}
+          {props.children}
+        </main>
         <SiteFooter>
           <FooterNav copyright={`© ${currentYear} • All Rights Reserved`} />
           <FooterSection className="bg-black" small>

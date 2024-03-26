@@ -6,7 +6,12 @@ import "@bloom-housing/ui-components/src/global/css-imports.scss"
 import "@bloom-housing/ui-components/src/global/app-css.scss"
 import "@bloom-housing/ui-seeds/src/global/app-css.scss"
 import { addTranslation, NavigationContext, GenericRouter } from "@bloom-housing/ui-components"
-import { AuthProvider, ConfigProvider, RequireLogin } from "@bloom-housing/shared-helpers"
+import {
+  AuthProvider,
+  ConfigProvider,
+  MessageProvider,
+  RequireLogin,
+} from "@bloom-housing/shared-helpers"
 
 // TODO: Make these not-global
 import "ag-grid-community/dist/styles/ag-grid.css"
@@ -74,7 +79,7 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
               signInMessage={signInMessage}
               skipForRoutes={skipLoginRoutes}
             >
-              {hasMounted && <Component {...pageProps} />}
+              <MessageProvider>{hasMounted && <Component {...pageProps} />}</MessageProvider>
             </RequireLogin>
           </AuthProvider>
         </ConfigProvider>
