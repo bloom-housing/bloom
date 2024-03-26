@@ -41,6 +41,8 @@ export const typeMap = {
   fiveBdrm: 'Five Bedroom',
 };
 
+const NUMBER_TO_PAGINATE_BY = 500;
+
 @Injectable()
 export class ApplicationCsvExporterService
   implements CsvExporterServiceInterface
@@ -88,6 +90,11 @@ export class ApplicationCsvExporterService
     const applications = await this.prisma.applications.findMany({
       select: {
         id: true,
+        householdMember: {
+          select: {
+            id: true,
+          },
+        },
       },
       where: {
         listingId: queryParams.listingId,
@@ -101,10 +108,13 @@ export class ApplicationCsvExporterService
         queryParams.listingId,
       );
 
-    // get maxHouseholdMembers or associated to the selected applications
-    const maxHouseholdMembers = await this.maxHouseholdMembers(
-      applications.map((application) => application.id),
-    );
+    // get maxHouseholdMembers associated to the selected applications
+    let maxHouseholdMembers = 0;
+    applications.forEach((app) => {
+      if (app.householdMember?.length > maxHouseholdMembers) {
+        maxHouseholdMembers = app.householdMember.length;
+      }
+    });
 
     const csvHeaders = await this.getCsvHeaders(
       maxHouseholdMembers,
@@ -131,129 +141,118 @@ export class ApplicationCsvExporterService
               .join(',') + '\n',
           );
 
-          for (let i = 0; i < applications.length / 1000 + 1; i++) {
-            // grab applications 1k at a time
-            const paginatedApplications =
-              await this.prisma.applications.findMany({
-                include: {
-                  ...view.csv,
-                  demographics: queryParams.includeDemographics
-                    ? {
-                        select: {
-                          id: true,
-                          createdAt: true,
-                          updatedAt: true,
-                          ethnicity: true,
-                          gender: true,
-                          sexualOrientation: true,
-                          howDidYouHear: true,
-                          race: true,
-                        },
+          const promiseArray: Promise<string>[] = [];
+          for (let i = 0; i < applications.length; i += NUMBER_TO_PAGINATE_BY) {
+            promiseArray.push(
+              new Promise(async (resolve) => {
+                // grab applications NUMBER_TO_PAGINATE_BY at a time
+                const paginatedApplications =
+                  await this.prisma.applications.findMany({
+                    include: {
+                      ...view.csv,
+                      demographics: queryParams.includeDemographics
+                        ? {
+                            select: {
+                              id: true,
+                              createdAt: true,
+                              updatedAt: true,
+                              ethnicity: true,
+                              gender: true,
+                              sexualOrientation: true,
+                              howDidYouHear: true,
+                              race: true,
+                            },
+                          }
+                        : false,
+                    },
+                    where: {
+                      listingId: queryParams.listingId,
+                      deletedAt: null,
+                    },
+                    skip: i,
+                    take: NUMBER_TO_PAGINATE_BY,
+                  });
+
+                let row = '';
+                paginatedApplications.forEach((app) => {
+                  let preferences: ApplicationMultiselectQuestion[];
+                  csvHeaders.forEach((header, index) => {
+                    let multiselectQuestionValue = false;
+                    let parsePreference = false;
+                    let value = header.path.split('.').reduce((acc, curr) => {
+                      // return preference/program as value for the format function to accept
+                      if (multiselectQuestionValue) {
+                        return acc;
                       }
-                    : false,
-                },
-                where: {
-                  listingId: queryParams.listingId,
-                  deletedAt: null,
-                },
-                skip: i * 1000,
-                take: 1000,
-              });
 
-            // now loop over applications and write them to file
-            paginatedApplications.forEach((app) => {
-              let row = '';
-              let preferences: ApplicationMultiselectQuestion[];
-              csvHeaders.forEach((header, index) => {
-                let multiselectQuestionValue = false;
-                let parsePreference = false;
-                let value = header.path.split('.').reduce((acc, curr) => {
-                  // return preference/program as value for the format function to accept
-                  if (multiselectQuestionValue) {
-                    return acc;
-                  }
+                      if (parsePreference) {
+                        // curr should equal the preference id we're pulling from
+                        if (!preferences) {
+                          preferences =
+                            app.preferences as unknown as ApplicationMultiselectQuestion[];
+                        }
+                        parsePreference = false;
+                        // there aren't typically many preferences, but if there, then a object map should be created and used
+                        const preference = preferences.find(
+                          (preference) =>
+                            preference.multiselectQuestionId === curr,
+                        );
+                        multiselectQuestionValue = true;
+                        return preference;
+                      }
 
-                  if (parsePreference) {
-                    // curr should equal the preference id we're pulling from
-                    if (!preferences) {
-                      preferences =
-                        app.preferences as unknown as ApplicationMultiselectQuestion[];
+                      // sets parsePreference to true, for the next iteration
+                      if (curr === 'preferences') {
+                        parsePreference = true;
+                      }
+
+                      if (acc === null || acc === undefined) {
+                        return '';
+                      }
+
+                      // handles working with arrays, e.g. householdMember.0.firstName
+                      if (!isNaN(Number(curr))) {
+                        const index = Number(curr);
+                        return acc[index];
+                      }
+
+                      return acc[curr];
+                    }, app);
+                    value =
+                      value === undefined ? '' : value === null ? '' : value;
+                    if (header.format) {
+                      value = header.format(value);
                     }
-                    parsePreference = false;
-                    // there aren't typically many preferences, but if there, then a object map should be created and used
-                    const preference = preferences.find(
-                      (preference) => preference.multiselectQuestionId === curr,
-                    );
-                    multiselectQuestionValue = true;
-                    return preference;
-                  }
 
-                  // sets parsePreference to true, for the next iteration
-                  if (curr === 'preferences') {
-                    parsePreference = true;
-                  }
-
-                  if (acc === null || acc === undefined) {
-                    return '';
-                  }
-
-                  // handles working with arrays, e.g. householdMember.0.firstName
-                  if (!isNaN(Number(curr))) {
-                    const index = Number(curr);
-                    return acc[index];
-                  }
-
-                  return acc[curr];
-                }, app);
-                value = value === undefined ? '' : value === null ? '' : value;
-                if (header.format) {
-                  value = header.format(value);
-                }
-
-                row += value ? `"${value.toString().replace(/"/g, `""`)}"` : '';
-                if (index < csvHeaders.length - 1) {
-                  row += ',';
-                }
-              });
-
-              try {
-                writableStream.write(row + '\n');
-              } catch (e) {
-                console.log('writeStream write error = ', e);
-                writableStream.once('drain', () => {
-                  console.log('drain buffer');
-                  writableStream.write(row + '\n');
+                    row += value
+                      ? `"${value.toString().replace(/"/g, `""`)}"`
+                      : '';
+                    if (index < csvHeaders.length - 1) {
+                      row += ',';
+                    }
+                  });
+                  row += '\n';
                 });
-              }
-            });
+                resolve(row);
+              }),
+            );
           }
+          const resolvedArray = await Promise.all(promiseArray);
+          // now loop over batched row data and write them to file
+          resolvedArray.forEach((row) => {
+            try {
+              writableStream.write(row);
+            } catch (e) {
+              console.log('writeStream write error = ', e);
+              writableStream.once('drain', () => {
+                console.log('drain buffer');
+                writableStream.write(row + '\n');
+              });
+            }
+          });
           writableStream.end();
         });
     });
-  }
-
-  async maxHouseholdMembers(applicationIds: string[]): Promise<number> {
-    const maxHouseholdMembersRes = await this.prisma.householdMember.groupBy({
-      by: ['applicationId'],
-      _count: {
-        applicationId: true,
-      },
-      where: {
-        OR: applicationIds.map((id) => {
-          return { applicationId: id };
-        }),
-      },
-      orderBy: {
-        _count: {
-          applicationId: 'desc',
-        },
-      },
-      take: 1,
-    });
-
-    return maxHouseholdMembersRes && maxHouseholdMembersRes.length
-      ? maxHouseholdMembersRes[0]._count.applicationId
-      : 0;
   }
 
   getHouseholdCsvHeaders(maxHouseholdMembers: number): CsvHeader[] {
