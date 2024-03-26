@@ -31,6 +31,7 @@ import {
   UserCreate,
   UserService,
   serviceOptions,
+  SuccessDTO,
 } from "../types/backend-swagger"
 import { getListingRedirectUrl } from "../utilities/getListingRedirectUrl"
 
@@ -74,6 +75,7 @@ type ContextProps = {
     mfaType: MfaType,
     phoneNumber?: string
   ) => Promise<RequestMfaCodeResponse | undefined>
+  requestSingleUseCode: (email: string) => Promise<SuccessDTO | undefined>
   loginViaSingleUseCode: (email: string, singleUseCode: string) => Promise<User | undefined>
 }
 
@@ -355,6 +357,16 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
       try {
         return await authService?.requestMfaCode({
           body: { email, password, mfaType, phoneNumber },
+        })
+      } finally {
+        dispatch(stopLoading())
+      }
+    },
+    requestSingleUseCode: async (email) => {
+      dispatch(startLoading())
+      try {
+        return await userService?.requestSingleUseCode({
+          body: { email },
         })
       } finally {
         dispatch(stopLoading())

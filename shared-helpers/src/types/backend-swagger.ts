@@ -1727,6 +1727,28 @@ export class UserService {
     })
   }
   /**
+   * Request single use code
+   */
+  requestSingleUseCode(
+    params: {
+      /** requestBody */
+      body?: RequestSingleUseCode
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/request-single-use-code"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Resend public confirmation
    */
   resendConfirmation(
@@ -1865,28 +1887,6 @@ export class AuthService {
   ): Promise<RequestMfaCodeResponse> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/auth/request-mfa-code"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Request single use code
-   */
-  requestSingleUseCode(
-    params: {
-      /** requestBody */
-      body?: RequestSingleUseCode
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/auth/request-single-use-code"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
@@ -2667,147 +2667,6 @@ export interface UnitsSummary {
 
   /**  */
   totalAvailable?: number
-}
-
-export interface UserRole {
-  /**  */
-  isAdmin?: boolean
-
-  /**  */
-  isJurisdictionalAdmin?: boolean
-
-  /**  */
-  isPartner?: boolean
-}
-
-export interface Jurisdiction {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  notificationsSignUpUrl?: string
-
-  /**  */
-  languages: LanguagesEnum[]
-
-  /**  */
-  multiselectQuestions: IdDTO[]
-
-  /**  */
-  partnerTerms?: string
-
-  /**  */
-  publicUrl: string
-
-  /**  */
-  emailFromAddress: string
-
-  /**  */
-  rentalAssistanceDefault: string
-
-  /**  */
-  enablePartnerSettings?: boolean
-
-  /**  */
-  enablePartnerDemographics?: boolean
-
-  /**  */
-  enableGeocodingPreferences?: boolean
-
-  /**  */
-  enableAccessibilityFeatures: boolean
-
-  /**  */
-  enableUtilitiesIncluded: boolean
-
-  /**  */
-  allowSingleUseCodeLogin: boolean
-
-  /**  */
-  listingApprovalPermissions: EnumJurisdictionListingApprovalPermissions[]
-}
-
-export interface User {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  passwordUpdatedAt: Date
-
-  /**  */
-  passwordValidForDays: number
-
-  /**  */
-  confirmedAt?: Date
-
-  /**  */
-  email: string
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  listings: IdDTO[]
-
-  /**  */
-  userRoles?: UserRole
-
-  /**  */
-  language?: LanguagesEnum
-
-  /**  */
-  jurisdictions: Jurisdiction[]
-
-  /**  */
-  mfaEnabled?: boolean
-
-  /**  */
-  lastLoginAt?: Date
-
-  /**  */
-  failedLoginAttemptsCount?: number
-
-  /**  */
-  phoneNumberVerified?: boolean
-
-  /**  */
-  agreedToTermsOfService: boolean
-
-  /**  */
-  hitConfirmationURL?: Date
-
-  /**  */
-  activeAccessToken?: string
-
-  /**  */
-  activeRefreshToken?: string
 }
 
 export interface Listing {
@@ -4448,6 +4307,62 @@ export interface JurisdictionUpdate {
   listingApprovalPermissions: EnumJurisdictionUpdateListingApprovalPermissions[]
 }
 
+export interface Jurisdiction {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  notificationsSignUpUrl?: string
+
+  /**  */
+  languages: LanguagesEnum[]
+
+  /**  */
+  multiselectQuestions: IdDTO[]
+
+  /**  */
+  partnerTerms?: string
+
+  /**  */
+  publicUrl: string
+
+  /**  */
+  emailFromAddress: string
+
+  /**  */
+  rentalAssistanceDefault: string
+
+  /**  */
+  enablePartnerSettings?: boolean
+
+  /**  */
+  enablePartnerDemographics?: boolean
+
+  /**  */
+  enableGeocodingPreferences?: boolean
+
+  /**  */
+  enableAccessibilityFeatures: boolean
+
+  /**  */
+  enableUtilitiesIncluded: boolean
+
+  /**  */
+  allowSingleUseCodeLogin: boolean
+
+  /**  */
+  listingApprovalPermissions: EnumJurisdictionListingApprovalPermissions[]
+}
+
 export interface MultiselectQuestionCreate {
   /**  */
   text: string
@@ -4916,6 +4831,91 @@ export interface EmailAndAppUrl {
   appUrl?: string
 }
 
+export interface UserRole {
+  /**  */
+  isAdmin?: boolean
+
+  /**  */
+  isJurisdictionalAdmin?: boolean
+
+  /**  */
+  isPartner?: boolean
+}
+
+export interface User {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  passwordUpdatedAt: Date
+
+  /**  */
+  passwordValidForDays: number
+
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  email: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  listings: IdDTO[]
+
+  /**  */
+  userRoles?: UserRole
+
+  /**  */
+  language?: LanguagesEnum
+
+  /**  */
+  jurisdictions: Jurisdiction[]
+
+  /**  */
+  mfaEnabled?: boolean
+
+  /**  */
+  lastLoginAt?: Date
+
+  /**  */
+  failedLoginAttemptsCount?: number
+
+  /**  */
+  phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
+
+  /**  */
+  activeAccessToken?: string
+
+  /**  */
+  activeRefreshToken?: string
+}
+
 export interface UserFilterParams {
   /**  */
   isPortalUser?: boolean
@@ -5064,6 +5064,11 @@ export interface UserInvite {
   jurisdictions: IdDTO[]
 }
 
+export interface RequestSingleUseCode {
+  /**  */
+  email: string
+}
+
 export interface ConfirmationRequest {
   /**  */
   token: string
@@ -5114,11 +5119,6 @@ export interface RequestMfaCodeResponse {
 
   /**  */
   phoneNumberVerified?: boolean
-}
-
-export interface RequestSingleUseCode {
-  /**  */
-  email: string
 }
 
 export interface UpdatePassword {
@@ -5250,12 +5250,6 @@ export enum UnitRentTypeEnum {
   "fixed" = "fixed",
   "percentageOfIncome" = "percentageOfIncome",
 }
-export enum EnumJurisdictionListingApprovalPermissions {
-  "user" = "user",
-  "partner" = "partner",
-  "admin" = "admin",
-  "jurisdictionAdmin" = "jurisdictionAdmin",
-}
 
 export enum AfsView {
   "pending" = "pending",
@@ -5310,6 +5304,12 @@ export enum EnumJurisdictionCreateListingApprovalPermissions {
   "jurisdictionAdmin" = "jurisdictionAdmin",
 }
 export enum EnumJurisdictionUpdateListingApprovalPermissions {
+  "user" = "user",
+  "partner" = "partner",
+  "admin" = "admin",
+  "jurisdictionAdmin" = "jurisdictionAdmin",
+}
+export enum EnumJurisdictionListingApprovalPermissions {
   "user" = "user",
   "partner" = "partner",
   "admin" = "admin",

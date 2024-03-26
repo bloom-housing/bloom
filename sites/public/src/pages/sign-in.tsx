@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState, useCallback } from "react"
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/router"
 import { t, setSiteAlertMessage, useMutate } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import { useRedirectToPrevPage } from "../lib/hooks"
@@ -12,6 +13,8 @@ import {
   AuthContext,
   FormSignIn,
   ResendConfirmationModal,
+  FormSignInDefault,
+  FormSignInPwdless,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import { SuccessDTO } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -20,13 +23,15 @@ import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
 import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
 
 const SignIn = () => {
-  const { login, userService } = useContext(AuthContext)
+  const router = useRouter()
+
+  const { login, requestSingleUseCode, userService } = useContext(AuthContext)
   const signUpCopy = process.env.showMandatedAccounts
   /* Form Handler */
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
   // https://github.com/react-hook-form/react-hook-form/issues/2887
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, watch, reset } = useForm()
+  const { register, handleSubmit, errors, watch, reset, clearErrors } = useForm()
   const redirectToPage = useRedirectToPrevPage("/account/dashboard")
   const { networkError, determineNetworkError, resetNetworkError } = useCatchNetworkError()
 
@@ -38,6 +43,11 @@ const SignIn = () => {
     message: NetworkStatusContent
     type: NetworkStatusType
   }>()
+
+  type LoginType = "pwd" | "code"
+  const loginType = router.query?.loginType as LoginType
+
+  const [useCode, setUseCode] = useState(loginType !== "pwd")
 
   const {
     mutate: mutateResendConfirmation,
@@ -60,6 +70,34 @@ const SignIn = () => {
       const user = await login(email, password)
       setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
       await redirectToPage()
+    } catch (error) {
+      const { status } = error.response || {}
+      determineNetworkError(status, error)
+    }
+  }
+
+  const onSubmitPwdless = async (data: { email: string; password: string }) => {
+    const { email, password } = data
+
+    try {
+      if (useCode) {
+        clearErrors()
+        await requestSingleUseCode(email)
+        const redirectUrl = router.query?.redirectUrl as string
+        const listingId = router.query?.listingId as string
+        let queryParams: { [key: string]: string } = { email, flowType: "login" }
+        if (redirectUrl) queryParams = { ...queryParams, redirectUrl }
+        if (listingId) queryParams = { ...queryParams, listingId }
+
+        await router.push({
+          pathname: "/verify",
+          query: queryParams,
+        })
+      } else {
+        const user = await login(email, password)
+        setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
+        await redirectToPage()
+      }
     } catch (error) {
       const { status } = error.response || {}
       determineNetworkError(status, error)
@@ -138,8 +176,6 @@ const SignIn = () => {
           )}
           <div className={signUpCopy && signUpBenefitsStyles["benefits-form-container"]}>
             <FormSignIn
-              onSubmit={(data) => void onSubmit(data)}
-              control={{ register, errors, handleSubmit, watch }}
               networkStatus={{
                 content: networkStatusContent,
                 type: networkStatusType,
@@ -150,7 +186,22 @@ const SignIn = () => {
                 },
               }}
               showRegisterBtn={true}
-            />
+              control={{ errors }}
+            >
+              {process.env.showPwdless ? (
+                <FormSignInPwdless
+                  onSubmit={(data) => void onSubmitPwdless(data)}
+                  control={{ register, errors, handleSubmit }}
+                  useCode={useCode}
+                  setUseCode={setUseCode}
+                />
+              ) : (
+                <FormSignInDefault
+                  onSubmit={(data) => void onSubmit(data)}
+                  control={{ register, errors, handleSubmit }}
+                />
+              )}
+            </FormSignIn>
           </div>
           {signUpCopy && (
             <div className={signUpBenefitsStyles["benefits-hide-display"]}>
