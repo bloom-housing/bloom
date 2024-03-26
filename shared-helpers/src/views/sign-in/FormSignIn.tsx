@@ -1,27 +1,24 @@
-import React, { useContext } from "react"
+import React from "react"
 import type { UseFormMethods } from "react-hook-form"
-import { Field, Form, NavigationContext, t } from "@bloom-housing/ui-components"
+import { useRouter } from "next/router"
+import { t } from "@bloom-housing/ui-components"
 import { Button, Heading } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { FormSignInErrorBox } from "./FormSignInErrorBox"
 import { NetworkStatus } from "../../auth/catchNetworkError"
 import { BloomCard } from "../components/BloomCard"
-import { useRouter } from "next/router"
 import { getListingRedirectUrl } from "../../utilities/getListingRedirectUrl"
 import styles from "./FormSignIn.module.scss"
 
 export type FormSignInProps = {
   control: FormSignInControl
-  onSubmit: (data: FormSignInValues) => void
   networkStatus: NetworkStatus
   showRegisterBtn?: boolean
+  children: React.ReactNode
 }
 
 export type FormSignInControl = {
   errors: UseFormMethods["errors"]
-  handleSubmit: UseFormMethods["handleSubmit"]
-  register: UseFormMethods["register"]
-  watch: UseFormMethods["watch"]
 }
 
 export type FormSignInValues = {
@@ -30,18 +27,13 @@ export type FormSignInValues = {
 }
 
 const FormSignIn = ({
-  onSubmit,
+  children,
   networkStatus,
   showRegisterBtn,
-  control: { errors, register, handleSubmit },
+  control: { errors },
 }: FormSignInProps) => {
-  const onError = () => {
-    window.scrollTo(0, 0)
-  }
-  const { LinkComponent } = useContext(NavigationContext)
   const router = useRouter()
   const listingIdRedirect = router.query?.listingId as string
-  const forgetPasswordURL = getListingRedirectUrl(listingIdRedirect, "/forgot-password")
   const createAccountUrl = getListingRedirectUrl(listingIdRedirect, "/create-account")
 
   return (
@@ -53,49 +45,23 @@ const FormSignIn = ({
           errorMessageId={"main-sign-in"}
           className={styles["sign-in-error-container"]}
         />
-        <CardSection divider={"inset"}>
-          <Form id="sign-in" onSubmit={handleSubmit(onSubmit, onError)}>
-            <Field
-              className="mb-6"
-              name="email"
-              label={t("t.email")}
-              validation={{ required: true }}
-              error={errors.email}
-              errorMessage={t("authentication.signIn.enterLoginEmail")}
-              register={register}
-              dataTestId="sign-in-email-field"
-              labelClassName={"text__caps-spaced"}
-            />
-            <aside>
-              <LinkComponent href={forgetPasswordURL} className={styles["forgot-password"]}>
-                {t("authentication.signIn.forgotPassword")}
-              </LinkComponent>
-            </aside>
-            <Field
-              className="mb-3"
-              name="password"
-              label={t("authentication.createAccount.password")}
-              validation={{ required: true }}
-              error={errors.password}
-              errorMessage={t("authentication.signIn.enterLoginPassword")}
-              register={register}
-              type={"password"}
-              dataTestId="sign-in-password-field"
-              labelClassName={"text__caps-spaced"}
-            />
-            <div className="mt-6">
-              <Button type="submit" variant="primary" id="sign-in-button">
-                {t("nav.signIn")}
-              </Button>
-            </div>
-          </Form>
-        </CardSection>
+        <CardSection divider={"inset"}>{children}</CardSection>
         {showRegisterBtn && (
           <CardSection divider={"inset"}>
-            <Heading priority={2} size="2xl" className="mb-6">
+            <Heading
+              priority={2}
+              size="2xl"
+              className={
+                process.env.showPwdless ? styles["pwdless-header"] : styles["default-header"]
+              }
+            >
               {t("authentication.createAccount.noAccount")}
             </Heading>
-
+            {process.env.showPwdless && (
+              <div className={styles["create-account-copy"]}>
+                {t("authentication.signIn.pwdless.createAccountCopy")}
+              </div>
+            )}
             <Button variant="primary-outlined" href={createAccountUrl}>
               {t("account.createAccount")}
             </Button>

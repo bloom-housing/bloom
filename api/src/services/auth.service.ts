@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { CookieOptions, Request, Response } from 'express';
 import { sign, verify } from 'jsonwebtoken';
-import { randomInt } from 'crypto';
 import { Prisma } from '@prisma/client';
 import { UpdatePassword } from '../dtos/auth/update-password.dto';
 import { MfaType } from '../enums/mfa/mfa-type-enum';
@@ -19,6 +18,7 @@ import { PrismaService } from './prisma.service';
 import { UserService } from './user.service';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { mapTo } from '../utilities/mapTo';
+import { generateSingleUseCode } from '../utilities/generate-single-use-code';
 import { Confirm } from '../dtos/auth/confirm.dto';
 import { SmsService } from './sms.service';
 import { EmailService } from './email.service';
@@ -220,7 +220,7 @@ export class AuthService {
       }
     }
 
-    const singleUseCode = this.generateSingleUseCode();
+    const singleUseCode = generateSingleUseCode();
     await this.prisma.userAccounts.update({
       data: {
         singleUseCode,
@@ -297,7 +297,7 @@ export class AuthService {
       );
     }
 
-    const singleUseCode = this.generateSingleUseCode();
+    const singleUseCode = generateSingleUseCode();
     await this.prisma.userAccounts.update({
       data: {
         singleUseCode,
@@ -399,14 +399,26 @@ export class AuthService {
   }
 
   /*
-    generates a numeric mfa code
+    confirms a user if using pwdless
   */
-  generateSingleUseCode() {
-    let out = '';
-    const characters = '0123456789';
-    for (let i = 0; i < Number(process.env.MFA_CODE_LENGTH); i++) {
-      out += characters.charAt(randomInt(characters.length));
+  async confirmAndSetCredentials(
+    user: User,
+    res: Response,
+  ): Promise<SuccessDTO> {
+    if (!user.confirmedAt) {
+      const data: Prisma.UserAccountsUpdateInput = {
+        confirmedAt: new Date(),
+        confirmationToken: null,
+      };
+
+      await this.prisma.userAccounts.update({
+        data,
+        where: {
+          id: user.id,
+        },
+      });
     }
-    return out;
+
+    return await this.setCredentials(res, user);
   }
 }

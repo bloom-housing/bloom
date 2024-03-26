@@ -49,8 +49,11 @@ import { PermissionTypeDecorator } from '../decorators/permission-type.decorator
 import { UserFilterParams } from '../dtos/users/user-filter-params.dto';
 import { UserCsvExporterService } from '../services/user-csv-export.service';
 import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
+import { RequestSingleUseCode } from '../dtos/single-use-code/request-single-use-code.dto';
+import { ThrottleGuard } from '../guards/throttler.guard';
 
 @Controller('user')
+@UseGuards(ThrottleGuard)
 @ApiTags('user')
 @PermissionTypeDecorator('user')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
@@ -168,13 +171,11 @@ export class UserController {
     @Body() dto: UserCreate,
     @Query() queryParams: UserCreateParams,
   ): Promise<User> {
-    const jurisdictionName = req.headers['jurisdictionname'] || '';
     return await this.userService.create(
       dto,
       false,
       queryParams.noWelcomeEmail !== true,
-      mapTo(User, req['user']),
-      jurisdictionName as string,
+      req,
     );
   }
 
@@ -187,12 +188,20 @@ export class UserController {
     @Body() dto: UserInvite,
     @Request() req: ExpressRequest,
   ): Promise<User> {
-    return await this.userService.create(
-      dto,
-      true,
-      undefined,
-      mapTo(User, req['user']),
-    );
+    return await this.userService.create(dto, true, undefined, req);
+  }
+
+  @Post('request-single-use-code')
+  @ApiOperation({
+    summary: 'Request single use code',
+    operationId: 'requestSingleUseCode',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async requestSingleUseCode(
+    @Request() req: ExpressRequest,
+    @Body() dto: RequestSingleUseCode,
+  ): Promise<SuccessDTO> {
+    return await this.userService.requestSingleUseCode(dto, req);
   }
 
   @Post('resend-confirmation')

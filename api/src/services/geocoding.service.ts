@@ -1,4 +1,4 @@
-import { FeatureCollection, point, polygons } from '@turf/helpers';
+import { FeatureCollection, Polygon, point } from '@turf/helpers';
 import buffer from '@turf/buffer';
 import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import { MapLayers, Prisma } from '@prisma/client';
@@ -72,21 +72,10 @@ export class GeocodingService {
           Number.parseFloat(preferenceAddress.latitude.toString()),
         ]);
 
-        // Convert the features to the format that turfjs wants
-        const polygonsFromFeature = [];
-        featureCollectionLayers.features.forEach((feature) => {
-          if (
-            feature.geometry.type === 'MultiPolygon' ||
-            feature.geometry.type === 'Polygon'
-          ) {
-            feature.geometry.coordinates.forEach((coordinate) => {
-              polygonsFromFeature.push(coordinate);
-            });
-          }
-        });
-        const layer = polygons(polygonsFromFeature);
-
-        const points = pointsWithinPolygon(preferencePoint, layer);
+        const points = pointsWithinPolygon(
+          preferencePoint,
+          featureCollectionLayers as FeatureCollection<Polygon>,
+        );
         if (points && points.features?.length) {
           return true;
         }

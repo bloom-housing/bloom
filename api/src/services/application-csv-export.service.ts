@@ -23,7 +23,11 @@ import { mapTo } from '../utilities/mapTo';
 
 view.csv = {
   ...view.details,
-  applicationFlaggedSet: true,
+  applicationFlaggedSet: {
+    select: {
+      id: true,
+    },
+  },
   listings: false,
 };
 
@@ -81,12 +85,10 @@ export class ApplicationCsvExporterService
     filename: string,
     queryParams: QueryParams,
   ): Promise<void> {
-    if (queryParams.includeDemographics) {
-      view.csv.demographics = true;
-    }
-
     const applications = await this.prisma.applications.findMany({
-      include: view.csv,
+      select: {
+        id: true,
+      },
       where: {
         listingId: queryParams.listingId,
         deletedAt: null,
@@ -110,7 +112,7 @@ export class ApplicationCsvExporterService
       queryParams.includeDemographics,
     );
 
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       // create stream
       const writableStream = fs.createWriteStream(`${filename}`);
       writableStream
@@ -122,80 +124,109 @@ export class ApplicationCsvExporterService
         .on('close', () => {
           resolve();
         })
-        .on('open', () => {
+        .on('open', async () => {
           writableStream.write(
             csvHeaders
               .map((header) => `"${header.label.replace(/"/g, `""`)}"`)
               .join(',') + '\n',
           );
 
-          // now loop over applications and write them to file
-          applications.forEach((app) => {
-            let row = '';
-            let preferences: ApplicationMultiselectQuestion[];
-            csvHeaders.forEach((header, index) => {
-              let multiselectQuestionValue = false;
-              let parsePreference = false;
-              let value = header.path.split('.').reduce((acc, curr) => {
-                // return preference/program as value for the format function to accept
-                if (multiselectQuestionValue) {
-                  return acc;
-                }
+          for (let i = 0; i < applications.length / 1000 + 1; i++) {
+            // grab applications 1k at a time
+            const paginatedApplications =
+              await this.prisma.applications.findMany({
+                include: {
+                  ...view.csv,
+                  demographics: queryParams.includeDemographics
+                    ? {
+                        select: {
+                          id: true,
+                          createdAt: true,
+                          updatedAt: true,
+                          ethnicity: true,
+                          gender: true,
+                          sexualOrientation: true,
+                          howDidYouHear: true,
+                          race: true,
+                        },
+                      }
+                    : false,
+                },
+                where: {
+                  listingId: queryParams.listingId,
+                  deletedAt: null,
+                },
+                skip: i * 1000,
+                take: 1000,
+              });
 
-                if (parsePreference) {
-                  // curr should equal the preference id we're pulling from
-                  if (!preferences) {
-                    preferences =
-                      app.preferences as unknown as ApplicationMultiselectQuestion[];
+            // now loop over applications and write them to file
+            paginatedApplications.forEach((app) => {
+              let row = '';
+              let preferences: ApplicationMultiselectQuestion[];
+              csvHeaders.forEach((header, index) => {
+                let multiselectQuestionValue = false;
+                let parsePreference = false;
+                let value = header.path.split('.').reduce((acc, curr) => {
+                  // return preference/program as value for the format function to accept
+                  if (multiselectQuestionValue) {
+                    return acc;
                   }
-                  parsePreference = false;
-                  // there aren't typically many preferences, but if there, then a object map should be created and used
-                  const preference = preferences.find(
-                    (preference) => preference.multiselectQuestionId === curr,
-                  );
-                  multiselectQuestionValue = true;
-                  return preference;
+
+                  if (parsePreference) {
+                    // curr should equal the preference id we're pulling from
+                    if (!preferences) {
+                      preferences =
+                        app.preferences as unknown as ApplicationMultiselectQuestion[];
+                    }
+                    parsePreference = false;
+                    // there aren't typically many preferences, but if there, then a object map should be created and used
+                    const preference = preferences.find(
+                      (preference) => preference.multiselectQuestionId === curr,
+                    );
+                    multiselectQuestionValue = true;
+                    return preference;
+                  }
+
+                  // sets parsePreference to true, for the next iteration
+                  if (curr === 'preferences') {
+                    parsePreference = true;
+                  }
+
+                  if (acc === null || acc === undefined) {
+                    return '';
+                  }
+
+                  // handles working with arrays, e.g. householdMember.0.firstName
+                  if (!isNaN(Number(curr))) {
+                    const index = Number(curr);
+                    return acc[index];
+                  }
+
+                  return acc[curr];
+                }, app);
+                value = value === undefined ? '' : value === null ? '' : value;
+                if (header.format) {
+                  value = header.format(value);
                 }
 
-                // sets parsePreference to true, for the next iteration
-                if (curr === 'preferences') {
-                  parsePreference = true;
+                row += value ? `"${value.toString().replace(/"/g, `""`)}"` : '';
+                if (index < csvHeaders.length - 1) {
+                  row += ',';
                 }
+              });
 
-                if (acc === null || acc === undefined) {
-                  return '';
-                }
-
-                // handles working with arrays, e.g. householdMember.0.firstName
-                if (!isNaN(Number(curr))) {
-                  const index = Number(curr);
-                  return acc[index];
-                }
-
-                return acc[curr];
-              }, app);
-              value = value === undefined ? '' : value === null ? '' : value;
-              if (header.format) {
-                value = header.format(value);
-              }
-
-              row += value ? `"${value.toString().replace(/"/g, `""`)}"` : '';
-              if (index < csvHeaders.length - 1) {
-                row += ',';
+              try {
+                writableStream.write(row + '\n');
+              } catch (e) {
+                console.log('writeStream write error = ', e);
+                writableStream.once('drain', () => {
+                  console.log('drain buffer');
+                  writableStream.write(row + '\n');
+                });
               }
             });
-
-            try {
-              writableStream.write(row + '\n');
-            } catch (e) {
-              console.log('writeStream write error = ', e);
-              writableStream.once('drain', () => {
-                console.log('drain buffer');
-                writableStream.write(row + '\n');
-              });
-            }
-          });
-
+          }
           writableStream.end();
         });
     });

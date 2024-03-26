@@ -106,7 +106,7 @@ const ApplicationName = () => {
 
                 <Field
                   name="applicant.firstName"
-                  label={t("application.contact.givenName")}
+                  label={t("application.name.firstOrGivenName")}
                   disabled={autofilled}
                   defaultValue={application.applicant.firstName}
                   validation={{ required: true, maxLength: 64 }}
@@ -134,7 +134,7 @@ const ApplicationName = () => {
 
                 <Field
                   name="applicant.lastName"
-                  label={t("application.contact.familyName")}
+                  label={t("application.name.lastOrFamilyName")}
                   disabled={autofilled}
                   defaultValue={application.applicant.lastName}
                   validation={{ required: true, maxLength: 64 }}
