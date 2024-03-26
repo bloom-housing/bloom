@@ -28,6 +28,7 @@ import { ApplicationsSideNav } from "../../../../components/applications/Applica
 import { NavigationHeader } from "../../../../components/shared/NavigationHeader"
 import { ExportTermsDialog } from "../../../../components/shared/ExportTermsDialog"
 import styles from "../../../../components/shared/ExportTermsDialog.module.scss"
+import Markdown from "markdown-to-jsx"
 const ApplicationsList = () => {
   const { profile } = useContext(AuthContext)
   const [isTermsOpen, setIsTermsOpen] = useState(false)
@@ -225,20 +226,9 @@ const ApplicationsList = () => {
                 <h2 className={styles["terms-of-use-text"]}>
                   {t("applications.export.termsOfUse")}
                 </h2>
-                <span>
-                  {t("applications.export.termsBodyOne")}
-                  <a href="https://mtc.ca.gov/doorway-housing-portal-terms-use" target="_blank">
-                    {t("applications.export.termsOfUse")}
-                  </a>
-                  {t("applications.export.termsBodyTwo")}
-                  <a
-                    href="https://docs.google.com/document/d/1W4tIMtUMwz4KqdcO5f4yZi0R5AU74P3B/edit?usp=sharing&ouid=105961542504967611474&rtpof=true&sd=true"
-                    target="_blank"
-                  >
-                    {t("applications.export.doorwayPartnersManual")}
-                  </a>
-                  {t("applications.export.termsBodyThree")}
-                </span>
+                <Markdown>
+                  {t("applications.export.termsBody", { bold: styles["terms-bold-text"] })}
+                </Markdown>
               </ExportTermsDialog>
             </>
           )}
