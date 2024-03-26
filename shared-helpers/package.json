@@ -26,6 +26,7 @@
     "@testing-library/react": "14.0.0",
     "@types/jest": "^26.0.14",
     "@types/node-polyglot": "^2.4.1",
+    "@types/react": "18.0.33",
     "@types/react-beautiful-dnd": "^13.1.1",
     "@types/react-dom": "^16.9.5",
     "@types/react-tabs": "^2.3.2",
