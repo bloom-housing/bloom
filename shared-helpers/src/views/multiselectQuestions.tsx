@@ -1,12 +1,6 @@
 import * as React from "react"
 import { UseFormMethods } from "react-hook-form"
-import {
-  ExpandableContent,
-  Field,
-  FieldGroup,
-  resolveObject,
-  t,
-} from "@bloom-housing/ui-components"
+import { ExpandableContent, Field, resolveObject, t } from "@bloom-housing/ui-components"
 import { stateKeys } from "../utilities/formKeys"
 import {
   ApplicationMultiselectQuestion,
@@ -20,6 +14,7 @@ import {
 } from "../types/backend-swagger"
 import { AddressHolder } from "../utilities/constants"
 import { FormAddressAlternate } from "./address/FormAddressAlternate"
+import { ReactNode } from "react"
 
 // Removes periods, commas, and apostrophes
 export const cleanMultiselectString = (name: string | undefined) => {
@@ -120,39 +115,43 @@ export const getAllOptions = (
   return optionPaths
 }
 
-export const getRadioFields = (
-  options: MultiselectOption[],
+const getRadioField = (
+  option: MultiselectOption,
   register: UseFormMethods["register"],
-  question: MultiselectQuestion,
-  applicationSection: MultiselectQuestionsApplicationSectionEnum,
-  errors?: UseFormMethods["errors"]
+  setValue: UseFormMethods["setValue"],
+  allOptions: string[],
+  optionFieldName: string,
+  getValues: UseFormMethods["getValues"],
+  trigger?: UseFormMethods["trigger"]
 ) => {
   return (
-    <fieldset>
-      {applicationSection === MultiselectQuestionsApplicationSectionEnum.preferences && (
-        <legend className="text__caps-spaced mb-4">{question?.text}</legend>
-      )}
-      <FieldGroup
-        fieldGroupClassName="grid grid-cols-1"
-        fieldClassName="ml-0"
-        type={"radio"}
-        groupNote={t("t.pleaseSelectOne")}
-        name={fieldName(question?.text, applicationSection)}
-        error={errors && errors?.application?.programs?.[question?.text]}
-        errorMessage={errors && t("errors.selectAnOption")}
+    <>
+      <Field
+        type="radio"
+        id={option.text}
+        name={optionFieldName}
+        label={option.text}
         register={register}
-        validation={{ required: true }}
-        fields={options?.map((option) => {
-          return {
-            id: `${question?.text}-${option?.text}`,
-            label: option?.text,
-            value: option?.text,
-            description: option?.description,
-            dataTestId: "app-question-option",
-          }
-        })}
+        inputProps={{
+          value: !!option.text,
+          onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+            if (e.target.checked && trigger) {
+              void trigger()
+            }
+            uncheckOptions(allOptions, setValue)
+            setValue(optionFieldName, e.target.value)
+          },
+        }}
+        dataTestId={"app-question-option"}
+        validation={{
+          validate: {
+            somethingIsChecked: (value) => {
+              return !!value || !!allOptions.find((option) => getValues(option))
+            },
+          },
+        }}
       />
-    </fieldset>
+    </>
   )
 }
 
@@ -174,6 +173,7 @@ const getCheckboxField = (
       name={optionFieldName}
       type={"checkbox"}
       label={option.text}
+      labelClassName="font-semibold"
       register={register}
       inputProps={{
         onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -209,39 +209,23 @@ const getCheckboxField = (
   )
 }
 
-// Get an individual question option checkbox field
-export const getCheckboxOption = (
+export const multiselectOptionWrapper = (
+  field: ReactNode,
   option: MultiselectOption,
   question: MultiselectQuestion,
   applicationSection: MultiselectQuestionsApplicationSectionEnum,
   register: UseFormMethods["register"],
-  setValue: UseFormMethods["setValue"],
-  getValues: UseFormMethods["getValues"],
-  allOptions: string[],
   watchFields: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [x: string]: any
   },
-  errors?: UseFormMethods["errors"],
-  trigger?: UseFormMethods["trigger"],
-  exclusiveKeys?: string[]
+  errors?: UseFormMethods["errors"]
 ) => {
   const optionFieldName = fieldName(question.text, applicationSection, option.text)
   return (
     <div className="mb-3" key={option.text}>
       <div className={`mb-3 field ${resolveObject(optionFieldName, errors) ? "error" : ""}`}>
-        {getCheckboxField(
-          option,
-          question,
-          applicationSection,
-          register,
-          setValue,
-          getValues,
-          allOptions,
-          optionFieldName,
-          trigger,
-          exclusiveKeys
-        )}
+        {field}
       </div>
       {option.description && (
         <div className="ml-8 -mt-3 mb-6">
@@ -314,47 +298,121 @@ export const getCheckboxOption = (
   )
 }
 
-export const mapRadiosToApi = (
-  data: { [name: string]: string },
-  question: MultiselectQuestion
-): ApplicationMultiselectQuestion => {
-  const [key, value] = Object.entries(data)[0]
-  const options: ApplicationMultiselectQuestionOption[] = []
+// Get an individual question option checkbox field
+export const getCheckboxOption = (
+  option: MultiselectOption,
+  question: MultiselectQuestion,
+  applicationSection: MultiselectQuestionsApplicationSectionEnum,
+  register: UseFormMethods["register"],
+  setValue: UseFormMethods["setValue"],
+  getValues: UseFormMethods["getValues"],
+  allOptions: string[],
+  watchFields: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [x: string]: any
+  },
+  errors?: UseFormMethods["errors"],
+  trigger?: UseFormMethods["trigger"],
+  exclusiveKeys?: string[]
+) => {
+  const optionFieldName = fieldName(question.text, applicationSection, option.text)
+  const checkboxField = getCheckboxField(
+    option,
+    question,
+    applicationSection,
+    register,
+    setValue,
+    getValues,
+    allOptions,
+    optionFieldName,
+    trigger,
+    exclusiveKeys
+  )
 
-  if (value) {
-    options.push({
-      key: value,
-      checked: true,
-      extraData: [],
-    })
-  }
-
-  question?.options?.forEach((option) => {
-    if (option.text !== value) {
-      options.push({
-        key: option.text,
-        checked: false,
-        extraData: [],
-      })
-    }
-  })
-
-  return {
-    multiselectQuestionId: question.id,
-    key,
-    claimed: Object.keys(data)?.length !== 0,
-    options,
-  }
+  return multiselectOptionWrapper(
+    checkboxField,
+    option,
+    question,
+    applicationSection,
+    register,
+    watchFields,
+    errors
+  )
 }
 
+// Get an individual question option radio field
+export const getRadioOption = (
+  option: MultiselectOption,
+  question: MultiselectQuestion,
+  applicationSection: MultiselectQuestionsApplicationSectionEnum,
+  register: UseFormMethods["register"],
+  setValue: UseFormMethods["setValue"],
+  allOptions: string[],
+  watchFields: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [x: string]: any
+  },
+  getValues: UseFormMethods["getValues"],
+  errors?: UseFormMethods["errors"],
+  trigger?: UseFormMethods["trigger"]
+) => {
+  const optionFieldName = fieldName(question.text, applicationSection, option.text)
+  const radioField = getRadioField(
+    option,
+    register,
+    setValue,
+    allOptions,
+    optionFieldName,
+    getValues,
+    trigger
+  )
+
+  return multiselectOptionWrapper(
+    radioField,
+    option,
+    question,
+    applicationSection,
+    register,
+    watchFields,
+    errors
+  )
+}
+
+function cleanRadioObject(obj: Record<string, any>) {
+  // Remove nulls
+  let cleanedObj = Object.entries(obj).reduce((acc, [key, value]) => {
+    if (value !== null) {
+      acc[key] = value
+    }
+    return acc
+  }, {})
+
+  // Convert "true" to true
+  cleanedObj = Object.entries(cleanedObj).reduce((acc, [key, value]) => {
+    if (
+      value === "true" &&
+      !(key.includes(AddressHolder.Name) || key.includes(AddressHolder.Relationship))
+    ) {
+      acc[key] = true
+    } else {
+      acc[key] = value
+    }
+    return acc
+  }, {})
+
+  return cleanedObj
+}
 export const mapCheckboxesToApi = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formData: { [name: string]: any },
   question: MultiselectQuestion,
   applicationSection: MultiselectQuestionsApplicationSectionEnum
 ): ApplicationMultiselectQuestion => {
-  const data =
+  const rawData =
     formData["application"][applicationSection][cleanMultiselectString(question.text) || ""]
+
+  const data = cleanRadioObject(rawData) // removes nulls and converts "true" to true for radio fields
+
   const claimed = !!Object.keys(data).filter((key) => data[key] === true).length
 
   const addressFields = Object.keys(data).filter((option) => Object.keys(data[option]))
@@ -451,48 +509,49 @@ export const mapApiToMultiselectForm = (
      *    }
      * }
      */
-    if (appQuestion.inputType === "checkbox") {
-      options = question.options.reduce((acc, curr) => {
-        const claimed = curr.checked
-        const cleanKey = cleanMultiselectString(curr.key) || ""
-        if (appQuestion.inputType === "checkbox") {
-          acc[cleanKey] = claimed
-          if (curr.extraData?.length) {
-            acc[`${cleanKey}-address`] = curr.extraData[0].value
-
-            const addressHolderName = curr.extraData?.find(
-              (field) => field.key === AddressHolder.Name
-            )
-            if (addressHolderName) {
-              acc[`${cleanKey}-${AddressHolder.Name}`] = addressHolderName.value
-            }
-
-            const addressHolderRelationship = curr.extraData?.find(
-              (field) => field.key === AddressHolder.Relationship
-            )
-            if (addressHolderRelationship) {
-              acc[`${cleanKey}-${AddressHolder.Relationship}`] = addressHolderRelationship.value
-            }
-            if (curr?.mapPinPosition) {
-              acc[`${cleanKey}-mapPinPosition`] = curr.mapPinPosition
-            }
-          }
-        }
-
-        return acc
-      }, {})
-
-      questionsFormData["application"][applicationSection][question.key] = options
-    }
 
     /**
      * Radio fields expect the following format
-     * QuestionName: OptionName
+     * QuestionName: {
+     *    OptionName1: "true"
+     *    OptionName1-address: {
+     *      street: "",
+     *      city: "",
+     *      ...
+     *    }
+     * }
      */
-    if (appQuestion.inputType === "radio") {
-      const selectedRadio = question.options.filter((option) => !!option.checked)[0]
-      questionsFormData["application"][applicationSection][question?.key] = selectedRadio?.key
-    }
+    options = question.options.reduce((acc, curr) => {
+      const claimed = curr.checked
+      const cleanKey = cleanMultiselectString(curr.key) || ""
+      if (appQuestion.inputType === "checkbox") {
+        acc[cleanKey] = claimed
+      } else {
+        acc[cleanKey] = claimed.toString()
+      }
+      if (curr.extraData?.length) {
+        acc[`${cleanKey}-address`] = curr.extraData[0].value
+
+        const addressHolderName = curr.extraData?.find((field) => field.key === AddressHolder.Name)
+        if (addressHolderName) {
+          acc[`${cleanKey}-${AddressHolder.Name}`] = addressHolderName.value
+        }
+
+        const addressHolderRelationship = curr.extraData?.find(
+          (field) => field.key === AddressHolder.Relationship
+        )
+        if (addressHolderRelationship) {
+          acc[`${cleanKey}-${AddressHolder.Relationship}`] = addressHolderRelationship.value
+        }
+        if (curr?.mapPinPosition) {
+          acc[`${cleanKey}-mapPinPosition`] = curr.mapPinPosition
+        }
+      }
+
+      return acc
+    }, {})
+
+    questionsFormData["application"][applicationSection][question.key] = options
   })
 
   return { ...questionsFormData }
