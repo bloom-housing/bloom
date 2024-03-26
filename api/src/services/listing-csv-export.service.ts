@@ -57,7 +57,7 @@ export const formatCommunityType = {
 @Injectable()
 export class ListingCsvExporterService implements CsvExporterServiceInterface {
   readonly dateFormat: string = 'MM-DD-YYYY hh:mm:ssA z';
-  timeZone = 'America/Los_Angeles';
+  timeZone = process.env.TIME_ZONE;
   constructor(
     private prisma: PrismaService,
     @Inject(Logger)

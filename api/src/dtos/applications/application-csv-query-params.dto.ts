@@ -31,7 +31,7 @@ export class ApplicationCsvQueryParams {
   @Expose()
   @ApiPropertyOptional({
     type: String,
-    example: 'America/Los_Angeles',
+    example: process.env.TIME_ZONE,
     required: false,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

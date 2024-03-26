@@ -46,9 +46,9 @@ export const applicationFactory = async (optionalParams?: {
     applicant: { create: applicantFactory(optionalParams?.applicant) },
     appUrl: '',
     status: ApplicationStatusEnum.submitted,
-    submissionType: optionalParams?.submissionType
-      ? optionalParams?.submissionType
-      : ApplicationSubmissionTypeEnum.electronical,
+    submissionType:
+      optionalParams?.submissionType ??
+      ApplicationSubmissionTypeEnum.electronical,
     submissionDate: new Date(),
     householdSize: optionalParams?.householdSize ?? 1,
     income: '40000',

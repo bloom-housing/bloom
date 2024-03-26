@@ -45,7 +45,7 @@ export class ApplicationCsvExporterService
   implements CsvExporterServiceInterface
 {
   readonly dateFormat: string = 'MM-DD-YYYY hh:mm:ssA z';
-  timeZone = 'America/Los_Angeles';
+  timeZone = process.env.TIME_ZONE;
   constructor(
     private prisma: PrismaService,
     private multiselectQuestionService: MultiselectQuestionService,
@@ -73,10 +73,6 @@ export class ApplicationCsvExporterService
         user.id
       }-${new Date().getTime()}.csv`,
     );
-
-    if (queryParams.timeZone) {
-      this.timeZone = queryParams.timeZone;
-    }
 
     await this.createCsv(filename, queryParams);
     const file = createReadStream(filename);
@@ -119,6 +115,7 @@ export class ApplicationCsvExporterService
     const csvHeaders = await this.getCsvHeaders(
       maxHouseholdMembers,
       multiSelectQuestions,
+      queryParams.timeZone,
       queryParams.includeDemographics,
     );
 
@@ -311,6 +308,7 @@ export class ApplicationCsvExporterService
   async getCsvHeaders(
     maxHouseholdMembers: number,
     multiSelectQuestions: MultiselectQuestion[],
+    timeZone: string,
     includeDemographics = false,
   ): Promise<CsvHeader[]> {
     const headers: CsvHeader[] = [
@@ -334,7 +332,7 @@ export class ApplicationCsvExporterService
         path: 'submissionDate',
         label: 'Application Submission Date',
         format: (val: string): string =>
-          formatLocalDate(val, this.dateFormat, this.timeZone),
+          formatLocalDate(val, this.dateFormat, timeZone ?? this.timeZone),
       },
       {
         path: 'applicant.firstName',

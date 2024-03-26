@@ -1,3 +1,7 @@
+-- Paper applications were originally submitted as though they were in UTC,
+-- when they should have been submitted in Pacific (PST/PDT) and converted to UTC.
+-- Here we update the times to be in PST or PDT depending on when they were submitted
+-- and the yearly cycle of daylight savings.
 
 UPDATE applications
 SET submission_date = submission_date + '7 hours'
