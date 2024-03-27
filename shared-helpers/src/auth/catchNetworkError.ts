@@ -30,6 +30,7 @@ export enum NetworkErrorMessage {
   PasswordOutdated = "but password is no longer valid",
   MfaUnauthorized = "mfaUnauthorized",
   SingleUseCodeUnauthorized = "singleUseCodeUnauthorized",
+  MfaPublicSite = "A user with MFA required is attempting to login to the public site",
 }
 
 /**
@@ -74,12 +75,31 @@ export const useCatchNetworkError = () => {
     }
   }
 
+  const check403Error = (message: string, error: AxiosError) => {
+    if (message === NetworkErrorMessage.MfaPublicSite) {
+      setNetworkError({
+        title: t("errors.somethingWentWrong"),
+        description: t("authentication.signIn.mfaError"),
+        error,
+      })
+    } else {
+      setNetworkError({
+        title: t("errors.somethingWentWrong"),
+        description: t("authentication.signIn.errorGenericMessage"),
+        error,
+      })
+    }
+  }
+
   const determineNetworkError: NetworkErrorDetermineError = (status, error) => {
     const responseMessage = axios.isAxiosError(error) ? error.response?.data.message : ""
 
     switch (status) {
       case 401:
         check401Error(responseMessage, error)
+        break
+      case 403:
+        check403Error(responseMessage, error)
         break
       case 429:
         setNetworkError({
