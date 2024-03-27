@@ -4,6 +4,7 @@ import { Injectable, StreamableFile } from '@nestjs/common';
 import { Request as ExpressRequest, Response } from 'express';
 import { view } from './application.service';
 import { PrismaService } from './prisma.service';
+import { ApplicationSubmissionTypeEnum } from '@prisma/client';
 import { MultiselectQuestionService } from './multiselect-question.service';
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
 import { UnitType } from '../dtos/unit-types/unit-type.dto';
@@ -16,13 +17,11 @@ import { ListingService } from './listing.service';
 import { PermissionService } from './permission.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { formatLocalDate } from '../utilities/format-local-date';
-
 import {
   CsvExporterServiceInterface,
   CsvHeader,
 } from '../types/CsvExportInterface';
 import { mapTo } from '../utilities/mapTo';
-import { ApplicationSubmissionTypeEnum } from '@prisma/client';
 
 view.csv = {
   ...view.details,
@@ -49,7 +48,6 @@ export class ApplicationCsvExporterService
   implements CsvExporterServiceInterface
 {
   readonly dateFormat: string = 'MM-DD-YYYY hh:mm:ssA z';
-  timeZone = process.env.TIME_ZONE;
   constructor(
     private prisma: PrismaService,
     private multiselectQuestionService: MultiselectQuestionService,
@@ -363,7 +361,11 @@ export class ApplicationCsvExporterService
         path: 'submissionDate',
         label: 'Application Submission Date',
         format: (val: string): string =>
-          formatLocalDate(val, this.dateFormat, timeZone ?? this.timeZone),
+          formatLocalDate(
+            val,
+            this.dateFormat,
+            timeZone ?? process.env.TIME_ZONE,
+          ),
       },
       {
         path: 'applicant.firstName',
