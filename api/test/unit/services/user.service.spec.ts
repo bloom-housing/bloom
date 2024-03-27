@@ -1176,6 +1176,10 @@ describe('Testing user service', () => {
         id,
       });
       emailService.changeEmail = jest.fn();
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        id: jurisId,
+        allowSingleUseCodeLogin: false,
+      });
 
       await service.update(
         {
@@ -1201,6 +1205,18 @@ describe('Testing user service', () => {
         },
         where: {
           id,
+        },
+      });
+      expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
+        select: {
+          id: true,
+          allowSingleUseCodeLogin: true,
+        },
+        where: {
+          name: 'jurisdictionName',
+        },
+        orderBy: {
+          allowSingleUseCodeLogin: OrderByEnum.DESC,
         },
       });
       expect(prisma.userAccounts.update).toHaveBeenCalledWith({

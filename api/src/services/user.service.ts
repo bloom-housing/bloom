@@ -178,26 +178,52 @@ export class UserService {
     }
 
     let confirmationToken: string;
+    let singleUseCode: string;
     if (dto.newEmail && dto.appUrl) {
-      confirmationToken = this.createConfirmationToken(
-        storedUser.id,
-        dto.newEmail,
-      );
+      const juris = await this.prisma.jurisdictions.findFirst({
+        select: {
+          id: true,
+          allowSingleUseCodeLogin: true,
+        },
+        where: {
+          name: jurisdictionName,
+        },
+        orderBy: {
+          allowSingleUseCodeLogin: OrderByEnum.DESC,
+        },
+      });
 
-      const confirmationUrl = this.getPublicConfirmationUrl(
-        dto.appUrl,
-        confirmationToken,
-      );
+      if (juris.allowSingleUseCodeLogin) {
+        confirmationToken = this.createConfirmationToken(
+          storedUser.id,
+          dto.newEmail,
+        );
+        singleUseCode = generateSingleUseCode();
+        await this.emailService.sendSingleUseCode(
+          { ...requestingUser, email: dto.newEmail },
+          singleUseCode,
+        );
+      } else {
+        confirmationToken = this.createConfirmationToken(
+          storedUser.id,
+          dto.newEmail,
+        );
 
-      this.emailService.changeEmail(
-        dto.jurisdictions && dto.jurisdictions[0]
-          ? dto.jurisdictions[0].name
-          : jurisdictionName,
-        mapTo(User, storedUser),
-        dto.appUrl,
-        confirmationUrl,
-        dto.newEmail,
-      );
+        const confirmationUrl = this.getPublicConfirmationUrl(
+          dto.appUrl,
+          confirmationToken,
+        );
+
+        this.emailService.changeEmail(
+          dto.jurisdictions && dto.jurisdictions[0]
+            ? dto.jurisdictions[0].name
+            : jurisdictionName,
+          mapTo(User, storedUser),
+          dto.appUrl,
+          confirmationUrl,
+          dto.newEmail,
+        );
+      }
     }
 
     // only update userRoles if something has changed
@@ -260,6 +286,7 @@ export class UserService {
         passwordHash: passwordHash ?? undefined,
         passwordUpdatedAt: passwordUpdatedAt ?? undefined,
         confirmationToken: confirmationToken ?? undefined,
+        singleUseCode: singleUseCode ?? undefined,
         firstName: dto.firstName,
         middleName: dto.middleName,
         lastName: dto.lastName,

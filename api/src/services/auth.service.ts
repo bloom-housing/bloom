@@ -333,12 +333,28 @@ export class AuthService {
     user: User,
     res: Response,
   ): Promise<SuccessDTO> {
-    if (!user.confirmedAt) {
+    const rawUser = await this.prisma.userAccounts.findUnique({
+      where: {
+        id: user.id,
+      },
+    });
+
+    if (!user.confirmedAt || rawUser.confirmationToken) {
+      // if the user hasn't been confirmed or if they are updating their email
       const data: Prisma.UserAccountsUpdateInput = {
         confirmedAt: new Date(),
         confirmationToken: null,
       };
 
+      if (rawUser.confirmationToken) {
+        const token = verify(
+          rawUser.confirmationToken,
+          process.env.APP_SECRET,
+        ) as IdAndEmail;
+        if (token.email) {
+          data.email = token.email;
+        }
+      }
       await this.prisma.userAccounts.update({
         data,
         where: {
