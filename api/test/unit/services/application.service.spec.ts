@@ -27,7 +27,20 @@ import { User } from '../../../src/dtos/users/user.dto';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
 import { GeocodingService } from '../../../src/services/geocoding.service';
 
-export const mockApplication = (position: number, date: Date) => {
+export const mockApplication = (
+  position: number,
+  date: Date,
+  numberOfHouseholdMembers?: number,
+) => {
+  let householdMember = undefined;
+  if (numberOfHouseholdMembers) {
+    householdMember = [];
+    for (let i = 0; i < numberOfHouseholdMembers; i++) {
+      householdMember.push({
+        id: randomUUID(),
+      });
+    }
+  }
   return {
     id: randomUUID(),
     appUrl: `appUrl ${position}`,
@@ -93,13 +106,18 @@ export const mockApplication = (position: number, date: Date) => {
     },
     createdAt: date,
     updatedAt: date,
+    householdMember: householdMember,
   };
 };
 
-export const mockApplicationSet = (numberToCreate: number, date: Date) => {
+export const mockApplicationSet = (
+  numberToCreate: number,
+  date: Date,
+  numberOfHouseholdMembers?: number,
+) => {
   const toReturn = [];
   for (let i = 0; i < numberToCreate; i++) {
-    toReturn.push(mockApplication(i, date));
+    toReturn.push(mockApplication(i, date, numberOfHouseholdMembers));
   }
   return toReturn;
 };
