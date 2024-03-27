@@ -1076,6 +1076,53 @@ describe('Testing application service', () => {
     expect(canOrThrowMock).not.toHaveBeenCalled();
   });
 
+  it('should error while creating an application as a non-admin user for a closed listing', async () => {
+    prisma.listings.findUnique = jest.fn().mockResolvedValue({
+      id: randomUUID(),
+      status: 'closed',
+    });
+
+    prisma.applications.create = jest.fn().mockResolvedValue({
+      id: randomUUID(),
+    });
+
+    const exampleAddress = addressFactory() as AddressCreate;
+    const dto = mockCreateApplicationData(exampleAddress, new Date());
+
+    prisma.jurisdictions.findFirst = jest
+      .fn()
+      .mockResolvedValue({ id: randomUUID() });
+
+    await expect(
+      async () =>
+        await service.create(dto, true, {
+          id: 'requestingUser id',
+          userRoles: { isAdmin: false },
+        } as unknown as User),
+    ).rejects.toThrowError(
+      'Non-administrators cannot submit applications to closed listings',
+    );
+
+    expect(prisma.listings.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: expect.anything(),
+      },
+      include: {
+        jurisdictions: true,
+        listingsBuildingAddress: true,
+        listingMultiselectQuestions: {
+          include: {
+            multiselectQuestions: true,
+          },
+        },
+      },
+    });
+
+    expect(prisma.applications.create).not.toHaveBeenCalled();
+
+    expect(canOrThrowMock).not.toHaveBeenCalled();
+  });
+
   it('should create an application from partner site', async () => {
     prisma.listings.findUnique = jest.fn().mockResolvedValue({
       id: randomUUID(),

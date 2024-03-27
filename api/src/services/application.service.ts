@@ -350,6 +350,12 @@ export class ApplicationService {
         );
       }
     }
+    // if closed listing and non-admin user
+    if (listing?.status === 'closed' && !requestingUser.userRoles?.isAdmin) {
+      throw new BadRequestException(
+        `Non-administrators cannot submit applications to closed listings`,
+      );
+    }
 
     const rawApplication = await this.prisma.applications.create({
       data: {
