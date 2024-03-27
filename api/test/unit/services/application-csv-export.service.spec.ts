@@ -559,4 +559,133 @@ describe('Testing application CSV export service', () => {
     expect(readable).toContain(headerRow);
     expect(readable).toContain(firstApp);
   });
+
+  it('should build csv with submission date defaulted to PST', async () => {
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date('2024-01-01'));
+
+    const requestingUser = {
+      firstName: 'requesting fName',
+      lastName: 'requesting lName',
+      email: 'requestingUser@email.com',
+      jurisdictions: [{ id: 'juris id' }],
+    } as unknown as User;
+
+    const applications = mockApplicationSet(5, new Date());
+    prisma.applications.findMany = jest.fn().mockReturnValue(applications);
+    prisma.listings.findUnique = jest.fn().mockResolvedValue({});
+    permissionService.canOrThrow = jest.fn().mockResolvedValue(true);
+
+    service.maxHouseholdMembers = jest.fn().mockReturnValue(1);
+
+    prisma.multiselectQuestions.findMany = jest.fn().mockReturnValue([
+      {
+        ...mockMultiselectQuestion(
+          0,
+          new Date(),
+          MultiselectQuestionsApplicationSectionEnum.preferences,
+        ),
+        options: [
+          { id: 1, text: 'text' },
+          { id: 2, text: 'text', collectAddress: true },
+        ],
+      },
+      {
+        ...mockMultiselectQuestion(
+          1,
+          new Date(),
+          MultiselectQuestionsApplicationSectionEnum.programs,
+        ),
+        options: [{ id: 1, text: 'text' }],
+      },
+    ]);
+
+    service.unitTypeToReadable = jest.fn().mockReturnValue('Studio');
+    const exportResponse = await service.exportFile(
+      { user: requestingUser } as unknown as ExpressRequest,
+      {} as unknown as Response,
+      { listingId: randomUUID() },
+    );
+
+    const mockedStream = new PassThrough();
+    exportResponse.getStream().pipe(mockedStream);
+
+    // In order to make sure the last expect statements are properly hit we need to wrap in a promise and resolve it
+    const readable = await new Promise((resolve) => {
+      mockedStream.on('data', async (d) => {
+        const value = Buffer.from(d).toString();
+        mockedStream.end();
+        mockedStream.destroy();
+        resolve(value);
+      });
+    });
+
+    expect(readable).toContain('PST');
+  });
+
+  it('should build csv with submission date in custom timezone', async () => {
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date('2024-01-01'));
+
+    const requestingUser = {
+      firstName: 'requesting fName',
+      lastName: 'requesting lName',
+      email: 'requestingUser@email.com',
+      jurisdictions: [{ id: 'juris id' }],
+    } as unknown as User;
+
+    const applications = mockApplicationSet(5, new Date());
+    prisma.applications.findMany = jest.fn().mockReturnValue(applications);
+    prisma.listings.findUnique = jest.fn().mockResolvedValue({});
+    permissionService.canOrThrow = jest.fn().mockResolvedValue(true);
+
+    service.maxHouseholdMembers = jest.fn().mockReturnValue(1);
+
+    prisma.multiselectQuestions.findMany = jest.fn().mockReturnValue([
+      {
+        ...mockMultiselectQuestion(
+          0,
+          new Date(),
+          MultiselectQuestionsApplicationSectionEnum.preferences,
+        ),
+        options: [
+          { id: 1, text: 'text' },
+          { id: 2, text: 'text', collectAddress: true },
+        ],
+      },
+      {
+        ...mockMultiselectQuestion(
+          1,
+          new Date(),
+          MultiselectQuestionsApplicationSectionEnum.programs,
+        ),
+        options: [{ id: 1, text: 'text' }],
+      },
+    ]);
+
+    service.unitTypeToReadable = jest.fn().mockReturnValue('Studio');
+    const exportResponse = await service.exportFile(
+      { user: requestingUser } as unknown as ExpressRequest,
+      {} as unknown as Response,
+      {
+        listingId: randomUUID(),
+        timeZone: 'America/New_York',
+      },
+    );
+
+    const mockedStream = new PassThrough();
+    exportResponse.getStream().pipe(mockedStream);
+
+    // In order to make sure the last expect statements are properly hit we need to wrap in a promise and resolve it
+    const readable = await new Promise((resolve) => {
+      mockedStream.on('data', async (d) => {
+        const value = Buffer.from(d).toString();
+        mockedStream.end();
+        mockedStream.destroy();
+        resolve(value);
+      });
+    });
+
+    expect(readable).toContain('EST');
+  });
 });

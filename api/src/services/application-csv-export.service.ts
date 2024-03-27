@@ -4,6 +4,7 @@ import { Injectable, StreamableFile } from '@nestjs/common';
 import { Request as ExpressRequest, Response } from 'express';
 import { view } from './application.service';
 import { PrismaService } from './prisma.service';
+import { ApplicationSubmissionTypeEnum } from '@prisma/client';
 import { MultiselectQuestionService } from './multiselect-question.service';
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
 import { UnitType } from '../dtos/unit-types/unit-type.dto';
@@ -15,6 +16,7 @@ import { User } from '../dtos/users/user.dto';
 import { ListingService } from './listing.service';
 import { PermissionService } from './permission.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import { formatLocalDate } from '../utilities/format-local-date';
 import {
   CsvExporterServiceInterface,
   CsvHeader,
@@ -45,12 +47,14 @@ export const typeMap = {
 export class ApplicationCsvExporterService
   implements CsvExporterServiceInterface
 {
+  readonly dateFormat: string = 'MM-DD-YYYY hh:mm:ssA z';
   constructor(
     private prisma: PrismaService,
     private multiselectQuestionService: MultiselectQuestionService,
     private listingService: ListingService,
     private permissionService: PermissionService,
   ) {}
+
   /**
    *
    * @param queryParams
@@ -64,12 +68,14 @@ export class ApplicationCsvExporterService
   ): Promise<StreamableFile> {
     const user = mapTo(User, req['user']);
     await this.authorizeCSVExport(user, queryParams.listingId);
+
     const filename = join(
       process.cwd(),
       `src/temp/listing-${queryParams.listingId}-applications-${
         user.id
       }-${new Date().getTime()}.csv`,
     );
+
     await this.createCsv(filename, queryParams);
     const file = createReadStream(filename);
     return new StreamableFile(file);
@@ -109,6 +115,7 @@ export class ApplicationCsvExporterService
     const csvHeaders = await this.getCsvHeaders(
       maxHouseholdMembers,
       multiSelectQuestions,
+      queryParams.timeZone,
       queryParams.includeDemographics,
     );
 
@@ -330,6 +337,7 @@ export class ApplicationCsvExporterService
   async getCsvHeaders(
     maxHouseholdMembers: number,
     multiSelectQuestions: MultiselectQuestion[],
+    timeZone: string,
     includeDemographics = false,
   ): Promise<CsvHeader[]> {
     const headers: CsvHeader[] = [
@@ -344,10 +352,20 @@ export class ApplicationCsvExporterService
       {
         path: 'submissionType',
         label: 'Application Type',
+        format: (val: string): string =>
+          val === ApplicationSubmissionTypeEnum.electronical
+            ? 'electronic'
+            : val,
       },
       {
         path: 'submissionDate',
         label: 'Application Submission Date',
+        format: (val: string): string =>
+          formatLocalDate(
+            val,
+            this.dateFormat,
+            timeZone ?? process.env.TIME_ZONE,
+          ),
       },
       {
         path: 'applicant.firstName',
