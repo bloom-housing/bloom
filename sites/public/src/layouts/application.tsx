@@ -2,6 +2,7 @@ import React, { useContext } from "react"
 import dayjs from "dayjs"
 import { useRouter } from "next/router"
 import Head from "next/head"
+import Markdown from "markdown-to-jsx"
 import { JurisdictionFooterSection as SanMateoFooter } from "../page_content/jurisdiction_overrides/san_mateo/jurisdiction-footer-section"
 import { JurisdictionFooterSection as SanJoseFooter } from "../page_content/jurisdiction_overrides/san_jose/jurisdiction-footer-section"
 import { JurisdictionFooterSection as AlamedaFooter } from "../page_content/jurisdiction_overrides/alameda/jurisdiction-footer-section"
@@ -79,7 +80,8 @@ const Layout = (props) => {
       const startWindow = convertWindowToDate(maintenanceWindow[0])
       const endWindow = convertWindowToDate(maintenanceWindow[1])
       const now = dayjs()
-      inMaintenance = now > startWindow && now < endWindow
+      inMaintenance =
+        now > startWindow && now < endWindow && process.env.jurisdictionName === "Alameda"
     }
     return inMaintenance
   }
@@ -103,8 +105,8 @@ const Layout = (props) => {
         </Head>
         {getInMaintenance() && (
           <div className={styles["site-alert-banner-container"]}>
-            <Message className={styles["site-alert-banner-content"]} variant={"alert"}>
-              {t("alert.maintenance")}
+            <Message className={styles["site-alert-banner-content"]} variant={"primary"}>
+              <Markdown>{t("alert.maintenance")}</Markdown>
             </Message>
           </div>
         )}

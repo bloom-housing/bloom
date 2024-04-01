@@ -1,4 +1,5 @@
 {
+  "alert.maintenance": "阿拉米達<u>縣</u>住房管理局 (HACA) 將於 4 月 2 日至 5 日開放候補名單。了解更多信息，請訪問 <a href='https://www.haca.net' target='_blank'>www.haca.net</a>。",
   "application.contact.doYouWorkIn": "您是否在 %{county} 工作？",
   "application.contact.doYouWorkInDescription": "",
   "application.household.member.workInRegion": "他們是否在 %{county} 工作？",
