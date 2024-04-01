@@ -258,24 +258,24 @@ export class ListingService implements OnModuleInit {
         }
         if (filter[ListingFilterKeys.bedrooms]) {
           whereClauseArray.push(
-            `(combined_units->>'numBedrooms') =  '${
-              filter[ListingFilterKeys.bedrooms]
-            }'`,
+            `(combined_units->>'numBedrooms') =  '${Math.floor(
+              filter[ListingFilterKeys.bedrooms],
+            )}'`,
           );
         }
         if (filter[ListingFilterKeys.bathrooms]) {
           whereClauseArray.push(
-            `(combined_units->>'numBathrooms') =  '${
-              filter[ListingFilterKeys.bathrooms]
-            }'`,
+            `(combined_units->>'numBathrooms') =  '${Math.floor(
+              filter[ListingFilterKeys.bathrooms],
+            )}'`,
           );
         }
         if (filter[ListingFilterKeys.monthlyRent]) {
           const comparison = filter['$comparison'];
           whereClauseArray.push(
-            `(combined_units->>'monthlyRent')::INTEGER ${comparison} '${
-              filter[ListingFilterKeys.monthlyRent]
-            }'`,
+            `(combined_units->>'monthlyRent')::INTEGER ${comparison} '${Math.floor(
+              filter[ListingFilterKeys.monthlyRent],
+            )}'`,
           );
         }
       });

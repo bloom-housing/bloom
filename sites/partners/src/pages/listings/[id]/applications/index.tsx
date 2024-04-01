@@ -53,6 +53,7 @@ const ApplicationsList = () => {
   const countyCode = listingDto?.jurisdictions.name
   const listingName = listingDto?.name
   const isListingOpen = listingDto?.status === "active"
+  const allowNewApps = listingDto?.status !== "closed" || profile?.userRoles?.isAdmin
   const { data: flaggedApps } = useFlaggedApplicationsList({
     listingId,
     page: 1,
@@ -194,15 +195,17 @@ const ApplicationsList = () => {
                 }}
                 headerContent={
                   <div className="flex-row">
-                    <Button
-                      href={`/listings/${listingId}/applications/add`}
-                      variant="primary-outlined"
-                      size="sm"
-                      className="mx-1"
-                      id={"addApplicationButton"}
-                    >
-                      {t("applications.addApplication")}
-                    </Button>
+                    {allowNewApps && (
+                      <Button
+                        href={`/listings/${listingId}/applications/add`}
+                        variant="primary-outlined"
+                        size="sm"
+                        className="mx-1"
+                        id={"addApplicationButton"}
+                      >
+                        {t("applications.addApplication")}
+                      </Button>
+                    )}
 
                     <Button
                       variant="primary-outlined"

@@ -373,8 +373,15 @@ export class EmailService {
     );
   }
 
-  public async sendSingleUseCode(user: User, singleUseCode: string) {
-    const jurisdiction = await this.getJurisdiction(user.jurisdictions);
+  public async sendSingleUseCode(
+    user: User,
+    singleUseCode: string,
+    jurisdictionName: string,
+  ) {
+    const jurisdiction = await this.getJurisdiction(
+      user.jurisdictions,
+      jurisdictionName,
+    );
     void (await this.loadTranslations(jurisdiction, user.language));
     const emailFromAddress = await this.getEmailToSendFrom(
       user.jurisdictions,
@@ -384,13 +391,13 @@ export class EmailService {
       user.email,
       emailFromAddress,
       user.confirmedAt
-        ? `Code for your ${jurisdiction.name} sign-in`
-        : `${jurisdiction.name} verification code`,
+        ? `Code for your ${jurisdiction?.name} sign-in`
+        : `${jurisdiction?.name} verification code`,
       this.template('single-use-code')({
         user: user,
         singleUseCodeOptions: {
           singleUseCode,
-          jurisdictionName: jurisdiction.name,
+          jurisdictionName: jurisdiction?.name,
         },
       }),
     );
