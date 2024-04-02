@@ -53,10 +53,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
 
         const { submissionDate } = data
 
-        const dateTime = convertDataToLocal(
-          submissionDate,
-          data?.submissionType || ApplicationSubmissionTypeEnum.electronical
-        )
+        const dateTime = convertDataToLocal(submissionDate)
 
         return `${dateTime.date} ${t("t.at")} ${dateTime.time}`
       },

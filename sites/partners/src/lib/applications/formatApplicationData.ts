@@ -8,6 +8,7 @@ import {
   getInputType,
 } from "@bloom-housing/shared-helpers"
 import { FormTypes, ApplicationTypes, Address } from "../../lib/applications/FormTypes"
+import { convertDataToLocal } from "../../lib/helpers"
 
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
@@ -104,7 +105,7 @@ export const mapFormToApi = ({
       "MM/DD/YYYY hh:mm:ss a"
     ).format(TIME_24H_FORMAT)
 
-    const formattedDate = dayjs(dateString, TIME_24H_FORMAT).utc(true).toDate()
+    const formattedDate = dayjs(dateString, TIME_24H_FORMAT).toDate()
 
     return formattedDate
   })()
@@ -270,7 +271,7 @@ export const mapFormToApi = ({
 
 export const mapApiToForm = (applicationData: ApplicationUpdate, listing: Listing) => {
   const submissionDate = applicationData.submissionDate
-    ? dayjs(new Date(applicationData.submissionDate)).utc()
+    ? dayjs(new Date(applicationData.submissionDate))
     : null
 
   const dateOfBirth = (() => {

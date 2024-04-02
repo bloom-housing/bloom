@@ -1,6 +1,7 @@
 import {
   ApplicationAddressTypeEnum,
   ApplicationMethodsTypeEnum,
+  ApplicationSubmissionTypeEnum,
   LanguagesEnum,
   ListingsStatusEnum,
   MultiselectQuestions,
@@ -460,6 +461,9 @@ export const stagingSeed = async (
         }),
         await applicationFactory(),
         await applicationFactory(),
+        await applicationFactory({
+          submissionType: ApplicationSubmissionTypeEnum.paper,
+        }),
       ],
     },
     {
