@@ -28,14 +28,13 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { JwtAuthGuard } from '../guards/jwt.guard';
 import { PermissionGuard } from '../guards/permission.guard';
-import { ThrottleGuard } from '../guards/throttler.guard';
 
 @Controller('reservedCommunityTypes')
 @ApiTags('reservedCommunityTypes')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 @ApiExtraModels(ReservedCommunityTypeQueryParams)
 @PermissionTypeDecorator('reservedCommunityType')
-@UseGuards(ThrottleGuard, JwtAuthGuard, PermissionGuard)
+@UseGuards(JwtAuthGuard, PermissionGuard)
 export class ReservedCommunityTypeController {
   constructor(
     private readonly ReservedCommunityTypeService: ReservedCommunityTypeService,

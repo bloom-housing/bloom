@@ -14,11 +14,10 @@ import { defaultValidationPipeOptions } from '../utilities/default-validation-pi
 import { OptionalAuthGuard } from '../guards/optional.guard';
 import { PermissionGuard } from '../guards/permission.guard';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
-import { ThrottleGuard } from '../guards/throttler.guard';
 
 @Controller('/mapLayers')
 @ApiTags('mapLayers')
-@UseGuards(ThrottleGuard, OptionalAuthGuard, PermissionGuard)
+@UseGuards(OptionalAuthGuard, PermissionGuard)
 @PermissionTypeDecorator('mapLayers')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 export class MapLayersController {

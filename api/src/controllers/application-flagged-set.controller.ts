@@ -32,12 +32,11 @@ import { mapTo } from '../utilities/mapTo';
 import { OptionalAuthGuard } from '../guards/optional.guard';
 import { PermissionGuard } from '../guards/permission.guard';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
-import { ThrottleGuard } from '../guards/throttler.guard';
 
 @Controller('/applicationFlaggedSets')
 @ApiExtraModels(SuccessDTO)
 @ApiTags('applicationFlaggedSets')
-@UseGuards(ThrottleGuard, OptionalAuthGuard, PermissionGuard)
+@UseGuards(OptionalAuthGuard, PermissionGuard)
 @PermissionTypeDecorator('applicationFlaggedSet')
 @UsePipes(
   new ValidationPipe({

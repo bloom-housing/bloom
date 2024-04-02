@@ -21,13 +21,12 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { JwtAuthGuard } from '../guards/jwt.guard';
 import { PermissionGuard } from '../guards/permission.guard';
-import { ThrottleGuard } from '../guards/throttler.guard';
 
 @Controller('unitTypes')
 @ApiTags('unitTypes')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 @PermissionTypeDecorator('unitType')
-@UseGuards(ThrottleGuard, JwtAuthGuard, PermissionGuard)
+@UseGuards(JwtAuthGuard, PermissionGuard)
 export class UnitTypeController {
   constructor(private readonly unitTypeService: UnitTypeService) {}
 
