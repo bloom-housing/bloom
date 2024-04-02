@@ -1,11 +1,12 @@
 import { NestFactory, HttpAdapterHost } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
+import { UnauthorizedException } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
+import { json } from 'express';
 import { AppModule } from './modules/app.module';
 import { CustomExceptionFilter } from './utilities/custom-exception-filter';
-import { json } from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -29,6 +30,14 @@ async function bootstrap() {
       credentials: true,
       origin: false,
     };
+
+    if (
+      process.env.API_PASS_KEY &&
+      req.header('passkey') &&
+      req.header('passkey') !== process.env.API_PASS_KEY
+    ) {
+      throw new UnauthorizedException('Traffic not from a known source');
+    }
 
     if (
       allowList.indexOf(req.header('Origin')) !== -1 ||
