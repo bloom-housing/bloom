@@ -27,6 +27,7 @@
   "account.settings.alerts.passwordSuccess": "Cập nhật mật khẩu thành công",
   "account.settings.confirmNewPassword": "Xác nhận mật khẩu mới",
   "account.settings.currentPassword": "Mật khẩu hiện tại",
+  "account.settings.dataRemovalDisclaimer": "Bạn có thể liên hệ với BAHFA để yêu cầu xóa thông tin tài khoản và dữ liệu liên quan của mình bất kỳ lúc nào. Để làm như vậy, vui lòng liên hệ với doorway@bayareametro.gov.",
   "account.settings.newPassword": "Mật khẩu mới",
   "account.settings.passwordRemember": "Khi thay đổi mật khẩu, hãy nhớ ghi lại mật khẩu để có thể ghi nhớ trong tương lai.",
   "account.settings.placeholders.day": "DD",

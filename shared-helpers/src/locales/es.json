@@ -27,6 +27,7 @@
   "account.settings.alerts.passwordSuccess": "La contraseña se ha actualizado de manera exitosa",
   "account.settings.confirmNewPassword": "Confirmar nueva contraseña",
   "account.settings.currentPassword": "Contraseña actual",
+  "account.settings.dataRemovalDisclaimer": "Puede comunicarse con BAHFA para eliminar la información de su cuenta y los datos asociados en cualquier momento. Para hacerlo, comuníquese con doorway@bayareametro.gov.",
   "account.settings.newPassword": "Nueva contraseña",
   "account.settings.passwordRemember": "Le recomendamos que al momento de cambiar su contraseña, asegúrese de anotarla para recordarla en el futuro.",
   "account.settings.placeholders.day": "DD",
