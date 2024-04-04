@@ -27,6 +27,11 @@
   color: var(--seeds-input-text-label-color);
 }
 
+.account-settings-disclaimer {
+  font-size: var(--seeds-font-size-xs);
+  color: var(--seeds-text-color-light);
+}
+
 .application-no-results {
   padding: var(--seeds-s8);
   background-color: var(--seeds-bg-color-muted);

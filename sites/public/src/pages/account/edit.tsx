@@ -369,6 +369,11 @@ const Edit = () => {
                 </fieldset>
               </Form>
             </Card.Section>
+            <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
+              <p className={styles["account-settings-disclaimer"]}>
+                {t("account.settings.dataRemovalDisclaimer")}
+              </p>
+            </Card.Section>
           </>
         </BloomCard>
       </FormsLayout>

@@ -27,6 +27,7 @@
   "account.settings.alerts.passwordSuccess": "Matagumpay na na-update ang password",
   "account.settings.confirmNewPassword": "Kumpirmahin ang bagong password",
   "account.settings.currentPassword": "Kasalukuyang password",
+  "account.settings.dataRemovalDisclaimer": "Maaari kang makipag-ugnayan sa BAHFA upang matanggal ang impormasyon ng iyong account at nauugnay na data anumang oras. Upang gawin ito, mangyaring makipag-ugnayan sa doorway@bayareametro.gov.",
   "account.settings.newPassword": "Bagong password",
   "account.settings.passwordRemember": "Kapag pinapalitan ang iyong password siguruhin na gagawa ka ng note para maalala mo ito sa susunod.",
   "account.settings.placeholders.day": "DD",

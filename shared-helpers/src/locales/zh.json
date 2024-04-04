@@ -27,6 +27,7 @@
   "account.settings.alerts.passwordSuccess": "密碼更新成功",
   "account.settings.confirmNewPassword": "確認新密碼",
   "account.settings.currentPassword": "目前密碼",
+  "account.settings.dataRemovalDisclaimer": "您可以隨時聯絡 BAHFA 刪除您的帳戶資訊和相關資料。為此，請聯絡doorway@bayareametro.gov。",
   "account.settings.newPassword": "新密碼",
   "account.settings.passwordRemember": "變更您的密碼時，請務必記下來以免在日後忘記。",
   "account.settings.placeholders.day": "DD",
