@@ -103,9 +103,10 @@ const PreferenceDrawer = ({
     ((optionData?.collectAddress && watch("collectAddress") === undefined) ||
       watch("collectAddress") === YesNoEnum.yes) &&
     isAdditionalDetailsEnabled
-  const isValidationRadiusVisible = profile?.jurisdictions.find(
-    (juris) => juris.id === watch("jurisdictionId")
-  )?.enableGeocodingRadiusMethod
+  const isValidationRadiusVisible =
+    profile?.jurisdictions.find((juris) => juris.id === watch("jurisdictionId"))
+      ?.enableGeocodingRadiusMethod ||
+    profile?.jurisdictions.every((juris) => juris.enableGeocodingRadiusMethod)
   const readiusExpand =
     (optionData?.validationMethod === ValidationMethodEnum.radius &&
       watch("validationMethod") === undefined) ||
