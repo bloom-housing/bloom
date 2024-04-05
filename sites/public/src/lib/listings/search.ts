@@ -1,8 +1,8 @@
 import { ListingQueryBuilder } from "./listing-query-builder"
 
 export type ListingSearchParams = {
-  bedrooms: string
-  bathrooms: string
+  bedrooms: string[]
+  bathrooms: string[]
   minRent: string
   monthlyRent: string
   counties: string[]
@@ -101,13 +101,12 @@ export function generateSearchQuery(params: ListingSearchParams) {
   const qb = new ListingQueryBuilder()
 
   // Find listings that have units with greater than or equal number of bedrooms
-  if (params.bedrooms != null) {
-    qb.whereGreaterThanEqual("bedrooms", params.bedrooms)
+  if (Array.isArray(params.bedrooms) && params.bedrooms.length > 0) {
+    qb.whereIn("bedrooms", params.bedrooms)
   }
 
-  // Find listings that have units with greater than or equal number of bathrooms
-  if (params.bathrooms != null) {
-    qb.whereGreaterThanEqual("bathrooms", params.bathrooms)
+  if (Array.isArray(params.bathrooms) && params.bathrooms.length > 0) {
+    qb.whereIn("bathrooms", params.bathrooms)
   }
 
   if (params.minRent && params.minRent != "") {
