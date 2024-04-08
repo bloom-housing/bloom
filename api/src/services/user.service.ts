@@ -193,7 +193,7 @@ export class UserService {
         },
       });
 
-      if (juris.allowSingleUseCodeLogin) {
+      if (juris?.allowSingleUseCodeLogin) {
         confirmationToken = this.createConfirmationToken(
           storedUser.id,
           dto.newEmail,
@@ -202,6 +202,7 @@ export class UserService {
         await this.emailService.sendSingleUseCode(
           { ...requestingUser, email: dto.newEmail },
           singleUseCode,
+          'single-use-code-change-email',
         );
       } else {
         confirmationToken = this.createConfirmationToken(

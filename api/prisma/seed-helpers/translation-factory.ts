@@ -154,6 +154,12 @@ const translations = (jurisdictionName?: string, language?: LanguagesEnum) => {
           'Use the following code to sign in to your %{jurisdictionName} account. This code will be valid for 5 minutes. Never share this code.',
         singleUseCode: '%{singleUseCode}',
       },
+      singleUseCodeUpdateEmail: {
+        greeting: 'Hi',
+        message:
+          'Use the following code to confirm an email update to your %{jurisdictionName} account. This code will be valid for 5 minutes. Never share this code.',
+        singleUseCode: '%{singleUseCode}',
+      },
     };
   } else if (language === LanguagesEnum.es) {
     return {

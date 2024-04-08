@@ -326,7 +326,11 @@ export class EmailService {
     );
   }
 
-  public async sendSingleUseCode(user: User, singleUseCode: string) {
+  public async sendSingleUseCode(
+    user: User,
+    singleUseCode: string,
+    template?: string,
+  ) {
     const jurisdiction = await this.getJurisdiction(user.jurisdictions);
     void (await this.loadTranslations(jurisdiction, user.language));
     const emailFromAddress = await this.getEmailToSendFrom(
@@ -339,7 +343,7 @@ export class EmailService {
       user.confirmedAt
         ? `Code for your ${jurisdiction.name} sign-in`
         : `${jurisdiction.name} verification code`,
-      this.template('single-use-code')({
+      this.template(template ?? 'single-use-code')({
         user: user,
         singleUseCodeOptions: {
           singleUseCode,

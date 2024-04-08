@@ -31,7 +31,7 @@ const Verify = () => {
   const { requestSingleUseCode, loginViaSingleUseCode } = useContext(AuthContext)
   const redirectToPage = useRedirectToPrevPage("/account/dashboard")
 
-  type FlowType = "create" | "login"
+  type FlowType = "create" | "login" | "update"
   const email = router.query?.email as string
   const flowType = router.query?.flowType as FlowType
 
@@ -41,7 +41,9 @@ const Verify = () => {
   const [alertMessage, setAlertMessage] = useState(
     flowType === "create"
       ? t("account.pwdless.createMessage", { email })
-      : t("account.pwdless.loginMessage", { email })
+      : flowType === "login"
+      ? t("account.pwdless.loginMessage", { email })
+      : t("account.pwdless.updateMessage", { email })
   )
 
   useEffect(() => {

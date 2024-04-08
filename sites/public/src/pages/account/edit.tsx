@@ -4,6 +4,7 @@ import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
 import customParseFormat from "dayjs/plugin/customParseFormat"
 dayjs.extend(customParseFormat)
+import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import {
   Field,
@@ -47,6 +48,7 @@ const Edit = () => {
   const [emailAlert, setEmailAlert] = useState<AlertMessage>()
   const MIN_PASSWORD_LENGTH = 8
   const password = useRef({})
+  const router = useRouter()
   password.current = watch("password", "")
 
   useEffect(() => {
@@ -99,6 +101,7 @@ const Edit = () => {
   const onEmailSubmit = async (data: { email: string }) => {
     const { email } = data
     setEmailAlert(null)
+
     try {
       await userService.update({
         body: {
@@ -107,7 +110,14 @@ const Edit = () => {
           newEmail: email,
         },
       })
-      setEmailAlert({ type: "success", message: `${t("account.settings.alerts.emailSuccess")}` })
+      if (process.env.showPwdless) {
+        await router.push({
+          pathname: "/verify",
+          query: { flowType: "update", email },
+        })
+      } else {
+        setEmailAlert({ type: "success", message: `${t("account.settings.alerts.emailSuccess")}` })
+      }
     } catch (err) {
       console.log("err = ", err)
       setEmailAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
