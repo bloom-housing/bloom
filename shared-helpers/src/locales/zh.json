@@ -41,6 +41,7 @@
   "account.signUpSaveTime.useACode": "使用代碼登入而無需密碼",
   "account.viewApplications": "查看申請",
   "alert.applicationMessage": "現在可以申請更多清單！您可能需要建立一個帳戶。請查看<a href='https://mtc.ca.gov/doorway-housing-portal-terms-use' target='_blank'>使用條款</a>和<a href='https://mtc.ca.gov/doorway-housing-portal-privacy-policy' target='_blank'>隱私權政策</a>，兩者均已變更。",
+  "alert.experiencingIssues": "我們目前在帳戶建立和登入確認電子郵件方面遇到問題。雖然我們解決了此問題，但您仍然可以在不登入帳戶的情況下進行經濟適用房搜尋。\n\n請查看<a href='https://mtc.ca.gov/doorway-housing-portal-terms-use' target='_blank'>使用條款</a>和<a href='https://mtc.ca.gov/doorway-housing-portal-privacy-policy' target='_blank'>隱私權政策</a>，兩者均已變更。",
   "alert.maintenance": "该网站正在进行定期维护。很抱歉给您带来不便。",
   "application.ada.hearing": "針對聽力障礙",
   "application.ada.label": "《美國殘疾人法案》(ADA) 規定的無障礙單位",
