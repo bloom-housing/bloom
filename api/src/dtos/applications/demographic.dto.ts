@@ -10,6 +10,13 @@ export class Demographic extends AbstractDTO {
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
   @ApiPropertyOptional()
+  ethnicity?: string;
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
+  @ApiPropertyOptional()
   gender?: string;
 
   @Expose()
