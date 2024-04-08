@@ -54,7 +54,7 @@
 
   #### 3\. Check the income tables published by the housing agency in your area
 
-  You may also check the income tables published on the housing agency website in the area in which your desired affordable housing is located. These tables are produced by the U.S Department of Housing and Urban Development (HUD) and are updated annually. [Tables for San José are provided here.](https://www.sanjoseca.gov/your-government/departments/housing/data/income-and-rent-limits/affordable-rental-housing) A household would typically be considered eligible for most affordable housing if the household income is 60% of Area Median Income (AMI) or below.  However, some properties have rents that are restricted to “moderate” income households with incomes up to 120% of AMI. If you have questions regarding these tables, please contact the agency in the area for which you are looking for affordable housing.
+  You may also check the income tables published on the housing agency website in the area in which your desired affordable housing is located. These tables are produced by the U.S Department of Housing and Urban Development (HUD) and are updated annually. [Tables for San José are provided here.](https://www.sanjoseca.gov/your-government/departments-offices/housing/data/income-and-rent-limits/affordable-rental-housing) A household would typically be considered eligible for most affordable housing if the household income is 60% of Area Median Income (AMI) or below.  However, some properties have rents that are restricted to “moderate” income households with incomes up to 120% of AMI. If you have questions regarding these tables, please contact the agency in the area for which you are looking for affordable housing.
 
   #### Preferences
 
