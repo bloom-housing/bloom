@@ -1,0 +1,21 @@
+.site-alert-banner-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+
+  &[data-variant="primary"] {
+    background-color: var(--seeds-color-primary-lighter);
+  }
+
+  &[data-variant="alert"] {
+    background-color: var(--seeds-color-alert-light);
+  }
+}
+
+.site-alert-banner-content {
+  --common-message-max-width: var(--seeds-width-5xl);
+  --common-message-font-size: var(--seeds-font-size-base);
+  width: 100%;
+}

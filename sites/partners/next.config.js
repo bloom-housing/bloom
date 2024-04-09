@@ -54,6 +54,7 @@ module.exports = withBundleAnalyzer(
       awsRegion: process.env.AWS_REGION,
       fileService: process.env.FILE_SERVICE,
       featureListingsApproval: process.env.FEATURE_LISTINGS_APPROVAL,
+      maintenanceWindow: process.env.MAINTENANCE_WINDOW,
     },
     i18n: {
       locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],

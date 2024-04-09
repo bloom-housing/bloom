@@ -52,6 +52,7 @@
   "account.pwdless.signInWithYourPassword": "Sign in with your password",
   "account.pwdless.verifyTitle": "Verify that it's you",
   "alert.applicationMessage": "Applications are now available for more listings! You may be required to create an account. Please review the <a href='https://mtc.ca.gov/doorway-housing-portal-terms-use' target='_blank'>Terms of Use</a> and <a href='https://mtc.ca.gov/doorway-housing-portal-privacy-policy' target='_blank'>Privacy Policy</a>, both of which have changed.",
+  "alert.experiencingIssues": "We're currently having a problem with account creation and login confirmation emails. While we resolve this issue, you may still conduct affordable housing searches without signing-in to your account.\n\nPlease review the <a href='https://mtc.ca.gov/doorway-housing-portal-terms-use' target='_blank'>Terms of Use</a> and <a href='https://mtc.ca.gov/doorway-housing-portal-privacy-policy' target='_blank'>Privacy Policy</a>, both of which have changed.",
   "alert.maintenance": "This site is undergoing scheduled maintenance. We apologize for any inconvenience.",
   "application.ada.hearing": "For Hearing Impairments",
   "application.ada.label": "ADA Accessible Units",
