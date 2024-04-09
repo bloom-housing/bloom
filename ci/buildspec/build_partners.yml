@@ -34,6 +34,7 @@ phases:
         --build-arg "LANGUAGES=${LANGUAGES}"
         --build-arg "MAPBOX_TOKEN=${MAPBOX_TOKEN}"
         --build-arg "FEATURE_LISTINGS_APPROVAL=${FEATURE_LISTINGS_APPROVAL}"
+        --build-arg "MAINTENANCE_WINDOW=${MAINTENANCE_WINDOW}"
         -t sites/partners:test
 
       # Run tests
@@ -52,6 +53,7 @@ phases:
         --build-arg "LANGUAGES=${LANGUAGES}"
         --build-arg "MAPBOX_TOKEN=${MAPBOX_TOKEN}"
         --build-arg "FEATURE_LISTINGS_APPROVAL=${FEATURE_LISTINGS_APPROVAL}"
+        --build-arg "MAINTENANCE_WINDOW=${MAINTENANCE_WINDOW}"
         -t sites/partners:run-candidate
 
       # Tag the run image
