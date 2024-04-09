@@ -100,7 +100,7 @@ export class PermissionService {
             user.id,
             'user',
             `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
-            `(${permissionActions.read}|${permissionActions.invitePartner}|${permissionActions.inviteJurisdictionalAdmin}|${permissionActions.update}|${permissionActions.delete})`,
+            `(${permissionActions.read}`,
           );
         }),
       );
