@@ -322,6 +322,7 @@ export const ListingView = (props: ListingProps) => {
 
   const getOnlineApplicationURL = () => {
     let onlineApplicationURL
+    let isExternal
     if (hasMethod(listing.applicationMethods, ApplicationMethodsTypeEnum.Internal)) {
       let urlBase
       if (props.isExternal) {
@@ -331,12 +332,14 @@ export const ListingView = (props: ListingProps) => {
         urlBase = ""
       }
       onlineApplicationURL = `${urlBase}/applications/start/choose-language?listingId=${listing.id}&source=dhp`
+      isExternal = false
     } else if (hasMethod(listing.applicationMethods, ApplicationMethodsTypeEnum.ExternalLink)) {
       onlineApplicationURL =
         getMethod(listing.applicationMethods, ApplicationMethodsTypeEnum.ExternalLink)
           ?.externalReference || ""
+      isExternal = true
     }
-    return onlineApplicationURL
+    return { url: onlineApplicationURL, isExternal }
   }
 
   const getPaperApplications = () => {
@@ -368,17 +371,20 @@ export const ListingView = (props: ListingProps) => {
   const getDateString = (date: Date, format: string) => {
     return date ? dayjs(date).format(format) : null
   }
-
-  const redirectIfSignedOut = () =>
-    process.env.showMandatedAccounts && initialStateLoaded && !profile && props.isExternal !== true
+  const onlineApplicationURLInfo = getOnlineApplicationURL()
+  const redirectIfLogInRequired = () =>
+    process.env.showMandatedAccounts &&
+    initialStateLoaded &&
+    !profile &&
+    !onlineApplicationURLInfo.isExternal
 
   const applySidebar = () => (
     <>
       <GetApplication
         onlineApplicationURL={
-          redirectIfSignedOut()
+          redirectIfLogInRequired()
             ? `/sign-in?redirectUrl=/applications/start/choose-language&listingId=${listing.id}`
-            : getOnlineApplicationURL()
+            : onlineApplicationURLInfo.url
         }
         applicationsOpen={!appOpenInFuture}
         applicationsOpenDate={getDateString(listing.applicationOpenDate, "MMMM D, YYYY")}
@@ -395,7 +401,7 @@ export const ListingView = (props: ListingProps) => {
         preview={props.preview}
         listingName={listing.name}
         listingId={listing.id}
-        isExternal={props.isExternal}
+        isExternal={props.isExternal ?? onlineApplicationURLInfo.isExternal}
         listingStatus={listing.status}
       />
       {!(

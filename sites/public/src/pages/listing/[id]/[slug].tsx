@@ -74,7 +74,6 @@ export default function ListingPage(props: ListingProps) {
         listing={listing as ListingViewListing}
         jurisdiction={props.jurisdiction}
         googleMapsApiKey={props.googleMapsApiKey}
-        isExternal={false}
       />
     </Layout>
   )
