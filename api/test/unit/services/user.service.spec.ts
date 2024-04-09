@@ -1757,7 +1757,7 @@ describe('Testing user service', () => {
       expect(res).toEqual(true);
     });
 
-    it('should disallow juris admin to promote to jurisdictional admin', () => {
+    it('should disallow juris admin to promote to admin', () => {
       const res = service.isUserRoleChangeAllowed(
         { userRoles: { isJurisdictionalAdmin: true } } as unknown as User,
         { isAdmin: true },
@@ -1765,20 +1765,20 @@ describe('Testing user service', () => {
       expect(res).toEqual(false);
     });
 
-    it('should allow juris admin to promote to jurisdictional admin', () => {
+    it('should disallow juris admin to promote to jurisdictional admin', () => {
       const res = service.isUserRoleChangeAllowed(
         { userRoles: { isJurisdictionalAdmin: true } } as unknown as User,
         { isJurisdictionalAdmin: true },
       );
-      expect(res).toEqual(true);
+      expect(res).toEqual(false);
     });
 
-    it('should allow juris admin to promote to partner', () => {
+    it('should disallow juris admin to promote to partner', () => {
       const res = service.isUserRoleChangeAllowed(
         { userRoles: { isJurisdictionalAdmin: true } } as unknown as User,
         { isPartner: true },
       );
-      expect(res).toEqual(true);
+      expect(res).toEqual(false);
     });
 
     it('should allow juris admin to demote', () => {
@@ -1786,10 +1786,10 @@ describe('Testing user service', () => {
         { userRoles: { isJurisdictionalAdmin: true } } as unknown as User,
         {},
       );
-      expect(res).toEqual(true);
+      expect(res).toEqual(false);
     });
 
-    it('should disallow partner to promote to jurisdictional admin', () => {
+    it('should disallow partner to promote to admin', () => {
       const res = service.isUserRoleChangeAllowed(
         { userRoles: { isPartner: true } } as unknown as User,
         { isAdmin: true },
