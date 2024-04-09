@@ -1,5 +1,4 @@
 import React, { useContext } from "react"
-import Markdown from "markdown-to-jsx"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import {
@@ -11,7 +10,7 @@ import {
   MenuLink,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
-import { AlertBanner, AuthContext, ExygyFooter } from "@bloom-housing/shared-helpers"
+import { AuthContext, ExygyFooter } from "@bloom-housing/shared-helpers"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
@@ -55,9 +54,6 @@ const Layout = (props) => {
         <Head>
           <title>{t("nav.siteTitlePartners")}</title>
         </Head>
-        <AlertBanner maintenanceWindow={process.env.maintenanceWindow} variant={"alert"}>
-          <Markdown>{t("alert.experiencingIssues")}</Markdown>
-        </AlertBanner>
         <SiteHeader
           imageOnly={true}
           logoSrc="/images/doorway-logo-partners.svg"
