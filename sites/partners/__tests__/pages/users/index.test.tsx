@@ -69,7 +69,7 @@ describe("users", () => {
     const header = await findByText("Users")
     expect(header).toBeInTheDocument()
     expect(getByText("Filter")).toBeInTheDocument()
-    expect(getByText("Add User")).toBeInTheDocument()
+    expect(queryAllByText("Add User")).toHaveLength(0)
     expect(queryAllByText("Export to CSV")).toHaveLength(0)
 
     const name = await findByText("First Last")
