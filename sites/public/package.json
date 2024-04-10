@@ -22,7 +22,7 @@
     "dev:listings": "cd ../../backend/core && yarn dev",
     "dev:new-backend": "cd ../../api && yarn dev",
     "dev:server-wait": "wait-on \"http-get://localhost:${PORT:-3100}/listings\"  --httpTimeout 60000 --tcpTimeout 1500 -v --interval 15000 && yarn dev",
-    "dev:server-wait-new": "wait-on \"http-get://localhost:3100/listings\"",
+    "dev:server-wait-new": "wait-on \"http-get://localhost:3100/\"",
     "dev:server-wait-cypress": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" --httpTimeout 60000 --tcpTimeout 1500 -v --interval 15000 && yarn build && yarn start",
     "dev:all-cypress": "concurrently \"yarn dev:new-backend\" \"yarn dev:server-wait\"",
     "dev:public-wait": "wait-on \"http://0.0.0.0:3000\"",
