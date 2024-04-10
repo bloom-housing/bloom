@@ -611,16 +611,24 @@ export class ApplicationCsvExporterService
     if (includeDemographics) {
       headers.push(
         {
-          path: 'demographics.ethnicity',
-          label: 'Ethnicity',
-        },
-        {
           path: 'demographics.race',
           label: 'Race',
           format: (val: string[]): string =>
             val
               .map((race) => this.convertDemographicRaceToReadable(race))
               .join(','),
+        },
+        {
+          path: 'demographics.gender',
+          label: 'Gender',
+        },
+        {
+          path: 'demographics.sexualOrientation',
+          label: 'Sexual Orientation',
+        },
+        {
+          path: 'demographics.spokenLanguage',
+          label: 'Spoken Language',
         },
         {
           path: 'demographics.howDidYouHear',
