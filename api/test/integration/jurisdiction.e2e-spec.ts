@@ -36,7 +36,7 @@ describe('Jurisdiction Controller Tests', () => {
     });
     const resLogIn = await request(app.getHttpServer())
       .post('/auth/login')
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
         password: 'abcdef',
@@ -61,7 +61,7 @@ describe('Jurisdiction Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/jurisdictions?`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .expect(200);
 
     expect(res.body.length).toBeGreaterThanOrEqual(2);
@@ -74,7 +74,7 @@ describe('Jurisdiction Controller Tests', () => {
     const id = randomUUID();
     const res = await request(app.getHttpServer())
       .get(`/jurisdictions/${id}`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .expect(404);
     expect(res.body.message).toEqual(
       `jurisdiction ${id} was requested but not found`,
@@ -88,7 +88,7 @@ describe('Jurisdiction Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/jurisdictions/${jurisdictionA.id}`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .expect(200);
 
     expect(res.body.name).toEqual(jurisdictionA.name);
@@ -98,7 +98,7 @@ describe('Jurisdiction Controller Tests', () => {
     const name = 'a nonexistant name';
     const res = await request(app.getHttpServer())
       .get(`/jurisdictions/byName/${name}`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .expect(404);
     expect(res.body.message).toEqual(
       `jurisdiction ${name} was requested but not found`,
@@ -112,7 +112,7 @@ describe('Jurisdiction Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/jurisdictions/byName/${jurisdictionA.name}`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .expect(200);
 
     expect(res.body.name).toEqual(jurisdictionA.name);
@@ -135,7 +135,7 @@ describe('Jurisdiction Controller Tests', () => {
     };
     const res = await request(app.getHttpServer())
       .post('/jurisdictions')
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send(createBody)
       .set('Cookie', cookies)
       .expect(201);
@@ -162,7 +162,7 @@ describe('Jurisdiction Controller Tests', () => {
     };
     const res = await request(app.getHttpServer())
       .put(`/jurisdictions/${id}`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send(updateBody)
       .set('Cookie', cookies)
       .expect(404);
@@ -194,7 +194,7 @@ describe('Jurisdiction Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .put(`/jurisdictions/${jurisdictionA.id}`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send(updateJurisdiction)
       .set('Cookie', cookies)
       .expect(200);
@@ -207,7 +207,7 @@ describe('Jurisdiction Controller Tests', () => {
     const id = randomUUID();
     const res = await request(app.getHttpServer())
       .delete(`/jurisdictions`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: id,
       } as IdDTO)
@@ -225,7 +225,7 @@ describe('Jurisdiction Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .delete(`/jurisdictions`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: jurisdictionA.id,
       } as IdDTO)

@@ -105,7 +105,7 @@ describe('Application flagged set Controller Tests', () => {
     });
     const res = await request(app.getHttpServer())
       .post('/auth/login')
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({ email: adminUser.email, password: 'abcdef' })
       .expect(201);
     adminAccessToken = res.header?.['set-cookie'].find((cookie) =>
@@ -167,7 +167,7 @@ describe('Application flagged set Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/applicationFlaggedSets?${query}`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -224,7 +224,7 @@ describe('Application flagged set Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/applicationFlaggedSets?${query}`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -280,7 +280,7 @@ describe('Application flagged set Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/applicationFlaggedSets/meta?${query}`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -336,7 +336,7 @@ describe('Application flagged set Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/applicationFlaggedSets/${resolvedAFS.id}`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -349,7 +349,7 @@ describe('Application flagged set Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/applicationFlaggedSets/${id}`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(404);
 
@@ -401,7 +401,7 @@ describe('Application flagged set Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .post(`/applicationFlaggedSets/resolve`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         afsId: pendingAFS.id,
         status: FlaggedSetStatusEnum.resolved,
@@ -488,7 +488,7 @@ describe('Application flagged set Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .post(`/applicationFlaggedSets/resolve`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         afsId: pendingAFS.id,
         status: FlaggedSetStatusEnum.resolved,
@@ -575,7 +575,7 @@ describe('Application flagged set Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .post(`/applicationFlaggedSets/resolve`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         afsId: resolvedAFS.id,
         status: FlaggedSetStatusEnum.pending,
@@ -645,7 +645,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/${afs.id}`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: afs.id,
       } as IdDTO)
@@ -666,7 +666,7 @@ describe('Application flagged set Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/${id}`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: id,
       } as IdDTO)
@@ -686,7 +686,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -707,7 +707,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -730,7 +730,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -753,7 +753,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -798,7 +798,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -826,7 +826,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -871,7 +871,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -899,7 +899,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -945,7 +945,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -969,7 +969,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1019,7 +1019,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1044,7 +1044,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1094,7 +1094,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1122,7 +1122,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1177,7 +1177,7 @@ describe('Application flagged set Controller Tests', () => {
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
       .set('Cookie', adminAccessToken)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .expect(200);
 
     afs = await prisma.applicationFlaggedSet.findMany({
@@ -1207,7 +1207,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1270,7 +1270,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1301,7 +1301,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1368,7 +1368,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1404,7 +1404,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1427,7 +1427,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1482,7 +1482,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1510,7 +1510,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1565,7 +1565,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1593,7 +1593,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1618,7 +1618,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1635,7 +1635,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .post(`/applicationFlaggedSets/resolve`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         afsId: afs[0].id,
         status: FlaggedSetStatusEnum.resolved,
@@ -1660,7 +1660,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1688,7 +1688,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1710,7 +1710,7 @@ describe('Application flagged set Controller Tests', () => {
     expect(afs.length).toEqual(2);
     await request(app.getHttpServer())
       .post(`/applicationFlaggedSets/resolve`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         afsId: containsAppA.id,
         status: FlaggedSetStatusEnum.resolved,
@@ -1725,7 +1725,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .post(`/applicationFlaggedSets/resolve`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         afsId: containsAppC.id,
         status: FlaggedSetStatusEnum.resolved,
@@ -1749,7 +1749,7 @@ describe('Application flagged set Controller Tests', () => {
     });
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 

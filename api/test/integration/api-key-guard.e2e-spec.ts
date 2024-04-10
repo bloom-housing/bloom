@@ -26,7 +26,7 @@ describe('API Key Guard Tests', () => {
   it('should succeed when correct header is present', async () => {
     await request(app.getHttpServer())
       .get('/jurisdictions')
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .expect(200);
   });
 

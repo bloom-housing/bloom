@@ -40,7 +40,7 @@ describe('UnitType Controller Tests', () => {
     });
     const resLogIn = await request(app.getHttpServer())
       .post('/auth/login')
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
         password: 'abcdef',
@@ -58,7 +58,7 @@ describe('UnitType Controller Tests', () => {
   it('testing list endpoint', async () => {
     const res = await request(app.getHttpServer())
       .get(`/unitTypes?`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', cookies)
       .expect(200);
     // all unit types are returned
@@ -73,7 +73,7 @@ describe('UnitType Controller Tests', () => {
     const id = randomUUID();
     const res = await request(app.getHttpServer())
       .get(`/unitTypes/${id}`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', cookies)
       .expect(404);
     expect(res.body.message).toEqual(
@@ -86,7 +86,7 @@ describe('UnitType Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/unitTypes/${unitTypeA.id}`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', cookies)
       .expect(200);
 
@@ -97,7 +97,7 @@ describe('UnitType Controller Tests', () => {
     const name = UnitTypeEnum.twoBdrm;
     const res = await request(app.getHttpServer())
       .post('/unitTypes')
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         name: name,
         numBedrooms: 10,
@@ -113,7 +113,7 @@ describe('UnitType Controller Tests', () => {
     const name = UnitTypeEnum.fourBdrm;
     const res = await request(app.getHttpServer())
       .put(`/unitTypes/${id}`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: id,
         name: name,
@@ -131,7 +131,7 @@ describe('UnitType Controller Tests', () => {
     const name = UnitTypeEnum.SRO;
     const res = await request(app.getHttpServer())
       .put(`/unitTypes/${unitTypeA.id}`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: unitTypeA.id,
         name: name,
@@ -148,7 +148,7 @@ describe('UnitType Controller Tests', () => {
     const id = randomUUID();
     const res = await request(app.getHttpServer())
       .delete(`/unitTypes`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: id,
       } as IdDTO)
@@ -170,7 +170,7 @@ describe('UnitType Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .delete(`/unitTypes`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: createRes.id,
       } as IdDTO)

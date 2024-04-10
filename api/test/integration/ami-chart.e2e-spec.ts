@@ -44,7 +44,7 @@ describe('AmiChart Controller Tests', () => {
     });
     const resLogIn = await request(app.getHttpServer())
       .post('/auth/login')
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
         password: 'abcdef',
@@ -77,7 +77,7 @@ describe('AmiChart Controller Tests', () => {
     const res = await request(app.getHttpServer())
       .get(`/amiCharts?${query}`)
       .set('Cookie', cookies)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .expect(200);
 
     expect(res.body.length).toEqual(1);
@@ -92,7 +92,7 @@ describe('AmiChart Controller Tests', () => {
     const res = await request(app.getHttpServer())
       .get(`/amiCharts/${amiChartA.id}`)
       .set('Cookie', cookies)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .expect(200);
 
     expect(res.body.name).toEqual(amiChartA.name);
@@ -101,7 +101,7 @@ describe('AmiChart Controller Tests', () => {
   it('testing create endpoint', async () => {
     const res = await request(app.getHttpServer())
       .post('/amiCharts')
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         name: 'name: 10',
         items: [
@@ -135,7 +135,7 @@ describe('AmiChart Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .put(`/amiCharts/${amiChartA.id}`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: amiChartA.id,
         name: 'updated name',
@@ -167,7 +167,7 @@ describe('AmiChart Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .delete(`/amiCharts`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: amiChartA.id,
       } as IdDTO)

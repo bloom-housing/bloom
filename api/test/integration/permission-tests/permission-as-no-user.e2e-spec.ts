@@ -121,7 +121,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .get(`/amiCharts?${query}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(401);
     });
@@ -133,7 +133,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .get(`/amiCharts/${amiChartA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(401);
     });
@@ -141,7 +141,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     it('should error as unauthorized for create endpoint', async () => {
       await request(app.getHttpServer())
         .post('/amiCharts')
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(buildAmiChartCreateMock(jurisdictionAId))
         .set('Cookie', cookies)
         .expect(401);
@@ -154,7 +154,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .put(`/amiCharts/${amiChartA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(buildAmiChartUpdateMock(amiChartA.id))
         .set('Cookie', cookies)
         .expect(401);
@@ -167,7 +167,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .delete(`/amiCharts`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: amiChartA.id,
         } as IdDTO)
@@ -193,7 +193,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     it('should be forbidden for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/applications?`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
     });
@@ -213,7 +213,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .get(`/applications/${applicationA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
     });
@@ -244,7 +244,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .delete(`/applications/`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: applicationA.id,
         })
@@ -270,7 +270,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       const exampleAddress = addressFactory() as AddressCreate;
       await request(app.getHttpServer())
         .post(`/applications/submit`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(
           buildApplicationCreateMock(
             exampleAddress,
@@ -301,7 +301,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       const exampleAddress = addressFactory() as AddressCreate;
       await request(app.getHttpServer())
         .post(`/applications/`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(
           buildApplicationCreateMock(
             exampleAddress,
@@ -342,7 +342,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       const exampleAddress = addressFactory() as AddressCreate;
       await request(app.getHttpServer())
         .put(`/applications/${applicationA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(
           buildApplicationUpdateMock(
             applicationA.id,
@@ -374,7 +374,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       const exampleAddress = addressFactory() as AddressCreate;
       await request(app.getHttpServer())
         .post(`/applications/verify`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(
           buildApplicationCreateMock(
             exampleAddress,
@@ -402,7 +402,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       });
       await request(app.getHttpServer())
         .get(`/applications/csv?listingId=${listing1Created.id}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
     });
@@ -412,7 +412,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     it('should error as unauthorized for presigned endpoint', async () => {
       await request(app.getHttpServer())
         .post('/assets/presigned-upload-metadata/')
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(buildPresignedEndpointMock())
         .set('Cookie', cookies)
         .expect(401);
@@ -423,7 +423,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     it('should succeed for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/jurisdictions?`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
     });
@@ -436,7 +436,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .get(`/jurisdictions/${jurisdictionA}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
     });
@@ -448,7 +448,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .get(`/jurisdictions/byName/${jurisdictionA.name}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
     });
@@ -456,7 +456,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     it('should error as forbidden for create endpoint', async () => {
       await request(app.getHttpServer())
         .post('/jurisdictions')
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(buildJurisdictionCreateMock('new permission jurisdiction 7'))
         .set('Cookie', cookies)
         .expect(403);
@@ -470,7 +470,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .put(`/jurisdictions/${jurisdictionA}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(
           buildJurisdictionUpdateMock(jurisdictionA, 'permission juris 9:8'),
         )
@@ -486,7 +486,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .delete(`/jurisdictions`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: jurisdictionA,
         } as IdDTO)
@@ -509,7 +509,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     it('should error as unauthorized for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/reservedCommunityTypes`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(401);
     });
@@ -522,7 +522,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .get(`/reservedCommunityTypes/${reservedCommunityTypeA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(401);
     });
@@ -530,7 +530,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     it('should error as unauthorized for create endpoint', async () => {
       await request(app.getHttpServer())
         .post('/reservedCommunityTypes')
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(buildReservedCommunityTypeCreateMock(jurisdictionAId))
         .set('Cookie', cookies)
         .expect(401);
@@ -544,7 +544,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .put(`/reservedCommunityTypes/${reservedCommunityTypeA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(buildReservedCommunityTypeUpdateMock(reservedCommunityTypeA.id))
         .set('Cookie', cookies)
         .expect(401);
@@ -558,7 +558,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .delete(`/reservedCommunityTypes`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: reservedCommunityTypeA.id,
         } as IdDTO)
@@ -571,7 +571,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     it('should error as unauthorized for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/unitRentTypes?`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(401);
     });
@@ -583,7 +583,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .get(`/unitRentTypes/${unitRentTypeA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(401);
     });
@@ -592,7 +592,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       const name = unitRentTypeFactory().name;
       await request(app.getHttpServer())
         .post('/unitRentTypes')
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           name: name,
         } as UnitRentTypeCreate)
@@ -607,7 +607,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       const name = unitRentTypeFactory().name;
       await request(app.getHttpServer())
         .put(`/unitRentTypes/${unitRentTypeA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: unitRentTypeA.id,
           name: name,
@@ -623,7 +623,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .delete(`/unitRentTypes`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: unitRentTypeA.id,
         } as IdDTO)
@@ -636,7 +636,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     it('should error as unauthorized for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/unitAccessibilityPriorityTypes?`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(401);
     });
@@ -648,7 +648,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .get(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(401);
     });
@@ -656,7 +656,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     it('should error as unauthorized for create endpoint', async () => {
       await request(app.getHttpServer())
         .post('/unitAccessibilityPriorityTypes')
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           name: 'Hearing And Visual',
         } as UnitAccessibilityPriorityTypeCreate)
@@ -670,7 +670,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       );
       await request(app.getHttpServer())
         .put(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: unitTypeA.id,
           name: 'hearing',
@@ -686,7 +686,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .delete(`/unitAccessibilityPriorityTypes`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: unitTypeA.id,
         } as IdDTO)
@@ -699,7 +699,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     it('should error as unauthorized for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/unitTypes?`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(401);
     });
@@ -712,7 +712,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .get(`/unitTypes/${unitTypeA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(401);
     });
@@ -721,7 +721,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       const name = UnitTypeEnum.twoBdrm;
       await request(app.getHttpServer())
         .post('/unitTypes')
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           name: name,
           numBedrooms: 10,
@@ -735,7 +735,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       const name = UnitTypeEnum.SRO;
       await request(app.getHttpServer())
         .put(`/unitTypes/${unitTypeA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: unitTypeA.id,
           name: name,
@@ -753,7 +753,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .delete(`/unitTypes`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: unitTypeA.id,
         } as IdDTO)
@@ -774,7 +774,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     it('should error as forbidden for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/multiselectQuestions?`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
     });
@@ -786,7 +786,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .get(`/multiselectQuestions/${multiselectQuestionA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
     });
@@ -794,7 +794,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     it('should error as forbidden for create endpoint', async () => {
       await request(app.getHttpServer())
         .post('/multiselectQuestions')
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(buildMultiselectQuestionCreateMock(jurisdictionId))
         .set('Cookie', cookies)
         .expect(403);
@@ -807,7 +807,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .put(`/multiselectQuestions/${multiselectQuestionA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(
           buildMultiselectQuestionUpdateMock(
             jurisdictionId,
@@ -825,7 +825,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .delete(`/multiselectQuestions`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: multiselectQuestionA.id,
         } as IdDTO)
@@ -838,7 +838,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     it('should error as forbidden for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/user/list?`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
     });
@@ -850,7 +850,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .get(`/user/${userA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(401);
     });
@@ -862,7 +862,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .put(`/user/${userA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: userA.id,
           firstName: 'New User First Name',
@@ -879,7 +879,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .delete(`/user/`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: userA.id,
         } as IdDTO)
@@ -894,7 +894,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .post(`/user/resend-confirmation/`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           email: userA.email,
           appUrl: 'https://www.google.com',
@@ -909,7 +909,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       });
       await request(app.getHttpServer())
         .post(`/user/resend-partner-confirmation/`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           email: userA.email,
           appUrl: 'https://www.google.com',
@@ -938,7 +938,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       });
       await request(app.getHttpServer())
         .post(`/user/is-confirmation-token-valid/`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           token: confToken,
         } as ConfirmationRequest)
@@ -952,7 +952,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       });
       await request(app.getHttpServer())
         .put(`/user/forgot-password/`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           email: userA.email,
         } as EmailAndAppUrl)
@@ -971,7 +971,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .post(`/user/`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(buildUserCreateMock(juris, 'publicUser+noUser@email.com'))
         .set('Cookie', cookies)
         .expect(201);
@@ -982,7 +982,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .post(`/user/invite`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(buildUserInviteMock(juris, 'partnerUser+noUser@email.com'))
         .set('Cookie', cookies)
         .expect(401);
@@ -991,7 +991,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     it('should error as forbidden for csv export endpoint', async () => {
       await request(app.getHttpServer())
         .get('/user/csv')
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
     });
@@ -1011,7 +1011,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     it('should succeed for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/listings?`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
     });
@@ -1037,7 +1037,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         .get(
           `/listings/byMultiselectQuestion/${listingACreated.listingMultiselectQuestions[0].multiselectQuestionId}`,
         )
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
     });
@@ -1052,7 +1052,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       });
       await request(app.getHttpServer())
         .get(`/listings/external/${listingACreated.id}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
     });
@@ -1070,7 +1070,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .delete(`/listings/`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: listing.id,
         } as IdDTO)
@@ -1097,7 +1097,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .put(`/listings/${listing.id}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(val)
         .set('Cookie', cookies)
         .expect(403);
@@ -1108,7 +1108,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .post('/listings')
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(val)
         .set('Cookie', cookies)
         .expect(403);
@@ -1117,7 +1117,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     it('should error as forbidden for process endpoint', async () => {
       await request(app.getHttpServer())
         .put(`/listings/process`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
     });
@@ -1125,7 +1125,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     it('should error as forbidden for csv endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/listings/csv`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
     });
@@ -1135,7 +1135,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     it('should error as forbidden for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/applicationFlaggedSets?`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
     });
@@ -1143,7 +1143,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     it('should error as forbidden for meta endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/applicationFlaggedSets/meta?`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
     });
@@ -1172,7 +1172,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .get(`/applicationFlaggedSets/${resolvedAFS.id}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
     });
@@ -1201,7 +1201,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .post(`/applicationFlaggedSets/resolve`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           afsId: afs.id,
           status: FlaggedSetStatusEnum.resolved,
@@ -1239,7 +1239,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .put(`/applicationFlaggedSets/${afs.id}`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: afs.id,
         } as IdDTO)
@@ -1255,7 +1255,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY })
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
     });

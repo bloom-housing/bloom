@@ -46,7 +46,7 @@ describe('MultiselectQuestion Controller Tests', () => {
     });
     const resLogIn = await request(app.getHttpServer())
       .post('/auth/login')
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
         password: 'abcdef',
@@ -75,7 +75,7 @@ describe('MultiselectQuestion Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/multiselectQuestions?`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', cookies)
       .expect(200);
 
@@ -105,7 +105,7 @@ describe('MultiselectQuestion Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/multiselectQuestions?${query}`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', cookies)
       .expect(200);
 
@@ -119,7 +119,7 @@ describe('MultiselectQuestion Controller Tests', () => {
     const id = randomUUID();
     const res = await request(app.getHttpServer())
       .get(`/multiselectQuestions/${id}`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', cookies)
       .expect(404);
     expect(res.body.message).toEqual(
@@ -134,7 +134,7 @@ describe('MultiselectQuestion Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/multiselectQuestions/${multiselectQuestionA.id}`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', cookies)
       .expect(200);
 
@@ -144,7 +144,7 @@ describe('MultiselectQuestion Controller Tests', () => {
   it('should create a multiselect question', async () => {
     const res = await request(app.getHttpServer())
       .post('/multiselectQuestions')
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         text: 'example text',
         subText: 'example subText',
@@ -202,7 +202,7 @@ describe('MultiselectQuestion Controller Tests', () => {
     const id = randomUUID();
     const res = await request(app.getHttpServer())
       .put(`/multiselectQuestions/${id}`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: id,
         text: 'example text',
@@ -265,7 +265,7 @@ describe('MultiselectQuestion Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .put(`/multiselectQuestions/${multiselectQuestionA.id}`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: multiselectQuestionA.id,
         text: 'example text',
@@ -324,7 +324,7 @@ describe('MultiselectQuestion Controller Tests', () => {
     const id = randomUUID();
     const res = await request(app.getHttpServer())
       .delete(`/multiselectQuestions`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: id,
       } as IdDTO)
@@ -342,7 +342,7 @@ describe('MultiselectQuestion Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .delete(`/multiselectQuestions`)
-      .set({ passkey: process.env.API_PASS_KEY })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: multiselectQuestionA.id,
       } as IdDTO)
