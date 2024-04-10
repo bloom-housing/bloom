@@ -19,6 +19,7 @@ import { CreatePresignedUploadMetadataResponse } from '../dtos/assets/create-pre
 import { CreatePresignedUploadMetadata } from '../dtos/assets/create-presigned-upload-meta.dto';
 import { AssetService } from '../services/asset.service';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
+import { ApiKeyGuard } from '../guards/api-key.guard';
 
 @Controller('assets')
 @ApiTags('assets')
@@ -28,7 +29,7 @@ import { defaultValidationPipeOptions } from '../utilities/default-validation-pi
   CreatePresignedUploadMetadataResponse,
 )
 @PermissionTypeDecorator('asset')
-@UseGuards(JwtAuthGuard, PermissionGuard)
+@UseGuards(ApiKeyGuard, JwtAuthGuard, PermissionGuard)
 export class AssetController {
   constructor(private readonly assetService: AssetService) {}
 

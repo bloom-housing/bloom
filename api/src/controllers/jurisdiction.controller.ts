@@ -27,6 +27,7 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { OptionalAuthGuard } from '../guards/optional.guard';
 import { PermissionGuard } from '../guards/permission.guard';
+import { ApiKeyGuard } from '../guards/api-key.guard';
 
 @Controller('jurisdictions')
 @ApiTags('jurisdictions')
@@ -50,6 +51,7 @@ export class JurisdictionController {
     operationId: 'retrieve',
   })
   @ApiOkResponse({ type: Jurisdiction })
+  @UseGuards(ApiKeyGuard)
   async retrieve(
     @Param('jurisdictionId', new ParseUUIDPipe({ version: '4' }))
     jurisdictionId: string,
@@ -63,6 +65,7 @@ export class JurisdictionController {
     operationId: 'retrieveByName',
   })
   @ApiOkResponse({ type: Jurisdiction })
+  @UseGuards(ApiKeyGuard)
   async retrieveByName(
     @Param('jurisdictionName') jurisdictionName: string,
   ): Promise<Jurisdiction> {
@@ -77,6 +80,7 @@ export class JurisdictionController {
     operationId: 'create',
   })
   @ApiOkResponse({ type: Jurisdiction })
+  @UseGuards(ApiKeyGuard)
   async create(
     @Body() jurisdiction: JurisdictionCreate,
   ): Promise<Jurisdiction> {
@@ -89,6 +93,7 @@ export class JurisdictionController {
     operationId: 'update',
   })
   @ApiOkResponse({ type: Jurisdiction })
+  @UseGuards(ApiKeyGuard)
   async update(
     @Body() jurisdiction: JurisdictionUpdate,
   ): Promise<Jurisdiction> {
@@ -101,6 +106,7 @@ export class JurisdictionController {
     operationId: 'delete',
   })
   @ApiOkResponse({ type: SuccessDTO })
+  @UseGuards(ApiKeyGuard)
   async delete(@Body() dto: IdDTO): Promise<SuccessDTO> {
     return await this.jurisdictionService.delete(dto.id);
   }

@@ -50,12 +50,14 @@ import { UserFilterParams } from '../dtos/users/user-filter-params.dto';
 import { UserCsvExporterService } from '../services/user-csv-export.service';
 import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
 import { RequestSingleUseCode } from '../dtos/single-use-code/request-single-use-code.dto';
+import { ApiKeyGuard } from '../guards/api-key.guard';
 
 @Controller('user')
 @ApiTags('user')
 @PermissionTypeDecorator('user')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 @ApiExtraModels(IdDTO, EmailAndAppUrl)
+@UseGuards(ApiKeyGuard)
 export class UserController {
   constructor(
     private readonly userService: UserService,

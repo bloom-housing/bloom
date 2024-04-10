@@ -26,13 +26,14 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { JwtAuthGuard } from '../guards/jwt.guard';
 import { PermissionGuard } from '../guards/permission.guard';
+import { ApiKeyGuard } from '../guards/api-key.guard';
 
 @Controller('unitAccessibilityPriorityTypes')
 @ApiTags('unitAccessibilityPriorityTypes')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 @ApiExtraModels(IdDTO)
 @PermissionTypeDecorator('unitAccessibilityPriorityType')
-@UseGuards(JwtAuthGuard, PermissionGuard)
+@UseGuards(ApiKeyGuard, JwtAuthGuard, PermissionGuard)
 export class UnitAccessibilityPriorityTypeController {
   constructor(
     private readonly unitAccessibilityPriorityTypeService: UnitAccessibilityPriorityTypeService,

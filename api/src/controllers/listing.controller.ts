@@ -53,6 +53,7 @@ import { ListingCsvExporterService } from '../services/listing-csv-export.servic
 import { ListingCsvQueryParams } from '../dtos/listings/listing-csv-query-params.dto';
 import { PermissionGuard } from '../guards/permission.guard';
 import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
+import { ApiKeyGuard } from '../guards/api-key.guard';
 
 @Controller('listings')
 @ApiTags('listings')
@@ -63,7 +64,7 @@ import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
   PaginationAllowsAllQueryParams,
   IdDTO,
 )
-@UseGuards(OptionalAuthGuard)
+@UseGuards(ApiKeyGuard, OptionalAuthGuard)
 @PermissionTypeDecorator('listing')
 @ActivityLogMetadata([{ targetPropertyName: 'status', propertyPath: 'status' }])
 @UseInterceptors(ActivityLogInterceptor)

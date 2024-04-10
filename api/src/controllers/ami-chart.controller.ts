@@ -28,12 +28,13 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { JwtAuthGuard } from '../guards/jwt.guard';
 import { PermissionGuard } from '../guards/permission.guard';
+import { ApiKeyGuard } from '../guards/api-key.guard';
 
 @Controller('/amiCharts')
 @ApiTags('amiCharts')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 @PermissionTypeDecorator('amiChart')
-@UseGuards(JwtAuthGuard, PermissionGuard)
+@UseGuards(ApiKeyGuard, JwtAuthGuard, PermissionGuard)
 @ApiExtraModels(AmiChartQueryParams)
 export class AmiChartController {
   constructor(private readonly AmiChartService: AmiChartService) {}
