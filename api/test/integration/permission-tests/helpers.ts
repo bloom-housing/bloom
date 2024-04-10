@@ -662,7 +662,7 @@ export const constructFullListingData = async (
     applicationDropOffAddressOfficeHours: 'drop off office hours string',
     applicationDropOffAddressType: ApplicationAddressTypeEnum.leasingAgent,
     applicationMailingAddressType: ApplicationAddressTypeEnum.leasingAgent,
-    buildingSelectionCriteria: 'selection criteria',
+    buildingSelectionCriteria: 'https://selection-criteria.com',
     costsNotIncluded: 'all costs included',
     creditHistory: 'credit history',
     criminalBackground: 'criminal background',
