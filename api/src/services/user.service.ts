@@ -203,7 +203,7 @@ export class UserService {
     // only update userRoles if something has changed
     if (dto.userRoles && storedUser.userRoles) {
       if (
-        this.isUserRoleChangeAllowed(requestingUser) &&
+        requestingUser?.userRoles?.isAdmin &&
         !(
           dto.userRoles.isAdmin === storedUser.userRoles.isAdmin &&
           dto.userRoles.isJurisdictionalAdmin ===
@@ -876,14 +876,6 @@ export class UserService {
 
   containsInvalidCharacters(value: string): boolean {
     return value.includes('.') || value.includes('http');
-  }
-
-  isUserRoleChangeAllowed(requestingUser: User): boolean {
-    if (requestingUser?.userRoles?.isAdmin) {
-      return true;
-    }
-
-    return false;
   }
 
   /**
