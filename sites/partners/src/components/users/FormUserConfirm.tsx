@@ -12,7 +12,7 @@ import {
   Modal,
 } from "@bloom-housing/ui-components"
 import { Button } from "@bloom-housing/ui-seeds"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import { ReRequestConfirmation } from "./ReRequestConfirmation"
 import { SuccessDTO } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -36,6 +36,7 @@ const FormUserConfirm = () => {
     reset: resetMutation,
   } = useMutate<SuccessDTO>()
   const { userService, loadProfile, loading, authService } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
   const token = router.query?.token as string
 
   const password = useRef({})
@@ -78,6 +79,7 @@ const FormUserConfirm = () => {
 
       if (response) {
         loadProfile("/")
+        addToast(t(`users.accountConfirmed`), { variant: "success" })
       }
     } catch (err) {
       setSubmitting(false)

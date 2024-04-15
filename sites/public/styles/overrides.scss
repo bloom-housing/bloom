@@ -4,9 +4,9 @@
   }
 
   #seeds-toast-stack {
-    --toast-stack-inset-top: 10.5rem;
+    --toast-stack-inset-top: calc(var(--seeds-s40) + var(--seeds-s2));
   }
-  
+
   --text-caps-spaced-letter-spacing: var(--bloom-letter-spacing-tight);
   --text-caps-spaced-font-weight: 700;
   .text__caps-spaced {
