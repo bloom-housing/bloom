@@ -14,4 +14,5 @@ export interface ApplicationFormConfig {
   sections: string[]
   languages: string[]
   steps: StepConfig[]
+  preview?: boolean
 }

@@ -57,6 +57,8 @@ const ApplicationChooseLanguage = (props: ChooseLanguageProps) => {
   const { conductor } = context
 
   const listingId = router.query.listingId
+  const isPreview = router.query.preview === "true"
+  conductor.config.preview = isPreview
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -70,7 +72,10 @@ const ApplicationChooseLanguage = (props: ChooseLanguageProps) => {
     conductor.reset()
     if (!router.isReady && !listingId) return
     if (router.isReady) {
-      if (!listingId || (process.env.showMandatedAccounts && initialStateLoaded && !profile)) {
+      if (
+        !listingId ||
+        (process.env.showMandatedAccounts && initialStateLoaded && !profile && !isPreview)
+      ) {
         void router.push("/")
       }
     }
@@ -80,16 +85,16 @@ const ApplicationChooseLanguage = (props: ChooseLanguageProps) => {
       conductor.listing = context.listing
       setListing(context.listing)
     }
-  }, [router, conductor, context, listingId, props, initialStateLoaded, profile])
+  }, [router, conductor, context, listingId, props, initialStateLoaded, profile, isPreview])
 
   useEffect(() => {
     if (listing && router.isReady) {
-      if (listing?.status !== ListingsStatusEnum.active && router.query.preview !== "true") {
+      if (listing?.status !== ListingsStatusEnum.active && !isPreview) {
         setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
         void router.push(`/${router.locale}/listing/${listing?.id}/${listing?.urlSlug}`)
       }
     }
-  }, [listing, router])
+  }, [isPreview, listing, router])
 
   const imageUrl = listing?.assets
     ? imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]

@@ -332,6 +332,7 @@ export const ListingView = (props: ListingProps) => {
         urlBase = ""
       }
       onlineApplicationURL = `${urlBase}/applications/start/choose-language?listingId=${listing.id}&source=dhp`
+      if (props.preview) onlineApplicationURL += "&preview=true"
       isCustomApp = false
     } else if (hasMethod(listing.applicationMethods, ApplicationMethodsTypeEnum.ExternalLink)) {
       onlineApplicationURL =
@@ -376,7 +377,8 @@ export const ListingView = (props: ListingProps) => {
     process.env.showMandatedAccounts &&
     initialStateLoaded &&
     !profile &&
-    !onlineApplicationURLInfo.isCustomApp
+    !onlineApplicationURLInfo.isCustomApp &&
+    !props.preview
 
   const applySidebar = () => (
     <>
