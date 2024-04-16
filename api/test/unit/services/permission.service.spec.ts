@@ -103,7 +103,7 @@ describe('Testing permission service', () => {
         'example id',
         'user',
         `r.obj.jurisdictionId == 'juris id'`,
-        `(${permissionActions.read}|${permissionActions.invitePartner}|${permissionActions.inviteJurisdictionalAdmin}|${permissionActions.update}|${permissionActions.delete})`,
+        `(${permissionActions.read})`,
       ),
     ).toEqual(true);
   });

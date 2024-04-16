@@ -23,7 +23,7 @@ import { FormUserManage } from "../../components/users/FormUserManage"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 
 type UserDrawerValue = {
-  type: "add" | "edit"
+  type: "add" | "edit" | "view"
   user?: User
 }
 
@@ -31,11 +31,22 @@ const Users = () => {
   const { profile } = useContext(AuthContext)
   const { mutate } = useSWRConfig()
   const [userDrawer, setUserDrawer] = useState<UserDrawerValue | null>(null)
+  const [userDrawerTitle, setUserDrawerTitle] = useState(t("users.addUser"))
   const [alertMessage, setAlertMessage] = useState({
     type: "alert" as AlertTypes,
     message: undefined,
   })
   const [errorAlert, setErrorAlert] = useState(false)
+
+  useEffect(() => {
+    if (userDrawer?.type === "add") {
+      setUserDrawerTitle(t("users.addUser"))
+    } else if (userDrawer?.type === "edit") {
+      setUserDrawerTitle(t("users.editUser"))
+    } else if (userDrawer?.type === "view") {
+      setUserDrawerTitle(t("users.viewUser"))
+    }
+  }, [userDrawer])
 
   const tableOptions = useAgTable()
 
@@ -59,8 +70,13 @@ const Users = () => {
           const user = params.data
           return (
             <button
+              id={user.email}
               className="text-blue-700 underline"
-              onClick={() => setUserDrawer({ type: "edit", user })}
+              onClick={() =>
+                profile?.userRoles?.isAdmin || profile.id == user.id
+                  ? setUserDrawer({ type: "edit", user })
+                  : setUserDrawer({ type: "view", user })
+              }
             >
               {params.value}
             </button>
@@ -177,15 +193,17 @@ const Users = () => {
             }}
             headerContent={
               <div className="flex-row">
-                <Button
-                  className="mx-1"
-                  variant="primary"
-                  onClick={() => setUserDrawer({ type: "add" })}
-                  disabled={!listingDtos}
-                  id={"add-user"}
-                >
-                  {t("users.addUser")}
-                </Button>
+                {profile?.userRoles?.isAdmin && (
+                  <Button
+                    className="mx-1"
+                    variant="primary"
+                    onClick={() => setUserDrawer({ type: "add" })}
+                    disabled={!listingDtos}
+                    id={"add-user"}
+                  >
+                    {t("users.addUser")}
+                  </Button>
+                )}
                 {(profile?.userRoles?.isAdmin || profile?.userRoles?.isJurisdictionalAdmin) && (
                   <Button
                     className="mx-1"
@@ -210,8 +228,8 @@ const Users = () => {
 
       <Drawer
         open={!!userDrawer}
-        title={userDrawer?.type === "add" ? t("users.addUser") : t("users.editUser")}
-        ariaDescription={t("users.addUser")}
+        title={userDrawerTitle}
+        ariaDescription={userDrawerTitle}
         onClose={() => setUserDrawer(null)}
       >
         <FormUserManage

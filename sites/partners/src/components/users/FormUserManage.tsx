@@ -8,7 +8,7 @@ import { JurisdictionAndListingSelection } from "./JurisdictionAndListingSelecti
 import SectionWithGrid from "../shared/SectionWithGrid"
 
 type FormUserManageProps = {
-  mode: "add" | "edit"
+  mode: "add" | "edit" | "view"
   user?: User
   listings: Listing[]
   onDrawerClose: () => void
@@ -52,7 +52,7 @@ const FormUserManage = ({
   const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false)
 
   let defaultValues: FormUserManageValues = {}
-  if (mode === "edit") {
+  if (mode === "edit" || mode === "view") {
     defaultValues = {
       firstName: user.firstName,
       lastName: user.lastName,
@@ -61,10 +61,6 @@ const FormUserManage = ({
       user_listings: user.listings?.map((item) => item.id) ?? [],
       jurisdiction_all: jurisdictionList.length === user.jurisdictions.length,
       jurisdictions: user.jurisdictions.map((elem) => elem.id),
-    }
-  } else if (profile?.userRoles?.isJurisdictionalAdmin) {
-    defaultValues = {
-      jurisdictions: [jurisdictionList[0].id],
     }
   }
 
@@ -306,7 +302,7 @@ const FormUserManage = ({
                 <div className="flex content-center">
                   <span>{t("users.userDetails")}</span>
 
-                  {mode === "edit" && (
+                  {(mode === "edit" || mode == "view") && (
                     <div className="ml-2 mt-1 flex items-center justify-center">
                       <Tag
                         className="tag-uppercase"
@@ -330,6 +326,7 @@ const FormUserManage = ({
                     errorMessage={t("errors.requiredFieldError")}
                     validation={{ required: true }}
                     register={register}
+                    disabled={mode === "view"}
                     type="text"
                   />
                 </Grid.Cell>
@@ -344,6 +341,7 @@ const FormUserManage = ({
                     errorMessage={t("errors.requiredFieldError")}
                     validation={{ required: true }}
                     register={register}
+                    disabled={mode === "view"}
                     type="text"
                   />
                 </Grid.Cell>
@@ -358,6 +356,7 @@ const FormUserManage = ({
                     errorMessage={t("authentication.signIn.loginError")}
                     validation={{ required: true, pattern: emailRegex }}
                     register={register}
+                    disabled={mode === "view"}
                     type="email"
                   />
                 </Grid.Cell>
@@ -382,6 +381,7 @@ const FormUserManage = ({
                     error={!!errors?.userRoles}
                     errorMessage={t("errors.requiredFieldError")}
                     validation={{ required: true }}
+                    disabled={mode === "view" || profile?.userRoles?.isJurisdictionalAdmin}
                   />
                 </Grid.Cell>
               </Grid.Row>
@@ -431,7 +431,7 @@ const FormUserManage = ({
             </Button>
           )}
 
-          {mode === "edit" && (
+          {mode === "edit" && !profile?.userRoles?.isJurisdictionalAdmin && (
             <Button
               type="button"
               className="bg-opacity-0 text-alert"

@@ -170,14 +170,6 @@ const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions 
         </>
       )
     }
-  } else if (profile?.userRoles?.isJurisdictionalAdmin) {
-    if (selectedRoles === RoleOption.Partner && selectedJurisdictions) {
-      return (
-        <SectionWithGrid heading={t("nav.listings")}>
-          <Grid.Row columns={1}>{ListingSection()}</Grid.Row>
-        </SectionWithGrid>
-      )
-    }
   }
 
   return null

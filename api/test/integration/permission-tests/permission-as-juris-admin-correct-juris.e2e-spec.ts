@@ -821,18 +821,18 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
 
     it('should error as forbidden for retrieve endpoint', async () => {
       const userA = await prisma.userAccounts.create({
-        data: await userFactory(),
+        data: await userFactory({ jurisdictionIds: [jurisId] }),
       });
 
       await request(app.getHttpServer())
         .get(`/user/${userA.id}`)
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
     });
 
     it('should error as forbidden for update endpoint', async () => {
       const userA = await prisma.userAccounts.create({
-        data: await userFactory(),
+        data: await userFactory({ jurisdictionIds: [jurisId] }),
       });
 
       await request(app.getHttpServer())
@@ -848,7 +848,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
 
     it('should error as forbidden for delete endpoint', async () => {
       const userA = await prisma.userAccounts.create({
-        data: await userFactory(),
+        data: await userFactory({ jurisdictionIds: [jurisId] }),
       });
 
       await request(app.getHttpServer())
@@ -946,11 +946,11 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
     });
 
     it('should error as forbidden for partner create endpoint', async () => {
-      const juris = await generateJurisdiction(prisma, 'permission juris 22');
-
       await request(app.getHttpServer())
         .post(`/user/invite`)
-        .send(buildUserInviteMock(juris, 'partnerUser+jurisCorrect@email.com'))
+        .send(
+          buildUserInviteMock(jurisId, 'partnerUser+jurisCorrect@email.com'),
+        )
         .set('Cookie', cookies)
         .expect(403);
     });

@@ -462,5 +462,6 @@
   "users.resendInvite": "Resend Invite",
   "users.totalUsers": "total users",
   "users.unconfirmed": "Unconfirmed",
-  "users.userDetails": "User Details"
+  "users.userDetails": "User Details",
+  "users.viewUser": "View User"
 }
