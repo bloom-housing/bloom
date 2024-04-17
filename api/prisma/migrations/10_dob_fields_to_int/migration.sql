@@ -23,7 +23,9 @@ ALTER TABLE "applicant" ADD COLUMN "birth_day" INTEGER;
 UPDATE "applicant" SET 
   "birth_year" = "birth_year_temp",
   "birth_month" = "birth_month_temp",
-  "birth_day" = "birth_day_temp";
+  "birth_day" = "birth_day_temp",
+  "first_name" = TRIM("first_name"),
+  "last_name" = TRIM("last_name");
 
 ALTER TABLE "applicant" DROP COLUMN "birth_year_temp";
 ALTER TABLE "applicant" DROP COLUMN "birth_month_temp";
@@ -50,8 +52,12 @@ ALTER TABLE "household_member" ADD COLUMN "birth_day" INTEGER;
 UPDATE "household_member" SET 
   "birth_year" = "birth_year_temp",
   "birth_month" = "birth_month_temp",
-  "birth_day" = "birth_day_temp";
+  "birth_day" = "birth_day_temp",
+  "first_name" = TRIM("first_name"),
+  "last_name" = TRIM("last_name");
 
 ALTER TABLE "household_member" DROP COLUMN "birth_year_temp";
 ALTER TABLE "household_member" DROP COLUMN "birth_month_temp";
 ALTER TABLE "household_member" DROP COLUMN "birth_day_temp";
+
+
