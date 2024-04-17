@@ -1312,13 +1312,13 @@ describe('Application flagged set Controller Tests', () => {
     let allApplicationCount = 0;
     for (const flaggedSet of afs) {
       expect(flaggedSet.rule).toEqual(RuleEnum.nameAndDOB);
-      if (flaggedSet.ruleKey.indexOf(`${listing}-firstname1`) >= 0) {
+      if (flaggedSet.ruleKey.indexOf(`${listing}-firstName1`) >= 0) {
         const applications = flaggedSet.applications.map((app) => app.id);
         expect(applications).toContain(appA.id);
         allApplicationCount++;
         expect(applications).toContain(appB.id);
         allApplicationCount++;
-      } else if (flaggedSet.ruleKey.indexOf(`${listing}-firstname3`) >= 0) {
+      } else if (flaggedSet.ruleKey.indexOf(`${listing}-firstName3`) >= 0) {
         const applications = flaggedSet.applications.map((app) => app.id);
         expect(applications).toContain(appC.id);
         allApplicationCount++;
