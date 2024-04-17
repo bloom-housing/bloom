@@ -632,16 +632,14 @@ export class ApplicationService {
                     ...member.householdMemberWorkAddress,
                   },
                 },
-                firstName: dto.applicant.firstName?.trim(),
-                lastName: dto.applicant.lastName?.trim(),
-                birthDay: dto.applicant.birthDay
-                  ? Number(dto.applicant.birthDay)
+                firstName: member.firstName?.trim(),
+                lastName: member.lastName?.trim(),
+                birthDay: member.birthDay ? Number(member.birthDay) : undefined,
+                birthMonth: member.birthMonth
+                  ? Number(member.birthMonth)
                   : undefined,
-                birthMonth: dto.applicant.birthMonth
-                  ? Number(dto.applicant.birthMonth)
-                  : undefined,
-                birthYear: dto.applicant.birthYear
-                  ? Number(dto.applicant.birthYear)
+                birthYear: member.birthYear
+                  ? Number(member.birthYear)
                   : undefined,
               })),
             }
@@ -817,16 +815,14 @@ export class ApplicationService {
                     ...member.householdMemberWorkAddress,
                   },
                 },
-                firstName: dto.applicant.firstName?.trim(),
-                lastName: dto.applicant.lastName?.trim(),
-                birthDay: dto.applicant.birthDay
-                  ? Number(dto.applicant.birthDay)
+                firstName: member.firstName?.trim(),
+                lastName: member.lastName?.trim(),
+                birthDay: member.birthDay ? Number(member.birthDay) : undefined,
+                birthMonth: member.birthMonth
+                  ? Number(member.birthMonth)
                   : undefined,
-                birthMonth: dto.applicant.birthMonth
-                  ? Number(dto.applicant.birthMonth)
-                  : undefined,
-                birthYear: dto.applicant.birthYear
-                  ? Number(dto.applicant.birthYear)
+                birthYear: member.birthYear
+                  ? Number(member.birthYear)
                   : undefined,
               })),
             }
