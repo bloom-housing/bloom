@@ -787,7 +787,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
                       householdMember: {
                         some: {
                           birthMonth: {
-                            in: birthMonths,
+                            in: birthMonths.map((val) => Number(val)),
                           },
                         },
                       },
@@ -795,7 +795,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
                     {
                       applicant: {
                         birthMonth: {
-                          in: birthMonths,
+                          in: birthMonths.map((val) => Number(val)),
                         },
                       },
                     },
@@ -807,7 +807,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
                       householdMember: {
                         some: {
                           birthDay: {
-                            in: birthDays,
+                            in: birthDays.map((val) => Number(val)),
                           },
                         },
                       },
@@ -815,7 +815,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
                     {
                       applicant: {
                         birthDay: {
-                          in: birthDays,
+                          in: birthDays.map((val) => Number(val)),
                         },
                       },
                     },
@@ -827,7 +827,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
                       householdMember: {
                         some: {
                           birthYear: {
-                            in: birthYears,
+                            in: birthYears.map((val) => Number(val)),
                           },
                         },
                       },
@@ -835,7 +835,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
                     {
                       applicant: {
                         birthYear: {
-                          in: birthYears,
+                          in: birthYears.map((val) => Number(val)),
                         },
                       },
                     },

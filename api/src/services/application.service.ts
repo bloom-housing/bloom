@@ -548,6 +548,17 @@ export class ApplicationService {
                     ...dto.applicant.applicantWorkAddress,
                   },
                 },
+                firstName: dto.applicant.firstName?.trim(),
+                lastName: dto.applicant.lastName?.trim(),
+                birthDay: dto.applicant.birthDay
+                  ? Number(dto.applicant.birthDay)
+                  : undefined,
+                birthMonth: dto.applicant.birthMonth
+                  ? Number(dto.applicant.birthMonth)
+                  : undefined,
+                birthYear: dto.applicant.birthYear
+                  ? Number(dto.applicant.birthYear)
+                  : undefined,
               },
             }
           : undefined,
@@ -621,6 +632,17 @@ export class ApplicationService {
                     ...member.householdMemberWorkAddress,
                   },
                 },
+                firstName: dto.applicant.firstName?.trim(),
+                lastName: dto.applicant.lastName?.trim(),
+                birthDay: dto.applicant.birthDay
+                  ? Number(dto.applicant.birthDay)
+                  : undefined,
+                birthMonth: dto.applicant.birthMonth
+                  ? Number(dto.applicant.birthMonth)
+                  : undefined,
+                birthYear: dto.applicant.birthYear
+                  ? Number(dto.applicant.birthYear)
+                  : undefined,
               })),
             }
           : undefined,
@@ -711,6 +733,17 @@ export class ApplicationService {
                     ...dto.applicant.applicantWorkAddress,
                   },
                 },
+                firstName: dto.applicant.firstName?.trim(),
+                lastName: dto.applicant.lastName?.trim(),
+                birthDay: dto.applicant.birthDay
+                  ? Number(dto.applicant.birthDay)
+                  : undefined,
+                birthMonth: dto.applicant.birthMonth
+                  ? Number(dto.applicant.birthMonth)
+                  : undefined,
+                birthYear: dto.applicant.birthYear
+                  ? Number(dto.applicant.birthYear)
+                  : undefined,
               },
             }
           : undefined,
@@ -784,6 +817,17 @@ export class ApplicationService {
                     ...member.householdMemberWorkAddress,
                   },
                 },
+                firstName: dto.applicant.firstName?.trim(),
+                lastName: dto.applicant.lastName?.trim(),
+                birthDay: dto.applicant.birthDay
+                  ? Number(dto.applicant.birthDay)
+                  : undefined,
+                birthMonth: dto.applicant.birthMonth
+                  ? Number(dto.applicant.birthMonth)
+                  : undefined,
+                birthYear: dto.applicant.birthYear
+                  ? Number(dto.applicant.birthYear)
+                  : undefined,
               })),
             }
           : undefined,
