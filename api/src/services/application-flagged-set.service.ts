@@ -649,7 +649,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
       return `${listingId}-email-${application.applicant.emailAddress}`;
     } else {
       return (
-        `${listingId}-nameAndDOB-${application.applicant.firstName}-${application.applicant.lastName}` +
+        `${listingId}-nameAndDOB-${application.applicant.firstName.toLowerCase()}-${application.applicant.lastName.toLowerCase()}` +
         `-${application.applicant.birthMonth}-${application.applicant.birthDay}-${application.applicant.birthYear}`
       );
     }

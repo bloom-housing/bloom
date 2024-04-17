@@ -361,6 +361,24 @@ describe('Testing application flagged set service', () => {
     ).toEqual('example id-nameAndDOB-first name-last name-5-6-2000');
   });
 
+  it('should build rule key in lowercase when rule is nameAndDOB', async () => {
+    expect(
+      await service.buildRuleKey(
+        {
+          applicant: {
+            firstName: 'FIRST Name',
+            lastName: 'lAsT nAMe',
+            birthMonth: 5,
+            birthDay: 6,
+            birthYear: 2000,
+          },
+        } as unknown as Application,
+        RuleEnum.nameAndDOB,
+        'example id',
+      ),
+    ).toEqual('example id-nameAndDOB-first name-last name-5-6-2000');
+  });
+
   it('should get a list of flagged sets when view is pendingEmail', async () => {
     const mockCount = jest
       .fn()
