@@ -48,22 +48,16 @@ import { generateSingleUseCode } from '../utilities/generate-single-use-code';
   it handles all the backend's business logic for reading/writing/deleting user data
 */
 
-const view: Prisma.UserAccountsInclude = {
-  listings: true,
-  jurisdictions: true,
-  userRoles: true,
-};
-
 const views: Partial<Record<UserViews, Prisma.UserAccountsInclude>> = {
-  jurisdictions: {
+  base: {
     jurisdictions: true,
+    userRoles: true,
   },
 };
 
 views.full = {
-  ...views.jurisdictions,
+  ...views.base,
   listings: true,
-  userRoles: true,
 };
 
 type findByOptions = {
@@ -312,7 +306,7 @@ export class UserService {
   async delete(userId: string, requestingUser: User): Promise<SuccessDTO> {
     const targetUser = await this.findUserOrError(
       { userId: userId },
-      UserViews.jurisdictions,
+      UserViews.base,
     );
 
     this.authorizeAction(

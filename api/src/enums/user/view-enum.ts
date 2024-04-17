@@ -1,4 +1,4 @@
 export enum UserViews {
-  jurisdictions = 'jurisdictions',
+  base = 'base',
   full = 'full',
 }
