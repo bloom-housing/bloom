@@ -62,14 +62,17 @@ describe('Application flagged set Controller Tests', () => {
     emailIndicator: string,
     nameAndDOBIndicator: number,
     listing: string,
+    dobIndicator?: string,
     householdMember?: Prisma.HouseholdMemberCreateWithoutApplicationsInput,
   ) => {
     return await prisma.applications.create({
       data: await applicationFactory({
         applicant: {
           emailAddress: `${listing}-email${emailIndicator}@email.com`,
-          firstName: `${listing}-firstName${nameAndDOBIndicator}`,
-          lastName: `${listing}-lastName${nameAndDOBIndicator}`,
+          firstName: `${listing}-firstName${
+            dobIndicator || nameAndDOBIndicator
+          }`,
+          lastName: `${listing}-lastName${dobIndicator || nameAndDOBIndicator}`,
           birthDay: nameAndDOBIndicator,
           birthMonth: nameAndDOBIndicator,
           birthYear: nameAndDOBIndicator,
@@ -731,6 +734,28 @@ describe('Application flagged set Controller Tests', () => {
     expect(afs[0].rule).toEqual(RuleEnum.nameAndDOB);
   });
 
+  it('should create a new flagged set if applications match on nameAndDOB case insensitive', async () => {
+    const listing = await createListing();
+
+    await createComplexApplication('1', 1, listing, 'test');
+    await createComplexApplication('2', 1, listing, 'TEST');
+
+    await request(app.getHttpServer())
+      .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
+      .expect(200);
+
+    const afs = await prisma.applicationFlaggedSet.findMany({
+      where: {
+        listingId: listing,
+      },
+    });
+
+    expect(afs.length).toEqual(1);
+
+    expect(afs[0].rule).toEqual(RuleEnum.nameAndDOB);
+  });
+
   it('should keep application in flagged set if email still matches', async () => {
     const listing = await createListing();
 
@@ -1289,13 +1314,13 @@ describe('Application flagged set Controller Tests', () => {
     let allApplicationCount = 0;
     for (const flaggedSet of afs) {
       expect(flaggedSet.rule).toEqual(RuleEnum.nameAndDOB);
-      if (flaggedSet.ruleKey.indexOf(`${listing}-firstName1`) >= 0) {
+      if (flaggedSet.ruleKey.indexOf(`${listing}-firstname1`) >= 0) {
         const applications = flaggedSet.applications.map((app) => app.id);
         expect(applications).toContain(appA.id);
         allApplicationCount++;
         expect(applications).toContain(appB.id);
         allApplicationCount++;
-      } else if (flaggedSet.ruleKey.indexOf(`${listing}-firstName3`) >= 0) {
+      } else if (flaggedSet.ruleKey.indexOf(`${listing}-firstname3`) >= 0) {
         const applications = flaggedSet.applications.map((app) => app.id);
         expect(applications).toContain(appC.id);
         allApplicationCount++;
@@ -1362,9 +1387,38 @@ describe('Application flagged set Controller Tests', () => {
     const listing = await createListing();
 
     await createComplexApplication('1', 1, listing);
-    await createComplexApplication('2', 2, listing, {
+    await createComplexApplication('2', 2, listing, '2', {
       firstName: `${listing}-firstName1`,
       lastName: `${listing}-lastName1`,
+      birthDay: 1,
+      birthMonth: 1,
+      birthYear: 1,
+      sameAddress: YesNoEnum.yes,
+      workInRegion: YesNoEnum.yes,
+    });
+
+    await request(app.getHttpServer())
+      .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
+      .expect(200);
+
+    const afs = await prisma.applicationFlaggedSet.findMany({
+      where: {
+        listingId: listing,
+      },
+    });
+
+    expect(afs.length).toEqual(1);
+    expect(afs[0].rule).toEqual(RuleEnum.nameAndDOB);
+  });
+
+  it('should create nameAndDob flagged set on household member matches case insensitive', async () => {
+    const listing = await createListing();
+
+    await createComplexApplication('1', 1, listing, 'TEST');
+    await createComplexApplication('2', 2, listing, '2', {
+      firstName: `${listing}-firstNametest`,
+      lastName: `${listing}-lastNameTest`,
       birthDay: 1,
       birthMonth: 1,
       birthYear: 1,

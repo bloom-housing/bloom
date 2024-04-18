@@ -244,6 +244,13 @@ const ListingFormActions = ({
                   id: listing.id,
                   body: {
                     ...(listing as unknown as ListingUpdate),
+                    // account for type mismatch between ListingMultiSelectQuestionType and IdDto
+                    listingMultiselectQuestions: listing.listingMultiselectQuestions?.map(
+                      (multiselectQuestions) => ({
+                        ordinal: multiselectQuestions.ordinal,
+                        id: multiselectQuestions.multiselectQuestions?.id,
+                      })
+                    ),
                     status: ListingsStatusEnum.active,
                   },
                 })
