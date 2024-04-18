@@ -83,6 +83,7 @@ describe('Testing application flagged set service', () => {
                       'household first name 1',
                       'household first name 2',
                     ],
+                    mode: 'insensitive',
                   },
                 },
               },
@@ -95,6 +96,7 @@ describe('Testing application flagged set service', () => {
                     'household first name 1',
                     'household first name 2',
                   ],
+                  mode: 'insensitive',
                 },
               },
             },
@@ -111,6 +113,7 @@ describe('Testing application flagged set service', () => {
                       'household last name 1',
                       'household last name 2',
                     ],
+                    mode: 'insensitive',
                   },
                 },
               },
@@ -123,6 +126,7 @@ describe('Testing application flagged set service', () => {
                     'household last name 1',
                     'household last name 2',
                   ],
+                  mode: 'insensitive',
                 },
               },
             },
@@ -346,6 +350,24 @@ describe('Testing application flagged set service', () => {
           applicant: {
             firstName: 'first name',
             lastName: 'last name',
+            birthMonth: 5,
+            birthDay: 6,
+            birthYear: 2000,
+          },
+        } as unknown as Application,
+        RuleEnum.nameAndDOB,
+        'example id',
+      ),
+    ).toEqual('example id-nameAndDOB-first name-last name-5-6-2000');
+  });
+
+  it('should build rule key in lowercase when rule is nameAndDOB', async () => {
+    expect(
+      await service.buildRuleKey(
+        {
+          applicant: {
+            firstName: 'FIRST Name',
+            lastName: 'lAsT nAMe',
             birthMonth: 5,
             birthDay: 6,
             birthYear: 2000,
@@ -700,7 +722,7 @@ describe('Testing application flagged set service', () => {
         id: 'example id 1',
       },
       {
-        id: 'example id 2',
+        id: 'Example id 2',
       },
     ]);
 
@@ -714,7 +736,7 @@ describe('Testing application flagged set service', () => {
         id: 'example id 1',
       },
       {
-        id: 'example id 2',
+        id: 'Example id 2',
       },
     ]);
 
@@ -964,7 +986,7 @@ describe('Testing application flagged set service', () => {
         id: 'example id 1',
       },
       {
-        id: 'example id 2',
+        id: 'Example id 2',
       },
     ]);
 
@@ -979,7 +1001,7 @@ describe('Testing application flagged set service', () => {
         id: 'example id 1',
       },
       {
-        id: 'example id 2',
+        id: 'Example id 2',
       },
     ]);
 
