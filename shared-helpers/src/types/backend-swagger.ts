@@ -118,6 +118,20 @@ export class RootService {
     })
   }
   /**
+   * Tip me over and pour me out
+   */
+  teapot(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/teapot"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Trigger the removal of CSVs job
    */
   clearTempFiles(options: IRequestOptions = {}): Promise<SuccessDTO> {
