@@ -390,14 +390,12 @@ describe('Testing user service', () => {
       prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
         id,
       });
-      const res = await service.findUserOrError(
-        { userId: id },
-        UserViews.jurisdictions,
-      );
+      const res = await service.findUserOrError({ userId: id }, UserViews.base);
       expect(res).toEqual({ id });
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
         include: {
           jurisdictions: true,
+          userRoles: true,
         },
         where: {
           id,
@@ -885,6 +883,7 @@ describe('Testing user service', () => {
         },
         include: {
           jurisdictions: true,
+          userRoles: true,
         },
       });
       expect(prisma.userAccounts.delete).toHaveBeenCalledWith({
@@ -931,6 +930,7 @@ describe('Testing user service', () => {
         },
         include: {
           jurisdictions: true,
+          userRoles: true,
         },
       });
 
