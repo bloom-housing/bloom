@@ -482,6 +482,28 @@ export class ApplicationFlaggedSetsService {
     })
   }
   /**
+   * Reset flagged set confirmation alert
+   */
+  resetConfirmationAlert(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/{afsId}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Resolve application flagged set
    */
   resolve(
@@ -513,28 +535,6 @@ export class ApplicationFlaggedSetsService {
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
       let data = null
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Reset flagged set confirmation alert
-   */
-  resetConfirmationAlert(
-    params: {
-      /** requestBody */
-      body?: IdDTO
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applicationFlaggedSets/{id}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
 
       configs.data = data
 
@@ -1474,6 +1474,31 @@ export class ApplicationsService {
     })
   }
   /**
+   * Update application by id
+   */
+  update(
+    params: {
+      /**  */
+      id: string
+      /** requestBody */
+      body?: ApplicationUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Application> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/{applicationId}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Submit application (used by applicants applying to a listing)
    */
   submit(
@@ -1509,31 +1534,6 @@ export class ApplicationsService {
       let url = basePath + "/applications/verify"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update application by id
-   */
-  update(
-    params: {
-      /**  */
-      id: string
-      /** requestBody */
-      body?: ApplicationUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Application> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applications/{id}"
-      url = url.replace("{id}", params["id"] + "")
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
       let data = params.body
 
@@ -2802,150 +2802,6 @@ export interface UnitsSummary {
 
   /**  */
   totalAvailable?: number
-}
-
-export interface UserRole {
-  /**  */
-  isAdmin?: boolean
-
-  /**  */
-  isJurisdictionalAdmin?: boolean
-
-  /**  */
-  isPartner?: boolean
-}
-
-export interface Jurisdiction {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  notificationsSignUpUrl?: string
-
-  /**  */
-  languages: LanguagesEnum[]
-
-  /**  */
-  multiselectQuestions: IdDTO[]
-
-  /**  */
-  partnerTerms?: string
-
-  /**  */
-  publicUrl: string
-
-  /**  */
-  emailFromAddress: string
-
-  /**  */
-  rentalAssistanceDefault: string
-
-  /**  */
-  enablePartnerSettings?: boolean
-
-  /**  */
-  enableListingOpportunity?: boolean
-
-  /**  */
-  enablePartnerDemographics?: boolean
-
-  /**  */
-  enableGeocodingPreferences?: boolean
-
-  /**  */
-  enableAccessibilityFeatures: boolean
-
-  /**  */
-  enableUtilitiesIncluded: boolean
-
-  /**  */
-  allowSingleUseCodeLogin: boolean
-
-  /**  */
-  listingApprovalPermissions: EnumJurisdictionListingApprovalPermissions[]
-}
-
-export interface User {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  passwordUpdatedAt: Date
-
-  /**  */
-  passwordValidForDays: number
-
-  /**  */
-  confirmedAt?: Date
-
-  /**  */
-  email: string
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  listings: IdDTO[]
-
-  /**  */
-  userRoles?: UserRole
-
-  /**  */
-  language?: LanguagesEnum
-
-  /**  */
-  jurisdictions: Jurisdiction[]
-
-  /**  */
-  mfaEnabled?: boolean
-
-  /**  */
-  lastLoginAt?: Date
-
-  /**  */
-  failedLoginAttemptsCount?: number
-
-  /**  */
-  phoneNumberVerified?: boolean
-
-  /**  */
-  agreedToTermsOfService: boolean
-
-  /**  */
-  hitConfirmationURL?: Date
-
-  /**  */
-  activeAccessToken?: string
-
-  /**  */
-  activeRefreshToken?: string
 }
 
 export interface Listing {
@@ -4533,10 +4389,10 @@ export interface JurisdictionCreate {
   enablePartnerSettings?: boolean
 
   /**  */
-  enableListingOpportunity?: boolean
+  enablePartnerDemographics?: boolean
 
   /**  */
-  enablePartnerDemographics?: boolean
+  enableListingOpportunity?: boolean
 
   /**  */
   enableGeocodingPreferences?: boolean
@@ -4583,10 +4439,10 @@ export interface JurisdictionUpdate {
   enablePartnerSettings?: boolean
 
   /**  */
-  enableListingOpportunity?: boolean
+  enablePartnerDemographics?: boolean
 
   /**  */
-  enablePartnerDemographics?: boolean
+  enableListingOpportunity?: boolean
 
   /**  */
   enableGeocodingPreferences?: boolean
@@ -4643,6 +4499,9 @@ export interface Jurisdiction {
 
   /**  */
   enablePartnerDemographics?: boolean
+
+  /**  */
+  enableListingOpportunity?: boolean
 
   /**  */
   enableGeocodingPreferences?: boolean

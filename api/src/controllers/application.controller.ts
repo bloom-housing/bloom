@@ -190,7 +190,7 @@ export class ApplicationController {
     };
   }
 
-  @Put(`:id`)
+  @Put(`:applicationId`)
   @ApiOperation({ summary: 'Update application by id', operationId: 'update' })
   @ApiOkResponse({ type: Application })
   async update(

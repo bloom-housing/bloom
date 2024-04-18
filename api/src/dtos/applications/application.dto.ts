@@ -103,7 +103,7 @@ export class Application extends AbstractDTO {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
-  @ApiPropertyOptional({ isArray: true })
+  @ApiPropertyOptional()
   incomeVouchers?: string[];
 
   @Expose()
