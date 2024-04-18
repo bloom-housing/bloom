@@ -21,6 +21,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         jurisdictionName: req.headers.jurisdictionname,
         language: req.headers.language,
         appUrl: req.headers.appurl,
+        "x-forwarded-for": req.headers["x-forwarded-for"] || "",
       },
       paramsSerializer: (params) => {
         return qs.stringify(params)

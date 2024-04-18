@@ -24,7 +24,11 @@ import { AfsQueryParams } from '../dtos/application-flagged-sets/afs-query-param
 import { AfsMeta } from '../dtos/application-flagged-sets/afs-meta.dto';
 import { OrderByEnum } from '../enums/shared/order-by-enum';
 import { View } from '../enums/application-flagged-sets/view';
-import { buildPaginationMetaInfo } from '../utilities/pagination-helpers';
+import {
+  buildPaginationMetaInfo,
+  calculateSkip,
+  calculateTake,
+} from '../utilities/pagination-helpers';
 import { AfsResolve } from '../dtos/application-flagged-sets/afs-resolve.dto';
 import { User } from '../dtos/users/user.dto';
 import { Application } from '../dtos/applications/application.dto';
@@ -67,6 +71,15 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
       where: whereClause,
     });
 
+    // if passed in page and limit would result in no results because there aren't that many listings
+    // revert back to the first page
+    let page = params.page;
+    if (count && params.limit && params.limit !== 'all' && params.page > 1) {
+      if (Math.ceil(count / params.limit) < params.page) {
+        page = 1;
+      }
+    }
+
     const rawAfs = await this.prisma.applicationFlaggedSet.findMany({
       include: {
         listings: true,
@@ -80,6 +93,8 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
       orderBy: {
         id: OrderByEnum.DESC,
       },
+      skip: calculateSkip(params.limit, page),
+      take: calculateTake(params.limit),
     });
 
     const totalFlagged = await this.prisma.applicationFlaggedSet.count({
@@ -634,8 +649,8 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
       return `${listingId}-email-${application.applicant.emailAddress}`;
     } else {
       return (
-        `${listingId}-nameAndDOB-${application.applicant.firstName}-${application.applicant.lastName}-${application.applicant.birthMonth}-` +
-        `${application.applicant.birthDay}-${application.applicant.birthYear}`
+        `${listingId}-nameAndDOB-${application.applicant.firstName.toLowerCase()}-${application.applicant.lastName.toLowerCase()}` +
+        `-${application.applicant.birthMonth}-${application.applicant.birthDay}-${application.applicant.birthYear}`
       );
     }
   }
@@ -733,6 +748,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
                         some: {
                           firstName: {
                             in: firstNames,
+                            mode: 'insensitive',
                           },
                         },
                       },
@@ -741,6 +757,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
                       applicant: {
                         firstName: {
                           in: firstNames,
+                          mode: 'insensitive',
                         },
                       },
                     },
@@ -753,6 +770,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
                         some: {
                           lastName: {
                             in: lastNames,
+                            mode: 'insensitive',
                           },
                         },
                       },
@@ -761,6 +779,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
                       applicant: {
                         lastName: {
                           in: lastNames,
+                          mode: 'insensitive',
                         },
                       },
                     },

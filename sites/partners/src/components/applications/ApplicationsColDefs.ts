@@ -2,10 +2,7 @@ import { t, formatYesNoLabel } from "@bloom-housing/ui-components"
 import { convertDataToLocal, formatIncome } from "../../lib/helpers"
 import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
-import {
-  ApplicationSubmissionTypeEnum,
-  IncomePeriodEnum,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { IncomePeriodEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 dayjs.extend(customParseFormat)
 
 function compareDates(a, b, node, nextNode, isInverted) {
@@ -37,7 +34,7 @@ function compareStrings(a, b, node, nextNode, isInverted) {
   }
 }
 
-export function getColDefs(maxHouseholdSize: number, countyCode: string) {
+export function getColDefs(maxHouseholdSize: number) {
   const defs = [
     {
       headerName: t("application.details.submittedDate"),
@@ -53,10 +50,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
 
         const { submissionDate } = data
 
-        const dateTime = convertDataToLocal(
-          submissionDate,
-          data?.submissionType || ApplicationSubmissionTypeEnum.electronical
-        )
+        const dateTime = convertDataToLocal(submissionDate)
 
         return `${dateTime.date} ${t("t.at")} ${dateTime.time}`
       },
