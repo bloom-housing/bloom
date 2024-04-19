@@ -830,7 +830,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         .expect(200);
     });
 
-    it('should succeed for update endpoint', async () => {
+    it('should error as forbidden for update endpoint', async () => {
       const userA = await prisma.userAccounts.create({
         data: await userFactory({ jurisdictionIds: [jurisId] }),
       });
@@ -844,10 +844,10 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
           jurisdictions: [{ id: jurisId } as IdDTO],
         } as UserUpdate)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
-    it('should succeed for delete endpoint', async () => {
+    it('should error as forbidden for delete endpoint', async () => {
       const userA = await prisma.userAccounts.create({
         data: await userFactory({ jurisdictionIds: [jurisId] }),
       });
@@ -858,7 +858,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
           id: userA.id,
         } as IdDTO)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
     it('should succeed for public resend confirmation endpoint', async () => {
