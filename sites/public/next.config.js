@@ -36,6 +36,7 @@ module.exports = withBundleAnalyzer({
     listingPhotoSize: process.env.LISTING_PHOTO_SIZE || "1302",
     mapBoxToken: MAPBOX_TOKEN,
     housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL,
+    gaKey: process.env.GA_KEY || null,
     gtmKey: process.env.GTM_KEY || null,
     idleTimeout: process.env.IDLE_TIMEOUT,
     jurisdictionName: process.env.JURISDICTION_NAME,
