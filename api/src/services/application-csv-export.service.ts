@@ -621,18 +621,30 @@ export class ApplicationCsvExporterService
         {
           path: 'demographics.gender',
           label: 'Gender',
+          format: (val: string): string =>
+            this.convertDemographicGenderToReadable(val),
         },
         {
           path: 'demographics.sexualOrientation',
           label: 'Sexual Orientation',
+          format: (val: string): string =>
+            this.convertDemographicSexualOrientationToReadable(val),
         },
         {
           path: 'demographics.spokenLanguage',
           label: 'Spoken Language',
+          format: (val: string): string =>
+            this.convertDemographicLanguageToReadable(val),
         },
         {
           path: 'demographics.howDidYouHear',
           label: 'How did you Hear?',
+          format: (val: string[]): string =>
+            val
+              .map((howDidYouHear) =>
+                this.convertDemographicHowDidYouHearToReadable(howDidYouHear),
+              )
+              .join(','),
         },
       );
     }
@@ -718,6 +730,65 @@ export class ApplicationCsvExporterService
       white: 'White',
     };
     return typeMap[rootKey] ?? rootKey;
+  }
+
+  convertDemographicGenderToReadable(type: string): string {
+    const typeMap = {
+      'genderqueerGenderNon-Binary': 'Genderqueer / Gender Nonbinary',
+      transMale: 'Trans Man / Transmasculine / Trans Male',
+      transFemale: 'Trans Woman / Transfeminine / Trans Female',
+      male: 'Man',
+      female: 'Woman',
+      differentTerm: 'I use a different term',
+      dontKnow: 'I don’t know or don’t understand the question',
+      preferNoResponse: 'Prefer not to respond',
+    };
+    return typeMap[type] ?? type;
+  }
+
+  convertDemographicSexualOrientationToReadable(type: string): string {
+    const typeMap = {
+      asexual: 'Asexual',
+      bisexual: 'Bisexual',
+      gayLesbianSameGenderLoving: 'Gay / Lesbian / Same-Gender Loving',
+      questioningUnsure: 'Questioning / Unsure',
+      straightHeterosexual: 'Straight / Heterosexual',
+      differentTerm: 'I use a different term',
+      dontKnow: 'I don’t understand the question',
+      preferNoResponse: 'Prefer not to respond',
+    };
+    return typeMap[type] ?? type;
+  }
+
+  convertDemographicLanguageToReadable(type: string): string {
+    const [rootKey, customValue = ''] = type.split(':');
+    const typeMap = {
+      chineseCantonese: 'Chinese - Cantonese',
+      chineseMandarin: 'Chinese - Mandarin',
+      english: 'English',
+      filipino: 'Filipino',
+      korean: 'Korean',
+      russian: 'Russian',
+      spanish: 'Spanish',
+      vietnamese: 'Vietnamese',
+      notListed: `Not Listed:${customValue}`,
+    };
+    return typeMap[rootKey] ?? rootKey;
+  }
+
+  convertDemographicHowDidYouHearToReadable(type: string): string {
+    const typeMap = {
+      governmentWebsite: 'Government Website',
+      propertyWebsite: 'Property Website',
+      emailAlert: 'Email Alert',
+      friend: 'Friend',
+      housingCounselor: 'Housing Counselor',
+      flyer: 'Flyer',
+      radioAd: 'Radio Ad',
+      busAd: 'Bus Ad',
+      other: 'Other',
+    };
+    return typeMap[type] ?? type;
   }
 
   unitTypeToReadable(type: string): string {
