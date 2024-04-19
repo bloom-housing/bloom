@@ -506,7 +506,8 @@ export const useApplicationsExport = (listingId: string, includeDemographics: bo
   const { applicationsService } = useContext(AuthContext)
 
   return useCsvExport(
-    () => applicationsService.listAsCsv({ listingId, includeDemographics }),
+    () =>
+      applicationsService.listAsCsv({ listingId, includeDemographics, timeZone: dayjs.tz.guess() }),
     `applications-${listingId}-${createDateStringFromNow()}.csv`
   )
 }

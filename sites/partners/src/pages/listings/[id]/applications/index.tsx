@@ -37,7 +37,10 @@ const ApplicationsList = () => {
     profile?.userRoles?.isPartner && listingJurisdiction?.enablePartnerDemographics
   const { onExport, csvExportLoading } = useApplicationsExport(
     listingId,
-    (profile?.userRoles?.isAdmin || includeDemographicsPartner) ?? false
+    (profile?.userRoles?.isAdmin ||
+      profile?.userRoles?.isJurisdictionalAdmin ||
+      includeDemographicsPartner) ??
+      false
   )
 
   const countyCode = listingDto?.jurisdictions.name

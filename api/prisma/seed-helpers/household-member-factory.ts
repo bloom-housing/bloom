@@ -18,9 +18,9 @@ export const householdMemberFactorySingle =
       middleName: randomNoun(),
       lastName: lastName,
       // Question: why are these strings?
-      birthMonth: randomBirthMonth().toString(),
-      birthDay: randomBirthDay().toString(),
-      birthYear: randomBirthYear().toString(),
+      birthMonth: randomBirthMonth(),
+      birthDay: randomBirthDay(),
+      birthYear: randomBirthYear(),
       sameAddress: randomYesNo,
       // Question: should this be an enum?
       relationship: randomAdjective(),

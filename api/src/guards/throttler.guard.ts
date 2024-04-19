@@ -7,7 +7,7 @@ export class ThrottleGuard extends ThrottlerGuard {
   protected async getTracker(req: Record<string, any>): Promise<string> {
     if (req?.headers && req.headers['x-forwarded-for']) {
       // if we are passing through the proxy use forwarded for
-      return req.headers['x-forwarded-for'];
+      return req.headers['x-forwarded-for'].split(',')[0];
     }
     return req.ips.length ? req.ips[0] : req.ip;
   }

@@ -795,7 +795,7 @@ export const createListing = async (
 export const createComplexApplication = async (
   prisma: PrismaService,
   emailIndicator: string,
-  nameAndDOBIndicator: string,
+  nameAndDOBIndicator: number,
   listing: string,
   householdMember?: Prisma.HouseholdMemberCreateWithoutApplicationsInput,
 ) => {
