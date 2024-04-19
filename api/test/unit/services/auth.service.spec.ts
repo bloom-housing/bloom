@@ -29,7 +29,6 @@ import { JurisdictionService } from '../../../src/services/jurisdiction.service'
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 import { PermissionService } from '../../../src/services/permission.service';
 import { Jurisdiction } from '../../../src/dtos/jurisdictions/jurisdiction.dto';
-import { generateSingleUseCode } from '../../../src/utilities/generate-single-use-code';
 
 describe('Testing auth service', () => {
   let authService: AuthService;

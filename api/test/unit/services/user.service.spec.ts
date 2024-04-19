@@ -19,6 +19,7 @@ import { User } from '../../../src/dtos/users/user.dto';
 import { PermissionService } from '../../../src/services/permission.service';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
 import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
+import { UserViews } from '../../../src/enums/user/view-enum';
 
 describe('Testing user service', () => {
   let service: UserService;
@@ -385,7 +386,7 @@ describe('Testing user service', () => {
       prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
         id,
       });
-      const res = await service.findUserOrError({ userId: id }, true);
+      const res = await service.findUserOrError({ userId: id }, UserViews.full);
       expect(res).toEqual({ id });
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
         include: {
@@ -399,12 +400,33 @@ describe('Testing user service', () => {
       });
     });
 
+    it('should find user by id and include only jurisdictions joins', async () => {
+      const id = randomUUID();
+      prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
+        id,
+      });
+      const res = await service.findUserOrError({ userId: id }, UserViews.base);
+      expect(res).toEqual({ id });
+      expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+        include: {
+          jurisdictions: true,
+          userRoles: true,
+        },
+        where: {
+          id,
+        },
+      });
+    });
+
     it('should find user by email and include joins', async () => {
       const email = 'example@email.com';
       prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
         email,
       });
-      const res = await service.findUserOrError({ email: email }, true);
+      const res = await service.findUserOrError(
+        { email: email },
+        UserViews.full,
+      );
       expect(res).toEqual({ email });
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
         include: {
@@ -423,7 +445,7 @@ describe('Testing user service', () => {
       prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
         id,
       });
-      const res = await service.findUserOrError({ userId: id }, false);
+      const res = await service.findUserOrError({ userId: id });
       expect(res).toEqual({ id });
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
         where: {
@@ -437,7 +459,7 @@ describe('Testing user service', () => {
       prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
         email,
       });
-      const res = await service.findUserOrError({ email: email }, false);
+      const res = await service.findUserOrError({ email: email });
       expect(res).toEqual({ email });
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
         where: {
@@ -450,7 +472,7 @@ describe('Testing user service', () => {
       const email = 'example@email.com';
       prisma.userAccounts.findUnique = jest.fn().mockResolvedValue(null);
       await expect(
-        async () => await service.findUserOrError({ email: email }, false),
+        async () => await service.findUserOrError({ email: email }),
       ).rejects.toThrowError(
         'user email: example@email.com was requested but not found',
       );
@@ -874,6 +896,10 @@ describe('Testing user service', () => {
         where: {
           id,
         },
+        include: {
+          jurisdictions: true,
+          userRoles: true,
+        },
       });
       expect(prisma.userAccounts.delete).toHaveBeenCalledWith({
         where: {
@@ -916,6 +942,10 @@ describe('Testing user service', () => {
       expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
         where: {
           id,
+        },
+        include: {
+          jurisdictions: true,
+          userRoles: true,
         },
       });
 
