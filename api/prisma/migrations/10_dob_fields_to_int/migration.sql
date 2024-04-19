@@ -64,3 +64,30 @@ ALTER TABLE "household_member" DROP COLUMN "birth_day_temp";
 -- Unify AFS
 UPDATE application_flagged_set
 SET rule_key = REPLACE(rule_key, ' ', '');
+
+UPDATE application_flagged_set
+SET rule_key = REPLACE(rule_key, '-01-', '-1-');
+
+UPDATE application_flagged_set
+SET rule_key = REPLACE(rule_key, '-02-', '-2-');
+
+UPDATE application_flagged_set
+SET rule_key = REPLACE(rule_key, '-03-', '-3-');
+
+UPDATE application_flagged_set
+SET rule_key = REPLACE(rule_key, '-04-', '-4-');
+
+UPDATE application_flagged_set
+SET rule_key = REPLACE(rule_key, '-05-', '-5-');
+
+UPDATE application_flagged_set
+SET rule_key = REPLACE(rule_key, '-06-', '-6-');
+
+UPDATE application_flagged_set
+SET rule_key = REPLACE(rule_key, '-07-', '-7-');
+
+UPDATE application_flagged_set
+SET rule_key = REPLACE(rule_key, '-08-', '-8-');
+
+UPDATE application_flagged_set
+SET rule_key = REPLACE(rule_key, '-09-', '-9-');
