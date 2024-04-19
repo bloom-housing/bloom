@@ -60,7 +60,7 @@ describe('Application flagged set Controller Tests', () => {
 
   const createComplexApplication = async (
     emailIndicator: string,
-    nameAndDOBIndicator: number,
+    nameIndicator: number,
     listing: string,
     dobIndicator?: string,
     householdMember?: Prisma.HouseholdMemberCreateWithoutApplicationsInput,
@@ -69,13 +69,11 @@ describe('Application flagged set Controller Tests', () => {
       data: await applicationFactory({
         applicant: {
           emailAddress: `${listing}-email${emailIndicator}@email.com`,
-          firstName: `${listing}-firstName${
-            dobIndicator || nameAndDOBIndicator
-          }`,
-          lastName: `${listing}-lastName${dobIndicator || nameAndDOBIndicator}`,
-          birthDay: nameAndDOBIndicator,
-          birthMonth: nameAndDOBIndicator,
-          birthYear: nameAndDOBIndicator,
+          firstName: `${listing}-firstName${dobIndicator || nameIndicator}`,
+          lastName: `${listing}-lastName${dobIndicator || nameIndicator}`,
+          birthDay: nameIndicator,
+          birthMonth: nameIndicator,
+          birthYear: nameIndicator,
         },
         listingId: listing,
         householdMember: [householdMember],
