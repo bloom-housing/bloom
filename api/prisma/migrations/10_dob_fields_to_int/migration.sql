@@ -61,3 +61,6 @@ ALTER TABLE "household_member" DROP COLUMN "birth_month_temp";
 ALTER TABLE "household_member" DROP COLUMN "birth_day_temp";
 
 
+-- Unify AFS
+UPDATE application_flagged_set
+SET rule_key = REPLACE(rule_key, ' ', '');
