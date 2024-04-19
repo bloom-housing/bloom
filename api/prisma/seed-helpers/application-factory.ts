@@ -116,9 +116,9 @@ export const applicantFactory = (
     phoneNumberType: 'home',
     noPhone: false,
     workInRegion: YesNoEnum.no,
-    birthDay: `${randomBirthDay()}`, // no zeros
-    birthMonth: `${randomBirthMonth()}`, // no zeros
-    birthYear: `${randomBirthYear()}`,
+    birthDay: randomBirthDay(), // no zeros
+    birthMonth: randomBirthMonth(), // no zeros
+    birthYear: randomBirthYear(),
     applicantAddress: {
       create: addressFactory(),
     },
