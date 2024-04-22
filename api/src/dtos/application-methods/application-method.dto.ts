@@ -6,12 +6,15 @@ import {
   IsString,
   MaxLength,
   ValidateNested,
+  ValidateIf,
+  IsUrl,
 } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { AbstractDTO } from '../shared/abstract.dto';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ApplicationMethodsTypeEnum } from '@prisma/client';
 import { PaperApplication } from '../paper-applications/paper-application.dto';
+import { hasHttps } from '../../decorators/hasHttps.decorator';
 
 export class ApplicationMethod extends AbstractDTO {
   @Expose()
@@ -36,6 +39,14 @@ export class ApplicationMethod extends AbstractDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
+  @ValidateIf((o) => o.type === ApplicationMethodsTypeEnum.ExternalLink, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @hasHttps({ groups: [ValidationsGroupsEnum.default] })
+  @IsUrl(
+    { require_protocol: true },
+    { groups: [ValidationsGroupsEnum.default] },
+  )
   externalReference?: string;
 
   @Expose()
