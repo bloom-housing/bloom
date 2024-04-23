@@ -4,8 +4,8 @@ import qs from "qs"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
-import { AuthContext } from "@bloom-housing/shared-helpers"
-import { setSiteAlertMessage, t } from "@bloom-housing/ui-components"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import { t } from "@bloom-housing/ui-components"
 import {
   ApplicationOrderByKeys,
   EnumListingFilterParamsComparison,
@@ -126,14 +126,11 @@ export function useListingsData({
 
 export const useListingExport = () => {
   const { listingsService } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
 
   const [csvExportLoading, setCsvExportLoading] = useState(false)
-  const [csvExportError, setCsvExportError] = useState(false)
-  const [csvExportSuccess, setCsvExportSuccess] = useState(false)
 
   const onExport = useCallback(async () => {
-    setCsvExportError(false)
-    setCsvExportSuccess(false)
     setCsvExportLoading(true)
 
     try {
@@ -151,11 +148,10 @@ export const useListingExport = () => {
       document.body.appendChild(link)
       link.click()
       link.parentNode.removeChild(link)
-      setCsvExportSuccess(true)
-      setSiteAlertMessage(t("t.exportSuccess"), "success")
+      addToast(t("t.exportSuccess"), { variant: "success" })
     } catch (err) {
       console.log(err)
-      setCsvExportError(true)
+      addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
     }
 
     setCsvExportLoading(false)
@@ -164,8 +160,6 @@ export const useListingExport = () => {
   return {
     onExport,
     csvExportLoading,
-    csvExportError,
-    csvExportSuccess,
   }
 }
 
@@ -529,12 +523,9 @@ export const useUsersExport = () => {
 
 const useCsvExport = (endpoint: () => Promise<string>, fileName: string) => {
   const [csvExportLoading, setCsvExportLoading] = useState(false)
-  const [csvExportError, setCsvExportError] = useState(false)
-  const [csvExportSuccess, setCsvExportSuccess] = useState(false)
+  const { addToast } = useContext(MessageContext)
 
   const onExport = useCallback(async () => {
-    setCsvExportError(false)
-    setCsvExportSuccess(false)
     setCsvExportLoading(true)
 
     try {
@@ -544,21 +535,18 @@ const useCsvExport = (endpoint: () => Promise<string>, fileName: string) => {
       fileLink.setAttribute("download", fileName)
       fileLink.href = URL.createObjectURL(blob)
       fileLink.click()
-      setCsvExportSuccess(true)
-      setSiteAlertMessage(t("t.exportSuccess"), "success")
+      addToast(t("t.exportSuccess"), { variant: "success" })
     } catch (err) {
       console.log(err)
-      setCsvExportError(true)
+      addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
     }
 
     setCsvExportLoading(false)
-  }, [endpoint, fileName])
+  }, [endpoint, fileName, addToast])
 
   return {
     onExport,
     csvExportLoading,
-    csvExportError,
-    csvExportSuccess,
   }
 }
 

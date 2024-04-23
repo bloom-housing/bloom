@@ -9,6 +9,7 @@ import { sign, verify } from 'jsonwebtoken';
 import { Prisma } from '@prisma/client';
 import { UpdatePassword } from '../dtos/auth/update-password.dto';
 import { MfaType } from '../enums/mfa/mfa-type-enum';
+import { UserViews } from '../enums/user/view-enum';
 import { isPasswordValid, passwordToHash } from '../utilities/password-helpers';
 import { RequestMfaCodeResponse } from '../dtos/mfa/request-mfa-code-response.dto';
 import { RequestMfaCode } from '../dtos/mfa/request-mfa-code.dto';
@@ -186,7 +187,7 @@ export class AuthService {
   async requestMfaCode(dto: RequestMfaCode): Promise<RequestMfaCodeResponse> {
     const user = await this.userService.findUserOrError(
       { email: dto.email },
-      true,
+      UserViews.full,
     );
 
     if (!user.mfaEnabled) {
@@ -291,10 +292,7 @@ export class AuthService {
   async confirmUser(dto: Confirm, res?: Response): Promise<SuccessDTO> {
     const token = verify(dto.token, process.env.APP_SECRET) as IdAndEmail;
 
-    let user = await this.userService.findUserOrError(
-      { userId: token.id },
-      false,
-    );
+    let user = await this.userService.findUserOrError({ userId: token.id });
 
     if (user.confirmationToken !== dto.token) {
       throw new BadRequestException(

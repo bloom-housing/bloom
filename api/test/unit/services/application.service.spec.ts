@@ -27,7 +27,20 @@ import { User } from '../../../src/dtos/users/user.dto';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
 import { GeocodingService } from '../../../src/services/geocoding.service';
 
-export const mockApplication = (position: number, date: Date) => {
+export const mockApplication = (
+  position: number,
+  date: Date,
+  numberOfHouseholdMembers?: number,
+) => {
+  let householdMember = undefined;
+  if (numberOfHouseholdMembers) {
+    householdMember = [];
+    for (let i = 0; i < numberOfHouseholdMembers; i++) {
+      householdMember.push({
+        id: randomUUID(),
+      });
+    }
+  }
   return {
     id: randomUUID(),
     appUrl: `appUrl ${position}`,
@@ -93,13 +106,18 @@ export const mockApplication = (position: number, date: Date) => {
     },
     createdAt: date,
     updatedAt: date,
+    householdMember: householdMember,
   };
 };
 
-export const mockApplicationSet = (numberToCreate: number, date: Date) => {
+export const mockApplicationSet = (
+  numberToCreate: number,
+  date: Date,
+  numberOfHouseholdMembers?: number,
+) => {
   const toReturn = [];
   for (let i = 0; i < numberToCreate; i++) {
-    toReturn.push(mockApplication(i, date));
+    toReturn.push(mockApplication(i, date, numberOfHouseholdMembers));
   }
   return toReturn;
 };
@@ -1158,9 +1176,9 @@ describe('Testing application service', () => {
             firstName: 'applicant first name',
             middleName: 'applicant middle name',
             lastName: 'applicant last name',
-            birthMonth: '12',
-            birthDay: '17',
-            birthYear: '1993',
+            birthMonth: 12,
+            birthDay: 17,
+            birthYear: 1993,
             emailAddress: 'example@email.com',
             noEmail: false,
             phoneNumber: '111-111-1111',
@@ -1240,9 +1258,9 @@ describe('Testing application service', () => {
               firstName: 'example first name',
               middleName: 'example middle name',
               lastName: 'example last name',
-              birthMonth: '12',
-              birthDay: '17',
-              birthYear: '1993',
+              birthMonth: 12,
+              birthDay: 17,
+              birthYear: 1993,
               sameAddress: YesNoEnum.yes,
               relationship: 'example relationship',
               workInRegion: YesNoEnum.yes,
@@ -1419,9 +1437,9 @@ describe('Testing application service', () => {
             firstName: 'applicant first name',
             middleName: 'applicant middle name',
             lastName: 'applicant last name',
-            birthMonth: '12',
-            birthDay: '17',
-            birthYear: '1993',
+            birthMonth: 12,
+            birthDay: 17,
+            birthYear: 1993,
             emailAddress: 'example@email.com',
             noEmail: false,
             phoneNumber: '111-111-1111',
@@ -1501,9 +1519,9 @@ describe('Testing application service', () => {
               firstName: 'example first name',
               middleName: 'example middle name',
               lastName: 'example last name',
-              birthMonth: '12',
-              birthDay: '17',
-              birthYear: '1993',
+              birthMonth: 12,
+              birthDay: 17,
+              birthYear: 1993,
               sameAddress: YesNoEnum.yes,
               relationship: 'example relationship',
               workInRegion: YesNoEnum.yes,
@@ -1646,9 +1664,9 @@ describe('Testing application service', () => {
             firstName: 'applicant first name',
             middleName: 'applicant middle name',
             lastName: 'applicant last name',
-            birthMonth: '12',
-            birthDay: '17',
-            birthYear: '1993',
+            birthMonth: 12,
+            birthDay: 17,
+            birthYear: 1993,
             emailAddress: 'example@email.com',
             noEmail: false,
             phoneNumber: '111-111-1111',
@@ -1728,9 +1746,9 @@ describe('Testing application service', () => {
               firstName: 'example first name',
               middleName: 'example middle name',
               lastName: 'example last name',
-              birthMonth: '12',
-              birthDay: '17',
-              birthYear: '1993',
+              birthMonth: 12,
+              birthDay: 17,
+              birthYear: 1993,
               sameAddress: YesNoEnum.yes,
               relationship: 'example relationship',
               workInRegion: YesNoEnum.yes,

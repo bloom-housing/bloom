@@ -352,7 +352,9 @@ describe('Testing application CSV export service', () => {
   });
 
   it('tests multiselectQuestionFormat with undefined question passed', () => {
-    expect(service.multiselectQuestionFormat(undefined)).toBe('');
+    expect(
+      service.multiselectQuestionFormat(undefined, undefined, undefined),
+    ).toBe('');
   });
 
   it('tests multiselectQuestionFormat', () => {
@@ -442,12 +444,10 @@ describe('Testing application CSV export service', () => {
       jurisdictions: [{ id: 'juris id' }],
     } as unknown as User;
 
-    const applications = mockApplicationSet(5, new Date());
+    const applications = mockApplicationSet(5, new Date(), 1);
     prisma.applications.findMany = jest.fn().mockReturnValue(applications);
     prisma.listings.findUnique = jest.fn().mockResolvedValue({});
     permissionService.canOrThrow = jest.fn().mockResolvedValue(true);
-
-    service.maxHouseholdMembers = jest.fn().mockReturnValue(1);
 
     prisma.multiselectQuestions.findMany = jest.fn().mockReturnValue([
       {
@@ -513,7 +513,6 @@ describe('Testing application CSV export service', () => {
 
     const applications = mockApplicationSet(3, new Date());
     prisma.applications.findMany = jest.fn().mockReturnValue(applications);
-    service.maxHouseholdMembers = jest.fn().mockReturnValue(0);
     prisma.listings.findUnique = jest.fn().mockResolvedValue({});
     permissionService.canOrThrow = jest.fn().mockResolvedValue(true);
 

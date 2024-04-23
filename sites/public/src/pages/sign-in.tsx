@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState, useCallback } from "react"
 import { useForm } from "react-hook-form"
+import { t, useMutate } from "@bloom-housing/ui-components"
 import { useRouter } from "next/router"
-import { t, setSiteAlertMessage, useMutate } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import { useRedirectToPrevPage } from "../lib/hooks"
 import {
@@ -11,6 +11,7 @@ import {
   NetworkStatusType,
   NetworkStatusContent,
   AuthContext,
+  MessageContext,
   FormSignIn,
   ResendConfirmationModal,
   FormSignInDefault,
@@ -23,10 +24,12 @@ import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
 import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
 
 const SignIn = () => {
+  const { addToast } = useContext(MessageContext)
   const router = useRouter()
 
   const { login, requestSingleUseCode, userService } = useContext(AuthContext)
   const signUpCopy = process.env.showMandatedAccounts
+
   /* Form Handler */
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
   // https://github.com/react-hook-form/react-hook-form/issues/2887
@@ -68,8 +71,8 @@ const SignIn = () => {
 
     try {
       const user = await login(email, password)
-      setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
       await redirectToPage()
+      addToast(t(`authentication.signIn.success`, { name: user.firstName }), { variant: "success" })
     } catch (error) {
       const { status } = error.response || {}
       determineNetworkError(status, error)
@@ -95,7 +98,9 @@ const SignIn = () => {
         })
       } else {
         const user = await login(email, password)
-        setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
+        addToast(t(`authentication.signIn.success`, { name: user.firstName }), {
+          variant: "success",
+        })
         await redirectToPage()
       }
     } catch (error) {

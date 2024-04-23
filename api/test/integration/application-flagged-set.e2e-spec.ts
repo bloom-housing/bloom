@@ -60,19 +60,20 @@ describe('Application flagged set Controller Tests', () => {
 
   const createComplexApplication = async (
     emailIndicator: string,
-    nameAndDOBIndicator: string,
+    nameIndicator: number,
     listing: string,
+    dobIndicator?: string,
     householdMember?: Prisma.HouseholdMemberCreateWithoutApplicationsInput,
   ) => {
     return await prisma.applications.create({
       data: await applicationFactory({
         applicant: {
           emailAddress: `${listing}-email${emailIndicator}@email.com`,
-          firstName: `${listing}-firstName${nameAndDOBIndicator}`,
-          lastName: `${listing}-lastName${nameAndDOBIndicator}`,
-          birthDay: nameAndDOBIndicator,
-          birthMonth: nameAndDOBIndicator,
-          birthYear: nameAndDOBIndicator,
+          firstName: `${listing}-firstName${dobIndicator || nameIndicator}`,
+          lastName: `${listing}-lastName${dobIndicator || nameIndicator}`,
+          birthDay: nameIndicator,
+          birthMonth: nameIndicator,
+          birthYear: nameIndicator,
         },
         listingId: listing,
         householdMember: [householdMember],
@@ -681,8 +682,8 @@ describe('Application flagged set Controller Tests', () => {
   it('should not create a flagged set if applications do not match', async () => {
     const listing = await createListing();
 
-    await createComplexApplication('1', '1', listing);
-    await createComplexApplication('2', '2', listing);
+    await createComplexApplication('1', 1, listing);
+    await createComplexApplication('2', 2, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
@@ -702,8 +703,8 @@ describe('Application flagged set Controller Tests', () => {
   it('should create a new flagged set if applications match on email', async () => {
     const listing = await createListing();
 
-    await createComplexApplication('1', '1', listing);
-    await createComplexApplication('1', '2', listing);
+    await createComplexApplication('1', 1, listing);
+    await createComplexApplication('1', 2, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
@@ -725,8 +726,30 @@ describe('Application flagged set Controller Tests', () => {
   it('should create a new flagged set if applications match on nameAndDOB', async () => {
     const listing = await createListing();
 
-    await createComplexApplication('1', '1', listing);
-    await createComplexApplication('2', '1', listing);
+    await createComplexApplication('1', 1, listing);
+    await createComplexApplication('2', 1, listing);
+
+    await request(app.getHttpServer())
+      .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
+      .expect(200);
+
+    const afs = await prisma.applicationFlaggedSet.findMany({
+      where: {
+        listingId: listing,
+      },
+    });
+
+    expect(afs.length).toEqual(1);
+
+    expect(afs[0].rule).toEqual(RuleEnum.nameAndDOB);
+  });
+
+  it('should create a new flagged set if applications match on nameAndDOB case insensitive', async () => {
+    const listing = await createListing();
+
+    await createComplexApplication('1', 1, listing, 'test');
+    await createComplexApplication('2', 1, listing, 'TEST');
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
@@ -748,8 +771,8 @@ describe('Application flagged set Controller Tests', () => {
   it('should keep application in flagged set if email still matches', async () => {
     const listing = await createListing();
 
-    const appA = await createComplexApplication('1', '1', listing);
-    const appB = await createComplexApplication('1', '2', listing);
+    const appA = await createComplexApplication('1', 1, listing);
+    const appB = await createComplexApplication('1', 2, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
@@ -821,8 +844,8 @@ describe('Application flagged set Controller Tests', () => {
   it('should keep application in flagged set if nameAndDOB still matches', async () => {
     const listing = await createListing();
 
-    const appA = await createComplexApplication('1', '1', listing);
-    const appB = await createComplexApplication('2', '1', listing);
+    const appA = await createComplexApplication('1', 1, listing);
+    const appB = await createComplexApplication('2', 1, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
@@ -894,8 +917,8 @@ describe('Application flagged set Controller Tests', () => {
   it('should remove application from flagged set if email no longer matches', async () => {
     const listing = await createListing();
 
-    const appA = await createComplexApplication('1', '1', listing);
-    await createComplexApplication('1', '2', listing);
+    const appA = await createComplexApplication('1', 1, listing);
+    await createComplexApplication('1', 2, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
@@ -964,8 +987,8 @@ describe('Application flagged set Controller Tests', () => {
   it('should remove application from flagged set if nameAndDOB no longer matches', async () => {
     const listing = await createListing();
 
-    const appA = await createComplexApplication('1', '1', listing);
-    await createComplexApplication('2', '1', listing);
+    const appA = await createComplexApplication('1', 1, listing);
+    await createComplexApplication('2', 1, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
@@ -996,9 +1019,9 @@ describe('Application flagged set Controller Tests', () => {
             data: {
               firstName: `${listing}-firstName3@email.com`,
               lastName: `${listing}-lastName3@email.com`,
-              birthDay: '3',
-              birthMonth: '3',
-              birthYear: '3',
+              birthDay: 3,
+              birthMonth: 3,
+              birthYear: 3,
             },
           },
         },
@@ -1038,9 +1061,9 @@ describe('Application flagged set Controller Tests', () => {
   it('should remove and create flagged set if email changed', async () => {
     const listing = await createListing();
 
-    const appA = await createComplexApplication('1', '1', listing);
-    const appB = await createComplexApplication('2', '2', listing);
-    const appC = await createComplexApplication('1', '3', listing);
+    const appA = await createComplexApplication('1', 1, listing);
+    const appB = await createComplexApplication('2', 2, listing);
+    const appC = await createComplexApplication('1', 3, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
@@ -1116,9 +1139,9 @@ describe('Application flagged set Controller Tests', () => {
   it('should remove and create flagged set if nameAndDOB changed', async () => {
     const listing = await createListing();
 
-    const appA = await createComplexApplication('1', '1', listing);
-    const appB = await createComplexApplication('2', '2', listing);
-    const appC = await createComplexApplication('3', '1', listing);
+    const appA = await createComplexApplication('1', 1, listing);
+    const appB = await createComplexApplication('2', 2, listing);
+    const appC = await createComplexApplication('3', 1, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
@@ -1153,9 +1176,9 @@ describe('Application flagged set Controller Tests', () => {
             data: {
               firstName: `${listing}-firstName2`,
               lastName: `${listing}-lastName2`,
-              birthDay: '2',
-              birthMonth: '2',
-              birthYear: '2',
+              birthDay: 2,
+              birthMonth: 2,
+              birthYear: 2,
             },
           },
         },
@@ -1199,11 +1222,11 @@ describe('Application flagged set Controller Tests', () => {
   it('should move application from flagged set to another if email changed', async () => {
     const listing = await createListing();
 
-    const appA = await createComplexApplication('1', '1', listing);
-    const appB = await createComplexApplication('1', '2', listing);
+    const appA = await createComplexApplication('1', 1, listing);
+    const appB = await createComplexApplication('1', 2, listing);
 
-    const appC = await createComplexApplication('3', '3', listing);
-    const appD = await createComplexApplication('3', '4', listing);
+    const appC = await createComplexApplication('3', 3, listing);
+    const appD = await createComplexApplication('3', 4, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
@@ -1293,11 +1316,11 @@ describe('Application flagged set Controller Tests', () => {
   it('should move application from flagged set to another if nameAndDOB changed', async () => {
     const listing = await createListing();
 
-    const appA = await createComplexApplication('1', '1', listing);
-    const appB = await createComplexApplication('2', '1', listing);
+    const appA = await createComplexApplication('1', 1, listing);
+    const appB = await createComplexApplication('2', 1, listing);
 
-    const appC = await createComplexApplication('3', '3', listing);
-    const appD = await createComplexApplication('4', '3', listing);
+    const appC = await createComplexApplication('3', 3, listing);
+    const appD = await createComplexApplication('4', 3, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
@@ -1318,13 +1341,13 @@ describe('Application flagged set Controller Tests', () => {
     let allApplicationCount = 0;
     for (const flaggedSet of afs) {
       expect(flaggedSet.rule).toEqual(RuleEnum.nameAndDOB);
-      if (flaggedSet.ruleKey.indexOf(`${listing}-firstName1`) >= 0) {
+      if (flaggedSet.ruleKey.indexOf(`${listing}-firstname1`) >= 0) {
         const applications = flaggedSet.applications.map((app) => app.id);
         expect(applications).toContain(appA.id);
         allApplicationCount++;
         expect(applications).toContain(appB.id);
         allApplicationCount++;
-      } else if (flaggedSet.ruleKey.indexOf(`${listing}-firstName3`) >= 0) {
+      } else if (flaggedSet.ruleKey.indexOf(`${listing}-firstname3`) >= 0) {
         const applications = flaggedSet.applications.map((app) => app.id);
         expect(applications).toContain(appC.id);
         allApplicationCount++;
@@ -1345,9 +1368,9 @@ describe('Application flagged set Controller Tests', () => {
             data: {
               firstName: `${listing}-firstName3`,
               lastName: `${listing}-lastName3`,
-              birthDay: '3',
-              birthMonth: '3',
-              birthYear: '3',
+              birthDay: 3,
+              birthMonth: 3,
+              birthYear: 3,
             },
           },
         },
@@ -1391,13 +1414,42 @@ describe('Application flagged set Controller Tests', () => {
   it('should create nameAndDob flagged set on household member matches', async () => {
     const listing = await createListing();
 
-    await createComplexApplication('1', '1', listing);
-    await createComplexApplication('2', '2', listing, {
+    await createComplexApplication('1', 1, listing);
+    await createComplexApplication('2', 2, listing, '2', {
       firstName: `${listing}-firstName1`,
       lastName: `${listing}-lastName1`,
-      birthDay: '1',
-      birthMonth: '1',
-      birthYear: '1',
+      birthDay: 1,
+      birthMonth: 1,
+      birthYear: 1,
+      sameAddress: YesNoEnum.yes,
+      workInRegion: YesNoEnum.yes,
+    });
+
+    await request(app.getHttpServer())
+      .put(`/applicationFlaggedSets/process`)
+      .set('Cookie', adminAccessToken)
+      .expect(200);
+
+    const afs = await prisma.applicationFlaggedSet.findMany({
+      where: {
+        listingId: listing,
+      },
+    });
+
+    expect(afs.length).toEqual(1);
+    expect(afs[0].rule).toEqual(RuleEnum.nameAndDOB);
+  });
+
+  it('should create nameAndDob flagged set on household member matches case insensitive', async () => {
+    const listing = await createListing();
+
+    await createComplexApplication('1', 1, listing, 'TEST');
+    await createComplexApplication('2', 2, listing, '2', {
+      firstName: `${listing}-firstNametest`,
+      lastName: `${listing}-lastNameTest`,
+      birthDay: 1,
+      birthMonth: 1,
+      birthYear: 1,
       sameAddress: YesNoEnum.yes,
       workInRegion: YesNoEnum.yes,
     });
@@ -1421,9 +1473,9 @@ describe('Application flagged set Controller Tests', () => {
   it('should remove from flagged set and create new flagged set when match moves from email -> nameAndDOB', async () => {
     const listing = await createListing();
 
-    const appA = await createComplexApplication('1', '1', listing);
-    const appB = await createComplexApplication('2', '2', listing);
-    const appC = await createComplexApplication('1', '3', listing);
+    const appA = await createComplexApplication('1', 1, listing);
+    const appB = await createComplexApplication('2', 2, listing);
+    const appC = await createComplexApplication('1', 3, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
@@ -1459,9 +1511,9 @@ describe('Application flagged set Controller Tests', () => {
               emailAddress: `${listing}-email4@email.com`,
               firstName: `${listing}-firstName2`,
               lastName: `${listing}-lastName2`,
-              birthDay: '2',
-              birthMonth: '2',
-              birthYear: '2',
+              birthDay: 2,
+              birthMonth: 2,
+              birthYear: 2,
             },
           },
         },
@@ -1504,9 +1556,9 @@ describe('Application flagged set Controller Tests', () => {
   it('should remove from flagged set and create new flagged set when match moves from nameAndDOB -> email', async () => {
     const listing = await createListing();
 
-    const appA = await createComplexApplication('1', '1', listing);
-    const appB = await createComplexApplication('2', '2', listing);
-    const appC = await createComplexApplication('3', '1', listing);
+    const appA = await createComplexApplication('1', 1, listing);
+    const appB = await createComplexApplication('2', 2, listing);
+    const appC = await createComplexApplication('3', 1, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
@@ -1542,9 +1594,9 @@ describe('Application flagged set Controller Tests', () => {
               emailAddress: `${listing}-email2@email.com`,
               firstName: `${listing}-firstName4`,
               lastName: `${listing}-lastName4`,
-              birthDay: '4',
-              birthMonth: '4',
-              birthYear: '4',
+              birthDay: 4,
+              birthMonth: 4,
+              birthYear: 4,
             },
           },
         },
@@ -1588,8 +1640,8 @@ describe('Application flagged set Controller Tests', () => {
   it('should create new email flagged set instead of nameAndDOB flagged set', async () => {
     const listing = await createListing();
 
-    await createComplexApplication('1', '1', listing);
-    await createComplexApplication('1', '1', listing);
+    await createComplexApplication('1', 1, listing);
+    await createComplexApplication('1', 1, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
@@ -1613,8 +1665,8 @@ describe('Application flagged set Controller Tests', () => {
   it('should not reset resolved status when new application not in flagged set', async () => {
     const listing = await createListing();
 
-    const appA = await createComplexApplication('1', '1', listing);
-    await createComplexApplication('2', '1', listing);
+    const appA = await createComplexApplication('1', 1, listing);
+    await createComplexApplication('2', 1, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
@@ -1648,7 +1700,7 @@ describe('Application flagged set Controller Tests', () => {
       .set('Cookie', adminAccessToken)
       .expect(201);
 
-    await createComplexApplication('3', '3', listing);
+    await createComplexApplication('3', 3, listing);
     await prisma.listings.update({
       where: {
         id: listing,
@@ -1680,11 +1732,11 @@ describe('Application flagged set Controller Tests', () => {
   it('should reset resolved status when new application in flagged set', async () => {
     const listing = await createListing();
 
-    const appA = await createComplexApplication('1', '1', listing);
-    await createComplexApplication('2', '1', listing);
+    const appA = await createComplexApplication('1', 1, listing);
+    await createComplexApplication('2', 1, listing);
 
-    const appC = await createComplexApplication('3', '3', listing);
-    await createComplexApplication('4', '3', listing);
+    const appC = await createComplexApplication('3', 3, listing);
+    await createComplexApplication('4', 3, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
@@ -1738,7 +1790,7 @@ describe('Application flagged set Controller Tests', () => {
       .set('Cookie', adminAccessToken)
       .expect(201);
 
-    await createComplexApplication('5', '3', listing);
+    await createComplexApplication('5', 3, listing);
     await prisma.listings.update({
       where: {
         id: listing,

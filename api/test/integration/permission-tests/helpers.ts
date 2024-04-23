@@ -165,11 +165,11 @@ export const buildMultiselectQuestionCreateMock = (
     links: [
       {
         title: 'title 1',
-        url: 'title 1',
+        url: 'https://title-1.com',
       },
       {
         title: 'title 2',
-        url: 'title 2',
+        url: 'https://title-2.com',
       },
     ],
     jurisdictions: [{ id: jurisId }],
@@ -181,7 +181,7 @@ export const buildMultiselectQuestionCreateMock = (
         links: [
           {
             title: 'title 3',
-            url: 'title 3',
+            url: 'https://title-3.com',
           },
         ],
         collectAddress: true,
@@ -194,7 +194,7 @@ export const buildMultiselectQuestionCreateMock = (
         links: [
           {
             title: 'title 4',
-            url: 'title 4',
+            url: 'https://title-4.com',
           },
         ],
         collectAddress: true,
@@ -219,11 +219,11 @@ export const buildMultiselectQuestionUpdateMock = (
     links: [
       {
         title: 'title 1',
-        url: 'title 1',
+        url: 'https://title-1.com',
       },
       {
         title: 'title 2',
-        url: 'title 2',
+        url: 'https://title-2.com',
       },
     ],
     jurisdictions: [{ id: jurisId }],
@@ -235,7 +235,7 @@ export const buildMultiselectQuestionUpdateMock = (
         links: [
           {
             title: 'title 3',
-            url: 'title 3',
+            url: 'https://title-3.com',
           },
         ],
         collectAddress: true,
@@ -248,7 +248,7 @@ export const buildMultiselectQuestionUpdateMock = (
         links: [
           {
             title: 'title 4',
-            url: 'title 4',
+            url: 'https://title-4.com',
           },
         ],
         collectAddress: true,
@@ -662,7 +662,7 @@ export const constructFullListingData = async (
     applicationDropOffAddressOfficeHours: 'drop off office hours string',
     applicationDropOffAddressType: ApplicationAddressTypeEnum.leasingAgent,
     applicationMailingAddressType: ApplicationAddressTypeEnum.leasingAgent,
-    buildingSelectionCriteria: 'selection criteria',
+    buildingSelectionCriteria: 'https://selection-criteria.com',
     costsNotIncluded: 'all costs included',
     creditHistory: 'credit history',
     criminalBackground: 'criminal background',
@@ -795,7 +795,7 @@ export const createListing = async (
 export const createComplexApplication = async (
   prisma: PrismaService,
   emailIndicator: string,
-  nameAndDOBIndicator: string,
+  nameAndDOBIndicator: number,
   listing: string,
   householdMember?: Prisma.HouseholdMemberCreateWithoutApplicationsInput,
 ) => {

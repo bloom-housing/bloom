@@ -1303,8 +1303,8 @@ describe('Testing Permissioning of endpoints as public user', () => {
     it('should error as forbidden for process endpoint', async () => {
       const listing = await createListing(prisma);
 
-      await createComplexApplication(prisma, '1', '1', listing);
-      await createComplexApplication(prisma, '1', '2', listing);
+      await createComplexApplication(prisma, '1', 1, listing);
+      await createComplexApplication(prisma, '1', 2, listing);
 
       await request(app.getHttpServer())
         .put(`/applicationFlaggedSets/process`)

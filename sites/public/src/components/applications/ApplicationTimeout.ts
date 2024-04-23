@@ -22,7 +22,6 @@ const ApplicationTimeout = () => {
         promptAction: t("application.timeout.action"),
         redirectPath: "/",
         alertMessage: t("application.timeout.afterMessage"),
-        alertType: "alert",
         onTimeout,
       })
 }

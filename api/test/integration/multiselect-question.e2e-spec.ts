@@ -152,11 +152,11 @@ describe('MultiselectQuestion Controller Tests', () => {
         links: [
           {
             title: 'title 1',
-            url: 'title 1',
+            url: 'https://title-1.com',
           },
           {
             title: 'title 2',
-            url: 'title 2',
+            url: 'https://title-2.com',
           },
         ],
         jurisdictions: [{ id: jurisdictionId }],
@@ -168,7 +168,7 @@ describe('MultiselectQuestion Controller Tests', () => {
             links: [
               {
                 title: 'title 3',
-                url: 'title 3',
+                url: 'https://title-3.com',
               },
             ],
             collectAddress: true,
@@ -181,7 +181,7 @@ describe('MultiselectQuestion Controller Tests', () => {
             links: [
               {
                 title: 'title 4',
-                url: 'title 4',
+                url: 'https://title-4.com',
               },
             ],
             collectAddress: true,
@@ -211,11 +211,11 @@ describe('MultiselectQuestion Controller Tests', () => {
         links: [
           {
             title: 'title 1',
-            url: 'title 1',
+            url: 'https://title-1.com',
           },
           {
             title: 'title 2',
-            url: 'title 2',
+            url: 'https://title-2.com',
           },
         ],
         jurisdictions: [{ id: jurisdictionId }],
@@ -227,7 +227,7 @@ describe('MultiselectQuestion Controller Tests', () => {
             links: [
               {
                 title: 'title 3',
-                url: 'title 3',
+                url: 'https://title-3.com',
               },
             ],
             collectAddress: true,
@@ -240,7 +240,7 @@ describe('MultiselectQuestion Controller Tests', () => {
             links: [
               {
                 title: 'title 4',
-                url: 'title 4',
+                url: 'https://title-4.com',
               },
             ],
             collectAddress: true,
@@ -274,11 +274,11 @@ describe('MultiselectQuestion Controller Tests', () => {
         links: [
           {
             title: 'title 1',
-            url: 'title 1',
+            url: 'https://title-1.com',
           },
           {
             title: 'title 2',
-            url: 'title 2',
+            url: 'https://title-2.com',
           },
         ],
         jurisdictions: [{ id: jurisdictionId }],
@@ -290,7 +290,7 @@ describe('MultiselectQuestion Controller Tests', () => {
             links: [
               {
                 title: 'title 3',
-                url: 'title 3',
+                url: 'https://title-3.com',
               },
             ],
             collectAddress: true,
@@ -303,7 +303,7 @@ describe('MultiselectQuestion Controller Tests', () => {
             links: [
               {
                 title: 'title 4',
-                url: 'title 4',
+                url: 'https://title-4.com',
               },
             ],
             collectAddress: true,

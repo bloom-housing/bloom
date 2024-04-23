@@ -36,6 +36,16 @@ export class AppController {
     return await this.appService.healthCheck();
   }
 
+  @Get('teapot')
+  @ApiOperation({
+    summary: 'Tip me over and pour me out',
+    operationId: 'teapot',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async teapot(): Promise<SuccessDTO> {
+    return await this.appService.teapot();
+  }
+
   @Put('clearTempFiles')
   @ApiOperation({
     summary: 'Trigger the removal of CSVs job',

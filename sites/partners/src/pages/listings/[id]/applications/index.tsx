@@ -1,14 +1,7 @@
 import React, { useContext, useMemo } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
-import {
-  AgTable,
-  t,
-  SiteAlert,
-  useAgTable,
-  Breadcrumbs,
-  BreadcrumbLink,
-} from "@bloom-housing/ui-components"
+import { AgTable, t, useAgTable, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import { Button } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
@@ -42,7 +35,7 @@ const ApplicationsList = () => {
   )
   const includeDemographicsPartner =
     profile?.userRoles?.isPartner && listingJurisdiction?.enablePartnerDemographics
-  const { onExport, csvExportLoading, csvExportError, csvExportSuccess } = useApplicationsExport(
+  const { onExport, csvExportLoading } = useApplicationsExport(
     listingId,
     (profile?.userRoles?.isAdmin ||
       profile?.userRoles?.isJurisdictionalAdmin ||
@@ -116,14 +109,6 @@ const ApplicationsList = () => {
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
-      {csvExportSuccess && <SiteAlert type="success" dismissable sticky={true} />}
-      {csvExportError && (
-        <SiteAlert
-          dismissable
-          sticky={true}
-          alertMessage={{ message: t("account.settings.alerts.genericError"), type: "alert" }}
-        />
-      )}
       <NavigationHeader
         title={listingName}
         listingId={listingId}
