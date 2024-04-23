@@ -118,6 +118,20 @@ export class RootService {
     })
   }
   /**
+   * Tip me over and pour me out
+   */
+  teapot(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/teapot"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Trigger the removal of CSVs job
    */
   clearTempFiles(options: IRequestOptions = {}): Promise<SuccessDTO> {
@@ -1435,6 +1449,8 @@ export class ApplicationsService {
       listingId: string
       /**  */
       includeDemographics?: boolean
+      /**  */
+      timeZone?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
@@ -1445,6 +1461,7 @@ export class ApplicationsService {
       configs.params = {
         listingId: params["listingId"],
         includeDemographics: params["includeDemographics"],
+        timeZone: params["timeZone"],
       }
 
       /** 适配ios13，get请求不允许带body */

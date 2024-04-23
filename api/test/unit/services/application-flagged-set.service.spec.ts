@@ -41,24 +41,24 @@ describe('Testing application flagged set service', () => {
         emailAddress: 'example email',
         firstName: 'example first name',
         lastName: 'example last name',
-        birthMonth: 'example birth month',
-        birthDay: 'example birth day',
-        birthYear: 'example birth year',
+        birthMonth: 9,
+        birthDay: 10,
+        birthYear: 2000,
       },
       householdMember: [
         {
           firstName: 'household first name 1',
           lastName: 'household last name 1',
-          birthMonth: 'household birth moth 1',
-          birthDay: 'household birth day 1',
-          birthYear: 'household birth year 1',
+          birthMonth: 10,
+          birthDay: 14,
+          birthYear: 1998,
         },
         {
           firstName: 'household first name 2',
           lastName: 'household last name 2',
-          birthMonth: 'household birth moth 2',
-          birthDay: 'household birth day 2',
-          birthYear: 'household birth year 2',
+          birthMonth: 11,
+          birthDay: 8,
+          birthYear: 1967,
         },
       ],
     } as unknown as Application;
@@ -83,6 +83,7 @@ describe('Testing application flagged set service', () => {
                       'household first name 1',
                       'household first name 2',
                     ],
+                    mode: 'insensitive',
                   },
                 },
               },
@@ -95,6 +96,7 @@ describe('Testing application flagged set service', () => {
                     'household first name 1',
                     'household first name 2',
                   ],
+                  mode: 'insensitive',
                 },
               },
             },
@@ -111,6 +113,7 @@ describe('Testing application flagged set service', () => {
                       'household last name 1',
                       'household last name 2',
                     ],
+                    mode: 'insensitive',
                   },
                 },
               },
@@ -123,6 +126,7 @@ describe('Testing application flagged set service', () => {
                     'household last name 1',
                     'household last name 2',
                   ],
+                  mode: 'insensitive',
                 },
               },
             },
@@ -134,11 +138,7 @@ describe('Testing application flagged set service', () => {
               householdMember: {
                 some: {
                   birthMonth: {
-                    in: [
-                      'example birth month',
-                      'household birth moth 1',
-                      'household birth moth 2',
-                    ],
+                    in: [9, 10, 11],
                   },
                 },
               },
@@ -146,11 +146,7 @@ describe('Testing application flagged set service', () => {
             {
               applicant: {
                 birthMonth: {
-                  in: [
-                    'example birth month',
-                    'household birth moth 1',
-                    'household birth moth 2',
-                  ],
+                  in: [9, 10, 11],
                 },
               },
             },
@@ -162,11 +158,7 @@ describe('Testing application flagged set service', () => {
               householdMember: {
                 some: {
                   birthDay: {
-                    in: [
-                      'example birth day',
-                      'household birth day 1',
-                      'household birth day 2',
-                    ],
+                    in: [10, 14, 8],
                   },
                 },
               },
@@ -174,11 +166,7 @@ describe('Testing application flagged set service', () => {
             {
               applicant: {
                 birthDay: {
-                  in: [
-                    'example birth day',
-                    'household birth day 1',
-                    'household birth day 2',
-                  ],
+                  in: [10, 14, 8],
                 },
               },
             },
@@ -190,11 +178,7 @@ describe('Testing application flagged set service', () => {
               householdMember: {
                 some: {
                   birthYear: {
-                    in: [
-                      'example birth year',
-                      'household birth year 1',
-                      'household birth year 2',
-                    ],
+                    in: [2000, 1998, 1967],
                   },
                 },
               },
@@ -202,11 +186,7 @@ describe('Testing application flagged set service', () => {
             {
               applicant: {
                 birthYear: {
-                  in: [
-                    'example birth year',
-                    'household birth year 1',
-                    'household birth year 2',
-                  ],
+                  in: [2000, 1998, 1967],
                 },
               },
             },
@@ -357,6 +337,24 @@ describe('Testing application flagged set service', () => {
     ).toEqual('example id-nameAndDOB-first name-last name-5-6-2000');
   });
 
+  it('should build rule key in lowercase when rule is nameAndDOB', async () => {
+    expect(
+      await service.buildRuleKey(
+        {
+          applicant: {
+            firstName: 'FIRST Name',
+            lastName: 'lAsT nAMe',
+            birthMonth: 5,
+            birthDay: 6,
+            birthYear: 2000,
+          },
+        } as unknown as Application,
+        RuleEnum.nameAndDOB,
+        'example id',
+      ),
+    ).toEqual('example id-nameAndDOB-first name-last name-5-6-2000');
+  });
+
   it('should get a list of flagged sets when view is pendingEmail', async () => {
     const mockCount = jest
       .fn()
@@ -409,6 +407,7 @@ describe('Testing application flagged set service', () => {
       orderBy: {
         id: OrderByEnum.DESC,
       },
+      skip: 0,
     });
 
     expect(prisma.applicationFlaggedSet.count).toHaveBeenNthCalledWith(1, {
@@ -699,7 +698,7 @@ describe('Testing application flagged set service', () => {
         id: 'example id 1',
       },
       {
-        id: 'example id 2',
+        id: 'Example id 2',
       },
     ]);
 
@@ -713,7 +712,7 @@ describe('Testing application flagged set service', () => {
         id: 'example id 1',
       },
       {
-        id: 'example id 2',
+        id: 'Example id 2',
       },
     ]);
 
@@ -963,7 +962,7 @@ describe('Testing application flagged set service', () => {
         id: 'example id 1',
       },
       {
-        id: 'example id 2',
+        id: 'Example id 2',
       },
     ]);
 
@@ -978,7 +977,7 @@ describe('Testing application flagged set service', () => {
         id: 'example id 1',
       },
       {
-        id: 'example id 2',
+        id: 'Example id 2',
       },
     ]);
 
@@ -2005,7 +2004,7 @@ describe('Testing application flagged set service', () => {
       data: {
         rule: RuleEnum.nameAndDOB,
         ruleKey:
-          'listing id-nameAndDOB-example first name-example last name-example birth month-example birth day-example birth year',
+          'listing id-nameAndDOB-example first name-example last name-9-10-2000',
         resolvedTime: null,
         status: FlaggedSetStatusEnum.pending,
         listings: {
@@ -2050,7 +2049,7 @@ describe('Testing application flagged set service', () => {
         {
           id: 'found afs id',
           ruleKey:
-            'listing id-nameAndDOB-example first name-example last name-example birth month-example birth day-example birth year',
+            'listing id-nameAndDOB-example first name-example last name-9-10-2000',
         },
       ]);
 
@@ -2230,7 +2229,7 @@ describe('Testing application flagged set service', () => {
       where: {
         listingId: 'listing id',
         ruleKey:
-          'listing id-nameAndDOB-example first name-example last name-example birth month-example birth day-example birth year',
+          'listing id-nameAndDOB-example first name-example last name-9-10-2000',
       },
     });
 
@@ -2246,7 +2245,7 @@ describe('Testing application flagged set service', () => {
       data: {
         rule: RuleEnum.nameAndDOB,
         ruleKey:
-          'listing id-nameAndDOB-example first name-example last name-example birth month-example birth day-example birth year',
+          'listing id-nameAndDOB-example first name-example last name-9-10-2000',
         resolvedTime: null,
         status: FlaggedSetStatusEnum.pending,
         listings: {

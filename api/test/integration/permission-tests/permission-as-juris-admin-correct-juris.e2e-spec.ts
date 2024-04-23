@@ -819,7 +819,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         .expect(200);
     });
 
-    it('should error as forbidden for retrieve endpoint', async () => {
+    it('should succeed for retrieve endpoint', async () => {
       const userA = await prisma.userAccounts.create({
         data: await userFactory({ jurisdictionIds: [jurisId] }),
       });
@@ -841,6 +841,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
           id: userA.id,
           firstName: 'New User First Name',
           lastName: 'New User Last Name',
+          jurisdictions: [{ id: jurisId } as IdDTO],
         } as UserUpdate)
         .set('Cookie', cookies)
         .expect(403);
@@ -949,6 +950,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
       await request(app.getHttpServer())
         .post(`/user/invite`)
         .send(
+          // builds an invite for an admin
           buildUserInviteMock(jurisId, 'partnerUser+jurisCorrect@email.com'),
         )
         .set('Cookie', cookies)

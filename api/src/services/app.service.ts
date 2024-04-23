@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { join } from 'path';
 import {
+  ImATeapotException,
   Inject,
   Injectable,
   InternalServerErrorException,
@@ -110,5 +111,17 @@ export class AppService implements OnModuleInit {
         },
       });
     }
+  }
+
+  // art pulled from: https://www.asciiart.eu/food-and-drinks/coffee-and-tea
+  async teapot(): Promise<SuccessDTO> {
+    throw new ImATeapotException(`
+                  ;,'
+          _o_    ;:;'
+      ,-.'---\`.__ ;
+      ((j\`=====',-'
+      \`-\     /
+        \`-=-'     hjw
+    `);
   }
 }

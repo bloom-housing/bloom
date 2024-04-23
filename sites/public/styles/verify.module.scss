@@ -18,5 +18,9 @@
 }
 
 .verify-error-container {
-  margin-inline: var(--seeds-s8);
+  margin-inline: var(--seeds-s4);
+
+  @media (min-width: theme("screens.sm")) {
+    margin-inline: var(--seeds-s12);
+  }
 }
