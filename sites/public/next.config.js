@@ -87,6 +87,20 @@ module.exports = withBundleAnalyzer({
     )
     return config
   },
+  // eslint-disable-next-line @typescript-eslint/require-await
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: `frame-ancestors 'none';`,
+          },
+        ],
+      },
+    ]
+  },
   // Uncomment line below before building when using symlink for UI-C
   // experimental: { esmExternals: "loose" },
 })
