@@ -5,6 +5,8 @@ import {
   IsDefined,
   IsString,
   ValidateNested,
+  ValidateIf,
+  IsUrl,
 } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { ListingEventsTypeEnum } from '@prisma/client';
@@ -43,6 +45,13 @@ export class ListingEvent extends AbstractDTO {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
+  @ValidateIf((o) => o.url && o.url.length > 0, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsUrl(
+    { require_protocol: true },
+    { groups: [ValidationsGroupsEnum.default] },
+  )
   url?: string;
 
   @Expose()

@@ -31,6 +31,7 @@ import {
   UserCreate,
   UserService,
   serviceOptions,
+  SuccessDTO,
 } from "../types/backend-swagger"
 import { getListingRedirectUrl } from "../utilities/getListingRedirectUrl"
 
@@ -60,7 +61,7 @@ type ContextProps = {
     password: string,
     passwordConfirmation: string
   ) => Promise<User | undefined>
-  signOut: () => void
+  signOut: () => Promise<void>
   confirmAccount: (token: string) => Promise<User | undefined>
   forgotPassword: (email: string, listingIdRedirect?: string) => Promise<boolean | undefined>
   createUser: (user: UserCreate, listingIdRedirect?: string) => Promise<User | undefined>
@@ -74,6 +75,7 @@ type ContextProps = {
     mfaType: MfaType,
     phoneNumber?: string
   ) => Promise<RequestMfaCodeResponse | undefined>
+  requestSingleUseCode: (email: string) => Promise<SuccessDTO | undefined>
   loginViaSingleUseCode: (email: string, singleUseCode: string) => Promise<User | undefined>
 }
 
@@ -355,6 +357,16 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
       try {
         return await authService?.requestMfaCode({
           body: { email, password, mfaType, phoneNumber },
+        })
+      } finally {
+        dispatch(stopLoading())
+      }
+    },
+    requestSingleUseCode: async (email) => {
+      dispatch(startLoading())
+      try {
+        return await userService?.requestSingleUseCode({
+          body: { email },
         })
       } finally {
         dispatch(stopLoading())

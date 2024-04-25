@@ -18,8 +18,10 @@ import { PermissionAction } from '../decorators/permission-action.decorator';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction-admin.guard';
 import { AppService } from '../services/app.service';
+import { ThrottleGuard } from '../guards/throttler.guard';
 
 @Controller()
+@UseGuards(ThrottleGuard)
 @ApiExtraModels(SuccessDTO)
 @ApiTags('root')
 export class AppController {
@@ -33,6 +35,16 @@ export class AppController {
   @ApiOkResponse({ type: SuccessDTO })
   async healthCheck(): Promise<SuccessDTO> {
     return await this.appService.healthCheck();
+  }
+
+  @Get('teapot')
+  @ApiOperation({
+    summary: 'Tip me over and pour me out',
+    operationId: 'teapot',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async teapot(): Promise<SuccessDTO> {
+    return await this.appService.teapot();
   }
 
   @Put('clearTempFiles')

@@ -3,7 +3,7 @@ import dayjs from "dayjs"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import Head from "next/head"
-import { Message } from "@bloom-housing/ui-seeds"
+import { Message, Toast } from "@bloom-housing/ui-seeds"
 import {
   SiteHeader,
   SiteFooter,
@@ -11,13 +11,13 @@ import {
   FooterSection,
   MenuLink,
   t,
-  setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
-import { AuthContext, ExygyFooter } from "@bloom-housing/shared-helpers"
+import { AuthContext, ExygyFooter, MessageContext } from "@bloom-housing/shared-helpers"
 import styles from "./application.module.scss"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
+  const { toastMessagesRef, addToast } = useContext(MessageContext)
   const router = useRouter()
 
   const languages =
@@ -58,9 +58,9 @@ const Layout = (props) => {
           title: t("nav.signOut"),
           onClick: () => {
             const signOutFxn = async () => {
-              setSiteAlertMessage(t(`authentication.signOut.success`), "notice")
               await router.push("/sign-in")
-              signOut()
+              await signOut()
+              addToast(t(`authentication.signOut.success`), { variant: "primary" })
             }
             void signOutFxn()
           },
@@ -123,6 +123,11 @@ const Layout = (props) => {
           strings={{ skipToMainContent: t("t.skipToMainContent") }}
         />
         <main id="main-content" className="md:overflow-x-hidden">
+          {toastMessagesRef.current.map((toastMessage) => (
+            <Toast {...toastMessage.props} testId="toast-alert" key={toastMessage.timestamp}>
+              {toastMessage.message}
+            </Toast>
+          ))}
           {props.children}
         </main>
       </div>

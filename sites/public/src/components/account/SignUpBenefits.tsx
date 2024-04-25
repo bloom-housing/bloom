@@ -13,8 +13,14 @@ const SignUpBenefits = (props: SignUpBenefitsProps) => {
   const iconListItems = [
     { icon: <ClockIcon />, text: t("account.signUpSaveTime.applyFaster") },
     { icon: <EyeIcon />, text: t("account.signUpSaveTime.checkStatus") },
-    { icon: CustomIconMap.lockClosed, text: t("account.signUpSaveTime.resetPassword") },
+    {
+      icon: CustomIconMap.lockClosed,
+      text: process.env.showPwdless
+        ? t("account.signUpSaveTime.useACode")
+        : t("account.signUpSaveTime.resetPassword"),
+    },
   ]
+
   const classNames = [styles["sign-up-benefits-container"]]
   if (props.className) classNames.push(props.className)
   return (

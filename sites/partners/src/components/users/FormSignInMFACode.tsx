@@ -4,7 +4,6 @@ import {
   Form,
   FormCard,
   t,
-  SiteAlert,
   FormSignInErrorBox,
   NetworkStatus,
   FormSignInControl,
@@ -74,7 +73,6 @@ const FormSignInMFACode = ({
         errorMessageId={"mfa-code"}
       />
 
-      <SiteAlert type="notice" dismissable />
       <div className="form-card__group pt-0">
         <Form id="sign-in-mfa" className="mt-10" onSubmit={handleSubmit(onSubmit, onError)}>
           <Field

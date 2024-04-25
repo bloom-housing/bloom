@@ -649,8 +649,8 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
       return `${listingId}-email-${application.applicant.emailAddress}`;
     } else {
       return (
-        `${listingId}-nameAndDOB-${application.applicant.firstName}-${application.applicant.lastName}-${application.applicant.birthMonth}-` +
-        `${application.applicant.birthDay}-${application.applicant.birthYear}`
+        `${listingId}-nameAndDOB-${application.applicant.firstName.toLowerCase()}-${application.applicant.lastName.toLowerCase()}` +
+        `-${application.applicant.birthMonth}-${application.applicant.birthDay}-${application.applicant.birthYear}`
       );
     }
   }
@@ -748,6 +748,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
                         some: {
                           firstName: {
                             in: firstNames,
+                            mode: 'insensitive',
                           },
                         },
                       },
@@ -756,6 +757,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
                       applicant: {
                         firstName: {
                           in: firstNames,
+                          mode: 'insensitive',
                         },
                       },
                     },
@@ -768,6 +770,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
                         some: {
                           lastName: {
                             in: lastNames,
+                            mode: 'insensitive',
                           },
                         },
                       },
@@ -776,6 +779,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
                       applicant: {
                         lastName: {
                           in: lastNames,
+                          mode: 'insensitive',
                         },
                       },
                     },
@@ -787,7 +791,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
                       householdMember: {
                         some: {
                           birthMonth: {
-                            in: birthMonths,
+                            in: birthMonths.map((val) => Number(val)),
                           },
                         },
                       },
@@ -795,7 +799,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
                     {
                       applicant: {
                         birthMonth: {
-                          in: birthMonths,
+                          in: birthMonths.map((val) => Number(val)),
                         },
                       },
                     },
@@ -807,7 +811,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
                       householdMember: {
                         some: {
                           birthDay: {
-                            in: birthDays,
+                            in: birthDays.map((val) => Number(val)),
                           },
                         },
                       },
@@ -815,7 +819,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
                     {
                       applicant: {
                         birthDay: {
-                          in: birthDays,
+                          in: birthDays.map((val) => Number(val)),
                         },
                       },
                     },
@@ -827,7 +831,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
                       householdMember: {
                         some: {
                           birthYear: {
-                            in: birthYears,
+                            in: birthYears.map((val) => Number(val)),
                           },
                         },
                       },
@@ -835,7 +839,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
                     {
                       applicant: {
                         birthYear: {
-                          in: birthYears,
+                          in: birthYears.map((val) => Number(val)),
                         },
                       },
                     },

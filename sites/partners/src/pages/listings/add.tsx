@@ -1,6 +1,6 @@
 import React from "react"
 import Head from "next/head"
-import { SiteAlert, t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
+import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import Layout from "../../layouts"
 import PaperListingForm from "../../components/listings/PaperListingForm"
 import { MetaTags } from "../../components/shared/MetaTags"
@@ -22,7 +22,6 @@ const NewListing = () => {
           image={metaImage}
           description={metaDescription}
         />
-        <SiteAlert type="success" timeout={5000} dismissable sticky={true} />
         <NavigationHeader
           className="relative"
           title={t("listings.newListing")}

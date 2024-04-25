@@ -1,9 +1,9 @@
 import React, { useContext, useMemo } from "react"
 import { useRouter } from "next/router"
 import dayjs from "dayjs"
-import { t, StatusMessages, setSiteAlertMessage } from "@bloom-housing/ui-components"
+import { t, StatusMessages } from "@bloom-housing/ui-components"
 import { Button, Link, Grid, Icon } from "@bloom-housing/ui-seeds"
-import { pdfUrlFromListingEvents, AuthContext } from "@bloom-housing/shared-helpers"
+import { pdfUrlFromListingEvents, AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import PencilSquareIcon from "@heroicons/react/24/solid/PencilSquareIcon"
 import LinkIcon from "@heroicons/react/20/solid/LinkIcon"
 import { ListingContext } from "./ListingContext"
@@ -40,6 +40,7 @@ const ListingFormActions = ({
 }: ListingFormActionsProps) => {
   const listing = useContext(ListingContext)
   const { profile, listingsService } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
   const router = useRouter()
 
   // single jurisdiction check covers jurisAdmin adding a listing (listing is undefined then)
@@ -254,19 +255,26 @@ const ListingFormActions = ({
                   id: listing.id,
                   body: {
                     ...(listing as unknown as ListingUpdate),
+                    // account for type mismatch between ListingMultiSelectQuestionType and IdDto
+                    listingMultiselectQuestions: listing.listingMultiselectQuestions?.map(
+                      (multiselectQuestions) => ({
+                        ordinal: multiselectQuestions.ordinal,
+                        id: multiselectQuestions.multiselectQuestions?.id,
+                      })
+                    ),
                     status: ListingsStatusEnum.active,
                   },
                 })
                 if (result) {
-                  setSiteAlertMessage(t("listings.approval.listingPublished"), "success")
+                  addToast(t("listings.approval.listingPublished"), { variant: "success" })
                   await router.push(`/`)
                 }
               } catch (err) {
-                setSiteAlertMessage(
+                addToast(
                   err.response?.data?.message === "email failed"
                     ? "errors.alert.listingsApprovalEmailError"
                     : "errors.somethingWentWrong",
-                  "warn"
+                  { variant: "warn" }
                 )
               }
             }
@@ -473,6 +481,7 @@ const ListingFormActions = ({
     listingId,
     listingsService,
     router,
+    addToast,
     showCloseListingModal,
     showLotteryResultsDrawer,
     showRequestChangesModal,

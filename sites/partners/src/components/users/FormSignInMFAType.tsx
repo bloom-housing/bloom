@@ -4,7 +4,6 @@ import {
   Form,
   FormCard,
   t,
-  SiteAlert,
   FormSignInErrorBox,
   NetworkStatus,
 } from "@bloom-housing/ui-components"
@@ -57,7 +56,6 @@ const FormSignInMFAType = ({
         errorMessageId={"mfa-type"}
       />
 
-      <SiteAlert type="notice" dismissable />
       <div className="form-card__group pt-0">
         <Form id="sign-in-mfa" className="mt-10" onSubmit={handleSubmit(onSubmit, onError)}>
           <Field

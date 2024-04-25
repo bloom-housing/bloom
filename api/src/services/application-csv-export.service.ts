@@ -4,6 +4,7 @@ import { Injectable, StreamableFile } from '@nestjs/common';
 import { Request as ExpressRequest, Response } from 'express';
 import { view } from './application.service';
 import { PrismaService } from './prisma.service';
+import { ApplicationSubmissionTypeEnum } from '@prisma/client';
 import { MultiselectQuestionService } from './multiselect-question.service';
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
 import { UnitType } from '../dtos/unit-types/unit-type.dto';
@@ -15,6 +16,7 @@ import { User } from '../dtos/users/user.dto';
 import { ListingService } from './listing.service';
 import { PermissionService } from './permission.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import { formatLocalDate } from '../utilities/format-local-date';
 import {
   CsvExporterServiceInterface,
   CsvHeader,
@@ -23,7 +25,11 @@ import { mapTo } from '../utilities/mapTo';
 
 view.csv = {
   ...view.details,
-  applicationFlaggedSet: true,
+  applicationFlaggedSet: {
+    select: {
+      id: true,
+    },
+  },
   listings: false,
 };
 
@@ -37,16 +43,20 @@ export const typeMap = {
   fiveBdrm: 'Five Bedroom',
 };
 
+const NUMBER_TO_PAGINATE_BY = 500;
+
 @Injectable()
 export class ApplicationCsvExporterService
   implements CsvExporterServiceInterface
 {
+  readonly dateFormat: string = 'MM-DD-YYYY hh:mm:ssA z';
   constructor(
     private prisma: PrismaService,
     private multiselectQuestionService: MultiselectQuestionService,
     private listingService: ListingService,
     private permissionService: PermissionService,
   ) {}
+
   /**
    *
    * @param queryParams
@@ -60,12 +70,14 @@ export class ApplicationCsvExporterService
   ): Promise<StreamableFile> {
     const user = mapTo(User, req['user']);
     await this.authorizeCSVExport(user, queryParams.listingId);
+
     const filename = join(
       process.cwd(),
       `src/temp/listing-${queryParams.listingId}-applications-${
         user.id
       }-${new Date().getTime()}.csv`,
     );
+
     await this.createCsv(filename, queryParams);
     const file = createReadStream(filename);
     return new StreamableFile(file);
@@ -81,12 +93,15 @@ export class ApplicationCsvExporterService
     filename: string,
     queryParams: QueryParams,
   ): Promise<void> {
-    if (queryParams.includeDemographics) {
-      view.csv.demographics = true;
-    }
-
     const applications = await this.prisma.applications.findMany({
-      include: view.csv,
+      select: {
+        id: true,
+        householdMember: {
+          select: {
+            id: true,
+          },
+        },
+      },
       where: {
         listingId: queryParams.listingId,
         deletedAt: null,
@@ -99,18 +114,22 @@ export class ApplicationCsvExporterService
         queryParams.listingId,
       );
 
-    // get maxHouseholdMembers or associated to the selected applications
-    const maxHouseholdMembers = await this.maxHouseholdMembers(
-      applications.map((application) => application.id),
-    );
+    // get maxHouseholdMembers associated to the selected applications
+    let maxHouseholdMembers = 0;
+    applications.forEach((app) => {
+      if (app.householdMember?.length > maxHouseholdMembers) {
+        maxHouseholdMembers = app.householdMember.length;
+      }
+    });
 
     const csvHeaders = await this.getCsvHeaders(
       maxHouseholdMembers,
       multiSelectQuestions,
+      queryParams.timeZone,
       queryParams.includeDemographics,
     );
 
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       // create stream
       const writableStream = fs.createWriteStream(`${filename}`);
       writableStream
@@ -122,71 +141,114 @@ export class ApplicationCsvExporterService
         .on('close', () => {
           resolve();
         })
-        .on('open', () => {
+        .on('open', async () => {
           writableStream.write(
             csvHeaders
               .map((header) => `"${header.label.replace(/"/g, `""`)}"`)
               .join(',') + '\n',
           );
 
-          // now loop over applications and write them to file
-          applications.forEach((app) => {
-            let row = '';
-            let preferences: ApplicationMultiselectQuestion[];
-            csvHeaders.forEach((header, index) => {
-              let multiselectQuestionValue = false;
-              let parsePreference = false;
-              let value = header.path.split('.').reduce((acc, curr) => {
-                // return preference/program as value for the format function to accept
-                if (multiselectQuestionValue) {
-                  return acc;
-                }
+          const promiseArray: Promise<string>[] = [];
+          for (let i = 0; i < applications.length; i += NUMBER_TO_PAGINATE_BY) {
+            promiseArray.push(
+              new Promise(async (resolve) => {
+                // grab applications NUMBER_TO_PAGINATE_BY at a time
+                const paginatedApplications =
+                  await this.prisma.applications.findMany({
+                    include: {
+                      ...view.csv,
+                      demographics: queryParams.includeDemographics
+                        ? {
+                            select: {
+                              id: true,
+                              createdAt: true,
+                              updatedAt: true,
+                              ethnicity: true,
+                              gender: true,
+                              sexualOrientation: true,
+                              howDidYouHear: true,
+                              race: true,
+                            },
+                          }
+                        : false,
+                    },
+                    where: {
+                      listingId: queryParams.listingId,
+                      deletedAt: null,
+                    },
+                    skip: i,
+                    take: NUMBER_TO_PAGINATE_BY,
+                  });
 
-                if (parsePreference) {
-                  // curr should equal the preference id we're pulling from
-                  if (!preferences) {
-                    preferences =
-                      app.preferences as unknown as ApplicationMultiselectQuestion[];
-                  }
-                  parsePreference = false;
-                  // there aren't typically many preferences, but if there, then a object map should be created and used
-                  const preference = preferences.find(
-                    (preference) => preference.multiselectQuestionId === curr,
-                  );
-                  multiselectQuestionValue = true;
-                  return preference;
-                }
+                let row = '';
+                paginatedApplications.forEach((app) => {
+                  let preferences: ApplicationMultiselectQuestion[];
+                  csvHeaders.forEach((header, index) => {
+                    let multiselectQuestionValue = false;
+                    let parsePreference = false;
+                    let value = header.path.split('.').reduce((acc, curr) => {
+                      // return preference/program as value for the format function to accept
+                      if (multiselectQuestionValue) {
+                        return acc;
+                      }
 
-                // sets parsePreference to true, for the next iteration
-                if (curr === 'preferences') {
-                  parsePreference = true;
-                }
+                      if (parsePreference) {
+                        // curr should equal the preference id we're pulling from
+                        if (!preferences) {
+                          preferences =
+                            app.preferences as unknown as ApplicationMultiselectQuestion[];
+                        }
+                        parsePreference = false;
+                        // there aren't typically many preferences, but if there, then a object map should be created and used
+                        const preference = preferences.find(
+                          (preference) =>
+                            preference.multiselectQuestionId === curr,
+                        );
+                        multiselectQuestionValue = true;
+                        return preference;
+                      }
 
-                if (acc === null || acc === undefined) {
-                  return '';
-                }
+                      // sets parsePreference to true, for the next iteration
+                      if (curr === 'preferences') {
+                        parsePreference = true;
+                      }
 
-                // handles working with arrays, e.g. householdMember.0.firstName
-                if (!isNaN(Number(curr))) {
-                  const index = Number(curr);
-                  return acc[index];
-                }
+                      if (acc === null || acc === undefined) {
+                        return '';
+                      }
 
-                return acc[curr];
-              }, app);
-              value = value === undefined ? '' : value === null ? '' : value;
-              if (header.format) {
-                value = header.format(value);
-              }
+                      // handles working with arrays, e.g. householdMember.0.firstName
+                      if (!isNaN(Number(curr))) {
+                        const index = Number(curr);
+                        return acc[index];
+                      }
 
-              row += value ? `"${value.toString().replace(/"/g, `""`)}"` : '';
-              if (index < csvHeaders.length - 1) {
-                row += ',';
-              }
-            });
+                      return acc[curr];
+                    }, app);
+                    value =
+                      value === undefined ? '' : value === null ? '' : value;
+                    if (header.format) {
+                      value = header.format(value);
+                    }
 
+                    row += value
+                      ? `"${value.toString().replace(/"/g, `""`)}"`
+                      : '';
+                    if (index < csvHeaders.length - 1) {
+                      row += ',';
+                    }
+                  });
+                  row += '\n';
+                });
+                resolve(row);
+              }),
+            );
+          }
+          const resolvedArray = await Promise.all(promiseArray);
+          // now loop over batched row data and write them to file
+          resolvedArray.forEach((row) => {
             try {
-              writableStream.write(row + '\n');
+              writableStream.write(row);
             } catch (e) {
               console.log('writeStream write error = ', e);
               writableStream.once('drain', () => {
@@ -195,34 +257,9 @@ export class ApplicationCsvExporterService
               });
             }
           });
-
           writableStream.end();
         });
     });
-  }
-
-  async maxHouseholdMembers(applicationIds: string[]): Promise<number> {
-    const maxHouseholdMembersRes = await this.prisma.householdMember.groupBy({
-      by: ['applicationId'],
-      _count: {
-        applicationId: true,
-      },
-      where: {
-        OR: applicationIds.map((id) => {
-          return { applicationId: id };
-        }),
-      },
-      orderBy: {
-        _count: {
-          applicationId: 'desc',
-        },
-      },
-      take: 1,
-    });
-
-    return maxHouseholdMembersRes && maxHouseholdMembersRes.length
-      ? maxHouseholdMembersRes[0]._count.applicationId
-      : 0;
   }
 
   getHouseholdCsvHeaders(maxHouseholdMembers: number): CsvHeader[] {
@@ -299,6 +336,7 @@ export class ApplicationCsvExporterService
   async getCsvHeaders(
     maxHouseholdMembers: number,
     multiSelectQuestions: MultiselectQuestion[],
+    timeZone: string,
     includeDemographics = false,
   ): Promise<CsvHeader[]> {
     const headers: CsvHeader[] = [
@@ -313,10 +351,20 @@ export class ApplicationCsvExporterService
       {
         path: 'submissionType',
         label: 'Application Type',
+        format: (val: string): string =>
+          val === ApplicationSubmissionTypeEnum.electronical
+            ? 'electronic'
+            : val,
       },
       {
         path: 'submissionDate',
         label: 'Application Submission Date',
+        format: (val: string): string =>
+          formatLocalDate(
+            val,
+            this.dateFormat,
+            timeZone ?? process.env.TIME_ZONE,
+          ),
       },
       {
         path: 'applicant.firstName',
