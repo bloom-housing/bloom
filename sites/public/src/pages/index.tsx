@@ -65,7 +65,11 @@ export default function Home(props: IndexProps) {
                   {t("welcome.signUp")}
                 </Heading>
               }
-              icon={<Icon size="2xl">{CustomIconMap.envelope}</Icon>}
+              icon={
+                <Icon size="2xl" outlined>
+                  {CustomIconMap.envelope}
+                </Icon>
+              }
               actions={[
                 <Button
                   key={"sign-up"}
@@ -86,7 +90,11 @@ export default function Home(props: IndexProps) {
                 {t("welcome.seeMoreOpportunitiesTruncated")}
               </Heading>
             }
-            icon={<Icon size="2xl">{CustomIconMap.home}</Icon>}
+            icon={
+              <Icon size="2xl" outlined>
+                {CustomIconMap.home}
+              </Icon>
+            }
             actions={[
               <Button
                 key={"additional-resources"}

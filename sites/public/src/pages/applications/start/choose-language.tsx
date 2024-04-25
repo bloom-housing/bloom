@@ -117,7 +117,11 @@ const ApplicationChooseLanguage = () => {
             <ImageCard imageUrl={imageUrl} description={listing.name} />
             <Message
               className={styles["message-inside-card"]}
-              customIcon={<Icon size="md">{CustomIconMap.clock}</Icon>}
+              customIcon={
+                <Icon size="md" outlined>
+                  {CustomIconMap.clock}
+                </Icon>
+              }
               fullwidth
             >
               {appStatusContent}
