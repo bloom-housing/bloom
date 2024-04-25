@@ -49,12 +49,14 @@ const ApplicationSummary = () => {
 
   useEffect(() => {
     if (listing && router.isReady) {
-      if (listing?.status !== ListingsStatusEnum.active) {
+      if (conductor.config.isPreview) {
+        void router.push(`/${router.locale}/preview/listings/${listing?.id}`)
+      } else if (listing?.status !== ListingsStatusEnum.active) {
         setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
         void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
       }
     }
-  }, [listing, router])
+  }, [conductor.config.isPreview, listing, router])
 
   useEffect(() => {
     conductor.application.reachedReviewStep = true
@@ -140,7 +142,11 @@ const ApplicationSummary = () => {
             <Button
               variant={"primary"}
               id={"app-summary-confirm"}
-              disabled={validationError}
+              disabled={
+                validationError ||
+                listing?.status !== ListingsStatusEnum.active ||
+                conductor.config.isPreview
+              }
               type={"submit"}
             >
               {t("t.confirm")}

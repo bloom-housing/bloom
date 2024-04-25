@@ -33,13 +33,14 @@ const loadListing = async (
   stateFunction,
   conductor,
   context,
-  language
+  language,
+  isPreview
 ) => {
   const response = await axios.get(`${backendApiBase}/listings/${listingId}`, {
     headers: { language },
   })
   conductor.listing = response.data
-  const applicationConfig = retrieveApplicationConfig(conductor.listing) // TODO: load from backend
+  const applicationConfig = retrieveApplicationConfig(conductor.listing, isPreview) // TODO: load from backend
   conductor.config = applicationConfig
   stateFunction(conductor.listing)
   context.syncListing(conductor.listing)
@@ -58,7 +59,6 @@ const ApplicationChooseLanguage = (props: ChooseLanguageProps) => {
 
   const listingId = router.query.listingId
   const isPreview = router.query.preview === "true"
-  conductor.config.preview = isPreview
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -80,7 +80,15 @@ const ApplicationChooseLanguage = (props: ChooseLanguageProps) => {
       }
     }
     if (!context.listing || context.listing.id !== listingId) {
-      void loadListing(props.backendApiBase, listingId, setListing, conductor, context, "en")
+      void loadListing(
+        props.backendApiBase,
+        listingId,
+        setListing,
+        conductor,
+        context,
+        "en",
+        isPreview
+      )
     } else {
       conductor.listing = context.listing
       setListing(context.listing)
@@ -111,12 +119,13 @@ const ApplicationChooseLanguage = (props: ChooseLanguageProps) => {
         setListing,
         conductor,
         context,
-        language
+        language,
+        isPreview
       ).then(() => {
         void router.push(conductor.determineNextUrl(), null, { locale: language })
       })
     },
-    [conductor, context, listingId, router, props]
+    [conductor, isPreview, props.backendApiBase, listingId, context, router]
   )
 
   const { content: appStatusContent } = useGetApplicationStatusProps(listing)

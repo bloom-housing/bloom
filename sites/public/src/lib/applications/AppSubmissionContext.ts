@@ -6,9 +6,10 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
-export const retrieveApplicationConfig = (listing: Listing) => {
+export const retrieveApplicationConfig = (listing: Listing, isPreview?: boolean) => {
   // Note: this whole function will eventually be replaced with one that reads this from the backend.
   const config = {
+    isPreview,
     sections: ["you", "household"],
     languages: ["en", "es", "zh", "vi", "tl"],
     steps: [
