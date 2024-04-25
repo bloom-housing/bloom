@@ -16,7 +16,7 @@ import {
 import { Button, Icon } from "@bloom-housing/ui-seeds"
 import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
 import ChevronRightIcon from "@heroicons/react/20/solid/ChevronRightIcon"
-import { AuthContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
+import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import {
   ListingCreate,
   ListingEventsTypeEnum,

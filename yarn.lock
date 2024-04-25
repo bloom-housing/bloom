@@ -1806,15 +1806,14 @@
     tailwindcss-rtl "^0.9.0"
     typesafe-actions "^5.1.0"
 
-"@bloom-housing/ui-seeds@1.12.2":
-  version "1.12.2"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.12.2.tgz#49a8b4439b16c9d0231bf326fde8a39012979ce7"
-  integrity sha512-GSMxJ9AplzQs5mYdUapakYMCS78hKClUtN2tpztG0d9d2Y5WDwWC+uUJkX4ARrz4k8x7UsT+JE+0UuXPgffrdQ==
+"@bloom-housing/ui-seeds@1.14.0":
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.14.0.tgz#9a8543bfa3e1c037555fb75297ab1ebbe91d6708"
+  integrity sha512-h3xmKs+J0GUMtBqS3IvaXBoO3ApRYjoHSiTZIfhhXkrlzxqK1mg/BANGTf19RR16AuMO/qLxDAUSFoSAkLUIBg==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.3.0"
-    "@fortawesome/free-regular-svg-icons" "^6.3.0"
-    "@fortawesome/free-solid-svg-icons" "^6.3.0"
     "@fortawesome/react-fontawesome" "^0.2.0"
+    "@heroicons/react" "^2.0.18"
     "@types/markdown-to-jsx" "^6.11.2"
     "@types/mdx" "^2.0.3"
     "@types/node" "^16.7.13"
@@ -2137,14 +2136,14 @@
   dependencies:
     "@fortawesome/fontawesome-common-types" "6.4.0"
 
-"@fortawesome/free-regular-svg-icons@^6.1.1", "@fortawesome/free-regular-svg-icons@^6.3.0":
+"@fortawesome/free-regular-svg-icons@^6.1.1":
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/@fortawesome/free-regular-svg-icons/-/free-regular-svg-icons-6.4.0.tgz#cacc53bd8d832d46feead412d9ea9ce80a55e13a"
   integrity sha512-ZfycI7D0KWPZtf7wtMFnQxs8qjBXArRzczABuMQqecA/nXohquJ5J/RCR77PmY5qGWkxAZDxpnUFVXKwtY/jPw==
   dependencies:
     "@fortawesome/fontawesome-common-types" "6.4.0"
 
-"@fortawesome/free-solid-svg-icons@^6.1.1", "@fortawesome/free-solid-svg-icons@^6.3.0":
+"@fortawesome/free-solid-svg-icons@^6.1.1":
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-6.4.0.tgz#48c0e790847fa56299e2f26b82b39663b8ad7119"
   integrity sha512-kutPeRGWm8V5dltFP1zGjQOEAzaLZj4StdQhWVZnfGFCvAPVvHh8qk5bRrU4KXnRRRNni5tKQI9PBAdI6MP8nQ==
@@ -2261,6 +2260,11 @@
   integrity sha512-tFJlT47db0kMqVm3H4nQYgn6Pwg10GTZHb1pwmSiv1K4ks6drQOtfEF5ZnPjkvC+y4/bUPHK+bc87QvLcL+WMw==
   dependencies:
     "@hapi/hoek" "^9.0.0"
+
+"@heroicons/react@^2.0.18":
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/@heroicons/react/-/react-2.1.3.tgz#78a2a7f504a7370283d07eabcddc7fec04f503db"
+  integrity sha512-fEcPfo4oN345SoqdlCDdSa4ivjaKbk0jTd+oubcgNxnNgAfzysfwWfQUr+51wigiWHQQRiZNd1Ao0M5Y3M2EGg==
 
 "@heroicons/react@^2.1.1":
   version "2.1.1"
