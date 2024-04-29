@@ -667,7 +667,7 @@ export class ApplicationService {
     if (dto.applicant.emailAddress && forPublic) {
       this.emailService.applicationConfirmation(
         mapTo(Listing, listing),
-        dto,
+        mappedApplication,
         listing.jurisdictions?.publicUrl,
       );
     }
