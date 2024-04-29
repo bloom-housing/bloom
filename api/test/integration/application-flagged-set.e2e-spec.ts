@@ -732,6 +732,7 @@ describe('Application flagged set Controller Tests', () => {
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
       .set('Cookie', adminAccessToken)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .expect(200);
 
     const afs = await prisma.applicationFlaggedSet.findMany({
@@ -1428,6 +1429,7 @@ describe('Application flagged set Controller Tests', () => {
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
       .set('Cookie', adminAccessToken)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .expect(200);
 
     const afs = await prisma.applicationFlaggedSet.findMany({
