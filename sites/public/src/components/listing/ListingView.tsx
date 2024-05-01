@@ -378,6 +378,7 @@ export const ListingView = (props: ListingProps) => {
     initialStateLoaded &&
     !profile &&
     onlineApplicationURLInfo.isCommonApp &&
+    !props.isExternal &&
     !props.preview
 
   const applySidebar = () => (
