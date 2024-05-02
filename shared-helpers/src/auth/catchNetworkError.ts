@@ -31,6 +31,7 @@ export enum NetworkErrorMessage {
   MfaUnauthorized = "mfaUnauthorized",
   SingleUseCodeUnauthorized = "singleUseCodeUnauthorized",
   MfaPublicSite = "A user with MFA required is attempting to login to the public site",
+  mfaCodeIsMissing = "mfaCodeIsMissing",
 }
 
 /**
@@ -62,6 +63,12 @@ export const useCatchNetworkError = () => {
         description: t("authentication.signIn.afterFailedAttempts", {
           count: error?.response?.data?.failureCountRemaining || 5,
         }),
+        error,
+      })
+    } else if (NetworkErrorMessage.mfaCodeIsMissing) {
+      setNetworkError({
+        title: t("errors.somethingWentWrong"),
+        description: t("authentication.signIn.mfaError"),
         error,
       })
     } else {
