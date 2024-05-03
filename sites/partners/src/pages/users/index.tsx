@@ -2,9 +2,9 @@ import React, { useContext, useMemo, useState } from "react"
 import Head from "next/head"
 import dayjs from "dayjs"
 import { useSWRConfig } from "swr"
-import { AgTable, useAgTable, t, Drawer, AlertBox } from "@bloom-housing/ui-components"
+import { AgTable, useAgTable, t, AlertBox } from "@bloom-housing/ui-components"
 import { User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { Button, Icon } from "@bloom-housing/ui-seeds"
+import { Button, Drawer, Icon } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts"
 import { useUserList, useListingsData, useUsersExport } from "../../lib/hooks"
@@ -192,9 +192,8 @@ const Users = () => {
       </section>
 
       <Drawer
-        open={!!userDrawer}
+        isOpen={!!userDrawer}
         title={userDrawer?.type === "add" ? t("users.addUser") : t("users.editUser")}
-        ariaDescription={t("users.addUser")}
         onClose={() => setUserDrawer(null)}
       >
         <FormUserManage

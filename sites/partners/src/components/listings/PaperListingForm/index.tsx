@@ -6,14 +6,13 @@ import {
   Form,
   AlertBox,
   LoadingOverlay,
-  Modal,
   Tabs,
   TabList,
   Tab,
   TabPanel,
   LatitudeLongitude,
 } from "@bloom-housing/ui-components"
-import { Button, Icon } from "@bloom-housing/ui-seeds"
+import { Button, Dialog, Icon } from "@bloom-housing/ui-seeds"
 import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
 import ChevronRightIcon from "@heroicons/react/20/solid/ChevronRightIcon"
 import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
@@ -432,12 +431,14 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         </>
       </LoadingOverlay>
 
-      <Modal
-        open={!!closeModal}
-        title={t("t.areYouSure")}
+      <Dialog
+        isOpen={!!closeModal}
         ariaDescription={t("listings.closeThisListing")}
         onClose={() => setCloseModal(false)}
-        actions={[
+      >
+        <Dialog.Header>{t("t.areYouSure")}</Dialog.Header>
+        <Dialog.Content>{t("listings.closeThisListing")}</Dialog.Content>
+        <Dialog.Footer>
           <Button
             type="button"
             variant="secondary"
@@ -448,7 +449,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             size="sm"
           >
             {t("listings.actions.close")}
-          </Button>,
+          </Button>
           <Button
             type="button"
             variant="primary-outlined"
@@ -458,18 +459,18 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             size="sm"
           >
             {t("t.cancel")}
-          </Button>,
-        ]}
-      >
-        {t("listings.closeThisListing")}
-      </Modal>
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
 
-      <Modal
-        open={!!publishModal}
-        title={t("t.areYouSure")}
+      <Dialog
+        isOpen={!!publishModal}
         ariaDescription={t("listings.publishThisListing")}
         onClose={() => setPublishModal(false)}
-        actions={[
+      >
+        <Dialog.Header>{t("t.areYouSure")}</Dialog.Header>
+        <Dialog.Content>{t("listings.publishThisListing")}</Dialog.Content>
+        <Dialog.Footer>
           <Button
             id="publishButtonConfirm"
             type="button"
@@ -481,7 +482,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             size="sm"
           >
             {t("listings.actions.publish")}
-          </Button>,
+          </Button>
           <Button
             type="button"
             variant="primary-outlined"
@@ -491,18 +492,18 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             size="sm"
           >
             {t("t.cancel")}
-          </Button>,
-        ]}
-      >
-        {t("listings.publishThisListing")}
-      </Modal>
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
 
-      <Modal
-        open={listingIsAlreadyLiveModal}
-        title={t("t.areYouSure")}
+      <Dialog
+        isOpen={listingIsAlreadyLiveModal}
         ariaDescription={t("listings.listingIsAlreadyLive")}
         onClose={() => setListingIsAlreadyLiveModal(false)}
-        actions={[
+      >
+        <Dialog.Header>{t("t.areYouSure")}</Dialog.Header>
+        <Dialog.Content>{t("listings.listingIsAlreadyLive")}</Dialog.Content>
+        <Dialog.Footer>
           <Button
             id="saveAlreadyLiveListingButtonConfirm"
             type="button"
@@ -514,7 +515,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             size="sm"
           >
             {t("t.save")}
-          </Button>,
+          </Button>
           <Button
             type="button"
             variant="primary-outlined"
@@ -524,18 +525,18 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             size="sm"
           >
             {t("t.cancel")}
-          </Button>,
-        ]}
-      >
-        {t("listings.listingIsAlreadyLive")}
-      </Modal>
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
 
-      <Modal
-        open={submitForApprovalModal}
-        title={t("t.areYouSure")}
+      <Dialog
+        isOpen={submitForApprovalModal}
         ariaDescription={t("listings.approval.submitForApprovalDescription")}
         onClose={() => setSubmitForApprovalModal(false)}
-        actions={[
+      >
+        <Dialog.Header>{t("t.areYouSure")}</Dialog.Header>
+        <Dialog.Content>{t("listings.approval.submitForApprovalDescription")}</Dialog.Content>
+        <Dialog.Footer>
           <Button
             id="submitListingForApprovalButtonConfirm"
             type="button"
@@ -547,7 +548,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             size="sm"
           >
             {t("t.submit")}
-          </Button>,
+          </Button>
           <Button
             type="button"
             onClick={() => {
@@ -556,11 +557,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             size="sm"
           >
             {t("t.cancel")}
-          </Button>,
-        ]}
-      >
-        {t("listings.approval.submitForApprovalDescription")}
-      </Modal>
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
 
       <RequestChangesModal
         defaultValue={listing?.requestedChanges}

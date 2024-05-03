@@ -1,7 +1,7 @@
 import React, { useContext, useMemo, useState } from "react"
 import dayjs from "dayjs"
-import { t, StatusMessages, Modal } from "@bloom-housing/ui-components"
-import { Button, Grid, Link } from "@bloom-housing/ui-seeds"
+import { t, StatusMessages } from "@bloom-housing/ui-components"
+import { Button, Dialog, Grid, Link } from "@bloom-housing/ui-seeds"
 import { ApplicationContext } from "./ApplicationContext"
 import { StatusAside } from "../shared/StatusAside"
 
@@ -115,12 +115,16 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
         {type === "edit" && <StatusMessages lastTimestamp={applicationUpdated} />}
       </StatusAside>
 
-      <Modal
-        open={!!deleteModal}
-        title={t("application.deleteThisApplication")}
+      <Dialog
+        isOpen={!!deleteModal}
         ariaDescription={t("application.deleteApplicationDescription")}
         onClose={() => setDeleteModal(false)}
-        actions={[
+      >
+        <Dialog.Header>{t("application.deleteThisApplication")}</Dialog.Header>
+        <Dialog.Content>
+          <p>{t("application.deleteApplicationDescription")}</p>
+        </Dialog.Content>
+        <Dialog.Footer>
           <Button
             variant="alert"
             onClick={() => {
@@ -130,7 +134,7 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
             size="sm"
           >
             {t("t.delete")}
-          </Button>,
+          </Button>
           <Button
             variant="primary-outlined"
             onClick={() => {
@@ -139,11 +143,9 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
             size="sm"
           >
             {t("t.cancel")}
-          </Button>,
-        ]}
-      >
-        {t("application.deleteApplicationDescription")}
-      </Modal>
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
     </>
   )
 }

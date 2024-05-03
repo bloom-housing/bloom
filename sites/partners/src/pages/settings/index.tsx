@@ -8,9 +8,8 @@ import {
   StandardCard,
   t,
   useMutate,
-  Modal,
 } from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
+import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts"
@@ -219,12 +218,14 @@ const Settings = () => {
         saveQuestion={saveQuestion}
         isLoading={isCreateLoading || isUpdateLoading}
       />
-      <Modal
-        open={!!copyModalOpen}
-        title={t("t.copy")}
+      <Dialog
+        isOpen={!!copyModalOpen}
         ariaDescription={t("listings.listingIsAlreadyLive")}
         onClose={() => setCopyModalOpen(null)}
-        actions={[
+      >
+        <Dialog.Header>{t("t.copy")}</Dialog.Header>
+        <Dialog.Content>{t("settings.createCopyDescription")}</Dialog.Content>
+        <Dialog.Footer>
           <Button
             type="button"
             variant="primary-outlined"
@@ -236,7 +237,7 @@ const Settings = () => {
             size="sm"
           >
             {t("settings.copy")}
-          </Button>,
+          </Button>
           <Button
             variant="primary-outlined"
             type="button"
@@ -248,11 +249,9 @@ const Settings = () => {
             size="sm"
           >
             {t("t.cancel")}
-          </Button>,
-        ]}
-      >
-        {t("settings.createCopyDescription")}
-      </Modal>
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
       {deleteConfirmModalOpen && (
         <PreferenceDeleteModal
           multiselectQuestion={deleteConfirmModalOpen}

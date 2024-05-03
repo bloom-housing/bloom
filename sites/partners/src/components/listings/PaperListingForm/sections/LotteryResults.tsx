@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import {
   t,
-  Drawer,
   Dropzone,
   MinimalTable,
   TableThumbnail,
@@ -14,7 +13,7 @@ import {
   ListingEventCreate,
   ListingEventsTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { Button, Card } from "@bloom-housing/ui-seeds"
+import { Button, Card, Drawer } from "@bloom-housing/ui-seeds"
 import { cloudinaryFileUploader } from "../../../../lib/helpers"
 
 interface LotteryResultsProps {
@@ -133,11 +132,29 @@ const LotteryResults = (props: LotteryResultsProps) => {
 
   return (
     <Drawer
-      open={drawerState}
-      title={t(title)}
+      isOpen={drawerState}
       onClose={() => resetDrawerState()}
       ariaDescription="Form to upload lottery results"
-      actions={[
+    >
+      <Drawer.Header>{t(title)}</Drawer.Header>
+      <Drawer.Content>
+        <Card spacing="lg">
+          <Card.Section>
+            <Dropzone
+              id="lottery-results-upload"
+              label={t("listings.sections.lotteryResultsHelperText")}
+              helptext={t("listings.pdfHelperText")}
+              uploader={pdfUploader}
+              accept="application/pdf"
+              progress={progressValue}
+            />
+            {cloudinaryData.url !== "" && (
+              <MinimalTable headers={resultsTableHeaders} data={previewTableRows}></MinimalTable>
+            )}
+          </Card.Section>
+        </Card>
+      </Drawer.Content>
+      <Drawer.Footer>
         <Button
           key={0}
           onClick={() => {
@@ -148,7 +165,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
           size="sm"
         >
           {progressValue === 100 ? t("t.post") : t("t.save")}
-        </Button>,
+        </Button>
         <Button
           key={1}
           onClick={() => {
@@ -158,24 +175,8 @@ const LotteryResults = (props: LotteryResultsProps) => {
           size="sm"
         >
           {t("t.cancel")}
-        </Button>,
-      ]}
-    >
-      <Card spacing="lg" className="spacer-section">
-        <Card.Section>
-          <Dropzone
-            id="lottery-results-upload"
-            label={t("listings.sections.lotteryResultsHelperText")}
-            helptext={t("listings.pdfHelperText")}
-            uploader={pdfUploader}
-            accept="application/pdf"
-            progress={progressValue}
-          />
-          {cloudinaryData.url !== "" && (
-            <MinimalTable headers={resultsTableHeaders} data={previewTableRows}></MinimalTable>
-          )}
-        </Card.Section>
-      </Card>
+        </Button>
+      </Drawer.Footer>
     </Drawer>
   )
 }

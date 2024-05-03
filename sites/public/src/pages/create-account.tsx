@@ -10,7 +10,7 @@ import {
   Modal,
   passwordRegex,
 } from "@bloom-housing/ui-components"
-import { Button, Heading } from "@bloom-housing/ui-seeds"
+import { Button, Dialog, Heading } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
@@ -287,9 +287,8 @@ export default () => {
           </div>
         )}
       </div>
-      <Modal
-        open={openModal}
-        title={t("authentication.createAccount.confirmationNeeded")}
+      <Dialog
+        isOpen={openModal}
         ariaDescription={t("authentication.createAccount.anEmailHasBeenSent", {
           email: email.current,
         })}
@@ -297,7 +296,13 @@ export default () => {
           void router.push("/sign-in")
           window.scrollTo(0, 0)
         }}
-        actions={[
+      >
+        <Dialog.Header>{t("authentication.createAccount.confirmationNeeded")}</Dialog.Header>
+        <Dialog.Content>
+          <p>{t("authentication.createAccount.anEmailHasBeenSent", { email: email.current })}</p>
+          <p>{t("authentication.createAccount.confirmationInstruction")}</p>
+        </Dialog.Content>
+        <Dialog.Footer>
           <Button
             variant="primary"
             onClick={() => {
@@ -307,7 +312,7 @@ export default () => {
             size="sm"
           >
             {t("t.ok")}
-          </Button>,
+          </Button>
           <Button
             variant="primary-outlined"
             disabled={confirmationResent}
@@ -318,14 +323,9 @@ export default () => {
             size="sm"
           >
             {t("authentication.createAccount.resendTheEmail")}
-          </Button>,
-        ]}
-      >
-        <>
-          <p>{t("authentication.createAccount.anEmailHasBeenSent", { email: email.current })}</p>
-          <p>{t("authentication.createAccount.confirmationInstruction")}</p>
-        </>
-      </Modal>
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
     </FormsLayout>
   )
 }

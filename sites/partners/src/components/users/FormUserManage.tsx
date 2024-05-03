@@ -1,7 +1,7 @@
 import React, { useMemo, useContext, useState, useCallback } from "react"
 import { FormProvider, useForm } from "react-hook-form"
-import { t, Form, Field, Select, useMutate, emailRegex, Modal } from "@bloom-housing/ui-components"
-import { Button, Card, Grid, Tag } from "@bloom-housing/ui-seeds"
+import { t, Form, Field, Select, useMutate, emailRegex } from "@bloom-housing/ui-components"
+import { Button, Card, Dialog, Grid, Tag } from "@bloom-housing/ui-seeds"
 import { RoleOption, roleKeys, AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { Listing, User, UserRole } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { JurisdictionAndListingSelection } from "./JurisdictionAndListingSelection"
@@ -433,12 +433,16 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
         </div>
       </Form>
 
-      <Modal
-        open={!!isDeleteModalActive}
-        title={t("t.areYouSure")}
+      <Dialog
+        isOpen={!!isDeleteModalActive}
         ariaDescription={t("users.doYouWantDeleteUser")}
         onClose={() => setDeleteModalActive(false)}
-        actions={[
+      >
+        <Dialog.Header>{t("t.areYouSure")}</Dialog.Header>
+        <Dialog.Content>
+          <p>{t("users.doYouWantDeleteUser")}</p>
+        </Dialog.Content>
+        <Dialog.Footer>
           <Button
             type="button"
             variant="alert"
@@ -449,7 +453,7 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
             size="sm"
           >
             {t("t.delete")}
-          </Button>,
+          </Button>
           <Button
             type="button"
             onClick={() => {
@@ -459,11 +463,9 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
             size="sm"
           >
             {t("t.cancel")}
-          </Button>,
-        ]}
-      >
-        {t("users.doYouWantDeleteUser")}
-      </Modal>
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
     </FormProvider>
   )
 }

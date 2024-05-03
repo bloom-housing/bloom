@@ -4,8 +4,8 @@ import {
   HouseholdMemberUpdate,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { t, MinimalTable, Drawer, Modal } from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
+import { t, MinimalTable } from "@bloom-housing/ui-components"
+import { Button, Dialog, Drawer } from "@bloom-housing/ui-seeds"
 import { FormMember } from "../FormMember"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
@@ -149,12 +149,8 @@ const FormHouseholdMembers = ({
         </Button>
       </SectionWithGrid>
 
-      <Drawer
-        open={!!membersDrawer}
-        title={t("application.household.householdMember")}
-        ariaDescription={t("application.household.householdMember")}
-        onClose={() => setMembersDrawer(null)}
-      >
+      <Drawer isOpen={!!membersDrawer} onClose={() => setMembersDrawer(null)}>
+        <Drawer.Header>{t("application.household.householdMember")}</Drawer.Header>
         <FormMember
           onSubmit={(member) => saveMember(member)}
           onClose={() => setMembersDrawer(null)}
@@ -163,15 +159,17 @@ const FormHouseholdMembers = ({
         />
       </Drawer>
 
-      <Modal
-        open={!!membersDeleteModal}
-        title={t("application.deleteThisMember")}
+      <Dialog
+        isOpen={!!membersDeleteModal}
         ariaDescription={t("application.deleteMemberDescription")}
         onClose={() => setMembersDeleteModal(null)}
-        actions={[
+      >
+        <Dialog.Header>{t("application.deleteThisMember")}</Dialog.Header>
+        <Dialog.Content>{t("application.deleteMemberDescription")}</Dialog.Content>
+        <Dialog.Footer>
           <Button variant="alert" onClick={() => deleteMember(membersDeleteModal)} size="sm">
             {t("t.delete")}
-          </Button>,
+          </Button>
           <Button
             variant="primary-outlined"
             onClick={() => {
@@ -180,11 +178,9 @@ const FormHouseholdMembers = ({
             size="sm"
           >
             {t("t.cancel")}
-          </Button>,
-        ]}
-      >
-        {t("application.deleteMemberDescription")}
-      </Modal>
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
     </>
   )
 }

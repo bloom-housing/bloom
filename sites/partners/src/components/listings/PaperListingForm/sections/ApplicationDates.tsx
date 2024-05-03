@@ -3,8 +3,8 @@ import { useWatch, useFormContext } from "react-hook-form"
 import { getDetailFieldDate, getDetailFieldTime } from "../../PaperListingDetails/sections/helpers"
 import dayjs from "dayjs"
 import { YesNoEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { t, DateField, TimeField, Drawer, MinimalTable, Modal } from "@bloom-housing/ui-components"
-import { Button, Link, Grid } from "@bloom-housing/ui-seeds"
+import { t, DateField, TimeField, MinimalTable } from "@bloom-housing/ui-components"
+import { Button, Dialog, Drawer, Link, Grid } from "@bloom-housing/ui-seeds"
 import { FormListing, TempEvent } from "../../../../lib/listings/formTypes"
 import { OpenHouseForm } from "../OpenHouseForm"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
@@ -182,31 +182,31 @@ const ApplicationDates = ({
         </Grid.Row>
       </SectionWithGrid>
 
-      <Drawer
-        open={!!drawerOpenHouse}
-        title={t("listings.sections.addOpenHouse")}
-        ariaDescription={t("listings.sections.addOpenHouse")}
-        onClose={() => setDrawerOpenHouse(false)}
-      >
-        <OpenHouseForm
-          onSubmit={onOpenHouseEventsSubmit}
-          currentEvent={(drawerOpenHouse as TempEvent) || undefined}
-        />
+      <Drawer isOpen={!!drawerOpenHouse} onClose={() => setDrawerOpenHouse(false)}>
+        <>
+          <Drawer.Header>{t("listings.sections.addOpenHouse")}</Drawer.Header>
+          <OpenHouseForm
+            onSubmit={onOpenHouseEventsSubmit}
+            currentEvent={(drawerOpenHouse as TempEvent) || undefined}
+          />
+        </>
       </Drawer>
 
-      <Modal
-        open={!!modalDeleteOpenHouse}
-        title={t("listings.events.deleteThisEvent")}
+      <Dialog
+        isOpen={!!modalDeleteOpenHouse}
         ariaDescription={t("listings.events.deleteConf")}
         onClose={() => setModalDeleteOpenHouse(null)}
-        actions={[
+      >
+        <Dialog.Header>{t("listings.events.deleteThisEvent")}</Dialog.Header>
+        <Dialog.Content>{t("listings.events.deleteConf")}</Dialog.Content>
+        <Dialog.Footer>
           <Button
             variant="alert"
             onClick={() => onOpenHouseEventDelete(modalDeleteOpenHouse)}
             size="sm"
           >
             {t("t.delete")}
-          </Button>,
+          </Button>
           <Button
             onClick={() => {
               setModalDeleteOpenHouse(null)
@@ -215,11 +215,9 @@ const ApplicationDates = ({
             size="sm"
           >
             {t("t.cancel")}
-          </Button>,
-        ]}
-      >
-        {t("listings.events.deleteConf")}
-      </Modal>
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
     </>
   )
 }

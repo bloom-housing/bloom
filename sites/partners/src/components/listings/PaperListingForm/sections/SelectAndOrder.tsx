@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react"
-import { t, MinimalTable, Drawer, Field, StandardTableData } from "@bloom-housing/ui-components"
+import { t, MinimalTable, Field, StandardTableData } from "@bloom-housing/ui-components"
 import {
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { Button, Card, Grid, Tag, Icon } from "@bloom-housing/ui-seeds"
+import { Button, Card, Drawer, Grid, Tag, Icon } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
 import InformationCircleIcon from "@heroicons/react/24/solid/InformationCircleIcon"
 import LinkComponent from "../../../../components/core/LinkComponent"
@@ -289,112 +289,120 @@ const SelectAndOrder = ({
       </SectionWithGrid>
 
       <Drawer
-        open={!!tableDrawer}
-        title={drawerTitle}
-        ariaDescription={drawerTitle}
+        isOpen={!!tableDrawer}
         onClose={() => {
           if (!selectDrawer) {
             setTableDrawer(null)
           }
         }}
       >
-        <div className="border rounded-md p-8 bg-white">
-          {!!draftListingData.length && (
-            <div className="mb-5">
-              <MinimalTable
-                headers={draggableTableHeaders}
-                data={draggableTableData}
-                draggable={true}
-                setData={setDragOrder}
-              />
-            </div>
-          )}
+        <Drawer.Header>{drawerTitle}</Drawer.Header>
+        <Drawer.Content>
+          <Card>
+            <Card.Section>
+              {!!draftListingData.length && (
+                <div className="mb-5">
+                  <MinimalTable
+                    headers={draggableTableHeaders}
+                    data={draggableTableData}
+                    draggable={true}
+                    setData={setDragOrder}
+                  />
+                </div>
+              )}
+              <Button
+                type="button"
+                variant="primary-outlined"
+                onClick={() => {
+                  setSelectDrawer(true)
+                }}
+              >
+                {drawerButtonText}
+              </Button>
+            </Card.Section>
+          </Card>
+        </Drawer.Content>
+        <Drawer.Footer>
           <Button
-            type="button"
-            variant="primary-outlined"
-            onClick={() => {
-              setSelectDrawer(true)
-            }}
-          >
-            {drawerButtonText}
-          </Button>
-        </div>
-        <Button
-          type="button"
-          className={"mt-4"}
-          variant="primary"
-          size="sm"
-          onClick={() => {
-            setListingData(draftListingData)
-            setTableDrawer(null)
-          }}
-        >
-          {t("t.save")}
-        </Button>
-      </Drawer>
-
-      <Drawer
-        open={!!selectDrawer}
-        title={drawerButtonText}
-        ariaDescription={drawerButtonText}
-        onClose={() => {
-          setSelectDrawer(null)
-          setOpenPreviews([])
-        }}
-        className={"drawer__small"}
-      >
-        <Card>
-          <Card.Section>
-            {jurisdiction
-              ? fetchedData.map((item, index) => {
-                  const previewShown = openPreviews.some((preview) => preview === index)
-                  return (
-                    <Grid key={index}>
-                      <Grid.Row>
-                        <Grid.Cell>
-                          <Field
-                            className={"font-semibold"}
-                            id={`${formKey}.${item.id}`}
-                            name={`${formKey}.${item.id}`}
-                            type="checkbox"
-                            label={item.text}
-                            register={register}
-                            inputProps={{
-                              defaultChecked: draftListingData.some(
-                                (existingItem) => existingItem.text === item.text
-                              ),
-                            }}
-                          />
-                          {getPreviewSection(previewShown, index, item)}
-                        </Grid.Cell>
-                      </Grid.Row>
-                    </Grid>
-                  )
-                })
-              : t("listings.selectJurisdiction")}
-          </Card.Section>
-        </Card>
-        {jurisdiction && (
-          <Button
-            id="addPreferenceSaveButton"
             type="button"
             className={"mt-4"}
             variant="primary"
+            size="sm"
             onClick={() => {
-              const formData = getValues()
-              const formItems = []
-              fetchedData.forEach((uniqueItem) => {
-                if (formData[formKey] && formData[formKey][uniqueItem.id]) {
-                  formItems.push(uniqueItem)
-                }
-              })
-              setDraftListingData(formItems)
-              setSelectDrawer(null)
-              setOpenPreviews([])
+              setListingData(draftListingData)
+              setTableDrawer(null)
             }}
           >
             {t("t.save")}
           </Button>
+        </Drawer.Footer>
+      </Drawer>
+
+      <Drawer
+        isOpen={!!selectDrawer}
+        onClose={() => {
+          setSelectDrawer(null)
+          setOpenPreviews([])
+        }}
+        nested
+      >
+        <Drawer.Header>{drawerButtonText}</Drawer.Header>
+        <Drawer.Content>
+          <Card>
+            <Card.Section>
+              {jurisdiction
+                ? fetchedData.map((item, index) => {
+                    const previewShown = openPreviews.some((preview) => preview === index)
+                    return (
+                      <Grid key={index}>
+                        <Grid.Row>
+                          <Grid.Cell>
+                            <Field
+                              className={"font-semibold"}
+                              id={`${formKey}.${item.id}`}
+                              name={`${formKey}.${item.id}`}
+                              type="checkbox"
+                              label={item.text}
+                              register={register}
+                              inputProps={{
+                                defaultChecked: draftListingData.some(
+                                  (existingItem) => existingItem.text === item.text
+                                ),
+                              }}
+                            />
+                            {getPreviewSection(previewShown, index, item)}
+                          </Grid.Cell>
+                        </Grid.Row>
+                      </Grid>
+                    )
+                  })
+                : t("listings.selectJurisdiction")}
+            </Card.Section>
+          </Card>
+        </Drawer.Content>
+        {jurisdiction && (
+          <Drawer.Footer>
+            <Button
+              id="addPreferenceSaveButton"
+              type="button"
+              className={"mt-4"}
+              variant="primary"
+              onClick={() => {
+                const formData = getValues()
+                const formItems = []
+                fetchedData.forEach((uniqueItem) => {
+                  if (formData[formKey] && formData[formKey][uniqueItem.id]) {
+                    formItems.push(uniqueItem)
+                  }
+                })
+                setDraftListingData(formItems)
+                setSelectDrawer(null)
+                setOpenPreviews([])
+              }}
+            >
+              {t("t.save")}
+            </Button>
+          </Drawer.Footer>
         )}
       </Drawer>
     </>

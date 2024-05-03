@@ -3,12 +3,11 @@ import {
   t,
   AppearanceStyleType,
   MinimalTable,
-  Drawer,
   Modal,
   FieldGroup,
   StandardTableData,
 } from "@bloom-housing/ui-components"
-import { Button, FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { Button, Dialog, Drawer, FieldValue, Grid, Tag } from "@bloom-housing/ui-seeds"
 import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import UnitForm from "../UnitForm"
 import { useFormContext, useWatch } from "react-hook-form"
@@ -226,21 +225,25 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
       )}
 
       <Drawer
-        open={unitDrawerOpen}
-        title={t("listings.unit.add")}
-        headerTag={
-          units.some((unit) => unit.tempId === defaultUnit?.tempId) ? t("t.saved") : t("t.draft")
-        }
-        headerTagStyle={
-          units.some((unit) => unit.tempId === defaultUnit?.tempId)
-            ? AppearanceStyleType.success
-            : null
-        }
-        ariaDescription={t("listings.unit.add")}
+        isOpen={unitDrawerOpen}
         onClose={() => setUnitDrawerOpen(false)}
         toastContent={toastContent}
         toastStyle={"success"}
       >
+        <Drawer.Header>
+          {t("listings.unit.add")}
+          <Tag
+            variant={
+              units.some((unit) => unit.tempId === defaultUnit?.tempId)
+                ? "success-inverse"
+                : undefined
+            }
+          >
+            {units.some((unit) => unit.tempId === defaultUnit?.tempId)
+              ? t("t.saved")
+              : t("t.draft")}
+          </Tag>
+        </Drawer.Header>
         <UnitForm
           onSubmit={(unit) => {
             setToastContent(null)
@@ -265,15 +268,13 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
         />
       </Drawer>
 
-      <Modal
-        open={!!unitDeleteModal}
-        title={t("listings.unit.delete")}
-        ariaDescription={t("listings.unit.deleteConf")}
-        onClose={() => setUnitDeleteModal(null)}
-        actions={[
+      <Dialog isOpen={!!unitDeleteModal} onClose={() => setUnitDeleteModal(null)}>
+        <Dialog.Header>{t("listings.unit.delete")}</Dialog.Header>
+        <Dialog.Content>{t("listings.unit.deleteConf")}</Dialog.Content>
+        <Dialog.Footer>
           <Button variant="alert" onClick={() => deleteUnit(unitDeleteModal)} size="sm">
             {t("t.delete")}
-          </Button>,
+          </Button>
           <Button
             onClick={() => {
               setUnitDeleteModal(null)
@@ -282,11 +283,9 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
             size="sm"
           >
             {t("t.cancel")}
-          </Button>,
-        ]}
-      >
-        {t("listings.unit.deleteConf")}
-      </Modal>
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
     </>
   )
 }
