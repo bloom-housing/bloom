@@ -34,6 +34,8 @@ const Applications = () => {
         .list({ userId: profile.id })
         .then((apps) => {
           apps?.items?.length > 0 ? setApplications(apps.items) : setLoading(false)
+          setListLoading(true)
+          // Setting list loading to true because we want to reassociate the listings with applications
         })
         .catch((err) => {
           console.error(`Error fetching applications: ${err}`)
