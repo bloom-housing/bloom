@@ -26,7 +26,7 @@
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\"",
     "dev:all-cypress": "concurrently \"yarn dev:new-backend\" \"yarn dev:server-wait-new\"",
     "dev:partners-wait": "wait-on \"http://0.0.0.0:3001\"",
-    "dev:server-wait-cypress": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" --httpTimeout 60000 --tcpTimeout 1500 -v --interval 15000 && yarn build && yarn start"
+    "dev:server-wait-cypress": "wait-on \"http-get://localhost:${PORT:-3100}/\" --httpTimeout 60000 --tcpTimeout 1500 -v --interval 15000 && yarn build && yarn start"
   },
   "dependencies": {
     "@bloom-housing/shared-helpers": "^7.7.1",
