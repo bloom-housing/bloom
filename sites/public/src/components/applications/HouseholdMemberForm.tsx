@@ -20,7 +20,10 @@ const HouseholdMemberForm = (props: HouseholdMemberFormProps) => {
 
   return (
     <div className={styles["application-form-household-member"]}>
-      <FieldValue helpText={props.subtitle}>
+      <FieldValue
+        className={styles["application-form-household-field-value"]}
+        helpText={props.subtitle}
+      >
         {props.memberFirstName} {props.memberLastName}
       </FieldValue>
       <div>

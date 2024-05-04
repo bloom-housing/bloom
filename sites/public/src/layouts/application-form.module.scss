@@ -90,8 +90,12 @@
 /* step-specific styles */
 .application-form-household-member {
   display: flex;
-  align-items: center;
+  align-items: top;
   justify-content: space-between;
+}
+
+.application-form-household-field-value {
+  --field-value-content-spacer: var(--seeds-s3);
 }
 
 /* overrides for Seeds Message & Alert */

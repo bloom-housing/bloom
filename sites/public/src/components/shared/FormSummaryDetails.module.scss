@@ -10,7 +10,11 @@
 }
 
 .summary-value {
-  padding-block-end: var(--seeds-spacer-header);
+  padding-block-end: var(--seeds-spacer-content);
+
+  &:last-of-type {
+    padding-block-end: var(--seeds-spacer-header);
+  }
 }
 
 .summary-note-text {
