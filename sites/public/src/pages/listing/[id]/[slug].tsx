@@ -119,12 +119,13 @@ export default function ListingPage(props: ListingProps) {
 export async function getServerSideProps(context: {
   params: Record<string, string>
   locale: string
+  req: Request
 }) {
   let response
 
   try {
     response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`, {
-      headers: { language: context.locale, yazeedtest: "hello" },
+      headers: { language: context.locale, yazeedtest: JSON.stringify(context.req) },
     })
   } catch (e) {
     return { notFound: true }
