@@ -119,13 +119,17 @@ export default function ListingPage(props: ListingProps) {
 export async function getServerSideProps(context: {
   params: Record<string, string>
   locale: string
-  req: Request
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  req: any
 }) {
   let response
-
   try {
     response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`, {
-      headers: { language: context.locale, yazeedtest: JSON.stringify(context.req) },
+      headers: {
+        language: context.locale,
+        yazeedtest: "hello",
+        "x-forwarded-for": context.req.socket.remoteAddress,
+      },
     })
   } catch (e) {
     return { notFound: true }
