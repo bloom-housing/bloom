@@ -3,13 +3,13 @@ import {
   Field,
   Form,
   FormCard,
-  Icon,
   t,
   FormSignInErrorBox,
   NetworkStatus,
 } from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
+import { Button, Icon } from "@bloom-housing/ui-seeds"
 import type { UseFormMethods } from "react-hook-form"
+import { CustomIconMap } from "@bloom-housing/shared-helpers"
 
 export type FormSignInMFAProps = {
   control: FormSignInMFAControl
@@ -40,7 +40,7 @@ const FormSignInMFAType = ({
   return (
     <FormCard>
       <div className="form-card__lead text-center">
-        <Icon size="2xl" symbol="profile" className="form-card__header-icon" />
+        <Icon size="2xl">{CustomIconMap.profile}</Icon>
         <h2 className="form-card__title is-borderless">
           {t("nav.signInMFA.verificationChoiceMainTitle")}
         </h2>

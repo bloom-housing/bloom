@@ -1,7 +1,7 @@
 import React, { useMemo, useContext } from "react"
 import Head from "next/head"
-import { Button } from "@bloom-housing/ui-seeds"
-import { t, AgTable, useAgTable, Icon, UniversalIconType } from "@bloom-housing/ui-components"
+import { Button, Icon } from "@bloom-housing/ui-seeds"
+import { t, AgTable, useAgTable } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { ColDef, ColGroupDef } from "ag-grid-community"
@@ -9,7 +9,7 @@ import { useListingExport, useListingsData } from "../lib/hooks"
 import Layout from "../layouts"
 import { MetaTags } from "../components/shared/MetaTags"
 import { NavigationHeader } from "../components/shared/NavigationHeader"
-import { faFileExport } from "@fortawesome/free-solid-svg-icons"
+import DocumentArrowDownIcon from "@heroicons/react/24/solid/DocumentArrowDownIcon"
 
 class formatLinkCell {
   link: HTMLAnchorElement
@@ -189,7 +189,9 @@ export default function ListingsList() {
                       onClick={() => onExport()}
                       leadIcon={
                         !csvExportLoading ? (
-                          <Icon symbol={faFileExport as UniversalIconType} size="base" />
+                          <Icon>
+                            <DocumentArrowDownIcon />
+                          </Icon>
                         ) : null
                       }
                       size="sm"

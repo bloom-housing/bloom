@@ -1,7 +1,6 @@
 import React from "react"
 import { render, cleanup, fireEvent } from "@testing-library/react"
-import { Button } from "@bloom-housing/ui-components"
-import { Tag } from "@bloom-housing/ui-seeds"
+import { Button, Tag } from "@bloom-housing/ui-seeds"
 import { StatusBar } from "../../../src/components/shared/StatusBar"
 
 afterEach(cleanup)
@@ -20,13 +19,7 @@ describe("<StatusBar>", () => {
   it("can render with a back button", () => {
     const onClickSpy = jest.fn()
     const { getByText } = render(
-      <StatusBar
-        backButton={
-          <Button inlineIcon="left" icon="arrowBack" onClick={onClickSpy}>
-            Back
-          </Button>
-        }
-      >
+      <StatusBar backButton={<Button onClick={onClickSpy}>Back</Button>}>
         <Tag variant={"success"}>Submitted</Tag>
       </StatusBar>
     )
