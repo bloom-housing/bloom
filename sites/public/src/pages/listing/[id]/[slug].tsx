@@ -119,17 +119,23 @@ export default function ListingPage(props: ListingProps) {
 export async function getServerSideProps(context: {
   params: Record<string, string>
   locale: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  req: any
 }) {
   let response
-
   try {
     response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`, {
-      headers: { language: context.locale, passkey: process.env.API_PASS_KEY },
+      headers: {
+        language: context.locale,
+        passkey: process.env.API_PASS_KEY,
+        "x-forwarded-for":
+          context.req.headers["x-forwarded-for"] ?? context.req.socket.remoteAddress,
+      },
     })
   } catch (e) {
     return { notFound: true }
   }
-  const jurisdiction = fetchJurisdictionByName()
+  const jurisdiction = fetchJurisdictionByName(context.req)
 
   return { props: { listing: response.data, jurisdiction: await jurisdiction } }
 }

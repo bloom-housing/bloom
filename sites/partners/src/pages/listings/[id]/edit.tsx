@@ -60,12 +60,17 @@ const EditListing = (props: { listing: Listing }) => {
   )
 }
 
-export async function getServerSideProps(context: { params: Record<string, string> }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function getServerSideProps(context: { params: Record<string, string>; req: any }) {
   let response
 
   try {
     response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`, {
-      headers: { passkey: process.env.API_PASS_KEY },
+      headers: {
+        passkey: process.env.API_PASS_KEY,
+        "x-forwarded-for":
+          context.req.headers["x-forwarded-for"] ?? context.req.socket.remoteAddress,
+      },
     })
   } catch (e) {
     console.log("e = ", e)
