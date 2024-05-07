@@ -128,7 +128,8 @@ export class EmailService {
         console.error(
           `Error sending email to: ${
             isMultipleRecipients ? to.toString() : to
-          }! Error body: ${errBody}`,
+          }! Error body:`,
+          errBody,
         );
         if (retry > 0) {
           void this.send(to, from, subject, body, retry - 1);

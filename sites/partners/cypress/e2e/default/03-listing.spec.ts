@@ -249,7 +249,7 @@ describe("Listing Management Tests", () => {
     cy.getByID("buildingAddress.state").contains("CA")
     cy.getByID("buildingAddress.zipCode").contains(listing["buildingAddress.zipCode"])
     cy.getByID("yearBuilt").contains(listing["yearBuilt"])
-    cy.getByID("longitude").should("include.text", "-122.4")
+    cy.getByID("longitude").should("include.text", "-122.398845")
     cy.getByID("latitude").should("include.text", "37.7")
     cy.getByID("reservedCommunityType").contains(listing["reservedCommunityType.id"])
     cy.getByID("reservedCommunityDescription").contains(listing["reservedCommunityDescription"])

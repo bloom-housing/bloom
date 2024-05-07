@@ -47,6 +47,7 @@ describe('ReservedCommunityType Controller Tests', () => {
     });
     const resLogIn = await request(app.getHttpServer())
       .post('/auth/login')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
         password: 'abcdef',
@@ -83,6 +84,7 @@ describe('ReservedCommunityType Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/reservedCommunityTypes`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', cookies)
       .expect(200);
 
@@ -114,6 +116,7 @@ describe('ReservedCommunityType Controller Tests', () => {
     // testing with params
     const res = await request(app.getHttpServer())
       .get(`/reservedCommunityTypes?${query}`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', cookies)
       .expect(200);
 
@@ -127,6 +130,7 @@ describe('ReservedCommunityType Controller Tests', () => {
     const id = randomUUID();
     const res = await request(app.getHttpServer())
       .get(`/reservedCommunityTypes/${id}`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', cookies)
       .expect(404);
     expect(res.body.message).toEqual(
@@ -142,6 +146,7 @@ describe('ReservedCommunityType Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/reservedCommunityTypes/${reservedCommunityTypeA.id}`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', cookies)
       .expect(200);
 
@@ -151,6 +156,7 @@ describe('ReservedCommunityType Controller Tests', () => {
   it('testing create endpoint', async () => {
     const res = await request(app.getHttpServer())
       .post('/reservedCommunityTypes')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         name: 'name: 10',
         description: 'description: 10',
@@ -169,6 +175,7 @@ describe('ReservedCommunityType Controller Tests', () => {
     const id = randomUUID();
     const res = await request(app.getHttpServer())
       .put(`/reservedCommunityTypes/${id}`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: id,
         name: 'example name',
@@ -189,6 +196,7 @@ describe('ReservedCommunityType Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .put(`/reservedCommunityTypes/${reservedCommunityTypeA.id}`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: reservedCommunityTypeA.id,
         name: 'name: 11',
@@ -205,6 +213,7 @@ describe('ReservedCommunityType Controller Tests', () => {
     const id = randomUUID();
     const res = await request(app.getHttpServer())
       .delete(`/reservedCommunityTypes`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: id,
       } as IdDTO)
@@ -227,6 +236,7 @@ describe('ReservedCommunityType Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .delete(`/reservedCommunityTypes`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: reservedCommunityTypeA.id,
       } as IdDTO)

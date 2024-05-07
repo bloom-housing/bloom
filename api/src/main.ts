@@ -3,9 +3,9 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
+import { json } from 'express';
 import { AppModule } from './modules/app.module';
 import { CustomExceptionFilter } from './utilities/custom-exception-filter';
-import { json } from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
