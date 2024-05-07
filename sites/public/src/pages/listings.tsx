@@ -71,9 +71,10 @@ export default function ListingsPage(props: ListingsProps) {
   )
 }
 
-export async function getServerSideProps() {
-  const openListings = fetchOpenListings()
-  const closedListings = fetchClosedListings()
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function getServerSideProps(context: { req: any }) {
+  const openListings = fetchOpenListings(context.req)
+  const closedListings = fetchClosedListings(context.req)
 
   return {
     props: { openListings: await openListings, closedListings: await closedListings },

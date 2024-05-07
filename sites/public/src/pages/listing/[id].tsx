@@ -9,11 +9,17 @@ export default function ListingRedirect(props: Record<string, string>) {
   )
 }
 
-export async function getServerSideProps(context: { params: Record<string, string> }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function getServerSideProps(context: { params: Record<string, string>; req: any }) {
   let response
 
   try {
-    response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`)
+    response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`, {
+      headers: {
+        "x-forwarded-for":
+          context.req.headers["x-forwarded-for"] ?? context.req.socket.remoteAddress,
+      },
+    })
   } catch (e) {
     return { notFound: true }
   }

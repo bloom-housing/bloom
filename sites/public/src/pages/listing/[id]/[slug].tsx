@@ -127,7 +127,6 @@ export async function getServerSideProps(context: {
     response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`, {
       headers: {
         language: context.locale,
-        yazeedtest: `${context.req.headers["x-forwarded-for"]}`,
         "x-forwarded-for":
           context.req.headers["x-forwarded-for"] ?? context.req.socket.remoteAddress,
       },
@@ -135,7 +134,7 @@ export async function getServerSideProps(context: {
   } catch (e) {
     return { notFound: true }
   }
-  const jurisdiction = fetchJurisdictionByName()
+  const jurisdiction = fetchJurisdictionByName(context.req)
 
   return { props: { listing: response.data, jurisdiction: await jurisdiction } }
 }
