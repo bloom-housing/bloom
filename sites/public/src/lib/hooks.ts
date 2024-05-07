@@ -104,7 +104,10 @@ export async function fetchBaseListingData({
       paramsSerializer: (params) => {
         return qs.stringify(params)
       },
-      headers: { passkey: process.env.API_PASS_KEY },
+      headers: {
+        passkey: process.env.API_PASS_KEY,
+        "x-forwarded-for": req.headers["x-forwarded-for"] ?? req.socket.remoteAddress,
+      },
     })
 
     listings = response.data?.items
@@ -115,37 +118,50 @@ export async function fetchBaseListingData({
   return listings
 }
 
-export async function fetchOpenListings() {
-  return await fetchBaseListingData({
-    additionalFilters: [
-      {
-        $comparison: EnumListingFilterParamsComparison["="],
-        status: ListingsStatusEnum.active,
-      },
-    ],
-    orderBy: [ListingOrderByKeys.mostRecentlyPublished],
-    orderDir: [OrderByEnum.desc],
-  })
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function fetchOpenListings(req: any) {
+  return await fetchBaseListingData(
+    {
+      additionalFilters: [
+        {
+          $comparison: EnumListingFilterParamsComparison["="],
+          status: ListingsStatusEnum.active,
+        },
+      ],
+      orderBy: [ListingOrderByKeys.mostRecentlyPublished],
+      orderDir: [OrderByEnum.desc],
+    },
+    req
+  )
 }
 
-export async function fetchClosedListings() {
-  return await fetchBaseListingData({
-    additionalFilters: [
-      {
-        $comparison: EnumListingFilterParamsComparison["="],
-        status: ListingsStatusEnum.closed,
-      },
-    ],
-    orderBy: [ListingOrderByKeys.mostRecentlyClosed],
-    orderDir: [OrderByEnum.desc],
-    limit: "10",
-  })
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function fetchClosedListings(req: any) {
+  return await fetchBaseListingData(
+    {
+      additionalFilters: [
+        {
+          $comparison: EnumListingFilterParamsComparison["="],
+          status: ListingsStatusEnum.closed,
+        },
+      ],
+      orderBy: [ListingOrderByKeys.mostRecentlyClosed],
+      orderDir: [OrderByEnum.desc],
+      limit: "10",
+    },
+    req
+  )
 }
 */
 
 let jurisdiction: Jurisdiction | null = null
 
-export async function fetchJurisdictionByName(backendApiBase: string, jurisdictionName: string) {
+export async function fetchJurisdictionByName(
+  backendApiBase: string,
+  jurisdictionName: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  req: any
+) {
   try {
     if (jurisdiction) {
       return jurisdiction
@@ -154,7 +170,10 @@ export async function fetchJurisdictionByName(backendApiBase: string, jurisdicti
     const jurisdictionRes = await axios.get(
       `${backendApiBase}/jurisdictions/byName/${jurisdictionName}`,
       {
-        headers: { passkey: process.env.API_PASS_KEY },
+        headers: {
+          passkey: process.env.API_PASS_KEY,
+          "x-forwarded-for": req.headers["x-forwarded-for"] ?? req.socket.remoteAddress,
+        },
       }
     )
     jurisdiction = jurisdictionRes?.data
