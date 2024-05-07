@@ -102,7 +102,8 @@ export const mockApplication = (
       },
     },
     demographics: {
-      race: ['declineToRespond'],
+      race: ['indigenous'],
+      howDidYouHear: ['other'],
     },
     createdAt: date,
     updatedAt: date,

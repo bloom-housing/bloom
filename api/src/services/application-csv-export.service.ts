@@ -669,18 +669,30 @@ export class ApplicationCsvExporterService
         {
           path: 'demographics.gender',
           label: 'Gender',
+          format: (val: string): string =>
+            this.convertDemographicGenderToReadable(val),
         },
         {
           path: 'demographics.sexualOrientation',
           label: 'Sexual Orientation',
+          format: (val: string): string =>
+            this.convertDemographicSexualOrientationToReadable(val),
         },
         {
           path: 'demographics.spokenLanguage',
           label: 'Spoken Language',
+          format: (val: string): string =>
+            this.convertDemographicLanguageToReadable(val),
         },
         {
           path: 'demographics.howDidYouHear',
           label: 'How did you Hear?',
+          format: (val: string[]): string =>
+            val
+              .map((howDidYouHear) =>
+                this.convertDemographicHowDidYouHearToReadable(howDidYouHear),
+              )
+              .join(','),
         },
       );
     }
@@ -742,30 +754,111 @@ export class ApplicationCsvExporterService
   convertDemographicRaceToReadable(type: string): string {
     const [rootKey, customValue = ''] = type.split(':');
     const typeMap = {
-      americanIndianAlaskanNative: 'American Indian / Alaskan Native',
       asian: 'Asian',
-      'asian-asianIndian': 'Asian[Asian Indian]',
-      'asian-otherAsian': `Asian[Other Asian:${customValue}]`,
-      blackAfricanAmerican: 'Black / African American',
       'asian-chinese': 'Asian[Chinese]',
-      declineToRespond: 'Decline to Respond',
       'asian-filipino': 'Asian[Filipino]',
-      'nativeHawaiianOtherPacificIslander-guamanianOrChamorro':
-        'Native Hawaiian / Other Pacific Islander[Guamanian or Chamorro]',
       'asian-japanese': 'Asian[Japanese]',
       'asian-korean': 'Asian[Korean]',
-      'nativeHawaiianOtherPacificIslander-nativeHawaiian':
-        'Native Hawaiian / Other Pacific Islander[Native Hawaiian]',
-      nativeHawaiianOtherPacificIslander:
-        'Native Hawaiian / Other Pacific Islander',
-      otherMultiracial: `Other / Multiracial:${customValue}`,
-      'nativeHawaiianOtherPacificIslander-otherPacificIslander': `Native Hawaiian / Other Pacific Islander[Other Pacific Islander:${customValue}]`,
-      'nativeHawaiianOtherPacificIslander-samoan':
-        'Native Hawaiian / Other Pacific Islander[Samoan]',
+      'asian-mongolian': 'Asian[Mongolian]',
       'asian-vietnamese': 'Asian[Vietnamese]',
+      'asian-centralAsian': 'Asian[Central Asian]',
+      'asian-southAsian': 'Asian[South Asian]',
+      'asian-southeastAsian': 'Asian[Southeast Asian]',
+      'asian-otherAsian': `Asian[Other Asian:${customValue}]`,
+      black: 'Black',
+      'black-african': 'Black[African]',
+      'black-africanAmerican': 'Black[African American]',
+      'black-caribbeanCentralSouthAmericanMexican':
+        'Black[Caribbean, Central American, South American or Mexican]',
+      'black-otherBlack': `Black[Other Black:${customValue}]`,
+      indigenous: 'Indigenous',
+      'indigenous-alaskanNative': 'Indigenous[Alaskan Native]',
+      'indigenous-nativeAmerican':
+        'Indigenous[American Indian/Native American]',
+      'indigenous-indigenousFromMexicoCaribbeanCentralSouthAmerica':
+        'Indigenous[Indigenous from Mexico, the Caribbean, Central America, or South America]',
+      'indigenous-otherIndigenous': `Indigenous[Other Indigenous:${customValue}]`,
+      latino: 'Latino',
+      'latino-caribbean': 'Latino[Caribbean]',
+      'latino-centralAmerican': 'Latino[Central American]',
+      'latino-mexican': 'Latino[Mexican]',
+      'latino-southAmerican': 'Latino[South American]',
+      'latino-otherLatino': `Latino[Other Latino:${customValue}]`,
+      middleEasternOrAfrican: 'Middle Eastern, West African or North African',
+      'middleEasternOrAfrican-northAfrican':
+        'Middle Eastern, West African or North African[North African]',
+      'middleEasternOrAfrican-westAsian':
+        'Middle Eastern, West African or North African[West Asian]',
+      'middleEasternOrAfrican-otherMiddleEasternNorthAfrican': `Middle Eastern, West African or North African[Other Middle Eastern or North African:${customValue}]`,
+      pacificIslander: 'Pacific Islander',
+      'pacificIslander-chamorro': 'Pacific Islander[Chamorro]',
+      'pacificIslander-nativeHawaiian': 'Pacific Islander[Native Hawaiian]',
+      'pacificIslander-samoan': 'Pacific Islander[Samoan]',
+      'pacificIslander-otherPacificIslander': `Pacific Islander[Other Pacific Islander:${customValue}]`,
       white: 'White',
+      'white-european': 'White[European]',
+      'white-otherWhite': `White[Other White:${customValue}]`,
     };
     return typeMap[rootKey] ?? rootKey;
+  }
+
+  convertDemographicGenderToReadable(type: string): string {
+    const typeMap = {
+      'genderqueerGenderNon-Binary': 'Genderqueer / Gender Nonbinary',
+      transMale: 'Trans Man / Transmasculine / Trans Male',
+      transFemale: 'Trans Woman / Transfeminine / Trans Female',
+      male: 'Man',
+      female: 'Woman',
+      differentTerm: 'I use a different term',
+      dontKnow: 'I don’t know or don’t understand the question',
+      preferNoResponse: 'Prefer not to respond',
+    };
+    return typeMap[type] ?? type;
+  }
+
+  convertDemographicSexualOrientationToReadable(type: string): string {
+    const typeMap = {
+      asexual: 'Asexual',
+      bisexual: 'Bisexual',
+      gayLesbianSameGenderLoving: 'Gay / Lesbian / Same-Gender Loving',
+      questioningUnsure: 'Questioning / Unsure',
+      straightHeterosexual: 'Straight / Heterosexual',
+      differentTerm: 'I use a different term',
+      dontKnow: 'I don’t understand the question',
+      preferNoResponse: 'Prefer not to respond',
+    };
+    return typeMap[type] ?? type;
+  }
+
+  convertDemographicLanguageToReadable(type: string): string {
+    const [rootKey, customValue = ''] = type.split(':');
+    const typeMap = {
+      chineseCantonese: 'Chinese - Cantonese',
+      chineseMandarin: 'Chinese - Mandarin',
+      english: 'English',
+      filipino: 'Filipino',
+      korean: 'Korean',
+      russian: 'Russian',
+      spanish: 'Spanish',
+      vietnamese: 'Vietnamese',
+      notListed: `Not Listed:${customValue}`,
+    };
+    return typeMap[rootKey] ?? rootKey;
+  }
+
+  convertDemographicHowDidYouHearToReadable(type: string): string {
+    const typeMap = {
+      governmentWebsite: 'Government Website',
+      propertyWebsite: 'Property Website',
+      emailAlert: 'Email Alert',
+      friend: 'Friend',
+      housingCounselor: 'Housing Counselor',
+      flyer: 'Flyer',
+      radioAd: 'Radio Ad',
+      busAd: 'Bus Ad',
+      other: 'Other',
+    };
+    return typeMap[type] ?? type;
   }
 
   unitTypeToReadable(type: string): string {
