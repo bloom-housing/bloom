@@ -14,7 +14,6 @@ import { EmailService } from '../../../src/services/email.service';
 import { TranslationService } from '../../../src/services/translation.service';
 import { JurisdictionService } from '../../../src/services/jurisdiction.service';
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
-import { SendGridService } from '../../../src/services/sendgrid.service';
 import { User } from '../../../src/dtos/users/user.dto';
 import { PermissionService } from '../../../src/services/permission.service';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
@@ -66,9 +65,6 @@ describe('Testing user service', () => {
     return toReturn;
   };
 
-  const SendGridServiceMock = {
-    send: jest.fn(),
-  };
   const googleTranslateServiceMock = {
     isConfigured: () => true,
     fetch: jest.fn(),
@@ -92,16 +88,11 @@ describe('Testing user service', () => {
         PrismaService,
         EmailService,
         ConfigService,
-        SendGridService,
         TranslationService,
         JurisdictionService,
         {
           provide: HttpService,
           useValue: httpServiceMock,
-        },
-        {
-          provide: SendGridService,
-          useValue: SendGridServiceMock,
         },
         {
           provide: GoogleTranslateService,

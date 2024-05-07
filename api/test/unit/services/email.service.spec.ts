@@ -5,9 +5,7 @@ import {
   ListingsStatusEnum,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
-import { MailService } from '@sendgrid/mail';
 import { EmailService } from '../../../src/services/email.service';
-import { SendGridService } from '../../../src/services/sendgrid.service';
 import { TranslationService } from '../../../src/services/translation.service';
 import { JurisdictionService } from '../../../src/services/jurisdiction.service';
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
@@ -43,15 +41,12 @@ const httpServiceMock = {
 describe('Testing email service', () => {
   let service: EmailService;
   let module: TestingModule;
-  let sendGridService: SendGridService;
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
       imports: [ConfigModule],
       providers: [
         EmailService,
-        SendGridService,
-        MailService,
         {
           provide: TranslationService,
           useValue: translationServiceMock,
@@ -68,10 +63,9 @@ describe('Testing email service', () => {
 
   beforeEach(async () => {
     jest.useFakeTimers();
-    sendGridService = module.get<SendGridService>(SendGridService);
     sendMock = jest.fn();
-    sendGridService.send = sendMock;
     service = await module.resolve(EmailService);
+    service.sendSES = sendMock;
   });
 
   const user = {
@@ -197,32 +191,6 @@ describe('Testing email service', () => {
     expect(sendMock.mock.calls[0][0].html).toContain(
       'Your password won&#x27;t change until you access the link above and create a new one.',
     );
-  });
-
-  it('should send csv data email', async () => {
-    await service.sendCSV(
-      [{ name: 'test', id: '1234' }],
-      user,
-      'csv data goes here',
-      'User Export',
-      'an export of all users',
-    );
-    expect(sendMock).toHaveBeenCalled();
-    expect(sendMock.mock.calls[0][0].to).toEqual(user.email);
-    expect(sendMock.mock.calls[0][0].subject).toEqual('User Export');
-    expect(sendMock.mock.calls[0][0].html).toContain(
-      'The attached file is an export of all users. If you have any questions, please reach out to your administrator.',
-    );
-    expect(sendMock.mock.calls[0][0].html).toContain('Hello,');
-    expect(sendMock.mock.calls[0][0].html).toContain('User Export');
-    expect(sendMock.mock.calls[0][0].attachments).toEqual([
-      {
-        type: 'text/csv',
-        content: expect.anything(),
-        disposition: 'attachment',
-        filename: expect.anything(),
-      },
-    ]);
   });
 
   describe('application confirmation', () => {
@@ -371,8 +339,9 @@ describe('Testing email service', () => {
       expect(emailMock.to).toEqual(emailArr);
       expect(emailMock.subject).toEqual('Listing approval requested');
       expect(emailMock.html).toMatch(
-        `<img src="https://housingbayarea.mtc.ca.gov/images/doorway-logo.png" alt="Bloom Housing Portal" width="300" height="65" />`,
+        `<img src="https://housingbayarea.mtc.ca.gov/images/doorway-logo.png" alt="Bloom Housing Portal" width="300" height="65" class="header-image"/>`,
       );
+
       expect(emailMock.html).toMatch('Hello,');
       expect(emailMock.html).toMatch('Listing approval requested');
       expect(emailMock.html).toMatch(
@@ -401,7 +370,7 @@ describe('Testing email service', () => {
       const emailArr = ['testOne@xample.com', 'testTwo@example.com'];
       const service = await module.resolve(EmailService);
       await service.changesRequested(
-        { name: 'test', id: '1234' },
+        { firstName: 'test', id: '1234' } as User,
         { name: 'listing name', id: 'listingId', juris: 'jurisId' },
         emailArr,
         'http://localhost:3001',
@@ -412,7 +381,7 @@ describe('Testing email service', () => {
       expect(emailMock.to).toEqual(emailArr);
       expect(emailMock.subject).toEqual('Listing changes requested');
       expect(emailMock.html).toMatch(
-        `<img src="https://housingbayarea.mtc.ca.gov/images/doorway-logo.png" alt="Bloom Housing Portal" width="300" height="65" />`,
+        `<img src="https://housingbayarea.mtc.ca.gov/images/doorway-logo.png" alt="Bloom Housing Portal" width="300" height="65" class="header-image"/>`,
       );
       expect(emailMock.html).toMatch('Listing changes requested');
       expect(emailMock.html).toMatch('Hello,');
@@ -457,7 +426,7 @@ describe('Testing email service', () => {
       expect(emailMock.to).toEqual(emailArr);
       expect(emailMock.subject).toEqual('New published listing');
       expect(emailMock.html).toMatch(
-        `<img src="https://housingbayarea.mtc.ca.gov/images/doorway-logo.png" alt="Bloom Housing Portal" width="300" height="65" />`,
+        `<img src="https://housingbayarea.mtc.ca.gov/images/doorway-logo.png" alt="Bloom Housing Portal" width="300" height="65" class="header-image"/>`,
       );
       expect(emailMock.html).toMatch('New published listing');
       expect(emailMock.html).toMatch('Hello,');

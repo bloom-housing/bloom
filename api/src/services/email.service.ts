@@ -1,8 +1,10 @@
-import { HttpException, Injectable, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
-import { ResponseError } from '@sendgrid/helpers/classes';
-import { MailDataRequired } from '@sendgrid/helpers/classes/mail';
 import fs from 'fs';
 import Handlebars from 'handlebars';
 import juice from 'juice';
@@ -13,6 +15,9 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import tz from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
+import * as aws from '@aws-sdk/client-ses';
+import nodemailer, { SendMailOptions } from 'nodemailer';
+import Mail from 'nodemailer/lib/mailer';
 import { TranslationService } from './translation.service';
 import { JurisdictionService } from './jurisdiction.service';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
@@ -23,20 +28,14 @@ import {
 } from '@prisma/client';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { Listing } from '../dtos/listings/listing.dto';
-import { SendGridService } from './sendgrid.service';
 import { ApplicationCreate } from '../dtos/applications/application-create.dto';
 import { User } from '../dtos/users/user.dto';
 import Unit from '../dtos/units/unit.dto';
 import { getPublicEmailURL } from '../utilities/get-public-email-url';
+
 dayjs.extend(utc);
 dayjs.extend(tz);
 dayjs.extend(advanced);
-
-type EmailAttachmentData = {
-  data: string;
-  name: string;
-  type: string;
-};
 
 type listingInfo = {
   id: string;
@@ -47,14 +46,22 @@ type listingInfo = {
 @Injectable()
 export class EmailService {
   polyglot: Polyglot;
+  transporter: Mail;
 
   constructor(
-    private readonly sendGrid: SendGridService,
     private readonly configService: ConfigService,
     private readonly translationService: TranslationService,
     private readonly jurisdictionService: JurisdictionService,
     private readonly httpService: HttpService,
   ) {
+    const sesClient = new aws.SESClient({
+      region: process.env.AWS_REGION,
+    });
+
+    this.transporter = nodemailer.createTransport({
+      SES: { ses: sesClient, aws },
+    });
+
     this.polyglot = new Polyglot({
       phrases: {},
     });
@@ -143,46 +150,17 @@ export class EmailService {
     );
   }
 
-  private async send(
-    to: string | string[],
-    from: string,
-    subject: string,
-    body: string,
-    retry = 3,
-    attachment?: EmailAttachmentData,
-  ) {
-    const isMultipleRecipients = Array.isArray(to);
-    const emailParams: MailDataRequired = {
-      to,
-      from,
-      subject,
-      html: body,
-    };
-    if (attachment) {
-      emailParams.attachments = [
-        {
-          content: Buffer.from(attachment.data).toString('base64'),
-          filename: attachment.name,
-          type: attachment.type,
-          disposition: 'attachment',
-        },
-      ];
+  public async sendSES(mailOptions: SendMailOptions) {
+    try {
+      return await this.transporter.sendMail({
+        ...mailOptions,
+        from: 'Doorway <no-reply@housingbayarea.org>',
+      });
+    } catch (e) {
+      console.log(e);
+      console.error('Failed to send email');
+      return e;
     }
-    const handleError = (error) => {
-      if (error instanceof ResponseError) {
-        const { response } = error;
-        const { body: errBody } = response;
-        console.error(
-          `Error sending email to: ${
-            isMultipleRecipients ? to.toString() : to
-          }! Error body: ${errBody}`,
-        );
-        if (retry > 0) {
-          void this.send(to, from, subject, body, retry - 1);
-        }
-      }
-    };
-    await this.sendGrid.send(emailParams, isMultipleRecipients, handleError);
   }
 
   // TODO: update this to be memoized based on jurisdiction and language
@@ -216,24 +194,6 @@ export class EmailService {
     return null;
   }
 
-  private async getEmailToSendFrom(
-    jurisdictionIds: IdDTO[],
-    jurisdiction: Jurisdiction,
-  ): Promise<string> {
-    if (jurisdiction) {
-      return jurisdiction.emailFromAddress;
-    }
-    // An admin will be attached to more than one jurisdiction so we want generic translations
-    // but still need an email to send from
-    if (jurisdictionIds.length > 1) {
-      const firstJurisdiction = await this.jurisdictionService.findOne({
-        jurisdictionId: jurisdictionIds[0].id,
-      });
-      return firstJurisdiction?.emailFromAddress || '';
-    }
-    return '';
-  }
-
   /* Send welcome email to new public users */
   public async welcome(
     jurisdictionName: string,
@@ -244,16 +204,16 @@ export class EmailService {
     const jurisdiction = await this.getJurisdiction(null, jurisdictionName);
     const baseUrl = appUrl ? new URL(appUrl).origin : undefined;
     await this.loadTranslations(jurisdiction, user.language);
-    await this.send(
-      user.email,
-      jurisdiction.emailFromAddress,
-      this.polyglot.t('register.welcome'),
-      this.template('register-email')({
+
+    await this.sendSES({
+      to: user.email,
+      subject: this.polyglot.t('register.welcome'),
+      html: this.template('register-email')({
         user: user,
         confirmationUrl: confirmationUrl,
         appOptions: { appUrl: baseUrl },
       }),
-    );
+    });
   }
 
   /* Send invite email to partner users */
@@ -265,20 +225,16 @@ export class EmailService {
   ) {
     const jurisdiction = await this.getJurisdiction(jurisdictionIds);
     void (await this.loadTranslations(jurisdiction, user.language));
-    const emailFromAddress = await this.getEmailToSendFrom(
-      jurisdictionIds,
-      jurisdiction,
-    );
-    await this.send(
-      user.email,
-      emailFromAddress,
-      this.polyglot.t('invite.hello'),
-      this.template('invite')({
+
+    await this.sendSES({
+      to: user.email,
+      subject: this.polyglot.t('invite.hello'),
+      html: this.template('invite')({
         user: user,
         confirmationUrl: confirmationUrl,
         appOptions: { appUrl },
       }),
-    );
+    });
   }
 
   /* send account update email */
@@ -289,19 +245,15 @@ export class EmailService {
   ) {
     const jurisdiction = await this.getJurisdiction(jurisdictionIds);
     void (await this.loadTranslations(jurisdiction, user.language));
-    const emailFromAddress = await this.getEmailToSendFrom(
-      jurisdictionIds,
-      jurisdiction,
-    );
-    await this.send(
-      user.email,
-      emailFromAddress,
-      this.polyglot.t('invite.portalAccountUpdate'),
-      this.template('portal-account-update')({
+
+    await this.sendSES({
+      to: user.email,
+      subject: this.polyglot.t('invite.portalAccountUpdate'),
+      html: this.template('portal-account-update')({
         user,
         appUrl,
       }),
-    );
+    });
   }
 
   /* send change of email email */
@@ -314,16 +266,16 @@ export class EmailService {
   ) {
     const jurisdiction = await this.getJurisdiction(null, jurisdictionName);
     await this.loadTranslations(jurisdiction, user.language);
-    await this.send(
-      newEmail,
-      jurisdiction.emailFromAddress,
-      'Bloom email change request',
-      this.template('change-email')({
+
+    await this.sendSES({
+      to: newEmail,
+      subject: 'Bloom email change request',
+      html: this.template('change-email')({
         user: user,
         confirmationUrl: confirmationUrl,
         appOptions: { appUrl: appUrl },
       }),
-    );
+    });
   }
 
   /* Send forgot password email */
@@ -338,39 +290,32 @@ export class EmailService {
     const compiledTemplate = this.template('forgot-password');
     const resetUrl = getPublicEmailURL(appUrl, resetToken, '/reset-password');
     const baseUrl = appUrl ? new URL(appUrl).origin : undefined;
-    const emailFromAddress = await this.getEmailToSendFrom(
-      jurisdictionIds,
-      jurisdiction,
-    );
 
-    await this.send(
-      user.email,
-      emailFromAddress,
-      this.polyglot.t('forgotPassword.subject'),
-      compiledTemplate({
+    await this.sendSES({
+      to: user.email,
+      subject: this.polyglot.t('forgotPassword.subject'),
+      text: 'Text version',
+      html: compiledTemplate({
         resetUrl: resetUrl,
         resetOptions: { appUrl: baseUrl },
         user: user,
       }),
-    );
+    });
   }
 
   public async sendMfaCode(user: User, singleUseCode: string) {
     const jurisdiction = await this.getJurisdiction(user.jurisdictions);
     void (await this.loadTranslations(jurisdiction, user.language));
-    const emailFromAddress = await this.getEmailToSendFrom(
-      user.jurisdictions,
-      jurisdiction,
-    );
-    await this.send(
-      user.email,
-      emailFromAddress,
-      'Partners Portal account access token',
-      this.template('mfa-code')({
+
+    await this.sendSES({
+      to: user.email,
+      subject: 'Partners Portal account access token',
+      text: 'Text version',
+      html: this.template('mfa-code')({
         user: user,
         mfaCodeOptions: { singleUseCode },
       }),
-    );
+    });
   }
 
   public async sendSingleUseCode(
@@ -383,24 +328,20 @@ export class EmailService {
       jurisdictionName,
     );
     void (await this.loadTranslations(jurisdiction, user.language));
-    const emailFromAddress = await this.getEmailToSendFrom(
-      user.jurisdictions,
-      jurisdiction,
-    );
-    await this.send(
-      user.email,
-      emailFromAddress,
-      user.confirmedAt
+
+    await this.sendSES({
+      to: user.email,
+      subject: user.confirmedAt
         ? `Code for your ${jurisdiction?.name} sign-in`
         : `${jurisdiction?.name} verification code`,
-      this.template('single-use-code')({
+      html: this.template('single-use-code')({
         user: user,
         singleUseCodeOptions: {
           singleUseCode,
           jurisdictionName: jurisdiction?.name,
         },
       }),
-    );
+    });
   }
 
   public async applicationConfirmation(
@@ -442,11 +383,10 @@ export class EmailService {
 
     const nextStepsUrl = this.polyglot.t('confirmation.nextStepsUrl');
 
-    await this.send(
-      application.applicant.emailAddress,
-      jurisdiction.emailFromAddress,
-      this.polyglot.t('confirmation.subject'),
-      compiledTemplate({
+    await this.sendSES({
+      to: application.applicant.emailAddress,
+      subject: this.polyglot.t('confirmation.subject'),
+      html: compiledTemplate({
         subject: this.polyglot.t('confirmation.subject'),
         header: {
           logoTitle: this.polyglot.t('header.logoTitle'),
@@ -463,7 +403,7 @@ export class EmailService {
           nextStepsUrl != 'confirmation.nextStepsUrl' ? nextStepsUrl : null,
         user,
       }),
-    );
+    });
   }
 
   public async requestApproval(
@@ -472,23 +412,18 @@ export class EmailService {
     emails: string[],
     appUrl: string,
   ) {
-    try {
-      const jurisdiction = await this.getJurisdiction([jurisdictionId]);
-      void (await this.loadTranslations(jurisdiction));
-      await this.send(
-        emails,
-        jurisdiction.emailFromAddress,
-        this.polyglot.t('requestApproval.header'),
-        this.template('request-approval')({
-          appOptions: { listingName: listingInfo.name },
-          appUrl: appUrl,
-          listingUrl: `${appUrl}/listings/${listingInfo.id}`,
-        }),
-      );
-    } catch (err) {
-      console.log('Request approval email failed', err);
-      throw new HttpException('email failed', 500);
-    }
+    const jurisdiction = await this.getJurisdiction([jurisdictionId]);
+    void (await this.loadTranslations(jurisdiction));
+
+    await this.sendSES({
+      to: emails,
+      subject: this.polyglot.t('requestApproval.header'),
+      html: this.template('request-approval')({
+        appOptions: { listingName: listingInfo.name },
+        appUrl: appUrl,
+        listingUrl: `${appUrl}/listings/${listingInfo.id}`,
+      }),
+    });
   }
 
   public async changesRequested(
@@ -497,25 +432,20 @@ export class EmailService {
     emails: string[],
     appUrl: string,
   ) {
-    try {
-      const jurisdiction = listingInfo.juris
-        ? await this.getJurisdiction([{ id: listingInfo.juris }])
-        : user.jurisdictions[0];
-      void (await this.loadTranslations(jurisdiction));
-      await this.send(
-        emails,
-        jurisdiction.emailFromAddress,
-        this.polyglot.t('changesRequested.header'),
-        this.template('changes-requested')({
-          appOptions: { listingName: listingInfo.name },
-          appUrl: appUrl,
-          listingUrl: `${appUrl}/listings/${listingInfo.id}`,
-        }),
-      );
-    } catch (err) {
-      console.log('changes requested email failed', err);
-      throw new HttpException('email failed', 500);
-    }
+    const jurisdiction = listingInfo.juris
+      ? await this.getJurisdiction([{ id: listingInfo.juris }])
+      : user.jurisdictions[0];
+    void (await this.loadTranslations(jurisdiction));
+
+    await this.sendSES({
+      to: emails,
+      subject: this.polyglot.t('changesRequested.header'),
+      html: this.template('changes-requested')({
+        appOptions: { listingName: listingInfo.name },
+        appUrl: appUrl,
+        listingUrl: `${appUrl}/listings/${listingInfo.id}`,
+      }),
+    });
   }
 
   public async listingApproved(
@@ -524,68 +454,17 @@ export class EmailService {
     emails: string[],
     publicUrl: string,
   ) {
-    try {
-      const jurisdiction = await this.getJurisdiction([jurisdictionId]);
-      void (await this.loadTranslations(jurisdiction));
-      await this.send(
-        emails,
-        jurisdiction.emailFromAddress,
-        this.polyglot.t('listingApproved.header'),
-        this.template('listing-approved')({
-          appOptions: { listingName: listingInfo.name },
-          listingUrl: `${publicUrl}/listing/${listingInfo.id}`,
-        }),
-      );
-    } catch (err) {
-      console.log('listing approval email failed', err);
-      throw new HttpException('email failed', 500);
-    }
-  }
+    const jurisdiction = await this.getJurisdiction([jurisdictionId]);
+    void (await this.loadTranslations(jurisdiction));
 
-  /**
-   *
-   * @param jurisdictionIds the set of jurisdicitons for the user (sent as IdDTO[]
-   * @param user the user that should received the csv export
-   * @param csvData the data that makes up the content of the csv to be sent as an attachment
-   * @param exportEmailTitle the title of the email ('User Export' is an example)
-   * @param exportEmailFileDescription describes what is being sent. Completes the line:
-     'The attached file is %{fileDescription}. If you have any questions, please reach out to your administrator.
-   */
-  async sendCSV(
-    jurisdictionIds: IdDTO[],
-    user: User,
-    csvData: string,
-    exportEmailTitle: string,
-    exportEmailFileDescription: string,
-  ): Promise<void> {
-    const jurisdiction = await this.getJurisdiction(jurisdictionIds);
-    void (await this.loadTranslations(jurisdiction, user.language));
-    const emailFromAddress = await this.getEmailToSendFrom(
-      user.jurisdictions,
-      jurisdiction,
-    );
-    await this.send(
-      user.email,
-      emailFromAddress,
-      exportEmailTitle,
-      this.template('csv-export')({
-        user: user,
-        appOptions: {
-          title: exportEmailTitle,
-          fileDescription: exportEmailFileDescription,
-          appUrl: process.env.PARTNERS_PORTAL_URL,
-        },
+    await this.sendSES({
+      to: emails,
+      subject: this.polyglot.t('listingApproved.header'),
+      html: this.template('listing-approved')({
+        appOptions: { listingName: listingInfo.name },
+        listingUrl: `${publicUrl}/listing/${listingInfo.id}`,
       }),
-      undefined,
-      {
-        data: csvData,
-        name: `users-${this.formatLocalDate(
-          new Date(),
-          'YYYY-MM-DD_HH:mm:ss',
-        )}.csv`,
-        type: 'text/csv',
-      },
-    );
+    });
   }
 
   public async listingOpportunity(listing: Listing) {

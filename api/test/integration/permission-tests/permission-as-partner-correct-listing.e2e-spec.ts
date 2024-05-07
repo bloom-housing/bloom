@@ -75,7 +75,6 @@ const testEmailService = {
   changeEmail: jest.fn(),
   forgotPassword: jest.fn(),
   sendMfaCode: jest.fn(),
-  sendCSV: jest.fn(),
   applicationConfirmation: jest.fn(),
 };
 

@@ -3,7 +3,6 @@ import { randomUUID } from 'crypto';
 import { sign } from 'jsonwebtoken';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
-import { MailService } from '@sendgrid/mail';
 import {
   ACCESS_TOKEN_AVAILABLE_NAME,
   ACCESS_TOKEN_AVAILABLE_OPTIONS,
@@ -23,7 +22,6 @@ import {
 } from '../../../src/utilities/password-helpers';
 import { MfaType } from '../../../src/enums/mfa/mfa-type-enum';
 import { EmailService } from '../../../src/services/email.service';
-import { SendGridService } from '../../../src/services/sendgrid.service';
 import { TranslationService } from '../../../src/services/translation.service';
 import { JurisdictionService } from '../../../src/services/jurisdiction.service';
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
@@ -49,11 +47,9 @@ describe('Testing auth service', () => {
         },
         ConfigService,
         PrismaService,
-        SendGridService,
         TranslationService,
         JurisdictionService,
         SmsService,
-        MailService,
         GoogleTranslateService,
         PermissionService,
       ],
