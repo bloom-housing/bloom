@@ -51,6 +51,7 @@ export async function getServerSideProps(context: { params: Record<string, strin
   try {
     response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`, {
       headers: {
+        passkey: process.env.API_PASS_KEY,
         "x-forwarded-for":
           context.req.headers["x-forwarded-for"] ?? context.req.socket.remoteAddress,
       },

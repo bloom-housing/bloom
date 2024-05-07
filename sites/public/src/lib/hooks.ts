@@ -114,6 +114,7 @@ export async function fetchBaseListingData(
         return qs.stringify(params)
       },
       headers: {
+        passkey: process.env.API_PASS_KEY,
         "x-forwarded-for": req.headers["x-forwarded-for"] ?? req.socket.remoteAddress,
       },
     })
@@ -175,6 +176,7 @@ export async function fetchJurisdictionByName(req: any) {
       `${process.env.backendApiBase}/jurisdictions/byName/${jurisdictionName}`,
       {
         headers: {
+          passkey: process.env.API_PASS_KEY,
           "x-forwarded-for": req.headers["x-forwarded-for"] ?? req.socket.remoteAddress,
         },
       }
