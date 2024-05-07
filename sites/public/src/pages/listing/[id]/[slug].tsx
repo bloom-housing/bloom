@@ -127,7 +127,7 @@ export async function getServerSideProps(context: {
     response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`, {
       headers: {
         language: context.locale,
-        yazeedtest: "hello",
+        yazeedtest: `${context.req.socket.remoteAddress} __ ${context.req.headers["x-forwarded-for"]}`,
         "x-forwarded-for": context.req.socket.remoteAddress,
       },
     })
