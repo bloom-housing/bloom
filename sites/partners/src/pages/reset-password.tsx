@@ -1,9 +1,9 @@
 import React, { useState, useContext, useRef } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
-import { Button } from "@bloom-housing/ui-seeds"
-import { Field, Form, FormCard, Icon, t, AlertBox } from "@bloom-housing/ui-components"
-import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import { Button, Icon } from "@bloom-housing/ui-seeds"
+import { Field, Form, FormCard, t, AlertBox } from "@bloom-housing/ui-components"
+import { AuthContext, CustomIconMap, MessageContext } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../layouts/forms"
 
 const ResetPassword = () => {
@@ -44,7 +44,7 @@ const ResetPassword = () => {
     <FormsLayout>
       <FormCard>
         <div className="form-card__lead text-center border-b mx-0">
-          <Icon size="2xl" symbol="profile" />
+          <Icon size="2xl">{CustomIconMap.profile}</Icon>
           <h2 className="form-card__title">{t("authentication.forgotPassword.changePassword")}</h2>
         </div>
         {requestError && (
