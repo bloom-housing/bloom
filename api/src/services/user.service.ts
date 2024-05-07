@@ -957,7 +957,9 @@ export class UserService {
       );
     }
 
-    const singleUseCode = generateSingleUseCode();
+    const singleUseCode = generateSingleUseCode(
+      Number(process.env.MFA_CODE_LENGTH),
+    );
     await this.prisma.userAccounts.update({
       data: {
         singleUseCode,

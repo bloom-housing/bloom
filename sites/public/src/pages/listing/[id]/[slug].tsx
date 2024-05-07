@@ -130,7 +130,7 @@ export async function getServerSideProps(context: {
 
   try {
     response = await axios.get(`${listingServiceUrl}/${context.params.id}`, {
-      headers: { language: context.locale },
+      headers: { language: context.locale, passkey: process.env.API_PASS_KEY },
     })
   } catch (e) {
     return { notFound: true }

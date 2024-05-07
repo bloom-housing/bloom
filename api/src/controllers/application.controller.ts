@@ -49,7 +49,7 @@ import { ApplicationCsvExporterService } from '../services/application-csv-expor
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
 import { MostRecentApplicationQueryParams } from '../dtos/applications/most-recent-application-query-params.dto';
 import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
-import { ThrottleGuard } from '../guards/throttler.guard';
+import { ApiKeyGuard } from '../guards/api-key.guard';
 
 @Controller('applications')
 @ApiTags('applications')
@@ -60,7 +60,7 @@ import { ThrottleGuard } from '../guards/throttler.guard';
   }),
 )
 @ApiExtraModels(IdDTO, AddressInput, BooleanInput, TextInput)
-@UseGuards(ThrottleGuard, OptionalAuthGuard)
+@UseGuards(ApiKeyGuard, OptionalAuthGuard)
 @PermissionTypeDecorator('application')
 @UseInterceptors(ActivityLogInterceptor)
 export class ApplicationController {

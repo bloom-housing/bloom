@@ -104,6 +104,7 @@ export async function fetchBaseListingData({
       paramsSerializer: (params) => {
         return qs.stringify(params)
       },
+      headers: { passkey: process.env.API_PASS_KEY },
     })
 
     listings = response.data?.items
@@ -151,7 +152,10 @@ export async function fetchJurisdictionByName(backendApiBase: string, jurisdicti
     }
 
     const jurisdictionRes = await axios.get(
-      `${backendApiBase}/jurisdictions/byName/${jurisdictionName}`
+      `${backendApiBase}/jurisdictions/byName/${jurisdictionName}`,
+      {
+        headers: { passkey: process.env.API_PASS_KEY },
+      }
     )
     jurisdiction = jurisdictionRes?.data
   } catch (error) {
