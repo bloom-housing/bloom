@@ -65,7 +65,7 @@ export const useCatchNetworkError = () => {
         }),
         error,
       })
-    } else if (NetworkErrorMessage.mfaCodeIsMissing) {
+    } else if (error?.response?.data?.name === NetworkErrorMessage.mfaCodeIsMissing) {
       setNetworkError({
         title: t("errors.somethingWentWrong"),
         description: t("authentication.signIn.mfaError"),
