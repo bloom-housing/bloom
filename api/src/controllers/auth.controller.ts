@@ -93,19 +93,6 @@ export class AuthController {
     return await this.authService.requestMfaCode(dto);
   }
 
-  @Post('request-single-use-code')
-  @ApiOperation({
-    summary: 'Request single use code',
-    operationId: 'requestSingleUseCode',
-  })
-  @ApiOkResponse({ type: SuccessDTO })
-  async requestSingleUseCode(
-    @Request() req: ExpressRequest,
-    @Body() dto: RequestSingleUseCode,
-  ): Promise<SuccessDTO> {
-    return await this.authService.requestSingleUseCode(dto, req);
-  }
-
   @Get('requestNewToken')
   @ApiOperation({
     summary: 'Requests a new token given a refresh token',
