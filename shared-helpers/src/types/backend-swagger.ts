@@ -4262,6 +4262,9 @@ export interface JurisdictionCreate {
   enableGeocodingPreferences?: boolean
 
   /**  */
+  enableGeocodingRadiusMethod?: boolean
+
+  /**  */
   enableAccessibilityFeatures: boolean
 
   /**  */
@@ -4307,6 +4310,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   enableGeocodingPreferences?: boolean
+
+  /**  */
+  enableGeocodingRadiusMethod?: boolean
 
   /**  */
   enableAccessibilityFeatures: boolean
@@ -4363,6 +4369,9 @@ export interface Jurisdiction {
 
   /**  */
   enableGeocodingPreferences?: boolean
+
+  /**  */
+  enableGeocodingRadiusMethod?: boolean
 
   /**  */
   enableAccessibilityFeatures: boolean

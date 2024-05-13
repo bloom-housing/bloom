@@ -47,8 +47,12 @@ export const stagingSeed = async (
     data: jurisdictionFactory(jurisdictionName, [UserRoleEnum.admin]),
   });
   // add another jurisdiction
+  let otherJusisName = randomNoun();
+  while (otherJusisName < jurisdictionName) {
+    otherJusisName = randomNoun();
+  }
   const additionalJurisdiction = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory(randomNoun()),
+    data: jurisdictionFactory(otherJusisName),
   });
   // create admin user
   await prismaClient.userAccounts.create({
