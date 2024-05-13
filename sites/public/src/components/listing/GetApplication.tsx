@@ -158,10 +158,10 @@ const GetApplication = (props: ApplicationsProps) => {
       )}
       <Dialog
         isOpen={!!showDownloadModal}
-        ariaDescription={t("listings.chooseALanguage")}
         onClose={() => setShowDownloadModal(false)}
+        ariaLabelledBy="get-application-header"
       >
-        <Dialog.Header>{t("listings.chooseALanguage")}</Dialog.Header>
+        <Dialog.Header id="get-application-header">{t("listings.chooseALanguage")}</Dialog.Header>
         <Dialog.Content>
           <Form>
             <fieldset>

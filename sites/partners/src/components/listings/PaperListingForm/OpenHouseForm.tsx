@@ -186,7 +186,6 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
           </Card>
         </Form>
       </Drawer.Content>
-
       <Drawer.Footer>
         <Button
           type="button"

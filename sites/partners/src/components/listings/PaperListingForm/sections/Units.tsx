@@ -1,14 +1,13 @@
-import React, { useState, useMemo, useCallback, useEffect } from "react"
+import React, { useState, useMemo, useCallback, useContext, useEffect } from "react"
 import {
   t,
-  AppearanceStyleType,
   MinimalTable,
-  Modal,
   FieldGroup,
   StandardTableData,
 } from "@bloom-housing/ui-components"
 import { Button, Dialog, Drawer, FieldValue, Grid, Tag } from "@bloom-housing/ui-seeds"
 import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { MessageContext } from "@bloom-housing/shared-helpers"
 import UnitForm from "../UnitForm"
 import { useFormContext, useWatch } from "react-hook-form"
 import { TempUnit } from "../../../../lib/listings/formTypes"
@@ -22,10 +21,10 @@ type UnitProps = {
 }
 
 const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
+  const { addToast } = useContext(MessageContext)
   const [unitDrawerOpen, setUnitDrawerOpen] = useState(false)
   const [unitDeleteModal, setUnitDeleteModal] = useState<number | null>(null)
   const [defaultUnit, setDefaultUnit] = useState<TempUnit | null>(null)
-  const [toastContent, setToastContent] = useState(null)
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -228,8 +227,6 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
         isOpen={unitDrawerOpen}
         onClose={() => setUnitDrawerOpen(false)}
         ariaLabelledBy="units-drawer-header"
-        toastContent={toastContent}
-        toastStyle={"success"}
       >
         <Drawer.Header id="units-drawer-header">
           {t("listings.unit.add")}
@@ -247,20 +244,19 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
         </Drawer.Header>
         <UnitForm
           onSubmit={(unit) => {
-            setToastContent(null)
             saveUnit(unit)
           }}
           onClose={(openNextUnit: boolean, openCurrentUnit: boolean, defaultUnit: TempUnit) => {
             setDefaultUnit(defaultUnit)
             if (openNextUnit) {
               if (defaultUnit) {
-                setToastContent(t("listings.unit.unitCopied"))
+                addToast(t("listings.unit.unitCopied"), {variant: "success"})
               }
               editUnit(nextId)
             } else if (!openCurrentUnit) {
               setUnitDrawerOpen(false)
             } else {
-              setToastContent(t("listings.unit.unitSaved"))
+              addToast(t("listings.unit.unitSaved"), {variant: "success"})
             }
           }}
           draft={!units.some((unit) => unit.tempId === defaultUnit?.tempId)}

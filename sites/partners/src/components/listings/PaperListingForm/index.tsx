@@ -547,8 +547,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       <Dialog
         isOpen={submitForApprovalModal}
         onClose={() => setSubmitForApprovalModal(false)}
-        ariaLabelledBy="listing-form-live-confirmation-dialog-header"
-        ariaDescribedBy="listing-form-live-confirmation-dialog-content"
+        ariaLabelledBy="listing-form-approval-dialog-header"
+        ariaDescribedBy="listing-form-approval-dialog-content"
       >
         <Dialog.Header id="listing-form-approval-dialog-header">{t("t.areYouSure")}</Dialog.Header>
         <Dialog.Content id="listing-form-approval-dialog-content">

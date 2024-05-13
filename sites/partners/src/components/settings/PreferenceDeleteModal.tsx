@@ -49,10 +49,19 @@ export const PreferenceDeleteModal = ({
 
   if (data?.length > 0) {
     return (
-      <Dialog isOpen={!!multiselectQuestion} onClose={onClose}>
-        <Dialog.Header>{t("settings.preferenceChangesRequired")}</Dialog.Header>
+      <Dialog
+        isOpen={!!multiselectQuestion}
+        onClose={onClose}
+        ariaLabelledBy="preference-changes-modal-header"
+        ariaDescribedBy="preference-changes-modal-description"
+      >
+        <Dialog.Header id="preference-changes-modal-header">
+          {t("settings.preferenceChangesRequired")}
+        </Dialog.Header>
         <Dialog.Content>
-          <div className="pb-3">{t("settings.preferenceDeleteError")}</div>
+          <div className="pb-3" id="preference-changes-modal-description">
+            {t("settings.preferenceDeleteError")}
+          </div>
           <MinimalTable
             headers={{ name: "listings.listingName" }}
             data={listingsTableData}
@@ -69,9 +78,16 @@ export const PreferenceDeleteModal = ({
   }
 
   return (
-    <Dialog isOpen={!!multiselectQuestion} onClose={onClose}>
-      <Dialog.Header>{t("t.areYouSure")}</Dialog.Header>
-      <Dialog.Content>{t("settings.preferenceDeleteConfirmation")}</Dialog.Content>
+    <Dialog
+      isOpen={!!multiselectQuestion}
+      onClose={onClose}
+      ariaLabelledBy="preference-delete-modal-header"
+      ariaDescribedBy="preference-delete-modal-description"
+    >
+      <Dialog.Header id="preference-delete-modal-header">{t("t.areYouSure")}</Dialog.Header>
+      <Dialog.Content id="preference-delete-modal-description">
+        {t("settings.preferenceDeleteConfirmation")}
+      </Dialog.Content>
       <Dialog.Footer>
         <Button type="button" variant="alert" onClick={deletePreference} size="sm">
           {t("t.delete")}
