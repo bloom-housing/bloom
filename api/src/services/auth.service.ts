@@ -4,7 +4,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { CookieOptions, Request, Response } from 'express';
+import { CookieOptions, Response } from 'express';
 import { sign, verify } from 'jsonwebtoken';
 import { Prisma } from '@prisma/client';
 import { UpdatePassword } from '../dtos/auth/update-password.dto';
@@ -23,8 +23,6 @@ import { generateSingleUseCode } from '../utilities/generate-single-use-code';
 import { Confirm } from '../dtos/auth/confirm.dto';
 import { SmsService } from './sms.service';
 import { EmailService } from './email.service';
-import { RequestSingleUseCode } from '../dtos/single-use-code/request-single-use-code.dto';
-import { OrderByEnum } from '../enums/shared/order-by-enum';
 
 // since our local env doesn't have an https cert we can't be secure. Hosted envs should be secure
 const secure = process.env.NODE_ENV !== 'development';
@@ -221,7 +219,9 @@ export class AuthService {
       }
     }
 
-    const singleUseCode = generateSingleUseCode();
+    const singleUseCode = generateSingleUseCode(
+      Number(process.env.MFA_CODE_LENGTH),
+    );
     await this.prisma.userAccounts.update({
       data: {
         singleUseCode,
@@ -245,76 +245,6 @@ export class AuthService {
           phoneNumber: user.phoneNumber,
           phoneNumberVerified: user.phoneNumberVerified,
         };
-  }
-
-  /**
-   *
-   * @param dto the incoming request with the email
-   * @returns a SuccessDTO always, and if the user exists it will send a code to the requester
-   */
-  async requestSingleUseCode(
-    dto: RequestSingleUseCode,
-    req: Request,
-  ): Promise<SuccessDTO> {
-    const user = await this.prisma.userAccounts.findFirst({
-      where: { email: dto.email },
-      include: {
-        jurisdictions: true,
-      },
-    });
-    if (!user) {
-      return { success: true };
-    }
-
-    const jurisName = req?.headers?.jurisdictionname;
-    if (!jurisName) {
-      throw new BadRequestException(
-        'jurisdictionname is missing from the request headers',
-      );
-    }
-
-    const juris = await this.prisma.jurisdictions.findFirst({
-      select: {
-        id: true,
-        allowSingleUseCodeLogin: true,
-      },
-      where: {
-        name: jurisName as string,
-      },
-      orderBy: {
-        allowSingleUseCodeLogin: OrderByEnum.DESC,
-      },
-    });
-
-    if (!juris) {
-      throw new BadRequestException(
-        `Jurisidiction ${jurisName} does not exists`,
-      );
-    }
-
-    if (!juris.allowSingleUseCodeLogin) {
-      throw new BadRequestException(
-        `Single use code login is not setup for ${jurisName}`,
-      );
-    }
-
-    const singleUseCode = generateSingleUseCode();
-    await this.prisma.userAccounts.update({
-      data: {
-        singleUseCode,
-        singleUseCodeUpdatedAt: new Date(),
-      },
-      where: {
-        id: user.id,
-      },
-    });
-
-    await this.emailsService.sendSingleUseCode(
-      mapTo(User, user),
-      singleUseCode,
-    );
-
-    return { success: true };
   }
 
   /*

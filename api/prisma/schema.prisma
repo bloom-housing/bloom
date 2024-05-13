@@ -112,9 +112,9 @@ model Applicant {
   firstName            String?       @map("first_name")
   middleName           String?       @map("middle_name")
   lastName             String?       @map("last_name")
-  birthMonth           String?       @map("birth_month")
-  birthDay             String?       @map("birth_day")
-  birthYear            String?       @map("birth_year")
+  birthMonth           Int?          @map("birth_month")
+  birthDay             Int?          @map("birth_day")
+  birthYear            Int?          @map("birth_year")
   emailAddress         String?       @map("email_address")
   noEmail              Boolean?      @map("no_email")
   phoneNumber          String?       @map("phone_number")
@@ -296,9 +296,9 @@ model HouseholdMember {
   firstName                  String?       @map("first_name")
   middleName                 String?       @map("middle_name")
   lastName                   String?       @map("last_name")
-  birthMonth                 String?       @map("birth_month")
-  birthDay                   String?       @map("birth_day")
-  birthYear                  String?       @map("birth_year")
+  birthMonth                 Int?          @map("birth_month")
+  birthDay                   Int?          @map("birth_day")
+  birthYear                  Int?          @map("birth_year")
   sameAddress                YesNoEnum?    @map("same_address")
   relationship               String?
   workInRegion               YesNoEnum?    @map("work_in_region")
@@ -330,6 +330,7 @@ model Jurisdictions {
   enableAccessibilityFeatures Boolean                  @default(false) @map("enable_accessibility_features")
   enableUtilitiesIncluded     Boolean                  @default(false) @map("enable_utilities_included")
   enableGeocodingPreferences  Boolean                  @default(false) @map("enable_geocoding_preferences")
+  enableGeocodingRadiusMethod Boolean                  @default(false) @map("enable_geocoding_radius_method")
   allowSingleUseCodeLogin     Boolean                  @default(false) @map("allow_single_use_code_login")
   amiChart                    AmiChart[]
   multiselectQuestions        MultiselectQuestions[]

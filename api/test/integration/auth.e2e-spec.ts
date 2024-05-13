@@ -52,6 +52,7 @@ describe('Auth Controller Tests', () => {
     });
     const res = await request(app.getHttpServer())
       .post('/auth/login')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
         password: 'abcdef',
@@ -94,6 +95,7 @@ describe('Auth Controller Tests', () => {
     });
     const res = await request(app.getHttpServer())
       .post('/auth/login')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
         password: 'abcdef',
@@ -134,6 +136,7 @@ describe('Auth Controller Tests', () => {
     });
     const resLogIn = await request(app.getHttpServer())
       .post('/auth/login')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
         password: 'abcdef',
@@ -142,6 +145,7 @@ describe('Auth Controller Tests', () => {
 
     const resLogOut = await request(app.getHttpServer())
       .get('/auth/logout')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', resLogIn.headers['set-cookie'])
       .expect(200);
 
@@ -185,6 +189,7 @@ describe('Auth Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .post('/auth/request-mfa-code')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
         password: 'abcdef',
@@ -241,6 +246,7 @@ describe('Auth Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .put('/auth/update-password')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
         password: 'abcdef123',
@@ -291,6 +297,7 @@ describe('Auth Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .put('/auth/confirm')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         token,
       } as Confirm)
@@ -321,6 +328,7 @@ describe('Auth Controller Tests', () => {
   it('should fail request new token when cookie not sent', async () => {
     const res = await request(app.getHttpServer())
       .get('/auth/requestNewToken')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .expect(400);
     expect(res.body.message).toBe('No refresh token sent with request');
   });
@@ -335,6 +343,7 @@ describe('Auth Controller Tests', () => {
     });
     const resLogIn = await request(app.getHttpServer())
       .post('/auth/login')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
         password: 'abcdef',
@@ -342,6 +351,7 @@ describe('Auth Controller Tests', () => {
       .expect(201);
     await request(app.getHttpServer())
       .get('/auth/requestNewToken')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', resLogIn.headers['set-cookie'])
       .expect(200);
   });
@@ -366,6 +376,7 @@ describe('Auth Controller Tests', () => {
     });
     const res = await request(app.getHttpServer())
       .post('/auth/loginViaSingleUseCode')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
         singleUseCode: storedUser.singleUseCode,

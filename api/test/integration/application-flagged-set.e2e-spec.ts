@@ -60,7 +60,7 @@ describe('Application flagged set Controller Tests', () => {
 
   const createComplexApplication = async (
     emailIndicator: string,
-    nameAndDOBIndicator: string,
+    nameIndicator: number,
     listing: string,
     dobIndicator?: string,
     householdMember?: Prisma.HouseholdMemberCreateWithoutApplicationsInput,
@@ -69,11 +69,11 @@ describe('Application flagged set Controller Tests', () => {
       data: await applicationFactory({
         applicant: {
           emailAddress: `${listing}-email${emailIndicator}@email.com`,
-          firstName: `${listing}-firstName${nameAndDOBIndicator}`,
-          lastName: `${listing}-lastName${nameAndDOBIndicator}`,
-          birthDay: dobIndicator || nameAndDOBIndicator,
-          birthMonth: dobIndicator || nameAndDOBIndicator,
-          birthYear: dobIndicator || nameAndDOBIndicator,
+          firstName: `${listing}-firstName${dobIndicator || nameIndicator}`,
+          lastName: `${listing}-lastName${dobIndicator || nameIndicator}`,
+          birthDay: nameIndicator,
+          birthMonth: nameIndicator,
+          birthYear: nameIndicator,
         },
         listingId: listing,
         householdMember: [householdMember],
@@ -106,6 +106,7 @@ describe('Application flagged set Controller Tests', () => {
     });
     const res = await request(app.getHttpServer())
       .post('/auth/login')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({ email: adminUser.email, password: 'abcdef' })
       .expect(201);
     adminAccessToken = res.header?.['set-cookie'].find((cookie) =>
@@ -167,6 +168,7 @@ describe('Application flagged set Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/applicationFlaggedSets?${query}`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -223,6 +225,7 @@ describe('Application flagged set Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/applicationFlaggedSets?${query}`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -278,6 +281,7 @@ describe('Application flagged set Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/applicationFlaggedSets/meta?${query}`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -333,6 +337,7 @@ describe('Application flagged set Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/applicationFlaggedSets/${resolvedAFS.id}`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -345,6 +350,7 @@ describe('Application flagged set Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/applicationFlaggedSets/${id}`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(404);
 
@@ -396,6 +402,7 @@ describe('Application flagged set Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .post(`/applicationFlaggedSets/resolve`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         afsId: pendingAFS.id,
         status: FlaggedSetStatusEnum.resolved,
@@ -482,6 +489,7 @@ describe('Application flagged set Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .post(`/applicationFlaggedSets/resolve`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         afsId: pendingAFS.id,
         status: FlaggedSetStatusEnum.resolved,
@@ -568,6 +576,7 @@ describe('Application flagged set Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .post(`/applicationFlaggedSets/resolve`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         afsId: resolvedAFS.id,
         status: FlaggedSetStatusEnum.pending,
@@ -637,6 +646,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/${afs.id}`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: afs.id,
       } as IdDTO)
@@ -657,6 +667,7 @@ describe('Application flagged set Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/${id}`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: id,
       } as IdDTO)
@@ -671,11 +682,12 @@ describe('Application flagged set Controller Tests', () => {
   it('should not create a flagged set if applications do not match', async () => {
     const listing = await createListing();
 
-    await createComplexApplication('1', '1', listing);
-    await createComplexApplication('2', '2', listing);
+    await createComplexApplication('1', 1, listing);
+    await createComplexApplication('2', 2, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -691,11 +703,12 @@ describe('Application flagged set Controller Tests', () => {
   it('should create a new flagged set if applications match on email', async () => {
     const listing = await createListing();
 
-    await createComplexApplication('1', '1', listing);
-    await createComplexApplication('1', '2', listing);
+    await createComplexApplication('1', 1, listing);
+    await createComplexApplication('1', 2, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -713,12 +726,13 @@ describe('Application flagged set Controller Tests', () => {
   it('should create a new flagged set if applications match on nameAndDOB', async () => {
     const listing = await createListing();
 
-    await createComplexApplication('1', '1', listing);
-    await createComplexApplication('2', '1', listing);
+    await createComplexApplication('1', 1, listing);
+    await createComplexApplication('2', 1, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
       .set('Cookie', adminAccessToken)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .expect(200);
 
     const afs = await prisma.applicationFlaggedSet.findMany({
@@ -735,11 +749,12 @@ describe('Application flagged set Controller Tests', () => {
   it('should create a new flagged set if applications match on nameAndDOB case insensitive', async () => {
     const listing = await createListing();
 
-    await createComplexApplication('1', 'test', listing, '1');
-    await createComplexApplication('2', 'TEST', listing, '1');
+    await createComplexApplication('1', 1, listing, 'test');
+    await createComplexApplication('2', 1, listing, 'TEST');
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -757,11 +772,12 @@ describe('Application flagged set Controller Tests', () => {
   it('should keep application in flagged set if email still matches', async () => {
     const listing = await createListing();
 
-    const appA = await createComplexApplication('1', '1', listing);
-    const appB = await createComplexApplication('1', '2', listing);
+    const appA = await createComplexApplication('1', 1, listing);
+    const appB = await createComplexApplication('1', 2, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -806,6 +822,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -828,11 +845,12 @@ describe('Application flagged set Controller Tests', () => {
   it('should keep application in flagged set if nameAndDOB still matches', async () => {
     const listing = await createListing();
 
-    const appA = await createComplexApplication('1', '1', listing);
-    const appB = await createComplexApplication('2', '1', listing);
+    const appA = await createComplexApplication('1', 1, listing);
+    const appB = await createComplexApplication('2', 1, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -877,6 +895,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -899,11 +918,12 @@ describe('Application flagged set Controller Tests', () => {
   it('should remove application from flagged set if email no longer matches', async () => {
     const listing = await createListing();
 
-    const appA = await createComplexApplication('1', '1', listing);
-    await createComplexApplication('1', '2', listing);
+    const appA = await createComplexApplication('1', 1, listing);
+    await createComplexApplication('1', 2, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -949,6 +969,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -967,11 +988,12 @@ describe('Application flagged set Controller Tests', () => {
   it('should remove application from flagged set if nameAndDOB no longer matches', async () => {
     const listing = await createListing();
 
-    const appA = await createComplexApplication('1', '1', listing);
-    await createComplexApplication('2', '1', listing);
+    const appA = await createComplexApplication('1', 1, listing);
+    await createComplexApplication('2', 1, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -998,9 +1020,9 @@ describe('Application flagged set Controller Tests', () => {
             data: {
               firstName: `${listing}-firstName3@email.com`,
               lastName: `${listing}-lastName3@email.com`,
-              birthDay: '3',
-              birthMonth: '3',
-              birthYear: '3',
+              birthDay: 3,
+              birthMonth: 3,
+              birthYear: 3,
             },
           },
         },
@@ -1021,6 +1043,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1039,12 +1062,13 @@ describe('Application flagged set Controller Tests', () => {
   it('should remove and create flagged set if email changed', async () => {
     const listing = await createListing();
 
-    const appA = await createComplexApplication('1', '1', listing);
-    const appB = await createComplexApplication('2', '2', listing);
-    const appC = await createComplexApplication('1', '3', listing);
+    const appA = await createComplexApplication('1', 1, listing);
+    const appB = await createComplexApplication('2', 2, listing);
+    const appC = await createComplexApplication('1', 3, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1094,6 +1118,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1115,12 +1140,13 @@ describe('Application flagged set Controller Tests', () => {
   it('should remove and create flagged set if nameAndDOB changed', async () => {
     const listing = await createListing();
 
-    const appA = await createComplexApplication('1', '1', listing);
-    const appB = await createComplexApplication('2', '2', listing);
-    const appC = await createComplexApplication('3', '1', listing);
+    const appA = await createComplexApplication('1', 1, listing);
+    const appB = await createComplexApplication('2', 2, listing);
+    const appC = await createComplexApplication('3', 1, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1151,9 +1177,9 @@ describe('Application flagged set Controller Tests', () => {
             data: {
               firstName: `${listing}-firstName2`,
               lastName: `${listing}-lastName2`,
-              birthDay: '2',
-              birthMonth: '2',
-              birthYear: '2',
+              birthDay: 2,
+              birthMonth: 2,
+              birthYear: 2,
             },
           },
         },
@@ -1175,6 +1201,7 @@ describe('Application flagged set Controller Tests', () => {
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
       .set('Cookie', adminAccessToken)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .expect(200);
 
     afs = await prisma.applicationFlaggedSet.findMany({
@@ -1196,14 +1223,15 @@ describe('Application flagged set Controller Tests', () => {
   it('should move application from flagged set to another if email changed', async () => {
     const listing = await createListing();
 
-    const appA = await createComplexApplication('1', '1', listing);
-    const appB = await createComplexApplication('1', '2', listing);
+    const appA = await createComplexApplication('1', 1, listing);
+    const appB = await createComplexApplication('1', 2, listing);
 
-    const appC = await createComplexApplication('3', '3', listing);
-    const appD = await createComplexApplication('3', '4', listing);
+    const appC = await createComplexApplication('3', 3, listing);
+    const appD = await createComplexApplication('3', 4, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1266,6 +1294,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1288,14 +1317,15 @@ describe('Application flagged set Controller Tests', () => {
   it('should move application from flagged set to another if nameAndDOB changed', async () => {
     const listing = await createListing();
 
-    const appA = await createComplexApplication('1', '1', listing);
-    const appB = await createComplexApplication('2', '1', listing);
+    const appA = await createComplexApplication('1', 1, listing);
+    const appB = await createComplexApplication('2', 1, listing);
 
-    const appC = await createComplexApplication('3', '3', listing);
-    const appD = await createComplexApplication('4', '3', listing);
+    const appC = await createComplexApplication('3', 3, listing);
+    const appD = await createComplexApplication('4', 3, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1339,9 +1369,9 @@ describe('Application flagged set Controller Tests', () => {
             data: {
               firstName: `${listing}-firstName3`,
               lastName: `${listing}-lastName3`,
-              birthDay: '3',
-              birthMonth: '3',
-              birthYear: '3',
+              birthDay: 3,
+              birthMonth: 3,
+              birthYear: 3,
             },
           },
         },
@@ -1362,6 +1392,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1384,13 +1415,13 @@ describe('Application flagged set Controller Tests', () => {
   it('should create nameAndDob flagged set on household member matches', async () => {
     const listing = await createListing();
 
-    await createComplexApplication('1', '1', listing);
-    await createComplexApplication('2', '2', listing, '2', {
+    await createComplexApplication('1', 1, listing);
+    await createComplexApplication('2', 2, listing, '2', {
       firstName: `${listing}-firstName1`,
       lastName: `${listing}-lastName1`,
-      birthDay: '1',
-      birthMonth: '1',
-      birthYear: '1',
+      birthDay: 1,
+      birthMonth: 1,
+      birthYear: 1,
       sameAddress: YesNoEnum.yes,
       workInRegion: YesNoEnum.yes,
     });
@@ -1398,6 +1429,7 @@ describe('Application flagged set Controller Tests', () => {
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
       .set('Cookie', adminAccessToken)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .expect(200);
 
     const afs = await prisma.applicationFlaggedSet.findMany({
@@ -1413,19 +1445,20 @@ describe('Application flagged set Controller Tests', () => {
   it('should create nameAndDob flagged set on household member matches case insensitive', async () => {
     const listing = await createListing();
 
-    await createComplexApplication('1', 'TEST', listing, '1');
-    await createComplexApplication('2', '2', listing, '2', {
+    await createComplexApplication('1', 1, listing, 'TEST');
+    await createComplexApplication('2', 2, listing, '2', {
       firstName: `${listing}-firstNametest`,
       lastName: `${listing}-lastNameTest`,
-      birthDay: '1',
-      birthMonth: '1',
-      birthYear: '1',
+      birthDay: 1,
+      birthMonth: 1,
+      birthYear: 1,
       sameAddress: YesNoEnum.yes,
       workInRegion: YesNoEnum.yes,
     });
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1442,12 +1475,13 @@ describe('Application flagged set Controller Tests', () => {
   it('should remove from flagged set and create new flagged set when match moves from email -> nameAndDOB', async () => {
     const listing = await createListing();
 
-    const appA = await createComplexApplication('1', '1', listing);
-    const appB = await createComplexApplication('2', '2', listing);
-    const appC = await createComplexApplication('1', '3', listing);
+    const appA = await createComplexApplication('1', 1, listing);
+    const appB = await createComplexApplication('2', 2, listing);
+    const appC = await createComplexApplication('1', 3, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1479,9 +1513,9 @@ describe('Application flagged set Controller Tests', () => {
               emailAddress: `${listing}-email4@email.com`,
               firstName: `${listing}-firstName2`,
               lastName: `${listing}-lastName2`,
-              birthDay: '2',
-              birthMonth: '2',
-              birthYear: '2',
+              birthDay: 2,
+              birthMonth: 2,
+              birthYear: 2,
             },
           },
         },
@@ -1502,6 +1536,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1523,12 +1558,13 @@ describe('Application flagged set Controller Tests', () => {
   it('should remove from flagged set and create new flagged set when match moves from nameAndDOB -> email', async () => {
     const listing = await createListing();
 
-    const appA = await createComplexApplication('1', '1', listing);
-    const appB = await createComplexApplication('2', '2', listing);
-    const appC = await createComplexApplication('3', '1', listing);
+    const appA = await createComplexApplication('1', 1, listing);
+    const appB = await createComplexApplication('2', 2, listing);
+    const appC = await createComplexApplication('3', 1, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1560,9 +1596,9 @@ describe('Application flagged set Controller Tests', () => {
               emailAddress: `${listing}-email2@email.com`,
               firstName: `${listing}-firstName4`,
               lastName: `${listing}-lastName4`,
-              birthDay: '4',
-              birthMonth: '4',
-              birthYear: '4',
+              birthDay: 4,
+              birthMonth: 4,
+              birthYear: 4,
             },
           },
         },
@@ -1583,6 +1619,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1605,11 +1642,12 @@ describe('Application flagged set Controller Tests', () => {
   it('should create new email flagged set instead of nameAndDOB flagged set', async () => {
     const listing = await createListing();
 
-    await createComplexApplication('1', '1', listing);
-    await createComplexApplication('1', '1', listing);
+    await createComplexApplication('1', 1, listing);
+    await createComplexApplication('1', 1, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1629,11 +1667,12 @@ describe('Application flagged set Controller Tests', () => {
   it('should not reset resolved status when new application not in flagged set', async () => {
     const listing = await createListing();
 
-    const appA = await createComplexApplication('1', '1', listing);
-    await createComplexApplication('2', '1', listing);
+    const appA = await createComplexApplication('1', 1, listing);
+    await createComplexApplication('2', 1, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1650,6 +1689,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .post(`/applicationFlaggedSets/resolve`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         afsId: afs[0].id,
         status: FlaggedSetStatusEnum.resolved,
@@ -1662,7 +1702,7 @@ describe('Application flagged set Controller Tests', () => {
       .set('Cookie', adminAccessToken)
       .expect(201);
 
-    await createComplexApplication('3', '3', listing);
+    await createComplexApplication('3', 3, listing);
     await prisma.listings.update({
       where: {
         id: listing,
@@ -1674,6 +1714,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1693,14 +1734,15 @@ describe('Application flagged set Controller Tests', () => {
   it('should reset resolved status when new application in flagged set', async () => {
     const listing = await createListing();
 
-    const appA = await createComplexApplication('1', '1', listing);
-    await createComplexApplication('2', '1', listing);
+    const appA = await createComplexApplication('1', 1, listing);
+    await createComplexApplication('2', 1, listing);
 
-    const appC = await createComplexApplication('3', '3', listing);
-    await createComplexApplication('4', '3', listing);
+    const appC = await createComplexApplication('3', 3, listing);
+    await createComplexApplication('4', 3, listing);
 
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
@@ -1722,6 +1764,7 @@ describe('Application flagged set Controller Tests', () => {
     expect(afs.length).toEqual(2);
     await request(app.getHttpServer())
       .post(`/applicationFlaggedSets/resolve`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         afsId: containsAppA.id,
         status: FlaggedSetStatusEnum.resolved,
@@ -1736,6 +1779,7 @@ describe('Application flagged set Controller Tests', () => {
 
     await request(app.getHttpServer())
       .post(`/applicationFlaggedSets/resolve`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         afsId: containsAppC.id,
         status: FlaggedSetStatusEnum.resolved,
@@ -1748,7 +1792,7 @@ describe('Application flagged set Controller Tests', () => {
       .set('Cookie', adminAccessToken)
       .expect(201);
 
-    await createComplexApplication('5', '3', listing);
+    await createComplexApplication('5', 3, listing);
     await prisma.listings.update({
       where: {
         id: listing,
@@ -1759,6 +1803,7 @@ describe('Application flagged set Controller Tests', () => {
     });
     await request(app.getHttpServer())
       .put(`/applicationFlaggedSets/process`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', adminAccessToken)
       .expect(200);
 
