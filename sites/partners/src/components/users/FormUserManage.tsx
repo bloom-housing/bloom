@@ -1,16 +1,19 @@
 import React, { useMemo, useContext, useState, useCallback } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { t, Form, Field, Select, useMutate, emailRegex } from "@bloom-housing/ui-components"
-import { Button, Card, Dialog, Grid, Tag } from "@bloom-housing/ui-seeds"
+import { Button, Card, Dialog, Drawer, Grid, Tag } from "@bloom-housing/ui-seeds"
 import { RoleOption, roleKeys, AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { Listing, User, UserRole } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { JurisdictionAndListingSelection } from "./JurisdictionAndListingSelection"
 import SectionWithGrid from "../shared/SectionWithGrid"
 
 type FormUserManageProps = {
+  isOpen: boolean
+  title: string
   mode: "add" | "edit"
   user?: User
   listings: Listing[]
+  onCancel: () => void
   onDrawerClose: () => void
 }
 
@@ -33,7 +36,15 @@ const determineUserRole = (roles: UserRole) => {
   return RoleOption.Partner
 }
 
-const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageProps) => {
+const FormUserManage = ({
+  isOpen,
+  title,
+  mode,
+  user,
+  listings,
+  onCancel,
+  onDrawerClose,
+}: FormUserManageProps) => {
   const { userService, profile } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
   const jurisdictionList = profile.jurisdictions
@@ -286,103 +297,109 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
   }
 
   return (
-    <FormProvider {...methods}>
-      <Form onSubmit={() => false}>
-        <Card>
-          <Card.Section>
-            <SectionWithGrid
-              heading={
-                <div className="flex content-center">
-                  <span>{t("users.userDetails")}</span>
+    <>
+      <Drawer isOpen={isOpen} onClose={onCancel} ariaLabelledBy="form-user-manage-drawer-header">
+        <Drawer.Header id="form-user-manage-drawer-header">{title}</Drawer.Header>
+        <Drawer.Content>
+          <FormProvider {...methods}>
+            <Form onSubmit={() => false}>
+              <Card>
+                <Card.Section>
+                  <SectionWithGrid
+                    heading={
+                      <div className="flex content-center">
+                        <span>{t("users.userDetails")}</span>
 
-                  {mode === "edit" && (
-                    <div className="ml-2 mt-1 flex items-center justify-center">
-                      <Tag
-                        className="tag-uppercase"
-                        variant={user.confirmedAt ? "success" : "primary"}
-                      >
-                        {user.confirmedAt ? t("users.confirmed") : t("users.unconfirmed")}
-                      </Tag>
-                    </div>
-                  )}
-                </div>
-              }
-            >
-              <Grid.Row columns={4}>
-                <Grid.Cell>
-                  <Field
-                    id="firstName"
-                    name="firstName"
-                    label={t("authentication.createAccount.firstName")}
-                    placeholder={t("authentication.createAccount.firstName")}
-                    error={!!errors?.firstName}
-                    errorMessage={t("errors.requiredFieldError")}
-                    validation={{ required: true }}
-                    register={register}
-                    type="text"
+                        {mode === "edit" && (
+                          <div className="ml-2 mt-1 flex items-center justify-center">
+                            <Tag
+                              className="tag-uppercase"
+                              variant={user.confirmedAt ? "success" : "primary"}
+                            >
+                              {user.confirmedAt ? t("users.confirmed") : t("users.unconfirmed")}
+                            </Tag>
+                          </div>
+                        )}
+                      </div>
+                    }
+                  >
+                    <Grid.Row columns={4}>
+                      <Grid.Cell>
+                        <Field
+                          id="firstName"
+                          name="firstName"
+                          label={t("authentication.createAccount.firstName")}
+                          placeholder={t("authentication.createAccount.firstName")}
+                          error={!!errors?.firstName}
+                          errorMessage={t("errors.requiredFieldError")}
+                          validation={{ required: true }}
+                          register={register}
+                          type="text"
+                        />
+                      </Grid.Cell>
+
+                      <Grid.Cell>
+                        <Field
+                          id="lastName"
+                          name="lastName"
+                          label={t("authentication.createAccount.lastName")}
+                          placeholder={t("authentication.createAccount.lastName")}
+                          error={!!errors?.lastName}
+                          errorMessage={t("errors.requiredFieldError")}
+                          validation={{ required: true }}
+                          register={register}
+                          type="text"
+                        />
+                      </Grid.Cell>
+
+                      <Grid.Cell>
+                        <Field
+                          id="email"
+                          name="email"
+                          label={t("t.email")}
+                          placeholder={t("t.email")}
+                          error={!!errors?.email}
+                          errorMessage={t("authentication.signIn.loginError")}
+                          validation={{ required: true, pattern: emailRegex }}
+                          register={register}
+                          type="email"
+                        />
+                      </Grid.Cell>
+
+                      <Grid.Cell>
+                        <Select
+                          id="userRoles"
+                          name="userRoles"
+                          label={t("t.role")}
+                          placeholder={t("t.role")}
+                          register={register}
+                          controlClassName="control"
+                          keyPrefix="users"
+                          options={roleKeys
+                            .filter((elem) => {
+                              if (profile?.userRoles?.isJurisdictionalAdmin) {
+                                return elem !== RoleOption.Administrator
+                              }
+                              return true
+                            })
+                            .sort((a, b) => (a < b ? -1 : 1))}
+                          error={!!errors?.userRoles}
+                          errorMessage={t("errors.requiredFieldError")}
+                          validation={{ required: true }}
+                        />
+                      </Grid.Cell>
+                    </Grid.Row>
+                  </SectionWithGrid>
+                  <JurisdictionAndListingSelection
+                    jurisdictionOptions={jurisdictionOptions}
+                    listingsOptions={listingsOptions}
                   />
-                </Grid.Cell>
-
-                <Grid.Cell>
-                  <Field
-                    id="lastName"
-                    name="lastName"
-                    label={t("authentication.createAccount.lastName")}
-                    placeholder={t("authentication.createAccount.lastName")}
-                    error={!!errors?.lastName}
-                    errorMessage={t("errors.requiredFieldError")}
-                    validation={{ required: true }}
-                    register={register}
-                    type="text"
-                  />
-                </Grid.Cell>
-
-                <Grid.Cell>
-                  <Field
-                    id="email"
-                    name="email"
-                    label={t("t.email")}
-                    placeholder={t("t.email")}
-                    error={!!errors?.email}
-                    errorMessage={t("authentication.signIn.loginError")}
-                    validation={{ required: true, pattern: emailRegex }}
-                    register={register}
-                    type="email"
-                  />
-                </Grid.Cell>
-
-                <Grid.Cell>
-                  <Select
-                    id="userRoles"
-                    name="userRoles"
-                    label={t("t.role")}
-                    placeholder={t("t.role")}
-                    register={register}
-                    controlClassName="control"
-                    keyPrefix="users"
-                    options={roleKeys
-                      .filter((elem) => {
-                        if (profile?.userRoles?.isJurisdictionalAdmin) {
-                          return elem !== RoleOption.Administrator
-                        }
-                        return true
-                      })
-                      .sort((a, b) => (a < b ? -1 : 1))}
-                    error={!!errors?.userRoles}
-                    errorMessage={t("errors.requiredFieldError")}
-                    validation={{ required: true }}
-                  />
-                </Grid.Cell>
-              </Grid.Row>
-            </SectionWithGrid>
-            <JurisdictionAndListingSelection
-              jurisdictionOptions={jurisdictionOptions}
-              listingsOptions={listingsOptions}
-            />
-          </Card.Section>
-        </Card>
-
-        <div className="mt-6">
+                </Card.Section>
+              </Card>
+            </Form>
+          </FormProvider>
+        </Drawer.Content>
+        <Drawer.Footer>
           {mode === "edit" && (
             <Button
               type="button"
@@ -430,15 +447,15 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
               {t("t.delete")}
             </Button>
           )}
-        </div>
-      </Form>
+        </Drawer.Footer>
+      </Drawer>
 
       <Dialog
         isOpen={!!isDeleteModalActive}
-        ariaDescription={t("users.doYouWantDeleteUser")}
+        ariaLabelledBy="form-user-manage-dialog-header"
         onClose={() => setDeleteModalActive(false)}
       >
-        <Dialog.Header>{t("t.areYouSure")}</Dialog.Header>
+        <Dialog.Header id="form-user-manage-dialog-header">{t("t.areYouSure")}</Dialog.Header>
         <Dialog.Content>
           <p>{t("users.doYouWantDeleteUser")}</p>
         </Dialog.Content>
@@ -466,7 +483,7 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
           </Button>
         </Dialog.Footer>
       </Dialog>
-    </FormProvider>
+    </>
   )
 }
 

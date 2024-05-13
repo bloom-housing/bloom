@@ -206,6 +206,7 @@ const Settings = () => {
           </article>
         </section>
       </Layout>
+
       <PreferenceDrawer
         drawerOpen={!!preferenceDrawerOpen}
         questionData={questionData}
@@ -218,12 +219,13 @@ const Settings = () => {
         saveQuestion={saveQuestion}
         isLoading={isCreateLoading || isUpdateLoading}
       />
+
       <Dialog
         isOpen={!!copyModalOpen}
-        ariaDescription={t("listings.listingIsAlreadyLive")}
+        ariaLabelledBy="settings-dialog-header"
         onClose={() => setCopyModalOpen(null)}
       >
-        <Dialog.Header>{t("t.copy")}</Dialog.Header>
+        <Dialog.Header id="settings-dialog-header">{t("t.copy")}</Dialog.Header>
         <Dialog.Content>{t("settings.createCopyDescription")}</Dialog.Content>
         <Dialog.Footer>
           <Button

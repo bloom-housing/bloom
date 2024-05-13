@@ -32,13 +32,14 @@ const RequestChangesModal = ({
   return (
     <Dialog
       isOpen={modalIsOpen}
-      ariaDescription={t("listings.approval.requestChangesDescription")}
       onClose={() => setModalIsOpen(false)}
+      ariaLabelledBy="request-changes-dialog-header"
+      ariaDescribedBy="request-changes-dialog-content"
     >
-      <Dialog.Header>{t("t.areYouSure")}</Dialog.Header>
+      <Dialog.Header id="request-changes-dialog-header">{t("t.areYouSure")}</Dialog.Header>
       <Dialog.Content>
         <Form id={"request-changes"} onSubmit={() => false}>
-          <div className={"pb-4 text-gray-700"}>
+          <div className={"pb-4 text-gray-700"} id="request-changes-dialog-content">
             {t("listings.approval.requestChangesDescription")}
           </div>
           <Textarea

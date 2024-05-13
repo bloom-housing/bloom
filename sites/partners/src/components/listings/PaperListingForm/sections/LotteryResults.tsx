@@ -134,10 +134,12 @@ const LotteryResults = (props: LotteryResultsProps) => {
     <Drawer
       isOpen={drawerState}
       onClose={() => resetDrawerState()}
-      ariaDescription="Form to upload lottery results"
+      ariaLabelledBy="lottery-results-drawer-header"
+      ariaDescribedBy="lottery-results-drawer-content"
     >
-      <Drawer.Header>{t(title)}</Drawer.Header>
+      <Drawer.Header id="lottery-results-drawer-header">{t(title)}</Drawer.Header>
       <Drawer.Content>
+        <p id="lottery-results-drawer-content">Form to upload lottery results</p>
         <Card spacing="lg">
           <Card.Section>
             <Dropzone

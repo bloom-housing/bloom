@@ -433,11 +433,16 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
       <Dialog
         isOpen={!!closeModal}
-        ariaDescription={t("listings.closeThisListing")}
         onClose={() => setCloseModal(false)}
+        ariaLabelledBy="listing-form-close-listing-dialog-header"
+        ariaDescribedBy="listing-form-close-listing-dialog-content"
       >
-        <Dialog.Header>{t("t.areYouSure")}</Dialog.Header>
-        <Dialog.Content>{t("listings.closeThisListing")}</Dialog.Content>
+        <Dialog.Header id="listing-form-close-listing-dialog-header">
+          {t("t.areYouSure")}
+        </Dialog.Header>
+        <Dialog.Content id="listing-form-close-listing-dialog-content">
+          {t("listings.closeThisListing")}
+        </Dialog.Content>
         <Dialog.Footer>
           <Button
             type="button"
@@ -465,11 +470,16 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
       <Dialog
         isOpen={!!publishModal}
-        ariaDescription={t("listings.publishThisListing")}
         onClose={() => setPublishModal(false)}
+        ariaLabelledBy="listing-form-publish-listing-dialog-header"
+        ariaDescribedBy="listing-form-publish-listing-dialog-content"
       >
-        <Dialog.Header>{t("t.areYouSure")}</Dialog.Header>
-        <Dialog.Content>{t("listings.publishThisListing")}</Dialog.Content>
+        <Dialog.Header id="listing-form-publish-listing-dialog-header">
+          {t("t.areYouSure")}
+        </Dialog.Header>
+        <Dialog.Content id="listing-form-publish-listing-dialog-content">
+          {t("listings.publishThisListing")}
+        </Dialog.Content>
         <Dialog.Footer>
           <Button
             id="publishButtonConfirm"
@@ -498,11 +508,16 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
       <Dialog
         isOpen={listingIsAlreadyLiveModal}
-        ariaDescription={t("listings.listingIsAlreadyLive")}
         onClose={() => setListingIsAlreadyLiveModal(false)}
+        ariaLabelledBy="listing-form-live-confirmation-dialog-header"
+        ariaDescribedBy="listing-form-live-confirmation-dialog-content"
       >
-        <Dialog.Header>{t("t.areYouSure")}</Dialog.Header>
-        <Dialog.Content>{t("listings.listingIsAlreadyLive")}</Dialog.Content>
+        <Dialog.Header id="listing-form-live-confirmation-dialog-header">
+          {t("t.areYouSure")}
+        </Dialog.Header>
+        <Dialog.Content id="listing-form-live-confirmation-dialog-content">
+          {t("listings.listingIsAlreadyLive")}
+        </Dialog.Content>
         <Dialog.Footer>
           <Button
             id="saveAlreadyLiveListingButtonConfirm"
@@ -531,11 +546,14 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
       <Dialog
         isOpen={submitForApprovalModal}
-        ariaDescription={t("listings.approval.submitForApprovalDescription")}
         onClose={() => setSubmitForApprovalModal(false)}
+        ariaLabelledBy="listing-form-live-confirmation-dialog-header"
+        ariaDescribedBy="listing-form-live-confirmation-dialog-content"
       >
-        <Dialog.Header>{t("t.areYouSure")}</Dialog.Header>
-        <Dialog.Content>{t("listings.approval.submitForApprovalDescription")}</Dialog.Content>
+        <Dialog.Header id="listing-form-approval-dialog-header">{t("t.areYouSure")}</Dialog.Header>
+        <Dialog.Content id="listing-form-approval-dialog-content">
+          {t("listings.approval.submitForApprovalDescription")}
+        </Dialog.Content>
         <Dialog.Footer>
           <Button
             id="submitListingForApprovalButtonConfirm"

@@ -1806,10 +1806,10 @@
     tailwindcss-rtl "^0.9.0"
     typesafe-actions "^5.1.0"
 
-"@bloom-housing/ui-seeds@1.14.0":
-  version "1.14.0"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.14.0.tgz#9a8543bfa3e1c037555fb75297ab1ebbe91d6708"
-  integrity sha512-h3xmKs+J0GUMtBqS3IvaXBoO3ApRYjoHSiTZIfhhXkrlzxqK1mg/BANGTf19RR16AuMO/qLxDAUSFoSAkLUIBg==
+"@bloom-housing/ui-seeds@1.16.0":
+  version "1.16.0"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.16.0.tgz#6ebaac0061672987be3db91e9bac6c0cee95364c"
+  integrity sha512-dOWJoAgk5VBjPlk+pW3nXmZo/P6Lz381+iWBSaQhWRvL8kn+IO03O4ZG3Jv8gnODjbFxFdTmSsdtCEY//W+yRQ==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.3.0"
     "@fortawesome/react-fontawesome" "^0.2.0"

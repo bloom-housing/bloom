@@ -33,7 +33,7 @@ export default () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, watch } = useForm()
   const [requestError, setRequestError] = useState<string>()
-  const [openModal, setOpenModal] = useState<boolean>(false)
+  const [openModal, setOpenModal] = useState<boolean>(true)
   const router = useRouter()
   const language = router.locale
   const listingId = router.query?.listingId as string
@@ -289,16 +289,15 @@ export default () => {
       </div>
       <Dialog
         isOpen={openModal}
-        ariaDescription={t("authentication.createAccount.anEmailHasBeenSent", {
-          email: email.current,
-        })}
         onClose={() => {
           void router.push("/sign-in")
           window.scrollTo(0, 0)
         }}
+        ariaLabelledBy="create-account-dialog-header"
+        ariaDescribedBy="create-account-dialog-content"
       >
-        <Dialog.Header>{t("authentication.createAccount.confirmationNeeded")}</Dialog.Header>
-        <Dialog.Content>
+        <Dialog.Header id="create-account-dialog-header">{t("authentication.createAccount.confirmationNeeded")}</Dialog.Header>
+        <Dialog.Content id="create-account-dialog-content">
           <p>{t("authentication.createAccount.anEmailHasBeenSent", { email: email.current })}</p>
           <p>{t("authentication.createAccount.confirmationInstruction")}</p>
         </Dialog.Content>

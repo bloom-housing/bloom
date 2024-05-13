@@ -4,7 +4,7 @@ import dayjs from "dayjs"
 import { useSWRConfig } from "swr"
 import { AgTable, useAgTable, t, AlertBox } from "@bloom-housing/ui-components"
 import { User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { Button, Drawer, Icon } from "@bloom-housing/ui-seeds"
+import { Button, Icon } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts"
 import { useUserList, useListingsData, useUsersExport } from "../../lib/hooks"
@@ -191,21 +191,18 @@ const Users = () => {
         </article>
       </section>
 
-      <Drawer
+      <FormUserManage
         isOpen={!!userDrawer}
         title={userDrawer?.type === "add" ? t("users.addUser") : t("users.editUser")}
-        onClose={() => setUserDrawer(null)}
-      >
-        <FormUserManage
-          mode={userDrawer?.type}
-          user={userDrawer?.user}
-          listings={listingDtos?.items}
-          onDrawerClose={() => {
-            setUserDrawer(null)
-            void mutate(cacheKey)
-          }}
-        />
-      </Drawer>
+        mode={userDrawer?.type}
+        user={userDrawer?.user}
+        listings={listingDtos?.items}
+        onCancel={() => setUserDrawer(null)}
+        onDrawerClose={() => {
+          setUserDrawer(null)
+          void mutate(cacheKey)
+        }}
+      />
     </Layout>
   )
 }

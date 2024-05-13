@@ -244,12 +244,16 @@ const ListingPhotos = () => {
       <Drawer
         isOpen={drawerState}
         onClose={() => resetDrawerState()}
-        ariaDescription="Form with photo upload dropzone"
+        ariaLabelledBy="listing-photos-drawer-header"
+        ariaDescribedBy="listing-photos-drawer-description"
       >
-        <Drawer.Header>
+        <Drawer.Header id="listing-photos-drawer-header">
           {t(listingFormPhotos.length > 0 ? "listings.editPhotos" : "listings.addPhoto")}
         </Drawer.Header>
         <Drawer.Content>
+          <p id="listing-photos-drawer-description" className="sr-only">
+            Form with PDF upload dropzone
+          </p>
           <Card>
             <Card.Header>
               <Heading priority={2} size="xl">

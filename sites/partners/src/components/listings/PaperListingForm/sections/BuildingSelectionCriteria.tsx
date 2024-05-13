@@ -226,14 +226,17 @@ const BuildingSelectionCriteria = () => {
       <Drawer
         isOpen={drawerState}
         onClose={() => resetDrawerState()}
+        ariaLabelledBy="building-selection-criteria-drawer-header"
         ariaDescribedBy="building-selection-criteria-drawer-description"
       >
-        <Drawer.Header>{t("listings.addBuildingSelectionCriteria")}</Drawer.Header>
+        <Drawer.Header id="building-selection-criteria-drawer-header">
+          {t("listings.addBuildingSelectionCriteria")}
+        </Drawer.Header>
         <Drawer.Content>
+          <p id="building-selection-criteria-drawer-description" className="sr-only">
+            Form with PDF upload dropzone
+          </p>
           <Card spacing="lg">
-            <p id="building-selection-criteria-drawer-description" className="sr-only">
-              Form with PDF upload dropzone
-            </p>
             <Card.Section>
               <FieldValue
                 label={t("listings.addBuildingSelectionCriteriaSubtitle")}

@@ -23,8 +23,12 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
   const rentType = getRentType(unit)
 
   return (
-    <Drawer isOpen={!!unit} onClose={() => setUnitDrawer(null)}>
-      <Drawer.Header>{t("listings.unit.title")}</Drawer.Header>
+    <Drawer
+      isOpen={!!unit}
+      onClose={() => setUnitDrawer(null)}
+      ariaLabelledBy="details-unit-drawer-header"
+    >
+      <Drawer.Header id="details-unit-drawer-header">{t("listings.unit.title")}</Drawer.Header>
       <Drawer.Content>
         <Card spacing="lg">
           <Card.Section>

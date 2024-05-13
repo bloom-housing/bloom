@@ -117,11 +117,14 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
 
       <Dialog
         isOpen={!!deleteModal}
-        ariaDescription={t("application.deleteApplicationDescription")}
+        ariaLabelledBy="applications-aside-header"
+        ariaDescribedBy="applications-aside-content"
         onClose={() => setDeleteModal(false)}
       >
-        <Dialog.Header>{t("application.deleteThisApplication")}</Dialog.Header>
-        <Dialog.Content>
+        <Dialog.Header id="applications-aside-header">
+          {t("application.deleteThisApplication")}
+        </Dialog.Header>
+        <Dialog.Content id="applications-aside-content">
           <p>{t("application.deleteApplicationDescription")}</p>
         </Dialog.Content>
         <Dialog.Footer>

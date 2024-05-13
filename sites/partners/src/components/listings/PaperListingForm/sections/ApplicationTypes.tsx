@@ -541,12 +541,17 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
       <Drawer
         isOpen={drawerState}
         onClose={() => resetDrawerState()}
+        ariaLabelledBy="application-types-drawer-header"
         ariaDescribedBy="application-types-drawer-description"
       >
-        <Drawer.Header>{t("listings.addPaperApplication")}</Drawer.Header>
+        <Drawer.Header id="application-types-drawer-header">
+          {t("listings.addPaperApplication")}
+        </Drawer.Header>
         <Drawer.Content>
+          <p id="application-types-drawer-description" className="sr-only">
+            Form with paper application upload dropzone
+          </p>
           <Card spacing="lg">
-            <p id="application-types-drawer-description" className="sr-only">Form with paper application upload dropzone</p>
             <Card.Section>
               {cloudinaryData.url === "" && (
                 <div className="field">

@@ -149,8 +149,14 @@ const FormHouseholdMembers = ({
         </Button>
       </SectionWithGrid>
 
-      <Drawer isOpen={!!membersDrawer} onClose={() => setMembersDrawer(null)}>
-        <Drawer.Header>{t("application.household.householdMember")}</Drawer.Header>
+      <Drawer
+        isOpen={!!membersDrawer}
+        onClose={() => setMembersDrawer(null)}
+        ariaLabelledBy="form-household-members-drawer-header"
+      >
+        <Drawer.Header id="form-household-members-drawer-header">
+          {t("application.household.householdMember")}
+        </Drawer.Header>
         <FormMember
           onSubmit={(member) => saveMember(member)}
           onClose={() => setMembersDrawer(null)}
@@ -161,11 +167,14 @@ const FormHouseholdMembers = ({
 
       <Dialog
         isOpen={!!membersDeleteModal}
-        ariaDescription={t("application.deleteMemberDescription")}
+        ariaLabelledBy="form-household-members-dialog-header"
+        ariaDescribedBy="form-household-members-dialog-content"
         onClose={() => setMembersDeleteModal(null)}
       >
-        <Dialog.Header>{t("application.deleteThisMember")}</Dialog.Header>
-        <Dialog.Content>{t("application.deleteMemberDescription")}</Dialog.Content>
+        <Dialog.Header id="form-household-members-dialog-header">{t("application.deleteThisMember")}</Dialog.Header>
+        <Dialog.Content id="form-household-members-dialog-content">
+          {t("application.deleteMemberDescription")}
+        </Dialog.Content>
         <Dialog.Footer>
           <Button variant="alert" onClick={() => deleteMember(membersDeleteModal)} size="sm">
             {t("t.delete")}

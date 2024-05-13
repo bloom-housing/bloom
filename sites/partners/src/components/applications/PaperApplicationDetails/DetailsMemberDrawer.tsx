@@ -23,8 +23,14 @@ const DetailsMemberDrawer = ({
   setMembersDrawer,
 }: DetailsMemberDrawerProps) => {
   return (
-    <Drawer isOpen={!!membersDrawer} onClose={() => setMembersDrawer(null)}>
-      <Drawer.Header>{t("application.household.householdMember")}</Drawer.Header>
+    <Drawer
+      isOpen={!!membersDrawer}
+      onClose={() => setMembersDrawer(null)}
+      ariaLabelledBy="details-member-drawer-header"
+    >
+      <Drawer.Header id="details-member-drawer-header">
+        {t("application.household.householdMember")}
+      </Drawer.Header>
       <Drawer.Content>
         <Card spacing="lg" className="spacer-section">
           <Card.Section>

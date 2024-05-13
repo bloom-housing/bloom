@@ -295,8 +295,9 @@ const SelectAndOrder = ({
             setTableDrawer(null)
           }
         }}
+        ariaLabelledBy="select-and-order-drawer-header"
       >
-        <Drawer.Header>{drawerTitle}</Drawer.Header>
+        <Drawer.Header id="select-and-order-drawer-header">{drawerTitle}</Drawer.Header>
         <Drawer.Content>
           <Card>
             <Card.Section>
@@ -344,9 +345,10 @@ const SelectAndOrder = ({
           setSelectDrawer(null)
           setOpenPreviews([])
         }}
+        ariaLabelledBy="select-and-order-nested-drawer-header"
         nested
       >
-        <Drawer.Header>{drawerButtonText}</Drawer.Header>
+        <Drawer.Header id="select-and-order-nested-drawer-header">{drawerButtonText}</Drawer.Header>
         <Drawer.Content>
           <Card>
             <Card.Section>

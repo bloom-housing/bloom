@@ -83,8 +83,9 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
         void router.push("/")
         window.scrollTo(0, 0)
       }}
+      ariaLabelledBy="account-confirmation-dialog-header"
     >
-      <Dialog.Header>{t("authentication.createAccount.linkExpired")}</Dialog.Header>
+      <Dialog.Header id="account-confirmation-dialog-header">{t("authentication.createAccount.linkExpired")}</Dialog.Header>
       <Dialog.Content>
         <Form id="resend-confirmation" onSubmit={handleSubmit(onSubmit)}>
           <Field

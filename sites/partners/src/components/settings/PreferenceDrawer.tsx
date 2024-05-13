@@ -230,8 +230,9 @@ const PreferenceDrawer = ({
           clearErrors("questions")
           onDrawerClose()
         }}
+        ariaLabelledBy="preference-drawer-header"
       >
-        <Drawer.Header>{drawerTitle}</Drawer.Header>
+        <Drawer.Header id="preference-drawer-header">{drawerTitle}</Drawer.Header>
         <Drawer.Content>
           <Card>
             <Card.Section>
@@ -519,13 +520,13 @@ const PreferenceDrawer = ({
 
       <Drawer
         isOpen={!!optionDrawerOpen}
-        ariaDescription={drawerTitle}
         onClose={() => {
           setOptionDrawerOpen(null)
         }}
+        ariaLabelledBy="preference-nested-drawer-header"
         nested
       >
-        <Drawer.Header>{selectDrawerTitle}</Drawer.Header>
+        <Drawer.Header id="preference-nested-drawer-header">{selectDrawerTitle}</Drawer.Header>
         <Drawer.Content>
           <Card>
             <Card.Section>

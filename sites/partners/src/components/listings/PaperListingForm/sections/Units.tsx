@@ -227,10 +227,11 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
       <Drawer
         isOpen={unitDrawerOpen}
         onClose={() => setUnitDrawerOpen(false)}
+        ariaLabelledBy="units-drawer-header"
         toastContent={toastContent}
         toastStyle={"success"}
       >
-        <Drawer.Header>
+        <Drawer.Header id="units-drawer-header">
           {t("listings.unit.add")}
           <Tag
             variant={

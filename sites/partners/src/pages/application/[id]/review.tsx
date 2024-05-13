@@ -212,10 +212,10 @@ const Flag = () => {
       </section>
       <Dialog
         isOpen={!!saveModalOpen}
-        ariaDescription={t("listings.closeThisListing")}
+        ariaLabelledBy="application-review-dialog-header"
         onClose={() => setSaveModalOpen(false)}
       >
-        <Dialog.Header>{t("flags.updateStatus")}</Dialog.Header>
+        <Dialog.Header id="application-review-dialog-header">{t("flags.updateStatus")}</Dialog.Header>
         <Dialog.Content>
           <Field
             id="setStatus.pending"

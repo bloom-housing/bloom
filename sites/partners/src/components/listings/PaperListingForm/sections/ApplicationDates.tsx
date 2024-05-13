@@ -182,23 +182,32 @@ const ApplicationDates = ({
         </Grid.Row>
       </SectionWithGrid>
 
-      <Drawer isOpen={!!drawerOpenHouse} onClose={() => setDrawerOpenHouse(false)}>
-        <>
-          <Drawer.Header>{t("listings.sections.addOpenHouse")}</Drawer.Header>
-          <OpenHouseForm
-            onSubmit={onOpenHouseEventsSubmit}
-            currentEvent={(drawerOpenHouse as TempEvent) || undefined}
-          />
-        </>
+      <Drawer
+        isOpen={!!drawerOpenHouse}
+        onClose={() => setDrawerOpenHouse(false)}
+        ariaLabelledBy="application-dates-drawer-header"
+      >
+        <Drawer.Header id="application-dates-drawer-header">
+          {t("listings.sections.addOpenHouse")}
+        </Drawer.Header>
+        <OpenHouseForm
+          onSubmit={onOpenHouseEventsSubmit}
+          currentEvent={(drawerOpenHouse as TempEvent) || undefined}
+        />
       </Drawer>
 
       <Dialog
         isOpen={!!modalDeleteOpenHouse}
-        ariaDescription={t("listings.events.deleteConf")}
+        ariaLabelledBy="application-dates-dialog-header"
+        ariaDescribedBy="application-dates-dialog-content"
         onClose={() => setModalDeleteOpenHouse(null)}
       >
-        <Dialog.Header>{t("listings.events.deleteThisEvent")}</Dialog.Header>
-        <Dialog.Content>{t("listings.events.deleteConf")}</Dialog.Content>
+        <Dialog.Header id="application-dates-dialog-header">
+          {t("listings.events.deleteThisEvent")}
+        </Dialog.Header>
+        <Dialog.Content id="application-dates-dialog-content">
+          {t("listings.events.deleteConf")}
+        </Dialog.Content>
         <Dialog.Footer>
           <Button
             variant="alert"
