@@ -59,15 +59,15 @@ p, jurisdictionAdmin, reservedCommunityType, true, read
 p, partner, reservedCommunityType, true, read
 
 p, admin, unitType, true, .*
-p, admin, jurisdictionAdmin, true, read
+p, jurisdictionAdmin, unitType, true, read
 p, partner, unitType, true, read
 
 p, admin, unitRentType, true, .*
-p, jurisdictionAdmin, jurisdictionAdmin, true, read
+p, jurisdictionAdmin, unitRentType, true, read
 p, partner, unitRentType, true, read
 
 p, admin, unitAccessibilityPriorityType, true, .*
-p, jurisdictionAdmin, jurisdictionAdmin, true, .*
+p, jurisdictionAdmin, unitAccessibilityPriorityType, true, read
 p, partner, unitAccessibilityPriorityType, true, read
 
 p, admin, applicationMethod, true, .*
