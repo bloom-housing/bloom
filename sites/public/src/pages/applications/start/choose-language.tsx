@@ -1,5 +1,4 @@
 import React, { useCallback, useContext, useEffect, useState } from "react"
-import axios from "axios"
 import { useRouter } from "next/router"
 import { ImageCard, t } from "@bloom-housing/ui-components"
 import {
@@ -13,6 +12,7 @@ import {
 import {
   LanguagesEnum,
   ListingsStatusEnum,
+  ListingsService,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Heading, Icon, Button, Message } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
@@ -27,11 +27,21 @@ import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
 
-const loadListing = async (listingId, stateFunction, conductor, context, language) => {
-  const response = await axios.get(`${process.env.backendApiBase}/listings/${listingId}`, {
-    headers: { language },
-  })
-  conductor.listing = response.data
+const loadListing = async (
+  listingId,
+  stateFunction,
+  conductor,
+  context,
+  language,
+  listingsService: ListingsService
+) => {
+  const response = await listingsService.retrieve(
+    { id: listingId },
+    {
+      headers: { language },
+    }
+  )
+  conductor.listing = response
   const applicationConfig = retrieveApplicationConfig(conductor.listing) // TODO: load from backend
   conductor.config = applicationConfig
   stateFunction(conductor.listing)
@@ -42,7 +52,7 @@ const ApplicationChooseLanguage = () => {
   const router = useRouter()
   const [listing, setListing] = useState(null)
   const context = useContext(AppSubmissionContext)
-  const { initialStateLoaded, profile } = useContext(AuthContext)
+  const { initialStateLoaded, profile, listingsService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
   const { conductor } = context
 
@@ -65,12 +75,12 @@ const ApplicationChooseLanguage = () => {
       }
     }
     if (!context.listing || context.listing.id !== listingId) {
-      void loadListing(listingId, setListing, conductor, context, "en")
+      void loadListing(listingId, setListing, conductor, context, "en", listingsService)
     } else {
       conductor.listing = context.listing
       setListing(context.listing)
     }
-  }, [router, conductor, context, listingId, initialStateLoaded, profile])
+  }, [router, conductor, context, listingId, initialStateLoaded, profile, listingsService])
 
   useEffect(() => {
     if (listing && router.isReady) {
@@ -90,11 +100,13 @@ const ApplicationChooseLanguage = () => {
       conductor.currentStep.save({
         language,
       })
-      void loadListing(listingId, setListing, conductor, context, language).then(() => {
-        void router.push(conductor.determineNextUrl(), null, { locale: language })
-      })
+      void loadListing(listingId, setListing, conductor, context, language, listingsService).then(
+        () => {
+          void router.push(conductor.determineNextUrl(), null, { locale: language })
+        }
+      )
     },
-    [conductor, context, listingId, router]
+    [conductor, context, listingId, router, listingsService]
   )
 
   const { content: appStatusContent } = useGetApplicationStatusProps(listing)
