@@ -7,13 +7,9 @@ import {
   AlertBox,
   LoadingOverlay,
   Modal,
-  Tabs,
-  TabList,
-  Tab,
-  TabPanel,
   LatitudeLongitude,
 } from "@bloom-housing/ui-components"
-import { Button, Icon } from "@bloom-housing/ui-seeds"
+import { Button, Icon, Tabs } from "@bloom-housing/ui-seeds"
 import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
 import ChevronRightIcon from "@heroicons/react/20/solid/ChevronRightIcon"
 import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
@@ -299,11 +295,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         selectedIndex={tabIndex}
                         onSelect={(index) => setTabIndex(index)}
                       >
-                        <TabList>
-                          <Tab>Listing Details</Tab>
-                          <Tab>Application Process</Tab>
-                        </TabList>
-                        <TabPanel>
+                        <Tabs.TabList>
+                          <Tabs.Tab>Listing Details</Tabs.Tab>
+                          <Tabs.Tab>Application Process</Tabs.Tab>
+                        </Tabs.TabList>
+                        <Tabs.TabPanel>
                           <ListingIntro jurisdictions={profile.jurisdictions} />
                           <ListingPhotos />
                           <BuildingDetails
@@ -366,14 +362,14 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                               }
                               onClick={() => {
                                 setTabIndex(1)
-                                window.scrollTo({ top: 0, behavior: "smooth" })
+                                setTimeout(() => window.scroll({ top: 0, behavior: "smooth" }))
                               }}
                             >
                               Application Process
                             </Button>
                           </div>
-                        </TabPanel>
-                        <TabPanel>
+                        </Tabs.TabPanel>
+                        <Tabs.TabPanel>
                           <RankingsAndResults listing={listing} />
                           <LeasingAgent />
                           <ApplicationTypes listing={listing} />
@@ -395,13 +391,13 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                               }
                               onClick={() => {
                                 setTabIndex(0)
-                                window.scrollTo({ top: 0, behavior: "smooth" })
+                                setTimeout(() => window.scroll({ top: 0, behavior: "smooth" }))
                               }}
                             >
                               Listing Details
                             </Button>
                           </div>
-                        </TabPanel>
+                        </Tabs.TabPanel>
                       </Tabs>
 
                       {listing?.status === ListingsStatusEnum.closed && (
