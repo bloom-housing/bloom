@@ -80,8 +80,7 @@ const Layout = (props) => {
       const startWindow = convertWindowToDate(maintenanceWindow[0])
       const endWindow = convertWindowToDate(maintenanceWindow[1])
       const now = dayjs()
-      inMaintenance =
-        now > startWindow && now < endWindow && process.env.jurisdictionName === "Alameda"
+      inMaintenance = now > startWindow && now < endWindow
     }
     return inMaintenance
   }
