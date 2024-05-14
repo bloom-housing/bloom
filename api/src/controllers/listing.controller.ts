@@ -64,7 +64,7 @@ import { ApiKeyGuard } from '../guards/api-key.guard';
   PaginationAllowsAllQueryParams,
   IdDTO,
 )
-@UseGuards(ApiKeyGuard, OptionalAuthGuard)
+@UseGuards(OptionalAuthGuard)
 @PermissionTypeDecorator('listing')
 @ActivityLogMetadata([{ targetPropertyName: 'status', propertyPath: 'status' }])
 @UseInterceptors(ActivityLogInterceptor)
@@ -92,7 +92,7 @@ export class ListingController {
     operationId: 'listAsCsv',
   })
   @Header('Content-Type', 'application/zip')
-  @UseGuards(OptionalAuthGuard, PermissionGuard)
+  @UseGuards(ApiKeyGuard, OptionalAuthGuard, PermissionGuard)
   @UseInterceptors(ExportLogInterceptor)
   async listAsCsv(
     @Request() req: ExpressRequest,
@@ -145,6 +145,7 @@ export class ListingController {
   @UseInterceptors(ClassSerializerInterceptor)
   @UsePipes(new ListingCreateUpdateValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: Listing })
+  @UseGuards(ApiKeyGuard)
   async create(
     @Request() req: ExpressRequest,
     @Body() listingDto: ListingCreate,
@@ -158,6 +159,7 @@ export class ListingController {
   @Delete()
   @ApiOperation({ summary: 'Delete listing by id', operationId: 'delete' })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  @UseGuards(ApiKeyGuard)
   async delete(
     @Body() dto: IdDTO,
     @Request() req: ExpressRequest,
@@ -173,7 +175,7 @@ export class ListingController {
   @ApiOkResponse({ type: SuccessDTO })
   @PermissionAction(permissionActions.submit)
   @UseInterceptors(ActivityLogInterceptor)
-  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
+  @UseGuards(ApiKeyGuard, OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
   async process(): Promise<SuccessDTO> {
     return await this.listingService.process();
   }
@@ -181,6 +183,7 @@ export class ListingController {
   @Put(':id')
   @ApiOperation({ summary: 'Update listing by id', operationId: 'update' })
   @UsePipes(new ListingCreateUpdateValidationPipe(defaultValidationPipeOptions))
+  @UseGuards(ApiKeyGuard)
   async update(
     @Request() req: ExpressRequest,
     @Param('id') listingId: string,
