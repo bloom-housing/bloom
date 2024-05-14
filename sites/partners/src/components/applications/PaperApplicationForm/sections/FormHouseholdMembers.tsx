@@ -171,7 +171,9 @@ const FormHouseholdMembers = ({
         ariaDescribedBy="form-household-members-dialog-content"
         onClose={() => setMembersDeleteModal(null)}
       >
-        <Dialog.Header id="form-household-members-dialog-header">{t("application.deleteThisMember")}</Dialog.Header>
+        <Dialog.Header id="form-household-members-dialog-header">
+          {t("application.deleteThisMember")}
+        </Dialog.Header>
         <Dialog.Content id="form-household-members-dialog-content">
           {t("application.deleteMemberDescription")}
         </Dialog.Content>

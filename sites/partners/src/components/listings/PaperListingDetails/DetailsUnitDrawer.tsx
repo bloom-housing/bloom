@@ -1,7 +1,7 @@
 import React from "react"
 import { Unit } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
-import { Button, Card, Drawer, FieldValue, Grid, Tag } from "@bloom-housing/ui-seeds"
+import { Button, Card, Drawer, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { getRentType } from "../../../lib/helpers"
 import { useSingleAmiChartData } from "../../../lib/hooks"
 import SectionWithGrid from "../../shared/SectionWithGrid"

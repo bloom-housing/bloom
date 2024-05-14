@@ -1,10 +1,5 @@
 import React, { useState, useMemo, useCallback, useContext, useEffect } from "react"
-import {
-  t,
-  MinimalTable,
-  FieldGroup,
-  StandardTableData,
-} from "@bloom-housing/ui-components"
+import { t, MinimalTable, FieldGroup, StandardTableData } from "@bloom-housing/ui-components"
 import { Button, Dialog, Drawer, FieldValue, Grid, Tag } from "@bloom-housing/ui-seeds"
 import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { MessageContext } from "@bloom-housing/shared-helpers"
@@ -250,13 +245,13 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
             setDefaultUnit(defaultUnit)
             if (openNextUnit) {
               if (defaultUnit) {
-                addToast(t("listings.unit.unitCopied"), {variant: "success"})
+                addToast(t("listings.unit.unitCopied"), { variant: "success" })
               }
               editUnit(nextId)
             } else if (!openCurrentUnit) {
               setUnitDrawerOpen(false)
             } else {
-              addToast(t("listings.unit.unitSaved"), {variant: "success"})
+              addToast(t("listings.unit.unitSaved"), { variant: "success" })
             }
           }}
           draft={!units.some((unit) => unit.tempId === defaultUnit?.tempId)}

@@ -644,30 +644,15 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
       </Drawer.Content>
       <Drawer.Footer>
         {!draft ? (
-          <Button
-            type="button"
-            onClick={() => copyAndNew()}
-            variant="secondary"
-            size="sm"
-          >
+          <Button type="button" onClick={() => copyAndNew()} variant="secondary" size="sm">
             {t("t.copy")}
           </Button>
         ) : (
-          <Button
-            type="button"
-            onClick={() => onFormSubmit("save")}
-            variant="secondary"
-            size="sm"
-          >
+          <Button type="button" onClick={() => onFormSubmit("save")} variant="secondary" size="sm">
             {t("t.save")}
           </Button>
         )}
-        <Button
-          type="button"
-          onClick={() => onFormSubmit("saveNew")}
-          variant="secondary"
-          size="sm"
-        >
+        <Button type="button" onClick={() => onFormSubmit("saveNew")} variant="secondary" size="sm">
           {t("t.saveNew")}
         </Button>
 

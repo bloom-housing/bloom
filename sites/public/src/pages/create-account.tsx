@@ -7,7 +7,6 @@ import {
   t,
   DOBField,
   AlertBox,
-  Modal,
   passwordRegex,
 } from "@bloom-housing/ui-components"
 import { Button, Dialog, Heading } from "@bloom-housing/ui-seeds"
@@ -287,6 +286,7 @@ export default () => {
           </div>
         )}
       </div>
+
       <Dialog
         isOpen={openModal}
         onClose={() => {
@@ -296,7 +296,9 @@ export default () => {
         ariaLabelledBy="create-account-dialog-header"
         ariaDescribedBy="create-account-dialog-content"
       >
-        <Dialog.Header id="create-account-dialog-header">{t("authentication.createAccount.confirmationNeeded")}</Dialog.Header>
+        <Dialog.Header id="create-account-dialog-header">
+          {t("authentication.createAccount.confirmationNeeded")}
+        </Dialog.Header>
         <Dialog.Content id="create-account-dialog-content">
           <p>{t("authentication.createAccount.anEmailHasBeenSent", { email: email.current })}</p>
           <p>{t("authentication.createAccount.confirmationInstruction")}</p>

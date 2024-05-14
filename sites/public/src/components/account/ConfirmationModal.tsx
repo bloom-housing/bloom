@@ -85,7 +85,9 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
       }}
       ariaLabelledBy="account-confirmation-dialog-header"
     >
-      <Dialog.Header id="account-confirmation-dialog-header">{t("authentication.createAccount.linkExpired")}</Dialog.Header>
+      <Dialog.Header id="account-confirmation-dialog-header">
+        {t("authentication.createAccount.linkExpired")}
+      </Dialog.Header>
       <Dialog.Content>
         <Form id="resend-confirmation" onSubmit={handleSubmit(onSubmit)}>
           <Field

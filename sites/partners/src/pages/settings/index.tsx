@@ -59,7 +59,6 @@ const Settings = () => {
         return aChar.localeCompare(bChar)
       })
       .map((preference) => {
-        // const rowClass = updatedIds.indexOf(preference.id) >= 0 ? "bg-gray-400" : ""
         return {
           name: {
             content: preference?.text,
@@ -90,7 +89,7 @@ const Settings = () => {
           },
         }
       })
-  }, [updatedIds, data])
+  }, [data])
 
   useEffect(() => {
     if (!isCreateLoading) {

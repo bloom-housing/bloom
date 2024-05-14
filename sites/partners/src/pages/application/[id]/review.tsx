@@ -215,7 +215,9 @@ const Flag = () => {
         ariaLabelledBy="application-review-dialog-header"
         onClose={() => setSaveModalOpen(false)}
       >
-        <Dialog.Header id="application-review-dialog-header">{t("flags.updateStatus")}</Dialog.Header>
+        <Dialog.Header id="application-review-dialog-header">
+          {t("flags.updateStatus")}
+        </Dialog.Header>
         <Dialog.Content>
           <Field
             id="setStatus.pending"
