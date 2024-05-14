@@ -48,6 +48,7 @@ module.exports = withBundleAnalyzer(
       cloudinarySignedPreset: process.env.CLOUDINARY_SIGNED_PRESET,
       mapBoxToken: MAPBOX_TOKEN,
       featureListingsApproval: process.env.FEATURE_LISTINGS_APPROVAL,
+      reCaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
     },
     i18n: {
       locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],

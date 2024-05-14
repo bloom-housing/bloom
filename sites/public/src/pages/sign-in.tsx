@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState, useCallback } from "react"
 import { useForm } from "react-hook-form"
+import ReCAPTCHA from "react-google-recaptcha"
 import { t, useMutate } from "@bloom-housing/ui-components"
 import { useRouter } from "next/router"
 import FormsLayout from "../layouts/forms"
@@ -52,6 +53,8 @@ const SignIn = () => {
 
   const [useCode, setUseCode] = useState(loginType !== "pwd")
 
+  const reCaptchaRef = useRef<ReCAPTCHA>()
+
   const {
     mutate: mutateResendConfirmation,
     reset: resetResendConfirmation,
@@ -66,11 +69,21 @@ const SignIn = () => {
     })
   }, [])
 
+  const getReCaptchaToken = async () => {
+    const reCaptchaToken = await reCaptchaRef.current.executeAsync()
+
+    reCaptchaRef.current.reset()
+
+    return reCaptchaToken
+  }
+
   const onSubmit = async (data: { email: string; password: string }) => {
     const { email, password } = data
 
     try {
-      const user = await login(email, password)
+      const reCaptchaToken = await getReCaptchaToken()
+
+      const user = await login(email, password, undefined, undefined, undefined, reCaptchaToken)
       await redirectToPage()
       addToast(t(`authentication.signIn.success`, { name: user.firstName }), { variant: "success" })
     } catch (error) {
@@ -97,7 +110,9 @@ const SignIn = () => {
           query: queryParams,
         })
       } else {
-        const user = await login(email, password)
+        const reCaptchaToken = await getReCaptchaToken()
+
+        const user = await login(email, password, undefined, undefined, undefined, reCaptchaToken)
         addToast(t(`authentication.signIn.success`, { name: user.firstName }), {
           variant: "success",
         })
@@ -235,6 +250,7 @@ const SignIn = () => {
         onSubmit={(email) => onResendConfirmationSubmit(email)}
         loadingMessage={isResendConfirmationLoading && t("t.formSubmitted")}
       />
+      <ReCAPTCHA sitekey={process.env.reCaptchaSiteKey} size="invisible" ref={reCaptchaRef} />
     </>
   )
 }

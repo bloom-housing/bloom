@@ -8,11 +8,23 @@ export enum EnumRenderStep {
 }
 
 export const onSubmitEmailAndPassword =
-  (setEmail, setPassword, setRenderStep, determineNetworkError, login, router, resetNetworkError) =>
+  (
+    setEmail,
+    setPassword,
+    setRenderStep,
+    determineNetworkError,
+    login,
+    router,
+    resetNetworkError,
+    reCaptchaRef
+  ) =>
   async (data: { email: string; password: string }) => {
     const { email, password } = data
     try {
-      await login(email, password, undefined, undefined, true)
+      const reCaptchaToken = await reCaptchaRef.current.executeAsync()
+      reCaptchaRef.current.reset()
+
+      await login(email, password, undefined, undefined, true, reCaptchaToken)
       await router.push("/")
     } catch (error) {
       if (error?.response?.data?.name === "mfaCodeIsMissing") {

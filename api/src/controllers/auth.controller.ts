@@ -48,8 +48,14 @@ export class AuthController {
   async login(
     @Request() req: ExpressRequest,
     @Response({ passthrough: true }) res: ExpressResponse,
+    @Body() dto: Login,
   ): Promise<SuccessDTO> {
-    return await this.authService.setCredentials(res, mapTo(User, req['user']));
+    return await this.authService.setCredentials(
+      res,
+      mapTo(User, req['user']),
+      undefined,
+      dto.reCaptchaToken,
+    );
   }
 
   @Post('loginViaSingleUseCode')

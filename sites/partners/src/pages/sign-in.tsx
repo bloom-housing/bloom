@@ -1,5 +1,6 @@
 import React, { useContext, useState, useRef, useEffect, useCallback } from "react"
 import { useForm } from "react-hook-form"
+import ReCAPTCHA from "react-google-recaptcha"
 import { useRouter } from "next/router"
 import {
   useCatchNetworkError,
@@ -99,6 +100,8 @@ const SignIn = () => {
     }
   }, [networkError])
 
+  const reCaptchaRef = useRef<ReCAPTCHA>()
+
   let formToRender: JSX.Element
 
   if (Object.keys(errors).length && !!networkError) {
@@ -144,10 +147,12 @@ const SignIn = () => {
             determineNetworkError,
             login,
             router,
-            resetNetworkError
+            resetNetworkError,
+            reCaptchaRef
           )}
           control={{ register, errors, handleSubmit }}
         />
+        <ReCAPTCHA sitekey={process.env.reCaptchaSiteKey} size="invisible" ref={reCaptchaRef} />
       </FormSignIn>
     )
   } else if (renderStep === EnumRenderStep.mfaType) {

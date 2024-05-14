@@ -5,6 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { CookieOptions, Response } from 'express';
+import axios from 'axios';
 import { sign, verify } from 'jsonwebtoken';
 import { Prisma } from '@prisma/client';
 import { UpdatePassword } from '../dtos/auth/update-password.dto';
@@ -84,9 +85,21 @@ export class AuthService {
     res: Response,
     user: User,
     incomingRefreshToken?: string,
+    reCaptchaToken?: string,
   ): Promise<SuccessDTO> {
     if (!user?.id) {
       throw new UnauthorizedException('no user found');
+    }
+
+    try {
+      const checkReCaptcha = await axios.post(
+        `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SITE_KEY}&response=${reCaptchaToken}`,
+      );
+      if (!checkReCaptcha.data.success) {
+        throw new UnauthorizedException(`User ${user.id} failed ReCaptcha`);
+      }
+    } catch (err) {
+      console.log('ReCaptcha call failed', err);
     }
 
     if (incomingRefreshToken) {
