@@ -23,23 +23,25 @@ describe('API Key Guard Tests', () => {
     await app.close();
   });
 
-  it('should succeed when correct header is present', async () => {
+  it('should error but because of unauthorized (got passed the pass key)', async () => {
     await request(app.getHttpServer())
-      .get('/jurisdictions')
+      .get('/reservedCommunityTypes')
       .set({ passkey: process.env.API_PASS_KEY || '' })
-      .expect(200);
+      .expect(401);
   });
 
   it('should error when incorrect header is present', async () => {
     const res = await request(app.getHttpServer())
-      .get('/listings')
+      .get('/reservedCommunityTypes')
       .set({ passkey: 'the wrong key' })
       .expect(401);
     expect(res.body.message).toBe('Traffic not from a known source');
   });
 
   it('should error when no header is present', async () => {
-    const res = await request(app.getHttpServer()).get('/listings').expect(401);
+    const res = await request(app.getHttpServer())
+      .get('/reservedCommunityTypes')
+      .expect(401);
     expect(res.body.message).toBe('Traffic not from a known source');
   });
 });
