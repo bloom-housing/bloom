@@ -1,5 +1,4 @@
 {
-  "alert.maintenance": "The Alameda <u>County</u> Housing Authority (HACA) will be opening its waitlist April 2 through April 5. Find out more at <a href='https://www.haca.net' target='_blank'>www.haca.net</a>.",
   "application.contact.doYouWorkIn": "Do you work in %{county} County?",
   "application.contact.doYouWorkInDescription": "",
   "application.household.member.workInRegion": "Do they work in the %{county} County?",
