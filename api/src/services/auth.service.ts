@@ -91,15 +91,17 @@ export class AuthService {
       throw new UnauthorizedException('no user found');
     }
 
-    try {
-      const checkReCaptcha = await axios.post(
-        `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SITE_KEY}&response=${reCaptchaToken}`,
-      );
-      if (!checkReCaptcha.data.success) {
-        throw new UnauthorizedException(`User ${user.id} failed ReCaptcha`);
+    if (process.env.RECAPTCHA_SITE_KEY) {
+      try {
+        const checkReCaptcha = await axios.post(
+          `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SITE_KEY}&response=${reCaptchaToken}`,
+        );
+        if (!checkReCaptcha.data.success) {
+          throw new UnauthorizedException(`User ${user.id} failed ReCaptcha`);
+        }
+      } catch (err) {
+        console.log('ReCaptcha call failed', err);
       }
-    } catch (err) {
-      console.log('ReCaptcha call failed', err);
     }
 
     if (incomingRefreshToken) {

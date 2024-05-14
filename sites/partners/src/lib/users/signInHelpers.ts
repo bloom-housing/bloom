@@ -21,8 +21,11 @@ export const onSubmitEmailAndPassword =
   async (data: { email: string; password: string }) => {
     const { email, password } = data
     try {
-      const reCaptchaToken = await reCaptchaRef.current.executeAsync()
-      reCaptchaRef.current.reset()
+      let reCaptchaToken = undefined
+      if (process.env.reCaptchaSiteKey) {
+        reCaptchaToken = await reCaptchaRef.current.executeAsync()
+        reCaptchaRef.current.reset()
+      }
 
       await login(email, password, undefined, undefined, true, reCaptchaToken)
       await router.push("/")

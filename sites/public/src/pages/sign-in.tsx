@@ -81,7 +81,7 @@ const SignIn = () => {
     const { email, password } = data
 
     try {
-      const reCaptchaToken = await getReCaptchaToken()
+      const reCaptchaToken = process.env.reCaptchaSiteKey ? await getReCaptchaToken() : undefined
 
       const user = await login(email, password, undefined, undefined, undefined, reCaptchaToken)
       await redirectToPage()
@@ -250,7 +250,9 @@ const SignIn = () => {
         onSubmit={(email) => onResendConfirmationSubmit(email)}
         loadingMessage={isResendConfirmationLoading && t("t.formSubmitted")}
       />
-      <ReCAPTCHA sitekey={process.env.reCaptchaSiteKey} size="invisible" ref={reCaptchaRef} />
+      {process.env.reCaptchaSiteKey && (
+        <ReCAPTCHA sitekey={process.env.reCaptchaSiteKey} size="invisible" ref={reCaptchaRef} />
+      )}
     </>
   )
 }

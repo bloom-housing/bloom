@@ -152,7 +152,9 @@ const SignIn = () => {
           )}
           control={{ register, errors, handleSubmit }}
         />
-        <ReCAPTCHA sitekey={process.env.reCaptchaSiteKey} size="invisible" ref={reCaptchaRef} />
+        {process.env.reCaptchaSiteKey && (
+          <ReCAPTCHA sitekey={process.env.reCaptchaSiteKey} size="invisible" ref={reCaptchaRef} />
+        )}
       </FormSignIn>
     )
   } else if (renderStep === EnumRenderStep.mfaType) {
