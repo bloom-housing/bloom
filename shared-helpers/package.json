@@ -13,7 +13,8 @@
   "scripts": {
     "test": "jest -w 1",
     "test:coverage": "jest -w 1 --coverage --watchAll=false",
-    "prettier": "prettier --write \"**/*.ts\""
+    "prettier": "prettier --write \"**/*.ts\"",
+    "test:missing-translations": "ts-node src/scripts/missing-translations.ts"
   },
   "dependencies": {
     "@bloom-housing/doorway-ui-components": "^1.0.0",

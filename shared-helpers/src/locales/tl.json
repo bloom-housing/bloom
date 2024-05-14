@@ -228,6 +228,8 @@
   "application.name.yourEmailAddress": "Iyong email address",
   "application.name.yourEmailAddressPwdlessHelper": "Ilagay ang iyong email address at padadalhan ka namin ng code para sa pag-sign in na walang password.",
   "application.name.yourName": "Iyong pangalan",
+  "application.preferences.dontWant": "Hindi ko gusto ang mga kagustuhang ito",
+  "application.preferences.dontWantSingular": "Hindi ko gusto ang kagustuhang ito",
   "application.preferences.options.address": "Address",
   "application.preferences.options.addressHolderName": "Buong Pangalan ng May-ari ng Address",
   "application.preferences.options.addressHolderRelationship": "Relasyon sa May-ari ng Address",

@@ -34,6 +34,7 @@ function main() {
     return missingKeys
   }
 
+  let missingTranslations = false
   allTranslations.forEach((foreignKeys) => {
     console.log("--------------------")
     console.log(`Missing Public Site ${foreignKeys.language} Translations:`)
@@ -41,10 +42,13 @@ function main() {
       englishTranslations,
       foreignKeys.translationKeys
     )
+    if (missingPublicSiteTranslations.length > 0) missingTranslations = true
     missingPublicSiteTranslations.forEach((missingKey) =>
       console.log(`${missingKey}, ${JSON.stringify(englishTranslations[missingKey])}`)
     )
   })
+
+  if (missingTranslations) throw Error
 }
 
 void main()
