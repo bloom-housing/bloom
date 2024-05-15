@@ -4,8 +4,7 @@ import qs from "qs"
 import { wrapper } from "axios-cookiejar-support"
 import { CookieJar } from "tough-cookie"
 import { getConfigs } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { maskAxiosResponse } from "@bloom-housing/shared-helpers"
-import { logger } from "../../../../logger"
+import { logger } from "../../../logger"
 
 /*
   This file exists as per https://nextjs.org/docs/api-routes/dynamic-api-routes
@@ -30,16 +29,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       jar,
     })
   )
-  // set up request to backend from request to next api
+
   // eslint-disable-next-line prefer-const
   let { backendUrl, ...rest } = req.query
-  logger.info(`${req.method} - ${backendUrl}`)
-  logger.debug(req)
-
   if (Array.isArray(backendUrl)) {
     backendUrl = backendUrl.join("/")
   }
+
   try {
+    // set up request to backend from request to next api
     const configs = getConfigs(req.method || "", "application/json", backendUrl || "", {})
     let cookieString = ""
     Object.keys(req.cookies).forEach((cookieHeader) => {
@@ -48,6 +46,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     configs.headers.cookie = cookieString
     configs.params = rest
     configs.data = req.body || {}
+
+    // log that call is going out
+    logger.info(`${req.method} - ${backendUrl}`)
+    logger.debug(req)
 
     // send request to backend
     const response = await axios.request(configs)
