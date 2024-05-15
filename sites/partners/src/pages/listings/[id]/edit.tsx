@@ -10,6 +10,7 @@ import { MetaTags } from "../../../components/shared/MetaTags"
 import ListingGuard from "../../../components/shared/ListingGuard"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
 import { FormListing } from "../../../lib/listings/formTypes"
+import { logger } from "../../../logger"
 
 const EditListing = (props: { listing: Listing }) => {
   const metaDescription = ""
@@ -63,11 +64,17 @@ const EditListing = (props: { listing: Listing }) => {
 
 export async function getServerSideProps(context: { params: Record<string, string> }) {
   let response
+  const backendUrl = `/listings/${context.params.id}`
 
   try {
-    response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`)
+    logger.info(`GET - ${backendUrl}`)
+    response = await axios.get(`${process.env.backendApiBase}${backendUrl}`)
   } catch (e) {
-    console.log("e = ", e)
+    if (e.response) {
+      logger.error(`GET - ${backendUrl} - ${e.response?.status} - ${e.response?.statusText}`)
+    } else {
+      logger.error("partner backend url adapter error:", e)
+    }
     return { notFound: true }
   }
 

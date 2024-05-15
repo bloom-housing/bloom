@@ -4,7 +4,6 @@ import qs from "qs"
 import { wrapper } from "axios-cookiejar-support"
 import { CookieJar } from "tough-cookie"
 import { getConfigs } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { maskAxiosResponse } from "@bloom-housing/shared-helpers"
 import { logger } from "../../../logger"
 
 /*
@@ -33,16 +32,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       jar,
     })
   )
-  // set up request to backend from request to next api
+
   // eslint-disable-next-line prefer-const
   let { backendUrl, ...rest } = req.query
-  logger.info(`${req.method} - ${backendUrl}`)
-  logger.debug(req)
-
   if (Array.isArray(backendUrl)) {
     backendUrl = backendUrl.join("/")
   }
+
   try {
+    // set up request to backend from request to next api
     const configs = getConfigs(req.method || "", "application/json", backendUrl || "", {})
     let cookieString = ""
     Object.keys(req.cookies).forEach((cookieHeader) => {
@@ -51,6 +49,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     configs.headers.cookie = cookieString
     configs.params = rest
     configs.data = req.body || {}
+
+    // log that call is going out
+    logger.info(`${req.method} - ${backendUrl}`)
+    logger.debug(req)
 
     // send request to backend
     // the zip endpoints also require a responseType of arraybuffer
@@ -85,7 +87,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       res.statusMessage = e.response.statusText
       res.status(e.response.status).json(e.response.data)
     } else {
-      logger.error("public backend url adapter error:", e)
+      logger.error("partner backend url adapter error:", e)
     }
   }
 }
