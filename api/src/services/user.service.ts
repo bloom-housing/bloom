@@ -401,10 +401,13 @@ export class UserService {
       UserViews.full,
     );
 
+    const isPartnerPortalUser =
+      storedUser.userRoles?.isAdmin ||
+      storedUser.userRoles?.isJurisdictionalAdmin ||
+      storedUser.userRoles?.isPartner;
     const isUserSiteMatch =
-      (storedUser.userRoles !== null &&
-        dto.appUrl === process.env.PARTNERS_PORTAL_URL) ||
-      (storedUser.userRoles === null &&
+      (isPartnerPortalUser && dto.appUrl === process.env.PARTNERS_PORTAL_URL) ||
+      (!isPartnerPortalUser &&
         dto.appUrl === storedUser.jurisdictions[0]?.publicUrl);
     // user on wrong site, return neutral message and don't send email
     if (!isUserSiteMatch) return { success: true };
