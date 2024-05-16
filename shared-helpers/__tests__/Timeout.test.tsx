@@ -6,7 +6,7 @@ import { AuthContext } from "../src/auth/AuthContext"
 afterEach(cleanup)
 
 // TODO: refactor this test.
-// 
+//
 // I don't think these tests mean anything now, as nothing is rendered in either case other
 // than the wrapper div. We need a real way to test if the timeout dialog works but that would
 // require a significant refactor beyond the scope of the current Seeds Dialog uptake task.
