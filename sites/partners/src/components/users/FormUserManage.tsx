@@ -45,6 +45,8 @@ const FormUserManage = ({
   onCancel,
   onDrawerClose,
 }: FormUserManageProps) => {
+  if (!isOpen) return null
+
   const { userService, profile } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
   const jurisdictionList = profile.jurisdictions

@@ -196,7 +196,7 @@ const Users = () => {
         title={userDrawer?.type === "add" ? t("users.addUser") : t("users.editUser")}
         mode={userDrawer?.type}
         user={userDrawer?.user}
-        listings={listingDtos?.items}
+        listings={listingDtos?.items ?? []}
         onCancel={() => setUserDrawer(null)}
         onDrawerClose={() => {
           setUserDrawer(null)
