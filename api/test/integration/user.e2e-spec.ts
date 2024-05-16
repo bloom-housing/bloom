@@ -564,7 +564,7 @@ describe('User Controller Tests', () => {
     expect(mockforgotPassword.mock.calls.length).toBe(1);
   });
 
-  it('should not set resetToken when forgot-password is called by public user on the partners url', async () => {
+  it('should not set resetToken when forgot-password is called by public user on the partners site', async () => {
     const juris = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
@@ -595,7 +595,7 @@ describe('User Controller Tests', () => {
     expect(mockforgotPassword.mock.calls.length).toBe(0);
   });
 
-  it('should set resetToken when forgot-password is called by partner user on the partner site', async () => {
+  it('should set resetToken when forgot-password is called by partner user on the partners site', async () => {
     const juris = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
@@ -629,7 +629,7 @@ describe('User Controller Tests', () => {
     expect(mockforgotPassword.mock.calls.length).toBe(1);
   });
 
-  it('should not set resetToken when forgot-password is called by partner user on the public url', async () => {
+  it('should not set resetToken when forgot-password is called by partner user on the public site', async () => {
     const juris = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
