@@ -157,10 +157,10 @@ const Users = () => {
               setSearch: tableOptions.filter.setFilterValue,
             }}
             headerContent={
-              <div className="flex-row">
+              <div className="flex gap-2 items-center">
                 <Button
-                  className="mx-1"
                   variant="primary"
+                  size="sm"
                   onClick={() => setUserDrawer({ type: "add" })}
                   disabled={!listingDtos}
                   id={"add-user"}
@@ -169,8 +169,8 @@ const Users = () => {
                 </Button>
                 {(profile?.userRoles?.isAdmin || profile?.userRoles?.isJurisdictionalAdmin) && (
                   <Button
-                    className="mx-1"
                     variant="primary-outlined"
+                    size="sm"
                     leadIcon={
                       !csvExportLoading ? (
                         <Icon>
@@ -191,18 +191,20 @@ const Users = () => {
         </article>
       </section>
 
-      <FormUserManage
-        isOpen={!!userDrawer}
-        title={userDrawer?.type === "add" ? t("users.addUser") : t("users.editUser")}
-        mode={userDrawer?.type}
-        user={userDrawer?.user}
-        listings={listingDtos?.items ?? []}
-        onCancel={() => setUserDrawer(null)}
-        onDrawerClose={() => {
-          setUserDrawer(null)
-          void mutate(cacheKey)
-        }}
-      />
+      {userDrawer && (
+        <FormUserManage
+          isOpen={!!userDrawer}
+          title={userDrawer?.type === "add" ? t("users.addUser") : t("users.editUser")}
+          mode={userDrawer?.type}
+          user={userDrawer?.user}
+          listings={listingDtos?.items}
+          onCancel={() => setUserDrawer(null)}
+          onDrawerClose={() => {
+            setUserDrawer(null)
+            void mutate(cacheKey)
+          }}
+        />
+      )}
     </Layout>
   )
 }
