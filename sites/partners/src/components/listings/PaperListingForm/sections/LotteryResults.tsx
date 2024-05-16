@@ -139,8 +139,8 @@ const LotteryResults = (props: LotteryResultsProps) => {
     >
       <Drawer.Header id="lottery-results-drawer-header">{t(title)}</Drawer.Header>
       <Drawer.Content>
-        <p id="lottery-results-drawer-content">Form to upload lottery results</p>
-        <Card spacing="lg">
+        <p id="lottery-results-drawer-content" className="sr-only">Form to upload lottery results</p>
+        <Card>
           <Card.Section>
             <Dropzone
               id="lottery-results-upload"

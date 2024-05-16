@@ -32,7 +32,7 @@ const DetailsMemberDrawer = ({
         {t("application.household.householdMember")}
       </Drawer.Header>
       <Drawer.Content>
-        <Card spacing="lg" className="spacer-section">
+        <Card>
           <Card.Section>
             <SectionWithGrid heading={t("application.details.householdMemberDetails")} inset>
               <Grid.Row columns={4}>

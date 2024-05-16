@@ -236,7 +236,7 @@ const BuildingSelectionCriteria = () => {
           <p id="building-selection-criteria-drawer-description" className="sr-only">
             Form with PDF upload dropzone
           </p>
-          <Card spacing="lg">
+          <Card>
             <Card.Section>
               <FieldValue
                 label={t("listings.addBuildingSelectionCriteriaSubtitle")}

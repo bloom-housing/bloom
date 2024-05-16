@@ -30,7 +30,7 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
     >
       <Drawer.Header id="details-unit-drawer-header">{t("listings.unit.title")}</Drawer.Header>
       <Drawer.Content>
-        <Card spacing="lg">
+        <Card>
           <Card.Section>
             <SectionWithGrid heading={t("listings.unit.details")} inset>
               <Grid.Row columns={4}>

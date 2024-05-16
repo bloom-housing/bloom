@@ -551,7 +551,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
           <p id="application-types-drawer-description" className="sr-only">
             Form with paper application upload dropzone
           </p>
-          <Card spacing="lg">
+          <Card>
             <Card.Section>
               {cloudinaryData.url === "" && (
                 <div className="field">

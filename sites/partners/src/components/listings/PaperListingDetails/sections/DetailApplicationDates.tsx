@@ -99,7 +99,7 @@ const DetailApplicationDates = () => {
             <p id="detail-application-dates-drawer-description" className="sr-only">
               {t("listings.unit.title")}
             </p>
-            <Card spacing="lg">
+            <Card>
               <Card.Section>
                 <Grid className="grid-inset-section">
                   <Grid.Row columns={3}>
