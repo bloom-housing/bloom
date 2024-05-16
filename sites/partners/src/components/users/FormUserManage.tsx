@@ -403,7 +403,6 @@ const FormUserManage = ({
           {mode === "edit" && (
             <Button
               type="button"
-              className="mx-1"
               onClick={() => onSave()}
               variant="primary"
               loadingMessage={isUpdateUserLoading && t("t.formSubmitted")}
@@ -415,7 +414,6 @@ const FormUserManage = ({
           {mode === "add" && (
             <Button
               type="button"
-              className="mx-1"
               onClick={() => onInvite()}
               variant="primary"
               loadingMessage={isSendInviteLoading && t("t.formSubmitted")}
@@ -428,7 +426,6 @@ const FormUserManage = ({
           {!user?.confirmedAt && mode === "edit" && (
             <Button
               type="button"
-              className="mx-1"
               onClick={() => onInviteResend()}
               variant="primary-outlined"
               loadingMessage={isResendConfirmationLoading && t("t.formSubmitted")}
