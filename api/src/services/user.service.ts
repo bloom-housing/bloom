@@ -401,6 +401,14 @@ export class UserService {
       UserViews.full,
     );
 
+    const isUserSiteMatch =
+      (storedUser.userRoles !== null &&
+        dto.appUrl === process.env.PARTNERS_PORTAL_URL) ||
+      (storedUser.userRoles === null &&
+        dto.appUrl === storedUser.jurisdictions[0]?.publicUrl);
+    // user on wrong site, return neutral message and don't send email
+    if (!isUserSiteMatch) return { success: true };
+
     const payload = {
       id: storedUser.id,
       exp: Number.parseInt(dayjs().add(1, 'hour').format('X')),
