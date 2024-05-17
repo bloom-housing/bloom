@@ -24,7 +24,7 @@ describe("Preference Management Tests", () => {
     cy.getByTestId("preference-link").type("https://www.example.com")
     cy.getByTestId("preference-link-title").type("Preference Link Title")
 
-    cy.getByTestId("preference-jurisdiction").select("Bloomington")
+    cy.getByTestId("preference-jurisdiction").select("Bay Area")
     cy.getByID("preference-add-option-button").click()
     cy.getByTestId("preference-option-title").type("Preference Option Title")
     cy.getByTestId("preference-option-description").type("Preference Option Description", {
