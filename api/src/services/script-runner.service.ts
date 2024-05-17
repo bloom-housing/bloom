@@ -44,16 +44,24 @@ export class ScriptRunnerService {
     });
 
     if (storedScriptRun?.didScriptRun) {
-      throw new BadRequestException(`${scriptName} has already been run`);
+      // if script run has already successfully completed throw already succeed error
+      throw new BadRequestException(
+        `${scriptName} has already been run and succeeded`,
+      );
+    } else if (storedScriptRun?.didScriptRun === false) {
+      // if script run was attempted but failed, throw attempt already failed error
+      throw new BadRequestException(
+        `${scriptName} has an attempted run and it failed, or is in progress. If it failed, please delete the db entry and try again`,
+      );
+    } else {
+      // if no script run has been attempted create script run entry
+      await this.prisma.scriptRuns.create({
+        data: {
+          scriptName,
+          triggeringUser: userTriggeringTheRun.id,
+        },
+      });
     }
-
-    // create script run entry
-    await this.prisma.scriptRuns.create({
-      data: {
-        scriptName,
-        triggeringUser: userTriggeringTheRun.id,
-      },
-    });
   }
 
   /**
