@@ -228,6 +228,8 @@
   "application.name.yourEmailAddress": "Your Email Address",
   "application.name.yourEmailAddressPwdlessHelper": "Enter your email address and we'll send you a code for a password-free sign in.",
   "application.name.yourName": "Your Name",
+  "application.preferences.dontWant": "I don't want these preferences",
+  "application.preferences.dontWantSingular": "I don't want this preference",
   "application.preferences.options.address": "Address",
   "application.preferences.options.qualifyingAddress": "Qualifying Address",
   "application.preferences.options.addressHolderName": "Full Name of Address Holder",

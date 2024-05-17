@@ -1,6 +1,9 @@
 import React, { useContext, useMemo, useState } from "react"
 import { useRouter } from "next/router"
+import dayjs from "dayjs"
 import Head from "next/head"
+import Markdown from "markdown-to-jsx"
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
 import {
   AgTable,
   t,
@@ -9,10 +12,12 @@ import {
   Breadcrumbs,
   BreadcrumbLink,
 } from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
+import { Button, Card, Heading, Icon, Message } from "@bloom-housing/ui-seeds"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   ApplicationOrderByKeys,
+  ListingsStatusEnum,
   OrderByEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
@@ -28,7 +33,8 @@ import { ApplicationsSideNav } from "../../../../components/applications/Applica
 import { NavigationHeader } from "../../../../components/shared/NavigationHeader"
 import { ExportTermsDialog } from "../../../../components/shared/ExportTermsDialog"
 import styles from "../../../../components/shared/ExportTermsDialog.module.scss"
-import Markdown from "markdown-to-jsx"
+import pageStyles from "../../../../../styles/applications.module.scss"
+
 const ApplicationsList = () => {
   const { profile } = useContext(AuthContext)
   const [isTermsOpen, setIsTermsOpen] = useState(false)
@@ -52,6 +58,8 @@ const ApplicationsList = () => {
       includeDemographicsPartner) ??
       false
   )
+
+  const shouldExpireData = !profile?.userRoles.isAdmin
 
   const countyCode = listingDto?.jurisdictions.name
   const listingName = listingDto?.name
@@ -125,6 +133,9 @@ const ApplicationsList = () => {
 
   if (!applications || appsError) return "An error has occurred."
 
+  const expiryDate = dayjs(listingDto?.closedAt).add(45, "day")
+  const formattedExpiryDate = expiryDate.format("MMMM D, YYYY")
+
   return (
     <Layout>
       <Head>
@@ -160,86 +171,124 @@ const ApplicationsList = () => {
 
       <ListingStatusBar status={listingDto?.status} />
 
-      <section className={"bg-gray-200 pt-4"}>
-        <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4 flex-col">
-          {listingDto && (
-            <>
-              <ApplicationsSideNav
-                className="w-full md:w-72"
-                listingId={listingId}
-                listingOpen={isListingOpen}
-              />
-
-              <AgTable
-                className="w-full"
-                id="applications-table"
-                pagination={{
-                  perPage: tableOptions.pagination.itemsPerPage,
-                  setPerPage: tableOptions.pagination.setItemsPerPage,
-                  currentPage: tableOptions.pagination.currentPage,
-                  setCurrentPage: tableOptions.pagination.setCurrentPage,
-                }}
-                config={{
-                  gridComponents,
-                  columns: columnDefs,
-                  totalItemsLabel: t("applications.totalApplications"),
-                }}
-                data={{
-                  items: applications,
-                  loading: appsLoading,
-                  totalItems: appsMeta?.totalItems,
-                  totalPages: appsMeta?.totalPages,
-                }}
-                search={{
-                  setSearch: tableOptions.filter.setFilterValue,
-                }}
-                sort={{
-                  setSort: tableOptions.sort.setSortOptions,
-                }}
-                headerContent={
-                  <div className="flex-row">
-                    {allowNewApps && (
-                      <Button
-                        href={`/listings/${listingId}/applications/add`}
-                        variant="primary-outlined"
-                        size="sm"
-                        className="mx-1"
-                        id={"addApplicationButton"}
-                      >
-                        {t("applications.addApplication")}
-                      </Button>
-                    )}
-
-                    <Button
-                      variant="primary-outlined"
-                      size="sm"
-                      className="mx-1"
-                      onClick={() => setIsTermsOpen(true)}
-                      loadingMessage={csvExportLoading && t("t.formSubmitted")}
+      {listingDto?.status === ListingsStatusEnum.closed &&
+      shouldExpireData &&
+      expiryDate <= dayjs() ? (
+        <section className={pageStyles["expired"]}>
+          <div className={pageStyles["parent"]}>
+            <div className={pageStyles["container"]}>
+              <div className={pageStyles["main"]}>
+                <Card spacing={"lg"}>
+                  <CardSection>
+                    <Icon icon={faExclamationCircle} size="xl" />
+                    <Heading priority={2} size={"2xl"}>
+                      {t("applications.export.dataExpiryHeader")}
+                    </Heading>
+                    <div className={pageStyles["card-description"]}>
+                      {t("applications.export.dataExpiryDescription")}
+                    </div>
+                  </CardSection>
+                </Card>
+              </div>
+              <aside className={pageStyles["side"]} />
+            </div>
+          </div>
+        </section>
+      ) : (
+        <section className={pageStyles["section"]}>
+          <article className={pageStyles["article"]}>
+            {listingDto && (
+              <>
+                <ApplicationsSideNav
+                  className={pageStyles["navigation-container"]}
+                  listingId={listingId}
+                  listingOpen={isListingOpen}
+                />
+                <div className={pageStyles["content-container"]}>
+                  {shouldExpireData && listingDto?.status === ListingsStatusEnum.closed && (
+                    <Message
+                      variant={"warn"}
+                      fullwidth={true}
+                      className={pageStyles["applications-expiration-message"]}
                     >
-                      {t("t.export")}
-                    </Button>
-                  </div>
-                }
-              />
-              <ExportTermsDialog
-                dialogHeader={t("applications.export.dialogHeader")}
-                isOpen={isTermsOpen}
-                onClose={() => setIsTermsOpen(false)}
-                onSubmit={onSubmit}
-              >
-                <p>{t("applications.export.dialogSubheader")}</p>
-                <h2 className={styles["terms-of-use-text"]}>
-                  {t("applications.export.termsOfUse")}
-                </h2>
-                <Markdown>
-                  {t("applications.export.termsBody", { bold: styles["terms-bold-text"] })}
-                </Markdown>
-              </ExportTermsDialog>
-            </>
-          )}
-        </article>
-      </section>
+                      {t("applications.export.dataExpiryMessage", {
+                        date: formattedExpiryDate,
+                      })}
+                    </Message>
+                  )}
+                  <AgTable
+                    id="applications-table"
+                    pagination={{
+                      perPage: tableOptions.pagination.itemsPerPage,
+                      setPerPage: tableOptions.pagination.setItemsPerPage,
+                      currentPage: tableOptions.pagination.currentPage,
+                      setCurrentPage: tableOptions.pagination.setCurrentPage,
+                    }}
+                    config={{
+                      gridComponents,
+                      columns: columnDefs,
+                      totalItemsLabel: t("applications.totalApplications"),
+                    }}
+                    data={{
+                      items: applications,
+                      loading: appsLoading,
+                      totalItems: appsMeta?.totalItems,
+                      totalPages: appsMeta?.totalPages,
+                    }}
+                    search={{
+                      setSearch: tableOptions.filter.setFilterValue,
+                    }}
+                    sort={{
+                      setSort: tableOptions.sort.setSortOptions,
+                    }}
+                    headerContent={
+                      <div className={pageStyles["table-action-container"]}>
+                        {allowNewApps && (
+                          <Button
+                            href={`/listings/${listingId}/applications/add`}
+                            variant="primary-outlined"
+                            size="sm"
+                            className={pageStyles["table-action"]}
+                            id={"addApplicationButton"}
+                          >
+                            {t("applications.addApplication")}
+                          </Button>
+                        )}
+
+                        <Button
+                          variant="primary-outlined"
+                          size="sm"
+                          className={pageStyles["table-action"]}
+                          onClick={() => setIsTermsOpen(true)}
+                          loadingMessage={csvExportLoading && t("t.formSubmitted")}
+                        >
+                          {t("t.export")}
+                        </Button>
+                      </div>
+                    }
+                  />
+                </div>
+
+                <ExportTermsDialog
+                  dialogHeader={t("applications.export.dialogHeader")}
+                  isOpen={isTermsOpen}
+                  onClose={() => setIsTermsOpen(false)}
+                  onSubmit={onSubmit}
+                >
+                  <p>{t("applications.export.dialogAlert", { date: formattedExpiryDate })}</p>
+                  <p>{t("applications.export.dialogSubheader")}</p>
+                  <h2 className={styles["terms-of-use-text"]}>
+                    {t("applications.export.termsOfUse")}
+                  </h2>
+                  <Markdown>
+                    {t("applications.export.termsBody", { bold: styles["terms-bold-text"] })}
+                  </Markdown>
+                </ExportTermsDialog>
+              </>
+            )}
+          </article>
+        </section>
+      )}
     </Layout>
   )
 }

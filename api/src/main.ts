@@ -14,13 +14,14 @@ import { json } from 'express';
 import { AppModule } from './modules/app.module';
 import { CustomExceptionFilter } from './utilities/custom-exception-filter';
 import { logger } from './middleware/logger.middleware';
+import { WinstonModule } from 'nest-winston';
+import { instance } from './logger/winston.logger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger:
-      process.env.NODE_ENV === 'development'
-        ? ['error', 'warn', 'log', 'debug']
-        : ['error', 'warn'],
+    logger: WinstonModule.createLogger({
+      instance: instance,
+    }),
   });
   const allowList = process.env.CORS_ORIGINS || [];
   const allowListRegex = process.env.CORS_REGEX
