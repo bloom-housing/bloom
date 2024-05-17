@@ -777,6 +777,7 @@ describe('User Controller Tests', () => {
         email: 'thisEmailDoesNotExist@exygy.com',
       } as RequestMfaCode)
       .set({ jurisdictionname: jurisdiction.name })
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .expect(201);
     expect(res.body.success).toEqual(true);
 

@@ -874,6 +874,7 @@ describe('Listing Controller Tests', () => {
         .put(`/jurisdictions/${jurisdictionA.id}`)
         .send(jurisdictionA)
         .set('Cookie', adminAccessToken)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
       const putApprovedResponse = await request(app.getHttpServer())
         .put(`/listings/${listing.id}`)
@@ -910,6 +911,7 @@ describe('Listing Controller Tests', () => {
         .put(`/jurisdictions/${jurisdictionA.id}`)
         .send(jurisdictionA)
         .set('Cookie', adminAccessToken)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
     });
 
