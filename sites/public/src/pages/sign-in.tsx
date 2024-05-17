@@ -231,58 +231,87 @@ const SignIn = () => {
 
   return (
     <>
-<<<<<<< HEAD
-      <FormsLayout className={signUpCopy ? "sm:max-w-lg md:max-w-full" : undefined}>
-        <div className={signUpCopy ? signUpBenefitsStyles["benefits-container"] : undefined}>
-          {signUpCopy && (
-            <div className={signUpBenefitsStyles["benefits-display-hide"]}>
-              <SignUpBenefitsHeadingGroup mobileView={true} />
-            </div>
-          )}
-          <div className={signUpCopy ? signUpBenefitsStyles["benefits-form-container"] : undefined}>
-            <FormSignIn
-              networkStatus={{
-                content: networkStatusContent,
-                type: networkStatusType,
-                reset: () => {
-                  reset()
-                  resetNetworkError()
-                  setConfirmationStatusMessage(undefined)
-                },
-              }}
-              showRegisterBtn={true}
-              control={{ errors }}
-            >
-              {process.env.showPwdless ? (
-                <FormSignInPwdless
-                  onSubmit={(data) => void onSubmitPwdless(data)}
-                  control={{ register, errors, handleSubmit }}
-                  useCode={useCode}
-                  setUseCode={setUseCode}
-                />
-              ) : (
-                <FormSignInDefault
-                  onSubmit={(data) => void onSubmit(data)}
-                  control={{ register, errors, handleSubmit }}
-                />
-              )}
-            </FormSignIn>
-          </div>
-          {signUpCopy && (
-            <div className={signUpBenefitsStyles["benefits-hide-display"]}>
-              <div className={signUpBenefitsStyles["benefits-desktop-container"]}>
-                <SignUpBenefitsHeadingGroup mobileView={false} />
-                <SignUpBenefits idTag="desktop" />
-=======
       <GoogleReCaptchaProvider reCaptchaKey={process.env.reCaptchaKey}>
         <FormsLayout className={signUpCopy ? "sm:max-w-lg md:max-w-full" : undefined}>
           <div className={signUpCopy ? signUpBenefitsStyles["benefits-container"] : undefined}>
             {signUpCopy && (
               <div className={signUpBenefitsStyles["benefits-display-hide"]}>
                 <SignUpBenefitsHeadingGroup mobileView={true} />
->>>>>>> f63ddbce5 (feat: v3 recaptcha)
               </div>
             )}
+            <div
+              className={signUpCopy ? signUpBenefitsStyles["benefits-form-container"] : undefined}
+            >
+              <FormSignIn
+                networkStatus={{
+                  content: networkStatusContent,
+                  type: networkStatusType,
+                  reset: () => {
+                    reset()
+                    resetNetworkError()
+                    setConfirmationStatusMessage(undefined)
+                  },
+                }}
+                showRegisterBtn={true}
+                control={{ errors }}
+              >
+                {process.env.showPwdless ? (
+                  <FormSignInPwdless
+                    onSubmit={(data) => void onSubmitPwdless(data)}
+                    control={{ register, errors, handleSubmit }}
+                    useCode={useCode}
+                    setUseCode={setUseCode}
+                  />
+                ) : (
+                  <FormSignInDefault
+                    onSubmit={(data) => void onSubmit(data)}
+                    control={{ register, errors, handleSubmit }}
+                  />
+                )}
+              </FormSignIn>
+            </div>
+            {signUpCopy && (
+              <div className={signUpBenefitsStyles["benefits-hide-display"]}>
+                <div className={signUpBenefitsStyles["benefits-desktop-container"]}>
+                  <SignUpBenefitsHeadingGroup mobileView={false} />
+                  <SignUpBenefits idTag="desktop" />
+                </div>
+              </div>
+            )}
+            <div
+              className={signUpCopy ? signUpBenefitsStyles["benefits-form-container"] : undefined}
+            >
+              <FormSignIn
+                networkStatus={{
+                  content: networkStatusContent,
+                  type: networkStatusType,
+                  reset: () => {
+                    reset()
+                    resetNetworkError()
+                    setConfirmationStatusMessage(undefined)
+                  },
+                }}
+                showRegisterBtn={true}
+                control={{ errors }}
+              >
+                {process.env.showPwdless ? (
+                  <FormSignInPwdless
+                    onSubmit={(data) => void onSubmitPwdless(data)}
+                    control={{ register, errors, handleSubmit }}
+                    useCode={useCode}
+                    setUseCode={setUseCode}
+                    loading={loading}
+                  />
+                ) : (
+                  <FormSignInDefault
+                    onSubmit={(data) => void onSubmit(data)}
+                    control={{ register, errors, handleSubmit }}
+                    loading={loading}
+                  />
+                )}
+              </FormSignIn>
+            </div>
+
             <div
               className={signUpCopy ? signUpBenefitsStyles["benefits-form-container"] : undefined}
             >
@@ -331,26 +360,22 @@ const SignIn = () => {
             )}
           </div>
         </FormsLayout>
-
-        <ResendConfirmationModal
-          isOpen={confirmationStatusModal}
-          onClose={() => {
-            setConfirmationStatusModal(false)
-            resetResendConfirmation()
-            resetNetworkError()
-          }}
-          initialEmailValue={emailValue.current as string}
-          onSubmit={(email) => onResendConfirmationSubmit(email)}
-          loadingMessage={isResendConfirmationLoading && t("t.formSubmitted")}
-        />
-        {reCaptchaEnabled && (
-          <GoogleReCaptcha
-            onVerify={onVerify}
-            refreshReCaptcha={refreshReCaptcha}
-            action={"login"}
-          />
-        )}
       </GoogleReCaptchaProvider>
+
+      <ResendConfirmationModal
+        isOpen={confirmationStatusModal}
+        onClose={() => {
+          setConfirmationStatusModal(false)
+          resetResendConfirmation()
+          resetNetworkError()
+        }}
+        initialEmailValue={emailValue.current as string}
+        onSubmit={(email) => onResendConfirmationSubmit(email)}
+        loadingMessage={isResendConfirmationLoading && t("t.formSubmitted")}
+      />
+      {reCaptchaEnabled && (
+        <GoogleReCaptcha onVerify={onVerify} refreshReCaptcha={refreshReCaptcha} action={"login"} />
+      )}
     </>
   )
 }

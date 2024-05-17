@@ -3,6 +3,7 @@ import "@bloom-housing/ui-components/src/global/app-css.scss"
 import "@bloom-housing/ui-seeds/src/global/app-css.scss"
 import React, { useEffect, useMemo, useState } from "react"
 import type { AppProps } from "next/app"
+import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3"
 import {
   addTranslation,
   GenericRouter,
@@ -100,14 +101,16 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
             syncListing: setSavedListing,
           }}
         >
-          <ConfigProvider apiUrl={process.env.backendApiBase}>
-            <AuthProvider>
-              <MessageProvider>
-                <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
-                <Component {...pageProps} />
-              </MessageProvider>
-            </AuthProvider>
-          </ConfigProvider>
+          <GoogleReCaptchaProvider reCaptchaKey={process.env.reCaptchaKey}>
+            <ConfigProvider apiUrl={process.env.backendApiBase}>
+              <AuthProvider>
+                <MessageProvider>
+                  <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
+                  <Component {...pageProps} />
+                </MessageProvider>
+              </AuthProvider>
+            </ConfigProvider>
+          </GoogleReCaptchaProvider>
         </AppSubmissionContext.Provider>
       </UICNavigationContext.Provider>
     </NavigationContext.Provider>
