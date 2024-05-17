@@ -68,7 +68,7 @@ const ApplicationVouchers = () => {
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.financial.vouchers.title")}
-          subheading={t("application.financial.vouchers.subTitle")}
+          subheading={t("application.financial.vouchers.subtitle")}
           progressNavProps={{
             currentPageSection: currentPageSection,
             completedSections: application.completedSections,
