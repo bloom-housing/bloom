@@ -27,6 +27,7 @@ env:
   MAPBOX_TOKEN: ${{ secrets.MAPBOX_TOKEN }}
   DISABLE_CORS: "TRUE"
   FEATURE_LISTINGS_APPROVAL: "TRUE"
+  API_PASS_KEY: "some-key-here"
 
 
 jobs:
