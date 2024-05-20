@@ -27,22 +27,24 @@ export class Demographic extends AbstractDTO {
   sexualOrientation?: string;
 
   @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default], each: true })
-  @ApiProperty()
-  howDidYouHear: string[];
+  @ApiPropertyOptional()
+  howDidYouHear?: string[];
 
   @Expose()
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
   @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   race?: string[];
 
   @Expose()
-  @ApiPropertyOptional()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
+  @ApiPropertyOptional()
   spokenLanguage?: string;
 }

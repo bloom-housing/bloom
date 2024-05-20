@@ -3882,10 +3882,10 @@ export interface Demographic {
   sexualOrientation?: string
 
   /**  */
-  howDidYouHear: string[]
+  howDidYouHear?: string[]
 
   /**  */
-  race: string[]
+  race?: string[]
 
   /**  */
   spokenLanguage?: string
@@ -4752,10 +4752,10 @@ export interface DemographicUpdate {
   sexualOrientation?: string
 
   /**  */
-  howDidYouHear: string[]
+  howDidYouHear?: string[]
 
   /**  */
-  race: string[]
+  race?: string[]
 
   /**  */
   spokenLanguage?: string
