@@ -14,7 +14,7 @@ export class ScriptRunnerService {
   constructor(private prisma: PrismaService) {}
 
   /**
-    this is simply and example
+    this is simply an example
   */
   async example(req: ExpressRequest): Promise<SuccessDTO> {
     const requestingUser = mapTo(User, req['user']);
