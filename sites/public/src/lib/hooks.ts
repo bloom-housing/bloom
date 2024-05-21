@@ -165,20 +165,24 @@ export async function fetchClosedListings(req: any) {
 let jurisdiction: Jurisdiction | null = null
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function fetchJurisdictionByName(req: any) {
+export async function fetchJurisdictionByName(req?: any) {
   try {
     if (jurisdiction) {
       return jurisdiction
     }
 
     const jurisdictionName = process.env.jurisdictionName
+
+    const headers = {
+      passkey: process.env.API_PASS_KEY,
+    }
+    if (req) {
+      headers["x-forwarded-for"] = req.headers["x-forwarded-for"] ?? req.socket.remoteAddress
+    }
     const jurisdictionRes = await axios.get(
       `${process.env.backendApiBase}/jurisdictions/byName/${jurisdictionName}`,
       {
-        headers: {
-          passkey: process.env.API_PASS_KEY,
-          "x-forwarded-for": req.headers["x-forwarded-for"] ?? req.socket.remoteAddress,
-        },
+        headers,
       }
     )
     jurisdiction = jurisdictionRes?.data
