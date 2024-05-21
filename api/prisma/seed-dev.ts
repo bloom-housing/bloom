@@ -84,21 +84,21 @@ export const devSeeding = async (
 
   await reservedCommunityTypeFactoryAll(jurisdiction.id, prismaClient);
 
-  const householdSize = randomInt(0, 6);
   for (let index = 0; index < LISTINGS_TO_SEED; index++) {
-    const householdMembers = await householdMemberFactoryMany(householdSize);
-
     const applications = [];
 
-    for (let j = 0; j <= APPLICATIONS_PER_LISTINGS; j++) {
-      applications.push(
-        await applicationFactory({
-          householdSize,
-          unitTypeId: unitTypes[randomInt(0, 5)].id,
-          householdMember: householdMembers,
-          multiselectQuestions,
-        }),
+    for (let j = 0; j <= APPLICATIONS_PER_LISTINGS - 1; j++) {
+      const householdSize = randomInt(1, 6);
+      const householdMembers = await householdMemberFactoryMany(
+        householdSize - 1,
       );
+      const app = await applicationFactory({
+        householdSize,
+        unitTypeId: unitTypes[randomInt(0, 5)].id,
+        householdMember: householdMembers,
+        multiselectQuestions,
+      });
+      applications.push(app);
     }
 
     const listing = await listingFactory(jurisdiction.id, prismaClient, {

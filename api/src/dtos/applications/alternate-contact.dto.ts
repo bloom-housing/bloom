@@ -2,6 +2,7 @@ import { Expose, Type } from 'class-transformer';
 import {
   IsDefined,
   IsEmail,
+  IsEnum,
   IsString,
   MaxLength,
   ValidateNested,
@@ -11,14 +12,19 @@ import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum
 import { AbstractDTO } from '../shared/abstract.dto';
 import { Address } from '../addresses/address.dto';
 import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
+import { AlternateContactRelationship } from '../../enums/applications/alternate-contact-relationship-enum';
 
 export class AlternateContact extends AbstractDTO {
   @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(AlternateContactRelationship, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ApiPropertyOptional({
+    enum: AlternateContactRelationship,
+    enumName: 'AlternateContactRelationship',
+  })
   @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
-  @ApiPropertyOptional()
-  type?: string;
+  type?: AlternateContactRelationship;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
