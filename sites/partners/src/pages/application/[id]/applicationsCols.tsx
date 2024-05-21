@@ -18,13 +18,14 @@ export const getCols = () => [
       if (!data?.id && !data?.confirmationCode) return ""
       return (
         <span className={"text-blue-900"}>
-          <Link href={`/application/${data.id}`}>{data.confirmationCode || data.id}</Link>
+          <Link href={`/application/${data.id}`}>
+            {data.confirmationCode ? data.confirmationCode : t("t.n/a")}
+          </Link>
         </span>
       )
     },
     width: 180,
   },
-
   {
     headerName: t("application.name.firstName"),
     field: "applicant.firstName",

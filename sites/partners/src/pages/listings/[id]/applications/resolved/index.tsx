@@ -27,6 +27,7 @@ const ApplicationsList = () => {
     page: tableOptions.pagination.currentPage,
     limit: tableOptions.pagination.itemsPerPage,
     view: "resolved",
+    search: tableOptions.filter.filterValue,
   })
 
   const columns = [
@@ -36,22 +37,21 @@ const ApplicationsList = () => {
       cellRenderer: "formatLinkCell",
       valueGetter: ({ data }) => {
         if (!data?.applications?.length) return ""
-        const applicant = data.applications[0]?.applicant
+        const applications = data.applications.reduce((acc, curr) => {
+          acc.push(`${curr.applicant.firstName} ${curr.applicant.lastName}`)
+          return acc
+        }, [])
 
-        return `${applicant.firstName} ${applicant.lastName}: ${data.rule}`
+        return `${applications.join(", ")}`
       },
       flex: 1,
-      minWidth: 250,
+      minWidth: 200,
     },
     {
-      headerName: t("applications.duplicates.primaryApplicant"),
-      field: "",
-      valueGetter: ({ data }) => {
-        if (!data?.applications?.length) return ""
-        const applicant = data.applications[0]?.applicant
-
-        return `${applicant.firstName} ${applicant.lastName}`
-      },
+      headerName: t("t.rule"),
+      field: "rule",
+      width: 130,
+      minWidth: 50,
     },
     {
       headerName: t("applications.duplicates.duplicateApplications"),
@@ -62,7 +62,8 @@ const ApplicationsList = () => {
         ).length
       },
       type: "rightAligned",
-      width: 130,
+      width: 140,
+      minWidth: 50,
     },
     {
       headerName: t("applications.duplicates.validApplications"),
@@ -74,6 +75,7 @@ const ApplicationsList = () => {
       },
       type: "rightAligned",
       width: 130,
+      minWidth: 50,
     },
   ]
 
@@ -138,7 +140,6 @@ const ApplicationsList = () => {
               }}
               search={{
                 setSearch: tableOptions.filter.setFilterValue,
-                showSearch: false,
               }}
               sort={{
                 setSort: tableOptions.sort.setSortOptions,

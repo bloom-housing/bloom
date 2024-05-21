@@ -6,6 +6,7 @@ import {
   HouseholdMember,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { House } from "@bloom-housing/ui-components/src/icons/Icons"
 
 type DetailsAddressColumnsProps = {
   type: AddressColsType
@@ -82,6 +83,8 @@ const DetailsAddressColumns = ({
           ? application.applicant.applicantAddress[item]
           : t("t.n/a")
       } else {
+        console.log(address)
+        console.log(householdMember)
         address[item] = householdMember?.householdMemberAddress[item]
           ? householdMember.householdMemberAddress[item]
           : t("t.n/a")

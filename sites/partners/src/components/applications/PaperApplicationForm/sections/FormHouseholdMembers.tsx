@@ -32,6 +32,9 @@ const FormHouseholdMembers = ({
 
   const editMember = useCallback(
     (orderId: number) => {
+      console.log("edit member")
+      console.log(orderId)
+
       setMembersDrawer(orderId)
     },
     [setMembersDrawer]

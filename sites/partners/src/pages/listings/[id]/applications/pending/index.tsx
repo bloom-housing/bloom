@@ -42,6 +42,7 @@ const ApplicationsList = () => {
     page: tableOptions.pagination.currentPage,
     limit: tableOptions.pagination.itemsPerPage,
     view,
+    search: tableOptions.filter.filterValue,
   })
 
   const columns = [
@@ -51,27 +52,23 @@ const ApplicationsList = () => {
       cellRenderer: "formatLinkCell",
       valueGetter: ({ data }) => {
         if (!data?.applications?.length) return ""
-        const applicant = data.applications[0]?.applicant
 
-        return `${applicant.firstName} ${applicant.lastName}: ${data.rule}`
+        const applications = data.applications.reduce((acc, curr) => {
+          acc.push(`${curr.applicant.firstName} ${curr.applicant.lastName}`)
+          return acc
+        }, [])
+
+        return `${applications.join(", ")}`
       },
       flex: 1,
       minWidth: 250,
     },
-    {
-      headerName: t("applications.duplicates.primaryApplicant"),
-      field: "",
-      valueGetter: ({ data }) => {
-        if (!data?.applications?.length) return ""
-        const applicant = data.applications[0]?.applicant
 
-        return `${applicant.firstName} ${applicant.lastName}`
-      },
-    },
     {
       headerName: t("t.rule"),
       field: "rule",
-      width: 150,
+      width: 130,
+      minWidth: 50,
     },
     {
       headerName: t("applications.pendingReview"),
@@ -81,6 +78,7 @@ const ApplicationsList = () => {
       },
       type: "rightAligned",
       width: 100,
+      minWidth: 50,
     },
   ]
 
@@ -200,7 +198,6 @@ const ApplicationsList = () => {
                   }}
                   search={{
                     setSearch: tableOptions.filter.setFilterValue,
-                    showSearch: false,
                   }}
                   sort={{
                     setSort: tableOptions.sort.setSortOptions,
