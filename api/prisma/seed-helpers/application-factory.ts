@@ -133,11 +133,9 @@ export const applicantFactory = (
     applicantAddress: {
       create: addressFactory(),
     },
-    applicantWorkAddress: randomBoolean()
-      ? {
-          create: addressFactory(),
-        }
-      : undefined,
+    applicantWorkAddress: {
+      create: addressFactory(),
+    },
     ...overrides,
   };
 };

@@ -20,8 +20,8 @@ export const alternateContactFactory =
         otherType: undefined,
         phoneNumber: undefined,
         emailAddress: undefined,
-        address: undefined,
         agency: undefined,
+        address: { create: addressFactory() },
       };
     }
     return {
