@@ -2001,6 +2001,25 @@ export class MapLayersService {
   }
 }
 
+export class ScriptRunnerService {
+  /**
+   * An example of how the script runner can work
+   */
+  exampleScript(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/exampleScript"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export interface SuccessDTO {
   /**  */
   success: boolean
