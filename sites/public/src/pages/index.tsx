@@ -115,8 +115,8 @@ export default function Home(props: IndexProps) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getStaticProps(context: { req: any }) {
-  const jurisdiction = await fetchJurisdictionByName(context.req)
+export async function getStaticProps() {
+  const jurisdiction = await fetchJurisdictionByName()
 
   return {
     props: { jurisdiction },
