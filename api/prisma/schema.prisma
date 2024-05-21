@@ -225,6 +225,7 @@ model Applications {
 
   @@unique([listingId, confirmationCode])
   @@index([listingId])
+  @@index([userId])
   @@map("applications")
 }
 
