@@ -138,7 +138,7 @@ const ApplicationDemographics = () => {
                 <Field
                   id="spokenLanguageNotListed"
                   name="spokenLanguageNotListed"
-                  label={t("application.review.demographics.genderSpecify")}
+                  label={t("application.review.demographics.spokenLanguageSpecify")}
                   validation={{ required: true }}
                   register={register}
                 />
