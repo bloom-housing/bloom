@@ -32,6 +32,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         jurisdictionName: req.headers.jurisdictionname,
         language: req.headers.language,
         appUrl: req.headers.appurl,
+        passkey: process.env.API_PASS_KEY,
       },
       paramsSerializer: (params) => {
         return qs.stringify(params)
