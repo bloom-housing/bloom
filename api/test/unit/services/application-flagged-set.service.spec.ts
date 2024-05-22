@@ -221,6 +221,47 @@ describe('Testing application flagged set service', () => {
     });
   });
 
+  it('should build where clause with listingId and view of pending with search', async () => {
+    expect(
+      await service.buildWhere({
+        listingId: 'example id',
+        view: View.pending,
+        search: 'simple search',
+      }),
+    ).toEqual({
+      AND: [
+        {
+          listingId: 'example id',
+        },
+        {
+          status: FlaggedSetStatusEnum.pending,
+        },
+        {
+          applications: {
+            some: {
+              applicant: {
+                OR: [
+                  {
+                    firstName: {
+                      contains: 'simple search',
+                      mode: 'insensitive',
+                    },
+                  },
+                  {
+                    lastName: {
+                      contains: 'simple search',
+                      mode: 'insensitive',
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      ],
+    });
+  });
+
   it('should build where clause with listingId and view of pendingNameAndDoB', async () => {
     expect(
       await service.buildWhere({
