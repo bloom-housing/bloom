@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect, useContext } from "react"
 import { UserStatus } from "../../../lib/constants"
 import { ListingList, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { ListingSearchParams, generateSearchQuery } from "../../../lib/listings/search"
-import { ListingService } from "../../../lib/listings/listing-service"
+import { searchListings } from "../../../lib/listings/listing-service"
 import { ListingsCombined } from "../ListingsCombined"
 
 import { AppearanceSizeType, Button } from "@bloom-housing/doorway-ui-components"
@@ -12,7 +12,6 @@ import { AppearanceBorderType, t } from "@bloom-housing/ui-components"
 type ListingsSearchCombinedProps = {
   searchString?: string
   googleMapsApiKey: string
-  listingsEndpoint: string
   bedrooms: FormOption[]
   bathrooms: FormOption[]
   counties: FormOption[]
@@ -26,7 +25,7 @@ type ListingsSearchCombinedProps = {
  * @returns
  */
 function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
-  const { profile } = useContext(AuthContext)
+  const { profile, listingsService } = useContext(AuthContext)
   const [modalOpen, setModalOpen] = useState(false)
   const [filterCount, setFilterCount] = useState(0)
 
@@ -57,12 +56,11 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
 
   // The search function expects a string
   // This can be changed later if needed
-  const pageSize = "25"
+  const pageSize = 25
 
   const search = async (params: ListingSearchParams, page: number) => {
     const qb = generateSearchQuery(params)
-    const listingService = new ListingService(props.listingsEndpoint)
-    const result = await listingService.searchListings(qb, pageSize, page)
+    const result = await searchListings(qb, pageSize, page, listingsService)
 
     const listings = result.items
     const meta = result.meta

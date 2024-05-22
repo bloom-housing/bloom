@@ -24,6 +24,7 @@ describe("Preference Management Tests", () => {
     cy.getByTestId("preference-link").type("https://www.example.com")
     cy.getByTestId("preference-link-title").type("Preference Link Title")
 
+    cy.getByTestId("preference-jurisdiction").select("Bay Area")
     cy.getByID("preference-add-option-button").click()
     cy.getByTestId("preference-option-title").type("Preference Option Title")
     cy.getByTestId("preference-option-description").type("Preference Option Description", {
@@ -35,8 +36,8 @@ describe("Preference Management Tests", () => {
     cy.getByTestId("exclusive-question-exclusive").check()
     cy.getByID("preference-option-save").click()
 
-    cy.getByTestId("validation-method-radius").click()
-    cy.getByTestId("preference-option-radius-size").type("100")
+    cy.getByTestId("validation-method-map").click()
+    cy.getByTestId("preference-map-layer").select("Redlined Districts")
     cy.getByTestId("collect-name-yes").click()
     cy.getByTestId("collect-relationship-yes").click()
     cy.getByID("preference-option-save").click()
@@ -71,8 +72,11 @@ describe("Preference Management Tests", () => {
     )
 
     cy.getByTestId("collect-address-yes").should("be.checked")
-    cy.getByTestId("validation-method-radius").should("be.checked")
-    cy.getByTestId("preference-option-radius-size").should("have.value", "100")
+    cy.getByTestId("validation-method-map").should("be.checked")
+    cy.getByTestId("preference-map-layer")
+      .find("option:selected")
+      .invoke("text")
+      .should("equal", "Redlined Districts")
     cy.getByTestId("collect-name-yes").should("be.checked")
     cy.getByTestId("collect-relationship-yes").should("be.checked")
     cy.getByTestId("exclusive-question-exclusive").should("have.value", "exclusive")

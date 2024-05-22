@@ -22,6 +22,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         language: req.headers.language,
         appUrl: req.headers.appurl,
         "x-forwarded-for": req.headers["x-forwarded-for"] || "",
+        passkey: process.env.API_PASS_KEY,
       },
       paramsSerializer: (params) => {
         return qs.stringify(params)

@@ -18,10 +18,9 @@ import { PermissionAction } from '../decorators/permission-action.decorator';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction-admin.guard';
 import { AppService } from '../services/app.service';
-import { ThrottleGuard } from '../guards/throttler.guard';
+import { ApiKeyGuard } from '../guards/api-key.guard';
 
 @Controller()
-@UseGuards(ThrottleGuard)
 @ApiExtraModels(SuccessDTO)
 @ApiTags('root')
 export class AppController {
@@ -55,7 +54,7 @@ export class AppController {
   @ApiOkResponse({ type: SuccessDTO })
   @PermissionAction(permissionActions.submit)
   @UseInterceptors(ActivityLogInterceptor)
-  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
+  @UseGuards(ApiKeyGuard, OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
   async clearTempFiles(): Promise<SuccessDTO> {
     return await this.appService.clearTempFiles();
   }

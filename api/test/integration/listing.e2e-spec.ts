@@ -96,6 +96,7 @@ describe('Listing Controller Tests', () => {
     });
     const res = await request(app.getHttpServer())
       .post('/auth/login')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({ email: adminUser.email, password: 'abcdef' })
       .expect(201);
     adminAccessToken = res.header?.['set-cookie'].find((cookie) =>
@@ -287,7 +288,7 @@ describe('Listing Controller Tests', () => {
       applicationDropOffAddressOfficeHours: 'drop off office hours string',
       applicationDropOffAddressType: ApplicationAddressTypeEnum.leasingAgent,
       applicationMailingAddressType: ApplicationAddressTypeEnum.leasingAgent,
-      buildingSelectionCriteria: 'selection criteria',
+      buildingSelectionCriteria: 'https://selection-criteria.com',
       costsNotIncluded: 'all costs included',
       creditHistory: 'credit history',
       criminalBackground: 'criminal background',
@@ -352,6 +353,7 @@ describe('Listing Controller Tests', () => {
     it.skip('should not get listings from list endpoint when no params are sent', async () => {
       const res = await request(app.getHttpServer())
         .get('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
 
       expect(res.body).toEqual({
@@ -380,6 +382,7 @@ describe('Listing Controller Tests', () => {
 
       const res = await request(app.getHttpServer())
         .get('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
 
       expect(res.body.meta.currentPage).toEqual(1);
@@ -419,6 +422,7 @@ describe('Listing Controller Tests', () => {
 
       const res = await request(app.getHttpServer())
         .get(`/listings?${query}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
 
       expect(res.body).toEqual({
@@ -465,6 +469,7 @@ describe('Listing Controller Tests', () => {
 
       let res = await request(app.getHttpServer())
         .get(`/listings?${query}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
 
       expect(res.body.meta).toEqual({
@@ -495,6 +500,7 @@ describe('Listing Controller Tests', () => {
 
       res = await request(app.getHttpServer())
         .get(`/listings?${query}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
 
       expect(res.body.meta).toEqual({
@@ -548,6 +554,7 @@ describe('Listing Controller Tests', () => {
         .get(
           `/listings/byMultiselectQuestion/${listingACreated.listingMultiselectQuestions[0].multiselectQuestionId}`,
         )
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
 
       expect(res.body.length).toEqual(1);
@@ -560,6 +567,7 @@ describe('Listing Controller Tests', () => {
       const id = randomUUID();
       const res = await request(app.getHttpServer())
         .delete(`/listings`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: id,
         } as IdDTO)
@@ -583,6 +591,7 @@ describe('Listing Controller Tests', () => {
 
       const res = await request(app.getHttpServer())
         .delete(`/listings/`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: listing.id,
         } as IdDTO)
@@ -602,6 +611,7 @@ describe('Listing Controller Tests', () => {
       const id = randomUUID();
       const res = await request(app.getHttpServer())
         .put(`/listings/${id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: id,
         } as IdDTO)
@@ -626,6 +636,7 @@ describe('Listing Controller Tests', () => {
 
       const res = await request(app.getHttpServer())
         .put(`/listings/${listing.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(val)
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -640,6 +651,7 @@ describe('Listing Controller Tests', () => {
 
       const res = await request(app.getHttpServer())
         .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(val)
         .set('Cookie', adminAccessToken)
         .expect(201);
@@ -663,6 +675,7 @@ describe('Listing Controller Tests', () => {
 
       const res = await request(app.getHttpServer())
         .put(`/listings/process`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
       expect(res.body.success).toEqual(true);
@@ -711,6 +724,7 @@ describe('Listing Controller Tests', () => {
 
       const res = await request(app.getHttpServer())
         .put(`/listings/process`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
 
@@ -801,6 +815,7 @@ describe('Listing Controller Tests', () => {
       });
       const res = await request(app.getHttpServer())
         .post('/auth/login')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({ email: adminUser.email, password: 'abcdef' })
         .expect(201);
 
@@ -812,6 +827,7 @@ describe('Listing Controller Tests', () => {
     it('update status to pending approval and notify appropriate users', async () => {
       const res = await request(app.getHttpServer())
         .post('/auth/login')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({ email: partnerUser.email, password: 'abcdef' })
         .expect(201);
 
@@ -822,12 +838,14 @@ describe('Listing Controller Tests', () => {
       val.status = ListingsStatusEnum.pendingReview;
       const putPendingApprovalResponse = await request(app.getHttpServer())
         .put(`/listings/${listing.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(val)
         .set('Cookie', partnerAccessToken)
         .expect(200);
 
       const listingPendingApprovalResponse = await request(app.getHttpServer())
         .get(`/listings/${putPendingApprovalResponse.body.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
 
       expect(listingPendingApprovalResponse.body.status).toBe(
@@ -856,15 +874,18 @@ describe('Listing Controller Tests', () => {
         .put(`/jurisdictions/${jurisdictionA.id}`)
         .send(jurisdictionA)
         .set('Cookie', adminAccessToken)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
       const putApprovedResponse = await request(app.getHttpServer())
         .put(`/listings/${listing.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(val)
         .set('Cookie', adminAccessToken)
         .expect(200);
 
       const listingApprovedResponse = await request(app.getHttpServer())
         .get(`/listings/${putApprovedResponse.body.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
 
       expect(listingApprovedResponse.body.status).toBe(
@@ -890,6 +911,7 @@ describe('Listing Controller Tests', () => {
         .put(`/jurisdictions/${jurisdictionA.id}`)
         .send(jurisdictionA)
         .set('Cookie', adminAccessToken)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
     });
 
@@ -898,12 +920,14 @@ describe('Listing Controller Tests', () => {
       val.status = ListingsStatusEnum.changesRequested;
       const putChangesRequestedResponse = await request(app.getHttpServer())
         .put(`/listings/${listing.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(val)
         .set('Cookie', adminAccessToken)
         .expect(200);
 
       const listingChangesRequestedResponse = await request(app.getHttpServer())
         .get(`/listings/${putChangesRequestedResponse.body.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
 
       expect(listingChangesRequestedResponse.body.status).toBe(

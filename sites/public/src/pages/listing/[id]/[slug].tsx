@@ -124,13 +124,21 @@ export default function ListingPage(props: ListingProps) {
 export async function getServerSideProps(context: {
   params: Record<string, string>
   locale: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  req: any
 }) {
   let response
   const listingServiceUrl = runtimeConfig.getListingServiceUrl()
 
   try {
     response = await axios.get(`${listingServiceUrl}/${context.params.id}`, {
-      headers: { language: context.locale },
+      headers: {
+        language: context.locale,
+        passkey: process.env.API_PASS_KEY,
+
+        "x-forwarded-for":
+          context.req.headers["x-forwarded-for"] ?? context.req.socket.remoteAddress,
+      },
     })
   } catch (e) {
     return { notFound: true }
