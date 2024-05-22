@@ -29,7 +29,8 @@ export class ScriptRunnerService {
     });
     await client.$connect();
 
-    const res = await client.$queryRaw`SELECT 1`;
+    const res =
+      await client.$queryRaw`SELECT id, name FROM jurisdictions WHERE name = 'San Mateo'`;
     console.log(res);
     await client.$disconnect();
 
