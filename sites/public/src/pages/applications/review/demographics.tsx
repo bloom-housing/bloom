@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useMemo } from "react"
 import { useForm } from "react-hook-form"
 
 import { FieldGroup, Form, Select, t } from "@bloom-housing/ui-components"
@@ -32,7 +32,7 @@ const ApplicationDemographics = () => {
     currentPageSection += 1
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit } = useForm({
+  const { register, handleSubmit, getValues } = useForm({
     defaultValues: {
       ethnicity: application.demographics.ethnicity,
       race: application.demographics.race,
@@ -69,6 +69,58 @@ const ApplicationDemographics = () => {
     })
   }, [profile])
 
+  const isKeyIncluded = (raceKey: string) => {
+    let keyExists = false
+    const curValues = getValues()
+    if (typeof curValues === "object" && !curValues) {
+      Object.entries(curValues).forEach(([key, _]) => {
+        if (key.includes(raceKey)) {
+          keyExists = true
+        }
+      })
+    } else {
+      application.demographics?.race?.forEach((value) => {
+        if (value.includes(raceKey)) {
+          keyExists = true
+        }
+      })
+    }
+    return keyExists
+  }
+
+  // Get the value of a field that is storing a custom value, i.e. "otherAsian: Custom Race Input"
+  const getCustomValue = (subKey: string) => {
+    const curValues = getValues()
+    let customValues
+    if (typeof curValues === "object" && !curValues) {
+      customValues = Object.entries(curValues).filter(([key, _]) => key.split(":")[0] === subKey)
+    } else {
+      customValues = application.demographics?.race?.filter(
+        (value) => value.split(":")[0] === subKey
+      )
+    }
+    return customValues?.length ? customValues[0].split(":")[1]?.substring(1) : ""
+  }
+
+  const raceOptions = useMemo(() => {
+    return Object.keys(raceKeys).map((rootKey) => ({
+      id: rootKey,
+      label: t(`application.review.demographics.raceOptions.${rootKey}`),
+      value: rootKey,
+      additionalText: rootKey.indexOf("other") >= 0,
+      defaultChecked: isKeyIncluded(rootKey),
+      defaultText: getCustomValue(rootKey),
+      subFields: raceKeys[rootKey].map((subKey) => ({
+        id: subKey,
+        label: t(`application.review.demographics.raceOptions.${subKey}`),
+        value: subKey,
+        defaultChecked: isKeyIncluded(subKey),
+        additionalText: subKey.indexOf("other") >= 0,
+        defaultText: getCustomValue(subKey),
+      })),
+    }))
+  }, [register, isKeyIncluded, getCustomValue])
+
   return (
     <FormsLayout>
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -94,26 +146,13 @@ const ApplicationDemographics = () => {
               </legend>
               <FieldGroup
                 name="race"
-                fields={Object.keys(raceKeys).map((rootKey) => ({
-                  id: rootKey,
-                  label: t(`application.review.demographics.raceOptions.${rootKey}`),
-                  value: rootKey,
-                  additionalText: rootKey.indexOf("other") >= 0,
-                  defaultChecked: application[`race-${rootKey}`],
-                  subFields: raceKeys[rootKey].map((subKey) => ({
-                    id: subKey,
-                    label: t(`application.review.demographics.raceOptions.${subKey}`),
-                    value: subKey,
-                    defaultChecked: application[`race-${subKey}`],
-                    additionalText: subKey.indexOf("other") >= 0,
-                  })),
-                }))}
+                fields={raceOptions}
+                type="checkbox"
+                register={register}
                 strings={{
                   description: "",
                 }}
-                type="checkbox"
                 dataTestId={"app-demographics-race"}
-                register={register}
               />
             </fieldset>
             <div className={"pt-4"}>
