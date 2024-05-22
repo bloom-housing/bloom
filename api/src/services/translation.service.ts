@@ -200,6 +200,8 @@ export class TranslationService {
         language: language,
       },
     });
+
+    //determine if listing or associated preferences have changed since translation creation
     let mostRecentUpdatedAt = listing.updatedAt;
     listing.listingMultiselectQuestions.forEach((multiselectObj) => {
       const multiselectUpdatedAt =
