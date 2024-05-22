@@ -1,9 +1,11 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
 import { Request as ExpressRequest } from 'express';
 import { PrismaService } from './prisma.service';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { User } from '../dtos/users/user.dto';
 import { mapTo } from '../utilities/mapTo';
+import { DataTransferDTO } from 'src/dtos/script-runner/data-transfer.dto';
 
 /**
   this is the service for running scripts
@@ -11,6 +13,29 @@ import { mapTo } from '../utilities/mapTo';
 */
 @Injectable()
 export class ScriptRunnerService {
+  async dataTransfer(
+    req: ExpressRequest,
+    dataTransferDTO: DataTransferDTO,
+  ): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart('example', requestingUser);
+
+    const client = new PrismaClient({
+      datasources: {
+        db: {
+          url: dataTransferDTO.connectionString,
+        },
+      },
+    });
+    await client.$connect();
+
+    const res = await client.$queryRaw`SELECT 1`;
+    console.log(res);
+    await client.$disconnect();
+
+    await this.markScriptAsComplete('example', requestingUser);
+    return { success: true };
+  }
   constructor(private prisma: PrismaService) {}
 
   /**
