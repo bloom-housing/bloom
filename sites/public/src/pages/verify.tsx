@@ -8,13 +8,14 @@ import {
   DialogFooter,
   DialogHeader,
 } from "@bloom-housing/ui-seeds/src/overlays/Dialog"
-import { Field, Form, t, SiteAlert, setSiteAlertMessage } from "@bloom-housing/ui-components"
+import { Field, Form, t } from "@bloom-housing/ui-components"
 import {
   PageView,
   pushGtmEvent,
   useCatchNetworkError,
   BloomCard,
   AuthContext,
+  MessageContext,
   FormSignInErrorBox,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
@@ -29,6 +30,7 @@ const Verify = () => {
   const { register, handleSubmit, errors, reset } = useForm()
   const { networkError, determineNetworkError, resetNetworkError } = useCatchNetworkError()
   const { requestSingleUseCode, loginViaSingleUseCode } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
   const redirectToPage = useRedirectToPrevPage("/account/dashboard")
 
   type FlowType = "create" | "login"
@@ -60,9 +62,11 @@ const Verify = () => {
       const user = await loginViaSingleUseCode(email, code)
       setIsLoginLoading(false)
       if (flowType === "login") {
-        setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
+        addToast(t(`authentication.signIn.success`, { name: user.firstName }), {
+          variant: "success",
+        })
       } else {
-        setSiteAlertMessage(t("authentication.createAccount.accountConfirmed"), "success")
+        addToast(t("authentication.createAccount.accountConfirmed"), { variant: "success" })
       }
       await redirectToPage()
     } catch (error) {
@@ -76,7 +80,6 @@ const Verify = () => {
     <FormsLayout>
       <BloomCard title={t("account.pwdless.verifyTitle")} customIcon={"profile"}>
         <>
-          <SiteAlert type="notice" dismissable />
           <FormSignInErrorBox
             errors={errors}
             networkStatus={{

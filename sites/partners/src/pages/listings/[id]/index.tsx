@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import Head from "next/head"
 import axios from "axios"
-import { t, AlertBox, SiteAlert, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
+import { t, AlertBox, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import {
   Listing,
   ListingsStatusEnum,
@@ -56,8 +56,6 @@ export default function ListingDetail(props: ListingProps) {
             <Head>
               <title>{t("nav.siteTitlePartners")}</title>
             </Head>
-            <SiteAlert type="success" timeout={5000} dismissable sticky={true} />
-            <SiteAlert type="warn" dismissable sticky={true} />
             <NavigationHeader
               title={listing.name}
               listingId={listing.id}

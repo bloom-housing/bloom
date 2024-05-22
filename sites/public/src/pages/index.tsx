@@ -1,13 +1,6 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect } from "react"
 import Head from "next/head"
-import {
-  AlertBox,
-  LinkButton,
-  t,
-  SiteAlert,
-  AppearanceSizeType,
-  InfoCard,
-} from "@bloom-housing/ui-components"
+import { AlertBox, LinkButton, t, AppearanceSizeType, InfoCard } from "@bloom-housing/ui-components"
 import { ActionBlock, DoorwayHero } from "@bloom-housing/doorway-ui-components"
 import { Heading } from "@bloom-housing/ui-seeds"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
@@ -32,7 +25,6 @@ export default function Home(props: IndexProps) {
     alertType: null,
   }
   const { profile } = useContext(AuthContext)
-  const [alertInfo, setAlertInfo] = useState(blankAlertInfo)
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -52,19 +44,6 @@ export default function Home(props: IndexProps) {
         <title>{t("nav.siteTitle")}</title>
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <div className="flex absolute w-full flex-col items-center">
-        <SiteAlert type="alert" className={alertClasses} />
-        <SiteAlert type="success" className={alertClasses} timeout={30000} />
-      </div>
-      {alertInfo.alertMessage && (
-        <AlertBox
-          className=""
-          onClose={() => setAlertInfo(blankAlertInfo)}
-          type={alertInfo.alertType}
-        >
-          {alertInfo.alertMessage}
-        </AlertBox>
-      )}
       <DoorwayHero
         title={t("welcome.findAffordableHousing")}
         offsetImage={"images/person-with-child.jpg"}
@@ -184,9 +163,7 @@ export default function Home(props: IndexProps) {
           ]}
         />
       )}
-      <ConfirmationModal
-        setSiteAlertMessage={(alertMessage, alertType) => setAlertInfo({ alertMessage, alertType })}
-      />
+      <ConfirmationModal />
     </Layout>
   )
 }

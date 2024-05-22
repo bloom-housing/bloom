@@ -11,7 +11,6 @@ import {
   emailRegex,
   t,
   AlertBox,
-  SiteAlert,
   AlertTypes,
   passwordRegex,
   DOBField,
@@ -162,8 +161,6 @@ const Edit = () => {
           headingPriority={1}
         >
           <>
-            <SiteAlert type="notice" dismissable />
-
             <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
               {nameAlert && (
                 <AlertBox

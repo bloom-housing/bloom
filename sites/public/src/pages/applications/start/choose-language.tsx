@@ -1,13 +1,14 @@
 import React, { useCallback, useContext, useEffect, useState } from "react"
 import axios from "axios"
 import { useRouter } from "next/router"
-import { ImageCard, t, setSiteAlertMessage } from "@bloom-housing/ui-components"
+import { ImageCard, t } from "@bloom-housing/ui-components"
 import {
   imageUrlFromListing,
   OnClientSide,
   PageView,
   pushGtmEvent,
   AuthContext,
+  MessageContext,
 } from "@bloom-housing/shared-helpers"
 import {
   LanguagesEnum,
@@ -55,6 +56,7 @@ const ApplicationChooseLanguage = (props: ChooseLanguageProps) => {
   const [listing, setListing] = useState(null)
   const context = useContext(AppSubmissionContext)
   const { initialStateLoaded, profile } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
   const { conductor } = context
 
   const listingId = router.query.listingId
@@ -98,11 +100,11 @@ const ApplicationChooseLanguage = (props: ChooseLanguageProps) => {
   useEffect(() => {
     if (listing && router.isReady) {
       if (listing?.status !== ListingsStatusEnum.active && !isPreview) {
-        setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
+        addToast(t("listings.applicationsClosedRedirect"), { variant: "alert" })
         void router.push(`/${router.locale}/listing/${listing?.id}/${listing?.urlSlug}`)
       }
     }
-  }, [isPreview, listing, router])
+  }, [isPreview, listing, router, addToast])
 
   const imageUrl = listing?.assets
     ? imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]

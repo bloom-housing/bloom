@@ -1,6 +1,6 @@
 import React from "react"
 import Head from "next/head"
-import { SiteAlert, t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
+import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import Layout from "../../../../layouts"
 import PaperApplicationForm from "../../../../components/applications/PaperApplicationForm/PaperApplicationForm"
 import { NavigationHeader } from "../../../../components/shared/NavigationHeader"
@@ -18,7 +18,6 @@ const NewApplication = () => {
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
-      <SiteAlert type="success" timeout={5000} dismissable sticky={true} />
       <NavigationHeader
         className="relative"
         title={t("applications.newApplication")}

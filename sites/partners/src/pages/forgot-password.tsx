@@ -1,17 +1,19 @@
 import React, { useContext } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
-import { t, setSiteAlertMessage } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import {
   useCatchNetworkError,
   AuthContext,
+  MessageContext,
   FormForgotPassword,
 } from "@bloom-housing/shared-helpers"
 
 const ForgotPassword = () => {
   const router = useRouter()
   const { forgotPassword } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
 
   /* Form Handler */
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
@@ -28,7 +30,7 @@ const ForgotPassword = () => {
       const { status } = error.response || {}
       determineNetworkError(status, error)
     }
-    setSiteAlertMessage(t(`authentication.forgotPassword.message`), "notice")
+    addToast(t(`authentication.forgotPassword.message`), { variant: "primary" })
     await router.push("/sign-in")
   }
 

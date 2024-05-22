@@ -5,7 +5,6 @@ import {
   t,
   Form,
   AlertBox,
-  setSiteAlertMessage,
   LoadingOverlay,
   Modal,
   Tabs,
@@ -16,7 +15,7 @@ import {
   Icon,
 } from "@bloom-housing/ui-components"
 import { Button } from "@bloom-housing/ui-seeds"
-import { AuthContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
+import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import {
   ListingCreate,
   ListingEventsTypeEnum,
@@ -74,6 +73,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const router = useRouter()
 
   const { listingsService, profile } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
 
   const [tabIndex, setTabIndex] = useState(0)
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
@@ -212,7 +212,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
               return t("listings.listingUpdated")
             }
-            setSiteAlertMessage(getToast(listing?.status, formattedData?.status), "success")
+            addToast(getToast(listing?.status, formattedData?.status), { variant: "success" })
 
             await router.push(`/listings/${result.id}`)
           }
@@ -249,7 +249,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             })
             setAlert("form")
           } else if (data?.message === "email failed") {
-            setSiteAlertMessage(t("errors.alert.listingsApprovalEmailError"), "warn")
+            addToast(t("errors.alert.listingsApprovalEmailError"), { variant: "warn" })
             await router.push(`/listings/${formData.id}/`)
           } else setAlert("api")
         }
@@ -271,6 +271,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       reset,
       setError,
       profile,
+      addToast,
     ]
   )
 

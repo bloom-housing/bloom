@@ -11,6 +11,7 @@ import {
   LoggedInUserIdleTimeout,
   ConfigProvider,
   AuthProvider,
+  MessageProvider,
 } from "@bloom-housing/shared-helpers"
 import { headScript, bodyTopTag, pageChangeHandler } from "../lib/customScripts"
 import { AppSubmissionContext } from "../lib/applications/AppSubmissionContext"
@@ -108,8 +109,10 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
         >
           <ConfigProvider apiUrl={process.env.backendApiBase}>
             <AuthProvider>
-              <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
-              {hasMounted && <Component {...pageProps} />}
+              <MessageProvider>
+                <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
+                {hasMounted && <Component {...pageProps} />}
+              </MessageProvider>
             </AuthProvider>
           </ConfigProvider>
         </AppSubmissionContext.Provider>

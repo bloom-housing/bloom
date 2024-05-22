@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from "react"
+import React, { useContext, useMemo, useState } from "react"
 import Head from "next/head"
 import dayjs from "dayjs"
 import { useSWRConfig } from "swr"
@@ -7,8 +7,6 @@ import {
   useAgTable,
   t,
   Drawer,
-  SiteAlert,
-  AlertTypes,
   AlertBox,
   Icon,
   UniversalIconType,
@@ -32,10 +30,6 @@ const Users = () => {
   const { mutate } = useSWRConfig()
   const [userDrawer, setUserDrawer] = useState<UserDrawerValue | null>(null)
   const [userDrawerTitle, setUserDrawerTitle] = useState(t("users.addUser"))
-  const [alertMessage, setAlertMessage] = useState({
-    type: "alert" as AlertTypes,
-    message: undefined,
-  })
   const [errorAlert, setErrorAlert] = useState(false)
 
   useEffect(() => {
@@ -50,10 +44,7 @@ const Users = () => {
 
   const tableOptions = useAgTable()
 
-  const { onExport, csvExportLoading, csvExportError, csvExportSuccess } = useUsersExport()
-  useEffect(() => {
-    setErrorAlert(csvExportError)
-  }, [csvExportError])
+  const { onExport, csvExportLoading } = useUsersExport()
 
   const columns = useMemo(() => {
     return [
@@ -154,8 +145,6 @@ const Users = () => {
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
-      <SiteAlert dismissable alertMessage={alertMessage} sticky={true} timeout={5000} />
-      {csvExportSuccess && <SiteAlert type="success" timeout={5000} dismissable sticky={true} />}
       <NavigationHeader className="relative" title={t("nav.users")} />
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
@@ -240,7 +229,6 @@ const Users = () => {
             setUserDrawer(null)
             void mutate(cacheKey)
           }}
-          setAlertMessage={setAlertMessage}
         />
       </Drawer>
     </Layout>

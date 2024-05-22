@@ -2,14 +2,15 @@ import React, { useContext } from "react"
 import Markdown from "markdown-to-jsx"
 import { useRouter } from "next/router"
 import Head from "next/head"
-import { MenuLink, setSiteAlertMessage, t } from "@bloom-housing/ui-components"
-import { AlertBanner, AuthContext } from "@bloom-housing/shared-helpers"
+import { Toast } from "@bloom-housing/ui-seeds"
+import { MenuLink, t } from "@bloom-housing/ui-components"
+import { AlertBanner, AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { getSiteFooter } from "../lib/helpers"
 import { SiteHeader } from "@bloom-housing/doorway-ui-components/src/headers/SiteHeader"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
-
+  const { toastMessagesRef, addToast } = useContext(MessageContext)
   const router = useRouter()
 
   const languages =
@@ -89,9 +90,9 @@ const Layout = (props) => {
             title: t("nav.signOut"),
             onClick: () => {
               const signOutFxn = async () => {
-                setSiteAlertMessage(t(`authentication.signOut.success`), "notice")
                 await router.push("/sign-in")
-                signOut()
+                await signOut()
+                addToast(t(`authentication.signOut.success`), { variant: "primary" })
               }
               void signOutFxn()
             },
@@ -141,6 +142,11 @@ const Layout = (props) => {
           strings={{ skipToMainContent: t("t.skipToMainContent") }}
         />
         <main id="main-content" className="md:overflow-x-hidden">
+          {toastMessagesRef.current.map((toastMessage) => (
+            <Toast {...toastMessage.props} testId="toast-alert" key={toastMessage.timestamp}>
+              {toastMessage.message}
+            </Toast>
+          ))}
           {props.children}
         </main>
       </div>
