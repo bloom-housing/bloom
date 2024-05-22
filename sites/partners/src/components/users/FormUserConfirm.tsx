@@ -126,7 +126,6 @@ const FormUserConfirm = () => {
                   name="password"
                   label={t("account.settings.newPassword")}
                   note={t("authentication.createAccount.passwordInfo")}
-                  placeholder={t("authentication.createAccount.mustBe8Chars")}
                   validation={{
                     required: true,
                     minLength: MIN_PASSWORD_LENGTH,
@@ -147,7 +146,6 @@ const FormUserConfirm = () => {
                   type="password"
                   name="passwordConfirmation"
                   label={t("account.settings.confirmNewPassword")}
-                  placeholder={t("authentication.createAccount.mustBe8Chars")}
                   validation={{
                     required: true,
                     validate: (value) =>
