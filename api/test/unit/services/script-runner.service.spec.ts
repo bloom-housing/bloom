@@ -1,7 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Logger } from '@nestjs/common';
-import { randomUUID } from 'crypto';
 import { SchedulerRegistry } from '@nestjs/schedule';
+import { randomUUID } from 'crypto';
+import { Request as ExpressRequest } from 'express';
 import { ScriptRunnerService } from '../../../src/services/script-runner.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { User } from '../../../src/dtos/users/user.dto';
@@ -21,6 +22,49 @@ describe('Testing script runner service', () => {
 
     service = module.get<ScriptRunnerService>(ScriptRunnerService);
     prisma = module.get<PrismaService>(PrismaService);
+  });
+
+  it('should transfer data', async () => {
+    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+
+    const id = randomUUID();
+    const scriptName = 'data transfer';
+
+    const res = await service.dataTransfer(
+      {
+        user: {
+          id,
+        } as unknown as User,
+      } as unknown as ExpressRequest,
+      {
+        connectionString: process.env.TEST_CONNECTION_STRING,
+      },
+    );
+
+    expect(res.success).toBe(true);
+
+    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
+      where: {
+        scriptName,
+      },
+    });
+    expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
+      data: {
+        scriptName,
+        triggeringUser: id,
+      },
+    });
+    expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
+      data: {
+        didScriptRun: true,
+        triggeringUser: id,
+      },
+      where: {
+        scriptName,
+      },
+    });
   });
 
   // | ---------- HELPER TESTS BELOW ---------- | //
