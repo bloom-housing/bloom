@@ -6,7 +6,6 @@ import {
   HouseholdMember,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { House } from "@bloom-housing/ui-components/src/icons/Icons"
 
 type DetailsAddressColumnsProps = {
   type: AddressColsType
