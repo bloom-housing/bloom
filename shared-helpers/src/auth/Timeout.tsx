@@ -1,8 +1,9 @@
 import React, { createElement, FunctionComponent, useContext, useEffect, useState } from "react"
+import { useRouter } from "next/router"
 import { AuthContext } from "./AuthContext"
 import { ConfigContext } from "./ConfigContext"
 import { Button } from "@bloom-housing/ui-seeds"
-import { NavigationContext, Modal, t } from "@bloom-housing/ui-components"
+import { Modal, t } from "@bloom-housing/ui-components"
 import { MessageContext } from "../utilities/MessageContext"
 
 const PROMPT_TIMEOUT = 60000
@@ -53,7 +54,7 @@ export const IdleTimeout: FunctionComponent<IdleTimeoutProps> = ({
   const { idleTimeout } = useContext(ConfigContext)
   const { addToast } = useContext(MessageContext)
   const [promptTimeout, setPromptTimeout] = useState<number | undefined>()
-  const { router } = useContext(NavigationContext)
+  const router = useRouter()
 
   useIdleTimeout(idleTimeout, () => {
     // Clear any existing prompt timeouts

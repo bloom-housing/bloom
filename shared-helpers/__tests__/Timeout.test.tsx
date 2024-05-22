@@ -3,6 +3,13 @@ import { render, cleanup } from "@testing-library/react"
 import { LoggedInUserIdleTimeout } from "../src/auth/Timeout"
 import { AuthContext } from "../src/auth/AuthContext"
 
+jest.mock("next/router", () => ({
+  useRouter() {
+    return {
+      push: jest.fn(),
+    }
+  },
+}))
 afterEach(cleanup)
 
 describe("<Timeout>", () => {
@@ -41,6 +48,7 @@ describe("<Timeout>", () => {
   it("does not create element if user is not logged in", () => {
     const onTimeoutSpy = jest.fn()
     const anchorMocked = document.createElement("div")
+
     const createElementSpy = jest.spyOn(document, "createElement").mockReturnValueOnce(anchorMocked)
     render(
       <AuthContext.Provider
