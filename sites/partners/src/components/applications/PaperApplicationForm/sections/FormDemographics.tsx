@@ -73,7 +73,7 @@ const FormDemographics = ({ formValues }: FormDemographicsProps) => {
         defaultText: getCustomValue(subKey),
       })),
     }))
-  }, [register, isKeyIncluded, getCustomValue])
+  }, [register])
 
   return (
     <>

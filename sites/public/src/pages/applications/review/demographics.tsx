@@ -119,7 +119,7 @@ const ApplicationDemographics = () => {
         defaultText: getCustomValue(subKey),
       })),
     }))
-  }, [register, isKeyIncluded, getCustomValue])
+  }, [register])
 
   return (
     <FormsLayout>
