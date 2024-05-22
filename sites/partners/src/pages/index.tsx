@@ -94,7 +94,7 @@ export default function ListingsList() {
         filter: false,
         resizable: true,
         cellRenderer: "ListingsLink",
-        minWidth: 200,
+        minWidth: 250,
         flex: 1,
       },
       {
@@ -109,6 +109,7 @@ export default function ListingsList() {
         resizable: true,
         valueFormatter: ({ value }) => t(`listings.listingStatus.${value}`),
         cellRenderer: "ApplicationsLink",
+        minWidth: 180,
       },
       {
         headerName: t("listings.applicationDeadline"),
@@ -117,6 +118,7 @@ export default function ListingsList() {
         filter: false,
         resizable: true,
         valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
+        minWidth: 130,
       },
       {
         headerName: t("listings.availableUnits"),
@@ -124,6 +126,7 @@ export default function ListingsList() {
         sortable: false,
         filter: false,
         resizable: true,
+        minWidth: 110,
       },
       {
         headerName: t("listings.waitlist.open"),
@@ -132,6 +135,7 @@ export default function ListingsList() {
         filter: false,
         resizable: true,
         cellRenderer: "formatWaitlistStatus",
+        minWidth: 100,
       },
     ]
     return columns
