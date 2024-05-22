@@ -15,8 +15,6 @@ export const householdMemberFactorySingle = (
 ): Prisma.HouseholdMemberCreateWithoutApplicationsInput => {
   const firstName = randomNoun();
   const lastName = randomNoun();
-  const sameAddress = randomBoolean() === true ? YesNoEnum.yes : YesNoEnum.no;
-  const workInRegion = randomBoolean() === true ? YesNoEnum.yes : YesNoEnum.no;
 
   const relationshipKeys = Object.values(HouseholdMemberRelationship);
 
@@ -28,17 +26,13 @@ export const householdMemberFactorySingle = (
     birthMonth: randomBirthMonth(),
     birthDay: randomBirthDay(),
     birthYear: randomBirthYear(),
-    sameAddress,
+    sameAddress: YesNoEnum.yes,
     relationship: relationshipKeys[randomInt(relationshipKeys.length)],
-    workInRegion: workInRegion,
-    householdMemberAddress:
-      sameAddress === YesNoEnum.no ? { create: addressFactory() } : undefined,
-    householdMemberWorkAddress:
-      workInRegion === YesNoEnum.yes
-        ? {
-            create: addressFactory(),
-          }
-        : undefined,
+    workInRegion: YesNoEnum.yes,
+    householdMemberAddress: { create: addressFactory() },
+    householdMemberWorkAddress: {
+      create: addressFactory(),
+    },
     orderId: index,
   };
 };
