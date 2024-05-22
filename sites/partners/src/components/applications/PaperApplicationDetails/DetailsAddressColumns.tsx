@@ -83,8 +83,6 @@ const DetailsAddressColumns = ({
           ? application.applicant.applicantAddress[item]
           : t("t.n/a")
       } else {
-        console.log(address)
-        console.log(householdMember)
         address[item] = householdMember?.householdMemberAddress[item]
           ? householdMember.householdMemberAddress[item]
           : t("t.n/a")

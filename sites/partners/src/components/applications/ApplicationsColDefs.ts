@@ -34,7 +34,7 @@ function compareStrings(a, b, node, nextNode, isInverted) {
   }
 }
 
-export function getColDefs(maxHouseholdSize: number) {
+export function getColDefs(maxHouseholdSize: number, countyCode: string) {
   const defs = [
     {
       headerName: t("application.details.submittedDate"),
