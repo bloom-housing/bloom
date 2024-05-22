@@ -156,6 +156,31 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
       }
     }
 
+    if (params.search) {
+      filters.push({
+        applications: {
+          some: {
+            applicant: {
+              OR: [
+                {
+                  firstName: {
+                    contains: params.search,
+                    mode: Prisma.QueryMode.insensitive,
+                  },
+                },
+                {
+                  lastName: {
+                    contains: params.search,
+                    mode: Prisma.QueryMode.insensitive,
+                  },
+                },
+              ],
+            },
+          },
+        },
+      });
+    }
+
     return {
       AND: filters,
     };

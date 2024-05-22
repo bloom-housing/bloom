@@ -37,6 +37,7 @@ interface UseSingleApplicationDataProps extends PaginationProps {
 interface UseSingleFlaggedApplicationDataProps extends UseSingleApplicationDataProps {
   view?: string
   limit: number
+  search?: string
 }
 
 type UseUserListProps = PaginationProps & {
@@ -188,6 +189,7 @@ export function useFlaggedApplicationsList({
   page,
   limit,
   view,
+  search = "",
 }: UseSingleFlaggedApplicationDataProps) {
   const { applicationFlaggedSetsService } = useContext(AuthContext)
 
@@ -195,10 +197,17 @@ export function useFlaggedApplicationsList({
     listingId,
     page,
     limit,
+    search,
   }
 
   if (view) {
     Object.assign(params, { view })
+  }
+
+  if (search?.length < 3) {
+    delete params.search
+  } else {
+    Object.assign(params, { search })
   }
 
   const paramString = qs.stringify(params)

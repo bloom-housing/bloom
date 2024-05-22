@@ -11,7 +11,10 @@ dayjs.extend(customParseFormat)
 
 import { TempUnit } from "./listings/formTypes"
 import { FieldError } from "react-hook-form"
-import { IncomePeriodEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  Application,
+  IncomePeriodEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export enum YesNoAnswer {
   "Yes" = "yes",
@@ -233,4 +236,15 @@ export function pdfFileNameFromFileId(fileId: string) {
   }
 
   return name
+}
+
+export const mergeApplicationNames = (applications: Application[]) => {
+  if (!applications?.length) return ""
+
+  const names = applications.reduce((acc, curr) => {
+    acc.push(`${curr.applicant.firstName} ${curr.applicant.lastName}`)
+    return acc
+  }, [])
+
+  return `${names.join(", ")}`
 }

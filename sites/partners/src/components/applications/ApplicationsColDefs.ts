@@ -42,8 +42,8 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       sortable: true,
       unSortIcon: true,
       filter: false,
-      width: 200,
-      minWidth: 150,
+      width: 220,
+      minWidth: 50,
       sort: "asc",
       valueGetter: ({ data }) => {
         if (!data?.submissionDate) return ""
@@ -61,8 +61,8 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       field: "confirmationCode",
       sortable: false,
       filter: false,
-      width: 150,
-      minWidth: 120,
+      width: 140,
+      minWidth: 50,
       cellRenderer: "formatLinkCell",
     },
     {
@@ -71,8 +71,8 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       sortable: false,
       unSortIcon: true,
       filter: false,
-      width: 150,
-      minWidth: 120,
+      width: 125,
+      minWidth: 50,
       valueFormatter: ({ value }) => t(`application.details.submissionType.${value}`),
       comparator: compareStrings,
     },
@@ -84,7 +84,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       unSortIcon: true,
       filter: false,
       width: 125,
-      minWidth: 100,
+      minWidth: 50,
       comparator: compareStrings,
     },
     {
@@ -95,7 +95,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       unSortIcon: true,
       filter: "agTextColumnFilter",
       width: 125,
-      minWidth: 100,
+      minWidth: 50,
       comparator: compareStrings,
     },
     {
@@ -104,8 +104,8 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       sortable: false,
       unSortIcon: true,
       filter: false,
-      width: 140,
-      minWidth: 140,
+      width: 120,
+      minWidth: 50,
       type: "rightAligned",
     },
     {
@@ -114,8 +114,8 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       sortable: false,
       unSortIcon: true,
       filter: false,
-      width: 180,
-      minWidth: 150,
+      width: 110,
+      minWidth: 50,
       type: "rightAligned",
       valueGetter: (row) => {
         if (!row?.data?.income || !row?.data?.incomePeriod) return ""
@@ -134,8 +134,8 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       sortable: false,
       unSortIcon: true,
       filter: false,
-      width: 180,
-      minWidth: 150,
+      width: 110,
+      minWidth: 50,
       type: "rightAligned",
       valueGetter: (row) => {
         if (!row?.data?.income || !row?.data?.incomePeriod) return ""
@@ -154,8 +154,8 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       sortable: false,
       unSortIcon: true,
       filter: false,
-      width: 120,
-      minWidth: 100,
+      width: 100,
+      minWidth: 50,
       valueFormatter: (data) => {
         if (!data.value) return ""
 
@@ -169,8 +169,8 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       sortable: false,
       unSortIcon: true,
       filter: true,
-      width: 120,
-      minWidth: 100,
+      width: 110,
+      minWidth: 50,
       valueGetter: (row) => {
         if (!row?.data?.accessibility) return ""
 
@@ -193,8 +193,8 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       sortable: false,
       unSortIcon: true,
       filter: true,
-      width: 150,
-      minWidth: 100,
+      width: 180,
+      minWidth: 50,
       valueGetter: (row) => {
         if (!row?.data?.preferences) return ""
 
@@ -216,8 +216,8 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       field: "applicant",
       sortable: false,
       filter: false,
-      width: 150,
-      minWidth: 100,
+      width: 125,
+      minWidth: 50,
       valueFormatter: ({ value }) => {
         if (!value) return ""
 
@@ -231,8 +231,8 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       field: "applicant.emailAddress",
       sortable: false,
       filter: false,
-      width: 150,
-      minWidth: 100,
+      width: 250,
+      minWidth: 50,
     },
     {
       headerName: t("t.phone"),
@@ -240,15 +240,15 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       sortable: false,
       filter: false,
       width: 150,
-      minWidth: 100,
+      minWidth: 50,
     },
     {
       headerName: t("applications.table.phoneType"),
       field: "applicant.phoneNumberType",
       sortable: false,
       filter: false,
-      width: 150,
-      minWidth: 100,
+      width: 90,
+      minWidth: 50,
       valueFormatter: ({ value }) => {
         if (!value) return ""
         return t(`application.contact.phoneNumberTypes.${value}`)
@@ -260,19 +260,19 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       sortable: false,
       filter: false,
       width: 150,
-      minWidth: 100,
+      minWidth: 50,
       valueFormatter: ({ value }) => {
         if (!value) return ""
         return value ? value : t("t.none")
       },
     },
     {
-      headerName: t("applications.table.additionalPhoneType"),
+      headerName: t("applications.table.additionalPhoneTypeShortened"),
       field: "additionalPhoneNumberType",
       sortable: false,
       filter: false,
-      width: 150,
-      minWidth: 100,
+      width: 90,
+      minWidth: 50,
       valueFormatter: ({ value }) => {
         if (!value) return ""
         return value ? t(`application.contact.phoneNumberTypes.${value}`) : t("t.none")
@@ -283,40 +283,40 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       field: "applicant.applicantAddress.street",
       sortable: false,
       filter: false,
-      width: 175,
-      minWidth: 150,
+      width: 250,
+      minWidth: 50,
     },
     {
       headerName: t("applications.table.residenceCity"),
       field: "applicant.applicantAddress.city",
       sortable: false,
       filter: false,
-      width: 150,
-      minWidth: 120,
+      width: 120,
+      minWidth: 50,
     },
     {
       headerName: t("applications.table.residenceState"),
       field: "applicant.applicantAddress.state",
       sortable: false,
       filter: false,
-      width: 120,
-      minWidth: 100,
+      width: 110,
+      minWidth: 50,
     },
     {
       headerName: t("applications.table.residenceZip"),
       field: "applicant.applicantAddress.zipCode",
       sortable: false,
       filter: false,
-      width: 120,
-      minWidth: 100,
+      width: 110,
+      minWidth: 50,
     },
     {
       headerName: t("applications.table.mailingStreet"),
       field: "applicationsMailingAddress.street",
       sortable: false,
       filter: false,
-      width: 175,
-      minWidth: 150,
+      width: 250,
+      minWidth: 50,
       valueFormatter: function ({ data, value }) {
         if (!value) return ""
         return `${data.sendMailToMailingAddress ? value : data.applicant.applicantAddress.street}`
@@ -327,8 +327,8 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       field: "applicationsMailingAddress.city",
       sortable: false,
       filter: false,
-      width: 150,
-      minWidth: 120,
+      width: 120,
+      minWidth: 50,
       valueFormatter: function ({ data, value }) {
         if (!value) return ""
 
@@ -340,8 +340,8 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       field: "applicationsMailingAddress.state",
       sortable: false,
       filter: false,
-      width: 120,
-      minWidth: 100,
+      width: 110,
+      minWidth: 50,
       valueFormatter: function ({ data, value }) {
         if (!value) return ""
 
@@ -353,8 +353,8 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       field: "applicationsMailingAddress.zipCode",
       sortable: false,
       filter: false,
-      width: 120,
-      minWidth: 100,
+      width: 110,
+      minWidth: 50,
       valueFormatter: function ({ data, value }) {
         if (!value) return ""
 
@@ -366,32 +366,32 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       field: "applicant.applicantWorkAddress.street",
       sortable: false,
       filter: false,
-      width: 175,
-      minWidth: 150,
+      width: 250,
+      minWidth: 50,
     },
     {
       headerName: t("applications.table.workCity"),
       field: "applicant.applicantWorkAddress.city",
       sortable: false,
       filter: false,
-      width: 150,
-      minWidth: 120,
+      width: 120,
+      minWidth: 50,
     },
     {
       headerName: t("applications.table.workState"),
       field: "applicant.applicantWorkAddress.state",
       sortable: false,
       filter: false,
-      width: 120,
-      minWidth: 100,
+      width: 110,
+      minWidth: 50,
     },
     {
       headerName: t("applications.table.workZip"),
       field: "applicant.applicantWorkAddress.zipCode",
       sortable: false,
       filter: false,
-      width: 120,
-      minWidth: 100,
+      width: 110,
+      minWidth: 50,
     },
     {
       headerName: t("applications.table.altContactFirstName"),
@@ -399,7 +399,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       sortable: false,
       filter: false,
       width: 125,
-      minWidth: 100,
+      minWidth: 50,
     },
     {
       headerName: t("applications.table.altContactLastName"),
@@ -407,15 +407,15 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       sortable: false,
       filter: false,
       width: 125,
-      minWidth: 100,
+      minWidth: 50,
     },
     {
       headerName: t("applications.table.altContactRelationship"),
       field: "alternateContact.type",
       sortable: false,
       filter: false,
-      width: 132,
-      minWidth: 132,
+      width: 135,
+      minWidth: 50,
       valueFormatter: ({ data, value }) => {
         if (!value) return ""
 
@@ -430,7 +430,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       sortable: false,
       filter: false,
       width: 125,
-      minWidth: 100,
+      minWidth: 50,
       valueFormatter: ({ value }) => {
         if (!value) return ""
         return value?.length ? value : t("t.none")
@@ -441,8 +441,8 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       field: "alternateContact.emailAddress",
       sortable: false,
       filter: false,
-      width: 150,
-      minWidth: 100,
+      width: 250,
+      minWidth: 50,
     },
     {
       headerName: t("applications.table.altContactPhone"),
@@ -458,32 +458,32 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       field: "alternateContact.address.street",
       sortable: false,
       filter: false,
-      width: 150,
-      minWidth: 100,
+      width: 250,
+      minWidth: 50,
     },
     {
       headerName: t("applications.table.altContactCity"),
       field: "alternateContact.address.city",
       sortable: false,
       filter: false,
-      width: 150,
-      minWidth: 100,
+      width: 120,
+      minWidth: 50,
     },
     {
       headerName: t("applications.table.altContactState"),
       field: "alternateContact.address.state",
       sortable: false,
       filter: false,
-      width: 150,
-      minWidth: 100,
+      width: 110,
+      minWidth: 50,
     },
     {
       headerName: t("applications.table.altContactZip"),
       field: "alternateContact.address.zipCode",
       sortable: false,
       filter: false,
-      width: 150,
-      minWidth: 100,
+      width: 110,
+      minWidth: 50,
     },
   ]
 
@@ -499,7 +499,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
         sortable: false,
         filter: false,
         width: 125,
-        minWidth: 100,
+        minWidth: 50,
         valueFormatter: ({ value }) => {
           if (!value) return ""
 
@@ -512,7 +512,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
         sortable: false,
         filter: false,
         width: 125,
-        minWidth: 100,
+        minWidth: 50,
         valueFormatter: ({ value }) => {
           if (!value) return ""
 
@@ -525,7 +525,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
         sortable: false,
         filter: false,
         width: 125,
-        minWidth: 100,
+        minWidth: 50,
         valueFormatter: ({ value }) => {
           if (!value) return ""
 
@@ -541,11 +541,10 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
         field: "householdMember",
         sortable: false,
         filter: false,
-        width: 132,
-        minWidth: 132,
+        width: 135,
+        minWidth: 50,
         valueFormatter: ({ value }) => {
           if (!value) return ""
-
           return value[i]?.relationship
             ? t(`application.form.options.relationship.${value[i].relationship}`)
             : ""
@@ -556,8 +555,8 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
         field: "householdMember",
         sortable: false,
         filter: false,
-        width: 125,
-        minWidth: 100,
+        width: 115,
+        minWidth: 50,
         valueFormatter: ({ value }) => {
           if (!value) return ""
           return formatYesNoLabel(value[i]?.sameAddress)
@@ -568,8 +567,8 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
         field: "householdMember",
         sortable: false,
         filter: false,
-        width: 125,
-        minWidth: 100,
+        width: 90,
+        minWidth: 50,
         valueFormatter: ({ value }) => {
           if (!value) return ""
           return formatYesNoLabel(value[i]?.workInRegion)
@@ -584,8 +583,8 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       field: "flagged",
       sortable: false,
       filter: false,
-      width: 125,
-      minWidth: 100,
+      width: 110,
+      minWidth: 50,
       valueFormatter: ({ value }) => {
         return formatYesNoLabel(value)
       },
@@ -595,8 +594,8 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       field: "markedAsDuplicate",
       sortable: false,
       filter: false,
-      width: 125,
-      minWidth: 100,
+      width: 110,
+      minWidth: 50,
       valueFormatter: ({ value }) => {
         return formatYesNoLabel(value)
       },

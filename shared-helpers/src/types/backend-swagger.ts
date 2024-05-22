@@ -423,6 +423,8 @@ export class ApplicationFlaggedSetsService {
       listingId: string
       /**  */
       view?: AfsView
+      /**  */
+      search?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedAfs> {
@@ -435,6 +437,7 @@ export class ApplicationFlaggedSetsService {
         limit: params["limit"],
         listingId: params["listingId"],
         view: params["view"],
+        search: params["search"],
       }
 
       /** 适配ios13，get请求不允许带body */
@@ -455,6 +458,8 @@ export class ApplicationFlaggedSetsService {
       listingId: string
       /**  */
       view?: AfsView
+      /**  */
+      search?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<AfsMeta> {
@@ -467,6 +472,7 @@ export class ApplicationFlaggedSetsService {
         limit: params["limit"],
         listingId: params["listingId"],
         view: params["view"],
+        search: params["search"],
       }
 
       /** 适配ios13，get请求不允许带body */
