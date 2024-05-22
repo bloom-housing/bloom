@@ -831,7 +831,6 @@ export class ApplicationCsvExporterService
   }
 
   convertDemographicLanguageToReadable(type: string): string {
-    console.log('HELLO LANGAUGE', type);
     const [rootKey, customValue = ''] = type.split(':');
     const typeMap = {
       chineseCantonese: 'Chinese - Cantonese',
