@@ -1,17 +1,8 @@
 import React, { useRef, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
-import {
-  t,
-  FormCard,
-  Form,
-  Field,
-  passwordRegex,
-  useMutate,
-  AlertBox,
-  Modal,
-} from "@bloom-housing/ui-components"
+import { t, FormCard, Form, Field, useMutate, AlertBox, Modal } from "@bloom-housing/ui-components"
 import { Button, Icon } from "@bloom-housing/ui-seeds"
-import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, MessageContext, passwordRegex } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import { ReRequestConfirmation } from "./ReRequestConfirmation"
 import { SuccessDTO } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -181,7 +172,9 @@ const FormUserConfirm = () => {
                 type="submit"
                 variant="primary"
                 className={"items-center"}
-                loadingMessage={(isConfirmLoading || loading) && t("t.formSubmitted")}
+                loadingMessage={
+                  (isConfirmLoading || loading || isSubmitting) && t("t.formSubmitted")
+                }
               >
                 {t("users.confirmAccount")}
               </Button>
