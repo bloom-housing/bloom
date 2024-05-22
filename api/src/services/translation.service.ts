@@ -181,7 +181,9 @@ export class TranslationService {
 
     if (translatedValue) {
       [...Object.keys(cleanedPaths).values()].forEach((path, index) => {
-        lodash.set(listing, path, translatedValue[0][index]);
+        if (translatedValue[0][index]) {
+          lodash.set(listing, path, translatedValue[0][index]);
+        }
       });
     }
 
@@ -192,9 +194,32 @@ export class TranslationService {
     listing: Listing,
     language: LanguagesEnum,
   ) {
-    return this.prisma.generatedListingTranslations.findFirst({
-      where: { listingId: listing.id, language: language },
+    const res = await this.prisma.generatedListingTranslations.findFirst({
+      where: {
+        listingId: listing.id,
+        language: language,
+      },
     });
+    let mostRecentUpdatedAt = listing.updatedAt;
+    listing.listingMultiselectQuestions.forEach((multiselectObj) => {
+      const multiselectUpdatedAt =
+        multiselectObj.multiselectQuestions?.updatedAt;
+      if (mostRecentUpdatedAt < multiselectUpdatedAt) {
+        mostRecentUpdatedAt = multiselectUpdatedAt;
+      }
+    });
+    if (res && res.createdAt < mostRecentUpdatedAt) {
+      console.log('new translations');
+      await this.prisma.generatedListingTranslations.delete({
+        where: {
+          id: res.id,
+        },
+      });
+
+      return undefined;
+    }
+
+    return res;
   }
 
   private async persistNewTranslatedValues(
