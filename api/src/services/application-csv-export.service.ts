@@ -163,11 +163,11 @@ export class ApplicationCsvExporterService
                               id: true,
                               createdAt: true,
                               updatedAt: true,
-                              ethnicity: true,
                               gender: true,
                               sexualOrientation: true,
                               howDidYouHear: true,
                               race: true,
+                              spokenLanguage: true,
                             },
                           }
                         : false,
@@ -831,6 +831,7 @@ export class ApplicationCsvExporterService
   }
 
   convertDemographicLanguageToReadable(type: string): string {
+    console.log('HELLO LANGAUGE', type);
     const [rootKey, customValue = ''] = type.split(':');
     const typeMap = {
       chineseCantonese: 'Chinese - Cantonese',
