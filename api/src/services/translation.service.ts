@@ -211,7 +211,6 @@ export class TranslationService {
       }
     });
     if (res && res.createdAt < mostRecentUpdatedAt) {
-      console.log('new translations');
       await this.prisma.generatedListingTranslations.delete({
         where: {
           id: res.id,
