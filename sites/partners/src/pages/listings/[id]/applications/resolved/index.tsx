@@ -2,16 +2,18 @@ import React from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import { AgTable, t, useAgTable, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
+import {
+  Application,
+  ApplicationReviewStatusEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useSingleListingData, useFlaggedApplicationsList } from "../../../../../lib/hooks"
 import { ListingStatusBar } from "../../../../../components/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../components/applications/ApplicationsSideNav"
 import { getLinkCellFormatter } from "../../../../../components/applications/helpers"
 import { NavigationHeader } from "../../../../../components/shared/NavigationHeader"
-import {
-  Application,
-  ApplicationReviewStatusEnum,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+
+import { mergeApplicationNames } from "../../../../../lib/helpers"
 
 const ApplicationsList = () => {
   const router = useRouter()
@@ -36,13 +38,7 @@ const ApplicationsList = () => {
       field: "id",
       cellRenderer: "formatLinkCell",
       valueGetter: ({ data }) => {
-        if (!data?.applications?.length) return ""
-        const applications = data.applications.reduce((acc, curr) => {
-          acc.push(`${curr.applicant.firstName} ${curr.applicant.lastName}`)
-          return acc
-        }, [])
-
-        return `${applications.join(", ")}`
+        return mergeApplicationNames(data.applications)
       },
       flex: 1,
       minWidth: 200,

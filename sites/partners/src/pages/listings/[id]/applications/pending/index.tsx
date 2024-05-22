@@ -12,12 +12,13 @@ import {
   BreadcrumbLink,
   AlertBox,
 } from "@bloom-housing/ui-components"
+import { formatDateTime } from "@bloom-housing/shared-helpers"
 import { useSingleListingData, useFlaggedApplicationsList } from "../../../../../lib/hooks"
 import { ListingStatusBar } from "../../../../../components/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../components/applications/ApplicationsSideNav"
-import { formatDateTime } from "@bloom-housing/shared-helpers"
 import { NavigationHeader } from "../../../../../components/shared/NavigationHeader"
+import { mergeApplicationNames } from "../../../../../lib/helpers"
 
 const ApplicationsList = () => {
   const router = useRouter()
@@ -51,14 +52,7 @@ const ApplicationsList = () => {
       field: "id",
       cellRenderer: "formatLinkCell",
       valueGetter: ({ data }) => {
-        if (!data?.applications?.length) return ""
-
-        const applications = data.applications.reduce((acc, curr) => {
-          acc.push(`${curr.applicant.firstName} ${curr.applicant.lastName}`)
-          return acc
-        }, [])
-
-        return `${applications.join(", ")}`
+        return mergeApplicationNames(data.applications)
       },
       flex: 1,
       minWidth: 250,
