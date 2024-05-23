@@ -55,7 +55,7 @@ describe('Auth Controller Tests', () => {
       .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
-        password: 'abcdef',
+        password: 'Abcdef12345!',
         mfaCode: storedUser.singleUseCode,
         mfaType: MfaType.email,
       } as Login)
@@ -98,7 +98,7 @@ describe('Auth Controller Tests', () => {
       .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
-        password: 'abcdef',
+        password: 'Abcdef12345!',
       } as Login)
       .expect(201);
 
@@ -139,7 +139,7 @@ describe('Auth Controller Tests', () => {
       .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
-        password: 'abcdef',
+        password: 'Abcdef12345!',
       } as Login)
       .expect(201);
 
@@ -192,7 +192,7 @@ describe('Auth Controller Tests', () => {
       .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
-        password: 'abcdef',
+        password: 'Abcdef12345!',
         mfaType: MfaType.sms,
       } as RequestMfaCode)
       .expect(201);
@@ -249,8 +249,8 @@ describe('Auth Controller Tests', () => {
       .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
-        password: 'abcdef123',
-        passwordConfirmation: 'abcdef123',
+        password: 'Abcdef12345!',
+        passwordConfirmation: 'Abcdef12345!',
         token,
       } as UpdatePassword)
       .expect(200);
@@ -346,7 +346,7 @@ describe('Auth Controller Tests', () => {
       .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
-        password: 'abcdef',
+        password: 'Abcdef12345!',
       } as Login)
       .expect(201);
     await request(app.getHttpServer())
