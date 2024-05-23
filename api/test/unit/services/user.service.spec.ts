@@ -1423,7 +1423,7 @@ describe('Testing user service', () => {
         {
           firstName: 'Partner User firstName',
           lastName: 'Partner User lastName',
-          password: 'example password 1',
+          password: 'Abcdef12345!',
           email: 'partnerUser@email.com',
           jurisdictions: [{ id: jurisId }],
           userRoles: {
@@ -1497,7 +1497,7 @@ describe('Testing user service', () => {
         {
           firstName: 'Partner User firstName',
           lastName: 'Partner User lastName',
-          password: 'example password 1',
+          password: 'Abcdef12345!',
           email: 'partnerUser@email.com',
           jurisdictions: [{ id: jurisId }],
           userRoles: {
@@ -1580,7 +1580,7 @@ describe('Testing user service', () => {
             {
               firstName: 'Partner User firstName',
               lastName: 'Partner User lastName',
-              password: 'example password 1',
+              password: 'Abcdef12345!',
               email: 'partnerUser@email.com',
               jurisdictions: [{ id: jurisId }],
               userRoles: {
@@ -1648,7 +1648,7 @@ describe('Testing user service', () => {
         {
           firstName: 'public User firstName',
           lastName: 'public User lastName',
-          password: 'example password 1',
+          password: 'Abcdef12345!',
           email: 'publicUser@email.com',
           jurisdictions: [{ id: jurisId }],
         },

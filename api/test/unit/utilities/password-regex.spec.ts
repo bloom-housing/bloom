@@ -22,7 +22,7 @@ describe('passwordRegex', () => {
     expect(passwordRegex.test('Abcdef12345!')).toBe(true);
     expect(passwordRegex.test('Abcdefghijkl1!')).toBe(true);
     expect(passwordRegex.test('2$Iz3S7]$oME')).toBe(true);
-    expect(passwordRegex.test('dC135+AY5nEt')).toBe(true);
-    expect(passwordRegex.test(' .;^xJ8d37Na7')).toBe(true);
+    expect(passwordRegex.test('dC135@AY5n+t')).toBe(true);
+    expect(passwordRegex.test('.;^xJ8d37Na7')).toBe(true);
   });
 });
