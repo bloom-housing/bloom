@@ -1,6 +1,8 @@
 import React from "react"
 import { Icon } from "@bloom-housing/ui-seeds"
-import { faStopwatch, faEye, faLock } from "@fortawesome/free-solid-svg-icons"
+import { CustomIconMap } from "@bloom-housing/shared-helpers"
+import ClockIcon from "@heroicons/react/24/solid/ClockIcon"
+import EyeIcon from "@heroicons/react/24/solid/EyeIcon"
 import { t } from "@bloom-housing/ui-components"
 import styles from "./SignUpBenefits.module.scss"
 
@@ -10,10 +12,10 @@ type SignUpBenefitsProps = {
 }
 const SignUpBenefits = (props: SignUpBenefitsProps) => {
   const iconListItems = [
-    { icon: faStopwatch, text: t("account.signUpSaveTime.applyFaster") },
-    { icon: faEye, text: t("account.signUpSaveTime.checkStatus") },
+    { icon: <ClockIcon />, text: t("account.signUpSaveTime.applyFaster") },
+    { icon: <EyeIcon />, text: t("account.signUpSaveTime.checkStatus") },
     {
-      icon: faLock,
+      icon: CustomIconMap.lockClosed,
       text: process.env.showPwdless
         ? t("account.signUpSaveTime.useACode")
         : t("account.signUpSaveTime.resetPassword"),
@@ -26,7 +28,9 @@ const SignUpBenefits = (props: SignUpBenefitsProps) => {
     <ul className={classNames.join(" ")}>
       {iconListItems.map((item) => (
         <li className={styles["sign-up-benefits-item"]} key={`${item.text}-${props.idTag}`}>
-          <Icon icon={item.icon} size="xl" className={styles["icon"]} />
+          <Icon size="xl" className={styles["icon"]}>
+            {item.icon}
+          </Icon>
           <p className={styles["text"]}>{item.text}</p>
         </li>
       ))}

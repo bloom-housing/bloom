@@ -12,9 +12,10 @@ import {
   Tab,
   TabPanel,
   LatitudeLongitude,
-  Icon,
 } from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
+import { Button, Icon } from "@bloom-housing/ui-seeds"
+import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
+import ChevronRightIcon from "@heroicons/react/20/solid/ChevronRightIcon"
 import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import {
   ListingCreate,
@@ -358,7 +359,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                               id="applicationProcessButton"
                               type="button"
                               variant="primary-outlined"
-                              tailIcon={<Icon symbol="arrowForward" size="small" />}
+                              tailIcon={
+                                <Icon>
+                                  <ChevronRightIcon />
+                                </Icon>
+                              }
                               onClick={() => {
                                 setTabIndex(1)
                                 window.scrollTo({ top: 0, behavior: "smooth" })
@@ -383,7 +388,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             <Button
                               type="button"
                               variant="primary-outlined"
-                              leadIcon={<Icon symbol="arrowBack" size="small" />}
+                              leadIcon={
+                                <Icon>
+                                  <ChevronLeftIcon />
+                                </Icon>
+                              }
                               onClick={() => {
                                 setTabIndex(0)
                                 window.scrollTo({ top: 0, behavior: "smooth" })

@@ -3,7 +3,7 @@ import { Heading, HeadingGroup, Icon } from "@bloom-housing/ui-seeds"
 import Card from "@bloom-housing/ui-seeds/src/blocks/Card"
 import React from "react"
 import styles from "./BloomCard.module.scss"
-import { CustomIconMap, CustomIconType } from "../accounts/CustomIconMap"
+import { CustomIconMap, CustomIconType } from "../CustomIconMap"
 
 interface BloomCardProps {
   customIcon?: CustomIconType

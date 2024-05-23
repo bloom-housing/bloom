@@ -1,9 +1,11 @@
 import React, { useContext, useMemo } from "react"
 import { useRouter } from "next/router"
 import dayjs from "dayjs"
-import { t, StatusMessages, Icon } from "@bloom-housing/ui-components"
-import { Button, Link, Grid } from "@bloom-housing/ui-seeds"
+import { t, StatusMessages } from "@bloom-housing/ui-components"
+import { Button, Link, Grid, Icon } from "@bloom-housing/ui-seeds"
 import { pdfUrlFromListingEvents, AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import PencilSquareIcon from "@heroicons/react/24/solid/PencilSquareIcon"
+import LinkIcon from "@heroicons/react/20/solid/LinkIcon"
 import { ListingContext } from "./ListingContext"
 import { StatusAside } from "../shared/StatusAside"
 import {
@@ -169,7 +171,11 @@ const ListingFormActions = ({
         <Button
           type="button"
           variant="text"
-          tailIcon={<Icon size="medium" symbol="edit" className="ml-2" />}
+          tailIcon={
+            <Icon>
+              <PencilSquareIcon />
+            </Icon>
+          }
           className="w-full p-3"
           onClick={() => showLotteryResultsDrawer && showLotteryResultsDrawer()}
         >
@@ -208,7 +214,11 @@ const ListingFormActions = ({
       <Grid.Cell key="btn-preview-results">
         <Link
           href={eventUrl}
-          tailIcon={<Icon size="medium" symbol="link" className="ml-2" />}
+          tailIcon={
+            <Icon>
+              <LinkIcon />
+            </Icon>
+          }
           className="w-full justify-center p-3"
         >
           {t("listings.actions.previewLotteryResults")}{" "}

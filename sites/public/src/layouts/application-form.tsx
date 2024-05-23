@@ -1,7 +1,6 @@
 import React from "react"
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons"
+import { BloomCard, CustomIconMap } from "@bloom-housing/shared-helpers"
 import { Button, Heading, Icon } from "@bloom-housing/ui-seeds"
-import { BloomCard } from "@bloom-housing/shared-helpers"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { t, ProgressNav, StepHeader } from "@bloom-housing/ui-components"
 import ApplicationConductor from "../lib/applications/ApplicationConductor"
@@ -31,7 +30,7 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
     return (
       <div className={styles["application-form-back-link"]}>
         <Button
-          leadIcon={<Icon icon={faChevronLeft} />}
+          leadIcon={<Icon>{CustomIconMap.chevronLeft}</Icon>}
           variant={"text"}
           className="font-bold"
           {...(onClickFxn ? { onClick: onClickFxn } : { href: url })}

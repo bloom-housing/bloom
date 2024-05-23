@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react"
 import Head from "next/head"
-import { AlertBox, LinkButton, t, AppearanceSizeType, InfoCard } from "@bloom-housing/ui-components"
+import { LinkButton, t, AppearanceSizeType, InfoCard } from "@bloom-housing/ui-components"
 import { ActionBlock, DoorwayHero } from "@bloom-housing/doorway-ui-components"
 import { Heading } from "@bloom-housing/ui-seeds"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"

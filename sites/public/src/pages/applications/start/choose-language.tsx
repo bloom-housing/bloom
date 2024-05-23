@@ -16,7 +16,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Heading, Icon, Button, Message } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { faClock } from "@fortawesome/free-regular-svg-icons"
+import { CustomIconMap } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import {
   AppSubmissionContext,
@@ -150,7 +150,11 @@ const ApplicationChooseLanguage = (props: ChooseLanguageProps) => {
             <ImageCard imageUrl={imageUrl} description={listing.name} />
             <Message
               className={styles["message-inside-card"]}
-              customIcon={<Icon icon={faClock} size="md" />}
+              customIcon={
+                <Icon size="md" outlined>
+                  {CustomIconMap.clock}
+                </Icon>
+              }
               fullwidth
             >
               {appStatusContent}
