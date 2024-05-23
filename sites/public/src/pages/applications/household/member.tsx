@@ -32,6 +32,10 @@ import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
 
 export class Member implements HouseholdMemberUpdate {
+  constructor(orderId: number) {
+    this.orderId = orderId
+  }
+
   id: string
   orderId = undefined as number | undefined
   firstName = ""
@@ -45,10 +49,6 @@ export class Member implements HouseholdMemberUpdate {
   phoneNumber = ""
   phoneNumberType = ""
   noPhone = undefined
-
-  constructor(orderId: number) {
-    this.orderId = orderId
-  }
   householdMemberAddress = {
     placeName: undefined,
     city: "",
@@ -285,7 +285,7 @@ const ApplicationMember = () => {
 
                 <Field
                   id="addressStreet"
-                  name="address.street"
+                  name="householdMemberAddress.street"
                   defaultValue={member.householdMemberAddress.street}
                   validation={{ required: true, maxLength: 64 }}
                   errorMessage={
@@ -301,7 +301,7 @@ const ApplicationMember = () => {
 
                 <Field
                   id="addressStreet2"
-                  name="address.street2"
+                  name="householdMemberAddress.street2"
                   label={t("application.contact.apt")}
                   defaultValue={member.householdMemberAddress.street2}
                   error={errors.address?.street2}
@@ -314,7 +314,7 @@ const ApplicationMember = () => {
                 <div className="flex max-w-2xl">
                   <Field
                     id="addressCity"
-                    name="address.city"
+                    name="householdMemberAddress.city"
                     label={t("application.contact.city")}
                     defaultValue={member.householdMemberAddress.city}
                     validation={{ required: true, maxLength: 64 }}
@@ -330,7 +330,7 @@ const ApplicationMember = () => {
 
                   <Select
                     id="addressState"
-                    name="address.state"
+                    name="householdMemberAddress.state"
                     label={t("application.contact.state")}
                     defaultValue={member.householdMemberAddress.state}
                     validation={{ required: true, maxLength: 64 }}
@@ -350,7 +350,7 @@ const ApplicationMember = () => {
 
                 <Field
                   id="addressZipCode"
-                  name="address.zipCode"
+                  name="householdMemberAddress.zipCode"
                   label={t("application.contact.zip")}
                   defaultValue={member.householdMemberAddress.zipCode}
                   validation={{ required: true, maxLength: 64 }}
@@ -395,7 +395,7 @@ const ApplicationMember = () => {
 
                 <Field
                   id="workAddress.street"
-                  name="workAddress.street"
+                  name="householdMemberWorkAddress.street"
                   label={t("application.contact.streetAddress")}
                   defaultValue={member.householdMemberWorkAddress.street}
                   validation={{ required: true, maxLength: 64 }}
@@ -411,7 +411,7 @@ const ApplicationMember = () => {
 
                 <Field
                   id="workAddress.street2"
-                  name="workAddress.street2"
+                  name="householdMemberWorkAddress.street2"
                   label={t("application.contact.apt")}
                   defaultValue={member.householdMemberWorkAddress.street2}
                   error={errors.workAddress?.street2}
@@ -424,7 +424,7 @@ const ApplicationMember = () => {
                 <div className="flex max-w-2xl">
                   <Field
                     id="workAddress.city"
-                    name="workAddress.city"
+                    name="householdMemberWorkAddress.city"
                     label={t("application.contact.city")}
                     defaultValue={member.householdMemberWorkAddress.city}
                     validation={{ required: true, maxLength: 64 }}
@@ -440,7 +440,7 @@ const ApplicationMember = () => {
 
                   <Select
                     id="workAddress.state"
-                    name="workAddress.state"
+                    name="householdMemberWorkAddress.state"
                     label={t("application.contact.state")}
                     defaultValue={member.householdMemberWorkAddress.state}
                     validation={{ required: true, maxLength: 64 }}
@@ -460,7 +460,7 @@ const ApplicationMember = () => {
 
                 <Field
                   id="workAddress.zipCode"
-                  name="workAddress.zipCode"
+                  name="householdMemberWorkAddress.zipCode"
                   label={t("application.contact.zip")}
                   defaultValue={member.householdMemberWorkAddress.zipCode}
                   validation={{ required: true, maxLength: 64 }}
