@@ -62,6 +62,7 @@ export const stagingSeed = async (
       confirmedAt: new Date(),
       jurisdictionIds: [jurisdiction.id, additionalJurisdiction.id],
       acceptedTerms: true,
+      password: 'abcdef',
     }),
   });
   // create a jurisdictional admin

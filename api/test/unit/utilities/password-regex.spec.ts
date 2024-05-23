@@ -19,6 +19,7 @@ describe('passwordRegex', () => {
     expect(passwordRegex.test('ABCDEFGHIJKL^')).toBe(false);
   });
   it('should identify strong passwords', () => {
+    expect(passwordRegex.test('Abcdef12345!')).toBe(true);
     expect(passwordRegex.test('Abcdefghijkl1!')).toBe(true);
     expect(passwordRegex.test('2$Iz3S7]$oME')).toBe(true);
     expect(passwordRegex.test('dC135+AY5nEt')).toBe(true);

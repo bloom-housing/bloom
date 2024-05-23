@@ -1,8 +1,8 @@
 {
   "email": "admin@example.com",
   "emailConfirmation": "admin@example.com",
-  "password": "abcdef",
-  "passwordConfirmation": "abcdef",
+  "password": "Abcdef12345!",
+  "passwordConfirmation": "Abcdef12345!",
   "firstName": "Test",
   "lastName": "User",
   "dob": "1980-01-01"
