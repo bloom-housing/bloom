@@ -284,7 +284,7 @@ const ApplicationMember = () => {
                 <legend className="text__caps-spaced">{t("application.contact.address")}</legend>
 
                 <Field
-                  id="addressStreet"
+                  id="householdMemberAddress.street"
                   name="householdMemberAddress.street"
                   defaultValue={member.householdMemberAddress.street}
                   validation={{ required: true, maxLength: 64 }}
@@ -300,7 +300,7 @@ const ApplicationMember = () => {
                 />
 
                 <Field
-                  id="addressStreet2"
+                  id="householdMemberAddress.street2"
                   name="householdMemberAddress.street2"
                   label={t("application.contact.apt")}
                   defaultValue={member.householdMemberAddress.street2}
@@ -313,7 +313,7 @@ const ApplicationMember = () => {
 
                 <div className="flex max-w-2xl">
                   <Field
-                    id="addressCity"
+                    id="householdMemberAddress.city"
                     name="householdMemberAddress.city"
                     label={t("application.contact.city")}
                     defaultValue={member.householdMemberAddress.city}
@@ -329,7 +329,7 @@ const ApplicationMember = () => {
                   />
 
                   <Select
-                    id="addressState"
+                    id="householdMemberAddress.state"
                     name="householdMemberAddress.state"
                     label={t("application.contact.state")}
                     defaultValue={member.householdMemberAddress.state}
@@ -349,7 +349,7 @@ const ApplicationMember = () => {
                 </div>
 
                 <Field
-                  id="addressZipCode"
+                  id="householdMemberAddress.zipCode"
                   name="householdMemberAddress.zipCode"
                   label={t("application.contact.zip")}
                   defaultValue={member.householdMemberAddress.zipCode}
@@ -394,7 +394,7 @@ const ApplicationMember = () => {
                 <legend className="text__caps-spaced">{t("application.contact.address")}</legend>
 
                 <Field
-                  id="workAddress.street"
+                  id="householdMemberWorkAddress.street"
                   name="householdMemberWorkAddress.street"
                   label={t("application.contact.streetAddress")}
                   defaultValue={member.householdMemberWorkAddress.street}
@@ -410,7 +410,7 @@ const ApplicationMember = () => {
                 />
 
                 <Field
-                  id="workAddress.street2"
+                  id="householdMemberWorkAddress.street2"
                   name="householdMemberWorkAddress.street2"
                   label={t("application.contact.apt")}
                   defaultValue={member.householdMemberWorkAddress.street2}
@@ -423,7 +423,7 @@ const ApplicationMember = () => {
 
                 <div className="flex max-w-2xl">
                   <Field
-                    id="workAddress.city"
+                    id="householdMemberWorkAddress.city"
                     name="householdMemberWorkAddress.city"
                     label={t("application.contact.city")}
                     defaultValue={member.householdMemberWorkAddress.city}
@@ -439,7 +439,7 @@ const ApplicationMember = () => {
                   />
 
                   <Select
-                    id="workAddress.state"
+                    id="householdMemberWorkAddress.state"
                     name="householdMemberWorkAddress.state"
                     label={t("application.contact.state")}
                     defaultValue={member.householdMemberWorkAddress.state}
@@ -459,7 +459,7 @@ const ApplicationMember = () => {
                 </div>
 
                 <Field
-                  id="workAddress.zipCode"
+                  id="householdMemberWorkAddress.zipCode"
                   name="householdMemberWorkAddress.zipCode"
                   label={t("application.contact.zip")}
                   defaultValue={member.householdMemberWorkAddress.zipCode}
