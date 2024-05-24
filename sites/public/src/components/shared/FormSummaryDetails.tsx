@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react"
-import { LocalizedLink, MultiLineAddress, t } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { MultiLineAddress, t } from "@bloom-housing/ui-components"
+import { Card, FieldValue, Heading, Link } from "@bloom-housing/ui-seeds"
 import {
   getUniqueUnitTypes,
   AddressHolder,
@@ -15,6 +15,7 @@ import {
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import styles from "./FormSummaryDetails.module.scss"
 
 type FormSummaryDetailsProps = {
   // TODO change to use Prisma application type instead of any
@@ -26,14 +27,6 @@ type FormSummaryDetailsProps = {
   hidePrograms?: boolean
   validationError?: boolean
 }
-
-const EditLink = (props: { href: string }) => (
-  <div className="float-right flex edit-link">
-    <LocalizedLink href={props.href} className={"text-blue-700"}>
-      {t("t.edit")}
-    </LocalizedLink>
-  </div>
-)
 
 const accessibilityLabels = (accessibility) => {
   const labels = []
@@ -139,20 +132,24 @@ const FormSummaryDetails = ({
     appLink: string,
     header: string,
     emptyText?: string,
-    className?: string
+    divider?: boolean
   ) => {
     return (
       <>
-        <h3 className="form--card__sub-header border-none text-xl">
-          {header}
-          {editMode && !validationError && <EditLink href={appLink} />}
-        </h3>
-        <div
+        <Card.Header className={styles["summary-header"]}>
+          <Heading priority={3} size="xl" className="font-serif font-normal">
+            {header}
+          </Heading>
+          {editMode && !validationError && <Link href={appLink}>{t("t.edit")}</Link>}
+        </Card.Header>
+
+        <Card.Section
+          className={styles["summary-section"]}
           id={applicationSection}
-          className={`form-card__group mx-0 ${className ? className : ""}`}
+          divider={divider ? "flush" : undefined}
         >
           {emptyText ? (
-            <p className="field-note text-black">{emptyText}</p>
+            <p className={styles["summary-note-text"]}>{emptyText}</p>
           ) : (
             <>
               {application[applicationSection]
@@ -174,7 +171,7 @@ const FormSummaryDetails = ({
                 )}
             </>
           )}
-        </div>
+        </Card.Section>
       </>
     )
   }
@@ -188,32 +185,32 @@ const FormSummaryDetails = ({
 
   return (
     <>
-      <h3 className="form--card__sub-header border-none text-xl">
-        {t("t.you")}
-        {editMode && <EditLink href="/applications/contact/name" />}
-      </h3>
+      <Card.Header className={styles["summary-header"]}>
+        <Heading priority={3} size="xl" className="font-serif font-normal">
+          {t("t.you")}
+        </Heading>
+        {editMode && <Link href="/applications/contact/name">{t("t.edit")}</Link>}
+      </Card.Header>
 
-      <div className="form-card__group mx-0">
+      <Card.Section className={styles["summary-section"]}>
         <FieldValue
           testId={"app-summary-name"}
           id="applicantName"
           label={t("t.name")}
-          className={"pb-4"}
+          className={styles["summary-value"]}
         >
           {application.applicant.firstName} {application.applicant.middleName}{" "}
           {application.applicant.lastName}
         </FieldValue>
-
         <FieldValue
           testId={"app-summary-dob"}
           id="applicantbirthDay"
           label={t("application.household.member.dateOfBirth")}
-          className={"pb-4"}
+          className={styles["summary-value"]}
         >
           {application.applicant.birthMonth}/{application.applicant.birthDay}/
           {application.applicant.birthYear}
         </FieldValue>
-
         {application.applicant.phoneNumber && (
           <FieldValue
             testId={"app-summary-phone"}
@@ -222,12 +219,11 @@ const FormSummaryDetails = ({
             helpText={t(
               `application.contact.phoneNumberTypes.${application.applicant.phoneNumberType}`
             )}
-            className={"pb-4"}
+            className={styles["summary-value"]}
           >
             {application.applicant.phoneNumber}
           </FieldValue>
         )}
-
         {application.additionalPhoneNumber && (
           <FieldValue
             testId={"app-summary-additional-phone"}
@@ -236,39 +232,36 @@ const FormSummaryDetails = ({
             helpText={t(
               `application.contact.phoneNumberTypes.${application.additionalPhoneNumberType}`
             )}
-            className={"pb-4"}
+            className={styles["summary-value"]}
           >
             {application.additionalPhoneNumber}
           </FieldValue>
         )}
-
         {application.applicant.emailAddress && (
           <FieldValue
             testId={"app-summary-email"}
             id="applicantEmail"
             label={t("t.email")}
-            className={"pb-4"}
+            className={styles["summary-value"]}
           >
             {application.applicant.emailAddress}
           </FieldValue>
         )}
-
         <FieldValue
           id="applicantAddress"
           label={t("application.contact.address")}
-          className={"pb-4"}
+          className={styles["summary-value"]}
         >
           <MultiLineAddress
             data-testid={"app-summary-address"}
             address={reformatAddress(application.applicant.applicantAddress)}
           />
         </FieldValue>
-
         {application.sendMailToMailingAddress && (
           <FieldValue
             id="applicantMailingAddress"
             label={t("application.contact.mailingAddress")}
-            className={"pb-4"}
+            className={styles["summary-value"]}
           >
             <MultiLineAddress
               data-testid={"app-summary-mailing-address"}
@@ -276,12 +269,11 @@ const FormSummaryDetails = ({
             />
           </FieldValue>
         )}
-
         {application.applicant.workInRegion === "yes" && (
           <FieldValue
             id="applicantWorkAddress"
             label={t("application.contact.workAddress")}
-            className={"pb-4"}
+            className={styles["summary-value"]}
           >
             <MultiLineAddress
               data-testid={"app-summary-work-address"}
@@ -289,31 +281,32 @@ const FormSummaryDetails = ({
             />
           </FieldValue>
         )}
-
         {application.contactPreferences && (
           <FieldValue
             testId={"app-summary-contact-type"}
             id="applicantPreferredContactType"
             label={t("application.contact.preferredContactType")}
-            className={"pb-4"}
+            className={styles["summary-value"]}
           >
             {application.contactPreferences?.map((item) => t(`t.${item}`)).join(", ")}
           </FieldValue>
         )}
-      </div>
+      </Card.Section>
 
       {application.alternateContact.type !== "" &&
         application.alternateContact.type !== "noContact" && (
-          <div id="alternateContact">
-            <h3 className="form--card__sub-header border-none text-xl">
-              {t("application.alternateContact.type.label")}
+          <>
+            <Card.Header className={styles["summary-header"]}>
+              <Heading priority={3} size="xl" className="font-serif font-normal">
+                {t("application.alternateContact.type.label")}
+              </Heading>
               {editMode && !validationError && (
-                <EditLink href="/applications/contact/alternate-contact-type" />
+                <Link href="/applications/contact/alternate-contact-type">{t("t.edit")}</Link>
               )}
-            </h3>
+            </Card.Header>
 
-            <div className="form-card__group mx-0">
-              <p className="field-note mb-5">
+            <Card.Section className={styles["summary-section"]}>
+              <p className={styles["summary-note-text"]}>
                 {t(`application.alternateContact.type.description`)}
               </p>
               <FieldValue
@@ -321,7 +314,7 @@ const FormSummaryDetails = ({
                 id="alternateName"
                 label={t("t.name")}
                 helpText={alternateContactName()}
-                className={"pb-4"}
+                className={styles["summary-value"]}
               >
                 {application.alternateContact.firstName} {application.alternateContact.lastName}
               </FieldValue>
@@ -331,7 +324,7 @@ const FormSummaryDetails = ({
                   testId={"app-summary-alternate-email"}
                   id="alternateEmail"
                   label={t("t.email")}
-                  className={"pb-4"}
+                  className={styles["summary-value"]}
                 >
                   {application.alternateContact.emailAddress}
                 </FieldValue>
@@ -342,7 +335,7 @@ const FormSummaryDetails = ({
                   testId={"app-summary-alternate-phone"}
                   id="alternatePhone"
                   label={t("t.phone")}
-                  className={"pb-4"}
+                  className={styles["summary-value"]}
                 >
                   {application.alternateContact.phoneNumber}
                 </FieldValue>
@@ -355,83 +348,85 @@ const FormSummaryDetails = ({
                   testId={"app-summary-alternate-mailing-address"}
                   id="alternateMailingAddress"
                   label={t("application.contact.address")}
-                  className={"pb-4"}
+                  className={styles["summary-value"]}
                 >
                   <MultiLineAddress address={application.alternateContact.address} />
                 </FieldValue>
               )}
-            </div>
-          </div>
+            </Card.Section>
+          </>
         )}
 
       {application.householdSize > 1 && (
-        <div id="householdMembers">
-          <h3 className="form--card__sub-header border-none text-xl">
-            {t("application.household.householdMembers")}
+        <>
+          <Card.Header className={styles["summary-header"]}>
+            <Heading priority={3} size="xl" className="font-serif font-normal">
+              {t("application.review.householdDetails")}
+            </Heading>
             {editMode && !validationError && (
-              <EditLink href="/applications/household/add-members" />
+              <Link href="/applications/household/preferred-units">{t("t.edit")}</Link>
             )}
-          </h3>
+          </Card.Header>
 
-          <div id="members" className="form-card__group info-group mx-0">
+          <Card.Section className={styles["summary-section"]}>
             {application.householdMember.map((member, index) => (
               <div
-                className="info-group__item"
+                className={styles["household-member-section"]}
                 key={`${member.firstName} - ${member.lastName} - ${index}`}
               >
                 <FieldValue
                   label={t("t.name")}
                   testId={"app-summary-household-member-name"}
-                  className={"pb-4"}
+                  className={styles["summary-value"]}
                 >
                   {member.firstName} {member.lastName}
                 </FieldValue>
-                <div>
-                  <FieldValue
-                    testId={"app-summary-household-member-dob"}
-                    label={t("application.household.member.dateOfBirth")}
-                    className={"pb-4"}
-                  >
-                    {member.birthMonth}/{member.birthDay}/{member.birthYear}
+                <FieldValue
+                  testId={"app-summary-household-member-dob"}
+                  label={t("application.household.member.dateOfBirth")}
+                  className={styles["summary-value"]}
+                >
+                  {member.birthMonth}/{member.birthDay}/{member.birthYear}
+                </FieldValue>
+                {member.sameAddress === "no" && (
+                  <FieldValue label={t("application.contact.address")} className={"pb-4"}>
+                    <MultiLineAddress
+                      data-testid={"app-summary-household-member-address"}
+                      address={reformatAddress(member.householdMemberAddress)}
+                    />
                   </FieldValue>
-                  {member.sameAddress === "no" && (
-                    <FieldValue label={t("application.contact.address")} className={"pb-4"}>
-                      <MultiLineAddress
-                        data-testid={"app-summary-household-member-address"}
-                        address={reformatAddress(member.householdMemberAddress)}
-                      />
-                    </FieldValue>
-                  )}
-                  {member.sameAddress !== "no" && (
-                    <p
-                      data-testid={"app-summary-household-member-same-address"}
-                      className={"text-xs text-gray-750"}
-                    >
-                      {t("application.review.sameAddressAsApplicant")}
-                    </p>
-                  )}
-                </div>
+                )}
+                {member.sameAddress !== "no" && (
+                  <p
+                    data-testid={"app-summary-household-member-same-address"}
+                    className={styles["household-member-same-address"]}
+                  >
+                    {t("application.review.sameAddressAsApplicant")}
+                  </p>
+                )}
               </div>
             ))}
-          </div>
-        </div>
+          </Card.Section>
+        </>
       )}
 
-      <div id="householdDetails">
-        <h3 className="form--card__sub-header border-none text-xl">
-          {t("application.review.householdDetails")}
+      <>
+        <Card.Header className={styles["summary-header"]}>
+          <Heading priority={3} size="xl" className="font-serif font-normal">
+            {t("application.review.householdDetails")}
+          </Heading>
           {editMode && !validationError && (
-            <EditLink href="/applications/household/preferred-units" />
+            <Link href="/applications/household/preferred-units">{t("t.edit")}</Link>
           )}
-        </h3>
+        </Card.Header>
 
-        <div className="form-card__group mx-0">
+        <Card.Section className={styles["summary-section"]}>
           {preferredUnits && (
             <FieldValue
               testId={"app-summary-preferred-units"}
               id="householdUnitType"
               label={t("application.household.preferredUnit.preferredUnitType")}
-              className={"pb-4"}
+              className={styles["summary-value"]}
             >
               {preferredUnits
                 ?.map((item) => t(`application.household.preferredUnit.options.${item}`))
@@ -442,7 +437,7 @@ const FormSummaryDetails = ({
             testId={"app-summary-ada"}
             id="householdAda"
             label={t("application.ada.label")}
-            className={"pb-4"}
+            className={styles["summary-value"]}
           >
             {accessibilityLabels(application.accessibility).map((item) => (
               <Fragment key={item}>
@@ -454,18 +449,18 @@ const FormSummaryDetails = ({
           <FieldValue
             id="householdChanges"
             label={t("application.household.expectingChanges.title")}
-            className={"pb-4"}
+            className={styles["summary-value"]}
           >
             {application.householdExpectingChanges ? t("t.yes") : t("t.no")}
           </FieldValue>
           <FieldValue
             id="householdStudent"
             label={t("application.household.householdStudent.title")}
-            className={"pb-4"}
+            className={styles["summary-value"]}
           >
             {application.householdStudent ? t("t.yes") : t("t.no")}
           </FieldValue>
-        </div>
+        </Card.Section>
 
         {!hidePrograms &&
           multiselectQuestionSection(
@@ -479,17 +474,24 @@ const FormSummaryDetails = ({
               : null
           )}
 
-        <h3 className="form--card__sub-header border-none text-xl">
-          {t("t.income")}
-          {editMode && !validationError && <EditLink href="/applications/financial/vouchers" />}
-        </h3>
+        <Card.Header className={styles["summary-header"]}>
+          <Heading priority={3} size="xl" className="font-serif font-normal">
+            {t("t.income")}
+          </Heading>
+          {editMode && !validationError && (
+            <Link href="/applications/financial/vouchers">{t("t.edit")}</Link>
+          )}
+        </Card.Header>
 
-        <div className={`form-card__group mx-0 ${hidePreferences && "border-b"}`}>
+        <Card.Section
+          className={styles["summary-section"]}
+          divider={hidePreferences ? "flush" : undefined}
+        >
           <FieldValue
             testId={"app-summary-income-vouchers"}
             id="incomeVouchers"
             label={t("application.review.voucherOrSubsidy")}
-            className={"pb-4"}
+            className={styles["summary-value"]}
           >
             {application.incomeVouchers ? t("t.yes") : t("t.no")}
           </FieldValue>
@@ -499,7 +501,7 @@ const FormSummaryDetails = ({
               testId={"app-summary-income"}
               id="incomeValue"
               label={t("t.income")}
-              className={"pb-4"}
+              className={styles["summary-value"]}
             >
               $
               {parseFloat(application.income).toLocaleString("en-US", {
@@ -509,7 +511,7 @@ const FormSummaryDetails = ({
               {t(`t.${application.incomePeriod}`)}
             </FieldValue>
           )}
-        </div>
+        </Card.Section>
 
         {!hidePreferences &&
           multiselectQuestionSection(
@@ -521,9 +523,9 @@ const FormSummaryDetails = ({
                   county: listing?.listingsBuildingAddress?.county || listing?.jurisdictions?.name,
                 })} ${t("application.preferences.general.preamble")}`
               : null,
-            "border-b"
+            true
           )}
-      </div>
+      </>
     </>
   )
 }
