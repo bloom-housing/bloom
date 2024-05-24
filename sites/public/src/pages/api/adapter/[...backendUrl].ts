@@ -14,16 +14,20 @@ import { logger } from "../../../logger"
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const jar = new CookieJar()
+  const headers: Record<string, string | string[]> = {
+    jurisdictionName: req.headers.jurisdictionname,
+    language: req.headers.language,
+    appUrl: req.headers.appurl,
+    "x-forwarded-for": req.headers["x-forwarded-for"] || "",
+  }
+
+  if (process.env.API_PASS_KEY) {
+    headers.passkey = process.env.API_PASS_KEY
+  }
   const axios = wrapper(
     axiosStatic.create({
       baseURL: process.env.BACKEND_API_BASE,
-      headers: {
-        jurisdictionName: req.headers.jurisdictionname,
-        language: req.headers.language,
-        appUrl: req.headers.appurl,
-        "x-forwarded-for": req.headers["x-forwarded-for"] || "",
-        passkey: process.env.API_PASS_KEY,
-      },
+      headers,
       paramsSerializer: (params) => {
         return qs.stringify(params)
       },

@@ -66,15 +66,17 @@ const EditListing = (props: { listing: Listing }) => {
 export async function getServerSideProps(context: { params: Record<string, string>; req: any }) {
   let response
   const backendUrl = `/listings/${context.params.id}`
+  const headers: Record<string, string> = {
+    "x-forwarded-for": context.req.headers["x-forwarded-for"] ?? context.req.socket.remoteAddress,
+  }
 
+  if (process.env.API_PASS_KEY) {
+    headers.passkey = process.env.API_PASS_KEY
+  }
   try {
     logger.info(`GET - ${backendUrl}`)
     response = await axios.get(`${process.env.backendApiBase}${backendUrl}`, {
-      headers: {
-        passkey: process.env.API_PASS_KEY,
-        "x-forwarded-for":
-          context.req.headers["x-forwarded-for"] ?? context.req.socket.remoteAddress,
-      },
+      headers,
     })
   } catch (e) {
     if (e.response) {

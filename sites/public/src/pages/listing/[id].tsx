@@ -21,12 +21,15 @@ export async function getServerSideProps(context: {
   const listingServiceUrl = runtimeConfig.getListingServiceUrl()
 
   try {
+    const headers: Record<string, string> = {
+      "x-forwarded-for": context.req.headers["x-forwarded-for"] ?? context.req.socket.remoteAddress,
+    }
+
+    if (process.env.API_PASS_KEY) {
+      headers.passkey = process.env.API_PASS_KEY
+    }
     response = await axios.get(`${listingServiceUrl}/${context.params.id}`, {
-      headers: {
-        passkey: process.env.API_PASS_KEY,
-        "x-forwarded-for":
-          context.req.headers["x-forwarded-for"] ?? context.req.socket.remoteAddress,
-      },
+      headers,
     })
   } catch (e) {
     return { notFound: true }
