@@ -225,6 +225,7 @@ model Applications {
 
   @@unique([listingId, confirmationCode])
   @@index([listingId])
+  @@index([userId])
   @@map("applications")
 }
 
@@ -332,6 +333,7 @@ model Jurisdictions {
   enableUtilitiesIncluded     Boolean                  @default(false) @map("enable_utilities_included")
   enableGeocodingPreferences  Boolean                  @default(false) @map("enable_geocoding_preferences")
   enableListingOpportunity    Boolean                  @default(false) @map("enable_listing_opportunity")
+  enableGeocodingRadiusMethod Boolean                  @default(false) @map("enable_geocoding_radius_method")
   allowSingleUseCodeLogin     Boolean                  @default(false) @map("allow_single_use_code_login")
   amiChart                    AmiChart[]
   multiselectQuestions        MultiselectQuestions[]
@@ -816,69 +818,70 @@ model UserRoles {
 }
 
 model ExternalListings {
-  id                  String                @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  assets              Json
-  householdSizeMin    Int?                  @map("household_size_min")   
-  householdSizeMax    Int?                  @map("household_size_max")   
-  unitsAvailable      Int?                  @map("units_available")
-  applicationDueDate  DateTime?             @map("application_due_date") @db.Timestamp(6)
-  applicationOpenDate DateTime?             @map("application_open_date") @db.Timestamp(6)
-  name                String      
-  waitlistCurrentSize Int?                  @map("waitlist_current_size")
-  waitlistMaxSize     Int?                  @map("waitlist_max_size")
-  isWaitlistOpen      Boolean?              @map("is_waitlist_open")
-  status              String    
-  reviewOrderType     String                @map("review_order_type")
-  closedAt            DateTime?             @map("closed_at") @db.Timestamp(6)
-  updatedAt           DateTime?             @map("updated_at") @db.Timestamp(6)
-  publishedAt         DateTime?             @map("published_at") @db.Timestamp(6)
-  lastApplicationUpdateAt   DateTime?       @map("last_application_update_at") @db.Timestamp(6)  @default(dbgenerated("'1970-01-01 00:00:00-07'::timestamp with time zone"))
-  neighborhood        String?         
-  reservedCommunityTypeName String?         @map("reserved_community_type_name") 
-  urlSlug             String                @map("url_slug") 
-  unitsSummarized     Json?                 @map("units_summarized") 
-  images              Json?                 
-  multiselectQuestions     Json?            @map("multiselect_questions") 
-  jurisdiction        Json?                 
-  reservedCommunityType    Json?            @map("reserved_community_type") 
-  units               Json?                 
-  buildingAddress     Json?                 @map("building_address") 
-  features            Json?                
-  utilities           Json?
+  id                        String    @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  assets                    Json
+  householdSizeMin          Int?      @map("household_size_min")
+  householdSizeMax          Int?      @map("household_size_max")
+  unitsAvailable            Int?      @map("units_available")
+  applicationDueDate        DateTime? @map("application_due_date") @db.Timestamp(6)
+  applicationOpenDate       DateTime? @map("application_open_date") @db.Timestamp(6)
+  name                      String
+  waitlistCurrentSize       Int?      @map("waitlist_current_size")
+  waitlistMaxSize           Int?      @map("waitlist_max_size")
+  isWaitlistOpen            Boolean?  @map("is_waitlist_open")
+  status                    String
+  reviewOrderType           String    @map("review_order_type")
+  closedAt                  DateTime? @map("closed_at") @db.Timestamp(6)
+  updatedAt                 DateTime? @map("updated_at") @db.Timestamp(6)
+  publishedAt               DateTime? @map("published_at") @db.Timestamp(6)
+  lastApplicationUpdateAt   DateTime? @default(dbgenerated("'1970-01-01 00:00:00-07'::timestamp with time zone")) @map("last_application_update_at") @db.Timestamp(6)
+  neighborhood              String?
+  reservedCommunityTypeName String?   @map("reserved_community_type_name")
+  urlSlug                   String    @map("url_slug")
+  unitsSummarized           Json?     @map("units_summarized")
+  images                    Json?
+  multiselectQuestions      Json?     @map("multiselect_questions")
+  jurisdiction              Json?
+  reservedCommunityType     Json?     @map("reserved_community_type")
+  units                     Json?
+  buildingAddress           Json?     @map("building_address")
+  features                  Json?
+  utilities                 Json?
 
-  @@map("external_listings")            
+  @@map("external_listings")
 }
 
 view CombinedListings {
-  id                  String                @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  assets              Json
-  householdSizeMin    Int?                  @map("household_size_min")   
-  householdSizeMax    Int?                  @map("household_size_max")   
-  unitsAvailable      Int?                  @map("units_available")
-  applicationDueDate  DateTime?             @map("application_due_date") @db.Timestamp(6)
-  applicationOpenDate DateTime?             @map("application_open_date") @db.Timestamp(6)
-  name                String      
-  waitlistCurrentSize Int?                  @map("waitlist_current_size")
-  waitlistMaxSize     Int?                  @map("waitlist_max_size")
-  is_waitlist_open    Boolean?              @map("is_waitlist_open")
-  status              String    
-  reviewOrderType     ReviewOrderTypeEnum   @map("review_order_type")
-  closedAt            DateTime?             @map("closed_at") @db.Timestamp(6)
-  updatedAt           DateTime?             @map("updated_at") @db.Timestamp(6)
-  publishedAt         DateTime?             @map("published_at") @db.Timestamp(6)
-  lastApplicationUpdateAt   DateTime?       @map("last_application_update_at") @db.Timestamp(6)  @default(dbgenerated("'1970-01-01 00:00:00-07'::timestamp with time zone"))
-  neighborhood        String?         
-  listingsBuildingAddress     Json?         @map("listings_building_address")
-  reservedCommunityTypeName String?         @map("reserved_community_type_name") 
-  unitsSummarized     Json?                 @map("units_summarized") 
-  listingImages         Json?                @map("listing_images") 
-  reservedCommunityTypes    Json?            @map("reserved_community_types") 
-  units               Json?      
-  isExternal          Boolean?              @map("is_external")   
-  urlSlug             String?               @map("url_slug")        
+  id                        String              @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  assets                    Json
+  householdSizeMin          Int?                @map("household_size_min")
+  householdSizeMax          Int?                @map("household_size_max")
+  unitsAvailable            Int?                @map("units_available")
+  applicationDueDate        DateTime?           @map("application_due_date") @db.Timestamp(6)
+  applicationOpenDate       DateTime?           @map("application_open_date") @db.Timestamp(6)
+  name                      String
+  waitlistCurrentSize       Int?                @map("waitlist_current_size")
+  waitlistMaxSize           Int?                @map("waitlist_max_size")
+  is_waitlist_open          Boolean?            @map("is_waitlist_open")
+  status                    String
+  reviewOrderType           ReviewOrderTypeEnum @map("review_order_type")
+  closedAt                  DateTime?           @map("closed_at") @db.Timestamp(6)
+  updatedAt                 DateTime?           @map("updated_at") @db.Timestamp(6)
+  publishedAt               DateTime?           @map("published_at") @db.Timestamp(6)
+  lastApplicationUpdateAt   DateTime?           @default(dbgenerated("'1970-01-01 00:00:00-07'::timestamp with time zone")) @map("last_application_update_at") @db.Timestamp(6)
+  neighborhood              String?
+  listingsBuildingAddress   Json?               @map("listings_building_address")
+  reservedCommunityTypeName String?             @map("reserved_community_type_name")
+  unitsSummarized           Json?               @map("units_summarized")
+  listingImages             Json?               @map("listing_images")
+  reservedCommunityTypes    Json?               @map("reserved_community_types")
+  units                     Json?
+  isExternal                Boolean?            @map("is_external")
+  urlSlug                   String?             @map("url_slug")
 
-  @@map("combined_listings")  
+  @@map("combined_listings")
 }
+
 // END Doorway specific
 
 // START DETROIT SPECIFIC

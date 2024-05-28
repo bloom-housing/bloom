@@ -38,6 +38,7 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
     });
     const resLogIn = await request(app.getHttpServer())
       .post('/auth/login')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
         password: 'abcdef',
@@ -59,6 +60,7 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/unitAccessibilityPriorityTypes?`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', cookies)
       .expect(200);
 
@@ -72,6 +74,7 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
     const id = randomUUID();
     const res = await request(app.getHttpServer())
       .get(`/unitAccessibilityPriorityTypes/${id}`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', cookies)
       .expect(404);
     expect(res.body.message).toEqual(
@@ -84,6 +87,7 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', cookies)
       .expect(200);
 
@@ -93,6 +97,7 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
   it('testing create endpoint', async () => {
     const res = await request(app.getHttpServer())
       .post('/unitAccessibilityPriorityTypes')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         name: 'hearing',
       } as UnitAccessibilityPriorityTypeCreate)
@@ -109,6 +114,7 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
     const id = randomUUID();
     const res = await request(app.getHttpServer())
       .put(`/unitAccessibilityPriorityTypes/${id}`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: id,
         name: priorityType.name,
@@ -127,6 +133,7 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
     );
     const res = await request(app.getHttpServer())
       .put(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: unitTypeA.id,
         name: priorityType.name,
@@ -141,6 +148,7 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
     const id = randomUUID();
     const res = await request(app.getHttpServer())
       .delete(`/unitAccessibilityPriorityTypes`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: id,
       } as IdDTO)
@@ -154,6 +162,7 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
   it('testing delete endpoint', async () => {
     await request(app.getHttpServer())
       .post('/unitAccessibilityPriorityTypes')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         name: 'hearing',
       } as UnitAccessibilityPriorityTypeCreate)
@@ -169,6 +178,7 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .delete(`/unitAccessibilityPriorityTypes`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: hearingTypes[hearingTypes.length - 1].id,
       } as IdDTO)

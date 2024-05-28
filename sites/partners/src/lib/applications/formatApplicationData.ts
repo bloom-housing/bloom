@@ -375,7 +375,7 @@ export const mapApiToForm = (applicationData: ApplicationUpdate, listing: Listin
         applicationData?.accessibility && applicationData?.accessibility[feature] === true
     )
 
-    if (demographics.spokenLanguage.startsWith("notListed:")) {
+    if (demographics.spokenLanguage?.startsWith("notListed:")) {
       const [spokenLanguage, customValue] = demographics.spokenLanguage.split(":")
       demographics.spokenLanguage = spokenLanguage
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment

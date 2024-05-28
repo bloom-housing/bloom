@@ -24,6 +24,8 @@ env:
   TIME_ZONE: America/Los_Angeles
   THROTTLE_TTL: 3600000
   THROTTLE_LIMIT: 100
+  API_PASS_KEY: "some-key-here"
+
 
 jobs:
   backend-integration:

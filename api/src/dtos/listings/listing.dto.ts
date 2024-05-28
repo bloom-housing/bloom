@@ -7,6 +7,7 @@ import {
   IsEnum,
   IsNumber,
   IsString,
+  IsUrl,
   MaxLength,
   ValidateNested,
 } from 'class-validator';
@@ -192,6 +193,10 @@ class Listing extends AbstractDTO {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
+  @IsUrl(
+    { require_protocol: true },
+    { groups: [ValidationsGroupsEnum.default] },
+  )
   buildingSelectionCriteria?: string;
 
   @Expose()

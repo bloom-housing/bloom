@@ -126,13 +126,24 @@ export default function ListingDetail(props: ListingProps) {
   )
 }
 
-export async function getServerSideProps(context: { params: Record<string, string> }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function getServerSideProps(context: { params: Record<string, string>; req: any }) {
   let response
   const backendUrl = `/listings/${context.params.id}`
 
   try {
     logger.info(`GET - ${backendUrl}`)
-    response = await axios.get(`${process.env.backendApiBase}${backendUrl}`)
+    const headers: Record<string, string> = {
+      "x-forwarded-for": context.req.headers["x-forwarded-for"] ?? context.req.socket.remoteAddress,
+    }
+
+    if (process.env.API_PASS_KEY) {
+      headers.passkey = process.env.API_PASS_KEY
+    }
+
+    response = await axios.get(`${process.env.backendApiBase}${backendUrl}`, {
+      headers,
+    })
   } catch (e) {
     if (e.response) {
       logger.error(`GET - ${backendUrl} - ${e.response?.status} - ${e.response?.statusText}`)

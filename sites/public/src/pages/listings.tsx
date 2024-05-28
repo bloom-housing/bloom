@@ -24,9 +24,6 @@ export default function ListingsPage(props: ListingsProps) {
     "counties:Alameda,Contra Costa,Marin,Napa,San Francisco,San Mateo,Santa Clara,Solano,Sonoma"
   const url = new URL(document.location.toString())
   const searchParam = url.searchParams.get("search")
-  const listingsEndpoint = `${process.env.backendProxyBase || process.env.backendApiBase}${
-    process.env.listingsQuery
-  }`
 
   // override the search value if present in url
   if (searchParam) {
@@ -40,7 +37,6 @@ export default function ListingsPage(props: ListingsProps) {
 
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
       <ListingsSearchCombined
-        listingsEndpoint={listingsEndpoint}
         googleMapsApiKey={props.googleMapsApiKey}
         searchString={searchString}
         bedrooms={props.bedrooms}
@@ -54,7 +50,6 @@ export default function ListingsPage(props: ListingsProps) {
 export function getServerSideProps() {
   return {
     props: {
-      listingsEndpoint: runtimeConfig.getListingServiceUrl(),
       googleMapsApiKey: runtimeConfig.getGoogleMapsApiKey(),
     },
   }

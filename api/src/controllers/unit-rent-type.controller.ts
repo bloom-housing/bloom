@@ -26,14 +26,14 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { JwtAuthGuard } from '../guards/jwt.guard';
 import { PermissionGuard } from '../guards/permission.guard';
-import { ThrottleGuard } from '../guards/throttler.guard';
+import { ApiKeyGuard } from '../guards/api-key.guard';
 
 @Controller('unitRentTypes')
 @ApiTags('unitRentTypes')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 @ApiExtraModels(UnitRentTypeCreate, UnitRentTypeUpdate, IdDTO)
 @PermissionTypeDecorator('unitRentType')
-@UseGuards(ThrottleGuard, JwtAuthGuard, PermissionGuard)
+@UseGuards(ApiKeyGuard, JwtAuthGuard, PermissionGuard)
 export class UnitRentTypeController {
   constructor(private readonly unitRentTypeService: UnitRentTypeService) {}
 

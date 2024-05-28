@@ -42,7 +42,7 @@ const ApplicationTerms = () => {
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
     setSubmitting(true)
-    const acceptedTerms = data.agree === "agree"
+    const acceptedTerms = data.agree
     conductor.currentStep.save({ acceptedTerms })
     application.acceptedTerms = acceptedTerms
     application.completedSections = 6

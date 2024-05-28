@@ -35,6 +35,7 @@ describe('UnitRentType Controller Tests', () => {
     });
     const resLogIn = await request(app.getHttpServer())
       .post('/auth/login')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
         password: 'abcdef',
@@ -59,6 +60,7 @@ describe('UnitRentType Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/unitRentTypes?`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', cookies)
       .expect(200);
 
@@ -72,6 +74,7 @@ describe('UnitRentType Controller Tests', () => {
     const id = randomUUID();
     const res = await request(app.getHttpServer())
       .get(`/unitRentTypes/${id}`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', cookies)
       .expect(404);
     expect(res.body.message).toEqual(
@@ -86,6 +89,7 @@ describe('UnitRentType Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/unitRentTypes/${unitRentTypeA.id}`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .set('Cookie', cookies)
       .expect(200);
 
@@ -96,6 +100,7 @@ describe('UnitRentType Controller Tests', () => {
     const name = unitRentTypeFactory().name;
     const res = await request(app.getHttpServer())
       .post('/unitRentTypes')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         name: name,
       } as UnitRentTypeCreate)
@@ -109,6 +114,7 @@ describe('UnitRentType Controller Tests', () => {
     const id = randomUUID();
     const res = await request(app.getHttpServer())
       .put(`/unitRentTypes/${id}`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: id,
         name: unitRentTypeFactory().name,
@@ -127,6 +133,7 @@ describe('UnitRentType Controller Tests', () => {
     const name = unitRentTypeFactory().name;
     const res = await request(app.getHttpServer())
       .put(`/unitRentTypes/${unitRentTypeA.id}`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: unitRentTypeA.id,
         name: name,
@@ -141,6 +148,7 @@ describe('UnitRentType Controller Tests', () => {
     const id = randomUUID();
     const res = await request(app.getHttpServer())
       .delete(`/unitRentTypes`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: id,
       } as IdDTO)
@@ -158,6 +166,7 @@ describe('UnitRentType Controller Tests', () => {
 
     const res = await request(app.getHttpServer())
       .delete(`/unitRentTypes`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         id: unitRentTypeA.id,
       } as IdDTO)

@@ -33,7 +33,7 @@ import { JwtAuthGuard } from '../guards/jwt.guard';
 import { PermissionGuard } from '../guards/permission.guard';
 import { AssetService } from '../services/asset.service';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
-import { ThrottleGuard } from '../guards/throttler.guard';
+import { ApiKeyGuard } from '../guards/api-key.guard';
 
 export class PaginatedAssetsDto extends PaginationFactory<Asset>(Asset) {}
 
@@ -57,7 +57,7 @@ const allowedFileTypes = [
     ...defaultValidationPipeOptions,
   }),
 )
-@UseGuards(ThrottleGuard, JwtAuthGuard, PermissionGuard)
+@UseGuards(ApiKeyGuard, JwtAuthGuard, PermissionGuard)
 export class AssetController {
   constructor(private readonly assetsService: AssetService) {}
 

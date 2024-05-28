@@ -1,30 +1,7 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
-import cookieParser from 'cookie-parser';
 import { generateSingleUseCode } from '../../../src/utilities/generate-single-use-code';
-import { AppModule } from '../../../src/modules/app.module';
 
-// skip test until ConfigService is implimented
-describe.skip('generateSingleUseCode', () => {
-  let app: INestApplication;
-
-  beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-    app.use(cookieParser());
-    await app.init();
-  });
-
-  afterAll(async () => {
-    await app.close();
-  });
-
+describe('generateSingleUseCode', () => {
   it('should generate mfa code of the specified length', () => {
-    expect(generateSingleUseCode().length).toEqual(
-      Number(process.env.MFA_CODE_LENGTH),
-    );
+    expect(generateSingleUseCode(5).length).toEqual(5);
   });
 });
