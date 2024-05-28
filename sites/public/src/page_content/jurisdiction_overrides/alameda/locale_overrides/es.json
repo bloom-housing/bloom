@@ -1,6 +1,7 @@
 {
   "application.contact.doYouWorkIn": "¿Trabaja usted en %{county}?",
   "application.contact.doYouWorkInDescription": "",
+  "application.financial.income.instruction1": "Sume el ingreso bruto total de su hogar antes de impuestos y deducciones de salarios, beneficios y otras fuentes de todos los miembros del hogar.",
   "application.household.member.workInRegion": "¿Trabaja él o ella en %{county}?",
   "application.household.member.workInRegionNote": "",
   "application.review.confirmation.whatHappensNext.fcfs": "### ¿Qué sucede ahora?\n\n* Se contactará a los solicitantes elegibles por orden hasta que se cubran las vacantes.\n\n* Las preferencias para la vivienda, si corresponden, alterarán el orden de postulación.\n\n* Si se comunican con usted para una entrevista, se le pedirá que complete una solicitud más detallada y que proporcione documentos de respaldo.",

@@ -1,6 +1,7 @@
 {
   "application.contact.doYouWorkIn": "Quý vị có làm việc tại %{county} không?",
   "application.contact.doYouWorkInDescription": "",
+  "application.financial.income.instruction1": "Cộng tổng thu nhập gộp của hộ gia đình bạn trước thuế và các khoản khấu trừ từ tiền lương, phúc lợi và các nguồn khác từ tất cả các thành viên trong gia đình.",
   "application.household.member.workInRegion": "Họ có làm việc tại %{county} không?",
   "application.household.member.workInRegionNote": "",
   "application.review.confirmation.whatHappensNext.fcfs": "### Điều gì sẽ xảy ra tiếp theo?\n\n* Những người nộp đơn hội đủ điều kiện sẽ được liên lạc trên cơ sở ai đến trước được phục vụ trước cho đến khi hết căn hộ trống.\n\n* Các ưu tiên về nhà ở, nếu có, sẽ làm thay đổi thứ tự ai đến trước được phục vụ trước.\n\n* Nếu quý vị được mời tham gia phỏng vấn, quý vị sẽ được yêu cầu điền một đơn đăng ký chi tiết hơn và cung cấp các giấy tờ hỗ trợ cần thiết.",

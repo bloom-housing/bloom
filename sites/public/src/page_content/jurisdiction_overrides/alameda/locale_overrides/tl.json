@@ -1,6 +1,7 @@
 {
   "application.contact.doYouWorkIn": "Nagtatrabaho ka ba sa %{county} County?",
   "application.household.member.workInRegion": "Nagtatrabaho ba sila sa %{county} County?",
+  "application.financial.income.instruction1": "Isama ang iyong kabuuang kabuuang kita ng sambahayan bago ang mga buwis at mga bawas mula sa sahod, mga benepisyo at iba pang mapagkukunan mula sa lahat ng miyembro ng sambahayan.",
   "application.household.member.workInRegionNote": "",
   "application.review.confirmation.whatHappensNext.fcfs": "### Ano ang susunod na mangyayari?\n\n* Ang mga kwalipikadong aplikante ay ilalagay sa waitlist sa batayang first come first serve hanggang sa mapuno ang mga puwesto ng waitlist.\n\n* Ang mga pagpipilian sa pabahay ay makakaapekto sa order ng waitlist, kung naaangkop.\n\n* Kapag tinawagan ka para sa isang interbyu, hihilingin sa inyo na sagutan nang mas detalyado ang aplikasyon at magbigay ng karagdagang mga dokumento.",
   "application.review.confirmation.whatHappensNext.lottery": "### Ano ang susunod na mangyayari?\n\n* Kapag nagsara na ang oras ang aplikasyon, ang mga kwalipikadong aplikante ay ilalagay sa pila batay sa ranggo ng lottery.\n\n* Ang mga pagpipilian sa pabahay ay makakaapekto sa order ng waitlist, kung naaangkop.\n\n* Kapag tinawagan ka para sa isang interbyu, hihilingin sa inyo na sagutan nang mas detalyado ang aplikasyon at magbigay ng karagdagang mga dokumento.",

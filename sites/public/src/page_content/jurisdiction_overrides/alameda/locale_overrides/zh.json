@@ -1,6 +1,7 @@
 {
   "application.contact.doYouWorkIn": "您是否在 %{county} 工作？",
   "application.contact.doYouWorkInDescription": "",
+  "application.financial.income.instruction1": "將所有家庭成員的稅前家庭總收入以及工資、福利和其他來源的扣除額相加。",
   "application.household.member.workInRegion": "他們是否在 %{county} 工作？",
   "application.household.member.workInRegionNote": "",
   "application.review.confirmation.whatHappensNext.fcfs": "### 接下來會發生什麼？\n\n* 我們將按照「先申請先入住」的原則聯絡合格的申請人，直至空置房被入住為止。\n\n* 住房優惠（如果適用）將影響「先申請先入住」順序。\n\n* 如果我們聯絡您要求進行面談，您需要填寫更詳細的申請表並提供證明文件。",
