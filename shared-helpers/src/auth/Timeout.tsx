@@ -2,13 +2,8 @@ import React, { createElement, FunctionComponent, useContext, useEffect, useStat
 import { AuthContext } from "./AuthContext"
 import { ConfigContext } from "./ConfigContext"
 import { Button } from "@bloom-housing/ui-seeds"
-import {
-  NavigationContext,
-  Modal,
-  setSiteAlertMessage,
-  AlertTypes,
-  t,
-} from "@bloom-housing/ui-components"
+import { Modal, setSiteAlertMessage, AlertTypes, t } from "@bloom-housing/ui-components"
+import { NavigationContext } from "@bloom-housing/doorway-ui-components"
 
 const PROMPT_TIMEOUT = 60000
 const events = ["mousemove", "keypress", "scroll"]
