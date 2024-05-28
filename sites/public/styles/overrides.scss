@@ -142,7 +142,7 @@
 
   --notice-background-color: var(--seeds-color-blue-300);
 
-  .seeds-message {
+  :is(.seeds-message, .seeds-toast) {
     &[data-variant="primary"] {
       background: var(--seeds-color-blue-300);
     }
