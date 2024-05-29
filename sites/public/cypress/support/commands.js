@@ -114,19 +114,29 @@ Cypress.Commands.add("step2PrimaryApplicantAddresses", (application) => {
     )
   }
 
-  cy.getByTestId("app-primary-address-street").type(application.applicant.address.street)
-  cy.getByTestId("app-primary-address-street2").type(application.applicant.address.street2)
-  cy.getByTestId("app-primary-address-city").type(application.applicant.address.city)
-  cy.getByTestId("app-primary-address-state").select(application.applicant.address.state)
-  cy.getByTestId("app-primary-address-zip").type(application.applicant.address.zipCode)
+  cy.getByTestId("app-primary-address-street").type(application.applicant.applicantAddress.street)
+  cy.getByTestId("app-primary-address-street2").type(application.applicant.applicantAddress.street2)
+  cy.getByTestId("app-primary-address-city").type(application.applicant.applicantAddress.city)
+  cy.getByTestId("app-primary-address-state").select(application.applicant.applicantAddress.state)
+  cy.getByTestId("app-primary-address-zip").type(application.applicant.applicantAddress.zipCode)
 
   if (application.sendMailToMailingAddress) {
     cy.getByTestId("app-primary-send-to-mailing").check()
-    cy.getByTestId("app-primary-mailing-address-street").type(application.mailingAddress.street)
-    cy.getByTestId("app-primary-mailing-address-street2").type(application.mailingAddress.street2)
-    cy.getByTestId("app-primary-mailing-address-city").type(application.mailingAddress.city)
-    cy.getByTestId("app-primary-mailing-address-state").select(application.mailingAddress.state)
-    cy.getByTestId("app-primary-mailing-address-zip").type(application.mailingAddress.zipCode)
+    cy.getByTestId("app-primary-mailing-address-street").type(
+      application.applicationsMailingAddress.street
+    )
+    cy.getByTestId("app-primary-mailing-address-street2").type(
+      application.applicationsMailingAddress.street2
+    )
+    cy.getByTestId("app-primary-mailing-address-city").type(
+      application.applicationsMailingAddress.city
+    )
+    cy.getByTestId("app-primary-mailing-address-state").select(
+      application.applicationsMailingAddress.state
+    )
+    cy.getByTestId("app-primary-mailing-address-zip").type(
+      application.applicationsMailingAddress.zipCode
+    )
   }
 
   application.contactPreferences.forEach((contactPreference) => {
@@ -136,13 +146,21 @@ Cypress.Commands.add("step2PrimaryApplicantAddresses", (application) => {
 
   if (application.applicant.workInRegion === "yes") {
     cy.getByTestId("app-primary-work-in-region-yes").check()
-    cy.getByTestId("app-primary-work-address-street").type(application.applicant.workAddress.street)
-    cy.getByTestId("app-primary-work-address-street2").type(
-      application.applicant.workAddress.street2
+    cy.getByTestId("app-primary-work-address-street").type(
+      application.applicant.applicantWorkAddress.street
     )
-    cy.getByTestId("app-primary-work-address-city").type(application.applicant.workAddress.city)
-    cy.getByTestId("app-primary-work-address-state").select(application.applicant.workAddress.state)
-    cy.getByTestId("app-primary-work-address-zip").type(application.applicant.workAddress.zipCode)
+    cy.getByTestId("app-primary-work-address-street2").type(
+      application.applicant.applicantWorkAddress.street2
+    )
+    cy.getByTestId("app-primary-work-address-city").type(
+      application.applicant.applicantWorkAddress.city
+    )
+    cy.getByTestId("app-primary-work-address-state").select(
+      application.applicant.applicantWorkAddress.state
+    )
+    cy.getByTestId("app-primary-work-address-zip").type(
+      application.applicant.applicantWorkAddress.zipCode
+    )
   } else {
     cy.getByTestId("app-primary-work-in-region-no").check()
   }
@@ -186,19 +204,19 @@ Cypress.Commands.add("step5AlternateContactInfo", (application) => {
   )
   cy.getByTestId("app-alternate-email").type(application.alternateContact.emailAddress)
   cy.getByTestId("app-alternate-mailing-address-street").type(
-    application.alternateContact.mailingAddress.street
+    application.alternateContact.address.street
   )
   cy.getByTestId("app-alternate-mailing-address-street2").type(
-    application.alternateContact.mailingAddress.street2
+    application.alternateContact.address.street2
   )
   cy.getByTestId("app-alternate-mailing-address-city").type(
-    application.alternateContact.mailingAddress.city
+    application.alternateContact.address.city
   )
   cy.getByTestId("app-alternate-mailing-address-state").select(
-    application.alternateContact.mailingAddress.state
+    application.alternateContact.address.state
   )
   cy.getByTestId("app-alternate-mailing-address-zip").type(
-    application.alternateContact.mailingAddress.zipCode
+    application.alternateContact.address.zipCode
   )
 
   cy.goNext()
@@ -208,7 +226,7 @@ Cypress.Commands.add("step5AlternateContactInfo", (application) => {
 })
 
 Cypress.Commands.add("step6HouseholdSize", (application) => {
-  if (application.householdMembers.length > 0) {
+  if (application.householdMember.length > 0) {
     cy.getByID("householdSizeLiveWithOthers").click()
     cy.goNext()
     cy.checkErrorAlert("not.exist")
@@ -229,7 +247,7 @@ Cypress.Commands.add("step7AddHouseholdMembers", (application) => {
   cy.checkErrorMessages("not.exist")
   cy.location("pathname").should("include", "applications/household/add-members")
 
-  application.householdMembers.forEach((householdMember) => {
+  application.householdMember.forEach((householdMember) => {
     cy.getByID("app-add-household-member-button").click()
     cy.checkErrorAlert("not.exist")
     cy.checkErrorMessages("not.exist")
@@ -244,11 +262,21 @@ Cypress.Commands.add("step7AddHouseholdMembers", (application) => {
 
     if (householdMember.sameAddress === "no") {
       cy.getByTestId("app-household-member-same-address").eq(1).check()
-      cy.getByTestId("app-household-member-address-street").type(householdMember.address.street)
-      cy.getByTestId("app-household-member-address-street2").type(householdMember.address.street2)
-      cy.getByTestId("app-household-member-address-city").type(householdMember.address.city)
-      cy.getByTestId("app-household-member-address-state").select(householdMember.address.state)
-      cy.getByTestId("app-household-member-address-zip").type(householdMember.address.zipCode)
+      cy.getByTestId("app-household-member-address-street").type(
+        householdMember.householdMemberAddress.street
+      )
+      cy.getByTestId("app-household-member-address-street2").type(
+        householdMember.householdMemberAddress.street2
+      )
+      cy.getByTestId("app-household-member-address-city").type(
+        householdMember.householdMemberAddress.city
+      )
+      cy.getByTestId("app-household-member-address-state").select(
+        householdMember.householdMemberAddress.state
+      )
+      cy.getByTestId("app-household-member-address-zip").type(
+        householdMember.householdMemberAddress.zipCode
+      )
     } else {
       cy.getByTestId("app-household-member-same-address").eq(0).check()
     }
@@ -256,19 +284,19 @@ Cypress.Commands.add("step7AddHouseholdMembers", (application) => {
     if (householdMember.workInRegion === "yes") {
       cy.getByTestId("app-household-member-work-in-region").eq(0).check()
       cy.getByTestId("app-household-member-work-address-street").type(
-        householdMember.workAddress.street
+        householdMember.householdMemberWorkAddress.street
       )
       cy.getByTestId("app-household-member-work-address-street2").type(
-        householdMember.workAddress.street2
+        householdMember.householdMemberWorkAddress.street2
       )
       cy.getByTestId("app-household-member-work-address-city").type(
-        householdMember.workAddress.city
+        householdMember.householdMemberWorkAddress.city
       )
       cy.getByTestId("app-household-member-work-address-state").select(
-        householdMember.workAddress.state
+        householdMember.householdMemberWorkAddress.state
       )
       cy.getByTestId("app-household-member-work-address-zip").type(
-        householdMember.workAddress.zipCode
+        householdMember.householdMemberWorkAddress.zipCode
       )
     } else {
       cy.getByTestId("app-household-member-work-in-region").eq(1).check()
@@ -477,27 +505,27 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
     },
     {
       id: "app-summary-applicant-address",
-      fieldValue: application.applicant.address.street,
+      fieldValue: application.applicant.applicantAddress.street,
     },
     {
       id: "app-summary-applicant-address",
-      fieldValue: application.applicant.address.street2,
+      fieldValue: application.applicant.applicantAddress.street2,
     },
     {
       id: "app-summary-applicant-address",
-      fieldValue: `${application.applicant.address.city}, ${application.applicant.address.state} ${application.applicant.address.zipCode}`,
+      fieldValue: `${application.applicant.applicantAddress.city}, ${application.applicant.applicantAddress.state} ${application.applicant.applicantAddress.zipCode}`,
     },
     {
       id: "app-summary-applicant-work-address",
-      fieldValue: application.applicant.workAddress.street,
+      fieldValue: application.applicant.applicantWorkAddress.street,
     },
     {
       id: "app-summary-applicant-work-address",
-      fieldValue: application.applicant.workAddress.street2,
+      fieldValue: application.applicant.applicantWorkAddress.street2,
     },
     {
       id: "app-summary-applicant-work-address",
-      fieldValue: `${application.applicant.workAddress.city}, ${application.applicant.workAddress.state} ${application.applicant.workAddress.zipCode}`,
+      fieldValue: `${application.applicant.applicantWorkAddress.city}, ${application.applicant.applicantWorkAddress.state} ${application.applicant.applicantWorkAddress.zipCode}`,
     },
     {
       id: "app-summary-contact-preference-type",
@@ -565,19 +593,19 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
     })
     fields.push({
       id: "app-summary-alternate-mailing-address",
-      fieldValue: application.alternateContact.mailingAddress.street,
+      fieldValue: application.alternateContact.address.street,
     })
     fields.push({
       id: "app-summary-alternate-mailing-address",
-      fieldValue: application.alternateContact.mailingAddress.street2,
+      fieldValue: application.alternateContact.address.street2,
     })
     fields.push({
       id: "app-summary-alternate-mailing-address",
-      fieldValue: `${application.alternateContact.mailingAddress.city}, ${application.alternateContact.mailingAddress.state} ${application.alternateContact.mailingAddress.zipCode}`,
+      fieldValue: `${application.alternateContact.address.city}, ${application.alternateContact.address.state} ${application.alternateContact.address.zipCode}`,
     })
   }
 
-  application.householdMembers.forEach((member) => {
+  application.householdMember.forEach((member) => {
     fields.push({
       id: "app-summary-household-member-name",
       fieldValue: `${member.firstName} ${member.lastName}`,
@@ -588,19 +616,7 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
     })
     fields.push({
       id: "app-summary-household-member-address",
-      fieldValue: `${member.address.street} ${member.address.street2} ${member.address.city}, ${member.address.state} ${member.address.zipCode}`,
-    })
-    fields.push({
-      id: "app-summary-household-member-address",
-      fieldValue: member.address.street,
-    })
-    fields.push({
-      id: "app-summary-household-member-address",
-      fieldValue: member.address.street2,
-    })
-    fields.push({
-      id: "app-summary-household-member-address",
-      fieldValue: `${member.address.city}, ${member.address.state} ${member.address.zipCode}`,
+      fieldValue: `${member.householdMemberAddress.street} ${member.householdMemberAddress.street2} ${member.householdMemberAddress.city}, ${member.householdMemberAddress.state} ${member.householdMemberAddress.zipCode}`,
     })
   })
 
@@ -671,7 +687,7 @@ Cypress.Commands.add("submitApplication", (listingName, application, signedIn, v
     cy.step5AlternateContactInfo(application)
   }
   cy.step6HouseholdSize(application)
-  if (application.householdMembers.length > 0) {
+  if (application.householdMember.length > 0) {
     cy.step7AddHouseholdMembers(application)
   }
   cy.step8PreferredUnits(application)
