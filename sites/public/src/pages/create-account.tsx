@@ -9,7 +9,6 @@ import {
   AlertBox,
   SiteAlert,
   Modal,
-  passwordRegex,
 } from "@bloom-housing/ui-components"
 import { Button, Heading } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
@@ -17,7 +16,13 @@ import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
 dayjs.extend(customParseFormat)
 import { useRouter } from "next/router"
-import { PageView, pushGtmEvent, AuthContext, BloomCard } from "@bloom-housing/shared-helpers"
+import {
+  PageView,
+  pushGtmEvent,
+  AuthContext,
+  BloomCard,
+  passwordRegex,
+} from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
 import accountCardStyles from "./account/account.module.scss"
@@ -35,6 +40,7 @@ export default () => {
   const { register, handleSubmit, errors, watch } = useForm()
   const [requestError, setRequestError] = useState<string>()
   const [openModal, setOpenModal] = useState<boolean>(false)
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
   const language = router.locale
   const listingId = router.query?.listingId as string
@@ -52,6 +58,7 @@ export default () => {
   }, [])
 
   const onSubmit = async (data) => {
+    setLoading(true)
     try {
       const { dob, ...rest } = data
       const listingIdRedirect =
@@ -79,7 +86,9 @@ export default () => {
       } else {
         setOpenModal(true)
       }
+      setLoading(false)
     } catch (err) {
+      setLoading(false)
       const { status, data } = err.response || {}
       if (status === 400) {
         setRequestError(`${t(`authentication.createAccount.errors.${data.message}`)}`)
@@ -256,7 +265,11 @@ export default () => {
                     label={t("authentication.createAccount.reEnterPassword")}
                     readerOnly
                   />
-                  <Button type="submit" variant="primary">
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    loadingMessage={loading ? t("t.loading") : undefined}
+                  >
                     {t("account.createAccount")}
                   </Button>
                 </CardSection>

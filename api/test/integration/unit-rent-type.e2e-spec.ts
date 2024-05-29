@@ -38,7 +38,7 @@ describe('UnitRentType Controller Tests', () => {
       .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
-        password: 'abcdef',
+        password: 'Abcdef12345!',
       } as Login)
       .expect(201);
 

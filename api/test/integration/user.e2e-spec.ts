@@ -71,7 +71,7 @@ describe('User Controller Tests', () => {
       .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
-        password: 'abcdef',
+        password: 'Abcdef12345!',
       } as Login)
       .expect(201);
 
@@ -576,7 +576,7 @@ describe('User Controller Tests', () => {
       .send({
         firstName: 'Public User firstName',
         lastName: 'Public User lastName',
-        password: 'example password 1',
+        password: 'Abcdef12345!',
         email: 'publicUser@email.com',
         jurisdictions: [{ id: juris.id }],
       } as UserCreate)
@@ -602,7 +602,7 @@ describe('User Controller Tests', () => {
     );
   });
 
-  it('should create parter user', async () => {
+  it('should create partner user', async () => {
     const juris = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
@@ -613,7 +613,7 @@ describe('User Controller Tests', () => {
       .send({
         firstName: 'Partner User firstName',
         lastName: 'Partner User lastName',
-        password: 'example password 1',
+        password: 'Abcdef12345!',
         email: 'partnerUser@email.com',
         jurisdictions: [{ id: juris.id }],
         agreedToTermsOfService: true,

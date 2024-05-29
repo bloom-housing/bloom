@@ -13,7 +13,6 @@ import {
   AlertBox,
   SiteAlert,
   AlertTypes,
-  passwordRegex,
   DOBField,
   DOBFieldValues,
 } from "@bloom-housing/ui-components"
@@ -25,6 +24,7 @@ import {
   AuthContext,
   RequireLogin,
   BloomCard,
+  passwordRegex,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
 import FormsLayout from "../../layouts/forms"
@@ -45,6 +45,11 @@ const Edit = () => {
   const [nameAlert, setNameAlert] = useState<AlertMessage>()
   const [dobAlert, setDobAlert] = useState<AlertMessage>()
   const [emailAlert, setEmailAlert] = useState<AlertMessage>()
+  const [nameLoading, setNameLoading] = useState(false)
+  const [birthdateLoading, setBirthdateLoading] = useState(false)
+  const [emailLoading, setEmailLoading] = useState(false)
+  const [passwordLoading, setPasswordLoading] = useState(false)
+
   const MIN_PASSWORD_LENGTH = 8
   const password = useRef({})
   password.current = watch("password", "")
@@ -64,6 +69,7 @@ const Edit = () => {
     middleName: string
     lastName: string
   }) => {
+    setNameLoading(true)
     const { firstName, middleName, lastName } = data
     setNameAlert(null)
     try {
@@ -71,13 +77,16 @@ const Edit = () => {
         body: { ...profile, firstName, middleName, lastName },
       })
       setNameAlert({ type: "success", message: `${t("account.settings.alerts.nameSuccess")}` })
+      setNameLoading(false)
     } catch (err) {
+      setNameLoading(false)
       setNameAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
       console.warn(err)
     }
   }
 
   const onBirthdateSubmit = async (data: { dateOfBirth: DOBFieldValues }) => {
+    setBirthdateLoading(true)
     const { dateOfBirth } = data
     setDobAlert(null)
     try {
@@ -90,13 +99,16 @@ const Edit = () => {
         },
       })
       setDobAlert({ type: "success", message: `${t("account.settings.alerts.dobSuccess")}` })
+      setBirthdateLoading(false)
     } catch (err) {
+      setBirthdateLoading(false)
       setDobAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
       console.warn(err)
     }
   }
 
   const onEmailSubmit = async (data: { email: string }) => {
+    setEmailLoading(true)
     const { email } = data
     setEmailAlert(null)
     try {
@@ -108,7 +120,9 @@ const Edit = () => {
         },
       })
       setEmailAlert({ type: "success", message: `${t("account.settings.alerts.emailSuccess")}` })
+      setEmailLoading(false)
     } catch (err) {
+      setEmailLoading(false)
       console.log("err = ", err)
       setEmailAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
       console.warn(err)
@@ -120,14 +134,17 @@ const Edit = () => {
     passwordConfirmation: string
     currentPassword: string
   }) => {
+    setPasswordLoading(true)
     const { password, passwordConfirmation, currentPassword } = data
     setPasswordAlert(null)
     if (passwordConfirmation === "" || password === "") {
       setPasswordAlert({ type: "alert", message: `${t("account.settings.alerts.passwordEmpty")}` })
+      setPasswordLoading(false)
       return
     }
     if (passwordConfirmation !== password) {
       setPasswordAlert({ type: "alert", message: `${t("account.settings.alerts.passwordMatch")}` })
+      setPasswordLoading(false)
       return
     }
     try {
@@ -138,7 +155,9 @@ const Edit = () => {
         type: "success",
         message: `${t("account.settings.alerts.passwordSuccess")}`,
       })
+      setPasswordLoading(false)
     } catch (err) {
+      setPasswordLoading(false)
       const { status } = err.response || {}
       if (status === 401) {
         setPasswordAlert({
@@ -222,7 +241,12 @@ const Edit = () => {
                       : t("errors.lastNameError")
                   }
                 />
-                <Button type="submit" size="sm" variant="primary-outlined">
+                <Button
+                  type="submit"
+                  size="sm"
+                  variant="primary-outlined"
+                  loadingMessage={nameLoading ? t("t.loading") : undefined}
+                >
                   {t("account.settings.update")}
                 </Button>
               </Form>
@@ -258,7 +282,13 @@ const Edit = () => {
                   label={t("application.name.yourDateOfBirth")}
                 />
                 <p className={"field-sub-note"}>{t("application.name.dobHelper")}</p>
-                <Button type="submit" size="sm" variant="primary-outlined" className="mt-6">
+                <Button
+                  type="submit"
+                  size="sm"
+                  variant="primary-outlined"
+                  className="mt-6"
+                  loadingMessage={birthdateLoading ? t("t.loading") : undefined}
+                >
                   {t("account.settings.update")}
                 </Button>
               </Form>
@@ -292,7 +322,12 @@ const Edit = () => {
                   register={register}
                   defaultValue={profile ? profile.email : null}
                 />
-                <Button type="submit" size="sm" variant="primary-outlined">
+                <Button
+                  type="submit"
+                  size="sm"
+                  variant="primary-outlined"
+                  loadingMessage={emailLoading ? t("t.loading") : undefined}
+                >
                   {t("account.settings.update")}
                 </Button>
               </Form>
@@ -363,7 +398,12 @@ const Edit = () => {
                     register={register}
                   />
 
-                  <Button type="submit" size="sm" variant="primary-outlined">
+                  <Button
+                    type="submit"
+                    size="sm"
+                    variant="primary-outlined"
+                    loadingMessage={passwordLoading ? t("t.loading") : undefined}
+                  >
                     {t("account.settings.update")}
                   </Button>
                 </fieldset>
