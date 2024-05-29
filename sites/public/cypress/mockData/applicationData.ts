@@ -148,10 +148,10 @@ export const ElmVillageApplication = {
   accessibility: {
     ...idDefaults,
     mobility: true,
-    vision: false,
-    hearing: false,
+    vision: true,
+    hearing: true,
   },
-  incomeVouchers: false,
+  incomeVouchers: true,
   income: "3000.00",
   incomePeriod: IncomePeriodEnum.perMonth,
   householdMembers: [
@@ -237,7 +237,7 @@ export const ElmVillageApplication = {
   },
   preferences: [
     {
-      key: "liveWork",
+      key: "Work in the city",
       claimed: true,
       options: [
         {
@@ -247,11 +247,11 @@ export const ElmVillageApplication = {
           address: {
             street: "1600 pennsylvania ave",
             city: "Washington",
-            state: "District Of Columbia",
-            zipCode: "20005",
+            state: "DC",
+            zipCode: "20500",
           },
           addressHolder: {
-            name: "first last",
+            name: "First Last",
             relationship: "Friend",
           },
         },
@@ -262,15 +262,15 @@ export const ElmVillageApplication = {
           address: {
             street: "1600 pennsylvania ave",
             city: "Washington",
-            state: "District Of Columbia",
-            zipCode: "20005",
+            state: "DC",
+            zipCode: "20500",
           },
         },
       ],
     },
     {
       key: "cityEmployee",
-      claimed: true,
+      claimed: false,
       options: [
         {
           key: "cityEmployee",
@@ -283,28 +283,10 @@ export const ElmVillageApplication = {
   programs: [
     {
       claimed: true,
-      key: "servedInMilitary",
+      key: "Veteran",
       options: [
         {
           key: "servedInMilitary",
-          checked: true,
-        },
-        {
-          key: "doNotConsider",
-          checked: false,
-        },
-        {
-          key: "preferNotToSay",
-          checked: false,
-        },
-      ],
-    },
-    {
-      key: "tay",
-      claimed: true,
-      options: [
-        {
-          key: "tay",
           checked: true,
         },
         {

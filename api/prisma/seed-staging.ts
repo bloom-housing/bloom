@@ -161,6 +161,21 @@ export const stagingSeed = async (
       },
     }),
   });
+  const multiselectQuestion3 = await prismaClient.multiselectQuestions.create({
+    data: multiselectQuestionFactory(jurisdiction.id, {
+      multiselectQuestion: {
+        text: 'Veteran',
+        description:
+          'Have you or anyone in your household served in the US military?',
+        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+        optOutText: 'Prefer not to say',
+        options: [
+          { text: 'Yes', exclusive: true, ordinal: 1 },
+          { text: 'No', exclusive: true, ordinal: 2 },
+        ],
+      },
+    }),
+  });
   const multiselectQuestionPrograms =
     await prismaClient.multiselectQuestions.create({
       data: multiselectQuestionFactory(jurisdiction.id, {
@@ -875,7 +890,11 @@ export const stagingSeed = async (
           ],
         },
       },
-      multiselectQuestions: [multiselectQuestion2, multiselectQuestion1],
+      multiselectQuestions: [
+        multiselectQuestion2,
+        multiselectQuestion1,
+        multiselectQuestion3,
+      ],
       units: [
         {
           amiPercentage: '30',

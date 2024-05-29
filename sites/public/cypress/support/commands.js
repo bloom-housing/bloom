@@ -380,7 +380,7 @@ Cypress.Commands.add("step13IncomeVouchers", (application) => {
 })
 
 Cypress.Commands.add("step14Income", (application) => {
-  cy.getByTestId("app-income").type(application.income)
+  cy.getByTestId("app-income").type(application.income, { force: true })
   if (application.incomePeriod === "perMonth") {
     cy.getByTestId("app-income-period").eq(0).check()
   } else {
@@ -527,30 +527,7 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
       id: "app-summary-alternate-mailing-address",
       fieldValue: `${application.alternateContact.mailingAddress.city}, ${application.alternateContact.mailingAddress.state} ${application.alternateContact.mailingAddress.zipCode}`,
     },
-    {
-      id: "app-summary-household-member-name",
-      fieldValue: `${application.householdMembers[0].firstName} ${application.householdMembers[0].lastName}`,
-    },
-    {
-      id: "app-summary-household-member-dob",
-      fieldValue: `${application.householdMembers[0].birthMonth}/${application.householdMembers[0].birthDay}/${application.householdMembers[0].birthYear}`,
-    },
-    {
-      id: "app-summary-household-member-address",
-      fieldValue: `${application.householdMembers[0].address.street} ${application.householdMembers[0].address.street2} ${application.householdMembers[0].address.city}, ${application.householdMembers[0].address.state} ${application.householdMembers[0].address.zipCode}`,
-    },
-    {
-      id: "app-summary-household-member-address",
-      fieldValue: application.householdMembers[0].address.street,
-    },
-    {
-      id: "app-summary-household-member-address",
-      fieldValue: application.householdMembers[0].address.street2,
-    },
-    {
-      id: "app-summary-household-member-address",
-      fieldValue: `${application.householdMembers[0].address.city}, ${application.householdMembers[0].address.state} ${application.householdMembers[0].address.zipCode}`,
-    },
+
     {
       id: "app-summary-preferred-units",
       fieldValue: application.preferredUnitTypes
@@ -597,6 +574,67 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
     const val = "For Hearing Impairments"
     fields.push({ id: val, fieldValue: val })
   }
+
+  application.householdMembers.forEach((member) => {
+    fields.push({
+      id: "app-summary-household-member-name",
+      fieldValue: `${member.firstName} ${member.lastName}`,
+    })
+    fields.push({
+      id: "app-summary-household-member-dob",
+      fieldValue: `${member.birthMonth}/${member.birthDay}/${member.birthYear}`,
+    })
+    fields.push({
+      id: "app-summary-household-member-address",
+      fieldValue: `${member.address.street} ${member.address.street2} ${member.address.city}, ${member.address.state} ${member.address.zipCode}`,
+    })
+    fields.push({
+      id: "app-summary-household-member-address",
+      fieldValue: member.address.street,
+    })
+    fields.push({
+      id: "app-summary-household-member-address",
+      fieldValue: member.address.street2,
+    })
+    fields.push({
+      id: "app-summary-household-member-address",
+      fieldValue: `${member.address.city}, ${member.address.state} ${member.address.zipCode}`,
+    })
+  })
+
+  const pushMultiselect = (section) => {
+    application[section]
+      .filter((item) => item.claimed)
+      .forEach((claimedPref) => {
+        fields.push({ id: claimedPref.key, fieldValue: claimedPref.key })
+        claimedPref.options
+          .filter((opt) => opt.checked)
+          .forEach((optionClaimed) => {
+            if (optionClaimed.address) {
+              fields.push({
+                id: claimedPref.key,
+                fieldValue: optionClaimed.address.street,
+              })
+              fields.push({
+                id: claimedPref.key,
+                fieldValue: `${optionClaimed.address.city}, ${optionClaimed.address.state} ${optionClaimed.address.zipCode}`,
+              })
+            }
+            if (optionClaimed.addressHolder) {
+              fields.push({
+                id: claimedPref.key,
+                fieldValue: optionClaimed.addressHolder.name,
+              })
+              fields.push({
+                id: claimedPref.key,
+                fieldValue: optionClaimed.addressHolder.relationship,
+              })
+            }
+          })
+      })
+  }
+  pushMultiselect("preferences")
+  pushMultiselect("programs")
 
   if (verify) {
     fields.forEach(({ id, fieldValue }) => {

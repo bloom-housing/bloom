@@ -161,10 +161,10 @@ const FormSummaryDetails = ({
                         label={question.key}
                         helpText={multiselectQuestionHelpText(option?.extraData)}
                         key={index}
-                        testId={"app-summary-preference"}
+                        testId={question.key}
                         className={"pb-6 whitespace-pre-wrap"}
                       >
-                        {getOptionText(question, option)}
+                        <div data-testid={option.key}>{getOptionText(question, option)}</div>
                       </FieldValue>
                     ))
                 )}
@@ -177,7 +177,6 @@ const FormSummaryDetails = ({
 
   const allListingUnitTypes = getUniqueUnitTypes(listing?.units)
 
-  console.log({ allListingUnitTypes })
   const preferredUnits = application.preferredUnitTypes?.map((unit) => {
     const unitDetails = allListingUnitTypes?.find(
       (unitType) => unitType.name === unit.name || unit.id === unitType.id
