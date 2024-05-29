@@ -388,22 +388,21 @@ const FormSummaryDetails = ({
                 </FieldValue>
 
                 {member.sameAddress === "no" && (
-                  <>
-                    <FieldValue
-                      label={t("application.contact.address")}
-                      className={"pb-4"}
-                      testId={"app-summary-household-member-address"}
-                    >
-                      <MultiLineAddress address={reformatAddress(member.householdMemberAddress)} />
-                    </FieldValue>
-
-                    <p
-                      data-testid={"app-summary-household-member-same-address"}
-                      className={styles["household-member-same-address"]}
-                    >
-                      {t("application.review.sameAddressAsApplicant")}
-                    </p>
-                  </>
+                  <FieldValue
+                    label={t("application.contact.address")}
+                    className={"pb-4"}
+                    testId={"app-summary-household-member-address"}
+                  >
+                    <MultiLineAddress address={reformatAddress(member.householdMemberAddress)} />
+                  </FieldValue>
+                )}
+                {member.sameAddress !== "no" && (
+                  <p
+                    data-testid={"app-summary-household-member-same-address"}
+                    className={styles["household-member-same-address"]}
+                  >
+                    {t("application.review.sameAddressAsApplicant")}
+                  </p>
                 )}
               </div>
             ))}
@@ -435,6 +434,7 @@ const FormSummaryDetails = ({
             </FieldValue>
           )}
           <FieldValue
+            testId={"app-summary-ada"}
             id="householdAda"
             label={t("application.ada.label")}
             className={styles["summary-value"]}
