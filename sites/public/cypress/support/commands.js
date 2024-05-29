@@ -504,31 +504,6 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
       fieldValue: application.contactPreferences[0],
     },
     {
-      id: "app-summary-alternate-name",
-      fieldValue: `${application.alternateContact.firstName} ${application.alternateContact.lastName}`,
-    },
-    {
-      id: "app-summary-alternate-email",
-      fieldValue: application.alternateContact.emailAddress,
-    },
-    {
-      id: "app-summary-alternate-phone",
-      fieldValue: application.alternateContact.phoneNumber,
-    },
-    {
-      id: "app-summary-alternate-mailing-address",
-      fieldValue: application.alternateContact.mailingAddress.street,
-    },
-    {
-      id: "app-summary-alternate-mailing-address",
-      fieldValue: application.alternateContact.mailingAddress.street2,
-    },
-    {
-      id: "app-summary-alternate-mailing-address",
-      fieldValue: `${application.alternateContact.mailingAddress.city}, ${application.alternateContact.mailingAddress.state} ${application.alternateContact.mailingAddress.zipCode}`,
-    },
-
-    {
       id: "app-summary-preferred-units",
       fieldValue: application.preferredUnitTypes
         .reduce((acc, item) => {
@@ -573,6 +548,33 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
   if (application.accessibility.hearing) {
     const val = "For Hearing Impairments"
     fields.push({ id: val, fieldValue: val })
+  }
+
+  if (application.alternateContact.type !== "dontHave") {
+    fields.push({
+      id: "app-summary-alternate-name",
+      fieldValue: `${application.alternateContact.firstName} ${application.alternateContact.lastName}`,
+    })
+    fields.push({
+      id: "app-summary-alternate-email",
+      fieldValue: application.alternateContact.emailAddress,
+    })
+    fields.push({
+      id: "app-summary-alternate-phone",
+      fieldValue: application.alternateContact.phoneNumber,
+    })
+    fields.push({
+      id: "app-summary-alternate-mailing-address",
+      fieldValue: application.alternateContact.mailingAddress.street,
+    })
+    fields.push({
+      id: "app-summary-alternate-mailing-address",
+      fieldValue: application.alternateContact.mailingAddress.street2,
+    })
+    fields.push({
+      id: "app-summary-alternate-mailing-address",
+      fieldValue: `${application.alternateContact.mailingAddress.city}, ${application.alternateContact.mailingAddress.state} ${application.alternateContact.mailingAddress.zipCode}`,
+    })
   }
 
   application.householdMembers.forEach((member) => {
