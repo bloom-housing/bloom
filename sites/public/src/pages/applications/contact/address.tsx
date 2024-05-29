@@ -53,7 +53,7 @@ const ApplicationAddress = () => {
       "applicant.phoneNumberType": application.applicant.phoneNumberType,
       sendMailToMailingAddress: application.sendMailToMailingAddress,
       "applicant.workInRegion": application.applicant.workInRegion,
-      "applicant.address.state": application.applicant.applicantAddress.state,
+      "applicant.applicantAddress.state": application.applicant.applicantAddress.state,
     },
     shouldFocusError: false,
   })
@@ -64,7 +64,7 @@ const ApplicationAddress = () => {
     if (!verifyAddress) {
       setFoundAddress({})
       setVerifyAddress(true)
-      findValidatedAddress(data.applicant.address, setFoundAddress, setNewAddressSelected)
+      findValidatedAddress(data.applicant.applicantAddress, setFoundAddress, setNewAddressSelected)
 
       return // Skip rest of the submit process
     }
@@ -296,7 +296,7 @@ const ApplicationAddress = () => {
 
                 <Field
                   id="addressStreet"
-                  name="applicant.address.street"
+                  name="applicant.applicantAddress.street"
                   label={t("application.contact.streetAddress")}
                   defaultValue={application.applicant.applicantAddress.street}
                   validation={{ required: true, maxLength: 64 }}
@@ -305,19 +305,19 @@ const ApplicationAddress = () => {
                       ? t("errors.maxLength")
                       : t("errors.streetError")
                   }
-                  error={errors.applicant?.address?.street}
+                  error={errors.applicant?.applicantAddress?.street}
                   register={register}
                   dataTestId={"app-primary-address-street"}
                 />
 
                 <Field
                   id="addressStreet2"
-                  name="applicant.address.street2"
+                  name="applicant.applicantAddress.street2"
                   label={t("application.contact.apt")}
                   defaultValue={application.applicant.applicantAddress.street2}
                   register={register}
                   dataTestId={"app-primary-address-street2"}
-                  error={errors.applicant?.address?.street2}
+                  error={errors.applicant?.applicantAddress?.street2}
                   validation={{ maxLength: 64 }}
                   errorMessage={t("errors.maxLength")}
                 />
@@ -325,7 +325,7 @@ const ApplicationAddress = () => {
                 <div className="flex max-w-2xl">
                   <Field
                     id="addressCity"
-                    name="applicant.address.city"
+                    name="applicant.applicantAddress.city"
                     label={t("application.contact.cityName")}
                     defaultValue={application.applicant.applicantAddress.city}
                     validation={{ required: true, maxLength: 64 }}
@@ -334,19 +334,19 @@ const ApplicationAddress = () => {
                         ? t("errors.maxLength")
                         : t("errors.cityError")
                     }
-                    error={errors.applicant?.address?.city}
+                    error={errors.applicant?.applicantAddress?.city}
                     register={register}
                     dataTestId={"app-primary-address-city"}
                   />
 
                   <Select
                     id="addressState"
-                    name="applicant.address.state"
+                    name="applicant.applicantAddress.state"
                     label={t("application.contact.state")}
                     validation={{ required: true, maxLength: 64 }}
                     error={errors.applicant?.address?.state}
                     errorMessage={
-                      errors.applicant?.address?.state?.type === "maxLength"
+                      errors.applicant?.applicantAddress?.state?.type === "maxLength"
                         ? t("errors.maxLength")
                         : t("errors.stateError")
                     }
@@ -359,12 +359,12 @@ const ApplicationAddress = () => {
                 </div>
                 <Field
                   id="addressZipCode"
-                  name="applicant.address.zipCode"
+                  name="applicant.applicantAddress.zipCode"
                   label={t("application.contact.zip")}
                   defaultValue={application.applicant.applicantAddress.zipCode}
                   validation={{ required: true, maxLength: 64 }}
                   errorMessage={
-                    errors.applicant?.address?.zipCode?.type === "maxLength"
+                    errors.applicant?.applicantAddress?.zipCode?.type === "maxLength"
                       ? t("errors.maxLength")
                       : t("errors.zipCodeError")
                   }
