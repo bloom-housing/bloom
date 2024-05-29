@@ -189,12 +189,42 @@ export const ElmVillageApplication = {
       workInRegion: "yes",
     },
   ],
-  preferredUnit: [
+  preferredUnitTypes: [
+    {
+      ...idDefaults,
+      id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
+      name: "SRO",
+      numBedrooms: 0,
+    },
+    {
+      ...idDefaults,
+      id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
+      name: "Studio",
+      numBedrooms: 0,
+    },
     {
       ...idDefaults,
       id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
       name: "1 Bedroom",
       numBedrooms: 1,
+    },
+    {
+      ...idDefaults,
+      id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
+      name: "2 Bedroom",
+      numBedrooms: 2,
+    },
+    {
+      ...idDefaults,
+      id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
+      name: "3 Bedroom",
+      numBedrooms: 3,
+    },
+    {
+      ...idDefaults,
+      id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
+      name: "4 Bedroom",
+      numBedrooms: 3,
     },
   ],
   demographics: {
@@ -385,7 +415,7 @@ export const minimalDataApplication = {
   income: "50000",
   incomePeriod: IncomePeriodEnum.perYear,
   householdMembers: [],
-  preferredUnit: [
+  preferredUnitTypes: [
     {
       ...idDefaults,
       id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",

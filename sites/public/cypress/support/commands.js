@@ -122,7 +122,7 @@ Cypress.Commands.add("step2PrimaryApplicantAddresses", (application) => {
 
   if (application.sendMailToMailingAddress) {
     cy.getByTestId("app-primary-send-to-mailing").check()
-    cy.getByTestId("app-primary-mailing-address-street").type(application.mailingAddress.street2)
+    cy.getByTestId("app-primary-mailing-address-street").type(application.mailingAddress.street)
     cy.getByTestId("app-primary-mailing-address-street2").type(application.mailingAddress.street2)
     cy.getByTestId("app-primary-mailing-address-city").type(application.mailingAddress.city)
     cy.getByTestId("app-primary-mailing-address-state").select(application.mailingAddress.state)
@@ -187,6 +187,9 @@ Cypress.Commands.add("step5AlternateContactInfo", (application) => {
   cy.getByTestId("app-alternate-email").type(application.alternateContact.emailAddress)
   cy.getByTestId("app-alternate-mailing-address-street").type(
     application.alternateContact.mailingAddress.street
+  )
+  cy.getByTestId("app-alternate-mailing-address-street2").type(
+    application.alternateContact.mailingAddress.street2
   )
   cy.getByTestId("app-alternate-mailing-address-city").type(
     application.alternateContact.mailingAddress.city
@@ -282,8 +285,8 @@ Cypress.Commands.add("step7AddHouseholdMembers", (application) => {
 })
 
 Cypress.Commands.add("step8PreferredUnits", (application) => {
-  application.preferredUnit.forEach((_, index) => {
-    cy.getByTestId("app-preferred-units").eq(index).check()
+  application.preferredUnitTypes.forEach((prefUnit) => {
+    cy.getByTestId(prefUnit.name).check()
   })
   cy.goNext()
   cy.checkErrorAlert("not.exist")
@@ -455,8 +458,152 @@ Cypress.Commands.add("step17Demographics", (application) => {
   cy.isNextRouteValid("demographics")
 })
 
-Cypress.Commands.add("step18Summary", () => {
-  // TODO check values
+Cypress.Commands.add("step18Summary", (application, verify) => {
+  const fields = [
+    {
+      id: "app-summary-applicant-name",
+      fieldValue: `${application.applicant.firstName}${
+        application.applicant.middleName ? ` ${application.applicant.middleName}` : ``
+      } ${application.applicant.lastName}`,
+    },
+    {
+      id: "app-summary-applicant-dob",
+      fieldValue: `${application.applicant.birthMonth}/${application.applicant.birthDay}/${application.applicant.birthYear}`,
+    },
+    { id: "app-summary-applicant-phone", fieldValue: application.applicant.phoneNumber },
+    {
+      id: "app-summary-applicant-email",
+      fieldValue: application.applicant.emailAddress,
+    },
+    {
+      id: "app-summary-applicant-address",
+      fieldValue: application.applicant.address.street,
+    },
+    {
+      id: "app-summary-applicant-address",
+      fieldValue: application.applicant.address.street2,
+    },
+    {
+      id: "app-summary-applicant-address",
+      fieldValue: `${application.applicant.address.city}, ${application.applicant.address.state} ${application.applicant.address.zipCode}`,
+    },
+    {
+      id: "app-summary-applicant-work-address",
+      fieldValue: application.applicant.workAddress.street,
+    },
+    {
+      id: "app-summary-applicant-work-address",
+      fieldValue: application.applicant.workAddress.street2,
+    },
+    {
+      id: "app-summary-applicant-work-address",
+      fieldValue: `${application.applicant.workAddress.city}, ${application.applicant.workAddress.state} ${application.applicant.workAddress.zipCode}`,
+    },
+    {
+      id: "app-summary-contact-preference-type",
+      fieldValue: application.contactPreferences[0],
+    },
+    {
+      id: "app-summary-alternate-name",
+      fieldValue: `${application.alternateContact.firstName} ${application.alternateContact.lastName}`,
+    },
+    {
+      id: "app-summary-alternate-email",
+      fieldValue: application.alternateContact.emailAddress,
+    },
+    {
+      id: "app-summary-alternate-phone",
+      fieldValue: application.alternateContact.phoneNumber,
+    },
+    {
+      id: "app-summary-alternate-mailing-address",
+      fieldValue: application.alternateContact.mailingAddress.street,
+    },
+    {
+      id: "app-summary-alternate-mailing-address",
+      fieldValue: application.alternateContact.mailingAddress.street2,
+    },
+    {
+      id: "app-summary-alternate-mailing-address",
+      fieldValue: `${application.alternateContact.mailingAddress.city}, ${application.alternateContact.mailingAddress.state} ${application.alternateContact.mailingAddress.zipCode}`,
+    },
+    {
+      id: "app-summary-household-member-name",
+      fieldValue: `${application.householdMembers[0].firstName} ${application.householdMembers[0].lastName}`,
+    },
+    {
+      id: "app-summary-household-member-dob",
+      fieldValue: `${application.householdMembers[0].birthMonth}/${application.householdMembers[0].birthDay}/${application.householdMembers[0].birthYear}`,
+    },
+    {
+      id: "app-summary-household-member-address",
+      fieldValue: `${application.householdMembers[0].address.street} ${application.householdMembers[0].address.street2} ${application.householdMembers[0].address.city}, ${application.householdMembers[0].address.state} ${application.householdMembers[0].address.zipCode}`,
+    },
+    {
+      id: "app-summary-household-member-address",
+      fieldValue: application.householdMembers[0].address.street,
+    },
+    {
+      id: "app-summary-household-member-address",
+      fieldValue: application.householdMembers[0].address.street2,
+    },
+    {
+      id: "app-summary-household-member-address",
+      fieldValue: `${application.householdMembers[0].address.city}, ${application.householdMembers[0].address.state} ${application.householdMembers[0].address.zipCode}`,
+    },
+    {
+      id: "app-summary-preferred-units",
+      fieldValue: application.preferredUnitTypes
+        .reduce((acc, item) => {
+          acc.push(item.name)
+          return acc
+        }, [])
+        .join(", "),
+    },
+    {
+      id: "app-summary-household-changes",
+      fieldValue: application.householdExpectingChanges ? "Yes" : "No",
+    },
+    {
+      id: "app-summary-household-student",
+      fieldValue: application.householdStudent ? "Yes" : "No",
+    },
+    {
+      id: "app-summary-income-vouchers",
+      fieldValue: application.incomeVouchers ? "Yes" : "No",
+    },
+    {
+      id: "app-summary-income",
+      fieldValue: parseFloat(application.income).toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+    },
+    {
+      id: "app-summary-income",
+      fieldValue: application.incomePeriod === "perMonth" ? "per month" : "per year",
+    },
+  ]
+
+  if (application.accessibility.mobility) {
+    const val = "For Mobility Impairments"
+    fields.push({ id: val, fieldValue: val })
+  }
+  if (application.accessibility.vision) {
+    const val = "For Vision Impairments"
+    fields.push({ id: val, fieldValue: val })
+  }
+  if (application.accessibility.hearing) {
+    const val = "For Hearing Impairments"
+    fields.push({ id: val, fieldValue: val })
+  }
+
+  if (verify) {
+    fields.forEach(({ id, fieldValue }) => {
+      cy.getByTestId(id).contains(fieldValue, { matchCase: false }).should("be.visible")
+    })
+  }
+
   cy.getByID("app-summary-confirm").click()
   cy.isNextRouteValid("summary")
 })
@@ -470,7 +617,7 @@ Cypress.Commands.add("step19TermsAndSubmit", () => {
   cy.getByTestId("app-confirmation-id").should("be.visible").and("not.be.empty")
 })
 
-Cypress.Commands.add("submitApplication", (listingName, application, signedIn) => {
+Cypress.Commands.add("submitApplication", (listingName, application, signedIn, verify) => {
   if (signedIn) {
     cy.beginApplicationSignedIn(listingName)
   } else {
@@ -520,8 +667,7 @@ Cypress.Commands.add("submitApplication", (listingName, application, signedIn) =
     }
 
     cy.step17Demographics(application)
-    cy.step18Summary(application)
-    // TODO: Check values on summary
+    cy.step18Summary(application, verify)
     cy.step19TermsAndSubmit(application)
   })
 })
