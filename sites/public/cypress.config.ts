@@ -7,7 +7,7 @@ export default defineConfig({
   video: true,
   videoUploadOnPasses: false,
   numTestsKeptInMemory: 0,
-
+  viewportHeight: 1500,
   env: {
     codeCoverage: {
       url: "/api/__coverage__",

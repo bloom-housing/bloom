@@ -2,9 +2,9 @@ import { ElmVillageApplication, minimalDataApplication } from "../../mockData/ap
 
 describe("Submit", function () {
   it("should submit an application for the Elm Village listing", function () {
-    cy.submitApplication("Elm Village", ElmVillageApplication, false)
+    cy.submitApplication("Elm Village", ElmVillageApplication, false, true)
   })
   it("should submit a minimal application for the Test: Default, No Preferences", function () {
-    cy.submitApplication("Blue Sky Apartments", minimalDataApplication, false)
+    cy.submitApplication("Blue Sky Apartments", minimalDataApplication, false, false)
   })
 })
