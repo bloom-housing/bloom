@@ -532,9 +532,13 @@ describe('User Controller Tests', () => {
     expect(userPostResend.hitConfirmationUrl).toBeNull();
   });
 
-  it('should set resetToken when forgot-password is called', async () => {
+  it('should set resetToken when forgot-password is called by public user on the public site', async () => {
+    const juris = await prisma.jurisdictions.create({
+      data: jurisdictionFactory(),
+    });
+
     const userA = await prisma.userAccounts.create({
-      data: await userFactory(),
+      data: await userFactory({ jurisdictionIds: [juris.id] }),
     });
 
     const mockforgotPassword = jest.spyOn(testEmailService, 'forgotPassword');
@@ -543,6 +547,7 @@ describe('User Controller Tests', () => {
       .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: userA.email,
+        appUrl: juris.publicUrl,
       } as EmailAndAppUrl)
       .expect(200);
 
@@ -556,6 +561,105 @@ describe('User Controller Tests', () => {
 
     expect(userPostResend.resetToken).not.toBeNull();
     expect(mockforgotPassword.mock.calls.length).toBe(1);
+  });
+
+  it('should not set resetToken when forgot-password is called by public user on the partners site', async () => {
+    const juris = await prisma.jurisdictions.create({
+      data: jurisdictionFactory(),
+    });
+
+    const userA = await prisma.userAccounts.create({
+      data: await userFactory({ jurisdictionIds: [juris.id] }),
+    });
+
+    const mockforgotPassword = jest.spyOn(testEmailService, 'forgotPassword');
+    const res = await request(app.getHttpServer())
+      .put(`/user/forgot-password/`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
+      .send({
+        email: userA.email,
+        appUrl: process.env.PARTNERS_PORTAL_URL,
+      } as EmailAndAppUrl)
+      .expect(200);
+
+    expect(res.body.success).toBe(true);
+
+    const userPostResend = await prisma.userAccounts.findUnique({
+      where: {
+        id: userA.id,
+      },
+    });
+
+    expect(userPostResend.resetToken).toBeNull();
+    expect(mockforgotPassword.mock.calls.length).toBe(0);
+  });
+
+  it('should set resetToken when forgot-password is called by partner user on the partners site', async () => {
+    const juris = await prisma.jurisdictions.create({
+      data: jurisdictionFactory(),
+    });
+
+    const userA = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: { isAdmin: true },
+        jurisdictionIds: [juris.id],
+      }),
+    });
+
+    const mockforgotPassword = jest.spyOn(testEmailService, 'forgotPassword');
+    const res = await request(app.getHttpServer())
+      .put(`/user/forgot-password/`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
+      .send({
+        email: userA.email,
+        appUrl: process.env.PARTNERS_PORTAL_URL,
+      } as EmailAndAppUrl)
+      .expect(200);
+
+    expect(res.body.success).toBe(true);
+
+    const userPostResend = await prisma.userAccounts.findUnique({
+      where: {
+        id: userA.id,
+      },
+    });
+
+    expect(userPostResend.resetToken).not.toBeNull();
+    expect(mockforgotPassword.mock.calls.length).toBe(1);
+  });
+
+  it('should not set resetToken when forgot-password is called by partner user on the public site', async () => {
+    const juris = await prisma.jurisdictions.create({
+      data: jurisdictionFactory(),
+    });
+
+    const userA = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: { isAdmin: true },
+        jurisdictionIds: [juris.id],
+      }),
+    });
+
+    const mockforgotPassword = jest.spyOn(testEmailService, 'forgotPassword');
+    const res = await request(app.getHttpServer())
+      .put(`/user/forgot-password/`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
+      .send({
+        email: userA.email,
+        appUrl: juris.publicUrl,
+      } as EmailAndAppUrl)
+      .expect(200);
+
+    expect(res.body.success).toBe(true);
+
+    const userPostResend = await prisma.userAccounts.findUnique({
+      where: {
+        id: userA.id,
+      },
+    });
+
+    expect(userPostResend.resetToken).toBeNull();
+    expect(mockforgotPassword.mock.calls.length).toBe(0);
   });
 
   it('should create public user', async () => {
