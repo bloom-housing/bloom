@@ -7,6 +7,8 @@ import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/share
 import {
   ethnicityKeys,
   raceKeys,
+  isKeyIncluded,
+  getCustomValue,
   howDidYouHear,
   fieldGroupObjectToArray,
   OnClientSide,
@@ -32,7 +34,7 @@ const ApplicationDemographics = () => {
     currentPageSection += 1
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, getValues } = useForm({
+  const { register, handleSubmit } = useForm({
     defaultValues: {
       ethnicity: application.demographics.ethnicity,
       race: application.demographics.race,
@@ -61,6 +63,25 @@ const ApplicationDemographics = () => {
     }))
   }
 
+  const raceOptions = useMemo(() => {
+    return Object.keys(raceKeys).map((rootKey) => ({
+      id: rootKey,
+      label: t(`application.review.demographics.raceOptions.${rootKey}`),
+      value: rootKey,
+      additionalText: rootKey.indexOf("other") >= 0,
+      defaultChecked: isKeyIncluded(rootKey, application.demographics?.race),
+      defaultText: getCustomValue(rootKey, application.demographics?.race),
+      subFields: raceKeys[rootKey].map((subKey) => ({
+        id: subKey,
+        label: t(`application.review.demographics.raceOptions.${subKey}`),
+        value: subKey,
+        defaultChecked: isKeyIncluded(subKey, application.demographics?.race),
+        additionalText: subKey.indexOf("other") >= 0,
+        defaultText: getCustomValue(subKey, application.demographics?.race),
+      })),
+    }))
+  }, [register])
+
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
@@ -68,58 +89,6 @@ const ApplicationDemographics = () => {
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
     })
   }, [profile])
-
-  const isKeyIncluded = (raceKey: string) => {
-    let keyExists = false
-    const curValues = getValues()
-    if (typeof curValues === "object" && !curValues) {
-      Object.entries(curValues).forEach(([key, _]) => {
-        if (key.includes(raceKey)) {
-          keyExists = true
-        }
-      })
-    } else {
-      application.demographics?.race?.forEach((value) => {
-        if (value.includes(raceKey)) {
-          keyExists = true
-        }
-      })
-    }
-    return keyExists
-  }
-
-  // Get the value of a field that is storing a custom value, i.e. "otherAsian: Custom Race Input"
-  const getCustomValue = (subKey: string) => {
-    const curValues = getValues()
-    let customValues
-    if (typeof curValues === "object" && !curValues) {
-      customValues = Object.entries(curValues).filter(([key, _]) => key.split(":")[0] === subKey)
-    } else {
-      customValues = application.demographics?.race?.filter(
-        (value) => value.split(":")[0] === subKey
-      )
-    }
-    return customValues?.length ? customValues[0].split(":")[1]?.substring(1) : ""
-  }
-
-  const raceOptions = useMemo(() => {
-    return Object.keys(raceKeys).map((rootKey) => ({
-      id: rootKey,
-      label: t(`application.review.demographics.raceOptions.${rootKey}`),
-      value: rootKey,
-      additionalText: rootKey.indexOf("other") >= 0,
-      defaultChecked: isKeyIncluded(rootKey),
-      defaultText: getCustomValue(rootKey),
-      subFields: raceKeys[rootKey].map((subKey) => ({
-        id: subKey,
-        label: t(`application.review.demographics.raceOptions.${subKey}`),
-        value: subKey,
-        defaultChecked: isKeyIncluded(subKey),
-        additionalText: subKey.indexOf("other") >= 0,
-        defaultText: getCustomValue(subKey),
-      })),
-    }))
-  }, [register])
 
   return (
     <FormsLayout>

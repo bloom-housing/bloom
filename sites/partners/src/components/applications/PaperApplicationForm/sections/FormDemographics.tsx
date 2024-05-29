@@ -2,7 +2,13 @@ import React, { useMemo } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Select, FieldGroup } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
-import { ethnicityKeys, raceKeys, howDidYouHear } from "@bloom-housing/shared-helpers"
+import {
+  ethnicityKeys,
+  raceKeys,
+  isKeyIncluded,
+  getCustomValue,
+  howDidYouHear,
+} from "@bloom-housing/shared-helpers"
 import { Demographic } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
@@ -14,7 +20,7 @@ const FormDemographics = ({ formValues }: FormDemographicsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, getValues } = formMethods
+  const { register } = formMethods
 
   const howDidYouHearOptions = useMemo(() => {
     return howDidYouHear?.map((item) => ({
@@ -24,53 +30,21 @@ const FormDemographics = ({ formValues }: FormDemographicsProps) => {
     }))
   }, [register])
 
-  // Does a key exist in a root field or a sub array
-  const isKeyIncluded = (raceKey: string) => {
-    let keyExists = false
-    const curValues = getValues()
-    if (typeof curValues === "object" && !curValues) {
-      Object.entries(curValues).forEach(([key, _]) => {
-        if (key.includes(raceKey)) {
-          keyExists = true
-        }
-      })
-    } else {
-      formValues?.race?.forEach((value) => {
-        if (value.includes(raceKey)) {
-          keyExists = true
-        }
-      })
-    }
-    return keyExists
-  }
-
-  // Get the value of a field that is storing a custom value, i.e. "otherAsian: Custom Race Input"
-  const getCustomValue = (subKey: string) => {
-    const curValues = getValues()
-    let customValues
-    if (typeof curValues === "object" && !curValues) {
-      customValues = Object.entries(curValues).filter(([key, _]) => key.split(":")[0] === subKey)
-    } else {
-      customValues = formValues?.race?.filter((value) => value.split(":")[0] === subKey)
-    }
-    return customValues?.length ? customValues[0].split(":")[1]?.substring(1) : ""
-  }
-
   const raceOptions = useMemo(() => {
     return Object.keys(raceKeys).map((rootKey) => ({
       id: rootKey,
       label: t(`application.review.demographics.raceOptions.${rootKey}`),
       value: rootKey,
       additionalText: rootKey.indexOf("other") >= 0,
-      defaultChecked: isKeyIncluded(rootKey),
-      defaultText: getCustomValue(rootKey),
+      defaultChecked: isKeyIncluded(rootKey, formValues?.race),
+      defaultText: getCustomValue(rootKey, formValues?.race),
       subFields: raceKeys[rootKey].map((subKey) => ({
         id: subKey,
         label: t(`application.review.demographics.raceOptions.${subKey}`),
         value: subKey,
-        defaultChecked: isKeyIncluded(subKey),
+        defaultChecked: isKeyIncluded(subKey, formValues?.race),
         additionalText: subKey.indexOf("other") >= 0,
-        defaultText: getCustomValue(subKey),
+        defaultText: getCustomValue(subKey, formValues?.race),
       })),
     }))
   }, [register])
