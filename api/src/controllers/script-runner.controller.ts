@@ -15,6 +15,7 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 import { OptionalAuthGuard } from '../guards/optional.guard';
 import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction-admin.guard';
 import { DataTransferDTO } from '../dtos/script-runner/data-transfer.dto';
+import { BulkApplicationResendDTO } from '../dtos/script-runner/bulk-application-resend.dto';
 
 @Controller('scriptRunner')
 @ApiTags('scriptRunner')
@@ -44,5 +45,22 @@ export class ScirptRunnerController {
     @Request() req: ExpressRequest,
   ): Promise<SuccessDTO> {
     return await this.scriptRunnerService.dataTransfer(req, dataTransferDTO);
+  }
+
+  @Put('bulkApplicationResend')
+  @ApiOperation({
+    summary:
+      'A script that resends application confirmations to applicants of a listing',
+    operationId: 'bulkApplicationResend',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async bulkApplicationResend(
+    @Body() bulkApplicationResendDTO: BulkApplicationResendDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.bulkApplicationResend(
+      req,
+      bulkApplicationResendDTO,
+    );
   }
 }

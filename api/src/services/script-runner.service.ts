@@ -6,6 +6,9 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 import { User } from '../dtos/users/user.dto';
 import { mapTo } from '../utilities/mapTo';
 import { DataTransferDTO } from '../dtos/script-runner/data-transfer.dto';
+import { BulkApplicationResendDTO } from '../dtos/script-runner/bulk-application-resend.dto';
+import { EmailService } from './email.service';
+import { Application } from '../dtos/applications/application.dto';
 
 /**
   this is the service for running scripts
@@ -13,7 +16,10 @@ import { DataTransferDTO } from '../dtos/script-runner/data-transfer.dto';
 */
 @Injectable()
 export class ScriptRunnerService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private emailService: EmailService,
+  ) {}
 
   /**
    *
@@ -50,6 +56,83 @@ export class ScriptRunnerService {
 
     // script runner standard spin down
     await this.markScriptAsComplete('data transfer', requestingUser);
+    return { success: true };
+  }
+
+  /**
+   *
+   * @param req incoming request object
+   * @param bulkApplicationResendDTO bulk resend arg. Should contain listing id
+   * @returns successDTO
+   * @description resends a confirmation email to all applicants on a listing with an email
+   */
+  async bulkApplicationResend(
+    req: ExpressRequest,
+    bulkApplicationResendDTO: BulkApplicationResendDTO,
+  ): Promise<SuccessDTO> {
+    // script runner standard start up
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart('bulk application resend', requestingUser);
+
+    // gather listing data
+    const listing = await this.prisma.listings.findUnique({
+      select: {
+        id: true,
+        jurisdictions: {
+          select: {
+            id: true,
+          },
+        },
+      },
+      where: {
+        id: bulkApplicationResendDTO.listingId,
+      },
+    });
+
+    if (!listing || !listing.jurisdictions) {
+      throw new BadRequestException('Listing does not exist');
+    }
+
+    // gather up all applications for that listing
+    const rawApplications = await this.prisma.applications.findMany({
+      select: {
+        id: true,
+        language: true,
+        confirmationCode: true,
+        applicant: {
+          select: {
+            id: true,
+            emailAddress: true,
+            firstName: true,
+            middleName: true,
+            lastName: true,
+          },
+        },
+      },
+      where: {
+        listingId: bulkApplicationResendDTO.listingId,
+        deletedAt: null,
+        applicant: {
+          emailAddress: {
+            not: null,
+          },
+        },
+      },
+    });
+    const applications = mapTo(Application, rawApplications);
+
+    // send emails
+    await Promise.all(
+      applications.map(async (application: Application) => {
+        await this.emailService.applicationScriptRunner(
+          mapTo(Application, application),
+          { id: listing.jurisdictions.id },
+        );
+      }),
+    );
+
+    // script runner standard spin down
+    await this.markScriptAsComplete('bulk application resend', requestingUser);
     return { success: true };
   }
 
