@@ -122,14 +122,12 @@ export class ScriptRunnerService {
     const applications = mapTo(Application, rawApplications);
 
     // send emails
-    await Promise.all(
-      applications.map(async (application: Application) => {
-        await this.emailService.applicationScriptRunner(
-          mapTo(Application, application),
-          { id: listing.jurisdictions.id },
-        );
-      }),
-    );
+    for (const application of applications) {
+      await this.emailService.applicationScriptRunner(
+        mapTo(Application, application),
+        { id: listing.jurisdictions.id },
+      );
+    }
 
     // script runner standard spin down
     await this.markScriptAsComplete('bulk application resend', requestingUser);

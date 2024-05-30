@@ -4,32 +4,29 @@ import { Request as ExpressRequest } from 'express';
 import { ScriptRunnerService } from '../../../src/services/script-runner.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { User } from '../../../src/dtos/users/user.dto';
-import { AppModule } from '../../../src/modules/app.module';
 import { EmailService } from '../../../src/services/email.service';
 
 describe('Testing script runner service', () => {
   let service: ScriptRunnerService;
   let prisma: PrismaService;
-
-  const testEmailService = {
-    /* eslint-disable @typescript-eslint/no-empty-function */
-    applicationScriptRunner: async () => {},
-  };
-
-  const mockApplicationScriptRunner = jest.spyOn(
-    testEmailService,
-    'applicationScriptRunner',
-  );
+  let emailService: EmailService;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    })
-      .overrideProvider(EmailService)
-      .useValue(testEmailService)
-      .compile();
+      providers: [
+        ScriptRunnerService,
+        PrismaService,
+        {
+          provide: EmailService,
+          useValue: {
+            applicationScriptRunner: jest.fn(),
+          },
+        },
+      ],
+    }).compile();
 
     service = module.get<ScriptRunnerService>(ScriptRunnerService);
+    emailService = module.get<EmailService>(EmailService);
     prisma = module.get<PrismaService>(PrismaService);
   });
 
@@ -178,7 +175,7 @@ describe('Testing script runner service', () => {
         },
       },
     });
-    expect(mockApplicationScriptRunner).toHaveBeenCalledWith(
+    expect(emailService.applicationScriptRunner).toHaveBeenCalledWith(
       {
         id: applicationId,
         language: 'en',
