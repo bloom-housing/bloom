@@ -5,7 +5,7 @@ SET translations = jsonb_set(translations, '{scriptRunner}', '{"information": "Y
 WHERE language = 'en';
 
 UPDATE translations
-SET translations = jsonb_set(translations, '{scriptRunner}', '{"information": "Anteriormente presentó su solicitud para Fremont Family Apartments, pero se produjo un error al enviar su correo electrónico de confirmación sin su número de confirmación. Su número de solicitud y número de confirmación se reenvían a continuación. Gracias por su paciencia.", "pleaseSave": "Por favor, guarde este correo electrónico para sus registros.", "subject": "Su Número de Confirmación de Solicitud Para Fremont Family Apartments", "yourApplicationNumber": "Su número de solicitud es: %{id}", "yourConfirmationNumber": “Su numero de confirmación es: %{confirmationCode}"}')
+SET translations = jsonb_set(translations, '{scriptRunner}', '{"information": "Anteriormente presentó su solicitud para Fremont Family Apartments, pero se produjo un error al enviar su correo electrónico de confirmación sin su número de confirmación. Su número de solicitud y número de confirmación se reenvían a continuación. Gracias por su paciencia.", "pleaseSave": "Por favor, guarde este correo electrónico para sus registros.", "subject": "Su Número de Confirmación de Solicitud Para Fremont Family Apartments", "yourApplicationNumber": "Su número de solicitud es: %{id}", "yourConfirmationNumber": "Su numero de confirmación es: %{confirmationCode}"}')
 WHERE language = 'es';
 
 UPDATE translations
@@ -13,9 +13,9 @@ SET translations = jsonb_set(translations, '{scriptRunner}', '{"information": "D
 WHERE language = 'tl';
 
 UPDATE translations
-SET translations = jsonb_set(translations, '{scriptRunner}', '{"information": "Trước đây bạn đã đăng ký vào Fremont Family Apartments nhưng đã xảy ra lỗi khiến bạn gửi email xác nhận mà không có số xác nhận. Số đơn đăng ký và số xác nhận của bạn được gửi lại bên dưới. Cảm ơn vì sự kiên nhẫn của bạn.", "pleaseSave": "Vui lòng lưu email này vào hồ sơ của bạn.", "subject": "Số xác nhận đơn đăng ký của bạn cho Căn hộ gia đình Fremont", "yourApplicationNumber": "Số đơn đăng ký của bạn là: %{id}", "yourConfirmationNumber": "Số xác nhận của bạn là: %{confirmationCode}"}')
+SET translations = jsonb_set(translations, '{scriptRunner}', '{"information": "Trước đây bạn đã đăng ký vào Fremont Family Apartments nhưng đã xảy ra lỗi khiến bạn gửi email xác nhận mà không có số xác nhận. Số đơn đăng ký và số xác nhận của bạn được gửi lại bên dưới. Cảm ơn vì sự kiên nhẫn của bạn.", "pleaseSave": "Vui lòng lưu email này vào hồ sơ của bạn.", "subject": "Số xác nhận đơn đăng ký của bạn cho Fremont Family Apartments", "yourApplicationNumber": "Số đơn đăng ký của bạn là: %{id}", "yourConfirmationNumber": "Số xác nhận của bạn là: %{confirmationCode}"}')
 WHERE language = 'vi';
 
 UPDATE translations
-SET translations = jsonb_set(translations, '{scriptRunner}', '{"information": "您之前申請過 Fremont Family Apartments, 但由於錯誤而導致您發送的確認電子郵件中沒有您的確認號碼。您的申請號碼和確認號碼將在下面重新發送。感謝您的耐心等待。", "pleaseSave": "請儲存此電子郵件作為您的記錄。", "subject": "您的 Fremont Family Apartments 申請確認號”, "yourApplicationNumber": "您的申請號碼是： %{id}", "yourConfirmationNumber": "您的確認號碼是： %{confirmationCode}"}')
+SET translations = jsonb_set(translations, '{scriptRunner}', '{"information": "您之前申請過 Fremont Family Apartments, 但由於錯誤而導致您發送的確認電子郵件中沒有您的確認號碼。您的申請號碼和確認號碼將在下面重新發送。感謝您的耐心等待。", "pleaseSave": "請儲存此電子郵件作為您的記錄。", "subject": "您的 Fremont Family Apartments 申請確認號", "yourApplicationNumber": "您的申請號碼是： %{id}", "yourConfirmationNumber": "您的確認號碼是： %{confirmationCode}"}')
 WHERE language = 'zh';
