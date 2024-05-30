@@ -73,6 +73,7 @@ export const AddressValidationSelection = (props: AddressValidationSelectionProp
     setVerifyAddress,
     setVerifyAddressStep,
   } = props
+
   return (
     <>
       {foundAddress.newAddress && (

@@ -3,6 +3,10 @@ import {
   ApplicationSubmissionTypeEnum,
   IncomePeriodEnum,
   LanguagesEnum,
+  Application,
+  YesNoEnum,
+  UnitTypeEnum,
+  ApplicationMultiselectQuestion,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const idDefaults = {
@@ -50,10 +54,10 @@ export const raceCheckboxesOrder = [
   "white",
 ]
 
-export const ElmVillageApplication = {
+export const ElmVillageApplication: Application = {
   markedAsDuplicate: false,
   ...idDefaults,
-  listing: {
+  listings: {
     id: "abcd1234",
   },
   applicant: {
@@ -61,8 +65,8 @@ export const ElmVillageApplication = {
     phoneNumber: "(444) 444-4444",
     noPhone: false,
     phoneNumberType: "work",
-    workInRegion: "yes",
-    address: {
+    workInRegion: YesNoEnum.yes,
+    applicantAddress: {
       ...idDefaults,
       street: "600 Montgomery St",
       street2: "Unit",
@@ -73,7 +77,7 @@ export const ElmVillageApplication = {
       latitude: null,
       longitude: null,
     },
-    workAddress: {
+    applicantWorkAddress: {
       ...idDefaults,
       street: "Work Street",
       street2: "Work Unit",
@@ -85,7 +89,6 @@ export const ElmVillageApplication = {
       longitude: null,
     },
     firstName: "First Name",
-    middleName: "Middle Name",
     lastName: "Last Name",
     birthMonth: "07",
     birthDay: "17",
@@ -102,7 +105,7 @@ export const ElmVillageApplication = {
   sendMailToMailingAddress: true,
   householdExpectingChanges: true,
   householdStudent: true,
-  mailingAddress: {
+  applicationsMailingAddress: {
     ...idDefaults,
     street: "Mailing Street",
     street2: "Mailing Unit",
@@ -110,7 +113,7 @@ export const ElmVillageApplication = {
     state: "AK",
     zipCode: "90220",
   },
-  alternateAddress: {
+  applicationsAlternateAddress: {
     ...idDefaults,
     street: "",
     street2: "",
@@ -127,7 +130,7 @@ export const ElmVillageApplication = {
     phoneNumber: "(333) 333-3333",
     otherType: "Other Relationship",
     emailAddress: "test2@bloom.com",
-    mailingAddress: {
+    address: {
       ...idDefaults,
       street: "Contact Street",
       street2: "Contact Street 2",
@@ -139,13 +142,13 @@ export const ElmVillageApplication = {
   accessibility: {
     ...idDefaults,
     mobility: true,
-    vision: false,
-    hearing: false,
+    vision: true,
+    hearing: true,
   },
-  incomeVouchers: "none",
+  incomeVouchers: ["issuedVouchers"],
   income: "3000.00",
   incomePeriod: IncomePeriodEnum.perMonth,
-  householdMembers: [
+  householdMember: [
     {
       ...idDefaults,
       firstName: "Member Name",
@@ -154,12 +157,7 @@ export const ElmVillageApplication = {
       birthMonth: "07",
       birthDay: "17",
       birthYear: "1996",
-      emailAddress: "",
-      noEmail: null,
-      phoneNumber: "",
-      phoneNumberType: "",
-      noPhone: null,
-      address: {
+      householdMemberAddress: {
         ...idDefaults,
         street: "Member Street",
         street2: "Member Unit",
@@ -167,7 +165,7 @@ export const ElmVillageApplication = {
         state: "AZ",
         zipCode: "90223",
       },
-      workAddress: {
+      householdMemberWorkAddress: {
         ...idDefaults,
         street: "Member Work Street",
         street2: "Member Work Unit",
@@ -175,17 +173,47 @@ export const ElmVillageApplication = {
         state: "AR",
         zipCode: "90224",
       },
-      sameAddress: "no",
+      sameAddress: YesNoEnum.no,
       relationship: "spouse",
-      workInRegion: "yes",
+      workInRegion: YesNoEnum.yes,
     },
   ],
-  preferredUnit: [
+  preferredUnitTypes: [
     {
       ...idDefaults,
       id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
-      name: "1 Bedroom",
+      name: "SRO" as UnitTypeEnum,
+      numBedrooms: 0,
+    },
+    {
+      ...idDefaults,
+      id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
+      name: "Studio" as UnitTypeEnum,
+      numBedrooms: 0,
+    },
+    {
+      ...idDefaults,
+      id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
+      name: "1 Bedroom" as UnitTypeEnum,
       numBedrooms: 1,
+    },
+    {
+      ...idDefaults,
+      id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
+      name: "2 Bedroom" as UnitTypeEnum,
+      numBedrooms: 2,
+    },
+    {
+      ...idDefaults,
+      id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
+      name: "3 Bedroom" as UnitTypeEnum,
+      numBedrooms: 3,
+    },
+    {
+      ...idDefaults,
+      id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
+      name: "4 Bedroom" as UnitTypeEnum,
+      numBedrooms: 3,
     },
   ],
   demographics: {
@@ -198,7 +226,7 @@ export const ElmVillageApplication = {
   },
   preferences: [
     {
-      key: "liveWork",
+      key: "Work in the city",
       claimed: true,
       options: [
         {
@@ -208,11 +236,11 @@ export const ElmVillageApplication = {
           address: {
             street: "1600 pennsylvania ave",
             city: "Washington",
-            state: "District Of Columbia",
-            zipCode: "20005",
+            state: "DC",
+            zipCode: "20500",
           },
           addressHolder: {
-            name: "first last",
+            name: "First Last",
             relationship: "Friend",
           },
         },
@@ -223,15 +251,15 @@ export const ElmVillageApplication = {
           address: {
             street: "1600 pennsylvania ave",
             city: "Washington",
-            state: "District Of Columbia",
-            zipCode: "20005",
+            state: "DC",
+            zipCode: "20500",
           },
         },
       ],
     },
     {
       key: "cityEmployee",
-      claimed: true,
+      claimed: false,
       options: [
         {
           key: "cityEmployee",
@@ -240,11 +268,11 @@ export const ElmVillageApplication = {
         },
       ],
     },
-  ],
+  ] as ApplicationMultiselectQuestion[],
   programs: [
     {
       claimed: true,
-      key: "servedInMilitary",
+      key: "Veteran",
       options: [
         {
           key: "servedInMilitary",
@@ -260,35 +288,17 @@ export const ElmVillageApplication = {
         },
       ],
     },
-    {
-      key: "tay",
-      claimed: true,
-      options: [
-        {
-          key: "tay",
-          checked: true,
-        },
-        {
-          key: "doNotConsider",
-          checked: false,
-        },
-        {
-          key: "preferNotToSay",
-          checked: false,
-        },
-      ],
-    },
-  ],
+  ] as ApplicationMultiselectQuestion[],
   confirmationCode: "",
   status: ApplicationStatusEnum.draft,
   submissionType: ApplicationSubmissionTypeEnum.electronical,
   language: LanguagesEnum.en,
 }
 
-export const minimalDataApplication = {
+export const minimalDataApplication: Application = {
   markedAsDuplicate: false,
   ...idDefaults,
-  listing: {
+  listings: {
     id: "abcd1234",
   },
   applicant: {
@@ -296,8 +306,8 @@ export const minimalDataApplication = {
     phoneNumber: null,
     noPhone: true,
     phoneNumberType: null,
-    workInRegion: "no",
-    address: {
+    workInRegion: YesNoEnum.no,
+    applicantAddress: {
       ...idDefaults,
       street: "600 Montgomery St",
       street2: "Unit",
@@ -306,7 +316,7 @@ export const minimalDataApplication = {
       zipCode: "94111",
       county: "",
     },
-    workAddress: {
+    applicantWorkAddress: {
       ...idDefaults,
       street: "",
       street2: "",
@@ -332,7 +342,7 @@ export const minimalDataApplication = {
   sendMailToMailingAddress: false,
   householdExpectingChanges: false,
   householdStudent: false,
-  mailingAddress: {
+  applicationsMailingAddress: {
     ...idDefaults,
     street: "",
     street2: "",
@@ -340,7 +350,7 @@ export const minimalDataApplication = {
     state: "",
     zipCode: "",
   },
-  alternateAddress: {
+  applicationsAlternateAddress: {
     ...idDefaults,
     street: "",
     street2: "",
@@ -357,7 +367,7 @@ export const minimalDataApplication = {
     phoneNumber: "",
     otherType: "",
     emailAddress: "",
-    mailingAddress: {
+    address: {
       ...idDefaults,
       street: "",
       street2: "",
@@ -372,15 +382,15 @@ export const minimalDataApplication = {
     vision: false,
     hearing: false,
   },
-  incomeVouchers: false,
+  incomeVouchers: ["none"],
   income: "50000",
   incomePeriod: IncomePeriodEnum.perYear,
-  householdMembers: [],
-  preferredUnit: [
+  householdMember: [],
+  preferredUnitTypes: [
     {
       ...idDefaults,
       id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
-      name: "2 Bedroom",
+      name: "2 Bedroom" as UnitTypeEnum,
       numBedrooms: 2,
     },
   ],
@@ -481,7 +491,7 @@ export const minimalDataApplication = {
         },
       ],
     },
-  ],
+  ] as ApplicationMultiselectQuestion[],
   confirmationCode: "",
   status: ApplicationStatusEnum.draft,
   submissionType: ApplicationSubmissionTypeEnum.electronical,
