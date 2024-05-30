@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Put,
   Request,
@@ -13,6 +14,7 @@ import { defaultValidationPipeOptions } from '../utilities/default-validation-pi
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { OptionalAuthGuard } from '../guards/optional.guard';
 import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction-admin.guard';
+import { DataTransferDTO } from '../dtos/script-runner/data-transfer.dto';
 
 @Controller('scriptRunner')
 @ApiTags('scriptRunner')
@@ -29,5 +31,18 @@ export class ScirptRunnerController {
   @ApiOkResponse({ type: SuccessDTO })
   async update(@Request() req: ExpressRequest): Promise<SuccessDTO> {
     return await this.scriptRunnerService.example(req);
+  }
+
+  @Put('dataTransfer')
+  @ApiOperation({
+    summary: 'A script that pulls data from one source into the current db',
+    operationId: 'dataTransfer',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async dataTransfer(
+    @Body() dataTransferDTO: DataTransferDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.dataTransfer(req, dataTransferDTO);
   }
 }

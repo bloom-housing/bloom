@@ -1,9 +1,11 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
 import { Request as ExpressRequest } from 'express';
 import { PrismaService } from './prisma.service';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { User } from '../dtos/users/user.dto';
 import { mapTo } from '../utilities/mapTo';
+import { DataTransferDTO } from '../dtos/script-runner/data-transfer.dto';
 
 /**
   this is the service for running scripts
@@ -12,6 +14,44 @@ import { mapTo } from '../utilities/mapTo';
 @Injectable()
 export class ScriptRunnerService {
   constructor(private prisma: PrismaService) {}
+
+  /**
+   *
+   * @param req incoming request object
+   * @param dataTransferDTO data transfer endpoint args. Should contain foreign db connection string
+   * @returns successDTO
+   * @description transfers data from foreign data into the database this api normally connects to
+   */
+  async dataTransfer(
+    req: ExpressRequest,
+    dataTransferDTO: DataTransferDTO,
+  ): Promise<SuccessDTO> {
+    // script runner standard start up
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart('data transfer', requestingUser);
+
+    // connect to foreign db based on incoming connection string
+    const client = new PrismaClient({
+      datasources: {
+        db: {
+          url: dataTransferDTO.connectionString,
+        },
+      },
+    });
+    await client.$connect();
+
+    // get data
+    const res =
+      await client.$queryRaw`SELECT id, name FROM jurisdictions WHERE name = 'San Mateo'`;
+    console.log(res);
+
+    // disconnect from foreign db
+    await client.$disconnect();
+
+    // script runner standard spin down
+    await this.markScriptAsComplete('data transfer', requestingUser);
+    return { success: true };
+  }
 
   /**
     this is simply an example
