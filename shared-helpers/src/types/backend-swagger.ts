@@ -2141,6 +2141,28 @@ export class ScriptRunnerService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * A script that pulls data from one source into the current db
+   */
+  dataTransfer(
+    params: {
+      /** requestBody */
+      body?: DataTransferDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/dataTransfer"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export interface SuccessDTO {
@@ -5354,6 +5376,11 @@ export interface MapLayer {
 
   /**  */
   jurisdictionId: string
+}
+
+export interface DataTransferDTO {
+  /**  */
+  connectionString: string
 }
 
 export enum ListingViews {
