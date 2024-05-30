@@ -8,18 +8,18 @@ import {
   ListingMap,
   LatitudeLongitude,
   AlertNotice,
-  Icon,
 } from "@bloom-housing/ui-components"
 import { Tooltip } from "@bloom-housing/doorway-ui-components"
 import { countyKeys, stateKeys } from "@bloom-housing/shared-helpers"
-import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { FieldValue, Grid, Icon } from "@bloom-housing/ui-seeds"
 import { FormListing } from "../../../../lib/listings/formTypes"
 import GeocodeService, {
   GeocodeService as GeocodeServiceType,
 } from "@mapbox/mapbox-sdk/services/geocoding"
 import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
 import Link from "next/link"
-import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons"
+import ArrowTopRightOnSquareIcon from "@heroicons/react/20/solid/ArrowTopRightOnSquareIcon"
+import InformationCircleIcon from "@heroicons/react/24/outline/InformationCircleIcon"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 interface MapBoxFeature {
@@ -344,28 +344,36 @@ const BuildingDetails = ({
                   id="county-helper"
                   text={t("county.goToOtherPortalsHover")}
                 >
-                  <Icon size="medium" symbol="info" />
+                  <Icon outlined className="text-base">
+                    <InformationCircleIcon />
+                  </Icon>
                 </Tooltip>
               </div>
               <li className="list-disc list-inside">
                 {t("county.goToOtherPortalsCitySanJose")}
                 <Link href="https://partners.housingbayarea.org/">
                   {" "}
-                  <Icon size="small" symbol={faArrowUpRightFromSquare} />{" "}
+                  <Icon>
+                    <ArrowTopRightOnSquareIcon />
+                  </Icon>{" "}
                 </Link>
               </li>
               <li className="list-disc list-inside">
                 {t("county.goToOtherPortalsAlamedaSanMateo")}
                 <Link href="https://partners.housingbayarea.org/">
                   {" "}
-                  <Icon size="small" symbol={faArrowUpRightFromSquare} />{" "}
+                  <Icon>
+                    <ArrowTopRightOnSquareIcon />
+                  </Icon>{" "}
                 </Link>
               </li>
               <li className="list-disc list-inside">
                 {t("county.goToOtherPortalsSanFrancisco")}
                 <Link href="https://www.partner.housing.sfgov.org/">
                   {" "}
-                  <Icon size="small" symbol={faArrowUpRightFromSquare} />{" "}
+                  <Icon>
+                    <ArrowTopRightOnSquareIcon />
+                  </Icon>{" "}
                 </Link>
               </li>
             </AlertNotice>

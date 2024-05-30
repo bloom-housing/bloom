@@ -23,9 +23,8 @@ import {
   ExpandableSection,
   StandardTable,
   ImageCard,
-  Icon,
 } from "@bloom-housing/ui-components"
-import { Message } from "@bloom-housing/ui-seeds"
+import { Icon, Message } from "@bloom-housing/ui-seeds"
 import {
   getOccupancyDescription,
   imageUrlFromListing,
@@ -39,6 +38,7 @@ import {
   IMAGE_FALLBACK_URL,
   pdfUrlFromListingEvents,
   AuthContext,
+  CustomIconMap,
 } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { ErrorPage } from "../../pages/_error"
@@ -49,7 +49,7 @@ import { SubmitApplication } from "./SubmitApplication"
 import { ListingGoogleMap } from "./ListingGoogleMap"
 import getConfig from "next/config"
 import Link from "next/link"
-import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons"
+import ArrowTopRightOnSquareIcon from "@heroicons/react/20/solid/ArrowTopRightOnSquareIcon"
 import {
   ApplicationAddressTypeEnum,
   ApplicationMethod,
@@ -554,7 +554,11 @@ export const ListingView = (props: ListingProps) => {
         <Message
           className="doorway-message application-status"
           fullwidth
-          customIcon={<Icon size="medium" symbol="clock" />}
+          customIcon={
+            <Icon size="md" outlined>
+              {CustomIconMap.clock}
+            </Icon>
+          }
         >
           {appStatusContent}
           {appStatusSubContent && (
@@ -618,7 +622,10 @@ export const ListingView = (props: ListingProps) => {
               aria-label="Opens in new window"
               className="lighter-uppercase"
             >
-              {t("t.viewOnMap")} <Icon size="small" symbol={faArrowUpRightFromSquare} />
+              {t("t.viewOnMap")}{" "}
+              <Icon>
+                <ArrowTopRightOnSquareIcon />
+              </Icon>
             </Link>
           </p>
         </div>

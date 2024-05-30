@@ -1,9 +1,11 @@
 import React, { RefObject } from "react"
 import { GoogleMap } from "@react-google-maps/api"
 import styles from "./MapControl.module.scss"
-import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons"
+import { Icon } from "@bloom-housing/ui-seeds"
+import PlusIcon from "@heroicons/react/24/solid/PlusIcon"
+import MinusIcon from "@heroicons/react/24/solid/MinusIcon"
 
-import { t, Icon } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 
 export interface MapControlProps {
   mapRef: RefObject<GoogleMap>
@@ -16,16 +18,15 @@ const MapControlZoomIn = (props: MapControlProps) => {
     m.state.map.setZoom(currentZoom + 1)
   }
   return (
-    <div
+    <button
       className={`${styles["control-style"]} ${styles["in-style"]}`}
       onClick={click}
-      onKeyDown={click}
-      role="button"
-      tabIndex={0}
       aria-label={t("t.zoomIn")}
     >
-      <Icon symbol={faPlus} fill={styles.controlBorderColor} size="md-large" />
-    </div>
+      <Icon size="lg" className={styles["control-icon"]}>
+        <PlusIcon />
+      </Icon>
+    </button>
   )
 }
 
@@ -37,16 +38,15 @@ const MapControlZoomOut = (props: MapControlProps) => {
   }
 
   return (
-    <div
+    <button
       className={`${styles["control-style"]} ${styles["out-style"]}`}
       onClick={click}
-      onKeyDown={click}
-      role="button"
-      tabIndex={0}
       aria-label={t("t.zoomOut")}
     >
-      <Icon symbol={faMinus} fill={styles.controlBorderColor} size="md-large" />
-    </div>
+      <Icon size="lg" className={styles["control-icon"]}>
+        <MinusIcon />
+      </Icon>
+    </button>
   )
 }
 
