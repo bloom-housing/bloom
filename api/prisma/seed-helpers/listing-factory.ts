@@ -95,16 +95,30 @@ export const listingFactory = async (
       : new Date(),
     listingMultiselectQuestions: optionalParams?.multiselectQuestions
       ? {
-          create: optionalParams.multiselectQuestions.map(
-            (question, index) => ({
-              multiselectQuestions: {
-                connect: {
-                  id: question.id,
+          create: [
+            ...optionalParams?.multiselectQuestions
+              ?.filter(
+                (question) => question.applicationSection === 'preferences',
+              )
+              .map((question, index) => ({
+                multiselectQuestions: {
+                  connect: {
+                    id: question.id,
+                  },
                 },
-              },
-              ordinal: index + 1,
-            }),
-          ),
+                ordinal: index + 1,
+              })),
+            ...optionalParams?.multiselectQuestions
+              ?.filter((question) => question.applicationSection === 'programs')
+              .map((question, index) => ({
+                multiselectQuestions: {
+                  connect: {
+                    id: question.id,
+                  },
+                },
+                ordinal: index + 1,
+              })),
+          ],
         }
       : undefined,
     applications: optionalParams?.applications
