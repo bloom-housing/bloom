@@ -17,5 +17,5 @@ SET translations = jsonb_set(translations, '{scriptRunner}', '{"information": "T
 WHERE language = 'vi';
 
 UPDATE translations
-SET translations = jsonb_set(translations, '{scriptRunner}', '{"information": "您之前申請過 Fremont Family Apartments, 但由於錯誤而導致您發送的確認電子郵件中沒有您的確認號碼。您的申請號碼和確認號碼將在下面重新發送。感謝您的耐心等待。", "pleaseSave": "請儲存此電子郵件作為您的記錄。", "subject": "您的申請確認號 Fremont Family Apartments”, "yourApplicationNumber": "您的申請號碼是： %{id}", "yourConfirmationNumber": "您的確認號碼是： %{confirmationCode}"}')
+SET translations = jsonb_set(translations, '{scriptRunner}', '{"information": "您之前申請過 Fremont Family Apartments, 但由於錯誤而導致您發送的確認電子郵件中沒有您的確認號碼。您的申請號碼和確認號碼將在下面重新發送。感謝您的耐心等待。", "pleaseSave": "請儲存此電子郵件作為您的記錄。", "subject": "您的 Fremont Family Apartments 申請確認號”, "yourApplicationNumber": "您的申請號碼是： %{id}", "yourConfirmationNumber": "您的確認號碼是： %{confirmationCode}"}')
 WHERE language = 'zh';
