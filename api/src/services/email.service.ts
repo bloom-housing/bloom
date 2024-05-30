@@ -19,6 +19,7 @@ import { SendGridService } from './sendgrid.service';
 import { ApplicationCreate } from '../dtos/applications/application-create.dto';
 import { User } from '../dtos/users/user.dto';
 import { getPublicEmailURL } from '../utilities/get-public-email-url';
+import { Application } from 'src/dtos/applications/application.dto';
 dayjs.extend(utc);
 dayjs.extend(tz);
 dayjs.extend(advanced);
@@ -487,6 +488,30 @@ export class EmailService {
       console.log('listing approval email failed', err);
       throw new HttpException('email failed', 500);
     }
+  }
+
+  public async applicationScriptRunner(
+    application: Application,
+    jurisdictionId: IdDTO,
+  ) {
+    const jurisdiction = await this.getJurisdiction([jurisdictionId]);
+    void (await this.loadTranslations(jurisdiction, application.language));
+    const compiledTemplate = this.template('script-runner');
+
+    const user = {
+      firstName: application.applicant.firstName,
+      middleName: application.applicant.middleName,
+      lastName: application.applicant.lastName,
+    };
+    await this.send(
+      application.applicant.emailAddress,
+      jurisdiction.emailFromAddress,
+      this.polyglot.t('scriptRunner.subject'),
+      compiledTemplate({
+        application,
+        user,
+      }),
+    );
   }
 
   /**
