@@ -2001,6 +2001,69 @@ export class MapLayersService {
   }
 }
 
+export class ScriptRunnerService {
+  /**
+   * An example of how the script runner can work
+   */
+  exampleScript(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/exampleScript"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * A script that pulls data from one source into the current db
+   */
+  dataTransfer(
+    params: {
+      /** requestBody */
+      body?: DataTransferDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/dataTransfer"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * A script that resends application confirmations to applicants of a listing
+   */
+  bulkApplicationResend(
+    params: {
+      /** requestBody */
+      body?: BulkApplicationResendDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/bulkApplicationResend"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export interface SuccessDTO {
   /**  */
   success: boolean
@@ -5178,6 +5241,16 @@ export interface MapLayer {
 
   /**  */
   jurisdictionId: string
+}
+
+export interface DataTransferDTO {
+  /**  */
+  connectionString: string
+}
+
+export interface BulkApplicationResendDTO {
+  /**  */
+  listingId: string
 }
 
 export enum ListingViews {
