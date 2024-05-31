@@ -154,6 +154,16 @@ const translations = (jurisdictionName?: string, language?: LanguagesEnum) => {
           'Use the following code to sign in to your %{jurisdictionName} account. This code will be valid for 5 minutes. Never share this code.',
         singleUseCode: '%{singleUseCode}',
       },
+      scriptRunner: {
+        information:
+          'You previously applied to Fremont Family Apartments, but an error resulted in sending your confirmation email without your confirmation number. Your application number and confirmation number are re-sent below. Thank you for your patience.',
+        pleaseSave: 'Please save this email for your records.',
+        subject:
+          'Your Application Confirmation Number for Fremont Family Apartments',
+        yourApplicationNumber: 'Your application number is: %{id}',
+        yourConfirmationNumber:
+          'Your confirmation number is: %{confirmationCode}',
+      },
     };
   } else if (language === LanguagesEnum.es) {
     return {

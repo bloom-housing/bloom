@@ -2040,6 +2040,28 @@ export class ScriptRunnerService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * A script that resends application confirmations to applicants of a listing
+   */
+  bulkApplicationResend(
+    params: {
+      /** requestBody */
+      body?: BulkApplicationResendDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/bulkApplicationResend"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export interface SuccessDTO {
@@ -5224,6 +5246,11 @@ export interface MapLayer {
 export interface DataTransferDTO {
   /**  */
   connectionString: string
+}
+
+export interface BulkApplicationResendDTO {
+  /**  */
+  listingId: string
 }
 
 export enum ListingViews {
