@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useMemo } from "react"
 import { useForm } from "react-hook-form"
 
 import { FieldGroup, Form, Select, t } from "@bloom-housing/ui-components"
@@ -7,6 +7,8 @@ import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/share
 import {
   ethnicityKeys,
   raceKeys,
+  isKeyIncluded,
+  getCustomValue,
   howDidYouHear,
   fieldGroupObjectToArray,
   OnClientSide,
@@ -61,6 +63,25 @@ const ApplicationDemographics = () => {
     }))
   }
 
+  const raceOptions = useMemo(() => {
+    return Object.keys(raceKeys).map((rootKey) => ({
+      id: rootKey,
+      label: t(`application.review.demographics.raceOptions.${rootKey}`),
+      value: rootKey,
+      additionalText: rootKey.indexOf("other") >= 0,
+      defaultChecked: isKeyIncluded(rootKey, application.demographics?.race),
+      defaultText: getCustomValue(rootKey, application.demographics?.race),
+      subFields: raceKeys[rootKey].map((subKey) => ({
+        id: subKey,
+        label: t(`application.review.demographics.raceOptions.${subKey}`),
+        value: subKey,
+        defaultChecked: isKeyIncluded(subKey, application.demographics?.race),
+        additionalText: subKey.indexOf("other") >= 0,
+        defaultText: getCustomValue(subKey, application.demographics?.race),
+      })),
+    }))
+  }, [register])
+
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
@@ -94,26 +115,13 @@ const ApplicationDemographics = () => {
               </legend>
               <FieldGroup
                 name="race"
-                fields={Object.keys(raceKeys).map((rootKey) => ({
-                  id: rootKey,
-                  label: t(`application.review.demographics.raceOptions.${rootKey}`),
-                  value: rootKey,
-                  additionalText: rootKey.indexOf("other") >= 0,
-                  defaultChecked: application[`race-${rootKey}`],
-                  subFields: raceKeys[rootKey].map((subKey) => ({
-                    id: subKey,
-                    label: t(`application.review.demographics.raceOptions.${subKey}`),
-                    value: subKey,
-                    defaultChecked: application[`race-${subKey}`],
-                    additionalText: subKey.indexOf("other") >= 0,
-                  })),
-                }))}
+                fields={raceOptions}
+                type="checkbox"
+                register={register}
                 strings={{
                   description: "",
                 }}
-                type="checkbox"
                 dataTestId={"app-demographics-race"}
-                register={register}
               />
             </fieldset>
             <div className={"pt-4"}>

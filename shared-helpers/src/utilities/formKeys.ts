@@ -191,6 +191,25 @@ export const raceKeys: subCheckboxes = {
   declineToRespond: [],
 }
 
+export const isKeyIncluded = (
+  searchKey: string,
+  originalValues: Array<string> | undefined
+): boolean => {
+  let keyExists = false
+  originalValues?.forEach((key) => {
+    if (key.includes(searchKey)) {
+      keyExists = true
+    }
+  })
+  return keyExists
+}
+
+// Get the value of a field that is storing a custom value, i.e. "otherAsian: Custom Race Input"
+export const getCustomValue = (subKey: string, formValues: Array<string> | undefined): string => {
+  const customValues = formValues?.find((value: string) => value.split(":")[0] === subKey)
+  return customValues?.length ? customValues.split(":")[1]?.substring(1) : ""
+}
+
 export const howDidYouHear = [
   {
     id: "jurisdictionWebsite",
