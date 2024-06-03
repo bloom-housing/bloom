@@ -186,7 +186,7 @@ export const mapFormToApi = ({
     race: fieldGroupObjectToArray(data, "race"),
   }
 
-  const sendMailToMailingAddress = data.application.sendMailToMailingAddress === true || false
+  const sendMailToMailingAddress = data.application.sendMailToMailingAddress
 
   const applicationsMailingAddress = getAddress(sendMailToMailingAddress, mailingAddressData)
 

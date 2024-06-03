@@ -87,7 +87,7 @@ export const devSeeding = async (
   for (let index = 0; index < LISTINGS_TO_SEED; index++) {
     const applications = [];
 
-    for (let j = 0; j <= APPLICATIONS_PER_LISTINGS - 1; j++) {
+    for (let j = 0; j < APPLICATIONS_PER_LISTINGS; j++) {
       const householdSize = randomInt(1, 6);
       const householdMembers = await householdMemberFactoryMany(
         householdSize - 1,

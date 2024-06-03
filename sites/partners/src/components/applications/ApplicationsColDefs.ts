@@ -574,7 +574,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
         width: 125,
         minWidth: 100,
         valueFormatter: ({ value }) => {
-          if (value.length < householdIndex) return ""
+          if (value?.length < householdIndex) return ""
           return formatYesNoLabel(value[i]?.workInRegion)
         },
       }
