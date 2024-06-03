@@ -18,6 +18,7 @@ env:
   TIME_ZONE: America/Los_Angeles
   THROTTLE_TTL: 3600000
   THROTTLE_LIMIT: 100
+  TEST_CONNECTION_STRING: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom
 
 jobs:
   backend-unit:
