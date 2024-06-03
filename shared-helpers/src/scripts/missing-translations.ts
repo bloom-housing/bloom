@@ -44,7 +44,7 @@ function main() {
     )
     if (missingPublicSiteTranslations.length > 0) missingTranslations = true
     missingPublicSiteTranslations.forEach((missingKey) =>
-      console.log(`${missingKey}, ${JSON.stringify(englishTranslations[missingKey])}`)
+      console.log(`${missingKey},${JSON.stringify(englishTranslations[missingKey])}`)
     )
   })
   if (missingTranslations) throw Error
