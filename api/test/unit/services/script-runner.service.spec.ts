@@ -24,7 +24,8 @@ describe('Testing script runner service', () => {
     prisma = module.get<PrismaService>(PrismaService);
   });
 
-  it('should transfer data', async () => {
+  // because of how doorway ci env variables work we can't publicly expose a db for us to connect to
+  it.skip('should transfer data', async () => {
     prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
     prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
     prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
