@@ -326,7 +326,7 @@ const PreferenceDrawer = ({
                 type="button"
                 size="sm"
                 className="w-max"
-                variant={errors["questions"] ? "alert" : "primary"}
+                variant={errors["questions"] ? "alert-outlined" : "primary-outlined"}
                 onClick={() => {
                   clearErrors("questions")
                   setOptionData(null)
