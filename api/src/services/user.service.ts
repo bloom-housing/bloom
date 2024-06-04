@@ -407,8 +407,7 @@ export class UserService {
       storedUser.userRoles?.isPartner;
     const isUserSiteMatch =
       (isPartnerPortalUser && dto.appUrl === process.env.PARTNERS_PORTAL_URL) ||
-      (!isPartnerPortalUser &&
-        dto.appUrl === storedUser.jurisdictions?.[0]?.publicUrl);
+      (!isPartnerPortalUser && dto.appUrl !== process.env.PARTNERS_PORTAL_URL);
     // user on wrong site, return neutral message and don't send email
     if (!isUserSiteMatch) return { success: true };
 
