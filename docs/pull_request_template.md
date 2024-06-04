@@ -19,7 +19,7 @@ Provide instructions so we can review, including any needed configuration, and t
 - [ ] Reviewed considering accessibility
 - [ ] Added tests covering the changes
 - [ ] Made corresponding changes to the documentation
-- [ ] Run `yarn generate:client` and/or created a migration when required
+- [ ] Ran `yarn generate:client` and/or created a migration when required
 
 ## Review Process:
 
