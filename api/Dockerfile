@@ -24,8 +24,8 @@ COPY .env ./
 RUN yarn prisma generate
 RUN yarn build
 
-# Expose port 3101 for api
-EXPOSE 3101
+# Expose port 3100 for api
+EXPOSE 3100
 
 # Start api
 CMD ["yarn", "dev"]
