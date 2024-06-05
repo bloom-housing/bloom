@@ -4,6 +4,7 @@ import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ApplicationContext } from "../../ApplicationContext"
 import { DetailsAddressColumns, AddressColsType } from "../DetailsAddressColumns"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { AlternateContactRelationship } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const DetailsAlternateContact = () => {
   const application = useContext(ApplicationContext)
@@ -44,14 +45,20 @@ const DetailsAlternateContact = () => {
           {application.alternateContact?.phoneNumber || t("t.n/a")}
         </FieldValue>
       </Grid.Row>
-      <SectionWithGrid.HeadingRow>{t("application.contact.address")} </SectionWithGrid.HeadingRow>
-      <Grid.Row columns={3}>
-        <DetailsAddressColumns
-          type={AddressColsType.alternateAddress}
-          application={application}
-          dataTestId="alternateContact"
-        />
-      </Grid.Row>
+      {application.alternateContact?.type !== AlternateContactRelationship.noContact && (
+        <>
+          <SectionWithGrid.HeadingRow>
+            {t("application.contact.address")}
+          </SectionWithGrid.HeadingRow>
+          <Grid.Row columns={3}>
+            <DetailsAddressColumns
+              type={AddressColsType.alternateAddress}
+              application={application}
+              dataTestId="alternateContact"
+            />
+          </Grid.Row>
+        </>
+      )}
     </SectionWithGrid>
   )
 }
