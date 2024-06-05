@@ -18,7 +18,7 @@ const DetailsApplicationData = () => {
     <SectionWithGrid heading={t("application.details.applicationData")} inset>
       <Grid.Row>
         <FieldValue label={t("application.details.number")} testId="number">
-          {application.confirmationCode || application.id}
+          {application.confirmationCode ?? t("t.n/a")}
         </FieldValue>
 
         {application.submissionType && (

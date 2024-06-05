@@ -14,11 +14,11 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
   const application = useContext(ApplicationContext)
 
   const householdMembersHeaders = {
-    name: t("t.name"),
-    relationship: t("t.relationship"),
-    birth: t("application.household.member.dateOfBirth"),
-    sameResidence: t("application.add.sameResidence"),
-    workInRegion: t("application.details.workInRegion"),
+    name: "t.name",
+    relationship: "t.relationship",
+    birth: "application.household.member.dateOfBirth",
+    sameResidence: "application.add.sameResidence",
+    workInRegion: "application.details.workInRegion",
     action: "",
   }
 

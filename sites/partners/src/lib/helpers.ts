@@ -15,7 +15,7 @@ dayjs.extend(customParseFormat)
 import { TempUnit } from "./listings/formTypes"
 import { FieldError } from "react-hook-form"
 import {
-  ApplicationSubmissionTypeEnum,
+  Application,
   AssetsService,
   IncomePeriodEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -287,4 +287,15 @@ export const fieldHasError = (errorObj: FieldError) => {
 
 export const fieldMessage = (errorObj: FieldError) => {
   return errorObj?.message
+}
+
+export const mergeApplicationNames = (applications: Application[]) => {
+  if (!applications?.length) return ""
+
+  const names = applications.reduce((acc, curr) => {
+    acc.push(`${curr.applicant.firstName} ${curr.applicant.lastName}`)
+    return acc
+  }, [])
+
+  return `${names.join(", ")}`
 }

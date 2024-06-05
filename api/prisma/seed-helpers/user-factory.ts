@@ -15,13 +15,16 @@ export const userFactory = async (optionalParams?: {
   jurisdictionIds?: string[];
   listings?: string[];
   acceptedTerms?: boolean;
+  password?: string;
 }): Promise<Prisma.UserAccountsCreateInput> => ({
   email:
     optionalParams?.email?.toLocaleLowerCase() ||
     `${randomNoun().toLowerCase()}${randomNoun().toLowerCase()}@${randomAdjective().toLowerCase()}.com`,
   firstName: optionalParams?.firstName || 'First',
   lastName: optionalParams?.lastName || 'Last',
-  passwordHash: await passwordToHash('abcdef'),
+  passwordHash: optionalParams?.password
+    ? await passwordToHash(optionalParams?.password)
+    : await passwordToHash('Abcdef12345!'),
   userRoles: {
     create: {
       isAdmin: optionalParams?.roles?.isAdmin || false,

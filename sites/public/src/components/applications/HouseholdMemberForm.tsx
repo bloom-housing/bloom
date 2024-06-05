@@ -2,6 +2,7 @@ import React from "react"
 import { t } from "@bloom-housing/ui-components"
 import { Button, FieldValue, Icon } from "@bloom-housing/ui-seeds"
 import { CustomIconMap } from "@bloom-housing/shared-helpers"
+import styles from "../../layouts/application-form.module.scss"
 
 export interface HouseholdMemberFormProps {
   editMember?: (memberId: number | undefined) => void
@@ -19,8 +20,11 @@ const HouseholdMemberForm = (props: HouseholdMemberFormProps) => {
   const editMode = props.editMode !== false && props.editMember // undefined should default to true
 
   return (
-    <div className="flex justify-between flex-row border-b">
-      <FieldValue helpText={props.subtitle} className="py-4 text-left">
+    <div className={styles["application-form-household-member"]}>
+      <FieldValue
+        className={styles["application-form-household-field-value"]}
+        helpText={props.subtitle}
+      >
         {props.memberFirstName} {props.memberLastName}
       </FieldValue>
       <div>
@@ -29,7 +33,7 @@ const HouseholdMemberForm = (props: HouseholdMemberFormProps) => {
             id={`edit-member-${props.memberFirstName}-${props.memberLastName}`}
             type="button"
             variant="text"
-            className="pt-4 app-household-member-edit-button"
+            className="app-household-member-edit-button pb-1"
             onClick={() => props.editMember && props.editMember(props.memberId)}
           >
             {props.strings?.edit ?? t("t.edit")}

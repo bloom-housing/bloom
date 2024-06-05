@@ -18,21 +18,23 @@ const FormHouseholdMembers = ({
   householdMembers,
   setHouseholdMembers,
 }: FormHouseholdMembersProps) => {
-  const [membersDrawer, setMembersDrawer] = useState<number | null>(null)
+  type MembersDrawer = HouseholdMember | null
+
+  const [membersDrawer, setMembersDrawer] = useState<MembersDrawer>(null)
   const [membersDeleteModal, setMembersDeleteModal] = useState<number | null>(null)
 
   const memberTableHeaders = {
-    name: t("t.name"),
-    relationship: t("t.relationship"),
-    dob: t("application.household.member.dateOfBirth"),
-    sameResidence: t("application.add.sameResidence"),
-    workInRegion: t("application.details.workInRegion"),
+    name: "t.name",
+    relationship: "t.relationship",
+    dob: "application.household.member.dateOfBirth",
+    sameResidence: "application.add.sameResidence",
+    workInRegion: "application.details.workInRegion",
     action: "",
   }
 
   const editMember = useCallback(
-    (orderId: number) => {
-      setMembersDrawer(orderId)
+    (member: HouseholdMember) => {
+      setMembersDrawer(member)
     },
     [setMembersDrawer]
   )
@@ -108,7 +110,7 @@ const FormHouseholdMembers = ({
               <Button
                 type="button"
                 className="font-semibold"
-                onClick={() => editMember(member.orderId)}
+                onClick={() => editMember(member)}
                 variant="text"
               >
                 {t("t.edit")}
@@ -142,7 +144,9 @@ const FormHouseholdMembers = ({
           type="button"
           variant="primary-outlined"
           size="sm"
-          onClick={() => setMembersDrawer(householdMembers.length + 1)}
+          onClick={() =>
+            setMembersDrawer({ orderId: householdMembers.length + 1 } as HouseholdMember)
+          }
           id={"addHouseholdMemberButton"}
         >
           {t("application.add.addHouseholdMember")}
@@ -161,7 +165,7 @@ const FormHouseholdMembers = ({
           onSubmit={(member) => saveMember(member)}
           onClose={() => setMembersDrawer(null)}
           members={householdMembers}
-          editedMemberId={membersDrawer}
+          editedMemberId={membersDrawer?.orderId}
         />
       </Drawer>
 
