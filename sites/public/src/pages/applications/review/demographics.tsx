@@ -50,15 +50,20 @@ const ApplicationDemographics = () => {
     },
   })
 
-  const spokenLanguageValue: string = watch("spokenLanguage")
+  const spokenLanguageValue: string = watch(
+    "spokenLanguage",
+    application.demographics?.spokenLanguage
+  )
 
   const onSubmit = (data) => {
     conductor.currentStep.save({
       demographics: {
         ethnicity: "",
         race: fieldGroupObjectToArray(data, "race"),
-        spokenLanguage: data.spokenLanguage,
-        spokenLanguageNotListed: data.spokenLanguageNotListed,
+        spokenLanguage:
+          data.spokenLanguage === "notListed"
+            ? `${data.spokenLanguage}:${data.spokenLanguageNotListed}`
+            : data.spokenLanguage,
         gender: data.gender,
         sexualOrientation: data.sexualOrientation,
         howDidYouHear: data.howDidYouHear,
@@ -132,7 +137,11 @@ const ApplicationDemographics = () => {
               <Select
                 id="spokenLanguage"
                 name="spokenLanguage"
-                defaultValue={application.demographics.spokenLanguage}
+                defaultValue={
+                  application.demographics.spokenLanguage?.includes("notListed")
+                    ? "notListed"
+                    : application.demographics.spokenLanguage
+                }
                 label={t("application.review.demographics.spokenLanguageLabel")}
                 placeholder={t("t.selectOne")}
                 register={register}
@@ -142,11 +151,16 @@ const ApplicationDemographics = () => {
                 keyPrefix="application.review.demographics.spokenLanguageOptions"
                 dataTestId={"app-demographics-spoken-language"}
               />
-              {spokenLanguageValue === "notListed" && (
+              {spokenLanguageValue?.includes("notListed") && (
                 <Field
                   id="spokenLanguageNotListed"
                   name="spokenLanguageNotListed"
-                  label={t("application.review.demographics.genderSpecify")}
+                  defaultValue={
+                    application.demographics.spokenLanguage?.includes("notListed")
+                      ? application.demographics.spokenLanguage.split(":")[1]
+                      : undefined
+                  }
+                  label={t("application.review.demographics.spokenLanguageSpecify")}
                   validation={{ required: true }}
                   register={register}
                 />

@@ -163,11 +163,11 @@ export class ApplicationCsvExporterService
                               id: true,
                               createdAt: true,
                               updatedAt: true,
-                              ethnicity: true,
                               gender: true,
                               sexualOrientation: true,
                               howDidYouHear: true,
                               race: true,
+                              spokenLanguage: true,
                             },
                           }
                         : false,
