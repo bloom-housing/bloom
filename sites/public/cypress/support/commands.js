@@ -578,7 +578,7 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
     fields.push({ id: val, fieldValue: val })
   }
 
-  if (application.alternateContact.type !== "dontHave") {
+  if (application.alternateContact.type !== "noContact") {
     fields.push({
       id: "app-summary-alternate-name",
       fieldValue: `${application.alternateContact.firstName} ${application.alternateContact.lastName}`,
@@ -682,7 +682,7 @@ Cypress.Commands.add("submitApplication", (listingName, application, signedIn, v
   cy.step1PrimaryApplicantName(application)
   cy.step2PrimaryApplicantAddresses(application)
   cy.step3AlternateContactType(application)
-  if (application.alternateContact.type !== "dontHave") {
+  if (application.alternateContact.type !== "noContact") {
     cy.step4AlternateContactName(application)
     cy.step5AlternateContactInfo(application)
   }
