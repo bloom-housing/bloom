@@ -2062,6 +2062,28 @@ export class ScriptRunnerService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * A script that takes in a standardized string and outputs the input for the ami chart create endpoint
+   */
+  amiChartImport(
+    params: {
+      /** requestBody */
+      body?: AmiChartImportDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/amiChartImport"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export interface SuccessDTO {
@@ -5251,6 +5273,17 @@ export interface DataTransferDTO {
 export interface BulkApplicationResendDTO {
   /**  */
   listingId: string
+}
+
+export interface AmiChartImportDTO {
+  /**  */
+  values: string
+
+  /**  */
+  name: string
+
+  /**  */
+  jurisdictionId: string
 }
 
 export enum ListingViews {

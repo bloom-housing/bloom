@@ -9,6 +9,8 @@ import { DataTransferDTO } from '../dtos/script-runner/data-transfer.dto';
 import { BulkApplicationResendDTO } from '../dtos/script-runner/bulk-application-resend.dto';
 import { EmailService } from './email.service';
 import { Application } from '../dtos/applications/application.dto';
+import { AmiChartImportDTO } from '../dtos/script-runner/ami-chart-import.dto';
+import { AmiChartCreate } from '../dtos/ami-charts/ami-chart-create.dto';
 
 /**
   this is the service for running scripts
@@ -132,6 +134,41 @@ export class ScriptRunnerService {
     // script runner standard spin down
     await this.markScriptAsComplete('bulk application resend', requestingUser);
     return { success: true };
+  }
+
+  /**
+   *
+   * @param amiChartImportDTO this is a string it takes a very specific formatted like:
+   * percentOfAmiValue_1 householdSize_1_income_value householdSize_2_income_value \n percentOfAmiValue_2 householdSize_1_income_value householdSize_2_income_value
+   * @returns a stringified version of AmiChartCreate DTO
+   * @description transfers data from foreign data into the database this api normally connects to. From this you can use it
+   */
+  amiChartImport(amiChartImportDTO: AmiChartImportDTO): string {
+    // parse incoming string into an amichart create dto
+    const toReturn: AmiChartCreate = {
+      items: [],
+      name: amiChartImportDTO.name,
+      jurisdictions: {
+        id: amiChartImportDTO.jurisdictionId,
+      },
+    };
+
+    const rows = amiChartImportDTO.values.split('\n');
+    rows.forEach((row: string) => {
+      const values = row.split(' ');
+      const percentage = values[0];
+      values.forEach((value: string, index: number) => {
+        if (index > 0) {
+          toReturn.items.push({
+            percentOfAmi: Number(percentage),
+            householdSize: index,
+            income: Number(value),
+          });
+        }
+      });
+    });
+
+    return JSON.stringify(toReturn);
   }
 
   /**

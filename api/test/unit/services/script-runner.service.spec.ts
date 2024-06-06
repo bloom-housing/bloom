@@ -192,6 +192,149 @@ describe('Testing script runner service', () => {
     );
   });
 
+  it('should build ami chart import object', () => {
+    const name = 'example name';
+    const jurisdictionId = 'example jurisdictionId';
+    const valueItem =
+      '15 18400 21000 23650 26250 28350 30450 32550 34650\n30 39150 44750 50350 55900 60400 64850 69350 73800\n50 65250 74600 83900 93200 100700 108150 115600 123050';
+    const res = service.amiChartImport({
+      values: valueItem,
+      name,
+      jurisdictionId,
+    });
+
+    expect(res).toEqual(
+      JSON.stringify({
+        items: [
+          {
+            percentOfAmi: 15,
+            householdSize: 1,
+            income: 18400,
+          },
+          {
+            percentOfAmi: 15,
+            householdSize: 2,
+            income: 21000,
+          },
+          {
+            percentOfAmi: 15,
+            householdSize: 3,
+            income: 23650,
+          },
+          {
+            percentOfAmi: 15,
+            householdSize: 4,
+            income: 26250,
+          },
+          {
+            percentOfAmi: 15,
+            householdSize: 5,
+            income: 28350,
+          },
+          {
+            percentOfAmi: 15,
+            householdSize: 6,
+            income: 30450,
+          },
+          {
+            percentOfAmi: 15,
+            householdSize: 7,
+            income: 32550,
+          },
+          {
+            percentOfAmi: 15,
+            householdSize: 8,
+            income: 34650,
+          },
+          {
+            percentOfAmi: 30,
+            householdSize: 1,
+            income: 39150,
+          },
+          {
+            percentOfAmi: 30,
+            householdSize: 2,
+            income: 44750,
+          },
+          {
+            percentOfAmi: 30,
+            householdSize: 3,
+            income: 50350,
+          },
+          {
+            percentOfAmi: 30,
+            householdSize: 4,
+            income: 55900,
+          },
+          {
+            percentOfAmi: 30,
+            householdSize: 5,
+            income: 60400,
+          },
+          {
+            percentOfAmi: 30,
+            householdSize: 6,
+            income: 64850,
+          },
+          {
+            percentOfAmi: 30,
+            householdSize: 7,
+            income: 69350,
+          },
+          {
+            percentOfAmi: 30,
+            householdSize: 8,
+            income: 73800,
+          },
+          {
+            percentOfAmi: 50,
+            householdSize: 1,
+            income: 65250,
+          },
+          {
+            percentOfAmi: 50,
+            householdSize: 2,
+            income: 74600,
+          },
+          {
+            percentOfAmi: 50,
+            householdSize: 3,
+            income: 83900,
+          },
+          {
+            percentOfAmi: 50,
+            householdSize: 4,
+            income: 93200,
+          },
+          {
+            percentOfAmi: 50,
+            householdSize: 5,
+            income: 100700,
+          },
+          {
+            percentOfAmi: 50,
+            householdSize: 6,
+            income: 108150,
+          },
+          {
+            percentOfAmi: 50,
+            householdSize: 7,
+            income: 115600,
+          },
+          {
+            percentOfAmi: 50,
+            householdSize: 8,
+            income: 123050,
+          },
+        ],
+        name,
+        jurisdictions: {
+          id: jurisdictionId,
+        },
+      }),
+    );
+  });
+
   // | ---------- HELPER TESTS BELOW ---------- | //
   it('should mark script run as started if no script run present in db', async () => {
     prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
