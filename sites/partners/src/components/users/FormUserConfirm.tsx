@@ -14,7 +14,7 @@ type FormUserConfirmFields = {
   agree: boolean
 }
 
-const MIN_PASSWORD_LENGTH = 8
+const MIN_PASSWORD_LENGTH = 12
 
 const FormUserConfirm = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
