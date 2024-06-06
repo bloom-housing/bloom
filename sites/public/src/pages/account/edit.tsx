@@ -254,6 +254,7 @@ const Edit = () => {
                     }
                     register={nameRegister}
                     defaultValue={user ? user.firstName : null}
+                    dataTestId={"account-first-name"}
                   />
 
                   <Field
@@ -265,6 +266,7 @@ const Edit = () => {
                     error={nameErrors.middleName}
                     validation={{ maxLength: 64 }}
                     errorMessage={t("errors.maxLength")}
+                    dataTestId={"account-middle-name"}
                   />
 
                   <Field
@@ -281,12 +283,14 @@ const Edit = () => {
                         ? t("errors.maxLength")
                         : t("errors.lastNameError")
                     }
+                    dataTestId={"account-last-name"}
                   />
                   <Button
                     type="submit"
                     size="sm"
                     variant="primary-outlined"
                     loadingMessage={nameLoading ? t("t.loading") : undefined}
+                    id={"account-submit-name"}
                   >
                     {t("account.settings.update")}
                   </Button>
@@ -329,6 +333,7 @@ const Edit = () => {
                     variant="primary-outlined"
                     className="mt-6"
                     loadingMessage={birthdateLoading ? t("t.loading") : undefined}
+                    id={"account-submit-dob"}
                   >
                     {t("account.settings.update")}
                   </Button>
@@ -362,12 +367,14 @@ const Edit = () => {
                     errorMessage={`${t("errors.emailAddressError")}`}
                     register={emailRegister}
                     defaultValue={user ? user.email : null}
+                    dataTestId={"account-email"}
                   />
                   <Button
                     type="submit"
                     size="sm"
                     variant="primary-outlined"
                     loadingMessage={emailLoading ? t("t.loading") : undefined}
+                    id={"account-submit-email"}
                   >
                     {t("account.settings.update")}
                   </Button>
@@ -400,6 +407,7 @@ const Edit = () => {
                         error={pwdErrors.currentPassword}
                         register={pwdRegister}
                         className={"mb-1"}
+                        dataTestId={"account-current-password"}
                       />
                       <span className="float-left text-sm font-semibold mt-2">
                         <Link href="/forgot-password">
@@ -422,6 +430,7 @@ const Edit = () => {
                       error={pwdErrors.password}
                       errorMessage={t("authentication.signIn.passwordError")}
                       register={pwdRegister}
+                      dataTestId={"account-password"}
                     />
 
                     <Field
@@ -437,6 +446,7 @@ const Edit = () => {
                       error={pwdErrors.passwordConfirmation}
                       errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
                       register={pwdRegister}
+                      dataTestId={"account-password-confirmation"}
                     />
 
                     <Button
@@ -444,6 +454,7 @@ const Edit = () => {
                       size="sm"
                       variant="primary-outlined"
                       loadingMessage={passwordLoading ? t("t.loading") : undefined}
+                      id={"account-submit-password"}
                     >
                       {t("account.settings.update")}
                     </Button>

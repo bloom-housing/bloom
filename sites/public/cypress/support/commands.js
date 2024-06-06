@@ -9,9 +9,9 @@ import {
   raceCheckboxesOrder,
 } from "./../mockData/applicationData"
 
-Cypress.Commands.add("signIn", () => {
-  cy.get(`[data-testid="sign-in-email-field"]`).type("admin@example.com")
-  cy.get(`[data-testid="sign-in-password-field"]`).type("abcdef")
+Cypress.Commands.add("signIn", (email, password) => {
+  cy.get(`[data-testid="sign-in-email-field"]`).type(email ?? "admin@example.com")
+  cy.get(`[data-testid="sign-in-password-field"]`).type(password ?? "abcdef")
   cy.getByID("sign-in-button").click()
 })
 
