@@ -79,7 +79,7 @@ const Edit = () => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  const MIN_PASSWORD_LENGTH = 8
+  const MIN_PASSWORD_LENGTH = 12
   const password = useRef({})
   password.current = pwdWatch("password", "")
 
