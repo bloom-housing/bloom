@@ -143,7 +143,7 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
         </Card.Section>
       </Card>
 
-      <Button variant="primary" onClick={() => setUnitDrawer(null)}>
+      <Button variant="primary" size="sm" onClick={() => setUnitDrawer(null)}>
         {t("t.done")}
       </Button>
     </Drawer>
