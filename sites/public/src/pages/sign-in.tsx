@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState, useCallback } from "react"
 import { useForm } from "react-hook-form"
-import { GoogleReCaptchaProvider, GoogleReCaptcha } from "react-google-recaptcha-v3"
+import { GoogleReCaptcha } from "react-google-recaptcha-v3"
 import { t, useMutate } from "@bloom-housing/ui-components"
 import { useRouter } from "next/router"
 import FormsLayout from "../layouts/forms"
@@ -231,136 +231,65 @@ const SignIn = () => {
 
   return (
     <>
-      <GoogleReCaptchaProvider reCaptchaKey={process.env.reCaptchaKey}>
-        <FormsLayout className={signUpCopy ? "sm:max-w-lg md:max-w-full" : undefined}>
-          <div className={signUpCopy ? signUpBenefitsStyles["benefits-container"] : undefined}>
-            {signUpCopy && (
-              <div className={signUpBenefitsStyles["benefits-display-hide"]}>
-                <SignUpBenefitsHeadingGroup mobileView={true} />
-              </div>
-            )}
-            <div
-              className={signUpCopy ? signUpBenefitsStyles["benefits-form-container"] : undefined}
-            >
-              <FormSignIn
-                networkStatus={{
-                  content: networkStatusContent,
-                  type: networkStatusType,
-                  reset: () => {
-                    reset()
-                    resetNetworkError()
-                    setConfirmationStatusMessage(undefined)
-                  },
-                }}
-                showRegisterBtn={true}
-                control={{ errors }}
-              >
-                {process.env.showPwdless ? (
-                  <FormSignInPwdless
-                    onSubmit={(data) => void onSubmitPwdless(data)}
-                    control={{ register, errors, handleSubmit }}
-                    useCode={useCode}
-                    setUseCode={setUseCode}
-                  />
-                ) : (
-                  <FormSignInDefault
-                    onSubmit={(data) => void onSubmit(data)}
-                    control={{ register, errors, handleSubmit }}
-                  />
-                )}
-              </FormSignIn>
+      <FormsLayout className={signUpCopy ? "sm:max-w-lg md:max-w-full" : undefined}>
+        <div className={signUpCopy ? signUpBenefitsStyles["benefits-container"] : undefined}>
+          {signUpCopy && (
+            <div className={signUpBenefitsStyles["benefits-display-hide"]}>
+              <SignUpBenefitsHeadingGroup mobileView={true} />
             </div>
-            {signUpCopy && (
-              <div className={signUpBenefitsStyles["benefits-hide-display"]}>
-                <div className={signUpBenefitsStyles["benefits-desktop-container"]}>
-                  <SignUpBenefitsHeadingGroup mobileView={false} />
-                  <SignUpBenefits idTag="desktop" />
-                </div>
-              </div>
-            )}
-            <div
-              className={signUpCopy ? signUpBenefitsStyles["benefits-form-container"] : undefined}
+          )}
+          <div className={signUpCopy ? signUpBenefitsStyles["benefits-form-container"] : undefined}>
+            <FormSignIn
+              networkStatus={{
+                content: networkStatusContent,
+                type: networkStatusType,
+                reset: () => {
+                  reset()
+                  resetNetworkError()
+                  setConfirmationStatusMessage(undefined)
+                },
+              }}
+              showRegisterBtn={true}
+              control={{ errors }}
             >
-              <FormSignIn
-                networkStatus={{
-                  content: networkStatusContent,
-                  type: networkStatusType,
-                  reset: () => {
-                    reset()
-                    resetNetworkError()
-                    setConfirmationStatusMessage(undefined)
-                  },
-                }}
-                showRegisterBtn={true}
-                control={{ errors }}
-              >
-                {process.env.showPwdless ? (
-                  <FormSignInPwdless
-                    onSubmit={(data) => void onSubmitPwdless(data)}
-                    control={{ register, errors, handleSubmit }}
-                    useCode={useCode}
-                    setUseCode={setUseCode}
-                    loading={loading}
-                  />
-                ) : (
-                  <FormSignInDefault
-                    onSubmit={(data) => void onSubmit(data)}
-                    control={{ register, errors, handleSubmit }}
-                    loading={loading}
-                  />
-                )}
-              </FormSignIn>
-            </div>
-
-            <div
-              className={signUpCopy ? signUpBenefitsStyles["benefits-form-container"] : undefined}
-            >
-              <FormSignIn
-                networkStatus={{
-                  content: networkStatusContent,
-                  type: networkStatusType,
-                  reset: () => {
-                    reset()
-                    resetNetworkError()
-                    setConfirmationStatusMessage(undefined)
-                  },
-                }}
-                showRegisterBtn={true}
-                control={{ errors }}
-              >
-                {process.env.showPwdless ? (
-                  <FormSignInPwdless
-                    onSubmit={(data) => void onSubmitPwdless(data)}
-                    control={{ register, errors, handleSubmit }}
-                    useCode={useCode}
-                    setUseCode={setUseCode}
-                    loading={loading}
-                  />
-                ) : (
-                  <FormSignInDefault
-                    onSubmit={(data) => void onSubmit(data)}
-                    control={{ register, errors, handleSubmit }}
-                    loading={loading}
-                  />
-                )}
-              </FormSignIn>
-            </div>
-            {signUpCopy && (
-              <div className={signUpBenefitsStyles["benefits-hide-display"]}>
-                <div className={signUpBenefitsStyles["benefits-desktop-container"]}>
-                  <SignUpBenefitsHeadingGroup mobileView={false} />
-                  <SignUpBenefits idTag="desktop" />
-                </div>
-              </div>
-            )}
-            {signUpCopy && (
-              <div className={signUpBenefitsStyles["benefits-display-hide"]}>
-                <SignUpBenefits idTag="mobile" />
-              </div>
-            )}
+              {process.env.showPwdless ? (
+                <FormSignInPwdless
+                  onSubmit={(data) => void onSubmitPwdless(data)}
+                  control={{ register, errors, handleSubmit }}
+                  useCode={useCode}
+                  setUseCode={setUseCode}
+                />
+              ) : (
+                <FormSignInDefault
+                  onSubmit={(data) => void onSubmit(data)}
+                  control={{ register, errors, handleSubmit }}
+                />
+              )}
+            </FormSignIn>
           </div>
-        </FormsLayout>
-      </GoogleReCaptchaProvider>
+          {signUpCopy && (
+            <div className={signUpBenefitsStyles["benefits-hide-display"]}>
+              <div className={signUpBenefitsStyles["benefits-desktop-container"]}>
+                <SignUpBenefitsHeadingGroup mobileView={false} />
+                <SignUpBenefits idTag="desktop" />
+              </div>
+            </div>
+          )}
+          {signUpCopy && (
+            <div className={signUpBenefitsStyles["benefits-hide-display"]}>
+              <div className={signUpBenefitsStyles["benefits-desktop-container"]}>
+                <SignUpBenefitsHeadingGroup mobileView={false} />
+                <SignUpBenefits idTag="desktop" />
+              </div>
+            </div>
+          )}
+          {signUpCopy && (
+            <div className={signUpBenefitsStyles["benefits-display-hide"]}>
+              <SignUpBenefits idTag="mobile" />
+            </div>
+          )}
+        </div>
+      </FormsLayout>
 
       <ResendConfirmationModal
         isOpen={confirmationStatusModal}
