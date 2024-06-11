@@ -427,6 +427,7 @@ describe('Testing auth service', () => {
           'invalidReCaptchaToken',
           true,
           false,
+          true,
         ),
     ).rejects.toThrowError(
       `The ReCaptcha CreateAssessment call failed because the token was: Example invalid reason`,
@@ -497,6 +498,7 @@ describe('Testing auth service', () => {
           'invalidReCaptchaToken',
           true,
           false,
+          true,
         ),
     ).rejects.toThrowError(
       `ReCaptcha failed because the action didn't match, action was: Invalid action`,
@@ -565,6 +567,7 @@ describe('Testing auth service', () => {
       'validToken',
       true,
       false,
+      true,
     );
 
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({

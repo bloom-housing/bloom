@@ -88,6 +88,7 @@ export class AuthService {
     reCaptchaToken?: string,
     requireReCaptcha?: boolean,
     mfaCode?: boolean,
+    enableRecaptcha?: boolean,
   ): Promise<SuccessDTO> {
     if (!user?.id) {
       throw new UnauthorizedException('no user found');
@@ -115,7 +116,7 @@ export class AuthService {
       const [response] = await client.createAssessment(request);
       client.close();
 
-      if (!response.tokenProperties.valid && process.env.ENABLE_RECAPTCHA) {
+      if (!response.tokenProperties.valid && enableRecaptcha) {
         throw new UnauthorizedException({
           name: 'failedReCaptchaToken',
           knownError: true,
@@ -132,10 +133,7 @@ export class AuthService {
 
         const threshold = parseFloat(process.env.RECAPTCHA_THRESHOLD);
 
-        if (
-          response.riskAnalysis.score < threshold &&
-          process.env.ENABLE_RECAPTCHA
-        ) {
+        if (response.riskAnalysis.score < threshold && enableRecaptcha) {
           throw new UnauthorizedException({
             name: 'failedReCaptchaScore',
             knownError: true,
@@ -143,7 +141,7 @@ export class AuthService {
           });
         }
       } else {
-        if (process.env.ENABLE_RECAPTCHA)
+        if (enableRecaptcha)
           throw new UnauthorizedException({
             name: 'failedReCaptchaAction',
             knownError: true,

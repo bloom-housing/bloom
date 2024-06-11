@@ -55,6 +55,7 @@ export class AuthController {
       dto.reCaptchaToken,
       !!process.env.RECAPTCHA_KEY,
       !!dto.mfaCode,
+      process.env.ENABLE_RECAPTCHA === 'TRUE',
     );
   }
 
