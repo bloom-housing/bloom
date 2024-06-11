@@ -380,6 +380,8 @@ class Listing extends AbstractDTO {
   @ApiPropertyOptional()
   customMapPin?: boolean;
 
+  //Used to refresh translations and communicate recent changes to admin users
+  //should be revisited after translations refactoring to see if its still useful
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
