@@ -181,7 +181,13 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
         </Card.Section>
       </Card>
 
-      <Button type="button" onClick={() => handleSubmit()} variant="primary" className="mr-4 mt-5">
+      <Button
+        type="button"
+        onClick={() => handleSubmit()}
+        variant="primary"
+        size="sm"
+        className="mr-4 mt-5"
+      >
         {t("t.save")}
       </Button>
     </Form>
