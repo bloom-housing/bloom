@@ -113,7 +113,7 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
             syncListing: setSavedListing,
           }}
         >
-          {!!process.env.reCaptchaKey ? (
+          {process.env.reCaptchaKey ? (
             <GoogleReCaptchaProvider reCaptchaKey={process.env.reCaptchaKey}>
               {pageContent}
             </GoogleReCaptchaProvider>

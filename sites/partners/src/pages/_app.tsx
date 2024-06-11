@@ -87,7 +87,7 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
           router: router as GenericRouter,
         }}
       >
-        {!!process.env.reCaptchaKey ? (
+        {process.env.reCaptchaKey ? (
           <GoogleReCaptchaProvider reCaptchaKey={process.env.reCaptchaKey}>
             {pageContent}
           </GoogleReCaptchaProvider>
