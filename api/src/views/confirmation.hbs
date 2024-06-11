@@ -60,8 +60,10 @@
               {{listing.leasingAgentPhone}}<br />
               {{listing.leasingAgentEmail}}<br />
             </p>
-            <h3>{{t "leasingAgent.officeHours"}}</h3>
-            <p>{{listing.leasingAgentOfficeHours}}</p>
+            {{#if listing.leasingAgentOfficeHours}}
+              <h3>{{t "leasingAgent.officeHours"}}</h3>
+              <p>{{listing.leasingAgentOfficeHours}}</p>
+            {{/if}}
           </div>
         </td>
       </tr>

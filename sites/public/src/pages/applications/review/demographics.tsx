@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useMemo } from "react"
 import { useForm } from "react-hook-form"
 
 import { Field, FieldGroup, Form, Select, t } from "@bloom-housing/ui-components"
@@ -7,6 +7,8 @@ import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/share
 import {
   raceKeys,
   spokenLanguageKeys,
+  isKeyIncluded,
+  getCustomValue,
   howDidYouHear,
   fieldGroupObjectToArray,
   OnClientSide,
@@ -48,15 +50,20 @@ const ApplicationDemographics = () => {
     },
   })
 
-  const spokenLanguageValue: string = watch("spokenLanguage")
+  const spokenLanguageValue: string = watch(
+    "spokenLanguage",
+    application.demographics?.spokenLanguage
+  )
 
   const onSubmit = (data) => {
     conductor.currentStep.save({
       demographics: {
         ethnicity: "",
         race: fieldGroupObjectToArray(data, "race"),
-        spokenLanguage: data.spokenLanguage,
-        spokenLanguageNotListed: data.spokenLanguageNotListed,
+        spokenLanguage:
+          data.spokenLanguage === "notListed"
+            ? `${data.spokenLanguage}:${data.spokenLanguageNotListed}`
+            : data.spokenLanguage,
         gender: data.gender,
         sexualOrientation: data.sexualOrientation,
         howDidYouHear: data.howDidYouHear,
@@ -64,6 +71,25 @@ const ApplicationDemographics = () => {
     })
     conductor.routeToNextOrReturnUrl()
   }
+
+  const raceOptions = useMemo(() => {
+    return Object.keys(raceKeys).map((rootKey) => ({
+      id: rootKey,
+      label: t(`application.review.demographics.raceOptions.${rootKey}`),
+      value: rootKey,
+      additionalText: rootKey.indexOf("other") >= 0,
+      defaultChecked: isKeyIncluded(rootKey, application.demographics?.race),
+      defaultText: getCustomValue(rootKey, application.demographics?.race),
+      subFields: raceKeys[rootKey].map((subKey) => ({
+        id: subKey,
+        label: t(`application.review.demographics.raceOptions.${subKey}`),
+        value: subKey,
+        defaultChecked: isKeyIncluded(subKey, application.demographics?.race),
+        additionalText: subKey.indexOf("other") >= 0,
+        defaultText: getCustomValue(subKey, application.demographics?.race),
+      })),
+    }))
+  }, [register])
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -98,33 +124,24 @@ const ApplicationDemographics = () => {
               </legend>
               <FieldGroup
                 name="race"
-                fields={Object.keys(raceKeys).map((rootKey) => ({
-                  id: rootKey,
-                  label: t(`application.review.demographics.raceOptions.${rootKey}`),
-                  value: rootKey,
-                  additionalText: rootKey.indexOf("other") >= 0,
-                  defaultChecked: application.demographics.race?.includes(rootKey),
-                  subFields: raceKeys[rootKey].map((subKey) => ({
-                    id: subKey,
-                    label: t(`application.review.demographics.raceOptions.${subKey}`),
-                    value: subKey,
-                    defaultChecked: application.demographics.race?.includes(subKey),
-                    additionalText: subKey.indexOf("other") >= 0,
-                  })),
-                }))}
+                fields={raceOptions}
+                type="checkbox"
+                register={register}
                 strings={{
                   description: "",
                 }}
-                type="checkbox"
                 dataTestId={"app-demographics-race"}
-                register={register}
               />
             </fieldset>
             <div className={"pt-8"}>
               <Select
                 id="spokenLanguage"
                 name="spokenLanguage"
-                defaultValue={application.demographics.spokenLanguage}
+                defaultValue={
+                  application.demographics.spokenLanguage?.includes("notListed")
+                    ? "notListed"
+                    : application.demographics.spokenLanguage
+                }
                 label={t("application.review.demographics.spokenLanguageLabel")}
                 placeholder={t("t.selectOne")}
                 register={register}
@@ -134,11 +151,16 @@ const ApplicationDemographics = () => {
                 keyPrefix="application.review.demographics.spokenLanguageOptions"
                 dataTestId={"app-demographics-spoken-language"}
               />
-              {spokenLanguageValue === "notListed" && (
+              {spokenLanguageValue?.includes("notListed") && (
                 <Field
                   id="spokenLanguageNotListed"
                   name="spokenLanguageNotListed"
-                  label={t("application.review.demographics.genderSpecify")}
+                  defaultValue={
+                    application.demographics.spokenLanguage?.includes("notListed")
+                      ? application.demographics.spokenLanguage.split(":")[1]
+                      : undefined
+                  }
+                  label={t("application.review.demographics.spokenLanguageSpecify")}
                   validation={{ required: true }}
                   register={register}
                 />

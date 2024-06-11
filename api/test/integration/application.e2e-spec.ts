@@ -105,7 +105,7 @@ describe('Application Controller Tests', () => {
       .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
-        password: 'abcdef',
+        password: 'Abcdef12345!',
       } as Login)
       .expect(201);
 
@@ -426,11 +426,12 @@ describe('Application Controller Tests', () => {
           id: listing1Created.id,
         },
         demographics: {
-          ethnicity: 'example ethnicity',
+          ethnicity: '',
           gender: 'example gender',
           sexualOrientation: 'example sexual orientation',
           howDidYouHear: ['example how did you hear'],
           race: ['example race'],
+          spokenLanguage: 'example language',
         },
         preferredUnitTypes: [
           {
@@ -605,11 +606,12 @@ describe('Application Controller Tests', () => {
           id: listing1Created.id,
         },
         demographics: {
-          ethnicity: 'example ethnicity',
+          ethnicity: '',
           gender: 'example gender',
           sexualOrientation: 'example sexual orientation',
           howDidYouHear: ['example how did you hear'],
           race: ['example race'],
+          spokenLanguage: 'example language',
         },
         preferredUnitTypes: [
           {
@@ -775,11 +777,12 @@ describe('Application Controller Tests', () => {
           id: listing1Created.id,
         },
         demographics: {
-          ethnicity: 'example ethnicity',
+          ethnicity: '',
           gender: 'example gender',
           sexualOrientation: 'example sexual orientation',
           howDidYouHear: ['example how did you hear'],
           race: ['example race'],
+          spokenLanguage: 'example language',
         },
         preferredUnitTypes: [
           {
@@ -952,11 +955,12 @@ describe('Application Controller Tests', () => {
           id: listing1Created.id,
         },
         demographics: {
-          ethnicity: 'example ethnicity',
+          ethnicity: '',
           gender: 'example gender',
           sexualOrientation: 'example sexual orientation',
           howDidYouHear: ['example how did you hear'],
           race: ['example race'],
+          spokenLanguage: 'example language',
         },
         preferredUnitTypes: [
           {
@@ -1118,11 +1122,12 @@ describe('Application Controller Tests', () => {
           id: listing1Created.id,
         },
         demographics: {
-          ethnicity: 'example ethnicity',
+          ethnicity: '',
           gender: 'example gender',
           sexualOrientation: 'example sexual orientation',
           howDidYouHear: ['example how did you hear'],
           race: ['example race'],
+          spokenLanguage: 'example language',
         },
         preferredUnitTypes: [
           {
@@ -1284,11 +1289,12 @@ describe('Application Controller Tests', () => {
           id: listing1Created.id,
         },
         demographics: {
-          ethnicity: 'example ethnicity',
+          ethnicity: '',
           gender: 'example gender',
           sexualOrientation: 'example sexual orientation',
           howDidYouHear: ['example how did you hear'],
           race: ['example race'],
+          spokenLanguage: 'example language',
         },
         preferredUnitTypes: [
           {

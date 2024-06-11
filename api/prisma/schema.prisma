@@ -950,6 +950,17 @@ model UserPreferences {
 
 // END DETROIT SPECIFIC
 
+model ScriptRuns {
+  id             String   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
+  scriptName     String   @unique() @map("script_name")
+  triggeringUser String   @map("triggering_user") @db.Uuid
+  didScriptRun   Boolean  @default(false) @map("did_script_run")
+
+  @@map("script_runs")
+}
+
 enum ApplicationMethodsTypeEnum {
   Internal
   FileDownload

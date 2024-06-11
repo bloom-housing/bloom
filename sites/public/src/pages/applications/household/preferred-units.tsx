@@ -51,6 +51,7 @@ const ApplicationPreferredUnits = () => {
     label: t(`application.household.preferredUnit.options.${item.name}`),
     value: item.id,
     defaultChecked: !!application.preferredUnitTypes?.find((unit) => unit.id === item.id),
+    dataTestId: t(`application.household.preferredUnit.options.${item.name}`),
   }))
 
   useEffect(() => {

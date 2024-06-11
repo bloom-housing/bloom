@@ -107,7 +107,7 @@ describe('Application flagged set Controller Tests', () => {
     const res = await request(app.getHttpServer())
       .post('/auth/login')
       .set({ passkey: process.env.API_PASS_KEY || '' })
-      .send({ email: adminUser.email, password: 'abcdef' })
+      .send({ email: adminUser.email, password: 'Abcdef12345!' })
       .expect(201);
     adminAccessToken = res.header?.['set-cookie'].find((cookie) =>
       cookie.startsWith('access-token='),

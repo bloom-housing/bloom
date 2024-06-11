@@ -9,6 +9,7 @@ import {
 import {
   Address,
   AllExtraDataTypes,
+  Application,
   ApplicationMultiselectQuestion,
   ApplicationMultiselectQuestionOption,
   InputType,
@@ -18,9 +19,7 @@ import {
 import styles from "./FormSummaryDetails.module.scss"
 
 type FormSummaryDetailsProps = {
-  // TODO change to use Prisma application type instead of any
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  application: any
+  application: Application
   listing: Listing
   editMode?: boolean
   hidePreferences?: boolean
@@ -162,10 +161,10 @@ const FormSummaryDetails = ({
                         label={question.key}
                         helpText={multiselectQuestionHelpText(option?.extraData)}
                         key={index}
-                        testId={"app-summary-preference"}
+                        testId={question.key}
                         className={"pb-6 whitespace-pre-wrap"}
                       >
-                        {getOptionText(question, option)}
+                        <div data-testid={option.key}>{getOptionText(question, option)}</div>
                       </FieldValue>
                     ))
                 )}
@@ -178,8 +177,10 @@ const FormSummaryDetails = ({
 
   const allListingUnitTypes = getUniqueUnitTypes(listing?.units)
 
-  const preferredUnits = application.preferredUnit?.map((unit) => {
-    const unitDetails = allListingUnitTypes?.find((unitType) => unitType.id === unit.id)
+  const preferredUnits = application.preferredUnitTypes?.map((unit) => {
+    const unitDetails = allListingUnitTypes?.find(
+      (unitType) => unitType.name === unit.name || unit.id === unitType.id
+    )
     return unitDetails?.name || unit.name
   })
 
@@ -194,16 +195,17 @@ const FormSummaryDetails = ({
 
       <Card.Section className={styles["summary-section"]}>
         <FieldValue
-          testId={"app-summary-name"}
+          testId={"app-summary-applicant-name"}
           id="applicantName"
           label={t("t.name")}
           className={styles["summary-value"]}
         >
-          {application.applicant.firstName} {application.applicant.middleName}{" "}
-          {application.applicant.lastName}
+          {`${application.applicant.firstName}${
+            application.applicant.middleName ? ` ${application.applicant.middleName}` : ``
+          } ${application.applicant.lastName}`}
         </FieldValue>
         <FieldValue
-          testId={"app-summary-dob"}
+          testId={"app-summary-applicant-dob"}
           id="applicantbirthDay"
           label={t("application.household.member.dateOfBirth")}
           className={styles["summary-value"]}
@@ -213,7 +215,7 @@ const FormSummaryDetails = ({
         </FieldValue>
         {application.applicant.phoneNumber && (
           <FieldValue
-            testId={"app-summary-phone"}
+            testId={"app-summary-applicant-phone"}
             id="applicantPhone"
             label={t("t.phone")}
             helpText={t(
@@ -226,7 +228,7 @@ const FormSummaryDetails = ({
         )}
         {application.additionalPhoneNumber && (
           <FieldValue
-            testId={"app-summary-additional-phone"}
+            testId={"app-summary-applicant-additional-phone"}
             id="applicantAdditionalPhone"
             label={t("t.additionalPhone")}
             helpText={t(
@@ -239,7 +241,7 @@ const FormSummaryDetails = ({
         )}
         {application.applicant.emailAddress && (
           <FieldValue
-            testId={"app-summary-email"}
+            testId={"app-summary-applicant-email"}
             id="applicantEmail"
             label={t("t.email")}
             className={styles["summary-value"]}
@@ -248,42 +250,38 @@ const FormSummaryDetails = ({
           </FieldValue>
         )}
         <FieldValue
+          testId={"app-summary-applicant-address"}
           id="applicantAddress"
           label={t("application.contact.address")}
           className={styles["summary-value"]}
         >
-          <MultiLineAddress
-            data-testid={"app-summary-address"}
-            address={reformatAddress(application.applicant.applicantAddress)}
-          />
+          <MultiLineAddress address={reformatAddress(application.applicant.applicantAddress)} />
         </FieldValue>
         {application.sendMailToMailingAddress && (
           <FieldValue
+            testId={"app-summary-applicant-mailing-address"}
             id="applicantMailingAddress"
             label={t("application.contact.mailingAddress")}
             className={styles["summary-value"]}
           >
-            <MultiLineAddress
-              data-testid={"app-summary-mailing-address"}
-              address={reformatAddress(application.applicationsMailingAddress)}
-            />
+            <MultiLineAddress address={reformatAddress(application.applicationsMailingAddress)} />
           </FieldValue>
         )}
         {application.applicant.workInRegion === "yes" && (
           <FieldValue
+            testId={"app-summary-applicant-work-address"}
             id="applicantWorkAddress"
             label={t("application.contact.workAddress")}
             className={styles["summary-value"]}
           >
             <MultiLineAddress
-              data-testid={"app-summary-work-address"}
               address={reformatAddress(application.applicant.applicantWorkAddress)}
             />
           </FieldValue>
         )}
         {application.contactPreferences && (
           <FieldValue
-            testId={"app-summary-contact-type"}
+            testId={"app-summary-contact-preference-type"}
             id="applicantPreferredContactType"
             label={t("application.contact.preferredContactType")}
             className={styles["summary-value"]}
@@ -389,7 +387,11 @@ const FormSummaryDetails = ({
                   {member.birthMonth}/{member.birthDay}/{member.birthYear}
                 </FieldValue>
                 {member.sameAddress === "no" && (
-                  <FieldValue label={t("application.contact.address")} className={"pb-4"}>
+                  <FieldValue
+                    label={t("application.contact.address")}
+                    className={"pb-4"}
+                    testId={"app-summary-household-member-address"}
+                  >
                     <MultiLineAddress
                       data-testid={"app-summary-household-member-address"}
                       address={reformatAddress(member.householdMemberAddress)}
@@ -440,13 +442,14 @@ const FormSummaryDetails = ({
             className={styles["summary-value"]}
           >
             {accessibilityLabels(application.accessibility).map((item) => (
-              <Fragment key={item}>
+              <div key={item} data-testid={item}>
                 {item}
                 <br />
-              </Fragment>
+              </div>
             ))}
           </FieldValue>
           <FieldValue
+            testId={"app-summary-household-changes"}
             id="householdChanges"
             label={t("application.household.expectingChanges.title")}
             className={styles["summary-value"]}
@@ -454,6 +457,7 @@ const FormSummaryDetails = ({
             {application.householdExpectingChanges ? t("t.yes") : t("t.no")}
           </FieldValue>
           <FieldValue
+            testId={"app-summary-household-student"}
             id="householdStudent"
             label={t("application.household.householdStudent.title")}
             className={styles["summary-value"]}

@@ -2,7 +2,6 @@ import { randomUUID } from 'crypto';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Logger } from '@nestjs/common';
 import { SchedulerRegistry } from '@nestjs/schedule';
-import { randomUUID } from 'crypto';
 import { AppService } from '../../../src/services/app.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 

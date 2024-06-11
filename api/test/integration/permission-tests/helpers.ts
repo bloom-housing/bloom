@@ -268,7 +268,7 @@ export const buildUserCreateMock = (
   return {
     firstName: 'Public User firstName',
     lastName: 'Public User lastName',
-    password: 'example password 1',
+    password: 'Abcdef12345!',
     email,
     jurisdictions: [{ id: jurisId }],
   } as unknown as UserCreate;
@@ -281,7 +281,7 @@ export const buildUserInviteMock = (
   return {
     firstName: 'Partner User firstName',
     lastName: 'Partner User lastName',
-    password: 'example password 1',
+    password: 'Abcdef12345!',
     email,
     jurisdictions: [{ id: jurisId }],
     agreedToTermsOfService: true,
@@ -339,11 +339,12 @@ export const buildApplicationCreateMock = (
       id: listingId,
     },
     demographics: {
-      ethnicity: 'example ethnicity',
+      ethnicity: '',
       gender: 'example gender',
       sexualOrientation: 'example sexual orientation',
       howDidYouHear: ['example how did you hear'],
       race: ['example race'],
+      spokenLanguage: 'example language',
     },
     preferredUnitTypes: [
       {
@@ -436,11 +437,12 @@ export const buildApplicationUpdateMock = (
       id: listingId,
     },
     demographics: {
-      ethnicity: 'example ethnicity',
+      ethnicity: '',
       gender: 'example gender',
       sexualOrientation: 'example sexual orientation',
       howDidYouHear: ['example how did you hear'],
       race: ['example race'],
+      spokenLanguage: 'example language',
     },
     preferredUnitTypes: [
       {

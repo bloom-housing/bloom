@@ -187,11 +187,11 @@ export const mockCreateApplicationData = (
       id: randomUUID(),
     },
     demographics: {
-      ethnicity: 'example ethnicity',
       gender: 'example gender',
       sexualOrientation: 'example sexual orientation',
       howDidYouHear: ['example how did you hear'],
       race: ['example race'],
+      spokenLanguage: 'example language',
     },
     preferredUnitTypes: [
       {
@@ -370,6 +370,7 @@ const detailView = {
       sexualOrientation: true,
       howDidYouHear: true,
       race: true,
+      spokenLanguage: true,
     },
   },
   preferredUnitTypes: {
@@ -562,6 +563,7 @@ const baseView = {
       sexualOrientation: true,
       howDidYouHear: true,
       race: true,
+      spokenLanguage: true,
     },
   },
   preferredUnitTypes: {
@@ -1244,11 +1246,11 @@ describe('Testing application service', () => {
         },
         demographics: {
           create: {
-            ethnicity: 'example ethnicity',
             gender: 'example gender',
             sexualOrientation: 'example sexual orientation',
             howDidYouHear: ['example how did you hear'],
             race: ['example race'],
+            spokenLanguage: 'example language',
           },
         },
         preferredUnitTypes: {
@@ -1552,11 +1554,11 @@ describe('Testing application service', () => {
         },
         demographics: {
           create: {
-            ethnicity: 'example ethnicity',
             gender: 'example gender',
             sexualOrientation: 'example sexual orientation',
             howDidYouHear: ['example how did you hear'],
             race: ['example race'],
+            spokenLanguage: 'example language',
           },
         },
         preferredUnitTypes: {
@@ -1782,11 +1784,11 @@ describe('Testing application service', () => {
         },
         demographics: {
           create: {
-            ethnicity: 'example ethnicity',
             gender: 'example gender',
             sexualOrientation: 'example sexual orientation',
             howDidYouHear: ['example how did you hear'],
             race: ['example race'],
+            spokenLanguage: 'example language',
           },
         },
         preferredUnitTypes: {
@@ -2081,6 +2083,7 @@ describe('Testing application service', () => {
             sexualOrientation: true,
             howDidYouHear: true,
             race: true,
+            spokenLanguage: true,
           },
         },
         preferredUnitTypes: {
