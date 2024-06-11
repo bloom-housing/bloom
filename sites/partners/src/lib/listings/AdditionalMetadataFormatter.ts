@@ -49,9 +49,9 @@ export default class AdditionalMetadataFormatter extends Formatter {
 
     cleanAddress("leasingAgentAddress")
     cleanAddress("buildingAddress")
-    cleanAddress("applicationMailingAddress")
-    cleanAddress("applicationPickUpAddress")
-    cleanAddress("applicationDropOffAddress")
+    cleanAddress("listingsApplicationMailingAddress")
+    cleanAddress("listingsApplicationPickUpAddress")
+    cleanAddress("listingsApplicationDropOffAddress")
 
     this.data.customMapPin = this.metadata.customMapPositionChosen
     this.data.yearBuilt = this.data.yearBuilt ? Number(this.data.yearBuilt) : null

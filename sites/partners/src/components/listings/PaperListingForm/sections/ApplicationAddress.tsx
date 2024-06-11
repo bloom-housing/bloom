@@ -373,7 +373,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                       )
                     }
                     inputProps={{
-                      onChange: () => clearErrors("applicationMailingAddress"),
+                      onChange: () => clearErrors("listingsApplicationMailingAddress"),
                     }}
                   />
                 </Grid.Cell>
