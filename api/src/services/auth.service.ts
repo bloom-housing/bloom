@@ -87,12 +87,13 @@ export class AuthService {
     incomingRefreshToken?: string,
     reCaptchaToken?: string,
     requireReCaptcha?: boolean,
+    mfaCode?: boolean,
   ): Promise<SuccessDTO> {
     if (!user?.id) {
       throw new UnauthorizedException('no user found');
     }
 
-    if (requireReCaptcha) {
+    if (requireReCaptcha && !user.mfaEnabled && !mfaCode) {
       const client = new RecaptchaEnterpriseServiceClient({
         credentials: {
           private_key: process.env.GOOGLE_API_KEY.replace(/\\n/gm, '\n'),
@@ -247,12 +248,6 @@ export class AuthService {
       { email: dto.email },
       UserViews.full,
     );
-
-    if (!user.mfaEnabled) {
-      throw new UnauthorizedException(
-        `user ${dto.email} requested an mfa code, but has mfa disabled`,
-      );
-    }
 
     if (!(await isPasswordValid(user.passwordHash, dto.password))) {
       throw new UnauthorizedException(

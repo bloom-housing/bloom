@@ -54,6 +54,7 @@ export class AuthController {
       undefined,
       dto.reCaptchaToken,
       !!process.env.RECAPTCHA_KEY,
+      !!dto.mfaCode,
     );
   }
 

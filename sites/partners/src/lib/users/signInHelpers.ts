@@ -3,19 +3,55 @@ import { MfaType } from "@bloom-housing/shared-helpers/src/types/backend-swagger
 export enum EnumRenderStep {
   emailAndPassword = "email and password",
   mfaType = "mfa type",
-  phoneNumber = "phone number if missing",
+  phoneNumber = "phone number is missing",
   enterCode = "enter mfa code",
 }
 
 export const onSubmitEmailAndPassword =
-  (setEmail, setPassword, setRenderStep, determineNetworkError, login, router, resetNetworkError) =>
+  (
+    setEmail,
+    setPassword,
+    setRenderStep,
+    determineNetworkError,
+    login,
+    router,
+    resetNetworkError,
+    setLoading,
+    reCaptchaEnabled,
+    reCaptchaToken,
+    setRefreshReCaptcha,
+    refreshReCaptcha
+  ) =>
   async (data: { email: string; password: string }) => {
     const { email, password } = data
+    setLoading(true)
     try {
-      await login(email, password, undefined, undefined, true)
+      await login(
+        email,
+        password,
+        undefined,
+        undefined,
+        true,
+        reCaptchaEnabled ? reCaptchaToken : undefined
+      )
+
       await router.push("/")
+      setLoading(false)
     } catch (error) {
-      if (error?.response?.data?.name === "mfaCodeIsMissing") {
+      setLoading(false)
+      setRefreshReCaptcha(!refreshReCaptcha)
+
+      const sendToMfaFlow = (errorName: string) => {
+        return (
+          errorName === "mfaCodeIsMissing" ||
+          (reCaptchaEnabled &&
+            (errorName === "failedReCaptchaToken" ||
+              errorName === "failedReCaptchaScore" ||
+              errorName === "failedReCaptchaAction"))
+        )
+      }
+
+      if (sendToMfaFlow(error?.response?.data?.name)) {
         setEmail(email)
         setPassword(password)
         resetNetworkError()

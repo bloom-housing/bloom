@@ -258,11 +258,13 @@ const SignIn = () => {
                   control={{ register, errors, handleSubmit }}
                   useCode={useCode}
                   setUseCode={setUseCode}
+                  loading={loading}
                 />
               ) : (
                 <FormSignInDefault
                   onSubmit={(data) => void onSubmit(data)}
                   control={{ register, errors, handleSubmit }}
+                  loading={loading}
                 />
               )}
             </FormSignIn>
