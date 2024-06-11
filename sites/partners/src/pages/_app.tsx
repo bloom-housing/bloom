@@ -55,6 +55,21 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   //   }
   // }, [])
 
+  const pageContent = (
+    <ConfigProvider apiUrl={process.env.backendApiBase}>
+      <AuthProvider>
+        <RequireLogin
+          signInPath="/sign-in"
+          termsPath="/users/terms"
+          signInMessage={signInMessage}
+          skipForRoutes={skipLoginRoutes}
+        >
+          <MessageProvider>{hasMounted && <Component {...pageProps} />}</MessageProvider>
+        </RequireLogin>
+      </AuthProvider>
+    </ConfigProvider>
+  )
+
   return (
     <SWRConfig
       value={{
@@ -72,20 +87,13 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
           router: router as GenericRouter,
         }}
       >
-        <GoogleReCaptchaProvider reCaptchaKey={process.env.reCaptchaKey}>
-          <ConfigProvider apiUrl={process.env.backendApiBase}>
-            <AuthProvider>
-              <RequireLogin
-                signInPath="/sign-in"
-                termsPath="/users/terms"
-                signInMessage={signInMessage}
-                skipForRoutes={skipLoginRoutes}
-              >
-                <MessageProvider>{hasMounted && <Component {...pageProps} />}</MessageProvider>
-              </RequireLogin>
-            </AuthProvider>
-          </ConfigProvider>
-        </GoogleReCaptchaProvider>
+        {!!process.env.reCaptchaKey ? (
+          <GoogleReCaptchaProvider reCaptchaKey={process.env.reCaptchaKey}>
+            {pageContent}
+          </GoogleReCaptchaProvider>
+        ) : (
+          pageContent
+        )}
       </NavigationContext.Provider>
     </SWRConfig>
   )

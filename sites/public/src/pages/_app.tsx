@@ -84,6 +84,18 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
 
   // NOTE: Seeds and UI-Components both use a NavigationContext to help internal links use Next's
   // routing system, so we'll include both here until UIC is no longer in use.
+
+  const pageContent = (
+    <ConfigProvider apiUrl={process.env.backendApiBase}>
+      <AuthProvider>
+        <MessageProvider>
+          <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
+          <Component {...pageProps} />
+        </MessageProvider>
+      </AuthProvider>
+    </ConfigProvider>
+  )
+
   return (
     <NavigationContext.Provider value={{ LinkComponent }}>
       <UICNavigationContext.Provider
@@ -101,16 +113,13 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
             syncListing: setSavedListing,
           }}
         >
-          <GoogleReCaptchaProvider reCaptchaKey={process.env.reCaptchaKey}>
-            <ConfigProvider apiUrl={process.env.backendApiBase}>
-              <AuthProvider>
-                <MessageProvider>
-                  <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
-                  <Component {...pageProps} />
-                </MessageProvider>
-              </AuthProvider>
-            </ConfigProvider>
-          </GoogleReCaptchaProvider>
+          {!!process.env.reCaptchaKey ? (
+            <GoogleReCaptchaProvider reCaptchaKey={process.env.reCaptchaKey}>
+              {pageContent}
+            </GoogleReCaptchaProvider>
+          ) : (
+            pageContent
+          )}
         </AppSubmissionContext.Provider>
       </UICNavigationContext.Provider>
     </NavigationContext.Provider>

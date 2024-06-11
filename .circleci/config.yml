@@ -28,7 +28,6 @@ executors:
       GOOGLE_API_ID: "secret-key"
       GOOGLE_API_KEY: "secret-key"
       GOOGLE_CLOUD_PROJECT_ID: "secret-key"
-      RECAPTCHA_KEY: "secret-key"
 
   standard-node:
     docker:
