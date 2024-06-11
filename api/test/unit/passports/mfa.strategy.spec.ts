@@ -25,7 +25,7 @@ describe('Testing mfa strategy', () => {
     const request = {
       body: {
         email: 'example@exygy.com',
-        password: 'abcdef',
+        password: 'Abcdef12345!',
         mfaCode: 'zyxwv',
         mfaType: MfaType.sms,
       } as Login,
@@ -59,7 +59,7 @@ describe('Testing mfa strategy', () => {
     const request = {
       body: {
         email: 'example@exygy.com',
-        password: 'abcdef',
+        password: 'Abcdef12345!',
         mfaCode: 'zyxwv',
         mfaType: MfaType.sms,
       } as Login,
@@ -88,13 +88,13 @@ describe('Testing mfa strategy', () => {
       lastLoginAt: new Date(),
       failedLoginAttemptsCount: 0,
       confirmedAt: null,
-      passwordHash: await passwordToHash('abcdef'),
+      passwordHash: await passwordToHash('Abcdef12345!'),
     });
 
     const request = {
       body: {
         email: 'example@exygy.com',
-        password: 'abcdef',
+        password: 'Abcdef12345!',
         mfaCode: 'zyxwv',
         mfaType: MfaType.sms,
       } as Login,
@@ -128,13 +128,13 @@ describe('Testing mfa strategy', () => {
       passwordValidForDays: 0,
       passwordUpdatedAt: new Date(0),
       userRoles: { isAdmin: true },
-      passwordHash: await passwordToHash('abcdef'),
+      passwordHash: await passwordToHash('Abcdef12345!'),
     });
 
     const request = {
       body: {
         email: 'example@exygy.com',
-        password: 'abcdef',
+        password: 'Abcdef12345!',
         mfaCode: 'zyxwv',
         mfaType: MfaType.sms,
       } as Login,
@@ -168,7 +168,7 @@ describe('Testing mfa strategy', () => {
       passwordValidForDays: 100,
       passwordUpdatedAt: new Date(),
       userRoles: { isAdmin: false },
-      passwordHash: await passwordToHash('abcdef123'),
+      passwordHash: await passwordToHash('Abcdef67890!'),
     });
 
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
@@ -176,7 +176,7 @@ describe('Testing mfa strategy', () => {
     const request = {
       body: {
         email: 'example@exygy.com',
-        password: 'abcdef',
+        password: 'Abcdef12345!',
         mfaCode: 'zyxwv',
         mfaType: MfaType.sms,
       } as Login,
@@ -218,7 +218,7 @@ describe('Testing mfa strategy', () => {
       passwordValidForDays: 100,
       passwordUpdatedAt: new Date(),
       userRoles: { isAdmin: false },
-      passwordHash: await passwordToHash('abcdef'),
+      passwordHash: await passwordToHash('Abcdef12345!'),
       mfaEnabled: false,
       phoneNumberVerified: false,
     });
@@ -228,7 +228,7 @@ describe('Testing mfa strategy', () => {
     const request = {
       body: {
         email: 'example@exygy.com',
-        password: 'abcdef',
+        password: 'Abcdef12345!',
         mfaCode: 'zyxwv',
         mfaType: MfaType.sms,
       } as Login,
@@ -271,7 +271,7 @@ describe('Testing mfa strategy', () => {
       passwordValidForDays: 100,
       passwordUpdatedAt: new Date(),
       userRoles: { isAdmin: false },
-      passwordHash: await passwordToHash('abcdef'),
+      passwordHash: await passwordToHash('Abcdef12345!'),
       mfaEnabled: true,
       phoneNumberVerified: false,
       mfaCodeUpdatedAt: new Date(),
@@ -282,7 +282,7 @@ describe('Testing mfa strategy', () => {
     const request = {
       body: {
         email: 'example@exygy.com',
-        password: 'abcdef',
+        password: 'Abcdef12345!',
         mfaCode: 'zyxwv',
         mfaType: MfaType.sms,
       } as Login,
@@ -323,7 +323,7 @@ describe('Testing mfa strategy', () => {
       passwordValidForDays: 100,
       passwordUpdatedAt: new Date(),
       userRoles: { isAdmin: false },
-      passwordHash: await passwordToHash('abcdef'),
+      passwordHash: await passwordToHash('Abcdef12345!'),
       mfaEnabled: true,
       phoneNumberVerified: false,
       mfaCode: 'zyxwv',
@@ -334,7 +334,7 @@ describe('Testing mfa strategy', () => {
     const request = {
       body: {
         email: 'example@exygy.com',
-        password: 'abcdef',
+        password: 'Abcdef12345!',
         mfaCode: 'zyxwv',
         mfaType: MfaType.sms,
       } as Login,
@@ -375,7 +375,7 @@ describe('Testing mfa strategy', () => {
       passwordValidForDays: 100,
       passwordUpdatedAt: new Date(),
       userRoles: { isAdmin: false },
-      passwordHash: await passwordToHash('abcdef'),
+      passwordHash: await passwordToHash('Abcdef12345!'),
       mfaEnabled: true,
       phoneNumberVerified: false,
       mfaCode: 'zyxwv',
@@ -387,7 +387,7 @@ describe('Testing mfa strategy', () => {
     const request = {
       body: {
         email: 'example@exygy.com',
-        password: 'abcdef',
+        password: 'Abcdef12345!',
         mfaType: MfaType.sms,
       } as Login,
     };
@@ -427,7 +427,7 @@ describe('Testing mfa strategy', () => {
       passwordValidForDays: 100,
       passwordUpdatedAt: new Date(),
       userRoles: { isAdmin: false },
-      passwordHash: await passwordToHash('abcdef'),
+      passwordHash: await passwordToHash('Abcdef12345!'),
       mfaEnabled: true,
       phoneNumberVerified: false,
       singleUseCode: 'zyxwv',
@@ -439,7 +439,7 @@ describe('Testing mfa strategy', () => {
     const request = {
       body: {
         email: 'example@exygy.com',
-        password: 'abcdef',
+        password: 'Abcdef12345!',
         mfaCode: 'zyxwv1',
         mfaType: MfaType.sms,
       } as Login,
@@ -484,7 +484,7 @@ describe('Testing mfa strategy', () => {
       passwordValidForDays: 100,
       passwordUpdatedAt: new Date(),
       userRoles: { isAdmin: false },
-      passwordHash: await passwordToHash('abcdef'),
+      passwordHash: await passwordToHash('Abcdef12345!'),
       mfaEnabled: true,
       phoneNumberVerified: false,
       singleUseCode: 'zyxwv',
@@ -496,7 +496,7 @@ describe('Testing mfa strategy', () => {
     const request = {
       body: {
         email: 'example@exygy.com',
-        password: 'abcdef',
+        password: 'Abcdef12345!',
         mfaCode: 'zyxwv',
         mfaType: MfaType.sms,
       } as Login,
@@ -541,7 +541,7 @@ describe('Testing mfa strategy', () => {
       passwordValidForDays: 100,
       passwordUpdatedAt: new Date(),
       userRoles: { isAdmin: false },
-      passwordHash: await passwordToHash('abcdef'),
+      passwordHash: await passwordToHash('Abcdef12345!'),
       mfaEnabled: true,
       phoneNumberVerified: false,
       singleUseCode: 'zyxwv',
@@ -553,7 +553,7 @@ describe('Testing mfa strategy', () => {
     const request = {
       body: {
         email: 'example@exygy.com',
-        password: 'abcdef',
+        password: 'Abcdef12345!',
         mfaCode: 'zyxwv',
         mfaType: MfaType.sms,
       } as Login,
@@ -596,7 +596,7 @@ describe('Testing mfa strategy', () => {
       passwordValidForDays: 100,
       passwordUpdatedAt: new Date(),
       userRoles: { isAdmin: false },
-      passwordHash: await passwordToHash('abcdef'),
+      passwordHash: await passwordToHash('Abcdef12345!'),
       mfaEnabled: true,
       phoneNumberVerified: false,
       singleUseCode: 'zyxwv',
@@ -608,7 +608,7 @@ describe('Testing mfa strategy', () => {
     const request = {
       body: {
         email: 'example@exygy.com',
-        password: 'abcdef',
+        password: 'Abcdef12345!',
         mfaCode: 'zyxwv',
         mfaType: MfaType.email,
       } as Login,

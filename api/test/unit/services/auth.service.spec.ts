@@ -453,7 +453,7 @@ describe('Testing auth service', () => {
     prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
       id: id,
       mfaEnabled: true,
-      passwordHash: await passwordToHash('abcdef'),
+      passwordHash: await passwordToHash('Abcdef12345!'),
       email: 'example@exygy.com',
       phoneNumberVerified: false,
     });
@@ -463,7 +463,7 @@ describe('Testing auth service', () => {
 
     const res = await authService.requestMfaCode({
       email: 'example@exygy.com',
-      password: 'abcdef',
+      password: 'Abcdef12345!',
       mfaType: MfaType.email,
     });
 
@@ -498,7 +498,7 @@ describe('Testing auth service', () => {
     prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
       id: id,
       mfaEnabled: true,
-      passwordHash: await passwordToHash('abcdef'),
+      passwordHash: await passwordToHash('Abcdef12345!'),
       email: 'example@exygy.com',
       phoneNumberVerified: false,
       phoneNumber: '520-781-8711',
@@ -512,7 +512,7 @@ describe('Testing auth service', () => {
 
     const res = await authService.requestMfaCode({
       email: 'example@exygy.com',
-      password: 'abcdef',
+      password: 'Abcdef12345!',
       mfaType: MfaType.sms,
     });
 
@@ -553,7 +553,7 @@ describe('Testing auth service', () => {
     prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
       id: id,
       mfaEnabled: false,
-      passwordHash: await hashPassword('abcdef', generateSalt()),
+      passwordHash: await hashPassword('Abcdef12345!', generateSalt()),
       email: 'example@exygy.com',
       phoneNumberVerified: false,
       phoneNumber: '520-781-8711',
@@ -566,7 +566,7 @@ describe('Testing auth service', () => {
       async () =>
         await await authService.requestMfaCode({
           email: 'example@exygy.com',
-          password: 'abcdef',
+          password: 'Abcdef12345!',
           mfaType: MfaType.sms,
         }),
     ).rejects.toThrowError(
@@ -581,7 +581,7 @@ describe('Testing auth service', () => {
     prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
       id: id,
       mfaEnabled: true,
-      passwordHash: await hashPassword('abcdef', generateSalt()),
+      passwordHash: await hashPassword('Abcdef12345!', generateSalt()),
       email: 'example@exygy.com',
       phoneNumberVerified: false,
       phoneNumber: '520-781-8711',
@@ -620,8 +620,8 @@ describe('Testing auth service', () => {
 
     await authService.updatePassword(
       {
-        password: 'abcdef',
-        passwordConfirmation: 'abcdef',
+        password: 'Abcdef12345!',
+        passwordConfirmation: 'Abcdef12345!',
         token,
       },
       response as unknown as Response,
@@ -693,8 +693,8 @@ describe('Testing auth service', () => {
       async () =>
         await authService.updatePassword(
           {
-            password: 'abcdef',
-            passwordConfirmation: 'abcdef',
+            password: 'Abcdef12345!',
+            passwordConfirmation: 'Abcdef12345!',
             token,
           },
           response as unknown as Response,
@@ -788,7 +788,7 @@ describe('Testing auth service', () => {
     await authService.confirmUser(
       {
         token,
-        password: 'abcdef',
+        password: 'Abcdef12345!',
       },
       response,
     );

@@ -8,7 +8,6 @@ import {
   DOBField,
   AlertBox,
   SiteAlert,
-  passwordRegex,
   Modal,
 } from "@bloom-housing/ui-components"
 import { Button, Heading, Dialog } from "@bloom-housing/ui-seeds"
@@ -18,7 +17,13 @@ import Markdown from "markdown-to-jsx"
 import customParseFormat from "dayjs/plugin/customParseFormat"
 dayjs.extend(customParseFormat)
 import { useRouter } from "next/router"
-import { PageView, pushGtmEvent, AuthContext, BloomCard } from "@bloom-housing/shared-helpers"
+import {
+  PageView,
+  pushGtmEvent,
+  AuthContext,
+  BloomCard,
+  passwordRegex,
+} from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
 import BloomCardStyles from "./account/account.module.scss"
@@ -40,6 +45,7 @@ export default () => {
   const [openEmailModal, setOpenEmailModal] = useState<boolean>(false)
   const [isTermsLoading, setIsTermsLoading] = useState(false)
   const [notChecked, setChecked] = useState(true)
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
   const language = router.locale
   const listingId = router.query?.listingId as string
@@ -58,6 +64,7 @@ export default () => {
 
   const onSubmit = async (data) => {
     setChecked(true)
+    setLoading(true)
     try {
       setIsTermsLoading(true)
       const { dob, ...rest } = data
@@ -84,7 +91,9 @@ export default () => {
       setOpenEmailModal(true)
       setIsTermsLoading(false)
       setOpenTermsModal(false)
+      setLoading(false)
     } catch (err) {
+      setLoading(false)
       setIsTermsLoading(false)
       setOpenTermsModal(false)
       const { status, data } = err.response || {}
@@ -271,6 +280,7 @@ export default () => {
                       void trigger().then((res) => res && setOpenTermsModal(true))
                     }}
                     variant="primary"
+                    loadingMessage={loading ? t("t.loading") : undefined}
                   >
                     {t("account.createAccount")}
                   </Button>

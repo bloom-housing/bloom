@@ -268,7 +268,7 @@ export const buildUserCreateMock = (
   return {
     firstName: 'Public User firstName',
     lastName: 'Public User lastName',
-    password: 'example password 1',
+    password: 'Abcdef12345!',
     email,
     jurisdictions: [{ id: jurisId }],
   } as unknown as UserCreate;
@@ -281,7 +281,7 @@ export const buildUserInviteMock = (
   return {
     firstName: 'Partner User firstName',
     lastName: 'Partner User lastName',
-    password: 'example password 1',
+    password: 'Abcdef12345!',
     email,
     jurisdictions: [{ id: jurisId }],
     agreedToTermsOfService: true,
