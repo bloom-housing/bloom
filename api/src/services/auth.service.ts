@@ -115,7 +115,7 @@ export class AuthService {
       const [response] = await client.createAssessment(request);
       client.close();
 
-      if (!response.tokenProperties.valid) {
+      if (!response.tokenProperties.valid && process.env.ENABLE_RECAPTCHA) {
         throw new UnauthorizedException({
           name: 'failedReCaptchaToken',
           knownError: true,
@@ -132,7 +132,10 @@ export class AuthService {
 
         const threshold = parseFloat(process.env.RECAPTCHA_THRESHOLD);
 
-        if (response.riskAnalysis.score < threshold) {
+        if (
+          response.riskAnalysis.score < threshold &&
+          process.env.ENABLE_RECAPTCHA
+        ) {
           throw new UnauthorizedException({
             name: 'failedReCaptchaScore',
             knownError: true,
@@ -140,11 +143,12 @@ export class AuthService {
           });
         }
       } else {
-        throw new UnauthorizedException({
-          name: 'failedReCaptchaAction',
-          knownError: true,
-          message: `ReCaptcha failed because the action didn't match, action was: ${response.tokenProperties.action}`,
-        });
+        if (process.env.ENABLE_RECAPTCHA)
+          throw new UnauthorizedException({
+            name: 'failedReCaptchaAction',
+            knownError: true,
+            message: `ReCaptcha failed because the action didn't match, action was: ${response.tokenProperties.action}`,
+          });
       }
     }
 
