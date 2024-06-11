@@ -201,28 +201,23 @@ export class TranslationService {
       },
     });
 
-    //check if associated preferences have changed since translation creation
-    let mostRecentPreferenceUpdate = new Date(2000, 1);
+    //determine when listing or associated preferences most recently changed
+    let mostRecentUpdate = listing.contentUpdatedAt;
     listing.listingMultiselectQuestions?.forEach((multiselectObj) => {
       const multiselectUpdatedAt =
         multiselectObj.multiselectQuestions?.updatedAt;
-      if (mostRecentPreferenceUpdate < multiselectUpdatedAt) {
-        mostRecentPreferenceUpdate = multiselectUpdatedAt;
+      if (mostRecentUpdate < multiselectUpdatedAt) {
+        mostRecentUpdate = multiselectUpdatedAt;
       }
     });
-    // refresh translations if preference recently updated or translations are a day old
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    if (
-      res &&
-      (res.createdAt < yesterday || res.createdAt < mostRecentPreferenceUpdate)
-    ) {
+    //refresh translations if application content changed since translation creation
+    if (res && res.createdAt < mostRecentUpdate) {
       await this.prisma.generatedListingTranslations.delete({
         where: {
           id: res.id,
         },
       });
-
+      console.log('get new translations');
       return undefined;
     }
 
