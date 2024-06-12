@@ -40,11 +40,13 @@ const ApplicationLiveAlone = () => {
       id: "householdSizeLiveAlone",
       value: "liveAlone",
       label: t("application.household.liveAlone.willLiveAlone"),
+      dataTestId: "app-household-live-alone",
     },
     {
       id: "householdSizeLiveWithOthers",
       value: "withOthers",
       label: t("application.household.liveAlone.liveWithOtherPeople"),
+      dataTestId: "app-household-with-others",
     },
   ]
 
