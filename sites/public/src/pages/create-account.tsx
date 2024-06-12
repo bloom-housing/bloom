@@ -328,6 +328,9 @@ export default () => {
                         onChange={() => setChecked(!notChecked)}
                         className={accountStyles["create-account-terms-checkbox"]}
                         labelClassName={accountStyles["create-account-terms-label"]}
+                        inputProps={{
+                          defaultChecked: !notChecked,
+                        }}
                       />
                     </>
                   </Dialog.Content>
