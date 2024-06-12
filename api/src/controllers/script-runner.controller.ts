@@ -71,8 +71,14 @@ export class ScirptRunnerController {
       'A script that takes in a standardized string and outputs the input for the ami chart create endpoint',
     operationId: 'amiChartImport',
   })
-  @ApiOkResponse({ type: String })
-  amiChartImport(@Body() amiChartImportDTO: AmiChartImportDTO): string {
-    return this.scriptRunnerService.amiChartImport(amiChartImportDTO);
+  @ApiOkResponse({ type: SuccessDTO })
+  async amiChartImport(
+    @Body() amiChartImportDTO: AmiChartImportDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.amiChartImport(
+      req,
+      amiChartImportDTO,
+    );
   }
 }

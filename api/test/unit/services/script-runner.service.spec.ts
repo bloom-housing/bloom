@@ -5,6 +5,7 @@ import { ScriptRunnerService } from '../../../src/services/script-runner.service
 import { PrismaService } from '../../../src/services/prisma.service';
 import { User } from '../../../src/dtos/users/user.dto';
 import { EmailService } from '../../../src/services/email.service';
+import { AmiChartService } from '../../../src/services/ami-chart.service';
 
 describe('Testing script runner service', () => {
   let service: ScriptRunnerService;
@@ -22,6 +23,7 @@ describe('Testing script runner service', () => {
             applicationScriptRunner: jest.fn(),
           },
         },
+        AmiChartService,
       ],
     }).compile();
 
@@ -192,19 +194,54 @@ describe('Testing script runner service', () => {
     );
   });
 
-  it('should build ami chart import object', () => {
+  it('should build ami chart import object', async () => {
+    const id = randomUUID();
+    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+    prisma.amiChart.create = jest.fn().mockResolvedValue(null);
+
     const name = 'example name';
+    const scriptName = `AMI Chart ${name}`;
     const jurisdictionId = 'example jurisdictionId';
     const valueItem =
       '15 18400 21000 23650 26250 28350 30450 32550 34650\n30 39150 44750 50350 55900 60400 64850 69350 73800\n50 65250 74600 83900 93200 100700 108150 115600 123050';
-    const res = service.amiChartImport({
-      values: valueItem,
-      name,
-      jurisdictionId,
+    const res = await service.amiChartImport(
+      {
+        user: {
+          id,
+        } as unknown as User,
+      } as unknown as ExpressRequest,
+      {
+        values: valueItem,
+        name,
+        jurisdictionId,
+      },
+    );
+    expect(res.success).toEqual(true);
+    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
+      where: {
+        scriptName,
+      },
     });
-
-    expect(res).toEqual(
-      JSON.stringify({
+    expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
+      data: {
+        scriptName,
+        triggeringUser: id,
+      },
+    });
+    expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
+      data: {
+        didScriptRun: true,
+        triggeringUser: id,
+      },
+      where: {
+        scriptName,
+      },
+    });
+    expect(prisma.amiChart.create).toHaveBeenCalledWith({
+      data: {
+        name,
         items: [
           {
             percentOfAmi: 15,
@@ -327,12 +364,16 @@ describe('Testing script runner service', () => {
             income: 123050,
           },
         ],
-        name,
         jurisdictions: {
-          id: jurisdictionId,
+          connect: {
+            id: jurisdictionId,
+          },
         },
-      }),
-    );
+      },
+      include: {
+        jurisdictions: true,
+      },
+    });
   });
 
   // | ---------- HELPER TESTS BELOW ---------- | //

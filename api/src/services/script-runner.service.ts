@@ -11,6 +11,7 @@ import { EmailService } from './email.service';
 import { Application } from '../dtos/applications/application.dto';
 import { AmiChartImportDTO } from '../dtos/script-runner/ami-chart-import.dto';
 import { AmiChartCreate } from '../dtos/ami-charts/ami-chart-create.dto';
+import { AmiChartService } from './ami-chart.service';
 
 /**
   this is the service for running scripts
@@ -21,6 +22,7 @@ export class ScriptRunnerService {
   constructor(
     private prisma: PrismaService,
     private emailService: EmailService,
+    private amiChartService: AmiChartService,
   ) {}
 
   /**
@@ -143,9 +145,19 @@ export class ScriptRunnerService {
    * @returns a stringified version of AmiChartCreate DTO
    * @description transfers data from foreign data into the database this api normally connects to. From this you can use it
    */
-  amiChartImport(amiChartImportDTO: AmiChartImportDTO): string {
+  async amiChartImport(
+    req: ExpressRequest,
+    amiChartImportDTO: AmiChartImportDTO,
+  ): Promise<SuccessDTO> {
+    // script runner standard start up
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart(
+      `AMI Chart ${amiChartImportDTO.name}`,
+      requestingUser,
+    );
+
     // parse incoming string into an amichart create dto
-    const toReturn: AmiChartCreate = {
+    const createDTO: AmiChartCreate = {
       items: [],
       name: amiChartImportDTO.name,
       jurisdictions: {
@@ -159,7 +171,7 @@ export class ScriptRunnerService {
       const percentage = values[0];
       values.forEach((value: string, index: number) => {
         if (index > 0) {
-          toReturn.items.push({
+          createDTO.items.push({
             percentOfAmi: Number(percentage),
             householdSize: index,
             income: Number(value),
@@ -168,7 +180,14 @@ export class ScriptRunnerService {
       });
     });
 
-    return JSON.stringify(toReturn);
+    await this.amiChartService.create(createDTO);
+
+    // script runner standard spin down
+    await this.markScriptAsComplete(
+      `AMI Chart ${amiChartImportDTO.name}`,
+      requestingUser,
+    );
+    return { success: true };
   }
 
   /**
