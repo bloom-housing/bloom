@@ -194,12 +194,13 @@ export class TranslationService {
     listing: Listing,
     language: LanguagesEnum,
   ) {
-    const res = await this.prisma.generatedListingTranslations.findFirst({
-      where: {
-        listingId: listing.id,
-        language: language,
-      },
-    });
+    const existingTranslations =
+      await this.prisma.generatedListingTranslations.findFirst({
+        where: {
+          listingId: listing.id,
+          language: language,
+        },
+      });
 
     //determine when listing or associated preferences most recently changed
     let mostRecentUpdate = listing.contentUpdatedAt;
@@ -211,17 +212,19 @@ export class TranslationService {
       }
     });
     //refresh translations if application content changed since translation creation
-    if (res && res.createdAt < mostRecentUpdate) {
+    if (
+      existingTranslations &&
+      existingTranslations.createdAt < mostRecentUpdate
+    ) {
       await this.prisma.generatedListingTranslations.delete({
         where: {
-          id: res.id,
+          id: existingTranslations.id,
         },
       });
-      console.log('get new translations');
       return undefined;
     }
 
-    return res;
+    return existingTranslations;
   }
 
   private async persistNewTranslatedValues(
