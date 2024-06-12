@@ -20,6 +20,10 @@
     background-color: var(--seeds-color-white);
     border-radius: var(--seeds-rounded-full);
     padding: var(--seeds-s2_5);
+
+    &.icon-size-lg {
+      padding: var(--seeds-s3);
+    }
   }
 
   .text {
