@@ -86,15 +86,15 @@ export class AuthService {
     user: User,
     incomingRefreshToken?: string,
     reCaptchaToken?: string,
-    requireReCaptcha?: boolean,
+    reCaptchaConfigured?: boolean,
     mfaCode?: boolean,
-    enableRecaptcha?: boolean,
+    shouldReCaptchaBlockLogin?: boolean,
   ): Promise<SuccessDTO> {
     if (!user?.id) {
       throw new UnauthorizedException('no user found');
     }
 
-    if (requireReCaptcha && !user.mfaEnabled && !mfaCode) {
+    if (reCaptchaConfigured && !user.mfaEnabled && !mfaCode) {
       const client = new RecaptchaEnterpriseServiceClient({
         credentials: {
           private_key: process.env.GOOGLE_API_KEY.replace(/\\n/gm, '\n'),
@@ -116,7 +116,7 @@ export class AuthService {
       const [response] = await client.createAssessment(request);
       client.close();
 
-      if (!response.tokenProperties.valid && enableRecaptcha) {
+      if (!response.tokenProperties.valid && shouldReCaptchaBlockLogin) {
         throw new UnauthorizedException({
           name: 'failedReCaptchaToken',
           knownError: true,
@@ -133,7 +133,10 @@ export class AuthService {
 
         const threshold = parseFloat(process.env.RECAPTCHA_THRESHOLD);
 
-        if (response.riskAnalysis.score < threshold && enableRecaptcha) {
+        if (
+          response.riskAnalysis.score < threshold &&
+          shouldReCaptchaBlockLogin
+        ) {
           throw new UnauthorizedException({
             name: 'failedReCaptchaScore',
             knownError: true,
@@ -141,7 +144,7 @@ export class AuthService {
           });
         }
       } else {
-        if (enableRecaptcha)
+        if (shouldReCaptchaBlockLogin)
           throw new UnauthorizedException({
             name: 'failedReCaptchaAction',
             knownError: true,

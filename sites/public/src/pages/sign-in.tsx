@@ -278,14 +278,6 @@ const SignIn = () => {
             </div>
           )}
           {signUpCopy && (
-            <div className={signUpBenefitsStyles["benefits-hide-display"]}>
-              <div className={signUpBenefitsStyles["benefits-desktop-container"]}>
-                <SignUpBenefitsHeadingGroup mobileView={false} />
-                <SignUpBenefits idTag="desktop" />
-              </div>
-            </div>
-          )}
-          {signUpCopy && (
             <div className={signUpBenefitsStyles["benefits-display-hide"]}>
               <SignUpBenefits idTag="mobile" />
             </div>

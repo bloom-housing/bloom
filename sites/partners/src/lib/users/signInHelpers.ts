@@ -3,7 +3,7 @@ import { MfaType } from "@bloom-housing/shared-helpers/src/types/backend-swagger
 export enum EnumRenderStep {
   emailAndPassword = "email and password",
   mfaType = "mfa type",
-  phoneNumber = "phone number is missing",
+  phoneNumber = "phone number if missing",
   enterCode = "enter mfa code",
 }
 
