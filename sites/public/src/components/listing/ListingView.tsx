@@ -381,6 +381,12 @@ export const ListingView = (props: ListingProps) => {
     !props.isExternal &&
     !props.preview
 
+  const submissionAddressExists =
+    listing.listingsApplicationMailingAddress ||
+    listing.applicationMailingAddressType === ApplicationAddressTypeEnum.leasingAgent ||
+    listing.listingsApplicationDropOffAddress ||
+    listing.applicationDropOffAddressType === ApplicationAddressTypeEnum.leasingAgent
+
   const applySidebar = () => (
     <>
       <GetApplication
@@ -407,10 +413,7 @@ export const ListingView = (props: ListingProps) => {
         isExternal={props.isExternal}
         listingStatus={listing.status}
       />
-      {!(
-        listing.status === ListingsStatusEnum.closed ||
-        !(listing.listingsApplicationMailingAddress || listing.listingsApplicationDropOffAddress)
-      ) && (
+      {listing.status !== ListingsStatusEnum.closed && submissionAddressExists && (
         <SubmitApplication
           applicationMailingAddress={getAddress(listing.applicationMailingAddressType, "mailIn")}
           applicationDropOffAddress={getAddress(listing.applicationDropOffAddressType, "dropOff")}
