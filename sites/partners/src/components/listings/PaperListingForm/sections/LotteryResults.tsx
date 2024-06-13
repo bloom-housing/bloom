@@ -115,6 +115,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
               setProgressValue(0)
             }}
             variant="text"
+            size="sm"
           >
             {t("t.delete")}
           </Button>

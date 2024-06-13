@@ -111,6 +111,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
                 className="font-semibold"
                 onClick={() => editUnit(unit.tempId)}
                 variant="text"
+                size="sm"
               >
                 {t("t.edit")}
               </Button>
@@ -119,6 +120,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
                 className="font-semibold text-alert"
                 onClick={() => setUnitDeleteModal(unit.tempId)}
                 variant="text"
+                size="sm"
               >
                 {t("t.delete")}
               </Button>
@@ -200,6 +202,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
               id="addUnitsButton"
               type="button"
               variant={fieldHasError(errors?.units) ? "alert" : "primary-outlined"}
+              size="sm"
               onClick={() => {
                 editUnit(units.length + 1)
                 clearErrors("units")

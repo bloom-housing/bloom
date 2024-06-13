@@ -107,6 +107,7 @@ const SelectAndOrder = ({
                   deleteItem(item, false)
                 }}
                 variant="text"
+                size="sm"
               >
                 {t("t.delete")}
               </Button>
@@ -137,6 +138,7 @@ const SelectAndOrder = ({
                   deleteItem(item, true)
                 }}
                 variant="text"
+                size="sm"
               >
                 {t("t.delete")}
               </Button>
@@ -279,6 +281,7 @@ const SelectAndOrder = ({
               id={`add-${applicationSection}-button`}
               type="button"
               variant="primary-outlined"
+              size="sm"
               onClick={() => setTableDrawer(true)}
             >
               {listingData.length ? editText : addText}
@@ -327,7 +330,6 @@ const SelectAndOrder = ({
           <Button
             id="selectAndOrderSaveButton"
             type="button"
-            className={"mt-4"}
             variant="primary"
             size="sm"
             onClick={() => {
@@ -388,7 +390,6 @@ const SelectAndOrder = ({
             <Button
               id="addPreferenceSaveButton"
               type="button"
-              className={"mt-4"}
               variant="primary"
               onClick={() => {
                 const formData = getValues()

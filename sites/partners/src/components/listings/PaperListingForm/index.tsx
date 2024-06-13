@@ -281,7 +281,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
                 <Form id="listing-form">
                   <div className="flex flex-row flex-wrap">
-                    <div className="md:w-9/12 pb-24">
+                    <div className="md:w-9/12 pb-28">
                       <Tabs
                         forceRenderTabPanel={true}
                         selectedIndex={tabIndex}
@@ -403,7 +403,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                       )}
                     </div>
 
-                    <aside className="md:w-3/12 md:pl-6">
+                    <aside className="w-full md:w-3/12 md:pl-6">
                       <ListingFormActions
                         type={editMode ? ListingFormActionsType.edit : ListingFormActionsType.add}
                         showCloseListingModal={() => setCloseModal(true)}

@@ -9,9 +9,9 @@ import {
   raceCheckboxesOrder,
 } from "./../mockData/applicationData"
 
-Cypress.Commands.add("signIn", () => {
-  cy.get(`[data-testid="sign-in-email-field"]`).type("admin@example.com")
-  cy.get(`[data-testid="sign-in-password-field"]`).type("abcdef")
+Cypress.Commands.add("signIn", (email, password) => {
+  cy.get(`[data-testid="sign-in-email-field"]`).type(email ?? "admin@example.com")
+  cy.get(`[data-testid="sign-in-password-field"]`).type(password ?? "abcdef")
   cy.getByID("sign-in-button").click()
 })
 
@@ -578,7 +578,7 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
     fields.push({ id: val, fieldValue: val })
   }
 
-  if (application.alternateContact.type !== "dontHave") {
+  if (application.alternateContact.type !== "noContact") {
     fields.push({
       id: "app-summary-alternate-name",
       fieldValue: `${application.alternateContact.firstName} ${application.alternateContact.lastName}`,
@@ -682,7 +682,7 @@ Cypress.Commands.add("submitApplication", (listingName, application, signedIn, v
   cy.step1PrimaryApplicantName(application)
   cy.step2PrimaryApplicantAddresses(application)
   cy.step3AlternateContactType(application)
-  if (application.alternateContact.type !== "dontHave") {
+  if (application.alternateContact.type !== "noContact") {
     cy.step4AlternateContactName(application)
     cy.step5AlternateContactInfo(application)
   }

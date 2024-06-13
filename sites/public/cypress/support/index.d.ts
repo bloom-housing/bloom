@@ -11,7 +11,7 @@ declare namespace Cypress {
     getPhoneFieldByTestId(testId: string): Chainable<Element>
     goNext(): Chainable<Element>
     isNextRouteValid(currentStep: string, skip?: number): Chainable
-    signIn(): Chainable
+    signIn(email?: string, password?: string): Chainable
     signOut(): Chainable
     step1PrimaryApplicantName(application: Application): Chainable
     step2PrimaryApplicantAddresses(application: Application): Chainable

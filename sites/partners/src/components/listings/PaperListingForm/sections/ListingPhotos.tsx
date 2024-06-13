@@ -103,6 +103,7 @@ const ListingPhotos = () => {
               saveImageFields(fields.filter((item, i2) => i2 != index) as ListingImage[])
             }}
             variant="text"
+            size="sm"
           >
             {t("t.delete")}
           </Button>
@@ -138,6 +139,7 @@ const ListingPhotos = () => {
               <Button
                 variant="text"
                 className="ml-0"
+                size="sm"
                 onClick={() => {
                   const resortedImages = [
                     drawerImages[index],
@@ -166,6 +168,7 @@ const ListingPhotos = () => {
                 setDrawerImages(filteredImages)
               }}
               variant="text"
+              size="sm"
             >
               {t("t.delete")}
             </Button>
@@ -221,6 +224,7 @@ const ListingPhotos = () => {
             <Button
               type="button"
               variant={fieldHasError(errors?.listingImages) ? "alert" : "primary-outlined"}
+              size="sm"
               onClick={() => {
                 setDrawerState(true)
                 setDrawerImages([...listingFormPhotos])
@@ -301,6 +305,7 @@ const ListingPhotos = () => {
           <Button
             variant="primary"
             type="button"
+            size="sm"
             onClick={() => {
               saveImageFields(drawerImages)
               resetDrawerState()

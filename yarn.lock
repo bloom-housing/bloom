@@ -8524,6 +8524,11 @@ csv-parse@^4.15.3:
   resolved "https://registry.npmjs.org/csv-parse/-/csv-parse-4.16.3.tgz"
   integrity sha512-cO1I/zmz4w2dcKHVvpCr7JVRu8/FymG5OEpmvsZYlccYolPBLoVGKUHgNoc4ZGkFeFlWGEDmMyBM+TTqRdW/wg==
 
+csv-parse@^5.5.5:
+  version "5.5.6"
+  resolved "https://registry.yarnpkg.com/csv-parse/-/csv-parse-5.5.6.tgz#0d726d58a60416361358eec291a9f93abe0b6b1a"
+  integrity sha512-uNpm30m/AGSkLxxy7d9yRXpJQFrZzVWLFBkS+6ngPcZkw/5k3L/jjFuj7tVnEpRn+QgmiXr21nDlhCiUK4ij2A==
+
 cypress-file-upload@^5.0.8:
   version "5.0.8"
   resolved "https://registry.npmjs.org/cypress-file-upload/-/cypress-file-upload-5.0.8.tgz"

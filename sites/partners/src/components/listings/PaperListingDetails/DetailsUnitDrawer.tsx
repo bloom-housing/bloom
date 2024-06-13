@@ -145,7 +145,7 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
         </Card>
       </Drawer.Content>
       <Drawer.Footer>
-        <Button variant="primary" onClick={() => setUnitDrawer(null)}>
+        <Button variant="primary" size="sm" onClick={() => setUnitDrawer(null)}>
           {t("t.done")}
         </Button>
       </Drawer.Footer>

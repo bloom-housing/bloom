@@ -35,6 +35,7 @@
     "@types/react-text-mask": "^5.4.6",
     "@types/react-transition-group": "^4.4.0",
     "@types/tough-cookie": "^4.0.2",
+    "csv-parse": "^5.5.5",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.5.3",
     "react": "18.2.0",

@@ -1,6 +1,7 @@
 import React, { useMemo } from "react"
 import {
   HouseholdMember,
+  HouseholdMemberRelationship,
   HouseholdMemberUpdate,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -59,7 +60,7 @@ export class Member implements HouseholdMemberUpdate {
     longitude: undefined,
   }
   sameAddress?: YesNoEnum
-  relationship?: string
+  relationship?: HouseholdMemberRelationship
   workInRegion?: YesNoEnum
 }
 

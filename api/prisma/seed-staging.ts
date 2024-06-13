@@ -95,6 +95,14 @@ export const stagingSeed = async (
       singleUseCode: '12345',
     }),
   });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      email: 'public-user@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      password: 'abcdef',
+    }),
+  });
   // add jurisdiction specific translations and default ones
   await prismaClient.translations.create({
     data: translationFactory(jurisdiction.id, jurisdiction.name),

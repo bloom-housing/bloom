@@ -328,7 +328,7 @@ const PreferenceDrawer = ({
                   type="button"
                   size="sm"
                   className="w-max"
-                  variant={errors["questions"] ? "alert" : "primary"}
+                  variant={errors["questions"] ? "alert-outlined" : "primary-outlined"}
                   onClick={() => {
                     clearErrors("questions")
                     setOptionData(null)
@@ -465,7 +465,6 @@ const PreferenceDrawer = ({
         <Drawer.Footer>
           <Button
             type="button"
-            className={"mt-4"}
             variant="primary"
             loadingMessage={isLoading && t("t.formSubmitted")}
             onClick={async () => {
@@ -846,7 +845,6 @@ const PreferenceDrawer = ({
         <Drawer.Footer>
           <Button
             type="button"
-            className={"mt-4"}
             variant="primary"
             onClick={async () => {
               const formData = getValues() as OptionForm
