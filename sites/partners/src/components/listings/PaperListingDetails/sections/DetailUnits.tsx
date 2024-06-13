@@ -37,6 +37,7 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
             <Button
               type="button"
               variant="text"
+              size="sm"
               className="font-semibold"
               onClick={() => setUnitDrawer(unit)}
             >

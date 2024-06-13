@@ -44,6 +44,7 @@ const DetailApplicationDates = () => {
                   <Button
                     type="button"
                     variant="text"
+                    size="sm"
                     className="font-semibold"
                     onClick={() => setDrawer(event)}
                   >
@@ -125,7 +126,7 @@ const DetailApplicationDates = () => {
             </Card.Section>
           </Card>
 
-          <Button variant="primary" onClick={() => setDrawer(null)}>
+          <Button variant="primary" size="sm" onClick={() => setDrawer(null)}>
             {t("t.done")}
           </Button>
         </Drawer>

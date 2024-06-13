@@ -119,6 +119,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
         content: (
           <Button
             type="button"
+            size="sm"
             className="font-semibold text-alert"
             onClick={() => {
               setCloudinaryData({
@@ -398,6 +399,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                         <div className="flex">
                           <Button
                             type="button"
+                            size="sm"
                             className="font-semibold text-alert"
                             onClick={() => {
                               const items = methods.paper.paperApplications.filter(
@@ -426,6 +428,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               <Button
                 type="button"
                 variant="primary-outlined"
+                size="sm"
                 onClick={() => {
                   // default the application to English:
                   setSelectedLanguage(LanguagesEnum.en)
