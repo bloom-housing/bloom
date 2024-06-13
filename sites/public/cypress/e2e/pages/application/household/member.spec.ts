@@ -21,11 +21,6 @@ describe("applications/household/member", function () {
     cy.getByTestId("app-household-member-address-street").should("be.visible")
   })
 
-  it("should show member work address if user indicates they work in the region", function () {
-    cy.getByTestId("app-household-member-work-in-region").eq(0).check()
-    cy.getByTestId("app-household-member-work-address-street").should("be.visible")
-  })
-
   it("should go back to members screen without adding current member when user cancels", function () {
     cy.getByID("app-household-member-cancel").click()
     cy.location("pathname").should("include", "/applications/household/add-members")

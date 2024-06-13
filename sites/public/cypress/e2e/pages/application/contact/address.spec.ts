@@ -35,7 +35,6 @@ describe("applications/contact/address", function () {
     cy.getByTestId("app-primary-address-zip").type("94112")
 
     cy.getByTestId("app-primary-contact-preference").eq(0).check()
-    cy.getByTestId("app-primary-work-in-region-no").check()
 
     cy.goNext()
     cy.getByTestId("app-found-address-label").should("be.visible")
@@ -56,7 +55,6 @@ describe("applications/contact/address", function () {
     cy.getByTestId("app-primary-address-zip").type("oqr8buoi@@hn")
 
     cy.getByTestId("app-primary-contact-preference").eq(0).check()
-    cy.getByTestId("app-primary-work-in-region-no").check()
 
     cy.goNext()
 
