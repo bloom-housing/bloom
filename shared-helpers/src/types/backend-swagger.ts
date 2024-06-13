@@ -3062,6 +3062,9 @@ export interface Listing {
   customMapPin?: boolean
 
   /**  */
+  contentUpdatedAt?: Date
+
+  /**  */
   publishedAt?: Date
 
   /**  */
@@ -3569,6 +3572,9 @@ export interface ListingCreate {
   customMapPin?: boolean
 
   /**  */
+  contentUpdatedAt?: Date
+
+  /**  */
   lastApplicationUpdateAt?: Date
 
   /**  */
@@ -3818,6 +3824,9 @@ export interface ListingUpdate {
 
   /**  */
   customMapPin?: boolean
+
+  /**  */
+  contentUpdatedAt?: Date
 
   /**  */
   lastApplicationUpdateAt?: Date
