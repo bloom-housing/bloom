@@ -9,12 +9,14 @@ import { TranslationService } from '../../../src/services/translation.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
+import dayjs from 'dayjs';
 
 const mockListing = (): Listing => {
   const basicListing = {
     id: 'id 1',
     createdAt: new Date(),
     updatedAt: new Date(),
+    contentUpdatedAt: new Date(),
     name: 'listing 1',
     status: ListingsStatusEnum.active,
     displayWaitlistSize: true,
@@ -213,6 +215,31 @@ describe('Testing translations service', () => {
     validateTranslatedFields(result);
   });
 
+  it('Should fetch translations and translate listing if db translations outdated', async () => {
+    googleTranslateServiceMock.fetch.mockResolvedValueOnce([translatedStrings]);
+    prisma.generatedListingTranslations.findFirst = jest
+      .fn()
+      .mockResolvedValue({
+        createdAt: dayjs(new Date()).subtract(1, 'days').toDate(),
+        id: randomUUID(),
+        translations: [translatedStrings],
+      });
+    prisma.generatedListingTranslations.delete = jest
+      .fn()
+      .mockResolvedValue(null);
+
+    const result = await service.translateListing(
+      mockListing() as Listing,
+      LanguagesEnum.es,
+    );
+    expect(googleTranslateServiceMock.fetch).toHaveBeenCalledTimes(1);
+    expect(prisma.generatedListingTranslations.findFirst).toHaveBeenCalledTimes(
+      1,
+    );
+    expect(prisma.generatedListingTranslations.delete).toHaveBeenCalledTimes(1);
+    validateTranslatedFields(result);
+  });
+
   it('Should fetch translations from db and translate listing', async () => {
     prisma.generatedListingTranslations.findFirst = jest
       .fn()
@@ -241,6 +268,7 @@ describe('Testing translations service', () => {
     expect(prisma.translations.findFirst).toBeCalledTimes(1);
     expect(result).toEqual(nullJurisdiction);
   });
+
   it('Should get merged translations for jurisdiction in english', async () => {
     const nullJurisdiction = {
       value: 'null jurisdiction',

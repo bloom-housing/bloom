@@ -1771,6 +1771,7 @@ describe('Testing listing service', () => {
       },
       data: {
         name: 'example listing name',
+        contentUpdatedAt: expect.anything(),
         depositMin: '5',
         assets: {
           create: [
@@ -1870,6 +1871,7 @@ describe('Testing listing service', () => {
       },
       data: {
         ...val,
+        contentUpdatedAt: expect.anything(),
         assets: {
           create: [exampleAsset],
         },
@@ -2307,6 +2309,7 @@ describe('Testing listing service', () => {
       },
       data: {
         name: 'example listing name',
+        contentUpdatedAt: expect.anything(),
         depositMin: '5',
         assets: [
           {
@@ -2441,6 +2444,7 @@ describe('Testing listing service', () => {
         ...val,
         id: undefined,
         publishedAt: expect.anything(),
+        contentUpdatedAt: expect.anything(),
         assets: [exampleAsset],
         applicationMethods: {
           create: [

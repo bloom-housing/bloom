@@ -510,6 +510,7 @@ model Listings {
   isWaitlistOpen                        Boolean?                      @map("is_waitlist_open")
   waitlistOpenSpots                     Int?                          @map("waitlist_open_spots")
   customMapPin                          Boolean?                      @map("custom_map_pin")
+  contentUpdatedAt                      DateTime?                     @map("content_updated_at") @db.Timestamptz(6)
   publishedAt                           DateTime?                     @map("published_at") @db.Timestamptz(6)
   closedAt                              DateTime?                     @map("closed_at") @db.Timestamptz(6)
   afsLastRunAt                          DateTime?                     @default(dbgenerated("'1970-01-01 00:00:00-07'::timestamp with time zone")) @map("afs_last_run_at") @db.Timestamptz(6)
