@@ -682,6 +682,9 @@ describe('Testing user service', () => {
         id,
         resetToken: 'example reset token',
       });
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        id,
+      });
       emailService.forgotPassword = jest.fn();
 
       await service.forgotPassword({ email, appUrl: 'http://localhost:3000' });
@@ -718,6 +721,7 @@ describe('Testing user service', () => {
         id,
         resetToken: 'example reset token',
       });
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
       emailService.forgotPassword = jest.fn();
 
       await service.forgotPassword({
