@@ -17,6 +17,7 @@
     "test:headless": "concurrently \"yarn dev\" \"cypress run\"",
     "test:coverage": "yarn nyc report --reporter=text-summary --check-coverage",
     "test:unit": "jest -w 1",
+    "test:unit:coverage": "jest -w 1 --coverage --watchAll=false",
     "start": "next start -p ${NEXTJS_PORT:-3000}",
     "test:backend:core:dbsetup": "cd ../../ && yarn test:backend:core:dbsetup",
     "dev:listings": "cd ../../backend/core && yarn dev",
