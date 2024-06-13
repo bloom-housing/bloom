@@ -230,6 +230,8 @@
   "application.name.yourName": "Your Name",
   "application.preferences.dontWant": "I don't want these preferences",
   "application.preferences.dontWantSingular": "I don't want this preference",
+  "application.preferences.general.preamble": "You will be in the general pool of applicants.",
+  "application.preferences.general.title": "Based on the information you have entered, your household has not claimed any housing preferences.",
   "application.preferences.options.address": "Address",
   "application.preferences.options.qualifyingAddress": "Qualifying Address",
   "application.preferences.options.addressHolderName": "Full Name of Address Holder",

@@ -23,7 +23,7 @@ const Privacy = () => {
     <Layout>
       <PageHeader title={pageTitle} inverse />
       <MarkdownSection>
-        <Markdown>{pageContent}</Markdown>
+        <Markdown>{pageContent.toString()}</Markdown>
       </MarkdownSection>
     </Layout>
   )

@@ -230,6 +230,8 @@
   "application.name.yourName": "Iyong pangalan",
   "application.preferences.dontWant": "Hindi ko gusto ang mga kagustuhang ito",
   "application.preferences.dontWantSingular": "Hindi ko gusto ang kagustuhang ito",
+  "application.preferences.general.preamble": "Ikaw ay nasa pangkalahatang grupo ng mga aplikante.",
+  "application.preferences.general.title": "Batay sa impormasyong iyong ipinasok, ang iyong sambahayan ay hindi nag-claim ng anumang mga kagustuhan sa pabahay.",
   "application.preferences.options.address": "Address",
   "application.preferences.options.addressHolderName": "Buong Pangalan ng May-ari ng Address",
   "application.preferences.options.addressHolderRelationship": "Relasyon sa May-ari ng Address",

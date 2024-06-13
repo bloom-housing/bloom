@@ -83,8 +83,8 @@ const ApplicationMember = () => {
   const router = useRouter()
   const currentPageSection = 2
 
-  if (router.query.memberId) {
-    memberId = parseInt(router.query.memberId.toString())
+  if (router.query?.memberId) {
+    memberId = parseInt(router.query?.memberId.toString())
     member = application.householdMember[memberId]
     saveText = t("application.household.member.updateHouseholdMember")
     cancelText = t("application.household.member.deleteThisPerson")
