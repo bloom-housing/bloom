@@ -78,7 +78,9 @@ const ApplicationDemographics = () => {
         defaultChecked: isKeyIncluded(subKey, application.demographics?.race),
         additionalText: subKey.indexOf("other") >= 0,
         defaultText: getCustomValue(subKey, application.demographics?.race),
+        dataTestId: subKey,
       })),
+      dataTestId: rootKey,
     }))
   }, [register])
 
