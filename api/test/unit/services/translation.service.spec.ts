@@ -227,6 +227,9 @@ describe('Testing translations service', () => {
     prisma.generatedListingTranslations.delete = jest
       .fn()
       .mockResolvedValue(null);
+    prisma.generatedListingTranslations.create = jest
+      .fn()
+      .mockResolvedValue(null);
 
     const result = await service.translateListing(
       mockListing() as Listing,
@@ -237,6 +240,7 @@ describe('Testing translations service', () => {
       1,
     );
     expect(prisma.generatedListingTranslations.delete).toHaveBeenCalledTimes(1);
+    expect(prisma.generatedListingTranslations.create).toHaveBeenCalledTimes(1);
     validateTranslatedFields(result);
   });
 
