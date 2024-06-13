@@ -89,16 +89,12 @@ const DetailApplicationDates = () => {
         <Drawer
           isOpen={!!drawer}
           ariaLabelledBy="detail-application-dates-drawer-header"
-          ariaDescribedBy="detail-application-dates-drawer-description"
           onClose={() => setDrawer(null)}
         >
           <Drawer.Header id="detail-application-dates-drawer-header">
             {t("listings.sections.openHouse")}
           </Drawer.Header>
           <Drawer.Content>
-            <p id="detail-application-dates-drawer-description" className="sr-only">
-              {t("listings.unit.title")}
-            </p>
             <Card>
               <Card.Section>
                 <Grid className="grid-inset-section">

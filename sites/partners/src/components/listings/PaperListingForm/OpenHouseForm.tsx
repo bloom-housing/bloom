@@ -187,7 +187,12 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
         </Form>
       </Drawer.Content>
       <Drawer.Footer>
-        <Button type="button" onClick={() => handleSubmit()} variant="primary">
+        <Button
+          id="saveOpenHouseFormButton"
+          type="button"
+          onClick={() => handleSubmit()}
+          variant="primary"
+        >
           {t("t.save")}
         </Button>
       </Drawer.Footer>

@@ -227,15 +227,11 @@ const BuildingSelectionCriteria = () => {
         isOpen={drawerState}
         onClose={() => resetDrawerState()}
         ariaLabelledBy="building-selection-criteria-drawer-header"
-        ariaDescribedBy="building-selection-criteria-drawer-description"
       >
         <Drawer.Header id="building-selection-criteria-drawer-header">
           {t("listings.addBuildingSelectionCriteria")}
         </Drawer.Header>
         <Drawer.Content>
-          <p id="building-selection-criteria-drawer-description" className="sr-only">
-            Form with PDF upload dropzone
-          </p>
           <Card>
             <Card.Section>
               <FieldValue
@@ -302,6 +298,7 @@ const BuildingSelectionCriteria = () => {
         </Drawer.Content>
         <Drawer.Footer>
           <Button
+            id="saveBuildingSelectionCriteriaButton"
             key={0}
             onClick={async () => {
               // Only try to save values if an attachment type has been selected

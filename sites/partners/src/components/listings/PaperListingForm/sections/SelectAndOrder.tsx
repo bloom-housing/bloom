@@ -325,6 +325,7 @@ const SelectAndOrder = ({
         </Drawer.Content>
         <Drawer.Footer>
           <Button
+            id="selectAndOrderSaveButton"
             type="button"
             className={"mt-4"}
             variant="primary"
