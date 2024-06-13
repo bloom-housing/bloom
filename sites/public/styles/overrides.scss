@@ -30,7 +30,6 @@
     --seeds-color-primary-light: var(--doorway-color-secondary-background);
     --message-max-width: initial;
     --message-flex-gap: 0.45rem;
-    align-items: start;
   }
 
   .warning-message {
@@ -121,6 +120,10 @@
     height: 3px;
   }
 
+  #seeds-toast-stack {
+    --toast-stack-inset-top: calc(var(--seeds-s40) + var(--seeds-s2));
+  }
+
   --text-caps-spaced-letter-spacing: var(--bloom-letter-spacing-tight);
   --text-caps-spaced-font-weight: 700;
   .text__caps-spaced {
@@ -138,7 +141,7 @@
 
   --notice-background-color: var(--seeds-color-blue-300);
 
-  .seeds-message {
+  :is(.seeds-message, .seeds-toast) {
     &[data-variant="primary"] {
       background: var(--seeds-color-blue-300);
     }

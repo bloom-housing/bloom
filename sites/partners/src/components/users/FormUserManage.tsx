@@ -2,7 +2,7 @@ import React, { useMemo, useContext, useState, useCallback } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { t, Form, Field, Select, useMutate, emailRegex, Modal } from "@bloom-housing/ui-components"
 import { Button, Card, Grid, Tag } from "@bloom-housing/ui-seeds"
-import { RoleOption, roleKeys, AuthContext } from "@bloom-housing/shared-helpers"
+import { RoleOption, roleKeys, AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { Listing, User, UserRole } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { JurisdictionAndListingSelection } from "./JurisdictionAndListingSelection"
 import SectionWithGrid from "../shared/SectionWithGrid"
@@ -12,12 +12,6 @@ type FormUserManageProps = {
   user?: User
   listings: Listing[]
   onDrawerClose: () => void
-  setAlertMessage: React.Dispatch<
-    React.SetStateAction<{
-      type: string
-      message: string
-    }>
-  >
 }
 
 type FormUserManageValues = {
@@ -39,14 +33,9 @@ const determineUserRole = (roles: UserRole) => {
   return RoleOption.Partner
 }
 
-const FormUserManage = ({
-  mode,
-  user,
-  listings,
-  onDrawerClose,
-  setAlertMessage,
-}: FormUserManageProps) => {
+const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageProps) => {
   const { userService, profile } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
   const jurisdictionList = profile.jurisdictions
 
   const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false)
@@ -210,13 +199,13 @@ const FormUserManage = ({
           body: body,
         })
         .then(() => {
-          setAlertMessage({ message: t(`users.inviteSent`), type: "success" })
+          addToast(t(`users.inviteSent`), { variant: "success" })
         })
         .catch((e) => {
           if (e?.response?.status === 409) {
-            setAlertMessage({ message: t(`errors.alert.emailConflict`), type: "alert" })
+            addToast(t(`errors.alert.emailConflict`), { variant: "alert" })
           } else {
-            setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
+            addToast(t(`errors.alert.badRequest`), { variant: "alert" })
           }
         })
         .finally(() => {
@@ -234,10 +223,10 @@ const FormUserManage = ({
       userService
         .resendPartnerConfirmation({ body })
         .then(() => {
-          setAlertMessage({ message: t(`users.confirmationSent`), type: "success" })
+          addToast(t(`users.confirmationSent`), { variant: "success" })
         })
         .catch(() => {
-          setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
+          addToast(t(`errors.alert.badRequest`), { variant: "alert" })
         })
         .finally(() => {
           onDrawerClose()
@@ -260,16 +249,16 @@ const FormUserManage = ({
           body: body,
         })
         .then(() => {
-          setAlertMessage({ message: t(`users.userUpdated`), type: "success" })
+          addToast(t(`users.userUpdated`), { variant: "success" })
         })
         .catch(() => {
-          setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
+          addToast(t(`errors.alert.badRequest`), { variant: "alert" })
         })
         .finally(() => {
           onDrawerClose()
         })
     )
-  }, [createUserBody, onDrawerClose, updateUser, userService, user, setAlertMessage])
+  }, [createUserBody, onDrawerClose, updateUser, userService, user, addToast])
 
   const onDelete = () => {
     void deleteUser(() =>
@@ -280,10 +269,10 @@ const FormUserManage = ({
           },
         })
         .then(() => {
-          setAlertMessage({ message: t(`users.userDeleted`), type: "success" })
+          addToast(t(`users.userDeleted`), { variant: "success" })
         })
         .catch(() => {
-          setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
+          addToast(t(`errors.alert.badRequest`), { variant: "alert" })
         })
         .finally(() => {
           onDrawerClose()

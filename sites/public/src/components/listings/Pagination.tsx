@@ -1,17 +1,14 @@
 import React from "react"
 import { Button, ButtonGroup, ButtonGroupSpacing } from "@bloom-housing/doorway-ui-components"
-import { AppearanceStyleType, t, Icon } from "@bloom-housing/ui-components"
+import { AppearanceStyleType, t } from "@bloom-housing/ui-components"
+import { Icon } from "@bloom-housing/ui-seeds"
+import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
+import ChevronRightIcon from "@heroicons/react/20/solid/ChevronRightIcon"
 
 type PaginationProps = {
   currentPage: number
   lastPage: number
   onPageChange: (page: number) => void
-}
-
-// This is a quick hack to get the icons to align better with the numbers
-// Normally they appear a little lower, so we'll pull them up
-const iconAdjustment: React.CSSProperties = {
-  marginTop: "-0.125rem",
 }
 
 export function Pagination(props: PaginationProps) {
@@ -80,9 +77,9 @@ export function Pagination(props: PaginationProps) {
           onClick={() => setPage(props.currentPage - 1)}
           ariaLabel={t("t.previous")}
         >
-          <div style={iconAdjustment}>
-            <Icon className="button__icon" size="small" symbol="arrowBack" />
-          </div>
+          <Icon size="md" className="-m-1">
+            <ChevronLeftIcon />
+          </Icon>
         </Button>,
         ...pageButtons,
         <Button
@@ -90,9 +87,9 @@ export function Pagination(props: PaginationProps) {
           onClick={() => setPage(props.currentPage + 1)}
           ariaLabel={t("t.next")}
         >
-          <div style={iconAdjustment}>
-            <Icon className="button__icon" size="small" symbol="arrowForward" />
-          </div>
+          <Icon size="md" className="-m-1">
+            <ChevronRightIcon />
+          </Icon>
         </Button>,
       ]}
     />

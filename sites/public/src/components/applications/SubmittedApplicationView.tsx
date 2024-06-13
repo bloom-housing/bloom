@@ -1,11 +1,10 @@
 import { t } from "@bloom-housing/ui-components"
 import { Button, Card, Heading, Icon } from "@bloom-housing/ui-seeds"
 import FormSummaryDetails from "../shared/FormSummaryDetails"
-import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import React, { useMemo } from "react"
 import { DATE_FORMAT } from "../../lib/constants"
 import dayjs from "dayjs"
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons"
+import { CustomIconMap, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import {
   Application,
   Listing,
@@ -52,7 +51,7 @@ const SubmittedApplicationView = ({
         <Card.Section divider={"inset"}>
           <Button
             size="sm"
-            leadIcon={<Icon icon={faChevronLeft} />}
+            leadIcon={<Icon>{CustomIconMap.chevronLeft}</Icon>}
             variant={"text"}
             href={backHref}
           >

@@ -8,6 +8,8 @@ import {
   multiselectQuestionPreference,
 } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { mockNextRouter, render } from "../../testUtils"
+import { MessageContext, MessageProvider } from "@bloom-housing/shared-helpers"
+import { Toast } from "@bloom-housing/ui-seeds"
 
 const server = setupServer()
 
@@ -125,7 +127,26 @@ describe("settings", () => {
           return res(ctx.json({}))
         })
       )
-      const { findByText, getByTestId, findByRole, queryAllByText } = render(<Settings key={"2"} />)
+
+      const ToastProvider = (props) => {
+        const { toastMessagesRef } = React.useContext(MessageContext)
+        return (
+          <MessageProvider>
+            {toastMessagesRef.current?.map((toastMessage) => (
+              <Toast {...toastMessage.props} testId="toast-alert" key={toastMessage.timestamp}>
+                {toastMessage.message}
+              </Toast>
+            ))}
+            {props.children}
+          </MessageProvider>
+        )
+      }
+
+      const { findByText, getByTestId, findByRole, queryAllByText } = render(
+        <ToastProvider>
+          <Settings key={"2"} />
+        </ToastProvider>
+      )
 
       await findByText(multiselectQuestionPreference.text)
 

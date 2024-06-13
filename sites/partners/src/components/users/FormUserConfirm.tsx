@@ -1,21 +1,12 @@
 import React, { useRef, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
-import {
-  t,
-  FormCard,
-  Icon,
-  Form,
-  Field,
-  setSiteAlertMessage,
-  useMutate,
-  AlertBox,
-  Modal,
-} from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
-import { AuthContext, passwordRegex } from "@bloom-housing/shared-helpers"
+import { t, FormCard, Form, Field, useMutate, AlertBox, Modal } from "@bloom-housing/ui-components"
+import { Button, Icon } from "@bloom-housing/ui-seeds"
+import { AuthContext, MessageContext, passwordRegex } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import { ReRequestConfirmation } from "./ReRequestConfirmation"
 import { SuccessDTO } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import Cog8ToothIcon from "@heroicons/react/24/solid/Cog8ToothIcon"
 
 type FormUserConfirmFields = {
   password: string
@@ -36,6 +27,7 @@ const FormUserConfirm = () => {
     reset: resetMutation,
   } = useMutate<SuccessDTO>()
   const { userService, loadProfile, loading, authService } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
   const token = router.query?.token as string
 
   const password = useRef({})
@@ -78,7 +70,7 @@ const FormUserConfirm = () => {
 
       if (response) {
         loadProfile("/")
-        setSiteAlertMessage(t(`users.accountConfirmed`), "success")
+        addToast(t(`users.accountConfirmed`), { variant: "success" })
       }
     } catch (err) {
       setSubmitting(false)
@@ -101,7 +93,9 @@ const FormUserConfirm = () => {
     <>
       <FormCard>
         <div className="form-card__lead text-center border-b mx-0 px-5">
-          <Icon size="2xl" symbol="settings" />
+          <Icon size="2xl">
+            <Cog8ToothIcon />
+          </Icon>
           <h2 className="form-card__title">{t("users.addPassword")}</h2>
           <p className="mt-4 field-note">{t("users.needUniquePassword")}</p>
 

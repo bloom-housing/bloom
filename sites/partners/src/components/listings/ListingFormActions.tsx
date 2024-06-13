@@ -1,9 +1,11 @@
 import React, { useContext, useMemo } from "react"
 import { useRouter } from "next/router"
 import dayjs from "dayjs"
-import { t, StatusMessages, Icon, setSiteAlertMessage } from "@bloom-housing/ui-components"
-import { Button, Link, Grid } from "@bloom-housing/ui-seeds"
-import { pdfUrlFromListingEvents, AuthContext } from "@bloom-housing/shared-helpers"
+import { t, StatusMessages } from "@bloom-housing/ui-components"
+import { Button, Link, Grid, Icon } from "@bloom-housing/ui-seeds"
+import { pdfUrlFromListingEvents, AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import PencilSquareIcon from "@heroicons/react/24/solid/PencilSquareIcon"
+import LinkIcon from "@heroicons/react/20/solid/LinkIcon"
 import { ListingContext } from "./ListingContext"
 import { StatusAside } from "../shared/StatusAside"
 import {
@@ -38,6 +40,7 @@ const ListingFormActions = ({
 }: ListingFormActionsProps) => {
   const listing = useContext(ListingContext)
   const { profile, listingsService } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
   const router = useRouter()
 
   // single jurisdiction check covers jurisAdmin adding a listing (listing is undefined then)
@@ -168,7 +171,11 @@ const ListingFormActions = ({
         <Button
           type="button"
           variant="text"
-          tailIcon={<Icon size="medium" symbol="edit" className="ml-2" />}
+          tailIcon={
+            <Icon>
+              <PencilSquareIcon />
+            </Icon>
+          }
           className="w-full p-3"
           onClick={() => showLotteryResultsDrawer && showLotteryResultsDrawer()}
         >
@@ -207,7 +214,11 @@ const ListingFormActions = ({
       <Grid.Cell key="btn-preview-results">
         <Link
           href={eventUrl}
-          tailIcon={<Icon size="medium" symbol="link" className="ml-2" />}
+          tailIcon={
+            <Icon>
+              <LinkIcon />
+            </Icon>
+          }
           className="w-full justify-center p-3"
         >
           {t("listings.actions.previewLotteryResults")}{" "}
@@ -256,15 +267,15 @@ const ListingFormActions = ({
                   },
                 })
                 if (result) {
-                  setSiteAlertMessage(t("listings.approval.listingPublished"), "success")
+                  addToast(t("listings.approval.listingPublished"), { variant: "success" })
                   await router.push(`/`)
                 }
               } catch (err) {
-                setSiteAlertMessage(
+                addToast(
                   err.response?.data?.message === "email failed"
                     ? "errors.alert.listingsApprovalEmailError"
                     : "errors.somethingWentWrong",
-                  "warn"
+                  { variant: "warn" }
                 )
               }
             }
@@ -472,6 +483,7 @@ const ListingFormActions = ({
     listingId,
     listingsService,
     router,
+    addToast,
     showCloseListingModal,
     showLotteryResultsDrawer,
     showRequestChangesModal,
