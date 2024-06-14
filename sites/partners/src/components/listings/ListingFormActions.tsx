@@ -28,6 +28,7 @@ type ListingFormActionsProps = {
   showRequestChangesModal?: () => void
   showSubmitForApprovalModal?: () => void
   submitFormWithStatus?: (confirm?: boolean, status?: ListingsStatusEnum) => void
+  setErrorAlert?: (alertMessage: string) => void
 }
 
 const ListingFormActions = ({
@@ -37,6 +38,7 @@ const ListingFormActions = ({
   showRequestChangesModal,
   showSubmitForApprovalModal,
   submitFormWithStatus,
+  setErrorAlert,
 }: ListingFormActionsProps) => {
   const listing = useContext(ListingContext)
   const { profile, listingsService } = useContext(AuthContext)
@@ -271,10 +273,16 @@ const ListingFormActions = ({
                   await router.push(`/`)
                 }
               } catch (err) {
+                // if it is a bad request (is missing fields or incorrect data) then display an error banner
+                if (err.response?.status === 400) {
+                  setErrorAlert(
+                    "There are errors in this listing that must be resolved before publishing. To see the errors, please try to approve this listing from the edit view."
+                  )
+                }
                 addToast(
                   err.response?.data?.message === "email failed"
-                    ? "errors.alert.listingsApprovalEmailError"
-                    : "errors.somethingWentWrong",
+                    ? t("errors.alert.listingsApprovalEmailError")
+                    : t("errors.somethingWentWrong"),
                   { variant: "warn" }
                 )
               }
