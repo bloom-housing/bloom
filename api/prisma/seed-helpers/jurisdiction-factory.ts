@@ -6,7 +6,7 @@ export const jurisdictionFactory = (
   listingApprovalPermissions?: UserRoleEnum[],
 ): Prisma.JurisdictionsCreateInput => ({
   name: jurisdictionName,
-  notificationsSignUpUrl: null,
+  notificationsSignUpUrl: 'https://www.exygy.com',
   languages: [LanguagesEnum.en],
   partnerTerms: 'Example Terms',
   publicUrl: 'http://localhost:3000',

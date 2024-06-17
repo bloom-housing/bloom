@@ -10,6 +10,7 @@ import {
 import { YesNoEnum } from '@prisma/client';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
+import { HouseholdMemberRelationship } from '../../enums/applications/household-member-relationship-enum';
 import { AbstractDTO } from '../shared/abstract.dto';
 import { Address } from '../addresses/address.dto';
 
@@ -67,10 +68,14 @@ export class HouseholdMember extends AbstractDTO {
   sameAddress?: YesNoEnum;
 
   @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  relationship?: string;
+  @IsEnum(HouseholdMemberRelationship, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ApiPropertyOptional({
+    enum: HouseholdMemberRelationship,
+    enumName: 'HouseholdMemberRelationship',
+  })
+  relationship?: HouseholdMemberRelationship;
 
   @Expose()
   @IsEnum(YesNoEnum, { groups: [ValidationsGroupsEnum.default] })

@@ -48,6 +48,8 @@ import { UserCreate } from '../../../src/dtos/users/user-create.dto';
 import { UserInvite } from '../../../src/dtos/users/user-invite.dto';
 import { ListingPublishedCreate } from '../../../src/dtos/listings/listing-published-create.dto';
 import { ListingPublishedUpdate } from '../../../src/dtos/listings/listing-published-update.dto';
+import { AlternateContactRelationship } from '../../../src/enums/applications/alternate-contact-relationship-enum';
+import { HouseholdMemberRelationship } from '../../../src/enums/applications/household-member-relationship-enum';
 
 export const generateJurisdiction = async (
   prisma: PrismaService,
@@ -324,7 +326,7 @@ export const buildApplicationCreateMock = (
       hearing: false,
     },
     alternateContact: {
-      type: 'example type',
+      type: AlternateContactRelationship.friend,
       otherType: 'example other type',
       firstName: 'example first name',
       lastName: 'example last name',
@@ -361,7 +363,7 @@ export const buildApplicationCreateMock = (
         birthDay: '17',
         birthYear: '1993',
         sameAddress: YesNoEnum.yes,
-        relationship: 'example relationship',
+        relationship: HouseholdMemberRelationship.friend,
         workInRegion: YesNoEnum.yes,
         householdMemberWorkAddress: exampleAddress,
         householdMemberAddress: exampleAddress,
@@ -422,7 +424,7 @@ export const buildApplicationUpdateMock = (
       hearing: false,
     },
     alternateContact: {
-      type: 'example type',
+      type: AlternateContactRelationship.friend,
       otherType: 'example other type',
       firstName: 'example first name',
       lastName: 'example last name',
@@ -459,7 +461,7 @@ export const buildApplicationUpdateMock = (
         birthDay: '17',
         birthYear: '1993',
         sameAddress: YesNoEnum.yes,
-        relationship: 'example relationship',
+        relationship: HouseholdMemberRelationship.friend,
         workInRegion: YesNoEnum.yes,
         householdMemberWorkAddress: exampleAddress,
         householdMemberAddress: exampleAddress,

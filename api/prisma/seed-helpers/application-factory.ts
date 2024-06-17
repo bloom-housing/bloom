@@ -17,6 +17,8 @@ import {
 } from './number-generator';
 import { preferenceFactory } from './application-preference-factory';
 import { demographicsFactory } from './demographic-factory';
+import { alternateContactFactory } from './alternate-contact-factory';
+import { randomBoolean } from './boolean-generator';
 
 export const applicationFactory = async (optionalParams?: {
   householdSize?: number;
@@ -41,6 +43,7 @@ export const applicationFactory = async (optionalParams?: {
     };
   }
   const demographics = await demographicsFactory();
+  const additionalPhone = randomBoolean();
   return {
     confirmationCode: generateConfirmationCode(),
     applicant: { create: applicantFactory(optionalParams?.applicant) },
@@ -52,7 +55,9 @@ export const applicationFactory = async (optionalParams?: {
     submissionDate: new Date(),
     householdSize: optionalParams?.householdSize ?? 1,
     income: '40000',
-    incomePeriod: IncomePeriodEnum.perYear,
+    incomePeriod: randomBoolean()
+      ? IncomePeriodEnum.perYear
+      : IncomePeriodEnum.perMonth,
     preferences: preferenceFactory(
       optionalParams?.multiselectQuestions
         ? optionalParams.multiselectQuestions.filter(
@@ -92,6 +97,7 @@ export const applicationFactory = async (optionalParams?: {
     demographics: {
       create: demographics,
     },
+    alternateContact: { create: alternateContactFactory() },
     userAccounts: optionalParams?.userId
       ? {
           connect: {
@@ -99,6 +105,10 @@ export const applicationFactory = async (optionalParams?: {
           },
         }
       : undefined,
+    incomeVouchers: ['issuedVouchers'],
+    additionalPhoneNumber: additionalPhone ? '(456) 456-4564' : undefined,
+    additionalPhone,
+    additionalPhoneNumberType: additionalPhone ? 'cell' : undefined,
   };
 };
 
@@ -109,6 +119,7 @@ export const applicantFactory = (
   const lastName = randomNoun();
   return {
     firstName: firstName,
+    middleName: randomBoolean() ? randomNoun() : undefined,
     lastName: lastName,
     emailAddress: `${firstName}.${lastName}@example.com`,
     noEmail: false,

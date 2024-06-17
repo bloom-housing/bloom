@@ -39,6 +39,8 @@ import { Login } from '../../src/dtos/auth/login.dto';
 import { multiselectQuestionFactory } from '../../prisma/seed-helpers/multiselect-question-factory';
 import { reservedCommunityTypeFactoryAll } from '../../prisma/seed-helpers/reserved-community-type-factory';
 import { ValidationMethod } from '../../src/enums/multiselect-questions/validation-method-enum';
+import { AlternateContactRelationship } from '../../src/enums/applications/alternate-contact-relationship-enum';
+import { HouseholdMemberRelationship } from '../../src/enums/applications/household-member-relationship-enum';
 
 describe('Application Controller Tests', () => {
   let app: INestApplication;
@@ -411,7 +413,7 @@ describe('Application Controller Tests', () => {
           hearing: false,
         },
         alternateContact: {
-          type: 'example type',
+          type: AlternateContactRelationship.friend,
           otherType: 'example other type',
           firstName: 'example first name',
           lastName: 'example last name',
@@ -448,7 +450,7 @@ describe('Application Controller Tests', () => {
             birthDay: '17',
             birthYear: '1993',
             sameAddress: YesNoEnum.yes,
-            relationship: 'example relationship',
+            relationship: HouseholdMemberRelationship.friend,
             workInRegion: YesNoEnum.yes,
             householdMemberWorkAddress: exampleAddress,
             householdMemberAddress: exampleAddress,
@@ -591,7 +593,7 @@ describe('Application Controller Tests', () => {
           hearing: false,
         },
         alternateContact: {
-          type: 'example type',
+          type: AlternateContactRelationship.friend,
           otherType: 'example other type',
           firstName: 'example first name',
           lastName: 'example last name',
@@ -628,7 +630,7 @@ describe('Application Controller Tests', () => {
             birthDay: '17',
             birthYear: '1993',
             sameAddress: YesNoEnum.yes,
-            relationship: 'example relationship',
+            relationship: HouseholdMemberRelationship.friend,
             workInRegion: YesNoEnum.yes,
             householdMemberWorkAddress: exampleAddress,
             householdMemberAddress: exampleAddress,
@@ -762,7 +764,7 @@ describe('Application Controller Tests', () => {
           hearing: false,
         },
         alternateContact: {
-          type: 'example type',
+          type: AlternateContactRelationship.friend,
           otherType: 'example other type',
           firstName: 'example first name',
           lastName: 'example last name',
@@ -799,7 +801,7 @@ describe('Application Controller Tests', () => {
             birthDay: '17',
             birthYear: '1993',
             sameAddress: YesNoEnum.yes,
-            relationship: 'example relationship',
+            relationship: HouseholdMemberRelationship.friend,
             workInRegion: YesNoEnum.yes,
             householdMemberWorkAddress: exampleAddress,
             householdMemberAddress: exampleAddress,
@@ -940,7 +942,7 @@ describe('Application Controller Tests', () => {
           hearing: false,
         },
         alternateContact: {
-          type: 'example type',
+          type: AlternateContactRelationship.friend,
           otherType: 'example other type',
           firstName: 'example first name',
           lastName: 'example last name',
@@ -977,7 +979,7 @@ describe('Application Controller Tests', () => {
             birthDay: '17',
             birthYear: '1993',
             sameAddress: YesNoEnum.yes,
-            relationship: 'example relationship',
+            relationship: HouseholdMemberRelationship.friend,
             workInRegion: YesNoEnum.yes,
             householdMemberWorkAddress: exampleAddress,
             householdMemberAddress: exampleAddress,
@@ -1107,7 +1109,7 @@ describe('Application Controller Tests', () => {
           hearing: false,
         },
         alternateContact: {
-          type: 'example type',
+          type: AlternateContactRelationship.friend,
           otherType: 'example other type',
           firstName: 'example first name',
           lastName: 'example last name',
@@ -1144,7 +1146,7 @@ describe('Application Controller Tests', () => {
             birthDay: '17',
             birthYear: '1993',
             sameAddress: YesNoEnum.yes,
-            relationship: 'example relationship',
+            relationship: HouseholdMemberRelationship.friend,
             workInRegion: YesNoEnum.yes,
             householdMemberWorkAddress: exampleAddress,
             householdMemberAddress: exampleAddress,
@@ -1274,7 +1276,7 @@ describe('Application Controller Tests', () => {
           hearing: false,
         },
         alternateContact: {
-          type: 'example type',
+          type: AlternateContactRelationship.friend,
           otherType: 'example other type',
           firstName: 'example first name',
           lastName: 'example last name',
@@ -1311,7 +1313,7 @@ describe('Application Controller Tests', () => {
             birthDay: '17',
             birthYear: '1993',
             sameAddress: YesNoEnum.yes,
-            relationship: 'example relationship',
+            relationship: HouseholdMemberRelationship.friend,
             workInRegion: YesNoEnum.yes,
             householdMemberWorkAddress: exampleAddress,
             householdMemberAddress: exampleAddress,

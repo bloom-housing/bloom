@@ -80,7 +80,7 @@ const FormSignInPwdless = ({
         </Button>
       </div>
       <div className={styles["sign-in-action"]}>
-        <Button variant={"text"} onClick={() => setUseCode(!useCode)}>
+        <Button variant={"text"} onClick={() => setUseCode(!useCode)} id={"use-password-instead"}>
           {useCode
             ? t("authentication.signIn.pwdless.usePassword")
             : t("authentication.signIn.pwdless.useCode")}

@@ -62,6 +62,14 @@ export const devSeeding = async (
   });
   await prismaClient.userAccounts.create({
     data: await userFactory({
+      email: 'public-user@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      password: 'abcdef',
+    }),
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
       roles: { isJurisdictionalAdmin: true },
       email: 'jurisdiction-admin@example.com',
       confirmedAt: new Date(),
@@ -85,21 +93,21 @@ export const devSeeding = async (
 
   await reservedCommunityTypeFactoryAll(jurisdiction.id, prismaClient);
 
-  const householdSize = randomInt(0, 6);
   for (let index = 0; index < LISTINGS_TO_SEED; index++) {
-    const householdMembers = await householdMemberFactoryMany(householdSize);
-
     const applications = [];
 
-    for (let j = 0; j <= APPLICATIONS_PER_LISTINGS; j++) {
-      applications.push(
-        await applicationFactory({
-          householdSize,
-          unitTypeId: unitTypes[randomInt(0, 5)].id,
-          householdMember: householdMembers,
-          multiselectQuestions,
-        }),
+    for (let j = 0; j < APPLICATIONS_PER_LISTINGS; j++) {
+      const householdSize = randomInt(1, 6);
+      const householdMembers = await householdMemberFactoryMany(
+        householdSize - 1,
       );
+      const app = await applicationFactory({
+        householdSize,
+        unitTypeId: unitTypes[randomInt(0, 5)].id,
+        householdMember: householdMembers,
+        multiselectQuestions,
+      });
+      applications.push(app);
     }
 
     const listing = await listingFactory(jurisdiction.id, prismaClient, {

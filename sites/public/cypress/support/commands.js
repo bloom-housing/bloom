@@ -9,14 +9,15 @@ import {
   raceCheckboxesOrder,
 } from "./../mockData/applicationData"
 
-Cypress.Commands.add("signIn", () => {
-  cy.get(`[data-testid="sign-in-email-field"]`).type("admin@example.com")
-  cy.get(`[data-testid="sign-in-password-field"]`).type("abcdef")
+Cypress.Commands.add("signIn", (email, password) => {
+  cy.get(`[data-testid="sign-in-email-field"]`).type(email ?? "admin@example.com")
+  cy.getByID("use-password-instead").click()
+  cy.get(`[data-testid="sign-in-password-field"]`).type(password ?? "abcdef")
   cy.getByID("sign-in-button").click()
 })
 
 Cypress.Commands.add("signOut", () => {
-  cy.get(`[data-testid="My Account-2"]`).trigger("mouseover")
+  cy.get(`[data-testid="My Account-4"]`).trigger("mouseover")
   cy.get(`[data-testid="Sign Out-3"]`).trigger("click")
 })
 
@@ -48,8 +49,8 @@ Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
   cy.visit("/listings")
   cy.get(".is-card-link").contains(listingName).click()
   cy.getByID("listing-view-apply-button").eq(1).click()
-  cy.getByID("app-choose-language-sign-in-button").click()
   cy.get("[data-testid=sign-in-email-field]").type("admin@example.com")
+  cy.getByID("use-password-instead").click()
   cy.get("[data-testid=sign-in-password-field]").type("abcdef")
   cy.getByID("sign-in-button").click()
   cy.getByID("app-choose-language-button").eq(0).click()
@@ -524,7 +525,7 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
     fields.push({ id: val, fieldValue: val })
   }
 
-  if (application.alternateContact.type !== "dontHave") {
+  if (application.alternateContact.type !== "noContact") {
     fields.push({
       id: "app-summary-alternate-name",
       fieldValue: `${application.alternateContact.firstName} ${application.alternateContact.lastName}`,
@@ -619,16 +620,12 @@ Cypress.Commands.add("step19TermsAndSubmit", () => {
   cy.getByTestId("app-confirmation-id").should("be.visible").and("not.be.empty")
 })
 
-Cypress.Commands.add("submitApplication", (listingName, application, signedIn, verify) => {
-  if (signedIn) {
-    cy.beginApplicationSignedIn(listingName)
-  } else {
-    cy.beginApplicationRejectAutofill(listingName)
-  }
+Cypress.Commands.add("submitApplication", (listingName, application, verify) => {
+  cy.beginApplicationRejectAutofill(listingName)
   cy.step1PrimaryApplicantName(application)
   cy.step2PrimaryApplicantAddresses(application)
   cy.step3AlternateContactType(application)
-  if (application.alternateContact.type !== "dontHave") {
+  if (application.alternateContact.type !== "noContact") {
     cy.step4AlternateContactName(application)
     cy.step5AlternateContactInfo(application)
   }

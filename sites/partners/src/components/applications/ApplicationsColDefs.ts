@@ -489,7 +489,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
 
   const householdCols = []
 
-  for (let i = 0; i < maxHouseholdSize; i++) {
+  for (let i = 0; i < maxHouseholdSize - 1; i++) {
     const householdIndex = i + 1
 
     householdCols.push(
@@ -558,7 +558,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
         width: 115,
         minWidth: 50,
         valueFormatter: ({ value }) => {
-          if (!value) return ""
+          if (value.length < householdIndex) return ""
           return formatYesNoLabel(value[i]?.sameAddress)
         },
       },
@@ -570,7 +570,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
         width: 90,
         minWidth: 50,
         valueFormatter: ({ value }) => {
-          if (!value) return ""
+          if (value?.length < householdIndex) return ""
           return formatYesNoLabel(value[i]?.workInRegion)
         },
       }

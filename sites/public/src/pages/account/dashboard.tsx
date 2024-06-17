@@ -92,7 +92,12 @@ function Dashboard(props: DashboardProps) {
                     headingPriority={2}
                   >
                     <Card.Section>
-                      <Button size="sm" href={"/account/edit"} variant="primary-outlined">
+                      <Button
+                        size="sm"
+                        href={"/account/edit"}
+                        variant="primary-outlined"
+                        id={"account-dashboard-settings"}
+                      >
                         {t("account.accountSettingsUpdate")}
                       </Button>
                     </Card.Section>

@@ -11,7 +11,7 @@ declare namespace Cypress {
     getPhoneFieldByTestId(testId: string): Chainable<Element>
     goNext(): Chainable<Element>
     isNextRouteValid(currentStep: string, skip?: number): Chainable
-    signIn(): Chainable
+    signIn(email?: string, password?: string): Chainable
     signOut(): Chainable
     step1PrimaryApplicantName(application: Application): Chainable
     step2PrimaryApplicantAddresses(application: Application): Chainable
@@ -34,11 +34,6 @@ declare namespace Cypress {
     step17Demographics(application: Application): Chainable
     step18Summary(application: Application): Chainable
     step19TermsAndSubmit(application: Application): Chainable
-    submitApplication(
-      listingName: string,
-      application: Application,
-      signedIn: boolean,
-      verify?: boolean
-    )
+    submitApplication(listingName: string, application: Application, verify?: boolean)
   }
 }

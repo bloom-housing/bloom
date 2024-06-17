@@ -13,6 +13,7 @@ import {
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   HouseholdMember,
+  HouseholdMemberRelationship,
   HouseholdMemberUpdate,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -72,7 +73,7 @@ export class Member implements HouseholdMemberUpdate {
     longitude: undefined,
   }
   sameAddress?: YesNoEnum
-  relationship?: string
+  relationship?: HouseholdMemberRelationship
   workInRegion?: YesNoEnum
 }
 
