@@ -40,9 +40,6 @@ COPY --chown=node:node *.json yarn*.lock *config.js ./
 # Bring in just the site we need
 COPY --chown=node:node sites/${SITE} ./sites/${SITE}
 
-# It turns out we do have a hard dependency on backend/core :(
-COPY --chown=node:node backend/core ./backend/core
-
 # And shared helpers
 COPY --chown=node:node shared-helpers ./shared-helpers
 
