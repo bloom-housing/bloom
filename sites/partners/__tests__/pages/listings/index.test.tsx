@@ -8,28 +8,6 @@ import React from "react"
 import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { mockNextRouter } from "../../testUtils"
 
-//Mock the jszip package used for Export
-const mockFile = jest.fn()
-let mockFolder: jest.Mock
-function mockJszip() {
-  mockFolder = jest.fn(mockJszip)
-  return {
-    folder: mockFolder,
-    file: mockFile,
-    generateAsync: jest.fn().mockImplementation(() => {
-      const blob = {}
-      const response = { blob }
-      return Promise.resolve(response)
-    }),
-  }
-}
-jest.mock("jszip", () => {
-  return {
-    __esModule: true,
-    default: mockJszip,
-  }
-})
-
 const server = setupServer()
 
 beforeAll(() => {

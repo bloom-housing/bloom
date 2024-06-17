@@ -192,7 +192,6 @@ COPY --from=optimize --chown=node:node /app/node_modules ./node_modules
 COPY --from=optimize --chown=node:node /app/sites/${SITE}/node_modules ./sites/${SITE}/node_modules
 
 # Bring in our local dependencies
-COPY --from=build /app/backend/core ./backend/core
 COPY --from=build /app/shared-helpers ./shared-helpers
 COPY --from=build /app/doorway-ui-components ./doorway-ui-components
 
