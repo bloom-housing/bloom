@@ -1,7 +1,7 @@
 import axiosStatic from "axios"
 import type { NextApiRequest, NextApiResponse } from "next"
 import qs from "qs"
-import { getConfigs } from "@bloom-housing/backend-core/types"
+import { getConfigs } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { wrapper } from "axios-cookiejar-support"
 import { CookieJar } from "tough-cookie"
 
