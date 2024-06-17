@@ -201,8 +201,7 @@ export class ApplicationCsvExporterService
                         parsePreference = false;
                         // there aren't typically many preferences, but if there, then a object map should be created and used
                         const preference = preferences.find(
-                          (preference) =>
-                            preference.multiselectQuestionId === curr,
+                          (preference) => preference.key === curr,
                         );
                         multiselectQuestionValue = true;
                         return preference;
@@ -568,9 +567,17 @@ export class ApplicationCsvExporterService
       .filter((question) => question.applicationSection === 'preferences')
       .forEach((question) => {
         headers.push({
-          path: `preferences.${question.id}.claimed`,
+          path: `preferences.${question.text}.claimed`,
           label: `Preference ${question.text}`,
-          format: (val: boolean): string => (val ? 'claimed' : ''),
+          format: (val: any): string => {
+            const claimedString: string[] = [];
+            val?.options?.forEach((option) => {
+              if (option.checked) {
+                claimedString.push(option.key);
+              }
+            });
+            return claimedString.length ? claimedString.join(', ') : '';
+          },
         });
         /**
          * there are other input types for extra data besides address
@@ -580,7 +587,7 @@ export class ApplicationCsvExporterService
           ?.filter((option) => option.collectAddress)
           .forEach((option) => {
             headers.push({
-              path: `preferences.${question.id}.address`,
+              path: `preferences.${question.text}.address`,
               label: `Preference ${question.text} - ${option.text} - Address`,
               format: (val: ApplicationMultiselectQuestion): string => {
                 return this.multiselectQuestionFormat(
@@ -592,7 +599,7 @@ export class ApplicationCsvExporterService
             });
             if (option.validationMethod) {
               headers.push({
-                path: `preferences.${question.id}.address`,
+                path: `preferences.${question.text}.address`,
                 label: `Preference ${question.text} - ${option.text} - Passed Address Check`,
                 format: (val: ApplicationMultiselectQuestion): string => {
                   return this.multiselectQuestionFormat(
@@ -605,7 +612,7 @@ export class ApplicationCsvExporterService
             }
             if (option.collectName) {
               headers.push({
-                path: `preferences.${question.id}.address`,
+                path: `preferences.${question.text}.address`,
                 label: `Preference ${question.text} - ${option.text} - Name of Address Holder`,
                 format: (val: ApplicationMultiselectQuestion): string => {
                   return this.multiselectQuestionFormat(
@@ -618,7 +625,7 @@ export class ApplicationCsvExporterService
             }
             if (option.collectRelationship) {
               headers.push({
-                path: `preferences.${question.id}.address`,
+                path: `preferences.${question.text}.address`,
                 label: `Preference ${question.text} - ${option.text} - Relationship to Address Holder`,
                 format: (val: ApplicationMultiselectQuestion): string => {
                   return this.multiselectQuestionFormat(
@@ -711,25 +718,6 @@ export class ApplicationCsvExporterService
     }
     return extraData.value as string;
   }
-
-  // multiselectQuestionGeocodingVerifiedFormat(
-  //   question: ApplicationMultiselectQuestion,
-  //   optionText: string,
-  // ): string {
-  //   if (!question) return '';
-  //   const selectedOption = question.options.find(
-  //     (option) => option.key === optionText,
-  //   );
-  //   const extraData = selectedOption.extraData.find(
-  //     (data) => data.key === 'geocodingVerified',
-  //   );
-  //   if (extraData) {
-  //     return extraData.value === 'unknown'
-  //       ? 'Needs Manual Verification'
-  //       : extraData.value.toString();
-  //   }
-  //   return '';
-  // }
 
   convertDemographicRaceToReadable(type: string): string {
     const [rootKey, customValue = ''] = type.split(':');
