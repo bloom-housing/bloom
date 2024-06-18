@@ -390,7 +390,7 @@ describe('Testing application CSV export service', () => {
   });
 
   it('tests getCsvHeaders with no houshold members, multiselect questions or demographics', async () => {
-    const headers = await service.getCsvHeaders(0, []);
+    const headers = await service.getCsvHeaders(0, [], process.env.TIME_ZONE);
     const testHeaders = [
       ...csvHeaders,
       {
@@ -413,7 +413,7 @@ describe('Testing application CSV export service', () => {
   });
 
   it('tests getCsvHeaders with household members and no multiselect questions or demographics', async () => {
-    const headers = await service.getCsvHeaders(3, []);
+    const headers = await service.getCsvHeaders(3, [], process.env.TIME_ZONE);
     const testHeaders = [
       ...csvHeaders,
       {
@@ -575,8 +575,6 @@ describe('Testing application CSV export service', () => {
     prisma.listings.findUnique = jest.fn().mockResolvedValue({});
     permissionService.canOrThrow = jest.fn().mockResolvedValue(true);
 
-    service.maxHouseholdMembers = jest.fn().mockReturnValue(1);
-
     prisma.multiselectQuestions.findMany = jest.fn().mockReturnValue([
       {
         ...mockMultiselectQuestion(
@@ -637,8 +635,6 @@ describe('Testing application CSV export service', () => {
     prisma.applications.findMany = jest.fn().mockReturnValue(applications);
     prisma.listings.findUnique = jest.fn().mockResolvedValue({});
     permissionService.canOrThrow = jest.fn().mockResolvedValue(true);
-
-    service.maxHouseholdMembers = jest.fn().mockReturnValue(1);
 
     prisma.multiselectQuestions.findMany = jest.fn().mockReturnValue([
       {
