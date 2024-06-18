@@ -140,10 +140,10 @@ export class ScriptRunnerService {
 
   /**
    *
-   * @param amiChartImportDTO this is a string it takes a very specific formatted like:
+   * @param amiChartImportDTO this is a string in a very specific format like:
    * percentOfAmiValue_1 householdSize_1_income_value householdSize_2_income_value \n percentOfAmiValue_2 householdSize_1_income_value householdSize_2_income_value
-   * @returns a stringified version of AmiChartCreate DTO
-   * @description transfers data from foreign data into the database this api normally connects to. From this you can use it
+   * @returns successDTO
+   * @description takes the incoming AMI Chart string and stores it as a new AMI Chart in the database
    */
   async amiChartImport(
     req: ExpressRequest,
