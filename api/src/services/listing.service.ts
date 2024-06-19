@@ -893,6 +893,7 @@ export class ListingService implements OnModuleInit {
             }
           : undefined,
         requestedChangesUser: undefined,
+        contentUpdatedAt: new Date(),
       },
     });
 
@@ -1350,6 +1351,7 @@ export class ListingService implements OnModuleInit {
                 })),
               }
             : undefined,
+          contentUpdatedAt: new Date(),
           publishedAt:
             storedListing.status !== ListingsStatusEnum.active &&
             dto.status === ListingsStatusEnum.active
