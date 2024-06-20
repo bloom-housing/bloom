@@ -611,8 +611,12 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
           },
         });
 
-      if (!alreadyFoundMatch && applicationsThatMatched.length) {
-        const builtRuleKey = this.buildRuleKey(application, rule, listingId);
+      const builtRuleKey = this.buildRuleKey(application, rule, listingId);
+      if (
+        !alreadyFoundMatch &&
+        applicationsThatMatched.length &&
+        builtRuleKey
+      ) {
         // if there were duplicates (application could be a part of a flagged set)
         if (flagSetsThisAppBelongsTo.length) {
           // if application is part of a flagged set already
@@ -672,7 +676,10 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
   ): string {
     if (rule == RuleEnum.email) {
       return `${listingId}-email-${application.applicant.emailAddress}`;
-    } else {
+    } else if (
+      application.applicant.firstName &&
+      application.applicant.lastName
+    ) {
       return (
         `${listingId}-nameAndDOB-${application.applicant.firstName?.toLowerCase()}-${application.applicant.lastName?.toLowerCase()}` +
         `-${application.applicant.birthMonth}-${application.applicant.birthDay}-${application.applicant.birthYear}`

@@ -419,7 +419,7 @@ describe('Testing application flagged set service', () => {
           RuleEnum.nameAndDOB,
           'example id',
         ),
-      ).toEqual('example id-nameAndDOB-undefined-undefined-5-6-2000');
+      ).toEqual(undefined);
     });
   });
 
