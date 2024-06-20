@@ -50,7 +50,11 @@ export default function ListingPage(props: ListingProps) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getServerSideProps(context: { params: Record<string, string>; req: any }) {
+export async function getServerSideProps(context: {
+  params: Record<string, string>
+  locale: string
+  req: any
+}) {
   let response
 
   const listingServiceUrl = runtimeConfig.getListingServiceUrl()
@@ -58,6 +62,7 @@ export async function getServerSideProps(context: { params: Record<string, strin
   try {
     const headers: Record<string, string> = {
       "x-forwarded-for": context.req.headers["x-forwarded-for"] ?? context.req.socket.remoteAddress,
+      language: context.locale,
     }
 
     if (process.env.API_PASS_KEY) {
