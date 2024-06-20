@@ -559,7 +559,8 @@ describe('Testing application CSV export service', () => {
     expect(readable).toContain(firstApp);
   });
 
-  it('should build csv with submission date defaulted to PST', async () => {
+  it('should build csv with submission date defaulted to TIME_ZONE variable', async () => {
+    process.env.TIME_ZONE = 'America/Los_Angeles';
     jest.useFakeTimers();
     jest.setSystemTime(new Date('2024-01-01'));
 
