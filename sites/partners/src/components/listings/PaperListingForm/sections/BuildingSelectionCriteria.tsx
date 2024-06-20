@@ -95,6 +95,7 @@ const BuildingSelectionCriteria = () => {
               setProgressValue(0)
             }}
             variant="text"
+            size="sm"
           >
             {t("t.delete")}
           </Button>
@@ -129,6 +130,7 @@ const BuildingSelectionCriteria = () => {
                 setDrawerState(true)
               }}
               variant="text"
+              size="sm"
             >
               {t("t.edit")}
             </Button>
@@ -140,6 +142,7 @@ const BuildingSelectionCriteria = () => {
                 deletePDF()
               }}
               variant="text"
+              size="sm"
             >
               {t("t.delete")}
             </Button>
@@ -164,6 +167,7 @@ const BuildingSelectionCriteria = () => {
                 setDrawerState(true)
               }}
               variant="text"
+              size="sm"
             >
               {t("t.edit")}
             </Button>
@@ -174,6 +178,7 @@ const BuildingSelectionCriteria = () => {
                 setValue("buildingSelectionCriteria", "")
               }}
               variant="text"
+              size="sm"
             >
               {t("t.delete")}
             </Button>
@@ -213,6 +218,7 @@ const BuildingSelectionCriteria = () => {
                 id="addBuildingSelectionCriteriaButton"
                 type="button"
                 variant="primary-outlined"
+                size="sm"
                 onClick={() => {
                   setDrawerState(true)
                 }}
