@@ -47,27 +47,14 @@ describe("applications", () => {
       rest.get("http://localhost/api/adapter/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
         return res(ctx.json(listing))
       }),
-      rest.get("http://localhost:3100/applications", (_req, res, ctx) => {
-        return res(ctx.json({ items: [application], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
       rest.get("http://localhost/api/adapter/applications", (_req, res, ctx) => {
         return res(ctx.json({ items: [application], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
-      rest.get("http://localhost:3100/user/list", (_req, res, ctx) => {
-        return res(ctx.json({ items: [user], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
-      rest.get("http://localhost/api/adapter/user/list", (_req, res, ctx) => {
-        return res(ctx.json({ items: [user], meta: { totalItems: 1, totalPages: 1 } }))
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets", (_req, res, ctx) => {
         return res(ctx.json({ items: [], meta: { totalItems: 0, totalPages: 0 } }))
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 1 }))
-      }),
-      // set logged in user as admin
-      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json({ id: "user1", roles: { id: "user1", isAdmin: true } }))
       })
     )
     const { findByText, getByText, getAllByText } = render(<ApplicationsList />)
@@ -166,27 +153,14 @@ describe("applications", () => {
       rest.get("http://localhost/api/adapter/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
         return res(ctx.json(listing))
       }),
-      rest.get("http://localhost:3100/applications", (_req, res, ctx) => {
-        return res(ctx.json({ items: [application], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
       rest.get("http://localhost/api/adapter/applications", (_req, res, ctx) => {
         return res(ctx.json({ items: [application], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
-      rest.get("http://localhost:3100/user/list", (_req, res, ctx) => {
-        return res(ctx.json({ items: [user], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
-      rest.get("http://localhost/api/adapter/user/list", (_req, res, ctx) => {
-        return res(ctx.json({ items: [user], meta: { totalItems: 1, totalPages: 1 } }))
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets", (_req, res, ctx) => {
         return res(ctx.json({ items: [], meta: { totalItems: 0, totalPages: 0 } }))
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 1 }))
-      }),
-      // set logged in user as admin
-      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json({ id: "user1", roles: { id: "user1", isAdmin: true } }))
       })
     )
     const { findByText, getByText } = render(<ApplicationsList />)
@@ -206,27 +180,14 @@ describe("applications", () => {
       rest.get("http://localhost/api/adapter/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
         return res(ctx.json(closedListing))
       }),
-      rest.get("http://localhost:3100/applications", (_req, res, ctx) => {
-        return res(ctx.json({ items: [application], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
       rest.get("http://localhost/api/adapter/applications", (_req, res, ctx) => {
         return res(ctx.json({ items: [application], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
-      rest.get("http://localhost:3100/user/list", (_req, res, ctx) => {
-        return res(ctx.json({ items: [user], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
-      rest.get("http://localhost/api/adapter/user/list", (_req, res, ctx) => {
-        return res(ctx.json({ items: [user], meta: { totalItems: 1, totalPages: 1 } }))
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets", (_req, res, ctx) => {
         return res(ctx.json({ items: [], meta: { totalItems: 0, totalPages: 0 } }))
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 1 }))
-      }),
-      // set logged in user as admin
-      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json({ id: "user1", roles: { id: "user1", isAdmin: true } }))
       })
     )
     const { findByText, getByText } = render(<ApplicationsList />)
