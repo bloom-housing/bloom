@@ -35,7 +35,7 @@ const ApplicationsList = () => {
   /* Data Fetching */
   const { listingDto } = useSingleListingData(listingId)
 
-  const listingJurisdiction = profile.jurisdictions.find(
+  const listingJurisdiction = profile?.jurisdictions.find(
     (jurisdiction) => jurisdiction.id === listingDto?.jurisdictions.id
   )
   const includeDemographicsPartner =
@@ -48,7 +48,7 @@ const ApplicationsList = () => {
       false
   )
 
-  const countyCode = listingDto?.jurisdictions.name
+  const countyCode = listingDto?.jurisdictions?.name
   const listingName = listingDto?.name
   const isListingOpen = listingDto?.status === "active"
   const { data: flaggedApps } = useFlaggedApplicationsList({
@@ -107,7 +107,7 @@ const ApplicationsList = () => {
     formatLinkCell,
   }
 
-  if (!applications || appsError) return "An error has occurred."
+  if (!applications || appsError) return <div>An error has occurred.</div>
 
   return (
     <Layout>

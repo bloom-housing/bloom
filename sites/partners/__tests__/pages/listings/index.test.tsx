@@ -1,12 +1,11 @@
-import { AuthProvider, ConfigProvider, MessageProvider } from "@bloom-housing/shared-helpers"
-
-import { fireEvent, render } from "@testing-library/react"
+import React from "react"
+import { MessageProvider } from "@bloom-housing/shared-helpers"
+import { fireEvent } from "@testing-library/react"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
-import ListingsList from "../../../src/pages/index"
-import React from "react"
 import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { mockNextRouter } from "../../testUtils"
+import ListingsList from "../../../src/pages/index"
+import { mockNextRouter, render } from "../../testUtils"
 
 //Mock the jszip package used for Export
 const mockFile = jest.fn()
@@ -65,13 +64,7 @@ describe("listings", () => {
       })
     )
 
-    const { findByText, queryByText } = render(
-      <ConfigProvider apiUrl={"http://localhost:3100"}>
-        <AuthProvider>
-          <ListingsList />
-        </AuthProvider>
-      </ConfigProvider>
-    )
+    const { findByText, queryByText } = render(<ListingsList />)
     const header = await findByText("Partners Portal")
     expect(header).toBeInTheDocument()
     const exportButton = queryByText("Export to CSV")
@@ -100,13 +93,7 @@ describe("listings", () => {
       })
     )
 
-    const { findByText, getByText } = render(
-      <ConfigProvider apiUrl={"http://localhost:3100"}>
-        <AuthProvider>
-          <ListingsList />
-        </AuthProvider>
-      </ConfigProvider>
-    )
+    const { findByText, getByText } = render(<ListingsList />)
     const header = await findByText("Partners Portal")
     expect(header).toBeInTheDocument()
     const exportButton = getByText("Export to CSV")
@@ -146,13 +133,9 @@ describe("listings", () => {
     )
 
     const { findByText, getByText } = render(
-      <ConfigProvider apiUrl={"http://localhost:3100"}>
-        <AuthProvider>
-          <MessageProvider>
-            <ListingsList />
-          </MessageProvider>
-        </AuthProvider>
-      </ConfigProvider>
+      <MessageProvider>
+        <ListingsList />
+      </MessageProvider>
     )
     const header = await findByText("Partners Portal")
     expect(header).toBeInTheDocument()
