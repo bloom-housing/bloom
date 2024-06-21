@@ -198,8 +198,7 @@ describe("applications", () => {
     expect(pushMock).toHaveBeenCalledWith("/listings/Uvbk5qurpB2WI9V6WnNdH/applications/add")
   })
 
-  // This is blocked by a Seeds PR to update the Dialog configuration
-  it.skip("should open confirmation modal when application add is clicked while listing is closed", async () => {
+  it("should open confirmation modal when application add is clicked while listing is closed", async () => {
     const { pushMock } = mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
 
     const closedListing: Listing = { ...listing, status: ListingsStatusEnum.closed }
