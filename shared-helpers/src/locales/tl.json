@@ -492,6 +492,8 @@
   "listings.remainingUnitsAfterPreferenceConsideration": "Pagkatapos na isaalang-alang ang lahat ng preference holder, ang anumang natitirang mga unit ay magiging available sa iba pang mga kwalipikadong aplikante.",
   "listings.rentalHistory": "History ng Pag-upa",
   "listings.requiredDocuments": "Kinakailangang mga Dokumento",
+  "listings.reservedCommunityTypeDescriptions.housingVoucher": "May-hawak ng Voucher ng HCV/Seksyon 8",
+  "listings.reservedCommunityTypes.housingVoucher": "Voucher ng HCV/Seksyon 8",
   "listings.reservedUnitsDescription": "Upang maging kuwalipikado para sa mga unit na ito, ang isa sa mga sumusunod ay dapat na angkop sa iyo o sa isang tao sa iyong sambahayan:",
   "listings.reservedUnitsForWhoAre": "Nakareserba para sa %{communityType} na %{reservedType}",
   "listings.reservedUnits": "Nakareserbang mga Unit",

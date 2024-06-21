@@ -537,6 +537,8 @@
   "listings.rentalHistory": "Lịch sử Thuê nhà",
   "listings.requiredDocuments": "Các tài liệu Cần thiết",
   "listings.reservedCommunityBuilding": "%{type} Tòa nhà",
+  "listings.reservedCommunityTypeDescriptions.housingVoucher": "Người giữ phiếu HCV/Phần 8",
+  "listings.reservedCommunityTypes.housingVoucher": "Phiếu HCV/Phần 8",
   "listings.reservedFor": "Được dành riêng cho %{type}",
   "listings.reservedTypePlural.family": "các gia đình",
   "listings.reservedTypePlural.senior": "người cao niên",

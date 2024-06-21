@@ -16,6 +16,7 @@ import { OptionalAuthGuard } from '../guards/optional.guard';
 import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction-admin.guard';
 import { DataTransferDTO } from '../dtos/script-runner/data-transfer.dto';
 import { BulkApplicationResendDTO } from '../dtos/script-runner/bulk-application-resend.dto';
+import { IdDTO } from '../dtos/shared/id.dto';
 
 @Controller('scriptRunner')
 @ApiTags('scriptRunner')
@@ -61,6 +62,22 @@ export class ScirptRunnerController {
     return await this.scriptRunnerService.bulkApplicationResend(
       req,
       bulkApplicationResendDTO,
+    );
+  }
+
+  @Put('createNewReservedCommunityType')
+  @ApiOperation({
+    summary: 'A script that creates a new reserved community type',
+    operationId: 'createNewReservedCommunityType',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async createNewReservedCommunityType(
+    @Body() idDto: IdDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.createNewReservedCommunityType(
+      req,
+      idDto,
     );
   }
 }

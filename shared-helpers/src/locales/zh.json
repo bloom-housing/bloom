@@ -541,6 +541,8 @@
   "listings.rentalHistory": "租賃記錄",
   "listings.requiredDocuments": "必須提供的文件",
   "listings.reservedCommunityBuilding": "%{type} 樓宇",
+  "listings.reservedCommunityTypeDescriptions.housingVoucher": "HCV/第 8 节凭证持有者",
+  "listings.reservedCommunityTypes.housingVoucher": "HCV/第 8 节优惠券",
   "listings.reservedFor": "保留給 %{type}",
   "listings.reservedTypePlural.family": "家庭",
   "listings.reservedTypePlural.senior": "長者",

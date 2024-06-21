@@ -9,6 +9,7 @@ import { DataTransferDTO } from '../dtos/script-runner/data-transfer.dto';
 import { BulkApplicationResendDTO } from '../dtos/script-runner/bulk-application-resend.dto';
 import { EmailService } from './email.service';
 import { Application } from '../dtos/applications/application.dto';
+import { IdDTO } from '../dtos/shared/id.dto';
 
 /**
   this is the service for running scripts
@@ -131,6 +132,44 @@ export class ScriptRunnerService {
 
     // script runner standard spin down
     await this.markScriptAsComplete('bulk application resend', requestingUser);
+    return { success: true };
+  }
+  /**
+   *
+   * @param req incoming request object
+   * @param jurisdictionIdDTO id containing the jurisdiction id we are creating the new community type for
+   * @returns successDTO
+   * @description creates a new reserved community type. Reserved community types also need translations added
+   */
+  async createNewReservedCommunityType(
+    req: ExpressRequest,
+    jurisdictionIdDTO: IdDTO,
+  ): Promise<SuccessDTO> {
+    // script runner standard start up
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart(
+      'Housing Voucher Community Type',
+      requestingUser,
+    );
+
+    // create new housing voucher community type
+    await this.prisma.reservedCommunityTypes.create({
+      data: {
+        name: 'housingVoucher',
+        description: 'Reserved for HCV/Section 8 Voucher Holder',
+        jurisdictions: {
+          connect: {
+            id: jurisdictionIdDTO.id,
+          },
+        },
+      },
+    });
+
+    // script runner standard spin down
+    await this.markScriptAsComplete(
+      'Housing Voucher Community Type',
+      requestingUser,
+    );
     return { success: true };
   }
 
