@@ -32,7 +32,7 @@
   "dependencies": {
     "@bloom-housing/shared-helpers": "^7.7.1",
     "@bloom-housing/ui-components": "12.1.0",
-    "@bloom-housing/ui-seeds": "1.14.0",
+    "@bloom-housing/ui-seeds": "1.16.1",
     "@heroicons/react": "^2.1.1",
     "@sentry/nextjs": "^7.61.0",
     "autoprefixer": "^10.3.4",

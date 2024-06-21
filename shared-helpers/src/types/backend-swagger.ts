@@ -2958,6 +2958,9 @@ export interface Listing {
   afsLastRunAt?: Date
 
   /**  */
+  lotteryLastRunAt?: Date
+
+  /**  */
   lastApplicationUpdateAt?: Date
 
   /**  */
@@ -3456,6 +3459,9 @@ export interface ListingCreate {
   contentUpdatedAt?: Date
 
   /**  */
+  lotteryLastRunAt?: Date
+
+  /**  */
   lastApplicationUpdateAt?: Date
 
   /**  */
@@ -3705,6 +3711,9 @@ export interface ListingUpdate {
 
   /**  */
   contentUpdatedAt?: Date
+
+  /**  */
+  lotteryLastRunAt?: Date
 
   /**  */
   lastApplicationUpdateAt?: Date
