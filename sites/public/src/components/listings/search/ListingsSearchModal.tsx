@@ -211,7 +211,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
 
   // workarounds to leverage UI-C's currency formatting without full refactor
   useEffect(() => {
-    if (typeof minRentFormatted === "string") {
+    if (typeof minRentFormatted !== "undefined") {
       const minRentRaw = minRentFormatted.replaceAll(currencyFormatting, "")
       updateValue("minRent", minRentRaw)
     }
@@ -219,7 +219,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
   }, [minRentFormatted])
 
   useEffect(() => {
-    if (typeof monthlyRentFormatted === "string") {
+    if (typeof monthlyRentFormatted !== "undefined") {
       const monthlyRentRaw = monthlyRentFormatted.replaceAll(currencyFormatting, "")
       updateValue("monthlyRent", monthlyRentRaw)
     }
