@@ -47,7 +47,6 @@ import { IdDTO } from '../dtos/shared/id.dto';
 import { startCronJob } from '../utilities/cron-job-starter';
 import { PermissionService } from './permission.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
-import { disconnect } from 'node:process';
 
 export type getListingsArgs = {
   skip: number;
@@ -1018,7 +1017,6 @@ export class ListingService implements OnModuleInit {
   */
   async update(dto: ListingUpdate, requestingUser: User): Promise<Listing> {
     const storedListing = await this.findOrThrow(dto.id, ListingViews.details);
-    console.log('RCD', dto.reservedCommunityTypes);
 
     await this.permissionService.canOrThrow(
       requestingUser,
