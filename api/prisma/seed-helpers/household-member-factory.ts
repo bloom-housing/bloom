@@ -8,7 +8,6 @@ import {
   randomBirthMonth,
   randomBirthYear,
 } from './number-generator';
-import { randomBoolean } from './boolean-generator';
 
 export const householdMemberFactorySingle = (
   index: number,
