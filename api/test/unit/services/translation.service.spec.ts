@@ -9,12 +9,14 @@ import { TranslationService } from '../../../src/services/translation.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
+import dayjs from 'dayjs';
 
 const mockListing = (): Listing => {
   const basicListing = {
     id: 'id 1',
     createdAt: new Date(),
     updatedAt: new Date(),
+    contentUpdatedAt: new Date(),
     name: 'listing 1',
     status: ListingsStatusEnum.active,
     displayWaitlistSize: true,
@@ -51,24 +53,38 @@ const mockListing = (): Listing => {
   };
   return {
     ...basicListing,
+    whatToExpect: 'untranslated what to expect',
     unitAmenities: 'untranslated unit amenities',
+    specialNotes: 'untranslated special notes',
     smokingPolicy: 'untranslated smoking policy',
     servicesOffered: 'untranslated services offered',
-    petPolicy: 'untranslated pet policy',
-    neighborhood: 'untranslated neighborhood',
-    amenities: 'untranslated amenities',
-    accessibility: 'untranslated accessibility',
-    whatToExpect: 'untranslated what to expect',
-    specialNotes: 'untranslated special notes',
+    reservedCommunityDescription: 'untranslated reserved community description',
     requiredDocuments: 'untranslated required documents',
     rentalHistory: 'untranslated rental history',
     rentalAssistance: 'untranslated rental assistance',
     programRules: 'untranslated program rules',
+    petPolicy: 'untranslated pet policy',
+    neighborhood: 'untranslated neighborhood',
+    leasingAgentOfficeHours: 'untranslated leasing agent office hours',
+    depositMin: 'untranslated deposit minimum',
+    depositMax: 'untranslated deposit maximum',
+    depositHelperText: 'untranslated deposit helper text',
     criminalBackground: 'untranslated criminal background',
     creditHistory: 'untranslated credit history',
     costsNotIncluded: 'untranslated costs not included',
     applicationPickUpAddressOfficeHours:
       'untranslated application pick up address office hours',
+    applicationDropOffAddressOfficeHours:
+      'untranslated application drop off address office hours',
+    amenities: 'untranslated amenities',
+    accessibility: 'untranslated accessibility',
+    referralApplication: {
+      externalReference: 'untranslated external reference',
+      type: 'Referral',
+      id: 'referral application',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
     listingMultiselectQuestions: [
       {
         multiselectQuestions: {
@@ -89,23 +105,30 @@ const mockListing = (): Listing => {
 };
 
 const translatedStrings = [
+  'translated accessibility',
+  'translated amenities',
+  'translated application drop off address office hours',
   'translated application pick up address office hours',
   'translated costs not included',
   'translated credit history',
   'translated criminal background',
+  'translated deposit helper text',
+  'translated deposit maximum',
+  'translated deposit minimum',
+  'translated leasing agent office hours',
+  'translated neighborhood',
+  'translated pet policy',
   'translated program rules',
   'translated rental assistance',
   'translated rental history',
   'translated required documents',
-  'translated special notes',
-  'translated what to expect',
-  'translated accessibility',
-  'translated amenities',
-  'translated neighborhood',
-  'translated pet policy',
+  'translated reserved community description',
   'translated services offered',
   'translated smoking policy',
+  'translated special notes',
   'translated unit amenities',
+  'translated what to expect',
+  'translated external reference',
   'translated multiselect text',
   'translated multiselect description',
   'translated multiselect subtext',
@@ -210,6 +233,31 @@ describe('Testing translations service', () => {
     validateTranslatedFields(result);
   });
 
+  it('Should fetch translations and translate listing if db translations outdated', async () => {
+    googleTranslateServiceMock.fetch.mockResolvedValueOnce([translatedStrings]);
+    prisma.generatedListingTranslations.findFirst = jest
+      .fn()
+      .mockResolvedValue({
+        createdAt: dayjs(new Date()).subtract(1, 'days').toDate(),
+        id: randomUUID(),
+        translations: [translatedStrings],
+      });
+    prisma.generatedListingTranslations.delete = jest
+      .fn()
+      .mockResolvedValue(null);
+
+    const result = await service.translateListing(
+      mockListing() as Listing,
+      LanguagesEnum.es,
+    );
+    expect(googleTranslateServiceMock.fetch).toHaveBeenCalledTimes(1);
+    expect(prisma.generatedListingTranslations.findFirst).toHaveBeenCalledTimes(
+      1,
+    );
+    expect(prisma.generatedListingTranslations.delete).toHaveBeenCalledTimes(1);
+    validateTranslatedFields(result);
+  });
+
   it('Should fetch translations from db and translate listing', async () => {
     prisma.generatedListingTranslations.findFirst = jest
       .fn()
@@ -238,6 +286,7 @@ describe('Testing translations service', () => {
     expect(prisma.translations.findFirst).toBeCalledTimes(1);
     expect(result).toEqual(nullJurisdiction);
   });
+
   it('Should get merged translations for jurisdiction in english', async () => {
     const nullJurisdiction = {
       value: 'null jurisdiction',
@@ -291,25 +340,42 @@ describe('Testing translations service', () => {
 });
 
 const validateTranslatedFields = (listing: Listing) => {
+  expect(listing.accessibility).toEqual('translated accessibility');
+  expect(listing.amenities).toEqual('translated amenities');
   expect(listing.applicationPickUpAddressOfficeHours).toEqual(
     'translated application pick up address office hours',
+  );
+  expect(listing.applicationDropOffAddressOfficeHours).toEqual(
+    'translated application drop off address office hours',
   );
   expect(listing.costsNotIncluded).toEqual('translated costs not included');
   expect(listing.creditHistory).toEqual('translated credit history');
   expect(listing.criminalBackground).toEqual('translated criminal background');
+  expect(listing.depositHelperText).toEqual('translated deposit helper text');
+  expect(listing.depositMax).toEqual('translated deposit maximum');
+  expect(listing.depositMin).toEqual('translated deposit minimum');
+  expect(listing.leasingAgentOfficeHours).toEqual(
+    'translated leasing agent office hours',
+  );
+  expect(listing.neighborhood).toEqual('translated neighborhood');
+  expect(listing.petPolicy).toEqual('translated pet policy');
   expect(listing.programRules).toEqual('translated program rules');
   expect(listing.rentalAssistance).toEqual('translated rental assistance');
   expect(listing.rentalHistory).toEqual('translated rental history');
   expect(listing.requiredDocuments).toEqual('translated required documents');
-  expect(listing.specialNotes).toEqual('translated special notes');
-  expect(listing.whatToExpect).toEqual('translated what to expect');
-  expect(listing.accessibility).toEqual('translated accessibility');
-  expect(listing.amenities).toEqual('translated amenities');
-  expect(listing.neighborhood).toEqual('translated neighborhood');
-  expect(listing.petPolicy).toEqual('translated pet policy');
+  expect(listing.reservedCommunityDescription).toEqual(
+    'translated reserved community description',
+  );
   expect(listing.servicesOffered).toEqual('translated services offered');
   expect(listing.smokingPolicy).toEqual('translated smoking policy');
+  expect(listing.specialNotes).toEqual('translated special notes');
   expect(listing.unitAmenities).toEqual('translated unit amenities');
+  expect(listing.whatToExpect).toEqual('translated what to expect');
+
+  expect(listing.referralApplication.externalReference).toEqual(
+    'translated external reference',
+  );
+
   expect(
     listing.listingMultiselectQuestions[0].multiselectQuestions.text,
   ).toEqual('translated multiselect text');

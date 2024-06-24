@@ -23,19 +23,19 @@ export default class BooleansFormatter extends Formatter {
         addressTypes[this.data.whereApplicationsMailedIn] !== addressTypes.anotherAddress,
       trueCase: () => addressTypes[this.data.whereApplicationsMailedIn],
     })
-    this.processBoolean("applicationDropOffAddress", {
+    this.processBoolean("listingsApplicationDropOffAddress", {
       when:
         this.data.canApplicationsBeDroppedOff === YesNoEnum.yes &&
         this.data.whereApplicationsDroppedOff === addressTypes.anotherAddress,
       trueCase: () => this.data.listingsApplicationDropOffAddress,
     })
-    this.processBoolean("applicationPickUpAddress", {
+    this.processBoolean("listingsApplicationPickUpAddress", {
       when:
         this.data.canPaperApplicationsBePickedUp === YesNoEnum.yes &&
         this.data.whereApplicationsPickedUp === addressTypes.anotherAddress,
       trueCase: () => this.data.listingsApplicationPickUpAddress,
     })
-    this.processBoolean("applicationMailingAddress", {
+    this.processBoolean("listingsApplicationMailingAddress", {
       when:
         this.data.canApplicationsBeMailedIn === YesNoEnum.yes &&
         this.data.whereApplicationsMailedIn === addressTypes.anotherAddress,

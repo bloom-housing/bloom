@@ -628,6 +628,7 @@ describe('Listing Controller Tests', () => {
       });
 
       const val = await constructFullListingData(listing.id, jurisdictionA.id);
+      val.listingsApplicationMailingAddress = undefined;
 
       const res = await request(app.getHttpServer())
         .put(`/listings/${listing.id}`)

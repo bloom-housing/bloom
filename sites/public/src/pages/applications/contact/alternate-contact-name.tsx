@@ -10,7 +10,7 @@ import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
 
-export default () => {
+const ApplicationAlternateContactName = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("alternateContactName")
   const currentPageSection = 1
@@ -130,3 +130,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default ApplicationAlternateContactName

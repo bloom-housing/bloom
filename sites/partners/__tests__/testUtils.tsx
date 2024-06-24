@@ -1,7 +1,7 @@
-import { AuthProvider, ConfigProvider } from "@bloom-housing/shared-helpers"
-import { render, RenderOptions } from "@testing-library/react"
 import React, { FC, ReactElement } from "react"
+import { render, RenderOptions } from "@testing-library/react"
 import { SWRConfig } from "swr"
+import { AuthProvider, ConfigProvider } from "@bloom-housing/shared-helpers"
 
 const AllTheProviders: FC<{ children: React.ReactNode }> = ({ children }) => {
   return (

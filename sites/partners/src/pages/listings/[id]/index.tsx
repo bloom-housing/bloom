@@ -5,6 +5,7 @@ import { t, AlertBox, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-comp
 import {
   Listing,
   ListingsStatusEnum,
+  ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingStatusBar } from "../../../components/listings/ListingStatusBar"
 import ListingGuard from "../../../components/shared/ListingGuard"
@@ -42,7 +43,7 @@ interface ListingProps {
 
 export default function ListingDetail(props: ListingProps) {
   const { listing } = props
-  const [errorAlert, setErrorAlert] = useState(false)
+  const [errorAlert, setErrorAlert] = useState<string>(null)
   const [unitDrawer, setUnitDrawer] = useState<UnitDrawer>(null)
 
   if (!listing) return null
@@ -62,6 +63,11 @@ export default function ListingDetail(props: ListingProps) {
                 show: listing.status !== ListingsStatusEnum.pending,
                 listingLabel: t("t.listingSingle"),
                 applicationsLabel: t("nav.applications"),
+                lotteryLabel:
+                  listing.status === ListingsStatusEnum.closed &&
+                  listing.reviewOrderType === ReviewOrderTypeEnum.lottery
+                    ? t("listings.lotteryTitle")
+                    : undefined,
               }}
               breadcrumbs={
                 <Breadcrumbs>
@@ -80,11 +86,11 @@ export default function ListingDetail(props: ListingProps) {
                 {errorAlert && (
                   <AlertBox
                     className="mb-5"
-                    onClose={() => setErrorAlert(false)}
+                    onClose={() => setErrorAlert(null)}
                     closeable
                     type="alert"
                   >
-                    {t("authentication.signIn.errorGenericMessage")}
+                    {errorAlert || t("authentication.signIn.errorGenericMessage")}
                   </AlertBox>
                 )}
 
@@ -111,7 +117,10 @@ export default function ListingDetail(props: ListingProps) {
                   </div>
 
                   <div className="w-full md:w-3/12 md:pl-6">
-                    <ListingFormActions type={ListingFormActionsType.details} />
+                    <ListingFormActions
+                      type={ListingFormActionsType.details}
+                      setErrorAlert={setErrorAlert}
+                    />
                   </div>
                 </div>
               </div>

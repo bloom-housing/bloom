@@ -16,6 +16,7 @@ import { OptionalAuthGuard } from '../guards/optional.guard';
 import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction-admin.guard';
 import { DataTransferDTO } from '../dtos/script-runner/data-transfer.dto';
 import { BulkApplicationResendDTO } from '../dtos/script-runner/bulk-application-resend.dto';
+import { AmiChartImportDTO } from '../dtos/script-runner/ami-chart-import.dto';
 
 @Controller('scriptRunner')
 @ApiTags('scriptRunner')
@@ -61,6 +62,23 @@ export class ScirptRunnerController {
     return await this.scriptRunnerService.bulkApplicationResend(
       req,
       bulkApplicationResendDTO,
+    );
+  }
+
+  @Put('amiChartImport')
+  @ApiOperation({
+    summary:
+      'A script that takes in a standardized string and outputs the input for the ami chart create endpoint',
+    operationId: 'amiChartImport',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async amiChartImport(
+    @Body() amiChartImportDTO: AmiChartImportDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.amiChartImport(
+      req,
+      amiChartImportDTO,
     );
   }
 }
