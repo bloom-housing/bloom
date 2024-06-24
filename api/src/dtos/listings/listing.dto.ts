@@ -380,6 +380,14 @@ class Listing extends AbstractDTO {
   @ApiPropertyOptional()
   customMapPin?: boolean;
 
+  //Used to refresh translations and communicate recent changes to admin users
+  //should be revisited after translations refactoring to see if its still useful
+  @Expose()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  @ApiPropertyOptional()
+  contentUpdatedAt?: Date;
+
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
@@ -397,6 +405,12 @@ class Listing extends AbstractDTO {
   @Type(() => Date)
   @ApiPropertyOptional()
   afsLastRunAt?: Date;
+
+  @Expose()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  @ApiPropertyOptional()
+  lotteryLastRunAt?: Date;
 
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })

@@ -1,11 +1,12 @@
-import React, { useContext, useMemo } from "react"
+import React, { useContext, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import { AgTable, t, useAgTable, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
+import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   ApplicationOrderByKeys,
+  ListingsStatusEnum,
   OrderByEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
@@ -25,12 +26,16 @@ const ApplicationsList = () => {
   const router = useRouter()
   const listingId = router.query.id as string
 
+  const [applicationConfirmAddModal, setApplicationConfirmAddModal] = useState(false)
+  const [applicationConfirmAddPostLotteryModal, setApplicationConfirmAddPostLotteryModal] =
+    useState(false)
+
   const tableOptions = useAgTable()
 
   /* Data Fetching */
   const { listingDto } = useSingleListingData(listingId)
 
-  const listingJurisdiction = profile.jurisdictions.find(
+  const listingJurisdiction = profile?.jurisdictions.find(
     (jurisdiction) => jurisdiction.id === listingDto?.jurisdictions.id
   )
   const includeDemographicsPartner =
@@ -43,7 +48,7 @@ const ApplicationsList = () => {
       false
   )
 
-  const countyCode = listingDto?.jurisdictions.name
+  const countyCode = listingDto?.jurisdictions?.name
   const listingName = listingDto?.name
   const isListingOpen = listingDto?.status === "active"
   const { data: flaggedApps } = useFlaggedApplicationsList({
@@ -102,7 +107,7 @@ const ApplicationsList = () => {
     formatLinkCell,
   }
 
-  if (!applications || appsError) return "An error has occurred."
+  if (!applications || appsError) return <div>An error has occurred.</div>
 
   return (
     <Layout>
@@ -170,7 +175,15 @@ const ApplicationsList = () => {
                 headerContent={
                   <div className="flex gap-2 items-center">
                     <Button
-                      href={`/listings/${listingId}/applications/add`}
+                      onClick={() => {
+                        if (listingDto.lotteryLastRunAt) {
+                          setApplicationConfirmAddPostLotteryModal(true)
+                        } else if (listingDto.status === ListingsStatusEnum.closed) {
+                          setApplicationConfirmAddModal(true)
+                        } else {
+                          void router.push(`/listings/${listingId}/applications/add`)
+                        }
+                      }}
                       variant="primary-outlined"
                       size="sm"
                       id={"addApplicationButton"}
@@ -193,6 +206,72 @@ const ApplicationsList = () => {
           )}
         </article>
       </section>
+
+      <Dialog
+        isOpen={applicationConfirmAddModal}
+        onClose={() => setApplicationConfirmAddModal(false)}
+        ariaLabelledBy="confirm-add-application-dialog-header"
+      >
+        <Dialog.Header id="confirm-add-application-dialog-header">
+          {t("applications.addConfirmModalHeader")}
+        </Dialog.Header>
+        <Dialog.Content>{t("applications.addConfirmModalContent")}</Dialog.Content>
+        <Dialog.Footer>
+          <Button
+            type="button"
+            variant="primary"
+            onClick={() => router.push(`/listings/${listingId}/applications/add`)}
+            size="sm"
+          >
+            {t("applications.addConfirmModalAddApplication")}
+          </Button>
+          <Button
+            type="button"
+            variant="primary-outlined"
+            onClick={() => setApplicationConfirmAddModal(false)}
+            size="sm"
+          >
+            {t("t.cancel")}
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
+
+      <Dialog
+        isOpen={applicationConfirmAddPostLotteryModal}
+        onClose={() => setApplicationConfirmAddPostLotteryModal(false)}
+        ariaLabelledBy="confirm-add-application-post-lottery-dialog-header"
+      >
+        <Dialog.Header id="confirm-add-application-post-lottery-dialog-header">
+          {t("applications.addConfirmModalAddApplicationPostLotteryTitle")}
+        </Dialog.Header>
+        <Dialog.Content>
+          <p>
+            <span>{t("applications.addConfirmModalAddApplicationPostLottery")}</span>{" "}
+            <span className={"font-semibold"}>
+              {t("applications.addConfirmModalAddApplicationPostLotteryWeighted")}
+            </span>
+          </p>
+          <p>{t("applications.addConfirmModalAddApplicationPostLotteryAreYouSure")}</p>
+        </Dialog.Content>
+        <Dialog.Footer>
+          <Button
+            type="button"
+            variant="alert"
+            onClick={() => router.push(`/listings/${listingId}/applications/add`)}
+            size="sm"
+          >
+            {t("applications.addConfirmModalAddApplicationPostLotteryConfirm")}
+          </Button>
+          <Button
+            type="button"
+            variant="primary-outlined"
+            onClick={() => setApplicationConfirmAddPostLotteryModal(false)}
+            size="sm"
+          >
+            {t("t.cancel")}
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
     </Layout>
   )
 }
