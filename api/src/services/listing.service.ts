@@ -1199,6 +1199,12 @@ export class ListingService implements OnModuleInit {
                   id: dto.reservedCommunityTypes.id,
                 },
               }
+            : storedListing.reservedCommunityTypes
+            ? {
+                disconnect: {
+                  id: storedListing.reservedCommunityTypes.id,
+                },
+              }
             : undefined,
           // Three options for the building selection criteria file
           // create new one, connect existing one, or deleted (disconnect)
