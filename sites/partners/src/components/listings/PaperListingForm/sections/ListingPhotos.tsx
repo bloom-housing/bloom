@@ -7,12 +7,11 @@ import {
   TableThumbnail,
   StandardTableData,
   StandardTableCell,
-  Drawer,
 } from "@bloom-housing/ui-components"
 import { CLOUDINARY_BUILDING_LABEL, getImageUrlFromAsset } from "@bloom-housing/shared-helpers"
 import { fieldHasError } from "../../../../lib/helpers"
 import { uploadAssetAndSetData } from "../../../../lib/assets"
-import { Button, Grid } from "@bloom-housing/ui-seeds"
+import { Button, Card, Drawer, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { Asset, ListingImage } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
@@ -246,61 +245,75 @@ const ListingPhotos = () => {
 
       {/* Image management and upload drawer */}
       <Drawer
-        open={drawerState}
-        title={t(listingFormPhotos.length > 0 ? "listings.editPhotos" : "listings.addPhoto")}
+        isOpen={drawerState}
         onClose={() => resetDrawerState()}
-        ariaDescription="Form with photo upload dropzone"
+        ariaLabelledBy="listing-photos-drawer-header"
       >
-        <section className="border rounded-md p-8 bg-white">
-          <h2 className="grid-section__title mb-8">{t("listings.listingPhoto")}</h2>
-          {drawerImages.length > 0 && (
-            <div className="mb-10" data-testid="drawer-photos-table">
-              <span className={"text-tiny text-gray-800 block mb-2"}>{t("t.photos")}</span>
-              <MinimalTable
-                draggable={true}
-                flushLeft={true}
-                setData={(newData) => {
-                  setDrawerImages(
-                    newData.map((item: Record<string, StandardTableCell>, index) => {
-                      const foundImage = drawerImages.find(
-                        (field) =>
-                          field.assets.fileId.split("/").slice(-1).join() == item.fileName.content
+        <Drawer.Header id="listing-photos-drawer-header">
+          {t(listingFormPhotos.length > 0 ? "listings.editPhotos" : "listings.addPhoto")}
+        </Drawer.Header>
+        <Drawer.Content>
+          <Card>
+            <Card.Header>
+              <Heading priority={2} size="xl">
+                Listing Photo
+              </Heading>
+            </Card.Header>
+            <Card.Section>
+              {drawerImages.length > 0 && (
+                <div className="mb-10" data-testid="drawer-photos-table">
+                  <span className={"text-tiny text-gray-800 block mb-2"}>{t("t.photos")}</span>
+                  <MinimalTable
+                    draggable={true}
+                    flushLeft={true}
+                    setData={(newData) => {
+                      setDrawerImages(
+                        newData.map((item: Record<string, StandardTableCell>, index) => {
+                          const foundImage = drawerImages.find(
+                            (field) =>
+                              field.assets.fileId.split("/").slice(-1).join() ==
+                              item.fileName.content
+                          )
+                          return { ...foundImage, ordinal: index }
+                        })
                       )
-                      return { ...foundImage, ordinal: index }
-                    })
-                  )
-                }}
-                headers={photoTableHeaders}
-                data={drawerTableRows}
-              ></MinimalTable>
-            </div>
-          )}
-          {drawerImages.length < 10 ? (
-            <Dropzone
-              id="listing-photo-upload"
-              label={t("t.uploadFile")}
-              helptext={t("listings.sections.photo.helperText")}
-              uploader={photoUploader}
-              accept="image/*"
-              progress={progressValue}
-            />
-          ) : (
-            <p className="field-note text-gray-750">{t("listings.sections.photo.maximumUpload")}</p>
-          )}
-        </section>
-        <Button
-          variant="primary"
-          type="button"
-          size="sm"
-          className={"mt-4"}
-          onClick={() => {
-            saveImageFields(drawerImages)
-            resetDrawerState()
-          }}
-          id={drawerImages.length > 0 ? "listing-photo-uploaded" : "listing-photo-empty"}
-        >
-          {t("t.save")}
-        </Button>
+                    }}
+                    headers={photoTableHeaders}
+                    data={drawerTableRows}
+                  ></MinimalTable>
+                </div>
+              )}
+              {drawerImages.length < 10 ? (
+                <Dropzone
+                  id="listing-photo-upload"
+                  label={t("t.uploadFile")}
+                  helptext={t("listings.sections.photo.helperText")}
+                  uploader={photoUploader}
+                  accept="image/*"
+                  progress={progressValue}
+                />
+              ) : (
+                <p className="field-note text-gray-750">
+                  {t("listings.sections.photo.maximumUpload")}
+                </p>
+              )}
+            </Card.Section>
+          </Card>
+        </Drawer.Content>
+        <Drawer.Footer>
+          <Button
+            variant="primary"
+            type="button"
+            size="sm"
+            onClick={() => {
+              saveImageFields(drawerImages)
+              resetDrawerState()
+            }}
+            id={drawerImages.length > 0 ? "listing-photo-uploaded" : "listing-photo-empty"}
+          >
+            {t("t.save")}
+          </Button>
+        </Drawer.Footer>
       </Drawer>
     </>
   )

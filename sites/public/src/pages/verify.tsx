@@ -146,9 +146,16 @@ const Verify = () => {
           </CardSection>
         </>
       </BloomCard>
-      <Dialog isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <DialogHeader>{t("account.pwdless.resendCode")}</DialogHeader>
-        <DialogContent>{t("account.pwdless.resendCodeHelper", { email })}</DialogContent>
+      <Dialog
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        ariaLabelledBy="verify-dialog-header"
+        ariaDescribedBy="verify-dialog-content"
+      >
+        <DialogHeader id="verify-dialog-header">{t("account.pwdless.resendCode")}</DialogHeader>
+        <DialogContent id="verify-dialog-content">
+          {t("account.pwdless.resendCodeHelper", { email })}
+        </DialogContent>
         <DialogFooter>
           <Button
             size={"sm"}

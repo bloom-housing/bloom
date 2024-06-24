@@ -7,11 +7,10 @@ import {
   t,
   OrDivider,
   ContactAddress,
-  Modal,
   Form,
   FieldGroup,
 } from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
+import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import { useForm } from "react-hook-form"
 import { downloadExternalPDF } from "../../lib/helpers"
 import { isExternalLink } from "@bloom-housing/ui-seeds/src/global/NavigationContext"
@@ -166,12 +165,35 @@ const GetApplication = (props: ApplicationsProps) => {
           )}
         </>
       )}
-      <Modal
-        open={!!showDownloadModal}
-        title={t("listings.chooseALanguage")}
-        ariaDescription={t("listings.chooseALanguage")}
+      <Dialog
+        isOpen={!!showDownloadModal}
         onClose={() => setShowDownloadModal(false)}
-        actions={[
+        ariaLabelledBy="get-application-header"
+      >
+        <Dialog.Header id="get-application-header">{t("listings.chooseALanguage")}</Dialog.Header>
+        <Dialog.Content>
+          <Form>
+            <fieldset>
+              <legend className="sr-only">{t("listings.chooseALanguage")}</legend>
+              <FieldGroup
+                name="paperApplicationLanguage"
+                fieldGroupClassName="grid grid-cols-1"
+                fieldClassName="ml-0"
+                type="radio"
+                register={register}
+                validation={{ required: true }}
+                fields={props.paperApplications?.map((app, index) => ({
+                  id: app.languageString,
+                  label: app.languageString,
+                  value: app.fileURL,
+                  defaultChecked: index === 0,
+                }))}
+                dataTestId={"paper-application-language"}
+              />
+            </fieldset>
+          </Form>
+        </Dialog.Content>
+        <Dialog.Footer>
           <Button
             variant="primary"
             size="sm"
@@ -181,7 +203,7 @@ const GetApplication = (props: ApplicationsProps) => {
             }}
           >
             {t("t.download")}
-          </Button>,
+          </Button>
           <Button
             variant="primary-outlined"
             size="sm"
@@ -190,30 +212,9 @@ const GetApplication = (props: ApplicationsProps) => {
             }}
           >
             {t("t.cancel")}
-          </Button>,
-        ]}
-      >
-        <Form>
-          <fieldset>
-            <legend className="sr-only">{t("listings.chooseALanguage")}</legend>
-            <FieldGroup
-              name="paperApplicationLanguage"
-              fieldGroupClassName="grid grid-cols-1"
-              fieldClassName="ml-0"
-              type="radio"
-              register={register}
-              validation={{ required: true }}
-              fields={props.paperApplications?.map((app, index) => ({
-                id: app.languageString,
-                label: app.languageString,
-                value: app.fileURL,
-                defaultChecked: index === 0,
-              }))}
-              dataTestId={"paper-application-language"}
-            />
-          </fieldset>
-        </Form>
-      </Modal>
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
     </section>
   )
 }

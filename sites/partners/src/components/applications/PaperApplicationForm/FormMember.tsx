@@ -14,7 +14,7 @@ import {
   Form,
   FormAddress,
 } from "@bloom-housing/ui-components"
-import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
+import { Button, Card, Drawer, Grid } from "@bloom-housing/ui-seeds"
 import { relationshipKeys, stateKeys } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import SectionWithGrid from "../../shared/SectionWithGrid"
@@ -157,113 +157,116 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
   ]
 
   return (
-    <Form onSubmit={() => false}>
-      <Card>
-        <Card.Section>
-          <SectionWithGrid heading={t("application.review.householdDetails")}>
-            <Grid.Row>
-              <Grid.Cell>
-                <Field
-                  id="firstName"
-                  name="firstName"
-                  label={t("application.name.firstName")}
-                  placeholder={t("application.name.firstName")}
+    <>
+      <Drawer.Content>
+        <Form onSubmit={() => false}>
+          <Card>
+            <Card.Section>
+              <SectionWithGrid heading={t("application.review.householdDetails")}>
+                <Grid.Row>
+                  <Grid.Cell>
+                    <Field
+                      id="firstName"
+                      name="firstName"
+                      label={t("application.name.firstName")}
+                      placeholder={t("application.name.firstName")}
+                      register={register}
+                    />
+                  </Grid.Cell>
+
+                  <Grid.Cell>
+                    <Field
+                      id="middleName"
+                      name="middleName"
+                      label={t("application.name.middleNameOptional")}
+                      placeholder={t("application.name.middleNameOptional")}
+                      register={register}
+                    />
+                  </Grid.Cell>
+
+                  <Grid.Cell>
+                    <Field
+                      id="lastName"
+                      name="lastName"
+                      label={t("application.name.lastName")}
+                      placeholder={t("application.name.lastName")}
+                      register={register}
+                    />
+                  </Grid.Cell>
+
+                  <Grid.Cell>
+                    <DOBField
+                      id="dateOfBirth"
+                      name="dateOfBirth"
+                      register={register}
+                      error={errors?.dateOfBirth}
+                      watch={watch}
+                      label={t("application.household.member.dateOfBirth")}
+                    />
+                  </Grid.Cell>
+                </Grid.Row>
+
+                <Grid.Row>
+                  <Grid.Cell>
+                    <Select
+                      id="relationship"
+                      name="relationship"
+                      label={t("t.relationship")}
+                      register={register}
+                      controlClassName="control"
+                      options={relationshipKeys}
+                      keyPrefix="application.form.options.relationship"
+                    />
+                  </Grid.Cell>
+
+                  <Grid.Cell>
+                    <FieldGroup
+                      name="sameAddress"
+                      type="radio"
+                      register={register}
+                      groupLabel={t("application.add.sameAddressAsPrimary")}
+                      fields={sameAddressOptions}
+                      fieldClassName="m-0"
+                      fieldGroupClassName="flex h-12 items-center"
+                    />
+                  </Grid.Cell>
+
+                  <Grid.Cell>
+                    <FieldGroup
+                      name="workInRegion"
+                      type="radio"
+                      register={register}
+                      groupLabel={t("application.details.workInRegion")}
+                      fields={workInRegionOptions}
+                      fieldClassName="m-0"
+                      fieldGroupClassName="flex h-12 items-center"
+                    />
+                  </Grid.Cell>
+                </Grid.Row>
+              </SectionWithGrid>
+
+              {sameAddressField === YesNoEnum.no && (
+                <FormAddress
+                  subtitle={t("application.details.residenceAddress")}
+                  dataKey="householdMemberAddress"
                   register={register}
+                  stateKeys={stateKeys}
                 />
-              </Grid.Cell>
+              )}
 
-              <Grid.Cell>
-                <Field
-                  id="middleName"
-                  name="middleName"
-                  label={t("application.name.middleNameOptional")}
-                  placeholder={t("application.name.middleNameOptional")}
+              {workInRegionField === YesNoEnum.yes && (
+                <FormAddress
+                  subtitle={t("application.contact.workAddress")}
+                  dataKey="householdMemberWorkAddress"
                   register={register}
+                  stateKeys={stateKeys}
                 />
-              </Grid.Cell>
-
-              <Grid.Cell>
-                <Field
-                  id="lastName"
-                  name="lastName"
-                  label={t("application.name.lastName")}
-                  placeholder={t("application.name.lastName")}
-                  register={register}
-                />
-              </Grid.Cell>
-
-              <Grid.Cell>
-                <DOBField
-                  id="dateOfBirth"
-                  name="dateOfBirth"
-                  register={register}
-                  error={errors?.dateOfBirth}
-                  watch={watch}
-                  label={t("application.household.member.dateOfBirth")}
-                />
-              </Grid.Cell>
-            </Grid.Row>
-
-            <Grid.Row>
-              <Grid.Cell>
-                <Select
-                  id="relationship"
-                  name="relationship"
-                  label={t("t.relationship")}
-                  register={register}
-                  controlClassName="control"
-                  options={relationshipKeys}
-                  keyPrefix="application.form.options.relationship"
-                />
-              </Grid.Cell>
-
-              <Grid.Cell>
-                <FieldGroup
-                  name="sameAddress"
-                  type="radio"
-                  register={register}
-                  groupLabel={t("application.add.sameAddressAsPrimary")}
-                  fields={sameAddressOptions}
-                  fieldClassName="m-0"
-                  fieldGroupClassName="flex h-12 items-center"
-                />
-              </Grid.Cell>
-
-              <Grid.Cell>
-                <FieldGroup
-                  name="workInRegion"
-                  type="radio"
-                  register={register}
-                  groupLabel={t("application.details.workInRegion")}
-                  fields={workInRegionOptions}
-                  fieldClassName="m-0"
-                  fieldGroupClassName="flex h-12 items-center"
-                />
-              </Grid.Cell>
-            </Grid.Row>
-          </SectionWithGrid>
-
-          {sameAddressField === YesNoEnum.no && (
-            <FormAddress
-              subtitle={t("application.details.residenceAddress")}
-              dataKey="householdMemberAddress"
-              register={register}
-              stateKeys={stateKeys}
-            />
-          )}
-
-          {workInRegionField === YesNoEnum.yes && (
-            <FormAddress
-              subtitle={t("application.contact.workAddress")}
-              dataKey="householdMemberWorkAddress"
-              register={register}
-              stateKeys={stateKeys}
-            />
-          )}
-        </Card.Section>
-      </Card>
-
-      <div className="mt-6">
+              )}
+            </Card.Section>
+          </Card>
+        </Form>
+      </Drawer.Content>
+      <Drawer.Footer>
         <Button
           type="button"
           onClick={() => onFormSubmit()}
@@ -276,8 +279,8 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
         <Button variant="primary-outlined" type="button" onClick={onClose}>
           {t("t.cancel")}
         </Button>
-      </div>
-    </Form>
+      </Drawer.Footer>
+    </>
   )
 }
 

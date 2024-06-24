@@ -5,16 +5,8 @@ import { useSWRConfig } from "swr"
 import { useRouter } from "next/router"
 import { GridApi } from "ag-grid-community"
 import { useForm } from "react-hook-form"
-import {
-  t,
-  AlertBox,
-  useMutate,
-  AgTable,
-  useAgTable,
-  Modal,
-  Field,
-} from "@bloom-housing/ui-components"
-import { Button, Icon, Tag } from "@bloom-housing/ui-seeds"
+import { t, AlertBox, useMutate, AgTable, useAgTable, Field } from "@bloom-housing/ui-components"
+import { Button, Dialog, Icon, Tag } from "@bloom-housing/ui-seeds"
 import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
 import {
   AfsResolve,
@@ -219,12 +211,44 @@ const Flag = () => {
           </div>
         </div>
       </section>
-      <Modal
-        open={!!saveModalOpen}
-        title={t("flags.updateStatus")}
-        ariaDescription={t("listings.closeThisListing")}
+      <Dialog
+        isOpen={!!saveModalOpen}
+        ariaLabelledBy="application-review-dialog-header"
         onClose={() => setSaveModalOpen(false)}
-        actions={[
+      >
+        <Dialog.Header id="application-review-dialog-header">
+          {t("flags.updateStatus")}
+        </Dialog.Header>
+        <Dialog.Content>
+          <Field
+            id="setStatus.pending"
+            name="setStatus"
+            className="m-0"
+            type="radio"
+            label={t("applications.pendingReview")}
+            register={register}
+            inputProps={{
+              value: "pending",
+              defaultChecked: data?.status === FlaggedSetStatusEnum.pending,
+            }}
+          />
+          <p className={"mb-6 ml-8 text-xs text-gray-800"}>{t("flags.pendingDescription")}</p>
+
+          <Field
+            id="setStatus.resolved"
+            name="setStatus"
+            className="m-0 border-t pt-6"
+            type="radio"
+            label={t("t.resolved")}
+            register={register}
+            inputProps={{
+              value: "resolved",
+              defaultChecked: data?.status === FlaggedSetStatusEnum.resolved,
+            }}
+          />
+          <p className={"ml-8 text-xs text-gray-800"}>{t("flags.resolvedDescription")}</p>
+        </Dialog.Content>
+        <Dialog.Footer>
           <Button
             type="button"
             variant="primary"
@@ -247,7 +271,7 @@ const Flag = () => {
             }}
           >
             {t("t.save")}
-          </Button>,
+          </Button>
           <Button
             type="button"
             variant="primary-outlined"
@@ -257,37 +281,9 @@ const Flag = () => {
             }}
           >
             {t("t.cancel")}
-          </Button>,
-        ]}
-      >
-        <Field
-          id="setStatus.pending"
-          name="setStatus"
-          className="m-0"
-          type="radio"
-          label={t("applications.pendingReview")}
-          register={register}
-          inputProps={{
-            value: "pending",
-            defaultChecked: data?.status === FlaggedSetStatusEnum.pending,
-          }}
-        />
-        <p className={"mb-6 ml-8 text-xs text-gray-800"}>{t("flags.pendingDescription")}</p>
-
-        <Field
-          id="setStatus.resolved"
-          name="setStatus"
-          className="m-0 border-t pt-6"
-          type="radio"
-          label={t("t.resolved")}
-          register={register}
-          inputProps={{
-            value: "resolved",
-            defaultChecked: data?.status === FlaggedSetStatusEnum.resolved,
-          }}
-        />
-        <p className={"ml-8 text-xs text-gray-800"}>{t("flags.resolvedDescription")}</p>
-      </Modal>
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
     </Layout>
   )
 }

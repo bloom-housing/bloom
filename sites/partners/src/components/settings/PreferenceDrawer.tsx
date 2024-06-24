@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from "react"
 import {
-  Drawer,
   Field,
   FieldGroup,
   MinimalTable,
@@ -9,7 +8,7 @@ import {
   t,
   Textarea,
 } from "@bloom-housing/ui-components"
-import { Button, Card, FieldValue, FormErrorMessage, Grid } from "@bloom-housing/ui-seeds"
+import { Button, Card, Drawer, FieldValue, FormErrorMessage, Grid } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import {
@@ -225,244 +224,247 @@ const PreferenceDrawer = ({
   return (
     <>
       <Drawer
-        open={!!drawerOpen}
-        title={drawerTitle}
-        ariaDescription={drawerTitle}
+        isOpen={!!drawerOpen}
         onClose={() => {
           clearErrors()
           clearErrors("questions")
           onDrawerClose()
         }}
+        ariaLabelledBy="preference-drawer-header"
       >
-        <Card>
-          <Card.Section>
-            <SectionWithGrid heading={t("settings.preference")}>
-              <Grid.Row columns={3}>
-                <Grid.Cell className="seeds-grid-span-2">
-                  <Field
-                    id="text"
-                    name="text"
-                    label={t("t.title")}
-                    placeholder={t("t.title")}
-                    register={register}
-                    type="text"
-                    dataTestId={"preference-title"}
-                    defaultValue={questionData?.text}
-                    errorMessage={t("errors.requiredFieldError")}
-                    validation={{ required: true }}
-                    error={errors.text}
-                    inputProps={{
-                      onChange: () => clearErrors("text"),
+        <Drawer.Header id="preference-drawer-header">{drawerTitle}</Drawer.Header>
+        <Drawer.Content>
+          <Card>
+            <Card.Section>
+              <SectionWithGrid heading={t("settings.preference")}>
+                <Grid.Row columns={3}>
+                  <Grid.Cell className="seeds-grid-span-2">
+                    <Field
+                      id="text"
+                      name="text"
+                      label={t("t.title")}
+                      placeholder={t("t.title")}
+                      register={register}
+                      type="text"
+                      dataTestId={"preference-title"}
+                      defaultValue={questionData?.text}
+                      errorMessage={t("errors.requiredFieldError")}
+                      validation={{ required: true }}
+                      error={errors.text}
+                      inputProps={{
+                        onChange: () => clearErrors("text"),
+                      }}
+                    />
+                  </Grid.Cell>
+                </Grid.Row>
+                <Grid.Row columns={3}>
+                  <Grid.Cell className="seeds-grid-span-2">
+                    <Textarea
+                      label={t("t.descriptionTitle")}
+                      name={"description"}
+                      id={"description"}
+                      fullWidth={true}
+                      placeholder={t("settings.preferenceDescription")}
+                      register={register}
+                      dataTestId={"preference-description"}
+                      defaultValue={questionData?.description}
+                    />
+                  </Grid.Cell>
+                </Grid.Row>
+                <Grid.Row columns={3}>
+                  <Grid.Cell>
+                    <Field
+                      id="preferenceUrl"
+                      name="preferenceUrl"
+                      label={t("t.url")}
+                      placeholder={"https://"}
+                      register={register}
+                      type="url"
+                      dataTestId={"preference-link"}
+                      error={!!errors?.preferenceUrl}
+                      errorMessage={
+                        errors?.preferenceUrl?.type === "https"
+                          ? t("errors.urlHttpsError")
+                          : t("errors.urlError")
+                      }
+                      defaultValue={
+                        questionData?.links?.length > 0 ? questionData?.links[0].url : ""
+                      }
+                    />
+                  </Grid.Cell>
+                  <Grid.Cell>
+                    <Field
+                      id="preferenceLinkTitle"
+                      name="preferenceLinkTitle"
+                      label={t("settings.preferenceLinkTitle")}
+                      placeholder={t("settings.preferenceLinkTitle")}
+                      register={register}
+                      type="text"
+                      dataTestId={"preference-link-title"}
+                      defaultValue={
+                        questionData?.links?.length > 0 ? questionData?.links[0].title : ""
+                      }
+                    />
+                  </Grid.Cell>
+                </Grid.Row>
+              </SectionWithGrid>
+              {questionData?.options?.length > 0 && (
+                <div className="mb-5">
+                  <MinimalTable
+                    headers={{
+                      name: "t.name",
+                      description: "t.descriptionTitle",
+                      action: "",
                     }}
+                    data={draggableTableData}
+                    draggable={true}
+                    setData={setDragOrder}
                   />
-                </Grid.Cell>
-              </Grid.Row>
-              <Grid.Row columns={3}>
-                <Grid.Cell className="seeds-grid-span-2">
-                  <Textarea
-                    label={t("t.descriptionTitle")}
-                    name={"description"}
-                    id={"description"}
-                    fullWidth={true}
-                    placeholder={t("settings.preferenceDescription")}
-                    register={register}
-                    dataTestId={"preference-description"}
-                    defaultValue={questionData?.description}
-                  />
-                </Grid.Cell>
-              </Grid.Row>
-              <Grid.Row columns={3}>
-                <Grid.Cell>
-                  <Field
-                    id="preferenceUrl"
-                    name="preferenceUrl"
-                    label={t("t.url")}
-                    placeholder={"https://"}
-                    register={register}
-                    type="url"
-                    dataTestId={"preference-link"}
-                    error={!!errors?.preferenceUrl}
-                    errorMessage={
-                      errors?.preferenceUrl?.type === "https"
-                        ? t("errors.urlHttpsError")
-                        : t("errors.urlError")
-                    }
-                    defaultValue={questionData?.links?.length > 0 ? questionData?.links[0].url : ""}
-                  />
-                </Grid.Cell>
-                <Grid.Cell>
-                  <Field
-                    id="preferenceLinkTitle"
-                    name="preferenceLinkTitle"
-                    label={t("settings.preferenceLinkTitle")}
-                    placeholder={t("settings.preferenceLinkTitle")}
-                    register={register}
-                    type="text"
-                    dataTestId={"preference-link-title"}
-                    defaultValue={
-                      questionData?.links?.length > 0 ? questionData?.links[0].title : ""
-                    }
-                  />
-                </Grid.Cell>
-              </Grid.Row>
-            </SectionWithGrid>
-            {questionData?.options?.length > 0 && (
-              <div className="mb-5">
-                <MinimalTable
-                  headers={{
-                    name: "t.name",
-                    description: "t.descriptionTitle",
-                    action: "",
-                  }}
-                  data={draggableTableData}
-                  draggable={true}
-                  setData={setDragOrder}
-                />
-              </div>
-            )}
-
-            <div className={"mb-5 flex flex-col"}>
-              <Button
-                type="button"
-                size="sm"
-                className="w-max"
-                variant={errors["questions"] ? "alert-outlined" : "primary-outlined"}
-                onClick={() => {
-                  clearErrors("questions")
-                  setOptionData(null)
-                  setOptionDrawerOpen("add")
-                }}
-                id={"preference-add-option-button"}
-              >
-                {t("settings.preferenceAddOption")}
-              </Button>
-              {errors["questions"] && (
-                <FormErrorMessage className={"pt-1"}>
-                  {errors["questions"].message}
-                </FormErrorMessage>
+                </div>
               )}
-            </div>
 
-            <Grid>
-              <Grid.Row columns={3}>
-                <Grid.Cell>
-                  <div className="pb-4">
+              <div className={"mb-5 flex flex-col"}>
+                <Button
+                  type="button"
+                  size="sm"
+                  className="w-max"
+                  variant={errors["questions"] ? "alert-outlined" : "primary-outlined"}
+                  onClick={() => {
+                    clearErrors("questions")
+                    setOptionData(null)
+                    setOptionDrawerOpen("add")
+                  }}
+                  id={"preference-add-option-button"}
+                >
+                  {t("settings.preferenceAddOption")}
+                </Button>
+                {errors["questions"] && (
+                  <FormErrorMessage className={"pt-1"}>
+                    {errors["questions"].message}
+                  </FormErrorMessage>
+                )}
+              </div>
+
+              <Grid>
+                <Grid.Row columns={3}>
+                  <Grid.Cell>
+                    <div className="pb-4">
+                      <FieldGroup
+                        name="canYouOptOutQuestion"
+                        type="radio"
+                        register={register}
+                        groupLabel={t("settings.preferenceOptOut")}
+                        fields={[
+                          {
+                            id: "optOutYes",
+                            label: t("t.yes"),
+                            value: YesNoEnum.yes,
+                            defaultChecked:
+                              questionData === null || questionData?.optOutText !== null,
+                            dataTestId: "opt-out-question-yes",
+                          },
+                          {
+                            id: "optOutNo",
+                            label: t("t.no"),
+                            value: YesNoEnum.no,
+                            defaultChecked: questionData && questionData?.optOutText === null,
+                            dataTestId: "opt-out-question-no",
+                          },
+                        ]}
+                        fieldClassName="m-0"
+                        fieldGroupClassName="flex h-12 items-center"
+                        dataTestId={"preference-can-you-opt-out"}
+                      />
+                    </div>
+                  </Grid.Cell>
+                  {optOutQuestion === YesNoEnum.yes && (
+                    <Grid.Cell>
+                      <Field
+                        id="optOutText"
+                        name="optOutText"
+                        label={t("settings.preferenceOptOutLabel")}
+                        placeholder={t("settings.preferenceOptOutLabel")}
+                        register={register}
+                        type="text"
+                        dataTestId={"preference-opt-out-label"}
+                        defaultValue={
+                          questionData?.optOutText ?? t("application.preferences.dontWantSingular")
+                        }
+                      />
+                    </Grid.Cell>
+                  )}
+                </Grid.Row>
+                <Grid.Row columns={3}>
+                  <Grid.Cell>
                     <FieldGroup
-                      name="canYouOptOutQuestion"
+                      name="showOnListingQuestion"
                       type="radio"
                       register={register}
-                      groupLabel={t("settings.preferenceOptOut")}
+                      groupLabel={t("settings.preferenceShowOnListing")}
                       fields={[
                         {
-                          id: "optOutYes",
+                          id: "showOnListingYes",
                           label: t("t.yes"),
                           value: YesNoEnum.yes,
-                          defaultChecked:
-                            questionData === null || questionData?.optOutText !== null,
-                          dataTestId: "opt-out-question-yes",
+                          defaultChecked: questionData === null || !questionData?.hideFromListing,
+                          dataTestId: "show-on-listing-question-yes",
                         },
                         {
-                          id: "optOutNo",
+                          id: "showOnListingNo",
                           label: t("t.no"),
                           value: YesNoEnum.no,
-                          defaultChecked: questionData && questionData?.optOutText === null,
-                          dataTestId: "opt-out-question-no",
+                          defaultChecked: questionData?.hideFromListing,
+                          dataTestId: "show-on-listing-question-no",
                         },
                       ]}
                       fieldClassName="m-0"
                       fieldGroupClassName="flex h-12 items-center"
-                      dataTestId={"preference-can-you-opt-out"}
-                    />
-                  </div>
-                </Grid.Cell>
-                {optOutQuestion === YesNoEnum.yes && (
-                  <Grid.Cell>
-                    <Field
-                      id="optOutText"
-                      name="optOutText"
-                      label={t("settings.preferenceOptOutLabel")}
-                      placeholder={t("settings.preferenceOptOutLabel")}
-                      register={register}
-                      type="text"
-                      dataTestId={"preference-opt-out-label"}
-                      defaultValue={
-                        questionData?.optOutText ?? t("application.preferences.dontWantSingular")
-                      }
+                      dataTestId={"preference-show-on-listing"}
                     />
                   </Grid.Cell>
-                )}
-              </Grid.Row>
-              <Grid.Row columns={3}>
-                <Grid.Cell>
-                  <FieldGroup
-                    name="showOnListingQuestion"
-                    type="radio"
-                    register={register}
-                    groupLabel={t("settings.preferenceShowOnListing")}
-                    fields={[
-                      {
-                        id: "showOnListingYes",
-                        label: t("t.yes"),
-                        value: YesNoEnum.yes,
-                        defaultChecked: questionData === null || !questionData?.hideFromListing,
-                        dataTestId: "show-on-listing-question-yes",
-                      },
-                      {
-                        id: "showOnListingNo",
-                        label: t("t.no"),
-                        value: YesNoEnum.no,
-                        defaultChecked: questionData?.hideFromListing,
-                        dataTestId: "show-on-listing-question-no",
-                      },
-                    ]}
-                    fieldClassName="m-0"
-                    fieldGroupClassName="flex h-12 items-center"
-                    dataTestId={"preference-show-on-listing"}
-                  />
-                </Grid.Cell>
-              </Grid.Row>
-              <Grid.Row columns={3}>
-                <Grid.Cell>
-                  <Select
-                    id={"jurisdictionId"}
-                    name={"jurisdictionId"}
-                    label={t("t.jurisdiction")}
-                    register={register}
-                    controlClassName={"control"}
-                    keyPrefix={"jurisdictions"}
-                    options={
-                      profile
-                        ? [
-                            { label: "", value: "" },
-                            ...(profile?.jurisdictions || []).map((jurisdiction) => ({
-                              label: jurisdiction.name,
-                              value: jurisdiction.id,
-                            })),
-                          ]
-                        : [{ label: "", value: "" }]
-                    }
-                    dataTestId={"preference-jurisdiction"}
-                    defaultValue={
-                      questionData?.jurisdictions?.length > 0
-                        ? questionData.jurisdictions[0].id
-                        : null
-                    }
-                    errorMessage={t("errors.requiredFieldError")}
-                    error={errors.jurisdictionId}
-                    validation={{ required: true }}
-                    inputProps={{
-                      onChange: () => clearErrors("jurisdictionId"),
-                    }}
-                  />
-                </Grid.Cell>
-              </Grid.Row>
-            </Grid>
-          </Card.Section>
-        </Card>
-        <div className="pb-8">
+                </Grid.Row>
+                <Grid.Row columns={3}>
+                  <Grid.Cell>
+                    <Select
+                      id={"jurisdictionId"}
+                      name={"jurisdictionId"}
+                      label={t("t.jurisdiction")}
+                      register={register}
+                      controlClassName={"control"}
+                      keyPrefix={"jurisdictions"}
+                      options={
+                        profile
+                          ? [
+                              { label: "", value: "" },
+                              ...(profile?.jurisdictions || []).map((jurisdiction) => ({
+                                label: jurisdiction.name,
+                                value: jurisdiction.id,
+                              })),
+                            ]
+                          : [{ label: "", value: "" }]
+                      }
+                      dataTestId={"preference-jurisdiction"}
+                      defaultValue={
+                        questionData?.jurisdictions?.length > 0
+                          ? questionData.jurisdictions[0].id
+                          : null
+                      }
+                      errorMessage={t("errors.requiredFieldError")}
+                      error={errors.jurisdictionId}
+                      validation={{ required: true }}
+                      inputProps={{
+                        onChange: () => clearErrors("jurisdictionId"),
+                      }}
+                    />
+                  </Grid.Cell>
+                </Grid.Row>
+              </Grid>
+            </Card.Section>
+          </Card>
+        </Drawer.Content>
+        <Drawer.Footer>
           <Button
             type="button"
-            className={"mt-4"}
             variant="primary"
             loadingMessage={isLoading && t("t.formSubmitted")}
             onClick={async () => {
@@ -512,261 +514,147 @@ const PreferenceDrawer = ({
           >
             {t("t.save")}
           </Button>
-        </div>
+        </Drawer.Footer>
       </Drawer>
 
       <Drawer
-        open={!!optionDrawerOpen}
-        title={selectDrawerTitle}
-        ariaDescription={drawerTitle}
+        isOpen={!!optionDrawerOpen}
         onClose={() => {
           setOptionDrawerOpen(null)
         }}
+        ariaLabelledBy="preference-nested-drawer-header"
+        nested
       >
-        <Card>
-          <Card.Section>
-            <SectionWithGrid heading={t("t.option")}>
-              <Grid.Row columns={3}>
-                <Grid.Cell className="seeds-grid-span-2">
-                  <FieldValue label={t("t.title")}>
+        <Drawer.Header id="preference-nested-drawer-header">{selectDrawerTitle}</Drawer.Header>
+        <Drawer.Content>
+          <Card>
+            <Card.Section>
+              <SectionWithGrid heading={t("t.option")}>
+                <Grid.Row columns={3}>
+                  <Grid.Cell className="seeds-grid-span-2">
+                    <FieldValue label={t("t.title")}>
+                      <Field
+                        id="optionTitle"
+                        name="optionTitle"
+                        label={t("t.title")}
+                        placeholder={t("t.title")}
+                        register={register}
+                        type="text"
+                        readerOnly
+                        dataTestId={"preference-option-title"}
+                        defaultValue={optionData?.text}
+                        errorMessage={t("errors.requiredFieldError")}
+                        error={!!errors["optionTitle"]}
+                        inputProps={{
+                          onChange: () => {
+                            clearErrors("optionTitle")
+                          },
+                        }}
+                      />
+                    </FieldValue>
+                  </Grid.Cell>
+                </Grid.Row>
+                <Grid.Row columns={3}>
+                  <Grid.Cell className="seeds-grid-span-2">
+                    <Textarea
+                      label={t("t.descriptionTitle")}
+                      name={"optionDescription"}
+                      id={"optionDescription"}
+                      placeholder={t("settings.preferenceOptionDescription")}
+                      fullWidth={true}
+                      register={register}
+                      dataTestId={"preference-option-description"}
+                      defaultValue={optionData?.description}
+                    />
+                  </Grid.Cell>
+                </Grid.Row>
+                <Grid.Row columns={3}>
+                  <FieldValue label={t("t.url")}>
                     <Field
-                      id="optionTitle"
-                      name="optionTitle"
-                      label={t("t.title")}
-                      placeholder={t("t.title")}
+                      id="optionUrl"
+                      name="optionUrl"
+                      label={t("t.url")}
+                      placeholder={"https://"}
+                      register={register}
+                      type="url"
+                      error={!!errors?.optionUrl}
+                      errorMessage={
+                        errors?.optionUrl?.type === "https"
+                          ? t("errors.urlHttpsError")
+                          : t("errors.urlError")
+                      }
+                      readerOnly
+                      dataTestId={"preference-option-link"}
+                      defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].url : ""}
+                    />
+                  </FieldValue>
+                  <FieldValue label={t("settings.preferenceLinkTitle")}>
+                    <Field
+                      id="optionLinkTitle"
+                      name="optionLinkTitle"
+                      label={t("settings.preferenceLinkTitle")}
+                      placeholder={t("settings.preferenceLinkTitle")}
                       register={register}
                       type="text"
                       readerOnly
-                      dataTestId={"preference-option-title"}
-                      defaultValue={optionData?.text}
-                      errorMessage={t("errors.requiredFieldError")}
-                      error={!!errors["optionTitle"]}
-                      inputProps={{
-                        onChange: () => {
-                          clearErrors("optionTitle")
-                        },
-                      }}
+                      dataTestId={"preference-option-link-title"}
+                      defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].title : ""}
                     />
                   </FieldValue>
-                </Grid.Cell>
-              </Grid.Row>
-              <Grid.Row columns={3}>
-                <Grid.Cell className="seeds-grid-span-2">
-                  <Textarea
-                    label={t("t.descriptionTitle")}
-                    name={"optionDescription"}
-                    id={"optionDescription"}
-                    placeholder={t("settings.preferenceOptionDescription")}
-                    fullWidth={true}
-                    register={register}
-                    dataTestId={"preference-option-description"}
-                    defaultValue={optionData?.description}
-                  />
-                </Grid.Cell>
-              </Grid.Row>
-              <Grid.Row columns={3}>
-                <FieldValue label={t("t.url")}>
-                  <Field
-                    id="optionUrl"
-                    name="optionUrl"
-                    label={t("t.url")}
-                    placeholder={"https://"}
-                    register={register}
-                    type="url"
-                    error={!!errors?.optionUrl}
-                    errorMessage={
-                      errors?.optionUrl?.type === "https"
-                        ? t("errors.urlHttpsError")
-                        : t("errors.urlError")
-                    }
-                    readerOnly
-                    dataTestId={"preference-option-link"}
-                    defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].url : ""}
-                  />
-                </FieldValue>
-                <FieldValue label={t("settings.preferenceLinkTitle")}>
-                  <Field
-                    id="optionLinkTitle"
-                    name="optionLinkTitle"
-                    label={t("settings.preferenceLinkTitle")}
-                    placeholder={t("settings.preferenceLinkTitle")}
-                    register={register}
-                    type="text"
-                    readerOnly
-                    dataTestId={"preference-option-link-title"}
-                    defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].title : ""}
-                  />
-                </FieldValue>
-              </Grid.Row>
-              <Grid.Row columns={3}>
-                <FieldValue label={t("settings.preferenceExclusiveQuestion")} className="mb-1">
-                  <FieldGroup
-                    name="exclusiveQuestion"
-                    type="radio"
-                    register={register}
-                    fields={[
-                      {
-                        id: "multiselect",
-                        label: t("settings.preferenceMultiSelect"),
-                        value: "multiselect",
-                        defaultChecked: optionData === null || !optionData?.exclusive,
-                        dataTestId: "exclusive-question-multiselect",
-                      },
-                      {
-                        id: "exclusive",
-                        label: t("settings.preferenceExclusive"),
-                        value: "exclusive",
-                        defaultChecked: optionData?.exclusive,
-                        dataTestId: "exclusive-question-exclusive",
-                      },
-                    ]}
-                    fieldClassName="m-0"
-                    fieldGroupClassName="flex h-12 items-center"
-                    dataTestId={"preference-exclusive-question"}
-                  />
-                </FieldValue>
-              </Grid.Row>
-            </SectionWithGrid>
-          </Card.Section>
-
-          <Card.Section>
-            <div className="border-t pt-8" />
-            <SectionWithGrid heading={t("settings.preferenceAdditionalFields")}>
-              <Grid.Row columns={3}>
-                <Grid.Cell className="pr-8">
-                  <FieldValue label={t("settings.preferenceCollectAddress")}>
+                </Grid.Row>
+                <Grid.Row columns={3}>
+                  <FieldValue label={t("settings.preferenceExclusiveQuestion")} className="mb-1">
                     <FieldGroup
-                      name="collectAddress"
+                      name="exclusiveQuestion"
                       type="radio"
                       register={register}
-                      validation={{ required: true }}
-                      error={errors.collectAddress}
                       fields={[
                         {
-                          label: t("t.yes"),
-                          value: YesNoEnum.yes,
-                          defaultChecked: optionData?.collectAddress,
-                          id: "collectAddressYes",
-                          dataTestId: "collect-address-yes",
-                          inputProps: {
-                            onChange: () => {
-                              clearErrors("collectAddress")
-                            },
-                          },
+                          id: "multiselect",
+                          label: t("settings.preferenceMultiSelect"),
+                          value: "multiselect",
+                          defaultChecked: optionData === null || !optionData?.exclusive,
+                          dataTestId: "exclusive-question-multiselect",
                         },
                         {
-                          label: t("t.no"),
-                          value: YesNoEnum.no,
-                          defaultChecked:
-                            optionData?.collectAddress !== undefined &&
-                            optionData?.collectAddress === false,
-                          id: "collectAddressNo",
-                          dataTestId: "collect-address-no",
-                          inputProps: {
-                            onChange: () => {
-                              clearErrors("collectAddress")
-                            },
-                          },
+                          id: "exclusive",
+                          label: t("settings.preferenceExclusive"),
+                          value: "exclusive",
+                          defaultChecked: optionData?.exclusive,
+                          dataTestId: "exclusive-question-exclusive",
                         },
                       ]}
                       fieldClassName="m-0"
-                      fieldGroupClassName="flex column items-center"
-                      dataTestId={"preference-option-collect-address"}
+                      fieldGroupClassName="flex h-12 items-center"
+                      dataTestId={"preference-exclusive-question"}
                     />
                   </FieldValue>
-                </Grid.Cell>
-                <Grid.Cell className="pr-12">
-                  {collectAddressExpand && (
-                    <FieldValue label={t("settings.preferenceValidatingAddress")}>
-                      <FieldGroup
-                        name="validationMethod"
-                        type="radio"
-                        register={register}
-                        validation={{ required: true }}
-                        error={errors.validationMethod}
-                        fields={validationMethodsFields}
-                        fieldClassName="m-0"
-                        fieldGroupClassName="flex flex-col"
-                        dataTestId={"preference-option-validation-method"}
-                      />
-                    </FieldValue>
-                  )}
-                </Grid.Cell>
-                <Grid.Cell className="pr-8">
-                  {collectAddressExpand && readiusExpand && isValidationRadiusVisible && (
-                    <FieldValue label={t("settings.preferenceValidatingAddress.howManyMiles")}>
-                      <Field
-                        id="radiusSize"
-                        name="radiusSize"
-                        label={t("settings.preferenceValidatingAddress.howManyMiles")}
-                        register={register}
-                        validation={{ required: true, min: 0 }}
-                        error={errors.radiusSize}
-                        errorMessage={t("errors.requiredFieldError")}
-                        type="number"
-                        readerOnly
-                        defaultValue={optionData?.radiusSize ?? null}
-                        dataTestId={"preference-option-radius-size"}
-                        inputProps={{
-                          onChange: () => clearErrors("radiusSize"),
-                        }}
-                      />
-                    </FieldValue>
-                  )}
-                  {collectAddressExpand && mapExpand && (
-                    <FieldValue label={t("settings.preferenceValidatingAddress.selectMapLayer")}>
-                      <p className={s.helperText}>
-                        {t("settings.preferenceValidatingAddress.selectMapLayerDescription")}
-                      </p>
-                      <Select
-                        id={"mapLayerId"}
-                        name={"mapLayerId"}
-                        register={register}
-                        controlClassName={"control"}
-                        options={
-                          mapLayers
-                            ? [
-                                { label: "", value: "" },
-                                ...mapLayers.map((layer) => ({
-                                  label: layer.name,
-                                  value: layer.id,
-                                })),
-                              ]
-                            : [{ label: "", value: "" }]
-                        }
-                        dataTestId={"preference-map-layer"}
-                        defaultValue={optionData?.mapLayerId ?? null}
-                        errorMessage={t("errors.requiredFieldError")}
-                        error={errors.mapLayerId}
-                        validation={{ required: true }}
-                        inputProps={{
-                          onChange: () => clearErrors("mapLayerId"),
-                        }}
-                      />
-                    </FieldValue>
-                  )}
-                </Grid.Cell>
-              </Grid.Row>
-              {collectAddressExpand && (
+                </Grid.Row>
+              </SectionWithGrid>
+            </Card.Section>
+
+            <Card.Section>
+              <div className="border-t pt-8" />
+              <SectionWithGrid heading={t("settings.preferenceAdditionalFields")}>
                 <Grid.Row columns={3}>
                   <Grid.Cell className="pr-8">
-                    <FieldValue label={t("settings.preferenceCollectAddressHolderName")}>
+                    <FieldValue label={t("settings.preferenceCollectAddress")}>
                       <FieldGroup
-                        name="collectName"
+                        name="collectAddress"
                         type="radio"
                         register={register}
                         validation={{ required: true }}
-                        error={errors.collectName}
+                        error={errors.collectAddress}
                         fields={[
                           {
                             label: t("t.yes"),
                             value: YesNoEnum.yes,
-                            defaultChecked: optionData?.collectName,
-                            id: "collectNameYes",
-                            dataTestId: "collect-name-yes",
+                            defaultChecked: optionData?.collectAddress,
+                            id: "collectAddressYes",
+                            dataTestId: "collect-address-yes",
                             inputProps: {
                               onChange: () => {
-                                clearErrors("collectName")
+                                clearErrors("collectAddress")
                               },
                             },
                           },
@@ -774,73 +662,189 @@ const PreferenceDrawer = ({
                             label: t("t.no"),
                             value: YesNoEnum.no,
                             defaultChecked:
-                              optionData?.collectName !== undefined && !optionData?.collectName,
-                            id: "collectNameNo",
-                            dataTestId: "collect-name-no",
+                              optionData?.collectAddress !== undefined &&
+                              optionData?.collectAddress === false,
+                            id: "collectAddressNo",
+                            dataTestId: "collect-address-no",
                             inputProps: {
                               onChange: () => {
-                                clearErrors("collectName")
+                                clearErrors("collectAddress")
                               },
                             },
                           },
                         ]}
                         fieldClassName="m-0"
                         fieldGroupClassName="flex column items-center"
-                        dataTestId={"preference-option-collect-name"}
+                        dataTestId={"preference-option-collect-address"}
                       />
                     </FieldValue>
+                  </Grid.Cell>
+                  <Grid.Cell className="pr-12">
+                    {collectAddressExpand && (
+                      <FieldValue label={t("settings.preferenceValidatingAddress")}>
+                        <FieldGroup
+                          name="validationMethod"
+                          type="radio"
+                          register={register}
+                          validation={{ required: true }}
+                          error={errors.validationMethod}
+                          fields={validationMethodsFields}
+                          fieldClassName="m-0"
+                          fieldGroupClassName="flex flex-col"
+                          dataTestId={"preference-option-validation-method"}
+                        />
+                      </FieldValue>
+                    )}
                   </Grid.Cell>
                   <Grid.Cell className="pr-8">
-                    <FieldValue label={t("settings.preferenceCollectAddressHolderRelationship")}>
-                      <FieldGroup
-                        name="collectRelationship"
-                        type="radio"
-                        register={register}
-                        validation={{ required: true }}
-                        error={errors.collectRelationship}
-                        fields={[
-                          {
-                            label: t("t.yes"),
-                            value: YesNoEnum.yes,
-                            defaultChecked: optionData?.collectRelationship,
-                            id: "collectRelationshipYes",
-                            dataTestId: "collect-relationship-yes",
-                            inputProps: {
-                              onChange: () => {
-                                clearErrors("collectRelationship")
-                              },
-                            },
-                          },
-                          {
-                            label: t("t.no"),
-                            value: YesNoEnum.no,
-                            defaultChecked:
-                              optionData?.collectRelationship !== undefined &&
-                              !optionData?.collectRelationship,
-                            id: "collectRelationshipNo",
-                            dataTestId: "collect-relationship-no",
-                            inputProps: {
-                              onChange: () => {
-                                clearErrors("collectRelationship")
-                              },
-                            },
-                          },
-                        ]}
-                        fieldClassName="m-0"
-                        fieldGroupClassName="flex"
-                        dataTestId={"preference-option-collect-relationship"}
-                      />
-                    </FieldValue>
+                    {collectAddressExpand && readiusExpand && isValidationRadiusVisible && (
+                      <FieldValue label={t("settings.preferenceValidatingAddress.howManyMiles")}>
+                        <Field
+                          id="radiusSize"
+                          name="radiusSize"
+                          label={t("settings.preferenceValidatingAddress.howManyMiles")}
+                          register={register}
+                          validation={{ required: true, min: 0 }}
+                          error={errors.radiusSize}
+                          errorMessage={t("errors.requiredFieldError")}
+                          type="number"
+                          readerOnly
+                          defaultValue={optionData?.radiusSize ?? null}
+                          dataTestId={"preference-option-radius-size"}
+                          inputProps={{
+                            onChange: () => clearErrors("radiusSize"),
+                          }}
+                        />
+                      </FieldValue>
+                    )}
+                    {collectAddressExpand && mapExpand && (
+                      <FieldValue label={t("settings.preferenceValidatingAddress.selectMapLayer")}>
+                        <p className={s.helperText}>
+                          {t("settings.preferenceValidatingAddress.selectMapLayerDescription")}
+                        </p>
+                        <Select
+                          id={"mapLayerId"}
+                          name={"mapLayerId"}
+                          register={register}
+                          controlClassName={"control"}
+                          options={
+                            mapLayers
+                              ? [
+                                  { label: "", value: "" },
+                                  ...mapLayers.map((layer) => ({
+                                    label: layer.name,
+                                    value: layer.id,
+                                  })),
+                                ]
+                              : [{ label: "", value: "" }]
+                          }
+                          dataTestId={"preference-map-layer"}
+                          defaultValue={optionData?.mapLayerId ?? null}
+                          errorMessage={t("errors.requiredFieldError")}
+                          error={errors.mapLayerId}
+                          validation={{ required: true }}
+                          inputProps={{
+                            onChange: () => clearErrors("mapLayerId"),
+                          }}
+                        />
+                      </FieldValue>
+                    )}
                   </Grid.Cell>
                 </Grid.Row>
-              )}
-            </SectionWithGrid>
-          </Card.Section>
-        </Card>
-        <div className="pb-8">
+                {collectAddressExpand && (
+                  <Grid.Row columns={3}>
+                    <Grid.Cell className="pr-8">
+                      <FieldValue label={t("settings.preferenceCollectAddressHolderName")}>
+                        <FieldGroup
+                          name="collectName"
+                          type="radio"
+                          register={register}
+                          validation={{ required: true }}
+                          error={errors.collectName}
+                          fields={[
+                            {
+                              label: t("t.yes"),
+                              value: YesNoEnum.yes,
+                              defaultChecked: optionData?.collectName,
+                              id: "collectNameYes",
+                              dataTestId: "collect-name-yes",
+                              inputProps: {
+                                onChange: () => {
+                                  clearErrors("collectName")
+                                },
+                              },
+                            },
+                            {
+                              label: t("t.no"),
+                              value: YesNoEnum.no,
+                              defaultChecked:
+                                optionData?.collectName !== undefined && !optionData?.collectName,
+                              id: "collectNameNo",
+                              dataTestId: "collect-name-no",
+                              inputProps: {
+                                onChange: () => {
+                                  clearErrors("collectName")
+                                },
+                              },
+                            },
+                          ]}
+                          fieldClassName="m-0"
+                          fieldGroupClassName="flex column items-center"
+                          dataTestId={"preference-option-collect-name"}
+                        />
+                      </FieldValue>
+                    </Grid.Cell>
+                    <Grid.Cell className="pr-8">
+                      <FieldValue label={t("settings.preferenceCollectAddressHolderRelationship")}>
+                        <FieldGroup
+                          name="collectRelationship"
+                          type="radio"
+                          register={register}
+                          validation={{ required: true }}
+                          error={errors.collectRelationship}
+                          fields={[
+                            {
+                              label: t("t.yes"),
+                              value: YesNoEnum.yes,
+                              defaultChecked: optionData?.collectRelationship,
+                              id: "collectRelationshipYes",
+                              dataTestId: "collect-relationship-yes",
+                              inputProps: {
+                                onChange: () => {
+                                  clearErrors("collectRelationship")
+                                },
+                              },
+                            },
+                            {
+                              label: t("t.no"),
+                              value: YesNoEnum.no,
+                              defaultChecked:
+                                optionData?.collectRelationship !== undefined &&
+                                !optionData?.collectRelationship,
+                              id: "collectRelationshipNo",
+                              dataTestId: "collect-relationship-no",
+                              inputProps: {
+                                onChange: () => {
+                                  clearErrors("collectRelationship")
+                                },
+                              },
+                            },
+                          ]}
+                          fieldClassName="m-0"
+                          fieldGroupClassName="flex"
+                          dataTestId={"preference-option-collect-relationship"}
+                        />
+                      </FieldValue>
+                    </Grid.Cell>
+                  </Grid.Row>
+                )}
+              </SectionWithGrid>
+            </Card.Section>
+          </Card>
+        </Drawer.Content>
+        <Drawer.Footer>
           <Button
             type="button"
-            className={"mt-4"}
             variant="primary"
             onClick={async () => {
               const formData = getValues() as OptionForm
@@ -915,7 +919,7 @@ const PreferenceDrawer = ({
           >
             {t("t.save")}
           </Button>
-        </div>
+        </Drawer.Footer>
       </Drawer>
     </>
   )
