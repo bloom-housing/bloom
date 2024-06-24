@@ -93,25 +93,37 @@ export class TranslationService {
     }
 
     const pathsToFilter = {
+      accessibility: listing.accessibility,
+      amenities: listing.amenities,
+      applicationDropOffAddressOfficeHours:
+        listing.applicationDropOffAddressOfficeHours,
       applicationPickUpAddressOfficeHours:
         listing.applicationPickUpAddressOfficeHours,
       costsNotIncluded: listing.costsNotIncluded,
       creditHistory: listing.creditHistory,
       criminalBackground: listing.criminalBackground,
+      depositHelperText: listing.depositHelperText,
+      depositMax: listing.depositMax,
+      depositMin: listing.depositMin,
+      leasingAgentOfficeHours: listing.leasingAgentOfficeHours,
+      neighborhood: listing.neighborhood,
+      petPolicy: listing.petPolicy,
       programRules: listing.programRules,
       rentalAssistance: listing.rentalAssistance,
       rentalHistory: listing.rentalHistory,
       requiredDocuments: listing.requiredDocuments,
-      specialNotes: listing.specialNotes,
-      whatToExpect: listing.whatToExpect,
-      accessibility: listing.accessibility,
-      amenities: listing.amenities,
-      neighborhood: listing.neighborhood,
-      petPolicy: listing.petPolicy,
+      reservedCommunityDescription: listing.reservedCommunityDescription,
       servicesOffered: listing.servicesOffered,
       smokingPolicy: listing.smokingPolicy,
+      specialNotes: listing.specialNotes,
       unitAmenities: listing.unitAmenities,
+      whatToExpect: listing.whatToExpect,
     };
+
+    if (listing.referralApplication?.externalReference) {
+      pathsToFilter[`referralApplication.externalReference`] =
+        listing.referralApplication?.externalReference;
+    }
 
     listing.listingEvents?.forEach((_, index) => {
       pathsToFilter[`listingEvents[${index}].note`] =
