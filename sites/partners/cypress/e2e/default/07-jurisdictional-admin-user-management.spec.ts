@@ -83,7 +83,7 @@ describe("Jurisdictional Admin User Mangement Tests", () => {
       )
     })
     cy.getByTestId("listings_Bloomington").first().click()
-    cy.getByTestId("listings_Bloomington").last().click()
+    cy.getByTestId("listings_Bloomington").last().click({ force: true })
     cy.getByID("invite-user").click()
     cy.getByTestId("toast-alert").contains("Invite sent").should("have.text", "Invite sent")
   })

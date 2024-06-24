@@ -92,13 +92,20 @@
   margin-block-end: var(--seeds-spacer-text);
 }
 
-:is(.spacer-container, .spacer-section, .spacer-content, .spacer-header, .spacer-label, .spacer-text):last-child {
+:is(
+    .spacer-container,
+    .spacer-section,
+    .spacer-content,
+    .spacer-header,
+    .spacer-label,
+    .spacer-text
+  ):last-child {
   margin-block-end: 0;
 }
 
 /* Override out-of-date ui-components labeling */
 :is(label, legend).text__caps-spaced {
-/*  --text-caps-spaced-font-family: var(--bloom-font-sans); */
+  /*  --text-caps-spaced-font-family: var(--bloom-font-sans); */
   --text-caps-spaced-letter-spacing: normal;
   --text-caps-spaced-font-weight: normal;
   --text-caps-spaced-margin-bottom: var(--seeds-s2);
@@ -166,7 +173,14 @@
   margin-block-end: var(--seeds-spacer-text);
 }
 
-:is(.spacer-container, .spacer-section, .spacer-content, .spacer-header, .spacer-label, .spacer-text):last-child {
+:is(
+    .spacer-container,
+    .spacer-section,
+    .spacer-content,
+    .spacer-header,
+    .spacer-label,
+    .spacer-text
+  ):last-child {
   margin-block-end: 0;
 }
 
@@ -177,4 +191,9 @@
   --text-caps-spaced-font-weight: normal;
   --text-caps-spaced-margin-bottom: var(--seeds-s2);
   text-transform: none;
+}
+
+.seeds-drawer-header .seeds-tag {
+  vertical-align: 15%;
+  margin-inline-start: var(--seeds-s3);
 }

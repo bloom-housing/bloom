@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import {
   t,
-  Drawer,
   Dropzone,
   FieldGroup,
   Field,
@@ -13,7 +12,7 @@ import {
   PhoneMask,
   StandardTableData,
 } from "@bloom-housing/ui-components"
-import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
+import { Button, Card, Drawer, Grid } from "@bloom-housing/ui-seeds"
 import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../../lib/helpers"
 import {
   ApplicationMethodCreate,
@@ -543,11 +542,54 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
       </SectionWithGrid>
 
       <Drawer
-        open={drawerState}
-        title={t("listings.addPaperApplication")}
+        isOpen={drawerState}
         onClose={() => resetDrawerState()}
-        ariaDescription="Form with paper application upload dropzone"
-        actions={[
+        ariaLabelledBy="application-types-drawer-header"
+      >
+        <Drawer.Header id="application-types-drawer-header">
+          {t("listings.addPaperApplication")}
+        </Drawer.Header>
+        <Drawer.Content>
+          <Card>
+            <Card.Section>
+              {cloudinaryData.url === "" && (
+                <div className="field">
+                  <p className="mb-2">
+                    <label className="label">{t("t.language")}</label>
+                  </p>
+                  <Select
+                    name="paperApplicationLanguage"
+                    options={Object.values(LanguagesEnum).map((item) => ({
+                      label: t(`languages.${item}`),
+                      value: item,
+                    }))}
+                    defaultValue={selectedLanguage}
+                    inputProps={{
+                      onChange: (e) => {
+                        setSelectedLanguage(e.target.value)
+                      },
+                    }}
+                  />
+                </div>
+              )}
+              <Dropzone
+                id="listing-paper-application-upload"
+                label={t("t.uploadFile")}
+                helptext={t("listings.pdfHelperText")}
+                uploader={pdfUploader}
+                accept="application/pdf"
+                progress={progressValue}
+              />
+              {cloudinaryData.url !== "" && (
+                <MinimalTable
+                  headers={paperApplicationsTableHeaders}
+                  data={previewPaperApplicationsTableRows}
+                ></MinimalTable>
+              )}
+            </Card.Section>
+          </Card>
+        </Drawer.Content>
+        <Drawer.Footer>
           <Button
             key={0}
             onClick={() => {
@@ -558,7 +600,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             size="sm"
           >
             Save
-          </Button>,
+          </Button>
           <Button
             key={1}
             onClick={() => {
@@ -568,47 +610,8 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             size="sm"
           >
             Cancel
-          </Button>,
-        ]}
-      >
-        <Card spacing="lg" className="spacer-section">
-          <Card.Section>
-            {cloudinaryData.url === "" && (
-              <div className="field">
-                <p className="mb-2">
-                  <label className="label">{t("t.language")}</label>
-                </p>
-                <Select
-                  name="paperApplicationLanguage"
-                  options={Object.values(LanguagesEnum).map((item) => ({
-                    label: t(`languages.${item}`),
-                    value: item,
-                  }))}
-                  defaultValue={selectedLanguage}
-                  inputProps={{
-                    onChange: (e) => {
-                      setSelectedLanguage(e.target.value)
-                    },
-                  }}
-                />
-              </div>
-            )}
-            <Dropzone
-              id="listing-paper-application-upload"
-              label={t("t.uploadFile")}
-              helptext={t("listings.pdfHelperText")}
-              uploader={pdfUploader}
-              accept="application/pdf"
-              progress={progressValue}
-            />
-            {cloudinaryData.url !== "" && (
-              <MinimalTable
-                headers={paperApplicationsTableHeaders}
-                data={previewPaperApplicationsTableRows}
-              ></MinimalTable>
-            )}
-          </Card.Section>
-        </Card>
+          </Button>
+        </Drawer.Footer>
       </Drawer>
     </>
   )

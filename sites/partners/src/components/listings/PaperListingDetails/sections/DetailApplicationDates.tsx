@@ -1,7 +1,7 @@
 import React, { useContext, useMemo, useState } from "react"
 import dayjs from "dayjs"
-import { t, MinimalTable, Drawer } from "@bloom-housing/ui-components"
-import { Button, Card, FieldValue, Grid, Link } from "@bloom-housing/ui-seeds"
+import { t, MinimalTable } from "@bloom-housing/ui-components"
+import { Button, Card, Drawer, FieldValue, Grid, Link } from "@bloom-housing/ui-seeds"
 import {
   ListingEvent,
   ListingEventsTypeEnum,
@@ -88,47 +88,52 @@ const DetailApplicationDates = () => {
         )}
 
         <Drawer
-          open={!!drawer}
-          title={t("listings.sections.openHouse")}
-          ariaDescription={t("listings.unit.title")}
+          isOpen={!!drawer}
+          ariaLabelledBy="detail-application-dates-drawer-header"
           onClose={() => setDrawer(null)}
         >
-          <Card spacing="lg" className="spacer-section">
-            <Card.Section>
-              <Grid className="grid-inset-section">
-                <Grid.Row columns={3}>
-                  <FieldValue id="drawer.startTime.date" label={t("t.date")}>
-                    {drawer?.startTime && getDetailFieldDate(drawer.startTime)}
-                  </FieldValue>
-                  <FieldValue id="drawer.startTime.time" label={t("t.startTime")}>
-                    {getDetailFieldTime(drawer?.startTime)}
-                  </FieldValue>
-                  <FieldValue id="drawer.endTime.time" label={t("t.endTime")}>
-                    {drawer?.endTime && getDetailFieldTime(drawer?.endTime)}
-                  </FieldValue>
-                  <FieldValue id="drawer.url" label={t("t.url")}>
-                    {drawer?.url ? (
-                      <Link className="mx-0 my-0" href={drawer.url}>
-                        {drawer?.label ?? t("t.url")}
-                      </Link>
-                    ) : (
-                      t("t.n/a")
-                    )}
-                  </FieldValue>
-                  <FieldValue
-                    id="events.openHouseNotes"
-                    label={t("listings.events.openHouseNotes")}
-                  >
-                    {drawer?.note || t("t.n/a")}
-                  </FieldValue>
-                </Grid.Row>
-              </Grid>
-            </Card.Section>
-          </Card>
-
-          <Button variant="primary" size="sm" onClick={() => setDrawer(null)}>
-            {t("t.done")}
-          </Button>
+          <Drawer.Header id="detail-application-dates-drawer-header">
+            {t("listings.sections.openHouse")}
+          </Drawer.Header>
+          <Drawer.Content>
+            <Card>
+              <Card.Section>
+                <Grid className="grid-inset-section">
+                  <Grid.Row columns={3}>
+                    <FieldValue id="drawer.startTime.date" label={t("t.date")}>
+                      {drawer?.startTime && getDetailFieldDate(drawer.startTime)}
+                    </FieldValue>
+                    <FieldValue id="drawer.startTime.time" label={t("t.startTime")}>
+                      {getDetailFieldTime(drawer?.startTime)}
+                    </FieldValue>
+                    <FieldValue id="drawer.endTime.time" label={t("t.endTime")}>
+                      {drawer?.endTime && getDetailFieldTime(drawer?.endTime)}
+                    </FieldValue>
+                    <FieldValue id="drawer.url" label={t("t.url")}>
+                      {drawer?.url ? (
+                        <Link className="mx-0 my-0" href={drawer.url}>
+                          {drawer?.label ?? t("t.url")}
+                        </Link>
+                      ) : (
+                        t("t.n/a")
+                      )}
+                    </FieldValue>
+                    <FieldValue
+                      id="events.openHouseNotes"
+                      label={t("listings.events.openHouseNotes")}
+                    >
+                      {drawer?.note || t("t.n/a")}
+                    </FieldValue>
+                  </Grid.Row>
+                </Grid>
+              </Card.Section>
+            </Card>
+          </Drawer.Content>
+          <Drawer.Footer>
+            <Button variant="primary" size="sm" onClick={() => setDrawer(null)}>
+              {t("t.done")}
+            </Button>
+          </Drawer.Footer>
         </Drawer>
       </SectionWithGrid>
     </>

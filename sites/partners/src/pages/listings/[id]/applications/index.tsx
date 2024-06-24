@@ -173,7 +173,7 @@ const ApplicationsList = () => {
                   setSort: tableOptions.sort.setSortOptions,
                 }}
                 headerContent={
-                  <div className="flex-row">
+                  <div className="flex gap-2 items-center">
                     <Button
                       onClick={() => {
                         if (listingDto.lotteryLastRunAt) {
@@ -186,7 +186,6 @@ const ApplicationsList = () => {
                       }}
                       variant="primary-outlined"
                       size="sm"
-                      className="mx-1"
                       id={"addApplicationButton"}
                     >
                       {t("applications.addApplication")}
@@ -195,7 +194,6 @@ const ApplicationsList = () => {
                     <Button
                       variant="primary-outlined"
                       size="sm"
-                      className="mx-1"
                       onClick={() => onExport()}
                       loadingMessage={csvExportLoading && t("t.formSubmitted")}
                     >

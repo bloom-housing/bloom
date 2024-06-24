@@ -1,5 +1,5 @@
-import { Modal, t, Form, Field } from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
+import { t, Form, Field } from "@bloom-housing/ui-components"
+import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { useRouter } from "next/router"
 import { useContext, useEffect, useRef, useState } from "react"
@@ -77,32 +77,18 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
   }, [router, profile])
 
   return (
-    <Modal
-      open={openModal}
-      title={t("authentication.createAccount.linkExpired")}
-      ariaDescription={t("authentication.createAccount.linkExpired")}
+    <Dialog
+      isOpen={openModal}
       onClose={() => {
         void router.push("/")
         window.scrollTo(0, 0)
       }}
-      actions={[
-        <Button type="submit" variant="primary" onClick={() => onFormSubmit()} size="sm">
-          {t("authentication.createAccount.resendTheEmail")}
-        </Button>,
-        <Button
-          variant="alert"
-          onClick={() => {
-            void router.push("/")
-            setOpenModal(false)
-            window.scrollTo(0, 0)
-          }}
-          size="sm"
-        >
-          {t("t.cancel")}
-        </Button>,
-      ]}
+      ariaLabelledBy="account-confirmation-dialog-header"
     >
-      <>
+      <Dialog.Header id="account-confirmation-dialog-header">
+        {t("authentication.createAccount.linkExpired")}
+      </Dialog.Header>
+      <Dialog.Content>
         <Form id="resend-confirmation" onSubmit={handleSubmit(onSubmit)}>
           <Field
             type="email"
@@ -117,8 +103,24 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
           />
         </Form>
         <p className="pt-4">{t("authentication.createAccount.resendEmailInfo")}</p>
-      </>
-    </Modal>
+      </Dialog.Content>
+      <Dialog.Footer>
+        <Button type="submit" variant="primary" onClick={() => onFormSubmit()} size="sm">
+          {t("authentication.createAccount.resendTheEmail")}
+        </Button>
+        <Button
+          variant="alert"
+          onClick={() => {
+            void router.push("/")
+            setOpenModal(false)
+            window.scrollTo(0, 0)
+          }}
+          size="sm"
+        >
+          {t("t.cancel")}
+        </Button>
+      </Dialog.Footer>
+    </Dialog>
   )
 }
 
