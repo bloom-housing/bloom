@@ -274,5 +274,5 @@ export class Application extends AbstractDTO {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationLotteryPosition)
   @ApiProperty({ type: ApplicationLotteryPosition, isArray: true })
-  ApplicationLotteryPositions: ApplicationLotteryPosition[];
+  applicationLotteryPositions: ApplicationLotteryPosition[];
 }

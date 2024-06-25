@@ -792,14 +792,14 @@ export class ApplicationCsvExporterService
   ): Promise<void> {
     // remove duplicates
     let filteredApplications = applications.filter(
-      (application) => !!application.markedAsDuplicate,
+      (application) => !application.markedAsDuplicate,
     );
     // prep our supporting array
     const ordinalArray = this.lotteryRandomizerHelper(filteredApplications);
 
-    // store raw positional score in db
+    // attach ordinal info to filteredApplications
     for (let i = 0; i < ordinalArray.length; i++) {
-      filteredApplications[i].ApplicationLotteryPositions = [
+      filteredApplications[i].applicationLotteryPositions = [
         {
           listingId,
           applicationId: filteredApplications[i].id,
@@ -807,21 +807,23 @@ export class ApplicationCsvExporterService
           multiselectQuestionId: null,
         },
       ];
-      await this.prisma.applicationLotteryPositions.create({
-        data: {
-          listingId,
-          applicationId: filteredApplications[i].id,
-          ordinal: ordinalArray[i],
-          multiselectQuestionId: null,
-        },
-      });
     }
+
+    // store raw positional score in db
+    await this.prisma.applicationLotteryPositions.createMany({
+      data: filteredApplications.map((app, index) => ({
+        listingId,
+        applicationId: app.id,
+        ordinal: ordinalArray[index],
+        multiselectQuestionId: null,
+      })),
+    });
 
     // order by ordinal
     filteredApplications = filteredApplications.sort(
       (a, b) =>
-        a.ApplicationLotteryPositions[0].ordinal -
-        b.ApplicationLotteryPositions[0].ordinal,
+        a.applicationLotteryPositions[0].ordinal -
+        b.applicationLotteryPositions[0].ordinal,
     );
 
     // loop over each preference on the listing and store the relative position of the applications
@@ -845,15 +847,15 @@ export class ApplicationCsvExporterService
         }
       }
 
-      // store these values in the db
-      for (let j = 0; j < applicationsWithThisPreference.length; j++) {
-        await this.prisma.applicationLotteryPositions.create({
-          data: {
+      if (applicationsWithThisPreference.length) {
+        // store these values in the db
+        await this.prisma.applicationLotteryPositions.createMany({
+          data: applicationsWithThisPreference.map((app, index) => ({
             listingId,
-            applicationId: applicationsWithThisPreference[j].id,
-            ordinal: ordinalArrayWithThisPreference[j],
+            applicationId: app.id,
+            ordinal: ordinalArrayWithThisPreference[index],
             multiselectQuestionId: id,
-          },
+          })),
         });
       }
     }

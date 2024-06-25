@@ -222,7 +222,7 @@ model Applications {
   demographics                 Demographics?                 @relation(fields: [demographicsId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   preferredUnitTypes           UnitTypes[]
   householdMember              HouseholdMember[]
-  ApplicationLotteryPositions  ApplicationLotteryPositions[]
+  applicationLotteryPositions  ApplicationLotteryPositions[]
 
   @@unique([listingId, confirmationCode])
   @@index([listingId])
@@ -585,7 +585,7 @@ model Listings {
   requestedChangesDate                  DateTime?                     @default(dbgenerated("'1970-01-01 00:00:00-07'::timestamp with time zone")) @map("requested_changes_date") @db.Timestamptz(6)
   requestedChangesUserId                String?                       @map("requested_changes_user_id") @db.Uuid
   requestedChangesUser                  UserAccounts?                 @relation("requested_changes_user", fields: [requestedChangesUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  ApplicationLotteryPositions           ApplicationLotteryPositions[]
+  applicationLotteryPositions           ApplicationLotteryPositions[]
 
   @@index([jurisdictionId])
   @@map("listings")
@@ -625,7 +625,7 @@ model MultiselectQuestions {
   applicationSection          MultiselectQuestionsApplicationSectionEnum @map("application_section")
   jurisdictions               Jurisdictions[]
   listings                    ListingMultiselectQuestions[]
-  ApplicationLotteryPositions ApplicationLotteryPositions[]
+  applicationLotteryPositions ApplicationLotteryPositions[]
 
   @@map("multiselect_questions")
 }

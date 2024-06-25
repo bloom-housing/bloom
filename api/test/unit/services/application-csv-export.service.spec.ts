@@ -720,24 +720,27 @@ describe('Testing application CSV export service', () => {
     for (let i = 0; i < 10; i++) {
       applications.push({
         id: randomUUID(),
-        markedAsDuplicate: true,
+        markedAsDuplicate: false,
       } as unknown as Application);
     }
 
-    prisma.applicationLotteryPositions.create = jest
+    prisma.applicationLotteryPositions.createMany = jest
       .fn()
       .mockResolvedValue({ id: randomUUID() });
 
     await service.lotteryRandomizer(listingId, applications, []);
 
+    expect(prisma.applicationLotteryPositions.createMany).toHaveBeenCalled();
+
+    const args = (prisma.applicationLotteryPositions.createMany as any).mock
+      .calls[0][0].data;
+
     for (let i = 1; i < 11; i++) {
-      expect(prisma.applicationLotteryPositions.create).toHaveBeenCalledWith({
-        data: {
-          listingId,
-          applicationId: expect.anything(),
-          ordinal: i,
-          multiselectQuestionId: null,
-        },
+      expect(args.find((val) => val.ordinal === i)).toEqual({
+        listingId,
+        applicationId: expect.anything(),
+        ordinal: i,
+        multiselectQuestionId: null,
       });
     }
   });
@@ -754,7 +757,7 @@ describe('Testing application CSV export service', () => {
     for (let i = 0; i < 10; i++) {
       applications.push({
         id: randomUUID(),
-        markedAsDuplicate: true,
+        markedAsDuplicate: false,
         preferences: [
           {
             key: 'example text',
@@ -764,30 +767,25 @@ describe('Testing application CSV export service', () => {
       } as unknown as Application);
     }
 
-    prisma.applicationLotteryPositions.create = jest
+    prisma.applicationLotteryPositions.createMany = jest
       .fn()
       .mockResolvedValue({ id: randomUUID() });
 
     await service.lotteryRandomizer(listingId, applications, preferences);
 
+    const args = (prisma.applicationLotteryPositions.createMany as any).mock
+      .calls[0][0].data;
+
     for (let i = 1; i < 11; i++) {
-      expect(prisma.applicationLotteryPositions.create).toHaveBeenCalledWith({
-        data: {
-          listingId,
-          applicationId: expect.anything(),
-          ordinal: i,
-          multiselectQuestionId: null,
-        },
-      });
-    }
-    expect(prisma.applicationLotteryPositions.create).not.toHaveBeenCalledWith({
-      data: {
+      expect(args.find((val) => val.ordinal === i)).toEqual({
         listingId,
         applicationId: expect.anything(),
-        ordinal: expect.anything(),
-        multiselectQuestionId: expect.anything(),
-      },
-    });
+        ordinal: i,
+        multiselectQuestionId: null,
+      });
+    }
+
+    expect(prisma.applicationLotteryPositions.createMany).toBeCalledTimes(1);
   });
 
   it('should store randomized ordinals and preference specific ordinals', async () => {
@@ -802,7 +800,7 @@ describe('Testing application CSV export service', () => {
     for (let i = 0; i < 10; i++) {
       applications.push({
         id: randomUUID(),
-        markedAsDuplicate: true,
+        markedAsDuplicate: false,
         preferences: [
           {
             key: 'example text',
@@ -812,40 +810,41 @@ describe('Testing application CSV export service', () => {
       } as unknown as Application);
     }
 
-    prisma.applicationLotteryPositions.create = jest
+    prisma.applicationLotteryPositions.createMany = jest
       .fn()
       .mockResolvedValue({ id: randomUUID() });
 
     await service.lotteryRandomizer(listingId, applications, preferences);
 
+    const args = (prisma.applicationLotteryPositions.createMany as any).mock
+      .calls[0][0].data;
+
     for (let i = 1; i < 11; i++) {
-      expect(prisma.applicationLotteryPositions.create).toHaveBeenCalledWith({
-        data: {
-          listingId,
-          applicationId: expect.anything(),
-          ordinal: i,
-          multiselectQuestionId: null,
-        },
+      expect(args.find((val) => val.ordinal === i)).toEqual({
+        listingId,
+        applicationId: expect.anything(),
+        ordinal: i,
+        multiselectQuestionId: null,
       });
     }
 
-    for (let i = 1; i < 11; i++) {
-      expect(prisma.applicationLotteryPositions.create).toHaveBeenCalledWith({
-        data: {
-          listingId,
-          applicationId: expect.anything(),
-          ordinal: i,
-          multiselectQuestionId: null,
-        },
-      });
-      expect(prisma.applicationLotteryPositions.create).toHaveBeenCalledWith({
-        data: {
-          listingId,
-          applicationId: expect.anything(),
-          ordinal: Math.ceil(i / 2),
-          multiselectQuestionId: expect.anything(),
-        },
+    const argsWithPreference = (
+      prisma.applicationLotteryPositions.createMany as any
+    ).mock.calls[1][0].data;
+
+    for (let i = 1; i < 5; i++) {
+      expect(argsWithPreference.find((val) => val.ordinal === i)).toEqual({
+        listingId,
+        applicationId: expect.anything(),
+        ordinal: i,
+        multiselectQuestionId: expect.anything(),
       });
     }
+
+    expect(argsWithPreference.find((val) => val.ordinal === 6)).toEqual(
+      undefined,
+    );
+
+    expect(prisma.applicationLotteryPositions.createMany).toBeCalledTimes(2);
   });
 });

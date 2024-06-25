@@ -4109,7 +4109,7 @@ export interface Application {
   listings: IdDTO
 
   /**  */
-  ApplicationLotteryPositions: ApplicationLotteryPosition[]
+  applicationLotteryPositions: ApplicationLotteryPosition[]
 }
 
 export interface ApplicationFlaggedSet {
