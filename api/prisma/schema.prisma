@@ -222,6 +222,7 @@ model Applications {
   demographics                 Demographics?                 @relation(fields: [demographicsId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   preferredUnitTypes           UnitTypes[]
   householdMember              HouseholdMember[]
+  ApplicationLotteryPositions  ApplicationLotteryPositions[]
 
   @@unique([listingId, confirmationCode])
   @@index([listingId])
@@ -424,6 +425,19 @@ model ListingMultiselectQuestions {
   @@map("listing_multiselect_questions")
 }
 
+model ApplicationLotteryPositions {
+  ordinal               Int
+  listingId             String                @map("listing_id") @db.Uuid
+  listings              Listings              @relation(fields: [listingId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  multiselectQuestionId String?               @map("multiselect_question_id") @db.Uuid
+  multiselectQuestions  MultiselectQuestions? @relation(fields: [multiselectQuestionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  applicationId         String                @map("application_id") @db.Uuid
+  applications          Applications          @relation(fields: [applicationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([listingId, applicationId])
+  @@map("application_lottery_positions")
+}
+
 model ListingUtilities {
   id          String    @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
@@ -571,6 +585,7 @@ model Listings {
   requestedChangesDate                  DateTime?                     @default(dbgenerated("'1970-01-01 00:00:00-07'::timestamp with time zone")) @map("requested_changes_date") @db.Timestamptz(6)
   requestedChangesUserId                String?                       @map("requested_changes_user_id") @db.Uuid
   requestedChangesUser                  UserAccounts?                 @relation("requested_changes_user", fields: [requestedChangesUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ApplicationLotteryPositions           ApplicationLotteryPositions[]
 
   @@index([jurisdictionId])
   @@map("listings")
@@ -597,19 +612,20 @@ model Migrations {
 // Note: missing [untranslatedText, untranslatedOptOutText] virtual fields
 // Note: [options] formerly had array max length 64
 model MultiselectQuestions {
-  id                 String                                     @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  createdAt          DateTime                                   @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt          DateTime                                   @updatedAt @map("updated_at") @db.Timestamp(6)
-  text               String
-  subText            String?                                    @map("sub_text")
-  description        String?
-  links              Json?
-  options            Json?
-  optOutText         String?                                    @map("opt_out_text")
-  hideFromListing    Boolean?                                   @map("hide_from_listing")
-  applicationSection MultiselectQuestionsApplicationSectionEnum @map("application_section")
-  jurisdictions      Jurisdictions[]
-  listings           ListingMultiselectQuestions[]
+  id                          String                                     @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt                   DateTime                                   @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                   DateTime                                   @updatedAt @map("updated_at") @db.Timestamp(6)
+  text                        String
+  subText                     String?                                    @map("sub_text")
+  description                 String?
+  links                       Json?
+  options                     Json?
+  optOutText                  String?                                    @map("opt_out_text")
+  hideFromListing             Boolean?                                   @map("hide_from_listing")
+  applicationSection          MultiselectQuestionsApplicationSectionEnum @map("application_section")
+  jurisdictions               Jurisdictions[]
+  listings                    ListingMultiselectQuestions[]
+  ApplicationLotteryPositions ApplicationLotteryPositions[]
 
   @@map("multiselect_questions")
 }

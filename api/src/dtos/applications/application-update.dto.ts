@@ -26,6 +26,7 @@ export class ApplicationUpdate extends OmitType(Application, [
   'flagged',
   'confirmationCode',
   'preferredUnitTypes',
+  'ApplicationLotteryPositions',
 ]) {
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })

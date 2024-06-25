@@ -22,6 +22,7 @@ import {
   CsvHeader,
 } from '../types/CsvExportInterface';
 import { mapTo } from '../utilities/mapTo';
+import { Application } from '../dtos/applications/application.dto';
 
 view.csv = {
   ...view.details,
@@ -782,5 +783,101 @@ export class ApplicationCsvExporterService
         jurisdictionId,
       },
     );
+  }
+
+  async lotteryRandomizer(
+    listingId: string,
+    applications: Application[],
+    preferencesOnListing: MultiselectQuestion[],
+  ): Promise<void> {
+    // remove duplicates
+    let filteredApplications = applications.filter(
+      (application) => !!application.markedAsDuplicate,
+    );
+    // prep our supporting array
+    const ordinalArray = this.lotteryRandomizerHelper(filteredApplications);
+
+    // store raw positional score in db
+    for (let i = 0; i < ordinalArray.length; i++) {
+      filteredApplications[i].ApplicationLotteryPositions = [
+        {
+          listingId,
+          applicationId: filteredApplications[i].id,
+          ordinal: ordinalArray[i],
+          multiselectQuestionId: null,
+        },
+      ];
+      await this.prisma.applicationLotteryPositions.create({
+        data: {
+          listingId,
+          applicationId: filteredApplications[i].id,
+          ordinal: ordinalArray[i],
+          multiselectQuestionId: null,
+        },
+      });
+    }
+
+    // order by ordinal
+    filteredApplications = filteredApplications.sort(
+      (a, b) =>
+        a.ApplicationLotteryPositions[0].ordinal -
+        b.ApplicationLotteryPositions[0].ordinal,
+    );
+
+    // loop over each preference on the listing and store the relative position of the applications
+    for (let i = 0; i < preferencesOnListing.length; i++) {
+      const { id, text } = preferencesOnListing[i];
+
+      const applicationsWithThisPreference: Application[] = [];
+      const ordinalArrayWithThisPreference: number[] = [];
+
+      // filter down to only the applications that have this particular preference
+      let preferenceOrdinal = 1;
+      for (let j = 0; j < filteredApplications.length; j++) {
+        if (
+          filteredApplications[j].preferences.some(
+            (preference) => preference.key === text && preference.claimed,
+          )
+        ) {
+          applicationsWithThisPreference.push(filteredApplications[j]);
+          ordinalArrayWithThisPreference.push(preferenceOrdinal);
+          preferenceOrdinal++;
+        }
+      }
+
+      // store these values in the db
+      for (let j = 0; j < applicationsWithThisPreference.length; j++) {
+        await this.prisma.applicationLotteryPositions.create({
+          data: {
+            listingId,
+            applicationId: applicationsWithThisPreference[j].id,
+            ordinal: ordinalArrayWithThisPreference[j],
+            multiselectQuestionId: id,
+          },
+        });
+      }
+    }
+  }
+
+  lotteryRandomizerHelper(filterApplicationsArray: Application[]): number[] {
+    // prep our supporting array
+    const numberOfUniqueApplications = filterApplicationsArray.length;
+    const ordinalArray: number[] = [];
+
+    // fill array with random values
+    filterApplicationsArray.forEach(() => {
+      // initial random value
+      let possibleRandomPosition =
+        Math.floor(Math.random() * numberOfUniqueApplications) + 1;
+      // ensure random value not already in array
+      while (ordinalArray.some((val) => val === possibleRandomPosition)) {
+        possibleRandomPosition =
+          Math.floor(Math.random() * numberOfUniqueApplications) + 1;
+      }
+      // push unique random value into array
+      ordinalArray.push(possibleRandomPosition);
+    });
+
+    return ordinalArray;
   }
 }
