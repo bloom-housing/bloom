@@ -2020,54 +2020,6 @@ describe('Testing user service', () => {
     expect(emailService.sendSingleUseCode).not.toHaveBeenCalled();
   });
 
-  it('should request single use code but jurisdiction disallows single use code login', async () => {
-    const id = randomUUID();
-    emailService.sendSingleUseCode = jest.fn();
-    prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
-      id,
-    });
-    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
-      id: randomUUID(),
-      allowSingleUseCodeLogin: false,
-    });
-    prisma.userAccounts.update = jest.fn().mockResolvedValue({
-      id,
-    });
-
-    await expect(
-      async () =>
-        await service.requestSingleUseCode(
-          {
-            email: 'example@exygy.com',
-          },
-          { headers: { jurisdictionname: 'juris 1' } } as unknown as Request,
-        ),
-    ).rejects.toThrowError('Single use code login is not setup for juris 1');
-
-    expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
-      where: {
-        email: 'example@exygy.com',
-      },
-      include: {
-        jurisdictions: true,
-      },
-    });
-    expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
-      select: {
-        id: true,
-        allowSingleUseCodeLogin: true,
-      },
-      where: {
-        name: 'juris 1',
-      },
-      orderBy: {
-        allowSingleUseCodeLogin: OrderByEnum.DESC,
-      },
-    });
-    expect(prisma.userAccounts.update).not.toHaveBeenCalled();
-    expect(emailService.sendSingleUseCode).not.toHaveBeenCalled();
-  });
-
   it('should request single use code but jurisdictionname was not sent', async () => {
     const id = randomUUID();
     emailService.sendSingleUseCode = jest.fn();

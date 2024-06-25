@@ -27,4 +27,9 @@ export class Login {
   @IsEnum(MfaType, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({ enum: MfaType, enumName: 'MfaType' })
   mfaType?: MfaType;
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  reCaptchaToken?: string;
 }

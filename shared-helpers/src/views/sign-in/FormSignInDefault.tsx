@@ -9,6 +9,7 @@ import styles from "./FormSignIn.module.scss"
 export type FormSignInDefaultProps = {
   control: FormSignInDefaultControl
   onSubmit: (data: FormSignInDefaultValues) => void
+  loading?: boolean
 }
 
 export type FormSignInDefaultValues = {
@@ -25,6 +26,7 @@ export type FormSignInDefaultControl = {
 const FormSignInDefault = ({
   onSubmit,
   control: { errors, register, handleSubmit },
+  loading,
 }: FormSignInDefaultProps) => {
   const onError = () => {
     window.scrollTo(0, 0)
@@ -65,7 +67,12 @@ const FormSignInDefault = ({
         dataTestId="sign-in-password-field"
       />
       <div className={styles["sign-in-action"]}>
-        <Button type="submit" variant="primary" id="sign-in-button">
+        <Button
+          type="submit"
+          variant="primary"
+          id="sign-in-button"
+          loadingMessage={loading ? t("t.loading") : null}
+        >
           {t("nav.signIn")}
         </Button>
       </div>
