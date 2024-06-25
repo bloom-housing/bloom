@@ -2983,6 +2983,9 @@ export interface Listing {
   lotteryLastRunAt?: Date
 
   /**  */
+  lotteryStatus?: LotteryStatusEnum
+
+  /**  */
   lastApplicationUpdateAt?: Date
 
   /**  */
@@ -3484,6 +3487,9 @@ export interface ListingCreate {
   lotteryLastRunAt?: Date
 
   /**  */
+  lotteryStatus?: LotteryStatusEnum
+
+  /**  */
   lastApplicationUpdateAt?: Date
 
   /**  */
@@ -3736,6 +3742,9 @@ export interface ListingUpdate {
 
   /**  */
   lotteryLastRunAt?: Date
+
+  /**  */
+  lotteryStatus?: LotteryStatusEnum
 
   /**  */
   lastApplicationUpdateAt?: Date
@@ -5352,6 +5361,15 @@ export enum ReviewOrderTypeEnum {
   "lottery" = "lottery",
   "firstComeFirstServe" = "firstComeFirstServe",
   "waitlist" = "waitlist",
+}
+
+export enum LotteryStatusEnum {
+  "errored" = "errored",
+  "ran" = "ran",
+  "approved" = "approved",
+  "releasedToPartners" = "releasedToPartners",
+  "publishedToPublic" = "publishedToPublic",
+  "expired" = "expired",
 }
 
 export enum ValidationMethodEnum {
