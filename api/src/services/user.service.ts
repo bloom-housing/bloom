@@ -401,6 +401,29 @@ export class UserService {
       UserViews.full,
     );
 
+    const isPartnerPortalUser =
+      storedUser.userRoles?.isAdmin ||
+      storedUser.userRoles?.isJurisdictionalAdmin ||
+      storedUser.userRoles?.isPartner;
+    const isUserSiteMatch = async () => {
+      if (isPartnerPortalUser) {
+        return dto.appUrl === process.env.PARTNERS_PORTAL_URL;
+      } else {
+        //temporary solution since users can currently log into other jurisdictions' public site
+        const juris = await this.prisma.jurisdictions.findFirst({
+          select: {
+            id: true,
+          },
+          where: {
+            publicUrl: dto.appUrl,
+          },
+        });
+        return !!juris;
+      }
+    };
+    // user on wrong site, return neutral message and don't send email
+    if (!(await isUserSiteMatch())) return { success: true };
+
     const payload = {
       id: storedUser.id,
       exp: Number.parseInt(dayjs().add(1, 'hour').format('X')),
