@@ -1571,6 +1571,7 @@ describe('Testing user service', () => {
           email: 'partnerUser@email.com',
           firstName: 'Partner User firstName',
           lastName: 'Partner User lastName',
+          agreedToTermsOfService: false,
           mfaEnabled: true,
           jurisdictions: {
             connect: [{ id: jurisId }],
@@ -1765,6 +1766,7 @@ describe('Testing user service', () => {
           password: 'Abcdef12345!',
           email: 'publicUser@email.com',
           jurisdictions: [{ id: jurisId }],
+          agreedToTermsOfService: true,
         },
         false,
         undefined,
@@ -1798,6 +1800,7 @@ describe('Testing user service', () => {
           language: undefined,
           listings: undefined,
           middleName: undefined,
+          agreedToTermsOfService: true,
           mfaEnabled: false,
           jurisdictions: {
             connect: { name: 'juris 1' },

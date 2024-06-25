@@ -660,6 +660,8 @@ export class UserService {
         dob: dto.dob,
         phoneNumber: dto.phoneNumber,
         language: dto.language,
+        agreedToTermsOfService:
+          'agreedToTermsOfService' in dto ? dto.agreedToTermsOfService : false,
         mfaEnabled: forPartners,
         ...jurisdictions,
         userRoles:
