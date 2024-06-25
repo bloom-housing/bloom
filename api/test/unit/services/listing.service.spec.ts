@@ -2238,6 +2238,7 @@ describe('Testing listing service', () => {
 
   describe('Test update endpoint', () => {
     it('should update a simple listing', async () => {
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue([]);
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         id: 'example id',
         name: 'example name',
@@ -2378,6 +2379,16 @@ describe('Testing listing service', () => {
       prisma.listings.update = jest.fn().mockResolvedValue({
         id: 'example id',
         name: 'example name',
+      });
+      prisma.assets.create = jest
+        .fn()
+        .mockResolvedValue({ oridinal: 1, id: randomUUID() });
+      prisma.address.create = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+        city: 'Washington',
+        state: 'DC',
+        street: '1600 Pennsylvania Avenue',
+        zipCode: '20500',
       });
       const updateMock = jest
         .fn()
