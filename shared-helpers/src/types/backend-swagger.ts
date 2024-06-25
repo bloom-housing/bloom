@@ -3982,6 +3982,20 @@ export interface ApplicationMultiselectQuestion {
   options: ApplicationMultiselectQuestionOption[]
 }
 
+export interface ApplicationLotteryPosition {
+  /**  */
+  listingId: string
+
+  /**  */
+  applicationId: string
+
+  /**  */
+  multiselectQuestionId: string
+
+  /**  */
+  ordinal: number
+}
+
 export interface Application {
   /**  */
   id: string
@@ -4093,6 +4107,9 @@ export interface Application {
 
   /**  */
   listings: IdDTO
+
+  /**  */
+  ApplicationLotteryPositions: ApplicationLotteryPosition[]
 }
 
 export interface ApplicationFlaggedSet {
