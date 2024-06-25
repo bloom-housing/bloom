@@ -10,6 +10,9 @@ import { BulkApplicationResendDTO } from '../dtos/script-runner/bulk-application
 import { EmailService } from './email.service';
 import { Application } from '../dtos/applications/application.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
+import { AmiChartImportDTO } from '../dtos/script-runner/ami-chart-import.dto';
+import { AmiChartCreate } from '../dtos/ami-charts/ami-chart-create.dto';
+import { AmiChartService } from './ami-chart.service';
 
 /**
   this is the service for running scripts
@@ -20,6 +23,7 @@ export class ScriptRunnerService {
   constructor(
     private prisma: PrismaService,
     private emailService: EmailService,
+    private amiChartService: AmiChartService,
   ) {}
 
   /**
@@ -168,6 +172,58 @@ export class ScriptRunnerService {
     // script runner standard spin down
     await this.markScriptAsComplete(
       'Housing Voucher Community Type',
+      requestingUser,
+    );
+    return { success: true };
+  }
+
+  /**
+   *
+   * @param amiChartImportDTO this is a string in a very specific format like:
+   * percentOfAmiValue_1 householdSize_1_income_value householdSize_2_income_value \n percentOfAmiValue_2 householdSize_1_income_value householdSize_2_income_value
+   * @returns successDTO
+   * @description takes the incoming AMI Chart string and stores it as a new AMI Chart in the database
+   */
+  async amiChartImport(
+    req: ExpressRequest,
+    amiChartImportDTO: AmiChartImportDTO,
+  ): Promise<SuccessDTO> {
+    // script runner standard start up
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart(
+      `AMI Chart ${amiChartImportDTO.name}`,
+      requestingUser,
+    );
+
+    // parse incoming string into an amichart create dto
+    const createDTO: AmiChartCreate = {
+      items: [],
+      name: amiChartImportDTO.name,
+      jurisdictions: {
+        id: amiChartImportDTO.jurisdictionId,
+      },
+    };
+
+    const rows = amiChartImportDTO.values.split('\n');
+    rows.forEach((row: string) => {
+      const values = row.split(' ');
+      const percentage = values[0];
+      values.forEach((value: string, index: number) => {
+        if (index > 0) {
+          createDTO.items.push({
+            percentOfAmi: Number(percentage),
+            householdSize: index,
+            income: Number(value),
+          });
+        }
+      });
+    });
+
+    await this.amiChartService.create(createDTO);
+
+    // script runner standard spin down
+    await this.markScriptAsComplete(
+      `AMI Chart ${amiChartImportDTO.name}`,
       requestingUser,
     );
     return { success: true };
