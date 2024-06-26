@@ -355,6 +355,7 @@ export default () => {
         )}
       </div>
 
+      {/* Email confirmation modal */}
       <Dialog
         isOpen={openEmailModal}
         onClose={() => {
