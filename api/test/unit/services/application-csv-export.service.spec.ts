@@ -25,6 +25,8 @@ import { Logger } from '@nestjs/common';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 import { CsvHeader } from '../../../src/types/CsvExportInterface';
+import { Application } from '../../../src/dtos/applications/application.dto';
+import MultiselectQuestion from '../../../src/dtos/multiselect-questions/multiselect-question.dto';
 
 describe('Testing application CSV export service', () => {
   let service: ApplicationCsvExporterService;
@@ -687,5 +689,167 @@ describe('Testing application CSV export service', () => {
     });
 
     expect(readable).toContain('EST');
+  });
+
+  it('should generate random ordinal arrays', () => {
+    for (let i = 0; i < 10; i++) {
+      // create and fill mock array
+      const filteredApplicationArray: Application[] = [];
+      for (let j = 0; j < i + 1; j++) {
+        filteredApplicationArray.push({
+          id: randomUUID(),
+        } as unknown as Application);
+      }
+
+      // run through randomizer
+      const ordinalArray = service.lotteryRandomizerHelper(
+        filteredApplicationArray,
+      );
+
+      // verify the results are random
+      expect(filteredApplicationArray.length).toEqual(ordinalArray.length);
+
+      for (let j = 1; j <= i + 1; j++) {
+        expect(ordinalArray.find((val) => val === j)).toEqual(j);
+      }
+    }
+  });
+
+  describe('Testing lotteryRandomizerHelper()', () => {
+    it('should store randomized ordinals when no preferences on listing', async () => {
+      const listingId = randomUUID();
+      const applications: Application[] = [];
+      for (let i = 0; i < 10; i++) {
+        applications.push({
+          id: randomUUID(),
+          markedAsDuplicate: false,
+        } as unknown as Application);
+      }
+
+      prisma.applicationLotteryPositions.createMany = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
+      await service.lotteryRandomizer(listingId, applications, []);
+
+      expect(prisma.applicationLotteryPositions.createMany).toHaveBeenCalled();
+
+      const args = (prisma.applicationLotteryPositions.createMany as any).mock
+        .calls[0][0].data;
+
+      for (let i = 1; i < 11; i++) {
+        expect(args.find((val) => val.ordinal === i)).toEqual({
+          listingId,
+          applicationId: expect.anything(),
+          ordinal: i,
+          multiselectQuestionId: null,
+        });
+      }
+    });
+  });
+
+  describe('Testing lotteryRandomizer()', () => {
+    it('should store randomized ordinals when every application has a preference', async () => {
+      const listingId = randomUUID();
+      const applications: Application[] = [];
+      const preferences: MultiselectQuestion[] = [
+        {
+          id: randomUUID(),
+          text: 'example text',
+        } as unknown as MultiselectQuestion,
+      ];
+      for (let i = 0; i < 10; i++) {
+        applications.push({
+          id: randomUUID(),
+          markedAsDuplicate: false,
+          preferences: [
+            {
+              key: 'example text',
+              claimed: false,
+            },
+          ],
+        } as unknown as Application);
+      }
+
+      prisma.applicationLotteryPositions.createMany = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
+      await service.lotteryRandomizer(listingId, applications, preferences);
+
+      const args = (prisma.applicationLotteryPositions.createMany as any).mock
+        .calls[0][0].data;
+
+      for (let i = 1; i < 11; i++) {
+        expect(args.find((val) => val.ordinal === i)).toEqual({
+          listingId,
+          applicationId: expect.anything(),
+          ordinal: i,
+          multiselectQuestionId: null,
+        });
+      }
+
+      expect(prisma.applicationLotteryPositions.createMany).toBeCalledTimes(1);
+    });
+
+    it('should store randomized ordinals and preference specific ordinals', async () => {
+      const listingId = randomUUID();
+      const applications: Application[] = [];
+      const preferences: MultiselectQuestion[] = [
+        {
+          id: randomUUID(),
+          text: 'example text',
+        } as unknown as MultiselectQuestion,
+      ];
+      for (let i = 0; i < 10; i++) {
+        applications.push({
+          id: randomUUID(),
+          markedAsDuplicate: false,
+          preferences: [
+            {
+              key: 'example text',
+              claimed: i % 2 === 0,
+            },
+          ],
+        } as unknown as Application);
+      }
+
+      prisma.applicationLotteryPositions.createMany = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
+      await service.lotteryRandomizer(listingId, applications, preferences);
+
+      const args = (prisma.applicationLotteryPositions.createMany as any).mock
+        .calls[0][0].data;
+
+      for (let i = 1; i < 11; i++) {
+        expect(args.find((val) => val.ordinal === i)).toEqual({
+          listingId,
+          applicationId: expect.anything(),
+          ordinal: i,
+          multiselectQuestionId: null,
+        });
+      }
+
+      const argsWithPreference = (
+        prisma.applicationLotteryPositions.createMany as any
+      ).mock.calls[1][0].data;
+
+      for (let i = 1; i < 5; i++) {
+        expect(argsWithPreference.find((val) => val.ordinal === i)).toEqual({
+          listingId,
+          applicationId: expect.anything(),
+          ordinal: i,
+          multiselectQuestionId: expect.anything(),
+        });
+      }
+
+      expect(argsWithPreference.find((val) => val.ordinal === 6)).toEqual(
+        undefined,
+      );
+
+      expect(prisma.applicationLotteryPositions.createMany).toBeCalledTimes(2);
+    });
   });
 });
