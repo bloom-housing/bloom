@@ -138,6 +138,7 @@ export async function getServerSideProps(context: { params: Record<string, strin
       },
     })
   } catch (e) {
+    console.log("e = ", e)
     return { notFound: true }
   }
 
