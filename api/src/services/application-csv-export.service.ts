@@ -798,16 +798,16 @@ export class ApplicationCsvExporterService
     const ordinalArray = this.lotteryRandomizerHelper(filteredApplications);
 
     // attach ordinal info to filteredApplications
-    for (let i = 0; i < ordinalArray.length; i++) {
+    ordinalArray.forEach((value, i) => {
       filteredApplications[i].applicationLotteryPositions = [
         {
           listingId,
           applicationId: filteredApplications[i].id,
-          ordinal: ordinalArray[i],
+          ordinal: value,
           multiselectQuestionId: null,
         },
       ];
-    }
+    });
 
     // store raw positional score in db
     await this.prisma.applicationLotteryPositions.createMany({
@@ -863,21 +863,23 @@ export class ApplicationCsvExporterService
 
   lotteryRandomizerHelper(filterApplicationsArray: Application[]): number[] {
     // prep our supporting array
-    const numberOfUniqueApplications = filterApplicationsArray.length;
     const ordinalArray: number[] = [];
+
+    const indexArray: number[] = [];
+    filterApplicationsArray.forEach((_, index) => {
+      indexArray.push(index + 1);
+    });
 
     // fill array with random values
     filterApplicationsArray.forEach(() => {
-      // initial random value
-      let possibleRandomPosition =
-        Math.floor(Math.random() * numberOfUniqueApplications) + 1;
-      // ensure random value not already in array
-      while (ordinalArray.some((val) => val === possibleRandomPosition)) {
-        possibleRandomPosition =
-          Math.floor(Math.random() * numberOfUniqueApplications) + 1;
-      }
+      // get random value
+      const randomPosition = Math.floor(Math.random() * indexArray.length);
+
+      // remove selected value from indexArray
+      const randomValue = indexArray.splice(randomPosition, 1);
+
       // push unique random value into array
-      ordinalArray.push(possibleRandomPosition);
+      ordinalArray.push(randomValue[0]);
     });
 
     return ordinalArray;
