@@ -511,7 +511,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
           >
             Cancel
           </Button>
-        </Drawer.Footer> 
+        </Drawer.Footer>
       </Drawer>
     </>
   )
