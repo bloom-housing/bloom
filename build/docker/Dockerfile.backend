@@ -101,7 +101,8 @@ WORKDIR /app
 # Pull in package files again
 COPY --from=source --chown=node:node \
     /app/api/package*.json \
-    /app/api/tsconfig*.json ./
+    /app/api/tsconfig*.json \
+    /app/api/prisma ./
 
 # Add only dependencies required to run the application
 COPY --from=optimize --chown=node:node /app/node_modules ./node_modules
