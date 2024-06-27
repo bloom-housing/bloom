@@ -1,0 +1,58 @@
+.lottery {
+  background-color: var(--seeds-bg-color-canvas);
+  padding-block: var(--seeds-s5);
+  color: var(--seeds-text-color);
+  font-size: var(--seeds-type-body-size);
+  svg {
+    color: var(--seeds-color-secondary);
+  }
+  h2 {
+    margin-top: var(--seeds-s2);
+  }
+  .parent {
+    max-width: var(--seeds-screen-xl);
+    padding-inline: var(--seeds-s5);
+    margin-inline: auto;
+  }
+  .container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .main {
+    width: 100%;
+    padding-bottom: var(--seeds-s6);
+    @media (--md-and-up) {
+      width: 75%;
+      padding-bottom: var(--seeds-s24);
+    }
+  }
+
+  .side {
+    width: 100%;
+    @media (--md-and-up) {
+      width: 25%;
+      padding-left: var(--seeds-s6);
+    }
+  }
+
+  .seeds-card {
+    width: 100%;
+  }
+
+  .card-description {
+    padding-top: var(--seeds-s2);
+    padding-bottom: var(--seeds-s6);
+  }
+  .history-item {
+    margin-bottom: var(--seeds-s4);
+    font-size: var(--seeds-type-label-size);
+    .event {
+      color: var(--seeds-color-on-surface);
+      font-weight: var(--seeds-font-weight-semibold);
+    }
+    .user {
+      color: var(--seeds-color-on-surface);
+    }
+  }
+}
