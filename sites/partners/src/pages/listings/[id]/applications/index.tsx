@@ -8,6 +8,7 @@ import {
   ApplicationOrderByKeys,
   ListingsStatusEnum,
   OrderByEnum,
+  ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   useSingleListingData,
@@ -122,6 +123,11 @@ const ApplicationsList = () => {
           flagsQty: flaggedApps?.meta?.totalFlagged,
           listingLabel: t("t.listingSingle"),
           applicationsLabel: t("nav.applications"),
+          lotteryLabel:
+            listingDto?.status === ListingsStatusEnum.closed &&
+            listingDto?.reviewOrderType === ReviewOrderTypeEnum.lottery
+              ? t("listings.lotteryTitle")
+              : undefined,
         }}
         breadcrumbs={
           <Breadcrumbs>
