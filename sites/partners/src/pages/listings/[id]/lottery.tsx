@@ -29,7 +29,11 @@ const Lottery = (props: { listing: Listing }) => {
   const [reRunModal, setReRunModal] = useState(false)
   const [releaseModal, setReleaseModal] = useState(false)
 
+<<<<<<< HEAD
   if (!listing) return <div>{t("t.errorOccurred")}</div>
+=======
+  if (!listing) return false
+>>>>>>> 95f9da424 (feat: rerun and release lottery modals)
 
   const getHistoryItem = (dateString: string, event: string, user: string) => {
     return (
@@ -49,9 +53,11 @@ const Lottery = (props: { listing: Listing }) => {
             <Download />
           </Icon>
           <Heading priority={2} size={"2xl"}>
-            {t("listings.lottery.export")}
+            {"Export lottery data"}
           </Heading>
-          <div className={styles["card-description"]}>{t("listings.lottery.exportFile")}</div>
+          <div className={styles["card-description"]}>
+            {"File includes randomized general pool and preference data."}
+          </div>
           <div>
             <Button>{t("t.export")}</Button>
           </div>
@@ -81,6 +87,7 @@ const Lottery = (props: { listing: Listing }) => {
     if (listing.lotteryLastRunAt) {
       return (
         <div className={styles["actions-container"]}>
+<<<<<<< HEAD
           <Button
             className={styles["action"]}
             onClick={() => setReRunModal(true)}
@@ -93,6 +100,12 @@ const Lottery = (props: { listing: Listing }) => {
             onClick={() => setReleaseModal(true)}
             variant={"primary-outlined"}
           >
+=======
+          <Button className={styles["action"]} onClick={() => setReRunModal(true)}>
+            {t("listings.lottery.reRun")}
+          </Button>
+          <Button className={styles["action"]} onClick={() => setReleaseModal(true)}>
+>>>>>>> 95f9da424 (feat: rerun and release lottery modals)
             {t("listings.lottery.release")}
           </Button>
         </div>
