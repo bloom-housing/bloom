@@ -5,16 +5,14 @@ import { useSWRConfig } from "swr"
 import {
   LoadingOverlay,
   MinimalTable,
-  SiteAlert,
   StandardCard,
   t,
-  AlertTypes,
   useMutate,
   Modal,
 } from "@bloom-housing/ui-components"
 import { Button } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts"
 import PreferenceDrawer from "../../components/settings/PreferenceDrawer"
 import { useJurisdictionalMultiselectQuestionList } from "../../lib/hooks"
@@ -34,6 +32,7 @@ const Settings = () => {
   const { mutate } = useSWRConfig()
 
   const { profile, multiselectQuestionsService } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
 
   const { mutate: updateQuestion, isLoading: isUpdateLoading } = useMutate()
   const { mutate: createQuestion, isLoading: isCreateLoading } = useMutate()
@@ -42,11 +41,6 @@ const Settings = () => {
   const [copyModalOpen, setCopyModalOpen] = useState<MultiselectQuestion>(null)
   const [questionData, setQuestionData] = useState<MultiselectQuestion>(null)
   const [updatedIds, setUpdatedIds] = useState<string[]>([])
-
-  const [alertMessage, setAlertMessage] = useState({
-    type: "alert" as AlertTypes,
-    message: undefined,
-  })
   const [deleteConfirmModalOpen, setDeleteConfirmModalOpen] = useState<MultiselectQuestion | null>(
     null
   )
@@ -121,10 +115,10 @@ const Settings = () => {
                 ? updatedIds
                 : [...updatedIds, result.id]
             )
-            setAlertMessage({ message: t(`settings.preferenceAlertUpdated`), type: "success" })
+            addToast(t(`settings.preferenceAlertUpdated`), { variant: "success" })
           })
           .catch((e) => {
-            setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
+            addToast(t(`errors.alert.badRequest`), { variant: "alert" })
             console.log(e)
           })
           .finally(() => {
@@ -144,10 +138,10 @@ const Settings = () => {
                 ? updatedIds
                 : [...updatedIds, result.id]
             )
-            setAlertMessage({ message: t(`settings.preferenceAlertCreated`), type: "success" })
+            addToast(t(`settings.preferenceAlertCreated`), { variant: "success" })
           })
           .catch((e) => {
-            setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
+            addToast(t(`errors.alert.badRequest`), { variant: "alert" })
             console.log(e)
           })
           .finally(() => {
@@ -186,7 +180,6 @@ const Settings = () => {
         <Head>
           <title>{t("nav.siteTitlePartners")}</title>
         </Head>
-        <SiteAlert timeout={5000} dismissable alertMessage={alertMessage} sticky={true} />
         <NavigationHeader className="relative" title={t("t.settings")} />
         <section>
           <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
@@ -263,7 +256,6 @@ const Settings = () => {
       {deleteConfirmModalOpen && (
         <PreferenceDeleteModal
           multiselectQuestion={deleteConfirmModalOpen}
-          setAlertMessage={setAlertMessage}
           onClose={() => {
             setDeleteConfirmModalOpen(null)
             void mutate(cacheKey)

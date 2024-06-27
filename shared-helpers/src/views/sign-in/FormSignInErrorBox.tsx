@@ -1,5 +1,5 @@
 import React from "react"
-import { t, AlertBox, SiteAlert, AlertNotice, ErrorMessage } from "@bloom-housing/ui-components"
+import { t, AlertBox, AlertNotice, ErrorMessage } from "@bloom-housing/ui-components"
 import type { UseFormMethods } from "react-hook-form"
 import { NetworkStatus } from "../../auth/catchNetworkError"
 import styles from "./FormSignIn.module.scss"
@@ -62,7 +62,6 @@ const FormSignInErrorBox = ({
           </AlertNotice>
         </>
       )}
-      <SiteAlert type="notice" dismissable className={styles["sign-in-error"]} />
     </div>
   )
 }

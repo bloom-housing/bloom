@@ -13,9 +13,9 @@ import {
   useAgTable,
   Modal,
   Field,
-  Icon,
 } from "@bloom-housing/ui-components"
-import { Button, Tag } from "@bloom-housing/ui-seeds"
+import { Button, Icon, Tag } from "@bloom-housing/ui-seeds"
+import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
 import {
   AfsResolve,
   ApplicationFlaggedSet,
@@ -115,7 +115,11 @@ const Flag = () => {
         <StatusBar
           backButton={
             <Button
-              leadIcon={<Icon symbol="arrowBack" size="small" />}
+              leadIcon={
+                <Icon size="sm">
+                  <ChevronLeftIcon />
+                </Icon>
+              }
               variant="text"
               size="sm"
               className="font-semibold no-underline"

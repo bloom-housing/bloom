@@ -1,15 +1,6 @@
 import React, { useEffect, useContext, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
-import {
-  Field,
-  Form,
-  emailRegex,
-  t,
-  DOBField,
-  AlertBox,
-  SiteAlert,
-  Modal,
-} from "@bloom-housing/ui-components"
+import { Field, Form, emailRegex, t, DOBField, AlertBox, Modal } from "@bloom-housing/ui-components"
 import { Button, Heading } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import dayjs from "dayjs"
@@ -119,7 +110,6 @@ export default () => {
                   {requestError}
                 </AlertBox>
               )}
-              <SiteAlert type="notice" dismissable />
               <Form id="create-account" onSubmit={handleSubmit(onSubmit)}>
                 <CardSection
                   divider={"inset"}

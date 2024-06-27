@@ -1,12 +1,13 @@
 import React, { useCallback, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
-import { ImageCard, t, setSiteAlertMessage } from "@bloom-housing/ui-components"
+import { ImageCard, t } from "@bloom-housing/ui-components"
 import {
   imageUrlFromListing,
   OnClientSide,
   PageView,
   pushGtmEvent,
   AuthContext,
+  MessageContext,
 } from "@bloom-housing/shared-helpers"
 import {
   LanguagesEnum,
@@ -15,7 +16,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Heading, Icon, Button, Message } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { faClock } from "@fortawesome/free-regular-svg-icons"
+import { CustomIconMap } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import {
   AppSubmissionContext,
@@ -52,6 +53,7 @@ const ApplicationChooseLanguage = () => {
   const [listing, setListing] = useState(null)
   const context = useContext(AppSubmissionContext)
   const { initialStateLoaded, profile, listingsService } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
   const { conductor } = context
 
   const listingId = router.query.listingId
@@ -85,11 +87,11 @@ const ApplicationChooseLanguage = () => {
   useEffect(() => {
     if (listing && router.isReady) {
       if (listing?.status !== ListingsStatusEnum.active && router.query.preview !== "true") {
-        setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
+        addToast(t("listings.applicationsClosedRedirect"), { variant: "alert" })
         void router.push(`/${router.locale}/listing/${listing?.id}/${listing?.urlSlug}`)
       }
     }
-  }, [listing, router])
+  }, [listing, router, addToast])
 
   const imageUrl = listing?.assets
     ? imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
@@ -129,7 +131,11 @@ const ApplicationChooseLanguage = () => {
             <ImageCard imageUrl={imageUrl} description={listing.name} />
             <Message
               className={styles["message-inside-card"]}
-              customIcon={<Icon icon={faClock} size="md" />}
+              customIcon={
+                <Icon size="md" outlined>
+                  {CustomIconMap.clock}
+                </Icon>
+              }
               fullwidth
             >
               {appStatusContent}

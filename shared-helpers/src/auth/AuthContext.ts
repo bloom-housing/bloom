@@ -61,7 +61,7 @@ type ContextProps = {
     password: string,
     passwordConfirmation: string
   ) => Promise<User | undefined>
-  signOut: () => void
+  signOut: () => Promise<void>
   confirmAccount: (token: string) => Promise<User | undefined>
   forgotPassword: (email: string, listingIdRedirect?: string) => Promise<boolean | undefined>
   createUser: (user: UserCreate, listingIdRedirect?: string) => Promise<User | undefined>

@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useContext } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
-import { t, AlertBox, SiteAlert, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
+import { t, AlertBox, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import { Tag } from "@bloom-housing/ui-seeds"
 import { useSingleApplicationData, useSingleListingData } from "../../../lib/hooks"
 import { AuthContext } from "@bloom-housing/shared-helpers"
@@ -81,7 +81,6 @@ export default function ApplicationsList() {
         <Head>
           <title>{t("nav.siteTitlePartners")}</title>
         </Head>
-        <SiteAlert type="success" timeout={5000} dismissable sticky={true} />
         <NavigationHeader
           className="relative"
           title={

@@ -1,5 +1,5 @@
 <RenderIf language="en">
-<Icon symbol="house" size="2xl" className="border-primary border-b-4 inline-block pb-3 px-3 mb-2" />
+<ContentIcon name="home" outlined />
 
 ## How to apply to affordable housing
 
@@ -9,7 +9,7 @@ You can find and apply for affordable rental opportunities.
 
 ---
 
-<Icon symbol="frontDoor" size="2xl" className="border-primary border-b-4 inline-block pb-3 px-3 my-1" />
+<ContentIcon name="frontDoor" />
 
 ## Additional housing opportunities and resources
 
@@ -20,7 +20,7 @@ We encourage you to browse other affordable housing resources.
 </RenderIf>
 
 <RenderIf language="es">
-<Icon symbol="house" size="2xl" className="border-primary border-b-4 inline-block pb-3 px-3 mb-2" />
+<ContentIcon name="home" outlined />
 
 ## Cómo solicitar una vivienda asequible
 
@@ -30,7 +30,7 @@ Puede encontrar y solicitar oportunidades de alquiler asequibles.
 
 ---
 
-<Icon symbol="frontDoor" size="2xl" className="border-primary border-b-4 inline-block pb-3 px-3 my-1" />
+<ContentIcon name="frontDoor" />
 
 ## Oportunidades adicionales de vivienda
 
@@ -41,7 +41,7 @@ Le invitamos a consultar otros recursos de vivienda de precio accesible.
 </RenderIf>
 
 <RenderIf language="zh">
-<Icon symbol="house" size="2xl" className="border-primary border-b-4 inline-block pb-3 px-3 mb-2" />
+<ContentIcon name="home" outlined />
 
 ## 如何申請經濟適用房
 
@@ -51,7 +51,7 @@ Le invitamos a consultar otros recursos de vivienda de precio accesible.
 
 ---
 
-<Icon symbol="frontDoor" size="2xl" className="border-primary border-b-4 inline-block pb-3 px-3 my-1" />
+<ContentIcon name="frontDoor" />
 
 ## 其他住房機會
 
@@ -62,8 +62,7 @@ Le invitamos a consultar otros recursos de vivienda de precio accesible.
 </RenderIf>
 
 <RenderIf language="vi">
-
-<Icon symbol="house" size="2xl" className="border-primary border-b-4 inline-block pb-3 px-3 mb-2" />
+<ContentIcon name="home" outlined />
 
 ## Làm thế nào để đăng ký nhà ở giá cả phải chăng
 
@@ -73,7 +72,8 @@ Bạn có thể tìm và đăng ký các cơ hội cho thuê với giá cả ph�
 
 ---
 
-<Icon symbol="frontDoor" size="2xl" className="border-primary border-b-4 inline-block pb-3 px-3 my-1" />
+<ContentIcon name="frontDoor" />
+
 ## Các Cơ hội Nhà ở Bổ sung
 
 Chúng tôi khuyến khích quý vị xem các nguồn thông tin trợ giúp về nhà ở giá phải chăng khác.
@@ -83,7 +83,7 @@ Chúng tôi khuyến khích quý vị xem các nguồn thông tin trợ giúp v�
 </RenderIf>
 
 <RenderIf language="tl">
-<Icon symbol="house" size="2xl" className="border-primary border-b-4 inline-block pb-3 px-3 mb-2" />
+<ContentIcon name="home" outlined />
 
 ## Paano mag-apply sa abot-kayang pabahay
 
@@ -93,7 +93,7 @@ Maaari kang maghanap at mag-aplay para sa abot-kayang pagkakataon sa pag-upa.
 
 ---
 
-<Icon symbol="frontDoor" size="2xl" className="border-primary border-b-4 inline-block pb-3 px-3 my-1" />
+<ContentIcon name="frontDoor" />
 
 ## Karagdagang Mga Oportunidad at Mapagkukunan ng Pabahay
 

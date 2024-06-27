@@ -3,14 +3,13 @@ import {
   Field,
   Form,
   FormCard,
-  Icon,
   t,
-  SiteAlert,
   FormSignInErrorBox,
   NetworkStatus,
   FormSignInControl,
 } from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
+import { Button, Icon } from "@bloom-housing/ui-seeds"
+import { CustomIconMap } from "@bloom-housing/shared-helpers"
 
 export enum RequestType {
   email = "email",
@@ -60,7 +59,7 @@ const FormSignInMFACode = ({
   return (
     <FormCard>
       <div className="form-card__lead text-center">
-        <Icon size="2xl" symbol="profile" className="form-card__header-icon" />
+        <Icon size="2xl">{CustomIconMap.profile}</Icon>
         <h2 className="form-card__title is-borderless">{t("nav.signInMFA.verifyTitle")}</h2>
         <p className="form-card__sub-title">
           {mfaType === RequestType.sms
@@ -74,7 +73,6 @@ const FormSignInMFACode = ({
         errorMessageId={"mfa-code"}
       />
 
-      <SiteAlert type="notice" dismissable />
       <div className="form-card__group pt-0">
         <Form id="sign-in-mfa" className="mt-10" onSubmit={handleSubmit(onSubmit, onError)}>
           <Field
