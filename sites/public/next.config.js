@@ -53,6 +53,7 @@ module.exports = withBundleAnalyzer({
     awsSecretKey: process.env.AWS_SECRET_KEY,
     awsRegion: process.env.AWS_REGION,
     fileService: process.env.FILE_SERVICE,
+    reCaptchaKey: process.env.RECAPTCHA_KEY,
   },
   i18n: {
     locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],

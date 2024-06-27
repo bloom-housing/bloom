@@ -976,12 +976,6 @@ export class UserService {
       );
     }
 
-    if (!juris.allowSingleUseCodeLogin) {
-      throw new BadRequestException(
-        `Single use code login is not setup for ${jurisdictionName}`,
-      );
-    }
-
     const singleUseCode = generateSingleUseCode(
       Number(process.env.MFA_CODE_LENGTH),
     );

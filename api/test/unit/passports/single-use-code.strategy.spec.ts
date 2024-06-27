@@ -515,60 +515,6 @@ describe('Testing single-use-code strategy', () => {
     });
   });
 
-  it('should fail if jurisdiction disallows single use code login', async () => {
-    const id = randomUUID();
-    prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
-      id: id,
-      lastLoginAt: new Date(),
-      failedLoginAttemptsCount: 0,
-      confirmedAt: new Date(),
-      passwordValidForDays: 100,
-      passwordUpdatedAt: new Date(),
-      userRoles: { isAdmin: false },
-      passwordHash: await passwordToHash('Abcdef12345!'),
-      mfaEnabled: true,
-      phoneNumberVerified: false,
-      singleUseCode: 'zyxwv',
-      singleUseCodeUpdatedAt: new Date(0),
-    });
-
-    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
-
-    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
-      id: randomUUID(),
-      allowSingleUseCodeLogin: false,
-    });
-
-    const request = {
-      body: {
-        email: 'example@exygy.com',
-        singleUseCode: 'zyxwv',
-      } as LoginViaSingleUseCode,
-      headers: { jurisdictionname: 'juris 1' },
-    };
-
-    await expect(
-      async () => await strategy.validate(request as unknown as Request),
-    ).rejects.toThrowError(`Single use code login is not setup for juris 1`);
-
-    expect(prisma.userAccounts.findFirst).not.toHaveBeenCalled();
-
-    expect(prisma.userAccounts.update).not.toHaveBeenCalled();
-
-    expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
-      select: {
-        id: true,
-        allowSingleUseCodeLogin: true,
-      },
-      where: {
-        name: 'juris 1',
-      },
-      orderBy: {
-        allowSingleUseCodeLogin: OrderByEnum.DESC,
-      },
-    });
-  });
-
   it('should fail if jurisdiction is missing from header', async () => {
     const id = randomUUID();
     prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({

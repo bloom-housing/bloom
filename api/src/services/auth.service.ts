@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { CookieOptions, Response } from 'express';
 import { sign, verify } from 'jsonwebtoken';
+import { RecaptchaEnterpriseServiceClient } from '@google-cloud/recaptcha-enterprise';
 import { Prisma } from '@prisma/client';
 import { UpdatePassword } from '../dtos/auth/update-password.dto';
 import { MfaType } from '../enums/mfa/mfa-type-enum';
@@ -85,9 +86,72 @@ export class AuthService {
     res: Response,
     user: User,
     incomingRefreshToken?: string,
+    reCaptchaToken?: string,
+    reCaptchaConfigured?: boolean,
+    mfaCode?: boolean,
+    shouldReCaptchaBlockLogin?: boolean,
   ): Promise<SuccessDTO> {
     if (!user?.id) {
       throw new UnauthorizedException('no user found');
+    }
+
+    if (reCaptchaConfigured && !user.mfaEnabled && !mfaCode) {
+      const client = new RecaptchaEnterpriseServiceClient({
+        credentials: {
+          private_key: process.env.GOOGLE_API_KEY.replace(/\\n/gm, '\n'),
+          client_email: process.env.GOOGLE_API_EMAIL,
+        },
+        projectID: process.env.GOOGLE_API_ID,
+      });
+
+      const request = {
+        assessment: {
+          event: {
+            token: reCaptchaToken,
+            siteKey: process.env.RECAPTCHA_KEY,
+          },
+        },
+        parent: client.projectPath(process.env.GOOGLE_CLOUD_PROJECT_ID),
+      };
+
+      const [response] = await client.createAssessment(request);
+      client.close();
+
+      if (!response.tokenProperties.valid && shouldReCaptchaBlockLogin) {
+        throw new UnauthorizedException({
+          name: 'failedReCaptchaToken',
+          knownError: true,
+          message: `The ReCaptcha CreateAssessment call failed because the token was: ${response.tokenProperties.invalidReason}`,
+        });
+      }
+
+      if (response.tokenProperties.action === 'login') {
+        response.riskAnalysis.reasons.forEach((reason) => {
+          console.log(reason);
+        });
+
+        console.log(`The ReCaptcha score is ${response.riskAnalysis.score}`);
+
+        const threshold = parseFloat(process.env.RECAPTCHA_THRESHOLD);
+
+        if (
+          response.riskAnalysis.score < threshold &&
+          shouldReCaptchaBlockLogin
+        ) {
+          throw new UnauthorizedException({
+            name: 'failedReCaptchaScore',
+            knownError: true,
+            message: `ReCaptcha failed because the score was ${response.riskAnalysis.score}`,
+          });
+        }
+      } else {
+        if (shouldReCaptchaBlockLogin)
+          throw new UnauthorizedException({
+            name: 'failedReCaptchaAction',
+            knownError: true,
+            message: `ReCaptcha failed because the action didn't match, action was: ${response.tokenProperties.action}`,
+          });
+      }
     }
 
     if (incomingRefreshToken) {
@@ -190,12 +254,6 @@ export class AuthService {
       { email: dto.email },
       UserViews.full,
     );
-
-    if (!user.mfaEnabled) {
-      throw new UnauthorizedException(
-        `user ${dto.email} requested an mfa code, but has mfa disabled`,
-      );
-    }
 
     if (!(await isPasswordValid(user.passwordHash, dto.password))) {
       throw new UnauthorizedException(

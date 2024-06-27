@@ -55,6 +55,7 @@ module.exports = withBundleAnalyzer(
       fileService: process.env.FILE_SERVICE,
       featureListingsApproval: process.env.FEATURE_LISTINGS_APPROVAL,
       maintenanceWindow: process.env.MAINTENANCE_WINDOW,
+      reCaptchaKey: process.env.RECAPTCHA_KEY,
       showLottery: process.env.SHOW_LOTTERY,
     },
     i18n: {
