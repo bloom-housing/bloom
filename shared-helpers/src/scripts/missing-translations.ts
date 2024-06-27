@@ -50,6 +50,7 @@ function main() {
     },
   ]
 
+  let missing = false
   const enOverrideTranslations = require("../../sites/public/page_content/locale_overrides/general.json")
 
   const findMissingBaseTranslations = (
@@ -153,6 +154,8 @@ function main() {
         translationSet.jurisTranslations,
         enOverrideTranslations
       )
+      if (missingOverrideTranslations.length) missing = true
+
       Object.entries(missingOverrideTranslations).forEach((entry) =>
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         console.log(`${entry[0]},${entry[1].location},"${entry[1].value}"`)
@@ -167,6 +170,8 @@ function main() {
       translationSet.baseTranslations,
       jurisOverrideTracker
     )
+    if (missingBaseTranslations.length) missing = true
+
     Object.entries(missingBaseTranslations).forEach((entry) =>
       console.log(
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
@@ -174,6 +179,7 @@ function main() {
       )
     )
   })
+  if (missing) throw Error
 }
 
 void main()
