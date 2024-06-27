@@ -29,7 +29,7 @@ const Lottery = (props: { listing: Listing }) => {
   const [reRunModal, setReRunModal] = useState(false)
   const [releaseModal, setReleaseModal] = useState(false)
 
-  if (!listing) return false
+  if (!listing) return <div>{t("t.errorOccurred")}</div>
 
   const getHistoryItem = (dateString: string, event: string, user: string) => {
     return (
@@ -49,11 +49,9 @@ const Lottery = (props: { listing: Listing }) => {
             <Download />
           </Icon>
           <Heading priority={2} size={"2xl"}>
-            {"Export lottery data"}
+            {t("listings.lottery.export")}
           </Heading>
-          <div className={styles["card-description"]}>
-            {"File includes randomized general pool and preference data."}
-          </div>
+          <div className={styles["card-description"]}>{t("listings.lottery.exportFile")}</div>
           <div>
             <Button>{t("t.export")}</Button>
           </div>
