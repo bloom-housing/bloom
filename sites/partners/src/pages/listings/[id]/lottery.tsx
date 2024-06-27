@@ -36,7 +36,7 @@ const Lottery = (props: { listing: Listing }) => {
   const [loading, setLoading] = useState(false)
 
   const { listingsService } = useContext(AuthContext)
-  const { data } = useFlaggedApplicationsMeta(listing.id)
+  const { data } = useFlaggedApplicationsMeta(listing?.id)
   const duplicatesExist = data?.totalPendingCount > 0
 
   if (!listing) return <div>{t("t.errorOccurred")}</div>
@@ -259,7 +259,7 @@ const Lottery = (props: { listing: Listing }) => {
                 {t("listings.lottery.duplicateContent")}{" "}
                 <span className={"font-semibold"}>
                   {t("listings.lottery.duplicateString", {
-                    sets: data?.totalPendingCount.toString(),
+                    sets: data?.totalPendingCount?.toString(),
                   })}
                 </span>{" "}
                 {t("listings.lottery.duplicatesConfirm")}
