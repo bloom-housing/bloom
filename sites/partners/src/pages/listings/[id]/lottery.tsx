@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import Head from "next/head"
 import axios from "axios"
 import Ticket from "@heroicons/react/24/solid/TicketIcon"
@@ -6,10 +6,12 @@ import Download from "@heroicons/react/24/solid/ArrowDownTrayIcon"
 import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import { Button, Card, Heading, Icon, Dialog } from "@bloom-housing/ui-seeds"
 import { CardHeader, CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   Listing,
   ListingsStatusEnum,
   ReviewOrderTypeEnum,
+  ListingUpdate,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Layout from "../../../layouts"
 import { ListingContext } from "../../../components/listings/ListingContext"
@@ -17,6 +19,7 @@ import { MetaTags } from "../../../components/shared/MetaTags"
 import ListingGuard from "../../../components/shared/ListingGuard"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
 import { ListingStatusBar } from "../../../components/listings/ListingStatusBar"
+import { useFlaggedApplicationsMeta } from "../../../lib/hooks"
 
 import styles from "../../../../styles/lottery.module.scss"
 
@@ -26,8 +29,15 @@ const Lottery = (props: { listing: Listing }) => {
 
   const { listing } = props
 
+  const [runModal, setRunModal] = useState(false)
+  const [runDuplicatesModal, setRunDuplicatesModal] = useState(false)
   const [reRunModal, setReRunModal] = useState(false)
   const [releaseModal, setReleaseModal] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  const { listingsService } = useContext(AuthContext)
+  const { data } = useFlaggedApplicationsMeta(listing.id)
+  const duplicatesExist = data?.totalPendingCount > 0
 
   if (!listing) return <div>{t("t.errorOccurred")}</div>
 
@@ -70,7 +80,14 @@ const Lottery = (props: { listing: Listing }) => {
             {t("listings.lottery.noDataDescription")}
           </div>
           <div>
-            <Button>{t("listings.lottery.runLottery")}</Button>
+            <Button
+              onClick={() => {
+                if (!duplicatesExist) setRunModal(true)
+                else setRunDuplicatesModal(true)
+              }}
+            >
+              {t("listings.lottery.runLottery")}
+            </Button>
           </div>
         </CardSection>
       )
@@ -174,6 +191,122 @@ const Lottery = (props: { listing: Listing }) => {
               </div>
             </section>
           </Layout>
+          <Dialog
+            isOpen={!!runModal}
+            ariaLabelledBy="run-lottery-modal-header"
+            ariaDescribedBy="run-lottery-modal-content"
+            onClose={() => setRunModal(false)}
+          >
+            <Dialog.Header id="run-lottery-modal-header">
+              {t("applications.addConfirmModalHeader")}
+            </Dialog.Header>
+            <Dialog.Content id="run-lottery-modal-content">
+              <p>{t("listings.lottery.runLotteryContent")}</p>
+              <p>{t("applications.addConfirmModalAddApplicationPostLotteryAreYouSure")}</p>
+            </Dialog.Content>
+            <Dialog.Footer>
+              <Button
+                variant="primary"
+                onClick={async () => {
+                  setLoading(true)
+                  // this is temporary, so that we can test this state in staging before the lottery api is finished - it just sets the lotteryLastRunAt field when you click run
+                  try {
+                    const updatedListing = listing
+                    updatedListing.listingMultiselectQuestions = []
+                    await listingsService.update({
+                      id: listing.id,
+                      body: {
+                        id: listing.id,
+                        ...(updatedListing as unknown as ListingUpdate),
+                        lotteryLastRunAt: new Date(),
+                      },
+                    })
+                    setRunModal(false)
+                    setLoading(false)
+                    location.reload()
+                  } catch (err) {
+                    console.log(err)
+                    setLoading(false)
+                  }
+                }}
+                size="sm"
+                loadingMessage={loading ? t("t.loading") : undefined}
+              >
+                {t("listings.lottery.runLottery")}
+              </Button>
+              <Button
+                variant="primary-outlined"
+                onClick={() => {
+                  setRunModal(false)
+                }}
+                size="sm"
+              >
+                {t("t.cancel")}
+              </Button>
+            </Dialog.Footer>
+          </Dialog>
+          <Dialog
+            isOpen={!!runDuplicatesModal}
+            ariaLabelledBy="run-duplicates-lottery-modal-header"
+            ariaDescribedBy="run-duplicates-lottery-modal-content"
+            onClose={() => setRunDuplicatesModal(false)}
+          >
+            <Dialog.Header id="run-duplicates-lottery-modal-header">
+              {t("applications.addConfirmModalAddApplicationPostLotteryTitle")}
+            </Dialog.Header>
+            <Dialog.Content id="run-duplicates-lottery-modal-content">
+              <p>
+                {t("listings.lottery.duplicateContent")}{" "}
+                <span className={"font-semibold"}>
+                  {t("listings.lottery.duplicateString", {
+                    sets: data?.totalPendingCount.toString(),
+                  })}
+                </span>{" "}
+                {t("listings.lottery.duplicatesConfirm")}
+              </p>
+              <p>{t("applications.addConfirmModalAddApplicationPostLotteryAreYouSure")}</p>
+            </Dialog.Content>
+            <Dialog.Footer>
+              <Button
+                variant="alert"
+                onClick={async () => {
+                  setLoading(true)
+                  // this is temporary, so that we can test this state in staging before the lottery api is finished - it just sets the lotteryLastRunAt field when you click run
+                  try {
+                    const updatedListing = listing
+                    updatedListing.listingMultiselectQuestions = []
+                    await listingsService.update({
+                      id: listing.id,
+                      body: {
+                        id: listing.id,
+                        ...(updatedListing as unknown as ListingUpdate),
+                        lotteryLastRunAt: new Date(),
+                      },
+                    })
+                    setRunDuplicatesModal(false)
+                    setLoading(false)
+                    location.reload()
+                  } catch (err) {
+                    console.log(err)
+                    setLoading(false)
+                  }
+                }}
+                size="sm"
+                loadingMessage={loading ? t("t.loading") : undefined}
+              >
+                {t("listings.lottery.runLotteryWithoutResolving")}
+              </Button>
+              <Button
+                variant="primary-outlined"
+                onClick={() => {
+                  setRunDuplicatesModal(false)
+                }}
+                size="sm"
+              >
+                {t("t.cancel")}
+              </Button>
+            </Dialog.Footer>
+          </Dialog>
           <Dialog
             isOpen={!!reRunModal}
             ariaLabelledBy="rerun-lottery-modal-header"
