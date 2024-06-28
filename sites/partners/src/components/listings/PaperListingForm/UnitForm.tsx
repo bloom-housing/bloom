@@ -84,13 +84,15 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
           name={fieldName}
           label={t("t.minimumIncome")}
           register={register}
-          type="number"
+          type="currency"
+          getValues={getValues}
+          setValue={setValue}
           prepend="$"
           readerOnly
           className={errors[fieldName] ? "error" : ""}
           error={errors[fieldName]}
           errorMessage={t("errors.requiredFieldError")}
-          validation={{ required: !!amiChartID }}
+          validation={{ required: !!amiChartID, pattern: /^[0-9]+$/ }}
           inputProps={{
             onChange: () => {
               clearErrors(fieldName)
@@ -339,7 +341,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   }, [defaultUnit, unitTypesOptions, setValue])
 
   // when rent type is updated we set the rent/income data to defaultUnit data for that value
-  // e.g. rent is fixed and swithced to percentage, then switched back we readd the old fixed data
+  // e.g. rent is fixed and switched to percentage, then switched back we readd the old fixed data
   useEffect(() => {
     if (defaultUnit) {
       if (rentType === "fixed") {
@@ -452,7 +454,10 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                       placeholder={t("listings.unit.squareFootage")}
                       register={register}
                       readerOnly
-                      type="number"
+                      type="text"
+                      validation={{ pattern: /^[0-9.]+$/ }}
+                      error={fieldHasError(errors?.sqFeet)}
+                      errorMessage={t("errors.numberError")}
                     />
                   </FieldValue>
 
@@ -589,8 +594,12 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                           label={t("t.monthlyMinimumIncome")}
                           placeholder="0.00"
                           register={register}
-                          type="number"
+                          type="currency"
+                          getValues={getValues}
+                          setValue={setValue}
                           prepend="$"
+                          error={fieldHasError(errors?.monthlyIncomeMin)}
+                          errorMessage={t("errors.numberError")}
                         />
                       </Grid.Cell>
 
@@ -601,8 +610,12 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                           label={t("listings.unit.monthlyRent")}
                           placeholder="0.00"
                           register={register}
-                          type="number"
+                          type="currency"
+                          getValues={getValues}
+                          setValue={setValue}
                           prepend="$"
+                          error={fieldHasError(errors?.monthlyRent)}
+                          errorMessage={t("errors.numberError")}
                         />
                       </Grid.Cell>
                     </>
@@ -615,7 +628,10 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                         label={t("listings.unit.%incomeRent")}
                         placeholder={t("listings.unit.percentage")}
                         register={register}
-                        type="number"
+                        type="text"
+                        validation={{ pattern: /^[0-9.]+$/ }}
+                        error={fieldHasError(errors?.monthlyRentAsPercentOfIncome)}
+                        errorMessage={t("errors.numberError")}
                       />
                     </Grid.Cell>
                   )}
