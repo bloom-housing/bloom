@@ -118,7 +118,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
   }, [])
 
   const clearValues = () => {
-    setFormValues(nullState);
+    setFormValues(nullState)
 
     // Reset currency fields:
 
