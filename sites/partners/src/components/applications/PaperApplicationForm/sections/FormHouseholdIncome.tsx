@@ -13,7 +13,7 @@ const FormHouseholdIncome = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { errors, register, setValue, trigger, watch } = formMethods
+  const { errors, register, getValues, setValue, trigger, watch } = formMethods
 
   const incomePeriodValue: string = watch("application.incomePeriod")
 
@@ -63,13 +63,14 @@ const FormHouseholdIncome = () => {
           <Grid.Cell>
             <Field
               id="incomeYear"
-              type="text"
+              type="currency"
+              getValues={getValues}
+              setValue={setValue}
               name="incomeYear"
               label={t("application.details.annualIncome")}
               placeholder={t("t.enterAmount")}
               register={register}
               disabled={incomePeriodValue !== IncomePeriodEnum.perYear}
-              validation={{ pattern: /^[0-9.]+$/ }}
               error={fieldHasError(errors?.incomeYear)}
               errorMessage={t("errors.numberError")}
             />
@@ -78,13 +79,14 @@ const FormHouseholdIncome = () => {
           <Grid.Cell>
             <Field
               id="incomeMonth"
-              type="text"
+              type="currency"
+              getValues={getValues}
+              setValue={setValue}
               name="incomeMonth"
               label={t("application.details.monthlyIncome")}
               placeholder={t("t.enterAmount")}
               register={register}
               disabled={incomePeriodValue !== IncomePeriodEnum.perMonth}
-              validation={{ pattern: /^[0-9.]+$/ }}
               error={fieldHasError(errors?.incomeMonth)}
               errorMessage={t("errors.numberError")}
             />

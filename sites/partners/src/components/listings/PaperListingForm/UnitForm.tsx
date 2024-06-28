@@ -92,7 +92,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
           className={errors[fieldName] ? "error" : ""}
           error={errors[fieldName]}
           errorMessage={t("errors.requiredFieldError")}
-          validation={{ required: !!amiChartID, pattern: /^[0-9.]+$/ }}
+          validation={{ required: !!amiChartID }}
           inputProps={{
             onChange: () => {
               clearErrors(fieldName)

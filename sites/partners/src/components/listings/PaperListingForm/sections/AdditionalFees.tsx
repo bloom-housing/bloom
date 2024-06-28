@@ -15,7 +15,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
   const formMethods = useFormContext()
   const { profile } = useContext(AuthContext)
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, errors, clearErrors } = formMethods
+  const { register, watch, errors, clearErrors, getValues, setValue } = formMethods
 
   const jurisdiction = watch("jurisdiction.id")
 
@@ -47,6 +47,8 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
               id={"applicationFee"}
               register={register}
               type={"currency"}
+              getValues={getValues}
+              setValue={setValue}
               prepend={"$"}
               placeholder={"0.00"}
             />
@@ -58,6 +60,8 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
               id={"depositMin"}
               register={register}
               type={"currency"}
+              getValues={getValues}
+              setValue={setValue}
               prepend={"$"}
               placeholder={"0.00"}
               error={fieldHasError(errors?.depositMin)}
@@ -74,6 +78,8 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
               id={"depositMax"}
               register={register}
               type={"currency"}
+              getValues={getValues}
+              setValue={setValue}
               prepend={"$"}
               placeholder={"0.00"}
               error={fieldHasError(errors?.depositMax)}
