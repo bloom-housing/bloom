@@ -69,7 +69,7 @@ const FormHouseholdIncome = () => {
               placeholder={t("t.enterAmount")}
               register={register}
               disabled={incomePeriodValue !== IncomePeriodEnum.perYear}
-              validation={{ pattern: /^[0-9]+$/ }}
+              validation={{ pattern: /^[0-9.]+$/ }}
               error={fieldHasError(errors?.incomeYear)}
               errorMessage={t("errors.numberError")}
             />
@@ -84,7 +84,7 @@ const FormHouseholdIncome = () => {
               placeholder={t("t.enterAmount")}
               register={register}
               disabled={incomePeriodValue !== IncomePeriodEnum.perMonth}
-              validation={{ pattern: /^[0-9]+$/ }}
+              validation={{ pattern: /^[0-9.]+$/ }}
               error={fieldHasError(errors?.incomeMonth)}
               errorMessage={t("errors.numberError")}
             />
