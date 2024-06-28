@@ -12,6 +12,10 @@ import {
   BreadcrumbLink,
   AlertBox,
 } from "@bloom-housing/ui-components"
+import {
+  ListingsStatusEnum,
+  ReviewOrderTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { formatDateTime } from "@bloom-housing/shared-helpers"
 import { useSingleListingData, useFlaggedApplicationsList } from "../../../../../lib/hooks"
 import { ListingStatusBar } from "../../../../../components/listings/ListingStatusBar"
@@ -131,6 +135,11 @@ const ApplicationsList = () => {
           flagsQty: flaggedAppsData?.meta?.totalFlagged,
           listingLabel: t("t.listingSingle"),
           applicationsLabel: t("nav.applications"),
+          lotteryLabel:
+            listingDto?.status === ListingsStatusEnum.closed &&
+            listingDto?.reviewOrderType === ReviewOrderTypeEnum.lottery
+              ? t("listings.lotteryTitle")
+              : undefined,
         }}
         breadcrumbs={
           <Breadcrumbs>

@@ -5,7 +5,18 @@ process.env.TZ = "UTC"
 
 module.exports = {
   testRegex: ["/*.test.tsx$", "/*.test.ts$"],
-  collectCoverageFrom: ["**/*.ts", "!**/*.tsx"],
+  collectCoverageFrom: ["**/*.ts", "**/*.tsx"],
+  coveragePathIgnorePatterns: [
+    "cypress",
+    "types",
+    "__tests__",
+    "page_content",
+    "public",
+    "next-env.d.ts",
+    "sentry.client.config.ts",
+    "sentry.server.config.ts",
+    "sentry.edge.config.ts",
+  ],
   coverageReporters: ["lcov", "text"],
   coverageDirectory: "test-coverage",
   coverageThreshold: {
@@ -23,14 +34,12 @@ module.exports = {
       isolatedModules: true,
     },
   },
-  rootDir: "../..",
-  roots: ["<rootDir>/sites/partners"],
   transform: {
     "^.+\\.[t|j]sx?$": "ts-jest",
   },
   transformIgnorePatterns: ["node_modules/?!(@bloom-housing/ui-components)"],
   setupFiles: ["dotenv/config"],
-  setupFilesAfterEnv: ["<rootDir>/sites/partners/.jest/setup-tests.js"],
+  setupFilesAfterEnv: ["../partners/.jest/setup-tests.js"],
   moduleNameMapper: {
     "\\.(scss|css|less)$": "identity-obj-proxy",
   },

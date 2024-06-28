@@ -36,6 +36,7 @@ phases:
         --build-arg "FEATURE_LISTINGS_APPROVAL=${FEATURE_LISTINGS_APPROVAL}"
         --build-arg "MAINTENANCE_WINDOW=${MAINTENANCE_WINDOW}"
         --build-arg "API_PASS_KEY=${API_PASS_KEY}"
+        --build-arg "SHOW_LOTTERY=${SHOW_LOTTERY}"
         -t sites/partners:test
 
       # Run tests
@@ -56,6 +57,7 @@ phases:
         --build-arg "FEATURE_LISTINGS_APPROVAL=${FEATURE_LISTINGS_APPROVAL}"
         --build-arg "MAINTENANCE_WINDOW=${MAINTENANCE_WINDOW}"
         --build-arg "API_PASS_KEY=${API_PASS_KEY}"
+        --build-arg "SHOW_LOTTERY=${SHOW_LOTTERY}"
         -t sites/partners:run-candidate
 
       # Tag the run image

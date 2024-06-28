@@ -19,6 +19,11 @@ env:
   THROTTLE_TTL: 3600000
   THROTTLE_LIMIT: 100
   TEST_CONNECTION_STRING: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom
+  GOOGLE_API_KEY: "secret-key"
+  GOOGLE_API_EMAIL: "secret-key"
+  GOOGLE_API_ID: "secret-key"
+  RECAPTCHA_KEY: "secret-key"
+  GOOGLE_CLOUD_PROJECT_ID: "secret-key"
 
 jobs:
   backend-unit:

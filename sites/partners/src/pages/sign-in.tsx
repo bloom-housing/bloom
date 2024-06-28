@@ -1,6 +1,7 @@
 import React, { useContext, useState, useRef, useEffect, useCallback } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
+import { GoogleReCaptcha } from "react-google-recaptcha-v3"
 import {
   useCatchNetworkError,
   NetworkStatusType,
@@ -31,6 +32,9 @@ const SignIn = () => {
   const { register, handleSubmit, errors, setValue, control, watch, reset } = useForm()
   const { networkError, determineNetworkError, resetNetworkError } = useCatchNetworkError()
   const router = useRouter()
+  const [loading, setLoading] = useState(false)
+  const [reCaptchaToken, setReCaptchaToken] = useState(null)
+  const [refreshReCaptcha, setRefreshReCaptcha] = useState(false)
   const [email, setEmail] = useState<string | undefined>(undefined)
   const [password, setPassword] = useState<string | undefined>(undefined)
   const [mfaType, setMfaType] = useState<RequestType | undefined>(undefined)
@@ -48,6 +52,8 @@ const SignIn = () => {
     message: NetworkStatusContent
     type: NetworkStatusType
   }>()
+
+  const reCaptchaEnabled = !!process.env.reCaptchaKey
 
   const {
     mutate: mutateResendConfirmation,
@@ -105,6 +111,10 @@ const SignIn = () => {
     resetNetworkError()
   }
 
+  const onVerify = useCallback((token) => {
+    setReCaptchaToken(token)
+  }, [])
+
   if (renderStep === EnumRenderStep.emailAndPassword) {
     const networkStatusContent = (() => {
       // the confirmation modal is active, do not show any alert
@@ -124,31 +134,46 @@ const SignIn = () => {
     })()
 
     formToRender = (
-      <FormSignIn
-        networkStatus={{
-          content: networkStatusContent,
-          type: networkStatusType,
-          reset: () => {
-            reset()
-            resetNetworkError()
-            setConfirmationStatusMessage(undefined)
-          },
-        }}
-        control={{ errors }}
-      >
-        <FormSignInDefault
-          onSubmit={onSubmitEmailAndPassword(
-            setEmail,
-            setPassword,
-            setRenderStep,
-            determineNetworkError,
-            login,
-            router,
-            resetNetworkError
-          )}
-          control={{ register, errors, handleSubmit }}
-        />
-      </FormSignIn>
+      <>
+        <FormSignIn
+          networkStatus={{
+            content: networkStatusContent,
+            type: networkStatusType,
+            reset: () => {
+              reset()
+              resetNetworkError()
+              setConfirmationStatusMessage(undefined)
+            },
+          }}
+          control={{ errors }}
+        >
+          <FormSignInDefault
+            onSubmit={onSubmitEmailAndPassword(
+              setEmail,
+              setPassword,
+              setRenderStep,
+              determineNetworkError,
+              login,
+              router,
+              resetNetworkError,
+              setLoading,
+              reCaptchaEnabled,
+              reCaptchaToken,
+              setRefreshReCaptcha,
+              refreshReCaptcha
+            )}
+            control={{ register, errors, handleSubmit }}
+            loading={loading}
+          />
+        </FormSignIn>
+        {reCaptchaEnabled && (
+          <GoogleReCaptcha
+            onVerify={onVerify}
+            refreshReCaptcha={refreshReCaptcha}
+            action={"login"}
+          />
+        )}
+      </>
     )
   } else if (renderStep === EnumRenderStep.mfaType) {
     formToRender = (

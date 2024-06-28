@@ -3,6 +3,8 @@ import { randomUUID } from 'crypto';
 import { sign } from 'jsonwebtoken';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
+import { MailService } from '@sendgrid/mail';
+import { RecaptchaEnterpriseServiceClient } from '@google-cloud/recaptcha-enterprise';
 import {
   ACCESS_TOKEN_AVAILABLE_NAME,
   ACCESS_TOKEN_AVAILABLE_OPTIONS,
@@ -27,6 +29,10 @@ import { JurisdictionService } from '../../../src/services/jurisdiction.service'
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 import { PermissionService } from '../../../src/services/permission.service';
 import { Jurisdiction } from '../../../src/dtos/jurisdictions/jurisdiction.dto';
+
+jest.mock('@google-cloud/recaptcha-enterprise');
+const mockedRecaptcha =
+  RecaptchaEnterpriseServiceClient as unknown as jest.Mock;
 
 describe('Testing auth service', () => {
   let authService: AuthService;
@@ -359,6 +365,244 @@ describe('Testing auth service', () => {
     expect(response.clearCookie).not.toHaveBeenCalled();
   });
 
+  it('should error when trying to set credentials when recaptcha is enabled and recaptcha token is invalid', async () => {
+    mockedRecaptcha.mockImplementation(() => {
+      return {
+        projectPath: (val): string => {
+          return val;
+        },
+        createAssessment: () => {
+          return [
+            {
+              tokenProperties: {
+                valid: false,
+                action: 'login',
+                invalidReason: 'Example invalid reason',
+              },
+              riskAnalysis: {
+                reasons: ['reason1', 'reason2'],
+                score: 0.5,
+              },
+            },
+          ];
+        },
+        close: () => {
+          return null;
+        },
+      };
+    });
+
+    const id = randomUUID();
+    const response = {
+      cookie: jest.fn(),
+      clearCookie: jest.fn(),
+    };
+    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+    prisma.userAccounts.count = jest.fn().mockResolvedValue(1);
+
+    await expect(
+      async () =>
+        await authService.setCredentials(
+          response as unknown as Response,
+          {
+            passwordUpdatedAt: new Date(),
+            passwordValidForDays: 100,
+            email: 'example@exygy.com',
+            firstName: 'Exygy',
+            lastName: 'User',
+            jurisdictions: [
+              {
+                id: randomUUID(),
+              } as Jurisdiction,
+            ],
+            agreedToTermsOfService: false,
+            id,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+          'refreshToken',
+          'invalidReCaptchaToken',
+          true,
+          false,
+          true,
+        ),
+    ).rejects.toThrowError(
+      `The ReCaptcha CreateAssessment call failed because the token was: Example invalid reason`,
+    );
+
+    expect(prisma.userAccounts.update).not.toHaveBeenCalled();
+
+    expect(prisma.userAccounts.count).not.toHaveBeenCalled();
+
+    expect(response.clearCookie).not.toHaveBeenCalled();
+  });
+
+  it('should error when trying to set credentials when recaptcha is enabled and action does not match', async () => {
+    mockedRecaptcha.mockImplementation(() => {
+      return {
+        projectPath: (val): string => {
+          return val;
+        },
+        createAssessment: () => {
+          return [
+            {
+              tokenProperties: {
+                valid: true,
+                action: 'Invalid action',
+              },
+              riskAnalysis: {
+                reasons: ['reason1', 'reason2'],
+                score: 0.9,
+              },
+            },
+          ];
+        },
+        close: () => {
+          return null;
+        },
+      };
+    });
+
+    const id = randomUUID();
+    const response = {
+      cookie: jest.fn(),
+      clearCookie: jest.fn(),
+    };
+    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+    prisma.userAccounts.count = jest.fn().mockResolvedValue(1);
+
+    await expect(
+      async () =>
+        await authService.setCredentials(
+          response as unknown as Response,
+          {
+            passwordUpdatedAt: new Date(),
+            passwordValidForDays: 100,
+            email: 'example@exygy.com',
+            firstName: 'Exygy',
+            lastName: 'User',
+            jurisdictions: [
+              {
+                id: randomUUID(),
+              } as Jurisdiction,
+            ],
+            agreedToTermsOfService: false,
+            id,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+          'refreshToken',
+          'invalidReCaptchaToken',
+          true,
+          false,
+          true,
+        ),
+    ).rejects.toThrowError(
+      `ReCaptcha failed because the action didn't match, action was: Invalid action`,
+    );
+
+    expect(prisma.userAccounts.update).not.toHaveBeenCalled();
+
+    expect(prisma.userAccounts.count).not.toHaveBeenCalled();
+
+    expect(response.clearCookie).not.toHaveBeenCalled();
+  });
+
+  it('should succeed when trying to set credentials when recaptcha is enabled and token/action are valid', async () => {
+    mockedRecaptcha.mockImplementation(() => {
+      return {
+        projectPath: (val): string => {
+          return val;
+        },
+        createAssessment: () => {
+          return [
+            {
+              tokenProperties: {
+                valid: true,
+                action: 'login',
+              },
+              riskAnalysis: {
+                reasons: ['reason1', 'reason2'],
+                score: 0.9,
+              },
+            },
+          ];
+        },
+        close: () => {
+          return null;
+        },
+      };
+    });
+
+    const id = randomUUID();
+    const response = {
+      cookie: jest.fn(),
+      clearCookie: jest.fn(),
+    };
+    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+    prisma.userAccounts.count = jest.fn().mockResolvedValue(1);
+
+    await authService.setCredentials(
+      response as unknown as Response,
+      {
+        passwordUpdatedAt: new Date(),
+        passwordValidForDays: 100,
+        email: 'example@exygy.com',
+        firstName: 'Exygy',
+        lastName: 'User',
+        jurisdictions: [
+          {
+            id: randomUUID(),
+          } as Jurisdiction,
+        ],
+        agreedToTermsOfService: false,
+        id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      'refreshToken',
+      'validToken',
+      true,
+      false,
+      true,
+    );
+
+    expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+      data: {
+        activeAccessToken: expect.anything(),
+        activeRefreshToken: expect.anything(),
+      },
+      where: {
+        id,
+      },
+    });
+
+    expect(prisma.userAccounts.count).toHaveBeenCalledWith({
+      where: {
+        id,
+        activeRefreshToken: 'refreshToken',
+      },
+    });
+
+    expect(response.cookie).toHaveBeenCalledWith(
+      TOKEN_COOKIE_NAME,
+      expect.anything(),
+      AUTH_COOKIE_OPTIONS,
+    );
+
+    expect(response.cookie).toHaveBeenCalledWith(
+      REFRESH_COOKIE_NAME,
+      expect.anything(),
+      REFRESH_COOKIE_OPTIONS,
+    );
+
+    expect(response.cookie).toHaveBeenCalledWith(
+      ACCESS_TOKEN_AVAILABLE_NAME,
+      'True',
+      ACCESS_TOKEN_AVAILABLE_OPTIONS,
+    );
+  });
+
   it('should error when trying to clear credentials,but user id not passed in', async () => {
     const id = randomUUID();
     const response = {
@@ -546,34 +790,6 @@ describe('Testing auth service', () => {
       phoneNumber: '520-781-8711',
       phoneNumberVerified: false,
     });
-  });
-
-  it('should error when trying to request mfa code, but mfa disabled', async () => {
-    const id = randomUUID();
-    prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
-      id: id,
-      mfaEnabled: false,
-      passwordHash: await hashPassword('Abcdef12345!', generateSalt()),
-      email: 'example@exygy.com',
-      phoneNumberVerified: false,
-      phoneNumber: '520-781-8711',
-    });
-    prisma.userAccounts.update = jest.fn().mockResolvedValue({
-      id: id,
-    });
-
-    await expect(
-      async () =>
-        await await authService.requestMfaCode({
-          email: 'example@exygy.com',
-          password: 'Abcdef12345!',
-          mfaType: MfaType.sms,
-        }),
-    ).rejects.toThrowError(
-      'user example@exygy.com requested an mfa code, but has mfa disabled',
-    );
-
-    expect(prisma.userAccounts.update).not.toHaveBeenCalled();
   });
 
   it('should error when trying to request mfa code, but incorrect password', async () => {

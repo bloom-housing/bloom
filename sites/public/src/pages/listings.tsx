@@ -22,7 +22,7 @@ export default function ListingsPage(props: ListingsProps) {
   const metaImage = "" // TODO: replace with hero image
   let searchString =
     "counties:Alameda,Contra Costa,Marin,Napa,San Francisco,San Mateo,Santa Clara,Solano,Sonoma"
-  const url = new URL(document.location.toString())
+  const url = new URL(document?.location.toString())
   const searchParam = url.searchParams.get("search")
 
   // override the search value if present in url

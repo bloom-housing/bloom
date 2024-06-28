@@ -19,7 +19,7 @@
   "dependencies": {
     "@bloom-housing/doorway-ui-components": "^1.0.0",
     "@bloom-housing/ui-components": "12.1.6",
-    "@bloom-housing/ui-seeds": "1.14.0",
+    "@bloom-housing/ui-seeds": "1.16.2",
     "@heroicons/react": "^2.1.1",
     "axios-cookiejar-support": "4.0.6",
     "tough-cookie": "4.1.3"
