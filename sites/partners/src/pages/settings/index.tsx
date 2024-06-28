@@ -8,9 +8,8 @@ import {
   StandardCard,
   t,
   useMutate,
-  Modal,
 } from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
+import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts"
@@ -60,7 +59,6 @@ const Settings = () => {
         return aChar.localeCompare(bChar)
       })
       .map((preference) => {
-        // const rowClass = updatedIds.indexOf(preference.id) >= 0 ? "bg-gray-400" : ""
         return {
           name: {
             content: preference?.text,
@@ -91,7 +89,7 @@ const Settings = () => {
           },
         }
       })
-  }, [updatedIds, data])
+  }, [data])
 
   useEffect(() => {
     if (!isCreateLoading) {
@@ -207,6 +205,7 @@ const Settings = () => {
           </article>
         </section>
       </Layout>
+
       <PreferenceDrawer
         drawerOpen={!!preferenceDrawerOpen}
         questionData={questionData}
@@ -219,12 +218,15 @@ const Settings = () => {
         saveQuestion={saveQuestion}
         isLoading={isCreateLoading || isUpdateLoading}
       />
-      <Modal
-        open={!!copyModalOpen}
-        title={t("t.copy")}
-        ariaDescription={t("listings.listingIsAlreadyLive")}
+
+      <Dialog
+        isOpen={!!copyModalOpen}
+        ariaLabelledBy="settings-dialog-header"
         onClose={() => setCopyModalOpen(null)}
-        actions={[
+      >
+        <Dialog.Header id="settings-dialog-header">{t("t.copy")}</Dialog.Header>
+        <Dialog.Content>{t("settings.createCopyDescription")}</Dialog.Content>
+        <Dialog.Footer>
           <Button
             type="button"
             variant="primary-outlined"
@@ -236,7 +238,7 @@ const Settings = () => {
             size="sm"
           >
             {t("settings.copy")}
-          </Button>,
+          </Button>
           <Button
             variant="primary-outlined"
             type="button"
@@ -248,11 +250,9 @@ const Settings = () => {
             size="sm"
           >
             {t("t.cancel")}
-          </Button>,
-        ]}
-      >
-        {t("settings.createCopyDescription")}
-      </Modal>
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
       {deleteConfirmModalOpen && (
         <PreferenceDeleteModal
           multiselectQuestion={deleteConfirmModalOpen}

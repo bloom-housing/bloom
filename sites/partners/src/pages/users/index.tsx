@@ -2,7 +2,7 @@ import React, { useContext, useMemo, useState } from "react"
 import Head from "next/head"
 import dayjs from "dayjs"
 import { useSWRConfig } from "swr"
-import { AgTable, useAgTable, t, Drawer, AlertBox } from "@bloom-housing/ui-components"
+import { AgTable, useAgTable, t, AlertBox } from "@bloom-housing/ui-components"
 import { User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Icon } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
@@ -157,10 +157,10 @@ const Users = () => {
               setSearch: tableOptions.filter.setFilterValue,
             }}
             headerContent={
-              <div className="flex-row">
+              <div className="flex gap-2 items-center">
                 <Button
-                  className="mx-1"
                   variant="primary"
+                  size="sm"
                   onClick={() => setUserDrawer({ type: "add" })}
                   disabled={!listingDtos}
                   id={"add-user"}
@@ -169,8 +169,8 @@ const Users = () => {
                 </Button>
                 {(profile?.userRoles?.isAdmin || profile?.userRoles?.isJurisdictionalAdmin) && (
                   <Button
-                    className="mx-1"
                     variant="primary-outlined"
+                    size="sm"
                     leadIcon={
                       !csvExportLoading ? (
                         <Icon>
@@ -191,22 +191,20 @@ const Users = () => {
         </article>
       </section>
 
-      <Drawer
-        open={!!userDrawer}
-        title={userDrawer?.type === "add" ? t("users.addUser") : t("users.editUser")}
-        ariaDescription={t("users.addUser")}
-        onClose={() => setUserDrawer(null)}
-      >
+      {userDrawer && (
         <FormUserManage
+          isOpen={!!userDrawer}
+          title={userDrawer?.type === "add" ? t("users.addUser") : t("users.editUser")}
           mode={userDrawer?.type}
           user={userDrawer?.user}
           listings={listingDtos?.items}
+          onCancel={() => setUserDrawer(null)}
           onDrawerClose={() => {
             setUserDrawer(null)
             void mutate(cacheKey)
           }}
         />
-      </Drawer>
+      )}
     </Layout>
   )
 }
