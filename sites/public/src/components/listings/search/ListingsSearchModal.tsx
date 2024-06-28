@@ -118,9 +118,16 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
   }, [])
 
   const clearValues = () => {
-    // TODO: fix this
-    // This code gets called but the UI doesn't update in response to state change
-    setFormValues(nullState)
+    setFormValues(nullState);
+
+    // Reset currency fields:
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    document.querySelector("#minRent").value = null
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    document.querySelector("#monthlyRent").value = null
   }
 
   const onSubmit = () => {
