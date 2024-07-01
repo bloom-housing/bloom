@@ -589,6 +589,7 @@ export const ListingView = (props: ListingProps) => {
                 ? getSummariesTable(byAMI.byUnitType, listing.reviewOrderType)
                 : []
 
+              if (isNaN(percent)) return null
               return (
                 <React.Fragment key={percent}>
                   <h2 className="mt-4 mb-2">
