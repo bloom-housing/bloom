@@ -498,6 +498,7 @@
   "users.editUser": "Edit User",
   "users.jurisdictionalAdmin": "Jurisdictional Admin",
   "users.jurisdictionalizedListings": "%{jurisdiction} Listings",
+  "users.limitedJurisdictionalAdmin": "Jurisdictional Admin - No PII",
   "users.makeNote": "When creating your password make sure you make note of it so you remember it in the future.",
   "users.needUniquePassword": "You'll need to add a unique password in order to confirm your account.",
   "users.partner": "Partner",

@@ -32,7 +32,9 @@ const Layout = (props) => {
   }
   if (
     profile?.jurisdictions?.some((jurisdiction) => !!jurisdiction.enablePartnerSettings) &&
-    (profile?.userRoles?.isAdmin || profile?.userRoles?.isJurisdictionalAdmin)
+    (profile?.userRoles?.isAdmin ||
+      profile?.userRoles?.isJurisdictionalAdmin ||
+      profile?.userRoles?.isLimitedJurisdictionalAdmin)
   ) {
     menuLinks.push({
       title: t("t.settings"),

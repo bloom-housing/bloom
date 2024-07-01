@@ -243,6 +243,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
             (!forPartners ||
               profile.userRoles?.isAdmin ||
               profile.userRoles?.isJurisdictionalAdmin ||
+              profile.userRoles?.isLimitedJurisdictionalAdmin ||
               profile.userRoles?.isPartner)
           ) {
             dispatch(saveProfile(profile))

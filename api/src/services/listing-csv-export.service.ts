@@ -851,6 +851,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       user &&
       (user.userRoles?.isAdmin ||
         user.userRoles?.isJurisdictionalAdmin ||
+        user.userRoles?.isLimitedJurisdictionalAdmin ||
         user.userRoles?.isPartner)
     ) {
       return;

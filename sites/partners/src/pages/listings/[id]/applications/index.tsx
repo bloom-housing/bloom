@@ -134,6 +134,8 @@ const ApplicationsList = () => {
   const expiryDate = dayjs(listingDto?.closedAt).add(45, "day")
   const formattedExpiryDate = expiryDate.format("MMMM D, YYYY")
 
+  if (profile?.userRoles?.isLimitedJurisdictionalAdmin) return null
+
   return (
     <Layout>
       <Head>

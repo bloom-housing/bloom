@@ -29,6 +29,8 @@ const determineUserRole = (roles: UserRole) => {
     return RoleOption.Administrator
   } else if (roles?.isJurisdictionalAdmin) {
     return RoleOption.JurisdictionalAdmin
+  } else if (roles?.isLimitedJurisdictionalAdmin) {
+    return RoleOption.LimitedJurisdictionalAdmin
   }
   return RoleOption.Partner
 }
@@ -159,6 +161,7 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
         isAdmin: userRoles.includes(RoleOption.Administrator),
         isPartner: userRoles.includes(RoleOption.Partner),
         isJurisdictionalAdmin: userRoles.includes(RoleOption.JurisdictionalAdmin),
+        isLimitedJurisdictionalAdmin: userRoles.includes(RoleOption.LimitedJurisdictionalAdmin),
         userId: undefined,
       }
     })()

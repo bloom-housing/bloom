@@ -1,7 +1,8 @@
-import React from "react"
+import React, { useContext } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import { AgTable, t, useAgTable, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   Application,
   ApplicationReviewStatusEnum,
@@ -22,6 +23,7 @@ const ApplicationsList = () => {
   const tableOptions = useAgTable()
 
   /* Data Fetching */
+  const { profile } = useContext(AuthContext)
   const { listingDto } = useSingleListingData(listingId)
   const listingName = listingDto?.name
   const { data: flaggedAppsData, loading: flaggedAppsLoading } = useFlaggedApplicationsList({
@@ -74,6 +76,8 @@ const ApplicationsList = () => {
       minWidth: 50,
     },
   ]
+
+  if (profile?.userRoles?.isLimitedJurisdictionalAdmin) return null
 
   return (
     <Layout>

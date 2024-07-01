@@ -83,7 +83,8 @@ const Users = () => {
         headerName: t("t.role"),
         field: "userRoles",
         valueFormatter: ({ value }) => {
-          const { isAdmin, isPartner, isJurisdictionalAdmin } = value || {}
+          const { isAdmin, isPartner, isJurisdictionalAdmin, isLimitedJurisdictionalAdmin } =
+            value || {}
 
           const roles = []
 
@@ -97,6 +98,10 @@ const Users = () => {
 
           if (isJurisdictionalAdmin) {
             roles.push(t("users.jurisdictionalAdmin"))
+          }
+
+          if (isLimitedJurisdictionalAdmin) {
+            roles.push(t("users.limitedJurisdictionalAdmin"))
           }
 
           return roles.join(", ")
