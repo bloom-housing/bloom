@@ -7,7 +7,6 @@ import {
   Logger,
   NotFoundException,
   OnModuleInit,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
@@ -1666,7 +1665,7 @@ export class ListingService implements OnModuleInit {
         ) {
           // TODO: add retracted to history
           // TODO: remove when all status logic has been implemented
-          const res = await this.prisma.listings.update({
+          res = await this.prisma.listings.update({
             data: {
               lotteryStatus: dto?.lotteryStatus,
             },
@@ -1692,12 +1691,12 @@ export class ListingService implements OnModuleInit {
           throw new ForbiddenException();
         } else if (currentStatus !== LotteryStatusEnum.approved) {
           throw new BadRequestException(
-            'Lottery cannot be released to partners without being in approved state',
+            'Lottery cannot be released to partners without being in approved state.',
           );
         }
         // TODO: add released to partners to history
         // TODO: remove when all status logic has been implemented
-        const res = await this.prisma.listings.update({
+        res = await this.prisma.listings.update({
           data: {
             lotteryStatus: dto?.lotteryStatus,
           },
@@ -1717,7 +1716,7 @@ export class ListingService implements OnModuleInit {
       }
       default: {
         throw new BadRequestException(
-          `${dto?.lotteryStatus} is not an allowed lottery status`,
+          `${dto?.lotteryStatus} is not an allowed lottery status.`,
         );
       }
     }
@@ -1732,7 +1731,7 @@ export class ListingService implements OnModuleInit {
     // });
 
     if (!res) {
-      throw new HttpException('listing lottery status failed to save', 500);
+      throw new HttpException('Listing lottery status failed to save.', 500);
     }
 
     return mapTo(Listing, res);
