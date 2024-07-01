@@ -118,9 +118,16 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
   }, [])
 
   const clearValues = () => {
-    // TODO: fix this
-    // This code gets called but the UI doesn't update in response to state change
     setFormValues(nullState)
+
+    // Reset currency fields:
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    document.querySelector("#minRent").value = null
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    document.querySelector("#monthlyRent").value = null
   }
 
   const onSubmit = () => {
@@ -211,7 +218,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
 
   // workarounds to leverage UI-C's currency formatting without full refactor
   useEffect(() => {
-    if (minRentFormatted) {
+    if (typeof minRentFormatted !== "undefined") {
       const minRentRaw = minRentFormatted.replaceAll(currencyFormatting, "")
       updateValue("minRent", minRentRaw)
     }
@@ -219,7 +226,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
   }, [minRentFormatted])
 
   useEffect(() => {
-    if (monthlyRentFormatted) {
+    if (typeof monthlyRentFormatted !== "undefined") {
       const monthlyRentRaw = monthlyRentFormatted.replaceAll(currencyFormatting, "")
       updateValue("monthlyRent", monthlyRentRaw)
     }
