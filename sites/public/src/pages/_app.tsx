@@ -95,7 +95,7 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
       <AuthProvider>
         <MessageProvider>
           <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
-          <Component {...pageProps} />
+          {hasMounted && <Component {...pageProps} />}
         </MessageProvider>
       </AuthProvider>
     </ConfigProvider>
