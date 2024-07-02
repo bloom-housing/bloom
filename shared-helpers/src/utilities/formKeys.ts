@@ -1,4 +1,4 @@
-import { LanguagesEnum } from "../types/backend-swagger"
+import { HouseholdMemberRelationship, AlternateContactRelationship } from "../types/backend-swagger"
 
 export const stateKeys = [
   "",
@@ -72,32 +72,9 @@ export const contactPreferencesKeys = [
 
 export const adaFeatureKeys = ["mobility", "vision", "hearing"]
 
-export const relationshipKeys = [
-  "",
-  "spouse",
-  "registeredDomesticPartner",
-  "parent",
-  "child",
-  "sibling",
-  "cousin",
-  "aunt",
-  "uncle",
-  "nephew",
-  "niece",
-  "grandparent",
-  "greatGrandparent",
-  "inLaw",
-  "friend",
-  "other",
-]
+export const relationshipKeys = ["", ...Object.values(HouseholdMemberRelationship)]
 
-export const altContactRelationshipKeys = [
-  "familyMember",
-  "friend",
-  "caseManager",
-  "other",
-  "noContact",
-]
+export const altContactRelationshipKeys = Object.values(AlternateContactRelationship)
 
 export const ethnicityKeys = ["hispanicLatino", "notHispanicLatino"]
 

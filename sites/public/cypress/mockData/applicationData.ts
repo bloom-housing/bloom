@@ -7,6 +7,8 @@ import {
   YesNoEnum,
   UnitTypeEnum,
   ApplicationMultiselectQuestion,
+  AlternateContactRelationship,
+  HouseholdMemberRelationship,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const idDefaults = {
@@ -133,7 +135,7 @@ export const ElmVillageApplication: Application = {
   },
   alternateContact: {
     ...idDefaults,
-    type: "other",
+    type: AlternateContactRelationship.other,
     firstName: "Alternate Name",
     lastName: "Alternate Last Name",
     agency: "Agency Name",
@@ -184,7 +186,7 @@ export const ElmVillageApplication: Application = {
         zipCode: "90224",
       },
       sameAddress: YesNoEnum.no,
-      relationship: "spouse",
+      relationship: HouseholdMemberRelationship.spouse,
       workInRegion: YesNoEnum.yes,
     },
   ],
@@ -372,7 +374,7 @@ export const minimalDataApplication: Application = {
   },
   alternateContact: {
     ...idDefaults,
-    type: "dontHave",
+    type: AlternateContactRelationship.noContact,
     firstName: "",
     lastName: "",
     agency: "",

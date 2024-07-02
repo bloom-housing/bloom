@@ -174,7 +174,6 @@ export const mapFormToApi = ({
     applicationsMailingAddress: mailingAddressData,
     additionalPhoneNumber,
     contactPreferences,
-    sendMailToMailingAddress,
   } = data.application
 
   const additionalPhone = !additionalPhoneNumberData
@@ -187,17 +186,24 @@ export const mapFormToApi = ({
     race: fieldGroupObjectToArray(data, "race"),
   }
 
+  const sendMailToMailingAddress = data.application.sendMailToMailingAddress
+
   const applicationsMailingAddress = getAddress(sendMailToMailingAddress, mailingAddressData)
 
   const alternateContact = data.application.alternateContact
 
   // send null instead of empty string
   alternateContact.emailAddress = alternateContact.emailAddress || null
+  alternateContact.type = alternateContact.type || null
 
   // pass blank address, not used for now everywhere
   const alternateAddress = getAddress(false, null)
 
   const { incomeMonth, incomeYear, householdMembers } = data
+
+  householdMembers.forEach((member) => {
+    member.relationship = member.relationship || null
+  })
 
   const incomePeriod: IncomePeriodEnum | null = data.application?.incomePeriod || null
 

@@ -3927,7 +3927,7 @@ export interface AlternateContact {
   updatedAt: Date
 
   /**  */
-  type?: string
+  type?: AlternateContactRelationship
 
   /**  */
   otherType?: string
@@ -3986,7 +3986,7 @@ export interface HouseholdMember {
   sameAddress?: YesNoEnum
 
   /**  */
-  relationship?: string
+  relationship?: HouseholdMemberRelationship
 
   /**  */
   workInRegion?: YesNoEnum
@@ -4678,7 +4678,7 @@ export interface ApplicantUpdate {
 
 export interface AlternateContactUpdate {
   /**  */
-  type?: string
+  type?: AlternateContactRelationship
 
   /**  */
   otherType?: string
@@ -4756,7 +4756,7 @@ export interface HouseholdMemberUpdate {
   sameAddress?: YesNoEnum
 
   /**  */
-  relationship?: string
+  relationship?: HouseholdMemberRelationship
 
   /**  */
   workInRegion?: YesNoEnum
@@ -5461,6 +5461,32 @@ export enum ApplicationReviewStatusEnum {
 export enum YesNoEnum {
   "yes" = "yes",
   "no" = "no",
+}
+
+export enum AlternateContactRelationship {
+  "familyMember" = "familyMember",
+  "friend" = "friend",
+  "caseManager" = "caseManager",
+  "other" = "other",
+  "noContact" = "noContact",
+}
+
+export enum HouseholdMemberRelationship {
+  "spouse" = "spouse",
+  "registeredDomesticPartner" = "registeredDomesticPartner",
+  "parent" = "parent",
+  "child" = "child",
+  "sibling" = "sibling",
+  "cousin" = "cousin",
+  "aunt" = "aunt",
+  "uncle" = "uncle",
+  "nephew" = "nephew",
+  "niece" = "niece",
+  "grandparent" = "grandparent",
+  "greatGrandparent" = "greatGrandparent",
+  "inLaw" = "inLaw",
+  "friend" = "friend",
+  "other" = "other",
 }
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput
 export enum EnumJurisdictionCreateListingApprovalPermissions {
