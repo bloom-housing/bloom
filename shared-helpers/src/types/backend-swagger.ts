@@ -346,6 +346,28 @@ export class ListingsService {
     })
   }
   /**
+   * Change the listing lottery status
+   */
+  lotteryStatus(
+    params: {
+      /** requestBody */
+      body?: ListingLotteryStatus
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/lotteryStatus"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Get listings by multiselect question id
    */
   retrieveListings(
@@ -3554,6 +3576,14 @@ export interface ListingCreate {
 
   /**  */
   requestedChangesUser?: IdDTO
+}
+
+export interface ListingLotteryStatus {
+  /**  */
+  listingId: string
+
+  /**  */
+  lotteryStatus: LotteryStatusEnum
 }
 
 export interface ListingUpdate {
