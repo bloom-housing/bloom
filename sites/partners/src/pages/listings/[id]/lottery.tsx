@@ -81,10 +81,18 @@ const Lottery = (props: { listing: Listing }) => {
     if (listing.lotteryLastRunAt) {
       return (
         <div className={styles["actions-container"]}>
-          <Button className={styles["action"]} onClick={() => setReRunModal(true)}>
+          <Button
+            className={styles["action"]}
+            onClick={() => setReRunModal(true)}
+            variant={"primary-outlined"}
+          >
             {t("listings.lottery.reRun")}
           </Button>
-          <Button className={styles["action"]} onClick={() => setReleaseModal(true)}>
+          <Button
+            className={styles["action"]}
+            onClick={() => setReleaseModal(true)}
+            variant={"primary-outlined"}
+          >
             {t("listings.lottery.release")}
           </Button>
         </div>
