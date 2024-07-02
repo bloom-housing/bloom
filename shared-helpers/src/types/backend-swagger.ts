@@ -315,7 +315,7 @@ export class ListingsService {
       body?: ListingUpdate
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<any> {
+  ): Promise<Listing> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/listings/{id}"
       url = url.replace("{id}", params["id"] + "")
@@ -354,7 +354,7 @@ export class ListingsService {
       body?: ListingLotteryStatus
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<SuccessDTO> {
+  ): Promise<Listing> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/listings/lotteryStatus"
 

@@ -186,7 +186,7 @@ export class ListingController {
     summary: 'Change the listing lottery status',
     operationId: 'lotteryStatus',
   })
-  @ApiOkResponse({ type: SuccessDTO })
+  @ApiOkResponse({ type: Listing })
   @UseGuards(ApiKeyGuard)
   async lotteryStatus(
     @Request() req: ExpressRequest,
@@ -201,6 +201,7 @@ export class ListingController {
   @Put(':id')
   @ApiOperation({ summary: 'Update listing by id', operationId: 'update' })
   @UsePipes(new ListingCreateUpdateValidationPipe(defaultValidationPipeOptions))
+  @ApiOkResponse({ type: Listing })
   @UseGuards(ApiKeyGuard)
   async update(
     @Request() req: ExpressRequest,
