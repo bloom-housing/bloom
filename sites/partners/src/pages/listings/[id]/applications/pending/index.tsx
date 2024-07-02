@@ -136,8 +136,8 @@ const ApplicationsList = () => {
           listingLabel: t("t.listingSingle"),
           applicationsLabel: t("nav.applications"),
           lotteryLabel:
-            listingDto.status === ListingsStatusEnum.closed &&
-            listingDto.reviewOrderType === ReviewOrderTypeEnum.lottery
+            listingDto?.status === ListingsStatusEnum.closed &&
+            listingDto?.reviewOrderType === ReviewOrderTypeEnum.lottery
               ? t("listings.lotteryTitle")
               : undefined,
         }}
