@@ -186,12 +186,12 @@ export class ListingController {
     summary: 'Change the listing lottery status',
     operationId: 'lotteryStatus',
   })
-  @ApiOkResponse({ type: Listing })
+  @ApiOkResponse({ type: SuccessDTO })
   @UseGuards(ApiKeyGuard)
   async lotteryStatus(
     @Request() req: ExpressRequest,
     @Body() dto: ListingLotteryStatus,
-  ): Promise<Listing> {
+  ): Promise<SuccessDTO> {
     return await this.listingService.lotteryStatus(
       dto,
       mapTo(User, req['user']),

@@ -989,10 +989,7 @@ describe('Listing Controller Tests', () => {
         })
         .set('Cookie', adminAccessToken)
         .expect(200);
-      expect(res.body.id).toEqual(listing.id);
-      expect(res.body.lotteryStatus).toEqual(
-        LotteryStatusEnum.releasedToPartners,
-      );
+      expect(res.body.success).toEqual(true);
     });
 
     it('should update listing lottery status to ran from releasedToPartners aka retract', async () => {
@@ -1017,8 +1014,7 @@ describe('Listing Controller Tests', () => {
         })
         .set('Cookie', adminAccessToken)
         .expect(200);
-      expect(res.body.id).toEqual(listing.id);
-      expect(res.body.lotteryStatus).toEqual(LotteryStatusEnum.ran);
+      expect(res.body.success).toEqual(true);
     });
   });
 });

@@ -1626,7 +1626,7 @@ export class ListingService implements OnModuleInit {
   async lotteryStatus(
     dto: ListingLotteryStatus,
     requestingUser: User,
-  ): Promise<Listing> {
+  ): Promise<SuccessDTO> {
     const storedListing = await this.findOrThrow(
       dto.listingId,
       ListingViews.details,
@@ -1734,6 +1734,8 @@ export class ListingService implements OnModuleInit {
       throw new HttpException('Listing lottery status failed to save.', 500);
     }
 
-    return mapTo(Listing, res);
+    return {
+      success: true,
+    };
   }
 }

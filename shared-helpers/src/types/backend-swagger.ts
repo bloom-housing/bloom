@@ -2093,7 +2093,7 @@ export class ScriptRunnerService {
       body?: AmiChartImportDTO
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<string> {
+  ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/scriptRunner/amiChartImport"
 
