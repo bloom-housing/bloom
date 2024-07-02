@@ -181,7 +181,7 @@ export class ListingController {
     return await this.listingService.process();
   }
 
-  @Put('lotteryStatus/:id')
+  @Put('lotteryStatus')
   @ApiOperation({
     summary: 'Change the listing lottery status',
     operationId: 'lotteryStatus',

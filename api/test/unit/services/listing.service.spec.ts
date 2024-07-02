@@ -2994,11 +2994,11 @@ describe('Testing listing service', () => {
       expect(prisma.listings.update).not.toHaveBeenCalled();
     });
 
-    it.skip(
+    it.todo(
       'should not update status if requested status does not match enums',
     );
 
-    it.skip('should update status to ran from null/errored');
+    it.todo('should update status to ran from null/errored');
 
     it('should not update status to ran if user is not an admin', async () => {
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
@@ -3031,13 +3031,13 @@ describe('Testing listing service', () => {
       expect(prisma.listings.update).not.toHaveBeenCalled();
     });
 
-    it.skip('should update status to errored');
+    it.todo('should update status to errored');
 
-    it.skip('should update status to approved from ran');
+    it.todo('should update status to approved from ran');
 
-    it.skip('should not update status to approved when status is not ran');
+    it.todo('should not update status to approved when status is not ran');
 
-    it.skip('should not update status to approved if user is not an admin');
+    it.todo('should not update status to approved if user is not an admin');
 
     it('should update status to releasedToPartners from approved', async () => {
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
@@ -3145,15 +3145,15 @@ describe('Testing listing service', () => {
       expect(prisma.listings.update).not.toHaveBeenCalled();
     });
 
-    it.skip(
+    it.todo(
       'should update status to publishedToPublic from releasedToPartners',
     );
 
-    it.skip(
+    it.todo(
       'should not update status to publishedToPublic when status is not releasedToPartners',
     );
 
-    it.skip(
+    it.todo(
       'should not update status to publishedToPublic if user is not an admin or partner',
     );
 
@@ -3197,6 +3197,6 @@ describe('Testing listing service', () => {
       });
     });
 
-    it.skip('should update status to expired');
+    it.todo('should update status to expired');
   });
 });
