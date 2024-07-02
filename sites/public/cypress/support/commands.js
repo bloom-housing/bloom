@@ -466,8 +466,7 @@ Cypress.Commands.add("step16GeneralPool", () => {
 Cypress.Commands.add("step17Demographics", (application) => {
   cy.location("pathname").should("include", "applications/review/demographics")
   application.demographics.race.forEach((race) => {
-    const raceIndex = raceCheckboxesOrder.indexOf(race)
-    cy.getByTestId("app-demographics-race").eq(raceIndex).check()
+    cy.getByTestId(race).check()
   })
 
   if (application.demographics.ethnicity) {

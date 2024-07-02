@@ -60,7 +60,7 @@ export const AdditionalResourcesSection = () => {
                 },
               }}
             >
-              {sidebarContent}
+              {sidebarContent.toString()}
             </Markdown>
           </MarkdownSection>
         </aside>

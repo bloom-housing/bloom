@@ -49,7 +49,7 @@ const Privacy = () => {
             },
           }}
         >
-          {privacySection}
+          {privacySection.toString()}
         </Markdown>
       </MarkdownSection>
     </Layout>

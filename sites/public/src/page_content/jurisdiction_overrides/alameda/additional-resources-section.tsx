@@ -94,7 +94,7 @@ export const AdditionalResourcesSection = () => {
                 },
               }}
             >
-              {oaklandHeader}
+              {oaklandHeader.toString()}
             </Markdown>
             <div className="info-cards__grid">
               <Resource>{baCommunityServiceOakland}</Resource>
@@ -111,7 +111,7 @@ export const AdditionalResourcesSection = () => {
                 },
               }}
             >
-              {northCountyHeader}
+              {northCountyHeader.toString()}
             </Markdown>
             <div className="info-cards__grid">
               <Resource>{baCommunityServiceNorth}</Resource>
@@ -125,7 +125,7 @@ export const AdditionalResourcesSection = () => {
                 },
               }}
             >
-              {midCountyHeader}
+              {midCountyHeader.toString()}
             </Markdown>
             <div className="info-cards__grid">
               <Resource>{buildingFuturesSanLeandro}</Resource>
@@ -139,7 +139,7 @@ export const AdditionalResourcesSection = () => {
                 },
               }}
             >
-              {eastCountyHeader}
+              {eastCountyHeader.toString()}
             </Markdown>
             <div className="info-cards__grid">
               <Resource>{adobeServicesEast}</Resource>
@@ -151,7 +151,7 @@ export const AdditionalResourcesSection = () => {
                 },
               }}
             >
-              {southCountyHeader}
+              {southCountyHeader.toString()}
             </Markdown>
             <div className="info-cards__grid">
               <Resource>{adobeServicesSouth}</Resource>
@@ -175,7 +175,7 @@ export const AdditionalResourcesSection = () => {
                 },
               }}
             >
-              {sidebarContent}
+              {sidebarContent.toString()}
             </Markdown>
           </MarkdownSection>
         </aside>

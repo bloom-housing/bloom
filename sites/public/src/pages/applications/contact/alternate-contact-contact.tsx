@@ -16,7 +16,7 @@ import ApplicationFormLayout from "../../../layouts/application-form"
 import FormsLayout from "../../../layouts/forms"
 import styles from "../../../layouts/application-form.module.scss"
 
-export default () => {
+const ApplicationAlternateContactContact = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("alternateContactInfo")
   const currentPageSection = 1
@@ -195,3 +195,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default ApplicationAlternateContactContact
