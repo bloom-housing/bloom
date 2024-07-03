@@ -229,7 +229,6 @@
   "listings.lottery.releaseButton": "Release lottery",
   "listings.lottery.releaseContent": "Releasing the lottery will give Partner users access to the lottery data, including the ability to publish results to applicants.",
   "listings.lottery.reRun": "Re-run lottery",
-  "listings.lottery.reRunButton": "Re-run lottery",
   "listings.lottery.reRunContent": "Re-running the lottery will give all applications a new raw rank, which will impact the order in which they are processed.",
   "listings.lottery.reRunHistory": "Re-running a lottery will also be tracked in the history log.",
   "listings.lottery.reRunCannotBeUndone": "This action cannot be undone.",

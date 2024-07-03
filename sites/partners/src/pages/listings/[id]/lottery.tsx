@@ -284,7 +284,7 @@ const Lottery = (props: { listing: Listing }) => {
                 }}
                 size="sm"
               >
-                {t("listings.lottery.reRunButton")}
+                {t("listings.lottery.reRun")}
               </Button>
               <Button
                 variant="primary-outlined"
