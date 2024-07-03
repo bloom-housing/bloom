@@ -20,9 +20,15 @@ type UnitProps = {
   units: TempUnit[]
   setUnits: (units: TempUnit[]) => void
   disableUnitsAccordion: boolean
+  disableListingAvailability?: boolean
 }
 
-const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
+const FormUnits = ({
+  units,
+  setUnits,
+  disableUnitsAccordion,
+  disableListingAvailability,
+}: UnitProps) => {
   const [unitDrawerOpen, setUnitDrawerOpen] = useState(false)
   const [unitDeleteModal, setUnitDeleteModal] = useState<number | null>(null)
   const [defaultUnit, setDefaultUnit] = useState<TempUnit | null>(null)
@@ -185,6 +191,9 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
                   id: "availableUnits",
                   dataTestId: "listingAvailability.availableUnits",
                   defaultChecked: listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlist,
+                  disabled:
+                    disableListingAvailability &&
+                    listing?.reviewOrderType === ReviewOrderTypeEnum.waitlist,
                 },
                 {
                   label: t("listings.waitlist.open"),
@@ -192,6 +201,9 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
                   id: "openWaitlist",
                   dataTestId: "listingAvailability.openWaitlist",
                   defaultChecked: listing?.reviewOrderType === ReviewOrderTypeEnum.waitlist,
+                  disabled:
+                    disableListingAvailability &&
+                    listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlist,
                 },
               ]}
             />

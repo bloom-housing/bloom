@@ -13,12 +13,14 @@ type ApplicationDatesProps = {
   openHouseEvents: TempEvent[]
   setOpenHouseEvents: (events: TempEvent[]) => void
   listing?: FormListing
+  disableDueDate?: boolean
 }
 
 const ApplicationDates = ({
   listing,
   openHouseEvents,
   setOpenHouseEvents,
+  disableDueDate,
 }: ApplicationDatesProps) => {
   const openHouseHeaders = {
     date: "t.date",
@@ -116,7 +118,7 @@ const ApplicationDates = ({
               register={register}
               watch={watch}
               note={t("listings.whenApplicationsClose")}
-              disabled={enableDueDate === YesNoEnum.no}
+              disabled={disableDueDate || enableDueDate === YesNoEnum.no}
               defaultDate={{
                 month: listing?.applicationDueDate
                   ? dayjs(new Date(listing?.applicationDueDate)).format("MM")
@@ -137,7 +139,7 @@ const ApplicationDates = ({
               id={"applicationDueTimeField"}
               register={register}
               watch={watch}
-              disabled={enableDueDate === YesNoEnum.no}
+              disabled={disableDueDate || enableDueDate === YesNoEnum.no}
               defaultValues={{
                 hours: listing?.applicationDueDate
                   ? dayjs(new Date(listing?.applicationDueDate)).format("hh")

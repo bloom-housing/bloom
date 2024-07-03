@@ -62,6 +62,7 @@ type ListingFormProps = {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const defaultValues = editMode ? listing : formDefaults
+  const isListingActive = listing?.status === ListingsStatusEnum.active
   const formMethods = useForm<FormListing>({
     defaultValues,
     shouldUnregister: false,
@@ -147,7 +148,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     newData?: Partial<FormListing>
   ) => {
     if (confirm && status === ListingsStatusEnum.active) {
-      if (listing?.status === ListingsStatusEnum.active) {
+      if (isListingActive) {
         setListingIsAlreadyLiveModal(true)
       } else {
         setPublishModal(true)
@@ -314,6 +315,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             units={units}
                             setUnits={setUnits}
                             disableUnitsAccordion={listing?.disableUnitsAccordion}
+                            disableListingAvailability={
+                              isListingActive && !profile.userRoles.isAdmin
+                            }
                           />
                           <SelectAndOrder
                             addText={t("listings.addPreference")}
@@ -370,7 +374,10 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           </div>
                         </Tabs.TabPanel>
                         <Tabs.TabPanel>
-                          <RankingsAndResults listing={listing} />
+                          <RankingsAndResults
+                            listing={listing}
+                            disableDueDates={isListingActive && !profile.userRoles.isAdmin}
+                          />
                           <LeasingAgent />
                           <ApplicationTypes listing={listing} />
                           <ApplicationAddress listing={listing} />
@@ -378,6 +385,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             listing={listing}
                             openHouseEvents={openHouseEvents}
                             setOpenHouseEvents={setOpenHouseEvents}
+                            disableDueDate={isListingActive && !profile.userRoles.isAdmin}
                           />
 
                           <div className="-ml-8 -mt-8 relative" style={{ top: "7rem" }}>
