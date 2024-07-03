@@ -23,9 +23,9 @@ import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { unitAccessibilityPriorityTypeFactoryAll } from './seed-helpers/unit-accessibility-priority-type-factory';
 import { multiselectQuestionFactory } from './seed-helpers/multiselect-question-factory';
 import {
-  lincolnMemorial,
-  washingtonMonument,
-  whiteHouse,
+  yellowstoneAddress,
+  yosemiteAddress,
+  rockyMountainAddress,
 } from './seed-helpers/address-factory';
 import { applicationFactory } from './seed-helpers/application-factory';
 import { translationFactory } from './seed-helpers/translation-factory';
@@ -286,7 +286,7 @@ export const stagingSeed = async (
         contentUpdatedAt: new Date(),
         publishedAt: new Date(),
         listingsBuildingAddress: {
-          create: whiteHouse,
+          create: yellowstoneAddress,
         },
         listingsApplicationPickUpAddress: undefined,
         listingsLeasingAgentAddress: undefined,
@@ -564,19 +564,19 @@ export const stagingSeed = async (
         contentUpdatedAt: new Date(),
         publishedAt: new Date(),
         listingsBuildingAddress: {
-          create: whiteHouse,
+          create: yellowstoneAddress,
         },
         listingsApplicationMailingAddress: {
-          create: lincolnMemorial,
+          create: rockyMountainAddress,
         },
         listingsApplicationPickUpAddress: {
-          create: washingtonMonument,
+          create: yosemiteAddress,
         },
         listingsLeasingAgentAddress: {
-          create: lincolnMemorial,
+          create: rockyMountainAddress,
         },
         listingsApplicationDropOffAddress: {
-          create: washingtonMonument,
+          create: yosemiteAddress,
         },
         reservedCommunityTypes: undefined,
         listingImages: {

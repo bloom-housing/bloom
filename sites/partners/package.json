@@ -15,6 +15,7 @@
     "build": "next build",
     "test": "concurrently \"yarn dev\" \"cypress open\"",
     "test:unit": "jest -w 1",
+    "test:unit:coverage": "jest -w 1 --coverage --watchAll=false",
     "test:headless": "concurrently \"yarn dev\" \"cypress run\"",
     "test:coverage": "yarn nyc report --reporter=text-summary --check-coverage",
     "export": "next export",
