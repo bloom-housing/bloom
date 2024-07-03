@@ -1060,13 +1060,15 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
       expect(activityLogResult).not.toBeNull();
     });
 
-    it('should succeed for update endpoint & create an activity log entry', async () => {
+    it('should succeed for update endpoint & create an activity log entry when user is not updating dates', async () => {
       const listingData = await listingFactory(jurisId, prisma);
       const listing = await prisma.listings.create({
         data: listingData,
       });
 
       const val = await constructFullListingData(prisma, listing.id, jurisId);
+      val.reviewOrderType = listing.reviewOrderType;
+      val.applicationDueDate = listing.applicationDueDate;
 
       await request(app.getHttpServer())
         .put(`/listings/${listing.id}`)

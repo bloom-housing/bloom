@@ -14,7 +14,6 @@ These commands are also encapsulated in:
 $ yarn setup
 ```
 
-
 If you would prefer to have it setup with more realistic data you can run `yarn db:setup:staging` instead of `yarn db:setup`.
 
 ## Starting the application
