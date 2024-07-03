@@ -108,7 +108,7 @@ const ApplicationsList = () => {
     formatLinkCell,
   }
 
-  if (!applications || appsError) return <div>An error has occurred.</div>
+  if (!applications || appsError) return <div>{t("t.errorOccurred")}</div>
 
   return (
     <Layout>
