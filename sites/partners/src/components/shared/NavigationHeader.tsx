@@ -71,7 +71,7 @@ const NavigationHeader = ({
         label: tabs.lotteryLabel,
         path: `/listings/${listingId}/lottery`,
         activePaths: [`/listings/${listingId}/lottery`],
-        content: t("t.new"),
+        content: undefined,
       })
     }
 
