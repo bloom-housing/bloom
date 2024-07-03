@@ -101,7 +101,7 @@ describe("applications", () => {
     expect(getByText("Mailing City")).toBeInTheDocument()
     expect(getByText("Estes Park")).toBeInTheDocument()
     expect(getByText("Mailing State")).toBeInTheDocument()
-    expect(getByText("C0")).toBeInTheDocument()
+    expect(getByText("CO")).toBeInTheDocument()
     expect(getByText("Mailing Zip")).toBeInTheDocument()
     expect(getByText("80517")).toBeInTheDocument()
     expect(getByText("Work Street Address")).toBeInTheDocument()

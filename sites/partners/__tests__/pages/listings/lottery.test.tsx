@@ -234,7 +234,7 @@ describe("lottery", () => {
       })
     )
 
-    const { getByText, findByText } = render(
+    const { getByText, findByText, findAllByText } = render(
       <Lottery listing={{ ...listing, lotteryLastRunAt: new Date() }} />
     )
 
@@ -243,7 +243,7 @@ describe("lottery", () => {
 
     fireEvent.click(getByText("Re-run lottery"))
     expect(await findByText("Are you sure?")).toBeInTheDocument()
-    expect(await findByText("I understand, re-run the lottery")).toBeInTheDocument()
+    expect(await findAllByText("Re-run lottery")).toHaveLength(2)
   })
 
   it("should show release modal if user clicks on release", async () => {
@@ -274,10 +274,10 @@ describe("lottery", () => {
     expect(header).toBeInTheDocument()
 
     fireEvent.click(getByText("Release lottery"))
-    expect(await findByText("Confirmation needed")).toBeInTheDocument()
+    expect(await findByText("Are you sure?")).toBeInTheDocument()
     expect(
       await findByText(
-        "Releasing the lottery will give Partner users access to the lottery data, including the ability to publicize anonymous results to applicants."
+        "Releasing the lottery will give Partner users access to the lottery data, including the ability to publish results to applicants."
       )
     ).toBeInTheDocument()
   })
@@ -334,14 +334,14 @@ describe("lottery", () => {
       })
     )
 
-    const { getByText, findByText } = render(<Lottery listing={listing} />)
+    const { getByText, findByText, findAllByText } = render(<Lottery listing={listing} />)
 
     const header = await findByText("Partners Portal")
     expect(header).toBeInTheDocument()
 
     fireEvent.click(getByText("Run lottery"))
-    expect(await findByText("Are you sure?")).toBeInTheDocument()
-    expect(await findByText("5 unresolved duplicate set(s).")).toBeInTheDocument()
-    expect(await findByText("Run lottery without resolving duplicates")).toBeInTheDocument()
+    expect(await findByText("Confirmation needed")).toBeInTheDocument()
+    expect(await findByText("5 unresolved duplicate sets.")).toBeInTheDocument()
+    expect(await findAllByText("Run lottery")).toHaveLength(2)
   })
 })

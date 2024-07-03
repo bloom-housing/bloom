@@ -207,7 +207,7 @@ describe("settings", () => {
           `This preference is currently added to listings and needs to be removed before being deleted.`
         )
       )
-      expect(getByText(listing.name))
+      expect(await findByText(listing.name))
       // verify delete button is not there
       expect(queryAllByText("Delete")).toHaveLength(0)
 
