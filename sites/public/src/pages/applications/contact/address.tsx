@@ -344,7 +344,7 @@ const ApplicationAddress = () => {
                     name="applicant.applicantAddress.state"
                     label={t("application.contact.state")}
                     validation={{ required: true, maxLength: 64 }}
-                    error={errors.applicant?.address?.state}
+                    error={errors.applicant?.applicantAddress?.state}
                     errorMessage={
                       errors.applicant?.applicantAddress?.state?.type === "maxLength"
                         ? t("errors.maxLength")
@@ -368,7 +368,7 @@ const ApplicationAddress = () => {
                       ? t("errors.maxLength")
                       : t("errors.zipCodeError")
                   }
-                  error={errors.applicant?.address?.zipCode}
+                  error={errors.applicant?.applicantAddress?.zipCode}
                   register={register}
                   dataTestId={"app-primary-address-zip"}
                 />
