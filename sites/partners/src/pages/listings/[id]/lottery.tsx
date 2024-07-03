@@ -30,7 +30,6 @@ const Lottery = (props: { listing: Listing }) => {
   const { listing } = props
 
   const [runModal, setRunModal] = useState(false)
-  const [runDuplicatesModal, setRunDuplicatesModal] = useState(false)
   const [reRunModal, setReRunModal] = useState(false)
   const [releaseModal, setReleaseModal] = useState(false)
   const [loading, setLoading] = useState(false)
