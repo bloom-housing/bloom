@@ -593,7 +593,7 @@ export class ApplicationCsvExporterService
                 claimedString.push(option.key);
               }
             });
-            return claimedString.length ? claimedString.join(', ') : '';
+            return claimedString.join(', ');
           },
         });
         /**
@@ -670,7 +670,7 @@ export class ApplicationCsvExporterService
                 claimedString.push(option.key);
               }
             });
-            return claimedString.length ? claimedString.join(', ') : '';
+            return claimedString.join(', ');
           },
         });
         /**
