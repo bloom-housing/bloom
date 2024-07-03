@@ -6,6 +6,7 @@ import {
   LanguagesEnum,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
+  LotteryStatusEnum,
   ReviewOrderTypeEnum,
   UnitTypeEnum,
   UserRoleEnum,
@@ -915,6 +916,105 @@ describe('Listing Controller Tests', () => {
         expect.arrayContaining([partnerUser.email]),
         process.env.PARTNERS_PORTAL_URL,
       );
+    });
+  });
+
+  describe('lottery status endpoint', () => {
+    it("should error when trying to update listing that doesn't exist", async () => {
+      const id = randomUUID();
+      const res = await request(app.getHttpServer())
+        .put('/listings/lotteryStatus')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          listingId: id,
+          lotteryStatus: LotteryStatusEnum.ran,
+        })
+        .set('Cookie', adminAccessToken)
+        .expect(404);
+      expect(res.body.message).toEqual(
+        `listingId ${id} was requested but not found`,
+      );
+    });
+
+    it('should error if user is not an admin and tries to update to ran or releasedToPartner', async () => {
+      const jurisdictionA = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
+      const listingData = await listingFactory(jurisdictionA.id, prisma, {
+        status: ListingsStatusEnum.closed,
+      });
+      const listing = await prisma.listings.create({
+        data: listingData,
+      });
+
+      const res = await request(app.getHttpServer())
+        .put('/listings/lotteryStatus')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          listingId: listing.id,
+          lotteryStatus: LotteryStatusEnum.ran,
+        })
+        .expect(403);
+
+      const res2 = await request(app.getHttpServer())
+        .put('/listings/lotteryStatus')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          listingId: listing.id,
+          lotteryStatus: LotteryStatusEnum.releasedToPartners,
+        })
+        .expect(403);
+    });
+
+    it('should update listing lottery status to releasedToPartners from approved', async () => {
+      const jurisdictionA = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
+      const listingData = await listingFactory(jurisdictionA.id, prisma, {
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: LotteryStatusEnum.approved,
+      });
+      const listing = await prisma.listings.create({
+        data: listingData,
+      });
+
+      const res = await request(app.getHttpServer())
+        .put('/listings/lotteryStatus')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          listingId: listing.id,
+          lotteryStatus: LotteryStatusEnum.releasedToPartners,
+        })
+        .set('Cookie', adminAccessToken)
+        .expect(200);
+      expect(res.body.success).toEqual(true);
+    });
+
+    it('should update listing lottery status to ran from releasedToPartners aka retract', async () => {
+      const jurisdictionA = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
+      const listingData = await listingFactory(jurisdictionA.id, prisma, {
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: LotteryStatusEnum.releasedToPartners,
+      });
+      const listing = await prisma.listings.create({
+        data: listingData,
+      });
+
+      const res = await request(app.getHttpServer())
+        .put('/listings/lotteryStatus')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          listingId: listing.id,
+          lotteryStatus: LotteryStatusEnum.ran,
+        })
+        .set('Cookie', adminAccessToken)
+        .expect(200);
+      expect(res.body.success).toEqual(true);
     });
   });
 });
