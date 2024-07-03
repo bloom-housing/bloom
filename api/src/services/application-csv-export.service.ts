@@ -183,9 +183,11 @@ export class ApplicationCsvExporterService
                 let row = '';
                 paginatedApplications.forEach((app) => {
                   let preferences: ApplicationMultiselectQuestion[];
+                  let programs: ApplicationMultiselectQuestion[];
                   csvHeaders.forEach((header, index) => {
                     let multiselectQuestionValue = false;
                     let parsePreference = false;
+                    let parseProgram = false;
                     let value = header.path.split('.').reduce((acc, curr) => {
                       // return preference/program as value for the format function to accept
                       if (multiselectQuestionValue) {
@@ -205,11 +207,26 @@ export class ApplicationCsvExporterService
                         );
                         multiselectQuestionValue = true;
                         return preference;
+                      } else if (parseProgram) {
+                        // curr should equal the preference id we're pulling from
+                        if (!programs) {
+                          programs =
+                            app.programs as unknown as ApplicationMultiselectQuestion[];
+                        }
+                        parsePreference = false;
+                        // there aren't typically many programs, but if there, then a object map should be created and used
+                        const program = programs.find(
+                          (preference) => preference.key === curr,
+                        );
+                        multiselectQuestionValue = true;
+                        return program;
                       }
 
                       // sets parsePreference to true, for the next iteration
                       if (curr === 'preferences') {
                         parsePreference = true;
+                      } else if (curr === 'programs') {
+                        parseProgram = true;
                       }
 
                       if (acc === null || acc === undefined) {
@@ -627,6 +644,83 @@ export class ApplicationCsvExporterService
               headers.push({
                 path: `preferences.${question.text}.address`,
                 label: `Preference ${question.text} - ${option.text} - Relationship to Address Holder`,
+                format: (val: ApplicationMultiselectQuestion): string => {
+                  return this.multiselectQuestionFormat(
+                    val,
+                    option.text,
+                    'addressHolderRelationship',
+                  );
+                },
+              });
+            }
+          });
+      });
+
+    // add programs to csv headers
+    multiSelectQuestions
+      .filter((question) => question.applicationSection === 'programs')
+      .forEach((question) => {
+        headers.push({
+          path: `programs.${question.text}.claimed`,
+          label: `Program ${question.text}`,
+          format: (val: any): string => {
+            const claimedString: string[] = [];
+            val?.options?.forEach((option) => {
+              if (option.checked) {
+                claimedString.push(option.key);
+              }
+            });
+            return claimedString.length ? claimedString.join(', ') : '';
+          },
+        });
+        /**
+         * there are other input types for extra data besides address
+         * that are not used on the old backend, but could be added here
+         */
+        question.options
+          ?.filter((option) => option.collectAddress)
+          .forEach((option) => {
+            headers.push({
+              path: `programs.${question.text}.address`,
+              label: `Program ${question.text} - ${option.text} - Address`,
+              format: (val: ApplicationMultiselectQuestion): string => {
+                return this.multiselectQuestionFormat(
+                  val,
+                  option.text,
+                  'address',
+                );
+              },
+            });
+            if (option.validationMethod) {
+              headers.push({
+                path: `programs.${question.text}.address`,
+                label: `Program ${question.text} - ${option.text} - Passed Address Check`,
+                format: (val: ApplicationMultiselectQuestion): string => {
+                  return this.multiselectQuestionFormat(
+                    val,
+                    option.text,
+                    'geocodingVerified',
+                  );
+                },
+              });
+            }
+            if (option.collectName) {
+              headers.push({
+                path: `programs.${question.text}.address`,
+                label: `Program ${question.text} - ${option.text} - Name of Address Holder`,
+                format: (val: ApplicationMultiselectQuestion): string => {
+                  return this.multiselectQuestionFormat(
+                    val,
+                    option.text,
+                    'addressHolderName',
+                  );
+                },
+              });
+            }
+            if (option.collectRelationship) {
+              headers.push({
+                path: `programs.${question.text}.address`,
+                label: `Program ${question.text} - ${option.text} - Relationship to Address Holder`,
                 format: (val: ApplicationMultiselectQuestion): string => {
                   return this.multiselectQuestionFormat(
                     val,
