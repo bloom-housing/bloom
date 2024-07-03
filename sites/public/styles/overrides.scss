@@ -152,4 +152,59 @@
       font-family: var(--seeds-font-serif);
     }
   }
+
+  .markdown-informational {
+    font-size: var(--seeds-type-body-size);
+
+    h3 {
+      font-family: var(--seeds-font-alt-sans);
+      font-size: var(--seeds-type-heading-size-lg);
+      font-weight: var(--seeds-font-weight-semibold);
+    }
+
+    ul:not(.application-timeline) > li:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
+  ul.application-timeline {
+    .ui-icon > svg {
+      margin-top: 0 !important;
+    }
+
+    .progress-nav__dot-item > p {
+      padding-top: 2.65rem;
+      text-align: left;
+      font-weight: normal !important;
+    }
+
+    .progress-nav__dot-item {
+      text-align: left;
+    }
+
+    .progress-nav__dot-item::before {
+      left: 1rem;
+    }
+
+    .progress-nav__dot-item::after {
+      top: 0.9rem;
+      height: 3px;
+    }
+
+    .progress-nav__dot-item.is-active::before {
+      background-color: var(--seeds-color-success-dark);
+    }
+
+    .progress-nav__dot-item:first-of-type::after {
+      left: 0;
+    }
+
+    .progress-nav__dot-item:last-of-type::after {
+      display: none;
+    }
+
+    .progress-nav__dot-item .absolute {
+      margin-left: 0.6rem;
+    }
+  }
 }
