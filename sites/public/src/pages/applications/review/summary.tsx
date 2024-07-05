@@ -51,7 +51,12 @@ const ApplicationSummary = () => {
 
   useEffect(() => {
     if (listing && router.isReady) {
-      if (listing?.status !== ListingsStatusEnum.active) {
+      const currentDate = new Date()
+      if (
+        listing?.status !== ListingsStatusEnum.active ||
+        (listing?.applicationDueDate && currentDate > listing.applicationDueDate) ||
+        !listing.commonDigitalApplication
+      ) {
         addToast(t("listings.applicationsClosedRedirect"), { variant: "alert" })
         void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
       }

@@ -521,8 +521,9 @@ export class ApplicationService {
       dto.submissionDate = new Date();
       // if the submission is after the application due date
       if (
-        listing?.applicationDueDate &&
-        dto.submissionDate > listing.applicationDueDate
+        (listing?.applicationDueDate &&
+          dto.submissionDate > listing.applicationDueDate) ||
+        !listing.commonDigitalApplication
       ) {
         throw new BadRequestException(
           `Listing is not open for application submission`,

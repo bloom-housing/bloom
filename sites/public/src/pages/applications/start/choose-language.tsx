@@ -83,8 +83,13 @@ const ApplicationChooseLanguage = () => {
   }, [router, conductor, context, listingId, initialStateLoaded, profile, listingsService])
 
   useEffect(() => {
-    if (listing && router.isReady) {
-      if (listing?.status !== ListingsStatusEnum.active && router.query.preview !== "true") {
+    if (listing && router.isReady && router?.query?.preview !== "true") {
+      const currentDate = new Date()
+      if (
+        listing?.status !== ListingsStatusEnum.active ||
+        (listing?.applicationDueDate && currentDate > listing.applicationDueDate) ||
+        !listing.commonDigitalApplication
+      ) {
         addToast(t("listings.applicationsClosedRedirect"), { variant: "alert" })
         void router.push(`/${router.locale}/listing/${listing?.id}/${listing?.urlSlug}`)
       }
