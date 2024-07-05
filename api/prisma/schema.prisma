@@ -516,6 +516,7 @@ model Listings {
   afsLastRunAt                          DateTime?                     @default(dbgenerated("'1970-01-01 00:00:00-07'::timestamp with time zone")) @map("afs_last_run_at") @db.Timestamptz(6)
   lastApplicationUpdateAt               DateTime?                     @default(dbgenerated("'1970-01-01 00:00:00-07'::timestamp with time zone")) @map("last_application_update_at") @db.Timestamptz(6)
   lotteryLastRunAt                      DateTime?                     @map("lottery_last_run_at") @db.Timestamptz(6)
+  lotteryStatus                         LotteryStatusEnum?            @map("lottery_status")
   buildingAddressId                     String?                       @map("building_address_id") @db.Uuid
   applicationPickUpAddressId            String?                       @map("application_pick_up_address_id") @db.Uuid
   applicationDropOffAddressId           String?                       @map("application_drop_off_address_id") @db.Uuid
@@ -1016,6 +1017,17 @@ enum ListingsStatusEnum {
   changesRequested
 
   @@map("listings_status_enum")
+}
+
+enum LotteryStatusEnum {
+  errored
+  ran
+  approved
+  releasedToPartners
+  publishedToPublic
+  expired
+
+  @@map("lottery_status_enum")
 }
 
 enum MultiselectQuestionsApplicationSectionEnum {

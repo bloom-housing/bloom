@@ -356,7 +356,7 @@ export class ListingsService {
       body?: ListingUpdate
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<any> {
+  ): Promise<Listing> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/listings/{id}"
       url = url.replace("{id}", params["id"] + "")
@@ -380,6 +380,28 @@ export class ListingsService {
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
       let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Change the listing lottery status
+   */
+  lotteryStatus(
+    params: {
+      /** requestBody */
+      body?: ListingLotteryStatus
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Listing> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/lotteryStatus"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
 
       configs.data = data
 
@@ -3099,6 +3121,9 @@ export interface Listing {
   lotteryLastRunAt?: Date
 
   /**  */
+  lotteryStatus?: LotteryStatusEnum
+
+  /**  */
   lastApplicationUpdateAt?: Date
 
   /**  */
@@ -3603,6 +3628,9 @@ export interface ListingCreate {
   lotteryLastRunAt?: Date
 
   /**  */
+  lotteryStatus?: LotteryStatusEnum
+
+  /**  */
   lastApplicationUpdateAt?: Date
 
   /**  */
@@ -3670,6 +3698,14 @@ export interface ListingCreate {
 
   /**  */
   requestedChangesUser?: IdDTO
+}
+
+export interface ListingLotteryStatus {
+  /**  */
+  listingId: string
+
+  /**  */
+  lotteryStatus: LotteryStatusEnum
 }
 
 export interface ListingUpdate {
@@ -3858,6 +3894,9 @@ export interface ListingUpdate {
 
   /**  */
   lotteryLastRunAt?: Date
+
+  /**  */
+  lotteryStatus?: LotteryStatusEnum
 
   /**  */
   lastApplicationUpdateAt?: Date
@@ -5488,6 +5527,15 @@ export enum ReviewOrderTypeEnum {
   "lottery" = "lottery",
   "firstComeFirstServe" = "firstComeFirstServe",
   "waitlist" = "waitlist",
+}
+
+export enum LotteryStatusEnum {
+  "errored" = "errored",
+  "ran" = "ran",
+  "approved" = "approved",
+  "releasedToPartners" = "releasedToPartners",
+  "publishedToPublic" = "publishedToPublic",
+  "expired" = "expired",
 }
 
 export enum ValidationMethodEnum {
