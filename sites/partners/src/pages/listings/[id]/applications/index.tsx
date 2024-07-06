@@ -129,7 +129,7 @@ const ApplicationsList = () => {
     }
   }
 
-  if (!applications || appsError) return <div>An error has occurred.</div>
+  if (!applications || appsError) return <div>{t("t.errorOccurred")}</div>
 
   const expiryDate = dayjs(listingDto?.closedAt).add(45, "day")
   const formattedExpiryDate = expiryDate.format("MMMM D, YYYY")

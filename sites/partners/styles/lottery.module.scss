@@ -34,6 +34,14 @@
       width: 25%;
       padding-left: var(--seeds-s6);
     }
+
+    .actions-container {
+      margin-bottom: var(--seeds-s2);
+      .action {
+        width: 100%;
+        margin-bottom: var(--seeds-s2);
+      }
+    }
   }
 
   .seeds-card {
