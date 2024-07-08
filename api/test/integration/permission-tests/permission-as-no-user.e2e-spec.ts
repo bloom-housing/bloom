@@ -228,7 +228,9 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         'permission juris 59',
       );
       await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
-      const listing1 = await listingFactory(jurisdiction, prisma);
+      const listing1 = await listingFactory(jurisdiction, prisma, {
+        digitalApp: true,
+      });
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
@@ -262,7 +264,9 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         'permission juris 60',
       );
       await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
-      const listing1 = await listingFactory(jurisdiction, prisma);
+      const listing1 = await listingFactory(jurisdiction, prisma, {
+        digitalApp: true,
+      });
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
@@ -293,7 +297,9 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         'permission juris 61',
       );
       await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
-      const listing1 = await listingFactory(jurisdiction, prisma);
+      const listing1 = await listingFactory(jurisdiction, prisma, {
+        digitalApp: true,
+      });
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
@@ -324,7 +330,9 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         'permission juris 62',
       );
       await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
-      const listing1 = await listingFactory(jurisdiction, prisma);
+      const listing1 = await listingFactory(jurisdiction, prisma, {
+        digitalApp: true,
+      });
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
@@ -366,7 +374,9 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         'permission juris 63',
       );
       await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
-      const listing1 = await listingFactory(jurisdiction, prisma);
+      const listing1 = await listingFactory(jurisdiction, prisma, {
+        digitalApp: true,
+      });
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });

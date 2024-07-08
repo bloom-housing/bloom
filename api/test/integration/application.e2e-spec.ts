@@ -349,7 +349,9 @@ describe('Application Controller Tests', () => {
         data: jurisdictionFactory(),
       });
       await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
-      const listing1 = await listingFactory(jurisdiction.id, prisma);
+      const listing1 = await listingFactory(jurisdiction.id, prisma, {
+        digitalApp: true,
+      });
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
@@ -514,6 +516,7 @@ describe('Application Controller Tests', () => {
       await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
       const exampleAddress = addressFactory() as AddressCreate;
       const listing1 = await listingFactory(jurisdiction.id, prisma, {
+        digitalApp: true,
         listing: {
           listingsBuildingAddress: { create: exampleAddress },
         } as unknown as Prisma.ListingsCreateInput,

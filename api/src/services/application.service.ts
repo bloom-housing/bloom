@@ -521,8 +521,7 @@ export class ApplicationService {
       dto.submissionDate = new Date();
       // if the submission is after the application due date
       if (
-        !listing.digitalApplication ||
-        !listing.commonDigitalApplication ||
+        !(listing.digitalApplication && listing.commonDigitalApplication) ||
         (listing?.applicationDueDate &&
           dto.submissionDate > listing.applicationDueDate)
       ) {
