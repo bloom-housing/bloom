@@ -56,26 +56,28 @@ const Lottery = (props: { listing: Listing }) => {
   }
 
   const getMainContent = () => {
+    const exportCard = (
+      <CardSection>
+        <Icon size="xl">
+          <Download />
+        </Icon>
+        <Heading priority={2} size={"2xl"}>
+          {t("listings.lottery.export")}
+        </Heading>
+        <div className={styles["card-description"]}>
+          {listing.listingMultiselectQuestions.length
+            ? t("listings.lottery.exportFile")
+            : t("listings.lottery.exportFileNoPreferences")}
+        </div>
+        <div>
+          <Button onClick={() => setExportModal(true)}>{t("t.export")}</Button>
+        </div>
+      </CardSection>
+    )
+
     if (profile?.userRoles?.isAdmin) {
       if (listing.lotteryLastRunAt) {
-        return (
-          <CardSection>
-            <Icon size="xl">
-              <Download />
-            </Icon>
-            <Heading priority={2} size={"2xl"}>
-              {t("listings.lottery.export")}
-            </Heading>
-            <div className={styles["card-description"]}>
-              {listing.listingMultiselectQuestions.length
-                ? t("listings.lottery.exportFile")
-                : t("listings.lottery.exportFileNoPreferences")}
-            </div>
-            <div>
-              <Button onClick={() => setExportModal(true)}>{t("t.export")}</Button>
-            </div>
-          </CardSection>
-        )
+        return exportCard
       } else {
         return (
           <CardSection>
@@ -127,6 +129,8 @@ const Lottery = (props: { listing: Listing }) => {
             </div>
           </CardSection>
         )
+      } else if (listing.lotteryStatus === LotteryStatusEnum.publishedToPublic) {
+        return exportCard
       } else {
         return (
           <CardSection>
