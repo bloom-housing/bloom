@@ -53,7 +53,6 @@ const ApplicationSummary = () => {
   useEffect(() => {
     if (listing && router.isReady) {
       const currentDate = dayjs()
-      console.log(listing)
       if (
         !listing.digitalApplication ||
         !listing.commonDigitalApplication ||
