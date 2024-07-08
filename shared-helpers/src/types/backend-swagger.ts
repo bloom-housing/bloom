@@ -346,6 +346,22 @@ export class ListingsService {
     })
   }
   /**
+   * Trigger the lottery process job
+   */
+  expireLotteries(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/expireLotteries"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Change the listing lottery status
    */
   lotteryStatus(
@@ -354,7 +370,7 @@ export class ListingsService {
       body?: ListingLotteryStatus
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Listing> {
+  ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/listings/lotteryStatus"
 

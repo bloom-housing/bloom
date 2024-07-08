@@ -181,6 +181,19 @@ export class ListingController {
     return await this.listingService.process();
   }
 
+  @Put('expireLotteries')
+  @ApiOperation({
+    summary: 'Trigger the lottery process job',
+    operationId: 'expireLotteries',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  @PermissionAction(permissionActions.update)
+  @UseInterceptors(ActivityLogInterceptor)
+  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
+  async expire_lotteries(): Promise<SuccessDTO> {
+    return await this.listingService.expire_lotteries();
+  }
+
   @Put('lotteryStatus')
   @ApiOperation({
     summary: 'Change the listing lottery status',

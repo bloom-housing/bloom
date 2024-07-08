@@ -2906,7 +2906,7 @@ describe('Testing listing service', () => {
       prisma.cronJob.findFirst = jest.fn().mockResolvedValue(null);
       prisma.cronJob.create = jest.fn().mockResolvedValue(true);
 
-      await service.markCronJobAsStarted();
+      await service.markCronJobAsStarted('LISTING_CRON_JOB');
 
       expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
         where: {
@@ -2927,7 +2927,7 @@ describe('Testing listing service', () => {
         .mockResolvedValue({ id: randomUUID() });
       prisma.cronJob.update = jest.fn().mockResolvedValue(true);
 
-      await service.markCronJobAsStarted();
+      await service.markCronJobAsStarted('LISTING_CRON_JOB');
 
       expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
         where: {
