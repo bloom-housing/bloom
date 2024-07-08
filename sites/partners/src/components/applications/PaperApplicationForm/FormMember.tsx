@@ -48,20 +48,8 @@ export class Member implements HouseholdMemberUpdate {
     latitude: undefined,
     longitude: undefined,
   }
-  householdMemberWorkAddress = {
-    placeName: undefined,
-    city: "",
-    county: "",
-    state: "",
-    street: "",
-    street2: "",
-    zipCode: "",
-    latitude: undefined,
-    longitude: undefined,
-  }
   sameAddress?: YesNoEnum
   relationship?: HouseholdMemberRelationship
-  workInRegion?: YesNoEnum
 }
 
 type ApplicationFormMemberProps = {
@@ -84,19 +72,16 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
       lastName: currentlyEdited?.lastName,
       relationship: currentlyEdited?.relationship,
       sameAddress: currentlyEdited?.sameAddress,
-      workInRegion: currentlyEdited?.workInRegion,
       dateOfBirth: {
         birthMonth: currentlyEdited?.birthMonth,
         birthDay: currentlyEdited?.birthDay,
         birthYear: currentlyEdited?.birthYear,
       },
       householdMemberAddress: currentlyEdited?.householdMemberAddress,
-      householdMemberWorkAddress: currentlyEdited?.householdMemberWorkAddress,
     },
   })
 
   const sameAddressField = watch("sameAddress")
-  const workInRegionField = watch("workInRegion")
 
   async function onFormSubmit() {
     const validation = await trigger()
@@ -105,7 +90,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
 
     const data = getValues()
 
-    const { sameAddress, workInRegion } = data
+    const { sameAddress } = data
     const { birthMonth, birthDay, birthYear } = data.dateOfBirth
     const formData = {
       createdAt: undefined,
@@ -115,7 +100,6 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
       birthDay,
       birthYear,
       sameAddress: sameAddress ? sameAddress : null,
-      workInRegion: workInRegion ? workInRegion : null,
     }
 
     const editedMember = members.find((member) => member.orderId === editedMemberId)
@@ -138,19 +122,6 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
     },
     {
       id: "sameAddressNo",
-      label: t("t.no"),
-      value: YesNoEnum.no,
-    },
-  ]
-
-  const workInRegionOptions = [
-    {
-      id: "workInRegionYes",
-      label: t("t.yes"),
-      value: YesNoEnum.yes,
-    },
-    {
-      id: "workInRegionNo",
       label: t("t.no"),
       value: YesNoEnum.no,
     },
@@ -228,18 +199,6 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
                   fieldGroupClassName="flex h-12 items-center"
                 />
               </Grid.Cell>
-
-              <Grid.Cell>
-                <FieldGroup
-                  name="workInRegion"
-                  type="radio"
-                  register={register}
-                  groupLabel={t("application.details.workInRegion")}
-                  fields={workInRegionOptions}
-                  fieldClassName="m-0"
-                  fieldGroupClassName="flex h-12 items-center"
-                />
-              </Grid.Cell>
             </Grid.Row>
           </SectionWithGrid>
 
@@ -247,15 +206,6 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
             <FormAddress
               subtitle={t("application.details.residenceAddress")}
               dataKey="householdMemberAddress"
-              register={register}
-              stateKeys={stateKeys}
-            />
-          )}
-
-          {workInRegionField === YesNoEnum.yes && (
-            <FormAddress
-              subtitle={t("application.contact.workAddress")}
-              dataKey="householdMemberWorkAddress"
               register={register}
               stateKeys={stateKeys}
             />

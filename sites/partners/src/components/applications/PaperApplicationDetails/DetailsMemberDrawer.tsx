@@ -69,17 +69,6 @@ const DetailsMemberDrawer = ({
               />
 
               <FieldValue
-                label={t("application.add.workInRegion")}
-                children={
-                  membersDrawer?.workInRegion === YesNoEnum.yes
-                    ? t("t.yes")
-                    : membersDrawer?.workInRegion === YesNoEnum.no
-                    ? t("t.no")
-                    : t("t.n/a")
-                }
-              />
-
-              <FieldValue
                 label={t("t.relationship")}
                 children={
                   membersDrawer?.relationship
@@ -97,21 +86,6 @@ const DetailsMemberDrawer = ({
                 <Grid.Row columns={3}>
                   <DetailsAddressColumns
                     type={AddressColsType.memberResidence}
-                    application={application}
-                    householdMember={membersDrawer}
-                  />
-                </Grid.Row>
-              </>
-            )}
-
-            {membersDrawer?.workInRegion === YesNoEnum.yes && (
-              <>
-                <SectionWithGrid.HeadingRow>
-                  {t("application.contact.workAddress")}
-                </SectionWithGrid.HeadingRow>
-                <Grid.Row columns={3}>
-                  <DetailsAddressColumns
-                    type={AddressColsType.memberWork}
                     application={application}
                     householdMember={membersDrawer}
                   />

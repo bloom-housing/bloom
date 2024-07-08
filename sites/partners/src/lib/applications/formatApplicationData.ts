@@ -117,23 +117,15 @@ export const mapFormToApi = ({
     const phoneNumberType: string | null = applicantData.phoneNumberType || null
     const noEmail = !applicantData.emailAddress
     const noPhone = !phoneNumber
-    const workInRegion: YesNoEnum | null = applicantData?.workInRegion || null
     const emailAddress: string | null = applicantData?.emailAddress || null
 
     applicantData.firstName = mapEmptyStringToNull(applicantData.firstName)
     applicantData.lastName = mapEmptyStringToNull(applicantData.lastName)
 
-    const workAddress = getAddress(
-      applicantData?.workInRegion === YesNoEnum.yes,
-      applicantData?.applicantWorkAddress
-    )
-
     return {
       ...applicantData,
       ...data.dateOfBirth,
       emailAddress,
-      workInRegion,
-      applicantWorkAddress: workAddress,
       phoneNumber,
       phoneNumberType,
       noEmail,
@@ -366,12 +358,7 @@ export const mapApiToForm = (applicationData: ApplicationUpdate, listing: Listin
     const householdExpectingChanges = getYesNoValue(applicationData.householdExpectingChanges)
     const householdStudent = getYesNoValue(applicationData.householdStudent)
 
-    const workInRegion = applicationData.applicant.workInRegion
-
-    const applicant = {
-      ...applicationData.applicant,
-      workInRegion,
-    }
+    const applicant = applicationData.applicant
 
     const preferredUnit = applicationData?.preferredUnitTypes?.map((unit) => unit.id)
 

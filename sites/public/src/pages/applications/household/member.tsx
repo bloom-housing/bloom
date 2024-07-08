@@ -61,20 +61,8 @@ export class Member implements HouseholdMemberUpdate {
     latitude: undefined,
     longitude: undefined,
   }
-  householdMemberWorkAddress = {
-    placeName: undefined,
-    city: "",
-    county: "",
-    state: "",
-    street: "",
-    street2: "",
-    zipCode: "",
-    latitude: undefined,
-    longitude: undefined,
-  }
   sameAddress?: YesNoEnum
   relationship?: HouseholdMemberRelationship
-  workInRegion?: YesNoEnum
 }
 
 const ApplicationMember = () => {

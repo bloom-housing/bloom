@@ -2,7 +2,7 @@ import React from "react"
 import { fireEvent } from "@testing-library/react"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
-import { application, user, listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { application, listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
   Listing,
   ListingsStatusEnum,
@@ -104,14 +104,6 @@ describe("applications", () => {
     expect(getByText("C0")).toBeInTheDocument()
     expect(getByText("Mailing Zip")).toBeInTheDocument()
     expect(getByText("80517")).toBeInTheDocument()
-    expect(getByText("Work Street Address")).toBeInTheDocument()
-    expect(getByText("9035 Village Dr")).toBeInTheDocument()
-    expect(getByText("Work City")).toBeInTheDocument()
-    expect(getByText("Yosemite Valley")).toBeInTheDocument()
-    expect(getByText("Work State")).toBeInTheDocument()
-    expect(getByText("CA")).toBeInTheDocument()
-    expect(getByText("Work Zip")).toBeInTheDocument()
-    expect(getByText("95389")).toBeInTheDocument()
     expect(getByText("Alt Contact First Name")).toBeInTheDocument()
     expect(getByText("Alternate First")).toBeInTheDocument()
     expect(getByText("Alt Contact Last Name")).toBeInTheDocument()
@@ -139,8 +131,7 @@ describe("applications", () => {
     expect(getByText("Relationship HH:1")).toBeInTheDocument()
     expect(getByText("Friend")).toBeInTheDocument()
     expect(getByText("Same Address as Primary HH:1")).toBeInTheDocument()
-    expect(getByText("Work in Region HH:1")).toBeInTheDocument()
-    expect(getAllByText("Yes")).toHaveLength(3)
+    expect(getAllByText("Yes")).toHaveLength(2)
     expect(getByText("Flagged as Duplicate")).toBeInTheDocument()
     expect(getByText("Marked as Duplicate")).toBeInTheDocument()
     expect(getByText("No")).toBeInTheDocument()

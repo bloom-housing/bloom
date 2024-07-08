@@ -26,18 +26,7 @@ export const blankApplication = {
     phoneNumber: "",
     phoneNumberType: "",
     noPhone: false,
-    workInRegion: null,
     applicantAddress: {
-      street: "",
-      street2: "",
-      city: "",
-      state: "",
-      zipCode: "",
-      county: "",
-      latitude: undefined,
-      longitude: undefined,
-    },
-    applicantWorkAddress: {
       street: "",
       street2: "",
       city: "",

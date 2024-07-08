@@ -100,7 +100,6 @@ export const application: Application = {
     phoneNumber: "(123) 123-1231",
     phoneNumberType: "home",
     noPhone: false,
-    workInRegion: YesNoEnum.no,
     birthDay: "10",
     birthMonth: "10",
     birthYear: "1990",
@@ -180,7 +179,6 @@ export const application: Application = {
       birthYear: "1966",
       relationship: HouseholdMemberRelationship.friend,
       sameAddress: YesNoEnum.no,
-      workInRegion: YesNoEnum.yes,
       householdMemberAddress: {
         id: "applicant_work_address_id",
         createdAt: new Date(),

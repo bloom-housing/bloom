@@ -28,7 +28,6 @@ const FormHouseholdMembers = ({
     relationship: "t.relationship",
     dob: "application.household.member.dateOfBirth",
     sameResidence: "application.add.sameResidence",
-    workInRegion: "application.details.workInRegion",
     action: "",
   }
 
@@ -83,7 +82,6 @@ const FormHouseholdMembers = ({
     return householdMembers.map((member) => {
       const { birthMonth, birthDay, birthYear } = member
       const sameResidence = member.sameAddress
-      const workInRegion = member.workInRegion
 
       return {
         name: {
@@ -103,7 +101,6 @@ const FormHouseholdMembers = ({
               : t("t.n/a"),
         },
         sameResidence: { content: chooseAddressStatus(sameResidence) },
-        workInRegion: { content: chooseAddressStatus(workInRegion) },
         action: {
           content: (
             <div className="flex gap-3">

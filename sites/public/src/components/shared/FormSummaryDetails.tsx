@@ -265,18 +265,7 @@ const FormSummaryDetails = ({
             <MultiLineAddress address={reformatAddress(application.applicationsMailingAddress)} />
           </FieldValue>
         )}
-        {application.applicant.workInRegion === "yes" && (
-          <FieldValue
-            testId={"app-summary-applicant-work-address"}
-            id="applicantWorkAddress"
-            label={t("application.contact.workAddress")}
-            className={styles["summary-value"]}
-          >
-            <MultiLineAddress
-              address={reformatAddress(application.applicant.applicantWorkAddress)}
-            />
-          </FieldValue>
-        )}
+
         {application.contactPreferences && (
           <FieldValue
             testId={"app-summary-contact-preference-type"}

@@ -52,7 +52,6 @@ const ApplicationAddress = () => {
       additionalPhone: application.additionalPhone,
       "applicant.phoneNumberType": application.applicant.phoneNumberType,
       sendMailToMailingAddress: application.sendMailToMailingAddress,
-      "applicant.workInRegion": application.applicant.workInRegion,
       "applicant.applicantAddress.state": application.applicant.applicantAddress.state,
     },
     shouldFocusError: false,
@@ -91,9 +90,7 @@ const ApplicationAddress = () => {
     if (!application.sendMailToMailingAddress) {
       application.applicationsMailingAddress = blankApplication.applicationsMailingAddress
     }
-    if (!application.applicant.workInRegion) {
-      application.applicant.applicantWorkAddress = blankApplication.applicant.applicantWorkAddress
-    }
+
     conductor.sync()
 
     conductor.routeToNextOrReturnUrl()

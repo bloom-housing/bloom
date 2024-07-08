@@ -17,8 +17,7 @@ class AutofillCleaner {
     // prettier-ignore
     this.
       addDefaults().
-      removeAdditionalKeys().
-      removeLiveWorkAddresses()
+      removeAdditionalKeys()
 
     return this.application
   }
@@ -60,7 +59,6 @@ class AutofillCleaner {
         unsetIdentifiers(member)
         member.orderId = index
         if (member.householdMemberAddress) unsetIdentifiers(member.householdMemberAddress)
-        if (member.householdMemberWorkAddress) unsetIdentifiers(member.householdMemberWorkAddress)
       })
     unsetIdentifiers(this.application.demographics)
 
@@ -70,14 +68,6 @@ class AutofillCleaner {
         unsetIdentifiers(this.application.alternateContact.address)
       }
     }
-
-    return this
-  }
-
-  removeLiveWorkAddresses() {
-    this.application.applicant.workInRegion = null
-    this.application.applicant.applicantWorkAddress = blankApplication.applicant
-      .applicantWorkAddress as Address
 
     return this
   }

@@ -4,7 +4,6 @@ import {
   AddressCreate,
   Application,
   HouseholdMember,
-  YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type DetailsAddressColumnsProps = {
@@ -55,25 +54,11 @@ const DetailsAddressColumns = ({
       }
     }
 
-    if (type === AddressColsType.work) {
-      if (application.applicant.workInRegion === YesNoEnum.yes) {
-        address[item] = application.applicant.applicantWorkAddress[item] || t("t.n/a")
-      } else {
-        address[item] = t("t.n/a")
-      }
-    }
-
     if (type === AddressColsType.alternateAddress) {
       address[item] =
         application.alternateContact && application.alternateContact.address[item]
           ? application.alternateContact.address[item]
           : t("t.n/a")
-    }
-
-    if (type === AddressColsType.memberWork) {
-      address[item] = householdMember?.householdMemberWorkAddress[item]
-        ? householdMember.householdMemberWorkAddress[item]
-        : t("t.n/a")
     }
 
     if (type === AddressColsType.memberResidence) {
