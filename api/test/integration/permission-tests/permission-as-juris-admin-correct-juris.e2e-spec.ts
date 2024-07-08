@@ -256,7 +256,9 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         prisma,
         UnitTypeEnum.oneBdrm,
       );
-      const listing1 = await listingFactory(jurisId, prisma);
+      const listing1 = await listingFactory(jurisId, prisma, {
+        digitalApp: true,
+      });
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
