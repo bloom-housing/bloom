@@ -87,8 +87,7 @@ const ApplicationChooseLanguage = () => {
     if (listing && router.isReady) {
       const currentDate = dayjs()
       if (
-        !listing.digitalApplication ||
-        !listing.commonDigitalApplication ||
+        !(listing.digitalApplication && listing.commonDigitalApplication) ||
         (router?.query?.preview !== "true" && listing?.status !== ListingsStatusEnum.active) ||
         (listing?.applicationDueDate && currentDate > dayjs(listing.applicationDueDate))
       ) {
