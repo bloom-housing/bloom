@@ -125,6 +125,7 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
 
     const listingData = await listingFactory(jurisId, prisma, {
       multiselectQuestions: [msq],
+      digitalApp: true,
     });
     const listing = await prisma.listings.create({
       data: listingData,
@@ -141,6 +142,7 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
 
     const listingData3 = await listingFactory(jurisId, prisma, {
       multiselectQuestions: [msq],
+      digitalApp: true,
     });
     const listing3 = await prisma.listings.create({
       data: listingData3,
