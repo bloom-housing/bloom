@@ -1659,23 +1659,24 @@ export class ListingService implements OnModuleInit {
       case LotteryStatusEnum.ran: {
         if (!isAdmin) {
           throw new ForbiddenException();
-        } else if (
+        }
+        if (
           currentStatus === LotteryStatusEnum.releasedToPartners ||
           currentStatus === LotteryStatusEnum.publishedToPublic
         ) {
           // TODO: add retracted to history
-          // TODO: remove when all status logic has been implemented
-          res = await this.prisma.listings.update({
-            data: {
-              lotteryStatus: dto?.lotteryStatus,
-            },
-            where: {
-              id: dto.listingId,
-            },
-          });
-        } else {
-          // TODO: add ran to history
         }
+        // TODO: add ran to history
+        // TODO: remove when all status logic has been implemented
+        res = await this.prisma.listings.update({
+          data: {
+            lotteryStatus: dto?.lotteryStatus,
+          },
+          where: {
+            id: dto.listingId,
+          },
+        });
+
         break;
       }
       case LotteryStatusEnum.errored: {

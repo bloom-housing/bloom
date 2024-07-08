@@ -301,6 +301,12 @@ const Lottery = (props: { listing: Listing }) => {
                         lotteryLastRunAt: new Date(),
                       },
                     })
+                    await listingsService.lotteryStatus({
+                      body: {
+                        listingId: listing.id,
+                        lotteryStatus: LotteryStatusEnum.ran,
+                      },
+                    })
                     setRunModal(false)
                     setLoading(false)
                     location.reload()
