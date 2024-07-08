@@ -349,6 +349,92 @@ export class ApplicationCsvExporterService
     return headers;
   }
 
+  constructMultiselectQuestionHeaders(
+    applicationSection: string,
+    labelString: string,
+    multiSelectQuestions: MultiselectQuestion[],
+  ): CsvHeader[] {
+    const headers: CsvHeader[] = [];
+
+    multiSelectQuestions
+      .filter((question) => question.applicationSection === applicationSection)
+      .forEach((question) => {
+        headers.push({
+          path: `${applicationSection}.${question.text}.claimed`,
+          label: `${labelString} ${question.text}`,
+          format: (val: any): string => {
+            const claimedString: string[] = [];
+            val?.options?.forEach((option) => {
+              if (option.checked) {
+                claimedString.push(option.key);
+              }
+            });
+            return claimedString.join(', ');
+          },
+        });
+        /**
+         * there are other input types for extra data besides address
+         * that are not used on the old backend, but could be added here
+         */
+        question.options
+          ?.filter((option) => option.collectAddress)
+          .forEach((option) => {
+            headers.push({
+              path: `${applicationSection}.${question.text}.address`,
+              label: `${labelString} ${question.text} - ${option.text} - Address`,
+              format: (val: ApplicationMultiselectQuestion): string => {
+                return this.multiselectQuestionFormat(
+                  val,
+                  option.text,
+                  'address',
+                );
+              },
+            });
+            if (option.validationMethod) {
+              headers.push({
+                path: `${applicationSection}.${question.text}.address`,
+                label: `${labelString} ${question.text} - ${option.text} - Passed Address Check`,
+                format: (val: ApplicationMultiselectQuestion): string => {
+                  return this.multiselectQuestionFormat(
+                    val,
+                    option.text,
+                    'geocodingVerified',
+                  );
+                },
+              });
+            }
+            if (option.collectName) {
+              headers.push({
+                path: `${applicationSection}.${question.text}.address`,
+                label: `${labelString} ${question.text} - ${option.text} - Name of Address Holder`,
+                format: (val: ApplicationMultiselectQuestion): string => {
+                  return this.multiselectQuestionFormat(
+                    val,
+                    option.text,
+                    'addressHolderName',
+                  );
+                },
+              });
+            }
+            if (option.collectRelationship) {
+              headers.push({
+                path: `${applicationSection}.${question.text}.address`,
+                label: `${labelString} ${question.text} - ${option.text} - Relationship to Address Holder`,
+                format: (val: ApplicationMultiselectQuestion): string => {
+                  return this.multiselectQuestionFormat(
+                    val,
+                    option.text,
+                    'addressHolderRelationship',
+                  );
+                },
+              });
+            }
+          });
+      });
+
+    return headers;
+  }
+
   async getCsvHeaders(
     maxHouseholdMembers: number,
     multiSelectQuestions: MultiselectQuestion[],
@@ -580,158 +666,20 @@ export class ApplicationCsvExporterService
     ];
 
     // add preferences to csv headers
-    multiSelectQuestions
-      .filter((question) => question.applicationSection === 'preferences')
-      .forEach((question) => {
-        headers.push({
-          path: `preferences.${question.text}.claimed`,
-          label: `Preference ${question.text}`,
-          format: (val: any): string => {
-            const claimedString: string[] = [];
-            val?.options?.forEach((option) => {
-              if (option.checked) {
-                claimedString.push(option.key);
-              }
-            });
-            return claimedString.join(', ');
-          },
-        });
-        /**
-         * there are other input types for extra data besides address
-         * that are not used on the old backend, but could be added here
-         */
-        question.options
-          ?.filter((option) => option.collectAddress)
-          .forEach((option) => {
-            headers.push({
-              path: `preferences.${question.text}.address`,
-              label: `Preference ${question.text} - ${option.text} - Address`,
-              format: (val: ApplicationMultiselectQuestion): string => {
-                return this.multiselectQuestionFormat(
-                  val,
-                  option.text,
-                  'address',
-                );
-              },
-            });
-            if (option.validationMethod) {
-              headers.push({
-                path: `preferences.${question.text}.address`,
-                label: `Preference ${question.text} - ${option.text} - Passed Address Check`,
-                format: (val: ApplicationMultiselectQuestion): string => {
-                  return this.multiselectQuestionFormat(
-                    val,
-                    option.text,
-                    'geocodingVerified',
-                  );
-                },
-              });
-            }
-            if (option.collectName) {
-              headers.push({
-                path: `preferences.${question.text}.address`,
-                label: `Preference ${question.text} - ${option.text} - Name of Address Holder`,
-                format: (val: ApplicationMultiselectQuestion): string => {
-                  return this.multiselectQuestionFormat(
-                    val,
-                    option.text,
-                    'addressHolderName',
-                  );
-                },
-              });
-            }
-            if (option.collectRelationship) {
-              headers.push({
-                path: `preferences.${question.text}.address`,
-                label: `Preference ${question.text} - ${option.text} - Relationship to Address Holder`,
-                format: (val: ApplicationMultiselectQuestion): string => {
-                  return this.multiselectQuestionFormat(
-                    val,
-                    option.text,
-                    'addressHolderRelationship',
-                  );
-                },
-              });
-            }
-          });
-      });
+    const preferenceHeaders = this.constructMultiselectQuestionHeaders(
+      'preferences',
+      'Preference',
+      multiSelectQuestions,
+    );
+    headers.push(...preferenceHeaders);
 
     // add programs to csv headers
-    multiSelectQuestions
-      .filter((question) => question.applicationSection === 'programs')
-      .forEach((question) => {
-        headers.push({
-          path: `programs.${question.text}.claimed`,
-          label: `Program ${question.text}`,
-          format: (val: any): string => {
-            const claimedString: string[] = [];
-            val?.options?.forEach((option) => {
-              if (option.checked) {
-                claimedString.push(option.key);
-              }
-            });
-            return claimedString.join(', ');
-          },
-        });
-        /**
-         * there are other input types for extra data besides address
-         * that are not used on the old backend, but could be added here
-         */
-        question.options
-          ?.filter((option) => option.collectAddress)
-          .forEach((option) => {
-            headers.push({
-              path: `programs.${question.text}.address`,
-              label: `Program ${question.text} - ${option.text} - Address`,
-              format: (val: ApplicationMultiselectQuestion): string => {
-                return this.multiselectQuestionFormat(
-                  val,
-                  option.text,
-                  'address',
-                );
-              },
-            });
-            if (option.validationMethod) {
-              headers.push({
-                path: `programs.${question.text}.address`,
-                label: `Program ${question.text} - ${option.text} - Passed Address Check`,
-                format: (val: ApplicationMultiselectQuestion): string => {
-                  return this.multiselectQuestionFormat(
-                    val,
-                    option.text,
-                    'geocodingVerified',
-                  );
-                },
-              });
-            }
-            if (option.collectName) {
-              headers.push({
-                path: `programs.${question.text}.address`,
-                label: `Program ${question.text} - ${option.text} - Name of Address Holder`,
-                format: (val: ApplicationMultiselectQuestion): string => {
-                  return this.multiselectQuestionFormat(
-                    val,
-                    option.text,
-                    'addressHolderName',
-                  );
-                },
-              });
-            }
-            if (option.collectRelationship) {
-              headers.push({
-                path: `programs.${question.text}.address`,
-                label: `Program ${question.text} - ${option.text} - Relationship to Address Holder`,
-                format: (val: ApplicationMultiselectQuestion): string => {
-                  return this.multiselectQuestionFormat(
-                    val,
-                    option.text,
-                    'addressHolderRelationship',
-                  );
-                },
-              });
-            }
-          });
-      });
+    const programHeaders = this.constructMultiselectQuestionHeaders(
+      'programs',
+      'Program',
+      multiSelectQuestions,
+    );
+    headers.push(...programHeaders);
 
     headers.push({
       path: 'householdSize',
