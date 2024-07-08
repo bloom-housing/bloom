@@ -2961,6 +2961,14 @@ describe('Testing listing service', () => {
       },
     } as User;
 
+    const publicUser = {
+      id: 'partner id',
+      userRoles: {
+        isAdmin: false,
+        isPartner: false,
+      },
+    } as User;
+
     it('should error when listing is not closed', async () => {
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         id: 'example id',
@@ -3079,40 +3087,6 @@ describe('Testing listing service', () => {
       });
     });
 
-    it('should not update status to releasedToPartners when status is not approved', async () => {
-      prisma.listings.findUnique = jest.fn().mockResolvedValue({
-        id: 'example id',
-        name: 'example name',
-        status: ListingsStatusEnum.closed,
-        lotteryStatus: LotteryStatusEnum.ran,
-      });
-      prisma.listings.update = jest.fn().mockResolvedValue(null);
-
-      await expect(
-        async () =>
-          await service.lotteryStatus(
-            {
-              listingId: randomUUID(),
-              lotteryStatus: LotteryStatusEnum.releasedToPartners,
-            } as ListingLotteryStatus,
-            adminUser,
-          ),
-      ).rejects.toThrowError(
-        'Lottery cannot be released to partners without being in approved state.',
-      );
-
-      expect(canOrThrowMock).toHaveBeenCalledWith(
-        adminUser,
-        'listing',
-        permissionActions.update,
-        {
-          id: 'example id',
-        },
-      );
-
-      expect(prisma.listings.update).not.toHaveBeenCalled();
-    });
-
     it('should not update status to releasedToPartners if user is not an admin', async () => {
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         id: 'example id',
@@ -3145,17 +3119,109 @@ describe('Testing listing service', () => {
       expect(prisma.listings.update).not.toHaveBeenCalled();
     });
 
-    it.todo(
-      'should update status to publishedToPublic from releasedToPartners',
-    );
+    it('should update status to publishedToPublic from releasedToPartners', async () => {
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: LotteryStatusEnum.releasedToPartners,
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: LotteryStatusEnum.publishedToPublic,
+      });
 
-    it.todo(
-      'should not update status to publishedToPublic when status is not releasedToPartners',
-    );
+      await service.lotteryStatus(
+        {
+          listingId: randomUUID(),
+          lotteryStatus: LotteryStatusEnum.publishedToPublic,
+        } as ListingLotteryStatus,
+        partnerUser,
+      );
 
-    it.todo(
-      'should not update status to publishedToPublic if user is not an admin or partner',
-    );
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        partnerUser,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+        },
+      );
+      expect(prisma.listings.update).toHaveBeenCalledWith({
+        data: {
+          lotteryStatus: LotteryStatusEnum.publishedToPublic,
+        },
+        where: {
+          id: expect.anything(),
+        },
+      });
+    });
+
+    it('should not update status to publishedToPublic when status is not releasedToPartners', async () => {
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: LotteryStatusEnum.ran,
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue(null);
+
+      await expect(
+        async () =>
+          await service.lotteryStatus(
+            {
+              listingId: randomUUID(),
+              lotteryStatus: LotteryStatusEnum.publishedToPublic,
+            } as ListingLotteryStatus,
+            partnerUser,
+          ),
+      ).rejects.toThrowError();
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        partnerUser,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+        },
+      );
+
+      expect(prisma.listings.update).not.toHaveBeenCalled();
+    });
+
+    it('should not update status to publishedToPublic if user is not an admin or partner', async () => {
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: LotteryStatusEnum.releasedToPartners,
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue(null);
+
+      await expect(
+        async () =>
+          await service.lotteryStatus(
+            {
+              listingId: randomUUID(),
+              lotteryStatus: LotteryStatusEnum.publishedToPublic,
+            } as ListingLotteryStatus,
+            publicUser,
+          ),
+      ).rejects.toThrowError();
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        publicUser,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+        },
+      );
+
+      expect(prisma.listings.update).not.toHaveBeenCalled();
+    });
 
     it('should update status to ran from approved/releasedToPartners/publishedToPublic aka retracted', async () => {
       prisma.listings.findUnique = jest.fn().mockResolvedValue({

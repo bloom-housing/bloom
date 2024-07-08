@@ -1691,11 +1691,6 @@ export class ListingService implements OnModuleInit {
         if (!isAdmin) {
           throw new ForbiddenException();
         }
-        // else if (currentStatus !== LotteryStatusEnum.approved) {
-        //   throw new BadRequestException(
-        //     'Lottery cannot be released to partners without being in approved state.',
-        //   );
-        // }
         // TODO: add released to partners to history
         // TODO: remove when all status logic has been implemented
         res = await this.prisma.listings.update({
