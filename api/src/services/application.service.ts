@@ -519,7 +519,7 @@ export class ApplicationService {
     if (forPublic) {
       // SubmissionDate is time the application was created for public
       dto.submissionDate = new Date();
-      // if the submission is after the application due date
+      // if there is no common app or submission is after the application due date
       if (
         !(listing.digitalApplication && listing.commonDigitalApplication) ||
         (listing?.applicationDueDate &&
