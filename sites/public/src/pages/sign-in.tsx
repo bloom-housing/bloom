@@ -157,13 +157,11 @@ const SignIn = () => {
       } catch (error) {
         setLoading(false)
         if (sendToReCaptchaFlow(error.response.data.name)) {
-          {
-            await singleUseCodeFlow(email, true)
-          }
-          const { status } = error.response || {}
-          determineNetworkError(status, error)
-          setRefreshReCaptcha(!refreshReCaptcha)
+          await singleUseCodeFlow(email, true)
         }
+        const { status } = error.response || {}
+        determineNetworkError(status, error)
+        setRefreshReCaptcha(!refreshReCaptcha)
       }
     }
   }
