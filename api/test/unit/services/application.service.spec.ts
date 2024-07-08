@@ -1114,6 +1114,8 @@ describe('Testing application service', () => {
     prisma.listings.findUnique = jest.fn().mockResolvedValue({
       id: randomUUID(),
       applicationDueDate: dayjs(new Date()).add(5, 'days').toDate(),
+      digitalApplication: true,
+      commonDigitalApplication: true,
     });
 
     prisma.applications.create = jest.fn().mockResolvedValue({
@@ -1330,6 +1332,8 @@ describe('Testing application service', () => {
     prisma.listings.findUnique = jest.fn().mockResolvedValue({
       id: randomUUID(),
       applicationDueDate: new Date(0),
+      digitalApplication: true,
+      commonDigitalApplication: true,
     });
 
     prisma.applications.create = jest.fn().mockResolvedValue({
