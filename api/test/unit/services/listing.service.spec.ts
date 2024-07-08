@@ -3047,12 +3047,12 @@ describe('Testing listing service', () => {
 
     it.todo('should not update status to approved if user is not an admin');
 
-    it('should update status to releasedToPartners from approved', async () => {
+    it('should update status to releasedToPartners from ran', async () => {
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         id: 'example id',
         name: 'example name',
         status: ListingsStatusEnum.closed,
-        lotteryStatus: LotteryStatusEnum.approved,
+        lotteryStatus: LotteryStatusEnum.ran,
       });
       prisma.listings.update = jest.fn().mockResolvedValue({
         id: 'example id',

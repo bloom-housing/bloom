@@ -1660,7 +1660,6 @@ export class ListingService implements OnModuleInit {
         if (!isAdmin) {
           throw new ForbiddenException();
         } else if (
-          currentStatus === LotteryStatusEnum.approved ||
           currentStatus === LotteryStatusEnum.releasedToPartners ||
           currentStatus === LotteryStatusEnum.publishedToPublic
         ) {
@@ -1683,13 +1682,14 @@ export class ListingService implements OnModuleInit {
         // TODO
         break;
       }
-      case LotteryStatusEnum.approved: {
-        // TODO
-        break;
-      }
       case LotteryStatusEnum.releasedToPartners: {
         if (!isAdmin) {
           throw new ForbiddenException();
+        }
+        if (currentStatus !== LotteryStatusEnum.ran) {
+          throw new BadRequestException(
+            'Lottery cannot be released to partners without being in run state.',
+          );
         }
         // TODO: add released to partners to history
         // TODO: remove when all status logic has been implemented
@@ -1704,7 +1704,7 @@ export class ListingService implements OnModuleInit {
         break;
       }
       case LotteryStatusEnum.publishedToPublic: {
-        if (!isPartner) {
+        if (!isPartner && !isAdmin) {
           throw new ForbiddenException();
         }
         if (currentStatus !== LotteryStatusEnum.releasedToPartners) {
