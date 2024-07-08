@@ -1649,6 +1649,7 @@ export class ListingService implements OnModuleInit {
     }
 
     const isAdmin = requestingUser.userRoles?.isAdmin;
+    const isPartner = requestingUser.userRoles?.isPartner;
     const currentStatus = storedListing.lotteryStatus;
 
     // TODO: remove when all status logic has been implemented
@@ -1689,11 +1690,12 @@ export class ListingService implements OnModuleInit {
       case LotteryStatusEnum.releasedToPartners: {
         if (!isAdmin) {
           throw new ForbiddenException();
-        } else if (currentStatus !== LotteryStatusEnum.approved) {
-          throw new BadRequestException(
-            'Lottery cannot be released to partners without being in approved state.',
-          );
         }
+        // else if (currentStatus !== LotteryStatusEnum.approved) {
+        //   throw new BadRequestException(
+        //     'Lottery cannot be released to partners without being in approved state.',
+        //   );
+        // }
         // TODO: add released to partners to history
         // TODO: remove when all status logic has been implemented
         res = await this.prisma.listings.update({
@@ -1707,7 +1709,24 @@ export class ListingService implements OnModuleInit {
         break;
       }
       case LotteryStatusEnum.publishedToPublic: {
-        // TODO
+        if (!isPartner) {
+          throw new ForbiddenException();
+        }
+        if (currentStatus !== LotteryStatusEnum.releasedToPartners) {
+          throw new BadRequestException(
+            'Lottery cannot be published to public without being in released to partners state.',
+          );
+        }
+        // TODO: add published to public to history
+        // TODO: remove when all status logic has been implemented
+        res = await this.prisma.listings.update({
+          data: {
+            lotteryStatus: dto?.lotteryStatus,
+          },
+          where: {
+            id: dto.listingId,
+          },
+        });
         break;
       }
       case LotteryStatusEnum.expired: {
