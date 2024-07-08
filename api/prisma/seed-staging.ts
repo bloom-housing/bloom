@@ -352,7 +352,7 @@ export const stagingSeed = async (
           minOccupancy: 1,
           monthlyRent: '1200',
           numBathrooms: 1,
-          numBedrooms: 1,
+          numBedrooms: 0,
           number: '101',
           sqFeet: '750.00',
           amiChart: { connect: { id: amiChart.id } },
@@ -375,7 +375,7 @@ export const stagingSeed = async (
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: {
             connect: {
-              id: unitTypes[1].id,
+              id: unitTypes[2].id,
             },
           },
         },
@@ -473,7 +473,7 @@ export const stagingSeed = async (
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: {
             connect: {
-              id: unitTypes[2].id,
+              id: unitTypes[3].id,
             },
           },
         },
@@ -491,7 +491,7 @@ export const stagingSeed = async (
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: {
             connect: {
-              id: unitTypes[2].id,
+              id: unitTypes[3].id,
             },
           },
         },
@@ -508,7 +508,7 @@ export const stagingSeed = async (
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: {
             connect: {
-              id: unitTypes[2].id,
+              id: unitTypes[3].id,
             },
           },
         },
@@ -954,25 +954,7 @@ export const stagingSeed = async (
           minOccupancy: 1,
           monthlyRent: '1200',
           numBathrooms: 1,
-          numBedrooms: 1,
-          number: '101',
-          sqFeet: '750.00',
-          amiChart: { connect: { id: amiChart.id } },
-          unitTypes: {
-            connect: {
-              id: unitTypes[0].id,
-            },
-          },
-        },
-        {
-          amiPercentage: '30',
-          monthlyIncomeMin: '2000',
-          floor: 1,
-          maxOccupancy: 3,
-          minOccupancy: 1,
-          monthlyRent: '1200',
-          numBathrooms: 1,
-          numBedrooms: 1,
+          numBedrooms: 0,
           number: '101',
           sqFeet: '750.00',
           amiChart: { connect: { id: amiChart.id } },
@@ -1014,7 +996,7 @@ export const stagingSeed = async (
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: {
             connect: {
-              id: unitTypes[3].id,
+              id: unitTypes[2].id,
             },
           },
         },
@@ -1026,9 +1008,27 @@ export const stagingSeed = async (
           minOccupancy: 1,
           monthlyRent: '1200',
           numBathrooms: 1,
-          numBedrooms: 1,
+          numBedrooms: 2,
           number: '101',
-          sqFeet: '750.00',
+          sqFeet: '1050.00',
+          amiChart: { connect: { id: amiChart.id } },
+          unitTypes: {
+            connect: {
+              id: unitTypes[3].id,
+            },
+          },
+        },
+        {
+          amiPercentage: '30',
+          monthlyIncomeMin: '2000',
+          floor: 1,
+          maxOccupancy: 3,
+          minOccupancy: 1,
+          monthlyRent: '1200',
+          numBathrooms: 2,
+          numBedrooms: 3,
+          number: '101',
+          sqFeet: '1250.00',
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: {
             connect: {
@@ -1043,10 +1043,10 @@ export const stagingSeed = async (
           maxOccupancy: 3,
           minOccupancy: 1,
           monthlyRent: '1200',
-          numBathrooms: 1,
-          numBedrooms: 1,
+          numBathrooms: 3,
+          numBedrooms: 4,
           number: '101',
-          sqFeet: '750.00',
+          sqFeet: '1750.00',
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: {
             connect: {
