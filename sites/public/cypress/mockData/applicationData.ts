@@ -381,8 +381,8 @@ export const minimalDataApplication: Application = {
     {
       ...idDefaults,
       id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
-      name: "2 Bedroom" as UnitTypeEnum,
-      numBedrooms: 2,
+      name: "1 Bedroom" as UnitTypeEnum,
+      numBedrooms: 1,
     },
   ],
   demographics: {
