@@ -24,6 +24,7 @@ import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
+import dayjs from "dayjs"
 
 const ApplicationSummary = () => {
   const router = useRouter()
@@ -51,10 +52,15 @@ const ApplicationSummary = () => {
 
   useEffect(() => {
     if (listing && router.isReady) {
+      const currentDate = dayjs()
       if (conductor.config.isPreview) {
         void router.push(`/${router.locale}/preview/listings/${listing?.id}`)
-      } else if (listing?.status !== ListingsStatusEnum.active) {
-        addToast(t("listings.applicationsClosedRedirect"), { variant: "alert" })
+      } else if (
+        !(listing.digitalApplication && listing.commonDigitalApplication) ||
+        listing?.status !== ListingsStatusEnum.active ||
+        (listing?.applicationDueDate && currentDate > dayjs(listing.applicationDueDate))
+      ) {
+        // addToast(t("listings.applicationsClosedRedirect"), { variant: "alert" })
         void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
       }
     }
