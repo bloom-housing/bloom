@@ -116,7 +116,14 @@ const Lottery = (props: { listing: Listing }) => {
               {t("listings.lottery.publishLotteryData")}
             </Heading>
             <div className={styles["card-description"]}>
-              <p>{t("listings.lottery.partnerPublishTimestamp")}</p>
+              {/* TODO: Update dates */}
+              <p>
+                {t("listings.lottery.partnerPublishTimestamp", {
+                  name: "NAME",
+                  date: "DATE",
+                  time: "TIME",
+                })}
+              </p>
             </div>
             <div>
               <Button
@@ -149,7 +156,8 @@ const Lottery = (props: { listing: Listing }) => {
                   })}{" "}
                 </span>
               )}
-              {t("listings.lottery.noDataDescriptionPartner")}
+              {/* TODO: Update date */}
+              {t("listings.lottery.noDataDescriptionPartner", { date: "DATE" })}
             </div>
           </CardSection>
         )
