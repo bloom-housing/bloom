@@ -375,7 +375,7 @@ export const stagingSeed = async (
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: {
             connect: {
-              id: unitTypes[2].id,
+              id: unitTypes[1].id,
             },
           },
         },
@@ -473,7 +473,7 @@ export const stagingSeed = async (
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: {
             connect: {
-              id: unitTypes[3].id,
+              id: unitTypes[2].id,
             },
           },
         },
@@ -491,7 +491,7 @@ export const stagingSeed = async (
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: {
             connect: {
-              id: unitTypes[3].id,
+              id: unitTypes[2].id,
             },
           },
         },
@@ -508,7 +508,7 @@ export const stagingSeed = async (
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: {
             connect: {
-              id: unitTypes[3].id,
+              id: unitTypes[2].id,
             },
           },
         },
@@ -646,7 +646,7 @@ export const stagingSeed = async (
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: {
             connect: {
-              id: unitTypes[2].id,
+              id: unitTypes[1].id,
             },
           },
         },
@@ -978,7 +978,7 @@ export const stagingSeed = async (
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: {
             connect: {
-              id: unitTypes[2].id,
+              id: unitTypes[1].id,
             },
           },
         },
@@ -996,7 +996,7 @@ export const stagingSeed = async (
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: {
             connect: {
-              id: unitTypes[2].id,
+              id: unitTypes[1].id,
             },
           },
         },
@@ -1014,7 +1014,7 @@ export const stagingSeed = async (
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: {
             connect: {
-              id: unitTypes[3].id,
+              id: unitTypes[2].id,
             },
           },
         },
@@ -1032,7 +1032,7 @@ export const stagingSeed = async (
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: {
             connect: {
-              id: unitTypes[4].id,
+              id: unitTypes[3].id,
             },
           },
         },
@@ -1050,7 +1050,7 @@ export const stagingSeed = async (
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: {
             connect: {
-              id: unitTypes[5].id,
+              id: unitTypes[4].id,
             },
           },
         },
