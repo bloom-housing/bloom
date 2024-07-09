@@ -4,15 +4,17 @@ import axios from "axios"
 import dayjs from "dayjs"
 import Ticket from "@heroicons/react/24/solid/TicketIcon"
 import Download from "@heroicons/react/24/solid/ArrowDownTrayIcon"
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
 import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
-import { Button, Card, Heading, Icon, Dialog } from "@bloom-housing/ui-seeds"
+import { Button, Card, Dialog, Heading, Icon, Message } from "@bloom-housing/ui-seeds"
 import { CardHeader, CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   Listing,
-  ListingsStatusEnum,
-  ReviewOrderTypeEnum,
   ListingUpdate,
+  ListingsStatusEnum,
+  LotteryStatusEnum,
+  ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Layout from "../../../layouts"
 import { ListingContext } from "../../../components/listings/ListingContext"
@@ -36,9 +38,13 @@ const Lottery = (props: { listing: Listing }) => {
   const [exportModal, setExportModal] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const { listingsService } = useContext(AuthContext)
+  const { listingsService, profile } = useContext(AuthContext)
   const { data } = useFlaggedApplicationsMeta(listing?.id)
   const duplicatesExist = data?.totalPendingCount > 0
+  const shouldExpireData =
+    !profile?.userRoles.isAdmin && listing?.status === ListingsStatusEnum.closed
+  const expiryDate = dayjs(listing?.closedAt).add(45, "day")
+  const formattedExpiryDate = expiryDate.format("MMMM D, YYYY")
 
   if (!listing) return <div>{t("t.errorOccurred")}</div>
 
@@ -161,39 +167,73 @@ const Lottery = (props: { listing: Listing }) => {
             />
 
             <ListingStatusBar status={listing?.status} />
-            <section className={styles["lottery"]}>
-              <div className={styles["parent"]}>
-                <div className={styles["container"]}>
-                  <div className={styles["main"]}>
-                    <Card spacing={"lg"}>{getMainContent()}</Card>
-                  </div>
-                  <aside className={styles["side"]}>
-                    <>
-                      {getActions()}
-                      <Card>
-                        <CardHeader>
-                          <Heading priority={2} size={"lg"}>
-                            {t("listings.lottery.history")}
-                          </Heading>
-                        </CardHeader>
+            {shouldExpireData && listing?.lotteryStatus === LotteryStatusEnum.expired ? (
+              <section className={styles["expired"]}>
+                <div className={styles["parent"]}>
+                  <div className={styles["container"]}>
+                    <div className={styles["main"]}>
+                      <Card spacing={"lg"}>
                         <CardSection>
-                          {getHistoryItem(
-                            "November 21st, 2023 at 8:30am",
-                            "Listing closed",
-                            "By property"
-                          )}
-                          {getHistoryItem(
-                            "November 21st, 2023 at 8:30am",
-                            "Listing closed",
-                            "By property"
-                          )}
+                          <Icon icon={faExclamationCircle} size="xl" />
+                          <Heading priority={2} size={"2xl"}>
+                            {t("listings.lottery.dataExpiryHeader")}
+                          </Heading>
+                          <div className={styles["card-description"]}>
+                            {t("listings.lottery.dataExpiryDescription")}
+                          </div>
                         </CardSection>
                       </Card>
-                    </>
-                  </aside>
+                    </div>
+                    <aside className={styles["side"]} />
+                  </div>
                 </div>
-              </div>
-            </section>
+              </section>
+            ) : (
+              <section className={styles["lottery"]}>
+                <div className={styles["parent"]}>
+                  <div className={styles["container"]}>
+                    <div className={styles["main"]}>
+                      {shouldExpireData && (
+                        <Message
+                          variant={"warn"}
+                          fullwidth={true}
+                          className={styles["applications-expiration-message"]}
+                        >
+                          {t("listings.lottery.dataExpiryMessage", {
+                            date: formattedExpiryDate,
+                          })}
+                        </Message>
+                      )}
+                      <Card spacing={"lg"}>{getMainContent()}</Card>
+                    </div>
+                    <aside className={styles["side"]}>
+                      <>
+                        {getActions()}
+                        <Card>
+                          <CardHeader>
+                            <Heading priority={2} size={"lg"}>
+                              {t("listings.lottery.history")}
+                            </Heading>
+                          </CardHeader>
+                          <CardSection>
+                            {getHistoryItem(
+                              "November 21st, 2023 at 8:30am",
+                              "Listing closed",
+                              "By property"
+                            )}
+                            {getHistoryItem(
+                              "November 21st, 2023 at 8:30am",
+                              "Listing closed",
+                              "By property"
+                            )}
+                          </CardSection>
+                        </Card>
+                      </>
+                    </aside>
+                  </div>
+                </div>
+              </section>
+            )}
           </Layout>
           <Dialog
             isOpen={!!runModal}
@@ -205,6 +245,7 @@ const Lottery = (props: { listing: Listing }) => {
               {t("applications.addConfirmModalHeader")}
             </Dialog.Header>
             <Dialog.Content id="run-lottery-modal-content">
+              <p>{t("listings.lottery.dialogAlert", { date: formattedExpiryDate })}</p>
               {duplicatesExist ? (
                 <p>
                   {t("listings.lottery.duplicateContent")}{" "}
