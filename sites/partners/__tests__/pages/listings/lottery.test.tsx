@@ -31,6 +31,9 @@ describe("lottery", () => {
       }),
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 0 }))
       })
     )
 
@@ -49,6 +52,9 @@ describe("lottery", () => {
       }),
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 0 }))
       })
     )
 
@@ -69,6 +75,9 @@ describe("lottery", () => {
       }),
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 0 }))
       })
     )
 
@@ -95,6 +104,9 @@ describe("lottery", () => {
       }),
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 0 }))
       })
     )
 
@@ -121,6 +133,9 @@ describe("lottery", () => {
       }),
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 0 }))
       })
     )
 
@@ -145,6 +160,9 @@ describe("lottery", () => {
       }),
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 0 }))
       })
     )
 
@@ -175,6 +193,9 @@ describe("lottery", () => {
       }),
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 0 }))
       })
     )
 
@@ -207,10 +228,13 @@ describe("lottery", () => {
       }),
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 0 }))
       })
     )
 
-    const { getByText, findByText } = render(
+    const { getByText, findByText, findAllByText } = render(
       <Lottery listing={{ ...listing, lotteryLastRunAt: new Date() }} />
     )
 
@@ -219,7 +243,7 @@ describe("lottery", () => {
 
     fireEvent.click(getByText("Re-run lottery"))
     expect(await findByText("Are you sure?")).toBeInTheDocument()
-    expect(await findByText("I understand, re-run the lottery")).toBeInTheDocument()
+    expect(await findAllByText("Re-run lottery")).toHaveLength(2)
   })
 
   it("should show release modal if user clicks on release", async () => {
@@ -236,6 +260,9 @@ describe("lottery", () => {
       }),
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 0 }))
       })
     )
 
@@ -247,11 +274,74 @@ describe("lottery", () => {
     expect(header).toBeInTheDocument()
 
     fireEvent.click(getByText("Release lottery"))
-    expect(await findByText("Confirmation needed")).toBeInTheDocument()
+    expect(await findByText("Are you sure?")).toBeInTheDocument()
     expect(
       await findByText(
-        "Releasing the lottery will give Partner users access to the lottery data, including the ability to publicize anonymous results to applicants."
+        "Releasing the lottery will give Partner users access to the lottery data, including the ability to publish results to applicants."
       )
     ).toBeInTheDocument()
+  })
+
+  it("should show confirm modal if user clicks on run lottery with no unresolved duplicates", async () => {
+    mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { isAdmin: true },
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 0 }))
+      })
+    )
+
+    const { getByText, findByText } = render(<Lottery listing={listing} />)
+
+    const header = await findByText("Lottery")
+    expect(header).toBeInTheDocument()
+
+    fireEvent.click(getByText("Run lottery"))
+    expect(await findByText("Confirmation needed")).toBeInTheDocument()
+    expect(
+      await findByText("Make sure to add all paper applications before running the lottery.")
+    ).toBeInTheDocument()
+  })
+
+  it("should show confirm with duplicates modal if user clicks on run lottery and listing does have unresolved duplicates", async () => {
+    mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { isAdmin: true },
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
+      })
+    )
+
+    const { getByText, findByText, findAllByText } = render(<Lottery listing={listing} />)
+
+    const header = await findByText("Lottery")
+    expect(header).toBeInTheDocument()
+
+    fireEvent.click(getByText("Run lottery"))
+    expect(await findByText("Confirmation needed")).toBeInTheDocument()
+    expect(await findByText("5 unresolved duplicate sets.")).toBeInTheDocument()
+    expect(await findAllByText("Run lottery")).toHaveLength(2)
   })
 })

@@ -144,7 +144,7 @@ export const application: Application = {
     updatedAt: new Date(),
     placeName: "Rocky Mountain National Park",
     city: "Estes Park",
-    state: "C0",
+    state: "CO",
     street: "1000 US-36",
     zipCode: "80517",
     latitude: 40.3800984,

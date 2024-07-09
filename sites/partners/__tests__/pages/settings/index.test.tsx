@@ -86,7 +86,7 @@ describe("settings", () => {
       expect(headAndBody).toHaveLength(2)
       const [head, body] = headAndBody
       expect(within(head).getAllByRole("columnheader")).toHaveLength(4)
-      const rows = within(body).getAllByRole("row")
+      const rows = await within(body).findAllByRole("row")
       expect(rows).toHaveLength(1)
       const [name, jurisdiction, updated, actions] = within(rows[0]).getAllByRole("cell")
       expect(name).toHaveTextContent(multiselectQuestionPreference.text)
