@@ -57,9 +57,7 @@ export const listingFactory = async (
     jurisdictionId,
   );
 
-  const digitalApp = !!optionalParams?.digitalApp
-    ? optionalParams.digitalApp
-    : Math.random() < 0.5;
+  const digitalApp = optionalParams?.digitalApp ?? Math.random() < 0.5;
 
   return {
     createdAt: new Date(),

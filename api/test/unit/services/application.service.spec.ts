@@ -1375,6 +1375,53 @@ describe('Testing application service', () => {
     expect(canOrThrowMock).not.toHaveBeenCalled();
   });
 
+  it('should error while creating an application from public site on a listing without common app', async () => {
+    prisma.listings.findUnique = jest.fn().mockResolvedValue({
+      id: randomUUID(),
+      applicationDueDate: new Date(0),
+      digitalApplication: false,
+      commonDigitalApplication: false,
+    });
+
+    prisma.applications.create = jest.fn().mockResolvedValue({
+      id: randomUUID(),
+    });
+
+    const exampleAddress = addressFactory() as AddressCreate;
+    const dto = mockCreateApplicationData(exampleAddress, new Date());
+
+    prisma.jurisdictions.findFirst = jest
+      .fn()
+      .mockResolvedValue({ id: randomUUID() });
+
+    await expect(
+      async () =>
+        await service.create(dto, true, {
+          id: 'requestingUser id',
+          userRoles: { isAdmin: true },
+        } as unknown as User),
+    ).rejects.toThrowError('Listing is not open for application submission');
+
+    expect(prisma.listings.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: expect.anything(),
+      },
+      include: {
+        jurisdictions: true,
+        listingsBuildingAddress: true,
+        listingMultiselectQuestions: {
+          include: {
+            multiselectQuestions: true,
+          },
+        },
+      },
+    });
+
+    expect(prisma.applications.create).not.toHaveBeenCalled();
+
+    expect(canOrThrowMock).not.toHaveBeenCalled();
+  });
+
   it('should create an application from partner site', async () => {
     prisma.listings.findUnique = jest.fn().mockResolvedValue({
       id: randomUUID(),
