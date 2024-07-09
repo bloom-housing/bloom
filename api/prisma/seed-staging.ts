@@ -960,7 +960,7 @@ export const stagingSeed = async (
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: {
             connect: {
-              id: unitTypes[1].id,
+              id: unitTypes[0].id,
             },
           },
         },
