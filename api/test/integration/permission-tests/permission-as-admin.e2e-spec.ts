@@ -253,9 +253,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
         'permission juris 2',
       );
       await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
-      const listing1 = await listingFactory(jurisdiction, prisma, {
-        digitalApp: true,
-      });
+      const listing1 = await listingFactory(jurisdiction, prisma);
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
@@ -375,9 +373,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
         'permission juris 5',
       );
       await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
-      const listing1 = await listingFactory(jurisdiction, prisma, {
-        digitalApp: true,
-      });
+      const listing1 = await listingFactory(jurisdiction, prisma);
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
@@ -428,9 +424,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
         'permission juris 6',
       );
       await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
-      const listing1 = await listingFactory(jurisdiction, prisma, {
-        digitalApp: true,
-      });
+      const listing1 = await listingFactory(jurisdiction, prisma);
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
