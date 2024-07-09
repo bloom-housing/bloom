@@ -4,7 +4,7 @@ import axios from "axios"
 import dayjs from "dayjs"
 import Ticket from "@heroicons/react/24/solid/TicketIcon"
 import Download from "@heroicons/react/24/solid/ArrowDownTrayIcon"
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
+import ExclamationCirleIcon from "@heroicons/react/24/solid/ExclamationCircleIcon"
 import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import { Button, Card, Dialog, Heading, Icon, Message } from "@bloom-housing/ui-seeds"
 import { CardHeader, CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
@@ -174,7 +174,9 @@ const Lottery = (props: { listing: Listing }) => {
                     <div className={styles["main"]}>
                       <Card spacing={"lg"}>
                         <CardSection>
-                          <Icon icon={faExclamationCircle} size="xl" />
+                          <Icon size="xl">
+                            <ExclamationCirleIcon />
+                          </Icon>
                           <Heading priority={2} size={"2xl"}>
                             {t("listings.lottery.dataExpiryHeader")}
                           </Heading>
