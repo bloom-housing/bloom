@@ -122,6 +122,7 @@ const mockListingSet = (
 const requestApprovalMock = jest.fn();
 const changesRequestedMock = jest.fn();
 const listingApprovedMock = jest.fn();
+const lotteryReleasedMock = jest.fn();
 const canOrThrowMock = jest.fn();
 
 const user = new User();
@@ -176,6 +177,7 @@ describe('Testing listing service', () => {
             requestApproval: requestApprovalMock,
             changesRequested: changesRequestedMock,
             listingApproved: listingApprovedMock,
+            lotteryReleased: lotteryReleasedMock,
           },
         },
         {
@@ -3083,18 +3085,24 @@ describe('Testing listing service', () => {
 
     it.todo('should not update status to approved if user is not an admin');
 
-    it('should update status to releasedToPartners from ran', async () => {
+    it('should update status to releasedToPartners from ran and send email', async () => {
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         id: 'example id',
         name: 'example name',
         status: ListingsStatusEnum.closed,
         lotteryStatus: LotteryStatusEnum.ran,
+        jurisdictionId: 'jurisId',
       });
       prisma.listings.update = jest.fn().mockResolvedValue({
         id: 'example id',
         name: 'example name',
         status: ListingsStatusEnum.closed,
         lotteryStatus: LotteryStatusEnum.releasedToPartners,
+        jurisdictionId: 'jurisId',
+      });
+
+      jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
+        emails: ['admin@email.com', 'partner@email.com'],
       });
 
       await service.lotteryStatus(
@@ -3111,6 +3119,7 @@ describe('Testing listing service', () => {
         permissionActions.update,
         {
           id: 'example id',
+          jurisdictionId: 'jurisId',
         },
       );
       expect(prisma.listings.update).toHaveBeenCalledWith({
@@ -3121,6 +3130,19 @@ describe('Testing listing service', () => {
           id: expect.anything(),
         },
       });
+
+      expect(service.getUserEmailInfo).toBeCalledWith(
+        ['admin', 'jurisdictionAdmin', 'partner'],
+        'example id',
+        'jurisId',
+      );
+
+      expect(lotteryReleasedMock).toBeCalledWith(
+        { id: 'admin id', userRoles: { isAdmin: true } },
+        { id: 'example id', juris: 'jurisId', name: 'example name' },
+        ['admin@email.com', 'partner@email.com'],
+        config.get('PARTNERS_PORTAL_URL'),
+      );
     });
 
     it('should not update status to releasedToPartners if user is not an admin', async () => {
