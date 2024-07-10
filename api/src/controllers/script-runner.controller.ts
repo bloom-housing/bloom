@@ -17,6 +17,7 @@ import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction
 import { DataTransferDTO } from '../dtos/script-runner/data-transfer.dto';
 import { BulkApplicationResendDTO } from '../dtos/script-runner/bulk-application-resend.dto';
 import { AmiChartImportDTO } from '../dtos/script-runner/ami-chart-import.dto';
+import { IdDTO } from '../dtos/shared/id.dto';
 
 @Controller('scriptRunner')
 @ApiTags('scriptRunner')
@@ -79,6 +80,22 @@ export class ScirptRunnerController {
     return await this.scriptRunnerService.amiChartImport(
       req,
       amiChartImportDTO,
+    );
+  }
+
+  @Put('lotteryReleasedTranslations')
+  @ApiOperation({
+    summary: 'A script that adds lottery released translations to the db',
+    operationId: 'lotteryReleasedTranslations',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async lotteryReleasedTranslations(
+    @Body() jurisdictionDTO: IdDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.addLotteryReleasedTranslations(
+      req,
+      jurisdictionDTO,
     );
   }
 }

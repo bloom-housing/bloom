@@ -1,5 +1,5 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { Request as ExpressRequest } from 'express';
 import { PrismaService } from './prisma.service';
 import { SuccessDTO } from '../dtos/shared/success.dto';
@@ -12,6 +12,7 @@ import { Application } from '../dtos/applications/application.dto';
 import { AmiChartImportDTO } from '../dtos/script-runner/ami-chart-import.dto';
 import { AmiChartCreate } from '../dtos/ami-charts/ami-chart-create.dto';
 import { AmiChartService } from './ami-chart.service';
+import { IdDTO } from 'src/dtos/shared/id.dto';
 
 /**
   this is the service for running scripts
@@ -192,6 +193,59 @@ export class ScriptRunnerService {
       `AMI Chart ${amiChartImportDTO.name}`,
       requestingUser,
     );
+    return { success: true };
+  }
+
+  /**
+   *
+   * @param req incoming request object
+   * @param jurisdiction should contain jurisdiction id
+   * @returns successDTO
+   * @description adds lottery released translations to the database
+   */
+  async addLotteryReleasedTranslations(
+    req: ExpressRequest,
+    jurisdictionDTO: IdDTO,
+  ): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart(
+      'add lottery released translations',
+      requestingUser,
+    );
+    const translations = await this.prisma.translations.findFirst({
+      where: { language: 'en', jurisdictionId: jurisdictionDTO.id },
+    });
+
+    console.log(translations);
+
+    console.log(translations.translations);
+
+    const translationsJSON =
+      translations.translations as unknown as Prisma.JsonArray;
+
+    console.log(translationsJSON);
+
+    await this.prisma.translations.update({
+      where: { id: translations.id },
+      data: {
+        translations: {
+          ...translationsJSON,
+          lotteryReleased: {
+            header: 'New lottery released',
+            adminApprovedStart:
+              'An admin has released lottery results for publication for the %{listingName} listing. Please log into the',
+            adminApprovedEnd:
+              'and navigate to the listing detail page to view the lottery tab and publish your results.',
+          },
+        },
+      },
+    });
+
+    await this.markScriptAsComplete(
+      'add lottery released translations',
+      requestingUser,
+    );
+
     return { success: true };
   }
 

@@ -58,10 +58,12 @@ describe('Listing Controller Tests', () => {
     requestApproval: async () => {},
     changesRequested: async () => {},
     listingApproved: async () => {},
+    lotteryReleased: async () => {},
   };
   const mockChangesRequested = jest.spyOn(testEmailService, 'changesRequested');
   const mockRequestApproval = jest.spyOn(testEmailService, 'requestApproval');
   const mockListingApproved = jest.spyOn(testEmailService, 'listingApproved');
+  const mockLotteryReleased = jest.spyOn(testEmailService, 'lotteryReleased');
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -1000,6 +1002,29 @@ describe('Listing Controller Tests', () => {
   });
 
   describe('lottery status endpoint', () => {
+    let adminUser, adminAccessToken;
+    beforeAll(async () => {
+      adminUser = await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: {
+            isAdmin: true,
+          },
+          mfaEnabled: false,
+          confirmedAt: new Date(),
+        }),
+      });
+
+      const res = await request(app.getHttpServer())
+        .post('/auth/login')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({ email: adminUser.email, password: 'Abcdef12345!' })
+        .expect(201);
+
+      adminAccessToken = res.header?.['set-cookie'].find((cookie) =>
+        cookie.startsWith('access-token='),
+      );
+    });
+
     it("should error when trying to update listing that doesn't exist", async () => {
       const id = randomUUID();
       const res = await request(app.getHttpServer())
@@ -1028,7 +1053,7 @@ describe('Listing Controller Tests', () => {
         data: listingData,
       });
 
-      const res = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .put('/listings/lotteryStatus')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
@@ -1037,7 +1062,7 @@ describe('Listing Controller Tests', () => {
         })
         .expect(403);
 
-      const res2 = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .put('/listings/lotteryStatus')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
@@ -1066,6 +1091,19 @@ describe('Listing Controller Tests', () => {
         },
       });
 
+      const partnerUser = await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: {
+            isPartner: true,
+            isAdmin: false,
+            isJurisdictionalAdmin: false,
+          },
+          listings: [listing.id],
+          jurisdictionIds: [jurisdictionA.id],
+          confirmedAt: new Date(),
+        }),
+      });
+
       const res = await request(app.getHttpServer())
         .put('/listings/lotteryStatus')
         .set({ passkey: process.env.API_PASS_KEY || '' })
@@ -1076,6 +1114,19 @@ describe('Listing Controller Tests', () => {
         .set('Cookie', adminAccessToken)
         .expect(200);
       expect(res.body.success).toEqual(true);
+
+      expect(mockLotteryReleased).toBeCalledWith(
+        expect.objectContaining({
+          email: adminUser.email,
+        }),
+        {
+          id: listing.id,
+          name: listing.name,
+          juris: expect.stringMatching(jurisdictionA.id),
+        },
+        expect.arrayContaining([partnerUser.email, adminUser.email]),
+        process.env.PARTNERS_PORTAL_URL,
+      );
     });
 
     it('should error trying to update listing lottery status to releasedToPartners from ran if there are new paper application updates', async () => {
