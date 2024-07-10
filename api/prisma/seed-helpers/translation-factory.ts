@@ -164,6 +164,13 @@ const translations = (jurisdictionName?: string, language?: LanguagesEnum) => {
         yourConfirmationNumber:
           'Your confirmation number is: %{confirmationCode}',
       },
+      lotteryReleased: {
+        header: 'New lottery released',
+        adminApprovedStart:
+          'An admin has released lottery results for publication for the %{listingName} listing. Please log into the',
+        adminApprovedEnd:
+          'and navigate to the listing detail page to view the lottery tab and publish your results.',
+      },
     };
   } else if (language === LanguagesEnum.es) {
     return {

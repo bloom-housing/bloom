@@ -1720,6 +1720,28 @@ export class ListingService implements OnModuleInit {
             id: dto.listingId,
           },
         });
+
+        const userInfo = await this.getUserEmailInfo(
+          [
+            UserRoleEnum.admin,
+            UserRoleEnum.jurisdictionAdmin,
+            UserRoleEnum.partner,
+          ],
+          storedListing.id,
+          storedListing.jurisdictionId,
+        );
+
+        await this.emailService.lotteryReleased(
+          requestingUser,
+          {
+            id: storedListing.id,
+            name: storedListing.name,
+            juris: storedListing.jurisdictionId,
+          },
+          userInfo.emails,
+          this.configService.get('PARTNERS_PORTAL_URL'),
+        );
+
         break;
       }
       case LotteryStatusEnum.publishedToPublic: {

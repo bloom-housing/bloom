@@ -560,6 +560,33 @@ export class EmailService {
     );
   }
 
+  public async lotteryReleased(
+    user: User,
+    listingInfo: listingInfo,
+    emails: string[],
+    appUrl: string,
+  ) {
+    try {
+      const jurisdiction = listingInfo.juris
+        ? await this.getJurisdiction([{ id: listingInfo.juris }])
+        : user.jurisdictions[0];
+      void (await this.loadTranslations(jurisdiction));
+      await this.send(
+        emails,
+        jurisdiction.emailFromAddress,
+        this.polyglot.t('lotteryReleased.header'),
+        this.template('lottery-released')({
+          appOptions: { listingName: listingInfo.name },
+          appUrl: appUrl,
+          listingUrl: `${appUrl}/listings/${listingInfo.id}`,
+        }),
+      );
+    } catch (err) {
+      console.log('lottery released email failed', err);
+      throw new HttpException('email failed', 500);
+    }
+  }
+
   formatLocalDate(rawDate: string | Date, format: string): string {
     const utcDate = dayjs.utc(rawDate);
     return utcDate.format(format);
