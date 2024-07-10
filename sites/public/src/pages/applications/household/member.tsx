@@ -290,11 +290,11 @@ const ApplicationMember = () => {
                   defaultValue={member.householdMemberAddress.street}
                   validation={{ required: true, maxLength: 64 }}
                   errorMessage={
-                    errors.address?.street?.type === "maxLength"
+                    errors.householdMemberAddress?.street?.type === "maxLength"
                       ? t("errors.maxLength")
                       : t("errors.streetError")
                   }
-                  error={errors.address?.street}
+                  error={errors.householdMemberAddress?.street}
                   register={register}
                   dataTestId={"app-household-member-address-street"}
                   label={t("application.contact.streetAddress")}
@@ -305,7 +305,7 @@ const ApplicationMember = () => {
                   name="householdMemberAddress.street2"
                   label={t("application.contact.apt")}
                   defaultValue={member.householdMemberAddress.street2}
-                  error={errors.address?.street2}
+                  error={errors.householdMemberAddress?.street2}
                   validation={{ maxLength: 64 }}
                   errorMessage={t("errors.maxLength")}
                   register={register}
@@ -320,11 +320,11 @@ const ApplicationMember = () => {
                     defaultValue={member.householdMemberAddress.city}
                     validation={{ required: true, maxLength: 64 }}
                     errorMessage={
-                      errors.address?.city?.type === "maxLength"
+                      errors.householdMemberAddress?.city?.type === "maxLength"
                         ? t("errors.maxLength")
                         : t("errors.cityError")
                     }
-                    error={errors.address?.city}
+                    error={errors.householdMemberAddress?.city}
                     register={register}
                     dataTestId={"app-household-member-address-city"}
                   />
@@ -335,9 +335,9 @@ const ApplicationMember = () => {
                     label={t("application.contact.state")}
                     defaultValue={member.householdMemberAddress.state}
                     validation={{ required: true, maxLength: 64 }}
-                    error={errors.address?.state}
+                    error={errors.householdMemberAddress?.state}
                     errorMessage={
-                      errors.address?.state?.type === "maxLength"
+                      errors.householdMemberAddress?.state?.type === "maxLength"
                         ? t("errors.maxLength")
                         : t("errors.stateError")
                     }
@@ -355,9 +355,9 @@ const ApplicationMember = () => {
                   label={t("application.contact.zip")}
                   defaultValue={member.householdMemberAddress.zipCode}
                   validation={{ required: true, maxLength: 64 }}
-                  error={errors.address?.zipCode}
+                  error={errors.householdMemberAddress?.zipCode}
                   errorMessage={
-                    errors.address?.zipCode?.type === "maxLength"
+                    errors.address?.householdMemberAddress?.type === "maxLength"
                       ? t("errors.maxLength")
                       : t("errors.zipCodeError")
                   }
@@ -400,9 +400,9 @@ const ApplicationMember = () => {
                   label={t("application.contact.streetAddress")}
                   defaultValue={member.householdMemberWorkAddress.street}
                   validation={{ required: true, maxLength: 64 }}
-                  error={errors.workAddress?.street}
+                  error={errors.householdMemberWorkAddress?.street}
                   errorMessage={
-                    errors.workAddress?.street?.type === "maxLength"
+                    errors.householdMemberWorkAddress?.street?.type === "maxLength"
                       ? t("errors.maxLength")
                       : t("errors.streetError")
                   }
@@ -415,7 +415,7 @@ const ApplicationMember = () => {
                   name="householdMemberWorkAddress.street2"
                   label={t("application.contact.apt")}
                   defaultValue={member.householdMemberWorkAddress.street2}
-                  error={errors.workAddress?.street2}
+                  error={errors.householdMemberWorkAddress?.street2}
                   errorMessage={t("errors.maxLength")}
                   validation={{ maxLength: 64 }}
                   register={register}
@@ -429,9 +429,9 @@ const ApplicationMember = () => {
                     label={t("application.contact.city")}
                     defaultValue={member.householdMemberWorkAddress.city}
                     validation={{ required: true, maxLength: 64 }}
-                    error={errors.workAddress?.city}
+                    error={errors.householdMemberWorkAddress?.city}
                     errorMessage={
-                      errors.workAddress?.city?.type === "maxLength"
+                      errors.householdMemberWorkAddress?.city?.type === "maxLength"
                         ? t("errors.maxLength")
                         : t("errors.cityError")
                     }
@@ -445,9 +445,9 @@ const ApplicationMember = () => {
                     label={t("application.contact.state")}
                     defaultValue={member.householdMemberWorkAddress.state}
                     validation={{ required: true, maxLength: 64 }}
-                    error={errors.workAddress?.state}
+                    error={errors.householdMemberWorkAddress?.state}
                     errorMessage={
-                      errors.workAddress?.state?.type === "maxLength"
+                      errors.householdMemberWorkAddress?.state?.type === "maxLength"
                         ? t("errors.maxLength")
                         : t("errors.stateError")
                     }
@@ -465,9 +465,9 @@ const ApplicationMember = () => {
                   label={t("application.contact.zip")}
                   defaultValue={member.householdMemberWorkAddress.zipCode}
                   validation={{ required: true, maxLength: 64 }}
-                  error={errors.workAddress?.zipCode}
+                  error={errors.householdMemberWorkAddress?.zipCode}
                   errorMessage={
-                    errors.workAddress?.zipCode?.type === "maxLength"
+                    errors.householdMemberWorkAddress?.zipCode?.type === "maxLength"
                       ? t("errors.maxLength")
                       : t("errors.zipCodeError")
                   }

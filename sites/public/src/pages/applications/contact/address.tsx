@@ -344,7 +344,7 @@ const ApplicationAddress = () => {
                     name="applicant.applicantAddress.state"
                     label={t("application.contact.state")}
                     validation={{ required: true, maxLength: 64 }}
-                    error={errors.applicant?.address?.state}
+                    error={errors.applicant?.applicantAddress?.state}
                     errorMessage={
                       errors.applicant?.applicantAddress?.state?.type === "maxLength"
                         ? t("errors.maxLength")
@@ -368,7 +368,7 @@ const ApplicationAddress = () => {
                       ? t("errors.maxLength")
                       : t("errors.zipCodeError")
                   }
-                  error={errors.applicant?.address?.zipCode}
+                  error={errors.applicant?.applicantAddress?.zipCode}
                   register={register}
                   dataTestId={"app-primary-address-zip"}
                 />
@@ -404,9 +404,9 @@ const ApplicationAddress = () => {
                     defaultValue={application.applicationsMailingAddress.street}
                     label={t("application.contact.streetAddress")}
                     validation={{ required: true, maxLength: 64 }}
-                    error={errors.mailingAddress?.street}
+                    error={errors.applicationsMailingAddress?.street}
                     errorMessage={
-                      errors.mailingAddress?.street?.type === "maxLength"
+                      errors.applicationsMailingAddress?.street?.type === "maxLength"
                         ? t("errors.maxLength")
                         : t("errors.streetError")
                     }
@@ -422,7 +422,7 @@ const ApplicationAddress = () => {
                     register={register}
                     dataTestId={"app-primary-mailing-address-street2"}
                     validation={{ maxLength: 64 }}
-                    error={errors.mailingAddress?.street2}
+                    error={errors.applicationsMailingAddress?.street2}
                     errorMessage={t("errors.maxLength")}
                   />
 
@@ -433,9 +433,9 @@ const ApplicationAddress = () => {
                       label={t("application.contact.city")}
                       defaultValue={application.applicationsMailingAddress.city}
                       validation={{ required: true, maxLength: 64 }}
-                      error={errors.mailingAddress?.city}
+                      error={errors.applicationsMailingAddress?.city}
                       errorMessage={
-                        errors.mailingAddress?.city?.type === "maxLength"
+                        errors.applicationsMailingAddress?.city?.type === "maxLength"
                           ? t("errors.maxLength")
                           : t("errors.cityError")
                       }
@@ -450,11 +450,11 @@ const ApplicationAddress = () => {
                       defaultValue={application.applicationsMailingAddress.state}
                       validation={{ required: true, maxLength: 64 }}
                       errorMessage={
-                        errors.mailingAddress?.state?.type === "maxLength"
+                        errors.applicationsMailingAddress?.state?.type === "maxLength"
                           ? t("errors.maxLength")
                           : t("errors.stateError")
                       }
-                      error={errors.mailingAddress?.state}
+                      error={errors.applicationsMailingAddress?.state}
                       register={register}
                       controlClassName="control"
                       options={stateKeys}
@@ -469,9 +469,9 @@ const ApplicationAddress = () => {
                     label={t("application.contact.zip")}
                     defaultValue={application.applicationsMailingAddress.zipCode}
                     validation={{ required: true, maxLength: 64 }}
-                    error={errors.mailingAddress?.zipCode}
+                    error={errors.applicationsMailingAddress?.zipCode}
                     errorMessage={
-                      errors.mailingAddress?.zipCode?.type === "maxLength"
+                      errors.applicationsMailingAddress?.zipCode?.type === "maxLength"
                         ? t("errors.maxLength")
                         : t("errors.zipCodeError")
                     }
