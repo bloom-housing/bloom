@@ -4,8 +4,6 @@ import {
   adaFeatureKeys,
   mapApiToMultiselectForm,
   mapCheckboxesToApi,
-  mapRadiosToApi,
-  getInputType,
 } from "@bloom-housing/shared-helpers"
 import { FormTypes, ApplicationTypes, Address } from "../../lib/applications/FormTypes"
 import { convertDataToLocal } from "../../lib/helpers"
@@ -15,7 +13,6 @@ import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
 import customParseFormat from "dayjs/plugin/customParseFormat"
 import {
-  MultiselectOption,
   HouseholdMember,
   ApplicationSubmissionTypeEnum,
   MultiselectQuestion,
@@ -142,29 +139,11 @@ export const mapFormToApi = ({
   })()
 
   const preferencesData = preferences.map((pref: MultiselectQuestion) => {
-    const inputType = getInputType(pref.options as unknown as MultiselectOption[])
-    if (inputType === "checkbox") {
-      return mapCheckboxesToApi(data, pref, MultiselectQuestionsApplicationSectionEnum.preferences)
-    }
-    if (inputType === "radio") {
-      return mapRadiosToApi(
-        { [pref.text]: data.application.preferences[pref.text] as string },
-        pref
-      )
-    }
+    return mapCheckboxesToApi(data, pref, MultiselectQuestionsApplicationSectionEnum.preferences)
   })
 
   const programsData = programs.map((program: MultiselectQuestion) => {
-    const inputType = getInputType(program.options as unknown as MultiselectOption[])
-    if (inputType === "checkbox") {
-      return mapCheckboxesToApi(data, program, MultiselectQuestionsApplicationSectionEnum.programs)
-    }
-    if (inputType === "radio") {
-      return mapRadiosToApi(
-        { [program.text]: data.application.programs[program.text] as string },
-        program
-      )
-    }
+    return mapCheckboxesToApi(data, program, MultiselectQuestionsApplicationSectionEnum.programs)
   })
 
   // additional phone
