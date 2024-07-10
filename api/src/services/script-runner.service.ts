@@ -216,14 +216,8 @@ export class ScriptRunnerService {
       where: { language: 'en', jurisdictionId: jurisdictionDTO.id },
     });
 
-    console.log(translations);
-
-    console.log(translations.translations);
-
     const translationsJSON =
       translations.translations as unknown as Prisma.JsonArray;
-
-    console.log(translationsJSON);
 
     await this.prisma.translations.update({
       where: { id: translations.id },
