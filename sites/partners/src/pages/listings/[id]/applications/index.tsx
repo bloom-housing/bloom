@@ -182,7 +182,7 @@ const ApplicationsList = () => {
                   <div className="flex gap-2 items-center">
                     <Button
                       onClick={() => {
-                        if (listingDto.lotteryLastRunAt) {
+                        if (process.env.showLottery === "TRUE" && !!listingDto.lotteryStatus) {
                           setApplicationConfirmAddPostLotteryModal(true)
                         } else if (listingDto.status === ListingsStatusEnum.closed) {
                           setApplicationConfirmAddModal(true)
