@@ -87,16 +87,11 @@ describe('Testing script runner service', () => {
     const id = randomUUID();
     const scriptName = 'add lottery released translations';
 
-    const res = await service.addLotteryReleasedTranslations(
-      {
-        user: {
-          id,
-        } as unknown as User,
-      } as unknown as ExpressRequest,
-      {
-        id: randomUUID(),
-      },
-    );
+    const res = await service.addLotteryReleasedTranslations({
+      user: {
+        id,
+      } as unknown as User,
+    } as unknown as ExpressRequest);
 
     expect(res.success).toBe(true);
 

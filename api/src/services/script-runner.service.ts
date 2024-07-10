@@ -12,7 +12,6 @@ import { Application } from '../dtos/applications/application.dto';
 import { AmiChartImportDTO } from '../dtos/script-runner/ami-chart-import.dto';
 import { AmiChartCreate } from '../dtos/ami-charts/ami-chart-create.dto';
 import { AmiChartService } from './ami-chart.service';
-import { IdDTO } from 'src/dtos/shared/id.dto';
 
 /**
   this is the service for running scripts
@@ -205,7 +204,6 @@ export class ScriptRunnerService {
    */
   async addLotteryReleasedTranslations(
     req: ExpressRequest,
-    jurisdictionDTO: IdDTO,
   ): Promise<SuccessDTO> {
     const requestingUser = mapTo(User, req['user']);
     await this.markScriptAsRunStart(
@@ -213,7 +211,7 @@ export class ScriptRunnerService {
       requestingUser,
     );
     const translations = await this.prisma.translations.findFirst({
-      where: { language: 'en', jurisdictionId: jurisdictionDTO.id },
+      where: { language: 'en', jurisdictionId: null },
     });
 
     const translationsJSON =

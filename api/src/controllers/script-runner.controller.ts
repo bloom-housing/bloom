@@ -90,12 +90,8 @@ export class ScirptRunnerController {
   })
   @ApiOkResponse({ type: SuccessDTO })
   async lotteryReleasedTranslations(
-    @Body() jurisdictionDTO: IdDTO,
     @Request() req: ExpressRequest,
   ): Promise<SuccessDTO> {
-    return await this.scriptRunnerService.addLotteryReleasedTranslations(
-      req,
-      jurisdictionDTO,
-    );
+    return await this.scriptRunnerService.addLotteryReleasedTranslations(req);
   }
 }
