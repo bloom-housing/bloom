@@ -1,13 +1,14 @@
-import React, { useEffect, useMemo, useState } from "react"
-import { Field, t, FieldGroup, resolveObject } from "@bloom-housing/ui-components"
+import React, { ReactNode, useEffect, useMemo, useState } from "react"
+import { Field, t, resolveObject } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import { useFormContext } from "react-hook-form"
+import { useFormContext, UseFormMethods } from "react-hook-form"
 import {
   stateKeys,
   getInputType,
   fieldName,
   AddressHolder,
   cleanMultiselectString,
+  getAllOptions,
 } from "@bloom-housing/shared-helpers"
 import {
   ListingMultiselectQuestion,
@@ -28,6 +29,13 @@ type FormMultiselectQuestionsProps = {
   sectionTitle: string
 }
 
+// Set the value as false for a set of option field names
+const uncheckOptions = (options: string[], setValue: (key: string, value: boolean) => void) => {
+  options?.forEach((option) => {
+    setValue(option, false)
+  })
+}
+
 const FormMultiselectQuestions = ({
   applicationSection,
   questions,
@@ -39,6 +47,7 @@ const FormMultiselectQuestions = ({
   const {
     register,
     watch,
+    setValue,
     formState: { errors },
   } = formMethods
 
@@ -77,7 +86,11 @@ const FormMultiselectQuestions = ({
 
   const watchQuestions = watch(allOptionFieldNames)
 
-  const getCheckboxOption = (option: MultiselectOption, question: MultiselectQuestion) => {
+  const multiselectOptionWrapper = (
+    field: ReactNode,
+    option: MultiselectOption,
+    question: MultiselectQuestion
+  ) => {
     const optionFieldName = fieldName(
       question.text,
       applicationSection,
@@ -85,13 +98,7 @@ const FormMultiselectQuestions = ({
     )
     return (
       <React.Fragment key={option.text}>
-        <Field
-          id={`${question?.text}-${option.text}`}
-          name={optionFieldName}
-          type={"checkbox"}
-          label={option.text}
-          register={register}
-        />
+        {field}
 
         {watchQuestions[optionFieldName] && option?.collectName && (
           <Field
@@ -146,27 +153,54 @@ const FormMultiselectQuestions = ({
     )
   }
 
-  const getRadioFields = (options: MultiselectOption[], question: MultiselectQuestion) => {
-    return (
-      <fieldset>
-        <FieldGroup
-          fieldGroupClassName="grid grid-cols-1"
-          fieldClassName="ml-0"
-          type={"radio"}
-          name={fieldName(question.text, applicationSection)}
-          register={register}
-          dataTestId={"app-question-option"}
-          fields={options?.map((option) => {
-            return {
-              id: `${question?.text}-${option.text}`,
-              label: option?.text,
-              value: option?.text,
-              description: option?.description,
-            }
-          })}
-        />
-      </fieldset>
+  const getCheckboxOption = (option: MultiselectOption, question: MultiselectQuestion) => {
+    const optionFieldName = fieldName(
+      question.text,
+      applicationSection,
+      cleanMultiselectString(option.text)
     )
+
+    const checkboxField = (
+      <Field
+        id={`${question?.text}-${option.text}`}
+        name={optionFieldName}
+        labelClassName="font-semibold"
+        type={"checkbox"}
+        label={option.text}
+        register={register}
+      />
+    )
+    return multiselectOptionWrapper(checkboxField, option, question)
+  }
+
+  const getRadioOption = (
+    option: MultiselectOption,
+    question: MultiselectQuestion,
+    setValue: UseFormMethods["setValue"]
+  ) => {
+    const optionFieldName = fieldName(
+      question.text,
+      applicationSection,
+      cleanMultiselectString(option.text)
+    )
+
+    const radioField = (
+      <Field
+        id={`${question?.text}-${option.text}`}
+        name={optionFieldName}
+        type={"radio"}
+        label={option.text}
+        register={register}
+        inputProps={{
+          value: !!option.text,
+          onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+            uncheckOptions(getAllOptions(question, applicationSection), setValue)
+            setValue(optionFieldName, e.target.value)
+          },
+        }}
+      />
+    )
+    return multiselectOptionWrapper(radioField, option, question)
   }
 
   return (
@@ -179,29 +213,50 @@ const FormMultiselectQuestions = ({
             const inputType = getInputType(question.options as unknown as MultiselectOption[])
             return (
               <FieldValue label={question.text}>
-                {inputType === "checkbox" ? (
-                  <fieldset className={"mt-4"}>
-                    {question?.options
-                      ?.sort((a, b) => (a.ordinal > b.ordinal ? 1 : -1))
-                      .map((option) => {
-                        return getCheckboxOption(option, question)
-                      })}
-                    {question?.optOutText &&
-                      getCheckboxOption(
-                        {
-                          text: question.optOutText,
-                          description: null,
-                          links: [],
-                          collectAddress: false,
-                          exclusive: true,
-                          ordinal: question.options.length,
-                        },
-                        question
-                      )}
-                  </fieldset>
-                ) : (
-                  getRadioFields(question?.options, question)
-                )}
+                <fieldset className={"mt-4"}>
+                  {inputType === "checkbox" ? (
+                    <>
+                      {question?.options
+                        ?.sort((a, b) => (a.ordinal > b.ordinal ? 1 : -1))
+                        .map((option) => {
+                          return getCheckboxOption(option, question)
+                        })}
+                      {question?.optOutText &&
+                        getCheckboxOption(
+                          {
+                            text: question.optOutText,
+                            description: null,
+                            links: [],
+                            collectAddress: false,
+                            exclusive: true,
+                            ordinal: question.options.length,
+                          },
+                          question
+                        )}
+                    </>
+                  ) : (
+                    <>
+                      {question?.options
+                        ?.sort((a, b) => (a.ordinal > b.ordinal ? 1 : -1))
+                        .map((option) => {
+                          return getRadioOption(option, question, setValue)
+                        })}
+                      {question?.optOutText &&
+                        getRadioOption(
+                          {
+                            text: question.optOutText,
+                            description: null,
+                            links: [],
+                            collectAddress: false,
+                            exclusive: true,
+                            ordinal: question.options.length,
+                          },
+                          question,
+                          setValue
+                        )}
+                    </>
+                  )}
+                </fieldset>
               </FieldValue>
             )
           })}

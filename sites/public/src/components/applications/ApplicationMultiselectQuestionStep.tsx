@@ -9,11 +9,10 @@ import {
   getExclusiveKeys,
   getInputType,
   getPageQuestion,
-  getRadioFields,
+  getRadioOption,
   listingSectionQuestions,
   mapApiToMultiselectForm,
   mapCheckboxesToApi,
-  mapRadiosToApi,
   OnClientSide,
   PageView,
   pushGtmEvent,
@@ -90,10 +89,7 @@ const ApplicationMultiselectQuestionStep = ({
 
   const onSubmit = (data) => {
     if (verifyAddressStep === 0) {
-      body.current =
-        questionSetInputType === "checkbox"
-          ? mapCheckboxesToApi(data, question, applicationSection)
-          : mapRadiosToApi(data.application[applicationSection], question)
+      body.current = mapCheckboxesToApi(data, question, applicationSection)
     }
 
     // Verify address on preferences
@@ -177,6 +173,21 @@ const ApplicationMultiselectQuestionStep = ({
     )
   }
 
+  const radioOption = (option: MultiselectOption) => {
+    return getRadioOption(
+      option,
+      question,
+      applicationSection,
+      register,
+      setValue,
+      allOptionNames,
+      watchQuestions,
+      getValues,
+      errors,
+      trigger
+    )
+  }
+
   const allOptions = question?.options ? [...question.options] : []
   if (question?.optOutText) {
     allOptions.push({
@@ -243,41 +254,49 @@ const ApplicationMultiselectQuestionStep = ({
 
           <div style={{ display: verifyAddress ? "none" : "block" }} key={question?.id}>
             <CardSection>
-              {questionSetInputType === "checkbox" ? (
-                <fieldset>
-                  <legend className="text__caps-spaced mb-4 sr-only">{question?.text}</legend>
-                  {applicationSection ===
-                    MultiselectQuestionsApplicationSectionEnum.preferences && (
-                    <div className="mb-6">
-                      <p className="text__caps-spaced m-0">{question?.text}</p>
-                      {question?.description && (
-                        <p className="field-note mt-3">{question?.description}</p>
-                      )}
-                      {question.links.map((link) => (
-                        <a
-                          key={link.url}
-                          className="block text-base mt-3 text-blue-500 underline"
-                          href={link.url}
-                          target={"_blank"}
-                          rel="noreferrer noopener"
-                        >
-                          {link.title}
-                        </a>
-                      ))}
-                    </div>
-                  )}
-                  <p className="field-note mb-3">
-                    {t("application.household.preferredUnit.optionsLabel")}
-                  </p>
-                  {allOptions
-                    ?.sort((a, b) => (a.ordinal > b.ordinal ? 1 : -1))
-                    .map((option) => {
-                      return checkboxOption(option)
-                    })}
-                </fieldset>
-              ) : (
-                getRadioFields(allOptions, register, question, applicationSection, errors)
-              )}
+              <fieldset>
+                <legend className="text__caps-spaced mb-4 sr-only">{question?.text}</legend>
+                {applicationSection === MultiselectQuestionsApplicationSectionEnum.preferences && (
+                  <div className="mb-6">
+                    <p className="text__caps-spaced m-0">{question?.text}</p>
+                    {question?.description && (
+                      <p className="field-note mt-3">{question?.description}</p>
+                    )}
+                    {question.links.map((link) => (
+                      <a
+                        key={link.url}
+                        className="block text-base mt-3 text-blue-500 underline"
+                        href={link.url}
+                        target={"_blank"}
+                        rel="noreferrer noopener"
+                      >
+                        {link.title}
+                      </a>
+                    ))}
+                  </div>
+                )}
+                {questionSetInputType === "checkbox" ? (
+                  <>
+                    <p className="field-note mb-3">
+                      {t("application.household.preferredUnit.optionsLabel")}
+                    </p>
+                    {allOptions
+                      ?.sort((a, b) => (a.ordinal > b.ordinal ? 1 : -1))
+                      .map((option) => {
+                        return checkboxOption(option)
+                      })}
+                  </>
+                ) : (
+                  <>
+                    <p className="field-note mb-3">{t("t.pleaseSelectOne")}</p>
+                    {allOptions
+                      ?.sort((a, b) => (a.ordinal > b.ordinal ? 1 : -1))
+                      .map((option) => {
+                        return radioOption(option)
+                      })}
+                  </>
+                )}
+              </fieldset>
             </CardSection>
           </div>
           {verifyAddress && (
