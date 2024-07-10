@@ -574,7 +574,9 @@ export class EmailService {
       await this.send(
         emails,
         jurisdiction.emailFromAddress,
-        this.polyglot.t('lotteryReleased.header'),
+        this.polyglot.t('lotteryReleased.header', {
+          listingName: listingInfo.name,
+        }),
         this.template('lottery-released')({
           appOptions: { listingName: listingInfo.name },
           appUrl: appUrl,

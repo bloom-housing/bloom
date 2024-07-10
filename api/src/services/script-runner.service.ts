@@ -223,11 +223,12 @@ export class ScriptRunnerService {
         translations: {
           ...translationsJSON,
           lotteryReleased: {
-            header: 'New lottery released',
+            header:
+              'Lottery results for %{listingName} are ready to be published',
             adminApprovedStart:
-              'An admin has released lottery results for publication for the %{listingName} listing. Please log into the',
+              'Lottery results for %{listingName} have been released for publication. Please go to the listing view in your',
             adminApprovedEnd:
-              'and navigate to the listing detail page to view the lottery tab and publish your results.',
+              'to view the lottery tab and release the lottery results.',
           },
         },
       },
