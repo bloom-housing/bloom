@@ -6417,10 +6417,22 @@ add-stream@^1.0.0:
   resolved "https://registry.npmjs.org/add-stream/-/add-stream-1.0.0.tgz"
   integrity sha1-anmQQ3ynNtXhKI25K9MmbV9csqo=
 
+ag-charts-types@10.0.1:
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/ag-charts-types/-/ag-charts-types-10.0.1.tgz#8b65ec22dc8d2e4d7f4dba5f8aba0a788215652d"
+  integrity sha512-o8aXJfO5lsLGu4jE/2MiTogLCfdJ8UCmrWNPb+AWU0YutCrBHO0uWbSuqzabZxZ4WHxwwRtTllZMT6WqTdz+qg==
+
 ag-grid-community@^26.0.0:
   version "26.2.1"
   resolved "https://registry.yarnpkg.com/ag-grid-community/-/ag-grid-community-26.2.1.tgz#b217e1b62317817c7119511a1a8358992e3a2026"
   integrity sha512-aChSGNdPkBda4BhOUUEAmAkRlIG7rFU8UTXx3NPStavrCOHKLDRV90djIKuiXfM6ONBqKmeqw2as0yuLnSN8dw==
+
+ag-grid-community@^32.0.1:
+  version "32.0.1"
+  resolved "https://registry.yarnpkg.com/ag-grid-community/-/ag-grid-community-32.0.1.tgz#3cec7cb49eb7d0fb15ab3f1586475228e1a5bd34"
+  integrity sha512-/eimCgJqMeyFxpJMTQuCtedKzk+BIInqhRdKdoQG8MD3yjrs/AWQFAcT6MP0T64CuNd85mxwB2t+3Ggb+S8hdA==
+  dependencies:
+    ag-charts-types "10.0.1"
 
 ag-grid-react@^26.0.0:
   version "26.2.0"
