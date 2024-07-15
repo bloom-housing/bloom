@@ -354,7 +354,7 @@ export class ListingsService {
       body?: ListingLotteryStatus
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Listing> {
+  ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/listings/lotteryStatus"
 
@@ -1421,6 +1421,64 @@ export class ApplicationsService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = { userId: params["userId"] }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get applications lottery results
+   */
+  lotteryResults(
+    params: {
+      /**  */
+      listingId: string
+      /**  */
+      includeDemographics?: boolean
+      /**  */
+      timeZone?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/getLotteryResults"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        listingId: params["listingId"],
+        includeDemographics: params["includeDemographics"],
+        timeZone: params["timeZone"],
+      }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Generate the lottery results for a listing
+   */
+  lotteryGenerate(
+    params: {
+      /**  */
+      listingId: string
+      /**  */
+      includeDemographics?: boolean
+      /**  */
+      timeZone?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/generateLotteryResults"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        listingId: params["listingId"],
+        includeDemographics: params["includeDemographics"],
+        timeZone: params["timeZone"],
+      }
 
       /** 适配ios13，get请求不允许带body */
 

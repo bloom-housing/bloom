@@ -521,6 +521,15 @@ export const useApplicationsExport = (listingId: string, includeDemographics: bo
   )
 }
 
+export const useLotteryExport = (listingId: string) => {
+  const { applicationsService } = useContext(AuthContext)
+
+  return useCsvExport(
+    () => applicationsService.lotteryResults({ listingId, timeZone: dayjs.tz.guess() }),
+    `lottery-${listingId}-${createDateStringFromNow()}.csv`
+  )
+}
+
 export const useUsersExport = () => {
   const { userService } = useContext(AuthContext)
 

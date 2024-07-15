@@ -95,6 +95,45 @@ export class ApplicationController {
     return await this.applicationService.mostRecentlyCreated(queryParams, req);
   }
 
+  @Get(`getLotteryResults`)
+  @ApiOperation({
+    summary: 'Get applications lottery results',
+    operationId: 'lotteryResults',
+  })
+  @Header('Content-Type', 'text/csv')
+  @UseInterceptors(ExportLogInterceptor)
+  async lotteryExport(
+    @Request() req: ExpressRequest,
+    @Res({ passthrough: true }) res: Response,
+    @Query(new ValidationPipe(defaultValidationPipeOptions))
+    queryParams: ApplicationCsvQueryParams,
+  ): Promise<StreamableFile> {
+    return await this.applicationCsvExportService.lotteryExport(
+      req,
+      res,
+      queryParams,
+    );
+  }
+
+  @Put(`generateLotteryResults`)
+  @ApiOperation({
+    summary: 'Generate the lottery results for a listing',
+    operationId: 'lotteryGenerate',
+  })
+  @Header('Content-Type', 'text/csv')
+  @UseInterceptors(ExportLogInterceptor)
+  async lotteryGenerate(
+    @Request() req: ExpressRequest,
+    @Res({ passthrough: true }) res: Response,
+    @Body() queryParams: ApplicationCsvQueryParams,
+  ): Promise<SuccessDTO> {
+    return await this.applicationCsvExportService.lotteryGenerate(
+      req,
+      res,
+      queryParams,
+    );
+  }
+
   @Get(`csv`)
   @ApiOperation({
     summary: 'Get applications as csv',

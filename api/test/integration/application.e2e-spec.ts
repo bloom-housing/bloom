@@ -6,6 +6,7 @@ import {
   ApplicationSubmissionTypeEnum,
   IncomePeriodEnum,
   LanguagesEnum,
+  LotteryStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
   Prisma,
   UnitTypeEnum,
@@ -1541,6 +1542,136 @@ describe('Application Controller Tests', () => {
       expect(res.body.message).toEqual([
         'preferences should not be null or undefined',
       ]);
+    });
+  });
+
+  describe('generateLotteryResults endpoint', () => {
+    it('should generate results when no previous attempt to run lotteries has happened', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
+      const listing1 = await listingFactory(jurisdiction.id, prisma);
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+
+      const appA = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        listingId: listing1Created.id,
+      });
+
+      const applicationA = await prisma.applications.create({
+        data: appA,
+        include: {
+          applicant: true,
+        },
+      });
+
+      const appB = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        listingId: listing1Created.id,
+      });
+
+      const applicationB = await prisma.applications.create({
+        data: appB,
+        include: {
+          applicant: true,
+        },
+      });
+
+      const appC = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        listingId: listing1Created.id,
+      });
+
+      const applicationC = await prisma.applications.create({
+        data: appC,
+        include: {
+          applicant: true,
+        },
+      });
+
+      await request(app.getHttpServer())
+        .put(`/applications/generateLotteryResults`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          listingId: listing1Created.id,
+        })
+        .set('Cookie', cookies)
+        .expect(200);
+
+      const lotteryPositions =
+        await prisma.applicationLotteryPositions.findMany({
+          where: {
+            listingId: listing1Created.id,
+          },
+        });
+
+      expect(
+        lotteryPositions.some((pos) => pos.applicationId === applicationA.id),
+      ).toBe(true);
+      expect(
+        lotteryPositions.some((pos) => pos.applicationId === applicationB.id),
+      ).toBe(true);
+      expect(
+        lotteryPositions.some((pos) => pos.applicationId === applicationC.id),
+      ).toBe(true);
+
+      const updatedListing = await prisma.listings.findUnique({
+        where: {
+          id: listing1Created.id,
+        },
+      });
+
+      expect(updatedListing.lotteryStatus).toEqual(LotteryStatusEnum.ran);
+    });
+
+    it('should throw an error when a run of lotteries already occured', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
+      const listing1 = await listingFactory(jurisdiction.id, prisma);
+      const listing1Created = await prisma.listings.create({
+        data: {
+          ...listing1,
+          lotteryLastRunAt: new Date(),
+          lotteryStatus: LotteryStatusEnum.ran,
+        },
+      });
+
+      const appA = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        listingId: listing1Created.id,
+      });
+
+      await prisma.applications.create({
+        data: appA,
+        include: {
+          applicant: true,
+        },
+      });
+
+      const res = await request(app.getHttpServer())
+        .put(`/applications/generateLotteryResults`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          listingId: listing1Created.id,
+        })
+        .set('Cookie', cookies)
+        .expect(400);
+      expect(res.body.message).toEqual(
+        `Listing ${listing1Created.id}: the lottery was attempted to be generated but it was already run previously`,
+      );
     });
   });
 });

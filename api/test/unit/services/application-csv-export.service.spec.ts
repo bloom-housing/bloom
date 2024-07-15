@@ -1,7 +1,10 @@
 import { randomUUID } from 'crypto';
 import { PassThrough } from 'stream';
 import { Test, TestingModule } from '@nestjs/testing';
-import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
+import {
+  LotteryStatusEnum,
+  MultiselectQuestionsApplicationSectionEnum,
+} from '@prisma/client';
 import { HttpModule } from '@nestjs/axios';
 import { Request as ExpressRequest, Response } from 'express';
 import { PrismaService } from '../../../src/services/prisma.service';
@@ -27,6 +30,7 @@ import { GoogleTranslateService } from '../../../src/services/google-translate.s
 import { CsvHeader } from '../../../src/types/CsvExportInterface';
 import { Application } from '../../../src/dtos/applications/application.dto';
 import MultiselectQuestion from '../../../src/dtos/multiselect-questions/multiselect-question.dto';
+import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
 
 describe('Testing application CSV export service', () => {
   let service: ApplicationCsvExporterService;
@@ -687,31 +691,31 @@ describe('Testing application CSV export service', () => {
     expect(readable).toContain('EST');
   });
 
-  it('should generate random ordinal arrays', () => {
-    for (let i = 0; i < 10; i++) {
-      // create and fill mock array
-      const filteredApplicationArray: Application[] = [];
-      for (let j = 0; j < i + 1; j++) {
-        filteredApplicationArray.push({
-          id: randomUUID(),
-        } as unknown as Application);
-      }
-
-      // run through randomizer
-      const ordinalArray = service.lotteryRandomizerHelper(
-        filteredApplicationArray,
-      );
-
-      // verify the results are random
-      expect(filteredApplicationArray.length).toEqual(ordinalArray.length);
-
-      for (let j = 1; j <= i + 1; j++) {
-        expect(ordinalArray.find((val) => val === j)).toEqual(j);
-      }
-    }
-  });
-
   describe('Testing lotteryRandomizerHelper()', () => {
+    it('should generate random ordinal arrays', () => {
+      for (let i = 0; i < 10; i++) {
+        // create and fill mock array
+        const filteredApplicationArray: Application[] = [];
+        for (let j = 0; j < i + 1; j++) {
+          filteredApplicationArray.push({
+            id: randomUUID(),
+          } as unknown as Application);
+        }
+
+        // run through randomizer
+        const ordinalArray = service.lotteryRandomizerHelper(
+          filteredApplicationArray,
+        );
+
+        // verify the results are random
+        expect(filteredApplicationArray.length).toEqual(ordinalArray.length);
+
+        for (let j = 1; j <= i + 1; j++) {
+          expect(ordinalArray.find((val) => val === j)).toEqual(j);
+        }
+      }
+    });
+
     it('should store randomized ordinals when no preferences on listing', async () => {
       const listingId = randomUUID();
       const applications: Application[] = [];
@@ -846,6 +850,266 @@ describe('Testing application CSV export service', () => {
       );
 
       expect(prisma.applicationLotteryPositions.createMany).toBeCalledTimes(2);
+    });
+  });
+
+  describe('Testing lotteryExport()', () => {
+    it('should generate lottery results ', async () => {
+      process.env.TIME_ZONE = 'America/Los_Angeles';
+      jest.useFakeTimers();
+      jest.setSystemTime(new Date('2024-01-01'));
+
+      const listingId = randomUUID();
+
+      const requestingUser = {
+        firstName: 'requesting fName',
+        lastName: 'requesting lName',
+        email: 'requestingUser@email.com',
+        jurisdictions: [{ id: 'juris id' }],
+      } as unknown as User;
+
+      const applications = mockApplicationSet(5, new Date(), undefined, true);
+      prisma.applications.findMany = jest.fn().mockReturnValue(applications);
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: listingId,
+        lotteryLastRunAt: new Date(),
+        lotteryStatus: LotteryStatusEnum.ran,
+      });
+      permissionService.canOrThrow = jest.fn().mockResolvedValue(true);
+
+      prisma.multiselectQuestions.findMany = jest.fn().mockReturnValue([
+        {
+          ...mockMultiselectQuestion(
+            0,
+            new Date(),
+            MultiselectQuestionsApplicationSectionEnum.preferences,
+          ),
+          options: [
+            { id: 1, text: 'text' },
+            { id: 2, text: 'text', collectAddress: true },
+          ],
+        },
+        {
+          ...mockMultiselectQuestion(
+            1,
+            new Date(),
+            MultiselectQuestionsApplicationSectionEnum.programs,
+          ),
+          options: [{ id: 1, text: 'text' }],
+        },
+      ]);
+
+      service.unitTypeToReadable = jest.fn().mockReturnValue('Studio');
+      const exportResponse = await service.lotteryExport(
+        { user: requestingUser } as unknown as ExpressRequest,
+        {} as unknown as Response,
+        { listingId },
+      );
+
+      const mockedStream = new PassThrough();
+      exportResponse.getStream().pipe(mockedStream);
+
+      // In order to make sure the last expect statements are properly hit we need to wrap in a promise and resolve it
+      const readable = await new Promise((resolve) => {
+        mockedStream.on('data', async (d) => {
+          const value = Buffer.from(d).toString();
+          mockedStream.end();
+          mockedStream.destroy();
+          resolve(value);
+        });
+      });
+
+      expect(readable).toContain('Lottery Position');
+    });
+  });
+
+  describe('Testing lotteryGenerate()', () => {
+    it('should build lottery when no prior lottery has been ran', async () => {
+      const listingId = randomUUID();
+      const requestingUser = {
+        firstName: 'requesting fName',
+        lastName: 'requesting lName',
+        email: 'requestingUser@email.com',
+        jurisdictions: [{ id: 'juris id' }],
+      } as unknown as User;
+
+      permissionService.canOrThrow = jest.fn().mockResolvedValue(true);
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: listingId,
+        lotteryLastRunAt: null,
+        lotteryStatus: null,
+      });
+      const applications = mockApplicationSet(5, new Date());
+      prisma.applications.findMany = jest.fn().mockReturnValue(applications);
+
+      prisma.multiselectQuestions.findMany = jest.fn().mockReturnValue([
+        {
+          ...mockMultiselectQuestion(
+            0,
+            new Date(),
+            MultiselectQuestionsApplicationSectionEnum.preferences,
+          ),
+          options: [
+            { id: 1, text: 'text' },
+            { id: 2, text: 'text', collectAddress: true },
+          ],
+        },
+        {
+          ...mockMultiselectQuestion(
+            1,
+            new Date(),
+            MultiselectQuestionsApplicationSectionEnum.programs,
+          ),
+          options: [{ id: 1, text: 'text' }],
+        },
+      ]);
+
+      prisma.applicationLotteryPositions.createMany = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: listingId,
+        lotteryLastRunAt: null,
+        lotteryStatus: null,
+      });
+
+      await service.lotteryGenerate(
+        { user: requestingUser } as unknown as ExpressRequest,
+        {} as unknown as Response,
+        { listingId },
+      );
+
+      expect(prisma.listings.findUnique).toHaveBeenCalledWith({
+        select: {
+          id: true,
+          lotteryLastRunAt: true,
+          lotteryStatus: true,
+        },
+        where: {
+          id: listingId,
+        },
+      });
+
+      expect(prisma.applications.findMany).toHaveBeenCalledWith({
+        select: {
+          id: true,
+          preferences: true,
+          householdMember: {
+            select: {
+              id: true,
+            },
+          },
+          applicationLotteryPositions: {
+            select: {
+              ordinal: true,
+              multiselectQuestionId: true,
+            },
+            where: {
+              multiselectQuestionId: null,
+            },
+            orderBy: {
+              ordinal: OrderByEnum.DESC,
+            },
+          },
+        },
+        where: {
+          listingId: listingId,
+          deletedAt: null,
+          markedAsDuplicate: false,
+        },
+      });
+
+      expect(prisma.applicationLotteryPositions.createMany).toHaveBeenCalled();
+      expect(prisma.listings.update).toHaveBeenCalledWith({
+        data: {
+          lotteryLastRunAt: expect.anything(),
+          lotteryStatus: LotteryStatusEnum.ran,
+        },
+        where: {
+          id: listingId,
+        },
+      });
+    });
+
+    it('should error when trying to generate lotterry results when previous results exist', async () => {
+      const listingId = randomUUID();
+      const requestingUser = {
+        firstName: 'requesting fName',
+        lastName: 'requesting lName',
+        email: 'requestingUser@email.com',
+        jurisdictions: [{ id: 'juris id' }],
+      } as unknown as User;
+
+      permissionService.canOrThrow = jest.fn().mockResolvedValue(true);
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: listingId,
+        lotteryLastRunAt: new Date(),
+        lotteryStatus: LotteryStatusEnum.ran,
+      });
+      const applications = mockApplicationSet(5, new Date());
+      prisma.applications.findMany = jest.fn().mockReturnValue(applications);
+
+      prisma.multiselectQuestions.findMany = jest.fn().mockReturnValue([
+        {
+          ...mockMultiselectQuestion(
+            0,
+            new Date(),
+            MultiselectQuestionsApplicationSectionEnum.preferences,
+          ),
+          options: [
+            { id: 1, text: 'text' },
+            { id: 2, text: 'text', collectAddress: true },
+          ],
+        },
+        {
+          ...mockMultiselectQuestion(
+            1,
+            new Date(),
+            MultiselectQuestionsApplicationSectionEnum.programs,
+          ),
+          options: [{ id: 1, text: 'text' }],
+        },
+      ]);
+
+      prisma.applicationLotteryPositions.createMany = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: listingId,
+        lotteryLastRunAt: null,
+        lotteryStatus: null,
+      });
+
+      await expect(
+        async () =>
+          await service.lotteryGenerate(
+            { user: requestingUser } as unknown as ExpressRequest,
+            {} as unknown as Response,
+            { listingId },
+          ),
+      ).rejects.toThrowError(
+        `Listing ${listingId}: the lottery was attempted to be generated but it was already run previously`,
+      );
+
+      expect(prisma.listings.findUnique).toHaveBeenCalledWith({
+        select: {
+          id: true,
+          lotteryLastRunAt: true,
+          lotteryStatus: true,
+        },
+        where: {
+          id: listingId,
+        },
+      });
+
+      expect(prisma.applications.findMany).not.toHaveBeenCalled();
+
+      expect(
+        prisma.applicationLotteryPositions.createMany,
+      ).not.toHaveBeenCalled();
+      expect(prisma.listings.update).not.toHaveBeenCalled();
     });
   });
 });
