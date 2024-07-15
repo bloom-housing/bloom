@@ -39,7 +39,7 @@ const Lottery = (props: { listing: Listing }) => {
   const [loading, setLoading] = useState(false)
 
   const { applicationsService, listingsService, profile } = useContext(AuthContext)
-  const { onExport, csvExportLoading } = useLotteryExport(listing.id)
+  const { onExport, csvExportLoading } = useLotteryExport(listing?.id)
   const { data } = useFlaggedApplicationsMeta(listing?.id)
   const duplicatesExist = data?.totalPendingCount > 0
 
