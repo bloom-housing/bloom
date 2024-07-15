@@ -1,3 +1,8 @@
 .navigation-header {
   --text-font-family: var(--bloom-font-alt-sans);
+  a {
+    text-transform: none;
+    font-size: var(--seeds-type-body-size);
+    font-weight: var(--seeds-font-weight-regular);
+  }
 }
