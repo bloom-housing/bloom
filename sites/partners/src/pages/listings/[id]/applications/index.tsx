@@ -7,6 +7,7 @@ import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   ApplicationOrderByKeys,
   ListingsStatusEnum,
+  LotteryStatusEnum,
   OrderByEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -182,7 +183,12 @@ const ApplicationsList = () => {
                   <div className="flex gap-2 items-center">
                     <Button
                       onClick={() => {
-                        if (process.env.showLottery === "TRUE" && !!listingDto.lotteryStatus) {
+                        if (
+                          process.env.showLottery === "TRUE" &&
+                          (listingDto.lotteryStatus === LotteryStatusEnum.ran ||
+                            listingDto.lotteryStatus === LotteryStatusEnum.releasedToPartners ||
+                            listingDto.lotteryStatus === LotteryStatusEnum.publishedToPublic)
+                        ) {
                           setApplicationConfirmAddPostLotteryModal(true)
                         } else if (listingDto.status === ListingsStatusEnum.closed) {
                           setApplicationConfirmAddModal(true)
