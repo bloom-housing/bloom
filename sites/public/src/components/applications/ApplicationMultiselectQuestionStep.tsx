@@ -262,7 +262,7 @@ const ApplicationMultiselectQuestionStep = ({
                     {question?.description && (
                       <p className="field-note mt-3">{question?.description}</p>
                     )}
-                    {question.links.map((link) => (
+                    {question?.links?.map((link) => (
                       <a
                         key={link.url}
                         className="block text-base mt-3 text-blue-500 underline"
