@@ -297,7 +297,8 @@ const Lottery = (props: { listing: Listing }) => {
                 variant="primary"
                 onClick={async () => {
                   try {
-                    await applicationsService.lotteryGenerate({ listingId: listing.id })
+                    setLoading(true)
+                    await applicationsService.lotteryGenerate({ body: { listingId: listing.id } })
                     setRunModal(false)
                     location.reload()
                   } catch (err) {

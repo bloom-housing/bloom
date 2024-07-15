@@ -1461,26 +1461,19 @@ export class ApplicationsService {
    */
   lotteryGenerate(
     params: {
-      /**  */
-      listingId: string
-      /**  */
-      includeDemographics?: boolean
-      /**  */
-      timeZone?: string
+      /** requestBody */
+      body?: ApplicationCsvQueryParams
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/applications/generateLotteryResults"
 
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = {
-        listingId: params["listingId"],
-        includeDemographics: params["includeDemographics"],
-        timeZone: params["timeZone"],
-      }
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
+      let data = params.body
+
+      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -4731,6 +4724,17 @@ export interface PaginatedApplication {
 
   /**  */
   meta: PaginationMeta
+}
+
+export interface ApplicationCsvQueryParams {
+  /**  */
+  listingId: string
+
+  /**  */
+  includeDemographics?: boolean
+
+  /**  */
+  timeZone?: string
 }
 
 export interface ApplicantUpdate {
