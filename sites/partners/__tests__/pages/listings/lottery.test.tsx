@@ -5,6 +5,7 @@ import { setupServer } from "msw/node"
 import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import Lottery from "../../../src/pages/listings/[id]/lottery"
 import { mockNextRouter, render } from "../../testUtils"
+import { ListingMultiselectQuestion } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const server = setupServer()
 
@@ -207,9 +208,7 @@ describe("lottery", () => {
     expect(header).toBeInTheDocument()
 
     expect(getByText("Export lottery data")).toBeInTheDocument()
-    expect(
-      getByText("File includes randomized general pool and preference data.")
-    ).toBeInTheDocument()
+    expect(getByText("File includes randomized general pool data.")).toBeInTheDocument()
     expect(getByText("Re-run lottery")).toBeInTheDocument()
     expect(getByText("Release lottery")).toBeInTheDocument()
   })
@@ -234,7 +233,7 @@ describe("lottery", () => {
       })
     )
 
-    const { getByText, findByText, findAllByText } = render(
+    const { getByText, findByText, getAllByText } = render(
       <Lottery listing={{ ...listing, lotteryLastRunAt: new Date() }} />
     )
 
@@ -243,7 +242,7 @@ describe("lottery", () => {
 
     fireEvent.click(getByText("Re-run lottery"))
     expect(await findByText("Are you sure?")).toBeInTheDocument()
-    expect(await findAllByText("Re-run lottery")).toHaveLength(2)
+    expect(getAllByText("Re-run lottery")).toHaveLength(2)
   })
 
   it("should show release modal if user clicks on release", async () => {
@@ -276,7 +275,7 @@ describe("lottery", () => {
     fireEvent.click(getByText("Release lottery"))
     expect(await findByText("Are you sure?")).toBeInTheDocument()
     expect(
-      await findByText(
+      getByText(
         "Releasing the lottery will give Partner users access to the lottery data, including the ability to publish results to applicants."
       )
     ).toBeInTheDocument()
@@ -310,7 +309,7 @@ describe("lottery", () => {
     fireEvent.click(getByText("Run lottery"))
     expect(await findByText("Confirmation needed")).toBeInTheDocument()
     expect(
-      await findByText("Make sure to add all paper applications before running the lottery.")
+      getByText("Make sure to add all paper applications before running the lottery.")
     ).toBeInTheDocument()
   })
 
@@ -334,14 +333,111 @@ describe("lottery", () => {
       })
     )
 
-    const { getByText, findByText, findAllByText } = render(<Lottery listing={listing} />)
+    const { getByText, findByText, getAllByText } = render(<Lottery listing={listing} />)
 
     const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
 
     fireEvent.click(getByText("Run lottery"))
     expect(await findByText("Confirmation needed")).toBeInTheDocument()
-    expect(await findByText("5 unresolved duplicate sets.")).toBeInTheDocument()
-    expect(await findAllByText("Run lottery")).toHaveLength(2)
+    expect(getByText("5 unresolved duplicate sets.")).toBeInTheDocument()
+    expect(getAllByText("Run lottery")).toHaveLength(2)
+  })
+
+  it("should show export modal if lottery has been run with no preference text", async () => {
+    mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { isAdmin: true },
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
+      })
+    )
+
+    const updatedListing = { ...listing, lotteryLastRunAt: new Date("September 6, 2025 8:15:00") }
+    const { getByText, findByText, findAllByText, getAllByText } = render(
+      <Lottery listing={updatedListing} />
+    )
+
+    const header = await findByText("Lottery")
+    expect(header).toBeInTheDocument()
+
+    expect(getByText("File includes randomized general pool data.")).toBeInTheDocument()
+
+    fireEvent.click(getByText("Export"))
+    expect(await findAllByText("Export lottery data")).toHaveLength(2)
+
+    expect(
+      getByText("This file includes the lottery raw rank for all applications.", { exact: false })
+    ).toBeInTheDocument()
+    expect(
+      getByText("This data was generated from the lottery that was run on 09/06/2025 at 8:15 am.", {
+        exact: false,
+      })
+    ).toBeInTheDocument()
+    expect(getAllByText("Export")).toHaveLength(2)
+  })
+
+  it("should show export modal if lottery has been run with preference text", async () => {
+    mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { isAdmin: true },
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
+      })
+    )
+
+    const updatedListing = {
+      ...listing,
+      lotteryLastRunAt: new Date("September 6, 2025 8:15:00"),
+      listingMultiselectQuestions: [{ multiselectQuestions: {} } as ListingMultiselectQuestion],
+    }
+    const { getByText, findByText, findAllByText, getAllByText } = render(
+      <Lottery listing={updatedListing} />
+    )
+
+    const header = await findByText("Lottery")
+    expect(header).toBeInTheDocument()
+
+    expect(
+      getByText("File includes randomized general pool and preference data.")
+    ).toBeInTheDocument()
+
+    fireEvent.click(getByText("Export"))
+    expect(await findAllByText("Export lottery data")).toHaveLength(2)
+
+    expect(
+      getByText(
+        "This file includes the lottery raw rank and preferences data for all applications.",
+        { exact: false }
+      )
+    ).toBeInTheDocument()
+    expect(
+      getByText("This data was generated from the lottery that was run on 09/06/2025 at 8:15 am.", {
+        exact: false,
+      })
+    ).toBeInTheDocument()
+    expect(getAllByText("Export")).toHaveLength(2)
   })
 })

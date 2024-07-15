@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react"
 import Head from "next/head"
 import axios from "axios"
+import dayjs from "dayjs"
 import Ticket from "@heroicons/react/24/solid/TicketIcon"
 import Download from "@heroicons/react/24/solid/ArrowDownTrayIcon"
 import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
@@ -33,6 +34,7 @@ const Lottery = (props: { listing: Listing }) => {
   const [runModal, setRunModal] = useState(false)
   const [reRunModal, setReRunModal] = useState(false)
   const [releaseModal, setReleaseModal] = useState(false)
+  const [exportModal, setExportModal] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const { listingsService } = useContext(AuthContext)
@@ -61,9 +63,13 @@ const Lottery = (props: { listing: Listing }) => {
           <Heading priority={2} size={"2xl"}>
             {t("listings.lottery.export")}
           </Heading>
-          <div className={styles["card-description"]}>{t("listings.lottery.exportFile")}</div>
+          <div className={styles["card-description"]}>
+            {listing.listingMultiselectQuestions.length
+              ? t("listings.lottery.exportFile")
+              : t("listings.lottery.exportFileNoPreferences")}
+          </div>
           <div>
-            <Button>{t("t.export")}</Button>
+            <Button onClick={() => setExportModal(true)}>{t("t.export")}</Button>
           </div>
         </CardSection>
       )
@@ -324,6 +330,48 @@ const Lottery = (props: { listing: Listing }) => {
                 variant="primary-outlined"
                 onClick={() => {
                   setReleaseModal(false)
+                }}
+                size="sm"
+              >
+                {t("t.cancel")}
+              </Button>
+            </Dialog.Footer>
+          </Dialog>
+          <Dialog
+            isOpen={!!exportModal}
+            ariaLabelledBy="export-lottery-modal-header"
+            ariaDescribedBy="export-lottery-modal-content"
+            onClose={() => setExportModal(false)}
+          >
+            <Dialog.Header id="export-lottery-modal-header">
+              {t("listings.lottery.export")}
+            </Dialog.Header>
+            <Dialog.Content id="export-lottery-modal-content">
+              <p>
+                {listing.listingMultiselectQuestions.length
+                  ? t("listings.lottery.exportContent")
+                  : t("listings.lottery.exportContentNoPreferences")}{" "}
+                {t("listings.lottery.exportContentTimestamp", {
+                  date: dayjs(listing.lotteryLastRunAt).format("MM/DD/YYYY"),
+                  time: dayjs(listing.lotteryLastRunAt).format("h:mm a"),
+                })}
+              </p>
+            </Dialog.Content>
+            <Dialog.Footer>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  // export lottery
+                  setExportModal(false)
+                }}
+                size="sm"
+              >
+                {t("t.export")}
+              </Button>
+              <Button
+                variant="primary-outlined"
+                onClick={() => {
+                  setExportModal(false)
                 }}
                 size="sm"
               >
