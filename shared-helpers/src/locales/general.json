@@ -456,6 +456,7 @@
   "authentication.terms.acceptExtended": "I have reviewed, understand and agree to the Terms of Use.",
   "authentication.terms.reviewTou": "Review Terms of Use",
   "authentication.terms.publicAccept": "You must accept the Terms of Use before creating an account.",
+  "authentication.terms.reviewToc": "Please review the Terms of Service",
   "authentication.terms.termsOfService": "View the Terms of Service here",
   "authentication.terms.termsOfUse": "Terms of Use",
   "authentication.terms.youMustAcceptToc": "To continue you must accept the Terms of Service",
