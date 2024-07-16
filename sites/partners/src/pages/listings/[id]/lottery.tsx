@@ -124,9 +124,10 @@ const Lottery = (props: { listing: Listing }) => {
               {/* TODO: Update dates */}
               <p>
                 {t("listings.lottery.partnerPublishTimestamp", {
-                  name: "NAME",
+                  adminName: t("listings.lottery.partnerPublishTimestampAdmin"),
                   date: "DATE",
                   time: "TIME",
+                  portal: t("listings.lottery.partnerPublishTimestampPortal"),
                 })}
               </p>
             </div>
@@ -161,8 +162,11 @@ const Lottery = (props: { listing: Listing }) => {
                   })}{" "}
                 </span>
               )}
-              {/* TODO: Update date */}
-              {t("listings.lottery.noDataDescriptionPartner", { date: "DATE" })}
+              {t("listings.lottery.noDataDescriptionPartner")}{" "}
+              <a href={`mailto:${t("listings.lottery.noDataEmail")}`}>
+                {t("listings.lottery.noDataEmail")}
+              </a>{" "}
+              {t("listings.lottery.noDataDescriptionPartnerEmail")}
             </div>
           </CardSection>
         )
@@ -336,7 +340,7 @@ const Lottery = (props: { listing: Listing }) => {
             </Dialog.Content>
             <Dialog.Footer>
               <Button
-                variant="primary"
+                variant={duplicatesExist ? "alert" : "primary"}
                 onClick={async () => {
                   setLoading(true)
                   // this is temporary, so that we can test this state in staging before the lottery api is finished - it just sets the lotteryLastRunAt field when you click run
@@ -368,7 +372,9 @@ const Lottery = (props: { listing: Listing }) => {
                 size="sm"
                 loadingMessage={loading ? t("t.loading") : undefined}
               >
-                {t("listings.lottery.runLottery")}
+                {duplicatesExist
+                  ? t("listings.lottery.runLotteryDuplicates")
+                  : t("listings.lottery.runLottery")}
               </Button>
               <Button
                 variant="primary-outlined"
@@ -405,7 +411,7 @@ const Lottery = (props: { listing: Listing }) => {
                 }}
                 size="sm"
               >
-                {t("listings.lottery.reRun")}
+                {t("listings.lottery.reRunUnderstand")}
               </Button>
               <Button
                 variant="primary-outlined"
@@ -475,8 +481,8 @@ const Lottery = (props: { listing: Listing }) => {
             <Dialog.Content id="export-lottery-modal-content">
               <p>
                 {listing.listingMultiselectQuestions.length
-                  ? t("listings.lottery.exportContent")
-                  : t("listings.lottery.exportContentNoPreferences")}{" "}
+                  ? t("listings.lottery.exportFile")
+                  : t("listings.lottery.exportFileNoPreferences")}{" "}
                 {t("listings.lottery.exportContentTimestamp", {
                   date: dayjs(listing.lotteryLastRunAt).format("MM/DD/YYYY"),
                   time: dayjs(listing.lotteryLastRunAt).format("h:mm a"),
