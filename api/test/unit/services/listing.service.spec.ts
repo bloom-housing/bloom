@@ -2953,7 +2953,7 @@ describe('Testing listing service', () => {
         .mockResolvedValue({ id: randomUUID() });
       prisma.cronJob.update = jest.fn().mockResolvedValue(true);
 
-      await service.expire_lotteries();
+      await service.expireLotteries();
       expect(prisma.listings.updateMany).toHaveBeenCalledWith({
         data: {
           lotteryStatus: LotteryStatusEnum.expired,

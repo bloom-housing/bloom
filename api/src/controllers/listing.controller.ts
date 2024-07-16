@@ -190,8 +190,8 @@ export class ListingController {
   @PermissionAction(permissionActions.update)
   @UseInterceptors(ActivityLogInterceptor)
   @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
-  async expire_lotteries(): Promise<SuccessDTO> {
-    return await this.listingService.expire_lotteries();
+  async expireLotteries(): Promise<SuccessDTO> {
+    return await this.listingService.expireLotteries();
   }
 
   @Put('lotteryStatus')

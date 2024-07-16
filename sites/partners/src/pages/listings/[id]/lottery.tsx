@@ -43,8 +43,7 @@ const Lottery = (props: { listing: Listing }) => {
   const { listingsService, profile } = useContext(AuthContext)
   const { data } = useFlaggedApplicationsMeta(listing?.id)
   const duplicatesExist = data?.totalPendingCount > 0
-  const shouldExpireData =
-    !profile?.userRoles.isAdmin && listing?.status === ListingsStatusEnum.closed
+  const shouldExpireData = !profile?.userRoles.isAdmin
   const expiryDate = dayjs(listing?.closedAt).add(45, "day")
   const formattedExpiryDate = expiryDate.format("MMMM D, YYYY")
 
@@ -248,7 +247,7 @@ const Lottery = (props: { listing: Listing }) => {
                             <ExclamationCirleIcon />
                           </Icon>
                           <Heading priority={2} size={"2xl"}>
-                            {t("listings.lottery.dataExpiryHeader")}
+                            {t("listings.lottery.noData")}
                           </Heading>
                           <div className={styles["card-description"]}>
                             {t("listings.lottery.dataExpiryDescription")}

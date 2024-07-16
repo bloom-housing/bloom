@@ -1579,10 +1579,10 @@ export class ListingService implements OnModuleInit {
     marks the db record for this cronjob as begun or creates a cronjob that
     is marked as begun if one does not already exist 
   */
-  async markCronJobAsStarted(cron_job_name: string): Promise<void> {
+  async markCronJobAsStarted(cronJobName: string): Promise<void> {
     const job = await this.prisma.cronJob.findFirst({
       where: {
-        name: cron_job_name,
+        name: cronJobName,
       },
     });
     if (job) {
@@ -1600,7 +1600,7 @@ export class ListingService implements OnModuleInit {
       await this.prisma.cronJob.create({
         data: {
           lastRunDate: new Date(),
-          name: cron_job_name,
+          name: cronJobName,
         },
       });
     }
@@ -1763,7 +1763,7 @@ export class ListingService implements OnModuleInit {
     runs the job to auto expire lotteries that are passed their due date
     will call the the cache purge to purge all listings as long as updates had to be made
   */
-  async expire_lotteries(): Promise<SuccessDTO> {
+  async expireLotteries(): Promise<SuccessDTO> {
     if (process.env.LOTTERY_DAYS_TILL_EXPIRY) {
       this.logger.warn('changeExpiredLotteryStatusCron job running');
       await this.markCronJobAsStarted(LOTTERY_CRON_JOB_NAME);
