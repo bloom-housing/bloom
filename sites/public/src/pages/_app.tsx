@@ -14,7 +14,7 @@ import {
   AuthProvider,
   MessageProvider,
 } from "@bloom-housing/shared-helpers"
-import { headScript, bodyTopTag, pageChangeHandler } from "../lib/customScripts"
+import { pageChangeHandler, gaLoadScript, gaCaptureScript } from "../lib/customScripts"
 import { AppSubmissionContext } from "../lib/applications/AppSubmissionContext"
 import ApplicationConductor, {
   loadApplicationFromAutosave,
@@ -60,16 +60,12 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     if (!document.body.dataset.customScriptsLoaded) {
       router.events.on("routeChangeComplete", pageChangeHandler)
 
-      const headScriptTag = document.createElement("script")
-      headScriptTag.textContent = headScript()
-      if (headScriptTag.textContent !== "") {
-        document.head.append(headScriptTag)
-      }
-
-      const bodyTopTagTmpl = document.createElement("template")
-      bodyTopTagTmpl.innerHTML = bodyTopTag()
-      if (bodyTopTagTmpl.innerHTML !== "") {
-        document.body.prepend(bodyTopTagTmpl.content.cloneNode(true))
+      // GA 4 Tracking
+      const gaLoadNode = gaLoadScript()
+      const gaCaptureNode = gaCaptureScript()
+      if (gaLoadNode && gaCaptureNode) {
+        document.head.append(gaLoadNode)
+        document.head.append(gaCaptureNode)
       }
 
       document.body.dataset.customScriptsLoaded = "true"
