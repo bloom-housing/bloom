@@ -16,6 +16,7 @@ import { LinkButton, t } from "@bloom-housing/ui-components"
 import styles from "./LandingSearch.module.scss"
 import { FormOption } from "./ListingsSearchModal"
 import { numericSearchFieldGenerator } from "./helpers"
+import { Dialog } from "@bloom-housing/ui-seeds"
 
 type LandingSearchProps = {
   bedrooms: FormOption[]
@@ -191,15 +192,19 @@ export function LandingSearch(props: LandingSearchProps) {
         </Button>
       </div>
 
-      <Modal
-        open={openCountyMapModal}
-        title={t("welcome.bayAreaCountyMap")}
-        headerClassNames="text-primary-dark text-2xl font-medium"
-        ariaDescription={t("welcome.bayAreaCountyMap")}
+      <Dialog
+        className="listings-search-dialog"
+        isOpen={openCountyMapModal}
         onClose={() => setOpenCountyMapModal(!openCountyMapModal)}
+        ariaLabelledBy="welcome-bay-area-county-map-header"
       >
-        <img src={"/images/county-map.png"} alt={t("welcome.bayAreaCountyMap")} />
-      </Modal>
+        <Dialog.Header id="welcome-bay-area-county-map-header">
+          {t("welcome.bayAreaCountyMap")}
+        </Dialog.Header>
+        <Dialog.Content>
+          <img src={"/images/county-map.png"} alt={t("welcome.bayAreaCountyMap")} />
+        </Dialog.Content>
+      </Dialog>
     </Card>
   )
 }

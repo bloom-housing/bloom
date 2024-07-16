@@ -152,4 +152,8 @@
       font-family: var(--seeds-font-serif);
     }
   }
+
+  .seeds-dialog.listings-search-dialog {
+    --dialog-width: 42rem;
+  }
 }

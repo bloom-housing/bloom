@@ -10,6 +10,7 @@ import {
   FieldGroup,
   FieldSingle,
 } from "@bloom-housing/doorway-ui-components"
+import { Dialog } from "@bloom-housing/ui-seeds"
 import { useForm } from "react-hook-form"
 import { numericSearchFieldGenerator } from "./helpers"
 
@@ -227,90 +228,92 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
   }, [monthlyRentFormatted])
 
   return (
-    <Modal
-      open={props.open}
+    <Dialog
+      className="listings-search-dialog"
+      isOpen={props.open}
       onClose={props.onClose}
-      title={t("search.filters")}
-      headerClassNames="bottom-border"
-      ariaDescription="Listing Search Filters"
-      actions={[
+      ariaLabelledBy="search-filters-header"
+    >
+      <Dialog.Header id="search-filters-header">{t("search.filters")}</Dialog.Header>
+      <Dialog.Content>
+        <div style={inputSectionStyle}>
+          <div style={sectionTitle}>{t("t.bedrooms")}</div>
+          <ButtonGroup
+            name="bedrooms"
+            options={bedroomOptions}
+            onChange={updateValue}
+            value={formValues.bedrooms}
+            spacing={ButtonGroupSpacing.left}
+          />
+        </div>
+
+        <div style={inputSectionStyle}>
+          <div style={sectionTitle}>{t("t.bathrooms")}</div>
+          <ButtonGroup
+            name="bathrooms"
+            options={bathroomOptions}
+            onChange={updateValue}
+            value={formValues.bathrooms}
+            spacing={ButtonGroupSpacing.left}
+          />
+        </div>
+        <div style={inputSectionStyle}>
+          <div style={sectionTitleTopBorder}>{t("t.monthlyRent")}</div>
+          <div style={rentStyle}>
+            <Field
+              type="currency"
+              name="minRent"
+              id="minRent"
+              register={register}
+              setValue={setValue}
+              getValues={getValues}
+              defaultValue={formValues.minRent}
+              placeholder={t("t.minPrice")}
+              className="doorway-field"
+              inputClassName="rent-input"
+              labelClassName="input-label"
+            ></Field>
+            <div style={hyphenContainerStyle}>
+              <div style={hyphenStyle}>-</div>
+            </div>
+            <Field
+              type="currency"
+              name="monthlyRent"
+              id="monthlyRent"
+              register={register}
+              setValue={setValue}
+              getValues={getValues}
+              defaultValue={formValues.monthlyRent}
+              placeholder={t("t.maxPrice")}
+              className="doorway-field"
+              inputClassName="rent-input"
+              labelClassName="input-label"
+            ></Field>
+          </div>
+        </div>
+
+        <div style={inputSectionStyle}>
+          <div style={sectionTitleTopBorder}>{t("t.counties")}</div>
+          <FieldGroup
+            name="counties"
+            fields={countyFields}
+            onChange={updateValueMulti}
+            register={register}
+            fieldGroupClassName="doorway-field-group grid grid-cols-2"
+            fieldLabelClassName="text-primary-dark font-medium tracking-wider text-2xs uppercase"
+          />
+        </div>
+        <img src={"/images/county-map.png"} alt={t("welcome.bayAreaCountyMap")} />
+      </Dialog.Content>
+      <Dialog.Footer>
         <Button type="button" className="is-secondary" onClick={onSubmit}>
           {t("t.showMatchingListings")}
-        </Button>,
-        <div style={{ flexGrow: 1 }}></div>,
+        </Button>
+        <div style={{ flexGrow: 1 }}></div>
         <button style={clearButtonStyle} onClick={clearValues}>
           {t("t.clearAllFilters")}
-        </button>,
-      ]}
-    >
-      <div style={inputSectionStyle}>
-        <div style={sectionTitle}>{t("t.bedrooms")}</div>
-        <ButtonGroup
-          name="bedrooms"
-          options={bedroomOptions}
-          onChange={updateValue}
-          value={formValues.bedrooms}
-          spacing={ButtonGroupSpacing.left}
-        />
-      </div>
-
-      <div style={inputSectionStyle}>
-        <div style={sectionTitle}>{t("t.bathrooms")}</div>
-        <ButtonGroup
-          name="bathrooms"
-          options={bathroomOptions}
-          onChange={updateValue}
-          value={formValues.bathrooms}
-          spacing={ButtonGroupSpacing.left}
-        />
-      </div>
-      <div style={inputSectionStyle}>
-        <div style={sectionTitleTopBorder}>{t("t.monthlyRent")}</div>
-        <div style={rentStyle}>
-          <Field
-            type="currency"
-            name="minRent"
-            id="minRent"
-            register={register}
-            setValue={setValue}
-            getValues={getValues}
-            defaultValue={formValues.minRent}
-            placeholder={t("t.minPrice")}
-            className="doorway-field"
-            inputClassName="rent-input"
-            labelClassName="input-label"
-          ></Field>
-          <div style={hyphenContainerStyle}>
-            <div style={hyphenStyle}>-</div>
-          </div>
-          <Field
-            type="currency"
-            name="monthlyRent"
-            id="monthlyRent"
-            register={register}
-            setValue={setValue}
-            getValues={getValues}
-            defaultValue={formValues.monthlyRent}
-            placeholder={t("t.maxPrice")}
-            className="doorway-field"
-            inputClassName="rent-input"
-            labelClassName="input-label"
-          ></Field>
-        </div>
-      </div>
-
-      <div style={inputSectionStyle}>
-        <div style={sectionTitleTopBorder}>{t("t.counties")}</div>
-        <FieldGroup
-          name="counties"
-          fields={countyFields}
-          onChange={updateValueMulti}
-          register={register}
-          fieldGroupClassName="doorway-field-group grid grid-cols-2"
-          fieldLabelClassName="text-primary-dark font-medium tracking-wider text-2xs uppercase"
-        />
-      </div>
-      <img src={"/images/county-map.png"} alt={t("welcome.bayAreaCountyMap")} />
-    </Modal>
+        </button>
+      </Dialog.Footer>
+    </Dialog>
   )
 }
