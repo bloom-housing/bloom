@@ -1764,37 +1764,39 @@ export class ListingService implements OnModuleInit {
     will call the the cache purge to purge all listings as long as updates had to be made
   */
   async expire_lotteries(): Promise<SuccessDTO> {
-    this.logger.warn('changeExpiredLotteryStatusCron job running');
-    await this.markCronJobAsStarted(LOTTERY_CRON_JOB_NAME);
-    const expiration_date = new Date();
-    expiration_date.setDate(
-      expiration_date.getDate() - Number(process.env.LOTTERY_DAYS_TILL_EXPIRY),
-    );
-    const res = await this.prisma.listings.updateMany({
-      data: {
-        lotteryStatus: LotteryStatusEnum.expired,
-      },
-      where: {
-        status: ListingsStatusEnum.closed,
-        reviewOrderType: ReviewOrderTypeEnum.lottery,
-        closedAt: {
-          lte: expiration_date,
+    if (process.env.LOTTERY_DAYS_TILL_EXPIRY) {
+      this.logger.warn('changeExpiredLotteryStatusCron job running');
+      await this.markCronJobAsStarted(LOTTERY_CRON_JOB_NAME);
+      const expiration_date = new Date();
+      expiration_date.setDate(
+        expiration_date.getDate() -
+          Number(process.env.LOTTERY_DAYS_TILL_EXPIRY),
+      );
+      const res = await this.prisma.listings.updateMany({
+        data: {
+          lotteryStatus: LotteryStatusEnum.expired,
         },
-        OR: [
-          {
-            lotteryStatus: {
-              not: LotteryStatusEnum.expired,
+        where: {
+          status: ListingsStatusEnum.closed,
+          reviewOrderType: ReviewOrderTypeEnum.lottery,
+          closedAt: {
+            lte: expiration_date,
+          },
+          OR: [
+            {
+              lotteryStatus: {
+                not: LotteryStatusEnum.expired,
+              },
             },
-          },
-          {
-            lotteryStatus: null,
-          },
-        ],
-      },
-    });
-    // TODO: add expired to history log for each listing
-    this.logger.warn(`Changed the status of ${res?.count} lotteries`);
-
+            {
+              lotteryStatus: null,
+            },
+          ],
+        },
+      });
+      // TODO: add expired to history log for each listing
+      this.logger.warn(`Changed the status of ${res?.count} lotteries`);
+    }
     return {
       success: true,
     };
