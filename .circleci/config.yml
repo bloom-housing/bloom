@@ -28,6 +28,7 @@ executors:
       GOOGLE_API_ID: "secret-key"
       GOOGLE_API_KEY: "secret-key"
       GOOGLE_CLOUD_PROJECT_ID: "secret-key"
+      LOTTERY_DAYS_TILL_EXPIRY: 45
 
   standard-node:
     docker:
