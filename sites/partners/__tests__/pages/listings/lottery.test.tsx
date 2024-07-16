@@ -7,10 +7,15 @@ import Lottery from "../../../src/pages/listings/[id]/lottery"
 import { mockNextRouter, render } from "../../testUtils"
 import {
   ListingMultiselectQuestion,
+  ListingsStatusEnum,
   LotteryStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const server = setupServer()
+const closedListing = {
+  ...listing,
+  status: ListingsStatusEnum.closed,
+}
 
 beforeAll(() => {
   server.listen()
@@ -62,12 +67,12 @@ describe("lottery", () => {
       })
     )
 
-    const { getAllByText, findByText } = render(<Lottery listing={listing} />)
+    const { getAllByText, findByText } = render(<Lottery listing={closedListing} />)
 
     const header = await findByText("Partners Portal")
     expect(header).toBeInTheDocument()
 
-    expect(getAllByText(listing.name).length).toBeGreaterThan(0)
+    expect(getAllByText(closedListing.name).length).toBeGreaterThan(0)
   })
 
   it("should render page if user is a jurisdictional admin", async () => {
@@ -85,12 +90,15 @@ describe("lottery", () => {
       })
     )
 
-    const { getAllByText, findByText } = render(<Lottery listing={listing} />)
+    const { getAllByText, getByText, findByText } = render(<Lottery listing={closedListing} />)
 
     const header = await findByText("Partners Portal")
     expect(header).toBeInTheDocument()
 
-    expect(getAllByText(listing.name).length).toBeGreaterThan(0)
+    expect(getAllByText(closedListing.name).length).toBeGreaterThan(0)
+    expect(
+      getByText("Lottery data for this listing will expire on", { exact: false })
+    ).toBeInTheDocument()
   })
 
   it("should render page if user is a partner with access to this listing", async () => {
@@ -114,12 +122,15 @@ describe("lottery", () => {
       })
     )
 
-    const { getAllByText, findByText } = render(<Lottery listing={listing} />)
+    const { getAllByText, getByText, findByText } = render(<Lottery listing={closedListing} />)
 
     const header = await findByText("Partners Portal")
     expect(header).toBeInTheDocument()
 
-    expect(getAllByText(listing.name).length).toBeGreaterThan(0)
+    expect(getAllByText(closedListing.name).length).toBeGreaterThan(0)
+    expect(
+      getByText("Lottery data for this listing will expire on", { exact: false })
+    ).toBeInTheDocument()
   })
 
   it("should not render page if user is a partner without access to this listing", () => {
@@ -143,11 +154,11 @@ describe("lottery", () => {
       })
     )
 
-    const { queryAllByText, queryByText } = render(<Lottery listing={listing} />)
+    const { queryAllByText, queryByText } = render(<Lottery listing={closedListing} />)
 
     const header = queryByText("Partners Portal")
     expect(header).not.toBeInTheDocument()
-    expect(queryAllByText(listing.name).length).toBe(0)
+    expect(queryAllByText(closedListing.name).length).toBe(0)
   })
 
   it("should show no lottery run state if user is an admin and lottery has not been run", async () => {
@@ -170,7 +181,7 @@ describe("lottery", () => {
       })
     )
 
-    const { getByText, findByText } = render(<Lottery listing={listing} />)
+    const { getByText, findByText } = render(<Lottery listing={closedListing} />)
 
     const header = await findByText("Partners Portal")
     expect(header).toBeInTheDocument()
@@ -204,7 +215,7 @@ describe("lottery", () => {
     )
 
     const { getByText, findByText } = render(
-      <Lottery listing={{ ...listing, lotteryLastRunAt: new Date() }} />
+      <Lottery listing={{ ...closedListing, lotteryLastRunAt: new Date() }} />
     )
 
     const header = await findByText("Partners Portal")
@@ -239,7 +250,7 @@ describe("lottery", () => {
     )
 
     const { getByText, findByText } = render(
-      <Lottery listing={{ ...listing, lotteryLastRunAt: new Date() }} />
+      <Lottery listing={{ ...closedListing, lotteryLastRunAt: new Date() }} />
     )
 
     const header = await findByText("Partners Portal")
@@ -271,7 +282,7 @@ describe("lottery", () => {
     )
 
     const { getByText, findByText } = render(
-      <Lottery listing={{ ...listing, lotteryLastRunAt: new Date() }} />
+      <Lottery listing={{ ...closedListing, lotteryLastRunAt: new Date() }} />
     )
 
     const header = await findByText("Partners Portal")
@@ -306,12 +317,13 @@ describe("lottery", () => {
       })
     )
 
-    const { getByText, findByText } = render(<Lottery listing={listing} />)
+    const { getByText, findByText } = render(<Lottery listing={closedListing} />)
 
     const header = await findByText("Partners Portal")
     expect(header).toBeInTheDocument()
 
     fireEvent.click(getByText("Run lottery"))
+    expect(getByText("This data will expire on", { exact: false })).toBeInTheDocument()
     expect(await findByText("Confirmation needed")).toBeInTheDocument()
     expect(
       getByText("Make sure to add all paper applications before running the lottery.")
@@ -338,12 +350,13 @@ describe("lottery", () => {
       })
     )
 
-    const { getByText, findByText } = render(<Lottery listing={listing} />)
+    const { getByText, findByText } = render(<Lottery listing={closedListing} />)
 
     const header = await findByText("Partners Portal")
     expect(header).toBeInTheDocument()
 
     fireEvent.click(getByText("Run lottery"))
+    expect(getByText("This data will expire on", { exact: false })).toBeInTheDocument()
     expect(await findByText("Confirmation needed")).toBeInTheDocument()
     expect(getByText("5 unresolved duplicate sets.")).toBeInTheDocument()
     expect(getByText("Run lottery without resolving duplicates")).toBeInTheDocument()
@@ -369,7 +382,10 @@ describe("lottery", () => {
       })
     )
 
-    const updatedListing = { ...listing, lotteryLastRunAt: new Date("September 6, 2025 8:15:00") }
+    const updatedListing = {
+      ...closedListing,
+      lotteryLastRunAt: new Date("September 6, 2025 8:15:00"),
+    }
     const { getByText, findByText, findAllByText, getAllByText } = render(
       <Lottery listing={updatedListing} />
     )
@@ -413,7 +429,7 @@ describe("lottery", () => {
     )
 
     const updatedListing = {
-      ...listing,
+      ...closedListing,
       lotteryLastRunAt: new Date("September 6, 2025 8:15:00"),
       listingMultiselectQuestions: [{ multiselectQuestions: {} } as ListingMultiselectQuestion],
     }
@@ -462,7 +478,7 @@ describe("lottery", () => {
     )
 
     const updatedListing = {
-      ...listing,
+      ...closedListing,
       lotteryStatus: LotteryStatusEnum.ran,
     }
 
@@ -498,7 +514,7 @@ describe("lottery", () => {
     )
 
     const updatedListing = {
-      ...listing,
+      ...closedListing,
       lotteryStatus: LotteryStatusEnum.releasedToPartners,
     }
 
@@ -539,7 +555,7 @@ describe("lottery", () => {
     )
 
     const updatedListing = {
-      ...listing,
+      ...closedListing,
       lotteryStatus: LotteryStatusEnum.publishedToPublic,
     }
 
@@ -550,5 +566,45 @@ describe("lottery", () => {
 
     expect(getByText("Export lottery data")).toBeInTheDocument()
     expect(getByText("Export")).toBeInTheDocument()
+  })
+
+  it("should show lottery expired state as a partner", async () => {
+    mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { isAdmin: false, isJurisdictionalAdmin: true },
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
+      })
+    )
+
+    const updatedListing = {
+      ...closedListing,
+      status: ListingsStatusEnum.closed,
+      lotteryStatus: LotteryStatusEnum.expired,
+    }
+
+    const { getByText, findByText, queryByText } = render(<Lottery listing={updatedListing} />)
+
+    const header = await findByText("Partners Portal")
+    expect(header).toBeInTheDocument()
+
+    expect(getByText("No lottery data")).toBeInTheDocument()
+    expect(
+      getByText("Lottery data has expired for this listing and is no longer available for export.")
+    ).toBeInTheDocument()
+    expect(queryByText("Publish")).not.toBeInTheDocument()
+    expect(queryByText("Run lottery")).not.toBeInTheDocument()
+    expect(queryByText("Release lottery")).not.toBeInTheDocument()
   })
 })
