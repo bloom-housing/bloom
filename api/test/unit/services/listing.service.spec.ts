@@ -2945,6 +2945,42 @@ describe('Testing listing service', () => {
     });
   });
 
+  describe('Test expireLotteries endpoint', () => {
+    it('should call the updateMany', async () => {
+      prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 2 });
+      prisma.cronJob.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+      prisma.cronJob.update = jest.fn().mockResolvedValue(true);
+
+      await service.expire_lotteries();
+      expect(prisma.listings.updateMany).toHaveBeenCalledWith({
+        data: {
+          lotteryStatus: LotteryStatusEnum.expired,
+        },
+        where: {
+          status: ListingsStatusEnum.closed,
+          reviewOrderType: ReviewOrderTypeEnum.lottery,
+          closedAt: {
+            lte: expect.anything(),
+          },
+          OR: [
+            {
+              lotteryStatus: {
+                not: LotteryStatusEnum.expired,
+              },
+            },
+            {
+              lotteryStatus: null,
+            },
+          ],
+        },
+      });
+      expect(prisma.cronJob.findFirst).toHaveBeenCalled();
+      expect(prisma.cronJob.update).toHaveBeenCalled();
+    });
+  });
+
   describe('Test lotteryStatus endpoint', () => {
     const adminUser = {
       id: 'admin id',
@@ -3262,7 +3298,5 @@ describe('Testing listing service', () => {
         },
       });
     });
-
-    it.todo('should update status to expired');
   });
 });
