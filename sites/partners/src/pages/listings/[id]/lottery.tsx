@@ -300,6 +300,7 @@ const Lottery = (props: { listing: Listing }) => {
                     setLoading(true)
                     await applicationsService.lotteryGenerate({ body: { listingId: listing.id } })
                     setRunModal(false)
+                    setLoading(false)
                     location.reload()
                   } catch (err) {
                     console.log(err)

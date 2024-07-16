@@ -2,6 +2,7 @@ import fs, { createReadStream } from 'fs';
 import { join } from 'path';
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   StreamableFile,
 } from '@nestjs/common';
@@ -806,8 +807,9 @@ export class ApplicationCsvExporterService
     queryParams: QueryParams,
   ): Promise<SuccessDTO> {
     const user = mapTo(User, req['user']);
-    await this.authorizeCSVExport(user, queryParams.listingId);
-
+    if (!user?.userRoles?.isAdmin) {
+      throw new ForbiddenException();
+    }
     const listing = await this.prisma.listings.findUnique({
       select: {
         id: true,
@@ -825,61 +827,70 @@ export class ApplicationCsvExporterService
       );
     }
 
-    const applications = await this.prisma.applications.findMany({
-      select: {
-        id: true,
-        preferences: true,
-        householdMember: {
-          select: {
-            id: true,
+    try {
+      const applications = await this.prisma.applications.findMany({
+        select: {
+          id: true,
+          preferences: true,
+          householdMember: {
+            select: {
+              id: true,
+            },
+          },
+          applicationLotteryPositions: {
+            select: {
+              ordinal: true,
+              multiselectQuestionId: true,
+            },
+            where: {
+              multiselectQuestionId: null,
+            },
+            orderBy: {
+              ordinal: OrderByEnum.DESC,
+            },
           },
         },
-        applicationLotteryPositions: {
-          select: {
-            ordinal: true,
-            multiselectQuestionId: true,
-          },
-          where: {
-            multiselectQuestionId: null,
-          },
-          orderBy: {
-            ordinal: OrderByEnum.DESC,
-          },
+        where: {
+          listingId: queryParams.listingId,
+          deletedAt: null,
+          markedAsDuplicate: false,
         },
-      },
-      where: {
-        listingId: queryParams.listingId,
-        deletedAt: null,
-        markedAsDuplicate: false,
-      },
-    });
+      });
 
-    // get all multiselect questions for a listing to build csv headers
-    const multiSelectQuestions =
-      await this.multiselectQuestionService.findByListingId(
+      // get all multiselect questions for a listing to build csv headers
+      const multiSelectQuestions =
+        await this.multiselectQuestionService.findByListingId(
+          queryParams.listingId,
+        );
+
+      await this.lotteryRandomizer(
         queryParams.listingId,
+        mapTo(Application, applications),
+        multiSelectQuestions.filter(
+          (multiselectQuestion) =>
+            multiselectQuestion.applicationSection ===
+            MultiselectQuestionsApplicationSectionEnum.preferences,
+        ),
       );
 
-    await this.lotteryRandomizer(
-      queryParams.listingId,
-      mapTo(Application, applications),
-      multiSelectQuestions.filter(
-        (multiselectQuestion) =>
-          multiselectQuestion.applicationSection ===
-          MultiselectQuestionsApplicationSectionEnum.preferences,
-      ),
-    );
-
-    await this.prisma.listings.update({
-      data: {
-        lotteryLastRunAt: new Date(),
-        lotteryStatus: LotteryStatusEnum.ran,
-      },
-      where: {
-        id: queryParams.listingId,
-      },
-    });
-
+      await this.listingService.lotteryStatus(
+        {
+          listingId: queryParams.listingId,
+          lotteryStatus: LotteryStatusEnum.ran,
+        },
+        user,
+      );
+    } catch (e) {
+      console.error(e);
+      await this.listingService.lotteryStatus(
+        {
+          listingId: queryParams.listingId,
+          lotteryStatus: LotteryStatusEnum.errored,
+        },
+        user,
+      );
+      return { success: false };
+    }
     return { success: true };
   }
 
@@ -989,8 +1000,7 @@ export class ApplicationCsvExporterService
                         parsePreference = false;
                         // there aren't typically many preferences, but if there, then a object map should be created and used
                         const preference = preferences.find(
-                          (preference) =>
-                            preference.multiselectQuestionId === curr,
+                          (preference) => preference.key === curr,
                         );
                         multiselectQuestionValue = true;
                         return preference;

@@ -6,6 +6,7 @@ import {
   ApplicationSubmissionTypeEnum,
   IncomePeriodEnum,
   LanguagesEnum,
+  ListingsStatusEnum,
   LotteryStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
   Prisma,
@@ -1546,7 +1547,7 @@ describe('Application Controller Tests', () => {
   });
 
   describe('generateLotteryResults endpoint', () => {
-    it('should generate results when no previous attempt to run lotteries has happened', async () => {
+    it('should generate results when no previous attempt to run lotteries has happened (no preferences)', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
@@ -1555,7 +1556,9 @@ describe('Application Controller Tests', () => {
         data: jurisdictionFactory(),
       });
       await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
-      const listing1 = await listingFactory(jurisdiction.id, prisma);
+      const listing1 = await listingFactory(jurisdiction.id, prisma, {
+        status: ListingsStatusEnum.closed,
+      });
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
@@ -1631,6 +1634,214 @@ describe('Application Controller Tests', () => {
       expect(updatedListing.lotteryStatus).toEqual(LotteryStatusEnum.ran);
     });
 
+    it('should generate results when no previous attempt to run lotteries has happened (with preferences)', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
+      const listing1 = await listingFactory(jurisdiction.id, prisma, {
+        status: ListingsStatusEnum.closed,
+      });
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+
+      const preferenceAId = await createMultiselectQuestion(
+        jurisdiction.id,
+        listing1Created.id,
+        MultiselectQuestionsApplicationSectionEnum.preferences,
+      );
+
+      const preferenceA = await prisma.multiselectQuestions.findUnique({
+        where: {
+          id: preferenceAId,
+        },
+      });
+
+      const preferenceBId = await createMultiselectQuestion(
+        jurisdiction.id,
+        listing1Created.id,
+        MultiselectQuestionsApplicationSectionEnum.preferences,
+      );
+
+      const preferenceB = await prisma.multiselectQuestions.findUnique({
+        where: {
+          id: preferenceBId,
+        },
+      });
+
+      const appA = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        listingId: listing1Created.id,
+      });
+
+      const applicationA = await prisma.applications.create({
+        data: {
+          ...appA,
+          preferences: [
+            {
+              multiselectQuestionId: preferenceA,
+              key: preferenceA.text,
+              claimed: true,
+              options: [],
+            },
+            {
+              multiselectQuestionId: preferenceB,
+              key: preferenceB.text,
+              claimed: true,
+              options: [],
+            },
+          ],
+        },
+        include: {
+          applicant: true,
+        },
+      });
+
+      const appB = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        listingId: listing1Created.id,
+      });
+
+      const applicationB = await prisma.applications.create({
+        data: {
+          ...appB,
+          preferences: [
+            {
+              multiselectQuestionId: preferenceA,
+              key: preferenceA.text,
+              claimed: true,
+              options: [],
+            },
+            {
+              multiselectQuestionId: preferenceB,
+              key: preferenceB.text,
+              claimed: false,
+              options: [],
+            },
+          ],
+        },
+        include: {
+          applicant: true,
+        },
+      });
+
+      const appC = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        listingId: listing1Created.id,
+      });
+
+      const applicationC = await prisma.applications.create({
+        data: {
+          ...appC,
+          preferences: [
+            {
+              multiselectQuestionId: preferenceA,
+              key: preferenceA.text,
+              claimed: false,
+              options: [],
+            },
+            {
+              multiselectQuestionId: preferenceB,
+              key: preferenceB.text,
+              claimed: true,
+              options: [],
+            },
+          ],
+        },
+        include: {
+          applicant: true,
+        },
+      });
+
+      await request(app.getHttpServer())
+        .put(`/applications/generateLotteryResults`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          listingId: listing1Created.id,
+        })
+        .set('Cookie', cookies)
+        .expect(200);
+
+      const lotteryPositions =
+        await prisma.applicationLotteryPositions.findMany({
+          where: {
+            listingId: listing1Created.id,
+            multiselectQuestionId: null,
+          },
+        });
+
+      expect(
+        lotteryPositions.some((pos) => pos.applicationId === applicationA.id),
+      ).toBe(true);
+      expect(
+        lotteryPositions.some((pos) => pos.applicationId === applicationB.id),
+      ).toBe(true);
+      expect(
+        lotteryPositions.some((pos) => pos.applicationId === applicationC.id),
+      ).toBe(true);
+
+      const prefALotteryPositions =
+        await prisma.applicationLotteryPositions.findMany({
+          where: {
+            listingId: listing1Created.id,
+            multiselectQuestionId: preferenceAId,
+          },
+        });
+
+      expect(
+        prefALotteryPositions.some(
+          (pos) => pos.applicationId === applicationA.id,
+        ),
+      ).toBe(true);
+      expect(
+        prefALotteryPositions.some(
+          (pos) => pos.applicationId === applicationB.id,
+        ),
+      ).toBe(true);
+      expect(
+        prefALotteryPositions.some(
+          (pos) => pos.applicationId === applicationC.id,
+        ),
+      ).toBe(false);
+
+      const prefBLotteryPositions =
+        await prisma.applicationLotteryPositions.findMany({
+          where: {
+            listingId: listing1Created.id,
+            multiselectQuestionId: preferenceBId,
+          },
+        });
+
+      expect(
+        prefBLotteryPositions.some(
+          (pos) => pos.applicationId === applicationA.id,
+        ),
+      ).toBe(true);
+      expect(
+        prefBLotteryPositions.some(
+          (pos) => pos.applicationId === applicationB.id,
+        ),
+      ).toBe(false);
+      expect(
+        prefBLotteryPositions.some(
+          (pos) => pos.applicationId === applicationC.id,
+        ),
+      ).toBe(true);
+
+      const updatedListing = await prisma.listings.findUnique({
+        where: {
+          id: listing1Created.id,
+        },
+      });
+
+      expect(updatedListing.lotteryStatus).toEqual(LotteryStatusEnum.ran);
+    });
+
     it('should throw an error when a run of lotteries already occured', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
@@ -1640,7 +1851,9 @@ describe('Application Controller Tests', () => {
         data: jurisdictionFactory(),
       });
       await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
-      const listing1 = await listingFactory(jurisdiction.id, prisma);
+      const listing1 = await listingFactory(jurisdiction.id, prisma, {
+        status: ListingsStatusEnum.closed,
+      });
       const listing1Created = await prisma.listings.create({
         data: {
           ...listing1,
