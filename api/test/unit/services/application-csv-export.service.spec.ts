@@ -2,6 +2,7 @@ import { randomUUID } from 'crypto';
 import { PassThrough } from 'stream';
 import { Test, TestingModule } from '@nestjs/testing';
 import {
+  ListingsStatusEnum,
   LotteryStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
 } from '@prisma/client';
@@ -931,6 +932,7 @@ describe('Testing application CSV export service', () => {
         lastName: 'requesting lName',
         email: 'requestingUser@email.com',
         jurisdictions: [{ id: 'juris id' }],
+        userRoles: { isAdmin: true },
       } as unknown as User;
 
       permissionService.canOrThrow = jest.fn().mockResolvedValue(true);
@@ -938,6 +940,7 @@ describe('Testing application CSV export service', () => {
         id: listingId,
         lotteryLastRunAt: null,
         lotteryStatus: null,
+        status: ListingsStatusEnum.closed,
       });
       const applications = mockApplicationSet(5, new Date());
       prisma.applications.findMany = jest.fn().mockReturnValue(applications);
@@ -1039,6 +1042,7 @@ describe('Testing application CSV export service', () => {
         lastName: 'requesting lName',
         email: 'requestingUser@email.com',
         jurisdictions: [{ id: 'juris id' }],
+        userRoles: { isAdmin: true },
       } as unknown as User;
 
       permissionService.canOrThrow = jest.fn().mockResolvedValue(true);

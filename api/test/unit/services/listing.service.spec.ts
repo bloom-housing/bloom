@@ -3255,6 +3255,7 @@ describe('Testing listing service', () => {
       );
       expect(prisma.listings.update).toHaveBeenCalledWith({
         data: {
+          lotteryLastRunAt: expect.anything(),
           lotteryStatus: LotteryStatusEnum.ran,
         },
         where: {
