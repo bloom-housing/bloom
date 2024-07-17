@@ -11,7 +11,11 @@ import {
   MaxLength,
   ValidateNested,
 } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  ApiProperty,
+  ApiPropertyOptional,
+  ApiResponseProperty,
+} from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { AbstractDTO } from '../shared/abstract.dto';
 import {
@@ -420,6 +424,11 @@ class Listing extends AbstractDTO {
     enumName: 'LotteryStatusEnum',
   })
   lotteryStatus?: LotteryStatusEnum;
+
+  @Expose()
+  @IsNumber()
+  @ApiResponseProperty()
+  lotteryDaysToExpiration?: number;
 
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })

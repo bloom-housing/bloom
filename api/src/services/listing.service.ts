@@ -501,6 +501,12 @@ export class ListingService implements OnModuleInit {
       result = await this.translationService.translateListing(result, lang);
     }
 
+    if (process.env.LOTTERY_DAYS_TILL_EXPIRY) {
+      result.lotteryDaysToExpiration = Number(
+        process.env.LOTTERY_DAYS_TILL_EXPIRY,
+      );
+    }
+
     await this.addUnitsSummarized(result);
     return result;
   }
