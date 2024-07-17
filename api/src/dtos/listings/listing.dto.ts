@@ -587,6 +587,11 @@ class Listing extends AbstractDTO {
     },
   )
   requestedChangesUser?: IdDTO;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  lotteryOptIn?: boolean;
 }
 
 export { Listing as default, Listing };

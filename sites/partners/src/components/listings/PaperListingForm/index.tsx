@@ -13,6 +13,7 @@ import {
   ListingsStatusEnum,
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
+  YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useForm, FormProvider } from "react-hook-form"
 import {
@@ -310,6 +311,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           <SelectAndOrder
                             addText={t("listings.addPreference")}
                             drawerTitle={t("listings.addPreferences")}
+                            drawerSubtitle={
+                              process.env.showLottery && listing.lotteryOptIn
+                                ? t("listings.lotteryPreferenceSubtitle")
+                                : null
+                            }
                             editText={t("listings.editPreferences")}
                             listingData={preferences || []}
                             setListingData={setPreferences}

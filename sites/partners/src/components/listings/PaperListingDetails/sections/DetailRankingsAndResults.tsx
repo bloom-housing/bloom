@@ -32,6 +32,13 @@ const DetailRankingsAndResults = () => {
           </FieldValue>
         </Grid.Row>
       )}
+      {listing.reviewOrderType === ReviewOrderTypeEnum.lottery && process.env.showLottery && (
+        <Grid.Row>
+          <FieldValue id="lotteryOptInQuestion" label={t("listings.lotteryOptInQuestion")}>
+            {listing?.lotteryOptIn ? t("t.yes") : t("t.no")}
+          </FieldValue>
+        </Grid.Row>
+      )}
       {lotteryEvent && (
         <>
           <Grid.Row>

@@ -354,7 +354,7 @@ export class ListingsService {
       body?: ListingLotteryStatus
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Listing> {
+  ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/listings/lotteryStatus"
 
@@ -3081,6 +3081,9 @@ export interface Listing {
 
   /**  */
   requestedChangesUser?: IdDTO
+
+  /**  */
+  lotteryOptIn?: boolean
 }
 
 export interface PaginationMeta {
@@ -3527,6 +3530,9 @@ export interface ListingCreate {
   requestedChangesDate?: Date
 
   /**  */
+  lotteryOptIn?: boolean
+
+  /**  */
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
@@ -3790,6 +3796,9 @@ export interface ListingUpdate {
 
   /**  */
   requestedChangesDate?: Date
+
+  /**  */
+  lotteryOptIn?: boolean
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
