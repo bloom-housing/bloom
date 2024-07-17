@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import { Button } from "@bloom-housing/ui-seeds"
+import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import { Field, Form, FormCard, t } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
@@ -43,48 +43,44 @@ const ReRequestConfirmation = ({
   }
 
   return (
-    <FormCard>
-      <div className="form-card__lead text-center border-b mx-0 px-5">
-        <p className="mt-4 field-note">{t("users.requestResendExplanation")}</p>
-      </div>
-
+    <>
+      <Dialog.Header id="request-resend-dialog-header">
+        {t("authentication.createAccount.errors.tokenExpired")}
+      </Dialog.Header>
       <Form id="re-request-confirmation" onSubmit={handleSubmit(onSubmit)}>
-        <div className="form-card__group is-borderless">
-          <fieldset>
-            <div className="mt-5">
-              <Field
-                name="email"
-                id="email"
-                label={t("t.email")}
-                validation={{
-                  required: true,
-                }}
-                error={!!errors?.email}
-                errorMessage={t("authentication.signIn.loginError")}
-                register={register}
-                className={"mb-1"}
-              />
-            </div>
-          </fieldset>
-        </div>
+        <Dialog.Content>
+          <p id="request-resend-dialog-explanation">{t("users.requestResendExplanation")}</p>
 
-        <div className="form-card__pager mt-8">
-          <div className="form-card__pager-row primary">
-            <Button type="submit" variant="primary" className={"items-center"}>
-              {t("users.requestResend")}
-            </Button>
-            <Button
-              variant="primary-outlined"
-              onClick={() => {
-                clearErrors(), onClose(false)
+          <fieldset>
+            <Field
+              name="email"
+              id="email"
+              label={t("t.email")}
+              validation={{
+                required: true,
               }}
-            >
-              {t("t.cancel")}
-            </Button>
-          </div>
-        </div>
+              error={!!errors?.email}
+              errorMessage={t("authentication.signIn.loginError")}
+              register={register}
+              className={"mb-1"}
+            />
+          </fieldset>
+        </Dialog.Content>
+        <Dialog.Footer>
+          <Button type="submit" variant="primary" className={"items-center"}>
+            {t("users.requestResend")}
+          </Button>
+          <Button
+            variant="primary-outlined"
+            onClick={() => {
+              clearErrors(), onClose(false)
+            }}
+          >
+            {t("t.cancel")}
+          </Button>
+        </Dialog.Footer>
       </Form>
-    </FormCard>
+    </>
   )
 }
 

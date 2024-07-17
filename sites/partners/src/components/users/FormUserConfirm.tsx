@@ -1,7 +1,7 @@
 import React, { useRef, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { t, FormCard, Form, Field, useMutate, AlertBox, Modal } from "@bloom-housing/ui-components"
-import { Button, Icon } from "@bloom-housing/ui-seeds"
+import { Button, Dialog, Icon } from "@bloom-housing/ui-seeds"
 import { AuthContext, MessageContext, passwordRegex } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import { ReRequestConfirmation } from "./ReRequestConfirmation"
@@ -181,18 +181,18 @@ const FormUserConfirm = () => {
         </Form>
       </FormCard>
 
-      <Modal
-        open={rerequestModalOpen}
-        title={t("authentication.createAccount.errors.tokenExpired")}
-        ariaDescription={t("users.requestResendDescription")}
+      <Dialog
+        isOpen={rerequestModalOpen}
         onClose={() => setRerequestModalOpen(false)}
+        ariaLabelledBy="request-resend-dialog-header"
+        ariaDescribedBy="request-resend-dialog-explanation"
       >
         <ReRequestConfirmation
           onClose={setRerequestModalOpen}
           clearExistingErrors={resetMutation}
           setAlert={setNewConfirmationRequested}
         />
-      </Modal>
+      </Dialog>
     </>
   )
 }
