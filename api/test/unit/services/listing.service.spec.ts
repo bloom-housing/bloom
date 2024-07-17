@@ -40,6 +40,8 @@ import { User } from '../../../src/dtos/users/user.dto';
 import { EmailService } from '../../../src/services/email.service';
 import { PermissionService } from '../../../src/services/permission.service';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
+import { ApplicationService } from '../../../src/services/application.service';
+import { GeocodingService } from '../../../src/services/geocoding.service';
 
 /*
   generates a super simple mock listing for us to test logic with
@@ -159,6 +161,8 @@ describe('Testing listing service', () => {
         ListingService,
         PrismaService,
         TranslationService,
+        ApplicationService,
+        GeocodingService,
         {
           provide: GoogleTranslateService,
           useValue: googleTranslateServiceMock,
@@ -3105,6 +3109,10 @@ describe('Testing listing service', () => {
         emails: ['admin@email.com', 'partner@email.com'],
       });
 
+      jest.spyOn(service, 'getPublicUserEmailInfo').mockResolvedValueOnce({
+        en: ['applicant@email.com'],
+      });
+
       await service.lotteryStatus(
         {
           listingId: randomUUID(),
@@ -3153,6 +3161,12 @@ describe('Testing listing service', () => {
         lotteryStatus: LotteryStatusEnum.ran,
       });
       prisma.listings.update = jest.fn().mockResolvedValue(null);
+      jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
+        emails: ['admin@email.com', 'partner@email.com'],
+      });
+      jest.spyOn(service, 'getPublicUserEmailInfo').mockResolvedValueOnce({
+        en: ['applicant@email.com'],
+      });
 
       await expect(
         async () =>
@@ -3189,6 +3203,12 @@ describe('Testing listing service', () => {
         name: 'example name',
         status: ListingsStatusEnum.closed,
         lotteryStatus: LotteryStatusEnum.publishedToPublic,
+      });
+      jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
+        emails: ['admin@email.com', 'partner@email.com'],
+      });
+      jest.spyOn(service, 'getPublicUserEmailInfo').mockResolvedValueOnce({
+        en: ['applicant@email.com'],
       });
 
       await service.lotteryStatus(
@@ -3293,6 +3313,9 @@ describe('Testing listing service', () => {
         name: 'example name',
         status: ListingsStatusEnum.closed,
         lotteryStatus: LotteryStatusEnum.ran,
+      });
+      jest.spyOn(service, 'getPublicUserEmailInfo').mockResolvedValueOnce({
+        en: ['applicant@email.com'],
       });
 
       await service.lotteryStatus(

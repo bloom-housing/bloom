@@ -3,6 +3,8 @@ import { INestApplication } from '@nestjs/common';
 import {
   ApplicationAddressTypeEnum,
   ApplicationMethodsTypeEnum,
+  ApplicationStatusEnum,
+  ApplicationSubmissionTypeEnum,
   LanguagesEnum,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
@@ -59,11 +61,21 @@ describe('Listing Controller Tests', () => {
     changesRequested: async () => {},
     listingApproved: async () => {},
     lotteryReleased: async () => {},
+    lotteryPublishedAdmin: async () => {},
+    lotteryPublishedApplicant: async () => {},
   };
   const mockChangesRequested = jest.spyOn(testEmailService, 'changesRequested');
   const mockRequestApproval = jest.spyOn(testEmailService, 'requestApproval');
   const mockListingApproved = jest.spyOn(testEmailService, 'listingApproved');
   const mockLotteryReleased = jest.spyOn(testEmailService, 'lotteryReleased');
+  const mockLotteryPublishedAdmin = jest.spyOn(
+    testEmailService,
+    'lotteryPublishedAdmin',
+  );
+  const mockLotteryPublishedApplicant = jest.spyOn(
+    testEmailService,
+    'lotteryPublishedApplicant',
+  );
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -1182,6 +1194,107 @@ describe('Listing Controller Tests', () => {
         .set('Cookie', adminAccessToken)
         .expect(200);
       expect(res.body.success).toEqual(true);
+    });
+
+    it('should update listing lottery status to publishedToPublic from releasedToPartners', async () => {
+      const jurisdictionA = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
+      const listingData = await listingFactory(jurisdictionA.id, prisma, {
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: LotteryStatusEnum.releasedToPartners,
+        applications: [
+          {
+            preferences: [],
+            status: ApplicationStatusEnum.submitted,
+            confirmationCode: 'ABCD1234',
+            submissionType: ApplicationSubmissionTypeEnum.electronical,
+            language: LanguagesEnum.en,
+            applicant: {
+              create: {
+                emailAddress: 'applicant@email.com',
+              },
+            },
+          },
+          {
+            preferences: [],
+            status: ApplicationStatusEnum.submitted,
+            confirmationCode: 'EFGH5678',
+            submissionType: ApplicationSubmissionTypeEnum.electronical,
+            language: LanguagesEnum.es,
+            applicant: {
+              create: {
+                emailAddress: 'applicant2@email.com',
+              },
+            },
+          },
+          {
+            preferences: [],
+            status: ApplicationStatusEnum.submitted,
+            confirmationCode: 'IJKL9012',
+            submissionType: ApplicationSubmissionTypeEnum.electronical,
+            language: null,
+            applicant: {
+              create: {
+                emailAddress: 'applicant3@email.com',
+              },
+            },
+          },
+        ],
+      });
+      const listing = await prisma.listings.create({
+        data: listingData,
+      });
+
+      const partnerUser = await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: {
+            isPartner: true,
+            isAdmin: false,
+            isJurisdictionalAdmin: false,
+          },
+          listings: [listing.id],
+          jurisdictionIds: [jurisdictionA.id],
+          confirmedAt: new Date(),
+        }),
+      });
+
+      const res = await request(app.getHttpServer())
+        .put('/listings/lotteryStatus')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          listingId: listing.id,
+          lotteryStatus: LotteryStatusEnum.publishedToPublic,
+        })
+        .set('Cookie', adminAccessToken)
+        .expect(200);
+      expect(res.body.success).toEqual(true);
+
+      expect(mockLotteryPublishedAdmin).toBeCalledWith(
+        expect.objectContaining({
+          email: adminUser.email,
+        }),
+        {
+          id: listing.id,
+          name: listing.name,
+          juris: expect.stringMatching(jurisdictionA.id),
+        },
+        expect.arrayContaining([partnerUser.email, adminUser.email]),
+        process.env.PARTNERS_PORTAL_URL,
+      );
+
+      expect(mockLotteryPublishedApplicant).toBeCalledWith(
+        {
+          id: listing.id,
+          name: listing.name,
+          juris: expect.stringMatching(jurisdictionA.id),
+        },
+        expect.objectContaining({
+          en: ['applicant@email.com', 'applicant3@email.com'],
+          es: ['applicant2@email.com'],
+        }),
+      );
     });
   });
 });

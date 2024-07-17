@@ -360,7 +360,7 @@ describe('Testing email service', () => {
       expect(emailMock.to).toEqual(emailArr);
       expect(emailMock.subject).toEqual('Listing approval requested');
       expect(emailMock.html).toMatch(
-        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" width="auto" height="137" />`,
+        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto" />`,
       );
 
       expect(emailMock.html).toMatch('Hello,');
@@ -402,7 +402,7 @@ describe('Testing email service', () => {
       expect(emailMock.to).toEqual(emailArr);
       expect(emailMock.subject).toEqual('Listing changes requested');
       expect(emailMock.html).toMatch(
-        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" width="auto" height="137" />`,
+        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto" />`,
       );
       expect(emailMock.html).toMatch('Listing changes requested');
       expect(emailMock.html).toMatch('Hello,');
@@ -447,7 +447,7 @@ describe('Testing email service', () => {
       expect(emailMock.to).toEqual(emailArr);
       expect(emailMock.subject).toEqual('New published listing');
       expect(emailMock.html).toMatch(
-        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" width="auto" height="137" />`,
+        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto" />`,
       );
       expect(emailMock.html).toMatch('New published listing');
       expect(emailMock.html).toMatch('Hello,');
