@@ -236,9 +236,9 @@ const Lottery = (props: { listing: Listing }) => {
             />
 
             <ListingStatusBar status={listing?.status} />
-            {shouldExpireData && listing?.lotteryStatus === LotteryStatusEnum.expired ? (
-              <section className={styles["expired"]}>
-                <div className={styles["parent"]}>
+            <section className={styles["lottery"]}>
+              <div className={styles["parent"]}>
+                {shouldExpireData && listing?.lotteryStatus === LotteryStatusEnum.expired ? (
                   <div className={styles["container"]}>
                     <div className={styles["main"]}>
                       <Card spacing={"lg"}>
@@ -257,11 +257,7 @@ const Lottery = (props: { listing: Listing }) => {
                     </div>
                     <aside className={styles["side"]} />
                   </div>
-                </div>
-              </section>
-            ) : (
-              <section className={styles["lottery"]}>
-                <div className={styles["parent"]}>
+                ) : (
                   <div className={styles["container"]}>
                     <div className={styles["main"]}>
                       {shouldExpireData && (
@@ -302,9 +298,9 @@ const Lottery = (props: { listing: Listing }) => {
                       </>
                     </aside>
                   </div>
-                </div>
-              </section>
-            )}
+                )}
+              </div>
+            </section>
           </Layout>
           <Dialog
             isOpen={!!runModal}
