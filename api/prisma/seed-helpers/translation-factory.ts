@@ -224,6 +224,21 @@ const translations = (jurisdictionName?: string, language?: LanguagesEnum) => {
         contactAgentToUpdateInfo:
           'Si necesita modificar información en su solicitud, no haga una solicitud nueva. Comuníquese con el agente de este listado.',
       },
+      lotteryAvailable: {
+        header: 'Nuevos resultados de la lotería de vivienda disponibles',
+        resultsAvailable:
+          'Los resultados están disponibles para una lotería de vivienda para %{listingName}. Consulte su cuenta del portal de vivienda para obtener más información.',
+        signIn: 'Inicie sesión para ver sus resultados',
+        whatHappensHeader: '¿Qué pasa después?',
+        whatHappensContent:
+          'El administrador de la propiedad comenzará a comunicarse con los solicitantes mediante su método de contacto preferido. Lo harán en el orden de clasificación de la lotería, dentro de cada preferencia de lotería. Cuando todas las unidades estén ocupadas, el administrador de la propiedad dejará de comunicarse con los solicitantes. Todas las unidades podrían llenarse antes de que el administrador de la propiedad alcance su rango. Si esto sucede, no lo contactaremos.',
+        otherOpportunities1:
+          'Para ver otras oportunidades de vivienda, visite %{appUrl}. Puede registrarse para recibir notificaciones de nuevas oportunidades de solicitud',
+        otherOpportunities2: 'aquí',
+        otherOpportunities3:
+          'Si desea obtener información sobre cómo funcionan las loterías, consulte la sección de lotería del',
+        otherOpportunities4: 'Housing Portal Centro de ayuda',
+      },
     };
   }
 };

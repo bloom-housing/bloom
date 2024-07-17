@@ -616,31 +616,38 @@ export class EmailService {
     }
   }
 
+  /**
+   *
+   * @param emails a key in LanguagesEnum to a list of emails of applicants who submitted in that language
+   */
   public async lotteryPublishedApplicant(
     listingInfo: listingInfo,
-    emails: string[],
+    emails: { [key: string]: string[] },
   ) {
     try {
       const jurisdiction = await this.getJurisdiction([
         { id: listingInfo.juris },
       ]);
-      void (await this.loadTranslations(jurisdiction));
-      await this.send(
-        emails,
-        jurisdiction.emailFromAddress,
-        this.polyglot.t('lotteryAvailable.header', {
-          listingName: listingInfo.name,
-        }),
-        this.template('lottery-published-applicant')({
-          appOptions: {
+
+      for (const language in emails) {
+        void (await this.loadTranslations(null, language as LanguagesEnum));
+        await this.send(
+          emails[language],
+          jurisdiction.emailFromAddress,
+          this.polyglot.t('lotteryAvailable.header', {
             listingName: listingInfo.name,
+          }),
+          this.template('lottery-published-applicant')({
+            appOptions: {
+              listingName: listingInfo.name,
+              appUrl: jurisdiction.publicUrl,
+            },
             appUrl: jurisdiction.publicUrl,
-          },
-          appUrl: jurisdiction.publicUrl,
-          notificationsUrl: 'https://www.exygy.com',
-          helpCenterUrl: 'https://www.exygy.com',
-        }),
-      );
+            notificationsUrl: 'https://www.exygy.com',
+            helpCenterUrl: 'https://www.exygy.com',
+          }),
+        );
+      }
     } catch (err) {
       console.log('lottery published applicant email failed', err);
       throw new HttpException('email failed', 500);

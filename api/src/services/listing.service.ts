@@ -290,10 +290,10 @@ export class ListingService implements OnModuleInit {
 
   public async getPublicUserEmailInfo(
     listingId?: string,
-  ): Promise<{ emails: string[]; publicUrl?: string | null }> {
+  ): Promise<{ [key: string]: string[] }> {
     const userResults = await this.prisma.applications.findMany({
       select: {
-        appUrl: true,
+        language: true,
         applicant: {
           select: {
             emailAddress: true,
@@ -310,14 +310,29 @@ export class ListingService implements OnModuleInit {
       },
     });
 
-    const userEmails: string[] = [];
-    userResults?.forEach(
-      (user) =>
-        user?.applicant?.emailAddress &&
-        userEmails.push(user.applicant.emailAddress),
-    );
+    const result = {};
+    Object.keys(LanguagesEnum).forEach((languageKey) => {
+      const applications = userResults
+        .filter((user) => user.language === languageKey)
+        .map((userObj) => userObj.applicant.emailAddress);
+      if (applications.length) {
+        result[languageKey] = applications;
+      }
+    });
 
-    return { emails: userEmails };
+    const noLanguageIndicated = userResults
+      .filter((user) => !user.language)
+      .map((userObj) => userObj.applicant.emailAddress);
+
+    if (!result[LanguagesEnum.en])
+      result[LanguagesEnum.en] = noLanguageIndicated;
+    else
+      result[LanguagesEnum.en] = [
+        ...result[LanguagesEnum.en],
+        ...noLanguageIndicated,
+      ];
+
+    return result;
   }
 
   public async listingApprovalNotify(params: {
@@ -1819,7 +1834,7 @@ export class ListingService implements OnModuleInit {
             name: storedListing.name,
             juris: storedListing.jurisdictionId,
           },
-          publicUserEmailInfo.emails,
+          publicUserEmailInfo,
         );
         break;
       }
