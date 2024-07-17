@@ -37,6 +37,7 @@ const Lottery = (props: { listing: Listing }) => {
   const [releaseModal, setReleaseModal] = useState(false)
   const [exportModal, setExportModal] = useState(false)
   const [publishModal, setPublishModal] = useState(false)
+  const [retractModal, setRetractModal] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const { listingsService, profile } = useContext(AuthContext)
@@ -170,23 +171,39 @@ const Lottery = (props: { listing: Listing }) => {
   }
 
   const getActions = () => {
-    if (listing.lotteryLastRunAt && profile?.userRoles?.isAdmin) {
+    if (profile?.userRoles?.isAdmin) {
       return (
         <div className={styles["actions-container"]}>
-          <Button
-            className={styles["action"]}
-            onClick={() => setReRunModal(true)}
-            variant={"primary-outlined"}
-          >
-            {t("listings.lottery.reRun")}
-          </Button>
-          <Button
-            className={styles["action"]}
-            onClick={() => setReleaseModal(true)}
-            variant={"primary-outlined"}
-          >
-            {t("listings.lottery.release")}
-          </Button>
+          <>
+            {listing.lotteryStatus === LotteryStatusEnum.ran && (
+              <>
+                <Button
+                  className={styles["action"]}
+                  onClick={() => setReRunModal(true)}
+                  variant={"primary-outlined"}
+                >
+                  {t("listings.lottery.reRun")}
+                </Button>
+                <Button
+                  className={styles["action"]}
+                  onClick={() => setReleaseModal(true)}
+                  variant={"primary-outlined"}
+                >
+                  {t("listings.lottery.release")}
+                </Button>
+              </>
+            )}
+            {(listing.lotteryStatus === LotteryStatusEnum.releasedToPartners ||
+              listing.lotteryStatus === LotteryStatusEnum.publishedToPublic) && (
+              <Button
+                className={styles["action"]}
+                onClick={() => setRetractModal(true)}
+                variant={"alert-outlined"}
+              >
+                {t("listings.lottery.retract")}
+              </Button>
+            )}
+          </>
         </div>
       )
     }
@@ -420,6 +437,56 @@ const Lottery = (props: { listing: Listing }) => {
                 variant="primary-outlined"
                 onClick={() => {
                   setReleaseModal(false)
+                }}
+                size="sm"
+              >
+                {t("t.cancel")}
+              </Button>
+            </Dialog.Footer>
+          </Dialog>
+          <Dialog
+            isOpen={!!retractModal}
+            ariaLabelledBy="retract-lottery-modal-header"
+            ariaDescribedBy="retract-lottery-modal-content"
+            onClose={() => setRetractModal(false)}
+          >
+            <Dialog.Header id="retract-lottery-modal-header">{t("t.areYouSure")}</Dialog.Header>
+            <Dialog.Content id="retract-lottery-modal-content">
+              <p>
+                {t("listings.lottery.retractContent")}{" "}
+                <span className={"font-semibold"}>
+                  {t("listings.lottery.retractContentRemoval")}
+                </span>
+              </p>
+              <p>{t("applications.addConfirmModalAddApplicationPostLotteryAreYouSure")}</p>
+            </Dialog.Content>
+            <Dialog.Footer>
+              <Button
+                variant="alert"
+                onClick={async () => {
+                  setLoading(true)
+                  try {
+                    await listingsService.lotteryStatus({
+                      body: {
+                        listingId: listing.id,
+                        lotteryStatus: LotteryStatusEnum.ran,
+                      },
+                    })
+                    location.reload()
+                  } catch (err) {
+                    console.log(err)
+                    setLoading(false)
+                  }
+                }}
+                loadingMessage={loading ? t("t.loading") : null}
+                size="sm"
+              >
+                {t("listings.lottery.retract")}
+              </Button>
+              <Button
+                variant="primary-outlined"
+                onClick={() => {
+                  setRetractModal(false)
                 }}
                 size="sm"
               >
