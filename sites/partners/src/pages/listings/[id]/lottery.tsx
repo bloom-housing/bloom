@@ -216,6 +216,7 @@ const Lottery = (props: { listing: Listing }) => {
                 applicationsLabel: t("nav.applications"),
                 lotteryLabel:
                   listing.status === ListingsStatusEnum.closed &&
+                  listing.lotteryOptIn &&
                   listing.reviewOrderType === ReviewOrderTypeEnum.lottery
                     ? t("listings.lotteryTitle")
                     : undefined,

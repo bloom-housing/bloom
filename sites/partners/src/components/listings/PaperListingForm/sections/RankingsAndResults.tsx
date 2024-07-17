@@ -131,7 +131,8 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
                       {
                         ...yesNoRadioOptions[0],
                         id: "lotteryOptInYes",
-                        defaultChecked: !listing || listing.lotteryOptIn === true,
+                        defaultChecked:
+                          !listing || listing.lotteryOptIn === true || !listing.lotteryOptIn,
                       },
 
                       {
