@@ -75,7 +75,7 @@ describe('Testing script runner service', () => {
     });
   });
 
-  it('should add lottery released translations', async () => {
+  it('should add lottery translations', async () => {
     prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
     prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
     prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
@@ -85,9 +85,9 @@ describe('Testing script runner service', () => {
     prisma.translations.update = jest.fn().mockResolvedValue(null);
 
     const id = randomUUID();
-    const scriptName = 'add lottery released translations';
+    const scriptName = 'add lottery translations';
 
-    const res = await service.addLotteryReleasedTranslations({
+    const res = await service.addLotteryTranslations({
       user: {
         id,
       } as unknown as User,
