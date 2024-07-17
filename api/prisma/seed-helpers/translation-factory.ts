@@ -171,6 +171,26 @@ const translations = (jurisdictionName?: string, language?: LanguagesEnum) => {
         adminApprovedEnd:
           'to view the lottery tab and release the lottery results.',
       },
+      lotteryPublished: {
+        header: 'Lottery results have been published for %{listingName}',
+        resultsPublished:
+          'Lottery results for %{listingName} have been published to applicant accounts.',
+      },
+      lotteryAvailable: {
+        header: 'New Housing Lottery Results Available',
+        resultsAvailable:
+          'Results are available for a housing lottery for %{listingName}. See your housing portal account for more information.',
+        signIn: 'Sign In to View Your Results',
+        whatHappensHeader: 'What happens next?',
+        whatHappensContent:
+          'The property manager will begin to contact applicants by their preferred contact method. They will do so in the order of lottery rank, within each lottery preference. When the units are all filled, the property manager will stop contacting applicants. All the units could be filled before the property manager reaches your rank. If this happens, you will not be contacted.',
+        otherOpportunities1:
+          'To view other housing opportunities, please visit %{appUrl}. You can sign up to receive notifications of new application opportunities',
+        otherOpportunities2: 'here',
+        otherOpportunities3:
+          'If you want to learn about how lotteries work, please see the lottery section of the',
+        otherOpportunities4: 'Housing Portal Help Center',
+      },
     };
   } else if (language === LanguagesEnum.es) {
     return {

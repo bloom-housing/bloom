@@ -82,15 +82,15 @@ export class ScirptRunnerController {
     );
   }
 
-  @Put('lotteryReleasedTranslations')
+  @Put('lotteryTranslations')
   @ApiOperation({
-    summary: 'A script that adds lottery released translations to the db',
-    operationId: 'lotteryReleasedTranslations',
+    summary: 'A script that adds lottery translations to the db',
+    operationId: 'lotteryTranslations',
   })
   @ApiOkResponse({ type: SuccessDTO })
-  async lotteryReleasedTranslations(
+  async lotteryTranslations(
     @Request() req: ExpressRequest,
   ): Promise<SuccessDTO> {
-    return await this.scriptRunnerService.addLotteryReleasedTranslations(req);
+    return await this.scriptRunnerService.addLotteryTranslations(req);
   }
 }

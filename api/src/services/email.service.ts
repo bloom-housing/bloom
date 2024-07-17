@@ -589,6 +589,64 @@ export class EmailService {
     }
   }
 
+  public async lotteryPublishedAdmin(
+    user: User,
+    listingInfo: listingInfo,
+    emails: string[],
+    appUrl: string,
+  ) {
+    try {
+      const jurisdiction = listingInfo.juris
+        ? await this.getJurisdiction([{ id: listingInfo.juris }])
+        : user.jurisdictions[0];
+      void (await this.loadTranslations(jurisdiction));
+      await this.send(
+        emails,
+        jurisdiction.emailFromAddress,
+        this.polyglot.t('lotteryPublished.header', {
+          listingName: listingInfo.name,
+        }),
+        this.template('lottery-published-admin')({
+          appOptions: { listingName: listingInfo.name, appUrl: appUrl },
+        }),
+      );
+    } catch (err) {
+      console.log('lottery published admin email failed', err);
+      throw new HttpException('email failed', 500);
+    }
+  }
+
+  public async lotteryPublishedApplicant(
+    listingInfo: listingInfo,
+    emails: string[],
+  ) {
+    try {
+      const jurisdiction = await this.getJurisdiction([
+        { id: listingInfo.juris },
+      ]);
+      void (await this.loadTranslations(jurisdiction));
+      await this.send(
+        emails,
+        jurisdiction.emailFromAddress,
+        this.polyglot.t('lotteryAvailable.header', {
+          listingName: listingInfo.name,
+        }),
+        this.template('lottery-published-applicant')({
+          appOptions: {
+            listingName: listingInfo.name,
+            appUrl: jurisdiction.publicUrl,
+          },
+          appUrl: jurisdiction.publicUrl,
+          notificationsUrl: 'https://www.exygy.com',
+          helpCenterUrl: 'https://www.exygy.com',
+        }),
+      );
+    } catch (err) {
+      console.log('lottery published applicant email failed', err);
+      throw new HttpException('email failed', 500);
+    }
+  }
+
   formatLocalDate(rawDate: string | Date, format: string): string {
     const utcDate = dayjs.utc(rawDate);
     return utcDate.format(format);
