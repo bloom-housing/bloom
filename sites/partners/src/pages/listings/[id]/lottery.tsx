@@ -266,7 +266,7 @@ const Lottery = (props: { listing: Listing }) => {
                     <div className={styles["main"]}>
                       {shouldExpireData && (
                         <Message
-                          variant={"alert"}
+                          variant={"warn"}
                           fullwidth={true}
                           className={styles["applications-expiration-message"]}
                         >
