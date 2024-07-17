@@ -966,6 +966,7 @@ export class ApplicationCsvExporterService
                     where: {
                       listingId: queryParams.listingId,
                       deletedAt: null,
+                      markedAsDuplicate: forLottery ? false : undefined,
                     },
                     skip: i,
                     take: NUMBER_TO_PAGINATE_BY,

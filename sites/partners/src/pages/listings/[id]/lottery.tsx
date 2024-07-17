@@ -70,7 +70,9 @@ const Lottery = (props: { listing: Listing }) => {
             : t("listings.lottery.exportFileNoPreferences")}
         </div>
         <div>
-          <Button onClick={() => setExportModal(true)}>{t("t.export")}</Button>
+          <Button disabled={loading || csvExportLoading} onClick={() => setExportModal(true)}>
+            {t("t.export")}
+          </Button>
         </div>
       </CardSection>
     )
