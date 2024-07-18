@@ -271,6 +271,8 @@
   "listings.lotteryDateNotes": "Lottery Date Notes",
   "listings.lotteryDateQuestion": "When will the lottery be run?",
   "listings.lotteryEndTime": "Lottery End Time",
+  "listings.lotteryOptInQuestion": "Will the lottery be run in the partner portal?",
+  "listings.lotteryPreferenceSubtitle": "Sort preferences to establish the order in which questions will appear in the application. This is how ranked buckets will appear in the lottery export file.",
   "listings.lotteryStartTime": "Lottery Start Time",
   "listings.lotteryTitle": "Lottery",
   "listings.mapPinAutomaticDescription": "Map pin position is based on the address provided",

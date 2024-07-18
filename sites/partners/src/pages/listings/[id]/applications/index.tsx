@@ -152,6 +152,7 @@ const ApplicationsList = () => {
           applicationsLabel: t("nav.applications"),
           lotteryLabel:
             listingDto?.status === ListingsStatusEnum.closed &&
+            listingDto?.lotteryOptIn &&
             listingDto?.reviewOrderType === ReviewOrderTypeEnum.lottery
               ? t("listings.lotteryTitle")
               : undefined,

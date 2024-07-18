@@ -592,6 +592,7 @@ class Listing extends AbstractDTO {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   isExternal?: boolean;
+  lotteryOptIn?: boolean;
 }
 
 export { Listing as default, Listing };

@@ -455,6 +455,7 @@ model Listings {
   commonDigitalApplication              Boolean?                      @map("common_digital_application")
   paperApplication                      Boolean?                      @map("paper_application")
   referralOpportunity                   Boolean?                      @map("referral_opportunity")
+  lotteryOptIn                          Boolean?                      @map("lottery_opt_in")
   assets                                Json
   accessibility                         String?
   amenities                             String?

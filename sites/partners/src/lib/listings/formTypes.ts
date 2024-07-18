@@ -69,6 +69,7 @@ export type FormListing = Omit<Listing, "countyCode"> & {
     year: string
   }
   reviewOrderQuestion?: string
+  lotteryOptInQuestion?: YesNoEnum
   listingAvailabilityQuestion?: string
   waitlistOpenQuestion?: YesNoEnum
   waitlistSizeQuestion?: YesNoEnum

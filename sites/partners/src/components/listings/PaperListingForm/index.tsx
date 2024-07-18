@@ -322,6 +322,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           <SelectAndOrder
                             addText={t("listings.addPreference")}
                             drawerTitle={t("listings.addPreferences")}
+                            drawerSubtitle={
+                              process.env.showLottery && listing?.lotteryOptIn
+                                ? t("listings.lotteryPreferenceSubtitle")
+                                : null
+                            }
                             editText={t("listings.editPreferences")}
                             listingData={preferences || []}
                             setListingData={setPreferences}

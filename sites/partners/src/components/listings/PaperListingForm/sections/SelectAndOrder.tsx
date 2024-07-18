@@ -20,6 +20,7 @@ type SelectAndOrderProps = {
   editText: string
   addText: string
   drawerTitle: string
+  drawerSubtitle?: string
   drawerButtonText: string
   dataFetcher: (
     jurisdiction?: string,
@@ -43,6 +44,7 @@ const SelectAndOrder = ({
   editText,
   addText,
   drawerTitle,
+  drawerSubtitle,
   drawerButtonText,
   dataFetcher,
   formKey,
@@ -302,6 +304,7 @@ const SelectAndOrder = ({
         }}
       >
         <div className="border rounded-md p-8 bg-white">
+          {drawerSubtitle && <p>{drawerSubtitle}</p>}
           {!!draftListingData.length && (
             <div className="mb-5">
               <MinimalTable
