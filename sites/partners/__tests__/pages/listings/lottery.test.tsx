@@ -216,9 +216,12 @@ describe("lottery", () => {
 
     const { getByText, findByText } = render(
       <Lottery
-        listing={{ ...closedListing, lotteryLastRunAt: new Date(), lotteryStatus: LotteryStatusEnum.ran }}
+        listing={{
+          ...closedListing,
+          lotteryLastRunAt: new Date(),
+          lotteryStatus: LotteryStatusEnum.ran,
+        }}
       />
-
     )
 
     const header = await findByText("Partners Portal")
@@ -254,7 +257,11 @@ describe("lottery", () => {
 
     const { getByText, findByText } = render(
       <Lottery
-        listing={{ ...closedListing, lotteryLastRunAt: new Date(), lotteryStatus: LotteryStatusEnum.ran }}
+        listing={{
+          ...closedListing,
+          lotteryLastRunAt: new Date(),
+          lotteryStatus: LotteryStatusEnum.ran,
+        }}
       />
     )
 
@@ -288,7 +295,11 @@ describe("lottery", () => {
 
     const { getByText, findByText } = render(
       <Lottery
-        listing={{ ...closedListing, lotteryLastRunAt: new Date(), lotteryStatus: LotteryStatusEnum.ran }}
+        listing={{
+          ...closedListing,
+          lotteryLastRunAt: new Date(),
+          lotteryStatus: LotteryStatusEnum.ran,
+        }}
       />
     )
 
@@ -639,7 +650,6 @@ describe("lottery", () => {
 
     const updatedListing = {
       ...closedListing,
-      status: ListingsStatusEnum.closed,
       lotteryStatus: LotteryStatusEnum.expired,
     }
 
