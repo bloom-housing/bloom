@@ -473,6 +473,7 @@
   "authentication.terms.reviewTou": "Review Terms of Use",
   "authentication.terms.publicTerms": "I have reviewed the <a className='lined' href='https://mtc.ca.gov/doorway-housing-portal-terms-use' target='_blank'>Terms of Use</a> for this Website, as that term is defined in the Terms of Use, and agree to comply with all requirements described therein that relate to my personal use.  I understand that if I do not use my account for three years, my account and all its data will be deleted.",
   "authentication.terms.publicAccept": "You must accept the Terms of Use before creating an account.",
+  "authentication.terms.reviewToc": "Please review the Terms of Service",
   "authentication.terms.termsOfService": "View the Terms of Service here",
   "authentication.terms.termsOfUse": "Terms of Use",
   "authentication.terms.youMustAcceptToc": "To continue you must accept the Terms of Service",

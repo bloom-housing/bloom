@@ -5,7 +5,10 @@ import { setupServer } from "msw/node"
 import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import Lottery from "../../../src/pages/listings/[id]/lottery"
 import { mockNextRouter, render } from "../../testUtils"
-import { ListingMultiselectQuestion } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  ListingMultiselectQuestion,
+  LotteryStatusEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const server = setupServer()
 
@@ -439,5 +442,114 @@ describe("lottery", () => {
       })
     ).toBeInTheDocument()
     expect(getAllByText("Export")).toHaveLength(2)
+  })
+
+  it("should show no lottery released state as a partner", async () => {
+    mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { isAdmin: false, isJurisdictionalAdmin: true },
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
+      })
+    )
+
+    const updatedListing = {
+      ...listing,
+      lotteryStatus: LotteryStatusEnum.ran,
+    }
+
+    const { getByText, findByText, queryByText } = render(<Lottery listing={updatedListing} />)
+
+    const header = await findByText("Lottery")
+    expect(header).toBeInTheDocument()
+
+    expect(getByText("No lottery data")).toBeInTheDocument()
+    expect(queryByText("Publish")).not.toBeInTheDocument()
+    expect(queryByText("Run lottery")).not.toBeInTheDocument()
+    expect(queryByText("Release lottery")).not.toBeInTheDocument()
+  })
+
+  it("should show publish modal if in released to partners state as a parter", async () => {
+    mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { isAdmin: false, isJurisdictionalAdmin: true },
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
+      })
+    )
+
+    const updatedListing = {
+      ...listing,
+      lotteryStatus: LotteryStatusEnum.releasedToPartners,
+    }
+
+    const { getByText, findByText } = render(<Lottery listing={updatedListing} />)
+
+    const header = await findByText("Lottery")
+    expect(header).toBeInTheDocument()
+
+    expect(getByText("Publish lottery data")).toBeInTheDocument()
+    fireEvent.click(getByText("Publish"))
+    expect(await findByText("Confirmation needed")).toBeInTheDocument()
+    expect(
+      getByText("Publishing the lottery for this listing will email results to applicants.")
+    ).toBeInTheDocument()
+    expect(getByText("Publish lottery")).toBeInTheDocument()
+  })
+
+  it("should show export if in published to public state as a parter", async () => {
+    mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { isAdmin: false, isJurisdictionalAdmin: true },
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
+      })
+    )
+
+    const updatedListing = {
+      ...listing,
+      lotteryStatus: LotteryStatusEnum.publishedToPublic,
+    }
+
+    const { getByText, findByText } = render(<Lottery listing={updatedListing} />)
+
+    const header = await findByText("Lottery")
+    expect(header).toBeInTheDocument()
+
+    expect(getByText("Export lottery data")).toBeInTheDocument()
+    expect(getByText("Export")).toBeInTheDocument()
   })
 })

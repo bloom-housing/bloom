@@ -49,9 +49,14 @@
   }
 
   .card-description {
-    padding-top: var(--seeds-s2);
+    padding-top: var(--seeds-s3);
     padding-bottom: var(--seeds-s6);
   }
+
+  .card-description-no-button {
+    padding-top: var(--seeds-s2);
+  }
+
   .history-item {
     margin-bottom: var(--seeds-s4);
     font-size: var(--seeds-type-label-size);

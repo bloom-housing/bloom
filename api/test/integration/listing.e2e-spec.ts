@@ -994,14 +994,14 @@ describe('Listing Controller Tests', () => {
         .expect(403);
     });
 
-    it('should update listing lottery status to releasedToPartners from approved', async () => {
+    it('should update listing lottery status to releasedToPartners from ran', async () => {
       const jurisdictionA = await prisma.jurisdictions.create({
         data: jurisdictionFactory(),
       });
       await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
       const listingData = await listingFactory(jurisdictionA.id, prisma, {
         status: ListingsStatusEnum.closed,
-        lotteryStatus: LotteryStatusEnum.approved,
+        lotteryStatus: LotteryStatusEnum.ran,
       });
       const listing = await prisma.listings.create({
         data: listingData,

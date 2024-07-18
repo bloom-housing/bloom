@@ -13,6 +13,8 @@ import {
   ListingsStatusEnum,
   ReviewOrderTypeEnum,
   ListingUpdate,
+  ListingEventsTypeEnum,
+  LotteryStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Layout from "../../../layouts"
 import { ListingContext } from "../../../components/listings/ListingContext"
@@ -35,9 +37,10 @@ const Lottery = (props: { listing: Listing }) => {
   const [reRunModal, setReRunModal] = useState(false)
   const [releaseModal, setReleaseModal] = useState(false)
   const [exportModal, setExportModal] = useState(false)
+  const [publishModal, setPublishModal] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const { listingsService } = useContext(AuthContext)
+  const { listingsService, profile } = useContext(AuthContext)
   const { data } = useFlaggedApplicationsMeta(listing?.id)
   const duplicatesExist = data?.totalPendingCount > 0
 
@@ -54,53 +57,117 @@ const Lottery = (props: { listing: Listing }) => {
   }
 
   const getMainContent = () => {
-    if (listing.lotteryLastRunAt) {
-      return (
-        <CardSection>
-          <Icon size="xl">
-            <Download />
-          </Icon>
-          <Heading priority={2} size={"2xl"}>
-            {t("listings.lottery.export")}
-          </Heading>
-          <div className={styles["card-description"]}>
-            {listing.listingMultiselectQuestions.length
-              ? t("listings.lottery.exportFile")
-              : t("listings.lottery.exportFileNoPreferences")}
-          </div>
-          <div>
-            <Button onClick={() => setExportModal(true)}>{t("t.export")}</Button>
-          </div>
-        </CardSection>
-      )
+    const exportCard = (
+      <CardSection>
+        <Icon size="xl">
+          <Download />
+        </Icon>
+        <Heading priority={2} size={"2xl"}>
+          {t("listings.lottery.export")}
+        </Heading>
+        <div className={styles["card-description"]}>
+          {listing.listingMultiselectQuestions.length
+            ? t("listings.lottery.exportFile")
+            : t("listings.lottery.exportFileNoPreferences")}
+        </div>
+        <div>
+          <Button onClick={() => setExportModal(true)}>{t("t.export")}</Button>
+        </div>
+      </CardSection>
+    )
+
+    if (profile?.userRoles?.isAdmin) {
+      if (listing.lotteryLastRunAt) {
+        return exportCard
+      } else {
+        return (
+          <CardSection>
+            <Icon size="xl">
+              <Ticket />
+            </Icon>
+            <Heading priority={2} size={"2xl"}>
+              {t("listings.lottery.noData")}
+            </Heading>
+            <div className={styles["card-description"]}>
+              {t("listings.lottery.noDataDescription")}
+            </div>
+            <div>
+              <Button
+                onClick={() => {
+                  setRunModal(true)
+                }}
+              >
+                {t("listings.lottery.runLottery")}
+              </Button>
+            </div>
+          </CardSection>
+        )
+      }
     } else {
-      return (
-        <CardSection>
-          <Icon size="xl">
-            <Ticket />
-          </Icon>
-          <Heading priority={2} size={"2xl"}>
-            {t("listings.lottery.noData")}
-          </Heading>
-          <div className={styles["card-description"]}>
-            {t("listings.lottery.noDataDescription")}
-          </div>
-          <div>
-            <Button
-              onClick={() => {
-                setRunModal(true)
-              }}
-            >
-              {t("listings.lottery.runLottery")}
-            </Button>
-          </div>
-        </CardSection>
+      const lotteryDate = listing.listingEvents.find(
+        (event) => event.type === ListingEventsTypeEnum.publicLottery
       )
+      if (listing.lotteryStatus === LotteryStatusEnum.releasedToPartners) {
+        return (
+          <CardSection>
+            <Icon size="xl">
+              <Ticket />
+            </Icon>
+            <Heading priority={2} size={"2xl"}>
+              {t("listings.lottery.publishLotteryData")}
+            </Heading>
+            <div className={styles["card-description"]}>
+              {/* TODO: Update dates */}
+              <p>
+                {t("listings.lottery.partnerPublishTimestamp", {
+                  name: "NAME",
+                  date: "DATE",
+                  time: "TIME",
+                })}
+              </p>
+            </div>
+            <div>
+              <Button
+                onClick={() => {
+                  setPublishModal(true)
+                }}
+              >
+                {t("listings.actions.publish")}
+              </Button>
+            </div>
+          </CardSection>
+        )
+      } else if (listing.lotteryStatus === LotteryStatusEnum.publishedToPublic) {
+        return exportCard
+      } else {
+        return (
+          <CardSection>
+            <Icon size="xl">
+              <Ticket />
+            </Icon>
+            <Heading priority={2} size={"2xl"}>
+              {t("listings.lottery.noData")}
+            </Heading>
+            <div className={styles["card-description-no-button"]}>
+              {lotteryDate && (
+                <span>
+                  {t("listings.lottery.noDataDescriptionPartnerDate", {
+                    date: dayjs(lotteryDate?.startDate).format("MM/DD/YYYY"),
+                    time: dayjs(lotteryDate?.startTime).format("h:mm a"),
+                  })}{" "}
+                </span>
+              )}
+              {/* TODO: Update date */}
+              {t("listings.lottery.noDataDescriptionPartner", { date: "DATE" })}
+            </div>
+          </CardSection>
+        )
+      }
     }
   }
 
   const getActions = () => {
-    if (listing.lotteryLastRunAt) {
+    if (listing.lotteryLastRunAt && profile?.userRoles?.isAdmin) {
       return (
         <div className={styles["actions-container"]}>
           <Button
@@ -243,6 +310,12 @@ const Lottery = (props: { listing: Listing }) => {
                         lotteryLastRunAt: new Date(),
                       },
                     })
+                    await listingsService.lotteryStatus({
+                      body: {
+                        listingId: listing.id,
+                        lotteryStatus: LotteryStatusEnum.ran,
+                      },
+                    })
                     setRunModal(false)
                     setLoading(false)
                     location.reload()
@@ -318,10 +391,22 @@ const Lottery = (props: { listing: Listing }) => {
             <Dialog.Footer>
               <Button
                 variant="primary"
-                onClick={() => {
-                  // release lottery
-                  setReleaseModal(false)
+                onClick={async () => {
+                  setLoading(true)
+                  try {
+                    await listingsService.lotteryStatus({
+                      body: {
+                        listingId: listing.id,
+                        lotteryStatus: LotteryStatusEnum.releasedToPartners,
+                      },
+                    })
+                    location.reload()
+                  } catch (err) {
+                    console.log(err)
+                    setLoading(false)
+                  }
                 }}
+                loadingMessage={loading ? t("t.loading") : null}
                 size="sm"
               >
                 {t("listings.lottery.releaseButton")}
@@ -372,6 +457,53 @@ const Lottery = (props: { listing: Listing }) => {
                 variant="primary-outlined"
                 onClick={() => {
                   setExportModal(false)
+                }}
+                size="sm"
+              >
+                {t("t.cancel")}
+              </Button>
+            </Dialog.Footer>
+          </Dialog>
+          <Dialog
+            isOpen={!!publishModal}
+            ariaLabelledBy="publish-lottery-modal-header"
+            ariaDescribedBy="publish-lottery-modal-content"
+            onClose={() => setPublishModal(false)}
+          >
+            <Dialog.Header id="publish-lottery-modal-header">
+              {t("applications.addConfirmModalHeader")}
+            </Dialog.Header>
+            <Dialog.Content id="publish-lottery-modal-content">
+              <p>{t("listings.lottery.publishContent")}</p>
+              <p>{t("applications.addConfirmModalAddApplicationPostLotteryAreYouSure")}</p>
+            </Dialog.Content>
+            <Dialog.Footer>
+              <Button
+                variant="primary"
+                onClick={async () => {
+                  setLoading(true)
+                  try {
+                    await listingsService.lotteryStatus({
+                      body: {
+                        listingId: listing.id,
+                        lotteryStatus: LotteryStatusEnum.publishedToPublic,
+                      },
+                    })
+                    location.reload()
+                  } catch (err) {
+                    console.log(err)
+                    setLoading(false)
+                  }
+                }}
+                loadingMessage={loading ? t("t.loading") : null}
+                size="sm"
+              >
+                {t("listings.lottery.publishLottery")}
+              </Button>
+              <Button
+                variant="primary-outlined"
+                onClick={() => {
+                  setPublishModal(false)
                 }}
                 size="sm"
               >
