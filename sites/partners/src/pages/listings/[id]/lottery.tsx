@@ -301,16 +301,16 @@ const Lottery = (props: { listing: Listing }) => {
                 onClick={async () => {
                   try {
                     setLoading(true)
-                    setRunModal(false)
                     await lotteryService.lotteryGenerate({ body: { listingId: listing.id } })
                     setLoading(false)
+                    setRunModal(false)
                     location.reload()
                   } catch (err) {
                     console.log(err)
                   }
                 }}
                 size="sm"
-                loadingMessage={csvExportLoading ? t("t.loading") : undefined}
+                loadingMessage={loading || csvExportLoading ? t("t.loading") : undefined}
               >
                 {t("listings.lottery.runLottery")}
               </Button>
@@ -430,12 +430,12 @@ const Lottery = (props: { listing: Listing }) => {
             <Dialog.Footer>
               <Button
                 variant="primary"
-                onClick={() => {
-                  const res = onExport()
+                onClick={async () => {
+                  await onExport()
                   setExportModal(false)
-                  return res
                 }}
                 size="sm"
+                loadingMessage={loading || csvExportLoading ? t("t.loading") : undefined}
               >
                 {t("t.export")}
               </Button>
