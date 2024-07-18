@@ -44,9 +44,9 @@ const Lottery = (props: { listing: Listing }) => {
   const { listingsService, profile } = useContext(AuthContext)
   const { data } = useFlaggedApplicationsMeta(listing?.id)
   const duplicatesExist = data?.totalPendingCount > 0
-  const shouldExpireData = !profile?.userRoles.isAdmin && !process.env.lotteryDaysTillExpiry
+  const shouldExpireData = !profile?.userRoles.isAdmin && process.env.lotteryDaysTillExpiry
   let formattedExpiryDate: string
-  if (!process.env.lotteryDaysTillExpiry) {
+  if (process.env.lotteryDaysTillExpiry) {
     const expiryDate = dayjs(listing?.closedAt).add(
       Number(process.env.lotteryDaysTillExpiry),
       "day"
@@ -336,7 +336,7 @@ const Lottery = (props: { listing: Listing }) => {
               {t("applications.addConfirmModalHeader")}
             </Dialog.Header>
             <Dialog.Content id="run-lottery-modal-content">
-              {!process.env.lotteryDaysTillExpiry ? (
+              {process.env.lotteryDaysTillExpiry ? (
                 <p>{t("listings.lottery.dialogAlert", { date: formattedExpiryDate })}</p>
               ) : undefined}
               {duplicatesExist ? (
