@@ -280,7 +280,7 @@ const Lottery = (props: { listing: Listing }) => {
                   <div className={styles["main"]}>
                     {!profile?.userRoles.isAdmin &&
                       process.env.lotteryDaysTillExpiry &&
-                      listing?.lotteryStatus !== LotteryStatusEnum.expired && (
+                      listing?.lotteryStatus === LotteryStatusEnum.publishedToPublic && (
                         <Message
                           variant={"warn"}
                           fullwidth={true}

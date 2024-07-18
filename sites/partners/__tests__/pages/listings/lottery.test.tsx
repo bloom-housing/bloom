@@ -96,9 +96,6 @@ describe("lottery", () => {
     expect(header).toBeInTheDocument()
 
     expect(getAllByText(closedListing.name).length).toBeGreaterThan(0)
-    expect(
-      getByText("Lottery data for this listing will expire on", { exact: false })
-    ).toBeInTheDocument()
   })
 
   it("should render page if user is a partner with access to this listing", async () => {
@@ -128,9 +125,6 @@ describe("lottery", () => {
     expect(header).toBeInTheDocument()
 
     expect(getAllByText(closedListing.name).length).toBeGreaterThan(0)
-    expect(
-      getByText("Lottery data for this listing will expire on", { exact: false })
-    ).toBeInTheDocument()
   })
 
   it("should not render page if user is a partner without access to this listing", () => {
