@@ -312,7 +312,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             addText={t("listings.addPreference")}
                             drawerTitle={t("listings.addPreferences")}
                             drawerSubtitle={
-                              process.env.showLottery && listing.lotteryOptIn
+                              process.env.showLottery && listing?.lotteryOptIn
                                 ? t("listings.lotteryPreferenceSubtitle")
                                 : null
                             }

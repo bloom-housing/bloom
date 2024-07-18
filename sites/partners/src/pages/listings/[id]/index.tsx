@@ -65,8 +65,8 @@ export default function ListingDetail(props: ListingProps) {
                 applicationsLabel: t("nav.applications"),
                 lotteryLabel:
                   listing.status === ListingsStatusEnum.closed &&
-                  listing.lotteryOptIn &&
-                  listing.reviewOrderType === ReviewOrderTypeEnum.lottery
+                  listing?.lotteryOptIn &&
+                  listing?.reviewOrderType === ReviewOrderTypeEnum.lottery
                     ? t("listings.lotteryTitle")
                     : undefined,
               }}
