@@ -204,7 +204,9 @@ describe("lottery", () => {
     )
 
     const { getByText, findByText } = render(
-      <Lottery listing={{ ...listing, lotteryLastRunAt: new Date() }} />
+      <Lottery
+        listing={{ ...listing, lotteryLastRunAt: new Date(), lotteryStatus: LotteryStatusEnum.ran }}
+      />
     )
 
     const header = await findByText("Lottery")
@@ -239,7 +241,9 @@ describe("lottery", () => {
     )
 
     const { getByText, findByText } = render(
-      <Lottery listing={{ ...listing, lotteryLastRunAt: new Date() }} />
+      <Lottery
+        listing={{ ...listing, lotteryLastRunAt: new Date(), lotteryStatus: LotteryStatusEnum.ran }}
+      />
     )
 
     const header = await findByText("Lottery")
@@ -271,7 +275,9 @@ describe("lottery", () => {
     )
 
     const { getByText, findByText } = render(
-      <Lottery listing={{ ...listing, lotteryLastRunAt: new Date() }} />
+      <Lottery
+        listing={{ ...listing, lotteryLastRunAt: new Date(), lotteryStatus: LotteryStatusEnum.ran }}
+      />
     )
 
     const header = await findByText("Lottery")
@@ -282,6 +288,48 @@ describe("lottery", () => {
     expect(
       getByText(
         "Releasing the lottery will give Partner users access to the lottery data, including the ability to publish results to applicants."
+      )
+    ).toBeInTheDocument()
+  })
+
+  it("should show retract modal if user clicks on retract", async () => {
+    mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { isAdmin: true },
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 0 }))
+      })
+    )
+
+    const { getByText, findByText } = render(
+      <Lottery
+        listing={{
+          ...listing,
+          lotteryLastRunAt: new Date(),
+          lotteryStatus: LotteryStatusEnum.releasedToPartners,
+        }}
+      />
+    )
+
+    const header = await findByText("Partners Portal")
+    expect(header).toBeInTheDocument()
+
+    fireEvent.click(getByText("Retract lottery"))
+    expect(await findByText("Are you sure?")).toBeInTheDocument()
+    expect(
+      getByText(
+        "Retracting the lottery will revoke Partner users’ access to the lottery data, including their ability to publish results to applicants."
       )
     ).toBeInTheDocument()
   })
