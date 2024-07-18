@@ -754,7 +754,7 @@ describe('Testing application CSV export service', () => {
         });
       });
 
-      expect(readable).toContain('Lottery Position');
+      expect(readable).toContain('Raw Lottery Rank');
     });
   });
 });
