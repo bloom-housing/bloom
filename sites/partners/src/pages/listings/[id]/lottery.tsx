@@ -38,7 +38,7 @@ const Lottery = (props: { listing: Listing }) => {
   const [publishModal, setPublishModal] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const { applicationsService, listingsService, profile } = useContext(AuthContext)
+  const { listingsService, lotteryService, profile } = useContext(AuthContext)
   const { onExport, csvExportLoading } = useLotteryExport(listing?.id)
   const { data } = useFlaggedApplicationsMeta(listing?.id)
   const duplicatesExist = data?.totalPendingCount > 0
@@ -97,6 +97,7 @@ const Lottery = (props: { listing: Listing }) => {
                 onClick={() => {
                   setRunModal(true)
                 }}
+                disabled={loading || csvExportLoading}
               >
                 {t("listings.lottery.runLottery")}
               </Button>
@@ -300,8 +301,8 @@ const Lottery = (props: { listing: Listing }) => {
                 onClick={async () => {
                   try {
                     setLoading(true)
-                    await applicationsService.lotteryGenerate({ body: { listingId: listing.id } })
                     setRunModal(false)
+                    await lotteryService.lotteryGenerate({ body: { listingId: listing.id } })
                     setLoading(false)
                     location.reload()
                   } catch (err) {

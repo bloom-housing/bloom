@@ -1457,28 +1457,6 @@ export class ApplicationsService {
     })
   }
   /**
-   * Generate the lottery results for a listing
-   */
-  lotteryGenerate(
-    params: {
-      /** requestBody */
-      body?: ApplicationCsvQueryParams
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applications/generateLotteryResults"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
    * Get applications as csv
    */
   listAsCsv(
@@ -2147,6 +2125,31 @@ export class ScriptRunnerService {
   ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/scriptRunner/amiChartImport"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class LotteryService {
+  /**
+   * Generate the lottery results for a listing
+   */
+  lotteryGenerate(
+    params: {
+      /** requestBody */
+      body?: ApplicationCsvQueryParams
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/lottery/generateLotteryResults"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
@@ -4726,17 +4729,6 @@ export interface PaginatedApplication {
   meta: PaginationMeta
 }
 
-export interface ApplicationCsvQueryParams {
-  /**  */
-  listingId: string
-
-  /**  */
-  includeDemographics?: boolean
-
-  /**  */
-  timeZone?: string
-}
-
 export interface ApplicantUpdate {
   /**  */
   firstName?: string
@@ -5423,6 +5415,17 @@ export interface AmiChartImportDTO {
 
   /**  */
   jurisdictionId: string
+}
+
+export interface ApplicationCsvQueryParams {
+  /**  */
+  listingId: string
+
+  /**  */
+  includeDemographics?: boolean
+
+  /**  */
+  timeZone?: string
 }
 
 export enum ListingViews {

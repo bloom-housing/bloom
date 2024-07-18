@@ -115,25 +115,6 @@ export class ApplicationController {
     );
   }
 
-  @Put(`generateLotteryResults`)
-  @ApiOperation({
-    summary: 'Generate the lottery results for a listing',
-    operationId: 'lotteryGenerate',
-  })
-  @Header('Content-Type', 'text/csv')
-  @UseInterceptors(ExportLogInterceptor)
-  async lotteryGenerate(
-    @Request() req: ExpressRequest,
-    @Res({ passthrough: true }) res: Response,
-    @Body() queryParams: ApplicationCsvQueryParams,
-  ): Promise<SuccessDTO> {
-    return await this.applicationCsvExportService.lotteryGenerate(
-      req,
-      res,
-      queryParams,
-    );
-  }
-
   @Get(`csv`)
   @ApiOperation({
     summary: 'Get applications as csv',
