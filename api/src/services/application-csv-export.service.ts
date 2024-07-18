@@ -593,7 +593,7 @@ export class ApplicationCsvExporterService
     if (forLottery) {
       headers.unshift({
         path: 'applicationLotteryPositions',
-        label: 'Lottery Position',
+        label: 'Raw Lottery Rank',
         format: (val: ApplicationLotteryPosition[]): number => {
           if (val?.length) {
             return val[0].ordinal;
@@ -710,7 +710,10 @@ export class ApplicationCsvExporterService
       }-${new Date().getTime()}.csv`,
     );
 
-    await this.createLotterySheet(filename, queryParams);
+    await this.createLotterySheet(filename, {
+      ...queryParams,
+      includeDemographics: true,
+    });
     const file = createReadStream(filename);
     return new StreamableFile(file);
   }
