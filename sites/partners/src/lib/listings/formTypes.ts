@@ -16,7 +16,7 @@ export enum AnotherAddressEnum {
   anotherAddress = "anotherAddress",
 }
 
-export type FormListing = Omit<Listing, "countyCode"> & {
+export type FormListing = Omit<Listing, "countyCode" | "lotteryDaysToExpiration"> & {
   applicationDueDateField?: {
     month: string
     day: string
