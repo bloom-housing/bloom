@@ -15,6 +15,7 @@ const server = setupServer()
 const closedListing = {
   ...listing,
   status: ListingsStatusEnum.closed,
+  lotteryDaysToExpiration: 45,
 }
 
 beforeAll(() => {
