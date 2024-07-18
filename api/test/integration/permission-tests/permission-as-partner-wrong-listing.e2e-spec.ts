@@ -1058,7 +1058,7 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
 
     it('should error as forbidden for process endpoint', async () => {
       await request(app.getHttpServer())
-        .put(`/listings/process`)
+        .put(`/listings/closeListings`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);

@@ -2832,7 +2832,7 @@ describe('Testing listing service', () => {
       prisma.cronJob.update = jest.fn().mockResolvedValue(true);
 
       process.env.PROXY_URL = 'https://www.google.com';
-      await service.process();
+      await service.closeListings();
       expect(httpServiceMock.request).toHaveBeenCalledWith({
         baseURL: 'https://www.google.com',
         method: 'PURGE',
@@ -2872,7 +2872,7 @@ describe('Testing listing service', () => {
       prisma.cronJob.update = jest.fn().mockResolvedValue(true);
 
       process.env.PROXY_URL = 'https://www.google.com';
-      await service.process();
+      await service.closeListings();
       expect(httpServiceMock.request).not.toHaveBeenCalled();
       expect(prisma.listings.updateMany).toHaveBeenCalledWith({
         data: {

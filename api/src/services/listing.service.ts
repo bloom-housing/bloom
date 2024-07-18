@@ -19,6 +19,7 @@ import {
   ReviewOrderTypeEnum,
   UserRoleEnum,
 } from '@prisma/client';
+import dayjs from 'dayjs';
 import { firstValueFrom } from 'rxjs';
 import { ApplicationFlaggedSetService } from './application-flagged-set.service';
 import { EmailService } from './email.service';
@@ -165,7 +166,7 @@ export class ListingService implements OnModuleInit {
       this.prisma,
       LISTING_CRON_JOB_NAME,
       process.env.LISTING_PROCESSING_CRON_STRING,
-      this.process.bind(this),
+      this.closeListings.bind(this),
       this.logger,
       this.schedulerRegistry,
     );
@@ -173,7 +174,7 @@ export class ListingService implements OnModuleInit {
       this.prisma,
       LOTTERY_CRON_JOB_NAME,
       process.env.LOTTERY_PROCESSING_CRON_STRING,
-      this.process.bind(this),
+      this.expireLotteries.bind(this),
       this.logger,
       this.schedulerRegistry,
     );
@@ -1537,7 +1538,7 @@ export class ListingService implements OnModuleInit {
     runs the job to auto close listings that are passed their due date
     will call the the cache purge to purge all listings as long as updates had to be made
   */
-  async process(): Promise<SuccessDTO> {
+  async closeListings(): Promise<SuccessDTO> {
     this.logger.warn('changeOverdueListingsStatusCron job running');
     await this.markCronJobAsStarted(LISTING_CRON_JOB_NAME);
     const res = await this.prisma.listings.updateMany({
@@ -1767,11 +1768,9 @@ export class ListingService implements OnModuleInit {
     if (process.env.LOTTERY_DAYS_TILL_EXPIRY) {
       this.logger.warn('changeExpiredLotteryStatusCron job running');
       await this.markCronJobAsStarted(LOTTERY_CRON_JOB_NAME);
-      const expiration_date = new Date();
-      expiration_date.setDate(
-        expiration_date.getDate() -
-          Number(process.env.LOTTERY_DAYS_TILL_EXPIRY),
-      );
+      const expiration_date = dayjs(new Date())
+        .subtract(Number(process.env.LOTTERY_DAYS_TILL_EXPIRY), 'days')
+        .toDate();
       const res = await this.prisma.listings.updateMany({
         data: {
           lotteryStatus: LotteryStatusEnum.expired,

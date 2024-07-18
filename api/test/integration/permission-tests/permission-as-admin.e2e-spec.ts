@@ -1274,7 +1274,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
 
     it('should succeed for process endpoint', async () => {
       await request(app.getHttpServer())
-        .put(`/listings/process`)
+        .put(`/listings/closeListings`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
