@@ -46,7 +46,6 @@ export class ListingUpdate extends OmitType(Listing, [
   'afsLastRunAt',
   'urlSlug',
   'applicationConfig',
-  'lotteryDaysToExpiration',
 ]) {
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
