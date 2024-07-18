@@ -3024,9 +3024,6 @@ export interface Listing {
   lotteryStatus?: LotteryStatusEnum
 
   /**  */
-  lotteryDaysToExpiration: number
-
-  /**  */
   lastApplicationUpdateAt?: Date
 
   /**  */
@@ -3531,9 +3528,6 @@ export interface ListingCreate {
   lotteryStatus?: LotteryStatusEnum
 
   /**  */
-  lotteryDaysToExpiration: number
-
-  /**  */
   lastApplicationUpdateAt?: Date
 
   /**  */
@@ -3797,9 +3791,6 @@ export interface ListingUpdate {
 
   /**  */
   lotteryStatus?: LotteryStatusEnum
-
-  /**  */
-  lotteryDaysToExpiration: number
 
   /**  */
   lastApplicationUpdateAt?: Date

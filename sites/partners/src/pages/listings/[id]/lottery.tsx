@@ -44,11 +44,8 @@ const Lottery = (props: { listing: Listing }) => {
   const { data } = useFlaggedApplicationsMeta(listing?.id)
   const duplicatesExist = data?.totalPendingCount > 0
   const shouldExpireData = !profile?.userRoles.isAdmin
-  let formattedExpiryDate: string
-  if (listing?.lotteryDaysToExpiration) {
-    const expiryDate = dayjs(listing?.closedAt).add(listing?.lotteryDaysToExpiration, "day")
-    formattedExpiryDate = expiryDate.format("MMMM D, YYYY")
-  }
+  const expiryDate = dayjs(listing?.closedAt).add(45, "day")
+  const formattedExpiryDate = expiryDate.format("MMMM D, YYYY")
 
   if (!listing) return <div>{t("t.errorOccurred")}</div>
 
