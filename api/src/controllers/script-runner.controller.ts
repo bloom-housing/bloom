@@ -34,17 +34,36 @@ export class ScirptRunnerController {
     return await this.scriptRunnerService.example(req);
   }
 
-  @Put('dataTransfer')
+  @Put('transferJurisdictionData')
   @ApiOperation({
     summary: 'A script that pulls data from one source into the current db',
-    operationId: 'dataTransfer',
+    operationId: 'transferJurisdictionData',
   })
   @ApiOkResponse({ type: SuccessDTO })
-  async dataTransfer(
+  async transferJurisdictionData(
     @Body() dataTransferDTO: DataTransferDTO,
     @Request() req: ExpressRequest,
   ): Promise<SuccessDTO> {
-    return await this.scriptRunnerService.dataTransfer(req, dataTransferDTO);
+    return await this.scriptRunnerService.transferJurisdictionData(
+      req,
+      dataTransferDTO,
+    );
+  }
+
+  @Put('transferJurisdictionListingsData')
+  @ApiOperation({
+    summary: 'A script that pulls data from one source into the current db',
+    operationId: 'transferJurisdictionListingsData',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async transferJurisdictionListingsData(
+    @Body() dataTransferDTO: DataTransferDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.transferJurisdictionListingData(
+      req,
+      dataTransferDTO,
+    );
   }
 
   @Put('amiChartImport')

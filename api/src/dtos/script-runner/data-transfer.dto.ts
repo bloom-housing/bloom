@@ -9,4 +9,10 @@ export class DataTransferDTO {
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   connectionString: string;
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
+  jurisdiction: string;
 }

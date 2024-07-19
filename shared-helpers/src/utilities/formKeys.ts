@@ -64,7 +64,7 @@ export const countyKeys = [
   "Marin",
   "Napa",
   // "San Francisco",
-  // "San Mateo",
+  "San Mateo",
   "Santa Clara",
   "Solano",
   "Sonoma",

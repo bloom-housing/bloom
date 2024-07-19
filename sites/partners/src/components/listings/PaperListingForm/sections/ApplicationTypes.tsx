@@ -186,6 +186,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   }, [methods, setValue])
   // register applicationMethods so we can set a value for it
   register("applicationMethods")
+
   return (
     <>
       <hr className="spacer-section-above spacer-section" />

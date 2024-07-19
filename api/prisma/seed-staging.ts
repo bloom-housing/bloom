@@ -54,25 +54,25 @@ export const stagingSeed = async (
   const additionalJurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Contra Costa', [UserRoleEnum.admin]),
   });
-  await prismaClient.jurisdictions.create({
+  const marinCounty = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Marin', [UserRoleEnum.admin]),
   });
-  await prismaClient.jurisdictions.create({
+  const napaCounty = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Napa', [UserRoleEnum.admin]),
   });
-  await prismaClient.jurisdictions.create({
+  const sanMateoCounty = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('San Mateo', [UserRoleEnum.admin]),
   });
-  await prismaClient.jurisdictions.create({
+  const santaClaraCounty = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Santa Clara', [UserRoleEnum.admin]),
   });
-  await prismaClient.jurisdictions.create({
+  const solanaCounty = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Solano', [UserRoleEnum.admin]),
   });
-  await prismaClient.jurisdictions.create({
+  const sonomaCounty = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Sonoma', [UserRoleEnum.admin]),
   });
-  await prismaClient.jurisdictions.create({
+  const sanFranciscoCounty = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('San Francisco', [UserRoleEnum.admin]),
   });
   // create admin user
@@ -81,7 +81,17 @@ export const stagingSeed = async (
       roles: { isAdmin: true },
       email: 'admin@example.com',
       confirmedAt: new Date(),
-      jurisdictionIds: [jurisdiction.id, additionalJurisdiction.id],
+      jurisdictionIds: [
+        jurisdiction.id,
+        additionalJurisdiction.id,
+        marinCounty.id,
+        napaCounty.id,
+        sanMateoCounty.id,
+        santaClaraCounty.id,
+        solanaCounty.id,
+        sonomaCounty.id,
+        sanFranciscoCounty.id,
+      ],
       acceptedTerms: true,
       password: 'abcdef',
     }),
