@@ -39,7 +39,10 @@ export function housingHelpLinkableCards(): React.ReactElement<CardProps>[] {
           {t("help.housingHelp.immediate.alamedaODinfo")}
         </DoorwayCollapsibleSection>
         <DoorwayCollapsibleSection title={t("counties.fullname.ContraCosta")}>
-          <a href="https://cchealth.org/h3/coc/help.php" target="_blank">
+          <a
+            href="https://www.cchealth.org/services-and-programs/homeless-services"
+            target="_blank"
+          >
             {t("help.housingHelp.immediate.contraCostaCHS")}
           </a>
           {t("help.housingHelp.immediate.contraCostaCHSinfo")}
