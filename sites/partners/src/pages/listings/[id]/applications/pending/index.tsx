@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useContext } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import dayjs from "dayjs"
@@ -12,7 +12,11 @@ import {
   BreadcrumbLink,
   AlertBox,
 } from "@bloom-housing/ui-components"
-import { formatDateTime } from "@bloom-housing/shared-helpers"
+import {
+  ListingsStatusEnum,
+  ReviewOrderTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { AuthContext, formatDateTime } from "@bloom-housing/shared-helpers"
 import { useSingleListingData, useFlaggedApplicationsList } from "../../../../../lib/hooks"
 import { ListingStatusBar } from "../../../../../components/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
@@ -28,6 +32,7 @@ const ApplicationsList = () => {
   const tableOptions = useAgTable()
 
   /* Data Fetching */
+  const { profile } = useContext(AuthContext)
   const { listingDto } = useSingleListingData(listingId)
   const listingName = listingDto?.name
   const isListingOpen = listingDto?.status === "active"
@@ -117,6 +122,8 @@ const ApplicationsList = () => {
     }
   }
 
+  if (profile?.userRoles?.isLimitedJurisdictionalAdmin) return null
+
   return (
     <Layout>
       <Head>
@@ -131,6 +138,11 @@ const ApplicationsList = () => {
           flagsQty: flaggedAppsData?.meta?.totalFlagged,
           listingLabel: t("t.listingSingle"),
           applicationsLabel: t("nav.applications"),
+          lotteryLabel:
+            listingDto?.status === ListingsStatusEnum.closed &&
+            listingDto?.reviewOrderType === ReviewOrderTypeEnum.lottery
+              ? t("listings.lotteryTitle")
+              : undefined,
         }}
         breadcrumbs={
           <Breadcrumbs>

@@ -6,7 +6,7 @@ import accountStyles from "../../pages/account/account.module.scss"
 
 interface StatusItemProps {
   applicationDueDate?: string
-  applicationURL: string
+  applicationURL?: string
   applicationUpdatedAt: string
   confirmationNumber?: string
   listingName: string
@@ -62,11 +62,13 @@ const StatusItem = (props: StatusItemProps) => {
         </section>
 
         <footer className={styles["status-item__footer"]}>
-          <div>
-            <Button href={props.applicationURL} variant="primary-outlined" size="sm">
-              {props.strings?.viewApplication ?? t("application.viewApplication")}
-            </Button>
-          </div>
+          {props.applicationURL && (
+            <div>
+              <Button href={props.applicationURL} variant="primary-outlined" size="sm">
+                {props.strings?.viewApplication ?? t("application.viewApplication")}
+              </Button>
+            </div>
+          )}
           <div>
             <Button href={props.listingURL} variant="primary-outlined" size="sm">
               {props.strings?.seeListing ?? t("t.seeListing")}

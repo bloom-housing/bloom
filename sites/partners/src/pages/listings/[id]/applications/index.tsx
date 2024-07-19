@@ -5,13 +5,14 @@ import Head from "next/head"
 import Markdown from "markdown-to-jsx"
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
 import { AgTable, t, useAgTable, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
-import { Button, Card, Heading, Icon, Message } from "@bloom-housing/ui-seeds"
+import { Button, Card, Dialog, Heading, Icon, Message } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   ApplicationOrderByKeys,
   ListingsStatusEnum,
   OrderByEnum,
+  ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   useSingleListingData,
@@ -33,13 +34,17 @@ const ApplicationsList = () => {
   const [isTermsOpen, setIsTermsOpen] = useState(false)
   const router = useRouter()
   const listingId = router.query.id as string
-  // eslint-disable-next-line @typescript-eslint/unbound-method
+
+  const [applicationConfirmAddModal, setApplicationConfirmAddModal] = useState(false)
+  const [applicationConfirmAddPostLotteryModal, setApplicationConfirmAddPostLotteryModal] =
+    useState(false)
+
   const tableOptions = useAgTable()
 
   /* Data Fetching */
   const { listingDto } = useSingleListingData(listingId)
 
-  const listingJurisdiction = profile.jurisdictions.find(
+  const listingJurisdiction = profile?.jurisdictions?.find(
     (jurisdiction) => jurisdiction.id === listingDto?.jurisdictions.id
   )
   const includeDemographicsPartner =
@@ -52,9 +57,9 @@ const ApplicationsList = () => {
       false
   )
 
-  const shouldExpireData = !profile?.userRoles.isAdmin
+  const shouldExpireData = !profile?.userRoles?.isAdmin
 
-  const countyCode = listingDto?.jurisdictions.name
+  const countyCode = listingDto?.jurisdictions?.name
   const listingName = listingDto?.name
   const isListingOpen = listingDto?.status === "active"
   const allowNewApps = listingDto?.status !== "closed" || profile?.userRoles?.isAdmin
@@ -124,10 +129,12 @@ const ApplicationsList = () => {
     }
   }
 
-  if (!applications || appsError) return "An error has occurred."
+  if (!applications || appsError) return <div>{t("t.errorOccurred")}</div>
 
   const expiryDate = dayjs(listingDto?.closedAt).add(45, "day")
   const formattedExpiryDate = expiryDate.format("MMMM D, YYYY")
+
+  if (profile?.userRoles?.isLimitedJurisdictionalAdmin) return null
 
   return (
     <Layout>
@@ -142,6 +149,11 @@ const ApplicationsList = () => {
           flagsQty: flaggedApps?.meta?.totalFlagged,
           listingLabel: t("t.listingSingle"),
           applicationsLabel: t("nav.applications"),
+          lotteryLabel:
+            listingDto?.status === ListingsStatusEnum.closed &&
+            listingDto?.reviewOrderType === ReviewOrderTypeEnum.lottery
+              ? t("listings.lotteryTitle")
+              : undefined,
         }}
         breadcrumbs={
           <Breadcrumbs>
@@ -230,7 +242,15 @@ const ApplicationsList = () => {
                       <div className={pageStyles["table-action-container"]}>
                         {allowNewApps && (
                           <Button
-                            href={`/listings/${listingId}/applications/add`}
+                            onClick={() => {
+                              if (listingDto.lotteryLastRunAt) {
+                                setApplicationConfirmAddPostLotteryModal(true)
+                              } else if (listingDto.status === ListingsStatusEnum.closed) {
+                                setApplicationConfirmAddModal(true)
+                              } else {
+                                void router.push(`/listings/${listingId}/applications/add`)
+                              }
+                            }}
                             variant="primary-outlined"
                             size="sm"
                             className={pageStyles["table-action"]}
@@ -274,6 +294,71 @@ const ApplicationsList = () => {
           </article>
         </section>
       )}
+      <Dialog
+        isOpen={applicationConfirmAddModal}
+        onClose={() => setApplicationConfirmAddModal(false)}
+        ariaLabelledBy="confirm-add-application-dialog-header"
+      >
+        <Dialog.Header id="confirm-add-application-dialog-header">
+          {t("applications.addConfirmModalHeader")}
+        </Dialog.Header>
+        <Dialog.Content>{t("applications.addConfirmModalContent")}</Dialog.Content>
+        <Dialog.Footer>
+          <Button
+            type="button"
+            variant="primary"
+            onClick={() => router.push(`/listings/${listingId}/applications/add`)}
+            size="sm"
+          >
+            {t("applications.addConfirmModalAddApplication")}
+          </Button>
+          <Button
+            type="button"
+            variant="primary-outlined"
+            onClick={() => setApplicationConfirmAddModal(false)}
+            size="sm"
+          >
+            {t("t.cancel")}
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
+
+      <Dialog
+        isOpen={applicationConfirmAddPostLotteryModal}
+        onClose={() => setApplicationConfirmAddPostLotteryModal(false)}
+        ariaLabelledBy="confirm-add-application-post-lottery-dialog-header"
+      >
+        <Dialog.Header id="confirm-add-application-post-lottery-dialog-header">
+          {t("applications.addConfirmModalAddApplicationPostLotteryTitle")}
+        </Dialog.Header>
+        <Dialog.Content>
+          <p>
+            <span>{t("applications.addConfirmModalAddApplicationPostLottery")}</span>{" "}
+            <span className={"font-semibold"}>
+              {t("applications.addConfirmModalAddApplicationPostLotteryWeighted")}
+            </span>
+          </p>
+          <p>{t("applications.addConfirmModalAddApplicationPostLotteryAreYouSure")}</p>
+        </Dialog.Content>
+        <Dialog.Footer>
+          <Button
+            type="button"
+            variant="alert"
+            onClick={() => router.push(`/listings/${listingId}/applications/add`)}
+            size="sm"
+          >
+            {t("applications.addConfirmModalAddApplicationPostLotteryConfirm")}
+          </Button>
+          <Button
+            type="button"
+            variant="primary-outlined"
+            onClick={() => setApplicationConfirmAddPostLotteryModal(false)}
+            size="sm"
+          >
+            {t("t.cancel")}
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
     </Layout>
   )
 }

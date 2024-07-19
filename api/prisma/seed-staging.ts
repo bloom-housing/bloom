@@ -23,10 +23,9 @@ import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { unitAccessibilityPriorityTypeFactoryAll } from './seed-helpers/unit-accessibility-priority-type-factory';
 import { multiselectQuestionFactory } from './seed-helpers/multiselect-question-factory';
 import {
-  goldenGateBridge,
-  lincolnMemorial,
-  washingtonMonument,
-  whiteHouse,
+  yellowstoneAddress,
+  yosemiteAddress,
+  rockyMountainAddress,
 } from './seed-helpers/address-factory';
 import { applicationFactory } from './seed-helpers/application-factory';
 import { translationFactory } from './seed-helpers/translation-factory';
@@ -97,6 +96,16 @@ export const stagingSeed = async (
       acceptedTerms: true,
     }),
   });
+  // create a limited jurisdictional admin
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isLimitedJurisdictionalAdmin: true },
+      email: 'limited-jurisdiction-admin@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: true,
+    }),
+  });
   await prismaClient.userAccounts.create({
     data: await userFactory({
       roles: { isAdmin: true },
@@ -140,6 +149,10 @@ export const stagingSeed = async (
   const amiChart = await prismaClient.amiChart.create({
     data: amiChartFactory(10, jurisdiction.id),
   });
+  await prismaClient.amiChart.create({
+    data: amiChartFactory(8, additionalJurisdiction.id),
+  });
+  // Create map layers
   await prismaClient.mapLayers.create({
     data: mapLayerFactory(jurisdiction.id, 'Redlined Districts', redlinedMap),
   });
@@ -315,7 +328,7 @@ export const stagingSeed = async (
         contentUpdatedAt: new Date(),
         publishedAt: new Date(),
         listingsBuildingAddress: {
-          create: whiteHouse,
+          create: yellowstoneAddress,
         },
         listingsApplicationPickUpAddress: undefined,
         listingsLeasingAgentAddress: undefined,
@@ -343,7 +356,7 @@ export const stagingSeed = async (
           minOccupancy: 1,
           monthlyRent: '1200',
           numBathrooms: 1,
-          numBedrooms: 1,
+          numBedrooms: 0,
           number: '101',
           sqFeet: '750.00',
           amiChart: { connect: { id: amiChart.id } },
@@ -593,19 +606,19 @@ export const stagingSeed = async (
         contentUpdatedAt: new Date(),
         publishedAt: new Date(),
         listingsBuildingAddress: {
-          create: goldenGateBridge,
+          create: yellowstoneAddress,
         },
         listingsApplicationMailingAddress: {
-          create: lincolnMemorial,
+          create: rockyMountainAddress,
         },
         listingsApplicationPickUpAddress: {
-          create: washingtonMonument,
+          create: yosemiteAddress,
         },
         listingsLeasingAgentAddress: {
-          create: lincolnMemorial,
+          create: rockyMountainAddress,
         },
         listingsApplicationDropOffAddress: {
-          create: washingtonMonument,
+          create: yosemiteAddress,
         },
         reservedCommunityTypes: undefined,
         listingImages: {
@@ -637,7 +650,7 @@ export const stagingSeed = async (
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: {
             connect: {
-              id: unitTypes[2].id,
+              id: unitTypes[1].id,
             },
           },
         },
@@ -945,13 +958,31 @@ export const stagingSeed = async (
           minOccupancy: 1,
           monthlyRent: '1200',
           numBathrooms: 1,
-          numBedrooms: 1,
+          numBedrooms: 0,
           number: '101',
           sqFeet: '750.00',
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: {
             connect: {
               id: unitTypes[0].id,
+            },
+          },
+        },
+        {
+          amiPercentage: '30',
+          monthlyIncomeMin: '2000',
+          floor: 1,
+          maxOccupancy: 3,
+          minOccupancy: 1,
+          monthlyRent: '1200',
+          numBathrooms: 1,
+          numBedrooms: 0,
+          number: '101',
+          sqFeet: '750.00',
+          amiChart: { connect: { id: amiChart.id } },
+          unitTypes: {
+            connect: {
+              id: unitTypes[5].id,
             },
           },
         },
@@ -981,9 +1012,9 @@ export const stagingSeed = async (
           minOccupancy: 1,
           monthlyRent: '1200',
           numBathrooms: 1,
-          numBedrooms: 1,
+          numBedrooms: 2,
           number: '101',
-          sqFeet: '750.00',
+          sqFeet: '1050.00',
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: {
             connect: {
@@ -998,10 +1029,10 @@ export const stagingSeed = async (
           maxOccupancy: 3,
           minOccupancy: 1,
           monthlyRent: '1200',
-          numBathrooms: 1,
-          numBedrooms: 1,
+          numBathrooms: 2,
+          numBedrooms: 3,
           number: '101',
-          sqFeet: '750.00',
+          sqFeet: '1250.00',
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: {
             connect: {
@@ -1016,32 +1047,14 @@ export const stagingSeed = async (
           maxOccupancy: 3,
           minOccupancy: 1,
           monthlyRent: '1200',
-          numBathrooms: 1,
-          numBedrooms: 1,
+          numBathrooms: 3,
+          numBedrooms: 4,
           number: '101',
-          sqFeet: '750.00',
+          sqFeet: '1750.00',
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: {
             connect: {
               id: unitTypes[4].id,
-            },
-          },
-        },
-        {
-          amiPercentage: '30',
-          monthlyIncomeMin: '2000',
-          floor: 1,
-          maxOccupancy: 3,
-          minOccupancy: 1,
-          monthlyRent: '1200',
-          numBathrooms: 1,
-          numBedrooms: 1,
-          number: '101',
-          sqFeet: '750.00',
-          amiChart: { connect: { id: amiChart.id } },
-          unitTypes: {
-            connect: {
-              id: unitTypes[5].id,
             },
           },
         },

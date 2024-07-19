@@ -61,20 +61,8 @@ export class Member implements HouseholdMemberUpdate {
     latitude: undefined,
     longitude: undefined,
   }
-  householdMemberWorkAddress = {
-    placeName: undefined,
-    city: "",
-    county: "",
-    state: "",
-    street: "",
-    street2: "",
-    zipCode: "",
-    latitude: undefined,
-    longitude: undefined,
-  }
   sameAddress?: YesNoEnum
   relationship?: HouseholdMemberRelationship
-  workInRegion?: YesNoEnum
 }
 
 const ApplicationMember = () => {
@@ -274,11 +262,11 @@ const ApplicationMember = () => {
                   defaultValue={member.householdMemberAddress.street}
                   validation={{ required: true, maxLength: 64 }}
                   errorMessage={
-                    errors.address?.street?.type === "maxLength"
+                    errors.householdMemberAddress?.street?.type === "maxLength"
                       ? t("errors.maxLength")
                       : t("errors.streetError")
                   }
-                  error={errors.address?.street}
+                  error={errors.householdMemberAddress?.street}
                   register={register}
                   dataTestId={"app-household-member-address-street"}
                   label={t("application.contact.streetAddress")}
@@ -289,7 +277,7 @@ const ApplicationMember = () => {
                   name="householdMemberAddress.street2"
                   label={t("application.contact.apt")}
                   defaultValue={member.householdMemberAddress.street2}
-                  error={errors.address?.street2}
+                  error={errors.householdMemberAddress?.street2}
                   validation={{ maxLength: 64 }}
                   errorMessage={t("errors.maxLength")}
                   register={register}
@@ -304,11 +292,11 @@ const ApplicationMember = () => {
                     defaultValue={member.householdMemberAddress.city}
                     validation={{ required: true, maxLength: 64 }}
                     errorMessage={
-                      errors.address?.city?.type === "maxLength"
+                      errors.householdMemberAddress?.city?.type === "maxLength"
                         ? t("errors.maxLength")
                         : t("errors.cityError")
                     }
-                    error={errors.address?.city}
+                    error={errors.householdMemberAddress?.city}
                     register={register}
                     dataTestId={"app-household-member-address-city"}
                   />
@@ -319,9 +307,9 @@ const ApplicationMember = () => {
                     label={t("application.contact.state")}
                     defaultValue={member.householdMemberAddress.state}
                     validation={{ required: true, maxLength: 64 }}
-                    error={errors.address?.state}
+                    error={errors.householdMemberAddress?.state}
                     errorMessage={
-                      errors.address?.state?.type === "maxLength"
+                      errors.householdMemberAddress?.state?.type === "maxLength"
                         ? t("errors.maxLength")
                         : t("errors.stateError")
                     }
@@ -339,9 +327,9 @@ const ApplicationMember = () => {
                   label={t("application.contact.zip")}
                   defaultValue={member.householdMemberAddress.zipCode}
                   validation={{ required: true, maxLength: 64 }}
-                  error={errors.address?.zipCode}
+                  error={errors.householdMemberAddress?.zipCode}
                   errorMessage={
-                    errors.address?.zipCode?.type === "maxLength"
+                    errors.address?.householdMemberAddress?.type === "maxLength"
                       ? t("errors.maxLength")
                       : t("errors.zipCodeError")
                   }

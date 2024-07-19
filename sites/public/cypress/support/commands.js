@@ -46,7 +46,8 @@ Cypress.Commands.add("checkErrorMessages", (command) => {
 })
 
 Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
-  cy.visit("/listings")
+  cy.visit("/")
+  cy.getByTestId("View Listings-1").click()
   cy.get(".is-card-link").contains(listingName).click()
   cy.getByID("listing-view-apply-button").eq(1).click()
   cy.get("[data-testid=sign-in-email-field]").type("admin@example.com")

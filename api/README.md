@@ -14,7 +14,6 @@ These commands are also encapsulated in:
 $ yarn setup
 ```
 
-
 If you would prefer to have it setup with more realistic data you can run `yarn db:setup:staging` instead of `yarn db:setup`.
 
 ## Starting the application
@@ -37,6 +36,13 @@ We use [Prisma](https://www.prisma.io/) as the ORM. To modify the schema you wil
   <li> Enum creation for use in both the API and the database </li>
   <li> How Prisma connects to the database </li>
 </ol>
+
+You will need to:
+1. Add the field in the DTO
+2. Run `yarn generate:client` to add the type to the swagger file
+3. Manually add the field to `schema.prisma`
+4. Run `yarn prisma migrate dev --name <name of migration>` to create the migration file
+
 
 ## Conventions
 We use the following conventions:

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState, useCallback } from "react"
 import { useForm } from "react-hook-form"
+import { GoogleReCaptcha } from "react-google-recaptcha-v3"
 import { t, useMutate } from "@bloom-housing/ui-components"
 import { useRouter } from "next/router"
 import FormsLayout from "../layouts/forms"
@@ -29,6 +30,7 @@ const SignIn = () => {
 
   const { login, requestSingleUseCode, userService } = useContext(AuthContext)
   const signUpCopy = process.env.showMandatedAccounts
+  const reCaptchaEnabled = !!process.env.reCaptchaKey
 
   /* Form Handler */
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
@@ -51,6 +53,9 @@ const SignIn = () => {
   const loginType = router.query?.loginType as LoginType
 
   const [useCode, setUseCode] = useState(loginType !== "pwd")
+  const [loading, setLoading] = useState(false)
+  const [reCaptchaToken, setReCaptchaToken] = useState(null)
+  const [refreshReCaptcha, setRefreshReCaptcha] = useState(false)
 
   const {
     mutate: mutateResendConfirmation,
@@ -66,46 +71,98 @@ const SignIn = () => {
     })
   }, [])
 
-  const onSubmit = async (data: { email: string; password: string }) => {
-    const { email, password } = data
+  const onVerify = useCallback((token) => {
+    setReCaptchaToken(token)
+  }, [])
 
+  const singleUseCodeFlow = async (email: string, reCaptcha?: boolean) => {
+    clearErrors()
     try {
-      const user = await login(email, password)
-      await redirectToPage()
-      addToast(t(`authentication.signIn.success`, { name: user.firstName }), { variant: "success" })
+      await requestSingleUseCode(email)
+      const redirectUrl = router.query?.redirectUrl as string
+      const listingId = router.query?.listingId as string
+      let queryParams: { [key: string]: string } = {
+        email,
+        flowType: reCaptcha ? "loginReCaptcha" : "login",
+      }
+      if (redirectUrl) queryParams = { ...queryParams, redirectUrl }
+      if (listingId) queryParams = { ...queryParams, listingId }
+
+      await router.push({
+        pathname: "/verify",
+        query: queryParams,
+      })
     } catch (error) {
+      setLoading(false)
       const { status } = error.response || {}
       determineNetworkError(status, error)
     }
   }
 
-  const onSubmitPwdless = async (data: { email: string; password: string }) => {
+  const sendToReCaptchaFlow = (errorName: string) => {
+    return (
+      reCaptchaEnabled &&
+      (errorName === "failedReCaptchaToken" ||
+        errorName === "failedReCaptchaScore" ||
+        errorName === "failedReCaptchaAction")
+    )
+  }
+
+  const onSubmit = async (data: { email: string; password: string }) => {
+    setLoading(true)
     const { email, password } = data
 
     try {
-      if (useCode) {
-        clearErrors()
-        await requestSingleUseCode(email)
-        const redirectUrl = router.query?.redirectUrl as string
-        const listingId = router.query?.listingId as string
-        let queryParams: { [key: string]: string } = { email, flowType: "login" }
-        if (redirectUrl) queryParams = { ...queryParams, redirectUrl }
-        if (listingId) queryParams = { ...queryParams, listingId }
+      const user = await login(
+        email,
+        password,
+        undefined,
+        undefined,
+        undefined,
+        reCaptchaEnabled ? reCaptchaToken : undefined
+      )
+      await redirectToPage()
+      addToast(t(`authentication.signIn.success`, { name: user.firstName }), { variant: "success" })
+    } catch (error) {
+      setLoading(false)
+      if (sendToReCaptchaFlow(error.response.data.name)) {
+        await singleUseCodeFlow(email, true)
+      }
+      const { status } = error.response || {}
+      determineNetworkError(status, error)
+      setRefreshReCaptcha(!refreshReCaptcha)
+    }
+  }
 
-        await router.push({
-          pathname: "/verify",
-          query: queryParams,
-        })
-      } else {
-        const user = await login(email, password)
+  const onSubmitPwdless = async (data: { email: string; password: string }) => {
+    setLoading(true)
+    const { email, password } = data
+
+    if (useCode) {
+      await singleUseCodeFlow(email)
+    } else {
+      try {
+        const user = await login(
+          email,
+          password,
+          undefined,
+          undefined,
+          undefined,
+          reCaptchaEnabled ? reCaptchaToken : undefined
+        )
         addToast(t(`authentication.signIn.success`, { name: user.firstName }), {
           variant: "success",
         })
         await redirectToPage()
+      } catch (error) {
+        setLoading(false)
+        if (sendToReCaptchaFlow(error.response.data.name)) {
+          await singleUseCodeFlow(email, true)
+        }
+        const { status } = error.response || {}
+        determineNetworkError(status, error)
+        setRefreshReCaptcha(!refreshReCaptcha)
       }
-    } catch (error) {
-      const { status } = error.response || {}
-      determineNetworkError(status, error)
     }
   }
 
@@ -199,11 +256,13 @@ const SignIn = () => {
                   control={{ register, errors, handleSubmit }}
                   useCode={useCode}
                   setUseCode={setUseCode}
+                  loading={loading}
                 />
               ) : (
                 <FormSignInDefault
                   onSubmit={(data) => void onSubmit(data)}
                   control={{ register, errors, handleSubmit }}
+                  loading={loading}
                 />
               )}
             </FormSignIn>
@@ -235,6 +294,9 @@ const SignIn = () => {
         onSubmit={(email) => onResendConfirmationSubmit(email)}
         loadingMessage={isResendConfirmationLoading && t("t.formSubmitted")}
       />
+      {reCaptchaEnabled && (
+        <GoogleReCaptcha onVerify={onVerify} refreshReCaptcha={refreshReCaptcha} action={"login"} />
+      )}
     </>
   )
 }

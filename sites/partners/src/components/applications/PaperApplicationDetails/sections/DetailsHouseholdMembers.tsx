@@ -18,7 +18,6 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
     relationship: "t.relationship",
     birth: "application.household.member.dateOfBirth",
     sameResidence: "application.add.sameResidence",
-    workInRegion: "application.details.workInRegion",
     action: "",
   }
 
@@ -46,7 +45,6 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
             : t("t.n/a"),
       },
       sameResidence: { content: checkAvailablility(item.sameAddress) },
-      workInRegion: { content: checkAvailablility(item.workInRegion) },
       action: {
         content: (
           <Button

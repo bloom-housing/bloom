@@ -1,27 +1,24 @@
-export const headScript = () => {
-  const gtmKey = process.env.gtmKey
-  if (gtmKey) {
-    return `
-      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-      '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','${gtmKey}')
-    `
-  } else {
-    return ""
-  }
+export const gaLoadScript = () => {
+  const gaKey = process.env.gtmKey
+  if (gaKey) {
+    const script = document.createElement("script")
+    script.async = true
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${gaKey}`
+    return script
+  } else return null
 }
 
-export const bodyTopTag = () => {
-  const gtmKey = process.env.gtmKey
-  if (gtmKey) {
-    return `
-    <noscript><iframe height="0" src="//www.googletagmanager.com/ns.html?id=${gtmKey}" style="display:none;visibility:hidden" width="0"></iframe></noscript>
-  `
-  } else {
-    return ""
-  }
+export const gaCaptureScript = () => {
+  const gaKey = process.env.gtmKey
+  if (gaKey) {
+    const script = document.createElement("script")
+    script.innerHTML = `
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', '${gaKey}');`
+    return script
+  } else return null
 }
 
 /* eslint-disable @typescript-eslint/no-explicit-any */

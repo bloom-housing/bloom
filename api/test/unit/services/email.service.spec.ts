@@ -10,7 +10,7 @@ import { TranslationService } from '../../../src/services/translation.service';
 import { JurisdictionService } from '../../../src/services/jurisdiction.service';
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 import { translationFactory } from '../../../prisma/seed-helpers/translation-factory';
-import { whiteHouse } from '../../../prisma/seed-helpers/address-factory';
+import { yellowstoneAddress } from '../../../prisma/seed-helpers/address-factory';
 import { Application } from '../../../src/dtos/applications/application.dto';
 import { User } from '../../../src/dtos/users/user.dto';
 import { ApplicationCreate } from '../../../src/dtos/applications/application-create.dto';
@@ -210,7 +210,7 @@ describe('Testing email service', () => {
       createdAt: new Date(),
       updatedAt: new Date(),
       listingsBuildingAddress: {
-        ...whiteHouse,
+        ...yellowstoneAddress,
         id: 'addressId',
         createdAt: new Date(),
         updatedAt: new Date(),

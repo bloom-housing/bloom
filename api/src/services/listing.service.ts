@@ -1,53 +1,59 @@
 import {
+  BadRequestException,
+  ForbiddenException,
+  HttpException,
   Inject,
   Injectable,
   Logger,
   NotFoundException,
   OnModuleInit,
-  HttpException,
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import {
   LanguagesEnum,
+  ListingEventsTypeEnum,
   ListingsStatusEnum,
+  LotteryStatusEnum,
   Prisma,
   ReviewOrderTypeEnum,
   UserRoleEnum,
 } from '@prisma/client';
 import { firstValueFrom } from 'rxjs';
+import { ApplicationFlaggedSetService } from './application-flagged-set.service';
+import { EmailService } from './email.service';
+import { PermissionService } from './permission.service';
 import { PrismaService } from './prisma.service';
+import { TranslationService } from './translation.service';
+import { AmiChart } from '../dtos/ami-charts/ami-chart.dto';
+import { Listing } from '../dtos/listings/listing.dto';
+import { ListingCreate } from '../dtos/listings/listing-create.dto';
+import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
+import { ListingLotteryStatus } from '../dtos/listings/listing-lottery-status.dto';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
+import { ListingUpdate } from '../dtos/listings/listing-update.dto';
+import { IdDTO } from '../dtos/shared/id.dto';
+import { SuccessDTO } from '../dtos/shared/success.dto';
+import { User } from '../dtos/users/user.dto';
+import Unit from '../dtos/units/unit.dto';
+import { ListingViews } from '../enums/listings/view-enum';
+import { ListingFilterKeys } from '../enums/listings/filter-key-enum';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import { buildFilter } from '../utilities/build-filter';
+import { buildOrderByForListings } from '../utilities/build-order-by';
+import { startCronJob } from '../utilities/cron-job-starter';
+import { checkIfDatesChanged } from '../utilities/listings-utilities';
+import { mapTo } from '../utilities/mapTo';
 import {
   buildPaginationMetaInfo,
   calculateSkip,
   calculateTake,
 } from '../utilities/pagination-helpers';
-import { buildOrderByForListings } from '../utilities/build-order-by';
-import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
-import { ListingFilterKeys } from '../enums/listings/filter-key-enum';
-import { buildFilter } from '../utilities/build-filter';
-import { Listing } from '../dtos/listings/listing.dto';
-import { mapTo } from '../utilities/mapTo';
 import {
   summarizeUnitsByTypeAndRent,
   summarizeUnits,
 } from '../utilities/unit-utilities';
-import { AmiChart } from '../dtos/ami-charts/ami-chart.dto';
-import { ListingViews } from '../enums/listings/view-enum';
-import { TranslationService } from './translation.service';
-import { ListingCreate } from '../dtos/listings/listing-create.dto';
-import { SuccessDTO } from '../dtos/shared/success.dto';
-import { ListingUpdate } from '../dtos/listings/listing-update.dto';
-import { ApplicationFlaggedSetService } from './application-flagged-set.service';
-import { User } from '../dtos/users/user.dto';
-import { EmailService } from './email.service';
-import { IdDTO } from '../dtos/shared/id.dto';
-import { startCronJob } from '../utilities/cron-job-starter';
-import { PermissionService } from './permission.service';
-import { permissionActions } from '../enums/permissions/permission-actions-enum';
-import Unit from '../dtos/units/unit.dto';
 
 export type getListingsArgs = {
   skip: number;
@@ -1152,6 +1158,8 @@ export class ListingService implements OnModuleInit {
   */
   async update(dto: ListingUpdate, requestingUser: User): Promise<Listing> {
     const storedListing = await this.findOrThrow(dto.id, ListingViews.details);
+    const isNonAdmin = !requestingUser?.userRoles?.isAdmin;
+    const isActiveListing = dto.status === ListingsStatusEnum.active;
 
     await this.permissionService.canOrThrow(
       requestingUser,
@@ -1162,6 +1170,31 @@ export class ListingService implements OnModuleInit {
         jurisdictionId: storedListing.jurisdictionId,
       },
     );
+
+    //check if the user has permission to edit dates
+    if (isNonAdmin && isActiveListing) {
+      const lotteryEvent = dto.listingEvents?.find(
+        (event) => event?.type === ListingEventsTypeEnum.publicLottery,
+      );
+      const storedLotteryEvent = storedListing.listingEvents?.find(
+        (event) => event?.type === ListingEventsTypeEnum.publicLottery,
+      );
+
+      if (
+        checkIfDatesChanged(
+          lotteryEvent,
+          storedLotteryEvent,
+          dto,
+          storedListing.applicationDueDate?.toISOString(),
+          storedListing.reviewOrderType,
+        )
+      ) {
+        throw new HttpException(
+          'You do not have permission to edit dates',
+          403,
+        );
+      }
+    }
 
     dto.unitsAvailable =
       dto.reviewOrderType !== ReviewOrderTypeEnum.waitlist && dto.units
@@ -1345,6 +1378,12 @@ export class ListingService implements OnModuleInit {
             ? {
                 connect: {
                   id: dto.reservedCommunityTypes.id,
+                },
+              }
+            : storedListing.reservedCommunityTypes
+            ? {
+                disconnect: {
+                  id: storedListing.reservedCommunityTypes.id,
                 },
               }
             : undefined,
@@ -1594,7 +1633,7 @@ export class ListingService implements OnModuleInit {
     clears the listing cache of either 1 listing or all listings
      @param storedListingStatus the status that was stored for the listing
      @param incomingListingStatus the incoming "new" status for a listing
-     @param savedResponseId the id of the listing   
+     @param savedResponseId the id of the listing
   */
   async cachePurge(
     storedListingStatus: ListingsStatusEnum | undefined,
@@ -1718,7 +1757,7 @@ export class ListingService implements OnModuleInit {
 
   /**
     marks the db record for this cronjob as begun or creates a cronjob that
-    is marked as begun if one does not already exist 
+    is marked as begun if one does not already exist
   */
   async markCronJobAsStarted(): Promise<void> {
     const job = await this.prisma.cronJob.findFirst({
@@ -1770,5 +1809,136 @@ export class ListingService implements OnModuleInit {
     }
 
     return listing.jurisdictionId;
+  }
+
+  async lotteryStatus(
+    dto: ListingLotteryStatus,
+    requestingUser: User,
+  ): Promise<SuccessDTO> {
+    const storedListing = await this.findOrThrow(
+      dto.listingId,
+      ListingViews.details,
+    );
+
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'listing',
+      permissionActions.update,
+      {
+        id: storedListing.id,
+        jurisdictionId: storedListing.jurisdictionId,
+      },
+    );
+
+    if (storedListing.status !== ListingsStatusEnum.closed) {
+      throw new BadRequestException(
+        'Lottery status cannot be changed until listing is closed.',
+      );
+    }
+
+    const isAdmin = requestingUser.userRoles?.isAdmin;
+    const isPartner = requestingUser.userRoles?.isPartner;
+    const currentStatus = storedListing.lotteryStatus;
+
+    // TODO: remove when all status logic has been implemented
+    let res;
+
+    switch (dto?.lotteryStatus) {
+      case LotteryStatusEnum.ran: {
+        if (!isAdmin) {
+          throw new ForbiddenException();
+        }
+        if (
+          currentStatus === LotteryStatusEnum.releasedToPartners ||
+          currentStatus === LotteryStatusEnum.publishedToPublic
+        ) {
+          // TODO: add retracted to history
+        }
+        // TODO: add ran to history
+        // TODO: remove when all status logic has been implemented
+        res = await this.prisma.listings.update({
+          data: {
+            lotteryStatus: dto?.lotteryStatus,
+          },
+          where: {
+            id: dto.listingId,
+          },
+        });
+
+        break;
+      }
+      case LotteryStatusEnum.errored: {
+        // TODO
+        break;
+      }
+      case LotteryStatusEnum.releasedToPartners: {
+        if (!isAdmin) {
+          throw new ForbiddenException();
+        }
+        if (currentStatus !== LotteryStatusEnum.ran) {
+          throw new BadRequestException(
+            'Lottery cannot be released to partners without being in run state.',
+          );
+        }
+        // TODO: add released to partners to history
+        // TODO: remove when all status logic has been implemented
+        res = await this.prisma.listings.update({
+          data: {
+            lotteryStatus: dto?.lotteryStatus,
+          },
+          where: {
+            id: dto.listingId,
+          },
+        });
+        break;
+      }
+      case LotteryStatusEnum.publishedToPublic: {
+        if (!isPartner && !isAdmin) {
+          throw new ForbiddenException();
+        }
+        if (currentStatus !== LotteryStatusEnum.releasedToPartners) {
+          throw new BadRequestException(
+            'Lottery cannot be published to public without being in released to partners state.',
+          );
+        }
+        // TODO: add published to public to history
+        // TODO: remove when all status logic has been implemented
+        res = await this.prisma.listings.update({
+          data: {
+            lotteryStatus: dto?.lotteryStatus,
+          },
+          where: {
+            id: dto.listingId,
+          },
+        });
+        break;
+      }
+      case LotteryStatusEnum.expired: {
+        // TODO
+        break;
+      }
+      default: {
+        throw new BadRequestException(
+          `${dto?.lotteryStatus} is not an allowed lottery status.`,
+        );
+      }
+    }
+    // TODO: uncomment when all status logic is implemented
+    // const res = await this.prisma.listings.update({
+    //   data: {
+    //     lotteryStatus: dto?.lotteryStatus,
+    //   },
+    //   where: {
+    //     id: dto.listingId,
+    //   },
+    // });
+
+    if (!res) {
+      throw new HttpException('Listing lottery status failed to save.', 500);
+    }
+
+    return {
+      success: true,
+    };
   }
 }

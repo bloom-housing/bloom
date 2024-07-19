@@ -109,7 +109,10 @@ const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions 
   }
 
   if (profile?.userRoles?.isAdmin) {
-    if (selectedRoles === RoleOption.JurisdictionalAdmin) {
+    if (
+      selectedRoles === RoleOption.JurisdictionalAdmin ||
+      selectedRoles === RoleOption.LimitedJurisdictionalAdmin
+    ) {
       return (
         <SectionWithGrid heading={t("t.jurisdiction")}>
           <Grid.Row columns={4}>

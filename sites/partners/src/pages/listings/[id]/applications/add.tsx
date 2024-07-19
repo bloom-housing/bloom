@@ -1,5 +1,6 @@
-import React from "react"
+import React, { useContext } from "react"
 import Head from "next/head"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import Layout from "../../../../layouts"
 import PaperApplicationForm from "../../../../components/applications/PaperApplicationForm/PaperApplicationForm"
@@ -10,8 +11,11 @@ import { useSingleListingData } from "../../../../lib/hooks"
 const NewApplication = () => {
   const router = useRouter()
   const listingId = router.query.id as string
+  const { profile } = useContext(AuthContext)
 
   const { listingDto: listing } = useSingleListingData(listingId)
+
+  if (profile?.userRoles?.isLimitedJurisdictionalAdmin) return null
 
   return (
     <Layout>
@@ -34,7 +38,6 @@ const NewApplication = () => {
           </Breadcrumbs>
         }
       />
-
       <PaperApplicationForm listingId={listingId} />
     </Layout>
   )

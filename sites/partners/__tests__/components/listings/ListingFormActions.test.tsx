@@ -769,7 +769,7 @@ describe("<ListingFormActions>", () => {
       })
 
       it("renders correct buttons in a closed edit state", () => {
-        const { getByText } = render(
+        const { getByText, queryAllByText } = render(
           <AuthContext.Provider value={{ profile: adminUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
@@ -779,9 +779,23 @@ describe("<ListingFormActions>", () => {
         expect(getByText("Reopen")).toBeTruthy()
         expect(getByText("Save & Exit")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
-        // Disabled for Doorway
-        // expect(getByText("Post Results")).toBeTruthy()
+        expect(queryAllByText("Post Results")).toHaveLength(0)
         expect(getByText("Cancel")).toBeTruthy()
+      })
+      it("renders correct buttons in a closed edit state if lottery is turned on", () => {
+        process.env.showLottery = "TRUE"
+        const { getByText } = render(
+          <AuthContext.Provider value={{ profile: adminUser }}>
+            <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
+              <ListingFormActions type={ListingFormActionsType.edit} />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        )
+        expect(getByText("Reopen")).toBeInTheDocument()
+        expect(getByText("Save & Exit")).toBeInTheDocument()
+        expect(getByText("Unpublish")).toBeInTheDocument()
+        expect(getByText("Post Results")).toBeInTheDocument()
+        expect(getByText("Cancel")).toBeInTheDocument()
       })
     })
     describe("as a jurisdictional admin", () => {

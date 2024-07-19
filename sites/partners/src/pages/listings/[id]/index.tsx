@@ -1,10 +1,12 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import Head from "next/head"
 import axios from "axios"
 import { t, AlertBox, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   Listing,
   ListingsStatusEnum,
+  ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingStatusBar } from "../../../components/listings/ListingStatusBar"
 import ListingGuard from "../../../components/shared/ListingGuard"
@@ -43,6 +45,7 @@ interface ListingProps {
 
 export default function ListingDetail(props: ListingProps) {
   const { listing } = props
+  const { profile } = useContext(AuthContext)
   const [errorAlert, setErrorAlert] = useState<string>(null)
   const [unitDrawer, setUnitDrawer] = useState<UnitDrawer>(null)
 
@@ -62,7 +65,14 @@ export default function ListingDetail(props: ListingProps) {
               tabs={{
                 show: listing.status !== ListingsStatusEnum.pending,
                 listingLabel: t("t.listingSingle"),
-                applicationsLabel: t("nav.applications"),
+                applicationsLabel: !profile?.userRoles?.isLimitedJurisdictionalAdmin
+                  ? t("nav.applications")
+                  : undefined,
+                lotteryLabel:
+                  listing.status === ListingsStatusEnum.closed &&
+                  listing.reviewOrderType === ReviewOrderTypeEnum.lottery
+                    ? t("listings.lotteryTitle")
+                    : undefined,
               }}
               breadcrumbs={
                 <Breadcrumbs>

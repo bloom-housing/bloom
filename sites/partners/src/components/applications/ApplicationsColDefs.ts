@@ -362,38 +362,6 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       },
     },
     {
-      headerName: t("applications.table.workStreet"),
-      field: "applicant.applicantWorkAddress.street",
-      sortable: false,
-      filter: false,
-      width: 250,
-      minWidth: 50,
-    },
-    {
-      headerName: t("applications.table.workCity"),
-      field: "applicant.applicantWorkAddress.city",
-      sortable: false,
-      filter: false,
-      width: 120,
-      minWidth: 50,
-    },
-    {
-      headerName: t("applications.table.workState"),
-      field: "applicant.applicantWorkAddress.state",
-      sortable: false,
-      filter: false,
-      width: 110,
-      minWidth: 50,
-    },
-    {
-      headerName: t("applications.table.workZip"),
-      field: "applicant.applicantWorkAddress.zipCode",
-      sortable: false,
-      filter: false,
-      width: 110,
-      minWidth: 50,
-    },
-    {
       headerName: t("applications.table.altContactFirstName"),
       field: "alternateContact.firstName",
       sortable: false,
@@ -560,18 +528,6 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
         valueFormatter: ({ value }) => {
           if (value.length < householdIndex) return ""
           return formatYesNoLabel(value[i]?.sameAddress)
-        },
-      },
-      {
-        headerName: `${t("application.details.workInRegion")} HH:${householdIndex}`,
-        field: "householdMember",
-        sortable: false,
-        filter: false,
-        width: 90,
-        minWidth: 50,
-        valueFormatter: ({ value }) => {
-          if (value?.length < householdIndex) return ""
-          return formatYesNoLabel(value[i]?.workInRegion)
         },
       }
     )

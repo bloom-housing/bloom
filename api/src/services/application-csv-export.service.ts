@@ -1,6 +1,6 @@
 import fs, { createReadStream } from 'fs';
 import { join } from 'path';
-import { Injectable, StreamableFile } from '@nestjs/common';
+import { ForbiddenException, Injectable, StreamableFile } from '@nestjs/common';
 import { Request as ExpressRequest, Response } from 'express';
 import { view } from './application.service';
 import { PrismaService } from './prisma.service';
@@ -871,6 +871,9 @@ export class ApplicationCsvExporterService
      * By making listingId required, we can check if the user has update permissions for the listing, since right now if a user has that
      * they also can run the export for that listing
      */
+    if (user?.userRoles?.isLimitedJurisdictionalAdmin)
+      throw new ForbiddenException();
+
     const jurisdictionId =
       await this.listingService.getJurisdictionIdByListingId(listingId);
 

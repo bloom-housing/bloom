@@ -11,6 +11,7 @@ export type FormSignInPwdlessProps = {
   onSubmit: (data: FormSignInPwdlessValues) => void
   useCode: boolean
   setUseCode: React.Dispatch<React.SetStateAction<boolean>>
+  loading?: boolean
 }
 
 export type FormSignInPwdlessValues = {
@@ -29,6 +30,7 @@ const FormSignInPwdless = ({
   control: { errors, register, handleSubmit },
   useCode,
   setUseCode,
+  loading,
 }: FormSignInPwdlessProps) => {
   const onError = () => {
     window.scrollTo(0, 0)
@@ -75,7 +77,12 @@ const FormSignInPwdless = ({
         </>
       )}
       <div className={styles["sign-in-action"]}>
-        <Button type="submit" variant="primary" id="sign-in-button">
+        <Button
+          type="submit"
+          variant="primary"
+          id="sign-in-button"
+          loadingMessage={loading ? t("t.loading") : null}
+        >
           {useCode ? t("authentication.signIn.pwdless.getCode") : t("nav.signIn")}
         </Button>
       </div>

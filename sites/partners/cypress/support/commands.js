@@ -140,13 +140,7 @@ Cypress.Commands.add("fillPrimaryApplicant", (application, fieldsToSkip = []) =>
     { id: "application.applicant.applicantAddress.state", fieldKey: "applicant.address.state" },
   ]
 
-  const fieldsToClick = [
-    {
-      id: "application.applicant.workInRegion",
-      fieldKey: `application.applicant.workInRegion${application["applicant.workInRegion"]}`,
-    },
-    { id: "email", fieldKey: "email" },
-  ]
+  const fieldsToClick = [{ id: "email", fieldKey: "email" }]
 
   fillFields(application, fieldsToType, fieldsToSelect, fieldsToClick, fieldsToSkip)
 })
@@ -203,7 +197,6 @@ Cypress.Commands.add("fillHouseholdMember", (application, fieldsToSkip = []) => 
       id: "sameAddress",
       fieldKey: `sameAddress${application["sameAddress"]}`,
     },
-    { id: "workInRegion", fieldKey: `workInRegion${application["workInRegion"]}` },
   ]
 
   fillFields(application, fieldsToType, fieldsToSelect, fieldsToClick, fieldsToSkip)
@@ -318,7 +311,6 @@ Cypress.Commands.add("verifyPrimaryApplicant", (application, fieldsToSkip = []) 
     { id: "phoneNumber", fieldKey: "formattedPhoneNumber" },
     { id: "additionalPhoneNumber", fieldKey: "formattedAdditionalPhoneNumber" },
     { id: "preferredContact", fieldKey: "preferredContact" },
-    { id: "workInRegion", fieldKey: "applicant.workInRegion" },
     { id: "residenceAddress.streetAddress", fieldKey: "applicant.address.street" },
     { id: "residenceAddress.street2", fieldKey: "applicant.address.street2" },
     { id: "residenceAddress.city", fieldKey: "applicant.address.city" },
@@ -329,11 +321,6 @@ Cypress.Commands.add("verifyPrimaryApplicant", (application, fieldsToSkip = []) 
     { id: "mailingAddress.city", fieldKey: "mailingAddress.city" },
     { id: "mailingAddress.state", fieldKey: "mailingAddress.stateCode" },
     { id: "mailingAddress.zipCode", fieldKey: "mailingAddress.zipCode" },
-    { id: "workAddress.streetAddress", fieldKey: "workAddress.streetAddress" },
-    { id: "workAddress.street2", fieldKey: "workAddress.street2" },
-    { id: "workAddress.city", fieldKey: "workAddress.city" },
-    { id: "workAddress.state", fieldKey: "workAddress.state" },
-    { id: "workAddress.zipCode", fieldKey: "workAddress.zipCode" },
   ]
   verifyHelper(application, fields, fieldsToSkip)
 })
@@ -363,7 +350,6 @@ Cypress.Commands.add("verifyHouseholdMembers", (application, fieldsToSkip = []) 
     { id: `[data-label="Date of Birth"]`, fieldKey: "householdMemberDoB" },
     { id: `[data-label="Relationship"]`, fieldKey: "relationship" },
     { id: `[data-label="Same Residence"]`, fieldKey: "sameAddress" },
-    { id: `[data-label="Work in Region"]`, fieldKey: "workInRegion" },
   ]
     .filter(({ id }) => !fieldsToSkip.includes(id))
     .forEach(({ id, fieldKey }) => {

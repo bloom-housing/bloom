@@ -87,12 +87,11 @@
 
     input.input {
       padding-inline: var(--bloom-s3);
-      padding-block: var(--bloom-s4);
+      padding-block: var(--bloom-s3_5);
       border-width: 2px;
       background-color: var(--bloom-color-gray-200);
       border-color: var(--bloom-color-gray-500);
       border-radius: var(--bloom-rounded-lg);
-      font-size: 0.9rem;
     }
 
     .prepend {
@@ -200,11 +199,10 @@
     @apply bg-gray-200;
     @apply text-gray-950;
     @apply leading-tight;
-    @apply py-4;
+    @apply py-2;
     @apply px-3;
-    height: 3.5em;
+    height: 3em;
     font-family: inherit;
-    font-size: 0.9rem !important;
     line-height: normal;
     -moz-appearance: none;
     -webkit-appearance: none;

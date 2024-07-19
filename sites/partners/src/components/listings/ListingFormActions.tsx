@@ -168,7 +168,7 @@ const ListingFormActions = ({
     )
 
     // Disabled for Doorway
-    /* const editPostedResultsButton = (lotteryResults) => (
+    const editPostedResultsButton = (lotteryResults) => (
       <Grid.Cell className="flex" key="btn-edit-lottery">
         <Button
           type="button"
@@ -198,7 +198,7 @@ const ListingFormActions = ({
           {t("listings.actions.postResults")}
         </Button>
       </Grid.Cell>
-    ) */
+    )
 
     const previewButton = (
       <Grid.Cell key="btn-preview">
@@ -411,17 +411,19 @@ const ListingFormActions = ({
           elements.push(unpublishButton)
         }
 
-        // Disabled for Doorway
-        /* const lotteryResults = listing?.listingEvents?.find(
-          (event) => event.type === ListingEventsTypeEnum.lotteryResults
-        ) */
+        // Only admins can publish results
+        // and the functionality should only be turned on if the rest of lottery functionality is
+        if (isListingApprover && process.env.showLottery === "TRUE") {
+          const lotteryResults = listing?.listingEvents?.find(
+            (event) => event.type === ListingEventsTypeEnum.lotteryResults
+          )
 
-        // all users can manage lottery results on closed listings
-        /* if (lotteryResults) {
-          elements.push(editPostedResultsButton(lotteryResults))
-        } else if (listing.status === ListingsStatusEnum.closed) {
-          elements.push(postResultsButton)
-        } */
+          if (lotteryResults) {
+            elements.push(editPostedResultsButton(lotteryResults))
+          } else if (listing.status === ListingsStatusEnum.closed) {
+            elements.push(postResultsButton)
+          }
+        }
 
         elements.push(cancelButton)
       }

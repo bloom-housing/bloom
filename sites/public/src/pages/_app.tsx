@@ -3,6 +3,7 @@ import "@bloom-housing/doorway-ui-components/src/global/app-css.scss"
 import "@bloom-housing/ui-seeds/src/global/app-css.scss"
 import React, { useEffect, useMemo, useState } from "react"
 import type { AppProps } from "next/app"
+import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3"
 import { NavigationContext as NavigationContextDoorway } from "@bloom-housing/doorway-ui-components"
 import { addTranslation, GenericRouter } from "@bloom-housing/ui-components"
 import { NavigationContext } from "@bloom-housing/ui-seeds/src/global/NavigationContext"
@@ -13,7 +14,7 @@ import {
   AuthProvider,
   MessageProvider,
 } from "@bloom-housing/shared-helpers"
-import { headScript, bodyTopTag, pageChangeHandler } from "../lib/customScripts"
+import { pageChangeHandler, gaLoadScript, gaCaptureScript } from "../lib/customScripts"
 import { AppSubmissionContext } from "../lib/applications/AppSubmissionContext"
 import ApplicationConductor, {
   loadApplicationFromAutosave,
@@ -59,16 +60,12 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     if (!document.body.dataset.customScriptsLoaded) {
       router.events.on("routeChangeComplete", pageChangeHandler)
 
-      const headScriptTag = document.createElement("script")
-      headScriptTag.textContent = headScript()
-      if (headScriptTag.textContent !== "") {
-        document.head.append(headScriptTag)
-      }
-
-      const bodyTopTagTmpl = document.createElement("template")
-      bodyTopTagTmpl.innerHTML = bodyTopTag()
-      if (bodyTopTagTmpl.innerHTML !== "") {
-        document.body.prepend(bodyTopTagTmpl.content.cloneNode(true))
+      // GA 4 Tracking
+      const gaLoadNode = gaLoadScript()
+      const gaCaptureNode = gaCaptureScript()
+      if (gaLoadNode && gaCaptureNode) {
+        document.head.append(gaLoadNode)
+        document.head.append(gaCaptureNode)
       }
 
       document.body.dataset.customScriptsLoaded = "true"
@@ -86,6 +83,20 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
 
   // HACK ALERT: we need to add the Next link context to both doorway uic and
   // uic in order for routing to work
+  // NOTE: Seeds and UI-Components both use a NavigationContext to help internal links use Next's
+  // routing system, so we'll include both here until UIC is no longer in use.
+
+  const pageContent = (
+    <ConfigProvider apiUrl={process.env.backendApiBase}>
+      <AuthProvider>
+        <MessageProvider>
+          <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
+          {hasMounted && <Component {...pageProps} />}
+        </MessageProvider>
+      </AuthProvider>
+    </ConfigProvider>
+  )
+
   return (
     <NavigationContext.Provider
       value={{
@@ -107,14 +118,13 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
             syncListing: setSavedListing,
           }}
         >
-          <ConfigProvider apiUrl={process.env.backendApiBase}>
-            <AuthProvider>
-              <MessageProvider>
-                <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
-                {hasMounted && <Component {...pageProps} />}
-              </MessageProvider>
-            </AuthProvider>
-          </ConfigProvider>
+          {process.env.reCaptchaKey ? (
+            <GoogleReCaptchaProvider reCaptchaKey={process.env.reCaptchaKey}>
+              {pageContent}
+            </GoogleReCaptchaProvider>
+          ) : (
+            pageContent
+          )}
         </AppSubmissionContext.Provider>
       </NavigationContextDoorway.Provider>
     </NavigationContext.Provider>

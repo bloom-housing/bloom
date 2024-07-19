@@ -54,7 +54,8 @@ type ContextProps = {
     password: string,
     mfaCode?: string,
     mfaType?: MfaType,
-    forPartners?: boolean
+    forPartners?: boolean,
+    reCaptchaToken?: string
   ) => Promise<User | undefined>
   resetPassword: (
     token: string,
@@ -227,11 +228,14 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
       password,
       mfaCode: string | undefined = undefined,
       mfaType: MfaType | undefined = undefined,
-      forPartners: boolean | undefined = undefined
+      forPartners: boolean | undefined = undefined,
+      reCaptchaToken: string | undefined = undefined
     ) => {
       dispatch(startLoading())
       try {
-        const response = await authService?.login({ body: { email, password, mfaCode, mfaType } })
+        const response = await authService?.login({
+          body: { email, password, mfaCode, mfaType, reCaptchaToken },
+        })
         if (response) {
           const profile = await userService?.profile()
           if (
@@ -239,6 +243,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
             (!forPartners ||
               profile.userRoles?.isAdmin ||
               profile.userRoles?.isJurisdictionalAdmin ||
+              profile.userRoles?.isLimitedJurisdictionalAdmin ||
               profile.userRoles?.isPartner)
           ) {
             dispatch(saveProfile(profile))

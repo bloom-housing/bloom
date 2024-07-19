@@ -140,6 +140,11 @@ describe('Testing user csv export service', () => {
                     isJurisdictionalAdmin: true,
                   },
                 },
+                {
+                  userRoles: {
+                    isLimitedJurisdictionalAdmin: true,
+                  },
+                },
               ],
             },
           ],
@@ -216,6 +221,11 @@ describe('Testing user csv export service', () => {
                 {
                   userRoles: {
                     isJurisdictionalAdmin: true,
+                  },
+                },
+                {
+                  userRoles: {
+                    isLimitedJurisdictionalAdmin: true,
                   },
                 },
               ],

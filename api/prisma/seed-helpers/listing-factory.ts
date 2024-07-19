@@ -5,6 +5,7 @@ import {
   PrismaClient,
   ListingsStatusEnum,
   ApplicationMethodsTypeEnum,
+  LotteryStatusEnum,
 } from '@prisma/client';
 import { randomInt } from 'crypto';
 import { randomName } from './word-generator';
@@ -41,6 +42,7 @@ export const listingFactory = async (
     reservedCommunityType?: string;
     digitalApp?: boolean;
     noImage?: boolean;
+    lotteryStatus?: LotteryStatusEnum;
   },
 ): Promise<Prisma.ListingsCreateInput> => {
   const previousListing = optionalParams?.listing || {};
@@ -57,15 +59,14 @@ export const listingFactory = async (
     optionalParams?.reservedCommunityType,
   );
 
-  const digitalApp = !!optionalParams?.digitalApp
-    ? optionalParams.digitalApp
-    : Math.random() < 0.5;
+  const digitalApp = optionalParams?.digitalApp ?? Math.random() < 0.5;
 
   return {
     createdAt: new Date(),
     assets: [],
     name: randomName(),
     status: optionalParams?.status || ListingsStatusEnum.active,
+    lotteryStatus: optionalParams?.lotteryStatus || undefined,
     displayWaitlistSize: Math.random() < 0.5,
     listingsBuildingAddress: {
       create: addressFactory(),

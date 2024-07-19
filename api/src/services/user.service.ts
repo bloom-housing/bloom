@@ -660,6 +660,8 @@ export class UserService {
         dob: dto.dob,
         phoneNumber: dto.phoneNumber,
         language: dto.language,
+        agreedToTermsOfService:
+          'agreedToTermsOfService' in dto ? dto.agreedToTermsOfService : false,
         mfaEnabled: forPartners,
         ...jurisdictions,
         userRoles:
@@ -971,12 +973,6 @@ export class UserService {
     if (!juris) {
       throw new BadRequestException(
         `Jurisidiction ${jurisdictionName} does not exists`,
-      );
-    }
-
-    if (!juris.allowSingleUseCodeLogin) {
-      throw new BadRequestException(
-        `Single use code login is not setup for ${jurisdictionName}`,
       );
     }
 
