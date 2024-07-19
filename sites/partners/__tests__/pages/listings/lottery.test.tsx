@@ -322,7 +322,7 @@ describe("lottery", () => {
       />
     )
 
-    const header = await findByText("Partners Portal")
+    const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
 
     fireEvent.click(getByText("Retract lottery"))

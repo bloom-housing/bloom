@@ -304,7 +304,7 @@ const SelectAndOrder = ({
         }}
       >
         <div className="border rounded-md p-8 bg-white">
-          {drawerSubtitle && <p>{drawerSubtitle}</p>}
+          {drawerSubtitle && <p className={"mb-4"}>{drawerSubtitle}</p>}
           {!!draftListingData.length && (
             <div className="mb-5">
               <MinimalTable

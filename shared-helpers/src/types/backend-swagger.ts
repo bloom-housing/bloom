@@ -2166,7 +2166,7 @@ export class ScriptRunnerService {
   /**
    * A script that pulls data from one source into the current db
    */
-  dataTransfer(
+  transferJurisdictionData(
     params: {
       /** requestBody */
       body?: DataTransferDTO
@@ -2174,7 +2174,29 @@ export class ScriptRunnerService {
     options: IRequestOptions = {}
   ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/scriptRunner/dataTransfer"
+      let url = basePath + "/scriptRunner/transferJurisdictionData"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * A script that pulls data from one source into the current db
+   */
+  transferJurisdictionListingsData(
+    params: {
+      /** requestBody */
+      body?: DataTransferDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/transferJurisdictionListingsData"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
@@ -5475,6 +5497,9 @@ export interface MapLayer {
 export interface DataTransferDTO {
   /**  */
   connectionString: string
+
+  /**  */
+  jurisdiction: string
 }
 
 export interface AmiChartImportDTO {
