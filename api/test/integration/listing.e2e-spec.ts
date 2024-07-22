@@ -1024,6 +1024,7 @@ describe('Listing Controller Tests', () => {
           listingId: listing.id,
           lotteryStatus: LotteryStatusEnum.releasedToPartners,
         })
+        .set('Cookie', adminAccessToken)
         .expect(400);
     });
 
