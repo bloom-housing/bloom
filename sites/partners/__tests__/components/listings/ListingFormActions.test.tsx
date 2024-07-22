@@ -1099,4 +1099,48 @@ describe("<ListingFormActions>", () => {
       })
     })
   })
+
+  describe("with lotteries on", () => {
+    beforeAll(() => {
+      process.env.showLottery = "TRUE"
+      adminUser = { ...adminUser, jurisdictions: [mockBaseJurisdiction] }
+    })
+
+    it("renders correct buttons in a closed edit state with lottery opted in", () => {
+      const { queryByText } = render(
+        <AuthContext.Provider value={{ profile: adminUser }}>
+          <ListingContext.Provider
+            value={{
+              ...listing,
+              status: ListingsStatusEnum.closed,
+              lotteryOptIn: true,
+              listingEvents: [],
+            }}
+          >
+            <ListingFormActions type={ListingFormActionsType.edit} />
+          </ListingContext.Provider>
+        </AuthContext.Provider>
+      )
+      expect(queryByText("Post Results")).not.toBeInTheDocument()
+    })
+
+    it("renders correct buttons in a closed edit state with lottery opted out", () => {
+      const { queryByText } = render(
+        <AuthContext.Provider value={{ profile: adminUser }}>
+          <ListingContext.Provider
+            value={{
+              ...listing,
+              status: ListingsStatusEnum.closed,
+              lotteryOptIn: false,
+              listingEvents: [],
+            }}
+          >
+            <ListingFormActions type={ListingFormActionsType.edit} />
+          </ListingContext.Provider>
+        </AuthContext.Provider>
+      )
+
+      expect(queryByText("Post Results")).toBeTruthy()
+    })
+  })
 })
