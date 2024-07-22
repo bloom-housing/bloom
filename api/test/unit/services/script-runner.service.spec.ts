@@ -7,6 +7,13 @@ import { ScriptRunnerService } from '../../../src/services/script-runner.service
 import { PrismaService } from '../../../src/services/prisma.service';
 import { User } from '../../../src/dtos/users/user.dto';
 import { AmiChartService } from '../../../src/services/ami-chart.service';
+import {
+  MultiselectQuestionsApplicationSectionEnum,
+  PrismaClient,
+} from '@prisma/client';
+import { mockDeep } from 'jest-mock-extended';
+
+const externalPrismaClient = mockDeep<PrismaClient>();
 
 describe('Testing script runner service', () => {
   let service: ScriptRunnerService;
@@ -26,47 +33,972 @@ describe('Testing script runner service', () => {
     prisma = module.get<PrismaService>(PrismaService);
   });
 
-  // because of how doorway ci env variables work we can't publicly expose a db for us to connect to
-  it.skip('should transfer data', async () => {
-    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
-    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
-    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+  describe('transferJurisdictionData', () => {
+    it('should not transfer jurisdiction data if jurisdiction does not exist', async () => {
+      prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
+      const id = randomUUID();
+      await expect(
+        service.transferJurisdictionData(
+          {
+            user: {
+              id,
+            } as unknown as User,
+          } as unknown as ExpressRequest,
+          {
+            connectionString: 'sample',
+            jurisdiction: 'Sample jurisdiction',
+          },
+          externalPrismaClient,
+        ),
+      ).rejects.toThrowError(
+        "Sample jurisdiction county doesn't exist in Doorway database",
+      );
 
-    const id = randomUUID();
-    const scriptName = 'data transfer';
-
-    const res = await service.dataTransfer(
-      {
-        user: {
-          id,
-        } as unknown as User,
-      } as unknown as ExpressRequest,
-      {
-        connectionString: process.env.TEST_CONNECTION_STRING,
-      },
-    );
-
-    expect(res.success).toBe(true);
-
-    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
-      where: {
-        scriptName,
-      },
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue([{ name: 'sample jurisdiction', id: randomUUID() }]);
+      await expect(
+        service.transferJurisdictionData(
+          {
+            user: {
+              id,
+            } as unknown as User,
+          } as unknown as ExpressRequest,
+          {
+            connectionString: 'sample',
+            jurisdiction: 'Sample jurisdiction',
+          },
+          externalPrismaClient,
+        ),
+      ).rejects.toThrowError(
+        "Sample jurisdiction county doesn't exist in foreign database",
+      );
     });
-    expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
-      data: {
-        scriptName,
-        triggeringUser: id,
-      },
+
+    it('should transfer ami and multiselect questions', async () => {
+      prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
+      const jurisdictionId = randomUUID();
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ name: 'sample jurisdiction', id: jurisdictionId });
+      externalPrismaClient.$queryRaw.mockResolvedValueOnce([
+        { name: 'sample jurisdiction', id: randomUUID() },
+      ]);
+      externalPrismaClient.$queryRawUnsafe
+        .mockResolvedValueOnce([
+          {
+            id: randomUUID(),
+            items: [],
+            name: 'sample jurisdiction AMI CHART 1',
+          },
+        ])
+        .mockResolvedValueOnce([
+          {
+            id: randomUUID(),
+            text: 'multiselect question',
+            sub_text: 'sub text',
+            description: 'multiselect question description',
+            options: [{ text: 'multiselect question option', ordinal: 1 }],
+            hide_from_listing: false,
+            application_section:
+              MultiselectQuestionsApplicationSectionEnum.preferences,
+            opt_out_text: "I don't want to be considered",
+          },
+        ]);
+      const mockAMIChartCalls = jest.fn().mockResolvedValue(null);
+      prisma.amiChart.createMany = mockAMIChartCalls;
+      const mockMultiselectQuestionCalls = jest.fn().mockResolvedValue(null);
+      prisma.multiselectQuestions.create = mockMultiselectQuestionCalls;
+      const userId = randomUUID();
+      const res = await service.transferJurisdictionData(
+        {
+          user: {
+            id: userId,
+          } as unknown as User,
+        } as unknown as ExpressRequest,
+        {
+          connectionString: 'sample',
+          jurisdiction: 'Sample jurisdiction',
+        },
+        externalPrismaClient,
+      );
+      expect(mockAMIChartCalls).toBeCalledTimes(1);
+      expect(mockAMIChartCalls).toBeCalledWith({
+        data: [
+          {
+            id: expect.anything(),
+            items: [],
+            jurisdictionId: jurisdictionId,
+            name: 'sample jurisdiction AMI CHART 1',
+          },
+        ],
+      });
+      expect(mockMultiselectQuestionCalls).toBeCalledTimes(1);
+      expect(mockMultiselectQuestionCalls).toBeCalledWith({
+        data: {
+          id: expect.anything(),
+          applicationSection: 'preferences',
+          jurisdictions: {
+            connect: { id: jurisdictionId },
+          },
+          links: undefined,
+          optOutText: "I don't want to be considered",
+          description: 'multiselect question description',
+          hideFromListing: false,
+          subText: 'sub text',
+          text: 'multiselect question',
+          options: [{ ordinal: 1, text: 'multiselect question option' }],
+        },
+      });
+
+      expect(res.success).toBe(true);
+      const scriptName = 'data transfer Sample jurisdiction';
+
+      expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
+        where: {
+          scriptName,
+        },
+      });
+      expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
+        data: {
+          scriptName,
+          triggeringUser: userId,
+        },
+      });
+      expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
+        data: {
+          didScriptRun: true,
+          triggeringUser: userId,
+        },
+        where: {
+          scriptName,
+        },
+      });
     });
-    expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
-      data: {
-        didScriptRun: true,
-        triggeringUser: id,
-      },
-      where: {
-        scriptName,
-      },
+  });
+
+  const createAddress = (name: string) => {
+    return {
+      place_name: name,
+      city: `${name} city`,
+      state: `${name} state`,
+      street: `${name} street`,
+      street2: `${name} street2`,
+      zipCode: `12345`,
+    };
+  };
+
+  describe('transferJurisdictionListingData', () => {
+    it('should transfer listings', async () => {
+      prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+      prisma.unitAccessibilityPriorityTypes.findMany = jest
+        .fn()
+        .mockResolvedValue([]);
+      prisma.unitRentTypes.findMany = jest.fn().mockResolvedValue([]);
+
+      const jurisdictionId = randomUUID();
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        name: 'sample jurisdiction',
+        id: jurisdictionId,
+      });
+      externalPrismaClient.$queryRaw.mockResolvedValueOnce([
+        { name: 'sample jurisdiction', id: randomUUID() },
+      ]);
+      const listingId = randomUUID();
+      externalPrismaClient.$queryRawUnsafe
+        .mockResolvedValueOnce([
+          {
+            id: listingId,
+            name: 'sample listing',
+            created_at: new Date(),
+            digital_application: true,
+            common_digital_application: true,
+            paper_application: false,
+            referral_opportunity: false,
+            assets: [],
+            accessibility: 'accessibility',
+            amenities: 'amenities',
+            developer: 'developer',
+            household_size_max: 2,
+            household_size_min: 1,
+            display_waitlist_size: false,
+            status: 'active',
+            building_address_id: randomUUID(),
+            leasing_agent_address_id: randomUUID(),
+            application_pick_up_address_id: randomUUID(),
+            application_drop_off_address_id: randomUUID(),
+          },
+        ])
+        .mockResolvedValueOnce([createAddress('building')])
+        .mockResolvedValueOnce([createAddress('leasing agent')])
+        .mockResolvedValueOnce([createAddress('application pick up')])
+        .mockResolvedValueOnce([createAddress('application drop up')])
+        .mockResolvedValueOnce([{ type: 'Internal' }]) // application methods
+        .mockResolvedValueOnce([]); // units
+      const createdListingId = randomUUID();
+      const mockListingSave = jest
+        .fn()
+        .mockResolvedValueOnce({ id: createdListingId });
+      prisma.listings.create = mockListingSave;
+
+      const id = randomUUID();
+      const scriptName = 'data transfer listings Sample jurisdiction';
+
+      const res = await service.transferJurisdictionListingData(
+        {
+          user: {
+            id,
+          } as unknown as User,
+        } as unknown as ExpressRequest,
+        {
+          connectionString: 'Sample',
+          jurisdiction: 'Sample jurisdiction',
+        },
+        externalPrismaClient,
+      );
+
+      expect(prisma.listings.create).toBeCalledTimes(1);
+      expect(mockListingSave).toBeCalledWith({
+        data: {
+          id: listingId,
+          accessibility: 'accessibility',
+          additionalApplicationSubmissionNotes: undefined,
+          afsLastRunAt: undefined,
+          amenities: 'amenities',
+          amiPercentageMax: undefined,
+          amiPercentageMin: undefined,
+          applicationDropOffAddressOfficeHours: undefined,
+          applicationDropOffAddressType: undefined,
+          applicationDueDate: undefined,
+          applicationFee: undefined,
+          applicationMailingAddressType: undefined,
+          applicationMethods: {
+            createMany: {
+              data: [
+                {
+                  acceptsPostmarkedApplications: undefined,
+                  label: undefined,
+                  phoneNumber: undefined,
+                  type: 'Internal',
+                },
+              ],
+            },
+          },
+          applicationOpenDate: undefined,
+          applicationOrganization: undefined,
+          applicationPickUpAddressOfficeHours: undefined,
+          applicationPickUpAddressType: undefined,
+          assets: [],
+          buildingSelectionCriteria: undefined,
+          buildingTotalUnits: undefined,
+          closedAt: undefined,
+          commonDigitalApplication: true,
+          contentUpdatedAt: undefined,
+          costsNotIncluded: undefined,
+          createdAt: expect.anything(),
+          creditHistory: undefined,
+          criminalBackground: undefined,
+          customMapPin: undefined,
+          depositHelperText: undefined,
+          depositMax: undefined,
+          depositMin: undefined,
+          developer: 'developer',
+          digitalApplication: true,
+          disableUnitsAccordion: undefined,
+          displayWaitlistSize: false,
+          homeType: undefined,
+          householdSizeMax: 2,
+          householdSizeMin: 1,
+          hrdId: undefined,
+          isVerified: undefined,
+          isWaitlistOpen: undefined,
+          jurisdictions: {
+            connect: {
+              id: jurisdictionId,
+            },
+          },
+          lastApplicationUpdateAt: undefined,
+          leasingAgentEmail: undefined,
+          leasingAgentName: undefined,
+          leasingAgentOfficeHours: undefined,
+          leasingAgentPhone: undefined,
+          leasingAgentTitle: undefined,
+          listingsApplicationDropOffAddress: {
+            create: {
+              city: 'application drop up city',
+              county: undefined,
+              createdAt: undefined,
+              latitude: undefined,
+              longitude: undefined,
+              placeName: 'application drop up',
+              state: 'application drop up state',
+              street: 'application drop up street',
+              street2: 'application drop up street2',
+              zipCode: undefined,
+            },
+          },
+          listingsApplicationMailingAddress: undefined,
+          listingsApplicationPickUpAddress: {
+            create: {
+              city: 'application pick up city',
+              county: undefined,
+              createdAt: undefined,
+              latitude: undefined,
+              longitude: undefined,
+              placeName: 'application pick up',
+              state: 'application pick up state',
+              street: 'application pick up street',
+              street2: 'application pick up street2',
+              zipCode: undefined,
+            },
+          },
+          listingsBuildingAddress: {
+            create: {
+              city: 'building city',
+              county: 'Sample jurisdiction',
+              createdAt: undefined,
+              latitude: undefined,
+              longitude: undefined,
+              placeName: 'building',
+              state: 'building state',
+              street: 'building street',
+              street2: 'building street2',
+              zipCode: undefined,
+            },
+          },
+          listingsLeasingAgentAddress: {
+            create: {
+              city: 'leasing agent city',
+              county: undefined,
+              createdAt: undefined,
+              latitude: undefined,
+              longitude: undefined,
+              placeName: 'leasing agent',
+              state: 'leasing agent state',
+              street: 'leasing agent street',
+              street2: 'leasing agent street2',
+              zipCode: undefined,
+            },
+          },
+          managementCompany: undefined,
+          managementWebsite: undefined,
+          marketingType: undefined,
+          name: 'sample listing',
+          neighborhood: undefined,
+          ownerCompany: undefined,
+          paperApplication: false,
+          petPolicy: undefined,
+          phoneNumber: undefined,
+          postmarkedApplicationsReceivedByDate: undefined,
+          programRules: undefined,
+          publishedAt: undefined,
+          referralOpportunity: false,
+          rentalAssistance: undefined,
+          rentalHistory: undefined,
+          requestedChanges: undefined,
+          requestedChangesDate: undefined,
+          requiredDocuments: undefined,
+          reservedCommunityDescription: undefined,
+          reservedCommunityMinAge: undefined,
+          reservedCommunityTypes: undefined,
+          resultLink: undefined,
+          reviewOrderType: undefined,
+          servicesOffered: undefined,
+          smokingPolicy: undefined,
+          specialNotes: undefined,
+          status: 'active',
+          unitAmenities: undefined,
+          unitsAvailable: undefined,
+          waitlistCurrentSize: undefined,
+          waitlistMaxSize: undefined,
+          waitlistOpenSpots: undefined,
+          whatToExpect: undefined,
+          yearBuilt: undefined,
+        },
+      });
+
+      expect(res.success).toBe(true);
+
+      expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
+        where: {
+          scriptName,
+        },
+      });
+      expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
+        data: {
+          scriptName,
+          triggeringUser: id,
+        },
+      });
+      expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
+        data: {
+          didScriptRun: true,
+          triggeringUser: id,
+        },
+        where: {
+          scriptName,
+        },
+      });
+    });
+
+    it('should transfer listings with RCD', async () => {
+      prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+      prisma.unitAccessibilityPriorityTypes.findMany = jest
+        .fn()
+        .mockResolvedValue([]);
+      prisma.unitRentTypes.findMany = jest.fn().mockResolvedValue([]);
+
+      const jurisdictionId = randomUUID();
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        name: 'sample jurisdiction',
+        id: jurisdictionId,
+      });
+      externalPrismaClient.$queryRaw.mockResolvedValueOnce([
+        { name: 'sample jurisdiction', id: randomUUID() },
+      ]);
+      const doorwayReservedCommunityTypeID = randomUUID();
+      const listingId = randomUUID();
+      externalPrismaClient.$queryRawUnsafe
+        .mockResolvedValueOnce([
+          {
+            id: listingId,
+            name: 'sample listing',
+            created_at: new Date(),
+            digital_application: false,
+            common_digital_application: false,
+            paper_application: false,
+            referral_opportunity: false,
+            assets: [],
+            household_size_max: 2,
+            household_size_min: 1,
+            display_waitlist_size: false,
+            status: 'closed',
+            reserved_community_type_id: randomUUID(),
+          },
+        ])
+        .mockResolvedValueOnce([{ name: 'senior' }])
+        .mockResolvedValueOnce([]) // application methods
+        .mockResolvedValueOnce([]); // units
+      prisma.reservedCommunityTypes.findMany = jest.fn().mockResolvedValueOnce([
+        { name: 'sample reserved type', id: randomUUID() },
+        { name: 'senior55', id: doorwayReservedCommunityTypeID },
+      ]);
+
+      const createdListingId = randomUUID();
+      const mockListingSave = jest
+        .fn()
+        .mockResolvedValueOnce({ id: createdListingId });
+      prisma.listings.create = mockListingSave;
+
+      const id = randomUUID();
+
+      await service.transferJurisdictionListingData(
+        {
+          user: {
+            id,
+          } as unknown as User,
+        } as unknown as ExpressRequest,
+        {
+          connectionString: 'Sample',
+          jurisdiction: 'Sample jurisdiction',
+        },
+        externalPrismaClient,
+      );
+
+      expect(mockListingSave).toBeCalledWith({
+        data: {
+          id: listingId,
+          accessibility: undefined,
+          additionalApplicationSubmissionNotes: undefined,
+          afsLastRunAt: undefined,
+          amenities: undefined,
+          amiPercentageMax: undefined,
+          amiPercentageMin: undefined,
+          applicationDropOffAddressOfficeHours: undefined,
+          applicationDropOffAddressType: undefined,
+          applicationDueDate: undefined,
+          applicationFee: undefined,
+          applicationMailingAddressType: undefined,
+          applicationOpenDate: undefined,
+          applicationOrganization: undefined,
+          applicationPickUpAddressOfficeHours: undefined,
+          applicationPickUpAddressType: undefined,
+          assets: [],
+          buildingSelectionCriteria: undefined,
+          buildingTotalUnits: undefined,
+          closedAt: undefined,
+          commonDigitalApplication: false,
+          contentUpdatedAt: undefined,
+          costsNotIncluded: undefined,
+          createdAt: expect.anything(),
+          creditHistory: undefined,
+          criminalBackground: undefined,
+          customMapPin: undefined,
+          depositHelperText: undefined,
+          depositMax: undefined,
+          depositMin: undefined,
+          developer: undefined,
+          digitalApplication: false,
+          disableUnitsAccordion: undefined,
+          displayWaitlistSize: false,
+          homeType: undefined,
+          householdSizeMax: 2,
+          householdSizeMin: 1,
+          hrdId: undefined,
+          isVerified: undefined,
+          isWaitlistOpen: undefined,
+          jurisdictions: {
+            connect: {
+              id: jurisdictionId,
+            },
+          },
+          lastApplicationUpdateAt: undefined,
+          leasingAgentEmail: undefined,
+          leasingAgentName: undefined,
+          leasingAgentOfficeHours: undefined,
+          leasingAgentPhone: undefined,
+          leasingAgentTitle: undefined,
+          listingsApplicationDropOffAddress: undefined,
+          listingsApplicationMailingAddress: undefined,
+          listingsApplicationPickUpAddress: undefined,
+          listingsBuildingAddress: undefined,
+          listingsLeasingAgentAddress: undefined,
+          managementCompany: undefined,
+          managementWebsite: undefined,
+          marketingType: undefined,
+          name: 'sample listing',
+          neighborhood: undefined,
+          ownerCompany: undefined,
+          paperApplication: false,
+          petPolicy: undefined,
+          phoneNumber: undefined,
+          postmarkedApplicationsReceivedByDate: undefined,
+          programRules: undefined,
+          publishedAt: undefined,
+          referralOpportunity: false,
+          rentalAssistance: undefined,
+          rentalHistory: undefined,
+          requestedChanges: undefined,
+          requestedChangesDate: undefined,
+          requiredDocuments: undefined,
+          reservedCommunityDescription: undefined,
+          reservedCommunityMinAge: undefined,
+          reservedCommunityTypes: {
+            connect: {
+              id: doorwayReservedCommunityTypeID,
+            },
+          },
+          resultLink: undefined,
+          reviewOrderType: undefined,
+          servicesOffered: undefined,
+          smokingPolicy: undefined,
+          specialNotes: undefined,
+          status: 'closed',
+          unitAmenities: undefined,
+          unitsAvailable: undefined,
+          waitlistCurrentSize: undefined,
+          waitlistMaxSize: undefined,
+          waitlistOpenSpots: undefined,
+          whatToExpect: undefined,
+          yearBuilt: undefined,
+        },
+      });
+    });
+
+    it('should transfer units for listings', async () => {
+      console.log = jest.fn();
+      prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+      const doorwayPriorityTypeId = randomUUID();
+      const priorityTypeId = randomUUID();
+      prisma.unitAccessibilityPriorityTypes.findMany = jest
+        .fn()
+        .mockResolvedValue([
+          { name: 'sample priority type', id: doorwayPriorityTypeId },
+        ]);
+      const doorwayRentTypeId = randomUUID();
+      const rentTypeId = randomUUID();
+      prisma.unitRentTypes.findMany = jest.fn().mockResolvedValue([
+        { name: 'fixed', id: doorwayRentTypeId },
+        { name: 'percentageOfIncome', id: randomUUID() },
+      ]);
+
+      const jurisdictionId = randomUUID();
+      const amiChartId = randomUUID();
+      const anotherAmiChartId = randomUUID();
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        name: 'sample jurisdiction',
+        id: jurisdictionId,
+      });
+      externalPrismaClient.$queryRaw
+        .mockResolvedValueOnce([
+          { name: 'sample jurisdiction', id: randomUUID() },
+        ])
+        .mockResolvedValueOnce([
+          { name: 'sample priority type', id: priorityTypeId },
+        ])
+        .mockResolvedValueOnce([
+          { name: 'fixed', id: rentTypeId },
+          { name: 'percentageOfIncome', id: randomUUID() },
+        ]);
+      externalPrismaClient.$queryRawUnsafe
+        .mockResolvedValueOnce([
+          {
+            id: randomUUID(),
+            name: 'sample listing',
+            created_at: new Date(),
+            digital_application: false,
+            common_digital_application: false,
+            paper_application: false,
+            referral_opportunity: false,
+            assets: [],
+            accessibility: 'accessibility',
+            amenities: 'amenities',
+            developer: 'developer',
+            household_size_max: 2,
+            household_size_min: 1,
+            display_waitlist_size: false,
+            status: 'active',
+          },
+        ])
+        .mockResolvedValueOnce([])
+        .mockResolvedValueOnce([
+          {
+            name: 'oneBdr',
+            floor: 1,
+            ami_percentage: '30',
+            annual_income_min: '1000',
+            annual_income_max: '10000',
+            max_occupancy: 5,
+            min_occupancy: 2,
+            num_bathrooms: 1,
+            num_bedrooms: 2,
+            number: '200',
+            sq_feet: '600',
+            ami_chart_id: amiChartId,
+            priority_type_id: priorityTypeId,
+            unit_rent_type_id: rentTypeId,
+          },
+          {
+            name: 'studio',
+            floor: 1,
+            ami_percentage: '30',
+            annual_income_min: '1000',
+            annual_income_max: '10000',
+            max_occupancy: 5,
+            min_occupancy: 2,
+            num_bathrooms: 1,
+            num_bedrooms: 2,
+            number: '200',
+            sq_feet: '600',
+            ami_chart_id: anotherAmiChartId, //This ami chart should not be found
+          },
+        ]);
+      const unitTypeId = randomUUID();
+      prisma.unitTypes.findFirst = jest
+        .fn()
+        .mockResolvedValueOnce({ id: unitTypeId });
+      prisma.amiChart.findFirst = jest
+        .fn()
+        .mockResolvedValueOnce({ id: amiChartId })
+        .mockResolvedValueOnce(null);
+      const createdListingId = randomUUID();
+      const mockListingSave = jest
+        .fn()
+        .mockResolvedValueOnce({ id: createdListingId });
+      prisma.listings.create = mockListingSave;
+      const mockUnitsSave = jest.fn().mockResolvedValueOnce(null);
+      prisma.units.create = mockUnitsSave;
+
+      const id = randomUUID();
+      const scriptName = 'data transfer listings Sample jurisdiction';
+
+      const res = await service.transferJurisdictionListingData(
+        {
+          user: {
+            id,
+          } as unknown as User,
+        } as unknown as ExpressRequest,
+        {
+          connectionString: 'Sample',
+          jurisdiction: 'Sample jurisdiction',
+        },
+        externalPrismaClient,
+      );
+
+      expect(console.log).toBeCalledWith(
+        `Ami chart not found in Doorway: ${anotherAmiChartId} for listing sample listing`,
+      );
+
+      expect(prisma.listings.create).toBeCalledTimes(1);
+      expect(prisma.units.create).toBeCalledTimes(2);
+      expect(prisma.units.create).toBeCalledWith({
+        data: {
+          amiChart: {
+            connect: {
+              id: amiChartId,
+            },
+          },
+          amiPercentage: '30',
+          annualIncomeMax: '10000',
+          annualIncomeMin: '1000',
+          bmrProgramChart: undefined,
+          floor: 1,
+          listings: {
+            connect: {
+              id: createdListingId,
+            },
+          },
+          maxOccupancy: 5,
+          minOccupancy: 2,
+          monthlyIncomeMin: undefined,
+          monthlyRent: undefined,
+          monthlyRentAsPercentOfIncome: undefined,
+          numBathrooms: 1,
+          numBedrooms: 2,
+          number: '200',
+          sqFeet: '600',
+          status: undefined,
+          unitAccessibilityPriorityTypes: {
+            connect: {
+              id: doorwayPriorityTypeId,
+            },
+          },
+          unitRentTypes: {
+            connect: {
+              id: doorwayRentTypeId,
+            },
+          },
+          unitTypes: {
+            connect: {
+              id: unitTypeId,
+            },
+          },
+        },
+      });
+
+      expect(res.success).toBe(true);
+
+      expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
+        where: {
+          scriptName,
+        },
+      });
+      expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
+        data: {
+          scriptName,
+          triggeringUser: id,
+        },
+      });
+      expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
+        data: {
+          didScriptRun: true,
+          triggeringUser: id,
+        },
+        where: {
+          scriptName,
+        },
+      });
+    });
+
+    it('should transfer listing multiselect questions', async () => {
+      console.log = jest.fn();
+      prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+      prisma.unitAccessibilityPriorityTypes.findMany = jest
+        .fn()
+        .mockResolvedValue([]);
+      prisma.unitRentTypes.findMany = jest.fn().mockResolvedValue([]);
+      const jurisdictionId = randomUUID();
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        name: 'sample jurisdiction',
+        id: jurisdictionId,
+      });
+      externalPrismaClient.$queryRaw.mockResolvedValueOnce([
+        { name: 'sample jurisdiction', id: randomUUID() },
+      ]);
+      const createdListingId = randomUUID();
+      const mockListingSave = jest
+        .fn()
+        .mockResolvedValueOnce({ id: createdListingId });
+      prisma.listings.create = mockListingSave;
+
+      const externalListingId = randomUUID();
+      const multiselectQuestionId = randomUUID();
+      const differentMultiselectQuestionId = randomUUID();
+      externalPrismaClient.$queryRawUnsafe
+        .mockResolvedValueOnce([
+          {
+            id: externalListingId,
+            name: 'sample listing',
+            created_at: new Date(),
+            digital_application: false,
+            common_digital_application: false,
+            paper_application: false,
+            referral_opportunity: false,
+            assets: [],
+            accessibility: 'accessibility',
+            amenities: 'amenities',
+            developer: 'developer',
+            household_size_max: 2,
+            household_size_min: 1,
+            display_waitlist_size: false,
+            status: 'active',
+          },
+        ])
+        .mockResolvedValueOnce([]) // no application methods for this test
+        .mockResolvedValueOnce([]) // no units for this test
+        .mockResolvedValueOnce([
+          {
+            ordinal: 1,
+            listingId: externalListingId,
+            multiselect_question_id: multiselectQuestionId,
+          },
+          {
+            ordinal: 2,
+            listingId: externalListingId,
+            multiselect_question_id: differentMultiselectQuestionId, // multiselect question not in doorway
+          },
+        ]);
+
+      const mockListingMultiselectQuestionCreate = jest
+        .fn()
+        .mockResolvedValueOnce(null)
+        .mockRejectedValueOnce('ERROR!');
+      prisma.listingMultiselectQuestions.create =
+        mockListingMultiselectQuestionCreate;
+
+      const id = randomUUID();
+
+      await service.transferJurisdictionListingData(
+        {
+          user: {
+            id,
+          } as unknown as User,
+        } as unknown as ExpressRequest,
+        {
+          connectionString: 'Sample',
+          jurisdiction: 'Sample jurisdiction',
+        },
+        externalPrismaClient,
+      );
+
+      expect(prisma.listingMultiselectQuestions.create).toBeCalledTimes(2);
+      expect(prisma.listingMultiselectQuestions.create).toBeCalledWith({
+        data: {
+          listingId: createdListingId,
+          multiselectQuestionId: multiselectQuestionId,
+          ordinal: 1,
+        },
+      });
+
+      expect(console.log).toBeCalledWith(
+        `unable to migrate listing multiselect question ${differentMultiselectQuestionId} to listing ${createdListingId}`,
+      );
+    });
+
+    it('should transfer listing events', async () => {
+      prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+      prisma.unitAccessibilityPriorityTypes.findMany = jest
+        .fn()
+        .mockResolvedValue([]);
+      prisma.unitRentTypes.findMany = jest.fn().mockResolvedValue([]);
+      const jurisdictionId = randomUUID();
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        name: 'sample jurisdiction',
+        id: jurisdictionId,
+      });
+      externalPrismaClient.$queryRaw.mockResolvedValueOnce([
+        { name: 'sample jurisdiction', id: randomUUID() },
+      ]);
+      const createdListingId = randomUUID();
+      const mockListingSave = jest
+        .fn()
+        .mockResolvedValueOnce({ id: createdListingId });
+      prisma.listings.create = mockListingSave;
+
+      const externalListingId = randomUUID();
+      externalPrismaClient.$queryRawUnsafe
+        .mockResolvedValueOnce([
+          {
+            id: externalListingId,
+            name: 'sample listing',
+            created_at: new Date(),
+            digital_application: false,
+            common_digital_application: false,
+            paper_application: false,
+            referral_opportunity: false,
+            assets: [],
+            accessibility: 'accessibility',
+            amenities: 'amenities',
+            developer: 'developer',
+            household_size_max: 2,
+            household_size_min: 1,
+            display_waitlist_size: false,
+            status: 'active',
+          },
+        ])
+        .mockResolvedValueOnce([]) // no application methods
+        .mockResolvedValueOnce([]) // no units for this test
+        .mockResolvedValueOnce([]) // no multiselect questions
+        .mockResolvedValueOnce([
+          {
+            type: 'publicLottery',
+            url: 'http://example.com',
+            note: 'note',
+            label: 'label',
+            start_time: new Date(),
+            end_time: new Date(),
+            start_date: new Date(),
+          },
+        ]);
+
+      prisma.listingEvents.createMany = jest.fn();
+
+      const id = randomUUID();
+
+      await service.transferJurisdictionListingData(
+        {
+          user: {
+            id,
+          } as unknown as User,
+        } as unknown as ExpressRequest,
+        {
+          connectionString: 'Sample',
+          jurisdiction: 'Sample jurisdiction',
+        },
+        externalPrismaClient,
+      );
+
+      expect(prisma.listingEvents.createMany).toBeCalledTimes(1);
+      expect(prisma.listingEvents.createMany).toBeCalledWith({
+        data: [
+          {
+            endTime: expect.anything(),
+            label: 'label',
+            note: 'note',
+            startDate: expect.anything(),
+            startTime: expect.anything(),
+            type: 'publicLottery',
+            url: 'http://example.com',
+            listingId: createdListingId,
+          },
+        ],
+      });
     });
   });
 

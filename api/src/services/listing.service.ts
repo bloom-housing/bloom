@@ -38,6 +38,7 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 import { User } from '../dtos/users/user.dto';
 import Unit from '../dtos/units/unit.dto';
 import { ListingViews } from '../enums/listings/view-enum';
+import { FilterAvailabilityEnum } from '../enums/listings/filter-availability-enum';
 import { ListingFilterKeys } from '../enums/listings/filter-key-enum';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { buildFilter } from '../utilities/build-filter';
@@ -276,6 +277,17 @@ export class ListingService implements OnModuleInit {
               filter[ListingFilterKeys.bathrooms],
             )}'`,
           );
+        }
+        if (
+          filter[ListingFilterKeys.availability] ===
+          FilterAvailabilityEnum.waitlistOpen
+        ) {
+          whereClauseArray.push(`combined.is_waitlist_open = true`);
+        } else if (
+          filter[ListingFilterKeys.availability] ===
+          FilterAvailabilityEnum.unitsAvailable
+        ) {
+          whereClauseArray.push(`combined.units_available >= 1`);
         }
         if (filter[ListingFilterKeys.monthlyRent]) {
           const comparison = filter['$comparison'];
