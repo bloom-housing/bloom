@@ -16,6 +16,7 @@ import { LinkButton, t } from "@bloom-housing/ui-components"
 import styles from "./LandingSearch.module.scss"
 import { FormOption } from "./ListingsSearchModal"
 import { numericSearchFieldGenerator } from "./helpers"
+import { FilterAvailabilityEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type LandingSearchProps = {
   bedrooms: FormOption[]
@@ -36,6 +37,7 @@ export function LandingSearch(props: LandingSearchProps) {
   const nullState: ListingSearchParams = {
     bedrooms: null,
     bathrooms: null,
+    availability: null,
     minRent: "",
     monthlyRent: "",
     counties: countyLabels,
@@ -130,6 +132,20 @@ export function LandingSearch(props: LandingSearchProps) {
 
   return (
     <Card className="bg-accent-cool-light">
+      <div className={styles["input-section"]}>
+        <div className={styles["input-section_title"]}>{t("t.opportunityType")}</div>
+        <ButtonGroup
+          name="availability"
+          options={[
+            { label: t("listings.waitlist.open"), value: FilterAvailabilityEnum.waitlistOpen },
+            { label: t("listings.availableUnits"), value: FilterAvailabilityEnum.unitsAvailable },
+          ]}
+          onChange={updateValue}
+          value={formValues.availability}
+          className="bg-accent-cool-light pt-2 md:py-0 md:px-0 landing-search-button-group w-full"
+          spacing={ButtonGroupSpacing.left}
+        />
+      </div>
       <div className={styles["input-section"]}>
         <div className={styles["input-section_title"]}>{t("t.bedrooms")}</div>
         <ButtonGroup

@@ -12,6 +12,7 @@ import {
 } from "@bloom-housing/doorway-ui-components"
 import { useForm } from "react-hook-form"
 import { numericSearchFieldGenerator } from "./helpers"
+import { FilterAvailabilityEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const inputSectionStyle: React.CSSProperties = {
   margin: "0px 15px",
@@ -86,6 +87,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
     minRent: "",
     monthlyRent: "",
     counties: countyLabels,
+    availability: null,
   }
   const initialState = parseSearchString(searchString, nullState)
   const [formValues, setFormValues] = useState(initialState)
@@ -250,6 +252,19 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
         </button>,
       ]}
     >
+      <div style={inputSectionStyle}>
+        <div style={sectionTitle}>{t("t.opportunityType")}</div>
+        <ButtonGroup
+          name="availability"
+          options={[
+            { label: t("listings.waitlist.open"), value: FilterAvailabilityEnum.waitlistOpen },
+            { label: t("listings.availableUnits"), value: FilterAvailabilityEnum.unitsAvailable },
+          ]}
+          onChange={updateValue}
+          value={formValues.availability}
+          spacing={ButtonGroupSpacing.left}
+        />
+      </div>
       <div style={inputSectionStyle}>
         <div style={sectionTitle}>{t("t.bedrooms")}</div>
         <ButtonGroup

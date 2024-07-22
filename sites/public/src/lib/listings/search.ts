@@ -1,4 +1,5 @@
 import { ListingQueryBuilder } from "./listing-query-builder"
+import { FilterAvailabilityEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export type ListingSearchParams = {
   bedrooms: string
@@ -6,6 +7,7 @@ export type ListingSearchParams = {
   minRent: string
   monthlyRent: string
   counties: string[]
+  availability: FilterAvailabilityEnum
 }
 
 /**
@@ -122,6 +124,10 @@ export function generateSearchQuery(params: ListingSearchParams) {
   // Find listings in these counties
   if (Array.isArray(params.counties) && params.counties.length > 0) {
     qb.whereIn("counties", params.counties)
+  }
+
+  if (params.availability) {
+    qb.whereEqual("availability", params.availability)
   }
 
   return qb

@@ -395,7 +395,7 @@ export class ListingsService {
       body?: ListingLotteryStatus
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Listing> {
+  ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/listings/lotteryStatus"
 
@@ -2267,6 +2267,9 @@ export interface ListingFilterParams {
 
   /**  */
   isExternal?: boolean
+
+  /**  */
+  availability?: FilterAvailabilityEnum
 
   /**  */
   city?: string
@@ -5510,6 +5513,11 @@ export enum ListingsStatusEnum {
   "closed" = "closed",
   "pendingReview" = "pendingReview",
   "changesRequested" = "changesRequested",
+}
+
+export enum FilterAvailabilityEnum {
+  "waitlistOpen" = "waitlistOpen",
+  "unitsAvailable" = "unitsAvailable",
 }
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
