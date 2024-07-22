@@ -64,7 +64,7 @@ describe("lottery", () => {
 
     const { getAllByText, findByText } = render(<Lottery listing={listing} />)
 
-    const header = await findByText("Partners Portal")
+    const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
 
     expect(getAllByText(listing.name).length).toBeGreaterThan(0)
@@ -87,7 +87,7 @@ describe("lottery", () => {
 
     const { getAllByText, findByText } = render(<Lottery listing={listing} />)
 
-    const header = await findByText("Partners Portal")
+    const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
 
     expect(getAllByText(listing.name).length).toBeGreaterThan(0)
@@ -116,7 +116,7 @@ describe("lottery", () => {
 
     const { getAllByText, findByText } = render(<Lottery listing={listing} />)
 
-    const header = await findByText("Partners Portal")
+    const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
 
     expect(getAllByText(listing.name).length).toBeGreaterThan(0)
@@ -145,7 +145,7 @@ describe("lottery", () => {
 
     const { queryAllByText, queryByText } = render(<Lottery listing={listing} />)
 
-    const header = queryByText("Partners Portal")
+    const header = queryByText("Lottery")
     expect(header).not.toBeInTheDocument()
     expect(queryAllByText(listing.name).length).toBe(0)
   })
@@ -172,7 +172,7 @@ describe("lottery", () => {
 
     const { getByText, findByText } = render(<Lottery listing={listing} />)
 
-    const header = await findByText("Partners Portal")
+    const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
 
     expect(getByText("No lottery data")).toBeInTheDocument()
@@ -209,7 +209,7 @@ describe("lottery", () => {
       />
     )
 
-    const header = await findByText("Partners Portal")
+    const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
 
     expect(getByText("Export lottery data")).toBeInTheDocument()
@@ -246,7 +246,7 @@ describe("lottery", () => {
       />
     )
 
-    const header = await findByText("Partners Portal")
+    const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
 
     fireEvent.click(getByText("Re-run lottery"))
@@ -280,7 +280,7 @@ describe("lottery", () => {
       />
     )
 
-    const header = await findByText("Partners Portal")
+    const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
 
     fireEvent.click(getByText("Release lottery"))
@@ -289,6 +289,52 @@ describe("lottery", () => {
       getByText(
         "Releasing the lottery will give Partner users access to the lottery data, including the ability to publish results to applicants."
       )
+    ).toBeInTheDocument()
+  })
+
+  it("should show new paper apps modals if user clicks on release if application updates have been made since last lottery run", async () => {
+    mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { isAdmin: true },
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 0 }))
+      })
+    )
+
+    const lotteryLastRan = new Date()
+    lotteryLastRan.setDate(lotteryLastRan.getDate() - 1)
+    const { getByText, findByText } = render(
+      <Lottery
+        listing={{
+          ...listing,
+          lotteryLastRunAt: lotteryLastRan,
+          lotteryStatus: LotteryStatusEnum.ran,
+          lastApplicationUpdateAt: new Date(),
+        }}
+      />
+    )
+
+    const header = await findByText("Lottery")
+    expect(header).toBeInTheDocument()
+
+    fireEvent.click(getByText("Release lottery"))
+    expect(await findByText("Action required")).toBeInTheDocument()
+    expect(
+      getByText("You have added or updated applications without re-running the lottery.")
+    ).toBeInTheDocument()
+    expect(
+      getByText("You must re-run the lottery before releasing the lottery data.")
     ).toBeInTheDocument()
   })
 
@@ -322,7 +368,7 @@ describe("lottery", () => {
       />
     )
 
-    const header = await findByText("Partners Portal")
+    const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
 
     fireEvent.click(getByText("Retract lottery"))
@@ -356,7 +402,7 @@ describe("lottery", () => {
 
     const { getByText, findByText } = render(<Lottery listing={listing} />)
 
-    const header = await findByText("Partners Portal")
+    const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
 
     fireEvent.click(getByText("Run lottery"))
@@ -388,7 +434,7 @@ describe("lottery", () => {
 
     const { getByText, findByText } = render(<Lottery listing={listing} />)
 
-    const header = await findByText("Partners Portal")
+    const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
 
     fireEvent.click(getByText("Run lottery"))
@@ -422,7 +468,7 @@ describe("lottery", () => {
       <Lottery listing={updatedListing} />
     )
 
-    const header = await findByText("Partners Portal")
+    const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
 
     expect(
@@ -469,7 +515,7 @@ describe("lottery", () => {
       <Lottery listing={updatedListing} />
     )
 
-    const header = await findByText("Partners Portal")
+    const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
 
     expect(
@@ -516,7 +562,7 @@ describe("lottery", () => {
 
     const { getByText, findByText, queryByText } = render(<Lottery listing={updatedListing} />)
 
-    const header = await findByText("Partners Portal")
+    const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
 
     expect(getByText("No lottery data")).toBeInTheDocument()
@@ -552,7 +598,7 @@ describe("lottery", () => {
 
     const { getByText, findByText } = render(<Lottery listing={updatedListing} />)
 
-    const header = await findByText("Partners Portal")
+    const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
 
     expect(getByText("Publish lottery data")).toBeInTheDocument()
@@ -593,7 +639,7 @@ describe("lottery", () => {
 
     const { getByText, findByText } = render(<Lottery listing={updatedListing} />)
 
-    const header = await findByText("Partners Portal")
+    const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
 
     expect(getByText("Export lottery data")).toBeInTheDocument()
