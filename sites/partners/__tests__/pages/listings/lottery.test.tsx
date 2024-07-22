@@ -558,6 +558,54 @@ describe("lottery", () => {
     expect(getAllByText("Export")).toHaveLength(2)
   })
 
+  it("should show export with terms modal if user is a partner", async () => {
+    mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { isAdmin: false, isPartner: true },
+            listings: [{ id: "Uvbk5qurpB2WI9V6WnNdH" }],
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
+      })
+    )
+
+    const updatedListing = {
+      ...listing,
+      lotteryLastRunAt: new Date("September 6, 2025 8:15:00"),
+      lotteryStatus: LotteryStatusEnum.publishedToPublic,
+    }
+    const { getByText, findByText, findAllByText, getAllByText } = render(
+      <Lottery listing={updatedListing} />
+    )
+
+    const header = await findByText("Partners Portal")
+    expect(header).toBeInTheDocument()
+
+    fireEvent.click(getByText("Export"))
+    expect(await findAllByText("Export lottery data")).toHaveLength(2)
+
+    expect(
+      getByText("This data was generated from the lottery that was run on 09/06/2025 at 8:15 am.", {
+        exact: false,
+      })
+    ).toBeInTheDocument()
+    expect(
+      getByText("You must accept the Terms of Use before exporting this data.")
+    ).toBeInTheDocument()
+
+    expect(getAllByText("Export")).toHaveLength(2)
+  })
+
   it("should show no lottery released state as a partner", async () => {
     mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
     document.cookie = "access-token-available=True"
