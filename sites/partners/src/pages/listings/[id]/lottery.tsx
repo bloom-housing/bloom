@@ -4,16 +4,18 @@ import axios from "axios"
 import dayjs from "dayjs"
 import Ticket from "@heroicons/react/24/solid/TicketIcon"
 import Download from "@heroicons/react/24/solid/ArrowDownTrayIcon"
+import ExclamationCirleIcon from "@heroicons/react/24/solid/ExclamationCircleIcon"
 import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
-import { Button, Card, Heading, Icon, Dialog } from "@bloom-housing/ui-seeds"
+import { Button, Card, Dialog, Heading, Icon, Message } from "@bloom-housing/ui-seeds"
 import { CardHeader, CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   Listing,
-  ListingsStatusEnum,
-  ReviewOrderTypeEnum,
+  ListingUpdate,
   ListingEventsTypeEnum,
+  ListingsStatusEnum,
   LotteryStatusEnum,
+  ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Layout from "../../../layouts"
 import { ListingContext } from "../../../components/listings/ListingContext"
@@ -43,6 +45,14 @@ const Lottery = (props: { listing: Listing }) => {
   const { onExport, csvExportLoading } = useLotteryExport(listing?.id)
   const { data } = useFlaggedApplicationsMeta(listing?.id)
   const duplicatesExist = data?.totalPendingCount > 0
+  let formattedExpiryDate: string
+  if (process.env.lotteryDaysTillExpiry) {
+    const expiryDate = dayjs(listing?.closedAt).add(
+      Number(process.env.lotteryDaysTillExpiry),
+      "day"
+    )
+    formattedExpiryDate = expiryDate.format("MMMM D, YYYY")
+  }
 
   if (!listing) return <div>{t("t.errorOccurred")}</div>
 
@@ -143,6 +153,21 @@ const Lottery = (props: { listing: Listing }) => {
         )
       } else if (listing.lotteryStatus === LotteryStatusEnum.publishedToPublic) {
         return exportCard
+      }
+      if (listing.lotteryStatus === LotteryStatusEnum.expired) {
+        return (
+          <CardSection>
+            <Icon size="xl">
+              <ExclamationCirleIcon />
+            </Icon>
+            <Heading priority={2} size={"2xl"}>
+              {t("listings.lottery.noData")}
+            </Heading>
+            <div className={styles["card-description"]}>
+              {t("listings.lottery.dataExpiryDescription")}
+            </div>
+          </CardSection>
+        )
       } else {
         return (
           <CardSection>
@@ -257,6 +282,19 @@ const Lottery = (props: { listing: Listing }) => {
               <div className={styles["parent"]}>
                 <div className={styles["container"]}>
                   <div className={styles["main"]}>
+                    {!profile?.userRoles.isAdmin &&
+                      process.env.lotteryDaysTillExpiry &&
+                      listing?.lotteryStatus === LotteryStatusEnum.publishedToPublic && (
+                        <Message
+                          variant={"warn"}
+                          fullwidth={true}
+                          className={styles["applications-expiration-message"]}
+                        >
+                          {t("listings.lottery.dataExpiryMessage", {
+                            date: formattedExpiryDate,
+                          })}
+                        </Message>
+                      )}
                     <Card spacing={"lg"}>{getMainContent()}</Card>
                   </div>
                   <aside className={styles["side"]}>
@@ -297,6 +335,9 @@ const Lottery = (props: { listing: Listing }) => {
               {t("applications.addConfirmModalHeader")}
             </Dialog.Header>
             <Dialog.Content id="run-lottery-modal-content">
+              {process.env.lotteryDaysTillExpiry ? (
+                <p>{t("listings.lottery.dialogAlert", { date: formattedExpiryDate })}</p>
+              ) : undefined}
               {duplicatesExist ? (
                 <p>
                   {t("listings.lottery.duplicateContent")}{" "}
