@@ -12,7 +12,6 @@ import {
   Listing,
   ListingsStatusEnum,
   ReviewOrderTypeEnum,
-  ListingUpdate,
   ListingEventsTypeEnum,
   LotteryStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -22,7 +21,7 @@ import { MetaTags } from "../../../components/shared/MetaTags"
 import ListingGuard from "../../../components/shared/ListingGuard"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
 import { ListingStatusBar } from "../../../components/listings/ListingStatusBar"
-import { useFlaggedApplicationsMeta } from "../../../lib/hooks"
+import { useFlaggedApplicationsMeta, useLotteryExport } from "../../../lib/hooks"
 
 import styles from "../../../../styles/lottery.module.scss"
 
@@ -39,7 +38,8 @@ const Lottery = (props: { listing: Listing }) => {
   const [publishModal, setPublishModal] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const { listingsService, profile } = useContext(AuthContext)
+  const { listingsService, lotteryService, profile } = useContext(AuthContext)
+  const { onExport, csvExportLoading } = useLotteryExport(listing?.id)
   const { data } = useFlaggedApplicationsMeta(listing?.id)
   const duplicatesExist = data?.totalPendingCount > 0
 
@@ -70,7 +70,9 @@ const Lottery = (props: { listing: Listing }) => {
             : t("listings.lottery.exportFileNoPreferences")}
         </div>
         <div>
-          <Button onClick={() => setExportModal(true)}>{t("t.export")}</Button>
+          <Button disabled={loading || csvExportLoading} onClick={() => setExportModal(true)}>
+            {t("t.export")}
+          </Button>
         </div>
       </CardSection>
     )
@@ -95,6 +97,7 @@ const Lottery = (props: { listing: Listing }) => {
                 onClick={() => {
                   setRunModal(true)
                 }}
+                disabled={loading || csvExportLoading}
               >
                 {t("listings.lottery.runLottery")}
               </Button>
@@ -296,35 +299,18 @@ const Lottery = (props: { listing: Listing }) => {
               <Button
                 variant="primary"
                 onClick={async () => {
-                  setLoading(true)
-                  // this is temporary, so that we can test this state in staging before the lottery api is finished - it just sets the lotteryLastRunAt field when you click run
                   try {
-                    const updatedListing = listing
-                    updatedListing.listingMultiselectQuestions = []
-                    await listingsService.update({
-                      id: listing.id,
-                      body: {
-                        id: listing.id,
-                        ...(updatedListing as unknown as ListingUpdate),
-                        lotteryLastRunAt: new Date(),
-                      },
-                    })
-                    await listingsService.lotteryStatus({
-                      body: {
-                        listingId: listing.id,
-                        lotteryStatus: LotteryStatusEnum.ran,
-                      },
-                    })
-                    setRunModal(false)
+                    setLoading(true)
+                    await lotteryService.lotteryGenerate({ body: { listingId: listing.id } })
                     setLoading(false)
+                    setRunModal(false)
                     location.reload()
                   } catch (err) {
                     console.log(err)
-                    setLoading(false)
                   }
                 }}
                 size="sm"
-                loadingMessage={loading ? t("t.loading") : undefined}
+                loadingMessage={loading || csvExportLoading ? t("t.loading") : undefined}
               >
                 {t("listings.lottery.runLottery")}
               </Button>
@@ -444,11 +430,12 @@ const Lottery = (props: { listing: Listing }) => {
             <Dialog.Footer>
               <Button
                 variant="primary"
-                onClick={() => {
-                  // export lottery
+                onClick={async () => {
+                  await onExport()
                   setExportModal(false)
                 }}
                 size="sm"
+                loadingMessage={loading || csvExportLoading ? t("t.loading") : undefined}
               >
                 {t("t.export")}
               </Button>

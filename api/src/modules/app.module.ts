@@ -21,6 +21,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { ThrottleGuard } from '../guards/throttler.guard';
 import { ScirptRunnerModule } from './script-runner.module';
+import { LotteryModule } from './lottery.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { ScirptRunnerModule } from './script-runner.module';
     ApplicationFlaggedSetModule,
     MapLayerModule,
     ScirptRunnerModule,
+    LotteryModule,
     ThrottlerModule.forRoot([
       {
         ttl: Number(process.env.THROTTLE_TTL),
@@ -74,6 +76,7 @@ import { ScirptRunnerModule } from './script-runner.module';
     ApplicationFlaggedSetModule,
     MapLayerModule,
     ScirptRunnerModule,
+    LotteryModule,
   ],
 })
 export class AppModule {}
