@@ -957,6 +957,14 @@ describe('Listing Controller Tests', () => {
         data: recentlyClosedListingData,
       });
 
+      const openListingData = await listingFactory(jurisdictionA.id, prisma, {
+        status: ListingsStatusEnum.active,
+        reviewOrderType: ReviewOrderTypeEnum.lottery,
+      });
+      const openListing = await prisma.listings.create({
+        data: openListingData,
+      });
+
       const res = await request(app.getHttpServer())
         .put(`/listings/expireLotteries`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
@@ -980,6 +988,14 @@ describe('Listing Controller Tests', () => {
       });
 
       expect(postJobListing2.lotteryStatus).toBeNull;
+
+      const postJobListing3 = await prisma.listings.findUnique({
+        where: {
+          id: openListing.id,
+        },
+      });
+
+      expect(postJobListing3.lotteryStatus).toBeNull;
     });
   });
 

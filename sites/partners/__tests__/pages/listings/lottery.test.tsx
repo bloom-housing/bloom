@@ -18,6 +18,7 @@ const closedListing = {
 }
 
 beforeAll(() => {
+  process.env.lotteryDaysTillExpiry = "45"
   server.listen()
 })
 

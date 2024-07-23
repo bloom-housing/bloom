@@ -9,7 +9,6 @@ addTranslation({ ...generalTranslations, ...general })
 process.env.cloudinaryCloudName = "exygy"
 process.env.cloudinarySignedPreset = "test123"
 process.env.backendApiBase = "http://localhost:3100"
-process.env.lotteryDaysTillExpiry = 45
 
 // Need to set __next on base div to handle the overlay
 const portalRoot = document.createElement("div")
