@@ -32,6 +32,7 @@ import {
   UserService,
   serviceOptions,
   SuccessDTO,
+  LotteryService,
 } from "../types/backend-swagger"
 import { getListingRedirectUrl } from "../utilities/getListingRedirectUrl"
 
@@ -48,6 +49,7 @@ type ContextProps = {
   reservedCommunityTypeService: ReservedCommunityTypesService
   unitPriorityService: UnitAccessibilityPriorityTypesService
   mapLayersService: MapLayersService
+  lotteryService: LotteryService
   loadProfile: (redirect?: string) => void
   login: (
     email: string,
@@ -216,6 +218,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
     authService: new AuthService(),
     multiselectQuestionsService: new MultiselectQuestionsService(),
     mapLayersService: new MapLayersService(),
+    lotteryService: new LotteryService(),
     reservedCommunityTypeService: new ReservedCommunityTypesService(),
     unitPriorityService: new UnitAccessibilityPriorityTypesService(),
     unitTypesService: new UnitTypesService(),

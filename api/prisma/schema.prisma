@@ -426,6 +426,7 @@ model ListingMultiselectQuestions {
 }
 
 model ApplicationLotteryPositions {
+  id                    String                @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   ordinal               Int
   listingId             String                @map("listing_id") @db.Uuid
   listings              Listings              @relation(fields: [listingId], references: [id], onDelete: Cascade, onUpdate: NoAction)
@@ -434,7 +435,8 @@ model ApplicationLotteryPositions {
   applicationId         String                @map("application_id") @db.Uuid
   applications          Applications          @relation(fields: [applicationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  @@id([listingId, applicationId])
+  @@index([listingId])
+  @@index([applicationId])
   @@map("application_lottery_positions")
 }
 

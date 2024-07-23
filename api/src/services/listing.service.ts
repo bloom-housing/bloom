@@ -1670,6 +1670,7 @@ export class ListingService implements OnModuleInit {
         // TODO: remove when all status logic has been implemented
         res = await this.prisma.listings.update({
           data: {
+            lotteryLastRunAt: new Date(),
             lotteryStatus: dto?.lotteryStatus,
           },
           where: {
