@@ -612,3 +612,16 @@ export function useMapLayersList(jurisdictionId?: string) {
     mapLayersError: error,
   }
 }
+
+export function useLotteryActivityLog(listingId: string) {
+  const { lotteryService } = useContext(AuthContext)
+  const fetcher = () => lotteryService.lotteryActivityLog({ listingId })
+
+  const { data, error } = useSWR(`/api/adapter/lottery/lotteryActivityLog`, fetcher)
+
+  return {
+    lotteryActivityLogData: data,
+    lotteryActivityLogLoading: !error && !data,
+    lotteryError: error,
+  }
+}

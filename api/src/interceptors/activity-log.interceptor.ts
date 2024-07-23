@@ -15,7 +15,9 @@ import { PrismaService } from '../services/prisma.service';
 
 export type ActivityLogMetadataType = Array<{
   targetPropertyName: string;
-  propertyPath: string;
+  propertyPath?: string;
+  defaultValue?: string;
+  customRecordId?: string;
 }>;
 
 @Injectable()
@@ -30,10 +32,16 @@ export class ActivityLogInterceptor implements NestInterceptor {
     if (activityLogMetadata) {
       metadata = {};
       for (const trackPropertiesMetadata of activityLogMetadata) {
-        metadata[trackPropertiesMetadata.targetPropertyName] = deepFind(
-          body,
-          trackPropertiesMetadata.propertyPath,
-        );
+        if (
+          !trackPropertiesMetadata.defaultValue &&
+          !trackPropertiesMetadata.propertyPath
+        )
+          metadata = null;
+        else {
+          metadata[trackPropertiesMetadata.targetPropertyName] =
+            trackPropertiesMetadata.defaultValue ??
+            deepFind(body, trackPropertiesMetadata.propertyPath);
+        }
       }
     }
     return metadata;
@@ -98,6 +106,8 @@ export class ActivityLogInterceptor implements NestInterceptor {
           } else {
             resourceId = req.body.id;
           }
+          resourceId = activityLogMetadata.customRecordId ?? resourceId;
+          console.log({ resourceId });
           return from(
             this.prisma.activityLog.create({
               include: {

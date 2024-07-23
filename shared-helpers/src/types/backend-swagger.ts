@@ -1449,7 +1449,7 @@ export class ApplicationsService {
   listAsCsv(
     params: {
       /**  */
-      listingId: string
+      id: string
       /**  */
       includeDemographics?: boolean
       /**  */
@@ -1462,7 +1462,7 @@ export class ApplicationsService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = {
-        listingId: params["listingId"],
+        id: params["id"],
         includeDemographics: params["includeDemographics"],
         timeZone: params["timeZone"],
       }
@@ -2186,6 +2186,46 @@ export class LotteryService {
         includeDemographics: params["includeDemographics"],
         timeZone: params["timeZone"],
       }
+    })
+  }
+
+  /**
+   * Change the listing lottery status
+   */
+  lotteryStatus(
+    params: {
+      /** requestBody */
+      body?: ListingLotteryStatus
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/lottery/lotteryStatus"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get a lottery activity log
+   */
+  lotteryActivityLog(
+    params: {
+      /**  */
+      id: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ActivityLogItem[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/lottery/lotteryActivityLog"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
       /** 适配ios13，get请求不允许带body */
 
@@ -3668,14 +3708,6 @@ export interface ListingCreate {
 
   /**  */
   requestedChangesUser?: IdDTO
-}
-
-export interface ListingLotteryStatus {
-  /**  */
-  listingId: string
-
-  /**  */
-  lotteryStatus: LotteryStatusEnum
 }
 
 export interface ListingUpdate {
@@ -5460,13 +5492,32 @@ export interface AmiChartImportDTO {
 
 export interface ApplicationCsvQueryParams {
   /**  */
-  listingId: string
+  id: string
 
   /**  */
   includeDemographics?: boolean
 
   /**  */
   timeZone?: string
+}
+
+export interface ListingLotteryStatus {
+  /**  */
+  id: string
+
+  /**  */
+  lotteryStatus: LotteryStatusEnum
+}
+
+export interface ActivityLogItem {
+  /**  */
+  metadata: object
+
+  /**  */
+  name: string
+
+  /**  */
+  logDate: Date
 }
 
 export enum ListingViews {

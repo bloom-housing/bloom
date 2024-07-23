@@ -3028,7 +3028,7 @@ describe('Testing listing service', () => {
         async () =>
           await service.lotteryStatus(
             {
-              listingId: randomUUID(),
+              id: randomUUID(),
               lotteryStatus: LotteryStatusEnum.ran,
             } as ListingLotteryStatus,
             user,
@@ -3067,7 +3067,7 @@ describe('Testing listing service', () => {
         async () =>
           await service.lotteryStatus(
             {
-              listingId: randomUUID(),
+              id: randomUUID(),
               lotteryStatus: LotteryStatusEnum.ran,
             } as ListingLotteryStatus,
             partnerUser,
@@ -3120,7 +3120,7 @@ describe('Testing listing service', () => {
 
       await service.lotteryStatus(
         {
-          listingId: randomUUID(),
+          id: randomUUID(),
           lotteryStatus: LotteryStatusEnum.releasedToPartners,
         } as ListingLotteryStatus,
         adminUser,
@@ -3177,7 +3177,7 @@ describe('Testing listing service', () => {
         async () =>
           await service.lotteryStatus(
             {
-              listingId: randomUUID(),
+              id: randomUUID(),
               lotteryStatus: LotteryStatusEnum.releasedToPartners,
             } as ListingLotteryStatus,
             partnerUser,
@@ -3218,7 +3218,7 @@ describe('Testing listing service', () => {
 
       await service.lotteryStatus(
         {
-          listingId: randomUUID(),
+          id: randomUUID(),
           lotteryStatus: LotteryStatusEnum.publishedToPublic,
         } as ListingLotteryStatus,
         partnerUser,
@@ -3255,7 +3255,7 @@ describe('Testing listing service', () => {
         async () =>
           await service.lotteryStatus(
             {
-              listingId: randomUUID(),
+              id: randomUUID(),
               lotteryStatus: LotteryStatusEnum.publishedToPublic,
             } as ListingLotteryStatus,
             partnerUser,
@@ -3287,7 +3287,7 @@ describe('Testing listing service', () => {
         async () =>
           await service.lotteryStatus(
             {
-              listingId: randomUUID(),
+              id: randomUUID(),
               lotteryStatus: LotteryStatusEnum.publishedToPublic,
             } as ListingLotteryStatus,
             publicUser,
@@ -3325,7 +3325,7 @@ describe('Testing listing service', () => {
 
       await service.lotteryStatus(
         {
-          listingId: randomUUID(),
+          id: randomUUID(),
           lotteryStatus: LotteryStatusEnum.ran,
         } as ListingLotteryStatus,
         adminUser,
