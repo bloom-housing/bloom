@@ -418,7 +418,10 @@ const ListingFormActions = ({
         // all users can manage lottery results on closed listings
         if (lotteryResults) {
           elements.push(editPostedResultsButton(lotteryResults))
-        } else if (listing.status === ListingsStatusEnum.closed) {
+        } else if (
+          listing.status === ListingsStatusEnum.closed &&
+          (!listing?.lotteryOptIn || !process.env.showLottery)
+        ) {
           elements.push(postResultsButton)
         }
 
@@ -471,7 +474,10 @@ const ListingFormActions = ({
 
         if (lotteryResults) {
           elements.push(editPostedResultsButton(lotteryResults))
-        } else if (listing.status === ListingsStatusEnum.closed) {
+        } else if (
+          listing.status === ListingsStatusEnum.closed &&
+          (!listing?.lotteryOptIn || !process.env.showLottery)
+        ) {
           elements.push(postResultsButton)
         }
 

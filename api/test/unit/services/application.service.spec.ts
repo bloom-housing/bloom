@@ -26,11 +26,14 @@ import { PermissionService } from '../../../src/services/permission.service';
 import { User } from '../../../src/dtos/users/user.dto';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
 import { GeocodingService } from '../../../src/services/geocoding.service';
+import { AlternateContactRelationship } from '../../../src/enums/applications/alternate-contact-relationship-enum';
+import { HouseholdMemberRelationship } from '../../../src/enums/applications/household-member-relationship-enum';
 
 export const mockApplication = (
   position: number,
   date: Date,
   numberOfHouseholdMembers?: number,
+  includeLotteryPosition?: boolean,
 ) => {
   let householdMember = undefined;
   if (numberOfHouseholdMembers) {
@@ -107,6 +110,13 @@ export const mockApplication = (
     createdAt: date,
     updatedAt: date,
     householdMember: householdMember,
+    applicationLotteryPositions: includeLotteryPosition
+      ? [
+          {
+            ordinal: position,
+          },
+        ]
+      : undefined,
   };
 };
 
@@ -114,10 +124,18 @@ export const mockApplicationSet = (
   numberToCreate: number,
   date: Date,
   numberOfHouseholdMembers?: number,
+  includeLotteryPosition?: boolean,
 ) => {
   const toReturn = [];
   for (let i = 0; i < numberToCreate; i++) {
-    toReturn.push(mockApplication(i, date, numberOfHouseholdMembers));
+    toReturn.push(
+      mockApplication(
+        i,
+        date,
+        numberOfHouseholdMembers,
+        includeLotteryPosition,
+      ),
+    );
   }
   return toReturn;
 };
@@ -171,7 +189,7 @@ export const mockCreateApplicationData = (
       hearing: false,
     },
     alternateContact: {
-      type: 'example type',
+      type: AlternateContactRelationship.other,
       otherType: 'example other type',
       firstName: 'example first name',
       lastName: 'example last name',
@@ -207,7 +225,7 @@ export const mockCreateApplicationData = (
         birthDay: '17',
         birthYear: '1993',
         sameAddress: YesNoEnum.yes,
-        relationship: 'example relationship',
+        relationship: HouseholdMemberRelationship.other,
         workInRegion: YesNoEnum.yes,
         householdMemberWorkAddress: exampleAddress,
         householdMemberAddress: exampleAddress,
@@ -1208,7 +1226,7 @@ describe('Testing application service', () => {
         },
         alternateContact: {
           create: {
-            type: 'example type',
+            type: AlternateContactRelationship.other,
             otherType: 'example other type',
             firstName: 'example first name',
             lastName: 'example last name',
@@ -1264,7 +1282,7 @@ describe('Testing application service', () => {
               birthDay: 17,
               birthYear: 1993,
               sameAddress: YesNoEnum.yes,
-              relationship: 'example relationship',
+              relationship: HouseholdMemberRelationship.other,
               workInRegion: YesNoEnum.yes,
               householdMemberAddress: {
                 create: {
@@ -1518,7 +1536,7 @@ describe('Testing application service', () => {
         },
         alternateContact: {
           create: {
-            type: 'example type',
+            type: AlternateContactRelationship.other,
             otherType: 'example other type',
             firstName: 'example first name',
             lastName: 'example last name',
@@ -1574,7 +1592,7 @@ describe('Testing application service', () => {
               birthDay: 17,
               birthYear: 1993,
               sameAddress: YesNoEnum.yes,
-              relationship: 'example relationship',
+              relationship: HouseholdMemberRelationship.other,
               workInRegion: YesNoEnum.yes,
               householdMemberAddress: {
                 create: {
@@ -1745,7 +1763,7 @@ describe('Testing application service', () => {
         },
         alternateContact: {
           create: {
-            type: 'example type',
+            type: AlternateContactRelationship.other,
             otherType: 'example other type',
             firstName: 'example first name',
             lastName: 'example last name',
@@ -1801,7 +1819,7 @@ describe('Testing application service', () => {
               birthDay: 17,
               birthYear: 1993,
               sameAddress: YesNoEnum.yes,
-              relationship: 'example relationship',
+              relationship: HouseholdMemberRelationship.other,
               workInRegion: YesNoEnum.yes,
               householdMemberAddress: {
                 create: {
