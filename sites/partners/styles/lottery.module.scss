@@ -69,3 +69,8 @@
     }
   }
 }
+
+.applications-expiration-message {
+  --message-max-width: 100%;
+  margin-bottom: var(--seeds-s4);
+}

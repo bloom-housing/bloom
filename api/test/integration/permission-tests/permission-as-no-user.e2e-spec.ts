@@ -1119,8 +1119,40 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
     it('should error as forbidden for process endpoint', async () => {
       await request(app.getHttpServer())
-        .put(`/listings/process`)
+        .put(`/listings/closeListings`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+
+    it('should error as forbidden for expireLotteries endpoint', async () => {
+      await request(app.getHttpServer())
+        .put(`/listings/expireLotteries`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+
+    it('should error as forbidden for lottery status endpoint', async () => {
+      const jurisdictionA = await generateJurisdiction(
+        prisma,
+        'permission juris 111118',
+      );
+      await reservedCommunityTypeFactoryAll(jurisdictionA, prisma);
+      const listingData = await listingFactory(jurisdictionA, prisma, {
+        status: 'closed',
+      });
+      const listing = await prisma.listings.create({
+        data: listingData,
+      });
+
+      await request(app.getHttpServer())
+        .put('/listings/lotteryStatus')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          listingId: listing.id,
+          lotteryStatus: 'ran',
+        })
         .set('Cookie', cookies)
         .expect(403);
     });

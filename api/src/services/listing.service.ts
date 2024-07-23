@@ -20,6 +20,7 @@ import {
   ReviewOrderTypeEnum,
   UserRoleEnum,
 } from '@prisma/client';
+import dayjs from 'dayjs';
 import { firstValueFrom } from 'rxjs';
 import { ApplicationFlaggedSetService } from './application-flagged-set.service';
 import { EmailService } from './email.service';
@@ -143,8 +144,8 @@ views.csv = {
   userAccounts: true,
 };
 
-const CRON_JOB_NAME = 'LISTING_CRON_JOB';
-
+const LISTING_CRON_JOB_NAME = 'LISTING_CRON_JOB';
+const LOTTERY_CRON_JOB_NAME = 'LOTTERY_CRON_JOB';
 /*
   this is the service for listings
   it handles all the backend's business logic for reading in listing(s)
@@ -167,9 +168,17 @@ export class ListingService implements OnModuleInit {
   onModuleInit() {
     startCronJob(
       this.prisma,
-      CRON_JOB_NAME,
+      LISTING_CRON_JOB_NAME,
       process.env.LISTING_PROCESSING_CRON_STRING,
-      this.process.bind(this),
+      this.closeListings.bind(this),
+      this.logger,
+      this.schedulerRegistry,
+    );
+    startCronJob(
+      this.prisma,
+      LOTTERY_CRON_JOB_NAME,
+      process.env.LOTTERY_PROCESSING_CRON_STRING,
+      this.expireLotteries.bind(this),
       this.logger,
       this.schedulerRegistry,
     );
@@ -1729,9 +1738,9 @@ export class ListingService implements OnModuleInit {
     runs the job to auto close listings that are passed their due date
     will call the the cache purge to purge all listings as long as updates had to be made
   */
-  async process(): Promise<SuccessDTO> {
+  async closeListings(): Promise<SuccessDTO> {
     this.logger.warn('changeOverdueListingsStatusCron job running');
-    await this.markCronJobAsStarted();
+    await this.markCronJobAsStarted(LISTING_CRON_JOB_NAME);
     const res = await this.prisma.listings.updateMany({
       data: {
         status: ListingsStatusEnum.closed,
@@ -1771,10 +1780,10 @@ export class ListingService implements OnModuleInit {
     marks the db record for this cronjob as begun or creates a cronjob that
     is marked as begun if one does not already exist
   */
-  async markCronJobAsStarted(): Promise<void> {
+  async markCronJobAsStarted(cronJobName: string): Promise<void> {
     const job = await this.prisma.cronJob.findFirst({
       where: {
-        name: CRON_JOB_NAME,
+        name: cronJobName,
       },
     });
     if (job) {
@@ -1792,11 +1801,12 @@ export class ListingService implements OnModuleInit {
       await this.prisma.cronJob.create({
         data: {
           lastRunDate: new Date(),
-          name: CRON_JOB_NAME,
+          name: cronJobName,
         },
       });
     }
   }
+
   /**
    *
    * @param listingId
@@ -1926,10 +1936,6 @@ export class ListingService implements OnModuleInit {
         });
         break;
       }
-      case LotteryStatusEnum.expired: {
-        // TODO
-        break;
-      }
       default: {
         throw new BadRequestException(
           `${dto?.lotteryStatus} is not an allowed lottery status.`,
@@ -1950,6 +1956,47 @@ export class ListingService implements OnModuleInit {
       throw new HttpException('Listing lottery status failed to save.', 500);
     }
 
+    return {
+      success: true,
+    };
+  }
+
+  /**
+    runs the job to auto expire lotteries that are passed their due date
+    will call the the cache purge to purge all listings as long as updates had to be made
+  */
+  async expireLotteries(): Promise<SuccessDTO> {
+    if (process.env.LOTTERY_DAYS_TILL_EXPIRY) {
+      this.logger.warn('changeExpiredLotteryStatusCron job running');
+      await this.markCronJobAsStarted(LOTTERY_CRON_JOB_NAME);
+      const expiration_date = dayjs(new Date())
+        .subtract(Number(process.env.LOTTERY_DAYS_TILL_EXPIRY), 'days')
+        .toDate();
+      const res = await this.prisma.listings.updateMany({
+        data: {
+          lotteryStatus: LotteryStatusEnum.expired,
+        },
+        where: {
+          status: ListingsStatusEnum.closed,
+          reviewOrderType: ReviewOrderTypeEnum.lottery,
+          closedAt: {
+            lte: expiration_date,
+          },
+          OR: [
+            {
+              lotteryStatus: {
+                not: LotteryStatusEnum.expired,
+              },
+            },
+            {
+              lotteryStatus: null,
+            },
+          ],
+        },
+      });
+      // TODO: add expired to history log for each listing
+      this.logger.warn(`Changed the status of ${res?.count} lotteries`);
+    }
     return {
       success: true,
     };

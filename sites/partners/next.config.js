@@ -57,6 +57,7 @@ module.exports = withBundleAnalyzer(
       maintenanceWindow: process.env.MAINTENANCE_WINDOW,
       reCaptchaKey: process.env.RECAPTCHA_KEY,
       showLottery: process.env.SHOW_LOTTERY,
+      lotteryDaysTillExpiry: process.env.LOTTERY_DAYS_TILL_EXPIRY,
     },
     i18n: {
       locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],

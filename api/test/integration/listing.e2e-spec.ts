@@ -676,7 +676,7 @@ describe('Listing Controller Tests', () => {
       });
 
       const res = await request(app.getHttpServer())
-        .put(`/listings/process`)
+        .put(`/listings/closeListings`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -725,7 +725,7 @@ describe('Listing Controller Tests', () => {
       });
 
       const res = await request(app.getHttpServer())
-        .put(`/listings/process`)
+        .put(`/listings/closeListings`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -943,6 +943,86 @@ describe('Listing Controller Tests', () => {
         expect.arrayContaining([partnerUser.email]),
         process.env.PARTNERS_PORTAL_URL,
       );
+    });
+  });
+
+  describe('expireLotteries endpoint', () => {
+    it('should only expire listing lotteries that are past due', async () => {
+      const jurisdictionA = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
+      const expiration_date = new Date();
+      expiration_date.setDate(
+        expiration_date.getDate() -
+          Number(process.env.LOTTERY_DAYS_TILL_EXPIRY || 45) -
+          1,
+      );
+      const expiredListingData = await listingFactory(
+        jurisdictionA.id,
+        prisma,
+        {
+          status: ListingsStatusEnum.closed,
+          closedAt: expiration_date,
+          reviewOrderType: ReviewOrderTypeEnum.lottery,
+        },
+      );
+      const expiredListing = await prisma.listings.create({
+        data: expiredListingData,
+      });
+
+      const recentlyClosedListingData = await listingFactory(
+        jurisdictionA.id,
+        prisma,
+        {
+          status: ListingsStatusEnum.closed,
+          closedAt: new Date(),
+          reviewOrderType: ReviewOrderTypeEnum.lottery,
+        },
+      );
+      const recentlyClosedListing = await prisma.listings.create({
+        data: recentlyClosedListingData,
+      });
+
+      const openListingData = await listingFactory(jurisdictionA.id, prisma, {
+        status: ListingsStatusEnum.active,
+        reviewOrderType: ReviewOrderTypeEnum.lottery,
+      });
+      const openListing = await prisma.listings.create({
+        data: openListingData,
+      });
+
+      const res = await request(app.getHttpServer())
+        .put(`/listings/expireLotteries`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', adminAccessToken)
+        .expect(200);
+
+      expect(res.body.success).toEqual(true);
+
+      const postJobListing = await prisma.listings.findUnique({
+        where: {
+          id: expiredListing.id,
+        },
+      });
+
+      expect(postJobListing.lotteryStatus).toEqual(LotteryStatusEnum.expired);
+
+      const postJobListing2 = await prisma.listings.findUnique({
+        where: {
+          id: recentlyClosedListing.id,
+        },
+      });
+
+      expect(postJobListing2.lotteryStatus).toBeNull;
+
+      const postJobListing3 = await prisma.listings.findUnique({
+        where: {
+          id: openListing.id,
+        },
+      });
+
+      expect(postJobListing3.lotteryStatus).toBeNull;
     });
   });
 
