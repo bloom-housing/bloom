@@ -12,8 +12,6 @@ import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   Listing,
   ListingUpdate,
-  ListingsStatusEnum,
-  ReviewOrderTypeEnum,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
   LotteryStatusEnum,
