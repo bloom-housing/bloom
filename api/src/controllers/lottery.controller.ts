@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Header,
+  Param,
   Put,
   Query,
   Request,
@@ -13,7 +14,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Request as ExpressRequest, Response } from 'express';
 import { LotteryService } from '../services/lottery.service';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
@@ -24,6 +25,12 @@ import { PermissionTypeDecorator } from '../decorators/permission-type.decorator
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
 import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
 import { ApiKeyGuard } from '../guards/api-key.guard';
+import { ActivityLogItem } from '../../src/dtos/lottery/activity-log-item.dto';
+import { ActivityLogMetadata } from '../../src/decorators/activity-log-metadata.decorator';
+import { ListingLotteryStatus } from 'src/dtos/listings/listing-lottery-status.dto';
+import { mapTo } from 'src/utilities/mapTo';
+import { User } from 'src/dtos/users/user.dto';
+import { LotteryStatusEnum } from '@prisma/client';
 
 @Controller('lottery')
 @ApiTags('lottery')
@@ -39,6 +46,12 @@ export class LotteryController {
     summary: 'Generate the lottery results for a listing',
     operationId: 'lotteryGenerate',
   })
+  @ActivityLogMetadata([
+    {
+      targetPropertyName: 'lotteryStatus',
+      defaultValue: LotteryStatusEnum.ran,
+    },
+  ])
   @UseInterceptors(ExportLogInterceptor)
   async lotteryGenerate(
     @Request() req: ExpressRequest,
@@ -62,5 +75,37 @@ export class LotteryController {
     queryParams: ApplicationCsvQueryParams,
   ): Promise<StreamableFile> {
     return await this.lotteryService.lotteryExport(req, res, queryParams);
+  }
+
+  @Put('lotteryStatus')
+  @ApiOperation({
+    summary: 'Change the listing lottery status',
+    operationId: 'lotteryStatus',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  @ActivityLogMetadata([
+    { targetPropertyName: 'lotteryStatus', propertyPath: 'lotteryStatus' },
+  ])
+  @UseGuards(ApiKeyGuard)
+  async lotteryStatus(
+    @Request() req: ExpressRequest,
+    @Body() dto: ListingLotteryStatus,
+  ): Promise<SuccessDTO> {
+    return await this.lotteryService.lotteryStatus(
+      dto,
+      mapTo(User, req['user']),
+    );
+  }
+
+  @Get('lotteryActivityLog')
+  @ApiOkResponse({ type: ActivityLogItem, isArray: true })
+  @ApiOperation({
+    summary: 'Get a lottery activity log',
+    operationId: 'lotteryActivityLog',
+  })
+  async lotteryActivityLog(
+    @Param('id') id: string,
+  ): Promise<ActivityLogItem[]> {
+    return await this.lotteryService.lotteryActivityLog(id);
   }
 }

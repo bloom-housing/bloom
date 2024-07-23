@@ -67,6 +67,8 @@ export const listingFactory = async (
     assets: [],
     name: randomName(),
     status: optionalParams?.status || ListingsStatusEnum.active,
+    closedAt:
+      optionalParams?.status === ListingsStatusEnum.closed ? new Date() : null,
     lotteryStatus: optionalParams?.lotteryStatus || undefined,
     displayWaitlistSize: Math.random() < 0.5,
     listingsBuildingAddress: {
