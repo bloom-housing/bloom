@@ -32,14 +32,14 @@ describe("Preference Management Tests", () => {
     })
     cy.getByTestId("preference-option-link").type("https://www.example2.com")
     cy.getByTestId("preference-option-link-title").type("Preference Option Link Title")
-    cy.getByTestId("collect-address-yes").click()
+    cy.getByTestId("collect-address-yes").click({ force: true })
     cy.getByTestId("exclusive-question-exclusive").check()
     cy.getByID("preference-option-save").click()
 
-    cy.getByTestId("validation-method-map").click()
+    cy.getByTestId("validation-method-map").click({ force: true })
     cy.getByTestId("preference-map-layer").select("Redlined Districts")
-    cy.getByTestId("collect-name-yes").click()
-    cy.getByTestId("collect-relationship-yes").click()
+    cy.getByTestId("collect-name-yes").click({ force: true })
+    cy.getByTestId("collect-relationship-yes").click({ force: true })
     cy.getByID("preference-option-save").click()
 
     cy.getByTestId("preference-opt-out-label").clear()

@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import { Button, Icon } from "@bloom-housing/ui-seeds"
+import { Button } from "@bloom-housing/ui-seeds"
 import {
   Field,
   Form,

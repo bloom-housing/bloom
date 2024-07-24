@@ -8,6 +8,7 @@ import {
   pushGtmEvent,
   AuthContext,
   MessageContext,
+  CustomIconMap,
 } from "@bloom-housing/shared-helpers"
 import {
   LanguagesEnum,
@@ -16,7 +17,6 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Heading, Icon, Button, Message } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { CustomIconMap } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import {
   AppSubmissionContext,
