@@ -292,9 +292,9 @@ export class ListingService implements OnModuleInit {
         if (filter[ListingFilterKeys.monthlyRent]) {
           const comparison = filter['$comparison'];
           whereClauseArray.push(
-            `(combined_units->>'monthlyRent')::INTEGER ${comparison} '${Math.floor(
-              filter[ListingFilterKeys.monthlyRent],
-            )}'`,
+            `(combined_units->>'monthlyRent')::FLOAT ${comparison} '${
+              filter[ListingFilterKeys.monthlyRent]
+            }'`,
           );
         }
       });

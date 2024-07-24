@@ -39,7 +39,9 @@ export const unitFactorySingle = (
     minOccupancy: bedrooms,
     maxOccupancy: bedrooms + 2,
     monthlyIncomeMin: randomInt(3500).toString(),
-    monthlyRent: (randomInt(2500) * (bedrooms || 1)).toString(),
+    monthlyRent: ((Math.random() * 100 + 2500) * (bedrooms || 1)).toPrecision(
+      2,
+    ),
     unitRentTypes: optionalParams?.unitRentTypeId
       ? { connect: { id: optionalParams?.unitRentTypeId } }
       : {
