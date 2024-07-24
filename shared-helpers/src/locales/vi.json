@@ -30,7 +30,7 @@
   "account.reviewTermsHelper": "Bạn phải chấp nhận các điều khoản sử dụng trước khi tạo tài khoản.",
   "account.settings.alerts.currentPassword": "Mật khẩu hiện tại không hợp lệ. Vui lòng thử lại.",
   "account.settings.alerts.dobSuccess": "Cập nhật ngày sinh thành công",
-  "account.settings.alerts.emailSuccess": "Cập nhật email thành công",
+  "account.settings.alerts.emailSuccess": "Vui lòng truy cập email của bạn để xác nhận bản cập nhật này",
   "account.settings.alerts.genericError": "Đã xảy ra lỗi. Vui lòng thử lại hoặc liên hệ với bộ phận hỗ trợ để được trợ giúp.",
   "account.settings.alerts.nameSuccess": "Cập nhật tên thành công",
   "account.settings.alerts.passwordEmpty": "Không được để trống các trường mật khẩu",
