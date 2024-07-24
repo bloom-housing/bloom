@@ -1083,8 +1083,14 @@ describe('Listing Controller Tests', () => {
         status: ListingsStatusEnum.closed,
         lotteryStatus: LotteryStatusEnum.ran,
       });
+      const appUpdate = new Date();
+      appUpdate.setDate(appUpdate.getDate() - 1);
       const listing = await prisma.listings.create({
-        data: listingData,
+        data: {
+          ...listingData,
+          lotteryLastRunAt: new Date(),
+          lastApplicationUpdateAt: appUpdate,
+        },
       });
 
       const res = await request(app.getHttpServer())
@@ -1097,6 +1103,36 @@ describe('Listing Controller Tests', () => {
         .set('Cookie', adminAccessToken)
         .expect(200);
       expect(res.body.success).toEqual(true);
+    });
+
+    it('should error trying to update listing lottery status to releasedToPartners from ran if there are new paper application updates', async () => {
+      const jurisdictionA = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
+      const listingData = await listingFactory(jurisdictionA.id, prisma, {
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: LotteryStatusEnum.ran,
+      });
+      const lotteryLastRun = new Date();
+      lotteryLastRun.setDate(lotteryLastRun.getDate() - 1);
+      const listing = await prisma.listings.create({
+        data: {
+          ...listingData,
+          lotteryLastRunAt: lotteryLastRun,
+          lastApplicationUpdateAt: new Date(),
+        },
+      });
+
+      await request(app.getHttpServer())
+        .put('/listings/lotteryStatus')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          listingId: listing.id,
+          lotteryStatus: LotteryStatusEnum.releasedToPartners,
+        })
+        .set('Cookie', adminAccessToken)
+        .expect(400);
     });
 
     it('should update listing lottery status to ran from releasedToPartners aka retract', async () => {

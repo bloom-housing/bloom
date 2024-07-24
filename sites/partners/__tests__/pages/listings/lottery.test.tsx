@@ -310,6 +310,52 @@ describe("lottery", () => {
     ).toBeInTheDocument()
   })
 
+  it("should show new paper apps modals if user clicks on release if application updates have been made since last lottery run", async () => {
+    mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { isAdmin: true },
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 0 }))
+      })
+    )
+
+    const lotteryLastRan = new Date()
+    lotteryLastRan.setDate(lotteryLastRan.getDate() - 1)
+    const { getByText, findByText } = render(
+      <Lottery
+        listing={{
+          ...listing,
+          lotteryLastRunAt: lotteryLastRan,
+          lotteryStatus: LotteryStatusEnum.ran,
+          lastApplicationUpdateAt: new Date(),
+        }}
+      />
+    )
+
+    const header = await findByText("Lottery")
+    expect(header).toBeInTheDocument()
+
+    fireEvent.click(getByText("Release lottery"))
+    expect(await findByText("Action required")).toBeInTheDocument()
+    expect(
+      getByText("You have added or updated applications without re-running the lottery.")
+    ).toBeInTheDocument()
+    expect(
+      getByText("You must re-run the lottery before releasing the lottery data.")
+    ).toBeInTheDocument()
+  })
+
   it("should show retract modal if user clicks on retract", async () => {
     mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
     document.cookie = "access-token-available=True"

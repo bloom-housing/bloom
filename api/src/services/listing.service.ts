@@ -1903,6 +1903,13 @@ export class ListingService implements OnModuleInit {
             'Lottery cannot be released to partners without being in run state.',
           );
         }
+        if (
+          storedListing.lotteryLastRunAt < storedListing.lastApplicationUpdateAt
+        ) {
+          throw new BadRequestException(
+            'Lottery cannot be released due to paper applications that are not included in the last run.',
+          );
+        }
         // TODO: add released to partners to history
         // TODO: remove when all status logic has been implemented
         res = await this.prisma.listings.update({
