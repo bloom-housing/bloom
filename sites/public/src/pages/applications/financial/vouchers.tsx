@@ -45,7 +45,7 @@ const ApplicationVouchers = () => {
     if (!validation) return
 
     const incomeVouchers = Object.entries(data)
-      .map(([key, value]) => (!!value ? key.replace("incomeVouchers-", "") : null))
+      .map(([key, value]) => (value ? key.replace("incomeVouchers-", "") : null))
       .filter((item) => item)
     const toSave = { incomeVouchers }
 
