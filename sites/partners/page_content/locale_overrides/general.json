@@ -283,6 +283,8 @@
   "listings.lottery.runLottery": "Run lottery",
   "listings.lottery.runLotteryContent": "Make sure to add all paper applications before running the lottery.",
   "listings.lottery.runLotteryDuplicates": "Run lottery without resolving duplicates",
+  "listings.lottery.terms": "I acknowledge that downloading and using the information contained in the Application(s), Excel or CSV files is subject to the <a className='lined' href='https://www.exygy.com' target='_blank'>Terms of Use</a>, and further, the use, storage, possession and retention of personal identifiable information contained in the Application is subject to state and federal privacy laws. I agree on behalf of the Local Government or Professional Partner that such Professional Partner or Local Government will comply with the Terms of Use and applicable state and federal privacy laws in viewing, using, storing and possessing the Application and the information contained therein. I warrant that I am authorized to enter into agreements such as the Terms of Use on behalf of such Professional Partner or Local Government.  <span className='font-semibold'>I agree to review for accuracy the spreadsheet(s) I download, per the guidance in the <a className='lined' href='https://www.exygy.com' target='_blank'>Partners Manual</a>, and to notify staff of any errors within 30 days of the close of the listing, or if a lottery will be conducted, at least three working days before the lottery is scheduled to be conducted.</span>",
+  "listings.lottery.termsAccept": "You must accept the Terms of Use before exporting this data.",
   "listings.lotteryDateNotes": "Lottery Date Notes",
   "listings.lotteryDateQuestion": "When will the lottery be run?",
   "listings.lotteryEndTime": "Lottery End Time",
