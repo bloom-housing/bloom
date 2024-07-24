@@ -5,6 +5,7 @@ import dayjs from "dayjs"
 import Ticket from "@heroicons/react/24/solid/TicketIcon"
 import Download from "@heroicons/react/24/solid/ArrowDownTrayIcon"
 import ExclamationCirleIcon from "@heroicons/react/24/solid/ExclamationCircleIcon"
+import Markdown from "markdown-to-jsx"
 import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import { Button, Card, Dialog, Heading, Icon, Message } from "@bloom-housing/ui-seeds"
 import { CardHeader, CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
@@ -37,6 +38,7 @@ const Lottery = (props: { listing: Listing }) => {
   const [reRunModal, setReRunModal] = useState(false)
   const [releaseModal, setReleaseModal] = useState(false)
   const [exportModal, setExportModal] = useState(false)
+  const [termsExportModal, setTermsExportModal] = useState(false)
   const [publishModal, setPublishModal] = useState(false)
   const [retractModal, setRetractModal] = useState(false)
   const [newApplicationsModal, setNewApplicationsModal] = useState(false)
@@ -82,7 +84,16 @@ const Lottery = (props: { listing: Listing }) => {
             : t("listings.lottery.exportFileNoPreferences")}
         </div>
         <div>
-          <Button disabled={loading || csvExportLoading} onClick={() => setExportModal(true)}>
+          <Button
+            disabled={loading || csvExportLoading}
+            onClick={() => {
+              if (profile?.userRoles?.isAdmin) {
+                setExportModal(true)
+              } else {
+                setTermsExportModal(true)
+              }
+            }}
+          >
             {t("t.export")}
           </Button>
         </div>
@@ -590,6 +601,53 @@ const Lottery = (props: { listing: Listing }) => {
                 variant="primary-outlined"
                 onClick={() => {
                   setExportModal(false)
+                }}
+                size="sm"
+              >
+                {t("t.cancel")}
+              </Button>
+            </Dialog.Footer>
+          </Dialog>
+          <Dialog
+            isOpen={!!termsExportModal}
+            ariaLabelledBy="terms-export-lottery-modal-header"
+            ariaDescribedBy="terms-export-lottery-modal-content"
+            onClose={() => setTermsExportModal(false)}
+          >
+            <Dialog.Header id="terms-export-lottery-modal-header">
+              {t("listings.lottery.export")}
+            </Dialog.Header>
+            <Dialog.Content id="terms-export-lottery-modal-content">
+              <p>
+                {listing.listingMultiselectQuestions.length
+                  ? t("listings.lottery.exportFile")
+                  : t("listings.lottery.exportFileNoPreferences")}{" "}
+                {t("listings.lottery.exportContentTimestamp", {
+                  date: dayjs(listing.lotteryLastRunAt).format("MM/DD/YYYY"),
+                  time: dayjs(listing.lotteryLastRunAt).format("h:mm a"),
+                })}
+              </p>
+              <p>{t("listings.lottery.termsAccept")}</p>
+              <h2 className={styles["terms-of-use-header"]}>
+                {t("authentication.terms.termsOfUse")}
+              </h2>
+              <Markdown>{t("listings.lottery.terms")}</Markdown>
+            </Dialog.Content>
+            <Dialog.Footer>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  // export lottery
+                  setTermsExportModal(false)
+                }}
+                size="sm"
+              >
+                {t("t.export")}
+              </Button>
+              <Button
+                variant="primary-outlined"
+                onClick={() => {
+                  setTermsExportModal(false)
                 }}
                 size="sm"
               >
