@@ -39,6 +39,7 @@ const Lottery = (props: { listing: Listing }) => {
   const [exportModal, setExportModal] = useState(false)
   const [publishModal, setPublishModal] = useState(false)
   const [retractModal, setRetractModal] = useState(false)
+  const [newApplicationsModal, setNewApplicationsModal] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const { listingsService, lotteryService, profile } = useContext(AuthContext)
@@ -214,7 +215,13 @@ const Lottery = (props: { listing: Listing }) => {
                 </Button>
                 <Button
                   className={styles["action"]}
-                  onClick={() => setReleaseModal(true)}
+                  onClick={() => {
+                    if (listing?.lotteryLastRunAt < listing?.lastApplicationUpdateAt) {
+                      setNewApplicationsModal(true)
+                    } else {
+                      setReleaseModal(true)
+                    }
+                  }}
                   variant={"primary-outlined"}
                 >
                   {t("listings.lottery.release")}
@@ -469,6 +476,31 @@ const Lottery = (props: { listing: Listing }) => {
                 size="sm"
               >
                 {t("t.cancel")}
+              </Button>
+            </Dialog.Footer>
+          </Dialog>
+          <Dialog
+            isOpen={!!newApplicationsModal}
+            ariaLabelledBy="new-applications-modal-header"
+            ariaDescribedBy="new-applications-modal-content"
+            onClose={() => setNewApplicationsModal(false)}
+          >
+            <Dialog.Header id="new-applications-modal-header">
+              {t("listings.lottery.newAppsHeader")}
+            </Dialog.Header>
+            <Dialog.Content id="new-applications-modal-content">
+              <p>{t("listings.lottery.newApps")}</p>
+              <p className={"font-semibold"}>{t("listings.lottery.newAppsReRun")}</p>
+            </Dialog.Content>
+            <Dialog.Footer>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  setNewApplicationsModal(false)
+                }}
+                size="sm"
+              >
+                {t("t.ok")}
               </Button>
             </Dialog.Footer>
           </Dialog>
