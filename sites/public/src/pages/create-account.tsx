@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
-import { Field, Form, emailRegex, t, DOBField, AlertBox, Modal } from "@bloom-housing/ui-components"
-import { Button, Heading, Dialog } from "@bloom-housing/ui-seeds"
+import { Field, Form, emailRegex, t, DOBField, AlertBox } from "@bloom-housing/ui-components"
+import { Button, Dialog, Heading } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import dayjs from "dayjs"
 import Markdown from "markdown-to-jsx"
@@ -354,18 +354,25 @@ export default () => {
           </div>
         )}
       </div>
+
       {/* Email confirmation modal */}
-      <Modal
-        open={openEmailModal}
-        title={t("authentication.createAccount.confirmationNeeded")}
-        ariaDescription={t("authentication.createAccount.anEmailHasBeenSent", {
-          email: email.current,
-        })}
+      <Dialog
+        isOpen={openEmailModal}
         onClose={() => {
           void router.push("/sign-in")
           window.scrollTo(0, 0)
         }}
-        actions={[
+        ariaLabelledBy="create-account-dialog-header"
+        ariaDescribedBy="create-account-dialog-content"
+      >
+        <Dialog.Header id="create-account-dialog-header">
+          {t("authentication.createAccount.confirmationNeeded")}
+        </Dialog.Header>
+        <Dialog.Content id="create-account-dialog-content">
+          <p>{t("authentication.createAccount.anEmailHasBeenSent", { email: email.current })}</p>
+          <p>{t("authentication.createAccount.confirmationInstruction")}</p>
+        </Dialog.Content>
+        <Dialog.Footer>
           <Button
             variant="primary"
             onClick={() => {
@@ -375,7 +382,7 @@ export default () => {
             size="sm"
           >
             {t("t.ok")}
-          </Button>,
+          </Button>
           <Button
             variant="primary-outlined"
             disabled={confirmationResent}
@@ -386,14 +393,9 @@ export default () => {
             size="sm"
           >
             {t("authentication.createAccount.resendTheEmail")}
-          </Button>,
-        ]}
-      >
-        <>
-          <p>{t("authentication.createAccount.anEmailHasBeenSent", { email: email.current })}</p>
-          <p>{t("authentication.createAccount.confirmationInstruction")}</p>
-        </>
-      </Modal>
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
     </FormsLayout>
   )
 }

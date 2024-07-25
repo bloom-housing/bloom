@@ -11,6 +11,7 @@ import {
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { ListingFilterKeys } from '../../enums/listings/filter-key-enum';
 import { ListingsStatusEnum } from '@prisma/client';
+import { FilterAvailabilityEnum } from '../../enums/listings/filter-availability-enum';
 
 export class ListingFilterParams extends BaseFilter {
   @Expose()
@@ -87,6 +88,17 @@ export class ListingFilterParams extends BaseFilter {
     }
   })
   [ListingFilterKeys.isExternal]?: boolean;
+
+  @Expose()
+  @ApiPropertyOptional({
+    enum: FilterAvailabilityEnum,
+    enumName: 'FilterAvailabilityEnum',
+    example: 'waitlistOpen',
+  })
+  @IsEnum(FilterAvailabilityEnum, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  [ListingFilterKeys.availability]?: FilterAvailabilityEnum;
 
   @Expose()
   @ApiPropertyOptional({

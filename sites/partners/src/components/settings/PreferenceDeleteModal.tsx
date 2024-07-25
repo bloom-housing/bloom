@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from "react"
-import { AlertTypes, MinimalTable, Modal, t } from "@bloom-housing/ui-components"
-import { Button, Link } from "@bloom-housing/ui-seeds"
+import { MinimalTable, t } from "@bloom-housing/ui-components"
+import { Button, Dialog, Link } from "@bloom-housing/ui-seeds"
 import { useListingsMultiselectQuestionList } from "../../lib/hooks"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { MultiselectQuestion } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -49,38 +49,49 @@ export const PreferenceDeleteModal = ({
 
   if (data?.length > 0) {
     return (
-      <Modal
-        title={t("settings.preferenceChangesRequired")}
-        open={!!multiselectQuestion}
+      <Dialog
+        isOpen={!!multiselectQuestion}
         onClose={onClose}
-        scrollableModal
-        actions={[
-          <Button type="button" variant="primary" onClick={onClose} size="sm">
-            {t("t.done")}
-          </Button>,
-        ]}
+        ariaLabelledBy="preference-changes-modal-header"
+        ariaDescribedBy="preference-changes-modal-description"
       >
-        <div>
-          <div className="pb-3">{t("settings.preferenceDeleteError")}</div>
+        <Dialog.Header id="preference-changes-modal-header">
+          {t("settings.preferenceChangesRequired")}
+        </Dialog.Header>
+        <Dialog.Content>
+          <div className="pb-3" id="preference-changes-modal-description">
+            {t("settings.preferenceDeleteError")}
+          </div>
           <MinimalTable
             headers={{ name: "listings.listingName" }}
             data={listingsTableData}
             cellClassName={" "}
           />
-        </div>
-      </Modal>
+        </Dialog.Content>
+        <Dialog.Footer>
+          <Button type="button" variant="primary" onClick={onClose} size="sm">
+            {t("t.done")}
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
     )
   }
 
   return (
-    <Modal
-      title={t("t.areYouSure")}
-      open={!!multiselectQuestion}
+    <Dialog
+      isOpen={!!multiselectQuestion}
       onClose={onClose}
-      actions={[
+      ariaLabelledBy="preference-delete-modal-header"
+      ariaDescribedBy="preference-delete-modal-description"
+    >
+      <Dialog.Header id="preference-delete-modal-header">{t("t.areYouSure")}</Dialog.Header>
+      <Dialog.Content id="preference-delete-modal-description">
+        {t("settings.preferenceDeleteConfirmation")}
+      </Dialog.Content>
+      <Dialog.Footer>
         <Button type="button" variant="alert" onClick={deletePreference} size="sm">
           {t("t.delete")}
-        </Button>,
+        </Button>
         <Button
           type="button"
           onClick={onClose}
@@ -89,10 +100,8 @@ export const PreferenceDeleteModal = ({
           size="sm"
         >
           {t("t.cancel")}
-        </Button>,
-      ]}
-    >
-      <div>{t("settings.preferenceDeleteConfirmation")}</div>
-    </Modal>
+        </Button>
+      </Dialog.Footer>
+    </Dialog>
   )
 }

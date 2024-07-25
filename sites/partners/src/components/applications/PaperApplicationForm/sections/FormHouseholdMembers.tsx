@@ -4,8 +4,8 @@ import {
   HouseholdMemberUpdate,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { t, MinimalTable, Drawer, Modal } from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
+import { t, MinimalTable } from "@bloom-housing/ui-components"
+import { Button, Dialog, Drawer } from "@bloom-housing/ui-seeds"
 import { FormMember } from "../FormMember"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
@@ -151,11 +151,13 @@ const FormHouseholdMembers = ({
       </SectionWithGrid>
 
       <Drawer
-        open={!!membersDrawer}
-        title={t("application.household.householdMember")}
-        ariaDescription={t("application.household.householdMember")}
+        isOpen={!!membersDrawer}
         onClose={() => setMembersDrawer(null)}
+        ariaLabelledBy="form-household-members-drawer-header"
       >
+        <Drawer.Header id="form-household-members-drawer-header">
+          {t("application.household.householdMember")}
+        </Drawer.Header>
         <FormMember
           onSubmit={(member) => saveMember(member)}
           onClose={() => setMembersDrawer(null)}
@@ -164,15 +166,22 @@ const FormHouseholdMembers = ({
         />
       </Drawer>
 
-      <Modal
-        open={!!membersDeleteModal}
-        title={t("application.deleteThisMember")}
-        ariaDescription={t("application.deleteMemberDescription")}
+      <Dialog
+        isOpen={!!membersDeleteModal}
+        ariaLabelledBy="form-household-members-dialog-header"
+        ariaDescribedBy="form-household-members-dialog-content"
         onClose={() => setMembersDeleteModal(null)}
-        actions={[
+      >
+        <Dialog.Header id="form-household-members-dialog-header">
+          {t("application.deleteThisMember")}
+        </Dialog.Header>
+        <Dialog.Content id="form-household-members-dialog-content">
+          {t("application.deleteMemberDescription")}
+        </Dialog.Content>
+        <Dialog.Footer>
           <Button variant="alert" onClick={() => deleteMember(membersDeleteModal)} size="sm">
             {t("t.delete")}
-          </Button>,
+          </Button>
           <Button
             variant="primary-outlined"
             onClick={() => {
@@ -181,11 +190,9 @@ const FormHouseholdMembers = ({
             size="sm"
           >
             {t("t.cancel")}
-          </Button>,
-        ]}
-      >
-        {t("application.deleteMemberDescription")}
-      </Modal>
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
     </>
   )
 }

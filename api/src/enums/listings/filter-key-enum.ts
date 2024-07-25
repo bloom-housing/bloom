@@ -11,4 +11,5 @@ export enum ListingFilterKeys {
   counties = 'counties',
   monthlyRent = 'monthlyRent',
   isExternal = 'isExternal',
+  availability = 'availability',
 }

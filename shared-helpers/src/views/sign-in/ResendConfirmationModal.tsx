@@ -1,6 +1,6 @@
-import { Modal, t, Form, Field, emailRegex } from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
-import React, { useEffect, useMemo } from "react"
+import { t, Form, Field, emailRegex } from "@bloom-housing/ui-components"
+import { Button, Dialog } from "@bloom-housing/ui-seeds"
+import React, { useCallback, useEffect, useMemo } from "react"
 import { useForm } from "react-hook-form"
 
 export type ResendConfirmationModalProps = {
@@ -45,39 +45,21 @@ const ResendConfirmationModal = ({
     onSubmit(emailResend)
   }
 
+  const closeCallback = useCallback(() => {
+    onClose()
+    window.scrollTo(0, 0)
+  }, [onClose])
+
   return (
-    <Modal
-      open={isOpen}
-      title={t("authentication.signIn.yourAccountIsNotConfirmed")}
-      ariaDescription={t("authentication.createAccount.linkExpired")}
-      onClose={() => {
-        onClose()
-        window.scrollTo(0, 0)
-      }}
-      actions={[
-        <Button
-          type="button"
-          variant="primary"
-          onClick={() => onFormSubmit()}
-          loadingMessage={loadingMessage}
-          size="sm"
-        >
-          {t("authentication.createAccount.resendTheEmail")}
-        </Button>,
-        <Button
-          type="button"
-          variant="alert"
-          onClick={() => {
-            onClose()
-            window.scrollTo(0, 0)
-          }}
-          size="sm"
-        >
-          {t("t.cancel")}
-        </Button>,
-      ]}
+    <Dialog
+      isOpen={isOpen}
+      onClose={closeCallback}
+      ariaLabelledBy="resend-confirmation-dialog-header"
     >
-      <>
+      <Dialog.Header id="resend-confirmation-dialog-header">
+        {t("authentication.signIn.yourAccountIsNotConfirmed")}
+      </Dialog.Header>
+      <Dialog.Content>
         <Form>
           <Field
             type="email"
@@ -93,8 +75,22 @@ const ResendConfirmationModal = ({
         </Form>
 
         <p className="pt-4">{t("authentication.createAccount.resendEmailInfo")}</p>
-      </>
-    </Modal>
+      </Dialog.Content>
+      <Dialog.Footer>
+        <Button
+          type="button"
+          variant="primary"
+          onClick={() => onFormSubmit()}
+          loadingMessage={loadingMessage}
+          size="sm"
+        >
+          {t("authentication.createAccount.resendTheEmail")}
+        </Button>
+        <Button type="button" variant="alert" onClick={closeCallback} size="sm">
+          {t("t.cancel")}
+        </Button>
+      </Dialog.Footer>
+    </Dialog>
   )
 }
 

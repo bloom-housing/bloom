@@ -16,6 +16,8 @@ import { LinkButton, t } from "@bloom-housing/ui-components"
 import styles from "./LandingSearch.module.scss"
 import { FormOption } from "./ListingsSearchModal"
 import { numericSearchFieldGenerator } from "./helpers"
+import { Dialog } from "@bloom-housing/ui-seeds"
+import { FilterAvailabilityEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type LandingSearchProps = {
   bedrooms: FormOption[]
@@ -36,6 +38,7 @@ export function LandingSearch(props: LandingSearchProps) {
   const nullState: ListingSearchParams = {
     bedrooms: null,
     bathrooms: null,
+    availability: null,
     minRent: "",
     monthlyRent: "",
     counties: countyLabels,
@@ -131,6 +134,20 @@ export function LandingSearch(props: LandingSearchProps) {
   return (
     <Card className="bg-accent-cool-light">
       <div className={styles["input-section"]}>
+        <div className={styles["input-section_title"]}>{t("t.opportunityType")}</div>
+        <ButtonGroup
+          name="availability"
+          options={[
+            { label: t("listings.waitlist.open"), value: FilterAvailabilityEnum.waitlistOpen },
+            { label: t("listings.availableUnits"), value: FilterAvailabilityEnum.unitsAvailable },
+          ]}
+          onChange={updateValue}
+          value={formValues.availability}
+          className="bg-accent-cool-light pt-2 md:py-0 md:px-0 landing-search-button-group w-full"
+          spacing={ButtonGroupSpacing.left}
+        />
+      </div>
+      <div className={styles["input-section"]}>
         <div className={styles["input-section_title"]}>{t("t.bedrooms")}</div>
         <ButtonGroup
           name="bedrooms"
@@ -191,15 +208,19 @@ export function LandingSearch(props: LandingSearchProps) {
         </Button>
       </div>
 
-      <Modal
-        open={openCountyMapModal}
-        title={t("welcome.bayAreaCountyMap")}
-        headerClassNames="text-primary-dark text-2xl font-medium"
-        ariaDescription={t("welcome.bayAreaCountyMap")}
+      <Dialog
+        className="listings-search-dialog"
+        isOpen={openCountyMapModal}
         onClose={() => setOpenCountyMapModal(!openCountyMapModal)}
+        ariaLabelledBy="welcome-bay-area-county-map-header"
       >
-        <img src={"/images/county-map.png"} alt={t("welcome.bayAreaCountyMap")} />
-      </Modal>
+        <Dialog.Header id="welcome-bay-area-county-map-header">
+          {t("welcome.bayAreaCountyMap")}
+        </Dialog.Header>
+        <Dialog.Content>
+          <img src={"/images/county-map.png"} alt={t("welcome.bayAreaCountyMap")} />
+        </Dialog.Content>
+      </Dialog>
     </Card>
   )
 }

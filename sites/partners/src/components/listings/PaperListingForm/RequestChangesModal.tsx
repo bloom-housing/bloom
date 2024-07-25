@@ -1,6 +1,6 @@
 import React from "react"
-import { Form, Modal, t, Textarea } from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
+import { Form, t, Textarea } from "@bloom-housing/ui-components"
+import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import { useForm } from "react-hook-form"
 import { FormListing } from "../../../lib/listings/formTypes"
 import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -30,12 +30,36 @@ const RequestChangesModal = ({
   const { register, getValues, errors, trigger, clearErrors } = useForm<FormFields>()
 
   return (
-    <Modal
-      open={modalIsOpen}
-      title={t("t.areYouSure")}
-      ariaDescription={t("listings.approval.requestChangesDescription")}
+    <Dialog
+      isOpen={modalIsOpen}
       onClose={() => setModalIsOpen(false)}
-      actions={[
+      ariaLabelledBy="request-changes-dialog-header"
+      ariaDescribedBy="request-changes-dialog-content"
+    >
+      <Dialog.Header id="request-changes-dialog-header">{t("t.areYouSure")}</Dialog.Header>
+      <Dialog.Content>
+        <Form id={"request-changes"} onSubmit={() => false}>
+          <div className={"pb-4 text-gray-700"} id="request-changes-dialog-content">
+            {t("listings.approval.requestChangesDescription")}
+          </div>
+          <Textarea
+            label={t("listings.approval.requestSummary")}
+            name={"requestedChanges"}
+            id={"requestedChanges"}
+            dataTestId={"requestedChanges"}
+            fullWidth={true}
+            register={register}
+            defaultValue={defaultValue}
+            maxLength={2000}
+            validation={{ required: true }}
+            errorMessage={!!errors?.requestedChanges && t("errors.requiredFieldError")}
+            inputProps={{
+              onChange: () => clearErrors("requestedChanges"),
+            }}
+          />
+        </Form>
+      </Dialog.Content>
+      <Dialog.Footer>
         <Button
           id="requestChangesButtonConfirm"
           type="button"
@@ -53,7 +77,7 @@ const RequestChangesModal = ({
           size="sm"
         >
           {t("listings.approval.requestChanges")}
-        </Button>,
+        </Button>
         <Button
           type="button"
           variant="primary-outlined"
@@ -63,30 +87,9 @@ const RequestChangesModal = ({
           size="sm"
         >
           {t("t.cancel")}
-        </Button>,
-      ]}
-    >
-      <Form id={"request-changes"} onSubmit={() => false}>
-        <div className={"pb-4 text-gray-700"}>
-          {t("listings.approval.requestChangesDescription")}
-        </div>
-        <Textarea
-          label={t("listings.approval.requestSummary")}
-          name={"requestedChanges"}
-          id={"requestedChanges"}
-          dataTestId={"requestedChanges"}
-          fullWidth={true}
-          register={register}
-          defaultValue={defaultValue}
-          maxLength={2000}
-          validation={{ required: true }}
-          errorMessage={!!errors?.requestedChanges && t("errors.requiredFieldError")}
-          inputProps={{
-            onChange: () => clearErrors("requestedChanges"),
-          }}
-        />
-      </Form>
-    </Modal>
+        </Button>
+      </Dialog.Footer>
+    </Dialog>
   )
 }
 

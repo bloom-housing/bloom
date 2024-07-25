@@ -153,6 +153,10 @@
     }
   }
 
+  .seeds-dialog.listings-search-dialog {
+    --dialog-width: 42rem;
+  }
+
   .markdown-informational {
     font-size: var(--seeds-type-body-size);
 
