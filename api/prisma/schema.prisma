@@ -1006,6 +1006,7 @@ enum YesNoEnum {
 enum RuleEnum {
   nameAndDOB
   email
+  emailAndNameAndDOB
 
   @@map("rule_enum")
 }

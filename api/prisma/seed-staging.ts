@@ -745,7 +745,7 @@ export const stagingSeed = async (
         customMapPin: false,
         contentUpdatedAt: dayjs(new Date()).subtract(1, 'days').toDate(),
         publishedAt: dayjs(new Date()).subtract(3, 'days').toDate(),
-        closedAt: dayjs(new Date()).subtract(1, 'days').toDate(),
+        closedAt: dayjs(new Date()).subtract(5, 'days').toDate(),
         listingsApplicationPickUpAddress: undefined,
         listingsLeasingAgentAddress: undefined,
         listingsApplicationDropOffAddress: undefined,
