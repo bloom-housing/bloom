@@ -105,6 +105,16 @@ export class ApplicationFlaggedSetController {
     return await this.applicationFlaggedSetService.process();
   }
 
+  @Put('process_duplicates')
+  @ApiOperation({
+    summary: 'Trigger the duplicate check process',
+    operationId: 'process',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async processDuplicates(): Promise<SuccessDTO> {
+    return await this.applicationFlaggedSetService.processDuplicates();
+  }
+
   @Put(':id')
   @ApiOperation({
     summary: 'Reset flagged set confirmation alert',

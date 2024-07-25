@@ -606,7 +606,6 @@ describe('Testing application flagged set service', () => {
       const mockCount = jest
         .fn()
         .mockResolvedValueOnce(1)
-        .mockResolvedValueOnce(2)
         .mockResolvedValueOnce(3);
 
       prisma.applicationFlaggedSet.count = mockCount;
@@ -615,9 +614,7 @@ describe('Testing application flagged set service', () => {
       expect(await service.meta({ listingId: 'example id' })).toEqual({
         totalCount: 12,
         totalResolvedCount: 1,
-        totalPendingCount: 5,
-        totalNamePendingCount: 2,
-        totalEmailPendingCount: 3,
+        totalPendingCount: 3,
       });
 
       expect(prisma.applicationFlaggedSet.count).toHaveBeenNthCalledWith(1, {
@@ -631,15 +628,6 @@ describe('Testing application flagged set service', () => {
         where: {
           listingId: 'example id',
           status: FlaggedSetStatusEnum.pending,
-          rule: RuleEnum.nameAndDOB,
-        },
-      });
-
-      expect(prisma.applicationFlaggedSet.count).toHaveBeenNthCalledWith(3, {
-        where: {
-          listingId: 'example id',
-          status: FlaggedSetStatusEnum.pending,
-          rule: RuleEnum.email,
         },
       });
     });
@@ -688,7 +676,7 @@ describe('Testing application flagged set service', () => {
         id: 'example id',
       });
 
-      await service.markCronJobAsStarted();
+      await service.markCronJobAsStarted('AFS_CRON_JOB');
 
       expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
         where: {
@@ -713,7 +701,7 @@ describe('Testing application flagged set service', () => {
         id: 'example id',
       });
 
-      await service.markCronJobAsStarted();
+      await service.markCronJobAsStarted('AFS_CRON_JOB');
 
       expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
         where: {
@@ -2391,6 +2379,7 @@ describe('Testing application flagged set service', () => {
 
   describe('Test process', () => {
     it('should process listing', async () => {
+      process.env.DUPLICATES_CLOSE_DATE = null;
       const mockCall = jest
         .fn()
         .mockResolvedValueOnce([
@@ -2504,6 +2493,10 @@ describe('Testing application flagged set service', () => {
           lastApplicationUpdateAt: {
             not: null,
           },
+          //  "closedAt":  {
+          //      "lte": 2024-07-28T08:00:00.000Z,
+          //    },
+          //    "id": undefined,
           AND: [
             {
               OR: [

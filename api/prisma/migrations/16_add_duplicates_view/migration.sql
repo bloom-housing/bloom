@@ -36,4 +36,8 @@ UNION
         household_member hm
     where
         hm.application_id = app.id
-)
+);
+
+ALTER TYPE "rule_enum"
+ADD
+    VALUE 'emailAndNameAndDOB';
