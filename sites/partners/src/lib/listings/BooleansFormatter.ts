@@ -64,5 +64,9 @@ export default class BooleansFormatter extends Formatter {
       when: this.data.paperApplicationChoice === YesNoEnum.yes,
       falseCase: () => (this.data.paperApplicationChoice === YesNoEnum.no ? false : null),
     })
+    this.processBoolean("lotteryOptIn", {
+      when: this.data.lotteryOptInQuestion === YesNoEnum.yes,
+      falseCase: () => (this.data.lotteryOptInQuestion === YesNoEnum.no ? false : null),
+    })
   }
 }

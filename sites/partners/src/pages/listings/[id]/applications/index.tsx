@@ -11,6 +11,7 @@ import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   ApplicationOrderByKeys,
   ListingsStatusEnum,
+  LotteryStatusEnum,
   OrderByEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -151,6 +152,7 @@ const ApplicationsList = () => {
           applicationsLabel: t("nav.applications"),
           lotteryLabel:
             listingDto?.status === ListingsStatusEnum.closed &&
+            listingDto?.lotteryOptIn &&
             listingDto?.reviewOrderType === ReviewOrderTypeEnum.lottery
               ? t("listings.lotteryTitle")
               : undefined,
@@ -243,7 +245,13 @@ const ApplicationsList = () => {
                         {allowNewApps && (
                           <Button
                             onClick={() => {
-                              if (listingDto.lotteryLastRunAt) {
+                              if (
+                                process.env.showLottery === "TRUE" &&
+                                (listingDto.lotteryStatus === LotteryStatusEnum.ran ||
+                                  listingDto.lotteryStatus ===
+                                    LotteryStatusEnum.releasedToPartners ||
+                                  listingDto.lotteryStatus === LotteryStatusEnum.publishedToPublic)
+                              ) {
                                 setApplicationConfirmAddPostLotteryModal(true)
                               } else if (listingDto.status === ListingsStatusEnum.closed) {
                                 setApplicationConfirmAddModal(true)

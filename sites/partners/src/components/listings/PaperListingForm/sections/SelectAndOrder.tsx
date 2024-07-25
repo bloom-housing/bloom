@@ -20,6 +20,7 @@ type SelectAndOrderProps = {
   editText: string
   addText: string
   drawerTitle: string
+  drawerSubtitle?: string
   drawerButtonText: string
   dataFetcher: (
     jurisdiction?: string,
@@ -43,6 +44,7 @@ const SelectAndOrder = ({
   editText,
   addText,
   drawerTitle,
+  drawerSubtitle,
   drawerButtonText,
   dataFetcher,
   formKey,
@@ -304,6 +306,7 @@ const SelectAndOrder = ({
         <Drawer.Content>
           <Card>
             <Card.Section>
+              {drawerSubtitle && <p className={"mb-4"}>{drawerSubtitle}</p>}
               {!!draftListingData.length && (
                 <div className="mb-5">
                   <MinimalTable
