@@ -51,6 +51,7 @@
   "account.signUpSaveTime.useACode": "使用代碼登入而無需密碼",
   "account.viewApplications": "查看应用程序",
   "alert.maintenance": "该网站正在进行定期维护。很抱歉给您带来不便。",
+  "alert.transition": "此网站将转换为住房门户网站/ Doorway Housing Portal 并且其网址 将更新到 <a className='lined' href='https://www.housingbayarea.org/zh' target='_blank'>housingbayarea.org</a>.",
   "application.ada.hearing": "聽障",
   "application.ada.label": "《美國殘疾人法案》(ADA) 規定的無障礙單位",
   "application.ada.mobility": "行動不便",

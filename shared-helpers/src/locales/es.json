@@ -51,6 +51,7 @@
   "account.signUpSaveTime.useACode": "Utilice un código para iniciar sesión sin contraseña",
   "account.viewApplications": "Ver aplicaciones",
   "alert.maintenance": "Este sitio está en mantenimiento programado. Nos disculpamos por cualquier inconveniente.",
+  "alert.transition": "Se realizará la transición de este sitio al Doorway Housing Portal y se redirigirá a <a className='lined' href='https://www.housingbayarea.org/es' target='_blank'>housingbayarea.org</a>.",
   "application.ada.hearing": "Para dificultades auditivas",
   "application.ada.label": "Viviendas accesibles de conformidad con ADA",
   "application.ada.mobility": "Para dificultades en la movilidad",

@@ -51,6 +51,7 @@
   "account.signUpSaveTime.useACode": "Gumamit ng code upang mag-sign in nang walang password",
   "account.viewApplications": "Tingnan ang mga application",
   "alert.maintenance": "Ang site na ito ay sumasailalim sa naka-iskedyul na pagpapanatili. Humihingi kami ng paumanhin para sa anumang abala.",
+  "alert.transition": "Ang site na ito ay magiging Doorway Housing Portal at magre-redirect sa <a className='lined' href='https://www.housingbayarea.org/tl' target='_blank'>housingbayarea.org</a>.",
   "application.ada.hearing": "Para Sa Mga Kapansanan Sa Pandinig",
   "application.ada.label": "Mga Accessible Unit ng ADA",
   "application.ada.mobility": "Para Sa Mga Kapansanan Sa Pagkilos",

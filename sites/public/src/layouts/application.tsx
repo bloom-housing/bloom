@@ -8,7 +8,6 @@ import { JurisdictionFooterSection as SanJoseFooter } from "../page_content/juri
 import { JurisdictionFooterSection as AlamedaFooter } from "../page_content/jurisdiction_overrides/alameda/jurisdiction-footer-section"
 import { JursidictionSiteNotice as SanJoseNotice } from "../page_content/jurisdiction_overrides/san_jose/jurisdiction-site-notice"
 import { JursidictionSiteNotice as AlamedaNotice } from "../page_content/jurisdiction_overrides/alameda/jurisdiction-site-notice"
-import { JursidictionSiteNotice as SanMateoNotice } from "../page_content/jurisdiction_overrides/san_mateo/jurisdiction-site-notice"
 import { Message, Toast } from "@bloom-housing/ui-seeds"
 import { SiteHeader, MenuLink, t } from "@bloom-housing/ui-components"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
@@ -87,6 +86,7 @@ const Layout = (props) => {
   }
 
   let siteNotice = <div></div>
+  let transitionMessage = null
   if (process.env.jurisdictionName === "Alameda") {
     siteNotice = <AlamedaNotice />
   }
@@ -94,7 +94,7 @@ const Layout = (props) => {
     siteNotice = <SanJoseNotice />
   }
   if (process.env.jurisdictionName === "San Mateo") {
-    siteNotice = <SanMateoNotice />
+    transitionMessage = t("alert.transition")
   }
 
   return (
@@ -103,6 +103,13 @@ const Layout = (props) => {
         <Head>
           <title>{t("nav.siteTitle")}</title>
         </Head>
+        {transitionMessage && (
+          <div className={styles["site-alert-banner-container"]}>
+            <Message className={styles["site-alert-banner-content"]} variant={"primary"}>
+              <Markdown>{transitionMessage}</Markdown>
+            </Message>
+          </div>
+        )}
         {getInMaintenance() && (
           <div className={styles["site-alert-banner-container"]}>
             <Message className={styles["site-alert-banner-content"]} variant={"primary"}>

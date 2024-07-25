@@ -51,6 +51,7 @@
   "account.pwdless.signInWithYourPassword": "Sign in with your password",
   "account.pwdless.verifyTitle": "Verify that it's you",
   "alert.maintenance": "This site is undergoing scheduled maintenance. We apologize for any inconvenience.",
+  "alert.transition": "This site will be transitioning into the Doorway Housing Portal and will redirect to <a className='lined' href='https://www.housingbayarea.org/' target='_blank'>housingbayarea.org</a>.",
   "application.ada.hearing": "For Hearing Impairments",
   "application.ada.label": "ADA Accessible Units",
   "application.ada.mobility": "For Mobility Impairments",
