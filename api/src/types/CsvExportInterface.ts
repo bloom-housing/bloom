@@ -11,6 +11,13 @@ export type CsvHeader = {
   format?: (val: unknown, fullObject?: unknown) => unknown;
 };
 
+export interface LotteryHeader {
+  path: string;
+  key?: string;
+  header: string;
+  format?: (val: unknown, fullObject?: unknown) => unknown;
+}
+
 type OneOrMoreArgs<T> = { 0: T } & Array<T>;
 
 export interface CsvExporterServiceInterface {

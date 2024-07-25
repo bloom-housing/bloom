@@ -1,10 +1,13 @@
 import {
   Body,
   Controller,
+  Get,
   Header,
   Put,
+  Query,
   Request,
   Res,
+  StreamableFile,
   UseGuards,
   UseInterceptors,
   UsePipes,
@@ -36,7 +39,6 @@ export class LotteryController {
     summary: 'Generate the lottery results for a listing',
     operationId: 'lotteryGenerate',
   })
-  @Header('Content-Type', 'text/csv')
   @UseInterceptors(ExportLogInterceptor)
   async lotteryGenerate(
     @Request() req: ExpressRequest,
@@ -44,5 +46,21 @@ export class LotteryController {
     @Body() queryParams: ApplicationCsvQueryParams,
   ): Promise<SuccessDTO> {
     return await this.lotteryService.lotteryGenerate(req, res, queryParams);
+  }
+
+  @Get(`getLotteryResults`)
+  @ApiOperation({
+    summary: 'Get applications lottery results',
+    operationId: 'lotteryResults',
+  })
+  @Header('Content-Type', 'application/zip')
+  @UseInterceptors(ExportLogInterceptor)
+  async lotteryExport(
+    @Request() req: ExpressRequest,
+    @Res({ passthrough: true }) res: Response,
+    @Query(new ValidationPipe(defaultValidationPipeOptions))
+    queryParams: ApplicationCsvQueryParams,
+  ): Promise<StreamableFile> {
+    return await this.lotteryService.lotteryExport(req, res, queryParams);
   }
 }
