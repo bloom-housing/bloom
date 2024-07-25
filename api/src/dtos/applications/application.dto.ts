@@ -9,6 +9,7 @@ import {
 import { Expose, Type } from 'class-transformer';
 import {
   ArrayMaxSize,
+  IsArray,
   IsBoolean,
   IsDate,
   IsDefined,
@@ -29,6 +30,7 @@ import { ApplicationMultiselectQuestion } from './application-multiselect-questi
 import { Demographic } from './demographic.dto';
 import { HouseholdMember } from './household-member.dto';
 import { UnitType } from '../unit-types/unit-type.dto';
+import { ApplicationLotteryPosition } from './application-lottery-position.dto';
 
 export class Application extends AbstractDTO {
   @Expose()
@@ -265,4 +267,12 @@ export class Application extends AbstractDTO {
   @Type(() => IdDTO)
   @ApiProperty({ type: IdDTO })
   listings: IdDTO;
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ApplicationLotteryPosition)
+  @ApiProperty({ type: ApplicationLotteryPosition, isArray: true })
+  applicationLotteryPositions: ApplicationLotteryPosition[];
 }

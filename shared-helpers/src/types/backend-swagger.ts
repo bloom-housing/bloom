@@ -1469,6 +1469,35 @@ export class ApplicationsService {
     })
   }
   /**
+   * Get applications lottery results
+   */
+  lotteryResults(
+    params: {
+      /**  */
+      listingId: string
+      /**  */
+      includeDemographics?: boolean
+      /**  */
+      timeZone?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/getLotteryResults"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        listingId: params["listingId"],
+        includeDemographics: params["includeDemographics"],
+        timeZone: params["timeZone"],
+      }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Get applications as csv
    */
   listAsCsv(
@@ -2197,6 +2226,31 @@ export class ScriptRunnerService {
   ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/scriptRunner/amiChartImport"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class LotteryService {
+  /**
+   * Generate the lottery results for a listing
+   */
+  lotteryGenerate(
+    params: {
+      /** requestBody */
+      body?: ApplicationCsvQueryParams
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/lottery/generateLotteryResults"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
@@ -4183,6 +4237,20 @@ export interface ApplicationMultiselectQuestion {
   options: ApplicationMultiselectQuestionOption[]
 }
 
+export interface ApplicationLotteryPosition {
+  /**  */
+  listingId: string
+
+  /**  */
+  applicationId: string
+
+  /**  */
+  multiselectQuestionId: string
+
+  /**  */
+  ordinal: number
+}
+
 export interface Application {
   /**  */
   id: string
@@ -4294,6 +4362,9 @@ export interface Application {
 
   /**  */
   listings: IdDTO
+
+  /**  */
+  applicationLotteryPositions: ApplicationLotteryPosition[]
 }
 
 export interface ApplicationFlaggedSet {
@@ -5480,6 +5551,17 @@ export interface AmiChartImportDTO {
 
   /**  */
   jurisdictionId: string
+}
+
+export interface ApplicationCsvQueryParams {
+  /**  */
+  listingId: string
+
+  /**  */
+  includeDemographics?: boolean
+
+  /**  */
+  timeZone?: string
 }
 
 export enum ListingViews {
