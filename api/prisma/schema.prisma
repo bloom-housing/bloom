@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["postgresqlExtensions"]
+  previewFeatures = ["postgresqlExtensions", "views"]
 }
 
 datasource db {
@@ -912,6 +912,16 @@ model ScriptRuns {
   didScriptRun   Boolean  @default(false) @map("did_script_run")
 
   @@map("script_runs")
+}
+
+view ApplicationFlaggedSetPossibilities {
+  key           String
+  listingId     String    @map("listing_id") @db.Uuid
+  applicationId String    @map("application_id") @db.Uuid
+  type          String
+
+  @@id([key, applicationId])
+  @@map("application_flagged_set_possibilities")
 }
 
 enum ApplicationMethodsTypeEnum {

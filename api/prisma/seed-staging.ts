@@ -497,10 +497,17 @@ export const stagingSeed = async (
         },
       ],
       multiselectQuestions: [cityEmployeeQuestion],
-      // has applications that are the same email
+      // has applications that are the same email and also same name/dob
       applications: [
         await applicationFactory({
-          applicant: { emailAddress: 'user1@example.com' },
+          applicant: {
+            emailAddress: 'user1@example.com',
+            firstName: 'first',
+            lastName: 'last',
+            birthDay: 1,
+            birthMonth: 1,
+            birthYear: 1970,
+          },
         }),
         await applicationFactory({
           applicant: { emailAddress: 'user1@example.com' },
@@ -509,6 +516,42 @@ export const stagingSeed = async (
         await applicationFactory(),
         await applicationFactory({
           submissionType: ApplicationSubmissionTypeEnum.paper,
+        }),
+        await applicationFactory({
+          applicant: {
+            emailAddress: 'user1@example.com',
+            firstName: 'first',
+            lastName: 'last',
+            birthDay: 1,
+            birthMonth: 1,
+            birthYear: 1970,
+          },
+        }),
+        await applicationFactory({
+          applicant: { emailAddress: 'user2@example.com' },
+        }),
+        await applicationFactory({
+          applicant: { emailAddress: 'user2@example.com' },
+        }),
+        await applicationFactory({
+          applicant: {
+            emailAddress: 'user3@example.com',
+            firstName: 'first3',
+            lastName: 'last3',
+            birthDay: 1,
+            birthMonth: 1,
+            birthYear: 1970,
+          },
+        }),
+        await applicationFactory({
+          applicant: {
+            emailAddress: 'user3@example.com',
+            firstName: 'first3',
+            lastName: 'last3',
+            birthDay: 1,
+            birthMonth: 1,
+            birthYear: 1970,
+          },
         }),
       ],
     },
