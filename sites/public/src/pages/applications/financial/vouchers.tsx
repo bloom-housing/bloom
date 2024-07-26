@@ -29,8 +29,14 @@ const ApplicationVouchers = () => {
     : 3
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, trigger } = useForm({
-    defaultValues: { incomeVouchers: application.incomeVouchers?.toString() },
+  const { register, handleSubmit, errors, trigger, getValues, setValue, clearErrors } = useForm({
+    defaultValues: {
+      incomeVouchers: Object.fromEntries(
+        application.incomeVouchers
+          ? application.incomeVouchers.map((item) => [`incomeVouchers-${item}`, true])
+          : []
+      ),
+    },
     shouldFocusError: false,
   })
 
@@ -38,7 +44,9 @@ const ApplicationVouchers = () => {
     const validation = await trigger()
     if (!validation) return
 
-    const { incomeVouchers } = data
+    const incomeVouchers = Object.entries(data)
+      .map(([key, value]) => (value ? key.replace("incomeVouchers-", "") : null))
+      .filter((item) => item)
     const toSave = { incomeVouchers }
 
     conductor.currentStep.save(toSave)
@@ -50,8 +58,23 @@ const ApplicationVouchers = () => {
 
   const incomeVouchersOptions = vouchersOrRentalAssistanceKeys.map((item) => ({
     id: item,
+    value: item,
     label: t(`application.financial.vouchers.options.${item}`),
     defaultChecked: application?.incomeVouchers?.includes(item) || false,
+    uniqueName: true,
+    inputProps: {
+      onChange: (e) => {
+        if (e.target.checked) {
+          if (item === "none") {
+            setValue("incomeVouchers-issuedVouchers", false)
+            setValue("incomeVouchers-rentalAssistance", false)
+          } else {
+            setValue("incomeVouchers-none", false)
+          }
+          clearErrors()
+        }
+      },
+    },
   }))
 
   useEffect(() => {
@@ -101,8 +124,15 @@ const ApplicationVouchers = () => {
                 name="incomeVouchers"
                 fields={incomeVouchersOptions}
                 type="checkbox"
-                validation={{ required: true }}
-                error={errors?.incomeVouchers}
+                validation={{
+                  validate: () => {
+                    return !!Object.values(getValues()).filter((value) => value).length
+                  },
+                }}
+                error={
+                  Object.keys(errors).length === Object.keys(getValues()).length &&
+                  Object.keys(getValues()).length > 0
+                }
                 errorMessage={t("errors.selectAtLeastOne")}
                 register={register}
                 dataTestId={"app-income-vouchers"}

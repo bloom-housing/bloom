@@ -481,7 +481,7 @@ const FormSummaryDetails = ({
             label={t("application.review.voucherOrSubsidy")}
             className={styles["summary-value"]}
           >
-            {application.incomeVouchers ? t("t.yes") : t("t.no")}
+            {application.incomeVouchers?.some((item) => item === "none") ? t("t.no") : t("t.yes")}
           </FieldValue>
 
           {application.incomePeriod && (
