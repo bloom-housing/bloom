@@ -10,14 +10,14 @@ describe('Testing password helpers', () => {
   });
 
   it('should create a hash from password and verify that the password is valid', async () => {
-    const hash = await passwordToHash('abcdef123');
-    const isValid = await isPasswordValid(hash, 'abcdef123');
+    const hash = await passwordToHash('Abcdef12345!');
+    const isValid = await isPasswordValid(hash, 'Abcdef12345!');
     expect(isValid).toBe(true);
   });
 
   it('should return false when incorrect password is provided', async () => {
-    const hash = await passwordToHash('abcdef123');
-    const isValid = await isPasswordValid(hash, 'abcdef');
+    const hash = await passwordToHash('Abcdef12345!');
+    const isValid = await isPasswordValid(hash, 'Abcdef67890!');
     expect(isValid).toBe(false);
   });
 });

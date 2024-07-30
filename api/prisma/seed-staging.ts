@@ -23,9 +23,9 @@ import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { unitAccessibilityPriorityTypeFactoryAll } from './seed-helpers/unit-accessibility-priority-type-factory';
 import { multiselectQuestionFactory } from './seed-helpers/multiselect-question-factory';
 import {
-  lincolnMemorial,
-  washingtonMonument,
-  whiteHouse,
+  yellowstoneAddress,
+  yosemiteAddress,
+  rockyMountainAddress,
 } from './seed-helpers/address-factory';
 import { applicationFactory } from './seed-helpers/application-factory';
 import { translationFactory } from './seed-helpers/translation-factory';
@@ -62,6 +62,7 @@ export const stagingSeed = async (
       confirmedAt: new Date(),
       jurisdictionIds: [jurisdiction.id, additionalJurisdiction.id],
       acceptedTerms: true,
+      password: 'abcdef',
     }),
   });
   // create a jurisdictional admin
@@ -94,6 +95,14 @@ export const stagingSeed = async (
       singleUseCode: '12345',
     }),
   });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      email: 'public-user@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      password: 'abcdef',
+    }),
+  });
   // add jurisdiction specific translations and default ones
   await prismaClient.translations.create({
     data: translationFactory(jurisdiction.id, jurisdiction.name),
@@ -108,6 +117,10 @@ export const stagingSeed = async (
   const amiChart = await prismaClient.amiChart.create({
     data: amiChartFactory(10, jurisdiction.id),
   });
+  await prismaClient.amiChart.create({
+    data: amiChartFactory(8, additionalJurisdiction.id),
+  });
+  // Create map layers
   await prismaClient.mapLayers.create({
     data: mapLayerFactory(jurisdiction.id, 'Redlined Districts', redlinedMap),
   });
@@ -156,6 +169,21 @@ export const stagingSeed = async (
             collectName: false,
             collectRelationship: false,
           },
+        ],
+      },
+    }),
+  });
+  const multiselectQuestion3 = await prismaClient.multiselectQuestions.create({
+    data: multiselectQuestionFactory(jurisdiction.id, {
+      multiselectQuestion: {
+        text: 'Veteran',
+        description:
+          'Have you or anyone in your household served in the US military?',
+        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+        optOutText: 'Prefer not to say',
+        options: [
+          { text: 'Yes', exclusive: true, ordinal: 1 },
+          { text: 'No', exclusive: true, ordinal: 2 },
         ],
       },
     }),
@@ -261,9 +289,10 @@ export const stagingSeed = async (
         isWaitlistOpen: false,
         waitlistOpenSpots: null,
         customMapPin: false,
+        contentUpdatedAt: new Date(),
         publishedAt: new Date(),
         listingsBuildingAddress: {
-          create: whiteHouse,
+          create: yellowstoneAddress,
         },
         listingsApplicationPickUpAddress: undefined,
         listingsLeasingAgentAddress: undefined,
@@ -291,7 +320,7 @@ export const stagingSeed = async (
           minOccupancy: 1,
           monthlyRent: '1200',
           numBathrooms: 1,
-          numBedrooms: 1,
+          numBedrooms: 0,
           number: '101',
           sqFeet: '750.00',
           amiChart: { connect: { id: amiChart.id } },
@@ -390,6 +419,7 @@ export const stagingSeed = async (
         isWaitlistOpen: false,
         waitlistOpenSpots: null,
         customMapPin: false,
+        contentUpdatedAt: new Date(),
         publishedAt: new Date(),
         listingsApplicationPickUpAddress: undefined,
         listingsApplicationDropOffAddress: undefined,
@@ -537,21 +567,22 @@ export const stagingSeed = async (
         isWaitlistOpen: false,
         waitlistOpenSpots: null,
         customMapPin: false,
+        contentUpdatedAt: new Date(),
         publishedAt: new Date(),
         listingsBuildingAddress: {
-          create: whiteHouse,
+          create: yellowstoneAddress,
         },
         listingsApplicationMailingAddress: {
-          create: lincolnMemorial,
+          create: rockyMountainAddress,
         },
         listingsApplicationPickUpAddress: {
-          create: washingtonMonument,
+          create: yosemiteAddress,
         },
         listingsLeasingAgentAddress: {
-          create: lincolnMemorial,
+          create: rockyMountainAddress,
         },
         listingsApplicationDropOffAddress: {
-          create: washingtonMonument,
+          create: yosemiteAddress,
         },
         reservedCommunityTypes: undefined,
         listingImages: {
@@ -583,7 +614,7 @@ export const stagingSeed = async (
           amiChart: { connect: { id: amiChart.id } },
           unitTypes: {
             connect: {
-              id: unitTypes[2].id,
+              id: unitTypes[1].id,
             },
           },
         },
@@ -654,6 +685,7 @@ export const stagingSeed = async (
         isWaitlistOpen: false,
         waitlistOpenSpots: null,
         customMapPin: false,
+        contentUpdatedAt: dayjs(new Date()).subtract(1, 'days').toDate(),
         publishedAt: dayjs(new Date()).subtract(3, 'days').toDate(),
         closedAt: dayjs(new Date()).subtract(1, 'days').toDate(),
         listingsApplicationPickUpAddress: undefined,
@@ -757,6 +789,7 @@ export const stagingSeed = async (
         isWaitlistOpen: true,
         waitlistOpenSpots: 6,
         customMapPin: false,
+        contentUpdatedAt: new Date(),
         publishedAt: new Date(),
         listingsApplicationPickUpAddress: undefined,
         listingsApplicationDropOffAddress: undefined,
@@ -846,6 +879,7 @@ export const stagingSeed = async (
         isWaitlistOpen: false,
         waitlistOpenSpots: null,
         customMapPin: false,
+        contentUpdatedAt: new Date(),
         publishedAt: new Date(),
         listingsApplicationPickUpAddress: undefined,
         listingsApplicationDropOffAddress: undefined,
@@ -874,7 +908,121 @@ export const stagingSeed = async (
           ],
         },
       },
-      multiselectQuestions: [multiselectQuestion2, multiselectQuestion1],
+      multiselectQuestions: [
+        multiselectQuestion2,
+        multiselectQuestion1,
+        multiselectQuestion3,
+      ],
+      units: [
+        {
+          amiPercentage: '30',
+          monthlyIncomeMin: '2000',
+          floor: 1,
+          maxOccupancy: 3,
+          minOccupancy: 1,
+          monthlyRent: '1200',
+          numBathrooms: 1,
+          numBedrooms: 0,
+          number: '101',
+          sqFeet: '750.00',
+          amiChart: { connect: { id: amiChart.id } },
+          unitTypes: {
+            connect: {
+              id: unitTypes[0].id,
+            },
+          },
+        },
+        {
+          amiPercentage: '30',
+          monthlyIncomeMin: '2000',
+          floor: 1,
+          maxOccupancy: 3,
+          minOccupancy: 1,
+          monthlyRent: '1200',
+          numBathrooms: 1,
+          numBedrooms: 0,
+          number: '101',
+          sqFeet: '750.00',
+          amiChart: { connect: { id: amiChart.id } },
+          unitTypes: {
+            connect: {
+              id: unitTypes[5].id,
+            },
+          },
+        },
+        {
+          amiPercentage: '30',
+          monthlyIncomeMin: '2000',
+          floor: 1,
+          maxOccupancy: 3,
+          minOccupancy: 1,
+          monthlyRent: '1200',
+          numBathrooms: 1,
+          numBedrooms: 1,
+          number: '101',
+          sqFeet: '750.00',
+          amiChart: { connect: { id: amiChart.id } },
+          unitTypes: {
+            connect: {
+              id: unitTypes[1].id,
+            },
+          },
+        },
+        {
+          amiPercentage: '30',
+          monthlyIncomeMin: '2000',
+          floor: 1,
+          maxOccupancy: 3,
+          minOccupancy: 1,
+          monthlyRent: '1200',
+          numBathrooms: 1,
+          numBedrooms: 2,
+          number: '101',
+          sqFeet: '1050.00',
+          amiChart: { connect: { id: amiChart.id } },
+          unitTypes: {
+            connect: {
+              id: unitTypes[2].id,
+            },
+          },
+        },
+        {
+          amiPercentage: '30',
+          monthlyIncomeMin: '2000',
+          floor: 1,
+          maxOccupancy: 3,
+          minOccupancy: 1,
+          monthlyRent: '1200',
+          numBathrooms: 2,
+          numBedrooms: 3,
+          number: '101',
+          sqFeet: '1250.00',
+          amiChart: { connect: { id: amiChart.id } },
+          unitTypes: {
+            connect: {
+              id: unitTypes[3].id,
+            },
+          },
+        },
+        {
+          amiPercentage: '30',
+          monthlyIncomeMin: '2000',
+          floor: 1,
+          maxOccupancy: 3,
+          minOccupancy: 1,
+          monthlyRent: '1200',
+          numBathrooms: 3,
+          numBedrooms: 4,
+          number: '101',
+          sqFeet: '1750.00',
+          amiChart: { connect: { id: amiChart.id } },
+          unitTypes: {
+            connect: {
+              id: unitTypes[4].id,
+            },
+          },
+        },
+      ],
     },
   ].map(
     async (

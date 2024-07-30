@@ -39,6 +39,8 @@ import { Login } from '../../src/dtos/auth/login.dto';
 import { multiselectQuestionFactory } from '../../prisma/seed-helpers/multiselect-question-factory';
 import { reservedCommunityTypeFactoryAll } from '../../prisma/seed-helpers/reserved-community-type-factory';
 import { ValidationMethod } from '../../src/enums/multiselect-questions/validation-method-enum';
+import { AlternateContactRelationship } from '../../src/enums/applications/alternate-contact-relationship-enum';
+import { HouseholdMemberRelationship } from '../../src/enums/applications/household-member-relationship-enum';
 
 describe('Application Controller Tests', () => {
   let app: INestApplication;
@@ -105,7 +107,7 @@ describe('Application Controller Tests', () => {
       .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
-        password: 'abcdef',
+        password: 'Abcdef12345!',
       } as Login)
       .expect(201);
 
@@ -347,7 +349,9 @@ describe('Application Controller Tests', () => {
         data: jurisdictionFactory(),
       });
       await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
-      const listing1 = await listingFactory(jurisdiction.id, prisma);
+      const listing1 = await listingFactory(jurisdiction.id, prisma, {
+        digitalApp: true,
+      });
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
@@ -411,7 +415,7 @@ describe('Application Controller Tests', () => {
           hearing: false,
         },
         alternateContact: {
-          type: 'example type',
+          type: AlternateContactRelationship.friend,
           otherType: 'example other type',
           firstName: 'example first name',
           lastName: 'example last name',
@@ -447,7 +451,7 @@ describe('Application Controller Tests', () => {
             birthDay: '17',
             birthYear: '1993',
             sameAddress: YesNoEnum.yes,
-            relationship: 'example relationship',
+            relationship: HouseholdMemberRelationship.friend,
             workInRegion: YesNoEnum.yes,
             householdMemberWorkAddress: exampleAddress,
             householdMemberAddress: exampleAddress,
@@ -501,6 +505,171 @@ describe('Application Controller Tests', () => {
       expect(mockApplicationConfirmation).toBeCalledTimes(1);
     });
 
+    it('should throw an error when submitting an application from the public site on a listing with no common app', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
+      const listing1 = await listingFactory(jurisdiction.id, prisma, {
+        digitalApp: false,
+      });
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+
+      const multiselectQuestionProgram = await createMultiselectQuestion(
+        jurisdiction.id,
+        listing1Created.id,
+        MultiselectQuestionsApplicationSectionEnum.programs,
+      );
+      const multiselectQuestionPreference = await createMultiselectQuestion(
+        jurisdiction.id,
+        listing1Created.id,
+        MultiselectQuestionsApplicationSectionEnum.preferences,
+      );
+
+      const submissionDate = new Date();
+      const exampleAddress = addressFactory() as AddressCreate;
+      const dto: ApplicationCreate = {
+        contactPreferences: ['example contact preference'],
+        preferences: [
+          {
+            multiselectQuestionId: multiselectQuestionPreference,
+            key: 'example key',
+            claimed: true,
+            options: [
+              {
+                key: 'example key',
+                checked: true,
+                extraData: [
+                  {
+                    type: InputType.boolean,
+                    key: 'example key',
+                    value: true,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        status: ApplicationStatusEnum.submitted,
+        submissionType: ApplicationSubmissionTypeEnum.electronical,
+        applicant: {
+          firstName: 'applicant first name',
+          middleName: 'applicant middle name',
+          lastName: 'applicant last name',
+          birthMonth: '12',
+          birthDay: '17',
+          birthYear: '1993',
+          emailAddress: 'example@email.com',
+          noEmail: false,
+          phoneNumber: '111-111-1111',
+          phoneNumberType: 'Cell',
+          noPhone: false,
+          workInRegion: YesNoEnum.yes,
+          applicantWorkAddress: exampleAddress,
+          applicantAddress: exampleAddress,
+        },
+        accessibility: {
+          mobility: false,
+          vision: false,
+          hearing: false,
+        },
+        alternateContact: {
+          type: AlternateContactRelationship.friend,
+          otherType: 'example other type',
+          firstName: 'example first name',
+          lastName: 'example last name',
+          agency: 'example agency',
+          phoneNumber: '111-111-1111',
+          emailAddress: 'example@email.com',
+          address: exampleAddress,
+        },
+        applicationsAlternateAddress: exampleAddress,
+        applicationsMailingAddress: exampleAddress,
+        listings: {
+          id: listing1Created.id,
+        },
+        demographics: {
+          ethnicity: 'example ethnicity',
+          gender: 'example gender',
+          sexualOrientation: 'example sexual orientation',
+          howDidYouHear: ['example how did you hear'],
+          race: ['example race'],
+        },
+        preferredUnitTypes: [
+          {
+            id: unitTypeA.id,
+          },
+        ],
+        householdMember: [
+          {
+            orderId: 0,
+            firstName: 'example first name',
+            middleName: 'example middle name',
+            lastName: 'example last name',
+            birthMonth: '12',
+            birthDay: '17',
+            birthYear: '1993',
+            sameAddress: YesNoEnum.yes,
+            relationship: HouseholdMemberRelationship.friend,
+            workInRegion: YesNoEnum.yes,
+            householdMemberWorkAddress: exampleAddress,
+            householdMemberAddress: exampleAddress,
+          },
+        ],
+        appUrl: 'http://www.example.com',
+        additionalPhone: true,
+        additionalPhoneNumber: '111-111-1111',
+        additionalPhoneNumberType: 'example type',
+        householdSize: 2,
+        housingStatus: 'example status',
+        sendMailToMailingAddress: true,
+        householdExpectingChanges: false,
+        householdStudent: false,
+        incomeVouchers: false,
+        income: '36000',
+        incomePeriod: IncomePeriodEnum.perYear,
+        language: LanguagesEnum.en,
+        acceptedTerms: true,
+        submissionDate: submissionDate,
+        reviewStatus: ApplicationReviewStatusEnum.valid,
+        programs: [
+          {
+            multiselectQuestionId: multiselectQuestionProgram,
+            key: 'example key',
+            claimed: true,
+            options: [
+              {
+                key: 'example key',
+                checked: true,
+                extraData: [
+                  {
+                    type: InputType.boolean,
+                    key: 'example key',
+                    value: true,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      };
+      const res = await request(app.getHttpServer())
+        .post(`/applications/submit`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(dto)
+        .set('Cookie', cookies)
+        .expect(400);
+      expect(res.body.message).toEqual(
+        `Listing is not open for application submission`,
+      );
+    });
+
     it('should calculate geocoding on application', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
@@ -512,6 +681,7 @@ describe('Application Controller Tests', () => {
       await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
       const exampleAddress = addressFactory() as AddressCreate;
       const listing1 = await listingFactory(jurisdiction.id, prisma, {
+        digitalApp: true,
         listing: {
           listingsBuildingAddress: { create: exampleAddress },
         } as unknown as Prisma.ListingsCreateInput,
@@ -590,7 +760,7 @@ describe('Application Controller Tests', () => {
           hearing: false,
         },
         alternateContact: {
-          type: 'example type',
+          type: AlternateContactRelationship.friend,
           otherType: 'example other type',
           firstName: 'example first name',
           lastName: 'example last name',
@@ -626,7 +796,7 @@ describe('Application Controller Tests', () => {
             birthDay: '17',
             birthYear: '1993',
             sameAddress: YesNoEnum.yes,
-            relationship: 'example relationship',
+            relationship: HouseholdMemberRelationship.friend,
             workInRegion: YesNoEnum.yes,
             householdMemberWorkAddress: exampleAddress,
             householdMemberAddress: exampleAddress,
@@ -760,7 +930,7 @@ describe('Application Controller Tests', () => {
           hearing: false,
         },
         alternateContact: {
-          type: 'example type',
+          type: AlternateContactRelationship.friend,
           otherType: 'example other type',
           firstName: 'example first name',
           lastName: 'example last name',
@@ -796,7 +966,7 @@ describe('Application Controller Tests', () => {
             birthDay: '17',
             birthYear: '1993',
             sameAddress: YesNoEnum.yes,
-            relationship: 'example relationship',
+            relationship: HouseholdMemberRelationship.friend,
             workInRegion: YesNoEnum.yes,
             householdMemberWorkAddress: exampleAddress,
             householdMemberAddress: exampleAddress,
@@ -937,7 +1107,7 @@ describe('Application Controller Tests', () => {
           hearing: false,
         },
         alternateContact: {
-          type: 'example type',
+          type: AlternateContactRelationship.friend,
           otherType: 'example other type',
           firstName: 'example first name',
           lastName: 'example last name',
@@ -973,7 +1143,7 @@ describe('Application Controller Tests', () => {
             birthDay: '17',
             birthYear: '1993',
             sameAddress: YesNoEnum.yes,
-            relationship: 'example relationship',
+            relationship: HouseholdMemberRelationship.friend,
             workInRegion: YesNoEnum.yes,
             householdMemberWorkAddress: exampleAddress,
             householdMemberAddress: exampleAddress,
@@ -1103,7 +1273,7 @@ describe('Application Controller Tests', () => {
           hearing: false,
         },
         alternateContact: {
-          type: 'example type',
+          type: AlternateContactRelationship.friend,
           otherType: 'example other type',
           firstName: 'example first name',
           lastName: 'example last name',
@@ -1139,7 +1309,7 @@ describe('Application Controller Tests', () => {
             birthDay: '17',
             birthYear: '1993',
             sameAddress: YesNoEnum.yes,
-            relationship: 'example relationship',
+            relationship: HouseholdMemberRelationship.friend,
             workInRegion: YesNoEnum.yes,
             householdMemberWorkAddress: exampleAddress,
             householdMemberAddress: exampleAddress,
@@ -1269,7 +1439,7 @@ describe('Application Controller Tests', () => {
           hearing: false,
         },
         alternateContact: {
-          type: 'example type',
+          type: AlternateContactRelationship.friend,
           otherType: 'example other type',
           firstName: 'example first name',
           lastName: 'example last name',
@@ -1305,7 +1475,7 @@ describe('Application Controller Tests', () => {
             birthDay: '17',
             birthYear: '1993',
             sameAddress: YesNoEnum.yes,
-            relationship: 'example relationship',
+            relationship: HouseholdMemberRelationship.friend,
             workInRegion: YesNoEnum.yes,
             householdMemberWorkAddress: exampleAddress,
             householdMemberAddress: exampleAddress,

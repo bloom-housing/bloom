@@ -1,4 +1,4 @@
-import { LanguagesEnum } from "../types/backend-swagger"
+import { HouseholdMemberRelationship, AlternateContactRelationship } from "../types/backend-swagger"
 
 export const stateKeys = [
   "",
@@ -72,32 +72,9 @@ export const contactPreferencesKeys = [
 
 export const adaFeatureKeys = ["mobility", "vision", "hearing"]
 
-export const relationshipKeys = [
-  "",
-  "spouse",
-  "registeredDomesticPartner",
-  "parent",
-  "child",
-  "sibling",
-  "cousin",
-  "aunt",
-  "uncle",
-  "nephew",
-  "niece",
-  "grandparent",
-  "greatGrandparent",
-  "inLaw",
-  "friend",
-  "other",
-]
+export const relationshipKeys = ["", ...Object.values(HouseholdMemberRelationship)]
 
-export const altContactRelationshipKeys = [
-  "familyMember",
-  "friend",
-  "caseManager",
-  "other",
-  "noContact",
-]
+export const altContactRelationshipKeys = Object.values(AlternateContactRelationship)
 
 export const ethnicityKeys = ["hispanicLatino", "notHispanicLatino"]
 
@@ -189,6 +166,25 @@ export const raceKeys: subCheckboxes = {
   white: [],
   otherMultiracial: [],
   declineToRespond: [],
+}
+
+export const isKeyIncluded = (
+  searchKey: string,
+  originalValues: Array<string> | undefined
+): boolean => {
+  let keyExists = false
+  originalValues?.forEach((key) => {
+    if (key.includes(searchKey)) {
+      keyExists = true
+    }
+  })
+  return keyExists
+}
+
+// Get the value of a field that is storing a custom value, i.e. "otherAsian: Custom Race Input"
+export const getCustomValue = (subKey: string, formValues: Array<string> | undefined): string => {
+  const customValues = formValues?.find((value: string) => value.split(":")[0] === subKey)
+  return customValues?.length ? customValues.split(":")[1]?.substring(1) : ""
 }
 
 export const howDidYouHear = [

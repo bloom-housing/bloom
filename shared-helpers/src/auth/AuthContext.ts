@@ -32,6 +32,7 @@ import {
   UserService,
   serviceOptions,
   SuccessDTO,
+  LotteryService,
 } from "../types/backend-swagger"
 import { getListingRedirectUrl } from "../utilities/getListingRedirectUrl"
 
@@ -48,13 +49,15 @@ type ContextProps = {
   reservedCommunityTypeService: ReservedCommunityTypesService
   unitPriorityService: UnitAccessibilityPriorityTypesService
   mapLayersService: MapLayersService
+  lotteryService: LotteryService
   loadProfile: (redirect?: string) => void
   login: (
     email: string,
     password: string,
     mfaCode?: string,
     mfaType?: MfaType,
-    forPartners?: boolean
+    forPartners?: boolean,
+    reCaptchaToken?: string
   ) => Promise<User | undefined>
   resetPassword: (
     token: string,
@@ -215,6 +218,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
     authService: new AuthService(),
     multiselectQuestionsService: new MultiselectQuestionsService(),
     mapLayersService: new MapLayersService(),
+    lotteryService: new LotteryService(),
     reservedCommunityTypeService: new ReservedCommunityTypesService(),
     unitPriorityService: new UnitAccessibilityPriorityTypesService(),
     unitTypesService: new UnitTypesService(),
@@ -227,11 +231,14 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
       password,
       mfaCode: string | undefined = undefined,
       mfaType: MfaType | undefined = undefined,
-      forPartners: boolean | undefined = undefined
+      forPartners: boolean | undefined = undefined,
+      reCaptchaToken: string | undefined = undefined
     ) => {
       dispatch(startLoading())
       try {
-        const response = await authService?.login({ body: { email, password, mfaCode, mfaType } })
+        const response = await authService?.login({
+          body: { email, password, mfaCode, mfaType, reCaptchaToken },
+        })
         if (response) {
           const profile = await userService?.profile()
           if (

@@ -1,8 +1,15 @@
-import React, { createElement, FunctionComponent, useContext, useEffect, useState } from "react"
+import React, {
+  createElement,
+  FunctionComponent,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react"
 import { AuthContext } from "./AuthContext"
 import { ConfigContext } from "./ConfigContext"
-import { Button } from "@bloom-housing/ui-seeds"
-import { NavigationContext, Modal, t } from "@bloom-housing/ui-components"
+import { Button, Dialog } from "@bloom-housing/ui-seeds"
+import { NavigationContext, t } from "@bloom-housing/ui-components"
 import { MessageContext } from "../utilities/MessageContext"
 
 const PROMPT_TIMEOUT = 60000
@@ -75,30 +82,26 @@ export const IdleTimeout: FunctionComponent<IdleTimeoutProps> = ({
     )
   })
 
-  const modalActions = [
-    <Button
-      variant="primary"
-      onClick={() => {
-        clearTimeout(promptTimeout)
-        setPromptTimeout(undefined)
-      }}
-      size="sm"
-    >
-      {promptAction}
-    </Button>,
-  ]
+  const closeCallback = useCallback(() => {
+    clearTimeout(promptTimeout)
+    setPromptTimeout(undefined)
+  }, [promptTimeout, setPromptTimeout])
 
   return (
-    <Modal
-      open={Boolean(promptTimeout)}
-      title={promptTitle}
-      ariaDescription={promptText}
-      actions={modalActions}
-      hideCloseIcon
-      role="alertdialog"
+    <Dialog
+      isOpen={Boolean(promptTimeout)}
+      onClose={closeCallback}
+      ariaLabelledBy="auth-timeout-dialog-header"
+      ariaDescribedBy="auth-timeout-dialog-content"
     >
-      {promptText}
-    </Modal>
+      <Dialog.Header id="auth-timeout-dialog-header">{promptTitle}</Dialog.Header>
+      <Dialog.Content id="auth-timeout-dialog-content">{promptText}</Dialog.Content>
+      <Dialog.Footer>
+        <Button variant="primary" onClick={closeCallback} size="sm">
+          {promptAction}
+        </Button>
+      </Dialog.Footer>
+    </Dialog>
   )
 }
 

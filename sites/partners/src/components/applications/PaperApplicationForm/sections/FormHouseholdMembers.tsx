@@ -4,8 +4,8 @@ import {
   HouseholdMemberUpdate,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { t, MinimalTable, Drawer, Modal } from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
+import { t, MinimalTable } from "@bloom-housing/ui-components"
+import { Button, Dialog, Drawer } from "@bloom-housing/ui-seeds"
 import { FormMember } from "../FormMember"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
@@ -18,21 +18,23 @@ const FormHouseholdMembers = ({
   householdMembers,
   setHouseholdMembers,
 }: FormHouseholdMembersProps) => {
-  const [membersDrawer, setMembersDrawer] = useState<number | null>(null)
+  type MembersDrawer = HouseholdMember | null
+
+  const [membersDrawer, setMembersDrawer] = useState<MembersDrawer>(null)
   const [membersDeleteModal, setMembersDeleteModal] = useState<number | null>(null)
 
   const memberTableHeaders = {
-    name: t("t.name"),
-    relationship: t("t.relationship"),
-    dob: t("application.household.member.dateOfBirth"),
-    sameResidence: t("application.add.sameResidence"),
-    workInRegion: t("application.details.workInRegion"),
+    name: "t.name",
+    relationship: "t.relationship",
+    dob: "application.household.member.dateOfBirth",
+    sameResidence: "application.add.sameResidence",
+    workInRegion: "application.details.workInRegion",
     action: "",
   }
 
   const editMember = useCallback(
-    (orderId: number) => {
-      setMembersDrawer(orderId)
+    (member: HouseholdMember) => {
+      setMembersDrawer(member)
     },
     [setMembersDrawer]
   )
@@ -108,7 +110,7 @@ const FormHouseholdMembers = ({
               <Button
                 type="button"
                 className="font-semibold"
-                onClick={() => editMember(member.orderId)}
+                onClick={() => editMember(member)}
                 variant="text"
               >
                 {t("t.edit")}
@@ -142,7 +144,9 @@ const FormHouseholdMembers = ({
           type="button"
           variant="primary-outlined"
           size="sm"
-          onClick={() => setMembersDrawer(householdMembers.length + 1)}
+          onClick={() =>
+            setMembersDrawer({ orderId: householdMembers.length + 1 } as HouseholdMember)
+          }
           id={"addHouseholdMemberButton"}
         >
           {t("application.add.addHouseholdMember")}
@@ -150,28 +154,37 @@ const FormHouseholdMembers = ({
       </SectionWithGrid>
 
       <Drawer
-        open={!!membersDrawer}
-        title={t("application.household.householdMember")}
-        ariaDescription={t("application.household.householdMember")}
+        isOpen={!!membersDrawer}
         onClose={() => setMembersDrawer(null)}
+        ariaLabelledBy="form-household-members-drawer-header"
       >
+        <Drawer.Header id="form-household-members-drawer-header">
+          {t("application.household.householdMember")}
+        </Drawer.Header>
         <FormMember
           onSubmit={(member) => saveMember(member)}
           onClose={() => setMembersDrawer(null)}
           members={householdMembers}
-          editedMemberId={membersDrawer}
+          editedMemberId={membersDrawer?.orderId}
         />
       </Drawer>
 
-      <Modal
-        open={!!membersDeleteModal}
-        title={t("application.deleteThisMember")}
-        ariaDescription={t("application.deleteMemberDescription")}
+      <Dialog
+        isOpen={!!membersDeleteModal}
+        ariaLabelledBy="form-household-members-dialog-header"
+        ariaDescribedBy="form-household-members-dialog-content"
         onClose={() => setMembersDeleteModal(null)}
-        actions={[
+      >
+        <Dialog.Header id="form-household-members-dialog-header">
+          {t("application.deleteThisMember")}
+        </Dialog.Header>
+        <Dialog.Content id="form-household-members-dialog-content">
+          {t("application.deleteMemberDescription")}
+        </Dialog.Content>
+        <Dialog.Footer>
           <Button variant="alert" onClick={() => deleteMember(membersDeleteModal)} size="sm">
             {t("t.delete")}
-          </Button>,
+          </Button>
           <Button
             variant="primary-outlined"
             onClick={() => {
@@ -180,11 +193,9 @@ const FormHouseholdMembers = ({
             size="sm"
           >
             {t("t.cancel")}
-          </Button>,
-        ]}
-      >
-        {t("application.deleteMemberDescription")}
-      </Modal>
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
     </>
   )
 }

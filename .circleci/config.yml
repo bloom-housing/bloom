@@ -24,6 +24,11 @@ executors:
       TEST_DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom"
       PARTNERS_PORTAL_URL: "http://localhost:3001"
       JURISDICTION_NAME: Bloomington
+      GOOGLE_API_EMAIL: "secret-key"
+      GOOGLE_API_ID: "secret-key"
+      GOOGLE_API_KEY: "secret-key"
+      GOOGLE_CLOUD_PROJECT_ID: "secret-key"
+
   standard-node:
     docker:
       - image: "cimg/node:18.14.2"
@@ -188,7 +193,6 @@ jobs:
             APP_SECRET: "CI-LONG-SECRET-KEY"
             # DB URL for migration and seeds:
             DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom_prisma"
-    
 
 workflows:
   build:

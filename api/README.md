@@ -38,6 +38,13 @@ We use [Prisma](https://www.prisma.io/) as the ORM. To modify the schema you wil
   <li> How Prisma connects to the database </li>
 </ol>
 
+You will need to:
+1. Add the field in the DTO
+2. Run `yarn generate:client` to add the type to the swagger file
+3. Manually add the field to `schema.prisma`
+4. Run `yarn prisma migrate dev --name <name of migration>` to create the migration file
+
+
 ## Conventions
 We use the following conventions:
 <ul>

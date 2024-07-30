@@ -87,6 +87,17 @@
   margin-bottom: var(--seeds-s6);
 }
 
+/* step-specific styles */
+.application-form-household-member {
+  display: flex;
+  align-items: top;
+  justify-content: space-between;
+}
+
+.application-form-household-field-value {
+  --field-value-content-spacer: var(--seeds-s3);
+}
+
 /* overrides for Seeds Message & Alert */
 .message-inside-card {
   --common-message-max-width: auto;

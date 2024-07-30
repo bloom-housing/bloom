@@ -174,20 +174,13 @@ export default function ListingsList() {
               setSort: tableOptions.sort.setSortOptions,
             }}
             headerContent={
-              <div className="flex-row">
+              <div className="flex gap-2 items-center">
                 {isAdmin && (
-                  <div className="flex-row">
-                    <Button
-                      size="sm"
-                      className="mx-1"
-                      variant="primary"
-                      href="/listings/add"
-                      id="addListingButton"
-                    >
+                  <>
+                    <Button size="sm" variant="primary" href="/listings/add" id="addListingButton">
                       {t("listings.addListing")}
                     </Button>
                     <Button
-                      className="mx-1"
                       id="export-listings"
                       variant="primary-outlined"
                       onClick={() => onExport()}
@@ -203,7 +196,7 @@ export default function ListingsList() {
                     >
                       {t("t.exportToCSV")}
                     </Button>
-                  </div>
+                  </>
                 )}
               </div>
             }

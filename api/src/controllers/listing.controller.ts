@@ -26,34 +26,35 @@ import {
   ApiOkResponse,
 } from '@nestjs/swagger';
 import { Request as ExpressRequest, Response } from 'express';
-import { ListingService } from '../services/listing.service';
-import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
-import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
 import { LanguagesEnum } from '@prisma/client';
-import { ListingsRetrieveParams } from '../dtos/listings/listings-retrieve-params.dto';
-import { PaginationAllowsAllQueryParams } from '../dtos/shared/pagination.dto';
-import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
-import { PaginatedListingDto } from '../dtos/listings/paginated-listing.dto';
-import Listing from '../dtos/listings/listing.dto';
-import { IdDTO } from '../dtos/shared/id.dto';
-import { ListingCreate } from '../dtos/listings/listing-create.dto';
-import { SuccessDTO } from '../dtos/shared/success.dto';
-import { ListingUpdate } from '../dtos/listings/listing-update.dto';
-import { ListingCreateUpdateValidationPipe } from '../validation-pipes/listing-create-update-pipe';
-import { mapTo } from '../utilities/mapTo';
-import { User } from '../dtos/users/user.dto';
-import { OptionalAuthGuard } from '../guards/optional.guard';
-import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor';
 import { ActivityLogMetadata } from '../decorators/activity-log-metadata.decorator';
-import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { PermissionAction } from '../decorators/permission-action.decorator';
+import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
+import Listing from '../dtos/listings/listing.dto';
+import { ListingCreate } from '../dtos/listings/listing-create.dto';
+import { ListingCsvQueryParams } from '../dtos/listings/listing-csv-query-params.dto';
+import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
+import { ListingLotteryStatus } from '../dtos/listings/listing-lottery-status.dto';
+import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
+import { ListingsRetrieveParams } from '../dtos/listings/listings-retrieve-params.dto';
+import { ListingUpdate } from '../dtos/listings/listing-update.dto';
+import { PaginatedListingDto } from '../dtos/listings/paginated-listing.dto';
+import { IdDTO } from '../dtos/shared/id.dto';
+import { PaginationAllowsAllQueryParams } from '../dtos/shared/pagination.dto';
+import { SuccessDTO } from '../dtos/shared/success.dto';
+import { User } from '../dtos/users/user.dto';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction-admin.guard';
-import { ListingCsvExporterService } from '../services/listing-csv-export.service';
-import { ListingCsvQueryParams } from '../dtos/listings/listing-csv-query-params.dto';
-import { PermissionGuard } from '../guards/permission.guard';
-import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
 import { ApiKeyGuard } from '../guards/api-key.guard';
+import { OptionalAuthGuard } from '../guards/optional.guard';
+import { PermissionGuard } from '../guards/permission.guard';
+import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor';
+import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
+import { ListingService } from '../services/listing.service';
+import { ListingCsvExporterService } from '../services/listing-csv-export.service';
+import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
+import { mapTo } from '../utilities/mapTo';
+import { ListingCreateUpdateValidationPipe } from '../validation-pipes/listing-create-update-pipe';
 
 @Controller('listings')
 @ApiTags('listings')
@@ -167,7 +168,7 @@ export class ListingController {
     return await this.listingService.delete(dto.id, mapTo(User, req['user']));
   }
 
-  @Put('process')
+  @Put('closeListings')
   @ApiOperation({
     summary: 'Trigger the listing process job',
     operationId: 'process',
@@ -176,13 +177,44 @@ export class ListingController {
   @PermissionAction(permissionActions.submit)
   @UseInterceptors(ActivityLogInterceptor)
   @UseGuards(ApiKeyGuard, OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
-  async process(): Promise<SuccessDTO> {
-    return await this.listingService.process();
+  async closeListings(): Promise<SuccessDTO> {
+    return await this.listingService.closeListings();
+  }
+
+  @Put('expireLotteries')
+  @ApiOperation({
+    summary: 'Trigger the lottery process job',
+    operationId: 'expireLotteries',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  @PermissionAction(permissionActions.update)
+  @UseInterceptors(ActivityLogInterceptor)
+  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
+  async expireLotteries(): Promise<SuccessDTO> {
+    return await this.listingService.expireLotteries();
+  }
+
+  @Put('lotteryStatus')
+  @ApiOperation({
+    summary: 'Change the listing lottery status',
+    operationId: 'lotteryStatus',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  @UseGuards(ApiKeyGuard)
+  async lotteryStatus(
+    @Request() req: ExpressRequest,
+    @Body() dto: ListingLotteryStatus,
+  ): Promise<SuccessDTO> {
+    return await this.listingService.lotteryStatus(
+      dto,
+      mapTo(User, req['user']),
+    );
   }
 
   @Put(':id')
   @ApiOperation({ summary: 'Update listing by id', operationId: 'update' })
   @UsePipes(new ListingCreateUpdateValidationPipe(defaultValidationPipeOptions))
+  @ApiOkResponse({ type: Listing })
   @UseGuards(ApiKeyGuard)
   async update(
     @Request() req: ExpressRequest,

@@ -113,7 +113,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
       .set({ passkey: process.env.API_PASS_KEY || '' })
       .send({
         email: storedUser.email,
-        password: 'abcdef',
+        password: 'Abcdef12345!',
       } as Login)
       .expect(201);
 
@@ -297,7 +297,9 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
         'permission juris 3',
       );
       await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
-      const listing1 = await listingFactory(jurisdiction, prisma);
+      const listing1 = await listingFactory(jurisdiction, prisma, {
+        digitalApp: true,
+      });
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
@@ -328,7 +330,9 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
         'permission juris 4',
       );
       await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
-      const listing1 = await listingFactory(jurisdiction, prisma);
+      const listing1 = await listingFactory(jurisdiction, prisma, {
+        digitalApp: true,
+      });
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
@@ -1270,8 +1274,40 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
 
     it('should succeed for process endpoint', async () => {
       await request(app.getHttpServer())
-        .put(`/listings/process`)
+        .put(`/listings/closeListings`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+
+    it('should succeed for expireLotteries endpoint', async () => {
+      await request(app.getHttpServer())
+        .put(`/listings/expireLotteries`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+
+    it('should succeed for lottery status endpoint', async () => {
+      const jurisdictionA = await generateJurisdiction(
+        prisma,
+        'permission juris 118',
+      );
+      await reservedCommunityTypeFactoryAll(jurisdictionA, prisma);
+      const listingData = await listingFactory(jurisdictionA, prisma, {
+        status: 'closed',
+      });
+      const listing = await prisma.listings.create({
+        data: listingData,
+      });
+
+      await request(app.getHttpServer())
+        .put('/listings/lotteryStatus')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          listingId: listing.id,
+          lotteryStatus: 'ran',
+        })
         .set('Cookie', cookies)
         .expect(200);
     });

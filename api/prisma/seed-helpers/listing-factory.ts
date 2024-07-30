@@ -1,10 +1,12 @@
 import {
-  Prisma,
   AmiChart,
-  MultiselectQuestions,
-  PrismaClient,
-  ListingsStatusEnum,
   ApplicationMethodsTypeEnum,
+  ListingsStatusEnum,
+  LotteryStatusEnum,
+  MultiselectQuestions,
+  Prisma,
+  PrismaClient,
+  ReviewOrderTypeEnum,
 } from '@prisma/client';
 import { randomInt } from 'crypto';
 import { randomName } from './word-generator';
@@ -40,6 +42,9 @@ export const listingFactory = async (
     afsLastRunSetInPast?: boolean;
     digitalApp?: boolean;
     noImage?: boolean;
+    lotteryStatus?: LotteryStatusEnum;
+    closedAt?: Date;
+    reviewOrderType?: ReviewOrderTypeEnum;
   },
 ): Promise<Prisma.ListingsCreateInput> => {
   const previousListing = optionalParams?.listing || {};
@@ -55,15 +60,14 @@ export const listingFactory = async (
     jurisdictionId,
   );
 
-  const digitalApp = !!optionalParams?.digitalApp
-    ? optionalParams.digitalApp
-    : Math.random() < 0.5;
+  const digitalApp = optionalParams?.digitalApp ?? Math.random() < 0.5;
 
   return {
     createdAt: new Date(),
     assets: [],
     name: randomName(),
     status: optionalParams?.status || ListingsStatusEnum.active,
+    lotteryStatus: optionalParams?.lotteryStatus || undefined,
     displayWaitlistSize: Math.random() < 0.5,
     listingsBuildingAddress: {
       create: addressFactory(),
@@ -95,16 +99,30 @@ export const listingFactory = async (
       : new Date(),
     listingMultiselectQuestions: optionalParams?.multiselectQuestions
       ? {
-          create: optionalParams.multiselectQuestions.map(
-            (question, index) => ({
-              multiselectQuestions: {
-                connect: {
-                  id: question.id,
+          create: [
+            ...optionalParams?.multiselectQuestions
+              ?.filter(
+                (question) => question.applicationSection === 'preferences',
+              )
+              .map((question, index) => ({
+                multiselectQuestions: {
+                  connect: {
+                    id: question.id,
+                  },
                 },
-              },
-              ordinal: index + 1,
-            }),
-          ),
+                ordinal: index + 1,
+              })),
+            ...optionalParams?.multiselectQuestions
+              ?.filter((question) => question.applicationSection === 'programs')
+              .map((question, index) => ({
+                multiselectQuestions: {
+                  connect: {
+                    id: question.id,
+                  },
+                },
+                ordinal: index + 1,
+              })),
+          ],
         }
       : undefined,
     applications: optionalParams?.applications
@@ -127,6 +145,8 @@ export const listingFactory = async (
         }
       : undefined,
     applicationDueDate: optionalParams?.applicationDueDate ?? undefined,
+    closedAt: optionalParams?.closedAt ?? undefined,
+    reviewOrderType: optionalParams?.reviewOrderType ?? undefined,
     developer: randomName(),
     leasingAgentName: randomName(),
     leasingAgentEmail: 'leasing-agent@example.com',

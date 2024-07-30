@@ -93,25 +93,37 @@ export class TranslationService {
     }
 
     const pathsToFilter = {
+      accessibility: listing.accessibility,
+      amenities: listing.amenities,
+      applicationDropOffAddressOfficeHours:
+        listing.applicationDropOffAddressOfficeHours,
       applicationPickUpAddressOfficeHours:
         listing.applicationPickUpAddressOfficeHours,
       costsNotIncluded: listing.costsNotIncluded,
       creditHistory: listing.creditHistory,
       criminalBackground: listing.criminalBackground,
+      depositHelperText: listing.depositHelperText,
+      depositMax: listing.depositMax,
+      depositMin: listing.depositMin,
+      leasingAgentOfficeHours: listing.leasingAgentOfficeHours,
+      neighborhood: listing.neighborhood,
+      petPolicy: listing.petPolicy,
       programRules: listing.programRules,
       rentalAssistance: listing.rentalAssistance,
       rentalHistory: listing.rentalHistory,
       requiredDocuments: listing.requiredDocuments,
-      specialNotes: listing.specialNotes,
-      whatToExpect: listing.whatToExpect,
-      accessibility: listing.accessibility,
-      amenities: listing.amenities,
-      neighborhood: listing.neighborhood,
-      petPolicy: listing.petPolicy,
+      reservedCommunityDescription: listing.reservedCommunityDescription,
       servicesOffered: listing.servicesOffered,
       smokingPolicy: listing.smokingPolicy,
+      specialNotes: listing.specialNotes,
       unitAmenities: listing.unitAmenities,
+      whatToExpect: listing.whatToExpect,
     };
+
+    if (listing.referralApplication?.externalReference) {
+      pathsToFilter[`referralApplication.externalReference`] =
+        listing.referralApplication?.externalReference;
+    }
 
     listing.listingEvents?.forEach((_, index) => {
       pathsToFilter[`listingEvents[${index}].note`] =
@@ -181,7 +193,9 @@ export class TranslationService {
 
     if (translatedValue) {
       [...Object.keys(cleanedPaths).values()].forEach((path, index) => {
-        lodash.set(listing, path, translatedValue[0][index]);
+        if (translatedValue[0][index]) {
+          lodash.set(listing, path, translatedValue[0][index]);
+        }
       });
     }
 
@@ -192,9 +206,37 @@ export class TranslationService {
     listing: Listing,
     language: LanguagesEnum,
   ) {
-    return this.prisma.generatedListingTranslations.findFirst({
-      where: { listingId: listing.id, language: language },
+    const existingTranslations =
+      await this.prisma.generatedListingTranslations.findFirst({
+        where: {
+          listingId: listing.id,
+          language: language,
+        },
+      });
+
+    //determine when listing or associated preferences most recently changed
+    let mostRecentUpdate = listing.contentUpdatedAt;
+    listing.listingMultiselectQuestions?.forEach((multiselectObj) => {
+      const multiselectUpdatedAt =
+        multiselectObj.multiselectQuestions?.updatedAt;
+      if (mostRecentUpdate < multiselectUpdatedAt) {
+        mostRecentUpdate = multiselectUpdatedAt;
+      }
     });
+    //refresh translations if application content changed since translation creation
+    if (
+      existingTranslations &&
+      existingTranslations.createdAt < mostRecentUpdate
+    ) {
+      await this.prisma.generatedListingTranslations.delete({
+        where: {
+          id: existingTranslations.id,
+        },
+      });
+      return undefined;
+    }
+
+    return existingTranslations;
   }
 
   private async persistNewTranslatedValues(

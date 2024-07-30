@@ -5,6 +5,7 @@ import {
   TabNavItem,
   AppearanceSizeType,
   NavigationContext,
+  t,
 } from "@bloom-housing/ui-components"
 import styles from "./NavigationHeader.module.scss"
 
@@ -22,6 +23,7 @@ type NavigationHeaderTabs = {
   flagsQty?: number
   listingLabel: string
   applicationsLabel: string
+  lotteryLabel?: string
 }
 
 type NavigationHeaderTabsElement = {
@@ -63,6 +65,15 @@ const NavigationHeader = ({
         content: undefined,
       },
     ]
+
+    if (process.env.showLottery === "TRUE" && tabs?.lotteryLabel) {
+      elements.push({
+        label: tabs.lotteryLabel,
+        path: `/listings/${listingId}/lottery`,
+        activePaths: [`/listings/${listingId}/lottery`],
+        content: undefined,
+      })
+    }
 
     return elements
   }, [tabs, listingId])

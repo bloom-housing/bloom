@@ -28,5 +28,4 @@ module.exports = {
       lines: 85,
     },
   },
-  workerIdleMemoryLimit: '70%',
 };

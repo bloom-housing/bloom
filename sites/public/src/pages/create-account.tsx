@@ -1,22 +1,19 @@
 import React, { useEffect, useContext, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
-import {
-  Field,
-  Form,
-  emailRegex,
-  t,
-  DOBField,
-  AlertBox,
-  Modal,
-  passwordRegex,
-} from "@bloom-housing/ui-components"
-import { Button, Heading } from "@bloom-housing/ui-seeds"
+import { Field, Form, emailRegex, t, DOBField, AlertBox } from "@bloom-housing/ui-components"
+import { Button, Dialog, Heading } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
 dayjs.extend(customParseFormat)
 import { useRouter } from "next/router"
-import { PageView, pushGtmEvent, AuthContext, BloomCard } from "@bloom-housing/shared-helpers"
+import {
+  PageView,
+  pushGtmEvent,
+  AuthContext,
+  BloomCard,
+  passwordRegex,
+} from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
 import accountCardStyles from "./account/account.module.scss"
@@ -34,6 +31,7 @@ export default () => {
   const { register, handleSubmit, errors, watch } = useForm()
   const [requestError, setRequestError] = useState<string>()
   const [openModal, setOpenModal] = useState<boolean>(false)
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
   const language = router.locale
   const listingId = router.query?.listingId as string
@@ -51,6 +49,7 @@ export default () => {
   }, [])
 
   const onSubmit = async (data) => {
+    setLoading(true)
     try {
       const { dob, ...rest } = data
       const listingIdRedirect =
@@ -78,7 +77,9 @@ export default () => {
       } else {
         setOpenModal(true)
       }
+      setLoading(false)
     } catch (err) {
+      setLoading(false)
       const { status, data } = err.response || {}
       if (status === 400) {
         setRequestError(`${t(`authentication.createAccount.errors.${data.message}`)}`)
@@ -254,7 +255,11 @@ export default () => {
                     label={t("authentication.createAccount.reEnterPassword")}
                     readerOnly
                   />
-                  <Button type="submit" variant="primary">
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    loadingMessage={loading ? t("t.loading") : undefined}
+                  >
                     {t("account.createAccount")}
                   </Button>
                 </CardSection>
@@ -287,17 +292,24 @@ export default () => {
           </div>
         )}
       </div>
-      <Modal
-        open={openModal}
-        title={t("authentication.createAccount.confirmationNeeded")}
-        ariaDescription={t("authentication.createAccount.anEmailHasBeenSent", {
-          email: email.current,
-        })}
+
+      <Dialog
+        isOpen={openModal}
         onClose={() => {
           void router.push("/sign-in")
           window.scrollTo(0, 0)
         }}
-        actions={[
+        ariaLabelledBy="create-account-dialog-header"
+        ariaDescribedBy="create-account-dialog-content"
+      >
+        <Dialog.Header id="create-account-dialog-header">
+          {t("authentication.createAccount.confirmationNeeded")}
+        </Dialog.Header>
+        <Dialog.Content id="create-account-dialog-content">
+          <p>{t("authentication.createAccount.anEmailHasBeenSent", { email: email.current })}</p>
+          <p>{t("authentication.createAccount.confirmationInstruction")}</p>
+        </Dialog.Content>
+        <Dialog.Footer>
           <Button
             variant="primary"
             onClick={() => {
@@ -307,7 +319,7 @@ export default () => {
             size="sm"
           >
             {t("t.ok")}
-          </Button>,
+          </Button>
           <Button
             variant="primary-outlined"
             disabled={confirmationResent}
@@ -318,14 +330,9 @@ export default () => {
             size="sm"
           >
             {t("authentication.createAccount.resendTheEmail")}
-          </Button>,
-        ]}
-      >
-        <>
-          <p>{t("authentication.createAccount.anEmailHasBeenSent", { email: email.current })}</p>
-          <p>{t("authentication.createAccount.confirmationInstruction")}</p>
-        </>
-      </Modal>
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
     </FormsLayout>
   )
 }

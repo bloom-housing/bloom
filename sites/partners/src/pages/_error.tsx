@@ -14,7 +14,7 @@ const Error = () => {
         {t("errors.notFound.message")}
       </Hero>
       <div className="homepage-extra">
-        <MarkdownSection fullwidth={true}>An error has occurred.</MarkdownSection>
+        <MarkdownSection fullwidth={true}>{t("t.errorOccurred")}</MarkdownSection>
       </div>
     </Layout>
   )

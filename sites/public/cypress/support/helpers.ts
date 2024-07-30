@@ -70,7 +70,7 @@ export const getListingIncome = (): GetIncomeReturn => {
 }
 
 export const updatePreferredUnits = ({ config, listing }: UpdatePreferredUnitsProps) => {
-  const firstUnitType = listing.units[0].unitType
+  const firstUnitType = listing.units[0].unitTypes
   config.preferredUnit = [{ id: firstUnitType?.id }]
 
   return config

@@ -4,8 +4,6 @@ import {
   adaFeatureKeys,
   mapApiToMultiselectForm,
   mapCheckboxesToApi,
-  mapRadiosToApi,
-  getInputType,
 } from "@bloom-housing/shared-helpers"
 import { FormTypes, ApplicationTypes, Address } from "../../lib/applications/FormTypes"
 import { convertDataToLocal } from "../../lib/helpers"
@@ -15,7 +13,6 @@ import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
 import customParseFormat from "dayjs/plugin/customParseFormat"
 import {
-  MultiselectOption,
   HouseholdMember,
   ApplicationSubmissionTypeEnum,
   MultiselectQuestion,
@@ -142,29 +139,11 @@ export const mapFormToApi = ({
   })()
 
   const preferencesData = preferences.map((pref: MultiselectQuestion) => {
-    const inputType = getInputType(pref.options as unknown as MultiselectOption[])
-    if (inputType === "checkbox") {
-      return mapCheckboxesToApi(data, pref, MultiselectQuestionsApplicationSectionEnum.preferences)
-    }
-    if (inputType === "radio") {
-      return mapRadiosToApi(
-        { [pref.text]: data.application.preferences[pref.text] as string },
-        pref
-      )
-    }
+    return mapCheckboxesToApi(data, pref, MultiselectQuestionsApplicationSectionEnum.preferences)
   })
 
   const programsData = programs.map((program: MultiselectQuestion) => {
-    const inputType = getInputType(program.options as unknown as MultiselectOption[])
-    if (inputType === "checkbox") {
-      return mapCheckboxesToApi(data, program, MultiselectQuestionsApplicationSectionEnum.programs)
-    }
-    if (inputType === "radio") {
-      return mapRadiosToApi(
-        { [program.text]: data.application.programs[program.text] as string },
-        program
-      )
-    }
+    return mapCheckboxesToApi(data, program, MultiselectQuestionsApplicationSectionEnum.programs)
   })
 
   // additional phone
@@ -174,7 +153,6 @@ export const mapFormToApi = ({
     applicationsMailingAddress: mailingAddressData,
     additionalPhoneNumber,
     contactPreferences,
-    sendMailToMailingAddress,
   } = data.application
 
   const additionalPhone = !additionalPhoneNumberData
@@ -187,17 +165,24 @@ export const mapFormToApi = ({
     race: fieldGroupObjectToArray(data, "race"),
   }
 
+  const sendMailToMailingAddress = data.application.sendMailToMailingAddress
+
   const applicationsMailingAddress = getAddress(sendMailToMailingAddress, mailingAddressData)
 
   const alternateContact = data.application.alternateContact
 
   // send null instead of empty string
   alternateContact.emailAddress = alternateContact.emailAddress || null
+  alternateContact.type = alternateContact.type || null
 
   // pass blank address, not used for now everywhere
   const alternateAddress = getAddress(false, null)
 
   const { incomeMonth, incomeYear, householdMembers } = data
+
+  householdMembers.forEach((member) => {
+    member.relationship = member.relationship || null
+  })
 
   const incomePeriod: IncomePeriodEnum | null = data.application?.incomePeriod || null
 

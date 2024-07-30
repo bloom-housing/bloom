@@ -13,6 +13,7 @@ import {
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   HouseholdMember,
+  HouseholdMemberRelationship,
   HouseholdMemberUpdate,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -32,6 +33,10 @@ import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
 
 export class Member implements HouseholdMemberUpdate {
+  constructor(orderId: number) {
+    this.orderId = orderId
+  }
+
   id: string
   orderId = undefined as number | undefined
   firstName = ""
@@ -45,10 +50,6 @@ export class Member implements HouseholdMemberUpdate {
   phoneNumber = ""
   phoneNumberType = ""
   noPhone = undefined
-
-  constructor(orderId: number) {
-    this.orderId = orderId
-  }
   householdMemberAddress = {
     placeName: undefined,
     city: "",
@@ -72,7 +73,7 @@ export class Member implements HouseholdMemberUpdate {
     longitude: undefined,
   }
   sameAddress?: YesNoEnum
-  relationship?: string
+  relationship?: HouseholdMemberRelationship
   workInRegion?: YesNoEnum
 }
 
@@ -83,8 +84,8 @@ const ApplicationMember = () => {
   const router = useRouter()
   const currentPageSection = 2
 
-  if (router.query.memberId) {
-    memberId = parseInt(router.query.memberId.toString())
+  if (router.query?.memberId) {
+    memberId = parseInt(router.query?.memberId.toString())
     member = application.householdMember[memberId]
     saveText = t("application.household.member.updateHouseholdMember")
     cancelText = t("application.household.member.deleteThisPerson")
@@ -284,27 +285,27 @@ const ApplicationMember = () => {
                 <legend className="text__caps-spaced">{t("application.contact.address")}</legend>
 
                 <Field
-                  id="addressStreet"
-                  name="address.street"
+                  id="householdMemberAddress.street"
+                  name="householdMemberAddress.street"
                   defaultValue={member.householdMemberAddress.street}
                   validation={{ required: true, maxLength: 64 }}
                   errorMessage={
-                    errors.address?.street?.type === "maxLength"
+                    errors.householdMemberAddress?.street?.type === "maxLength"
                       ? t("errors.maxLength")
                       : t("errors.streetError")
                   }
-                  error={errors.address?.street}
+                  error={errors.householdMemberAddress?.street}
                   register={register}
                   dataTestId={"app-household-member-address-street"}
                   label={t("application.contact.streetAddress")}
                 />
 
                 <Field
-                  id="addressStreet2"
-                  name="address.street2"
+                  id="householdMemberAddress.street2"
+                  name="householdMemberAddress.street2"
                   label={t("application.contact.apt")}
                   defaultValue={member.householdMemberAddress.street2}
-                  error={errors.address?.street2}
+                  error={errors.householdMemberAddress?.street2}
                   validation={{ maxLength: 64 }}
                   errorMessage={t("errors.maxLength")}
                   register={register}
@@ -313,30 +314,30 @@ const ApplicationMember = () => {
 
                 <div className="flex max-w-2xl">
                   <Field
-                    id="addressCity"
-                    name="address.city"
+                    id="householdMemberAddress.city"
+                    name="householdMemberAddress.city"
                     label={t("application.contact.city")}
                     defaultValue={member.householdMemberAddress.city}
                     validation={{ required: true, maxLength: 64 }}
                     errorMessage={
-                      errors.address?.city?.type === "maxLength"
+                      errors.householdMemberAddress?.city?.type === "maxLength"
                         ? t("errors.maxLength")
                         : t("errors.cityError")
                     }
-                    error={errors.address?.city}
+                    error={errors.householdMemberAddress?.city}
                     register={register}
                     dataTestId={"app-household-member-address-city"}
                   />
 
                   <Select
-                    id="addressState"
-                    name="address.state"
+                    id="householdMemberAddress.state"
+                    name="householdMemberAddress.state"
                     label={t("application.contact.state")}
                     defaultValue={member.householdMemberAddress.state}
                     validation={{ required: true, maxLength: 64 }}
-                    error={errors.address?.state}
+                    error={errors.householdMemberAddress?.state}
                     errorMessage={
-                      errors.address?.state?.type === "maxLength"
+                      errors.householdMemberAddress?.state?.type === "maxLength"
                         ? t("errors.maxLength")
                         : t("errors.stateError")
                     }
@@ -349,14 +350,14 @@ const ApplicationMember = () => {
                 </div>
 
                 <Field
-                  id="addressZipCode"
-                  name="address.zipCode"
+                  id="householdMemberAddress.zipCode"
+                  name="householdMemberAddress.zipCode"
                   label={t("application.contact.zip")}
                   defaultValue={member.householdMemberAddress.zipCode}
                   validation={{ required: true, maxLength: 64 }}
-                  error={errors.address?.zipCode}
+                  error={errors.householdMemberAddress?.zipCode}
                   errorMessage={
-                    errors.address?.zipCode?.type === "maxLength"
+                    errors.address?.householdMemberAddress?.type === "maxLength"
                       ? t("errors.maxLength")
                       : t("errors.zipCodeError")
                   }
@@ -394,14 +395,14 @@ const ApplicationMember = () => {
                 <legend className="text__caps-spaced">{t("application.contact.address")}</legend>
 
                 <Field
-                  id="workAddress.street"
-                  name="workAddress.street"
+                  id="householdMemberWorkAddress.street"
+                  name="householdMemberWorkAddress.street"
                   label={t("application.contact.streetAddress")}
                   defaultValue={member.householdMemberWorkAddress.street}
                   validation={{ required: true, maxLength: 64 }}
-                  error={errors.workAddress?.street}
+                  error={errors.householdMemberWorkAddress?.street}
                   errorMessage={
-                    errors.workAddress?.street?.type === "maxLength"
+                    errors.householdMemberWorkAddress?.street?.type === "maxLength"
                       ? t("errors.maxLength")
                       : t("errors.streetError")
                   }
@@ -410,11 +411,11 @@ const ApplicationMember = () => {
                 />
 
                 <Field
-                  id="workAddress.street2"
-                  name="workAddress.street2"
+                  id="householdMemberWorkAddress.street2"
+                  name="householdMemberWorkAddress.street2"
                   label={t("application.contact.apt")}
                   defaultValue={member.householdMemberWorkAddress.street2}
-                  error={errors.workAddress?.street2}
+                  error={errors.householdMemberWorkAddress?.street2}
                   errorMessage={t("errors.maxLength")}
                   validation={{ maxLength: 64 }}
                   register={register}
@@ -423,14 +424,14 @@ const ApplicationMember = () => {
 
                 <div className="flex max-w-2xl">
                   <Field
-                    id="workAddress.city"
-                    name="workAddress.city"
+                    id="householdMemberWorkAddress.city"
+                    name="householdMemberWorkAddress.city"
                     label={t("application.contact.city")}
                     defaultValue={member.householdMemberWorkAddress.city}
                     validation={{ required: true, maxLength: 64 }}
-                    error={errors.workAddress?.city}
+                    error={errors.householdMemberWorkAddress?.city}
                     errorMessage={
-                      errors.workAddress?.city?.type === "maxLength"
+                      errors.householdMemberWorkAddress?.city?.type === "maxLength"
                         ? t("errors.maxLength")
                         : t("errors.cityError")
                     }
@@ -439,14 +440,14 @@ const ApplicationMember = () => {
                   />
 
                   <Select
-                    id="workAddress.state"
-                    name="workAddress.state"
+                    id="householdMemberWorkAddress.state"
+                    name="householdMemberWorkAddress.state"
                     label={t("application.contact.state")}
                     defaultValue={member.householdMemberWorkAddress.state}
                     validation={{ required: true, maxLength: 64 }}
-                    error={errors.workAddress?.state}
+                    error={errors.householdMemberWorkAddress?.state}
                     errorMessage={
-                      errors.workAddress?.state?.type === "maxLength"
+                      errors.householdMemberWorkAddress?.state?.type === "maxLength"
                         ? t("errors.maxLength")
                         : t("errors.stateError")
                     }
@@ -459,14 +460,14 @@ const ApplicationMember = () => {
                 </div>
 
                 <Field
-                  id="workAddress.zipCode"
-                  name="workAddress.zipCode"
+                  id="householdMemberWorkAddress.zipCode"
+                  name="householdMemberWorkAddress.zipCode"
                   label={t("application.contact.zip")}
                   defaultValue={member.householdMemberWorkAddress.zipCode}
                   validation={{ required: true, maxLength: 64 }}
-                  error={errors.workAddress?.zipCode}
+                  error={errors.householdMemberWorkAddress?.zipCode}
                   errorMessage={
-                    errors.workAddress?.zipCode?.type === "maxLength"
+                    errors.householdMemberWorkAddress?.zipCode?.type === "maxLength"
                       ? t("errors.maxLength")
                       : t("errors.zipCodeError")
                   }

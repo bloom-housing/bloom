@@ -1,0 +1,12 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api
+    environment:
+      - PORT=${PORT}
+    ports:
+      - '3100:3100'
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'

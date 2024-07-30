@@ -49,9 +49,9 @@ export default class AdditionalMetadataFormatter extends Formatter {
 
     cleanAddress("leasingAgentAddress")
     cleanAddress("buildingAddress")
-    cleanAddress("applicationMailingAddress")
-    cleanAddress("applicationPickUpAddress")
-    cleanAddress("applicationDropOffAddress")
+    cleanAddress("listingsApplicationMailingAddress")
+    cleanAddress("listingsApplicationPickUpAddress")
+    cleanAddress("listingsApplicationDropOffAddress")
 
     this.data.customMapPin = this.metadata.customMapPositionChosen
     this.data.yearBuilt = this.data.yearBuilt ? Number(this.data.yearBuilt) : null
@@ -60,6 +60,10 @@ export default class AdditionalMetadataFormatter extends Formatter {
       this.data.reviewOrderQuestion === "reviewOrderLottery"
         ? ReviewOrderTypeEnum.lottery
         : ReviewOrderTypeEnum.firstComeFirstServe
+
+    if (this.data.reviewOrderType !== ReviewOrderTypeEnum.lottery) {
+      this.data.lotteryOptIn = null
+    }
 
     if (this.data.listingAvailabilityQuestion === "openWaitlist") {
       this.data.reviewOrderType = ReviewOrderTypeEnum.waitlist

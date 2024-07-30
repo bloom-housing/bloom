@@ -315,7 +315,7 @@ export class ListingsService {
       body?: ListingUpdate
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<any> {
+  ): Promise<Listing> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/listings/{id}"
       url = url.replace("{id}", params["id"] + "")
@@ -339,6 +339,44 @@ export class ListingsService {
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
       let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Trigger the lottery process job
+   */
+  expireLotteries(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/expireLotteries"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Change the listing lottery status
+   */
+  lotteryStatus(
+    params: {
+      /** requestBody */
+      body?: ListingLotteryStatus
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/lotteryStatus"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
 
       configs.data = data
 
@@ -1406,6 +1444,35 @@ export class ApplicationsService {
     })
   }
   /**
+   * Get applications lottery results
+   */
+  lotteryResults(
+    params: {
+      /**  */
+      listingId: string
+      /**  */
+      includeDemographics?: boolean
+      /**  */
+      timeZone?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/getLotteryResults"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        listingId: params["listingId"],
+        includeDemographics: params["includeDemographics"],
+        timeZone: params["timeZone"],
+      }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Get applications as csv
    */
   listAsCsv(
@@ -2012,6 +2079,97 @@ export class ScriptRunnerService {
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
       let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * A script that pulls data from one source into the current db
+   */
+  dataTransfer(
+    params: {
+      /** requestBody */
+      body?: DataTransferDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/dataTransfer"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * A script that resends application confirmations to applicants of a listing
+   */
+  bulkApplicationResend(
+    params: {
+      /** requestBody */
+      body?: BulkApplicationResendDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/bulkApplicationResend"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * A script that takes in a standardized string and outputs the input for the ami chart create endpoint
+   */
+  amiChartImport(
+    params: {
+      /** requestBody */
+      body?: AmiChartImportDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/amiChartImport"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class LotteryService {
+  /**
+   * Generate the lottery results for a listing
+   */
+  lotteryGenerate(
+    params: {
+      /** requestBody */
+      body?: ApplicationCsvQueryParams
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/lottery/generateLotteryResults"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
 
       configs.data = data
 
@@ -2902,6 +3060,9 @@ export interface Listing {
   customMapPin?: boolean
 
   /**  */
+  contentUpdatedAt?: Date
+
+  /**  */
   publishedAt?: Date
 
   /**  */
@@ -2909,6 +3070,12 @@ export interface Listing {
 
   /**  */
   afsLastRunAt?: Date
+
+  /**  */
+  lotteryLastRunAt?: Date
+
+  /**  */
+  lotteryStatus?: LotteryStatusEnum
 
   /**  */
   lastApplicationUpdateAt?: Date
@@ -2984,6 +3151,9 @@ export interface Listing {
 
   /**  */
   requestedChangesUser?: IdDTO
+
+  /**  */
+  lotteryOptIn?: boolean
 }
 
 export interface PaginationMeta {
@@ -3406,6 +3576,15 @@ export interface ListingCreate {
   customMapPin?: boolean
 
   /**  */
+  contentUpdatedAt?: Date
+
+  /**  */
+  lotteryLastRunAt?: Date
+
+  /**  */
+  lotteryStatus?: LotteryStatusEnum
+
+  /**  */
   lastApplicationUpdateAt?: Date
 
   /**  */
@@ -3419,6 +3598,9 @@ export interface ListingCreate {
 
   /**  */
   requestedChangesDate?: Date
+
+  /**  */
+  lotteryOptIn?: boolean
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
@@ -3470,6 +3652,14 @@ export interface ListingCreate {
 
   /**  */
   requestedChangesUser?: IdDTO
+}
+
+export interface ListingLotteryStatus {
+  /**  */
+  listingId: string
+
+  /**  */
+  lotteryStatus: LotteryStatusEnum
 }
 
 export interface ListingUpdate {
@@ -3654,6 +3844,15 @@ export interface ListingUpdate {
   customMapPin?: boolean
 
   /**  */
+  contentUpdatedAt?: Date
+
+  /**  */
+  lotteryLastRunAt?: Date
+
+  /**  */
+  lotteryStatus?: LotteryStatusEnum
+
+  /**  */
   lastApplicationUpdateAt?: Date
 
   /**  */
@@ -3667,6 +3866,9 @@ export interface ListingUpdate {
 
   /**  */
   requestedChangesDate?: Date
+
+  /**  */
+  lotteryOptIn?: boolean
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
@@ -3830,7 +4032,7 @@ export interface AlternateContact {
   updatedAt: Date
 
   /**  */
-  type?: string
+  type?: AlternateContactRelationship
 
   /**  */
   otherType?: string
@@ -3889,7 +4091,7 @@ export interface HouseholdMember {
   sameAddress?: YesNoEnum
 
   /**  */
-  relationship?: string
+  relationship?: HouseholdMemberRelationship
 
   /**  */
   workInRegion?: YesNoEnum
@@ -3927,6 +4129,20 @@ export interface ApplicationMultiselectQuestion {
 
   /**  */
   options: ApplicationMultiselectQuestionOption[]
+}
+
+export interface ApplicationLotteryPosition {
+  /**  */
+  listingId: string
+
+  /**  */
+  applicationId: string
+
+  /**  */
+  multiselectQuestionId: string
+
+  /**  */
+  ordinal: number
 }
 
 export interface Application {
@@ -4040,6 +4256,9 @@ export interface Application {
 
   /**  */
   listings: IdDTO
+
+  /**  */
+  applicationLotteryPositions: ApplicationLotteryPosition[]
 }
 
 export interface ApplicationFlaggedSet {
@@ -4581,7 +4800,7 @@ export interface ApplicantUpdate {
 
 export interface AlternateContactUpdate {
   /**  */
-  type?: string
+  type?: AlternateContactRelationship
 
   /**  */
   otherType?: string
@@ -4659,7 +4878,7 @@ export interface HouseholdMemberUpdate {
   sameAddress?: YesNoEnum
 
   /**  */
-  relationship?: string
+  relationship?: HouseholdMemberRelationship
 
   /**  */
   workInRegion?: YesNoEnum
@@ -5134,6 +5353,9 @@ export interface Login {
 
   /**  */
   mfaType?: MfaType
+
+  /**  */
+  reCaptchaToken?: string
 }
 
 export interface LoginViaSingleUseCode {
@@ -5199,6 +5421,38 @@ export interface MapLayer {
   jurisdictionId: string
 }
 
+export interface DataTransferDTO {
+  /**  */
+  connectionString: string
+}
+
+export interface BulkApplicationResendDTO {
+  /**  */
+  listingId: string
+}
+
+export interface AmiChartImportDTO {
+  /**  */
+  values: string
+
+  /**  */
+  name: string
+
+  /**  */
+  jurisdictionId: string
+}
+
+export interface ApplicationCsvQueryParams {
+  /**  */
+  listingId: string
+
+  /**  */
+  includeDemographics?: boolean
+
+  /**  */
+  timeZone?: string
+}
+
 export enum ListingViews {
   "fundamentals" = "fundamentals",
   "base" = "base",
@@ -5247,6 +5501,15 @@ export enum ReviewOrderTypeEnum {
   "lottery" = "lottery",
   "firstComeFirstServe" = "firstComeFirstServe",
   "waitlist" = "waitlist",
+}
+
+export enum LotteryStatusEnum {
+  "errored" = "errored",
+  "ran" = "ran",
+  "approved" = "approved",
+  "releasedToPartners" = "releasedToPartners",
+  "publishedToPublic" = "publishedToPublic",
+  "expired" = "expired",
 }
 
 export enum ValidationMethodEnum {
@@ -5343,6 +5606,32 @@ export enum ApplicationReviewStatusEnum {
 export enum YesNoEnum {
   "yes" = "yes",
   "no" = "no",
+}
+
+export enum AlternateContactRelationship {
+  "familyMember" = "familyMember",
+  "friend" = "friend",
+  "caseManager" = "caseManager",
+  "other" = "other",
+  "noContact" = "noContact",
+}
+
+export enum HouseholdMemberRelationship {
+  "spouse" = "spouse",
+  "registeredDomesticPartner" = "registeredDomesticPartner",
+  "parent" = "parent",
+  "child" = "child",
+  "sibling" = "sibling",
+  "cousin" = "cousin",
+  "aunt" = "aunt",
+  "uncle" = "uncle",
+  "nephew" = "nephew",
+  "niece" = "niece",
+  "grandparent" = "grandparent",
+  "greatGrandparent" = "greatGrandparent",
+  "inLaw" = "inLaw",
+  "friend" = "friend",
+  "other" = "other",
 }
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput
 export enum EnumJurisdictionCreateListingApprovalPermissions {

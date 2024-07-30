@@ -1,17 +1,8 @@
 import React, { useRef, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
-import {
-  t,
-  FormCard,
-  Form,
-  Field,
-  passwordRegex,
-  useMutate,
-  AlertBox,
-  Modal,
-} from "@bloom-housing/ui-components"
-import { Button, Icon } from "@bloom-housing/ui-seeds"
-import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import { t, FormCard, Form, Field, useMutate, AlertBox, Modal } from "@bloom-housing/ui-components"
+import { Button, Dialog, Icon } from "@bloom-housing/ui-seeds"
+import { AuthContext, MessageContext, passwordRegex } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import { ReRequestConfirmation } from "./ReRequestConfirmation"
 import { SuccessDTO } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -23,7 +14,7 @@ type FormUserConfirmFields = {
   agree: boolean
 }
 
-const MIN_PASSWORD_LENGTH = 8
+const MIN_PASSWORD_LENGTH = 12
 
 const FormUserConfirm = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -135,7 +126,6 @@ const FormUserConfirm = () => {
                   name="password"
                   label={t("account.settings.newPassword")}
                   note={t("authentication.createAccount.passwordInfo")}
-                  placeholder={t("authentication.createAccount.mustBe8Chars")}
                   validation={{
                     required: true,
                     minLength: MIN_PASSWORD_LENGTH,
@@ -156,7 +146,6 @@ const FormUserConfirm = () => {
                   type="password"
                   name="passwordConfirmation"
                   label={t("account.settings.confirmNewPassword")}
-                  placeholder={t("authentication.createAccount.mustBe8Chars")}
                   validation={{
                     required: true,
                     validate: (value) =>
@@ -181,7 +170,9 @@ const FormUserConfirm = () => {
                 type="submit"
                 variant="primary"
                 className={"items-center"}
-                loadingMessage={(isConfirmLoading || loading) && t("t.formSubmitted")}
+                loadingMessage={
+                  (isConfirmLoading || loading || isSubmitting) && t("t.formSubmitted")
+                }
               >
                 {t("users.confirmAccount")}
               </Button>
@@ -190,18 +181,18 @@ const FormUserConfirm = () => {
         </Form>
       </FormCard>
 
-      <Modal
-        open={rerequestModalOpen}
-        title={t("authentication.createAccount.errors.tokenExpired")}
-        ariaDescription={t("users.requestResendDescription")}
+      <Dialog
+        isOpen={rerequestModalOpen}
         onClose={() => setRerequestModalOpen(false)}
+        ariaLabelledBy="request-resend-dialog-header"
+        ariaDescribedBy="request-resend-dialog-explanation"
       >
         <ReRequestConfirmation
           onClose={setRerequestModalOpen}
           clearExistingErrors={resetMutation}
           setAlert={setNewConfirmationRequested}
         />
-      </Modal>
+      </Dialog>
     </>
   )
 }

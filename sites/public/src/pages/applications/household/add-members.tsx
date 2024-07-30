@@ -11,6 +11,7 @@ import { HouseholdMemberForm } from "../../../components/applications/HouseholdM
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
+import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationAddMembers = () => {
   const { profile } = useContext(AuthContext)
@@ -51,14 +52,16 @@ const ApplicationAddMembers = () => {
 
   const membersSection = application.householdMember.map((member, index) => {
     return (
-      <HouseholdMemberForm
-        editMember={editMember}
-        key={index}
-        memberFirstName={member.firstName}
-        memberId={index}
-        memberLastName={member.lastName}
-        subtitle={t("application.household.householdMember")}
-      />
+      <CardSection divider="inset">
+        <HouseholdMemberForm
+          editMember={editMember}
+          key={index}
+          memberFirstName={member.firstName}
+          memberId={index}
+          memberLastName={member.lastName}
+          subtitle={t("application.household.householdMember")}
+        />
+      </CardSection>
     )
   })
 
@@ -89,30 +92,26 @@ const ApplicationAddMembers = () => {
             url: conductor.determinePreviousUrl(),
           }}
         >
-          <Form>
-            <div>
-              <HouseholdSizeField
-                assistanceUrl={t("application.household.assistanceUrl")}
-                clearErrors={clearErrors}
-                error={errors.householdSize}
-                householdSize={householdSize}
-                householdSizeMax={listing?.householdSizeMax}
-                householdSizeMin={listing?.householdSizeMin}
-                register={register}
-                validate={true}
-              />
-            </div>
-            <div className="px-8 my-0 mx-0 pb-0 pt-0">
-              <HouseholdMemberForm
-                editMember={editMember}
-                editMode={!application.autofilled}
-                memberFirstName={applicant.firstName}
-                memberLastName={applicant.lastName}
-                subtitle={t("application.household.primaryApplicant")}
-              />
-              {membersSection}
-            </div>
-          </Form>
+          <HouseholdSizeField
+            assistanceUrl={t("application.household.assistanceUrl")}
+            clearErrors={clearErrors}
+            error={errors.householdSize}
+            householdSize={householdSize}
+            householdSizeMax={listing?.householdSizeMax}
+            householdSizeMin={listing?.householdSizeMin}
+            register={register}
+            validate={true}
+          />
+          <CardSection divider="inset">
+            <HouseholdMemberForm
+              editMember={editMember}
+              editMode={!application.autofilled}
+              memberFirstName={applicant.firstName}
+              memberLastName={applicant.lastName}
+              subtitle={t("application.household.primaryApplicant")}
+            />
+          </CardSection>
+          {membersSection}
           <CardSection divider={"flush"} className={"border-none"}>
             <Button
               onClick={onAddMember}
@@ -123,7 +122,7 @@ const ApplicationAddMembers = () => {
               {t("application.household.addMembers.addHouseholdMember")}
             </Button>
           </CardSection>
-          <CardSection className={"bg-primary-lighter"}>
+          <CardSection className={styles["application-form-action-footer"]}>
             <Button
               onClick={() => {
                 conductor.returnToReview = false

@@ -23,7 +23,7 @@ const Disclaimer = () => {
     <Layout>
       <PageHeader inverse={true} title={pageTitle} />
       <MarkdownSection>
-        <Markdown>{pageContent}</Markdown>
+        <Markdown>{pageContent.toString()}</Markdown>
       </MarkdownSection>
     </Layout>
   )

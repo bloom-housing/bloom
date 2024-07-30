@@ -8,6 +8,7 @@ import {
   pushGtmEvent,
   AuthContext,
   MessageContext,
+  CustomIconMap,
 } from "@bloom-housing/shared-helpers"
 import {
   LanguagesEnum,
@@ -16,7 +17,6 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Heading, Icon, Button, Message } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { CustomIconMap } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import {
   AppSubmissionContext,
@@ -26,6 +26,7 @@ import { useGetApplicationStatusProps } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
+import dayjs from "dayjs"
 
 const loadListing = async (
   listingId,
@@ -84,8 +85,13 @@ const ApplicationChooseLanguage = () => {
 
   useEffect(() => {
     if (listing && router.isReady) {
-      if (listing?.status !== ListingsStatusEnum.active && router.query.preview !== "true") {
-        addToast(t("listings.applicationsClosedRedirect"), { variant: "alert" })
+      const currentDate = dayjs()
+      if (
+        !(listing.digitalApplication && listing.commonDigitalApplication) ||
+        (router?.query?.preview !== "true" && listing?.status !== ListingsStatusEnum.active) ||
+        (listing?.applicationDueDate && currentDate > dayjs(listing.applicationDueDate))
+      ) {
+        // addToast(t("listings.applicationsClosedRedirect"), { variant: "alert" })
         void router.push(`/${router.locale}/listing/${listing?.id}/${listing?.urlSlug}`)
       }
     }

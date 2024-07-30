@@ -1,0 +1,17 @@
+export enum HouseholdMemberRelationship {
+  spouse = 'spouse',
+  registeredDomesticPartner = 'registeredDomesticPartner',
+  parent = 'parent',
+  child = 'child',
+  sibling = 'sibling',
+  cousin = 'cousin',
+  aunt = 'aunt',
+  uncle = 'uncle',
+  nephew = 'nephew',
+  niece = 'niece',
+  grandparent = 'grandparent',
+  greatGrandparent = 'greatGrandparent',
+  inLaw = 'inLaw',
+  friend = 'friend',
+  other = 'other',
+}
