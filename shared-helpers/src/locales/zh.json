@@ -28,7 +28,7 @@
   "account.pwdless.verifyTitle": "确认是您本人",
   "account.settings.alerts.currentPassword": "目前密碼無效。請再試一次。",
   "account.settings.alerts.dobSuccess": "出生日期更新成功",
-  "account.settings.alerts.emailSuccess": "電子郵件更新成功",
+  "account.settings.alerts.emailSuccess": "請轉到您的電子郵件確認此更新",
   "account.settings.alerts.genericError": "發生錯誤。請再試一次，或是聯絡客戶支援以尋求服務。",
   "account.settings.alerts.nameSuccess": "姓名更新成功",
   "account.settings.alerts.passwordEmpty": "密碼欄位不可為空白",

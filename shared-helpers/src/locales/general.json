@@ -22,7 +22,7 @@
   "account.signUpSaveTime.title": "Sign up quickly and check application status at anytime",
   "account.settings.alerts.currentPassword": "Invalid current password. Please try again.",
   "account.settings.alerts.dobSuccess": "Birthdate update successful",
-  "account.settings.alerts.emailSuccess": "Email update successful",
+  "account.settings.alerts.emailSuccess": "Please go to your email to confirm this update",
   "account.pwdless.code": "Your code",
   "account.pwdless.codeNewAlert": "A new code has been sent to %{email}. Be aware, the code will expire in 5 minutes.",
   "account.pwdless.continue": "Continue",
