@@ -24,7 +24,7 @@
   "account.signUpSaveTime.title": "Sign up quickly and check application status at anytime",
   "account.settings.alerts.currentPassword": "Invalid current password. Please try again.",
   "account.settings.alerts.dobSuccess": "Birthdate update successful",
-  "account.settings.alerts.emailSuccess": "Email update successful",
+  "account.settings.alerts.emailSuccess": "Please go to your email to confirm this update",
   "account.settings.alerts.genericError": "There was an error. Please try again, or contact support for help.",
   "account.settings.alerts.nameSuccess": "Name update successful",
   "account.settings.alerts.passwordEmpty": "Password fields may not be empty",
