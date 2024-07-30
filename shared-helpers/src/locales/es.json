@@ -29,7 +29,7 @@
   "account.reviewTermsHelper": "Debe aceptar los términos de uso antes de crear una cuenta.",
   "account.settings.alerts.currentPassword": "Contraseña inválida. Por favor, vuelva a intentarlo.",
   "account.settings.alerts.dobSuccess": "La fecha de nacimiento se ha actualizado de manera exitosa",
-  "account.settings.alerts.emailSuccess": "El correo electrónico se ha actualizado de manera exitosa",
+  "account.settings.alerts.emailSuccess": "Vaya a su correo electrónico para confirmar esta actualización",
   "account.settings.alerts.genericError": "Hubo un error. Por favor, inténtelo nuevamente o comuníquese con el servicio de asistencia para obtener ayuda.",
   "account.settings.alerts.nameSuccess": "El nombre se ha actualizado de manera exitosa",
   "account.settings.alerts.passwordEmpty": "Los campos de contraseña no pueden estar vacíos",
