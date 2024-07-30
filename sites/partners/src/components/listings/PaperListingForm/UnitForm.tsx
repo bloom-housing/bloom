@@ -502,38 +502,38 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 </Grid.Row>
               </SectionWithGrid>
 
-          <hr className="spacer-section-above spacer-section" />
-          <SectionWithGrid heading={t("listings.unit.eligibility")}>
-            <Grid.Row columns={4}>
-              <FieldValue label={t("listings.unit.amiChart")}>
-                <Select
-                  id="amiChart.id"
-                  name="amiChart.id"
-                  label={t("listings.unit.amiChart")}
-                  placeholder={t("listings.unit.amiChart")}
-                  labelClassName="sr-only"
-                  register={register}
-                  controlClassName="control"
-                  options={amiChartsOptions}
-                  error={fieldHasError(errors?.amiChart?.id)}
-                  errorMessage={t("errors.requiredFieldError")}
-                  validation={{ required: true }}
-                  inputProps={{
-                    onChange: () => {
-                      setValue("amiPercentage", undefined)
-                      clearErrors("amiPercentage")
-                      clearErrors("amiChart.id")
-                      ;[...Array(maxAmiHouseholdSize)].forEach((_, index) => {
-                        setValue(`maxIncomeHouseholdSize${index + 1}`, undefined)
-                      })
-                      if (amiChartID && !loading && amiChartsOptions) {
-                        void fetchAmiChart()
-                        setIsAmiPercentageDirty(true)
-                      }
-                    },
-                  }}
-                />
-              </FieldValue>
+              <hr className="spacer-section-above spacer-section" />
+              <SectionWithGrid heading={t("listings.unit.eligibility")}>
+                <Grid.Row columns={4}>
+                  <FieldValue label={t("listings.unit.amiChart")}>
+                    <Select
+                      id="amiChart.id"
+                      name="amiChart.id"
+                      label={t("listings.unit.amiChart")}
+                      placeholder={t("listings.unit.amiChart")}
+                      labelClassName="sr-only"
+                      register={register}
+                      controlClassName="control"
+                      options={amiChartsOptions}
+                      error={fieldHasError(errors?.amiChart?.id)}
+                      errorMessage={t("errors.requiredFieldError")}
+                      validation={{ required: true }}
+                      inputProps={{
+                        onChange: () => {
+                          setValue("amiPercentage", undefined)
+                          clearErrors("amiPercentage")
+                          clearErrors("amiChart.id")
+                          ;[...Array(maxAmiHouseholdSize)].forEach((_, index) => {
+                            setValue(`maxIncomeHouseholdSize${index + 1}`, undefined)
+                          })
+                          if (amiChartID && !loading && amiChartsOptions) {
+                            void fetchAmiChart()
+                            setIsAmiPercentageDirty(true)
+                          }
+                        },
+                      }}
+                    />
+                  </FieldValue>
 
                   <FieldValue label={t("listings.unit.amiPercentage")}>
                     <Select
