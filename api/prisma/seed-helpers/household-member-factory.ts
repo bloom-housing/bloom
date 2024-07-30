@@ -11,6 +11,7 @@ import {
 
 export const householdMemberFactorySingle = (
   index: number,
+  overrides?: Prisma.HouseholdMemberCreateWithoutApplicationsInput,
 ): Prisma.HouseholdMemberCreateWithoutApplicationsInput => {
   const firstName = randomNoun();
   const lastName = randomNoun();
@@ -33,6 +34,7 @@ export const householdMemberFactorySingle = (
       create: addressFactory(),
     },
     orderId: index,
+    ...overrides,
   };
 };
 

@@ -574,13 +574,29 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
               applications: flaggedGroup[0].applicationids,
             };
           }
-          if (flaggedGroup.length === 2) {
+          // Most common multiple match is email and primary user name/dob
+          // but it can be more than 2 if also some or all of the household members match
+          // in rare cases it can also be primary applicant and household member match but email does not
+          if (flaggedGroup.length > 1) {
+            const emailFlagged = flaggedGroup.find(
+              (group) => group.type === RuleEnum.email,
+            );
+            // all name flags need to be sorted alphabetically so they are the same every time
+            const nameFlagged = flaggedGroup
+              .filter((group) => group.type === RuleEnum.nameAndDOB)
+              ?.sort((flagA, flagB) => flagB.key.localeCompare(flagA.key));
+            if (!emailFlagged) {
+              // In the rare case that more than one name/dob matches but not email it should still be nameAndDOB
+              return {
+                ruleKey: `${nameFlagged.map((flag) => flag.key).join('-')}`,
+                rule: RuleEnum.nameAndDOB,
+                applications: flaggedGroup[0].applicationids,
+              };
+            }
             return {
-              ruleKey: `${
-                flaggedGroup.find((value) => value.type === 'email')?.key
-              }-${
-                flaggedGroup.find((value) => value.type === 'nameAndDOB')?.key
-              }`,
+              ruleKey: `${emailFlagged.key}-${nameFlagged
+                .map((flag) => flag.key)
+                .join('-')}`,
               rule: RuleEnum.emailAndNameAndDOB,
               applications: flaggedGroup[0].applicationids,
             };
@@ -640,6 +656,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
               where: { id: foundApplicationFlaggedSet.id },
             });
           }
+          // If generated is the same as in the db than do nothing, otherwise create a new one
         } else {
           await this.prisma.applicationFlaggedSet.create({
             data: {

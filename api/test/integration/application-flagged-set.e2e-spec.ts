@@ -23,7 +23,6 @@ import { AfsResolve } from '../../src/dtos/application-flagged-sets/afs-resolve.
 import { IdDTO } from '../../src/dtos/shared/id.dto';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { reservedCommunityTypeFactoryAll } from '../../prisma/seed-helpers/reserved-community-type-factory';
-import dayjs from 'dayjs';
 
 describe('Application flagged set Controller Tests', () => {
   let app: INestApplication;
@@ -2698,6 +2697,48 @@ describe('Application flagged set Controller Tests', () => {
 
       expect(afs.length).toEqual(1);
       expect(afs[0].rule).toEqual(RuleEnum.nameAndDOB);
+    });
+
+    it('should create nameAndDob flagged set when more than one name matches', async () => {
+      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
+      const listing = await createListing();
+
+      await createComplexApplication('1', 1, listing, undefined, {
+        firstName: `${listing}-householdfirst`,
+        lastName: `${listing}-householdlast`,
+        birthDay: 2,
+        birthMonth: 2,
+        birthYear: 2,
+        sameAddress: YesNoEnum.yes,
+        workInRegion: YesNoEnum.yes,
+      });
+      await createComplexApplication('2', 1, listing, undefined, {
+        firstName: `${listing}-householdfirst`,
+        lastName: `${listing}-householdlast`,
+        birthDay: 2,
+        birthMonth: 2,
+        birthYear: 2,
+        sameAddress: YesNoEnum.yes,
+        workInRegion: YesNoEnum.yes,
+      });
+
+      await request(app.getHttpServer())
+        .put(`/applicationFlaggedSets/process_duplicates`)
+        .set('Cookie', adminAccessToken)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(200);
+
+      const afs = await prisma.applicationFlaggedSet.findMany({
+        where: {
+          listingId: listing,
+        },
+      });
+
+      expect(afs.length).toEqual(1);
+      expect(afs[0].rule).toEqual(RuleEnum.nameAndDOB);
+      expect(afs[0].ruleKey).toEqual(
+        `${listing}-householdfirst-${listing}-householdlast-2-2-2-${listing}-firstname1-${listing}-lastname1-1-1-1`,
+      );
     });
 
     it('should create nameAndDob flagged set on household member matches case insensitive', async () => {
