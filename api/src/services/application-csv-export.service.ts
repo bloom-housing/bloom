@@ -288,8 +288,12 @@ export class ApplicationCsvExporterService {
 
                       return acc[curr];
                     }, app);
-                    value =
-                      value === undefined ? '' : value === null ? '' : value;
+                    if (value === undefined) {
+                      value = '';
+                    } else if (value === null) {
+                      value = '';
+                    }
+
                     if (header.format) {
                       value = header.format(value);
                     }
