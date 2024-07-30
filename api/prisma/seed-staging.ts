@@ -38,6 +38,7 @@ import {
 } from './seed-helpers/map-layer-factory';
 import { ValidationMethod } from '../src/enums/multiselect-questions/validation-method-enum';
 import { randomNoun } from './seed-helpers/word-generator';
+import { householdMemberFactorySingle } from './seed-helpers/household-member-factory';
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
@@ -509,19 +510,6 @@ export const stagingSeed = async (
       multiselectQuestions: [cityEmployeeQuestion],
       // has applications that are the same email and also same name/dob
       applications: [
-        await applicationFactory({
-          applicant: {
-            emailAddress: 'user1@example.com',
-            firstName: 'first',
-            lastName: 'last',
-            birthDay: 1,
-            birthMonth: 1,
-            birthYear: 1970,
-          },
-        }),
-        await applicationFactory({
-          applicant: { emailAddress: 'user1@example.com' },
-        }),
         await applicationFactory(),
         await applicationFactory(),
         await applicationFactory({
@@ -538,6 +526,19 @@ export const stagingSeed = async (
           },
         }),
         await applicationFactory({
+          applicant: { emailAddress: 'user1@example.com' },
+        }),
+        await applicationFactory({
+          applicant: {
+            emailAddress: 'user1@example.com',
+            firstName: 'first',
+            lastName: 'last',
+            birthDay: 1,
+            birthMonth: 1,
+            birthYear: 1970,
+          },
+        }),
+        await applicationFactory({
           applicant: { emailAddress: 'user2@example.com' },
         }),
         await applicationFactory({
@@ -552,6 +553,22 @@ export const stagingSeed = async (
             birthMonth: 1,
             birthYear: 1970,
           },
+          householdMember: [
+            householdMemberFactorySingle(1, {
+              firstName: 'householdFirst1',
+              lastName: 'householdLast1',
+              birthDay: 5,
+              birthMonth: 5,
+              birthYear: 1950,
+            }),
+            householdMemberFactorySingle(2, {
+              firstName: 'householdFirst2',
+              lastName: 'householdLast2',
+              birthDay: 8,
+              birthMonth: 8,
+              birthYear: 1980,
+            }),
+          ],
         }),
         await applicationFactory({
           applicant: {
@@ -562,6 +579,43 @@ export const stagingSeed = async (
             birthMonth: 1,
             birthYear: 1970,
           },
+          householdMember: [
+            householdMemberFactorySingle(1, {
+              firstName: 'householdFirst1',
+              lastName: 'householdLast1',
+              birthDay: 5,
+              birthMonth: 5,
+              birthYear: 1950,
+            }),
+            householdMemberFactorySingle(2, {
+              firstName: 'householdFirst2',
+              lastName: 'householdLast2',
+              birthDay: 8,
+              birthMonth: 8,
+              birthYear: 1980,
+            }),
+          ],
+        }),
+        await applicationFactory({
+          applicant: {
+            emailAddress: 'user4@example.com',
+            firstName: 'first4',
+            lastName: 'last4',
+            birthDay: 2,
+            birthMonth: 2,
+            birthYear: 2002,
+          },
+        }),
+        await applicationFactory({
+          householdMember: [
+            {
+              firstName: 'first4',
+              lastName: 'last4',
+              birthDay: 2,
+              birthMonth: 2,
+              birthYear: 2002,
+            },
+          ],
         }),
       ],
     },
