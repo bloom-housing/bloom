@@ -1002,7 +1002,8 @@ export class ApplicationCsvExporterService
                         // curr should equal the preference id we're pulling from
                         if (!preferences) {
                           preferences =
-                            app.preferences as unknown as ApplicationMultiselectQuestion[];
+                            (app.preferences as unknown as ApplicationMultiselectQuestion[]) ||
+                            [];
                         }
                         parsePreference = false;
                         // there aren't typically many preferences, but if there, then a object map should be created and used
@@ -1015,12 +1016,13 @@ export class ApplicationCsvExporterService
                         // curr should equal the preference id we're pulling from
                         if (!programs) {
                           programs =
-                            app.programs as unknown as ApplicationMultiselectQuestion[];
+                            (app.programs as unknown as ApplicationMultiselectQuestion[]) ||
+                            [];
                         }
                         parsePreference = false;
                         // there aren't typically many programs, but if there, then a object map should be created and used
                         const program = programs.find(
-                          (preference) => preference.key === curr,
+                          (program) => program.key === curr,
                         );
                         multiselectQuestionValue = true;
                         return program;
