@@ -1,0 +1,39 @@
+.listings-vars {
+  // This is a not-ideal way to do "fill window minus header and filter modal" however
+  // I can't find another way to do this.
+  // TODO: update header + filter modal to a not-magic number
+  --listings-component-height: calc(100vh - 183px);
+  --listings-component-half-height: calc(var(--listings-component-height) / 2);
+  --listings-list-width: 600px;
+  --swipe-area-height: var(--bloom-s14);
+  --background-color: var(--bloom-color-white);
+  --line-color: var(--bloom-color-gray-650);
+}
+
+.search-filter-bar {
+  width: var(--listings-list-width);
+  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  right: 0px;
+  z-index: 1;
+  background: white;
+  padding: var(--seeds-s4);
+  gap: var(--seeds-s4);
+
+  @media (max-width: $screen-md) {
+    position: static;
+    width: 100%;
+    font-size: var(--seeds-font-size-sm);
+  }
+}
+
+.search-total-results {
+  font-size: var(--seeds-font-size-xl);
+
+  @media (max-width: $screen-md) {
+    font-size: var(--seeds-font-size-sm);
+  }
+}
