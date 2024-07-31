@@ -36,7 +36,8 @@ export const ListingsSearchMetadata = ({
           setModalOpen(true)
         }}
       >
-        <strong>{t("search.filters")}</strong>{filterCount}
+        <strong>{t("search.filters")}</strong>
+        {filterCount}
       </Button>
     </div>
   )
