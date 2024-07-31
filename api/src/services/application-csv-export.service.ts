@@ -22,6 +22,9 @@ import {
   CsvHeader,
 } from '../types/CsvExportInterface';
 import { mapTo } from '../utilities/mapTo';
+import { Application } from '../dtos/applications/application.dto';
+import { OrderByEnum } from '../enums/shared/order-by-enum';
+import { ApplicationLotteryPosition } from '../dtos/applications/application-lottery-position.dto';
 
 view.csv = {
   ...view.details,
@@ -129,137 +132,12 @@ export class ApplicationCsvExporterService
       queryParams.includeDemographics,
     );
 
-    return new Promise(async (resolve, reject) => {
-      // create stream
-      const writableStream = fs.createWriteStream(`${filename}`);
-      writableStream
-        .on('error', (err) => {
-          console.log('csv writestream error');
-          console.log(err);
-          reject(err);
-        })
-        .on('close', () => {
-          resolve();
-        })
-        .on('open', async () => {
-          writableStream.write(
-            csvHeaders
-              .map((header) => `"${header.label.replace(/"/g, `""`)}"`)
-              .join(',') + '\n',
-          );
-
-          const promiseArray: Promise<string>[] = [];
-          for (let i = 0; i < applications.length; i += NUMBER_TO_PAGINATE_BY) {
-            promiseArray.push(
-              new Promise(async (resolve) => {
-                // grab applications NUMBER_TO_PAGINATE_BY at a time
-                const paginatedApplications =
-                  await this.prisma.applications.findMany({
-                    include: {
-                      ...view.csv,
-                      demographics: queryParams.includeDemographics
-                        ? {
-                            select: {
-                              id: true,
-                              createdAt: true,
-                              updatedAt: true,
-                              ethnicity: true,
-                              gender: true,
-                              sexualOrientation: true,
-                              howDidYouHear: true,
-                              race: true,
-                            },
-                          }
-                        : false,
-                    },
-                    where: {
-                      listingId: queryParams.listingId,
-                      deletedAt: null,
-                    },
-                    skip: i,
-                    take: NUMBER_TO_PAGINATE_BY,
-                  });
-
-                let row = '';
-                paginatedApplications.forEach((app) => {
-                  let preferences: ApplicationMultiselectQuestion[];
-                  csvHeaders.forEach((header, index) => {
-                    let multiselectQuestionValue = false;
-                    let parsePreference = false;
-                    let value = header.path.split('.').reduce((acc, curr) => {
-                      // return preference/program as value for the format function to accept
-                      if (multiselectQuestionValue) {
-                        return acc;
-                      }
-
-                      if (parsePreference) {
-                        // curr should equal the preference id we're pulling from
-                        if (!preferences) {
-                          preferences =
-                            app.preferences as unknown as ApplicationMultiselectQuestion[];
-                        }
-                        parsePreference = false;
-                        // there aren't typically many preferences, but if there, then a object map should be created and used
-                        const preference = preferences.find(
-                          (preference) =>
-                            preference.multiselectQuestionId === curr,
-                        );
-                        multiselectQuestionValue = true;
-                        return preference;
-                      }
-
-                      // sets parsePreference to true, for the next iteration
-                      if (curr === 'preferences') {
-                        parsePreference = true;
-                      }
-
-                      if (acc === null || acc === undefined) {
-                        return '';
-                      }
-
-                      // handles working with arrays, e.g. householdMember.0.firstName
-                      if (!isNaN(Number(curr))) {
-                        const index = Number(curr);
-                        return acc[index];
-                      }
-
-                      return acc[curr];
-                    }, app);
-                    value =
-                      value === undefined ? '' : value === null ? '' : value;
-                    if (header.format) {
-                      value = header.format(value);
-                    }
-
-                    row += value
-                      ? `"${value.toString().replace(/"/g, `""`)}"`
-                      : '';
-                    if (index < csvHeaders.length - 1) {
-                      row += ',';
-                    }
-                  });
-                  row += '\n';
-                });
-                resolve(row);
-              }),
-            );
-          }
-          const resolvedArray = await Promise.all(promiseArray);
-          // now loop over batched row data and write them to file
-          resolvedArray.forEach((row) => {
-            try {
-              writableStream.write(row);
-            } catch (e) {
-              console.log('writeStream write error = ', e);
-              writableStream.once('drain', () => {
-                console.log('drain buffer');
-                writableStream.write(row + '\n');
-              });
-            }
-          });
-          writableStream.end();
-        });
-    });
+    return this.csvExportHelper(
+      filename,
+      mapTo(Application, applications),
+      csvHeaders,
+      queryParams,
+    );
   }
 
   getHouseholdCsvHeaders(maxHouseholdMembers: number): CsvHeader[] {
@@ -333,11 +211,98 @@ export class ApplicationCsvExporterService
     return headers;
   }
 
+  constructMultiselectQuestionHeaders(
+    applicationSection: string,
+    labelString: string,
+    multiSelectQuestions: MultiselectQuestion[],
+  ): CsvHeader[] {
+    const headers: CsvHeader[] = [];
+
+    multiSelectQuestions
+      .filter((question) => question.applicationSection === applicationSection)
+      .forEach((question) => {
+        headers.push({
+          path: `${applicationSection}.${question.text}.claimed`,
+          label: `${labelString} ${question.text}`,
+          format: (val: any): string => {
+            const claimedString: string[] = [];
+            val?.options?.forEach((option) => {
+              if (option.checked) {
+                claimedString.push(option.key);
+              }
+            });
+            return claimedString.join(', ');
+          },
+        });
+        /**
+         * there are other input types for extra data besides address
+         * that are not used on the old backend, but could be added here
+         */
+        question.options
+          ?.filter((option) => option.collectAddress)
+          .forEach((option) => {
+            headers.push({
+              path: `${applicationSection}.${question.text}.address`,
+              label: `${labelString} ${question.text} - ${option.text} - Address`,
+              format: (val: ApplicationMultiselectQuestion): string => {
+                return this.multiselectQuestionFormat(
+                  val,
+                  option.text,
+                  'address',
+                );
+              },
+            });
+            if (option.validationMethod) {
+              headers.push({
+                path: `${applicationSection}.${question.text}.address`,
+                label: `${labelString} ${question.text} - ${option.text} - Passed Address Check`,
+                format: (val: ApplicationMultiselectQuestion): string => {
+                  return this.multiselectQuestionFormat(
+                    val,
+                    option.text,
+                    'geocodingVerified',
+                  );
+                },
+              });
+            }
+            if (option.collectName) {
+              headers.push({
+                path: `${applicationSection}.${question.text}.address`,
+                label: `${labelString} ${question.text} - ${option.text} - Name of Address Holder`,
+                format: (val: ApplicationMultiselectQuestion): string => {
+                  return this.multiselectQuestionFormat(
+                    val,
+                    option.text,
+                    'addressHolderName',
+                  );
+                },
+              });
+            }
+            if (option.collectRelationship) {
+              headers.push({
+                path: `${applicationSection}.${question.text}.address`,
+                label: `${labelString} ${question.text} - ${option.text} - Relationship to Address Holder`,
+                format: (val: ApplicationMultiselectQuestion): string => {
+                  return this.multiselectQuestionFormat(
+                    val,
+                    option.text,
+                    'addressHolderRelationship',
+                  );
+                },
+              });
+            }
+          });
+      });
+
+    return headers;
+  }
+
   async getCsvHeaders(
     maxHouseholdMembers: number,
     multiSelectQuestions: MultiselectQuestion[],
     timeZone: string,
     includeDemographics = false,
+    forLottery = false,
   ): Promise<CsvHeader[]> {
     const headers: CsvHeader[] = [
       {
@@ -564,73 +529,20 @@ export class ApplicationCsvExporterService
     ];
 
     // add preferences to csv headers
-    multiSelectQuestions
-      .filter((question) => question.applicationSection === 'preferences')
-      .forEach((question) => {
-        headers.push({
-          path: `preferences.${question.id}.claimed`,
-          label: `Preference ${question.text}`,
-          format: (val: boolean): string => (val ? 'claimed' : ''),
-        });
-        /**
-         * there are other input types for extra data besides address
-         * that are not used on the old backend, but could be added here
-         */
-        question.options
-          ?.filter((option) => option.collectAddress)
-          .forEach((option) => {
-            headers.push({
-              path: `preferences.${question.id}.address`,
-              label: `Preference ${question.text} - ${option.text} - Address`,
-              format: (val: ApplicationMultiselectQuestion): string => {
-                return this.multiselectQuestionFormat(
-                  val,
-                  option.text,
-                  'address',
-                );
-              },
-            });
-            if (option.validationMethod) {
-              headers.push({
-                path: `preferences.${question.id}.address`,
-                label: `Preference ${question.text} - ${option.text} - Passed Address Check`,
-                format: (val: ApplicationMultiselectQuestion): string => {
-                  return this.multiselectQuestionFormat(
-                    val,
-                    option.text,
-                    'geocodingVerified',
-                  );
-                },
-              });
-            }
-            if (option.collectName) {
-              headers.push({
-                path: `preferences.${question.id}.address`,
-                label: `Preference ${question.text} - ${option.text} - Name of Address Holder`,
-                format: (val: ApplicationMultiselectQuestion): string => {
-                  return this.multiselectQuestionFormat(
-                    val,
-                    option.text,
-                    'addressHolderName',
-                  );
-                },
-              });
-            }
-            if (option.collectRelationship) {
-              headers.push({
-                path: `preferences.${question.id}.address`,
-                label: `Preference ${question.text} - ${option.text} - Relationship to Address Holder`,
-                format: (val: ApplicationMultiselectQuestion): string => {
-                  return this.multiselectQuestionFormat(
-                    val,
-                    option.text,
-                    'addressHolderRelationship',
-                  );
-                },
-              });
-            }
-          });
-      });
+    const preferenceHeaders = this.constructMultiselectQuestionHeaders(
+      'preferences',
+      'Preference',
+      multiSelectQuestions,
+    );
+    headers.push(...preferenceHeaders);
+
+    // add programs to csv headers
+    const programHeaders = this.constructMultiselectQuestionHeaders(
+      'programs',
+      'Program',
+      multiSelectQuestions,
+    );
+    headers.push(...programHeaders);
 
     headers.push({
       path: 'householdSize',
@@ -677,6 +589,18 @@ export class ApplicationCsvExporterService
       );
     }
 
+    // if its for the lottery insert the lottery position
+    if (forLottery) {
+      headers.unshift({
+        path: 'applicationLotteryPositions',
+        label: 'Raw Lottery Rank',
+        format: (val: ApplicationLotteryPosition[]): number => {
+          if (val?.length) {
+            return val[0].ordinal;
+          }
+        },
+      });
+    }
     return headers;
   }
 
@@ -711,25 +635,6 @@ export class ApplicationCsvExporterService
     }
     return extraData.value as string;
   }
-
-  // multiselectQuestionGeocodingVerifiedFormat(
-  //   question: ApplicationMultiselectQuestion,
-  //   optionText: string,
-  // ): string {
-  //   if (!question) return '';
-  //   const selectedOption = question.options.find(
-  //     (option) => option.key === optionText,
-  //   );
-  //   const extraData = selectedOption.extraData.find(
-  //     (data) => data.key === 'geocodingVerified',
-  //   );
-  //   if (extraData) {
-  //     return extraData.value === 'unknown'
-  //       ? 'Needs Manual Verification'
-  //       : extraData.value.toString();
-  //   }
-  //   return '';
-  // }
 
   convertDemographicRaceToReadable(type: string): string {
     const [rootKey, customValue = ''] = type.split(':');
@@ -782,5 +687,294 @@ export class ApplicationCsvExporterService
         jurisdictionId,
       },
     );
+  }
+
+  /**
+   *
+   * @param queryParams
+   * @param req
+   * @returns generates the lottery export file via helper function and returns the streamable file
+   */
+  async lotteryExport<QueryParams extends ApplicationCsvQueryParams>(
+    req: ExpressRequest,
+    res: Response,
+    queryParams: QueryParams,
+  ): Promise<StreamableFile> {
+    const user = mapTo(User, req['user']);
+    await this.authorizeCSVExport(user, queryParams.listingId);
+
+    const filename = join(
+      process.cwd(),
+      `src/temp/lottery-listing-${queryParams.listingId}-applications-${
+        user.id
+      }-${new Date().getTime()}.csv`,
+    );
+
+    await this.createLotterySheet(filename, {
+      ...queryParams,
+      includeDemographics: true,
+    });
+    const file = createReadStream(filename);
+    return new StreamableFile(file);
+  }
+
+  /**
+   *
+   * @param filename
+   * @param queryParams
+   * @returns generates the lottery sheet
+   */
+  async createLotterySheet<QueryParams extends ApplicationCsvQueryParams>(
+    filename: string,
+    queryParams: QueryParams,
+  ): Promise<void> {
+    let applications = await this.prisma.applications.findMany({
+      select: {
+        id: true,
+        preferences: true,
+        householdMember: {
+          select: {
+            id: true,
+          },
+        },
+        applicationLotteryPositions: {
+          select: {
+            ordinal: true,
+            multiselectQuestionId: true,
+          },
+          where: {
+            multiselectQuestionId: null,
+          },
+          orderBy: {
+            ordinal: OrderByEnum.DESC,
+          },
+        },
+      },
+      where: {
+        listingId: queryParams.listingId,
+        deletedAt: null,
+        markedAsDuplicate: false,
+      },
+    });
+
+    // get all multiselect questions for a listing to build csv headers
+    const multiSelectQuestions =
+      await this.multiselectQuestionService.findByListingId(
+        queryParams.listingId,
+      );
+
+    // get maxHouseholdMembers associated to the selected applications
+    let maxHouseholdMembers = 0;
+    applications.forEach((app) => {
+      if (app.householdMember?.length > maxHouseholdMembers) {
+        maxHouseholdMembers = app.householdMember.length;
+      }
+    });
+
+    const csvHeaders = await this.getCsvHeaders(
+      maxHouseholdMembers,
+      multiSelectQuestions,
+      queryParams.timeZone,
+      queryParams.includeDemographics,
+      true,
+    );
+
+    applications = applications.sort(
+      (a, b) =>
+        a.applicationLotteryPositions[0].ordinal -
+        b.applicationLotteryPositions[0].ordinal,
+    );
+    return this.csvExportHelper(
+      filename,
+      mapTo(Application, applications),
+      csvHeaders,
+      queryParams,
+      true,
+    );
+  }
+
+  /**
+   *
+   * @param filename the name of the file to write to
+   * @param applications the full list of partial applications
+   * @param csvHeaders the headers and renderers of the csv
+   * @param queryParams the incoming param args
+   * @param forLottery whether we are getting the lottery results or not
+   * @returns void but writes the output to a file
+   */
+  csvExportHelper(
+    filename: string,
+    applications: Application[],
+    csvHeaders: CsvHeader[],
+    queryParams: ApplicationCsvQueryParams,
+    forLottery = false,
+  ): Promise<void> {
+    return new Promise(async (resolve, reject) => {
+      // create stream
+      const writableStream = fs.createWriteStream(`${filename}`);
+      writableStream
+        .on('error', (err) => {
+          console.log('csv writestream error');
+          console.log(err);
+          reject(err);
+        })
+        .on('close', () => {
+          resolve();
+        })
+        .on('open', async () => {
+          writableStream.write(
+            csvHeaders
+              .map((header) => `"${header.label.replace(/"/g, `""`)}"`)
+              .join(',') + '\n',
+          );
+
+          const promiseArray: Promise<string>[] = [];
+          for (let i = 0; i < applications.length; i += NUMBER_TO_PAGINATE_BY) {
+            promiseArray.push(
+              new Promise(async (resolve) => {
+                // grab applications NUMBER_TO_PAGINATE_BY at a time
+                let paginatedApplications =
+                  await this.prisma.applications.findMany({
+                    include: {
+                      ...view.csv,
+                      demographics: queryParams.includeDemographics
+                        ? {
+                            select: {
+                              id: true,
+                              createdAt: true,
+                              updatedAt: true,
+                              ethnicity: true,
+                              gender: true,
+                              sexualOrientation: true,
+                              howDidYouHear: true,
+                              race: true,
+                            },
+                          }
+                        : false,
+                      applicationLotteryPositions: forLottery
+                        ? {
+                            select: {
+                              ordinal: true,
+                            },
+                            where: {
+                              multiselectQuestionId: null,
+                            },
+                          }
+                        : false,
+                    },
+                    where: {
+                      listingId: queryParams.listingId,
+                      deletedAt: null,
+                      markedAsDuplicate: forLottery ? false : undefined,
+                      id: {
+                        in: applications
+                          .slice(i, i + NUMBER_TO_PAGINATE_BY)
+                          .map((app) => app.id),
+                      },
+                    },
+                  });
+                if (forLottery) {
+                  paginatedApplications = paginatedApplications.sort(
+                    (a, b) =>
+                      a.applicationLotteryPositions[0].ordinal -
+                      b.applicationLotteryPositions[0].ordinal,
+                  );
+                }
+                let row = '';
+                paginatedApplications.forEach((app) => {
+                  let preferences: ApplicationMultiselectQuestion[];
+                  let programs: ApplicationMultiselectQuestion[];
+                  csvHeaders.forEach((header, index) => {
+                    let multiselectQuestionValue = false;
+                    let parsePreference = false;
+                    let parseProgram = false;
+                    let value = header.path.split('.').reduce((acc, curr) => {
+                      // return preference/program as value for the format function to accept
+                      if (multiselectQuestionValue) {
+                        return acc;
+                      }
+
+                      if (parsePreference) {
+                        // curr should equal the preference id we're pulling from
+                        if (!preferences) {
+                          preferences =
+                            app.preferences as unknown as ApplicationMultiselectQuestion[];
+                        }
+                        parsePreference = false;
+                        // there aren't typically many preferences, but if there, then a object map should be created and used
+                        const preference = preferences.find(
+                          (preference) => preference.key === curr,
+                        );
+                        multiselectQuestionValue = true;
+                        return preference;
+                      } else if (parseProgram) {
+                        // curr should equal the preference id we're pulling from
+                        if (!programs) {
+                          programs =
+                            app.programs as unknown as ApplicationMultiselectQuestion[];
+                        }
+                        parsePreference = false;
+                        // there aren't typically many programs, but if there, then a object map should be created and used
+                        const program = programs.find(
+                          (preference) => preference.key === curr,
+                        );
+                        multiselectQuestionValue = true;
+                        return program;
+                      }
+
+                      // sets parsePreference to true, for the next iteration
+                      if (curr === 'preferences') {
+                        parsePreference = true;
+                      } else if (curr === 'programs') {
+                        parseProgram = true;
+                      }
+
+                      if (acc === null || acc === undefined) {
+                        return '';
+                      }
+
+                      // handles working with arrays, e.g. householdMember.0.firstName
+                      if (!isNaN(Number(curr))) {
+                        const index = Number(curr);
+                        return acc[index];
+                      }
+
+                      return acc[curr];
+                    }, app);
+                    value =
+                      value === undefined ? '' : value === null ? '' : value;
+                    if (header.format) {
+                      value = header.format(value);
+                    }
+
+                    row += value
+                      ? `"${value.toString().replace(/"/g, `""`)}"`
+                      : '';
+                    if (index < csvHeaders.length - 1) {
+                      row += ',';
+                    }
+                  });
+                  row += '\n';
+                });
+                resolve(row);
+              }),
+            );
+          }
+          const resolvedArray = await Promise.all(promiseArray);
+          // now loop over batched row data and write them to file
+          resolvedArray.forEach((row) => {
+            try {
+              writableStream.write(row);
+            } catch (e) {
+              console.log('writeStream write error = ', e);
+              writableStream.once('drain', () => {
+                console.log('drain buffer');
+                writableStream.write(row + '\n');
+              });
+            }
+          });
+          writableStream.end();
+        });
+    });
   }
 }
