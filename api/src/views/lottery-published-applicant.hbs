@@ -1,0 +1,64 @@
+{{#> layout_default }}
+    <h1>
+        {{t "lotteryAvailable.header" appOptions}}
+    </h1>
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+        <tr>
+            <td align="left">
+            <p>
+                {{t "lotteryAvailable.resultsAvailable" appOptions}}
+            </p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+        <tr>
+            <td align="center">
+            <a
+                class="btn btn-primary"
+                href="{{ appUrl }}"
+                target="_blank"
+                style="color:white"
+                >
+                  {{t "lotteryAvailable.signIn"}}
+                </a
+            >
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+        <tr>
+            <td align="left">
+            <p>
+                <strong>{{t "lotteryAvailable.whatHappensHeader"}}</strong>
+                <br/><br/>
+                {{t "lotteryAvailable.whatHappensContent" }}
+                <br/><br/>
+                {{t "lotteryAvailable.otherOpportunities1" appOptions}} <a href="{{ notificationsUrl }}" target="_blank">{{t "lotteryAvailable.otherOpportunities2"}}</a>.
+                <br/><br/>
+                 {{t "lotteryAvailable.otherOpportunities3"}} <a href="{{ helpCenterUrl }}"  target="_blank">{{t "lotteryAvailable.otherOpportunities4"}}</a>.
+                <br/><br/>
+            </p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+        <tr>
+            <td align="left">
+            <p>
+                {{t "header.logoTitle"}}
+            </p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+{{/layout_default }}

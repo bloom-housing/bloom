@@ -1,4 +1,5 @@
 import {
+  LanguagesEnum,
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
   PrismaClient,
@@ -79,6 +80,9 @@ export const devSeeding = async (
   // add jurisdiction specific translations and default ones
   await prismaClient.translations.create({
     data: translationFactory(jurisdiction.id, jurisdiction.name),
+  });
+  await prismaClient.translations.create({
+    data: translationFactory(undefined, undefined, LanguagesEnum.es),
   });
   await prismaClient.translations.create({
     data: translationFactory(),
