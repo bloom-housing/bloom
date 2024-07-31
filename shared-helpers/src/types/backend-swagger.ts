@@ -521,6 +521,22 @@ export class ApplicationFlaggedSetsService {
     })
   }
   /**
+   * Trigger the duplicate check process
+   */
+  processDuplicates(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/process_duplicates"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Reset flagged set confirmation alert
    */
   resetConfirmationAlert(
@@ -5972,6 +5988,7 @@ export enum AfsView {
 export enum RuleEnum {
   "nameAndDOB" = "nameAndDOB",
   "email" = "email",
+  "emailAndNameAndDOB" = "emailAndNameAndDOB",
 }
 
 export enum FlaggedSetStatusEnum {
