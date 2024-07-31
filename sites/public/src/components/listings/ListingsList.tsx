@@ -4,6 +4,7 @@ import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger
 import { LinkButton, ZeroListingsItem } from "@bloom-housing/doorway-ui-components"
 import { Pagination } from "./Pagination"
 import { LoadingOverlay, t, InfoCard } from "@bloom-housing/ui-components"
+import styles from "./ListingsCombined.module.scss"
 
 type ListingsListProps = {
   listings: Listing[]
@@ -77,7 +78,7 @@ const ListingsList = (props: ListingsListProps) => {
       <></>
     )
   return (
-    <div>
+    <div className={styles["listings-list-wrapper"]}>
       <LoadingOverlay isLoading={props.loading}>{listingsDiv}</LoadingOverlay>
       {pagination}
       {infoCards}

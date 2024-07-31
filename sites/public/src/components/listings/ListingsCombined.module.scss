@@ -141,3 +141,17 @@
     }
   }
 }
+
+.listings-list-wrapper {
+  --padding: 2.5rem;
+
+  /* These attribute selectors are strange, but that's because we want to short-circuit the
+     CSS module renaming and use these exact class names */
+  [class*="loading-overlay"]::before { 
+    background-color: white;
+  }
+
+  [class*="loading-overlay__spinner"] {
+    color: var(--seeds-color-gray-400) !important;
+  }
+}

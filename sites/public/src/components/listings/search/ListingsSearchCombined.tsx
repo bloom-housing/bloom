@@ -101,6 +101,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
   return (
     <div className={styles["listings-vars"]}>
       <ListingsSearchMetadata
+        loading={searchResults.loading}
         setModalOpen={setModalOpen}
         filterCount={filterCount}
         searchResults={searchResults}

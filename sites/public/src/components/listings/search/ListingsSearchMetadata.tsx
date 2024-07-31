@@ -4,6 +4,7 @@ import { Button } from "@bloom-housing/ui-seeds"
 import styles from "./ListingsSearch.module.scss"
 
 export interface ListingsSearchMetadataProps {
+  loading: boolean
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>
   filterCount: number
   searchResults: {
@@ -16,6 +17,7 @@ export interface ListingsSearchMetadataProps {
 }
 
 export const ListingsSearchMetadata = ({
+  loading,
   setModalOpen,
   filterCount,
   searchResults,
@@ -23,11 +25,13 @@ export const ListingsSearchMetadata = ({
   return (
     <div className={styles["search-filter-bar"]}>
       <span className={styles["search-total-results"]}>
-        <strong>{t("search.totalResults")}</strong> {searchResults.totalItems}
+        <strong>{t("search.totalResults")}</strong> {!loading && searchResults.totalItems}
       </span>
-      <span>
-        ({t("t.pageXofY", { current: searchResults.currentPage, total: searchResults.lastPage })})
-      </span>
+      {!loading && (
+        <span>
+          ({t("t.pageXofY", { current: searchResults.currentPage, total: searchResults.lastPage })})
+        </span>
+      )}
       <Button
         variant="primary-outlined"
         size="sm"
