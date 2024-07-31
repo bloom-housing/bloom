@@ -1,0 +1,53 @@
+{{#> layout_default }}
+    <h1>
+        {{t "lotteryReleased.header" appOptions}}
+    </h1>
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+        <tr>
+            <td align="left">
+            <p>
+                {{t "t.hello"}},
+                <br/><br/>
+                {{t "lotteryReleased.adminApprovedStart" appOptions}} <a href="{{ appUrl }}">{{t "t.partnersPortal"}}</a> {{t "lotteryReleased.adminApprovedEnd"}}
+                <br/><br/>
+                  <strong>{{t "requestApproval.accessListing"}}</strong>
+                <br/><br/>
+            </p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+        <tr>
+            <td align="center">
+            <a
+                class="btn btn-primary"
+                href="{{ listingUrl }}"
+                target="_blank"
+                style="color:white"
+                >
+                  {{t "t.viewListing"}}
+                </a
+            >
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+        <tr>
+            <td align="left">
+            <p>
+                {{t "footer.thankYou"}},
+                <br/><br/>
+                {{t "header.logoTitle"}}
+            </p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+{{/layout_default }}

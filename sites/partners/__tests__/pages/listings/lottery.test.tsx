@@ -586,7 +586,7 @@ describe("lottery", () => {
       <Lottery listing={updatedListing} />
     )
 
-    const header = await findByText("Partners Portal")
+    const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
 
     fireEvent.click(getByText("Export"))

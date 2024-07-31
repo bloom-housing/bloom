@@ -76,6 +76,8 @@ const testEmailService = {
   forgotPassword: jest.fn(),
   sendMfaCode: jest.fn(),
   applicationConfirmation: jest.fn(),
+  lotteryPublishedAdmin: jest.fn(),
+  lotteryPublishedApplicant: jest.fn(),
 };
 
 describe('Testing Permissioning of endpoints as partner with correct listing', () => {
