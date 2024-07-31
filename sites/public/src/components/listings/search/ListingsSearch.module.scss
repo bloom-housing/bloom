@@ -37,3 +37,15 @@
     font-size: var(--seeds-font-size-sm);
   }
 }
+
+.search-filters-button {
+  --button-font-weight: normal;
+  --button-interior-gap: var(--seeds-s2);
+
+  @media (max-width: $screen-md) {
+    --button-border-width: 0 !important;
+    --button-padding-sm: var(--seeds-s2) !important;
+
+    margin-inline-end: calc(0px - var(--seeds-s2));
+  }
+}

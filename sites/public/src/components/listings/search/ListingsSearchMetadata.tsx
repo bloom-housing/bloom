@@ -31,11 +31,12 @@ export const ListingsSearchMetadata = ({
       <Button
         variant="primary-outlined"
         size="sm"
+        className={styles["search-filters-button"]}
         onClick={() => {
           setModalOpen(true)
         }}
       >
-        {`${t("search.filters")} ${filterCount}`}
+        <strong>{t("search.filters")}</strong>{filterCount}
       </Button>
     </div>
   )
