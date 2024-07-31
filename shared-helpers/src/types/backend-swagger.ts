@@ -334,7 +334,7 @@ export class ListingsService {
    */
   process(options: IRequestOptions = {}): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/listings/process"
+      let url = basePath + "/listings/closeListings"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
@@ -526,6 +526,22 @@ export class ApplicationFlaggedSetsService {
   process(options: IRequestOptions = {}): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/applicationFlaggedSets/process"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Trigger the duplicate check process
+   */
+  processDuplicates(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/process_duplicates"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
@@ -5572,6 +5588,7 @@ export enum AfsView {
 export enum RuleEnum {
   "nameAndDOB" = "nameAndDOB",
   "email" = "email",
+  "emailAndNameAndDOB" = "emailAndNameAndDOB",
 }
 
 export enum FlaggedSetStatusEnum {

@@ -108,7 +108,7 @@ export class ApplicationFlaggedSetController {
   @Put('process_duplicates')
   @ApiOperation({
     summary: 'Trigger the duplicate check process',
-    operationId: 'process',
+    operationId: 'processDuplicates',
   })
   @ApiOkResponse({ type: SuccessDTO })
   async processDuplicates(): Promise<SuccessDTO> {
