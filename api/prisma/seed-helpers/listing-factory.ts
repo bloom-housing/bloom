@@ -1,11 +1,12 @@
 import {
-  Prisma,
   AmiChart,
-  MultiselectQuestions,
-  PrismaClient,
-  ListingsStatusEnum,
   ApplicationMethodsTypeEnum,
+  ListingsStatusEnum,
   LotteryStatusEnum,
+  MultiselectQuestions,
+  Prisma,
+  PrismaClient,
+  ReviewOrderTypeEnum,
 } from '@prisma/client';
 import { randomInt } from 'crypto';
 import { randomName } from './word-generator';
@@ -43,6 +44,8 @@ export const listingFactory = async (
     digitalApp?: boolean;
     noImage?: boolean;
     lotteryStatus?: LotteryStatusEnum;
+    closedAt?: Date;
+    reviewOrderType?: ReviewOrderTypeEnum;
   },
 ): Promise<Prisma.ListingsCreateInput> => {
   const previousListing = optionalParams?.listing || {};
@@ -144,6 +147,8 @@ export const listingFactory = async (
         }
       : undefined,
     applicationDueDate: optionalParams?.applicationDueDate ?? undefined,
+    closedAt: optionalParams?.closedAt ?? undefined,
+    reviewOrderType: optionalParams?.reviewOrderType ?? undefined,
     developer: randomName(),
     leasingAgentName: randomName(),
     leasingAgentEmail: 'leasing-agent@example.com',
