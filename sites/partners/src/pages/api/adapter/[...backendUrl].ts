@@ -13,7 +13,7 @@ import { logger } from "../../../logger"
 */
 
 // all endpoints that return a zip file
-const zipEndpoints = ["listings/csv"]
+const zipEndpoints = ["listings/csv", "lottery/getLotteryResults"]
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const jar = new CookieJar()
