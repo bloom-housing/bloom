@@ -198,6 +198,8 @@ model Applications {
   submissionType               ApplicationSubmissionTypeEnum @map("submission_type")
   acceptedTerms                Boolean?                      @map("accepted_terms")
   submissionDate               DateTime?                     @map("submission_date") @db.Timestamptz(6)
+  receivedBy                   String?                       @map("received_by")
+  receivedAt                   DateTime?                     @map("received_at") @db.Timestamptz(6)
   // if this field is true then the application is a confirmed duplicate
   // meaning that the record in the application flagged set table has a status of duplicate
   markedAsDuplicate            Boolean                       @default(false) @map("marked_as_duplicate")

@@ -4366,6 +4366,12 @@ export interface Application {
   submissionDate?: Date
 
   /**  */
+  receivedBy?: string
+
+  /**  */
+  receivedAt?: Date
+
+  /**  */
   markedAsDuplicate: boolean
 
   /**  */
@@ -5114,6 +5120,12 @@ export interface ApplicationCreate {
   submissionDate?: Date
 
   /**  */
+  receivedBy?: string
+
+  /**  */
+  receivedAt?: Date
+
+  /**  */
   reviewStatus?: ApplicationReviewStatusEnum
 
   /**  */
@@ -5207,6 +5219,12 @@ export interface ApplicationUpdate {
 
   /**  */
   submissionDate?: Date
+
+  /**  */
+  receivedBy?: string
+
+  /**  */
+  receivedAt?: Date
 
   /**  */
   reviewStatus?: ApplicationReviewStatusEnum

@@ -332,6 +332,20 @@ export class ApplicationCsvExporterService
           ),
       },
       {
+        path: 'receivedAt',
+        label: 'Application Received At',
+        format: (val: string): string =>
+          formatLocalDate(
+            val,
+            this.dateFormat,
+            timeZone ?? process.env.TIME_ZONE,
+          ),
+      },
+      {
+        path: 'receivedBy',
+        label: 'Application Received By',
+      },
+      {
         path: 'applicant.firstName',
         label: 'Primary Applicant First Name',
       },

@@ -1,5 +1,12 @@
 import React, { useEffect } from "react"
-import { t, Select, TimeField, DateField, DateFieldValues } from "@bloom-housing/ui-components"
+import {
+  t,
+  Field,
+  Select,
+  TimeField,
+  DateField,
+  DateFieldValues,
+} from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
 import { LanguagesEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useFormContext } from "react-hook-form"
@@ -19,6 +26,14 @@ const FormApplicationData = () => {
   const isDateRequired =
     dateSubmittedValue?.day || dateSubmittedValue?.month || dateSubmittedValue?.year
 
+  const dateReceivedValue: DateFieldValues = watch("dateReceived")
+  const dateReceivedError = !!errors?.dateReceived
+  const isDateReceivedFilled =
+    dateReceivedValue?.day && dateReceivedValue?.month && dateReceivedValue?.year
+
+  const isDateReceivedRequired =
+    dateReceivedValue?.day && dateReceivedValue?.month && dateReceivedValue?.year
+
   useEffect(() => {
     if (dateSubmittedError || !isDateRequired) {
       setValue("timeSubmitted.hours", null)
@@ -26,6 +41,14 @@ const FormApplicationData = () => {
       setValue("timeSubmitted.seconds", null)
     }
   }, [dateSubmittedError, isDateRequired, setValue])
+
+  useEffect(() => {
+    if (dateReceivedError || !isDateReceivedRequired) {
+      setValue("timeReceived.hours", null)
+      setValue("timeReceived.minutes", null)
+      setValue("timeReceived.seconds", null)
+    }
+  }, [dateReceivedError, isDateReceivedRequired, setValue])
 
   return (
     <SectionWithGrid heading={t("application.details.applicationData")}>
@@ -67,6 +90,46 @@ const FormApplicationData = () => {
             controlClassName="control"
             options={["", ...Object.values(LanguagesEnum)]}
             keyPrefix="languages"
+          />
+        </Grid.Cell>
+      </Grid.Row>
+
+      <Grid.Row>
+        <Grid.Cell>
+          <DateField
+            id="dateReceived"
+            name="dateReceived"
+            register={register}
+            error={errors?.dateReceived}
+            watch={watch}
+            label={t("application.add.dateReceivedAt")}
+            errorMessage={t("errors.dateError")}
+            required={!!isDateReceivedRequired}
+            labelClass={"text__caps-spaced"}
+          />
+        </Grid.Cell>
+
+        <Grid.Cell>
+          <TimeField
+            id="timeReceived"
+            name="timeReceived"
+            label={t("application.add.timeReceivedAt")}
+            register={register}
+            watch={watch}
+            error={!!errors?.timeReceived}
+            disabled={!isDateReceivedFilled}
+            required={!!isDateReceivedFilled}
+            labelClass={"text__caps-spaced"}
+          />
+        </Grid.Cell>
+
+        <Grid.Cell>
+          <Field
+            id="application.receivedBy"
+            name="application.receivedBy"
+            label={t("application.add.receivedBy")}
+            placeholder={t("application.add.receivedBy")}
+            register={register}
           />
         </Grid.Cell>
       </Grid.Row>
