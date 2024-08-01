@@ -377,6 +377,10 @@ export class LotteryService {
       true,
     );
 
+    applications = applications.filter(
+      (elem) => !!elem.applicationLotteryPositions?.length,
+    );
+
     applications = applications.sort(
       (a, b) =>
         a.applicationLotteryPositions[0].ordinal -
