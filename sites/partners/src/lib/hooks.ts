@@ -523,16 +523,11 @@ export const useApplicationsExport = (listingId: string, includeDemographics: bo
 
 export const useLotteryExport = (listingId: string) => {
   const { lotteryService } = useContext(AuthContext)
-
-  // return useCsvExport(
-  //   () => lotteryService.lotteryResults({ listingId, timeZone: dayjs.tz.guess() }),
-  //   `lottery-${listingId}-${createDateStringFromNow()}.xlsx`,
-  //   true
-  // )
-  const [csvExportLoading, setCsvExportLoading] = useState(false)
+  const [exportLoading, setExportLoading] = useState(false)
+  const { addToast } = useContext(MessageContext)
 
   const onExport = useCallback(async () => {
-    setCsvExportLoading(true)
+    setExportLoading(true)
     try {
       const content = await lotteryService.lotteryResults(
         { listingId },
@@ -548,17 +543,17 @@ export const useLotteryExport = (listingId: string) => {
       document.body.appendChild(link)
       link.click()
       link.parentNode.removeChild(link)
-      //addToast(t("t.exportSuccess"), { variant: "success" })
+      addToast(t("t.exportSuccess"), { variant: "success" })
     } catch (err) {
       console.log(err)
-      //addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
+      addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
     }
-    setCsvExportLoading(false)
+    setExportLoading(false)
   }, [])
 
   return {
     onExport,
-    csvExportLoading,
+    exportLoading,
   }
 }
 

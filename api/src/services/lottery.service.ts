@@ -506,7 +506,8 @@ export class LotteryService {
                   // curr should equal the preference id we're pulling from
                   if (!preferences) {
                     preferences =
-                      app.preferences as unknown as ApplicationMultiselectQuestion[];
+                      (app.preferences as unknown as ApplicationMultiselectQuestion[]) ||
+                      [];
                   }
                   parsePreference = false;
                   // there aren't typically many preferences, but if there, then a object map should be created and used
@@ -519,7 +520,8 @@ export class LotteryService {
                   // curr should equal the preference id we're pulling from
                   if (!programs) {
                     programs =
-                      app.programs as unknown as ApplicationMultiselectQuestion[];
+                      (app.programs as unknown as ApplicationMultiselectQuestion[]) ||
+                      [];
                   }
                   parsePreference = false;
                   // there aren't typically many programs, but if there, then a object map should be created and used
