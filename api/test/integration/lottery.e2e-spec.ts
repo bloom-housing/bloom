@@ -8,6 +8,9 @@ import {
 } from '@prisma/client';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
+import { randomUUID } from 'crypto';
+import { Request as ExpressRequest, Response } from 'express';
+import { stringify } from 'qs';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { applicationFactory } from '../../prisma/seed-helpers/application-factory';
@@ -22,10 +25,13 @@ import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { Login } from '../../src/dtos/auth/login.dto';
 import { multiselectQuestionFactory } from '../../prisma/seed-helpers/multiselect-question-factory';
 import { reservedCommunityTypeFactoryAll } from '../../prisma/seed-helpers/reserved-community-type-factory';
+import { LotteryService } from '../../src/services/lottery.service';
+import { ApplicationCsvQueryParams } from 'src/dtos/applications/application-csv-query-params.dto';
 
 describe('Application Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
+  let lotteryService: LotteryService;
   let cookies = '';
 
   const createMultiselectQuestion = async (
@@ -56,6 +62,7 @@ describe('Application Controller Tests', () => {
 
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
+    lotteryService = moduleFixture.get<LotteryService>(LotteryService);
     app.use(cookieParser());
     await app.init();
     await unitTypeFactoryAll(prisma);
@@ -426,6 +433,85 @@ describe('Application Controller Tests', () => {
       expect(res.body.message).toEqual(
         `Listing ${listing1Created.id}: the lottery was attempted to be generated but it was already run previously`,
       );
+    });
+  });
+
+  describe('getLotteryResults endpoint', () => {
+    it('should get a lottery export of application', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
+      const listing1 = await listingFactory(jurisdiction.id, prisma, {
+        status: ListingsStatusEnum.closed,
+      });
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+
+      const appA = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        listingId: listing1Created.id,
+      });
+
+      await prisma.applications.create({
+        data: appA,
+        include: {
+          applicant: true,
+        },
+      });
+
+      const appB = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        listingId: listing1Created.id,
+      });
+
+      await prisma.applications.create({
+        data: appB,
+        include: {
+          applicant: true,
+        },
+      });
+
+      const appC = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        listingId: listing1Created.id,
+      });
+
+      await prisma.applications.create({
+        data: appC,
+        include: {
+          applicant: true,
+        },
+      });
+
+      await lotteryService.lotteryGenerate(
+        {
+          user: {
+            id: randomUUID(),
+            userRoles: {
+              isAdmin: true,
+            },
+          },
+        } as unknown as ExpressRequest,
+        {} as Response,
+        { listingId: listing1Created.id },
+      );
+
+      const queryParams: ApplicationCsvQueryParams = {
+        listingId: listing1Created.id,
+      };
+      const query = stringify(queryParams as any);
+
+      await request(app.getHttpServer())
+        .get(`/lottery/getLotteryResults?${query}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
     });
   });
 });
