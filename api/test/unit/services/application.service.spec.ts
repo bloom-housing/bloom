@@ -60,7 +60,7 @@ export const mockApplication = (
     incomePeriod: IncomePeriodEnum.perMonth,
     preferences: [{ claimed: true, key: 'example key', options: null }],
     programs: [{ claimed: true, key: 'example key', options: null }],
-    preferredUnitTypes: ['studio', 'oneBdrm'],
+    preferredUnitTypes: [{ name: 'studio' }, { name: 'oneBdrm' }],
     status: ApplicationStatusEnum.submitted,
     submissionType: ApplicationSubmissionTypeEnum.electronical,
     acceptedTerms: true,

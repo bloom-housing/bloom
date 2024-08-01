@@ -12,7 +12,6 @@ import { CardHeader, CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   Listing,
-  ListingUpdate,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
   LotteryStatusEnum,
@@ -45,7 +44,7 @@ const Lottery = (props: { listing: Listing }) => {
   const [loading, setLoading] = useState(false)
 
   const { listingsService, lotteryService, profile } = useContext(AuthContext)
-  const { onExport, csvExportLoading } = useLotteryExport(listing?.id)
+  const { onExport, exportLoading } = useLotteryExport(listing?.id)
   const { data } = useFlaggedApplicationsMeta(listing?.id)
   const duplicatesExist = data?.totalPendingCount > 0
   let formattedExpiryDate: string
@@ -85,7 +84,7 @@ const Lottery = (props: { listing: Listing }) => {
         </div>
         <div>
           <Button
-            disabled={loading || csvExportLoading}
+            disabled={loading || exportLoading}
             onClick={() => {
               if (profile?.userRoles?.isAdmin) {
                 setExportModal(true)
@@ -120,7 +119,7 @@ const Lottery = (props: { listing: Listing }) => {
                 onClick={() => {
                   setRunModal(true)
                 }}
-                disabled={loading || csvExportLoading}
+                disabled={loading || exportLoading}
               >
                 {t("listings.lottery.runLottery")}
               </Button>
@@ -388,7 +387,7 @@ const Lottery = (props: { listing: Listing }) => {
                   }
                 }}
                 size="sm"
-                loadingMessage={loading || csvExportLoading ? t("t.loading") : undefined}
+                loadingMessage={loading || exportLoading ? t("t.loading") : undefined}
               >
                 {duplicatesExist
                   ? t("listings.lottery.runLotteryDuplicates")
@@ -615,7 +614,7 @@ const Lottery = (props: { listing: Listing }) => {
                   setExportModal(false)
                 }}
                 size="sm"
-                loadingMessage={loading || csvExportLoading ? t("t.loading") : undefined}
+                loadingMessage={loading || exportLoading ? t("t.loading") : undefined}
               >
                 {t("t.export")}
               </Button>
