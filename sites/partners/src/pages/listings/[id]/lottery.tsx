@@ -45,10 +45,7 @@ const Lottery = (props: { listing: Listing }) => {
 
   const { listingsService, lotteryService, profile } = useContext(AuthContext)
 
-  console.log("48:", listing)
-  console.log("49:", profile)
-
-  const listingJurisdiction = profile?.jurisdictions.find(
+  const listingJurisdiction = profile?.jurisdictions?.find(
     (jurisdiction) => jurisdiction.id === listing?.jurisdictions.id
   )
 
