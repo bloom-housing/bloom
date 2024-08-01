@@ -29,6 +29,7 @@ import { PrismaService } from './prisma.service';
 import { CsvHeader } from '../types/CsvExportInterface';
 import { getExportHeaders } from '../utilities/application-export-helpers';
 import { mapTo } from '../utilities/mapTo';
+import { IdDTO } from '../dtos/shared/id.dto';
 
 view.csv = {
   ...view.details,
@@ -290,7 +291,6 @@ export class LotteryService {
 
     await this.createLotterySheet(workbook, {
       ...queryParams,
-      includeDemographics: true,
     });
 
     await workbook.xlsx.writeFile(filename);
@@ -386,13 +386,34 @@ export class LotteryService {
         a.applicationLotteryPositions[0].ordinal -
         b.applicationLotteryPositions[0].ordinal,
     );
+
+    const mappedApps = mapTo(Application, applications);
     await this.lotteryExportHelper(
       workbook,
-      mapTo(Application, applications),
+      mappedApps,
       columns,
       queryParams,
       true,
     );
+
+    const preferences = multiSelectQuestions.filter(
+      (question) =>
+        question.applicationSection ===
+        MultiselectQuestionsApplicationSectionEnum.preferences,
+    );
+    for (const preference of preferences) {
+      await this.lotteryExportHelper(
+        workbook,
+        mappedApps,
+        columns,
+        queryParams,
+        true,
+        {
+          id: preference.id,
+          name: preference.text,
+        },
+      );
+    }
   }
 
   /**
@@ -426,6 +447,7 @@ export class LotteryService {
    * @param csvHeaders the headers and renderers of the export
    * @param queryParams the incoming param args
    * @param forLottery whether we are getting the lottery results or not
+   * @param preference if present, then builds the preference specific spreadsheet page
    * @returns void but writes the output to a file
    */
   async lotteryExportHelper(
@@ -434,14 +456,40 @@ export class LotteryService {
     csvHeaders: CsvHeader[],
     queryParams: ApplicationCsvQueryParams,
     forLottery = false,
+    preference?: IdDTO,
   ): Promise<void> {
     // create raw rank spreadsheet
-    const rawRankSpreadsheet = workbook.addWorksheet('Raw');
-    rawRankSpreadsheet.columns = this.buildExportColumns(csvHeaders);
+    const rawRankSpreadsheet = workbook.addWorksheet(
+      preference ? preference.name : 'Raw',
+    );
+    rawRankSpreadsheet.columns = this.buildExportColumns(
+      csvHeaders,
+      preference,
+    );
+
+    const filteredApplications = preference
+      ? applications.filter((app) =>
+          app.preferences.some(
+            (pref) =>
+              (pref.multiselectQuestionId === preference.id ||
+                pref.key === preference.name) &&
+              pref.claimed,
+          ),
+        )
+      : applications;
 
     // build row data
     const promiseArray: Promise<Partial<Row>[]>[] = [];
-    for (let i = 0; i < applications.length; i += NUMBER_TO_PAGINATE_BY) {
+    for (
+      let i = 0;
+      i < filteredApplications.length;
+      i += NUMBER_TO_PAGINATE_BY
+    ) {
+      const slicedApplications = filteredApplications.slice(
+        i,
+        i + NUMBER_TO_PAGINATE_BY,
+      );
+
       promiseArray.push(
         new Promise(async (resolve) => {
           // grab applications NUMBER_TO_PAGINATE_BY at a time
@@ -468,7 +516,7 @@ export class LotteryService {
                       ordinal: true,
                     },
                     where: {
-                      multiselectQuestionId: null,
+                      multiselectQuestionId: preference ? preference.id : null,
                     },
                   }
                 : false,
@@ -478,9 +526,7 @@ export class LotteryService {
               deletedAt: null,
               markedAsDuplicate: forLottery ? false : undefined,
               id: {
-                in: applications
-                  .slice(i, i + NUMBER_TO_PAGINATE_BY)
-                  .map((app) => app.id),
+                in: slicedApplications.map((app) => app.id),
               },
             },
           });
@@ -496,6 +542,12 @@ export class LotteryService {
             const row: Partial<Row> = {};
             let preferences: ApplicationMultiselectQuestion[];
             let programs: ApplicationMultiselectQuestion[];
+
+            if (preference) {
+              row['Raw Rank'] = slicedApplications.find(
+                (slicedApp) => (slicedApp.id = app.id),
+              ).applicationLotteryPositions[0].ordinal;
+            }
             csvHeaders.forEach((header) => {
               let multiselectQuestionValue = false;
               let parsePreference = false;
@@ -576,12 +628,27 @@ export class LotteryService {
     });
   }
 
-  buildExportColumns(csvHeaders: CsvHeader[]): Partial<Column>[] {
+  buildExportColumns(
+    csvHeaders: CsvHeader[],
+    preference?: IdDTO,
+  ): Partial<Column>[] {
     const res: Partial<Column>[] = csvHeaders.map((header) => ({
       key: header.path,
       header: header.label,
     }));
 
+    if (preference) {
+      const indx = res.findIndex(
+        (header) => header.header === 'Raw Lottery Rank',
+      );
+
+      res[indx].header = `${preference.name} Rank`;
+
+      res.splice(indx + 1, 0, {
+        key: 'Raw Rank',
+        header: 'Raw Rank',
+      });
+    }
     return res;
   }
 }
