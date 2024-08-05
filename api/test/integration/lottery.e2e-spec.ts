@@ -30,8 +30,8 @@ import { Login } from '../../src/dtos/auth/login.dto';
 import { multiselectQuestionFactory } from '../../prisma/seed-helpers/multiselect-question-factory';
 import { reservedCommunityTypeFactoryAll } from '../../prisma/seed-helpers/reserved-community-type-factory';
 import { LotteryService } from '../../src/services/lottery.service';
-import { ApplicationCsvQueryParams } from 'src/dtos/applications/application-csv-query-params.dto';
-import { EmailService } from 'src/services/email.service';
+import { ApplicationCsvQueryParams } from '../../src/dtos/applications/application-csv-query-params.dto';
+import { EmailService } from '../../src/services/email.service';
 
 describe('Application Controller Tests', () => {
   let app: INestApplication;
