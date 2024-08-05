@@ -50,7 +50,7 @@ const Lottery = (props: { listing: Listing }) => {
   const [newApplicationsModal, setNewApplicationsModal] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const { listingsService, lotteryService, profile } = useContext(AuthContext)
+  const { lotteryService, profile } = useContext(AuthContext)
 
   const listingJurisdiction = profile?.jurisdictions?.find(
     (jurisdiction) => jurisdiction.id === listing?.jurisdictions.id
@@ -80,8 +80,6 @@ const Lottery = (props: { listing: Listing }) => {
 
   console.log({ lotteryActivityLogData })
 
-  if (!listing) return <div>{t("t.errorOccurred")}</div>
-
   const getHistoryItem = (date: Date, event: string, user: string, key: number) => {
     return (
       <div className={styles["history-item"]} key={key}>
@@ -102,8 +100,11 @@ const Lottery = (props: { listing: Listing }) => {
 
     const eventMap = {
       closed: t("listings.lottery.historyLogClosed"),
-      ran: t(""),
-      retract: t(""),
+      ran: "Lottery was run",
+      rerun: "Lottery was re-run",
+      releasedToPartners: "Lottery results released",
+      retracted: "Lottery retracted",
+      publishedToPublic: "Lottery results published to public",
     }
 
     const getStatus = (logItem: ActivityLogItem) => {
@@ -112,19 +113,50 @@ const Lottery = (props: { listing: Listing }) => {
     }
 
     const statusOptions = Object.keys(eventMap)
-    const items = lotteryActivityLogData
-      ?.filter((logItem) => statusOptions.indexOf(getStatus(logItem)) >= 0)
-      .map((logItem, index) => {
-        return getHistoryItem(
-          logItem.logDate,
-          eventMap[getStatus(logItem)],
-          status === "closed" ? t("listings.lottery.historyLogAutomatic") : logItem.name,
-          index
-        )
-      })
+
+    const items = []
+
+    lotteryActivityLogData.forEach((logItem, index) => {
+      if (statusOptions.indexOf(getStatus(logItem)) >= 0) {
+        const status = getStatus(logItem)
+
+        const getEvent = (status: string) => {
+          if (index === 0) return status
+          const previousStatus = getStatus(lotteryActivityLogData[index - 1])
+          if (
+            status === LotteryStatusEnum.ran &&
+            (previousStatus === LotteryStatusEnum.releasedToPartners ||
+              previousStatus === LotteryStatusEnum.publishedToPublic)
+          ) {
+            return "retracted"
+          }
+          if (status === LotteryStatusEnum.ran && previousStatus === LotteryStatusEnum.ran) {
+            return "rerun"
+          }
+          return status
+        }
+
+        const event = getEvent(status)
+
+        const adminOnlyStatuses = ["rerun", "ran"]
+
+        if (profile?.userRoles.isAdmin || adminOnlyStatuses.indexOf(event) < 0) {
+          items.push(
+            getHistoryItem(
+              logItem.logDate,
+              eventMap[event],
+              status === "closed" ? t("listings.lottery.historyLogAutomatic") : logItem.name,
+              index
+            )
+          )
+        }
+      }
+    })
 
     return items
-  }, [lotteryActivityLogData])
+  }, [lotteryActivityLogData, profile])
+
+  if (!listing) return <div>{t("t.errorOccurred")}</div>
 
   const getMainContent = () => {
     const exportCard = (

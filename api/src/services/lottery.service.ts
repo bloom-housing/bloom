@@ -875,13 +875,14 @@ export class LotteryService {
 
     return activityLogs
       .filter((log) => {
-        const logString = log.metadata.toString();
-        if (logString.includes('listing')) {
-          if (logString.includes('closed')) {
-            return log;
-          } else return null;
+        const logString = JSON.stringify(log.metadata);
+        // only return closed listing status updates
+        if (logString.includes('status')) {
+          if (logString.includes(ListingsStatusEnum.closed)) {
+            return true;
+          } else return false;
         }
-        return log;
+        return true;
       })
       .map((log) => {
         return {

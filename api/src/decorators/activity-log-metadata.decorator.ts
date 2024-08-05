@@ -4,6 +4,7 @@ export type ActivityLogMetadataType = Array<{
   targetPropertyName: string;
   propertyPath?: string;
   defaultValue?: string;
+  customRecordId?: string;
 }>;
 
 export const ActivityLogMetadata = (metadata: ActivityLogMetadataType) =>
