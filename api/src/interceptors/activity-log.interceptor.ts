@@ -36,7 +36,7 @@ export class ActivityLogInterceptor implements NestInterceptor {
           !trackPropertiesMetadata.defaultValue &&
           !trackPropertiesMetadata.propertyPath
         )
-          metadata = null;
+          metadata[trackPropertiesMetadata.targetPropertyName] = null;
         else {
           metadata[trackPropertiesMetadata.targetPropertyName] =
             trackPropertiesMetadata.defaultValue ??
