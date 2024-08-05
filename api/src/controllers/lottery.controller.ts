@@ -27,10 +27,13 @@ import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
 import { ApiKeyGuard } from '../guards/api-key.guard';
 import { ActivityLogItem } from '../../src/dtos/lottery/activity-log-item.dto';
 import { ActivityLogMetadata } from '../../src/decorators/activity-log-metadata.decorator';
-import { ListingLotteryStatus } from 'src/dtos/listings/listing-lottery-status.dto';
-import { mapTo } from 'src/utilities/mapTo';
-import { User } from 'src/dtos/users/user.dto';
+import { ListingLotteryStatus } from '../../src/dtos/listings/listing-lottery-status.dto';
+import { mapTo } from '../../src/utilities/mapTo';
+import { User } from '../../src/dtos/users/user.dto';
 import { LotteryStatusEnum } from '@prisma/client';
+import { PermissionAction } from '../../src/decorators/permission-action.decorator';
+import { permissionActions } from '../../src/enums/permissions/permission-actions-enum';
+import { AdminOrJurisdictionalAdminGuard } from '../../src/guards/admin-or-jurisdiction-admin.guard';
 
 @Controller('lottery')
 @ApiTags('lottery')
@@ -107,5 +110,18 @@ export class LotteryController {
     @Param('id') id: string,
   ): Promise<ActivityLogItem[]> {
     return await this.lotteryService.lotteryActivityLog(id);
+  }
+
+  @Put('expireLotteries')
+  @ApiOperation({
+    summary: 'Trigger the lottery process job',
+    operationId: 'expireLotteries',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  @PermissionAction(permissionActions.update)
+  @UseInterceptors(ActivityLogInterceptor)
+  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
+  async expireLotteries(): Promise<SuccessDTO> {
+    return await this.lotteryService.expireLotteries();
   }
 }
