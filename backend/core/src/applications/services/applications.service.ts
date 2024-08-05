@@ -463,16 +463,16 @@ export class ApplicationsService {
     return this.authzService.canOrThrow(user, "application", action, resource)
   }
 
-  private async authorizeCSVExport(user, listingId) {
+  private async authorizeCSVExport(user, id) {
     /**
      * Checking authorization for each application is very expensive.
      * By making listingId required, we can check if the user has update permissions for the listing, since right now if a user has that
      * they also can run the export for that listing
      */
-    const jurisdictionId = await this.listingsService.getJurisdictionIdByListingId(listingId)
+    const jurisdictionId = await this.listingsService.getJurisdictionIdByListingId(id)
 
     return await this.authzService.canOrThrow(user, "listing", authzActions.update, {
-      id: listingId,
+      id,
       jurisdictionId,
     })
   }

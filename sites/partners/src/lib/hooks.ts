@@ -516,7 +516,11 @@ export const useApplicationsExport = (listingId: string, includeDemographics: bo
 
   return useCsvExport(
     () =>
-      applicationsService.listAsCsv({ listingId, includeDemographics, timeZone: dayjs.tz.guess() }),
+      applicationsService.listAsCsv({
+        id: listingId,
+        includeDemographics,
+        timeZone: dayjs.tz.guess(),
+      }),
     `applications-${listingId}-${createDateStringFromNow()}.csv`
   )
 }
@@ -615,7 +619,7 @@ export function useMapLayersList(jurisdictionId?: string) {
 
 export function useLotteryActivityLog(listingId: string) {
   const { lotteryService } = useContext(AuthContext)
-  const fetcher = () => lotteryService.lotteryActivityLog({ listingId })
+  const fetcher = () => lotteryService.lotteryActivityLog({ id: listingId })
 
   const { data, error } = useSWR(`/api/adapter/lottery/lotteryActivityLog`, fetcher)
 

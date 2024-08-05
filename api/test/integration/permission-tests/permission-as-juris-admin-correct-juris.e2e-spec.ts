@@ -1171,13 +1171,13 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
 
     it('should succeed for expireLotteries endpoint', async () => {
       await request(app.getHttpServer())
-        .put(`/listings/expireLotteries`)
+        .put(`/lottery/expireLotteries`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
     });
 
-    it('should error as forbiddon for lottery status endpoint', async () => {
+    it('should error as forbidden for lottery status endpoint', async () => {
       const listingData = await listingFactory(jurisId, prisma, {
         status: 'closed',
       });
@@ -1186,7 +1186,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
       });
 
       await request(app.getHttpServer())
-        .put('/listings/lotteryStatus')
+        .put('/lottery/lotteryStatus')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           listingId: listing.id,
