@@ -37,3 +37,8 @@
 .application-no-results-text {
   padding-bottom: var(--seeds-s6);
 }
+
+.application-count-tab {
+  display: flex;
+  justify-content: space-between;
+}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, Fragment, useContext } from "react"
 import Head from "next/head"
-import { t, LoadingOverlay } from "@bloom-housing/ui-components"
-import { Button, Card, Heading } from "@bloom-housing/ui-seeds"
+import { t, LoadingOverlay, NavigationContext } from "@bloom-housing/ui-components"
+import { Button, Card, Heading, Tabs } from "@bloom-housing/ui-seeds"
 import {
   PageView,
   pushGtmEvent,
@@ -9,19 +9,29 @@ import {
   RequireLogin,
   BloomCard,
 } from "@bloom-housing/shared-helpers"
-import Layout from "../../layouts/application"
-import { StatusItemWrapper, AppWithListing } from "./StatusItemWrapper"
-import { MetaTags } from "../../components/shared/MetaTags"
-import { UserStatus } from "../../lib/constants"
+import Layout from "../../../layouts/application"
+import { StatusItemWrapper, AppWithListing } from "../StatusItemWrapper"
+import { MetaTags } from "../../../components/shared/MetaTags"
+import { UserStatus } from "../../../lib/constants"
 
-import styles from "../../pages/account/account.module.scss"
+import styles from "../../../pages/account/account.module.scss"
+import { useRouter } from "next/router"
+import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+
+interface AppsFiltered {
+  lottery: AppWithListing[]
+  open: AppWithListing[]
+  closed: AppWithListing[]
+}
 
 const Applications = () => {
   const { applicationsService, listingsService, profile } = useContext(AuthContext)
   const [applications, setApplications] = useState<AppWithListing[]>()
+  const [applicationsFiltered, setApplicationsFiltered] = useState<AppsFiltered>()
   const [loading, setLoading] = useState(true)
   const [listLoading, setListLoading] = useState(true)
   const [error, setError] = useState()
+  const router = useRouter()
 
   useEffect(() => {
     if (profile) {
@@ -56,6 +66,19 @@ const Applications = () => {
       .then((res) => {
         setListLoading(false)
         setApplications(res)
+        const open = [],
+          closed = [],
+          lottery = []
+        res.forEach((app) => {
+          if (app.fullListing.status === ListingsStatusEnum.active) {
+            open.push(app)
+          } else if (app.fullListing.lotteryStatus) {
+            lottery.push(app)
+          } else {
+            closed.push(app)
+          }
+        })
+        setApplicationsFiltered({ open, closed, lottery })
         setLoading(false)
       })
       .catch((err) => {
@@ -85,6 +108,19 @@ const Applications = () => {
       </Card.Section>
     )
   }
+  const selectionHandler = (index: number) => {
+    const baseUrl = "/account/applications"
+    switch (index) {
+      case 0:
+        return baseUrl
+      case 1:
+        return `${baseUrl}/lottery`
+      case 2:
+        return `${baseUrl}/open`
+      case 3:
+        return `${baseUrl}/closed`
+    }
+  }
   return (
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
       <Layout>
@@ -93,7 +129,20 @@ const Applications = () => {
         </Head>
         <MetaTags title={t("account.myApplications")} description="" />
         <section className="bg-gray-300 border-t border-gray-450">
-          <div className="flex flex-wrap relative max-w-3xl mx-auto sm:p-8">
+          <div className="flex flex-row relative max-w-5xl mx-auto md:py-8 px-6">
+            <Tabs verticalSidebar onSelect={(index) => void router.push(selectionHandler(index))}>
+              <Tabs.TabList>
+                <Tabs.Tab className={styles["application-count-tab"]}>
+                  <span>{t("account.allMyApplications")}</span>
+                  <span>{applications?.length ?? 0}</span>
+                </Tabs.Tab>
+                <Tabs.Tab className={styles["application-count-tab"]}>
+                  {t("account.lotteryRun")}
+                </Tabs.Tab>
+                <Tabs.Tab>{t("account.openApplications")}</Tabs.Tab>
+                <Tabs.Tab>{t("account.closedApplications")}</Tabs.Tab>
+              </Tabs.TabList>
+            </Tabs>
             <BloomCard
               iconSymbol="application"
               title={t("account.myApplications")}
