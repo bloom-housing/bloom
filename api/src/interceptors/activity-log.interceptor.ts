@@ -107,7 +107,7 @@ export class ActivityLogInterceptor implements NestInterceptor {
             resourceId = req.body.id;
           }
           resourceId =
-            activityLogMetadata.length && activityLogMetadata[0].customRecordId
+            activityLogMetadata?.length && activityLogMetadata[0].customRecordId
               ? activityLogMetadata[0].customRecordId
               : resourceId;
           return from(
