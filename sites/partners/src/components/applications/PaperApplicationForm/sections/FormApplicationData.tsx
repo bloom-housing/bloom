@@ -8,11 +8,18 @@ import {
   DateFieldValues,
 } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
-import { LanguagesEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  ApplicationSubmissionTypeEnum,
+  LanguagesEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useFormContext } from "react-hook-form"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
-const FormApplicationData = () => {
+type FormApplicationDataProps = {
+  appType: ApplicationSubmissionTypeEnum
+}
+
+const FormApplicationData = (props: FormApplicationDataProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -94,45 +101,47 @@ const FormApplicationData = () => {
         </Grid.Cell>
       </Grid.Row>
 
-      <Grid.Row>
-        <Grid.Cell>
-          <DateField
-            id="dateReceived"
-            name="dateReceived"
-            register={register}
-            error={errors?.dateReceived}
-            watch={watch}
-            label={t("application.add.dateReceivedAt")}
-            errorMessage={t("errors.dateError")}
-            required={!!isDateReceivedRequired}
-            labelClass={"text__caps-spaced"}
-          />
-        </Grid.Cell>
+      {props.appType !== ApplicationSubmissionTypeEnum.electronical && (
+        <Grid.Row>
+          <Grid.Cell>
+            <DateField
+              id="dateReceived"
+              name="dateReceived"
+              register={register}
+              error={errors?.dateReceived}
+              watch={watch}
+              label={t("application.add.dateReceivedAt")}
+              errorMessage={t("errors.dateError")}
+              required={!!isDateReceivedRequired}
+              labelClass={"text__caps-spaced"}
+            />
+          </Grid.Cell>
 
-        <Grid.Cell>
-          <TimeField
-            id="timeReceived"
-            name="timeReceived"
-            label={t("application.add.timeReceivedAt")}
-            register={register}
-            watch={watch}
-            error={!!errors?.timeReceived}
-            disabled={!isDateReceivedFilled}
-            required={!!isDateReceivedFilled}
-            labelClass={"text__caps-spaced"}
-          />
-        </Grid.Cell>
+          <Grid.Cell>
+            <TimeField
+              id="timeReceived"
+              name="timeReceived"
+              label={t("application.add.timeReceivedAt")}
+              register={register}
+              watch={watch}
+              error={!!errors?.timeReceived}
+              disabled={!isDateReceivedFilled}
+              required={!!isDateReceivedFilled}
+              labelClass={"text__caps-spaced"}
+            />
+          </Grid.Cell>
 
-        <Grid.Cell>
-          <Field
-            id="application.receivedBy"
-            name="application.receivedBy"
-            label={t("application.add.receivedBy")}
-            placeholder={t("application.add.receivedBy")}
-            register={register}
-          />
-        </Grid.Cell>
-      </Grid.Row>
+          <Grid.Cell>
+            <Field
+              id="application.receivedBy"
+              name="application.receivedBy"
+              label={t("application.add.receivedBy")}
+              placeholder={t("application.add.receivedBy")}
+              register={register}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+      )}
     </SectionWithGrid>
   )
 }
