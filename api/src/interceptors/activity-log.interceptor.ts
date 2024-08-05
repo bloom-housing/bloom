@@ -110,7 +110,6 @@ export class ActivityLogInterceptor implements NestInterceptor {
             activityLogMetadata.length && activityLogMetadata[0].customRecordId
               ? activityLogMetadata[0].customRecordId
               : resourceId;
-          console.log({ resourceId });
           return from(
             this.prisma.activityLog.create({
               include: {

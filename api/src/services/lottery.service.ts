@@ -64,12 +64,12 @@ export class LotteryService {
     private prisma: PrismaService,
     private multiselectQuestionService: MultiselectQuestionService,
     private listingService: ListingService,
-    private permissionService: PermissionService,
-    @Inject(Logger)
-    private logger = new Logger(ListingService.name),
-    private schedulerRegistry: SchedulerRegistry,
     private emailService: EmailService,
     private configService: ConfigService,
+    @Inject(Logger)
+    private logger = new Logger(LotteryService.name),
+    private schedulerRegistry: SchedulerRegistry,
+    private permissionService: PermissionService,
   ) {}
 
   onModuleInit() {

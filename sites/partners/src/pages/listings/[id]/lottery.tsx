@@ -78,8 +78,6 @@ const Lottery = (props: { listing: Listing }) => {
     formattedExpiryDate = expiryDate.format("MMMM D, YYYY")
   }
 
-  console.log({ lotteryActivityLogData })
-
   const getHistoryItem = (date: Date, event: string, user: string, key: number) => {
     return (
       <div className={styles["history-item"]} key={key}>

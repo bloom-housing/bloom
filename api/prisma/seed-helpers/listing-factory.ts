@@ -43,7 +43,6 @@ export const listingFactory = async (
     digitalApp?: boolean;
     noImage?: boolean;
     lotteryStatus?: LotteryStatusEnum;
-    closedAt?: Date;
     reviewOrderType?: ReviewOrderTypeEnum;
   },
 ): Promise<Prisma.ListingsCreateInput> => {
@@ -147,7 +146,6 @@ export const listingFactory = async (
         }
       : undefined,
     applicationDueDate: optionalParams?.applicationDueDate ?? undefined,
-    closedAt: optionalParams?.closedAt ?? undefined,
     reviewOrderType: optionalParams?.reviewOrderType ?? undefined,
     developer: randomName(),
     leasingAgentName: randomName(),
