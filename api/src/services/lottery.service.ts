@@ -545,7 +545,7 @@ export class LotteryService {
 
             if (preference) {
               row['Raw Rank'] = slicedApplications.find(
-                (slicedApp) => (slicedApp.id = app.id),
+                (slicedApp) => slicedApp.id === app.id,
               ).applicationLotteryPositions[0].ordinal;
             }
             csvHeaders.forEach((header) => {
