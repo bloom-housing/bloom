@@ -515,10 +515,14 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                       register={register}
                       controlClassName="control"
                       options={amiChartsOptions}
+                      error={fieldHasError(errors?.amiChart?.id)}
+                      errorMessage={t("errors.requiredFieldError")}
+                      validation={{ required: true }}
                       inputProps={{
                         onChange: () => {
                           setValue("amiPercentage", undefined)
                           clearErrors("amiPercentage")
+                          clearErrors("amiChart.id")
                           ;[...Array(maxAmiHouseholdSize)].forEach((_, index) => {
                             setValue(`maxIncomeHouseholdSize${index + 1}`, undefined)
                           })
