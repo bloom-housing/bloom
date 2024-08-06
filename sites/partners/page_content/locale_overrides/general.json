@@ -495,7 +495,7 @@
   "users.allJurisdictions": "All Jurisdictions",
   "users.allListings": "All listings",
   "users.alljurisdictionalizedListings": "All %{jurisdiction} Listings",
-  "users.confirmAccount": "Confirm Account",
+  "users.confirmAccount": "Confirm account",
   "users.confirmed": "Confirmed",
   "users.doYouWantDeleteUser": "Do you really want to delete this user?",
   "users.editUser": "Edit User",

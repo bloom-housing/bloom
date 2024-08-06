@@ -44,7 +44,7 @@ export const getListingStatusTag = (listingStatus: ListingsStatusEnum) => {
           {t(`listings.listingStatus.changesRequested`)}
         </Tag>
       )
-    default:
+    case ListingsStatusEnum.pending:
       return (
         <Tag
           className="tag-uppercase"
@@ -55,5 +55,7 @@ export const getListingStatusTag = (listingStatus: ListingsStatusEnum) => {
           {t(`listings.listingStatus.pending`)}
         </Tag>
       )
+    default:
+      return null
   }
 }
