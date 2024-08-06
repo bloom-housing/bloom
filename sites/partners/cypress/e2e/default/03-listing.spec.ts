@@ -156,6 +156,9 @@ describe("Listing Management Tests", () => {
     cy.getByID("monthlyRent").type(listing["monthlyRent"])
     cy.getByID("unitAccessibilityPriorityTypes.id").select(listing["priorityType.id"])
     cy.get("button").contains("Save & Exit").click()
+    cy.getByID("amiChart.id").select(1).trigger("change")
+    cy.getByID("amiPercentage").select(1)
+    cy.get("button").contains("Save & Exit").click()
     cy.get("#add-preferences-button").contains("Add Preference").click()
     cy.get(".seeds-card-section > .seeds-button").contains("Select Preferences").click()
     cy.get(
