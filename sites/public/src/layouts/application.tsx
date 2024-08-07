@@ -106,7 +106,7 @@ const Layout = (props) => {
       })
     }
   }
-  console.log(process.env.maintenanceWindow)
+
   return (
     <div className="site-wrapper">
       <div className="site-content">
