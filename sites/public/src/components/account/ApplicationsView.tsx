@@ -27,7 +27,7 @@ export enum ApplicationsFilterEnum {
   Open,
   Closed,
 }
-interface AppCount {
+interface ApplicationsCount {
   total: number
   lottery: number
   open: number
@@ -41,31 +41,29 @@ interface ApplicationsViewProps {
 const ApplicationsView = (props: ApplicationsViewProps) => {
   const { applicationsService, listingsService, profile } = useContext(AuthContext)
   const [applications, setApplications] = useState<AppWithListing[]>()
-  const [applicationsCount, setApplicationsCount] = useState<AppCount>()
+  const [applicationsCount, setApplicationsCount] = useState<ApplicationsCount>()
   const [loading, setLoading] = useState(true)
   const [listLoading, setListLoading] = useState(true)
   const [error, setError] = useState()
   const router = useRouter()
 
   useEffect(() => {
-    if (profile) {
-      console.log(`My Applications - ${ApplicationsFilterEnum[props.filterType]}`)
+    if (profile && loading) {
       pushGtmEvent<PageView>({
         event: "pageView",
         pageTitle: `My Applications - ${ApplicationsFilterEnum[props.filterType]}`,
         status: UserStatus.LoggedIn,
       })
-      if (loading)
-        applicationsService
-          .list({ userId: profile.id })
-          .then((apps) => {
-            apps?.items?.length > 0 ? setApplications(apps.items) : setLoading(false)
-          })
-          .catch((err) => {
-            console.error(`Error fetching applications: ${err}`)
-            setError(err)
-            setLoading(false)
-          })
+      applicationsService
+        .list({ userId: profile.id })
+        .then((apps) => {
+          apps?.items?.length > 0 ? setApplications(apps.items) : setLoading(false)
+        })
+        .catch((err) => {
+          console.error(`Error fetching applications: ${err}`)
+          setError(err)
+          setLoading(false)
+        })
     }
   }, [profile, applicationsService])
 
