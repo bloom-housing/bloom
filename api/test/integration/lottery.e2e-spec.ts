@@ -551,9 +551,9 @@ describe('Lottery Controller Tests', () => {
         data: jurisdictionFactory(),
       });
       await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
-      const expiration_date = new Date();
-      expiration_date.setDate(
-        expiration_date.getDate() -
+      const expiredClosedListingDate = new Date();
+      expiredClosedListingDate.setDate(
+        expiredClosedListingDate.getDate() -
           Number(process.env.LOTTERY_DAYS_TILL_EXPIRY || 45) -
           1,
       );
@@ -562,7 +562,7 @@ describe('Lottery Controller Tests', () => {
         prisma,
         {
           status: ListingsStatusEnum.closed,
-          closedAt: expiration_date,
+          closedAt: expiredClosedListingDate,
           reviewOrderType: ReviewOrderTypeEnum.lottery,
         },
       );
@@ -697,7 +697,6 @@ describe('Lottery Controller Tests', () => {
     });
 
     it('should update listing lottery status to releasedToPartners from ran', async () => {
-      console.log('start of test');
       const jurisdictionA = await prisma.jurisdictions.create({
         data: jurisdictionFactory(),
       });
@@ -729,7 +728,6 @@ describe('Lottery Controller Tests', () => {
         }),
       });
 
-      console.log('before call');
       const res = await request(app.getHttpServer())
         .put('/lottery/lotteryStatus')
         .set({ passkey: process.env.API_PASS_KEY || '' })
