@@ -704,10 +704,10 @@ const PreferenceDrawer = ({
                           name="radiusSize"
                           label={t("settings.preferenceValidatingAddress.howManyMiles")}
                           register={register}
-                          validation={{ required: true, min: 0 }}
+                          validation={{ required: true, min: 0, pattern: /^[0-9.]+$/ }}
                           error={errors.radiusSize}
                           errorMessage={t("errors.requiredFieldError")}
-                          type="number"
+                          type="text"
                           readerOnly
                           defaultValue={optionData?.radiusSize ?? null}
                           dataTestId={"preference-option-radius-size"}
