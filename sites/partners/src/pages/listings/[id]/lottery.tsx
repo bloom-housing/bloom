@@ -336,9 +336,6 @@ const Lottery = (props: { listing: Listing }) => {
               {t("applications.addConfirmModalHeader")}
             </Dialog.Header>
             <Dialog.Content id="run-lottery-modal-content">
-              {process.env.lotteryDaysTillExpiry ? (
-                <p>{t("listings.lottery.dialogAlert", { date: formattedExpiryDate })}</p>
-              ) : undefined}
               {duplicatesExist ? (
                 <p>
                   {t("listings.lottery.duplicateContent")}{" "}
