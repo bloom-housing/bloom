@@ -168,7 +168,7 @@ export class ListingController {
     return await this.listingService.delete(dto.id, mapTo(User, req['user']));
   }
 
-  @Put('process')
+  @Put('closeListings')
   @ApiOperation({
     summary: 'Trigger the listing process job',
     operationId: 'process',
@@ -177,8 +177,21 @@ export class ListingController {
   @PermissionAction(permissionActions.submit)
   @UseInterceptors(ActivityLogInterceptor)
   @UseGuards(ApiKeyGuard, OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
-  async process(): Promise<SuccessDTO> {
-    return await this.listingService.process();
+  async closeListings(): Promise<SuccessDTO> {
+    return await this.listingService.closeListings();
+  }
+
+  @Put('expireLotteries')
+  @ApiOperation({
+    summary: 'Trigger the lottery process job',
+    operationId: 'expireLotteries',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  @PermissionAction(permissionActions.update)
+  @UseInterceptors(ActivityLogInterceptor)
+  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
+  async expireLotteries(): Promise<SuccessDTO> {
+    return await this.listingService.expireLotteries();
   }
 
   @Put('lotteryStatus')

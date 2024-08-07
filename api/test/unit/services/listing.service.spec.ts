@@ -2832,7 +2832,7 @@ describe('Testing listing service', () => {
       prisma.cronJob.update = jest.fn().mockResolvedValue(true);
 
       process.env.PROXY_URL = 'https://www.google.com';
-      await service.process();
+      await service.closeListings();
       expect(httpServiceMock.request).toHaveBeenCalledWith({
         baseURL: 'https://www.google.com',
         method: 'PURGE',
@@ -2872,7 +2872,7 @@ describe('Testing listing service', () => {
       prisma.cronJob.update = jest.fn().mockResolvedValue(true);
 
       process.env.PROXY_URL = 'https://www.google.com';
-      await service.process();
+      await service.closeListings();
       expect(httpServiceMock.request).not.toHaveBeenCalled();
       expect(prisma.listings.updateMany).toHaveBeenCalledWith({
         data: {
@@ -2906,7 +2906,7 @@ describe('Testing listing service', () => {
       prisma.cronJob.findFirst = jest.fn().mockResolvedValue(null);
       prisma.cronJob.create = jest.fn().mockResolvedValue(true);
 
-      await service.markCronJobAsStarted();
+      await service.markCronJobAsStarted('LISTING_CRON_JOB');
 
       expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
         where: {
@@ -2927,7 +2927,7 @@ describe('Testing listing service', () => {
         .mockResolvedValue({ id: randomUUID() });
       prisma.cronJob.update = jest.fn().mockResolvedValue(true);
 
-      await service.markCronJobAsStarted();
+      await service.markCronJobAsStarted('LISTING_CRON_JOB');
 
       expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
         where: {
@@ -2942,6 +2942,42 @@ describe('Testing listing service', () => {
           id: expect.anything(),
         },
       });
+    });
+  });
+
+  describe('Test expireLotteries endpoint', () => {
+    it('should call the updateMany', async () => {
+      prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 2 });
+      prisma.cronJob.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+      prisma.cronJob.update = jest.fn().mockResolvedValue(true);
+
+      await service.expireLotteries();
+      expect(prisma.listings.updateMany).toHaveBeenCalledWith({
+        data: {
+          lotteryStatus: LotteryStatusEnum.expired,
+        },
+        where: {
+          status: ListingsStatusEnum.closed,
+          reviewOrderType: ReviewOrderTypeEnum.lottery,
+          closedAt: {
+            lte: expect.anything(),
+          },
+          OR: [
+            {
+              lotteryStatus: {
+                not: LotteryStatusEnum.expired,
+              },
+            },
+            {
+              lotteryStatus: null,
+            },
+          ],
+        },
+      });
+      expect(prisma.cronJob.findFirst).toHaveBeenCalled();
+      expect(prisma.cronJob.update).toHaveBeenCalled();
     });
   });
 
@@ -3263,7 +3299,5 @@ describe('Testing listing service', () => {
         },
       });
     });
-
-    it.todo('should update status to expired');
   });
 });

@@ -49,6 +49,7 @@ module.exports = withBundleAnalyzer(
       mapBoxToken: MAPBOX_TOKEN,
       featureListingsApproval: process.env.FEATURE_LISTINGS_APPROVAL,
       showLottery: process.env.SHOW_LOTTERY,
+      lotteryDaysTillExpiry: process.env.LOTTERY_DAYS_TILL_EXPIRY,
     },
     i18n: {
       locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],
