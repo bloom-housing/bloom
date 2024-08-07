@@ -113,9 +113,9 @@ const Layout = (props) => {
         <Head>
           <title>{t("nav.siteTitle")}</title>
         </Head>
-        {/* temporary change to support email issue, should return to alert.maintenance after window */}
+        {/* temporary change to infra maintenance, should return to alert.maintenance after window */}
         <AlertBanner maintenanceWindow={process.env.maintenanceWindow} variant={"primary"}>
-          <Markdown>{t("alert.applicationMessage")}</Markdown>
+          <Markdown>{t("alert.infraMaintenance")}</Markdown>
         </AlertBanner>
         <SiteHeader
           logoSrc="/images/doorway-logo.png"
