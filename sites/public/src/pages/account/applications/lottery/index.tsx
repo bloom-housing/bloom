@@ -3,6 +3,6 @@ import ApplicationsView, {
   ApplicationsFilterEnum,
 } from "../../../../components/account/ApplicationsView"
 
-const Applications = () => <ApplicationsView filterType={ApplicationsFilterEnum.Lottery} />
+const LotteryApplications = () => <ApplicationsView filterType={ApplicationsFilterEnum.Lottery} />
 
-export default Applications
+export default LotteryApplications
