@@ -23,7 +23,7 @@ const AlertBanner = ({ children, maintenanceWindow, variant }: AlertBannerProps)
     }
     return inMaintenance
   }
-
+  console.log(getInMaintenance())
   return (
     getInMaintenance() && (
       <div className={styles["site-alert-banner-container"]} data-variant={variant}>
