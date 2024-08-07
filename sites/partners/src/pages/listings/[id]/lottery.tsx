@@ -519,7 +519,7 @@ const Lottery = (props: { listing: Listing }) => {
                 onClick={async () => {
                   try {
                     setLoading(true)
-                    await lotteryService.lotteryGenerate({ body: { listingId: listing.id } })
+                    await lotteryService.lotteryGenerate({ body: { id: listing.id } })
                     setLoading(false)
                     setReRunModal(false)
                     location.reload()

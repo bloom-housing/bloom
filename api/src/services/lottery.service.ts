@@ -359,7 +359,10 @@ export class LotteryService {
       },
     );
 
+    console.log('after perm');
+
     if (storedListing.status !== ListingsStatusEnum.closed) {
+      console.log('throwing bc not closed');
       throw new BadRequestException(
         'Lottery status cannot be changed until listing is closed.',
       );
