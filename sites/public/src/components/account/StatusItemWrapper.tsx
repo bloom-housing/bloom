@@ -1,10 +1,11 @@
 import React from "react"
 import dayjs from "dayjs"
-import { StatusItem } from "./StatusItem"
+import { ApplicationListingStatus, StatusItem } from "./StatusItem"
 import { Application, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export interface AppWithListing extends Application {
   fullListing?: Listing
+  appStatus?: ApplicationListingStatus
 }
 interface StatusItemWrapperProps {
   application: AppWithListing
@@ -21,6 +22,7 @@ const StatusItemWrapper = (props: StatusItemWrapperProps) => {
       confirmationNumber={props.application?.confirmationCode || props.application?.id}
       listingName={props.application?.fullListing?.name}
       listingURL={`/listing/${props.application?.fullListing?.id}/${props.application?.fullListing?.urlSlug}`}
+      status={props.application.appStatus}
       key={props.application?.id}
     />
   )

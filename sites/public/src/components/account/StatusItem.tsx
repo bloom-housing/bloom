@@ -4,6 +4,11 @@ import { Button, Card, Tag } from "@bloom-housing/ui-seeds"
 import styles from "./StatusItem.module.scss"
 import applicationsViewStyles from "./ApplicationsView.module.scss"
 
+export enum ApplicationListingStatus {
+  Lottery = "lottery",
+  Open = "open",
+  Closed = "closed",
+}
 interface StatusItemProps {
   applicationDueDate?: string
   applicationURL: string
@@ -11,6 +16,7 @@ interface StatusItemProps {
   confirmationNumber?: string
   listingName: string
   listingURL: string
+  status: ApplicationListingStatus
   strings?: {
     applicationsDeadline?: string
     edited?: string
@@ -23,6 +29,21 @@ interface StatusItemProps {
 }
 
 const StatusItem = (props: StatusItemProps) => {
+  console.log(props.status)
+
+  const statusString = () => {
+    switch (props.status) {
+      case ApplicationListingStatus.Lottery:
+        return t("account.lotteryRun")
+      case ApplicationListingStatus.Open:
+        return t("account.openApplications")
+      case ApplicationListingStatus.Closed:
+        return t("account.closedApplications")
+      default:
+        return t("application.statuses.submitted")
+    }
+  }
+
   return (
     <Card.Section className={applicationsViewStyles["account-card-applications-section"]}>
       <article className={styles["status-item"]}>
@@ -30,9 +51,7 @@ const StatusItem = (props: StatusItemProps) => {
           <h3 className={styles["status-item__title"]}>{props.listingName}</h3>
           <p className={styles["status-item__status"]}>
             {props.strings?.status ?? t("application.status")}:{" "}
-            <Tag variant="primary">
-              {props.strings?.submittedStatus ?? t("application.statuses.submitted")}
-            </Tag>
+            <Tag variant="primary">{props.strings?.submittedStatus ?? statusString()}</Tag>
           </p>
         </header>
 
@@ -62,11 +81,13 @@ const StatusItem = (props: StatusItemProps) => {
         </section>
 
         <footer className={styles["status-item__footer"]}>
-          <div>
-            <Button href={props.applicationURL} variant="primary-outlined" size="sm">
-              {props.strings?.viewApplication ?? t("application.viewApplication")}
-            </Button>
-          </div>
+          {props.status === ApplicationListingStatus.Open && (
+            <div>
+              <Button href={props.applicationURL} variant="primary-outlined" size="sm">
+                {props.strings?.viewApplication ?? t("application.viewApplication")}
+              </Button>
+            </div>
+          )}
           <div>
             <Button href={props.listingURL} variant="secondary-outlined" size="sm">
               {props.strings?.seeListing ?? t("t.seeListing")}

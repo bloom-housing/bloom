@@ -20,6 +20,7 @@ import {
   LotteryStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useRouter } from "next/router"
+import { ApplicationListingStatus } from "./StatusItem"
 
 export enum ApplicationsFilterEnum {
   All = 0,
@@ -89,18 +90,30 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
         res.forEach((app) => {
           if (app.fullListing?.status === ListingsStatusEnum.active) {
             open++
-            if (props.filterType === ApplicationsFilterEnum.Open) displayApplications.push(app)
+            app.appStatus = ApplicationListingStatus.Open
+            if (
+              [ApplicationsFilterEnum.Open, ApplicationsFilterEnum.All].includes(props.filterType)
+            )
+              displayApplications.push(app)
           } else if (app.fullListing?.lotteryStatus === LotteryStatusEnum.publishedToPublic) {
             lottery++
-            if (props.filterType === ApplicationsFilterEnum.Lottery) displayApplications.push(app)
+            app.appStatus = ApplicationListingStatus.Lottery
+            if (
+              [ApplicationsFilterEnum.Lottery, ApplicationsFilterEnum.All].includes(
+                props.filterType
+              )
+            )
+              displayApplications.push(app)
           } else {
             closed++
-            if (props.filterType === ApplicationsFilterEnum.Closed) displayApplications.push(app)
+            app.appStatus = ApplicationListingStatus.Closed
+            if (
+              [ApplicationsFilterEnum.Closed, ApplicationsFilterEnum.All].includes(props.filterType)
+            )
+              displayApplications.push(app)
           }
         })
-        props.filterType === ApplicationsFilterEnum.All
-          ? setApplications(res)
-          : setApplications(displayApplications)
+        setApplications(displayApplications)
         setApplicationsCount({ total, lottery, open, closed })
         setLoading(false)
       })
