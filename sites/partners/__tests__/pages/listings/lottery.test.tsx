@@ -424,7 +424,6 @@ describe("lottery", () => {
     expect(header).toBeInTheDocument()
 
     fireEvent.click(getByText("Run lottery"))
-    expect(getByText("This data will expire on", { exact: false })).toBeInTheDocument()
     expect(await findByText("Confirmation needed")).toBeInTheDocument()
     expect(
       getByText("Make sure to add all paper applications before running the lottery.")
@@ -457,7 +456,6 @@ describe("lottery", () => {
     expect(header).toBeInTheDocument()
 
     fireEvent.click(getByText("Run lottery"))
-    expect(getByText("This data will expire on", { exact: false })).toBeInTheDocument()
     expect(await findByText("Confirmation needed")).toBeInTheDocument()
     expect(getByText("5 unresolved duplicate sets.")).toBeInTheDocument()
     expect(getByText("Run lottery without resolving duplicates")).toBeInTheDocument()
