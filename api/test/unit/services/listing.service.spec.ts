@@ -124,6 +124,8 @@ const requestApprovalMock = jest.fn();
 const changesRequestedMock = jest.fn();
 const listingApprovedMock = jest.fn();
 const lotteryReleasedMock = jest.fn();
+const lotteryPublishedAdminMock = jest.fn();
+const lotteryPublishedApplicantMock = jest.fn();
 
 const canOrThrowMock = jest.fn();
 

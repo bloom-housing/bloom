@@ -418,7 +418,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the wron
         data: listing1,
       });
       await request(app.getHttpServer())
-        .get(`/applications/csv?listingId=${listing1Created.id}`)
+        .get(`/applications/csv?id=${listing1Created.id}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
@@ -1123,7 +1123,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the wron
         .put('/lottery/lotteryStatus')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
-          listingId: listing.id,
+          id: listing.id,
           lotteryStatus: 'ran',
         })
         .set('Cookie', cookies)
