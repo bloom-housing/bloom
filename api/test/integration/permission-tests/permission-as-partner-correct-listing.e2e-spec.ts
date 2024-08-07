@@ -461,7 +461,7 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
 
     it('should succeed for csv endpoint', async () => {
       await request(app.getHttpServer())
-        .get(`/applications/csv?listingId=${userListingId}`)
+        .get(`/applications/csv?id=${userListingId}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
@@ -1121,7 +1121,7 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
         .put('/lottery/lotteryStatus')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
-          listingId: closedUserListingId2,
+          id: closedUserListingId2,
           lotteryStatus: 'publishedToPublic',
         })
         .set('Cookie', cookies)

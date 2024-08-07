@@ -33,7 +33,7 @@ import { LotteryService } from '../../src/services/lottery.service';
 import { ApplicationCsvQueryParams } from '../../src/dtos/applications/application-csv-query-params.dto';
 import { EmailService } from '../../src/services/email.service';
 
-describe('Application Controller Tests', () => {
+describe('Lottery Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let lotteryService: LotteryService;
@@ -181,7 +181,7 @@ describe('Application Controller Tests', () => {
         .put(`/lottery/generateLotteryResults`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
-          listingId: listing1Created.id,
+          id: listing1Created.id,
         })
         .set('Cookie', cookies)
         .expect(200);
@@ -340,7 +340,7 @@ describe('Application Controller Tests', () => {
         .put(`/lottery/generateLotteryResults`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
-          listingId: listing1Created.id,
+          id: listing1Created.id,
         })
         .set('Cookie', cookies)
         .expect(200);
@@ -547,7 +547,7 @@ describe('Application Controller Tests', () => {
       });
 
       const res = await request(app.getHttpServer())
-        .put(`/listings/expireLotteries`)
+        .put(`/lottery/expireLotteries`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -607,10 +607,10 @@ describe('Application Controller Tests', () => {
     it("should error when trying to update listing that doesn't exist", async () => {
       const id = randomUUID();
       const res = await request(app.getHttpServer())
-        .put('/listings/lotteryStatus')
+        .put('/lottery/lotteryStatus')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
-          listingId: id,
+          id: id,
           lotteryStatus: LotteryStatusEnum.ran,
         })
         .set('Cookie', adminAccessToken)
@@ -633,25 +633,26 @@ describe('Application Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put('/listings/lotteryStatus')
+        .put('/lottery/lotteryStatus')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
-          listingId: listing.id,
+          id: listing.id,
           lotteryStatus: LotteryStatusEnum.ran,
         })
         .expect(403);
 
       await request(app.getHttpServer())
-        .put('/listings/lotteryStatus')
+        .put('/lottery/lotteryStatus')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
-          listingId: listing.id,
+          id: listing.id,
           lotteryStatus: LotteryStatusEnum.releasedToPartners,
         })
         .expect(403);
     });
 
     it('should update listing lottery status to releasedToPartners from ran', async () => {
+      console.log('start of test');
       const jurisdictionA = await prisma.jurisdictions.create({
         data: jurisdictionFactory(),
       });
@@ -683,11 +684,12 @@ describe('Application Controller Tests', () => {
         }),
       });
 
+      console.log('before call');
       const res = await request(app.getHttpServer())
-        .put('/listings/lotteryStatus')
+        .put('/lottery/lotteryStatus')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
-          listingId: listing.id,
+          id: listing.id,
           lotteryStatus: LotteryStatusEnum.releasedToPartners,
         })
         .set('Cookie', adminAccessToken)
@@ -728,10 +730,10 @@ describe('Application Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put('/listings/lotteryStatus')
+        .put('/lottery/lotteryStatus')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
-          listingId: listing.id,
+          id: listing.id,
           lotteryStatus: LotteryStatusEnum.releasedToPartners,
         })
         .set('Cookie', adminAccessToken)
@@ -752,10 +754,10 @@ describe('Application Controller Tests', () => {
       });
 
       const res = await request(app.getHttpServer())
-        .put('/listings/lotteryStatus')
+        .put('/lottery/lotteryStatus')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
-          listingId: listing.id,
+          id: listing.id,
           lotteryStatus: LotteryStatusEnum.ran,
         })
         .set('Cookie', adminAccessToken)
@@ -828,10 +830,10 @@ describe('Application Controller Tests', () => {
       });
 
       const res = await request(app.getHttpServer())
-        .put('/listings/lotteryStatus')
+        .put('/lottery/lotteryStatus')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
-          listingId: listing.id,
+          id: listing.id,
           lotteryStatus: LotteryStatusEnum.publishedToPublic,
         })
         .set('Cookie', adminAccessToken)
