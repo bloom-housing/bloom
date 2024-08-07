@@ -146,7 +146,6 @@ export class ScriptRunnerService {
    * Copying and pasting from google sheets will not match the format above. You will need to perform the following:
    * 1) Find and delete all instances of "%"
    * 2) Using the Regex option in the Find and Replace tool, replace /\t with " " and /\n with "\\n"
-   * See "How to format AMI data for script runner import" in Notion for a more detailed example
    * @returns successDTO
    * @description takes the incoming AMI Chart string and stores it as a new AMI Chart in the database
    */
