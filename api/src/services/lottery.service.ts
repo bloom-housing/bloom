@@ -289,7 +289,7 @@ export class LotteryService {
       }-${new Date().getTime()}.zip`,
     );
 
-    await this.createLotterySheet(workbook, {
+    await this.createLotterySheets(workbook, {
       ...queryParams,
     });
 
@@ -320,9 +320,9 @@ export class LotteryService {
    *
    * @param filename
    * @param queryParams
-   * @returns generates the lottery sheet
+   * @returns generates the lottery sheets
    */
-  async createLotterySheet<QueryParams extends ApplicationCsvQueryParams>(
+  async createLotterySheets<QueryParams extends ApplicationCsvQueryParams>(
     workbook: Excel.Workbook,
     queryParams: QueryParams,
   ): Promise<void> {
@@ -388,7 +388,7 @@ export class LotteryService {
     );
 
     const mappedApps = mapTo(Application, applications);
-    await this.lotteryExportHelper(
+    await this.generateSpreadsheetData(
       workbook,
       mappedApps,
       columns,
@@ -402,7 +402,7 @@ export class LotteryService {
         MultiselectQuestionsApplicationSectionEnum.preferences,
     );
     for (const preference of preferences) {
-      await this.lotteryExportHelper(
+      await this.generateSpreadsheetData(
         workbook,
         mappedApps,
         columns,
@@ -450,7 +450,7 @@ export class LotteryService {
    * @param preference if present, then builds the preference specific spreadsheet page
    * @returns void but writes the output to a file
    */
-  async lotteryExportHelper(
+  async generateSpreadsheetData(
     workbook: Excel.Workbook,
     applications: Application[],
     csvHeaders: CsvHeader[],
@@ -458,14 +458,11 @@ export class LotteryService {
     forLottery = false,
     preference?: IdDTO,
   ): Promise<void> {
-    // create raw rank spreadsheet
-    const rawRankSpreadsheet = workbook.addWorksheet(
+    // create a spreadsheet. If the preference is passed in use that as a title otherwise 'raw'
+    const spreadsheet = workbook.addWorksheet(
       preference ? preference.name : 'Raw',
     );
-    rawRankSpreadsheet.columns = this.buildExportColumns(
-      csvHeaders,
-      preference,
-    );
+    spreadsheet.columns = this.buildExportColumns(csvHeaders, preference);
 
     const filteredApplications = preference
       ? applications.filter((app) =>
@@ -624,7 +621,7 @@ export class LotteryService {
 
     // add rows to spreadsheet
     res.forEach((elem) => {
-      rawRankSpreadsheet.addRows(elem);
+      spreadsheet.addRows(elem);
     });
   }
 
