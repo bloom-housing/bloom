@@ -1,0 +1,44 @@
+.applications-section-background {
+  background: var(--seeds-bg-color-canvas);
+  border-color: var(--seeds-border-color);
+  border-top: 1px;
+}
+
+.applications-section-container {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  max-width: var(--seeds-width-5xl);
+  margin-inline: auto;
+  padding-block: var(--seeds-s8);
+  padding-inline: var(--seeds-s6);
+  @media (max-width: theme("screens.sm")) {
+    flex-direction: column;
+    gap: var(--seeds-s4);
+  }
+}
+
+.account-card-applications-section {
+  --card-content-padding-inline: var(--seeds-s12);
+  @media (max-width: theme("screens.sm")) {
+    --card-content-padding-inline: var(--seeds-s4);
+    --card-content-padding-block: var(--seeds-s4);
+  }
+}
+
+.application-no-results {
+  padding: var(--seeds-s8);
+  background-color: var(--seeds-bg-color-muted);
+  @media (max-width: theme("screens.sm")) {
+    padding: var(--seeds-s6);
+  }
+}
+
+.application-no-results-text {
+  padding-bottom: var(--seeds-s6);
+}
+
+.application-count-tab {
+  display: flex;
+  justify-content: space-between;
+}
