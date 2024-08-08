@@ -32,6 +32,7 @@ import { reservedCommunityTypeFactoryAll } from '../../prisma/seed-helpers/reser
 import { LotteryService } from '../../src/services/lottery.service';
 import { ApplicationCsvQueryParams } from '../../src/dtos/applications/application-csv-query-params.dto';
 import { EmailService } from '../../src/services/email.service';
+import { permissionActions } from '../../src/enums/permissions/permission-actions-enum';
 
 describe('Lottery Controller Tests', () => {
   let app: INestApplication;
@@ -210,6 +211,16 @@ describe('Lottery Controller Tests', () => {
       });
 
       expect(updatedListing.lotteryStatus).toEqual(LotteryStatusEnum.ran);
+
+      const activityLogResult = await prisma.activityLog.findFirst({
+        where: {
+          module: 'lottery',
+          action: permissionActions.update,
+          recordId: listing1Created.id,
+        },
+      });
+
+      expect(activityLogResult).not.toBeNull();
     });
 
     it('should generate results when no previous attempt to run lotteries has happened (with preferences)', async () => {
@@ -706,6 +717,16 @@ describe('Lottery Controller Tests', () => {
         expect.arrayContaining([partnerUser.email, adminUser.email]),
         process.env.PARTNERS_PORTAL_URL,
       );
+
+      const activityLogResult = await prisma.activityLog.findFirst({
+        where: {
+          module: 'lottery',
+          action: permissionActions.update,
+          recordId: listing.id,
+        },
+      });
+
+      expect(activityLogResult).not.toBeNull();
     });
 
     it('should error trying to update listing lottery status to releasedToPartners from ran if there are new paper application updates', async () => {
@@ -761,6 +782,16 @@ describe('Lottery Controller Tests', () => {
         .set('Cookie', adminAccessToken)
         .expect(200);
       expect(res.body.success).toEqual(true);
+
+      const activityLogResult = await prisma.activityLog.findFirst({
+        where: {
+          module: 'lottery',
+          action: permissionActions.update,
+          recordId: listing.id,
+        },
+      });
+
+      expect(activityLogResult).not.toBeNull();
     });
 
     it('should update listing lottery status to publishedToPublic from releasedToPartners', async () => {

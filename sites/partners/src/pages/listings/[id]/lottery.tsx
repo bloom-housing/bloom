@@ -17,7 +17,6 @@ import {
   ListingsStatusEnum,
   LotteryStatusEnum,
   ReviewOrderTypeEnum,
-  ActivityLogItem,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Layout from "../../../layouts"
 import { ListingContext } from "../../../components/listings/ListingContext"
@@ -98,57 +97,26 @@ const Lottery = (props: { listing: Listing }) => {
 
     const eventMap = {
       closed: t("listings.lottery.historyLogClosed"),
-      ran: "Lottery was run",
-      rerun: "Lottery was re-run",
-      releasedToPartners: "Lottery results released",
-      retracted: "Lottery retracted",
-      publishedToPublic: "Lottery results published to public",
+      ran: t("listings.lottery.historyLogRun"),
+      rerun: t("listings.lottery.historyLogReRun"),
+      releasedToPartners: t("listings.lottery.historyLogReleased"),
+      retracted: t("listings.lottery.historyLogRetracted"),
+      publishedToPublic: t("listings.lottery.historyLogPublished"),
     }
-
-    const getStatus = (logItem: ActivityLogItem) => {
-      if (!logItem.metadata) return
-      return logItem.metadata[Object.keys(logItem.metadata)[0]]
-    }
-
-    const statusOptions = Object.keys(eventMap)
 
     const items = []
 
     lotteryActivityLogData.forEach((logItem, index) => {
-      if (statusOptions.indexOf(getStatus(logItem)) >= 0) {
-        const status = getStatus(logItem)
-
-        const getEvent = (status: string) => {
-          if (index === 0) return status
-          const previousStatus = getStatus(lotteryActivityLogData[index - 1])
-          if (
-            status === LotteryStatusEnum.ran &&
-            (previousStatus === LotteryStatusEnum.releasedToPartners ||
-              previousStatus === LotteryStatusEnum.publishedToPublic)
-          ) {
-            return "retracted"
-          }
-          if (status === LotteryStatusEnum.ran && previousStatus === LotteryStatusEnum.ran) {
-            return "rerun"
-          }
-          return status
-        }
-
-        const event = getEvent(status)
-
-        const adminOnlyStatuses = ["rerun", "ran"]
-
-        if (profile?.userRoles.isAdmin || adminOnlyStatuses.indexOf(event) < 0) {
-          items.push(
-            getHistoryItem(
-              logItem.logDate,
-              eventMap[event],
-              status === "closed" ? t("listings.lottery.historyLogAutomatic") : logItem.name,
-              index
-            )
-          )
-        }
-      }
+      items.push(
+        getHistoryItem(
+          logItem.logDate,
+          eventMap[logItem.status],
+          logItem.status === "closed"
+            ? t("listings.lottery.historyLogAutomatic")
+            : t("listings.lottery.historyLogUser", { name: logItem.name }),
+          index
+        )
+      )
     })
 
     return items

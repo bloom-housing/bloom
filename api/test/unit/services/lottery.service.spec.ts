@@ -34,6 +34,7 @@ import { LotteryService } from '../../../src/services/lottery.service';
 import { getExportHeaders } from '../../../src/utilities/application-export-helpers';
 import { ListingLotteryStatus } from '../../../src/dtos/listings/listing-lottery-status.dto';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
+import { release } from 'process';
 
 const canOrThrowMock = jest.fn();
 const lotteryReleasedMock = jest.fn();
@@ -1279,6 +1280,228 @@ describe('Testing lottery service', () => {
       });
       expect(prisma.cronJob.findFirst).toHaveBeenCalled();
       expect(prisma.cronJob.update).toHaveBeenCalled();
+    });
+  });
+
+  describe('Testing getLotteryStatusFromActivityLogMetadata()', () => {
+    it('should format first status correctly', () => {
+      expect(
+        service.getLotteryStatusFromActivityLogMetadata('ran', 0, null),
+      ).toEqual('ran');
+    });
+    it('should format intermediate statuses correctly', () => {
+      expect(
+        service.getLotteryStatusFromActivityLogMetadata(
+          'releasedToPartners',
+          0,
+          'ran',
+        ),
+      ).toEqual('releasedToPartners');
+      expect(
+        service.getLotteryStatusFromActivityLogMetadata(
+          'publishedToPublic',
+          0,
+          'releasedToPartners',
+        ),
+      ).toEqual('publishedToPublic');
+    });
+    it('should format rerun correctly', () => {
+      expect(
+        service.getLotteryStatusFromActivityLogMetadata('ran', 1, 'ran'),
+      ).toEqual('rerun');
+    });
+    it('should format retracted correctly', () => {
+      expect(
+        service.getLotteryStatusFromActivityLogMetadata(
+          'ran',
+          1,
+          'releasedToPartners',
+        ),
+      ).toEqual('retracted');
+      expect(
+        service.getLotteryStatusFromActivityLogMetadata(
+          'ran',
+          1,
+          'publishedToPublic',
+        ),
+      ).toEqual('retracted');
+    });
+  });
+
+  describe('Testing lotteryActivityLog()', () => {
+    const listingId = randomUUID();
+    const adminUser = {
+      id: 'admin id',
+      userRoles: {
+        isAdmin: true,
+      },
+    } as User;
+
+    const partnerUser = {
+      id: 'partner id',
+      userRoles: {
+        isAdmin: false,
+        isPartner: true,
+      },
+    } as User;
+
+    const closedDate = new Date();
+    closedDate.setDate(closedDate.getDate() - 10);
+    const ranDate = new Date();
+    ranDate.setDate(ranDate.getDate() - 9);
+    const reRanDate = new Date();
+    reRanDate.setDate(reRanDate.getDate() - 8);
+    const releasedDate = new Date();
+    releasedDate.setDate(releasedDate.getDate() - 7);
+    const retractedDate = new Date();
+    retractedDate.setDate(retractedDate.getDate() - 6);
+    const released2Date = new Date();
+    released2Date.setDate(released2Date.getDate() - 5);
+    const publishedDate = new Date();
+    publishedDate.setDate(publishedDate.getDate() - 4);
+
+    beforeEach(() => {
+      canOrThrowMock.mockResolvedValue(true);
+      prisma.activityLog.findMany = jest.fn().mockResolvedValue([
+        {
+          metadata: { status: 'closed' },
+          userId: 'abcd',
+          updatedAt: closedDate,
+          userAccounts: {
+            firstName: 'Abc',
+            lastName: 'Def',
+          },
+        },
+        {
+          metadata: { lotteryStatus: 'ran' },
+          userId: 'abcd',
+          updatedAt: ranDate,
+          userAccounts: {
+            firstName: 'Ghi',
+            lastName: 'Jkl',
+          },
+        },
+        {
+          metadata: { lotteryStatus: 'ran' },
+          userId: 'abcd',
+          updatedAt: reRanDate,
+          userAccounts: {
+            firstName: 'Mno',
+            lastName: 'Pqr',
+          },
+        },
+        {
+          metadata: { lotteryStatus: 'releasedToPartners' },
+          userId: 'abcd',
+          updatedAt: releasedDate,
+          userAccounts: {
+            firstName: 'Stu',
+            lastName: 'Vwx',
+          },
+        },
+        {
+          metadata: { lotteryStatus: 'ran' },
+          userId: 'abcd',
+          updatedAt: retractedDate,
+          userAccounts: {
+            firstName: 'Yza',
+            lastName: 'Bcd',
+          },
+        },
+        {
+          metadata: { lotteryStatus: 'releasedToPartners' },
+          userId: 'abcd',
+          updatedAt: released2Date,
+          userAccounts: {
+            firstName: 'Efg',
+            lastName: 'Hij',
+          },
+        },
+        {
+          metadata: { lotteryStatus: 'publishedToPublic' },
+          userId: 'abcd',
+          updatedAt: publishedDate,
+          userAccounts: {
+            firstName: 'Klm',
+            lastName: 'Nop',
+          },
+        },
+      ]);
+    });
+    it('should process lottery activity log for an admin', async () => {
+      const historyLog = await service.lotteryActivityLog(listingId, adminUser);
+
+      expect(historyLog).toEqual([
+        {
+          logDate: closedDate,
+          name: 'Abc Def',
+          status: 'closed',
+        },
+        {
+          logDate: ranDate,
+          name: 'Ghi Jkl',
+          status: 'ran',
+        },
+        {
+          logDate: reRanDate,
+          name: 'Mno Pqr',
+          status: 'rerun',
+        },
+        {
+          logDate: releasedDate,
+          name: 'Stu Vwx',
+          status: 'releasedToPartners',
+        },
+        {
+          logDate: retractedDate,
+          name: 'Yza Bcd',
+          status: 'retracted',
+        },
+        {
+          logDate: released2Date,
+          name: 'Efg Hij',
+          status: 'releasedToPartners',
+        },
+        {
+          logDate: publishedDate,
+          name: 'Klm Nop',
+          status: 'publishedToPublic',
+        },
+      ]);
+    });
+    it('should process lottery activity log for a partner', async () => {
+      const historyLog = await service.lotteryActivityLog(
+        listingId,
+        partnerUser,
+      );
+
+      expect(historyLog).toEqual([
+        {
+          logDate: closedDate,
+          name: 'Abc Def',
+          status: 'closed',
+        },
+        {
+          logDate: releasedDate,
+          name: 'Stu Vwx',
+          status: 'releasedToPartners',
+        },
+        {
+          logDate: retractedDate,
+          name: 'Yza Bcd',
+          status: 'retracted',
+        },
+        {
+          logDate: released2Date,
+          name: 'Efg Hij',
+          status: 'releasedToPartners',
+        },
+        {
+          logDate: publishedDate,
+          name: 'Klm Nop',
+          status: 'publishedToPublic',
+        },
+      ]);
     });
   });
 });

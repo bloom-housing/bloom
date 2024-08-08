@@ -13,6 +13,7 @@ import {
   ListingsStatusEnum,
   LotteryStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
+  Prisma,
   ReviewOrderTypeEnum,
   UserRoleEnum,
 } from '@prisma/client';
@@ -39,7 +40,7 @@ import { CsvHeader } from '../types/CsvExportInterface';
 import { getExportHeaders } from '../utilities/application-export-helpers';
 import { mapTo } from '../utilities/mapTo';
 import { IdDTO } from '../dtos/shared/id.dto';
-import { ActivityLogItem } from '../dtos/lottery/activity-log-item.dto';
+import { LotteryActivityLogItem } from '../dtos/lottery/lottery-activity-log-item.dto';
 import { ListingLotteryStatus } from '../../src/dtos/listings/listing-lottery-status.dto';
 import { ListingViews } from '../../src/enums/listings/view-enum';
 import { startCronJob } from '../utilities/cron-job-starter';
@@ -56,6 +57,12 @@ view.csv = {
 };
 const NUMBER_TO_PAGINATE_BY = 500;
 const LOTTERY_CRON_JOB_NAME = 'LOTTERY_CRON_JOB';
+
+export type LotteryActivityLogStatus =
+  | LotteryStatusEnum
+  | 'rerun'
+  | 'retracted'
+  | 'closed';
 
 @Injectable()
 export class LotteryService {
@@ -844,13 +851,43 @@ export class LotteryService {
     return res;
   }
 
+  getActivityLogKey = (logData: Prisma.JsonValue | null) => {
+    if (!logData) return null;
+    return logData[Object.keys(logData)[0]];
+  };
+
+  getLotteryStatusFromActivityLogMetadata = (
+    status: LotteryActivityLogStatus,
+    index: number,
+    previousStatus: LotteryActivityLogStatus | null,
+  ): LotteryActivityLogStatus => {
+    if (!status) return;
+    if (index === 0) return status;
+
+    if (
+      status === LotteryStatusEnum.ran &&
+      (previousStatus === LotteryStatusEnum.releasedToPartners ||
+        previousStatus === LotteryStatusEnum.publishedToPublic)
+    ) {
+      return 'retracted';
+    }
+    if (
+      status === LotteryStatusEnum.ran &&
+      previousStatus === LotteryStatusEnum.ran
+    ) {
+      return 'rerun';
+    }
+    return status;
+  };
+
   /*
    * @param listingId
    * @returns a list of activity log entries and the name of the user who did the action for lotteries
    */
   public async lotteryActivityLog(
     listingId: string,
-  ): Promise<ActivityLogItem[]> {
+    requestingUser: User,
+  ): Promise<LotteryActivityLogItem[]> {
     const activityLogs = await this.prisma.activityLog.findMany({
       select: {
         metadata: true,
@@ -874,7 +911,8 @@ export class LotteryService {
       },
     });
 
-    return activityLogs
+    const filteredActivityLogs = activityLogs
+      .sort((a, b) => a.updatedAt.getTime() - b.updatedAt.getTime())
       .filter((log) => {
         const logString = JSON.stringify(log.metadata);
         // only return closed listing status updates
@@ -884,14 +922,33 @@ export class LotteryService {
           } else return false;
         }
         return true;
-      })
-      .map((log) => {
-        return {
-          metadata: log.metadata as any,
-          name: `${log.userAccounts.firstName} ${log.userAccounts.lastName}`,
-          logDate: log.updatedAt,
-        };
       });
+
+    const formattedActivityLogs: LotteryActivityLogItem[] = [];
+    filteredActivityLogs.forEach((logItem, index) => {
+      const lotteryStatus = this.getLotteryStatusFromActivityLogMetadata(
+        this.getActivityLogKey(logItem.metadata),
+        index,
+        index > 0
+          ? this.getActivityLogKey(filteredActivityLogs[index - 1].metadata)
+          : null,
+      );
+
+      const adminOnlyStatuses: LotteryActivityLogStatus[] = ['rerun', 'ran'];
+
+      if (
+        requestingUser?.userRoles.isAdmin ||
+        adminOnlyStatuses.indexOf(lotteryStatus) < 0
+      ) {
+        formattedActivityLogs.push({
+          logDate: logItem.updatedAt,
+          name: `${logItem.userAccounts.firstName} ${logItem.userAccounts.lastName}`,
+          status: lotteryStatus,
+        });
+      }
+    });
+
+    return formattedActivityLogs;
   }
 
   /**
