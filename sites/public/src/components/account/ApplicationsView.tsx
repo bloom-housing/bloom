@@ -134,7 +134,7 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
     let buttonText = t("listings.browseListings")
     let buttonHref = "/listings"
     // only show custom message and redirect to "All my applications" if they have applied before
-    if (applicationsCount?.total !== 0) {
+    if (applicationsCount?.total > 0) {
       buttonText = t("account.viewAllApplications")
       buttonHref = "/account/applications"
       switch (props.filterType) {
