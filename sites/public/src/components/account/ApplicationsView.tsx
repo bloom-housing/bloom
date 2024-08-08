@@ -193,13 +193,12 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
                   <span>{applicationsCount?.lottery}</span>
                 </Tabs.Tab>
                 <Tabs.Tab className={styles["application-count-tab"]}>
-                  <span>{t("account.openApplications")}</span>
-                  <span>{applicationsCount?.open}</span>
-                </Tabs.Tab>
-
-                <Tabs.Tab className={styles["application-count-tab"]}>
                   <span>{t("account.closedApplications")}</span>
                   <span>{applicationsCount?.closed}</span>
+                </Tabs.Tab>
+                <Tabs.Tab className={styles["application-count-tab"]}>
+                  <span>{t("account.openApplications")}</span>
+                  <span>{applicationsCount?.open}</span>
                 </Tabs.Tab>
               </Tabs.TabList>
             </Tabs>
