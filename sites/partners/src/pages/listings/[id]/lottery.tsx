@@ -33,7 +33,7 @@ dayjs.extend(advancedFormat)
 
 import styles from "../../../../styles/lottery.module.scss"
 
-const Lottery = (props: { listing: Listing }) => {
+const Lottery = (props: { listing: Listing | undefined }) => {
   const metaDescription = ""
   const metaImage = ""
 
