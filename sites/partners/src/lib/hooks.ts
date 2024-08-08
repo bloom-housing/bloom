@@ -534,7 +534,7 @@ export const useLotteryExport = (listingId: string) => {
     setExportLoading(true)
     try {
       const content = await lotteryService.lotteryResults(
-        { listingId },
+        { id: listingId },
         { responseType: "arraybuffer" }
       )
       const blob = new Blob([new Uint8Array(content)], { type: "application/zip" })

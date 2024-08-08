@@ -25,7 +25,7 @@ import { PermissionTypeDecorator } from '../decorators/permission-type.decorator
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
 import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
 import { ApiKeyGuard } from '../guards/api-key.guard';
-import { ActivityLogItem } from '../../src/dtos/lottery/activity-log-item.dto';
+import { LotteryActivityLogItem } from '../dtos/lottery/lottery-activity-log-item.dto';
 import { ActivityLogMetadata } from '../../src/decorators/activity-log-metadata.decorator';
 import { ListingLotteryStatus } from '../../src/dtos/listings/listing-lottery-status.dto';
 import { mapTo } from '../../src/utilities/mapTo';
@@ -101,15 +101,19 @@ export class LotteryController {
   }
 
   @Get('lotteryActivityLog')
-  @ApiOkResponse({ type: ActivityLogItem, isArray: true })
+  @ApiOkResponse({ type: LotteryActivityLogItem, isArray: true })
   @ApiOperation({
     summary: 'Get a lottery activity log',
     operationId: 'lotteryActivityLog',
   })
   async lotteryActivityLog(
+    @Request() req: ExpressRequest,
     @Param('id') id: string,
-  ): Promise<ActivityLogItem[]> {
-    return await this.lotteryService.lotteryActivityLog(id);
+  ): Promise<LotteryActivityLogItem[]> {
+    return await this.lotteryService.lotteryActivityLog(
+      id,
+      mapTo(User, req['user']),
+    );
   }
 
   @Put('expireLotteries')

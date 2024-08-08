@@ -334,49 +334,11 @@ export class ListingsService {
    */
   process(options: IRequestOptions = {}): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/listings/process"
+      let url = basePath + "/listings/closeListings"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
       let data = null
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Trigger the lottery process job
-   */
-  expireLotteries(options: IRequestOptions = {}): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/listings/expireLotteries"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Change the listing lottery status
-   */
-  lotteryStatus(
-    params: {
-      /** requestBody */
-      body?: ListingLotteryStatus
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/listings/lotteryStatus"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
 
       configs.data = data
 
@@ -2169,7 +2131,7 @@ export class LotteryService {
   lotteryResults(
     params: {
       /**  */
-      listingId: string
+      id: string
       /**  */
       includeDemographics?: boolean
       /**  */
@@ -2182,13 +2144,16 @@ export class LotteryService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = {
-        listingId: params["listingId"],
+        id: params["id"],
         includeDemographics: params["includeDemographics"],
         timeZone: params["timeZone"],
       }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
     })
   }
-
   /**
    * Change the listing lottery status
    */
@@ -2220,7 +2185,7 @@ export class LotteryService {
       id: string
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<ActivityLogItem[]> {
+  ): Promise<LotteryActivityLogItem[]> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/lottery/lotteryActivityLog"
       url = url.replace("{id}", params["id"] + "")
@@ -2228,6 +2193,22 @@ export class LotteryService {
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
       /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Trigger the lottery process job
+   */
+  expireLotteries(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/lottery/expireLotteries"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -5509,9 +5490,9 @@ export interface ListingLotteryStatus {
   lotteryStatus: LotteryStatusEnum
 }
 
-export interface ActivityLogItem {
+export interface LotteryActivityLogItem {
   /**  */
-  metadata: object
+  status: string
 
   /**  */
   name: string
