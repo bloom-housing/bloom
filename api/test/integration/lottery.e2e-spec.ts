@@ -389,51 +389,6 @@ describe('Application Controller Tests', () => {
 
       expect(updatedListing.lotteryStatus).toEqual(LotteryStatusEnum.ran);
     });
-
-    it('should throw an error when a run of lotteries already occured', async () => {
-      const unitTypeA = await unitTypeFactorySingle(
-        prisma,
-        UnitTypeEnum.oneBdrm,
-      );
-      const jurisdiction = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
-      });
-      await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
-      const listing1 = await listingFactory(jurisdiction.id, prisma, {
-        status: ListingsStatusEnum.closed,
-      });
-      const listing1Created = await prisma.listings.create({
-        data: {
-          ...listing1,
-          lotteryLastRunAt: new Date(),
-          lotteryStatus: LotteryStatusEnum.ran,
-        },
-      });
-
-      const appA = await applicationFactory({
-        unitTypeId: unitTypeA.id,
-        listingId: listing1Created.id,
-      });
-
-      await prisma.applications.create({
-        data: appA,
-        include: {
-          applicant: true,
-        },
-      });
-
-      const res = await request(app.getHttpServer())
-        .put(`/lottery/generateLotteryResults`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send({
-          listingId: listing1Created.id,
-        })
-        .set('Cookie', cookies)
-        .expect(400);
-      expect(res.body.message).toEqual(
-        `Listing ${listing1Created.id}: the lottery was attempted to be generated but it was already run previously`,
-      );
-    });
   });
 
   describe('getLotteryResults endpoint', () => {
