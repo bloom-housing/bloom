@@ -613,27 +613,21 @@ export class EmailService {
     emails: string[],
     appUrl: string,
   ) {
-    try {
-      const jurisdiction = listingInfo.juris
-        ? await this.getJurisdiction([{ id: listingInfo.juris }])
-        : user.jurisdictions[0];
-      void (await this.loadTranslations(jurisdiction));
-      await this.send(
-        emails,
-        jurisdiction.emailFromAddress,
-        this.polyglot.t('lotteryReleased.header', {
-          listingName: listingInfo.name,
-        }),
-        this.template('lottery-released')({
-          appOptions: { listingName: listingInfo.name },
-          appUrl: appUrl,
-          listingUrl: `${appUrl}/listings/${listingInfo.id}`,
-        }),
-      );
-    } catch (err) {
-      console.log('lottery released email failed', err);
-      throw new HttpException('email failed', 500);
-    }
+    const jurisdiction = listingInfo.juris
+      ? await this.getJurisdiction([{ id: listingInfo.juris }])
+      : user.jurisdictions[0];
+    void (await this.loadTranslations(jurisdiction));
+    await this.sendSES({
+      to: emails,
+      subject: this.polyglot.t('lotteryReleased.header', {
+        listingName: listingInfo.name,
+      }),
+      html: this.template('lottery-released')({
+        appOptions: { listingName: listingInfo.name },
+        appUrl: appUrl,
+        listingUrl: `${appUrl}/listings/${listingInfo.id}`,
+      }),
+    });
   }
 
   public async lotteryPublishedAdmin(
@@ -642,25 +636,19 @@ export class EmailService {
     emails: string[],
     appUrl: string,
   ) {
-    try {
-      const jurisdiction = listingInfo.juris
-        ? await this.getJurisdiction([{ id: listingInfo.juris }])
-        : user.jurisdictions[0];
-      void (await this.loadTranslations(jurisdiction));
-      await this.send(
-        emails,
-        jurisdiction.emailFromAddress,
-        this.polyglot.t('lotteryPublished.header', {
-          listingName: listingInfo.name,
-        }),
-        this.template('lottery-published-admin')({
-          appOptions: { listingName: listingInfo.name, appUrl: appUrl },
-        }),
-      );
-    } catch (err) {
-      console.log('lottery published admin email failed', err);
-      throw new HttpException('email failed', 500);
-    }
+    const jurisdiction = listingInfo.juris
+      ? await this.getJurisdiction([{ id: listingInfo.juris }])
+      : user.jurisdictions[0];
+    void (await this.loadTranslations(jurisdiction));
+    await this.sendSES({
+      to: emails,
+      subject: this.polyglot.t('lotteryPublished.header', {
+        listingName: listingInfo.name,
+      }),
+      html: this.template('lottery-published-admin')({
+        appOptions: { listingName: listingInfo.name, appUrl: appUrl },
+      }),
+    });
   }
 
   /**
@@ -671,34 +659,29 @@ export class EmailService {
     listingInfo: listingInfo,
     emails: { [key: string]: string[] },
   ) {
-    try {
-      const jurisdiction = await this.getJurisdiction([
-        { id: listingInfo.juris },
-      ]);
+    const jurisdiction = await this.getJurisdiction([
+      { id: listingInfo.juris },
+    ]);
 
-      for (const language in emails) {
-        void (await this.loadTranslations(null, language as LanguagesEnum));
-        await this.send(
-          emails[language],
-          jurisdiction.emailFromAddress,
-          this.polyglot.t('lotteryAvailable.header', {
+    for (const language in emails) {
+      void (await this.loadTranslations(null, language as LanguagesEnum));
+      await this.sendSES({
+        to: emails[language],
+
+        subject: this.polyglot.t('lotteryAvailable.header', {
+          listingName: listingInfo.name,
+        }),
+        html: this.template('lottery-published-applicant')({
+          appOptions: {
             listingName: listingInfo.name,
-          }),
-          this.template('lottery-published-applicant')({
-            appOptions: {
-              listingName: listingInfo.name,
-              appUrl: jurisdiction.publicUrl,
-            },
             appUrl: jurisdiction.publicUrl,
-            // These two URLs are placeholders and must be updated per jurisdiction
-            notificationsUrl: 'https://www.exygy.com',
-            helpCenterUrl: 'https://www.exygy.com',
-          }),
-        );
-      }
-    } catch (err) {
-      console.log('lottery published applicant email failed', err);
-      throw new HttpException('email failed', 500);
+          },
+          appUrl: jurisdiction.publicUrl,
+          // These two URLs are placeholders and must be updated per jurisdiction
+          notificationsUrl: 'https://www.exygy.com',
+          helpCenterUrl: 'https://www.exygy.com',
+        }),
+      });
     }
   }
 

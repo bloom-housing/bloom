@@ -471,16 +471,20 @@ const ListingFormActions = ({
           elements.push(unpublishButton)
         }
 
-        // Disabled for Doorway:
-        /* const lotteryResults = listing?.listingEvents?.find(
-          (event) => event.type === ListingEventsTypeEnum.lotteryResults
-        ) */
+        if (process.env.showLottery === "TRUE") {
+          const lotteryResults = listing?.listingEvents?.find(
+            (event) => event.type === ListingEventsTypeEnum.lotteryResults
+          )
 
-        /* if (lotteryResults) {
-          elements.push(editPostedResultsButton(lotteryResults))
-        } else if (listing.status === ListingsStatusEnum.closed) {
-          // elements.push(postResultsButton)
-        } */
+          if (lotteryResults) {
+            elements.push(editPostedResultsButton(lotteryResults))
+          } else if (
+            listing.status === ListingsStatusEnum.closed &&
+            (!listing?.lotteryOptIn || !process.env.showLottery)
+          ) {
+            elements.push(postResultsButton)
+          }
+        }
 
         elements.push(cancelButton)
       }

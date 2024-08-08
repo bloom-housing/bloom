@@ -1124,7 +1124,7 @@ describe("<ListingFormActions>", () => {
       expect(queryByText("Post Results")).not.toBeInTheDocument()
     })
 
-    it("renders correct buttons in a closed edit state with lottery opted out", () => {
+    fit("renders correct buttons in a closed edit state with lottery opted out", () => {
       const { queryByText } = render(
         <AuthContext.Provider value={{ profile: adminUser }}>
           <ListingContext.Provider

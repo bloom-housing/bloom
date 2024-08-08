@@ -2,9 +2,9 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import {
   ApplicationMethodsTypeEnum,
   MultiselectQuestionsApplicationSectionEnum,
-  Prisma
+  Prisma,
   PrismaClient,
-  LanguagesEnum
+  LanguagesEnum,
 } from '@prisma/client';
 import { Request as ExpressRequest } from 'express';
 import { PrismaService } from './prisma.service';
@@ -698,7 +698,7 @@ export class ScriptRunnerService {
       lotteryAvailable: {
         header: 'New Housing Lottery Results Available',
         resultsAvailable:
-          'Results are available for a housing lottery for %{listingName}. See your housing portal account for more information.',
+          'Results are available for a housing lottery for %{listingName}. See your Doorway Housing Portal account for more information.',
         signIn: 'Sign In to View Your Results',
         whatHappensHeader: 'What happens next?',
         whatHappensContent:
@@ -708,7 +708,7 @@ export class ScriptRunnerService {
         otherOpportunities2: 'here',
         otherOpportunities3:
           'If you want to learn about how lotteries work, please see the lottery section of the',
-        otherOpportunities4: 'Housing Portal Help Center',
+        otherOpportunities4: 'Doorway Housing Portal Help Center',
       },
     };
 
@@ -726,7 +726,7 @@ export class ScriptRunnerService {
         otherOpportunities2: 'aquí',
         otherOpportunities3:
           'Si desea obtener información sobre cómo funcionan las loterías, consulte la sección de lotería del',
-        otherOpportunities4: 'Housing Portal Centro de ayuda',
+        otherOpportunities4: 'Doorway Housing Portal Centro de ayuda',
       },
     };
 
@@ -744,7 +744,7 @@ export class ScriptRunnerService {
         otherOpportunities2: 'dito',
         otherOpportunities3:
           'Kung gusto mong malaman kung paano gumagana ang mga lottery, pakitingnan ang seksyon ng lottery ng',
-        otherOpportunities4: 'Housing Portal Help Center',
+        otherOpportunities4: 'Doorway Housing Portal Help Center',
       },
     };
 
@@ -762,7 +762,7 @@ export class ScriptRunnerService {
         otherOpportunities2: 'đây',
         otherOpportunities3:
           'Nếu bạn muốn tìm hiểu về cách hoạt động của xổ số, vui lòng xem phần xổ số của',
-        otherOpportunities4: 'Housing Portal Trung tâm trợ giúp',
+        otherOpportunities4: 'Doorway Housing Portal Trung tâm trợ giúp',
       },
     };
 
@@ -779,7 +779,7 @@ export class ScriptRunnerService {
           '要查看其他住房機會，請訪問 %{appUrl}。您可以註冊接收新申請機會的通知',
         otherOpportunities2: '這裡',
         otherOpportunities3: '如果您想了解彩票的運作方式，請參閱網站的彩票部分',
-        otherOpportunities4: 'Housing Portal 幫助中心',
+        otherOpportunities4: 'Doorway Housing Portal 幫助中心',
       },
     };
     await updateForLanguage(LanguagesEnum.en, enKeys);

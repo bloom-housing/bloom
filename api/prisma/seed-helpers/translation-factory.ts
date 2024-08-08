@@ -193,7 +193,7 @@ const translations = (jurisdictionName?: string, language?: LanguagesEnum) => {
       lotteryAvailable: {
         header: 'New Housing Lottery Results Available',
         resultsAvailable:
-          'Results are available for a housing lottery for %{listingName}. See your housing portal account for more information.',
+          'Results are available for a housing lottery for %{listingName}. See your Doorway Housing Portal account for more information.',
         signIn: 'Sign In to View Your Results',
         whatHappensHeader: 'What happens next?',
         whatHappensContent:
@@ -203,7 +203,7 @@ const translations = (jurisdictionName?: string, language?: LanguagesEnum) => {
         otherOpportunities2: 'here',
         otherOpportunities3:
           'If you want to learn about how lotteries work, please see the lottery section of the',
-        otherOpportunities4: 'Housing Portal Help Center',
+        otherOpportunities4: 'Doorway Housing Portal Help Center',
       },
     };
   } else if (language === LanguagesEnum.es) {
@@ -251,7 +251,7 @@ const translations = (jurisdictionName?: string, language?: LanguagesEnum) => {
         otherOpportunities2: 'aquí',
         otherOpportunities3:
           'Si desea obtener información sobre cómo funcionan las loterías, consulte la sección de lotería del',
-        otherOpportunities4: 'Housing Portal Centro de ayuda',
+        otherOpportunities4: 'Doorway Housing Portal Centro de ayuda',
       },
     };
   }

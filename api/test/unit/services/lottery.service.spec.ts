@@ -31,6 +31,7 @@ describe('Testing lottery service', () => {
   let service: LotteryService;
   let prisma: PrismaService;
   let permissionService: PermissionService;
+  let listingService: ListingService;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -61,7 +62,16 @@ describe('Testing lottery service', () => {
 
     service = module.get<LotteryService>(LotteryService);
     prisma = module.get<PrismaService>(PrismaService);
+    listingService = module.get<ListingService>(ListingService);
     permissionService = module.get<PermissionService>(PermissionService);
+
+    jest.spyOn(listingService, 'getUserEmailInfo').mockResolvedValueOnce({
+      emails: ['admin@email.com', 'partner@email.com'],
+    });
+
+    jest.spyOn(listingService, 'getPublicUserEmailInfo').mockResolvedValueOnce({
+      en: ['applicant@email.com'],
+    });
   });
 
   describe('Testing lotteryRandomizerHelper()', () => {
