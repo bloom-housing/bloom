@@ -10,7 +10,7 @@ export class ListingLotteryStatus {
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  listingId: string;
+  id: string;
 
   @Expose()
   @IsEnum(LotteryStatusEnum, { groups: [ValidationsGroupsEnum.default] })

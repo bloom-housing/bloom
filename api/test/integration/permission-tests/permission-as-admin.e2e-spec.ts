@@ -459,7 +459,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
         data: listing1,
       });
       await request(app.getHttpServer())
-        .get(`/applications/csv?listingId=${listing1Created.id}`)
+        .get(`/applications/csv?id=${listing1Created.id}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
@@ -1282,7 +1282,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
 
     it('should succeed for expireLotteries endpoint', async () => {
       await request(app.getHttpServer())
-        .put(`/listings/expireLotteries`)
+        .put(`/lottery/expireLotteries`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
@@ -1302,10 +1302,10 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
       });
 
       await request(app.getHttpServer())
-        .put('/listings/lotteryStatus')
+        .put('/lottery/lotteryStatus')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
-          listingId: listing.id,
+          id: listing.id,
           lotteryStatus: 'ran',
         })
         .set('Cookie', cookies)

@@ -18,7 +18,7 @@ export class ExportLogInterceptor extends ActivityLogInterceptor {
         // only export type tied to a single resourceId
         if (module === 'application') {
           const req = context.switchToHttp().getRequest();
-          resourceId = req.query.listingId;
+          resourceId = req.query.id;
         }
         return from(
           this.prisma.activityLog.create({

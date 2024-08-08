@@ -2,7 +2,9 @@ import { SetMetadata } from '@nestjs/common';
 
 export type ActivityLogMetadataType = Array<{
   targetPropertyName: string;
-  propertyPath: string;
+  propertyPath?: string;
+  defaultValue?: string;
+  customRecordId?: string;
 }>;
 
 export const ActivityLogMetadata = (metadata: ActivityLogMetadataType) =>
