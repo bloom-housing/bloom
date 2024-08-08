@@ -891,7 +891,6 @@ export class LotteryService {
     const activityLogs = await this.prisma.activityLog.findMany({
       select: {
         metadata: true,
-        userId: true,
         updatedAt: true,
         userAccounts: {
           select: {

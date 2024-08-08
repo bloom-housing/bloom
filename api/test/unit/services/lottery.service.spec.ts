@@ -1365,7 +1365,6 @@ describe('Testing lottery service', () => {
       prisma.activityLog.findMany = jest.fn().mockResolvedValue([
         {
           metadata: { status: 'closed' },
-          userId: 'abcd',
           updatedAt: closedDate,
           userAccounts: {
             firstName: 'Abc',
@@ -1374,7 +1373,6 @@ describe('Testing lottery service', () => {
         },
         {
           metadata: { lotteryStatus: 'ran' },
-          userId: 'abcd',
           updatedAt: ranDate,
           userAccounts: {
             firstName: 'Ghi',
@@ -1383,7 +1381,6 @@ describe('Testing lottery service', () => {
         },
         {
           metadata: { lotteryStatus: 'ran' },
-          userId: 'abcd',
           updatedAt: reRanDate,
           userAccounts: {
             firstName: 'Mno',
@@ -1392,7 +1389,6 @@ describe('Testing lottery service', () => {
         },
         {
           metadata: { lotteryStatus: 'releasedToPartners' },
-          userId: 'abcd',
           updatedAt: releasedDate,
           userAccounts: {
             firstName: 'Stu',
@@ -1401,7 +1397,6 @@ describe('Testing lottery service', () => {
         },
         {
           metadata: { lotteryStatus: 'ran' },
-          userId: 'abcd',
           updatedAt: retractedDate,
           userAccounts: {
             firstName: 'Yza',
@@ -1410,7 +1405,6 @@ describe('Testing lottery service', () => {
         },
         {
           metadata: { lotteryStatus: 'releasedToPartners' },
-          userId: 'abcd',
           updatedAt: released2Date,
           userAccounts: {
             firstName: 'Efg',
@@ -1419,7 +1413,6 @@ describe('Testing lottery service', () => {
         },
         {
           metadata: { lotteryStatus: 'publishedToPublic' },
-          userId: 'abcd',
           updatedAt: publishedDate,
           userAccounts: {
             firstName: 'Klm',
