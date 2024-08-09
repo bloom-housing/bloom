@@ -460,7 +460,7 @@ export class LotteryService {
   ): Promise<void> {
     // create a spreadsheet. If the preference is passed in use that as a title otherwise 'raw'
     const spreadsheet = workbook.addWorksheet(
-      preference ? preference.name : 'Raw',
+      preference ? preference.name : 'Raw Lottery Rank',
     );
     spreadsheet.columns = this.buildExportColumns(csvHeaders, preference);
 
@@ -541,7 +541,7 @@ export class LotteryService {
             let programs: ApplicationMultiselectQuestion[];
 
             if (preference) {
-              row['Raw Rank'] = slicedApplications.find(
+              row['Raw Lottery Rank'] = slicedApplications.find(
                 (slicedApp) => slicedApp.id === app.id,
               ).applicationLotteryPositions[0].ordinal;
             }
@@ -642,8 +642,8 @@ export class LotteryService {
       res[indx].header = `${preference.name} Rank`;
 
       res.splice(indx + 1, 0, {
-        key: 'Raw Rank',
-        header: 'Raw Rank',
+        key: 'Raw Lottery Rank',
+        header: 'Raw Lottery Rank',
       });
     }
     return res;

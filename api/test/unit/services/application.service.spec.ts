@@ -59,7 +59,7 @@ export const mockApplication = (options: {
     incomeVouchers: true,
     income: `income ${options.position}`,
     incomePeriod: IncomePeriodEnum.perMonth,
-    preferences: options.preferences,
+    preferences: options.preferences || [],
     programs: [{ claimed: true, key: 'example key', options: null }],
     preferredUnitTypes: [{ name: 'studio' }, { name: 'oneBdrm' }],
     status: ApplicationStatusEnum.submitted,

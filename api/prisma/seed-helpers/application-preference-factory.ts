@@ -22,7 +22,7 @@ export const preferenceFactory = (
         extraData: option.collectAddress
           ? [
               {
-                key: 'Address',
+                key: 'address',
                 type: InputType.address,
                 value: addressFactory(),
               },
