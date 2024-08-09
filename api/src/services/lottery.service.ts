@@ -639,11 +639,9 @@ export class LotteryService {
         (header) => header.header === 'Raw Lottery Rank',
       );
 
-      res[indx].header = `${preference.name} Rank`;
-
       res.splice(indx + 1, 0, {
         key: 'Raw Lottery Rank',
-        header: 'Raw Lottery Rank',
+        header: `${preference.name} Rank`,
       });
     }
     return res;

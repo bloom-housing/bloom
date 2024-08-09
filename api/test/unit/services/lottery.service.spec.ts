@@ -920,10 +920,10 @@ describe('Testing lottery service', () => {
       expect(workbook.worksheets[0].columnCount).toEqual(56);
       expect(workbook.worksheets[0].rowCount).toEqual(3); // header and 2 applications
       expect(workbook.worksheets[0].getColumn(3).header).toEqual(
-        'sample preference Rank',
+        'Raw Lottery Rank',
       );
       expect(workbook.worksheets[0].getColumn(4).header).toEqual(
-        'Raw Lottery Rank',
+        'sample preference Rank',
       );
       expect(workbook.worksheets[0].getRow(2).getCell(3).value).toEqual('1');
       expect(workbook.worksheets[0].getRow(3).getCell(3).value).toEqual('2');
