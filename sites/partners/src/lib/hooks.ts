@@ -521,7 +521,7 @@ export const useApplicationsExport = (listingId: string, includeDemographics: bo
   )
 }
 
-export const useLotteryExport = (listingId: string) => {
+export const useLotteryExport = (listingId: string, includeDemographics: boolean) => {
   const { lotteryService } = useContext(AuthContext)
   const [exportLoading, setExportLoading] = useState(false)
   const { addToast } = useContext(MessageContext)
@@ -530,7 +530,7 @@ export const useLotteryExport = (listingId: string) => {
     setExportLoading(true)
     try {
       const content = await lotteryService.lotteryResults(
-        { listingId },
+        { listingId, includeDemographics },
         { responseType: "arraybuffer" }
       )
       const blob = new Blob([new Uint8Array(content)], { type: "application/zip" })
