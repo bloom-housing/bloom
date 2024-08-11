@@ -910,18 +910,16 @@ export class LotteryService {
       },
     });
 
-    const filteredActivityLogs = activityLogs
-      .sort((a, b) => a.updatedAt.getTime() - b.updatedAt.getTime())
-      .filter((log) => {
-        const logString = JSON.stringify(log.metadata);
-        // only return closed listing status updates
-        if (logString.includes('status')) {
-          if (logString.includes(ListingsStatusEnum.closed)) {
-            return true;
-          } else return false;
-        }
-        return true;
-      });
+    const filteredActivityLogs = activityLogs.filter((log) => {
+      const logString = JSON.stringify(log.metadata);
+      // only return closed listing status updates
+      if (logString.includes('status')) {
+        if (logString.includes(ListingsStatusEnum.closed)) {
+          return true;
+        } else return false;
+      }
+      return true;
+    });
 
     const formattedActivityLogs: LotteryActivityLogItem[] = [];
     filteredActivityLogs.forEach((logItem, index) => {

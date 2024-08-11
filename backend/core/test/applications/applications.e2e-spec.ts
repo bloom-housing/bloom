@@ -443,7 +443,7 @@ describe("Applications", () => {
     expect(createRes.body).toHaveProperty("updatedAt")
     expect(createRes.body).toHaveProperty("id")
     const res = await supertest(app.getHttpServer())
-      .get(`/applications/csv/?id=${listing1Id}`)
+      .get(`/applications/csv/?listingId=${listing1Id}`)
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
     expect(res.body.status).toEqual("Success")
