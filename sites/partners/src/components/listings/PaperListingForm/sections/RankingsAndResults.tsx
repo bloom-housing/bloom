@@ -17,9 +17,10 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 type RankingsAndResultsProps = {
   listing?: FormListing
   disableDueDates?: boolean
+  isAdmin?: boolean
 }
 
-const RankingsAndResults = ({ listing, disableDueDates }: RankingsAndResultsProps) => {
+const RankingsAndResults = ({ listing, disableDueDates, isAdmin }: RankingsAndResultsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -128,31 +129,48 @@ const RankingsAndResults = ({ listing, disableDueDates }: RankingsAndResultsProp
         {reviewOrder === "reviewOrderLottery" && (
           <>
             {process.env.showLottery && (
-              <Grid.Row columns={2} className={"flex items-center"}>
-                <Grid.Cell>
-                  <p className={`field-label m-4 ml-0`}>{t("listings.lotteryOptInQuestion")}</p>
-                  <FieldGroup
-                    name="lotteryOptInQuestion"
-                    type="radio"
-                    register={register}
-                    fields={[
-                      {
-                        ...yesNoRadioOptions[0],
-                        id: "lotteryOptInYes",
-                        defaultChecked:
-                          !listing || listing.lotteryOptIn === true || !listing.lotteryOptIn,
-                      },
+              <>
+                {isAdmin ? (
+                  <Grid.Row columns={2} className={"flex items-center"}>
+                    <Grid.Cell>
+                      <p className={`field-label m-4 ml-0`}>{t("listings.lotteryOptInQuestion")}</p>
+                      <FieldGroup
+                        name="lotteryOptInQuestion"
+                        type="radio"
+                        register={register}
+                        fields={[
+                          {
+                            ...yesNoRadioOptions[0],
+                            id: "lotteryOptInYes",
+                            defaultChecked:
+                              !listing ||
+                              listing.lotteryOptIn === true ||
+                              listing.lotteryOptIn === null,
+                          },
 
-                      {
-                        ...yesNoRadioOptions[1],
-                        id: "lotteryOptInNo",
-                        defaultChecked: listing && listing.lotteryOptIn === false,
-                      },
-                    ]}
-                  />
-                </Grid.Cell>
-              </Grid.Row>
+                          {
+                            ...yesNoRadioOptions[1],
+                            id: "lotteryOptInNo",
+                            defaultChecked: listing && listing.lotteryOptIn === false,
+                          },
+                        ]}
+                      />
+                    </Grid.Cell>
+                  </Grid.Row>
+                ) : (
+                  <Grid.Row columns={2}>
+                    <Grid.Cell>
+                      <p className={"field-note -mt-6"}>
+                        {!listing || listing.lotteryOptIn === true || listing.lotteryOptIn === null
+                          ? t("listings.lotteryOptInPartnerYes")
+                          : t("listings.lotteryOptInPartnerNo")}
+                      </p>
+                    </Grid.Cell>
+                  </Grid.Row>
+                )}
+              </>
             )}
+
             <Grid.Row columns={3}>
               <Grid.Cell>
                 <DateField

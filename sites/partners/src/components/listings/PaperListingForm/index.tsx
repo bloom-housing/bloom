@@ -375,6 +375,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           <RankingsAndResults
                             listing={listing}
                             disableDueDates={isListingActive && !profile.userRoles.isAdmin}
+                            isAdmin={profile?.userRoles.isAdmin}
                           />
                           <LeasingAgent />
                           <ApplicationTypes listing={listing} />

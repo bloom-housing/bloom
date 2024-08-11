@@ -289,6 +289,8 @@
   "listings.lotteryDateQuestion": "When will the lottery be run?",
   "listings.lotteryEndTime": "Lottery End Time",
   "listings.lotteryOptInQuestion": "Will the lottery be run in the partner portal?",
+  "listings.lotteryOptInPartnerYes": "Your lottery will be run in the Partners Portal. If you want to make alternative arrangements, please contact staff.",
+  "listings.lotteryOptInPartnerNo": "This lottery will not be run in the Partners Portal because you have requested to use an alternative process. If this is an error, please contact staff.",
   "listings.lotteryPreferenceSubtitle": "Sort preferences to establish the order in which questions will appear in the application. This is how ranked buckets will appear in the lottery export file.",
   "listings.lotteryStartTime": "Lottery Start Time",
   "listings.lotteryTitle": "Lottery",
