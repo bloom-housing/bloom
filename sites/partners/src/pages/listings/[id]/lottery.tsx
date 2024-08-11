@@ -215,29 +215,29 @@ const Lottery = (props: { listing: Listing }) => {
       return (
         <div className={styles["actions-container"]}>
           <>
+            {listing.lotteryStatus && (
+              <Button
+                className={styles["action"]}
+                onClick={() => setReRunModal(true)}
+                variant={"primary-outlined"}
+              >
+                {t("listings.lottery.reRun")}
+              </Button>
+            )}
             {listing.lotteryStatus === LotteryStatusEnum.ran && (
-              <>
-                <Button
-                  className={styles["action"]}
-                  onClick={() => setReRunModal(true)}
-                  variant={"primary-outlined"}
-                >
-                  {t("listings.lottery.reRun")}
-                </Button>
-                <Button
-                  className={styles["action"]}
-                  onClick={() => {
-                    if (listing?.lotteryLastRunAt < listing?.lastApplicationUpdateAt) {
-                      setNewApplicationsModal(true)
-                    } else {
-                      setReleaseModal(true)
-                    }
-                  }}
-                  variant={"primary-outlined"}
-                >
-                  {t("listings.lottery.release")}
-                </Button>
-              </>
+              <Button
+                className={styles["action"]}
+                onClick={() => {
+                  if (listing?.lotteryLastRunAt < listing?.lastApplicationUpdateAt) {
+                    setNewApplicationsModal(true)
+                  } else {
+                    setReleaseModal(true)
+                  }
+                }}
+                variant={"primary-outlined"}
+              >
+                {t("listings.lottery.release")}
+              </Button>
             )}
             {(listing.lotteryStatus === LotteryStatusEnum.releasedToPartners ||
               listing.lotteryStatus === LotteryStatusEnum.publishedToPublic) && (
@@ -413,21 +413,46 @@ const Lottery = (props: { listing: Listing }) => {
           >
             <Dialog.Header id="rerun-lottery-modal-header">{t("t.areYouSure")}</Dialog.Header>
             <Dialog.Content id="rerun-lottery-modal-content">
-              <p>
-                <span>{t("listings.lottery.reRunContent")}</span>{" "}
-                <span className={"font-semibold"}>{t("listings.lottery.reRunCannotBeUndone")}</span>
-              </p>
-              <p>{t("listings.lottery.reRunHistory")}</p>
-              <p>{t("applications.addConfirmModalAddApplicationPostLotteryAreYouSure")}</p>
+              {listing.lotteryStatus === LotteryStatusEnum.releasedToPartners ||
+              listing.lotteryStatus === LotteryStatusEnum.publishedToPublic ? (
+                <>
+                  <p>{t("listings.lottery.reRunContentAfterRelease")}</p>
+                  {listing.lotteryStatus === LotteryStatusEnum.publishedToPublic && (
+                    <p className={"font-semibold"}>
+                      {t("listings.lottery.reRunContentAfterReleaseRemoval")}
+                    </p>
+                  )}
+                  <p>{t("applications.addConfirmModalAddApplicationPostLotteryAreYouSure")}</p>
+                </>
+              ) : (
+                <>
+                  <p>
+                    <span>{t("listings.lottery.reRunContent")}</span>{" "}
+                    <span className={"font-semibold"}>
+                      {t("listings.lottery.reRunCannotBeUndone")}
+                    </span>
+                  </p>
+                  <p>{t("listings.lottery.reRunHistory")}</p>
+                  <p>{t("applications.addConfirmModalAddApplicationPostLotteryAreYouSure")}</p>
+                </>
+              )}
             </Dialog.Content>
             <Dialog.Footer>
               <Button
                 variant="alert"
-                onClick={() => {
-                  // re-run lottery
-                  setReRunModal(false)
+                onClick={async () => {
+                  try {
+                    setLoading(true)
+                    await lotteryService.lotteryGenerate({ body: { listingId: listing.id } })
+                    setLoading(false)
+                    setReRunModal(false)
+                    location.reload()
+                  } catch (err) {
+                    console.log(err)
+                  }
                 }}
                 size="sm"
+                loadingMessage={loading ? t("t.loading") : null}
               >
                 {t("listings.lottery.reRunUnderstand")}
               </Button>
