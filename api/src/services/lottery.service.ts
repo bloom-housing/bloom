@@ -76,12 +76,6 @@ export class LotteryService {
         id: queryParams.listingId,
       },
     });
-    if (listing?.lotteryStatus) {
-      // if lottery has been run before
-      throw new BadRequestException(
-        `Listing ${queryParams.listingId}: the lottery was attempted to be generated but it was already run previously`,
-      );
-    }
 
     try {
       const applications = await this.prisma.applications.findMany({
