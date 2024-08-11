@@ -63,6 +63,8 @@ export default class AdditionalMetadataFormatter extends Formatter {
 
     if (this.data.reviewOrderType !== ReviewOrderTypeEnum.lottery) {
       this.data.lotteryOptIn = null
+    } else {
+      if (this.data.lotteryOptIn === null) delete this.data.lotteryOptIn
     }
 
     if (this.data.listingAvailabilityQuestion === "openWaitlist") {

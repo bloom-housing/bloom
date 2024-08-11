@@ -367,7 +367,10 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           </div>
                         </Tabs.TabPanel>
                         <Tabs.TabPanel>
-                          <RankingsAndResults listing={listing} />
+                          <RankingsAndResults
+                            listing={listing}
+                            isAdmin={profile?.userRoles.isAdmin}
+                          />
                           <LeasingAgent />
                           <ApplicationTypes listing={listing} />
                           <ApplicationAddress listing={listing} />
