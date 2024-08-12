@@ -2,7 +2,7 @@ import React from "react"
 import { t } from "@bloom-housing/ui-components"
 import { Button, Card, Tag } from "@bloom-housing/ui-seeds"
 import styles from "./StatusItem.module.scss"
-import accountStyles from "../../pages/account/account.module.scss"
+import applicationsViewStyles from "./ApplicationsView.module.scss"
 
 interface StatusItemProps {
   applicationDueDate?: string
@@ -27,7 +27,7 @@ interface StatusItemProps {
 
 const StatusItem = (props: StatusItemProps) => {
   return (
-    <Card.Section className={accountStyles["account-card-applications-section"]}>
+    <Card.Section className={applicationsViewStyles["account-card-applications-section"]}>
       <article className={styles["status-item"]}>
         <header className={styles["status-item__header"]}>
           <h3 className={styles["status-item__title"]}>{props.listingName}</h3>
