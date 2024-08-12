@@ -1925,6 +1925,50 @@ describe('Application flagged set Controller Tests', () => {
       expect(afs[0].rule).toEqual(RuleEnum.emailAndNameAndDOB);
     });
 
+    it('should create a new flagged set if multiple applications flagged', async () => {
+      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
+      const listing = await createListing();
+
+      // Three match with email and a different one has a household member with same name/dob as one in the match
+      await createComplexApplication('1', 1, listing);
+      await createComplexApplication('1', 2, listing);
+      await createComplexApplication('1', 3, listing);
+      await createComplexApplication('2', 4, listing, '2', {
+        firstName: `${listing}-firstName1`,
+        lastName: `${listing}-lastName1`,
+        birthDay: 1,
+        birthMonth: 1,
+        birthYear: 1,
+        sameAddress: YesNoEnum.yes,
+        workInRegion: YesNoEnum.yes,
+      });
+      await request(app.getHttpServer())
+        .put(`/applicationFlaggedSets/process_duplicates`)
+        .set('Cookie', adminAccessToken)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(200);
+
+      const afs = await prisma.applicationFlaggedSet.findMany({
+        where: {
+          listingId: listing,
+        },
+        include: {
+          applications: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      });
+
+      expect(afs.length).toEqual(1);
+      expect(afs[0].applications).toHaveLength(4);
+      expect(afs[0].ruleKey).toEqual(
+        `${listing}-email1@email.com-${listing}-firstname1-${listing}-lastname1-1-1-1`,
+      );
+      expect(afs[0].rule).toEqual(RuleEnum.emailAndNameAndDOB);
+    });
+
     it('should create a new flagged set if applications match on nameAndDOB case insensitive', async () => {
       process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
       const listing = await createListing();
