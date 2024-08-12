@@ -535,20 +535,34 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
         GROUP BY key, type
         HAVING count(application_id) > 1;`;
 
-      // group all of the groups by the applicationIds
+      // group all of the groups by overlapping applicationIds
       const reduced = flaggedApplicationGrouped.reduce(
-        (accumulated, applicationGroup) => {
-          const key = applicationGroup.applicationids
-            .sort((a, b) => a.localeCompare(b))
-            .toString();
-          const values = accumulated[key] || [];
-          values.push(applicationGroup);
-          accumulated[key] = values;
+        (accumulated, flaggedGroup) => {
+          // If this flag set has already been added in a previous iteration we don't need to do it again
+          const foundInAccumulated = accumulated.find((acc) =>
+            acc.find((value) => value.key === flaggedGroup.key),
+          );
+          if (foundInAccumulated) {
+            return accumulated;
+          }
+          const newGroup = [];
+          flaggedGroup.applicationids.forEach((appId) => {
+            flaggedApplicationGrouped.forEach((flaggedAppGroup) => {
+              const foundGroup = flaggedAppGroup.applicationids.find(
+                (id) => id === appId,
+              );
+              if (
+                foundGroup &&
+                !newGroup.find((group) => flaggedAppGroup.key === group.key)
+              ) {
+                newGroup.push(flaggedAppGroup);
+              }
+            });
+          });
+          accumulated.push(newGroup);
           return accumulated;
         },
-        {} as {
-          [key: string]: PossibleFlaggedSetQuery[];
-        },
+        [] as PossibleFlaggedSetQuery[][],
       );
 
       const applicationFlaggedSetsInDB =
@@ -565,49 +579,53 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
           },
         });
 
-      const constructedFlaggedSets = Object.values(reduced).map(
-        (flaggedGroup) => {
-          if (flaggedGroup.length === 1) {
+      const constructedFlaggedSets = reduced.map((flaggedGroup) => {
+        if (flaggedGroup.length === 1) {
+          return {
+            ruleKey: flaggedGroup[0].key,
+            rule: flaggedGroup[0].type as RuleEnum,
+            applications: flaggedGroup[0].applicationids,
+          };
+        }
+        // Most common multiple match is email and primary user name/dob
+        // but it can be more than 2 if also some or all of the household members match
+        // in rare cases it can also be primary applicant and household member match but email does not
+        if (flaggedGroup.length > 1) {
+          const applicationIDs = [];
+          flaggedGroup.forEach((group) => {
+            applicationIDs.push(...group.applicationids);
+          });
+          const uniqueIds = [...new Set(applicationIDs)];
+          const emailFlagged = flaggedGroup.find(
+            (group) => group.type === RuleEnum.email,
+          );
+          // all name flags need to be sorted alphabetically so they are the same every time
+          const nameFlagged = flaggedGroup
+            .filter((group) => group.type === RuleEnum.nameAndDOB)
+            ?.sort((flagA, flagB) => flagB.key.localeCompare(flagA.key));
+          if (!emailFlagged) {
+            // In the rare case that more than one name/dob matches but not email it should still be nameAndDOB
             return {
-              ruleKey: flaggedGroup[0].key,
-              rule: flaggedGroup[0].type as RuleEnum,
-              applications: flaggedGroup[0].applicationids,
+              ruleKey: `${nameFlagged.map((flag) => flag.key).join('-')}`,
+              rule: RuleEnum.nameAndDOB,
+              applications: uniqueIds,
             };
           }
-          // Most common multiple match is email and primary user name/dob
-          // but it can be more than 2 if also some or all of the household members match
-          // in rare cases it can also be primary applicant and household member match but email does not
-          if (flaggedGroup.length > 1) {
-            const emailFlagged = flaggedGroup.find(
-              (group) => group.type === RuleEnum.email,
-            );
-            // all name flags need to be sorted alphabetically so they are the same every time
-            const nameFlagged = flaggedGroup
-              .filter((group) => group.type === RuleEnum.nameAndDOB)
-              ?.sort((flagA, flagB) => flagB.key.localeCompare(flagA.key));
-            if (!emailFlagged) {
-              // In the rare case that more than one name/dob matches but not email it should still be nameAndDOB
-              return {
-                ruleKey: `${nameFlagged.map((flag) => flag.key).join('-')}`,
-                rule: RuleEnum.nameAndDOB,
-                applications: flaggedGroup[0].applicationids,
-              };
-            }
-            return {
-              ruleKey: `${emailFlagged.key}-${nameFlagged
-                .map((flag) => flag.key)
-                .join('-')}`,
-              rule: RuleEnum.emailAndNameAndDOB,
-              applications: flaggedGroup[0].applicationids,
-            };
-          }
-        },
-      );
+          return {
+            ruleKey: `${emailFlagged.key}-${nameFlagged
+              .map((flag) => flag.key)
+              .join('-')}`,
+            rule: RuleEnum.emailAndNameAndDOB,
+            applications: uniqueIds,
+          };
+        }
+      });
       // Remove unused application flagged sets that are no longer valid
-      // There are two scenarios this can happen
+      // There are multiple scenarios this can happen
       //  1. An application is deleted from the system
       //  2. An application is edited so either the applications no longer conflict or now is considered
       //     a match with both types (will be part of emailAndNameAndDOB)
+      //  3. A new application is added that partially matches a group so the group key is now different
       for (const flaggedSet of applicationFlaggedSetsInDB) {
         const foundApplicationFlaggedSet = constructedFlaggedSets.find(
           (afs) => afs.ruleKey === flaggedSet.ruleKey,
