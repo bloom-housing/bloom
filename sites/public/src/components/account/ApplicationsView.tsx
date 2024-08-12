@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Fragment, useContext } from "react"
 import Head from "next/head"
-import { t, LoadingOverlay, NavigationContext } from "@bloom-housing/ui-components"
+import { t, LoadingOverlay } from "@bloom-housing/ui-components"
 import { Button, Card, Heading, Tabs } from "@bloom-housing/ui-seeds"
 import {
   PageView,
@@ -24,8 +24,8 @@ import { useRouter } from "next/router"
 export enum ApplicationsFilterEnum {
   All = 0,
   Lottery,
-  Open,
   Closed,
+  Open,
 }
 interface ApplicationsCount {
   total: number
@@ -120,11 +120,11 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
       case ApplicationsFilterEnum.Lottery:
         void router.push(`${baseUrl}/lottery`)
         break
-      case ApplicationsFilterEnum.Open:
-        void router.push(`${baseUrl}/open`)
-        break
       case ApplicationsFilterEnum.Closed:
         void router.push(`${baseUrl}/closed`)
+        break
+      case ApplicationsFilterEnum.Open:
+        void router.push(`${baseUrl}/open`)
         break
     }
   }
@@ -141,11 +141,11 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
         case ApplicationsFilterEnum.Lottery:
           headerText = t("account.noLotteryApplications")
           break
-        case ApplicationsFilterEnum.Open:
-          headerText = t("account.noOpenApplications")
-          break
         case ApplicationsFilterEnum.Closed:
           headerText = t("account.noClosedApplications")
+          break
+        case ApplicationsFilterEnum.Open:
+          headerText = t("account.noOpenApplications")
           break
       }
     }
