@@ -144,7 +144,7 @@
   "county.goToOtherPortalsHover": "Doorway Partners Portal only contains listings for:  Contra Costa County, Marin County, Napa County, Santa Clara County (other than the City of San Jose), Solano County, and Sonoma County. If the listing is in Alameda county, San Mateo county, San Francisco City/County, or the City of San Jose, use these links to create listings in the respective portals.",
   "county.goToOtherPortalsSanFrancisco": "City and County of San Francisco - DAHLIA",
   "county.goToOtherPortalsTitle": "To add listings for other Bay Area counties, use one of these portals: ",
-  "errors.alert.emailConflict": "That email is already in use",
+  "errors.alert.emailConflict": "This email is already in use. Please contact your housing department if you're still experiencing issues",
   "errors.alert.listingsApprovalEmailError": "This listing was updated, but the associated emails failed to send.",
   "errors.maxLessThanMinOccupancyError": "Max Occupancy must be greater than or equal to Minimum Occupancy",
   "errors.minGreaterThanMaxOccupancyError": "Minimum Occupancy must be less than or equal to Max Occupancy",

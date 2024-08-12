@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ForbiddenException,
+  ConflictException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -78,7 +79,7 @@ export class UserService {
 
   /*
     this will get a set of users given the params passed in
-    Only users with a user role of admin or jurisdictional admin can get the list of available users. 
+    Only users with a user role of admin or jurisdictional admin can get the list of available users.
     This means we don't need to account for a user with only the partner role when it comes to accessing this function
   */
   async list(params: UserQueryParams, user: User): Promise<PaginatedUserDto> {
@@ -613,7 +614,7 @@ export class UserService {
         return mapTo(User, res);
       } else {
         // existing user && ((partner user -> trying to recreate user) || (public user -> trying to recreate a public user))
-        throw new BadRequestException('emailInUse');
+        throw new ConflictException('emailInUse');
       }
     }
 
