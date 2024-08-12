@@ -1,6 +1,6 @@
 import React from "react"
 import dayjs from "dayjs"
-import { StatusItem } from "../../components/account/StatusItem"
+import { StatusItem } from "./StatusItem"
 import {
   Application,
   Listing,
