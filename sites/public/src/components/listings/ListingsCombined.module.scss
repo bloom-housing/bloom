@@ -51,7 +51,7 @@
   .listings-list {
     overflow-y: auto;
     width: var(--listings-list-width);
-    padding-top: 4.5rem;
+    padding-top: var(--listings-list-overscroll);
 
     @media (max-width: $screen-md) {
       padding-top: 0;
@@ -143,7 +143,7 @@
 }
 
 .listings-list-wrapper {
-  --padding: 2.5rem;
+  --padding: var(--seeds-s10);
 
   /* These attribute selectors are strange, but that's because we want to short-circuit the
      CSS module renaming and use these exact class names */

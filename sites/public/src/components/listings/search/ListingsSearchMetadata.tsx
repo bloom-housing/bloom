@@ -27,7 +27,7 @@ export const ListingsSearchMetadata = ({
       <span className={styles["search-total-results"]}>
         <strong>{t("search.totalResults")}</strong> {!loading && searchResults.totalItems}
       </span>
-      {!loading && (
+      {!loading && searchResults.lastPage > 0 && (
         <span>
           ({t("t.pageXofY", { current: searchResults.currentPage, total: searchResults.lastPage })})
         </span>
