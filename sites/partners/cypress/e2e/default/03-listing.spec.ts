@@ -349,7 +349,7 @@ describe("Listing Management Tests", () => {
       .clear()
       .clear()
       .type(listing["editedName"])
-    cy.getByID("saveAndExitButton").contains("Save & Exit").click()
+    cy.getByID("saveAndContinueButton").contains("Save & Exit").click()
     cy.getByID("saveAlreadyLiveListingButtonConfirm").contains("Save").click()
     cy.getByTestId("page-header").should("have.text", listing["editedName"])
   }

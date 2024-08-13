@@ -45,12 +45,23 @@ import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers
 import { useJurisdictionalMultiselectQuestionList } from "../../../lib/hooks"
 import { StatusBar } from "../../../components/shared/StatusBar"
 import { getListingStatusTag } from "../helpers"
-import RequestChangesModal from "./RequestChangesModal"
+import RequestChangesDialog from "./dialogs/RequestChangesDialog"
+import CloseListingDialog from "./dialogs/CloseListingDialog"
+import PublishListingDialog from "./dialogs/PublishListingDialog"
+import LiveConfirmationDialog from "./dialogs/LiveConfirmationDialog"
+import ListingApprovalDialog from "./dialogs/ListingApprovalDialog"
+import SaveBeforeExitDialog from "./dialogs/SaveBeforeExitDialog"
 
 type ListingFormProps = {
   listing?: FormListing
   editMode?: boolean
 }
+
+export type SubmitFunction = (
+  action: "redirect" | "continue" | "confirm",
+  status?: ListingsStatusEnum,
+  newData?: Partial<FormListing>
+) => void
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ListingForm = ({ listing, editMode }: ListingFormProps) => {
@@ -99,12 +110,13 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     }
   }
 
-  const [closeModal, setCloseModal] = useState(false)
-  const [publishModal, setPublishModal] = useState(false)
+  const [closeSaveDialog, setCloseSaveDialog] = useState(false)
+  const [closeListingDialog, setCloseListingDialog] = useState(false)
+  const [publishDialog, setPublishDialog] = useState(false)
   const [lotteryResultsDrawer, setLotteryResultsDrawer] = useState(false)
-  const [listingIsAlreadyLiveModal, setListingIsAlreadyLiveModal] = useState(false)
-  const [submitForApprovalModal, setSubmitForApprovalModal] = useState(false)
-  const [requestChangesModal, setRequestChangesModal] = useState(false)
+  const [listingIsAlreadyLiveDialog, setListingIsAlreadyLiveDialog] = useState(false)
+  const [submitForApprovalDialog, setSubmitForApprovalDialog] = useState(false)
+  const [requestChangesDialog, setRequestChangesDialog] = useState(false)
 
   useEffect(() => {
     if (listing?.units) {
@@ -134,16 +146,12 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getValues, setError, clearErrors, reset } = formMethods
 
-  const triggerSubmitWithStatus = (
-    confirm?: boolean,
-    status?: ListingsStatusEnum,
-    newData?: Partial<FormListing>
-  ) => {
-    if (confirm && status === ListingsStatusEnum.active) {
+  const triggerSubmitWithStatus: SubmitFunction = (action, status, newData) => {
+    if (action === "confirm" && status === ListingsStatusEnum.active) {
       if (listing?.status === ListingsStatusEnum.active) {
-        setListingIsAlreadyLiveModal(true)
+        setListingIsAlreadyLiveDialog(true)
       } else {
-        setPublishModal(true)
+        setPublishDialog(true)
       }
       return
     }
@@ -151,11 +159,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     if (status) {
       formData = { ...formData, status }
     }
-    void onSubmit(formData)
+    void onSubmit(formData, action === "continue")
   }
 
   const onSubmit = useCallback(
-    async (formData: FormListing) => {
+    async (formData: FormListing, continueEditing: boolean) => {
       if (!loading) {
         try {
           setLoading(true)
@@ -204,7 +212,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             }
             addToast(getToast(listing?.status, formattedData?.status), { variant: "success" })
 
-            await router.push(`/listings/${result.id}`)
+            // Only do the router push if it's a redirect condition
+            if (!continueEditing) await router.push(`/listings/${result.id}`)
           }
           setLoading(false)
         } catch (err) {
@@ -401,7 +410,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         (!listing?.lotteryOptIn || !process.env.showLottery) && (
                           <LotteryResults
                             submitCallback={(data) => {
-                              triggerSubmitWithStatus(false, ListingsStatusEnum.closed, data)
+                              triggerSubmitWithStatus("redirect", ListingsStatusEnum.closed, data)
                             }}
                             drawerState={lotteryResultsDrawer}
                             showDrawer={(toggle: boolean) => setLotteryResultsDrawer(toggle)}
@@ -412,10 +421,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                     <aside className="w-full md:w-3/12 md:pl-6">
                       <ListingFormActions
                         type={editMode ? ListingFormActionsType.edit : ListingFormActionsType.add}
-                        showCloseListingModal={() => setCloseModal(true)}
+                        showSaveBeforeExitDialog={() => setCloseSaveDialog(true)}
+                        showCloseListingModal={() => setCloseListingDialog(true)}
                         showLotteryResultsDrawer={() => setLotteryResultsDrawer(true)}
-                        showRequestChangesModal={() => setRequestChangesModal(true)}
-                        showSubmitForApprovalModal={() => setSubmitForApprovalModal(true)}
+                        showRequestChangesModal={() => setRequestChangesDialog(true)}
+                        showSubmitForApprovalModal={() => setSubmitForApprovalDialog(true)}
                         submitFormWithStatus={triggerSubmitWithStatus}
                       />
                     </aside>
@@ -427,158 +437,42 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         </>
       </LoadingOverlay>
 
-      <Dialog
-        isOpen={!!closeModal}
-        onClose={() => setCloseModal(false)}
-        ariaLabelledBy="listing-form-close-listing-dialog-header"
-        ariaDescribedBy="listing-form-close-listing-dialog-content"
-      >
-        <Dialog.Header id="listing-form-close-listing-dialog-header">
-          {t("t.areYouSure")}
-        </Dialog.Header>
-        <Dialog.Content id="listing-form-close-listing-dialog-content">
-          {t("listings.closeThisListing")}
-        </Dialog.Content>
-        <Dialog.Footer>
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={() => {
-              setCloseModal(false)
-              triggerSubmitWithStatus(false, ListingsStatusEnum.closed)
-            }}
-            size="sm"
-          >
-            {t("listings.actions.close")}
-          </Button>
-          <Button
-            type="button"
-            variant="primary-outlined"
-            onClick={() => {
-              setCloseModal(false)
-            }}
-            size="sm"
-          >
-            {t("t.cancel")}
-          </Button>
-        </Dialog.Footer>
-      </Dialog>
+      <SaveBeforeExitDialog
+        isOpen={closeSaveDialog}
+        setOpen={setCloseSaveDialog}
+        currentListingStatus={listing.status}
+        submitFormWithStatus={triggerSubmitWithStatus}
+        listingDetailURL={`/listings/${listing.id}`}
+      />
 
-      <Dialog
-        isOpen={!!publishModal}
-        onClose={() => setPublishModal(false)}
-        ariaLabelledBy="listing-form-publish-listing-dialog-header"
-        ariaDescribedBy="listing-form-publish-listing-dialog-content"
-      >
-        <Dialog.Header id="listing-form-publish-listing-dialog-header">
-          {t("t.areYouSure")}
-        </Dialog.Header>
-        <Dialog.Content id="listing-form-publish-listing-dialog-content">
-          {t("listings.publishThisListing")}
-        </Dialog.Content>
-        <Dialog.Footer>
-          <Button
-            id="publishButtonConfirm"
-            type="button"
-            variant="success"
-            onClick={() => {
-              setPublishModal(false)
-              triggerSubmitWithStatus(false, ListingsStatusEnum.active)
-            }}
-            size="sm"
-          >
-            {t("listings.actions.publish")}
-          </Button>
-          <Button
-            type="button"
-            variant="primary-outlined"
-            onClick={() => {
-              setPublishModal(false)
-            }}
-            size="sm"
-          >
-            {t("t.cancel")}
-          </Button>
-        </Dialog.Footer>
-      </Dialog>
+      <CloseListingDialog
+        isOpen={closeListingDialog}
+        setOpen={setCloseListingDialog}
+        submitFormWithStatus={triggerSubmitWithStatus}
+      />
 
-      <Dialog
-        isOpen={listingIsAlreadyLiveModal}
-        onClose={() => setListingIsAlreadyLiveModal(false)}
-        ariaLabelledBy="listing-form-live-confirmation-dialog-header"
-        ariaDescribedBy="listing-form-live-confirmation-dialog-content"
-      >
-        <Dialog.Header id="listing-form-live-confirmation-dialog-header">
-          {t("t.areYouSure")}
-        </Dialog.Header>
-        <Dialog.Content id="listing-form-live-confirmation-dialog-content">
-          {t("listings.listingIsAlreadyLive")}
-        </Dialog.Content>
-        <Dialog.Footer>
-          <Button
-            id="saveAlreadyLiveListingButtonConfirm"
-            type="button"
-            variant="success"
-            onClick={() => {
-              setListingIsAlreadyLiveModal(false)
-              triggerSubmitWithStatus(false, ListingsStatusEnum.active)
-            }}
-            size="sm"
-          >
-            {t("t.save")}
-          </Button>
-          <Button
-            type="button"
-            variant="primary-outlined"
-            onClick={() => {
-              setListingIsAlreadyLiveModal(false)
-            }}
-            size="sm"
-          >
-            {t("t.cancel")}
-          </Button>
-        </Dialog.Footer>
-      </Dialog>
+      <PublishListingDialog
+        isOpen={publishDialog}
+        setOpen={setPublishDialog}
+        submitFormWithStatus={triggerSubmitWithStatus}
+      />
 
-      <Dialog
-        isOpen={submitForApprovalModal}
-        onClose={() => setSubmitForApprovalModal(false)}
-        ariaLabelledBy="listing-form-approval-dialog-header"
-        ariaDescribedBy="listing-form-approval-dialog-content"
-      >
-        <Dialog.Header id="listing-form-approval-dialog-header">{t("t.areYouSure")}</Dialog.Header>
-        <Dialog.Content id="listing-form-approval-dialog-content">
-          {t("listings.approval.submitForApprovalDescription")}
-        </Dialog.Content>
-        <Dialog.Footer>
-          <Button
-            id="submitListingForApprovalButtonConfirm"
-            type="button"
-            variant="success"
-            onClick={() => {
-              setSubmitForApprovalModal(false)
-              triggerSubmitWithStatus(false, ListingsStatusEnum.pendingReview)
-            }}
-            size="sm"
-          >
-            {t("t.submit")}
-          </Button>
-          <Button
-            type="button"
-            onClick={() => {
-              setSubmitForApprovalModal(false)
-            }}
-            size="sm"
-          >
-            {t("t.cancel")}
-          </Button>
-        </Dialog.Footer>
-      </Dialog>
+      <LiveConfirmationDialog
+        isOpen={listingIsAlreadyLiveDialog}
+        setOpen={setListingIsAlreadyLiveDialog}
+        submitFormWithStatus={triggerSubmitWithStatus}
+      />
 
-      <RequestChangesModal
+      <ListingApprovalDialog
+        isOpen={submitForApprovalDialog}
+        setOpen={setSubmitForApprovalDialog}
+        submitFormWithStatus={triggerSubmitWithStatus}
+      />
+
+      <RequestChangesDialog
         defaultValue={listing?.requestedChanges}
-        modalIsOpen={requestChangesModal}
-        setModalIsOpen={setRequestChangesModal}
+        modalIsOpen={requestChangesDialog}
+        setModalIsOpen={setRequestChangesDialog}
         submitFormWithStatus={triggerSubmitWithStatus}
       />
     </>
