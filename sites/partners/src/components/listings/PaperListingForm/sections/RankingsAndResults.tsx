@@ -22,7 +22,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, control } = formMethods
+  const { register, watch, control, errors } = formMethods
 
   const lotteryEvent = getLotteryEvent(listing as unknown as Listing)
 
@@ -153,6 +153,16 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
                   id={"lotteryDate"}
                   register={register}
                   watch={watch}
+                  error={
+                    errors?.lotteryDate
+                      ? {
+                          month: errors?.lotteryDate,
+                          day: errors?.lotteryDate,
+                          year: errors?.lotteryDate,
+                        }
+                      : null
+                  }
+                  errorMessage={t("errors.requiredFieldError")}
                   defaultDate={{
                     month: lotteryEvent?.startDate
                       ? dayjs(new Date(lotteryEvent?.startDate)).utc().format("MM")
