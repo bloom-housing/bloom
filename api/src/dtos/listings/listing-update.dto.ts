@@ -14,7 +14,7 @@ import { AddressCreate } from '../addresses/address-create.dto';
 import { ListingEventCreate } from './listing-event-create.dto';
 import { ListingFeatures } from './listing-feature.dto';
 import { ListingUtilities } from './listing-utility.dto';
-import { LotteryDateParamValidator } from 'src/utilities/lottery-date-validator';
+import { LotteryDateParamValidator } from '../../utilities/lottery-date-validator';
 
 export class ListingUpdate extends OmitType(Listing, [
   // fields get their type changed
