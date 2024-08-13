@@ -26,7 +26,10 @@ export class LotteryDateParamValidator implements ValidatorConstraintInterface {
     if (reviewOrderType === ReviewOrderTypeEnum.lottery && lotteryOptIn) {
       return !!listingEvents.find(
         (event: ListingEvent) =>
-          event.type === ListingEventsTypeEnum.publicLottery && event.startDate,
+          event.type === ListingEventsTypeEnum.publicLottery &&
+          event.startDate &&
+          event.startTime &&
+          event.endTime,
       );
     }
     return true;

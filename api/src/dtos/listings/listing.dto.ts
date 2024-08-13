@@ -38,7 +38,7 @@ import { IdDTO } from '../shared/id.dto';
 import { listingUrlSlug } from '../../utilities/listing-url-slug';
 import { User } from '../users/user.dto';
 import { requestedChangesUserMapper } from '../../utilities/requested-changes-user';
-import { LotteryDateParamValidator } from 'src/utilities/lottery-date-validator';
+import { LotteryDateParamValidator } from '../../utilities/lottery-date-validator';
 
 class Listing extends AbstractDTO {
   @Expose()
