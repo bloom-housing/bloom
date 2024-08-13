@@ -169,7 +169,7 @@ export const stagingSeed = async (
   const mapLayer = await prismaClient.mapLayers.create({
     data: mapLayerFactory(jurisdiction.id, 'Washington DC', simplifiedDCMap),
   });
-  const multiselectQuestion1 = await prismaClient.multiselectQuestions.create({
+  const cityEmployeeQuestion = await prismaClient.multiselectQuestions.create({
     data: multiselectQuestionFactory(jurisdiction.id, {
       multiselectQuestion: {
         text: 'City Employees',
@@ -186,7 +186,7 @@ export const stagingSeed = async (
       },
     }),
   });
-  const multiselectQuestion2 = await prismaClient.multiselectQuestions.create({
+  const workInCityQuestion = await prismaClient.multiselectQuestions.create({
     data: multiselectQuestionFactory(jurisdiction.id, {
       multiselectQuestion: {
         text: 'Work in the city',
@@ -215,21 +215,24 @@ export const stagingSeed = async (
       },
     }),
   });
-  const multiselectQuestion3 = await prismaClient.multiselectQuestions.create({
-    data: multiselectQuestionFactory(jurisdiction.id, {
-      multiselectQuestion: {
-        text: 'Veteran',
-        description:
-          'Have you or anyone in your household served in the US military?',
-        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
-        optOutText: 'Prefer not to say',
-        options: [
-          { text: 'Yes', exclusive: true, ordinal: 1 },
-          { text: 'No', exclusive: true, ordinal: 2 },
-        ],
-      },
-    }),
-  });
+  const veteranProgramQuestion = await prismaClient.multiselectQuestions.create(
+    {
+      data: multiselectQuestionFactory(jurisdiction.id, {
+        multiselectQuestion: {
+          text: 'Veteran',
+          description:
+            'Have you or anyone in your household served in the US military?',
+          applicationSection:
+            MultiselectQuestionsApplicationSectionEnum.programs,
+          optOutText: 'Prefer not to say',
+          options: [
+            { text: 'Yes', exclusive: true, ordinal: 1 },
+            { text: 'No', exclusive: true, ordinal: 2 },
+          ],
+        },
+      }),
+    },
+  );
   const multiselectQuestionPrograms =
     await prismaClient.multiselectQuestions.create({
       data: multiselectQuestionFactory(jurisdiction.id, {
@@ -395,8 +398,8 @@ export const stagingSeed = async (
         },
       ],
       multiselectQuestions: [
-        multiselectQuestion1,
-        multiselectQuestion2,
+        cityEmployeeQuestion,
+        workInCityQuestion,
         multiselectQuestionPrograms,
       ],
       applications: [await applicationFactory(), await applicationFactory()],
@@ -527,7 +530,7 @@ export const stagingSeed = async (
           },
         },
       ],
-      multiselectQuestions: [multiselectQuestion1],
+      multiselectQuestions: [cityEmployeeQuestion],
       // has applications that are the same email
       applications: [
         await applicationFactory({
@@ -854,7 +857,7 @@ export const stagingSeed = async (
           ],
         },
       },
-      multiselectQuestions: [multiselectQuestion2],
+      multiselectQuestions: [workInCityQuestion],
     },
     {
       listing: {
@@ -954,10 +957,32 @@ export const stagingSeed = async (
           ],
         },
       },
+      applications: [
+        await applicationFactory({
+          multiselectQuestions: [workInCityQuestion, cityEmployeeQuestion],
+        }),
+        await applicationFactory({
+          multiselectQuestions: [
+            cityEmployeeQuestion,
+            workInCityQuestion,
+            veteranProgramQuestion,
+          ],
+        }),
+        await applicationFactory({
+          multiselectQuestions: [workInCityQuestion, cityEmployeeQuestion],
+        }),
+        await applicationFactory({
+          multiselectQuestions: [workInCityQuestion],
+        }),
+        await applicationFactory({
+          multiselectQuestions: [workInCityQuestion],
+        }),
+        await applicationFactory(),
+      ],
       multiselectQuestions: [
-        multiselectQuestion2,
-        multiselectQuestion1,
-        multiselectQuestion3,
+        workInCityQuestion,
+        cityEmployeeQuestion,
+        veteranProgramQuestion,
       ],
       units: [
         {

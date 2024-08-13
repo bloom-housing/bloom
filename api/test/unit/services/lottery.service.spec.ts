@@ -6,12 +6,16 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
 } from '@prisma/client';
 import { HttpModule } from '@nestjs/axios';
+import Excel from 'exceljs';
 import { Request as ExpressRequest, Response } from 'express';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { ApplicationCsvExporterService } from '../../../src/services/application-csv-export.service';
 import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
 import { User } from '../../../src/dtos/users/user.dto';
-import { mockApplicationSet } from './application.service.spec';
+import {
+  mockApplication,
+  mockApplicationSet,
+} from './application.service.spec';
 import { mockMultiselectQuestion } from './multiselect-question.service.spec';
 import { ListingService } from '../../../src/services/listing.service';
 import { PermissionService } from '../../../src/services/permission.service';
@@ -26,6 +30,7 @@ import { Application } from '../../../src/dtos/applications/application.dto';
 import MultiselectQuestion from '../../../src/dtos/multiselect-questions/multiselect-question.dto';
 import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
 import { LotteryService } from '../../../src/services/lottery.service';
+import { getExportHeaders } from '../../../src/utilities/application-export-helpers';
 
 describe('Testing lottery service', () => {
   let service: LotteryService;
@@ -345,6 +350,514 @@ describe('Testing lottery service', () => {
           id: listingId,
         },
       });
+    });
+  });
+
+  describe('Testing generateSpreadsheetData', () => {
+    it('should generate spreadsheet and the data', async () => {
+      const applicationSet = mockApplicationSet(5, new Date(), 0, true);
+      prisma.applications.findMany = jest
+        .fn()
+        .mockResolvedValueOnce(applicationSet);
+      const workbook = new Excel.Workbook();
+      const listingId = randomUUID();
+      const headers = getExportHeaders(
+        0,
+        [],
+        'America/Los_Angeles',
+        false,
+        true,
+      );
+      await service.generateSpreadsheetData(
+        workbook,
+        applicationSet,
+        headers,
+        {
+          listingId: listingId,
+          includeDemographics: false,
+          timeZone: 'America/Los_Angeles',
+        },
+        true,
+      );
+
+      expect(prisma.applications.findMany).toBeCalledWith({
+        include: {
+          accessibility: {
+            select: {
+              hearing: true,
+              id: true,
+              mobility: true,
+              vision: true,
+            },
+          },
+          alternateContact: {
+            select: {
+              address: {
+                select: {
+                  city: true,
+                  county: true,
+                  id: true,
+                  latitude: true,
+                  longitude: true,
+                  placeName: true,
+                  state: true,
+                  street: true,
+                  street2: true,
+                  zipCode: true,
+                },
+              },
+              agency: true,
+              emailAddress: true,
+              firstName: true,
+              id: true,
+              lastName: true,
+              otherType: true,
+              phoneNumber: true,
+              type: true,
+            },
+          },
+          applicant: {
+            select: {
+              applicantAddress: {
+                select: {
+                  city: true,
+                  county: true,
+                  id: true,
+                  latitude: true,
+                  longitude: true,
+                  placeName: true,
+                  state: true,
+                  street: true,
+                  street2: true,
+                  zipCode: true,
+                },
+              },
+              applicantWorkAddress: {
+                select: {
+                  city: true,
+                  county: true,
+                  id: true,
+                  latitude: true,
+                  longitude: true,
+                  placeName: true,
+                  state: true,
+                  street: true,
+                  street2: true,
+                  zipCode: true,
+                },
+              },
+              birthDay: true,
+              birthMonth: true,
+              birthYear: true,
+              emailAddress: true,
+              firstName: true,
+              id: true,
+              lastName: true,
+              middleName: true,
+              noEmail: true,
+              noPhone: true,
+              phoneNumber: true,
+              phoneNumberType: true,
+              workInRegion: true,
+            },
+          },
+          applicationFlaggedSet: {
+            select: {
+              id: true,
+            },
+          },
+          applicationLotteryPositions: {
+            select: {
+              ordinal: true,
+            },
+            where: {
+              multiselectQuestionId: null,
+            },
+          },
+          applicationsAlternateAddress: {
+            select: {
+              city: true,
+              county: true,
+              id: true,
+              latitude: true,
+              longitude: true,
+              placeName: true,
+              state: true,
+              street: true,
+              street2: true,
+              zipCode: true,
+            },
+          },
+          applicationsMailingAddress: {
+            select: {
+              city: true,
+              county: true,
+              id: true,
+              latitude: true,
+              longitude: true,
+              placeName: true,
+              state: true,
+              street: true,
+              street2: true,
+              zipCode: true,
+            },
+          },
+          demographics: false,
+          householdMember: {
+            select: {
+              birthDay: true,
+              birthMonth: true,
+              birthYear: true,
+              firstName: true,
+              householdMemberAddress: {
+                select: {
+                  city: true,
+                  county: true,
+                  id: true,
+                  latitude: true,
+                  longitude: true,
+                  placeName: true,
+                  state: true,
+                  street: true,
+                  street2: true,
+                  zipCode: true,
+                },
+              },
+              householdMemberWorkAddress: {
+                select: {
+                  city: true,
+                  county: true,
+                  id: true,
+                  latitude: true,
+                  longitude: true,
+                  placeName: true,
+                  state: true,
+                  street: true,
+                  street2: true,
+                  zipCode: true,
+                },
+              },
+              id: true,
+              lastName: true,
+              middleName: true,
+              orderId: true,
+              relationship: true,
+              sameAddress: true,
+              workInRegion: true,
+            },
+          },
+          listings: false,
+          preferredUnitTypes: {
+            select: {
+              id: true,
+              name: true,
+              numBedrooms: true,
+            },
+          },
+          userAccounts: {
+            select: {
+              email: true,
+              firstName: true,
+              id: true,
+              lastName: true,
+            },
+          },
+        },
+        where: {
+          deletedAt: null,
+          id: {
+            in: applicationSet.map((appSet) => appSet.id),
+          },
+          listingId: listingId,
+          markedAsDuplicate: false,
+        },
+      });
+      expect(workbook.worksheets).toHaveLength(1);
+      expect(workbook.worksheets[0].columnCount).toEqual(55);
+      expect(workbook.worksheets[0].rowCount).toEqual(6); // header and 5 applications
+      expect(workbook.worksheets[0].getColumn(3).header).toEqual(
+        'Raw Lottery Rank',
+      );
+      expect(workbook.worksheets[0].getRow(2).getCell(3).value).toEqual('1');
+      expect(workbook.worksheets[0].getRow(3).getCell(3).value).toEqual('2');
+      expect(workbook.worksheets[0].getRow(4).getCell(3).value).toEqual('3');
+      expect(workbook.worksheets[0].getRow(5).getCell(3).value).toEqual('4');
+      expect(workbook.worksheets[0].getRow(6).getCell(3).value).toEqual('5');
+    });
+
+    it('should generate spreadsheet and the data for preference sheet', async () => {
+      const preferenceId = randomUUID();
+      const preference = { name: 'sample preference', id: preferenceId };
+      const applicationSet = [
+        mockApplication({
+          date: new Date(),
+          position: 2,
+          numberOfHouseholdMembers: 0,
+          includeLotteryPosition: true,
+          preferences: [{ claimed: true, multiselectQuestionId: preferenceId }],
+        }),
+        mockApplication({
+          date: new Date(),
+          position: 0,
+          numberOfHouseholdMembers: 0,
+          includeLotteryPosition: true,
+          preferences: [
+            { claimed: false, multiselectQuestionId: preferenceId },
+          ],
+        }),
+        mockApplication({
+          date: new Date(),
+          position: 1,
+          numberOfHouseholdMembers: 0,
+          includeLotteryPosition: true,
+          preferences: [],
+        }),
+        mockApplication({
+          date: new Date(),
+          position: 3,
+          numberOfHouseholdMembers: 0,
+          includeLotteryPosition: true,
+          preferences: [{ claimed: true, multiselectQuestionId: preferenceId }],
+        }),
+      ];
+      prisma.applications.findMany = jest.fn().mockResolvedValueOnce([
+        {
+          ...applicationSet[0],
+          applicationLotteryPositions: [{ ordinal: 1 }],
+        },
+        {
+          ...applicationSet[3],
+          applicationLotteryPositions: [{ ordinal: 2 }],
+        },
+        ,
+      ]);
+      const workbook = new Excel.Workbook();
+      const listingId = randomUUID();
+      const headers = getExportHeaders(
+        0,
+        [],
+        'America/Los_Angeles',
+        false,
+        true,
+      );
+      await service.generateSpreadsheetData(
+        workbook,
+        applicationSet as Application[],
+        headers,
+        {
+          listingId: listingId,
+          includeDemographics: false,
+          timeZone: 'America/Los_Angeles',
+        },
+        true,
+        preference,
+      );
+
+      expect(prisma.applications.findMany).toBeCalledWith({
+        include: {
+          accessibility: {
+            select: {
+              hearing: true,
+              id: true,
+              mobility: true,
+              vision: true,
+            },
+          },
+          alternateContact: {
+            select: {
+              address: {
+                select: {
+                  city: true,
+                  county: true,
+                  id: true,
+                  latitude: true,
+                  longitude: true,
+                  placeName: true,
+                  state: true,
+                  street: true,
+                  street2: true,
+                  zipCode: true,
+                },
+              },
+              agency: true,
+              emailAddress: true,
+              firstName: true,
+              id: true,
+              lastName: true,
+              otherType: true,
+              phoneNumber: true,
+              type: true,
+            },
+          },
+          applicant: {
+            select: {
+              applicantAddress: {
+                select: {
+                  city: true,
+                  county: true,
+                  id: true,
+                  latitude: true,
+                  longitude: true,
+                  placeName: true,
+                  state: true,
+                  street: true,
+                  street2: true,
+                  zipCode: true,
+                },
+              },
+              applicantWorkAddress: {
+                select: {
+                  city: true,
+                  county: true,
+                  id: true,
+                  latitude: true,
+                  longitude: true,
+                  placeName: true,
+                  state: true,
+                  street: true,
+                  street2: true,
+                  zipCode: true,
+                },
+              },
+              birthDay: true,
+              birthMonth: true,
+              birthYear: true,
+              emailAddress: true,
+              firstName: true,
+              id: true,
+              lastName: true,
+              middleName: true,
+              noEmail: true,
+              noPhone: true,
+              phoneNumber: true,
+              phoneNumberType: true,
+              workInRegion: true,
+            },
+          },
+          applicationFlaggedSet: {
+            select: {
+              id: true,
+            },
+          },
+          applicationLotteryPositions: {
+            select: {
+              ordinal: true,
+            },
+            where: {
+              multiselectQuestionId: preferenceId,
+            },
+          },
+          applicationsAlternateAddress: {
+            select: {
+              city: true,
+              county: true,
+              id: true,
+              latitude: true,
+              longitude: true,
+              placeName: true,
+              state: true,
+              street: true,
+              street2: true,
+              zipCode: true,
+            },
+          },
+          applicationsMailingAddress: {
+            select: {
+              city: true,
+              county: true,
+              id: true,
+              latitude: true,
+              longitude: true,
+              placeName: true,
+              state: true,
+              street: true,
+              street2: true,
+              zipCode: true,
+            },
+          },
+          demographics: false,
+          householdMember: {
+            select: {
+              birthDay: true,
+              birthMonth: true,
+              birthYear: true,
+              firstName: true,
+              householdMemberAddress: {
+                select: {
+                  city: true,
+                  county: true,
+                  id: true,
+                  latitude: true,
+                  longitude: true,
+                  placeName: true,
+                  state: true,
+                  street: true,
+                  street2: true,
+                  zipCode: true,
+                },
+              },
+              householdMemberWorkAddress: {
+                select: {
+                  city: true,
+                  county: true,
+                  id: true,
+                  latitude: true,
+                  longitude: true,
+                  placeName: true,
+                  state: true,
+                  street: true,
+                  street2: true,
+                  zipCode: true,
+                },
+              },
+              id: true,
+              lastName: true,
+              middleName: true,
+              orderId: true,
+              relationship: true,
+              sameAddress: true,
+              workInRegion: true,
+            },
+          },
+          listings: false,
+          preferredUnitTypes: {
+            select: {
+              id: true,
+              name: true,
+              numBedrooms: true,
+            },
+          },
+          userAccounts: {
+            select: {
+              email: true,
+              firstName: true,
+              id: true,
+              lastName: true,
+            },
+          },
+        },
+        where: {
+          deletedAt: null,
+          id: {
+            in: [applicationSet[0].id, applicationSet[3].id],
+          },
+          listingId: listingId,
+          markedAsDuplicate: false,
+        },
+      });
+      expect(workbook.worksheets).toHaveLength(1);
+      expect(workbook.worksheets[0].columnCount).toEqual(56);
+      expect(workbook.worksheets[0].rowCount).toEqual(3); // header and 2 applications
+      expect(workbook.worksheets[0].getColumn(3).header).toEqual(
+        'Raw Lottery Rank',
+      );
+      expect(workbook.worksheets[0].getColumn(4).header).toEqual(
+        'sample preference Rank',
+      );
+      expect(workbook.worksheets[0].getRow(2).getCell(3).value).toEqual(3);
+      expect(workbook.worksheets[0].getRow(3).getCell(3).value).toEqual(4);
+      expect(workbook.worksheets[0].getRow(2).getCell(4).value).toEqual('1');
+      expect(workbook.worksheets[0].getRow(3).getCell(4).value).toEqual('2');
     });
   });
 });

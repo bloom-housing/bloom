@@ -12,7 +12,7 @@ export const addressFactory =
       grandCanyonAddress,
       glacierAddress,
       carlsbadAddress,
-    ][randomInt(5)];
+    ][randomInt(8)];
 
 export const yellowstoneAddress = {
   placeName: 'Yellowstone National Park',

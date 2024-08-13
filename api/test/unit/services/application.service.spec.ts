@@ -29,16 +29,17 @@ import { GeocodingService } from '../../../src/services/geocoding.service';
 import { AlternateContactRelationship } from '../../../src/enums/applications/alternate-contact-relationship-enum';
 import { HouseholdMemberRelationship } from '../../../src/enums/applications/household-member-relationship-enum';
 
-export const mockApplication = (
-  position: number,
-  date: Date,
-  numberOfHouseholdMembers?: number,
-  includeLotteryPosition?: boolean,
-) => {
+export const mockApplication = (options: {
+  date: Date;
+  position?: number;
+  numberOfHouseholdMembers?: number;
+  includeLotteryPosition?: boolean;
+  preferences?: any;
+}) => {
   let householdMember = undefined;
-  if (numberOfHouseholdMembers) {
+  if (options.numberOfHouseholdMembers) {
     householdMember = [];
-    for (let i = 0; i < numberOfHouseholdMembers; i++) {
+    for (let i = 0; i < options.numberOfHouseholdMembers; i++) {
       householdMember.push({
         id: randomUUID(),
       });
@@ -46,75 +47,75 @@ export const mockApplication = (
   }
   return {
     id: randomUUID(),
-    appUrl: `appUrl ${position}`,
+    appUrl: `appUrl ${options.position}`,
     additionalPhone: true,
-    additionalPhoneNumber: `additionalPhoneNumber ${position}`,
-    additionalPhoneNumberType: `additionalPhoneNumberType ${position}`,
-    householdSize: position,
-    housingStatus: `housingStatus ${position}`,
+    additionalPhoneNumber: `additionalPhoneNumber ${options.position}`,
+    additionalPhoneNumberType: `additionalPhoneNumberType ${options.position}`,
+    householdSize: options.position,
+    housingStatus: `housingStatus ${options.position}`,
     sendMailToMailingAddress: true,
     householdExpectingChanges: true,
     householdStudent: true,
     incomeVouchers: true,
-    income: `income ${position}`,
+    income: `income ${options.position}`,
     incomePeriod: IncomePeriodEnum.perMonth,
-    preferences: [{ claimed: true, key: 'example key', options: null }],
+    preferences: options.preferences || [],
     programs: [{ claimed: true, key: 'example key', options: null }],
     preferredUnitTypes: [{ name: 'studio' }, { name: 'oneBdrm' }],
     status: ApplicationStatusEnum.submitted,
     submissionType: ApplicationSubmissionTypeEnum.electronical,
     acceptedTerms: true,
-    submissionDate: date,
+    submissionDate: options.date,
     markedAsDuplicate: false,
-    confirmationCode: `confirmationCode ${position}`,
+    confirmationCode: `confirmationCode ${options.position}`,
     reviewStatus: ApplicationReviewStatusEnum.valid,
     applicant: {
-      firstName: `application ${position} firstName`,
-      middleName: `application ${position} middleName`,
-      lastName: `application ${position} lastName`,
-      birthMonth: `application ${position} birthMonth`,
-      birthDay: `application ${position} birthDay`,
-      birthYear: `application ${position} birthYear`,
-      emailAddress: `application ${position} emailaddress`,
+      firstName: `application ${options.position} firstName`,
+      middleName: `application ${options.position} middleName`,
+      lastName: `application ${options.position} lastName`,
+      birthMonth: `application ${options.position} birthMonth`,
+      birthDay: `application ${options.position} birthDay`,
+      birthYear: `application ${options.position} birthYear`,
+      emailAddress: `application ${options.position} emailaddress`,
       noEmail: false,
-      phoneNumber: `application ${position} phoneNumber`,
-      phoneNumberType: `application ${position} phoneNumberType`,
+      phoneNumber: `application ${options.position} phoneNumber`,
+      phoneNumberType: `application ${options.position} phoneNumberType`,
       noPhone: false,
       workInRegion: YesNoEnum.yes,
       applicantWorkAddress: {
-        placeName: `application ${position} applicantWorkAddress placeName`,
-        city: `application ${position} applicantWorkAddress city`,
-        county: `application ${position} applicantWorkAddress county`,
-        state: `application ${position} applicantWorkAddress state`,
-        street: `application ${position} applicantWorkAddress street`,
-        street2: `application ${position} applicantWorkAddress street2`,
-        zipCode: `application ${position} applicantWorkAddress zipCode`,
-        latitude: position,
-        longitude: position,
+        placeName: `application ${options.position} applicantWorkAddress placeName`,
+        city: `application ${options.position} applicantWorkAddress city`,
+        county: `application ${options.position} applicantWorkAddress county`,
+        state: `application ${options.position} applicantWorkAddress state`,
+        street: `application ${options.position} applicantWorkAddress street`,
+        street2: `application ${options.position} applicantWorkAddress street2`,
+        zipCode: `application ${options.position} applicantWorkAddress zipCode`,
+        latitude: options.position,
+        longitude: options.position,
       },
       applicantAddress: {
-        placeName: `application ${position} applicantAddress placeName`,
-        city: `application ${position} applicantAddress city`,
-        county: `application ${position} applicantAddress county`,
-        state: `application ${position} applicantAddress state`,
-        street: `application ${position} applicantAddress street`,
-        street2: `application ${position} applicantAddress street2`,
-        zipCode: `application ${position} applicantAddress zipCode`,
-        latitude: position,
-        longitude: position,
+        placeName: `application ${options.position} applicantAddress placeName`,
+        city: `application ${options.position} applicantAddress city`,
+        county: `application ${options.position} applicantAddress county`,
+        state: `application ${options.position} applicantAddress state`,
+        street: `application ${options.position} applicantAddress street`,
+        street2: `application ${options.position} applicantAddress street2`,
+        zipCode: `application ${options.position} applicantAddress zipCode`,
+        latitude: options.position,
+        longitude: options.position,
       },
     },
     demographics: {
       race: ['indigenous'],
       howDidYouHear: ['other'],
     },
-    createdAt: date,
-    updatedAt: date,
+    createdAt: options.date,
+    updatedAt: options.date,
     householdMember: householdMember,
-    applicationLotteryPositions: includeLotteryPosition
+    applicationLotteryPositions: options.includeLotteryPosition
       ? [
           {
-            ordinal: position,
+            ordinal: options.position + 1,
           },
         ]
       : undefined,
@@ -130,12 +131,12 @@ export const mockApplicationSet = (
   const toReturn = [];
   for (let i = 0; i < numberToCreate; i++) {
     toReturn.push(
-      mockApplication(
-        i,
+      mockApplication({
+        position: i,
         date,
         numberOfHouseholdMembers,
         includeLotteryPosition,
-      ),
+      }),
     );
   }
   return toReturn;

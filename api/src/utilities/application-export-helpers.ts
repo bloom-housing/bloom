@@ -399,7 +399,7 @@ export const constructMultiselectQuestionHeaders = (
           });
           if (option.validationMethod) {
             headers.push({
-              path: `${applicationSection}.${question.text}.address`,
+              path: `${applicationSection}.${question.text}.geocodingVerified`,
               label: `${labelString} ${question.text} - ${option.text} - Passed Address Check`,
               format: (val: ApplicationMultiselectQuestion): string => {
                 return multiselectQuestionFormat(
@@ -412,7 +412,7 @@ export const constructMultiselectQuestionHeaders = (
           }
           if (option.collectName) {
             headers.push({
-              path: `${applicationSection}.${question.text}.address`,
+              path: `${applicationSection}.${question.text}.addressHolderName`,
               label: `${labelString} ${question.text} - ${option.text} - Name of Address Holder`,
               format: (val: ApplicationMultiselectQuestion): string => {
                 return multiselectQuestionFormat(
@@ -425,7 +425,7 @@ export const constructMultiselectQuestionHeaders = (
           }
           if (option.collectRelationship) {
             headers.push({
-              path: `${applicationSection}.${question.text}.address`,
+              path: `${applicationSection}.${question.text}.addressHolderRelationship`,
               label: `${labelString} ${question.text} - ${option.text} - Relationship to Address Holder`,
               format: (val: ApplicationMultiselectQuestion): string => {
                 return multiselectQuestionFormat(

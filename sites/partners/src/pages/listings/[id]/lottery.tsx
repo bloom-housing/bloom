@@ -45,7 +45,21 @@ const Lottery = (props: { listing: Listing }) => {
   const [loading, setLoading] = useState(false)
 
   const { listingsService, lotteryService, profile } = useContext(AuthContext)
-  const { onExport, exportLoading } = useLotteryExport(listing?.id)
+
+  const listingJurisdiction = profile?.jurisdictions?.find(
+    (jurisdiction) => jurisdiction.id === listing?.jurisdictions.id
+  )
+
+  const includeDemographicsPartner =
+    profile?.userRoles?.isPartner && listingJurisdiction?.enablePartnerDemographics
+
+  const { onExport, exportLoading } = useLotteryExport(
+    listing?.id,
+    (profile?.userRoles?.isAdmin ||
+      profile?.userRoles?.isJurisdictionalAdmin ||
+      includeDemographicsPartner) ??
+      false
+  )
   const { data } = useFlaggedApplicationsMeta(listing?.id)
   const duplicatesExist = data?.totalPendingCount > 0
   let formattedExpiryDate: string
@@ -658,11 +672,12 @@ const Lottery = (props: { listing: Listing }) => {
             <Dialog.Footer>
               <Button
                 variant="primary"
-                onClick={() => {
-                  // export lottery
+                onClick={async () => {
+                  await onExport()
                   setTermsExportModal(false)
                 }}
                 size="sm"
+                loadingMessage={loading || exportLoading ? t("t.loading") : undefined}
               >
                 {t("t.export")}
               </Button>
