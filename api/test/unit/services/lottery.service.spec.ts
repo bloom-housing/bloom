@@ -660,7 +660,7 @@ describe('Testing lottery service', () => {
         applicationSet as Application[],
         headers,
         {
-          listingId: listingId,
+          id: listingId,
           includeDemographics: false,
           timeZone: 'America/Los_Angeles',
         },
