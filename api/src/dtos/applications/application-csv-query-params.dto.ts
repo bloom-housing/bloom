@@ -10,7 +10,7 @@ export class ApplicationCsvQueryParams {
     required: true,
   })
   @IsUUID()
-  listingId: string;
+  id: string;
 
   @Expose()
   @ApiPropertyOptional({
