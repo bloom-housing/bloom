@@ -18,7 +18,7 @@ const SaveBeforeExitDialog = ({
   setOpen,
   currentListingStatus,
   submitFormWithStatus,
-  listingDetailURL
+  listingDetailURL,
 }: SaveBeforeExitDialogProps) => {
   const router = useRouter()
 
@@ -30,16 +30,16 @@ const SaveBeforeExitDialog = ({
       ariaDescribedBy="listing-save-before-exit-dialog-content"
     >
       <Dialog.Header id="listing-save-before-exit-dialog-header">
-        {t("t.areYouSure")}
+        {t("t.saveChangesQuestion")}
       </Dialog.Header>
       <Dialog.Content id="listing-save-before-exit-dialog-content">
-        Save stuff, yo dawg.
+        {t("t.saveChangesBeforeExit")}
       </Dialog.Content>
       <Dialog.Footer>
         <Button
           id="saveBeforeExitConfirm"
           type="button"
-          variant="success"
+          variant="primary"
           onClick={() => {
             setOpen(false)
             submitFormWithStatus("redirect", currentListingStatus)
@@ -50,14 +50,14 @@ const SaveBeforeExitDialog = ({
         </Button>
         <Button
           type="button"
-          variant="primary-outlined"
+          variant="alert-outlined"
           onClick={() => {
             setOpen(false)
             router.push(listingDetailURL)
           }}
           size="sm"
         >
-          {t("t.cancel")}
+          {t("t.discard")}
         </Button>
       </Dialog.Footer>
     </Dialog>

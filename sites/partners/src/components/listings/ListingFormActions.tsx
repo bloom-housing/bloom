@@ -140,6 +140,7 @@ const ListingFormActions = ({
       <Grid.Cell key="btn-save">
         <Button
           type="button"
+          variant="primary-outlined"
           className="w-full"
           onClick={() => submitFormWithStatus("continue", listing.status)}
           id={"saveAndContinueButton"}

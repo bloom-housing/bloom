@@ -63,6 +63,24 @@ export type SubmitFunction = (
   newData?: Partial<FormListing>
 ) => void
 
+const getToast = (listing: FormListing, oldStatus: ListingsStatusEnum, newStatus: ListingsStatusEnum) => {
+  const toasts = {
+    [ListingsStatusEnum.pendingReview]: t("listings.approval.submittedForReview"),
+    [ListingsStatusEnum.changesRequested]: t("listings.listingStatus.changesRequested"),
+    [ListingsStatusEnum.active]: t("listings.approval.listingPublished"),
+    [ListingsStatusEnum.pending]: t("listings.approval.listingUnpublished"),
+    [ListingsStatusEnum.closed]: t("listings.approval.listingClosed"),
+    saved: t("listings.listingUpdated")
+  }
+  if (oldStatus !== newStatus) {
+    if (!listing && newStatus === ListingsStatusEnum.pending)
+      return toasts.saved
+    return toasts[newStatus]
+  }
+
+  return toasts.saved
+}
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const defaultValues = editMode ? listing : formDefaults
@@ -194,23 +212,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           reset(formData)
 
           if (result) {
-            const getToast = (oldStatus: ListingsStatusEnum, newStatus: ListingsStatusEnum) => {
-              const toasts = {
-                [ListingsStatusEnum.pendingReview]: t("listings.approval.submittedForReview"),
-                [ListingsStatusEnum.changesRequested]: t("listings.listingStatus.changesRequested"),
-                [ListingsStatusEnum.active]: t("listings.approval.listingPublished"),
-                [ListingsStatusEnum.pending]: t("listings.approval.listingUnpublished"),
-                [ListingsStatusEnum.closed]: t("listings.approval.listingClosed"),
-              }
-              if (oldStatus !== newStatus) {
-                if (!listing && newStatus === ListingsStatusEnum.pending)
-                  return t("listings.listingUpdated")
-                return toasts[newStatus]
-              }
-
-              return t("listings.listingUpdated")
-            }
-            addToast(getToast(listing?.status, formattedData?.status), { variant: "success" })
+            addToast(getToast(listing, listing?.status, formattedData?.status), { variant: "success" })
 
             // Only do the router push if it's a redirect condition
             if (!continueEditing) await router.push(`/listings/${result.id}`)
