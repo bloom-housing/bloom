@@ -587,6 +587,7 @@ export const convertDemographicRaceToReadable = (type: string): string => {
     'black-caribbeanCentralSouthAmericanMexican':
       'Black[Caribbean, Central American, South American or Mexican]',
     'black-otherBlack': `Black[Other Black:${customValue}]`,
+    declineToRespond: 'Decline to Respond',
     indigenous: 'Indigenous',
     'indigenous-alaskanNative': 'Indigenous[Alaskan Native]',
     'indigenous-nativeAmerican': 'Indigenous[American Indian/Native American]',

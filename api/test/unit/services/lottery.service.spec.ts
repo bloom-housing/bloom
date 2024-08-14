@@ -598,7 +598,7 @@ describe('Testing lottery service', () => {
         },
       });
       expect(workbook.worksheets).toHaveLength(1);
-      expect(workbook.worksheets[0].columnCount).toEqual(55);
+      expect(workbook.worksheets[0].columnCount).toEqual(57);
       expect(workbook.worksheets[0].rowCount).toEqual(6); // header and 5 applications
       expect(workbook.worksheets[0].getColumn(3).header).toEqual(
         'Raw Lottery Rank',
@@ -871,7 +871,7 @@ describe('Testing lottery service', () => {
         },
       });
       expect(workbook.worksheets).toHaveLength(1);
-      expect(workbook.worksheets[0].columnCount).toEqual(56);
+      expect(workbook.worksheets[0].columnCount).toEqual(58);
       expect(workbook.worksheets[0].rowCount).toEqual(3); // header and 2 applications
       expect(workbook.worksheets[0].getColumn(3).header).toEqual(
         'Raw Lottery Rank',

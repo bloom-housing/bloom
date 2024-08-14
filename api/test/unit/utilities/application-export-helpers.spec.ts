@@ -43,6 +43,14 @@ describe('Testing application export helpers', () => {
       label: 'Application Submission Date',
     },
     {
+      path: 'receivedAt',
+      label: 'Application Received At',
+    },
+    {
+      path: 'receivedBy',
+      label: 'Application Received By',
+    },
+    {
       path: 'applicant.firstName',
       label: 'Primary Applicant First Name',
     },
@@ -271,15 +279,15 @@ describe('Testing application export helpers', () => {
   describe('Testing convertDemographicRaceToReadable', () => {
     it('tests convertDemographicRaceToReadable with valid type', () => {
       const keys = [
-        'americanIndianAlaskanNative',
+        'indigenous-alaskanNative',
         'declineToRespond',
-        'nativeHawaiianOtherPacificIslander-nativeHawaiian',
+        'pacificIslander-nativeHawaiian',
       ];
 
       const values = [
-        'American Indian / Alaskan Native',
+        'Indigenous[Alaskan Native]',
         'Decline to Respond',
-        'Native Hawaiian / Other Pacific Islander[Native Hawaiian]',
+        'Pacific Islander[Native Hawaiian]',
       ];
 
       for (let i = 0; i < keys.length; i++) {
@@ -290,11 +298,9 @@ describe('Testing application export helpers', () => {
     it('tests convertDemographicRaceToReadable with valid type and custom value', () => {
       expect(
         convertDemographicRaceToReadable(
-          'nativeHawaiianOtherPacificIslander-otherPacificIslander:Fijian',
+          'pacificIslander-otherPacificIslander:Fijian',
         ),
-      ).toBe(
-        'Native Hawaiian / Other Pacific Islander[Other Pacific Islander:Fijian]',
-      );
+      ).toBe('Pacific Islander[Other Pacific Islander:Fijian]');
     });
 
     it('tests convertDemographicRaceToReadable with type not in typeMap', () => {

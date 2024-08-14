@@ -98,7 +98,7 @@ describe('Testing application CSV export service', () => {
       { user: requestingUser } as unknown as ExpressRequest,
       {} as unknown as Response,
       {
-        listingId: randomUUID(),
+        id: randomUUID(),
         includeDemographics: false,
       },
     );
@@ -156,13 +156,13 @@ describe('Testing application CSV export service', () => {
     const exportResponse = await service.exportFile(
       { user: requestingUser } as unknown as ExpressRequest,
       {} as unknown as Response,
-      { listingId: 'test', includeDemographics: true },
+      { id: 'test', includeDemographics: true },
     );
 
     const headerRow =
       '"Application Id","Application Confirmation Code","Application Type","Application Submission Date","Application Received At","Application Received By","Primary Applicant First Name","Primary Applicant Middle Name","Primary Applicant Last Name","Primary Applicant Birth Day","Primary Applicant Birth Month","Primary Applicant Birth Year","Primary Applicant Email Address","Primary Applicant Phone Number","Primary Applicant Phone Type","Primary Applicant Additional Phone Number","Primary Applicant Preferred Contact Type","Primary Applicant Street","Primary Applicant Street 2","Primary Applicant City","Primary Applicant State","Primary Applicant Zip Code","Primary Applicant Mailing Street","Primary Applicant Mailing Street 2","Primary Applicant Mailing City","Primary Applicant Mailing State","Primary Applicant Mailing Zip Code","Primary Applicant Work Street","Primary Applicant Work Street 2","Primary Applicant Work City","Primary Applicant Work State","Primary Applicant Work Zip Code","Alternate Contact First Name","Alternate Contact Last Name","Alternate Contact Type","Alternate Contact Agency","Alternate Contact Other Type","Alternate Contact Email Address","Alternate Contact Phone Number","Alternate Contact Street","Alternate Contact Street 2","Alternate Contact City","Alternate Contact State","Alternate Contact Zip Code","Income","Income Period","Accessibility Mobility","Accessibility Vision","Accessibility Hearing","Expecting Household Changes","Household Includes Student or Member Nearing 18","Vouchers or Subsidies","Requested Unit Types","Preference text 0","Program text 1","Household Size","Marked As Duplicate","Flagged As Duplicate","Race","Gender","Sexual Orientation","Spoken Language","How did you Hear?"';
     const firstApp =
-      '"application 0 firstName","application 0 middleName","application 0 lastName","application 0 birthDay","application 0 birthMonth","application 0 birthYear","application 0 emailaddress","application 0 phoneNumber","application 0 phoneNumberType","additionalPhoneNumber 0",,"application 0 applicantAddress street","application 0 applicantAddress street2","application 0 applicantAddress city","application 0 applicantAddress state","application 0 applicantAddress zipCode",,,,,,"application 0 applicantWorkAddress street","application 0 applicantWorkAddress street2","application 0 applicantWorkAddress city","application 0 applicantWorkAddress state","application 0 applicantWorkAddress zipCode",,,,,,,,,,,,,"income 0","per month",,,,"true","true","true","Studio,Studio",,,,,,"Indigenous",,,,"Other"';
+      '"application 0 firstName","application 0 middleName","application 0 lastName","application 0 birthDay","application 0 birthMonth","application 0 birthYear","application 0 emailaddress","application 0 phoneNumber","application 0 phoneNumberType","additionalPhoneNumber 0",,"application 0 applicantAddress street","application 0 applicantAddress street2","application 0 applicantAddress city","application 0 applicantAddress state","application 0 applicantAddress zipCode",,,,,,"application 0 applicantWorkAddress street","application 0 applicantWorkAddress street2","application 0 applicantWorkAddress city","application 0 applicantWorkAddress state","application 0 applicantWorkAddress zipCode",,,,,,,,,,,,,"income 0","per month",,,,"true","true","true","Studio,One Bedroom",,,,,,"Indigenous",,,,"Other"';
 
     const mockedStream = new PassThrough();
     exportResponse.getStream().pipe(mockedStream);
@@ -224,7 +224,7 @@ describe('Testing application CSV export service', () => {
     const exportResponse = await service.exportFile(
       { user: requestingUser } as unknown as ExpressRequest,
       {} as unknown as Response,
-      { listingId: randomUUID() },
+      { id: randomUUID() },
     );
 
     const mockedStream = new PassThrough();
@@ -288,7 +288,7 @@ describe('Testing application CSV export service', () => {
       { user: requestingUser } as unknown as ExpressRequest,
       {} as unknown as Response,
       {
-        listingId: randomUUID(),
+        id: randomUUID(),
         timeZone: 'America/New_York',
       },
     );
