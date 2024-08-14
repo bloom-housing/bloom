@@ -472,7 +472,7 @@ export class ApplicationsService {
     const jurisdictionId = await this.listingsService.getJurisdictionIdByListingId(listingId)
 
     return await this.authzService.canOrThrow(user, "listing", authzActions.update, {
-      id: listingId,
+      listingId,
       jurisdictionId,
     })
   }

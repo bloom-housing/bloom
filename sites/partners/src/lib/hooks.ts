@@ -516,7 +516,11 @@ export const useApplicationsExport = (listingId: string, includeDemographics: bo
 
   return useCsvExport(
     () =>
-      applicationsService.listAsCsv({ listingId, includeDemographics, timeZone: dayjs.tz.guess() }),
+      applicationsService.listAsCsv({
+        id: listingId,
+        includeDemographics,
+        timeZone: dayjs.tz.guess(),
+      }),
     `applications-${listingId}-${createDateStringFromNow()}.csv`
   )
 }
@@ -530,7 +534,7 @@ export const useLotteryExport = (listingId: string, includeDemographics: boolean
     setExportLoading(true)
     try {
       const content = await lotteryService.lotteryResults(
-        { listingId, includeDemographics },
+        { id: listingId, includeDemographics },
         { responseType: "arraybuffer" }
       )
       const blob = new Blob([new Uint8Array(content)], { type: "application/zip" })
@@ -610,5 +614,18 @@ export function useMapLayersList(jurisdictionId?: string) {
     mapLayers: data,
     mapLayersLoading: !error && !data,
     mapLayersError: error,
+  }
+}
+
+export function useLotteryActivityLog(listingId: string) {
+  const { lotteryService } = useContext(AuthContext)
+  const fetcher = () => lotteryService.lotteryActivityLog({ id: listingId })
+
+  const { data, error } = useSWR(`/api/adapter/lottery/lotteryActivityLog`, fetcher)
+
+  return {
+    lotteryActivityLogData: data,
+    lotteryActivityLogLoading: !error && !data,
+    lotteryError: error,
   }
 }
