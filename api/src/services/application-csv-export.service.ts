@@ -50,11 +50,11 @@ export class ApplicationCsvExporterService {
     queryParams: QueryParams,
   ): Promise<StreamableFile> {
     const user = mapTo(User, req['user']);
-    await this.authorizeCSVExport(user, queryParams.listingId);
+    await this.authorizeCSVExport(user, queryParams.id);
 
     const filename = join(
       process.cwd(),
-      `src/temp/listing-${queryParams.listingId}-applications-${
+      `src/temp/listing-${queryParams.id}-applications-${
         user.id
       }-${new Date().getTime()}.csv`,
     );
@@ -84,16 +84,14 @@ export class ApplicationCsvExporterService {
         },
       },
       where: {
-        listingId: queryParams.listingId,
+        listingId: queryParams.id,
         deletedAt: null,
       },
     });
 
     // get all multiselect questions for a listing to build csv headers
     const multiSelectQuestions =
-      await this.multiselectQuestionService.findByListingId(
-        queryParams.listingId,
-      );
+      await this.multiselectQuestionService.findByListingId(queryParams.id);
 
     // get maxHouseholdMembers associated to the selected applications
     let maxHouseholdMembers = 0;
@@ -213,7 +211,7 @@ export class ApplicationCsvExporterService {
                         : false,
                     },
                     where: {
-                      listingId: queryParams.listingId,
+                      listingId: queryParams.id,
                       deletedAt: null,
                       markedAsDuplicate: forLottery ? false : undefined,
                       id: {

@@ -432,7 +432,7 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
         data: listing1,
       });
       await request(app.getHttpServer())
-        .get(`/applications/csv?listingId=${listing1Created.id}`)
+        .get(`/applications/csv?id=${listing1Created.id}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
@@ -1065,7 +1065,7 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
 
     it('should error as forbidden for expireLotteries endpoint', async () => {
       await request(app.getHttpServer())
-        .put(`/listings/expireLotteries`)
+        .put(`/lottery/expireLotteries`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
@@ -1073,10 +1073,10 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
 
     it('should error as forbidden for lottery status endpoint', async () => {
       await request(app.getHttpServer())
-        .put('/listings/lotteryStatus')
+        .put('/lottery/lotteryStatus')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
-          listingId: listingId,
+          id: listingId,
           lotteryStatus: 'publishedToPublic',
         })
         .set('Cookie', cookies)

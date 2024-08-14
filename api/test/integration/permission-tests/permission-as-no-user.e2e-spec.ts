@@ -404,7 +404,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         data: listing1,
       });
       await request(app.getHttpServer())
-        .get(`/applications/csv?listingId=${listing1Created.id}`)
+        .get(`/applications/csv?id=${listing1Created.id}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
@@ -1127,7 +1127,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
     it('should error as forbidden for expireLotteries endpoint', async () => {
       await request(app.getHttpServer())
-        .put(`/listings/expireLotteries`)
+        .put(`/lottery/expireLotteries`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
@@ -1147,10 +1147,10 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       });
 
       await request(app.getHttpServer())
-        .put('/listings/lotteryStatus')
+        .put('/lottery/lotteryStatus')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
-          listingId: listing.id,
+          id: listing.id,
           lotteryStatus: 'ran',
         })
         .set('Cookie', cookies)

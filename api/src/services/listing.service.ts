@@ -20,7 +20,6 @@ import {
   ReviewOrderTypeEnum,
   UserRoleEnum,
 } from '@prisma/client';
-import dayjs from 'dayjs';
 import { firstValueFrom } from 'rxjs';
 import { ApplicationFlaggedSetService } from './application-flagged-set.service';
 import { EmailService } from './email.service';
@@ -145,7 +144,6 @@ views.csv = {
 };
 
 const LISTING_CRON_JOB_NAME = 'LISTING_CRON_JOB';
-const LOTTERY_CRON_JOB_NAME = 'LOTTERY_CRON_JOB';
 /*
   this is the service for listings
   it handles all the backend's business logic for reading in listing(s)
@@ -171,14 +169,6 @@ export class ListingService implements OnModuleInit {
       LISTING_CRON_JOB_NAME,
       process.env.LISTING_PROCESSING_CRON_STRING,
       this.closeListings.bind(this),
-      this.logger,
-      this.schedulerRegistry,
-    );
-    startCronJob(
-      this.prisma,
-      LOTTERY_CRON_JOB_NAME,
-      process.env.LOTTERY_PROCESSING_CRON_STRING,
-      this.expireLotteries.bind(this),
       this.logger,
       this.schedulerRegistry,
     );
@@ -1878,229 +1868,5 @@ export class ListingService implements OnModuleInit {
     }
 
     return listing.jurisdictionId;
-  }
-
-  async lotteryStatus(
-    dto: ListingLotteryStatus,
-    requestingUser: User,
-  ): Promise<SuccessDTO> {
-    const storedListing = await this.findOrThrow(
-      dto.listingId,
-      ListingViews.details,
-    );
-
-    await this.permissionService.canOrThrow(
-      requestingUser,
-      'listing',
-      permissionActions.update,
-      {
-        id: storedListing.id,
-        jurisdictionId: storedListing.jurisdictionId,
-      },
-    );
-
-    if (storedListing.status !== ListingsStatusEnum.closed) {
-      throw new BadRequestException(
-        'Lottery status cannot be changed until listing is closed.',
-      );
-    }
-
-    const isAdmin = requestingUser.userRoles?.isAdmin;
-    const isJurisdictionalAdmin =
-      requestingUser.userRoles?.isJurisdictionalAdmin;
-    const isPartner = requestingUser.userRoles?.isPartner;
-    const currentStatus = storedListing.lotteryStatus;
-
-    // TODO: remove when all status logic has been implemented
-    let res;
-
-    const partnerUserEmailInfo = await this.getUserEmailInfo(
-      [
-        UserRoleEnum.admin,
-        UserRoleEnum.jurisdictionAdmin,
-        UserRoleEnum.partner,
-      ],
-      storedListing.id,
-      storedListing.jurisdictionId,
-    );
-
-    const publicUserEmailInfo = await this.getPublicUserEmailInfo(
-      storedListing.id,
-    );
-
-    switch (dto?.lotteryStatus) {
-      case LotteryStatusEnum.ran: {
-        if (!isAdmin) {
-          throw new ForbiddenException();
-        }
-        if (
-          currentStatus === LotteryStatusEnum.releasedToPartners ||
-          currentStatus === LotteryStatusEnum.publishedToPublic
-        ) {
-          // TODO: add retracted to history
-        }
-        // TODO: add ran to history
-        // TODO: remove when all status logic has been implemented
-        res = await this.prisma.listings.update({
-          data: {
-            lotteryLastRunAt: new Date(),
-            lotteryStatus: dto?.lotteryStatus,
-          },
-          where: {
-            id: dto.listingId,
-          },
-        });
-
-        break;
-      }
-      case LotteryStatusEnum.errored: {
-        // TODO
-        break;
-      }
-      case LotteryStatusEnum.releasedToPartners: {
-        if (!isAdmin) {
-          throw new ForbiddenException();
-        }
-        if (currentStatus !== LotteryStatusEnum.ran) {
-          throw new BadRequestException(
-            'Lottery cannot be released to partners without being in run state.',
-          );
-        }
-        if (
-          storedListing.lotteryLastRunAt < storedListing.lastApplicationUpdateAt
-        ) {
-          throw new BadRequestException(
-            'Lottery cannot be released due to paper applications that are not included in the last run.',
-          );
-        }
-        // TODO: add released to partners to history
-        // TODO: remove when all status logic has been implemented
-        res = await this.prisma.listings.update({
-          data: {
-            lotteryStatus: dto?.lotteryStatus,
-          },
-          where: {
-            id: dto.listingId,
-          },
-        });
-
-        await this.emailService.lotteryReleased(
-          requestingUser,
-          {
-            id: storedListing.id,
-            name: storedListing.name,
-            juris: storedListing.jurisdictionId,
-          },
-          partnerUserEmailInfo.emails,
-          this.configService.get('PARTNERS_PORTAL_URL'),
-        );
-
-        break;
-      }
-      case LotteryStatusEnum.publishedToPublic: {
-        if (!isPartner && !isAdmin && !isJurisdictionalAdmin) {
-          throw new ForbiddenException();
-        }
-        if (currentStatus !== LotteryStatusEnum.releasedToPartners) {
-          throw new BadRequestException(
-            'Lottery cannot be published to public without being in released to partners state.',
-          );
-        }
-        // TODO: add published to public to history
-        // TODO: remove when all status logic has been implemented
-        res = await this.prisma.listings.update({
-          data: {
-            lotteryStatus: dto?.lotteryStatus,
-          },
-          where: {
-            id: dto.listingId,
-          },
-        });
-
-        await this.emailService.lotteryPublishedAdmin(
-          requestingUser,
-          {
-            id: storedListing.id,
-            name: storedListing.name,
-            juris: storedListing.jurisdictionId,
-          },
-          partnerUserEmailInfo.emails,
-          this.configService.get('PARTNERS_PORTAL_URL'),
-        );
-
-        await this.emailService.lotteryPublishedApplicant(
-          {
-            id: storedListing.id,
-            name: storedListing.name,
-            juris: storedListing.jurisdictionId,
-          },
-          publicUserEmailInfo,
-        );
-        break;
-      }
-      default: {
-        throw new BadRequestException(
-          `${dto?.lotteryStatus} is not an allowed lottery status.`,
-        );
-      }
-    }
-    // TODO: uncomment when all status logic is implemented
-    // const res = await this.prisma.listings.update({
-    //   data: {
-    //     lotteryStatus: dto?.lotteryStatus,
-    //   },
-    //   where: {
-    //     id: dto.listingId,
-    //   },
-    // });
-
-    if (!res) {
-      throw new HttpException('Listing lottery status failed to save.', 500);
-    }
-
-    return {
-      success: true,
-    };
-  }
-
-  /**
-    runs the job to auto expire lotteries that are passed their due date
-    will call the the cache purge to purge all listings as long as updates had to be made
-  */
-  async expireLotteries(): Promise<SuccessDTO> {
-    if (process.env.LOTTERY_DAYS_TILL_EXPIRY) {
-      this.logger.warn('changeExpiredLotteryStatusCron job running');
-      await this.markCronJobAsStarted(LOTTERY_CRON_JOB_NAME);
-      const expiration_date = dayjs(new Date())
-        .subtract(Number(process.env.LOTTERY_DAYS_TILL_EXPIRY), 'days')
-        .toDate();
-      const res = await this.prisma.listings.updateMany({
-        data: {
-          lotteryStatus: LotteryStatusEnum.expired,
-        },
-        where: {
-          status: ListingsStatusEnum.closed,
-          reviewOrderType: ReviewOrderTypeEnum.lottery,
-          closedAt: {
-            lte: expiration_date,
-          },
-          OR: [
-            {
-              lotteryStatus: {
-                not: LotteryStatusEnum.expired,
-              },
-            },
-            {
-              lotteryStatus: null,
-            },
-          ],
-        },
-      });
-      // TODO: add expired to history log for each listing
-      this.logger.warn(`Changed the status of ${res?.count} lotteries`);
-    }
-    return {
-      success: true,
-    };
   }
 }

@@ -1,7 +1,8 @@
-import React, { useState, useContext } from "react"
+import React, { useState, useContext, useMemo } from "react"
 import Head from "next/head"
 import axios from "axios"
 import dayjs from "dayjs"
+import advancedFormat from "dayjs/plugin/advancedFormat"
 import Ticket from "@heroicons/react/24/solid/TicketIcon"
 import Download from "@heroicons/react/24/solid/ArrowDownTrayIcon"
 import ExclamationCirleIcon from "@heroicons/react/24/solid/ExclamationCircleIcon"
@@ -24,11 +25,16 @@ import ListingGuard from "../../../components/shared/ListingGuard"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
 import { ListingStatusBar } from "../../../components/listings/ListingStatusBar"
 import { logger } from "../../../logger"
-import { useFlaggedApplicationsMeta, useLotteryExport } from "../../../lib/hooks"
+import {
+  useFlaggedApplicationsMeta,
+  useLotteryActivityLog,
+  useLotteryExport,
+} from "../../../lib/hooks"
+dayjs.extend(advancedFormat)
 
 import styles from "../../../../styles/lottery.module.scss"
 
-const Lottery = (props: { listing: Listing }) => {
+const Lottery = (props: { listing: Listing | undefined }) => {
   const metaDescription = ""
   const metaImage = ""
 
@@ -44,7 +50,7 @@ const Lottery = (props: { listing: Listing }) => {
   const [newApplicationsModal, setNewApplicationsModal] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const { listingsService, lotteryService, profile } = useContext(AuthContext)
+  const { lotteryService, profile } = useContext(AuthContext)
 
   const listingJurisdiction = profile?.jurisdictions?.find(
     (jurisdiction) => jurisdiction.id === listing?.jurisdictions.id
@@ -61,6 +67,7 @@ const Lottery = (props: { listing: Listing }) => {
       false
   )
   const { data } = useFlaggedApplicationsMeta(listing?.id)
+  const { lotteryActivityLogData } = useLotteryActivityLog(listing?.id)
   const duplicatesExist = data?.totalPendingCount > 0
   let formattedExpiryDate: string
   if (process.env.lotteryDaysTillExpiry) {
@@ -71,17 +78,54 @@ const Lottery = (props: { listing: Listing }) => {
     formattedExpiryDate = expiryDate.format("MMMM D, YYYY")
   }
 
-  if (!listing) return <div>{t("t.errorOccurred")}</div>
-
-  const getHistoryItem = (dateString: string, event: string, user: string) => {
+  const getHistoryItem = (date: Date, event: string, user: string, key: number) => {
     return (
-      <div className={styles["history-item"]}>
-        <div>{dateString}</div>
+      <div className={styles["history-item"]} key={key}>
+        <div>
+          {t("listings.lottery.historyLogTimestamp", {
+            date: dayjs(date).format("MMMM Do, YYYY"),
+            time: dayjs(date).format("h:mm a"),
+          })}
+        </div>
         <div className={styles["event"]}>{event}</div>
         <div className={styles["user"]}>{user}</div>
       </div>
     )
   }
+
+  const historyItems = useMemo(() => {
+    if (!lotteryActivityLogData) return
+
+    const eventMap = {
+      closed: t("listings.lottery.historyLogClosed"),
+      ran: t("listings.lottery.historyLogRun"),
+      rerun: t("listings.lottery.historyLogReRun"),
+      releasedToPartners: t("listings.lottery.historyLogReleased"),
+      retracted: t("listings.lottery.historyLogRetracted"),
+      publishedToPublic: t("listings.lottery.historyLogPublished"),
+    }
+
+    const items = []
+
+    lotteryActivityLogData.forEach((logItem, index) => {
+      if (Object.keys(eventMap).indexOf(logItem.status) >= 0) {
+        items.push(
+          getHistoryItem(
+            logItem.logDate,
+            eventMap[logItem.status],
+            logItem.status === "closed"
+              ? t("listings.lottery.historyLogAutomatic")
+              : t("listings.lottery.historyLogUser", { name: logItem.name }),
+            index
+          )
+        )
+      }
+    })
+
+    return items
+  }, [lotteryActivityLogData, profile])
+
+  if (!listing) return <div>{t("t.errorOccurred")}</div>
 
   const getMainContent = () => {
     const exportCard = (
@@ -338,18 +382,7 @@ const Lottery = (props: { listing: Listing }) => {
                             {t("listings.lottery.history")}
                           </Heading>
                         </CardHeader>
-                        <CardSection>
-                          {getHistoryItem(
-                            "November 21st, 2023 at 8:30am",
-                            "Listing closed",
-                            "By property"
-                          )}
-                          {getHistoryItem(
-                            "November 21st, 2023 at 8:30am",
-                            "Listing closed",
-                            "By property"
-                          )}
-                        </CardSection>
+                        <CardSection>{historyItems}</CardSection>
                       </Card>
                     </>
                   </aside>
@@ -393,7 +426,7 @@ const Lottery = (props: { listing: Listing }) => {
                 onClick={async () => {
                   try {
                     setLoading(true)
-                    await lotteryService.lotteryGenerate({ body: { listingId: listing.id } })
+                    await lotteryService.lotteryGenerate({ body: { id: listing.id } })
                     setLoading(false)
                     setRunModal(false)
                     location.reload()
@@ -457,7 +490,7 @@ const Lottery = (props: { listing: Listing }) => {
                 onClick={async () => {
                   try {
                     setLoading(true)
-                    await lotteryService.lotteryGenerate({ body: { listingId: listing.id } })
+                    await lotteryService.lotteryGenerate({ body: { id: listing.id } })
                     setLoading(false)
                     setReRunModal(false)
                     location.reload()
@@ -498,9 +531,9 @@ const Lottery = (props: { listing: Listing }) => {
                 onClick={async () => {
                   setLoading(true)
                   try {
-                    await listingsService.lotteryStatus({
+                    await lotteryService.lotteryStatus({
                       body: {
-                        listingId: listing.id,
+                        id: listing.id,
                         lotteryStatus: LotteryStatusEnum.releasedToPartners,
                       },
                     })
@@ -573,9 +606,9 @@ const Lottery = (props: { listing: Listing }) => {
                 onClick={async () => {
                   setLoading(true)
                   try {
-                    await listingsService.lotteryStatus({
+                    await lotteryService.lotteryStatus({
                       body: {
-                        listingId: listing.id,
+                        id: listing.id,
                         lotteryStatus: LotteryStatusEnum.ran,
                       },
                     })
@@ -711,9 +744,9 @@ const Lottery = (props: { listing: Listing }) => {
                 onClick={async () => {
                   setLoading(true)
                   try {
-                    await listingsService.lotteryStatus({
+                    await lotteryService.lotteryStatus({
                       body: {
-                        listingId: listing.id,
+                        id: listing.id,
                         lotteryStatus: LotteryStatusEnum.publishedToPublic,
                       },
                     })

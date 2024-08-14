@@ -198,36 +198,6 @@ export class ListingController {
     return await this.listingService.closeListings();
   }
 
-  @Put('expireLotteries')
-  @ApiOperation({
-    summary: 'Trigger the lottery process job',
-    operationId: 'expireLotteries',
-  })
-  @ApiOkResponse({ type: SuccessDTO })
-  @PermissionAction(permissionActions.update)
-  @UseInterceptors(ActivityLogInterceptor)
-  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
-  async expireLotteries(): Promise<SuccessDTO> {
-    return await this.listingService.expireLotteries();
-  }
-
-  @Put('lotteryStatus')
-  @ApiOperation({
-    summary: 'Change the listing lottery status',
-    operationId: 'lotteryStatus',
-  })
-  @ApiOkResponse({ type: SuccessDTO })
-  @UseGuards(ApiKeyGuard)
-  async lotteryStatus(
-    @Request() req: ExpressRequest,
-    @Body() dto: ListingLotteryStatus,
-  ): Promise<SuccessDTO> {
-    return await this.listingService.lotteryStatus(
-      dto,
-      mapTo(User, req['user']),
-    );
-  }
-
   @Put(':id')
   @ApiOperation({ summary: 'Update listing by id', operationId: 'update' })
   @UsePipes(new ListingCreateUpdateValidationPipe(defaultValidationPipeOptions))
