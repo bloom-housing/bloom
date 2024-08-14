@@ -107,16 +107,18 @@ const Lottery = (props: { listing: Listing | undefined }) => {
     const items = []
 
     lotteryActivityLogData.forEach((logItem, index) => {
-      items.push(
-        getHistoryItem(
-          logItem.logDate,
-          eventMap[logItem.status],
-          logItem.status === "closed"
-            ? t("listings.lottery.historyLogAutomatic")
-            : t("listings.lottery.historyLogUser", { name: logItem.name }),
-          index
+      if (Object.keys(eventMap).indexOf(logItem.status) >= 0) {
+        items.push(
+          getHistoryItem(
+            logItem.logDate,
+            eventMap[logItem.status],
+            logItem.status === "closed"
+              ? t("listings.lottery.historyLogAutomatic")
+              : t("listings.lottery.historyLogUser", { name: logItem.name }),
+            index
+          )
         )
-      )
+      }
     })
 
     return items

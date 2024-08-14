@@ -981,7 +981,6 @@ export class LotteryService {
           ],
         },
       });
-      // TODO: add expired to history log for each listing
       this.logger.warn(`Changed the status of ${res?.count} lotteries`);
     }
     return {
