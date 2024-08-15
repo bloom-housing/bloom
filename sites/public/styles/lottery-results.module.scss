@@ -1,0 +1,44 @@
+.background-card-section {
+  background-color: var(--seeds-bg-color-surface-primary);
+  border: none;
+}
+
+.background-card-alert-section {
+  background-color: var(--seeds-color-secondary-lighter);
+  border: none;
+}
+
+.section-button {
+  margin-top: var(--seeds-s4);
+}
+
+.section-heading {
+  margin-bottom: var(--seeds-s2);
+}
+
+.preference-rank {
+  display: flex;
+  flex-direction: row;
+}
+
+.rank-number {
+  background-color: var(--seeds-color-primary);
+  display: flex;
+  align-items: center;
+  padding-inline: var(--seeds-s3);
+  font-size: var(--seeds-font-size-2xl);
+  color: var(--seeds-color-white);
+  font-weight: var(--seeds-font-weight-semibold);
+  height: var(--seeds-s10);
+  letter-spacing: -0.05em;
+  margin-right: var(--seeds-s6);
+}
+
+.rank-number-content {
+  line-height: 0.5;
+}
+
+.raw-rank {
+  font-size: var(--seeds-font-size-4xl);
+  font-weight: var(--seeds-font-weight-semibold);
+}

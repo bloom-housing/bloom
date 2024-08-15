@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from "react"
 import { t } from "@bloom-housing/ui-components"
-import FormsLayout from "../../../layouts/forms"
+import FormsLayout from "../../../../layouts/forms"
 import { useRouter } from "next/router"
 import { AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import { Application, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { SubmittedApplicationView } from "../../../components/applications/SubmittedApplicationView"
+import { SubmittedApplicationView } from "../../../../components/applications/SubmittedApplicationView"
 import { Card, Button, Heading } from "@bloom-housing/ui-seeds"
 
 export default () => {
