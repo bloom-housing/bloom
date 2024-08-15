@@ -107,7 +107,7 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
           break
       }
     }
-    console.log(showLottery)
+
     return (
       <Card.Section className={styles["account-card-applications-section"]}>
         <div className={styles["application-no-results"]}>
