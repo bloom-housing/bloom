@@ -94,7 +94,7 @@ const Layout = (props) => {
     siteNotice = <SanJoseNotice />
   }
   if (process.env.jurisdictionName === "San Mateo") {
-    transitionMessage = t("alert.transition")
+    transitionMessage = t("alert.transitionv2")
   }
 
   return (
