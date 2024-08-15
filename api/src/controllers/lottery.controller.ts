@@ -4,6 +4,7 @@ import {
   Get,
   Header,
   Param,
+  ParseUUIDPipe,
   Put,
   Query,
   Request,
@@ -100,15 +101,16 @@ export class LotteryController {
     );
   }
 
-  @Get('lotteryActivityLog')
+  @Get('lotteryActivityLog/:id')
   @ApiOkResponse({ type: LotteryActivityLogItem, isArray: true })
   @ApiOperation({
     summary: 'Get a lottery activity log',
     operationId: 'lotteryActivityLog',
   })
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   async lotteryActivityLog(
     @Request() req: ExpressRequest,
-    @Param('id') id: string,
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
   ): Promise<LotteryActivityLogItem[]> {
     return await this.lotteryService.lotteryActivityLog(
       id,
