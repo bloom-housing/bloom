@@ -3,6 +3,6 @@ import ApplicationsView, {
   ApplicationsFilterEnum,
 } from "../../../../components/account/ApplicationsView"
 
-const ClosedApplications = () => <ApplicationsView filterType={ApplicationsFilterEnum.Closed} />
+const ClosedApplications = () => <ApplicationsView filterType={ApplicationsFilterEnum.closed} />
 
 export default ClosedApplications

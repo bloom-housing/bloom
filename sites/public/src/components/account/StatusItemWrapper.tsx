@@ -4,14 +4,14 @@ import { StatusItem } from "./StatusItem"
 import { Application, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export interface AppWithListing extends Application {
-  fullListing?: Listing
+  listings: Listing
 }
 interface StatusItemWrapperProps {
   application: AppWithListing
 }
 
 const StatusItemWrapper = (props: StatusItemWrapperProps) => {
-  const applicationDueDate = props.application?.fullListing?.applicationDueDate
+  const applicationDueDate = props.application?.listings?.applicationDueDate
 
   return (
     <StatusItem
@@ -19,8 +19,8 @@ const StatusItemWrapper = (props: StatusItemWrapperProps) => {
       applicationURL={`application/${props.application?.id}`}
       applicationUpdatedAt={dayjs(props.application?.updatedAt).format("MMMM D, YYYY")}
       confirmationNumber={props.application?.confirmationCode || props.application?.id}
-      listingName={props.application?.fullListing?.name}
-      listingURL={`/listing/${props.application?.fullListing?.id}/${props.application?.fullListing?.urlSlug}`}
+      listingName={props.application?.listings?.name}
+      listingURL={`/listing/${props.application?.listings?.id}`}
       key={props.application?.id}
     />
   )
