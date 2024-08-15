@@ -432,6 +432,110 @@ describe('Lottery Controller Tests', () => {
 
       expect(updatedListing.lotteryStatus).toEqual(LotteryStatusEnum.ran);
     });
+
+    it('should re-run lottery if lottery has already ran', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
+      const listing1 = await listingFactory(jurisdiction.id, prisma, {
+        status: ListingsStatusEnum.closed,
+      });
+      const listing1Created = await prisma.listings.create({
+        data: {
+          ...listing1,
+        },
+      });
+
+      const appA = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        listingId: listing1Created.id,
+      });
+      await prisma.applications.create({
+        data: appA,
+        include: {
+          applicant: true,
+        },
+      });
+      const appB = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        listingId: listing1Created.id,
+      });
+      await prisma.applications.create({
+        data: appB,
+        include: {
+          applicant: true,
+        },
+      });
+      const appC = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        listingId: listing1Created.id,
+      });
+      await prisma.applications.create({
+        data: appC,
+        include: {
+          applicant: true,
+        },
+      });
+      const appD = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        listingId: listing1Created.id,
+      });
+      await prisma.applications.create({
+        data: appD,
+        include: {
+          applicant: true,
+        },
+      });
+      const appE = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        listingId: listing1Created.id,
+      });
+      await prisma.applications.create({
+        data: appE,
+        include: {
+          applicant: true,
+        },
+      });
+
+      await request(app.getHttpServer())
+        .put(`/lottery/generateLotteryResults`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: listing1Created.id,
+        })
+        .set('Cookie', cookies)
+        .expect(200);
+      const lotterySpotsA = await prisma.applicationLotteryPositions.findMany({
+        where: { listingId: listing1Created.id },
+      });
+      expect(lotterySpotsA).toHaveLength(5);
+      await request(app.getHttpServer())
+        .put(`/lottery/generateLotteryResults`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: listing1Created.id,
+        })
+        .set('Cookie', cookies)
+        .expect(200);
+      const lotterySpotsB = await prisma.applicationLotteryPositions.findMany({
+        where: { listingId: listing1Created.id },
+      });
+      expect(lotterySpotsB).toHaveLength(5);
+
+      // The new lottery should be different than the first lottery
+      const lotterySpotsASorted = lotterySpotsA
+        .sort((spotA, spotB) => spotA.ordinal - spotB.ordinal)
+        .map((lotterySpot) => lotterySpot.applicationId);
+      const lotterySpotsBSorted = lotterySpotsB
+        .sort((spotA, spotB) => spotA.ordinal - spotB.ordinal)
+        .map((lotterySpot) => lotterySpot.applicationId);
+      expect(lotterySpotsASorted).not.toEqual(lotterySpotsBSorted);
+    });
   });
 
   describe('getLotteryResults endpoint', () => {

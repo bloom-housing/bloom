@@ -121,13 +121,22 @@ export class LotteryService {
     const listing = await this.prisma.listings.findUnique({
       select: {
         id: true,
-        lotteryLastRunAt: true,
         lotteryStatus: true,
       },
       where: {
         id: listingId,
       },
     });
+
+    if (listing?.lotteryStatus) {
+      // If a lottery has already been run we should delete all of the existing lottery values so that we start from fresh.
+      // This is needed for two scenarios:
+      //     1. The lottery generation fails halfway through and the data is corrupted (some values from first run and some from re-reun) - this is very unlikely
+      //     2. During the regeneration there are now less applications but they are still in the applicationLotteryPositions table
+      await this.prisma.applicationLotteryPositions.deleteMany({
+        where: { listingId: listingId },
+      });
+    }
 
     try {
       const applications = await this.prisma.applications.findMany({
@@ -454,7 +463,6 @@ export class LotteryService {
     );
 
     if (storedListing.status !== ListingsStatusEnum.closed) {
-      console.log('throwing bc not closed');
       throw new BadRequestException(
         'Lottery status cannot be changed until listing is closed.',
       );
