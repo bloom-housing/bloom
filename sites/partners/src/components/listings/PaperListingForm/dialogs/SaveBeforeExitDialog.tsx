@@ -8,9 +8,9 @@ import { SubmitFunction } from "../index"
 export interface SaveBeforeExitDialogProps {
   isOpen: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  currentListingStatus: ListingsStatusEnum
   submitFormWithStatus: SubmitFunction
   listingDetailURL: string
+  currentListingStatus?: ListingsStatusEnum
 }
 
 const SaveBeforeExitDialog = ({
@@ -30,7 +30,7 @@ const SaveBeforeExitDialog = ({
       ariaDescribedBy="listing-save-before-exit-dialog-content"
     >
       <Dialog.Header id="listing-save-before-exit-dialog-header">
-        {t("t.saveChangesQuestion")}
+        {currentListingStatus ? t("t.saveChangesQuestion") : t("t.saveDraftQuestion")}
       </Dialog.Header>
       <Dialog.Content id="listing-save-before-exit-dialog-content">
         {t("t.saveChangesBeforeExit")}
@@ -42,7 +42,7 @@ const SaveBeforeExitDialog = ({
           variant="primary"
           onClick={() => {
             setOpen(false)
-            submitFormWithStatus("redirect", currentListingStatus)
+            submitFormWithStatus("redirect", currentListingStatus || ListingsStatusEnum.pending)
           }}
           size="sm"
         >

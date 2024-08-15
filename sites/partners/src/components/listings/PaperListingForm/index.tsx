@@ -442,9 +442,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       <SaveBeforeExitDialog
         isOpen={closeSaveDialog}
         setOpen={setCloseSaveDialog}
-        currentListingStatus={listing.status}
+        currentListingStatus={listing?.status}
         submitFormWithStatus={triggerSubmitWithStatus}
-        listingDetailURL={`/listings/${listing.id}`}
+        listingDetailURL={`/${listing ? `listings/${listing?.id}` : ""}`}
       />
 
       <CloseListingDialog
