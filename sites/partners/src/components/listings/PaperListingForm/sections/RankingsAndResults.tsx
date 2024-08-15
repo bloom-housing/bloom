@@ -22,7 +22,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, control } = formMethods
+  const { register, watch, control, errors } = formMethods
 
   const lotteryEvent = getLotteryEvent(listing as unknown as Listing)
 
@@ -129,17 +129,31 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
                   id={"lotteryDate"}
                   register={register}
                   watch={watch}
-                  defaultDate={{
-                    month: lotteryEvent?.startDate
-                      ? dayjs(new Date(lotteryEvent?.startDate)).utc().format("MM")
-                      : null,
-                    day: lotteryEvent?.startDate
-                      ? dayjs(new Date(lotteryEvent?.startDate)).utc().format("DD")
-                      : null,
-                    year: lotteryEvent?.startDate
-                      ? dayjs(new Date(lotteryEvent?.startDate)).utc().format("YYYY")
-                      : null,
-                  }}
+                  error={
+                    errors?.lotteryDate
+                      ? {
+                          month: errors?.lotteryDate,
+                          day: errors?.lotteryDate,
+                          year: errors?.lotteryDate,
+                        }
+                      : null
+                  }
+                  errorMessage={t("errors.requiredFieldError")}
+                  defaultDate={
+                    errors?.lotteryDate
+                      ? null
+                      : {
+                          month: lotteryEvent?.startDate
+                            ? dayjs(new Date(lotteryEvent?.startDate)).utc().format("MM")
+                            : null,
+                          day: lotteryEvent?.startDate
+                            ? dayjs(new Date(lotteryEvent?.startDate)).utc().format("DD")
+                            : null,
+                          year: lotteryEvent?.startDate
+                            ? dayjs(new Date(lotteryEvent?.startDate)).utc().format("YYYY")
+                            : null,
+                        }
+                  }
                 />
               </Grid.Cell>
               <Grid.Cell>
@@ -149,18 +163,26 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
                   id={"lotteryStartTime"}
                   register={register}
                   watch={watch}
-                  defaultValues={{
-                    hours: lotteryEvent?.startTime
-                      ? dayjs(new Date(lotteryEvent?.startTime)).format("hh")
-                      : null,
-                    minutes: lotteryEvent?.startTime
-                      ? dayjs(new Date(lotteryEvent?.startTime)).format("mm")
-                      : null,
-                    seconds: lotteryEvent?.startTime
-                      ? dayjs(new Date(lotteryEvent?.startTime)).format("ss")
-                      : null,
-                    period: new Date(lotteryEvent?.startTime).getHours() >= 12 ? "pm" : "am",
+                  error={errors?.lotteryDate ? true : false}
+                  strings={{
+                    timeError: errors?.lotteryDate ? t("errors.requiredFieldError") : null,
                   }}
+                  defaultValues={
+                    errors?.lotteryDate
+                      ? null
+                      : {
+                          hours: lotteryEvent?.startTime
+                            ? dayjs(new Date(lotteryEvent?.startTime)).format("hh")
+                            : null,
+                          minutes: lotteryEvent?.startTime
+                            ? dayjs(new Date(lotteryEvent?.startTime)).format("mm")
+                            : null,
+                          seconds: lotteryEvent?.startTime
+                            ? dayjs(new Date(lotteryEvent?.startTime)).format("ss")
+                            : null,
+                          period: new Date(lotteryEvent?.startTime).getHours() >= 12 ? "pm" : "am",
+                        }
+                  }
                 />
               </Grid.Cell>
               <Grid.Cell>
@@ -170,18 +192,26 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
                   id={"lotteryEndTime"}
                   register={register}
                   watch={watch}
-                  defaultValues={{
-                    hours: lotteryEvent?.endTime
-                      ? dayjs(new Date(lotteryEvent?.endTime)).format("hh")
-                      : null,
-                    minutes: lotteryEvent?.endTime
-                      ? dayjs(new Date(lotteryEvent?.endTime)).format("mm")
-                      : null,
-                    seconds: lotteryEvent?.endTime
-                      ? dayjs(new Date(lotteryEvent?.endTime)).format("ss")
-                      : null,
-                    period: new Date(lotteryEvent?.endTime).getHours() >= 12 ? "pm" : "am",
+                  error={errors?.lotteryDate ? true : false}
+                  strings={{
+                    timeError: errors?.lotteryDate ? t("errors.requiredFieldError") : null,
                   }}
+                  defaultValues={
+                    errors?.lotteryDate
+                      ? null
+                      : {
+                          hours: lotteryEvent?.endTime
+                            ? dayjs(new Date(lotteryEvent?.endTime)).format("hh")
+                            : null,
+                          minutes: lotteryEvent?.endTime
+                            ? dayjs(new Date(lotteryEvent?.endTime)).format("mm")
+                            : null,
+                          seconds: lotteryEvent?.endTime
+                            ? dayjs(new Date(lotteryEvent?.endTime)).format("ss")
+                            : null,
+                          period: new Date(lotteryEvent?.endTime).getHours() >= 12 ? "pm" : "am",
+                        }
+                  }
                 />
               </Grid.Cell>
             </Grid.Row>

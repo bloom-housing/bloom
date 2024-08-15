@@ -1,6 +1,6 @@
 import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import { IsDefined, ValidateNested } from 'class-validator';
+import { IsDefined, Validate, ValidateNested } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { IdDTO } from '../shared/id.dto';
@@ -14,6 +14,7 @@ import { AddressCreate } from '../addresses/address-create.dto';
 import { ListingEventCreate } from './listing-event-create.dto';
 import { ListingFeatures } from './listing-feature.dto';
 import { ListingUtilities } from './listing-utility.dto';
+import { LotteryDateParamValidator } from '../../utilities/lottery-date-validator';
 
 export class ListingUpdate extends OmitType(Listing, [
   // fields get their type changed
@@ -129,6 +130,9 @@ export class ListingUpdate extends OmitType(Listing, [
   listingsResult?: AssetCreate;
 
   @Expose()
+  @Validate(LotteryDateParamValidator, {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingEventCreate)
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
