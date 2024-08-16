@@ -1,7 +1,7 @@
 FROM --platform=linux/amd64 node:16.3.0
 
 # The source stage will contain only the necessary source code
-FROM node:18.14-alpine AS source
+FROM node:18.20-alpine AS source
 
 # WORKDIR doesn't need to be fancy, but it needs to be consistent
 WORKDIR /app
@@ -47,7 +47,7 @@ CMD yarn test
 #####################
 
 # The build stage builds the code using the dependencies from the deps stage
-FROM node:18.14-alpine AS build
+FROM node:18.20-alpine AS build
 
 # Start in the root
 WORKDIR /app
@@ -67,7 +67,7 @@ RUN yarn build
 #####################
 
 # The optimize stage contains only dependencies needed to run the service
-FROM node:18.14-alpine AS optimize
+FROM node:18.20-alpine AS optimize
 
 # No need to keep nested dirs since shared-helpers is only needed for testing
 WORKDIR /app
@@ -93,7 +93,7 @@ RUN yarn prisma generate
 #####################
 
 # The run stage contains an optimized image for running the application
-FROM node:18.14-alpine AS run
+FROM node:18.20-alpine AS run
 
 # No need to keep nested dirs since shared-helpers is only needed for testing
 WORKDIR /app

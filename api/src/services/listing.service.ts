@@ -20,6 +20,7 @@ import {
   ReviewOrderTypeEnum,
   UserRoleEnum,
 } from '@prisma/client';
+import dayjs from 'dayjs';
 import { firstValueFrom } from 'rxjs';
 import { ApplicationFlaggedSetService } from './application-flagged-set.service';
 import { EmailService } from './email.service';
@@ -143,8 +144,8 @@ views.csv = {
   userAccounts: true,
 };
 
-const CRON_JOB_NAME = 'LISTING_CRON_JOB';
-
+const LISTING_CRON_JOB_NAME = 'LISTING_CRON_JOB';
+const LOTTERY_CRON_JOB_NAME = 'LOTTERY_CRON_JOB';
 /*
   this is the service for listings
   it handles all the backend's business logic for reading in listing(s)
@@ -167,9 +168,17 @@ export class ListingService implements OnModuleInit {
   onModuleInit() {
     startCronJob(
       this.prisma,
-      CRON_JOB_NAME,
+      LISTING_CRON_JOB_NAME,
       process.env.LISTING_PROCESSING_CRON_STRING,
-      this.process.bind(this),
+      this.closeListings.bind(this),
+      this.logger,
+      this.schedulerRegistry,
+    );
+    startCronJob(
+      this.prisma,
+      LOTTERY_CRON_JOB_NAME,
+      process.env.LOTTERY_PROCESSING_CRON_STRING,
+      this.expireLotteries.bind(this),
       this.logger,
       this.schedulerRegistry,
     );
@@ -282,7 +291,7 @@ export class ListingService implements OnModuleInit {
           filter[ListingFilterKeys.availability] ===
           FilterAvailabilityEnum.waitlistOpen
         ) {
-          whereClauseArray.push(`combined.is_waitlist_open = true`);
+          whereClauseArray.push(`combined.review_order_type = 'waitlist'`);
         } else if (
           filter[ListingFilterKeys.availability] ===
           FilterAvailabilityEnum.unitsAvailable
@@ -409,6 +418,53 @@ export class ListingService implements OnModuleInit {
     const userEmails: string[] = [];
     userResults?.forEach((user) => user?.email && userEmails.push(user.email));
     return { emails: userEmails, publicUrl };
+  }
+
+  public async getPublicUserEmailInfo(
+    listingId?: string,
+  ): Promise<{ [key: string]: string[] }> {
+    const userResults = await this.prisma.applications.findMany({
+      select: {
+        language: true,
+        applicant: {
+          select: {
+            emailAddress: true,
+          },
+        },
+      },
+      where: {
+        listingId,
+        applicant: {
+          emailAddress: {
+            not: null,
+          },
+        },
+      },
+    });
+
+    const result = {};
+    Object.keys(LanguagesEnum).forEach((languageKey) => {
+      const applications = userResults
+        .filter((user) => user.language === languageKey)
+        .map((userObj) => userObj.applicant.emailAddress);
+      if (applications.length) {
+        result[languageKey] = applications;
+      }
+    });
+
+    const noLanguageIndicated = userResults
+      .filter((user) => !user.language)
+      .map((userObj) => userObj.applicant.emailAddress);
+
+    if (!result[LanguagesEnum.en])
+      result[LanguagesEnum.en] = noLanguageIndicated;
+    else
+      result[LanguagesEnum.en] = [
+        ...result[LanguagesEnum.en],
+        ...noLanguageIndicated,
+      ];
+
+    return result;
   }
 
   public async listingApprovalNotify(params: {
@@ -1729,9 +1785,9 @@ export class ListingService implements OnModuleInit {
     runs the job to auto close listings that are passed their due date
     will call the the cache purge to purge all listings as long as updates had to be made
   */
-  async process(): Promise<SuccessDTO> {
+  async closeListings(): Promise<SuccessDTO> {
     this.logger.warn('changeOverdueListingsStatusCron job running');
-    await this.markCronJobAsStarted();
+    await this.markCronJobAsStarted(LISTING_CRON_JOB_NAME);
     const res = await this.prisma.listings.updateMany({
       data: {
         status: ListingsStatusEnum.closed,
@@ -1771,10 +1827,10 @@ export class ListingService implements OnModuleInit {
     marks the db record for this cronjob as begun or creates a cronjob that
     is marked as begun if one does not already exist
   */
-  async markCronJobAsStarted(): Promise<void> {
+  async markCronJobAsStarted(cronJobName: string): Promise<void> {
     const job = await this.prisma.cronJob.findFirst({
       where: {
-        name: CRON_JOB_NAME,
+        name: cronJobName,
       },
     });
     if (job) {
@@ -1792,11 +1848,12 @@ export class ListingService implements OnModuleInit {
       await this.prisma.cronJob.create({
         data: {
           lastRunDate: new Date(),
-          name: CRON_JOB_NAME,
+          name: cronJobName,
         },
       });
     }
   }
+
   /**
    *
    * @param listingId
@@ -1849,11 +1906,27 @@ export class ListingService implements OnModuleInit {
     }
 
     const isAdmin = requestingUser.userRoles?.isAdmin;
+    const isJurisdictionalAdmin =
+      requestingUser.userRoles?.isJurisdictionalAdmin;
     const isPartner = requestingUser.userRoles?.isPartner;
     const currentStatus = storedListing.lotteryStatus;
 
     // TODO: remove when all status logic has been implemented
     let res;
+
+    const partnerUserEmailInfo = await this.getUserEmailInfo(
+      [
+        UserRoleEnum.admin,
+        UserRoleEnum.jurisdictionAdmin,
+        UserRoleEnum.partner,
+      ],
+      storedListing.id,
+      storedListing.jurisdictionId,
+    );
+
+    const publicUserEmailInfo = await this.getPublicUserEmailInfo(
+      storedListing.id,
+    );
 
     switch (dto?.lotteryStatus) {
       case LotteryStatusEnum.ran: {
@@ -1893,6 +1966,13 @@ export class ListingService implements OnModuleInit {
             'Lottery cannot be released to partners without being in run state.',
           );
         }
+        if (
+          storedListing.lotteryLastRunAt < storedListing.lastApplicationUpdateAt
+        ) {
+          throw new BadRequestException(
+            'Lottery cannot be released due to paper applications that are not included in the last run.',
+          );
+        }
         // TODO: add released to partners to history
         // TODO: remove when all status logic has been implemented
         res = await this.prisma.listings.update({
@@ -1903,10 +1983,22 @@ export class ListingService implements OnModuleInit {
             id: dto.listingId,
           },
         });
+
+        await this.emailService.lotteryReleased(
+          requestingUser,
+          {
+            id: storedListing.id,
+            name: storedListing.name,
+            juris: storedListing.jurisdictionId,
+          },
+          partnerUserEmailInfo.emails,
+          this.configService.get('PARTNERS_PORTAL_URL'),
+        );
+
         break;
       }
       case LotteryStatusEnum.publishedToPublic: {
-        if (!isPartner && !isAdmin) {
+        if (!isPartner && !isAdmin && !isJurisdictionalAdmin) {
           throw new ForbiddenException();
         }
         if (currentStatus !== LotteryStatusEnum.releasedToPartners) {
@@ -1924,10 +2016,26 @@ export class ListingService implements OnModuleInit {
             id: dto.listingId,
           },
         });
-        break;
-      }
-      case LotteryStatusEnum.expired: {
-        // TODO
+
+        await this.emailService.lotteryPublishedAdmin(
+          requestingUser,
+          {
+            id: storedListing.id,
+            name: storedListing.name,
+            juris: storedListing.jurisdictionId,
+          },
+          partnerUserEmailInfo.emails,
+          this.configService.get('PARTNERS_PORTAL_URL'),
+        );
+
+        await this.emailService.lotteryPublishedApplicant(
+          {
+            id: storedListing.id,
+            name: storedListing.name,
+            juris: storedListing.jurisdictionId,
+          },
+          publicUserEmailInfo,
+        );
         break;
       }
       default: {
@@ -1950,6 +2058,47 @@ export class ListingService implements OnModuleInit {
       throw new HttpException('Listing lottery status failed to save.', 500);
     }
 
+    return {
+      success: true,
+    };
+  }
+
+  /**
+    runs the job to auto expire lotteries that are passed their due date
+    will call the the cache purge to purge all listings as long as updates had to be made
+  */
+  async expireLotteries(): Promise<SuccessDTO> {
+    if (process.env.LOTTERY_DAYS_TILL_EXPIRY) {
+      this.logger.warn('changeExpiredLotteryStatusCron job running');
+      await this.markCronJobAsStarted(LOTTERY_CRON_JOB_NAME);
+      const expiration_date = dayjs(new Date())
+        .subtract(Number(process.env.LOTTERY_DAYS_TILL_EXPIRY), 'days')
+        .toDate();
+      const res = await this.prisma.listings.updateMany({
+        data: {
+          lotteryStatus: LotteryStatusEnum.expired,
+        },
+        where: {
+          status: ListingsStatusEnum.closed,
+          reviewOrderType: ReviewOrderTypeEnum.lottery,
+          closedAt: {
+            lte: expiration_date,
+          },
+          OR: [
+            {
+              lotteryStatus: {
+                not: LotteryStatusEnum.expired,
+              },
+            },
+            {
+              lotteryStatus: null,
+            },
+          ],
+        },
+      });
+      // TODO: add expired to history log for each listing
+      this.logger.warn(`Changed the status of ${res?.count} lotteries`);
+    }
     return {
       success: true,
     };

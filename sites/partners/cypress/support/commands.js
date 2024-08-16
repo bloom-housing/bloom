@@ -296,6 +296,9 @@ Cypress.Commands.add("verifyApplicationData", (application, fieldsToSkip = []) =
     { id: "submittedDate", fieldKey: "submittedDate" },
     { id: "timeDate", fieldKey: "timeDate" },
     { id: "language", fieldKey: "language" },
+    { id: "receivedDate", fieldKey: "receivedDate" },
+    { id: "receivedTime", fieldKey: "receivedTime" },
+    { id: "receivedBy", fieldKey: "receivedBy" },
     { id: "submittedBy", fieldKey: "submittedBy" },
   ]
   verifyHelper(application, fields, fieldsToSkip)

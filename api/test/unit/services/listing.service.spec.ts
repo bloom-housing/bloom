@@ -40,6 +40,8 @@ import { User } from '../../../src/dtos/users/user.dto';
 import { EmailService } from '../../../src/services/email.service';
 import { PermissionService } from '../../../src/services/permission.service';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
+import { ApplicationService } from '../../../src/services/application.service';
+import { GeocodingService } from '../../../src/services/geocoding.service';
 
 /*
  generates a super simple mock listing for us to test logic with
@@ -122,6 +124,10 @@ const mockListingSet = (
 const requestApprovalMock = jest.fn();
 const changesRequestedMock = jest.fn();
 const listingApprovedMock = jest.fn();
+const lotteryReleasedMock = jest.fn();
+const lotteryPublishedAdminMock = jest.fn();
+const lotteryPublishedApplicantMock = jest.fn();
+
 const canOrThrowMock = jest.fn();
 
 const user = new User();
@@ -158,6 +164,8 @@ describe('Testing listing service', () => {
         ListingService,
         PrismaService,
         TranslationService,
+        ApplicationService,
+        GeocodingService,
         {
           provide: GoogleTranslateService,
           useValue: googleTranslateServiceMock,
@@ -176,6 +184,9 @@ describe('Testing listing service', () => {
             requestApproval: requestApprovalMock,
             changesRequested: changesRequestedMock,
             listingApproved: listingApprovedMock,
+            lotteryReleased: lotteryReleasedMock,
+            lotteryPublishedAdmin: lotteryPublishedAdminMock,
+            lotteryPublishedApplicant: lotteryPublishedApplicantMock,
           },
         },
         {
@@ -2845,7 +2856,7 @@ describe('Testing listing service', () => {
       prisma.cronJob.update = jest.fn().mockResolvedValue(true);
 
       process.env.PROXY_URL = 'https://www.google.com';
-      await service.process();
+      await service.closeListings();
       expect(httpServiceMock.request).toHaveBeenCalledWith({
         baseURL: 'https://www.google.com',
         method: 'PURGE',
@@ -2885,7 +2896,7 @@ describe('Testing listing service', () => {
       prisma.cronJob.update = jest.fn().mockResolvedValue(true);
 
       process.env.PROXY_URL = 'https://www.google.com';
-      await service.process();
+      await service.closeListings();
       expect(httpServiceMock.request).not.toHaveBeenCalled();
       expect(prisma.listings.updateMany).toHaveBeenCalledWith({
         data: {
@@ -2919,7 +2930,7 @@ describe('Testing listing service', () => {
       prisma.cronJob.findFirst = jest.fn().mockResolvedValue(null);
       prisma.cronJob.create = jest.fn().mockResolvedValue(true);
 
-      await service.markCronJobAsStarted();
+      await service.markCronJobAsStarted('LISTING_CRON_JOB');
 
       expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
         where: {
@@ -2940,7 +2951,7 @@ describe('Testing listing service', () => {
         .mockResolvedValue({ id: randomUUID() });
       prisma.cronJob.update = jest.fn().mockResolvedValue(true);
 
-      await service.markCronJobAsStarted();
+      await service.markCronJobAsStarted('LISTING_CRON_JOB');
 
       expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
         where: {
@@ -2955,6 +2966,42 @@ describe('Testing listing service', () => {
           id: expect.anything(),
         },
       });
+    });
+  });
+
+  describe('Test expireLotteries endpoint', () => {
+    it('should call the updateMany', async () => {
+      prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 2 });
+      prisma.cronJob.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+      prisma.cronJob.update = jest.fn().mockResolvedValue(true);
+
+      await service.expireLotteries();
+      expect(prisma.listings.updateMany).toHaveBeenCalledWith({
+        data: {
+          lotteryStatus: LotteryStatusEnum.expired,
+        },
+        where: {
+          status: ListingsStatusEnum.closed,
+          reviewOrderType: ReviewOrderTypeEnum.lottery,
+          closedAt: {
+            lte: expect.anything(),
+          },
+          OR: [
+            {
+              lotteryStatus: {
+                not: LotteryStatusEnum.expired,
+              },
+            },
+            {
+              lotteryStatus: null,
+            },
+          ],
+        },
+      });
+      expect(prisma.cronJob.findFirst).toHaveBeenCalled();
+      expect(prisma.cronJob.update).toHaveBeenCalled();
     });
   });
 
@@ -3060,18 +3107,28 @@ describe('Testing listing service', () => {
 
     it.todo('should not update status to approved if user is not an admin');
 
-    it('should update status to releasedToPartners from ran', async () => {
+    it('should update status to releasedToPartners from ran and send email', async () => {
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         id: 'example id',
         name: 'example name',
         status: ListingsStatusEnum.closed,
         lotteryStatus: LotteryStatusEnum.ran,
+        jurisdictionId: 'jurisId',
       });
       prisma.listings.update = jest.fn().mockResolvedValue({
         id: 'example id',
         name: 'example name',
         status: ListingsStatusEnum.closed,
         lotteryStatus: LotteryStatusEnum.releasedToPartners,
+        jurisdictionId: 'jurisId',
+      });
+
+      jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
+        emails: ['admin@email.com', 'partner@email.com'],
+      });
+
+      jest.spyOn(service, 'getPublicUserEmailInfo').mockResolvedValueOnce({
+        en: ['applicant@email.com'],
       });
 
       await service.lotteryStatus(
@@ -3088,6 +3145,7 @@ describe('Testing listing service', () => {
         permissionActions.update,
         {
           id: 'example id',
+          jurisdictionId: 'jurisId',
         },
       );
       expect(prisma.listings.update).toHaveBeenCalledWith({
@@ -3098,6 +3156,19 @@ describe('Testing listing service', () => {
           id: expect.anything(),
         },
       });
+
+      expect(service.getUserEmailInfo).toBeCalledWith(
+        ['admin', 'jurisdictionAdmin', 'partner'],
+        'example id',
+        'jurisId',
+      );
+
+      expect(lotteryReleasedMock).toBeCalledWith(
+        { id: 'admin id', userRoles: { isAdmin: true } },
+        { id: 'example id', juris: 'jurisId', name: 'example name' },
+        ['admin@email.com', 'partner@email.com'],
+        config.get('PARTNERS_PORTAL_URL'),
+      );
     });
 
     it('should not update status to releasedToPartners if user is not an admin', async () => {
@@ -3108,6 +3179,12 @@ describe('Testing listing service', () => {
         lotteryStatus: LotteryStatusEnum.ran,
       });
       prisma.listings.update = jest.fn().mockResolvedValue(null);
+      jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
+        emails: ['admin@email.com', 'partner@email.com'],
+      });
+      jest.spyOn(service, 'getPublicUserEmailInfo').mockResolvedValueOnce({
+        en: ['applicant@email.com'],
+      });
 
       await expect(
         async () =>
@@ -3144,6 +3221,12 @@ describe('Testing listing service', () => {
         name: 'example name',
         status: ListingsStatusEnum.closed,
         lotteryStatus: LotteryStatusEnum.publishedToPublic,
+      });
+      jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
+        emails: ['admin@email.com', 'partner@email.com'],
+      });
+      jest.spyOn(service, 'getPublicUserEmailInfo').mockResolvedValueOnce({
+        en: ['applicant@email.com'],
       });
 
       await service.lotteryStatus(
@@ -3249,6 +3332,9 @@ describe('Testing listing service', () => {
         status: ListingsStatusEnum.closed,
         lotteryStatus: LotteryStatusEnum.ran,
       });
+      jest.spyOn(service, 'getPublicUserEmailInfo').mockResolvedValueOnce({
+        en: ['applicant@email.com'],
+      });
 
       await service.lotteryStatus(
         {
@@ -3276,7 +3362,5 @@ describe('Testing listing service', () => {
         },
       });
     });
-
-    it.todo('should update status to expired');
   });
 });

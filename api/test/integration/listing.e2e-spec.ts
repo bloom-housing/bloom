@@ -3,6 +3,8 @@ import { INestApplication } from '@nestjs/common';
 import {
   ApplicationAddressTypeEnum,
   ApplicationMethodsTypeEnum,
+  ApplicationStatusEnum,
+  ApplicationSubmissionTypeEnum,
   LanguagesEnum,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
@@ -59,6 +61,9 @@ describe('Listing Controller Tests', () => {
     changesRequested: async () => {},
     listingApproved: async () => {},
     listingOpportunity: async () => {},
+    lotteryReleased: async () => {},
+    lotteryPublishedAdmin: async () => {},
+    lotteryPublishedApplicant: async () => {},
   };
   const mockChangesRequested = jest.spyOn(testEmailService, 'changesRequested');
   const mockRequestApproval = jest.spyOn(testEmailService, 'requestApproval');
@@ -66,6 +71,15 @@ describe('Listing Controller Tests', () => {
   const mockListingOpportunity = jest.spyOn(
     testEmailService,
     'listingOpportunity',
+  );
+  const mockLotteryReleased = jest.spyOn(testEmailService, 'lotteryReleased');
+  const mockLotteryPublishedAdmin = jest.spyOn(
+    testEmailService,
+    'lotteryPublishedAdmin',
+  );
+  const mockLotteryPublishedApplicant = jest.spyOn(
+    testEmailService,
+    'lotteryPublishedApplicant',
   );
 
   beforeAll(async () => {
@@ -676,7 +690,7 @@ describe('Listing Controller Tests', () => {
       });
 
       const res = await request(app.getHttpServer())
-        .put(`/listings/process`)
+        .put(`/listings/closeListings`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -725,7 +739,7 @@ describe('Listing Controller Tests', () => {
       });
 
       const res = await request(app.getHttpServer())
-        .put(`/listings/process`)
+        .put(`/listings/closeListings`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -946,7 +960,110 @@ describe('Listing Controller Tests', () => {
     });
   });
 
+  describe('expireLotteries endpoint', () => {
+    it('should only expire listing lotteries that are past due', async () => {
+      const jurisdictionA = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
+      const expiration_date = new Date();
+      expiration_date.setDate(
+        expiration_date.getDate() -
+          Number(process.env.LOTTERY_DAYS_TILL_EXPIRY || 45) -
+          1,
+      );
+      const expiredListingData = await listingFactory(
+        jurisdictionA.id,
+        prisma,
+        {
+          status: ListingsStatusEnum.closed,
+          closedAt: expiration_date,
+          reviewOrderType: ReviewOrderTypeEnum.lottery,
+        },
+      );
+      const expiredListing = await prisma.listings.create({
+        data: expiredListingData,
+      });
+
+      const recentlyClosedListingData = await listingFactory(
+        jurisdictionA.id,
+        prisma,
+        {
+          status: ListingsStatusEnum.closed,
+          closedAt: new Date(),
+          reviewOrderType: ReviewOrderTypeEnum.lottery,
+        },
+      );
+      const recentlyClosedListing = await prisma.listings.create({
+        data: recentlyClosedListingData,
+      });
+
+      const openListingData = await listingFactory(jurisdictionA.id, prisma, {
+        status: ListingsStatusEnum.active,
+        reviewOrderType: ReviewOrderTypeEnum.lottery,
+      });
+      const openListing = await prisma.listings.create({
+        data: openListingData,
+      });
+
+      const res = await request(app.getHttpServer())
+        .put(`/listings/expireLotteries`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', adminAccessToken)
+        .expect(200);
+
+      expect(res.body.success).toEqual(true);
+
+      const postJobListing = await prisma.listings.findUnique({
+        where: {
+          id: expiredListing.id,
+        },
+      });
+
+      expect(postJobListing.lotteryStatus).toEqual(LotteryStatusEnum.expired);
+
+      const postJobListing2 = await prisma.listings.findUnique({
+        where: {
+          id: recentlyClosedListing.id,
+        },
+      });
+
+      expect(postJobListing2.lotteryStatus).toBeNull;
+
+      const postJobListing3 = await prisma.listings.findUnique({
+        where: {
+          id: openListing.id,
+        },
+      });
+
+      expect(postJobListing3.lotteryStatus).toBeNull;
+    });
+  });
+
   describe('lottery status endpoint', () => {
+    let adminUser, adminAccessToken;
+    beforeAll(async () => {
+      adminUser = await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: {
+            isAdmin: true,
+          },
+          mfaEnabled: false,
+          confirmedAt: new Date(),
+        }),
+      });
+
+      const res = await request(app.getHttpServer())
+        .post('/auth/login')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({ email: adminUser.email, password: 'Abcdef12345!' })
+        .expect(201);
+
+      adminAccessToken = res.header?.['set-cookie'].find((cookie) =>
+        cookie.startsWith('access-token='),
+      );
+    });
+
     it("should error when trying to update listing that doesn't exist", async () => {
       const id = randomUUID();
       const res = await request(app.getHttpServer())
@@ -975,7 +1092,7 @@ describe('Listing Controller Tests', () => {
         data: listingData,
       });
 
-      const res = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .put('/listings/lotteryStatus')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
@@ -984,7 +1101,7 @@ describe('Listing Controller Tests', () => {
         })
         .expect(403);
 
-      const res2 = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .put('/listings/lotteryStatus')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
@@ -1003,8 +1120,27 @@ describe('Listing Controller Tests', () => {
         status: ListingsStatusEnum.closed,
         lotteryStatus: LotteryStatusEnum.ran,
       });
+      const appUpdate = new Date();
+      appUpdate.setDate(appUpdate.getDate() - 1);
       const listing = await prisma.listings.create({
-        data: listingData,
+        data: {
+          ...listingData,
+          lotteryLastRunAt: new Date(),
+          lastApplicationUpdateAt: appUpdate,
+        },
+      });
+
+      const partnerUser = await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: {
+            isPartner: true,
+            isAdmin: false,
+            isJurisdictionalAdmin: false,
+          },
+          listings: [listing.id],
+          jurisdictionIds: [jurisdictionA.id],
+          confirmedAt: new Date(),
+        }),
       });
 
       const res = await request(app.getHttpServer())
@@ -1017,6 +1153,49 @@ describe('Listing Controller Tests', () => {
         .set('Cookie', adminAccessToken)
         .expect(200);
       expect(res.body.success).toEqual(true);
+
+      expect(mockLotteryReleased).toBeCalledWith(
+        expect.objectContaining({
+          email: adminUser.email,
+        }),
+        {
+          id: listing.id,
+          name: listing.name,
+          juris: expect.stringMatching(jurisdictionA.id),
+        },
+        expect.arrayContaining([partnerUser.email, adminUser.email]),
+        process.env.PARTNERS_PORTAL_URL,
+      );
+    });
+
+    it('should error trying to update listing lottery status to releasedToPartners from ran if there are new paper application updates', async () => {
+      const jurisdictionA = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
+      const listingData = await listingFactory(jurisdictionA.id, prisma, {
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: LotteryStatusEnum.ran,
+      });
+      const lotteryLastRun = new Date();
+      lotteryLastRun.setDate(lotteryLastRun.getDate() - 1);
+      const listing = await prisma.listings.create({
+        data: {
+          ...listingData,
+          lotteryLastRunAt: lotteryLastRun,
+          lastApplicationUpdateAt: new Date(),
+        },
+      });
+
+      await request(app.getHttpServer())
+        .put('/listings/lotteryStatus')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          listingId: listing.id,
+          lotteryStatus: LotteryStatusEnum.releasedToPartners,
+        })
+        .set('Cookie', adminAccessToken)
+        .expect(400);
     });
 
     it('should update listing lottery status to ran from releasedToPartners aka retract', async () => {
@@ -1042,6 +1221,107 @@ describe('Listing Controller Tests', () => {
         .set('Cookie', adminAccessToken)
         .expect(200);
       expect(res.body.success).toEqual(true);
+    });
+
+    it('should update listing lottery status to publishedToPublic from releasedToPartners', async () => {
+      const jurisdictionA = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
+      const listingData = await listingFactory(jurisdictionA.id, prisma, {
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: LotteryStatusEnum.releasedToPartners,
+        applications: [
+          {
+            preferences: [],
+            status: ApplicationStatusEnum.submitted,
+            confirmationCode: 'ABCD1234',
+            submissionType: ApplicationSubmissionTypeEnum.electronical,
+            language: LanguagesEnum.en,
+            applicant: {
+              create: {
+                emailAddress: 'applicant@email.com',
+              },
+            },
+          },
+          {
+            preferences: [],
+            status: ApplicationStatusEnum.submitted,
+            confirmationCode: 'EFGH5678',
+            submissionType: ApplicationSubmissionTypeEnum.electronical,
+            language: LanguagesEnum.es,
+            applicant: {
+              create: {
+                emailAddress: 'applicant2@email.com',
+              },
+            },
+          },
+          {
+            preferences: [],
+            status: ApplicationStatusEnum.submitted,
+            confirmationCode: 'IJKL9012',
+            submissionType: ApplicationSubmissionTypeEnum.electronical,
+            language: null,
+            applicant: {
+              create: {
+                emailAddress: 'applicant3@email.com',
+              },
+            },
+          },
+        ],
+      });
+      const listing = await prisma.listings.create({
+        data: listingData,
+      });
+
+      const partnerUser = await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: {
+            isPartner: true,
+            isAdmin: false,
+            isJurisdictionalAdmin: false,
+          },
+          listings: [listing.id],
+          jurisdictionIds: [jurisdictionA.id],
+          confirmedAt: new Date(),
+        }),
+      });
+
+      const res = await request(app.getHttpServer())
+        .put('/listings/lotteryStatus')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          listingId: listing.id,
+          lotteryStatus: LotteryStatusEnum.publishedToPublic,
+        })
+        .set('Cookie', adminAccessToken)
+        .expect(200);
+      expect(res.body.success).toEqual(true);
+
+      expect(mockLotteryPublishedAdmin).toBeCalledWith(
+        expect.objectContaining({
+          email: adminUser.email,
+        }),
+        {
+          id: listing.id,
+          name: listing.name,
+          juris: expect.stringMatching(jurisdictionA.id),
+        },
+        expect.arrayContaining([partnerUser.email, adminUser.email]),
+        process.env.PARTNERS_PORTAL_URL,
+      );
+
+      expect(mockLotteryPublishedApplicant).toBeCalledWith(
+        {
+          id: listing.id,
+          name: listing.name,
+          juris: expect.stringMatching(jurisdictionA.id),
+        },
+        expect.objectContaining({
+          en: ['applicant@email.com', 'applicant3@email.com'],
+          es: ['applicant2@email.com'],
+        }),
+      );
     });
   });
 });

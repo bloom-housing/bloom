@@ -4,16 +4,19 @@ import axios from "axios"
 import dayjs from "dayjs"
 import Ticket from "@heroicons/react/24/solid/TicketIcon"
 import Download from "@heroicons/react/24/solid/ArrowDownTrayIcon"
+import ExclamationCirleIcon from "@heroicons/react/24/solid/ExclamationCircleIcon"
+import Markdown from "markdown-to-jsx"
 import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
-import { Button, Card, Heading, Icon, Dialog } from "@bloom-housing/ui-seeds"
+import { Button, Card, Dialog, Heading, Icon, Message } from "@bloom-housing/ui-seeds"
 import { CardHeader, CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   Listing,
-  ListingsStatusEnum,
-  ReviewOrderTypeEnum,
+  ListingUpdate,
   ListingEventsTypeEnum,
+  ListingsStatusEnum,
   LotteryStatusEnum,
+  ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Layout from "../../../layouts"
 import { ListingContext } from "../../../components/listings/ListingContext"
@@ -36,14 +39,24 @@ const Lottery = (props: { listing: Listing }) => {
   const [reRunModal, setReRunModal] = useState(false)
   const [releaseModal, setReleaseModal] = useState(false)
   const [exportModal, setExportModal] = useState(false)
+  const [termsExportModal, setTermsExportModal] = useState(false)
   const [publishModal, setPublishModal] = useState(false)
   const [retractModal, setRetractModal] = useState(false)
+  const [newApplicationsModal, setNewApplicationsModal] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const { listingsService, lotteryService, profile } = useContext(AuthContext)
   const { onExport, csvExportLoading } = useLotteryExport(listing?.id)
   const { data } = useFlaggedApplicationsMeta(listing?.id)
   const duplicatesExist = data?.totalPendingCount > 0
+  let formattedExpiryDate: string
+  if (process.env.lotteryDaysTillExpiry) {
+    const expiryDate = dayjs(listing?.closedAt).add(
+      Number(process.env.lotteryDaysTillExpiry),
+      "day"
+    )
+    formattedExpiryDate = expiryDate.format("MMMM D, YYYY")
+  }
 
   if (!listing) return <div>{t("t.errorOccurred")}</div>
 
@@ -72,7 +85,16 @@ const Lottery = (props: { listing: Listing }) => {
             : t("listings.lottery.exportFileNoPreferences")}
         </div>
         <div>
-          <Button disabled={loading || csvExportLoading} onClick={() => setExportModal(true)}>
+          <Button
+            disabled={loading || csvExportLoading}
+            onClick={() => {
+              if (profile?.userRoles?.isAdmin) {
+                setExportModal(true)
+              } else {
+                setTermsExportModal(true)
+              }
+            }}
+          >
             {t("t.export")}
           </Button>
         </div>
@@ -144,6 +166,21 @@ const Lottery = (props: { listing: Listing }) => {
         )
       } else if (listing.lotteryStatus === LotteryStatusEnum.publishedToPublic) {
         return exportCard
+      }
+      if (listing.lotteryStatus === LotteryStatusEnum.expired) {
+        return (
+          <CardSection>
+            <Icon size="xl">
+              <ExclamationCirleIcon />
+            </Icon>
+            <Heading priority={2} size={"2xl"}>
+              {t("listings.lottery.noData")}
+            </Heading>
+            <div className={styles["card-description"]}>
+              {t("listings.lottery.dataExpiryDescription")}
+            </div>
+          </CardSection>
+        )
       } else {
         return (
           <CardSection>
@@ -190,7 +227,13 @@ const Lottery = (props: { listing: Listing }) => {
                 </Button>
                 <Button
                   className={styles["action"]}
-                  onClick={() => setReleaseModal(true)}
+                  onClick={() => {
+                    if (listing?.lotteryLastRunAt < listing?.lastApplicationUpdateAt) {
+                      setNewApplicationsModal(true)
+                    } else {
+                      setReleaseModal(true)
+                    }
+                  }}
                   variant={"primary-outlined"}
                 >
                   {t("listings.lottery.release")}
@@ -258,6 +301,19 @@ const Lottery = (props: { listing: Listing }) => {
               <div className={styles["parent"]}>
                 <div className={styles["container"]}>
                   <div className={styles["main"]}>
+                    {!profile?.userRoles.isAdmin &&
+                      process.env.lotteryDaysTillExpiry &&
+                      listing?.lotteryStatus === LotteryStatusEnum.publishedToPublic && (
+                        <Message
+                          variant={"warn"}
+                          fullwidth={true}
+                          className={styles["applications-expiration-message"]}
+                        >
+                          {t("listings.lottery.dataExpiryMessage", {
+                            date: formattedExpiryDate,
+                          })}
+                        </Message>
+                      )}
                     <Card spacing={"lg"}>{getMainContent()}</Card>
                   </div>
                   <aside className={styles["side"]}>
@@ -433,6 +489,31 @@ const Lottery = (props: { listing: Listing }) => {
             </Dialog.Footer>
           </Dialog>
           <Dialog
+            isOpen={!!newApplicationsModal}
+            ariaLabelledBy="new-applications-modal-header"
+            ariaDescribedBy="new-applications-modal-content"
+            onClose={() => setNewApplicationsModal(false)}
+          >
+            <Dialog.Header id="new-applications-modal-header">
+              {t("listings.lottery.newAppsHeader")}
+            </Dialog.Header>
+            <Dialog.Content id="new-applications-modal-content">
+              <p>{t("listings.lottery.newApps")}</p>
+              <p className={"font-semibold"}>{t("listings.lottery.newAppsReRun")}</p>
+            </Dialog.Content>
+            <Dialog.Footer>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  setNewApplicationsModal(false)
+                }}
+                size="sm"
+              >
+                {t("t.ok")}
+              </Button>
+            </Dialog.Footer>
+          </Dialog>
+          <Dialog
             isOpen={!!retractModal}
             ariaLabelledBy="retract-lottery-modal-header"
             ariaDescribedBy="retract-lottery-modal-content"
@@ -518,6 +599,53 @@ const Lottery = (props: { listing: Listing }) => {
                 variant="primary-outlined"
                 onClick={() => {
                   setExportModal(false)
+                }}
+                size="sm"
+              >
+                {t("t.cancel")}
+              </Button>
+            </Dialog.Footer>
+          </Dialog>
+          <Dialog
+            isOpen={!!termsExportModal}
+            ariaLabelledBy="terms-export-lottery-modal-header"
+            ariaDescribedBy="terms-export-lottery-modal-content"
+            onClose={() => setTermsExportModal(false)}
+          >
+            <Dialog.Header id="terms-export-lottery-modal-header">
+              {t("listings.lottery.export")}
+            </Dialog.Header>
+            <Dialog.Content id="terms-export-lottery-modal-content">
+              <p>
+                {listing.listingMultiselectQuestions.length
+                  ? t("listings.lottery.exportFile")
+                  : t("listings.lottery.exportFileNoPreferences")}{" "}
+                {t("listings.lottery.exportContentTimestamp", {
+                  date: dayjs(listing.lotteryLastRunAt).format("MM/DD/YYYY"),
+                  time: dayjs(listing.lotteryLastRunAt).format("h:mm a"),
+                })}
+              </p>
+              <p>{t("listings.lottery.termsAccept")}</p>
+              <h2 className={styles["terms-of-use-header"]}>
+                {t("authentication.terms.termsOfUse")}
+              </h2>
+              <Markdown>{t("listings.lottery.terms")}</Markdown>
+            </Dialog.Content>
+            <Dialog.Footer>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  // export lottery
+                  setTermsExportModal(false)
+                }}
+                size="sm"
+              >
+                {t("t.export")}
+              </Button>
+              <Button
+                variant="primary-outlined"
+                onClick={() => {
+                  setTermsExportModal(false)
                 }}
                 size="sm"
               >

@@ -387,6 +387,22 @@ export class ListingsService {
     })
   }
   /**
+   * Trigger the lottery process job
+   */
+  expireLotteries(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/expireLotteries"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Change the listing lottery status
    */
   lotteryStatus(
@@ -2252,6 +2268,22 @@ export class ScriptRunnerService {
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
       let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * A script that adds lottery translations to the db
+   */
+  lotteryTranslations(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/lotteryTranslations"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
 
       configs.data = data
 
@@ -4350,6 +4382,12 @@ export interface Application {
   submissionDate?: Date
 
   /**  */
+  receivedBy?: string
+
+  /**  */
+  receivedAt?: Date
+
+  /**  */
   markedAsDuplicate: boolean
 
   /**  */
@@ -5098,6 +5136,12 @@ export interface ApplicationCreate {
   submissionDate?: Date
 
   /**  */
+  receivedBy?: string
+
+  /**  */
+  receivedAt?: Date
+
+  /**  */
   reviewStatus?: ApplicationReviewStatusEnum
 
   /**  */
@@ -5191,6 +5235,12 @@ export interface ApplicationUpdate {
 
   /**  */
   submissionDate?: Date
+
+  /**  */
+  receivedBy?: string
+
+  /**  */
+  receivedAt?: Date
 
   /**  */
   reviewStatus?: ApplicationReviewStatusEnum

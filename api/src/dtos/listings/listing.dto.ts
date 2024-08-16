@@ -9,6 +9,7 @@ import {
   IsString,
   IsUrl,
   MaxLength,
+  Validate,
   ValidateNested,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
@@ -37,6 +38,7 @@ import { IdDTO } from '../shared/id.dto';
 import { listingUrlSlug } from '../../utilities/listing-url-slug';
 import { User } from '../users/user.dto';
 import { requestedChangesUserMapper } from '../../utilities/requested-changes-user';
+import { LotteryDateParamValidator } from '../../utilities/lottery-date-validator';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -460,6 +462,9 @@ class Listing extends AbstractDTO {
   assets: Asset[];
 
   @Expose()
+  @Validate(LotteryDateParamValidator, {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingEvent)
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

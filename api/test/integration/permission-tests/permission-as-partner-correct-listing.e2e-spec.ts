@@ -76,6 +76,8 @@ const testEmailService = {
   forgotPassword: jest.fn(),
   sendMfaCode: jest.fn(),
   applicationConfirmation: jest.fn(),
+  lotteryPublishedAdmin: jest.fn(),
+  lotteryPublishedApplicant: jest.fn(),
 };
 
 describe('Testing Permissioning of endpoints as partner with correct listing', () => {
@@ -87,6 +89,7 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
   let jurisId = '';
   let userListingId = '';
   let closedUserListingId = '';
+  let closedUserListingId2 = '';
   let userListingToBeDeleted = '';
   let listingMulitselectQuestion = '';
 
@@ -148,10 +151,24 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
     });
     userListingToBeDeleted = listing2.id;
 
+    const closedListingData2 = await listingFactory(jurisId, prisma, {
+      status: ListingsStatusEnum.closed,
+      lotteryStatus: 'releasedToPartners',
+    });
+    const closedListing2 = await prisma.listings.create({
+      data: closedListingData2,
+    });
+    closedUserListingId2 = closedListing2.id;
+
     const storedUser = await prisma.userAccounts.create({
       data: await userFactory({
         roles: { isPartner: true },
-        listings: [userListingId, userListingToBeDeleted, closedUserListingId],
+        listings: [
+          userListingId,
+          userListingToBeDeleted,
+          closedUserListingId,
+          closedUserListingId2,
+        ],
         jurisdictionIds: [jurisId],
         mfaEnabled: false,
         confirmedAt: new Date(),
@@ -1086,10 +1103,30 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
 
     it('should error as forbidden for process endpoint', async () => {
       await request(app.getHttpServer())
-        .put(`/listings/process`)
+        .put(`/listings/closeListings`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
+    });
+
+    it('should error as forbidden for expireLotteries endpoint', async () => {
+      await request(app.getHttpServer())
+        .put(`/listings/expireLotteries`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+
+    it('should succeed for lottery status endpoint', async () => {
+      await request(app.getHttpServer())
+        .put('/listings/lotteryStatus')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          listingId: closedUserListingId2,
+          lotteryStatus: 'publishedToPublic',
+        })
+        .set('Cookie', cookies)
+        .expect(200);
     });
 
     it('should succeed for csv endpoint', async () => {

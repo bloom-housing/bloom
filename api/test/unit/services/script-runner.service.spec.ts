@@ -194,6 +194,48 @@ describe('Testing script runner service', () => {
     };
   };
 
+  it('should add lottery translations', async () => {
+    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+    prisma.translations.findFirst = jest
+      .fn()
+      .mockResolvedValue({ id: randomUUID(), translations: {} });
+    prisma.translations.update = jest.fn().mockResolvedValue(null);
+
+    const id = randomUUID();
+    const scriptName = 'add lottery translations';
+
+    const res = await service.addLotteryTranslations({
+      user: {
+        id,
+      } as unknown as User,
+    } as unknown as ExpressRequest);
+
+    expect(res.success).toBe(true);
+
+    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
+      where: {
+        scriptName,
+      },
+    });
+    expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
+      data: {
+        scriptName,
+        triggeringUser: id,
+      },
+    });
+    expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
+      data: {
+        didScriptRun: true,
+        triggeringUser: id,
+      },
+      where: {
+        scriptName,
+      },
+    });
+  });
+
   describe('transferJurisdictionListingData', () => {
     it('should transfer listings', async () => {
       prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);

@@ -178,6 +178,33 @@ const translations = (jurisdictionName?: string, language?: LanguagesEnum) => {
           tl: 'Tingnan ang Listahan at Mag-apply',
         },
       },
+      lotteryReleased: {
+        header: 'Lottery results for %{listingName} are ready to be published',
+        adminApprovedStart:
+          'Lottery results for %{listingName} have been released for publication. Please go to the listing view in your',
+        adminApprovedEnd:
+          'to view the lottery tab and release the lottery results.',
+      },
+      lotteryPublished: {
+        header: 'Lottery results have been published for %{listingName}',
+        resultsPublished:
+          'Lottery results for %{listingName} have been published to applicant accounts.',
+      },
+      lotteryAvailable: {
+        header: 'New Housing Lottery Results Available',
+        resultsAvailable:
+          'Results are available for a housing lottery for %{listingName}. See your Doorway Housing Portal account for more information.',
+        signIn: 'Sign In to View Your Results',
+        whatHappensHeader: 'What happens next?',
+        whatHappensContent:
+          'The property manager will begin to contact applicants by their preferred contact method. They will do so in the order of lottery rank, within each lottery preference. When the units are all filled, the property manager will stop contacting applicants. All the units could be filled before the property manager reaches your rank. If this happens, you will not be contacted.',
+        otherOpportunities1:
+          'To view other housing opportunities, please visit %{appUrl}. You can sign up to receive notifications of new application opportunities',
+        otherOpportunities2: 'here',
+        otherOpportunities3:
+          'If you want to learn about how lotteries work, please see the lottery section of the',
+        otherOpportunities4: 'Doorway Housing Portal Help Center',
+      },
     };
   } else if (language === LanguagesEnum.es) {
     return {
@@ -210,6 +237,21 @@ const translations = (jurisdictionName?: string, language?: LanguagesEnum) => {
         propertyManager: 'Administrador de propiedades',
         contactAgentToUpdateInfo:
           'Si necesita modificar información en su solicitud, no haga una solicitud nueva. Comuníquese con el agente de este listado.',
+      },
+      lotteryAvailable: {
+        header: 'Nuevos resultados de la lotería de vivienda disponibles',
+        resultsAvailable:
+          'Los resultados están disponibles para una lotería de vivienda para %{listingName}. Consulte su cuenta del portal de vivienda para obtener más información.',
+        signIn: 'Inicie sesión para ver sus resultados',
+        whatHappensHeader: '¿Qué pasa después?',
+        whatHappensContent:
+          'El administrador de la propiedad comenzará a comunicarse con los solicitantes mediante su método de contacto preferido. Lo harán en el orden de clasificación de la lotería, dentro de cada preferencia de lotería. Cuando todas las unidades estén ocupadas, el administrador de la propiedad dejará de comunicarse con los solicitantes. Todas las unidades podrían llenarse antes de que el administrador de la propiedad alcance su rango. Si esto sucede, no lo contactaremos.',
+        otherOpportunities1:
+          'Para ver otras oportunidades de vivienda, visite %{appUrl}. Puede registrarse para recibir notificaciones de nuevas oportunidades de solicitud',
+        otherOpportunities2: 'aquí',
+        otherOpportunities3:
+          'Si desea obtener información sobre cómo funcionan las loterías, consulte la sección de lotería del',
+        otherOpportunities4: 'Doorway Housing Portal Centro de ayuda',
       },
     };
   }

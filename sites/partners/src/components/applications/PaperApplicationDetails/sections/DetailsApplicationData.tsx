@@ -1,6 +1,7 @@
 import React, { useContext, useMemo } from "react"
 import { t } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { ApplicationSubmissionTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ApplicationContext } from "../../ApplicationContext"
 import { convertDataToLocal } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
@@ -12,6 +13,12 @@ const DetailsApplicationData = () => {
     if (!application) return null
 
     return convertDataToLocal(application?.submissionDate)
+  }, [application])
+
+  const receivedDate = useMemo(() => {
+    if (!application) return null
+
+    return convertDataToLocal(application?.receivedAt)
   }, [application])
 
   return (
@@ -45,6 +52,22 @@ const DetailsApplicationData = () => {
           {!application.householdSize ? 1 : application.householdSize}
         </FieldValue>
       </Grid.Row>
+
+      {application.submissionType === ApplicationSubmissionTypeEnum.paper && (
+        <Grid.Row>
+          <FieldValue label={t("application.details.receivedDate")} testId="receivedDate">
+            {receivedDate.date}
+          </FieldValue>
+
+          <FieldValue label={t("application.details.receivedTime")} testId="receivedTime">
+            {receivedDate.time}
+          </FieldValue>
+
+          <FieldValue label={t("application.details.receivedBy")} testId="receivedBy">
+            {application.receivedBy ? application.receivedBy : t("t.n/a")}
+          </FieldValue>
+        </Grid.Row>
+      )}
 
       <Grid.Row>
         <FieldValue label={t("application.details.submittedBy")} testId="submittedBy">

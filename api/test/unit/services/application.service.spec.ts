@@ -1513,6 +1513,8 @@ describe('Testing application service', () => {
 
     const exampleAddress = addressFactory() as AddressCreate;
     const dto = mockCreateApplicationData(exampleAddress, new Date());
+    dto.receivedAt = new Date();
+    dto.receivedBy = 'example received by';
 
     await service.create(dto, false, {
       id: 'requestingUser id',
@@ -1557,6 +1559,8 @@ describe('Testing application service', () => {
         language: LanguagesEnum.en,
         acceptedTerms: true,
         submissionDate: expect.anything(),
+        receivedAt: expect.anything(),
+        receivedBy: 'example received by',
         reviewStatus: ApplicationReviewStatusEnum.valid,
         confirmationCode: expect.anything(),
         applicant: {

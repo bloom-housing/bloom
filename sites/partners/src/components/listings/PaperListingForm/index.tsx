@@ -406,15 +406,16 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         </Tabs.TabPanel>
                       </Tabs>
 
-                      {listing?.status === ListingsStatusEnum.closed && (
-                        <LotteryResults
-                          submitCallback={(data) => {
-                            triggerSubmitWithStatus(false, ListingsStatusEnum.closed, data)
-                          }}
-                          drawerState={lotteryResultsDrawer}
-                          showDrawer={(toggle: boolean) => setLotteryResultsDrawer(toggle)}
-                        />
-                      )}
+                      {listing?.status === ListingsStatusEnum.closed &&
+                        (!listing?.lotteryOptIn || !process.env.showLottery) && (
+                          <LotteryResults
+                            submitCallback={(data) => {
+                              triggerSubmitWithStatus(false, ListingsStatusEnum.closed, data)
+                            }}
+                            drawerState={lotteryResultsDrawer}
+                            showDrawer={(toggle: boolean) => setLotteryResultsDrawer(toggle)}
+                          />
+                        )}
                     </div>
 
                     <aside className="w-full md:w-3/12 md:pl-6">

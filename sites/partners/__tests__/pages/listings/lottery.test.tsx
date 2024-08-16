@@ -7,12 +7,18 @@ import Lottery from "../../../src/pages/listings/[id]/lottery"
 import { mockNextRouter, render } from "../../testUtils"
 import {
   ListingMultiselectQuestion,
+  ListingsStatusEnum,
   LotteryStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const server = setupServer()
+const closedListing = {
+  ...listing,
+  status: ListingsStatusEnum.closed,
+}
 
 beforeAll(() => {
+  process.env.lotteryDaysTillExpiry = "45"
   server.listen()
 })
 
@@ -62,12 +68,12 @@ describe("lottery", () => {
       })
     )
 
-    const { getAllByText, findByText } = render(<Lottery listing={listing} />)
+    const { getAllByText, findByText } = render(<Lottery listing={closedListing} />)
 
     const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
 
-    expect(getAllByText(listing.name).length).toBeGreaterThan(0)
+    expect(getAllByText(closedListing.name).length).toBeGreaterThan(0)
   })
 
   it("should render page if user is a jurisdictional admin", async () => {
@@ -85,12 +91,12 @@ describe("lottery", () => {
       })
     )
 
-    const { getAllByText, findByText } = render(<Lottery listing={listing} />)
+    const { getAllByText, getByText, findByText } = render(<Lottery listing={closedListing} />)
 
     const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
 
-    expect(getAllByText(listing.name).length).toBeGreaterThan(0)
+    expect(getAllByText(closedListing.name).length).toBeGreaterThan(0)
   })
 
   it("should render page if user is a partner with access to this listing", async () => {
@@ -114,12 +120,12 @@ describe("lottery", () => {
       })
     )
 
-    const { getAllByText, findByText } = render(<Lottery listing={listing} />)
+    const { getAllByText, getByText, findByText } = render(<Lottery listing={closedListing} />)
 
     const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
 
-    expect(getAllByText(listing.name).length).toBeGreaterThan(0)
+    expect(getAllByText(closedListing.name).length).toBeGreaterThan(0)
   })
 
   it("should not render page if user is a partner without access to this listing", () => {
@@ -143,11 +149,11 @@ describe("lottery", () => {
       })
     )
 
-    const { queryAllByText, queryByText } = render(<Lottery listing={listing} />)
+    const { queryAllByText, queryByText } = render(<Lottery listing={closedListing} />)
 
     const header = queryByText("Lottery")
     expect(header).not.toBeInTheDocument()
-    expect(queryAllByText(listing.name).length).toBe(0)
+    expect(queryAllByText(closedListing.name).length).toBe(0)
   })
 
   it("should show no lottery run state if user is an admin and lottery has not been run", async () => {
@@ -170,7 +176,7 @@ describe("lottery", () => {
       })
     )
 
-    const { getByText, findByText } = render(<Lottery listing={listing} />)
+    const { getByText, findByText } = render(<Lottery listing={closedListing} />)
 
     const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
@@ -205,7 +211,11 @@ describe("lottery", () => {
 
     const { getByText, findByText } = render(
       <Lottery
-        listing={{ ...listing, lotteryLastRunAt: new Date(), lotteryStatus: LotteryStatusEnum.ran }}
+        listing={{
+          ...closedListing,
+          lotteryLastRunAt: new Date(),
+          lotteryStatus: LotteryStatusEnum.ran,
+        }}
       />
     )
 
@@ -242,7 +252,11 @@ describe("lottery", () => {
 
     const { getByText, findByText } = render(
       <Lottery
-        listing={{ ...listing, lotteryLastRunAt: new Date(), lotteryStatus: LotteryStatusEnum.ran }}
+        listing={{
+          ...closedListing,
+          lotteryLastRunAt: new Date(),
+          lotteryStatus: LotteryStatusEnum.ran,
+        }}
       />
     )
 
@@ -276,7 +290,11 @@ describe("lottery", () => {
 
     const { getByText, findByText } = render(
       <Lottery
-        listing={{ ...listing, lotteryLastRunAt: new Date(), lotteryStatus: LotteryStatusEnum.ran }}
+        listing={{
+          ...closedListing,
+          lotteryLastRunAt: new Date(),
+          lotteryStatus: LotteryStatusEnum.ran,
+        }}
       />
     )
 
@@ -289,6 +307,52 @@ describe("lottery", () => {
       getByText(
         "Releasing the lottery will give Partner users access to the lottery data, including the ability to publish results to applicants."
       )
+    ).toBeInTheDocument()
+  })
+
+  it("should show new paper apps modals if user clicks on release if application updates have been made since last lottery run", async () => {
+    mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { isAdmin: true },
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 0 }))
+      })
+    )
+
+    const lotteryLastRan = new Date()
+    lotteryLastRan.setDate(lotteryLastRan.getDate() - 1)
+    const { getByText, findByText } = render(
+      <Lottery
+        listing={{
+          ...listing,
+          lotteryLastRunAt: lotteryLastRan,
+          lotteryStatus: LotteryStatusEnum.ran,
+          lastApplicationUpdateAt: new Date(),
+        }}
+      />
+    )
+
+    const header = await findByText("Lottery")
+    expect(header).toBeInTheDocument()
+
+    fireEvent.click(getByText("Release lottery"))
+    expect(await findByText("Action required")).toBeInTheDocument()
+    expect(
+      getByText("You have added or updated applications without re-running the lottery.")
+    ).toBeInTheDocument()
+    expect(
+      getByText("You must re-run the lottery before releasing the lottery data.")
     ).toBeInTheDocument()
   })
 
@@ -354,7 +418,7 @@ describe("lottery", () => {
       })
     )
 
-    const { getByText, findByText } = render(<Lottery listing={listing} />)
+    const { getByText, findByText } = render(<Lottery listing={closedListing} />)
 
     const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
@@ -386,7 +450,7 @@ describe("lottery", () => {
       })
     )
 
-    const { getByText, findByText } = render(<Lottery listing={listing} />)
+    const { getByText, findByText } = render(<Lottery listing={closedListing} />)
 
     const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
@@ -417,7 +481,10 @@ describe("lottery", () => {
       })
     )
 
-    const updatedListing = { ...listing, lotteryLastRunAt: new Date("September 6, 2025 8:15:00") }
+    const updatedListing = {
+      ...closedListing,
+      lotteryLastRunAt: new Date("September 6, 2025 8:15:00"),
+    }
     const { getByText, findByText, findAllByText, getAllByText } = render(
       <Lottery listing={updatedListing} />
     )
@@ -461,7 +528,7 @@ describe("lottery", () => {
     )
 
     const updatedListing = {
-      ...listing,
+      ...closedListing,
       lotteryLastRunAt: new Date("September 6, 2025 8:15:00"),
       listingMultiselectQuestions: [{ multiselectQuestions: {} } as ListingMultiselectQuestion],
     }
@@ -489,6 +556,54 @@ describe("lottery", () => {
     expect(getAllByText("Export")).toHaveLength(2)
   })
 
+  it("should show export with terms modal if user is a partner", async () => {
+    mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { isAdmin: false, isPartner: true },
+            listings: [{ id: "Uvbk5qurpB2WI9V6WnNdH" }],
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
+      })
+    )
+
+    const updatedListing = {
+      ...listing,
+      lotteryLastRunAt: new Date("September 6, 2025 8:15:00"),
+      lotteryStatus: LotteryStatusEnum.publishedToPublic,
+    }
+    const { getByText, findByText, findAllByText, getAllByText } = render(
+      <Lottery listing={updatedListing} />
+    )
+
+    const header = await findByText("Lottery")
+    expect(header).toBeInTheDocument()
+
+    fireEvent.click(getByText("Export"))
+    expect(await findAllByText("Export lottery data")).toHaveLength(2)
+
+    expect(
+      getByText("This data was generated from the lottery that was run on 09/06/2025 at 8:15 am.", {
+        exact: false,
+      })
+    ).toBeInTheDocument()
+    expect(
+      getByText("You must accept the Terms of Use before exporting this data.")
+    ).toBeInTheDocument()
+
+    expect(getAllByText("Export")).toHaveLength(2)
+  })
+
   it("should show no lottery released state as a partner", async () => {
     mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
     document.cookie = "access-token-available=True"
@@ -510,7 +625,7 @@ describe("lottery", () => {
     )
 
     const updatedListing = {
-      ...listing,
+      ...closedListing,
       lotteryStatus: LotteryStatusEnum.ran,
     }
 
@@ -546,7 +661,7 @@ describe("lottery", () => {
     )
 
     const updatedListing = {
-      ...listing,
+      ...closedListing,
       lotteryStatus: LotteryStatusEnum.releasedToPartners,
     }
 
@@ -587,7 +702,7 @@ describe("lottery", () => {
     )
 
     const updatedListing = {
-      ...listing,
+      ...closedListing,
       lotteryStatus: LotteryStatusEnum.publishedToPublic,
     }
 
@@ -598,5 +713,44 @@ describe("lottery", () => {
 
     expect(getByText("Export lottery data")).toBeInTheDocument()
     expect(getByText("Export")).toBeInTheDocument()
+  })
+
+  it("should show lottery expired state as a partner", async () => {
+    mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { isAdmin: false, isJurisdictionalAdmin: true },
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
+      })
+    )
+
+    const updatedListing = {
+      ...closedListing,
+      lotteryStatus: LotteryStatusEnum.expired,
+    }
+
+    const { getByText, findByText, queryByText } = render(<Lottery listing={updatedListing} />)
+
+    const header = await findByText("Lottery")
+    expect(header).toBeInTheDocument()
+
+    expect(getByText("No lottery data")).toBeInTheDocument()
+    expect(
+      getByText("Lottery data has expired for this listing and is no longer available for export.")
+    ).toBeInTheDocument()
+    expect(queryByText("Publish")).not.toBeInTheDocument()
+    expect(queryByText("Run lottery")).not.toBeInTheDocument()
+    expect(queryByText("Release lottery")).not.toBeInTheDocument()
   })
 })

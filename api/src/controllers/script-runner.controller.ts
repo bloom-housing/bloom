@@ -82,4 +82,16 @@ export class ScirptRunnerController {
       amiChartImportDTO,
     );
   }
+
+  @Put('lotteryTranslations')
+  @ApiOperation({
+    summary: 'A script that adds lottery translations to the db',
+    operationId: 'lotteryTranslations',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async lotteryTranslations(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.addLotteryTranslations(req);
+  }
 }

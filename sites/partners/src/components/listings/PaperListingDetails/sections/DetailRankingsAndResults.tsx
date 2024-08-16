@@ -43,13 +43,17 @@ const DetailRankingsAndResults = () => {
         <>
           <Grid.Row>
             <FieldValue id="lotteryEvent.startTime.date" label={t("listings.lotteryDateQuestion")}>
-              {dayjs(new Date(lotteryEvent?.startTime)).utc().format("MM/DD/YYYY")}
+              {dayjs(new Date(lotteryEvent?.startDate)).utc().format("MM/DD/YYYY")}
             </FieldValue>
             <FieldValue id="lotteryEvent.startTime.time" label={t("listings.lotteryStartTime")}>
-              {dayjs(new Date(lotteryEvent?.startTime)).format("hh:mm A")}
+              {lotteryEvent?.startTime
+                ? dayjs(new Date(lotteryEvent?.startTime)).format("hh:mm A")
+                : null}
             </FieldValue>
             <FieldValue id="lotteryEvent.lotteryEndTime.time" label={t("listings.lotteryEndTime")}>
-              {dayjs(new Date(lotteryEvent?.endTime)).format("hh:mm A")}
+              {lotteryEvent?.endTime
+                ? dayjs(new Date(lotteryEvent?.endTime)).format("hh:mm A")
+                : null}
             </FieldValue>
           </Grid.Row>
           <Grid.Row>

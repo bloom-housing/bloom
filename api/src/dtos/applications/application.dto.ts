@@ -17,6 +17,7 @@ import {
   IsNumber,
   IsString,
   MaxLength,
+  MinLength,
   ValidateNested,
 } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
@@ -155,6 +156,19 @@ export class Application extends AbstractDTO {
   @Type(() => Date)
   @ApiPropertyOptional()
   submissionDate?: Date;
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
+  @MinLength(1, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  receivedBy?: string;
+
+  @Expose()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  @ApiPropertyOptional()
+  receivedAt?: Date;
 
   // if this field is true then the application is a confirmed duplicate
   // meaning that the record in the applicaiton flagged set table has a status of duplicate
