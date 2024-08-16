@@ -1,13 +1,13 @@
 import React, { useRef, useState, useEffect, useContext } from "react"
 import { UserStatus } from "../../../lib/constants"
 import { ListingList, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import { t } from "@bloom-housing/ui-components"
 import { ListingSearchParams, generateSearchQuery } from "../../../lib/listings/search"
 import { searchListings } from "../../../lib/listings/listing-service"
+import styles from "./ListingsSearch.module.scss"
 import { ListingsCombined } from "../ListingsCombined"
-
-import { AppearanceSizeType, Button } from "@bloom-housing/doorway-ui-components"
 import { FormOption, ListingsSearchModal } from "./ListingsSearchModal"
-import { AppearanceBorderType, t } from "@bloom-housing/ui-components"
+import { ListingsSearchMetadata } from "./ListingsSearchMetadata"
 
 type ListingsSearchCombinedProps = {
   searchString?: string
@@ -41,6 +41,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
     listings: [],
     currentPage: 0,
     lastPage: 0,
+    totalItems: 0,
     loading: true,
   })
 
@@ -69,6 +70,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
       listings: listings,
       currentPage: meta.currentPage,
       lastPage: meta.totalPages,
+      totalItems: meta.totalItems,
       loading: false,
     })
 
@@ -97,19 +99,13 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
   }
 
   return (
-    <div>
-      <div style={{ width: "100%", display: "flex" }}>
-        <div style={{ flexGrow: 1 }}></div>
-        <Button
-          border={AppearanceBorderType.borderless}
-          size={AppearanceSizeType.small}
-          onClick={() => {
-            setModalOpen(true)
-          }}
-        >
-          {`${t("search.filters")} ${filterCount}`}
-        </Button>
-      </div>
+    <div className={styles["listings-vars"]}>
+      <ListingsSearchMetadata
+        loading={searchResults.loading}
+        setModalOpen={setModalOpen}
+        filterCount={filterCount}
+        searchResults={searchResults}
+      />
 
       <ListingsSearchModal
         open={modalOpen}

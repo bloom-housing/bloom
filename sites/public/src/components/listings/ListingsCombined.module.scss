@@ -1,14 +1,4 @@
 .listings-combined {
-  // This is a not-ideal way to do "fill window minus header and filter modal" however
-  // I can't find another way to do this.
-  // TODO: update header + filter modal to a not-magic number
-  --listings-component-height: calc(100vh - 183px);
-  --listings-component-half-height: calc(var(--listings-component-height) / 2);
-  --swipe-area-height: var(--bloom-s14);
-  --listings-list-width: 600px;
-  --background-color: var(--bloom-color-white);
-  --line-color: var(--bloom-color-gray-650);
-
   display: flex;
   align-items: stretch;
   height: var(--listings-component-height);
@@ -61,8 +51,10 @@
   .listings-list {
     overflow-y: auto;
     width: var(--listings-list-width);
+    padding-top: var(--listings-list-overscroll);
 
     @media (max-width: $screen-md) {
+      padding-top: 0;
       position: absolute;
       z-index: 1;
       top: var(--swipe-area-height);
@@ -147,5 +139,19 @@
       margin-top: var(--bloom-s4);
       border-top: 1px solid var(--line-color);
     }
+  }
+}
+
+.listings-list-wrapper {
+  --padding: var(--seeds-s10);
+
+  /* These attribute selectors are strange, but that's because we want to short-circuit the
+     CSS module renaming and use these exact class names */
+  [class*="loading-overlay"]::before { 
+    background-color: white;
+  }
+
+  [class*="loading-overlay__spinner"] {
+    color: var(--seeds-color-gray-400) !important;
   }
 }
