@@ -45,9 +45,12 @@ describe("lottery", () => {
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
       }),
-      rest.get("http://localhost/api/adapter/lottery/lotteryActivityLog", (_req, res, ctx) => {
-        return res(ctx.json([]))
-      })
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const { findByText } = render(<Lottery listing={undefined} />)
@@ -69,9 +72,12 @@ describe("lottery", () => {
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
       }),
-      rest.get("http://localhost/api/adapter/lottery/lotteryActivityLog", (_req, res, ctx) => {
-        return res(ctx.json([]))
-      })
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const { getAllByText, findByText } = render(<Lottery listing={closedListing} />)
@@ -95,9 +101,12 @@ describe("lottery", () => {
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
       }),
-      rest.get("http://localhost/api/adapter/lottery/lotteryActivityLog", (_req, res, ctx) => {
-        return res(ctx.json([]))
-      })
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const { getAllByText, findByText } = render(<Lottery listing={closedListing} />)
@@ -127,9 +136,12 @@ describe("lottery", () => {
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
       }),
-      rest.get("http://localhost/api/adapter/lottery/lotteryActivityLog", (_req, res, ctx) => {
-        return res(ctx.json([]))
-      })
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const { getAllByText, findByText } = render(<Lottery listing={closedListing} />)
@@ -159,9 +171,12 @@ describe("lottery", () => {
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
       }),
-      rest.get("http://localhost/api/adapter/lottery/lotteryActivityLog", (_req, res, ctx) => {
-        return res(ctx.json([]))
-      })
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const { queryAllByText, queryByText } = render(<Lottery listing={closedListing} />)
@@ -189,9 +204,12 @@ describe("lottery", () => {
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
       }),
-      rest.get("http://localhost/api/adapter/lottery/lotteryActivityLog", (_req, res, ctx) => {
-        return res(ctx.json([]))
-      })
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const { getByText, findByText } = render(<Lottery listing={closedListing} />)
@@ -225,9 +243,12 @@ describe("lottery", () => {
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
       }),
-      rest.get("http://localhost/api/adapter/lottery/lotteryActivityLog", (_req, res, ctx) => {
-        return res(ctx.json([]))
-      })
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const { getByText, findByText } = render(
@@ -269,9 +290,12 @@ describe("lottery", () => {
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
       }),
-      rest.get("http://localhost/api/adapter/lottery/lotteryActivityLog", (_req, res, ctx) => {
-        return res(ctx.json([]))
-      })
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const { getByText, findByText } = render(
@@ -310,9 +334,12 @@ describe("lottery", () => {
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
       }),
-      rest.get("http://localhost/api/adapter/lottery/lotteryActivityLog", (_req, res, ctx) => {
-        return res(ctx.json([]))
-      })
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const { getByText, findByText } = render(
@@ -355,9 +382,12 @@ describe("lottery", () => {
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
       }),
-      rest.get("http://localhost/api/adapter/lottery/lotteryActivityLog", (_req, res, ctx) => {
-        return res(ctx.json([]))
-      })
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const lotteryLastRan = new Date()
@@ -404,9 +434,12 @@ describe("lottery", () => {
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
       }),
-      rest.get("http://localhost/api/adapter/lottery/lotteryActivityLog", (_req, res, ctx) => {
-        return res(ctx.json([]))
-      })
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const { getByText, findByText } = render(
@@ -449,9 +482,12 @@ describe("lottery", () => {
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
       }),
-      rest.get("http://localhost/api/adapter/lottery/lotteryActivityLog", (_req, res, ctx) => {
-        return res(ctx.json([]))
-      })
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const { getByText, findByText } = render(<Lottery listing={closedListing} />)
@@ -484,9 +520,12 @@ describe("lottery", () => {
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
       }),
-      rest.get("http://localhost/api/adapter/lottery/lotteryActivityLog", (_req, res, ctx) => {
-        return res(ctx.json([]))
-      })
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const { getByText, findByText } = render(<Lottery listing={closedListing} />)
@@ -518,9 +557,12 @@ describe("lottery", () => {
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
       }),
-      rest.get("http://localhost/api/adapter/lottery/lotteryActivityLog", (_req, res, ctx) => {
-        return res(ctx.json([]))
-      })
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const updatedListing = {
@@ -567,9 +609,12 @@ describe("lottery", () => {
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
       }),
-      rest.get("http://localhost/api/adapter/lottery/lotteryActivityLog", (_req, res, ctx) => {
-        return res(ctx.json([]))
-      })
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const updatedListing = {
@@ -620,9 +665,12 @@ describe("lottery", () => {
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
       }),
-      rest.get("http://localhost/api/adapter/lottery/lotteryActivityLog", (_req, res, ctx) => {
-        return res(ctx.json([]))
-      })
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const updatedListing = {
@@ -670,9 +718,12 @@ describe("lottery", () => {
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
       }),
-      rest.get("http://localhost/api/adapter/lottery/lotteryActivityLog", (_req, res, ctx) => {
-        return res(ctx.json([]))
-      })
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const updatedListing = {
@@ -709,9 +760,12 @@ describe("lottery", () => {
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
       }),
-      rest.get("http://localhost/api/adapter/lottery/lotteryActivityLog", (_req, res, ctx) => {
-        return res(ctx.json([]))
-      })
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const updatedListing = {
@@ -753,9 +807,12 @@ describe("lottery", () => {
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
       }),
-      rest.get("http://localhost/api/adapter/lottery/lotteryActivityLog", (_req, res, ctx) => {
-        return res(ctx.json([]))
-      })
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const updatedListing = {
@@ -790,9 +847,12 @@ describe("lottery", () => {
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
       }),
-      rest.get("http://localhost/api/adapter/lottery/lotteryActivityLog", (_req, res, ctx) => {
-        return res(ctx.json([]))
-      })
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const updatedListing = {
@@ -832,35 +892,42 @@ describe("lottery", () => {
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
       }),
-      rest.get("http://localhost/api/adapter/lottery/lotteryActivityLog", (_req, res, ctx) => {
-        return res(
-          ctx.json([
-            { status: "closed", name: null, logDate: new Date("September 6, 2025 8:15:00") },
-            { status: "ran", name: "Admin One", logDate: new Date("September 6, 2025 9:00:00") },
-            { status: "rerun", name: "Admin Two", logDate: new Date("September 6, 2025 9:30:00") },
-            {
-              status: "releasedToPartners",
-              name: "Admin Three",
-              logDate: new Date("September 7, 2025 13:00:00"),
-            },
-            {
-              status: "retracted",
-              name: "Admin Four",
-              logDate: new Date("September 7, 2025 14:00:00"),
-            },
-            {
-              status: "releasedToPartners",
-              name: "Admin Five",
-              logDate: new Date("September 7, 2025 15:00:00"),
-            },
-            {
-              status: "publishedToPublic",
-              name: "Partner One",
-              logDate: new Date("September 8, 2025 9:00:00"),
-            },
-          ])
-        )
-      })
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(
+            ctx.json([
+              { status: "closed", name: null, logDate: new Date("September 6, 2025 8:15:00") },
+              { status: "ran", name: "Admin One", logDate: new Date("September 6, 2025 9:00:00") },
+              {
+                status: "rerun",
+                name: "Admin Two",
+                logDate: new Date("September 6, 2025 9:30:00"),
+              },
+              {
+                status: "releasedToPartners",
+                name: "Admin Three",
+                logDate: new Date("September 7, 2025 13:00:00"),
+              },
+              {
+                status: "retracted",
+                name: "Admin Four",
+                logDate: new Date("September 7, 2025 14:00:00"),
+              },
+              {
+                status: "releasedToPartners",
+                name: "Admin Five",
+                logDate: new Date("September 7, 2025 15:00:00"),
+              },
+              {
+                status: "publishedToPublic",
+                name: "Partner One",
+                logDate: new Date("September 8, 2025 9:00:00"),
+              },
+            ])
+          )
+        }
+      )
     )
 
     const updatedListing = {
