@@ -1,7 +1,8 @@
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsEnum, IsString } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
+import { ApplicationsFilterEnum } from '../../enums/applications/filter-enum';
 
 export class PublicAppsViewQueryParams {
   @Expose()
@@ -14,9 +15,10 @@ export class PublicAppsViewQueryParams {
 
   @Expose()
   @ApiPropertyOptional({
-    type: String,
-    example: 'filterType',
+    enum: ApplicationsFilterEnum,
+    enumName: 'ApplicationsFilterEnum',
+    example: 'all',
   })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  filterType?: string;
+  @IsEnum(ApplicationsFilterEnum, { groups: [ValidationsGroupsEnum.default] })
+  filterType?: ApplicationsFilterEnum;
 }

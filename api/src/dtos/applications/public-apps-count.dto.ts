@@ -5,26 +5,18 @@ import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum
 
 export class PublicAppsCount {
   @Expose()
-  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   total: number;
 
   @Expose()
-  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   lottery: number;
 
   @Expose()
-  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   closed: number;
 
   @Expose()
-  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   open: number;
 }

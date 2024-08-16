@@ -1413,7 +1413,7 @@ export class ApplicationsService {
       /**  */
       userId: string
       /**  */
-      filterType?: string
+      filterType?: ApplicationsFilterEnum
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
@@ -5743,6 +5743,13 @@ export enum ApplicationOrderByKeys {
   "lastName" = "lastName",
   "submissionDate" = "submissionDate",
   "createdAt" = "createdAt",
+}
+
+export enum ApplicationsFilterEnum {
+  "all" = "all",
+  "lottery" = "lottery",
+  "closed" = "closed",
+  "open" = "open",
 }
 
 export enum MfaType {

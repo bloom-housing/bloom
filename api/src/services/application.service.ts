@@ -7,6 +7,7 @@ import {
 import crypto from 'crypto';
 import { Request as ExpressRequest } from 'express';
 import {
+  ListingEventsTypeEnum,
   ListingsStatusEnum,
   LotteryStatusEnum,
   Prisma,
@@ -32,9 +33,9 @@ import { User } from '../dtos/users/user.dto';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { GeocodingService } from './geocoding.service';
 import { MostRecentApplicationQueryParams } from '../dtos/applications/most-recent-application-query-params.dto';
-import { PublicAppsViewQueryParams } from 'src/dtos/applications/public-apps-view-params.dto';
-import { ApplicationsFilterEnum } from 'src/enums/applications/filter-enum';
-import { PublicAppsViewResponse } from 'src/dtos/applications/public-apps-view.dto';
+import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
+import { ApplicationsFilterEnum } from '../enums/applications/filter-enum';
+import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view.dto';
 
 export const view: Partial<
   Record<ApplicationViews, Prisma.ApplicationsInclude>
@@ -368,6 +369,7 @@ export class ApplicationService {
     if (!user) {
       throw new ForbiddenException();
     }
+    console.log();
     const whereClause = this.buildWhereClause(params);
     const rawApps = await this.prisma.applications.findMany({
       select: {
@@ -385,6 +387,7 @@ export class ApplicationService {
               select: {
                 startDate: true,
               },
+              where: { type: ListingEventsTypeEnum.publicLottery },
             },
           },
         },
@@ -396,6 +399,11 @@ export class ApplicationService {
     let lottery = 0,
       closed = 0,
       open = 0;
+
+    console.log(ApplicationsFilterEnum);
+
+    console.log(ApplicationsFilterEnum['all']);
+    console.log(Object.keys(ApplicationsFilterEnum).indexOf('all'));
 
     rawApps.forEach((app) => {
       if (app.listings.status === ListingsStatusEnum.active) {
@@ -409,13 +417,14 @@ export class ApplicationService {
         if (params.filterType === ApplicationsFilterEnum.lottery)
           displayApplications.push(app);
       } else {
+        //fix to handle all case
         closed++;
         if (params.filterType === ApplicationsFilterEnum.closed)
           displayApplications.push(app);
       }
     });
-
-    if (!params.filterType || params.filterType === ApplicationsFilterEnum.all)
+    //
+    if (params.filterType === ApplicationsFilterEnum.all)
       displayApplications.push(...rawApps);
     return {
       displayApplications,
