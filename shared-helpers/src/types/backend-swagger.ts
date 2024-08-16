@@ -2209,7 +2209,7 @@ export class LotteryService {
     options: IRequestOptions = {}
   ): Promise<LotteryActivityLogItem[]> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/lottery/lotteryActivityLog"
+      let url = basePath + "/lottery/lotteryActivityLog/{id}"
       url = url.replace("{id}", params["id"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
