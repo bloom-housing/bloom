@@ -63,18 +63,21 @@ export type SubmitFunction = (
   newData?: Partial<FormListing>
 ) => void
 
-const getToast = (listing: FormListing, oldStatus: ListingsStatusEnum, newStatus: ListingsStatusEnum) => {
+const getToast = (
+  listing: FormListing,
+  oldStatus: ListingsStatusEnum,
+  newStatus: ListingsStatusEnum
+) => {
   const toasts = {
     [ListingsStatusEnum.pendingReview]: t("listings.approval.submittedForReview"),
     [ListingsStatusEnum.changesRequested]: t("listings.listingStatus.changesRequested"),
     [ListingsStatusEnum.active]: t("listings.approval.listingPublished"),
     [ListingsStatusEnum.pending]: t("listings.approval.listingUnpublished"),
     [ListingsStatusEnum.closed]: t("listings.approval.listingClosed"),
-    saved: t("listings.listingUpdated")
+    saved: t("listings.listingUpdated"),
   }
   if (oldStatus !== newStatus) {
-    if (!listing && newStatus === ListingsStatusEnum.pending)
-      return toasts.saved
+    if (!listing && newStatus === ListingsStatusEnum.pending) return toasts.saved
     return toasts[newStatus]
   }
 
@@ -212,7 +215,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           reset(formData)
 
           if (result) {
-            addToast(getToast(listing, listing?.status, formattedData?.status), { variant: "success" })
+            addToast(getToast(listing, listing?.status, formattedData?.status), {
+              variant: "success",
+            })
 
             // Only do the router push if it's a redirect condition
             if (!continueEditing) await router.push(`/listings/${result.id}`)

@@ -53,7 +53,7 @@ const SaveBeforeExitDialog = ({
           variant="alert-outlined"
           onClick={() => {
             setOpen(false)
-            router.push(listingDetailURL)
+            void router.push(listingDetailURL)
           }}
           size="sm"
         >
