@@ -619,9 +619,9 @@ export function useMapLayersList(jurisdictionId?: string) {
 
 export function useLotteryActivityLog(listingId: string) {
   const { lotteryService } = useContext(AuthContext)
-  const fetcher = () => lotteryService.lotteryActivityLog({ id: listingId })
+  const fetcher = () => listingId && lotteryService.lotteryActivityLog({ id: listingId })
 
-  const { data, error } = useSWR(`/api/adapter/lottery/lotteryActivityLog`, fetcher)
+  const { data, error } = useSWR(`/api/adapter/lottery/lotteryActivityLog/${listingId}`, fetcher)
 
   return {
     lotteryActivityLogData: data,
