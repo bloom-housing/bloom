@@ -49,6 +49,7 @@ const SaveBeforeExitDialog = ({
           {t("t.save")}
         </Button>
         <Button
+          id="saveBeforeExitDiscard"
           type="button"
           variant="alert-outlined"
           onClick={() => {

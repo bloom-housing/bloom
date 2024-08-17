@@ -82,6 +82,7 @@ const ListingFormActions = ({
     const cancelButton = (
       <Grid.Cell className="flex" key="btn-cancel">
         <Button
+          id="listingsExitButton"
           variant="text"
           className="w-full justify-center p-3"
           onClick={() => {

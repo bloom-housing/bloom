@@ -168,7 +168,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const { getValues, setError, clearErrors, reset } = formMethods
 
   const triggerSubmitWithStatus: SubmitFunction = (action, status, newData) => {
-    if (action === "confirm" && status === ListingsStatusEnum.active) {
+    if (action !== "redirect" && status === ListingsStatusEnum.active) {
       if (listing?.status === ListingsStatusEnum.active) {
         setListingIsAlreadyLiveDialog(true)
       } else {
