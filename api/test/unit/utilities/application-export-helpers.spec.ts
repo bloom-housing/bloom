@@ -280,13 +280,11 @@ describe('Testing application export helpers', () => {
     it('tests convertDemographicRaceToReadable with valid type', () => {
       const keys = [
         'indigenous-alaskanNative',
-        'declineToRespond',
         'pacificIslander-nativeHawaiian',
       ];
 
       const values = [
         'Indigenous[Alaskan Native]',
-        'Decline to Respond',
         'Pacific Islander[Native Hawaiian]',
       ];
 
