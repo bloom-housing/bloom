@@ -8,7 +8,7 @@ describe("Listing Management Tests", () => {
   })
 
   it("error messaging & save dialogs", () => {
-  // Test to check that the appropriate error messages happen on submit
+    // Test to check that the appropriate error messages happen on submit
     cy.visit("/")
     cy.get("a").contains("Add Listing").click()
     cy.contains("New Listing")
