@@ -4,6 +4,7 @@ import {
   ApplicationStatusEnum,
   ApplicationSubmissionTypeEnum,
   LanguagesEnum,
+  ListingEventsTypeEnum,
   ListingsStatusEnum,
   LotteryStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
@@ -33,6 +34,7 @@ import { LotteryService } from '../../src/services/lottery.service';
 import { ApplicationCsvQueryParams } from '../../src/dtos/applications/application-csv-query-params.dto';
 import { EmailService } from '../../src/services/email.service';
 import { permissionActions } from '../../src/enums/permissions/permission-actions-enum';
+import dayjs from 'dayjs';
 
 describe('Lottery Controller Tests', () => {
   let app: INestApplication;
@@ -621,12 +623,13 @@ describe('Lottery Controller Tests', () => {
         data: jurisdictionFactory(),
       });
       await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
-      const expiredClosedListingDate = new Date();
-      expiredClosedListingDate.setDate(
-        expiredClosedListingDate.getDate() -
-          Number(process.env.LOTTERY_DAYS_TILL_EXPIRY || 45) -
-          1,
-      );
+      const expiredClosedListingDate = dayjs(new Date())
+        .subtract(
+          Number(process.env.LOTTERY_DAYS_TILL_EXPIRY || 45) + 1,
+          'days',
+        )
+        .toDate();
+
       const expiredListingData = await listingFactory(
         jurisdictionA.id,
         prisma,
@@ -692,6 +695,16 @@ describe('Lottery Controller Tests', () => {
       });
 
       expect(postJobListing3.lotteryStatus).toBeNull;
+
+      const activityLogResult = await prisma.activityLog.findFirst({
+        where: {
+          module: 'lottery',
+          action: permissionActions.update,
+          recordId: postJobListing.id,
+        },
+      });
+
+      expect(activityLogResult).not.toBeNull();
     });
   });
 
@@ -810,9 +823,6 @@ describe('Lottery Controller Tests', () => {
       expect(res.body.success).toEqual(true);
 
       expect(mockLotteryReleased).toBeCalledWith(
-        expect.objectContaining({
-          email: adminUser.email,
-        }),
         {
           id: listing.id,
           name: listing.name,
@@ -973,10 +983,17 @@ describe('Lottery Controller Tests', () => {
         .expect(200);
       expect(res.body.success).toEqual(true);
 
+      const activityLogResult = await prisma.activityLog.findFirst({
+        where: {
+          module: 'lottery',
+          action: permissionActions.update,
+          recordId: listing.id,
+        },
+      });
+
+      expect(activityLogResult).not.toBeNull();
+
       expect(mockLotteryPublishedAdmin).toBeCalledWith(
-        expect.objectContaining({
-          email: adminUser.email,
-        }),
         {
           id: listing.id,
           name: listing.name,
