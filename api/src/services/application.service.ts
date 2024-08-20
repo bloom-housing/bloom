@@ -369,7 +369,6 @@ export class ApplicationService {
     if (!user) {
       throw new ForbiddenException();
     }
-    console.log();
     const whereClause = this.buildWhereClause(params);
     const rawApps = await this.prisma.applications.findMany({
       select: {
@@ -400,11 +399,6 @@ export class ApplicationService {
       closed = 0,
       open = 0;
 
-    console.log(ApplicationsFilterEnum);
-
-    console.log(ApplicationsFilterEnum['all']);
-    console.log(Object.keys(ApplicationsFilterEnum).indexOf('all'));
-
     rawApps.forEach((app) => {
       if (app.listings.status === ListingsStatusEnum.active) {
         open++;
@@ -426,10 +420,10 @@ export class ApplicationService {
     //
     if (params.filterType === ApplicationsFilterEnum.all)
       displayApplications.push(...rawApps);
-    return {
+    return mapTo(PublicAppsViewResponse, {
       displayApplications,
       applicationsCount: { total, lottery, closed, open },
-    };
+    });
   }
 
   /*
