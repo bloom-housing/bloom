@@ -142,7 +142,7 @@ export default () => {
                     divider={"flush"}
                     className={`${styles["background-card-alert-section"]}`}
                   >
-                    <Message fullwidth={true}>
+                    <Message fullwidth={true} className={styles["preference-alert"]}>
                       {t("account.application.lottery.preferencesMessage")}
                     </Message>
                   </Card.Section>
