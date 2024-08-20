@@ -35,7 +35,7 @@ import { GeocodingService } from './geocoding.service';
 import { MostRecentApplicationQueryParams } from '../dtos/applications/most-recent-application-query-params.dto';
 import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
 import { ApplicationsFilterEnum } from '../enums/applications/filter-enum';
-import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view.dto';
+import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-response.dto';
 
 export const view: Partial<
   Record<ApplicationViews, Prisma.ApplicationsInclude>
