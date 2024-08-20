@@ -2260,6 +2260,7 @@ describe('Testing listing service', () => {
       prisma.$transaction = jest
         .fn()
         .mockResolvedValue([{ id: 'example id', name: 'example name' }]);
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
 
       await service.update(
         {
@@ -2406,6 +2407,8 @@ describe('Testing listing service', () => {
         ]);
 
       const val = constructFullListingData(randomUUID());
+      prisma.assets.create = jest.fn().mockResolvedValue({ id: randomUUID() });
+      prisma.address.create = jest.fn().mockResolvedValue({ id: randomUUID() });
       val.reservedCommunityTypes = null;
 
       await service.update(val as ListingUpdate, user);
