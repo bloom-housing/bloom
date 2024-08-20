@@ -35,27 +35,33 @@ export const startCronJob = (
   const repeatCron = cronString;
   const randomSecond = Math.floor(Math.random() * 30);
   const newCron = `${randomSecond * 2} ${repeatCron}`;
-  const job = new CronJob(newCron, () => {
-    void (async () => {
-      const currentCronJob = await prisma.cronJob.findFirst({
-        where: {
-          name: cronName,
-        },
-      });
-      // To prevent multiple overlapped jobs only run if one hasn't started in the last 5 minutes
-      if (
-        !currentCronJob ||
-        currentCronJob.lastRunDate <
-          dayjs(new Date()).subtract(5, 'minutes').toDate()
-      ) {
-        try {
-          await functionToCall();
-        } catch (e) {
-          logger.error(`${cronName} failed to run. ${e}`);
+  const job = new CronJob(
+    newCron,
+    () => {
+      void (async () => {
+        const currentCronJob = await prisma.cronJob.findFirst({
+          where: {
+            name: cronName,
+          },
+        });
+        // To prevent multiple overlapped jobs only run if one hasn't started in the last 5 minutes
+        if (
+          !currentCronJob ||
+          currentCronJob.lastRunDate <
+            dayjs(new Date()).subtract(5, 'minutes').toDate()
+        ) {
+          try {
+            await functionToCall();
+          } catch (e) {
+            logger.error(`${cronName} failed to run. ${e}`);
+          }
         }
-      }
-    })();
-  });
+      })();
+    },
+    undefined,
+    undefined,
+    process.env.TIME_ZONE,
+  );
   schedulerRegistry.addCronJob(cronName, job);
   if (process.env.NODE_ENV !== 'test') {
     job.start();
