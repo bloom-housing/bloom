@@ -42,7 +42,7 @@ const SaveBeforeExitDialog = ({
           variant="primary"
           onClick={() => {
             setOpen(false)
-            submitFormWithStatus("redirect", currentListingStatus || ListingsStatusEnum.pending)
+            submitFormWithStatus("confirm", currentListingStatus || ListingsStatusEnum.pending)
           }}
           size="sm"
         >
