@@ -33,7 +33,7 @@ export const ApplicationListingCard = (props: { listingName: string; listingId: 
     <ApplicationCard heading={props.listingName}>
       <div>
         {props.listingId && (
-          <Button size="sm" variant={"text"} href={`/listing/${props.listingId}}`}>
+          <Button size="sm" variant={"text"} href={`/listing/${props.listingId}`}>
             {t("application.confirmation.viewOriginalListing")}
           </Button>
         )}
