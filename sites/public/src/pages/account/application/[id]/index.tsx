@@ -5,7 +5,7 @@ import { useRouter } from "next/router"
 import { AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import { Application, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { SubmittedApplicationView } from "../../../../components/applications/SubmittedApplicationView"
-import { Card, Button, Heading } from "@bloom-housing/ui-seeds"
+import { ApplicationError } from "../../../../components/account/ApplicationError"
 
 export default () => {
   const router = useRouter()
@@ -49,35 +49,9 @@ export default () => {
       <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
         <FormsLayout>
           {noApplication && (
-            <Card spacing={"sm"} className={"my-6"}>
-              <Card.Section className={"bg-primary px-8 py-4"}>
-                <Heading priority={1} className={"text-xl font-bold font-alt-sans text-white"}>
-                  {t("account.application.error")}
-                </Heading>
-              </Card.Section>
-              <Card.Section className={"px-8"}>
-                <p className="field-note mb-5">{t("account.application.noApplicationError")}</p>
-                <Button href={`applications`} size="sm" variant="primary-outlined">
-                  {t("account.application.return")}
-                </Button>
-              </Card.Section>
-            </Card>
+            <ApplicationError error={t("account.application.noApplicationError")} />
           )}
-          {unauthorized && (
-            <Card spacing={"sm"} className={"my-6"}>
-              <Card.Section className={"bg-primary px-8 py-4"}>
-                <Heading priority={1} className={"text-xl font-bold font-alt-sans text-white"}>
-                  {t("account.application.error")}
-                </Heading>
-              </Card.Section>
-              <Card.Section className={"px-8"}>
-                <p className="field-note mb-5">{t("account.application.noAccessError")}</p>
-                <Button href={`applications`} size="sm" variant="primary-outlined">
-                  {t("account.application.return")}
-                </Button>
-              </Card.Section>
-            </Card>
-          )}
+          {unauthorized && <ApplicationError error={t("account.application.noAccessError")} />}
           {application && (
             <SubmittedApplicationView
               application={application}
