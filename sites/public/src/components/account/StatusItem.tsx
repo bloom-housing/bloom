@@ -68,7 +68,7 @@ const StatusItem = (props: StatusItemProps) => {
           {props.lotteryResults && (
             <div>
               <Button href={props.lotteryURL} variant="primary-outlined" size="sm">
-                {props.strings?.lotteryResults ?? "View lottery results"}
+                {props.strings?.lotteryResults ?? t("account.application.lottery.viewResults")}
               </Button>
             </div>
           )}

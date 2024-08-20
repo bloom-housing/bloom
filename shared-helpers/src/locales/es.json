@@ -17,6 +17,7 @@
   "account.application.lottery.rawRankHeader": "Tu rango bruto",
   "account.application.lottery.resultsHeader": "Aquí están tus resultados de lotería",
   "account.application.lottery.resultsSubheader": "Se enviaron %{applications} solicitudes para %{units} unidades",
+  "account.application.lottery.viewResults": "Ver resultados de lotería",
   "account.application.noAccessError": "Usted no está autorizado para ver esta aplicación",
   "account.application.noApplicationError": "No existe ninguna aplicación con esa ID",
   "account.application.return": "Volver a las solicitudes",

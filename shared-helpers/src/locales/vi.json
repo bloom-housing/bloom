@@ -17,6 +17,7 @@
   "account.application.lottery.rawRankHeader": "Xếp hạng thô của bạn",
   "account.application.lottery.resultsHeader": "Đây là kết quả xổ số của bạn",
   "account.application.lottery.resultsSubheader": "%{applications} đơn xin đã được nộp cho %{units} đơn vị",
+  "account.application.lottery.viewResults": "Xem kết quả xổ số",
   "account.application.noAccessError": "Quý vị không được phép xem đơn đăng ký này",
   "account.application.noApplicationError": "Không tồn tại đơn đăng ký nào có ID đó",
   "account.application.return": "Quay lại đơn đăng ký",
