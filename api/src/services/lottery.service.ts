@@ -367,7 +367,7 @@ export class LotteryService {
     });
   }
 
-  private async updateLotteryStatus(
+  async updateLotteryStatus(
     listingId: string,
     status: LotteryStatusEnum,
   ): Promise<SuccessDTO> {
@@ -394,7 +394,7 @@ export class LotteryService {
     };
   }
 
-  private async publishLottery(listing: Listing): Promise<SuccessDTO> {
+  async publishLottery(listing: Listing): Promise<SuccessDTO> {
     const partnerUserEmailInfo = await this.listingService.getUserEmailInfo(
       [
         UserRoleEnum.admin,
@@ -402,19 +402,22 @@ export class LotteryService {
         UserRoleEnum.partner,
       ],
       listing.id,
-      listing.jurisdictions.id,
+      listing.jurisdictions?.id,
     );
 
     const publicUserEmailInfo =
       await this.listingService.getPublicUserEmailInfo(listing.id);
 
-    this.updateLotteryStatus(listing.id, LotteryStatusEnum.publishedToPublic);
+    await this.updateLotteryStatus(
+      listing.id,
+      LotteryStatusEnum.publishedToPublic,
+    );
 
     await this.emailService.lotteryPublishedAdmin(
       {
         id: listing.id,
         name: listing.name,
-        juris: listing.jurisdictions.id,
+        juris: listing.jurisdictions?.id,
       },
       partnerUserEmailInfo.emails,
       this.configService.get('PARTNERS_PORTAL_URL'),
@@ -424,7 +427,7 @@ export class LotteryService {
       {
         id: listing.id,
         name: listing.name,
-        juris: listing.jurisdictions.id,
+        juris: listing.jurisdictions?.id,
       },
       publicUserEmailInfo,
     );
@@ -470,7 +473,7 @@ export class LotteryService {
         if (!isAdmin) {
           throw new ForbiddenException();
         }
-        this.updateLotteryStatus(dto.id, dto?.lotteryStatus);
+        await this.updateLotteryStatus(dto.id, dto?.lotteryStatus);
         break;
       }
       case LotteryStatusEnum.errored: {
@@ -493,7 +496,7 @@ export class LotteryService {
             'Lottery cannot be released due to paper applications that are not included in the last run.',
           );
         }
-        this.updateLotteryStatus(dto.id, dto?.lotteryStatus);
+        await this.updateLotteryStatus(dto.id, dto?.lotteryStatus);
 
         const partnerUserEmailInfo = await this.listingService.getUserEmailInfo(
           [
@@ -526,7 +529,7 @@ export class LotteryService {
           );
         }
         const storedListingMapped = mapTo(Listing, storedListing);
-        this.publishLottery(storedListingMapped);
+        await this.publishLottery(storedListingMapped);
         break;
       }
       default: {
@@ -980,41 +983,51 @@ export class LotteryService {
     await this.listingService.markCronJobAsStarted(
       LOTTERY_PUBLISH_CRON_JOB_NAME,
     );
-    const today = new Date();
+    const tomorrow = dayjs(new Date()).add(1, 'days').toDate();
+    console.log(tomorrow);
     const releasedListings = await this.prisma.listings.findMany({
-      include: {
-        listingEvents: true,
+      select: {
+        id: true,
+        name: true,
+        jurisdictions: true,
       },
       where: {
         status: ListingsStatusEnum.closed,
         reviewOrderType: ReviewOrderTypeEnum.lottery,
         lotteryOptIn: true,
         lotteryStatus: LotteryStatusEnum.releasedToPartners,
+        listingEvents: {
+          some: {
+            type: ListingEventsTypeEnum.publicLottery,
+            startDate: { lt: tomorrow },
+          },
+        },
       },
     });
-    releasedListings.forEach(async (listingRaw) => {
-      const listing = mapTo(Listing, listingRaw);
-      const publicLottery = listing?.listingEvents.find((event) => {
-        event.type === ListingEventsTypeEnum.publicLottery;
-      });
-      if (publicLottery?.startDate.toDateString() === today.toDateString()) {
-        this.publishLottery(listing);
-      }
+    console.log(releasedListings);
+    await Promise.all(
+      releasedListings.map(async (listingRaw) => {
+        const listing = mapTo(Listing, listingRaw);
+        try {
+          await this.prisma.activityLog.create({
+            data: {
+              module: 'lottery',
+              recordId: listing.id,
+              action: 'update',
+              metadata: { lotteryStatus: LotteryStatusEnum.publishedToPublic },
+            },
+          });
 
-      await this.prisma.activityLog.create({
-        data: {
-          module: 'lottery',
-          recordId: listing.id,
-          action: 'update',
-          metadata: { lotteryStatus: LotteryStatusEnum.publishedToPublic },
-        },
-      });
-    });
+          await this.publishLottery(listing);
+        } catch (error) {
+          console.error(error);
+        }
+      }),
+    );
 
     this.logger.warn(
       `Changed the status of ${releasedListings.length} lotteries`,
     );
-
     return {
       success: true,
     };
@@ -1054,42 +1067,29 @@ export class LotteryService {
           ],
         },
       });
+      const listingIds = listings.map((listing) => listing.id);
 
       const res = await this.prisma.listings.updateMany({
         data: {
           lotteryStatus: LotteryStatusEnum.expired,
         },
         where: {
-          status: ListingsStatusEnum.closed,
-          reviewOrderType: ReviewOrderTypeEnum.lottery,
-          closedAt: {
-            lte: expiration_date,
-          },
-          OR: [
-            {
-              lotteryStatus: {
-                not: LotteryStatusEnum.expired,
-              },
-            },
-            {
-              lotteryStatus: null,
-            },
-          ],
+          id: { in: listingIds },
         },
       });
 
-      const activityLogData = listings.map((listing) => {
+      const activityLogData = listingIds.map((id) => {
         return {
           module: 'lottery',
-          recordId: listing.id,
+          recordId: id,
           action: 'update',
           metadata: { lotteryStatus: LotteryStatusEnum.expired },
         };
       });
-
       await this.prisma.activityLog.createMany({
         data: activityLogData,
       });
+
       this.logger.warn(`Changed the status of ${res?.count} lotteries`);
     }
     return {

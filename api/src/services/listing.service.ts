@@ -1599,6 +1599,7 @@ export class ListingService implements OnModuleInit {
         ],
       },
     });
+    const listingIds = listings.map((listing) => listing.id);
 
     const res = await this.prisma.listings.updateMany({
       data: {
@@ -1606,31 +1607,18 @@ export class ListingService implements OnModuleInit {
         closedAt: new Date(),
       },
       where: {
-        status: ListingsStatusEnum.active,
-        AND: [
-          {
-            applicationDueDate: {
-              not: null,
-            },
-          },
-          {
-            applicationDueDate: {
-              lte: new Date(),
-            },
-          },
-        ],
+        id: { in: listingIds },
       },
     });
 
-    const activityLogData = listings.map((listing) => {
+    const activityLogData = listingIds.map((id) => {
       return {
         module: 'listing',
-        recordId: listing.id,
+        recordId: id,
         action: 'update',
         metadata: { status: 'closed' },
       };
     });
-
     await this.prisma.activityLog.createMany({
       data: activityLogData,
     });
