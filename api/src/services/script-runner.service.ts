@@ -36,19 +36,22 @@ export class ScriptRunnerService {
   async dataTransfer(
     req: ExpressRequest,
     dataTransferDTO: DataTransferDTO,
+    prisma?: PrismaClient,
   ): Promise<SuccessDTO> {
     // script runner standard start up
     const requestingUser = mapTo(User, req['user']);
     await this.markScriptAsRunStart('data transfer', requestingUser);
 
     // connect to foreign db based on incoming connection string
-    const client = new PrismaClient({
-      datasources: {
-        db: {
-          url: dataTransferDTO.connectionString,
+    const client =
+      prisma ||
+      new PrismaClient({
+        datasources: {
+          db: {
+            url: dataTransferDTO.connectionString,
+          },
         },
-      },
-    });
+      });
     await client.$connect();
 
     // get data

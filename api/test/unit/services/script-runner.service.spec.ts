@@ -1,11 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { PrismaClient } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { Request as ExpressRequest } from 'express';
+import { mockDeep } from 'jest-mock-extended';
 import { ScriptRunnerService } from '../../../src/services/script-runner.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { User } from '../../../src/dtos/users/user.dto';
 import { EmailService } from '../../../src/services/email.service';
 import { AmiChartService } from '../../../src/services/ami-chart.service';
+
+const externalPrismaClient = mockDeep<PrismaClient>();
 
 describe('Testing script runner service', () => {
   let service: ScriptRunnerService;
@@ -49,6 +53,7 @@ describe('Testing script runner service', () => {
       {
         connectionString: process.env.TEST_CONNECTION_STRING,
       },
+      externalPrismaClient,
     );
 
     expect(res.success).toBe(true);
