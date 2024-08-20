@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires, import/no-unresolved */
 
 // Takes in a CSV file with two columns (t_key,t_value) with the key being the translation file key and the value being the associated English string, and prints out in the JSON translation file format the "key": "translated string"
-// Temporarily update the shared-helpers tsconfig to include `"module": "commonjs"`
+// CSV format:
+// t_key,t_value
+// "key.here","Translation here"
+//
 // example from within this directory, first argument is one of LanguagesEnum and second argument is the formatted CSV filename with keys and english strings, piped to a new file: `ts-node get-machine-translations es english-keys.csv > any-filename-here.json`
 import fs from "node:fs"
 import { parse } from "csv-parse/sync"
