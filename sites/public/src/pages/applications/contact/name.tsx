@@ -113,7 +113,7 @@ const ApplicationName = () => {
                   error={errors.applicant?.firstName}
                   errorMessage={
                     errors.applicant?.firstName?.type === "maxLength"
-                      ? t("errors.maxLength")
+                      ? t("errors.maxLength", { length: 64 })
                       : t("errors.givenNameError")
                   }
                   register={register}
@@ -129,7 +129,7 @@ const ApplicationName = () => {
                   dataTestId={"app-primary-middle-name"}
                   validation={{ maxLength: 64 }}
                   error={errors.applicant?.middleName}
-                  errorMessage={t("errors.maxLength")}
+                  errorMessage={t("errors.maxLength", { length: 64 })}
                 />
 
                 <Field
@@ -141,7 +141,7 @@ const ApplicationName = () => {
                   error={errors.applicant?.lastName}
                   errorMessage={
                     errors.applicant?.lastName?.type === "maxLength"
-                      ? t("errors.maxLength")
+                      ? t("errors.maxLength", { length: 64 })
                       : t("errors.familyNameError")
                   }
                   register={register}

@@ -115,7 +115,7 @@ const ApplicationAlternateContactType = () => {
                         error={errors.otherType}
                         errorMessage={
                           errors.otherType?.type === "maxLength"
-                            ? t("errors.maxLength")
+                            ? t("errors.maxLength", { length: 64 })
                             : t("application.alternateContact.type.otherTypeValidationErrorMessage")
                         }
                         register={register}
