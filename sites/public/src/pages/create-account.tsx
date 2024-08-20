@@ -129,7 +129,7 @@ export default () => {
                     error={errors.givenName}
                     errorMessage={
                       errors.givenName?.type === "maxLength"
-                        ? t("errors.maxLength")
+                        ? t("errors.maxLength", { length: 64 })
                         : t("errors.firstNameError")
                     }
                     register={register}
@@ -143,7 +143,7 @@ export default () => {
                     register={register}
                     error={errors.middleName}
                     validation={{ maxLength: 64 }}
-                    errorMessage={t("errors.maxLength")}
+                    errorMessage={t("errors.maxLength", { length: 64 })}
                     controlClassName={styles["create-account-input"]}
                   />
 
@@ -157,7 +157,7 @@ export default () => {
                     register={register}
                     errorMessage={
                       errors.lastName?.type === "maxLength"
-                        ? t("errors.maxLength")
+                        ? t("errors.maxLength", { length: 64 })
                         : t("errors.lastNameError")
                     }
                     controlClassName={styles["create-account-input"]}
