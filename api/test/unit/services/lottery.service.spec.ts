@@ -302,6 +302,7 @@ describe('Testing lottery service', () => {
         lotteryLastRunAt: null,
         lotteryStatus: null,
       });
+      prisma.userAccounts.findMany = jest.fn().mockResolvedValue([]);
 
       await service.lotteryGenerate(
         { user: requestingUser } as unknown as ExpressRequest,
@@ -412,6 +413,7 @@ describe('Testing lottery service', () => {
         lotteryLastRunAt: null,
         lotteryStatus: null,
       });
+      prisma.userAccounts.findMany = jest.fn().mockResolvedValue([]);
 
       await service.lotteryGenerate(
         { user: requestingUser } as unknown as ExpressRequest,
@@ -703,6 +705,7 @@ describe('Testing lottery service', () => {
         lotteryStatus: LotteryStatusEnum.ran,
       });
       prisma.listings.update = jest.fn().mockResolvedValue(null);
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
 
       await expect(
         async () =>
@@ -772,6 +775,7 @@ describe('Testing lottery service', () => {
         status: ListingsStatusEnum.closed,
         lotteryStatus: LotteryStatusEnum.ran,
       });
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
       jest
         .spyOn(listingService, 'getPublicUserEmailInfo')
         .mockResolvedValueOnce({
