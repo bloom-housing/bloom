@@ -5,7 +5,10 @@ import { AuthContext, BloomCard, CustomIconMap, RequireLogin } from "@bloom-hous
 import { Application, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Card, Button, Heading, Icon, Message } from "@bloom-housing/ui-seeds"
 import FormsLayout from "../../../../layouts/forms"
-import { ApplicationError } from "../../../../components/account/ApplicationError"
+import {
+  ApplicationError,
+  ApplicationListingCard,
+} from "../../../../components/account/ApplicationCards"
 import styles from "../../../../../styles/lottery-results.module.scss"
 
 export default () => {
@@ -25,8 +28,7 @@ export default () => {
           listingsService
             ?.retrieve({ id: app.listings.id })
             .then((retrievedListing) => {
-              // TODO: fix this once this page is migrated
-              setListing(retrievedListing as unknown as Listing)
+              setListing(retrievedListing)
             })
             .catch((err) => {
               console.error(`Error fetching listing: ${err}`)
@@ -55,26 +57,7 @@ export default () => {
           {unauthorized && <ApplicationError error={t("account.application.noAccessError")} />}
           {application && (
             <>
-              <Card spacing={"sm"} className={"my-6"}>
-                <Card.Section className={"bg-primary px-8 py-4"}>
-                  <Heading priority={1} size="xl" className={styles["card-header"]}>
-                    {listing?.name}
-                  </Heading>
-                </Card.Section>
-                <Card.Section className={"px-8"}>
-                  <div>
-                    {listing && (
-                      <Button
-                        size="sm"
-                        variant={"text"}
-                        href={`/listing/${listing.id}/${listing?.urlSlug}`}
-                      >
-                        {t("application.confirmation.viewOriginalListing")}
-                      </Button>
-                    )}
-                  </div>
-                </Card.Section>
-              </Card>
+              <ApplicationListingCard listingName={listing?.name} listingId={listing?.id} />
               <BloomCard className={"mb-6"}>
                 <>
                   <Card.Section divider={"inset"} className={"border-none"}>
@@ -87,24 +70,28 @@ export default () => {
                       {t("t.back")}
                     </Button>
                     <Heading priority={2} size={"2xl"} className="mt-6">
-                      {"Here are your lottery results"}
+                      {t("account.application.lottery.resultsHeader")}
                     </Heading>
                     <p className="mt-4">
-                      {"2500 applications were submitted for 50 available units"}
+                      {t("account.application.lottery.resultsSubheader", {
+                        applications: 2500,
+                        units: 50,
+                      })}
                     </p>
                   </Card.Section>
                   <Card.Section
                     divider={"flush"}
                     className={`${styles["background-card-section"]} border-none`}
                   >
-                    <Heading priority={3} size={"xl"}>{`Your raw rank`}</Heading>
+                    <Heading priority={3} size={"xl"}>
+                      {t("account.application.lottery.rawRankHeader")}
+                    </Heading>
                     <p className={styles["raw-rank"]}>57</p>
                   </Card.Section>
                   <Card.Section divider={"flush"}>
                     <div>
-                      <p>{`Raw rank is the basic randomized order of all applications received for the listing before  the preferences are applied. For example, if 1,000 applications are submitted, each will be assigned a raw rank of 1 to 1,000.`}</p>
+                      <p>{t("account.application.lottery.rawRank")}</p>
                     </div>
-
                     <div>
                       <Button
                         className={styles["section-button"]}
@@ -112,20 +99,17 @@ export default () => {
                         hideExternalLinkIcon={true}
                         size={"sm"}
                       >
-                        What is raw rank?
+                        {t("account.application.lottery.rawRankButton")}
                       </Button>
                     </div>
                   </Card.Section>
                   <Card.Section divider={"flush"} className={"border-none"}>
                     <div>
-                      <Heading
-                        priority={3}
-                        size={"xl"}
-                        className={`${styles["section-heading"]}`}
-                      >{`Your lottery preference(s)`}</Heading>
-                      <p>{`Lottery preferences for your application are shown here in priority order. If you do not qualify for any lottery preferences, you will be part of the general lottery category. The general lottery category is the last group processed.`}</p>
+                      <Heading priority={3} size={"xl"} className={`${styles["section-heading"]}`}>
+                        {t("account.application.lottery.preferencesHeader")}
+                      </Heading>
+                      <p>{t("account.application.lottery.preferences")}</p>
                     </div>
-
                     <div>
                       <Button
                         className={styles["section-button"]}
@@ -133,7 +117,7 @@ export default () => {
                         hideExternalLinkIcon={true}
                         size={"sm"}
                       >
-                        What are lottery preferences?
+                        {t("account.application.lottery.preferencesButton")}
                       </Button>
                     </div>
                   </Card.Section>
@@ -142,17 +126,16 @@ export default () => {
                     className={`${styles["background-card-alert-section"]}`}
                   >
                     <Message fullwidth={true}>
-                      These results are based on the information you provided in your application.
-                      Preference eligibility is subject to change once your information is verified.
+                      {t("account.application.lottery.preferencesMessage")}
                     </Message>
                   </Card.Section>
                   <Card.Section divider={"flush"} className={styles["preference-rank"]}>
                     <div className={styles["rank-number"]}>#10</div>
                     <div>
                       <Heading priority={4} size={"lg"}>{`Certificate of Preference`}</Heading>
-                      <p
-                        className={styles["number-applicants"]}
-                      >{`Out of 10 applicants on this list`}</p>
+                      <p className={styles["number-applicants"]}>
+                        {t("account.application.lottery.applicantList", { applicants: 10 })}
+                      </p>
                     </div>
                   </Card.Section>
                   <Card.Section divider={"flush"} className={styles["preference-rank"]}>
@@ -162,9 +145,9 @@ export default () => {
                         priority={4}
                         size={"lg"}
                       >{`Displaced Tenants Housing Preference`}</Heading>
-                      <p
-                        className={styles["number-applicants"]}
-                      >{`Out of 15 applicants on this list`}</p>
+                      <p className={styles["number-applicants"]}>
+                        {t("account.application.lottery.applicantList", { applicants: 15 })}
+                      </p>
                     </div>
                   </Card.Section>
                   <Card.Section divider={"flush"} className={styles["preference-rank"]}>
@@ -173,19 +156,17 @@ export default () => {
                     </div>
                     <div>
                       <Heading priority={4} size={"lg"}>{`Live/Work Preference`}</Heading>
-                      <p
-                        className={styles["number-applicants"]}
-                      >{`Out of 2800 applicants on this list`}</p>
+                      <p className={styles["number-applicants"]}>
+                        {t("account.application.lottery.applicantList", { applicants: 2800 })}
+                      </p>
                     </div>
                   </Card.Section>
                   <Card.Section divider={"flush"} className={"border-none"}>
                     <div>
-                      <Heading
-                        priority={3}
-                        size={"xl"}
-                        className={`${styles["section-heading"]}`}
-                      >{`What happens next?`}</Heading>
-                      <p>{`The property manager will contact applicants in preference order. They will start with the highest priority preference.  If the property manager contacts you, they will ask you to provide documentation to support what you answered in the application. That documentation could include paystubs, for example. They might also need to gather more information by asking you to complete a supplemental application.`}</p>
+                      <Heading priority={3} size={"xl"} className={`${styles["section-heading"]}`}>
+                        {t("account.application.lottery.nextHeader")}
+                      </Heading>
+                      <p>{t("account.application.lottery.next")}</p>
                     </div>
                   </Card.Section>
                 </>

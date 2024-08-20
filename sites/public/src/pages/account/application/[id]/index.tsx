@@ -5,7 +5,7 @@ import { useRouter } from "next/router"
 import { AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import { Application, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { SubmittedApplicationView } from "../../../../components/applications/SubmittedApplicationView"
-import { ApplicationError } from "../../../../components/account/ApplicationError"
+import { ApplicationError } from "../../../../components/account/ApplicationCards"
 
 export default () => {
   const router = useRouter()
