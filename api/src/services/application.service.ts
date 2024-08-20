@@ -359,7 +359,8 @@ export class ApplicationService {
   }
 
   /*
-    this will the most recent application the user has submitted
+    this will get the required app/associated listing information for the public account display
+    it will only show applications matching the status passed in via params
   */
   async publicAppsView(
     params: PublicAppsViewQueryParams,
@@ -373,6 +374,7 @@ export class ApplicationService {
     const rawApps = await this.prisma.applications.findMany({
       select: {
         id: true,
+        userId: true,
         confirmationCode: true,
         updatedAt: true,
         listings: {
@@ -393,6 +395,19 @@ export class ApplicationService {
       },
       where: whereClause,
     });
+
+    await Promise.all(
+      rawApps.map(async (application) => {
+        await this.authorizeAction(
+          user,
+          application.listings?.id,
+          permissionActions.read,
+          application.userId,
+        );
+      }),
+    );
+
+    //filter for display applications and status counts
     const displayApplications = [];
     const total = rawApps.length ?? 0;
     let lottery = 0,
@@ -420,6 +435,7 @@ export class ApplicationService {
     //
     if (params.filterType === ApplicationsFilterEnum.all)
       displayApplications.push(...rawApps);
+
     return mapTo(PublicAppsViewResponse, {
       displayApplications,
       applicationsCount: { total, lottery, closed, open },
