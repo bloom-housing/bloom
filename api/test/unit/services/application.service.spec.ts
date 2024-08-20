@@ -768,6 +768,7 @@ describe('Testing application service', () => {
     prisma.applications.findFirst = jest.fn().mockResolvedValue({
       id: 'example id',
     });
+    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
 
     const params: ApplicationQueryParams = {
       orderBy: ApplicationOrderByKeys.createdAt,
@@ -1087,12 +1088,18 @@ describe('Testing application service', () => {
   });
 
   it('should get an application when findOne() is called and Id exists', async () => {
+    const requestingUser = {
+      firstName: 'requesting fName',
+      lastName: 'requesting lName',
+      email: 'requestingUser@email.com',
+      jurisdictions: [{ id: 'juris id' }],
+    } as unknown as User;
+    const date = new Date();
     const mockedValue = mockApplication({ date: date, position: 3 });
     prisma.applications.findUnique = jest.fn().mockResolvedValue(mockedValue);
     prisma.jurisdictions.findFirst = jest
       .fn()
-      .mockResolvedValue({ name: 'jurisdiction', id: 'jurisdictionID' });
-    prisma.applications.findUnique = jest.fn().mockResolvedValue(mockedValue);
+      .mockResolvedValue({ id: randomUUID() });
 
     expect(
       await service.findOne('example Id', {
@@ -2059,6 +2066,10 @@ describe('Testing application service', () => {
     prisma.jurisdictions.findFirst = jest
       .fn()
       .mockResolvedValue({ id: randomUUID() });
+    prisma.listings.findFirst = jest
+      .fn()
+      .mockResolvedValue({ id: randomUUID() });
+    prisma.householdMember.deleteMany = jest.fn().mockResolvedValue(null);
 
     await service.update(dto, {
       id: 'requestingUser id',

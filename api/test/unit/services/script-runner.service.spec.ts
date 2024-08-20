@@ -1,19 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Logger } from '@nestjs/common';
-import { SchedulerRegistry } from '@nestjs/schedule';
 import {
-  MultiselectQuestionsApplicationSectionEnum,
   LanguagesEnum,
+  MultiselectQuestionsApplicationSectionEnum,
   PrismaClient,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { Request as ExpressRequest } from 'express';
+import { mockDeep } from 'jest-mock-extended';
 import { ScriptRunnerService } from '../../../src/services/script-runner.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { User } from '../../../src/dtos/users/user.dto';
 import { AmiChartService } from '../../../src/services/ami-chart.service';
-import { mockDeep } from 'jest-mock-extended';
 
 const externalPrismaClient = mockDeep<PrismaClient>();
 
@@ -22,13 +20,7 @@ describe('Testing script runner service', () => {
   let prisma: PrismaService;
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        ScriptRunnerService,
-        PrismaService,
-        Logger,
-        SchedulerRegistry,
-        AmiChartService,
-      ],
+      providers: [ScriptRunnerService, PrismaService, AmiChartService],
     }).compile();
 
     service = module.get<ScriptRunnerService>(ScriptRunnerService);
