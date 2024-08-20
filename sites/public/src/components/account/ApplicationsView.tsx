@@ -1,5 +1,6 @@
 import React, { useEffect, useState, Fragment, useContext } from "react"
 import Head from "next/head"
+import { useRouter } from "next/router"
 import { t, LoadingOverlay } from "@bloom-housing/ui-components"
 import { Button, Card, Heading, Tabs } from "@bloom-housing/ui-seeds"
 import {
@@ -10,14 +11,14 @@ import {
   BloomCard,
 } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
+import { ApplicationsFilterEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { StatusItemWrapper, AppWithListing } from "./StatusItemWrapper"
 import { MetaTags } from "../shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
 
 import styles from "./ApplicationsView.module.scss"
-import { useRouter } from "next/router"
 
-export enum ApplicationsFilterEnum {
+export enum ApplicationsIndexEnum {
   all = 0,
   lottery,
   closed,
@@ -31,7 +32,7 @@ interface ApplicationsCount {
 }
 
 interface ApplicationsViewProps {
-  filterType: ApplicationsFilterEnum
+  filterType: ApplicationsIndexEnum
 }
 
 const ApplicationsView = (props: ApplicationsViewProps) => {
@@ -42,18 +43,19 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
   const [error, setError] = useState()
   const router = useRouter()
   const showLottery = process.env.showLottery
+  const filterTypeString = ApplicationsIndexEnum[props.filterType]
 
   useEffect(() => {
     if (profile && loading) {
       pushGtmEvent<PageView>({
         event: "pageView",
-        pageTitle: `My Applications - ${ApplicationsFilterEnum[props.filterType]}`,
+        pageTitle: `My Applications - ${filterTypeString}`,
         status: UserStatus.LoggedIn,
       })
       applicationsService
         .publicAppsView({
           userId: profile.id,
-          filterType: ApplicationsFilterEnum[props.filterType],
+          filterType: ApplicationsFilterEnum[filterTypeString],
         })
         .then((res) => {
           setApplications(res.displayApplications)
@@ -70,16 +72,16 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
   const selectionHandler = (index: number) => {
     const baseUrl = "/account/applications"
     switch (index) {
-      case ApplicationsFilterEnum.all:
+      case ApplicationsIndexEnum.all:
         void router.push(baseUrl)
         break
-      case ApplicationsFilterEnum.lottery:
+      case ApplicationsIndexEnum.lottery:
         void router.push(`${baseUrl}/lottery`)
         break
-      case ApplicationsFilterEnum.closed:
+      case ApplicationsIndexEnum.closed:
         void router.push(`${baseUrl}/closed`)
         break
-      case ApplicationsFilterEnum.open:
+      case ApplicationsIndexEnum.open:
         void router.push(`${baseUrl}/open`)
         break
     }
@@ -94,15 +96,15 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
       buttonText = t("account.viewAllApplications")
       buttonHref = "/account/applications"
       switch (props.filterType) {
-        case ApplicationsFilterEnum.lottery:
+        case ApplicationsIndexEnum.lottery:
           headerText = t("account.noLotteryApplications")
           break
-        case ApplicationsFilterEnum.closed:
+        case ApplicationsIndexEnum.closed:
           headerText = showLottery
             ? t("account.noClosedApplications")
             : t("account.noClosedApplicationsSimplified")
           break
-        case ApplicationsFilterEnum.open:
+        case ApplicationsIndexEnum.open:
           headerText = t("account.noOpenApplications")
           break
       }
