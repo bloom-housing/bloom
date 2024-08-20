@@ -1578,6 +1578,28 @@ export class ListingService implements OnModuleInit {
   async closeListings(): Promise<SuccessDTO> {
     this.logger.warn('changeOverdueListingsStatusCron job running');
     await this.markCronJobAsStarted(LISTING_CRON_JOB_NAME);
+
+    const listings = await this.prisma.listings.findMany({
+      select: {
+        id: true,
+      },
+      where: {
+        status: ListingsStatusEnum.active,
+        AND: [
+          {
+            applicationDueDate: {
+              not: null,
+            },
+          },
+          {
+            applicationDueDate: {
+              lte: new Date(),
+            },
+          },
+        ],
+      },
+    });
+
     const res = await this.prisma.listings.updateMany({
       data: {
         status: ListingsStatusEnum.closed,
@@ -1599,6 +1621,20 @@ export class ListingService implements OnModuleInit {
         ],
       },
     });
+
+    const activityLogData = listings.map((listing) => {
+      return {
+        module: 'listing',
+        recordId: listing.id,
+        action: 'update',
+        metadata: { status: 'closed' },
+      };
+    });
+
+    await this.prisma.activityLog.createMany({
+      data: activityLogData,
+    });
+
     this.logger.warn(`Changed the status of ${res?.count} listings`);
     if (res?.count) {
       await this.cachePurge(
