@@ -47,6 +47,22 @@ export default () => {
     }
   }, [profile, applicationId, applicationsService, listingsService])
 
+  const preferenceRank = (rank: number, preferenceName: string, numApplicants: number) => {
+    return (
+      <Card.Section divider={"flush"} className={styles["preference-rank"]}>
+        <div className={styles["rank-number"]}>{`#${rank}`}</div>
+        <div>
+          <Heading priority={4} size={"lg"}>
+            {preferenceName}
+          </Heading>
+          <p className={styles["number-applicants"]}>
+            {t("account.application.lottery.applicantList", { applicants: numApplicants })}
+          </p>
+        </div>
+      </Card.Section>
+    )
+  }
+
   return (
     <>
       <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
@@ -77,6 +93,7 @@ export default () => {
                         applications: 2500,
                         units: 50,
                       })}
+                      {/* TODO: Plug in BE data */}
                     </p>
                   </Card.Section>
                   <Card.Section
@@ -86,7 +103,7 @@ export default () => {
                     <Heading priority={3} size={"xl"}>
                       {t("account.application.lottery.rawRankHeader")}
                     </Heading>
-                    <p className={styles["raw-rank"]}>57</p>
+                    <p className={styles["raw-rank"]}>57</p> {/* TODO: Plug in BE data */}
                   </Card.Section>
                   <Card.Section divider={"flush"}>
                     <div>
@@ -129,38 +146,10 @@ export default () => {
                       {t("account.application.lottery.preferencesMessage")}
                     </Message>
                   </Card.Section>
-                  <Card.Section divider={"flush"} className={styles["preference-rank"]}>
-                    <div className={styles["rank-number"]}>#10</div>
-                    <div>
-                      <Heading priority={4} size={"lg"}>{`Certificate of Preference`}</Heading>
-                      <p className={styles["number-applicants"]}>
-                        {t("account.application.lottery.applicantList", { applicants: 10 })}
-                      </p>
-                    </div>
-                  </Card.Section>
-                  <Card.Section divider={"flush"} className={styles["preference-rank"]}>
-                    <div className={styles["rank-number"]}>#15</div>
-                    <div>
-                      <Heading
-                        priority={4}
-                        size={"lg"}
-                      >{`Displaced Tenants Housing Preference`}</Heading>
-                      <p className={styles["number-applicants"]}>
-                        {t("account.application.lottery.applicantList", { applicants: 15 })}
-                      </p>
-                    </div>
-                  </Card.Section>
-                  <Card.Section divider={"flush"} className={styles["preference-rank"]}>
-                    <div className={styles["rank-number"]}>
-                      <span className={styles["rank-number-content"]}>#1008</span>
-                    </div>
-                    <div>
-                      <Heading priority={4} size={"lg"}>{`Live/Work Preference`}</Heading>
-                      <p className={styles["number-applicants"]}>
-                        {t("account.application.lottery.applicantList", { applicants: 2800 })}
-                      </p>
-                    </div>
-                  </Card.Section>
+                  {/* TODO: Plug in BE data */}
+                  {preferenceRank(10, `Certificate of Preference`, 10)}
+                  {preferenceRank(15, `Displaced Tenants Housing Preference`, 15)}
+                  {preferenceRank(1008, `Live/Work Preference`, 2800)}
                   <Card.Section divider={"flush"} className={"border-none"}>
                     <div>
                       <Heading priority={3} size={"xl"} className={`${styles["section-heading"]}`}>
