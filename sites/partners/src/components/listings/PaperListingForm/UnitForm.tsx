@@ -516,14 +516,14 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                       controlClassName="control"
                       options={amiChartsOptions}
                       inputProps={{
-                        onChange: () => {
+                        onChange: (value) => {
                           setValue("amiPercentage", undefined)
                           clearErrors("amiPercentage")
                           ;[...Array(maxAmiHouseholdSize)].forEach((_, index) => {
                             setValue(`maxIncomeHouseholdSize${index + 1}`, undefined)
                           })
-                          if (amiChartID && !loading && amiChartsOptions) {
-                            void fetchAmiChart()
+                          if (value?.target?.value && !loading && amiChartsOptions) {
+                            void fetchAmiChart(value.target.value)
                             setIsAmiPercentageDirty(true)
                           }
                         },
