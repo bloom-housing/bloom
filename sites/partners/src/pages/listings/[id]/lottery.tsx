@@ -126,7 +126,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
     })
 
     return items
-  }, [lotteryActivityLogData, profile])
+  }, [lotteryActivityLogData])
 
   if (!listing) return <div>{t("t.errorOccurred")}</div>
 
@@ -427,14 +427,17 @@ const Lottery = (props: { listing: Listing | undefined }) => {
               <Button
                 variant={duplicatesExist ? "alert" : "primary"}
                 onClick={async () => {
+                  setLoading(true)
                   try {
-                    setLoading(true)
                     await lotteryService.lotteryGenerate({ body: { id: listing.id } })
                     setLoading(false)
                     setRunModal(false)
-                    location.reload()
+                    addToast(t("listings.lottery.toast.run"), { variant: "success" })
+                    await router.push(`/listings/${listing.id}/lottery`)
                   } catch (err) {
                     console.log(err)
+                    setLoading(false)
+                    addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
                   }
                 }}
                 size="sm"
@@ -491,15 +494,17 @@ const Lottery = (props: { listing: Listing | undefined }) => {
               <Button
                 variant="alert"
                 onClick={async () => {
+                  setLoading(true)
                   try {
-                    setLoading(true)
                     await lotteryService.lotteryGenerate({ body: { id: listing.id } })
                     setLoading(false)
                     setReRunModal(false)
-                    addToast("Lottery re-run successfully", { variant: "success" })
-                    router.reload()
+                    addToast(t("listings.lottery.toast.rerun"), { variant: "success" })
+                    await router.push(`/listings/${listing.id}/lottery`)
                   } catch (err) {
                     console.log(err)
+                    setLoading(false)
+                    addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
                   }
                 }}
                 size="sm"
@@ -541,10 +546,14 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                         lotteryStatus: LotteryStatusEnum.releasedToPartners,
                       },
                     })
-                    location.reload()
+                    setLoading(false)
+                    setReleaseModal(false)
+                    addToast(t("listings.lottery.toast.released"), { variant: "success" })
+                    await router.push(`/listings/${listing.id}/lottery`)
                   } catch (err) {
                     console.log(err)
                     setLoading(false)
+                    addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
                   }
                 }}
                 loadingMessage={loading ? t("t.loading") : null}
@@ -616,10 +625,14 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                         lotteryStatus: LotteryStatusEnum.ran,
                       },
                     })
-                    location.reload()
+                    setLoading(false)
+                    setRetractModal(false)
+                    addToast(t("listings.lottery.toast.retracted"), { variant: "success" })
+                    await router.push(`/listings/${listing.id}/lottery`)
                   } catch (err) {
                     console.log(err)
                     setLoading(false)
+                    addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
                   }
                 }}
                 loadingMessage={loading ? t("t.loading") : null}
@@ -662,8 +675,15 @@ const Lottery = (props: { listing: Listing | undefined }) => {
               <Button
                 variant="primary"
                 onClick={async () => {
-                  await onExport()
-                  setExportModal(false)
+                  setLoading(true)
+                  try {
+                    await onExport()
+                    setLoading(false)
+                    setExportModal(false)
+                  } catch {
+                    setLoading(false)
+                    addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
+                  }
                 }}
                 size="sm"
                 loadingMessage={loading || exportLoading ? t("t.loading") : undefined}
@@ -710,8 +730,15 @@ const Lottery = (props: { listing: Listing | undefined }) => {
               <Button
                 variant="primary"
                 onClick={async () => {
-                  await onExport()
-                  setTermsExportModal(false)
+                  setLoading(true)
+                  try {
+                    await onExport()
+                    setLoading(false)
+                    setTermsExportModal(false)
+                  } catch {
+                    setLoading(false)
+                    addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
+                  }
                 }}
                 size="sm"
                 loadingMessage={loading || exportLoading ? t("t.loading") : undefined}
@@ -754,10 +781,14 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                         lotteryStatus: LotteryStatusEnum.publishedToPublic,
                       },
                     })
-                    location.reload()
+                    setLoading(false)
+                    setPublishModal(false)
+                    addToast(t("listings.lottery.toast.published"), { variant: "success" })
+                    await router.push(`/listings/${listing.id}/lottery`)
                   } catch (err) {
                     console.log(err)
                     setLoading(false)
+                    addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
                   }
                 }}
                 loadingMessage={loading ? t("t.loading") : null}

@@ -156,7 +156,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
           reset()
           clearErrors()
           setAlert(null)
-          router.reload()
+          await router.push(`/listings/${listingId}/applications/add`)
         }
       }
     } catch (err) {
