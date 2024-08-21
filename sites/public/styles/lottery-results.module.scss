@@ -1,0 +1,79 @@
+.lottery-results {
+  color: var(--seeds-text-color);
+
+  .background-card-section {
+    background-color: var(--seeds-bg-color-surface-primary);
+    border: none;
+  }
+
+  .background-card-alert-section {
+    background-color: var(--seeds-color-secondary-lighter);
+    font-size: var(--seeds-type-label-size);
+    --card-content-padding-block: 0;
+    --card-content-padding-inline: 0;
+  }
+
+  .preference-alert {
+    @media (max-width: theme("screens.sm")) {
+      --common-message-max-width: 100%;
+    }
+  }
+
+  .section-button {
+    margin-top: var(--seeds-s6);
+  }
+
+  .section-heading {
+    margin-bottom: var(--seeds-s2);
+  }
+
+  .preference-rank {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .rank-number {
+    background-color: var(--seeds-color-primary);
+    display: flex;
+    align-items: center;
+    padding-inline: var(--seeds-s4);
+    padding-block: var(--seeds-s1);
+    font-size: var(--seeds-font-size-2xl);
+    color: var(--seeds-color-white);
+    font-weight: var(--seeds-font-weight-semibold);
+    height: var(--seeds-s10);
+    letter-spacing: -0.05em;
+    margin-right: var(--seeds-s6);
+  }
+
+  .rank-number-content {
+    line-height: 0.5;
+  }
+
+  .number-applicants {
+    font-size: var(--seeds-type-label-size);
+    color: var(--seeds-text-color-light);
+  }
+
+  .raw-rank {
+    font-size: var(--seeds-font-size-4xl);
+    font-weight: var(--seeds-font-weight-semibold);
+    line-height: initial;
+  }
+
+  h3,
+  h4 {
+    color: var(--seeds-text-color);
+  }
+
+  p {
+    font-size: var(--seeds-type-body-size);
+  }
+
+  .card-header {
+    font-weight: var(--seeds-font-weight-bold);
+    color: var(--seeds-color-white);
+    font-family: var(--seeds-font-alt-sans);
+  }
+}

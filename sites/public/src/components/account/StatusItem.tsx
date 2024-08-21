@@ -11,9 +11,12 @@ interface StatusItemProps {
   confirmationNumber?: string
   listingName: string
   listingURL: string
+  lotteryResults?: boolean
+  lotteryURL?: string
   strings?: {
     applicationsDeadline?: string
     edited?: string
+    lotteryResults?: string
     seeListing?: string
     status?: string
     submittedStatus?: string
@@ -62,6 +65,13 @@ const StatusItem = (props: StatusItemProps) => {
         </section>
 
         <footer className={styles["status-item__footer"]}>
+          {props.lotteryResults && (
+            <div>
+              <Button href={props.lotteryURL} variant="primary-outlined" size="sm">
+                {props.strings?.lotteryResults ?? t("account.application.lottery.viewResults")}
+              </Button>
+            </div>
+          )}
           <div>
             <Button href={props.applicationURL} variant="primary-outlined" size="sm">
               {props.strings?.viewApplication ?? t("application.viewApplication")}

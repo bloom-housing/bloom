@@ -10,6 +10,7 @@ import {
 import { useMemo } from "react"
 import { DATE_FORMAT } from "../../lib/constants"
 import dayjs from "dayjs"
+import { ApplicationListingCard } from "../account/ApplicationCards"
 
 interface SubmittedApplicationViewProps {
   application: Application
@@ -28,26 +29,7 @@ const SubmittedApplicationView = ({
 
   return (
     <>
-      <Card spacing={"sm"} className={"my-6"}>
-        <Card.Section className={"bg-primary px-8 py-4"}>
-          <Heading priority={1} size="xl" className={"font-bold font-alt-sans text-white"}>
-            {listing?.name}
-          </Heading>
-        </Card.Section>
-        <Card.Section className={"px-8"}>
-          <div>
-            {listing && (
-              <Button
-                size="sm"
-                variant={"text"}
-                href={`/listing/${listing.id}/${listing?.urlSlug}`}
-              >
-                {t("application.confirmation.viewOriginalListing")}
-              </Button>
-            )}
-          </div>
-        </Card.Section>
-      </Card>
+      <ApplicationListingCard listingName={listing?.name} listingId={listing?.id} />
       <Card spacing={"lg"} className={"mb-6"}>
         <Card.Section divider={"inset"}>
           <Button

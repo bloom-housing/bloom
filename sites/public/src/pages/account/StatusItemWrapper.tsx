@@ -1,7 +1,11 @@
 import React from "react"
 import dayjs from "dayjs"
 import { StatusItem } from "../../components/account/StatusItem"
-import { Application, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  Application,
+  Listing,
+  LotteryStatusEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export interface AppWithListing extends Application {
   fullListing?: Listing
@@ -16,12 +20,16 @@ const StatusItemWrapper = (props: StatusItemWrapperProps) => {
   return (
     <StatusItem
       applicationDueDate={applicationDueDate && dayjs(applicationDueDate).format("MMMM D, YYYY")}
-      applicationURL={`application/${props.application?.id}`}
+      applicationURL={`/account/application/${props.application?.id}`}
       applicationUpdatedAt={dayjs(props.application?.updatedAt).format("MMMM D, YYYY")}
       confirmationNumber={props.application?.confirmationCode || props.application?.id}
       listingName={props.application?.fullListing?.name}
       listingURL={`/listing/${props.application?.fullListing?.id}/${props.application?.fullListing?.urlSlug}`}
       key={props.application?.id}
+      lotteryResults={
+        props.application?.fullListing?.lotteryStatus === LotteryStatusEnum.publishedToPublic
+      }
+      lotteryURL={`/account/application/${props.application?.id}/lottery-results`}
     />
   )
 }
