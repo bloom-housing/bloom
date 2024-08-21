@@ -5,6 +5,7 @@ import {
   Application,
   Listing,
   ListingsStatusEnum,
+  LotteryStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export interface AppWithListing extends Application {
@@ -21,12 +22,16 @@ const StatusItemWrapper = (props: StatusItemWrapperProps) => {
   return (
     <StatusItem
       applicationDueDate={applicationDueDate && dayjs(applicationDueDate).format("MMMM D, YYYY")}
-      applicationURL={!isListingClosed && `application/${props.application?.id}`}
+      applicationURL={!isListingClosed && `/account/application/${props.application?.id}`}
       applicationUpdatedAt={dayjs(props.application?.updatedAt).format("MMMM D, YYYY")}
       confirmationNumber={props.application?.confirmationCode || props.application?.id}
       listingName={props.application?.fullListing?.name}
       listingURL={`/listing/${props.application?.fullListing?.id}/${props.application?.fullListing?.urlSlug}`}
       key={props.application?.id}
+      lotteryResults={
+        props.application?.fullListing?.lotteryStatus === LotteryStatusEnum.publishedToPublic
+      }
+      lotteryURL={`/account/application/${props.application?.id}/lottery-results`}
     />
   )
 }

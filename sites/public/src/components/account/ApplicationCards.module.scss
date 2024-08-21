@@ -1,0 +1,14 @@
+.application-card {
+  p {
+    color: var(--seeds-text-color);
+  }
+  .heading-section {
+    background-color: var(--seeds-color-primary);
+  }
+
+  .card-header {
+    font-weight: var(--seeds-font-weight-bold);
+    color: var(--seeds-color-white);
+    font-family: var(--seeds-font-alt-sans);
+  }
+}

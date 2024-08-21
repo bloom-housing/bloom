@@ -72,6 +72,7 @@
   justify-content: flex-start;
   padding-top: var(--seeds-s4);
   width: fit-content;
+  flex-wrap: wrap;
   @media (max-width: theme("screens.sm")) {
     flex-direction: column;
     padding-top: var(--seeds-s6);
