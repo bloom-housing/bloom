@@ -81,7 +81,7 @@ const ApplicationAlternateContactName = () => {
                 validation={{ required: true, maxLength: 64 }}
                 errorMessage={
                   errors.firstName?.type === "maxLength"
-                    ? t("errors.maxLength")
+                    ? t("errors.maxLength", { length: 64 })
                     : t("errors.givenNameError")
                 }
                 error={errors.firstName}
@@ -97,7 +97,7 @@ const ApplicationAlternateContactName = () => {
                 error={errors.lastName}
                 errorMessage={
                   errors.lastName?.type === "maxLength"
-                    ? t("errors.maxLength")
+                    ? t("errors.maxLength", { length: 64 })
                     : t("errors.familyNameError")
                 }
                 register={register}
