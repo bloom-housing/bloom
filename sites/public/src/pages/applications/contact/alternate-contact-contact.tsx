@@ -136,7 +136,7 @@ const ApplicationAlternateContactContact = () => {
                 dataTestId={"app-alternate-mailing-address-street"}
                 error={errors.mailingAddress?.street}
                 validation={{ maxLength: 64 }}
-                errorMessage={t("errors.maxLength")}
+                errorMessage={t("errors.maxLength", { length: 64 })}
               />
               <Field
                 id="mailingAddress.street2"
@@ -147,7 +147,7 @@ const ApplicationAlternateContactContact = () => {
                 defaultValue={application.alternateContact.address.street2}
                 error={errors.mailingAddress?.street2}
                 validation={{ maxLength: 64 }}
-                errorMessage={t("errors.maxLength")}
+                errorMessage={t("errors.maxLength", { length: 64 })}
               />
               <div className="flex max-w-2xl">
                 <Field
@@ -159,7 +159,7 @@ const ApplicationAlternateContactContact = () => {
                   dataTestId={"app-alternate-mailing-address-city"}
                   error={errors.mailingAddress?.city}
                   validation={{ maxLength: 64 }}
-                  errorMessage={t("errors.maxLength")}
+                  errorMessage={t("errors.maxLength", { length: 64 })}
                 />
 
                 <Select
@@ -174,7 +174,7 @@ const ApplicationAlternateContactContact = () => {
                   dataTestId={"app-alternate-mailing-address-state"}
                   error={errors.mailingAddress?.state}
                   validation={{ maxLength: 64 }}
-                  errorMessage={t("errors.maxLength")}
+                  errorMessage={t("errors.maxLength", { length: 64 })}
                 />
               </div>
               <Field
@@ -185,8 +185,8 @@ const ApplicationAlternateContactContact = () => {
                 register={register}
                 dataTestId={"app-alternate-mailing-address-zip"}
                 error={errors.mailingAddress?.zipCode}
-                validation={{ maxLength: 64 }}
-                errorMessage={t("errors.maxLength")}
+                validation={{ maxLength: 10 }}
+                errorMessage={t("errors.maxLength", { length: 10 })}
               />
             </fieldset>
           </CardSection>

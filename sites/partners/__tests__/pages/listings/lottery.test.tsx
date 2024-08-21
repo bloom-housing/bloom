@@ -44,7 +44,13 @@ describe("lottery", () => {
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
-      })
+      }),
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const { findByText } = render(<Lottery listing={undefined} />)
@@ -65,7 +71,13 @@ describe("lottery", () => {
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
-      })
+      }),
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const { getAllByText, findByText } = render(<Lottery listing={closedListing} />)
@@ -88,10 +100,16 @@ describe("lottery", () => {
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
-      })
+      }),
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
-    const { getAllByText, getByText, findByText } = render(<Lottery listing={closedListing} />)
+    const { getAllByText, findByText } = render(<Lottery listing={closedListing} />)
 
     const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
@@ -117,10 +135,16 @@ describe("lottery", () => {
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
-      })
+      }),
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
-    const { getAllByText, getByText, findByText } = render(<Lottery listing={closedListing} />)
+    const { getAllByText, findByText } = render(<Lottery listing={closedListing} />)
 
     const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
@@ -146,7 +170,13 @@ describe("lottery", () => {
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
-      })
+      }),
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const { queryAllByText, queryByText } = render(<Lottery listing={closedListing} />)
@@ -173,7 +203,13 @@ describe("lottery", () => {
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
-      })
+      }),
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const { getByText, findByText } = render(<Lottery listing={closedListing} />)
@@ -206,7 +242,13 @@ describe("lottery", () => {
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
-      })
+      }),
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const { getByText, findByText } = render(
@@ -247,7 +289,13 @@ describe("lottery", () => {
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
-      })
+      }),
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const { getByText, findByText } = render(
@@ -285,7 +333,13 @@ describe("lottery", () => {
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
-      })
+      }),
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const { getByText, findByText } = render(
@@ -327,7 +381,13 @@ describe("lottery", () => {
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
-      })
+      }),
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const lotteryLastRan = new Date()
@@ -373,7 +433,13 @@ describe("lottery", () => {
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
-      })
+      }),
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const { getByText, findByText } = render(
@@ -415,7 +481,13 @@ describe("lottery", () => {
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
-      })
+      }),
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const { getByText, findByText } = render(<Lottery listing={closedListing} />)
@@ -447,7 +519,13 @@ describe("lottery", () => {
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
-      })
+      }),
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const { getByText, findByText } = render(<Lottery listing={closedListing} />)
@@ -478,7 +556,13 @@ describe("lottery", () => {
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
-      })
+      }),
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const updatedListing = {
@@ -524,7 +608,13 @@ describe("lottery", () => {
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
-      })
+      }),
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const updatedListing = {
@@ -574,7 +664,13 @@ describe("lottery", () => {
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
-      })
+      }),
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const updatedListing = {
@@ -621,7 +717,13 @@ describe("lottery", () => {
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
-      })
+      }),
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const updatedListing = {
@@ -657,7 +759,13 @@ describe("lottery", () => {
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
-      })
+      }),
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const updatedListing = {
@@ -698,7 +806,13 @@ describe("lottery", () => {
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
-      })
+      }),
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const updatedListing = {
@@ -732,7 +846,13 @@ describe("lottery", () => {
       }),
       rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
-      })
+      }),
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
     )
 
     const updatedListing = {
@@ -752,5 +872,93 @@ describe("lottery", () => {
     expect(queryByText("Publish")).not.toBeInTheDocument()
     expect(queryByText("Run lottery")).not.toBeInTheDocument()
     expect(queryByText("Release lottery")).not.toBeInTheDocument()
+  })
+
+  it("should show history log", async () => {
+    mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { isAdmin: true },
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      }),
+      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
+      }),
+      rest.get(
+        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(
+            ctx.json([
+              { status: "closed", name: null, logDate: new Date("September 6, 2025 8:15:00") },
+              { status: "ran", name: "Admin One", logDate: new Date("September 6, 2025 9:00:00") },
+              {
+                status: "rerun",
+                name: "Admin Two",
+                logDate: new Date("September 6, 2025 9:30:00"),
+              },
+              {
+                status: "releasedToPartners",
+                name: "Admin Three",
+                logDate: new Date("September 7, 2025 13:00:00"),
+              },
+              {
+                status: "retracted",
+                name: "Admin Four",
+                logDate: new Date("September 7, 2025 14:00:00"),
+              },
+              {
+                status: "releasedToPartners",
+                name: "Admin Five",
+                logDate: new Date("September 7, 2025 15:00:00"),
+              },
+              {
+                status: "publishedToPublic",
+                name: "Partner One",
+                logDate: new Date("September 8, 2025 9:00:00"),
+              },
+            ])
+          )
+        }
+      )
+    )
+
+    const updatedListing = {
+      ...closedListing,
+      lotteryStatus: LotteryStatusEnum.ran,
+    }
+
+    const { getByText, findByText, getAllByText } = render(<Lottery listing={updatedListing} />)
+
+    const header = await findByText("Lottery")
+    expect(header).toBeInTheDocument()
+
+    expect(getByText("Listing closed")).toBeInTheDocument()
+    expect(getByText("by Property")).toBeInTheDocument()
+    expect(getByText("September 6th, 2025 at 8:15 am")).toBeInTheDocument()
+    expect(getByText("Lottery was run")).toBeInTheDocument()
+    expect(getByText("by Admin One")).toBeInTheDocument()
+    expect(getByText("September 6th, 2025 at 9:00 am")).toBeInTheDocument()
+    expect(getByText("Lottery was re-run")).toBeInTheDocument()
+    expect(getByText("by Admin Two")).toBeInTheDocument()
+    expect(getByText("September 6th, 2025 at 9:30 am")).toBeInTheDocument()
+    expect(getAllByText("Lottery results released")).toHaveLength(2)
+    expect(getByText("by Admin Three")).toBeInTheDocument()
+    expect(getByText("September 7th, 2025 at 1:00 pm")).toBeInTheDocument()
+    expect(getByText("Lottery retracted")).toBeInTheDocument()
+    expect(getByText("by Admin Four")).toBeInTheDocument()
+    expect(getByText("September 7th, 2025 at 2:00 pm")).toBeInTheDocument()
+    expect(getByText("by Admin Five")).toBeInTheDocument()
+    expect(getByText("September 7th, 2025 at 3:00 pm")).toBeInTheDocument()
+    expect(getByText("Lottery results published to public")).toBeInTheDocument()
+    expect(getByText("by Partner One")).toBeInTheDocument()
+    expect(getByText("September 8th, 2025 at 9:00 am")).toBeInTheDocument()
   })
 })

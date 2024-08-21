@@ -258,7 +258,7 @@ export const multiselectOptionWrapper = (
           error={!!resolveObject(`${optionFieldName}-${AddressHolder.Name}`, errors)}
           errorMessage={
             resolveObject(`${optionFieldName}-${AddressHolder.Name}`, errors)?.type === "maxLength"
-              ? t("errors.maxLength")
+              ? t("errors.maxLength", { length: 64 })
               : t("errors.requiredFieldError")
           }
           dataTestId="addressHolder-name"
@@ -275,7 +275,7 @@ export const multiselectOptionWrapper = (
           errorMessage={
             resolveObject(`${optionFieldName}-${AddressHolder.Relationship}`, errors)?.type ===
             "maxLength"
-              ? t("errors.maxLength")
+              ? t("errors.maxLength", { length: 64 })
               : t("errors.requiredFieldError")
           }
           dataTestId="addressHolder-relationship"
