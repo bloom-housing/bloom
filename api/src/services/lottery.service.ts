@@ -984,7 +984,6 @@ export class LotteryService {
       LOTTERY_PUBLISH_CRON_JOB_NAME,
     );
     const tomorrow = dayjs(new Date()).add(1, 'days').toDate();
-    console.log(tomorrow);
     const releasedListings = await this.prisma.listings.findMany({
       select: {
         id: true,
@@ -1004,7 +1003,7 @@ export class LotteryService {
         },
       },
     });
-    console.log(releasedListings);
+
     await Promise.all(
       releasedListings.map(async (listingRaw) => {
         const listing = mapTo(Listing, listingRaw);
