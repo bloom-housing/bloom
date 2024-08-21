@@ -2,6 +2,7 @@ import React, { useState, useContext, useMemo } from "react"
 import Head from "next/head"
 import axios from "axios"
 import dayjs from "dayjs"
+import { useRouter } from "next/router"
 import advancedFormat from "dayjs/plugin/advancedFormat"
 import Ticket from "@heroicons/react/24/solid/TicketIcon"
 import Download from "@heroicons/react/24/solid/ArrowDownTrayIcon"
@@ -10,7 +11,7 @@ import Markdown from "markdown-to-jsx"
 import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import { Button, Card, Dialog, Heading, Icon, Message } from "@bloom-housing/ui-seeds"
 import { CardHeader, CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import {
   Listing,
   ListingEventsTypeEnum,
@@ -38,6 +39,9 @@ const Lottery = (props: { listing: Listing | undefined }) => {
   const metaImage = ""
 
   const { listing } = props
+
+  const { addToast } = useContext(MessageContext)
+  const router = useRouter()
 
   const [runModal, setRunModal] = useState(false)
   const [reRunModal, setReRunModal] = useState(false)
@@ -492,7 +496,8 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                     await lotteryService.lotteryGenerate({ body: { id: listing.id } })
                     setLoading(false)
                     setReRunModal(false)
-                    location.reload()
+                    addToast("Lottery re-run successfully", { variant: "success" })
+                    router.reload()
                   } catch (err) {
                     console.log(err)
                   }
