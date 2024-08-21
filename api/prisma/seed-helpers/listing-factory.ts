@@ -13,6 +13,7 @@ import { randomName } from './word-generator';
 import { addressFactory } from './address-factory';
 import { unitFactoryMany } from './unit-factory';
 import { reservedCommunityTypeFactoryGet } from './reserved-community-type-factory';
+import { ListingEvent } from 'src/dtos/listings/listing-event.dto';
 
 const cloudinaryIds = [
   'dev/blake-wheeler-zBHU08hdzhY-unsplash_swqash',
@@ -45,6 +46,8 @@ export const listingFactory = async (
     lotteryStatus?: LotteryStatusEnum;
     closedAt?: Date;
     reviewOrderType?: ReviewOrderTypeEnum;
+    listingEvents?: Prisma.ListingEventsCreateWithoutListingsInput[];
+    lotteryOptIn?: boolean;
   },
 ): Promise<Prisma.ListingsCreateInput> => {
   const previousListing = optionalParams?.listing || {};
@@ -61,7 +64,6 @@ export const listingFactory = async (
   );
 
   const digitalApp = optionalParams?.digitalApp ?? Math.random() < 0.5;
-
   return {
     createdAt: new Date(),
     assets: [],
@@ -73,6 +75,7 @@ export const listingFactory = async (
       ? new Date()
       : null,
     lotteryStatus: optionalParams?.lotteryStatus || undefined,
+    lotteryOptIn: optionalParams?.lotteryOptIn || undefined,
     displayWaitlistSize: Math.random() < 0.5,
     listingsBuildingAddress: {
       create: addressFactory(),
@@ -179,6 +182,11 @@ export const listingFactory = async (
           },
         }
       : {},
+    listingEvents: optionalParams?.listingEvents
+      ? {
+          create: optionalParams.listingEvents,
+        }
+      : undefined,
     ...previousListing,
   };
 };
