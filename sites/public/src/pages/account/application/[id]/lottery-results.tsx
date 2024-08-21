@@ -112,7 +112,7 @@ export default () => {
                     <div>
                       <Button
                         className={styles["section-button"]}
-                        href={"https://www.exygy.com"}
+                        href={"https://www.exygy.com"} // NOTE: Update per jurisdiction
                         hideExternalLinkIcon={true}
                         size={"sm"}
                       >
@@ -130,7 +130,7 @@ export default () => {
                     <div>
                       <Button
                         className={styles["section-button"]}
-                        href={"https://www.exygy.com"}
+                        href={"https://www.exygy.com"} // NOTE: Update per jurisdiction
                         hideExternalLinkIcon={true}
                         size={"sm"}
                       >
