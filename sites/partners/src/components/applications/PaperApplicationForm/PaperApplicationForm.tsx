@@ -152,7 +152,6 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
         if (redirect === "details") {
           void router.push(`/application/${result.id}`)
         } else {
-          // same issue here as well with submit & new when adding an application
           reset()
           clearErrors()
           setAlert(null)
