@@ -31,7 +31,7 @@ export const FormAddressAlternate = ({
         validation={{ required: true, maxLength: 64 }}
         errorMessage={
           resolveObject(`${dataKey}.street`, errors)?.type === "maxLength"
-            ? t("errors.maxLength")
+            ? t("errors.maxLength", { length: 64 })
             : t("errors.streetError")
         }
         error={!!resolveObject(`${dataKey}.street`, errors)}
@@ -46,7 +46,7 @@ export const FormAddressAlternate = ({
         register={register}
         error={!!resolveObject(`${dataKey}.street2`, errors)}
         validation={{ maxLength: 64 }}
-        errorMessage={t("errors.maxLength")}
+        errorMessage={t("errors.maxLength", { length: 64 })}
       />
 
       <div className="flex">
@@ -59,7 +59,7 @@ export const FormAddressAlternate = ({
           error={!!resolveObject(`${dataKey}.city`, errors)}
           errorMessage={
             resolveObject(`${dataKey}.city`, errors)?.type === "maxLength"
-              ? t("errors.maxLength")
+              ? t("errors.maxLength", { length: 64 })
               : t("errors.cityError")
           }
           dataTestId="address-city"
@@ -73,7 +73,7 @@ export const FormAddressAlternate = ({
           error={!!resolveObject(`${dataKey}.state`, errors)}
           errorMessage={
             resolveObject(`${dataKey}.state`, errors)?.type === "maxLength"
-              ? t("errors.maxLength")
+              ? t("errors.maxLength", { length: 64 })
               : t("errors.stateError")
           }
           register={register}
@@ -88,11 +88,11 @@ export const FormAddressAlternate = ({
         name={`${dataKey}.zipCode`}
         label={t("application.contact.zip")}
         register={register}
-        validation={{ required, maxLength: 64 }}
+        validation={{ required, maxLength: 10 }}
         error={!!resolveObject(`${dataKey}.zipCode`, errors)}
         errorMessage={
           resolveObject(`${dataKey}.zipCode`, errors)?.type === "maxLength"
-            ? t("errors.maxLength")
+            ? t("errors.maxLength", { length: 10 })
             : t("errors.zipCodeError")
         }
         dataTestId="address-zipcode"

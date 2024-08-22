@@ -111,7 +111,7 @@ const FormMultiselectQuestions = ({
             errorMessage={
               resolveObject(`${optionFieldName}-${AddressHolder.Name}`, errors)?.type ===
               "maxLength"
-                ? t("errors.maxLength")
+                ? t("errors.maxLength", { length: 64 })
                 : t("errors.requiredFieldError")
             }
           />
@@ -127,7 +127,7 @@ const FormMultiselectQuestions = ({
             errorMessage={
               resolveObject(`${optionFieldName}-${AddressHolder.Relationship}`, errors)?.type ===
               "maxLength"
-                ? t("errors.maxLength")
+                ? t("errors.maxLength", { length: 64 })
                 : t("errors.requiredFieldError")
             }
           />
