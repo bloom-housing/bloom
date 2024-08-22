@@ -94,30 +94,6 @@ const RankingsAndResults = ({ listing, isAdmin }: RankingsAndResultsProps) => {
             </Grid.Cell>
           </Grid.Row>
         )}
-        {(reviewOrder === "reviewOrderFCFS" || availabilityQuestion === "openWaitlist") && (
-          <Grid.Row columns={2} className={"flex items-center"}>
-            <Grid.Cell>
-              <p className="field-label m-4 ml-0">{t("listings.dueDateQuestion")}</p>
-              <FieldGroup
-                name="dueDateQuestion"
-                type="radio"
-                register={register}
-                fields={[
-                  {
-                    ...yesNoRadioOptions[0],
-                    id: "dueDateQuestionYes",
-                    defaultChecked: listing && listing.applicationDueDate !== null,
-                  },
-                  {
-                    ...yesNoRadioOptions[1],
-                    id: "dueDateQuestionNo",
-                    defaultChecked: listing && !listing.applicationDueDate,
-                  },
-                ]}
-              />
-            </Grid.Cell>
-          </Grid.Row>
-        )}
         {reviewOrder === "reviewOrderLottery" && (
           <>
             {process.env.showLottery && (
@@ -273,6 +249,28 @@ const RankingsAndResults = ({ listing, isAdmin }: RankingsAndResultsProps) => {
             </Grid.Row>
           </>
         )}
+        <Grid.Row columns={2} className={"flex items-center"}>
+          <Grid.Cell>
+            <p className="field-label m-4 ml-0">{t("listings.dueDateQuestion")}</p>
+            <FieldGroup
+              name="dueDateQuestion"
+              type="radio"
+              register={register}
+              fields={[
+                {
+                  ...yesNoRadioOptions[0],
+                  id: "dueDateQuestionYes",
+                  defaultChecked: listing && listing.applicationDueDate !== null,
+                },
+                {
+                  ...yesNoRadioOptions[1],
+                  id: "dueDateQuestionNo",
+                  defaultChecked: listing && !listing.applicationDueDate,
+                },
+              ]}
+            />
+          </Grid.Cell>
+        </Grid.Row>
         <Grid.Row columns={2} className={"flex items-center"}>
           <Grid.Cell>
             <p className={`field-label m-4 ml-0`}>{t("listings.waitlist.openQuestion")}</p>
