@@ -1,8 +1,7 @@
 import React, { useState, useMemo } from "react"
-import { useWatch, useFormContext } from "react-hook-form"
+import { useFormContext } from "react-hook-form"
 import { getDetailFieldDate, getDetailFieldTime } from "../../PaperListingDetails/sections/helpers"
 import dayjs from "dayjs"
-import { YesNoEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t, DateField, TimeField, MinimalTable } from "@bloom-housing/ui-components"
 import { Button, Dialog, Drawer, Link, Grid } from "@bloom-housing/ui-seeds"
 import { FormListing, TempEvent } from "../../../../lib/listings/formTypes"
@@ -70,12 +69,7 @@ const ApplicationDates = ({
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, control } = formMethods
-
-  const enableDueDate = useWatch({
-    control,
-    name: "dueDateQuestion",
-  })
+  const { register, watch } = formMethods
 
   const [drawerOpenHouse, setDrawerOpenHouse] = useState<TempEvent | boolean>(false)
   const [modalDeleteOpenHouse, setModalDeleteOpenHouse] = useState<TempEvent | null>(null)
@@ -116,7 +110,6 @@ const ApplicationDates = ({
               register={register}
               watch={watch}
               note={t("listings.whenApplicationsClose")}
-              disabled={enableDueDate === YesNoEnum.no}
               defaultDate={{
                 month: listing?.applicationDueDate
                   ? dayjs(new Date(listing?.applicationDueDate)).format("MM")
@@ -137,23 +130,16 @@ const ApplicationDates = ({
               id={"applicationDueTimeField"}
               register={register}
               watch={watch}
-              disabled={enableDueDate === YesNoEnum.no}
               defaultValues={{
                 hours: listing?.applicationDueDate
                   ? dayjs(new Date(listing?.applicationDueDate)).format("hh")
-                  : enableDueDate === YesNoEnum.no
-                  ? null
-                  : "05",
+                  : null,
                 minutes: listing?.applicationDueDate
                   ? dayjs(new Date(listing?.applicationDueDate)).format("mm")
-                  : enableDueDate === YesNoEnum.no
-                  ? null
-                  : "00",
+                  : null,
                 seconds: listing?.applicationDueDate
                   ? dayjs(new Date(listing?.applicationDueDate)).format("ss")
-                  : enableDueDate === YesNoEnum.no
-                  ? null
-                  : "00",
+                  : null,
                 period: listing?.applicationDueDate
                   ? new Date(listing?.applicationDueDate).getHours() >= 12
                     ? "pm"
