@@ -55,6 +55,7 @@ import SaveBeforeExitDialog from "./dialogs/SaveBeforeExitDialog"
 type ListingFormProps = {
   listing?: FormListing
   editMode?: boolean
+  setListingName?: React.Dispatch<React.SetStateAction<string>>
 }
 
 export type SubmitFunction = (
@@ -85,7 +86,7 @@ const getToast = (
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ListingForm = ({ listing, editMode }: ListingFormProps) => {
+const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) => {
   const defaultValues = editMode ? listing : formDefaults
   const formMethods = useForm<FormListing>({
     defaultValues,
@@ -219,8 +220,12 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
               variant: "success",
             })
 
-            // Only do the router push if it's a redirect condition
-            if (!continueEditing) await router.push(`/listings/${result.id}`)
+            if (continueEditing) {
+              setAlert(null)
+              setListingName(result.name)
+            } else {
+              await router.push(`/listings/${result.id}`)
+            }
           }
           setLoading(false)
         } catch (err) {
