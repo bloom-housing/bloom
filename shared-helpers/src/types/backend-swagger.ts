@@ -2245,6 +2245,27 @@ export class LotteryService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Get lottery results by application id
+   */
+  publicLotteryResults(
+    params: {
+      /**  */
+      id: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationLotteryPosition[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/lottery/publicLotteryResults/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export interface SuccessDTO {
