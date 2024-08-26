@@ -15,6 +15,7 @@ import {
   Listing,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
+  LotteryActivityLogItem,
   LotteryStatusEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -78,16 +79,36 @@ const Lottery = (props: { listing: Listing | undefined }) => {
     formattedExpiryDate = expiryDate.format("MMMM D, YYYY")
   }
 
-  const getHistoryItem = (date: Date, event: string, user: string, key: number) => {
+  const eventMap = {
+    closed: t("listings.lottery.historyLogClosed"),
+    ran: t("listings.lottery.historyLogRun"),
+    rerun: t("listings.lottery.historyLogReRun"),
+    releasedToPartners: t("listings.lottery.historyLogReleased"),
+    retracted: t("listings.lottery.historyLogRetracted"),
+    publishedToPublic: t("listings.lottery.historyLogPublished"),
+  }
+
+  const getHistoryItem = ({ logDate, name, status }: LotteryActivityLogItem, key: number) => {
+    let user
+    if (status === ListingsStatusEnum.closed) {
+      user = t("listings.lottery.historyLogByProperty")
+    } else if (
+      (status === LotteryStatusEnum.publishedToPublic || status === LotteryStatusEnum.expired) &&
+      !name
+    ) {
+      user = t("listings.lottery.historyLogBySystem")
+    } else {
+      user = t("listings.lottery.historyLogUser", { name: name })
+    }
     return (
       <div className={styles["history-item"]} key={key}>
         <div>
           {t("listings.lottery.historyLogTimestamp", {
-            date: dayjs(date).format("MMMM Do, YYYY"),
-            time: dayjs(date).format("h:mm a"),
+            date: dayjs(logDate).format("MMMM Do, YYYY"),
+            time: dayjs(logDate).format("h:mm a"),
           })}
         </div>
-        <div className={styles["event"]}>{event}</div>
+        <div className={styles["event"]}>{eventMap[status]}</div>
         <div className={styles["user"]}>{user}</div>
       </div>
     )
@@ -96,29 +117,11 @@ const Lottery = (props: { listing: Listing | undefined }) => {
   const historyItems = useMemo(() => {
     if (!lotteryActivityLogData) return
 
-    const eventMap = {
-      closed: t("listings.lottery.historyLogClosed"),
-      ran: t("listings.lottery.historyLogRun"),
-      rerun: t("listings.lottery.historyLogReRun"),
-      releasedToPartners: t("listings.lottery.historyLogReleased"),
-      retracted: t("listings.lottery.historyLogRetracted"),
-      publishedToPublic: t("listings.lottery.historyLogPublished"),
-    }
-
     const items = []
 
     lotteryActivityLogData.forEach((logItem, index) => {
       if (Object.keys(eventMap).indexOf(logItem.status) >= 0) {
-        items.push(
-          getHistoryItem(
-            logItem.logDate,
-            eventMap[logItem.status],
-            logItem.status === "closed"
-              ? t("listings.lottery.historyLogAutomatic")
-              : t("listings.lottery.historyLogUser", { name: logItem.name }),
-            index
-          )
-        )
+        items.push(getHistoryItem(logItem, index))
       }
     })
 

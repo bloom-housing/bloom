@@ -1,6 +1,7 @@
 import { randomUUID } from 'crypto';
 import { Test, TestingModule } from '@nestjs/testing';
 import {
+  ListingEventsTypeEnum,
   ListingsStatusEnum,
   LotteryStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
@@ -982,12 +983,6 @@ describe('Testing lottery service', () => {
 
     it.todo('should update status to errored');
 
-    it.todo('should update status to approved from ran');
-
-    it.todo('should not update status to approved when status is not ran');
-
-    it.todo('should not update status to approved if user is not an admin');
-
     it('should update status to releasedToPartners from ran and send email', async () => {
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         id: 'example id',
@@ -1047,7 +1042,6 @@ describe('Testing lottery service', () => {
       );
 
       expect(lotteryReleasedMock).toBeCalledWith(
-        { id: 'admin id', userRoles: { isAdmin: true } },
         { id: 'example id', juris: 'jurisId', name: 'example name' },
         ['admin@email.com', 'partner@email.com'],
         config.get('PARTNERS_PORTAL_URL'),
@@ -1257,18 +1251,86 @@ describe('Testing lottery service', () => {
     });
   });
 
+  describe('Test autoPublishResults endpoint', () => {
+    it('should call the updateMany', async () => {
+      prisma.listings.findMany = jest.fn().mockResolvedValue([
+        {
+          id: 'example id1',
+          listingEvents: [
+            {
+              type: ListingEventsTypeEnum.publicLottery,
+            },
+          ],
+        },
+      ]);
+      prisma.activityLog.create = jest.fn().mockResolvedValue({});
+      prisma.cronJob.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+      prisma.cronJob.update = jest.fn().mockResolvedValue(true);
+
+      await service.autoPublishResults();
+      expect(prisma.listings.findMany).toHaveBeenCalledWith({
+        select: {
+          id: true,
+          name: true,
+          jurisdictions: true,
+        },
+        where: {
+          status: ListingsStatusEnum.closed,
+          reviewOrderType: ReviewOrderTypeEnum.lottery,
+          lotteryOptIn: true,
+          lotteryStatus: LotteryStatusEnum.releasedToPartners,
+          listingEvents: {
+            some: {
+              type: ListingEventsTypeEnum.publicLottery,
+              startDate: { lt: expect.anything() },
+            },
+          },
+        },
+      });
+      expect(prisma.listings.update).toHaveBeenCalledWith({
+        data: {
+          lotteryStatus: LotteryStatusEnum.publishedToPublic,
+        },
+        where: {
+          id: 'example id1',
+        },
+      });
+      expect(prisma.activityLog.create).toHaveBeenCalledWith({
+        data: {
+          module: 'lottery',
+          recordId: 'example id1',
+          action: 'update',
+          metadata: { lotteryStatus: LotteryStatusEnum.publishedToPublic },
+        },
+      });
+      expect(prisma.cronJob.findFirst).toHaveBeenCalled();
+      expect(prisma.cronJob.update).toHaveBeenCalled();
+    });
+  });
+
   describe('Test expireLotteries endpoint', () => {
     it('should call the updateMany', async () => {
+      prisma.listings.findMany = jest.fn().mockResolvedValue([
+        {
+          id: 'example id1',
+        },
+        {
+          id: 'example id2',
+        },
+      ]);
       prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 2 });
+      prisma.activityLog.createMany = jest.fn().mockResolvedValue({ count: 2 });
       prisma.cronJob.findFirst = jest
         .fn()
         .mockResolvedValue({ id: randomUUID() });
       prisma.cronJob.update = jest.fn().mockResolvedValue(true);
 
       await service.expireLotteries();
-      expect(prisma.listings.updateMany).toHaveBeenCalledWith({
-        data: {
-          lotteryStatus: LotteryStatusEnum.expired,
+      expect(prisma.listings.findMany).toHaveBeenCalledWith({
+        select: {
+          id: true,
         },
         where: {
           status: ListingsStatusEnum.closed,
@@ -1287,6 +1349,30 @@ describe('Testing lottery service', () => {
             },
           ],
         },
+      });
+      expect(prisma.listings.updateMany).toHaveBeenCalledWith({
+        data: {
+          lotteryStatus: LotteryStatusEnum.expired,
+        },
+        where: {
+          id: { in: ['example id1', 'example id2'] },
+        },
+      });
+      expect(prisma.activityLog.createMany).toHaveBeenCalledWith({
+        data: [
+          {
+            module: 'lottery',
+            recordId: 'example id1',
+            action: 'update',
+            metadata: { lotteryStatus: LotteryStatusEnum.expired },
+          },
+          {
+            module: 'lottery',
+            recordId: 'example id2',
+            action: 'update',
+            metadata: { lotteryStatus: LotteryStatusEnum.expired },
+          },
+        ],
       });
       expect(prisma.cronJob.findFirst).toHaveBeenCalled();
       expect(prisma.cronJob.update).toHaveBeenCalled();

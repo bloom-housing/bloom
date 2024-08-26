@@ -4,6 +4,7 @@ import {
   ApplicationStatusEnum,
   ApplicationSubmissionTypeEnum,
   LanguagesEnum,
+  ListingEventsTypeEnum,
   ListingsStatusEnum,
   LotteryStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
@@ -33,6 +34,7 @@ import { LotteryService } from '../../src/services/lottery.service';
 import { ApplicationCsvQueryParams } from '../../src/dtos/applications/application-csv-query-params.dto';
 import { EmailService } from '../../src/services/email.service';
 import { permissionActions } from '../../src/enums/permissions/permission-actions-enum';
+import dayjs from 'dayjs';
 
 describe('Lottery Controller Tests', () => {
   let app: INestApplication;
@@ -511,18 +513,127 @@ describe('Lottery Controller Tests', () => {
     });
   });
 
+  describe('autoPublishResults endpoint', () => {
+    it('should only publish listing lotteries that are due today', async () => {
+      const jurisdictionA = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
+      const today = new Date();
+      const dueListingData = await listingFactory(jurisdictionA.id, prisma, {
+        status: ListingsStatusEnum.closed,
+        reviewOrderType: ReviewOrderTypeEnum.lottery,
+        lotteryOptIn: true,
+        lotteryStatus: LotteryStatusEnum.releasedToPartners,
+        listingEvents: [
+          {
+            type: ListingEventsTypeEnum.publicLottery,
+            startDate: today,
+          },
+        ],
+      });
+      const dueListing = await prisma.listings.create({
+        include: { listingEvents: true },
+        data: dueListingData,
+      });
+
+      const dueButNotReleasedListingData = await listingFactory(
+        jurisdictionA.id,
+        prisma,
+        {
+          status: ListingsStatusEnum.closed,
+          reviewOrderType: ReviewOrderTypeEnum.lottery,
+          lotteryOptIn: true,
+          lotteryStatus: LotteryStatusEnum.ran,
+          listingEvents: [
+            {
+              type: ListingEventsTypeEnum.publicLottery,
+              startDate: today,
+            },
+          ],
+        },
+      );
+      const dueButNotReleasedListing = await prisma.listings.create({
+        data: dueButNotReleasedListingData,
+      });
+
+      const notDueListingData = await listingFactory(jurisdictionA.id, prisma, {
+        status: ListingsStatusEnum.closed,
+        reviewOrderType: ReviewOrderTypeEnum.lottery,
+        lotteryOptIn: true,
+        lotteryStatus: LotteryStatusEnum.releasedToPartners,
+        listingEvents: [
+          {
+            type: ListingEventsTypeEnum.publicLottery,
+            startDate: dayjs(today).add(5, 'days').toDate(),
+          },
+        ],
+      });
+      const notDueListing = await prisma.listings.create({
+        data: notDueListingData,
+      });
+
+      const res = await request(app.getHttpServer())
+        .put(`/lottery/autoPublishResults`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', adminAccessToken)
+        .expect(200);
+
+      expect(res.body.success).toEqual(true);
+
+      const postJobListing = await prisma.listings.findUnique({
+        where: {
+          id: dueListing.id,
+        },
+      });
+
+      expect(postJobListing.lotteryStatus).toEqual(
+        LotteryStatusEnum.publishedToPublic,
+      );
+
+      const postJobListing2 = await prisma.listings.findUnique({
+        where: {
+          id: dueButNotReleasedListing.id,
+        },
+      });
+
+      expect(postJobListing2.lotteryStatus).toEqual(LotteryStatusEnum.ran);
+
+      const postJobListing3 = await prisma.listings.findUnique({
+        where: {
+          id: notDueListing.id,
+        },
+      });
+
+      expect(postJobListing3.lotteryStatus).toEqual(
+        LotteryStatusEnum.releasedToPartners,
+      );
+
+      const activityLogResult = await prisma.activityLog.findFirst({
+        where: {
+          module: 'lottery',
+          action: permissionActions.update,
+          recordId: postJobListing.id,
+        },
+      });
+
+      expect(activityLogResult).not.toBeNull();
+    });
+  });
+
   describe('expireLotteries endpoint', () => {
     it('should only expire listing lotteries that are past due', async () => {
       const jurisdictionA = await prisma.jurisdictions.create({
         data: jurisdictionFactory(),
       });
       await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
-      const expiredClosedListingDate = new Date();
-      expiredClosedListingDate.setDate(
-        expiredClosedListingDate.getDate() -
-          Number(process.env.LOTTERY_DAYS_TILL_EXPIRY || 45) -
-          1,
-      );
+      const expiredClosedListingDate = dayjs(new Date())
+        .subtract(
+          Number(process.env.LOTTERY_DAYS_TILL_EXPIRY || 45) + 1,
+          'days',
+        )
+        .toDate();
+
       const expiredListingData = await listingFactory(
         jurisdictionA.id,
         prisma,
@@ -588,6 +699,16 @@ describe('Lottery Controller Tests', () => {
       });
 
       expect(postJobListing3.lotteryStatus).toBeNull;
+
+      const activityLogResult = await prisma.activityLog.findFirst({
+        where: {
+          module: 'lottery',
+          action: permissionActions.update,
+          recordId: postJobListing.id,
+        },
+      });
+
+      expect(activityLogResult).not.toBeNull();
     });
   });
 
@@ -706,9 +827,6 @@ describe('Lottery Controller Tests', () => {
       expect(res.body.success).toEqual(true);
 
       expect(mockLotteryReleased).toBeCalledWith(
-        expect.objectContaining({
-          email: adminUser.email,
-        }),
         {
           id: listing.id,
           name: listing.name,
@@ -869,10 +987,17 @@ describe('Lottery Controller Tests', () => {
         .expect(200);
       expect(res.body.success).toEqual(true);
 
+      const activityLogResult = await prisma.activityLog.findFirst({
+        where: {
+          module: 'lottery',
+          action: permissionActions.update,
+          recordId: listing.id,
+        },
+      });
+
+      expect(activityLogResult).not.toBeNull();
+
       expect(mockLotteryPublishedAdmin).toBeCalledWith(
-        expect.objectContaining({
-          email: adminUser.email,
-        }),
         {
           id: listing.id,
           name: listing.name,

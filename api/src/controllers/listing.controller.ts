@@ -34,7 +34,6 @@ import Listing from '../dtos/listings/listing.dto';
 import { ListingCreate } from '../dtos/listings/listing-create.dto';
 import { ListingCsvQueryParams } from '../dtos/listings/listing-csv-query-params.dto';
 import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
-import { ListingLotteryStatus } from '../dtos/listings/listing-lottery-status.dto';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
 import { ListingsRetrieveParams } from '../dtos/listings/listings-retrieve-params.dto';
 import { ListingUpdate } from '../dtos/listings/listing-update.dto';

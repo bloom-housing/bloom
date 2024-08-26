@@ -2846,9 +2846,18 @@ describe('Testing listing service', () => {
     });
   });
 
-  describe('Test process endpoint', () => {
+  describe('Test closeListings endpoint', () => {
     it('should call the purge if no listings needed to get processed', async () => {
+      prisma.listings.findMany = jest.fn().mockResolvedValue([
+        {
+          id: 'example id1',
+        },
+        {
+          id: 'example id2',
+        },
+      ]);
       prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 2 });
+      prisma.activityLog.createMany = jest.fn().mockResolvedValue({ count: 2 });
       prisma.cronJob.findFirst = jest
         .fn()
         .mockResolvedValue({ id: randomUUID() });
@@ -2861,10 +2870,9 @@ describe('Testing listing service', () => {
         method: 'PURGE',
         url: `/listings?*`,
       });
-      expect(prisma.listings.updateMany).toHaveBeenCalledWith({
-        data: {
-          status: ListingsStatusEnum.closed,
-          closedAt: expect.anything(),
+      expect(prisma.listings.findMany).toHaveBeenCalledWith({
+        select: {
+          id: true,
         },
         where: {
           status: ListingsStatusEnum.active,
@@ -2882,12 +2890,38 @@ describe('Testing listing service', () => {
           ],
         },
       });
+      expect(prisma.listings.updateMany).toHaveBeenCalledWith({
+        data: {
+          status: ListingsStatusEnum.closed,
+          closedAt: expect.anything(),
+        },
+        where: {
+          id: { in: ['example id1', 'example id2'] },
+        },
+      });
+      expect(prisma.activityLog.createMany).toHaveBeenCalledWith({
+        data: [
+          {
+            module: 'listing',
+            recordId: 'example id1',
+            action: 'update',
+            metadata: { status: ListingsStatusEnum.closed },
+          },
+          {
+            module: 'listing',
+            recordId: 'example id2',
+            action: 'update',
+            metadata: { status: ListingsStatusEnum.closed },
+          },
+        ],
+      });
       expect(prisma.cronJob.findFirst).toHaveBeenCalled();
       expect(prisma.cronJob.update).toHaveBeenCalled();
       process.env.PROXY_URL = undefined;
     });
 
     it('should not call the purge if no listings needed to get processed', async () => {
+      prisma.listings.findMany = jest.fn().mockResolvedValue([]);
       prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 0 });
       prisma.cronJob.findFirst = jest
         .fn()
@@ -2903,19 +2937,7 @@ describe('Testing listing service', () => {
           closedAt: expect.anything(),
         },
         where: {
-          status: ListingsStatusEnum.active,
-          AND: [
-            {
-              applicationDueDate: {
-                not: null,
-              },
-            },
-            {
-              applicationDueDate: {
-                lte: expect.anything(),
-              },
-            },
-          ],
+          id: { in: [] },
         },
       });
       expect(prisma.cronJob.findFirst).toHaveBeenCalled();

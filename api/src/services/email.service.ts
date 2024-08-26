@@ -608,15 +608,13 @@ export class EmailService {
   }
 
   public async lotteryReleased(
-    user: User,
     listingInfo: listingInfo,
     emails: string[],
     appUrl: string,
   ) {
-    const jurisdiction = listingInfo.juris
-      ? await this.getJurisdiction([{ id: listingInfo.juris }])
-      : user.jurisdictions[0];
-    void (await this.loadTranslations(jurisdiction));
+    const jurisdiction = await this.getJurisdiction([
+      { id: listingInfo.juris },
+    ]);
     await this.sendSES({
       to: emails,
       subject: this.polyglot.t('lotteryReleased.header', {
@@ -631,14 +629,13 @@ export class EmailService {
   }
 
   public async lotteryPublishedAdmin(
-    user: User,
     listingInfo: listingInfo,
     emails: string[],
     appUrl: string,
   ) {
-    const jurisdiction = listingInfo.juris
-      ? await this.getJurisdiction([{ id: listingInfo.juris }])
-      : user.jurisdictions[0];
+    const jurisdiction = await this.getJurisdiction([
+      { id: listingInfo.juris },
+    ]);
     void (await this.loadTranslations(jurisdiction));
     await this.sendSES({
       to: emails,
