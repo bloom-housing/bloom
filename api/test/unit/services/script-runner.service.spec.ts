@@ -1,16 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Logger } from '@nestjs/common';
 import { SchedulerRegistry } from '@nestjs/schedule';
+import {
+  MultiselectQuestionsApplicationSectionEnum,
+  PrismaClient,
+  ReviewOrderTypeEnum,
+} from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { Request as ExpressRequest } from 'express';
 import { ScriptRunnerService } from '../../../src/services/script-runner.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { User } from '../../../src/dtos/users/user.dto';
 import { AmiChartService } from '../../../src/services/ami-chart.service';
-import {
-  MultiselectQuestionsApplicationSectionEnum,
-  PrismaClient,
-} from '@prisma/client';
 import { mockDeep } from 'jest-mock-extended';
 
 const externalPrismaClient = mockDeep<PrismaClient>();
@@ -1222,6 +1223,27 @@ describe('Testing script runner service', () => {
       },
       include: {
         jurisdictions: true,
+      },
+    });
+  });
+
+  it('should transfer data', async () => {
+    prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 1 });
+
+    const id = randomUUID();
+    const res = await service.optOutExistingLotteries({
+      user: {
+        id,
+      } as unknown as User,
+    } as unknown as ExpressRequest);
+
+    expect(res.success).toBe(true);
+
+    expect(prisma.listings.updateMany).toHaveBeenCalledWith({
+      data: { lotteryOptIn: false },
+      where: {
+        reviewOrderType: ReviewOrderTypeEnum.lottery,
+        lotteryOptIn: null,
       },
     });
   });

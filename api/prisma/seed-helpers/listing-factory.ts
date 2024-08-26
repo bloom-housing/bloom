@@ -46,6 +46,8 @@ export const listingFactory = async (
     lotteryStatus?: LotteryStatusEnum;
     closedAt?: Date;
     reviewOrderType?: ReviewOrderTypeEnum;
+    listingEvents?: Prisma.ListingEventsCreateWithoutListingsInput[];
+    lotteryOptIn?: boolean;
   },
 ): Promise<Prisma.ListingsCreateInput> => {
   const previousListing = optionalParams?.listing || {};
@@ -75,6 +77,7 @@ export const listingFactory = async (
       ? new Date()
       : null,
     lotteryStatus: optionalParams?.lotteryStatus || undefined,
+    lotteryOptIn: optionalParams?.lotteryOptIn || undefined,
     displayWaitlistSize: Math.random() < 0.5,
     listingsBuildingAddress: {
       create: addressFactory(),
@@ -181,6 +184,11 @@ export const listingFactory = async (
           },
         }
       : {},
+    listingEvents: optionalParams?.listingEvents
+      ? {
+          create: optionalParams.listingEvents,
+        }
+      : undefined,
     ...previousListing,
   };
 };

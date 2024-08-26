@@ -94,4 +94,16 @@ export class ScirptRunnerController {
   ): Promise<SuccessDTO> {
     return await this.scriptRunnerService.addLotteryTranslations(req);
   }
+
+  @Put('optOutExistingLotteries')
+  @ApiOperation({
+    summary: 'A script that opts out existing lottery listings',
+    operationId: 'optOutExistingLotteries',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async optOutExistingLotteries(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.optOutExistingLotteries(req);
+  }
 }

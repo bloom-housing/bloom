@@ -5,6 +5,7 @@ import {
   Prisma,
   PrismaClient,
   LanguagesEnum,
+  ReviewOrderTypeEnum,
 } from '@prisma/client';
 import { Request as ExpressRequest } from 'express';
 import { PrismaService } from './prisma.service';
@@ -790,6 +791,38 @@ export class ScriptRunnerService {
 
     await this.markScriptAsComplete('add lottery translations', requestingUser);
 
+    return { success: true };
+  }
+
+  /**
+   *
+   * @param req incoming request object
+   * @returns successDTO
+   * @description opts out existing lottery listings
+   */
+  async optOutExistingLotteries(req: ExpressRequest): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart(
+      'opt out existing lotteries',
+      requestingUser,
+    );
+
+    const { count } = await this.prisma.listings.updateMany({
+      data: {
+        lotteryOptIn: false,
+      },
+      where: {
+        reviewOrderType: ReviewOrderTypeEnum.lottery,
+        lotteryOptIn: null,
+      },
+    });
+
+    console.log(`updated lottery opt in for ${count} listings`);
+
+    await this.markScriptAsComplete(
+      'opt out existing lotteries',
+      requestingUser,
+    );
     return { success: true };
   }
 
