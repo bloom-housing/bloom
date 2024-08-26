@@ -116,9 +116,22 @@ export class LotteryController {
     );
   }
 
+  @Put('autoPublishResults')
+  @ApiOperation({
+    summary: 'Trigger the lottery auto publish process job',
+    operationId: 'autoPublishResults',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  @PermissionAction(permissionActions.update)
+  @UseInterceptors(ActivityLogInterceptor)
+  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
+  async autoPublishResults(): Promise<SuccessDTO> {
+    return await this.lotteryService.autoPublishResults();
+  }
+
   @Put('expireLotteries')
   @ApiOperation({
-    summary: 'Trigger the lottery process job',
+    summary: 'Trigger the lottery expiration process job',
     operationId: 'expireLotteries',
   })
   @ApiOkResponse({ type: SuccessDTO })
