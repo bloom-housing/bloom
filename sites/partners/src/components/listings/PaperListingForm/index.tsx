@@ -75,7 +75,7 @@ const getToast = (
     [ListingsStatusEnum.active]: t("listings.approval.listingPublished"),
     [ListingsStatusEnum.pending]: t("listings.approval.listingUnpublished"),
     [ListingsStatusEnum.closed]: t("listings.approval.listingClosed"),
-    saved: t("listings.listingUpdated"),
+    saved: t("listings.progressSaved"),
   }
   if (oldStatus !== newStatus) {
     if (!listing && newStatus === ListingsStatusEnum.pending) return toasts.saved
