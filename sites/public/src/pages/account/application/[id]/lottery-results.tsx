@@ -39,7 +39,6 @@ export default () => {
                 .publicLotteryResults({ id: applicationId })
                 .then((results) => {
                   setResults(results as any)
-                  console.log({ results })
                 })
                 .catch((err) => {
                   console.error(`Error fetching lottery results: ${err}`)

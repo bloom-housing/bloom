@@ -2254,7 +2254,7 @@ export class LotteryService {
       id: string
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<ApplicationLotteryPosition[]> {
+  ): Promise<PublicLotteryResult[]> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/lottery/publicLotteryResults/{id}"
       url = url.replace("{id}", params["id"] + "")
@@ -5552,6 +5552,14 @@ export interface LotteryActivityLogItem {
 
   /**  */
   logDate: Date
+}
+
+export interface PublicLotteryResult {
+  /**  */
+  ordinal: number
+
+  /**  */
+  multiselectQuestionId: string
 }
 
 export enum ListingViews {

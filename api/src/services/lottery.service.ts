@@ -1107,9 +1107,8 @@ export class LotteryService {
    */
   public async publicLotteryResults(
     applicationId: string,
-    req: ExpressRequest,
+    user: User,
   ): Promise<PublicLotteryResult[]> {
-    const user = mapTo(User, req['user']);
     if (!user) {
       throw new ForbiddenException();
     }

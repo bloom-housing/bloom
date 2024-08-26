@@ -158,6 +158,9 @@ export class LotteryController {
     @Request() req: ExpressRequest,
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
   ): Promise<PublicLotteryResult[]> {
-    return this.lotteryService.publicLotteryResults(id, req);
+    return this.lotteryService.publicLotteryResults(
+      id,
+      mapTo(User, req['user']),
+    );
   }
 }
