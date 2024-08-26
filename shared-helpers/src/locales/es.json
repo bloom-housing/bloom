@@ -30,6 +30,7 @@
   "account.myApplicationsSubtitle": "Vea las fechas de la lotería y los listados de las propiedades para las que ha presentado solicitudes",
   "account.noApplications": "Parece que todavía no ha realizado una solicitud a ningún anuncio.",
   "account.noClosedApplications": "Los listados a los que ha presentado su solicitud todavía aceptan solicitudes o ya tienen publicados los resultados de la lotería.",
+  "account.noClosedApplicationsSimplified": "Ninguno de los listados a los que ha solicitado se ha cerrado.",
   "account.noLotteryApplications": "Ninguno de los listados a los que ha solicitado ha publicado resultados de lotería.",
   "account.noOpenApplications": "Ninguno de los listados a los que ha presentado su solicitud todavía acepta solicitudes.",
   "account.openApplications": "Aceptar solicitudes",

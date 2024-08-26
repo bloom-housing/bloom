@@ -30,6 +30,7 @@
   "account.myApplicationsSubtitle": "查看您已申請物業的抽簽日期和好屋推薦",
   "account.noApplications": "您似乎尚未套用至任何刊登資訊。",
   "account.noClosedApplications": "您所申请的列表要么仍在接受申请，要么已经公布了抽签结果。",
+  "account.noClosedApplicationsSimplified": "您所申请的列表均尚未关闭。",
   "account.noLotteryApplications": "您所申请的所有房源均未公布抽签结果。",
   "account.noOpenApplications": "您所申请的所有列表均不再接受申请。",
   "account.openApplications": "接受申请",

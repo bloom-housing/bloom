@@ -30,6 +30,7 @@
   "account.myApplicationsSubtitle": "See lottery dates and listings for properties for which you've applied",
   "account.noApplications": "It looks like you haven't applied to any listings yet.",
   "account.noClosedApplications": "The listings you've applied to are either still accepting applications or already have lottery results posted.",
+  "account.noClosedApplicationsSimplified": "None of the listings you've applied to have closed.",
   "account.noLotteryApplications": "None of the listings you've applied to have released lottery results.",
   "account.noOpenApplications": "None of the listings you've applied to are still accepting applications.",
   "account.openApplications": "Accepting applications",

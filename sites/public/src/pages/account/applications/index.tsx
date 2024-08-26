@@ -1,8 +1,8 @@
 import React from "react"
 import ApplicationsView, {
-  ApplicationsFilterEnum,
+  ApplicationsIndexEnum,
 } from "../../../components/account/ApplicationsView"
 
-const AllApplications = () => <ApplicationsView filterType={ApplicationsFilterEnum.All} />
+const AllApplications = () => <ApplicationsView filterType={ApplicationsIndexEnum.all} />
 
 export default AllApplications
