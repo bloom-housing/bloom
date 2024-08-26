@@ -5,7 +5,7 @@ import Listing from '../listings/listing.dto';
 
 export class PublicAppsFiltered extends OmitType(Application, ['listings']) {
   @Expose()
-  @Type(() => Application)
+  @Type(() => Listing)
   @ApiProperty({ type: Listing })
   listings: Listing;
 }
