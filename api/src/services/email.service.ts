@@ -561,15 +561,14 @@ export class EmailService {
   }
 
   public async lotteryReleased(
-    user: User,
     listingInfo: listingInfo,
     emails: string[],
     appUrl: string,
   ) {
     try {
-      const jurisdiction = listingInfo.juris
-        ? await this.getJurisdiction([{ id: listingInfo.juris }])
-        : user.jurisdictions[0];
+      const jurisdiction = await this.getJurisdiction([
+        { id: listingInfo.juris },
+      ]);
       void (await this.loadTranslations(jurisdiction));
       await this.send(
         emails,
@@ -590,15 +589,14 @@ export class EmailService {
   }
 
   public async lotteryPublishedAdmin(
-    user: User,
     listingInfo: listingInfo,
     emails: string[],
     appUrl: string,
   ) {
     try {
-      const jurisdiction = listingInfo.juris
-        ? await this.getJurisdiction([{ id: listingInfo.juris }])
-        : user.jurisdictions[0];
+      const jurisdiction = await this.getJurisdiction([
+        { id: listingInfo.juris },
+      ]);
       void (await this.loadTranslations(jurisdiction));
       await this.send(
         emails,
