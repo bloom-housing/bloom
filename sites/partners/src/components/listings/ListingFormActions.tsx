@@ -78,7 +78,6 @@ const ListingFormActions = ({
   }, [listing])
 
   const actions = useMemo(() => {
-    // TODO: should be Exit, show Save confirmation dialog
     const cancelButton = (
       <Grid.Cell className="flex" key="btn-cancel">
         <Button
@@ -324,8 +323,6 @@ const ListingFormActions = ({
           type="button"
           className="w-full"
           onClick={() => {
-            // NOTE: confused by the following todo. Doesn't this show a modal? -JW
-            // TODO: throw a modal -EJ
             submitFormWithStatus("confirm", ListingsStatusEnum.active)
           }}
         >
