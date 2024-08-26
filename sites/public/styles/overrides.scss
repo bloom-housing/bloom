@@ -211,4 +211,8 @@
       margin-left: 0.6rem;
     }
   }
+
+  .image-card-tag__wrapper {
+    z-index: calc(var(--seeds-z-index-overlay) - 2);
+  }
 }
