@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, ReviewOrderTypeEnum } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { Request as ExpressRequest } from 'express';
 import { mockDeep } from 'jest-mock-extended';
@@ -419,6 +419,27 @@ describe('Testing script runner service', () => {
       },
       include: {
         jurisdictions: true,
+      },
+    });
+  });
+
+  it('should transfer data', async () => {
+    prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 1 });
+
+    const id = randomUUID();
+    const res = await service.optOutExistingLotteries({
+      user: {
+        id,
+      } as unknown as User,
+    } as unknown as ExpressRequest);
+
+    expect(res.success).toBe(true);
+
+    expect(prisma.listings.updateMany).toHaveBeenCalledWith({
+      data: { lotteryOptIn: false },
+      where: {
+        reviewOrderType: ReviewOrderTypeEnum.lottery,
+        lotteryOptIn: null,
       },
     });
   });
