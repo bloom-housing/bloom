@@ -32,7 +32,7 @@ export const MessageProvider: FunctionComponent<React.PropsWithChildren> = ({ ch
     // Clean up messages after they're expired
     setTimeout(() => {
       toastMessagesRef.current = toastMessagesRef.current.filter(
-        (msg) => msg.timestamp != newMsg.timestamp
+        (msg) => msg.timestamp !== newMsg.timestamp
       )
     }, newMsg.props.hideTimeout)
   }
