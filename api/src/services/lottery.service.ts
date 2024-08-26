@@ -983,7 +983,11 @@ export class LotteryService {
     await this.listingService.markCronJobAsStarted(
       LOTTERY_PUBLISH_CRON_JOB_NAME,
     );
-    const tomorrow = dayjs(new Date()).add(1, 'days').toDate();
+    const tomorrow = dayjs(
+      `${new Date().toISOString().split('T')[0]}T00:00:00.000Z`,
+    )
+      .add(1, 'days')
+      .toDate();
     const releasedListings = await this.prisma.listings.findMany({
       select: {
         id: true,

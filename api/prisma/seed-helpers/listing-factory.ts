@@ -13,7 +13,6 @@ import { randomName } from './word-generator';
 import { addressFactory } from './address-factory';
 import { unitFactoryMany } from './unit-factory';
 import { reservedCommunityTypeFactoryGet } from './reserved-community-type-factory';
-import { ListingEvent } from 'src/dtos/listings/listing-event.dto';
 
 const cloudinaryIds = [
   'dev/blake-wheeler-zBHU08hdzhY-unsplash_swqash',
@@ -64,6 +63,7 @@ export const listingFactory = async (
   );
 
   const digitalApp = optionalParams?.digitalApp ?? Math.random() < 0.5;
+
   return {
     createdAt: new Date(),
     assets: [],
