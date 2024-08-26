@@ -49,7 +49,7 @@ module.exports = withBundleAnalyzer(
       mapBoxToken: MAPBOX_TOKEN,
       featureListingsApproval: process.env.FEATURE_LISTINGS_APPROVAL,
       reCaptchaKey: process.env.RECAPTCHA_KEY,
-      showLottery: process.env.SHOW_LOTTERY,
+      showLottery: process.env.SHOW_LOTTERY === "TRUE",
       lotteryDaysTillExpiry: process.env.LOTTERY_DAYS_TILL_EXPIRY,
     },
     i18n: {
