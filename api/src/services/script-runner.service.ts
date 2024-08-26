@@ -370,7 +370,7 @@ export class ScriptRunnerService {
       },
     });
 
-    console.log(count);
+    console.log(`updated lottery opt in for ${count} listings`);
 
     await this.markScriptAsComplete(
       'opt out existing lotteries',
