@@ -583,7 +583,7 @@
   "errors.householdTooBig": "您的家庭人數過多。",
   "errors.householdTooSmall": "您的家庭人數過少。",
   "errors.lastNameError": "請輸入姓氏",
-  "errors.maxLength": "不得超過64個字符",
+  "errors.maxLength": "不得超過%{length}個字符",
   "errors.notFound.message": "嗯，我們似乎找不到您要的網頁。請嘗試返回上一頁，或點擊下面以瀏覽上市名單。",
   "errors.notFound.title": "找不到網頁",
   "errors.numberError": "請輸入一個大於 0 的有效數字。",

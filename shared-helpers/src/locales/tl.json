@@ -545,7 +545,7 @@
   "errors.householdTooBig": "Napakalaki ng iyong sambahayan.",
   "errors.householdTooSmall": "Napakaliit ng iyong sambahayan.",
   "errors.lastNameError": "Pakilagay ang  Apelyido",
-  "errors.maxLength": "Hindi dapat humigit sa 64 na karakter.",
+  "errors.maxLength": "Hindi dapat humigit sa %{length} na character.",
   "errors.notFound.message": "Sori, mukhang hindi namin makita ang page na hinahanap mo. Pakisubukang bumalik sa dating page o mag-click sa ibaba para mag-browse ng mga listahan.",
   "errors.notFound.title": "Hindi Nahanap ang Page",
   "errors.numberError": "Pakilagay ang tamang numero na mas malaki sa 0.",

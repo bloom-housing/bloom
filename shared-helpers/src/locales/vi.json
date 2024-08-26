@@ -583,7 +583,7 @@
   "errors.householdTooBig": "Quy mô hộ gia đình của quý vị quá lớn.",
   "errors.householdTooSmall": "Quy mô hộ gia đình của quý vị quá nhỏ.",
   "errors.lastNameError": "Vui lòng nhập Họ",
-  "errors.maxLength": "Không được nhiều hơn 64 ký tự.",
+  "errors.maxLength": "Không được nhiều hơn %{length} ký tự.",
   "errors.notFound.message": "Rất tiếc, chúng tôi dường như không thể tìm thấy trang quý vị đang tìm kiếm. Hãy thử quay lại trang trước hoặc nhấp vào bên dưới để duyệt các danh sách nhà.",
   "errors.notFound.title": "Không Tìm thấy Trang",
   "errors.numberError": "Vui lòng nhập một số hợp lệ lớn hơn 0.",

@@ -298,7 +298,7 @@ const ApplicationAddress = () => {
                   validation={{ required: true, maxLength: 64 }}
                   errorMessage={
                     errors.applicant?.address?.street?.type === "maxLength"
-                      ? t("errors.maxLength")
+                      ? t("errors.maxLength", { length: 64 })
                       : t("errors.streetError")
                   }
                   error={errors.applicant?.applicantAddress?.street}
@@ -315,7 +315,7 @@ const ApplicationAddress = () => {
                   dataTestId={"app-primary-address-street2"}
                   error={errors.applicant?.applicantAddress?.street2}
                   validation={{ maxLength: 64 }}
-                  errorMessage={t("errors.maxLength")}
+                  errorMessage={t("errors.maxLength", { length: 64 })}
                 />
 
                 <div className="flex max-w-2xl">
@@ -327,7 +327,7 @@ const ApplicationAddress = () => {
                     validation={{ required: true, maxLength: 64 }}
                     errorMessage={
                       errors.applicant?.address?.city?.type === "maxLength"
-                        ? t("errors.maxLength")
+                        ? t("errors.maxLength", { length: 64 })
                         : t("errors.cityError")
                     }
                     error={errors.applicant?.applicantAddress?.city}
@@ -343,7 +343,7 @@ const ApplicationAddress = () => {
                     error={errors.applicant?.applicantAddress?.state}
                     errorMessage={
                       errors.applicant?.applicantAddress?.state?.type === "maxLength"
-                        ? t("errors.maxLength")
+                        ? t("errors.maxLength", { length: 64 })
                         : t("errors.stateError")
                     }
                     register={register}
@@ -358,10 +358,10 @@ const ApplicationAddress = () => {
                   name="applicant.applicantAddress.zipCode"
                   label={t("application.contact.zip")}
                   defaultValue={application.applicant.applicantAddress.zipCode}
-                  validation={{ required: true, maxLength: 64 }}
+                  validation={{ required: true, maxLength: 10 }}
                   errorMessage={
                     errors.applicant?.applicantAddress?.zipCode?.type === "maxLength"
-                      ? t("errors.maxLength")
+                      ? t("errors.maxLength", { length: 10 })
                       : t("errors.zipCodeError")
                   }
                   error={errors.applicant?.applicantAddress?.zipCode}
@@ -403,7 +403,7 @@ const ApplicationAddress = () => {
                     error={errors.applicationsMailingAddress?.street}
                     errorMessage={
                       errors.applicationsMailingAddress?.street?.type === "maxLength"
-                        ? t("errors.maxLength")
+                        ? t("errors.maxLength", { length: 64 })
                         : t("errors.streetError")
                     }
                     register={register}
@@ -419,7 +419,7 @@ const ApplicationAddress = () => {
                     dataTestId={"app-primary-mailing-address-street2"}
                     validation={{ maxLength: 64 }}
                     error={errors.applicationsMailingAddress?.street2}
-                    errorMessage={t("errors.maxLength")}
+                    errorMessage={t("errors.maxLength", { length: 64 })}
                   />
 
                   <div className="flex max-w-2xl">
@@ -432,7 +432,7 @@ const ApplicationAddress = () => {
                       error={errors.applicationsMailingAddress?.city}
                       errorMessage={
                         errors.applicationsMailingAddress?.city?.type === "maxLength"
-                          ? t("errors.maxLength")
+                          ? t("errors.maxLength", { length: 64 })
                           : t("errors.cityError")
                       }
                       register={register}
@@ -447,7 +447,7 @@ const ApplicationAddress = () => {
                       validation={{ required: true, maxLength: 64 }}
                       errorMessage={
                         errors.applicationsMailingAddress?.state?.type === "maxLength"
-                          ? t("errors.maxLength")
+                          ? t("errors.maxLength", { length: 64 })
                           : t("errors.stateError")
                       }
                       error={errors.applicationsMailingAddress?.state}
@@ -464,11 +464,11 @@ const ApplicationAddress = () => {
                     name="applicationsMailingAddress.zipCode"
                     label={t("application.contact.zip")}
                     defaultValue={application.applicationsMailingAddress.zipCode}
-                    validation={{ required: true, maxLength: 64 }}
+                    validation={{ required: true, maxLength: 10 }}
                     error={errors.applicationsMailingAddress?.zipCode}
                     errorMessage={
                       errors.applicationsMailingAddress?.zipCode?.type === "maxLength"
-                        ? t("errors.maxLength")
+                        ? t("errors.maxLength", { length: 10 })
                         : t("errors.zipCodeError")
                     }
                     register={register}

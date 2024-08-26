@@ -535,7 +535,7 @@
   "errors.householdTooBig": "Your household size is too big.",
   "errors.householdTooSmall": "Your household size is too small.",
   "errors.lastNameError": "Please enter a Last Name",
-  "errors.maxLength": "Must not be more than 64 characters.",
+  "errors.maxLength": "Must not be more than %{length} characters.",
   "errors.notFound.message": "Uh oh, we can’t seem to find the page you’re looking for. Try going back to the previous page or click below to browse listings.",
   "errors.notFound.title": "Page Not Found",
   "errors.numberError": "Please enter a valid number greater than 0.",

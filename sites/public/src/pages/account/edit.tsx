@@ -249,7 +249,7 @@ const Edit = () => {
                     validation={{ maxLength: 64 }}
                     errorMessage={
                       nameErrors.firstName?.type === "maxLength"
-                        ? t("errors.maxLength")
+                        ? t("errors.maxLength", { length: 64 })
                         : t("errors.firstNameError")
                     }
                     register={nameRegister}
@@ -265,7 +265,7 @@ const Edit = () => {
                     label={t("application.name.middleNameOptional")}
                     error={nameErrors.middleName}
                     validation={{ maxLength: 64 }}
-                    errorMessage={t("errors.maxLength")}
+                    errorMessage={t("errors.maxLength", { length: 64 })}
                     dataTestId={"account-middle-name"}
                   />
 
@@ -280,7 +280,7 @@ const Edit = () => {
                     validation={{ maxLength: 64 }}
                     errorMessage={
                       nameErrors.lastName?.type === "maxLength"
-                        ? t("errors.maxLength")
+                        ? t("errors.maxLength", { length: 64 })
                         : t("errors.lastNameError")
                     }
                     dataTestId={"account-last-name"}

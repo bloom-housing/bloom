@@ -580,7 +580,7 @@
   "errors.householdTooBig": "El número de miembros de su hogar es demasiado alto.",
   "errors.householdTooSmall": "El número de miembros de su hogar es demasiado bajo.",
   "errors.lastNameError": "Por favor ingrese un apellido",
-  "errors.maxLength": "No puede tener más de 64 caracteres.",
+  "errors.maxLength": "No puede tener más de %{length} caracteres.",
   "errors.notFound.message": "Me temo que no podemos encontrar la página que está buscando. Intente regresar a la página anterior o haga clic abajo para ver listados.",
   "errors.notFound.title": "No se encontró la página",
   "errors.numberError": "Por favor ingrese un número válido mayor a 0.",
