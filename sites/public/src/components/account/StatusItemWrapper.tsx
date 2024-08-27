@@ -16,7 +16,7 @@ interface StatusItemWrapperProps {
 
 const StatusItemWrapper = (props: StatusItemWrapperProps) => {
   const applicationDueDate = props.application?.listings?.applicationDueDate
-
+  console.log(props)
   return (
     <StatusItem
       applicationDueDate={applicationDueDate && dayjs(applicationDueDate).format("MMMM D, YYYY")}
@@ -25,7 +25,9 @@ const StatusItemWrapper = (props: StatusItemWrapperProps) => {
       confirmationNumber={props.application?.confirmationCode || props.application?.id}
       listingName={props.application?.listings?.name}
       listingURL={`/listing/${props.application?.listings?.id}`}
+      listingStatus={props.application.listings.status}
       key={props.application?.id}
+      lotteryDate={props.application?.listings.listingEvents[0]?.startDate}
       lotteryResults={
         props.application?.listings?.lotteryStatus === LotteryStatusEnum.publishedToPublic
       }
