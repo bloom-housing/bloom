@@ -1,6 +1,4 @@
 import {
-  BadRequestException,
-  ForbiddenException,
   HttpException,
   Inject,
   Injectable,
@@ -14,11 +12,11 @@ import { SchedulerRegistry } from '@nestjs/schedule';
 import {
   LanguagesEnum,
   ListingsStatusEnum,
-  LotteryStatusEnum,
   Prisma,
   ReviewOrderTypeEnum,
   UserRoleEnum,
 } from '@prisma/client';
+import dayjs from 'dayjs';
 import { firstValueFrom } from 'rxjs';
 import { ApplicationFlaggedSetService } from './application-flagged-set.service';
 import { EmailService } from './email.service';
@@ -29,7 +27,6 @@ import { AmiChart } from '../dtos/ami-charts/ami-chart.dto';
 import { Listing } from '../dtos/listings/listing.dto';
 import { ListingCreate } from '../dtos/listings/listing-create.dto';
 import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
-import { ListingLotteryStatus } from '../dtos/listings/listing-lottery-status.dto';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
 import { ListingUpdate } from '../dtos/listings/listing-update.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
