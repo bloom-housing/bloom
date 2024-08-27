@@ -8,12 +8,13 @@ import { PublicAppsFiltered } from './public-apps-filtered.dto';
 
 export class PublicAppsViewResponse {
   @Expose()
-  @Type(() => Application)
-  @ApiProperty({ type: Application, isArray: true })
+  @Type(() => PublicAppsFiltered)
+  @ApiProperty({ type: PublicAppsFiltered, isArray: true })
   displayApplications: PublicAppsFiltered[];
 
   @Expose()
   @Type(() => PublicAppsCount)
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ type: PublicAppsCount })
   applicationsCount: PublicAppsCount;
 }
