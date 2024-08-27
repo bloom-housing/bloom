@@ -27,7 +27,7 @@ const StatusItemWrapper = (props: StatusItemWrapperProps) => {
       listingURL={`/listing/${props.application?.listings?.id}`}
       key={props.application?.id}
       lotteryResults={
-        props.application?.fullListing?.lotteryStatus === LotteryStatusEnum.publishedToPublic
+        props.application?.listings?.lotteryStatus === LotteryStatusEnum.publishedToPublic
       }
       lotteryURL={`/account/application/${props.application?.id}/lottery-results`}
     />
