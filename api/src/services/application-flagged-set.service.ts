@@ -662,7 +662,11 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
             data: {
               ruleKey: flaggedGroup.ruleKey,
               rule: flaggedGroup.rule,
-              listingId: listing.id,
+              listings: {
+                connect: {
+                  id: listing.id,
+                },
+              },
               status: FlaggedSetStatusEnum.pending,
               applications: {
                 connect: flaggedGroup.applications.map((application) => {
