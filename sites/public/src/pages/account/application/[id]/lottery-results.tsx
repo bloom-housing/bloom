@@ -4,9 +4,9 @@ import { t } from "@bloom-housing/ui-components"
 import { AuthContext, BloomCard, CustomIconMap, RequireLogin } from "@bloom-housing/shared-helpers"
 import {
   Application,
-  ApplicationLotteryPosition,
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
+  PublicLotteryResult,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Card, Button, Heading, Icon, Message } from "@bloom-housing/ui-seeds"
 import FormsLayout from "../../../../layouts/forms"
@@ -21,7 +21,7 @@ export default () => {
   const applicationId = router.query.id as string
   const { applicationsService, listingsService, profile, lotteryService } = useContext(AuthContext)
   const [application, setApplication] = useState<Application>()
-  const [results, setResults] = useState<ApplicationLotteryPosition[]>()
+  const [results, setResults] = useState<PublicLotteryResult[]>()
   const [listing, setListing] = useState<Listing>()
   const [unauthorized, setUnauthorized] = useState(false)
   const [noApplication, setNoApplication] = useState(false)
@@ -38,7 +38,7 @@ export default () => {
               lotteryService
                 .publicLotteryResults({ id: applicationId })
                 .then((results) => {
-                  setResults(results as any)
+                  setResults(results)
                 })
                 .catch((err) => {
                   console.error(`Error fetching lottery results: ${err}`)
