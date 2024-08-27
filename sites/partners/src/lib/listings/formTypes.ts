@@ -167,6 +167,7 @@ export const formDefaults: FormListing = {
   //     rows: [],
   //   },
   // },
+  applicationLotteryTotals: [],
 }
 
 export type TempUnit = Unit & {
