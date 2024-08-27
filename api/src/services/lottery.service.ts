@@ -10,6 +10,7 @@ import {
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { ConfigService } from '@nestjs/config';
 import {
+  ApplicationLotteryTotal,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
   LotteryStatusEnum,
@@ -241,6 +242,14 @@ export class LotteryService {
       })),
     });
 
+    await this.prisma.applicationLotteryTotal.create({
+      data: {
+        listingId,
+        total: filteredApplications.length,
+        multiselectQuestionId: null,
+      },
+    });
+
     // order by ordinal
     filteredApplications = filteredApplications.sort(
       (a, b) =>
@@ -278,6 +287,13 @@ export class LotteryService {
             ordinal: ordinalArrayWithThisPreference[index],
             multiselectQuestionId: id,
           })),
+        });
+        await this.prisma.applicationLotteryTotal.create({
+          data: {
+            listingId,
+            total: applicationsWithThisPreference.length,
+            multiselectQuestionId: id,
+          },
         });
       }
     }
@@ -1138,6 +1154,40 @@ export class LotteryService {
       },
       where: {
         applicationId,
+      },
+    });
+
+    return results;
+  }
+
+  /*
+   * @param id - listing id
+   * @returns an array of totals
+   */
+  public async lotteryTotals(
+    listingId: string,
+    user: User,
+  ): Promise<ApplicationLotteryTotal[]> {
+    if (!user) {
+      throw new ForbiddenException();
+    }
+
+    await this.prisma.applications.findFirstOrThrow({
+      where: {
+        listingId,
+        userId: user.id,
+      },
+    });
+
+    const results = await this.prisma.applicationLotteryTotal.findMany({
+      select: {
+        id: true,
+        total: true,
+        multiselectQuestionId: true,
+        listingId: true,
+      },
+      where: {
+        listingId,
       },
     });
 
