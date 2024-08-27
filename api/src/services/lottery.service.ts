@@ -137,6 +137,9 @@ export class LotteryService {
       await this.prisma.applicationLotteryPositions.deleteMany({
         where: { listingId: listingId },
       });
+      await this.prisma.applicationLotteryTotal.deleteMany({
+        where: { listingId: listingId },
+      });
     }
 
     try {
@@ -1129,23 +1132,27 @@ export class LotteryService {
       throw new ForbiddenException();
     }
 
-    const applicationUserId = await this.prisma.applications.findFirstOrThrow({
-      select: {
-        userId: true,
-      },
-      where: {
-        id: applicationId,
-      },
-    });
+    if (!user.userRoles.isAdmin) {
+      const applicationUserId = await this.prisma.applications.findFirstOrThrow(
+        {
+          select: {
+            userId: true,
+          },
+          where: {
+            id: applicationId,
+          },
+        },
+      );
 
-    await this.permissionService.canOrThrow(
-      user,
-      'application',
-      permissionActions.read,
-      {
-        userId: applicationUserId.userId,
-      },
-    );
+      await this.permissionService.canOrThrow(
+        user,
+        'application',
+        permissionActions.read,
+        {
+          userId: applicationUserId.userId,
+        },
+      );
+    }
 
     const results = await this.prisma.applicationLotteryPositions.findMany({
       select: {
@@ -1172,12 +1179,14 @@ export class LotteryService {
       throw new ForbiddenException();
     }
 
-    await this.prisma.applications.findFirstOrThrow({
-      where: {
-        listingId,
-        userId: user.id,
-      },
-    });
+    if (!user.userRoles.isAdmin) {
+      await this.prisma.applications.findFirstOrThrow({
+        where: {
+          listingId,
+          userId: user.id,
+        },
+      });
+    }
 
     const results = await this.prisma.applicationLotteryTotal.findMany({
       select: {
