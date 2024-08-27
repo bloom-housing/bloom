@@ -695,6 +695,16 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
           });
         }
       }
+      for (const listing of outOfDateListings) {
+        await this.prisma.listings.update({
+          where: {
+            id: listing.id,
+          },
+          data: {
+            afsLastRunAt: new Date(),
+          },
+        });
+      }
     }
 
     return {
