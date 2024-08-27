@@ -1214,4 +1214,49 @@ describe('Testing lottery service', () => {
       });
     });
   });
+
+  describe('Testing lotteryTotals()', () => {
+    const listingId = randomUUID();
+    const publicUser = {
+      id: 'public id',
+      userRoles: {},
+    } as User;
+
+    it('should query for lottery totals', async () => {
+      prisma.applications.findFirstOrThrow = jest
+        .fn()
+        .mockResolvedValue({ userId: publicUser.id });
+      prisma.applicationLotteryTotal.findMany = jest.fn().mockResolvedValue([
+        { total: 10, multiselectQuestionId: null, listingId },
+        { total: 5, multiselectQuestionId: 'preference id', listingId },
+      ]);
+      await service.lotteryTotals(listingId, publicUser);
+
+      expect(prisma.applicationLotteryTotal.findMany).toHaveBeenCalledWith({
+        select: {
+          id: true,
+          total: true,
+          multiselectQuestionId: true,
+          listingId: true,
+        },
+        where: {
+          listingId,
+        },
+      });
+    });
+
+    it('should fail for no user', async () => {
+      prisma.applications.findFirstOrThrow = jest
+        .fn()
+        .mockResolvedValue({ userId: publicUser.id });
+      prisma.applicationLotteryTotal.findMany = jest.fn().mockResolvedValue([
+        { total: 10, multiselectQuestionId: null, listingId },
+        { total: 5, multiselectQuestionId: 'preference id', listingId },
+      ]);
+
+      await expect(
+        async () => await service.lotteryTotals(listingId, null),
+      ).rejects.toThrowError();
+    });
+  });
 });
