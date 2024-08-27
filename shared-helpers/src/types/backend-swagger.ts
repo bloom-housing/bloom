@@ -1457,7 +1457,7 @@ export class ApplicationsService {
       filterType?: ApplicationsFilterEnum
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<any> {
+  ): Promise<PublicAppsViewResponse> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/applications/publicAppsView"
 
@@ -5004,6 +5004,144 @@ export interface PaginatedApplication {
 
   /**  */
   meta: PaginationMeta
+}
+
+export interface PublicAppsFiltered {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  deletedAt?: Date
+
+  /**  */
+  appUrl?: string
+
+  /**  */
+  additionalPhone?: boolean
+
+  /**  */
+  additionalPhoneNumber?: string
+
+  /**  */
+  additionalPhoneNumberType?: string
+
+  /**  */
+  contactPreferences: string[]
+
+  /**  */
+  householdSize: number
+
+  /**  */
+  housingStatus?: string
+
+  /**  */
+  sendMailToMailingAddress?: boolean
+
+  /**  */
+  householdExpectingChanges?: boolean
+
+  /**  */
+  householdStudent?: boolean
+
+  /**  */
+  incomeVouchers?: boolean
+
+  /**  */
+  income?: string
+
+  /**  */
+  incomePeriod?: IncomePeriodEnum
+
+  /**  */
+  status: ApplicationStatusEnum
+
+  /**  */
+  language?: LanguagesEnum
+
+  /**  */
+  acceptedTerms?: boolean
+
+  /**  */
+  submissionType: ApplicationSubmissionTypeEnum
+
+  /**  */
+  submissionDate?: Date
+
+  /**  */
+  markedAsDuplicate: boolean
+
+  /**  */
+  flagged?: boolean
+
+  /**  */
+  confirmationCode: string
+
+  /**  */
+  reviewStatus?: ApplicationReviewStatusEnum
+
+  /**  */
+  applicationsMailingAddress: Address
+
+  /**  */
+  applicationsAlternateAddress: Address
+
+  /**  */
+  accessibility: Accessibility
+
+  /**  */
+  demographics: Demographic
+
+  /**  */
+  preferredUnitTypes: UnitType[]
+
+  /**  */
+  applicant: Applicant
+
+  /**  */
+  alternateContact: AlternateContact
+
+  /**  */
+  householdMember: HouseholdMember[]
+
+  /**  */
+  preferences?: ApplicationMultiselectQuestion[]
+
+  /**  */
+  programs?: ApplicationMultiselectQuestion[]
+
+  /**  */
+  applicationLotteryPositions: ApplicationLotteryPosition[]
+
+  /**  */
+  listings: Listing
+}
+
+export interface PublicAppsCount {
+  /**  */
+  total: number
+
+  /**  */
+  lottery: number
+
+  /**  */
+  closed: number
+
+  /**  */
+  open: number
+}
+
+export interface PublicAppsViewResponse {
+  /**  */
+  displayApplications: PublicAppsFiltered[]
+
+  /**  */
+  applicationsCount: PublicAppsCount
 }
 
 export interface ApplicantUpdate {
