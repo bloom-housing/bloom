@@ -51,7 +51,7 @@ import { MostRecentApplicationQueryParams } from '../dtos/applications/most-rece
 import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
 import { ApiKeyGuard } from '../guards/api-key.guard';
 import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
-import { PublicAppsViewResponse } from 'src/dtos/applications/public-apps-view-response.dto';
+import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-response.dto';
 
 @Controller('applications')
 @ApiTags('applications')
