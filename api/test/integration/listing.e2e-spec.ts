@@ -3,12 +3,9 @@ import { INestApplication } from '@nestjs/common';
 import {
   ApplicationAddressTypeEnum,
   ApplicationMethodsTypeEnum,
-  ApplicationStatusEnum,
-  ApplicationSubmissionTypeEnum,
   LanguagesEnum,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
-  LotteryStatusEnum,
   ReviewOrderTypeEnum,
   UnitTypeEnum,
   UserRoleEnum,

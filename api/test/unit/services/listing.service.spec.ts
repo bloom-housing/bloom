@@ -30,7 +30,6 @@ import { ListingViews } from '../../../src/enums/listings/view-enum';
 import { TranslationService } from '../../../src/services/translation.service';
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 import { ListingCreate } from '../../../src/dtos/listings/listing-create.dto';
-import { ListingLotteryStatus } from 'src/dtos/listings/listing-lottery-status.dto';
 import { ListingUpdate } from '../../../src/dtos/listings/listing-update.dto';
 import { ListingPublishedCreate } from '../../../src/dtos/listings/listing-published-create.dto';
 import { ListingPublishedUpdate } from '../../../src/dtos/listings/listing-published-update.dto';
@@ -2257,6 +2256,15 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
+      prisma.listingEvents.findMany = jest.fn().mockResolvedValue([]);
+      prisma.listingEvents.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
+      prisma.assets.delete = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
       prisma.$transaction = jest
         .fn()
         .mockResolvedValue([{ id: 'example id', name: 'example name' }]);
@@ -2388,6 +2396,15 @@ describe('Testing listing service', () => {
         },
       });
       prisma.listings.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
+      prisma.listingEvents.findMany = jest.fn().mockResolvedValue([]);
+      prisma.listingEvents.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
+      prisma.assets.delete = jest.fn().mockResolvedValue({
         id: 'example id',
         name: 'example name',
       });

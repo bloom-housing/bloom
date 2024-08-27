@@ -1,6 +1,4 @@
 import {
-  BadRequestException,
-  ForbiddenException,
   HttpException,
   Inject,
   Injectable,
@@ -14,7 +12,6 @@ import { SchedulerRegistry } from '@nestjs/schedule';
 import {
   LanguagesEnum,
   ListingsStatusEnum,
-  LotteryStatusEnum,
   Prisma,
   ReviewOrderTypeEnum,
   UserRoleEnum,
@@ -29,7 +26,6 @@ import { AmiChart } from '../dtos/ami-charts/ami-chart.dto';
 import { Listing } from '../dtos/listings/listing.dto';
 import { ListingCreate } from '../dtos/listings/listing-create.dto';
 import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
-import { ListingLotteryStatus } from '../dtos/listings/listing-lottery-status.dto';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
 import { ListingUpdate } from '../dtos/listings/listing-update.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
@@ -1062,6 +1058,45 @@ export class ListingService implements OnModuleInit {
     return undefined;
   }
 
+  /**
+   * @param listingId the listing id we are operating on
+   * @description disconnects assets from listing events, then deletes those assets
+   */
+  async updateListingEvents(listingId: string): Promise<void> {
+    const assetIds = await this.prisma.listingEvents.findMany({
+      select: {
+        id: true,
+        fileId: true,
+      },
+      where: {
+        listingId,
+      },
+    });
+    await Promise.all(
+      assetIds.map(async (assetData) => {
+        await this.prisma.listingEvents.update({
+          data: {
+            assets: {
+              disconnect: true,
+            },
+          },
+          where: {
+            id: assetData.id,
+          },
+        });
+      }),
+    );
+    await Promise.all(
+      assetIds.map(async (assetData) => {
+        await this.prisma.assets.delete({
+          where: {
+            id: assetData.fileId,
+          },
+        });
+      }),
+    );
+  }
+
   /*
     update a listing
   */
@@ -1134,6 +1169,8 @@ export class ListingService implements OnModuleInit {
       dto,
       'listingsBuildingAddress',
     );
+    // Delete all assets tied to listing events before creating new ones
+    await this.updateListingEvents(dto.id);
 
     // Wrap the deletion and update in one transaction so that units aren't lost if update fails
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -1207,22 +1244,25 @@ export class ListingService implements OnModuleInit {
             : undefined,
           listingEvents: dto.listingEvents
             ? {
-                create: dto.listingEvents.map((event) => ({
-                  type: event.type,
-                  startDate: event.startDate,
-                  startTime: event.startTime,
-                  endTime: event.endTime,
-                  url: event.url,
-                  note: event.note,
-                  label: event.label,
-                  assets: event.assets
-                    ? {
-                        create: {
-                          ...event.assets,
-                        },
-                      }
-                    : undefined,
-                })),
+                create: dto.listingEvents.map((event) => {
+                  return {
+                    type: event.type,
+                    startDate: event.startDate,
+                    startTime: event.startTime,
+                    endTime: event.endTime,
+                    url: event.url,
+                    note: event.note,
+                    label: event.label,
+                    assets: event.assets
+                      ? {
+                          create: {
+                            ...event.assets,
+                            id: undefined,
+                          },
+                        }
+                      : undefined,
+                  };
+                }),
               }
             : undefined,
           listingImages: allAssets.length
