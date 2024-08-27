@@ -136,7 +136,7 @@ model ApplicationFlaggedSet {
   createdAt             DateTime             @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt             DateTime             @updatedAt @map("updated_at") @db.Timestamp(6)
   rule                  RuleEnum
-  ruleKey               String               @unique() @map("rule_key") @db.VarChar
+  ruleKey               String               @map("rule_key") @db.VarChar
   resolvedTime          DateTime?            @map("resolved_time") @db.Timestamptz(6)
   listingId             String               @map("listing_id") @db.Uuid
   showConfirmationAlert Boolean              @default(false) @map("show_confirmation_alert")
@@ -147,6 +147,7 @@ model ApplicationFlaggedSet {
   applications          Applications[]
 
   @@index([listingId])
+  @@unique([ruleKey, listingId])
   @@map("application_flagged_set")
 }
 

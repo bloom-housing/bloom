@@ -41,3 +41,10 @@ UNION
 ALTER TYPE "rule_enum"
 ADD
     VALUE 'emailAndNameAndDOB';
+
+ALTER TABLE
+    application_flagged_set DROP CONSTRAINT IF EXISTS "application_flagged_set_rule_key_key";
+
+DROP INDEX IF EXISTS "application_flagged_set_rule_key_key";
+
+CREATE UNIQUE INDEX "application_flagged_set_rule_key_listing_id_key" ON "application_flagged_set"("rule_key", "listing_id");
