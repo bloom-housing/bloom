@@ -1088,11 +1088,13 @@ export class ListingService implements OnModuleInit {
     );
     await Promise.all(
       assetIds.map(async (assetData) => {
-        await this.prisma.assets.delete({
-          where: {
-            id: assetData.fileId,
-          },
-        });
+        if (assetData.fileId) {
+          await this.prisma.assets.delete({
+            where: {
+              id: assetData.fileId,
+            },
+          });
+        }
       }),
     );
   }
