@@ -269,6 +269,30 @@ describe('Testing lottery service', () => {
   });
 
   describe('Testing lotteryGenerate()', () => {
+    it('should error if not an admin', async () => {
+      const listingId = randomUUID();
+      const requestingUser = {
+        firstName: 'requesting fName',
+        lastName: 'requesting lName',
+        email: 'requestingUser@email.com',
+        jurisdictions: [{ id: 'juris id' }],
+        userRoles: { isAdmin: false },
+      } as unknown as User;
+
+      prisma.listings.findUnique = jest.fn();
+
+      await expect(
+        async () =>
+          await service.lotteryGenerate(
+            { user: requestingUser } as unknown as ExpressRequest,
+            {} as unknown as Response,
+            { id: listingId },
+          ),
+      ).rejects.toThrowError();
+
+      expect(prisma.listings.findUnique).not.toHaveBeenCalled();
+    });
+
     it('should build lottery when no prior lottery has been ran', async () => {
       const listingId = randomUUID();
       const requestingUser = {
