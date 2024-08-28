@@ -33,6 +33,7 @@ const CloseListingDialog = ({ isOpen, setOpen, submitFormWithStatus }: CloseList
             submitFormWithStatus("redirect", ListingsStatusEnum.closed)
           }}
           size="sm"
+          id={"close-listing-modal-button"}
         >
           {t("listings.actions.close")}
         </Button>

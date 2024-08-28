@@ -157,6 +157,7 @@ const ListingFormActions = ({
           variant="primary-outlined"
           className="w-full"
           onClick={() => showCloseListingModal && showCloseListingModal()}
+          id={"closeButton"}
         >
           {t("listings.actions.close")}
         </Button>

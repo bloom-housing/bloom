@@ -44,6 +44,7 @@ const Users = () => {
             <button
               className="text-blue-700 underline"
               onClick={() => setUserDrawer({ type: "edit", user })}
+              id={`user-link-${user.email}`}
             >
               {params.value}
             </button>
