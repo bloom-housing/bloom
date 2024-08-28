@@ -503,6 +503,47 @@ describe('Testing application flagged set service', () => {
         },
       });
     });
+
+    it('should return the first page if count is more than number of listings', async () => {
+      const mockCount = jest
+        .fn()
+        .mockResolvedValueOnce(2)
+        .mockResolvedValueOnce(2);
+      prisma.applicationFlaggedSet.count = mockCount;
+      prisma.applicationFlaggedSet.findMany = jest.fn().mockResolvedValue([
+        {
+          id: 'example id',
+        },
+        {
+          id: 'example id 2',
+        },
+      ]);
+      expect(
+        await service.list({
+          listingId: 'example id',
+          view: View.pendingEmail,
+          limit: 100,
+          page: 2,
+        }),
+      ).toEqual({
+        items: [
+          {
+            id: 'example id',
+          },
+          {
+            id: 'example id 2',
+          },
+        ],
+        meta: {
+          currentPage: 1,
+          itemCount: 2,
+          itemsPerPage: 2,
+          totalItems: 2,
+          totalPages: 1,
+          totalFlagged: 2,
+        },
+      });
+    });
   });
 
   describe('Test findOne', () => {
@@ -2493,10 +2534,6 @@ describe('Testing application flagged set service', () => {
           lastApplicationUpdateAt: {
             not: null,
           },
-          //  "closedAt":  {
-          //      "lte": 2024-07-28T08:00:00.000Z,
-          //    },
-          //    "id": undefined,
           AND: [
             {
               OR: [

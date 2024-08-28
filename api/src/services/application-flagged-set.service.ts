@@ -83,10 +83,10 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
 
     // if passed in page and limit would result in no results because there aren't that many listings
     // revert back to the first page
-    let page = params.page;
     if (count && params.limit && params.limit !== 'all' && params.page > 1) {
       if (Math.ceil(count / params.limit) < params.page) {
-        page = 1;
+        params.page = 1;
+        params.limit = count;
       }
     }
 
@@ -103,7 +103,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
       orderBy: {
         id: OrderByEnum.DESC,
       },
-      skip: calculateSkip(params.limit, page),
+      skip: calculateSkip(params.limit, params.page),
       take: calculateTake(params.limit),
     });
 
@@ -636,6 +636,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
           });
         }
       }
+      // Save or Update flag sets in the database
       for (const flaggedGroup of constructedFlaggedSets) {
         const foundApplicationFlaggedSet = applicationFlaggedSetsInDB.find(
           (afs) => afs.ruleKey === flaggedGroup.ruleKey,
@@ -695,6 +696,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
           });
         }
       }
+      // set the last run at date to the listings
       for (const listing of outOfDateListings) {
         await this.prisma.listings.update({
           where: {

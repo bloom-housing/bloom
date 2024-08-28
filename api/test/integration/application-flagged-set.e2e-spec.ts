@@ -1801,7 +1801,7 @@ describe('Application flagged set Controller Tests', () => {
       );
     });
 
-    it('should only run on listings closed before the DUPLICATES_CLOSE_DATE', async () => {
+    it('should not run on listings closed before the DUPLICATES_CLOSE_DATE', async () => {
       process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
       const jurisdiction = await createJurisdiction();
       const listing = await listingFactory(jurisdiction, prisma, {
@@ -1854,6 +1854,7 @@ describe('Application flagged set Controller Tests', () => {
     });
 
     it('should create a new flagged set if applications match on email', async () => {
+      const newDate = new Date();
       process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
       const listing = await createListing();
 
@@ -1861,7 +1862,7 @@ describe('Application flagged set Controller Tests', () => {
       await createComplexApplication('1', 2, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -1873,8 +1874,16 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       expect(afs.length).toEqual(1);
-
       expect(afs[0].rule).toEqual(RuleEnum.email);
+
+      const dbListing = await prisma.listings.findUnique({
+        select: { afsLastRunAt: true },
+        where: { id: listing },
+      });
+      expect(dbListing.afsLastRunAt).not.toBeNull();
+      expect(new Date(dbListing.afsLastRunAt).getDate()).toBeGreaterThanOrEqual(
+        newDate.getDate(),
+      );
     });
 
     it('should create a new flagged set if applications match on nameAndDOB', async () => {
