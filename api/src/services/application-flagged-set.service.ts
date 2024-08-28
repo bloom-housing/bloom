@@ -43,6 +43,13 @@ import dayjs from 'dayjs';
 
 const OLD_CRON_JOB_NAME = 'AFS_CRON_JOB_v1';
 const CRON_JOB_NAME = 'AFS_CRON_JOB_v2';
+
+type PossibleFlaggedSetQuery = {
+  key: string;
+  type: RuleEnum;
+  applicationids: string[];
+};
+
 @Injectable()
 export class ApplicationFlaggedSetService implements OnModuleInit {
   constructor(
@@ -521,12 +528,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
       `running duplicates check on ${outOfDateListings.length} listings`,
     );
     for (const listing of outOfDateListings) {
-      type PossibleFlaggedSetQuery = {
-        key: string;
-        type: RuleEnum;
-        applicationids: string[];
-      };
-      // find all flagged keys for this listing that applies to more than one listing
+      // find all eflagged keys for this listing that applies to more than one listing
       const flaggedApplicationGrouped: PossibleFlaggedSetQuery[] = await this
         .prisma
         .$queryRaw`select key, array_agg(application_id) as applicationIds, type
