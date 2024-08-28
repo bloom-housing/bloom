@@ -203,24 +203,27 @@ export class ScriptRunnerService {
     return { success: true };
   }
 
-  /**
-   *
-   * @param req incoming request object
-   * @param jurisdiction should contain jurisdiction id
-   * @returns successDTO
-   * @description adds lottery translations to the database
-   */
-  async addLotteryTranslations(req: ExpressRequest): Promise<SuccessDTO> {
+  private async addLotteryTranslationsHelper(req: ExpressRequest) {
     const requestingUser = mapTo(User, req['user']);
-    await this.markScriptAsRunStart('add lottery translations', requestingUser);
 
     const updateForLanguage = async (
       language: LanguagesEnum,
       translationKeys: Record<string, Record<string, string>>,
     ) => {
-      const translations = await this.prisma.translations.findFirst({
+      let translations;
+      translations = await this.prisma.translations.findFirst({
         where: { language, jurisdictionId: null },
       });
+
+      if (!translations) {
+        translations = await this.prisma.translations.create({
+          data: {
+            language: language,
+            translations: {},
+            jurisdictions: undefined,
+          },
+        });
+      }
 
       const translationsJSON =
         translations.translations as unknown as Prisma.JsonArray;
@@ -345,6 +348,37 @@ export class ScriptRunnerService {
     await this.markScriptAsComplete('add lottery translations', requestingUser);
 
     return { success: true };
+  }
+
+  /**
+   *
+   * @param req incoming request object
+   * @param jurisdiction should contain jurisdiction id
+   * @returns successDTO
+   * @description adds lottery translations to the database
+   */
+  async addLotteryTranslations(req: ExpressRequest): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart('add lottery translations', requestingUser);
+    return this.addLotteryTranslationsHelper(req);
+  }
+
+  /**
+   *
+   * @param req incoming request object
+   * @param jurisdiction should contain jurisdiction id
+   * @returns successDTO
+   * @description adds lottery translations to the database and create if does not exist
+   */
+  async addLotteryTranslationsCreateIfEmpty(
+    req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart(
+      'add lottery translations create if empty',
+      requestingUser,
+    );
+    return this.addLotteryTranslationsHelper(req);
   }
 
   /**
