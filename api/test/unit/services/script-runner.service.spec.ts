@@ -126,7 +126,7 @@ describe('Testing script runner service', () => {
     });
   });
 
-  fit('should add lottery translations and create if empty', async () => {
+  it('should add lottery translations and create if empty', async () => {
     prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
     prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
     prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
