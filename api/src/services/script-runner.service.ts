@@ -204,8 +204,6 @@ export class ScriptRunnerService {
   }
 
   private async addLotteryTranslationsHelper(req: ExpressRequest) {
-    const requestingUser = mapTo(User, req['user']);
-
     const updateForLanguage = async (
       language: LanguagesEnum,
       translationKeys: Record<string, Record<string, string>>,
@@ -344,10 +342,6 @@ export class ScriptRunnerService {
     await updateForLanguage(LanguagesEnum.tl, tlKeys);
     await updateForLanguage(LanguagesEnum.vi, viKeys);
     await updateForLanguage(LanguagesEnum.zh, zhKeys);
-
-    await this.markScriptAsComplete('add lottery translations', requestingUser);
-
-    return { success: true };
   }
 
   /**
@@ -360,7 +354,10 @@ export class ScriptRunnerService {
   async addLotteryTranslations(req: ExpressRequest): Promise<SuccessDTO> {
     const requestingUser = mapTo(User, req['user']);
     await this.markScriptAsRunStart('add lottery translations', requestingUser);
-    return this.addLotteryTranslationsHelper(req);
+    this.addLotteryTranslationsHelper(req);
+    await this.markScriptAsComplete('add lottery translations', requestingUser);
+
+    return { success: true };
   }
 
   /**
@@ -378,7 +375,13 @@ export class ScriptRunnerService {
       'add lottery translations create if empty',
       requestingUser,
     );
-    return this.addLotteryTranslationsHelper(req);
+    this.addLotteryTranslationsHelper(req);
+    await this.markScriptAsComplete(
+      'add lottery translations create if empty',
+      requestingUser,
+    );
+
+    return { success: true };
   }
 
   /**
