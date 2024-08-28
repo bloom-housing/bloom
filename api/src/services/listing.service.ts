@@ -1086,17 +1086,21 @@ export class ListingService implements OnModuleInit {
         });
       }),
     );
-    await Promise.all(
-      assetIds.map(async (assetData) => {
-        if (assetData.fileId) {
-          await this.prisma.assets.delete({
-            where: {
-              id: assetData.fileId,
-            },
-          });
-        }
-      }),
-    );
+    const fileIds = assetIds.reduce((accum, curr) => {
+      if (curr.fileId) {
+        accum.push(curr.fileId);
+      }
+      return accum;
+    }, []);
+    if (fileIds.length) {
+      await this.prisma.assets.deleteMany({
+        where: {
+          id: {
+            in: fileIds,
+          },
+        },
+      });
+    }
   }
 
   /*
@@ -1246,25 +1250,23 @@ export class ListingService implements OnModuleInit {
             : undefined,
           listingEvents: dto.listingEvents
             ? {
-                create: dto.listingEvents.map((event) => {
-                  return {
-                    type: event.type,
-                    startDate: event.startDate,
-                    startTime: event.startTime,
-                    endTime: event.endTime,
-                    url: event.url,
-                    note: event.note,
-                    label: event.label,
-                    assets: event.assets
-                      ? {
-                          create: {
-                            ...event.assets,
-                            id: undefined,
-                          },
-                        }
-                      : undefined,
-                  };
-                }),
+                create: dto.listingEvents.map((event) => ({
+                  type: event.type,
+                  startDate: event.startDate,
+                  startTime: event.startTime,
+                  endTime: event.endTime,
+                  url: event.url,
+                  note: event.note,
+                  label: event.label,
+                  assets: event.assets
+                    ? {
+                        create: {
+                          ...event.assets,
+                          id: undefined,
+                        },
+                      }
+                    : undefined,
+                })),
               }
             : undefined,
           listingImages: allAssets.length
