@@ -1172,7 +1172,7 @@ describe('Lottery Controller Tests', () => {
     });
   });
   describe('lotteryTotals', () => {
-    fit('should return totals', async () => {
+    it('should return totals', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
