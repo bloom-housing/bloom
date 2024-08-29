@@ -15,6 +15,8 @@ import {
   EnumJurisdictionListingApprovalPermissions,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
+import { SubmitFunction } from "./PaperListingForm"
+
 export enum ListingFormActionsType {
   add = "add",
   edit = "edit",
@@ -23,16 +25,18 @@ export enum ListingFormActionsType {
 
 type ListingFormActionsProps = {
   type: ListingFormActionsType
+  showSaveBeforeExitDialog?: () => void
   showCloseListingModal?: () => void
   showLotteryResultsDrawer?: () => void
   showRequestChangesModal?: () => void
   showSubmitForApprovalModal?: () => void
-  submitFormWithStatus?: (confirm?: boolean, status?: ListingsStatusEnum) => void
+  submitFormWithStatus?: SubmitFunction
   setErrorAlert?: (alertMessage: string) => void
 }
 
 const ListingFormActions = ({
   type,
+  showSaveBeforeExitDialog,
   showCloseListingModal,
   showLotteryResultsDrawer,
   showRequestChangesModal,
@@ -76,12 +80,16 @@ const ListingFormActions = ({
   const actions = useMemo(() => {
     const cancelButton = (
       <Grid.Cell className="flex" key="btn-cancel">
-        <Link
+        <Button
+          id="listingsExitButton"
+          variant="text"
           className="w-full justify-center p-3"
-          href={type === "add" ? "/" : `/listings/${listingId}`}
+          onClick={() => {
+            showSaveBeforeExitDialog()
+          }}
         >
-          {t("t.cancel")}
-        </Link>
+          {t("t.exit")}
+        </Button>
       </Grid.Cell>
     )
 
@@ -106,7 +114,7 @@ const ListingFormActions = ({
           variant="success"
           className="w-full"
           onClick={() => {
-            submitFormWithStatus(true, ListingsStatusEnum.active)
+            submitFormWithStatus("confirm", ListingsStatusEnum.active)
           }}
         >
           {t("listings.actions.publish")}
@@ -121,22 +129,23 @@ const ListingFormActions = ({
           type="button"
           variant="primary-outlined"
           className="w-full"
-          onClick={() => submitFormWithStatus(false, ListingsStatusEnum.pending)}
+          onClick={() => submitFormWithStatus("redirect", ListingsStatusEnum.pending)}
         >
           {t("listings.actions.draft")}
         </Button>
       </Grid.Cell>
     )
 
-    const saveExitButton = (
+    const saveContinueButton = (
       <Grid.Cell key="btn-save">
         <Button
           type="button"
+          variant="primary-outlined"
           className="w-full"
-          onClick={() => submitFormWithStatus(true, listing.status)}
-          id={"saveAndExitButton"}
+          onClick={() => submitFormWithStatus("continue", listing.status)}
+          id={"saveAndContinueButton"}
         >
-          {t("t.saveExit")}
+          {t("t.save")}
         </Button>
       </Grid.Cell>
     )
@@ -160,7 +169,7 @@ const ListingFormActions = ({
           variant="alert-outlined"
           className="w-full"
           type="button"
-          onClick={() => submitFormWithStatus(false, ListingsStatusEnum.pending)}
+          onClick={() => submitFormWithStatus("redirect", ListingsStatusEnum.pending)}
         >
           {t("listings.actions.unpublish")}
         </Button>
@@ -251,7 +260,7 @@ const ListingFormActions = ({
           onClick={async () => {
             // utilize same submit logic if updating status from edit view
             if (type === ListingFormActionsType.edit) {
-              submitFormWithStatus(false, ListingsStatusEnum.active)
+              submitFormWithStatus("redirect", ListingsStatusEnum.active)
             } else {
               try {
                 const result = await listingsService.update({
@@ -315,8 +324,7 @@ const ListingFormActions = ({
           type="button"
           className="w-full"
           onClick={() => {
-            // TODO throw a modal
-            submitFormWithStatus(true, ListingsStatusEnum.active)
+            submitFormWithStatus("confirm", ListingsStatusEnum.active)
           }}
         >
           {t("listings.approval.reopen")}
@@ -393,9 +401,6 @@ const ListingFormActions = ({
             elements.push(submitButton)
         }
 
-        // all users can make updates to an open listing
-        elements.push(saveExitButton)
-
         // admins can request changes on pending review listings
         if (isListingApprover && listing.status === ListingsStatusEnum.pendingReview)
           elements.push(requestChangesButton)
@@ -428,6 +433,9 @@ const ListingFormActions = ({
           }
         }
 
+        // all users can make updates to an open listing
+        elements.push(saveContinueButton)
+
         elements.push(cancelButton)
       }
       return elements
@@ -458,7 +466,7 @@ const ListingFormActions = ({
         if (listing.status === ListingsStatusEnum.closed) {
           elements.push(reopenButton)
         }
-        elements.push(saveExitButton)
+        elements.push(saveContinueButton)
 
         if (listing.status === ListingsStatusEnum.active) {
           elements.push(closeButton)

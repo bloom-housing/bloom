@@ -2,8 +2,9 @@ import React from "react"
 import { Form, t, Textarea } from "@bloom-housing/ui-components"
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import { useForm } from "react-hook-form"
-import { FormListing } from "../../../lib/listings/formTypes"
+import { FormListing } from "../../../../lib/listings/formTypes"
 import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { SubmitFunction } from "../index"
 
 type FormFields = {
   requestedChanges: string
@@ -13,14 +14,10 @@ type RequestChangesModalProps = {
   defaultValue: string
   modalIsOpen: boolean
   setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>
-  submitFormWithStatus: (
-    confirm?: boolean,
-    status?: ListingsStatusEnum,
-    newData?: Partial<FormListing>
-  ) => void
+  submitFormWithStatus: SubmitFunction
 }
 
-const RequestChangesModal = ({
+const RequestChangesDialog = ({
   defaultValue,
   modalIsOpen,
   setModalIsOpen,
@@ -68,7 +65,7 @@ const RequestChangesModal = ({
             const validation = await trigger()
             if (validation) {
               const formData = getValues()
-              submitFormWithStatus(false, ListingsStatusEnum.changesRequested, {
+              submitFormWithStatus("redirect", ListingsStatusEnum.changesRequested, {
                 requestedChanges: formData.requestedChanges,
                 requestedChangesDate: new Date(),
               })
@@ -93,4 +90,4 @@ const RequestChangesModal = ({
   )
 }
 
-export { RequestChangesModal as default }
+export { RequestChangesDialog as default }
