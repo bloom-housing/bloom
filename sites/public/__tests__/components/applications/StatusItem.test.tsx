@@ -2,11 +2,12 @@ import React from "react"
 import { render, cleanup } from "@testing-library/react"
 import { t } from "@bloom-housing/ui-components"
 import { StatusItem } from "../../../src/components/account/StatusItem"
+import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 afterEach(cleanup)
 
 describe("<StatusItem>", () => {
-  it("renders without error", () => {
+  it("renders open application without error", () => {
     const { getByText } = render(
       <StatusItem
         applicationDueDate={"March 10th, 2022"}
@@ -14,6 +15,7 @@ describe("<StatusItem>", () => {
         applicationUpdatedAt={"March 8th, 2022"}
         confirmationNumber={"1234abcd"}
         listingName={"Listing Name"}
+        listingStatus={ListingsStatusEnum.active}
         listingURL={"/listing/abcd1234/listing-name"}
       />
     )
@@ -29,6 +31,7 @@ describe("<StatusItem>", () => {
         applicationUpdatedAt={"March 8th, 2022"}
         listingName={"Listing Name"}
         listingURL={"/listing/abcd1234/listing-name"}
+        listingStatus={ListingsStatusEnum.active}
       />
     )
 
