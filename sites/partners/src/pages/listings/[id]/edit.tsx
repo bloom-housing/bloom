@@ -56,11 +56,7 @@ const EditListing = (props: { listing: Listing }) => {
             }
           />
 
-          <PaperListingForm
-            listing={listing as FormListing}
-            editMode
-            setListingName={setListingName}
-          />
+          <PaperListingForm listing={listing} editMode setListingName={setListingName} />
         </Layout>
       </ListingGuard>
     </ListingContext.Provider>
