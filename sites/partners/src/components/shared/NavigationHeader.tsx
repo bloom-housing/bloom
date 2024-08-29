@@ -66,7 +66,7 @@ const NavigationHeader = ({
       },
     ]
 
-    if (process.env.showLottery === "TRUE" && tabs?.lotteryLabel) {
+    if (process.env.showLottery && tabs?.lotteryLabel) {
       elements.push({
         label: tabs.lotteryLabel,
         path: `/listings/${listingId}/lottery`,
