@@ -1600,14 +1600,16 @@ describe('Application Controller Tests', () => {
         listingId: listingLotteryCreated.id,
       });
       const appArr = [appOpenListing, appClosedListing, appLotteryListing];
-      appArr.forEach(async (app) => {
-        await prisma.applications.create({
-          data: app,
-          include: {
-            applicant: true,
-          },
-        });
-      });
+      await Promise.all(
+        appArr.map(async (app) => {
+          await prisma.applications.create({
+            data: app,
+            include: {
+              applicant: true,
+            },
+          });
+        }),
+      );
 
       const queryParams: PublicAppsViewQueryParams = {
         userId: user.id,
