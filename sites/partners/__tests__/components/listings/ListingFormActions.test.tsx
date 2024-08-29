@@ -97,7 +97,7 @@ describe("<ListingFormActions>", () => {
       )
       expect(getByText("Save as Draft")).toBeTruthy()
       expect(getByText("Publish")).toBeTruthy()
-      expect(getByText("Cancel")).toBeTruthy()
+      expect(getByText("Exit")).toBeTruthy()
     })
 
     it("renders correct buttons in a draft detail state", () => {
@@ -120,9 +120,9 @@ describe("<ListingFormActions>", () => {
           </ListingContext.Provider>
         </AuthContext.Provider>
       )
-      expect(getByText("Save & Exit")).toBeTruthy()
+      expect(getByText("Save")).toBeTruthy()
       expect(getByText("Publish")).toBeTruthy()
-      expect(getByText("Cancel")).toBeTruthy()
+      expect(getByText("Exit")).toBeTruthy()
     })
 
     it("renders correct buttons in an open detail state", () => {
@@ -145,10 +145,10 @@ describe("<ListingFormActions>", () => {
           </ListingContext.Provider>
         </AuthContext.Provider>
       )
-      expect(getByText("Save & Exit")).toBeTruthy()
+      expect(getByText("Save")).toBeTruthy()
       expect(getByText("Close")).toBeTruthy()
       expect(getByText("Unpublish")).toBeTruthy()
-      expect(getByText("Cancel")).toBeTruthy()
+      expect(getByText("Exit")).toBeTruthy()
     })
 
     it("renders correct buttons in a closed detail state", () => {
@@ -172,9 +172,9 @@ describe("<ListingFormActions>", () => {
         </AuthContext.Provider>
       )
       expect(getByText("Reopen")).toBeTruthy()
-      expect(getByText("Save & Exit")).toBeTruthy()
+      expect(getByText("Save")).toBeTruthy()
       expect(getByText("Unpublish")).toBeTruthy()
-      expect(getByText("Cancel")).toBeTruthy()
+      expect(getByText("Exit")).toBeTruthy()
     })
   })
 
@@ -195,7 +195,7 @@ describe("<ListingFormActions>", () => {
         )
         expect(getByText("Publish")).toBeTruthy()
         expect(getByText("Save as Draft")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
 
       it("renders correct buttons in a draft detail state", () => {
@@ -219,8 +219,8 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Publish")).toBeTruthy()
-        expect(getByText("Save & Exit")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
 
       it("renders correct buttons in a pending approval detail state", () => {
@@ -249,9 +249,9 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Approve & Publish")).toBeTruthy()
-        expect(getByText("Save & Exit")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
         expect(getByText("Request Changes")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
 
       it("renders correct buttons in a changes requested detail state", () => {
@@ -280,8 +280,8 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Approve & Publish")).toBeTruthy()
-        expect(getByText("Save & Exit")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
       it("renders correct buttons in an open detail state", () => {
         const { getByText } = render(
@@ -303,10 +303,10 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(getByText("Save & Exit")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
         expect(getByText("Close")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
 
       it("renders correct buttons in a closed detail state", () => {
@@ -330,10 +330,10 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Reopen")).toBeTruthy()
-        expect(getByText("Save & Exit")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
         expect(getByText("Post Results")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
     })
     describe("as a jurisdictional admin", () => {
@@ -354,7 +354,7 @@ describe("<ListingFormActions>", () => {
         )
         expect(getByText("Submit")).toBeTruthy()
         expect(getByText("Save as Draft")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
 
       it("renders correct buttons in a draft detail state", () => {
@@ -378,8 +378,8 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Submit")).toBeTruthy()
-        expect(getByText("Save & Exit")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
 
       it("renders correct buttons in a pending approval detail state", () => {
@@ -421,8 +421,8 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Submit")).toBeTruthy()
-        expect(getByText("Save & Exit")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
 
       it("renders correct buttons in an open detail state", () => {
@@ -445,10 +445,10 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(getByText("Save & Exit")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
         expect(getByText("Close")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
 
       it("renders correct buttons in a closed detail state", () => {
@@ -472,10 +472,10 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(queryByText("Reopen")).toBeFalsy()
-        expect(getByText("Save & Exit")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
         expect(getByText("Post Results")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
     })
 
@@ -493,7 +493,7 @@ describe("<ListingFormActions>", () => {
         )
         expect(getByText("Submit")).toBeTruthy()
         expect(getByText("Save as Draft")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
 
       it("renders correct buttons in a draft detail state", () => {
@@ -517,8 +517,8 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Submit")).toBeTruthy()
-        expect(getByText("Save & Exit")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
 
       it("renders correct buttons in a pending approval detail state", () => {
@@ -560,8 +560,8 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Submit")).toBeTruthy()
-        expect(getByText("Save & Exit")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
 
       it("renders correct buttons in an open detail state", () => {
@@ -584,10 +584,10 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(getByText("Save & Exit")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
         expect(getByText("Close")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
 
       it("renders correct buttons in a closed detail state", () => {
@@ -611,10 +611,10 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(queryByText("Reopen")).toBeFalsy()
-        expect(getByText("Save & Exit")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
         expect(getByText("Post Results")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
     })
   })
@@ -638,7 +638,7 @@ describe("<ListingFormActions>", () => {
         )
         expect(getByText("Publish")).toBeTruthy()
         expect(getByText("Save as Draft")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
 
       it("renders correct buttons in a draft detail state", () => {
@@ -662,8 +662,8 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Publish")).toBeTruthy()
-        expect(getByText("Save & Exit")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
 
       it("renders correct buttons in a pending approval detail state", () => {
@@ -692,9 +692,9 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Approve & Publish")).toBeTruthy()
-        expect(getByText("Save & Exit")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
         expect(getByText("Request Changes")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
 
       it("renders correct buttons in a changes requested detail state", () => {
@@ -723,8 +723,8 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Approve & Publish")).toBeTruthy()
-        expect(getByText("Save & Exit")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
       it("renders correct buttons in an open detail state", () => {
         const { getByText } = render(
@@ -746,10 +746,10 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(getByText("Save & Exit")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
         expect(getByText("Close")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
 
       it("renders correct buttons in a closed detail state", () => {
@@ -773,10 +773,10 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Reopen")).toBeTruthy()
-        expect(getByText("Save & Exit")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
         expect(getByText("Post Results")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
     })
     describe("as a jurisdictional admin", () => {
@@ -797,7 +797,7 @@ describe("<ListingFormActions>", () => {
         )
         expect(getByText("Publish")).toBeTruthy()
         expect(getByText("Save as Draft")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
 
       it("renders correct buttons in a draft detail state", () => {
@@ -821,8 +821,8 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Publish")).toBeTruthy()
-        expect(getByText("Save & Exit")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
 
       it("renders correct buttons in a pending approval detail state", () => {
@@ -851,9 +851,9 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Approve & Publish")).toBeTruthy()
-        expect(getByText("Save & Exit")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
         expect(getByText("Request Changes")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
 
       it("renders correct buttons in a changes requested detail state", () => {
@@ -882,8 +882,8 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Approve & Publish")).toBeTruthy()
-        expect(getByText("Save & Exit")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
       it("renders correct buttons in an open detail state", () => {
         const { getByText } = render(
@@ -905,10 +905,10 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(getByText("Save & Exit")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
         expect(getByText("Close")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
 
       it("renders correct buttons in a closed detail state", () => {
@@ -932,10 +932,10 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Reopen")).toBeTruthy()
-        expect(getByText("Save & Exit")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
         expect(getByText("Post Results")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
     })
 
@@ -953,7 +953,7 @@ describe("<ListingFormActions>", () => {
         )
         expect(getByText("Submit")).toBeTruthy()
         expect(getByText("Save as Draft")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
 
       it("renders correct buttons in a draft detail state", () => {
@@ -977,8 +977,8 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Submit")).toBeTruthy()
-        expect(getByText("Save & Exit")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
 
       it("renders correct buttons in a pending approval detail state", () => {
@@ -1020,8 +1020,8 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Submit")).toBeTruthy()
-        expect(getByText("Save & Exit")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
 
       it("renders correct buttons in an open detail state", () => {
@@ -1044,10 +1044,10 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(getByText("Save & Exit")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
         expect(getByText("Close")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
 
       it("renders correct buttons in a closed detail state", () => {
@@ -1071,10 +1071,10 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(queryByText("Reopen")).toBeFalsy()
-        expect(getByText("Save & Exit")).toBeTruthy()
+        expect(getByText("Save")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
         expect(getByText("Post Results")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("Exit")).toBeTruthy()
       })
     })
   })
