@@ -13,7 +13,8 @@ interface StatusItemProps {
   listingName: string
   listingURL: string
   listingStatus: ListingsStatusEnum
-  lotteryDate: Date
+  lotteryStartDate?: string
+  lotteryPublishedDate?: string
   lotteryResults?: boolean
   lotteryURL?: string
   strings?: {
@@ -40,18 +41,21 @@ const StatusItem = (props: StatusItemProps) => {
     tagText = t("account.lotteryRun")
     tagVariant = "success"
 
-    deadlineText = t("account.lotteryResultsPosted")
+    deadlineText = t("account.lotteryPosted")
+    dueDate = props.lotteryPublishedDate
   } else if (props.listingStatus === ListingsStatusEnum.active) {
     tagText = t("account.openApplications")
     tagVariant = "primary"
 
     deadlineText = t("account.applicationsClose")
+    dueDate = props.applicationDueDate
   } else {
     tagText = t("account.closedApplications")
     tagVariant = "secondary"
 
-    if (props.lotteryDate) {
+    if (props.lotteryStartDate) {
       deadlineText = t("account.lotteryDate")
+      dueDate = props.lotteryStartDate
     }
   }
 
@@ -82,10 +86,10 @@ const StatusItem = (props: StatusItemProps) => {
           </div>
 
           <div className={styles["status-item__action"]}>
-            {props.applicationDueDate && (
+            {dueDate && (
               <p className={styles["status-item__due"]}>
-                {props.strings?.applicationsDeadline ?? t("listings.applicationDeadline")}:{" "}
-                <span className={styles["status-item__due-date"]}>{props.applicationDueDate}</span>
+                {`${deadlineText} `}
+                <span className={styles["status-item__due-date"]}>{dueDate}</span>
               </p>
             )}
           </div>

@@ -36,6 +36,7 @@ import { MostRecentApplicationQueryParams } from '../dtos/applications/most-rece
 import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
 import { ApplicationsFilterEnum } from '../enums/applications/filter-enum';
 import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-response.dto';
+import { OrderByEnum } from '../enums/shared/order-by-enum';
 
 export const view: Partial<
   Record<ApplicationViews, Prisma.ApplicationsInclude>
@@ -408,33 +409,68 @@ export class ApplicationService {
     );
 
     //filter for display applications and status counts
-    const displayApplications = [];
+    let filteredApplications = [];
+    let displayApplications = [];
     const total = rawApps.length ?? 0;
     let lottery = 0,
       closed = 0,
       open = 0;
-
+    const lotteryListingIds: string[] = [];
     rawApps.forEach((app) => {
       if (app.listings.status === ListingsStatusEnum.active) {
         open++;
         if (params.filterType === ApplicationsFilterEnum.open)
-          displayApplications.push(app);
+          filteredApplications.push(app);
       } else if (
         app.listings?.lotteryStatus === LotteryStatusEnum.publishedToPublic
       ) {
         lottery++;
-        if (params.filterType === ApplicationsFilterEnum.lottery)
-          displayApplications.push(app);
+        lotteryListingIds.push(app.listings.id);
+        if (params.filterType === ApplicationsFilterEnum.lottery) {
+          filteredApplications.push(app);
+        }
       } else {
-        //fix to handle all case
         closed++;
         if (params.filterType === ApplicationsFilterEnum.closed)
-          displayApplications.push(app);
+          filteredApplications.push(app);
       }
     });
-    //
+
     if (params.filterType === ApplicationsFilterEnum.all)
-      displayApplications.push(...rawApps);
+      filteredApplications = rawApps;
+    // get lottery published date from activity log if needed
+    if (
+      [ApplicationsFilterEnum.lottery, ApplicationsFilterEnum.all].includes(
+        params.filterType,
+      )
+    ) {
+      const lotteryActivity = await this.prisma.activityLog.findMany({
+        select: {
+          metadata: true,
+          updatedAt: true,
+          recordId: true,
+        },
+        where: {
+          module: 'lottery',
+          recordId: { in: lotteryListingIds },
+        },
+        orderBy: {
+          updatedAt: OrderByEnum.ASC,
+        },
+      });
+
+      const activityLogHelper = {};
+      lotteryActivity.forEach((log) => {
+        const logString = JSON.stringify(log.metadata);
+        if (logString.includes(LotteryStatusEnum.publishedToPublic)) {
+          activityLogHelper[log.recordId] = log.updatedAt;
+        }
+      });
+      displayApplications = filteredApplications.map((app) => {
+        app['lotteryPublishDate'] = activityLogHelper[app.listings.id];
+        return app;
+      });
+    } else displayApplications = filteredApplications;
 
     return mapTo(PublicAppsViewResponse, {
       displayApplications,

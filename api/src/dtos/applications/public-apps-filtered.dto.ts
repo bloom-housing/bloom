@@ -8,4 +8,9 @@ export class PublicAppsFiltered extends OmitType(Application, ['listings']) {
   @Type(() => Listing)
   @ApiProperty({ type: Listing })
   listings: Listing;
+
+  @Expose()
+  @Type(() => Date)
+  @ApiProperty({ type: Date })
+  lotteryPublishDate?: Date;
 }

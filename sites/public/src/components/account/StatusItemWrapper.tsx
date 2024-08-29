@@ -9,6 +9,7 @@ import {
 
 export interface AppWithListing extends Application {
   listings: Listing
+  lotteryPublishDate: Date
 }
 interface StatusItemWrapperProps {
   application: AppWithListing
@@ -16,7 +17,8 @@ interface StatusItemWrapperProps {
 
 const StatusItemWrapper = (props: StatusItemWrapperProps) => {
   const applicationDueDate = props.application?.listings?.applicationDueDate
-  console.log(props)
+  const lotteryStartDate = props.application?.listings.listingEvents[0]?.startDate
+  const lotteryPublishDate = props.application?.lotteryPublishDate
   return (
     <StatusItem
       applicationDueDate={applicationDueDate && dayjs(applicationDueDate).format("MMMM D, YYYY")}
@@ -27,7 +29,8 @@ const StatusItemWrapper = (props: StatusItemWrapperProps) => {
       listingURL={`/listing/${props.application?.listings?.id}`}
       listingStatus={props.application.listings.status}
       key={props.application?.id}
-      lotteryDate={props.application?.listings.listingEvents[0]?.startDate}
+      lotteryStartDate={lotteryStartDate && dayjs(lotteryStartDate).format("MMMM D, YYYY")}
+      lotteryPublishedDate={lotteryPublishDate && dayjs(lotteryPublishDate).format("MMMM D, YYYY")}
       lotteryResults={
         props.application?.listings?.lotteryStatus === LotteryStatusEnum.publishedToPublic
       }
