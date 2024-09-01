@@ -1,10 +1,9 @@
 import { t, Form, Field } from "@bloom-housing/ui-components"
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
-import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, MessageContext, emailRegex } from "@bloom-housing/shared-helpers"
 import { useRouter } from "next/router"
 import React, { useContext, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
-import { emailRegex } from "../../lib/helpers"
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ConfirmationModalProps {}

@@ -5,13 +5,17 @@ import {
   DOBField,
   Select,
   Field,
-  emailRegex,
   PhoneField,
   FieldGroup,
   FormAddress,
 } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
-import { phoneNumberKeys, contactPreferencesKeys, stateKeys } from "@bloom-housing/shared-helpers"
+import {
+  phoneNumberKeys,
+  contactPreferencesKeys,
+  stateKeys,
+  emailRegex,
+} from "@bloom-housing/shared-helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const FormPrimaryApplicant = () => {

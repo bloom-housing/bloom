@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
-import { Field, Form, emailRegex, t, DOBField, AlertBox } from "@bloom-housing/ui-components"
+import { Field, Form, t, DOBField, AlertBox } from "@bloom-housing/ui-components"
 import { Button, Dialog, Heading } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import dayjs from "dayjs"
@@ -14,6 +14,7 @@ import {
   AuthContext,
   BloomCard,
   passwordRegex,
+  emailRegex,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"

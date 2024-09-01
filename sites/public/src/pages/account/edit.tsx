@@ -8,7 +8,6 @@ import { useForm } from "react-hook-form"
 import {
   Field,
   Form,
-  emailRegex,
   t,
   AlertBox,
   AlertTypes,
@@ -25,6 +24,7 @@ import {
   RequireLogin,
   BloomCard,
   passwordRegex,
+  emailRegex,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
 import FormsLayout from "../../layouts/forms"

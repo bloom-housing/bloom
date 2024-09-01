@@ -3,11 +3,11 @@ import {
   StandardTable,
   StandardTableData,
   t,
-  numberOrdinal,
   getTranslationWithArguments,
 } from "@bloom-housing/ui-components"
 import { ContentAccordion } from "@bloom-housing/doorway-ui-components"
 import { MinMax, ReviewOrderTypeEnum, Unit, UnitSummary } from "../types/backend-swagger"
+import { numberOrdinal } from "../utilities/numberOrdinal"
 
 const getTranslationFromCurrencyString = (value: string) => {
   if (value.startsWith("t.")) return getTranslationWithArguments(value)

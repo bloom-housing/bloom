@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react"
 import axios from "axios"
 //import qs from "qs"
 import { useRouter } from "next/router"
-import { ApplicationStatusProps, isInternalLink } from "@bloom-housing/ui-components"
+import { ApplicationStatusProps } from "@bloom-housing/ui-components"
 import {
   // EnumListingFilterParamsComparison,
   Jurisdiction,
@@ -15,7 +15,7 @@ import {
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./applications/AppSubmissionContext"
 import { getListingApplicationStatus } from "./helpers"
-import { useRequireLoggedInUser } from "@bloom-housing/shared-helpers"
+import { useRequireLoggedInUser, isInternalLink } from "@bloom-housing/shared-helpers"
 
 export const useRedirectToPrevPage = (defaultPath = "/") => {
   const router = useRouter()
