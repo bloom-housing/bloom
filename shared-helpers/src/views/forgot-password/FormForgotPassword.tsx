@@ -8,12 +8,12 @@ import {
   AlertNotice,
   ErrorMessage,
   NavigationContext,
-  emailRegex,
 } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { NetworkErrorReset, NetworkStatusContent } from "../../auth/catchNetworkError"
 import type { UseFormMethods } from "react-hook-form"
 import BloomCard from "../components/BloomCard"
+import { emailRegex } from "../../utilities/regex"
 import styles from "./FormForgotPassword.module.scss"
 
 export type FormForgotPasswordProps = {

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { emailRegex, Field, Form, PhoneField, Select, t } from "@bloom-housing/ui-components"
+import { Field, Form, PhoneField, Select, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { Alert } from "@bloom-housing/ui-seeds"
 import {
@@ -9,6 +9,7 @@ import {
   pushGtmEvent,
   stateKeys,
   AuthContext,
+  emailRegex,
 } from "@bloom-housing/shared-helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
