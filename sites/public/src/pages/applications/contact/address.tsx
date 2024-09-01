@@ -1,15 +1,7 @@
 import React, { useContext, useEffect, useState, useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { Alert, FormErrorMessage } from "@bloom-housing/ui-seeds"
-import {
-  Field,
-  FieldGroup,
-  Form,
-  mergeDeep,
-  PhoneField,
-  Select,
-  t,
-} from "@bloom-housing/ui-components"
+import { Field, FieldGroup, Form, PhoneField, Select, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   contactPreferencesKeys,
@@ -20,6 +12,7 @@ import {
   PageView,
   pushGtmEvent,
   AuthContext,
+  mergeDeep,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { disableContactFormOption } from "../../../lib/helpers"

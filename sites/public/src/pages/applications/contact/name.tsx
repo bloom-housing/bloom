@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import { DOBField, Field, Form, t, emailRegex } from "@bloom-housing/ui-components"
+import { DOBField, Field, Form, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { Alert, Icon } from "@bloom-housing/ui-seeds"
 import {
@@ -9,6 +9,7 @@ import {
   pushGtmEvent,
   AuthContext,
   CustomIconMap,
+  emailRegex,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"

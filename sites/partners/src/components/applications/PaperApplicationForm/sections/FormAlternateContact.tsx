@@ -1,8 +1,8 @@
 import React, { useEffect } from "react"
 import { useFormContext } from "react-hook-form"
-import { t, Select, Field, emailRegex, PhoneField, FormAddress } from "@bloom-housing/ui-components"
+import { t, Select, Field, PhoneField, FormAddress } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
-import { altContactRelationshipKeys, stateKeys } from "@bloom-housing/shared-helpers"
+import { altContactRelationshipKeys, stateKeys, emailRegex } from "@bloom-housing/shared-helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const FormAlternateContact = () => {
