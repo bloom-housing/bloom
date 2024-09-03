@@ -48,7 +48,7 @@ module.exports = withBundleAnalyzer(
       cloudinarySignedPreset: process.env.CLOUDINARY_SIGNED_PRESET,
       mapBoxToken: MAPBOX_TOKEN,
       featureListingsApproval: process.env.FEATURE_LISTINGS_APPROVAL,
-      showLottery: process.env.SHOW_LOTTERY,
+      showLottery: process.env.SHOW_LOTTERY === "TRUE",
       lotteryDaysTillExpiry: process.env.LOTTERY_DAYS_TILL_EXPIRY,
     },
     i18n: {
