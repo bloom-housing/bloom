@@ -2146,6 +2146,22 @@ export class ScriptRunnerService {
     })
   }
   /**
+   * A script that adds lottery translations to the db and creates them if it does not exist
+   */
+  lotteryTranslations1(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/lotteryTranslationsCreateIfEmpty"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * A script that opts out existing lottery listings
    */
   optOutExistingLotteries(options: IRequestOptions = {}): Promise<SuccessDTO> {
