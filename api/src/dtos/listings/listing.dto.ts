@@ -413,6 +413,12 @@ class Listing extends AbstractDTO {
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   @ApiPropertyOptional()
+  lotteryLastPublishedAt?: Date;
+
+  @Expose()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  @ApiPropertyOptional()
   lotteryLastRunAt?: Date;
 
   @Expose()

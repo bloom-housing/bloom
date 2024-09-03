@@ -383,6 +383,7 @@ export class ApplicationService {
             id: true,
             name: true,
             status: true,
+            lotteryLastPublishedAt: true,
             lotteryStatus: true,
             applicationDueDate: true,
             listingEvents: {
@@ -409,7 +410,6 @@ export class ApplicationService {
     );
 
     //filter for display applications and status counts
-    let filteredApplications = [];
     let displayApplications = [];
     const total = rawApps.length ?? 0;
     let lottery = 0,
@@ -420,57 +420,24 @@ export class ApplicationService {
       if (app.listings.status === ListingsStatusEnum.active) {
         open++;
         if (params.filterType === ApplicationsFilterEnum.open)
-          filteredApplications.push(app);
+          displayApplications.push(app);
       } else if (
         app.listings?.lotteryStatus === LotteryStatusEnum.publishedToPublic
       ) {
         lottery++;
         lotteryListingIds.push(app.listings.id);
         if (params.filterType === ApplicationsFilterEnum.lottery) {
-          filteredApplications.push(app);
+          displayApplications.push(app);
         }
       } else {
         closed++;
         if (params.filterType === ApplicationsFilterEnum.closed)
-          filteredApplications.push(app);
+          displayApplications.push(app);
       }
     });
 
     if (params.filterType === ApplicationsFilterEnum.all)
-      filteredApplications = rawApps;
-    // get lottery published date from activity log if needed
-    if (
-      [ApplicationsFilterEnum.lottery, ApplicationsFilterEnum.all].includes(
-        params.filterType,
-      )
-    ) {
-      const lotteryActivity = await this.prisma.activityLog.findMany({
-        select: {
-          metadata: true,
-          updatedAt: true,
-          recordId: true,
-        },
-        where: {
-          module: 'lottery',
-          recordId: { in: lotteryListingIds },
-        },
-        orderBy: {
-          updatedAt: OrderByEnum.ASC,
-        },
-      });
-
-      const activityLogHelper = {};
-      lotteryActivity.forEach((log) => {
-        const logString = JSON.stringify(log.metadata);
-        if (logString.includes(LotteryStatusEnum.publishedToPublic)) {
-          activityLogHelper[log.recordId] = log.updatedAt;
-        }
-      });
-      displayApplications = filteredApplications.map((app) => {
-        app['lotteryPublishDate'] = activityLogHelper[app.listings.id];
-        return app;
-      });
-    } else displayApplications = filteredApplications;
+      displayApplications = rawApps;
 
     return mapTo(PublicAppsViewResponse, {
       displayApplications,

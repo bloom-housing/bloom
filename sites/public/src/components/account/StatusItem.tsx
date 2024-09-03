@@ -30,29 +30,24 @@ interface StatusItemProps {
 }
 
 const StatusItem = (props: StatusItemProps) => {
-  //set custom visuals based on listing/lottery status
+  //set custom visuals and data based on listing/lottery status
   let tagText = ""
   let tagVariant: "primary" | "secondary" | "success"
-
   let deadlineText = ""
   let dueDate = ""
-
   if (props.lotteryResults) {
     tagText = t("account.lotteryRun")
     tagVariant = "success"
-
     deadlineText = t("account.lotteryPosted")
     dueDate = props.lotteryPublishedDate
   } else if (props.listingStatus === ListingsStatusEnum.active) {
     tagText = t("account.openApplications")
     tagVariant = "primary"
-
     deadlineText = t("account.applicationsClose")
     dueDate = props.applicationDueDate
   } else {
     tagText = t("account.closedApplications")
     tagVariant = "secondary"
-
     if (props.lotteryStartDate) {
       deadlineText = t("account.lotteryDate")
       dueDate = props.lotteryStartDate

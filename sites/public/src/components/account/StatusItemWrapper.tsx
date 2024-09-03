@@ -9,7 +9,6 @@ import {
 
 export interface AppWithListing extends Application {
   listings: Listing
-  lotteryPublishDate: Date
 }
 interface StatusItemWrapperProps {
   application: AppWithListing
@@ -17,8 +16,8 @@ interface StatusItemWrapperProps {
 
 const StatusItemWrapper = (props: StatusItemWrapperProps) => {
   const applicationDueDate = props.application?.listings?.applicationDueDate
-  const lotteryStartDate = props.application?.listings.listingEvents[0]?.startDate
-  const lotteryPublishDate = props.application?.lotteryPublishDate
+  const lotteryStartDate = props.application?.listings?.listingEvents[0]?.startDate
+  const lotteryPublishDate = props.application?.listings?.lotteryLastPublishedAt
   return (
     <StatusItem
       applicationDueDate={applicationDueDate && dayjs(applicationDueDate).format("MMMM D, YYYY")}
