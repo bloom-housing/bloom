@@ -35,6 +35,7 @@ import { LotteryStatusEnum } from '@prisma/client';
 import { PermissionAction } from '../../src/decorators/permission-action.decorator';
 import { permissionActions } from '../../src/enums/permissions/permission-actions-enum';
 import { AdminOrJurisdictionalAdminGuard } from '../../src/guards/admin-or-jurisdiction-admin.guard';
+import { PublicLotteryResult } from '../../src/dtos/lottery/lottery-public-result.dto';
 
 @Controller('lottery')
 @ApiTags('lottery')
@@ -142,5 +143,24 @@ export class LotteryController {
   @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
   async expireLotteries(): Promise<SuccessDTO> {
     return await this.lotteryService.expireLotteries();
+  }
+
+  @Get(`publicLotteryResults/:id`)
+  @ApiOkResponse({
+    type: PublicLotteryResult,
+    isArray: true,
+  })
+  @ApiOperation({
+    summary: 'Get lottery results by application id',
+    operationId: 'publicLotteryResults',
+  })
+  async publicLotteryResults(
+    @Request() req: ExpressRequest,
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<PublicLotteryResult[]> {
+    return this.lotteryService.publicLotteryResults(
+      id,
+      mapTo(User, req['user']),
+    );
   }
 }
