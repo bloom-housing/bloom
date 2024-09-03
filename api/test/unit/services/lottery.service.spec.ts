@@ -1152,4 +1152,34 @@ describe('Testing lottery service', () => {
       ]);
     });
   });
+
+  describe('Testing publicLotteryResults()', () => {
+    const applicationId = randomUUID();
+    const publicUser = {
+      id: 'public id',
+    } as User;
+
+    it('should query for lottery positions', async () => {
+      prisma.applications.findFirstOrThrow = jest
+        .fn()
+        .mockResolvedValue({ userId: publicUser.id });
+      prisma.applicationLotteryPositions.findMany = jest
+        .fn()
+        .mockResolvedValue([
+          { ordinal: 10, multiselectQuestionId: null },
+          { ordinal: 5, multiselectQuestionId: 'preference id' },
+        ]);
+      await service.publicLotteryResults(applicationId, publicUser);
+
+      expect(prisma.applicationLotteryPositions.findMany).toHaveBeenCalledWith({
+        select: {
+          ordinal: true,
+          multiselectQuestionId: true,
+        },
+        where: {
+          applicationId,
+        },
+      });
+    });
+  });
 });

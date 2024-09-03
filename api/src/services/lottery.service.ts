@@ -47,6 +47,7 @@ import { ListingLotteryStatus } from '../../src/dtos/listings/listing-lottery-st
 import { ListingViews } from '../../src/enums/listings/view-enum';
 import { startCronJob } from '../utilities/cron-job-starter';
 import { EmailService } from './email.service';
+import { PublicLotteryResult } from '../../src/dtos/lottery/lottery-public-result.dto';
 
 view.csv = {
   ...view.details,
@@ -1103,5 +1104,48 @@ export class LotteryService {
     return {
       success: true,
     };
+  }
+
+  /*
+   * @param id - application id
+   * @returns a public lottery results object
+   */
+  public async publicLotteryResults(
+    applicationId: string,
+    user: User,
+  ): Promise<PublicLotteryResult[]> {
+    if (!user) {
+      throw new ForbiddenException();
+    }
+
+    const applicationUserId = await this.prisma.applications.findFirstOrThrow({
+      select: {
+        userId: true,
+      },
+      where: {
+        id: applicationId,
+      },
+    });
+
+    await this.permissionService.canOrThrow(
+      user,
+      'application',
+      permissionActions.read,
+      {
+        userId: applicationUserId.userId,
+      },
+    );
+
+    const results = await this.prisma.applicationLotteryPositions.findMany({
+      select: {
+        ordinal: true,
+        multiselectQuestionId: true,
+      },
+      where: {
+        applicationId,
+      },
+    });
+
+    return results;
   }
 }

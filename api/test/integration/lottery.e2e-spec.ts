@@ -1127,4 +1127,49 @@ describe('Lottery Controller Tests', () => {
       );
     });
   });
+  describe('publicLotteryResults', () => {
+    it('should return a raw rank', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      const listing1 = await listingFactory(jurisdiction.id, prisma, {
+        status: ListingsStatusEnum.closed,
+      });
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+
+      const appA = await applicationFactory({
+        listingId: listing1Created.id,
+      });
+
+      const appACreated = await prisma.applications.create({
+        data: appA,
+        include: {
+          applicant: true,
+        },
+      });
+
+      await lotteryService.lotteryGenerate(
+        {
+          user: {
+            id: randomUUID(),
+            userRoles: {
+              isAdmin: true,
+            },
+          },
+        } as unknown as ExpressRequest,
+        {} as Response,
+        { id: listing1Created.id },
+      );
+
+      const res = await request(app.getHttpServer())
+        .get(`/lottery/publicLotteryResults/${appACreated.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+
+      expect(res.body).toEqual([{ ordinal: 1, multiselectQuestionId: null }]);
+    });
+  });
 });
