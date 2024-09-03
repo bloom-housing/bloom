@@ -41,6 +41,8 @@ declare namespace Cypress {
       fieldsToClick: fieldObj[],
       fieldsToSkip: string[]
     ): Chainable
+    addMinimalListing(listingName: string, isLottery: boolean, isApproval: boolean): Chainable
+    addMinimalApplication(listingName: string): Chainable
   }
 }
 /* eslint-enable @typescript-eslint/no-unused-vars */
