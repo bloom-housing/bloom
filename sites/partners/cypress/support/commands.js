@@ -392,13 +392,15 @@ Cypress.Commands.add("verifyTerms", (application) => {
   cy.getByTestId("signatureOnTerms").contains(application["acceptedTerms"])
 })
 
-Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval) => {
+Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, jurisdiction) => {
   // Create and publish minimal lottery listing
   cy.getByID("addListingButton").contains("Add Listing").click()
   cy.contains("New Listing")
   cy.fixture("minimalListing").then((listing) => {
-    cy.getByID("jurisdictions.id").select("Bloomington")
-    cy.getByID("jurisdictions.id-error").should("have.length", 0)
+    if (jurisdiction) {
+      cy.getByID("jurisdictions.id").select("Bloomington")
+      cy.getByID("jurisdictions.id-error").should("have.length", 0)
+    }
     cy.getByID("name").type(listingName)
     cy.getByID("developer").type(listing["developer"])
     cy.getByID("add-photos-button").contains("Add Photo").click()

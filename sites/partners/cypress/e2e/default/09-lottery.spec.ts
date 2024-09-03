@@ -11,7 +11,7 @@ describe("Lottery Tests", () => {
     const uniqueListingName = Date.now().toString()
 
     cy.visit("/")
-    cy.addMinimalListing(uniqueListingName, true, false)
+    cy.addMinimalListing(uniqueListingName, true, false, true)
     cy.addMinimalApplication(uniqueListingName)
 
     // Close the listing and view lottery tab
@@ -43,6 +43,7 @@ describe("Lottery Tests", () => {
     // Add partner to this listing
     cy.visit("/")
     cy.getByTestId("Users-1").click()
+    cy.contains("Users")
     cy.getByTestId("ag-search-input").type("partner-user@example.com")
     cy.getByID("user-link-partner@example.com").first().click()
     cy.getByTestId("listings-all-Bloomington").check()

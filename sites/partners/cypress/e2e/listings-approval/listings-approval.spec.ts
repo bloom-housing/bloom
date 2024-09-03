@@ -6,7 +6,7 @@ describe("Listings approval feature", () => {
     cy.login("jurisdictionalAdminUser")
     cy.visit("/")
 
-    cy.addMinimalListing(uniqueListingName, false, true)
+    cy.addMinimalListing(uniqueListingName, false, true, false)
     cy.getByID("listing-status-pending-review").should("be.visible")
     cy.signOut()
 

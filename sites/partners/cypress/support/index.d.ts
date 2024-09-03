@@ -41,7 +41,12 @@ declare namespace Cypress {
       fieldsToClick: fieldObj[],
       fieldsToSkip: string[]
     ): Chainable
-    addMinimalListing(listingName: string, isLottery: boolean, isApproval: boolean): Chainable
+    addMinimalListing(
+      listingName: string,
+      isLottery: boolean,
+      isApproval: boolean,
+      jurisdiction: boolean
+    ): Chainable
     addMinimalApplication(listingName: string): Chainable
   }
 }
