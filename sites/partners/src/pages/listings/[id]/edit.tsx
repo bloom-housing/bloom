@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import Head from "next/head"
 import axios from "axios"
 import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
@@ -17,6 +17,7 @@ const EditListing = (props: { listing: Listing }) => {
   const metaImage = "" // TODO: replace with hero image
 
   const { listing } = props
+  const [listingName, setListingName] = useState(listing?.name)
 
   if (!listing) return false
 
@@ -38,7 +39,7 @@ const EditListing = (props: { listing: Listing }) => {
             title={
               <>
                 <p className="font-sans font-semibold uppercase text-2xl">
-                  {t("t.edit")}: {listing.name}
+                  {t("t.edit")}: {listingName}
                 </p>
 
                 <p className="font-sans text-base mt-1">{listing.id}</p>
@@ -47,7 +48,7 @@ const EditListing = (props: { listing: Listing }) => {
             breadcrumbs={
               <Breadcrumbs>
                 <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
-                <BreadcrumbLink href={`/listings/${listing.id}`}>{listing.name}</BreadcrumbLink>
+                <BreadcrumbLink href={`/listings/${listing.id}`}>{listingName}</BreadcrumbLink>
                 <BreadcrumbLink href={`/listings/${listing.id}/edit`} current>
                   {t("t.edit")}
                 </BreadcrumbLink>
@@ -55,7 +56,11 @@ const EditListing = (props: { listing: Listing }) => {
             }
           />
 
-          <PaperListingForm listing={listing as FormListing} editMode />
+          <PaperListingForm
+            listing={listing as FormListing}
+            editMode
+            setListingName={setListingName}
+          />
         </Layout>
       </ListingGuard>
     </ListingContext.Provider>

@@ -47,7 +47,7 @@ describe("Listings approval feature", () => {
     cy.login("user")
     searchAndOpenListing(cy, uniqueListingNameEdited)
     cy.getByID("listingEditButton").click()
-    cy.getByID("saveAndExitButton").should("be.visible")
+    cy.getByID("saveAndContinueButton").should("be.visible")
     cy.getByID("listing-status-pending-review").should("be.visible")
     cy.getByID("approveAndPublishButton").click()
     cy.getByID("listing-status-active").should("be.visible")

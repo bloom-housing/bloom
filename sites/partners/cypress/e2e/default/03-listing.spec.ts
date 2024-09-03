@@ -7,8 +7,8 @@ describe("Listing Management Tests", () => {
     cy.signOut()
   })
 
-  // Test to check that the appropriate error messages happen on submit
-  it("error messaging", () => {
+  it("error messaging & save dialogs", () => {
+    // Test to check that the appropriate error messages happen on submit
     cy.visit("/")
     cy.get("a").contains("Add Listing").click()
     cy.contains("New Listing")
@@ -48,6 +48,26 @@ describe("Listing Management Tests", () => {
     cy.getByID("leasingAgentPhone-error").contains("This field is required")
     cy.getByID("digitalApplicationChoice-error").contains("This field is required")
     cy.getByID("paperApplicationChoice-error").contains("This field is required")
+    // Verify the behavior of Exit discard & confirm
+    cy.contains("Listing Details").click()
+    cy.getByID("name").clear()
+    cy.getByID("name").type("Test - error messaging DISCARD")
+    cy.getByID("listingsExitButton").click()
+    cy.getByID("listing-save-before-exit-dialog-content").contains(
+      "Do you want to save your changes before you exit?"
+    )
+    cy.getByID("saveBeforeExitDiscard").click()
+    cy.contains("Test - error messaging")
+    cy.getByID("listingEditButton").contains("Edit").click()
+    cy.getByID("name").clear()
+    cy.getByID("name").type("Test - error messaging DISCARD")
+    cy.getByID("listingsExitButton").click()
+    cy.getByID("saveBeforeExitConfirm").click()
+    cy.contains("Test - error messaging DISCARD")
+    // Test save button
+    cy.getByID("listingEditButton").contains("Edit").click()
+    cy.getByID("saveAndContinueButton").contains("Save").click()
+    cy.getByID("name").should("have.value", "Test - error messaging DISCARD")
   })
 
   it("full listing publish", () => {
@@ -376,7 +396,7 @@ describe("Listing Management Tests", () => {
       .clear()
       .clear()
       .type(listing["editedName"])
-    cy.getByID("saveAndExitButton").contains("Save & Exit").click()
+    cy.getByID("saveAndContinueButton").contains("Save").click()
     cy.getByID("saveAlreadyLiveListingButtonConfirm").contains("Save").click()
     cy.getByTestId("page-header").should("have.text", listing["editedName"])
   }
