@@ -56,7 +56,7 @@ module.exports = withBundleAnalyzer(
       featureListingsApproval: process.env.FEATURE_LISTINGS_APPROVAL,
       maintenanceWindow: process.env.MAINTENANCE_WINDOW,
       reCaptchaKey: process.env.RECAPTCHA_KEY,
-      showLottery: process.env.SHOW_LOTTERY,
+      showLottery: process.env.SHOW_LOTTERY === "TRUE",
       lotteryDaysTillExpiry: process.env.LOTTERY_DAYS_TILL_EXPIRY,
     },
     i18n: {

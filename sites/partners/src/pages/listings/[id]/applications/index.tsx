@@ -246,7 +246,7 @@ const ApplicationsList = () => {
                           <Button
                             onClick={() => {
                               if (
-                                process.env.showLottery === "TRUE" &&
+                                process.env.showLottery &&
                                 (listingDto.lotteryStatus === LotteryStatusEnum.ran ||
                                   listingDto.lotteryStatus ===
                                     LotteryStatusEnum.releasedToPartners ||
