@@ -3,6 +3,7 @@ import { Logger } from '@nestjs/common';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import {
   MultiselectQuestionsApplicationSectionEnum,
+  LanguagesEnum,
   PrismaClient,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
@@ -235,6 +236,53 @@ describe('Testing script runner service', () => {
         scriptName,
       },
     });
+  });
+
+  it('should add lottery translations and create if empty', async () => {
+    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+    prisma.translations.findFirst = jest.fn().mockResolvedValue(undefined);
+    prisma.translations.update = jest.fn().mockResolvedValue(null);
+    prisma.translations.create = jest.fn().mockReturnValue({
+      language: LanguagesEnum.en,
+      translations: {},
+      jurisdictions: undefined,
+    });
+
+    const id = randomUUID();
+    const scriptName = 'add lottery translations create if empty';
+
+    const res = await service.addLotteryTranslationsCreateIfEmpty({
+      user: {
+        id,
+      } as unknown as User,
+    } as unknown as ExpressRequest);
+
+    expect(res.success).toBe(true);
+
+    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
+      where: {
+        scriptName,
+      },
+    });
+    expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
+      data: {
+        scriptName,
+        triggeringUser: id,
+      },
+    });
+    expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
+      data: {
+        didScriptRun: true,
+        triggeringUser: id,
+      },
+      where: {
+        scriptName,
+      },
+    });
+
+    expect(prisma.translations.create).toHaveBeenCalled();
   });
 
   describe('transferJurisdictionListingData', () => {
