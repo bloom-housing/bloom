@@ -36,7 +36,6 @@ import { MostRecentApplicationQueryParams } from '../dtos/applications/most-rece
 import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
 import { ApplicationsFilterEnum } from '../enums/applications/filter-enum';
 import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-response.dto';
-import { OrderByEnum } from '../enums/shared/order-by-enum';
 
 export const view: Partial<
   Record<ApplicationViews, Prisma.ApplicationsInclude>

@@ -8,7 +8,6 @@ import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/back
 interface StatusItemProps {
   applicationDueDate?: string
   applicationURL: string
-  applicationUpdatedAt: string
   confirmationNumber?: string
   listingName: string
   listingURL: string

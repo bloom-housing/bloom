@@ -22,7 +22,6 @@ const StatusItemWrapper = (props: StatusItemWrapperProps) => {
     <StatusItem
       applicationDueDate={applicationDueDate && dayjs(applicationDueDate).format("MMMM D, YYYY")}
       applicationURL={`/account/application/${props.application?.id}`}
-      applicationUpdatedAt={dayjs(props.application?.updatedAt).format("MMMM D, YYYY")}
       confirmationNumber={props.application?.confirmationCode || props.application?.id}
       listingName={props.application?.listings?.name}
       listingURL={`/listing/${props.application?.listings?.id}`}
