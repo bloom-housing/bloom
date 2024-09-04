@@ -117,6 +117,16 @@ export const stagingSeed = async (
       acceptedTerms: true,
     }),
   });
+  // create a partner
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isPartner: true },
+      email: 'partner@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: true,
+    }),
+  });
   await prismaClient.userAccounts.create({
     data: await userFactory({
       roles: { isAdmin: true },

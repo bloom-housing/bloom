@@ -87,6 +87,7 @@ const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions 
                       onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
                         updateAllCheckboxes(e, key),
                     }}
+                    dataTestId={`listings-all-${jurisdictionLabel}`}
                   />
 
                   <FieldGroup

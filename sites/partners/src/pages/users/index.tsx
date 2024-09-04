@@ -53,7 +53,7 @@ const Users = () => {
           const user = params.data
           return (
             <button
-              id={user.email}
+              id={`user-link-${user.email}`}
               className="text-blue-700 underline"
               onClick={() =>
                 profile?.userRoles?.isAdmin || profile.id == user.id

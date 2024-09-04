@@ -205,6 +205,7 @@ const RankingsAndResults = ({ listing, disableDueDates, isAdmin }: RankingsAndRe
                             : null,
                         }
                   }
+                  dataTestId={"lottery-start-date"}
                 />
               </Grid.Cell>
               <Grid.Cell>
@@ -235,6 +236,7 @@ const RankingsAndResults = ({ listing, disableDueDates, isAdmin }: RankingsAndRe
                           period: new Date(lotteryEvent?.startTime).getHours() >= 12 ? "pm" : "am",
                         }
                   }
+                  dataTestId={"lottery-start-time"}
                 />
               </Grid.Cell>
               <Grid.Cell>
@@ -265,6 +267,7 @@ const RankingsAndResults = ({ listing, disableDueDates, isAdmin }: RankingsAndRe
                           period: new Date(lotteryEvent?.endTime).getHours() >= 12 ? "pm" : "am",
                         }
                   }
+                  dataTestId={"lottery-end-time"}
                 />
               </Grid.Cell>
             </Grid.Row>

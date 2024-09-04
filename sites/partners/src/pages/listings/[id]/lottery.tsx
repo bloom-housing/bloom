@@ -140,7 +140,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
         <Icon size="xl">
           <Download />
         </Icon>
-        <Heading priority={2} size={"2xl"}>
+        <Heading priority={2} size={"2xl"} id={"lottery-heading"}>
           {t("listings.lottery.export")}
         </Heading>
         <div className={styles["card-description"]}>
@@ -186,6 +186,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                   setRunModal(true)
                 }}
                 disabled={loading || exportLoading}
+                id={"lottery-run-button"}
               >
                 {t("listings.lottery.runLottery")}
               </Button>
@@ -222,6 +223,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                 onClick={() => {
                   setPublishModal(true)
                 }}
+                id={"lottery-publish-button"}
               >
                 {t("listings.actions.publish")}
               </Button>
@@ -285,6 +287,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                 className={styles["action"]}
                 onClick={() => setReRunModal(true)}
                 variant={"primary-outlined"}
+                id={"lottery-rerun-button"}
               >
                 {t("listings.lottery.reRun")}
               </Button>
@@ -300,6 +303,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                   }
                 }}
                 variant={"primary-outlined"}
+                id={"lottery-release-button"}
               >
                 {t("listings.lottery.release")}
               </Button>
@@ -310,6 +314,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                 className={styles["action"]}
                 onClick={() => setRetractModal(true)}
                 variant={"alert-outlined"}
+                id={"lottery-retract-button"}
               >
                 {t("listings.lottery.retract")}
               </Button>
@@ -446,6 +451,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                 }}
                 size="sm"
                 loadingMessage={loading || exportLoading ? t("t.loading") : undefined}
+                id={"lottery-run-modal-button"}
               >
                 {duplicatesExist
                   ? t("listings.lottery.runLotteryDuplicates")
@@ -513,6 +519,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                 }}
                 size="sm"
                 loadingMessage={loading ? t("t.loading") : null}
+                id={"lottery-rerun-modal-button"}
               >
                 {t("listings.lottery.reRunUnderstand")}
               </Button>
@@ -562,6 +569,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                 }}
                 loadingMessage={loading ? t("t.loading") : null}
                 size="sm"
+                id={"lottery-release-modal-button"}
               >
                 {t("listings.lottery.releaseButton")}
               </Button>
@@ -641,6 +649,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                 }}
                 loadingMessage={loading ? t("t.loading") : null}
                 size="sm"
+                id={"lottery-retract-modal-button"}
               >
                 {t("listings.lottery.retract")}
               </Button>
@@ -797,6 +806,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                 }}
                 loadingMessage={loading ? t("t.loading") : null}
                 size="sm"
+                id={"lottery-publish-modal-button"}
               >
                 {t("listings.lottery.publishLottery")}
               </Button>
