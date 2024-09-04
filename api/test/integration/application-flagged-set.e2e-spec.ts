@@ -1980,20 +1980,10 @@ describe('Application flagged set Controller Tests', () => {
 
     it('should create multiple flag sets with chaining of flags', async () => {
       process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
-      const jurisdiction = await createJurisdiction();
-      await prisma.userAccounts.create({
-        data: await userFactory({
-          roles: { isAdmin: true },
-          email: 'admin@example.com',
-          confirmedAt: new Date(),
-          jurisdictionIds: [jurisdiction],
-          acceptedTerms: true,
-          password: 'abcdef',
-        }),
-      });
-      const listing = await createListing(jurisdiction);
+      const listing = await createListing();
 
-      // Three match with email and a different one has a household member with same name/dob as one in the match
+      // Two flag sets should be created one for just email on app 1 and 5
+      // and the other for a hodgepodge of combinations with app 2,3,4,6,7, and 8
       const app1 = await createComplexApplication('3', 5, listing);
       const app2 = await createComplexApplication('4', 3, listing);
       const app3 = await createComplexApplication('1', 1, listing);
