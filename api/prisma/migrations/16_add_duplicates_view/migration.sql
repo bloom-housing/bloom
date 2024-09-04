@@ -43,7 +43,7 @@ UNION
 
 ALTER TYPE "rule_enum"
 ADD
-    VALUE 'emailAndNameAndDOB';
+    VALUE 'combination';
 
 ALTER TABLE
     application_flagged_set DROP CONSTRAINT IF EXISTS "application_flagged_set_rule_key_key";

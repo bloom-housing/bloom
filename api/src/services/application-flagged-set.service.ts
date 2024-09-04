@@ -656,7 +656,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
             ruleKey: `${emailFlagged.key}-${nameFlagged
               .map((flag) => flag.key)
               .join('-')}`,
-            rule: RuleEnum.emailAndNameAndDOB,
+            rule: RuleEnum.combination,
             applications: uniqueIds,
           };
         }
@@ -665,7 +665,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
       // There are multiple scenarios this can happen
       //  1. An application is deleted from the system
       //  2. An application is edited so either the applications no longer conflict or now is considered
-      //     a match with both types (will be part of emailAndNameAndDOB)
+      //     a match with both types (will be part of combination)
       //  3. A new application is added that partially matches a group so the group key is now different
       for (const flaggedSet of applicationFlaggedSetsInDB) {
         const foundApplicationFlaggedSet = constructedFlaggedSets.find(

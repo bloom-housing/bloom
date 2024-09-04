@@ -1931,7 +1931,7 @@ describe('Application flagged set Controller Tests', () => {
 
       expect(afs.length).toEqual(1);
 
-      expect(afs[0].rule).toEqual(RuleEnum.emailAndNameAndDOB);
+      expect(afs[0].rule).toEqual(RuleEnum.combination);
     });
 
     it('should create a new flagged set if multiple applications flagged', async () => {
@@ -1975,7 +1975,7 @@ describe('Application flagged set Controller Tests', () => {
       expect(afs[0].ruleKey).toEqual(
         `${listing}-email1@email.com-${listing}-firstname1-${listing}-lastname1-1-1-1`,
       );
-      expect(afs[0].rule).toEqual(RuleEnum.emailAndNameAndDOB);
+      expect(afs[0].rule).toEqual(RuleEnum.combination);
     });
 
     it('should create multiple flag sets with chaining of flags', async () => {
@@ -2035,7 +2035,7 @@ describe('Application flagged set Controller Tests', () => {
       expect(afs[0].ruleKey).toEqual(
         `${listing}-email1@email.com-${listing}-firstname3-${listing}-lastname3-3-3-3-${listing}-firstname1-${listing}-lastname1-1-1-1`,
       );
-      expect(afs[0].rule).toEqual(RuleEnum.emailAndNameAndDOB);
+      expect(afs[0].rule).toEqual(RuleEnum.combination);
       expect(afs[1].applications).toHaveLength(2);
       expect(afs[1].applications).toEqual([{ id: app1.id }, { id: app5.id }]);
       expect(afs[1].ruleKey).toEqual(`${listing}-email3@email.com`);

@@ -1021,7 +1021,7 @@ enum YesNoEnum {
 enum RuleEnum {
   nameAndDOB
   email
-  emailAndNameAndDOB
+  combination
 
   @@map("rule_enum")
 }

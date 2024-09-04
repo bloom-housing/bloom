@@ -48,8 +48,8 @@ const ApplicationsList = () => {
       headerName: t("t.rule"),
       field: "rule",
       valueGetter: ({ data }) => {
-        if (data.rule === RuleEnum.emailAndNameAndDOB) {
-          return t("applications.emailNameDob")
+        if (data.rule === RuleEnum.combination) {
+          return t("applications.combination")
         }
         if (data.rule === RuleEnum.email) {
           return t("applications.email")
