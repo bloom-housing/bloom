@@ -28,6 +28,8 @@ executors:
       GOOGLE_API_ID: "secret-key"
       GOOGLE_API_KEY: "secret-key"
       GOOGLE_CLOUD_PROJECT_ID: "secret-key"
+      SHOW_LOTTERY: "TRUE"
+      THROTTLE_LIMIT: 1000
 
   standard-node:
     docker:

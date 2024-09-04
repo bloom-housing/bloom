@@ -412,6 +412,7 @@ const FormUserManage = ({
               onClick={() => onSave()}
               variant="primary"
               loadingMessage={isUpdateUserLoading && t("t.formSubmitted")}
+              id={"save-user"}
             >
               {t("t.save")}
             </Button>
