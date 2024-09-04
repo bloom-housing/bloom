@@ -45,7 +45,6 @@ import { AlternateContactRelationship } from '../../src/enums/applications/alter
 import { HouseholdMemberRelationship } from '../../src/enums/applications/household-member-relationship-enum';
 import { ApplicationsFilterEnum } from '../../src/enums/applications/filter-enum';
 import { PublicAppsViewQueryParams } from '../../src/dtos/applications/public-apps-view-params.dto';
-import { ListingLotteryStatus } from 'src/dtos/listings/listing-lottery-status.dto';
 
 describe('Application Controller Tests', () => {
   let app: INestApplication;

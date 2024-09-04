@@ -4998,9 +4998,6 @@ export interface PublicAppsFiltered {
 
   /**  */
   listings: Listing
-
-  /**  */
-  lotteryPublishDate: Date
 }
 
 export interface PublicAppsCount {

@@ -17,7 +17,7 @@ interface StatusItemWrapperProps {
 const StatusItemWrapper = (props: StatusItemWrapperProps) => {
   const applicationDueDate = props.application?.listings?.applicationDueDate
   const lotteryStartDate = props.application?.listings?.listingEvents[0]?.startDate
-  const lotteryPublishDate = props.application?.listings?.lotteryLastPublishedAt
+  const lotteryLastPublishedAt = props.application?.listings?.lotteryLastPublishedAt
   return (
     <StatusItem
       applicationDueDate={applicationDueDate && dayjs(applicationDueDate).format("MMMM D, YYYY")}
@@ -28,7 +28,9 @@ const StatusItemWrapper = (props: StatusItemWrapperProps) => {
       listingStatus={props.application.listings.status}
       key={props.application?.id}
       lotteryStartDate={lotteryStartDate && dayjs(lotteryStartDate).format("MMMM D, YYYY")}
-      lotteryPublishedDate={lotteryPublishDate && dayjs(lotteryPublishDate).format("MMMM D, YYYY")}
+      lotteryPublishedDate={
+        lotteryLastPublishedAt && dayjs(lotteryLastPublishedAt).format("MMMM D, YYYY")
+      }
       lotteryResults={
         props.application?.listings?.lotteryStatus === LotteryStatusEnum.publishedToPublic
       }

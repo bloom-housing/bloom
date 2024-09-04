@@ -414,7 +414,6 @@ export class ApplicationService {
     let lottery = 0,
       closed = 0,
       open = 0;
-    const lotteryListingIds: string[] = [];
     rawApps.forEach((app) => {
       if (app.listings.status === ListingsStatusEnum.active) {
         open++;
@@ -424,7 +423,6 @@ export class ApplicationService {
         app.listings?.lotteryStatus === LotteryStatusEnum.publishedToPublic
       ) {
         lottery++;
-        lotteryListingIds.push(app.listings.id);
         if (params.filterType === ApplicationsFilterEnum.lottery) {
           displayApplications.push(app);
         }

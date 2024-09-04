@@ -21,7 +21,6 @@ interface StatusItemProps {
     edited?: string
     lotteryResults?: string
     seeListing?: string
-    status?: string
     submittedStatus?: string
     viewApplication?: string
     yourNumber?: string
@@ -59,7 +58,6 @@ const StatusItem = (props: StatusItemProps) => {
         <header className={styles["status-item__header"]}>
           <h3 className={styles["status-item__title"]}>{props.listingName}</h3>
           <p className={styles["status-item__status"]}>
-            {props.strings?.status ?? t("application.status")}: {""}
             <Tag variant={tagVariant}>{tagText}</Tag>
           </p>
         </header>
