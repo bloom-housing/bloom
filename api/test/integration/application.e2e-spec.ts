@@ -1628,6 +1628,7 @@ describe('Application Controller Tests', () => {
       expect(res.body.applicationsCount.open).toEqual(1);
 
       expect(res.body.displayApplications.length).toBe(3);
+      expect(res.body.displayApplications[0].id).not.toBeNull();
     });
 
     it('should not retrieve applications nor error when none exist', async () => {
