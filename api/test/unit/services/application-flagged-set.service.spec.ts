@@ -14,6 +14,7 @@ import { View } from '../../../src/enums/application-flagged-sets/view';
 import { Application } from '../../../src/dtos/applications/application.dto';
 import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
 import { User } from '../../../src/dtos/users/user.dto';
+import { randomUUID } from 'node:crypto';
 
 describe('Testing application flagged set service', () => {
   let service: ApplicationFlaggedSetService;
@@ -2559,6 +2560,150 @@ describe('Testing application flagged set service', () => {
         },
         data: {
           afsLastRunAt: expect.anything(),
+        },
+      });
+    });
+  });
+
+  describe('Test processDuplicates', () => {
+    it('should process only one listing when listingId is passed in', async () => {
+      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
+      const listingID = randomUUID();
+      prisma.listings.findMany = jest.fn().mockResolvedValue([]);
+      await service.processDuplicates(listingID);
+      expect(prisma.listings.findMany).toBeCalledWith({
+        select: {
+          afsLastRunAt: true,
+          id: true,
+          name: true,
+        },
+        where: {
+          AND: [
+            {
+              OR: [
+                {
+                  closedAt: {
+                    gte: new Date('2024-06-28T08:00:00.000Z'),
+                  },
+                },
+                {
+                  closedAt: null,
+                },
+              ],
+            },
+            {
+              OR: [
+                {
+                  afsLastRunAt: {
+                    equals: null,
+                  },
+                },
+                {
+                  afsLastRunAt: {
+                    lte: expect.objectContaining({
+                      isEnum: false,
+                      isList: false,
+                      modelName: 'Listings',
+                      name: 'lastApplicationUpdateAt',
+                      typeName: 'DateTime',
+                    }),
+                  },
+                },
+              ],
+            },
+          ],
+          id: listingID,
+          lastApplicationUpdateAt: {
+            not: null,
+          },
+        },
+      });
+    });
+
+    it('should process all eligible listings when listingId is not passed in', async () => {
+      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
+      prisma.listings.findMany = jest.fn().mockResolvedValue([]);
+      await service.processDuplicates();
+      expect(prisma.listings.findMany).toBeCalledWith({
+        select: {
+          afsLastRunAt: true,
+          id: true,
+          name: true,
+        },
+        where: {
+          AND: [
+            {
+              OR: [
+                {
+                  closedAt: {
+                    gte: new Date('2024-06-28T08:00:00.000Z'),
+                  },
+                },
+                {
+                  closedAt: null,
+                },
+              ],
+            },
+            {
+              OR: [
+                {
+                  afsLastRunAt: {
+                    equals: null,
+                  },
+                },
+                {
+                  afsLastRunAt: {
+                    lte: expect.objectContaining({
+                      isEnum: false,
+                      isList: false,
+                      modelName: 'Listings',
+                      name: 'lastApplicationUpdateAt',
+                      typeName: 'DateTime',
+                    }),
+                  },
+                },
+              ],
+            },
+          ],
+          id: undefined,
+          lastApplicationUpdateAt: {
+            not: null,
+          },
+        },
+      });
+    });
+
+    it('should process all eligible listings last run excluded when forced is passed in', async () => {
+      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
+      const listingID = randomUUID();
+      prisma.listings.findMany = jest.fn().mockResolvedValue([]);
+      await service.processDuplicates(listingID, true);
+      expect(prisma.listings.findMany).toBeCalledWith({
+        select: {
+          afsLastRunAt: true,
+          id: true,
+          name: true,
+        },
+        where: {
+          AND: [
+            {
+              OR: [
+                {
+                  closedAt: {
+                    gte: new Date('2024-06-28T08:00:00.000Z'),
+                  },
+                },
+                {
+                  closedAt: null,
+                },
+              ],
+            },
+            {},
+          ],
+          id: listingID,
+          lastApplicationUpdateAt: {
+            not: null,
+          },
         },
       });
     });

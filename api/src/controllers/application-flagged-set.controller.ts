@@ -117,6 +117,7 @@ export class ApplicationFlaggedSetController {
   ): Promise<SuccessDTO> {
     return await this.applicationFlaggedSetService.processDuplicates(
       params?.listingId,
+      params?.force,
     );
   }
 

@@ -475,7 +475,16 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
     return true;
   }
 
-  async processDuplicates(listingId?: string): Promise<SuccessDTO> {
+  /**
+   * Run the duplicate process on all listings that match the criteria
+   *
+   * @param listingId optional parameter to run the process on a specific listing
+   * @param forceProcess optional parameter to force the process to run even if listing would not normally run
+   */
+  async processDuplicates(
+    listingId?: string,
+    forceProcess?: boolean,
+  ): Promise<SuccessDTO> {
     this.logger.warn('running the Application flagged sets version 2 cron job');
     await this.markCronJobAsStarted(CRON_JOB_NAME);
     const duplicatesCloseDate =
@@ -507,20 +516,23 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
               { closedAt: null },
             ],
           },
-          {
-            OR: [
-              {
-                afsLastRunAt: {
-                  equals: null,
-                },
-              },
-              {
-                afsLastRunAt: {
-                  lte: this.prisma.listings.fields.lastApplicationUpdateAt,
-                },
-              },
-            ],
-          },
+          // Allow the ability to force process even if application flag set has run more recent than last application update
+          !forceProcess
+            ? {
+                OR: [
+                  {
+                    afsLastRunAt: {
+                      equals: null,
+                    },
+                  },
+                  {
+                    afsLastRunAt: {
+                      lte: this.prisma.listings.fields.lastApplicationUpdateAt,
+                    },
+                  },
+                ],
+              }
+            : {},
         ],
       },
     });
@@ -528,7 +540,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
       `running duplicates check on ${outOfDateListings.length} listings`,
     );
     for (const listing of outOfDateListings) {
-      // find all eflagged keys for this listing that applies to more than one listing
+      // find all flagged keys for this listing that applies to more than one listing
       const flaggedApplicationGrouped: PossibleFlaggedSetQuery[] = await this
         .prisma
         .$queryRaw`select key, array_agg(application_id) as applicationIds, type
@@ -537,35 +549,61 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
         GROUP BY key, type
         HAVING count(application_id) > 1;`;
 
-      // group all of the groups by overlapping applicationIds
-      const reduced = flaggedApplicationGrouped.reduce(
-        (accumulated, flaggedGroup) => {
-          // If this flag set has already been added in a previous iteration we don't need to do it again
-          const foundInAccumulated = accumulated.find((acc) =>
-            acc.find((value) => value.key === flaggedGroup.key),
-          );
-          if (foundInAccumulated) {
-            return accumulated;
-          }
-          const newGroup = [];
-          flaggedGroup.applicationids.forEach((appId) => {
-            flaggedApplicationGrouped.forEach((flaggedAppGroup) => {
-              const foundGroup = flaggedAppGroup.applicationids.find(
-                (id) => id === appId,
-              );
-              if (
-                foundGroup &&
-                !newGroup.find((group) => flaggedAppGroup.key === group.key)
-              ) {
-                newGroup.push(flaggedAppGroup);
+      // Group all of the flagged keys by application id
+      const applicationToGroupList = {};
+      flaggedApplicationGrouped.forEach((group) => {
+        group.applicationids.forEach((id) => {
+          const inGroupList = applicationToGroupList[id] || [];
+          inGroupList.push(group);
+          applicationToGroupList[id] = inGroupList;
+        });
+      });
+
+      let individualMatchingGroup = [];
+      const groupByIntersectingIdsAndRemoveFromList = (
+        value: PossibleFlaggedSetQuery[],
+        key: string,
+      ): PossibleFlaggedSetQuery[] => {
+        individualMatchingGroup.push(...value);
+        delete applicationToGroupList[key];
+        value.forEach((v) => {
+          v.applicationids.forEach((id) => {
+            if (id !== key) {
+              const nextIdValues = applicationToGroupList[id];
+              if (nextIdValues) {
+                return groupByIntersectingIdsAndRemoveFromList(
+                  nextIdValues,
+                  id,
+                );
               }
-            });
+            }
           });
-          accumulated.push(newGroup);
-          return accumulated;
-        },
-        [] as PossibleFlaggedSetQuery[][],
-      );
+        });
+        return individualMatchingGroup;
+      };
+
+      // Loop through the grouped by application list and combine the ones that have overlap
+      // Using a while loop because as it groups it jumps around and only needs to go over each group once
+      const matchingGroups = [];
+      while (Object.keys(applicationToGroupList).length > 0) {
+        individualMatchingGroup = [];
+        const [key, value] = Object.entries(applicationToGroupList)[0];
+        const matchedGroups = groupByIntersectingIdsAndRemoveFromList(
+          value as PossibleFlaggedSetQuery[],
+          key,
+        );
+        // Remove duplicated groups
+        matchedGroups
+          .map((group) => group.key)
+          .filter((e, i, a) => a.indexOf(e) !== i)
+          .forEach((groupKey) => {
+            const foundIndex = matchedGroups.findIndex(
+              (group) => group.key === groupKey,
+            );
+            matchedGroups.splice(foundIndex, 1);
+          });
+        matchingGroups.push(matchedGroups);
+      }
 
       const applicationFlaggedSetsInDB =
         await this.prisma.applicationFlaggedSet.findMany({
@@ -581,10 +619,11 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
           },
         });
 
-      const constructedFlaggedSets = reduced.map((flaggedGroup) => {
+      // These are the flag sets in the style and grouping that goes in the DB
+      const constructedFlaggedSets = matchingGroups.map((flaggedGroup) => {
         if (flaggedGroup.length === 1) {
           return {
-            ruleKey: flaggedGroup[0].key,
+            ruleKey: flaggedGroup[0].key || '',
             rule: flaggedGroup[0].type as RuleEnum,
             applications: flaggedGroup[0].applicationids,
           };
@@ -672,7 +711,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
                     return { id: application };
                   }),
                 },
-                status: FlaggedSetStatusEnum.pending, // TODO: confirm we need to change the status back to pending
+                status: FlaggedSetStatusEnum.pending,
               },
               where: { id: foundApplicationFlaggedSet.id },
             });

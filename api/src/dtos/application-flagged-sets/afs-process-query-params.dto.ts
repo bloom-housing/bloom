@@ -8,4 +8,8 @@ export class AfsProcessQueryParams {
   @ApiPropertyOptional()
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   listingId?: string;
+
+  @Expose()
+  @ApiPropertyOptional()
+  force?: boolean;
 }

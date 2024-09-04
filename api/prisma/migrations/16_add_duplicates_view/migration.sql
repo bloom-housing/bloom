@@ -9,6 +9,7 @@ CREATE VIEW "application_flagged_set_possibilities" AS (
         applications app
     where
         a.id = app.applicant_id
+        and app.deleted_at is null
 )
 UNION
 (
@@ -23,6 +24,7 @@ UNION
     where
         a.id = app.applicant_id
         and a.email_address is not null
+        and app.deleted_at is null
 )
 UNION
 (
@@ -36,6 +38,7 @@ UNION
         household_member hm
     where
         hm.application_id = app.id
+        and app.deleted_at is null
 );
 
 ALTER TYPE "rule_enum"

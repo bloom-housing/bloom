@@ -526,7 +526,24 @@ export const stagingSeed = async (
           },
         }),
         await applicationFactory({
-          applicant: { emailAddress: 'user1@example.com' },
+          applicant: {
+            emailAddress: 'user1@example.com',
+            firstName: 'first2',
+            lastName: 'last2',
+            birthDay: 2,
+            birthMonth: 2,
+            birthYear: 1992,
+          },
+        }),
+        await applicationFactory({
+          applicant: {
+            emailAddress: 'user5@example.com',
+            firstName: 'first2',
+            lastName: 'last2',
+            birthDay: 2,
+            birthMonth: 2,
+            birthYear: 1992,
+          },
         }),
         await applicationFactory({
           applicant: {

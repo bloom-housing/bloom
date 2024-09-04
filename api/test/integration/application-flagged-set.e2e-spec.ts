@@ -40,8 +40,8 @@ describe('Application flagged set Controller Tests', () => {
     await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
     return jurisdiction.id;
   };
-  const createListing = async (): Promise<string> => {
-    const jurisdiction = await createJurisdiction();
+  const createListing = async (jurisdictionId?: string): Promise<string> => {
+    const jurisdiction = jurisdictionId || (await createJurisdiction());
     const listing1 = await listingFactory(jurisdiction, prisma, {
       status: ListingsStatusEnum.closed,
       afsLastRunSetInPast: true,
@@ -1976,6 +1976,69 @@ describe('Application flagged set Controller Tests', () => {
         `${listing}-email1@email.com-${listing}-firstname1-${listing}-lastname1-1-1-1`,
       );
       expect(afs[0].rule).toEqual(RuleEnum.emailAndNameAndDOB);
+    });
+
+    it('should create multiple flag sets with chaining of flags', async () => {
+      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
+      const jurisdiction = await createJurisdiction();
+      await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: { isAdmin: true },
+          email: 'admin@example.com',
+          confirmedAt: new Date(),
+          jurisdictionIds: [jurisdiction],
+          acceptedTerms: true,
+          password: 'abcdef',
+        }),
+      });
+      const listing = await createListing(jurisdiction);
+
+      // Three match with email and a different one has a household member with same name/dob as one in the match
+      const app1 = await createComplexApplication('3', 5, listing);
+      const app2 = await createComplexApplication('4', 3, listing);
+      const app3 = await createComplexApplication('1', 1, listing);
+      const app4 = await createComplexApplication('2', 1, listing);
+      const app5 = await createComplexApplication('3', 6, listing);
+      const app6 = await createComplexApplication('2', 4, listing);
+      const app7 = await createComplexApplication('1', 2, listing);
+      const app8 = await createComplexApplication('1', 3, listing);
+      await createComplexApplication('7', 7, listing);
+      await request(app.getHttpServer())
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
+        .set('Cookie', adminAccessToken)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(200);
+
+      const afs = await prisma.applicationFlaggedSet.findMany({
+        where: {
+          listingId: listing,
+        },
+        include: {
+          applications: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      });
+
+      expect(afs.length).toEqual(2);
+      expect(afs[0].applications).toHaveLength(6);
+      expect(afs[0].applications).toEqual([
+        { id: app2.id },
+        { id: app3.id },
+        { id: app4.id },
+        { id: app6.id },
+        { id: app7.id },
+        { id: app8.id },
+      ]);
+      expect(afs[0].ruleKey).toEqual(
+        `${listing}-email1@email.com-${listing}-firstname3-${listing}-lastname3-3-3-3-${listing}-firstname1-${listing}-lastname1-1-1-1`,
+      );
+      expect(afs[0].rule).toEqual(RuleEnum.emailAndNameAndDOB);
+      expect(afs[1].applications).toHaveLength(2);
+      expect(afs[1].applications).toEqual([{ id: app1.id }, { id: app5.id }]);
+      expect(afs[1].ruleKey).toEqual(`${listing}-email3@email.com`);
     });
 
     it('should create a new flagged set if applications match on nameAndDOB case insensitive', async () => {
