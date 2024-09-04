@@ -6,6 +6,9 @@ import {
   ApplicationReviewStatusEnum,
   YesNoEnum,
   LanguagesEnum,
+  ListingEventsTypeEnum,
+  ListingsStatusEnum,
+  LotteryStatusEnum,
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import dayjs from 'dayjs';
@@ -28,6 +31,8 @@ import { permissionActions } from '../../../src/enums/permissions/permission-act
 import { GeocodingService } from '../../../src/services/geocoding.service';
 import { AlternateContactRelationship } from '../../../src/enums/applications/alternate-contact-relationship-enum';
 import { HouseholdMemberRelationship } from '../../../src/enums/applications/household-member-relationship-enum';
+import { PublicAppsViewQueryParams } from '../../../src/dtos/applications/public-apps-view-params.dto';
+import { ApplicationsFilterEnum } from '../../../src/enums/applications/filter-enum';
 
 export const mockApplication = (options: {
   date: Date;
@@ -764,6 +769,108 @@ describe('Testing application service', () => {
         applicationFlaggedSet: {
           some: {},
         },
+      },
+    });
+  });
+
+  it('should get public apps view information when applications are available', async () => {
+    const userId = randomUUID();
+    const requestingUser = {
+      id: userId,
+      firstName: 'requesting fName',
+      lastName: 'requesting lName',
+      email: 'requestingUser@email.com',
+      jurisdictions: [{ id: 'juris id' }],
+    } as unknown as User;
+    const date = new Date();
+    const mockedValues = mockApplicationSet(3, date);
+    const listingStatuses = [
+      { status: ListingsStatusEnum.active },
+      { status: ListingsStatusEnum.closed },
+      {
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: LotteryStatusEnum.publishedToPublic,
+      },
+    ];
+    const mockedValuesWithListing = mockedValues.map((mockedValue, idx) => {
+      return {
+        ...mockedValue,
+        listings: listingStatuses[idx],
+      };
+    });
+    prisma.applications.findMany = jest.fn().mockResolvedValue(
+      mockedValuesWithListing.map((mockValue) => {
+        return {
+          id: mockValue.id,
+          userId: requestingUser.id,
+          confirmationCode: mockValue.confirmationCode,
+          updatedAt: mockValue.updatedAt,
+          listings: {
+            id: randomUUID(),
+            name: 'listing name',
+            status: mockValue.listings.status,
+            lotteryLastPublishedAt: null,
+            lotteryStatus: mockValue.listings.lotteryStatus ?? null,
+            applicationDueDate: null,
+            listingEvents: {
+              startDate: null,
+            },
+          },
+        };
+      }),
+    );
+
+    const params: PublicAppsViewQueryParams = {
+      userId: requestingUser.id,
+      filterType: ApplicationsFilterEnum.all,
+    };
+
+    const res = await service.publicAppsView(params, {
+      user: requestingUser,
+    } as unknown as ExpressRequest);
+
+    expect(res.displayApplications.length).toEqual(3);
+    expect(res.applicationsCount).toEqual({
+      total: 3,
+      open: 1,
+      closed: 1,
+      lottery: 1,
+    });
+
+    expect(prisma.applications.findMany).toHaveBeenCalledWith({
+      select: {
+        id: true,
+        userId: true,
+        confirmationCode: true,
+        updatedAt: true,
+        listings: {
+          select: {
+            id: true,
+            name: true,
+            status: true,
+            lotteryLastPublishedAt: true,
+            lotteryStatus: true,
+            applicationDueDate: true,
+            listingEvents: {
+              select: {
+                startDate: true,
+              },
+              where: { type: ListingEventsTypeEnum.publicLottery },
+            },
+          },
+        },
+      },
+      where: {
+        AND: [
+          {
+            userAccounts: {
+              id: userId,
+            },
+          },
+          {
+            deletedAt: null,
+          },
+        ],
       },
     });
   });
