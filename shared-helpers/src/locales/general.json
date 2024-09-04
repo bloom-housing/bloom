@@ -414,7 +414,7 @@
   "application.timeout.action": "Continue working",
   "application.timeout.afterMessage": "We care about your security. We ended your session due to inactivity. Please start a new application to continue.",
   "application.timeout.text": "To protect your identity, your session will expire in one minute due to inactivity. You will lose any unsaved information if you choose not to respond.",
-  "application.viewApplication": "View Application",
+  "application.viewApplication": "View application",
   "application.yourLotteryNumber": "Your confirmation number is",
   "applications.addApplication": "Add Application",
   "applications.begin.en": "Begin",

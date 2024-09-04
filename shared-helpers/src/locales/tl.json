@@ -423,7 +423,7 @@
   "application.timeout.action": "Mapatuloy na tinatrabaho",
   "application.timeout.afterMessage": "Pinapahalagahan namin ang iyong seguridad. Tinapos namin ang iyong sesyon dahil sa kawalan ng aktibidad. Mangyaring magsimula ng bagong application upang magpatuloy.",
   "application.timeout.text": "Para maprotektahan ang iyong pagkakakilanlan, matatapos ang iyong sesyon sa loob ng isang minuto dahil sa kawalan ng aktibidad. Mawawala sa iyo ang anumang hindi na-save na impormasyon kung pipiliin mong hindi tumugon.",
-  "application.viewApplication": "Tingnan ang Application",
+  "application.viewApplication": "Tingnan ang application",
   "application.yourLotteryNumber": "Ang numero ng kumpirmasyon mo ay",
   "applications.addApplication": "Magdagdag ng Application",
   "applications.begin.en": "Begin",

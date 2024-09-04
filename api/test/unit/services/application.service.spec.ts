@@ -1960,7 +1960,7 @@ describe('Testing application service', () => {
       jurisdictions: [{ id: 'juris id' }],
     } as unknown as User;
     const date = new Date();
-    const mockedValue = mockApplication(3, date);
+    const mockedValue = mockApplication({ position: 3, date });
     prisma.applications.findUnique = jest.fn().mockResolvedValue(mockedValue);
     prisma.applications.findFirst = jest
       .fn()
