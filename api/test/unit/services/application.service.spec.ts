@@ -1006,6 +1006,33 @@ describe('Testing application service', () => {
     );
   });
 
+  it('should not error when publicAppsView() is called when applications are unavailable', async () => {
+    prisma.applications.findMany = jest
+      .fn()
+      .mockResolvedValue(getPublicAppsFindManyMock([]));
+
+    const params: PublicAppsViewQueryParams = {
+      userId: requestingUser.id,
+      filterType: ApplicationsFilterEnum.all,
+    };
+
+    const res = await service.publicAppsView(params, {
+      user: requestingUser,
+    } as unknown as ExpressRequest);
+
+    expect(res.displayApplications.length).toEqual(0);
+    expect(res.applicationsCount).toEqual({
+      total: 0,
+      open: 0,
+      closed: 0,
+      lottery: 0,
+    });
+
+    expect(prisma.applications.findMany).toHaveBeenCalledWith(
+      publicAppsFindManyCalledWith,
+    );
+  });
+
   it('should get an application when findOne() is called and Id exists', async () => {
     const mockedValue = mockApplication({ date: date, position: 3 });
     prisma.applications.findUnique = jest.fn().mockResolvedValue(mockedValue);
