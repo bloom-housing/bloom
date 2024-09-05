@@ -93,6 +93,20 @@ const ListingFormActions = ({
       </Grid.Cell>
     )
 
+    const copyButton = (
+      <Grid.Cell key="btn-copy">
+        <Button
+          variant="primary-outlined"
+          className="w-full"
+          onClick={() => {
+            showSaveBeforeExitDialog()
+          }}
+        >
+          {t("listings.actions.copy")}
+        </Button>
+      </Grid.Cell>
+    )
+
     const editFromDetailButton = (
       <Grid.Cell key="btn-edit">
         <Button
