@@ -58,8 +58,9 @@ const ApplicationSummary = () => {
         listing?.status !== ListingsStatusEnum.active ||
         (listing?.applicationDueDate && currentDate > dayjs(listing.applicationDueDate))
       ) {
-        // addToast(t("listings.applicationsClosedRedirect"), { variant: "alert" })
-        void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
+        router
+          .push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
+          .then(() => addToast(t("listings.applicationsClosedRedirect"), { variant: "alert" }))
       }
     }
   }, [listing, router, addToast])
