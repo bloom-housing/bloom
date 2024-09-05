@@ -19,14 +19,14 @@ describe("<StatusItem>", () => {
       />
     )
 
-    expect(getByText("Listing Name")).not.toBeNull()
-    expect(getByText(t("account.openApplications"), { exact: false })).not.toBeNull()
-    expect(getByText(t("account.applicationsClose"), { exact: false })).not.toBeNull()
-    expect(getByText(t("application.yourLotteryNumber"), { exact: false })).not.toBeNull()
+    expect(getByText("Listing Name")).toBeInTheDocument()
+    expect(getByText(t("account.openApplications"))).toBeInTheDocument()
+    expect(getByText(t("account.applicationsClose"))).toBeInTheDocument()
+    expect(getByText(t("application.yourLotteryNumber"), { exact: false })).toBeInTheDocument()
 
-    expect(getByText(t("application.viewApplication"), { exact: false })).not.toBeNull()
-    expect(getByText(t("t.seeListing"), { exact: false })).not.toBeNull()
-    expect(queryByText(t("account.application.lottery.viewResults"), { exact: false })).toBeNull()
+    expect(getByText(t("application.viewApplication"))).toBeInTheDocument()
+    expect(getByText(t("t.seeListing"))).toBeInTheDocument()
+    expect(queryByText(t("account.application.lottery.viewResults"))).not.toBeInTheDocument()
   })
 
   it("renders open application without a confirmation number or due date if not provided", () => {
@@ -40,13 +40,13 @@ describe("<StatusItem>", () => {
       />
     )
 
-    expect(getByText("Listing Name")).not.toBeNull()
-    expect(getByText(t("account.openApplications"), { exact: false })).not.toBeNull()
-    expect(queryByText(t("account.applicationsClose"), { exact: false })).toBeNull()
-    expect(getByText(t("application.yourLotteryNumber"), { exact: false })).not.toBeNull()
+    expect(getByText("Listing Name")).toBeInTheDocument()
+    expect(getByText(t("account.openApplications"))).toBeInTheDocument()
+    expect(queryByText(t("account.applicationsClose"))).not.toBeInTheDocument()
+    expect(getByText(t("application.yourLotteryNumber"), { exact: false })).toBeInTheDocument()
 
-    expect(getByText(t("application.viewApplication"), { exact: false })).not.toBeNull()
-    expect(getByText(t("t.seeListing"), { exact: false })).not.toBeNull()
+    expect(getByText(t("application.viewApplication"))).toBeInTheDocument()
+    expect(getByText(t("t.seeListing"))).toBeInTheDocument()
     expect(queryByText(t("account.application.lottery.viewResults"))).toBeFalsy()
   })
 
@@ -62,14 +62,14 @@ describe("<StatusItem>", () => {
       />
     )
 
-    expect(getByText("Listing Name")).not.toBeNull()
-    expect(getByText(t("account.closedApplications"), { exact: false })).not.toBeNull()
-    expect(getByText(t("account.lotteryDate"), { exact: false })).not.toBeNull()
-    expect(getByText(t("application.yourLotteryNumber"), { exact: false })).not.toBeNull()
+    expect(getByText("Listing Name")).toBeInTheDocument()
+    expect(getByText(t("account.closedApplications"))).toBeInTheDocument()
+    expect(getByText(t("account.lotteryDate"))).toBeInTheDocument()
+    expect(getByText(t("application.yourLotteryNumber"), { exact: false })).toBeInTheDocument()
 
-    expect(getByText(t("application.viewApplication"), { exact: false })).not.toBeNull()
-    expect(getByText(t("t.seeListing"), { exact: false })).not.toBeNull()
-    expect(queryByText(t("account.application.lottery.viewResults"), { exact: false })).toBeNull()
+    expect(getByText(t("application.viewApplication"))).toBeInTheDocument()
+    expect(getByText(t("t.seeListing"))).toBeInTheDocument()
+    expect(queryByText(t("account.application.lottery.viewResults"))).not.toBeInTheDocument()
   })
 
   it("renders closed non-lottery application without error", () => {
@@ -83,14 +83,14 @@ describe("<StatusItem>", () => {
       />
     )
 
-    expect(getByText("Listing Name")).not.toBeNull()
-    expect(getByText(t("account.closedApplications"), { exact: false })).not.toBeNull()
-    expect(queryByText(t("account.lotteryDate"), { exact: false })).toBeNull()
-    expect(getByText(t("application.yourLotteryNumber"), { exact: false })).not.toBeNull()
+    expect(getByText("Listing Name")).toBeInTheDocument()
+    expect(getByText(t("account.closedApplications"))).toBeInTheDocument()
+    expect(queryByText(t("account.lotteryDate"))).not.toBeInTheDocument()
+    expect(getByText(t("application.yourLotteryNumber"), { exact: false })).toBeInTheDocument()
 
-    expect(getByText(t("application.viewApplication"), { exact: false })).not.toBeNull()
-    expect(getByText(t("t.seeListing"), { exact: false })).not.toBeNull()
-    expect(queryByText(t("account.application.lottery.viewResults"), { exact: false })).toBeNull()
+    expect(getByText(t("application.viewApplication"))).toBeInTheDocument()
+    expect(getByText(t("t.seeListing"))).toBeInTheDocument()
+    expect(queryByText(t("account.application.lottery.viewResults"))).not.toBeInTheDocument()
   })
 
   it("renders lottery run application without error", () => {
@@ -106,13 +106,13 @@ describe("<StatusItem>", () => {
       />
     )
 
-    expect(getByText("Listing Name")).not.toBeNull()
-    expect(getByText(t("account.lotteryRun"), { exact: false })).not.toBeNull()
-    expect(getByText(t("account.lotteryPosted"), { exact: false })).not.toBeNull()
-    expect(getByText(t("application.yourLotteryNumber"), { exact: false })).not.toBeNull()
+    expect(getByText("Listing Name")).toBeInTheDocument()
+    expect(getByText(t("account.lotteryRun"))).toBeInTheDocument()
+    expect(getByText(t("account.lotteryPosted"))).toBeInTheDocument()
+    expect(getByText(t("application.yourLotteryNumber"), { exact: false })).toBeInTheDocument()
 
-    expect(getByText(t("account.application.lottery.viewResults"), { exact: false })).not.toBeNull()
-    expect(getByText(t("application.viewApplication"), { exact: false })).not.toBeNull()
-    expect(getByText(t("t.seeListing"), { exact: false })).not.toBeNull()
+    expect(getByText(t("account.application.lottery.viewResults"))).toBeInTheDocument()
+    expect(getByText(t("application.viewApplication"))).toBeInTheDocument()
+    expect(getByText(t("t.seeListing"))).toBeInTheDocument()
   })
 })
