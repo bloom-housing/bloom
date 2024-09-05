@@ -1132,17 +1132,21 @@ export class LotteryService {
       throw new ForbiddenException();
     }
 
-    if (!user.userRoles.isAdmin) {
-      const applicationUserId = await this.prisma.applications.findFirstOrThrow(
-        {
-          select: {
-            userId: true,
-          },
-          where: {
-            id: applicationId,
-          },
+    if (!user.userRoles?.isAdmin) {
+      const applicationUserId = await this.prisma.applications.findFirst({
+        select: {
+          userId: true,
         },
-      );
+        where: {
+          id: applicationId,
+        },
+      });
+
+      if (!applicationUserId) {
+        throw new BadRequestException(
+          `User requesting lottery results did not submit an application to this listing`,
+        );
+      }
 
       await this.permissionService.canOrThrow(
         user,
@@ -1179,13 +1183,18 @@ export class LotteryService {
       throw new ForbiddenException();
     }
 
-    if (!user.userRoles.isAdmin) {
-      await this.prisma.applications.findFirstOrThrow({
+    if (!user.userRoles?.isAdmin) {
+      const application = await this.prisma.applications.findFirst({
         where: {
           listingId,
           userId: user.id,
         },
       });
+      if (!application) {
+        throw new BadRequestException(
+          `User requesting lottery totals did not submit an application to this listing`,
+        );
+      }
     }
 
     const results = await this.prisma.applicationLotteryTotal.findMany({
