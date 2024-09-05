@@ -16,16 +16,21 @@ interface StatusItemWrapperProps {
 
 const StatusItemWrapper = (props: StatusItemWrapperProps) => {
   const applicationDueDate = props.application?.listings?.applicationDueDate
-
+  const lotteryStartDate = props.application?.listings?.listingEvents[0]?.startDate
+  const lotteryLastPublishedAt = props.application?.listings?.lotteryLastPublishedAt
   return (
     <StatusItem
-      applicationDueDate={applicationDueDate && dayjs(applicationDueDate).format("MMMM D, YYYY")}
+      applicationDueDate={applicationDueDate && dayjs(applicationDueDate).format("MMM D, YYYY")}
       applicationURL={`/account/application/${props.application?.id}`}
-      applicationUpdatedAt={dayjs(props.application?.updatedAt).format("MMMM D, YYYY")}
       confirmationNumber={props.application?.confirmationCode || props.application?.id}
       listingName={props.application?.listings?.name}
       listingURL={`/listing/${props.application?.listings?.id}`}
+      listingStatus={props.application.listings.status}
       key={props.application?.id}
+      lotteryStartDate={lotteryStartDate && dayjs(lotteryStartDate).format("MMM D, YYYY")}
+      lotteryPublishedDate={
+        lotteryLastPublishedAt && dayjs(lotteryLastPublishedAt).format("MMM D, YYYY")
+      }
       lotteryResults={
         props.application?.listings?.lotteryStatus === LotteryStatusEnum.publishedToPublic
       }
