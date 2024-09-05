@@ -1216,7 +1216,7 @@ describe('Testing lottery service', () => {
     } as User;
 
     it('should query for lottery positions', async () => {
-      prisma.applications.findFirstOrThrow = jest
+      prisma.applications.findFirst = jest
         .fn()
         .mockResolvedValue({ userId: publicUser.id });
       prisma.applicationLotteryPositions.findMany = jest
@@ -1247,7 +1247,7 @@ describe('Testing lottery service', () => {
     } as User;
 
     it('should query for lottery totals', async () => {
-      prisma.applications.findFirstOrThrow = jest
+      prisma.applications.findFirst = jest
         .fn()
         .mockResolvedValue({ userId: publicUser.id });
       prisma.applicationLotteryTotal.findMany = jest.fn().mockResolvedValue([
