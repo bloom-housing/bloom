@@ -13,6 +13,7 @@ import { ConfigService } from '@nestjs/config';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import {
   LanguagesEnum,
+  ListingEventsTypeEnum,
   ListingsStatusEnum,
   LotteryStatusEnum,
   Prisma,
@@ -28,6 +29,7 @@ import { TranslationService } from './translation.service';
 import { AmiChart } from '../dtos/ami-charts/ami-chart.dto';
 import { Listing } from '../dtos/listings/listing.dto';
 import { ListingCreate } from '../dtos/listings/listing-create.dto';
+import { ListingDuplicate } from '../dtos/listings/listing-duplicate.dto';
 import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
 import { ListingLotteryStatus } from '../dtos/listings/listing-lottery-status.dto';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
@@ -963,6 +965,68 @@ export class ListingService implements OnModuleInit {
     }
     await this.cachePurge(undefined, dto.status, rawListing.id);
     return mapTo(Listing, rawListing);
+  }
+
+  async duplicate(
+    dto: ListingDuplicate,
+    requestingUser: User,
+  ): Promise<Listing> {
+    const storedListing = await this.findOrThrow(
+      dto.storedListing.id,
+      ListingViews.details,
+    );
+
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'listing',
+      permissionActions.create,
+      {
+        jurisdictionId: storedListing.jurisdictions.id,
+      },
+    );
+
+    if (dto.name.trim() === storedListing.name) {
+      throw new BadRequestException('New listing name must be unique');
+    }
+
+    const mappedListing = mapTo(ListingCreate, storedListing);
+
+    const listingEvents = mappedListing.listingEvents?.filter(
+      (event) => event.type !== ListingEventsTypeEnum.lotteryResults,
+    );
+
+    const listingImages = mappedListing.listingImages?.map((unsavedImage) => {
+      return {
+        assets: {
+          fileId: unsavedImage.assets.fileId,
+          label: unsavedImage.assets.label,
+        },
+        ordinal: unsavedImage.ordinal,
+      };
+    });
+
+    if (!dto.includeUnits) {
+      delete mappedListing['units'];
+    }
+
+    const newListingData: ListingCreate = {
+      ...mappedListing,
+      name: dto.name,
+      status: ListingsStatusEnum.pending,
+      listingEvents: listingEvents,
+      listingMultiselectQuestions:
+        storedListing.listingMultiselectQuestions?.map((question) => {
+          return {
+            id: question.multiselectQuestionId,
+            ordinal: question.ordinal,
+          };
+        }),
+      listingImages: listingImages,
+      lotteryLastRunAt: undefined,
+      lotteryStatus: undefined,
+    };
+
+    return await this.create(newListingData, requestingUser);
   }
 
   /*
