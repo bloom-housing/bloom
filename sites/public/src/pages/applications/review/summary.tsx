@@ -61,6 +61,8 @@ const ApplicationSummary = () => {
         router
           .push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
           .then(() => addToast(t("listings.applicationsClosedRedirect"), { variant: "alert" }))
+          /* eslint-disable @typescript-eslint/no-empty-function */
+          .catch(() => {})
       }
     }
   }, [listing, router, addToast])
