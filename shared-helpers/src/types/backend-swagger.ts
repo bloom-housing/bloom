@@ -2236,7 +2236,23 @@ export class LotteryService {
     })
   }
   /**
-   * Trigger the lottery process job
+   * Trigger the lottery auto publish process job
+   */
+  autoPublishResults(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/lottery/autoPublishResults"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Trigger the lottery expiration process job
    */
   expireLotteries(options: IRequestOptions = {}): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
