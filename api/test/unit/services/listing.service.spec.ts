@@ -2170,7 +2170,59 @@ describe('Testing listing service', () => {
 
       expect(prisma.listings.findUnique).toHaveBeenCalledWith({
         where: {
-          id: expect.anything(),
+          id: listing.id.toString(),
+        },
+        include: {
+          applicationMethods: {
+            include: {
+              paperApplications: {
+                include: {
+                  assets: true,
+                },
+              },
+            },
+          },
+          jurisdictions: true,
+          listingEvents: {
+            include: {
+              assets: true,
+            },
+          },
+          listingFeatures: true,
+          listingImages: {
+            include: {
+              assets: true,
+            },
+          },
+          listingMultiselectQuestions: {
+            include: {
+              multiselectQuestions: true,
+            },
+          },
+          listingUtilities: true,
+          listingsApplicationDropOffAddress: true,
+          listingsApplicationPickUpAddress: true,
+          listingsBuildingAddress: true,
+          listingsBuildingSelectionCriteriaFile: true,
+          listingsApplicationMailingAddress: true,
+          listingsLeasingAgentAddress: true,
+          listingsResult: true,
+          requestedChangesUser: true,
+          reservedCommunityTypes: true,
+          units: {
+            include: {
+              amiChart: {
+                include: {
+                  jurisdictions: true,
+                  unitGroupAmiLevels: true,
+                },
+              },
+              unitAccessibilityPriorityTypes: true,
+              unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
+            },
+          },
         },
       });
     });
@@ -2210,7 +2262,59 @@ describe('Testing listing service', () => {
 
       expect(prisma.listings.findUnique).toHaveBeenCalledWith({
         where: {
-          id: expect.anything(),
+          id: listing.id.toString(),
+        },
+        include: {
+          applicationMethods: {
+            include: {
+              paperApplications: {
+                include: {
+                  assets: true,
+                },
+              },
+            },
+          },
+          jurisdictions: true,
+          listingEvents: {
+            include: {
+              assets: true,
+            },
+          },
+          listingFeatures: true,
+          listingImages: {
+            include: {
+              assets: true,
+            },
+          },
+          listingMultiselectQuestions: {
+            include: {
+              multiselectQuestions: true,
+            },
+          },
+          listingUtilities: true,
+          listingsApplicationDropOffAddress: true,
+          listingsApplicationPickUpAddress: true,
+          listingsBuildingAddress: true,
+          listingsBuildingSelectionCriteriaFile: true,
+          listingsApplicationMailingAddress: true,
+          listingsLeasingAgentAddress: true,
+          listingsResult: true,
+          requestedChangesUser: true,
+          reservedCommunityTypes: true,
+          units: {
+            include: {
+              amiChart: {
+                include: {
+                  jurisdictions: true,
+                  unitGroupAmiLevels: true,
+                },
+              },
+              unitAccessibilityPriorityTypes: true,
+              unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
+            },
+          },
         },
       });
     });
@@ -2241,7 +2345,59 @@ describe('Testing listing service', () => {
 
       expect(prisma.listings.findUnique).toHaveBeenCalledWith({
         where: {
-          id: expect.anything(),
+          id: listing.id.toString(),
+        },
+        include: {
+          applicationMethods: {
+            include: {
+              paperApplications: {
+                include: {
+                  assets: true,
+                },
+              },
+            },
+          },
+          jurisdictions: true,
+          listingEvents: {
+            include: {
+              assets: true,
+            },
+          },
+          listingFeatures: true,
+          listingImages: {
+            include: {
+              assets: true,
+            },
+          },
+          listingMultiselectQuestions: {
+            include: {
+              multiselectQuestions: true,
+            },
+          },
+          listingUtilities: true,
+          listingsApplicationDropOffAddress: true,
+          listingsApplicationPickUpAddress: true,
+          listingsBuildingAddress: true,
+          listingsBuildingSelectionCriteriaFile: true,
+          listingsApplicationMailingAddress: true,
+          listingsLeasingAgentAddress: true,
+          listingsResult: true,
+          requestedChangesUser: true,
+          reservedCommunityTypes: true,
+          units: {
+            include: {
+              amiChart: {
+                include: {
+                  jurisdictions: true,
+                  unitGroupAmiLevels: true,
+                },
+              },
+              unitAccessibilityPriorityTypes: true,
+              unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
+            },
+          },
         },
       });
     });
