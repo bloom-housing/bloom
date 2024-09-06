@@ -976,8 +976,16 @@ export class ListingService implements OnModuleInit {
       ListingViews.details,
     );
 
+    const userRoles =
+      process.env.ALLOW_PARTNERS_TO_CREATE_DUPLICATES === 'TRUE'
+        ? {
+            ...requestingUser.userRoles,
+            isAdmin: true,
+          }
+        : requestingUser.userRoles;
+
     await this.permissionService.canOrThrow(
-      requestingUser,
+      { ...requestingUser, userRoles: userRoles },
       'listing',
       permissionActions.create,
       {
@@ -1026,7 +1034,37 @@ export class ListingService implements OnModuleInit {
       lotteryStatus: undefined,
     };
 
-    return await this.create(newListingData, requestingUser);
+    const res = await this.create(newListingData, {
+      ...requestingUser,
+      userRoles: userRoles,
+    });
+
+    if (
+      process.env.ALLOW_PARTNERS_TO_CREATE_DUPLICATES === 'TRUE' &&
+      requestingUser.userRoles.isPartner
+    ) {
+      await this.prisma.userAccounts.update({
+        data: {
+          listings: {
+            connect: { id: res.id },
+          },
+        },
+        where: {
+          id: requestingUser.id,
+        },
+      });
+
+      await this.prisma.activityLog.create({
+        data: {
+          module: 'user',
+          recordId: requestingUser.id,
+          action: 'update',
+          userAccounts: { connect: { id: requestingUser.id } },
+        },
+      });
+    }
+
+    return res;
   }
 
   /*
