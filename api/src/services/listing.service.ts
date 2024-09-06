@@ -1005,15 +1005,13 @@ export class ListingService implements OnModuleInit {
       (event) => event.type !== ListingEventsTypeEnum.lotteryResults,
     );
 
-    const listingImages = mappedListing.listingImages?.map((unsavedImage) => {
-      return {
-        assets: {
-          fileId: unsavedImage.assets.fileId,
-          label: unsavedImage.assets.label,
-        },
-        ordinal: unsavedImage.ordinal,
-      };
-    });
+    const listingImages = mappedListing.listingImages?.map((unsavedImage) => ({
+      assets: {
+        fileId: unsavedImage.assets.fileId,
+        label: unsavedImage.assets.label,
+      },
+      ordinal: unsavedImage.ordinal,
+    }));
 
     if (!dto.includeUnits) {
       delete mappedListing['units'];
@@ -1025,14 +1023,13 @@ export class ListingService implements OnModuleInit {
       status: ListingsStatusEnum.pending,
       listingEvents: listingEvents,
       listingMultiselectQuestions:
-        storedListing.listingMultiselectQuestions?.map((question) => {
-          return {
-            id: question.multiselectQuestionId,
-            ordinal: question.ordinal,
-          };
-        }),
+        storedListing.listingMultiselectQuestions?.map((question) => ({
+          id: question.multiselectQuestionId,
+          ordinal: question.ordinal,
+        })),
       listingImages: listingImages,
       lotteryLastRunAt: undefined,
+      lotteryLastPublishedAt: undefined,
       lotteryStatus: undefined,
     };
 
