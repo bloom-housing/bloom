@@ -977,12 +977,14 @@ export class ListingService implements OnModuleInit {
     );
 
     const userRoles =
-      process.env.ALLOW_PARTNERS_TO_CREATE_DUPLICATES === 'TRUE'
+      process.env.ALLOW_PARTNERS_TO_CREATE_DUPLICATES === 'TRUE' &&
+      (requestingUser?.userRoles?.isJurisdictionalAdmin ||
+        requestingUser?.userRoles?.isPartner)
         ? {
             ...requestingUser.userRoles,
             isAdmin: true,
           }
-        : requestingUser.userRoles;
+        : requestingUser?.userRoles;
 
     await this.permissionService.canOrThrow(
       { ...requestingUser, userRoles: userRoles },
@@ -1041,7 +1043,7 @@ export class ListingService implements OnModuleInit {
 
     if (
       process.env.ALLOW_PARTNERS_TO_CREATE_DUPLICATES === 'TRUE' &&
-      requestingUser.userRoles.isPartner
+      requestingUser.userRoles?.isPartner
     ) {
       await this.prisma.userAccounts.update({
         data: {
