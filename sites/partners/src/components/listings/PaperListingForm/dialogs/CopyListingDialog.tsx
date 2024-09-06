@@ -1,22 +1,42 @@
-import React from "react"
-import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import React, { useContext } from "react"
+import { IdDTO } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
-import { Field, t } from "@bloom-housing/ui-components"
-import { SubmitFunction } from "../index"
+import { Field, Form, t } from "@bloom-housing/ui-components"
+import { useForm } from "react-hook-form"
+import { MessageContext } from "@bloom-housing/shared-helpers"
+import { useRouter } from "next/router"
 
 export interface CopyListingDialogProps {
   isOpen: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  listingName: string
-  submitFormWithStatus: SubmitFunction
+  listingInfo: IdDTO
 }
 
-const CopyListingDialog = ({
-  isOpen,
-  setOpen,
-  listingName,
-  submitFormWithStatus,
-}: CopyListingDialogProps) => {
+type CopyListingFormFields = {
+  newListingName: string
+  includeUnitData: boolean
+}
+
+const CopyListingDialog = ({ isOpen, setOpen, listingInfo }: CopyListingDialogProps) => {
+  // const { listingsService } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
+  const { register, errors, handleSubmit, clearErrors } = useForm<CopyListingFormFields>()
+  const router = useRouter()
+
+  const onSubmit = async (data: CopyListingFormFields) => {
+    try {
+      // const res = await listingsService.duplicate(())
+      //then
+      const res = { id: "eb58d4c9-f750-4089-a421-8458bede4167" }
+      setOpen(false)
+      await router.push(`/listings/${res.id}`)
+      addToast(t("listings.copy.success"), { variant: "success" })
+    } catch (err) {
+      console.error(err)
+      setOpen(false)
+      addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
+    }
+  }
   return (
     <Dialog
       isOpen={isOpen}
@@ -24,49 +44,52 @@ const CopyListingDialog = ({
       ariaLabelledBy="listing-form-copy-listing-dialog-header"
       ariaDescribedBy="listing-form-copy-listing-dialog-content"
     >
-      <Dialog.Header id="listing-form-copy-listing-dialog-header">
-        {t("listings.copyListing")}
-      </Dialog.Header>
-      <Dialog.Content id="listing-form-copy-listing-dialog-content">
-        <span>{t("listings.copy.description")}</span>
-        <Field
-          name="listingName"
-          label={t("listings.listingName")}
-          validation={{ required: true }}
-          defaultValue={`${listingName} ${t("actions.copy")}`}
-        ></Field>
-        <Field
-          name="unitData"
-          type="checkbox"
-          label={t("listings.copy.unitData")}
-          subNote={t("listings.copy.unitSubNote")}
-          inputProps={{ defaultChecked: true }}
-        />
-      </Dialog.Content>
-      <Dialog.Footer>
-        <Button
-          type="button"
-          variant="primary"
-          onClick={() => {
-            setOpen(false)
-            submitFormWithStatus("redirect", ListingsStatusEnum.closed)
-          }}
-          size="sm"
-          id={"copy-listing-modal-button"}
-        >
-          {t("actions.copy")}
-        </Button>
-        <Button
-          type="button"
-          variant="primary-outlined"
-          onClick={() => {
-            setOpen(false)
-          }}
-          size="sm"
-        >
-          {t("t.cancel")}
-        </Button>
-      </Dialog.Footer>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Dialog.Header id="listing-form-copy-listing-dialog-header">
+          {t("listings.copyListing")}
+        </Dialog.Header>
+        <Dialog.Content id="listing-form-copy-listing-dialog-content">
+          <span>{t("listings.copy.description")}</span>
+          <Field
+            name="newListingName"
+            label={t("listings.listingName")}
+            validation={{
+              required: true,
+              validate: (value) => value !== listingInfo.name,
+            }}
+            error={!!errors?.newListingName}
+            errorMessage={t("errors.copy.listingNameError")}
+            register={register}
+            defaultValue={`${listingInfo.name} ${t("actions.copy")}`}
+            inputProps={{
+              onChange: () => clearErrors("newListingName"),
+            }}
+          ></Field>
+          <Field
+            name="includeUnitData"
+            type="checkbox"
+            label={t("listings.copy.unitData")}
+            subNote={t("listings.copy.unitSubNote")}
+            register={register}
+            inputProps={{ defaultChecked: true }}
+          />
+        </Dialog.Content>
+        <Dialog.Footer>
+          <Button type="submit" variant="primary" size="sm" id={"copy-listing-modal-button"}>
+            {t("actions.copy")}
+          </Button>
+          <Button
+            type="button"
+            variant="primary-outlined"
+            onClick={() => {
+              setOpen(false)
+            }}
+            size="sm"
+          >
+            {t("t.cancel")}
+          </Button>
+        </Dialog.Footer>
+      </Form>
     </Dialog>
   )
 }
