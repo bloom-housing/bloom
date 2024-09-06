@@ -27,6 +27,7 @@ type ListingFormActionsProps = {
   type: ListingFormActionsType
   showSaveBeforeExitDialog?: () => void
   showCloseListingModal?: () => void
+  showCopyListingDialog?: () => void
   showLotteryResultsDrawer?: () => void
   showRequestChangesModal?: () => void
   showSubmitForApprovalModal?: () => void
@@ -38,6 +39,7 @@ const ListingFormActions = ({
   type,
   showSaveBeforeExitDialog,
   showCloseListingModal,
+  showCopyListingDialog,
   showLotteryResultsDrawer,
   showRequestChangesModal,
   showSubmitForApprovalModal,
@@ -99,10 +101,10 @@ const ListingFormActions = ({
           variant="primary-outlined"
           className="w-full"
           onClick={() => {
-            showSaveBeforeExitDialog()
+            showCopyListingDialog()
           }}
         >
-          {t("listings.actions.copy")}
+          {t("actions.copy")}
         </Button>
       </Grid.Cell>
     )
@@ -370,8 +372,9 @@ const ListingFormActions = ({
             listing.status === ListingsStatusEnum.changesRequested
           )
             elements.push(approveAndPublishButton)
-          // admins can always edit
+          // admins can always edit or copy
           elements.push(editFromDetailButton)
+          elements.push(copyButton)
         } else {
           // partners cannot edit if pending approval
           if (listing.status !== ListingsStatusEnum.pendingReview)
