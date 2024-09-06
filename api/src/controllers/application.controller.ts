@@ -50,6 +50,7 @@ import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-
 import { MostRecentApplicationQueryParams } from '../dtos/applications/most-recent-application-query-params.dto';
 import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
 import { ApiKeyGuard } from '../guards/api-key.guard';
+import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
 
 @Controller('applications')
 @ApiTags('applications')
@@ -93,6 +94,18 @@ export class ApplicationController {
     @Query() queryParams: MostRecentApplicationQueryParams,
   ): Promise<Application> {
     return await this.applicationService.mostRecentlyCreated(queryParams, req);
+  }
+
+  @Get('publicAppsView')
+  @ApiOperation({
+    summary: 'Get public applications info',
+    operationId: 'publicAppsView',
+  })
+  async publicAppsView(
+    @Request() req: ExpressRequest,
+    @Query() queryParams: PublicAppsViewQueryParams,
+  ): Promise<any> {
+    return await this.applicationService.publicAppsView(queryParams, req);
   }
 
   @Get(`csv`)

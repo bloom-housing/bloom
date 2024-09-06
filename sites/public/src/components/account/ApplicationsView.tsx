@@ -1,5 +1,6 @@
 import React, { useEffect, useState, Fragment, useContext } from "react"
 import Head from "next/head"
+import { useRouter } from "next/router"
 import { t, LoadingOverlay } from "@bloom-housing/ui-components"
 import { Button, Card, Heading, Tabs } from "@bloom-housing/ui-seeds"
 import {
@@ -10,22 +11,18 @@ import {
   BloomCard,
 } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
+import { ApplicationsFilterEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { StatusItemWrapper, AppWithListing } from "./StatusItemWrapper"
 import { MetaTags } from "../shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
 
 import styles from "./ApplicationsView.module.scss"
-import {
-  ListingsStatusEnum,
-  LotteryStatusEnum,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { useRouter } from "next/router"
 
-export enum ApplicationsFilterEnum {
-  All = 0,
-  Lottery,
-  Closed,
-  Open,
+export enum ApplicationsIndexEnum {
+  all = 0,
+  lottery,
+  closed,
+  open,
 }
 interface ApplicationsCount {
   total: number
@@ -35,95 +32,56 @@ interface ApplicationsCount {
 }
 
 interface ApplicationsViewProps {
-  filterType: ApplicationsFilterEnum
+  filterType: ApplicationsIndexEnum
 }
 
 const ApplicationsView = (props: ApplicationsViewProps) => {
-  const { applicationsService, listingsService, profile } = useContext(AuthContext)
+  const { applicationsService, profile } = useContext(AuthContext)
   const [applications, setApplications] = useState<AppWithListing[]>()
   const [applicationsCount, setApplicationsCount] = useState<ApplicationsCount>()
   const [loading, setLoading] = useState(true)
-  const [listLoading, setListLoading] = useState(true)
   const [error, setError] = useState()
   const router = useRouter()
+  const showLottery = process.env.showLottery
+  const filterTypeString = ApplicationsIndexEnum[props.filterType]
 
   useEffect(() => {
     if (profile && loading) {
       pushGtmEvent<PageView>({
         event: "pageView",
-        pageTitle: `My Applications - ${ApplicationsFilterEnum[props.filterType]}`,
+        pageTitle: `My Applications - ${filterTypeString}`,
         status: UserStatus.LoggedIn,
       })
       applicationsService
-        .list({ userId: profile.id })
-        .then((apps) => {
-          apps?.items?.length > 0 ? setApplications(apps.items) : setLoading(false)
+        .publicAppsView({
+          userId: profile.id,
+          filterType: ApplicationsFilterEnum[filterTypeString],
+        })
+        .then((res) => {
+          setApplications(res.displayApplications)
+          setApplicationsCount(res.applicationsCount)
         })
         .catch((err) => {
           console.error(`Error fetching applications: ${err}`)
           setError(err)
-          setLoading(false)
         })
+        .finally(() => setLoading(false))
     }
   }, [profile, applicationsService])
-
-  useEffect(() => {
-    if (!applications || (applications && !listLoading)) return
-
-    void Promise.all(
-      applications?.map(async (app) => {
-        const retrievedListing = await listingsService.retrieve({
-          id: app?.listings.id,
-        })
-        app.fullListing = retrievedListing
-        return app
-      })
-    )
-      .then((res) => {
-        setListLoading(false)
-        const displayApplications = []
-        const total = res.length
-        let open = 0,
-          closed = 0,
-          lottery = 0
-        res.forEach((app) => {
-          if (app.fullListing?.status === ListingsStatusEnum.active) {
-            open++
-            if (props.filterType === ApplicationsFilterEnum.Open) displayApplications.push(app)
-          } else if (app.fullListing?.lotteryStatus === LotteryStatusEnum.publishedToPublic) {
-            lottery++
-            if (props.filterType === ApplicationsFilterEnum.Lottery) displayApplications.push(app)
-          } else {
-            closed++
-            if (props.filterType === ApplicationsFilterEnum.Closed) displayApplications.push(app)
-          }
-        })
-        props.filterType === ApplicationsFilterEnum.All
-          ? setApplications(res)
-          : setApplications(displayApplications)
-        setApplicationsCount({ total, lottery, open, closed })
-        setLoading(false)
-      })
-      .catch((err) => {
-        console.error(`Error fetching applications: ${err}`)
-        setError(err)
-        setLoading(false)
-      })
-  }, [applications, listLoading, listingsService])
 
   const selectionHandler = (index: number) => {
     const baseUrl = "/account/applications"
     switch (index) {
-      case ApplicationsFilterEnum.All:
+      case ApplicationsIndexEnum.all:
         void router.push(baseUrl)
         break
-      case ApplicationsFilterEnum.Lottery:
+      case ApplicationsIndexEnum.lottery:
         void router.push(`${baseUrl}/lottery`)
         break
-      case ApplicationsFilterEnum.Closed:
+      case ApplicationsIndexEnum.closed:
         void router.push(`${baseUrl}/closed`)
         break
-      case ApplicationsFilterEnum.Open:
+      case ApplicationsIndexEnum.open:
         void router.push(`${baseUrl}/open`)
         break
     }
@@ -138,17 +96,20 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
       buttonText = t("account.viewAllApplications")
       buttonHref = "/account/applications"
       switch (props.filterType) {
-        case ApplicationsFilterEnum.Lottery:
+        case ApplicationsIndexEnum.lottery:
           headerText = t("account.noLotteryApplications")
           break
-        case ApplicationsFilterEnum.Closed:
-          headerText = t("account.noClosedApplications")
+        case ApplicationsIndexEnum.closed:
+          headerText = showLottery
+            ? t("account.noClosedApplications")
+            : t("account.noClosedApplicationsSimplified")
           break
-        case ApplicationsFilterEnum.Open:
+        case ApplicationsIndexEnum.open:
           headerText = t("account.noOpenApplications")
           break
       }
     }
+
     return (
       <Card.Section className={styles["account-card-applications-section"]}>
         <div className={styles["application-no-results"]}>
@@ -188,7 +149,11 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
                   <span>{t("account.allMyApplications")}</span>
                   <span>{applicationsCount?.total}</span>
                 </Tabs.Tab>
-                <Tabs.Tab className={styles["application-count-tab"]}>
+                <Tabs.Tab
+                  className={`${styles["application-count-tab"]} ${
+                    !showLottery ? styles["application-hide-tab"] : ""
+                  }`}
+                >
                   <span>{t("account.lotteryRun")}</span>
                   <span>{applicationsCount?.lottery}</span>
                 </Tabs.Tab>

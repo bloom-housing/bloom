@@ -1447,6 +1447,29 @@ export class ApplicationsService {
     })
   }
   /**
+   * Get public applications info
+   */
+  publicAppsView(
+    params: {
+      /**  */
+      userId: string
+      /**  */
+      filterType?: ApplicationsFilterEnum
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/publicAppsView"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { userId: params["userId"], filterType: params["filterType"] }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Get applications as csv
    */
   listAsCsv(
@@ -5936,6 +5959,13 @@ export enum ApplicationOrderByKeys {
   "lastName" = "lastName",
   "submissionDate" = "submissionDate",
   "createdAt" = "createdAt",
+}
+
+export enum ApplicationsFilterEnum {
+  "all" = "all",
+  "lottery" = "lottery",
+  "closed" = "closed",
+  "open" = "open",
 }
 
 export enum MfaType {
