@@ -975,9 +975,12 @@ export class ListingService implements OnModuleInit {
       dto.storedListing.id,
       ListingViews.details,
     );
+    if (dto.name.trim() === storedListing.name) {
+      throw new BadRequestException('New listing name must be unique');
+    }
 
     const userRoles =
-      process.env.ALLOW_PARTNERS_TO_CREATE_DUPLICATES === 'TRUE' &&
+      process.env.ALLOW_PARTNERS_TO_DUPLICATE_LISTINGS === 'TRUE' &&
       (requestingUser?.userRoles?.isJurisdictionalAdmin ||
         requestingUser?.userRoles?.isPartner)
         ? {
@@ -994,10 +997,6 @@ export class ListingService implements OnModuleInit {
         jurisdictionId: storedListing.jurisdictions.id,
       },
     );
-
-    if (dto.name.trim() === storedListing.name) {
-      throw new BadRequestException('New listing name must be unique');
-    }
 
     const mappedListing = mapTo(ListingCreate, storedListing);
 
@@ -1039,7 +1038,7 @@ export class ListingService implements OnModuleInit {
     });
 
     if (
-      process.env.ALLOW_PARTNERS_TO_CREATE_DUPLICATES === 'TRUE' &&
+      process.env.ALLOW_PARTNERS_TO_DUPLICATE_LISTINGS === 'TRUE' &&
       requestingUser.userRoles?.isPartner
     ) {
       await this.prisma.userAccounts.update({
