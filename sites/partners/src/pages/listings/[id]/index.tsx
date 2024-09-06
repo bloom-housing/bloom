@@ -135,8 +135,7 @@ export default function ListingDetail(props: ListingProps) {
           <CopyListingDialog
             isOpen={copyListingDialog}
             setOpen={setCopyListingDialog}
-            listingName={listing.name}
-            submitFormWithStatus={() => console.log("hooray")}
+            listingInfo={{ name: listing.name, id: listing.id }}
           />
         </>
       </ListingGuard>
