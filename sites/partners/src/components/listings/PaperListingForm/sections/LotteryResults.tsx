@@ -42,7 +42,10 @@ const LotteryResults = (props: LotteryResultsProps) => {
 
   useEffect(() => {
     if (uploadedPDF) {
-      setCloudinaryData({ url: cloudinaryUrlFromId(uploadedPDF.file?.fileId), id: uploadedPDF.id })
+      setCloudinaryData({
+        url: cloudinaryUrlFromId(uploadedPDF.file?.fileId || uploadedPDF.assets?.fileId),
+        id: uploadedPDF.id,
+      })
       // Don't allow a new one to be uploaded if one already exists so setting progress to 100%
       setProgressValue(100)
     }

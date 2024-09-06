@@ -684,6 +684,7 @@ describe('Testing lottery service', () => {
       expect(prisma.listings.update).toHaveBeenCalledWith({
         data: {
           lotteryStatus: LotteryStatusEnum.publishedToPublic,
+          lotteryLastPublishedAt: expect.anything(),
         },
         where: {
           id: expect.anything(),
@@ -849,6 +850,7 @@ describe('Testing lottery service', () => {
       expect(prisma.listings.update).toHaveBeenCalledWith({
         data: {
           lotteryStatus: LotteryStatusEnum.publishedToPublic,
+          lotteryLastPublishedAt: expect.anything(),
         },
         where: {
           id: 'example id1',
