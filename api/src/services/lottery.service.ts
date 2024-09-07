@@ -365,6 +365,11 @@ export class LotteryService {
     let updateData: any;
     if (status === LotteryStatusEnum.ran) {
       updateData = { lotteryStatus: status, lotteryLastRunAt: new Date() };
+    } else if (status === LotteryStatusEnum.publishedToPublic) {
+      updateData = {
+        lotteryStatus: status,
+        lotteryLastPublishedAt: new Date(),
+      };
     } else {
       updateData = { lotteryStatus: status };
     }

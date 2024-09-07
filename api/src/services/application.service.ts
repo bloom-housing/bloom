@@ -383,6 +383,7 @@ export class ApplicationService {
             id: true,
             name: true,
             status: true,
+            lotteryLastPublishedAt: true,
             lotteryStatus: true,
             applicationDueDate: true,
             listingEvents: {
@@ -409,12 +410,11 @@ export class ApplicationService {
     );
 
     //filter for display applications and status counts
-    const displayApplications = [];
+    let displayApplications = [];
     const total = rawApps.length ?? 0;
     let lottery = 0,
       closed = 0,
       open = 0;
-
     rawApps.forEach((app) => {
       if (app.listings.status === ListingsStatusEnum.active) {
         open++;
@@ -424,18 +424,18 @@ export class ApplicationService {
         app.listings?.lotteryStatus === LotteryStatusEnum.publishedToPublic
       ) {
         lottery++;
-        if (params.filterType === ApplicationsFilterEnum.lottery)
+        if (params.filterType === ApplicationsFilterEnum.lottery) {
           displayApplications.push(app);
+        }
       } else {
-        //fix to handle all case
         closed++;
         if (params.filterType === ApplicationsFilterEnum.closed)
           displayApplications.push(app);
       }
     });
-    //
+
     if (params.filterType === ApplicationsFilterEnum.all)
-      displayApplications.push(...rawApps);
+      displayApplications = rawApps;
 
     return mapTo(PublicAppsViewResponse, {
       displayApplications,

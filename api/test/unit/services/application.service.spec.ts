@@ -6,6 +6,9 @@ import {
   ApplicationReviewStatusEnum,
   YesNoEnum,
   LanguagesEnum,
+  ListingEventsTypeEnum,
+  ListingsStatusEnum,
+  LotteryStatusEnum,
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import dayjs from 'dayjs';
@@ -28,6 +31,8 @@ import { permissionActions } from '../../../src/enums/permissions/permission-act
 import { GeocodingService } from '../../../src/services/geocoding.service';
 import { AlternateContactRelationship } from '../../../src/enums/applications/alternate-contact-relationship-enum';
 import { HouseholdMemberRelationship } from '../../../src/enums/applications/household-member-relationship-enum';
+import { PublicAppsViewQueryParams } from '../../../src/dtos/applications/public-apps-view-params.dto';
+import { ApplicationsFilterEnum } from '../../../src/enums/applications/filter-enum';
 
 export const mockApplication = (options: {
   date: Date;
@@ -684,14 +689,76 @@ describe('Testing application service', () => {
     jest.resetAllMocks();
   });
 
+  //common shared variables
+  const userId = randomUUID();
+  const requestingUser = {
+    id: userId,
+    firstName: 'requesting fName',
+    lastName: 'requesting lName',
+    email: 'requestingUser@email.com',
+    jurisdictions: [{ id: 'juris id' }],
+  } as unknown as User;
+  const date = new Date();
+
+  //publicAppsView shared mocks
+  const getPublicAppsFindManyMock = (mockedArr) => {
+    return mockedArr.map((mockValue) => ({
+      id: mockValue.id,
+      userId: requestingUser.id,
+      confirmationCode: mockValue.confirmationCode,
+      updatedAt: mockValue.updatedAt,
+      listings: {
+        id: randomUUID(),
+        name: 'listing name',
+        status: mockValue.listings.status,
+        lotteryLastPublishedAt: null,
+        lotteryStatus: mockValue.listings.lotteryStatus ?? null,
+        applicationDueDate: null,
+        listingEvents: {
+          startDate: null,
+        },
+      },
+    }));
+  };
+
+  const publicAppsFindManyCalledWith = {
+    select: {
+      id: true,
+      userId: true,
+      confirmationCode: true,
+      updatedAt: true,
+      listings: {
+        select: {
+          id: true,
+          name: true,
+          status: true,
+          lotteryLastPublishedAt: true,
+          lotteryStatus: true,
+          applicationDueDate: true,
+          listingEvents: {
+            select: {
+              startDate: true,
+            },
+            where: { type: ListingEventsTypeEnum.publicLottery },
+          },
+        },
+      },
+    },
+    where: {
+      AND: [
+        {
+          userAccounts: {
+            id: userId,
+          },
+        },
+        {
+          deletedAt: null,
+        },
+      ],
+    },
+  };
+
   it('should get applications from list() when applications are available', async () => {
-    const requestingUser = {
-      firstName: 'requesting fName',
-      lastName: 'requesting lName',
-      email: 'requestingUser@email.com',
-      jurisdictions: [{ id: 'juris id' }],
-    } as unknown as User;
-    const date = new Date();
     const mockedValue = mockApplicationSet(3, date);
     prisma.jurisdictions.findFirst = jest
       .fn()
@@ -773,15 +840,207 @@ describe('Testing application service', () => {
     });
   });
 
+  it('should get publicAppsView() info when applications are available and filterType is all', async () => {
+    const mockedValues = mockApplicationSet(3, date);
+    const listingStatuses = [
+      { status: ListingsStatusEnum.active },
+      { status: ListingsStatusEnum.closed },
+      {
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: LotteryStatusEnum.publishedToPublic,
+      },
+    ];
+    const mockedValuesWithListing = mockedValues.map((mockedValue, idx) => {
+      return {
+        ...mockedValue,
+        listings: listingStatuses[idx],
+      };
+    });
+    prisma.applications.findMany = jest
+      .fn()
+      .mockResolvedValue(getPublicAppsFindManyMock(mockedValuesWithListing));
+
+    const params: PublicAppsViewQueryParams = {
+      userId: requestingUser.id,
+      filterType: ApplicationsFilterEnum.all,
+    };
+
+    const res = await service.publicAppsView(params, {
+      user: requestingUser,
+    } as unknown as ExpressRequest);
+
+    expect(res.displayApplications.length).toEqual(3);
+    expect(res.applicationsCount).toEqual({
+      total: 3,
+      open: 1,
+      closed: 1,
+      lottery: 1,
+    });
+
+    expect(prisma.applications.findMany).toHaveBeenCalledWith(
+      publicAppsFindManyCalledWith,
+    );
+  });
+
+  it('should get publicAppsView() info when applications are available and filterType is open', async () => {
+    const mockedValues = mockApplicationSet(3, date);
+    const listingStatuses = [
+      { status: ListingsStatusEnum.active },
+      { status: ListingsStatusEnum.active },
+      {
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: LotteryStatusEnum.publishedToPublic,
+      },
+    ];
+    const mockedValuesWithListing = mockedValues.map((mockedValue, idx) => {
+      return {
+        ...mockedValue,
+        listings: listingStatuses[idx],
+      };
+    });
+    prisma.applications.findMany = jest
+      .fn()
+      .mockResolvedValue(getPublicAppsFindManyMock(mockedValuesWithListing));
+
+    const params: PublicAppsViewQueryParams = {
+      userId: requestingUser.id,
+      filterType: ApplicationsFilterEnum.open,
+    };
+
+    const res = await service.publicAppsView(params, {
+      user: requestingUser,
+    } as unknown as ExpressRequest);
+
+    expect(res.displayApplications.length).toEqual(2);
+    expect(res.applicationsCount).toEqual({
+      total: 3,
+      open: 2,
+      closed: 0,
+      lottery: 1,
+    });
+
+    expect(prisma.applications.findMany).toHaveBeenCalledWith(
+      publicAppsFindManyCalledWith,
+    );
+  });
+
+  it('should get publicAppsView() info when applications are available and filterType is closed', async () => {
+    const mockedValues = mockApplicationSet(3, date);
+    const listingStatuses = [
+      { status: ListingsStatusEnum.closed },
+      { status: ListingsStatusEnum.closed },
+      {
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: LotteryStatusEnum.publishedToPublic,
+      },
+    ];
+    const mockedValuesWithListing = mockedValues.map((mockedValue, idx) => {
+      return {
+        ...mockedValue,
+        listings: listingStatuses[idx],
+      };
+    });
+    prisma.applications.findMany = jest
+      .fn()
+      .mockResolvedValue(getPublicAppsFindManyMock(mockedValuesWithListing));
+
+    const params: PublicAppsViewQueryParams = {
+      userId: requestingUser.id,
+      filterType: ApplicationsFilterEnum.closed,
+    };
+
+    const res = await service.publicAppsView(params, {
+      user: requestingUser,
+    } as unknown as ExpressRequest);
+
+    expect(res.displayApplications.length).toEqual(2);
+    expect(res.applicationsCount).toEqual({
+      total: 3,
+      open: 0,
+      closed: 2,
+      lottery: 1,
+    });
+
+    expect(prisma.applications.findMany).toHaveBeenCalledWith(
+      publicAppsFindManyCalledWith,
+    );
+  });
+
+  it('should get publicAppsView() info when applications are available and filterType is lottery', async () => {
+    const mockedValues = mockApplicationSet(3, date);
+    const listingStatuses = [
+      { status: ListingsStatusEnum.active },
+      {
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: LotteryStatusEnum.publishedToPublic,
+      },
+      {
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: LotteryStatusEnum.publishedToPublic,
+      },
+    ];
+    const mockedValuesWithListing = mockedValues.map((mockedValue, idx) => {
+      return {
+        ...mockedValue,
+        listings: listingStatuses[idx],
+      };
+    });
+    prisma.applications.findMany = jest
+      .fn()
+      .mockResolvedValue(getPublicAppsFindManyMock(mockedValuesWithListing));
+
+    const params: PublicAppsViewQueryParams = {
+      userId: requestingUser.id,
+      filterType: ApplicationsFilterEnum.lottery,
+    };
+
+    const res = await service.publicAppsView(params, {
+      user: requestingUser,
+    } as unknown as ExpressRequest);
+
+    expect(res.displayApplications.length).toEqual(2);
+    expect(res.applicationsCount).toEqual({
+      total: 3,
+      open: 1,
+      closed: 0,
+      lottery: 2,
+    });
+
+    expect(prisma.applications.findMany).toHaveBeenCalledWith(
+      publicAppsFindManyCalledWith,
+    );
+  });
+
+  it('should not error when publicAppsView() is called when applications are unavailable', async () => {
+    prisma.applications.findMany = jest
+      .fn()
+      .mockResolvedValue(getPublicAppsFindManyMock([]));
+
+    const params: PublicAppsViewQueryParams = {
+      userId: requestingUser.id,
+      filterType: ApplicationsFilterEnum.all,
+    };
+
+    const res = await service.publicAppsView(params, {
+      user: requestingUser,
+    } as unknown as ExpressRequest);
+
+    expect(res.displayApplications.length).toEqual(0);
+    expect(res.applicationsCount).toEqual({
+      total: 0,
+      open: 0,
+      closed: 0,
+      lottery: 0,
+    });
+
+    expect(prisma.applications.findMany).toHaveBeenCalledWith(
+      publicAppsFindManyCalledWith,
+    );
+  });
+
   it('should get an application when findOne() is called and Id exists', async () => {
-    const requestingUser = {
-      firstName: 'requesting fName',
-      lastName: 'requesting lName',
-      email: 'requestingUser@email.com',
-      jurisdictions: [{ id: 'juris id' }],
-    } as unknown as User;
-    const date = new Date();
-    const mockedValue = mockApplication(3, date);
+    const mockedValue = mockApplication({ date: date, position: 3 });
+    prisma.applications.findUnique = jest.fn().mockResolvedValue(mockedValue);
     prisma.jurisdictions.findFirst = jest
       .fn()
       .mockResolvedValue({ name: 'jurisdiction', id: 'jurisdictionID' });
@@ -804,12 +1063,6 @@ describe('Testing application service', () => {
   });
 
   it("should throw error when findOne() is called and Id doens't exists", async () => {
-    const requestingUser = {
-      firstName: 'requesting fName',
-      lastName: 'requesting lName',
-      email: 'requestingUser@email.com',
-      jurisdictions: [{ id: 'juris id' }],
-    } as unknown as User;
     prisma.applications.findUnique = jest.fn().mockResolvedValue(null);
 
     await expect(
@@ -2010,14 +2263,7 @@ describe('Testing application service', () => {
   });
 
   it('should get most recent application for a user', async () => {
-    const requestingUser = {
-      firstName: 'requesting fName',
-      lastName: 'requesting lName',
-      email: 'requestingUser@email.com',
-      jurisdictions: [{ id: 'juris id' }],
-    } as unknown as User;
-    const date = new Date();
-    const mockedValue = mockApplication(3, date);
+    const mockedValue = mockApplication({ position: 3, date });
     prisma.applications.findUnique = jest.fn().mockResolvedValue(mockedValue);
     prisma.applications.findFirst = jest
       .fn()
