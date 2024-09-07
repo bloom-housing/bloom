@@ -168,7 +168,7 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
               </Tabs.TabList>
             </Tabs>
             <BloomCard
-              iconSymbol="application"
+              customIcon="application"
               title={t("account.myApplications")}
               subtitle={t("account.myApplicationsSubtitle")}
               headingPriority={1}

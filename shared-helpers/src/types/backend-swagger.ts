@@ -5059,7 +5059,7 @@ export interface PublicAppsFiltered {
   householdStudent?: boolean
 
   /**  */
-  incomeVouchers?: boolean
+  incomeVouchers?: string[]
 
   /**  */
   income?: string
