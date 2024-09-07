@@ -1,4 +1,11 @@
-import React, { FunctionComponent, createContext, createElement, useState, useRef } from "react"
+import React, {
+  FunctionComponent,
+  createContext,
+  createElement,
+  useContext,
+  useState,
+  useRef,
+} from "react"
 import { CommonMessageProps } from "@bloom-housing/ui-seeds/src/blocks/shared/CommonMessage"
 
 // TODO: this should be exportable from seeds directly
@@ -48,4 +55,8 @@ export const MessageProvider: FunctionComponent<React.PropsWithChildren> = ({ ch
 
     children
   )
+}
+
+export const useToastyRef = () => {
+  return useRef(useContext(MessageContext))
 }

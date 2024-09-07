@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useContext, useEffect, useState } from "react"
 import { NavigationContext } from "@bloom-housing/ui-components"
 import { AuthContext } from "./AuthContext"
-import { MessageContext } from "../utilities/MessageContext"
+import { useToastyRef } from "../utilities/MessageContext"
 
 // See https://github.com/Microsoft/TypeScript/issues/14094
 type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never }
@@ -31,7 +31,7 @@ const RequireLogin: FunctionComponent<RequireLoginProps> = ({
 }) => {
   const { router } = useContext(NavigationContext)
   const { profile, initialStateLoaded } = useContext(AuthContext)
-  const { addToast } = useContext(MessageContext)
+  const toastyRef = useToastyRef()
   const [hasTerms, setHasTerms] = useState(false)
 
   // Parse just the pathname portion of the signInPath (in case we want to pass URL params)
@@ -56,6 +56,8 @@ const RequireLogin: FunctionComponent<RequireLoginProps> = ({
   }, [profile])
 
   useEffect(() => {
+    const { addToast } = toastyRef.current
+
     if (loginRequiredForPath && initialStateLoaded && !profile) {
       addToast(signInMessage, { variant: "primary" })
       void router.push(signInPath)
@@ -73,7 +75,7 @@ const RequireLogin: FunctionComponent<RequireLoginProps> = ({
     signInMessage,
     termsPath,
     hasTerms,
-    addToast,
+    toastyRef,
   ])
 
   if (
