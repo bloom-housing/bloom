@@ -521,9 +521,9 @@ export class EmailService {
     }
     tableRows.push({
       label: this.polyglot.t('rentalOpportunity.address'),
-      value: `${listing.listingsBuildingAddress.street}, ${listing.listingsBuildingAddress.city} ${listing.listingsBuildingAddress.state} ${listing.listingsBuildingAddress.zipCode}`,
+      value: `${listing.listingsBuildingAddress?.street}, ${listing.listingsBuildingAddress?.city} ${listing.listingsBuildingAddress?.state} ${listing.listingsBuildingAddress?.zipCode}`,
     });
-    Object.entries(units.bedrooms).forEach(([key, bedroom]) => {
+    Object.entries(units?.bedrooms || {})?.forEach(([key, bedroom]) => {
       const sqFtString = this.formatUnitDetails(bedroom, 'sqFeet', 'sqft');
       const bathroomstring = this.formatUnitDetails(
         bedroom,
@@ -533,24 +533,24 @@ export class EmailService {
       );
       tableRows.push({
         label: this.polyglot.t(`rentalOpportunity.${key}`),
-        value: `${bedroom.length} unit${
+        value: `${bedroom?.length} unit${
           bedroom.length > 1 ? 's' : ''
         }${bathroomstring}${sqFtString}`,
       });
     });
-    if (units.rent?.length) {
+    if (units?.rent?.length) {
       tableRows.push({
         label: this.polyglot.t('rentalOpportunity.rent'),
         value: this.formatPricing(units.rent),
       });
     }
-    if (units.minIncome?.length) {
+    if (units?.minIncome?.length) {
       tableRows.push({
         label: this.polyglot.t('rentalOpportunity.minIncome'),
         value: this.formatPricing(units.minIncome),
       });
     }
-    if (units.maxIncome?.length) {
+    if (units?.maxIncome?.length) {
       tableRows.push({
         label: this.polyglot.t('rentalOpportunity.maxIncome'),
         value: this.formatPricing(units.maxIncome),
@@ -612,9 +612,6 @@ export class EmailService {
     emails: string[],
     appUrl: string,
   ) {
-    const jurisdiction = await this.getJurisdiction([
-      { id: listingInfo.juris },
-    ]);
     await this.sendSES({
       to: emails,
       subject: this.polyglot.t('lotteryReleased.header', {

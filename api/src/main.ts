@@ -19,9 +19,13 @@ import { instance } from './logger/winston.logger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: WinstonModule.createLogger({
-      instance: instance,
-    }),
+    // In local development use the built in logger for better readability
+    logger:
+      process.env.NODE_ENV === 'development'
+        ? ['error', 'warn', 'log', 'debug']
+        : WinstonModule.createLogger({
+            instance: instance,
+          }),
   });
   const allowList = process.env.CORS_ORIGINS || [];
   const allowListRegex = process.env.CORS_REGEX
