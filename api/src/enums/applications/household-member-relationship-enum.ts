@@ -13,5 +13,6 @@ export enum HouseholdMemberRelationship {
   greatGrandparent = 'greatGrandparent',
   inLaw = 'inLaw',
   friend = 'friend',
+  liveInAide = 'liveInAide',
   other = 'other',
 }

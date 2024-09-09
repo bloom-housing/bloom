@@ -171,6 +171,7 @@
   "application.form.options.relationship.grandparent": "Abuelo(a)",
   "application.form.options.relationship.greatGrandparent": "Bisabuelo(a)",
   "application.form.options.relationship.inLaw": "Pariente político",
+  "application.form.options.relationship.liveInAide": "Asistente residente",
   "application.form.options.relationship.nephew": "Sobrino",
   "application.form.options.relationship.niece": "Sobrina",
   "application.form.options.relationship.other": "Otro",

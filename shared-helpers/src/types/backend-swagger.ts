@@ -5730,6 +5730,7 @@ export enum HouseholdMemberRelationship {
   "greatGrandparent" = "greatGrandparent",
   "inLaw" = "inLaw",
   "friend" = "friend",
+  "liveInAide" = "liveInAide",
   "other" = "other",
 }
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput
