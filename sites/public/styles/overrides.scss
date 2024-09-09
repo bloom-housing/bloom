@@ -215,4 +215,13 @@
   .image-card-tag__wrapper {
     z-index: calc(var(--seeds-z-index-overlay) - 2);
   }
+
+  .seeds-tag {
+    &[data-variant="primary"] {
+      background-color: var(--seeds-color-primary-lighter);
+    }
+    &[data-variant="secondary"] {
+      color: var(--seeds-color-accent-cool-darker);
+    }
+  }
 }
