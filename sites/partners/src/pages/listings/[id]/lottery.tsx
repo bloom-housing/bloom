@@ -198,6 +198,9 @@ const Lottery = (props: { listing: Listing | undefined }) => {
         (event) => event.type === ListingEventsTypeEnum.publicLottery
       )
       if (listing.lotteryStatus === LotteryStatusEnum.releasedToPartners) {
+        const lotteryReleaseDate = lotteryActivityLogData?.findLast(
+          (logItem) => logItem.status === LotteryStatusEnum.releasedToPartners
+        )?.logDate
         return (
           <CardSection>
             <Icon size="xl">
@@ -211,8 +214,8 @@ const Lottery = (props: { listing: Listing | undefined }) => {
               <p>
                 {t("listings.lottery.partnerPublishTimestamp", {
                   adminName: t("listings.lottery.partnerPublishTimestampAdmin"),
-                  date: "DATE",
-                  time: "TIME",
+                  date: dayjs(lotteryReleaseDate).format("MM/DD/YYYY"),
+                  time: dayjs(lotteryReleaseDate).format("h:mm a"),
                   portal: t("listings.lottery.partnerPublishTimestampPortal"),
                 })}
               </p>
