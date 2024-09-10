@@ -330,6 +330,28 @@ export class ListingsService {
     })
   }
   /**
+   * Duplicate listing
+   */
+  duplicate(
+    params: {
+      /** requestBody */
+      body?: ListingDuplicate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Listing> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/duplicate"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Trigger the listing process job
    */
   process(options: IRequestOptions = {}): Promise<SuccessDTO> {
@@ -3787,6 +3809,17 @@ export interface ListingCreate {
 
   /**  */
   requestedChangesUser?: IdDTO
+}
+
+export interface ListingDuplicate {
+  /**  */
+  name: string
+
+  /**  */
+  includeUnits: boolean
+
+  /**  */
+  storedListing: IdDTO
 }
 
 export interface ListingUpdate {
