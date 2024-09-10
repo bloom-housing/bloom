@@ -198,9 +198,10 @@ const Lottery = (props: { listing: Listing | undefined }) => {
         (event) => event.type === ListingEventsTypeEnum.publicLottery
       )
       if (listing.lotteryStatus === LotteryStatusEnum.releasedToPartners) {
-        const lotteryReleaseDate = lotteryActivityLogData?.findLast(
-          (logItem) => logItem.status === LotteryStatusEnum.releasedToPartners
-        )?.logDate
+        // reverse array to find most recent release date
+        const lotteryReleaseDate = lotteryActivityLogData
+          ?.reverse()
+          ?.find((logItem) => logItem.status === LotteryStatusEnum.releasedToPartners)?.logDate
         return (
           <CardSection>
             <Icon size="xl">
