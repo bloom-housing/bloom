@@ -398,7 +398,7 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
   cy.contains("New Listing")
   cy.fixture("minimalListing").then((listing) => {
     if (jurisdiction) {
-      cy.getByID("jurisdictions.id").select("Bloomington")
+      cy.getByID("jurisdictions.id").select("Alameda")
       cy.getByID("jurisdictions.id-error").should("have.length", 0)
     }
     cy.getByID("name").type(listingName)
@@ -423,7 +423,6 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
     cy.getByID("addUnitsButton").contains("Add Unit").click()
     cy.getByID("number").type(listing["number"])
     cy.getByID("unitTypes.id").select(listing["unitType.id"])
-    cy.getByID("unitFormSaveAndExitButton").contains("Save & Exit").click()
     cy.getByID("amiChart.id").select(1).trigger("change")
     cy.getByID("amiPercentage").select(1)
     cy.getByID("unitFormSaveAndExitButton").contains("Save & Exit").click()
@@ -464,6 +463,7 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
 
 Cypress.Commands.add("addMinimalApplication", (listingName) => {
   cy.visit("/")
+  cy.contains("Users")
   cy.getByTestId(`listing-status-cell-${listingName}`).click()
   cy.getByID("addApplicationButton").contains("Add Application").click()
   cy.fixture("applicantOnlyData").then((application) => {
