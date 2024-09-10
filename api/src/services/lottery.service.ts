@@ -95,7 +95,7 @@ export class LotteryService {
       this.prisma,
       LOTTERY_PUBLISH_CRON_JOB_NAME,
       process.env.LOTTERY_PUBLISH_PROCESSING_CRON_STRING,
-      this.expireLotteries.bind(this),
+      this.autoPublishResults.bind(this),
       this.logger,
       this.schedulerRegistry,
     );
