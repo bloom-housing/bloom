@@ -1258,10 +1258,8 @@ describe('Testing lottery service', () => {
 
       expect(prisma.applicationLotteryTotal.findMany).toHaveBeenCalledWith({
         select: {
-          id: true,
           total: true,
           multiselectQuestionId: true,
-          listingId: true,
         },
         where: {
           listingId,
