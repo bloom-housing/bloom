@@ -37,6 +37,7 @@ import { permissionActions } from '../../src/enums/permissions/permission-action
 import { AdminOrJurisdictionalAdminGuard } from '../../src/guards/admin-or-jurisdiction-admin.guard';
 import { PublicLotteryResult } from '../../src/dtos/lottery/lottery-public-result.dto';
 import { ApplicationLotteryTotal } from '../../src/dtos/applications/application-lottery-total.dto';
+import { PublicLotteryTotal } from 'src/dtos/lottery/lottery-public-total.dto';
 
 @Controller('lottery')
 @ApiTags('lottery')
@@ -167,7 +168,7 @@ export class LotteryController {
 
   @Get(`lotteryTotals/:id`)
   @ApiOkResponse({
-    type: ApplicationLotteryTotal,
+    type: PublicLotteryTotal,
     isArray: true,
   })
   @ApiOperation({
@@ -177,7 +178,7 @@ export class LotteryController {
   async lotteryTotals(
     @Request() req: ExpressRequest,
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-  ): Promise<ApplicationLotteryTotal[]> {
+  ): Promise<PublicLotteryTotal[]> {
     return this.lotteryService.lotteryTotals(id, mapTo(User, req['user']));
   }
 }

@@ -49,6 +49,7 @@ import { ListingViews } from '../../src/enums/listings/view-enum';
 import { startCronJob } from '../utilities/cron-job-starter';
 import { EmailService } from './email.service';
 import { PublicLotteryResult } from '../../src/dtos/lottery/lottery-public-result.dto';
+import { PublicLotteryTotal } from '../../src/dtos/lottery/lottery-public-total.dto';
 
 view.csv = {
   ...view.details,
@@ -1178,7 +1179,7 @@ export class LotteryService {
   public async lotteryTotals(
     listingId: string,
     user: User,
-  ): Promise<ApplicationLotteryTotal[]> {
+  ): Promise<PublicLotteryTotal[]> {
     if (!user) {
       throw new ForbiddenException();
     }
@@ -1199,10 +1200,8 @@ export class LotteryService {
 
     const results = await this.prisma.applicationLotteryTotal.findMany({
       select: {
-        id: true,
         total: true,
         multiselectQuestionId: true,
-        listingId: true,
       },
       where: {
         listingId,

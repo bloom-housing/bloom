@@ -1258,12 +1258,10 @@ describe('Lottery Controller Tests', () => {
       expect(res.body).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            listingId: listing1Created.id,
             multiselectQuestionId: null,
             total: 2,
           }),
           expect.objectContaining({
-            listingId: listing1Created.id,
             multiselectQuestionId: preferenceACreated.id,
             total: 1,
           }),

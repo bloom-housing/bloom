@@ -4,7 +4,7 @@ import { t } from "@bloom-housing/ui-components"
 import { AuthContext, BloomCard, CustomIconMap, RequireLogin } from "@bloom-housing/shared-helpers"
 import {
   Application,
-  ApplicationLotteryTotal,
+  PublicLotteryTotal,
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
   PublicLotteryResult,
@@ -23,7 +23,7 @@ export default () => {
   const { applicationsService, listingsService, profile, lotteryService } = useContext(AuthContext)
   const [application, setApplication] = useState<Application>()
   const [results, setResults] = useState<PublicLotteryResult[]>()
-  const [totals, setTotals] = useState<ApplicationLotteryTotal[]>()
+  const [totals, setTotals] = useState<PublicLotteryTotal[]>()
   const [listing, setListing] = useState<Listing>()
   const [unauthorized, setUnauthorized] = useState(false)
   const [noApplication, setNoApplication] = useState(false)
