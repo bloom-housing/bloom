@@ -36,8 +36,7 @@ import { PermissionAction } from '../../src/decorators/permission-action.decorat
 import { permissionActions } from '../../src/enums/permissions/permission-actions-enum';
 import { AdminOrJurisdictionalAdminGuard } from '../../src/guards/admin-or-jurisdiction-admin.guard';
 import { PublicLotteryResult } from '../../src/dtos/lottery/lottery-public-result.dto';
-import { ApplicationLotteryTotal } from '../../src/dtos/applications/application-lottery-total.dto';
-import { PublicLotteryTotal } from 'src/dtos/lottery/lottery-public-total.dto';
+import { PublicLotteryTotal } from '../../src/dtos/lottery/lottery-public-total.dto';
 
 @Controller('lottery')
 @ApiTags('lottery')
