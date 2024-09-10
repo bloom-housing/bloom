@@ -42,7 +42,7 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState()
   const router = useRouter()
-  const showLottery = process.env.showLottery
+  const showLotteryApps = process.env.showLotteryApps
   const filterTypeString = ApplicationsIndexEnum[props.filterType]
 
   useEffect(() => {
@@ -100,7 +100,7 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
           headerText = t("account.noLotteryApplications")
           break
         case ApplicationsIndexEnum.closed:
-          headerText = showLottery
+          headerText = showLotteryApps
             ? t("account.noClosedApplications")
             : t("account.noClosedApplicationsSimplified")
           break
@@ -151,7 +151,7 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
                 </Tabs.Tab>
                 <Tabs.Tab
                   className={`${styles["application-count-tab"]} ${
-                    !showLottery ? styles["application-hide-tab"] : ""
+                    !showLotteryApps ? styles["application-hide-tab"] : ""
                   }`}
                 >
                   <span>{t("account.lotteryRun")}</span>

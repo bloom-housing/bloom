@@ -28,12 +28,13 @@ interface StatusItemProps {
 }
 
 const StatusItem = (props: StatusItemProps) => {
+  const showLotteryApps = process.env.showLotteryApps
   //set custom visuals and data based on listing/lottery status
   let tagText = ""
   let tagVariant: "primary" | "secondary" | "success"
   let deadlineText = ""
   let dueDate = ""
-  if (props.lotteryResults) {
+  if (props.lotteryResults && showLotteryApps) {
     tagText = t("account.lotteryRun")
     tagVariant = "success"
     deadlineText = t("account.lotteryPosted")
@@ -46,7 +47,7 @@ const StatusItem = (props: StatusItemProps) => {
   } else {
     tagText = t("account.closedApplications")
     tagVariant = "secondary"
-    if (props.lotteryStartDate) {
+    if (props.lotteryStartDate && showLotteryApps) {
       deadlineText = t("account.lotteryDate")
       dueDate = props.lotteryStartDate
     }
