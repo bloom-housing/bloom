@@ -389,12 +389,18 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
   cy.contains("New Listing")
   cy.fixture("minimalListing").then((listing) => {
     if (jurisdiction) {
-      cy.getByID("jurisdictions.id").select("Bloomington")
+      cy.getByID("jurisdictions.id").select("Bay Area")
       cy.getByID("jurisdictions.id-error").should("have.length", 0)
     }
     cy.getByID("name").type(listingName)
     cy.getByID("developer").type(listing["developer"])
     cy.getByID("add-photos-button").contains("Add Photo").click()
+    cy.intercept("/api/adapter/upload", {
+      body: {
+        id: "123",
+        url: "https://assets.website-files.com/5fbfdd121e108ea418ede824/5fbfdea9a7287d45a63d821b_Exygy%20Logo.svg",
+      },
+    })
     cy.getByTestId("dropzone-input").attachFile(
       "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg",
       {
@@ -404,7 +410,10 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
     cy.getByTestId("drawer-photos-table")
       .find("img")
       .should("have.attr", "src")
-      .should("include", "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96")
+      .should(
+        "include",
+        "https://assets.website-files.com/5fbfdd121e108ea418ede824/5fbfdea9a7287d45a63d821b_Exygy%20Logo.svg"
+      )
     cy.getByID("listing-photo-uploaded").contains("Save").click()
     cy.getByID("listingsBuildingAddress.street").type(listing["buildingAddress.street"])
     cy.getByID("neighborhood").type(listing["neighborhood"])
@@ -414,7 +423,6 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
     cy.getByID("addUnitsButton").contains("Add Unit").click()
     cy.getByID("number").type(listing["number"])
     cy.getByID("unitTypes.id").select(listing["unitType.id"])
-    cy.getByID("unitFormSaveAndExitButton").contains("Save & Exit").click()
     cy.getByID("amiChart.id").select(1).trigger("change")
     cy.getByID("amiPercentage").select(1)
     cy.getByID("unitFormSaveAndExitButton").contains("Save & Exit").click()
@@ -437,24 +445,24 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
     cy.getByID("digitalApplicationChoiceYes").check()
     cy.getByID("commonDigitalApplicationChoiceYes").check()
     cy.getByID("paperApplicationNo").check()
-    cy.getByID("referralOpportunityNo").check()
-  })
 
-  if (isApproval) {
-    cy.getByID("submitButton").contains("Submit").click()
-    cy.getByID("submitListingForApprovalButtonConfirm").contains("Submit").click()
-    cy.getByTestId("page-header").should("be.visible")
-    cy.getByTestId("page-header").should("have.text", listingName)
-  } else {
-    cy.getByID("publishButton").contains("Publish").click()
-    cy.getByID("publishButtonConfirm").contains("Publish").click()
-    cy.get("[data-testid=page-header]").should("be.visible")
-    cy.getByTestId("page-header").should("have.text", listingName)
-  }
+    if (isApproval) {
+      cy.getByID("submitButton").contains("Submit").click()
+      cy.getByID("submitListingForApprovalButtonConfirm").contains("Submit").click()
+      cy.getByTestId("page-header").should("be.visible")
+      cy.getByTestId("page-header").should("have.text", listingName)
+    } else {
+      cy.getByID("publishButton").contains("Publish").click()
+      cy.getByID("publishButtonConfirm").contains("Publish").click()
+      cy.get("[data-testid=page-header]").should("be.visible")
+      cy.getByTestId("page-header").should("have.text", listingName)
+    }
+  })
 })
 
 Cypress.Commands.add("addMinimalApplication", (listingName) => {
   cy.visit("/")
+  cy.contains("Users")
   cy.getByTestId(`listing-status-cell-${listingName}`).click()
   cy.getByID("addApplicationButton").contains("Add Application").click()
   cy.fixture("applicantOnlyData").then((application) => {

@@ -16,6 +16,7 @@ describe("Lottery Tests", () => {
 
     // Close the listing and view lottery tab
     cy.visit("/")
+    cy.contains("Listings")
     cy.getByTestId("ag-search-input").type(uniqueListingName)
     cy.getByTestId(uniqueListingName).first().click()
     cy.getByID("listingEditButton").contains("Edit").click()
@@ -46,13 +47,14 @@ describe("Lottery Tests", () => {
     cy.contains("Users")
     cy.getByTestId("ag-search-input").type("partner-user@example.com")
     cy.getByID("user-link-partner@example.com").first().click()
-    cy.getByTestId("listings-all-Bloomington").check()
+    cy.getByTestId("listings-all-Bay Area").check({ force: true })
     cy.getByID("save-user").click()
 
     // Login as partner and view lottery tab
     cy.signOut()
     cy.login("partnerUser")
     cy.visit("/")
+    cy.contains("Listings")
     cy.getByTestId("ag-search-input").type(uniqueListingName)
     cy.getByTestId(uniqueListingName).first().click()
     cy.get(`[role="tab"]`).eq(2).click()
@@ -67,6 +69,7 @@ describe("Lottery Tests", () => {
     cy.signOut()
     cy.login()
     cy.visit("/")
+    cy.contains("Listings")
     cy.getByTestId("ag-search-input").type(uniqueListingName)
     cy.getByTestId(uniqueListingName).first().click()
     cy.get(`[role="tab"]`).eq(2).click()
@@ -81,6 +84,7 @@ describe("Lottery Tests", () => {
     cy.signOut()
     cy.login("partnerUser")
     cy.visit("/")
+    cy.contains("Listings")
     cy.getByTestId("ag-search-input").type(uniqueListingName)
     cy.getByTestId(uniqueListingName).first().click()
     cy.get(`[role="tab"]`).eq(2).click()
