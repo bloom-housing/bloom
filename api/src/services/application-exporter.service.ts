@@ -1,7 +1,7 @@
 import { Injectable, StreamableFile } from '@nestjs/common';
 import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
 import archiver from 'archiver';
-import Excel, { Column, Row } from 'exceljs';
+import Excel, { Column } from 'exceljs';
 import { Request as ExpressRequest, Response } from 'express';
 import fs, { createReadStream } from 'fs';
 import { join } from 'path';
@@ -32,7 +32,7 @@ view.csv = {
   },
   listings: false,
 };
-const NUMBER_TO_PAGINATE_BY = 250;
+const NUMBER_TO_PAGINATE_BY = 500;
 
 @Injectable()
 export class ApplicationExporterService {
@@ -327,11 +327,8 @@ export class ApplicationExporterService {
     queryParams: QueryParams,
     forLottery = true,
   ): Promise<StreamableFile> {
-    console.log('start:', process.memoryUsage());
     const user = mapTo(User, req['user']);
     await this.authorizeExport(user, queryParams.id);
-
-    const workbook = new Excel.Workbook();
 
     const filename = join(
       process.cwd(),
@@ -340,13 +337,18 @@ export class ApplicationExporterService {
       }-applications-${user.id}-${new Date().getTime()}.xlsx`,
     );
 
+    const workbook = new Excel.stream.xlsx.WorkbookWriter({
+      filename,
+      useSharedStrings: false,
+    });
+
     const zipFilePath = join(
       process.cwd(),
       `src/temp/${forLottery ? 'lottery-' : ''}listing-${
         queryParams.id
       }-applications-${user.id}-${new Date().getTime()}.zip`,
     );
-    console.log('before sheet creation:', process.memoryUsage());
+
     await this.createSpreadsheets(
       workbook,
       {
@@ -354,9 +356,8 @@ export class ApplicationExporterService {
       },
       forLottery,
     );
-    console.log('after sheet creation:', process.memoryUsage());
-    await workbook.xlsx.writeFile(filename);
-    console.log('after sheet write:', process.memoryUsage());
+
+    await workbook.commit();
     const readStream = createReadStream(filename);
 
     return new Promise((resolve) => {
@@ -369,16 +370,15 @@ export class ApplicationExporterService {
         const zipFile = createReadStream(zipFilePath);
         resolve(new StreamableFile(zipFile));
       });
-      console.log('before zip creation:', process.memoryUsage());
+
       archive.pipe(output);
       archive.append(readStream, {
         name: `${forLottery ? 'lottery-' : ''}${
           queryParams.id
         }-${new Date().getTime()}.xlsx`,
       });
-      console.log('before zip finalize:', process.memoryUsage());
+
       archive.finalize();
-      console.log('after zip finalize:', process.memoryUsage());
     });
   }
 
@@ -390,7 +390,7 @@ export class ApplicationExporterService {
    * @returns generates the lottery sheets
    */
   async createSpreadsheets<QueryParams extends ApplicationCsvQueryParams>(
-    workbook: Excel.Workbook,
+    workbook: Excel.stream.xlsx.WorkbookWriter,
     queryParams: QueryParams,
     forLottery = false,
   ): Promise<void> {
@@ -424,7 +424,6 @@ export class ApplicationExporterService {
         markedAsDuplicate: forLottery ? false : undefined,
       },
     });
-    console.log('basic app data:', process.memoryUsage());
     // get all multiselect questions for a listing to build csv headers
     const multiSelectQuestions =
       await this.multiselectQuestionService.findByListingId(queryParams.id);
@@ -457,7 +456,7 @@ export class ApplicationExporterService {
       );
     }
     const mappedApps = mapTo(Application, applications);
-    console.log('before raw sheet gen:', process.memoryUsage());
+
     await this.generateSpreadsheetData(
       workbook,
       mappedApps,
@@ -500,7 +499,7 @@ export class ApplicationExporterService {
    * @returns void but writes the output to a file
    */
   async generateSpreadsheetData(
-    workbook: Excel.Workbook,
+    workbook: Excel.stream.xlsx.WorkbookWriter,
     applications: Application[],
     csvHeaders: CsvHeader[],
     queryParams: ApplicationCsvQueryParams,
@@ -529,7 +528,6 @@ export class ApplicationExporterService {
       : applications;
     console.log(`after filteredApplications:`, process.memoryUsage());
     // build row data
-    const promiseArray: Promise<Partial<Row>[]>[] = [];
     console.log(`before promise loop:`, process.memoryUsage());
     for (
       let i = 0;
@@ -541,147 +539,135 @@ export class ApplicationExporterService {
         i + NUMBER_TO_PAGINATE_BY,
       );
 
-      promiseArray.push(
-        new Promise(async (resolve) => {
-          // grab applications NUMBER_TO_PAGINATE_BY at a time
-          let paginatedApplications = await this.prisma.applications.findMany({
-            include: {
-              ...view.csv,
-              demographics: queryParams.includeDemographics
-                ? {
-                    select: {
-                      id: true,
-                      createdAt: true,
-                      updatedAt: true,
-                      ethnicity: true,
-                      gender: true,
-                      sexualOrientation: true,
-                      howDidYouHear: true,
-                      race: true,
-                    },
-                  }
-                : false,
-              applicationLotteryPositions: forLottery
-                ? {
-                    select: {
-                      ordinal: true,
-                    },
-                    where: {
-                      multiselectQuestionId: preference ? preference.id : null,
-                    },
-                  }
-                : false,
-            },
-            where: {
-              listingId: queryParams.id,
-              deletedAt: null,
-              markedAsDuplicate: forLottery ? false : undefined,
-              id: {
-                in: slicedApplications.map((app) => app.id),
-              },
-            },
-          });
+      // grab applications NUMBER_TO_PAGINATE_BY at a time
+      let paginatedApplications = await this.prisma.applications.findMany({
+        include: {
+          ...view.csv,
+          demographics: queryParams.includeDemographics
+            ? {
+                select: {
+                  id: true,
+                  createdAt: true,
+                  updatedAt: true,
+                  ethnicity: true,
+                  gender: true,
+                  sexualOrientation: true,
+                  howDidYouHear: true,
+                  race: true,
+                },
+              }
+            : false,
+          applicationLotteryPositions: forLottery
+            ? {
+                select: {
+                  ordinal: true,
+                },
+                where: {
+                  multiselectQuestionId: preference ? preference.id : null,
+                },
+              }
+            : false,
+        },
+        where: {
+          listingId: queryParams.id,
+          deletedAt: null,
+          markedAsDuplicate: forLottery ? false : undefined,
+          id: {
+            in: slicedApplications.map((app) => app.id),
+          },
+        },
+      });
 
-          if (forLottery) {
-            paginatedApplications = paginatedApplications.sort(
-              (a, b) =>
-                a.applicationLotteryPositions[0].ordinal -
-                b.applicationLotteryPositions[0].ordinal,
-            );
-          }
+      if (forLottery) {
+        paginatedApplications = paginatedApplications.sort(
+          (a, b) =>
+            a.applicationLotteryPositions[0].ordinal -
+            b.applicationLotteryPositions[0].ordinal,
+        );
+      }
 
-          const rows: Partial<Row>[] = [];
-          paginatedApplications.forEach((app) => {
-            const row: Partial<Row> = {};
-            let preferences: ApplicationMultiselectQuestion[];
-            let programs: ApplicationMultiselectQuestion[];
+      paginatedApplications.forEach((app) => {
+        const rowData = {};
+        let preferences: ApplicationMultiselectQuestion[];
+        let programs: ApplicationMultiselectQuestion[];
 
-            if (preference) {
-              row['Raw Lottery Rank'] = slicedApplications.find(
-                (slicedApp) => slicedApp.id === app.id,
-              ).applicationLotteryPositions[0].ordinal;
+        if (preference) {
+          rowData['Raw Lottery Rank'] = slicedApplications.find(
+            (slicedApp) => slicedApp.id === app.id,
+          ).applicationLotteryPositions[0].ordinal;
+        }
+
+        csvHeaders.forEach((header) => {
+          let multiselectQuestionValue = false;
+          let parsePreference = false;
+          let parseProgram = false;
+          let value = header.path.split('.').reduce((acc, curr) => {
+            // return preference/program as value for the format function to accept
+            if (multiselectQuestionValue) {
+              return acc;
             }
 
-            csvHeaders.forEach((header) => {
-              let multiselectQuestionValue = false;
-              let parsePreference = false;
-              let parseProgram = false;
-              let value = header.path.split('.').reduce((acc, curr) => {
-                // return preference/program as value for the format function to accept
-                if (multiselectQuestionValue) {
-                  return acc;
-                }
-
-                if (parsePreference) {
-                  // curr should equal the preference id we're pulling from
-                  if (!preferences) {
-                    preferences =
-                      (app.preferences as unknown as ApplicationMultiselectQuestion[]) ||
-                      [];
-                  }
-                  parsePreference = false;
-                  // there aren't typically many preferences, but if there, then a object map should be created and used
-                  const preference = preferences.find(
-                    (preference) => preference.key === curr,
-                  );
-                  multiselectQuestionValue = true;
-                  return preference;
-                } else if (parseProgram) {
-                  // curr should equal the preference id we're pulling from
-                  if (!programs) {
-                    programs =
-                      (app.programs as unknown as ApplicationMultiselectQuestion[]) ||
-                      [];
-                  }
-                  parsePreference = false;
-                  // there aren't typically many programs, but if there, then a object map should be created and used
-                  const program = programs.find(
-                    (preference) => preference.key === curr,
-                  );
-                  multiselectQuestionValue = true;
-                  return program;
-                }
-
-                // sets parsePreference to true, for the next iteration
-                if (curr === 'preferences') {
-                  parsePreference = true;
-                } else if (curr === 'programs') {
-                  parseProgram = true;
-                }
-
-                if (acc === null || acc === undefined) {
-                  return '';
-                }
-
-                // handles working with arrays, e.g. householdMember.0.firstName
-                if (!isNaN(Number(curr))) {
-                  const index = Number(curr);
-                  return acc[index];
-                }
-
-                return acc[curr];
-              }, app);
-              value = value === undefined ? '' : value === null ? '' : value;
-              if (header.format) {
-                value = header.format(value);
+            if (parsePreference) {
+              // curr should equal the preference id we're pulling from
+              if (!preferences) {
+                preferences =
+                  (app.preferences as unknown as ApplicationMultiselectQuestion[]) ||
+                  [];
               }
+              parsePreference = false;
+              // there aren't typically many preferences, but if there, then a object map should be created and used
+              const preference = preferences.find(
+                (preference) => preference.key === curr,
+              );
+              multiselectQuestionValue = true;
+              return preference;
+            } else if (parseProgram) {
+              // curr should equal the preference id we're pulling from
+              if (!programs) {
+                programs =
+                  (app.programs as unknown as ApplicationMultiselectQuestion[]) ||
+                  [];
+              }
+              parsePreference = false;
+              // there aren't typically many programs, but if there, then a object map should be created and used
+              const program = programs.find(
+                (preference) => preference.key === curr,
+              );
+              multiselectQuestionValue = true;
+              return program;
+            }
 
-              row[`${header.path}`] = value ? value.toString() : '';
-            });
+            // sets parsePreference to true, for the next iteration
+            if (curr === 'preferences') {
+              parsePreference = true;
+            } else if (curr === 'programs') {
+              parseProgram = true;
+            }
 
-            rows.push(row);
-          });
-          resolve(rows);
-        }),
-      );
+            if (acc === null || acc === undefined) {
+              return '';
+            }
+
+            // handles working with arrays, e.g. householdMember.0.firstName
+            if (!isNaN(Number(curr))) {
+              const index = Number(curr);
+              return acc[index];
+            }
+
+            return acc[curr];
+          }, app);
+          value = value === undefined ? '' : value === null ? '' : value;
+          if (header.format) {
+            value = header.format(value);
+          }
+
+          rowData[`${header.path}`] = value ? value.toString() : '';
+        });
+        spreadsheet.addRow(rowData).commit();
+      });
     }
-    const res = await Promise.all(promiseArray);
+    spreadsheet.commit();
     console.log(`after promise loop:`, process.memoryUsage());
-    // add rows to spreadsheet
-    res.forEach((elem) => {
-      spreadsheet.addRows(elem);
-    });
-    console.log(`after row add:`, process.memoryUsage());
   }
 
   /**
@@ -692,7 +678,7 @@ export class ApplicationExporterService {
    * @returns a new worksheet
    */
   createNewWorksheet(
-    workbook: Excel.Workbook,
+    workbook: Excel.stream.xlsx.WorkbookWriter,
     forLottery: boolean,
     preference?: IdDTO,
   ): Excel.Worksheet {
