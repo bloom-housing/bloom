@@ -327,7 +327,6 @@ export class ApplicationExporterService {
     queryParams: QueryParams,
     forLottery = true,
   ): Promise<StreamableFile> {
-    console.log('start:', process.memoryUsage());
     const user = mapTo(User, req['user']);
     await this.authorizeExport(user, queryParams.id);
 
@@ -346,7 +345,7 @@ export class ApplicationExporterService {
         queryParams.id
       }-applications-${user.id}-${new Date().getTime()}.zip`,
     );
-    console.log('before sheet creation:', process.memoryUsage());
+
     await this.createSpreadsheets(
       workbook,
       {
@@ -354,9 +353,8 @@ export class ApplicationExporterService {
       },
       forLottery,
     );
-    console.log('after sheet creation:', process.memoryUsage());
+
     await workbook.xlsx.writeFile(filename);
-    console.log('after sheet write:', process.memoryUsage());
     const readStream = createReadStream(filename);
 
     return new Promise((resolve) => {
@@ -369,16 +367,14 @@ export class ApplicationExporterService {
         const zipFile = createReadStream(zipFilePath);
         resolve(new StreamableFile(zipFile));
       });
-      console.log('before zip creation:', process.memoryUsage());
+
       archive.pipe(output);
       archive.append(readStream, {
         name: `${forLottery ? 'lottery-' : ''}${
           queryParams.id
         }-${new Date().getTime()}.xlsx`,
       });
-      console.log('before zip finalize:', process.memoryUsage());
       archive.finalize();
-      console.log('after zip finalize:', process.memoryUsage());
     });
   }
 
@@ -424,7 +420,7 @@ export class ApplicationExporterService {
         markedAsDuplicate: forLottery ? false : undefined,
       },
     });
-    console.log('basic app data:', process.memoryUsage());
+
     // get all multiselect questions for a listing to build csv headers
     const multiSelectQuestions =
       await this.multiselectQuestionService.findByListingId(queryParams.id);
@@ -457,7 +453,7 @@ export class ApplicationExporterService {
       );
     }
     const mappedApps = mapTo(Application, applications);
-    console.log('before raw sheet gen:', process.memoryUsage());
+
     await this.generateSpreadsheetData(
       workbook,
       mappedApps,
