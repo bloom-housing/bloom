@@ -1406,6 +1406,29 @@ export class ApplicationsService {
     })
   }
   /**
+   * Get public applications info
+   */
+  publicAppsView(
+    params: {
+      /**  */
+      userId: string
+      /**  */
+      filterType?: ApplicationsFilterEnum
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PublicAppsViewResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/publicAppsView"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { userId: params["userId"], filterType: params["filterType"] }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Get applications as csv
    */
   listAsCsv(
@@ -3163,6 +3186,9 @@ export interface Listing {
   afsLastRunAt?: Date
 
   /**  */
+  lotteryLastPublishedAt?: Date
+
+  /**  */
   lotteryLastRunAt?: Date
 
   /**  */
@@ -3670,6 +3696,9 @@ export interface ListingCreate {
   contentUpdatedAt?: Date
 
   /**  */
+  lotteryLastPublishedAt?: Date
+
+  /**  */
   lotteryLastRunAt?: Date
 
   /**  */
@@ -3928,6 +3957,9 @@ export interface ListingUpdate {
 
   /**  */
   contentUpdatedAt?: Date
+
+  /**  */
+  lotteryLastPublishedAt?: Date
 
   /**  */
   lotteryLastRunAt?: Date
@@ -4835,6 +4867,144 @@ export interface PaginatedApplication {
 
   /**  */
   meta: PaginationMeta
+}
+
+export interface PublicAppsFiltered {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  deletedAt?: Date
+
+  /**  */
+  appUrl?: string
+
+  /**  */
+  additionalPhone?: boolean
+
+  /**  */
+  additionalPhoneNumber?: string
+
+  /**  */
+  additionalPhoneNumberType?: string
+
+  /**  */
+  contactPreferences: string[]
+
+  /**  */
+  householdSize: number
+
+  /**  */
+  housingStatus?: string
+
+  /**  */
+  sendMailToMailingAddress?: boolean
+
+  /**  */
+  householdExpectingChanges?: boolean
+
+  /**  */
+  householdStudent?: boolean
+
+  /**  */
+  incomeVouchers?: boolean
+
+  /**  */
+  income?: string
+
+  /**  */
+  incomePeriod?: IncomePeriodEnum
+
+  /**  */
+  status: ApplicationStatusEnum
+
+  /**  */
+  language?: LanguagesEnum
+
+  /**  */
+  acceptedTerms?: boolean
+
+  /**  */
+  submissionType: ApplicationSubmissionTypeEnum
+
+  /**  */
+  submissionDate?: Date
+
+  /**  */
+  markedAsDuplicate: boolean
+
+  /**  */
+  flagged?: boolean
+
+  /**  */
+  confirmationCode: string
+
+  /**  */
+  reviewStatus?: ApplicationReviewStatusEnum
+
+  /**  */
+  applicationsMailingAddress: Address
+
+  /**  */
+  applicationsAlternateAddress: Address
+
+  /**  */
+  accessibility: Accessibility
+
+  /**  */
+  demographics: Demographic
+
+  /**  */
+  preferredUnitTypes: UnitType[]
+
+  /**  */
+  applicant: Applicant
+
+  /**  */
+  alternateContact: AlternateContact
+
+  /**  */
+  householdMember: HouseholdMember[]
+
+  /**  */
+  preferences?: ApplicationMultiselectQuestion[]
+
+  /**  */
+  programs?: ApplicationMultiselectQuestion[]
+
+  /**  */
+  applicationLotteryPositions: ApplicationLotteryPosition[]
+
+  /**  */
+  listings: Listing
+}
+
+export interface PublicAppsCount {
+  /**  */
+  total: number
+
+  /**  */
+  lottery: number
+
+  /**  */
+  closed: number
+
+  /**  */
+  open: number
+}
+
+export interface PublicAppsViewResponse {
+  /**  */
+  displayApplications: PublicAppsFiltered[]
+
+  /**  */
+  applicationsCount: PublicAppsCount
 }
 
 export interface ApplicantUpdate {
@@ -5772,6 +5942,13 @@ export enum ApplicationOrderByKeys {
   "lastName" = "lastName",
   "submissionDate" = "submissionDate",
   "createdAt" = "createdAt",
+}
+
+export enum ApplicationsFilterEnum {
+  "all" = "all",
+  "lottery" = "lottery",
+  "closed" = "closed",
+  "open" = "open",
 }
 
 export enum MfaType {
