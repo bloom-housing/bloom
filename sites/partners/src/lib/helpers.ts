@@ -147,7 +147,13 @@ export const createTime = (
 export const createDate = (formDate: { year: string; month: string; day: string }) => {
   if (!formDate || !formDate?.year || !formDate?.month || !formDate?.day) return null
 
-  return dayjs(`${formDate.year}-${formDate.month}-${formDate.day}`, "YYYY-MM-DD").toDate()
+  const createdDate = new Date(
+    parseInt(formDate.year),
+    parseInt(formDate.month) - 1,
+    parseInt(formDate.day)
+  )
+
+  return createdDate
 }
 
 interface FileUploaderParams {
