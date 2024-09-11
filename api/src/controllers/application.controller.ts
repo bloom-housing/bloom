@@ -133,7 +133,7 @@ export class ApplicationController {
   })
   @Header('Content-Type', 'application/zip')
   @UseInterceptors(ExportLogInterceptor)
-  async lotteryExport(
+  async spreadsheetExport(
     @Request() req: ExpressRequest,
     @Res({ passthrough: true }) res: Response,
     @Query(new ValidationPipe(defaultValidationPipeOptions))
