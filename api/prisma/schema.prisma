@@ -534,6 +534,7 @@ model Listings {
   closedAt                              DateTime?                     @map("closed_at") @db.Timestamptz(6)
   afsLastRunAt                          DateTime?                     @default(dbgenerated("'1970-01-01 00:00:00-07'::timestamp with time zone")) @map("afs_last_run_at") @db.Timestamptz(6)
   lastApplicationUpdateAt               DateTime?                     @default(dbgenerated("'1970-01-01 00:00:00-07'::timestamp with time zone")) @map("last_application_update_at") @db.Timestamptz(6)
+  lotteryLastPublishedAt                DateTime?                @map("lottery_last_published_at") @db.Timestamptz(6)
   lotteryLastRunAt                      DateTime?                     @map("lottery_last_run_at") @db.Timestamptz(6)
   lotteryStatus                         LotteryStatusEnum?            @map("lottery_status")
   buildingAddressId                     String?                       @map("building_address_id") @db.Uuid

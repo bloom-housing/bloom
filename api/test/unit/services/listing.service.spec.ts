@@ -30,7 +30,6 @@ import { ListingViews } from '../../../src/enums/listings/view-enum';
 import { TranslationService } from '../../../src/services/translation.service';
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 import { ListingCreate } from '../../../src/dtos/listings/listing-create.dto';
-import { ListingLotteryStatus } from 'src/dtos/listings/listing-lottery-status.dto';
 import { ListingUpdate } from '../../../src/dtos/listings/listing-update.dto';
 import { ListingPublishedCreate } from '../../../src/dtos/listings/listing-published-create.dto';
 import { ListingPublishedUpdate } from '../../../src/dtos/listings/listing-published-update.dto';

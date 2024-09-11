@@ -33,7 +33,7 @@
     "@bloom-housing/doorway-ui-components": "^1.0.0",
     "@bloom-housing/shared-helpers": "^7.7.1",
     "@bloom-housing/ui-components": "12.1.6",
-    "@bloom-housing/ui-seeds": "1.16.2",
+    "@bloom-housing/ui-seeds": "1.17.0",
     "@heroicons/react": "^2.1.1",
     "@react-google-maps/api": "^2.18.1",
     "@sentry/nextjs": "^7.61.0",

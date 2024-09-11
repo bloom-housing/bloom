@@ -6,6 +6,8 @@ import {
   ApplicationSubmissionTypeEnum,
   IncomePeriodEnum,
   LanguagesEnum,
+  ListingsStatusEnum,
+  LotteryStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
   Prisma,
   UnitTypeEnum,
@@ -41,6 +43,8 @@ import { reservedCommunityTypeFactoryAll } from '../../prisma/seed-helpers/reser
 import { ValidationMethod } from '../../src/enums/multiselect-questions/validation-method-enum';
 import { AlternateContactRelationship } from '../../src/enums/applications/alternate-contact-relationship-enum';
 import { HouseholdMemberRelationship } from '../../src/enums/applications/household-member-relationship-enum';
+import { ApplicationsFilterEnum } from '../../src/enums/applications/filter-enum';
+import { PublicAppsViewQueryParams } from '../../src/dtos/applications/public-apps-view-params.dto';
 
 describe('Application Controller Tests', () => {
   let app: INestApplication;
@@ -1549,6 +1553,111 @@ describe('Application Controller Tests', () => {
       expect(res.body.message).toEqual([
         'preferences should not be null or undefined',
       ]);
+    });
+  });
+  describe('publicAppsView endpoint', () => {
+    it('should retrieve applications and counts when they exist', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const user = await prisma.userAccounts.create({
+        data: await userFactory(),
+      });
+      const juris = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(juris.id, prisma);
+
+      const listingOpen = await listingFactory(juris.id, prisma, {
+        status: ListingsStatusEnum.active,
+      });
+      const listingClosed = await listingFactory(juris.id, prisma, {
+        status: ListingsStatusEnum.closed,
+      });
+      const listingLottery = await listingFactory(juris.id, prisma, {
+        status: ListingsStatusEnum.closed,
+        lotteryStatus: LotteryStatusEnum.publishedToPublic,
+      });
+      const listingOpenCreated = await prisma.listings.create({
+        data: listingOpen,
+      });
+      const listingClosedCreated = await prisma.listings.create({
+        data: listingClosed,
+      });
+      const listingLotteryCreated = await prisma.listings.create({
+        data: listingLottery,
+      });
+
+      const appOpenListing = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        userId: user.id,
+        listingId: listingOpenCreated.id,
+      });
+
+      const appClosedListing = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        userId: user.id,
+        listingId: listingClosedCreated.id,
+      });
+
+      const appLotteryListing = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        userId: user.id,
+        listingId: listingLotteryCreated.id,
+      });
+      const appArr = [appOpenListing, appClosedListing, appLotteryListing];
+      await Promise.all(
+        appArr.map(async (app) => {
+          await prisma.applications.create({
+            data: app,
+            include: {
+              applicant: true,
+            },
+          });
+        }),
+      );
+
+      const queryParams: PublicAppsViewQueryParams = {
+        userId: user.id,
+        filterType: ApplicationsFilterEnum.all,
+      };
+      const query = stringify(queryParams as any);
+
+      const res = await request(app.getHttpServer())
+        .get(`/applications/publicAppsView?${query}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+
+      expect(res.body.applicationsCount.total).toEqual(3);
+      expect(res.body.applicationsCount.lottery).toEqual(1);
+      expect(res.body.applicationsCount.closed).toEqual(1);
+      expect(res.body.applicationsCount.open).toEqual(1);
+
+      expect(res.body.displayApplications.length).toBe(3);
+      expect(res.body.displayApplications[0].id).not.toBeNull();
+    });
+
+    it('should not retrieve applications nor error when none exist', async () => {
+      const userA = await prisma.userAccounts.create({
+        data: await userFactory(),
+      });
+
+      const queryParams: PublicAppsViewQueryParams = {
+        userId: userA.id,
+        filterType: ApplicationsFilterEnum.all,
+      };
+      const query = stringify(queryParams as any);
+
+      const res = await request(app.getHttpServer())
+        .get(`/applications/publicAppsView?${query}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+
+      expect(res.body.applicationsCount.total).toEqual(0);
+      expect(res.body.displayApplications.length).toEqual(0);
     });
   });
 });

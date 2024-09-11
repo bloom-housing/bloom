@@ -960,7 +960,10 @@ describe('Lottery Controller Tests', () => {
         ],
       });
       const listing = await prisma.listings.create({
-        data: listingData,
+        data: {
+          ...listingData,
+          lotteryLastPublishedAt: new Date(),
+        },
       });
 
       const partnerUser = await prisma.userAccounts.create({
