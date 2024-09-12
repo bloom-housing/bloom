@@ -27,6 +27,12 @@ describe("helpers", () => {
     it("should create dates with variable numbers of characters", () => {
       expect(createDate({ year: "2025", month: "12", day: "10" })).toEqual(new Date(2025, 11, 10))
       expect(createDate({ year: "2025", month: "1", day: "5" })).toEqual(new Date(2025, 0, 5))
+      expect(createDate({ year: "2025", month: "01", day: "05" })).toEqual(new Date(2025, 0, 5))
+    })
+    it("should fail with invalid input", () => {
+      expect(createDate({ year: "202", month: "12", day: "10" })).toBeFalsy()
+      expect(createDate({ year: "2025", month: "13", day: "10" })).toBeFalsy()
+      expect(createDate({ year: "2025", month: "13", day: "35" })).toBeFalsy()
     })
   })
 })
