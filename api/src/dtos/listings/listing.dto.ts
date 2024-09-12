@@ -1,5 +1,6 @@
 import { Expose, Transform, TransformFnParams, Type } from 'class-transformer';
 import {
+  IsArray,
   IsBoolean,
   IsDate,
   IsDefined,
@@ -39,6 +40,7 @@ import { listingUrlSlug } from '../../utilities/listing-url-slug';
 import { User } from '../users/user.dto';
 import { requestedChangesUserMapper } from '../../utilities/requested-changes-user';
 import { LotteryDateParamValidator } from '../../utilities/lottery-date-validator';
+import { ApplicationLotteryTotal } from '../applications/application-lottery-total.dto';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -608,6 +610,14 @@ class Listing extends AbstractDTO {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   lotteryOptIn?: boolean;
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ApplicationLotteryTotal)
+  @ApiProperty({ type: ApplicationLotteryTotal, isArray: true })
+  applicationLotteryTotals: ApplicationLotteryTotal[];
 }
 
 export { Listing as default, Listing };

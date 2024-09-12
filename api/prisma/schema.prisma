@@ -444,6 +444,18 @@ model ApplicationLotteryPositions {
   @@map("application_lottery_positions")
 }
 
+model ApplicationLotteryTotal {
+  id                    String                @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  total                 Int
+  listingId             String                @map("listing_id") @db.Uuid
+  listings              Listings              @relation(fields: [listingId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  multiselectQuestionId String?               @map("multiselect_question_id") @db.Uuid
+  multiselectQuestions  MultiselectQuestions? @relation(fields: [multiselectQuestionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([listingId])
+  @@map("application_lottery_totals")
+}
+
 model ListingUtilities {
   id          String    @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
@@ -596,7 +608,7 @@ model Listings {
   requestedChangesUserId                String?                       @map("requested_changes_user_id") @db.Uuid
   requestedChangesUser                  UserAccounts?                 @relation("requested_changes_user", fields: [requestedChangesUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   applicationLotteryPositions           ApplicationLotteryPositions[]
-
+  applicationLotteryTotals              ApplicationLotteryTotal[]
   @@index([jurisdictionId])
   @@map("listings")
 }
@@ -636,6 +648,7 @@ model MultiselectQuestions {
   jurisdictions               Jurisdictions[]
   listings                    ListingMultiselectQuestions[]
   applicationLotteryPositions ApplicationLotteryPositions[]
+  applicationLotteryTotals    ApplicationLotteryTotal[]
 
   @@map("multiselect_questions")
 }

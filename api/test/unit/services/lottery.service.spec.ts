@@ -138,9 +138,16 @@ describe('Testing lottery service', () => {
         .fn()
         .mockResolvedValue({ id: randomUUID() });
 
+      prisma.applicationLotteryTotal.create = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
       await service.lotteryRandomizer(listingId, applications, []);
 
-      expect(prisma.applicationLotteryPositions.createMany).toHaveBeenCalled();
+      expect(
+        prisma.applicationLotteryPositions.createMany,
+      ).toHaveBeenCalledTimes(1);
+      expect(prisma.applicationLotteryTotal.create).toHaveBeenCalledTimes(1);
 
       const args = (prisma.applicationLotteryPositions.createMany as any).mock
         .calls[0][0].data;
@@ -183,6 +190,10 @@ describe('Testing lottery service', () => {
         .fn()
         .mockResolvedValue({ id: randomUUID() });
 
+      prisma.applicationLotteryTotal.create = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
       await service.lotteryRandomizer(listingId, applications, preferences);
 
       const args = (prisma.applicationLotteryPositions.createMany as any).mock
@@ -198,6 +209,7 @@ describe('Testing lottery service', () => {
       }
 
       expect(prisma.applicationLotteryPositions.createMany).toBeCalledTimes(1);
+      expect(prisma.applicationLotteryTotal.create).toBeCalledTimes(1);
     });
 
     it('should store randomized ordinals and preference specific ordinals', async () => {
@@ -223,6 +235,10 @@ describe('Testing lottery service', () => {
       }
 
       prisma.applicationLotteryPositions.createMany = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
+      prisma.applicationLotteryTotal.create = jest
         .fn()
         .mockResolvedValue({ id: randomUUID() });
 
@@ -258,10 +274,35 @@ describe('Testing lottery service', () => {
       );
 
       expect(prisma.applicationLotteryPositions.createMany).toBeCalledTimes(2);
+      expect(prisma.applicationLotteryTotal.create).toBeCalledTimes(2);
     });
   });
 
   describe('Testing lotteryGenerate()', () => {
+    it('should error if not an admin', async () => {
+      const listingId = randomUUID();
+      const requestingUser = {
+        firstName: 'requesting fName',
+        lastName: 'requesting lName',
+        email: 'requestingUser@email.com',
+        jurisdictions: [{ id: 'juris id' }],
+        userRoles: { isAdmin: false },
+      } as unknown as User;
+
+      prisma.listings.findUnique = jest.fn();
+
+      await expect(
+        async () =>
+          await service.lotteryGenerate(
+            { user: requestingUser } as unknown as ExpressRequest,
+            {} as unknown as Response,
+            { id: listingId },
+          ),
+      ).rejects.toThrowError();
+
+      expect(prisma.listings.findUnique).not.toHaveBeenCalled();
+    });
+
     it('should build lottery when no prior lottery has been ran', async () => {
       const listingId = randomUUID();
       const requestingUser = {
@@ -305,6 +346,10 @@ describe('Testing lottery service', () => {
       ]);
 
       prisma.applicationLotteryPositions.createMany = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
+      prisma.applicationLotteryTotal.createMany = jest
         .fn()
         .mockResolvedValue({ id: randomUUID() });
 
@@ -361,6 +406,8 @@ describe('Testing lottery service', () => {
       });
 
       expect(prisma.applicationLotteryPositions.createMany).toHaveBeenCalled();
+      expect(prisma.applicationLotteryTotal.create).toHaveBeenCalled();
+
       expect(prisma.listings.update).toHaveBeenCalledWith({
         data: {
           lotteryLastRunAt: expect.anything(),
@@ -419,6 +466,11 @@ describe('Testing lottery service', () => {
         .fn()
         .mockResolvedValue({ id: randomUUID() });
 
+      prisma.applicationLotteryTotal.deleteMany = jest.fn();
+      prisma.applicationLotteryTotal.create = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
       prisma.listings.update = jest.fn().mockResolvedValue({
         id: listingId,
         lotteryLastRunAt: null,
@@ -445,9 +497,14 @@ describe('Testing lottery service', () => {
       expect(
         prisma.applicationLotteryPositions.deleteMany,
       ).toHaveBeenCalledWith({ where: { listingId: listingId } });
+      expect(prisma.applicationLotteryTotal.deleteMany).toHaveBeenCalledWith({
+        where: { listingId: listingId },
+      });
       expect(prisma.applications.findMany).toHaveBeenCalled();
 
       expect(prisma.applicationLotteryPositions.createMany).toHaveBeenCalled();
+      expect(prisma.applicationLotteryTotal.create).toHaveBeenCalled();
+
       expect(prisma.listings.update).toHaveBeenCalled();
     });
   });
@@ -1167,10 +1224,11 @@ describe('Testing lottery service', () => {
     const applicationId = randomUUID();
     const publicUser = {
       id: 'public id',
+      userRoles: {},
     } as User;
 
     it('should query for lottery positions', async () => {
-      prisma.applications.findFirstOrThrow = jest
+      prisma.applications.findFirst = jest
         .fn()
         .mockResolvedValue({ userId: publicUser.id });
       prisma.applicationLotteryPositions.findMany = jest
@@ -1190,6 +1248,49 @@ describe('Testing lottery service', () => {
           applicationId,
         },
       });
+    });
+  });
+
+  describe('Testing lotteryTotals()', () => {
+    const listingId = randomUUID();
+    const publicUser = {
+      id: 'public id',
+      userRoles: {},
+    } as User;
+
+    it('should query for lottery totals', async () => {
+      prisma.applications.findFirst = jest
+        .fn()
+        .mockResolvedValue({ userId: publicUser.id });
+      prisma.applicationLotteryTotal.findMany = jest.fn().mockResolvedValue([
+        { total: 10, multiselectQuestionId: null, listingId },
+        { total: 5, multiselectQuestionId: 'preference id', listingId },
+      ]);
+      await service.lotteryTotals(listingId, publicUser);
+
+      expect(prisma.applicationLotteryTotal.findMany).toHaveBeenCalledWith({
+        select: {
+          total: true,
+          multiselectQuestionId: true,
+        },
+        where: {
+          listingId,
+        },
+      });
+    });
+
+    it('should fail for no user', async () => {
+      prisma.applications.findFirstOrThrow = jest
+        .fn()
+        .mockResolvedValue({ userId: publicUser.id });
+      prisma.applicationLotteryTotal.findMany = jest.fn().mockResolvedValue([
+        { total: 10, multiselectQuestionId: null, listingId },
+        { total: 5, multiselectQuestionId: 'preference id', listingId },
+      ]);
+
+      await expect(
+        async () => await service.lotteryTotals(listingId, null),
+      ).rejects.toThrowError();
     });
   });
 });

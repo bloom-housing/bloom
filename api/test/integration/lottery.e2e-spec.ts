@@ -1133,6 +1133,7 @@ describe('Lottery Controller Tests', () => {
         data: jurisdictionFactory(),
       });
       await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
+
       const listing1 = await listingFactory(jurisdiction.id, prisma, {
         status: ListingsStatusEnum.closed,
       });
@@ -1171,6 +1172,104 @@ describe('Lottery Controller Tests', () => {
         .expect(200);
 
       expect(res.body).toEqual([{ ordinal: 1, multiselectQuestionId: null }]);
+    });
+  });
+  describe('lotteryTotals', () => {
+    it('should return totals', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
+
+      const preferenceA = await multiselectQuestionFactory(jurisdiction.id, {
+        multiselectQuestion: {
+          text: 'City Employees',
+          description: 'Employees of the local city.',
+          applicationSection:
+            MultiselectQuestionsApplicationSectionEnum.preferences,
+          options: [
+            {
+              text: 'At least one member of my household is a city employee',
+              collectAddress: false,
+              ordinal: 0,
+            },
+          ],
+        },
+      });
+
+      const preferenceACreated = await prisma.multiselectQuestions.create({
+        data: preferenceA,
+      });
+
+      const listing1 = await listingFactory(jurisdiction.id, prisma, {
+        status: ListingsStatusEnum.closed,
+        multiselectQuestions: [preferenceACreated],
+      });
+
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+
+      const appA = await applicationFactory({
+        listingId: listing1Created.id,
+        unitTypeId: unitTypeA.id,
+        multiselectQuestions: [preferenceACreated],
+      });
+
+      await prisma.applications.create({
+        data: appA,
+        include: {
+          applicant: true,
+        },
+      });
+
+      const appB = await applicationFactory({
+        listingId: listing1Created.id,
+        unitTypeId: unitTypeA.id,
+      });
+
+      await prisma.applications.create({
+        data: appB,
+        include: {
+          applicant: true,
+        },
+      });
+
+      await lotteryService.lotteryGenerate(
+        {
+          user: {
+            id: randomUUID(),
+            userRoles: {
+              isAdmin: true,
+            },
+          },
+        } as unknown as ExpressRequest,
+        {} as Response,
+        { id: listing1Created.id },
+      );
+
+      const res = await request(app.getHttpServer())
+        .get(`/lottery/lotteryTotals/${listing1Created.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', adminAccessToken)
+        .expect(200);
+
+      expect(res.body).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            multiselectQuestionId: null,
+            total: 2,
+          }),
+          expect.objectContaining({
+            multiselectQuestionId: preferenceACreated.id,
+            total: 1,
+          }),
+        ]),
+      );
     });
   });
 });
