@@ -372,16 +372,16 @@ const ListingFormActions = ({
             listing.status === ListingsStatusEnum.changesRequested
           )
             elements.push(approveAndPublishButton)
-          // admins can always edit or copy
+          // admins can always edit
           elements.push(editFromDetailButton)
-          elements.push(copyButton)
         } else {
           // partners cannot edit if pending approval
           if (listing.status !== ListingsStatusEnum.pendingReview)
             elements.push(editFromDetailButton)
         }
 
-        // all users can preview
+        // all users can copy or preview
+        elements.push(copyButton)
         elements.push(previewButton)
 
         // all users can view lottery results if posted
@@ -461,6 +461,7 @@ const ListingFormActions = ({
       // read-only form
       if (type === ListingFormActionsType.details) {
         elements.push(editFromDetailButton)
+        elements.push(copyButton)
         elements.push(previewButton)
 
         lotteryResultsButton(elements)

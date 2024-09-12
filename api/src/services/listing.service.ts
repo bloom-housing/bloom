@@ -975,6 +975,7 @@ export class ListingService implements OnModuleInit {
     const newListingData: ListingCreate = {
       ...mappedListing,
       name: dto.name,
+      assets: [],
       status: ListingsStatusEnum.pending,
       listingEvents: listingEvents,
       listingMultiselectQuestions:
