@@ -4,6 +4,7 @@ import { t } from "@bloom-housing/ui-components"
 import { AuthContext, BloomCard, CustomIconMap, RequireLogin } from "@bloom-housing/shared-helpers"
 import {
   Application,
+  PublicLotteryTotal,
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
   PublicLotteryResult,
@@ -22,6 +23,7 @@ export default () => {
   const { applicationsService, listingsService, profile, lotteryService } = useContext(AuthContext)
   const [application, setApplication] = useState<Application>()
   const [results, setResults] = useState<PublicLotteryResult[]>()
+  const [totals, setTotals] = useState<PublicLotteryTotal[]>()
   const [listing, setListing] = useState<Listing>()
   const [unauthorized, setUnauthorized] = useState(false)
   const [noApplication, setNoApplication] = useState(false)
@@ -39,6 +41,14 @@ export default () => {
                 .publicLotteryResults({ id: applicationId })
                 .then((results) => {
                   setResults(results)
+                  lotteryService
+                    .lotteryTotals({ id: retrievedListing.id })
+                    .then((totals) => {
+                      setTotals(totals)
+                    })
+                    .catch((err) => {
+                      console.error(`Error fetching lottery totals: ${err}`)
+                    })
                 })
                 .catch((err) => {
                   console.error(`Error fetching lottery results: ${err}`)
@@ -108,7 +118,7 @@ export default () => {
                           listing?.unitsAvailable !== 1 ? "Plural" : ""
                         }`,
                         {
-                          applications: 2500, // TODO: Plug in BE data
+                          applications: totals?.find((total) => !total.multiselectQuestionId).total,
                           units: listing?.unitsAvailable,
                         }
                       )}
@@ -181,7 +191,14 @@ export default () => {
                           result.multiselectQuestionId === question.multiselectQuestions.id
                       )
                       return result
-                        ? preferenceRank(result.ordinal, question.multiselectQuestions.text, 2500) // TODO: Plug in BE data
+                        ? preferenceRank(
+                            result.ordinal,
+                            question.multiselectQuestions.text,
+                            totals?.find(
+                              (total) =>
+                                total.multiselectQuestionId === question.multiselectQuestions.id
+                            )?.total
+                          )
                         : null
                     })}
                   <Card.Section divider={"flush"} className={"border-none"}>

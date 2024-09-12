@@ -10,6 +10,7 @@ import {
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { ConfigService } from '@nestjs/config';
 import {
+  ApplicationLotteryTotal,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
   LotteryStatusEnum,
@@ -48,6 +49,7 @@ import { ListingViews } from '../../src/enums/listings/view-enum';
 import { startCronJob } from '../utilities/cron-job-starter';
 import { EmailService } from './email.service';
 import { PublicLotteryResult } from '../../src/dtos/lottery/lottery-public-result.dto';
+import { PublicLotteryTotal } from '../../src/dtos/lottery/lottery-public-total.dto';
 
 view.csv = {
   ...view.details,
@@ -134,6 +136,9 @@ export class LotteryService {
       //     1. The lottery generation fails halfway through and the data is corrupted (some values from first run and some from re-reun) - this is very unlikely
       //     2. During the regeneration there are now less applications but they are still in the applicationLotteryPositions table
       await this.prisma.applicationLotteryPositions.deleteMany({
+        where: { listingId: listingId },
+      });
+      await this.prisma.applicationLotteryTotal.deleteMany({
         where: { listingId: listingId },
       });
     }
@@ -241,6 +246,14 @@ export class LotteryService {
       })),
     });
 
+    await this.prisma.applicationLotteryTotal.create({
+      data: {
+        listingId,
+        total: filteredApplications.length,
+        multiselectQuestionId: null,
+      },
+    });
+
     // order by ordinal
     filteredApplications = filteredApplications.sort(
       (a, b) =>
@@ -278,6 +291,13 @@ export class LotteryService {
             ordinal: ordinalArrayWithThisPreference[index],
             multiselectQuestionId: id,
           })),
+        });
+        await this.prisma.applicationLotteryTotal.create({
+          data: {
+            listingId,
+            total: applicationsWithThisPreference.length,
+            multiselectQuestionId: id,
+          },
         });
       }
     }
@@ -1118,23 +1138,31 @@ export class LotteryService {
       throw new ForbiddenException();
     }
 
-    const applicationUserId = await this.prisma.applications.findFirstOrThrow({
-      select: {
-        userId: true,
-      },
-      where: {
-        id: applicationId,
-      },
-    });
+    if (!user.userRoles?.isAdmin) {
+      const applicationUserId = await this.prisma.applications.findFirst({
+        select: {
+          userId: true,
+        },
+        where: {
+          id: applicationId,
+        },
+      });
 
-    await this.permissionService.canOrThrow(
-      user,
-      'application',
-      permissionActions.read,
-      {
-        userId: applicationUserId.userId,
-      },
-    );
+      if (!applicationUserId) {
+        throw new BadRequestException(
+          `User requesting lottery results did not submit an application to this listing`,
+        );
+      }
+
+      await this.permissionService.canOrThrow(
+        user,
+        'application',
+        permissionActions.read,
+        {
+          userId: applicationUserId.userId,
+        },
+      );
+    }
 
     const results = await this.prisma.applicationLotteryPositions.findMany({
       select: {
@@ -1143,6 +1171,45 @@ export class LotteryService {
       },
       where: {
         applicationId,
+      },
+    });
+
+    return results;
+  }
+
+  /*
+   * @param id - listing id
+   * @returns an array of totals
+   */
+  public async lotteryTotals(
+    listingId: string,
+    user: User,
+  ): Promise<PublicLotteryTotal[]> {
+    if (!user) {
+      throw new ForbiddenException();
+    }
+
+    if (!user.userRoles?.isAdmin) {
+      const application = await this.prisma.applications.findFirst({
+        where: {
+          listingId,
+          userId: user.id,
+        },
+      });
+      if (!application) {
+        throw new BadRequestException(
+          `User requesting lottery totals did not submit an application to this listing`,
+        );
+      }
+    }
+
+    const results = await this.prisma.applicationLotteryTotal.findMany({
+      select: {
+        total: true,
+        multiselectQuestionId: true,
+      },
+      where: {
+        listingId,
       },
     });
 

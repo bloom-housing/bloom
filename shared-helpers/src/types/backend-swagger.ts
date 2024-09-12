@@ -2327,6 +2327,27 @@ export class LotteryService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Get lottery totals by listing id
+   */
+  lotteryTotals(
+    params: {
+      /**  */
+      id: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PublicLotteryTotal[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/lottery/lotteryTotals/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export interface SuccessDTO {
@@ -3017,6 +3038,17 @@ export interface UnitsSummary {
   totalAvailable?: number
 }
 
+export interface ApplicationLotteryTotal {
+  /**  */
+  listingId: string
+
+  /**  */
+  multiselectQuestionId: string
+
+  /**  */
+  total: number
+}
+
 export interface Listing {
   /**  */
   id: string
@@ -3308,6 +3340,9 @@ export interface Listing {
 
   /**  */
   lotteryOptIn?: boolean
+
+  /**  */
+  applicationLotteryTotals: ApplicationLotteryTotal[]
 }
 
 export interface PaginationMeta {
@@ -5776,6 +5811,14 @@ export interface LotteryActivityLogItem {
 export interface PublicLotteryResult {
   /**  */
   ordinal: number
+
+  /**  */
+  multiselectQuestionId: string
+}
+
+export interface PublicLotteryTotal {
+  /**  */
+  total: number
 
   /**  */
   multiselectQuestionId: string
