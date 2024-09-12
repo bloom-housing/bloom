@@ -3,7 +3,7 @@ import { IdDTO } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import { Field, Form, t } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
-import { MessageContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { useRouter } from "next/router"
 
 export interface CopyListingDialogProps {
@@ -18,16 +18,22 @@ type CopyListingFormFields = {
 }
 
 const CopyListingDialog = ({ isOpen, setOpen, listingInfo }: CopyListingDialogProps) => {
-  // const { listingsService } = useContext(AuthContext)
+  const { listingsService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
   const { register, errors, handleSubmit, clearErrors } = useForm<CopyListingFormFields>()
   const router = useRouter()
 
   const onSubmit = async (data: CopyListingFormFields) => {
     try {
-      // const res = await listingsService.duplicate(())
-      //then
-      const res = { id: "eb58d4c9-f750-4089-a421-8458bede4167" }
+      const res = await listingsService.duplicate({
+        body: {
+          includeUnits: data.includeUnitData,
+          name: data.newListingName,
+          storedListing: {
+            id: listingInfo.id,
+          },
+        },
+      })
       setOpen(false)
       await router.push(`/listings/${res.id}`)
       addToast(t("listings.copy.success"), { variant: "success" })
