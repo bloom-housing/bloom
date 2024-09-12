@@ -141,9 +141,18 @@ export const createTime = (
  * Create Date object depending on DateField component
  */
 export const createDate = (formDate: { year: string; month: string; day: string }) => {
-  if (!formDate || !formDate?.year || !formDate?.month || !formDate?.day) return null
+  const year = formDate?.year
+  let month = formDate?.month
+  let day = formDate?.day
+  if (!formDate || !year || !month || !day || year.length !== 4) return null
 
-  return dayjs(`${formDate.year}-${formDate.month}-${formDate.day}`, "YYYY-MM-DD").toDate()
+  if (day.length === 1) day = `0${day}`
+  if (month.length === 1) month = `0${month}`
+
+  const date = dayjs(`${year}-${month}-${day}`, "YYYY-MM-DD", true)
+  if (!date.isValid()) return null
+
+  return date.toDate()
 }
 
 export function formatIncome(

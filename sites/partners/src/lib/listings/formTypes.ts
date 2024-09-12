@@ -154,6 +154,7 @@ export const formDefaults: FormListing = {
   yearBuilt: null,
   reviewOrderType: null,
   unitsSummary: [],
+  referralOpportunity: false,
   applicationLotteryTotals: [],
 }
 
