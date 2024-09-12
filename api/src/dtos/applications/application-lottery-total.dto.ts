@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import {
   IsDefined,
@@ -21,7 +21,7 @@ export class ApplicationLotteryTotal {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   multiselectQuestionId?: string;
 
   @Expose()
