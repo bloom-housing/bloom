@@ -479,10 +479,6 @@ Cypress.Commands.add("addMinimalApplication", (listingName) => {
 Cypress.Commands.add("findAndOpenListing", (listingName) => {
   cy.visit("/")
   cy.contains("Listings")
-  cy.getByTestId("ag-search-input").should("be.visible").type(listingName)
+  cy.getByTestId("ag-search-input").should("be.visible").type(listingName, { force: true })
   cy.getByTestId(listingName).first().click()
-})
-
-Cypress.Keyboard.defaults({
-  keystrokeDelay: 1,
 })
