@@ -109,6 +109,7 @@ describe("<ListingFormActions>", () => {
         </AuthContext.Provider>
       )
       expect(getByText("Edit")).toBeTruthy()
+      expect(getByText("Copy")).toBeTruthy()
       expect(getByText("Preview")).toBeTruthy()
     })
 
@@ -134,6 +135,7 @@ describe("<ListingFormActions>", () => {
         </AuthContext.Provider>
       )
       expect(getByText("Edit")).toBeTruthy()
+      expect(getByText("Copy")).toBeTruthy()
       expect(getByText("Preview")).toBeTruthy()
     })
 
@@ -160,6 +162,7 @@ describe("<ListingFormActions>", () => {
         </AuthContext.Provider>
       )
       expect(getByText("Edit")).toBeTruthy()
+      expect(getByText("Copy")).toBeTruthy()
       expect(getByText("Preview")).toBeTruthy()
     })
 
@@ -207,6 +210,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -235,6 +239,7 @@ describe("<ListingFormActions>", () => {
         )
         expect(getByText("Approve & Publish")).toBeTruthy()
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -266,6 +271,7 @@ describe("<ListingFormActions>", () => {
         )
         expect(getByText("Approve & Publish")).toBeTruthy()
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -292,6 +298,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -318,6 +325,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -366,6 +374,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -392,6 +401,7 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
         expect(queryByText("Edit")).toBeFalsy()
       })
@@ -407,6 +417,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -434,6 +445,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -460,6 +472,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -505,6 +518,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -531,6 +545,7 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
         expect(queryByText("Edit")).toBeFalsy()
       })
@@ -546,6 +561,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -573,6 +589,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -599,6 +616,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -650,6 +668,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -678,6 +697,7 @@ describe("<ListingFormActions>", () => {
         )
         expect(getByText("Approve & Publish")).toBeTruthy()
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -709,6 +729,7 @@ describe("<ListingFormActions>", () => {
         )
         expect(getByText("Approve & Publish")).toBeTruthy()
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -735,6 +756,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -761,6 +783,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -809,6 +832,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -837,6 +861,7 @@ describe("<ListingFormActions>", () => {
         )
         expect(getByText("Approve & Publish")).toBeTruthy()
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -868,6 +893,7 @@ describe("<ListingFormActions>", () => {
         )
         expect(getByText("Approve & Publish")).toBeTruthy()
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -894,6 +920,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -920,6 +947,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -965,6 +993,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -991,6 +1020,7 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
         expect(queryByText("Edit")).toBeFalsy()
       })
@@ -1006,6 +1036,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -1033,6 +1064,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -1059,6 +1091,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
