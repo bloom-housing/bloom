@@ -1,8 +1,12 @@
 import React, { useContext, useEffect } from "react"
 import Head from "next/head"
 import { LinkButton, t, AppearanceSizeType, InfoCard } from "@bloom-housing/ui-components"
-import { ActionBlock, DoorwayHero } from "@bloom-housing/doorway-ui-components"
-import { Heading } from "@bloom-housing/ui-seeds"
+import {
+  ActionBlock,
+  ActionBlockBackground,
+  DoorwayHero,
+} from "@bloom-housing/doorway-ui-components"
+import { Button, Heading } from "@bloom-housing/ui-seeds"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
@@ -35,6 +39,7 @@ export default function Home(props: IndexProps) {
   }, [profile])
 
   const notificationsSignUpURL = process.env.notificationsSignUpUrl
+  const mtcDataUrl = process.env.mtcDataUrl
   const metaDescription = t("pageDescription.welcome")
   const metaImage = t("welcome.personWithChildAlt")
   const alertClasses = "flex-grow mt-6 max-w-6xl w-full"
@@ -142,24 +147,46 @@ export default function Home(props: IndexProps) {
       </div>
       {notificationsSignUpURL && (
         <ActionBlock
-          className="p-12"
+          className="px-6 py-8 md:py-12"
           header={
-            <Heading className="" priority={2}>
+            <Heading size="3xl" priority={2}>
               {t("t.signUpForAlerts")}
             </Heading>
           }
           subheader={t("t.subscribeToListingAlerts")}
-          background="primary-lightest"
+          background={ActionBlockBackground.primaryLightest}
           actions={[
-            <LinkButton
+            <Button
               key={"sign-up"}
-              className="is-primary"
-              href={notificationsSignUpURL}
-              newTab={true}
-              size={AppearanceSizeType.small}
+              variant="primary-outlined"
+              href={"notificationsSignUpURL"}
+              newWindowTarget
             >
               {t("t.signUp")}
-            </LinkButton>,
+            </Button>,
+          ]}
+        />
+      )}
+      {mtcDataUrl && (
+        <ActionBlock
+          className="px-6 py-8 md:py-12"
+          header={
+            <Heading size="3xl" priority={2}>
+              {t("t.seeTheData")}
+            </Heading>
+          }
+          subheader={t("t.getApplicationAndData")}
+          background={ActionBlockBackground.secondaryLighter}
+          actions={[
+            <Button
+              key={"seeTheData"}
+              variant="primary-outlined"
+              href={mtcDataUrl}
+              newWindowTarget
+              hideExternalLinkIcon
+            >
+              {t("t.seeTheData")}
+            </Button>,
           ]}
         />
       )}
