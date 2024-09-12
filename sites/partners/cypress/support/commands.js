@@ -429,13 +429,13 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
     cy.get("button").contains("Application Process").click()
     if (isLottery) {
       cy.getByID("reviewOrderLottery").check()
-      cy.getByTestId("lottery-start-date-month").type("12")
+      cy.getByTestId("lottery-start-date-month").type("1")
       cy.getByTestId("lottery-start-date-day").type("17")
       cy.getByTestId("lottery-start-date-year").type("2026")
-      cy.getByTestId("lottery-start-time-hours").type("10")
+      cy.getByTestId("lottery-start-time-hours").type("9")
       cy.getByTestId("lottery-start-time-minutes").type("00")
       cy.getByTestId("lottery-start-time-period").select("AM")
-      cy.getByTestId("lottery-end-time-hours").type("11")
+      cy.getByTestId("lottery-end-time-hours").type("10")
       cy.getByTestId("lottery-end-time-minutes").type("00")
       cy.getByTestId("lottery-end-time-period").select("AM")
     }
