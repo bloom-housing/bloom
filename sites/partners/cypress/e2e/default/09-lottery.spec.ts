@@ -15,9 +15,7 @@ describe("Lottery Tests", () => {
     cy.addMinimalApplication(uniqueListingName)
 
     // Close the listing and view lottery tab
-    cy.visit("/")
-    cy.getByTestId("ag-search-input").type(uniqueListingName)
-    cy.getByTestId(uniqueListingName).first().click()
+    cy.findAndOpenListing(uniqueListingName)
     cy.getByID("listingEditButton").contains("Edit").click()
     cy.getByID("closeButton").contains("Close").click()
     cy.getByID("close-listing-modal-button").contains("Close").click()
@@ -52,9 +50,7 @@ describe("Lottery Tests", () => {
     // Login as partner and view lottery tab
     cy.signOut()
     cy.login("partnerUser")
-    cy.visit("/")
-    cy.getByTestId("ag-search-input").type(uniqueListingName)
-    cy.getByTestId(uniqueListingName).first().click()
+    cy.findAndOpenListing(uniqueListingName)
     cy.get(`[role="tab"]`).eq(2).click()
     cy.get("h2").contains("Publish lottery data")
 
@@ -66,9 +62,7 @@ describe("Lottery Tests", () => {
     // Login as admin and view lottery tab
     cy.signOut()
     cy.login()
-    cy.visit("/")
-    cy.getByTestId("ag-search-input").type(uniqueListingName)
-    cy.getByTestId(uniqueListingName).first().click()
+    cy.findAndOpenListing(uniqueListingName)
     cy.get(`[role="tab"]`).eq(2).click()
     cy.get("h2").contains("Export lottery data")
 
@@ -80,9 +74,7 @@ describe("Lottery Tests", () => {
     // Login as partner and view lottery tab, ensure no data
     cy.signOut()
     cy.login("partnerUser")
-    cy.visit("/")
-    cy.getByTestId("ag-search-input").type(uniqueListingName)
-    cy.getByTestId(uniqueListingName).first().click()
+    cy.findAndOpenListing(uniqueListingName)
     cy.get(`[role="tab"]`).eq(2).click()
     cy.get("h2").contains("No lottery data")
   })

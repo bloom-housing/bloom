@@ -475,3 +475,10 @@ Cypress.Commands.add("addMinimalApplication", (listingName) => {
   })
   cy.getByID("submitApplicationButton").click()
 })
+
+Cypress.Commands.add("findAndOpenListing", (listingName) => {
+  cy.visit("/")
+  cy.contains("Listings")
+  cy.getByTestId("ag-search-input").type(listingName)
+  cy.getByTestId(listingName).first().click()
+})
