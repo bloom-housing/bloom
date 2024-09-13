@@ -664,8 +664,6 @@
   "listings.rePricing": "重新定價",
   "listings.requiredDocuments": "必須提供的文件",
   "listings.reservedCommunityBuilding": "%{type} 樓宇",
-  "listings.reservedCommunityTypeDescriptions.housingVoucher": "HCV/第 8 节凭证持有者",
-  "listings.reservedCommunityTypes.housingVoucher": "HCV/第 8 节优惠券",
   "listings.reservedCommunitySeniorTitle": "高级楼",
   "listings.reservedCommunityTitleDefault": "预留楼",
   "listings.reservedCommunityType": "保留社区类型",

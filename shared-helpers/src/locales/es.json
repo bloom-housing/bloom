@@ -664,8 +664,6 @@
   "listings.rePricing": "Asignar un nuevo precio",
   "listings.requiredDocuments": "Documentos requeridos",
   "listings.reservedCommunityBuilding": "Edificación %{type}",
-  "listings.reservedCommunityTypeDescriptions.housingVoucher": "el titular del vale de HCV / Sección 8",
-  "listings.reservedCommunityTypes.housingVoucher": "Vale HCV/Sección 8",
   "listings.reservedCommunitySeniorTitle": "Edificio para personas mayores",
   "listings.reservedCommunityTitleDefault": "Edificio Reservado",
   "listings.reservedCommunityType": "Tipo de comunidad reservada",
