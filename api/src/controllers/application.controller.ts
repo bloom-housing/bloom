@@ -45,7 +45,7 @@ import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { PermissionAction } from '../decorators/permission-action.decorator';
-import { ApplicationCsvExporterService } from '../services/application-csv-export.service';
+import { ApplicationExporterService } from '../services/application-exporter.service';
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
 import { MostRecentApplicationQueryParams } from '../dtos/applications/most-recent-application-query-params.dto';
 import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
@@ -68,7 +68,7 @@ import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-re
 export class ApplicationController {
   constructor(
     private readonly applicationService: ApplicationService,
-    private readonly applicationCsvExportService: ApplicationCsvExporterService,
+    private readonly applicationExportService: ApplicationExporterService,
   ) {}
 
   @Get()
@@ -123,10 +123,27 @@ export class ApplicationController {
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationCsvQueryParams,
   ): Promise<StreamableFile> {
-    return await this.applicationCsvExportService.exportFile(
+    return await this.applicationExportService.csvExport(req, res, queryParams);
+  }
+
+  @Get(`spreadsheet`)
+  @ApiOperation({
+    summary: 'Get applications as spreadsheet',
+    operationId: 'listAsSpreadsheet',
+  })
+  @Header('Content-Type', 'application/zip')
+  @UseInterceptors(ExportLogInterceptor)
+  async spreadsheetExport(
+    @Request() req: ExpressRequest,
+    @Res({ passthrough: true }) res: Response,
+    @Query(new ValidationPipe(defaultValidationPipeOptions))
+    queryParams: ApplicationCsvQueryParams,
+  ): Promise<StreamableFile> {
+    return await this.applicationExportService.spreadsheetExport(
       req,
       res,
       queryParams,
+      false,
     );
   }
 
