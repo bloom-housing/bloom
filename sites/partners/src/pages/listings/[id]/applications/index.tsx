@@ -42,12 +42,13 @@ const ApplicationsList = () => {
   )
   const includeDemographicsPartner =
     profile?.userRoles?.isPartner && listingJurisdiction?.enablePartnerDemographics
-  const { onExport, csvExportLoading } = useApplicationsExport(
+  const { onExport, exportLoading } = useApplicationsExport(
     listingId,
     (profile?.userRoles?.isAdmin ||
       profile?.userRoles?.isJurisdictionalAdmin ||
       includeDemographicsPartner) ??
-      false
+      false,
+    !!process.env.applicationExportAsSpreadsheet
   )
 
   const countyCode = listingDto?.jurisdictions?.name
@@ -208,7 +209,7 @@ const ApplicationsList = () => {
                       variant="primary-outlined"
                       size="sm"
                       onClick={() => onExport()}
-                      loadingMessage={csvExportLoading && t("t.formSubmitted")}
+                      loadingMessage={exportLoading && t("t.formSubmitted")}
                     >
                       {t("t.export")}
                     </Button>

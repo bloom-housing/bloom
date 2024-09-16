@@ -29,7 +29,7 @@ import { ListingStatusBar } from "../../../components/listings/ListingStatusBar"
 import {
   useFlaggedApplicationsMeta,
   useLotteryActivityLog,
-  useLotteryExport,
+  useSpreadsheetExport,
 } from "../../../lib/hooks"
 dayjs.extend(advancedFormat)
 
@@ -63,12 +63,13 @@ const Lottery = (props: { listing: Listing | undefined }) => {
   const includeDemographicsPartner =
     profile?.userRoles?.isPartner && listingJurisdiction?.enablePartnerDemographics
 
-  const { onExport, exportLoading } = useLotteryExport(
+  const { onExport, exportLoading } = useSpreadsheetExport(
     listing?.id,
     (profile?.userRoles?.isAdmin ||
       profile?.userRoles?.isJurisdictionalAdmin ||
       includeDemographicsPartner) ??
-      false
+      false,
+    true
   )
   const { data } = useFlaggedApplicationsMeta(listing?.id)
   const { lotteryActivityLogData } = useLotteryActivityLog(listing?.id)

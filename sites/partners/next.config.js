@@ -50,6 +50,7 @@ module.exports = withBundleAnalyzer(
       featureListingsApproval: process.env.FEATURE_LISTINGS_APPROVAL,
       showLottery: process.env.SHOW_LOTTERY === "TRUE",
       lotteryDaysTillExpiry: process.env.LOTTERY_DAYS_TILL_EXPIRY,
+      applicationExportAsSpreadsheet: process.env.APPLICATION_EXPORT_AS_SPREADSHEET === "TRUE",
     },
     i18n: {
       locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],
