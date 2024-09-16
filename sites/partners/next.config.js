@@ -58,6 +58,7 @@ module.exports = withBundleAnalyzer(
       reCaptchaKey: process.env.RECAPTCHA_KEY,
       showLottery: process.env.SHOW_LOTTERY === "TRUE",
       lotteryDaysTillExpiry: process.env.LOTTERY_DAYS_TILL_EXPIRY,
+      applicationExportAsSpreadsheet: process.env.APPLICATION_EXPORT_AS_SPREADSHEET === "TRUE",
     },
     i18n: {
       locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],

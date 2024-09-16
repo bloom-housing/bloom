@@ -50,12 +50,13 @@ const ApplicationsList = () => {
   )
   const includeDemographicsPartner =
     profile?.userRoles?.isPartner && listingJurisdiction?.enablePartnerDemographics
-  const { onExport, csvExportLoading } = useApplicationsExport(
+  const { onExport, exportLoading } = useApplicationsExport(
     listingId,
     (profile?.userRoles?.isAdmin ||
       profile?.userRoles?.isJurisdictionalAdmin ||
       includeDemographicsPartner) ??
-      false
+      false,
+    !!process.env.applicationExportAsSpreadsheet
   )
 
   const shouldExpireData = !profile?.userRoles?.isAdmin
@@ -273,7 +274,7 @@ const ApplicationsList = () => {
                           size="sm"
                           className={pageStyles["table-action"]}
                           onClick={() => setIsTermsOpen(true)}
-                          loadingMessage={csvExportLoading && t("t.formSubmitted")}
+                          loadingMessage={exportLoading && t("t.formSubmitted")}
                         >
                           {t("t.export")}
                         </Button>
