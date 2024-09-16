@@ -56,7 +56,7 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
         .publicAppsView({
           userId: profile.id,
           filterType: ApplicationsFilterEnum[filterTypeString],
-          includeLotteryApps: true,
+          includeLotteryApps: !!showPublicLottery,
         })
         .then((res) => {
           setApplications(res.displayApplications)
