@@ -91,7 +91,7 @@ const StatusItem = (props: StatusItemProps) => {
         <footer className={styles["status-item__footer"]}>
           {props.lotteryResults && showPublicLottery && (
             <div>
-              <Button href={props.lotteryURL} variant="primary-outlined" size="sm">
+              <Button href={props.lotteryURL} variant="primary" size="sm">
                 {props.strings?.lotteryResults ?? t("account.application.lottery.viewResults")}
               </Button>
             </div>
@@ -102,7 +102,7 @@ const StatusItem = (props: StatusItemProps) => {
             </Button>
           </div>
           <div>
-            <Button href={props.listingURL} variant="secondary-outlined" size="sm">
+            <Button href={props.listingURL} variant="primary-outlined" size="sm">
               {props.strings?.seeListing ?? t("t.seeListing")}
             </Button>
           </div>
