@@ -5,9 +5,10 @@ import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
 import { HttpModule } from '@nestjs/axios';
 import { Request as ExpressRequest, Response } from 'express';
 import { PrismaService } from '../../../src/services/prisma.service';
+import { ApplicationCsvQueryParams } from '../../../src/dtos/applications/application-csv-query-params.dto';
+import { User } from '../../../src/dtos/users/user.dto';
 import { ApplicationExporterService } from '../../../src/services/application-exporter.service';
 import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
-import { User } from '../../../src/dtos/users/user.dto';
 import { mockApplicationSet } from './application.service.spec';
 import { mockMultiselectQuestion } from './multiselect-question.service.spec';
 import { ListingService } from '../../../src/services/listing.service';
@@ -21,7 +22,7 @@ import { SchedulerRegistry } from '@nestjs/schedule';
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 import { unitTypeToReadable } from '../../../src/utilities/application-export-helpers';
 
-describe('Testing application CSV export service', () => {
+describe('Testing application export service', () => {
   let service: ApplicationExporterService;
   let prisma: PrismaService;
   let permissionService: PermissionService;
@@ -100,7 +101,7 @@ describe('Testing application CSV export service', () => {
       {
         listingId: randomUUID(),
         includeDemographics: false,
-      },
+      } as unknown as ApplicationCsvQueryParams,
     );
 
     const headerRow =
@@ -156,7 +157,10 @@ describe('Testing application CSV export service', () => {
     const exportResponse = await service.csvExport(
       { user: requestingUser } as unknown as ExpressRequest,
       {} as unknown as Response,
-      { listingId: 'test', includeDemographics: true },
+      {
+        listingId: 'test',
+        includeDemographics: true,
+      } as unknown as ApplicationCsvQueryParams,
     );
 
     const headerRow =
@@ -224,7 +228,7 @@ describe('Testing application CSV export service', () => {
     const exportResponse = await service.csvExport(
       { user: requestingUser } as unknown as ExpressRequest,
       {} as unknown as Response,
-      { listingId: randomUUID() },
+      { listingId: randomUUID() } as unknown as ApplicationCsvQueryParams,
     );
 
     const mockedStream = new PassThrough();
@@ -290,7 +294,7 @@ describe('Testing application CSV export service', () => {
       {
         listingId: randomUUID(),
         timeZone: 'America/New_York',
-      },
+      } as unknown as ApplicationCsvQueryParams,
     );
 
     const mockedStream = new PassThrough();

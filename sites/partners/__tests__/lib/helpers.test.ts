@@ -1,5 +1,5 @@
 import { Application } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { mergeApplicationNames } from "../../src/lib/helpers"
+import { createDate, mergeApplicationNames } from "../../src/lib/helpers"
 
 describe("helpers", () => {
   describe("mergeApplicationNames", () => {
@@ -21,6 +21,18 @@ describe("helpers", () => {
     })
     it("should merge names for no application", () => {
       expect(mergeApplicationNames([])).toEqual("")
+    })
+  })
+  describe("createDate", () => {
+    it("should create dates with variable numbers of characters", () => {
+      expect(createDate({ year: "2025", month: "12", day: "10" })).toEqual(new Date(2025, 11, 10))
+      expect(createDate({ year: "2025", month: "1", day: "5" })).toEqual(new Date(2025, 0, 5))
+      expect(createDate({ year: "2025", month: "01", day: "05" })).toEqual(new Date(2025, 0, 5))
+    })
+    it("should fail with invalid input", () => {
+      expect(createDate({ year: "202", month: "12", day: "10" })).toBeFalsy()
+      expect(createDate({ year: "2025", month: "13", day: "10" })).toBeFalsy()
+      expect(createDate({ year: "2025", month: "13", day: "35" })).toBeFalsy()
     })
   })
 })
