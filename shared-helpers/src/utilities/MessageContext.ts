@@ -57,6 +57,11 @@ export const MessageProvider: FunctionComponent<React.PropsWithChildren> = ({ ch
   )
 }
 
+/**
+ * Use the current value of a ref within `useEffect` so you can pass the ref to the dependencies
+ * array. Otherwise, the effect will constantly rerun because the context alone isn't a stable ref.
+ * File this one in the "Weird React" category!
+ */
 export const useToastyRef = () => {
   return useRef(useContext(MessageContext))
 }
