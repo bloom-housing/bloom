@@ -330,6 +330,28 @@ export class ListingsService {
     })
   }
   /**
+   * Duplicate listing
+   */
+  duplicate(
+    params: {
+      /** requestBody */
+      body?: ListingDuplicate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Listing> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/duplicate"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Trigger the listing process job
    */
   process(options: IRequestOptions = {}): Promise<SuccessDTO> {
@@ -2334,6 +2356,27 @@ export class LotteryService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Get lottery totals by listing id
+   */
+  lotteryTotals(
+    params: {
+      /**  */
+      id: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PublicLotteryTotal[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/lottery/lotteryTotals/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export interface SuccessDTO {
@@ -3024,6 +3067,17 @@ export interface UnitsSummary {
   totalAvailable?: number
 }
 
+export interface ApplicationLotteryTotal {
+  /**  */
+  listingId: string
+
+  /**  */
+  multiselectQuestionId: string
+
+  /**  */
+  total: number
+}
+
 export interface Listing {
   /**  */
   id: string
@@ -3315,6 +3369,9 @@ export interface Listing {
 
   /**  */
   lotteryOptIn?: boolean
+
+  /**  */
+  applicationLotteryTotals: ApplicationLotteryTotal[]
 }
 
 export interface PaginationMeta {
@@ -3816,6 +3873,17 @@ export interface ListingCreate {
 
   /**  */
   requestedChangesUser?: IdDTO
+}
+
+export interface ListingDuplicate {
+  /**  */
+  name: string
+
+  /**  */
+  includeUnits: boolean
+
+  /**  */
+  storedListing: IdDTO
 }
 
 export interface ListingUpdate {
@@ -5772,6 +5840,14 @@ export interface LotteryActivityLogItem {
 export interface PublicLotteryResult {
   /**  */
   ordinal: number
+
+  /**  */
+  multiselectQuestionId: string
+}
+
+export interface PublicLotteryTotal {
+  /**  */
+  total: number
 
   /**  */
   multiselectQuestionId: string

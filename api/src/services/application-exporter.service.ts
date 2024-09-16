@@ -9,17 +9,17 @@ import { view } from './application.service';
 import { Application } from '../dtos/applications/application.dto';
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
 import { ApplicationMultiselectQuestion } from '../dtos/applications/application-multiselect-question.dto';
-import { CsvHeader } from '../types/CsvExportInterface';
-import { getExportHeaders } from '../utilities/application-export-helpers';
 import { IdDTO } from '../dtos/shared/id.dto';
-import { ListingService } from './listing.service';
-import { mapTo } from '../utilities/mapTo';
-import { MultiselectQuestionService } from './multiselect-question.service';
+import { User } from '../dtos/users/user.dto';
 import { OrderByEnum } from '../enums/shared/order-by-enum';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import { ListingService } from './listing.service';
+import { MultiselectQuestionService } from './multiselect-question.service';
 import { PermissionService } from './permission.service';
 import { PrismaService } from './prisma.service';
-import { User } from '../dtos/users/user.dto';
+import { CsvHeader } from '../types/CsvExportInterface';
+import { getExportHeaders } from '../utilities/application-export-helpers';
+import { mapTo } from '../utilities/mapTo';
 
 import process from 'process';
 
@@ -377,7 +377,6 @@ export class ApplicationExporterService {
           queryParams.id
         }-${new Date().getTime()}.xlsx`,
       });
-
       archive.finalize();
     });
   }
@@ -472,7 +471,6 @@ export class ApplicationExporterService {
           MultiselectQuestionsApplicationSectionEnum.preferences,
       );
       for (const preference of preferences) {
-        console.log(`before ${preference.text} gen:`, process.memoryUsage());
         await this.generateSpreadsheetData(
           workbook,
           mappedApps,
@@ -507,15 +505,13 @@ export class ApplicationExporterService {
     preference?: IdDTO,
   ): Promise<void> {
     // create a spreadsheet. If the preference is passed in use that as a title otherwise 'raw'
-    console.log(`before new worksheet:`, process.memoryUsage());
     const spreadsheet = this.createNewWorksheet(
       workbook,
       forLottery,
       preference,
     );
-    console.log(`after new worksheet:`, process.memoryUsage());
     spreadsheet.columns = this.buildExportColumns(csvHeaders, preference);
-    console.log(`after attaching columns:`, process.memoryUsage());
+
     const filteredApplications = preference
       ? applications.filter((app) =>
           app.preferences.some(
@@ -526,9 +522,7 @@ export class ApplicationExporterService {
           ),
         )
       : applications;
-    console.log(`after filteredApplications:`, process.memoryUsage());
-    // build row data
-    console.log(`before promise loop:`, process.memoryUsage());
+
     for (
       let i = 0;
       i < filteredApplications.length;

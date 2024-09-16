@@ -565,7 +565,10 @@ export const useSpreadsheetExport = (
       link.href = url
       const now = new Date()
       const dateString = dayjs(now).format("YYYY-MM-DD_HH-mm")
-      link.setAttribute("download", `${listingId}-${dateString}-test.zip`)
+      link.setAttribute(
+        "download",
+        `${listingId}-${dateString}-${forLottery ? "lottery" : "applications"}.zip`
+      )
       document.body.appendChild(link)
       link.click()
       link.parentNode.removeChild(link)
