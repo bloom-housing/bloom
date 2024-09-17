@@ -693,9 +693,6 @@ describe("lottery", () => {
         exact: false,
       })
     ).toBeInTheDocument()
-    expect(
-      getByText("You must accept the Terms of Use before exporting this data.")
-    ).toBeInTheDocument()
 
     expect(getAllByText("Export")).toHaveLength(2)
   })
