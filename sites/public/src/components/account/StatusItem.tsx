@@ -28,12 +28,13 @@ interface StatusItemProps {
 }
 
 const StatusItem = (props: StatusItemProps) => {
+  const showPublicLottery = process.env.showPublicLottery
   //set custom visuals and data based on listing/lottery status
   let tagText = ""
   let tagVariant: "primary" | "secondary" | "success"
   let deadlineText = ""
   let dueDate = ""
-  if (props.lotteryResults) {
+  if (props.lotteryResults && showPublicLottery) {
     tagText = t("account.lotteryRun")
     tagVariant = "success"
     deadlineText = t("account.lotteryPosted")
@@ -46,7 +47,7 @@ const StatusItem = (props: StatusItemProps) => {
   } else {
     tagText = t("account.closedApplications")
     tagVariant = "secondary"
-    if (props.lotteryStartDate) {
+    if (props.lotteryStartDate && showPublicLottery) {
       deadlineText = t("account.lotteryDate")
       dueDate = props.lotteryStartDate
     }
@@ -88,17 +89,17 @@ const StatusItem = (props: StatusItemProps) => {
         </section>
 
         <footer className={styles["status-item__footer"]}>
+          {props.lotteryResults && showPublicLottery && (
+            <div>
+              <Button href={props.lotteryURL} variant="primary" size="sm">
+                {props.strings?.lotteryResults ?? t("account.application.lottery.viewResults")}
+              </Button>
+            </div>
+          )}
           {props.applicationURL && (
             <div>
               <Button href={props.applicationURL} variant="primary-outlined" size="sm">
                 {props.strings?.viewApplication ?? t("application.viewApplication")}
-              </Button>
-            </div>
-          )}
-          {props.lotteryResults && (
-            <div>
-              <Button href={props.lotteryURL} variant="primary-outlined" size="sm">
-                {props.strings?.lotteryResults ?? t("account.application.lottery.viewResults")}
               </Button>
             </div>
           )}

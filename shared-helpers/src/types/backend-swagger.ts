@@ -1477,6 +1477,8 @@ export class ApplicationsService {
       userId: string
       /**  */
       filterType?: ApplicationsFilterEnum
+      /**  */
+      includeLotteryApps?: boolean
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PublicAppsViewResponse> {
@@ -1484,7 +1486,11 @@ export class ApplicationsService {
       let url = basePath + "/applications/publicAppsView"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { userId: params["userId"], filterType: params["filterType"] }
+      configs.params = {
+        userId: params["userId"],
+        filterType: params["filterType"],
+        includeLotteryApps: params["includeLotteryApps"],
+      }
 
       /** 适配ios13，get请求不允许带body */
 
