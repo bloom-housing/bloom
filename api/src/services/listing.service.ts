@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  ForbiddenException,
   HttpException,
   Inject,
   Injectable,
@@ -13,12 +12,13 @@ import { ConfigService } from '@nestjs/config';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import {
   LanguagesEnum,
+  ListingEventsTypeEnum,
   ListingsStatusEnum,
-  LotteryStatusEnum,
   Prisma,
   ReviewOrderTypeEnum,
   UserRoleEnum,
 } from '@prisma/client';
+import dayjs from 'dayjs';
 import { firstValueFrom } from 'rxjs';
 import { ApplicationFlaggedSetService } from './application-flagged-set.service';
 import { EmailService } from './email.service';
@@ -28,8 +28,8 @@ import { TranslationService } from './translation.service';
 import { AmiChart } from '../dtos/ami-charts/ami-chart.dto';
 import { Listing } from '../dtos/listings/listing.dto';
 import { ListingCreate } from '../dtos/listings/listing-create.dto';
+import { ListingDuplicate } from '../dtos/listings/listing-duplicate.dto';
 import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
-import { ListingLotteryStatus } from '../dtos/listings/listing-lottery-status.dto';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
 import { ListingUpdate } from '../dtos/listings/listing-update.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
@@ -965,6 +965,104 @@ export class ListingService implements OnModuleInit {
     return mapTo(Listing, rawListing);
   }
 
+  async duplicate(
+    dto: ListingDuplicate,
+    requestingUser: User,
+  ): Promise<Listing> {
+    const storedListing = await this.findOrThrow(
+      dto.storedListing.id,
+      ListingViews.details,
+    );
+    if (dto.name.trim() === storedListing.name) {
+      throw new BadRequestException('New listing name must be unique');
+    }
+
+    const userRoles =
+      process.env.ALLOW_PARTNERS_TO_DUPLICATE_LISTINGS === 'TRUE' &&
+      (requestingUser?.userRoles?.isJurisdictionalAdmin ||
+        requestingUser?.userRoles?.isPartner)
+        ? {
+            ...requestingUser.userRoles,
+            isAdmin: true,
+          }
+        : requestingUser?.userRoles;
+
+    await this.permissionService.canOrThrow(
+      { ...requestingUser, userRoles: userRoles },
+      'listing',
+      permissionActions.create,
+      {
+        jurisdictionId: storedListing.jurisdictions.id,
+      },
+    );
+
+    const mappedListing = mapTo(ListingCreate, storedListing);
+
+    const listingEvents = mappedListing.listingEvents?.filter(
+      (event) => event.type !== ListingEventsTypeEnum.lotteryResults,
+    );
+
+    const listingImages = mappedListing.listingImages?.map((unsavedImage) => ({
+      assets: {
+        fileId: unsavedImage.assets.fileId,
+        label: unsavedImage.assets.label,
+      },
+      ordinal: unsavedImage.ordinal,
+    }));
+
+    if (!dto.includeUnits) {
+      delete mappedListing['units'];
+    }
+
+    const newListingData: ListingCreate = {
+      ...mappedListing,
+      name: dto.name,
+      status: ListingsStatusEnum.pending,
+      listingEvents: listingEvents,
+      listingMultiselectQuestions:
+        storedListing.listingMultiselectQuestions?.map((question) => ({
+          id: question.multiselectQuestionId,
+          ordinal: question.ordinal,
+        })),
+      listingImages: listingImages,
+      lotteryLastRunAt: undefined,
+      lotteryLastPublishedAt: undefined,
+      lotteryStatus: undefined,
+    };
+
+    const res = await this.create(newListingData, {
+      ...requestingUser,
+      userRoles: userRoles,
+    });
+
+    if (
+      process.env.ALLOW_PARTNERS_TO_DUPLICATE_LISTINGS === 'TRUE' &&
+      requestingUser.userRoles?.isPartner
+    ) {
+      await this.prisma.userAccounts.update({
+        data: {
+          listings: {
+            connect: { id: res.id },
+          },
+        },
+        where: {
+          id: requestingUser.id,
+        },
+      });
+
+      await this.prisma.activityLog.create({
+        data: {
+          module: 'user',
+          recordId: requestingUser.id,
+          action: 'update',
+          userAccounts: { connect: { id: requestingUser.id } },
+        },
+      });
+    }
+
+    return res;
+  }
+
   /*
     deletes a listing
   */
@@ -1062,6 +1160,51 @@ export class ListingService implements OnModuleInit {
     return undefined;
   }
 
+  /**
+   * @param listingId the listing id we are operating on
+   * @description disconnects assets from listing events, then deletes those assets
+   */
+  async updateListingEvents(listingId: string): Promise<void> {
+    const assetIds = await this.prisma.listingEvents.findMany({
+      select: {
+        id: true,
+        fileId: true,
+      },
+      where: {
+        listingId,
+      },
+    });
+    await Promise.all(
+      assetIds.map(async (assetData) => {
+        await this.prisma.listingEvents.update({
+          data: {
+            assets: {
+              disconnect: true,
+            },
+          },
+          where: {
+            id: assetData.id,
+          },
+        });
+      }),
+    );
+    const fileIds = assetIds.reduce((accum, curr) => {
+      if (curr.fileId) {
+        accum.push(curr.fileId);
+      }
+      return accum;
+    }, []);
+    if (fileIds.length) {
+      await this.prisma.assets.deleteMany({
+        where: {
+          id: {
+            in: fileIds,
+          },
+        },
+      });
+    }
+  }
+
   /*
     update a listing
   */
@@ -1134,6 +1277,8 @@ export class ListingService implements OnModuleInit {
       dto,
       'listingsBuildingAddress',
     );
+    // Delete all assets tied to listing events before creating new ones
+    await this.updateListingEvents(dto.id);
 
     // Wrap the deletion and update in one transaction so that units aren't lost if update fails
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -1219,6 +1364,7 @@ export class ListingService implements OnModuleInit {
                     ? {
                         create: {
                           ...event.assets,
+                          id: undefined,
                         },
                       }
                     : undefined,
@@ -1483,7 +1629,15 @@ export class ListingService implements OnModuleInit {
       storedListing.status === ListingsStatusEnum.active &&
       dto.status === ListingsStatusEnum.closed
     ) {
-      await this.afsService.process(dto.id);
+      if (
+        process.env.DUPLICATES_CLOSE_DATE &&
+        dayjs(process.env.DUPLICATES_CLOSE_DATE, 'YYYY-MM-DD HH:mm Z') <
+          dayjs(new Date())
+      ) {
+        await this.afsService.processDuplicates(dto.id);
+      } else {
+        await this.afsService.process(dto.id);
+      }
     }
 
     await this.cachePurge(storedListing.status, dto.status, rawListing.id);
