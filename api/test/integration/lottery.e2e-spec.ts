@@ -8,6 +8,7 @@ import {
   ListingsStatusEnum,
   LotteryStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
+  Prisma,
   ReviewOrderTypeEnum,
   UnitTypeEnum,
 } from '@prisma/client';
@@ -1133,7 +1134,6 @@ describe('Lottery Controller Tests', () => {
         data: jurisdictionFactory(),
       });
       await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
-
       const listing1 = await listingFactory(jurisdiction.id, prisma, {
         status: ListingsStatusEnum.closed,
       });

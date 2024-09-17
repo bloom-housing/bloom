@@ -521,6 +521,31 @@ export class ApplicationFlaggedSetsService {
     })
   }
   /**
+   * Trigger the duplicate check process
+   */
+  processDuplicates(
+    params: {
+      /**  */
+      listingId?: string
+      /**  */
+      force?: boolean
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/process_duplicates"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+      configs.params = { listingId: params["listingId"], force: params["force"] }
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Reset flagged set confirmation alert
    */
   resetConfirmationAlert(
@@ -1436,6 +1461,8 @@ export class ApplicationsService {
       userId: string
       /**  */
       filterType?: ApplicationsFilterEnum
+      /**  */
+      includeLotteryApps?: boolean
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PublicAppsViewResponse> {
@@ -1443,7 +1470,11 @@ export class ApplicationsService {
       let url = basePath + "/applications/publicAppsView"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { userId: params["userId"], filterType: params["filterType"] }
+      configs.params = {
+        userId: params["userId"],
+        filterType: params["filterType"],
+        includeLotteryApps: params["includeLotteryApps"],
+      }
 
       /** 适配ios13，get请求不允许带body */
 
@@ -5972,6 +6003,7 @@ export enum AfsView {
 export enum RuleEnum {
   "nameAndDOB" = "nameAndDOB",
   "email" = "email",
+  "combination" = "combination",
 }
 
 export enum FlaggedSetStatusEnum {
