@@ -14,6 +14,7 @@ import { View } from '../../../src/enums/application-flagged-sets/view';
 import { Application } from '../../../src/dtos/applications/application.dto';
 import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
 import { User } from '../../../src/dtos/users/user.dto';
+import { randomUUID } from 'node:crypto';
 
 describe('Testing application flagged set service', () => {
   let service: ApplicationFlaggedSetService;
@@ -503,6 +504,47 @@ describe('Testing application flagged set service', () => {
         },
       });
     });
+
+    it('should return the first page if count is more than number of listings', async () => {
+      const mockCount = jest
+        .fn()
+        .mockResolvedValueOnce(2)
+        .mockResolvedValueOnce(2);
+      prisma.applicationFlaggedSet.count = mockCount;
+      prisma.applicationFlaggedSet.findMany = jest.fn().mockResolvedValue([
+        {
+          id: 'example id',
+        },
+        {
+          id: 'example id 2',
+        },
+      ]);
+      expect(
+        await service.list({
+          listingId: 'example id',
+          view: View.pendingEmail,
+          limit: 100,
+          page: 2,
+        }),
+      ).toEqual({
+        items: [
+          {
+            id: 'example id',
+          },
+          {
+            id: 'example id 2',
+          },
+        ],
+        meta: {
+          currentPage: 1,
+          itemCount: 2,
+          itemsPerPage: 2,
+          totalItems: 2,
+          totalPages: 1,
+          totalFlagged: 2,
+        },
+      });
+    });
   });
 
   describe('Test findOne', () => {
@@ -606,7 +648,6 @@ describe('Testing application flagged set service', () => {
       const mockCount = jest
         .fn()
         .mockResolvedValueOnce(1)
-        .mockResolvedValueOnce(2)
         .mockResolvedValueOnce(3);
 
       prisma.applicationFlaggedSet.count = mockCount;
@@ -615,9 +656,7 @@ describe('Testing application flagged set service', () => {
       expect(await service.meta({ listingId: 'example id' })).toEqual({
         totalCount: 12,
         totalResolvedCount: 1,
-        totalPendingCount: 5,
-        totalNamePendingCount: 2,
-        totalEmailPendingCount: 3,
+        totalPendingCount: 3,
       });
 
       expect(prisma.applicationFlaggedSet.count).toHaveBeenNthCalledWith(1, {
@@ -631,15 +670,6 @@ describe('Testing application flagged set service', () => {
         where: {
           listingId: 'example id',
           status: FlaggedSetStatusEnum.pending,
-          rule: RuleEnum.nameAndDOB,
-        },
-      });
-
-      expect(prisma.applicationFlaggedSet.count).toHaveBeenNthCalledWith(3, {
-        where: {
-          listingId: 'example id',
-          status: FlaggedSetStatusEnum.pending,
-          rule: RuleEnum.email,
         },
       });
     });
@@ -688,7 +718,7 @@ describe('Testing application flagged set service', () => {
         id: 'example id',
       });
 
-      await service.markCronJobAsStarted();
+      await service.markCronJobAsStarted('AFS_CRON_JOB');
 
       expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
         where: {
@@ -713,7 +743,7 @@ describe('Testing application flagged set service', () => {
         id: 'example id',
       });
 
-      await service.markCronJobAsStarted();
+      await service.markCronJobAsStarted('AFS_CRON_JOB');
 
       expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
         where: {
@@ -2391,6 +2421,7 @@ describe('Testing application flagged set service', () => {
 
   describe('Test process', () => {
     it('should process listing', async () => {
+      process.env.DUPLICATES_CLOSE_DATE = null;
       const mockCall = jest
         .fn()
         .mockResolvedValueOnce([
@@ -2529,6 +2560,150 @@ describe('Testing application flagged set service', () => {
         },
         data: {
           afsLastRunAt: expect.anything(),
+        },
+      });
+    });
+  });
+
+  describe('Test processDuplicates', () => {
+    it('should process only one listing when listingId is passed in', async () => {
+      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
+      const listingID = randomUUID();
+      prisma.listings.findMany = jest.fn().mockResolvedValue([]);
+      await service.processDuplicates(listingID);
+      expect(prisma.listings.findMany).toBeCalledWith({
+        select: {
+          afsLastRunAt: true,
+          id: true,
+          name: true,
+        },
+        where: {
+          AND: [
+            {
+              OR: [
+                {
+                  closedAt: {
+                    gte: new Date('2024-06-28T08:00:00.000Z'),
+                  },
+                },
+                {
+                  closedAt: null,
+                },
+              ],
+            },
+            {
+              OR: [
+                {
+                  afsLastRunAt: {
+                    equals: null,
+                  },
+                },
+                {
+                  afsLastRunAt: {
+                    lte: expect.objectContaining({
+                      isEnum: false,
+                      isList: false,
+                      modelName: 'Listings',
+                      name: 'lastApplicationUpdateAt',
+                      typeName: 'DateTime',
+                    }),
+                  },
+                },
+              ],
+            },
+          ],
+          id: listingID,
+          lastApplicationUpdateAt: {
+            not: null,
+          },
+        },
+      });
+    });
+
+    it('should process all eligible listings when listingId is not passed in', async () => {
+      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
+      prisma.listings.findMany = jest.fn().mockResolvedValue([]);
+      await service.processDuplicates();
+      expect(prisma.listings.findMany).toBeCalledWith({
+        select: {
+          afsLastRunAt: true,
+          id: true,
+          name: true,
+        },
+        where: {
+          AND: [
+            {
+              OR: [
+                {
+                  closedAt: {
+                    gte: new Date('2024-06-28T08:00:00.000Z'),
+                  },
+                },
+                {
+                  closedAt: null,
+                },
+              ],
+            },
+            {
+              OR: [
+                {
+                  afsLastRunAt: {
+                    equals: null,
+                  },
+                },
+                {
+                  afsLastRunAt: {
+                    lte: expect.objectContaining({
+                      isEnum: false,
+                      isList: false,
+                      modelName: 'Listings',
+                      name: 'lastApplicationUpdateAt',
+                      typeName: 'DateTime',
+                    }),
+                  },
+                },
+              ],
+            },
+          ],
+          id: undefined,
+          lastApplicationUpdateAt: {
+            not: null,
+          },
+        },
+      });
+    });
+
+    it('should process all eligible listings last run excluded when forced is passed in', async () => {
+      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
+      const listingID = randomUUID();
+      prisma.listings.findMany = jest.fn().mockResolvedValue([]);
+      await service.processDuplicates(listingID, true);
+      expect(prisma.listings.findMany).toBeCalledWith({
+        select: {
+          afsLastRunAt: true,
+          id: true,
+          name: true,
+        },
+        where: {
+          AND: [
+            {
+              OR: [
+                {
+                  closedAt: {
+                    gte: new Date('2024-06-28T08:00:00.000Z'),
+                  },
+                },
+                {
+                  closedAt: null,
+                },
+              ],
+            },
+            {},
+          ],
+          id: listingID,
+          lastApplicationUpdateAt: {
+            not: null,
+          },
         },
       });
     });
