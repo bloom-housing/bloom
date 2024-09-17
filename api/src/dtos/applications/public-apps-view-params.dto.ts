@@ -1,6 +1,6 @@
-import { Expose, Type } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsString } from 'class-validator';
+import { IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { ApplicationsFilterEnum } from '../../enums/applications/filter-enum';
 
@@ -19,6 +19,19 @@ export class PublicAppsViewQueryParams {
     enumName: 'ApplicationsFilterEnum',
     example: 'all',
   })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsEnum(ApplicationsFilterEnum, { groups: [ValidationsGroupsEnum.default] })
   filterType?: ApplicationsFilterEnum;
+
+  @Expose()
+  @ApiPropertyOptional()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @Transform(
+    (obj: any) => {
+      return obj.value === 'true' || obj.value === true;
+    },
+    { toClassOnly: true },
+  )
+  includeLotteryApps?: boolean;
 }
