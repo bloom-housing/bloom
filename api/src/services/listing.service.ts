@@ -283,39 +283,36 @@ export class ListingService implements OnModuleInit {
   ): Promise<{ [key: string]: string[] }> {
     const userResults = await this.prisma.applications.findMany({
       select: {
-        language: true,
-        applicant: {
+        userAccounts: {
           select: {
-            emailAddress: true,
+            email: true,
           },
         },
+        language: true,
       },
       where: {
         listingId,
-        applicant: {
-          emailAddress: {
-            not: null,
-          },
-        },
         markedAsDuplicate: {
           not: true,
         },
       },
     });
 
+    const emailUsers = userResults.filter((user) => !!user.userAccounts?.email);
+
     const result = {};
     Object.keys(LanguagesEnum).forEach((languageKey) => {
-      const applications = userResults
+      const applications = emailUsers
         .filter((user) => user.language === languageKey)
-        .map((userObj) => userObj.applicant.emailAddress);
+        .map((userObj) => userObj.userAccounts.email);
       if (applications.length) {
         result[languageKey] = applications;
       }
     });
 
-    const noLanguageIndicated = userResults
+    const noLanguageIndicated = emailUsers
       .filter((user) => !user.language)
-      .map((userObj) => userObj.applicant.emailAddress);
+      .map((userObj) => userObj.userAccounts.email);
 
     if (!result[LanguagesEnum.en])
       result[LanguagesEnum.en] = noLanguageIndicated;
