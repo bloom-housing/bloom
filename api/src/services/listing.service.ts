@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  ForbiddenException,
   HttpException,
   Inject,
   Injectable,
@@ -29,6 +28,7 @@ import { TranslationService } from './translation.service';
 import { AmiChart } from '../dtos/ami-charts/ami-chart.dto';
 import { Listing } from '../dtos/listings/listing.dto';
 import { ListingCreate } from '../dtos/listings/listing-create.dto';
+import { ListingDuplicate } from '../dtos/listings/listing-duplicate.dto';
 import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
 import { ListingLotteryStatus } from '../dtos/listings/listing-lottery-status.dto';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
@@ -1112,6 +1112,104 @@ export class ListingService implements OnModuleInit {
       }
     }
     return mapTo(Listing, rawListing);
+  }
+
+  async duplicate(
+    dto: ListingDuplicate,
+    requestingUser: User,
+  ): Promise<Listing> {
+    const storedListing = await this.findOrThrow(
+      dto.storedListing.id,
+      ListingViews.details,
+    );
+    if (dto.name.trim() === storedListing.name) {
+      throw new BadRequestException('New listing name must be unique');
+    }
+
+    const userRoles =
+      process.env.ALLOW_PARTNERS_TO_DUPLICATE_LISTINGS === 'TRUE' &&
+      (requestingUser?.userRoles?.isJurisdictionalAdmin ||
+        requestingUser?.userRoles?.isPartner)
+        ? {
+            ...requestingUser.userRoles,
+            isAdmin: true,
+          }
+        : requestingUser?.userRoles;
+
+    await this.permissionService.canOrThrow(
+      { ...requestingUser, userRoles: userRoles },
+      'listing',
+      permissionActions.create,
+      {
+        jurisdictionId: storedListing.jurisdictions.id,
+      },
+    );
+
+    const mappedListing = mapTo(ListingCreate, storedListing);
+
+    const listingEvents = mappedListing.listingEvents?.filter(
+      (event) => event.type !== ListingEventsTypeEnum.lotteryResults,
+    );
+
+    const listingImages = mappedListing.listingImages?.map((unsavedImage) => ({
+      assets: {
+        fileId: unsavedImage.assets.fileId,
+        label: unsavedImage.assets.label,
+      },
+      ordinal: unsavedImage.ordinal,
+    }));
+
+    if (!dto.includeUnits) {
+      delete mappedListing['units'];
+    }
+
+    const newListingData: ListingCreate = {
+      ...mappedListing,
+      name: dto.name,
+      status: ListingsStatusEnum.pending,
+      listingEvents: listingEvents,
+      listingMultiselectQuestions:
+        storedListing.listingMultiselectQuestions?.map((question) => ({
+          id: question.multiselectQuestionId,
+          ordinal: question.ordinal,
+        })),
+      listingImages: listingImages,
+      lotteryLastRunAt: undefined,
+      lotteryLastPublishedAt: undefined,
+      lotteryStatus: undefined,
+    };
+
+    const res = await this.create(newListingData, {
+      ...requestingUser,
+      userRoles: userRoles,
+    });
+
+    if (
+      process.env.ALLOW_PARTNERS_TO_DUPLICATE_LISTINGS === 'TRUE' &&
+      requestingUser.userRoles?.isPartner
+    ) {
+      await this.prisma.userAccounts.update({
+        data: {
+          listings: {
+            connect: { id: res.id },
+          },
+        },
+        where: {
+          id: requestingUser.id,
+        },
+      });
+
+      await this.prisma.activityLog.create({
+        data: {
+          module: 'user',
+          recordId: requestingUser.id,
+          action: 'update',
+          userAccounts: { connect: { id: requestingUser.id } },
+        },
+      });
+    }
+
+    return res;
   }
 
   /*

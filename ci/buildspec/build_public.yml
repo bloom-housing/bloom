@@ -43,6 +43,7 @@ phases:
         --build-arg "SHOW_MANDATED_ACCOUNTS=$SHOW_MANDATED_ACCOUNTS"
         --build-arg "SHOW_PWDLESS=$SHOW_PWDLESS"
         --build-arg "MAINTENANCE_WINDOW=$MAINTENANCE_WINDOW"
+        --build-arg "SHOW_PUBLIC_LOTTERY=${SHOW_PUBLIC_LOTTERY}"
         --build-arg "API_PASS_KEY=${API_PASS_KEY}"
         --target test
         -t sites/public:test
@@ -71,6 +72,7 @@ phases:
         --build-arg "SHOW_MANDATED_ACCOUNTS=$SHOW_MANDATED_ACCOUNTS"
         --build-arg "SHOW_PWDLESS=$SHOW_PWDLESS"
         --build-arg "MAINTENANCE_WINDOW=$MAINTENANCE_WINDOW"
+        --build-arg "SHOW_PUBLIC_LOTTERY=${SHOW_PUBLIC_LOTTERY}"
         --build-arg "API_PASS_KEY=${API_PASS_KEY}"
         --target run
         -t sites/public:run-candidate

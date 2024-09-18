@@ -155,6 +155,7 @@ export const formDefaults: FormListing = {
   reviewOrderType: null,
   unitsSummary: [],
   referralOpportunity: false,
+  applicationLotteryTotals: [],
 }
 
 export type TempUnit = Unit & {

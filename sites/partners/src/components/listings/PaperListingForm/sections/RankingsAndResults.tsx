@@ -189,7 +189,7 @@ const RankingsAndResults = ({ listing, disableDueDates, isAdmin }: RankingsAndRe
                         }
                       : null
                   }
-                  errorMessage={t("errors.requiredFieldError")}
+                  errorMessage={t("errors.dateError")}
                   defaultDate={
                     errors?.lotteryDate
                       ? null
@@ -218,7 +218,7 @@ const RankingsAndResults = ({ listing, disableDueDates, isAdmin }: RankingsAndRe
                   disabled={disableDueDates}
                   error={errors?.lotteryDate ? true : false}
                   strings={{
-                    timeError: errors?.lotteryDate ? t("errors.requiredFieldError") : null,
+                    timeError: errors?.lotteryDate ? t("errors.dateError") : null,
                   }}
                   defaultValues={
                     errors?.lotteryDate
@@ -249,7 +249,7 @@ const RankingsAndResults = ({ listing, disableDueDates, isAdmin }: RankingsAndRe
                   disabled={disableDueDates}
                   error={errors?.lotteryDate ? true : false}
                   strings={{
-                    timeError: errors?.lotteryDate ? t("errors.requiredFieldError") : null,
+                    timeError: errors?.lotteryDate ? t("errors.dateError") : null,
                   }}
                   defaultValues={
                     errors?.lotteryDate

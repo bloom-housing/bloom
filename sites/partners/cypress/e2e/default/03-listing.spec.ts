@@ -280,9 +280,7 @@ describe("Listing Management Tests", () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function verifyDetails(cy: Cypress.cy, listing: any): void {
-    cy.visit("/")
-    cy.getByTestId("ag-search-input").type(listing["name"])
-    cy.getByTestId(listing["name"]).first().click()
+    cy.findAndOpenListing(listing["name"])
     cy.getByID("jurisdictions.name").contains(listing["jurisdiction.id"])
     cy.getByID("name").contains(listing["name"])
     cy.getByID("developer").contains(listing["developer"])
@@ -386,9 +384,7 @@ describe("Listing Management Tests", () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function verifyOpenListingWarning(cy: Cypress.cy, listing: any): void {
-    cy.visit("/")
-    cy.getByTestId("ag-search-input").type(listing["name"])
-    cy.getByTestId(listing["name"]).first().click()
+    cy.findAndOpenListing(listing["name"])
     cy.getByID("listingEditButton").contains("Edit").click()
     cy.getByTestId("nameField")
       .should("be.visible")

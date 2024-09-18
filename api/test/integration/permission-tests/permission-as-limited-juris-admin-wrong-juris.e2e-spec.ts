@@ -1079,6 +1079,32 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
         .expect(403);
     });
 
+    it('should error as forbidden for duplicate endpoint', async () => {
+      const jurisdictionA = await generateJurisdiction(
+        prisma,
+        'permission juris 188',
+      );
+      await reservedCommunityTypeFactoryAll(jurisdictionA, prisma);
+
+      const listingData = await listingFactory(jurisdictionA, prisma);
+      const listing = await prisma.listings.create({
+        data: listingData,
+      });
+
+      const res = await request(app.getHttpServer())
+        .post('/listings/duplicate')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          includeUnits: true,
+          name: 'name',
+          storedListing: {
+            id: listing.id,
+          },
+        })
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+
     it('should error as forbidden for process endpoint', async () => {
       await request(app.getHttpServer())
         .put(`/listings/closeListings`)

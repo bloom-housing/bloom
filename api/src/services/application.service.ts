@@ -421,7 +421,8 @@ export class ApplicationService {
         if (params.filterType === ApplicationsFilterEnum.open)
           displayApplications.push(app);
       } else if (
-        app.listings?.lotteryStatus === LotteryStatusEnum.publishedToPublic
+        app.listings?.lotteryStatus === LotteryStatusEnum.publishedToPublic &&
+        params.includeLotteryApps
       ) {
         lottery++;
         if (params.filterType === ApplicationsFilterEnum.lottery) {

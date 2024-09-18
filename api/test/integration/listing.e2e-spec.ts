@@ -666,6 +666,75 @@ describe('Listing Controller Tests', () => {
     });
   });
 
+  describe('duplicate endpoint', () => {
+    it('should duplicate listing, include units', async () => {
+      const jurisdictionA = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
+      const listingData = await listingFactory(jurisdictionA.id, prisma, {
+        numberOfUnits: 2,
+      });
+      const listing = await prisma.listings.create({
+        data: listingData,
+        include: {
+          units: true,
+        },
+      });
+
+      const newName = 'duplicate name 1';
+
+      const res = await request(app.getHttpServer())
+        .post('/listings/duplicate')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          includeUnits: true,
+          name: newName,
+          storedListing: {
+            id: listing.id,
+          },
+        })
+        .set('Cookie', adminAccessToken)
+        .expect(201);
+
+      expect(res.body.name).toEqual(newName);
+      expect(res.body.units.length).toBe(listing.units.length);
+    });
+
+    it('should duplicate listing, exclude units', async () => {
+      const jurisdictionA = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
+      const listingData = await listingFactory(jurisdictionA.id, prisma, {
+        numberOfUnits: 2,
+      });
+      const listing = await prisma.listings.create({
+        data: listingData,
+        include: {
+          units: true,
+        },
+      });
+      const newName = 'duplicate name 2';
+
+      const res = await request(app.getHttpServer())
+        .post('/listings/duplicate')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          includeUnits: false,
+          name: newName,
+          storedListing: {
+            id: listing.id,
+          },
+        })
+        .set('Cookie', adminAccessToken)
+        .expect(201);
+
+      expect(res.body.name).toEqual(newName);
+      expect(res.body.units).toEqual([]);
+    });
+  });
+
   describe('process endpoint', () => {
     it('should successfully process listings that are past due', async () => {
       const jurisdictionA = await prisma.jurisdictions.create({
