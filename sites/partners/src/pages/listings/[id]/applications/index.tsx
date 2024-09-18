@@ -284,6 +284,7 @@ const ApplicationsList = () => {
 
                 <ExportTermsDialog
                   dialogHeader={t("applications.export.dialogHeader")}
+                  id="applications"
                   isOpen={isTermsOpen}
                   onClose={() => setIsTermsOpen(false)}
                   onSubmit={onSubmit}

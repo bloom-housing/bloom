@@ -7,25 +7,39 @@ import styles from "./ExportTermsDialog.module.scss"
 export interface ExportTermsDialogProps {
   children: React.ReactNode
   dialogHeader: string
+  id: string
   isOpen: boolean
   onClose: () => void
   onSubmit: () => void
+  loadingState?: boolean
 }
 
 export const ExportTermsDialog = ({
   children,
   dialogHeader,
   isOpen,
+  id,
   onClose,
   onSubmit,
+  loadingState,
 }: ExportTermsDialogProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose}>
-      <Dialog.Header className={styles["export-terms-header"]}>{dialogHeader}</Dialog.Header>
-      <Dialog.Content>
+    <Dialog
+      isOpen={isOpen}
+      onClose={onClose}
+      ariaLabelledBy={`export-terms-modal-header-${id}`}
+      ariaDescribedBy={`export-terms-modal-content-${id}`}
+    >
+      <Dialog.Header
+        className={styles["export-terms-header"]}
+        id={`export-terms-modal-header-${id}`}
+      >
+        {dialogHeader}
+      </Dialog.Header>
+      <Dialog.Content id={`export-terms-modal-content-${id}`}>
         <>{children}</>
       </Dialog.Content>
       <Form id="terms" onSubmit={handleSubmit(onSubmit)}>
@@ -45,7 +59,12 @@ export const ExportTermsDialog = ({
           <Button type="submit" variant="primary" id="terms" size="sm">
             {t("t.export")}
           </Button>
-          <Button variant="secondary-outlined" size="sm" onClick={onClose}>
+          <Button
+            variant="secondary-outlined"
+            size="sm"
+            onClick={onClose}
+            loadingMessage={loadingState ? t("t.loading") : undefined}
+          >
             {t("t.cancel")}
           </Button>
         </Dialog.Footer>

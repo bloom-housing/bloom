@@ -21,6 +21,7 @@ import {
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Layout from "../../../layouts"
+import { ExportTermsDialog } from "../../../components/shared/ExportTermsDialog"
 import { ListingContext } from "../../../components/listings/ListingContext"
 import { MetaTags } from "../../../components/shared/MetaTags"
 import ListingGuard from "../../../components/shared/ListingGuard"
@@ -718,61 +719,39 @@ const Lottery = (props: { listing: Listing | undefined }) => {
               </Button>
             </Dialog.Footer>
           </Dialog>
-          <Dialog
+          <ExportTermsDialog
+            dialogHeader={t("listings.lottery.export")}
+            id="partner-lottery"
             isOpen={!!termsExportModal}
-            ariaLabelledBy="terms-export-lottery-modal-header"
-            ariaDescribedBy="terms-export-lottery-modal-content"
             onClose={() => setTermsExportModal(false)}
+            onSubmit={async () => {
+              setLoading(true)
+              try {
+                await onExport()
+                setLoading(false)
+                setTermsExportModal(false)
+              } catch {
+                setLoading(false)
+                addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
+              }
+            }}
+            loadingState={loading || exportLoading}
           >
-            <Dialog.Header id="terms-export-lottery-modal-header">
-              {t("listings.lottery.export")}
-            </Dialog.Header>
-            <Dialog.Content id="terms-export-lottery-modal-content">
-              <p>
-                {listing.listingMultiselectQuestions.length
-                  ? t("listings.lottery.exportFile")
-                  : t("listings.lottery.exportFileNoPreferences")}{" "}
-                {t("listings.lottery.exportContentTimestamp", {
-                  date: dayjs(listing.lotteryLastRunAt).format("MM/DD/YYYY"),
-                  time: dayjs(listing.lotteryLastRunAt).format("h:mm a"),
-                })}
-              </p>
-              <p>{t("listings.lottery.termsAccept")}</p>
-              <h2 className={styles["terms-of-use-header"]}>
-                {t("authentication.terms.termsOfUse")}
-              </h2>
-              <Markdown>{t("listings.lottery.terms")}</Markdown>
-            </Dialog.Content>
-            <Dialog.Footer>
-              <Button
-                variant="primary"
-                onClick={async () => {
-                  setLoading(true)
-                  try {
-                    await onExport()
-                    setLoading(false)
-                    setTermsExportModal(false)
-                  } catch {
-                    setLoading(false)
-                    addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
-                  }
-                }}
-                size="sm"
-                loadingMessage={loading || exportLoading ? t("t.loading") : undefined}
-              >
-                {t("t.export")}
-              </Button>
-              <Button
-                variant="primary-outlined"
-                onClick={() => {
-                  setTermsExportModal(false)
-                }}
-                size="sm"
-              >
-                {t("t.cancel")}
-              </Button>
-            </Dialog.Footer>
-          </Dialog>
+            <p>
+              {listing.listingMultiselectQuestions.length
+                ? t("listings.lottery.exportFile")
+                : t("listings.lottery.exportFileNoPreferences")}{" "}
+              {t("listings.lottery.exportContentTimestamp", {
+                date: dayjs(listing.lotteryLastRunAt).format("MM/DD/YYYY"),
+                time: dayjs(listing.lotteryLastRunAt).format("h:mm a"),
+              })}
+            </p>
+            <p>{t("listings.lottery.termsAccept")}</p>
+            <h2 className={styles["terms-of-use-header"]}>
+              {t("authentication.terms.termsOfUse")}
+            </h2>
+            <Markdown>{t("listings.lottery.terms")}</Markdown>
+          </ExportTermsDialog>
           <Dialog
             isOpen={!!publishModal}
             ariaLabelledBy="publish-lottery-modal-header"
