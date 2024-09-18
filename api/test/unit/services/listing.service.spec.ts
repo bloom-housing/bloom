@@ -2525,6 +2525,15 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
+      prisma.listingEvents.findMany = jest.fn().mockResolvedValue([]);
+      prisma.listingEvents.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
+      prisma.assets.delete = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
       prisma.$transaction = jest
         .fn()
         .mockResolvedValue([{ id: 'example id', name: 'example name' }]);
@@ -2668,6 +2677,15 @@ describe('Testing listing service', () => {
         state: 'DC',
         street: '1600 Pennsylvania Avenue',
         zipCode: '20500',
+      });
+      prisma.listingEvents.findMany = jest.fn().mockResolvedValue([]);
+      prisma.listingEvents.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
+      prisma.assets.delete = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
       });
       const updateMock = jest
         .fn()
@@ -3257,6 +3275,127 @@ describe('Testing listing service', () => {
           id: expect.anything(),
         },
       });
+    });
+  });
+
+  describe('Test updateListingEvents endpoint', () => {
+    it('should clear asset from listing events if they are present', async () => {
+      prisma.listingEvents.findMany = jest.fn().mockResolvedValue([
+        {
+          id: 'random asset id',
+          fileId: 'random file id',
+        },
+      ]);
+      prisma.listingEvents.update = jest
+        .fn()
+        .mockResolvedValue({ success: true });
+      prisma.assets.deleteMany = jest.fn().mockResolvedValue({ success: true });
+
+      await service.updateListingEvents('random id');
+
+      expect(prisma.listingEvents.findMany).toHaveBeenCalledWith({
+        select: {
+          id: true,
+          fileId: true,
+        },
+        where: {
+          listingId: 'random id',
+        },
+      });
+      expect(prisma.listingEvents.update).toHaveBeenCalledWith({
+        data: {
+          assets: {
+            disconnect: true,
+          },
+        },
+        where: {
+          id: 'random asset id',
+        },
+      });
+      expect(prisma.assets.deleteMany).toHaveBeenCalledWith({
+        where: {
+          id: {
+            in: ['random file id'],
+          },
+        },
+      });
+    });
+
+    it('should clear multiple assets from listing events if they are present', async () => {
+      prisma.listingEvents.findMany = jest.fn().mockResolvedValue([
+        {
+          id: 'random asset id 1',
+          fileId: 'random file id 1',
+        },
+        {
+          id: 'random asset id 2',
+        },
+      ]);
+      prisma.listingEvents.update = jest
+        .fn()
+        .mockResolvedValue({ success: true });
+      prisma.assets.deleteMany = jest.fn().mockResolvedValue({ success: true });
+
+      await service.updateListingEvents('random id');
+
+      expect(prisma.listingEvents.findMany).toHaveBeenCalledWith({
+        select: {
+          id: true,
+          fileId: true,
+        },
+        where: {
+          listingId: 'random id',
+        },
+      });
+      expect(prisma.listingEvents.update).toHaveBeenCalledWith({
+        data: {
+          assets: {
+            disconnect: true,
+          },
+        },
+        where: {
+          id: 'random asset id 1',
+        },
+      });
+      expect(prisma.listingEvents.update).toHaveBeenCalledWith({
+        data: {
+          assets: {
+            disconnect: true,
+          },
+        },
+        where: {
+          id: 'random asset id 2',
+        },
+      });
+      expect(prisma.assets.deleteMany).toHaveBeenCalledWith({
+        where: {
+          id: {
+            in: ['random file id 1'],
+          },
+        },
+      });
+    });
+
+    it('should do nothing if no listing events present', async () => {
+      prisma.listingEvents.findMany = jest.fn().mockResolvedValue([]);
+      prisma.listingEvents.update = jest
+        .fn()
+        .mockResolvedValue({ success: true });
+      prisma.assets.deleteMany = jest.fn().mockResolvedValue({ success: true });
+
+      await service.updateListingEvents('random id');
+
+      expect(prisma.listingEvents.findMany).toHaveBeenCalledWith({
+        select: {
+          id: true,
+          fileId: true,
+        },
+        where: {
+          listingId: 'random id',
+        },
+      });
+      expect(prisma.listingEvents.update).not.toHaveBeenCalled();
+      expect(prisma.assets.deleteMany).not.toHaveBeenCalled();
     });
   });
 });

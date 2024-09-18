@@ -14,7 +14,6 @@ import {
   LanguagesEnum,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
-  LotteryStatusEnum,
   Prisma,
   ReviewOrderTypeEnum,
   UserRoleEnum,
@@ -30,7 +29,6 @@ import { Listing } from '../dtos/listings/listing.dto';
 import { ListingCreate } from '../dtos/listings/listing-create.dto';
 import { ListingDuplicate } from '../dtos/listings/listing-duplicate.dto';
 import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
-import { ListingLotteryStatus } from '../dtos/listings/listing-lottery-status.dto';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
 import { ListingUpdate } from '../dtos/listings/listing-update.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
@@ -1309,6 +1307,51 @@ export class ListingService implements OnModuleInit {
     return undefined;
   }
 
+  /**
+   * @param listingId the listing id we are operating on
+   * @description disconnects assets from listing events, then deletes those assets
+   */
+  async updateListingEvents(listingId: string): Promise<void> {
+    const assetIds = await this.prisma.listingEvents.findMany({
+      select: {
+        id: true,
+        fileId: true,
+      },
+      where: {
+        listingId,
+      },
+    });
+    await Promise.all(
+      assetIds.map(async (assetData) => {
+        await this.prisma.listingEvents.update({
+          data: {
+            assets: {
+              disconnect: true,
+            },
+          },
+          where: {
+            id: assetData.id,
+          },
+        });
+      }),
+    );
+    const fileIds = assetIds.reduce((accum, curr) => {
+      if (curr.fileId) {
+        accum.push(curr.fileId);
+      }
+      return accum;
+    }, []);
+    if (fileIds.length) {
+      await this.prisma.assets.deleteMany({
+        where: {
+          id: {
+            in: fileIds,
+          },
+        },
+      });
+    }
+  }
+
   /*
     update a listing
   */
@@ -1408,6 +1451,8 @@ export class ListingService implements OnModuleInit {
       dto,
       'listingsBuildingAddress',
     );
+    // Delete all assets tied to listing events before creating new ones
+    await this.updateListingEvents(dto.id);
 
     // Wrap the deletion and update in one transaction so that units aren't lost if update fails
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -1493,6 +1538,7 @@ export class ListingService implements OnModuleInit {
                     ? {
                         create: {
                           ...event.assets,
+                          id: undefined,
                         },
                       }
                     : undefined,
