@@ -233,6 +233,7 @@ describe('Testing translations service', () => {
     expect(prisma.generatedListingTranslations.findFirst).toHaveBeenCalledTimes(
       1,
     );
+    expect(prisma.generatedListingTranslations.create).toHaveBeenCalledTimes(1);
     validateTranslatedFields(result);
   });
 

@@ -8,16 +8,12 @@ import {
   ReviewOrderTypeEnum,
 } from '@prisma/client';
 import { HttpModule } from '@nestjs/axios';
-import Excel from 'exceljs';
 import { Request as ExpressRequest, Response } from 'express';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { ApplicationCsvExporterService } from '../../../src/services/application-csv-export.service';
 import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
 import { User } from '../../../src/dtos/users/user.dto';
-import {
-  mockApplication,
-  mockApplicationSet,
-} from './application.service.spec';
+import { mockApplicationSet } from './application.service.spec';
 import { mockMultiselectQuestion } from './multiselect-question.service.spec';
 import { ListingService } from '../../../src/services/listing.service';
 import { PermissionService } from '../../../src/services/permission.service';
@@ -32,10 +28,8 @@ import { Application } from '../../../src/dtos/applications/application.dto';
 import MultiselectQuestion from '../../../src/dtos/multiselect-questions/multiselect-question.dto';
 import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
 import { LotteryService } from '../../../src/services/lottery.service';
-import { getExportHeaders } from '../../../src/utilities/application-export-helpers';
 import { ListingLotteryStatus } from '../../../src/dtos/listings/listing-lottery-status.dto';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
-import { release } from 'process';
 
 const canOrThrowMock = jest.fn();
 const lotteryReleasedMock = jest.fn();
@@ -144,9 +138,16 @@ describe('Testing lottery service', () => {
         .fn()
         .mockResolvedValue({ id: randomUUID() });
 
+      prisma.applicationLotteryTotal.create = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
       await service.lotteryRandomizer(listingId, applications, []);
 
-      expect(prisma.applicationLotteryPositions.createMany).toHaveBeenCalled();
+      expect(
+        prisma.applicationLotteryPositions.createMany,
+      ).toHaveBeenCalledTimes(1);
+      expect(prisma.applicationLotteryTotal.create).toHaveBeenCalledTimes(1);
 
       const args = (prisma.applicationLotteryPositions.createMany as any).mock
         .calls[0][0].data;
@@ -189,6 +190,10 @@ describe('Testing lottery service', () => {
         .fn()
         .mockResolvedValue({ id: randomUUID() });
 
+      prisma.applicationLotteryTotal.create = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
       await service.lotteryRandomizer(listingId, applications, preferences);
 
       const args = (prisma.applicationLotteryPositions.createMany as any).mock
@@ -204,6 +209,7 @@ describe('Testing lottery service', () => {
       }
 
       expect(prisma.applicationLotteryPositions.createMany).toBeCalledTimes(1);
+      expect(prisma.applicationLotteryTotal.create).toBeCalledTimes(1);
     });
 
     it('should store randomized ordinals and preference specific ordinals', async () => {
@@ -229,6 +235,10 @@ describe('Testing lottery service', () => {
       }
 
       prisma.applicationLotteryPositions.createMany = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
+      prisma.applicationLotteryTotal.create = jest
         .fn()
         .mockResolvedValue({ id: randomUUID() });
 
@@ -264,10 +274,35 @@ describe('Testing lottery service', () => {
       );
 
       expect(prisma.applicationLotteryPositions.createMany).toBeCalledTimes(2);
+      expect(prisma.applicationLotteryTotal.create).toBeCalledTimes(2);
     });
   });
 
   describe('Testing lotteryGenerate()', () => {
+    it('should error if not an admin', async () => {
+      const listingId = randomUUID();
+      const requestingUser = {
+        firstName: 'requesting fName',
+        lastName: 'requesting lName',
+        email: 'requestingUser@email.com',
+        jurisdictions: [{ id: 'juris id' }],
+        userRoles: { isAdmin: false },
+      } as unknown as User;
+
+      prisma.listings.findUnique = jest.fn();
+
+      await expect(
+        async () =>
+          await service.lotteryGenerate(
+            { user: requestingUser } as unknown as ExpressRequest,
+            {} as unknown as Response,
+            { id: listingId },
+          ),
+      ).rejects.toThrowError();
+
+      expect(prisma.listings.findUnique).not.toHaveBeenCalled();
+    });
+
     it('should build lottery when no prior lottery has been ran', async () => {
       const listingId = randomUUID();
       const requestingUser = {
@@ -314,11 +349,16 @@ describe('Testing lottery service', () => {
         .fn()
         .mockResolvedValue({ id: randomUUID() });
 
+      prisma.applicationLotteryTotal.createMany = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
       prisma.listings.update = jest.fn().mockResolvedValue({
         id: listingId,
         lotteryLastRunAt: null,
         lotteryStatus: null,
       });
+      prisma.userAccounts.findMany = jest.fn().mockResolvedValue([]);
 
       await service.lotteryGenerate(
         { user: requestingUser } as unknown as ExpressRequest,
@@ -329,7 +369,6 @@ describe('Testing lottery service', () => {
       expect(prisma.listings.findUnique).toHaveBeenCalledWith({
         select: {
           id: true,
-          lotteryLastRunAt: true,
           lotteryStatus: true,
         },
         where: {
@@ -367,6 +406,8 @@ describe('Testing lottery service', () => {
       });
 
       expect(prisma.applicationLotteryPositions.createMany).toHaveBeenCalled();
+      expect(prisma.applicationLotteryTotal.create).toHaveBeenCalled();
+
       expect(prisma.listings.update).toHaveBeenCalledWith({
         data: {
           lotteryLastRunAt: expect.anything(),
@@ -377,513 +418,94 @@ describe('Testing lottery service', () => {
         },
       });
     });
-  });
 
-  describe('Testing generateSpreadsheetData', () => {
-    it('should generate spreadsheet and the data', async () => {
-      const applicationSet = mockApplicationSet(5, new Date(), 0, true);
-      prisma.applications.findMany = jest
-        .fn()
-        .mockResolvedValueOnce(applicationSet);
-      const workbook = new Excel.Workbook();
+    it('should generate lottery results when previous results exist', async () => {
       const listingId = randomUUID();
-      const headers = getExportHeaders(
-        0,
-        [],
-        'America/Los_Angeles',
-        false,
-        true,
-      );
-      await service.generateSpreadsheetData(
-        workbook,
-        applicationSet,
-        headers,
-        {
-          id: listingId,
-          includeDemographics: false,
-          timeZone: 'America/Los_Angeles',
-        },
-        true,
-      );
+      const requestingUser = {
+        firstName: 'requesting fName',
+        lastName: 'requesting lName',
+        email: 'requestingUser@email.com',
+        jurisdictions: [{ id: 'juris id' }],
+        userRoles: { isAdmin: true },
+      } as unknown as User;
 
-      expect(prisma.applications.findMany).toBeCalledWith({
-        include: {
-          accessibility: {
-            select: {
-              hearing: true,
-              id: true,
-              mobility: true,
-              vision: true,
-            },
-          },
-          alternateContact: {
-            select: {
-              address: {
-                select: {
-                  city: true,
-                  county: true,
-                  id: true,
-                  latitude: true,
-                  longitude: true,
-                  placeName: true,
-                  state: true,
-                  street: true,
-                  street2: true,
-                  zipCode: true,
-                },
-              },
-              agency: true,
-              emailAddress: true,
-              firstName: true,
-              id: true,
-              lastName: true,
-              otherType: true,
-              phoneNumber: true,
-              type: true,
-            },
-          },
-          applicant: {
-            select: {
-              applicantAddress: {
-                select: {
-                  city: true,
-                  county: true,
-                  id: true,
-                  latitude: true,
-                  longitude: true,
-                  placeName: true,
-                  state: true,
-                  street: true,
-                  street2: true,
-                  zipCode: true,
-                },
-              },
-              applicantWorkAddress: {
-                select: {
-                  city: true,
-                  county: true,
-                  id: true,
-                  latitude: true,
-                  longitude: true,
-                  placeName: true,
-                  state: true,
-                  street: true,
-                  street2: true,
-                  zipCode: true,
-                },
-              },
-              birthDay: true,
-              birthMonth: true,
-              birthYear: true,
-              emailAddress: true,
-              firstName: true,
-              id: true,
-              lastName: true,
-              middleName: true,
-              noEmail: true,
-              noPhone: true,
-              phoneNumber: true,
-              phoneNumberType: true,
-              workInRegion: true,
-            },
-          },
-          applicationFlaggedSet: {
-            select: {
-              id: true,
-            },
-          },
-          applicationLotteryPositions: {
-            select: {
-              ordinal: true,
-            },
-            where: {
-              multiselectQuestionId: null,
-            },
-          },
-          applicationsAlternateAddress: {
-            select: {
-              city: true,
-              county: true,
-              id: true,
-              latitude: true,
-              longitude: true,
-              placeName: true,
-              state: true,
-              street: true,
-              street2: true,
-              zipCode: true,
-            },
-          },
-          applicationsMailingAddress: {
-            select: {
-              city: true,
-              county: true,
-              id: true,
-              latitude: true,
-              longitude: true,
-              placeName: true,
-              state: true,
-              street: true,
-              street2: true,
-              zipCode: true,
-            },
-          },
-          demographics: false,
-          householdMember: {
-            select: {
-              birthDay: true,
-              birthMonth: true,
-              birthYear: true,
-              firstName: true,
-              householdMemberAddress: {
-                select: {
-                  city: true,
-                  county: true,
-                  id: true,
-                  latitude: true,
-                  longitude: true,
-                  placeName: true,
-                  state: true,
-                  street: true,
-                  street2: true,
-                  zipCode: true,
-                },
-              },
-              householdMemberWorkAddress: {
-                select: {
-                  city: true,
-                  county: true,
-                  id: true,
-                  latitude: true,
-                  longitude: true,
-                  placeName: true,
-                  state: true,
-                  street: true,
-                  street2: true,
-                  zipCode: true,
-                },
-              },
-              id: true,
-              lastName: true,
-              middleName: true,
-              orderId: true,
-              relationship: true,
-              sameAddress: true,
-              workInRegion: true,
-            },
-          },
-          listings: false,
-          preferredUnitTypes: {
-            select: {
-              id: true,
-              name: true,
-              numBedrooms: true,
-            },
-          },
-          userAccounts: {
-            select: {
-              email: true,
-              firstName: true,
-              id: true,
-              lastName: true,
-            },
-          },
-        },
-        where: {
-          deletedAt: null,
-          id: {
-            in: applicationSet.map((appSet) => appSet.id),
-          },
-          listingId: listingId,
-          markedAsDuplicate: false,
-        },
+      canOrThrowMock.mockResolvedValue(true);
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: listingId,
+        lotteryLastRunAt: new Date(),
+        lotteryStatus: LotteryStatusEnum.ran,
+        status: ListingsStatusEnum.closed,
       });
-      expect(workbook.worksheets).toHaveLength(1);
-      expect(workbook.worksheets[0].columnCount).toEqual(57);
-      expect(workbook.worksheets[0].rowCount).toEqual(6); // header and 5 applications
-      expect(workbook.worksheets[0].getColumn(3).header).toEqual(
-        'Raw Lottery Rank',
-      );
-      expect(workbook.worksheets[0].getRow(2).getCell(3).value).toEqual('1');
-      expect(workbook.worksheets[0].getRow(3).getCell(3).value).toEqual('2');
-      expect(workbook.worksheets[0].getRow(4).getCell(3).value).toEqual('3');
-      expect(workbook.worksheets[0].getRow(5).getCell(3).value).toEqual('4');
-      expect(workbook.worksheets[0].getRow(6).getCell(3).value).toEqual('5');
-    });
+      const applications = mockApplicationSet(5, new Date());
+      prisma.applications.findMany = jest.fn().mockReturnValue(applications);
 
-    it('should generate spreadsheet and the data for preference sheet', async () => {
-      const preferenceId = randomUUID();
-      const preference = { name: 'sample preference', id: preferenceId };
-      const applicationSet = [
-        mockApplication({
-          date: new Date(),
-          position: 2,
-          numberOfHouseholdMembers: 0,
-          includeLotteryPosition: true,
-          preferences: [{ claimed: true, multiselectQuestionId: preferenceId }],
-        }),
-        mockApplication({
-          date: new Date(),
-          position: 0,
-          numberOfHouseholdMembers: 0,
-          includeLotteryPosition: true,
-          preferences: [
-            { claimed: false, multiselectQuestionId: preferenceId },
+      prisma.multiselectQuestions.findMany = jest.fn().mockReturnValue([
+        {
+          ...mockMultiselectQuestion(
+            0,
+            new Date(),
+            MultiselectQuestionsApplicationSectionEnum.preferences,
+          ),
+          options: [
+            { id: 1, text: 'text' },
+            { id: 2, text: 'text', collectAddress: true },
           ],
-        }),
-        mockApplication({
-          date: new Date(),
-          position: 1,
-          numberOfHouseholdMembers: 0,
-          includeLotteryPosition: true,
-          preferences: [],
-        }),
-        mockApplication({
-          date: new Date(),
-          position: 3,
-          numberOfHouseholdMembers: 0,
-          includeLotteryPosition: true,
-          preferences: [{ claimed: true, multiselectQuestionId: preferenceId }],
-        }),
-      ];
-      prisma.applications.findMany = jest.fn().mockResolvedValueOnce([
-        {
-          ...applicationSet[0],
-          applicationLotteryPositions: [{ ordinal: 1 }],
         },
         {
-          ...applicationSet[3],
-          applicationLotteryPositions: [{ ordinal: 2 }],
+          ...mockMultiselectQuestion(
+            1,
+            new Date(),
+            MultiselectQuestionsApplicationSectionEnum.programs,
+          ),
+          options: [{ id: 1, text: 'text' }],
         },
-        ,
       ]);
-      const workbook = new Excel.Workbook();
-      const listingId = randomUUID();
-      const headers = getExportHeaders(
-        0,
-        [],
-        'America/Los_Angeles',
-        false,
-        true,
-      );
-      await service.generateSpreadsheetData(
-        workbook,
-        applicationSet as Application[],
-        headers,
-        {
-          id: listingId,
-          includeDemographics: false,
-          timeZone: 'America/Los_Angeles',
-        },
-        true,
-        preference,
+
+      prisma.applicationLotteryPositions.deleteMany = jest.fn();
+      prisma.applicationLotteryPositions.createMany = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
+      prisma.applicationLotteryTotal.deleteMany = jest.fn();
+      prisma.applicationLotteryTotal.create = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: listingId,
+        lotteryLastRunAt: null,
+        lotteryStatus: null,
+      });
+      prisma.userAccounts.findMany = jest.fn().mockResolvedValue([]);
+
+      await service.lotteryGenerate(
+        { user: requestingUser } as unknown as ExpressRequest,
+        {} as unknown as Response,
+        { id: listingId },
       );
 
-      expect(prisma.applications.findMany).toBeCalledWith({
-        include: {
-          accessibility: {
-            select: {
-              hearing: true,
-              id: true,
-              mobility: true,
-              vision: true,
-            },
-          },
-          alternateContact: {
-            select: {
-              address: {
-                select: {
-                  city: true,
-                  county: true,
-                  id: true,
-                  latitude: true,
-                  longitude: true,
-                  placeName: true,
-                  state: true,
-                  street: true,
-                  street2: true,
-                  zipCode: true,
-                },
-              },
-              agency: true,
-              emailAddress: true,
-              firstName: true,
-              id: true,
-              lastName: true,
-              otherType: true,
-              phoneNumber: true,
-              type: true,
-            },
-          },
-          applicant: {
-            select: {
-              applicantAddress: {
-                select: {
-                  city: true,
-                  county: true,
-                  id: true,
-                  latitude: true,
-                  longitude: true,
-                  placeName: true,
-                  state: true,
-                  street: true,
-                  street2: true,
-                  zipCode: true,
-                },
-              },
-              applicantWorkAddress: {
-                select: {
-                  city: true,
-                  county: true,
-                  id: true,
-                  latitude: true,
-                  longitude: true,
-                  placeName: true,
-                  state: true,
-                  street: true,
-                  street2: true,
-                  zipCode: true,
-                },
-              },
-              birthDay: true,
-              birthMonth: true,
-              birthYear: true,
-              emailAddress: true,
-              firstName: true,
-              id: true,
-              lastName: true,
-              middleName: true,
-              noEmail: true,
-              noPhone: true,
-              phoneNumber: true,
-              phoneNumberType: true,
-              workInRegion: true,
-            },
-          },
-          applicationFlaggedSet: {
-            select: {
-              id: true,
-            },
-          },
-          applicationLotteryPositions: {
-            select: {
-              ordinal: true,
-            },
-            where: {
-              multiselectQuestionId: preferenceId,
-            },
-          },
-          applicationsAlternateAddress: {
-            select: {
-              city: true,
-              county: true,
-              id: true,
-              latitude: true,
-              longitude: true,
-              placeName: true,
-              state: true,
-              street: true,
-              street2: true,
-              zipCode: true,
-            },
-          },
-          applicationsMailingAddress: {
-            select: {
-              city: true,
-              county: true,
-              id: true,
-              latitude: true,
-              longitude: true,
-              placeName: true,
-              state: true,
-              street: true,
-              street2: true,
-              zipCode: true,
-            },
-          },
-          demographics: false,
-          householdMember: {
-            select: {
-              birthDay: true,
-              birthMonth: true,
-              birthYear: true,
-              firstName: true,
-              householdMemberAddress: {
-                select: {
-                  city: true,
-                  county: true,
-                  id: true,
-                  latitude: true,
-                  longitude: true,
-                  placeName: true,
-                  state: true,
-                  street: true,
-                  street2: true,
-                  zipCode: true,
-                },
-              },
-              householdMemberWorkAddress: {
-                select: {
-                  city: true,
-                  county: true,
-                  id: true,
-                  latitude: true,
-                  longitude: true,
-                  placeName: true,
-                  state: true,
-                  street: true,
-                  street2: true,
-                  zipCode: true,
-                },
-              },
-              id: true,
-              lastName: true,
-              middleName: true,
-              orderId: true,
-              relationship: true,
-              sameAddress: true,
-              workInRegion: true,
-            },
-          },
-          listings: false,
-          preferredUnitTypes: {
-            select: {
-              id: true,
-              name: true,
-              numBedrooms: true,
-            },
-          },
-          userAccounts: {
-            select: {
-              email: true,
-              firstName: true,
-              id: true,
-              lastName: true,
-            },
-          },
+      expect(prisma.listings.findUnique).toHaveBeenCalledWith({
+        select: {
+          id: true,
+          lotteryStatus: true,
         },
         where: {
-          deletedAt: null,
-          id: {
-            in: [applicationSet[0].id, applicationSet[3].id],
-          },
-          listingId: listingId,
-          markedAsDuplicate: false,
+          id: listingId,
         },
       });
-      expect(workbook.worksheets).toHaveLength(1);
-      expect(workbook.worksheets[0].columnCount).toEqual(58);
-      expect(workbook.worksheets[0].rowCount).toEqual(3); // header and 2 applications
-      expect(workbook.worksheets[0].getColumn(3).header).toEqual(
-        'Raw Lottery Rank',
-      );
-      expect(workbook.worksheets[0].getColumn(4).header).toEqual(
-        'sample preference Rank',
-      );
-      expect(workbook.worksheets[0].getRow(2).getCell(3).value).toEqual(3);
-      expect(workbook.worksheets[0].getRow(3).getCell(3).value).toEqual(4);
-      expect(workbook.worksheets[0].getRow(2).getCell(4).value).toEqual('1');
-      expect(workbook.worksheets[0].getRow(3).getCell(4).value).toEqual('2');
+
+      expect(
+        prisma.applicationLotteryPositions.deleteMany,
+      ).toHaveBeenCalledWith({ where: { listingId: listingId } });
+      expect(prisma.applicationLotteryTotal.deleteMany).toHaveBeenCalledWith({
+        where: { listingId: listingId },
+      });
+      expect(prisma.applications.findMany).toHaveBeenCalled();
+
+      expect(prisma.applicationLotteryPositions.createMany).toHaveBeenCalled();
+      expect(prisma.applicationLotteryTotal.create).toHaveBeenCalled();
+
+      expect(prisma.listings.update).toHaveBeenCalled();
     });
   });
 
@@ -1145,6 +767,7 @@ describe('Testing lottery service', () => {
         lotteryStatus: LotteryStatusEnum.ran,
       });
       prisma.listings.update = jest.fn().mockResolvedValue(null);
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
 
       await expect(
         async () =>
@@ -1214,6 +837,7 @@ describe('Testing lottery service', () => {
         status: ListingsStatusEnum.closed,
         lotteryStatus: LotteryStatusEnum.ran,
       });
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
       jest
         .spyOn(listingService, 'getPublicUserEmailInfo')
         .mockResolvedValueOnce({
@@ -1253,7 +877,7 @@ describe('Testing lottery service', () => {
   });
 
   describe('Test autoPublishResults endpoint', () => {
-    it('should call the updateMany', async () => {
+    it('should call the update', async () => {
       prisma.listings.findMany = jest.fn().mockResolvedValue([
         {
           id: 'example id1',
@@ -1600,10 +1224,11 @@ describe('Testing lottery service', () => {
     const applicationId = randomUUID();
     const publicUser = {
       id: 'public id',
+      userRoles: {},
     } as User;
 
     it('should query for lottery positions', async () => {
-      prisma.applications.findFirstOrThrow = jest
+      prisma.applications.findFirst = jest
         .fn()
         .mockResolvedValue({ userId: publicUser.id });
       prisma.applicationLotteryPositions.findMany = jest
@@ -1623,6 +1248,49 @@ describe('Testing lottery service', () => {
           applicationId,
         },
       });
+    });
+  });
+
+  describe('Testing lotteryTotals()', () => {
+    const listingId = randomUUID();
+    const publicUser = {
+      id: 'public id',
+      userRoles: {},
+    } as User;
+
+    it('should query for lottery totals', async () => {
+      prisma.applications.findFirst = jest
+        .fn()
+        .mockResolvedValue({ userId: publicUser.id });
+      prisma.applicationLotteryTotal.findMany = jest.fn().mockResolvedValue([
+        { total: 10, multiselectQuestionId: null, listingId },
+        { total: 5, multiselectQuestionId: 'preference id', listingId },
+      ]);
+      await service.lotteryTotals(listingId, publicUser);
+
+      expect(prisma.applicationLotteryTotal.findMany).toHaveBeenCalledWith({
+        select: {
+          total: true,
+          multiselectQuestionId: true,
+        },
+        where: {
+          listingId,
+        },
+      });
+    });
+
+    it('should fail for no user', async () => {
+      prisma.applications.findFirstOrThrow = jest
+        .fn()
+        .mockResolvedValue({ userId: publicUser.id });
+      prisma.applicationLotteryTotal.findMany = jest.fn().mockResolvedValue([
+        { total: 10, multiselectQuestionId: null, listingId },
+        { total: 5, multiselectQuestionId: 'preference id', listingId },
+      ]);
+
+      await expect(
+        async () => await service.lotteryTotals(listingId, null),
+      ).rejects.toThrowError();
     });
   });
 });

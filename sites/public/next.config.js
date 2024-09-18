@@ -42,7 +42,7 @@ module.exports = withBundleAnalyzer({
     cacheRevalidate: process.env.CACHE_REVALIDATE ? Number(process.env.CACHE_REVALIDATE) : 60,
     cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
     showProfessionalPartners: process.env.SHOW_PROFESSIONAL_PARTNERS === "TRUE",
-    showLottery: process.env.SHOW_LOTTERY === "TRUE",
+    showPublicLottery: process.env.SHOW_PUBLIC_LOTTERY === "TRUE",
     showMandatedAccounts: process.env.SHOW_MANDATED_ACCOUNTS === "TRUE",
     showPwdless: process.env.SHOW_PWDLESS === "TRUE",
     notificationsSignUpUrl: process.env.NOTIFICATIONS_SIGN_UP_URL || null,

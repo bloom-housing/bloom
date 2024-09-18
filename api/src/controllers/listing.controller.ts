@@ -32,6 +32,7 @@ import { PermissionAction } from '../decorators/permission-action.decorator';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import Listing from '../dtos/listings/listing.dto';
 import { ListingCreate } from '../dtos/listings/listing-create.dto';
+import { ListingDuplicate } from '../dtos/listings/listing-duplicate.dto';
 import { ListingCsvQueryParams } from '../dtos/listings/listing-csv-query-params.dto';
 import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
@@ -172,6 +173,19 @@ export class ListingController {
       listingDto,
       mapTo(User, req['user']),
     );
+  }
+
+  @Post('duplicate')
+  @ApiOperation({ summary: 'Duplicate listing', operationId: 'duplicate' })
+  @UseInterceptors(ClassSerializerInterceptor)
+  @UsePipes(new ListingCreateUpdateValidationPipe(defaultValidationPipeOptions))
+  @ApiOkResponse({ type: Listing })
+  @UseGuards(ApiKeyGuard)
+  async duplicate(
+    @Request() req: ExpressRequest,
+    @Body() dto: ListingDuplicate,
+  ): Promise<Listing> {
+    return await this.listingService.duplicate(dto, mapTo(User, req['user']));
   }
 
   @Delete()

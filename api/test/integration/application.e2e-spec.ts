@@ -1621,6 +1621,7 @@ describe('Application Controller Tests', () => {
       const queryParams: PublicAppsViewQueryParams = {
         userId: user.id,
         filterType: ApplicationsFilterEnum.all,
+        includeLotteryApps: true,
       };
       const query = stringify(queryParams as any);
 
@@ -1647,6 +1648,7 @@ describe('Application Controller Tests', () => {
       const queryParams: PublicAppsViewQueryParams = {
         userId: userA.id,
         filterType: ApplicationsFilterEnum.all,
+        includeLotteryApps: true,
       };
       const query = stringify(queryParams as any);
 
