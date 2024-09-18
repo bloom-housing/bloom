@@ -679,7 +679,7 @@ export class ApplicationExporterService {
     if (forLottery) {
       return workbook.addWorksheet(
         preference
-          ? preference.name.replace(/[\*\?\:\\\/]/, '-')
+          ? preference.name.replace(/[\*\?\:\\\/]/g, '-')
           : 'Raw Lottery Rank',
       );
     }
