@@ -297,6 +297,9 @@ export class ListingService implements OnModuleInit {
             not: null,
           },
         },
+        markedAsDuplicate: {
+          not: true,
+        },
       },
     });
 
