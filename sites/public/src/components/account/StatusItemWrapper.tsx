@@ -32,7 +32,8 @@ const StatusItemWrapper = (props: StatusItemWrapperProps) => {
         lotteryLastPublishedAt && dayjs(lotteryLastPublishedAt).format("MMM D, YYYY")
       }
       lotteryResults={
-        props.application?.listings?.lotteryStatus === LotteryStatusEnum.publishedToPublic
+        props.application?.listings?.lotteryStatus === LotteryStatusEnum.publishedToPublic &&
+        !!props.application?.applicationLotteryPositions?.length
       }
       lotteryURL={`/account/application/${props.application?.id}/lottery-results`}
     />
