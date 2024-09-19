@@ -10,7 +10,7 @@ import {
 import { HttpModule } from '@nestjs/axios';
 import { Request as ExpressRequest, Response } from 'express';
 import { PrismaService } from '../../../src/services/prisma.service';
-import { ApplicationCsvExporterService } from '../../../src/services/application-csv-export.service';
+import { ApplicationExporterService } from '../../../src/services/application-exporter.service';
 import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
 import { User } from '../../../src/dtos/users/user.dto';
 import { mockApplicationSet } from './application.service.spec';
@@ -51,7 +51,7 @@ describe('Testing lottery service', () => {
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        ApplicationCsvExporterService,
+        ApplicationExporterService,
         PrismaService,
         MultiselectQuestionService,
         ListingService,

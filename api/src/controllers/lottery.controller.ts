@@ -16,26 +16,27 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Request as ExpressRequest, Response } from 'express';
-import { LotteryService } from '../services/lottery.service';
-import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
-import { SuccessDTO } from '../dtos/shared/success.dto';
-import { OptionalAuthGuard } from '../guards/optional.guard';
-import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor';
-import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
-import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
-import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
-import { ApiKeyGuard } from '../guards/api-key.guard';
-import { LotteryActivityLogItem } from '../dtos/lottery/lottery-activity-log-item.dto';
-import { ActivityLogMetadata } from '../../src/decorators/activity-log-metadata.decorator';
-import { ListingLotteryStatus } from '../../src/dtos/listings/listing-lottery-status.dto';
-import { mapTo } from '../../src/utilities/mapTo';
-import { User } from '../../src/dtos/users/user.dto';
 import { LotteryStatusEnum } from '@prisma/client';
+import { Request as ExpressRequest, Response } from 'express';
+import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor';
+import { ActivityLogMetadata } from '../../src/decorators/activity-log-metadata.decorator';
+import { AdminOrJurisdictionalAdminGuard } from '../../src/guards/admin-or-jurisdiction-admin.guard';
+import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
+import { ApiKeyGuard } from '../guards/api-key.guard';
+import { ApplicationExporterService } from '../services/application-exporter.service';
+import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
+import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
+import { ListingLotteryStatus } from '../../src/dtos/listings/listing-lottery-status.dto';
+import { LotteryActivityLogItem } from '../dtos/lottery/lottery-activity-log-item.dto';
+import { LotteryService } from '../services/lottery.service';
+import { mapTo } from '../../src/utilities/mapTo';
+import { OptionalAuthGuard } from '../guards/optional.guard';
 import { PermissionAction } from '../../src/decorators/permission-action.decorator';
 import { permissionActions } from '../../src/enums/permissions/permission-actions-enum';
-import { AdminOrJurisdictionalAdminGuard } from '../../src/guards/admin-or-jurisdiction-admin.guard';
+import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { PublicLotteryResult } from '../../src/dtos/lottery/lottery-public-result.dto';
+import { SuccessDTO } from '../dtos/shared/success.dto';
+import { User } from '../../src/dtos/users/user.dto';
 import { PublicLotteryTotal } from '../../src/dtos/lottery/lottery-public-total.dto';
 
 @Controller('lottery')
@@ -45,7 +46,10 @@ import { PublicLotteryTotal } from '../../src/dtos/lottery/lottery-public-total.
 @UseGuards(ApiKeyGuard, OptionalAuthGuard)
 @UseInterceptors(ActivityLogInterceptor)
 export class LotteryController {
-  constructor(private readonly lotteryService: LotteryService) {}
+  constructor(
+    private readonly lotteryService: LotteryService,
+    private readonly applicationExporterService: ApplicationExporterService,
+  ) {}
 
   @Put(`generateLotteryResults`)
   @ApiOperation({
@@ -80,7 +84,11 @@ export class LotteryController {
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationCsvQueryParams,
   ): Promise<StreamableFile> {
-    return await this.lotteryService.lotteryExport(req, res, queryParams);
+    return await this.applicationExporterService.spreadsheetExport(
+      req,
+      res,
+      queryParams,
+    );
   }
 
   @Put('lotteryStatus')
