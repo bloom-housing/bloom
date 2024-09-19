@@ -419,17 +419,14 @@ const ListingFormActions = ({
 
         // Only admins can publish results
         // and the functionality should only be turned on if the rest of lottery functionality is
-        if (isListingApprover && process.env.showLottery === "TRUE") {
+        if (isListingApprover && process.env.showLottery) {
           const lotteryResults = listing?.listingEvents?.find(
             (event) => event.type === ListingEventsTypeEnum.lotteryResults
           )
 
           if (lotteryResults) {
             elements.push(editPostedResultsButton(lotteryResults))
-          } else if (
-            listing.status === ListingsStatusEnum.closed &&
-            (!listing?.lotteryOptIn || !process.env.showLottery)
-          ) {
+          } else if (listing.status === ListingsStatusEnum.closed && !listing?.lotteryOptIn) {
             elements.push(postResultsButton)
           }
         }
@@ -480,17 +477,14 @@ const ListingFormActions = ({
           elements.push(unpublishButton)
         }
 
-        if (process.env.showLottery === "TRUE") {
+        if (process.env.showLottery) {
           const lotteryResults = listing?.listingEvents?.find(
             (event) => event.type === ListingEventsTypeEnum.lotteryResults
           )
 
           if (lotteryResults) {
             elements.push(editPostedResultsButton(lotteryResults))
-          } else if (
-            listing.status === ListingsStatusEnum.closed &&
-            (!listing?.lotteryOptIn || !process.env.showLottery)
-          ) {
+          } else if (listing.status === ListingsStatusEnum.closed && !listing?.lotteryOptIn) {
             elements.push(postResultsButton)
           }
         }
@@ -502,6 +496,7 @@ const ListingFormActions = ({
     }
 
     return listingApprovalPermissions?.length > 0 ? getApprovalActions() : getDefaultActions()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isListingApprover,
     listing,
