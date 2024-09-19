@@ -21,8 +21,6 @@ import { CsvHeader } from '../types/CsvExportInterface';
 import { getExportHeaders } from '../utilities/application-export-helpers';
 import { mapTo } from '../utilities/mapTo';
 
-import process from 'process';
-
 view.csv = {
   ...view.details,
   applicationFlaggedSet: {
@@ -661,7 +659,6 @@ export class ApplicationExporterService {
       });
     }
     spreadsheet.commit();
-    console.log(`after promise loop:`, process.memoryUsage());
   }
 
   /**
