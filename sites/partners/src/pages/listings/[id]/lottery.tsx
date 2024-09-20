@@ -29,7 +29,7 @@ import { ListingStatusBar } from "../../../components/listings/ListingStatusBar"
 import {
   useFlaggedApplicationsMeta,
   useLotteryActivityLog,
-  useLotteryExport,
+  useSpreadsheetExport,
 } from "../../../lib/hooks"
 dayjs.extend(advancedFormat)
 
@@ -63,12 +63,13 @@ const Lottery = (props: { listing: Listing | undefined }) => {
   const includeDemographicsPartner =
     profile?.userRoles?.isPartner && listingJurisdiction?.enablePartnerDemographics
 
-  const { onExport, exportLoading } = useLotteryExport(
+  const { onExport, exportLoading } = useSpreadsheetExport(
     listing?.id,
     (profile?.userRoles?.isAdmin ||
       profile?.userRoles?.isJurisdictionalAdmin ||
       includeDemographicsPartner) ??
-      false
+      false,
+    true
   )
   const { data } = useFlaggedApplicationsMeta(listing?.id)
   const { lotteryActivityLogData } = useLotteryActivityLog(listing?.id)
@@ -198,6 +199,10 @@ const Lottery = (props: { listing: Listing | undefined }) => {
         (event) => event.type === ListingEventsTypeEnum.publicLottery
       )
       if (listing.lotteryStatus === LotteryStatusEnum.releasedToPartners) {
+        // reverse array to find most recent release date
+        const lotteryReleaseDate = lotteryActivityLogData
+          ?.reverse()
+          ?.find((logItem) => logItem.status === LotteryStatusEnum.releasedToPartners)?.logDate
         return (
           <CardSection>
             <Icon size="xl">
@@ -211,8 +216,8 @@ const Lottery = (props: { listing: Listing | undefined }) => {
               <p>
                 {t("listings.lottery.partnerPublishTimestamp", {
                   adminName: t("listings.lottery.partnerPublishTimestampAdmin"),
-                  date: "DATE",
-                  time: "TIME",
+                  date: dayjs(lotteryReleaseDate).format("MM/DD/YYYY"),
+                  time: dayjs(lotteryReleaseDate).format("h:mm a"),
                   portal: t("listings.lottery.partnerPublishTimestampPortal"),
                 })}
               </p>
@@ -732,11 +737,6 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                   time: dayjs(listing.lotteryLastRunAt).format("h:mm a"),
                 })}
               </p>
-              <p>{t("listings.lottery.termsAccept")}</p>
-              <h2 className={styles["terms-of-use-header"]}>
-                {t("authentication.terms.termsOfUse")}
-              </h2>
-              <Markdown>{t("listings.lottery.terms")}</Markdown>
             </Dialog.Content>
             <Dialog.Footer>
               <Button

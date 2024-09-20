@@ -521,6 +521,31 @@ export class ApplicationFlaggedSetsService {
     })
   }
   /**
+   * Trigger the duplicate check process
+   */
+  processDuplicates(
+    params: {
+      /**  */
+      listingId?: string
+      /**  */
+      force?: boolean
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/process_duplicates"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+      configs.params = { listingId: params["listingId"], force: params["force"] }
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Reset flagged set confirmation alert
    */
   resetConfirmationAlert(
@@ -1436,6 +1461,8 @@ export class ApplicationsService {
       userId: string
       /**  */
       filterType?: ApplicationsFilterEnum
+      /**  */
+      includeLotteryApps?: boolean
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PublicAppsViewResponse> {
@@ -1443,7 +1470,11 @@ export class ApplicationsService {
       let url = basePath + "/applications/publicAppsView"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { userId: params["userId"], filterType: params["filterType"] }
+      configs.params = {
+        userId: params["userId"],
+        filterType: params["filterType"],
+        includeLotteryApps: params["includeLotteryApps"],
+      }
 
       /** 适配ios13，get请求不允许带body */
 
@@ -1466,6 +1497,35 @@ export class ApplicationsService {
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/applications/csv"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        id: params["id"],
+        includeDemographics: params["includeDemographics"],
+        timeZone: params["timeZone"],
+      }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get applications as spreadsheet
+   */
+  listAsSpreadsheet(
+    params: {
+      /**  */
+      id: string
+      /**  */
+      includeDemographics?: boolean
+      /**  */
+      timeZone?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/spreadsheet"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = {
@@ -2327,6 +2387,27 @@ export class LotteryService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Get lottery totals by listing id
+   */
+  lotteryTotals(
+    params: {
+      /**  */
+      id: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PublicLotteryTotal[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/lottery/lotteryTotals/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export interface SuccessDTO {
@@ -3017,6 +3098,17 @@ export interface UnitsSummary {
   totalAvailable?: number
 }
 
+export interface ApplicationLotteryTotal {
+  /**  */
+  listingId: string
+
+  /**  */
+  multiselectQuestionId: string
+
+  /**  */
+  total: number
+}
+
 export interface Listing {
   /**  */
   id: string
@@ -3308,6 +3400,9 @@ export interface Listing {
 
   /**  */
   lotteryOptIn?: boolean
+
+  /**  */
+  applicationLotteryTotals: ApplicationLotteryTotal[]
 }
 
 export interface PaginationMeta {
@@ -5781,6 +5876,14 @@ export interface PublicLotteryResult {
   multiselectQuestionId: string
 }
 
+export interface PublicLotteryTotal {
+  /**  */
+  total: number
+
+  /**  */
+  multiselectQuestionId: string
+}
+
 export enum ListingViews {
   "fundamentals" = "fundamentals",
   "base" = "base",
@@ -5900,6 +6003,7 @@ export enum AfsView {
 export enum RuleEnum {
   "nameAndDOB" = "nameAndDOB",
   "email" = "email",
+  "combination" = "combination",
 }
 
 export enum FlaggedSetStatusEnum {

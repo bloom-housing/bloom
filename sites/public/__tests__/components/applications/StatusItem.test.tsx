@@ -7,6 +7,10 @@ import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/back
 afterEach(cleanup)
 
 describe("<StatusItem>", () => {
+  beforeAll(() => {
+    process.env.showPublicLottery = "TRUE"
+  })
+
   it("renders open application without error", () => {
     const { getByText, queryByText } = render(
       <StatusItem
