@@ -78,6 +78,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.5.3",
     "js-levenshtein": "^1.1.6",
+    "jszip": "3.10.1",
     "msw": "^0.46.0",
     "next-transpile-modules": "^10.0.0",
     "nyc": "^15.1.0",

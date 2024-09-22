@@ -2,7 +2,7 @@ import React from "react"
 import { fireEvent } from "@testing-library/react"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
-import { application, user, listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { application, listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
   Listing,
   ListingsStatusEnum,
