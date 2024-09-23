@@ -84,6 +84,11 @@ const Flag = () => {
       return t("flags.nameDobRule", {
         name: `${data?.applications[0].applicant.firstName} ${data?.applications[0].applicant.lastName}`,
       })
+    } else if (data?.rule === RuleEnum.combination) {
+      return t("flags.combindationRule", {
+        name: `${data?.applications[0].applicant.firstName} ${data?.applications[0].applicant.lastName}`,
+        email: data?.applications[0].applicant.emailAddress,
+      })
     }
     return ""
   }

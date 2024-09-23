@@ -6,6 +6,7 @@ import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   Application,
   ApplicationReviewStatusEnum,
+  RuleEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useSingleListingData, useFlaggedApplicationsList } from "../../../../../lib/hooks"
 import { ListingStatusBar } from "../../../../../components/listings/ListingStatusBar"
@@ -48,8 +49,20 @@ const ApplicationsList = () => {
     {
       headerName: t("t.rule"),
       field: "rule",
-      width: 130,
-      minWidth: 50,
+      valueGetter: ({ data }) => {
+        if (data.rule === RuleEnum.combination) {
+          return t("applications.combination")
+        }
+        if (data.rule === RuleEnum.email) {
+          return t("applications.email")
+        }
+        if (data.rule === RuleEnum.nameAndDOB) {
+          return t("applications.namedob")
+        }
+        return data.rule
+      },
+      width: 250,
+      minWidth: 200,
     },
     {
       headerName: t("applications.duplicates.duplicateApplications"),

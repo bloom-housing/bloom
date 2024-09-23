@@ -8,6 +8,7 @@ import {
   ListingsStatusEnum,
   LotteryStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
+  Prisma,
   ReviewOrderTypeEnum,
   UnitTypeEnum,
 } from '@prisma/client';

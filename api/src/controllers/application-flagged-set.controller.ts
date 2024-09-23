@@ -26,6 +26,7 @@ import { PaginatedAfsDto } from '../dtos/application-flagged-sets/paginated-afs.
 import { ApplicationFlaggedSet } from '../dtos/application-flagged-sets/application-flagged-set.dto';
 import { AfsResolve } from '../dtos/application-flagged-sets/afs-resolve.dto';
 import { AfsMeta } from '../dtos/application-flagged-sets/afs-meta.dto';
+import { AfsProcessQueryParams } from '../dtos/application-flagged-sets/afs-process-query-params.dto';
 import { AfsQueryParams } from '../dtos/application-flagged-sets/afs-query-params.dto';
 import { User } from '../dtos/users/user.dto';
 import { mapTo } from '../utilities/mapTo';
@@ -103,6 +104,21 @@ export class ApplicationFlaggedSetController {
   @ApiOkResponse({ type: SuccessDTO })
   async process(): Promise<SuccessDTO> {
     return await this.applicationFlaggedSetService.process();
+  }
+
+  @Put('process_duplicates')
+  @ApiOperation({
+    summary: 'Trigger the duplicate check process',
+    operationId: 'processDuplicates',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async processDuplicates(
+    @Query() params: AfsProcessQueryParams,
+  ): Promise<SuccessDTO> {
+    return await this.applicationFlaggedSetService.processDuplicates(
+      params?.listingId,
+      params?.force,
+    );
   }
 
   @Put(':afsId')
