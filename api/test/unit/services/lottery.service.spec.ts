@@ -615,11 +615,9 @@ describe('Testing lottery service', () => {
         emails: ['admin@email.com', 'partner@email.com'],
       });
 
-      jest
-        .spyOn(listingService, 'getPublicUserEmailInfo')
-        .mockResolvedValueOnce({
-          en: ['applicant@email.com'],
-        });
+      jest.spyOn(service, 'getPublicUserEmailInfo').mockResolvedValueOnce({
+        en: ['applicant@email.com'],
+      });
 
       await service.lotteryStatus(
         {
@@ -671,11 +669,9 @@ describe('Testing lottery service', () => {
       jest.spyOn(listingService, 'getUserEmailInfo').mockResolvedValueOnce({
         emails: ['admin@email.com', 'partner@email.com'],
       });
-      jest
-        .spyOn(listingService, 'getPublicUserEmailInfo')
-        .mockResolvedValueOnce({
-          en: ['applicant@email.com'],
-        });
+      jest.spyOn(service, 'getPublicUserEmailInfo').mockResolvedValueOnce({
+        en: ['applicant@email.com'],
+      });
 
       await expect(
         async () =>
@@ -716,11 +712,9 @@ describe('Testing lottery service', () => {
       jest.spyOn(listingService, 'getUserEmailInfo').mockResolvedValueOnce({
         emails: ['admin@email.com', 'partner@email.com'],
       });
-      jest
-        .spyOn(listingService, 'getPublicUserEmailInfo')
-        .mockResolvedValueOnce({
-          en: ['applicant@email.com'],
-        });
+      jest.spyOn(service, 'getPublicUserEmailInfo').mockResolvedValueOnce({
+        en: ['applicant@email.com'],
+      });
 
       await service.lotteryStatus(
         {
@@ -828,11 +822,9 @@ describe('Testing lottery service', () => {
         lotteryStatus: LotteryStatusEnum.ran,
       });
       prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
-      jest
-        .spyOn(listingService, 'getPublicUserEmailInfo')
-        .mockResolvedValueOnce({
-          en: ['applicant@email.com'],
-        });
+      jest.spyOn(service, 'getPublicUserEmailInfo').mockResolvedValueOnce({
+        en: ['applicant@email.com'],
+      });
 
       jest.spyOn(listingService, 'getUserEmailInfo').mockResolvedValueOnce({
         emails: ['admin@email.com', 'partner@email.com'],

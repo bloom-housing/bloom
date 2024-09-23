@@ -278,53 +278,6 @@ export class ListingService implements OnModuleInit {
     return { emails: userEmails, publicUrl };
   }
 
-  public async getPublicUserEmailInfo(
-    listingId?: string,
-  ): Promise<{ [key: string]: string[] }> {
-    const userResults = await this.prisma.applications.findMany({
-      select: {
-        userAccounts: {
-          select: {
-            email: true,
-          },
-        },
-        language: true,
-      },
-      where: {
-        listingId,
-        markedAsDuplicate: {
-          not: true,
-        },
-      },
-    });
-
-    const emailUsers = userResults.filter((user) => !!user.userAccounts?.email);
-
-    const result = {};
-    Object.keys(LanguagesEnum).forEach((languageKey) => {
-      const applications = emailUsers
-        .filter((user) => user.language === languageKey)
-        .map((userObj) => userObj.userAccounts.email);
-      if (applications.length) {
-        result[languageKey] = applications;
-      }
-    });
-
-    const noLanguageIndicated = emailUsers
-      .filter((user) => !user.language)
-      .map((userObj) => userObj.userAccounts.email);
-
-    if (!result[LanguagesEnum.en])
-      result[LanguagesEnum.en] = noLanguageIndicated;
-    else
-      result[LanguagesEnum.en] = [
-        ...result[LanguagesEnum.en],
-        ...noLanguageIndicated,
-      ];
-
-    return result;
-  }
-
   public async listingApprovalNotify(params: {
     user: User;
     listingInfo: IdDTO;
