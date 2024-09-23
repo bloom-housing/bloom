@@ -9,7 +9,7 @@ import {
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { ConfigService } from '@nestjs/config';
 import {
-  ApplicationLotteryTotal,
+  LanguagesEnum,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
   LotteryStatusEnum,
@@ -350,6 +350,53 @@ export class LotteryService {
     };
   }
 
+  public async getPublicUserEmailInfo(
+    listingId?: string,
+  ): Promise<{ [key: string]: string[] }> {
+    const userResults = await this.prisma.applications.findMany({
+      select: {
+        userAccounts: {
+          select: {
+            email: true,
+          },
+        },
+        language: true,
+      },
+      where: {
+        listingId,
+        markedAsDuplicate: {
+          not: true,
+        },
+      },
+    });
+
+    const emailUsers = userResults.filter((user) => !!user.userAccounts?.email);
+
+    const result = {};
+    Object.keys(LanguagesEnum).forEach((languageKey) => {
+      const applications = emailUsers
+        .filter((user) => user.language === languageKey)
+        .map((userObj) => userObj.userAccounts.email);
+      if (applications.length) {
+        result[languageKey] = applications;
+      }
+    });
+
+    const noLanguageIndicated = emailUsers
+      .filter((user) => !user.language)
+      .map((userObj) => userObj.userAccounts.email);
+
+    if (!result[LanguagesEnum.en])
+      result[LanguagesEnum.en] = noLanguageIndicated;
+    else
+      result[LanguagesEnum.en] = [
+        ...result[LanguagesEnum.en],
+        ...noLanguageIndicated,
+      ];
+
+    return result;
+  }
+
   async publishLottery(listing: Listing): Promise<SuccessDTO> {
     const partnerUserEmailInfo = await this.listingService.getUserEmailInfo(
       [
@@ -361,8 +408,7 @@ export class LotteryService {
       listing.jurisdictions?.id,
     );
 
-    const publicUserEmailInfo =
-      await this.listingService.getPublicUserEmailInfo(listing.id);
+    const publicUserEmailInfo = await this.getPublicUserEmailInfo(listing.id);
 
     await this.updateLotteryStatus(
       listing.id,
