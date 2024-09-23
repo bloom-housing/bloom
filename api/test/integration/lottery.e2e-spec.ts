@@ -1032,9 +1032,12 @@ describe('Lottery Controller Tests', () => {
             confirmationCode: 'ABCD1234',
             submissionType: ApplicationSubmissionTypeEnum.electronical,
             language: LanguagesEnum.en,
-            applicant: {
+            userAccounts: {
               create: {
-                emailAddress: 'applicant@email.com',
+                email: 'applicant@email.com',
+                firstName: 'first',
+                lastName: 'last',
+                passwordHash: 'abcd1234',
               },
             },
           },
@@ -1044,9 +1047,12 @@ describe('Lottery Controller Tests', () => {
             confirmationCode: 'EFGH5678',
             submissionType: ApplicationSubmissionTypeEnum.electronical,
             language: LanguagesEnum.es,
-            applicant: {
+            userAccounts: {
               create: {
-                emailAddress: 'applicant2@email.com',
+                email: 'applicant2@email.com',
+                firstName: 'first',
+                lastName: 'last',
+                passwordHash: 'abcd1234',
               },
             },
           },
@@ -1056,9 +1062,24 @@ describe('Lottery Controller Tests', () => {
             confirmationCode: 'IJKL9012',
             submissionType: ApplicationSubmissionTypeEnum.electronical,
             language: null,
+            userAccounts: {
+              create: {
+                email: 'applicant3@email.com',
+                firstName: 'first',
+                lastName: 'last',
+                passwordHash: 'abcd1234',
+              },
+            },
+          },
+          {
+            preferences: [],
+            status: ApplicationStatusEnum.submitted,
+            confirmationCode: 'MNOP3456',
+            submissionType: ApplicationSubmissionTypeEnum.electronical,
+            language: null,
             applicant: {
               create: {
-                emailAddress: 'applicant3@email.com',
+                emailAddress: 'applicant4@email.com',
               },
             },
           },
