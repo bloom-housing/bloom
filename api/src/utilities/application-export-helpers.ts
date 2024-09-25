@@ -347,6 +347,7 @@ export const constructMultiselectQuestionHeaders = (
           const claimedString: string[] = [];
           val?.options?.forEach((option) => {
             // If applicant opts out it is returned as an checked option. We need to compare the
+            // value of the option to the multiselect question's opt out text
             if (option.checked && question.optOutText !== option.key) {
               claimedString.push(option.key);
             }
