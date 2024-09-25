@@ -36,6 +36,7 @@ const StatusItemWrapper = (props: StatusItemWrapperProps) => {
         !!props.application?.applicationLotteryPositions?.length
       }
       lotteryURL={`/account/application/${props.application?.id}/lottery-results`}
+      lotteryStatus={props.application?.listings?.lotteryStatus}
     />
   )
 }
