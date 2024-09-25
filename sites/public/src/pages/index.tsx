@@ -159,7 +159,7 @@ export default function Home(props: IndexProps) {
             <Button
               key={"sign-up"}
               variant="primary-outlined"
-              href={"notificationsSignUpURL"}
+              href={notificationsSignUpURL}
               newWindowTarget
             >
               {t("t.signUp")}
