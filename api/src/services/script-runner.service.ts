@@ -705,12 +705,15 @@ export class ScriptRunnerService {
         whatHappensHeader: 'What happens next?',
         whatHappensContent:
           'The property manager will begin to contact applicants by their preferred contact method. They will do so in the order of lottery rank, within each lottery preference. When the units are all filled, the property manager will stop contacting applicants. All the units could be filled before the property manager reaches your rank. If this happens, you will not be contacted.',
+        duplicatesDetails:
+          'Doorway generally does not accept duplicate applications. A duplicate application is one that has someone who also appears on another application for the same housing opportunity. For more detailed information on how we handle duplicates, see our',
         otherOpportunities1:
           'To view other housing opportunities, please visit %{appUrl}. You can sign up to receive notifications of new application opportunities',
         otherOpportunities2: 'here',
         otherOpportunities3:
           'If you want to learn about how lotteries work, please see the lottery section of the',
         otherOpportunities4: 'Doorway Housing Portal Help Center',
+        termsOfUse: 'Terms of Use',
       },
     };
 
@@ -723,12 +726,15 @@ export class ScriptRunnerService {
         whatHappensHeader: '¿Qué pasa después?',
         whatHappensContent:
           'El administrador de la propiedad comenzará a comunicarse con los solicitantes mediante su método de contacto preferido. Lo harán en el orden de clasificación de la lotería, dentro de cada preferencia de lotería. Cuando todas las unidades estén ocupadas, el administrador de la propiedad dejará de comunicarse con los solicitantes. Todas las unidades podrían llenarse antes de que el administrador de la propiedad alcance su rango. Si esto sucede, no lo contactaremos.',
+        duplicatesDetails:
+          'Doorway generalmente no acepta solicitudes duplicadas. Una solicitud duplicada es aquella en la que aparece una persona que también aparece en otra solicitud para la misma oportunidad de vivienda. Para obtener información más detallada sobre cómo manejamos las solicitudes duplicadas, consulte nuestros',
         otherOpportunities1:
           'Para ver otras oportunidades de vivienda, visite %{appUrl}. Puede registrarse para recibir notificaciones de nuevas oportunidades de solicitud',
         otherOpportunities2: 'aquí',
         otherOpportunities3:
           'Si desea obtener información sobre cómo funcionan las loterías, consulte la sección de lotería del',
         otherOpportunities4: 'Doorway Housing Portal Centro de ayuda',
+        termsOfUse: 'Términos de uso',
       },
     };
 
@@ -741,12 +747,15 @@ export class ScriptRunnerService {
         whatHappensHeader: 'Anong mangyayari sa susunod?',
         whatHappensContent:
           'Magsisimulang makipag-ugnayan ang property manager sa mga aplikante sa pamamagitan ng kanilang gustong paraan ng pakikipag-ugnayan. Gagawin nila ito sa pagkakasunud-sunod ng ranggo ng lottery, sa loob ng bawat kagustuhan sa lottery. Kapag napuno na ang lahat ng unit, hihinto na ang property manager sa pakikipag-ugnayan sa mga aplikante. Maaaring mapunan ang lahat ng unit bago maabot ng property manager ang iyong ranggo. Kung mangyari ito, hindi ka makontak.',
+        duplicatesDetails:
+          'Ang Doorway sa pangkalahatan ay hindi tumatanggap ng mga duplicate na aplikasyon. Ang isang duplicate na aplikasyon ay isa na mayroong isang tao na lumilitaw din sa isa pang aplikasyon para sa parehong pagkakataon sa pabahay. Para sa mas detalyadong impormasyon sa kung paano namin pinangangasiwaan ang mga duplicate, tingnan ang aming',
         otherOpportunities1:
           'Upang tingnan ang iba pang pagkakataon sa pabahay, pakibisita ang %{appUrl}. Maaari kang mag-sign up upang makatanggap ng mga abiso ng mga bagong pagkakataon sa aplikasyon',
         otherOpportunities2: 'dito',
         otherOpportunities3:
           'Kung gusto mong malaman kung paano gumagana ang mga lottery, pakitingnan ang seksyon ng lottery ng',
         otherOpportunities4: 'Doorway Housing Portal Help Center',
+        termsOfUse: 'Mga Tuntunin ng Paggamit',
       },
     };
 
@@ -759,12 +768,15 @@ export class ScriptRunnerService {
         whatHappensHeader: 'Chuyện gì xảy ra tiếp theo?',
         whatHappensContent:
           'Người quản lý tài sản sẽ bắt đầu liên hệ với người nộp đơn bằng phương thức liên hệ ưa thích của họ. Họ sẽ làm như vậy theo thứ tự xếp hạng xổ số, trong mỗi ưu tiên xổ số. Khi các căn hộ đã được lấp đầy, người quản lý tài sản sẽ ngừng liên hệ với người nộp đơn. Tất cả các đơn vị có thể được lấp đầy trước khi người quản lý tài sản đạt đến cấp bậc của bạn. Nếu điều này xảy ra, bạn sẽ không được liên lạc.',
+        duplicatesDetails:
+          'Doorway thường không chấp nhận các đơn xin trùng lặp. Một đơn xin trùng lặp là đơn xin có người cũng xuất hiện trên một đơn xin khác cho cùng một cơ hội nhà ở. Để biết thông tin chi tiết hơn về cách chúng tôi xử lý các đơn xin trùng lặp, hãy xem của chúng tôi',
         otherOpportunities1:
           'Để xem các cơ hội nhà ở khác, vui lòng truy cập %{appUrl}. Bạn có thể đăng ký để nhận thông báo về các cơ hội ứng tuyển mới',
         otherOpportunities2: 'đây',
         otherOpportunities3:
           'Nếu bạn muốn tìm hiểu về cách hoạt động của xổ số, vui lòng xem phần xổ số của',
         otherOpportunities4: 'Doorway Housing Portal Trung tâm trợ giúp',
+        termsOfUse: 'Điều khoản sử dụng',
       },
     };
 
@@ -777,11 +789,14 @@ export class ScriptRunnerService {
         whatHappensHeader: '接下來發生什麼事？',
         whatHappensContent:
           '物業經理將開始透過申請人首選的聯絡方式與申請人聯繫。他們將按照每個彩票偏好中的彩票排名順序進行操作。當單位全部住滿後，物業經理將停止聯絡申請人。在物業經理達到您的等級之前，所有單位都可以被填滿。如果發生這種情況，我們將不會與您聯繫。',
+        duplicatesDetails:
+          'Doorway 一般不接受重复申请。重复申请是指申请者与另一份申请者有相同的住房机会。有关我们如何处理重复申请的更多详细信息，请参阅我们的',
         otherOpportunities1:
           '要查看其他住房機會，請訪問 %{appUrl}。您可以註冊接收新申請機會的通知',
         otherOpportunities2: '這裡',
         otherOpportunities3: '如果您想了解彩票的運作方式，請參閱網站的彩票部分',
         otherOpportunities4: 'Doorway Housing Portal 幫助中心',
+        termsOfUse: '使用条款',
       },
     };
     await updateForLanguage(LanguagesEnum.en, enKeys);
