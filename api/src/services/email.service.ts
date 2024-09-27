@@ -129,9 +129,8 @@ export class EmailService {
       return;
     }
 
-    // juice inlines css to allow for email styling, and convert single quote entities back to `'`
-    // so it doesn't display as a raw entity string
-    const inlineHtml = this.formatSingleQuote(juice(rawHtml));
+    // juice inlines css to allow for email styling
+    const inlineHtml = juice(rawHtml);
     const govEmailXml = `<bulletin>\n <subject>${subject}</subject>\n  <body><![CDATA[\n     
       ${inlineHtml}\n   ]]></body>\n   <sms_body nil='true'></sms_body>\n   <publish_rss type='boolean'>false</publish_rss>\n   <open_tracking type='boolean'>true</open_tracking>\n   <click_tracking type='boolean'>true</click_tracking>\n   <share_content_enabled type='boolean'>true</share_content_enabled>\n   <topics type='array'>\n     <topic>\n       <code>${GOVDELIVERY_TOPIC}</code>\n     </topic>\n   </topics>\n   <categories type='array' />\n </bulletin>`;
 
@@ -600,7 +599,7 @@ export class EmailService {
     });
 
     const compiled = compiledTemplate({
-      listingName: listing.name,
+      listingName: this.stripAngleBrackets(listing.name),
       tableRows,
       languageUrls,
     });
@@ -680,8 +679,10 @@ export class EmailService {
     }
   }
 
-  formatSingleQuote(markup: string): string {
-    return markup.replace(/&#x27;/g, "'");
+  // Useful for GovSend where we can't send entities, so we'll output certain strings raw but we want to
+  // ensure we don't let real HTML through which is an XSS risk
+  stripAngleBrackets(markup: string): string {
+    return markup.replace(/[<>]/g, '');
   }
 
   formatLocalDate(rawDate: string | Date, format: string): string {
