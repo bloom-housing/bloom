@@ -242,21 +242,28 @@ export class LotteryService {
     );
 
     // loop over each preference on the listing and store the relative position of the applications
-    for (let i = 0; i < preferencesOnListing.length; i++) {
-      const { id, text } = preferencesOnListing[i];
+    for (const preferenceOnListing of preferencesOnListing) {
+      const { id, text, optOutText } = preferenceOnListing;
 
       const applicationsWithThisPreference: Application[] = [];
       const ordinalArrayWithThisPreference: number[] = [];
 
       // filter down to only the applications that have this particular preference
       let preferenceOrdinal = 1;
-      for (let j = 0; j < filteredApplications.length; j++) {
+      for (const filteredApplication of filteredApplications) {
+        const foundPreference = filteredApplication.preferences.find(
+          (preference) => preference.key === text && preference.claimed,
+        );
         if (
-          filteredApplications[j].preferences.some(
-            (preference) => preference.key === text && preference.claimed,
-          )
+          foundPreference?.claimed &&
+          // if at least one option is checked it should not be the same as the opt out text
+          (!foundPreference.options?.length ||
+            foundPreference.options.some(
+              (preference) =>
+                preference.checked === true && preference.key !== optOutText,
+            ))
         ) {
-          applicationsWithThisPreference.push(filteredApplications[j]);
+          applicationsWithThisPreference.push(filteredApplication);
           ordinalArrayWithThisPreference.push(preferenceOrdinal);
           preferenceOrdinal++;
         }

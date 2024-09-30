@@ -200,6 +200,7 @@ export const stagingSeed = async (
   });
   const workInCityQuestion = await prismaClient.multiselectQuestions.create({
     data: multiselectQuestionFactory(jurisdiction.id, {
+      optOut: true,
       multiselectQuestion: {
         text: 'Work in the city',
         description: 'At least one member of my household works in the city',

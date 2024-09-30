@@ -578,11 +578,15 @@ export class ApplicationExporterService {
           });
 
           if (forLottery) {
-            paginatedApplications = paginatedApplications.sort(
-              (a, b) =>
-                a.applicationLotteryPositions[0].ordinal -
-                b.applicationLotteryPositions[0].ordinal,
-            );
+            // We need to filter out applications that have "claimed" preference but they really chose to opt out
+            // And then it is sorted based on the ordinal value
+            paginatedApplications = paginatedApplications
+              .filter((app) => app.applicationLotteryPositions?.length)
+              .sort(
+                (a, b) =>
+                  a.applicationLotteryPositions[0].ordinal -
+                  b.applicationLotteryPositions[0].ordinal,
+              );
           }
 
           const rows: Partial<Row>[] = [];
