@@ -42,11 +42,14 @@ describe("lottery", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 0 }))
+      }),
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
       }),
       rest.get(
-        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
         (_req, res, ctx) => {
           return res(ctx.json([]))
         }
@@ -69,11 +72,11 @@ describe("lottery", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
       }),
       rest.get(
-        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
         (_req, res, ctx) => {
           return res(ctx.json([]))
         }
@@ -98,11 +101,11 @@ describe("lottery", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
       }),
       rest.get(
-        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
         (_req, res, ctx) => {
           return res(ctx.json([]))
         }
@@ -133,11 +136,11 @@ describe("lottery", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
       }),
       rest.get(
-        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
         (_req, res, ctx) => {
           return res(ctx.json([]))
         }
@@ -168,11 +171,11 @@ describe("lottery", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
       }),
       rest.get(
-        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
         (_req, res, ctx) => {
           return res(ctx.json([]))
         }
@@ -201,11 +204,11 @@ describe("lottery", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
       }),
       rest.get(
-        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
         (_req, res, ctx) => {
           return res(ctx.json([]))
         }
@@ -240,11 +243,11 @@ describe("lottery", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
       }),
       rest.get(
-        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
         (_req, res, ctx) => {
           return res(ctx.json([]))
         }
@@ -287,11 +290,11 @@ describe("lottery", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
       }),
       rest.get(
-        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
         (_req, res, ctx) => {
           return res(ctx.json([]))
         }
@@ -331,11 +334,11 @@ describe("lottery", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
       }),
       rest.get(
-        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
         (_req, res, ctx) => {
           return res(ctx.json([]))
         }
@@ -379,11 +382,11 @@ describe("lottery", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
       }),
       rest.get(
-        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
         (_req, res, ctx) => {
           return res(ctx.json([]))
         }
@@ -431,11 +434,11 @@ describe("lottery", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
       }),
       rest.get(
-        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
         (_req, res, ctx) => {
           return res(ctx.json([]))
         }
@@ -479,11 +482,11 @@ describe("lottery", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 0 }))
       }),
       rest.get(
-        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
         (_req, res, ctx) => {
           return res(ctx.json([]))
         }
@@ -517,11 +520,11 @@ describe("lottery", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
       }),
       rest.get(
-        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
         (_req, res, ctx) => {
           return res(ctx.json([]))
         }
@@ -554,11 +557,11 @@ describe("lottery", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
       }),
       rest.get(
-        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
         (_req, res, ctx) => {
           return res(ctx.json([]))
         }
@@ -606,11 +609,11 @@ describe("lottery", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
       }),
       rest.get(
-        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
         (_req, res, ctx) => {
           return res(ctx.json([]))
         }
@@ -662,11 +665,11 @@ describe("lottery", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
       }),
       rest.get(
-        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
         (_req, res, ctx) => {
           return res(ctx.json([]))
         }
@@ -693,9 +696,6 @@ describe("lottery", () => {
         exact: false,
       })
     ).toBeInTheDocument()
-    expect(
-      getByText("You must accept the Terms of Use before exporting this data.")
-    ).toBeInTheDocument()
 
     expect(getAllByText("Export")).toHaveLength(2)
   })
@@ -715,11 +715,11 @@ describe("lottery", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
       }),
       rest.get(
-        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
         (_req, res, ctx) => {
           return res(ctx.json([]))
         }
@@ -757,11 +757,11 @@ describe("lottery", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
       }),
       rest.get(
-        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
         (_req, res, ctx) => {
           return res(ctx.json([]))
         }
@@ -804,11 +804,11 @@ describe("lottery", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
       }),
       rest.get(
-        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
         (_req, res, ctx) => {
           return res(ctx.json([]))
         }
@@ -844,11 +844,11 @@ describe("lottery", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
       }),
       rest.get(
-        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
         (_req, res, ctx) => {
           return res(ctx.json([]))
         }
@@ -889,11 +889,11 @@ describe("lottery", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost/api/adapter/applicationFlaggedSets/meta", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
         return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
       }),
       rest.get(
-        "http://localhost/api/adapter/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
         (_req, res, ctx) => {
           return res(
             ctx.json([

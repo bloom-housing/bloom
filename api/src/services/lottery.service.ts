@@ -9,7 +9,7 @@ import {
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { ConfigService } from '@nestjs/config';
 import {
-  ApplicationLotteryTotal,
+  LanguagesEnum,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
   LotteryStatusEnum,
@@ -242,21 +242,28 @@ export class LotteryService {
     );
 
     // loop over each preference on the listing and store the relative position of the applications
-    for (let i = 0; i < preferencesOnListing.length; i++) {
-      const { id, text } = preferencesOnListing[i];
+    for (const preferenceOnListing of preferencesOnListing) {
+      const { id, text, optOutText } = preferenceOnListing;
 
       const applicationsWithThisPreference: Application[] = [];
       const ordinalArrayWithThisPreference: number[] = [];
 
       // filter down to only the applications that have this particular preference
       let preferenceOrdinal = 1;
-      for (let j = 0; j < filteredApplications.length; j++) {
+      for (const filteredApplication of filteredApplications) {
+        const foundPreference = filteredApplication.preferences.find(
+          (preference) => preference.key === text && preference.claimed,
+        );
         if (
-          filteredApplications[j].preferences.some(
-            (preference) => preference.key === text && preference.claimed,
-          )
+          foundPreference?.claimed &&
+          // if at least one option is checked it should not be the same as the opt out text
+          (!foundPreference.options?.length ||
+            foundPreference.options.some(
+              (preference) =>
+                preference.checked === true && preference.key !== optOutText,
+            ))
         ) {
-          applicationsWithThisPreference.push(filteredApplications[j]);
+          applicationsWithThisPreference.push(filteredApplication);
           ordinalArrayWithThisPreference.push(preferenceOrdinal);
           preferenceOrdinal++;
         }
@@ -343,6 +350,53 @@ export class LotteryService {
     };
   }
 
+  public async getPublicUserEmailInfo(
+    listingId?: string,
+  ): Promise<{ [key: string]: string[] }> {
+    const userResults = await this.prisma.applications.findMany({
+      select: {
+        userAccounts: {
+          select: {
+            email: true,
+          },
+        },
+        language: true,
+      },
+      where: {
+        listingId,
+        markedAsDuplicate: {
+          not: true,
+        },
+      },
+    });
+
+    const emailUsers = userResults.filter((user) => !!user.userAccounts?.email);
+
+    const result = {};
+    Object.keys(LanguagesEnum).forEach((languageKey) => {
+      const applications = emailUsers
+        .filter((user) => user.language === languageKey)
+        .map((userObj) => userObj.userAccounts.email);
+      if (applications.length) {
+        result[languageKey] = applications;
+      }
+    });
+
+    const noLanguageIndicated = emailUsers
+      .filter((user) => !user.language)
+      .map((userObj) => userObj.userAccounts.email);
+
+    if (!result[LanguagesEnum.en])
+      result[LanguagesEnum.en] = noLanguageIndicated;
+    else
+      result[LanguagesEnum.en] = [
+        ...result[LanguagesEnum.en],
+        ...noLanguageIndicated,
+      ];
+
+    return result;
+  }
+
   async publishLottery(listing: Listing): Promise<SuccessDTO> {
     const partnerUserEmailInfo = await this.listingService.getUserEmailInfo(
       [
@@ -354,8 +408,7 @@ export class LotteryService {
       listing.jurisdictions?.id,
     );
 
-    const publicUserEmailInfo =
-      await this.listingService.getPublicUserEmailInfo(listing.id);
+    const publicUserEmailInfo = await this.getPublicUserEmailInfo(listing.id);
 
     await this.updateLotteryStatus(
       listing.id,
@@ -551,13 +604,19 @@ export class LotteryService {
         updatedAt: OrderByEnum.ASC,
       },
     });
+
+    let previouslyActive = true;
     const filteredActivityLogs = activityLogs.filter((log) => {
       const logString = JSON.stringify(log.metadata);
       // only return closed listing status updates
       if (logString.includes('status')) {
-        if (logString.includes(ListingsStatusEnum.closed)) {
+        if (logString.includes(ListingsStatusEnum.closed) && previouslyActive) {
+          previouslyActive = false;
           return true;
-        } else return false;
+        } else if (logString.includes(ListingsStatusEnum.active)) {
+          previouslyActive = true;
+        }
+        return false;
       }
       return true;
     });

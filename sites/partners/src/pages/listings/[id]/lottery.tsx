@@ -737,11 +737,6 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                   time: dayjs(listing.lotteryLastRunAt).format("h:mm a"),
                 })}
               </p>
-              <p>{t("listings.lottery.termsAccept")}</p>
-              <h2 className={styles["terms-of-use-header"]}>
-                {t("authentication.terms.termsOfUse")}
-              </h2>
-              <Markdown>{t("listings.lottery.terms")}</Markdown>
             </Dialog.Content>
             <Dialog.Footer>
               <Button
