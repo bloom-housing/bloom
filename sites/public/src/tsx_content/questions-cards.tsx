@@ -324,6 +324,6 @@ export function questionsLinkableCards(): React.ReactElement<CardProps>[] {
         </Card.Section>
       </Card>
     )
-    return questions
   }
+  return questions
 }

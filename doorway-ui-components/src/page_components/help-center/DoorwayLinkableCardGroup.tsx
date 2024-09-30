@@ -12,6 +12,9 @@ type DoorwayLinkableCardGroupProps = {
 const DoorwayLinkableCardGroup = (props: DoorwayLinkableCardGroupProps) => {
   const getLinks = () => {
     const links = []
+    if (!props.cards?.length) {
+      return []
+    }
     for (const card of props.cards) {
       if (card.props?.jumplinkData) {
         const jumplinkData = card.props.jumplinkData
