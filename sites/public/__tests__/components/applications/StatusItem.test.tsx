@@ -2,7 +2,10 @@ import React from "react"
 import { render, cleanup } from "@testing-library/react"
 import { t } from "@bloom-housing/ui-components"
 import { StatusItem } from "../../../src/components/account/StatusItem"
-import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  ListingsStatusEnum,
+  LotteryStatusEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 afterEach(cleanup)
 
@@ -105,6 +108,7 @@ describe("<StatusItem>", () => {
         listingName={"Listing Name"}
         listingStatus={ListingsStatusEnum.active}
         listingURL={"/listing/abcd1234/listing-name"}
+        lotteryStatus={LotteryStatusEnum.publishedToPublic}
         lotteryPublishedDate={"March 10th, 2022"}
         lotteryResults={true}
       />

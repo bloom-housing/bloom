@@ -3125,7 +3125,7 @@ export interface ApplicationLotteryTotal {
   listingId: string
 
   /**  */
-  multiselectQuestionId: string
+  multiselectQuestionId?: string
 
   /**  */
   total: number
@@ -5892,7 +5892,7 @@ export interface PublicLotteryResult {
   ordinal: number
 
   /**  */
-  multiselectQuestionId: string
+  multiselectQuestionId?: string
 }
 
 export interface PublicLotteryTotal {
@@ -5900,7 +5900,7 @@ export interface PublicLotteryTotal {
   total: number
 
   /**  */
-  multiselectQuestionId: string
+  multiselectQuestionId?: string
 }
 
 export enum ListingViews {
