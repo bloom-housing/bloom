@@ -394,6 +394,11 @@ export class ApplicationService {
             },
           },
         },
+        applicationLotteryPositions: {
+          select: {
+            id: true,
+          },
+        },
       },
       where: whereClause,
     });

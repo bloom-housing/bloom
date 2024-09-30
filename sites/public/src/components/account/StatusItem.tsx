@@ -3,7 +3,10 @@ import { t } from "@bloom-housing/ui-components"
 import { Button, Card, Tag } from "@bloom-housing/ui-seeds"
 import styles from "./StatusItem.module.scss"
 import applicationsViewStyles from "./ApplicationsView.module.scss"
-import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  ListingsStatusEnum,
+  LotteryStatusEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 interface StatusItemProps {
   applicationDueDate?: string
@@ -16,6 +19,7 @@ interface StatusItemProps {
   lotteryPublishedDate?: string
   lotteryResults?: boolean
   lotteryURL?: string
+  lotteryStatus?: LotteryStatusEnum
   strings?: {
     applicationsDeadline?: string
     edited?: string
@@ -34,7 +38,7 @@ const StatusItem = (props: StatusItemProps) => {
   let tagVariant: "primary" | "secondary" | "success"
   let deadlineText = ""
   let dueDate = ""
-  if (props.lotteryResults && showPublicLottery) {
+  if (props.lotteryStatus === LotteryStatusEnum.publishedToPublic && showPublicLottery) {
     tagText = t("account.lotteryRun")
     tagVariant = "success"
     deadlineText = t("account.lotteryPosted")
