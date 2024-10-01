@@ -959,13 +959,19 @@ export class LotteryService {
         updatedAt: OrderByEnum.ASC,
       },
     });
+
+    let previouslyActive = true;
     const filteredActivityLogs = activityLogs.filter((log) => {
       const logString = JSON.stringify(log.metadata);
       // only return closed listing status updates
       if (logString.includes('status')) {
-        if (logString.includes(ListingsStatusEnum.closed)) {
+        if (logString.includes(ListingsStatusEnum.closed) && previouslyActive) {
+          previouslyActive = false;
           return true;
-        } else return false;
+        } else if (logString.includes(ListingsStatusEnum.active)) {
+          previouslyActive = true;
+        }
+        return false;
       }
       return true;
     });

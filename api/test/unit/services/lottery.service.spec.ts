@@ -1057,6 +1057,8 @@ describe('Testing lottery service', () => {
       },
     } as User;
 
+    const openedDate = new Date();
+    openedDate.setDate(openedDate.getDate() - 11);
     const closedDate = new Date();
     closedDate.setDate(closedDate.getDate() - 10);
     const ranDate = new Date();
@@ -1076,8 +1078,24 @@ describe('Testing lottery service', () => {
       canOrThrowMock.mockResolvedValue(true);
       prisma.activityLog.findMany = jest.fn().mockResolvedValue([
         {
+          metadata: { status: 'active' },
+          updatedAt: openedDate,
+          userAccounts: {
+            firstName: 'Abc',
+            lastName: 'Def',
+          },
+        },
+        {
           metadata: { status: 'closed' },
           updatedAt: closedDate,
+          userAccounts: {
+            firstName: 'Abc',
+            lastName: 'Def',
+          },
+        },
+        {
+          metadata: { status: 'closed' },
+          updatedAt: ranDate,
           userAccounts: {
             firstName: 'Abc',
             lastName: 'Def',
