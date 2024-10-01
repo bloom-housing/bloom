@@ -3,6 +3,7 @@ import {
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
   PrismaClient,
+  UserRoleEnum,
 } from '@prisma/client';
 import { userFactory } from './seed-helpers/user-factory';
 import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
@@ -47,7 +48,11 @@ export const devSeeding = async (
 ) => {
   const jurisdiction = await prismaClient.jurisdictions.create({
     data: {
-      ...jurisdictionFactory(jurisdictionName),
+      ...jurisdictionFactory(
+        jurisdictionName,
+        [UserRoleEnum.admin],
+        [UserRoleEnum.admin],
+      ),
       allowSingleUseCodeLogin: false,
     },
   });
