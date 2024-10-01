@@ -8,6 +8,7 @@ import ListingFormActions, {
 } from "../../../src/components/listings/ListingFormActions"
 import { mockNextRouter, render } from "../../testUtils"
 import {
+  EnumJurisdictionDuplicateListingPermissions,
   EnumJurisdictionListingApprovalPermissions,
   Jurisdiction,
   LanguagesEnum,
@@ -32,6 +33,7 @@ const mockBaseJurisdiction: Jurisdiction = {
   enableAccessibilityFeatures: false,
   enableUtilitiesIncluded: true,
   listingApprovalPermissions: [],
+  duplicateListingPermissions: [EnumJurisdictionDuplicateListingPermissions.admin],
   enableGeocodingPreferences: false,
   allowSingleUseCodeLogin: false,
 }
@@ -46,6 +48,15 @@ const mockAdminJurisAdminJurisdiction: Jurisdiction = {
   listingApprovalPermissions: [
     EnumJurisdictionListingApprovalPermissions.admin,
     EnumJurisdictionListingApprovalPermissions.jurisdictionAdmin,
+  ],
+}
+
+const mockAllUserCopyJurisdiction: Jurisdiction = {
+  ...mockBaseJurisdiction,
+  duplicateListingPermissions: [
+    EnumJurisdictionDuplicateListingPermissions.admin,
+    EnumJurisdictionDuplicateListingPermissions.jurisdictionAdmin,
+    EnumJurisdictionDuplicateListingPermissions.partner,
   ],
 }
 
@@ -366,7 +377,7 @@ describe("<ListingFormActions>", () => {
       })
 
       it("renders correct buttons in a draft detail state", () => {
-        const { getByText } = render(
+        const { getByText, queryByText } = render(
           <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.details} />
@@ -374,7 +385,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
-        expect(getByText("Copy")).toBeTruthy()
+        expect(queryByText("Copy")).toBeFalsy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -401,13 +412,13 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(getByText("Copy")).toBeTruthy()
         expect(getByText("Preview")).toBeTruthy()
+        expect(queryByText("Copy")).toBeFalsy()
         expect(queryByText("Edit")).toBeFalsy()
       })
 
       it("renders correct buttons in a changes requested detail state", () => {
-        const { getByText } = render(
+        const { getByText, queryByText } = render(
           <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.changesRequested }}
@@ -417,7 +428,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
-        expect(getByText("Copy")).toBeTruthy()
+        expect(queryByText("Copy")).toBeFalsy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -437,7 +448,7 @@ describe("<ListingFormActions>", () => {
       })
 
       it("renders correct buttons in an open detail state", () => {
-        const { getByText } = render(
+        const { getByText, queryByText } = render(
           <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
               <ListingFormActions type={ListingFormActionsType.details} />
@@ -445,7 +456,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
-        expect(getByText("Copy")).toBeTruthy()
+        expect(queryByText("Copy")).toBeFalsy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -464,7 +475,7 @@ describe("<ListingFormActions>", () => {
       })
 
       it("renders correct buttons in a closed detail state", () => {
-        const { getByText } = render(
+        const { getByText, queryByText } = render(
           <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.details} />
@@ -472,7 +483,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
-        expect(getByText("Copy")).toBeTruthy()
+        expect(queryByText("Copy")).toBeFalsy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -510,7 +521,7 @@ describe("<ListingFormActions>", () => {
       })
 
       it("renders correct buttons in a draft detail state", () => {
-        const { getByText } = render(
+        const { getByText, queryByText } = render(
           <AuthContext.Provider value={{ profile: partnerUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.details} />
@@ -518,7 +529,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
-        expect(getByText("Copy")).toBeTruthy()
+        expect(queryByText("Copy")).toBeFalsy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -545,13 +556,13 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(getByText("Copy")).toBeTruthy()
+        expect(queryByText("Copy")).toBeFalsy()
         expect(getByText("Preview")).toBeTruthy()
         expect(queryByText("Edit")).toBeFalsy()
       })
 
       it("renders correct buttons in a changes requested detail state", () => {
-        const { getByText } = render(
+        const { getByText, queryByText } = render(
           <AuthContext.Provider value={{ profile: partnerUser }}>
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.changesRequested }}
@@ -561,7 +572,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
-        expect(getByText("Copy")).toBeTruthy()
+        expect(queryByText("Copy")).toBeFalsy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -581,7 +592,7 @@ describe("<ListingFormActions>", () => {
       })
 
       it("renders correct buttons in an open detail state", () => {
-        const { getByText } = render(
+        const { getByText, queryByText } = render(
           <AuthContext.Provider value={{ profile: partnerUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
               <ListingFormActions type={ListingFormActionsType.details} />
@@ -589,7 +600,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
-        expect(getByText("Copy")).toBeTruthy()
+        expect(queryByText("Copy")).toBeFalsy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -608,7 +619,7 @@ describe("<ListingFormActions>", () => {
       })
 
       it("renders correct buttons in a closed detail state", () => {
-        const { getByText } = render(
+        const { getByText, queryByText } = render(
           <AuthContext.Provider value={{ profile: partnerUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.details} />
@@ -616,7 +627,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
-        expect(getByText("Copy")).toBeTruthy()
+        expect(queryByText("Copy")).toBeFalsy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -824,7 +835,7 @@ describe("<ListingFormActions>", () => {
       })
 
       it("renders correct buttons in a draft detail state", () => {
-        const { getByText } = render(
+        const { getByText, queryByText } = render(
           <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.details} />
@@ -832,7 +843,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
-        expect(getByText("Copy")).toBeTruthy()
+        expect(queryByText("Copy")).toBeFalsy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -850,7 +861,7 @@ describe("<ListingFormActions>", () => {
       })
 
       it("renders correct buttons in a pending approval detail state", () => {
-        const { getByText } = render(
+        const { getByText, queryByText } = render(
           <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.pendingReview }}
@@ -861,7 +872,7 @@ describe("<ListingFormActions>", () => {
         )
         expect(getByText("Approve & Publish")).toBeTruthy()
         expect(getByText("Edit")).toBeTruthy()
-        expect(getByText("Copy")).toBeTruthy()
+        expect(queryByText("Copy")).toBeFalsy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -882,7 +893,7 @@ describe("<ListingFormActions>", () => {
       })
 
       it("renders correct buttons in a changes requested detail state", () => {
-        const { getByText } = render(
+        const { getByText, queryByText } = render(
           <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.changesRequested }}
@@ -893,7 +904,7 @@ describe("<ListingFormActions>", () => {
         )
         expect(getByText("Approve & Publish")).toBeTruthy()
         expect(getByText("Edit")).toBeTruthy()
-        expect(getByText("Copy")).toBeTruthy()
+        expect(queryByText("Copy")).toBeFalsy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -912,7 +923,7 @@ describe("<ListingFormActions>", () => {
         expect(getByText("Exit")).toBeTruthy()
       })
       it("renders correct buttons in an open detail state", () => {
-        const { getByText } = render(
+        const { getByText, queryByText } = render(
           <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
               <ListingFormActions type={ListingFormActionsType.details} />
@@ -920,7 +931,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
-        expect(getByText("Copy")).toBeTruthy()
+        expect(queryByText("Copy")).toBeFalsy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -939,7 +950,7 @@ describe("<ListingFormActions>", () => {
       })
 
       it("renders correct buttons in a closed detail state", () => {
-        const { getByText } = render(
+        const { getByText, queryByText } = render(
           <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.details} />
@@ -947,7 +958,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
-        expect(getByText("Copy")).toBeTruthy()
+        expect(queryByText("Copy")).toBeFalsy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -985,7 +996,7 @@ describe("<ListingFormActions>", () => {
       })
 
       it("renders correct buttons in a draft detail state", () => {
-        const { getByText } = render(
+        const { getByText, queryByText } = render(
           <AuthContext.Provider value={{ profile: partnerUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.details} />
@@ -993,7 +1004,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
-        expect(getByText("Copy")).toBeTruthy()
+        expect(queryByText("Copy")).toBeFalsy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -1020,13 +1031,13 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(getByText("Copy")).toBeTruthy()
+        expect(queryByText("Copy")).toBeFalsy()
         expect(getByText("Preview")).toBeTruthy()
         expect(queryByText("Edit")).toBeFalsy()
       })
 
       it("renders correct buttons in a changes requested detail state", () => {
-        const { getByText } = render(
+        const { getByText, queryByText } = render(
           <AuthContext.Provider value={{ profile: partnerUser }}>
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.changesRequested }}
@@ -1036,7 +1047,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
-        expect(getByText("Copy")).toBeTruthy()
+        expect(queryByText("Copy")).toBeFalsy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -1056,7 +1067,7 @@ describe("<ListingFormActions>", () => {
       })
 
       it("renders correct buttons in an open detail state", () => {
-        const { getByText } = render(
+        const { getByText, queryByText } = render(
           <AuthContext.Provider value={{ profile: partnerUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
               <ListingFormActions type={ListingFormActionsType.details} />
@@ -1064,7 +1075,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
-        expect(getByText("Copy")).toBeTruthy()
+        expect(queryByText("Copy")).toBeFalsy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -1083,7 +1094,7 @@ describe("<ListingFormActions>", () => {
       })
 
       it("renders correct buttons in a closed detail state", () => {
-        const { getByText } = render(
+        const { getByText, queryByText } = render(
           <AuthContext.Provider value={{ profile: partnerUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.details} />
@@ -1091,7 +1102,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(getByText("Edit")).toBeTruthy()
-        expect(getByText("Copy")).toBeTruthy()
+        expect(queryByText("Copy")).toBeFalsy()
         expect(getByText("Preview")).toBeTruthy()
       })
 
@@ -1153,6 +1164,139 @@ describe("<ListingFormActions>", () => {
       )
 
       expect(queryByText("Post Results")).toBeTruthy()
+    })
+  })
+
+  describe("with all users able to copy", () => {
+    describe("as an admin", () => {
+      beforeAll(() => {
+        adminUser = { ...adminUser, jurisdictions: [mockAllUserCopyJurisdiction] }
+      })
+      it("renders correct buttons in a draft detail state", () => {
+        const { getByText } = render(
+          <AuthContext.Provider value={{ profile: adminUser }}>
+            <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
+              <ListingFormActions type={ListingFormActionsType.details} />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        )
+        expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
+        expect(getByText("Preview")).toBeTruthy()
+      })
+
+      it("renders correct buttons in a detail state", () => {
+        const { getByText } = render(
+          <AuthContext.Provider value={{ profile: adminUser }}>
+            <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
+              <ListingFormActions type={ListingFormActionsType.details} />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        )
+        expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
+        expect(getByText("Preview")).toBeTruthy()
+      })
+      it("renders correct buttons in a closed detail state", () => {
+        const { getByText } = render(
+          <AuthContext.Provider value={{ profile: adminUser }}>
+            <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
+              <ListingFormActions type={ListingFormActionsType.details} />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        )
+        expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
+        expect(getByText("Preview")).toBeTruthy()
+      })
+    })
+
+    describe("as a jurisdictional admin", () => {
+      beforeAll(() => {
+        jurisdictionAdminUser = {
+          ...jurisdictionAdminUser,
+          jurisdictions: [mockAllUserCopyJurisdiction],
+        }
+      })
+      it("renders correct buttons in a draft detail state", () => {
+        const { getByText } = render(
+          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+            <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
+              <ListingFormActions type={ListingFormActionsType.details} />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        )
+        expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
+        expect(getByText("Preview")).toBeTruthy()
+      })
+
+      it("renders correct buttons in a detail state", () => {
+        const { getByText } = render(
+          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+            <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
+              <ListingFormActions type={ListingFormActionsType.details} />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        )
+        expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
+        expect(getByText("Preview")).toBeTruthy()
+      })
+      it("renders correct buttons in a closed detail state", () => {
+        const { getByText } = render(
+          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+            <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
+              <ListingFormActions type={ListingFormActionsType.details} />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        )
+        expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
+        expect(getByText("Preview")).toBeTruthy()
+      })
+    })
+    describe("as a partner", () => {
+      beforeAll(() => {
+        partnerUser = { ...adminUser, jurisdictions: [mockAllUserCopyJurisdiction] }
+      })
+      it("renders correct buttons in a draft detail state", () => {
+        const { getByText } = render(
+          <AuthContext.Provider value={{ profile: partnerUser }}>
+            <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
+              <ListingFormActions type={ListingFormActionsType.details} />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        )
+        expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
+        expect(getByText("Preview")).toBeTruthy()
+      })
+
+      it("renders correct buttons in a detail state", () => {
+        const { getByText } = render(
+          <AuthContext.Provider value={{ profile: partnerUser }}>
+            <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
+              <ListingFormActions type={ListingFormActionsType.details} />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        )
+        expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
+        expect(getByText("Preview")).toBeTruthy()
+      })
+      it("renders correct buttons in a closed detail state", () => {
+        const { getByText } = render(
+          <AuthContext.Provider value={{ profile: partnerUser }}>
+            <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
+              <ListingFormActions type={ListingFormActionsType.details} />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        )
+        expect(getByText("Edit")).toBeTruthy()
+        expect(getByText("Copy")).toBeTruthy()
+        expect(getByText("Preview")).toBeTruthy()
+      })
     })
   })
 })

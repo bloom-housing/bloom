@@ -4815,6 +4815,9 @@ export interface JurisdictionCreate {
 
   /**  */
   listingApprovalPermissions: EnumJurisdictionCreateListingApprovalPermissions[]
+
+  /**  */
+  duplicateListingPermissions: EnumJurisdictionCreateDuplicateListingPermissions[]
 }
 
 export interface JurisdictionUpdate {
@@ -4865,6 +4868,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   listingApprovalPermissions: EnumJurisdictionUpdateListingApprovalPermissions[]
+
+  /**  */
+  duplicateListingPermissions: EnumJurisdictionUpdateDuplicateListingPermissions[]
 }
 
 export interface Jurisdiction {
@@ -4924,6 +4930,9 @@ export interface Jurisdiction {
 
   /**  */
   listingApprovalPermissions: EnumJurisdictionListingApprovalPermissions[]
+
+  /**  */
+  duplicateListingPermissions: EnumJurisdictionDuplicateListingPermissions[]
 }
 
 export interface MultiselectQuestionCreate {
@@ -6121,13 +6130,31 @@ export enum EnumJurisdictionCreateListingApprovalPermissions {
   "admin" = "admin",
   "jurisdictionAdmin" = "jurisdictionAdmin",
 }
+export enum EnumJurisdictionCreateDuplicateListingPermissions {
+  "user" = "user",
+  "partner" = "partner",
+  "admin" = "admin",
+  "jurisdictionAdmin" = "jurisdictionAdmin",
+}
 export enum EnumJurisdictionUpdateListingApprovalPermissions {
   "user" = "user",
   "partner" = "partner",
   "admin" = "admin",
   "jurisdictionAdmin" = "jurisdictionAdmin",
 }
+export enum EnumJurisdictionUpdateDuplicateListingPermissions {
+  "user" = "user",
+  "partner" = "partner",
+  "admin" = "admin",
+  "jurisdictionAdmin" = "jurisdictionAdmin",
+}
 export enum EnumJurisdictionListingApprovalPermissions {
+  "user" = "user",
+  "partner" = "partner",
+  "admin" = "admin",
+  "jurisdictionAdmin" = "jurisdictionAdmin",
+}
+export enum EnumJurisdictionDuplicateListingPermissions {
   "user" = "user",
   "partner" = "partner",
   "admin" = "admin",
