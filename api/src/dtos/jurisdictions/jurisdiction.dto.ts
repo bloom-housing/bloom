@@ -124,4 +124,18 @@ export class Jurisdiction extends AbstractDTO {
     isArray: true,
   })
   listingApprovalPermissions: UserRoleEnum[];
+
+  @Expose()
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(UserRoleEnum, {
+    groups: [ValidationsGroupsEnum.default],
+    each: true,
+  })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({
+    enum: UserRoleEnum,
+    example: [UserRoleEnum.admin],
+    isArray: true,
+  })
+  duplicateListingPermissions: UserRoleEnum[];
 }

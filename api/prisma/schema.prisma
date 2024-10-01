@@ -342,6 +342,7 @@ model Jurisdictions {
   translations                Translations[]
   user_accounts               UserAccounts[]
   listingApprovalPermissions  UserRoleEnum[]           @map("listing_approval_permission")
+  duplicateListingPermissions UserRoleEnum[]           @map("duplicate_listing_permissions")
 
   @@map("jurisdictions")
 }
