@@ -936,7 +936,7 @@ export class ListingService implements OnModuleInit {
     }
 
     const duplicateListingPermissions = (
-      requestingUser.jurisdictions?.length === 1
+      requestingUser?.jurisdictions?.length === 1
         ? requestingUser?.jurisdictions[0]
         : requestingUser?.jurisdictions?.find(
             (juris) => juris.id === storedListing?.jurisdictions?.id,
