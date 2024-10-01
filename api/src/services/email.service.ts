@@ -147,6 +147,7 @@ export class EmailService {
   }
 
   public async sendSES(mailOptions: SendMailOptions) {
+    if (Array.isArray(mailOptions.to) && mailOptions.to.length === 0) return;
     try {
       return await this.transporter.sendMail({
         ...mailOptions,
