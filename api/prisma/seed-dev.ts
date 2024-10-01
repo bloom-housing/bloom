@@ -48,11 +48,7 @@ export const devSeeding = async (
 ) => {
   const jurisdiction = await prismaClient.jurisdictions.create({
     data: {
-      ...jurisdictionFactory(
-        jurisdictionName,
-        [UserRoleEnum.admin],
-        [UserRoleEnum.admin],
-      ),
+      ...jurisdictionFactory(jurisdictionName),
       allowSingleUseCodeLogin: false,
     },
   });
