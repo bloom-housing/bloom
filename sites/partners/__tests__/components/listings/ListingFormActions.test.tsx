@@ -33,7 +33,7 @@ const mockBaseJurisdiction: Jurisdiction = {
   enableAccessibilityFeatures: false,
   enableUtilitiesIncluded: true,
   listingApprovalPermissions: [],
-  duplicateListingPermissions: [EnumJurisdictionDuplicateListingPermissions.admin],
+  duplicateListingPermissions: [],
   enableGeocodingPreferences: false,
   allowSingleUseCodeLogin: false,
 }

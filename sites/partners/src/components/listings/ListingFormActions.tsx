@@ -68,8 +68,7 @@ const ListingFormActions = ({
 
   const duplicateListingPermissions = jurisdiction?.duplicateListingPermissions
   const isListingCopier =
-    (profile?.userRoles?.isAdmin &&
-      duplicateListingPermissions?.includes(EnumJurisdictionDuplicateListingPermissions.admin)) ||
+    profile?.userRoles?.isAdmin ||
     (profile?.userRoles?.isJurisdictionalAdmin &&
       duplicateListingPermissions?.includes(
         EnumJurisdictionDuplicateListingPermissions.jurisdictionAdmin
