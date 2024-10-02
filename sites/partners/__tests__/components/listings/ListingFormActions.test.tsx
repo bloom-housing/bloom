@@ -54,7 +54,6 @@ const mockAdminJurisAdminJurisdiction: Jurisdiction = {
 const mockAllUserCopyJurisdiction: Jurisdiction = {
   ...mockBaseJurisdiction,
   duplicateListingPermissions: [
-    EnumJurisdictionDuplicateListingPermissions.admin,
     EnumJurisdictionDuplicateListingPermissions.jurisdictionAdmin,
     EnumJurisdictionDuplicateListingPermissions.partner,
   ],
