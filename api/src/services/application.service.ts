@@ -650,11 +650,15 @@ export class ApplicationService {
                     ...dto.applicant.applicantAddress,
                   },
                 },
-                applicantWorkAddress: {
-                  create: {
-                    ...dto.applicant.applicantWorkAddress,
-                  },
-                },
+                //explicitly set to undefined since it is otherwise an empty object which errors on Address's required fields
+                //field is currently dependent on the 'work in region' question which has been removed
+                applicantWorkAddress: dto.applicant.applicantWorkAddress?.street
+                  ? {
+                      create: {
+                        ...dto.applicant.applicantWorkAddress,
+                      },
+                    }
+                  : undefined,
                 firstName: dto.applicant.firstName?.trim(),
                 lastName: dto.applicant.lastName?.trim(),
                 birthDay: dto.applicant.birthDay
@@ -728,17 +732,19 @@ export class ApplicationService {
               create: dto.householdMember.map((member) => ({
                 ...member,
                 sameAddress: member.sameAddress || YesNoEnum.no,
-                workInRegion: member.workInRegion || YesNoEnum.no,
                 householdMemberAddress: {
                   create: {
                     ...member.householdMemberAddress,
                   },
                 },
-                householdMemberWorkAddress: {
-                  create: {
-                    ...member.householdMemberWorkAddress,
-                  },
-                },
+                householdMemberWorkAddress: member.householdMemberWorkAddress
+                  ?.street
+                  ? {
+                      create: {
+                        ...member.householdMemberWorkAddress,
+                      },
+                    }
+                  : undefined,
                 firstName: member.firstName?.trim(),
                 lastName: member.lastName?.trim(),
                 birthDay: member.birthDay ? Number(member.birthDay) : undefined,
@@ -911,7 +917,6 @@ export class ApplicationService {
               create: dto.householdMember.map((member) => ({
                 ...member,
                 sameAddress: member.sameAddress || YesNoEnum.no,
-                workInRegion: member.workInRegion || YesNoEnum.no,
                 householdMemberAddress: {
                   create: {
                     ...member.householdMemberAddress,
