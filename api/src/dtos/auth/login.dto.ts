@@ -1,4 +1,10 @@
-import { IsEmail, IsString, MaxLength, IsEnum } from 'class-validator';
+import {
+  IsBoolean,
+  IsEmail,
+  IsString,
+  MaxLength,
+  IsEnum,
+} from 'class-validator';
 import { Expose } from 'class-transformer';
 import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
@@ -32,4 +38,9 @@ export class Login {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   reCaptchaToken?: string;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  agreedToTermsOfService?: boolean;
 }

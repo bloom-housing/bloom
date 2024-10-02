@@ -4,7 +4,6 @@ import { Field, Form, t, DOBField, AlertBox } from "@bloom-housing/ui-components
 import { Button, Dialog, Heading } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import dayjs from "dayjs"
-import Markdown from "markdown-to-jsx"
 import customParseFormat from "dayjs/plugin/customParseFormat"
 dayjs.extend(customParseFormat)
 import { useRouter } from "next/router"
@@ -23,6 +22,7 @@ import accountStyles from "../../styles/create-account.module.scss"
 import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
 import SignUpBenefits from "../components/account/SignUpBenefits"
 import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
+import TermsModal from "../components/shared/TermsModal"
 import { LanguagesEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export default () => {
@@ -288,55 +288,15 @@ export default () => {
                   </Button>
                 </CardSection>
                 {/* Terms disclaimer modal */}
-                <Dialog
-                  isOpen={openTermsModal}
-                  onClose={() => {
-                    setOpenTermsModal(false)
-                  }}
-                >
-                  <Dialog.Header>{t("authentication.terms.reviewTou")}</Dialog.Header>
-                  <Dialog.Content>
-                    <>
-                      <p>{t("authentication.terms.publicAccept")}</p>
-                      <Heading
-                        size="lg"
-                        priority={2}
-                        className={accountStyles["create-account-modal-subheader"]}
-                      >
-                        {t("authentication.terms.termsOfUse")}
-                      </Heading>
-                      <Markdown>{t("authentication.terms.publicTerms")}</Markdown>
-                      <Field
-                        id="agreedToTermsOfService"
-                        name="agreedToTermsOfService"
-                        type="checkbox"
-                        label={t(`authentication.terms.acceptExtended`)}
-                        register={register}
-                        validation={{ required: true }}
-                        error={!!errors.agree}
-                        errorMessage={t("errors.agreeError")}
-                        dataTestId="agree"
-                        onChange={() => setChecked(!notChecked)}
-                        className={accountStyles["create-account-terms-checkbox"]}
-                        labelClassName={accountStyles["create-account-terms-label"]}
-                        inputProps={{
-                          defaultChecked: !notChecked,
-                        }}
-                      />
-                    </>
-                  </Dialog.Content>
-                  <Dialog.Footer>
-                    <Button
-                      disabled={notChecked}
-                      type="submit"
-                      variant="primary"
-                      onClick={handleSubmit(onSubmit)}
-                      loadingMessage={isTermsLoading ? t("t.loading") : undefined}
-                    >
-                      {t("t.finish")}
-                    </Button>
-                  </Dialog.Footer>
-                </Dialog>
+                <TermsModal
+                  control={{ register, errors, handleSubmit }}
+                  onSubmit={onSubmit}
+                  notChecked={notChecked}
+                  setChecked={setChecked}
+                  openTermsModal={openTermsModal}
+                  setOpenTermsModal={setOpenTermsModal}
+                  isTermsLoading={isTermsLoading}
+                />
               </Form>
             </>
           </BloomCard>

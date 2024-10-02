@@ -69,6 +69,7 @@ describe('Testing single-use-code strategy', () => {
       id: randomUUID(),
       lastLoginAt: new Date(),
       failedLoginAttemptsCount: 10,
+      agreedToTermsOfService: true,
     });
     prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
       id: randomUUID(),
@@ -125,6 +126,7 @@ describe('Testing single-use-code strategy', () => {
       mfaEnabled: true,
       phoneNumberVerified: false,
       mfaCodeUpdatedAt: new Date(),
+      agreedToTermsOfService: true,
     });
 
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
@@ -194,6 +196,7 @@ describe('Testing single-use-code strategy', () => {
       mfaEnabled: true,
       phoneNumberVerified: false,
       mfaCode: 'zyxwv',
+      agreedToTermsOfService: true,
     });
 
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
@@ -264,6 +267,7 @@ describe('Testing single-use-code strategy', () => {
       phoneNumberVerified: false,
       mfaCode: 'zyxwv',
       mfaCodeUpdatedAt: new Date(),
+      agreedToTermsOfService: true,
     });
 
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
@@ -333,6 +337,7 @@ describe('Testing single-use-code strategy', () => {
       phoneNumberVerified: false,
       singleUseCode: 'zyxwv',
       singleUseCodeUpdatedAt: new Date(),
+      agreedToTermsOfService: true,
     });
 
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
@@ -406,6 +411,7 @@ describe('Testing single-use-code strategy', () => {
       phoneNumberVerified: false,
       singleUseCode: 'zyxwv',
       singleUseCodeUpdatedAt: new Date(0),
+      agreedToTermsOfService: true,
     });
 
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
@@ -479,6 +485,7 @@ describe('Testing single-use-code strategy', () => {
       phoneNumberVerified: false,
       singleUseCode: 'zyxwv',
       singleUseCodeUpdatedAt: new Date(0),
+      agreedToTermsOfService: true,
     });
 
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
@@ -530,6 +537,7 @@ describe('Testing single-use-code strategy', () => {
       phoneNumberVerified: false,
       singleUseCode: 'zyxwv',
       singleUseCodeUpdatedAt: new Date(0),
+      agreedToTermsOfService: true,
     });
 
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
@@ -556,6 +564,68 @@ describe('Testing single-use-code strategy', () => {
     expect(prisma.jurisdictions.findFirst).not.toHaveBeenCalled();
   });
 
+  it('should fail if agreedToTermsOfService is false', async () => {
+    const id = randomUUID();
+    prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
+      id: id,
+      lastLoginAt: new Date(),
+      failedLoginAttemptsCount: 0,
+      confirmedAt: new Date(),
+      passwordValidForDays: 100,
+      passwordUpdatedAt: new Date(),
+      userRoles: { isAdmin: false },
+      passwordHash: await passwordToHash('Abcdef12345!'),
+      mfaEnabled: true,
+      phoneNumberVerified: false,
+      singleUseCode: 'zyxwv',
+      singleUseCodeUpdatedAt: new Date(),
+      agreedToTermsOfService: false,
+    });
+
+    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+
+    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+      id: randomUUID(),
+      allowSingleUseCodeLogin: true,
+    });
+
+    const request = {
+      body: {
+        email: 'example@exygy.com',
+        singleUseCode: 'zyxwv',
+      } as LoginViaSingleUseCode,
+      headers: { jurisdictionname: 'juris 1' },
+    };
+
+    await expect(
+      async () => await strategy.validate(request as unknown as Request),
+    ).rejects.toThrowError(`User ${id} has not accepted the terms of service`);
+
+    expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
+      include: {
+        userRoles: true,
+        listings: true,
+        jurisdictions: true,
+      },
+      where: {
+        email: 'example@exygy.com',
+      },
+    });
+
+    expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
+      select: {
+        id: true,
+        allowSingleUseCodeLogin: true,
+      },
+      where: {
+        name: 'juris 1',
+      },
+      orderBy: {
+        allowSingleUseCodeLogin: OrderByEnum.DESC,
+      },
+    });
+  });
+
   it('should succeed', async () => {
     const id = randomUUID();
     prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
@@ -571,6 +641,7 @@ describe('Testing single-use-code strategy', () => {
       phoneNumberVerified: false,
       singleUseCode: 'zyxwv',
       singleUseCodeUpdatedAt: new Date(),
+      agreedToTermsOfService: true,
     });
 
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
@@ -584,6 +655,79 @@ describe('Testing single-use-code strategy', () => {
       body: {
         email: 'example@exygy.com',
         singleUseCode: 'zyxwv',
+      } as LoginViaSingleUseCode,
+      headers: { jurisdictionname: 'juris 1' },
+    };
+
+    await strategy.validate(request as unknown as Request);
+
+    expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
+      include: {
+        userRoles: true,
+        listings: true,
+        jurisdictions: true,
+      },
+      where: {
+        email: 'example@exygy.com',
+      },
+    });
+
+    expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+      data: {
+        singleUseCode: null,
+        singleUseCodeUpdatedAt: expect.anything(),
+        lastLoginAt: expect.anything(),
+        failedLoginAttemptsCount: 0,
+      },
+      where: {
+        id,
+      },
+    });
+
+    expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
+      select: {
+        id: true,
+        allowSingleUseCodeLogin: true,
+      },
+      where: {
+        name: 'juris 1',
+      },
+      orderBy: {
+        allowSingleUseCodeLogin: OrderByEnum.DESC,
+      },
+    });
+  });
+
+  it('should succeed when agreeing to terms of service', async () => {
+    const id = randomUUID();
+    prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
+      id: id,
+      lastLoginAt: new Date(),
+      failedLoginAttemptsCount: 0,
+      confirmedAt: new Date(),
+      passwordValidForDays: 100,
+      passwordUpdatedAt: new Date(),
+      userRoles: { isAdmin: false },
+      passwordHash: await passwordToHash('Abcdef12345!'),
+      mfaEnabled: true,
+      phoneNumberVerified: false,
+      singleUseCode: 'zyxwv',
+      singleUseCodeUpdatedAt: new Date(),
+      agreedToTermsOfService: false,
+    });
+
+    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+
+    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+      id: randomUUID(),
+      allowSingleUseCodeLogin: true,
+    });
+
+    const request = {
+      body: {
+        email: 'example@exygy.com',
+        singleUseCode: 'zyxwv',
+        agreedToTermsOfService: true,
       } as LoginViaSingleUseCode,
       headers: { jurisdictionname: 'juris 1' },
     };

@@ -1,10 +1,9 @@
 import React, { useContext, useEffect, useRef, useState, useCallback } from "react"
-import { useForm } from "react-hook-form"
-import { GoogleReCaptcha } from "react-google-recaptcha-v3"
-import { t, useMutate } from "@bloom-housing/ui-components"
+import axios from "axios"
 import { useRouter } from "next/router"
-import FormsLayout from "../layouts/forms"
-import { useRedirectToPrevPage } from "../lib/hooks"
+import { GoogleReCaptcha } from "react-google-recaptcha-v3"
+import { useForm } from "react-hook-form"
+import { SuccessDTO } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   PageView,
   pushGtmEvent,
@@ -18,11 +17,14 @@ import {
   FormSignInDefault,
   FormSignInPwdless,
 } from "@bloom-housing/shared-helpers"
-import { UserStatus } from "../lib/constants"
-import { SuccessDTO } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { t, useMutate } from "@bloom-housing/ui-components"
 import SignUpBenefits from "../components/account/SignUpBenefits"
-import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
 import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
+import TermsModal, { FormSignInValues } from "../components/shared/TermsModal"
+import FormsLayout from "../layouts/forms"
+import { UserStatus } from "../lib/constants"
+import { useRedirectToPrevPage } from "../lib/hooks"
+import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
 
 const SignIn = () => {
   const { addToast } = useContext(MessageContext)
@@ -56,6 +58,8 @@ const SignIn = () => {
   const [loading, setLoading] = useState(false)
   const [reCaptchaToken, setReCaptchaToken] = useState(null)
   const [refreshReCaptcha, setRefreshReCaptcha] = useState(false)
+  const [openTermsModal, setOpenTermsModal] = useState<boolean>(false)
+  const [notChecked, setChecked] = useState(true)
 
   const {
     mutate: mutateResendConfirmation,
@@ -119,7 +123,8 @@ const SignIn = () => {
         undefined,
         undefined,
         undefined,
-        reCaptchaEnabled ? reCaptchaToken : undefined
+        reCaptchaEnabled ? reCaptchaToken : undefined,
+        !notChecked ? true : undefined
       )
       await redirectToPage()
       addToast(t(`authentication.signIn.success`, { name: user.firstName }), { variant: "success" })
@@ -129,7 +134,12 @@ const SignIn = () => {
         await singleUseCodeFlow(email, true)
       }
       const { status } = error.response || {}
-      determineNetworkError(status, error)
+      const responseMessage = axios.isAxiosError(error) ? error.response?.data.message : ""
+      if (status === 400 && responseMessage?.includes("has not accepted the terms of service")) {
+        setOpenTermsModal(true)
+      } else {
+        determineNetworkError(status, error)
+      }
       setRefreshReCaptcha(!refreshReCaptcha)
     }
   }
@@ -148,7 +158,8 @@ const SignIn = () => {
           undefined,
           undefined,
           undefined,
-          reCaptchaEnabled ? reCaptchaToken : undefined
+          reCaptchaEnabled ? reCaptchaToken : undefined,
+          !notChecked ? true : undefined
         )
         addToast(t(`authentication.signIn.success`, { name: user.firstName }), {
           variant: "success",
@@ -156,11 +167,18 @@ const SignIn = () => {
         await redirectToPage()
       } catch (error) {
         setLoading(false)
+        setOpenTermsModal(false)
+        setChecked(true)
         if (sendToReCaptchaFlow(error.response.data.name)) {
           await singleUseCodeFlow(email, true)
         }
         const { status } = error.response || {}
-        determineNetworkError(status, error)
+        const responseMessage = axios.isAxiosError(error) ? error.response?.data.message : ""
+        if (status === 400 && responseMessage?.includes("has not accepted the terms of service")) {
+          setOpenTermsModal(true)
+        } else {
+          determineNetworkError(status, error)
+        }
         setRefreshReCaptcha(!refreshReCaptcha)
       }
     }
@@ -297,6 +315,14 @@ const SignIn = () => {
       {reCaptchaEnabled && (
         <GoogleReCaptcha onVerify={onVerify} refreshReCaptcha={refreshReCaptcha} action={"login"} />
       )}
+      <TermsModal
+        control={{ register, errors, handleSubmit }}
+        onSubmit={(data) => void onSubmitPwdless(data as FormSignInValues)}
+        notChecked={notChecked}
+        setChecked={setChecked}
+        openTermsModal={openTermsModal}
+        setOpenTermsModal={setOpenTermsModal}
+      />
     </>
   )
 }

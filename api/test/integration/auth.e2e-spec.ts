@@ -126,6 +126,50 @@ describe('Auth Controller Tests', () => {
     expect(loggedInUser.activeRefreshToken).not.toBeNull();
   });
 
+  it('should login successfully as user who is agreeing to terms of service for first time', async () => {
+    const storedUser = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: { isAdmin: true },
+        mfaEnabled: false,
+        confirmedAt: new Date(),
+        acceptedTerms: false,
+      }),
+    });
+    const res = await request(app.getHttpServer())
+      .post('/auth/login')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
+      .send({
+        email: storedUser.email,
+        password: 'Abcdef12345!',
+        agreedToTermsOfService: true,
+      } as Login)
+      .expect(201);
+
+    expect(res.body).toEqual({
+      success: true,
+    });
+
+    const cookies = res.headers['set-cookie'].map(
+      (cookie) => cookie.split('=')[0],
+    );
+
+    expect(cookies).toContain(TOKEN_COOKIE_NAME);
+    expect(cookies).toContain(REFRESH_COOKIE_NAME);
+    expect(cookies).toContain(ACCESS_TOKEN_AVAILABLE_NAME);
+
+    const loggedInUser = await prisma.userAccounts.findUnique({
+      where: {
+        id: storedUser.id,
+      },
+    });
+
+    expect(loggedInUser.lastLoginAt).not.toBeNull();
+    expect(loggedInUser.singleUseCode).toBeNull();
+    expect(loggedInUser.activeAccessToken).not.toBeNull();
+    expect(loggedInUser.activeRefreshToken).not.toBeNull();
+    expect(loggedInUser.agreedToTermsOfService).toBeTruthy();
+  });
+
   it('should logout successfully', async () => {
     const storedUser = await prisma.userAccounts.create({
       data: await userFactory({

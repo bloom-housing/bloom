@@ -45,7 +45,7 @@ export const userFactory = async (optionalParams?: {
   singleUseCodeUpdatedAt: optionalParams?.mfaEnabled ? new Date() : undefined,
   phoneNumber: optionalParams?.phoneNumber || null,
   phoneNumberVerified: optionalParams?.phoneNumberVerified || null,
-  agreedToTermsOfService: optionalParams?.acceptedTerms || false,
+  agreedToTermsOfService: optionalParams?.acceptedTerms ?? true,
   listings: optionalParams?.listings
     ? {
         connect: optionalParams.listings.map((listing) => {

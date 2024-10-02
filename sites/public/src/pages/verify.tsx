@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react"
+import axios from "axios"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
 import { Button, Alert, Dialog, Message } from "@bloom-housing/ui-seeds"
@@ -18,6 +19,7 @@ import {
   MessageContext,
   FormSignInErrorBox,
 } from "@bloom-housing/shared-helpers"
+import TermsModal, { FormVerifyValues } from "../components/shared/TermsModal"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
 import { useRedirectToPrevPage } from "../lib/hooks"
@@ -52,6 +54,8 @@ const Verify = () => {
   const [isResendLoading, setIsResendLoading] = useState(false)
   const [isLoginLoading, setIsLoginLoading] = useState(false)
   const [alertMessage, setAlertMessage] = useState(getAlertMessage())
+  const [openTermsModal, setOpenTermsModal] = useState<boolean>(false)
+  const [notChecked, setChecked] = useState(true)
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -66,7 +70,7 @@ const Verify = () => {
 
     try {
       setIsLoginLoading(true)
-      const user = await loginViaSingleUseCode(email, code)
+      const user = await loginViaSingleUseCode(email, code, !notChecked ? true : undefined)
       setIsLoginLoading(false)
       if (flowType === "login" || flowType === "loginReCaptcha") {
         addToast(t(`authentication.signIn.success`, { name: user.firstName }), {
@@ -78,8 +82,15 @@ const Verify = () => {
       await redirectToPage()
     } catch (error) {
       setIsLoginLoading(false)
+      setOpenTermsModal(false)
+      setChecked(true)
       const { status } = error.response || {}
-      determineNetworkError(status, error)
+      const responseMessage = axios.isAxiosError(error) ? error.response?.data.message : ""
+      if (status === 400 && responseMessage?.includes("has not accepted the terms of service")) {
+        setOpenTermsModal(true)
+      } else {
+        determineNetworkError(status, error)
+      }
     }
   }
 
@@ -196,6 +207,14 @@ const Verify = () => {
           </Button>
         </DialogFooter>
       </Dialog>
+      <TermsModal
+        control={{ register, errors, handleSubmit }}
+        onSubmit={(data) => void onSubmit(data as FormVerifyValues)}
+        notChecked={notChecked}
+        setChecked={setChecked}
+        openTermsModal={openTermsModal}
+        setOpenTermsModal={setOpenTermsModal}
+      />
     </FormsLayout>
   )
 }

@@ -5939,6 +5939,9 @@ export interface Login {
 
   /**  */
   reCaptchaToken?: string
+
+  /**  */
+  agreedToTermsOfService?: boolean
 }
 
 export interface LoginViaSingleUseCode {
@@ -5947,6 +5950,9 @@ export interface LoginViaSingleUseCode {
 
   /**  */
   singleUseCode: string
+
+  /**  */
+  agreedToTermsOfService?: boolean
 }
 
 export interface RequestMfaCode {
@@ -5983,6 +5989,9 @@ export interface UpdatePassword {
 
   /**  */
   token: string
+
+  /**  */
+  agreedToTermsOfService?: boolean
 }
 
 export interface Confirm {
