@@ -40,7 +40,7 @@ describe("settings", () => {
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json([]))
         }),
-        rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
+        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json([multiselectQuestionPreference]))
         }),
         rest.get(
@@ -65,7 +65,7 @@ describe("settings", () => {
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json([multiselectQuestionPreference]))
         }),
-        rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
+        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json([multiselectQuestionPreference]))
         }),
         rest.get(
@@ -117,6 +117,9 @@ describe("settings", () => {
             return res(ctx.json([]))
           }
         ),
+        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json([multiselectQuestionPreference]))
+        }),
         rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json([multiselectQuestionPreference]))
         }),
@@ -181,6 +184,9 @@ describe("settings", () => {
             })
           )
         }),
+        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json([multiselectQuestionPreference]))
+        }),
         rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json([multiselectQuestionPreference]))
         }),
@@ -229,6 +235,9 @@ describe("settings", () => {
               jurisdictions: [{ id: "id1" }],
             })
           )
+        }),
+        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json([multiselectQuestionPreference]))
         }),
         rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json([multiselectQuestionPreference]))

@@ -12,7 +12,7 @@ describe("Listings approval feature", () => {
 
     // Admin: Request changes
     cy.login("user")
-    searchAndOpenListing(cy, uniqueListingName)
+    cy.findAndOpenListing(uniqueListingName)
     cy.getByID("listing-status-pending-review").should("be.visible")
     cy.getByID("listingEditButton").click()
     cy.getByID("requestChangesButton").click()
@@ -23,7 +23,7 @@ describe("Listings approval feature", () => {
 
     // Partner: Can see the requested changes, edit the listing, and resubmit for approval
     cy.login("jurisdictionalAdminUser")
-    searchAndOpenListing(cy, uniqueListingName)
+    cy.findAndOpenListing(uniqueListingName)
     cy.getByID("listing-status-changes-requested").should("be.visible")
     cy.getByID("requestedChanges").contains("Requested changes test summary")
     cy.getByID("requestedChangesUser").contains("First Last")
@@ -36,7 +36,7 @@ describe("Listings approval feature", () => {
 
     // Admin: Approve and publish
     cy.login("user")
-    searchAndOpenListing(cy, uniqueListingNameEdited)
+    cy.findAndOpenListing(uniqueListingNameEdited)
     cy.getByID("listingEditButton").click()
     cy.getByID("saveAndContinueButton").should("be.visible")
     cy.getByID("listing-status-pending-review").should("be.visible")
@@ -44,9 +44,4 @@ describe("Listings approval feature", () => {
     cy.getByID("listing-status-active").should("be.visible")
     cy.signOut()
   })
-
-  function searchAndOpenListing(cy: Cypress.cy, name: string): void {
-    cy.getByTestId("ag-search-input").type(name)
-    cy.getByTestId(name).click()
-  }
 })

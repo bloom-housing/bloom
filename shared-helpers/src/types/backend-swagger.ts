@@ -521,6 +521,31 @@ export class ApplicationFlaggedSetsService {
     })
   }
   /**
+   * Trigger the duplicate check process
+   */
+  processDuplicates(
+    params: {
+      /**  */
+      listingId?: string
+      /**  */
+      force?: boolean
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/process_duplicates"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+      configs.params = { listingId: params["listingId"], force: params["force"] }
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Reset flagged set confirmation alert
    */
   resetConfirmationAlert(
@@ -2378,6 +2403,27 @@ export class LotteryService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Get lottery totals by listing id
+   */
+  lotteryTotals(
+    params: {
+      /**  */
+      id: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PublicLotteryTotal[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/lottery/lotteryTotals/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export interface SuccessDTO {
@@ -3068,6 +3114,17 @@ export interface UnitsSummary {
   totalAvailable?: number
 }
 
+export interface ApplicationLotteryTotal {
+  /**  */
+  listingId: string
+
+  /**  */
+  multiselectQuestionId: string
+
+  /**  */
+  total: number
+}
+
 export interface Listing {
   /**  */
   id: string
@@ -3359,6 +3416,9 @@ export interface Listing {
 
   /**  */
   lotteryOptIn?: boolean
+
+  /**  */
+  applicationLotteryTotals: ApplicationLotteryTotal[]
 }
 
 export interface PaginationMeta {
@@ -5829,6 +5889,14 @@ export interface PublicLotteryResult {
   multiselectQuestionId: string
 }
 
+export interface PublicLotteryTotal {
+  /**  */
+  total: number
+
+  /**  */
+  multiselectQuestionId: string
+}
+
 export enum ListingViews {
   "fundamentals" = "fundamentals",
   "base" = "base",
@@ -5948,6 +6016,7 @@ export enum AfsView {
 export enum RuleEnum {
   "nameAndDOB" = "nameAndDOB",
   "email" = "email",
+  "combination" = "combination",
 }
 
 export enum FlaggedSetStatusEnum {
