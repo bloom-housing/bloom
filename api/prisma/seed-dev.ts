@@ -3,7 +3,6 @@ import {
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
   PrismaClient,
-  UserRoleEnum,
 } from '@prisma/client';
 import { userFactory } from './seed-helpers/user-factory';
 import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';

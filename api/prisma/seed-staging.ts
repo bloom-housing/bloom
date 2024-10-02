@@ -46,11 +46,7 @@ export const stagingSeed = async (
 ) => {
   // create main jurisdiction
   const jurisdiction = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory(
-      jurisdictionName,
-      [UserRoleEnum.admin],
-      [UserRoleEnum.admin],
-    ),
+    data: jurisdictionFactory(jurisdictionName, [UserRoleEnum.admin]),
   });
   // add another jurisdiction
   let otherJusisName = randomNoun();

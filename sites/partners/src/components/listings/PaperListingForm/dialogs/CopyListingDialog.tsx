@@ -71,7 +71,7 @@ const CopyListingDialog = ({ isOpen, setOpen, listingInfo }: CopyListingDialogPr
             inputProps={{
               onChange: () => clearErrors("newListingName"),
             }}
-          ></Field>
+          />
           <Field
             name="includeUnitData"
             type="checkbox"
