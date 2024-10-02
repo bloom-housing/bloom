@@ -37,7 +37,7 @@ export const AUTH_COOKIE_OPTIONS: CookieOptions = {
   httpOnly: true,
   secure,
   sameSite,
-  maxAge: TOKEN_COOKIE_MAXAGE / 24, // access token should last 1 hr
+  maxAge: TOKEN_COOKIE_MAXAGE / 8, // access token should last 1.5 hr
   domain: process.env.COOKIE_DOMAIN ?? undefined,
 };
 export const REFRESH_COOKIE_OPTIONS: CookieOptions = {
