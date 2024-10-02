@@ -19,6 +19,7 @@ import {
   ReviewOrderTypeEnum,
   UserRoleEnum,
 } from '@prisma/client';
+import dayjs from 'dayjs';
 import { firstValueFrom } from 'rxjs';
 import { ApplicationFlaggedSetService } from './application-flagged-set.service';
 import { EmailService } from './email.service';
@@ -1582,7 +1583,15 @@ export class ListingService implements OnModuleInit {
       storedListing.status === ListingsStatusEnum.active &&
       dto.status === ListingsStatusEnum.closed
     ) {
-      await this.afsService.process(dto.id);
+      if (
+        process.env.DUPLICATES_CLOSE_DATE &&
+        dayjs(process.env.DUPLICATES_CLOSE_DATE, 'YYYY-MM-DD HH:mm Z') <
+          dayjs(new Date())
+      ) {
+        await this.afsService.processDuplicates(dto.id);
+      } else {
+        await this.afsService.process(dto.id);
+      }
     }
 
     await this.cachePurge(storedListing.status, dto.status, rawListing.id);

@@ -34,13 +34,22 @@ import { User } from '../dtos/users/user.dto';
 import { Application } from '../dtos/applications/application.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { startCronJob } from '../utilities/cron-job-starter';
+import dayjs from 'dayjs';
 
 /*
   this is the service for application flaged sets
   it handles all the backend's business logic for managing flagged set data
 */
 
-const CRON_JOB_NAME = 'AFS_CRON_JOB';
+const OLD_CRON_JOB_NAME = 'AFS_CRON_JOB_v1';
+const CRON_JOB_NAME = 'AFS_CRON_JOB_v2';
+
+type PossibleFlaggedSetQuery = {
+  key: string;
+  type: RuleEnum;
+  applicationids: string[];
+};
+
 @Injectable()
 export class ApplicationFlaggedSetService implements OnModuleInit {
   constructor(
@@ -53,9 +62,17 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
   onModuleInit() {
     startCronJob(
       this.prisma,
-      CRON_JOB_NAME,
+      OLD_CRON_JOB_NAME,
       process.env.AFS_PROCESSING_CRON_STRING,
       this.process.bind(this),
+      this.logger,
+      this.schedulerRegistry,
+    );
+    startCronJob(
+      this.prisma,
+      CRON_JOB_NAME,
+      process.env.DUPLICATES_PROCESSING_CRON_STRING,
+      this.processDuplicates.bind(this),
       this.logger,
       this.schedulerRegistry,
     );
@@ -73,10 +90,10 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
 
     // if passed in page and limit would result in no results because there aren't that many listings
     // revert back to the first page
-    let page = params.page;
     if (count && params.limit && params.limit !== 'all' && params.page > 1) {
       if (Math.ceil(count / params.limit) < params.page) {
-        page = 1;
+        params.page = 1;
+        params.limit = count;
       }
     }
 
@@ -93,7 +110,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
       orderBy: {
         id: OrderByEnum.DESC,
       },
-      skip: calculateSkip(params.limit, page),
+      skip: calculateSkip(params.limit, params.page),
       take: calculateTake(params.limit),
     });
 
@@ -235,41 +252,29 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
     this will return meta info for a set of application flagged sets
   */
   async meta(params: AfsQueryParams): Promise<AfsMeta> {
-    const [
-      totalCount,
-      totalResolvedCount,
-      totalNamePendingCount,
-      totalEmailPendingCount,
-    ] = await Promise.all([
-      this.prisma.applications.count({
-        where: {
-          listingId: params.listingId,
-          // We only should display non-deleted applications
-          deletedAt: null,
-        },
-      }),
-      this.metaDataQueryBuilder(
-        params.listingId,
-        FlaggedSetStatusEnum.resolved,
-      ),
-      this.metaDataQueryBuilder(
-        params.listingId,
-        FlaggedSetStatusEnum.pending,
-        RuleEnum.nameAndDOB,
-      ),
-      this.metaDataQueryBuilder(
-        params.listingId,
-        FlaggedSetStatusEnum.pending,
-        RuleEnum.email,
-      ),
-    ]);
+    const [totalCount, totalResolvedCount, totalPendingCount] =
+      await Promise.all([
+        this.prisma.applications.count({
+          where: {
+            listingId: params.listingId,
+            // We only should display non-deleted applications
+            deletedAt: null,
+          },
+        }),
+        this.metaDataQueryBuilder(
+          params.listingId,
+          FlaggedSetStatusEnum.resolved,
+        ),
+        this.metaDataQueryBuilder(
+          params.listingId,
+          FlaggedSetStatusEnum.pending,
+        ),
+      ]);
 
     return {
       totalCount,
       totalResolvedCount,
-      totalPendingCount: totalNamePendingCount + totalEmailPendingCount,
-      totalNamePendingCount,
-      totalEmailPendingCount,
+      totalPendingCount,
     };
   }
 
@@ -471,12 +476,296 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
   }
 
   /**
+   * Run the duplicate process on all listings that match the criteria
+   *
+   * @param listingId optional parameter to run the process on a specific listing
+   * @param forceProcess optional parameter to force the process to run even if listing would not normally run
+   */
+  async processDuplicates(
+    listingId?: string,
+    forceProcess?: boolean,
+  ): Promise<SuccessDTO> {
+    this.logger.warn('running the Application flagged sets version 2 cron job');
+    await this.markCronJobAsStarted(CRON_JOB_NAME);
+    const duplicatesCloseDate =
+      !!process.env.DUPLICATES_CLOSE_DATE &&
+      dayjs(process.env.DUPLICATES_CLOSE_DATE, 'YYYY-MM-DD HH:mm Z');
+
+    if (!duplicatesCloseDate || duplicatesCloseDate > dayjs(new Date())) {
+      this.logger.warn(
+        'DUPLICATES_CLOSE_DATE either not set or is in the future',
+      );
+      return;
+    }
+    const outOfDateListings = await this.prisma.listings.findMany({
+      select: {
+        id: true,
+        afsLastRunAt: true,
+        name: true,
+      },
+      where: {
+        lastApplicationUpdateAt: {
+          not: null,
+        },
+        id: listingId,
+        AND: [
+          {
+            OR: [
+              // Only run this job on listings that were closed after the DUPLICATES_CLOSE_DATE
+              { closedAt: { gte: duplicatesCloseDate.toDate() } },
+              { closedAt: null },
+            ],
+          },
+          // Allow the ability to force process even if application flag set has run more recent than last application update
+          !forceProcess
+            ? {
+                OR: [
+                  {
+                    afsLastRunAt: {
+                      equals: null,
+                    },
+                  },
+                  {
+                    afsLastRunAt: {
+                      lte: this.prisma.listings.fields.lastApplicationUpdateAt,
+                    },
+                  },
+                ],
+              }
+            : {},
+        ],
+      },
+    });
+    this.logger.warn(
+      `running duplicates check on ${outOfDateListings.length} listings`,
+    );
+    for (const listing of outOfDateListings) {
+      // find all flagged keys for this listing that applies to more than one listing
+      const flaggedApplicationGrouped: PossibleFlaggedSetQuery[] = await this
+        .prisma
+        .$queryRaw`select key, array_agg(application_id) as applicationIds, type
+        FROM application_flagged_set_possibilities
+        WHERE listing_id = ${listing.id}::UUID
+        GROUP BY key, type
+        HAVING count(application_id) > 1;`;
+
+      // Group all of the flagged keys by application id
+      const applicationToGroupList = {};
+      flaggedApplicationGrouped.forEach((group) => {
+        group.applicationids.forEach((id) => {
+          const inGroupList = applicationToGroupList[id] || [];
+          inGroupList.push(group);
+          applicationToGroupList[id] = inGroupList;
+        });
+      });
+
+      let individualMatchingGroup = [];
+      const groupByIntersectingIdsAndRemoveFromList = (
+        value: PossibleFlaggedSetQuery[],
+        key: string,
+      ): PossibleFlaggedSetQuery[] => {
+        individualMatchingGroup.push(...value);
+        delete applicationToGroupList[key];
+        value.forEach((v) => {
+          v.applicationids.forEach((id) => {
+            if (id !== key) {
+              const nextIdValues = applicationToGroupList[id];
+              if (nextIdValues) {
+                return groupByIntersectingIdsAndRemoveFromList(
+                  nextIdValues,
+                  id,
+                );
+              }
+            }
+          });
+        });
+        return individualMatchingGroup;
+      };
+
+      // Loop through the grouped by application list and combine the ones that have overlap
+      // Using a while loop because as it groups it jumps around and only needs to go over each group once
+      const matchingGroups = [];
+      while (Object.keys(applicationToGroupList).length > 0) {
+        individualMatchingGroup = [];
+        const [key, value] = Object.entries(applicationToGroupList)[0];
+        const matchedGroups = groupByIntersectingIdsAndRemoveFromList(
+          value as PossibleFlaggedSetQuery[],
+          key,
+        );
+        // Remove duplicated groups
+        matchedGroups
+          .map((group) => group.key)
+          .filter((e, i, a) => a.indexOf(e) !== i)
+          .forEach((groupKey) => {
+            const foundIndex = matchedGroups.findIndex(
+              (group) => group.key === groupKey,
+            );
+            matchedGroups.splice(foundIndex, 1);
+          });
+        matchingGroups.push(matchedGroups);
+      }
+
+      const applicationFlaggedSetsInDB =
+        await this.prisma.applicationFlaggedSet.findMany({
+          include: {
+            applications: {
+              select: {
+                id: true,
+              },
+            },
+          },
+          where: {
+            listingId: listing.id,
+          },
+        });
+
+      // These are the flag sets in the style and grouping that goes in the DB
+      const constructedFlaggedSets = matchingGroups.map((flaggedGroup) => {
+        if (flaggedGroup.length === 1) {
+          return {
+            ruleKey: flaggedGroup[0].key || '',
+            rule: flaggedGroup[0].type as RuleEnum,
+            applications: flaggedGroup[0].applicationids,
+          };
+        }
+        // Most common multiple match is email and primary user name/dob
+        // but it can be more than 2 if also some or all of the household members match
+        // in rare cases it can also be primary applicant and household member match but email does not
+        if (flaggedGroup.length > 1) {
+          const applicationIDs = [];
+          flaggedGroup.forEach((group) => {
+            applicationIDs.push(...group.applicationids);
+          });
+          const uniqueIds = [...new Set(applicationIDs)];
+          const emailFlagged = flaggedGroup.find(
+            (group) => group.type === RuleEnum.email,
+          );
+          // all name flags need to be sorted alphabetically so they are the same every time
+          const nameFlagged = flaggedGroup
+            .filter((group) => group.type === RuleEnum.nameAndDOB)
+            ?.sort((flagA, flagB) => flagB.key.localeCompare(flagA.key));
+          if (!emailFlagged) {
+            // In the rare case that more than one name/dob matches but not email it should still be nameAndDOB
+            return {
+              ruleKey: `${nameFlagged.map((flag) => flag.key).join('-')}`,
+              rule: RuleEnum.nameAndDOB,
+              applications: uniqueIds,
+            };
+          }
+          return {
+            ruleKey: `${emailFlagged.key}-${nameFlagged
+              .map((flag) => flag.key)
+              .join('-')}`,
+            rule: RuleEnum.combination,
+            applications: uniqueIds,
+          };
+        }
+      });
+      // Remove unused application flagged sets that are no longer valid
+      // There are multiple scenarios this can happen
+      //  1. An application is deleted from the system
+      //  2. An application is edited so either the applications no longer conflict or now is considered
+      //     a match with both types (will be part of combination)
+      //  3. A new application is added that partially matches a group so the group key is now different
+      for (const flaggedSet of applicationFlaggedSetsInDB) {
+        const foundApplicationFlaggedSet = constructedFlaggedSets.find(
+          (afs) => afs.ruleKey === flaggedSet.ruleKey,
+        );
+        if (!foundApplicationFlaggedSet) {
+          await this.prisma.applicationFlaggedSet.delete({
+            where: { id: flaggedSet.id },
+          });
+        }
+      }
+      // Save or Update flag sets in the database
+      for (const flaggedGroup of constructedFlaggedSets) {
+        const foundApplicationFlaggedSet = applicationFlaggedSetsInDB.find(
+          (afs) => afs.ruleKey === flaggedGroup.ruleKey,
+        );
+        if (foundApplicationFlaggedSet) {
+          const foundAFSApplicationIds =
+            foundApplicationFlaggedSet.applications.map((afs) => afs.id);
+          // find if the saved flagged group is different size or doesn't contain the same applications
+          if (
+            !(
+              foundAFSApplicationIds.length ===
+                flaggedGroup.applications.length &&
+              foundAFSApplicationIds.every((value) =>
+                flaggedGroup.applications.includes(value),
+              )
+            )
+          ) {
+            const applicationIdsNoLongerValid = foundAFSApplicationIds.filter(
+              (afsId) => !flaggedGroup.applications.includes(afsId),
+            );
+            await this.prisma.applicationFlaggedSet.update({
+              data: {
+                applications: {
+                  // disconnect any application that no longer match
+                  disconnect: applicationIdsNoLongerValid
+                    ? applicationIdsNoLongerValid.map((afs) => {
+                        return { id: afs };
+                      })
+                    : undefined,
+                  connect: flaggedGroup.applications.map((application) => {
+                    return { id: application };
+                  }),
+                },
+                status: FlaggedSetStatusEnum.pending,
+              },
+              where: { id: foundApplicationFlaggedSet.id },
+            });
+          }
+          // If generated is the same as in the db than do nothing, otherwise create a new one
+        } else {
+          await this.prisma.applicationFlaggedSet.create({
+            data: {
+              ruleKey: flaggedGroup.ruleKey,
+              rule: flaggedGroup.rule,
+              listings: {
+                connect: {
+                  id: listing.id,
+                },
+              },
+              status: FlaggedSetStatusEnum.pending,
+              applications: {
+                connect: flaggedGroup.applications.map((application) => {
+                  return { id: application };
+                }),
+              },
+            },
+          });
+        }
+      }
+      // set the last run at date to the listings
+      for (const listing of outOfDateListings) {
+        await this.prisma.listings.update({
+          where: {
+            id: listing.id,
+          },
+          data: {
+            afsLastRunAt: new Date(),
+          },
+        });
+      }
+    }
+
+    return {
+      success: true,
+    };
+  }
+
+  /**
     this goes through listings that have had an application added since the last cronjob run
     it calls a series of helpers to add to or build a flagged set if duplicates are found
   */
   async process(listingId?: string): Promise<SuccessDTO> {
     this.logger.warn('running the Application flagged sets cron job');
-    await this.markCronJobAsStarted();
+    await this.markCronJobAsStarted(OLD_CRON_JOB_NAME);
+    const duplicatesCloseDate =
+      process.env.DUPLICATES_CLOSE_DATE &&
+      dayjs(process.env.DUPLICATES_CLOSE_DATE, 'YYYY-MM-DD HH:mm Z');
+
     const outOfDateListings = await this.prisma.listings.findMany({
       select: {
         id: true,
@@ -487,6 +776,12 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
           not: null,
         },
         id: listingId,
+        // If DUPLICATES_CLOSE_DATE is in the past only run this job on closed listings
+        // from before DUPLICATES_CLOSE_DATE
+        closedAt:
+          duplicatesCloseDate && duplicatesCloseDate < dayjs(new Date())
+            ? { lte: duplicatesCloseDate.toDate() }
+            : undefined,
         AND: [
           {
             OR: [
@@ -548,10 +843,10 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
     marks the db record for this cronjob as begun or creates a cronjob that
     is marked as begun if one does not already exist 
   */
-  async markCronJobAsStarted(): Promise<void> {
+  async markCronJobAsStarted(name: string): Promise<void> {
     const job = await this.prisma.cronJob.findFirst({
       where: {
-        name: CRON_JOB_NAME,
+        name: name,
       },
     });
     if (job) {
@@ -569,7 +864,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
       await this.prisma.cronJob.create({
         data: {
           lastRunDate: new Date(),
-          name: CRON_JOB_NAME,
+          name: name,
         },
       });
     }

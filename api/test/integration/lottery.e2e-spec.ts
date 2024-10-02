@@ -727,6 +727,7 @@ describe('Lottery Controller Tests', () => {
 
   describe('expireLotteries endpoint', () => {
     it('should only expire listing lotteries that are past due', async () => {
+      process.env.LOTTERY_DAYS_TILL_EXPIRY = '45';
       const jurisdictionA = await prisma.jurisdictions.create({
         data: jurisdictionFactory(),
       });
