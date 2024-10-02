@@ -155,18 +155,7 @@ export const formDefaults: FormListing = {
   // showWaitlist: false,
   reviewOrderType: null,
   unitsSummary: [],
-  // unitsSummarized: {
-  //   unitTypes: [],
-  //   priorityTypes: [],
-  //   amiPercentages: [],
-  //   byUnitTypeAndRent: [],
-  //   byUnitType: [],
-  //   byAMI: [],
-  //   hmi: {
-  //     columns: [],
-  //     rows: [],
-  //   },
-  // },
+  applicationLotteryTotals: [],
 }
 
 export type TempUnit = Unit & {

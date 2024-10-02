@@ -18,6 +18,7 @@ import {
   ReviewOrderTypeEnum,
   UserRoleEnum,
 } from '@prisma/client';
+import dayjs from 'dayjs';
 import { firstValueFrom } from 'rxjs';
 import { ApplicationFlaggedSetService } from './application-flagged-set.service';
 import { EmailService } from './email.service';
@@ -275,53 +276,6 @@ export class ListingService implements OnModuleInit {
     const userEmails: string[] = [];
     userResults?.forEach((user) => user?.email && userEmails.push(user.email));
     return { emails: userEmails, publicUrl };
-  }
-
-  public async getPublicUserEmailInfo(
-    listingId?: string,
-  ): Promise<{ [key: string]: string[] }> {
-    const userResults = await this.prisma.applications.findMany({
-      select: {
-        language: true,
-        applicant: {
-          select: {
-            emailAddress: true,
-          },
-        },
-      },
-      where: {
-        listingId,
-        applicant: {
-          emailAddress: {
-            not: null,
-          },
-        },
-      },
-    });
-
-    const result = {};
-    Object.keys(LanguagesEnum).forEach((languageKey) => {
-      const applications = userResults
-        .filter((user) => user.language === languageKey)
-        .map((userObj) => userObj.applicant.emailAddress);
-      if (applications.length) {
-        result[languageKey] = applications;
-      }
-    });
-
-    const noLanguageIndicated = userResults
-      .filter((user) => !user.language)
-      .map((userObj) => userObj.applicant.emailAddress);
-
-    if (!result[LanguagesEnum.en])
-      result[LanguagesEnum.en] = noLanguageIndicated;
-    else
-      result[LanguagesEnum.en] = [
-        ...result[LanguagesEnum.en],
-        ...noLanguageIndicated,
-      ];
-
-    return result;
   }
 
   public async listingApprovalNotify(params: {
@@ -1628,7 +1582,15 @@ export class ListingService implements OnModuleInit {
       storedListing.status === ListingsStatusEnum.active &&
       dto.status === ListingsStatusEnum.closed
     ) {
-      await this.afsService.process(dto.id);
+      if (
+        process.env.DUPLICATES_CLOSE_DATE &&
+        dayjs(process.env.DUPLICATES_CLOSE_DATE, 'YYYY-MM-DD HH:mm Z') <
+          dayjs(new Date())
+      ) {
+        await this.afsService.processDuplicates(dto.id);
+      } else {
+        await this.afsService.process(dto.id);
+      }
     }
 
     await this.cachePurge(storedListing.status, dto.status, rawListing.id);

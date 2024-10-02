@@ -106,6 +106,7 @@ export class EmailService {
     attachment?: EmailAttachmentData,
   ) {
     const isMultipleRecipients = Array.isArray(to);
+    if (isMultipleRecipients && to.length === 0) return;
     const emailParams: MailDataRequired = {
       to,
       from,

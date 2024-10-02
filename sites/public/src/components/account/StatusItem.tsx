@@ -3,7 +3,10 @@ import { t } from "@bloom-housing/ui-components"
 import { Button, Card, Tag } from "@bloom-housing/ui-seeds"
 import styles from "./StatusItem.module.scss"
 import applicationsViewStyles from "./ApplicationsView.module.scss"
-import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  ListingsStatusEnum,
+  LotteryStatusEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 interface StatusItemProps {
   applicationDueDate?: string
@@ -16,6 +19,7 @@ interface StatusItemProps {
   lotteryPublishedDate?: string
   lotteryResults?: boolean
   lotteryURL?: string
+  lotteryStatus?: LotteryStatusEnum
   strings?: {
     applicationsDeadline?: string
     edited?: string
@@ -28,12 +32,13 @@ interface StatusItemProps {
 }
 
 const StatusItem = (props: StatusItemProps) => {
+  const showPublicLottery = process.env.showPublicLottery
   //set custom visuals and data based on listing/lottery status
   let tagText = ""
   let tagVariant: "primary" | "secondary" | "success"
   let deadlineText = ""
   let dueDate = ""
-  if (props.lotteryResults) {
+  if (props.lotteryStatus === LotteryStatusEnum.publishedToPublic && showPublicLottery) {
     tagText = t("account.lotteryRun")
     tagVariant = "success"
     deadlineText = t("account.lotteryPosted")
@@ -46,7 +51,7 @@ const StatusItem = (props: StatusItemProps) => {
   } else {
     tagText = t("account.closedApplications")
     tagVariant = "secondary"
-    if (props.lotteryStartDate) {
+    if (props.lotteryStartDate && showPublicLottery) {
       deadlineText = t("account.lotteryDate")
       dueDate = props.lotteryStartDate
     }
@@ -88,9 +93,9 @@ const StatusItem = (props: StatusItemProps) => {
         </section>
 
         <footer className={styles["status-item__footer"]}>
-          {props.lotteryResults && (
+          {props.lotteryResults && showPublicLottery && (
             <div>
-              <Button href={props.lotteryURL} variant="primary-outlined" size="sm">
+              <Button href={props.lotteryURL} variant="primary" size="sm">
                 {props.strings?.lotteryResults ?? t("account.application.lottery.viewResults")}
               </Button>
             </div>
@@ -101,7 +106,7 @@ const StatusItem = (props: StatusItemProps) => {
             </Button>
           </div>
           <div>
-            <Button href={props.listingURL} variant="secondary-outlined" size="sm">
+            <Button href={props.listingURL} variant="primary-outlined" size="sm">
               {props.strings?.seeListing ?? t("t.seeListing")}
             </Button>
           </div>
