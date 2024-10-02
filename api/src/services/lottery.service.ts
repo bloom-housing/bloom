@@ -2,7 +2,6 @@ import {
   BadRequestException,
   ForbiddenException,
   HttpException,
-  StreamableFile,
   Inject,
   Injectable,
   Logger,
@@ -19,15 +18,9 @@ import {
   ReviewOrderTypeEnum,
   UserRoleEnum,
 } from '@prisma/client';
-import archiver from 'archiver';
-import Excel, { Column, Row } from 'exceljs';
 import dayjs from 'dayjs';
 import { Request as ExpressRequest, Response } from 'express';
-import fs, { createReadStream } from 'fs';
-import { join } from 'path';
-import { view } from './application.service';
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
-import { ApplicationMultiselectQuestion } from '../dtos/applications/application-multiselect-question.dto';
 import { Application } from '../dtos/applications/application.dto';
 import Listing from '../dtos/listings/listing.dto';
 import MultiselectQuestion from '../dtos/multiselect-questions/multiselect-question.dto';
@@ -39,10 +32,7 @@ import { ListingService } from './listing.service';
 import { MultiselectQuestionService } from './multiselect-question.service';
 import { PermissionService } from './permission.service';
 import { PrismaService } from './prisma.service';
-import { CsvHeader } from '../types/CsvExportInterface';
-import { getExportHeaders } from '../utilities/application-export-helpers';
 import { mapTo } from '../utilities/mapTo';
-import { IdDTO } from '../dtos/shared/id.dto';
 import { LotteryActivityLogItem } from '../dtos/lottery/lottery-activity-log-item.dto';
 import { ListingLotteryStatus } from '../../src/dtos/listings/listing-lottery-status.dto';
 import { ListingViews } from '../../src/enums/listings/view-enum';
@@ -51,16 +41,6 @@ import { EmailService } from './email.service';
 import { PublicLotteryResult } from '../../src/dtos/lottery/lottery-public-result.dto';
 import { PublicLotteryTotal } from '../../src/dtos/lottery/lottery-public-total.dto';
 
-view.csv = {
-  ...view.details,
-  applicationFlaggedSet: {
-    select: {
-      id: true,
-    },
-  },
-  listings: false,
-};
-const NUMBER_TO_PAGINATE_BY = 500;
 const LOTTERY_CRON_JOB_NAME = 'LOTTERY_CRON_JOB';
 const LOTTERY_PUBLISH_CRON_JOB_NAME = 'LOTTERY_PUBLISH_CRON_JOB';
 
@@ -331,63 +311,6 @@ export class LotteryService {
     return ordinalArray;
   }
 
-  /**
-   *
-   * @param queryParams
-   * @param req
-   * @returns generates the lottery export file via helper function and returns the streamable file
-   */
-  async lotteryExport<QueryParams extends ApplicationCsvQueryParams>(
-    req: ExpressRequest,
-    res: Response,
-    queryParams: QueryParams,
-  ): Promise<StreamableFile> {
-    const user = mapTo(User, req['user']);
-    await this.authorizeLotteryExport(user, queryParams.id);
-
-    const workbook = new Excel.Workbook();
-
-    const filename = join(
-      process.cwd(),
-      `src/temp/lottery-listing-${queryParams.id}-applications-${
-        user.id
-      }-${new Date().getTime()}.xlsx`,
-    );
-
-    const zipFilePath = join(
-      process.cwd(),
-      `src/temp/lottery-listing-${queryParams.id}-applications-${
-        user.id
-      }-${new Date().getTime()}.zip`,
-    );
-
-    await this.createLotterySheets(workbook, {
-      ...queryParams,
-    });
-
-    await workbook.xlsx.writeFile(filename);
-
-    const readStream = createReadStream(filename);
-
-    return new Promise((resolve) => {
-      // Create a writable stream to the zip file
-      const output = fs.createWriteStream(zipFilePath);
-      const archive = archiver('zip', {
-        zlib: { level: 9 },
-      });
-      output.on('close', () => {
-        const zipFile = createReadStream(zipFilePath);
-        resolve(new StreamableFile(zipFile));
-      });
-
-      archive.pipe(output);
-      archive.append(readStream, {
-        name: `lottery-${queryParams.id}-${new Date().getTime()}.xlsx`,
-      });
-      archive.finalize();
-    });
-  }
-
   async updateLotteryStatus(
     listingId: string,
     status: LotteryStatusEnum,
@@ -568,337 +491,6 @@ export class LotteryService {
     return {
       success: true,
     };
-  }
-
-  /**
-   *
-   * @param filename
-   * @param queryParams
-   * @returns generates the lottery sheets
-   */
-  async createLotterySheets<QueryParams extends ApplicationCsvQueryParams>(
-    workbook: Excel.Workbook,
-    queryParams: QueryParams,
-  ): Promise<void> {
-    let applications = await this.prisma.applications.findMany({
-      select: {
-        id: true,
-        preferences: true,
-        householdMember: {
-          select: {
-            id: true,
-          },
-        },
-        applicationLotteryPositions: {
-          select: {
-            ordinal: true,
-            multiselectQuestionId: true,
-          },
-          where: {
-            multiselectQuestionId: null,
-          },
-          orderBy: {
-            ordinal: OrderByEnum.DESC,
-          },
-        },
-      },
-      where: {
-        listingId: queryParams.id,
-        deletedAt: null,
-        markedAsDuplicate: false,
-      },
-    });
-
-    // get all multiselect questions for a listing to build csv headers
-    const multiSelectQuestions =
-      await this.multiselectQuestionService.findByListingId(queryParams.id);
-
-    // get maxHouseholdMembers associated to the selected applications
-    let maxHouseholdMembers = 0;
-    applications.forEach((app) => {
-      if (app.householdMember?.length > maxHouseholdMembers) {
-        maxHouseholdMembers = app.householdMember.length;
-      }
-    });
-
-    const columns = getExportHeaders(
-      maxHouseholdMembers,
-      multiSelectQuestions,
-      queryParams.timeZone,
-      queryParams.includeDemographics,
-      true,
-    );
-
-    applications = applications.filter(
-      (elem) => !!elem.applicationLotteryPositions?.length,
-    );
-
-    applications = applications.sort(
-      (a, b) =>
-        a.applicationLotteryPositions[0].ordinal -
-        b.applicationLotteryPositions[0].ordinal,
-    );
-
-    const mappedApps = mapTo(Application, applications);
-    await this.generateSpreadsheetData(
-      workbook,
-      mappedApps,
-      columns,
-      queryParams,
-      true,
-    );
-
-    const preferences = multiSelectQuestions.filter(
-      (question) =>
-        question.applicationSection ===
-        MultiselectQuestionsApplicationSectionEnum.preferences,
-    );
-    for (const preference of preferences) {
-      await this.generateSpreadsheetData(
-        workbook,
-        mappedApps,
-        columns,
-        queryParams,
-        true,
-        {
-          id: preference.id,
-          name: preference.text,
-        },
-      );
-    }
-  }
-
-  /**
-   * @param user the user attempting to get the lottery export
-   * @param listingId the listing we are trying the export is for
-   */
-  async authorizeLotteryExport(user, listingId): Promise<void> {
-    /**
-     * Checking authorization for each application is very expensive.
-     * By making listingId required, we can check if the user has update permissions for the listing, since right now if a user has that
-     * they also can run the export for that listing
-     */
-    const jurisdictionId =
-      await this.listingService.getJurisdictionIdByListingId(listingId);
-
-    await this.permissionService.canOrThrow(
-      user,
-      'listing',
-      permissionActions.update,
-      {
-        id: listingId,
-        jurisdictionId,
-      },
-    );
-  }
-
-  /**
-   *
-   * @param workbook the spreadsheet we'll be adding data too
-   * @param applications the full list of partial applications
-   * @param csvHeaders the headers and renderers of the export
-   * @param queryParams the incoming param args
-   * @param forLottery whether we are getting the lottery results or not
-   * @param preference if present, then builds the preference specific spreadsheet page
-   * @returns void but writes the output to a file
-   */
-  async generateSpreadsheetData(
-    workbook: Excel.Workbook,
-    applications: Application[],
-    csvHeaders: CsvHeader[],
-    queryParams: ApplicationCsvQueryParams,
-    forLottery = false,
-    preference?: IdDTO,
-  ): Promise<void> {
-    // create a spreadsheet. If the preference is passed in use that as a title otherwise 'raw'
-    const spreadsheet = workbook.addWorksheet(
-      preference ? preference.name : 'Raw Lottery Rank',
-    );
-    spreadsheet.columns = this.buildExportColumns(csvHeaders, preference);
-
-    const filteredApplications = preference
-      ? applications.filter((app) =>
-          app.preferences.some(
-            (pref) =>
-              (pref.multiselectQuestionId === preference.id ||
-                pref.key === preference.name) &&
-              pref.claimed,
-          ),
-        )
-      : applications;
-
-    // build row data
-    const promiseArray: Promise<Partial<Row>[]>[] = [];
-    for (
-      let i = 0;
-      i < filteredApplications.length;
-      i += NUMBER_TO_PAGINATE_BY
-    ) {
-      const slicedApplications = filteredApplications.slice(
-        i,
-        i + NUMBER_TO_PAGINATE_BY,
-      );
-
-      promiseArray.push(
-        new Promise(async (resolve) => {
-          // grab applications NUMBER_TO_PAGINATE_BY at a time
-          let paginatedApplications = await this.prisma.applications.findMany({
-            include: {
-              ...view.csv,
-              demographics: queryParams.includeDemographics
-                ? {
-                    select: {
-                      id: true,
-                      createdAt: true,
-                      updatedAt: true,
-                      ethnicity: true,
-                      gender: true,
-                      sexualOrientation: true,
-                      howDidYouHear: true,
-                      race: true,
-                    },
-                  }
-                : false,
-              applicationLotteryPositions: forLottery
-                ? {
-                    select: {
-                      ordinal: true,
-                    },
-                    where: {
-                      multiselectQuestionId: preference ? preference.id : null,
-                    },
-                  }
-                : false,
-            },
-            where: {
-              listingId: queryParams.id,
-              deletedAt: null,
-              markedAsDuplicate: forLottery ? false : undefined,
-              id: {
-                in: slicedApplications.map((app) => app.id),
-              },
-            },
-          });
-          if (forLottery) {
-            paginatedApplications = paginatedApplications.sort(
-              (a, b) =>
-                a.applicationLotteryPositions[0].ordinal -
-                b.applicationLotteryPositions[0].ordinal,
-            );
-          }
-          const rows: Partial<Row>[] = [];
-          paginatedApplications.forEach((app) => {
-            const row: Partial<Row> = {};
-            let preferences: ApplicationMultiselectQuestion[];
-            let programs: ApplicationMultiselectQuestion[];
-
-            if (preference) {
-              row['Raw Lottery Rank'] = slicedApplications.find(
-                (slicedApp) => slicedApp.id === app.id,
-              ).applicationLotteryPositions[0].ordinal;
-            }
-            csvHeaders.forEach((header) => {
-              let multiselectQuestionValue = false;
-              let parsePreference = false;
-              let parseProgram = false;
-              let value = header.path.split('.').reduce((acc, curr) => {
-                // return preference/program as value for the format function to accept
-                if (multiselectQuestionValue) {
-                  return acc;
-                }
-
-                if (parsePreference) {
-                  // curr should equal the preference id we're pulling from
-                  if (!preferences) {
-                    preferences =
-                      (app.preferences as unknown as ApplicationMultiselectQuestion[]) ||
-                      [];
-                  }
-                  parsePreference = false;
-                  // there aren't typically many preferences, but if there, then a object map should be created and used
-                  const preference = preferences.find(
-                    (preference) => preference.key === curr,
-                  );
-                  multiselectQuestionValue = true;
-                  return preference;
-                } else if (parseProgram) {
-                  // curr should equal the preference id we're pulling from
-                  if (!programs) {
-                    programs =
-                      (app.programs as unknown as ApplicationMultiselectQuestion[]) ||
-                      [];
-                  }
-                  parsePreference = false;
-                  // there aren't typically many programs, but if there, then a object map should be created and used
-                  const program = programs.find(
-                    (preference) => preference.key === curr,
-                  );
-                  multiselectQuestionValue = true;
-                  return program;
-                }
-
-                // sets parsePreference to true, for the next iteration
-                if (curr === 'preferences') {
-                  parsePreference = true;
-                } else if (curr === 'programs') {
-                  parseProgram = true;
-                }
-
-                if (acc === null || acc === undefined) {
-                  return '';
-                }
-
-                // handles working with arrays, e.g. householdMember.0.firstName
-                if (!isNaN(Number(curr))) {
-                  const index = Number(curr);
-                  return acc[index];
-                }
-
-                return acc[curr];
-              }, app);
-              value = value === undefined ? '' : value === null ? '' : value;
-              if (header.format) {
-                value = header.format(value);
-              }
-
-              row[`${header.path}`] = value ? value.toString() : '';
-            });
-            rows.push(row);
-          });
-          resolve(rows);
-        }),
-      );
-    }
-    const res = await Promise.all(promiseArray);
-
-    // add rows to spreadsheet
-    res.forEach((elem) => {
-      spreadsheet.addRows(elem);
-    });
-  }
-
-  buildExportColumns(
-    csvHeaders: CsvHeader[],
-    preference?: IdDTO,
-  ): Partial<Column>[] {
-    const res: Partial<Column>[] = csvHeaders.map((header) => ({
-      key: header.path,
-      header: header.label,
-    }));
-
-    if (preference) {
-      const indx = res.findIndex(
-        (header) => header.header === 'Raw Lottery Rank',
-      );
-
-      res[indx].header = `${preference.name} Rank`;
-
-      res.splice(indx, 0, {
-        key: 'Raw Lottery Rank',
-        header: 'Raw Lottery Rank',
-      });
-    }
-    return res;
   }
 
   getActivityLogKey = (logData: Prisma.JsonValue | null) => {

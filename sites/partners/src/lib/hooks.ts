@@ -511,10 +511,21 @@ export const createDateStringFromNow = (format = "YYYY-MM-DD_HH:mm:ss"): string 
   return dayjs(now).format(format)
 }
 
-export const useApplicationsExport = (listingId: string, includeDemographics: boolean) => {
+export const useApplicationsExport = (
+  listingId: string,
+  includeDemographics: boolean,
+  spreadSheetExport = false
+) => {
+  if (spreadSheetExport) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    return useSpreadsheetExport(listingId, includeDemographics, false)
+  }
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { applicationsService } = useContext(AuthContext)
 
-  return useCsvExport(
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const res = useCsvExport(
     () =>
       applicationsService.listAsCsv({
         id: listingId,
@@ -523,27 +534,41 @@ export const useApplicationsExport = (listingId: string, includeDemographics: bo
       }),
     `applications-${listingId}-${createDateStringFromNow()}.csv`
   )
+
+  return { onExport: res.onExport, exportLoading: res.csvExportLoading }
 }
 
-export const useLotteryExport = (listingId: string, includeDemographics: boolean) => {
-  const { lotteryService } = useContext(AuthContext)
+export const useSpreadsheetExport = (
+  listingId: string,
+  includeDemographics: boolean,
+  forLottery: boolean
+) => {
+  const { applicationsService, lotteryService } = useContext(AuthContext)
   const [exportLoading, setExportLoading] = useState(false)
   const { addToast } = useContext(MessageContext)
 
   const onExport = useCallback(async () => {
     setExportLoading(true)
     try {
-      const content = await lotteryService.lotteryResults(
-        { id: listingId, includeDemographics },
-        { responseType: "arraybuffer" }
-      )
+      const content = forLottery
+        ? await lotteryService.lotteryResults(
+            { id: listingId, includeDemographics },
+            { responseType: "arraybuffer" }
+          )
+        : await applicationsService.listAsSpreadsheet(
+            { id: listingId, includeDemographics },
+            { responseType: "arraybuffer" }
+          )
       const blob = new Blob([new Uint8Array(content)], { type: "application/zip" })
       const url = window.URL.createObjectURL(blob)
       const link = document.createElement("a")
       link.href = url
       const now = new Date()
       const dateString = dayjs(now).format("YYYY-MM-DD_HH-mm")
-      link.setAttribute("download", `${listingId}-${dateString}-test.zip`)
+      link.setAttribute(
+        "download",
+        `${listingId}-${dateString}-${forLottery ? "lottery" : "applications"}.zip`
+      )
       document.body.appendChild(link)
       link.click()
       link.parentNode.removeChild(link)
