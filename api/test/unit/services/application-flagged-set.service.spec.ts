@@ -2587,7 +2587,7 @@ describe('Testing application flagged set service', () => {
                   },
                 },
                 {
-                  closedAt: null,
+                  status: { not: 'closed' },
                 },
               ],
             },
@@ -2640,7 +2640,7 @@ describe('Testing application flagged set service', () => {
                   },
                 },
                 {
-                  closedAt: null,
+                  status: { not: 'closed' },
                 },
               ],
             },
@@ -2694,7 +2694,7 @@ describe('Testing application flagged set service', () => {
                   },
                 },
                 {
-                  closedAt: null,
+                  status: { not: 'closed' },
                 },
               ],
             },
