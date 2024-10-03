@@ -3244,7 +3244,7 @@ export interface ApplicationLotteryTotal {
   listingId: string
 
   /**  */
-  multiselectQuestionId: string
+  multiselectQuestionId?: string
 
   /**  */
   total: number
@@ -5939,6 +5939,9 @@ export interface Login {
 
   /**  */
   reCaptchaToken?: string
+
+  /**  */
+  agreedToTermsOfService?: boolean
 }
 
 export interface LoginViaSingleUseCode {
@@ -5947,6 +5950,9 @@ export interface LoginViaSingleUseCode {
 
   /**  */
   singleUseCode: string
+
+  /**  */
+  agreedToTermsOfService?: boolean
 }
 
 export interface RequestMfaCode {
@@ -5983,6 +5989,9 @@ export interface UpdatePassword {
 
   /**  */
   token: string
+
+  /**  */
+  agreedToTermsOfService?: boolean
 }
 
 export interface Confirm {
@@ -6058,7 +6067,7 @@ export interface PublicLotteryResult {
   ordinal: number
 
   /**  */
-  multiselectQuestionId: string
+  multiselectQuestionId?: string
 }
 
 export interface PublicLotteryTotal {
@@ -6066,7 +6075,7 @@ export interface PublicLotteryTotal {
   total: number
 
   /**  */
-  multiselectQuestionId: string
+  multiselectQuestionId?: string
 }
 
 export enum ListingViews {

@@ -142,8 +142,7 @@ export default () => {
                     <div>
                       <Button
                         className={styles["section-button"]}
-                        href={"https://www.exygy.com"} // NOTE: Update per jurisdiction
-                        hideExternalLinkIcon={true}
+                        href={"/help/questions#how-do-lottery-results-work-section"}
                         size={"sm"}
                       >
                         {t("account.application.lottery.rawRankButton")}
@@ -160,8 +159,7 @@ export default () => {
                     <div>
                       <Button
                         className={styles["section-button"]}
-                        href={"https://www.exygy.com"} // NOTE: Update per jurisdiction
-                        hideExternalLinkIcon={true}
+                        href={"/help/questions#how-do-lottery-results-work-section"}
                         size={"sm"}
                       >
                         {t("account.application.lottery.preferencesButton")}

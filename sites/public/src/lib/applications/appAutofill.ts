@@ -48,6 +48,9 @@ class AutofillCleaner {
 
     unsetIdentifiers(this.application.accessibility)
     unsetIdentifiers(this.application.applicant)
+    //set to undefined since it's dependent on the 'work in region' question which has been removed
+    //handles case of autofilling with applications submitted before app.service sets workAddress to undefined
+    this.application.applicant.applicantWorkAddress = undefined
     unsetIdentifiers(this.application.applicationsMailingAddress)
 
     if (this.application.applicationsAlternateAddress)
@@ -59,6 +62,8 @@ class AutofillCleaner {
         unsetIdentifiers(member)
         member.orderId = index
         if (member.householdMemberAddress) unsetIdentifiers(member.householdMemberAddress)
+        //same reasoning as line 51-52
+        member.householdMemberWorkAddress = undefined
       })
     unsetIdentifiers(this.application.demographics)
 

@@ -37,7 +37,7 @@ export const AUTH_COOKIE_OPTIONS: CookieOptions = {
   httpOnly: true,
   secure,
   sameSite,
-  maxAge: TOKEN_COOKIE_MAXAGE / 24, // access token should last 1 hr
+  maxAge: TOKEN_COOKIE_MAXAGE / 8, // access token should last 1.5 hr
   domain: process.env.COOKIE_DOMAIN ?? undefined,
 };
 export const REFRESH_COOKIE_OPTIONS: CookieOptions = {
@@ -90,6 +90,8 @@ export class AuthService {
     reCaptchaConfigured?: boolean,
     mfaCode?: boolean,
     shouldReCaptchaBlockLogin?: boolean,
+    agreedToTermsOfService?: boolean,
+    ignoreTermsOfService?: boolean,
   ): Promise<SuccessDTO> {
     if (!user?.id) {
       throw new UnauthorizedException('no user found');
@@ -187,6 +189,22 @@ export class AuthService {
       }
     }
 
+    if (
+      !ignoreTermsOfService &&
+      !user.agreedToTermsOfService &&
+      !agreedToTermsOfService &&
+      !(
+        user.userRoles?.isAdmin ||
+        user.userRoles?.isJurisdictionalAdmin ||
+        user.userRoles?.isLimitedJurisdictionalAdmin ||
+        user.userRoles?.isPartner
+      )
+    ) {
+      throw new BadRequestException(
+        `User ${user.id} has not accepted the terms of service`,
+      );
+    }
+
     const accessToken = this.generateAccessToken(user);
     const newRefreshToken = this.generateAccessToken(user, true);
 
@@ -195,6 +213,8 @@ export class AuthService {
       data: {
         activeAccessToken: accessToken,
         activeRefreshToken: newRefreshToken,
+        agreedToTermsOfService:
+          agreedToTermsOfService ?? agreedToTermsOfService,
       },
       where: {
         id: user.id,
@@ -314,12 +334,28 @@ export class AuthService {
     res: Response,
   ): Promise<SuccessDTO> {
     const user = await this.prisma.userAccounts.findFirst({
+      include: { userRoles: true },
       where: { resetToken: dto.token },
     });
 
     if (!user) {
       throw new NotFoundException(
         `user resetToken: ${dto.token} was requested but not found`,
+      );
+    }
+
+    if (
+      !user.agreedToTermsOfService &&
+      !dto.agreedToTermsOfService &&
+      !(
+        user.userRoles?.isAdmin ||
+        user.userRoles?.isJurisdictionalAdmin ||
+        user.userRoles?.isLimitedJurisdictionalAdmin ||
+        user.userRoles?.isPartner
+      )
+    ) {
+      throw new BadRequestException(
+        `User ${user.id} has not accepted the terms of service`,
       );
     }
 
@@ -344,7 +380,16 @@ export class AuthService {
       },
     });
 
-    return await this.setCredentials(res, mapTo(User, user));
+    return await this.setCredentials(
+      res,
+      mapTo(User, user),
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      dto.agreedToTermsOfService,
+    );
   }
 
   /*
@@ -382,7 +427,17 @@ export class AuthService {
       },
     });
 
-    return await this.setCredentials(res, mapTo(User, user));
+    return await this.setCredentials(
+      res,
+      mapTo(User, user),
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      true,
+    );
   }
 
   /*
@@ -391,6 +446,7 @@ export class AuthService {
   async confirmAndSetCredentials(
     user: User,
     res: Response,
+    agreedToTermsOfService?: boolean,
   ): Promise<SuccessDTO> {
     if (!user.confirmedAt) {
       const data: Prisma.UserAccountsUpdateInput = {
@@ -406,6 +462,15 @@ export class AuthService {
       });
     }
 
-    return await this.setCredentials(res, user);
+    return await this.setCredentials(
+      res,
+      user,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      agreedToTermsOfService,
+    );
   }
 }

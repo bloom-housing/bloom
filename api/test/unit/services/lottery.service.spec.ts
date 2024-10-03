@@ -94,7 +94,7 @@ describe('Testing lottery service', () => {
       emails: ['admin@email.com', 'partner@email.com'],
     });
 
-    jest.spyOn(listingService, 'getPublicUserEmailInfo').mockResolvedValueOnce({
+    jest.spyOn(service, 'getPublicUserEmailInfo').mockResolvedValueOnce({
       en: ['applicant@email.com'],
     });
   });
@@ -219,6 +219,7 @@ describe('Testing lottery service', () => {
         {
           id: randomUUID(),
           text: 'example text',
+          options: [],
         } as unknown as MultiselectQuestion,
       ];
       for (let i = 0; i < 10; i++) {
@@ -229,6 +230,7 @@ describe('Testing lottery service', () => {
             {
               key: 'example text',
               claimed: i % 2 === 0,
+              options: [{ key: 'example option', checked: i % 2 === 0 }],
             },
           ],
         } as unknown as Application);
@@ -275,6 +277,68 @@ describe('Testing lottery service', () => {
 
       expect(prisma.applicationLotteryPositions.createMany).toBeCalledTimes(2);
       expect(prisma.applicationLotteryTotal.create).toBeCalledTimes(2);
+    });
+
+    it('should not store preference ordinal if opted out', async () => {
+      const listingId = randomUUID();
+      const applications: Application[] = [];
+      const preferences: MultiselectQuestion[] = [
+        {
+          id: randomUUID(),
+          text: 'example text',
+          optOutText: 'opt out text',
+          options: [{ key: 'example option' }],
+        } as unknown as MultiselectQuestion,
+      ];
+      applications.push({
+        id: randomUUID(),
+        markedAsDuplicate: false,
+        preferences: [
+          {
+            key: 'example text',
+            claimed: true,
+            options: [
+              {
+                key: 'example option',
+                checked: false,
+              },
+              {
+                key: 'opt out text',
+                checked: true,
+              },
+            ],
+          },
+        ],
+      } as unknown as Application);
+
+      prisma.applicationLotteryPositions.createMany = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
+      prisma.applicationLotteryTotal.create = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
+      await service.lotteryRandomizer(listingId, applications, preferences);
+
+      const args = (prisma.applicationLotteryPositions.createMany as any).mock
+        .calls[0][0].data;
+
+      expect(args[0]).toEqual({
+        listingId,
+        applicationId: expect.anything(),
+        ordinal: 1,
+        multiselectQuestionId: null,
+      });
+
+      const argsWithPreference = (
+        prisma.applicationLotteryPositions.createMany as any
+      ).mock.calls[1];
+
+      expect(argsWithPreference).toBeUndefined();
+
+      expect(prisma.applicationLotteryPositions.createMany).toBeCalledTimes(1);
+      expect(prisma.applicationLotteryTotal.create).toBeCalledTimes(1);
     });
   });
 
@@ -625,11 +689,9 @@ describe('Testing lottery service', () => {
         emails: ['admin@email.com', 'partner@email.com'],
       });
 
-      jest
-        .spyOn(listingService, 'getPublicUserEmailInfo')
-        .mockResolvedValueOnce({
-          en: ['applicant@email.com'],
-        });
+      jest.spyOn(service, 'getPublicUserEmailInfo').mockResolvedValueOnce({
+        en: ['applicant@email.com'],
+      });
 
       await service.lotteryStatus(
         {
@@ -681,11 +743,9 @@ describe('Testing lottery service', () => {
       jest.spyOn(listingService, 'getUserEmailInfo').mockResolvedValueOnce({
         emails: ['admin@email.com', 'partner@email.com'],
       });
-      jest
-        .spyOn(listingService, 'getPublicUserEmailInfo')
-        .mockResolvedValueOnce({
-          en: ['applicant@email.com'],
-        });
+      jest.spyOn(service, 'getPublicUserEmailInfo').mockResolvedValueOnce({
+        en: ['applicant@email.com'],
+      });
 
       await expect(
         async () =>
@@ -726,11 +786,9 @@ describe('Testing lottery service', () => {
       jest.spyOn(listingService, 'getUserEmailInfo').mockResolvedValueOnce({
         emails: ['admin@email.com', 'partner@email.com'],
       });
-      jest
-        .spyOn(listingService, 'getPublicUserEmailInfo')
-        .mockResolvedValueOnce({
-          en: ['applicant@email.com'],
-        });
+      jest.spyOn(service, 'getPublicUserEmailInfo').mockResolvedValueOnce({
+        en: ['applicant@email.com'],
+      });
 
       await service.lotteryStatus(
         {
@@ -838,11 +896,9 @@ describe('Testing lottery service', () => {
         lotteryStatus: LotteryStatusEnum.ran,
       });
       prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
-      jest
-        .spyOn(listingService, 'getPublicUserEmailInfo')
-        .mockResolvedValueOnce({
-          en: ['applicant@email.com'],
-        });
+      jest.spyOn(service, 'getPublicUserEmailInfo').mockResolvedValueOnce({
+        en: ['applicant@email.com'],
+      });
 
       jest.spyOn(listingService, 'getUserEmailInfo').mockResolvedValueOnce({
         emails: ['admin@email.com', 'partner@email.com'],
@@ -1067,6 +1123,8 @@ describe('Testing lottery service', () => {
       },
     } as User;
 
+    const openedDate = new Date();
+    openedDate.setDate(openedDate.getDate() - 11);
     const closedDate = new Date();
     closedDate.setDate(closedDate.getDate() - 10);
     const ranDate = new Date();
@@ -1086,8 +1144,24 @@ describe('Testing lottery service', () => {
       canOrThrowMock.mockResolvedValue(true);
       prisma.activityLog.findMany = jest.fn().mockResolvedValue([
         {
+          metadata: { status: 'active' },
+          updatedAt: openedDate,
+          userAccounts: {
+            firstName: 'Abc',
+            lastName: 'Def',
+          },
+        },
+        {
           metadata: { status: 'closed' },
           updatedAt: closedDate,
+          userAccounts: {
+            firstName: 'Abc',
+            lastName: 'Def',
+          },
+        },
+        {
+          metadata: { status: 'closed' },
+          updatedAt: ranDate,
           userAccounts: {
             firstName: 'Abc',
             lastName: 'Def',

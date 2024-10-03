@@ -82,7 +82,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
       Number(process.env.lotteryDaysTillExpiry),
       "day"
     )
-    formattedExpiryDate = expiryDate.format("MMMM D, YYYY")
+    formattedExpiryDate = expiryDate.format("MM/DD/YYYY")
   }
 
   const eventMap = {

@@ -1,4 +1,5 @@
 import React from "react"
+import Markdown from "markdown-to-jsx"
 import { t, Heading } from "@bloom-housing/ui-components"
 import { CardProps, Card, DoorwayCollapsibleSection } from "@bloom-housing/doorway-ui-components"
 
@@ -73,21 +74,32 @@ export function getStartedLinkableCards(): React.ReactElement<CardProps>[] {
                 <span className="text__medium-weighted">{t("t.seeDetails")}</span>.
                 {t("help.getStarted.applyLotteryWaitlistResp2a")}
               </li>
-              <li>{t("help.getStarted.applyLotteryWaitlistResp3")}</li>
-              <ul className="text__medium-normal list-disc ml-5 mb-0">
-                <li>{t("help.getStarted.applyLotteryWaitlistResp3a")}</li>
-                <li>{t("help.getStarted.applyLotteryWaitlistResp3b")}</li>
-                <li>{t("help.getStarted.applyLotteryWaitlistResp3c")}</li>
-                <li>{t("help.getStarted.applyLotteryWaitlistResp3d")}</li>
-              </ul>
+              <li>
+                {t("help.getStarted.applyLotteryWaitlistResp3")}
+                <ul className="text__medium-normal list-disc ml-5 mb-0">
+                  <li>{t("help.getStarted.applyLotteryWaitlistResp3a")}</li>
+                  <li>{t("help.getStarted.applyLotteryWaitlistResp3b")}</li>
+                  <li>{t("help.getStarted.applyLotteryWaitlistResp3c")}</li>
+                  <li>{t("help.getStarted.applyLotteryWaitlistResp3d")}</li>
+                </ul>
+              </li>
               <li>{t("help.getStarted.applyLotteryWaitlistResp4")}</li>
               <li>{t("help.getStarted.applyLotteryWaitlistResp5")}</li>
-              <li>{t("help.getStarted.applyLotteryWaitlistResp6")}</li>
-              <ul className="text__medium-normal list-disc ml-5 mb-0">
-                <li>{t("help.getStarted.applyLotteryWaitlistResp6a")}</li>
-                <li>{t("help.getStarted.applyLotteryWaitlistResp6b")}</li>
-                <li>{t("help.getStarted.applyLotteryWaitlistResp6c")}</li>
-              </ul>
+              <Markdown
+                options={{
+                  overrides: {
+                    ul: {
+                      component: ({ children, ...props }) => (
+                        <ul {...props} className="list-disc ml-5">
+                          {children}
+                        </ul>
+                      ),
+                    },
+                  },
+                }}
+              >
+                {t("help.getStarted.applyLotteryWaitlistResp6")}
+              </Markdown>
               <li>{t("help.getStarted.applyLotteryWaitlistResp7")}</li>
             </ol>
           </span>

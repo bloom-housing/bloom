@@ -3,7 +3,6 @@ import { randomUUID } from 'crypto';
 import { sign } from 'jsonwebtoken';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
-import { MailService } from '@sendgrid/mail';
 import { RecaptchaEnterpriseServiceClient } from '@google-cloud/recaptcha-enterprise';
 import {
   ACCESS_TOKEN_AVAILABLE_NAME,
@@ -153,7 +152,7 @@ describe('Testing auth service', () => {
           id: randomUUID(),
         } as Jurisdiction,
       ],
-      agreedToTermsOfService: false,
+      agreedToTermsOfService: true,
       id,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -209,7 +208,7 @@ describe('Testing auth service', () => {
             id: randomUUID(),
           } as Jurisdiction,
         ],
-        agreedToTermsOfService: false,
+        agreedToTermsOfService: true,
         id,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -221,6 +220,77 @@ describe('Testing auth service', () => {
       data: {
         activeAccessToken: expect.anything(),
         activeRefreshToken: expect.anything(),
+      },
+      where: {
+        id,
+      },
+    });
+
+    expect(prisma.userAccounts.count).toHaveBeenCalledWith({
+      where: {
+        id,
+        activeRefreshToken: 'refreshToken',
+      },
+    });
+
+    expect(response.cookie).toHaveBeenCalledWith(
+      TOKEN_COOKIE_NAME,
+      expect.anything(),
+      AUTH_COOKIE_OPTIONS,
+    );
+
+    expect(response.cookie).toHaveBeenCalledWith(
+      REFRESH_COOKIE_NAME,
+      expect.anything(),
+      REFRESH_COOKIE_OPTIONS,
+    );
+
+    expect(response.cookie).toHaveBeenCalledWith(
+      ACCESS_TOKEN_AVAILABLE_NAME,
+      'True',
+      ACCESS_TOKEN_AVAILABLE_OPTIONS,
+    );
+  });
+
+  it('should set credentials with incoming agreedToTermsOfService is true and user has not previously agreed to terms of service', async () => {
+    const id = randomUUID();
+    const response = {
+      cookie: jest.fn(),
+    };
+    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+    prisma.userAccounts.count = jest.fn().mockResolvedValue(1);
+
+    await authService.setCredentials(
+      response as unknown as Response,
+      {
+        passwordUpdatedAt: new Date(),
+        passwordValidForDays: 100,
+        email: 'example@exygy.com',
+        firstName: 'Exygy',
+        lastName: 'User',
+        jurisdictions: [
+          {
+            id: randomUUID(),
+          } as Jurisdiction,
+        ],
+        agreedToTermsOfService: true,
+        id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      'refreshToken',
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      true,
+    );
+
+    expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+      data: {
+        activeAccessToken: expect.anything(),
+        activeRefreshToken: expect.anything(),
+        agreedToTermsOfService: true,
       },
       where: {
         id,
@@ -277,7 +347,7 @@ describe('Testing auth service', () => {
                 id: randomUUID(),
               } as Jurisdiction,
             ],
-            agreedToTermsOfService: false,
+            agreedToTermsOfService: true,
             id,
             createdAt: new Date(),
             updatedAt: new Date(),
@@ -321,7 +391,7 @@ describe('Testing auth service', () => {
     );
   });
 
-  it('should error when trying to set credentials,but user id not passed in', async () => {
+  it('should error when trying to set credentials, but user id not passed in', async () => {
     const id = randomUUID();
     const response = {
       cookie: jest.fn(),
@@ -345,7 +415,7 @@ describe('Testing auth service', () => {
                 id: randomUUID(),
               } as Jurisdiction,
             ],
-            agreedToTermsOfService: false,
+            agreedToTermsOfService: true,
             id: null,
             createdAt: new Date(),
             updatedAt: new Date(),
@@ -415,7 +485,7 @@ describe('Testing auth service', () => {
                 id: randomUUID(),
               } as Jurisdiction,
             ],
-            agreedToTermsOfService: false,
+            agreedToTermsOfService: true,
             id,
             createdAt: new Date(),
             updatedAt: new Date(),
@@ -486,7 +556,7 @@ describe('Testing auth service', () => {
                 id: randomUUID(),
               } as Jurisdiction,
             ],
-            agreedToTermsOfService: false,
+            agreedToTermsOfService: true,
             id,
             createdAt: new Date(),
             updatedAt: new Date(),
@@ -504,6 +574,44 @@ describe('Testing auth service', () => {
     expect(prisma.userAccounts.update).not.toHaveBeenCalled();
 
     expect(prisma.userAccounts.count).not.toHaveBeenCalled();
+
+    expect(response.clearCookie).not.toHaveBeenCalled();
+  });
+
+  it('should error when trying to set credentials and user has not agreed to terms of service', async () => {
+    const id = randomUUID();
+    const response = {
+      cookie: jest.fn(),
+      clearCookie: jest.fn(),
+    };
+    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+    prisma.userAccounts.count = jest.fn().mockResolvedValue(1);
+
+    await expect(
+      async () =>
+        await authService.setCredentials(
+          response as unknown as Response,
+          {
+            passwordUpdatedAt: new Date(),
+            passwordValidForDays: 100,
+            email: 'example@exygy.com',
+            firstName: 'Exygy',
+            lastName: 'User',
+            jurisdictions: [
+              {
+                id: randomUUID(),
+              } as Jurisdiction,
+            ],
+            agreedToTermsOfService: false,
+            id,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+          'refreshToken',
+        ),
+    ).rejects.toThrowError(`User ${id} has not accepted the terms of service`);
+
+    expect(prisma.userAccounts.update).not.toHaveBeenCalled();
 
     expect(response.clearCookie).not.toHaveBeenCalled();
   });
@@ -555,7 +663,7 @@ describe('Testing auth service', () => {
             id: randomUUID(),
           } as Jurisdiction,
         ],
-        agreedToTermsOfService: false,
+        agreedToTermsOfService: true,
         id,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -603,7 +711,7 @@ describe('Testing auth service', () => {
     );
   });
 
-  it('should error when trying to clear credentials,but user id not passed in', async () => {
+  it('should error when trying to clear credentials, but user id not passed in', async () => {
     const id = randomUUID();
     const response = {
       cookie: jest.fn(),
@@ -624,7 +732,7 @@ describe('Testing auth service', () => {
               id: randomUUID(),
             } as Jurisdiction,
           ],
-          agreedToTermsOfService: false,
+          agreedToTermsOfService: true,
           id: null,
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -659,7 +767,7 @@ describe('Testing auth service', () => {
           id: randomUUID(),
         } as Jurisdiction,
       ],
-      agreedToTermsOfService: false,
+      agreedToTermsOfService: true,
       id,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -832,7 +940,9 @@ describe('Testing auth service', () => {
       cookie: jest.fn(),
     };
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
-    prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({ id });
+    prisma.userAccounts.findFirst = jest
+      .fn()
+      .mockResolvedValue({ id, agreedToTermsOfService: true });
 
     await authService.updatePassword(
       {
@@ -844,6 +954,9 @@ describe('Testing auth service', () => {
     );
 
     expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
+      include: {
+        userRoles: true,
+      },
       where: {
         resetToken: token,
       },
@@ -901,9 +1014,11 @@ describe('Testing auth service', () => {
       cookie: jest.fn(),
     };
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id: secondId });
-    prisma.userAccounts.findFirst = jest
-      .fn()
-      .mockResolvedValue({ id: secondId, resetToken: secondToken });
+    prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
+      id: secondId,
+      resetToken: secondToken,
+      agreedToTermsOfService: true,
+    });
 
     await expect(
       async () =>

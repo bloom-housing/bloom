@@ -86,6 +86,12 @@ export class SingleUseCodeStrategy extends PassportStrategy(
       );
     }
 
+    if (!rawUser.agreedToTermsOfService && !dto.agreedToTermsOfService) {
+      throw new BadRequestException(
+        `User ${rawUser.id} has not accepted the terms of service`,
+      );
+    }
+
     isUserLockedOut(
       rawUser.lastLoginAt,
       rawUser.failedLoginAttemptsCount,

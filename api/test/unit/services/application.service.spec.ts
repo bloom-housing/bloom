@@ -727,6 +727,11 @@ describe('Testing application service', () => {
       userId: true,
       confirmationCode: true,
       updatedAt: true,
+      applicationLotteryPositions: {
+        select: {
+          id: true,
+        },
+      },
       listings: {
         select: {
           id: true,
@@ -1446,7 +1451,7 @@ describe('Testing application service', () => {
     expect(canOrThrowMock).not.toHaveBeenCalled();
   });
 
-  it('should create an application from public site', async () => {
+  it('should create an application from public site with applicant work information defined', async () => {
     prisma.listings.findUnique = jest.fn().mockResolvedValue({
       id: randomUUID(),
       applicationDueDate: dayjs(new Date()).add(5, 'days').toDate(),
@@ -1612,6 +1617,224 @@ describe('Testing application service', () => {
                   ...exampleAddress,
                 },
               },
+            },
+          ],
+        },
+        programs: [
+          {
+            key: 'example key',
+            claimed: true,
+            options: [
+              {
+                key: 'example key',
+                checked: true,
+                extraData: [
+                  {
+                    type: InputType.boolean,
+                    key: 'example key',
+                    value: true,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        preferences: [
+          {
+            key: 'example key',
+            claimed: true,
+            options: [
+              {
+                key: 'example key',
+                checked: true,
+                extraData: [
+                  {
+                    type: InputType.boolean,
+                    key: 'example key',
+                    value: true,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        userAccounts: {
+          connect: {
+            id: 'requestingUser id',
+          },
+        },
+      },
+    });
+
+    expect(canOrThrowMock).not.toHaveBeenCalled();
+  });
+
+  it('should create an application from public site with applicant work information null/undefined', async () => {
+    prisma.listings.findUnique = jest.fn().mockResolvedValue({
+      id: randomUUID(),
+      applicationDueDate: dayjs(new Date()).add(5, 'days').toDate(),
+      digitalApplication: true,
+      commonDigitalApplication: true,
+    });
+
+    prisma.applications.create = jest.fn().mockResolvedValue({
+      id: randomUUID(),
+    });
+
+    const exampleAddress = addressFactory() as AddressCreate;
+    const dto = mockCreateApplicationData(exampleAddress, new Date());
+
+    //remove workInRegion and workAddress information
+    dto.applicant.workInRegion = null;
+    dto.applicant.applicantWorkAddress = undefined;
+    dto.householdMember.forEach((member) => {
+      member.workInRegion = null;
+      member.householdMemberWorkAddress = undefined;
+    });
+
+    prisma.jurisdictions.findFirst = jest
+      .fn()
+      .mockResolvedValue({ id: randomUUID() });
+
+    await service.create(dto, true, {
+      id: 'requestingUser id',
+      userRoles: { isAdmin: true },
+    } as unknown as User);
+
+    expect(prisma.listings.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: expect.anything(),
+      },
+      include: {
+        jurisdictions: true,
+        listingsBuildingAddress: true,
+        listingMultiselectQuestions: {
+          include: {
+            multiselectQuestions: true,
+          },
+        },
+      },
+    });
+
+    expect(prisma.applications.create).toHaveBeenCalledWith({
+      include: { ...detailView },
+      data: {
+        contactPreferences: ['example contact preference'],
+        status: ApplicationStatusEnum.submitted,
+        submissionType: ApplicationSubmissionTypeEnum.electronical,
+        appUrl: 'http://www.example.com',
+        additionalPhone: true,
+        additionalPhoneNumber: '111-111-1111',
+        additionalPhoneNumberType: 'example additional phone number type',
+        householdSize: 2,
+        housingStatus: 'example housing status',
+        sendMailToMailingAddress: true,
+        householdExpectingChanges: false,
+        householdStudent: false,
+        incomeVouchers: [],
+        income: '36000',
+        incomePeriod: IncomePeriodEnum.perYear,
+        language: LanguagesEnum.en,
+        acceptedTerms: true,
+        // Submission date is the moment it was created
+        submissionDate: expect.any(Date),
+        reviewStatus: ApplicationReviewStatusEnum.valid,
+        confirmationCode: expect.anything(),
+        applicant: {
+          create: {
+            firstName: 'applicant first name',
+            middleName: 'applicant middle name',
+            lastName: 'applicant last name',
+            birthMonth: 12,
+            birthDay: 17,
+            birthYear: 1993,
+            emailAddress: 'example@email.com',
+            noEmail: false,
+            phoneNumber: '111-111-1111',
+            phoneNumberType: 'Cell',
+            noPhone: false,
+            workInRegion: null,
+            applicantAddress: {
+              create: {
+                ...exampleAddress,
+              },
+            },
+            applicantWorkAddress: undefined,
+          },
+        },
+        accessibility: {
+          create: {
+            mobility: false,
+            vision: false,
+            hearing: false,
+          },
+        },
+        alternateContact: {
+          create: {
+            type: AlternateContactRelationship.other,
+            otherType: 'example other type',
+            firstName: 'example first name',
+            lastName: 'example last name',
+            agency: 'example agency',
+            phoneNumber: '111-111-1111',
+            emailAddress: 'example@email.com',
+            address: {
+              create: {
+                ...exampleAddress,
+              },
+            },
+          },
+        },
+        applicationsAlternateAddress: {
+          create: {
+            ...exampleAddress,
+          },
+        },
+        applicationsMailingAddress: {
+          create: {
+            ...exampleAddress,
+          },
+        },
+        listings: {
+          connect: {
+            id: dto.listings.id,
+          },
+        },
+        demographics: {
+          create: {
+            gender: 'example gender',
+            sexualOrientation: 'example sexual orientation',
+            howDidYouHear: ['example how did you hear'],
+            race: ['example race'],
+            spokenLanguage: 'example language',
+          },
+        },
+        preferredUnitTypes: {
+          connect: [
+            {
+              id: expect.anything(),
+            },
+          ],
+        },
+        householdMember: {
+          create: [
+            {
+              orderId: 0,
+              firstName: 'example first name',
+              middleName: 'example middle name',
+              lastName: 'example last name',
+              birthMonth: 12,
+              birthDay: 17,
+              birthYear: 1993,
+              sameAddress: YesNoEnum.yes,
+              relationship: HouseholdMemberRelationship.other,
+              workInRegion: null,
+              householdMemberAddress: {
+                create: {
+                  ...exampleAddress,
+                },
+              },
+              householdMemberWorkAddress: undefined,
             },
           ],
         },
