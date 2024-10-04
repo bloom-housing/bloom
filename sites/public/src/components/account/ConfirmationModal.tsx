@@ -1,6 +1,6 @@
 import { t, Form, Field } from "@bloom-housing/ui-components"
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
-import { AuthContext, MessageContext, emailRegex } from "@bloom-housing/shared-helpers"
+import { AuthContext, useToastyRef, emailRegex } from "@bloom-housing/shared-helpers"
 import { useRouter } from "next/router"
 import React, { useContext, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -10,7 +10,7 @@ export interface ConfirmationModalProps {}
 
 const ConfirmationModal = () => {
   const { resendConfirmation, profile, confirmAccount } = useContext(AuthContext)
-  const { addToast } = useContext(MessageContext)
+  const toastyRef = useToastyRef()
   const [openModal, setOpenModal] = useState(false)
   const router = useRouter()
 
@@ -23,6 +23,8 @@ const ConfirmationModal = () => {
   email.current = watch("email", "")
 
   const onSubmit = async (email) => {
+    const { addToast } = toastyRef.current
+
     try {
       const listingId = router.query?.listingId as string
       await resendConfirmation(email, listingId)
@@ -42,6 +44,7 @@ const ConfirmationModal = () => {
   }
 
   useEffect(() => {
+    const { addToast } = toastyRef.current
     const redirectUrl = "/applications/start/choose-language"
     const listingId = router.query?.listingId as string
 
@@ -72,9 +75,7 @@ const ConfirmationModal = () => {
           }
         })
     }
-    // This ensures useEffect is called only once
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router, profile])
+  }, [router, profile, toastyRef])
 
   return (
     <Dialog

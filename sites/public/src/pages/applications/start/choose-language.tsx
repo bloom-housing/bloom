@@ -8,7 +8,7 @@ import {
   PageView,
   pushGtmEvent,
   AuthContext,
-  MessageContext,
+  useToastyRef,
   CustomIconMap,
 } from "@bloom-housing/shared-helpers"
 import {
@@ -55,7 +55,7 @@ const ApplicationChooseLanguage = () => {
   const [listing, setListing] = useState(null)
   const context = useContext(AppSubmissionContext)
   const { initialStateLoaded, profile, listingsService } = useContext(AuthContext)
-  const { addToast } = useContext(MessageContext)
+  const toastyRef = useToastyRef()
   const { conductor } = context
 
   const listingId = router.query.listingId
@@ -98,6 +98,8 @@ const ApplicationChooseLanguage = () => {
   ])
 
   useEffect(() => {
+    const { addToast } = toastyRef.current
+
     if (listing && router.isReady) {
       const currentDate = dayjs()
       if (
@@ -105,11 +107,11 @@ const ApplicationChooseLanguage = () => {
         (!isPreview && listing?.status !== ListingsStatusEnum.active) ||
         (listing?.applicationDueDate && currentDate > dayjs(listing.applicationDueDate))
       ) {
-        // addToast(t("listings.applicationsClosedRedirect"), { variant: "alert" })
+        addToast(t("listings.applicationsClosedRedirect"), { variant: "alert" })
         void router.push(`/${router.locale}/listing/${listing?.id}/${listing?.urlSlug}`)
       }
     }
-  }, [isPreview, listing, router, addToast])
+  }, [isPreview, listing, router, toastyRef])
 
   const imageUrl = listing?.assets
     ? imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
