@@ -165,7 +165,7 @@ const ApplicationChooseLanguage = () => {
                   key={index}
                   id={"app-choose-language-button"}
                 >
-                  {t(`applications.begin.${lang}`)}
+                  {t(`languages.${lang}`)}
                 </Button>
               ))}
             </>

@@ -724,6 +724,11 @@ describe('Testing application service', () => {
       userId: true,
       confirmationCode: true,
       updatedAt: true,
+      applicationLotteryPositions: {
+        select: {
+          id: true,
+        },
+      },
       listings: {
         select: {
           id: true,

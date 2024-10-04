@@ -12,10 +12,15 @@ export type NetworkStatusType = AlertTypes
 
 export type NetworkStatusError = AxiosError
 
+type CatchNetworkError = {
+  failureCountRemaining?: number
+  message?: string
+}
+
 export type NetworkStatusContent = {
   title: string
   description: string
-  error?: AxiosError
+  error?: AxiosError<CatchNetworkError>
 } | null
 
 export type NetworkErrorDetermineError = (
@@ -38,7 +43,7 @@ export enum NetworkErrorMessage {
 export const useCatchNetworkError = () => {
   const [networkError, setNetworkError] = useState<NetworkStatusContent>(null)
 
-  const check401Error = (message: string, error: AxiosError) => {
+  const check401Error = (message: string, error: AxiosError<CatchNetworkError>) => {
     if (message?.includes(NetworkErrorMessage.PasswordOutdated)) {
       setNetworkError({
         title: t("authentication.signIn.passwordOutdated"),
@@ -74,9 +79,11 @@ export const useCatchNetworkError = () => {
     }
   }
 
-  const determineNetworkError: NetworkErrorDetermineError = (status, error) => {
-    const responseMessage = axios.isAxiosError(error) ? error.response?.data.message : ""
-
+  const determineNetworkError: NetworkErrorDetermineError = (
+    status,
+    error: AxiosError<CatchNetworkError>
+  ) => {
+    const responseMessage = axios.isAxiosError(error) ? error.response?.data.message || "" : ""
     switch (status) {
       case 401:
         check401Error(responseMessage, error)
