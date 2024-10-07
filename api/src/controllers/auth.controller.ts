@@ -30,11 +30,13 @@ import { Login } from '../dtos/auth/login.dto';
 import { mapTo } from '../utilities/mapTo';
 import { User } from '../dtos/users/user.dto';
 import { LoginViaSingleUseCode } from '../dtos/auth/login-single-use-code.dto';
+import { ApiKeyGuard } from '../guards/api-key.guard';
 import { SingleUseCodeAuthGuard } from '../guards/single-use-code.guard';
 
 @Controller('auth')
 @ApiTags('auth')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+@UseGuards(ApiKeyGuard)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 

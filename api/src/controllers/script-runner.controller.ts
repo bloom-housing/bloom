@@ -17,11 +17,12 @@ import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction
 import { DataTransferDTO } from '../dtos/script-runner/data-transfer.dto';
 import { BulkApplicationResendDTO } from '../dtos/script-runner/bulk-application-resend.dto';
 import { AmiChartImportDTO } from '../dtos/script-runner/ami-chart-import.dto';
+import { ApiKeyGuard } from '../guards/api-key.guard';
 
 @Controller('scriptRunner')
 @ApiTags('scriptRunner')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
-@UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
+@UseGuards(ApiKeyGuard, OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
 export class ScirptRunnerController {
   constructor(private readonly scriptRunnerService: ScriptRunnerService) {}
 
