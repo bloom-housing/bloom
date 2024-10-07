@@ -6,6 +6,7 @@ try {
   // Pass
 }
 import { NestFactory, HttpAdapterHost } from '@nestjs/core';
+import { Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import cookieParser from 'cookie-parser';
@@ -36,7 +37,8 @@ async function bootstrap() {
   });
 
   const { httpAdapter } = app.get(HttpAdapterHost);
-  app.useGlobalFilters(new CustomExceptionFilter(httpAdapter));
+  const logger: Logger = app.get(Logger);
+  app.useGlobalFilters(new CustomExceptionFilter(httpAdapter, logger));
   app.enableCors((req, cb) => {
     const options = {
       credentials: true,
