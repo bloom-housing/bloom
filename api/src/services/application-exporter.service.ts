@@ -241,12 +241,13 @@ export class ApplicationExporterService {
                         // curr should equal the preference id we're pulling from
                         if (!programs) {
                           programs =
-                            app.programs as unknown as ApplicationMultiselectQuestion[];
+                            (app.programs as unknown as ApplicationMultiselectQuestion[]) ||
+                            [];
                         }
                         parsePreference = false;
                         // there aren't typically many programs, but if there, then a object map should be created and used
                         const program = programs.find(
-                          (preference) => preference.key === curr,
+                          (prog) => prog.key === curr,
                         );
                         multiselectQuestionValue = true;
                         return program;
