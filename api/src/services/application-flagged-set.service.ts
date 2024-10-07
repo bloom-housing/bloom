@@ -513,7 +513,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
             OR: [
               // Only run this job on listings that were closed after the DUPLICATES_CLOSE_DATE
               { closedAt: { gte: duplicatesCloseDate.toDate() } },
-              { closedAt: null },
+              { status: { not: 'closed' } },
             ],
           },
           // Allow the ability to force process even if application flag set has run more recent than last application update
@@ -778,10 +778,6 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
         id: listingId,
         // If DUPLICATES_CLOSE_DATE is in the past only run this job on closed listings
         // from before DUPLICATES_CLOSE_DATE
-        closedAt:
-          duplicatesCloseDate && duplicatesCloseDate < dayjs(new Date())
-            ? { lte: duplicatesCloseDate.toDate() }
-            : undefined,
         AND: [
           {
             OR: [
@@ -797,6 +793,14 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
               },
             ],
           },
+          duplicatesCloseDate && duplicatesCloseDate < dayjs(new Date())
+            ? {
+                AND: [
+                  { closedAt: { lte: duplicatesCloseDate.toDate() } },
+                  { status: { not: 'active' } },
+                ],
+              }
+            : undefined,
         ],
       },
     });
