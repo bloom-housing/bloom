@@ -9,9 +9,9 @@ import { AbstractHttpAdapter, BaseExceptionFilter } from '@nestjs/core';
 @Catch()
 export class CustomExceptionFilter extends BaseExceptionFilter {
   logger: Logger;
-  constructor(httpAdapter: AbstractHttpAdapter) {
+  constructor(httpAdapter: AbstractHttpAdapter, logger: Logger) {
     super(httpAdapter);
-    this.logger = new Logger('Exception Filter');
+    this.logger = logger;
   }
   catch(exception: any, host: ArgumentsHost) {
     this.logger.error({
