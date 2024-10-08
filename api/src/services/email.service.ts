@@ -321,7 +321,7 @@ export class EmailService {
     await this.send(
       user.email,
       emailFromAddress,
-      'Partners Portal account access token',
+      `${singleUseCode} is your secure Partners Portal account access token`,
       this.template('mfa-code')({
         user: user,
         mfaCodeOptions: { singleUseCode },
@@ -340,8 +340,8 @@ export class EmailService {
       user.email,
       emailFromAddress,
       user.confirmedAt
-        ? `Code for your ${jurisdiction.name} sign-in`
-        : `${jurisdiction.name} verification code`,
+        ? `${singleUseCode} is your secure ${jurisdiction.name} sign-in code`
+        : `${singleUseCode} is your secure ${jurisdiction.name} verification code`,
       this.template('single-use-code')({
         user: user,
         singleUseCodeOptions: {

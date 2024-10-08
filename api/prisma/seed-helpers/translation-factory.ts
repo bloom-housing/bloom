@@ -151,7 +151,7 @@ const translations = (jurisdictionName?: string, language?: LanguagesEnum) => {
       singleUseCodeEmail: {
         greeting: 'Hi',
         message:
-          'Use the following code to sign in to your %{jurisdictionName} account. This code will be valid for 5 minutes. Never share this code.',
+          'Use the following code to sign in to your %{jurisdictionName} account. This code will be valid for 10 minutes. Never share this code.',
         singleUseCode: '%{singleUseCode}',
       },
       scriptRunner: {
