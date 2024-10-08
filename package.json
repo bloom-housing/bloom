@@ -82,7 +82,7 @@
     "wait-on": "^5.2.0"
   },
   "resolutions": {
-    "minimist": "^1.2.8"
+    "commitizen": "^4.3.1"
   },
   "prettier": {
     "singleQuote": false,
