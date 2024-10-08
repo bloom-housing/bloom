@@ -694,7 +694,7 @@ describe('Testing auth service', () => {
     );
   });
 
-  it('should request mfa code through email', async () => {
+  it('should send new mfa code through email when previous code is outdated', async () => {
     const id = randomUUID();
     emailService.sendMfaCode = jest.fn();
     prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
@@ -703,6 +703,10 @@ describe('Testing auth service', () => {
       passwordHash: await passwordToHash('Abcdef12345!'),
       email: 'example@exygy.com',
       phoneNumberVerified: false,
+      singleUseCode: '00000',
+      singleUseCodeUpdatedAt: new Date(
+        new Date().getTime() - Number(process.env.MFA_CODE_VALUE) * 2,
+      ),
     });
     prisma.userAccounts.update = jest.fn().mockResolvedValue({
       id,
@@ -726,7 +730,7 @@ describe('Testing auth service', () => {
     });
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({
       data: {
-        singleUseCode: expect.anything(),
+        singleUseCode: expect.not.stringMatching('00000'),
         singleUseCodeUpdatedAt: expect.anything(),
       },
       where: {
@@ -788,7 +792,7 @@ describe('Testing auth service', () => {
     });
   });
 
-  it('should request mfa code through sms', async () => {
+  it('should send new mfa code through sms when previous code is outdated', async () => {
     const id = randomUUID();
     prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
       id: id,
@@ -797,6 +801,10 @@ describe('Testing auth service', () => {
       email: 'example@exygy.com',
       phoneNumberVerified: false,
       phoneNumber: '520-781-8711',
+      singleUseCode: '00000',
+      singleUseCodeUpdatedAt: new Date(
+        new Date().getTime() - Number(process.env.MFA_CODE_VALUE) * 2,
+      ),
     });
     prisma.userAccounts.update = jest.fn().mockResolvedValue({
       id,
@@ -823,7 +831,7 @@ describe('Testing auth service', () => {
     });
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({
       data: {
-        singleUseCode: expect.anything(),
+        singleUseCode: expect.not.stringMatching('00000'),
         singleUseCodeUpdatedAt: expect.anything(),
         phoneNumber: '520-781-8711',
       },
