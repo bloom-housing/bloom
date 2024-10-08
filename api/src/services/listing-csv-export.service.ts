@@ -349,6 +349,16 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           formatLocalDate(val, this.dateFormat, this.timeZone),
       },
       {
+        path: 'copyOfId',
+        label: 'Copy or Original',
+        format: (val: string): string => (val ? 'Copy' : 'Original'),
+      },
+      {
+        path: 'copyOfId',
+        label: 'Copied From',
+        format: (val: string): string => val,
+      },
+      {
         path: 'developer',
         label: 'Developer',
       },
