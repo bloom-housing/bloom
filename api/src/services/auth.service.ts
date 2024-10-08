@@ -12,6 +12,7 @@ import { UpdatePassword } from '../dtos/auth/update-password.dto';
 import { MfaType } from '../enums/mfa/mfa-type-enum';
 import { UserViews } from '../enums/user/view-enum';
 import { isPasswordValid, passwordToHash } from '../utilities/password-helpers';
+import { singleUseCodeInvalid } from '../utilities/passport-validator-utilities';
 import { RequestMfaCodeResponse } from '../dtos/mfa/request-mfa-code-response.dto';
 import { RequestMfaCode } from '../dtos/mfa/request-mfa-code.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
@@ -277,9 +278,23 @@ export class AuthService {
       }
     }
 
-    const singleUseCode = generateSingleUseCode(
-      Number(process.env.MFA_CODE_LENGTH),
-    );
+    let singleUseCode = '';
+    // if the code is still valid, send the same code again otherwise generate a fresh code
+    if (
+      user.singleUseCode &&
+      !singleUseCodeInvalid(
+        user.singleUseCodeUpdatedAt,
+        Number(process.env.MFA_CODE_VALID),
+        user.singleUseCode,
+        user.singleUseCode,
+      )
+    ) {
+      singleUseCode = user.singleUseCode;
+    } else {
+      singleUseCode = generateSingleUseCode(
+        Number(process.env.MFA_CODE_LENGTH),
+      );
+    }
     await this.prisma.userAccounts.update({
       data: {
         singleUseCode,
