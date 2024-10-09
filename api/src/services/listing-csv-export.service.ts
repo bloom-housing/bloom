@@ -37,6 +37,11 @@ import { ListingMultiselectQuestion } from '../dtos/listings/listing-multiselect
 
 views.csv = {
   ...views.details,
+  copyOf: {
+    select: {
+      id: true,
+    },
+  },
   userAccounts: true,
 };
 
@@ -349,9 +354,9 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           formatLocalDate(val, this.dateFormat, this.timeZone),
       },
       {
-        path: 'copyOfId',
+        path: 'copyOf',
         label: 'Copy or Original',
-        format: (val: string): string => (val ? 'Copy' : 'Original'),
+        format: (val: Listing): string => (val ? 'Copy' : 'Original'),
       },
       {
         path: 'copyOfId',
