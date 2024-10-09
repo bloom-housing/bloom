@@ -98,30 +98,6 @@ yarn dev
 4. Follow the directions above to run Bloom locally.
    Bloom will now be consuming the published version of @bloom-housing/ui-components specified in package.json and no local ui-component changes will be reflected.
 
-### Bloom's UI-Component Development
-
-- Because Bloom's ui-components package is a separate open source repository, developing within both repos locally requires linking the folders with the following steps:
-
-### Directory Setup
-
-1. Clone both Bloom and the [ui-components repository](https://github.com/bloom-housing/ui-components) on the same directory level.
-
-### Symlinking UI-C
-
-1. In the Bloom directory, run `yarn link:uic`.
-2. Open the next.config.js file in the public and partner's directory.
-3. Uncomment the experimental property at the bottom of each file.
-4. Follow the directions above to run Bloom locally.
-   These steps allow for two development patterns. You can edit ui-components within the node_modules of Bloom and the changes will be reflected in your local version of ui-components. Alternatively, you can edit the local version of ui-components and the changes will be reflected in the node_modules in Bloom. Both patterns will display up-to-date changes on the local server.
-
-### Unlinking UI-C
-
-1. In the Bloom directory, run `yarn unlink:uic`.
-2. Open the next.config.js file in the public and partner's directory.
-3. Comment out the experimental property at the bottom of each file.
-4. Follow the directions above to run Bloom locally.
-   Bloom will now be consuming the published version of @bloom-housing/ui-components specified in package.json and no local ui-component changes will be reflected.
-
 ## Contributing
 
 Contributions to the core Bloom applications and services are welcomed. To help us meet the project's goals around quality and maintainability, we ask that all contributors read, understand, and agree to our guidelines.
@@ -130,13 +106,11 @@ Contributions to the core Bloom applications and services are welcomed. To help 
 
 Our development tasks are managed through GitHub issues and development in the vast majority of cases should be tied to an issue. Please feel free to submit issues even if you don't plan on implementing it yourself. Before creating an issue, check first to see if one already exists. When creating an issue, give it a descriptive title and include screenshots if relevant. Please don't start work on an issue without checking in with the Bloom team first as it may already be in development! You can tag us (@seanmalbert, @emilyjablonski, @yazeedloonat) to get started on an issue or ask any questions.
 
-### Committing, Versioning, and Releasing
+### Committing
 
-We are using [lerna](https://lerna.js.org/) as a monorepo management tool. It automatically versions, releases, and generates a changelog across our packages. In conjunction with lerna we are also using [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/), a specification for commit messages that helps lerna understand what level of change each commit is in order to automate our processes.
+We are also using [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/), a specification for commit messages that indicates what type and level of change each commit is.
 
-On commit, two steps automatically run: (1) linting and (2) a verification of the conventional commit standard. We recommend not running `git commit` and instead globally installing commitizen (`npm install -g commitizen`) and then committing with `git cz` which will run a commit message CLI. The CLI asks a series of questions about your changeset and builds the commit message for you in the conventional commit format. You can also `git commit` with your own message if you are confident it follows the conventional standard.
-
-In addition to commits needing to be formatted as conventional commits, if you are making different levels of version change across multiple packages, your commits must also be separated by package in order to avoid improperly versioning a package.
+On commit, two steps automatically run: (1) linting and (2) a verification of the conventional commit standard. You can either, instead of running `git commit`, globally install commitizen (`npm install -g commitizen`) and then commit with `git cz` which will run a commit message CLI. The CLI asks a series of questions about your changeset and builds the commit message for you in the conventional commit format. You can alternatively run `git commit` with your own message if you are confident it follows the conventional standard, and it will fail if it does not.
 
 On every merge to `main`, our Netlify and Heroku environment automatically deploys.
 

@@ -38,6 +38,7 @@
     "ag-grid-react": "^26.0.0",
     "axios": "^0.28.0",
     "axios-cookiejar-support": "4.0.6",
+    "clone-deep": "^4.0.1",
     "dayjs": "^1.10.7",
     "dotenv": "^8.2.0",
     "http-cookie-agent": "5.0.2",
