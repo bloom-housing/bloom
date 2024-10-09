@@ -37,8 +37,8 @@ async function bootstrap() {
   });
 
   const { httpAdapter } = app.get(HttpAdapterHost);
-  const logger: Logger = app.get(Logger);
-  app.useGlobalFilters(new CustomExceptionFilter(httpAdapter, logger));
+  const inUselogger: Logger = app.get(Logger);
+  app.useGlobalFilters(new CustomExceptionFilter(httpAdapter, inUselogger));
   app.enableCors((req, cb) => {
     const options = {
       credentials: true,
