@@ -19,18 +19,18 @@ phases:
       - export ECR_REPO="${ECR_HOST}/${ECR_NAMESPACE}"
 
       # Skip the test step as it is handle before merge. But re-add if you want more verification
-      # - docker build . -f build/docker/Dockerfile.backend --target test -t backend/core:test
-      # - docker run backend/core:test yarn test
-      - docker build . -f build/docker/Dockerfile.backend --target run -t backend/core:run-candidate
-      - docker build . -f build/docker/Dockerfile.backend --target migrate -t backend/core:migrate-candidate
+      # - docker build . -f build/docker/Dockerfile.backend --target test -t api:test
+      # - docker run api:test yarn test
+      - docker build . -f build/docker/Dockerfile.backend --target run -t api:run-candidate
+      - docker build . -f build/docker/Dockerfile.backend --target migrate -t api:migrate-candidate
 
       # Add hash and candidate tags to migration image
-      - docker tag backend/core:migrate-candidate "${ECR_REPO}/backend:migrate-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
-      - docker tag backend/core:migrate-candidate "${ECR_REPO}/backend:migrate-candidate"
+      - docker tag api:migrate-candidate "${ECR_REPO}/backend:migrate-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
+      - docker tag api:migrate-candidate "${ECR_REPO}/backend:migrate-candidate"
 
       # Add hash and candidate tags to run image
-      - docker tag backend/core:run-candidate "${ECR_REPO}/backend:run-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
-      - docker tag backend/core:run-candidate "${ECR_REPO}/backend:run-candidate"
+      - docker tag api:run-candidate "${ECR_REPO}/backend:run-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
+      - docker tag api:run-candidate "${ECR_REPO}/backend:run-candidate"
 
       # Push run image(s)
       - docker push "${ECR_REPO}/backend:run-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"

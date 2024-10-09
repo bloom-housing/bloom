@@ -32,7 +32,7 @@ const dbConfig: DbConfig = {
 }
 
 /* 
-This is set in backend/core, and since changing a table name is a significant
+This is set in api, and since changing a table name is a significant
 effort, it's assumed that 1) it is very unlikely to happen over the short 
 lifetime of this task and 2) changing a var somewhere in the same repo is 
 actually less intrusive than changing an env var elsewhere.
