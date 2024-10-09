@@ -44,14 +44,14 @@ const DetailsAddressColumns = ({
 
   Object.keys(address).forEach((item) => {
     if (type === AddressColsType.residence) {
-      address[item] = application.applicant.applicantAddress[item] || t("t.n/a")
+      address[item] = application.applicant?.applicantAddress[item] || t("t.n/a")
     }
 
     if (type === AddressColsType.mailing) {
       if (application.sendMailToMailingAddress) {
         address[item] = application.applicationsMailingAddress[item]
       } else {
-        address[item] = application.applicant.applicantAddress[item] || t("t.n/a")
+        address[item] = application.applicant?.applicantAddress[item] || t("t.n/a")
       }
     }
 
@@ -64,8 +64,8 @@ const DetailsAddressColumns = ({
 
     if (type === AddressColsType.memberResidence) {
       if (householdMember?.sameAddress === "yes") {
-        address[item] = application.applicant.applicantAddress[item]
-          ? application.applicant.applicantAddress[item]
+        address[item] = application.applicant?.applicantAddress[item]
+          ? application.applicant?.applicantAddress[item]
           : t("t.n/a")
       } else {
         address[item] = householdMember?.householdMemberAddress[item]

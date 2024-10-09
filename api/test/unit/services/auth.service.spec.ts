@@ -95,7 +95,7 @@ describe('Testing auth service', () => {
       sign(
         {
           sub: id,
-          expiresIn: 86400000 / 24,
+          expiresIn: 86400000 / 8,
         },
         process.env.APP_SECRET,
       ),

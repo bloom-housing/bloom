@@ -86,7 +86,7 @@ export default function ApplicationsList() {
           title={
             <>
               <p className="font-sans font-semibold uppercase text-2xl">
-                {application.applicant.firstName} {application.applicant.lastName}
+                {application.applicant?.firstName} {application.applicant?.lastName}
               </p>
 
               <p className="font-sans text-base mt-1">
