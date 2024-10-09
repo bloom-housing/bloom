@@ -378,7 +378,7 @@ const SelectAndOrder = ({
                               register={register}
                               inputProps={{
                                 defaultChecked: draftListingData.some(
-                                  (existingItem) => existingItem.text === item.text
+                                  (existingItem) => existingItem.id === item.id
                                 ),
                               }}
                             />
