@@ -955,7 +955,11 @@ export class ListingService implements OnModuleInit {
             ...requestingUser.userRoles,
             isAdmin: true,
           }
-        : requestingUser?.userRoles;
+        : //allows for duplicate feature to be fully turned off no matter the user
+          {
+            ...requestingUser?.userRoles,
+            isAdmin: false,
+          };
 
     await this.permissionService.canOrThrow(
       { ...requestingUser, userRoles: userRoles },
