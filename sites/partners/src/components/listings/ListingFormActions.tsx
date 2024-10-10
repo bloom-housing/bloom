@@ -76,6 +76,8 @@ const ListingFormActions = ({
     (profile?.userRoles?.isPartner &&
       duplicateListingPermissions?.includes(EnumJurisdictionDuplicateListingPermissions.partner))
 
+  const isLimitedClosedListingAction =
+    process.env.limitClosedListingActions && listing.status === ListingsStatusEnum.closed
   const listingId = listing?.id
 
   const listingJurisdiction = profile?.jurisdictions?.find(

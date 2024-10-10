@@ -20,5 +20,8 @@ export const jurisdictionFactory = (
   enableGeocodingPreferences: true,
   enableGeocodingRadiusMethod: false,
   listingApprovalPermissions: listingApprovalPermissions || [],
-  duplicateListingPermissions: duplicateListingPermissions || [],
+  duplicateListingPermissions: duplicateListingPermissions || [
+    UserRoleEnum.admin,
+    UserRoleEnum.jurisdictionAdmin,
+  ],
 });
