@@ -13,6 +13,7 @@ import {
   ListingUpdate,
   ListingsStatusEnum,
   EnumJurisdictionListingApprovalPermissions,
+  EnumJurisdictionDuplicateListingPermissions,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 import { SubmitFunction } from "./PaperListingForm"
@@ -27,6 +28,7 @@ type ListingFormActionsProps = {
   type: ListingFormActionsType
   showSaveBeforeExitDialog?: () => void
   showCloseListingModal?: () => void
+  showCopyListingDialog?: () => void
   showLotteryResultsDrawer?: () => void
   showRequestChangesModal?: () => void
   showSubmitForApprovalModal?: () => void
@@ -38,6 +40,7 @@ const ListingFormActions = ({
   type,
   showSaveBeforeExitDialog,
   showCloseListingModal,
+  showCopyListingDialog,
   showLotteryResultsDrawer,
   showRequestChangesModal,
   showSubmitForApprovalModal,
@@ -50,18 +53,28 @@ const ListingFormActions = ({
   const router = useRouter()
 
   // single jurisdiction check covers jurisAdmin adding a listing (listing is undefined then)
-  const listingApprovalPermissions = (
+  const jurisdiction =
     profile?.jurisdictions?.length === 1
       ? profile?.jurisdictions[0]
       : profile?.jurisdictions?.find((juris) => juris.id === listing?.jurisdictions?.id)
-  )?.listingApprovalPermissions
 
+  const listingApprovalPermissions = jurisdiction?.listingApprovalPermissions
   const isListingApprover =
     profile?.userRoles.isAdmin ||
     (profile?.userRoles.isJurisdictionalAdmin &&
       listingApprovalPermissions?.includes(
         EnumJurisdictionListingApprovalPermissions.jurisdictionAdmin
       ))
+
+  const duplicateListingPermissions = jurisdiction?.duplicateListingPermissions
+  const isListingCopier =
+    profile?.userRoles?.isAdmin ||
+    (profile?.userRoles?.isJurisdictionalAdmin &&
+      duplicateListingPermissions?.includes(
+        EnumJurisdictionDuplicateListingPermissions.jurisdictionAdmin
+      )) ||
+    (profile?.userRoles?.isPartner &&
+      duplicateListingPermissions?.includes(EnumJurisdictionDuplicateListingPermissions.partner))
 
   const listingId = listing?.id
 
@@ -89,6 +102,20 @@ const ListingFormActions = ({
           }}
         >
           {t("t.exit")}
+        </Button>
+      </Grid.Cell>
+    )
+
+    const copyButton = (
+      <Grid.Cell key="btn-copy">
+        <Button
+          variant="primary-outlined"
+          className="w-full"
+          onClick={() => {
+            showCopyListingDialog()
+          }}
+        >
+          {t("actions.copy")}
         </Button>
       </Grid.Cell>
     )
@@ -364,6 +391,7 @@ const ListingFormActions = ({
             elements.push(editFromDetailButton)
         }
 
+        if (isListingCopier) elements.push(copyButton)
         // all users can preview
         elements.push(previewButton)
 
@@ -444,6 +472,7 @@ const ListingFormActions = ({
       // read-only form
       if (type === ListingFormActionsType.details) {
         elements.push(editFromDetailButton)
+        if (isListingCopier) elements.push(copyButton)
         elements.push(previewButton)
 
         lotteryResultsButton(elements)
