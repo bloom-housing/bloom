@@ -100,7 +100,6 @@ export class LotteryController {
   @ActivityLogMetadata([
     { targetPropertyName: 'lotteryStatus', propertyPath: 'lotteryStatus' },
   ])
-  @UseGuards(ApiKeyGuard)
   async lotteryStatus(
     @Request() req: ExpressRequest,
     @Body() dto: ListingLotteryStatus,
