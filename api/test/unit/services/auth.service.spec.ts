@@ -694,7 +694,7 @@ describe('Testing auth service', () => {
     );
   });
 
-  it('should request mfa code through email', async () => {
+  it('should send new mfa code through email when previous code is outdated', async () => {
     const id = randomUUID();
     emailService.sendMfaCode = jest.fn();
     prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
@@ -703,6 +703,10 @@ describe('Testing auth service', () => {
       passwordHash: await passwordToHash('Abcdef12345!'),
       email: 'example@exygy.com',
       phoneNumberVerified: false,
+      singleUseCode: '00000',
+      singleUseCodeUpdatedAt: new Date(
+        new Date().getTime() - Number(process.env.MFA_CODE_VALUE) * 2,
+      ),
     });
     prisma.userAccounts.update = jest.fn().mockResolvedValue({
       id,
@@ -726,7 +730,7 @@ describe('Testing auth service', () => {
     });
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({
       data: {
-        singleUseCode: expect.anything(),
+        singleUseCode: expect.not.stringMatching('00000'),
         singleUseCodeUpdatedAt: expect.anything(),
       },
       where: {
@@ -740,7 +744,55 @@ describe('Testing auth service', () => {
     });
   });
 
-  it('should request mfa code through sms', async () => {
+  it('should send the same mfa code through email when requested again within valid window', async () => {
+    const id = randomUUID();
+    emailService.sendMfaCode = jest.fn();
+    prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
+      id: id,
+      mfaEnabled: true,
+      passwordHash: await passwordToHash('Abcdef12345!'),
+      email: 'example@exygy.com',
+      phoneNumberVerified: false,
+      singleUseCode: '00000',
+      singleUseCodeUpdatedAt: new Date(),
+    });
+    prisma.userAccounts.update = jest.fn().mockResolvedValue({
+      id,
+    });
+
+    const res = await authService.requestMfaCode({
+      email: 'example@exygy.com',
+      password: 'Abcdef12345!',
+      mfaType: MfaType.email,
+    });
+
+    expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+      include: expect.objectContaining({
+        listings: true,
+        jurisdictions: true,
+        userRoles: true,
+      }),
+      where: {
+        email: 'example@exygy.com',
+      },
+    });
+    expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+      data: {
+        singleUseCode: '00000',
+        singleUseCodeUpdatedAt: expect.anything(),
+      },
+      where: {
+        id,
+      },
+    });
+    expect(emailService.sendMfaCode).toHaveBeenCalled();
+    expect(res).toEqual({
+      email: 'example@exygy.com',
+      phoneNumberVerified: false,
+    });
+  });
+
+  it('should send new mfa code through sms when previous code is outdated', async () => {
     const id = randomUUID();
     prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
       id: id,
@@ -749,6 +801,10 @@ describe('Testing auth service', () => {
       email: 'example@exygy.com',
       phoneNumberVerified: false,
       phoneNumber: '520-781-8711',
+      singleUseCode: '00000',
+      singleUseCodeUpdatedAt: new Date(
+        new Date().getTime() - Number(process.env.MFA_CODE_VALUE) * 2,
+      ),
     });
     prisma.userAccounts.update = jest.fn().mockResolvedValue({
       id,
@@ -775,7 +831,64 @@ describe('Testing auth service', () => {
     });
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({
       data: {
-        singleUseCode: expect.anything(),
+        singleUseCode: expect.not.stringMatching('00000'),
+        singleUseCodeUpdatedAt: expect.anything(),
+        phoneNumber: '520-781-8711',
+      },
+      where: {
+        id,
+      },
+    });
+    expect(sendMfaCodeMock).not.toHaveBeenCalled();
+    expect(smsService.client.messages.create).toHaveBeenCalledWith({
+      body: expect.anything(),
+      from: expect.anything(),
+      to: '520-781-8711',
+    });
+    expect(res).toEqual({
+      phoneNumber: '520-781-8711',
+      phoneNumberVerified: false,
+    });
+  });
+
+  it('should send the same mfa code through sms when requested again within valid window', async () => {
+    const id = randomUUID();
+    prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
+      id: id,
+      mfaEnabled: true,
+      passwordHash: await passwordToHash('Abcdef12345!'),
+      email: 'example@exygy.com',
+      phoneNumberVerified: false,
+      phoneNumber: '520-781-8711',
+      singleUseCode: '00000',
+      singleUseCodeUpdatedAt: new Date(),
+    });
+    prisma.userAccounts.update = jest.fn().mockResolvedValue({
+      id,
+    });
+    smsService.client.messages.create = jest
+      .fn()
+      .mockResolvedValue({ success: true });
+
+    const res = await authService.requestMfaCode({
+      email: 'example@exygy.com',
+      password: 'Abcdef12345!',
+      mfaType: MfaType.sms,
+    });
+
+    expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+      include: expect.objectContaining({
+        listings: true,
+        jurisdictions: true,
+        userRoles: true,
+      }),
+      where: {
+        email: 'example@exygy.com',
+      },
+    });
+    expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+      data: {
+        singleUseCode: '00000',
         singleUseCodeUpdatedAt: expect.anything(),
         phoneNumber: '520-781-8711',
       },
