@@ -886,9 +886,10 @@ export class ScriptRunnerService {
         where: { language, jurisdictionId: null },
       });
       if (!translations) {
-        throw new Error(
+        console.log(
           `Translations for ${language} don't exist in Doorway database`,
         );
+        return
       }
       const translationsJSON = translations.translations as Prisma.JsonObject;
 
@@ -929,7 +930,7 @@ export class ScriptRunnerService {
         'Doorway thường không chấp nhận các đơn xin trùng lặp. Một đơn xin trùng lặp là đơn xin có người cũng xuất hiện trên một đơn xin khác cho cùng một cơ hội nhà ở. Để biết thông tin chi tiết hơn về cách chúng tôi xử lý các đơn xin trùng lặp, hãy xem của chúng tôi',
       termsOfUse: 'Điều khoản sử dụng',
     });
-    await updateTranslation(LanguagesEnum.vi, {
+    await updateTranslation(LanguagesEnum.zh, {
       duplicatesDetails:
         'Doorway 一般不接受重复申请。重复申请是指申请者与另一份申请者有相同的住房机会。有关我们如何处理重复申请的更多详细信息，请参阅我们的',
       termsOfUse: '使用条款',
