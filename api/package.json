@@ -20,7 +20,7 @@
     "test:cov-ci": "yarn db:migration:run && jest --config ./test/jest-with-coverage.config.js --runInBand --logHeapUsage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "db:import-listings": "cd ../tasks/import-listings && yarn install && yarn build && yarn \"import:run:local:${IMPORT_ENV}\" && cd ../../api",
-    "db:resetup": "psql -c 'DROP DATABASE IF EXISTS bloom;' && psql -c 'CREATE DATABASE bloom;' && psql -d bloom -c 'CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";'",
+    "db:resetup": "psql -c 'DROP DATABASE IF EXISTS bloom WITH (FORCE);' && psql -c 'CREATE DATABASE bloom;' && psql -d bloom -c 'CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";'",
     "db:migration:run": "yarn prisma migrate deploy",
     "db:seed:production": "npx prisma db seed -- --environment production",
     "db:seed:staging": "npx prisma db seed -- --environment staging",
