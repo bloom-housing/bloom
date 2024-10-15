@@ -91,6 +91,7 @@ const ApplicationAddMembers = () => {
           backLink={{
             url: conductor.determinePreviousUrl(),
           }}
+          conductor={conductor}
         >
           <HouseholdSizeField
             assistanceUrl={t("application.household.assistanceUrl")}
@@ -120,17 +121,6 @@ const ApplicationAddMembers = () => {
               type={"button"}
             >
               {t("application.household.addMembers.addHouseholdMember")}
-            </Button>
-          </CardSection>
-          <CardSection className={styles["application-form-action-footer"]}>
-            <Button
-              onClick={() => {
-                conductor.returnToReview = false
-                void handleSubmit(onSubmit)()
-              }}
-              id={"app-done-household-members-button"}
-            >
-              {t("t.next")}
             </Button>
           </CardSection>
         </ApplicationFormLayout>
