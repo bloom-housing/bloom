@@ -2132,6 +2132,129 @@ describe('Testing listing service', () => {
         },
       );
     });
+
+    it('should create a simple, duplicate listing', async () => {
+      prisma.listings.create = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
+
+      await service.create(
+        {
+          name: 'example listing name',
+          depositMin: '5',
+          assets: [
+            {
+              fileId: randomUUID(),
+              label: 'example asset',
+            },
+          ],
+          jurisdictions: {
+            id: randomUUID(),
+          },
+          status: ListingsStatusEnum.pending,
+          displayWaitlistSize: false,
+          unitsSummary: null,
+          listingEvents: [],
+        } as ListingCreate,
+        user,
+        'original id',
+      );
+
+      expect(prisma.listings.create).toHaveBeenCalledWith({
+        include: {
+          applicationMethods: {
+            include: {
+              paperApplications: {
+                include: {
+                  assets: true,
+                },
+              },
+            },
+          },
+          jurisdictions: true,
+          listingEvents: {
+            include: {
+              assets: true,
+            },
+          },
+          listingFeatures: true,
+          listingImages: {
+            include: {
+              assets: true,
+            },
+          },
+          listingMultiselectQuestions: {
+            include: {
+              multiselectQuestions: true,
+            },
+          },
+          listingUtilities: true,
+          listingsApplicationDropOffAddress: true,
+          listingsApplicationPickUpAddress: true,
+          listingsApplicationMailingAddress: true,
+          listingsBuildingAddress: true,
+          listingsBuildingSelectionCriteriaFile: true,
+          listingsLeasingAgentAddress: true,
+          listingsResult: true,
+          requestedChangesUser: true,
+          reservedCommunityTypes: true,
+          units: {
+            include: {
+              amiChart: {
+                include: {
+                  jurisdictions: true,
+                  unitGroupAmiLevels: true,
+                },
+              },
+              unitAccessibilityPriorityTypes: true,
+              unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
+            },
+          },
+        },
+        data: {
+          name: 'example listing name',
+          contentUpdatedAt: expect.anything(),
+          depositMin: '5',
+          assets: {
+            create: [
+              {
+                fileId: expect.anything(),
+                label: 'example asset',
+              },
+            ],
+          },
+          jurisdictions: {
+            connect: {
+              id: expect.anything(),
+            },
+          },
+          status: ListingsStatusEnum.pending,
+          displayWaitlistSize: false,
+          unitsSummary: undefined,
+          unitsAvailable: 0,
+          listingEvents: {
+            create: [],
+          },
+          copyOf: {
+            connect: {
+              id: expect.anything(),
+            },
+          },
+        },
+      });
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        user,
+        'listing',
+        permissionActions.create,
+        {
+          jurisdictionId: expect.anything(),
+        },
+      );
+    });
   });
 
   describe('Test duplicate endpoint', () => {

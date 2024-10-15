@@ -729,6 +729,14 @@ describe('Listing Controller Tests', () => {
 
       expect(res.body.name).toEqual(newName);
       expect(res.body.units).toEqual([]);
+
+      const newListing = await prisma.listings.findFirst({
+        select: {
+          copyOfId: true,
+        },
+        where: { id: res.body.id },
+      });
+      expect(newListing.copyOfId).toEqual(listing.id);
     });
   });
 

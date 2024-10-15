@@ -146,8 +146,8 @@ model ApplicationFlaggedSet {
   listings              Listings             @relation(fields: [listingId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   applications          Applications[]
 
-  @@index([listingId])
   @@unique([ruleKey, listingId])
+  @@index([listingId])
   @@map("application_flagged_set")
 }
 
@@ -547,7 +547,7 @@ model Listings {
   closedAt                              DateTime?                     @map("closed_at") @db.Timestamptz(6)
   afsLastRunAt                          DateTime?                     @default(dbgenerated("'1970-01-01 00:00:00-07'::timestamp with time zone")) @map("afs_last_run_at") @db.Timestamptz(6)
   lastApplicationUpdateAt               DateTime?                     @default(dbgenerated("'1970-01-01 00:00:00-07'::timestamp with time zone")) @map("last_application_update_at") @db.Timestamptz(6)
-  lotteryLastPublishedAt                DateTime?                @map("lottery_last_published_at") @db.Timestamptz(6)
+  lotteryLastPublishedAt                DateTime?                     @map("lottery_last_published_at") @db.Timestamptz(6)
   lotteryLastRunAt                      DateTime?                     @map("lottery_last_run_at") @db.Timestamptz(6)
   lotteryStatus                         LotteryStatusEnum?            @map("lottery_status")
   buildingAddressId                     String?                       @map("building_address_id") @db.Uuid
@@ -555,6 +555,7 @@ model Listings {
   applicationDropOffAddressId           String?                       @map("application_drop_off_address_id") @db.Uuid
   applicationMailingAddressId           String?                       @map("application_mailing_address_id") @db.Uuid
   buildingSelectionCriteriaFileId       String?                       @map("building_selection_criteria_file_id") @db.Uuid
+  copyOfId                              String?                       @map("copy_of_id") @db.Uuid
   jurisdictionId                        String?                       @map("jurisdiction_id") @db.Uuid
   leasingAgentAddressId                 String?                       @map("leasing_agent_address_id") @db.Uuid
   reservedCommunityTypeId               String?                       @map("reserved_community_type_id") @db.Uuid
@@ -610,6 +611,9 @@ model Listings {
   requestedChangesUser                  UserAccounts?                 @relation("requested_changes_user", fields: [requestedChangesUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   applicationLotteryPositions           ApplicationLotteryPositions[]
   applicationLotteryTotals              ApplicationLotteryTotal[]
+  copyOf                                Listings?                     @relation("copy_of", fields: [copyOfId], references: [id])
+  Listings                              Listings[]                    @relation("copy_of")
+
   @@index([jurisdictionId])
   @@map("listings")
 }
@@ -1003,8 +1007,8 @@ model ScriptRuns {
 
 view ApplicationFlaggedSetPossibilities {
   key           String
-  listingId     String    @map("listing_id") @db.Uuid
-  applicationId String    @map("application_id") @db.Uuid
+  listingId     String @map("listing_id") @db.Uuid
+  applicationId String @map("application_id") @db.Uuid
   type          String
 
   @@id([key, applicationId])
