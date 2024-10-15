@@ -1,7 +1,7 @@
 import { Injectable, StreamableFile } from '@nestjs/common';
 import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
 import archiver from 'archiver';
-import Excel, { Column, Row } from 'exceljs';
+import Excel, { Column } from 'exceljs';
 import { Request as ExpressRequest, Response } from 'express';
 import fs, { createReadStream } from 'fs';
 import { join } from 'path';
@@ -21,8 +21,6 @@ import { CsvHeader } from '../types/CsvExportInterface';
 import { getExportHeaders } from '../utilities/application-export-helpers';
 import { mapTo } from '../utilities/mapTo';
 
-import process from 'process';
-
 view.csv = {
   ...view.details,
   applicationFlaggedSet: {
@@ -32,7 +30,7 @@ view.csv = {
   },
   listings: false,
 };
-const NUMBER_TO_PAGINATE_BY = 250;
+const NUMBER_TO_PAGINATE_BY = 500;
 
 @Injectable()
 export class ApplicationExporterService {
@@ -243,12 +241,13 @@ export class ApplicationExporterService {
                         // curr should equal the preference id we're pulling from
                         if (!programs) {
                           programs =
-                            app.programs as unknown as ApplicationMultiselectQuestion[];
+                            (app.programs as unknown as ApplicationMultiselectQuestion[]) ||
+                            [];
                         }
                         parsePreference = false;
                         // there aren't typically many programs, but if there, then a object map should be created and used
                         const program = programs.find(
-                          (preference) => preference.key === curr,
+                          (prog) => prog.key === curr,
                         );
                         multiselectQuestionValue = true;
                         return program;
@@ -330,14 +329,17 @@ export class ApplicationExporterService {
     const user = mapTo(User, req['user']);
     await this.authorizeExport(user, queryParams.id);
 
-    const workbook = new Excel.Workbook();
-
     const filename = join(
       process.cwd(),
       `src/temp/${forLottery ? 'lottery-' : ''}listing-${
         queryParams.id
       }-applications-${user.id}-${new Date().getTime()}.xlsx`,
     );
+
+    const workbook = new Excel.stream.xlsx.WorkbookWriter({
+      filename,
+      useSharedStrings: false,
+    });
 
     const zipFilePath = join(
       process.cwd(),
@@ -354,7 +356,7 @@ export class ApplicationExporterService {
       forLottery,
     );
 
-    await workbook.xlsx.writeFile(filename);
+    await workbook.commit();
     const readStream = createReadStream(filename);
 
     return new Promise((resolve) => {
@@ -386,7 +388,7 @@ export class ApplicationExporterService {
    * @returns generates the lottery sheets
    */
   async createSpreadsheets<QueryParams extends ApplicationCsvQueryParams>(
-    workbook: Excel.Workbook,
+    workbook: Excel.stream.xlsx.WorkbookWriter,
     queryParams: QueryParams,
     forLottery = false,
   ): Promise<void> {
@@ -420,7 +422,6 @@ export class ApplicationExporterService {
         markedAsDuplicate: forLottery ? false : undefined,
       },
     });
-
     // get all multiselect questions for a listing to build csv headers
     const multiSelectQuestions =
       await this.multiselectQuestionService.findByListingId(queryParams.id);
@@ -495,7 +496,7 @@ export class ApplicationExporterService {
    * @returns void but writes the output to a file
    */
   async generateSpreadsheetData(
-    workbook: Excel.Workbook,
+    workbook: Excel.stream.xlsx.WorkbookWriter,
     applications: Application[],
     csvHeaders: CsvHeader[],
     queryParams: ApplicationCsvQueryParams,
@@ -521,9 +522,6 @@ export class ApplicationExporterService {
         )
       : applications;
 
-    // build row data
-    const promiseArray: Promise<Partial<Row>[]>[] = [];
-
     for (
       let i = 0;
       i < filteredApplications.length;
@@ -534,145 +532,138 @@ export class ApplicationExporterService {
         i + NUMBER_TO_PAGINATE_BY,
       );
 
-      promiseArray.push(
-        new Promise(async (resolve) => {
-          // grab applications NUMBER_TO_PAGINATE_BY at a time
-          let paginatedApplications = await this.prisma.applications.findMany({
-            include: {
-              ...view.csv,
-              demographics: queryParams.includeDemographics
-                ? {
-                    select: {
-                      id: true,
-                      createdAt: true,
-                      updatedAt: true,
-                      ethnicity: true,
-                      gender: true,
-                      sexualOrientation: true,
-                      howDidYouHear: true,
-                      race: true,
-                    },
-                  }
-                : false,
-              applicationLotteryPositions: forLottery
-                ? {
-                    select: {
-                      ordinal: true,
-                    },
-                    where: {
-                      multiselectQuestionId: preference ? preference.id : null,
-                    },
-                  }
-                : false,
-            },
-            where: {
-              listingId: queryParams.id,
-              deletedAt: null,
-              markedAsDuplicate: forLottery ? false : undefined,
-              id: {
-                in: slicedApplications.map((app) => app.id),
-              },
-            },
-          });
+      // grab applications NUMBER_TO_PAGINATE_BY at a time
+      let paginatedApplications = await this.prisma.applications.findMany({
+        include: {
+          ...view.csv,
+          demographics: queryParams.includeDemographics
+            ? {
+                select: {
+                  id: true,
+                  createdAt: true,
+                  updatedAt: true,
+                  ethnicity: true,
+                  gender: true,
+                  sexualOrientation: true,
+                  howDidYouHear: true,
+                  race: true,
+                },
+              }
+            : false,
+          applicationLotteryPositions: forLottery
+            ? {
+                select: {
+                  ordinal: true,
+                },
+                where: {
+                  multiselectQuestionId: preference ? preference.id : null,
+                },
+              }
+            : false,
+        },
+        where: {
+          listingId: queryParams.id,
+          deletedAt: null,
+          markedAsDuplicate: forLottery ? false : undefined,
+          id: {
+            in: slicedApplications.map((app) => app.id),
+          },
+        },
+      });
 
-          if (forLottery) {
-            paginatedApplications = paginatedApplications.sort(
-              (a, b) =>
-                a.applicationLotteryPositions[0].ordinal -
-                b.applicationLotteryPositions[0].ordinal,
-            );
-          }
+      if (forLottery) {
+        // We need to filter out applications that have "claimed" preference but they really chose to opt out
+        // And then it is sorted based on the ordinal value
+        paginatedApplications = paginatedApplications
+          .filter((app) => app.applicationLotteryPositions?.length)
+          .sort(
+            (a, b) =>
+              a.applicationLotteryPositions[0].ordinal -
+              b.applicationLotteryPositions[0].ordinal,
+          );
+      }
 
-          const rows: Partial<Row>[] = [];
-          paginatedApplications.forEach((app) => {
-            const row: Partial<Row> = {};
-            let preferences: ApplicationMultiselectQuestion[];
-            let programs: ApplicationMultiselectQuestion[];
+      paginatedApplications.forEach((app) => {
+        const rowData = {};
+        let preferences: ApplicationMultiselectQuestion[];
+        let programs: ApplicationMultiselectQuestion[];
 
-            if (preference) {
-              row['Raw Lottery Rank'] = slicedApplications.find(
-                (slicedApp) => slicedApp.id === app.id,
-              ).applicationLotteryPositions[0].ordinal;
+        if (preference) {
+          rowData['Raw Lottery Rank'] = slicedApplications.find(
+            (slicedApp) => slicedApp.id === app.id,
+          ).applicationLotteryPositions[0].ordinal;
+        }
+
+        csvHeaders.forEach((header) => {
+          let multiselectQuestionValue = false;
+          let parsePreference = false;
+          let parseProgram = false;
+          let value = header.path.split('.').reduce((acc, curr) => {
+            // return preference/program as value for the format function to accept
+            if (multiselectQuestionValue) {
+              return acc;
             }
 
-            csvHeaders.forEach((header) => {
-              let multiselectQuestionValue = false;
-              let parsePreference = false;
-              let parseProgram = false;
-              let value = header.path.split('.').reduce((acc, curr) => {
-                // return preference/program as value for the format function to accept
-                if (multiselectQuestionValue) {
-                  return acc;
-                }
-
-                if (parsePreference) {
-                  // curr should equal the preference id we're pulling from
-                  if (!preferences) {
-                    preferences =
-                      (app.preferences as unknown as ApplicationMultiselectQuestion[]) ||
-                      [];
-                  }
-                  parsePreference = false;
-                  // there aren't typically many preferences, but if there, then a object map should be created and used
-                  const preference = preferences.find(
-                    (preference) => preference.key === curr,
-                  );
-                  multiselectQuestionValue = true;
-                  return preference;
-                } else if (parseProgram) {
-                  // curr should equal the preference id we're pulling from
-                  if (!programs) {
-                    programs =
-                      (app.programs as unknown as ApplicationMultiselectQuestion[]) ||
-                      [];
-                  }
-                  parsePreference = false;
-                  // there aren't typically many programs, but if there, then a object map should be created and used
-                  const program = programs.find(
-                    (preference) => preference.key === curr,
-                  );
-                  multiselectQuestionValue = true;
-                  return program;
-                }
-
-                // sets parsePreference to true, for the next iteration
-                if (curr === 'preferences') {
-                  parsePreference = true;
-                } else if (curr === 'programs') {
-                  parseProgram = true;
-                }
-
-                if (acc === null || acc === undefined) {
-                  return '';
-                }
-
-                // handles working with arrays, e.g. householdMember.0.firstName
-                if (!isNaN(Number(curr))) {
-                  const index = Number(curr);
-                  return acc[index];
-                }
-
-                return acc[curr];
-              }, app);
-              value = value === undefined ? '' : value === null ? '' : value;
-              if (header.format) {
-                value = header.format(value);
+            if (parsePreference) {
+              // curr should equal the preference id we're pulling from
+              if (!preferences) {
+                preferences =
+                  (app.preferences as unknown as ApplicationMultiselectQuestion[]) ||
+                  [];
               }
+              parsePreference = false;
+              // there aren't typically many preferences, but if there, then a object map should be created and used
+              const preference = preferences.find(
+                (preference) => preference.key === curr,
+              );
+              multiselectQuestionValue = true;
+              return preference;
+            } else if (parseProgram) {
+              // curr should equal the preference id we're pulling from
+              if (!programs) {
+                programs =
+                  (app.programs as unknown as ApplicationMultiselectQuestion[]) ||
+                  [];
+              }
+              parsePreference = false;
+              // there aren't typically many programs, but if there, then a object map should be created and used
+              const program = programs.find(
+                (preference) => preference.key === curr,
+              );
+              multiselectQuestionValue = true;
+              return program;
+            }
 
-              row[`${header.path}`] = value ? value.toString() : '';
-            });
+            // sets parsePreference to true, for the next iteration
+            if (curr === 'preferences') {
+              parsePreference = true;
+            } else if (curr === 'programs') {
+              parseProgram = true;
+            }
 
-            rows.push(row);
-          });
-          resolve(rows);
-        }),
-      );
+            if (acc === null || acc === undefined) {
+              return '';
+            }
+
+            // handles working with arrays, e.g. householdMember.0.firstName
+            if (!isNaN(Number(curr))) {
+              const index = Number(curr);
+              return acc[index];
+            }
+
+            return acc[curr];
+          }, app);
+          value = value === undefined ? '' : value === null ? '' : value;
+          if (header.format) {
+            value = header.format(value);
+          }
+
+          rowData[`${header.path}`] = value ? value.toString() : '';
+        });
+        spreadsheet.addRow(rowData).commit();
+      });
     }
-    const res = await Promise.all(promiseArray);
-    // add rows to spreadsheet
-    res.forEach((elem) => {
-      spreadsheet.addRows(elem);
-    });
+    spreadsheet.commit();
   }
 
   /**
@@ -683,14 +674,14 @@ export class ApplicationExporterService {
    * @returns a new worksheet
    */
   createNewWorksheet(
-    workbook: Excel.Workbook,
+    workbook: Excel.stream.xlsx.WorkbookWriter,
     forLottery: boolean,
     preference?: IdDTO,
   ): Excel.Worksheet {
     if (forLottery) {
       return workbook.addWorksheet(
         preference
-          ? preference.name.replace(/[\*\?\:\\\/]/, '-')
+          ? preference.name.replace(/[\*\?\:\\\/]/g, '-')
           : 'Raw Lottery Rank',
       );
     }

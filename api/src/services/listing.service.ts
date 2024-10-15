@@ -133,12 +133,6 @@ views.details = {
   ...views.full,
 };
 
-views.csv = {
-  ...views.base,
-  ...views.full,
-  userAccounts: true,
-};
-
 const LISTING_CRON_JOB_NAME = 'LISTING_CRON_JOB';
 /*
   this is the service for listings
@@ -276,53 +270,6 @@ export class ListingService implements OnModuleInit {
     const userEmails: string[] = [];
     userResults?.forEach((user) => user?.email && userEmails.push(user.email));
     return { emails: userEmails, publicUrl };
-  }
-
-  public async getPublicUserEmailInfo(
-    listingId?: string,
-  ): Promise<{ [key: string]: string[] }> {
-    const userResults = await this.prisma.applications.findMany({
-      select: {
-        language: true,
-        applicant: {
-          select: {
-            emailAddress: true,
-          },
-        },
-      },
-      where: {
-        listingId,
-        applicant: {
-          emailAddress: {
-            not: null,
-          },
-        },
-      },
-    });
-
-    const result = {};
-    Object.keys(LanguagesEnum).forEach((languageKey) => {
-      const applications = userResults
-        .filter((user) => user.language === languageKey)
-        .map((userObj) => userObj.applicant.emailAddress);
-      if (applications.length) {
-        result[languageKey] = applications;
-      }
-    });
-
-    const noLanguageIndicated = userResults
-      .filter((user) => !user.language)
-      .map((userObj) => userObj.applicant.emailAddress);
-
-    if (!result[LanguagesEnum.en])
-      result[LanguagesEnum.en] = noLanguageIndicated;
-    else
-      result[LanguagesEnum.en] = [
-        ...result[LanguagesEnum.en],
-        ...noLanguageIndicated,
-      ];
-
-    return result;
   }
 
   public async listingApprovalNotify(params: {
@@ -692,7 +639,11 @@ export class ListingService implements OnModuleInit {
   /*
     creates a listing
   */
-  async create(dto: ListingCreate, requestingUser: User): Promise<Listing> {
+  async create(
+    dto: ListingCreate,
+    requestingUser: User,
+    copyOfId?: string,
+  ): Promise<Listing> {
     await this.permissionService.canOrThrow(
       requestingUser,
       'listing',
@@ -944,6 +895,13 @@ export class ListingService implements OnModuleInit {
           : undefined,
         requestedChangesUser: undefined,
         contentUpdatedAt: new Date(),
+        copyOf: copyOfId
+          ? {
+              connect: {
+                id: copyOfId,
+              },
+            }
+          : undefined,
       },
     });
 
@@ -1030,10 +988,14 @@ export class ListingService implements OnModuleInit {
       lotteryStatus: undefined,
     };
 
-    const res = await this.create(newListingData, {
-      ...requestingUser,
-      userRoles: userRoles,
-    });
+    const res = await this.create(
+      newListingData,
+      {
+        ...requestingUser,
+        userRoles: userRoles,
+      },
+      storedListing.id,
+    );
 
     if (
       process.env.ALLOW_PARTNERS_TO_DUPLICATE_LISTINGS === 'TRUE' &&
