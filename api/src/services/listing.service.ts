@@ -133,12 +133,6 @@ views.details = {
   ...views.full,
 };
 
-views.csv = {
-  ...views.base,
-  ...views.full,
-  userAccounts: true,
-};
-
 const LISTING_CRON_JOB_NAME = 'LISTING_CRON_JOB';
 /*
   this is the service for listings
@@ -692,7 +686,11 @@ export class ListingService implements OnModuleInit {
   /*
     creates a listing
   */
-  async create(dto: ListingCreate, requestingUser: User): Promise<Listing> {
+  async create(
+    dto: ListingCreate,
+    requestingUser: User,
+    copyOfId?: string,
+  ): Promise<Listing> {
     await this.permissionService.canOrThrow(
       requestingUser,
       'listing',
@@ -944,6 +942,13 @@ export class ListingService implements OnModuleInit {
           : undefined,
         requestedChangesUser: undefined,
         contentUpdatedAt: new Date(),
+        copyOf: copyOfId
+          ? {
+              connect: {
+                id: copyOfId,
+              },
+            }
+          : undefined,
       },
     });
 
@@ -1030,10 +1035,14 @@ export class ListingService implements OnModuleInit {
       lotteryStatus: undefined,
     };
 
-    const res = await this.create(newListingData, {
-      ...requestingUser,
-      userRoles: userRoles,
-    });
+    const res = await this.create(
+      newListingData,
+      {
+        ...requestingUser,
+        userRoles: userRoles,
+      },
+      storedListing.id,
+    );
 
     if (
       process.env.ALLOW_PARTNERS_TO_DUPLICATE_LISTINGS === 'TRUE' &&
