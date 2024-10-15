@@ -61,7 +61,7 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
   })()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, trigger, getValues, errors } = useForm<OpenHouseFormValues>({
+  const { register, setValue, watch, trigger, getValues, errors } = useForm<OpenHouseFormValues>({
     defaultValues,
   })
 
@@ -107,6 +107,7 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
                       name="date"
                       id="date"
                       register={register}
+                      setValue={setValue}
                       watch={watch}
                       error={errors?.date}
                       errorMessage={t("errors.requiredFieldError")}
@@ -120,6 +121,7 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
                       name="startTime"
                       id="startTime"
                       register={register}
+                      setValue={setValue}
                       watch={watch}
                       error={!!errors?.startTime}
                       required
@@ -132,6 +134,7 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
                       name="endTime"
                       id="endTime"
                       register={register}
+                      setValue={setValue}
                       watch={watch}
                       error={!!errors?.endTime}
                       required
