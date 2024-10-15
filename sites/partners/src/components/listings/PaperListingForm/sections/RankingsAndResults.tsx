@@ -146,6 +146,7 @@ const RankingsAndResults = ({ listing, isAdmin }: RankingsAndResultsProps) => {
                   name={"lotteryDate"}
                   id={"lotteryDate"}
                   register={register}
+                  required
                   setValue={setValue}
                   watch={watch}
                   error={
@@ -182,6 +183,7 @@ const RankingsAndResults = ({ listing, isAdmin }: RankingsAndResultsProps) => {
                   name={"lotteryStartTime"}
                   id={"lotteryStartTime"}
                   register={register}
+                  required
                   setValue={setValue}
                   watch={watch}
                   error={errors?.lotteryDate ? true : false}
@@ -213,6 +215,7 @@ const RankingsAndResults = ({ listing, isAdmin }: RankingsAndResultsProps) => {
                   name={"lotteryEndTime"}
                   id={"lotteryEndTime"}
                   register={register}
+                  required
                   setValue={setValue}
                   watch={watch}
                   error={errors?.lotteryDate ? true : false}
