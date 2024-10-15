@@ -120,4 +120,17 @@ export class ScirptRunnerController {
   ): Promise<SuccessDTO> {
     return await this.scriptRunnerService.optOutExistingLotteries(req);
   }
+
+  @Put('updateCodeExpirationTranslations')
+  @ApiOperation({
+    summary:
+      'A script that updates single use code translations to show extended expiration time',
+    operationId: 'updateCodeExpirationTranslations',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async updateCodeExpirationTranslations(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.updateCodeExpirationTranslations(req);
+  }
 }
