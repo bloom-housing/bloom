@@ -17,6 +17,7 @@ import { Application } from '../dtos/applications/application.dto';
 import { AmiChartImportDTO } from '../dtos/script-runner/ami-chart-import.dto';
 import { AmiChartCreate } from '../dtos/ami-charts/ami-chart-create.dto';
 import { AmiChartService } from './ami-chart.service';
+import { IdDTO } from '../dtos/shared/id.dto';
 
 /**
   this is the service for running scripts
@@ -413,6 +414,43 @@ export class ScriptRunnerService {
       'opt out existing lotteries',
       requestingUser,
     );
+    return { success: true };
+  }
+
+  /**
+   *
+   * @param req incoming request object
+   * @param jurisdictionIdDTO id containing the jurisdiction id we are creating the new community type for
+   * @param name name of the community type
+   * @param name description of the community type
+   * @returns successDTO
+   * @description creates a new reserved community type. Reserved community types also need translations added
+   */
+  async createNewReservedCommunityType(
+    req: ExpressRequest,
+    jurisdictionId: string,
+    name: string,
+    description?: string,
+  ): Promise<SuccessDTO> {
+    // script runner standard start up
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart(`${name} Type`, requestingUser);
+
+    // create new reserved community type using the passed in params
+    await this.prisma.reservedCommunityTypes.create({
+      data: {
+        name: name,
+        description: description,
+        jurisdictions: {
+          connect: {
+            id: jurisdictionId,
+          },
+        },
+      },
+    });
+
+    // script runner standard spin down
+    await this.markScriptAsComplete(`${name} Type`, requestingUser);
     return { success: true };
   }
 
