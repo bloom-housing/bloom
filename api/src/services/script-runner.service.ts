@@ -436,7 +436,7 @@ export class ScriptRunnerService {
     const requestingUser = mapTo(User, req['user']);
     await this.markScriptAsRunStart(`${name} Type`, requestingUser);
 
-    // create new housing voucher community type
+    // create new reserved community type using the passed in params
     await this.prisma.reservedCommunityTypes.create({
       data: {
         name: name,
