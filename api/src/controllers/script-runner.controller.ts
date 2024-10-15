@@ -36,7 +36,8 @@ export class ScirptRunnerController {
 
   @Put('transferJurisdictionData')
   @ApiOperation({
-    summary: 'A script that pulls data from one source into the current db',
+    summary:
+      'A script that pulls jurisdiction data from one source into the current db',
     operationId: 'transferJurisdictionData',
   })
   @ApiOkResponse({ type: SuccessDTO })
@@ -52,7 +53,8 @@ export class ScirptRunnerController {
 
   @Put('transferJurisdictionListingsData')
   @ApiOperation({
-    summary: 'A script that pulls data from one source into the current db',
+    summary:
+      'A script that pulls listing data from one source into the current db',
     operationId: 'transferJurisdictionListingsData',
   })
   @ApiOkResponse({ type: SuccessDTO })
@@ -61,6 +63,23 @@ export class ScirptRunnerController {
     @Request() req: ExpressRequest,
   ): Promise<SuccessDTO> {
     return await this.scriptRunnerService.transferJurisdictionListingData(
+      req,
+      dataTransferDTO,
+    );
+  }
+
+  @Put('transferJurisdictionUserApplicationData')
+  @ApiOperation({
+    summary:
+      'A script that pulls user and application data from one source into the current db',
+    operationId: 'transferJurisdictionUserApplicationData',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async transferJurisdictionUserApplicationData(
+    @Body() dataTransferDTO: DataTransferDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.transferJurisdictionUserApplicationData(
       req,
       dataTransferDTO,
     );

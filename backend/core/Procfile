@@ -1,2 +1,0 @@
-release: yarn herokusetup
-web: yarn start

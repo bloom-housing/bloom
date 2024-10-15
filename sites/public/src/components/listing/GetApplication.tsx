@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import Markdown from "markdown-to-jsx"
-
+import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   Address,
   Heading,
@@ -11,10 +11,9 @@ import {
   FieldGroup,
 } from "@bloom-housing/ui-components"
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
+import { isExternalLink } from "@bloom-housing/ui-seeds/src/global/NavigationContext"
 import { useForm } from "react-hook-form"
 import { downloadExternalPDF } from "../../lib/helpers"
-import { isExternalLink } from "@bloom-housing/ui-seeds/src/global/NavigationContext"
-import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export interface PaperApplication {
   fileURL: string

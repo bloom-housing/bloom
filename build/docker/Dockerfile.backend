@@ -32,7 +32,6 @@ RUN yarn prisma generate
 # The test stage builds an image safe for running tests
 FROM deps AS test
 
-# Go deep into backend/core due to shared-helpers dependency
 WORKDIR /app/api
 
 # When running this image, make sure to use the built-in node user

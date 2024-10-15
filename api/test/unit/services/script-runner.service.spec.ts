@@ -1,11 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import {
+  ApplicationReviewStatusEnum,
+  ApplicationStatusEnum,
+  ApplicationSubmissionTypeEnum,
   LanguagesEnum,
   MultiselectQuestionsApplicationSectionEnum,
   PrismaClient,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
+import dayjs from 'dayjs';
 import { Request as ExpressRequest } from 'express';
 import { mockDeep } from 'jest-mock-extended';
 import { ScriptRunnerService } from '../../../src/services/script-runner.service';
@@ -179,7 +183,6 @@ describe('Testing script runner service', () => {
 
   const createAddress = (name: string) => {
     return {
-      place_name: name,
       city: `${name} city`,
       state: `${name} state`,
       street: `${name} street`,
@@ -396,7 +399,7 @@ describe('Testing script runner service', () => {
           id: listingId,
           accessibility: 'accessibility',
           additionalApplicationSubmissionNotes: undefined,
-          afsLastRunAt: undefined,
+          afsLastRunAt: expect.anything(),
           amenities: 'amenities',
           amiPercentageMax: undefined,
           amiPercentageMin: undefined,
@@ -463,7 +466,7 @@ describe('Testing script runner service', () => {
               createdAt: undefined,
               latitude: undefined,
               longitude: undefined,
-              placeName: 'application drop up',
+              placeName: undefined,
               state: 'application drop up state',
               street: 'application drop up street',
               street2: 'application drop up street2',
@@ -478,7 +481,7 @@ describe('Testing script runner service', () => {
               createdAt: undefined,
               latitude: undefined,
               longitude: undefined,
-              placeName: 'application pick up',
+              placeName: undefined,
               state: 'application pick up state',
               street: 'application pick up street',
               street2: 'application pick up street2',
@@ -492,7 +495,7 @@ describe('Testing script runner service', () => {
               createdAt: undefined,
               latitude: undefined,
               longitude: undefined,
-              placeName: 'building',
+              placeName: undefined,
               state: 'building state',
               street: 'building street',
               street2: 'building street2',
@@ -506,7 +509,7 @@ describe('Testing script runner service', () => {
               createdAt: undefined,
               latitude: undefined,
               longitude: undefined,
-              placeName: 'leasing agent',
+              placeName: undefined,
               state: 'leasing agent state',
               street: 'leasing agent street',
               street2: 'leasing agent street2',
@@ -645,7 +648,7 @@ describe('Testing script runner service', () => {
           id: listingId,
           accessibility: undefined,
           additionalApplicationSubmissionNotes: undefined,
-          afsLastRunAt: undefined,
+          afsLastRunAt: expect.anything(),
           amenities: undefined,
           amiPercentageMax: undefined,
           amiPercentageMin: undefined,
@@ -1123,6 +1126,288 @@ describe('Testing script runner service', () => {
             listingId: createdListingId,
           },
         ],
+      });
+    });
+  });
+
+  describe('transferJurisdictionUserApplicationData', () => {
+    it('should transfer partner users', async () => {
+      prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+
+      const jurisdictionId = randomUUID();
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        name: 'sample jurisdiction',
+        id: jurisdictionId,
+      });
+      const externalJurisdictionId = randomUUID();
+      externalPrismaClient.$queryRaw.mockResolvedValueOnce([
+        { name: 'sample jurisdiction', id: externalJurisdictionId },
+      ]);
+      const listingId = randomUUID();
+      const pastDate = dayjs(new Date()).subtract(15, 'days').toDate();
+      const userId = randomUUID();
+      const partnerOne = {
+        listings: [
+          {
+            jurisdictionId: externalJurisdictionId,
+            id: listingId,
+          },
+          { jurisdictionId: randomUUID(), id: randomUUID() },
+        ],
+        id: userId,
+        passwordHash: 'password hash',
+        passwordUpdatedAt: new Date(),
+        passwordValidForDays: 180,
+        resetToken: 'reset token',
+        confirmationToken: 'confirmation token',
+        confirmedAt: new Date(),
+        email: 'email@example.com',
+        firstName: 'first',
+        middleName: 'middle',
+        lastName: 'last',
+        dob: new Date(),
+        phoneNumber: 'phone number',
+        createdAt: pastDate,
+        updatedAt: pastDate,
+        language: LanguagesEnum.en,
+        mfaEnabled: false,
+        lastLoginAt: pastDate,
+        failedLoginAttemptsCount: 0,
+        phoneNumberVerified: true,
+        agreedToTermsOfService: true,
+        hitConfirmationUrl: new Date(),
+        singleUseCode: null,
+        singleUseCodeUpdatedAt: pastDate,
+        activeAccessToken: null,
+        activeRefreshToken: null,
+      };
+      externalPrismaClient.userAccounts.findMany
+        .mockResolvedValueOnce([partnerOne])
+        .mockResolvedValueOnce([]);
+      prisma.userAccounts.create = jest.fn();
+      const id = randomUUID();
+      await service.transferJurisdictionUserApplicationData(
+        {
+          user: {
+            id,
+          } as unknown as User,
+        } as unknown as ExpressRequest,
+        {
+          connectionString: 'Sample',
+          jurisdiction: 'Sample jurisdiction',
+        },
+        externalPrismaClient,
+      );
+
+      expect(prisma.userAccounts.create).toBeCalledTimes(1);
+      expect(prisma.userAccounts.create).toBeCalledWith({
+        data: {
+          activeAccessToken: null,
+          activeRefreshToken: null,
+          agreedToTermsOfService: false,
+          confirmationToken: 'confirmation token',
+          confirmedAt: expect.anything(),
+          createdAt: pastDate,
+          dob: expect.anything(),
+          email: 'email@example.com',
+          failedLoginAttemptsCount: 0,
+          firstName: 'first',
+          hitConfirmationUrl: expect.anything(),
+          id: expect.anything(),
+          jurisdictions: {
+            connect: {
+              id: jurisdictionId,
+            },
+          },
+          language: 'en',
+          lastLoginAt: expect.anything(),
+          lastName: 'last',
+          listings: {
+            connect: [
+              {
+                id: listingId,
+              },
+            ],
+          },
+          mfaEnabled: false,
+          middleName: 'middle',
+          passwordHash: 'password hash',
+          passwordUpdatedAt: expect.anything(),
+          passwordValidForDays: 180,
+          phoneNumber: 'phone number',
+          phoneNumberVerified: true,
+          resetToken: 'reset token',
+          singleUseCode: null,
+          singleUseCodeUpdatedAt: expect.anything(),
+          updatedAt: undefined,
+          userRoles: {
+            create: {
+              isPartner: true,
+            },
+          },
+        },
+      });
+    });
+
+    it('should transfer public users', async () => {
+      prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+
+      const jurisdictionId = randomUUID();
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        name: 'sample jurisdiction',
+        id: jurisdictionId,
+      });
+      const externalJurisdictionId = randomUUID();
+      externalPrismaClient.$queryRaw.mockResolvedValueOnce([
+        { name: 'sample jurisdiction', id: externalJurisdictionId },
+      ]);
+      const pastDate = dayjs(new Date()).subtract(15, 'days').toDate();
+      const userId = randomUUID();
+      const publicUser = {
+        id: userId,
+        passwordHash: 'password hash',
+        passwordUpdatedAt: new Date(),
+        passwordValidForDays: 180,
+        resetToken: 'reset token',
+        confirmationToken: 'confirmation token',
+        confirmedAt: new Date(),
+        email: 'email@example.com',
+        firstName: 'first',
+        middleName: 'middle',
+        lastName: 'last',
+        dob: new Date(),
+        phoneNumber: 'phone number',
+        createdAt: pastDate,
+        updatedAt: pastDate,
+        language: LanguagesEnum.en,
+        mfaEnabled: false,
+        lastLoginAt: pastDate,
+        failedLoginAttemptsCount: 0,
+        phoneNumberVerified: true,
+        agreedToTermsOfService: true,
+        hitConfirmationUrl: new Date(),
+        singleUseCode: null,
+        singleUseCodeUpdatedAt: pastDate,
+        activeAccessToken: null,
+        activeRefreshToken: null,
+      };
+      const applicationListingId = randomUUID();
+      const application = {
+        id: randomUUID(),
+        listings: {
+          id: applicationListingId,
+          jurisdictionId: externalJurisdictionId,
+        },
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: false,
+        appUrl: 'appUrl',
+        householdSize: 1,
+        status: ApplicationStatusEnum.submitted,
+        language: LanguagesEnum.en,
+        submissionType: ApplicationSubmissionTypeEnum.electronical,
+        acceptedTerms: true,
+        submissionDate: new Date(),
+        markedAsDuplicate: false,
+        confirmationCode: 'confirmationCode',
+        reviewStatus: ApplicationReviewStatusEnum.valid,
+      };
+      externalPrismaClient.userAccounts.findMany
+        .mockResolvedValueOnce([]) // No partner users
+        .mockResolvedValueOnce([
+          { ...publicUser, applications: [application] } as any,
+        ]);
+      const createdUserId = randomUUID();
+      prisma.userAccounts.findFirst = jest.fn().mockResolvedValueOnce(null);
+      prisma.userAccounts.create = jest
+        .fn()
+        .mockResolvedValueOnce({ id: createdUserId });
+      prisma.applications.create = jest.fn();
+      prisma.address.createMany = jest.fn();
+      const id = randomUUID();
+      await service.transferJurisdictionUserApplicationData(
+        {
+          user: {
+            id,
+          } as unknown as User,
+        } as unknown as ExpressRequest,
+        {
+          connectionString: 'Sample',
+          jurisdiction: 'Sample jurisdiction',
+        },
+        externalPrismaClient,
+      );
+
+      expect(prisma.userAccounts.create).toBeCalledTimes(1);
+      expect(prisma.userAccounts.create).toBeCalledWith({
+        data: {
+          activeAccessToken: null,
+          activeRefreshToken: null,
+          agreedToTermsOfService: false,
+          application: undefined,
+          confirmationToken: 'confirmation token',
+          confirmedAt: expect.anything(),
+          createdAt: pastDate,
+          dob: expect.anything(),
+          email: 'email@example.com',
+          failedLoginAttemptsCount: 0,
+          firstName: 'first',
+          hitConfirmationUrl: expect.anything(),
+          id: expect.anything(),
+          jurisdictions: {
+            connect: {
+              id: jurisdictionId,
+            },
+          },
+          language: 'en',
+          lastLoginAt: expect.anything(),
+          lastName: 'last',
+          mfaEnabled: false,
+          middleName: 'middle',
+          passwordHash: 'password hash',
+          passwordUpdatedAt: expect.anything(),
+          passwordValidForDays: 180,
+          phoneNumber: 'phone number',
+          phoneNumberVerified: true,
+          resetToken: 'reset token',
+          singleUseCode: null,
+          singleUseCodeUpdatedAt: expect.anything(),
+          updatedAt: undefined,
+        },
+      });
+
+      expect(prisma.applications.create).toBeCalledTimes(1);
+      expect(prisma.applications.create).toBeCalledWith({
+        data: {
+          appUrl: 'appUrl',
+          confirmationCode: 'confirmationCode',
+          createdAt: expect.anything(),
+          deletedAt: false,
+          householdSize: 1,
+          id: expect.anything(),
+          listings: {
+            connect: {
+              id: applicationListingId,
+            },
+          },
+          markedAsDuplicate: false,
+          preferences: [],
+          programs: [],
+          reviewStatus: 'valid',
+          status: 'submitted',
+          submissionDate: expect.anything(),
+          submissionType: 'electronical',
+          updatedAt: expect.anything(),
+          userAccounts: {
+            connect: {
+              id: createdUserId,
+            },
+          },
+        },
       });
     });
   });

@@ -7,7 +7,6 @@
     "packages": [
       "sites/public",
       "sites/partners",
-      "backend/core",
       "shared-helpers",
       "doorway-ui-components"
     ],
@@ -47,9 +46,6 @@
     "test:shared:helpers": "cd shared-helpers && yarn && yarn test",
     "test:shared:translations": "cd shared-helpers && yarn && yarn test:missing-translations",
     "test:doorway-ui-components": "cd doorway-ui-components && yarn && yarn test",
-    "test:backend:core:dbsetup": "cd backend/core && yarn db:migration:run && yarn db:seed",
-    "test:backend:core": "cd backend/core && yarn test",
-    "test:e2e:backend:core": "cd backend/core && yarn test:e2e",
     "test:apps": "concurrently \"yarn dev:backend\" \"yarn test:app:public\"",
     "test:apps:headless": "concurrently \"yarn dev:backend\" \"yarn test:app:public:headless\"",
     "lint": "eslint 'sites/**/*.ts' 'sites/**/*.tsx' 'sites/**/*.js' && cd api && yarn lint",
@@ -87,6 +83,7 @@
     "react-test-renderer": "18.2.0",
     "rimraf": "^3.0.2",
     "ts-jest": "^26.4.1",
+    "ts-node": "^10.0.0",
     "typescript": "4.6.4",
     "wait-on": "^5.2.0"
   },

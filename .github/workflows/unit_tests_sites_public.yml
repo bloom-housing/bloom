@@ -30,10 +30,6 @@ jobs:
         working-directory: ./sites/public
         run: yarn
 
-      - name: yarn in backend/core dir
-        working-directory: ./backend/core
-        run: yarn
-
       - name: yarn in sites/public dir
         working-directory: ./sites/public
         run: yarn

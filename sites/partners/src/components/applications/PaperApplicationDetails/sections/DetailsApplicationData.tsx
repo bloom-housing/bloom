@@ -71,7 +71,7 @@ const DetailsApplicationData = () => {
 
       <Grid.Row>
         <FieldValue label={t("application.details.submittedBy")} testId="submittedBy">
-          {application.applicant.firstName && application.applicant.lastName
+          {application.applicant?.firstName && application.applicant?.lastName
             ? `${application.applicant.firstName} ${application.applicant.lastName}`
             : t("t.n/a")}
         </FieldValue>
