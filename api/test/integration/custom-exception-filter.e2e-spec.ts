@@ -2,9 +2,9 @@ import { HttpAdapterHost } from '@nestjs/core';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, Logger } from '@nestjs/common';
 import request from 'supertest';
-import { AppModule } from '../../../src/modules/app.module';
-import { PrismaService } from '../../../src/services/prisma.service';
-import { CustomExceptionFilter } from '../../../src/utilities/custom-exception-filter';
+import { AppModule } from '../../src/modules/app.module';
+import { PrismaService } from '../../src/services/prisma.service';
+import { CustomExceptionFilter } from '../../src/utilities/custom-exception-filter';
 
 describe('Testing custom exception filter', () => {
   let app: INestApplication;
