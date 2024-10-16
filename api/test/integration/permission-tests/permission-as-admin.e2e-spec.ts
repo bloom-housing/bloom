@@ -553,9 +553,13 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
     });
 
     it('should succeed for update endpoint', async () => {
+      const newJurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(newJurisdiction.id, prisma);
       const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
         prisma,
-        jurisdictionId,
+        newJurisdiction.id,
       );
 
       await request(app.getHttpServer())
