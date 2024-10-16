@@ -343,10 +343,10 @@ const FormSummaryDetails = ({
         <>
           <Card.Header className={styles["summary-header"]}>
             <Heading priority={3} size="xl" className="font-serif font-normal">
-              {t("application.review.householdDetails")}
+              {t("application.household.householdMembers")}
             </Heading>
             {editMode && !validationError && (
-              <Link href="/applications/household/preferred-units">{t("t.edit")}</Link>
+              <Link href="/applications/household/add-members">{t("t.edit")}</Link>
             )}
           </Card.Header>
 
