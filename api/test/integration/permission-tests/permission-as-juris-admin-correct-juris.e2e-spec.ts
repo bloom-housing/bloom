@@ -208,7 +208,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
   describe('Testing application endpoints', () => {
     beforeAll(async () => {
       await unitTypeFactoryAll(prisma);
-      await await prisma.translations.create({
+      await prisma.translations.create({
         data: translationFactory(),
       });
     });

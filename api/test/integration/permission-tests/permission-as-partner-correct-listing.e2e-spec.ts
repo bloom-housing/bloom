@@ -272,7 +272,7 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
 
   describe('Testing application endpoints', () => {
     beforeAll(async () => {
-      await await prisma.translations.create({
+      await prisma.translations.create({
         data: translationFactory(),
       });
     });

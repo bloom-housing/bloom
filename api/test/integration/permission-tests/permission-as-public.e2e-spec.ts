@@ -204,7 +204,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
   describe('Testing application endpoints', () => {
     beforeAll(async () => {
       await unitTypeFactoryAll(prisma);
-      await await prisma.translations.create({
+      await prisma.translations.create({
         data: translationFactory(),
       });
     });

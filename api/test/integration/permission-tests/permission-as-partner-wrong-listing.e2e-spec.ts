@@ -261,7 +261,7 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
   describe('Testing application endpoints', () => {
     beforeAll(async () => {
       await unitTypeFactoryAll(prisma);
-      await await prisma.translations.create({
+      await prisma.translations.create({
         data: translationFactory(),
       });
     });

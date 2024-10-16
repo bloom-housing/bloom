@@ -209,7 +209,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
   describe('Testing application endpoints', () => {
     beforeAll(async () => {
       await unitTypeFactoryAll(prisma);
-      await await prisma.translations.create({
+      await prisma.translations.create({
         data: translationFactory(),
       });
     });
@@ -705,12 +705,11 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
 
     it('should succeed for delete endpoint', async () => {
       await unitAccessibilityPriorityTypeFactoryAll(prisma);
-      const unitTypeA =
-        await await prisma.unitAccessibilityPriorityTypes.create({
-          data: {
-            name: 'unit type A',
-          },
-        });
+      const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
+        data: {
+          name: 'unit type A',
+        },
+      });
 
       await request(app.getHttpServer())
         .delete(`/unitAccessibilityPriorityTypes`)
