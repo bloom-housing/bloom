@@ -788,7 +788,6 @@ export class ScriptRunnerService {
             return;
           }
           try {
-            console.log('application', application);
             await this.prisma.applications.create({
               data: {
                 id: application.id,
@@ -800,6 +799,7 @@ export class ScriptRunnerService {
                 submissionDate: application.submissionDate,
                 preferences: [],
                 programs: [],
+                contactPreferences: [],
                 status: application.status,
                 householdSize: application.householdSize,
                 appUrl: application.appUrl,

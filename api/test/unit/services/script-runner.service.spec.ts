@@ -1355,6 +1355,7 @@ describe('Testing script runner service', () => {
           markedAsDuplicate: false,
           preferences: [],
           programs: [],
+          contactPreferences: [],
           reviewStatus: 'valid',
           status: 'submitted',
           submissionDate: expect.anything(),
