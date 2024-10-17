@@ -14,11 +14,7 @@ import { useFormConductor } from "../../../lib/hooks"
 import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
 import AutofillCleaner from "../../../lib/applications/appAutofill"
 import { UserStatus } from "../../../lib/constants"
-import {
-  Application,
-  ApplicationOrderByKeys,
-  OrderByEnum,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { Application } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import ApplicationFormLayout from "../../../layouts/application-form"
 import { Button } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"

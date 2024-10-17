@@ -17,10 +17,10 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { ReservedCommunityTypeService } from '../services/reserved-community-type.service';
 import { ReservedCommunityType } from '../dtos/reserved-community-types/reserved-community-type.dto';
 import { ReservedCommunityTypeCreate } from '../dtos/reserved-community-types/reserved-community-type-create.dto';
 import { ReservedCommunityTypeUpdate } from '../dtos/reserved-community-types/reserved-community-type-update.dto';
+import { ReservedCommunityTypeService } from '../services/reserved-community-type.service';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { ReservedCommunityTypeQueryParams } from '../dtos/reserved-community-types/reserved-community-type-query-params.dto';
 import { IdDTO } from '../dtos/shared/id.dto';

@@ -11,7 +11,6 @@ import { HouseholdMemberForm } from "../../../components/applications/HouseholdM
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationAddMembers = () => {
   const { profile } = useContext(AuthContext)
