@@ -1,6 +1,6 @@
 const path = require("path")
-const bloomTheme = require("../tailwind.config.js");
-const tailwindVars = require("../tailwind.tosass.js")(bloomTheme);
+const bloomTheme = require("../tailwind.config.js")
+const tailwindVars = require("../tailwind.tosass.js")(bloomTheme)
 
 module.exports = {
   stories: ["../src/**/*.stories.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)"],
@@ -11,18 +11,6 @@ module.exports = {
     "@storybook/addon-a11y",
     "@storybook/addon-knobs",
     "@geometricpanda/storybook-addon-badges",
-    {
-      /**
-       * Fix Storybook issue with PostCSS@8
-       * @see https://github.com/storybookjs/storybook/issues/12668#issuecomment-773958085
-       */
-      name: "@storybook/addon-postcss",
-      options: {
-        postcssLoaderOptions: {
-          implementation: require("postcss"),
-        },
-      },
-    },
   ],
   core: {
     builder: "webpack5",
@@ -54,7 +42,7 @@ module.exports = {
           },
         },
       ],
-    });
+    })
 
     config.module.rules.push({
       test: /\.(ts|tsx)$/,
@@ -66,9 +54,9 @@ module.exports = {
           },
         },
       ],
-    });
+    })
 
-    config.resolve.extensions.push(".ts", ".tsx");
-    return config;
+    config.resolve.extensions.push(".ts", ".tsx")
+    return config
   },
-};
+}
