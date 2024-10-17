@@ -1261,7 +1261,7 @@ describe("<ListingFormActions>", () => {
     })
     describe("as a partner", () => {
       beforeAll(() => {
-        partnerUser = { ...adminUser, jurisdictions: [mockAllUserCopyJurisdiction] }
+        partnerUser = { ...partnerUser, jurisdictions: [mockAllUserCopyJurisdiction] }
       })
       it("renders correct buttons in a draft detail state", () => {
         const { getByText } = render(
