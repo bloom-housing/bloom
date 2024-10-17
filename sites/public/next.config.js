@@ -45,6 +45,7 @@ module.exports = withBundleAnalyzer({
     showPwdless: process.env.SHOW_PWDLESS === "TRUE",
     maintenanceWindow: process.env.MAINTENANCE_WINDOW,
     reCaptchaKey: process.env.RECAPTCHA_KEY,
+    maxClosedListings: process.env.MAX_CLOSED_LISTINGS,
   },
   i18n: {
     locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],
