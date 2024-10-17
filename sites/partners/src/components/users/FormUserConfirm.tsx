@@ -1,6 +1,6 @@
 import React, { useRef, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
-import { t, FormCard, Form, Field, useMutate, AlertBox, Modal } from "@bloom-housing/ui-components"
+import { t, FormCard, Form, Field, useMutate, AlertBox } from "@bloom-housing/ui-components"
 import { Button, Dialog, Icon } from "@bloom-housing/ui-seeds"
 import { AuthContext, MessageContext, passwordRegex } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"

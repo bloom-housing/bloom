@@ -51,7 +51,6 @@ const ApplicationsList = () => {
     !!process.env.applicationExportAsSpreadsheet
   )
 
-  const countyCode = listingDto?.jurisdictions?.name
   const listingName = listingDto?.name
   const isListingOpen = listingDto?.status === "active"
   const { data: flaggedApps } = useFlaggedApplicationsList({
@@ -103,8 +102,8 @@ const ApplicationsList = () => {
   }, [applications])
 
   const columnDefs = useMemo(() => {
-    return getColDefs(maxHouseholdSize, countyCode)
-  }, [maxHouseholdSize, countyCode])
+    return getColDefs(maxHouseholdSize)
+  }, [maxHouseholdSize])
 
   const gridComponents = {
     formatLinkCell,
