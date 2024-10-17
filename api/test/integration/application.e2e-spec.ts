@@ -95,7 +95,7 @@ describe('Application Controller Tests', () => {
     app.use(cookieParser());
     await app.init();
     await unitTypeFactoryAll(prisma);
-    await await prisma.translations.create({
+    await prisma.translations.create({
       data: translationFactory(),
     });
 

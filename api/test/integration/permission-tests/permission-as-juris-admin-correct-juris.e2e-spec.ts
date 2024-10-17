@@ -100,7 +100,10 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
     app.use(cookieParser());
     await app.init();
 
-    jurisId = await generateJurisdiction(prisma, 'permission juris 19');
+    jurisId = await generateJurisdiction(
+      prisma,
+      'correct jadmin permission juris',
+    );
     await reservedCommunityTypeFactoryAll(jurisId, prisma);
     await unitAccessibilityPriorityTypeFactoryAll(prisma);
 
@@ -205,7 +208,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
   describe('Testing application endpoints', () => {
     beforeAll(async () => {
       await unitTypeFactoryAll(prisma);
-      await await prisma.translations.create({
+      await prisma.translations.create({
         data: translationFactory(),
       });
     });
@@ -519,7 +522,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
     it('should error as forbidden for delete endpoint', async () => {
       const jurisdictionA = await generateJurisdiction(
         prisma,
-        'permission juris 20',
+        'correct jadmin permission juris delete',
       );
 
       await request(app.getHttpServer())
@@ -989,7 +992,10 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
     });
 
     it('should succeed for public create endpoint', async () => {
-      const juris = await generateJurisdiction(prisma, 'permission juris 21');
+      const juris = await generateJurisdiction(
+        prisma,
+        'correct jadmin permission juris create',
+      );
 
       const data = await applicationFactory();
       data.applicant.create.emailAddress = 'publicuser@email.com';
@@ -1161,14 +1167,8 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
       expect(activityLogResult).not.toBeNull();
     });
 
-    it('should error as forbidden for duplicate endpoint', async () => {
-      const jurisdictionA = await generateJurisdiction(
-        prisma,
-        'permission juris 181',
-      );
-      await reservedCommunityTypeFactoryAll(jurisdictionA, prisma);
-
-      const listingData = await listingFactory(jurisdictionA, prisma);
+    it('should succeed for duplicate endpoint', async () => {
+      const listingData = await listingFactory(jurisId, prisma);
       const listing = await prisma.listings.create({
         data: listingData,
       });
@@ -1184,7 +1184,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
           },
         })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(201);
     });
 
     it('should succeed for process endpoint', async () => {
@@ -1193,33 +1193,6 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
-    });
-
-    it('should succeed for expireLotteries endpoint', async () => {
-      await request(app.getHttpServer())
-        .put(`/lottery/expireLotteries`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', cookies)
-        .expect(200);
-    });
-
-    it('should error as forbidden for lottery status endpoint', async () => {
-      const listingData = await listingFactory(jurisId, prisma, {
-        status: 'closed',
-      });
-      const listing = await prisma.listings.create({
-        data: listingData,
-      });
-
-      await request(app.getHttpServer())
-        .put('/lottery/lotteryStatus')
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send({
-          id: listing.id,
-          lotteryStatus: 'ran',
-        })
-        .set('Cookie', cookies)
-        .expect(403);
     });
 
     it('should succeed for csv endpoint & create an activity log entry', async () => {
@@ -1367,6 +1340,35 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
+    });
+  });
+
+  describe('Testing lottery endpoints', () => {
+    it('should succeed for expireLotteries endpoint', async () => {
+      await request(app.getHttpServer())
+        .put(`/lottery/expireLotteries`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+
+    it('should error as forbidden for lottery status endpoint', async () => {
+      const listingData = await listingFactory(jurisId, prisma, {
+        status: 'closed',
+      });
+      const listing = await prisma.listings.create({
+        data: listingData,
+      });
+
+      await request(app.getHttpServer())
+        .put('/lottery/lotteryStatus')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: listing.id,
+          lotteryStatus: 'ran',
+        })
+        .set('Cookie', cookies)
+        .expect(403);
     });
   });
 });
