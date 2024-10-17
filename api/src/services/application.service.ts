@@ -168,6 +168,13 @@ export const view: Partial<
         id: true,
       },
     },
+    preferredUnitTypes: {
+      select: {
+        id: true,
+        name: true,
+        numBedrooms: true,
+      },
+    },
   },
 };
 
@@ -183,13 +190,6 @@ view.base = {
       sexualOrientation: true,
       howDidYouHear: true,
       race: true,
-    },
-  },
-  preferredUnitTypes: {
-    select: {
-      id: true,
-      name: true,
-      numBedrooms: true,
     },
   },
   listings: {
