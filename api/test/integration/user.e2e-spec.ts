@@ -476,9 +476,9 @@ describe('User Controller Tests', () => {
       .send({
         token: fakeConfToken,
       } as ConfirmationRequest)
-      .set('Cookie', cookies);
-    // .expect(201);
-    console.log(res);
+      .set('Cookie', cookies)
+      .expect(201);
+
     expect(res.status).toBe(201);
     expect(res.body.success).toBe(undefined);
 
@@ -520,10 +520,9 @@ describe('User Controller Tests', () => {
       .send({
         token: fakeConfToken,
       } as ConfirmationRequest)
-      .set('Cookie', cookies);
-    // .expect(201);
+      .set('Cookie', cookies)
+      .expect(201);
 
-    console.log(res);
     expect(res.status).toBe(201);
     expect(res.body.success).toBe(undefined);
 
