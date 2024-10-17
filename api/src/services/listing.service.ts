@@ -935,15 +935,31 @@ export class ListingService implements OnModuleInit {
       throw new BadRequestException('New listing name must be unique');
     }
 
+    const duplicateListingPermissions = (
+      requestingUser?.jurisdictions?.length === 1
+        ? requestingUser?.jurisdictions[0]
+        : requestingUser?.jurisdictions?.find(
+            (juris) => juris.id === storedListing?.jurisdictions?.id,
+          )
+    )?.duplicateListingPermissions;
+
     const userRoles =
-      process.env.ALLOW_PARTNERS_TO_DUPLICATE_LISTINGS === 'TRUE' &&
-      (requestingUser?.userRoles?.isJurisdictionalAdmin ||
-        requestingUser?.userRoles?.isPartner)
+      requestingUser?.userRoles?.isAdmin ||
+      (requestingUser?.userRoles?.isJurisdictionalAdmin &&
+        duplicateListingPermissions?.includes(
+          UserRoleEnum.jurisdictionAdmin,
+        )) ||
+      (requestingUser?.userRoles?.isPartner &&
+        duplicateListingPermissions?.includes(UserRoleEnum.partner))
         ? {
             ...requestingUser.userRoles,
             isAdmin: true,
           }
-        : requestingUser?.userRoles;
+        : //allows for duplicate feature to be fully turned off no matter the user
+          {
+            ...requestingUser?.userRoles,
+            isAdmin: false,
+          };
 
     await this.permissionService.canOrThrow(
       { ...requestingUser, userRoles: userRoles },
@@ -975,6 +991,7 @@ export class ListingService implements OnModuleInit {
     const newListingData: ListingCreate = {
       ...mappedListing,
       name: dto.name,
+      assets: [],
       status: ListingsStatusEnum.pending,
       listingEvents: listingEvents,
       listingMultiselectQuestions:
@@ -998,8 +1015,8 @@ export class ListingService implements OnModuleInit {
     );
 
     if (
-      process.env.ALLOW_PARTNERS_TO_DUPLICATE_LISTINGS === 'TRUE' &&
-      requestingUser.userRoles?.isPartner
+      requestingUser?.userRoles?.isPartner &&
+      duplicateListingPermissions?.includes(UserRoleEnum.partner)
     ) {
       await this.prisma.userAccounts.update({
         data: {

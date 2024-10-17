@@ -4,6 +4,7 @@ import { randomName } from './word-generator';
 export const jurisdictionFactory = (
   jurisdictionName = randomName(),
   listingApprovalPermissions?: UserRoleEnum[],
+  duplicateListingPermissions?: UserRoleEnum[],
 ): Prisma.JurisdictionsCreateInput => ({
   name: jurisdictionName,
   notificationsSignUpUrl: 'https://www.exygy.com',
@@ -19,4 +20,8 @@ export const jurisdictionFactory = (
   enableGeocodingPreferences: true,
   enableGeocodingRadiusMethod: false,
   listingApprovalPermissions: listingApprovalPermissions || [],
+  duplicateListingPermissions: duplicateListingPermissions || [
+    UserRoleEnum.admin,
+    UserRoleEnum.jurisdictionAdmin,
+  ],
 });
