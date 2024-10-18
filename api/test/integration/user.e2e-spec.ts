@@ -412,7 +412,7 @@ describe('User Controller Tests', () => {
       data: await userFactory(),
     });
 
-    const confToken = await userService.createConfirmationToken(
+    const confToken = userService.createConfirmationToken(
       userA.id,
       userA.email,
     );
@@ -451,7 +451,7 @@ describe('User Controller Tests', () => {
       data: await userFactory(),
     });
 
-    const storedConfToken = await userService.createConfirmationToken(
+    const storedConfToken = userService.createConfirmationToken(
       userA.id,
       userA.email,
     );
@@ -465,7 +465,7 @@ describe('User Controller Tests', () => {
       },
     });
 
-    const fakeConfToken = await userService.createConfirmationToken(
+    const fakeConfToken = userService.createConfirmationToken(
       randomUUID(),
       userA.email,
     );
@@ -478,6 +478,7 @@ describe('User Controller Tests', () => {
       .set('Cookie', cookies)
       .expect(201);
 
+    expect(res.status).toBe(201);
     expect(res.body.success).toBe(undefined);
 
     const userPostResend = await prisma.userAccounts.findUnique({
@@ -494,7 +495,7 @@ describe('User Controller Tests', () => {
       data: await userFactory(),
     });
 
-    const storedConfToken = await userService.createConfirmationToken(
+    const storedConfToken = userService.createConfirmationToken(
       userA.id,
       userA.email,
     );
@@ -508,7 +509,7 @@ describe('User Controller Tests', () => {
       },
     });
 
-    const fakeConfToken = await userService.createConfirmationToken(
+    const fakeConfToken = userService.createConfirmationToken(
       userA.id,
       userA.email + 'x',
     );
@@ -521,6 +522,7 @@ describe('User Controller Tests', () => {
       .set('Cookie', cookies)
       .expect(201);
 
+    expect(res.status).toBe(201);
     expect(res.body.success).toBe(undefined);
 
     const userPostResend = await prisma.userAccounts.findUnique({

@@ -6,6 +6,7 @@ import {
   LanguagesEnum,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
+  Prisma,
   ReviewOrderTypeEnum,
   UnitTypeEnum,
   UserRoleEnum,
@@ -441,12 +442,16 @@ describe('Listing Controller Tests', () => {
     });
 
     it('should get listings from list endpoint when params are sent', async () => {
-      const listing1 = await listingFactory(jurisdictionAId, prisma);
+      const listing1 = await listingFactory(jurisdictionAId, prisma, {
+        listing: { name: 'filterListing1' } as Prisma.ListingsCreateInput,
+      });
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
 
-      const listing2 = await listingFactory(jurisdictionAId, prisma);
+      const listing2 = await listingFactory(jurisdictionAId, prisma, {
+        listing: { name: 'filterListing2' } as Prisma.ListingsCreateInput,
+      });
       const listing2Created = await prisma.listings.create({
         data: listing2,
       });

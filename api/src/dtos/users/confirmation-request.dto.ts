@@ -6,7 +6,7 @@ import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum
 export class ConfirmationRequest {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(542, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   token: string;
 }
