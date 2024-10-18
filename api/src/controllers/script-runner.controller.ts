@@ -18,6 +18,7 @@ import { DataTransferDTO } from '../dtos/script-runner/data-transfer.dto';
 import { BulkApplicationResendDTO } from '../dtos/script-runner/bulk-application-resend.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { AmiChartImportDTO } from '../dtos/script-runner/ami-chart-import.dto';
+import { CommunityTypeDTO } from '../dtos/script-runner/community-type.dto';
 
 @Controller('scriptRunner')
 @ApiTags('scriptRunner')
@@ -63,22 +64,6 @@ export class ScirptRunnerController {
     return await this.scriptRunnerService.bulkApplicationResend(
       req,
       bulkApplicationResendDTO,
-    );
-  }
-
-  @Put('createNewReservedCommunityType')
-  @ApiOperation({
-    summary: 'A script that creates a new reserved community type',
-    operationId: 'createNewReservedCommunityType',
-  })
-  @ApiOkResponse({ type: SuccessDTO })
-  async createNewReservedCommunityType(
-    @Body() idDto: IdDTO,
-    @Request() req: ExpressRequest,
-  ): Promise<SuccessDTO> {
-    return await this.scriptRunnerService.createNewReservedCommunityType(
-      req,
-      idDto,
     );
   }
 
@@ -136,5 +121,23 @@ export class ScirptRunnerController {
     @Request() req: ExpressRequest,
   ): Promise<SuccessDTO> {
     return await this.scriptRunnerService.optOutExistingLotteries(req);
+  }
+
+  @Put('createNewReservedCommunityType')
+  @ApiOperation({
+    summary: 'A script that creates a new reserved community type',
+    operationId: 'createNewReservedCommunityType',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async createNewReservedCommunityType(
+    @Body() body: CommunityTypeDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.createNewReservedCommunityType(
+      req,
+      body.id,
+      body.name,
+      body.description,
+    );
   }
 }
