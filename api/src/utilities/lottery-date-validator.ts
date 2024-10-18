@@ -1,8 +1,4 @@
-import {
-  ListingEventsTypeEnum,
-  ReviewOrderTypeEnum,
-  YesNoEnum,
-} from '@prisma/client';
+import { ListingEventsTypeEnum, ReviewOrderTypeEnum } from '@prisma/client';
 import {
   ValidatorConstraint,
   ValidatorConstraintInterface,

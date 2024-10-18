@@ -6,7 +6,6 @@ import {
   mapCheckboxesToApi,
 } from "@bloom-housing/shared-helpers"
 import { FormTypes, ApplicationTypes, Address } from "../../lib/applications/FormTypes"
-import { convertDataToLocal } from "../../lib/helpers"
 
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"

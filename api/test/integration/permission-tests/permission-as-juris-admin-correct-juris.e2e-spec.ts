@@ -1173,7 +1173,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
         data: listingData,
       });
 
-      const res = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post('/listings/duplicate')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
