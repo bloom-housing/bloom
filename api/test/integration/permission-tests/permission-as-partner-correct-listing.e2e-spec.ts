@@ -1110,7 +1110,7 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
     });
 
     it('should error as forbidden for duplicate endpoint', async () => {
-      const res = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post('/listings/duplicate')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
