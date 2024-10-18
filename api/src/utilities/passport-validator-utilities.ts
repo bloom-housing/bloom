@@ -58,7 +58,7 @@ export function singleUseCodePresent(
  * @param storedSingleUseCode single use code stored on the user
  * @returns
  */
-export function singleUseCodeValid(
+export function singleUseCodeInvalid(
   singleUseCodeUpdatedAt: Date,
   ttl: number,
   incomingSingleUseCode: string,

@@ -7,7 +7,6 @@ jest.mock('@google-cloud/translate/build/src/v2');
 
 describe('GoogleTranslateService', () => {
   let service: GoogleTranslateService;
-  let prisma: PrismaService;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -15,7 +14,6 @@ describe('GoogleTranslateService', () => {
     }).compile();
 
     service = module.get<GoogleTranslateService>(GoogleTranslateService);
-    prisma = module.get<PrismaService>(PrismaService);
   });
 
   describe('isConfigured', () => {
