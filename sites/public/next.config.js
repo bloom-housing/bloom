@@ -46,6 +46,8 @@ module.exports = withBundleAnalyzer({
     showMandatedAccounts: process.env.SHOW_MANDATED_ACCOUNTS === "TRUE",
     showPwdless: process.env.SHOW_PWDLESS === "TRUE",
     maintenanceWindow: process.env.MAINTENANCE_WINDOW,
+    reCaptchaKey: process.env.RECAPTCHA_KEY,
+    maxClosedListings: process.env.MAX_CLOSED_LISTINGS,
   },
   i18n: {
     locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],
