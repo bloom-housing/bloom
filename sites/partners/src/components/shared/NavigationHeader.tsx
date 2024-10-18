@@ -5,7 +5,6 @@ import {
   TabNavItem,
   AppearanceSizeType,
   NavigationContext,
-  t,
 } from "@bloom-housing/ui-components"
 import styles from "./NavigationHeader.module.scss"
 
