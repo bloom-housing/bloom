@@ -8,8 +8,8 @@ import {
   ListingMap,
   LatitudeLongitude,
   AlertNotice,
+  Tooltip,
 } from "@bloom-housing/ui-components"
-import { Tooltip } from "@bloom-housing/doorway-ui-components"
 import { countyKeys, stateKeys } from "@bloom-housing/shared-helpers"
 import { FieldValue, Grid, Icon } from "@bloom-housing/ui-seeds"
 import { FormListing } from "../../../../lib/listings/formTypes"

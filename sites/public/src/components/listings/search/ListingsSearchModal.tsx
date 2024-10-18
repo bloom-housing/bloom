@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react"
 import { ListingSearchParams, parseSearchString } from "../../../lib/listings/search"
 import { t } from "@bloom-housing/ui-components"
 import {
-  Modal,
   ButtonGroup,
   ButtonGroupSpacing,
   Button,

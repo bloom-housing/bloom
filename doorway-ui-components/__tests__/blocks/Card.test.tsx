@@ -1,11 +1,9 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
+import { AppearanceStyleType, LinkButton, HeadingGroup } from "@bloom-housing/ui-components"
 import { Card } from "../../src/blocks/Card"
-import { HeadingGroup } from "../../src/headers/HeadingGroup"
 import { Button } from "../../src/actions/Button"
 import { ButtonGroup } from "../../src/actions/ButtonGroup"
-import { LinkButton } from "../../src/actions/LinkButton"
-import { AppearanceStyleType } from "@bloom-housing/ui-components"
 
 afterEach(cleanup)
 

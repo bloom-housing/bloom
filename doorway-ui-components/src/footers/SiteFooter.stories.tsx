@@ -1,9 +1,8 @@
 import * as React from "react"
-
+import { LocalizedLink } from "@bloom-housing/ui-components"
+import { ExygyFooter } from "@bloom-housing/shared-helpers"
 import { SiteFooter } from "./SiteFooter"
 import { FooterNav } from "../navigation/FooterNav"
-import { LocalizedLink } from "../actions/LocalizedLink"
-import { ExygyFooter } from "./ExygyFooter"
 import { FooterSection } from "../sections/FooterSection"
 
 export default {

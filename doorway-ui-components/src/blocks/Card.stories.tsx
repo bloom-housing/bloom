@@ -1,10 +1,9 @@
 import React from "react"
+import { AppearanceStyleType, LinkButton, HeadingGroup } from "@bloom-housing/ui-components"
 import { BADGES } from "../../.storybook/constants"
-import { Button, ButtonGroup, ButtonGroupSpacing, LinkButton } from "../.."
-import { HeadingGroup } from "../headers/HeadingGroup"
+import { Button, ButtonGroup, ButtonGroupSpacing } from "../.."
 import Card from "./Card"
 import CardDocumentation from "./Card.docs.mdx"
-import { AppearanceStyleType } from "@bloom-housing/ui-components"
 
 export default {
   title: "Blocks/Card 🚩",

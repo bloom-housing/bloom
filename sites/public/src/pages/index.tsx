@@ -24,10 +24,6 @@ interface IndexProps {
 }
 
 export default function Home(props: IndexProps) {
-  const blankAlertInfo = {
-    alertMessage: null,
-    alertType: null,
-  }
   const { profile } = useContext(AuthContext)
 
   useEffect(() => {
@@ -42,7 +38,6 @@ export default function Home(props: IndexProps) {
   const mtcDataUrl = process.env.mtcDataUrl
   const metaDescription = t("pageDescription.welcome")
   const metaImage = t("welcome.personWithChildAlt")
-  const alertClasses = "flex-grow mt-6 max-w-6xl w-full"
   return (
     <Layout>
       <Head>

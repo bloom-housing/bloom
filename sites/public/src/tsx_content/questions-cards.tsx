@@ -1,6 +1,7 @@
 import React from "react"
 import { t, Heading } from "@bloom-housing/ui-components"
-import { CardProps, Card, DoorwayCollapsibleSection } from "@bloom-housing/doorway-ui-components"
+import { CardProps, Card } from "@bloom-housing/doorway-ui-components"
+import { DoorwayCollapsibleSection } from "../components/shared/DoorwayCollapsibleSection"
 
 // These are static, however they need to be exported as a function and
 // not a const due to a race condition around translations.
@@ -12,7 +13,7 @@ export function questionsLinkableCards(): React.ReactElement<CardProps>[] {
       jumplinkData={{ title: t("help.faq.processPreparation") }}
     >
       <Card.Header>
-        <Heading priority={2} className={"text-primary-lighter font-semibold"}>
+        <Heading priority={2} className={"text-primary-lighter font-bold"}>
           {t("help.faq.processPreparation")}
         </Heading>
       </Card.Header>
@@ -139,7 +140,7 @@ export function questionsLinkableCards(): React.ReactElement<CardProps>[] {
       jumplinkData={{ title: t("help.faq.whatsNextHeader") }}
     >
       <Card.Header>
-        <Heading priority={2} className={"text-primary-lighter font-semibold"}>
+        <Heading priority={2} className={"text-primary-lighter font-bold"}>
           {t("help.faq.whatsNextHeader")}
         </Heading>
       </Card.Header>
@@ -201,7 +202,7 @@ export function questionsLinkableCards(): React.ReactElement<CardProps>[] {
       jumplinkData={{ title: t("help.faq.whatElseToKnowHeader") }}
     >
       <Card.Header>
-        <Heading priority={2} className={"text-primary-lighter font-semibold"}>
+        <Heading priority={2} className={"text-primary-lighter font-bold"}>
           {t("help.faq.whatElseToKnowHeader")}
         </Heading>
       </Card.Header>
@@ -283,7 +284,7 @@ export function questionsLinkableCards(): React.ReactElement<CardProps>[] {
         jumplinkData={{ title: t("help.faq.lotteryResults") }}
       >
         <Card.Header>
-          <Heading priority={2} className={"text-primary-lighter font-semibold"}>
+          <Heading priority={2} className={"text-primary-lighter font-bold"}>
             {t("help.faq.lotteryResults")}
           </Heading>
         </Card.Header>

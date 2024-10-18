@@ -1,9 +1,16 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Heading, AppearanceStyleType, StandardTableProps, HeaderType, Icon, IconFillColors } from "@bloom-housing/ui-components"
+import {
+  Heading,
+  AppearanceStyleType,
+  StandardTableProps,
+  HeaderType,
+  Icon,
+  IconFillColors,
+  LinkButton,
+  StackedTableProps,
+  Tag,
+} from "@bloom-housing/ui-components"
 import { ImageCard, ImageCardProps, ImageTag } from "../../blocks/ImageCard"
-import { LinkButton } from "../../actions/LinkButton"
-import { StackedTableProps } from "../../tables/StackedTable"
-import { Tag } from "../../text/Tag"
 import { AppearanceShadeType } from "../../global/AppearanceTypes"
 import "./ListingCard.scss"
 import { NavigationContext } from "../../config/NavigationContext"
@@ -227,7 +234,7 @@ const ListingCard = (props: ListingCardProps) => {
                   href={footerButton.href}
                   ariaHidden={footerButton.ariaHidden}
                   key={index}
-                  className={"is-secondary"}
+                  className={"is-secondary doorway-button"}
                 >
                   {footerButton.text}
                 </LinkButton>

@@ -1,6 +1,6 @@
 import React, { ChangeEvent, HTMLAttributes, useMemo } from "react"
-import { ErrorMessage } from "../notifications/ErrorMessage"
 import { UseFormMethods, RegisterOptions } from "react-hook-form"
+import { ErrorMessage } from "@bloom-housing/ui-components"
 import "./Field.scss"
 
 export interface FieldProps {

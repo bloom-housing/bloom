@@ -1,9 +1,16 @@
 import React, { useMemo, useState } from "react"
-import { t, AppearanceStyleType, Icon, IconFillColors, UniversalIconType } from "@bloom-housing/ui-components"
-import { LocalizedLink } from "../actions/LocalizedLink"
+import {
+  t,
+  AppearanceStyleType,
+  Icon,
+  IconFillColors,
+  UniversalIconType,
+  LocalizedLink,
+  Tooltip,
+  TooltipProps,
+  Tag,
+} from "@bloom-housing/ui-components"
 import "./ImageCard.scss"
-import { Tag } from "../text/Tag"
-import { TooltipProps, Tooltip } from "./Tooltip"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import { AppearanceSizeType } from "../global/AppearanceTypes"
 import { Modal } from "../overlays/Modal"
