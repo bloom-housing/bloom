@@ -26,10 +26,6 @@ const getHowItWorks = async (jurisdiction: string) => {
 }
 
 export default function Home(props: IndexProps) {
-  const blankAlertInfo = {
-    alertMessage: null,
-    alertType: null,
-  }
   const { profile } = useContext(AuthContext)
   const [howItWorksContent, setHowItWorksContent] = useState("")
 

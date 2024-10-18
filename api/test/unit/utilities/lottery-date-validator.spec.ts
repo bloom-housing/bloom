@@ -1,8 +1,4 @@
-import {
-  ListingEventsTypeEnum,
-  ReviewOrderTypeEnum,
-  YesNoEnum,
-} from '@prisma/client';
+import { ListingEventsTypeEnum, ReviewOrderTypeEnum } from '@prisma/client';
 import { LotteryDateParamValidator } from '../../../src/utilities/lottery-date-validator';
 
 describe('Testing OrderQueryParamValidator', () => {

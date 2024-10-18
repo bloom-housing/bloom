@@ -6,7 +6,6 @@ import {
   contactPreferencesCheckboxesOrder,
   alternateContactTypeRadioOrder,
   howDidYouHearCheckboxesOrder,
-  raceCheckboxesOrder,
 } from "./../mockData/applicationData"
 
 Cypress.Commands.add("signIn", (email, password) => {
