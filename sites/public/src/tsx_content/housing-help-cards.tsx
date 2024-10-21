@@ -1,6 +1,7 @@
 import React from "react"
 import { t, Heading } from "@bloom-housing/ui-components"
-import { CardProps, Card, DoorwayCollapsibleSection } from "@bloom-housing/doorway-ui-components"
+import { CardProps, Card } from "@bloom-housing/doorway-ui-components"
+import { DoorwayCollapsibleSection } from "../components/shared/DoorwayCollapsibleSection"
 
 // These are static, however they need to be exported as a function and
 // not a const due to a race condition around translations.
@@ -20,7 +21,7 @@ export function housingHelpLinkableCards(): React.ReactElement<CardProps>[] {
       jumplinkData={{ title: t("help.housingHelp.immediateHousingAssistance") }}
     >
       <Card.Header>
-        <Heading priority={2} className={"text-primary-lighter font-semibold"}>
+        <Heading priority={2} className={"text-primary-lighter font-bold"}>
           {t("help.housingHelp.immediateHousingAssistance")}
         </Heading>
       </Card.Header>
@@ -109,7 +110,7 @@ export function housingHelpLinkableCards(): React.ReactElement<CardProps>[] {
       jumplinkData={{ title: t("help.housingHelp.counseling.title") }}
     >
       <Card.Header>
-        <Heading priority={2} className={"text-primary-lighter font-semibold"}>
+        <Heading priority={2} className={"text-primary-lighter font-bold"}>
           {t("help.housingHelp.counseling.title")}
         </Heading>
       </Card.Header>
@@ -171,7 +172,7 @@ export function housingHelpLinkableCards(): React.ReactElement<CardProps>[] {
       jumplinkData={{ title: t("help.housingHelp.vouchers.title") }}
     >
       <Card.Header>
-        <Heading priority={2} className={"text-primary-lighter font-semibold"}>
+        <Heading priority={2} className={"text-primary-lighter font-bold"}>
           {t("help.housingHelp.vouchers.title")}
         </Heading>
       </Card.Header>
@@ -288,7 +289,7 @@ export function housingHelpLinkableCards(): React.ReactElement<CardProps>[] {
       jumplinkData={{ title: t("help.housingHelp.relatedHelp.title") }}
     >
       <Card.Header>
-        <Heading priority={2} className={"text-primary-lighter font-semibold"}>
+        <Heading priority={2} className={"text-primary-lighter font-bold"}>
           {t("help.housingHelp.relatedHelp.title")}
         </Heading>
       </Card.Header>

@@ -916,7 +916,7 @@ describe('Testing auth service', () => {
 
     await expect(
       async () =>
-        await await authService.requestMfaCode({
+        await authService.requestMfaCode({
           email: 'example@exygy.com',
           password: 'abcdef123',
           mfaType: MfaType.sms,

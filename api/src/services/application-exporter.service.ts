@@ -248,7 +248,7 @@ export class ApplicationExporterService {
                         parsePreference = false;
                         // there aren't typically many programs, but if there, then a object map should be created and used
                         const program = programs.find(
-                          (program) => program.key === curr,
+                          (prog) => prog.key === curr,
                         );
                         multiselectQuestionValue = true;
                         return program;

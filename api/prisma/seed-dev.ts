@@ -4,22 +4,20 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   PrismaClient,
 } from '@prisma/client';
-import { userFactory } from './seed-helpers/user-factory';
-import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
-import { amiChartFactory } from './seed-helpers/ami-chart-factory';
-import { multiselectQuestionFactory } from './seed-helpers/multiselect-question-factory';
-import { listingFactory } from './seed-helpers/listing-factory';
-import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
-import { randomName } from './seed-helpers/word-generator';
 import { randomInt } from 'node:crypto';
-import { applicationFactory } from './seed-helpers/application-factory';
-import { translationFactory } from './seed-helpers/translation-factory';
-import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
-import { householdMemberFactoryMany } from './seed-helpers/household-member-factory';
 import { APPLICATIONS_PER_LISTINGS, LISTINGS_TO_SEED } from './constants';
-
+import { amiChartFactory } from './seed-helpers/ami-chart-factory';
+import { applicationFactory } from './seed-helpers/application-factory';
+import { householdMemberFactoryMany } from './seed-helpers/household-member-factory';
+import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
+import { listingFactory } from './seed-helpers/listing-factory';
+import { multiselectQuestionFactory } from './seed-helpers/multiselect-question-factory';
+import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
+import { translationFactory } from './seed-helpers/translation-factory';
+import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
+import { userFactory } from './seed-helpers/user-factory';
+import { randomName } from './seed-helpers/word-generator';
 const listingStatusEnumArray = Object.values(ListingsStatusEnum);
-
 const createMultiselect = async (
   jurisdictionId: string,
   prismaClient: PrismaClient,
@@ -40,7 +38,6 @@ const createMultiselect = async (
   });
   return multiSelectQuestions;
 };
-
 export const devSeeding = async (
   prismaClient: PrismaClient,
   jurisdictionName?: string,
@@ -58,6 +55,114 @@ export const devSeeding = async (
       confirmedAt: new Date(),
       jurisdictionIds: [jurisdiction.id],
       acceptedTerms: true,
+      password: 'abcdef',
+    }),
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isAdmin: true },
+      email: 'admin1@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: true,
+      password: 'abcdef',
+    }),
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isAdmin: true },
+      email: 'admin2@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: true,
+      password: 'abcdef',
+    }),
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isAdmin: true },
+      email: 'admin3@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: true,
+      password: 'abcdef',
+    }),
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isAdmin: true },
+      email: 'admin4@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: true,
+      password: 'abcdef',
+    }),
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isAdmin: true },
+      email: 'admin5@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: true,
+      password: 'abcdef',
+    }),
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isAdmin: true },
+      email: 'admin6@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: true,
+      password: 'abcdef',
+    }),
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isAdmin: true },
+      email: 'admin7@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: true,
+      password: 'abcdef',
+    }),
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isAdmin: true },
+      email: 'admin8@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: true,
+      password: 'abcdef',
+    }),
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isAdmin: true },
+      email: 'admin9@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: true,
+      password: 'abcdef',
+    }),
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isAdmin: true },
+      email: 'admin10@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: true,
+      password: 'abcdef',
+    }),
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      email: 'public-user@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
       password: 'abcdef',
     }),
   });
@@ -103,12 +208,9 @@ export const devSeeding = async (
   const multiselectQuestions = await Promise.all(
     await createMultiselect(jurisdiction.id, prismaClient),
   );
-
   await reservedCommunityTypeFactoryAll(jurisdiction.id, prismaClient);
-
   for (let index = 0; index < LISTINGS_TO_SEED; index++) {
     const applications = [];
-
     for (let j = 0; j < APPLICATIONS_PER_LISTINGS; j++) {
       const householdSize = randomInt(1, 6);
       const householdMembers = await householdMemberFactoryMany(
@@ -122,7 +224,6 @@ export const devSeeding = async (
       });
       applications.push(app);
     }
-
     const listing = await listingFactory(jurisdiction.id, prismaClient, {
       amiChart: amiChart,
       numberOfUnits: index + 1,
@@ -132,10 +233,10 @@ export const devSeeding = async (
         index < 4
           ? ListingsStatusEnum.active
           : listingStatusEnumArray[
-              index - 3 < listingStatusEnumArray.length
-                ? index - 3
-                : randomInt(listingStatusEnumArray.length - 1)
-            ],
+          index - 3 < listingStatusEnumArray.length
+            ? index - 3
+            : randomInt(listingStatusEnumArray.length - 1)
+          ],
       multiselectQuestions:
         index > 0 ? multiselectQuestions.slice(0, index - 1) : [],
       applications,

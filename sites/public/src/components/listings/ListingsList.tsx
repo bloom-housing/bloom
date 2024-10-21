@@ -1,9 +1,9 @@
 import * as React from "react"
-import { getListings } from "../../lib/helpers"
 import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { LinkButton, ZeroListingsItem } from "@bloom-housing/doorway-ui-components"
+import { ZeroListingsItem } from "@bloom-housing/doorway-ui-components"
+import { LoadingOverlay, t, InfoCard, LinkButton } from "@bloom-housing/ui-components"
+import { getListings } from "../../lib/helpers"
 import { Pagination } from "./Pagination"
-import { LoadingOverlay, t, InfoCard } from "@bloom-housing/ui-components"
 import styles from "./ListingsCombined.module.scss"
 
 type ListingsListProps = {

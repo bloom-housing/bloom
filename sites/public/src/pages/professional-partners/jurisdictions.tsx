@@ -1,11 +1,11 @@
 import React, { useEffect, useContext } from "react"
 import { t, PageHeader } from "@bloom-housing/ui-components"
-import { DoorwayLinkableCardGroup } from "@bloom-housing/doorway-ui-components"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { professionalsPartnersJurisdictionsCards } from "../../tsx_content/professional-partners-jurisdictions-cards"
+import { DoorwayLinkableCardGroup } from "../../components/shared/DoorwayLinkableCardGroup"
 
 const Jurisdictions = () => {
   const { profile } = useContext(AuthContext)

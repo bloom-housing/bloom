@@ -9,9 +9,6 @@ yarn-error.log*
 .next/
 **/out/_next*
 
-# Storybook build output
-storybook-static
-
 # Cypress test output videos
 **/cypress/videos
 **/cypress/screenshots

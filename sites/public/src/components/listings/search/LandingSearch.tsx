@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react"
 import { ListingSearchParams, buildSearchString } from "../../../lib/listings/search"
 import {
-  Modal,
   ButtonGroup,
   FieldGroup,
   FieldSingle,
-  Card,
   Button,
   ButtonGroupSpacing,
   Field,
   AppearanceSizeType,
 } from "@bloom-housing/doorway-ui-components"
 import { useForm } from "react-hook-form"
-import { LinkButton, t } from "@bloom-housing/ui-components"
+import { LinkButton, t, Card } from "@bloom-housing/ui-components"
 import styles from "./LandingSearch.module.scss"
 import { FormOption } from "./ListingsSearchModal"
 import { numericSearchFieldGenerator } from "./helpers"

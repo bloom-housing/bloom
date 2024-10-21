@@ -1,6 +1,7 @@
 import React from "react"
 import { t, Heading } from "@bloom-housing/ui-components"
-import { CardProps, Card, DoorwaySection } from "@bloom-housing/doorway-ui-components"
+import { CardProps, Card } from "@bloom-housing/doorway-ui-components"
+import { DoorwaySection } from "../components/shared/DoorwaySection"
 
 // These are static, however they need to be exported as a function and
 // not a const due to a race condition around translations.
@@ -12,7 +13,7 @@ export function professionalsPartnersJurisdictionsCards(): React.ReactElement<Ca
       jumplinkData={{ title: t("professionalPartners.jurisdictions.whatIsTheRole") }}
     >
       <Card.Header>
-        <Heading priority={2} className={"text-primary-lighter font-semibold"}>
+        <Heading priority={2} className={"text-primary-lighter font-bold"}>
           {t("professionalPartners.jurisdictions.whatIsTheRole")}
         </Heading>
       </Card.Header>
@@ -47,7 +48,7 @@ export function professionalsPartnersJurisdictionsCards(): React.ReactElement<Ca
       jumplinkData={{ title: t("professionalPartners.jurisdictions.howCanWeGetInvolved") }}
     >
       <Card.Header>
-        <Heading priority={2} className={"text-primary-lighter font-semibold"}>
+        <Heading priority={2} className={"text-primary-lighter font-bold"}>
           {t("professionalPartners.jurisdictions.howCanWeGetInvolved")}
         </Heading>
       </Card.Header>

@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react"
-import { t } from "@bloom-housing/ui-components"
-import { ExpandableContent } from "../actions/ExpandableContent"
-import { ErrorMessage } from "../notifications/ErrorMessage"
+import { t, ExpandableContent, ErrorMessage } from "@bloom-housing/ui-components"
 import { UseFormMethods, RegisterOptions } from "react-hook-form"
 import { Field } from "./Field"
 import "./FieldGroup.scss"

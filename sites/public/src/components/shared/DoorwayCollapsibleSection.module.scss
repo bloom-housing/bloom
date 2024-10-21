@@ -1,0 +1,34 @@
+.doorway-collapsible-section {
+  /* Component Variables */
+  --doorway-collapsible-section-border-bottom: var(--doorway-standard-border);
+  --doorway-collapsible-section-heading-container-padding: var(--bloom-s4) 0;
+  --doorway-collapsible-section-section-padding: var(--bloom-s2) 0;
+
+  button {
+    &:after {
+      font-weight: bold;
+      display: inline-block;
+      margin-left: var(--bloom-s2);
+      margin-right: var(--bloom-s2);
+      font-size: var(--bloom-font-size-xs);
+      content: "⌃";
+      transform: rotate(180deg) translateY(2px);
+    }
+    &[aria-expanded="true"]:after {
+      transform: rotate(0deg) translateY(2px);
+      margin-right: var(--bloom-s2);
+    }
+  }
+}
+.doorway-collapsible-section_heading-container {
+  display: flex;
+  justify-content: space-between;
+  user-select: none;
+  cursor: pointer;
+  border-bottom: var(--doorway-collapsible-section-border-bottom);
+  padding: var(--doorway-collapsible-section-heading-container-padding);
+}
+
+.doorway-collapsible-section_section {
+  padding: var(--doorway-collapsible-section-section-padding);
+}

@@ -1,11 +1,11 @@
 import React, { useEffect, useContext } from "react"
 import { t, PageHeader } from "@bloom-housing/ui-components"
-import { DoorwayLinkableCardGroup } from "@bloom-housing/doorway-ui-components"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
 import { getStartedLinkableCards } from "../../tsx_content/get-started-cards"
 import { MetaTags } from "../../components/shared/MetaTags"
+import { DoorwayLinkableCardGroup } from "../../components/shared/DoorwayLinkableCardGroup"
 
 const GetStarted = () => {
   const { profile } = useContext(AuthContext)

@@ -8,14 +8,9 @@ yarn-error.log*
 # Next.js cache and compiled artifacts
 .next/**
 
-# Storybook and storybook build output
-.storybook/**
-storybook-static
-
 # Storyshots and other tests
 __tests__/**
-*.stories.tsx
-*.storyshot
+
 # Temporary test images -- TODO: refactor
 public/images/banner.png
 public/images/listing.jpg

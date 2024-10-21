@@ -1,7 +1,8 @@
 import React from "react"
 import Markdown from "markdown-to-jsx"
 import { t, Heading } from "@bloom-housing/ui-components"
-import { CardProps, Card, DoorwayCollapsibleSection } from "@bloom-housing/doorway-ui-components"
+import { CardProps, Card } from "@bloom-housing/doorway-ui-components"
+import { DoorwayCollapsibleSection } from "../components/shared/DoorwayCollapsibleSection"
 
 // These are static, however they need to be exported as a function and
 // not a const due to a race condition around translations.
@@ -13,7 +14,7 @@ export function getStartedLinkableCards(): React.ReactElement<CardProps>[] {
       jumplinkData={{ title: t("help.getStarted.howDoIGetStarted") }}
     >
       <Card.Header>
-        <Heading priority={2} className={"text-primary-lighter font-semibold"}>
+        <Heading priority={2} className={"text-primary-lighter font-bold"}>
           {t("help.getStarted.howDoIGetStarted")}
         </Heading>
       </Card.Header>
@@ -38,7 +39,7 @@ export function getStartedLinkableCards(): React.ReactElement<CardProps>[] {
       jumplinkData={{ title: t("help.getStarted.howFindApply") }}
     >
       <Card.Header>
-        <Heading priority={2} className={"text-primary-lighter font-semibold"}>
+        <Heading priority={2} className={"text-primary-lighter font-bold"}>
           {t("help.getStarted.howFindApply")}
         </Heading>
       </Card.Header>

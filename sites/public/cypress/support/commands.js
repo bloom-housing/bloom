@@ -269,7 +269,7 @@ Cypress.Commands.add("step7AddHouseholdMembers", (application) => {
     cy.checkErrorMessages("not.exist")
     cy.location("pathname").should("include", "/applications/household/add-members")
   })
-  cy.getByID("app-done-household-members-button").click()
+  cy.goNext()
 })
 
 Cypress.Commands.add("step8PreferredUnits", (application) => {

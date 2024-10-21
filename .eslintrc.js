@@ -47,12 +47,10 @@ module.exports = {
   },
   ignorePatterns: [
     "node_modules",
-    "storybook-static",
     ".next",
     "dist",
     "api",
     "migration/",
-    "**/*.stories.tsx",
     "**/.eslintrc.js",
     "doorway-ui-components",
     "tasks/import-listings",

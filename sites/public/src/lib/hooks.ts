@@ -147,7 +147,7 @@ export async function fetchClosedListings(req: any) {
       ],
       orderBy: [ListingOrderByKeys.mostRecentlyClosed],
       orderDir: [OrderByEnum.desc],
-      limit: "10",
+      limit: process.env.maxClosedListings,
     },
     req
   )

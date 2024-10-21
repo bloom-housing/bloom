@@ -13,32 +13,31 @@ import {
   UserRoleEnum,
 } from '@prisma/client';
 import dayjs from 'dayjs';
+import { ValidationMethod } from '../src/enums/multiselect-questions/validation-method-enum';
+import {
+  rockyMountainAddress,
+  yellowstoneAddress,
+  yosemiteAddress,
+} from './seed-helpers/address-factory';
+import { amiChartFactory } from './seed-helpers/ami-chart-factory';
+import { applicationFactory } from './seed-helpers/application-factory';
+import { householdMemberFactorySingle } from './seed-helpers/household-member-factory';
 import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
 import {
   featuresAndUtilites,
   listingFactory,
 } from './seed-helpers/listing-factory';
-import { amiChartFactory } from './seed-helpers/ami-chart-factory';
-import { userFactory } from './seed-helpers/user-factory';
-import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
-import { unitAccessibilityPriorityTypeFactoryAll } from './seed-helpers/unit-accessibility-priority-type-factory';
-import { multiselectQuestionFactory } from './seed-helpers/multiselect-question-factory';
-import {
-  yellowstoneAddress,
-  yosemiteAddress,
-  rockyMountainAddress,
-} from './seed-helpers/address-factory';
-import { applicationFactory } from './seed-helpers/application-factory';
-import { translationFactory } from './seed-helpers/translation-factory';
-import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
 import {
   mapLayerFactory,
   redlinedMap,
   simplifiedDCMap,
 } from './seed-helpers/map-layer-factory';
-import { ValidationMethod } from '../src/enums/multiselect-questions/validation-method-enum';
-import { householdMemberFactorySingle } from './seed-helpers/household-member-factory';
-
+import { multiselectQuestionFactory } from './seed-helpers/multiselect-question-factory';
+import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
+import { translationFactory } from './seed-helpers/translation-factory';
+import { unitAccessibilityPriorityTypeFactoryAll } from './seed-helpers/unit-accessibility-priority-type-factory';
+import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
+import { userFactory } from './seed-helpers/user-factory';
 export const stagingSeed = async (
   prismaClient: PrismaClient,
   jurisdictionName: string,
@@ -98,6 +97,7 @@ export const stagingSeed = async (
       password: 'abcdef',
     }),
   });
+
   // create a jurisdictional admin
   await prismaClient.userAccounts.create({
     data: await userFactory({
@@ -1275,4 +1275,94 @@ export const stagingSeed = async (
       }
     },
   );
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isAdmin: true },
+      email: 'admin1@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: true,
+      password: 'abcdef',
+    }),
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isAdmin: true },
+      email: 'admin2@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: true,
+      password: 'abcdef',
+    }),
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isAdmin: true },
+      email: 'admin3@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: true,
+      password: 'abcdef',
+    }),
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isAdmin: true },
+      email: 'admin4@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: true,
+      password: 'abcdef',
+    }),
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isAdmin: true },
+      email: 'admin5@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: true,
+      password: 'abcdef',
+    }),
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isAdmin: true },
+      email: 'admin6@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: true,
+      password: 'abcdef',
+    }),
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isAdmin: true },
+      email: 'admin7@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: true,
+      password: 'abcdef',
+    }),
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isAdmin: true },
+      email: 'admin8@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: true,
+      password: 'abcdef',
+    }),
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isAdmin: true },
+      email: 'admin9@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      acceptedTerms: true,
+      password: 'abcdef',
+    }),
+  });
 };
