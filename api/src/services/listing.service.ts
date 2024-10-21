@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   HttpException,
   Inject,
   Injectable,
@@ -955,11 +956,18 @@ export class ListingService implements OnModuleInit {
             ...requestingUser.userRoles,
             isAdmin: true,
           }
-        : //allows for duplicate feature to be fully turned off no matter the user
-          {
+        : {
             ...requestingUser?.userRoles,
             isAdmin: false,
           };
+    //manually check for juris mismatch since logic above is forcing admin permissioning
+    if (
+      !requestingUser.jurisdictions.some(
+        (juris) => juris.id === storedListing.jurisdictionId,
+      )
+    ) {
+      throw new ForbiddenException();
+    }
 
     await this.permissionService.canOrThrow(
       { ...requestingUser, userRoles: userRoles },
