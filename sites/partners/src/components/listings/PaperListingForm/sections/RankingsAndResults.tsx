@@ -61,6 +61,7 @@ const RankingsAndResults = ({ listing, isAdmin }: RankingsAndResultsProps) => {
       value: YesNoEnum.no,
     },
   ]
+
   return (
     <>
       <SectionWithGrid
@@ -186,9 +187,9 @@ const RankingsAndResults = ({ listing, isAdmin }: RankingsAndResultsProps) => {
                   required
                   setValue={setValue}
                   watch={watch}
-                  error={errors?.lotteryDate ? true : false}
+                  error={errors?.lotteryStartTime ? true : false}
                   strings={{
-                    timeError: errors?.lotteryDate ? t("errors.dateError") : null,
+                    timeError: errors?.lotteryStartTime ? t("errors.timeError") : null,
                   }}
                   defaultValues={
                     errors?.lotteryDate
@@ -218,9 +219,9 @@ const RankingsAndResults = ({ listing, isAdmin }: RankingsAndResultsProps) => {
                   required
                   setValue={setValue}
                   watch={watch}
-                  error={errors?.lotteryDate ? true : false}
+                  error={errors?.lotteryEndTime ? true : false}
                   strings={{
-                    timeError: errors?.lotteryDate ? t("errors.dateError") : null,
+                    timeError: errors?.lotteryEndTime ? t("errors.timeError") : null,
                   }}
                   defaultValues={
                     errors?.lotteryDate
