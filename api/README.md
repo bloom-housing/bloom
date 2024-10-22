@@ -28,7 +28,7 @@ If along the way you get `env: node: No such file or directory`, inspect the out
 
 #### Installing Postgresql
 
-You can install Postgres using homebrew with the following command: `brew install postgresql@14`. You then start it with `brew services start postgresql@14`.
+You can install Postgres using homebrew with the following command: `brew install postgresql@15`. You then start it with `brew services start postgresql@15`.
 
 #### Project dependencies
 

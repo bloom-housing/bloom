@@ -22,8 +22,6 @@ The `sites` folder contains reference implementations for both the public and pa
 - `sites/partners` is the site designed for housing developers, property managers, and city/county (jurisdiction) employees. For application management, it offers the ability to view, edit, and export applications for listings and other administrative tasks. For listing management, it offers the ability to create, edit, and publish listings. A login is required to use the Partners Portal.
 - Visit [sites/partners/README](https://github.com/bloom-housing/bloom/blob/main/sites/partners/README.md) for more details.
 
-In some cases for the sites folder, production deployments in jurisdictions will diverge to accommodate customizations. For example, [housingbayarea](https://github.com/housingbayarea/bloom) (HBA) is a fork of Bloom core that supports multiple Bay Area jurisdictions, which is lightly customized for each jurisdiction. In HBA, our jurisdictions are each a separate branch.
-
 ---
 
 - `api` is the container for the key backend services (e.g. listings, applications, users). Information is stored in a Postgres database and served over HTTPS to the front-end (either at build time for things that can be server-rendered, or at run time). Services expose a REST API.
