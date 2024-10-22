@@ -18,7 +18,7 @@ type CopyListingFormFields = {
 }
 
 const CopyListingDialog = ({ isOpen, setOpen, listingInfo }: CopyListingDialogProps) => {
-  const { listingsService } = useContext(AuthContext)
+  const { listingsService, loadProfile } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, handleSubmit, clearErrors } = useForm<CopyListingFormFields>()
@@ -36,7 +36,7 @@ const CopyListingDialog = ({ isOpen, setOpen, listingInfo }: CopyListingDialogPr
         },
       })
       setOpen(false)
-      await router.push(`/listings/${res.id}`)
+      loadProfile(`/listings/${res.id}`)
       addToast(t("listings.copy.success"), { variant: "success" })
     } catch (err) {
       console.error(err)
