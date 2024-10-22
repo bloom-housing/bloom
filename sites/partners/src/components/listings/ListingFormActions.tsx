@@ -77,7 +77,6 @@ const ListingFormActions = ({
     (profile?.userRoles?.isPartner &&
       duplicateListingPermissions?.includes(EnumJurisdictionDuplicateListingPermissions.partner))
 
-  const isLimitedClosedListingAction = process.env.limitClosedListingActions
   const listingId = listing?.id
 
   const listingJurisdiction = profile?.jurisdictions?.find(
@@ -491,7 +490,10 @@ const ListingFormActions = ({
         listing.status === ListingsStatusEnum.closed &&
         type === ListingFormActionsType.edit
       ) {
-        if ((isListingApprover || !isListingApprovalEnabled) && !isLimitedClosedListingAction) {
+        if (
+          (isListingApprover || !isListingApprovalEnabled) &&
+          !process.env.limitClosedListingActions
+        ) {
           elements.push(reopenButton)
         }
         elements.push(unpublishButton)
@@ -594,7 +596,7 @@ const ListingFormActions = ({
         listing.status === ListingsStatusEnum.closed &&
         type === ListingFormActionsType.details
       ) {
-        if (!isLimitedClosedListingAction) elements.push(editFromDetailButton)
+        if (!process.env.limitClosedListingActions) elements.push(editFromDetailButton)
         if (isListingCopier) elements.push(copyButton)
         elements.push(previewButton)
       }
@@ -603,7 +605,10 @@ const ListingFormActions = ({
         listing.status === ListingsStatusEnum.closed &&
         type === ListingFormActionsType.edit
       ) {
-        if ((isListingApprover || !isListingApprovalEnabled) && !isLimitedClosedListingAction) {
+        if (
+          (isListingApprover || !isListingApprovalEnabled) &&
+          !process.env.limitClosedListingActions
+        ) {
           elements.push(reopenButton)
         }
         elements.push(unpublishButton)
@@ -700,7 +705,7 @@ const ListingFormActions = ({
         listing.status === ListingsStatusEnum.closed &&
         type === ListingFormActionsType.details
       ) {
-        if (!isLimitedClosedListingAction) elements.push(editFromDetailButton)
+        if (!process.env.limitClosedListingActions) elements.push(editFromDetailButton)
         if (isListingCopier) elements.push(copyButton)
         elements.push(previewButton)
       }
