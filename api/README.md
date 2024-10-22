@@ -1,4 +1,4 @@
-# Setup
+# Bloom Backend
 
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![NestJS](https://img.shields.io/badge/nestjs-%23E0234E.svg?style=for-the-badge&logo=nestjs&logoColor=white) ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white) ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 
@@ -174,8 +174,3 @@ Running the following will run all unit tests: `yarn test`
 ### Testing with code coverage
 
 We have set up both code coverage and code coverage benchmarks. These benchmarks must be met for your PR to pass CI checks. Test coverage is calculated against both the integration and unit test runs. You can run test coverage with the following: `yarn test:cov`
-
-## Considerations For Detroit
-
-As it stands right now `core` uses the AmiChart items column and `detroit` uses the AmiChartItem table.
-As we move through converting detroit over to prisma we will unify those and choose one of the two approaches.
