@@ -1,6 +1,10 @@
 # Bloom Affordable Housing Platform
 
+Bloom is Exygy’s affordable housing platform. Its goal is to be a single entry point for affordable housing seekers and application management for developers. You can read more about the platform on [bloomhousing.com](https://bloomhousing.com/).
+
 ## Overview
+
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white) ![NestJS](https://img.shields.io/badge/nestjs-%23E0234E.svg?style=for-the-badge&logo=nestjs&logoColor=white) ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white) ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white) ![SASS](https://img.shields.io/badge/SASS-hotpink.svg?style=for-the-badge&logo=SASS&logoColor=white) ![Jest](https://img.shields.io/badge/-jest-%23C21325?style=for-the-badge&logo=jest&logoColor=white) ![cypress](https://img.shields.io/badge/-cypress-%23E5E5E5?style=for-the-badge&logo=cypress&logoColor=058a5e) ![Testing-Library](https://img.shields.io/badge/-TestingLibrary-%23E33332?style=for-the-badge&logo=testing-library&logoColor=white)
 
 Bloom consists of a client/server architecture using [Next.js](https://nextjs.org) for the frontend applications and [NestJS](https://nestjs.com), [Prisma](https://www.prisma.io/), and [Postgres](https://www.postgresql.org/) on the backend.
 
@@ -8,7 +12,7 @@ Bloom consists of a client/server architecture using [Next.js](https://nextjs.or
 
 Bloom uses a monorepo-style repository containing multiple user-facing applications and backend services. The three main high-level packages are `api`, `sites`, and `shared-helpers`. Additionally, Bloom's UI leverages the in-house packages `@bloom-housing/ui-seeds` and `@bloom-housing/ui-components`.
 
-The `sites` package contains reference implementations for the two user-facing applications in the system:
+The `sites` folder contains reference implementations for both the public and partner applications:
 
 ---
 
@@ -18,11 +22,11 @@ The `sites` package contains reference implementations for the two user-facing a
 - `sites/partners` is the site designed for housing developers, property managers, and city/county (jurisdiction) employees. For application management, it offers the ability to view, edit, and export applications for listings and other administrative tasks. For listing management, it offers the ability to create, edit, and publish listings. A login is required to use the Partners Portal.
 - Visit [sites/partners/README](https://github.com/bloom-housing/bloom/blob/main/sites/partners/README.md) for more details.
 
-In some cases for the sites folder, production deployments in jurisdictions will diverge to accomodate customizations. [housingbayarea](https://github.com/housingbayarea/bloom) is a fork of Bloom core for multiple Bay Area jurisdictions which is lightly customized for each jurisdiction. In this fork, our jurisdictions are each a separate branch.
+In some cases for the sites folder, production deployments in jurisdictions will diverge to accommodate customizations. For example, [housingbayarea](https://github.com/housingbayarea/bloom) (HBA) is a fork of Bloom core that supports multiple Bay Area jurisdictions, which is lightly customized for each jurisdiction. In HBA, our jurisdictions are each a separate branch.
 
 ---
 
-- `api` is the container for the key backend services (e.g. listings, applications, users). Information is stored in a Postgres database and served over HTTPS to the front-end (either at build time for things that can be server-rendered, or at run time). Most services are part of a NestJS application which allows for consolidated operation in one runtime environment. Services expose a REST API, and aren't expected to have any UI other than for debugging.
+- `api` is the container for the key backend services (e.g. listings, applications, users). Information is stored in a Postgres database and served over HTTPS to the front-end (either at build time for things that can be server-rendered, or at run time). Services expose a REST API.
 - Visit [api/README](https://github.com/bloom-housing/bloom/blob/main/api/README.md) for more details.
 
 ---
@@ -32,15 +36,15 @@ In some cases for the sites folder, production deployments in jurisdictions will
 
 ---
 
-- `@bloom-housing/ui-seeds` is our component library based on our internal design system. It is comprised of React components and design system tokens The published ui-seeds [Storybook](https://storybook.js.org/) can be found [here](https://storybook-ui-seeds.netlify.app/?path=/story/tokens-introduction--page). For further details visit the [ui-seeds repository](https://github.com/bloom-housing/ui-seeds) and our [external design documentation](https://zeroheight.com/5e69dd4e1/p/938cb5-seeds-design-system) on Zeroheight.
+- `@bloom-housing/ui-seeds` (Seeds) is our component library based on our internal design system. It is comprised of React components and design system tokens. The published ui-seeds [Storybook](https://storybook.js.org/) can be found [here](https://storybook-ui-seeds.netlify.app/?path=/story/tokens-introduction--page). For further details visit the [ui-seeds repository](https://github.com/bloom-housing/ui-seeds) and our [external design documentation](https://zeroheight.com/5e69dd4e1/p/938cb5-seeds-design-system) on Zeroheight.
 
-- `@bloom-housing/ui-components` is also an internal component library - but it is being slowly replaced with `ui-seeds` which is the next iteration. The published ui-components storybook can be found [here](https://storybook.bloom.exygy.dev/). For further details visit the [ui-components repository](https://github.com/bloom-housing/ui-components).
+- `@bloom-housing/ui-components` (UIC) is also an internal component library - but it is being slowly replaced with `ui-seeds` which is the next iteration. The published ui-components storybook can be found [here](https://storybook.bloom.exygy.dev/). For further details visit the [ui-components repository](https://github.com/bloom-housing/ui-components).
 
-## Getting Started for Developers
+## Getting started for developers
 
-If this is your first time working with Bloom, please be sure to check out the `sites/public`, `sites/partners` and `api` README files for important and specific configuration information.
+If this is your first time working with Bloom, please be sure to check out the `sites/public`, `sites/partners` and `api` README files for important and specific configuration information. After doing so, you can proceed with the below setup instructions.
 
-## General Local Setup
+## Starting locally
 
 ### Dependencies
 
@@ -60,15 +64,15 @@ Running `yarn dev:all` from root runs 3 processes for both apps and the backend 
 
 You can also run each process individually from separate terminals with the following command in each directory: `yarn dev`.
 
-### Bloom's UI-Component Development
+### Bloom UIC development
 
 Because Bloom's ui-components package is a separate open source repository, developing in Bloom while concurrently iterating in ui-components requires linking the folders with the following steps:
 
-### Directory Setup
+### Directory setup
 
 1. Clone both Bloom and the [ui-components repository](https://github.com/bloom-housing/ui-components) on the same directory level.
 
-### Symlinking UI-C
+### Symlinking UIC
 
 1. In the Bloom directory, run `yarn link:uic`.
 2. Open the next.config.js file in the public and partner's directory.
@@ -76,7 +80,7 @@ Because Bloom's ui-components package is a separate open source repository, deve
 4. Follow the directions above to run Bloom locally.
    These steps allow you to edit your local version of ui-components and the changes will be reflected in the node_modules in Bloom.
 
-### Unlinking UI-C
+### Unlinking UIC
 
 1. In the Bloom directory, run `yarn unlink:uic`.
 2. Open the next.config.js file in the public and partner's directory.

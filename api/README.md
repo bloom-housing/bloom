@@ -59,23 +59,23 @@ You will need to:
 We use the following conventions:
 
 <ul>
-  <li> model and enum names are capitalized camelcased (e.g. HelloWorld) </li>
-  <li> model and enum names are <b>@@map()</b>ed to lowercase snakecased (e.g. hello_world) </li>
-  <li> a model's fields are lowercase camelcased (e.g. helloWorld) </li>
-  <li> a model's fields are <b>@map()</b>ed to lowercase snackcased (e.g. hello_world) </li>
+  <li> model and enum names are capitalized camel case (e.g. HelloWorld) </li>
+  <li> model and enum names are <b>@@map()</b>ed to lowercase snake case (e.g. hello_world) </li>
+  <li> a model's fields are lowercase camel case (e.g. helloWorld) </li>
+  <li> a model's fields are <b>@map()</b>ed to lowercase snake case (e.g. hello_world) </li>
 </ul>
 This is to make the api easier to work with, and to respect postgres's name space conventions.
 <p></p>
 
 ## Controllers
 
-Backend endpoints live in controllers under `src/controllers`. They follow the [Nestjs standards](https://docs.nestjs.com/controllers)
+Backend endpoints live in controllers under `src/controllers`. They follow the [NestJs standards](https://docs.nestjs.com/controllers)
 
 ### Conventions
 
-Controllers are given the extension `.contoller.ts` and the model name (listing, application, etc) is singular. So for example `listing.controller.ts`.
+Controllers are given the extension `.controller.ts` and the model name (listing, application, etc) is singular. So for example `listing.controller.ts`.
 
-The exported class should be in capitalized camelcase (e.g. `ListingController`).
+The exported class should be in capitalized camel case (e.g. `ListingController`).
 
 ## DTOs
 
@@ -87,21 +87,21 @@ DTOs are stored under `src/dtos`, and are broken up by what model they are relat
 
 ### Conventions
 
-DTOs are given the extension `.dto.ts` and the file name is lowercase kebabcase (e.g. `listings-filter-params.dto.ts`).
+DTOs are given the extension `.dto.ts` and the file name is lowercase kebab case (e.g. `listings-filter-params.dto.ts`).
 
-The exported class should be in capitalized camelcase (e.g. `ListingFilterParams`) and does not include the DTO as a suffix.
+The exported class should be in capitalized camel case (e.g. `ListingFilterParams`) and does not include the DTO as a suffix.
 
 ## Enums
 
-These are enums used by NestJs primarily for either taking in a request or sending out a response. Database enums (enums from Prisma) are part of the primsa schema and are not housed here.
+These are enums used by NestJs primarily for either taking in a request or sending out a response. Database enums (enums from Prisma) are part of the Prisma schema and are not housed here.
 
-They are housed under `src/enums` and the file name is lowercase kebabcase and end with `-enum.ts`.
+They are housed under `src/enums` and the file name is lowercase kebab case and end with `-enum.ts`.
 
 So for example `filter-key-enum.ts`.
 
 ### Conventions
 
-The exported enum should be in capitalized camelcase (e.g. `ListingFilterKeys`).
+The exported enum should be in capitalized camel case (e.g. `ListingFilterKeys`).
 
 ## Modules
 
@@ -111,7 +111,7 @@ Modules connect the controllers to services and follow [NestJS standards](https:
 
 Modules are housed under `src/modules` and are given the extension `.module.ts`. The model name (listing, application, etc) is singular. So for example `listing.module.ts`.
 
-The exported class should be in capitalized camelcase (e.g. `ListingModule`).
+The exported class should be in capitalized camel case (e.g. `ListingModule`).
 
 ## Services
 
@@ -125,7 +125,7 @@ The follow the [NestJS standards](https://docs.nestjs.com/providers).
 
 Services are housed under `src/services` and are given the extension `.services.ts`. The model name (listing, application, etc) is singular. So for example `listing.service.ts`.
 
-The exported class should be in capitalized camelcase (e.g. `ListingService`).
+The exported class should be in capitalized camel case (e.g. `ListingService`).
 
 ## Guards & Passport Strategies
 
