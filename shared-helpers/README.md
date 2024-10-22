@@ -1,15 +1,7 @@
 # Bloom Shared Helpers
 
-This package is the home of types and functions intended for shared use between the Next.js sites within the Bloom monorepo. In certain instances there is also some commonality between the frontend plus the backend (not implemented currently).
+This package includes types, functions, and components shared between the public and partners sites within Bloom.
 
-## CLI
+## Tests
 
-To run the test suite which is built with Jest run:
-
-```
-yarn test
-
-# or
-
-yarn test:coverage # generates local coverage reports, useful as you are writing tests
-```
+Run the unit test suite with the following command: `yarn test`
