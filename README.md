@@ -50,9 +50,15 @@ If this is your first time working with Bloom, please be sure to check out the `
 
 Run `yarn install` and root and from within the api directory.
 
+If you don't have yarn installed, you can do so with `brew install yarn`.
+
 ### Local environment variables
 
 Configuration of each app and service is read from environment variables. There is an `.env.template` file in each app or service directory that must be copied to `.env`. Some keys are secret and are internally available.
+
+### Prettier
+
+If you use VSCode, you can install the [Prettier plugin](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode), ⌘⇧P Open User Settings, search for and enable `Format on Save`, and then ⌘⇧P Reload Window. When you save a file locally, it should automatically format according to our configuration.
 
 ### Running a local test server
 
