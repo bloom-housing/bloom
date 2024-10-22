@@ -54,7 +54,7 @@ If you don't have yarn installed, you can install homebrew with [these instructi
 
 ### Local environment variables
 
-Configuration of each app and service is read from environment variables. There is an `.env.template` file `sites/public`, `sites/partners`, and `api` that must be copied to an `.env` at the same level. Some keys are secret and are internally available. The template files include default values and descriptions of each variable.
+Configuration of each app and service is read from environment variables. There is an `.env.template` file in `sites/public`, `sites/partners`, and `api` that must be copied to an `.env` at the same level. Some keys are secret and are internally available. The template files include default values and descriptions of each variable.
 
 ### VSCode Extensions
 
@@ -72,7 +72,7 @@ Running `yarn dev:all` from root runs 3 processes for both apps and the backend 
 
 - 3000 for the public app
 - 3001 for the partners app
-- 3100 for api
+- 3100 for the api
 
 You can also run each process individually from separate terminals with the following command in each directory: `yarn dev`.
 
