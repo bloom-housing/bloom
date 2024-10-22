@@ -22,7 +22,6 @@ const CopyListingDialog = ({ isOpen, setOpen, listingInfo }: CopyListingDialogPr
   const { addToast } = useContext(MessageContext)
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, handleSubmit, clearErrors } = useForm<CopyListingFormFields>()
-  const router = useRouter()
 
   const onSubmit = async (data: CopyListingFormFields) => {
     try {
