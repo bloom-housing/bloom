@@ -960,16 +960,6 @@ export class ListingService implements OnModuleInit {
             ...requestingUser?.userRoles,
             isAdmin: false,
           };
-    //manually check for juris mismatch since logic above is forcing admin permissioning
-    if (
-      (requestingUser?.userRoles?.isJurisdictionalAdmin ||
-        requestingUser?.userRoles?.isPartner) &&
-      !requestingUser?.jurisdictions?.some(
-        (juris) => juris.id === storedListing.jurisdictionId,
-      )
-    ) {
-      throw new ForbiddenException();
-    }
 
     await this.permissionService.canOrThrow(
       { ...requestingUser, userRoles: userRoles },
@@ -979,6 +969,20 @@ export class ListingService implements OnModuleInit {
         jurisdictionId: storedListing.jurisdictions.id,
       },
     );
+
+    //manually check for juris/listing mismatch since logic above is forcing admin permissioning
+    if (
+      (requestingUser?.userRoles?.isJurisdictionalAdmin &&
+        !requestingUser?.jurisdictions?.some(
+          (juris) => juris.id === storedListing.jurisdictionId,
+        )) ||
+      (requestingUser?.userRoles?.isPartner &&
+        !requestingUser?.listings?.some(
+          (listing) => listing.id === storedListing.id,
+        ))
+    ) {
+      throw new ForbiddenException();
+    }
 
     const mappedListing = mapTo(ListingCreate, storedListing);
 
