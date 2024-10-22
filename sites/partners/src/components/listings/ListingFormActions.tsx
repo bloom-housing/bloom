@@ -388,6 +388,7 @@ const ListingFormActions = ({
         elements.push(postResultsButton)
       }
     }
+
     //admin experience
     if (profile?.userRoles.isAdmin) {
       // new unsaved listing
@@ -499,6 +500,7 @@ const ListingFormActions = ({
         elements.push(cancelButton)
       }
     }
+
     //jurisdictional admin experience
     else if (profile?.userRoles.isJurisdictionalAdmin) {
       // new unsaved listing
@@ -610,6 +612,7 @@ const ListingFormActions = ({
         elements.push(cancelButton)
       }
     }
+
     //partner user experience
     else if (profile?.userRoles.isPartner) {
       // new unsaved listing
