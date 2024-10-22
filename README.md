@@ -54,7 +54,7 @@ If you don't have yarn installed, you can do so with `brew install yarn`.
 
 ### Local environment variables
 
-Configuration of each app and service is read from environment variables. There is an `.env.template` file in each app or service directory that must be copied to `.env`. Some keys are secret and are internally available.
+Configuration of each app and service is read from environment variables. There is an `.env.template` file in each app or service directory that must be copied to `.env`. Some keys are secret and are internally available. The template files include default values and descriptions of each variable.
 
 ### VSCode Extensions
 

@@ -22,11 +22,11 @@ If you don't have yarn installed, you can install homebrew with [these instructi
 
 #### Installing Node
 
-We are currently using Node version 18. You can install Node using Homebrew with the following command: `brew install node@18`.
+We are currently using Node version 18. You can install Node using homebrew with the following command: `brew install node@18`.
 
 If you have multiple versions of Node installed, you can use [nvm](https://github.com/nvm-sh/nvm) (node version manager) to switch between them. Ensure you're on the right version by checking with `node -v`.
 
-If along the way you get `env: node: No such file or directory`, inspect the output from installing node for instructions on if you made need to add node to certain paths.
+If along the way you get `env: node: No such file or directory`, inspect the output from installing node for instructions on if you might need to add node to certain terminal paths.
 
 #### Installing Postgresql
 
@@ -39,6 +39,8 @@ The following command will generate and build the Prisma schema and setup the da
 If you would prefer to have it setup with more realistic data you can instead run: `yarn setup`.
 
 If this is your first time running this command and you see `psql: error: FATAL: database "<username>" does not exist` you may need to run `createdb <username>` first.
+
+You will also need to update the `DATABASE_URL` environment variable to include your username.
 
 If you're using VSCode, you can install [this extension](https://marketplace.visualstudio.com/items?itemName=ckolkman.vscode-postgres) to inspect your local database. When you click on the + to create a new connection, you can use the following inputs to each question to create a connection to the newly created database: `localhost`, `<username>`, hit enter for password, `5432`, standard, `bloom_prisma`, and a descriptive name like `local-bloom`. Once the connection is established, you can inspect the database.
 
