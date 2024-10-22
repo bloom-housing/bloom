@@ -42,19 +42,19 @@ In some cases for the sites folder, production deployments in jurisdictions will
 
 ## Getting started for developers
 
-If this is your first time working with Bloom, please be sure to check out the `sites/public`, `sites/partners` and `api` README files for important and specific configuration information. After doing so, you can proceed with the below setup instructions.
+If this is your first time working with Bloom, please be sure to check out the `sites/public`, `sites/partners`, and `api` README files for important and specific configuration information. After doing so, you can proceed with the below setup instructions.
 
 ## Starting locally
 
 ### Dependencies
 
-Run `yarn install` and root and from within the api directory.
+Run `yarn install` at root and from within the api directory.
 
-If you don't have yarn installed, you can do so with `brew install yarn`.
+If you don't have yarn installed, you can install homebrew with [these instructions](https://brew.sh/) and then do so with `brew install yarn`.
 
 ### Local environment variables
 
-Configuration of each app and service is read from environment variables. There is an `.env.template` file in each app or service directory that must be copied to `.env`. Some keys are secret and are internally available. The template files include default values and descriptions of each variable.
+Configuration of each app and service is read from environment variables. There is an `.env.template` file `sites/public`, `sites/partners`, and `api` that must be copied to an `.env` at the same level. Some keys are secret and are internally available. The template files include default values and descriptions of each variable.
 
 ### VSCode Extensions
 
