@@ -26,11 +26,11 @@ We are currently using Node version 18. You can install Node using Homebrew with
 
 If you have multiple versions of Node installed, you can use [nvm](https://github.com/nvm-sh/nvm) (node version manager) to switch between them. Ensure you're on the right version by checking with `node -v`.
 
-If you get `env: node: No such file or directory`, inspect the output from installing node for instructions on if you made need to add node to certain paths.
+If along the way you get `env: node: No such file or directory`, inspect the output from installing node for instructions on if you made need to add node to certain paths.
 
 #### Installing Postgresql
 
-You can install Postgres using Homebrew with the following command: `brew install postgresql@14`. You then start it with `brew services start postgresql@14`.
+You can install Postgres using homebrew with the following command: `brew install postgresql@14`. You then start it with `brew services start postgresql@14`.
 
 ## Starting locally
 
@@ -40,7 +40,7 @@ If you would prefer to have it setup with more realistic data you can instead ru
 
 If this is your first time running this command and you see `psql: error: FATAL: database "<username>" does not exist` you may need to run `createdb <username>` first.
 
-If you're using VSCode, you can install [this extension](https://marketplace.visualstudio.com/items?itemName=ckolkman.vscode-postgres) to inspect your local database. When you click on the +, you can use the following inputs to each question to create a connection to the newly created database: `localhost`, `<username>`, hit enter for password, `5432`, standard, `bloom_prisma`, and a descriptive name like `local-bloom`.
+If you're using VSCode, you can install [this extension](https://marketplace.visualstudio.com/items?itemName=ckolkman.vscode-postgres) to inspect your local database. When you click on the + to create a new connection, you can use the following inputs to each question to create a connection to the newly created database: `localhost`, `<username>`, hit enter for password, `5432`, standard, `bloom_prisma`, and a descriptive name like `local-bloom`. Once the connection is established, you can inspect the database.
 
 To start the application run: `yarn dev`.
 

@@ -6,7 +6,11 @@ This is the reference implementation of our public-facing portal. It displays li
 
 ## Getting Started
 
-- `yarn install` at root to install dependencies (if you don't have yarn installed, you can do so with `brew install yarn`)
+The following commands are for macOS / Linux, but you can find equivalent instructions for Windows machines online.
+
+If you don't have yarn installed, you can install homebrew with [these instructions](https://brew.sh/) and then do so with `brew install yarn`.
+
+- `yarn install` at root to install dependencies
 - From within `sites/public` copy the `.env.template` to `.env` and edit variables appropriate to your local environment - some keys are secret and are internally available - the template file includes default values and descriptions of each variable
 - `yarn dev:all` at root will start up the backend at port 3100 and the public app at port 3000
 

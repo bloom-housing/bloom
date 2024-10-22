@@ -56,9 +56,15 @@ If you don't have yarn installed, you can do so with `brew install yarn`.
 
 Configuration of each app and service is read from environment variables. There is an `.env.template` file in each app or service directory that must be copied to `.env`. Some keys are secret and are internally available.
 
-### Prettier
+### VSCode Extensions
 
-If you use VSCode, you can install the [Prettier plugin](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode), ⌘⇧P Open User Settings, search for and enable `Format on Save`, and then ⌘⇧P Reload Window. When you save a file locally, it should automatically format according to our configuration.
+If you use VSCode, these are some recommended extensions.
+
+With the [Prettier plugin](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) installed, ⌘⇧P Open User Settings, search for and enable `Format on Save`, and then ⌘⇧P Reload Window. When you save a file locally, it should automatically format according to our configuration.
+
+The [Postgres explorer plugin](https://marketplace.visualstudio.com/items?itemName=ckolkman.vscode-postgres) will let you inspect your local database (more setup instructions in the [api README](https://github.com/bloom-housing/bloom/blob/main/api/README.md)).
+
+The [Code Spell Checker plugin](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker) will flag spelling errors.
 
 ### Running a local test server
 

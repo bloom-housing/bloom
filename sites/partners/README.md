@@ -6,9 +6,11 @@ This is the reference implementation of our partners web app, providing the UI f
 
 ## Getting Started
 
+The following commands are for macOS / Linux, but you can find equivalent instructions for Windows machines online.
+
 If you don't have yarn installed, you can install homebrew with [these instructions](https://brew.sh/) and then do so with `brew install yarn`.
 
-- `yarn install` at root to install dependencies (if you don't have yarn installed, you can do so with `brew install yarn`)
+- `yarn install` at root to install dependencies
 - From within `sites/partners` copy the `.env.template` to `.env` and edit variables appropriate to your local environment - some keys are secret and are internally available - the template file includes default values and descriptions of each variable
 - `yarn dev:all` at root will start up the backend at port 3100 and the partners app at port 3001
 
