@@ -59,6 +59,7 @@ const ListingFormActions = ({
       : profile?.jurisdictions?.find((juris) => juris.id === listing?.jurisdictions?.id)
 
   const listingApprovalPermissions = jurisdiction?.listingApprovalPermissions
+  const isListingApprovalEnabled = listingApprovalPermissions?.length > 0
   const isListingApprover =
     profile?.userRoles.isAdmin ||
     (profile?.userRoles.isJurisdictionalAdmin &&
@@ -76,8 +77,6 @@ const ListingFormActions = ({
     (profile?.userRoles?.isPartner &&
       duplicateListingPermissions?.includes(EnumJurisdictionDuplicateListingPermissions.partner))
 
-  const isLimitedClosedListingAction =
-    process.env.limitClosedListingActions && listing.status === ListingsStatusEnum.closed
   const listingId = listing?.id
 
   const listingJurisdiction = profile?.jurisdictions?.find(
@@ -374,160 +373,354 @@ const ListingFormActions = ({
       }
     }
 
-    const getApprovalActions = () => {
-      const elements = []
-      // read-only form
-      if (type === ListingFormActionsType.details) {
-        if (isListingApprover) {
-          // admins can approve and publish if pending approval or changes requested
-          if (
-            listing.status === ListingsStatusEnum.pendingReview ||
-            listing.status === ListingsStatusEnum.changesRequested
-          )
-            elements.push(approveAndPublishButton)
-          // admins can always edit
-          elements.push(editFromDetailButton)
-        } else {
-          // partners cannot edit if pending approval
-          if (listing.status !== ListingsStatusEnum.pendingReview)
-            elements.push(editFromDetailButton)
-        }
-
-        if (isListingCopier) elements.push(copyButton)
-        // all users can preview
-        elements.push(previewButton)
-
-        // all users can view lottery results if posted
-        lotteryResultsButton(elements)
+    const elements = []
+    const getLotteryResultsButton = () => {
+      const lotteryResults = listing?.listingEvents?.find(
+        (event) => event.type === ListingEventsTypeEnum.lotteryResults
+      )
+      if (lotteryResults) {
+        elements.push(editPostedResultsButton(lotteryResults))
+      } else if (
+        listing.status === ListingsStatusEnum.closed &&
+        (!listing?.lotteryOptIn || !process.env.showLottery)
+      ) {
+        elements.push(postResultsButton)
       }
+    }
 
+    //admin experience
+    if (profile?.userRoles.isAdmin) {
       // new unsaved listing
       if (type === ListingFormActionsType.add) {
-        // admins can publish, partners can only submit for approval
-        elements.push(isListingApprover ? publishButton : submitButton)
-        // all users can save a draft
+        elements.push(isListingApprover || !isListingApprovalEnabled ? publishButton : submitButton)
         elements.push(saveDraftButton)
         elements.push(cancelButton)
       }
-
-      // listing saved at least once
-      if (type === ListingFormActionsType.edit) {
-        if (isListingApprover) {
-          // admins can publish a draft
-          if (listing.status === ListingsStatusEnum.pending) elements.push(publishButton)
-          // admins can approve and publish a pending approval or changes requested listing
-          if (
-            listing.status === ListingsStatusEnum.pendingReview ||
-            listing.status === ListingsStatusEnum.changesRequested
-          )
-            elements.push(approveAndPublishButton)
-          // admins can reopen a closed listing
-          if (listing.status === ListingsStatusEnum.closed) elements.push(reopenButton)
-        } else {
-          // partners can submit for approval a draft or changes requested listing
-          if (
-            listing.status === ListingsStatusEnum.pending ||
-            listing.status === ListingsStatusEnum.changesRequested
-          )
-            elements.push(submitButton)
-        }
-
-        // admins can request changes on pending review listings
-        if (isListingApprover && listing.status === ListingsStatusEnum.pendingReview)
-          elements.push(requestChangesButton)
-
-        // all users can unpublish a closed listing
-        if (listing.status === ListingsStatusEnum.closed) {
-          elements.push(unpublishButton)
-        }
-
-        // all users can close or unpublish open listings
-        if (listing.status === ListingsStatusEnum.active) {
-          elements.push(closeButton)
-          elements.push(unpublishButton)
-        }
-
-        const lotteryResults = listing?.listingEvents?.find(
-          (event) => event.type === ListingEventsTypeEnum.lotteryResults
-        )
-
-        // all users can manage lottery results on closed listings
-        if (lotteryResults) {
-          elements.push(editPostedResultsButton(lotteryResults))
-        } else if (
-          listing.status === ListingsStatusEnum.closed &&
-          (!listing?.lotteryOptIn || !process.env.showLottery)
-        ) {
-          elements.push(postResultsButton)
-        }
-
-        // all users can make updates to an open listing
-        elements.push(saveContinueButton)
-
-        elements.push(cancelButton)
-      }
-      return elements
-    }
-
-    const getDefaultActions = () => {
-      const elements = []
-      // read-only form
-      if (type === ListingFormActionsType.details) {
+      //draft listing, detail view
+      else if (
+        listing.status === ListingsStatusEnum.pending &&
+        type === ListingFormActionsType.details
+      ) {
         elements.push(editFromDetailButton)
         if (isListingCopier) elements.push(copyButton)
         elements.push(previewButton)
-
-        lotteryResultsButton(elements)
       }
+      //draft listing, edit view
+      else if (
+        listing.status === ListingsStatusEnum.pending &&
+        type === ListingFormActionsType.edit
+      ) {
+        elements.push(isListingApprover || !isListingApprovalEnabled ? publishButton : submitButton)
+        elements.push(saveContinueButton)
+        elements.push(cancelButton)
+      }
+      //pending review listing, detail view
+      else if (
+        listing.status === ListingsStatusEnum.pendingReview &&
+        type === ListingFormActionsType.details
+      ) {
+        if (isListingApprover) {
+          elements.push(approveAndPublishButton)
+          elements.push(editFromDetailButton)
+        }
+        if (isListingCopier) elements.push(copyButton)
+        elements.push(previewButton)
+      }
+      //pending review listing, edit view
+      else if (
+        listing.status === ListingsStatusEnum.pendingReview &&
+        type === ListingFormActionsType.edit
+      ) {
+        if (isListingApprover) {
+          elements.push(approveAndPublishButton)
+          elements.push(requestChangesButton)
+        }
+        elements.push(saveContinueButton)
+        elements.push(cancelButton)
+      }
+      //changes requested listing, detail view
+      else if (
+        listing.status === ListingsStatusEnum.changesRequested &&
+        type === ListingFormActionsType.details
+      ) {
+        if (isListingApprover) elements.push(approveAndPublishButton)
+        elements.push(editFromDetailButton)
+        if (isListingCopier) elements.push(copyButton)
+        elements.push(previewButton)
+      }
+      //changes requested listing, edit view
+      else if (
+        listing.status === ListingsStatusEnum.changesRequested &&
+        type === ListingFormActionsType.edit
+      ) {
+        elements.push(isListingApprover ? approveAndPublishButton : submitButton)
+        elements.push(saveContinueButton)
+        elements.push(cancelButton)
+      }
+      //open listing, detail view
+      else if (
+        listing.status === ListingsStatusEnum.active &&
+        type === ListingFormActionsType.details
+      ) {
+        elements.push(editFromDetailButton)
+        if (isListingCopier) elements.push(copyButton)
+        elements.push(previewButton)
+      }
+      //open listing, edit view
+      else if (
+        listing.status === ListingsStatusEnum.active &&
+        type === ListingFormActionsType.edit
+      ) {
+        elements.push(closeButton)
+        elements.push(unpublishButton)
+        elements.push(saveContinueButton)
+        elements.push(cancelButton)
+      }
+      //closed listing, detail view
+      else if (
+        listing.status === ListingsStatusEnum.closed &&
+        type === ListingFormActionsType.details
+      ) {
+        elements.push(editFromDetailButton)
+        if (isListingCopier) elements.push(copyButton)
+        elements.push(previewButton)
+      }
+      //closed listing, edit view
+      else if (
+        listing.status === ListingsStatusEnum.closed &&
+        type === ListingFormActionsType.edit
+      ) {
+        if (
+          (isListingApprover || !isListingApprovalEnabled) &&
+          !process.env.limitClosedListingActions
+        ) {
+          elements.push(reopenButton)
+        }
+        elements.push(unpublishButton)
+        getLotteryResultsButton()
+        elements.push(saveContinueButton)
+        elements.push(cancelButton)
+      }
+    }
 
+    //jurisdictional admin experience
+    else if (profile?.userRoles.isJurisdictionalAdmin) {
       // new unsaved listing
       if (type === ListingFormActionsType.add) {
-        elements.push(publishButton)
+        elements.push(isListingApprover || !isListingApprovalEnabled ? publishButton : submitButton)
         elements.push(saveDraftButton)
         elements.push(cancelButton)
       }
-
-      // listing saved at least once
-      if (type === ListingFormActionsType.edit) {
-        if (listing.status === ListingsStatusEnum.pending) {
-          elements.push(publishButton)
-        }
-        if (listing.status === ListingsStatusEnum.closed) {
-          elements.push(reopenButton)
-        }
+      //draft listing, detail view
+      else if (
+        listing.status === ListingsStatusEnum.pending &&
+        type === ListingFormActionsType.details
+      ) {
+        elements.push(editFromDetailButton)
+        if (isListingCopier) elements.push(copyButton)
+        elements.push(previewButton)
+      }
+      //draft listing, edit view
+      else if (
+        listing.status === ListingsStatusEnum.pending &&
+        type === ListingFormActionsType.edit
+      ) {
+        elements.push(isListingApprover || !isListingApprovalEnabled ? publishButton : submitButton)
         elements.push(saveContinueButton)
-
-        if (listing.status === ListingsStatusEnum.active) {
-          elements.push(closeButton)
-        }
-
-        if (
-          listing.status === ListingsStatusEnum.closed ||
-          listing.status === ListingsStatusEnum.active
-        ) {
-          elements.push(unpublishButton)
-        }
-
-        const lotteryResults = listing?.listingEvents?.find(
-          (event) => event.type === ListingEventsTypeEnum.lotteryResults
-        )
-
-        if (lotteryResults) {
-          elements.push(editPostedResultsButton(lotteryResults))
-        } else if (
-          listing.status === ListingsStatusEnum.closed &&
-          (!listing?.lotteryOptIn || !process.env.showLottery)
-        ) {
-          elements.push(postResultsButton)
-        }
-
         elements.push(cancelButton)
       }
-
-      return elements
+      //pending review listing, detail view
+      else if (
+        listing.status === ListingsStatusEnum.pendingReview &&
+        type === ListingFormActionsType.details
+      ) {
+        if (isListingApprover) {
+          elements.push(approveAndPublishButton)
+          elements.push(editFromDetailButton)
+        }
+        if (isListingCopier) elements.push(copyButton)
+        elements.push(previewButton)
+      }
+      //pending review listing, edit view
+      else if (
+        listing.status === ListingsStatusEnum.pendingReview &&
+        type === ListingFormActionsType.edit
+      ) {
+        if (isListingApprover) {
+          elements.push(approveAndPublishButton)
+          elements.push(requestChangesButton)
+        }
+        elements.push(saveContinueButton)
+        elements.push(cancelButton)
+      }
+      //changes requested listing, detail view
+      else if (
+        listing.status === ListingsStatusEnum.changesRequested &&
+        type === ListingFormActionsType.details
+      ) {
+        if (isListingApprover) elements.push(approveAndPublishButton)
+        elements.push(editFromDetailButton)
+        if (isListingCopier) elements.push(copyButton)
+        elements.push(previewButton)
+      }
+      //changes requested listing, edit view
+      else if (
+        listing.status === ListingsStatusEnum.changesRequested &&
+        type === ListingFormActionsType.edit
+      ) {
+        elements.push(isListingApprover ? approveAndPublishButton : submitButton)
+        elements.push(saveContinueButton)
+        elements.push(cancelButton)
+      }
+      //open listing, detail view
+      else if (
+        listing.status === ListingsStatusEnum.active &&
+        type === ListingFormActionsType.details
+      ) {
+        elements.push(editFromDetailButton)
+        if (isListingCopier) elements.push(copyButton)
+        elements.push(previewButton)
+      }
+      //open listing, edit view
+      else if (
+        listing.status === ListingsStatusEnum.active &&
+        type === ListingFormActionsType.edit
+      ) {
+        elements.push(closeButton)
+        elements.push(unpublishButton)
+        elements.push(saveContinueButton)
+        elements.push(cancelButton)
+      }
+      //closed listing, detail view
+      else if (
+        listing.status === ListingsStatusEnum.closed &&
+        type === ListingFormActionsType.details
+      ) {
+        if (!process.env.limitClosedListingActions) elements.push(editFromDetailButton)
+        if (isListingCopier) elements.push(copyButton)
+        elements.push(previewButton)
+      }
+      //closed listing, edit view
+      else if (
+        listing.status === ListingsStatusEnum.closed &&
+        type === ListingFormActionsType.edit
+      ) {
+        if (
+          (isListingApprover || !isListingApprovalEnabled) &&
+          !process.env.limitClosedListingActions
+        ) {
+          elements.push(reopenButton)
+        }
+        elements.push(unpublishButton)
+        getLotteryResultsButton()
+        elements.push(saveContinueButton)
+        elements.push(cancelButton)
+      }
     }
 
-    return listingApprovalPermissions?.length > 0 ? getApprovalActions() : getDefaultActions()
+    //partner user experience
+    else if (profile?.userRoles.isPartner) {
+      // new unsaved listing
+      if (type === ListingFormActionsType.add) {
+        elements.push(isListingApprover ? publishButton : submitButton)
+        elements.push(saveDraftButton)
+        elements.push(cancelButton)
+      }
+      //draft listing, detail view
+      else if (
+        listing.status === ListingsStatusEnum.pending &&
+        type === ListingFormActionsType.details
+      ) {
+        elements.push(editFromDetailButton)
+        if (isListingCopier) elements.push(copyButton)
+        elements.push(previewButton)
+      }
+      //draft listing, edit view
+      else if (
+        listing.status === ListingsStatusEnum.pending &&
+        type === ListingFormActionsType.edit
+      ) {
+        elements.push(isListingApprover ? publishButton : submitButton)
+        elements.push(saveContinueButton)
+        elements.push(cancelButton)
+      }
+      //pending review listing, detail view
+      else if (
+        listing.status === ListingsStatusEnum.pendingReview &&
+        type === ListingFormActionsType.details
+      ) {
+        //copy button?
+        if (isListingCopier) elements.push(copyButton)
+        elements.push(previewButton)
+      }
+      //pending review listing, edit view
+      else if (
+        listing.status === ListingsStatusEnum.pendingReview &&
+        type === ListingFormActionsType.edit
+      ) {
+        elements.push(isListingApprover ? publishButton : submitButton)
+        elements.push(saveContinueButton)
+        elements.push(cancelButton)
+      }
+      //changes requested listing, detail view
+      else if (
+        listing.status === ListingsStatusEnum.changesRequested &&
+        type === ListingFormActionsType.details
+      ) {
+        elements.push(editFromDetailButton)
+        //copy button?
+        if (isListingCopier) elements.push(copyButton)
+        elements.push(previewButton)
+      }
+      //changes requested listing, edit view
+      else if (
+        listing.status === ListingsStatusEnum.changesRequested &&
+        type === ListingFormActionsType.edit
+      ) {
+        elements.push(isListingApprover ? publishButton : submitButton)
+        elements.push(saveContinueButton)
+        elements.push(cancelButton)
+      }
+      //open listing, detail view
+      else if (
+        listing.status === ListingsStatusEnum.active &&
+        type === ListingFormActionsType.details
+      ) {
+        elements.push(editFromDetailButton)
+        if (isListingCopier) elements.push(copyButton)
+        elements.push(previewButton)
+      }
+      //open listing, edit view
+      else if (
+        listing.status === ListingsStatusEnum.active &&
+        type === ListingFormActionsType.edit
+      ) {
+        elements.push(closeButton)
+        elements.push(unpublishButton)
+        elements.push(saveContinueButton)
+        elements.push(cancelButton)
+      }
+      //closed listing, detail view
+      else if (
+        listing.status === ListingsStatusEnum.closed &&
+        type === ListingFormActionsType.details
+      ) {
+        if (!process.env.limitClosedListingActions) elements.push(editFromDetailButton)
+        if (isListingCopier) elements.push(copyButton)
+        elements.push(previewButton)
+      }
+      //closed listing, edit view
+      else if (
+        listing.status === ListingsStatusEnum.closed &&
+        type === ListingFormActionsType.edit
+      ) {
+        elements.push(unpublishButton)
+        getLotteryResultsButton()
+        elements.push(saveContinueButton)
+        elements.push(cancelButton)
+      }
+    }
+    return elements
   }, [
     isListingApprover,
     listing,
