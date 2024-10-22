@@ -1,6 +1,6 @@
 # Bloom Affordable Housing Platform
 
-Bloom is Exygy’s affordable housing platform. Bloom's goal is to be a single entry point for affordable housing seekers and application management for developers. You can read more about the platform on [bloomhousing.com](https://bloomhousing.com/).
+Bloom is [Exygy](https://www.exygy.com/)’s affordable housing platform. Bloom's goal is to be a single entry point for affordable housing seekers and application management for developers. You can read more about the platform on [bloomhousing.com](https://bloomhousing.com/).
 
 ## Overview
 
