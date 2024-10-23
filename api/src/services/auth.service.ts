@@ -11,6 +11,7 @@ import { Prisma } from '@prisma/client';
 import { UpdatePassword } from '../dtos/auth/update-password.dto';
 import { MfaType } from '../enums/mfa/mfa-type-enum';
 import { UserViews } from '../enums/user/view-enum';
+import { getSingleUseCode } from '../utilities/get-single-use-code';
 import { isPasswordValid, passwordToHash } from '../utilities/password-helpers';
 import { RequestMfaCodeResponse } from '../dtos/mfa/request-mfa-code-response.dto';
 import { RequestMfaCode } from '../dtos/mfa/request-mfa-code.dto';
@@ -20,7 +21,6 @@ import { PrismaService } from './prisma.service';
 import { UserService } from './user.service';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { mapTo } from '../utilities/mapTo';
-import { generateSingleUseCode } from '../utilities/generate-single-use-code';
 import { Confirm } from '../dtos/auth/confirm.dto';
 import { SmsService } from './sms.service';
 import { EmailService } from './email.service';
@@ -298,9 +298,13 @@ export class AuthService {
       }
     }
 
-    const singleUseCode = generateSingleUseCode(
+    const singleUseCode = getSingleUseCode(
       Number(process.env.MFA_CODE_LENGTH),
+      user.singleUseCode,
+      user.singleUseCodeUpdatedAt,
+      Number(process.env.MFA_CODE_VALID),
     );
+
     await this.prisma.userAccounts.update({
       data: {
         singleUseCode,

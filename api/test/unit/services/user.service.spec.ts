@@ -1969,11 +1969,13 @@ describe('Testing user service', () => {
     expect(emailService.sendSingleUseCode).not.toHaveBeenCalled();
   });
 
-  it('should successfully request single use code', async () => {
+  it('should successfully request single use code when previous code is still valid', async () => {
     const id = randomUUID();
     emailService.sendSingleUseCode = jest.fn();
     prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
       id,
+      singleUseCode: '00000',
+      singleUseCodeUpdatedAt: new Date(),
     });
     prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
       id,
@@ -2012,7 +2014,64 @@ describe('Testing user service', () => {
     });
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({
       data: {
-        singleUseCode: expect.anything(),
+        singleUseCode: '00000',
+        singleUseCodeUpdatedAt: expect.anything(),
+      },
+      where: {
+        id,
+      },
+    });
+    expect(emailService.sendSingleUseCode).toHaveBeenCalled();
+    expect(res.success).toEqual(true);
+  });
+  it('should successfully request single use code when previous code is outdated', async () => {
+    const id = randomUUID();
+    emailService.sendSingleUseCode = jest.fn();
+    prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
+      id,
+      singleUseCode: '00000',
+      singleUseCodeUpdatedAt: new Date(
+        new Date().getTime() - Number(process.env.MFA_CODE_VALUE) * 2,
+      ),
+    });
+    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+      id,
+      allowSingleUseCodeLogin: true,
+    });
+    prisma.userAccounts.update = jest.fn().mockResolvedValue({
+      id,
+    });
+
+    const res = await service.requestSingleUseCode(
+      {
+        email: 'example@exygy.com',
+      },
+      { headers: { jurisdictionname: 'juris 1' } } as unknown as Request,
+    );
+
+    expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
+      where: {
+        email: 'example@exygy.com',
+      },
+      include: {
+        jurisdictions: true,
+      },
+    });
+    expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
+      select: {
+        id: true,
+        allowSingleUseCodeLogin: true,
+      },
+      where: {
+        name: 'juris 1',
+      },
+      orderBy: {
+        allowSingleUseCodeLogin: OrderByEnum.DESC,
+      },
+    });
+    expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+      data: {
+        singleUseCode: expect.not.stringMatching('00000'),
         singleUseCodeUpdatedAt: expect.anything(),
       },
       where: {

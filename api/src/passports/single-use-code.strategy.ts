@@ -16,7 +16,7 @@ import { OrderByEnum } from '../enums/shared/order-by-enum';
 import {
   isUserLockedOut,
   singleUseCodePresent,
-  singleUseCodeValid,
+  singleUseCodeInvalid,
 } from '../utilities/passport-validator-utilities';
 
 @Injectable()
@@ -114,7 +114,7 @@ export class SingleUseCodeStrategy extends PassportStrategy(
         name: 'singleUseCodeIsMissing',
       });
     } else if (
-      singleUseCodeValid(
+      singleUseCodeInvalid(
         rawUser.singleUseCodeUpdatedAt,
         Number(process.env.MFA_CODE_VALID),
         dto.singleUseCode,
