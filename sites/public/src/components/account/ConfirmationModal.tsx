@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form"
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ConfirmationModalProps {}
 
-const ConfirmationModal = (props: ConfirmationModalProps) => {
+const ConfirmationModal = () => {
   const { resendConfirmation, profile, confirmAccount } = useContext(AuthContext)
   const toastyRef = useToastyRef()
   const [openModal, setOpenModal] = useState(false)

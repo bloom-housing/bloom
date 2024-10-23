@@ -17,7 +17,6 @@ import { Application } from '../dtos/applications/application.dto';
 import { AmiChartImportDTO } from '../dtos/script-runner/ami-chart-import.dto';
 import { AmiChartCreate } from '../dtos/ami-charts/ami-chart-create.dto';
 import { AmiChartService } from './ami-chart.service';
-import { IdDTO } from '../dtos/shared/id.dto';
 
 /**
   this is the service for running scripts
@@ -204,7 +203,7 @@ export class ScriptRunnerService {
     return { success: true };
   }
 
-  private async addLotteryTranslationsHelper(req: ExpressRequest) {
+  private async addLotteryTranslationsHelper() {
     const updateForLanguage = async (
       language: LanguagesEnum,
       translationKeys: Record<string, Record<string, string>>,
@@ -355,7 +354,7 @@ export class ScriptRunnerService {
   async addLotteryTranslations(req: ExpressRequest): Promise<SuccessDTO> {
     const requestingUser = mapTo(User, req['user']);
     await this.markScriptAsRunStart('add lottery translations', requestingUser);
-    this.addLotteryTranslationsHelper(req);
+    this.addLotteryTranslationsHelper();
     await this.markScriptAsComplete('add lottery translations', requestingUser);
 
     return { success: true };
@@ -376,7 +375,7 @@ export class ScriptRunnerService {
       'add lottery translations create if empty',
       requestingUser,
     );
-    this.addLotteryTranslationsHelper(req);
+    this.addLotteryTranslationsHelper();
     await this.markScriptAsComplete(
       'add lottery translations create if empty',
       requestingUser,
@@ -451,6 +450,49 @@ export class ScriptRunnerService {
 
     // script runner standard spin down
     await this.markScriptAsComplete(`${name} Type`, requestingUser);
+    return { success: true };
+  }
+
+  /**
+   *
+   * @param req incoming request object
+   * @returns successDTO
+   * @description updates single use code translations to show extended expiration time
+   */
+  async updateCodeExpirationTranslations(
+    req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart(
+      'update code expiration translations',
+      requestingUser,
+    );
+
+    const translations = await this.prisma.translations.findFirst({
+      where: { language: 'en', jurisdictionId: null },
+    });
+    const translationsJSON =
+      translations.translations as unknown as Prisma.JsonArray;
+
+    await this.prisma.translations.update({
+      where: { id: translations.id },
+      data: {
+        translations: {
+          ...translationsJSON,
+          singleUseCodeEmail: {
+            greeting: 'Hi',
+            message:
+              'Use the following code to sign in to your %{jurisdictionName} account. This code will be valid for 10 minutes. Never share this code.',
+            singleUseCode: '%{singleUseCode}',
+          },
+        },
+      },
+    });
+
+    await this.markScriptAsComplete(
+      'update code expiration translations',
+      requestingUser,
+    );
     return { success: true };
   }
 
