@@ -360,21 +360,10 @@ const ListingFormActions = ({
       </Grid.Cell>
     )
 
-    const lotteryResultsButton = (elements) => {
-      if (
-        listing.listingEvents?.find((event) => event.type === ListingEventsTypeEnum.lotteryResults)
-      ) {
-        const eventUrl = pdfUrlFromListingEvents(
-          listing?.listingEvents,
-          ListingEventsTypeEnum.lotteryResults,
-          process.env.cloudinaryCloudName
-        )
-        elements.push(viewPostedResultsButton(eventUrl))
-      }
-    }
-
     const elements = []
-    const getLotteryResultsButton = () => {
+
+    //lottery buttons for listing edit view
+    const updateLotteryResultsButton = () => {
       const lotteryResults = listing?.listingEvents?.find(
         (event) => event.type === ListingEventsTypeEnum.lotteryResults
       )
@@ -385,6 +374,19 @@ const ListingFormActions = ({
         (!listing?.lotteryOptIn || !process.env.showLottery)
       ) {
         elements.push(postResultsButton)
+      }
+    }
+    //lottery button for listing detail view
+    const viewlotteryResultsButton = () => {
+      if (
+        listing.listingEvents?.find((event) => event.type === ListingEventsTypeEnum.lotteryResults)
+      ) {
+        const eventUrl = pdfUrlFromListingEvents(
+          listing?.listingEvents,
+          ListingEventsTypeEnum.lotteryResults,
+          process.env.cloudinaryCloudName
+        )
+        elements.push(viewPostedResultsButton(eventUrl))
       }
     }
 
@@ -484,6 +486,7 @@ const ListingFormActions = ({
         elements.push(editFromDetailButton)
         if (isListingCopier) elements.push(copyButton)
         elements.push(previewButton)
+        viewlotteryResultsButton()
       }
       //closed listing, edit view
       else if (
@@ -497,7 +500,7 @@ const ListingFormActions = ({
           elements.push(reopenButton)
         }
         elements.push(unpublishButton)
-        getLotteryResultsButton()
+        updateLotteryResultsButton()
         elements.push(saveContinueButton)
         elements.push(cancelButton)
       }
@@ -599,6 +602,7 @@ const ListingFormActions = ({
         if (!process.env.limitClosedListingActions) elements.push(editFromDetailButton)
         if (isListingCopier) elements.push(copyButton)
         elements.push(previewButton)
+        viewlotteryResultsButton()
       }
       //closed listing, edit view
       else if (
@@ -612,7 +616,7 @@ const ListingFormActions = ({
           elements.push(reopenButton)
         }
         elements.push(unpublishButton)
-        getLotteryResultsButton()
+        updateLotteryResultsButton()
         elements.push(saveContinueButton)
         elements.push(cancelButton)
       }
@@ -708,6 +712,7 @@ const ListingFormActions = ({
         if (!process.env.limitClosedListingActions) elements.push(editFromDetailButton)
         if (isListingCopier) elements.push(copyButton)
         elements.push(previewButton)
+        viewlotteryResultsButton()
       }
       //closed listing, edit view
       else if (
@@ -715,7 +720,7 @@ const ListingFormActions = ({
         type === ListingFormActionsType.edit
       ) {
         elements.push(unpublishButton)
-        getLotteryResultsButton()
+        updateLotteryResultsButton()
         elements.push(saveContinueButton)
         elements.push(cancelButton)
       }
