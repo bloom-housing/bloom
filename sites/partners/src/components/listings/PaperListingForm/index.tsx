@@ -191,44 +191,50 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
         try {
           setLoading(true)
           clearErrors()
+          const successful = await formMethods.trigger()
 
-          const dataPipeline = new ListingDataPipeline(formData, {
-            preferences,
-            programs,
-            units,
-            openHouseEvents,
-            profile: profile,
-            latLong,
-            customMapPositionChosen,
-          })
-          const formattedData = await dataPipeline.run()
-          let result
-          if (editMode) {
-            result = await listingsService.update({
-              id: listing.id,
-              body: { id: listing.id, ...(formattedData as unknown as ListingUpdate) },
+          if (successful) {
+            const dataPipeline = new ListingDataPipeline(formData, {
+              preferences,
+              programs,
+              units,
+              openHouseEvents,
+              profile: profile,
+              latLong,
+              customMapPositionChosen,
             })
-          } else {
-            result = await listingsService.create({
-              body: formattedData as unknown as ListingCreate,
-            })
-          }
-
-          reset(formData)
-
-          if (result) {
-            addToast(getToast(listing, listing?.status, formattedData?.status), {
-              variant: "success",
-            })
-
-            if (continueEditing) {
-              setAlert(null)
-              setListingName(result.name)
+            const formattedData = await dataPipeline.run()
+            let result
+            if (editMode) {
+              result = await listingsService.update({
+                id: listing.id,
+                body: { id: listing.id, ...(formattedData as unknown as ListingUpdate) },
+              })
             } else {
-              await router.push(`/listings/${result.id}`)
+              result = await listingsService.create({
+                body: formattedData as unknown as ListingCreate,
+              })
             }
+
+            reset(formData)
+
+            if (result) {
+              addToast(getToast(listing, listing?.status, formattedData?.status), {
+                variant: "success",
+              })
+
+              if (continueEditing) {
+                setAlert(null)
+                setListingName(result.name)
+              } else {
+                await router.push(`/listings/${result.id}`)
+              }
+            }
+            setLoading(false)
+          } else {
+            setLoading(false)
+            setAlert("form")
           }
-          setLoading(false)
         } catch (err) {
           reset(formData)
           setLoading(false)
