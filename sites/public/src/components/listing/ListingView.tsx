@@ -71,7 +71,7 @@ interface ListingProps {
 
 export const ListingView = (props: ListingProps) => {
   const { initialStateLoaded, profile } = useContext(AuthContext)
-  let buildingSelectionCriteria, preferencesSection
+  let buildingSelectionCriteria, preferencesSection, programsSection
   const { listing } = props
   const { content: appStatusContent, subContent: appStatusSubContent } =
     useGetApplicationStatusProps(listing)
@@ -182,8 +182,15 @@ export const ListingView = (props: ListingProps) => {
       !listingPref.multiselectQuestions.hideFromListing
   )
 
-  const getPreferenceData = () => {
-    return listingPreferences.map((listingPref, index) => {
+  const listingPrograms = listing?.listingMultiselectQuestions.filter(
+    (listingProgram) =>
+      listingProgram.multiselectQuestions.applicationSection ===
+        MultiselectQuestionsApplicationSectionEnum.programs &&
+      !listingProgram.multiselectQuestions.hideFromListing
+  )
+
+  const getPreferenceData = (forPrograms = false) => {
+    return (forPrograms ? listingPrograms : listingPreferences).map((listingPref, index) => {
       return {
         ordinal: index + 1,
         links: listingPref?.multiselectQuestions?.links,
@@ -191,6 +198,20 @@ export const ListingView = (props: ListingProps) => {
         description: listingPref?.multiselectQuestions?.description,
       }
     })
+  }
+
+  if (listingPrograms && listingPrograms?.length > 0) {
+    programsSection = (
+      <ListSection
+        title={t("listings.sections.housingProgramsTitle")}
+        subtitle={t("listings.sections.housingProgramsSubtitle")}
+      >
+        <>
+          <PreferencesList listingPreferences={getPreferenceData(true)} />
+          <p className="text-gray-750 text-sm">{t("listings.remainingUnitsAfterPrograms")}</p>
+        </>
+      </ListSection>
+    )
   }
 
   if (listingPreferences && listingPreferences?.length > 0) {
@@ -695,6 +716,7 @@ export const ListingView = (props: ListingProps) => {
               />
             )}
 
+            {programsSection}
             {preferencesSection}
 
             {(listing.creditHistory ||
