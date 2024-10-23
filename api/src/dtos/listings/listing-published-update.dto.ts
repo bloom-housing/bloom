@@ -156,9 +156,16 @@ export class ListingPublishedUpdate extends OmitType(ListingUpdate, [
 
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateIf((o) => o.reviewOrderType !== ReviewOrderTypeEnum.waitlist, {
-    groups: [ValidationsGroupsEnum.default],
-  })
+  @ValidateIf(
+    (o) =>
+      !(
+        o.applicationDueDate == undefined &&
+        o.reviewOrderType == ReviewOrderTypeEnum.waitlist
+      ),
+    {
+      groups: [ValidationsGroupsEnum.default],
+    },
+  )
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   @ApiProperty()
