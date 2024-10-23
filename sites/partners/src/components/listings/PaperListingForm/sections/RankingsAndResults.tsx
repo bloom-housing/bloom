@@ -23,7 +23,7 @@ const RankingsAndResults = ({ listing, isAdmin }: RankingsAndResultsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, control, errors } = formMethods
+  const { register, setValue, watch, control, errors } = formMethods
 
   const lotteryEvent = getLotteryEvent(listing as unknown as Listing)
 
@@ -61,6 +61,7 @@ const RankingsAndResults = ({ listing, isAdmin }: RankingsAndResultsProps) => {
       value: YesNoEnum.no,
     },
   ]
+
   return (
     <>
       <SectionWithGrid
@@ -146,6 +147,8 @@ const RankingsAndResults = ({ listing, isAdmin }: RankingsAndResultsProps) => {
                   name={"lotteryDate"}
                   id={"lotteryDate"}
                   register={register}
+                  required
+                  setValue={setValue}
                   watch={watch}
                   error={
                     errors?.lotteryDate
@@ -181,10 +184,12 @@ const RankingsAndResults = ({ listing, isAdmin }: RankingsAndResultsProps) => {
                   name={"lotteryStartTime"}
                   id={"lotteryStartTime"}
                   register={register}
+                  required
+                  setValue={setValue}
                   watch={watch}
-                  error={errors?.lotteryDate ? true : false}
+                  error={errors?.lotteryStartTime ? true : false}
                   strings={{
-                    timeError: errors?.lotteryDate ? t("errors.dateError") : null,
+                    timeError: errors?.lotteryStartTime ? t("errors.timeError") : null,
                   }}
                   defaultValues={
                     errors?.lotteryDate
@@ -211,10 +216,12 @@ const RankingsAndResults = ({ listing, isAdmin }: RankingsAndResultsProps) => {
                   name={"lotteryEndTime"}
                   id={"lotteryEndTime"}
                   register={register}
+                  required
+                  setValue={setValue}
                   watch={watch}
-                  error={errors?.lotteryDate ? true : false}
+                  error={errors?.lotteryEndTime ? true : false}
                   strings={{
-                    timeError: errors?.lotteryDate ? t("errors.dateError") : null,
+                    timeError: errors?.lotteryEndTime ? t("errors.timeError") : null,
                   }}
                   defaultValues={
                     errors?.lotteryDate
