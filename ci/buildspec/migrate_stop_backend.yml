@@ -1,9 +1,7 @@
 # AWS CodeBuild config
 # This file is referenced in the infra repo as a CodeBuild buildspec target.
-
 ## The environment variables in this file are passed in through the buildbuild resource.
 ## Check the terraform scripts to see where these variables originate from.
-
 version: 0.2
 env:
   shell: bash
@@ -14,7 +12,6 @@ env:
     PGDATABASE: "${DB_CREDS_ARN}:db_name"
     PGPORT: "${DB_CREDS_ARN}:port"
     DATABASE_URL: "${DB_CREDS_ARN}:uri"
-
 phases:
   pre_build:
     commands:
@@ -22,32 +19,25 @@ phases:
   build:
     commands:
       - export ECR_REPO="${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}"
-
       - export MIGRATION_IMAGE="${ECR_REPO}/backend:migrate-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
-
       # Pull down migration candidate image
       - docker pull "${MIGRATION_IMAGE}"
-
       # Use the defulat cluster if something more specific hasn't been provided
       - export ECS_BACKEND_CLUSTER="${ECS_BACKEND_CLUSTER:-${ECS_DEFAULT_CLUSTER}}"
-
       # The backend needs to be completely turned down for a reseed
       # If the backend is still running, the reseed step fails due to open connections
-
       # Check current backend desired count
       - export FOUND_BACKEND_COUNT=$(aws ecs  describe-services --cluster "${ECS_BACKEND_CLUSTER}" --service "${ECS_BACKEND_SERVICE}" | jq -r .services[0].desiredCount)
       # We have to quote this line or YAML attempts to interpret the `: ` as a dict key(this is a YAML feature, not a bug)
       - "export BACKEND_COUNT=$((FOUND_BACKEND_COUNT<1 ? 1 : FOUND_BACKEND_COUNT))"
-
       # Scale to 0
       - aws ecs update-service --cluster "${ECS_BACKEND_CLUSTER}" --service "${ECS_BACKEND_SERVICE}" --desired-count 0
-
+      - if [[ ! -z "${ECS_PRIVATE_BACKEND_SERVICE}" ]]; then aws ecs update-service --cluster "${ECS_BACKEND_CLUSTER}" --service "${ECS_PRIVATE_BACKEND_SERVICE}" --desired-count 0; fi
       # Wait for the service to stablize
       - aws ecs wait services-stable --cluster "${ECS_BACKEND_CLUSTER}" --services "${ECS_BACKEND_SERVICE}"
-
+      - if [[ ! -z "${ECS_PRIVATE_BACKEND_SERVICE}" ]]; then aws ecs wait services-stable --cluster "${ECS_BACKEND_CLUSTER}" --services "${ECS_PRIVATE_BACKEND_SERVICE}"; fi
       # Default to db:reseed:ci
       - export MIGRATION_CMD="${MIGRATION_CMD:-db:reseed:ci}"
-
       # Execute migration
       # Note that many of these vars are required by the app but not used for migration
       - >
@@ -70,6 +60,6 @@ phases:
         --env PARTNERS_PORTAL_URL="${PARTNERS_PORTAL_URL:-http://localhost:3001/not-used}"
         --env SKIP_MIGRATIONS=FALSE
         "${MIGRATION_IMAGE}" sh -c "yarn ${MIGRATION_CMD}"
-
       # Start the backend back up with the previous number of desired containers
       - aws ecs update-service --cluster "${ECS_BACKEND_CLUSTER}" --service "${ECS_BACKEND_SERVICE}" --desired-count $BACKEND_COUNT
+      - if [[ ! -z "${ECS_PRIVATE_BACKEND_SERVICE}" ]]; then aws ecs update-service --cluster "${ECS_BACKEND_CLUSTER}" --service "${ECS_PRIVATE_BACKEND_SERVICE}" --desired-count $BACKEND_COUNT; fi
