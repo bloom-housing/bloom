@@ -17,6 +17,7 @@ import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction
 import { DataTransferDTO } from '../dtos/script-runner/data-transfer.dto';
 import { BulkApplicationResendDTO } from '../dtos/script-runner/bulk-application-resend.dto';
 import { AmiChartImportDTO } from '../dtos/script-runner/ami-chart-import.dto';
+import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
 import { CommunityTypeDTO } from '../dtos/script-runner/community-type.dto';
 import { ApiKeyGuard } from '../guards/api-key.guard';
 
@@ -81,6 +82,23 @@ export class ScirptRunnerController {
     return await this.scriptRunnerService.amiChartImport(
       req,
       amiChartImportDTO,
+    );
+  }
+
+  @Put('amiChartUpdateImport')
+  @ApiOperation({
+    summary:
+      'A script that takes in a standardized string and outputs the input for the ami chart update endpoint',
+    operationId: 'amiChartUpdateImport',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async amiChartUpdateImport(
+    @Body() amiChartUpdateImportDTO: AmiChartUpdateImportDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.amiChartUpdateImport(
+      req,
+      amiChartUpdateImportDTO,
     );
   }
 
