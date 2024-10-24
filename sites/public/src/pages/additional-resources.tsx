@@ -101,7 +101,9 @@ const AdditionalResources = () => {
                 subtitle={
                   "Public Housing Authorities (PHAs) typically oversee two programs that provide direct assistance to tenants: overseeing units of public housing, and administering the Section 8 Housing Choice Voucher program. However, some PHAs no longer manage public units, and the scale of these programs can also vary widely. Please contact your local PHA to find out how they may be of assistance to you."
                 }
-              />
+              >
+                <Resource>{exygy}</Resource>
+              </InfoCardGrid>
               <section className="info-cards">
                 <header className="info-cards__header">
                   <Heading priority={2} styleType="underlineWeighted" className={"text-sm"}>
@@ -130,7 +132,7 @@ const AdditionalResources = () => {
                   },
                 }}
               >
-                {sidebarContent}
+                {sidebarContent as unknown as string}
               </Markdown>
             </MarkdownSection>
           </aside>
