@@ -36,6 +36,7 @@ import DetailPreferences from "../../../components/listings/PaperListingDetails/
 import DetailCommunityType from "../../../components/listings/PaperListingDetails/sections/DetailCommunityType"
 import DetailPrograms from "../../../components/listings/PaperListingDetails/sections/DetailPrograms"
 import DetailListingNotes from "../../../components/listings/PaperListingDetails/sections/DetailNotes"
+import CopyListingDialog from "../../../components/listings/PaperListingForm/dialogs/CopyListingDialog"
 
 interface ListingProps {
   listing: Listing
@@ -45,6 +46,7 @@ export default function ListingDetail(props: ListingProps) {
   const { listing } = props
   const [errorAlert, setErrorAlert] = useState<string>(null)
   const [unitDrawer, setUnitDrawer] = useState<UnitDrawer>(null)
+  const [copyListingDialog, setCopyListingDialog] = useState(false)
 
   if (!listing) return null
 
@@ -120,6 +122,7 @@ export default function ListingDetail(props: ListingProps) {
                   <div className="w-full md:w-3/12 md:pl-6">
                     <ListingFormActions
                       type={ListingFormActionsType.details}
+                      showCopyListingDialog={() => setCopyListingDialog(true)}
                       setErrorAlert={setErrorAlert}
                     />
                   </div>
@@ -129,6 +132,11 @@ export default function ListingDetail(props: ListingProps) {
           </Layout>
 
           <DetailUnitDrawer unit={unitDrawer} setUnitDrawer={setUnitDrawer} />
+          <CopyListingDialog
+            isOpen={copyListingDialog}
+            setOpen={setCopyListingDialog}
+            listingInfo={{ name: listing.name, id: listing.id }}
+          />
         </>
       </ListingGuard>
     </ListingContext.Provider>
