@@ -104,7 +104,11 @@ const Layout = (props) => {
           logoSrc="/images/logo_glyph.svg"
           homeURL="/"
           notice={
-            <a href="/" target="_blank" className={"cursor-pointer"}>
+            <a
+              href="https://www.imdb.com/title/tt0073195/"
+              target="_blank"
+              className={"cursor-pointer"}
+            >
               {t("nav.getFeedback")}
             </a>
           }
