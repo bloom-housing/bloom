@@ -12,8 +12,7 @@ import {
   ListingEventsTypeEnum,
   ListingUpdate,
   ListingsStatusEnum,
-  EnumJurisdictionListingApprovalPermissions,
-  EnumJurisdictionDuplicateListingPermissions,
+  UserRoleEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 import { SubmitFunction } from "./PaperListingForm"
@@ -63,19 +62,14 @@ const ListingFormActions = ({
   const isListingApprover =
     profile?.userRoles.isAdmin ||
     (profile?.userRoles.isJurisdictionalAdmin &&
-      listingApprovalPermissions?.includes(
-        EnumJurisdictionListingApprovalPermissions.jurisdictionAdmin
-      ))
+      listingApprovalPermissions?.includes(UserRoleEnum.jurisdictionAdmin))
 
   const duplicateListingPermissions = jurisdiction?.duplicateListingPermissions
   const isListingCopier =
     profile?.userRoles?.isAdmin ||
     (profile?.userRoles?.isJurisdictionalAdmin &&
-      duplicateListingPermissions?.includes(
-        EnumJurisdictionDuplicateListingPermissions.jurisdictionAdmin
-      )) ||
-    (profile?.userRoles?.isPartner &&
-      duplicateListingPermissions?.includes(EnumJurisdictionDuplicateListingPermissions.partner))
+      duplicateListingPermissions?.includes(UserRoleEnum.jurisdictionAdmin)) ||
+    (profile?.userRoles?.isPartner && duplicateListingPermissions?.includes(UserRoleEnum.partner))
 
   const listingId = listing?.id
 
