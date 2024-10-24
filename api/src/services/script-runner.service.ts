@@ -460,6 +460,49 @@ export class ScriptRunnerService {
   }
 
   /**
+   *
+   * @param req incoming request object
+   * @returns successDTO
+   * @description updates single use code translations to show extended expiration time
+   */
+  async updateCodeExpirationTranslations(
+    req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart(
+      'update code expiration translations',
+      requestingUser,
+    );
+
+    const translations = await this.prisma.translations.findFirst({
+      where: { language: 'en', jurisdictionId: null },
+    });
+    const translationsJSON =
+      translations.translations as unknown as Prisma.JsonArray;
+
+    await this.prisma.translations.update({
+      where: { id: translations.id },
+      data: {
+        translations: {
+          ...translationsJSON,
+          singleUseCodeEmail: {
+            greeting: 'Hi',
+            message:
+              'Use the following code to sign in to your %{jurisdictionName} account. This code will be valid for 10 minutes. Never share this code.',
+            singleUseCode: '%{singleUseCode}',
+          },
+        },
+      },
+    });
+
+    await this.markScriptAsComplete(
+      'update code expiration translations',
+      requestingUser,
+    );
+    return { success: true };
+  }
+
+  /**
     this is simply an example
   */
   async example(req: ExpressRequest): Promise<SuccessDTO> {

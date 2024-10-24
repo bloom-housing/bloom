@@ -41,7 +41,7 @@ import { buildWhereClause } from '../utilities/build-user-where';
 import { getPublicEmailURL } from '../utilities/get-public-email-url';
 import { UserRole } from '../dtos/users/user-role.dto';
 import { RequestSingleUseCode } from '../dtos/single-use-code/request-single-use-code.dto';
-import { generateSingleUseCode } from '../utilities/generate-single-use-code';
+import { getSingleUseCode } from '../utilities/get-single-use-code';
 
 /*
   this is the service for users
@@ -990,8 +990,11 @@ export class UserService {
       );
     }
 
-    const singleUseCode = generateSingleUseCode(
+    const singleUseCode = getSingleUseCode(
       Number(process.env.MFA_CODE_LENGTH),
+      user.singleUseCode,
+      user.singleUseCodeUpdatedAt,
+      Number(process.env.MFA_CODE_VALID),
     );
     await this.prisma.userAccounts.update({
       data: {
