@@ -61,7 +61,6 @@ const ApplicationsList = () => {
 
   const shouldExpireData = !profile?.userRoles?.isAdmin
 
-  const countyCode = listingDto?.jurisdictions?.name
   const listingName = listingDto?.name
   const isListingOpen = listingDto?.status === "active"
   const allowNewApps = listingDto?.status !== "closed" || profile?.userRoles?.isAdmin
@@ -114,8 +113,8 @@ const ApplicationsList = () => {
   }, [applications])
 
   const columnDefs = useMemo(() => {
-    return getColDefs(maxHouseholdSize, countyCode)
-  }, [maxHouseholdSize, countyCode])
+    return getColDefs(maxHouseholdSize)
+  }, [maxHouseholdSize])
 
   const gridComponents = {
     formatLinkCell,

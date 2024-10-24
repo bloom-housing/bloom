@@ -8,7 +8,6 @@ import {
   ListingsStatusEnum,
   LotteryStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
-  Prisma,
   ReviewOrderTypeEnum,
   UnitTypeEnum,
   UnitTypes,

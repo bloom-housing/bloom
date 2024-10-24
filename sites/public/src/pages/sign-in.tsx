@@ -20,7 +20,7 @@ import {
 import { t, useMutate } from "@bloom-housing/ui-components"
 import SignUpBenefits from "../components/account/SignUpBenefits"
 import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
-import TermsModal, { FormSignInValues } from "../components/shared/TermsModal"
+import { FormSignInValues, TermsModal } from "../components/shared/TermsModal"
 import FormsLayout from "../layouts/forms"
 import { UserStatus } from "../lib/constants"
 import { useRedirectToPrevPage } from "../lib/hooks"

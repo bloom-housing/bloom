@@ -1,6 +1,6 @@
 import React from "react"
 import { fireEvent, render } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
+import { userEvent } from "@testing-library/user-event"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
 import LotteryResults from "../../../../../src/components/listings/PaperListingForm/sections/LotteryResults"

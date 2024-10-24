@@ -9,7 +9,6 @@ import { ListingContext } from "../../../components/listings/ListingContext"
 import { MetaTags } from "../../../components/shared/MetaTags"
 import ListingGuard from "../../../components/shared/ListingGuard"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
-import { FormListing } from "../../../lib/listings/formTypes"
 import { logger } from "../../../logger"
 
 const EditListing = (props: { listing: Listing }) => {

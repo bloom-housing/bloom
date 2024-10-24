@@ -1031,7 +1031,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         data: listingData,
       });
 
-      const res = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post('/listings/duplicate')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({

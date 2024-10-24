@@ -22,7 +22,7 @@ import accountStyles from "../../styles/create-account.module.scss"
 import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
 import SignUpBenefits from "../components/account/SignUpBenefits"
 import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
-import TermsModal from "../components/shared/TermsModal"
+import { TermsModal } from "../components/shared/TermsModal"
 import { LanguagesEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export default () => {

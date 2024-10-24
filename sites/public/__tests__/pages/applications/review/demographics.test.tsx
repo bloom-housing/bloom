@@ -147,7 +147,7 @@ describe("applications pages", () => {
     })
 
     it("should show other text fields when other options are checked", async () => {
-      const { getByLabelText, queryByTestId, findAllByTestId } = render(<ApplicationDemographics />)
+      const { getByLabelText, findAllByTestId } = render(<ApplicationDemographics />)
 
       fireEvent.click(getByLabelText("Asian"))
       expect(await findAllByTestId("asian-otherAsian")).toHaveLength(1)
