@@ -4836,10 +4836,10 @@ export interface JurisdictionCreate {
   allowSingleUseCodeLogin: boolean
 
   /**  */
-  listingApprovalPermissions: EnumJurisdictionCreateListingApprovalPermissions[]
+  listingApprovalPermissions: UserRoleEnum[]
 
   /**  */
-  duplicateListingPermissions: EnumJurisdictionCreateDuplicateListingPermissions[]
+  duplicateListingPermissions: UserRoleEnum[]
 }
 
 export interface JurisdictionUpdate {
@@ -4889,10 +4889,10 @@ export interface JurisdictionUpdate {
   allowSingleUseCodeLogin: boolean
 
   /**  */
-  listingApprovalPermissions: EnumJurisdictionUpdateListingApprovalPermissions[]
+  listingApprovalPermissions: UserRoleEnum[]
 
   /**  */
-  duplicateListingPermissions: EnumJurisdictionUpdateDuplicateListingPermissions[]
+  duplicateListingPermissions: UserRoleEnum[]
 }
 
 export interface Jurisdiction {
@@ -4951,10 +4951,10 @@ export interface Jurisdiction {
   allowSingleUseCodeLogin: boolean
 
   /**  */
-  listingApprovalPermissions: EnumJurisdictionListingApprovalPermissions[]
+  listingApprovalPermissions: UserRoleEnum[]
 
   /**  */
-  duplicateListingPermissions: EnumJurisdictionDuplicateListingPermissions[]
+  duplicateListingPermissions: UserRoleEnum[]
 }
 
 export interface MultiselectQuestionCreate {
@@ -6154,37 +6154,7 @@ export enum HouseholdMemberRelationship {
   "other" = "other",
 }
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput
-export enum EnumJurisdictionCreateListingApprovalPermissions {
-  "user" = "user",
-  "partner" = "partner",
-  "admin" = "admin",
-  "jurisdictionAdmin" = "jurisdictionAdmin",
-}
-export enum EnumJurisdictionCreateDuplicateListingPermissions {
-  "user" = "user",
-  "partner" = "partner",
-  "admin" = "admin",
-  "jurisdictionAdmin" = "jurisdictionAdmin",
-}
-export enum EnumJurisdictionUpdateListingApprovalPermissions {
-  "user" = "user",
-  "partner" = "partner",
-  "admin" = "admin",
-  "jurisdictionAdmin" = "jurisdictionAdmin",
-}
-export enum EnumJurisdictionUpdateDuplicateListingPermissions {
-  "user" = "user",
-  "partner" = "partner",
-  "admin" = "admin",
-  "jurisdictionAdmin" = "jurisdictionAdmin",
-}
-export enum EnumJurisdictionListingApprovalPermissions {
-  "user" = "user",
-  "partner" = "partner",
-  "admin" = "admin",
-  "jurisdictionAdmin" = "jurisdictionAdmin",
-}
-export enum EnumJurisdictionDuplicateListingPermissions {
+export enum UserRoleEnum {
   "user" = "user",
   "partner" = "partner",
   "admin" = "admin",

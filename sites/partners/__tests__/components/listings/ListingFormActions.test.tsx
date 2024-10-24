@@ -8,8 +8,7 @@ import ListingFormActions, {
 } from "../../../src/components/listings/ListingFormActions"
 import { mockNextRouter, render } from "../../testUtils"
 import {
-  EnumJurisdictionDuplicateListingPermissions,
-  EnumJurisdictionListingApprovalPermissions,
+  UserRoleEnum,
   Jurisdiction,
   LanguagesEnum,
   ListingsStatusEnum,
@@ -33,33 +32,27 @@ const mockBaseJurisdiction: Jurisdiction = {
   enableAccessibilityFeatures: false,
   enableUtilitiesIncluded: true,
   listingApprovalPermissions: [],
-  duplicateListingPermissions: [
-    EnumJurisdictionDuplicateListingPermissions.admin,
-    EnumJurisdictionDuplicateListingPermissions.jurisdictionAdmin,
-  ],
+  duplicateListingPermissions: [UserRoleEnum.admin, UserRoleEnum.jurisdictionAdmin],
   enableGeocodingPreferences: false,
   allowSingleUseCodeLogin: false,
 }
 
 const mockAdminOnlyApprovalJurisdiction: Jurisdiction = {
   ...mockBaseJurisdiction,
-  listingApprovalPermissions: [EnumJurisdictionListingApprovalPermissions.admin],
+  listingApprovalPermissions: [UserRoleEnum.admin],
 }
 
 const mockAdminJurisAdminApprovalJurisdiction: Jurisdiction = {
   ...mockBaseJurisdiction,
-  listingApprovalPermissions: [
-    EnumJurisdictionListingApprovalPermissions.admin,
-    EnumJurisdictionListingApprovalPermissions.jurisdictionAdmin,
-  ],
+  listingApprovalPermissions: [UserRoleEnum.admin, UserRoleEnum.jurisdictionAdmin],
 }
 
 const mockAllUserCopyJurisdiction: Jurisdiction = {
   ...mockBaseJurisdiction,
   duplicateListingPermissions: [
-    EnumJurisdictionDuplicateListingPermissions.admin,
-    EnumJurisdictionDuplicateListingPermissions.jurisdictionAdmin,
-    EnumJurisdictionDuplicateListingPermissions.partner,
+    UserRoleEnum.admin,
+    UserRoleEnum.jurisdictionAdmin,
+    UserRoleEnum.partner,
   ],
 }
 

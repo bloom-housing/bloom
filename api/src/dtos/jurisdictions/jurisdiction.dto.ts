@@ -120,6 +120,7 @@ export class Jurisdiction extends AbstractDTO {
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({
     enum: UserRoleEnum,
+    enumName: 'UserRoleEnum',
     example: [UserRoleEnum.admin],
     isArray: true,
   })
@@ -134,6 +135,7 @@ export class Jurisdiction extends AbstractDTO {
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({
     enum: UserRoleEnum,
+    enumName: 'UserRoleEnum',
     example: [UserRoleEnum.admin],
     isArray: true,
   })
