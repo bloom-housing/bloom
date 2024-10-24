@@ -1,14 +1,18 @@
 # Bloom Public Application
 
-This is the reference implementation of our public-facing web app. It displays listings and allows users to apply for those listings. Users are also able to create accounts with which they can view the applications they have submitted.
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white) ![SASS](https://img.shields.io/badge/SASS-hotpink.svg?style=for-the-badge&logo=SASS&logoColor=white) ![cypress](https://img.shields.io/badge/-cypress-%23E5E5E5?style=for-the-badge&logo=cypress&logoColor=058a5e) ![Testing-Library](https://img.shields.io/badge/-TestingLibrary-%23E33332?style=for-the-badge&logo=testing-library&logoColor=white) ![Jest](https://img.shields.io/badge/-jest-%23C21325?style=for-the-badge&logo=jest&logoColor=white)
+
+This is the reference implementation of our public-facing portal. It displays listings and allows users to apply for those listings. Users are also able to create accounts they can use to view submitted applications. You can read more about the product at [bloomhousing.com](https://bloomhousing.com/).
 
 ## Getting Started
 
-All from within `sites/public`:
+The following commands are for macOS / Linux, but you can find equivalent instructions for Windows machines online.
 
-- `yarn install`to install dependencies
-- Copy the `.env.template` to `.env` and edit variables appropriate to your local environment
-- `yarn dev:all` will start up the backend at port 3100 and the public app at port 3000
+If you don't have yarn installed, you can install homebrew with [these instructions](https://brew.sh/) and then do so with `brew install yarn`.
+
+- `yarn install` at root to install dependencies
+- From within `sites/public` copy the `.env.template` to `.env` and edit variables appropriate to your local environment - some keys are secret and are internally available - the template file includes default values and descriptions of each variable
+- `yarn dev:all` at root will start up the backend at port 3100 and the public app at port 3000
 
 ## Recommended Extension
 
@@ -40,19 +44,8 @@ After installing the extension, ⌘⇧P Open User Settings (JSON), and add the f
 
 ## Tests
 
-For our public application, our tests currently consistent of a Cypress integration test suite. We are looking to add React Testing Library unit tests soon.
+For our public application, our tests currently consist of both a Cypress end to end suite and a jest unit/integration suite.
 
-To run the Cypress suite, with the application running, run `yarn test` from within `sites/public` and when the test runner in a Chrome browser opens, click on whichever suite you want to run.
+To run the Cypress suite, with the application already running, run `yarn test` from within `sites/public`.
 
-## Environment Variables
-
-| Name                          | Description                                                                                                                                    | Default                                                                                                                   | Type                                   |
-| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- | --- | ------ |
-| BACKEND_API_BASE              | URL pointing to a working NestJS bloom server (no trailing slash)                                                                              | http://localhost:3100                                                                                                     | string                                 |
-| LISTINGS_QUERY                | Value specifying what path to use to fetch listings at build time for static serving                                                           | /listings                                                                                                                 | string                                 |
-| HOUSING_COUNSELOR_SERVICE_URL | If this is set, we show a link to this URL in the site header labelled "Get Assistance"                                                        | https://housing.sfgov.org/assets/housing_counselors-7b0f260dac22dfa20871edd36135b62f1a25a9dad78faf2cf8e8e2514b80cf61.json | string                                 |
-| NEXTJS_PORT                   | Defines port number the server will listen to for incoming connections                                                                         | 3000                                                                                                                      | number                                 |
-| MAPBOX_TOKEN                  | Mapbox access token used for interacting with maps. See more documentation [here](https://docs.mapbox.com/help/getting-started/access-tokens/) | Available internally                                                                                                      | string                                 |
-| LANGUAGES                     | Controls what languages Next will try to render on the page                                                                                    | en,es,zh,vi                                                                                                               | string                                 |     | number |
-| JURISDICTION_NAME             | Defines an identifier sent along with XHR requests for the backend to identify the current jurisdiction                                        | Alameda                                                                                                                   | "Alameda" \| "San Jose" \| "San Mateo" |
-| GTM_KEY                       | Refer to [analytics docs](https://github.com/bloom-housing/bloom/blob/master/docs/Analytics.md)                                                | GTM-KF22FJP                                                                                                               | string                                 |
+To run the unit/integration suite, run `yarn test:unit` from within `sites/public`, or `yarn test:unit:coverage` to run with coverage reports.
