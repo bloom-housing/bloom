@@ -75,25 +75,25 @@ describe("applications pages", () => {
     })
 
     it("should show other text fields when other options are checked", async () => {
-      const { getByText, queryByTitle, findByTitle } = render(<ApplicationDemographics />)
+      const { getByText, queryByTestId, findAllByTestId } = render(<ApplicationDemographics />)
 
-      expect(queryByTitle("asian-otherAsian")).not.toBeInTheDocument()
+      expect(queryByTestId("asian-otherAsian")).not.toBeInTheDocument()
       fireEvent.click(getByText("Asian"))
       fireEvent.click(getByText("Other Asian"))
-      expect(await findByTitle("asian-otherAsian")).toBeInTheDocument()
+      expect(await findAllByTestId("asian-otherAsian")).toHaveLength(2)
 
       expect(
-        queryByTitle("nativeHawaiianOtherPacificIslander-otherPacificIslander")
+        queryByTestId("nativeHawaiianOtherPacificIslander-otherPacificIslander")
       ).not.toBeInTheDocument()
       fireEvent.click(getByText("Native Hawaiian / Other Pacific Islander"))
       fireEvent.click(getByText("Other Pacific Islander"))
       expect(
-        await findByTitle("nativeHawaiianOtherPacificIslander-otherPacificIslander")
-      ).toBeInTheDocument()
+        await findAllByTestId("nativeHawaiianOtherPacificIslander-otherPacificIslander")
+      ).toHaveLength(2)
 
-      expect(queryByTitle("otherMultiracial")).not.toBeInTheDocument()
+      expect(await findAllByTestId("otherMultiracial")).toHaveLength(1)
       fireEvent.click(getByText("Other / Multiracial"))
-      expect(await findByTitle("otherMultiracial")).toBeInTheDocument()
+      expect(await findAllByTestId("otherMultiracial")).toHaveLength(2)
     })
   })
 })
