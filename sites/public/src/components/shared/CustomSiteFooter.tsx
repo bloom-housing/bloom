@@ -5,7 +5,7 @@ import styles from "./CustomSiteFooter.module.scss"
 
 const CustomSiteFooter = () => {
   return (
-    <div className={styles["footer-container"]}>
+    <footer className={styles["footer-container"]}>
       <div className={styles["footer-content-container"]}>
         <div className={styles["footer"]}>
           <div className={styles["icon-container"]}>
@@ -41,7 +41,7 @@ const CustomSiteFooter = () => {
           </div>
         </div>
       </div>
-    </div>
+    </footer>
   )
 }
 
