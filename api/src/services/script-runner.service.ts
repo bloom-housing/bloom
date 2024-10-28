@@ -17,8 +17,8 @@ import { Application } from '../dtos/applications/application.dto';
 import { AmiChartImportDTO } from '../dtos/script-runner/ami-chart-import.dto';
 import { AmiChartCreate } from '../dtos/ami-charts/ami-chart-create.dto';
 import { AmiChartService } from './ami-chart.service';
-import { AmiChartUpdate } from 'src/dtos/ami-charts/ami-chart-update.dto';
-import { AmiChartUpdateImportDTO } from 'src/dtos/script-runner/ami-chart-update-import.dto';
+import { AmiChartUpdate } from '../dtos/ami-charts/ami-chart-update.dto';
+import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
 
 /**
   this is the service for running scripts
