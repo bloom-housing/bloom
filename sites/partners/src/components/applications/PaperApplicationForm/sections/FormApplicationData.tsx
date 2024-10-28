@@ -37,6 +37,7 @@ const FormApplicationData = () => {
             register={register}
             error={errors?.dateSubmitted}
             watch={watch}
+            setValue={setValue}
             label={t("application.add.dateSubmitted")}
             errorMessage={t("errors.dateError")}
             required={!!isDateRequired}
@@ -50,6 +51,7 @@ const FormApplicationData = () => {
             name="timeSubmitted"
             label={t("application.add.timeSubmitted")}
             register={register}
+            setValue={setValue}
             watch={watch}
             error={!!errors?.timeSubmitted}
             disabled={!isDateFilled}

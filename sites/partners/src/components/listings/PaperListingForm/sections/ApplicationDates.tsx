@@ -69,7 +69,7 @@ const ApplicationDates = ({
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch } = formMethods
+  const { errors, register, setValue, watch } = formMethods
 
   const [drawerOpenHouse, setDrawerOpenHouse] = useState<TempEvent | boolean>(false)
   const [modalDeleteOpenHouse, setModalDeleteOpenHouse] = useState<TempEvent | null>(null)
@@ -108,7 +108,9 @@ const ApplicationDates = ({
               name={"applicationDueDateField"}
               id={"applicationDueDateField"}
               register={register}
+              setValue={setValue}
               watch={watch}
+              error={errors?.applicationDueDateField}
               note={t("listings.whenApplicationsClose")}
               defaultDate={{
                 month: listing?.applicationDueDate
@@ -129,7 +131,9 @@ const ApplicationDates = ({
               name={"applicationDueTimeField"}
               id={"applicationDueTimeField"}
               register={register}
+              setValue={setValue}
               watch={watch}
+              error={errors?.applicationDueTimeField}
               defaultValues={{
                 hours: listing?.applicationDueDate
                   ? dayjs(new Date(listing?.applicationDueDate)).format("hh")
