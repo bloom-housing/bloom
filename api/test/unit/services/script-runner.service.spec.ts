@@ -12,6 +12,9 @@ import { PrismaService } from '../../../src/services/prisma.service';
 import { User } from '../../../src/dtos/users/user.dto';
 import { EmailService } from '../../../src/services/email.service';
 import { AmiChartService } from '../../../src/services/ami-chart.service';
+import { ApplicationService } from '../../../src/services/application.service';
+import { GeocodingService } from '../../../src/services/geocoding.service';
+import { PermissionService } from '../../../src/services/permission.service';
 
 const externalPrismaClient = mockDeep<PrismaClient>();
 
@@ -32,6 +35,9 @@ describe('Testing script runner service', () => {
           },
         },
         AmiChartService,
+        ApplicationService,
+        GeocodingService,
+        PermissionService,
       ],
     }).compile();
 
@@ -470,6 +476,71 @@ describe('Testing script runner service', () => {
       },
       include: {
         jurisdictions: true,
+      },
+    });
+  });
+
+  it('should correct application preference data for sparks home', async () => {
+    const id = randomUUID();
+    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+    prisma.applications.findMany = jest.fn().mockResolvedValue([
+      {
+        id: id,
+        preferences: [
+          {
+            options: [
+              { key: 'Live in %{county} County Preference' },
+              { key: 'Work in %{county} County Preference' },
+            ],
+          },
+        ],
+      },
+    ]);
+    prisma.applications.update = jest.fn().mockResolvedValue(null);
+
+    const scriptName = 'Correct application preference data for Sparks Homes';
+    const res = await service.correctApplicationPreferenceDataForSparksHomes({
+      user: {
+        id,
+        userRoles: { isAdmin: true },
+      } as unknown as User,
+    } as unknown as ExpressRequest);
+    expect(res.success).toEqual(true);
+    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
+      where: {
+        scriptName,
+      },
+    });
+    expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
+      data: {
+        scriptName,
+        triggeringUser: id,
+      },
+    });
+    expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
+      data: {
+        didScriptRun: true,
+        triggeringUser: id,
+      },
+      where: {
+        scriptName,
+      },
+    });
+    expect(prisma.applications.update).toHaveBeenCalledWith({
+      data: {
+        preferences: [
+          {
+            options: [
+              { key: 'Live in the City of Hayward' },
+              { key: 'Work in the City of Hayward' },
+            ],
+          },
+        ],
+      },
+      where: {
+        id,
       },
     });
   });
