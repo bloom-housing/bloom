@@ -246,6 +246,13 @@ describe("Listing Management Tests", () => {
     cy.getByID("startTime.period").select("AM")
     cy.getByID("endTime.period").select("PM")
     cy.getByID("saveOpenHouseFormButton").contains("Save").click()
+
+    cy.getByID("applicationDueDateField.month").type(listing["date.month"])
+    cy.getByID("applicationDueDateField.day").type(listing["date.day"])
+    cy.getByID("applicationDueDateField.year").type((new Date().getFullYear() + 1).toString())
+    cy.getByID("applicationDueTimeField.hours").type(listing["startTime.hours"])
+    cy.getByID("applicationDueTimeField.minutes").type(listing["startTime.minutes"])
+    cy.getByID("applicationDueTimeField.period").select("PM")
     cy.getByID("publishButton").contains("Publish").click()
 
     cy.getByID("publishButtonConfirm").contains("Publish").click()
