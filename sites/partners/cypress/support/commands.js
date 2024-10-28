@@ -447,6 +447,15 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
     cy.getByID("commonDigitalApplicationChoiceYes").check()
     cy.getByID("paperApplicationNo").check()
     cy.getByID("referralOpportunityNo").check()
+
+    if (!isApproval) {
+      cy.getByID("applicationDueDateField.month").type(listing["date.month"])
+      cy.getByID("applicationDueDateField.day").type(listing["date.day"])
+      cy.getByID("applicationDueDateField.year").type((new Date().getFullYear() + 1).toString())
+      cy.getByID("applicationDueTimeField.hours").type(listing["startTime.hours"])
+      cy.getByID("applicationDueTimeField.minutes").type(listing["startTime.minutes"])
+      cy.getByID("applicationDueTimeField.period").select("PM")
+    }
   })
 
   if (isApproval) {
@@ -455,12 +464,6 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
     cy.getByTestId("page-header").should("be.visible")
     cy.getByTestId("page-header").should("have.text", listingName)
   } else {
-    cy.getByID("applicationDueDateField.month").type(listing["date.month"])
-    cy.getByID("applicationDueDateField.day").type(listing["date.day"])
-    cy.getByID("applicationDueDateField.year").type((new Date().getFullYear() + 1).toString())
-    cy.getByID("applicationDueTimeField.hours").type(listing["startTime.hours"])
-    cy.getByID("applicationDueTimeField.minutes").type(listing["startTime.minutes"])
-    cy.getByID("applicationDueTimeField.period").select("PM")
     cy.getByID("publishButton").contains("Publish").click()
     cy.getByID("publishButtonConfirm").contains("Publish").click()
     cy.get("[data-testid=page-header]").should("be.visible")
