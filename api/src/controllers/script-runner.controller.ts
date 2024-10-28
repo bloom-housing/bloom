@@ -69,18 +69,35 @@ export class ScirptRunnerController {
     );
   }
 
-  @Put('transferJurisdictionUserApplicationData')
+  @Put('transferJurisdictionPartnerUserData')
   @ApiOperation({
     summary:
-      'A script that pulls user and application data from one source into the current db',
-    operationId: 'transferJurisdictionUserApplicationData',
+      'A script that pulls partner user data from one source into the current db',
+    operationId: 'transferJurisdictionPartnerUserData',
   })
   @ApiOkResponse({ type: SuccessDTO })
-  async transferJurisdictionUserApplicationData(
+  async transferJurisdictionPartnerUserData(
     @Body() dataTransferDTO: DataTransferDTO,
     @Request() req: ExpressRequest,
   ): Promise<SuccessDTO> {
-    return await this.scriptRunnerService.transferJurisdictionUserApplicationData(
+    return await this.scriptRunnerService.transferJurisdictionPartnerUserData(
+      req,
+      dataTransferDTO,
+    );
+  }
+
+  @Put('transferJurisdictionPublicUserApplicationData')
+  @ApiOperation({
+    summary:
+      'A script that pulls public user and application data from one source into the current db',
+    operationId: 'transferJurisdictionPublicUserApplicationData',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async transferJurisdictionPublicUserApplicationData(
+    @Body() dataTransferDTO: DataTransferDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.transferJurisdictionPublicUserAndApplicationData(
       req,
       dataTransferDTO,
     );

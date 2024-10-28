@@ -606,7 +606,7 @@ export class ScriptRunnerService {
    * @returns successDTO
    * @description transfers partner users from foreign data into the database this api normally connects to
    */
-  async transferJurisdictionUserApplicationData(
+  async transferJurisdictionPartnerUserData(
     req: ExpressRequest,
     dataTransferDTO: DataTransferDTO,
     prisma?: PrismaClient,
@@ -709,11 +709,75 @@ export class ScriptRunnerService {
           console.log(
             `unable to migrate partner user ${
               partner.email
-            } for listings ${listings.toLocaleString()}`,
+            } for listings ${listings
+              ?.map((listing) => listing.id)
+              .toLocaleString()}`,
           );
           console.log(e);
         }
       }
+    }
+
+    // disconnect from foreign db
+    await client.$disconnect();
+
+    // script runner standard spin down
+    await this.markScriptAsComplete(
+      `data transfer user and application ${dataTransferDTO.jurisdiction}`,
+      requestingUser,
+    );
+
+    return { success: true };
+  }
+
+  /**
+   *
+   * @param req incoming request object
+   * @param dataTransferDTO data transfer endpoint args. Should contain foreign db connection string
+   * @returns successDTO
+   * @description transfers public users and corresponding applications from foreign data into the database this api normally connects to
+   */
+  async transferJurisdictionPublicUserAndApplicationData(
+    req: ExpressRequest,
+    dataTransferDTO: DataTransferDTO,
+    prisma?: PrismaClient,
+  ): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart(
+      `data transfer public users and applications ${dataTransferDTO.jurisdiction}`,
+      requestingUser,
+    );
+
+    // connect to foreign db based on incoming connection string
+    const client =
+      prisma ||
+      new PrismaClient({
+        datasources: {
+          db: {
+            url: dataTransferDTO.connectionString,
+          },
+        },
+      });
+    await client.$connect();
+
+    const doorwayJurisdiction = await this.prisma.jurisdictions.findFirst({
+      where: { name: dataTransferDTO.jurisdiction },
+    });
+
+    if (!doorwayJurisdiction) {
+      throw new Error(
+        `${dataTransferDTO.jurisdiction} county doesn't exist in Doorway database`,
+      );
+    }
+
+    // get jurisdiction
+    const jurisdiction: { id: string }[] =
+      await client.$queryRaw`SELECT id, name FROM jurisdictions WHERE name = ${dataTransferDTO.jurisdiction}`;
+
+    if (!jurisdiction) {
+      throw new Error(
+        `${dataTransferDTO.jurisdiction} county doesn't exist in foreign database`,
+      );
     }
 
     const publicUsers = await client.userAccounts.findMany({
@@ -759,6 +823,8 @@ export class ScriptRunnerService {
 
     if (publicUsers?.length) {
       console.log(`migrating ${publicUsers.length} public users`);
+      let totalApplications = 0,
+        currentUserCount = 0;
       for (const publicUser of publicUsers) {
         let user = await this.prisma.userAccounts.findFirst({
           where: { email: publicUser.email },
@@ -784,48 +850,56 @@ export class ScriptRunnerService {
         }
         for (const application of publicUser.applications) {
           // Only migrate applications for this jurisdiction
-          if (application.listings.jurisdictionId !== jurisdiction[0].id) {
-            return;
-          }
-          try {
-            await this.prisma.applications.create({
-              data: {
-                id: application.id,
-                createdAt: application.createdAt,
-                updatedAt: application.updatedAt,
-                deletedAt: application.deletedAt,
-                confirmationCode: application.confirmationCode,
-                submissionType: application.submissionType,
-                submissionDate: application.submissionDate,
-                preferences: [],
-                programs: [],
-                contactPreferences: [],
-                status: application.status,
-                householdSize: application.householdSize,
-                appUrl: application.appUrl,
-                markedAsDuplicate: application.markedAsDuplicate,
-                reviewStatus: application.reviewStatus,
-                userAccounts: {
-                  connect: {
-                    // Tie the application to the user, either the new user or the one in our system with the same email
-                    id: user.id,
+          if (application.listings.jurisdictionId === jurisdiction[0].id) {
+            try {
+              await this.prisma.applications.create({
+                data: {
+                  id: application.id,
+                  createdAt: application.createdAt,
+                  updatedAt: application.updatedAt,
+                  deletedAt: application.deletedAt,
+                  confirmationCode: application.confirmationCode,
+                  submissionType: application.submissionType,
+                  submissionDate: application.submissionDate,
+                  preferences: [],
+                  programs: [],
+                  contactPreferences: [],
+                  status: application.status,
+                  householdSize: application.householdSize,
+                  appUrl: application.appUrl,
+                  markedAsDuplicate: application.markedAsDuplicate,
+                  reviewStatus: application.reviewStatus,
+                  userAccounts: {
+                    connect: {
+                      // Tie the application to the user, either the new user or the one in our system with the same email
+                      id: user.id,
+                    },
+                  },
+                  listings: {
+                    connect: {
+                      id: application.listings.id,
+                    },
                   },
                 },
-                listings: {
-                  connect: {
-                    id: application.listings.id,
-                  },
-                },
-              },
-            });
-          } catch (e) {
-            console.log('e', e);
-            console.log(
-              `unable to migrate application ${application.id} for user ${user.id}`,
-            );
+              });
+              totalApplications++;
+            } catch (e) {
+              console.log('e', e);
+              console.log(
+                `unable to migrate application ${application.id} for user ${user.id}`,
+              );
+            }
           }
         }
+        currentUserCount++;
+        // console logs for progress of migration
+        if (currentUserCount % 20 === 0) {
+          console.log(
+            `Progress: ${currentUserCount} users and ${totalApplications} applications`,
+          );
+        }
       }
+      console.log(`migrated ${totalApplications} applications`);
     }
 
     // disconnect from foreign db
@@ -833,7 +907,7 @@ export class ScriptRunnerService {
 
     // script runner standard spin down
     await this.markScriptAsComplete(
-      `data transfer user and application ${dataTransferDTO.jurisdiction}`,
+      `data transfer public users and applications ${dataTransferDTO.jurisdiction}`,
       requestingUser,
     );
 

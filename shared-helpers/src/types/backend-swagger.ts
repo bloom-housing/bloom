@@ -2247,7 +2247,7 @@ export class ScriptRunnerService {
     })
   }
   /**
-   * A script that pulls data from one source into the current db
+   * A script that pulls jurisdiction data from one source into the current db
    */
   transferJurisdictionData(
     params: {
@@ -2269,7 +2269,7 @@ export class ScriptRunnerService {
     })
   }
   /**
-   * A script that pulls data from one source into the current db
+   * A script that pulls listing data from one source into the current db
    */
   transferJurisdictionListingsData(
     params: {
@@ -2280,6 +2280,50 @@ export class ScriptRunnerService {
   ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/scriptRunner/transferJurisdictionListingsData"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * A script that pulls partner user data from one source into the current db
+   */
+  transferJurisdictionPartnerUserData(
+    params: {
+      /** requestBody */
+      body?: DataTransferDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/transferJurisdictionPartnerUserData"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * A script that pulls public user and application data from one source into the current db
+   */
+  transferJurisdictionPublicUserApplicationData(
+    params: {
+      /** requestBody */
+      body?: DataTransferDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/transferJurisdictionPublicUserApplicationData"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
