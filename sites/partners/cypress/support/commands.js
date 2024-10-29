@@ -447,15 +447,12 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
     cy.getByID("commonDigitalApplicationChoiceYes").check()
     cy.getByID("paperApplicationNo").check()
     cy.getByID("referralOpportunityNo").check()
-
-    if (!isApproval) {
-      cy.getByID("applicationDueDateField.month").type(listing["date.month"])
-      cy.getByID("applicationDueDateField.day").type(listing["date.day"])
-      cy.getByID("applicationDueDateField.year").type((new Date().getFullYear() + 1).toString())
-      cy.getByID("applicationDueTimeField.hours").type(listing["startTime.hours"])
-      cy.getByID("applicationDueTimeField.minutes").type(listing["startTime.minutes"])
-      cy.getByID("applicationDueTimeField.period").select("PM")
-    }
+    cy.getByID("applicationDueDateField.month").type(listing["date.month"])
+    cy.getByID("applicationDueDateField.day").type(listing["date.day"])
+    cy.getByID("applicationDueDateField.year").type((new Date().getFullYear() + 1).toString())
+    cy.getByID("applicationDueTimeField.hours").type(listing["date.hours"])
+    cy.getByID("applicationDueTimeField.minutes").type(listing["date.minutes"])
+    cy.getByID("applicationDueTimeField.period").select("PM")
   })
 
   if (isApproval) {
