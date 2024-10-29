@@ -503,6 +503,77 @@ export class ScriptRunnerService {
   }
 
   /**
+   * @param req incoming request object
+   * @returns successDTO
+   * @description updates the preference keys for applications on Spark Homes
+   */
+  async correctApplicationPreferenceDataForSparksHomes(
+    req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    // script runner standard start up
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart(
+      'Correct application preference data for Sparks Homes',
+      requestingUser,
+    );
+
+    const applications = await this.prisma.applications.findMany({
+      select: {
+        id: true,
+        preferences: true,
+      },
+      where: { listingId: 'a055ce66-a074-4f3a-b67b-6776bec9926e' },
+    });
+
+    const options = [
+      {
+        original: 'Live in %{county} County Preference',
+        new: 'Live in the City of Hayward',
+      },
+      {
+        original: 'Work in %{county} County Preference',
+        new: 'Work in the City of Hayward',
+      },
+    ];
+
+    console.log(`Updating ${applications.length} applications`);
+    for (const applicaiton of applications) {
+      const blob = applicaiton.preferences;
+
+      const preference = blob[0];
+
+      preference.options = preference.options.map((option) => {
+        if (option.key === options[0].original) {
+          return {
+            ...option,
+            key: options[0].new,
+          };
+        } else if (option.key === options[1].original) {
+          return {
+            ...option,
+            key: options[1].new,
+          };
+        }
+      });
+
+      await this.prisma.applications.update({
+        data: {
+          preferences: [preference] as unknown as Prisma.JsonArray,
+        },
+        where: {
+          id: applicaiton.id,
+        },
+      });
+    }
+
+    await this.markScriptAsComplete(
+      'Correct application preference data for Sparks Homes',
+      requestingUser,
+    );
+    return { success: true };
+  }
+
+  /**
     this is simply an example
   */
   async example(req: ExpressRequest): Promise<SuccessDTO> {

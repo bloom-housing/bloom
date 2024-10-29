@@ -152,4 +152,19 @@ export class ScirptRunnerController {
   ): Promise<SuccessDTO> {
     return await this.scriptRunnerService.updateCodeExpirationTranslations(req);
   }
+
+  @Put('correctApplicationPreferenceDataForSparksHomes')
+  @ApiOperation({
+    summary:
+      'A script that updates the preference keys for applications on Spark Homes',
+    operationId: 'correctApplicationPreferenceDataForSparksHomes',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async correctApplicationPreferenceDataForSparksHomes(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.correctApplicationPreferenceDataForSparksHomes(
+      req,
+    );
+  }
 }
