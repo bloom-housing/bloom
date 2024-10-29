@@ -1,6 +1,8 @@
 @import "./colors.scss";
 
 :root {
+  --seeds-font-alt-sans: "Metropolis", Helvetica, Arial, Verdana, sans-serif;
+
   .site-header {
     --logo-content-padding: 0;
     --logo-desktop-height: var(--base-height);
@@ -222,6 +224,13 @@
     }
     &[data-variant="secondary"] {
       color: var(--seeds-color-accent-cool-darker);
+    }
+  }
+
+  .seeds-button {
+    --button-font-weight: var(--seeds-font-weight-semibold);
+    &[data-variant="secondary"] {
+      color: var(--doorway-color-blue-1300);
     }
   }
 

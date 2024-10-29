@@ -1,0 +1,134 @@
+.footer-container {
+  color: var(--seeds-color-white);
+  width: 100%;
+  background-color: var(--seeds-color-gray-800);
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+
+  a {
+    color: var(--seeds-color-white);
+  }
+}
+
+.footer-content-container {
+  padding-inline: var(--seeds-s6);
+  padding-block: var(--seeds-s12);
+  width: 100%;
+  @media (--md-down) {
+    padding-inline: var(--seeds-s6);
+    padding-block: var(--seeds-s8);
+  }
+}
+
+.footer {
+  padding-inline: 0;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: flex-start;
+  margin: auto;
+  max-width: var(--seeds-screen-lg);
+
+  @media (--md-down) {
+    flex-direction: column;
+  }
+}
+
+.left-column-container {
+  display: flex;
+  flex-direction: column;
+  margin-right: var(--seeds-s2);
+  @media (--md-down) {
+    margin-right: 0;
+  }
+}
+
+.right-column-container {
+  display: flex;
+  flex-direction: column;
+  @media (--md-down) {
+    margin-right: 0;
+  }
+
+  .icon-container {
+    margin-left: calc(-1 * var(--seeds-s1));
+  }
+}
+
+.icon-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.copyright-content-container {
+  background-color: var(--seeds-color-gray-950);
+  padding-inline: var(--seeds-s6);
+  padding-block: var(--seeds-s6);
+}
+
+.copyright {
+  justify-content: space-between;
+  background-color: var(--seeds-color-gray-950);
+  align-items: center;
+  color: var(--seeds-color-on-inverse-muted);
+  img {
+    margin-left: var(--seeds-s4);
+  }
+  @media (--md-down) {
+    align-items: flex-start;
+    justify-content: start;
+    img {
+      margin-top: var(--seeds-s4);
+      margin-left: 0;
+    }
+  }
+}
+
+.jurisdiction-icon {
+  height: var(--seeds-s20);
+  width: var(--seeds-s20);
+  display: inline-block;
+  margin-right: var(--seeds-s3);
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.association-icon {
+  height: var(--seeds-s24);
+  width: var(--seeds-s96);
+}
+
+.jurisdiction-address {
+  margin-top: var(--seeds-s8);
+  color: var(--seeds-color-white);
+}
+
+.social-icon {
+  width: var(--seeds-s10);
+  height: var(--seeds-s10);
+  display: inline-block;
+  margin-right: var(--seeds-s4);
+  img {
+    width: var(--seeds-s10);
+    height: var(--seeds-s10);
+    display: inline;
+  }
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  margin-block: var(--seeds-s4);
+  a {
+    margin-bottom: var(--seeds-s3);
+  }
+  @media (--md-down) {
+    margin-top: var(--seeds-s10);
+  }
+}

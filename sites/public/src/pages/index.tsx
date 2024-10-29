@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react"
 import Head from "next/head"
-import { LinkButton, t, AppearanceSizeType, InfoCard } from "@bloom-housing/ui-components"
+import { t, InfoCard } from "@bloom-housing/ui-components"
 import {
   ActionBlock,
   ActionBlockBackground,
@@ -51,95 +51,6 @@ export default function Home(props: IndexProps) {
       >
         <LandingSearch bedrooms={props.bedrooms} counties={locations} />
       </DoorwayHero>
-      <ActionBlock
-        className="p-12"
-        header={<Heading priority={2}>{t("welcome.introduction")}</Heading>}
-        subheader={t("welcome.useDoorway")}
-        body={
-          <span>
-            {t("welcome.moreListingsComing")}
-            <br />
-            {t("welcome.useDoorwayBAHFAtext")}
-            <br />
-            <a
-              className="lined"
-              href="https://mtc.ca.gov/about-mtc/authorities/bay-area-housing-finance-authority-bahfa"
-              target="_blank"
-            >
-              {t("welcome.useDoorwayBAHFAlink")}
-            </a>
-          </span>
-        }
-        background="secondary-lighter"
-        actions={[
-          <LinkButton
-            className="is-borderless is-inline is-unstyled underline text-primary"
-            href="/help/get-started"
-            key={"get-started"}
-            size={AppearanceSizeType.small}
-            normalCase
-            icon="arrowForward"
-            iconPlacement="right"
-          >
-            {t("welcome.learnHowToUseDoorway")}
-          </LinkButton>,
-        ]}
-      />
-      <div className="homepage-extra warn">
-        <div className="action-blocks pb-4 pt-4 w-full space-between items-start">
-          <InfoCard
-            title={t("welcome.needOtherHelp")}
-            className="flex-1 is-inline is-normal text-left"
-          >
-            <img
-              src={"images/person-holding-hands.jpg"}
-              alt={t("welcome.peopleHoldingHandsAlt")}
-              className={"mt-4 mb-4 rounded-3xl"}
-            />
-            <p className="text-gray-950 text__medium-normal mb-4 font-semibold">
-              {t("welcome.emergencyHousing")}
-            </p>
-            <ul className="text__medium-normal list-disc ml-5">
-              <li>{t("welcome.call211")}</li>
-              <li>{t("welcome.findRelatedServices")}</li>
-            </ul>
-            <LinkButton
-              key={"get-help"}
-              className="is-primary"
-              href={"/help/housing-help"}
-              size={AppearanceSizeType.small}
-            >
-              {t("welcome.getHelp")}
-            </LinkButton>
-          </InfoCard>
-          <InfoCard
-            title={t("welcome.haveQuestions")}
-            className="flex-1 is-inline is-normal text-left"
-          >
-            <img
-              src={"images/person-laptop.jpg"}
-              alt={t("welcome.personLaptopAlt")}
-              className={"mt-4 mb-4 rounded-3xl"}
-            />
-            <p className="text-gray-950 text__medium-normal mb-4 font-semibold">
-              {t("welcome.getAnswers")}
-            </p>
-            <ul className="text__medium-normal list-disc ml-5">
-              <li>{t("welcome.whatHappens")}</li>
-              <li>{t("welcome.incomeAffectRent")}</li>
-              <li>{t("welcome.whatDoesAffordableMean")}</li>
-            </ul>
-            <LinkButton
-              key={"learn-more"}
-              className="is-primary"
-              href={"/help/questions"}
-              size={AppearanceSizeType.small}
-            >
-              {t("welcome.learnMore")}
-            </LinkButton>
-          </InfoCard>
-        </div>
-      </div>
       {notificationsSignUpURL && (
         <ActionBlock
           className="px-6 py-8 md:py-12"
@@ -149,19 +60,61 @@ export default function Home(props: IndexProps) {
             </Heading>
           }
           subheader={t("t.subscribeToListingAlerts")}
-          background={ActionBlockBackground.primaryLightest}
+          background={"secondary-lighter"}
           actions={[
             <Button
               key={"sign-up"}
               variant="primary-outlined"
               href={notificationsSignUpURL}
               newWindowTarget
+              hideExternalLinkIcon
             >
               {t("t.signUp")}
             </Button>,
           ]}
         />
       )}
+      <div className="homepage-extra warn">
+        <div className="action-blocks pb-4 pt-4 w-full space-between items-start">
+          <InfoCard
+            title={t("welcome.haveQuestions")}
+            className="flex-1 is-inline is-normal text-left"
+          >
+            <img
+              src={"images/person-laptop.jpg"}
+              alt={t("welcome.personLaptopAlt")}
+              className={"mt-4 mb-4 rounded-3xl"}
+            />
+            <ul className="text__medium-normal list-disc ml-5 mb-6">
+              <li>{t("welcome.whatHappens")}</li>
+              <li>{t("welcome.incomeAffectRent")}</li>
+              <li>{t("welcome.whatDoesAffordableMean")}</li>
+            </ul>
+            <Button key={"learn-more"} href={"/help/questions"} variant={"secondary"}>
+              {t("welcome.learnMore")}
+            </Button>
+          </InfoCard>
+          <InfoCard
+            title={t("welcome.needOtherHelp")}
+            className="flex-1 is-inline is-normal text-left"
+          >
+            <img
+              src={"images/person-holding-hands.jpg"}
+              alt={t("welcome.peopleHoldingHandsAlt")}
+              className={"mt-4 mb-4 rounded-3xl"}
+            />
+            <p className="text-gray-950 text__medium-normal mb-4">
+              {t("welcome.emergencyHousing")}
+            </p>
+            <p className="text-gray-950 text__medium-normal mb-6">
+              {t("welcome.emergencyHousingResources")}
+            </p>
+            <Button key={"get-help"} href={"/help/housing-help"} variant={"secondary"}>
+              {t("welcome.getHelp")}
+            </Button>
+          </InfoCard>
+        </div>
+      </div>
       {mtcDataUrl && (
         <ActionBlock
           className="px-6 py-8 md:py-12"
@@ -171,7 +124,7 @@ export default function Home(props: IndexProps) {
             </Heading>
           }
           subheader={t("t.getApplicationAndData")}
-          background={ActionBlockBackground.secondaryLighter}
+          background={ActionBlockBackground.primaryLightest}
           actions={[
             <Button
               key={"seeTheData"}
