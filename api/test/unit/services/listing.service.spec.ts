@@ -3513,12 +3513,12 @@ describe('Testing listing service', () => {
     it('should find all active listings', async () => {
       prisma.listings.findMany = jest.fn().mockResolvedValue([
         {
-          id: 'random asset id',
+          id: 'random id',
           listingsBuildingAddress: exampleAddress,
         },
       ]);
 
-      await service.updateListingEvents('random id');
+      await service.mapMarkers();
 
       expect(prisma.listings.findMany).toHaveBeenCalledWith({
         select: {
