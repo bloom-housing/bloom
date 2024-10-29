@@ -257,6 +257,20 @@ export class ListingsService {
     })
   }
   /**
+   * Get listing map markers
+   */
+  mapMarkers(options: IRequestOptions = {}): Promise<ListingMapMarker[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/mapMarkers"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Get listing for external consumption by id
    */
   externalRetrieve(
@@ -276,55 +290,6 @@ export class ListingsService {
       configs.params = { view: params["view"] }
 
       /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get listing by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      id: string
-      /**  */
-      view?: ListingViews
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Listing> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/listings/{id}"
-      url = url.replace("{id}", params["id"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { view: params["view"] }
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update listing by id
-   */
-  update(
-    params: {
-      /**  */
-      id: string
-      /** requestBody */
-      body?: ListingUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Listing> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/listings/{id}"
-      url = url.replace("{id}", params["id"] + "")
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -363,6 +328,55 @@ export class ListingsService {
       let data = null
 
       configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update listing by id
+   */
+  update(
+    params: {
+      /**  */
+      id: string
+      /** requestBody */
+      body?: ListingUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Listing> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get listing by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      id: string
+      /**  */
+      view?: ListingViews
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Listing> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { view: params["view"] }
+
+      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -2237,6 +2251,44 @@ export class ScriptRunnerService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * A script that creates a new reserved community type
+   */
+  createNewReservedCommunityType(
+    params: {
+      /** requestBody */
+      body?: CommunityTypeDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/createNewReservedCommunityType"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * A script that updates single use code translations to show extended expiration time
+   */
+  updateCodeExpirationTranslations(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/updateCodeExpirationTranslations"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class LotteryService {
@@ -3428,6 +3480,17 @@ export interface PaginatedListing {
 
   /**  */
   meta: PaginationMeta
+}
+
+export interface ListingMapMarker {
+  /**  */
+  id: string
+
+  /**  */
+  lat: number
+
+  /**  */
+  lng: number
 }
 
 export interface UnitAmiChartOverrideCreate {
@@ -5836,6 +5899,17 @@ export interface AmiChartImportDTO {
 
   /**  */
   jurisdictionId: string
+}
+
+export interface CommunityTypeDTO {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+
+  /**  */
+  description?: string
 }
 
 export interface ApplicationCsvQueryParams {
