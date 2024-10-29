@@ -15,6 +15,7 @@ import {
   ListingDetailItem,
   ListingDetails,
   ListingMap,
+  locale,
   Message,
   OneLineAddress,
   EventSection,
@@ -57,16 +58,47 @@ import {
   ListingEvent,
   ListingEventCreate,
   ListingEventsTypeEnum,
+  ListingMultiselectQuestion,
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { DownloadLotteryResults } from "./DownloadLotteryResults"
 
+import {
+  OrdinalList,
+  OrdinalListItem,
+  OrdinalListItemDescription,
+  OrdinalListItemLinks,
+  OrdinalListItemOrdinal,
+  OrdinalListItemTitle,
+} from "./Schmeep"
+
+const getOrdinalSuffix = (n: number) => {
+  if (locale() == "en") {
+    const s = ["th", "st", "nd", "rd"]
+    const v = n % 100
+    return s[(v - 20) % 10] || s[v] || s[0]
+  } else {
+    return ""
+  }
+}
+
 interface ListingProps {
   listing: Listing
   preview?: boolean
   jurisdiction?: Jurisdiction
+}
+
+const getUnhiddenMultiselectQuestions = (
+  arrayToSeach: ListingMultiselectQuestion[],
+  section: MultiselectQuestionsApplicationSectionEnum
+): ListingMultiselectQuestion[] => {
+  return arrayToSeach.filter(
+    (elem) =>
+      elem.multiselectQuestions.applicationSection === section &&
+      !elem.multiselectQuestions.hideFromListing
+  )
 }
 
 export const ListingView = (props: ListingProps) => {
@@ -175,27 +207,30 @@ export const ListingView = (props: ListingProps) => {
     )
   }
 
-  const listingPreferences = listing?.listingMultiselectQuestions.filter(
-    (listingPref) =>
-      listingPref.multiselectQuestions.applicationSection ===
-        MultiselectQuestionsApplicationSectionEnum.preferences &&
-      !listingPref.multiselectQuestions.hideFromListing
+  const listingPreferences = getUnhiddenMultiselectQuestions(
+    listing?.listingMultiselectQuestions || [],
+    MultiselectQuestionsApplicationSectionEnum.preferences
   )
 
-  const listingPrograms = listing?.listingMultiselectQuestions.filter(
-    (listingProgram) =>
-      listingProgram.multiselectQuestions.applicationSection ===
-        MultiselectQuestionsApplicationSectionEnum.programs &&
-      !listingProgram.multiselectQuestions.hideFromListing
+  const listingPrograms = getUnhiddenMultiselectQuestions(
+    listing?.listingMultiselectQuestions || [],
+    MultiselectQuestionsApplicationSectionEnum.programs
   )
 
-  const getPreferenceData = (forPrograms = false) => {
-    return (forPrograms ? listingPrograms : listingPreferences).map((listingPref, index) => {
+  const getMultiselectQuestionData = (section: MultiselectQuestionsApplicationSectionEnum) => {
+    let multiselectQuestionSet: ListingMultiselectQuestion[] = []
+
+    if (section === MultiselectQuestionsApplicationSectionEnum.programs) {
+      multiselectQuestionSet = listingPrograms
+    } else {
+      multiselectQuestionSet = listingPreferences
+    }
+    return multiselectQuestionSet.map((listingMultiselectQuestion, index) => {
       return {
         ordinal: index + 1,
-        links: listingPref?.multiselectQuestions?.links,
-        title: listingPref?.multiselectQuestions?.text,
-        description: listingPref?.multiselectQuestions?.description,
+        links: listingMultiselectQuestion?.multiselectQuestions?.links,
+        title: listingMultiselectQuestion?.multiselectQuestions?.text,
+        description: listingMultiselectQuestion?.multiselectQuestions?.description,
       }
     })
   }
@@ -207,7 +242,36 @@ export const ListingView = (props: ListingProps) => {
         subtitle={t("listings.sections.housingProgramsSubtitle")}
       >
         <>
-          <PreferencesList listingPreferences={getPreferenceData(true)} />
+          <PreferencesList
+            listingPreferences={getMultiselectQuestionData(
+              MultiselectQuestionsApplicationSectionEnum.programs
+            )}
+          />
+          <OrdinalList>
+            {getMultiselectQuestionData(MultiselectQuestionsApplicationSectionEnum.programs).map(
+              (msq, index) => {
+                return (
+                  <OrdinalListItem
+                    index={index}
+                    className={
+                      !msq.description && !msq.links
+                        ? "preferences-list__item--title-only"
+                        : undefined
+                    }
+                  >
+                    <OrdinalListItemOrdinal
+                      showOrdinalSection={false}
+                      ordinal={msq.ordinal}
+                      ordinalSuffix={getOrdinalSuffix(msq.ordinal)}
+                    />
+                    <OrdinalListItemTitle text={msq.title} />
+                    <OrdinalListItemDescription text={msq.description} />
+                    <OrdinalListItemLinks links={msq.links} />
+                  </OrdinalListItem>
+                )
+              }
+            )}
+          </OrdinalList>
           <p className="text-gray-750 text-sm">{t("listings.remainingUnitsAfterPrograms")}</p>
         </>
       </ListSection>
@@ -221,7 +285,36 @@ export const ListingView = (props: ListingProps) => {
         subtitle={t("listings.sections.housingPreferencesSubtitle")}
       >
         <>
-          <PreferencesList listingPreferences={getPreferenceData()} />
+          <PreferencesList
+            listingPreferences={getMultiselectQuestionData(
+              MultiselectQuestionsApplicationSectionEnum.preferences
+            )}
+          />
+          <OrdinalList>
+            {getMultiselectQuestionData(MultiselectQuestionsApplicationSectionEnum.preferences).map(
+              (msq, index) => {
+                return (
+                  <OrdinalListItem
+                    index={index}
+                    className={
+                      !msq.description && !msq.links
+                        ? "preferences-list__item--title-only"
+                        : undefined
+                    }
+                  >
+                    <OrdinalListItemOrdinal
+                      showOrdinalSection={true}
+                      ordinal={msq.ordinal}
+                      ordinalSuffix={getOrdinalSuffix(msq.ordinal)}
+                    />
+                    <OrdinalListItemTitle text={msq.title} />
+                    <OrdinalListItemDescription text={msq.description} />
+                    <OrdinalListItemLinks links={msq.links} />
+                  </OrdinalListItem>
+                )
+              }
+            )}
+          </OrdinalList>
           <p className="text-gray-750 text-sm">
             {t("listings.remainingUnitsAfterPreferenceConsideration")}
           </p>
