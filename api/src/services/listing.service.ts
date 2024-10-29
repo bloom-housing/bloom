@@ -1817,6 +1817,9 @@ export class ListingService implements OnModuleInit {
         id: true,
         listingsBuildingAddress: true,
       },
+      where: {
+        status: ListingsStatusEnum.active,
+      },
     });
 
     const listings = mapTo(Listing, listingsRaw);
