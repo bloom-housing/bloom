@@ -2275,6 +2275,7 @@ export class ScriptRunnerService {
       axios(configs, resolve, reject)
     })
   }
+
   /**
    * A script that updates the preference keys for applications on Spark Homes
    */
