@@ -1150,7 +1150,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the wron
       expect(activityLogResult).not.toBeNull();
     });
 
-    it('should succeed for mmapMarkers endpoint', async () => {
+    it('should succeed for mapMarkers endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/listings/mapMarkers`)
         .set({ passkey: process.env.API_PASS_KEY || '' })

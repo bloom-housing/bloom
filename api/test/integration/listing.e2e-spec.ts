@@ -999,7 +999,7 @@ describe('Listing Controller Tests', () => {
     });
   });
 
-  describe('Test mapMarkers endpoint', () => {
+  describe('mapMarkers endpoint', () => {
     it('should find all active listings', async () => {
       const listingData = await listingFactory(jurisdictionAId, prisma);
       const listing = await prisma.listings.create({

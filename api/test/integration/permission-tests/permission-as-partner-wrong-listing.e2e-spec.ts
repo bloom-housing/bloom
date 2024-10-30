@@ -1101,7 +1101,7 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
         .expect(200);
     });
 
-    it('should succeed for mmapMarkers endpoint', async () => {
+    it('should succeed for mapMarkers endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/listings/mapMarkers`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
