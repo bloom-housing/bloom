@@ -671,7 +671,8 @@ export class EmailService {
             appUrl: jurisdiction.publicUrl,
           },
           appUrl: jurisdiction.publicUrl,
-          // These two URLs are placeholders and must be updated per jurisdiction
+          termsUrl: 'https://mtc.ca.gov/doorway-housing-portal-terms-use',
+          // These three URLs are placeholders and must be updated per jurisdiction
           notificationsUrl: 'https://www.exygy.com',
           helpCenterUrl: 'https://www.exygy.com',
         }),

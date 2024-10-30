@@ -159,6 +159,20 @@ export class ScirptRunnerController {
     return await this.scriptRunnerService.optOutExistingLotteries(req);
   }
 
+  @Put('addDuplicatesInformationToLotteryEmail')
+  @ApiOperation({
+    summary: 'A script that adds duplicates information to lottery email',
+    operationId: 'addDuplicatesInformationToLotteryEmail',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async addDuplicatesInformationToLotteryEmail(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.addDuplicatesInformationToLotteryEmail(
+      req,
+    );
+  }
+
   @Put('createNewReservedCommunityType')
   @ApiOperation({
     summary: 'A script that creates a new reserved community type',

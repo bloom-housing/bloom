@@ -2405,6 +2405,22 @@ export class ScriptRunnerService {
     })
   }
   /**
+   * A script that adds duplicates information to lottery email
+   */
+  addDuplicatesInformationToLotteryEmail(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/addDuplicatesInformationToLotteryEmail"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * A script that creates a new reserved community type
    */
   createNewReservedCommunityType(
