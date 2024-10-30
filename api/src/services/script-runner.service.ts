@@ -1104,7 +1104,7 @@ export class ScriptRunnerService {
   async addLotteryTranslations(req: ExpressRequest): Promise<SuccessDTO> {
     const requestingUser = mapTo(User, req['user']);
     await this.markScriptAsRunStart('add lottery translations', requestingUser);
-    this.addLotteryTranslationsHelper();
+    this.addLotteryTranslationsHelper(true);
     await this.markScriptAsComplete('add lottery translations', requestingUser);
 
     return { success: true };
