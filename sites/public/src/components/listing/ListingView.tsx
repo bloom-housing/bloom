@@ -15,7 +15,6 @@ import {
   ListingDetailItem,
   ListingDetails,
   ListingMap,
-  locale,
   Message,
   OneLineAddress,
   EventSection,
@@ -65,16 +64,6 @@ import {
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { DownloadLotteryResults } from "./DownloadLotteryResults"
-
-const getOrdinalSuffix = (n: number) => {
-  if (locale() == "en") {
-    const s = ["th", "st", "nd", "rd"]
-    const v = n % 100
-    return s[(v - 20) % 10] || s[v] || s[0]
-  } else {
-    return ""
-  }
-}
 
 interface ListingProps {
   listing: Listing
