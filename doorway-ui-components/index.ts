@@ -10,9 +10,6 @@ export * from "./src/blocks/ImageCard"
 /* Contexts */
 export * from "./src/config"
 
-/* Footers */
-export * from "./src/footers/SiteFooter"
-
 /* Forms */
 export * from "./src/forms/Field"
 export * from "./src/forms/FieldGroup"
@@ -31,7 +28,6 @@ export * from "./src/helpers/useFallbackImage"
 export * from "./src/helpers/useKeyPress"
 
 /* Navigation */
-export * from "./src/navigation/FooterNav"
 export * from "./src/navigation/LanguageNav"
 
 /* Notifications */
@@ -45,6 +41,3 @@ export * from "./src/overlays/Modal"
 export * from "./src/page_components/listing/ContentAccordion"
 export * from "./src/page_components/listing/ListingCard"
 export * from "./src/page_components/listings/ZeroListingsItem"
-
-/* Sections */
-export * from "./src/sections/FooterSection"

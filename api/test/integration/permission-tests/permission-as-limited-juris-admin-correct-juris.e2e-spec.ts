@@ -320,7 +320,7 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
       });
 
       const exampleAddress = addressFactory() as AddressCreate;
-      const res = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post(`/applications/`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(
@@ -1123,7 +1123,7 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
         data: listingData,
       });
 
-      const res = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post('/listings/duplicate')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({

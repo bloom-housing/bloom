@@ -2247,7 +2247,7 @@ export class ScriptRunnerService {
     })
   }
   /**
-   * A script that pulls data from one source into the current db
+   * A script that pulls jurisdiction data from one source into the current db
    */
   transferJurisdictionData(
     params: {
@@ -2269,7 +2269,7 @@ export class ScriptRunnerService {
     })
   }
   /**
-   * A script that pulls data from one source into the current db
+   * A script that pulls listing data from one source into the current db
    */
   transferJurisdictionListingsData(
     params: {
@@ -2280,6 +2280,50 @@ export class ScriptRunnerService {
   ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/scriptRunner/transferJurisdictionListingsData"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * A script that pulls partner user data from one source into the current db
+   */
+  transferJurisdictionPartnerUserData(
+    params: {
+      /** requestBody */
+      body?: DataTransferDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/transferJurisdictionPartnerUserData"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * A script that pulls public user and application data from one source into the current db
+   */
+  transferJurisdictionPublicUserApplicationData(
+    params: {
+      /** requestBody */
+      body?: DataTransferDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/transferJurisdictionPublicUserApplicationData"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
@@ -2366,6 +2410,44 @@ export class ScriptRunnerService {
   addDuplicatesInformationToLotteryEmail(options: IRequestOptions = {}): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/scriptRunner/addDuplicatesInformationToLotteryEmail"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * A script that creates a new reserved community type
+   */
+  createNewReservedCommunityType(
+    params: {
+      /** requestBody */
+      body?: CommunityTypeDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/createNewReservedCommunityType"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * A script that updates single use code translations to show extended expiration time
+   */
+  updateCodeExpirationTranslations(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/updateCodeExpirationTranslations"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
@@ -6046,6 +6128,17 @@ export interface AmiChartImportDTO {
 
   /**  */
   jurisdictionId: string
+}
+
+export interface CommunityTypeDTO {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+
+  /**  */
+  description?: string
 }
 
 export interface ApplicationCsvQueryParams {

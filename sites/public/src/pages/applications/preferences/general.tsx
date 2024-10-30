@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { t, Form } from "@bloom-housing/ui-components"
 import {
@@ -16,7 +16,6 @@ import ApplicationFormLayout from "../../../layouts/application-form"
 
 const ApplicationPreferencesGeneral = () => {
   const { profile } = useContext(AuthContext)
-  const [hideReviewButton, setHideReviewButton] = useState(false)
   const { conductor, application, listing } = useFormConductor("generalPool")
   const currentPageSection = listingSectionQuestions(
     listing,
@@ -27,7 +26,6 @@ const ApplicationPreferencesGeneral = () => {
 
   const { handleSubmit } = useForm()
   const onSubmit = () => {
-    if (!conductor.canJumpForwardToReview()) setHideReviewButton(true)
     conductor.completeSection(4)
     conductor.sync()
     conductor.routeToNextOrReturnUrl()

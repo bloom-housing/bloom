@@ -48,7 +48,7 @@
     "test:doorway-ui-components": "cd doorway-ui-components && yarn && yarn test",
     "test:apps": "concurrently \"yarn dev:backend\" \"yarn test:app:public\"",
     "test:apps:headless": "concurrently \"yarn dev:backend\" \"yarn test:app:public:headless\"",
-    "lint": "eslint 'sites/**/*.ts' 'sites/**/*.tsx' 'sites/**/*.js' && cd api && yarn lint",
+    "lint": "eslint 'sites/**/*.ts' 'sites/**/*.tsx' 'sites/**/*.js' --max-warnings 40 && cd api && yarn lint --max-warnings 2",
     "version:all": "lerna version --yes --no-commit-hooks --ignore-scripts --conventional-graduate --include-merged-tags --force-git-tag",
     "test:backend:new": "cd api && yarn test --detectOpenHandles",
     "test:backend:new:e2e": "cd api && yarn jest --config ./test/jest-e2e.config.js --detectOpenHandles",
@@ -98,7 +98,7 @@
     }
   },
   "lint-staged": {
-    "*.{js,ts,tsx}": "eslint --max-warnings 100"
+    "*.{js,ts,tsx}": "eslint"
   },
   "config": {
     "commitizen": {

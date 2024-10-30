@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer';
 import { ArrayMaxSize, IsDefined, IsString, MaxLength } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { AbstractDTO } from '../shared/abstract.dto';
 

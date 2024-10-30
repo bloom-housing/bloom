@@ -19,7 +19,7 @@ import {
   MessageContext,
   FormSignInErrorBox,
 } from "@bloom-housing/shared-helpers"
-import TermsModal, { FormVerifyValues } from "../components/shared/TermsModal"
+import { FormVerifyValues, TermsModal } from "../components/shared/TermsModal"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
 import { useRedirectToPrevPage } from "../lib/hooks"

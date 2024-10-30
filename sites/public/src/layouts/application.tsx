@@ -5,8 +5,8 @@ import Head from "next/head"
 import { Toast } from "@bloom-housing/ui-seeds"
 import { MenuLink, t } from "@bloom-housing/ui-components"
 import { AlertBanner, AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
-import { getSiteFooter } from "../lib/helpers"
 import { SiteHeader } from "@bloom-housing/doorway-ui-components/src/headers/SiteHeader"
+import CustomSiteFooter from "../components/shared/CustomSiteFooter"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
@@ -150,7 +150,7 @@ const Layout = (props) => {
           {props.children}
         </main>
       </div>
-      {getSiteFooter()}
+      <CustomSiteFooter />
     </div>
   )
 }

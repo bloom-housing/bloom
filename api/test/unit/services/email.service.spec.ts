@@ -25,7 +25,7 @@ const translationServiceMock = {
 };
 
 const jurisdictionServiceMock = {
-  findOne: (id) => {
+  findOne: () => {
     return { name: 'Jurisdiction 1' };
   },
 };

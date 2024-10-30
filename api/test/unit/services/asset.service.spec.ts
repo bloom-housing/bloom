@@ -7,11 +7,7 @@ import {
   CloudinaryService,
   UploadService,
 } from '../../../src/services/upload.service';
-import {
-  AmazonS3FileService,
-  FileServiceProvider,
-  NullFileService,
-} from '../../../src/services/uploads';
+import { FileServiceProvider } from '../../../src/services/uploads';
 import { PrismaService } from '../../../src/services/prisma.service';
 
 describe('Testing asset service', () => {

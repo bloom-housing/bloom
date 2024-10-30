@@ -44,7 +44,6 @@ user.email = 'test@example.com';
 describe('Testing lottery service', () => {
   let service: LotteryService;
   let prisma: PrismaService;
-  let permissionService: PermissionService;
   let listingService: ListingService;
   let config: ConfigService;
 
@@ -87,7 +86,6 @@ describe('Testing lottery service', () => {
     service = module.get<LotteryService>(LotteryService);
     prisma = module.get<PrismaService>(PrismaService);
     listingService = module.get<ListingService>(ListingService);
-    permissionService = module.get<PermissionService>(PermissionService);
     config = module.get<ConfigService>(ConfigService);
 
     jest.spyOn(listingService, 'getUserEmailInfo').mockResolvedValueOnce({

@@ -12,7 +12,7 @@ import {
   BloomCard,
   MessageContext,
 } from "@bloom-housing/shared-helpers"
-import TermsModal from "../components/shared/TermsModal"
+import { TermsModal } from "../components/shared/TermsModal"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
 
