@@ -43,6 +43,7 @@ import {
   pdfUrlFromListingEvents,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
+import { Card, Heading as SeedsHeading } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
 import { ErrorPage } from "../../pages/_error"
 import { useGetApplicationStatusProps } from "../../lib/hooks"
@@ -64,15 +65,6 @@ import {
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { DownloadLotteryResults } from "./DownloadLotteryResults"
-
-import {
-  OrdinalList,
-  OrdinalListItem,
-  OrdinalListItemDescription,
-  OrdinalListItemLinks,
-  OrdinalListItemOrdinal,
-  OrdinalListItemTitle,
-} from "./Schmeep"
 
 const getOrdinalSuffix = (n: number) => {
   if (locale() == "en") {
@@ -242,36 +234,23 @@ export const ListingView = (props: ListingProps) => {
         subtitle={t("listings.sections.housingProgramsSubtitle")}
       >
         <>
-          <PreferencesList
-            listingPreferences={getMultiselectQuestionData(
-              MultiselectQuestionsApplicationSectionEnum.programs
-            )}
-          />
-          <OrdinalList>
-            {getMultiselectQuestionData(MultiselectQuestionsApplicationSectionEnum.programs).map(
-              (msq, index) => {
-                return (
-                  <OrdinalListItem
-                    index={index}
-                    className={
-                      !msq.description && !msq.links
-                        ? "preferences-list__item--title-only"
-                        : undefined
-                    }
-                  >
-                    <OrdinalListItemOrdinal
-                      showOrdinalSection={false}
-                      ordinal={msq.ordinal}
-                      ordinalSuffix={getOrdinalSuffix(msq.ordinal)}
-                    />
-                    <OrdinalListItemTitle text={msq.title} />
-                    <OrdinalListItemDescription text={msq.description} />
-                    <OrdinalListItemLinks links={msq.links} />
-                  </OrdinalListItem>
-                )
-              }
-            )}
-          </OrdinalList>
+          {getMultiselectQuestionData(MultiselectQuestionsApplicationSectionEnum.programs).map(
+            (msq) => {
+              return (
+                <Card spacing="md" className="listing-multiselect-card">
+                  <Card.Header>
+                    <SeedsHeading size="sm" priority={4}>
+                      {msq.title}
+                    </SeedsHeading>
+                  </Card.Header>
+
+                  <Card.Section>
+                    <p>{msq.description}</p>
+                  </Card.Section>
+                </Card>
+              )
+            }
+          )}
           <p className="text-gray-750 text-sm">{t("listings.remainingUnitsAfterPrograms")}</p>
         </>
       </ListSection>
@@ -290,31 +269,6 @@ export const ListingView = (props: ListingProps) => {
               MultiselectQuestionsApplicationSectionEnum.preferences
             )}
           />
-          <OrdinalList>
-            {getMultiselectQuestionData(MultiselectQuestionsApplicationSectionEnum.preferences).map(
-              (msq, index) => {
-                return (
-                  <OrdinalListItem
-                    index={index}
-                    className={
-                      !msq.description && !msq.links
-                        ? "preferences-list__item--title-only"
-                        : undefined
-                    }
-                  >
-                    <OrdinalListItemOrdinal
-                      showOrdinalSection={true}
-                      ordinal={msq.ordinal}
-                      ordinalSuffix={getOrdinalSuffix(msq.ordinal)}
-                    />
-                    <OrdinalListItemTitle text={msq.title} />
-                    <OrdinalListItemDescription text={msq.description} />
-                    <OrdinalListItemLinks links={msq.links} />
-                  </OrdinalListItem>
-                )
-              }
-            )}
-          </OrdinalList>
           <p className="text-gray-750 text-sm">
             {t("listings.remainingUnitsAfterPreferenceConsideration")}
           </p>
