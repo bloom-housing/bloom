@@ -1187,12 +1187,24 @@ export class ScriptRunnerService {
           'Doorway generally does not accept duplicate applications. A duplicate application is one that has someone who also appears on another application for the same housing opportunity. For more detailed information on how we handle duplicates, see our',
         termsOfUse: 'Terms of Use',
       },
+      confirmation: {
+        submitAnotherApplication:
+          'If you’re not changing the primary applicant or any household members, you can just submit another application.  We’ll take the last one submitted, per the duplicate application policy.',
+        otherChanges:
+          'For other changes, please contact doorway@bayareametro.gov.',
+      },
     });
     await this.updateTranslationsForLanguage(LanguagesEnum.es, {
       lotteryAvailable: {
         duplicatesDetails:
           'Doorway generalmente no acepta solicitudes duplicadas. Una solicitud duplicada es aquella en la que aparece una persona que también aparece en otra solicitud para la misma oportunidad de vivienda. Para obtener información más detallada sobre cómo manejamos las solicitudes duplicadas, consulte nuestros',
         termsOfUse: 'Términos de uso',
+      },
+      confirmation: {
+        submitAnotherApplication:
+          'Si no va a cambiar al solicitante principal ni a ningún miembro del hogar, puede simplemente enviar otra solicitud.  Tomaremos el último enviado, según la política de solicitud de duplicados.',
+        otherChanges:
+          'Para otros cambios, comuníquese con doorway@bayareametro.gov',
       },
     });
     await this.updateTranslationsForLanguage(LanguagesEnum.tl, {
@@ -1208,12 +1220,23 @@ export class ScriptRunnerService {
           'Doorway thường không chấp nhận các đơn xin trùng lặp. Một đơn xin trùng lặp là đơn xin có người cũng xuất hiện trên một đơn xin khác cho cùng một cơ hội nhà ở. Để biết thông tin chi tiết hơn về cách chúng tôi xử lý các đơn xin trùng lặp, hãy xem của chúng tôi',
         termsOfUse: 'Điều khoản sử dụng',
       },
+      confirmation: {
+        submitAnotherApplication:
+          'Nếu bạn không thay đổi người nộp đơn chính hoặc bất kỳ thành viên nào trong gia đình, bạn chỉ cần gửi đơn đăng ký khác.  Chúng tôi sẽ lấy bản cuối cùng được gửi theo chính sách đăng ký trùng lặp.',
+        otherChanges:
+          'Đối với những thay đổi khác, vui lòng liên hệ với Door@bayareametro.gov.',
+      },
     });
     await this.updateTranslationsForLanguage(LanguagesEnum.zh, {
       lotteryAvailable: {
         duplicatesDetails:
           'Doorway 一般不接受重复申请。重复申请是指申请者与另一份申请者有相同的住房机会。有关我们如何处理重复申请的更多详细信息，请参阅我们的',
         termsOfUse: '使用条款',
+      },
+      confirmation: {
+        submitAnotherApplication:
+          '如果你不改變主申請人或任何家庭成員，你可以提交另一份申請。  我們將根據重複申請政策採用最後提交的一份申請。',
+        otherChanges: '如需其他變更，請聯絡doorway@bayareametro.gov。',
       },
     });
 
@@ -1388,19 +1411,20 @@ export class ScriptRunnerService {
     createIfMissing?: boolean,
   ) {
     let translations;
-    translations = await this.prisma.translations.findFirst({
-      where: { language, jurisdictionId: null },
+    translations = await this.prisma.translations.findMany({
+      where: { language },
     });
 
-    if (!translations) {
+    if (!translations?.length) {
       if (createIfMissing) {
-        translations = await this.prisma.translations.create({
+        const createdTranslations = await this.prisma.translations.create({
           data: {
             language: language,
             translations: {},
             jurisdictions: undefined,
           },
         });
+        translations = [createdTranslations];
       } else {
         console.log(
           `Translations for ${language} don't exist in Doorway database`,
@@ -1409,24 +1433,26 @@ export class ScriptRunnerService {
       }
     }
 
-    const translationsJSON = translations.translations as Prisma.JsonObject;
+    for (const translation of translations) {
+      const translationsJSON = translation.translations as Prisma.JsonObject;
 
-    Object.keys(newTranslations).forEach((key) => {
-      translationsJSON[key] = {
-        ...((translationsJSON[key] || {}) as Prisma.JsonObject),
-        ...newTranslations[key],
-      };
-    });
+      Object.keys(newTranslations).forEach((key) => {
+        translationsJSON[key] = {
+          ...((translationsJSON[key] || {}) as Prisma.JsonObject),
+          ...newTranslations[key],
+        };
+      });
 
-    // technique taken from
-    // https://www.prisma.io/docs/orm/prisma-client/special-fields-and-types/working-with-json-fields#advanced-example-update-a-nested-json-key-value
-    const dataClause = Prisma.validator<Prisma.TranslationsUpdateInput>()({
-      translations: translationsJSON,
-    });
+      // technique taken from
+      // https://www.prisma.io/docs/orm/prisma-client/special-fields-and-types/working-with-json-fields#advanced-example-update-a-nested-json-key-value
+      const dataClause = Prisma.validator<Prisma.TranslationsUpdateInput>()({
+        translations: translationsJSON,
+      });
 
-    await this.prisma.translations.update({
-      where: { id: translations.id },
-      data: dataClause,
-    });
+      await this.prisma.translations.update({
+        where: { id: translation.id },
+        data: dataClause,
+      });
+    }
   }
 }

@@ -96,6 +96,10 @@ const translations = (jurisdictionName?: string, language?: LanguagesEnum) => {
         contactedForAnInterview:
           'If you are contacted for an interview, you will need to fill out a more detailed application and provide supporting documents.',
         gotYourConfirmationNumber: 'We got your application for',
+        submitAnotherApplication:
+          'If you’re not changing the primary applicant or any household members, you can just submit another application.  We’ll take the last one submitted, per the duplicate application policy.',
+        otherChanges:
+          'For other changes, please contact doorway@bayareametro.gov.',
       },
       leasingAgent: {
         officeHours: 'Office Hours:',

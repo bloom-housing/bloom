@@ -326,6 +326,7 @@
   "application.review.confirmation.imdone": "No gracias, ya terminé.",
   "application.review.confirmation.lotteryNumber": "Este es el número de confirmación de su solicitud",
   "application.review.confirmation.needToMakeUpdates": "### ¿Necesita realizar actualizaciones?\n\nSi necesita actualizar la información de su solicitud, no vuelva a realizar una nueva solicitud.  Contáctese con el agente de este listado.\n\n**%{agentName}**  \n%{agentPhone}  \n%{agentEmail}\n\n**Horario de oficina**  \n%{agentOfficeHours}\n\nComuníquese con el agente si no ha recibido una confirmación por correo electrónico.",
+  "application.review.confirmation.needToMakeUpdates.lottery": "### ¿Necesita hacer actualizaciones?\n\nSi no va a cambiar al solicitante principal ni a ningún miembro del hogar, puede enviar otra solicitud. Tomaremos la última enviada, según la política de solicitudes duplicadas.\n \nPara otros cambios, comuníquese con <a mailto='doorway@bayareametro.gov'>doorway@bayareametro.gov.</a>",
   "application.review.confirmation.needToUpdate": "Si necesita actualizar información en su solicitud, no vuelva a hacer su solicitud. Comuníquese con el agente si no recibió una confirmación por email.",
   "application.review.confirmation.pleaseWriteNumber": "Sírvase anotar su número de solicitud y consérvelo en un lugar seguro. También le enviamos este número por email si nos proporcionó una dirección de email.",
   "application.review.confirmation.print": "Ver la solicitud enviada e imprimir una copia.",

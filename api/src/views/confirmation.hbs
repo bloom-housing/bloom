@@ -32,6 +32,9 @@
             <li>{{eligibleText}}</li>
             <li>{{preferenceText}}</li>
             <li>{{interviewText}}</li>
+            {{#if duplicateText}}
+              <li>{{duplicateText}} <a href="{{ termsUrl }}" target="_blank">{{t "lotteryAvailable.termsOfUse"}}</a>.</li>
+            {{/if}}
             {{#if contactText}}
               <li>{{contactText}}</li>
             {{/if}}
@@ -52,6 +55,12 @@
             {{/if}}
 
             <h2>{{t "confirmation.needToMakeUpdates"}}</h2>
+            {{#if duplicateText}}
+            <ul>
+              <li>{{t "confirmation.submitAnotherApplication"}}</li>
+              <li>{{t "confirmation.otherChanges"}}</li>
+            </ul>
+            {{else}}
             <p>{{t "leasingAgent.contactAgentToUpdateInfo"}}</p>
             <h3>{{t "leasingAgent.propertyManager"}}</h3>
             <p>
@@ -60,6 +69,7 @@
               {{listing.leasingAgentPhone}}<br />
               {{listing.leasingAgentEmail}}<br />
             </p>
+            {{/if}}
             {{#if listing.leasingAgentOfficeHours}}
               <h3>{{t "leasingAgent.officeHours"}}</h3>
               <p>{{listing.leasingAgentOfficeHours}}</p>

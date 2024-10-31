@@ -42,6 +42,24 @@ const ApplicationConfirmation = () => {
     }
   }, [listing, router.locale])
 
+  const contentUpdates = useMemo(() => {
+    switch (listing?.reviewOrderType) {
+      case ReviewOrderTypeEnum.lottery:
+        return {
+          text: t("application.review.confirmation.needToMakeUpdates.lottery"),
+        }
+      default:
+        return {
+          text: t("application.review.confirmation.needToMakeUpdates", {
+            agentName: listing?.leasingAgentName || "",
+            agentPhone: listing?.leasingAgentPhone || "",
+            agentEmail: listing?.leasingAgentEmail || "",
+            agentOfficeHours: listing?.leasingAgentOfficeHours || "",
+          }),
+        }
+    }
+  }, [listing, router.locale])
+
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
@@ -81,21 +99,13 @@ const ApplicationConfirmation = () => {
           <CardSection divider={"inset"}>
             <div className="markdown markdown-informational">
               <ApplicationTimeline />
-
-              <Markdown options={{ disableParsingRawHTML: true }}>{content.text}</Markdown>
+              <Markdown>{content.text}</Markdown>
             </div>
           </CardSection>
 
           <CardSection divider={"inset"}>
             <div className="markdown markdown-informational">
-              <Markdown options={{ disableParsingRawHTML: true }}>
-                {t("application.review.confirmation.needToMakeUpdates", {
-                  agentName: listing?.leasingAgentName || "",
-                  agentPhone: listing?.leasingAgentPhone || "",
-                  agentEmail: listing?.leasingAgentEmail || "",
-                  agentOfficeHours: listing?.leasingAgentOfficeHours || "",
-                })}
-              </Markdown>
+              <Markdown>{contentUpdates.text}</Markdown>
             </div>
           </CardSection>
 

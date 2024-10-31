@@ -285,7 +285,7 @@ describe('Testing email service', () => {
         'If you are contacted for an interview, you will be asked to fill out a more detailed application and provide supporting documents',
       );
       expect(sendMock.mock.calls[0][0].html).toContain(
-        'If you need to update information on your application, do not apply again. Instead, contact the agent for this listing',
+        'If you’re not changing the primary applicant or any household members, you can just submit another application.  We’ll take the last one submitted, per the duplicate application policy.',
       );
     });
     it('Test waitlist', async () => {

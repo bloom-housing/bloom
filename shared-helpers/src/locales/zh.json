@@ -326,6 +326,7 @@
   "application.review.confirmation.imdone": "不，謝謝，我已開立帳戶。",
   "application.review.confirmation.lotteryNumber": "這是您的申請確認號碼",
   "application.review.confirmation.needToMakeUpdates": "### 需要更新內容？\n\n如果您必須更新申請資訊，請勿再次申請。請您直接聯絡此刊登資訊的仲介人員。\n\n**%{agentName}**  \n%{agentPhone}  \n%{agentEmail}\n\n**辦公時間**  \n%{agentOfficeHours}\n\n如果您並未收到電子郵件確認，請聯絡仲介人員。",
+  "application.review.confirmation.needToMakeUpdates.lottery": "### 需要進行更新嗎？\n\n如果您不更改主申請人或任何家庭成員，您只需提交另一份申請即可。我們將根據重複申請政策採用最後提交的一份申請。 \n \n如需其他更改，請聯絡 <a mailto='doorway@bayareametro.gov'>doorway@bayareametro.gov</a>",
   "application.review.confirmation.needToUpdate": "如果您需要更新申請資料，請勿再次提交申請。如果您沒有收到電郵確認函，請聯絡經紀人。",
   "application.review.confirmation.pleaseWriteNumber": "請寫下您的申請號碼，並妥為保管。如果您有提供電郵地址，我們亦已透過電郵將這個號碼發送給您。",
   "application.review.confirmation.print": "查看已提交的申請並列印一份副本。",

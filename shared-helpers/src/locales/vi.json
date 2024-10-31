@@ -326,6 +326,7 @@
   "application.review.confirmation.imdone": "Không, cảm ơn, tôi đã làm xong.",
   "application.review.confirmation.lotteryNumber": "Đây là số xác nhận đơn ghi danh của quý vị",
   "application.review.confirmation.needToMakeUpdates": "### Quý vị cần cập nhật thông tin?\n\nNếu quý vị cần cập nhật thông tin trên đơn đăng ký của mình, đừng đăng ký lại. Thay vào đó, hãy liên hệ với đại lý cho danh sách này.\n\n**%{agentName}**  \n%{agentPhone}  \n%{agentEmail}\n\n**Giờ Làm việc**  \n%{agentOfficeHours}\n\nLiên hệ với đại lý nếu quý vị không nhận được email xác nhận.",
+  "application.review.confirmation.needToMakeUpdates.lottery": "### Cần cập nhật?\n\nNếu bạn không thay đổi người nộp đơn chính hoặc bất kỳ thành viên nào trong gia đình, bạn chỉ cần gửi đơn đăng ký khác. Chúng tôi sẽ xử lý đơn đăng ký cuối cùng được gửi theo chính sách đăng ký trùng lặp.\n \nĐối với những thay đổi khác, vui lòng liên hệ <a mailto='doorway@bayareametro.gov'>doorway@bayareametro.gov.</a>",
   "application.review.confirmation.needToUpdate": "Nếu quý vị cần cập nhật thông tin trên đơn ghi danh của mình, vui lòng không làm đơn ghi danh lại. Hãy liên lạc với nhân viên đại diện nếu quý vị không nhận được email xác nhận.",
   "application.review.confirmation.pleaseWriteNumber": "Vui lòng ghi lại số đơn ghi danh của quý vị và giữ nó ở một nơi an toàn. Chúng tôi cũng đã gửi số này qua email cho quý vị nếu quý vị cung cấp địa chỉ email.",
   "application.review.confirmation.print": "Xem đơn ghi danh đã nộp và in một bản sao.",
