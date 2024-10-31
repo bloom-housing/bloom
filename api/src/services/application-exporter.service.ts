@@ -469,7 +469,27 @@ export class ApplicationExporterService {
           question.applicationSection ===
           MultiselectQuestionsApplicationSectionEnum.preferences,
       );
-      for (const preference of preferences) {
+      // pull in the preference questions by ordinal
+      const listingPreferencesByOrdinal =
+        await this.prisma.listingMultiselectQuestions.findMany({
+          where: {
+            multiselectQuestionId: {
+              in: [...preferences.map((preference) => preference.id)],
+            },
+          },
+          orderBy: {
+            ordinal: 'asc',
+          },
+        });
+
+      // get a sorted list of preferences via listing preference ordinal
+      const sortedPreferences = listingPreferencesByOrdinal.map((item) =>
+        preferences.find(
+          (preference) => preference.id === item.multiselectQuestionId,
+        ),
+      );
+
+      for (const preference of sortedPreferences) {
         await this.generateSpreadsheetData(
           workbook,
           mappedApps,
