@@ -237,7 +237,7 @@ const Settings = () => {
             loadingMessage={isCreateLoading && t("t.formSubmitted")}
             size="sm"
           >
-            {t("settings.copy")}
+            {t("actions.copy")}
           </Button>
           <Button
             variant="primary-outlined"

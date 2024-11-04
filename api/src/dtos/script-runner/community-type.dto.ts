@@ -8,16 +8,25 @@ export class CommunityTypeDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiProperty({
+    type: String,
+    example: 'jurisdiction id',
+  })
   id: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiProperty({
+    type: String,
+    example: 'newReservedCommunityName',
+  })
   name: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    type: String,
+    example: 'Description of reserved community type',
+  })
   description?: string;
 }

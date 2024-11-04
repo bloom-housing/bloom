@@ -705,7 +705,9 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 name={"postmarkByDateDateField"}
                 id={"postmarkByDateDateField"}
                 register={register}
+                setValue={setValue}
                 watch={watch}
+                error={errors?.postmarkByDateDateField}
                 defaultDate={{
                   month: listing?.postmarkedApplicationsReceivedByDate
                     ? dayjsDate.format("MM")
@@ -728,7 +730,9 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 name={"postmarkByDateTimeField"}
                 id={"postmarkByDateTimeField"}
                 register={register}
+                setValue={setValue}
                 watch={watch}
+                error={errors?.postmarkByDateTimeField}
                 defaultValues={{
                   hours: listing?.postmarkedApplicationsReceivedByDate
                     ? dayjsDate.format("hh")
