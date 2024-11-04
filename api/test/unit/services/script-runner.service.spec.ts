@@ -1833,6 +1833,53 @@ describe('Testing script runner service', () => {
     });
   });
 
+  it('should hide programs from listing detail page', async () => {
+    const id = randomUUID();
+    const scriptName = 'hideProgramsFromListings';
+
+    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+    prisma.multiselectQuestions.updateMany = jest.fn().mockResolvedValue(null);
+
+    const res = await service.hideProgramsFromListings({
+      user: {
+        id,
+      } as unknown as User,
+    } as unknown as ExpressRequest);
+
+    expect(res.success).toBe(true);
+
+    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
+      where: {
+        scriptName,
+      },
+    });
+    expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
+      data: {
+        scriptName,
+        triggeringUser: id,
+      },
+    });
+    expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
+      data: {
+        didScriptRun: true,
+        triggeringUser: id,
+      },
+      where: {
+        scriptName,
+      },
+    });
+    expect(prisma.multiselectQuestions.updateMany).toHaveBeenCalledWith({
+      data: {
+        hideFromListing: true,
+      },
+      where: {
+        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+      },
+    });
+  });
+
   // | ---------- HELPER TESTS BELOW ---------- | //
   it('should mark script run as started if no script run present in db', async () => {
     prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);

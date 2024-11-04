@@ -209,6 +209,7 @@ export class ScirptRunnerController {
       body.description,
     );
   }
+
   @Put('updateCodeExpirationTranslations')
   @ApiOperation({
     summary:
@@ -220,5 +221,18 @@ export class ScirptRunnerController {
     @Request() req: ExpressRequest,
   ): Promise<SuccessDTO> {
     return await this.scriptRunnerService.updateCodeExpirationTranslations(req);
+  }
+
+  @Put('hideProgramsFromListings')
+  @ApiOperation({
+    summary:
+      'A script that hides program multiselect questions from the public detail page',
+    operationId: 'hideProgramsFromListings',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async hideProgramsFromListings(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.hideProgramsFromListings(req);
   }
 }

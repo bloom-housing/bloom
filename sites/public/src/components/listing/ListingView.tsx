@@ -40,6 +40,7 @@ import {
   AuthContext,
   CustomIconMap,
 } from "@bloom-housing/shared-helpers"
+import { Card, Heading as SeedsHeading } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
 import { ErrorPage } from "../../pages/_error"
 import { useGetApplicationStatusProps } from "../../lib/hooks"
@@ -59,6 +60,7 @@ import {
   ListingEvent,
   ListingEventCreate,
   ListingEventsTypeEnum,
+  ListingMultiselectQuestion,
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
   ReviewOrderTypeEnum,
@@ -85,9 +87,20 @@ interface ListingProps {
   isExternal?: boolean
 }
 
+const getUnhiddenMultiselectQuestions = (
+  arrayToSeach: ListingMultiselectQuestion[],
+  section: MultiselectQuestionsApplicationSectionEnum
+): ListingMultiselectQuestion[] => {
+  return arrayToSeach.filter(
+    (elem) =>
+      elem.multiselectQuestions.applicationSection === section &&
+      !elem.multiselectQuestions.hideFromListing
+  )
+}
+
 export const ListingView = (props: ListingProps) => {
   const { initialStateLoaded, profile } = useContext(AuthContext)
-  let buildingSelectionCriteria, preferencesSection
+  let buildingSelectionCriteria, preferencesSection, programsSection
   const { listing } = props
   const { content: appStatusContent, subContent: appStatusSubContent } =
     useGetApplicationStatusProps(listing)
@@ -191,22 +204,62 @@ export const ListingView = (props: ListingProps) => {
     )
   }
 
-  const listingPreferences = listing?.listingMultiselectQuestions.filter(
-    (listingPref) =>
-      listingPref.multiselectQuestions.applicationSection ===
-        MultiselectQuestionsApplicationSectionEnum.preferences &&
-      !listingPref.multiselectQuestions.hideFromListing
+  const listingPreferences = getUnhiddenMultiselectQuestions(
+    listing?.listingMultiselectQuestions || [],
+    MultiselectQuestionsApplicationSectionEnum.preferences
   )
 
-  const getPreferenceData = () => {
-    return listingPreferences.map((listingPref, index) => {
+  const listingPrograms = getUnhiddenMultiselectQuestions(
+    listing?.listingMultiselectQuestions || [],
+    MultiselectQuestionsApplicationSectionEnum.programs
+  )
+
+  const getMultiselectQuestionData = (section: MultiselectQuestionsApplicationSectionEnum) => {
+    let multiselectQuestionSet: ListingMultiselectQuestion[] = []
+
+    if (section === MultiselectQuestionsApplicationSectionEnum.programs) {
+      multiselectQuestionSet = listingPrograms
+    } else {
+      multiselectQuestionSet = listingPreferences
+    }
+    return multiselectQuestionSet.map((listingMultiselectQuestion, index) => {
       return {
         ordinal: index + 1,
-        links: listingPref?.multiselectQuestions?.links,
-        title: listingPref?.multiselectQuestions?.text,
-        description: listingPref?.multiselectQuestions?.description,
+        links: listingMultiselectQuestion?.multiselectQuestions?.links,
+        title: listingMultiselectQuestion?.multiselectQuestions?.text,
+        description: listingMultiselectQuestion?.multiselectQuestions?.description,
       }
     })
+  }
+
+  if (listingPrograms && listingPrograms?.length > 0) {
+    programsSection = (
+      <ListSection
+        title={t("listings.sections.housingProgramsTitle")}
+        subtitle={t("listings.sections.housingProgramsSubtitle")}
+      >
+        <>
+          {getMultiselectQuestionData(MultiselectQuestionsApplicationSectionEnum.programs).map(
+            (msq) => {
+              return (
+                <Card spacing="md" className="listing-multiselect-card">
+                  <Card.Header>
+                    <SeedsHeading size="sm" priority={4}>
+                      {msq.title}
+                    </SeedsHeading>
+                  </Card.Header>
+
+                  <Card.Section>
+                    <p>{msq.description}</p>
+                  </Card.Section>
+                </Card>
+              )
+            }
+          )}
+          <p className="text-gray-750 text-sm">{t("listings.remainingUnitsAfterPrograms")}</p>
+        </>
+      </ListSection>
+    )
   }
 
   if (listingPreferences && listingPreferences?.length > 0) {
@@ -216,7 +269,11 @@ export const ListingView = (props: ListingProps) => {
         subtitle={t("listings.sections.housingPreferencesSubtitle")}
       >
         <>
-          <PreferencesList listingPreferences={getPreferenceData()} />
+          <PreferencesList
+            listingPreferences={getMultiselectQuestionData(
+              MultiselectQuestionsApplicationSectionEnum.preferences
+            )}
+          />
           <p className="text-gray-750 text-sm">
             {t("listings.remainingUnitsAfterPreferenceConsideration")}
           </p>
@@ -758,6 +815,7 @@ export const ListingView = (props: ListingProps) => {
               />
             )}
 
+            {programsSection}
             {preferencesSection}
 
             {(listing.creditHistory ||

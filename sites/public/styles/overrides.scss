@@ -122,6 +122,25 @@
     height: 3px;
   }
 
+  .listing-multiselect-card {
+    --card-border-radius: var(--seeds-s1);
+    --card-content-padding-block: var(--seeds-s3);
+    --card-content-padding-inline: var(--seeds-s6);
+    padding-block-end: var(--seeds-s4);
+    margin-bottom: var(--seeds-s4);
+    color: var(--seeds-text-color);
+    font-size: var(--seeds-type-caption-size);
+    header {
+      .text-heading-sm {
+        font-family: var(--seeds-font-sans);
+        color: var(--seeds-text-color-dark);
+        text-transform: uppercase;
+        font-weight: bold;
+        letter-spacing: .025rem;
+      }
+    }
+  }
+
   #seeds-toast-stack {
     --toast-stack-inset-top: calc(var(--seeds-s40) + var(--seeds-s2));
   }
