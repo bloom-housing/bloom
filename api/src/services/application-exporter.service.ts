@@ -473,6 +473,7 @@ export class ApplicationExporterService {
       const listingPreferencesByOrdinal =
         await this.prisma.listingMultiselectQuestions.findMany({
           where: {
+            listingId: queryParams.id,
             multiselectQuestionId: {
               in: [...preferences.map((preference) => preference.id)],
             },
@@ -495,7 +496,7 @@ export class ApplicationExporterService {
           mappedApps,
           columns,
           queryParams,
-          forLottery,
+          true,
           {
             id: preference.id,
             name: preference.text,
