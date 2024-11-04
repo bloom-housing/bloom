@@ -56,6 +56,10 @@ yarn install
 
 Configuration of each app and service is read from environment variables. There is an `.env.template` file in each app or service directory that must be copied to `.env` (or equivalent). Some keys are purposefully missing for security concerns and are internally available.
 
+The [CSS variable autocomplete plugin](https://marketplace.visualstudio.com/items?itemName=vunguyentuan.vscode-css-variables&ssr=false#overview) will pull in all CSS variable definitions from ui-seeds for autocompletion (more setup instructions in the [public README](https://github.com/bloom-housing/bloom/blob/main/sites/public/README.md)).
+
+The [CSS module autocomplete plugin](https://marketplace.visualstudio.com/items?itemName=clinyong.vscode-css-modules) which provides autocomplete for CSS module files.
+
 ### Running a local test server
 
 ```
