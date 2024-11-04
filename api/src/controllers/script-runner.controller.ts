@@ -198,4 +198,17 @@ export class ScirptRunnerController {
   ): Promise<SuccessDTO> {
     return await this.scriptRunnerService.insertSanJoseMapLayers(req);
   }
+
+  @Put('hideProgramsFromListings')
+  @ApiOperation({
+    summary:
+      'A script that hides program multiselect questions from the public detail page',
+    operationId: 'hideProgramsFromListings',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async hideProgramsFromListings(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.hideProgramsFromListings(req);
+  }
 }

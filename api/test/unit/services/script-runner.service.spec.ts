@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   LanguagesEnum,
+  MultiselectQuestionsApplicationSectionEnum,
   PrismaClient,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
@@ -740,6 +741,53 @@ describe('Testing script runner service', () => {
       where: {
         reviewOrderType: ReviewOrderTypeEnum.lottery,
         lotteryOptIn: null,
+      },
+    });
+  });
+
+  it('should hide programs from listing detail page', async () => {
+    const id = randomUUID();
+    const scriptName = 'hideProgramsFromListings';
+
+    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+    prisma.multiselectQuestions.updateMany = jest.fn().mockResolvedValue(null);
+
+    const res = await service.hideProgramsFromListings({
+      user: {
+        id,
+      } as unknown as User,
+    } as unknown as ExpressRequest);
+
+    expect(res.success).toBe(true);
+
+    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
+      where: {
+        scriptName,
+      },
+    });
+    expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
+      data: {
+        scriptName,
+        triggeringUser: id,
+      },
+    });
+    expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
+      data: {
+        didScriptRun: true,
+        triggeringUser: id,
+      },
+      where: {
+        scriptName,
+      },
+    });
+    expect(prisma.multiselectQuestions.updateMany).toHaveBeenCalledWith({
+      data: {
+        hideFromListing: true,
+      },
+      where: {
+        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
       },
     });
   });
