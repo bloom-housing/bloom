@@ -25,6 +25,8 @@ describe('Auth Controller Tests', () => {
   let smsService: SmsService;
 
   beforeAll(async () => {
+    process.env.TWILIO_ACCOUNT_SID = 'AC.SID';
+    process.env.TWILIO_AUTH_TOKEN = 'TOKEN';
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
