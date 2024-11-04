@@ -64,6 +64,10 @@ The [Postgres explorer plugin](https://marketplace.visualstudio.com/items?itemNa
 
 The [Code Spell Checker plugin](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker) will flag spelling errors.
 
+The [CSS variable autocomplete plugin](https://marketplace.visualstudio.com/items?itemName=vunguyentuan.vscode-css-variables&ssr=false#overview) will pull in all CSS variable definitions from ui-seeds for autocompletion (more setup instructions in the [public README](https://github.com/bloom-housing/bloom/blob/main/sites/public/README.md)).
+
+The [CSS module autocomplete plugin](https://marketplace.visualstudio.com/items?itemName=clinyong.vscode-css-modules) which provides autocomplete for CSS module files.
+
 ### Running a local test server
 
 Running `yarn dev:all` from root runs 3 processes for both apps and the backend services on 3 different ports:
