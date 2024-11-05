@@ -75,7 +75,7 @@ describe('Testing jwt strategy', () => {
       async () =>
         await strategy.validate(request as unknown as Request, { sub: id }),
     ).rejects.toThrowError(
-      `user ${id} attempted to log in, but password is outdated`,
+      `user ${id} attempted to log in, but password is no longer valid`,
     );
 
     expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
