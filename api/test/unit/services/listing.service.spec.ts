@@ -3521,4 +3521,27 @@ describe('Testing listing service', () => {
       expect(prisma.assets.deleteMany).not.toHaveBeenCalled();
     });
   });
+
+  describe('Test mapMarkers endpoint', () => {
+    it('should find all active listings', async () => {
+      prisma.listings.findMany = jest.fn().mockResolvedValue([
+        {
+          id: 'random id',
+          listingsBuildingAddress: exampleAddress,
+        },
+      ]);
+
+      await service.mapMarkers();
+
+      expect(prisma.listings.findMany).toHaveBeenCalledWith({
+        select: {
+          id: true,
+          listingsBuildingAddress: true,
+        },
+        where: {
+          status: ListingsStatusEnum.active,
+        },
+      });
+    });
+  });
 });

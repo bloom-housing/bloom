@@ -29,6 +29,7 @@ import { AmiChart } from '../dtos/ami-charts/ami-chart.dto';
 import { Listing } from '../dtos/listings/listing.dto';
 import { ListingCreate } from '../dtos/listings/listing-create.dto';
 import { ListingDuplicate } from '../dtos/listings/listing-duplicate.dto';
+import { ListingMapMarker } from '../dtos/listings/listing-map-marker.dto';
 import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
 import { ListingUpdate } from '../dtos/listings/listing-update.dto';
@@ -2007,5 +2008,27 @@ export class ListingService implements OnModuleInit {
     }
 
     return listing.jurisdictionId;
+  }
+
+  async mapMarkers(): Promise<ListingMapMarker[]> {
+    const listingsRaw = await this.prisma.listings.findMany({
+      select: {
+        id: true,
+        listingsBuildingAddress: true,
+      },
+      where: {
+        status: ListingsStatusEnum.active,
+      },
+    });
+
+    const listings = mapTo(Listing, listingsRaw);
+
+    return listings.map((listing) => {
+      return {
+        id: listing.id,
+        lat: listing.listingsBuildingAddress.latitude,
+        lng: listing.listingsBuildingAddress.longitude,
+      } as ListingMapMarker;
+    });
   }
 }

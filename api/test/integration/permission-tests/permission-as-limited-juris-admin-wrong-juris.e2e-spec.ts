@@ -1156,6 +1156,12 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
 
       expect(activityLogResult).not.toBeNull();
     });
+
+    it('should succeed for mapMarkers endpoint', async () => {
+      await request(app.getHttpServer())
+        .get(`/listings/mapMarkers`)
+        .expect(200);
+    });
   });
 
   describe('Testing application flagged set endpoints', () => {

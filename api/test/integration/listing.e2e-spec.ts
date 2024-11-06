@@ -670,11 +670,7 @@ describe('Listing Controller Tests', () => {
 
   describe('duplicate endpoint', () => {
     it('should duplicate listing, include units', async () => {
-      const jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
-      });
-      await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
-      const listingData = await listingFactory(jurisdictionA.id, prisma, {
+      const listingData = await listingFactory(jurisdictionAId, prisma, {
         numberOfUnits: 2,
       });
       const listing = await prisma.listings.create({
@@ -1027,6 +1023,32 @@ describe('Listing Controller Tests', () => {
         expect.arrayContaining([partnerUser.email]),
         process.env.PARTNERS_PORTAL_URL,
       );
+    });
+  });
+
+  describe('mapMarkers endpoint', () => {
+    it('should find all active listings', async () => {
+      const listingData = await listingFactory(jurisdictionAId, prisma);
+      const listing = await prisma.listings.create({
+        data: listingData,
+      });
+
+      const closedListingData = await listingFactory(jurisdictionAId, prisma, {
+        status: ListingsStatusEnum.closed,
+      });
+      const closedListing = await prisma.listings.create({
+        data: closedListingData,
+      });
+
+      const res = await request(app.getHttpServer())
+        .get('/listings/mapMarkers')
+        .expect(200);
+
+      expect(res.body.length).toBeGreaterThanOrEqual(1);
+
+      const ids = res.body.map((marker) => marker.id);
+      expect(ids).toContain(listing.id);
+      expect(ids).not.toContain(closedListing.id);
     });
   });
 });
