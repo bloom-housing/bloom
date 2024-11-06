@@ -35,6 +35,7 @@ import { ListingCreate } from '../dtos/listings/listing-create.dto';
 import { ListingDuplicate } from '../dtos/listings/listing-duplicate.dto';
 import { ListingCsvQueryParams } from '../dtos/listings/listing-csv-query-params.dto';
 import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
+import { ListingMapMarker } from '../dtos/listings/listing-map-marker.dto';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
 import { ListingsRetrieveParams } from '../dtos/listings/listings-retrieve-params.dto';
 import { ListingUpdate } from '../dtos/listings/listing-update.dto';
@@ -104,6 +105,16 @@ export class ListingController {
     return await this.listingCsvExportService.exportFile(req, res, queryParams);
   }
 
+  @Get('mapMarkers')
+  @ApiOperation({
+    summary: 'Get listing map markers',
+    operationId: 'mapMarkers',
+  })
+  @ApiOkResponse({ type: ListingMapMarker, isArray: true })
+  async mapMarkers() {
+    return await this.listingService.mapMarkers();
+  }
+
   @Get(`external/:id`)
   @ApiOperation({
     summary: 'Get listing for external consumption by id',
@@ -118,23 +129,6 @@ export class ListingController {
     @Query() queryParams: ListingsRetrieveParams,
   ) {
     return await this.listingService.findOneAndExternalize(
-      listingId,
-      language,
-      queryParams.view,
-    );
-  }
-
-  @Get(`:id`)
-  @ApiOperation({ summary: 'Get listing by id', operationId: 'retrieve' })
-  @UseInterceptors(ClassSerializerInterceptor)
-  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
-  @ApiOkResponse({ type: Listing })
-  async retrieve(
-    @Headers('language') language: LanguagesEnum,
-    @Param('id', new ParseUUIDPipe({ version: '4' })) listingId: string,
-    @Query() queryParams: ListingsRetrieveParams,
-  ) {
-    return await this.listingService.findOne(
       listingId,
       language,
       queryParams.view,
@@ -218,6 +212,24 @@ export class ListingController {
   ) {
     return await this.listingService.findListingsWithMultiSelectQuestion(
       multiselectQuestionId,
+    );
+  }
+
+  // NestJS best practice to have get(':id') at the bottom of the file
+  @Get(`:id`)
+  @ApiOperation({ summary: 'Get listing by id', operationId: 'retrieve' })
+  @UseInterceptors(ClassSerializerInterceptor)
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  @ApiOkResponse({ type: Listing })
+  async retrieve(
+    @Headers('language') language: LanguagesEnum,
+    @Param('id', new ParseUUIDPipe({ version: '4' })) listingId: string,
+    @Query() queryParams: ListingsRetrieveParams,
+  ) {
+    return await this.listingService.findOne(
+      listingId,
+      language,
+      queryParams.view,
     );
   }
 }
