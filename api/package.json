@@ -60,7 +60,7 @@
     "@types/multer": "^1.4.7",
     "archiver": "^6.0.1",
     "aws-sdk": "2.1157.0",
-    "casbin": "^5.27.1",
+    "casbin": "5.27.1",
     "class-transformer": "~0.5.1",
     "class-validator": "~0.14.0",
     "cloudinary": "^1.37.3",
