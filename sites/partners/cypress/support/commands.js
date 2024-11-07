@@ -393,7 +393,8 @@ Cypress.Commands.add("verifyTerms", (application) => {
 })
 
 Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, jurisdiction) => {
-  // Create and publish minimal lottery listing
+  // Create and publish minimal FCFS or Lottery listing
+  // TODO: test Open Waitlist, though maybe with integration test instead
   cy.getByID("addListingButton").contains("Add Listing").click()
   cy.contains("New Listing")
   cy.fixture("minimalListing").then((listing) => {

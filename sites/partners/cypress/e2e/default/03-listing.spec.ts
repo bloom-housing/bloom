@@ -82,6 +82,7 @@ describe("Listing Management Tests", () => {
     })
   })
 
+  // Fill out a First Come, First Serve (FCFS) listing
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function fillOutListing(cy: Cypress.cy, listing: any): void {
     cy.getByID("jurisdictions.id").select(listing["jurisdiction.id"])
