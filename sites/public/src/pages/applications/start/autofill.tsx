@@ -73,7 +73,7 @@ export default () => {
             userId: profile.id,
           })
           .then((res) => {
-            if (res) {
+            if (res && res.applicant) {
               setPreviousApplication(new AutofillCleaner(res).clean())
             } else {
               onSubmit()
