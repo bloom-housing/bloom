@@ -45,15 +45,6 @@ export const JurisdictionFooterSection = () => {
             {t("footer.SFHousingPortal")}
           </a>
           |
-          <a
-            className="px-2"
-            href="https://smc.housingbayarea.org/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {t("footer.SMPortal")}
-          </a>
-          |
           <a className="px-2" href="https://housing.acgov.org/" target="_blank" rel="noreferrer">
             {t("footer.ACPortal")}
           </a>

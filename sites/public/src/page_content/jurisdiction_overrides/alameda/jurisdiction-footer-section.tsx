@@ -30,10 +30,6 @@ export const JurisdictionFooterSection = () => {
             {t("footer.SFHousingPortal")}
           </a>
           |
-          <a className="px-2" href={t("footer.SMCHousingUrl")} target="_blank" rel="noreferrer">
-            {t("footer.SMCHousingPortal")}
-          </a>
-          |
           <a className="px-2" href={t("footer.SJHousingUrl")} target="_blank" rel="noreferrer">
             {t("footer.SJHousingPortal")}
           </a>
