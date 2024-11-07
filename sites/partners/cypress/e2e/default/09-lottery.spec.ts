@@ -46,7 +46,7 @@ describe("Lottery Tests", () => {
       .should("be.visible")
       .type("partner-user@example.com", { force: true })
     cy.getByID("user-link-partner@example.com").first().click()
-    cy.getByTestId("listings-all-Alameda").check()
+    cy.getByTestId("listings-all-Alameda").check({ force: true })
     cy.getByID("save-user").click()
 
     // Login as partner and view lottery tab

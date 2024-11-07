@@ -19,6 +19,17 @@ import { AmiChartCreate } from '../dtos/ami-charts/ami-chart-create.dto';
 import { AmiChartService } from './ami-chart.service';
 import { AmiChartUpdate } from '../dtos/ami-charts/ami-chart-update.dto';
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
+import sanJoseRedlined from '../data/SanJoseRedlined.json';
+import district1 from '../data/SanJoseDistrict1.json';
+import district2 from '../data/SanJoseDistrict2.json';
+import district3 from '../data/SanJoseDistrict3.json';
+import district4 from '../data/SanJoseDistrict4.json';
+import district5 from '../data/SanJoseDistrict5.json';
+import district6 from '../data/SanJoseDistrict6.json';
+import district7 from '../data/SanJoseDistrict7.json';
+import district8 from '../data/SanJoseDistrict8.json';
+import district9 from '../data/SanJoseDistrict9.json';
+import district10 from '../data/SanJoseDistrict10.json';
 
 /**
   this is the service for running scripts
@@ -628,6 +639,56 @@ export class ScriptRunnerService {
       'Correct application preference data for Sparks Homes',
       requestingUser,
     );
+    return { success: true };
+  }
+  /**
+   *
+   * @param req incoming request object
+   * @returns successDTO
+   * @description Adds 11 new map layers for San Jose
+   */
+  async insertSanJoseMapLayers(req: ExpressRequest): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart('san jose map layers', requestingUser);
+
+    const sjId = await this.prisma.jurisdictions.findFirst({
+      select: {
+        id: true,
+      },
+      where: { name: 'San Jose' },
+    });
+
+    await this.prisma.mapLayers.create({
+      data: {
+        name: 'San Jose Redlined',
+        jurisdictionId: sjId.id,
+        featureCollection: sanJoseRedlined,
+      },
+    });
+
+    const councilDistrictMaps = [
+      district1,
+      district2,
+      district3,
+      district4,
+      district5,
+      district6,
+      district7,
+      district8,
+      district9,
+      district10,
+    ];
+    councilDistrictMaps.forEach(async (disctict, index) => {
+      await this.prisma.mapLayers.create({
+        data: {
+          name: `San Jose District ${index + 1}`,
+          jurisdictionId: sjId.id,
+          featureCollection: disctict,
+        },
+      });
+    });
+
+    await this.markScriptAsComplete('san jose map layers', requestingUser);
     return { success: true };
   }
 

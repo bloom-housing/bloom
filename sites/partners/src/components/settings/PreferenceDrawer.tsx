@@ -731,10 +731,12 @@ const PreferenceDrawer = ({
                             mapLayers
                               ? [
                                   { label: "", value: "" },
-                                  ...mapLayers.map((layer) => ({
-                                    label: layer.name,
-                                    value: layer.id,
-                                  })),
+                                  ...mapLayers
+                                    .sort((a, b) => a.name.localeCompare(b.name))
+                                    .map((layer) => ({
+                                      label: layer.name,
+                                      value: layer.id,
+                                    })),
                                 ]
                               : [{ label: "", value: "" }]
                           }

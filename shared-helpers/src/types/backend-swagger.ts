@@ -2311,7 +2311,6 @@ export class ScriptRunnerService {
       axios(configs, resolve, reject)
     })
   }
-
   /**
    * A script that updates the preference keys for applications on Spark Homes
    */
@@ -2320,6 +2319,22 @@ export class ScriptRunnerService {
   ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/scriptRunner/correctApplicationPreferenceDataForSparksHomes"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * A script that adds map layers for San Jose
+   */
+  insertSanJoseMapLayers(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/insertSanJoseMapLayers"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
@@ -5938,7 +5953,6 @@ export interface AmiChartImportDTO {
   /**  */
   jurisdictionId: string
 }
-
 
 export interface AmiChartUpdateImportDTO {
   /**  */

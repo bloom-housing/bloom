@@ -841,4 +841,32 @@ describe('Testing script runner service', () => {
       },
     });
   });
+
+  describe('insertSanJoseMapLayers', () => {
+    it('should insert all san jose maps', async () => {
+      const id = randomUUID();
+      const jurisdictionId = randomUUID();
+      prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+      prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: jurisdictionId });
+      prisma.mapLayers.create = jest.fn();
+      await service.insertSanJoseMapLayers({
+        user: {
+          id,
+        } as unknown as User,
+      } as unknown as ExpressRequest);
+
+      expect(prisma.mapLayers.create).toHaveBeenCalledTimes(11);
+      expect(prisma.mapLayers.create).toHaveBeenCalledWith({
+        data: {
+          name: 'San Jose Redlined',
+          jurisdictionId: jurisdictionId,
+          featureCollection: expect.anything(),
+        },
+      });
+    });
+  });
 });
