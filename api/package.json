@@ -49,7 +49,7 @@
     "@nestjs/passport": "~10.0.1",
     "@nestjs/platform-express": "^10.3.2",
     "@nestjs/schedule": "^4.0.1",
-    "@nestjs/swagger": "~7.1.12",
+    "@nestjs/swagger": "^7.4.2",
     "@nestjs/throttler": "^5.1.2",
     "@prisma/client": "^5.0.0",
     "@turf/boolean-point-in-polygon": "6.5.0",

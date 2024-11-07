@@ -42,39 +42,81 @@ export const stagingSeed = async (
   prismaClient: PrismaClient,
   jurisdictionName: string,
 ) => {
+  //doorway-specific permissions
+  const listingApprovalPermissions = [UserRoleEnum.admin];
+  const duplicateListingPermissions = [
+    UserRoleEnum.admin,
+    UserRoleEnum.jurisdictionAdmin,
+    UserRoleEnum.limitedJurisdictionAdmin,
+    UserRoleEnum.partner,
+  ];
   // create main jurisdiction
   const jurisdiction = await prismaClient.jurisdictions.create({
     data: {
-      ...jurisdictionFactory(jurisdictionName || 'Bay Area', [
-        UserRoleEnum.admin,
-      ]),
+      ...jurisdictionFactory(
+        jurisdictionName || 'Bay Area',
+        listingApprovalPermissions,
+        duplicateListingPermissions,
+      ),
       allowSingleUseCodeLogin: true,
     },
   });
   // add another jurisdiction
   const additionalJurisdiction = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory('Contra Costa', [UserRoleEnum.admin]),
+    data: jurisdictionFactory(
+      'Contra Costa',
+      listingApprovalPermissions,
+      duplicateListingPermissions,
+    ),
   });
   const marinCounty = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory('Marin', [UserRoleEnum.admin]),
+    data: jurisdictionFactory(
+      'Marin',
+      listingApprovalPermissions,
+      duplicateListingPermissions,
+    ),
   });
   const napaCounty = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory('Napa', [UserRoleEnum.admin]),
+    data: jurisdictionFactory(
+      'Napa',
+      listingApprovalPermissions,
+      duplicateListingPermissions,
+    ),
   });
   const sanMateoCounty = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory('San Mateo', [UserRoleEnum.admin]),
+    data: jurisdictionFactory(
+      'San Mateo',
+      listingApprovalPermissions,
+      duplicateListingPermissions,
+    ),
   });
   const santaClaraCounty = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory('Santa Clara', [UserRoleEnum.admin]),
+    data: jurisdictionFactory(
+      'Santa Clara',
+      listingApprovalPermissions,
+      duplicateListingPermissions,
+    ),
   });
   const solanaCounty = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory('Solano', [UserRoleEnum.admin]),
+    data: jurisdictionFactory(
+      'Solano',
+      listingApprovalPermissions,
+      duplicateListingPermissions,
+    ),
   });
   const sonomaCounty = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory('Sonoma', [UserRoleEnum.admin]),
+    data: jurisdictionFactory(
+      'Sonoma',
+      listingApprovalPermissions,
+      duplicateListingPermissions,
+    ),
   });
   const sanFranciscoCounty = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory('San Francisco', [UserRoleEnum.admin]),
+    data: jurisdictionFactory(
+      'San Francisco',
+      listingApprovalPermissions,
+      duplicateListingPermissions,
+    ),
   });
   // create admin user
   await prismaClient.userAccounts.create({
