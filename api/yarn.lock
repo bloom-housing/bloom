@@ -4704,7 +4704,7 @@ caniuse-lite@^1.0.30001580:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001585.tgz#0b4e848d84919c783b2a41c13f7de8ce96744401"
   integrity sha512-yr2BWR1yLXQ8fMpdS/4ZZXpseBgE7o4g41x3a6AJOqZuOi+iE/WdJYAuZ6Y95i4Ohd2Y+9MzIWRR+uGABH4s3Q==
 
-casbin@^5.27.1:
+casbin@5.27.1:
   version "5.27.1"
   resolved "https://registry.yarnpkg.com/casbin/-/casbin-5.27.1.tgz#ebebae1e0c555301c7e1ee83204863e9db0d3b1c"
   integrity sha512-nAbUyMfeVasZDZ39/OX+Y8AzpiAGvhYI58l/3BKuDZSnqC+Rpja/DmcHPt0wcUgJxfMkG/yo0dCmMhnSXZq49A==
