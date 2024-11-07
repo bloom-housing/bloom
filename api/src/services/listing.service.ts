@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   HttpException,
   Inject,
   Injectable,
@@ -29,6 +30,7 @@ import { AmiChart } from '../dtos/ami-charts/ami-chart.dto';
 import { Listing } from '../dtos/listings/listing.dto';
 import { ListingCreate } from '../dtos/listings/listing-create.dto';
 import { ListingDuplicate } from '../dtos/listings/listing-duplicate.dto';
+import { ListingMapMarker } from '../dtos/listings/listing-map-marker.dto';
 import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
 import { ListingUpdate } from '../dtos/listings/listing-update.dto';
@@ -935,15 +937,30 @@ export class ListingService implements OnModuleInit {
       throw new BadRequestException('New listing name must be unique');
     }
 
+    const duplicateListingPermissions = (
+      requestingUser?.jurisdictions?.length === 1
+        ? requestingUser?.jurisdictions[0]
+        : requestingUser?.jurisdictions?.find(
+            (juris) => juris.id === storedListing?.jurisdictions?.id,
+          )
+    )?.duplicateListingPermissions;
+
     const userRoles =
-      process.env.ALLOW_PARTNERS_TO_DUPLICATE_LISTINGS === 'TRUE' &&
-      (requestingUser?.userRoles?.isJurisdictionalAdmin ||
-        requestingUser?.userRoles?.isPartner)
+      requestingUser?.userRoles?.isAdmin ||
+      (requestingUser?.userRoles?.isJurisdictionalAdmin &&
+        duplicateListingPermissions?.includes(
+          UserRoleEnum.jurisdictionAdmin,
+        )) ||
+      (requestingUser?.userRoles?.isPartner &&
+        duplicateListingPermissions?.includes(UserRoleEnum.partner))
         ? {
             ...requestingUser.userRoles,
             isAdmin: true,
           }
-        : requestingUser?.userRoles;
+        : {
+            ...requestingUser?.userRoles,
+            isAdmin: false,
+          };
 
     await this.permissionService.canOrThrow(
       { ...requestingUser, userRoles: userRoles },
@@ -953,6 +970,20 @@ export class ListingService implements OnModuleInit {
         jurisdictionId: storedListing.jurisdictions.id,
       },
     );
+
+    //manually check for juris/listing mismatch since logic above is forcing admin permissioning
+    if (
+      (requestingUser?.userRoles?.isJurisdictionalAdmin &&
+        !requestingUser?.jurisdictions?.some(
+          (juris) => juris.id === storedListing.jurisdictionId,
+        )) ||
+      (requestingUser?.userRoles?.isPartner &&
+        !requestingUser?.listings?.some(
+          (listing) => listing.id === storedListing.id,
+        ))
+    ) {
+      throw new ForbiddenException();
+    }
 
     const mappedListing = mapTo(ListingCreate, storedListing);
 
@@ -975,6 +1006,7 @@ export class ListingService implements OnModuleInit {
     const newListingData: ListingCreate = {
       ...mappedListing,
       name: dto.name,
+      assets: [],
       status: ListingsStatusEnum.pending,
       listingEvents: listingEvents,
       listingMultiselectQuestions:
@@ -998,8 +1030,8 @@ export class ListingService implements OnModuleInit {
     );
 
     if (
-      process.env.ALLOW_PARTNERS_TO_DUPLICATE_LISTINGS === 'TRUE' &&
-      requestingUser.userRoles?.isPartner
+      requestingUser?.userRoles?.isPartner &&
+      duplicateListingPermissions?.includes(UserRoleEnum.partner)
     ) {
       await this.prisma.userAccounts.update({
         data: {
@@ -1808,5 +1840,27 @@ export class ListingService implements OnModuleInit {
     }
 
     return listing.jurisdictionId;
+  }
+
+  async mapMarkers(): Promise<ListingMapMarker[]> {
+    const listingsRaw = await this.prisma.listings.findMany({
+      select: {
+        id: true,
+        listingsBuildingAddress: true,
+      },
+      where: {
+        status: ListingsStatusEnum.active,
+      },
+    });
+
+    const listings = mapTo(Listing, listingsRaw);
+
+    return listings.map((listing) => {
+      return {
+        id: listing.id,
+        lat: listing.listingsBuildingAddress.latitude,
+        lng: listing.listingsBuildingAddress.longitude,
+      } as ListingMapMarker;
+    });
   }
 }

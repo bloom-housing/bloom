@@ -111,6 +111,7 @@ export const buildJurisdictionCreateMock = (
     enableUtilitiesIncluded: true,
     allowSingleUseCodeLogin: true,
     listingApprovalPermissions: [],
+    duplicateListingPermissions: [],
   };
 };
 
@@ -132,6 +133,7 @@ export const buildJurisdictionUpdateMock = (
     enableUtilitiesIncluded: true,
     allowSingleUseCodeLogin: true,
     listingApprovalPermissions: [],
+    duplicateListingPermissions: [],
   };
 };
 

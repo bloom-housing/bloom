@@ -257,6 +257,20 @@ export class ListingsService {
     })
   }
   /**
+   * Get listing map markers
+   */
+  mapMarkers(options: IRequestOptions = {}): Promise<ListingMapMarker[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/mapMarkers"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Get listing for external consumption by id
    */
   externalRetrieve(
@@ -276,55 +290,6 @@ export class ListingsService {
       configs.params = { view: params["view"] }
 
       /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get listing by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      id: string
-      /**  */
-      view?: ListingViews
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Listing> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/listings/{id}"
-      url = url.replace("{id}", params["id"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { view: params["view"] }
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update listing by id
-   */
-  update(
-    params: {
-      /**  */
-      id: string
-      /** requestBody */
-      body?: ListingUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Listing> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/listings/{id}"
-      url = url.replace("{id}", params["id"] + "")
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -363,6 +328,55 @@ export class ListingsService {
       let data = null
 
       configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update listing by id
+   */
+  update(
+    params: {
+      /**  */
+      id: string
+      /** requestBody */
+      body?: ListingUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Listing> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get listing by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      id: string
+      /**  */
+      view?: ListingViews
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Listing> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { view: params["view"] }
+
+      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -2190,6 +2204,28 @@ export class ScriptRunnerService {
     })
   }
   /**
+   * A script that takes in a standardized string and outputs the input for the ami chart update endpoint
+   */
+  amiChartUpdateImport(
+    params: {
+      /** requestBody */
+      body?: AmiChartUpdateImportDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/amiChartUpdateImport"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * A script that adds lottery translations to the db
    */
   lotteryTranslations(options: IRequestOptions = {}): Promise<SuccessDTO> {
@@ -2265,6 +2301,22 @@ export class ScriptRunnerService {
   updateCodeExpirationTranslations(options: IRequestOptions = {}): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/scriptRunner/updateCodeExpirationTranslations"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * A script that hides program multiselect questions from the public detail page
+   */
+  hideProgramsFromListings(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/hideProgramsFromListings"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
@@ -3466,6 +3518,17 @@ export interface PaginatedListing {
 
   /**  */
   meta: PaginationMeta
+}
+
+export interface ListingMapMarker {
+  /**  */
+  id: string
+
+  /**  */
+  lat: number
+
+  /**  */
+  lng: number
 }
 
 export interface UnitAmiChartOverrideCreate {
@@ -4814,7 +4877,10 @@ export interface JurisdictionCreate {
   allowSingleUseCodeLogin: boolean
 
   /**  */
-  listingApprovalPermissions: EnumJurisdictionCreateListingApprovalPermissions[]
+  listingApprovalPermissions: UserRoleEnum[]
+
+  /**  */
+  duplicateListingPermissions: UserRoleEnum[]
 }
 
 export interface JurisdictionUpdate {
@@ -4864,7 +4930,10 @@ export interface JurisdictionUpdate {
   allowSingleUseCodeLogin: boolean
 
   /**  */
-  listingApprovalPermissions: EnumJurisdictionUpdateListingApprovalPermissions[]
+  listingApprovalPermissions: UserRoleEnum[]
+
+  /**  */
+  duplicateListingPermissions: UserRoleEnum[]
 }
 
 export interface Jurisdiction {
@@ -4923,7 +4992,10 @@ export interface Jurisdiction {
   allowSingleUseCodeLogin: boolean
 
   /**  */
-  listingApprovalPermissions: EnumJurisdictionListingApprovalPermissions[]
+  listingApprovalPermissions: UserRoleEnum[]
+
+  /**  */
+  duplicateListingPermissions: UserRoleEnum[]
 }
 
 export interface MultiselectQuestionCreate {
@@ -5876,6 +5948,14 @@ export interface AmiChartImportDTO {
   jurisdictionId: string
 }
 
+export interface AmiChartUpdateImportDTO {
+  /**  */
+  values: string
+
+  /**  */
+  amiId: string
+}
+
 export interface CommunityTypeDTO {
   /**  */
   id: string
@@ -6115,19 +6195,7 @@ export enum HouseholdMemberRelationship {
   "other" = "other",
 }
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput
-export enum EnumJurisdictionCreateListingApprovalPermissions {
-  "user" = "user",
-  "partner" = "partner",
-  "admin" = "admin",
-  "jurisdictionAdmin" = "jurisdictionAdmin",
-}
-export enum EnumJurisdictionUpdateListingApprovalPermissions {
-  "user" = "user",
-  "partner" = "partner",
-  "admin" = "admin",
-  "jurisdictionAdmin" = "jurisdictionAdmin",
-}
-export enum EnumJurisdictionListingApprovalPermissions {
+export enum UserRoleEnum {
   "user" = "user",
   "partner" = "partner",
   "admin" = "admin",

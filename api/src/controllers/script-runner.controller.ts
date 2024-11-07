@@ -17,6 +17,7 @@ import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction
 import { DataTransferDTO } from '../dtos/script-runner/data-transfer.dto';
 import { BulkApplicationResendDTO } from '../dtos/script-runner/bulk-application-resend.dto';
 import { AmiChartImportDTO } from '../dtos/script-runner/ami-chart-import.dto';
+import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
 import { CommunityTypeDTO } from '../dtos/script-runner/community-type.dto';
 import { ApiKeyGuard } from '../guards/api-key.guard';
 
@@ -84,6 +85,23 @@ export class ScirptRunnerController {
     );
   }
 
+  @Put('amiChartUpdateImport')
+  @ApiOperation({
+    summary:
+      'A script that takes in a standardized string and outputs the input for the ami chart update endpoint',
+    operationId: 'amiChartUpdateImport',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async amiChartUpdateImport(
+    @Body() amiChartUpdateImportDTO: AmiChartUpdateImportDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.amiChartUpdateImport(
+      req,
+      amiChartUpdateImportDTO,
+    );
+  }
+
   @Put('lotteryTranslations')
   @ApiOperation({
     summary: 'A script that adds lottery translations to the db',
@@ -140,6 +158,7 @@ export class ScirptRunnerController {
       body.description,
     );
   }
+
   @Put('updateCodeExpirationTranslations')
   @ApiOperation({
     summary:
@@ -151,5 +170,18 @@ export class ScirptRunnerController {
     @Request() req: ExpressRequest,
   ): Promise<SuccessDTO> {
     return await this.scriptRunnerService.updateCodeExpirationTranslations(req);
+  }
+
+  @Put('hideProgramsFromListings')
+  @ApiOperation({
+    summary:
+      'A script that hides program multiselect questions from the public detail page',
+    operationId: 'hideProgramsFromListings',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async hideProgramsFromListings(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.hideProgramsFromListings(req);
   }
 }
