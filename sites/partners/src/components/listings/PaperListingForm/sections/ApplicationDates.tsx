@@ -96,6 +96,8 @@ const ApplicationDates = ({
     setModalDeleteOpenHouse(null)
   }
 
+  const hasDueDateError = errors?.applicationDueDate || errors?.applicationDueDateField
+
   return (
     <>
       <hr className="spacer-section-above spacer-section" />
@@ -112,7 +114,13 @@ const ApplicationDates = ({
               register={register}
               setValue={setValue}
               watch={watch}
-              error={errors?.applicationDueDateField}
+              error={
+                hasDueDateError && {
+                  month: hasDueDateError,
+                  day: hasDueDateError,
+                  year: hasDueDateError,
+                }
+              }
               note={t("listings.whenApplicationsClose")}
               defaultDate={{
                 month: listing?.applicationDueDate
@@ -135,7 +143,7 @@ const ApplicationDates = ({
               register={register}
               setValue={setValue}
               watch={watch}
-              error={errors?.applicationDueTimeField}
+              error={errors?.applicationDueDate || errors?.applicationDueTimeField}
               defaultValues={{
                 hours: listing?.applicationDueDate
                   ? dayjs(new Date(listing?.applicationDueDate)).format("hh")
