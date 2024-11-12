@@ -38,6 +38,8 @@ phases:
         --build-arg "API_PASS_KEY=${API_PASS_KEY}"
         --build-arg "SHOW_LOTTERY=${SHOW_LOTTERY}"
         --build-arg "LOTTERY_DAYS_TILL_EXPIRY=${LOTTERY_DAYS_TILL_EXPIRY}"
+        --build-arg "LIMIT_CLOSED_LISTING_ACTIONS=${LIMIT_CLOSED_LISTING_ACTIONS}"
+
         -t sites/partners:test
 
       # Run tests
@@ -60,6 +62,8 @@ phases:
         --build-arg "API_PASS_KEY=${API_PASS_KEY}"
         --build-arg "SHOW_LOTTERY=${SHOW_LOTTERY}"
         --build-arg "LOTTERY_DAYS_TILL_EXPIRY=${LOTTERY_DAYS_TILL_EXPIRY}"
+        --build-arg "LIMIT_CLOSED_LISTING_ACTIONS=${LIMIT_CLOSED_LISTING_ACTIONS}"
+
         -t sites/partners:run-candidate
 
       # Tag the run image
