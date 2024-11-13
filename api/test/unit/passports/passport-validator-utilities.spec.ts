@@ -35,7 +35,13 @@ describe('Testing checkUserLockout', () => {
       failedLoginAttemptsCount: 5,
     };
     expect(
-      checkUserLockout(val.lastLoginAt, val.failedLoginAttemptsCount, 5, 10),
+      async () =>
+        await checkUserLockout(
+          val.lastLoginAt,
+          val.failedLoginAttemptsCount,
+          5,
+          10,
+        ),
     ).rejects.toThrowError(`Failed login attempts exceeded.`);
   });
 });
