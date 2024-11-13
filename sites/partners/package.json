@@ -38,7 +38,7 @@
     "ag-grid-community": "^26.0.0",
     "ag-grid-react": "^26.0.0",
     "autoprefixer": "^10.3.4",
-    "axios": "^0.21.1",
+    "axios": "^0.28.0",
     "axios-cookiejar-support": "4.0.6",
     "dayjs": "^1.10.7",
     "dotenv": "^8.2.0",

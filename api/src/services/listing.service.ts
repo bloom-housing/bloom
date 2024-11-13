@@ -248,7 +248,7 @@ export class ListingService implements OnModuleInit {
       params.filter.forEach((filter) => {
         if (filter[ListingFilterKeys.counties]) {
           const countyArray = [];
-          // check to remove potential malicous strings such as sql injection by only allowing letters and spaces
+          // check to remove potential malicious strings such as sql injection by only allowing letters and spaces
           filter[ListingFilterKeys.counties].forEach((county) => {
             if (county.match(onlyLettersPattern)) {
               countyArray.push(`'${county}'`);
