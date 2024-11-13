@@ -17,7 +17,7 @@ import { defaultValidationPipeOptions } from '../utilities/default-validation-pi
 import { Login } from '../dtos/auth/login.dto';
 import { MfaType } from '../enums/mfa/mfa-type-enum';
 import {
-  checkFailedLoginCount,
+  checkUserLockout,
   singleUseCodePresent,
   singleUseCodeInvalid,
 } from '../utilities/passport-validator-utilities';
@@ -58,7 +58,7 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
       );
     }
     //check if user is locked out and update failed login attempts count
-    rawUser.failedLoginAttemptsCount = checkFailedLoginCount(
+    rawUser.failedLoginAttemptsCount = checkUserLockout(
       rawUser.lastLoginAt,
       rawUser.failedLoginAttemptsCount,
       Number(process.env.AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS),

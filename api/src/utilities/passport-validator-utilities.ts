@@ -8,7 +8,7 @@ import { HttpException, HttpStatus } from '@nestjs/common';
  *
  * @returns updated value of failed login attempts
  */
-export function checkFailedLoginCount(
+export function checkUserLockout(
   lastLoginAt: Date,
   failedLoginAttemptsCount: number,
   maxAttempts: number,

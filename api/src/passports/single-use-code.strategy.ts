@@ -14,7 +14,7 @@ import { defaultValidationPipeOptions } from '../utilities/default-validation-pi
 import { LoginViaSingleUseCode } from '../dtos/auth/login-single-use-code.dto';
 import { OrderByEnum } from '../enums/shared/order-by-enum';
 import {
-  checkFailedLoginCount,
+  checkUserLockout,
   singleUseCodePresent,
   singleUseCodeInvalid,
 } from '../utilities/passport-validator-utilities';
@@ -86,7 +86,7 @@ export class SingleUseCodeStrategy extends PassportStrategy(
       );
     }
 
-    rawUser.failedLoginAttemptsCount = checkFailedLoginCount(
+    rawUser.failedLoginAttemptsCount = checkUserLockout(
       rawUser.lastLoginAt,
       rawUser.failedLoginAttemptsCount,
       Number(process.env.AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS),
