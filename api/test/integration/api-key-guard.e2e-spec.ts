@@ -13,6 +13,7 @@ describe('API Key Guard Tests', () => {
   let cookies = '';
 
   beforeAll(async () => {
+    process.env.API_PASS_KEY = 'OUR_API_PASS_KEY';
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();

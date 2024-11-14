@@ -2,6 +2,16 @@ describe("Listings approval feature", () => {
   const uniqueListingName = Date.now().toString()
   const uniqueListingNameEdited = `${uniqueListingName} edited`
   it("should allow for pending submission, requested changes, and approval", () => {
+    cy.intercept("POST", "https://api.cloudinary.com/v1_1/exygy/upload", {
+      fixture: "cypressUpload",
+    })
+    cy.intercept(
+      "GET",
+      "https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg.jpg",
+      {
+        fixture: "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg",
+      }
+    )
     // Partner: Submit a listing for approval
     cy.login("jurisdictionalAdminUser")
     cy.visit("/")
