@@ -281,7 +281,7 @@
   "listings.lottery.reRunUnderstand": "I understand, re-run lottery",
   "listings.lottery.retract": "Retract lottery",
   "listings.lottery.retractContent": "Retracting the lottery will revoke Partner users’ access to the lottery data, including their ability to publish results to applicants.",
-  "listings.lottery.retractContentRemoval": "If a lottery has already been published, it will also remove any lottery results from applicant accounts and the listing status will be marked as 'Lottery retracted'.",
+  "listings.lottery.retractContentRemoval": "If a lottery has already been published, it will also remove any lottery results from applicant accounts and the listing status will revert to \"applications closed\"",
   "listings.lottery.runLottery": "Run lottery",
   "listings.lottery.runLotteryContent": "Make sure to add all paper applications before running the lottery.",
   "listings.lottery.runLotteryDuplicates": "Run lottery without resolving duplicates",
