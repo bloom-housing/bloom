@@ -31,6 +31,14 @@ import { PermissionService } from '../../../src/services/permission.service';
 import { Jurisdiction } from '../../../src/dtos/jurisdictions/jurisdiction.dto';
 
 describe('Testing auth service', () => {
+  process.env.APP_SECRET = 'SOME-LONG-SECRET-KEY';
+  process.env.EMAIL_API_KEY = 'SG.SOME-LONG-SECRET-KEY';
+  process.env.TWILIO_ACCOUNT_SID = 'AC';
+  process.env.TWILIO_AUTH_TOKEN = '842';
+  process.env.MFA_CODE_LENGTH = '5';
+  process.env.MFA_CODE_VALID = '60000';
+  process.env.TWILIO_PHONE_NUMBER = '5555555555';
+  process.env.GOOGLE_API_KEY = 'GOOGLE_API_KEY';
   let authService: AuthService;
   let smsService: SmsService;
   let prisma: PrismaService;
@@ -96,7 +104,7 @@ describe('Testing auth service', () => {
           sub: id,
           expiresIn: 86400000 / 24,
         },
-        process.env.APP_SECRET,
+        'SOME-LONG-SECRET-KEY',
       ),
     );
   });
@@ -128,7 +136,7 @@ describe('Testing auth service', () => {
           sub: id,
           expiresIn: 86400000,
         },
-        process.env.APP_SECRET,
+        'SOME-LONG-SECRET-KEY',
       ),
     );
   });
@@ -655,8 +663,8 @@ describe('Testing auth service', () => {
     });
     expect(sendMfaCodeMock).not.toHaveBeenCalled();
     expect(smsService.client.messages.create).toHaveBeenCalledWith({
-      body: expect.anything(),
-      from: expect.anything(),
+      body: 'Your Partners Portal account access token: 00000',
+      from: '5555555555',
       to: '520-781-8711',
     });
     expect(res).toEqual({
@@ -727,7 +735,7 @@ describe('Testing auth service', () => {
       {
         id,
       },
-      process.env.APP_SECRET,
+      'SOME-LONG-SECRET-KEY',
     );
     const response = {
       cookie: jest.fn(),
@@ -788,14 +796,14 @@ describe('Testing auth service', () => {
       {
         id,
       },
-      process.env.APP_SECRET,
+      'SOME-LONG-SECRET-KEY',
     );
     const secondId = randomUUID();
     const secondToken = sign(
       {
         id: secondId,
       },
-      process.env.APP_SECRET,
+      'SOME-LONG-SECRET-KEY',
     );
 
     const response = {
@@ -829,7 +837,7 @@ describe('Testing auth service', () => {
       {
         id,
       },
-      process.env.APP_SECRET,
+      'SOME-LONG-SECRET-KEY',
     );
     prisma.userAccounts.findUnique = jest
       .fn()
@@ -890,7 +898,7 @@ describe('Testing auth service', () => {
         id,
         email: 'example@exygy.com',
       },
-      process.env.APP_SECRET,
+      'SOME-LONG-SECRET-KEY',
     );
     prisma.userAccounts.findUnique = jest
       .fn()
