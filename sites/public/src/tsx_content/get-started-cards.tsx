@@ -80,7 +80,6 @@ export function getStartedLinkableCards(): React.ReactElement<CardProps>[] {
                 <ul className="text__medium-normal list-disc ml-5 mb-0">
                   <li>{t("help.getStarted.applyLotteryWaitlistResp3a")}</li>
                   <li>{t("help.getStarted.applyLotteryWaitlistResp3b")}</li>
-                  <li>{t("help.getStarted.applyLotteryWaitlistResp3c")}</li>
                   <li>{t("help.getStarted.applyLotteryWaitlistResp3d")}</li>
                 </ul>
               </li>
@@ -120,11 +119,6 @@ export function getStartedLinkableCards(): React.ReactElement<CardProps>[] {
               <li>
                 <a href="https://housing.sanjoseca.gov" target="_blank">
                   {t("help.getStarted.checkApplicationsResp3")}
-                </a>
-              </li>
-              <li>
-                <a href="https://smc.housingbayarea.org" target="_blank">
-                  {t("help.getStarted.checkApplicationsResp4")}
                 </a>
               </li>
             </ul>

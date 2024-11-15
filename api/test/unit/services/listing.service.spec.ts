@@ -1895,6 +1895,7 @@ describe('Testing listing service', () => {
         data: {
           ...val,
           contentUpdatedAt: expect.anything(),
+          publishedAt: expect.anything(),
           assets: {
             create: [exampleAsset],
           },

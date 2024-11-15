@@ -277,6 +277,18 @@ model Demographics {
   @@map("demographics")
 }
 
+model FeatureFlags {
+  id                String          @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt         DateTime        @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt         DateTime        @updatedAt @map("updated_at") @db.Timestamp(6)
+  name              String          @unique()
+  description       String
+  active            Boolean         @default(true)
+  jurisdictions     Jurisdictions[]
+
+  @@map("feature_flags")
+}
+
 model GeneratedListingTranslations {
   id             String        @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamp(6)
@@ -340,6 +352,7 @@ model Jurisdictions {
   enableGeocodingRadiusMethod Boolean                  @default(false) @map("enable_geocoding_radius_method")
   allowSingleUseCodeLogin     Boolean                  @default(false) @map("allow_single_use_code_login")
   amiChart                    AmiChart[]
+  featureFlags                FeatureFlags[]
   multiselectQuestions        MultiselectQuestions[]
   listings                    Listings[]
   reservedCommunityTypes      ReservedCommunityTypes[]
