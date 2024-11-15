@@ -147,11 +147,11 @@ describe("applications pages", () => {
     })
 
     it("should show other text fields when other options are checked", async () => {
-      const { getByText, queryByTestId, findAllByTestId } = render(<ApplicationDemographics />)
+      const { getByLabelText, findAllByTestId } = render(<ApplicationDemographics />)
 
-      expect(queryByTestId("asian-otherAsian")).not.toBeInTheDocument()
-      fireEvent.click(getByText("Asian"))
-      fireEvent.click(getByText("Other Asian"))
+      fireEvent.click(getByLabelText("Asian"))
+      expect(await findAllByTestId("asian-otherAsian")).toHaveLength(1)
+      fireEvent.click(getByLabelText("Other Asian"))
       expect(await findAllByTestId("asian-otherAsian")).toHaveLength(2)
 
       fireEvent.click(getByLabelText("Black"))
@@ -171,17 +171,22 @@ describe("applications pages", () => {
 
       fireEvent.click(getByLabelText("Middle Eastern, West African or North African"))
       expect(
-        queryByTestId("nativeHawaiianOtherPacificIslander-otherPacificIslander")
-      ).not.toBeInTheDocument()
-      fireEvent.click(getByText("Native Hawaiian / Other Pacific Islander"))
-      fireEvent.click(getByText("Other Pacific Islander"))
+        await findAllByTestId("middleEasternOrAfrican-otherMiddleEasternNorthAfrican")
+      ).toHaveLength(1)
+      fireEvent.click(getByLabelText("Other Middle Eastern or North African"))
       expect(
-        await findAllByTestId("nativeHawaiianOtherPacificIslander-otherPacificIslander")
+        await findAllByTestId("middleEasternOrAfrican-otherMiddleEasternNorthAfrican")
       ).toHaveLength(2)
 
-      expect(await findAllByTestId("otherMultiracial")).toHaveLength(1)
-      fireEvent.click(getByText("Other / Multiracial"))
-      expect(await findAllByTestId("otherMultiracial")).toHaveLength(2)
+      fireEvent.click(getByLabelText("Pacific Islander"))
+      expect(await findAllByTestId("pacificIslander-otherPacificIslander")).toHaveLength(1)
+      fireEvent.click(getByLabelText("Other Pacific Islander"))
+      expect(await findAllByTestId("pacificIslander-otherPacificIslander")).toHaveLength(2)
+
+      fireEvent.click(getByLabelText("White"))
+      expect(await findAllByTestId("white-otherWhite")).toHaveLength(1)
+      fireEvent.click(getByLabelText("Other White"))
+      expect(await findAllByTestId("white-otherWhite")).toHaveLength(2)
     })
   })
 })
