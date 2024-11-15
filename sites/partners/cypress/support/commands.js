@@ -446,7 +446,6 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
     cy.getByID("digitalApplicationChoiceYes").check()
     cy.getByID("commonDigitalApplicationChoiceYes").check()
     cy.getByID("paperApplicationNo").check()
-    cy.getByID("referralOpportunityNo").check()
     cy.getByID("applicationDueDateField.month").type(listing["date.month"])
     cy.getByID("applicationDueDateField.day").type(listing["date.day"])
     cy.getByID("applicationDueDateField.year").type((new Date().getFullYear() + 1).toString())
