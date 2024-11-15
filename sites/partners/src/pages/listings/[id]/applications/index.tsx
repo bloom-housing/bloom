@@ -289,7 +289,9 @@ const ApplicationsList = () => {
                   onClose={() => setIsTermsOpen(false)}
                   onSubmit={onSubmit}
                 >
-                  <p>{t("applications.export.dialogAlert", { date: formattedExpiryDate })}</p>
+                  {listingDto?.closedAt && (
+                    <p>{t("applications.export.dialogAlert", { date: formattedExpiryDate })}</p>
+                  )}
                   <p>{t("applications.export.dialogSubheader")}</p>
                   <h2 className={styles["terms-of-use-text"]}>
                     {t("applications.export.termsOfUse")}
