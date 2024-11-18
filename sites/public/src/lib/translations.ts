@@ -3,6 +3,7 @@ import spanishTranslations from "@bloom-housing/shared-helpers/src/locales/es.js
 import chineseTranslations from "@bloom-housing/shared-helpers/src/locales/zh.json"
 import vietnameseTranslations from "@bloom-housing/shared-helpers/src/locales/vi.json"
 import tagalogTranslations from "@bloom-housing/shared-helpers/src/locales/tl.json"
+import bengaliTranslations from "@bloom-housing/shared-helpers/src/locales/bn.json"
 
 import additionalGeneralTranslations from "../../page_content/locale_overrides/general.json"
 
@@ -12,6 +13,7 @@ export const translations = {
   zh: chineseTranslations,
   vi: vietnameseTranslations,
   tl: tagalogTranslations,
+  bn: bengaliTranslations,
 } as Record<string, any>
 
 export const overrideTranslations = { en: additionalGeneralTranslations } as Record<string, any>

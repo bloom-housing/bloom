@@ -975,6 +975,8 @@ enum LanguagesEnum {
   vi
   zh
   tl
+  bn
+  ar
 
   @@map("languages_enum")
 }
