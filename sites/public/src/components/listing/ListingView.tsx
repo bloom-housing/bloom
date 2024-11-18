@@ -24,7 +24,7 @@ import {
   StandardTable,
   ImageCard,
 } from "@bloom-housing/ui-components"
-import { Icon, Message } from "@bloom-housing/ui-seeds"
+import { Card, Heading as SeedsHeading, Icon, Message } from "@bloom-housing/ui-seeds"
 import {
   getOccupancyDescription,
   imageUrlFromListing,
@@ -40,7 +40,6 @@ import {
   AuthContext,
   CustomIconMap,
 } from "@bloom-housing/shared-helpers"
-import { Card, Heading as SeedsHeading } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
 import { ErrorPage } from "../../pages/_error"
 import { useGetApplicationStatusProps } from "../../lib/hooks"

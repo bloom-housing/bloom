@@ -123,20 +123,24 @@
   }
 
   .listing-multiselect-card {
-    --card-border-radius: var(--seeds-s1);
-    --card-content-padding-block: var(--seeds-s3);
+    --card-border-width: 0;
     --card-content-padding-inline: var(--seeds-s6);
+    --card-header-padding-inline: var(--seeds-s6);
+    --card-content-padding-block: var(--seeds-s3);
     padding-block-end: var(--seeds-s4);
-    margin-bottom: var(--seeds-s4);
+    margin-inline: var(--seeds-s3);
+    margin-block-end: var(--seeds-s4);
     color: var(--seeds-text-color);
     font-size: var(--seeds-type-caption-size);
+    background-color: var(--bloom-color-blue-300);
     header {
       .text-heading-sm {
-        font-family: var(--seeds-font-sans);
+        font-family: var(--seeds-font-serif);
         color: var(--seeds-text-color-dark);
         text-transform: uppercase;
         font-weight: bold;
         letter-spacing: .025rem;
+        font-size: var(--seeds-font-size-xs);
       }
     }
   }
