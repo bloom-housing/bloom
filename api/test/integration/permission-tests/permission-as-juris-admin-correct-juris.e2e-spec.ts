@@ -1120,7 +1120,9 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
     });
 
     it('should succeed for update endpoint & create an activity log entry', async () => {
-      const listingData = await listingFactory(jurisId, prisma);
+      const listingData = await listingFactory(jurisId, prisma, {
+        applicationDueDate: new Date(),
+      });
       const listing = await prisma.listings.create({
         data: listingData,
       });
