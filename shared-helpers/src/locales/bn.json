@@ -813,7 +813,7 @@
   "nav.applications": "অ্যাপ্লিকেশন",
   "nav.browseProperties": "বৈশিষ্ট্য ব্রাউজ করুন",
   "nav.flags": "পতাকা",
-  "nav.getFeedback": "এটি আমাদের নতুন ওয়েবসাইটের একটি প্রিভিউ। আমরা শুধু শুরু করছি। আমরা <a target='_blank' class='a-white lined' href='%{feedbackUrl}'> আপনার মতামত পেতে চাই। </a>",
+  "nav.getFeedback": "আমরা আপনার প্রতিক্রিয়া পেতে চাই!",
   "nav.listings": "তালিকা",
   "nav.myAccount": "আমার অ্যাকাউন্ট",
   "nav.myApplications": "আমার অ্যাপ্লিকেশন",
