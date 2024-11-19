@@ -464,7 +464,7 @@
   "authentication.forgotPassword.errors.passwordTooWeak": "Password is too weak. Must be at least 12 characters and include at least one lowercase letter, one uppercase letter, one number, and one special character (#?!@$%^&*-).",
   "authentication.forgotPassword.errors.tokenExpired": "Reset password token expired. Please request for a new one.",
   "authentication.forgotPassword.errors.tokenMissing": "Token not found. Please request for a new one.",
-  "authentication.forgotPassword.message": "If there is an account made with that email, you'll receive an email with a link to reset your password.",
+  "authentication.forgotPassword.message": "If there is an account made with that email, you'll receive an email with a link to reset your password. The reset link is valid for 1 hour.",
   "authentication.forgotPassword.passwordConfirmation": "Password Confirmation",
   "authentication.forgotPassword.sendEmail": "Send email",
   "authentication.signIn.accountHasBeenLocked": "For security reasons, this account has been locked.",

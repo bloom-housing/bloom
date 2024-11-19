@@ -470,7 +470,7 @@
   "authentication.forgotPassword.errors.passwordTooWeak": "Masyadong mahina ang password. Dapat ay hindi bababa sa 12 character at may kasamang hindi bababa sa isang maliit na titik, isang malaking titik, isang numero, at isang espesyal na character (#?!@$%^&*-).",
   "authentication.forgotPassword.errors.tokenExpired": "Nag-expire na ang token ng pag-reset ng password. Humiling ng bago.",
   "authentication.forgotPassword.errors.tokenMissing": "Hindi nahanap ang token. Humiling ng bago.",
-  "authentication.forgotPassword.message": "Kung may account na ginawa gamit ang email na iyon, makakatanggap ka ng email na may link para i-reset ang iyong password.",
+  "authentication.forgotPassword.message": "Kung may account na ginawa gamit ang email na iyon, makakatanggap ka ng email na may link para i-reset ang iyong password. Ang link sa pag-reset ay may bisa sa loob ng 1 oras.",
   "authentication.forgotPassword.passwordConfirmation": "Pagkumpirma ng Password",
   "authentication.forgotPassword.sendEmail": "Magpadala ng email",
   "authentication.signIn.accountHasBeenLocked": "Para sa mga kadahilanang pangseguridad, ang account na ito isinara na.",
