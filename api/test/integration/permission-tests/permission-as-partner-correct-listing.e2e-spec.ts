@@ -1078,7 +1078,7 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
         userListingId,
         jurisId,
       );
-      val.reviewOrderType = null;
+      val.applicationDueDate = undefined;
 
       await request(app.getHttpServer())
         .put(`/listings/${userListingId}`)
