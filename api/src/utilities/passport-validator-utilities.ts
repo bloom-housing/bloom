@@ -6,14 +6,14 @@ import { HttpException, HttpStatus } from '@nestjs/common';
  * @param failedLoginAttemptsCount the number of times the user failed to log in (stored in db)
  * @param maxAttempts the maximum number of attempts before user is considered locked out (env variable)
  *
- * @returns throws error if user is already locked out
+ * @returns updated value of failed login attempts
  */
-export function isUserLockedOut(
+export function checkUserLockout(
   lastLoginAt: Date,
   failedLoginAttemptsCount: number,
   maxAttempts: number,
   cooldown: number,
-): void {
+): number {
   if (lastLoginAt && failedLoginAttemptsCount >= maxAttempts) {
     // if a user has logged in, but has since gone over their max failed login attempts
     const retryAfter = new Date(lastLoginAt.getTime() + cooldown);
@@ -33,6 +33,7 @@ export function isUserLockedOut(
       );
     }
   }
+  return failedLoginAttemptsCount;
 }
 
 /**
