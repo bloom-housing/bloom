@@ -404,6 +404,11 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         path: 'listingsBuildingAddress.longitude',
         label: 'Longitude',
       },
+      // TODO: only add this column if homeType feature flag is on
+      {
+        path: 'homeType',
+        label: 'Home Type',
+      },
       {
         path: 'units.length',
         label: 'Number of Units',
