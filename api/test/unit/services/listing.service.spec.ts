@@ -3131,9 +3131,10 @@ describe('Testing listing service', () => {
 
   describe('Test listingApprovalNotify endpoint', () => {
     it('listingApprovalNotify request approval email', async () => {
-      jest
-        .spyOn(service, 'getUserEmailInfo')
-        .mockResolvedValueOnce({ emails: ['admin@email.com'] });
+      jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
+        emails: ['admin@email.com'],
+        emailFromAddress: 'no-reply@housingbayarea.org',
+      });
       await service.listingApprovalNotify({
         user,
         listingInfo: { id: 'id', name: 'name' },
@@ -3146,18 +3147,22 @@ describe('Testing listing service', () => {
         ['admin'],
         'id',
         'jurisId',
+        false,
+        true,
       );
       expect(requestApprovalMock).toBeCalledWith(
         { id: 'jurisId' },
         { id: 'id', name: 'name' },
         ['admin@email.com'],
         config.get('PARTNERS_PORTAL_URL'),
+        'no-reply@housingbayarea.org',
       );
     });
 
     it('listingApprovalNotify changes requested email', async () => {
       jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
         emails: ['jurisAdmin@email.com', 'partner@email.com'],
+        emailFromAddress: 'no-reply@housingbayarea.org',
       });
       await service.listingApprovalNotify({
         user,
@@ -3171,12 +3176,15 @@ describe('Testing listing service', () => {
         ['partner', 'jurisdictionAdmin'],
         'id',
         'jurisId',
+        false,
+        true,
       );
       expect(changesRequestedMock).toBeCalledWith(
         user,
         { id: 'id', name: 'name', juris: 'jurisId' },
         ['jurisAdmin@email.com', 'partner@email.com'],
         config.get('PARTNERS_PORTAL_URL'),
+        'no-reply@housingbayarea.org',
       );
     });
 
@@ -3184,6 +3192,7 @@ describe('Testing listing service', () => {
       jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
         emails: ['jurisAdmin@email.com', 'partner@email.com'],
         publicUrl: 'public.housing.gov',
+        emailFromAddress: 'no-reply@housingbayarea.org',
       });
       await service.listingApprovalNotify({
         user,
@@ -3199,12 +3208,14 @@ describe('Testing listing service', () => {
         'id',
         'jurisId',
         true,
+        true,
       );
       expect(listingApprovedMock).toBeCalledWith(
         expect.objectContaining({ id: 'jurisId' }),
         { id: 'id', name: 'name' },
         ['jurisAdmin@email.com', 'partner@email.com'],
         'public.housing.gov',
+        'no-reply@housingbayarea.org',
       );
     });
 

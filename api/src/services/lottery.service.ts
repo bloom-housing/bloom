@@ -406,6 +406,8 @@ export class LotteryService {
       ],
       listing.id,
       listing.jurisdictions?.id,
+      false,
+      true,
     );
 
     const publicUserEmailInfo = await this.getPublicUserEmailInfo(listing.id);
@@ -423,6 +425,7 @@ export class LotteryService {
       },
       partnerUserEmailInfo.emails,
       this.configService.get('PARTNERS_PORTAL_URL'),
+      partnerUserEmailInfo.emailFromAddress,
     );
 
     await this.emailService.lotteryPublishedApplicant(
@@ -508,6 +511,8 @@ export class LotteryService {
           ],
           storedListing.id,
           storedListing.jurisdictionId,
+          false,
+          true,
         );
 
         await this.emailService.lotteryReleased(
@@ -518,6 +523,7 @@ export class LotteryService {
           },
           partnerUserEmailInfo.emails,
           this.configService.get('PARTNERS_PORTAL_URL'),
+          partnerUserEmailInfo.emailFromAddress,
         );
         break;
       }

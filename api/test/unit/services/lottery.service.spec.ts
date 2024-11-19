@@ -87,14 +87,6 @@ describe('Testing lottery service', () => {
     prisma = module.get<PrismaService>(PrismaService);
     listingService = module.get<ListingService>(ListingService);
     config = module.get<ConfigService>(ConfigService);
-
-    jest.spyOn(listingService, 'getUserEmailInfo').mockResolvedValueOnce({
-      emails: ['admin@email.com', 'partner@email.com'],
-    });
-
-    jest.spyOn(service, 'getPublicUserEmailInfo').mockResolvedValueOnce({
-      en: ['applicant@email.com'],
-    });
   });
 
   describe('Testing lotteryRandomizerHelper()', () => {
@@ -685,6 +677,7 @@ describe('Testing lottery service', () => {
 
       jest.spyOn(listingService, 'getUserEmailInfo').mockResolvedValueOnce({
         emails: ['admin@email.com', 'partner@email.com'],
+        emailFromAddress: 'no-reply@housingbayarea.org',
       });
 
       jest.spyOn(service, 'getPublicUserEmailInfo').mockResolvedValueOnce({
@@ -721,12 +714,15 @@ describe('Testing lottery service', () => {
         ['admin', 'jurisdictionAdmin', 'partner'],
         'example id',
         'jurisId',
+        false,
+        true,
       );
 
       expect(lotteryReleasedMock).toBeCalledWith(
         { id: 'example id', juris: 'jurisId', name: 'example name' },
         ['admin@email.com', 'partner@email.com'],
         config.get('PARTNERS_PORTAL_URL'),
+        'no-reply@housingbayarea.org',
       );
     });
 

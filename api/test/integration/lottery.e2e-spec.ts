@@ -44,6 +44,7 @@ describe('Lottery Controller Tests', () => {
   let cookies = '';
   let adminAccessToken: string;
   let jurisdictionAId: string;
+  let jurisdictionAEmail: string;
   let unitTypeA: UnitTypes;
 
   const testEmailService = {
@@ -101,6 +102,7 @@ describe('Lottery Controller Tests', () => {
       data: jurisdictionFactory(),
     });
     jurisdictionAId = jurisdiction.id;
+    jurisdictionAEmail = jurisdiction.emailFromAddress;
     await reservedCommunityTypeFactoryAll(jurisdictionAId, prisma);
     await unitTypeFactoryAll(prisma);
     unitTypeA = await unitTypeFactorySingle(prisma, UnitTypeEnum.oneBdrm);
@@ -895,6 +897,7 @@ describe('Lottery Controller Tests', () => {
         },
         expect.arrayContaining([partnerUser.email, adminUser.email]),
         process.env.PARTNERS_PORTAL_URL,
+        jurisdictionAEmail,
       );
 
       const activityLogResult = await prisma.activityLog.findFirst({
@@ -1078,6 +1081,7 @@ describe('Lottery Controller Tests', () => {
         },
         expect.arrayContaining([partnerUser.email, adminUser.email]),
         process.env.PARTNERS_PORTAL_URL,
+        jurisdictionAEmail,
       );
 
       expect(mockLotteryPublishedApplicant).toBeCalledWith(
