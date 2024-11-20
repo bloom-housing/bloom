@@ -551,6 +551,8 @@
   "housingCounselors.languageServices": "Language Services: ",
   "housingCounselors.subtitle": "Talk with a local housing counselor specific to your needs.",
   "housingCounselors.visitWebsite": "Visit %{name}",
+  "languages.ar": "عربى",
+  "languages.bn": "বাংলা",
   "languages.en": "English",
   "languages.es": "Español",
   "languages.tl": "Filipino",
