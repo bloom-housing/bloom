@@ -613,6 +613,21 @@ class Listing extends AbstractDTO {
   @Type(() => ApplicationLotteryTotal)
   @ApiProperty({ type: ApplicationLotteryTotal, isArray: true })
   applicationLotteryTotals: ApplicationLotteryTotal[];
+
+  @Expose()
+  @ApiPropertyOptional()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  includeCommunityDisclaimer?: boolean;
+
+  @Expose()
+  @ApiPropertyOptional()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  communityDisclaimerTitle?: string;
+
+  @Expose()
+  @ApiPropertyOptional()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  communityDisclaimerDescription?: string;
 }
 
 export { Listing as default, Listing };
