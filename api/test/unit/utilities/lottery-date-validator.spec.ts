@@ -2,14 +2,13 @@ import { ListingEventsTypeEnum, ReviewOrderTypeEnum } from '@prisma/client';
 import { LotteryDateParamValidator } from '../../../src/utilities/lottery-date-validator';
 
 describe('Testing OrderQueryParamValidator', () => {
-  it('should return true if reviewOrderType is not lottery and lotteryOptIn is null', () => {
+  it('should return true if reviewOrderType is not lottery', () => {
     const lotteryDateParamValidator = new LotteryDateParamValidator();
     expect(
       lotteryDateParamValidator.validate([], {
         property: 'listingEvents',
         object: {
           reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
-          lotteryOptIn: null,
         },
         value: undefined,
         constraints: [],
@@ -18,30 +17,13 @@ describe('Testing OrderQueryParamValidator', () => {
     ).toBeTruthy();
   });
 
-  it('should return true if reviewOrderType is lottery and lotteryOptIn is no', () => {
+  it('should return false if reviewOrderType is lottery and listingEvents is empty', () => {
     const lotteryDateParamValidator = new LotteryDateParamValidator();
     expect(
       lotteryDateParamValidator.validate([], {
         property: 'listingEvents',
         object: {
           reviewOrderType: ReviewOrderTypeEnum.lottery,
-          lotteryOptIn: false,
-        },
-        value: undefined,
-        constraints: [],
-        targetName: '',
-      }),
-    ).toBeTruthy();
-  });
-
-  it('should return false if reviewOrderType is lottery and lotteryOptIn is yes and listingEvents is empty', () => {
-    const lotteryDateParamValidator = new LotteryDateParamValidator();
-    expect(
-      lotteryDateParamValidator.validate([], {
-        property: 'listingEvents',
-        object: {
-          reviewOrderType: ReviewOrderTypeEnum.lottery,
-          lotteryOptIn: true,
         },
         value: undefined,
         constraints: [],
@@ -50,7 +32,7 @@ describe('Testing OrderQueryParamValidator', () => {
     ).toBeFalsy();
   });
 
-  it('should return false if reviewOrderType is lottery and lotteryOptIn is yes and listingEvents has publicLottery without startDate', () => {
+  it('should return false if reviewOrderType is lottery and listingEvents has publicLottery without startDate', () => {
     const lotteryDateParamValidator = new LotteryDateParamValidator();
     expect(
       lotteryDateParamValidator.validate(
@@ -69,7 +51,6 @@ describe('Testing OrderQueryParamValidator', () => {
           property: 'listingEvents',
           object: {
             reviewOrderType: ReviewOrderTypeEnum.lottery,
-            lotteryOptIn: true,
           },
           value: undefined,
           constraints: [],
@@ -79,7 +60,7 @@ describe('Testing OrderQueryParamValidator', () => {
     ).toBeFalsy();
   });
 
-  it('should return false if reviewOrderType is lottery and lotteryOptIn is yes and listingEvents has publicLottery without startTime', () => {
+  it('should return false if reviewOrderType is lottery and listingEvents has publicLottery without startTime', () => {
     const lotteryDateParamValidator = new LotteryDateParamValidator();
     expect(
       lotteryDateParamValidator.validate(
@@ -98,7 +79,6 @@ describe('Testing OrderQueryParamValidator', () => {
           property: 'listingEvents',
           object: {
             reviewOrderType: ReviewOrderTypeEnum.lottery,
-            lotteryOptIn: true,
           },
           value: undefined,
           constraints: [],
@@ -108,7 +88,7 @@ describe('Testing OrderQueryParamValidator', () => {
     ).toBeFalsy();
   });
 
-  it('should return false if reviewOrderType is lottery and lotteryOptIn is yes and listingEvents has publicLottery without endTime', () => {
+  it('should return false if reviewOrderType is lottery and listingEvents has publicLottery without endTime', () => {
     const lotteryDateParamValidator = new LotteryDateParamValidator();
     expect(
       lotteryDateParamValidator.validate(
@@ -127,7 +107,6 @@ describe('Testing OrderQueryParamValidator', () => {
           property: 'listingEvents',
           object: {
             reviewOrderType: ReviewOrderTypeEnum.lottery,
-            lotteryOptIn: true,
           },
           value: undefined,
           constraints: [],
@@ -137,7 +116,7 @@ describe('Testing OrderQueryParamValidator', () => {
     ).toBeFalsy();
   });
 
-  it('should return true if reviewOrderType is lottery and lotteryOptIn is yes and listingEvents has full publicLottery event', () => {
+  it('should return true if reviewOrderType is lottery and listingEvents has full publicLottery event', () => {
     const lotteryDateParamValidator = new LotteryDateParamValidator();
     expect(
       lotteryDateParamValidator.validate(
@@ -156,7 +135,6 @@ describe('Testing OrderQueryParamValidator', () => {
           property: 'listingEvents',
           object: {
             reviewOrderType: ReviewOrderTypeEnum.lottery,
-            lotteryOptIn: true,
           },
           value: undefined,
           constraints: [],
@@ -166,7 +144,7 @@ describe('Testing OrderQueryParamValidator', () => {
     ).toBeTruthy();
   });
 
-  it('should return true if reviewOrderType is lottery and lotteryOptIn is yes and listingEvents has full publicLottery event and other events', () => {
+  it('should return true if reviewOrderType is lottery and listingEvents has full publicLottery event and other events', () => {
     const lotteryDateParamValidator = new LotteryDateParamValidator();
     expect(
       lotteryDateParamValidator.validate(
@@ -194,7 +172,6 @@ describe('Testing OrderQueryParamValidator', () => {
           property: 'listingEvents',
           object: {
             reviewOrderType: ReviewOrderTypeEnum.lottery,
-            lotteryOptIn: true,
           },
           value: undefined,
           constraints: [],
