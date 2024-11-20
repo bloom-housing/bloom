@@ -128,7 +128,10 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
 
     listingMulitselectQuestion = msq.id;
 
+    const tomorrowsDate = new Date();
+    tomorrowsDate.setDate(tomorrowsDate.getDate() + 1);
     const listingData = await listingFactory(jurisId, prisma, {
+      applicationDueDate: tomorrowsDate,
       multiselectQuestions: [msq],
       digitalApp: true,
     });
@@ -1073,12 +1076,19 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
     });
 
     it('should succeed for update endpoint & create an activity log entry', async () => {
+      const listing = await prisma.listings.findFirst({
+        where: {
+          id: userListingId,
+        },
+      });
+
       const val = await constructFullListingData(
         prisma,
         userListingId,
         jurisId,
       );
-      delete val.applicationDueDate;
+      val.applicationDueDate = listing.applicationDueDate;
+      val.reviewOrderType = null;
 
       await request(app.getHttpServer())
         .put(`/listings/${userListingId}`)
