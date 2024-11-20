@@ -1,13 +1,13 @@
 .footer-container {
   color: var(--seeds-color-on-inverse-muted);
   width: 100%;
-  background-color: var(--seeds-color-gray-800);
+  background-color: var(--seeds-bg-color-inverse);
   text-align: left;
   display: flex;
   flex-direction: column;
 
   a {
-    color: var(--seeds-color-white);
+    color: var(--seeds-color-on-inverse);
   }
 }
 
@@ -52,13 +52,13 @@
 }
 
 .copyright-content-container {
-  background-color: var(--seeds-color-gray-950);
+  background-color: var(--seeds-bg-color-inverse-dark);
 }
 
 .copyright {
   flex-direction: row;
   justify-content: space-between;
-  background-color: var(--seeds-color-gray-950);
+  background-color: var(--seeds-bg-color-inverse-dark);
   align-items: flex-start;
   color: var(--seeds-color-on-inverse-muted);
   img {
