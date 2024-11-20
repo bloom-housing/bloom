@@ -1,19 +1,12 @@
 import React, { useContext } from "react"
 import dayjs from "dayjs"
 import { useRouter } from "next/router"
-import Link from "next/link"
 import Head from "next/head"
 import { Message, Toast } from "@bloom-housing/ui-seeds"
-import {
-  SiteHeader,
-  SiteFooter,
-  FooterNav,
-  FooterSection,
-  MenuLink,
-  t,
-} from "@bloom-housing/ui-components"
-import { AuthContext, ExygyFooter, MessageContext } from "@bloom-housing/shared-helpers"
+import { SiteHeader, MenuLink, t } from "@bloom-housing/ui-components"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import styles from "./application.module.scss"
+import CustomSiteFooter from "../components/shared/CustomSiteFooter"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
@@ -132,15 +125,7 @@ const Layout = (props) => {
         </main>
       </div>
 
-      <SiteFooter>
-        <FooterNav copyright={t("footer.copyright")}>
-          <Link href="/privacy">{t("pageTitle.privacy")}</Link>
-          <Link href="/disclaimer">{t("pageTitle.disclaimer")}</Link>
-        </FooterNav>
-        <FooterSection className="bg-black" small>
-          <ExygyFooter />
-        </FooterSection>
-      </SiteFooter>
+      <CustomSiteFooter />
     </div>
   )
 }
