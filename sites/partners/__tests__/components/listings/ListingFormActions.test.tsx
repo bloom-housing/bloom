@@ -486,14 +486,14 @@ describe("<ListingFormActions>", () => {
       })
 
       it("renders correct buttons in a closed edit state", () => {
-        const { getByText } = render(
+        const { getByText, queryByText } = render(
           <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(getByText("Reopen")).toBeTruthy()
+        expect(queryByText("Reopen")).toBeFalsy()
         expect(getByText("Save")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
         expect(getByText("Post Results")).toBeTruthy()
@@ -637,7 +637,7 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(getByText("Reopen")).toBeTruthy()
+        expect(queryByText("Reopen")).toBeFalsy()
         expect(getByText("Save")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
         expect(getByText("Post Results")).toBeTruthy()
@@ -1113,7 +1113,7 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(getByText("Reopen")).toBeTruthy()
+        expect(queryByText("Reopen")).toBeFalsy()
         expect(getByText("Save")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
         expect(getByText("Post Results")).toBeTruthy()
@@ -1328,7 +1328,7 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(getByText("Reopen")).toBeTruthy()
+        expect(queryByText("Reopen")).toBeFalsy()
         expect(getByText("Save")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
         expect(getByText("Post Results")).toBeTruthy()
@@ -1364,7 +1364,7 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(getByText("Reopen")).toBeTruthy()
+        expect(queryByText("Reopen")).toBeFalsy()
         expect(getByText("Save")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
         expect(getByText("Post Results")).toBeTruthy()
@@ -1398,7 +1398,7 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(getByText("Reopen")).toBeTruthy()
+        expect(queryByText("Reopen")).toBeFalsy()
         expect(getByText("Save")).toBeTruthy()
         expect(getByText("Unpublish")).toBeTruthy()
         expect(getByText("Post Results")).toBeTruthy()
