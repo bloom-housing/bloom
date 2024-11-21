@@ -3,6 +3,7 @@ import {
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
+import { JurisdictionService } from './jurisdiction.service';
 import { PrismaService } from './prisma.service';
 import { FeatureFlag } from '../dtos/feature-flags/feature-flag.dto';
 import { FeatureFlagAssociate } from '../dtos/feature-flags/feature-flag-associate.dto';
@@ -17,7 +18,10 @@ import { mapTo } from '../utilities/mapTo';
     */
 @Injectable()
 export class FeatureFlagService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private jurisdictionService: JurisdictionService,
+  ) {}
 
   /**
         this will get a set of feature flags
@@ -166,6 +170,16 @@ export class FeatureFlagService {
     });
 
     const idsToAssociate = [...idsToAssociateSet];
+
+    for (const id of idsToAssociate) {
+      try {
+        await this.jurisdictionService.findOrThrow(id);
+      } catch (e) {
+        throw new BadRequestException(
+          `jurisdiction id ${id} was requested for association but not found`,
+        );
+      }
+    }
 
     const rawResults = await this.prisma.featureFlags.update({
       data: {

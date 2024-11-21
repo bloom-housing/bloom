@@ -4,6 +4,7 @@ import { FeatureFlagAssociate } from '../../../src/dtos/feature-flags/feature-fl
 import { FeatureFlagCreate } from '../../../src/dtos/feature-flags/feature-flag-create.dto';
 import { FeatureFlagUpdate } from '../../../src/dtos/feature-flags/feature-flag-update.dto';
 import { FeatureFlagService } from '../../../src/services/feature-flag.service';
+import { JurisdictionService } from '../../../src/services/jurisdiction.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 
 describe('Testing feature flag service', () => {
@@ -31,7 +32,7 @@ describe('Testing feature flag service', () => {
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [FeatureFlagService, PrismaService],
+      providers: [FeatureFlagService, JurisdictionService, PrismaService],
     }).compile();
 
     service = module.get<FeatureFlagService>(FeatureFlagService);
@@ -267,6 +268,9 @@ describe('Testing feature flag service', () => {
         ...mockedValue,
         jurisdictions: [unchangingJurisdiction, removeJurisdiction],
       });
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: 'id' });
       prisma.featureFlags.update = jest.fn().mockResolvedValue({
         ...mockedValue,
         jurisdictions: [unchangingJurisdiction, associateJurisdiction],
