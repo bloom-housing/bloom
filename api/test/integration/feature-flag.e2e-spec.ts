@@ -7,6 +7,7 @@ import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { featureFlagFactory } from '../../prisma/seed-helpers/feature-flag-factory';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
+import { randomName } from '../../prisma/seed-helpers/word-generator';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { Login } from '../../src/dtos/auth/login.dto';
 
@@ -75,7 +76,7 @@ describe('Feature Flag Controller Tests', () => {
   describe('create endpoint', () => {
     it('should create a feature flag', async () => {
       const body = {
-        name: 'new name',
+        name: randomName(),
         description: 'new description',
         active: true,
       };
@@ -105,7 +106,7 @@ describe('Feature Flag Controller Tests', () => {
 
       const body = {
         id: featureFlag.id,
-        name: 'updated name',
+        name: `updated ${randomName()}`,
         description: 'updated description',
         active: !featureFlag.active,
       };
