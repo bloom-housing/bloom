@@ -487,10 +487,7 @@ const ListingFormActions = ({
         listing.status === ListingsStatusEnum.closed &&
         type === ListingFormActionsType.edit
       ) {
-        if (
-          (isListingApprover || !isListingApprovalEnabled) &&
-          !process.env.limitClosedListingActions
-        ) {
+        if (!process.env.limitClosedListingActions) {
           elements.push(reopenButton)
         }
         elements.push(unpublishButton)
@@ -603,10 +600,7 @@ const ListingFormActions = ({
         listing.status === ListingsStatusEnum.closed &&
         type === ListingFormActionsType.edit
       ) {
-        if (
-          (isListingApprover || !isListingApprovalEnabled) &&
-          !process.env.limitClosedListingActions
-        ) {
+        if (!process.env.limitClosedListingActions) {
           elements.push(reopenButton)
         }
         elements.push(unpublishButton)
@@ -713,6 +707,9 @@ const ListingFormActions = ({
         listing.status === ListingsStatusEnum.closed &&
         type === ListingFormActionsType.edit
       ) {
+        if (!process.env.limitClosedListingActions) {
+          elements.push(reopenButton)
+        }
         elements.push(unpublishButton)
         updateLotteryResultsButton()
         elements.push(saveContinueButton)
