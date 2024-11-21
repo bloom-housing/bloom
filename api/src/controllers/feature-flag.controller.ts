@@ -39,8 +39,8 @@ import { ApiKeyGuard } from '../guards/api-key.guard';
   FeatureFlagUpdate,
   IdDTO,
 )
-// @PermissionTypeDecorator('featureFlags')
-// @UseGuards(OptionalAuthGuard, PermissionGuard)
+@PermissionTypeDecorator('featureFlags')
+@UseGuards(OptionalAuthGuard, PermissionGuard)
 export class FeatureFlagController {
   constructor(private readonly featureFlagService: FeatureFlagService) {}
 
