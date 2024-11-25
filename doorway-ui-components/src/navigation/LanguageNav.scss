@@ -3,28 +3,46 @@
   --inner-width: inherit;
   --inner-desktop-padding: inherit;
   --inner-mobile-padding: inherit;
-  background-color: var(--bloom-color-gray-200);
+
+  background-color: var(--seeds-bg-color-surface);
+
+  @media (min-width: $screen-md) {
+    background-color: var(--bloom-color-gray-200);
+  }
 }
 
 .language-bar__inner {
   max-width: var(--inner-max-width);
   width: var(--inner-width);
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  align-items: start;
+  justify-content: space-between;
+  gap: var(--seeds-s2);
   margin: auto;
-  padding: var(--inner-mobile-padding);
-  padding: var(--bloom-s2) 0;
+  padding-block: var(--seeds-s2) 0;
 
-  @media (max-width: $screen-md) {
-    justify-content: center;
+  @media (min-width: $screen-md) {
+    flex-direction: row;
+    align-items: center;
+    padding-block-end: var(--seeds-s2);
+  }
+}
+
+.language-nav {
+  width: 100%;
+  background-color: var(--bloom-color-gray-200);
+  padding-block: var(--seeds-s1);
+
+  @media (min-width: $screen-md) {
+    padding-block: 0;
+    width: auto;
   }
 }
 
 .language-nav__list {
   display: flex;
-  @media (max-width: $screen-md) {
-    justify-content: center;
-  }
+
   li:not(:last-child) {
     border-right: var(--doorway-standard-border);
   }
@@ -47,5 +65,31 @@
   &.is-active {
     color: var(--bloom-text-color);
     background-color: var(--doorway-color-secondary);
+  }
+}
+
+.language-bar__association-logo {
+  background-color: var(--seeds-bg-color-surface);
+
+  @media (min-width: $screen-md) {
+    background-color: transparent;
+  }
+
+  a {
+    display: block;
+  }
+
+  img {
+    height: 20px;
+    margin-left: var(--seeds-s2);
+    
+    @media (min-width: $screen-md) {
+      height: 30px;
+      margin-left: var(--seeds-s5);
+    }
+  
+    @media (min-width: $screen-lg) {
+      margin-left: -2px;
+    }
   }
 }
