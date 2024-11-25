@@ -89,6 +89,17 @@ describe("Listing Management Tests", () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function fillOutListing(cy: Cypress.cy, listing: any): void {
+    cy.intercept("GET", "/geocoding/v5/**", { fixture: "address" })
+    cy.intercept("POST", "https://api.cloudinary.com/v1_1/exygy/upload", {
+      fixture: "cypressUpload",
+    })
+    cy.intercept(
+      "GET",
+      "https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpg",
+      {
+        fixture: "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg",
+      }
+    )
     cy.getByID("jurisdictions.id").select(listing["jurisdiction.id"])
     cy.getByID("name").type(listing["name"])
     cy.getByID("developer").type(listing["developer"])
@@ -117,6 +128,16 @@ describe("Listing Management Tests", () => {
         "https://assets.website-files.com/5fbfdd121e108ea418ede824/5fbfdea9a7287d45a63d821b_Exygy%20Logo.svg"
       )
 
+    cy.intercept("POST", "https://api.cloudinary.com/v1_1/exygy/upload", {
+      public_id: "dev/cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08",
+    })
+    cy.intercept(
+      "GET",
+      "https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08.jpg",
+      {
+        fixture: "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08.jpg",
+      }
+    )
     cy.getByID("add-photos-button").contains("Edit Photos").click()
     cy.getByTestId("dropzone-input").attachFile(
       "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08.jpg",
@@ -299,8 +320,8 @@ describe("Listing Management Tests", () => {
     cy.getByID("buildingAddress.state").contains("CA")
     cy.getByID("buildingAddress.zipCode").contains(listing["buildingAddress.zipCode"])
     cy.getByID("yearBuilt").contains(listing["yearBuilt"])
-    cy.getByID("longitude").contains("-121.95")
-    cy.getByID("latitude").contains("37.76")
+    cy.getByID("longitude").contains("-122")
+    cy.getByID("latitude").contains("37.7")
     cy.getByID("reservedCommunityType").contains(listing["reservedCommunityType.id"])
     cy.getByID("reservedCommunityDescription").contains(listing["reservedCommunityDescription"])
     cy.getByTestId("unit-types-or-individual").contains("Unit Types")

@@ -9,7 +9,16 @@ describe("Lottery Tests", () => {
 
   it("can run through every lottery action", () => {
     const uniqueListingName = Date.now().toString()
-
+    cy.intercept("POST", "https://api.cloudinary.com/v1_1/exygy/upload", {
+      fixture: "cypressUpload",
+    })
+    cy.intercept(
+      "GET",
+      "https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg.jpg",
+      {
+        fixture: "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg",
+      }
+    )
     cy.visit("/")
     cy.addMinimalListing(uniqueListingName, true, false, true)
     cy.addMinimalApplication(uniqueListingName)

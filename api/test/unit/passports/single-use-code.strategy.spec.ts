@@ -11,6 +11,9 @@ describe('Testing single-use-code strategy', () => {
   let strategy: SingleUseCodeStrategy;
   let prisma: PrismaService;
   beforeAll(async () => {
+    process.env.MFA_CODE_VALID = '60000';
+    process.env.AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS = '5';
+    process.env.AUTH_LOCK_LOGIN_COOLDOWN = '1800000';
     const module: TestingModule = await Test.createTestingModule({
       providers: [SingleUseCodeStrategy, PrismaService],
     }).compile();

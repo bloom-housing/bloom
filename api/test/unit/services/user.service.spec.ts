@@ -310,10 +310,11 @@ describe('Testing user service', () => {
 
   describe('createConfirmationToken', () => {
     it('should encode a confirmation token correctly', () => {
+      process.env.APP_SECRET = 'SOME-LONG-SECRET-KEY';
       const id = randomUUID();
       const res = service.createConfirmationToken(id, 'example@email.com');
       expect(res).not.toBeNull();
-      const decoded = verify(res, process.env.APP_SECRET) as IdDTO;
+      const decoded = verify(res, 'SOME-LONG-SECRET-KEY') as IdDTO;
       expect(decoded.id).toEqual(id);
     });
   });
@@ -1970,6 +1971,8 @@ describe('Testing user service', () => {
   });
 
   it('should successfully request single use code when previous code is still valid', async () => {
+    process.env.MFA_CODE_LENGTH = '5';
+    process.env.MFA_CODE_VALID = '60000';
     const id = randomUUID();
     emailService.sendSingleUseCode = jest.fn();
     prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({

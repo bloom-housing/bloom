@@ -50,6 +50,8 @@ describe('Testing mfa strategy', () => {
   });
 
   it('should fail because user is locked out', async () => {
+    process.env.AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS = '5';
+    process.env.AUTH_LOCK_LOGIN_COOLDOWN = '1800000';
     prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
       id: randomUUID(),
       lastLoginAt: new Date(),
@@ -475,6 +477,7 @@ describe('Testing mfa strategy', () => {
   });
 
   it('should fail if no mfaCode is expired', async () => {
+    process.env.MFA_CODE_VALID = '60000';
     const id = randomUUID();
     prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
       id: id,

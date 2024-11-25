@@ -23,6 +23,7 @@ executors:
       # DB URL for the jest tests per ormconfig.test.ts
       TEST_DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom"
       PARTNERS_PORTAL_URL: "http://localhost:3001"
+      BACKEND_API_BASE: "http://localhost:3100"
       JURISDICTION_NAME: Bloomington
       GOOGLE_API_EMAIL: "secret-key"
       GOOGLE_API_ID: "secret-key"
@@ -31,6 +32,13 @@ executors:
       SHOW_LOTTERY: "TRUE"
       SHOW_PUBLIC_LOTTERY: "TRUE"
       THROTTLE_LIMIT: 1000
+      API_PASS_KEY: "some-key-here"
+      HOUSING_COUNSELOR_SERVICE_URL: "/get-assistance"
+      # Sample token https://docs.mapbox.com/api/accounts/tokens/#example-token-metadata-object
+      MAPBOX_TOKEN: "pk.eyJ1Ijoic2NvdGhpcyIsImEiOiJjaWp1Y2ltYmUwMDBicmJrdDQ4ZDBkaGN4In0.sbihZCZJ56-fsFNKHXF8YQ"
+      CLOUDINARY_KEY: "key"
+      CLOUDINARY_SIGNED_PRESET: "signedpreset"
+      CLOUDINARY_CLOUD_NAME: "exygy"
 
   standard-node:
     docker:

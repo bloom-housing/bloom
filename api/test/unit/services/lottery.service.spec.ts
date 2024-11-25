@@ -988,6 +988,7 @@ describe('Testing lottery service', () => {
 
   describe('Test expireLotteries endpoint', () => {
     it('should call the updateMany', async () => {
+      process.env.LOTTERY_DAYS_TILL_EXPIRY = '45';
       prisma.listings.findMany = jest.fn().mockResolvedValue([
         {
           id: 'example id1',

@@ -43,6 +43,7 @@ describe('User Controller Tests', () => {
   });
 
   beforeAll(async () => {
+    process.env.PARTNERS_PORTAL_URL = 'http://localhost:3001/';
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
