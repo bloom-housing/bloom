@@ -111,9 +111,9 @@ Contributions to the core Bloom applications and services are welcomed. To help 
 
 Our development tasks are managed through GitHub issues and development in the vast majority of cases should be tied to an issue. Please feel free to submit issues even if you don't plan on implementing them yourself. Before creating an issue, check first to see if one already exists. When creating an issue, give it a descriptive title and include screenshots if relevant. Please don't start work on an issue without checking in with the Bloom team first as it may already be in development! You can tag us (@ludtkemorgan, @emilyjablonski, @yazeedloonat) to get started on an issue or ask any questions.
 
-### Committing, Versioning, and Releasing
+### Committing
 
-We are using [lerna](https://lerna.js.org/) as a monorepo management tool. It automatically versions, releases, and generates a changelog across our packages. In conjunction with lerna we are also using [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/), a specification for commit messages that helps lerna understand what level of change each commit is in order to automate our processes.
+We are also using [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/), a specification for commit messages that indicates what type and level of change each commit is.
 
 On commit, two steps automatically run: (1) linting and (2) a verification of the conventional commit standard. You can either, instead of running `git commit`, globally install commitizen (`npm install -g commitizen`) and then commit with `git cz` which will run a commit message CLI (the CLI asks a series of questions about your changeset and builds the commit message for you in the conventional commit format), or alternatively run `git commit` with your own message if you are confident it follows the conventional standard, and the linter will fail if it does not.
 

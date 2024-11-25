@@ -41,6 +41,7 @@
     "autoprefixer": "^10.3.4",
     "axios": "^0.28.0",
     "axios-cookiejar-support": "4.0.6",
+    "clone-deep": "^4.0.1",
     "dayjs": "^1.10.7",
     "deasync": "0.1.28",
     "dotenv": "^8.2.0",
