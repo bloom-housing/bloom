@@ -26,7 +26,7 @@ export const getListingStatusTag = (listingStatus: ListingsStatusEnum) => {
       return (
         <Tag
           className="tag-uppercase"
-          variant={"in-process"}
+          variant={"warn"}
           size={"lg"}
           id={"listing-status-pending-review"}
         >
