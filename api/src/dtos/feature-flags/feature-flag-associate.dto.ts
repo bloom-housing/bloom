@@ -1,7 +1,6 @@
 import { Expose } from 'class-transformer';
 import { IsArray, IsDefined, IsString, IsUUID } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { IdDTO } from '../shared/id.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
 export class FeatureFlagAssociate {
