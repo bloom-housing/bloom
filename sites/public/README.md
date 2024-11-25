@@ -14,6 +14,34 @@ If you don't have yarn installed, you can install homebrew with [these instructi
 - From within `sites/public` copy the `.env.template` to `.env` and edit variables appropriate to your local environment - some keys are secret and are internally available - the template file includes default values and descriptions of each variable
 - `yarn dev:all` at root will start up the backend at port 3100 and the public app at port 3000
 
+## Recommended Extension
+
+If you're using VSCode, the [CSS variable autocomplete plugin](https://marketplace.visualstudio.com/items?itemName=vunguyentuan.vscode-css-variables&ssr=false#overview) will pull in all CSS variable definitions from ui-seeds for autocompletion.
+
+After installing the extension, ⌘⇧P Open User Settings (JSON), and add the following configuration:
+
+```
+  "cssVariables.blacklistFolders": [
+    "**/.git",
+    "**/.svn",
+    "**/.hg",
+    "**/CVS",
+    "**/.DS_Store",
+    "**/bower_components",
+    "**/tmp",
+    "**/dist",
+    "**/tests",
+    "**/node_modules/^(?!@bloom-housing).*/m"
+  ],
+  "cssVariables.lookupFiles": [
+    "**/*.css",
+    "**/*.scss",
+    "**/*.sass",
+    "**/*.less",
+    "node_modules/@bloom-housing/ui-seeds/src/**/*.scss"
+  ]
+  ```
+
 ## Tests
 
 For our public application, our tests currently consist of both a Cypress end to end suite and a jest unit/integration suite.

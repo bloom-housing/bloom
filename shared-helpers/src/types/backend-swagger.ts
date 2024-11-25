@@ -2311,6 +2311,22 @@ export class ScriptRunnerService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * A script that hides program multiselect questions from the public detail page
+   */
+  hideProgramsFromListings(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/hideProgramsFromListings"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class LotteryService {
@@ -3477,6 +3493,15 @@ export interface Listing {
 
   /**  */
   applicationLotteryTotals: ApplicationLotteryTotal[]
+
+  /**  */
+  includeCommunityDisclaimer?: boolean
+
+  /**  */
+  communityDisclaimerTitle?: string
+
+  /**  */
+  communityDisclaimerDescription?: string
 }
 
 export interface PaginationMeta {
@@ -3940,6 +3965,15 @@ export interface ListingCreate {
   lotteryOptIn?: boolean
 
   /**  */
+  includeCommunityDisclaimer?: boolean
+
+  /**  */
+  communityDisclaimerTitle?: string
+
+  /**  */
+  communityDisclaimerDescription?: string
+
+  /**  */
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
@@ -4212,6 +4246,15 @@ export interface ListingUpdate {
 
   /**  */
   lotteryOptIn?: boolean
+
+  /**  */
+  includeCommunityDisclaimer?: boolean
+
+  /**  */
+  communityDisclaimerTitle?: string
+
+  /**  */
+  communityDisclaimerDescription?: string
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
@@ -6083,6 +6126,8 @@ export enum LanguagesEnum {
   "vi" = "vi",
   "zh" = "zh",
   "tl" = "tl",
+  "bn" = "bn",
+  "ar" = "ar",
 }
 
 export enum ListingEventsTypeEnum {
