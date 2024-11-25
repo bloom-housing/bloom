@@ -158,11 +158,9 @@ export class FeatureFlagService {
   ): Promise<FeatureFlag> {
     await this.findOrThrow(dto.id);
 
-    const idsToAssociateSet = new Set(
-      dto.associate.map((jurisdiction) => jurisdiction.id),
-    );
+    const idsToAssociateSet = new Set(dto.associate);
 
-    dto.remove.forEach(({ id }) => {
+    dto.remove.forEach((id) => {
       if (idsToAssociateSet.has(id)) {
         // Remove the item from the set
         idsToAssociateSet.delete(id);
@@ -187,7 +185,7 @@ export class FeatureFlagService {
           connect: idsToAssociate.map((id) => {
             return { id: id };
           }),
-          disconnect: dto.remove.map(({ id }) => {
+          disconnect: dto.remove.map((id) => {
             return { id: id };
           }),
         },

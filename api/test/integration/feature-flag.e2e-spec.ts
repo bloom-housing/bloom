@@ -203,16 +203,8 @@ describe('Feature Flag Controller Tests', () => {
 
       const body = {
         id: featureFlag.id,
-        associate: [
-          {
-            id: jurisdiction3.id,
-          },
-        ],
-        remove: [
-          {
-            id: jurisdiction2.id,
-          },
-        ],
+        associate: [jurisdiction3.id],
+        remove: [jurisdiction2.id],
       };
 
       const res = await request(app.getHttpServer())
@@ -249,16 +241,8 @@ describe('Feature Flag Controller Tests', () => {
 
       const body = {
         id: featureFlag.id,
-        associate: [
-          {
-            id: jurisdiction.id,
-          },
-        ],
-        remove: [
-          {
-            id: jurisdiction.id,
-          },
-        ],
+        associate: [jurisdiction.id],
+        remove: [jurisdiction.id],
       };
 
       const res = await request(app.getHttpServer())

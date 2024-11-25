@@ -6170,10 +6170,10 @@ export interface FeatureFlagAssociate {
   id: string
 
   /**  */
-  associate: IdDTO[]
+  associate: string[]
 
   /**  */
-  remove: IdDTO[]
+  remove: string[]
 }
 
 export interface FeatureFlagCreate {
@@ -6287,6 +6287,8 @@ export enum LanguagesEnum {
   "vi" = "vi",
   "zh" = "zh",
   "tl" = "tl",
+  "bn" = "bn",
+  "ar" = "ar",
 }
 
 export enum ListingEventsTypeEnum {

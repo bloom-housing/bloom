@@ -1,4 +1,4 @@
-import { Expose, Type } from 'class-transformer';
+import { Expose } from 'class-transformer';
 import { IsArray, IsDefined, IsString, IsUUID } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { IdDTO } from '../shared/id.dto';
@@ -13,14 +13,20 @@ export class FeatureFlagAssociate {
   id: string;
 
   @Expose()
-  @Type(() => IdDTO)
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ type: IdDTO, isArray: true })
-  associate: IdDTO[];
+  @IsUUID(4, {
+    groups: [ValidationsGroupsEnum.default],
+    each: true,
+  })
+  @ApiProperty()
+  associate: string[];
 
   @Expose()
-  @Type(() => IdDTO)
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ type: IdDTO, isArray: true })
-  remove: IdDTO[];
+  @IsUUID(4, {
+    groups: [ValidationsGroupsEnum.default],
+    each: true,
+  })
+  @ApiProperty()
+  remove: string[];
 }

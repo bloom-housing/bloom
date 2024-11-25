@@ -278,8 +278,8 @@ describe('Testing feature flag service', () => {
 
       const params: FeatureFlagAssociate = {
         id: mockedValue.id,
-        associate: [associateJurisdiction],
-        remove: [removeJurisdiction],
+        associate: [associateJurisdiction.id],
+        remove: [removeJurisdiction.id],
       };
 
       expect(await service.associateJurisdictions(params)).toEqual({
