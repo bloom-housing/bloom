@@ -344,6 +344,11 @@ describe('Listing Controller Tests', () => {
         phone: false,
         internet: true,
       },
+      includeCommunityDisclaimer: Math.random() >= 0.5,
+      communityDisclaimerTitle:
+        Math.random() >= 0.5 ? 'example title' : undefined,
+      communityDisclaimerDescription:
+        Math.random() >= 0.5 ? 'example description' : undefined,
     };
   };
 
