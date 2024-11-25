@@ -999,6 +999,21 @@ export class ListingService implements OnModuleInit {
       ordinal: unsavedImage.ordinal,
     }));
 
+    const applicationMethods = mappedListing.applicationMethods?.map(
+      (applicationMethod) => ({
+        ...applicationMethod,
+        paperApplications: applicationMethod.paperApplications?.map(
+          (paperApplication) => ({
+            ...paperApplication,
+            assets: {
+              fileId: paperApplication.assets.fileId,
+              label: paperApplication.assets.label,
+            },
+          }),
+        ),
+      }),
+    );
+
     if (!dto.includeUnits) {
       delete mappedListing['units'];
     }
@@ -1015,6 +1030,7 @@ export class ListingService implements OnModuleInit {
           ordinal: question.ordinal,
         })),
       listingImages: listingImages,
+      applicationMethods: applicationMethods,
       lotteryLastRunAt: undefined,
       lotteryLastPublishedAt: undefined,
       lotteryStatus: undefined,
