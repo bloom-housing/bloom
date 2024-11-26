@@ -60,6 +60,14 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
 
   return (
     <SectionWithGrid heading={t("listings.units")} inset>
+      {/* TODO: put this behind the feature flag */}
+      {listing.homeType && (
+        <Grid.Row>
+          <FieldValue id="homeType" label={t("listings.homeType")}>
+            {listing.homeType ? t(`homeType.${listing.homeType}`) : t("t.none")}
+          </FieldValue>
+        </Grid.Row>
+      )}
       <Grid.Row>
         <FieldValue
           id="unitTypesOrIndividual"

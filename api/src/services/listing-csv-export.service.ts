@@ -34,6 +34,7 @@ import Unit from '../dtos/units/unit.dto';
 import Listing from '../dtos/listings/listing.dto';
 import { mapTo } from '../utilities/mapTo';
 import { ListingMultiselectQuestion } from '../dtos/listings/listing-multiselect-question.dto';
+import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 
 views.csv = {
   ...views.details,
@@ -83,7 +84,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
   ): Promise<StreamableFile> {
     this.logger.warn('Generating Listing-Unit Zip');
     const user = mapTo(User, req['user']);
-    await this.authorizeCSVExport(mapTo(User, req['user']));
+    await this.authorizeCSVExport(user);
 
     const zipFileName = `listings-units-${user.id}-${new Date().getTime()}.zip`;
     const zipFilePath = join(process.cwd(), `src/temp/${zipFileName}`);
@@ -124,6 +125,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
 
     await this.createCsv(listingFilePath, queryParams, {
       listings: listings as unknown as Listing[],
+      user,
     });
     const listingCsv = createReadStream(listingFilePath);
 
@@ -156,9 +158,9 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
   async createCsv<QueryParams extends ListingCsvQueryParams>(
     filename: string,
     queryParams: QueryParams,
-    optionParams: { listings: Listing[] },
+    optionParams: { listings: Listing[]; user: User },
   ): Promise<void> {
-    const csvHeaders = await this.getCsvHeaders();
+    const csvHeaders = await this.getCsvHeaders(optionParams.user);
 
     return new Promise((resolve, reject) => {
       // create stream
@@ -316,7 +318,18 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     return fieldValue;
   };
 
-  async getCsvHeaders(): Promise<CsvHeader[]> {
+  doAnyJurisdictionHaveFeatureFlagSet = (
+    jurisdictions: Jurisdiction[],
+    featureFlagName: string,
+  ) => {
+    return !!jurisdictions.find((juris) => {
+      return !!juris.featureFlags.find(
+        (flag) => flag.name === featureFlagName && flag.active,
+      );
+    });
+  };
+
+  async getCsvHeaders(user: User): Promise<CsvHeader[]> {
     const headers: CsvHeader[] = [
       {
         path: 'id',
@@ -406,11 +419,15 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       },
     ];
 
-    // TODO: only add this column if homeType feature flag is on
-    // {
-    //   path: 'homeType',
-    //   label: 'Home Type',
-    // },
+    if (
+      this.doAnyJurisdictionHaveFeatureFlagSet(user.jurisdictions, 'homeType')
+    ) {
+      headers.push({
+        path: 'homeType',
+        label: 'Home Type',
+      });
+    }
+
     headers.push(
       ...[
         {

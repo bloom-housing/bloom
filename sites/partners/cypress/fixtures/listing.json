@@ -10,6 +10,7 @@
   "yearBuilt": "2021",
   "reservedCommunityType.id": "Seniors",
   "reservedCommunityDescription": "Basic Test Description",
+  "homeType": "Apartment",
   "number": "2",
   "unitType.id": "One Bedroom",
   "numBathrooms": "2",

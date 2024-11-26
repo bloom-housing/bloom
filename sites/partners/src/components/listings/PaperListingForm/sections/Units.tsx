@@ -1,7 +1,16 @@
 import React, { useState, useMemo, useCallback, useContext, useEffect } from "react"
-import { t, MinimalTable, FieldGroup, StandardTableData } from "@bloom-housing/ui-components"
+import {
+  t,
+  MinimalTable,
+  FieldGroup,
+  StandardTableData,
+  Select,
+} from "@bloom-housing/ui-components"
 import { Button, Dialog, Drawer, FieldValue, Grid, Tag } from "@bloom-housing/ui-seeds"
-import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  HomeTypeEnum,
+  ReviewOrderTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { MessageContext } from "@bloom-housing/shared-helpers"
 import UnitForm from "../UnitForm"
 import { useFormContext, useWatch } from "react-hook-form"
@@ -30,6 +39,14 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
     control,
     name: "listingAvailabilityQuestion",
   })
+
+  const homeTypes = [
+    "",
+    ...Object.values(HomeTypeEnum).map((val) => {
+      console.log(`homeType.${val}`, t(`homeType.${val}`))
+      return { value: val, label: t(`homeType.${val}`) }
+    }),
+  ]
 
   const nextId = units && units.length > 0 ? units[units.length - 1]?.tempId + 1 : 1
 
@@ -188,6 +205,21 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
                 },
               ]}
             />
+          </FieldValue>
+        </Grid.Row>
+        <Grid.Row columns={2}>
+          <FieldValue label={t("listings.homeType")}>
+            {homeTypes && (
+              <Select
+                id={`homeType`}
+                name={`homeType`}
+                label={t("listings.homeType")}
+                labelClassName="sr-only"
+                register={register}
+                controlClassName="control"
+                options={homeTypes}
+              />
+            )}
           </FieldValue>
         </Grid.Row>
         <SectionWithGrid.HeadingRow>{t("listings.units")}</SectionWithGrid.HeadingRow>
