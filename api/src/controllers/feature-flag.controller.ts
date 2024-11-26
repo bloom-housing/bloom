@@ -40,7 +40,7 @@ import { ApiKeyGuard } from '../guards/api-key.guard';
   IdDTO,
 )
 @PermissionTypeDecorator('featureFlags')
-@UseGuards(OptionalAuthGuard, PermissionGuard)
+@UseGuards(ApiKeyGuard, OptionalAuthGuard, PermissionGuard)
 export class FeatureFlagController {
   constructor(private readonly featureFlagService: FeatureFlagService) {}
 
@@ -57,7 +57,6 @@ export class FeatureFlagController {
     operationId: 'create',
   })
   @ApiOkResponse({ type: FeatureFlag })
-  @UseGuards(ApiKeyGuard)
   async create(@Body() featureFlag: FeatureFlagCreate): Promise<FeatureFlag> {
     return await this.featureFlagService.create(featureFlag);
   }
@@ -68,7 +67,6 @@ export class FeatureFlagController {
     operationId: 'update',
   })
   @ApiOkResponse({ type: FeatureFlag })
-  @UseGuards(ApiKeyGuard)
   async update(@Body() featureFlag: FeatureFlagUpdate): Promise<FeatureFlag> {
     return await this.featureFlagService.update(featureFlag);
   }
@@ -79,7 +77,6 @@ export class FeatureFlagController {
     operationId: 'delete',
   })
   @ApiOkResponse({ type: SuccessDTO })
-  @UseGuards(ApiKeyGuard)
   async delete(@Body() dto: IdDTO): Promise<SuccessDTO> {
     return await this.featureFlagService.delete(dto.id);
   }
@@ -90,7 +87,6 @@ export class FeatureFlagController {
     operationId: 'associateJurisdictions',
   })
   @ApiOkResponse({ type: FeatureFlag })
-  @UseGuards(ApiKeyGuard)
   async associateJurisdictions(
     @Body() featureFlagAssociate: FeatureFlagAssociate,
   ): Promise<FeatureFlag> {
@@ -105,11 +101,10 @@ export class FeatureFlagController {
     operationId: 'retrieve',
   })
   @ApiOkResponse({ type: FeatureFlag })
-  @UseGuards(ApiKeyGuard)
   async retrieve(
     @Param('featureFlagId', new ParseUUIDPipe({ version: '4' }))
     featureFlagId: string,
-  ): Promise<FeatureFlag | null> {
+  ): Promise<FeatureFlag> {
     return this.featureFlagService.findOne(featureFlagId);
   }
 }
