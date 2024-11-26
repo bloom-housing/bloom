@@ -70,7 +70,6 @@
     "cloudinary": "^1.37.3",
     "compression": "^1.7.4",
     "cookie-parser": "~1.4.6",
-    "cron": "^3.1.7",
     "dayjs": "~1.11.9",
     "dotenv": "^16.4.5",
     "exceljs": "^4.4.0",
