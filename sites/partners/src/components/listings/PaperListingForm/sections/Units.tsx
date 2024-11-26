@@ -8,6 +8,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { Button, Dialog, Drawer, FieldValue, Grid, Tag } from "@bloom-housing/ui-seeds"
 import {
+  FeatureFlag,
   HomeTypeEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -22,13 +23,15 @@ type UnitProps = {
   units: TempUnit[]
   setUnits: (units: TempUnit[]) => void
   disableUnitsAccordion: boolean
+  featureFlags: FeatureFlag[]
 }
 
-const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
+const FormUnits = ({ units, setUnits, disableUnitsAccordion, featureFlags }: UnitProps) => {
   const { addToast } = useContext(MessageContext)
   const [unitDrawerOpen, setUnitDrawerOpen] = useState(false)
   const [unitDeleteModal, setUnitDeleteModal] = useState<number | null>(null)
   const [defaultUnit, setDefaultUnit] = useState<TempUnit | null>(null)
+  const [homeTypeEnabled, setHomeTypeEnabled] = useState(false)
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -43,7 +46,6 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
   const homeTypes = [
     "",
     ...Object.values(HomeTypeEnum).map((val) => {
-      console.log(`homeType.${val}`, t(`homeType.${val}`))
       return { value: val, label: t(`homeType.${val}`) }
     }),
   ]
@@ -77,6 +79,15 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
       })
     }
   }, [units])
+
+  // If hometype feature flag is not turned on for selected jurisdiction we need to reset the value
+  useEffect(() => {
+    const isHomeTypeEnabled = !!featureFlags.find((flag) => flag.name === "homeType")
+    setHomeTypeEnabled(isHomeTypeEnabled)
+    if (!isHomeTypeEnabled) {
+      setValue("homeType", "")
+    }
+  }, [featureFlags, setValue])
 
   const editUnit = useCallback(
     (tempId: number) => {
@@ -207,21 +218,24 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
             />
           </FieldValue>
         </Grid.Row>
-        <Grid.Row columns={2}>
-          <FieldValue label={t("listings.homeType")}>
-            {homeTypes && (
-              <Select
-                id={`homeType`}
-                name={`homeType`}
-                label={t("listings.homeType")}
-                labelClassName="sr-only"
-                register={register}
-                controlClassName="control"
-                options={homeTypes}
-              />
-            )}
-          </FieldValue>
-        </Grid.Row>
+
+        {homeTypeEnabled && (
+          <Grid.Row columns={2}>
+            <FieldValue label={t("listings.homeType")}>
+              {homeTypes && (
+                <Select
+                  id={`homeType`}
+                  name={`homeType`}
+                  label={t("listings.homeType")}
+                  labelClassName="sr-only"
+                  register={register}
+                  controlClassName="control"
+                  options={homeTypes}
+                />
+              )}
+            </FieldValue>
+          </Grid.Row>
+        )}
         <SectionWithGrid.HeadingRow>{t("listings.units")}</SectionWithGrid.HeadingRow>
         <Grid.Row>
           <Grid.Cell className="grid-inset-section">
