@@ -1739,10 +1739,10 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bloom-housing/ui-components@12.1.6":
-  version "12.1.6"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-12.1.6.tgz#e451ceb89f03044cfeb7e6995fd088f11712b9af"
-  integrity sha512-FjoRwau2o3jTgBtuRFLEcM5nhSxjr2n5pzNyx8bjGHZbX/721EYpR/RL2dJekTxYaUgHsI9vK5d9BK74IZxzMA==
+"@bloom-housing/ui-components@12.4.0":
+  version "12.4.0"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-12.4.0.tgz#bc36172c4d500ecd632d440d58af4183904cf882"
+  integrity sha512-c67UsaZZF8LG3J5AzdbBcNfRf70+rLaQjjQxbH+dTHnH8GvPffKF9kL/vICldPHIm+qO+5Uc7paYXITzKFZp+w==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.1.1"
     "@fortawesome/free-regular-svg-icons" "^6.1.1"

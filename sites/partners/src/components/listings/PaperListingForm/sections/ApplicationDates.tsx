@@ -1,8 +1,7 @@
 import React, { useState, useMemo } from "react"
-import { useWatch, useFormContext } from "react-hook-form"
+import { useFormContext } from "react-hook-form"
 import { getDetailFieldDate, getDetailFieldTime } from "../../PaperListingDetails/sections/helpers"
 import dayjs from "dayjs"
-import { YesNoEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t, DateField, TimeField, MinimalTable } from "@bloom-housing/ui-components"
 import { Button, Dialog, Drawer, Link, Grid } from "@bloom-housing/ui-seeds"
 import { FormListing, TempEvent } from "../../../../lib/listings/formTypes"
@@ -72,12 +71,7 @@ const ApplicationDates = ({
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, control } = formMethods
-
-  const enableDueDate = useWatch({
-    control,
-    name: "dueDateQuestion",
-  })
+  const { errors, register, setValue, watch } = formMethods
 
   const [drawerOpenHouse, setDrawerOpenHouse] = useState<TempEvent | boolean>(false)
   const [modalDeleteOpenHouse, setModalDeleteOpenHouse] = useState<TempEvent | null>(null)
@@ -102,6 +96,8 @@ const ApplicationDates = ({
     setModalDeleteOpenHouse(null)
   }
 
+  const hasDueDateError = errors?.applicationDueDate || errors?.applicationDueDateField
+
   return (
     <>
       <hr className="spacer-section-above spacer-section" />
@@ -116,9 +112,16 @@ const ApplicationDates = ({
               name={"applicationDueDateField"}
               id={"applicationDueDateField"}
               register={register}
+              setValue={setValue}
               watch={watch}
+              error={
+                hasDueDateError && {
+                  month: hasDueDateError,
+                  day: hasDueDateError,
+                  year: hasDueDateError,
+                }
+              }
               note={t("listings.whenApplicationsClose")}
-              disabled={disableDueDate || enableDueDate === YesNoEnum.no}
               defaultDate={{
                 month: listing?.applicationDueDate
                   ? dayjs(new Date(listing?.applicationDueDate)).format("MM")
@@ -138,24 +141,19 @@ const ApplicationDates = ({
               name={"applicationDueTimeField"}
               id={"applicationDueTimeField"}
               register={register}
+              setValue={setValue}
               watch={watch}
-              disabled={disableDueDate || enableDueDate === YesNoEnum.no}
+              error={errors?.applicationDueDate || errors?.applicationDueTimeField}
               defaultValues={{
                 hours: listing?.applicationDueDate
                   ? dayjs(new Date(listing?.applicationDueDate)).format("hh")
-                  : enableDueDate === YesNoEnum.no
-                  ? null
-                  : "05",
+                  : null,
                 minutes: listing?.applicationDueDate
                   ? dayjs(new Date(listing?.applicationDueDate)).format("mm")
-                  : enableDueDate === YesNoEnum.no
-                  ? null
-                  : "00",
+                  : null,
                 seconds: listing?.applicationDueDate
                   ? dayjs(new Date(listing?.applicationDueDate)).format("ss")
-                  : enableDueDate === YesNoEnum.no
-                  ? null
-                  : "00",
+                  : null,
                 period: listing?.applicationDueDate
                   ? new Date(listing?.applicationDueDate).getHours() >= 12
                     ? "pm"

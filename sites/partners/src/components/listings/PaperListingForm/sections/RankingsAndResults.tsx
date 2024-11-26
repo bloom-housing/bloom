@@ -24,7 +24,7 @@ const RankingsAndResults = ({ listing, disableDueDates, isAdmin }: RankingsAndRe
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, control, errors } = formMethods
+  const { register, setValue, watch, control, errors } = formMethods
 
   const lotteryEvent = getLotteryEvent(listing as unknown as Listing)
 
@@ -62,6 +62,7 @@ const RankingsAndResults = ({ listing, disableDueDates, isAdmin }: RankingsAndRe
       value: YesNoEnum.no,
     },
   ]
+
   return (
     <>
       <SectionWithGrid
@@ -94,32 +95,6 @@ const RankingsAndResults = ({ listing, disableDueDates, isAdmin }: RankingsAndRe
                       disableDueDates &&
                       listing?.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe,
                     defaultChecked: listing?.reviewOrderType === ReviewOrderTypeEnum.lottery,
-                  },
-                ]}
-              />
-            </Grid.Cell>
-          </Grid.Row>
-        )}
-        {reviewOrder === "reviewOrderFCFS" && (
-          <Grid.Row columns={2} className={"flex items-center"}>
-            <Grid.Cell>
-              <p className="field-label m-4 ml-0">{t("listings.dueDateQuestion")}</p>
-              <FieldGroup
-                name="dueDateQuestion"
-                type="radio"
-                register={register}
-                fields={[
-                  {
-                    ...yesNoRadioOptions[0],
-                    id: "dueDateQuestionYes",
-                    disabled: disableDueDates && !listing?.applicationDueDate,
-                    defaultChecked: listing && listing.applicationDueDate !== null,
-                  },
-                  {
-                    ...yesNoRadioOptions[1],
-                    id: "dueDateQuestionNo",
-                    disabled: disableDueDates && listing?.applicationDueDate !== null,
-                    defaultChecked: listing && !listing.applicationDueDate,
                   },
                 ]}
               />
@@ -178,6 +153,8 @@ const RankingsAndResults = ({ listing, disableDueDates, isAdmin }: RankingsAndRe
                   name={"lotteryDate"}
                   id={"lotteryDate"}
                   register={register}
+                  required
+                  setValue={setValue}
                   watch={watch}
                   disabled={disableDueDates}
                   error={
@@ -214,11 +191,12 @@ const RankingsAndResults = ({ listing, disableDueDates, isAdmin }: RankingsAndRe
                   name={"lotteryStartTime"}
                   id={"lotteryStartTime"}
                   register={register}
+                  required
+                  setValue={setValue}
                   watch={watch}
-                  disabled={disableDueDates}
-                  error={errors?.lotteryDate ? true : false}
+                  error={errors?.lotteryStartTime ? true : false}
                   strings={{
-                    timeError: errors?.lotteryDate ? t("errors.dateError") : null,
+                    timeError: errors?.lotteryStartTime ? t("errors.timeError") : null,
                   }}
                   defaultValues={
                     errors?.lotteryDate
@@ -245,11 +223,12 @@ const RankingsAndResults = ({ listing, disableDueDates, isAdmin }: RankingsAndRe
                   name={"lotteryEndTime"}
                   id={"lotteryEndTime"}
                   register={register}
+                  required
+                  setValue={setValue}
                   watch={watch}
-                  disabled={disableDueDates}
-                  error={errors?.lotteryDate ? true : false}
+                  error={errors?.lotteryEndTime ? true : false}
                   strings={{
-                    timeError: errors?.lotteryDate ? t("errors.dateError") : null,
+                    timeError: errors?.lotteryEndTime ? t("errors.timeError") : null,
                   }}
                   defaultValues={
                     errors?.lotteryDate

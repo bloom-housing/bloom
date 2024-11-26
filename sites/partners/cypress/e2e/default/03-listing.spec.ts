@@ -87,6 +87,7 @@ describe("Listing Management Tests", () => {
     })
   })
 
+  // Fill out a First Come, First Serve (FCFS) listing
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function fillOutListing(cy: Cypress.cy, listing: any): void {
     cy.intercept("GET", "/geocoding/v5/**", { fixture: "address" })
@@ -238,7 +239,6 @@ describe("Listing Management Tests", () => {
     cy.getByID("specialNotes").type(listing["specialNotes"])
     cy.get("button").contains("Application Process").click()
     cy.getByID("reviewOrderFCFS").check()
-    cy.getByID("dueDateQuestionNo").check()
     cy.getByID("waitlistOpenNo").check()
     cy.getByID("leasingAgentName").type(listing["leasingAgentName"])
     cy.getByID("leasingAgentEmail").type(listing["leasingAgentEmail"])
@@ -292,6 +292,13 @@ describe("Listing Management Tests", () => {
     cy.getByID("startTime.period").select("AM")
     cy.getByID("endTime.period").select("PM")
     cy.getByID("saveOpenHouseFormButton").contains("Save").click()
+
+    cy.getByID("applicationDueDateField.month").type(listing["date.month"])
+    cy.getByID("applicationDueDateField.day").type(listing["date.day"])
+    cy.getByID("applicationDueDateField.year").type((new Date().getFullYear() + 1).toString())
+    cy.getByID("applicationDueTimeField.hours").type(listing["startTime.hours"])
+    cy.getByID("applicationDueTimeField.minutes").type(listing["startTime.minutes"])
+    cy.getByID("applicationDueTimeField.period").select("PM")
     cy.getByID("publishButton").contains("Publish").click()
 
     cy.getByID("publishButtonConfirm").contains("Publish").click()
@@ -356,7 +363,6 @@ describe("Listing Management Tests", () => {
     cy.getByID("programRules").contains(listing["programRules"])
     cy.getByID("specialNotes").contains(listing["specialNotes"])
     cy.getByID("reviewOrderQuestion").contains("First come first serve")
-    cy.getByID("dueDateQuestion").contains("No")
     cy.getByID("whatToExpect").contains(
       "Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents."
     )

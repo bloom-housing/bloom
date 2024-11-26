@@ -40,7 +40,7 @@ const ApplicationConfirmation = () => {
       default:
         return { text: "" }
     }
-  }, [listing, router.locale])
+  }, [listing])
 
   const contentUpdates = useMemo(() => {
     switch (listing?.reviewOrderType) {

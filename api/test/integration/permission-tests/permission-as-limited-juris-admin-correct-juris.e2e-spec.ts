@@ -1063,7 +1063,9 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
     });
 
     it('should succeed for update endpoint & create an activity log entry when user is not updating dates', async () => {
-      const listingData = await listingFactory(jurisId, prisma);
+      const listingData = await listingFactory(jurisId, prisma, {
+        applicationDueDate: new Date(),
+      });
       const listing = await prisma.listings.create({
         data: listingData,
       });
