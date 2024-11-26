@@ -508,7 +508,7 @@
   "authentication.forgotPassword.errors.passwordTooWeak": "La contraseña es demasiado débil. Debe tener al menos 12 caracteres e incluir al menos una letra minúscula, una letra mayúscula, un número y un carácter especial (#?!@$%^&*-).",
   "authentication.forgotPassword.errors.tokenExpired": "El token de restablecimiento de contraseña caducó. Por favor, solicite uno nuevo.",
   "authentication.forgotPassword.errors.tokenMissing": "El token no fue encontrado. Por favor, solicite uno nuevo.",
-  "authentication.forgotPassword.message": "Si hay una cuenta creada con ese correo electrónico, recibirás un correo electrónico con un enlace para restablecer tu contraseña.",
+  "authentication.forgotPassword.message": "Si hay una cuenta creada con ese correo electrónico, recibirás un correo electrónico con un enlace para restablecer tu contraseña. El enlace de reinicio es válido por 1 hora.",
   "authentication.forgotPassword.passwordConfirmation": "Confirmación de contraseña",
   "authentication.forgotPassword.sendEmail": "Enviar correo electrónico",
   "authentication.signIn.accountHasBeenLocked": "Por razones de seguridad, esta cuenta ha sido bloqueada.",

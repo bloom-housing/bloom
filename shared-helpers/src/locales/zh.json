@@ -508,7 +508,7 @@
   "authentication.forgotPassword.errors.passwordTooWeak": "密碼強度太弱。必須至少 12 個字符，並且至少包含 1 個小寫字母、1 個大寫字母、1 個數字和 1 個特殊字符 (#?!@$%^&*-)。",
   "authentication.forgotPassword.errors.tokenExpired": "重設密碼權杖已到期。請要求新的權杖。",
   "authentication.forgotPassword.errors.tokenMissing": "找不到權杖。請要求新的權杖。",
-  "authentication.forgotPassword.message": "如果使用该电子邮件创建了帐户，您将收到一封包含重置密码链接的电子邮件。",
+  "authentication.forgotPassword.message": "如果使用该电子邮件创建了帐户，您将收到一封包含重置密码链接的电子邮件。 重置链接有效期为1小时。",
   "authentication.forgotPassword.passwordConfirmation": "确认密码",
   "authentication.forgotPassword.sendEmail": "傳送電子郵件",
   "authentication.signIn.accountHasBeenLocked": "基於安全原因，此帳戶已遭到鎖定。",

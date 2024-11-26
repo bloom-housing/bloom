@@ -508,7 +508,7 @@
   "authentication.forgotPassword.errors.passwordTooWeak": "Mật khẩu quá yếu. Phải có ít nhất 12 ký tự và bao gồm ít nhất một chữ cái viết thường, một chữ cái viết hoa, một số và một ký tự đặc biệt (#?!@$%^&*-).",
   "authentication.forgotPassword.errors.tokenExpired": "Mã thông báo đặt lại mật khẩu đã hết hạn. Vui lòng yêu cầu mã mới.",
   "authentication.forgotPassword.errors.tokenMissing": "Không tìm thấy mã thông báo. Vui lòng yêu cầu mã mới.",
-  "authentication.forgotPassword.message": "Nếu có tài khoản được tạo bằng email đó, bạn sẽ nhận được email có liên kết để đặt lại mật khẩu của mình.",
+  "authentication.forgotPassword.message": "Nếu có tài khoản được tạo bằng email đó, bạn sẽ nhận được email có liên kết để đặt lại mật khẩu của mình. Liên kết đặt lại có hiệu lực trong 1 giờ.",
   "authentication.forgotPassword.passwordConfirmation": "Xác nhận mật khẩu",
   "authentication.forgotPassword.sendEmail": "Gửi email",
   "authentication.signIn.accountHasBeenLocked": "Vì lý do bảo mật, tài khoản này đã bị khóa.",
