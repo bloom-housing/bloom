@@ -12,6 +12,7 @@ import { Prisma } from '@prisma/client';
 import { JurisdictionUpdate } from '../dtos/jurisdictions/jurisdiction-update.dto';
 
 const view: Prisma.JurisdictionsInclude = {
+  featureFlags: true,
   multiselectQuestions: true,
 };
 /**
