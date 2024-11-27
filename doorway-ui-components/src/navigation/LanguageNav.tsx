@@ -18,8 +18,8 @@ const LanguageNav = ({ ariaLabel, languages }: LanguageNavProps) => {
     <div className="language-bar">
       <div className="language-bar__inner">
         <figure className="language-bar__association-logo">
-          <a href="#">
-            <img src="/images/mtc-abag-logo.png" alt={t("footer.mtcLogo")} />
+          <a href="https://mtc.ca.gov/">
+            <img src="/images/mtc-abag-logo.png" alt={t("nav.mtcLogo")} />
           </a>
         </figure>
         <nav {...{ "aria-label": ariaLabel ?? "Language" }} className="language-nav">
