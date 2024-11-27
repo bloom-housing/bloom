@@ -4,7 +4,7 @@
 .image-card {
   /* Component Variables */
   --default-background-color: var(--bloom-color-gray-500);
-  --border-radius: var(--doorway-standard-border-radius);
+  --border-radius: 0;
   --image-height: auto;
   --tags-justify-mobile: center;
   --tags-justify-desktop: flex-start;
@@ -12,9 +12,7 @@
   --grid-gap-desktop: var(--bloom-s4);
   --grid-template-columns-mobile: 1fr 1fr;
   --grid-template-rows-mobile: 1.2fr 0.5fr;
-  --grid-template-areas-mobile:
-    "Main Main"
-    "Secondary-1 Secondary-2";
+  --grid-template-areas-mobile: "Main Main" "Secondary-1 Secondary-2";
 
   position: relative;
 }
@@ -38,7 +36,6 @@
 
   &.has-grid-layout {
     --grid-gap: var(--grid-gap-desktop);
-
 
     background-color: transparent;
     display: grid;
@@ -173,6 +170,7 @@
   --footer-justify: center;
   --modal-border: none;
   --modal-shadow: none;
+  max-height: 100dvh;
   @media (min-width: $screen-md) {
     --scroll-max-height: calc(80vh - 200px);
     max-width: var(--bloom-width-5xl);
@@ -188,8 +186,11 @@
   svg {
     @extend .sr-only;
   }
-  footer button:focus {
-    box-shadow: 0 0 3px 4px var(--bloom-color-accent-cool);
+  footer {
+    border: 0;
+    button:focus {
+      box-shadow: 0 0 3px 4px var(--bloom-color-accent-cool);
+    }
   }
 }
 

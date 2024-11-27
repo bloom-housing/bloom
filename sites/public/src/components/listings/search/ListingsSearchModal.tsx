@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { ListingSearchParams, parseSearchString } from "../../../lib/listings/search"
 import { t } from "@bloom-housing/ui-components"
 import {
@@ -88,11 +88,12 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
     monthlyRent: "",
     counties: countyLabels,
     availability: null,
+    ids: undefined,
   }
   const initialState = parseSearchString(searchString, nullState)
   const [formValues, setFormValues] = useState(initialState)
 
-  const countFilters = (params: ListingSearchParams) => {
+  const countFilters = useCallback((params: ListingSearchParams) => {
     let count = 0
     // For each of our search params, count the number that aren't empty
     Object.values(params).forEach((value) => {
@@ -101,23 +102,14 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
       count++
     })
     return count
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // We're factoring out the function to prevent requiring props in useEffect
   const filterChange = props.onFilterChange
   useEffect(() => {
     filterChange(countFilters(formValues))
   }, [formValues, filterChange, countFilters])
-
-  // Run this once immediately after first render
-  // Empty array is intentional; it's how we make sure it only runs once
-  /* eslint-disable react-hooks/exhaustive-deps */
-  useEffect(() => {
-    // Set initial filter count
-    props.onFilterChange(countFilters(formValues))
-    // Fetch listings
-    onSubmit()
-  }, [])
 
   const clearValues = () => {
     setFormValues(nullState)
@@ -198,7 +190,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
         check = false
       }
       countyFields.push({
-        id: `county-item-${idx}`,
+        id: `county-item-${county.label}`,
         index: idx,
         label: county.label,
         value: county.value,
@@ -326,11 +318,20 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
         <img src={"/images/county-map.png"} alt={t("welcome.bayAreaCountyMap")} />
       </Dialog.Content>
       <Dialog.Footer>
-        <Button type="button" className="is-secondary" onClick={onSubmit}>
+        <Button
+          type="button"
+          className="is-secondary"
+          onClick={onSubmit}
+          id={"listings-map-filter-dialog-show-button"}
+        >
           {t("t.showMatchingListings")}
         </Button>
         <div style={{ flexGrow: 1 }}></div>
-        <button style={clearButtonStyle} onClick={clearValues}>
+        <button
+          style={clearButtonStyle}
+          onClick={clearValues}
+          data-testid={"listings-map-filter-dialog-clear-button"}
+        >
           {t("t.clearAllFilters")}
         </button>
       </Dialog.Footer>

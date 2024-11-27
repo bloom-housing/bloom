@@ -1,11 +1,13 @@
 import React from "react"
-import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api"
+import { APIProvider, Map, AdvancedMarker } from "@vis.gl/react-google-maps"
+import { useJsApiLoader } from "@react-google-maps/api"
 import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type ListingGoogleMapProps = {
   listing: Listing
   googleMapsHref: string
   googleMapsApiKey: string
+  googleMapsMapId: string
 }
 
 const containerStyle: React.CSSProperties = {
@@ -26,19 +28,28 @@ const ListingGoogleMap = (props: ListingGoogleMapProps) => {
     lng: listing.listingsBuildingAddress.longitude,
   }
   const marker = (
-    <Marker
-      position={latitudeLongitude}
-      icon={{
-        url: "/images/map-pin.svg",
-      }}
-    ></Marker>
+    <AdvancedMarker position={latitudeLongitude}>
+      <span>
+        <img src="/images/map-pin.svg" alt={"Listing pin"} />
+      </span>
+    </AdvancedMarker>
   )
 
   return isLoaded ? (
     <a href={props.googleMapsHref} target="_blank">
-      <GoogleMap mapContainerStyle={containerStyle} center={latitudeLongitude} zoom={13}>
-        {marker}
-      </GoogleMap>
+      <APIProvider apiKey={props.googleMapsApiKey}>
+        <Map
+          mapId={props.googleMapsMapId}
+          style={containerStyle}
+          gestureHandling={"greedy"}
+          disableDefaultUI={true}
+          clickableIcons={false}
+          defaultZoom={14}
+          defaultCenter={latitudeLongitude}
+        >
+          {marker}
+        </Map>
+      </APIProvider>
     </a>
   ) : (
     <></>

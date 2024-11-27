@@ -8,6 +8,7 @@ export type ListingSearchParams = {
   monthlyRent: string
   counties: string[]
   availability: FilterAvailabilityEnum
+  ids: string[]
 }
 
 /**
@@ -83,7 +84,7 @@ export function parseSearchString<T extends object>(search: string, format: T): 
 export function buildSearchString(input: ListingSearchParams) {
   // For each non-null key in the input, return a serialized value, then join all together
   return Object.entries(input)
-    .filter(([key, value]) => {
+    .filter(([_, value]) => {
       return value !== null && value != ""
     })
     .map(([key, value]) => {
@@ -124,6 +125,11 @@ export function generateSearchQuery(params: ListingSearchParams) {
   // Find listings in these counties
   if (Array.isArray(params.counties) && params.counties.length > 0) {
     qb.whereIn("counties", params.counties)
+  }
+
+  // Find listings with these ids
+  if (Array.isArray(params.ids) && params.ids.length > 0) {
+    qb.whereIn("ids", params.ids)
   }
 
   if (params.availability) {

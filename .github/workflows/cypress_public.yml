@@ -39,7 +39,8 @@ env:
   SHOW_MANDATED_ACCOUNTS: "TRUE"
   SHOW_PWDLESS: "TRUE"
   SHOW_PUBLIC_LOTTERY: "TRUE"
-
+  GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+  GOOGLE_MAPS_MAP_ID: ${{ secrets.GOOGLE_MAPS_MAP_ID }}
 
 jobs:
   public-cypress:
@@ -84,23 +85,11 @@ jobs:
           PGPASSWORD: bloom
 
       - name: Setup backend
-        run: yarn test:backend:new:dbsetup:withseed
+        run: yarn test:backend:new:dbsetup:withseed:large
         env:
           PGHOST: 127.0.0.1
           PGPASSWORD: bloom
           PGUSER: bloom-dev
-
-      - name: yarn in tasks/import-listings dir
-        working-directory: ./tasks/import-listings
-        run: yarn
-      
-      - name: Build import
-        working-directory: ./tasks/import-listings
-        run: yarn build
-
-      - name: Import listings
-        working-directory: ./tasks/import-listings
-        run: yarn import:run:local:dev
 
       - name: Cypress run
         uses: cypress-io/github-action@v5

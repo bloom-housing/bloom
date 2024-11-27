@@ -63,7 +63,7 @@ export const unitFactoryMany = async (
   ].map(async (_, index) => {
     const unitType = await unitTypeFactorySingle(
       prismaClient,
-      unitTypes[randomInt(unitTypes.length)],
+      unitTypes[randomInt(unitTypes.length) - 1],
     );
 
     // create a random priority type with roughly half being null

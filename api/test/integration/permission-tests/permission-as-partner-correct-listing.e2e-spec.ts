@@ -1088,7 +1088,6 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
         jurisId,
       );
       val.applicationDueDate = listing.applicationDueDate;
-      val.reviewOrderType = null;
 
       await request(app.getHttpServer())
         .put(`/listings/${userListingId}`)
@@ -1152,10 +1151,10 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
 
     it('should succeed for mapMarkers endpoint', async () => {
       await request(app.getHttpServer())
-        .get(`/listings/mapMarkers`)
+        .post(`/listings/mapMarkers`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(201);
     });
   });
 

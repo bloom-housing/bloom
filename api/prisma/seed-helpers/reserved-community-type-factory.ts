@@ -1,13 +1,7 @@
 import { Prisma, PrismaClient, ReservedCommunityTypes } from '@prisma/client';
 import { randomInt } from 'crypto';
 
-const reservedCommunityTypeOptions = [
-  'specialNeeds',
-  'senior',
-  'senior62',
-  'developmentalDisability',
-  'veteran',
-];
+const reservedCommunityTypeOptions = ['senior', 'senior62', 'veteran'];
 
 export const reservedCommunityTypeFactory = (
   jurisdictionId: string,

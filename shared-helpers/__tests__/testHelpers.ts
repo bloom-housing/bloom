@@ -88,6 +88,7 @@ export const application: Application = {
   id: "application_1",
   createdAt: new Date(),
   updatedAt: new Date(),
+  applicationLotteryPositions: [],
   applicant: {
     id: "applicant_id",
     createdAt: new Date(),
@@ -134,7 +135,7 @@ export const application: Application = {
   submissionType: ApplicationSubmissionTypeEnum.electronical,
   submissionDate: new Date(),
   confirmationCode: "ABCD1234",
-  incomeVouchers: true,
+  incomeVouchers: [],
   additionalPhoneNumber: "(456) 456-4564",
   additionalPhoneNumberType: "cell",
   sendMailToMailingAddress: true,
@@ -314,6 +315,7 @@ export const jurisdiction: Jurisdiction = {
 
 export const listing: Listing = {
   id: "Uvbk5qurpB2WI9V6WnNdH",
+  applicationLotteryTotals: [],
   applicationConfig: undefined,
   applicationOpenDate: new Date("2019-12-31T15:22:57.000-07:00"),
   listingsApplicationPickUpAddress: undefined,

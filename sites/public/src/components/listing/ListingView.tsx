@@ -83,6 +83,7 @@ interface ListingProps {
   preview?: boolean
   jurisdiction?: Jurisdiction
   googleMapsApiKey: string
+  googleMapsMapId: string
   isExternal?: boolean
 }
 
@@ -1050,6 +1051,7 @@ export const ListingView = (props: ListingProps) => {
               listing={listing}
               googleMapsHref={googleMapsHref}
               googleMapsApiKey={props.googleMapsApiKey}
+              googleMapsMapId={props.googleMapsMapId}
             />
           </div>
         </ListingDetailItem>

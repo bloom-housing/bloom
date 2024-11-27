@@ -1,7 +1,10 @@
 import {
-  ListingFilterParams,
+  ListingMapMarker,
+  ListingOrderByKeys,
+  ListingsQueryParams,
   ListingsService,
   ListingViews,
+  OrderByEnum,
   PaginatedListing,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingQueryBuilder } from "./listing-query-builder"
@@ -23,26 +26,40 @@ export const searchListings = async (
     },
   })
 
-  const params: {
-    view: ListingViews
-    limit: number | "all"
-    page: number
-    filter: ListingFilterParams[]
-  } = {
+  const params: ListingsQueryParams = {
     view: ListingViews.base,
-    limit: limit,
+    limit: limit || "all",
     page: page,
     filter: qb.getFilterParams(),
+    orderBy: [ListingOrderByKeys.mostRecentlyPublished],
+    orderDir: [OrderByEnum.desc],
   }
 
-  console.log("61:", params)
-
   try {
-    const response = await listingsService.listCombined(params)
+    const response = await listingsService.listCombined({
+      body: { ...params },
+    })
     results = response
   } catch (e) {
     console.log("ListingService.searchListings error: ", e)
   }
 
   return results
+}
+
+export const searchMapMarkers = async (
+  qb: ListingQueryBuilder,
+  listingsService: ListingsService
+): Promise<ListingMapMarker[]> => {
+  const params: ListingsQueryParams = {
+    limit: "all",
+    filter: qb.getFilterParams(),
+  }
+
+  try {
+    const response = await listingsService.mapMarkers({ body: { ...params } })
+    return response
+  } catch (e) {
+    console.log("ListingService.searchMapMarkers error: ", e)
+  }
 }

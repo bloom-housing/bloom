@@ -48,8 +48,6 @@ module.exports = withBundleAnalyzer({
     notificationsSignUpUrl: process.env.NOTIFICATIONS_SIGN_UP_URL || null,
     maintenanceWindow: process.env.MAINTENANCE_WINDOW,
     mtcDataUrl: process.env.MTC_DATA_URL,
-    // start Doorway env variables
-    //googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY, // moved to runtime config
     awsS3BucketName: process.env.AWS_S3_BUCKET_NAME,
     awsAccessKey: process.env.AWS_ACCESS_KEY_ID,
     awsSecretKey: process.env.AWS_SECRET_KEY,

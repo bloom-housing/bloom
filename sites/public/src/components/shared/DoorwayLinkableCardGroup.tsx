@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import Link from "next/link"
 import { Card, CardProps, generateJumplinkId } from "@bloom-housing/doorway-ui-components"
 import styles from "./DoorwayLinkableCardGroup.module.scss"

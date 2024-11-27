@@ -160,13 +160,41 @@ export class ListingsService {
       /**  */
       limit?: number | "all"
       /**  */
-      filter?: ListingFilterParams[]
+      $comparison: string
+      /**  */
+      name?: string
+      /**  */
+      status?: ListingsStatusEnum
+      /**  */
+      neighborhood?: string
+      /**  */
+      bedrooms?: number
+      /**  */
+      bathrooms?: number
+      /**  */
+      zipcode?: string
+      /**  */
+      leasingAgents?: string
+      /**  */
+      jurisdiction?: string
+      /**  */
+      isExternal?: boolean
+      /**  */
+      availability?: FilterAvailabilityEnum
+      /**  */
+      city?: string
+      /**  */
+      monthlyRent?: number
+      /**  */
+      counties?: []
+      /**  */
+      ids?: []
       /**  */
       view?: ListingViews
       /**  */
-      orderBy?: ListingOrderByKeys
+      orderBy?: ListingOrderByKeys[]
       /**  */
-      orderDir?: OrderByEnum
+      orderDir?: OrderByEnum[]
       /**  */
       search?: string
     } = {} as any,
@@ -179,7 +207,21 @@ export class ListingsService {
       configs.params = {
         page: params["page"],
         limit: params["limit"],
-        filter: params["filter"],
+        $comparison: params["$comparison"],
+        name: params["name"],
+        status: params["status"],
+        neighborhood: params["neighborhood"],
+        bedrooms: params["bedrooms"],
+        bathrooms: params["bathrooms"],
+        zipcode: params["zipcode"],
+        leasingAgents: params["leasingAgents"],
+        jurisdiction: params["jurisdiction"],
+        isExternal: params["isExternal"],
+        availability: params["availability"],
+        city: params["city"],
+        monthlyRent: params["monthlyRent"],
+        counties: params["counties"],
+        ids: params["ids"],
         view: params["view"],
         orderBy: params["orderBy"],
         orderDir: params["orderDir"],
@@ -240,38 +282,19 @@ export class ListingsService {
    */
   listCombined(
     params: {
-      /**  */
-      page?: number
-      /**  */
-      limit?: number | "all"
-      /**  */
-      filter?: ListingFilterParams[]
-      /**  */
-      view?: ListingViews
-      /**  */
-      orderBy?: ListingOrderByKeys
-      /**  */
-      orderDir?: OrderByEnum
-      /**  */
-      search?: string
+      /** requestBody */
+      body?: ListingsQueryParams
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/listings/combined"
 
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = {
-        page: params["page"],
-        limit: params["limit"],
-        filter: params["filter"],
-        view: params["view"],
-        orderBy: params["orderBy"],
-        orderDir: params["orderDir"],
-        search: params["search"],
-      }
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
+      let data = params.body
+
+      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -300,13 +323,21 @@ export class ListingsService {
   /**
    * Get listing map markers
    */
-  mapMarkers(options: IRequestOptions = {}): Promise<ListingMapMarker[]> {
+  mapMarkers(
+    params: {
+      /** requestBody */
+      body?: ListingsQueryParams
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ListingMapMarker[]> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/listings/mapMarkers"
 
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
+      let data = params.body
+
+      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -2688,29 +2719,6 @@ export interface SuccessDTO {
   success: boolean
 }
 
-export interface ListingsQueryParams {
-  /**  */
-  page?: number
-
-  /**  */
-  limit?: number | "all"
-
-  /**  */
-  filter?: string[]
-
-  /**  */
-  view?: ListingViews
-
-  /**  */
-  orderBy?: ListingOrderByKeys
-
-  /**  */
-  orderDir?: OrderByEnum
-
-  /**  */
-  search?: string
-}
-
 export interface ListingFilterParams {
   /**  */
   $comparison: EnumListingFilterParamsComparison
@@ -2753,6 +2761,32 @@ export interface ListingFilterParams {
 
   /**  */
   counties?: string[]
+
+  /**  */
+  ids?: string[]
+}
+
+export interface ListingsQueryParams {
+  /**  */
+  page?: number
+
+  /**  */
+  limit?: number | "all"
+
+  /**  */
+  filter?: ListingFilterParams[]
+
+  /**  */
+  view?: ListingViews
+
+  /**  */
+  orderBy?: ListingOrderByKeys[]
+
+  /**  */
+  orderDir?: OrderByEnum[]
+
+  /**  */
+  search?: string
 }
 
 export interface ListingsRetrieveParams {
@@ -6267,6 +6301,26 @@ export interface PublicLotteryTotal {
   multiselectQuestionId?: string
 }
 
+export enum ListingsStatusEnum {
+  "active" = "active",
+  "pending" = "pending",
+  "closed" = "closed",
+  "pendingReview" = "pendingReview",
+  "changesRequested" = "changesRequested",
+}
+
+export enum FilterAvailabilityEnum {
+  "waitlistOpen" = "waitlistOpen",
+  "unitsAvailable" = "unitsAvailable",
+}
+export enum EnumListingFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "<=" = "<=",
+  "NA" = "NA",
+}
 export enum ListingViews {
   "fundamentals" = "fundamentals",
   "base" = "base",
@@ -6292,26 +6346,6 @@ export enum OrderByEnum {
   "desc" = "desc",
 }
 
-export enum ListingsStatusEnum {
-  "active" = "active",
-  "pending" = "pending",
-  "closed" = "closed",
-  "pendingReview" = "pendingReview",
-  "changesRequested" = "changesRequested",
-}
-
-export enum FilterAvailabilityEnum {
-  "waitlistOpen" = "waitlistOpen",
-  "unitsAvailable" = "unitsAvailable",
-}
-export enum EnumListingFilterParamsComparison {
-  "=" = "=",
-  "<>" = "<>",
-  "IN" = "IN",
-  ">=" = ">=",
-  "<=" = "<=",
-  "NA" = "NA",
-}
 export enum ApplicationAddressTypeEnum {
   "leasingAgent" = "leasingAgent",
 }

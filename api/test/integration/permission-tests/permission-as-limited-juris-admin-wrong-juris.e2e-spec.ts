@@ -1159,8 +1159,8 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
 
     it('should succeed for mapMarkers endpoint', async () => {
       await request(app.getHttpServer())
-        .get(`/listings/mapMarkers`)
-        .expect(200);
+        .post(`/listings/mapMarkers`)
+        .expect(201);
     });
   });
 

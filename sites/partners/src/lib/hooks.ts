@@ -80,6 +80,7 @@ export function useListingsData({
     filter: [],
     search,
     view: ListingViews.base,
+    $comparison: null,
   }
 
   if (sort) {
@@ -240,7 +241,7 @@ export function useApplicationsData(
   }
 
   if (orderBy) {
-    Object.assign(params, { orderBy, order: order || OrderByEnum.asc })
+    Object.assign(params, { orderBy, order: order || "asc" })
   }
 
   const paramsString = qs.stringify(params)

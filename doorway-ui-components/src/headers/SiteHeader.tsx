@@ -58,16 +58,6 @@ const SiteHeader = (props: SiteHeaderProps) => {
 
   const [navbarClass, setNavbarClass] = useState("site-header__navbar-inline")
 
-  const updateNavbarClass = () => {
-    // If the links have flex-wrapped onto the next line, apply the background color
-    const logoOffset = document.getElementById("site-header-logo")?.offsetLeft
-    const linksOffset = document.getElementById("site-header-links")?.offsetLeft
-    if (linksOffset === undefined || logoOffset === undefined) return
-    return linksOffset === 0 || linksOffset === logoOffset
-      ? setNavbarClass("site-header__navbar-wrapped")
-      : setNavbarClass("site-header__navbar-inline")
-  }
-
   const { LinkComponent } = useContext(NavigationContext)
 
   const DESKTOP_MIN_WIDTH = props.desktopMinWidth || 767 // @screen md
@@ -79,7 +69,6 @@ const SiteHeader = (props: SiteHeaderProps) => {
       } else {
         setIsDesktop(false)
       }
-      updateNavbarClass()
     }
 
     updateMedia()

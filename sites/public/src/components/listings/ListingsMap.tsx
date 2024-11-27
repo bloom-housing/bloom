@@ -1,29 +1,62 @@
-import React, { useEffect, useState } from "react"
-import { GoogleMap, InfoWindow, Marker, useJsApiLoader } from "@react-google-maps/api"
-import { getListingUrl, getListingCard } from "../../lib/helpers"
-import styles from "./ListingsCombined.module.scss"
-import { MapControl } from "../shared/MapControl"
+import React, { useState } from "react"
+import { APIProvider, Map } from "@vis.gl/react-google-maps"
+import { useJsApiLoader } from "@react-google-maps/api"
+import { Heading } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
-import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { ListingMapMarker } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { MapControl } from "../shared/MapControl"
+import { MapClusterer } from "./MapClusterer"
+import styles from "./ListingsCombined.module.scss"
+import { ListingSearchParams } from "../../lib/listings/search"
+
+const defaultCenter = {
+  lat: 37.579795,
+  lng: -122.374118,
+}
+const defaultZoom = 9
 
 type ListingsMapProps = {
-  listings?: Listing[]
+  listings?: ListingMapMarker[] | null
   googleMapsApiKey: string
+  googleMapsMapId: string
   desktopMinWidth?: number
   isMapExpanded: boolean
-  setShowListingsList?: React.Dispatch<React.SetStateAction<boolean>>
+  setVisibleMarkers: React.Dispatch<React.SetStateAction<MapMarkerData[]>>
+  visibleMarkers: MapMarkerData[]
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
+  searchFilter: ListingSearchParams
+  isFirstBoundsLoad: boolean
+  setIsFirstBoundsLoad: React.Dispatch<React.SetStateAction<boolean>>
+  isDesktop: boolean
+}
+
+export type MapMarkerData = {
+  id: string
+  key: number
+  coordinate: google.maps.LatLngLiteral
 }
 
 const containerStyle: React.CSSProperties = {
-  display: "flex",
   width: "100%",
   height: "100%",
   position: "relative",
+  display: "block",
 }
 
-const center = {
-  lat: 37.579795,
-  lng: -122.374118,
+const getMarkers = (listings: ListingMapMarker[]) => {
+  const markers: MapMarkerData[] | null = []
+  if (!listings) return null
+  listings?.forEach((listing: ListingMapMarker, index) => {
+    markers.push({
+      coordinate: {
+        lat: listing.lat,
+        lng: listing.lng,
+      },
+      id: listing.id,
+      key: index,
+    })
+  })
+  return markers
 }
 
 const ListingsMap = (props: ListingsMapProps) => {
@@ -31,105 +64,46 @@ const ListingsMap = (props: ListingsMapProps) => {
     googleMapsApiKey: props.googleMapsApiKey,
   })
 
-  const [openInfoWindow, setOpenInfoWindow] = useState(false)
-  const [infoWindowIndex, setInfoWindowIndex] = useState(null)
+  const [infoWindowIndex, setInfoWindowIndex] = useState<number>(null)
 
-  const [isDesktop, setIsDesktop] = useState(true)
+  const markers: MapMarkerData[] | null = getMarkers(props.listings)
 
-  const DESKTOP_MIN_WIDTH = props.desktopMinWidth || 767 // @screen md
-  useEffect(() => {
-    if (window.innerWidth > DESKTOP_MIN_WIDTH) {
-      setIsDesktop(true)
-    } else {
-      setIsDesktop(false)
-    }
+  if (!isLoaded) return <></>
 
-    const updateMedia = () => {
-      if (window.innerWidth > DESKTOP_MIN_WIDTH) {
-        setIsDesktop(true)
-      } else {
-        setIsDesktop(false)
-      }
-    }
-    window.addEventListener("resize", updateMedia)
-    return () => window.removeEventListener("resize", updateMedia)
-  }, [DESKTOP_MIN_WIDTH])
-
-  const markers = []
-  let index = 0
-  props.listings.forEach((listing: Listing) => {
-    const lat = listing.listingsBuildingAddress.latitude
-    const lng = listing.listingsBuildingAddress.longitude
-    const uri = getListingUrl(listing)
-    const key = ++index
-
-    // Create an info window that is associated to each marker and that contains the listing card
-    // for that listing.
-    const infoWindow = (
-      <InfoWindow position={{ lat: lat, lng: lng }} onCloseClick={() => setOpenInfoWindow(false)}>
-        {getListingCard(listing, key - 1)}
-      </InfoWindow>
-    )
-    markers.push({ lat, lng, uri, key, infoWindow })
-  })
-
-  const mapRef = React.useRef(null)
-  return isLoaded ? (
-    <div className={styles["listings-map"]}>
+  return (
+    <div id={"listings-map"} className={styles["listings-map"]}>
       <a className={styles["listings-map-skip-link"]} href={`#listingsList`}>
         {t("t.skipMapOfListings")}
       </a>
-      <MapControl mapRef={mapRef} />
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={center}
-        zoom={9}
-        options={{ disableDefaultUI: true }}
-        ref={mapRef}
-      >
-        {markers.map((marker) => (
-          <Marker
-            position={{ lat: marker.lat, lng: marker.lng }}
-            label={{
-              text: marker.key.toString(),
-              color: "var(--bloom-color-white)",
-              fontFamily: "var(--bloom-font-sans)",
-              fontWeight: "700",
-              fontSize: "var(--bloom-font-size-2xs)",
-            }}
-            onClick={() => {
-              if (isDesktop) {
-                setOpenInfoWindow(true)
-                setInfoWindowIndex(marker.key)
-              } else {
-                if (props.isMapExpanded) {
-                  // Bring up the listings list with the correct listing at the top. A short timeout
-                  // is needed so the listings row element can be found in the document.
-                  props.setShowListingsList(true)
-                  setTimeout(() => {
-                    const element = document.getElementsByClassName("listings-row")[marker.key - 1]
-                    element.scrollIntoView(false)
-                  }, 1)
-                } else {
-                  const element = document.getElementsByClassName("listings-row")[marker.key - 1]
-                  element.scrollIntoView(false)
-                }
-              }
-            }}
-            key={marker.key.toString()}
-            icon={{
-              url: "/images/map-pin.svg",
-              labelOrigin: new google.maps.Point(14, 15),
-            }}
-          >
-            {/* Only display the info window when the corresponding marker has been clicked. */}
-            {openInfoWindow && infoWindowIndex === marker.key && marker.infoWindow}
-          </Marker>
-        ))}
-      </GoogleMap>
+      <Heading className={"sr-only"} priority={2}>
+        {t("t.listingsMap")}
+      </Heading>
+      <APIProvider apiKey={props.googleMapsApiKey}>
+        <Map
+          mapId={props.googleMapsMapId}
+          style={containerStyle}
+          gestureHandling={"greedy"}
+          disableDefaultUI={true}
+          defaultZoom={defaultZoom}
+          defaultCenter={defaultCenter}
+          clickableIcons={false}
+        >
+          <MapControl />
+          <MapClusterer
+            mapMarkers={markers}
+            infoWindowIndex={infoWindowIndex}
+            setInfoWindowIndex={setInfoWindowIndex}
+            setVisibleMarkers={props.setVisibleMarkers}
+            visibleMarkers={props.visibleMarkers}
+            setIsLoading={props.setIsLoading}
+            searchFilter={props.searchFilter}
+            isFirstBoundsLoad={props.isFirstBoundsLoad}
+            setIsFirstBoundsLoad={props.setIsFirstBoundsLoad}
+            isDesktop={props.isDesktop}
+          />
+        </Map>
+      </APIProvider>
     </div>
-  ) : (
-    <></>
   )
 }
 

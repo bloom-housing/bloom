@@ -55,6 +55,7 @@
     "test:backend:new:cov": "cd api && yarn jest --config ./test/jest-with-coverage.config.js --detectOpenHandles --logHeapUsage",
     "test:backend:new:dbsetup": "cd api && yarn db:migration:run",
     "test:backend:new:dbsetup:withseed": "cd api && yarn db:migration:run && yarn db:seed:staging",
+    "test:backend:new:dbsetup:withseed:large": "cd api && yarn db:migration:run && yarn db:seed:staging-large",
     "backend:new:install": "cd api && yarn install",
     "prettier": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\""
   },

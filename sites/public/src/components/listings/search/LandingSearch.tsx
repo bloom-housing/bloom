@@ -40,6 +40,7 @@ export function LandingSearch(props: LandingSearchProps) {
     minRent: "",
     monthlyRent: "",
     counties: countyLabels,
+    ids: null,
   }
   const initialState = nullState
   const [formValues, setFormValues] = useState(initialState)

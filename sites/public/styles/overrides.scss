@@ -7,7 +7,7 @@
     --logo-content-padding: 0;
     --logo-desktop-height: var(--base-height);
     --logo-desktop-padding: 0;
-    --logo-tablet-padding: 0 0 0 var(--bloom-s6);
+    --logo-tablet-padding: 0 0 0 var(--bloom-s4);
     --logo-image-desktop-max-height: 3rem;
     --link-align-items: center;
     --link-padding-wrapped: var(--bloom-s2) var(--bloom-s4);
@@ -139,7 +139,7 @@
         color: var(--seeds-text-color-dark);
         text-transform: uppercase;
         font-weight: bold;
-        letter-spacing: .025rem;
+        letter-spacing: 0.025rem;
         font-size: var(--seeds-font-size-xs);
       }
     }
@@ -176,6 +176,10 @@
     h1 {
       font-family: var(--seeds-font-serif);
     }
+  }
+
+  .seeds-dialog {
+    max-height: 100dvh;
   }
 
   .seeds-dialog.listings-search-dialog {
@@ -259,5 +263,57 @@
 
   .alert-box {
     --notice-background-color: var(--bloom-color-blue-300);
+  }
+
+  .info-window {
+    .listings-row {
+      flex-direction: row;
+      --inter-row-gap: 0;
+      padding-top: 0;
+      padding-bottom: var(--seeds-s2);
+      @media (max-width: $screen-lg) {
+        flex-direction: column;
+        padding-bottom: 0;
+        .listings-row_figure {
+          margin-bottom: var(--seeds-s2);
+          width: 100%;
+          .image-card {
+            width: 100%;
+            img {
+              max-height: 125px;
+            }
+          }
+        }
+        .listings-row_content {
+          padding-left: 0;
+        }
+      }
+      .listings-row_footer_container {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .listings-row {
+    --inter-row-gap: var(--seeds-s3_5);
+  }
+
+  .results-bar-button {
+    --button-interior-gap: var(--seeds-s1_5);
+    line-height: var(--seeds-line-height-4);
+    @media (max-width: $screen-md) {
+      --button-icon-side-padding: var(--seeds-s2);
+      --button-border-width: 0;
+      --button-padding-sm: var(--seeds-s2);
+      margin-inline-end: calc(0px - var(--seeds-s2));
+    }
+  }
+
+  .pagination-button-group {
+    --padding-inline-desktop: var(--seeds-s6);
+    --padding-block: var(--seeds-s2) var(--seeds-s6);
+    .doorway-button {
+      padding: var(--seeds-s3) var(--seeds-s4);
+    }
   }
 }
