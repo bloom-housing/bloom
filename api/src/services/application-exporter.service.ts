@@ -8,6 +8,7 @@ import { join } from 'path';
 import { view } from './application.service';
 import { Application } from '../dtos/applications/application.dto';
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
+import { MultiselectQuestion } from '../dtos/multiselect-questions/multiselect-question.dto';
 import { ApplicationMultiselectQuestion } from '../dtos/applications/application-multiselect-question.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { User } from '../dtos/users/user.dto';
@@ -464,30 +465,9 @@ export class ApplicationExporterService {
     );
 
     if (forLottery) {
-      const preferences = multiSelectQuestions.filter(
-        (question) =>
-          question.applicationSection ===
-          MultiselectQuestionsApplicationSectionEnum.preferences,
-      );
-      // pull in the preference questions by ordinal
-      const listingPreferencesByOrdinal =
-        await this.prisma.listingMultiselectQuestions.findMany({
-          where: {
-            listingId: queryParams.id,
-            multiselectQuestionId: {
-              in: [...preferences.map((preference) => preference.id)],
-            },
-          },
-          orderBy: {
-            ordinal: 'asc',
-          },
-        });
-
-      // get a sorted list of preferences via listing preference ordinal
-      const sortedPreferences = listingPreferencesByOrdinal.map((item) =>
-        preferences.find(
-          (preference) => preference.id === item.multiselectQuestionId,
-        ),
+      const sortedPreferences = await this.sortPreferencesByOrdinal(
+        multiSelectQuestions,
+        queryParams.id,
       );
 
       for (const preference of sortedPreferences) {
@@ -737,6 +717,38 @@ export class ApplicationExporterService {
       });
     }
     return res;
+  }
+
+  async sortPreferencesByOrdinal(
+    questions: MultiselectQuestion[],
+    listingId: string,
+  ) {
+    const preferences = questions.filter(
+      (question) =>
+        question.applicationSection ===
+        MultiselectQuestionsApplicationSectionEnum.preferences,
+    );
+
+    // pull in the preference questions by ordinal
+    const listingPreferencesByOrdinal =
+      await this.prisma.listingMultiselectQuestions.findMany({
+        where: {
+          listingId: listingId,
+          multiselectQuestionId: {
+            in: [...preferences.map((preference) => preference.id)],
+          },
+        },
+        orderBy: {
+          ordinal: 'asc',
+        },
+      });
+
+    // get a sorted list of preferences via listing preference ordinal
+    return listingPreferencesByOrdinal.map((item) =>
+      preferences.find(
+        (preference) => preference.id === item.multiselectQuestionId,
+      ),
+    );
   }
 
   // shared functions
