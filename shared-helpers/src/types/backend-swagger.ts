@@ -2534,6 +2534,132 @@ export class LotteryService {
   }
 }
 
+export class FeatureFlagsService {
+  /**
+   * List of feature flags
+   */
+  list(options: IRequestOptions = {}): Promise<FeatureFlag[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/featureFlags"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Create a feature flag
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: FeatureFlagCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<FeatureFlag> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/featureFlags"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update a feature flag
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: FeatureFlagUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<FeatureFlag> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/featureFlags"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete a feature flag by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/featureFlags"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Associate and disassociate jurisdictions with a feature flag
+   */
+  associateJurisdictions(
+    params: {
+      /** requestBody */
+      body?: FeatureFlagAssociate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<FeatureFlag> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/featureFlags/associateJurisdictions"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get a feature flag by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      featureFlagId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<FeatureFlag> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/featureFlags/{featureFlagId}"
+      url = url.replace("{featureFlagId}", params["featureFlagId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export interface SuccessDTO {
   /**  */
   success: boolean
@@ -4970,6 +5096,29 @@ export interface JurisdictionUpdate {
   duplicateListingPermissions: UserRoleEnum[]
 }
 
+export interface FeatureFlag {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  description: string
+
+  /**  */
+  active: boolean
+
+  /**  */
+  jurisdictions: IdDTO[]
+}
+
 export interface Jurisdiction {
   /**  */
   id: string
@@ -5030,6 +5179,9 @@ export interface Jurisdiction {
 
   /**  */
   duplicateListingPermissions: UserRoleEnum[]
+
+  /**  */
+  featureFlags: FeatureFlag[]
 }
 
 export interface MultiselectQuestionCreate {
@@ -6042,6 +6194,42 @@ export interface PublicLotteryTotal {
 
   /**  */
   multiselectQuestionId?: string
+}
+
+export interface FeatureFlagAssociate {
+  /**  */
+  id: string
+
+  /**  */
+  associate: string[]
+
+  /**  */
+  remove: string[]
+}
+
+export interface FeatureFlagCreate {
+  /**  */
+  name: string
+
+  /**  */
+  description: string
+
+  /**  */
+  active: boolean
+}
+
+export interface FeatureFlagUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+
+  /**  */
+  description: string
+
+  /**  */
+  active: boolean
 }
 
 export enum ListingViews {

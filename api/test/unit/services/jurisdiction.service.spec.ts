@@ -54,6 +54,7 @@ describe('Testing jurisdiction service', () => {
 
     expect(prisma.jurisdictions.findMany).toHaveBeenCalledWith({
       include: {
+        featureFlags: true,
         multiselectQuestions: true,
       },
     });
@@ -75,6 +76,7 @@ describe('Testing jurisdiction service', () => {
         },
       },
       include: {
+        featureFlags: true,
         multiselectQuestions: true,
       },
     });
@@ -96,6 +98,7 @@ describe('Testing jurisdiction service', () => {
         },
       },
       include: {
+        featureFlags: true,
         multiselectQuestions: true,
       },
     });
@@ -117,6 +120,7 @@ describe('Testing jurisdiction service', () => {
         },
       },
       include: {
+        featureFlags: true,
         multiselectQuestions: true,
       },
     });
@@ -138,6 +142,9 @@ describe('Testing jurisdiction service', () => {
       enablePartnerSettings: true,
       enableAccessibilityFeatures: true,
       enableUtilitiesIncluded: true,
+      allowSingleUseCodeLogin: false,
+      listingApprovalPermissions: [],
+      duplicateListingPermissions: [],
     };
 
     expect(await service.create(params)).toEqual(mockedValue);
@@ -154,8 +161,12 @@ describe('Testing jurisdiction service', () => {
         enablePartnerSettings: true,
         enableAccessibilityFeatures: true,
         enableUtilitiesIncluded: true,
+        allowSingleUseCodeLogin: false,
+        listingApprovalPermissions: [],
+        duplicateListingPermissions: [],
       },
       include: {
+        featureFlags: true,
         multiselectQuestions: true,
       },
     });
@@ -186,6 +197,9 @@ describe('Testing jurisdiction service', () => {
       enablePartnerSettings: true,
       enableAccessibilityFeatures: true,
       enableUtilitiesIncluded: true,
+      allowSingleUseCodeLogin: false,
+      listingApprovalPermissions: [],
+      duplicateListingPermissions: [],
     };
 
     expect(await service.update(params)).toEqual({
@@ -222,11 +236,15 @@ describe('Testing jurisdiction service', () => {
         enablePartnerSettings: true,
         enableAccessibilityFeatures: true,
         enableUtilitiesIncluded: true,
+        allowSingleUseCodeLogin: false,
+        listingApprovalPermissions: [],
+        duplicateListingPermissions: [],
       },
       where: {
         id: mockedJurisdiction.id,
       },
       include: {
+        featureFlags: true,
         multiselectQuestions: true,
       },
     });
@@ -248,6 +266,9 @@ describe('Testing jurisdiction service', () => {
       enablePartnerSettings: true,
       enableAccessibilityFeatures: true,
       enableUtilitiesIncluded: true,
+      allowSingleUseCodeLogin: false,
+      listingApprovalPermissions: [],
+      duplicateListingPermissions: [],
     };
 
     await expect(async () => await service.update(params)).rejects.toThrowError(
