@@ -11,6 +11,7 @@ import {
   IsUrl,
   MaxLength,
   Validate,
+  ValidateIf,
   ValidateNested,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
@@ -621,11 +622,19 @@ class Listing extends AbstractDTO {
 
   @Expose()
   @ApiPropertyOptional()
+  @ValidateIf((o) => o.includeCommunityDisclaimer, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   communityDisclaimerTitle?: string;
 
   @Expose()
   @ApiPropertyOptional()
+  @ValidateIf((o) => o.includeCommunityDisclaimer, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   communityDisclaimerDescription?: string;
 }
