@@ -64,6 +64,7 @@ import {
   createSimpleListing,
 } from './helpers';
 import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
+import { featureFlagFactory } from '../../../prisma/seed-helpers/feature-flag-factory';
 
 const testEmailService = {
   confirmation: jest.fn(),
@@ -1414,6 +1415,95 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
           id: listing.id,
           lotteryStatus: 'ran',
         })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+  });
+
+  describe('Testing feature flag endpoints', () => {
+    it('should succeed for list endpoint', async () => {
+      await request(app.getHttpServer())
+        .get(`/featureFlags`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+
+    it('should succeed for create endpoint', async () => {
+      const body = {
+        name: 'new name',
+        description: 'new description',
+        active: true,
+      };
+
+      await request(app.getHttpServer())
+        .post(`/featureFlags`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(body)
+        .set('Cookie', cookies)
+        .expect(201);
+    });
+
+    it('should succeed for update endpoint', async () => {
+      const featureFlag = await prisma.featureFlags.create({
+        data: featureFlagFactory(),
+      });
+
+      const body = {
+        id: featureFlag.id,
+        name: 'updated name',
+        description: 'updated description',
+        active: !featureFlag.active,
+      };
+
+      await request(app.getHttpServer())
+        .put(`/featureFlags`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(body)
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+
+    it('should succeed for delete endpoint', async () => {
+      const featureFlag = await prisma.featureFlags.create({
+        data: featureFlagFactory(),
+      });
+
+      await request(app.getHttpServer())
+        .delete(`/featureFlags`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({ id: featureFlag.id })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+
+    it('should succeed for associate jurisdictions endpoint', async () => {
+      const featureFlag = await prisma.featureFlags.create({
+        data: featureFlagFactory(),
+      });
+
+      const body = {
+        id: featureFlag.id,
+        associate: [],
+        remove: [],
+      };
+
+      await request(app.getHttpServer())
+        .put(`/featureFlags/associateJurisdictions`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(body)
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+
+    it('should succeed for retrieve endpoint', async () => {
+      const featureFlag = await prisma.featureFlags.create({
+        data: featureFlagFactory(),
+      });
+
+      await request(app.getHttpServer())
+        .get(`/featureFlags/${featureFlag.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
     });
