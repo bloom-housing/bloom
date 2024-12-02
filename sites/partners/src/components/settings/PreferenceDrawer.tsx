@@ -248,8 +248,12 @@ const PreferenceDrawer = ({
                       type="text"
                       dataTestId={"preference-title"}
                       defaultValue={questionData?.text}
-                      errorMessage={t("errors.requiredFieldError")}
-                      validation={{ required: true }}
+                      errorMessage={
+                        errors.text?.type === "maxLength"
+                          ? t("errors.maxLength", { length: 32 })
+                          : t("errors.requiredFieldError")
+                      }
+                      validation={{ required: true, maxLength: 32 }}
                       error={errors.text}
                       inputProps={{
                         onChange: () => clearErrors("text"),
