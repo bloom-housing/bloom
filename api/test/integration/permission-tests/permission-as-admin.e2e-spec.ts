@@ -1452,7 +1452,6 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
 
       const body = {
         id: featureFlag.id,
-        name: 'updated name',
         description: 'updated description',
         active: !featureFlag.active,
       };
