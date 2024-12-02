@@ -50,11 +50,11 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
   useEffect(() => {
     if (
       listing &&
-      watch("includeCommunityDisclaimer") === null &&
+      watch("includeCommunityDisclaimerQuestion") === null &&
       listing?.includeCommunityDisclaimer !== null
     ) {
       setValue(
-        "includeCommunityDisclaimer",
+        "includeCommunityDisclaimerQuestion",
         listing?.includeCommunityDisclaimer ? YesNoEnum.yes : YesNoEnum.no
       )
     }
@@ -102,7 +102,7 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
         <Grid.Row columns={1}>
           <FieldValue label={t("listings.includeCommunityDisclaimer")}>
             <FieldGroup
-              name="includeCommunityDisclaimer"
+              name="includeCommunityDisclaimerQuestion"
               type="radio"
               register={register}
               fields={[
@@ -121,7 +121,7 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
           </FieldValue>
         </Grid.Row>
 
-        {watch("includeCommunityDisclaimer") === "yes" && (
+        {watch("includeCommunityDisclaimerQuestion") === YesNoEnum.yes && (
           <>
             <Grid.Row columns={3}>
               <Grid.Cell className="seeds-grid-span-2">
