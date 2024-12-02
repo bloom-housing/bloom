@@ -322,8 +322,8 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     jurisdictions: Jurisdiction[],
     featureFlagName: string,
   ) => {
-    return !!jurisdictions.find((juris) => {
-      return !!juris.featureFlags.find(
+    return jurisdictions.some((juris) => {
+      return juris.featureFlags.some(
         (flag) => flag.name === featureFlagName && flag.active,
       );
     });

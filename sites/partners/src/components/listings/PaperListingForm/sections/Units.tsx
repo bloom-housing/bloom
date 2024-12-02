@@ -23,7 +23,7 @@ type UnitProps = {
   units: TempUnit[]
   setUnits: (units: TempUnit[]) => void
   disableUnitsAccordion: boolean
-  featureFlags: FeatureFlag[]
+  featureFlags?: FeatureFlag[]
 }
 
 const FormUnits = ({ units, setUnits, disableUnitsAccordion, featureFlags }: UnitProps) => {
@@ -82,10 +82,12 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion, featureFlags }: Uni
 
   // If hometype feature flag is not turned on for selected jurisdiction we need to reset the value
   useEffect(() => {
-    const isHomeTypeEnabled = !!featureFlags.find((flag) => flag.name === "homeType")
-    setHomeTypeEnabled(isHomeTypeEnabled)
-    if (!isHomeTypeEnabled) {
-      setValue("homeType", "")
+    if (featureFlags) {
+      const isHomeTypeEnabled = featureFlags.some((flag) => flag.name === "homeType")
+      setHomeTypeEnabled(isHomeTypeEnabled)
+      if (!isHomeTypeEnabled) {
+        setValue("homeType", "")
+      }
     }
   }, [featureFlags, setValue])
 
@@ -178,6 +180,23 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion, featureFlags }: Uni
     <>
       <hr className="spacer-section-above spacer-section" />
       <SectionWithGrid heading={t("listings.units")} subheading={t("listings.unitsDescription")}>
+        {homeTypeEnabled && (
+          <Grid.Row columns={2}>
+            <FieldValue label={t("listings.homeType")}>
+              {homeTypes && (
+                <Select
+                  id={`homeType`}
+                  name={`homeType`}
+                  label={t("listings.homeType")}
+                  labelClassName="sr-only"
+                  register={register}
+                  controlClassName="control"
+                  options={homeTypes}
+                />
+              )}
+            </FieldValue>
+          </Grid.Row>
+        )}
         <Grid.Row columns={2}>
           <FieldValue label={t("listings.unitTypesOrIndividual")} className="mb-1">
             <FieldGroup
@@ -219,23 +238,6 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion, featureFlags }: Uni
           </FieldValue>
         </Grid.Row>
 
-        {homeTypeEnabled && (
-          <Grid.Row columns={2}>
-            <FieldValue label={t("listings.homeType")}>
-              {homeTypes && (
-                <Select
-                  id={`homeType`}
-                  name={`homeType`}
-                  label={t("listings.homeType")}
-                  labelClassName="sr-only"
-                  register={register}
-                  controlClassName="control"
-                  options={homeTypes}
-                />
-              )}
-            </FieldValue>
-          </Grid.Row>
-        )}
         <SectionWithGrid.HeadingRow>{t("listings.units")}</SectionWithGrid.HeadingRow>
         <Grid.Row>
           <Grid.Cell className="grid-inset-section">

@@ -126,7 +126,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
   const [customMapPositionChosen, setCustomMapPositionChosen] = useState(
     listing?.customMapPin || false
   )
-  const [activeFeatureFlags, setActiveFeatureFlags] = useState<FeatureFlag[]>([])
+  const [activeFeatureFlags, setActiveFeatureFlags] = useState<FeatureFlag[]>(null)
 
   const setLatitudeLongitude = (latlong: LatitudeLongitude) => {
     if (!loading) {
@@ -172,9 +172,11 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
 
   const selectedJurisdiction = watch("jurisdictions.id")
 
+  // Set the active feature flags depending on if/what jurisdiction is selected
   useEffect(() => {
     const newFeatureFlags = profile.jurisdictions?.reduce((featureFlags, juris) => {
       if (!selectedJurisdiction || selectedJurisdiction === juris.id) {
+        // filter only the active feature flags
         const jurisFeatureFlags = juris.featureFlags?.filter((value) => value.active)
         const flags = [...featureFlags, ...jurisFeatureFlags]
         return [...new Set(flags)]
