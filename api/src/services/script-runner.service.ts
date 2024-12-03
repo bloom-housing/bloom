@@ -710,12 +710,6 @@ export class ScriptRunnerService {
       active: false,
     },
     {
-      name: 'enablePartnerSettings',
-      description:
-        "When true, the 'settings' tab in the partner site is visible",
-      active: false,
-    },
-    {
       name: 'enableUtilitiesIncluded',
       description:
         "When true, the 'utilities included' section is displayed in listing creation/edit and the public listing view",
