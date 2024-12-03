@@ -6659,20 +6659,17 @@ export enum AlternateContactRelationship {
 }
 
 export enum HouseholdMemberRelationship {
-  "spouse" = "spouse",
-  "registeredDomesticPartner" = "registeredDomesticPartner",
-  "parent" = "parent",
+  "spousePartner" = "spousePartner",
+  "girlfriendBoyfriend" = "girlfriendBoyfriend",
   "child" = "child",
-  "sibling" = "sibling",
-  "cousin" = "cousin",
-  "aunt" = "aunt",
-  "uncle" = "uncle",
-  "nephew" = "nephew",
-  "niece" = "niece",
-  "grandparent" = "grandparent",
-  "greatGrandparent" = "greatGrandparent",
-  "inLaw" = "inLaw",
+  "parent" = "parent",
   "friend" = "friend",
+  "brotherSister" = "brotherSister",
+  "cousin" = "cousin",
+  "auntUncle" = "auntUncle",
+  "nephewNiece" = "nephewNiece",
+  "grandparentGreatGrandparent" = "grandparentGreatGrandparent",
+  "liveInAide" = "liveInAide",
   "other" = "other",
 }
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput

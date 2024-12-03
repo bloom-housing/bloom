@@ -20,7 +20,6 @@ export type ApplicationTypes = {
   language?: LanguagesEnum
   additionalPhoneNumber?: string
   additionalPhoneNumberType?: string
-  contactPreferences?: string[]
   acceptedTerms?: YesNoEnum
   incomePeriod?: IncomePeriodEnum
   incomeVouchers?: string[]

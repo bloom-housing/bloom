@@ -161,7 +161,6 @@ export const mapFormToApi = ({
     additionalPhoneNumberType: additionalPhoneNumberTypeData,
     applicationsMailingAddress: mailingAddressData,
     additionalPhoneNumber,
-    contactPreferences,
     incomeVouchers,
   } = data.application
 
@@ -243,7 +242,6 @@ export const mapFormToApi = ({
     additionalPhone,
     additionalPhoneNumber,
     additionalPhoneNumberType,
-    contactPreferences,
     sendMailToMailingAddress,
     applicationsMailingAddress,
     alternateContact,
@@ -375,7 +373,6 @@ export const mapApiToForm = (applicationData: ApplicationUpdate, listing: Listin
   const application: ApplicationTypes = (() => {
     const {
       language,
-      contactPreferences,
       sendMailToMailingAddress,
       applicationsMailingAddress,
       incomePeriod,
@@ -414,7 +411,6 @@ export const mapApiToForm = (applicationData: ApplicationUpdate, listing: Listin
       additionalPhoneNumber,
       additionalPhoneNumberType,
       preferences,
-      contactPreferences,
       sendMailToMailingAddress,
       applicationsMailingAddress,
       preferredUnit,

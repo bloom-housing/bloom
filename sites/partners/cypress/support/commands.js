@@ -140,9 +140,7 @@ Cypress.Commands.add("fillPrimaryApplicant", (application, fieldsToSkip = []) =>
     { id: "application.applicant.applicantAddress.state", fieldKey: "applicant.address.state" },
   ]
 
-  const fieldsToClick = [{ id: "email", fieldKey: "email" }]
-
-  fillFields(application, fieldsToType, fieldsToSelect, fieldsToClick, fieldsToSkip)
+  fillFields(application, fieldsToType, fieldsToSelect, [], fieldsToSkip)
 })
 
 Cypress.Commands.add("fillAlternateContact", (application, fieldsToSkip = []) => {
@@ -313,7 +311,6 @@ Cypress.Commands.add("verifyPrimaryApplicant", (application, fieldsToSkip = []) 
     { id: "dateOfBirth", fieldKey: "dateOfBirth" },
     { id: "phoneNumber", fieldKey: "formattedPhoneNumber" },
     { id: "additionalPhoneNumber", fieldKey: "formattedAdditionalPhoneNumber" },
-    { id: "preferredContact", fieldKey: "preferredContact" },
     { id: "residenceAddress.streetAddress", fieldKey: "applicant.address.street" },
     { id: "residenceAddress.street2", fieldKey: "applicant.address.street2" },
     { id: "residenceAddress.city", fieldKey: "applicant.address.city" },

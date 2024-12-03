@@ -65,19 +65,6 @@ const DetailsPrimaryApplicant = () => {
         >
           {application.additionalPhoneNumber || t("t.n/a")}
         </FieldValue>
-
-        <FieldValue label={t("application.details.preferredContact")} testId="preferredContact">
-          {(() => {
-            if (!application.contactPreferences.length) return t("t.n/a")
-
-            return application.contactPreferences.map((item) => (
-              <span key={item}>
-                {t(`t.${item}`)}
-                <br />
-              </span>
-            ))
-          })()}
-        </FieldValue>
       </Grid.Row>
 
       <SectionWithGrid.HeadingRow>

@@ -3,7 +3,6 @@
 
 import {
   applicationStepOrder,
-  contactPreferencesCheckboxesOrder,
   alternateContactTypeRadioOrder,
   howDidYouHearCheckboxesOrder,
 } from "./../mockData/applicationData"
@@ -143,11 +142,6 @@ Cypress.Commands.add("step2PrimaryApplicantAddresses", (application) => {
       application.applicationsMailingAddress.zipCode
     )
   }
-
-  application.contactPreferences.forEach((contactPreference) => {
-    const contactPreferenceIndex = contactPreferencesCheckboxesOrder.indexOf(contactPreference)
-    cy.getByTestId("app-primary-contact-preference").eq(contactPreferenceIndex).check()
-  })
 
   cy.goNext()
   cy.checkErrorAlert("not.exist")
@@ -478,10 +472,6 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
       fieldValue: `${application.applicant.applicantAddress.city}, ${application.applicant.applicantAddress.state} ${application.applicant.applicantAddress.zipCode}`,
     },
 
-    {
-      id: "app-summary-contact-preference-type",
-      fieldValue: application.contactPreferences[0],
-    },
     {
       id: "app-summary-preferred-units",
       fieldValue: application.preferredUnitTypes

@@ -1,10 +1,9 @@
 import React, { useContext, useEffect, useState, useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { Alert } from "@bloom-housing/ui-seeds"
-import { Field, FieldGroup, Form, PhoneField, Select, t } from "@bloom-housing/ui-components"
+import { Field, Form, PhoneField, Select, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
-  contactPreferencesKeys,
   phoneNumberKeys,
   stateKeys,
   blankApplication,
@@ -15,7 +14,6 @@ import {
   mergeDeep,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
-import { disableContactFormOption } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import {
   FoundAddress,
@@ -100,13 +98,6 @@ const ApplicationAddress = () => {
   const additionalPhone = watch("additionalPhone")
   const sendMailToMailingAddress = watch("sendMailToMailingAddress")
   const clientLoaded = OnClientSide()
-
-  const contactPreferencesOptions = contactPreferencesKeys?.map((item) => ({
-    id: item.id,
-    label: t(`t.${item.id}`),
-    defaultChecked: application?.contactPreferences?.includes(item.id) || false,
-    disabled: disableContactFormOption(item.id, noPhone, application.applicant.noEmail),
-  }))
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -470,26 +461,6 @@ const ApplicationAddress = () => {
                 </fieldset>
               </CardSection>
             )}
-
-            <CardSection divider={"inset"}>
-              <fieldset>
-                <legend
-                  className={`text__caps-spaced ${errors?.contactPreferences ? "text-alert" : ""}`}
-                >
-                  {t("application.contact.contactPreference")}
-                </legend>
-                <FieldGroup
-                  name="contactPreferences"
-                  fields={contactPreferencesOptions}
-                  type="checkbox"
-                  validation={{ required: true }}
-                  error={errors?.contactPreferences}
-                  errorMessage={t("errors.selectAtLeastOne")}
-                  register={register}
-                  dataTestId={"app-primary-contact-preference"}
-                />
-              </fieldset>
-            </CardSection>
           </div>
           <CardSection>
             {verifyAddress && (

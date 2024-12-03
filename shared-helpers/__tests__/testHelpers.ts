@@ -166,7 +166,6 @@ export const application: Application = {
     createdAt: new Date(),
     updatedAt: new Date(),
   },
-  contactPreferences: [],
   preferredUnitTypes: [],
   householdMember: [
     {

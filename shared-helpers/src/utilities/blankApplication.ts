@@ -40,7 +40,6 @@ export const blankApplication = {
   additionalPhone: false,
   additionalPhoneNumber: "",
   additionalPhoneNumberType: "",
-  contactPreferences: [],
   householdSize: 0,
   housingStatus: "",
   sendMailToMailingAddress: false,

@@ -91,10 +91,6 @@ describe('Testing application export helpers', () => {
       label: 'Primary Applicant Additional Phone Number',
     },
     {
-      path: 'contactPreferences',
-      label: 'Primary Applicant Preferred Contact Type',
-    },
-    {
       path: 'applicant.applicantAddress.street',
       label: `Primary Applicant Street`,
     },
@@ -133,26 +129,6 @@ describe('Testing application export helpers', () => {
     {
       path: 'applicationsMailingAddress.zipCode',
       label: `Primary Applicant Mailing Zip Code`,
-    },
-    {
-      path: 'applicant.applicantWorkAddress.street',
-      label: `Primary Applicant Work Street`,
-    },
-    {
-      path: 'applicant.applicantWorkAddress.street2',
-      label: `Primary Applicant Work Street 2`,
-    },
-    {
-      path: 'applicant.applicantWorkAddress.city',
-      label: `Primary Applicant Work City`,
-    },
-    {
-      path: 'applicant.applicantWorkAddress.state',
-      label: `Primary Applicant Work State`,
-    },
-    {
-      path: 'applicant.applicantWorkAddress.zipCode',
-      label: `Primary Applicant Work Zip Code`,
     },
     {
       path: 'alternateContact.firstName',
