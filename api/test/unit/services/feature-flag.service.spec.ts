@@ -161,7 +161,7 @@ describe('Testing feature flag service', () => {
       expect(await service.update(params)).toEqual({
         id: mockedValue.id,
         name: mockedValue.name,
-        description: mockedValue.description,
+        description: 'updated feature flag 1',
         active: mockedValue.active,
         createdAt: date,
         updatedAt: date,
@@ -176,7 +176,6 @@ describe('Testing feature flag service', () => {
 
       expect(prisma.featureFlags.update).toHaveBeenCalledWith({
         data: {
-          name: mockedValue.name,
           description: 'updated feature flag 1',
           active: mockedValue.active,
         },
