@@ -73,7 +73,8 @@ export default function ListingDetail(props: ListingProps) {
                 lotteryLabel:
                   listing.status === ListingsStatusEnum.closed &&
                   listing?.lotteryOptIn &&
-                  listing?.reviewOrderType === ReviewOrderTypeEnum.lottery
+                  listing?.reviewOrderType === ReviewOrderTypeEnum.lottery &&
+                  !profile?.userRoles?.isLimitedJurisdictionalAdmin
                     ? t("listings.lotteryTitle")
                     : undefined,
               }}
