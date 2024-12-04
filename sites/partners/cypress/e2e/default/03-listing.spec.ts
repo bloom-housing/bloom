@@ -160,6 +160,9 @@ describe("Listing Management Tests", () => {
     cy.getByID("reservedCommunityDescription").type(listing["reservedCommunityDescription"])
     cy.getByTestId("unit-types").check()
     cy.getByTestId("listingAvailability.availableUnits").check()
+    if (listing["homeType"]) {
+      cy.getByID("homeType").select(listing["homeType"])
+    }
     cy.getByID("addUnitsButton").contains("Add Unit").click()
     cy.getByID("number").type(listing["number"])
     cy.getByID("unitTypes.id").select(listing["unitType.id"])
@@ -303,6 +306,9 @@ describe("Listing Management Tests", () => {
     cy.getByID("latitude").should("include.text", "37.7")
     cy.getByID("reservedCommunityType").contains(listing["reservedCommunityType.id"])
     cy.getByID("reservedCommunityDescription").contains(listing["reservedCommunityDescription"])
+    if (listing["homeType"]) {
+      cy.getByID("homeType").contains(listing["homeType"])
+    }
     cy.getByTestId("unit-types-or-individual").contains("Unit Types")
     cy.getByTestId("listing-availability-question").contains("Available Units")
     cy.getByID("unitTable").contains(listing["number"])
