@@ -27,6 +27,7 @@ describe("Listing Management Tests", () => {
     cy.contains("Listing Data")
     // Try to publish a listing and should show errors for appropriate fields
     cy.getByID("listingEditButton").contains("Edit").click()
+    cy.getByID("reservedCommunityTypes.id").select(1)
     cy.getByID("includeCommunityDisclaimerYes").check()
     cy.getByID("publishButton").contains("Publish").click()
     cy.getByID("publishButtonConfirm").contains("Publish").click()
