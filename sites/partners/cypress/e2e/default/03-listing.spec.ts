@@ -192,6 +192,9 @@ describe("Listing Management Tests", () => {
     cy.getByID("communityDisclaimerDescription").type(listing["communityDisclaimerDescription"])
     cy.getByTestId("unit-types").check()
     cy.getByTestId("listingAvailability.availableUnits").check()
+    if (listing["homeType"]) {
+      cy.getByID("homeType").select(listing["homeType"])
+    }
     cy.getByID("addUnitsButton").contains("Add Unit").click()
     cy.getByID("number").type(listing["number"])
     cy.getByID("unitTypes.id").select(listing["unitType.id"])
@@ -341,6 +344,9 @@ describe("Listing Management Tests", () => {
     cy.getByID("includeCommunityDisclaimer").contains("Yes")
     cy.getByID("communityDisclaimerTitle").contains(listing["communityDisclaimerTitle"])
     cy.getByID("communityDisclaimerDescription").contains(listing["communityDisclaimerDescription"])
+    if (listing["homeType"]) {
+      cy.getByID("homeType").contains(listing["homeType"])
+    }
     cy.getByTestId("unit-types-or-individual").contains("Unit Types")
     cy.getByTestId("listing-availability-question").contains("Available Units")
     cy.getByID("unitTable").contains(listing["number"])

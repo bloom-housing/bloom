@@ -433,6 +433,7 @@ describe('Testing listing service', () => {
         phone: false,
         internet: true,
       },
+      homeType: 'apartment',
     };
   };
 

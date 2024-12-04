@@ -34,6 +34,7 @@ import Unit from '../dtos/units/unit.dto';
 import Listing from '../dtos/listings/listing.dto';
 import { mapTo } from '../utilities/mapTo';
 import { ListingMultiselectQuestion } from '../dtos/listings/listing-multiselect-question.dto';
+import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 
 views.csv = {
   ...views.details,
@@ -83,7 +84,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
   ): Promise<StreamableFile> {
     this.logger.warn('Generating Listing-Unit Zip');
     const user = mapTo(User, req['user']);
-    await this.authorizeCSVExport(mapTo(User, req['user']));
+    await this.authorizeCSVExport(user);
 
     const zipFileName = `listings-units-${user.id}-${new Date().getTime()}.zip`;
     const zipFilePath = join(process.cwd(), `src/temp/${zipFileName}`);
@@ -124,6 +125,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
 
     await this.createCsv(listingFilePath, queryParams, {
       listings: listings as unknown as Listing[],
+      user,
     });
     const listingCsv = createReadStream(listingFilePath);
 
@@ -156,9 +158,9 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
   async createCsv<QueryParams extends ListingCsvQueryParams>(
     filename: string,
     queryParams: QueryParams,
-    optionParams: { listings: Listing[] },
+    optionParams: { listings: Listing[]; user: User },
   ): Promise<void> {
-    const csvHeaders = await this.getCsvHeaders();
+    const csvHeaders = await this.getCsvHeaders(optionParams.user);
 
     return new Promise((resolve, reject) => {
       // create stream
@@ -316,7 +318,18 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     return fieldValue;
   };
 
-  async getCsvHeaders(): Promise<CsvHeader[]> {
+  doAnyJurisdictionHaveFeatureFlagSet = (
+    jurisdictions: Jurisdiction[],
+    featureFlagName: string,
+  ) => {
+    return jurisdictions.some((juris) => {
+      return juris.featureFlags.some(
+        (flag) => flag.name === featureFlagName && flag.active,
+      );
+    });
+  };
+
+  async getCsvHeaders(user: User): Promise<CsvHeader[]> {
     const headers: CsvHeader[] = [
       {
         path: 'id',
@@ -404,397 +417,416 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         path: 'listingsBuildingAddress.longitude',
         label: 'Longitude',
       },
-      {
-        path: 'units.length',
-        label: 'Number of Units',
-      },
-      {
-        path: 'reviewOrderType',
-        label: 'Listing Availability',
-        format: (val: string): string =>
-          val === ListingReviewOrder.waitlist
-            ? 'Open Waitlist'
-            : 'Available Units',
-      },
-      {
-        path: 'reviewOrderType',
-        label: 'Review Order',
-        format: (val: string): string => {
-          if (!val) return '';
-          const spacedValue = val.replace(/([A-Z])/g, (match) => ` ${match}`);
-          const result =
-            spacedValue.charAt(0).toUpperCase() + spacedValue.slice(1);
-          return result;
+    ];
+
+    if (
+      this.doAnyJurisdictionHaveFeatureFlagSet(user.jurisdictions, 'homeType')
+    ) {
+      headers.push({
+        path: 'homeType',
+        label: 'Home Type',
+      });
+    }
+
+    headers.push(
+      ...[
+        {
+          path: 'units.length',
+          label: 'Number of Units',
         },
-      },
-      {
-        path: 'listingEvents',
-        label: 'Lottery Date',
-        format: (val: ListingEvent[]): string => {
-          if (!val) return '';
-          const lottery = val.filter(
-            (event) => event.type === ListingEventsTypeEnum.publicLottery,
-          );
-          return lottery.length
-            ? formatLocalDate(lottery[0].startTime, 'MM-DD-YYYY', this.timeZone)
-            : '';
+        {
+          path: 'reviewOrderType',
+          label: 'Listing Availability',
+          format: (val: string): string =>
+            val === ListingReviewOrder.waitlist
+              ? 'Open Waitlist'
+              : 'Available Units',
         },
-      },
-      {
-        path: 'listingEvents',
-        label: 'Lottery Start',
-        format: (val: ListingEvent[]): string => {
-          if (!val) return '';
-          const lottery = val.filter(
-            (event) => event.type === ListingEventsTypeEnum.publicLottery,
-          );
-          return lottery.length
-            ? formatLocalDate(lottery[0].startTime, 'hh:mmA z', this.timeZone)
-            : '';
+        {
+          path: 'reviewOrderType',
+          label: 'Review Order',
+          format: (val: string): string => {
+            if (!val) return '';
+            const spacedValue = val.replace(/([A-Z])/g, (match) => ` ${match}`);
+            const result =
+              spacedValue.charAt(0).toUpperCase() + spacedValue.slice(1);
+            return result;
+          },
         },
-      },
-      {
-        path: 'listingEvents',
-        label: 'Lottery End',
-        format: (val: ListingEvent[]): string => {
-          if (!val) return '';
-          const lottery = val.filter(
-            (event) => event.type === ListingEventsTypeEnum.publicLottery,
-          );
-          return lottery.length
-            ? formatLocalDate(lottery[0].endTime, 'hh:mmA z', this.timeZone)
-            : '';
-        },
-      },
-      {
-        path: 'listingEvents',
-        label: 'Lottery Notes',
-        format: (val: ListingEvent[]): string => {
-          if (!val) return '';
-          const lottery = val.filter(
-            (event) => event.type === ListingEventsTypeEnum.publicLottery,
-          );
-          return lottery.length ? lottery[0].note : '';
-        },
-      },
-      {
-        path: 'listingMultiselectQuestions',
-        label: 'Housing Preferences',
-        format: (val: ListingMultiselectQuestion[]): string => {
-          return val
-            .filter(
-              (question) =>
-                question.multiselectQuestions.applicationSection ===
-                'preferences',
-            )
-            .map((question) => question.multiselectQuestions.text)
-            .join(',');
-        },
-      },
-      {
-        path: 'listingMultiselectQuestions',
-        label: 'Housing Programs',
-        format: (val: ListingMultiselectQuestion[]): string => {
-          return val
-            .filter(
-              (question) =>
-                question.multiselectQuestions.applicationSection === 'programs',
-            )
-            .map((question) => question.multiselectQuestions.text)
-            .join(',');
-        },
-      },
-      {
-        path: 'applicationFee',
-        label: 'Application Fee',
-        format: this.formatCurrency,
-      },
-      {
-        path: 'depositHelperText',
-        label: 'Deposit Helper Text',
-      },
-      {
-        path: 'depositMin',
-        label: 'Deposit Min',
-        format: this.formatCurrency,
-      },
-      {
-        path: 'depositMax',
-        label: 'Deposit Max',
-        format: this.formatCurrency,
-      },
-      {
-        path: 'costsNotIncluded',
-        label: 'Costs Not Included',
-      },
-      {
-        path: 'amenities',
-        label: 'Property Amenities',
-      },
-      {
-        path: 'accessibility',
-        label: 'Additional Accessibility',
-      },
-      {
-        path: 'unitAmenities',
-        label: 'Unit Amenities',
-      },
-      {
-        path: 'smokingPolicy',
-        label: 'Smoking Policy',
-      },
-      {
-        path: 'petPolicy',
-        label: 'Pets Policy',
-      },
-      {
-        path: 'servicesOffered',
-        label: 'Services Offered',
-      },
-      {
-        path: 'creditHistory',
-        label: 'Eligibility Rules - Credit History',
-      },
-      {
-        path: 'rentalHistory',
-        label: 'Eligibility Rules - Rental History',
-      },
-      {
-        path: 'criminalBackground',
-        label: 'Eligibility Rules - Criminal Background',
-      },
-      {
-        path: 'rentalAssistance',
-        label: 'Eligibility Rules - Rental Assistance',
-      },
-      {
-        path: 'buildingSelectionCriteriaFileId',
-        label: 'Building Selection Criteria',
-        format: this.cloudinaryPdfFromId,
-      },
-      {
-        path: 'programRules',
-        label: 'Important Program Rules',
-      },
-      {
-        path: 'requiredDocuments',
-        label: 'Required Documents',
-      },
-      {
-        path: 'specialNotes',
-        label: 'Special Notes',
-      },
-      {
-        path: 'isWaitlistOpen',
-        label: 'Waitlist',
-        format: this.formatYesNo,
-      },
-      {
-        path: 'leasingAgentName',
-        label: 'Leasing Agent Name',
-      },
-      {
-        path: 'leasingAgentEmail',
-        label: 'Leasing Agent Email',
-      },
-      {
-        path: 'leasingAgentPhone',
-        label: 'Leasing Agent Phone',
-      },
-      {
-        path: 'leasingAgentTitle',
-        label: 'Leasing Agent Title',
-      },
-      {
-        path: 'leasingAgentOfficeHours',
-        label: 'Leasing Agent Office Hours',
-      },
-      {
-        path: 'listingsLeasingAgentAddress.street',
-        label: 'Leasing Agent Street Address',
-      },
-      {
-        path: 'listingsLeasingAgentAddress.street2',
-        label: 'Leasing Agent Apt/Unit #',
-      },
-      {
-        path: 'listingsLeasingAgentAddress.city',
-        label: 'Leasing Agent City',
-      },
-      {
-        path: 'listingsLeasingAgentAddress.state',
-        label: 'Leasing Agent State',
-      },
-      {
-        path: 'listingsLeasingAgentAddress.zipCode',
-        label: 'Leasing Agent Zip',
-      },
-      {
-        path: 'listingsLeasingAgentAddress.street',
-        label: 'Leasing Agency Mailing Address',
-      },
-      {
-        path: 'listingsLeasingAgentAddress.street2',
-        label: 'Leasing Agency Mailing Address Street 2',
-      },
-      {
-        path: 'listingsLeasingAgentAddress.city',
-        label: 'Leasing Agency Mailing Address City',
-      },
-      {
-        path: 'listingsLeasingAgentAddress.state',
-        label: 'Leasing Agency Mailing Address State',
-      },
-      {
-        path: 'listingsLeasingAgentAddress.zipCode',
-        label: 'Leasing Agency Mailing Address Zip',
-      },
-      {
-        path: 'listingsApplicationPickUpAddress.street',
-        label: 'Leasing Agency Pickup Address',
-      },
-      {
-        path: 'listingsApplicationPickUpAddress.street2',
-        label: 'Leasing Agency Pickup Address Street 2',
-      },
-      {
-        path: 'listingsApplicationPickUpAddress.city',
-        label: 'Leasing Agency Pickup Address City',
-      },
-      {
-        path: 'listingsApplicationPickUpAddress.state',
-        label: 'Leasing Agency Pickup Address State',
-      },
-      {
-        path: 'listingsApplicationPickUpAddress.zipCode',
-        label: 'Leasing Agency Pickup Address Zip',
-      },
-      {
-        path: 'applicationPickUpAddressOfficeHours',
-        label: 'Leasing Pick Up Office Hours',
-      },
-      {
-        path: 'digitalApplication',
-        label: 'Digital Application',
-        format: this.formatYesNo,
-      },
-      {
-        path: 'applicationMethods',
-        label: 'Digital Application URL',
-        format: (val: ApplicationMethod[]): string => {
-          const method = val.filter(
-            (appMethod) =>
-              appMethod.type === ApplicationMethodsTypeEnum.ExternalLink,
-          );
-          return method.length ? method[0].externalReference : '';
-        },
-      },
-      {
-        path: 'paperApplication',
-        label: 'Paper Application',
-        format: this.formatYesNo,
-      },
-      {
-        path: 'applicationMethods',
-        label: 'Paper Application URL',
-        format: (val: ApplicationMethod[]): string => {
-          const method = val.filter(
-            (appMethod) => appMethod.paperApplications.length > 0,
-          );
-          const paperApps = method.length ? method[0].paperApplications : [];
-          return paperApps.length
-            ? paperApps
-                .map((app) => this.cloudinaryPdfFromId(app.assets.fileId))
-                .join(', ')
-            : '';
-        },
-      },
-      {
-        path: 'referralOpportunity',
-        label: 'Referral Opportunity',
-        format: this.formatYesNo,
-      },
-      {
-        path: 'applicationMailingAddressId',
-        label: 'Can applications be mailed in?',
-        format: this.formatYesNo,
-      },
-      {
-        path: 'applicationPickUpAddressId',
-        label: 'Can applications be picked up?',
-        format: this.formatYesNo,
-      },
-      {
-        path: 'applicationPickUpAddressId',
-        label: 'Can applications be dropped off?',
-        format: this.formatYesNo,
-      },
-      {
-        path: 'postmarkedApplicationsReceivedByDate',
-        label: 'Postmark',
-        format: (val: string): string =>
-          formatLocalDate(val, this.dateFormat, this.timeZone),
-      },
-      {
-        path: 'additionalApplicationSubmissionNotes',
-        label: 'Additional Application Submission Notes',
-      },
-      {
-        path: 'applicationDueDate',
-        label: 'Application Due Date',
-        format: (val: string): string =>
-          formatLocalDate(val, 'MM-DD-YYYY', this.timeZone),
-      },
-      {
-        path: 'applicationDueDate',
-        label: 'Application Due Time',
-        format: (val: string): string =>
-          formatLocalDate(val, 'hh:mmA z', this.timeZone),
-      },
-      {
-        path: 'listingEvents',
-        label: 'Open House',
-        format: (val: ListingEvent[]): string => {
-          if (!val) return '';
-          return val
-            .filter((event) => event.type === ListingEventsTypeEnum.openHouse)
-            .map((event) => {
-              let openHouseStr = '';
-              if (event.label) openHouseStr += `${event.label}`;
-              if (event.startTime) {
-                const date = formatLocalDate(
-                  event.startTime,
+        {
+          path: 'listingEvents',
+          label: 'Lottery Date',
+          format: (val: ListingEvent[]): string => {
+            if (!val) return '';
+            const lottery = val.filter(
+              (event) => event.type === ListingEventsTypeEnum.publicLottery,
+            );
+            return lottery.length
+              ? formatLocalDate(
+                  lottery[0].startTime,
                   'MM-DD-YYYY',
                   this.timeZone,
-                );
-                openHouseStr += `: ${date}`;
-                if (event.endTime) {
-                  const startTime = formatLocalDate(
-                    event.startTime,
-                    'hh:mmA',
-                    this.timeZone,
-                  );
-                  const endTime = formatLocalDate(
-                    event.endTime,
-                    'hh:mmA z',
-                    this.timeZone,
-                  );
-                  openHouseStr += ` (${startTime} - ${endTime})`;
-                }
-              }
-              return openHouseStr;
-            })
-            .filter((str) => str.length)
-            .join(', ');
+                )
+              : '';
+          },
         },
-      },
-      {
-        path: 'userAccounts',
-        label: 'Partners Who Have Access',
-        format: (val: User[]): string =>
-          val.map((user) => `${user.firstName} ${user.lastName}`).join(', '),
-      },
-    ];
+        {
+          path: 'listingEvents',
+          label: 'Lottery Start',
+          format: (val: ListingEvent[]): string => {
+            if (!val) return '';
+            const lottery = val.filter(
+              (event) => event.type === ListingEventsTypeEnum.publicLottery,
+            );
+            return lottery.length
+              ? formatLocalDate(lottery[0].startTime, 'hh:mmA z', this.timeZone)
+              : '';
+          },
+        },
+        {
+          path: 'listingEvents',
+          label: 'Lottery End',
+          format: (val: ListingEvent[]): string => {
+            if (!val) return '';
+            const lottery = val.filter(
+              (event) => event.type === ListingEventsTypeEnum.publicLottery,
+            );
+            return lottery.length
+              ? formatLocalDate(lottery[0].endTime, 'hh:mmA z', this.timeZone)
+              : '';
+          },
+        },
+        {
+          path: 'listingEvents',
+          label: 'Lottery Notes',
+          format: (val: ListingEvent[]): string => {
+            if (!val) return '';
+            const lottery = val.filter(
+              (event) => event.type === ListingEventsTypeEnum.publicLottery,
+            );
+            return lottery.length ? lottery[0].note : '';
+          },
+        },
+        {
+          path: 'listingMultiselectQuestions',
+          label: 'Housing Preferences',
+          format: (val: ListingMultiselectQuestion[]): string => {
+            return val
+              .filter(
+                (question) =>
+                  question.multiselectQuestions.applicationSection ===
+                  'preferences',
+              )
+              .map((question) => question.multiselectQuestions.text)
+              .join(',');
+          },
+        },
+        {
+          path: 'listingMultiselectQuestions',
+          label: 'Housing Programs',
+          format: (val: ListingMultiselectQuestion[]): string => {
+            return val
+              .filter(
+                (question) =>
+                  question.multiselectQuestions.applicationSection ===
+                  'programs',
+              )
+              .map((question) => question.multiselectQuestions.text)
+              .join(',');
+          },
+        },
+        {
+          path: 'applicationFee',
+          label: 'Application Fee',
+          format: this.formatCurrency,
+        },
+        {
+          path: 'depositHelperText',
+          label: 'Deposit Helper Text',
+        },
+        {
+          path: 'depositMin',
+          label: 'Deposit Min',
+          format: this.formatCurrency,
+        },
+        {
+          path: 'depositMax',
+          label: 'Deposit Max',
+          format: this.formatCurrency,
+        },
+        {
+          path: 'costsNotIncluded',
+          label: 'Costs Not Included',
+        },
+        {
+          path: 'amenities',
+          label: 'Property Amenities',
+        },
+        {
+          path: 'accessibility',
+          label: 'Additional Accessibility',
+        },
+        {
+          path: 'unitAmenities',
+          label: 'Unit Amenities',
+        },
+        {
+          path: 'smokingPolicy',
+          label: 'Smoking Policy',
+        },
+        {
+          path: 'petPolicy',
+          label: 'Pets Policy',
+        },
+        {
+          path: 'servicesOffered',
+          label: 'Services Offered',
+        },
+        {
+          path: 'creditHistory',
+          label: 'Eligibility Rules - Credit History',
+        },
+        {
+          path: 'rentalHistory',
+          label: 'Eligibility Rules - Rental History',
+        },
+        {
+          path: 'criminalBackground',
+          label: 'Eligibility Rules - Criminal Background',
+        },
+        {
+          path: 'rentalAssistance',
+          label: 'Eligibility Rules - Rental Assistance',
+        },
+        {
+          path: 'buildingSelectionCriteriaFileId',
+          label: 'Building Selection Criteria',
+          format: this.cloudinaryPdfFromId,
+        },
+        {
+          path: 'programRules',
+          label: 'Important Program Rules',
+        },
+        {
+          path: 'requiredDocuments',
+          label: 'Required Documents',
+        },
+        {
+          path: 'specialNotes',
+          label: 'Special Notes',
+        },
+        {
+          path: 'isWaitlistOpen',
+          label: 'Waitlist',
+          format: this.formatYesNo,
+        },
+        {
+          path: 'leasingAgentName',
+          label: 'Leasing Agent Name',
+        },
+        {
+          path: 'leasingAgentEmail',
+          label: 'Leasing Agent Email',
+        },
+        {
+          path: 'leasingAgentPhone',
+          label: 'Leasing Agent Phone',
+        },
+        {
+          path: 'leasingAgentTitle',
+          label: 'Leasing Agent Title',
+        },
+        {
+          path: 'leasingAgentOfficeHours',
+          label: 'Leasing Agent Office Hours',
+        },
+        {
+          path: 'listingsLeasingAgentAddress.street',
+          label: 'Leasing Agent Street Address',
+        },
+        {
+          path: 'listingsLeasingAgentAddress.street2',
+          label: 'Leasing Agent Apt/Unit #',
+        },
+        {
+          path: 'listingsLeasingAgentAddress.city',
+          label: 'Leasing Agent City',
+        },
+        {
+          path: 'listingsLeasingAgentAddress.state',
+          label: 'Leasing Agent State',
+        },
+        {
+          path: 'listingsLeasingAgentAddress.zipCode',
+          label: 'Leasing Agent Zip',
+        },
+        {
+          path: 'listingsLeasingAgentAddress.street',
+          label: 'Leasing Agency Mailing Address',
+        },
+        {
+          path: 'listingsLeasingAgentAddress.street2',
+          label: 'Leasing Agency Mailing Address Street 2',
+        },
+        {
+          path: 'listingsLeasingAgentAddress.city',
+          label: 'Leasing Agency Mailing Address City',
+        },
+        {
+          path: 'listingsLeasingAgentAddress.state',
+          label: 'Leasing Agency Mailing Address State',
+        },
+        {
+          path: 'listingsLeasingAgentAddress.zipCode',
+          label: 'Leasing Agency Mailing Address Zip',
+        },
+        {
+          path: 'listingsApplicationPickUpAddress.street',
+          label: 'Leasing Agency Pickup Address',
+        },
+        {
+          path: 'listingsApplicationPickUpAddress.street2',
+          label: 'Leasing Agency Pickup Address Street 2',
+        },
+        {
+          path: 'listingsApplicationPickUpAddress.city',
+          label: 'Leasing Agency Pickup Address City',
+        },
+        {
+          path: 'listingsApplicationPickUpAddress.state',
+          label: 'Leasing Agency Pickup Address State',
+        },
+        {
+          path: 'listingsApplicationPickUpAddress.zipCode',
+          label: 'Leasing Agency Pickup Address Zip',
+        },
+        {
+          path: 'applicationPickUpAddressOfficeHours',
+          label: 'Leasing Pick Up Office Hours',
+        },
+        {
+          path: 'digitalApplication',
+          label: 'Digital Application',
+          format: this.formatYesNo,
+        },
+        {
+          path: 'applicationMethods',
+          label: 'Digital Application URL',
+          format: (val: ApplicationMethod[]): string => {
+            const method = val.filter(
+              (appMethod) =>
+                appMethod.type === ApplicationMethodsTypeEnum.ExternalLink,
+            );
+            return method.length ? method[0].externalReference : '';
+          },
+        },
+        {
+          path: 'paperApplication',
+          label: 'Paper Application',
+          format: this.formatYesNo,
+        },
+        {
+          path: 'applicationMethods',
+          label: 'Paper Application URL',
+          format: (val: ApplicationMethod[]): string => {
+            const method = val.filter(
+              (appMethod) => appMethod.paperApplications.length > 0,
+            );
+            const paperApps = method.length ? method[0].paperApplications : [];
+            return paperApps.length
+              ? paperApps
+                  .map((app) => this.cloudinaryPdfFromId(app.assets.fileId))
+                  .join(', ')
+              : '';
+          },
+        },
+        {
+          path: 'referralOpportunity',
+          label: 'Referral Opportunity',
+          format: this.formatYesNo,
+        },
+        {
+          path: 'applicationMailingAddressId',
+          label: 'Can applications be mailed in?',
+          format: this.formatYesNo,
+        },
+        {
+          path: 'applicationPickUpAddressId',
+          label: 'Can applications be picked up?',
+          format: this.formatYesNo,
+        },
+        {
+          path: 'applicationPickUpAddressId',
+          label: 'Can applications be dropped off?',
+          format: this.formatYesNo,
+        },
+        {
+          path: 'postmarkedApplicationsReceivedByDate',
+          label: 'Postmark',
+          format: (val: string): string =>
+            formatLocalDate(val, this.dateFormat, this.timeZone),
+        },
+        {
+          path: 'additionalApplicationSubmissionNotes',
+          label: 'Additional Application Submission Notes',
+        },
+        {
+          path: 'applicationDueDate',
+          label: 'Application Due Date',
+          format: (val: string): string =>
+            formatLocalDate(val, 'MM-DD-YYYY', this.timeZone),
+        },
+        {
+          path: 'applicationDueDate',
+          label: 'Application Due Time',
+          format: (val: string): string =>
+            formatLocalDate(val, 'hh:mmA z', this.timeZone),
+        },
+        {
+          path: 'listingEvents',
+          label: 'Open House',
+          format: (val: ListingEvent[]): string => {
+            if (!val) return '';
+            return val
+              .filter((event) => event.type === ListingEventsTypeEnum.openHouse)
+              .map((event) => {
+                let openHouseStr = '';
+                if (event.label) openHouseStr += `${event.label}`;
+                if (event.startTime) {
+                  const date = formatLocalDate(
+                    event.startTime,
+                    'MM-DD-YYYY',
+                    this.timeZone,
+                  );
+                  openHouseStr += `: ${date}`;
+                  if (event.endTime) {
+                    const startTime = formatLocalDate(
+                      event.startTime,
+                      'hh:mmA',
+                      this.timeZone,
+                    );
+                    const endTime = formatLocalDate(
+                      event.endTime,
+                      'hh:mmA z',
+                      this.timeZone,
+                    );
+                    openHouseStr += ` (${startTime} - ${endTime})`;
+                  }
+                }
+                return openHouseStr;
+              })
+              .filter((str) => str.length)
+              .join(', ');
+          },
+        },
+        {
+          path: 'userAccounts',
+          label: 'Partners Who Have Access',
+          format: (val: User[]): string =>
+            val.map((user) => `${user.firstName} ${user.lastName}`).join(', '),
+        },
+      ],
+    );
 
     return headers;
   }

@@ -362,13 +362,14 @@ describe('Listing Controller Tests', () => {
         phone: false,
         internet: true,
       },
-      includeCommunityDisclaimer: shouldIncludeCommunityDisclaimer,
+      includeCommunityDisclaimer: Math.random() >= 0.5,
       communityDisclaimerTitle: shouldIncludeCommunityDisclaimer
         ? 'example title'
         : undefined,
       communityDisclaimerDescription: shouldIncludeCommunityDisclaimer
         ? 'example description'
         : undefined,
+      homeType: 'apartment',
     };
   };
 

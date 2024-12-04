@@ -3924,6 +3924,9 @@ export interface Listing {
 
   /**  */
   communityDisclaimerDescription?: string
+
+  /**  */
+  homeType?: HomeTypeEnum
 }
 
 export interface PaginationMeta {
@@ -4399,6 +4402,9 @@ export interface ListingCreate {
   communityDisclaimerDescription?: string
 
   /**  */
+  homeType?: HomeTypeEnum
+
+  /**  */
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
@@ -4683,6 +4689,9 @@ export interface ListingUpdate {
 
   /**  */
   communityDisclaimerDescription?: string
+
+  /**  */
+  homeType?: HomeTypeEnum
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
@@ -6687,6 +6696,13 @@ export enum UnitTypeEnum {
 export enum UnitRentTypeEnum {
   "fixed" = "fixed",
   "percentageOfIncome" = "percentageOfIncome",
+}
+
+export enum HomeTypeEnum {
+  "apartment" = "apartment",
+  "duplex" = "duplex",
+  "house" = "house",
+  "townhome" = "townhome",
 }
 
 export enum AfsView {

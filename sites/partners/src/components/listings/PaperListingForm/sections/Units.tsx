@@ -1,7 +1,17 @@
 import React, { useState, useMemo, useCallback, useContext, useEffect } from "react"
-import { t, MinimalTable, FieldGroup, StandardTableData } from "@bloom-housing/ui-components"
+import {
+  t,
+  MinimalTable,
+  FieldGroup,
+  StandardTableData,
+  Select,
+} from "@bloom-housing/ui-components"
 import { Button, Dialog, Drawer, FieldValue, Grid, Tag } from "@bloom-housing/ui-seeds"
-import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlag,
+  HomeTypeEnum,
+  ReviewOrderTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { MessageContext } from "@bloom-housing/shared-helpers"
 import UnitForm from "../UnitForm"
 import { useFormContext, useWatch } from "react-hook-form"
@@ -14,6 +24,7 @@ type UnitProps = {
   setUnits: (units: TempUnit[]) => void
   disableUnitsAccordion: boolean
   disableListingAvailability?: boolean
+  featureFlags?: FeatureFlag[]
 }
 
 const FormUnits = ({
@@ -21,11 +32,13 @@ const FormUnits = ({
   setUnits,
   disableUnitsAccordion,
   disableListingAvailability,
+  featureFlags,
 }: UnitProps) => {
   const { addToast } = useContext(MessageContext)
   const [unitDrawerOpen, setUnitDrawerOpen] = useState(false)
   const [unitDeleteModal, setUnitDeleteModal] = useState<number | null>(null)
   const [defaultUnit, setDefaultUnit] = useState<TempUnit | null>(null)
+  const [homeTypeEnabled, setHomeTypeEnabled] = useState(false)
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -36,6 +49,13 @@ const FormUnits = ({
     control,
     name: "listingAvailabilityQuestion",
   })
+
+  const homeTypes = [
+    "",
+    ...Object.values(HomeTypeEnum).map((val) => {
+      return { value: val, label: t(`homeType.${val}`) }
+    }),
+  ]
 
   const nextId = units && units.length > 0 ? units[units.length - 1]?.tempId + 1 : 1
 
@@ -66,6 +86,17 @@ const FormUnits = ({
       })
     }
   }, [units])
+
+  // If hometype feature flag is not turned on for selected jurisdiction we need to reset the value
+  useEffect(() => {
+    if (featureFlags) {
+      const isHomeTypeEnabled = featureFlags.some((flag) => flag.name === "homeType")
+      setHomeTypeEnabled(isHomeTypeEnabled)
+      if (!isHomeTypeEnabled) {
+        setValue("homeType", "")
+      }
+    }
+  }, [featureFlags, setValue])
 
   const editUnit = useCallback(
     (tempId: number) => {
@@ -156,6 +187,23 @@ const FormUnits = ({
     <>
       <hr className="spacer-section-above spacer-section" />
       <SectionWithGrid heading={t("listings.units")} subheading={t("listings.unitsDescription")}>
+        {homeTypeEnabled && (
+          <Grid.Row columns={2}>
+            <FieldValue label={t("listings.homeType")}>
+              {homeTypes && (
+                <Select
+                  id={`homeType`}
+                  name={`homeType`}
+                  label={t("listings.homeType")}
+                  labelClassName="sr-only"
+                  register={register}
+                  controlClassName="control"
+                  options={homeTypes}
+                />
+              )}
+            </FieldValue>
+          </Grid.Row>
+        )}
         <Grid.Row columns={2}>
           <FieldValue label={t("listings.unitTypesOrIndividual")} className="mb-1">
             <FieldGroup
@@ -202,6 +250,7 @@ const FormUnits = ({
             />
           </FieldValue>
         </Grid.Row>
+
         <SectionWithGrid.HeadingRow>{t("listings.units")}</SectionWithGrid.HeadingRow>
         <Grid.Row>
           <Grid.Cell className="grid-inset-section">

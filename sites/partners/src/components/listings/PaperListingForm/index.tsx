@@ -7,6 +7,7 @@ import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
 import ChevronRightIcon from "@heroicons/react/20/solid/ChevronRightIcon"
 import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import {
+  FeatureFlag,
   ListingCreate,
   ListingEventsTypeEnum,
   ListingUpdate,
@@ -126,6 +127,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
   const [customMapPositionChosen, setCustomMapPositionChosen] = useState(
     listing?.customMapPin || false
   )
+  const [activeFeatureFlags, setActiveFeatureFlags] = useState<FeatureFlag[]>(null)
 
   const setLatitudeLongitude = (latlong: LatitudeLongitude) => {
     if (!loading) {
@@ -167,7 +169,23 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
   }, [listing?.units, listing?.listingEvents, setUnits, setOpenHouseEvents])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getValues, setError, clearErrors, reset } = formMethods
+  const { getValues, setError, clearErrors, reset, watch } = formMethods
+
+  const selectedJurisdiction = watch("jurisdictions.id")
+
+  // Set the active feature flags depending on if/what jurisdiction is selected
+  useEffect(() => {
+    const newFeatureFlags = profile.jurisdictions?.reduce((featureFlags, juris) => {
+      if (!selectedJurisdiction || selectedJurisdiction === juris.id) {
+        // filter only the active feature flags
+        const jurisFeatureFlags = juris.featureFlags?.filter((value) => value.active)
+        const flags = [...featureFlags, ...jurisFeatureFlags]
+        return [...new Set(flags)]
+      }
+      return featureFlags
+    }, [])
+    setActiveFeatureFlags(newFeatureFlags)
+  }, [profile.jurisdictions, selectedJurisdiction])
 
   const triggerSubmitWithStatus: SubmitFunction = (action, status, newData) => {
     if (action !== "redirect" && status === ListingsStatusEnum.active) {
@@ -338,6 +356,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                             disableListingAvailability={
                               isListingActive && !profile.userRoles.isAdmin
                             }
+                            featureFlags={activeFeatureFlags}
                           />
                           <SelectAndOrder
                             addText={t("listings.addPreference")}
