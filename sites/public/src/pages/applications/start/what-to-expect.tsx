@@ -65,7 +65,7 @@ const ApplicationWhatToExpect = () => {
           mounted: OnClientSide(),
         }}
         backLink={{
-          url: listing.includeCommunityDisclaimer
+          url: listing?.includeCommunityDisclaimer
             ? conductor.determinePreviousUrl()
             : `/applications/start/choose-language?listingId=${listing?.id}`,
         }}
