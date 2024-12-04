@@ -167,6 +167,7 @@
   "listings.addPreferences": "Add Preferences",
   "listings.additionalApplicationSubmissionNotes": "Additional Application Submission Notes",
   "listings.amiOverrideTitle": "Override for household size of %{householdSize}",
+  "listings.appearsInListing": "Appears in listing",
   "listings.applicationDropOffQuestion": "Can applications be dropped off?",
   "listings.applicationDueTime": "Application Due Time",
   "listings.applicationPickupQuestion": "Can applications be picked up?",

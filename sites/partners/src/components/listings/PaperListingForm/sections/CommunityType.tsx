@@ -95,6 +95,7 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
               id={"reservedCommunityDescription"}
               fullWidth={true}
               register={register}
+              note={t("listings.appearsInListing")}
             />
           </Grid.Cell>
         </Grid.Row>
@@ -110,18 +111,20 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
                   label: t("t.yes"),
                   value: YesNoEnum.yes,
                   id: "includeCommunityDisclaimerYes",
+                  disabled: !currentCommunityType,
                 },
                 {
                   label: t("t.no"),
                   value: YesNoEnum.no,
                   id: "includeCommunityDisclaimerNo",
+                  disabled: !currentCommunityType,
                 },
               ]}
             />
           </FieldValue>
         </Grid.Row>
 
-        {watch("includeCommunityDisclaimerQuestion") === YesNoEnum.yes && (
+        {watch("includeCommunityDisclaimerQuestion") === YesNoEnum.yes && currentCommunityType && (
           <>
             <Grid.Row columns={3}>
               <Grid.Cell className="seeds-grid-span-2">
