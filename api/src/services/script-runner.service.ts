@@ -435,7 +435,7 @@ export class ScriptRunnerService {
   }
 
   /**
-    this is simply an example
+    Adds all existing feature flags across Bloom to the database
   */
   async addFeatureFlags(req: ExpressRequest): Promise<SuccessDTO> {
     const requestingUser = mapTo(User, req['user']);
