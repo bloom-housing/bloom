@@ -1,4 +1,28 @@
+@import "../public/static/fonts/Montserrat.css";
+
 :root {
+  // Seeds token overrides
+
+  --seeds-font-alt-sans: "Montserrat", "Open Sans", "Helvetica", "Arial", "Verdana", "sans-serif";
+  --seeds-font-sans: "Montserrat", "Open Sans", "Helvetica", "Arial", "Verdana", "sans-serif";
+  --seeds-font-serif: "Montserrat", "Droid Serif", "Georgia", "Times", "serif";
+  --seeds-color-primary-darker: #0b221f;
+  --seeds-color-primary-dark: #1a5049;
+  --seeds-color-primary: #297e73;
+  --seeds-color-primary-light: #59c9ba;
+  --seeds-color-primary-lighter: #b5e7e0;
+
+  // Seeds component & class token overrides
+  .seeds-button {
+    --button-border-radius-sm: var(--seeds-rounded-3xl);
+    --button-border-radius-md: var(--seeds-rounded-3xl);
+  }
+
+  .text-heading-4xl {
+    font-weight: var(--seeds-font-weight-semibold);
+  }
+
+  // UIC and miscellaneous overrides
   .seeds-button {
     -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
   }
@@ -17,7 +41,7 @@
         color: var(--seeds-text-color-dark);
         text-transform: uppercase;
         font-weight: bold;
-        letter-spacing: .025rem;
+        letter-spacing: 0.025rem;
       }
     }
   }
