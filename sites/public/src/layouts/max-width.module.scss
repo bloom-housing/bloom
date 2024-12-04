@@ -1,0 +1,13 @@
+.layout-max-width-container {
+  margin-block: var(--seeds-s6);
+  padding-inline: var(--seeds-s4);
+
+  @media (--md-and-up) {
+    margin-block: var(--seeds-s12);
+  }
+}
+
+.layout-max-width-content {
+  max-width: var(--seeds-screen-lg);
+  margin: auto;
+}
