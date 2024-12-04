@@ -5,6 +5,10 @@
   @media (--md-and-up) {
     margin-block: var(--seeds-s12);
   }
+
+  p:not(:last-child) {
+    margin-block-end: var(--seeds-s4);
+  }
 }
 
 .layout-max-width-content {
