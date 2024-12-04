@@ -731,7 +731,7 @@ describe('Testing script runner service', () => {
     });
   });
 
-  it('should create 15 feature flags', async () => {
+  it('should create 16 feature flags', async () => {
     const id = randomUUID();
     const scriptName = 'add feature flags';
 
@@ -768,7 +768,7 @@ describe('Testing script runner service', () => {
         scriptName,
       },
     });
-    expect(prisma.featureFlags.create).toHaveBeenCalledTimes(15);
+    expect(prisma.featureFlags.create).toHaveBeenCalledTimes(16);
   });
 
   // | ---------- HELPER TESTS BELOW ---------- | //
