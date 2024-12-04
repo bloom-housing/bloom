@@ -896,6 +896,8 @@ export class ListingService implements OnModuleInit {
             }
           : undefined,
         requestedChangesUser: undefined,
+        publishedAt:
+          dto.status === ListingsStatusEnum.active ? new Date() : undefined,
         contentUpdatedAt: new Date(),
         copyOf: copyOfId
           ? {
