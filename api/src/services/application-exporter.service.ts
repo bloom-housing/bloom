@@ -719,6 +719,12 @@ export class ApplicationExporterService {
     return res;
   }
 
+  /**
+   * 
+   * @param questions a collection of questions which can include more than preferences, the rest will be filtered out
+   * @param listingId the id of the listing
+   * @returns listing preferences sorted in ordinal order
+   */
   async sortPreferencesByOrdinal(
     questions: MultiselectQuestion[],
     listingId: string,
