@@ -43,6 +43,9 @@ export default class ApplicationConductor {
     chooseLanguage: {
       url: "/applications/start/choose-language",
     },
+    communityDisclaimer: {
+      url: "/applications/start/community-disclaimer",
+    },
     whatToExpect: {
       url: "/applications/start/what-to-expect",
     },

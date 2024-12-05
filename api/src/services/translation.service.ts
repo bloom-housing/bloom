@@ -166,6 +166,13 @@ export class TranslationService {
       });
     }
 
+    if (listing.includeCommunityDisclaimer) {
+      pathsToFilter[`communityDisclaimerTitle`] =
+        listing.communityDisclaimerTitle;
+      pathsToFilter[`communityDisclaimerDescription`] =
+        listing.communityDisclaimerDescription;
+    }
+
     const persistedTranslationsFromDB = await this.getPersistedTranslatedValues(
       listing,
       language,
