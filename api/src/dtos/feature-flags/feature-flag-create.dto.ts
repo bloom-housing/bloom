@@ -1,4 +1,9 @@
 import { OmitType } from '@nestjs/swagger';
-import { FeatureFlagUpdate } from './feature-flag-update.dto';
+import { FeatureFlag } from './feature-flag.dto';
 
-export class FeatureFlagCreate extends OmitType(FeatureFlagUpdate, ['id']) {}
+export class FeatureFlagCreate extends OmitType(FeatureFlag, [
+  'id',
+  'createdAt',
+  'updatedAt',
+  'jurisdictions',
+]) {}

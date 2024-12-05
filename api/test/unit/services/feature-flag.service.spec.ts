@@ -149,20 +149,19 @@ describe('Testing feature flag service', () => {
       prisma.featureFlags.findFirst = jest.fn().mockResolvedValue(mockedValue);
       prisma.featureFlags.update = jest.fn().mockResolvedValue({
         ...mockedValue,
-        name: 'updated feature flag 1',
+        description: 'updated feature flag 1',
       });
 
       const params: FeatureFlagUpdate = {
-        name: 'updated feature flag 1',
         id: mockedValue.id,
-        description: mockedValue.description,
+        description: 'updated feature flag 1',
         active: mockedValue.active,
       };
 
       expect(await service.update(params)).toEqual({
         id: mockedValue.id,
-        name: 'updated feature flag 1',
-        description: mockedValue.description,
+        name: mockedValue.name,
+        description: 'updated feature flag 1',
         active: mockedValue.active,
         createdAt: date,
         updatedAt: date,
@@ -177,8 +176,7 @@ describe('Testing feature flag service', () => {
 
       expect(prisma.featureFlags.update).toHaveBeenCalledWith({
         data: {
-          name: 'updated feature flag 1',
-          description: mockedValue.description,
+          description: 'updated feature flag 1',
           active: mockedValue.active,
         },
         include: {
@@ -201,7 +199,6 @@ describe('Testing feature flag service', () => {
 
       const params: FeatureFlagUpdate = {
         id: 'example id',
-        name: 'example feature flag',
         description: 'example description',
         active: true,
       };
