@@ -13,24 +13,27 @@ type AdditionalFeesProps = {
 
 const AdditionalFees = (props: AdditionalFeesProps) => {
   const formMethods = useFormContext()
-  const { profile } = useContext(AuthContext)
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, errors, clearErrors } = formMethods
 
   const jurisdiction = watch("jurisdiction.id")
 
   const utilitiesFields = useMemo(() => {
-    return listingUtilities.map((utility) => ({
-      id: utility,
-      label: t(`listings.utilities.${utility}`),
-      defaultChecked: props.existingUtilities ? props.existingUtilities[utility] : false,
-      register,
-    }))
+    return listingUtilities.map((utility) => {
+      return {
+        id: utility,
+        label: t(`listings.utilities.${utility}`),
+        defaultChecked: props.existingUtilities ? props.existingUtilities[utility] : false,
+        register,
+      }
+    })
   }, [props.existingUtilities, register])
 
-  const enableUtilitiesIncluded = profile?.jurisdictions?.find(
-    (j) => j.id === jurisdiction
-  )?.enableUtilitiesIncluded
+  const enableUtilitiesIncluded = doJurisdictionsHaveFeatureFlagOn(
+    "enableUtilitiesIncluded",
+    jurisdiction
+  )
 
   return (
     <>
@@ -109,10 +112,9 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
         {enableUtilitiesIncluded && (
           <Grid.Row>
             <FieldValue label={t("listings.sections.utilities")}>
-              {/* TODO: default checked doesn't appear to be working even in main */}
               <FieldGroup
                 type="checkbox"
-                name="listingUtilities"
+                name="utilities"
                 fields={utilitiesFields}
                 register={register}
                 fieldGroupClassName="grid grid-cols-2 mt-4"
