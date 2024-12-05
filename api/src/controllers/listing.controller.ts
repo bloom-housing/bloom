@@ -89,20 +89,18 @@ export class ListingController {
   }
 
   // REMOVE_WHEN_EXTERNAL_NOT_NEEDED
-  @Get('combined')
+  @Post('combined')
   // @ApiExtraModels(CombinedListingFilterParams, CombinedListingsQueryParams)
   @ApiOperation({
     summary: 'List all local and external listings',
     operationId: 'listCombined',
   })
+  @PermissionAction(permissionActions.read)
   @UseInterceptors(ClassSerializerInterceptor)
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   public async getCombined(
-    @Query() queryParams: ListingsQueryParams,
+    @Body() queryParams: ListingsQueryParams,
   ): Promise<PaginatedListingDto> {
-    mapTo(ListingsQueryParams, queryParams, {
-      excludeExtraneousValues: true,
-    });
     const list = await this.listingService.listCombined(queryParams);
     return mapTo(PaginatedListingDto, list);
   }
@@ -124,14 +122,19 @@ export class ListingController {
     return await this.listingCsvExportService.exportFile(req, res, queryParams);
   }
 
-  @Get('mapMarkers')
+  @Post('mapMarkers')
   @ApiOperation({
     summary: 'Get listing map markers',
     operationId: 'mapMarkers',
   })
+  @PermissionAction(permissionActions.read)
   @ApiOkResponse({ type: ListingMapMarker, isArray: true })
-  async mapMarkers() {
-    return await this.listingService.mapMarkers();
+  @UseInterceptors(ClassSerializerInterceptor)
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  async mapMarkers(
+    @Body() queryParams: ListingsQueryParams,
+  ): Promise<ListingMapMarker[]> {
+    return await this.listingService.mapMarkers(queryParams);
   }
 
   @Get(`external/:id`)
@@ -234,7 +237,6 @@ export class ListingController {
     );
   }
 
-  // NestJS best practice to have get(':id') at the bottom of the file
   @Get(`:id`)
   @ApiOperation({ summary: 'Get listing by id', operationId: 'retrieve' })
   @UseInterceptors(ClassSerializerInterceptor)

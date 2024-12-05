@@ -83,7 +83,6 @@
   "application.contact.phoneNumberTypes.home": "住家",
   "application.contact.phoneNumberTypes.prompt": "這是哪類電話號碼？",
   "application.contact.phoneNumberTypes.work": "工作",
-  "application.contact.preferredContactType": "首選聯絡方式",
   "application.contact.provideAMailingAddress": "請提供一個可收到您最新申請消息和資料的地址。",
   "application.contact.sendMailToMailingAddress": "請將我的郵件寄往另一地址",
   "application.contact.state": "州",

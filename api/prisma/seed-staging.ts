@@ -16,8 +16,8 @@ import dayjs from 'dayjs';
 import { ValidationMethod } from '../src/enums/multiselect-questions/validation-method-enum';
 import {
   rockyMountainAddress,
-  yellowstoneAddress,
   yosemiteAddress,
+  stagingRealisticAddresses,
 } from './seed-helpers/address-factory';
 import { amiChartFactory } from './seed-helpers/ami-chart-factory';
 import { applicationFactory } from './seed-helpers/application-factory';
@@ -41,6 +41,7 @@ import { userFactory } from './seed-helpers/user-factory';
 export const stagingSeed = async (
   prismaClient: PrismaClient,
   jurisdictionName: string,
+  largeSeed?: boolean,
 ) => {
   //doorway-specific permissions
   const listingApprovalPermissions = [UserRoleEnum.admin];
@@ -68,6 +69,9 @@ export const stagingSeed = async (
       listingApprovalPermissions,
       duplicateListingPermissions,
     ),
+  });
+  const alamedaCounty = await prismaClient.jurisdictions.create({
+    data: jurisdictionFactory('Alameda', [UserRoleEnum.admin]),
   });
   const marinCounty = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory(
@@ -118,6 +122,17 @@ export const stagingSeed = async (
       duplicateListingPermissions,
     ),
   });
+  const jurisdictionNameMap = {
+    Alameda: alamedaCounty.id,
+    'Contra Costa': additionalJurisdiction.id,
+    Marin: marinCounty.id,
+    'San Mateo': sanMateoCounty.id,
+    Napa: napaCounty.id,
+    'Santa Clara': santaClaraCounty.id,
+    Solano: solanaCounty.id,
+    Sonoma: sonomaCounty.id,
+    'San Francisco': sanFranciscoCounty.id,
+  };
   // create admin user
   await prismaClient.userAccounts.create({
     data: await userFactory({
@@ -322,10 +337,12 @@ export const stagingSeed = async (
   const unitTypes = await unitTypeFactoryAll(prismaClient);
   await unitAccessibilityPriorityTypeFactoryAll(prismaClient);
   await reservedCommunityTypeFactoryAll(jurisdiction.id, prismaClient);
-  await reservedCommunityTypeFactoryAll(
-    additionalJurisdiction.id,
-    prismaClient,
-  );
+  for (const juris in jurisdictionNameMap) {
+    await reservedCommunityTypeFactoryAll(
+      jurisdictionNameMap[juris],
+      prismaClient,
+    );
+  }
   // list of predefined listings WARNING: images only work if image setup is cloudinary on exygy account
   [
     {
@@ -396,7 +413,7 @@ export const stagingSeed = async (
         contentUpdatedAt: new Date(),
         publishedAt: new Date(),
         listingsBuildingAddress: {
-          create: yellowstoneAddress,
+          create: stagingRealisticAddresses[0],
         },
         listingsApplicationPickUpAddress: undefined,
         listingsLeasingAgentAddress: undefined,
@@ -798,7 +815,7 @@ export const stagingSeed = async (
         contentUpdatedAt: new Date(),
         publishedAt: new Date(),
         listingsBuildingAddress: {
-          create: yellowstoneAddress,
+          create: stagingRealisticAddresses[1],
         },
         listingsApplicationMailingAddress: {
           create: rockyMountainAddress,
@@ -1295,6 +1312,7 @@ export const stagingSeed = async (
         multiselectQuestions: value.multiselectQuestions,
         applications: value.applications,
         afsLastRunSetInPast: true,
+        address: stagingRealisticAddresses[index + 4],
       });
       const savedListing = await prismaClient.listings.create({
         data: listing,
@@ -1407,4 +1425,22 @@ export const stagingSeed = async (
       password: 'abcdef',
     }),
   });
+  if (largeSeed) {
+    Object.values(stagingRealisticAddresses).forEach(async (addr, index) => {
+      const listing = await listingFactory(
+        jurisdictionNameMap[addr.county],
+        prismaClient,
+        {
+          amiChart: amiChart,
+          numberOfUnits: 4,
+          digitalApp: !!(index % 2),
+          address: addr,
+          publishedAt: dayjs(new Date()).subtract(5, 'days').toDate(),
+        },
+      );
+      await prismaClient.listings.create({
+        data: listing,
+      });
+    });
+  }
 };

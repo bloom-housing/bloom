@@ -48,6 +48,8 @@ export const listingFactory = async (
     reviewOrderType?: ReviewOrderTypeEnum;
     listingEvents?: Prisma.ListingEventsCreateWithoutListingsInput[];
     lotteryOptIn?: boolean;
+    address?: Prisma.AddressCreateInput;
+    publishedAt?: Date;
   },
 ): Promise<Prisma.ListingsCreateInput> => {
   const previousListing = optionalParams?.listing || {};
@@ -76,11 +78,18 @@ export const listingFactory = async (
       : optionalParams?.status === ListingsStatusEnum.closed
       ? new Date()
       : null,
+    publishedAt:
+      optionalParams?.publishedAt ||
+      (!!optionalParams?.status &&
+      optionalParams.status !== ListingsStatusEnum.active &&
+      optionalParams.status !== ListingsStatusEnum.closed
+        ? null
+        : new Date()),
     lotteryStatus: optionalParams?.lotteryStatus || undefined,
     lotteryOptIn: optionalParams?.lotteryOptIn || undefined,
     displayWaitlistSize: Math.random() < 0.5,
     listingsBuildingAddress: {
-      create: addressFactory(),
+      create: optionalParams?.address || addressFactory(),
     },
     listingsApplicationMailingAddress: {
       create: addressFactory(),
@@ -95,7 +104,7 @@ export const listingFactory = async (
       create: addressFactory(),
     },
     reservedCommunityTypes:
-      Math.random() < 0.5
+      Math.random() < 0.5 && reservedCommunityType
         ? {
             connect: {
               id: reservedCommunityType.id,
@@ -155,7 +164,9 @@ export const listingFactory = async (
         }
       : undefined,
     applicationDueDate: optionalParams?.applicationDueDate ?? undefined,
-    reviewOrderType: optionalParams?.reviewOrderType ?? undefined,
+    reviewOrderType:
+      optionalParams?.reviewOrderType ??
+      ReviewOrderTypeEnum.firstComeFirstServe,
     developer: randomName(),
     leasingAgentName: randomName(),
     leasingAgentEmail: 'leasing-agent@example.com',

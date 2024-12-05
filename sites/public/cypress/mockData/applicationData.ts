@@ -17,7 +17,6 @@ const idDefaults = {
   updatedAt: new Date(),
 }
 
-export const contactPreferencesCheckboxesOrder = ["email", "phone", "letter", "text"]
 export const alternateContactTypeRadioOrder = [
   "familyMember",
   "friend",
@@ -100,7 +99,6 @@ export const ElmVillageApplication: Application = {
   additionalPhone: true,
   additionalPhoneNumber: "(555) 555-5555",
   additionalPhoneNumberType: "home",
-  contactPreferences: ["email"],
   householdSize: 2,
   housingStatus: "",
   sendMailToMailingAddress: true,
@@ -167,7 +165,7 @@ export const ElmVillageApplication: Application = {
         zipCode: "90223",
       },
       sameAddress: YesNoEnum.no,
-      relationship: HouseholdMemberRelationship.spouse,
+      relationship: HouseholdMemberRelationship.spousePartner,
     },
   ],
   preferredUnitTypes: [
@@ -327,7 +325,6 @@ export const minimalDataApplication: Application = {
   additionalPhone: false,
   additionalPhoneNumber: "",
   additionalPhoneNumberType: "",
-  contactPreferences: ["letter"],
   householdSize: 1,
   housingStatus: "",
   sendMailToMailingAddress: false,

@@ -11,5 +11,9 @@
   "unitType.id": "One Bedroom",
   "leasingAgentName": "Basic Agent Name",
   "leasingAgentEmail": "basicAgent@email.com",
-  "leasingAgentPhone": "520-245-8811"
+  "leasingAgentPhone": "520-245-8811",
+  "date.month": "10",
+  "date.day": "04",
+  "date.hours": "10",
+  "date.minutes": "04"
 }

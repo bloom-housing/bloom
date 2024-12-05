@@ -83,7 +83,6 @@
   "application.contact.phoneNumberTypes.home": "Home",
   "application.contact.phoneNumberTypes.prompt": "What type of number is this?",
   "application.contact.phoneNumberTypes.work": "Work",
-  "application.contact.preferredContactType": "Preferred Contact Type",
   "application.contact.provideAMailingAddress": "Provide an address where you can receive updates and materials about your application.",
   "application.contact.sendMailToMailingAddress": "Send my mail to a different address",
   "application.contact.state": "State",

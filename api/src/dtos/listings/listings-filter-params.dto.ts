@@ -7,6 +7,7 @@ import {
   IsEnum,
   IsNumberString,
   IsString,
+  IsUUID,
 } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { ListingFilterKeys } from '../../enums/listings/filter-key-enum';
@@ -123,4 +124,13 @@ export class ListingFilterParams extends BaseFilter {
   })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   [ListingFilterKeys.counties]?: string[];
+
+  @Expose()
+  @ApiPropertyOptional({
+    type: Array,
+    example: ['abcdef'],
+  })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default], each: true })
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.ids]?: string[];
 }

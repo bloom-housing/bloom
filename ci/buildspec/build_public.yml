@@ -45,6 +45,8 @@ phases:
         --build-arg "MAINTENANCE_WINDOW=$MAINTENANCE_WINDOW"
         --build-arg "SHOW_PUBLIC_LOTTERY=${SHOW_PUBLIC_LOTTERY}"
         --build-arg "API_PASS_KEY=${API_PASS_KEY}"
+        --build-arg "GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY}"
+        --build-arg "GOOGLE_MAPS_MAP_ID=${GOOGLE_MAPS_MAP_ID}"
         --target test
         -t sites/public:test
         .
@@ -74,6 +76,8 @@ phases:
         --build-arg "MAINTENANCE_WINDOW=$MAINTENANCE_WINDOW"
         --build-arg "SHOW_PUBLIC_LOTTERY=${SHOW_PUBLIC_LOTTERY}"
         --build-arg "API_PASS_KEY=${API_PASS_KEY}"
+        --build-arg "GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY}"
+        --build-arg "GOOGLE_MAPS_MAP_ID=${GOOGLE_MAPS_MAP_ID}"
         --target run
         -t sites/public:run-candidate
         .

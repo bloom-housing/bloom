@@ -140,9 +140,7 @@ Cypress.Commands.add("fillPrimaryApplicant", (application, fieldsToSkip = []) =>
     { id: "application.applicant.applicantAddress.state", fieldKey: "applicant.address.state" },
   ]
 
-  const fieldsToClick = [{ id: "email", fieldKey: "email" }]
-
-  fillFields(application, fieldsToType, fieldsToSelect, fieldsToClick, fieldsToSkip)
+  fillFields(application, fieldsToType, fieldsToSelect, [], fieldsToSkip)
 })
 
 Cypress.Commands.add("fillAlternateContact", (application, fieldsToSkip = []) => {
@@ -313,7 +311,6 @@ Cypress.Commands.add("verifyPrimaryApplicant", (application, fieldsToSkip = []) 
     { id: "dateOfBirth", fieldKey: "dateOfBirth" },
     { id: "phoneNumber", fieldKey: "formattedPhoneNumber" },
     { id: "additionalPhoneNumber", fieldKey: "formattedAdditionalPhoneNumber" },
-    { id: "preferredContact", fieldKey: "preferredContact" },
     { id: "residenceAddress.streetAddress", fieldKey: "applicant.address.street" },
     { id: "residenceAddress.street2", fieldKey: "applicant.address.street2" },
     { id: "residenceAddress.city", fieldKey: "applicant.address.city" },
@@ -384,7 +381,8 @@ Cypress.Commands.add("verifyTerms", (application) => {
 })
 
 Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, jurisdiction) => {
-  // Create and publish minimal lottery listing
+  // Create and publish minimal FCFS or Lottery listing
+  // TODO: test Open Waitlist, though maybe with integration test instead
   cy.getByID("addListingButton").contains("Add Listing").click()
   cy.contains("New Listing")
   cy.fixture("minimalListing").then((listing) => {
@@ -445,19 +443,25 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
     cy.getByID("digitalApplicationChoiceYes").check()
     cy.getByID("commonDigitalApplicationChoiceYes").check()
     cy.getByID("paperApplicationNo").check()
-
-    if (isApproval) {
-      cy.getByID("submitButton").contains("Submit").click()
-      cy.getByID("submitListingForApprovalButtonConfirm").contains("Submit").click()
-      cy.getByTestId("page-header").should("be.visible")
-      cy.getByTestId("page-header").should("have.text", listingName)
-    } else {
-      cy.getByID("publishButton").contains("Publish").click()
-      cy.getByID("publishButtonConfirm").contains("Publish").click()
-      cy.get("[data-testid=page-header]").should("be.visible")
-      cy.getByTestId("page-header").should("have.text", listingName)
-    }
+    cy.getByID("applicationDueDateField.month").type(listing["date.month"])
+    cy.getByID("applicationDueDateField.day").type(listing["date.day"])
+    cy.getByID("applicationDueDateField.year").type((new Date().getFullYear() + 1).toString())
+    cy.getByID("applicationDueTimeField.hours").type(listing["date.hours"])
+    cy.getByID("applicationDueTimeField.minutes").type(listing["date.minutes"])
+    cy.getByID("applicationDueTimeField.period").select("PM")
   })
+
+  if (isApproval) {
+    cy.getByID("submitButton").contains("Submit").click()
+    cy.getByID("submitListingForApprovalButtonConfirm").contains("Submit").click()
+    cy.getByTestId("page-header").should("be.visible")
+    cy.getByTestId("page-header").should("have.text", listingName)
+  } else {
+    cy.getByID("publishButton").contains("Publish").click()
+    cy.getByID("publishButtonConfirm").contains("Publish").click()
+    cy.get("[data-testid=page-header]").should("be.visible")
+    cy.getByTestId("page-header").should("have.text", listingName)
+  }
 })
 
 Cypress.Commands.add("addMinimalApplication", (listingName) => {

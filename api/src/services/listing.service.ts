@@ -56,6 +56,7 @@ import {
   summarizeUnitsByTypeAndRent,
   summarizeUnits,
 } from '../utilities/unit-utilities';
+import { ListingOrderByKeys } from '../enums/listings/order-by-enum';
 
 export type getListingsArgs = {
   skip: number;
@@ -202,7 +203,10 @@ export class ListingService implements OnModuleInit {
     const listingsRaw = await this.prisma.listings.findMany({
       skip: calculateSkip(params.limit, page),
       take: calculateTake(params.limit),
-      orderBy: buildOrderByForListings(params.orderBy, params.orderDir),
+      orderBy: buildOrderByForListings(
+        params.orderBy,
+        params.orderDir,
+      ) as Prisma.ListingsOrderByWithRelationInput[],
       include: views[params.view ?? 'full'],
       where: whereClause,
     });
@@ -232,16 +236,7 @@ export class ListingService implements OnModuleInit {
     };
   }
 
-  async listCombined(params: ListingsQueryParams): Promise<{
-    items: Listing[];
-    meta: {
-      currentPage: number;
-      itemCount: number;
-      itemsPerPage: number;
-      totalItems: number;
-      totalPages: number;
-    };
-  }> {
+  async buildListingsWhereClause(params: ListingsQueryParams) {
     const onlyLettersPattern = /^[A-Za-z ]+$/;
     const whereClauseArray = [];
     if (params?.filter?.length) {
@@ -257,6 +252,12 @@ export class ListingService implements OnModuleInit {
           whereClauseArray.push(
             `(combined.listings_building_address->>'county') in (${countyArray})`,
           );
+        }
+        if (filter[ListingFilterKeys.ids]) {
+          const listingsArray = filter[ListingFilterKeys.ids].map(
+            (filterId) => `'${filterId}'`,
+          );
+          whereClauseArray.push(`combined.id in (${listingsArray})`);
         }
         if (filter[ListingFilterKeys.bedrooms]) {
           whereClauseArray.push(
@@ -310,7 +311,20 @@ export class ListingService implements OnModuleInit {
     const listingIds: { id: string }[] = await this.prisma.$queryRawUnsafe(
       rawQuery,
     );
+    return listingIds;
+  }
 
+  async listCombined(params: ListingsQueryParams): Promise<{
+    items: Listing[];
+    meta: {
+      currentPage: number;
+      itemCount: number;
+      itemsPerPage: number;
+      totalItems: number;
+      totalPages: number;
+    };
+  }> {
+    const listingIds = await this.buildListingsWhereClause(params);
     const count = listingIds?.length;
 
     // if passed in page and limit would result in no results because there aren't that many listings
@@ -330,6 +344,10 @@ export class ListingService implements OnModuleInit {
           in: listingIds.map((listing) => listing.id),
         },
       },
+      orderBy: buildOrderByForListings(
+        [ListingOrderByKeys.mostRecentlyPublished],
+        params.orderDir,
+      ) as Prisma.CombinedListingsOrderByWithRelationInput[],
     });
 
     listingsRaw.forEach((listing) => {
@@ -2081,14 +2099,19 @@ export class ListingService implements OnModuleInit {
     return listing.jurisdictionId;
   }
 
-  async mapMarkers(): Promise<ListingMapMarker[]> {
-    const listingsRaw = await this.prisma.listings.findMany({
+  async mapMarkers(params: ListingsQueryParams): Promise<ListingMapMarker[]> {
+    const listingIds = await this.buildListingsWhereClause(params);
+
+    const listingsRaw = await this.prisma.combinedListings.findMany({
       select: {
         id: true,
         listingsBuildingAddress: true,
       },
       where: {
         status: ListingsStatusEnum.active,
+        id: {
+          in: listingIds.map((listing) => listing.id),
+        },
       },
     });
 

@@ -24,7 +24,7 @@ describe("applications pages", () => {
 
   describe("address step", () => {
     it("should render form fields", () => {
-      const { getByText, getByTestId, getAllByTestId } = render(<ApplicationAddress />)
+      const { getByText, getByTestId } = render(<ApplicationAddress />)
 
       expect(
         getByText("Now we need to know how to contact you about your application.", {
@@ -41,7 +41,6 @@ describe("applications pages", () => {
       expect(getByTestId("app-primary-address-state")).toBeInTheDocument()
       expect(getByTestId("app-primary-address-zip")).toBeInTheDocument()
       expect(getByTestId("app-primary-send-to-mailing")).toBeInTheDocument()
-      expect(getAllByTestId("app-primary-contact-preference")).toHaveLength(4)
     })
 
     it("should require form input", async () => {
@@ -54,7 +53,6 @@ describe("applications pages", () => {
       expect(getByText("Please enter a phone number")).toBeInTheDocument()
       expect(getByText("Please enter a phone number type")).toBeInTheDocument()
       expect(getByText("Please enter an address")).toBeInTheDocument()
-      expect(getByText("Please select at least one option.")).toBeInTheDocument()
     })
 
     it("should disable phone fields if user indicates they don't have a phone", async () => {

@@ -5,15 +5,17 @@
   --max-width-large-screen: var(--bloom-width-5xl);
   --cell-padding: var(--bloom-s3);
   --wider-cell-padding: var(--bloom-s5);
-  --margin: 0 var(--inter-row-gap);
   --card-tag-padding: var(--bloom-s3) var(--bloom-s5);
+  --row-padding: var(--inter-row-gap);
+  --row-margin: 0;
   --card-tag-font-weight: inherit;
 
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   max-width: var(--max-width);
-  margin: var(--margin);
+  padding: var(--row-padding);
+  margin: var(--row-margin);
   position: relative;
   border-bottom: var(--bloom-border-1) solid var(--bloom-color-gray-450);
   padding-bottom: var(--inter-row-gap);

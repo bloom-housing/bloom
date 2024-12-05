@@ -1,6 +1,11 @@
 import React from "react"
-import { Button, ButtonGroup, ButtonGroupSpacing } from "@bloom-housing/doorway-ui-components"
-import { AppearanceStyleType, t } from "@bloom-housing/ui-components"
+import {
+  AppearanceSizeType,
+  Button,
+  ButtonGroup,
+  ButtonGroupSpacing,
+} from "@bloom-housing/doorway-ui-components"
+import { t, AppearanceStyleType } from "@bloom-housing/ui-components"
 import { Icon } from "@bloom-housing/ui-seeds"
 import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
 import ChevronRightIcon from "@heroicons/react/20/solid/ChevronRightIcon"
@@ -53,7 +58,7 @@ export function Pagination(props: PaginationProps) {
     const styleType = isCurrent ? AppearanceStyleType.primary : null
 
     pageButtons.push(
-      <Button styleType={styleType} onClick={onClick}>
+      <Button styleType={styleType} onClick={onClick} size={AppearanceSizeType.small}>
         {i}
       </Button>
     )
@@ -67,31 +72,50 @@ export function Pagination(props: PaginationProps) {
   // className={styles["pagination"]}
   // size={AppearanceSizeType.small}
 
+  if (props.lastPage === 1) return <></>
+
+  let buttonColumns = []
+
+  if (canNavBackward) {
+    buttonColumns.push(
+      <Button
+        disabled={!canNavBackward}
+        onClick={() => setPage(props.currentPage - 1)}
+        ariaLabel={t("t.previous")}
+        size={AppearanceSizeType.small}
+      >
+        <Icon size="md" className="-m-1">
+          <ChevronLeftIcon />
+        </Icon>
+      </Button>
+    )
+  }
+
+  buttonColumns = [...buttonColumns, ...pageButtons]
+
+  if (canNavForward) {
+    buttonColumns.push(
+      <Button
+        disabled={!canNavForward}
+        onClick={() => setPage(props.currentPage + 1)}
+        ariaLabel={t("t.next")}
+        size={AppearanceSizeType.small}
+      >
+        <Icon size="md" className="-m-1">
+          <ChevronRightIcon />
+        </Icon>
+      </Button>
+    )
+  }
+
   return (
-    <ButtonGroup
-      spacing={ButtonGroupSpacing.even}
-      pagination={true}
-      columns={[
-        <Button
-          disabled={!canNavBackward}
-          onClick={() => setPage(props.currentPage - 1)}
-          ariaLabel={t("t.previous")}
-        >
-          <Icon size="md" className="-m-1">
-            <ChevronLeftIcon />
-          </Icon>
-        </Button>,
-        ...pageButtons,
-        <Button
-          disabled={!canNavForward}
-          onClick={() => setPage(props.currentPage + 1)}
-          ariaLabel={t("t.next")}
-        >
-          <Icon size="md" className="-m-1">
-            <ChevronRightIcon />
-          </Icon>
-        </Button>,
-      ]}
-    />
+    <section aria-label={"Listings list pagination"}>
+      <ButtonGroup
+        spacing={ButtonGroupSpacing.even}
+        pagination={true}
+        columns={buttonColumns}
+        className={"pagination-button-group"}
+      />
+    </section>
   )
 }

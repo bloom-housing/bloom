@@ -94,6 +94,8 @@ p, admin, mapLayers, true, .*
 p, jurisdictionAdmin, mapLayers, true, .*
 p, limitedJurisdictionAdmin, mapLayers, true, .*
 
+p, admin, featureFlags, true, .*
+
 g, admin, jurisdictionAdmin
 g, jurisdictionAdmin, partner
 g, partner, user

@@ -83,7 +83,6 @@
   "application.contact.phoneNumberTypes.home": "Home",
   "application.contact.phoneNumberTypes.prompt": "Anong uri ng numero ito?",
   "application.contact.phoneNumberTypes.work": "Trabaho",
-  "application.contact.preferredContactType": "Napiling Uri ng Contact",
   "application.contact.provideAMailingAddress": "Magbigay ng address kung saan maaari kang tumanggap ng mga update at materyal tungkol sa iyong application.",
   "application.contact.sendMailToMailingAddress": "Ipadala ang aking liham sa ibang address",
   "application.contact.state": "State",

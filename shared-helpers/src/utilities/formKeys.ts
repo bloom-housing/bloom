@@ -70,21 +70,6 @@ export const countyKeys = [
   "Sonoma",
 ]
 
-export const contactPreferencesKeys = [
-  {
-    id: "email",
-  },
-  {
-    id: "phone",
-  },
-  {
-    id: "letter",
-  },
-  {
-    id: "text",
-  },
-]
-
 export const adaFeatureKeys = ["mobility", "vision", "hearing"]
 
 export const relationshipKeys = ["", ...Object.values(HouseholdMemberRelationship)]

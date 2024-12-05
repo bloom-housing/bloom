@@ -5,7 +5,6 @@ export default defineConfig({
   projectId: "f32m8f",
   pageLoadTimeout: 100000,
   video: true,
-  videoUploadOnPasses: false,
   numTestsKeptInMemory: 0,
   scrollBehavior: "center",
   viewportHeight: 1500,

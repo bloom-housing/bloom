@@ -265,17 +265,6 @@ const FormSummaryDetails = ({
             <MultiLineAddress address={reformatAddress(application.applicationsMailingAddress)} />
           </FieldValue>
         )}
-
-        {application.contactPreferences && (
-          <FieldValue
-            testId={"app-summary-contact-preference-type"}
-            id="applicantPreferredContactType"
-            label={t("application.contact.preferredContactType")}
-            className={styles["summary-value"]}
-          >
-            {application.contactPreferences?.map((item) => t(`t.${item}`)).join(", ")}
-          </FieldValue>
-        )}
       </Card.Section>
       {application.alternateContact.type && application.alternateContact.type !== "noContact" && (
         <>

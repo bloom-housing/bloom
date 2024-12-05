@@ -160,13 +160,41 @@ export class ListingsService {
       /**  */
       limit?: number | "all"
       /**  */
-      filter?: ListingFilterParams[]
+      $comparison: string
+      /**  */
+      name?: string
+      /**  */
+      status?: ListingsStatusEnum
+      /**  */
+      neighborhood?: string
+      /**  */
+      bedrooms?: number
+      /**  */
+      bathrooms?: number
+      /**  */
+      zipcode?: string
+      /**  */
+      leasingAgents?: string
+      /**  */
+      jurisdiction?: string
+      /**  */
+      isExternal?: boolean
+      /**  */
+      availability?: FilterAvailabilityEnum
+      /**  */
+      city?: string
+      /**  */
+      monthlyRent?: number
+      /**  */
+      counties?: []
+      /**  */
+      ids?: []
       /**  */
       view?: ListingViews
       /**  */
-      orderBy?: ListingOrderByKeys
+      orderBy?: ListingOrderByKeys[]
       /**  */
-      orderDir?: OrderByEnum
+      orderDir?: OrderByEnum[]
       /**  */
       search?: string
     } = {} as any,
@@ -179,7 +207,21 @@ export class ListingsService {
       configs.params = {
         page: params["page"],
         limit: params["limit"],
-        filter: params["filter"],
+        $comparison: params["$comparison"],
+        name: params["name"],
+        status: params["status"],
+        neighborhood: params["neighborhood"],
+        bedrooms: params["bedrooms"],
+        bathrooms: params["bathrooms"],
+        zipcode: params["zipcode"],
+        leasingAgents: params["leasingAgents"],
+        jurisdiction: params["jurisdiction"],
+        isExternal: params["isExternal"],
+        availability: params["availability"],
+        city: params["city"],
+        monthlyRent: params["monthlyRent"],
+        counties: params["counties"],
+        ids: params["ids"],
         view: params["view"],
         orderBy: params["orderBy"],
         orderDir: params["orderDir"],
@@ -240,38 +282,19 @@ export class ListingsService {
    */
   listCombined(
     params: {
-      /**  */
-      page?: number
-      /**  */
-      limit?: number | "all"
-      /**  */
-      filter?: ListingFilterParams[]
-      /**  */
-      view?: ListingViews
-      /**  */
-      orderBy?: ListingOrderByKeys
-      /**  */
-      orderDir?: OrderByEnum
-      /**  */
-      search?: string
+      /** requestBody */
+      body?: ListingsQueryParams
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/listings/combined"
 
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = {
-        page: params["page"],
-        limit: params["limit"],
-        filter: params["filter"],
-        view: params["view"],
-        orderBy: params["orderBy"],
-        orderDir: params["orderDir"],
-        search: params["search"],
-      }
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
+      let data = params.body
+
+      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -300,13 +323,21 @@ export class ListingsService {
   /**
    * Get listing map markers
    */
-  mapMarkers(options: IRequestOptions = {}): Promise<ListingMapMarker[]> {
+  mapMarkers(
+    params: {
+      /** requestBody */
+      body?: ListingsQueryParams
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ListingMapMarker[]> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/listings/mapMarkers"
 
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
+      let data = params.body
+
+      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -2683,32 +2714,135 @@ export class LotteryService {
   }
 }
 
+export class FeatureFlagsService {
+  /**
+   * List of feature flags
+   */
+  list(options: IRequestOptions = {}): Promise<FeatureFlag[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/featureFlags"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Create a feature flag
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: FeatureFlagCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<FeatureFlag> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/featureFlags"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update a feature flag
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: FeatureFlagUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<FeatureFlag> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/featureFlags"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete a feature flag by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/featureFlags"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Associate and disassociate jurisdictions with a feature flag
+   */
+  associateJurisdictions(
+    params: {
+      /** requestBody */
+      body?: FeatureFlagAssociate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<FeatureFlag> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/featureFlags/associateJurisdictions"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get a feature flag by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      featureFlagId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<FeatureFlag> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/featureFlags/{featureFlagId}"
+      url = url.replace("{featureFlagId}", params["featureFlagId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export interface SuccessDTO {
   /**  */
   success: boolean
-}
-
-export interface ListingsQueryParams {
-  /**  */
-  page?: number
-
-  /**  */
-  limit?: number | "all"
-
-  /**  */
-  filter?: string[]
-
-  /**  */
-  view?: ListingViews
-
-  /**  */
-  orderBy?: ListingOrderByKeys
-
-  /**  */
-  orderDir?: OrderByEnum
-
-  /**  */
-  search?: string
 }
 
 export interface ListingFilterParams {
@@ -2753,6 +2887,32 @@ export interface ListingFilterParams {
 
   /**  */
   counties?: string[]
+
+  /**  */
+  ids?: string[]
+}
+
+export interface ListingsQueryParams {
+  /**  */
+  page?: number
+
+  /**  */
+  limit?: number | "all"
+
+  /**  */
+  filter?: ListingFilterParams[]
+
+  /**  */
+  view?: ListingViews
+
+  /**  */
+  orderBy?: ListingOrderByKeys[]
+
+  /**  */
+  orderDir?: OrderByEnum[]
+
+  /**  */
+  search?: string
 }
 
 export interface ListingsRetrieveParams {
@@ -5161,6 +5321,29 @@ export interface JurisdictionUpdate {
   duplicateListingPermissions: UserRoleEnum[]
 }
 
+export interface FeatureFlag {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  description: string
+
+  /**  */
+  active: boolean
+
+  /**  */
+  jurisdictions: IdDTO[]
+}
+
 export interface Jurisdiction {
   /**  */
   id: string
@@ -5224,6 +5407,9 @@ export interface Jurisdiction {
 
   /**  */
   duplicateListingPermissions: UserRoleEnum[]
+
+  /**  */
+  featureFlags: FeatureFlag[]
 }
 
 export interface MultiselectQuestionCreate {
@@ -6267,6 +6453,62 @@ export interface PublicLotteryTotal {
   multiselectQuestionId?: string
 }
 
+export interface FeatureFlagAssociate {
+  /**  */
+  id: string
+
+  /**  */
+  associate: string[]
+
+  /**  */
+  remove: string[]
+}
+
+export interface FeatureFlagCreate {
+  /**  */
+  name: string
+
+  /**  */
+  description: string
+
+  /**  */
+  active: boolean
+}
+
+export interface FeatureFlagUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+
+  /**  */
+  description: string
+
+  /**  */
+  active: boolean
+}
+
+export enum ListingsStatusEnum {
+  "active" = "active",
+  "pending" = "pending",
+  "closed" = "closed",
+  "pendingReview" = "pendingReview",
+  "changesRequested" = "changesRequested",
+}
+
+export enum FilterAvailabilityEnum {
+  "waitlistOpen" = "waitlistOpen",
+  "unitsAvailable" = "unitsAvailable",
+}
+export enum EnumListingFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "<=" = "<=",
+  "NA" = "NA",
+}
 export enum ListingViews {
   "fundamentals" = "fundamentals",
   "base" = "base",
@@ -6292,26 +6534,6 @@ export enum OrderByEnum {
   "desc" = "desc",
 }
 
-export enum ListingsStatusEnum {
-  "active" = "active",
-  "pending" = "pending",
-  "closed" = "closed",
-  "pendingReview" = "pendingReview",
-  "changesRequested" = "changesRequested",
-}
-
-export enum FilterAvailabilityEnum {
-  "waitlistOpen" = "waitlistOpen",
-  "unitsAvailable" = "unitsAvailable",
-}
-export enum EnumListingFilterParamsComparison {
-  "=" = "=",
-  "<>" = "<>",
-  "IN" = "IN",
-  ">=" = ">=",
-  "<=" = "<=",
-  "NA" = "NA",
-}
 export enum ApplicationAddressTypeEnum {
   "leasingAgent" = "leasingAgent",
 }
@@ -6437,20 +6659,17 @@ export enum AlternateContactRelationship {
 }
 
 export enum HouseholdMemberRelationship {
-  "spouse" = "spouse",
-  "registeredDomesticPartner" = "registeredDomesticPartner",
-  "parent" = "parent",
+  "spousePartner" = "spousePartner",
+  "girlfriendBoyfriend" = "girlfriendBoyfriend",
   "child" = "child",
-  "sibling" = "sibling",
-  "cousin" = "cousin",
-  "aunt" = "aunt",
-  "uncle" = "uncle",
-  "nephew" = "nephew",
-  "niece" = "niece",
-  "grandparent" = "grandparent",
-  "greatGrandparent" = "greatGrandparent",
-  "inLaw" = "inLaw",
+  "parent" = "parent",
   "friend" = "friend",
+  "brotherSister" = "brotherSister",
+  "cousin" = "cousin",
+  "auntUncle" = "auntUncle",
+  "nephewNiece" = "nephewNiece",
+  "grandparentGreatGrandparent" = "grandparentGreatGrandparent",
+  "liveInAide" = "liveInAide",
   "other" = "other",
 }
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput

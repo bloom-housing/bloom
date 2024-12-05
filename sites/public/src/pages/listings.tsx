@@ -1,5 +1,6 @@
 import React from "react"
 import Head from "next/head"
+import { Heading } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 import { MetaTags } from "../components/shared/MetaTags"
 import ListingsSearchCombined, {
@@ -12,6 +13,7 @@ import Layout from "../layouts/application"
 export interface ListingsProps {
   listingsEndpoint: string
   googleMapsApiKey: string
+  googleMapsMapId: string
   bedrooms: FormOption[]
   bathrooms: FormOption[]
 }
@@ -30,14 +32,18 @@ export default function ListingsPage(props: ListingsProps) {
     searchString = searchParam
   }
   return (
-    <Layout>
+    <Layout hideFooter={true}>
       <Head>
         <title>{pageTitle}</title>
       </Head>
 
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
+      <Heading className={"sr-only"} priority={1}>
+        {t("nav.listings")}
+      </Heading>
       <ListingsSearchCombined
         googleMapsApiKey={props.googleMapsApiKey}
+        googleMapsMapId={props.googleMapsMapId}
         searchString={searchString}
         bedrooms={props.bedrooms}
         bathrooms={props.bathrooms}
@@ -50,7 +56,8 @@ export default function ListingsPage(props: ListingsProps) {
 export function getServerSideProps() {
   return {
     props: {
-      googleMapsApiKey: runtimeConfig.getGoogleMapsApiKey(),
+      googleMapsApiKey: runtimeConfig.getGoogleMapsApiKey() || null,
+      googleMapsMapId: runtimeConfig.getGoogleMapsMapId() || null,
     },
   }
 }

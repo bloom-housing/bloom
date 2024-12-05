@@ -40,6 +40,8 @@ describe("build search string", () => {
       bathrooms: null,
       minRent: null,
       monthlyRent: null,
+      ids: null,
+      availability: null,
     }
 
     const expectedStr = "bedrooms:2;counties:county1,county2"

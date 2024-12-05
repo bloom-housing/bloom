@@ -1,21 +1,8 @@
 import React, { useEffect } from "react"
 import { useFormContext } from "react-hook-form"
-import {
-  t,
-  DOBField,
-  Select,
-  Field,
-  PhoneField,
-  FieldGroup,
-  FormAddress,
-} from "@bloom-housing/ui-components"
+import { t, DOBField, Select, Field, PhoneField, FormAddress } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
-import {
-  phoneNumberKeys,
-  contactPreferencesKeys,
-  stateKeys,
-  emailRegex,
-} from "@bloom-housing/shared-helpers"
+import { phoneNumberKeys, stateKeys, emailRegex } from "@bloom-housing/shared-helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const FormPrimaryApplicant = () => {
@@ -23,11 +10,6 @@ const FormPrimaryApplicant = () => {
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, errors, control, setValue, clearErrors } = formMethods
-
-  const contactPreferencesOptions = contactPreferencesKeys?.map((item) => ({
-    id: item.id,
-    label: t(`t.${item.id}`),
-  }))
 
   const mailingAddressValue: boolean = watch("application.sendMailToMailingAddress")
   const phoneValue: string = watch("phoneNumber")
@@ -162,16 +144,6 @@ const FormPrimaryApplicant = () => {
               keyPrefix="application.contact.phoneNumberTypes"
               validation={{ required: !!additionalPhoneValue?.length }}
               disabled={!additionalPhoneValue?.length}
-            />
-          </Grid.Cell>
-
-          <Grid.Cell>
-            <FieldGroup
-              name="application.contactPreferences"
-              fields={contactPreferencesOptions}
-              type="checkbox"
-              register={register}
-              groupLabel={t("application.contact.preferredContactType")}
             />
           </Grid.Cell>
         </Grid.Row>

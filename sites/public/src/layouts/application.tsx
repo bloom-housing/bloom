@@ -8,7 +8,12 @@ import { AlertBanner, AuthContext, MessageContext } from "@bloom-housing/shared-
 import { SiteHeader } from "@bloom-housing/doorway-ui-components/src/headers/SiteHeader"
 import CustomSiteFooter from "../components/shared/CustomSiteFooter"
 
-const Layout = (props) => {
+interface LayoutProps {
+  children?: React.ReactNode
+  hideFooter?: boolean
+}
+
+const Layout = (props: LayoutProps) => {
   const { profile, signOut } = useContext(AuthContext)
   const { toastMessagesRef, addToast } = useContext(MessageContext)
   const router = useRouter()
@@ -150,7 +155,7 @@ const Layout = (props) => {
           {props.children}
         </main>
       </div>
-      <CustomSiteFooter />
+      {!props.hideFooter && <CustomSiteFooter />}
     </div>
   )
 }
