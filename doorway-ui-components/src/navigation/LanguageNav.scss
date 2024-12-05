@@ -84,7 +84,7 @@
     
     @media (min-width: $screen-md) {
       height: 30px;
-      margin-left: var(--seeds-s5);
+      margin-left: calc(var(--logo-tablet-padding) * 0.75);
     }
   
     @media (min-width: $screen-lg) {
