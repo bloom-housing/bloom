@@ -7,6 +7,7 @@ import { Request as ExpressRequest, Response } from 'express';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { ApplicationCsvQueryParams } from '../../../src/dtos/applications/application-csv-query-params.dto';
 import { User } from '../../../src/dtos/users/user.dto';
+import MultiselectQuestion from '../../../src/dtos/multiselect-questions/multiselect-question.dto';
 import { ApplicationExporterService } from '../../../src/services/application-exporter.service';
 import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
 import { mockApplicationSet } from './application.service.spec';
@@ -380,5 +381,57 @@ describe('Testing application export service', () => {
     });
 
     expect(readable).toContain('EST');
+  });
+
+  it('should sort listing preferences by ordinal', async () => {
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date('2024-01-01'));
+
+    const unsortedPreferences = [
+      {
+        ...mockMultiselectQuestion(
+          0,
+          new Date(),
+          MultiselectQuestionsApplicationSectionEnum.preferences,
+        ),
+      },
+      {
+        ...mockMultiselectQuestion(
+          1,
+          new Date(),
+          MultiselectQuestionsApplicationSectionEnum.preferences,
+        ),
+      },
+      {
+        ...mockMultiselectQuestion(
+          2,
+          new Date(),
+          MultiselectQuestionsApplicationSectionEnum.programs,
+        ),
+        options: [{ id: 1, text: 'text' }],
+      },
+    ] as MultiselectQuestion[];
+
+    const listingId = randomUUID();
+
+    prisma.listingMultiselectQuestions.findMany = jest.fn().mockReturnValue([
+      {
+        listingId,
+        multiselectQuestionId: unsortedPreferences[1].id,
+        ordinal: 1,
+      },
+      {
+        listingId,
+        multiselectQuestionId: unsortedPreferences[0].id,
+        ordinal: 2,
+      },
+    ]);
+
+    const sortedPreferences = await service.sortPreferencesByOrdinal(
+      unsortedPreferences,
+      listingId,
+    );
+    expect(sortedPreferences[0].text).toEqual('text 1');
+    expect(sortedPreferences[1].text).toEqual('text 0');
   });
 });
