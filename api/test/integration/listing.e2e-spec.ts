@@ -349,6 +349,7 @@ describe('Listing Controller Tests', () => {
         Math.random() >= 0.5 ? 'example title' : undefined,
       communityDisclaimerDescription:
         Math.random() >= 0.5 ? 'example description' : undefined,
+      homeType: 'apartment',
     };
   };
 

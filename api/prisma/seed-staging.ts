@@ -39,6 +39,7 @@ import {
 import { ValidationMethod } from '../src/enums/multiselect-questions/validation-method-enum';
 import { randomNoun } from './seed-helpers/word-generator';
 import { householdMemberFactorySingle } from './seed-helpers/household-member-factory';
+import { featureFlagFactory } from './seed-helpers/feature-flag-factory';
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
@@ -55,6 +56,12 @@ export const stagingSeed = async (
   }
   const additionalJurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory(otherJusisName),
+  });
+  // Seed feature flags
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory('homeType', true, 'Home Type feature', [
+      jurisdiction.id,
+    ]),
   });
   // create admin user
   await prismaClient.userAccounts.create({
