@@ -33,13 +33,9 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   datadogRum.init({
     applicationId: process.env.DD_APPLICATION_ID,
     clientToken: process.env.DD_CLIENT_TOKEN,
-    // `site` refers to the Datadog site parameter of your organization
-    // see https://docs.datadoghq.com/getting_started/site/
     site: process.env.DD_SITE,
     service: "public-site",
-    env: "public-core",
-    // Specify a version number to identify the deployed version of your application in Datadog
-    // version: '1.0.0',
+    env: "core_prod",
     sessionSampleRate: 100,
     sessionReplaySampleRate: 20,
     trackUserInteractions: true,
