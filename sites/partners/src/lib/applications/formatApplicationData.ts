@@ -187,6 +187,8 @@ export const mapFormToApi = ({
 
   householdMembers.forEach((member) => {
     member.relationship = member.relationship || null
+    delete member.householdMemberWorkAddress
+    delete member.workInRegion
   })
 
   const incomePeriod: IncomePeriodEnum | null = data.application?.incomePeriod || null

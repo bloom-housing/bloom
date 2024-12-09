@@ -2541,6 +2541,22 @@ export class ScriptRunnerService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * A script that deletes work addresses from applicants and household members
+   */
+  removeWorkAddresses(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/removeWorkAddresses"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class LotteryService {

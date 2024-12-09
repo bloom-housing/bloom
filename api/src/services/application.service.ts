@@ -839,11 +839,13 @@ export class ApplicationService {
                     ...dto.applicant.applicantAddress,
                   },
                 },
-                applicantWorkAddress: {
-                  create: {
-                    ...dto.applicant.applicantWorkAddress,
-                  },
-                },
+                applicantWorkAddress: dto.applicant.applicantAddress?.street
+                  ? {
+                      create: {
+                        ...dto.applicant.applicantAddress,
+                      },
+                    }
+                  : undefined,
                 firstName: dto.applicant.firstName?.trim(),
                 lastName: dto.applicant.lastName?.trim(),
                 birthDay: dto.applicant.birthDay
@@ -922,11 +924,14 @@ export class ApplicationService {
                     ...member.householdMemberAddress,
                   },
                 },
-                householdMemberWorkAddress: {
-                  create: {
-                    ...member.householdMemberWorkAddress,
-                  },
-                },
+                householdMemberWorkAddress: member.householdMemberWorkAddress
+                  ?.street
+                  ? {
+                      create: {
+                        ...member.householdMemberWorkAddress,
+                      },
+                    }
+                  : undefined,
                 firstName: member.firstName?.trim(),
                 lastName: member.lastName?.trim(),
                 birthDay: member.birthDay ? Number(member.birthDay) : undefined,

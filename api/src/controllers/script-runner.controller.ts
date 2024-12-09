@@ -235,4 +235,17 @@ export class ScirptRunnerController {
   ): Promise<SuccessDTO> {
     return await this.scriptRunnerService.hideProgramsFromListings(req);
   }
+
+  @Put('removeWorkAddresses')
+  @ApiOperation({
+    summary:
+      'A script that deletes work addresses from applicants and household members',
+    operationId: 'removeWorkAddresses',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async removeWorkAddresses(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.removeWorkAddresses(req);
+  }
 }

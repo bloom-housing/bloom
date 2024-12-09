@@ -1281,6 +1281,72 @@ export class ScriptRunnerService {
     return { success: true };
   }
 
+  async removeWorkAddresses(req: ExpressRequest): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart('remove work addresses', requestingUser);
+
+    const applicants = await this.prisma.applicant.findMany({
+      select: {
+        id: true,
+        workAddressId: true,
+      },
+      where: {
+        workAddressId: {
+          not: null,
+        },
+      },
+    });
+
+    const householdMembers = await this.prisma.householdMember.findMany({
+      select: {
+        id: true,
+        workAddressId: true,
+      },
+      where: {
+        workAddressId: {
+          not: null,
+        },
+      },
+    });
+
+    await this.prisma.applicant.updateMany({
+      data: {
+        workAddressId: null,
+      },
+      where: {
+        id: {
+          in: applicants.map((applicant) => applicant.id),
+        },
+      },
+    });
+
+    await this.prisma.householdMember.updateMany({
+      data: {
+        workAddressId: null,
+      },
+      where: {
+        id: {
+          in: householdMembers.map((householdMember) => householdMember.id),
+        },
+      },
+    });
+
+    const workAddressesIds = applicants
+      .concat(householdMembers)
+      .map((address) => address.workAddressId);
+
+    await this.prisma.address.deleteMany({
+      where: {
+        id: {
+          in: workAddressesIds,
+        },
+      },
+    });
+
+    await this.markScriptAsComplete('remove work addresses', requestingUser);
+    return { success: true };
+  }
+
   /**
     this is simply an example
   */
