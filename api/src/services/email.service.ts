@@ -526,7 +526,9 @@ export class EmailService {
     if (listing.applicationDueDate) {
       tableRows.push({
         label: this.polyglot.t('rentalOpportunity.applicationsDue'),
-        value: dayjs(listing.applicationDueDate).format('MMMM D, YYYY'),
+        value: dayjs(listing.applicationDueDate)
+          .tz(process.env.TIME_ZONE)
+          .format('MMMM D, YYYY'),
       });
     }
     tableRows.push({
@@ -573,7 +575,9 @@ export class EmailService {
       if (lotteryEvent && lotteryEvent.startDate) {
         tableRows.push({
           label: this.polyglot.t('rentalOpportunity.lottery'),
-          value: dayjs(lotteryEvent.startDate).format('MMMM D, YYYY'),
+          value: dayjs(lotteryEvent.startDate)
+            .tz(process.env.TIME_ZONE)
+            .format('MMMM D, YYYY'),
         });
       }
     }
