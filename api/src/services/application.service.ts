@@ -641,6 +641,7 @@ export class ApplicationService {
       data: {
         ...dto,
         confirmationCode: this.generateConfirmationCode(),
+        contactPreferences: [],
         applicant: dto.applicant
           ? {
               create: {

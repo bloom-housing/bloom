@@ -1285,63 +1285,95 @@ export class ScriptRunnerService {
     const requestingUser = mapTo(User, req['user']);
     await this.markScriptAsRunStart('remove work addresses', requestingUser);
 
-    const applicants = await this.prisma.applicant.findMany({
-      select: {
-        id: true,
-        workAddressId: true,
-      },
-      where: {
-        workAddressId: {
-          not: null,
-        },
-      },
-    });
+    let applicantLoop = true;
 
-    const householdMembers = await this.prisma.householdMember.findMany({
-      select: {
-        id: true,
-        workAddressId: true,
-      },
-      where: {
-        workAddressId: {
-          not: null,
+    while (applicantLoop) {
+      const rawApplicants = await this.prisma.applicant.findMany({
+        select: {
+          id: true,
+          workAddressId: true,
         },
-      },
-    });
-
-    await this.prisma.applicant.updateMany({
-      data: {
-        workAddressId: null,
-      },
-      where: {
-        id: {
-          in: applicants.map((applicant) => applicant.id),
+        where: {
+          workAddressId: {
+            not: null,
+          },
         },
-      },
-    });
+        take: 10000,
+      });
 
-    await this.prisma.householdMember.updateMany({
-      data: {
-        workAddressId: null,
-      },
-      where: {
-        id: {
-          in: householdMembers.map((householdMember) => householdMember.id),
+      if (!rawApplicants?.length) {
+        applicantLoop = false;
+      } else {
+        console.log(
+          `${rawApplicants.length} applicant work addresses to remove`,
+        );
+
+        await this.prisma.applicant.updateMany({
+          data: {
+            workAddressId: null,
+          },
+          where: {
+            id: {
+              in: rawApplicants.map((applicant) => applicant.id),
+            },
+          },
+        });
+
+        await this.prisma.address.deleteMany({
+          where: {
+            id: {
+              in: rawApplicants.map((applicant) => applicant.workAddressId),
+            },
+          },
+        });
+      }
+    }
+    console.log(`All applicant work addresses have been removed`);
+
+    let householdLoop = true;
+
+    while (householdLoop) {
+      const rawHouseholdMembers = await this.prisma.householdMember.findMany({
+        select: {
+          id: true,
+          workAddressId: true,
         },
-      },
-    });
-
-    const workAddressesIds = applicants
-      .concat(householdMembers)
-      .map((address) => address.workAddressId);
-
-    await this.prisma.address.deleteMany({
-      where: {
-        id: {
-          in: workAddressesIds,
+        where: {
+          workAddressId: {
+            not: null,
+          },
         },
-      },
-    });
+        take: 10000,
+      });
+
+      if (!rawHouseholdMembers?.length) {
+        householdLoop = false;
+      } else {
+        console.log(
+          `${rawHouseholdMembers.length} household member work addresses to remove`,
+        );
+
+        await this.prisma.householdMember.updateMany({
+          data: {
+            workAddressId: null,
+          },
+          where: {
+            id: {
+              in: rawHouseholdMembers.map((member) => member.id),
+            },
+          },
+        });
+
+        await this.prisma.address.deleteMany({
+          where: {
+            id: {
+              in: rawHouseholdMembers.map((member) => member.workAddressId),
+            },
+          },
+        });
+      }
+    }
+    console.log(`All household member work addresses have been removed`);
 
     await this.markScriptAsComplete('remove work addresses', requestingUser);
     return { success: true };

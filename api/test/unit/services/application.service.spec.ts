@@ -152,7 +152,7 @@ export const mockCreateApplicationData = (
   submissionDate: Date,
 ): ApplicationCreate => {
   return {
-    contactPreferences: ['example contact preference'],
+    contactPreferences: [],
     preferences: [
       {
         key: 'example key',
@@ -1493,7 +1493,7 @@ describe('Testing application service', () => {
     expect(prisma.applications.create).toHaveBeenCalledWith({
       include: { ...detailView },
       data: {
-        contactPreferences: ['example contact preference'],
+        contactPreferences: [],
         status: ApplicationStatusEnum.submitted,
         submissionType: ApplicationSubmissionTypeEnum.electronical,
         appUrl: 'http://www.example.com',
@@ -1719,7 +1719,7 @@ describe('Testing application service', () => {
     expect(prisma.applications.create).toHaveBeenCalledWith({
       include: { ...detailView },
       data: {
-        contactPreferences: ['example contact preference'],
+        contactPreferences: [],
         status: ApplicationStatusEnum.submitted,
         submissionType: ApplicationSubmissionTypeEnum.electronical,
         appUrl: 'http://www.example.com',
@@ -2073,7 +2073,7 @@ describe('Testing application service', () => {
         ...detailView,
       },
       data: {
-        contactPreferences: ['example contact preference'],
+        contactPreferences: [],
         status: ApplicationStatusEnum.submitted,
         submissionType: ApplicationSubmissionTypeEnum.electronical,
         appUrl: 'http://www.example.com',
@@ -2310,7 +2310,7 @@ describe('Testing application service', () => {
         ...detailView,
       },
       data: {
-        contactPreferences: ['example contact preference'],
+        contactPreferences: [],
         status: ApplicationStatusEnum.submitted,
         submissionType: ApplicationSubmissionTypeEnum.electronical,
         appUrl: 'http://www.example.com',
