@@ -78,6 +78,8 @@ export type FormListing = Omit<Listing, "countyCode"> & {
   whereApplicationsDroppedOff?: ApplicationAddressTypeEnum | AnotherAddressEnum
   whereApplicationsPickedUp?: ApplicationAddressTypeEnum | AnotherAddressEnum
   whereApplicationsMailedIn?: ApplicationAddressTypeEnum | AnotherAddressEnum
+  accessibilityFeatures?: string[]
+  utilities?: string[]
 }
 
 export const addressTypes = {
