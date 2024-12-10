@@ -686,7 +686,7 @@ export const ListingView = (props: ListingProps) => {
           {!applicationsClosed && getWaitlist()}
           {hasNonReferralMethods &&
           !applicationsClosed &&
-          listing.status !== ListingsStatusEnum.closed ? (
+          (listing.status !== ListingsStatusEnum.closed || props.preview) ? (
             <>{applySidebar()}</>
           ) : (
             <></>
@@ -845,7 +845,7 @@ export const ListingView = (props: ListingProps) => {
               {!applicationsClosed && getWaitlist()}
               {hasNonReferralMethods &&
                 !applicationsClosed &&
-                listing.status !== ListingsStatusEnum.closed &&
+                (listing.status !== ListingsStatusEnum.closed || props.preview) &&
                 applySidebar()}
               {listing?.referralApplication && (
                 <ReferralApplication
