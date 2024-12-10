@@ -184,4 +184,17 @@ export class ScirptRunnerController {
   ): Promise<SuccessDTO> {
     return await this.scriptRunnerService.hideProgramsFromListings(req);
   }
+
+  @Put('updatesWhatHappensInLotteryEmail')
+  @ApiOperation({
+    summary:
+      'A script that updates the "what happens next" content in lottery email',
+    operationId: 'updatesWhatHappensInLotteryEmail',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async updatesWhatHappensInLotteryEmail(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.updatesWhatHappensInLotteryEmail(req);
+  }
 }
