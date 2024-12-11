@@ -3,7 +3,7 @@ FROM --platform=linux/amd64 node:16.3.0
 # The source stage will contain only the necessary source code
 FROM node:18.20-alpine AS source
 
-RUN apk add --no-cache openssl
+RUN ln -s /usr/lib/libssl.so.3 /lib/libssl.so.3
 
 # WORKDIR doesn't need to be fancy, but it needs to be consistent
 WORKDIR /app
