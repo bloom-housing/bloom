@@ -271,7 +271,7 @@
   }
 
   @media (min-width: $screen-md) and (max-width: $screen-lg) {
-    padding: var(--logo-tablet-padding);
+    margin-right: calc(2px - var(--logo-tablet-padding));
   }
 
   @media (min-width: $screen-print) {

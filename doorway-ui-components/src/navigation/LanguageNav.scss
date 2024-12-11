@@ -1,51 +1,94 @@
 .language-bar {
-  --inner-max-width: var(--bloom-width-5xl);
-  --inner-width: inherit;
-  --inner-desktop-padding: inherit;
-  --inner-mobile-padding: inherit;
-  background-color: var(--bloom-color-gray-200);
+  --bar-background-color: var(--seeds-bg-color-canvas);
+  --selected-language-color: var(--seeds-color-secondary);
+  --inner-max-width: var(--seeds-width-5xl);
+  --inner-gap: var(--seeds-s2);
+
+  background-color: var(--seeds-bg-color-surface);
+
+  @media (min-width: $screen-md) {
+    background-color: var(--bar-background-color);
+  }
 }
 
 .language-bar__inner {
   max-width: var(--inner-max-width);
-  width: var(--inner-width);
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  align-items: start;
+  justify-content: space-between;
+  gap: var(--inner-gap);
   margin: auto;
-  padding: var(--inner-mobile-padding);
-  padding: var(--bloom-s2) 0;
+  padding-block: var(--inner-gap) 0;
 
-  @media (max-width: $screen-md) {
-    justify-content: center;
+  @media (min-width: $screen-md) {
+    flex-direction: row;
+    align-items: center;
+    padding-block-end: var(--inner-gap);
+  }
+}
+
+.language-nav {
+  width: 100%;
+  background-color: var(--bar-background-color);
+  padding-block: var(--seeds-s1);
+
+  @media (min-width: $screen-md) {
+    padding-block: 0;
+    width: auto;
   }
 }
 
 .language-nav__list {
   display: flex;
-  @media (max-width: $screen-md) {
-    justify-content: center;
-  }
+
   li:not(:last-child) {
     border-right: var(--doorway-standard-border);
   }
 }
 
 .language-nav__list-button {
-  padding: var(--bloom-s1) var(--bloom-s3);
-  color: var(--bloom-text-color);
-  border-radius: var(--bloom-rounded-full);
+  padding: var(--seeds-s1) var(--seeds-s3);
+  color: var(--seeds-text-color);
+  border-radius: var(--seeds-rounded-full);
   font-weight: 500;
-  font-size: var(--bloom-font-size-xs);
+  font-size: var(--seeds-font-size-xs);
   cursor: pointer;
   background-color: transparent;
-  margin: 0 var(--bloom-s1_5);
+  margin: 0 var(--seeds-s1_5);
 
   &:hover {
-    background-color: var(--doorway-color-secondary);
+    background-color: var(--selected-language-color);
   }
 
   &.is-active {
-    color: var(--bloom-text-color);
-    background-color: var(--doorway-color-secondary);
+    color: var(--seeds-text-color);
+    background-color: var(--selected-language-color);
+  }
+}
+
+.language-bar__association-logo {
+  background-color: var(--seeds-bg-color-surface);
+
+  @media (min-width: $screen-md) {
+    background-color: transparent;
+  }
+
+  a {
+    display: block;
+  }
+
+  img {
+    height: 20px;
+    margin-left: var(--inner-gap);
+    
+    @media (min-width: $screen-md) {
+      height: 30px;
+      margin-left: calc(var(--logo-tablet-padding) * 0.75);
+    }
+  
+    @media (min-width: $screen-lg) {
+      margin-left: -2px;
+    }
   }
 }

@@ -18,11 +18,6 @@ const CustomSiteFooter = () => {
               >
                 <img src="/images/bahfa-logo.png" alt={t("footer.bahfaLogo")} />
               </a>
-              <img
-                className={styles["association-icon"]}
-                src="/images/mtc-abag-logo.svg"
-                alt={t("footer.mtcLogo")}
-              />
             </div>
             <div className={styles["jurisdiction-address"]}>
               375 Beale Street, Suite 800

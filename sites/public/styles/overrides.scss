@@ -7,11 +7,11 @@
     --logo-content-padding: 0;
     --logo-desktop-height: var(--base-height);
     --logo-desktop-padding: 0;
-    --logo-tablet-padding: 0 0 0 var(--bloom-s4);
+    --logo-tablet-padding: var(--bloom-s4);
     --logo-image-desktop-max-height: 3rem;
     --link-align-items: center;
     --link-padding-wrapped: var(--bloom-s2) var(--bloom-s4);
-    --link-padding-inline: var(--bloom-s4) var(--bloom-s4) var(--bloom-s3) var(--bloom-s4);
+    --link-padding-inline: var(--bloom-s4) var(--bloom-s3) var(--bloom-s3) var(--bloom-s3);
     --link-bottom-border: 0;
     --link-font-size: var(--bloom-font-size-sm);
     --link-font-weight: 500;
@@ -22,6 +22,10 @@
     --mobile-menu-font-size: var(--bloom-font-size-s);
     --navbar-menu-desktop-margin: inherit;
     --navbar-menu-min-width: 110px;
+
+    @media (min-width: $screen-lg) {
+      --link-padding-inline: var(--bloom-s4) var(--bloom-s4) var(--bloom-s3) var(--bloom-s4);
+    }
   }
 
   .doorway-message {
