@@ -75,6 +75,7 @@ WORKDIR /app
 COPY --from=source --chown=node:node \
     /app/api/package*.json \
     /app/api/tsconfig*.json \
+    /app/api/yarn*.lock \
     /app/api/prisma ./
 
 # Set the NODE_ENV variable
@@ -101,6 +102,7 @@ WORKDIR /app
 COPY --from=source --chown=node:node \
     /app/api/package*.json \
     /app/api/tsconfig*.json \
+    /app/api/yarn*.lock \
     /app/api/prisma ./
 
 # Add only dependencies required to run the application
