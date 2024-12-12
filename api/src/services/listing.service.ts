@@ -1210,20 +1210,28 @@ export class ListingService implements OnModuleInit {
 
     const newListingData: ListingCreate = {
       ...mappedListing,
-      name: dto.name,
+      applicationMethods: applicationMethods,
       assets: [],
-      status: ListingsStatusEnum.pending,
+      listingsBuildingSelectionCriteriaFile:
+        mappedListing.listingsBuildingSelectionCriteriaFile
+          ? {
+              fileId:
+                mappedListing.listingsBuildingSelectionCriteriaFile.fileId,
+              label: mappedListing.listingsBuildingSelectionCriteriaFile.label,
+            }
+          : undefined,
       listingEvents: listingEvents,
+      listingImages: listingImages,
       listingMultiselectQuestions:
         storedListing.listingMultiselectQuestions?.map((question) => ({
           id: question.multiselectQuestionId,
           ordinal: question.ordinal,
         })),
-      listingImages: listingImages,
-      applicationMethods: applicationMethods,
       lotteryLastRunAt: undefined,
       lotteryLastPublishedAt: undefined,
       lotteryStatus: undefined,
+      name: dto.name,
+      status: ListingsStatusEnum.pending,
     };
 
     const res = await this.create(
