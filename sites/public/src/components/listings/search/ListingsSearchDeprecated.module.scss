@@ -3,7 +3,7 @@
   // I can't find another way to do this.
   // TODO: update header + filter modal to a not-magic number
   --desktop-header-offset: 169px;
-  --mobile-header-offset: 126px;
+  --mobile-header-offset: 215px;
   --listings-component-height: calc(100dvh - var(--desktop-header-offset));
   --listings-component-height-mobile: calc(100dvh - var(--mobile-header-offset));
 

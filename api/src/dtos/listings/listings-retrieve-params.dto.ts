@@ -15,4 +15,11 @@ export class ListingsRetrieveParams {
     groups: [ValidationsGroupsEnum.default],
   })
   view?: ListingViews;
+
+  @Expose()
+  @ApiPropertyOptional({
+    type: Boolean,
+    example: true,
+  })
+  combined?: boolean;
 }

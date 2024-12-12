@@ -650,8 +650,11 @@ export class ListingService implements OnModuleInit {
     listingId: string,
     lang: LanguagesEnum = LanguagesEnum.en,
     view: ListingViews = ListingViews.full,
+    combined?: boolean,
   ): Promise<Listing> {
-    const listingRaw = await this.findOrThrow(listingId, view);
+    const listingRaw = combined
+      ? await this.findOrThrowCombined(listingId)
+      : await this.findOrThrow(listingId, view);
 
     let result = mapTo(Listing, listingRaw);
 
@@ -1305,6 +1308,21 @@ export class ListingService implements OnModuleInit {
   async findOrThrow(id: string, view?: ListingViews) {
     const listing = await this.prisma.listings.findUnique({
       include: view ? views[view] : undefined,
+      where: {
+        id,
+      },
+    });
+
+    if (!listing) {
+      throw new NotFoundException(
+        `listingId ${id} was requested but not found`,
+      );
+    }
+    return listing;
+  }
+
+  async findOrThrowCombined(id: string) {
+    const listing = await this.prisma.combinedListings.findUnique({
       where: {
         id,
       },

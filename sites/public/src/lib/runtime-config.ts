@@ -42,6 +42,10 @@ export const runtimeConfig = {
     return this.env.GOOGLE_MAPS_MAP_ID
   },
 
+  getShowAllMapPins() {
+    return this.env.SHOW_ALL_MAP_PINS
+  },
+
   getBackendApiBase() {
     if (this.env.BACKEND_PROXY_BASE) {
       // try proxy base first

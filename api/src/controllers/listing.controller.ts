@@ -251,6 +251,7 @@ export class ListingController {
       listingId,
       language,
       queryParams.view,
+      queryParams.combined,
     );
   }
 }

@@ -47,6 +47,7 @@ phases:
         --build-arg "API_PASS_KEY=${API_PASS_KEY}"
         --build-arg "GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY}"
         --build-arg "GOOGLE_MAPS_MAP_ID=${GOOGLE_MAPS_MAP_ID}"
+        --build-arg "SHOW_ALL_MAP_PINS=${SHOW_ALL_MAP_PINS}"
         --target test
         -t sites/public:test
         .
@@ -78,6 +79,7 @@ phases:
         --build-arg "API_PASS_KEY=${API_PASS_KEY}"
         --build-arg "GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY}"
         --build-arg "GOOGLE_MAPS_MAP_ID=${GOOGLE_MAPS_MAP_ID}"
+        --build-arg "SHOW_ALL_MAP_PINS=${SHOW_ALL_MAP_PINS}"
         --target run
         -t sites/public:run-candidate
         .

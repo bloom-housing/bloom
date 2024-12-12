@@ -108,7 +108,11 @@ export const MapClusterer = ({
 
   const fetchInfoWindow = async (listingId: string) => {
     try {
-      const response = await listingsService.retrieve({ id: listingId, view: ListingViews.base })
+      const response = await listingsService.retrieve({
+        id: listingId,
+        view: ListingViews.base,
+        combined: true,
+      })
       setInfoWindowContent(
         <div data-testid={"listings-map-info-window"}>
           {getListingCard(response, infoWindowIndex)}

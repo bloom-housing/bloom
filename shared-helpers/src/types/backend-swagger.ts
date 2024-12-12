@@ -351,6 +351,8 @@ export class ListingsService {
       id: string
       /**  */
       view?: ListingViews
+      /**  */
+      combined?: boolean
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<string> {
@@ -359,7 +361,7 @@ export class ListingsService {
       url = url.replace("{id}", params["id"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { view: params["view"] }
+      configs.params = { view: params["view"], combined: params["combined"] }
 
       /** 适配ios13，get请求不允许带body */
 
@@ -438,6 +440,8 @@ export class ListingsService {
       id: string
       /**  */
       view?: ListingViews
+      /**  */
+      combined?: boolean
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Listing> {
@@ -446,7 +450,7 @@ export class ListingsService {
       url = url.replace("{id}", params["id"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { view: params["view"] }
+      configs.params = { view: params["view"], combined: params["combined"] }
 
       /** 适配ios13，get请求不允许带body */
 
@@ -2934,6 +2938,9 @@ export interface ListingsQueryParams {
 export interface ListingsRetrieveParams {
   /**  */
   view?: ListingViews
+
+  /**  */
+  combined?: boolean
 }
 
 export interface PaginationAllowsAllQueryParams {
