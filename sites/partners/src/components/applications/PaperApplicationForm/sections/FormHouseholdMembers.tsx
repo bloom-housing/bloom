@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from "react"
+import React, { useState, useMemo, useCallback, useEffect } from "react"
 import {
   HouseholdMember,
   HouseholdMemberUpdate,
@@ -84,6 +84,7 @@ const FormHouseholdMembers = ({
       const { birthMonth, birthDay, birthYear } = member
       const sameResidence = member.sameAddress
       const workInRegion = member.workInRegion
+      console.log(member.orderId)
 
       return {
         name: {
@@ -170,7 +171,7 @@ const FormHouseholdMembers = ({
       </Drawer>
 
       <Dialog
-        isOpen={!!membersDeleteModal}
+        isOpen={membersDeleteModal !== null}
         ariaLabelledBy="form-household-members-dialog-header"
         ariaDescribedBy="form-household-members-dialog-content"
         onClose={() => setMembersDeleteModal(null)}

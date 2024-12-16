@@ -77,7 +77,8 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
   useEffect(() => {
     if (application?.householdMember) {
-      setHouseholdMembers(application.householdMember)
+      const orderedMembers = application.householdMember.sort((a, b) => a.orderId - b.orderId)
+      setHouseholdMembers(orderedMembers)
     }
   }, [application, setHouseholdMembers])
 
