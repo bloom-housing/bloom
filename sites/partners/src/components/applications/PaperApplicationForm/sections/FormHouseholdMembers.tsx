@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useEffect } from "react"
+import React, { useState, useMemo, useCallback } from "react"
 import {
   HouseholdMember,
   HouseholdMemberUpdate,
@@ -84,7 +84,6 @@ const FormHouseholdMembers = ({
       const { birthMonth, birthDay, birthYear } = member
       const sameResidence = member.sameAddress
       const workInRegion = member.workInRegion
-      console.log(member.orderId)
 
       return {
         name: {
