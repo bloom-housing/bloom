@@ -139,12 +139,7 @@ export const fieldGroupObjectToArray = (
   const modifiedArray: string[] = []
   const getValue = (elem: string) => {
     const formSubKey = elem.substring(elem.indexOf("-") + 1)
-    const value =
-      formSubKey === formObject[elem] || formObject[elem] === ""
-        ? formSubKey
-        : `${formSubKey}: ${formObject[elem]}`
-    console.log(value)
-    return value
+    return formSubKey === formObject[elem] ? formSubKey : `${formSubKey}: ${formObject[elem]}`
   }
   Object.keys(formObject)
     .filter(
