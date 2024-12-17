@@ -541,11 +541,13 @@ export const getHouseholdCsvHeaders = (
  */
 export const convertDemographicRaceToReadable = (type: string): string => {
   const [rootKey, customValue = ''] = type.split(':');
+  //only show colon if user entered a custom value
+  const customAppendStr = customValue ? `: ${customValue}` : '';
   const typeMap = {
     americanIndianAlaskanNative: 'American Indian / Alaskan Native',
     asian: 'Asian',
     'asian-asianIndian': 'Asian[Asian Indian]',
-    'asian-otherAsian': `Asian[Other Asian:${customValue}]`,
+    'asian-otherAsian': `Asian[Other Asian${customAppendStr}]`,
     blackAfricanAmerican: 'Black / African American',
     'asian-chinese': 'Asian[Chinese]',
     declineToRespond: 'Decline to Respond',
@@ -558,7 +560,7 @@ export const convertDemographicRaceToReadable = (type: string): string => {
       'Native Hawaiian / Other Pacific Islander[Native Hawaiian]',
     nativeHawaiianOtherPacificIslander:
       'Native Hawaiian / Other Pacific Islander',
-    otherMultiracial: `Other / Multiracial:${customValue}`,
+    otherMultiracial: `Other / Multiracial${customAppendStr}`,
     'nativeHawaiianOtherPacificIslander-otherPacificIslander': `Native Hawaiian / Other Pacific Islander[Other Pacific Islander:${customValue}]`,
     'nativeHawaiianOtherPacificIslander-samoan':
       'Native Hawaiian / Other Pacific Islander[Samoan]',
