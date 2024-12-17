@@ -142,7 +142,12 @@ export const fieldGroupObjectToArray = (
     return formSubKey === formObject[elem] ? formSubKey : `${formSubKey}: ${formObject[elem]}`
   }
   Object.keys(formObject)
-    .filter((formValue) => formValue.split("-")[0] === rootKey && formObject[formValue])
+    .filter(
+      (formValue) =>
+        formValue.split("-")[0] === rootKey &&
+        //empty string handles selected checkbox fields with empty additionalText
+        (formObject[formValue] || formObject[formValue] === "")
+    )
     .forEach((elem) => {
       if (formObject[elem].isArray) {
         formObject[elem].forEach(() => {
