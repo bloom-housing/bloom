@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useCallback, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import Markdown from "markdown-to-jsx"
@@ -20,14 +20,20 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import ApplicationFormLayout from "../../../layouts/application-form"
-import { Button } from "@bloom-housing/ui-seeds"
+import { Button, Dialog } from "@bloom-housing/ui-seeds"
 
 const ApplicationTerms = () => {
   const router = useRouter()
   const { conductor, application, listing } = useFormConductor("terms")
-  const { applicationsService, profile } = useContext(AuthContext)
+  const { applicationsService, authService, loadProfile, profile } = useContext(AuthContext)
   const [apiError, setApiError] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [sessionVoided, setSessionVoided] = useState(false)
+
+  const closeCallback = useCallback(async () => {
+    await router.push("/sign-in")
+    void loadProfile()
+  }, [router, loadProfile])
 
   let currentPageSection = 4
   if (listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.programs)?.length)
@@ -63,33 +69,44 @@ const ApplicationTerms = () => {
     // @ts-ignore
     delete application.demographics.spokenLanguageNotListed
 
-    applicationsService
-      .submit({
-        body: {
-          ...application,
-          reviewStatus: ApplicationReviewStatusEnum.pending,
-          listings: {
-            id: listing.id,
-          },
-          appUrl: window.location.origin,
-          ...(profile && {
-            user: {
-              id: profile.id,
+    authService
+      .requestNewToken()
+      .then(() => {
+        applicationsService
+          .submit({
+            body: {
+              ...application,
+              reviewStatus: ApplicationReviewStatusEnum.pending,
+              listings: {
+                id: listing.id,
+              },
+              appUrl: window.location.origin,
+              ...(profile && {
+                user: {
+                  id: profile.id,
+                },
+              }),
+              // TODO remove this once this call is changed to the new backend
             },
-          }),
-          // TODO remove this once this call is changed to the new backend
-        },
+          })
+          .then((result) => {
+            conductor.currentStep.save({ confirmationCode: result.confirmationCode })
+            return router.push("/applications/review/confirmation")
+          })
+          .catch((err) => {
+            setSubmitting(false)
+            setApiError(true)
+            window.scrollTo(0, 0)
+            console.error(`Error creating application: ${err}`)
+            throw err
+          })
       })
-      .then((result) => {
-        conductor.currentStep.save({ confirmationCode: result.confirmationCode })
-        return router.push("/applications/review/confirmation")
-      })
-      .catch((err) => {
-        setSubmitting(false)
-        setApiError(true)
-        window.scrollTo(0, 0)
-        console.error(`Error creating application: ${err}`)
-        throw err
+      .catch((e) => {
+        // We need to have a valid user when submitting an application.
+        // If their session is no longer valid we should send them back to login
+        // This can happen either by auth token being too old or the user logged in a different session and voided this one
+        console.error(e)
+        setSessionVoided(true)
       })
   }
 
@@ -103,6 +120,29 @@ const ApplicationTerms = () => {
 
   return (
     <FormsLayout>
+      <Dialog
+        isOpen={sessionVoided}
+        onClose={closeCallback}
+        ariaLabelledBy="session-voided-dialog-header"
+        ariaDescribedBy="session-voided-dialog-content"
+      >
+        <Dialog.Header id="session-voided-dialog-header">
+          {t("session.voided.header")}
+        </Dialog.Header>
+        <Dialog.Content id="session-voided-dialog-content">
+          <p>
+            {t("session.voided.context1")}
+            {listing.name}
+            {t("session.voided.context2")}
+          </p>
+          <p>{t("session.voided.context3")}</p>
+        </Dialog.Content>
+        <Dialog.Footer>
+          <Button variant="primary" onClick={closeCallback} size="sm">
+            {t("session.voided.ok")}
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
       <Form id="review-terms" onSubmit={handleSubmit(onSubmit)}>
         <ApplicationFormLayout
           listingName={listing?.name}
