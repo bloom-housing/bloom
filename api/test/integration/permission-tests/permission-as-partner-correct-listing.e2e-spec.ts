@@ -67,6 +67,8 @@ import {
   createSimpleApplication,
 } from './helpers';
 import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
+import { ListingsQueryParams } from '../../../src/dtos/listings/listings-query-params.dto';
+import { Compare } from '../../../src/dtos/shared/base-filter.dto';
 
 const testEmailService = {
   confirmation: jest.fn(),
@@ -87,6 +89,7 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
   let applicationFlaggedSetService: ApplicationFlaggedSetService;
   let cookies = '';
   let jurisId = '';
+  let jurisId2 = '';
   let userListingId = '';
   let closedUserListingId = '';
   let closedUserListingId2 = '';
@@ -115,6 +118,11 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
       prisma,
       'correct partner permission juris',
     );
+
+    jurisId2 = await generateJurisdiction(
+      prisma,
+      'correct partner permission juris 2',
+    );
     await reservedCommunityTypeFactoryAll(jurisId, prisma);
     await unitAccessibilityPriorityTypeFactoryAll(prisma);
 
@@ -135,6 +143,7 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
       multiselectQuestions: [msq],
       digitalApp: true,
     });
+
     const listing = await prisma.listings.create({
       data: listingData,
     });
@@ -149,7 +158,7 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
     });
     closedUserListingId = closedListing.id;
 
-    const listingData2 = await listingFactory(jurisId, prisma, {
+    const listingData2 = await listingFactory(jurisId2, prisma, {
       multiselectQuestions: [msq],
     });
     const listing2 = await prisma.listings.create({
@@ -1042,10 +1051,38 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
   describe('Testing listing endpoints', () => {
     it('should succeed for list endpoint', async () => {
       await request(app.getHttpServer())
-        .get(`/listings?`)
+        .post(`/listings/list`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(200);
+        .send({} as ListingsQueryParams)
+        .expect(201);
+    });
+
+    it('should succeed for list endpoint filtered by jurisdiction', async () => {
+      const totalListings = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .send({})
+        .expect(201);
+      const jurisdiction2Listings = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .send({
+          filter: [
+            {
+              $comparison: Compare.IN,
+              jurisdiction: jurisId2,
+            },
+          ],
+        } as ListingsQueryParams)
+        .expect(201);
+
+      expect(totalListings.body.items.length).toBeGreaterThan(
+        jurisdiction2Listings.body.items.length,
+      );
+      expect(jurisdiction2Listings.body.items.length).toBeGreaterThan(0);
     });
 
     it('should succeed for retrieveListings endpoint', async () => {

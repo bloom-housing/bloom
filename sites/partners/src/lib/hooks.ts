@@ -49,7 +49,7 @@ type UseListingsDataProps = PaginationProps & {
   search?: string
   sort?: ColumnOrder[]
   roles?: UserRole
-  userJurisidctionIds?: string[]
+  userJurisdictionIds?: string[]
 }
 
 export function useSingleListingData(listingId: string) {
@@ -72,7 +72,7 @@ export function useListingsData({
   search = "",
   sort,
   roles,
-  userJurisidctionIds,
+  userJurisdictionIds,
 }: UseListingsDataProps) {
   const params = {
     page,
@@ -101,7 +101,7 @@ export function useListingsData({
   } else if (roles?.isJurisdictionalAdmin || roles?.isLimitedJurisdictionalAdmin) {
     params.filter.push({
       $comparison: EnumListingFilterParamsComparison.IN,
-      jurisdiction: userJurisidctionIds[0],
+      jurisdiction: userJurisdictionIds[0],
     })
   }
 
@@ -113,7 +113,7 @@ export function useListingsData({
 
   const { listingsService } = useContext(AuthContext)
 
-  const fetcher = () => listingsService.list(params)
+  const fetcher = () => listingsService.list({ body: { ...params } })
 
   const paramsString = qs.stringify(params)
 

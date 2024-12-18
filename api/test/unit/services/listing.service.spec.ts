@@ -539,6 +539,10 @@ describe('Testing listing service', () => {
             [ListingFilterKeys.bedrooms]: 2,
             $comparison: Compare['>='],
           },
+          {
+            [ListingFilterKeys.jurisdiction]: 'Jurisdiction',
+            $comparison: Compare.IN,
+          },
         ],
       };
 
@@ -574,6 +578,15 @@ describe('Testing listing service', () => {
                         mode: 'insensitive',
                       },
                     },
+                  },
+                },
+              ],
+            },
+            {
+              OR: [
+                {
+                  jurisdictionId: {
+                    in: ['jurisdiction'],
                   },
                 },
               ],
@@ -634,6 +647,15 @@ describe('Testing listing service', () => {
                         mode: 'insensitive',
                       },
                     },
+                  },
+                },
+              ],
+            },
+            {
+              OR: [
+                {
+                  jurisdictionId: {
+                    in: ['jurisdiction'],
                   },
                 },
               ],

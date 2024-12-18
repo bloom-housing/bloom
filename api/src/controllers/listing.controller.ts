@@ -76,15 +76,16 @@ export class ListingController {
     private readonly listingCsvExportService: ListingCsvExporterService,
   ) {}
 
-  @Get()
+  @Post('list')
   @ApiOperation({
     summary: 'Get a paginated set of listings',
     operationId: 'list',
   })
+  @PermissionAction(permissionActions.read)
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOkResponse({ type: PaginatedListingDto })
-  public async getPaginatedSet(@Query() queryParams: ListingsQueryParams) {
+  public async getPaginatedSet(@Body() queryParams: ListingsQueryParams) {
     return await this.listingService.list(queryParams);
   }
 

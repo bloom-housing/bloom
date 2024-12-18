@@ -427,9 +427,10 @@ describe('Listing Controller Tests', () => {
       const query = stringify(queryParams as any);
 
       const res = await request(app.getHttpServer())
-        .get(`/listings?${query}`)
+        .post(`/listings/list`)
+        .send(query)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .expect(200);
+        .expect(201);
 
       expect(res.body).toEqual({
         items: [],
@@ -478,9 +479,10 @@ describe('Listing Controller Tests', () => {
       let query = stringify(queryParams as any);
 
       let res = await request(app.getHttpServer())
-        .get(`/listings?${query}`)
+        .post(`/listings/list`)
+        .send(query)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .expect(200);
+        .expect(201);
 
       expect(res.body.meta).toEqual({
         currentPage: 1,
@@ -509,9 +511,10 @@ describe('Listing Controller Tests', () => {
       query = stringify(queryParams as any);
 
       res = await request(app.getHttpServer())
-        .get(`/listings?${query}`)
+        .post(`/listings/list`)
+        .send(query)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .expect(200);
+        .expect(201);
 
       expect(res.body.meta).toEqual({
         currentPage: 2,

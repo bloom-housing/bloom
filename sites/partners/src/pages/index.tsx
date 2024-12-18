@@ -158,7 +158,7 @@ export default function ListingsList() {
     userId: profile?.id,
     sort: tableOptions.sort.sortOptions,
     roles: profile?.userRoles,
-    userJurisidctionIds: profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id),
+    userJurisdictionIds: profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id),
   })
 
   return (

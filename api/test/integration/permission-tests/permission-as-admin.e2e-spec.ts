@@ -1069,10 +1069,10 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
   describe('Testing listing endpoints', () => {
     it('should succeed for list endpoint', async () => {
       await request(app.getHttpServer())
-        .get(`/listings?`)
+        .post(`/listings/list`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(201);
     });
 
     it('should succeed for retrieveListings endpoint', async () => {
