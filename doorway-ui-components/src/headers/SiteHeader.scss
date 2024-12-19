@@ -7,6 +7,7 @@
   --base-desktop-width: 1025px;
   --base-height: 75px;
   --base-max-height: 75px;
+  --base-max-height-mobile: 50px;
   --base-mobile-padding: inherit;
   --base-mobile-width: 1025px;
   --border-color: var(--bloom-color-gray-450);
@@ -195,7 +196,7 @@
 
 .site-header__base {
   height: var(--base-height);
-  max-height: var(--base-max-height);
+  max-height: var(--base-max-height-mobile);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -209,6 +210,7 @@
   @media (min-width: $screen-md) {
     padding: var(--base-desktop-padding);
     width: var(--base-desktop-width);
+    max-height: var(--base-max-height);
   }
 }
 

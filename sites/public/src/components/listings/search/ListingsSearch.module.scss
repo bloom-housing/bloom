@@ -15,6 +15,12 @@
   --line-color: var(--seeds-color-gray-650);
 
   position: absolute;
+
+  @media (max-width: $screen-md) {
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+  }
 }
 
 .search-filter-bar {

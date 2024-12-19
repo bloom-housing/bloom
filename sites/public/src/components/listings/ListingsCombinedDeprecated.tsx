@@ -58,7 +58,9 @@ const ListingsCombined = (props: ListingsCombinedProps) => {
 
   const getListingsList = () => {
     return (
-      <div className={`${styles["listings-combined"]} flex-row`}>
+      <div
+        className={`${styles["listings-combined"]} ${deprecatedStyles["listings-combined-deprecated"]} flex-row`}
+      >
         <div className={`${deprecatedStyles["listings-map-deprecated"]}`}>
           <ListingsMap
             listings={props.listings}
@@ -91,7 +93,9 @@ const ListingsCombined = (props: ListingsCombinedProps) => {
 
   const getListingsMap = () => {
     return (
-      <div className={`${styles["listings-combined"]} flex-row`}>
+      <div
+        className={`${styles["listings-combined"]} ${deprecatedStyles["listings-combined-deprecated"]} flex-row`}
+      >
         <div className={styles["listings-map-expanded"]}>
           <ListingsMap
             listings={props.listings}
@@ -109,7 +113,9 @@ const ListingsCombined = (props: ListingsCombinedProps) => {
 
   const getListingsCombined = () => {
     return (
-      <div className={`${styles["listings-combined"]} flex-row`}>
+      <div
+        className={`${styles["listings-combined"]} ${deprecatedStyles["listings-combined-deprecated"]} flex-row`}
+      >
         <div className={`${deprecatedStyles["listings-map-deprecated"]}`}>
           <ListingsMap
             listings={props.listings}

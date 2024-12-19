@@ -26,6 +26,21 @@ export const ListingsSearchMetadata = ({
     <section role="contentinfo" aria-label="Listing filter bar">
       <div className={`${styles["search-filter-bar"]} ${styles["search-switch-container"]}`}>
         <>
+          <div className={`${styles["total-results-mobile"]}`}>
+            <span className={`${styles["search-total-results"]}`} data-testid={"map-total-results"}>
+              <strong>{t("search.totalResults")}</strong> {searchResults.totalItems}
+            </span>
+            {searchResults.lastPage > 0 && (
+              <span data-testid={"map-pagination"}>
+                (
+                {t("t.pageXofY", {
+                  current: searchResults.currentPage,
+                  total: searchResults.lastPage,
+                })}
+                )
+              </span>
+            )}
+          </div>
           <Button
             variant="primary-outlined"
             size="sm"
@@ -43,7 +58,7 @@ export const ListingsSearchMetadata = ({
           </Button>
         </>
       </div>
-      <div className={`${styles["search-filter-bar"]}`}>
+      <div className={`${styles["search-filter-bar"]} ${styles["search-filter-bar-mobile"]}`}>
         <div className={`${styles["total-results"]}`}>
           <span className={`${styles["search-total-results"]}`} data-testid={"map-total-results"}>
             <strong>{t("search.totalResults")}</strong> {searchResults.totalItems}

@@ -168,7 +168,9 @@ Cypress.Commands.add("step3AlternateContactType", (application) => {
 })
 
 Cypress.Commands.add("step4AlternateContactName", (application) => {
-  cy.getByTestId("app-alternate-first-name").type(application.alternateContact.firstName)
+  cy.getByTestId("app-alternate-first-name").type(application.alternateContact.firstName, {
+    force: true,
+  })
   cy.getByTestId("app-alternate-last-name").type(application.alternateContact.lastName)
   cy.goNext()
   cy.checkErrorAlert("not.exist")

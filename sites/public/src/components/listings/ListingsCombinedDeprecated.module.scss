@@ -11,6 +11,7 @@
     background-color: var(--background-color);
     border-top-left-radius: var(--bloom-rounded-3xl);
     border-top-right-radius: var(--bloom-rounded-3xl);
+    border-top: 1px solid var(--seeds-border-color);
   }
 }
 
@@ -20,13 +21,14 @@
   @media (max-width: $screen-md) {
     display: block;
     position: absolute;
-    top: calc(var(--listings-component-height));
+    bottom: 0;
     height: 3.25rem;
     width: 100%;
     z-index: var(--seeds-z-index-overlay);
     background-color: var(--background-color);
     border-top-left-radius: var(--bloom-rounded-3xl);
     border-top-right-radius: var(--bloom-rounded-3xl);
+    border-top: 1px solid var(--seeds-border-color);
   }
 }
 
@@ -57,7 +59,7 @@
     display: block;
     position: static;
     z-index: 1;
-    height: calc(100dvh - 370px);
+    height: calc(calc(100dvh - calc(100dvh / 2)) - 3rem);
     overflow-y: auto;
     background-color: var(--background-color);
   }
@@ -71,7 +73,7 @@
     position: absolute;
     max-height: var(--listings-component-height-mobile);
     z-index: 1;
-    top: calc(calc(calc(100vh - 183px) / 2));
+    bottom: 0;
     width: 100%;
     border-top-left-radius: var(--bloom-rounded-3xl);
     border-top-right-radius: var(--bloom-rounded-3xl);
@@ -93,12 +95,9 @@
     z-index: 1;
     top: var(--seeds-s10);
     width: 100%;
-    overflow-y: auto;
-    background-color: var(--background-color);
     display: block;
     position: static;
     z-index: 1;
-    height: calc(100dvh - 230px);
     overflow-y: auto;
     background-color: var(--background-color);
   }
@@ -112,7 +111,20 @@
   @media (max-width: $screen-md) {
     position: absolute;
     z-index: 0;
-    height: calc(100dvh - 230px);
+    height: inherit;
     width: 100%;
+  }
+}
+
+.listings-map-list-container {
+  @media (max-width: $screen-md) {
+    margin-top: var(--seeds-s1);
+  }
+}
+
+.listings-combined-deprecated {
+  @media (max-width: $screen-md) {
+    height: var(--listings-component-height-mobile);
+    max-height: var(--listings-component-height-mobile);
   }
 }

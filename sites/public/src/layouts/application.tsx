@@ -146,7 +146,7 @@ const Layout = (props: LayoutProps) => {
           })}
           strings={{ skipToMainContent: t("t.skipToMainContent") }}
         />
-        <main id="main-content" className="md:overflow-x-hidden">
+        <main id="main-content" className="md:overflow-x-hidden relative">
           {toastMessagesRef.current.map((toastMessage) => (
             <Toast {...toastMessage.props} testId="toast-alert" key={toastMessage.timestamp}>
               {toastMessage.message}

@@ -5,8 +5,7 @@
   flex-direction: column;
 
   @media (max-width: $screen-md) {
-    height: var(--listings-component-height-mobile);
-    max-height: var(--listings-component-height-mobile);
+    height: 100%;
   }
 
   .listings-map {
@@ -25,8 +24,6 @@
     display: flex;
     height: 100%;
     @media (max-width: $screen-md) {
-      height: var(--listings-component-height-mobile);
-      max-height: var(--listings-component-height-mobile);
       position: relative;
       display: block;
     }
@@ -56,8 +53,7 @@
       display: block;
       z-index: 0;
       width: 100%;
-      height: calc(var(--listings-component-height-mobile));
-      max-height: calc(var(--listings-component-height-mobile));
+      height: 100%;
     }
   }
 
@@ -83,7 +79,7 @@
 
     @media (max-width: $screen-md) {
       display: block;
-      position: relative;
+      position: static;
       z-index: 1;
       overflow-y: auto;
       background-color: var(--background-color);
@@ -98,14 +94,6 @@
       width: 55%;
     }
   }
-}
-
-.listings-map-list-container-list-only {
-  height: var(--listings-component-height-mobile);
-}
-
-.listings-map-list-container-map-only {
-  height: var(--listings-component-height-mobile);
 }
 
 .listings-list-wrapper {
