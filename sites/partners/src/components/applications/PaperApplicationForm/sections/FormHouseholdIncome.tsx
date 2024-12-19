@@ -7,12 +7,13 @@ import {
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { fieldHasError } from "../../../../lib/helpers"
 
 const FormHouseholdIncome = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch } = formMethods
+  const { errors, register, getValues, setValue, trigger, watch } = formMethods
 
   const incomePeriodValue: string = watch("application.incomePeriod")
 
@@ -62,24 +63,32 @@ const FormHouseholdIncome = () => {
           <Grid.Cell>
             <Field
               id="incomeYear"
-              type="number"
+              type="currency"
+              getValues={getValues}
+              setValue={setValue}
               name="incomeYear"
               label={t("application.details.annualIncome")}
               placeholder={t("t.enterAmount")}
               register={register}
               disabled={incomePeriodValue !== IncomePeriodEnum.perYear}
+              error={fieldHasError(errors?.incomeYear)}
+              errorMessage={t("errors.numberError")}
             />
           </Grid.Cell>
 
           <Grid.Cell>
             <Field
               id="incomeMonth"
-              type="number"
+              type="currency"
+              getValues={getValues}
+              setValue={setValue}
               name="incomeMonth"
               label={t("application.details.monthlyIncome")}
               placeholder={t("t.enterAmount")}
               register={register}
               disabled={incomePeriodValue !== IncomePeriodEnum.perMonth}
+              error={fieldHasError(errors?.incomeMonth)}
+              errorMessage={t("errors.numberError")}
             />
           </Grid.Cell>
 
