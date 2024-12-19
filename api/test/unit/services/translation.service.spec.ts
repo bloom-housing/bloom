@@ -42,8 +42,6 @@ const mockListing = (): Listing => {
       publicUrl: '',
       emailFromAddress: '',
       rentalAssistanceDefault: '',
-      enableAccessibilityFeatures: true,
-      enableUtilitiesIncluded: true,
     },
     units: [],
     unitsSummarized: undefined,
