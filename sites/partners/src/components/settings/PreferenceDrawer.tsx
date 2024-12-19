@@ -92,7 +92,11 @@ const PreferenceDrawer = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionData])
 
-  const optOutQuestion = watch("canYouOptOutQuestion")
+  const optOutQuestion = watch(
+    "canYouOptOutQuestion",
+    // set watch default value to mirror canYouOptOutQuestion default on load
+    questionData === null || questionData?.optOutText !== null ? YesNoEnum.yes : undefined
+  )
 
   const isAdditionalDetailsEnabled = profile?.jurisdictions?.some(
     (jurisdiction) => jurisdiction.enableGeocodingPreferences
