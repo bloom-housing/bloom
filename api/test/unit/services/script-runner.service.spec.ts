@@ -135,7 +135,7 @@ describe('Testing script runner service', () => {
     prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
     prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
     prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
-    prisma.translations.findFirst = jest.fn().mockResolvedValue(undefined);
+    prisma.translations.findMany = jest.fn().mockResolvedValue(undefined);
     prisma.translations.update = jest.fn().mockResolvedValue(null);
     prisma.translations.create = jest.fn().mockReturnValue({
       language: LanguagesEnum.en,
