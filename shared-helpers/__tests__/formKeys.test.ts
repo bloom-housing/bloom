@@ -60,7 +60,7 @@ describe("formKeys helpers", () => {
       ["root-C"]: "C",
       ["root-D"]: "",
     }
-    const expectedArray = ["A", "B", "C", "D: "]
+    const expectedArray = ["A", "B", "C", "D"]
     expect(fieldGroupObjectToArray(testObj, "root")).toStrictEqual(expectedArray)
   })
 })
