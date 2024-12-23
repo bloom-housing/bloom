@@ -542,7 +542,7 @@ export const getHouseholdCsvHeaders = (
 export const convertDemographicRaceToReadable = (type: string): string => {
   const [rootKey, customValue = ''] = type.split(':');
   //only show colon if user entered a custom value
-  const customValueFormatted = customValue ? `: ${customValue}` : '';
+  const customValueFormatted = customValue ? `:${customValue}` : '';
   const typeMap = {
     americanIndianAlaskanNative: 'American Indian / Alaskan Native',
     asian: 'Asian',
