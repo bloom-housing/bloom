@@ -543,6 +543,8 @@ export const getHouseholdCsvHeaders = (
  */
 export const convertDemographicRaceToReadable = (type: string): string => {
   const [rootKey, customValue = ''] = type.split(':');
+  //only show colon if user entered a custom value
+  const customValueFormatted = customValue ? `:${customValue}` : '';
   const typeMap = {
     asian: 'Asian',
     'asian-chinese': 'Asian[Chinese]',
@@ -554,39 +556,39 @@ export const convertDemographicRaceToReadable = (type: string): string => {
     'asian-centralAsian': 'Asian[Central Asian]',
     'asian-southAsian': 'Asian[South Asian]',
     'asian-southeastAsian': 'Asian[Southeast Asian]',
-    'asian-otherAsian': `Asian[Other Asian:${customValue}]`,
+    'asian-otherAsian': `Asian[Other Asian${customValueFormatted}]`,
     black: 'Black',
     'black-african': 'Black[African]',
     'black-africanAmerican': 'Black[African American]',
     'black-caribbeanCentralSouthAmericanMexican':
       'Black[Caribbean, Central American, South American or Mexican]',
-    'black-otherBlack': `Black[Other Black:${customValue}]`,
+    'black-otherBlack': `Black[Other Black${customValueFormatted}]`,
     indigenous: 'Indigenous',
     'indigenous-alaskanNative': 'Indigenous[Alaskan Native]',
     'indigenous-nativeAmerican': 'Indigenous[American Indian/Native American]',
     'indigenous-indigenousFromMexicoCaribbeanCentralSouthAmerica':
       'Indigenous[Indigenous from Mexico, the Caribbean, Central America, or South America]',
-    'indigenous-otherIndigenous': `Indigenous[Other Indigenous:${customValue}]`,
+    'indigenous-otherIndigenous': `Indigenous[Other Indigenous${customValueFormatted}]`,
     latino: 'Latino',
     'latino-caribbean': 'Latino[Caribbean]',
     'latino-centralAmerican': 'Latino[Central American]',
     'latino-mexican': 'Latino[Mexican]',
     'latino-southAmerican': 'Latino[South American]',
-    'latino-otherLatino': `Latino[Other Latino:${customValue}]`,
+    'latino-otherLatino': `Latino[Other Latino${customValueFormatted}]`,
     middleEasternOrAfrican: 'Middle Eastern, West African or North African',
     'middleEasternOrAfrican-northAfrican':
       'Middle Eastern, West African or North African[North African]',
     'middleEasternOrAfrican-westAsian':
       'Middle Eastern, West African or North African[West Asian]',
-    'middleEasternOrAfrican-otherMiddleEasternNorthAfrican': `Middle Eastern, West African or North African[Other Middle Eastern or North African:${customValue}]`,
+    'middleEasternOrAfrican-otherMiddleEasternNorthAfrican': `Middle Eastern, West African or North African[Other Middle Eastern or North African${customValueFormatted}]`,
     pacificIslander: 'Pacific Islander',
     'pacificIslander-chamorro': 'Pacific Islander[Chamorro]',
     'pacificIslander-nativeHawaiian': 'Pacific Islander[Native Hawaiian]',
     'pacificIslander-samoan': 'Pacific Islander[Samoan]',
-    'pacificIslander-otherPacificIslander': `Pacific Islander[Other Pacific Islander:${customValue}]`,
+    'pacificIslander-otherPacificIslander': `Pacific Islander[Other Pacific Islander${customValueFormatted}]`,
     white: 'White',
     'white-european': 'White[European]',
-    'white-otherWhite': `White[Other White:${customValue}]`,
+    'white-otherWhite': `White[Other White${customValueFormatted}]`,
   };
   return typeMap[rootKey] ?? rootKey;
 };

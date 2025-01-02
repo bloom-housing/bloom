@@ -277,6 +277,12 @@ describe('Testing application export helpers', () => {
       ).toBe('Pacific Islander[Other Pacific Islander:Fijian]');
     });
 
+    it('tests convertDemographicRaceToReadable with valid type and empty custom value', () => {
+      expect(convertDemographicRaceToReadable('black-otherBlack')).toBe(
+        'Black[Other Black]',
+      );
+    });
+
     it('tests convertDemographicRaceToReadable with type not in typeMap', () => {
       const custom = 'This is a custom value';
       expect(convertDemographicRaceToReadable(custom)).toBe(custom);
