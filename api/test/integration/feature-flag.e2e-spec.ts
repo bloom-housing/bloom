@@ -106,7 +106,6 @@ describe('Feature Flag Controller Tests', () => {
 
       const body = {
         id: featureFlag.id,
-        name: `updated ${randomName()}`,
         description: 'updated description',
         active: !featureFlag.active,
       };
@@ -120,6 +119,7 @@ describe('Feature Flag Controller Tests', () => {
 
       expect(res.body).toEqual({
         ...body,
+        name: featureFlag.name,
         jurisdictions: [],
         createdAt: expect.anything(),
         updatedAt: expect.anything(),
@@ -129,7 +129,6 @@ describe('Feature Flag Controller Tests', () => {
     it('should error when trying to update a feature flag that does not exist', async () => {
       const body = {
         id: randomUUID(),
-        name: 'updated name',
         description: 'updated description',
         active: true,
       };
