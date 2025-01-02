@@ -845,7 +845,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         label: 'AMI Chart',
       },
       {
-        path: 'unit.amiChart.items.0.percentOfAmi',
+        path: 'unit.amiPercentage',
         label: 'AMI Level',
       },
       {
