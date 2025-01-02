@@ -248,4 +248,18 @@ export class ScirptRunnerController {
   ): Promise<SuccessDTO> {
     return await this.scriptRunnerService.removeWorkAddresses(req);
   }
+
+  @Put('updatedHouseholdMemberRelationships')
+  @ApiOperation({
+    summary: 'A script that updates household member relationships',
+    operationId: 'updatedHouseholdMemberRelationships',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async updatedHouseholdMemberRelationships(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.updateHouseholdMemberRelationships(
+      req,
+    );
+  }
 }

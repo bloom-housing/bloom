@@ -1880,6 +1880,45 @@ describe('Testing script runner service', () => {
     });
   });
 
+  it('should update household member relationships', async () => {
+    const id = randomUUID();
+    const scriptName = 'update household member relationships';
+
+    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+    prisma.householdMember.updateMany = jest.fn().mockResolvedValue(null);
+
+    const res = await service.updateHouseholdMemberRelationships({
+      user: {
+        id,
+      } as unknown as User,
+    } as unknown as ExpressRequest);
+
+    expect(res.success).toBe(true);
+
+    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
+      where: {
+        scriptName,
+      },
+    });
+    expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
+      data: {
+        scriptName,
+        triggeringUser: id,
+      },
+    });
+    expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
+      data: {
+        didScriptRun: true,
+        triggeringUser: id,
+      },
+      where: {
+        scriptName,
+      },
+    });
+  });
+
   it('should remove all working addresses', async () => {
     const id = randomUUID();
     const scriptName = 'remove work addresses';

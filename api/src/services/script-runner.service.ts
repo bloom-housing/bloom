@@ -18,6 +18,7 @@ import { AmiChartCreate } from '../dtos/ami-charts/ami-chart-create.dto';
 import { AmiChartService } from './ami-chart.service';
 import { AmiChartUpdate } from '../dtos/ami-charts/ami-chart-update.dto';
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
+import { HouseholdMemberRelationship } from '../../src/enums/applications/household-member-relationship-enum';
 
 /**
   this is the service for running scripts
@@ -1500,6 +1501,68 @@ export class ScriptRunnerService {
         data: dataClause,
       });
     }
+  }
+
+  /**
+   *
+   * @param req incoming request object
+   * @returns successDTO
+   * @description update household member relationships
+   */
+  async updateHouseholdMemberRelationships(
+    req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart(
+      'update household member relationships',
+      requestingUser,
+    );
+
+    const updateRelationship = async (
+      prev: string,
+      updated: HouseholdMemberRelationship,
+    ) => {
+      const result = await this.prisma.householdMember.updateMany({
+        data: {
+          relationship: updated,
+        },
+        where: {
+          relationship: prev,
+        },
+      });
+
+      console.log(
+        `updated relationship from ${prev} to ${updated} for ${
+          result?.count ?? 0
+        } household members`,
+      );
+    };
+
+    updateRelationship('spouse', HouseholdMemberRelationship.spousePartner);
+    updateRelationship(
+      'registeredDomesticPartner',
+      HouseholdMemberRelationship.spousePartner,
+    );
+    updateRelationship('sibling', HouseholdMemberRelationship.brotherSister);
+    updateRelationship('aunt', HouseholdMemberRelationship.auntUncle);
+    updateRelationship('uncle', HouseholdMemberRelationship.auntUncle);
+    updateRelationship('nephew', HouseholdMemberRelationship.nephewNiece);
+    updateRelationship('niece', HouseholdMemberRelationship.nephewNiece);
+    updateRelationship(
+      'grandparent',
+      HouseholdMemberRelationship.grandparentGreatGrandparent,
+    );
+    updateRelationship(
+      'greatGrandparent',
+      HouseholdMemberRelationship.grandparentGreatGrandparent,
+    );
+    updateRelationship('inLaw', HouseholdMemberRelationship.other);
+
+    await this.markScriptAsComplete(
+      'update household member relationships',
+      requestingUser,
+    );
+    return { success: true };
   }
 
   async addLotteryTranslationsHelper(createIfMissing?: boolean) {
