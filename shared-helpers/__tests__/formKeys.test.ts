@@ -52,4 +52,15 @@ describe("formKeys helpers", () => {
     const expectedArray = ["A", "B", "C", "D: 1,2"]
     expect(fieldGroupObjectToArray(testObj, "root")).toStrictEqual(expectedArray)
   })
+
+  it("fieldGroupObjectToArray with empty additional inputs", () => {
+    const testObj = {
+      ["root-A"]: "A",
+      ["root-B"]: "B",
+      ["root-C"]: "C",
+      ["root-D"]: "",
+    }
+    const expectedArray = ["A", "B", "C", "D"]
+    expect(fieldGroupObjectToArray(testObj, "root")).toStrictEqual(expectedArray)
+  })
 })
