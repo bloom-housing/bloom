@@ -167,7 +167,7 @@ const FormHouseholdMembers = ({
       </Drawer>
 
       <Dialog
-        isOpen={!!membersDeleteModal}
+        isOpen={membersDeleteModal !== null}
         ariaLabelledBy="form-household-members-dialog-header"
         ariaDescribedBy="form-household-members-dialog-content"
         onClose={() => setMembersDeleteModal(null)}

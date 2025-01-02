@@ -31,7 +31,10 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
 
       return t("t.n/a")
     }
-    return application?.householdMember?.map((item) => ({
+    const orderedHouseholdMembers = application?.householdMember?.sort(
+      (a, b) => a.orderId - b.orderId
+    )
+    return orderedHouseholdMembers?.map((item) => ({
       name: { content: `${item.firstName} ${item.middleName} ${item.lastName}` },
       relationship: {
         content: item.relationship
