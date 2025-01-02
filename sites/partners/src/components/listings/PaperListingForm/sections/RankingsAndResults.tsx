@@ -95,7 +95,7 @@ const RankingsAndResults = ({ listing, isAdmin }: RankingsAndResultsProps) => {
             </Grid.Cell>
           </Grid.Row>
         )}
-        {reviewOrder === "reviewOrderLottery" && (
+        {availabilityQuestion !== "openWaitlist" && reviewOrder === "reviewOrderLottery" && (
           <>
             {process.env.showLottery && (
               <>
