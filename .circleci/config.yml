@@ -90,7 +90,7 @@ jobs:
           command: yarn test:backend:new:dbsetup:withseed
       - run:
           name: run backend
-          command: yarn dev
+          command: yarn start:prod
           background: true
           working_directory: api
       - run:
@@ -130,7 +130,7 @@ jobs:
           command: yarn test:backend:new:dbsetup:withseed
       - run:
           name: run backend
-          command: yarn dev
+          command: yarn start:prod
           background: true
           working_directory: api
       - run:
