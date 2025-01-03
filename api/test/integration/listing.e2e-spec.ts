@@ -66,6 +66,34 @@ describe('Listing Controller Tests', () => {
   const mockRequestApproval = jest.spyOn(testEmailService, 'requestApproval');
   const mockListingApproved = jest.spyOn(testEmailService, 'listingApproved');
 
+  const listingFeatures = {
+    elevator: true,
+    wheelchairRamp: false,
+    serviceAnimalsAllowed: true,
+    accessibleParking: false,
+    parkingOnSite: true,
+    inUnitWasherDryer: false,
+    laundryInBuilding: true,
+    barrierFreeEntrance: false,
+    rollInShower: true,
+    grabBars: false,
+    heatingInUnit: true,
+    acInUnit: false,
+    hearing: true,
+    visual: false,
+    mobility: true,
+  };
+  const listingUtilities = {
+    water: false,
+    gas: true,
+    trash: false,
+    sewer: true,
+    electricity: false,
+    cable: true,
+    phone: false,
+    internet: true,
+  };
+
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
@@ -319,33 +347,8 @@ describe('Listing Controller Tests', () => {
       reservedCommunityTypes: {
         id: reservedCommunityType.id,
       },
-      listingFeatures: {
-        elevator: true,
-        wheelchairRamp: false,
-        serviceAnimalsAllowed: true,
-        accessibleParking: false,
-        parkingOnSite: true,
-        inUnitWasherDryer: false,
-        laundryInBuilding: true,
-        barrierFreeEntrance: false,
-        rollInShower: true,
-        grabBars: false,
-        heatingInUnit: true,
-        acInUnit: false,
-        hearing: true,
-        visual: false,
-        mobility: true,
-      },
-      listingUtilities: {
-        water: false,
-        gas: true,
-        trash: false,
-        sewer: true,
-        electricity: false,
-        cable: true,
-        phone: false,
-        internet: true,
-      },
+      listingFeatures: listingFeatures,
+      listingUtilities: listingUtilities,
       includeCommunityDisclaimer: shouldIncludeCommunityDisclaimer,
       communityDisclaimerTitle: shouldIncludeCommunityDisclaimer
         ? 'example title'
@@ -670,6 +673,17 @@ describe('Listing Controller Tests', () => {
         .set('Cookie', adminAccessToken)
         .expect(201);
       expect(res.body.name).toEqual(val.name);
+
+      const newDBValues = await prisma.listings.findMany({
+        include: {
+          listingFeatures: true,
+          listingUtilities: true,
+        },
+        where: { name: val.name },
+      });
+      expect(newDBValues.length).toBeGreaterThanOrEqual(1);
+      expect(newDBValues[0].listingFeatures).toMatchObject(listingFeatures);
+      expect(newDBValues[0].listingUtilities).toMatchObject(listingUtilities);
     });
   });
 
@@ -702,6 +716,15 @@ describe('Listing Controller Tests', () => {
 
       expect(res.body.name).toEqual(newName);
       expect(res.body.units.length).toBe(listing.units.length);
+
+      const newDBValues = await prisma.listings.findMany({
+        include: {
+          units: true,
+        },
+        where: { name: newName },
+      });
+      expect(newDBValues.length).toBeGreaterThanOrEqual(1);
+      expect(newDBValues[0].units).toHaveLength(2);
     });
 
     it('should duplicate listing, exclude units', async () => {
