@@ -12,4 +12,4 @@ phases:
       - aws ecs update-service --force-new-deployment --cluster "${ECS_BACKEND_CLUSTER:-${ECS_DEFAULT_CLUSTER}}" --service "${ECS_BACKEND_SERVICE}"
       - aws ecs update-service --force-new-deployment --cluster "${ECS_PUBLIC_CLUSTER:-${ECS_DEFAULT_CLUSTER}}" --service "${ECS_PUBLIC_SERVICE}"
       - aws ecs update-service --force-new-deployment --cluster "${ECS_PARTNER_CLUSTER:-${ECS_DEFAULT_CLUSTER}}" --service "${ECS_PARTNER_SERVICE}"
-      - if [ ! -z "${ECS_PRIVATE_BACKEND_SERVICE}"]; then aws ecs update-service --force-new-deployment --cluster "${ECS_BACKEND_CLUSTER:-${ECS_DEFAULT_CLUSTER}}" --service "${ECS_PRIVATE_BACKEND_SERVICE}-v2"; fi
+      - aws ecs update-service --force-new-deployment --cluster "${ECS_BACKEND_CLUSTER:-${ECS_DEFAULT_CLUSTER}}" --service "${ECS_PRIVATE_BACKEND_SERVICE}"
