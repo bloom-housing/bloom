@@ -8,7 +8,6 @@ import {
   Logger,
   StreamableFile,
 } from '@nestjs/common';
-import { SchedulerRegistry } from '@nestjs/schedule';
 import {
   Request as ExpressRequest,
   Response as ExpressResponse,
@@ -68,7 +67,6 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     private prisma: PrismaService,
     @Inject(Logger)
     private logger = new Logger(ListingCsvExporterService.name),
-    private schedulerRegistry: SchedulerRegistry,
   ) {}
 
   /**
