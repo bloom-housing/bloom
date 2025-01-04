@@ -51,6 +51,10 @@ const RankingsAndResults = ({ listing, isAdmin }: RankingsAndResultsProps) => {
     name: "listingAvailabilityQuestion",
   })
 
+  // Ensure the lottery fields only show when it's "available units" listing
+  const showLotteryFields =
+    availabilityQuestion !== "openWaitlist" && reviewOrder === "reviewOrderLottery"
+
   const yesNoRadioOptions = [
     {
       label: t("t.yes"),
@@ -95,7 +99,7 @@ const RankingsAndResults = ({ listing, isAdmin }: RankingsAndResultsProps) => {
             </Grid.Cell>
           </Grid.Row>
         )}
-        {reviewOrder === "reviewOrderLottery" && (
+        {showLotteryFields && (
           <>
             {process.env.showLottery && (
               <>
