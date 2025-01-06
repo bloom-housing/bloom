@@ -65,7 +65,9 @@ const ApplicationWhatToExpect = () => {
           mounted: OnClientSide(),
         }}
         backLink={{
-          url: `/applications/start/choose-language?listingId=${listing?.id}`,
+          url: listing?.includeCommunityDisclaimer
+            ? conductor.determinePreviousUrl()
+            : `/applications/start/choose-language?listingId=${listing?.id}`,
         }}
       >
         <CardSection>

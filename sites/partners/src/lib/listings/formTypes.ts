@@ -47,6 +47,9 @@ export type FormListing = Omit<Listing, "countyCode"> & {
   referralOpportunityChoice?: YesNoEnum
   dueDateQuestionChoice?: YesNoEnum
   criteriaAttachType?: string
+  includeCommunityDisclaimerQuestion?: YesNoEnum
+  communityDisclaimerTitle?: string
+  communityDisclaimerDescription?: string
   lotteryDate?: {
     month: string
     day: string
