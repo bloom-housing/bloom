@@ -211,4 +211,15 @@ export class ScirptRunnerController {
   ): Promise<SuccessDTO> {
     return await this.scriptRunnerService.hideProgramsFromListings(req);
   }
+
+  @Put('addFeatureFlags')
+  @ApiOperation({
+    summary:
+      'A script that adds existing feature flags into the feature flag table',
+    operationId: 'addFeatureFlags',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async addFeatureFlags(@Request() req: ExpressRequest): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.addFeatureFlags(req);
+  }
 }
