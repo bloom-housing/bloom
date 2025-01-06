@@ -41,6 +41,7 @@
 .application-count-tab {
   display: flex;
   justify-content: space-between;
+  gap: var(--seeds-s4);
 }
 
 .application-hide-tab {
