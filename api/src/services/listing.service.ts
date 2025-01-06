@@ -403,6 +403,12 @@ export class ListingService implements OnModuleInit {
         jurisdictions: { some: { id: jurisId } },
       });
     }
+    if (userRoles.includes(UserRoleEnum.limitedJurisdictionAdmin)) {
+      userRolesWhere.push({
+        userRoles: { isLimitedJurisdictionalAdmin: true },
+        jurisdictions: { some: { id: jurisId } },
+      });
+    }
 
     const rawUsers = await this.prisma.userAccounts.findMany({
       select: {
@@ -445,7 +451,10 @@ export class ListingService implements OnModuleInit {
     previousStatus?: ListingsStatusEnum;
     jurisId: string;
   }) {
-    const nonApprovingRoles: UserRoleEnum[] = [UserRoleEnum.partner];
+    const nonApprovingRoles: UserRoleEnum[] = [
+      UserRoleEnum.limitedJurisdictionAdmin,
+      UserRoleEnum.partner,
+    ];
     if (!params.approvingRoles.includes(UserRoleEnum.jurisdictionAdmin))
       nonApprovingRoles.push(UserRoleEnum.jurisdictionAdmin);
     if (

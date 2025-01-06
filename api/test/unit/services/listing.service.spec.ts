@@ -3195,7 +3195,7 @@ describe('Testing listing service', () => {
       });
 
       expect(service.getUserEmailInfo).toBeCalledWith(
-        ['partner', 'jurisdictionAdmin'],
+        ['limitedJurisdictionAdmin', 'partner', 'jurisdictionAdmin'],
         'id',
         'jurisId',
         false,
@@ -3226,7 +3226,7 @@ describe('Testing listing service', () => {
       });
 
       expect(service.getUserEmailInfo).toBeCalledWith(
-        ['partner', 'jurisdictionAdmin'],
+        ['limitedJurisdictionAdmin', 'partner', 'jurisdictionAdmin'],
         'id',
         'jurisId',
         true,
