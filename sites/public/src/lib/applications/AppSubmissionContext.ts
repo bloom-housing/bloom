@@ -16,50 +16,61 @@ export const retrieveApplicationConfig = (listing: Listing, isPreview?: boolean)
       {
         name: "chooseLanguage",
       },
-      {
-        name: "whatToExpect",
-      },
-      {
-        name: "autofill",
-      },
-      {
-        name: "primaryApplicantName",
-      },
-      {
-        name: "primaryApplicantAddress",
-      },
-      {
-        name: "alternateContactType",
-      },
-      {
-        name: "alternateContactName",
-      },
-      {
-        name: "alternateContactInfo",
-      },
-      {
-        name: "liveAlone",
-      },
-      {
-        name: "householdMemberInfo",
-      },
-      {
-        name: "addMembers",
-      },
-      {
-        name: "preferredUnitSize",
-      },
-      {
-        name: "adaHouseholdMembers",
-      },
-      {
-        name: "householdChanges",
-      },
-      {
-        name: "householdStudent",
-      },
     ],
   }
+
+  // conditionally add community disclaimer
+  if (listing?.includeCommunityDisclaimer) {
+    config.steps.push({
+      name: "communityDisclaimer",
+    })
+  }
+
+  // Continue with rest of the steps
+  config.steps.push(
+    {
+      name: "whatToExpect",
+    },
+    {
+      name: "autofill",
+    },
+    {
+      name: "primaryApplicantName",
+    },
+    {
+      name: "primaryApplicantAddress",
+    },
+    {
+      name: "alternateContactType",
+    },
+    {
+      name: "alternateContactName",
+    },
+    {
+      name: "alternateContactInfo",
+    },
+    {
+      name: "liveAlone",
+    },
+    {
+      name: "householdMemberInfo",
+    },
+    {
+      name: "addMembers",
+    },
+    {
+      name: "preferredUnitSize",
+    },
+    {
+      name: "adaHouseholdMembers",
+    },
+    {
+      name: "householdChanges",
+    },
+    {
+      name: "householdStudent",
+    }
+  )
 
   // conditionally add programs
   if (

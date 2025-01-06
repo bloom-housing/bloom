@@ -12,6 +12,8 @@
   "reservedCommunityType.value": 2,
   "reservedCommunityType.id": "Seniors",
   "reservedCommunityDescription": "Basic Test Description",
+  "communityDisclaimerTitle": "Basic Test Title",
+  "communityDisclaimerDescription": "Basic Test Description",
   "number": "2",
   "unitType.id": "One Bedroom",
   "numBathrooms": "2",

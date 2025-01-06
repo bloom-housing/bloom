@@ -68,5 +68,10 @@ export default class BooleansFormatter extends Formatter {
       when: this.data.lotteryOptInQuestion === YesNoEnum.yes,
       falseCase: () => (this.data.lotteryOptInQuestion === YesNoEnum.no ? false : null),
     })
+    this.processBoolean("includeCommunityDisclaimer", {
+      when: this.data.includeCommunityDisclaimerQuestion === YesNoEnum.yes,
+      falseCase: () =>
+        this.data.includeCommunityDisclaimerQuestion === YesNoEnum.no ? false : null,
+    })
   }
 }

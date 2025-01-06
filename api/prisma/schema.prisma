@@ -278,13 +278,13 @@ model Demographics {
 }
 
 model FeatureFlags {
-  id                String          @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  createdAt         DateTime        @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt         DateTime        @updatedAt @map("updated_at") @db.Timestamp(6)
-  name              String          @unique()
-  description       String
-  active            Boolean         @default(true)
-  jurisdictions     Jurisdictions[]
+  id            String          @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt     DateTime        @updatedAt @map("updated_at") @db.Timestamp(6)
+  name          String          @unique()
+  description   String
+  active        Boolean         @default(true)
+  jurisdictions Jurisdictions[]
 
   @@map("feature_flags")
 }
@@ -577,6 +577,9 @@ model Listings {
   resultId                              String?                       @map("result_id") @db.Uuid
   featuresId                            String?                       @unique() @map("features_id") @db.Uuid
   utilitiesId                           String?                       @unique() @map("utilities_id") @db.Uuid
+  includeCommunityDisclaimer            Boolean?                      @map("include_community_disclaimer")
+  communityDisclaimerTitle              String?                       @map("community_disclaimer_title")
+  communityDisclaimerDescription        String?                       @map("community_disclaimer_description")
   // START DETROIT SPECIFIC
   hrdId                                 String?                       @map("hrd_id")
   ownerCompany                          String?                       @map("owner_company")
@@ -626,7 +629,7 @@ model Listings {
   requestedChangesUser                  UserAccounts?                 @relation("requested_changes_user", fields: [requestedChangesUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   applicationLotteryPositions           ApplicationLotteryPositions[]
   applicationLotteryTotals              ApplicationLotteryTotal[]
-  copyOf                                Listings?                     @relation("copy_of", fields: [copyOfId], references: [id])
+  copyOf                                Listings?                     @relation("copy_of", fields: [copyOfId], references: [id], onUpdate: NoAction)
   Listings                              Listings[]                    @relation("copy_of")
 
   @@index([jurisdictionId])

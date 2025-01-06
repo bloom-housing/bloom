@@ -11,6 +11,7 @@ import {
   IsUrl,
   MaxLength,
   Validate,
+  ValidateIf,
   ValidateNested,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
@@ -618,6 +619,29 @@ class Listing extends AbstractDTO {
   @Type(() => ApplicationLotteryTotal)
   @ApiProperty({ type: ApplicationLotteryTotal, isArray: true })
   applicationLotteryTotals: ApplicationLotteryTotal[];
+
+  @Expose()
+  @ApiPropertyOptional()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  includeCommunityDisclaimer?: boolean;
+
+  @Expose()
+  @ApiPropertyOptional()
+  @ValidateIf((o) => o.includeCommunityDisclaimer, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  communityDisclaimerTitle?: string;
+
+  @Expose()
+  @ApiPropertyOptional()
+  @ValidateIf((o) => o.includeCommunityDisclaimer, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  communityDisclaimerDescription?: string;
 }
 
 export { Listing as default, Listing };
