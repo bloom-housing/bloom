@@ -528,7 +528,8 @@ export class EmailService {
         label: this.polyglot.t('rentalOpportunity.applicationsDue'),
         value: dayjs(listing.applicationDueDate)
           .tz(process.env.TIME_ZONE)
-          .format('MMMM D, YYYY'),
+          .format('MMMM D, YYYY [at] h:mma z'),
+        bolded: true,
       });
     }
     tableRows.push({
@@ -577,7 +578,7 @@ export class EmailService {
           label: this.polyglot.t('rentalOpportunity.lottery'),
           value: dayjs(lotteryEvent.startDate)
             .tz(process.env.TIME_ZONE)
-            .format('MMMM D, YYYY'),
+            .format('MMMM D, YYYY [at] h:mma z'),
         });
       }
     }

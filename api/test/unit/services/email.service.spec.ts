@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigModule } from '@nestjs/config';
 import {
   LanguagesEnum,
+  ListingEventsTypeEnum,
   ListingsStatusEnum,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
@@ -16,8 +17,10 @@ import { User } from '../../../src/dtos/users/user.dto';
 import { ApplicationCreate } from '../../../src/dtos/applications/application-create.dto';
 import { of } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
+import dayjs from 'dayjs';
 
 let sendMock;
+let govSendMock;
 const translationServiceMock = {
   getMergedTranslations: () => {
     return translationFactory().translations;
@@ -64,8 +67,10 @@ describe('Testing email service', () => {
   beforeEach(async () => {
     jest.useFakeTimers();
     sendMock = jest.fn();
+    govSendMock = jest.fn();
     service = await module.resolve(EmailService);
     service.sendSES = sendMock;
+    service.govSend = govSendMock;
   });
 
   const user = {
@@ -442,6 +447,61 @@ describe('Testing email service', () => {
       );
       expect(emailMock.html).toMatch('Thank you,');
       expect(emailMock.html).toMatch('Bloom Housing Portal');
+    });
+
+    it('should notify people of listing opportunity', async () => {
+      const listing = {
+        id: 'listingId',
+        name: 'test listing',
+        reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+        applicationDueDate: new Date(),
+        status: ListingsStatusEnum.active,
+        jurisdictions: { name: 'test jurisdiction', id: 'jurisdictionId' },
+        displayWaitlistSize: false,
+        showWaitlist: false,
+        applicationMethods: [],
+        assets: [],
+        listingEvents: [
+          {
+            type: ListingEventsTypeEnum.publicLottery,
+            startDate: new Date(),
+          },
+        ],
+        units: [],
+        referralApplication: undefined,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        listingsBuildingAddress: {
+          ...yellowstoneAddress,
+          id: 'addressId',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      };
+      const service = await module.resolve(EmailService);
+      await service.listingOpportunity(listing);
+
+      const emailMock = govSendMock.mock.calls[0][0];
+      expect(emailMock).toMatch(
+        '<span class="intro">Rental opportunity at</span> <br />test listing',
+      );
+      expect(emailMock).toMatch(
+        'Please view listing for the most updated information',
+      );
+      expect(emailMock).toMatch(
+        /<td class="bold">\s*Applications Due\s*<\/td>/,
+      );
+      expect(emailMock).toMatch(
+        new RegExp(
+          `<td class="bold">\\s*${dayjs(listing.applicationDueDate)
+            .tz(process.env.TIME_ZONE)
+            .format('MMMM D, YYYY [at] h:mma z')}\\s*</td>`,
+        ),
+      );
+      expect(emailMock).toMatch(/<td class="bold">\s*Address\s*<\/td>/);
+      expect(emailMock).toMatch(
+        /<td>\s*3200 Old Faithful Inn Rd, Yellowstone National Park WY 82190\s*<\/td>/,
+      );
     });
   });
 });

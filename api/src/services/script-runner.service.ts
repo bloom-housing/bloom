@@ -1383,6 +1383,57 @@ export class ScriptRunnerService {
   }
 
   /**
+   *
+   * @param req incoming request object
+   * @returns successDTO
+   * @description updates single use code translations to show extended expiration time
+   */
+  async addNoticeToListingOpportunityEmail(
+    req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart(
+      'add notice translation for listing opportunity email',
+      requestingUser,
+    );
+
+    await this.updateTranslationsForLanguage(LanguagesEnum.en, {
+      rentalOpportunity: {
+        viewListingNotice:
+          'Please view listing for the most updated information',
+      },
+    });
+    await this.updateTranslationsForLanguage(LanguagesEnum.es, {
+      rentalOpportunity: {
+        viewListingNotice:
+          'Consulte el listado para obtener la información más actualizada',
+      },
+    });
+    await this.updateTranslationsForLanguage(LanguagesEnum.tl, {
+      rentalOpportunity: {
+        viewListingNotice:
+          'Mangyaring tingnan ang listahan para sa pinakabagong impormasyon',
+      },
+    });
+    await this.updateTranslationsForLanguage(LanguagesEnum.vi, {
+      rentalOpportunity: {
+        viewListingNotice: 'Vui lòng xem danh sách để biết thông tin mới nhất',
+      },
+    });
+    await this.updateTranslationsForLanguage(LanguagesEnum.zh, {
+      rentalOpportunity: {
+        viewListingNotice: '请查看列表以获取最新信息',
+      },
+    });
+
+    await this.markScriptAsComplete(
+      'add notice translation for listing opportunity email',
+      requestingUser,
+    );
+    return { success: true };
+  }
+
+  /**
     Adds all existing feature flags across Bloom to the database
   */
   async addFeatureFlags(req: ExpressRequest): Promise<SuccessDTO> {

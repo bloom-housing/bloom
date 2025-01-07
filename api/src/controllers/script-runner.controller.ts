@@ -249,6 +249,20 @@ export class ScirptRunnerController {
     return await this.scriptRunnerService.removeWorkAddresses(req);
   }
 
+  @Put('addNoticeToListingOpportunityEmail')
+  @ApiOperation({
+    summary:
+      'A script that adds notice translations for the listing opportunity email',
+    operationId: 'addNoticeToListingOpportunityEmail',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async addNoticeToListingOpportunityEmail(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.addNoticeToListingOpportunityEmail(
+      req,
+    );
+  }
 
   @Put('addFeatureFlags')
   @ApiOperation({
