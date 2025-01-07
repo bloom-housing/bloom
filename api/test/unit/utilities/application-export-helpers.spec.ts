@@ -297,6 +297,12 @@ describe('Testing application export helpers', () => {
       );
     });
 
+    it('tests convertDemographicRaceToReadable with valid type and empty custom value', () => {
+      expect(convertDemographicRaceToReadable('otherMultiracial')).toBe(
+        'Other / Multiracial',
+      );
+    });
+
     it('tests convertDemographicRaceToReadable with type not in typeMap', () => {
       const custom = 'This is a custom value';
       expect(convertDemographicRaceToReadable(custom)).toBe(custom);
