@@ -17,7 +17,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, errors, clearErrors } = formMethods
 
-  const jurisdiction = watch("jurisdiction.id")
+  const jurisdiction = watch("jurisdictions.id")
 
   const utilitiesFields = useMemo(() => {
     return listingUtilities.map((utility) => {

@@ -16,7 +16,7 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = formMethods
-  const jurisdiction = watch("jurisdiction.id")
+  const jurisdiction = watch("jurisdictions.id")
 
   const featureOptions = useMemo(() => {
     return listingFeatures.map((item) => ({
@@ -108,7 +108,6 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
         {!enableAccessibilityFeatures ? null : (
           <Grid.Row>
             <FieldValue label={t("listings.sections.accessibilityFeatures")}>
-              {/* TODO: default checked doesn't appear to be working even on main*/}
               <FieldGroup
                 type="checkbox"
                 name="accessibilityFeatures"
