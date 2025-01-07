@@ -149,6 +149,8 @@ describe('Listing Controller Tests', () => {
       label: 'example asset label',
     };
 
+    const shouldIncludeCommunityDisclaimer = Math.random() >= 0.5;
+
     return {
       id: listingId ?? undefined,
       assets: [exampleAsset],
@@ -344,11 +346,14 @@ describe('Listing Controller Tests', () => {
         phone: false,
         internet: true,
       },
-      includeCommunityDisclaimer: Math.random() >= 0.5,
-      communityDisclaimerTitle:
-        Math.random() >= 0.5 ? 'example title' : undefined,
-      communityDisclaimerDescription:
-        Math.random() >= 0.5 ? 'example description' : undefined,
+      includeCommunityDisclaimer: shouldIncludeCommunityDisclaimer,
+      communityDisclaimerTitle: shouldIncludeCommunityDisclaimer
+        ? 'example title'
+        : undefined,
+      communityDisclaimerDescription: shouldIncludeCommunityDisclaimer
+        ? 'example description'
+        : undefined,
+      homeType: 'apartment',
     };
   };
 

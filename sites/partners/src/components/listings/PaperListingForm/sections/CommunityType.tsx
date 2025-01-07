@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
-import { t, Select, Textarea } from "@bloom-housing/ui-components"
+import { t, Select, Textarea, FieldGroup, Field } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import { ReservedCommunityType } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  ReservedCommunityType,
+  YesNoEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useReservedCommunityTypeList } from "../../../../lib/hooks"
 import { arrayToFormOptions } from "../../../../lib/helpers"
 import { FormListing } from "../../../../lib/listings/formTypes"
@@ -16,7 +19,7 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch } = formMethods
+  const { register, setValue, watch, errors } = formMethods
 
   const reservedCommunityType = watch("reservedCommunityTypes.id")
 
@@ -43,6 +46,19 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
       setCurrentCommunityType(reservedCommunityType)
     }
   }, [reservedCommunityType, listing?.reservedCommunityTypes?.id])
+
+  useEffect(() => {
+    if (
+      listing &&
+      watch("includeCommunityDisclaimerQuestion") === null &&
+      listing?.includeCommunityDisclaimer !== null
+    ) {
+      setValue(
+        "includeCommunityDisclaimerQuestion",
+        listing?.includeCommunityDisclaimer ? YesNoEnum.yes : YesNoEnum.no
+      )
+    }
+  }, [setValue, listing?.includeCommunityDisclaimer, watch, listing])
 
   return (
     <>
@@ -79,9 +95,68 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
               id={"reservedCommunityDescription"}
               fullWidth={true}
               register={register}
+              note={t("listings.appearsInListing")}
             />
           </Grid.Cell>
         </Grid.Row>
+
+        <Grid.Row columns={1}>
+          <FieldValue label={t("listings.includeCommunityDisclaimer")}>
+            <FieldGroup
+              name="includeCommunityDisclaimerQuestion"
+              type="radio"
+              register={register}
+              fields={[
+                {
+                  label: t("t.yes"),
+                  value: YesNoEnum.yes,
+                  id: "includeCommunityDisclaimerYes",
+                  disabled: !currentCommunityType,
+                },
+                {
+                  label: t("t.no"),
+                  value: YesNoEnum.no,
+                  id: "includeCommunityDisclaimerNo",
+                  disabled: !currentCommunityType,
+                },
+              ]}
+            />
+          </FieldValue>
+        </Grid.Row>
+
+        {watch("includeCommunityDisclaimerQuestion") === YesNoEnum.yes && currentCommunityType && (
+          <>
+            <Grid.Row columns={3}>
+              <Grid.Cell className="seeds-grid-span-2">
+                <Field
+                  label={t("listings.reservedCommunityDisclaimerTitle")}
+                  name="communityDisclaimerTitle"
+                  id="communityDisclaimerTitle"
+                  register={register}
+                  subNote={t("listings.requiredToPublishAppearsAsFirstPage")}
+                  error={errors.communityDisclaimerTitle}
+                  placeholder={t("t.enterTitle")}
+                  errorMessage={t("t.enterTitle")}
+                />
+              </Grid.Cell>
+            </Grid.Row>
+
+            <Grid.Row columns={3}>
+              <Grid.Cell className="seeds-grid-span-2">
+                <Textarea
+                  label={t("listings.reservedCommunityDisclaimer")}
+                  name="communityDisclaimerDescription"
+                  id="communityDisclaimerDescription"
+                  fullWidth={true}
+                  register={register}
+                  note={t("listings.requiredToPublishAppearsAsFirstPage")}
+                  placeholder={t("t.enterDescription")}
+                  errorMessage={errors.communityDisclaimerDescription && t("t.enterDescription")}
+                />
+              </Grid.Cell>
+            </Grid.Row>
+          </>
+        )}
       </SectionWithGrid>
     </>
   )

@@ -1,5 +1,8 @@
 import { listingFeatures, listingUtilities } from "@bloom-housing/shared-helpers"
-import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  ReviewOrderTypeEnum,
+  YesNoEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Formatter from "./Formatter"
 
 export default class AdditionalMetadataFormatter extends Formatter {
@@ -55,7 +58,15 @@ export default class AdditionalMetadataFormatter extends Formatter {
 
     this.data.customMapPin = this.metadata.customMapPositionChosen
     this.data.yearBuilt = this.data.yearBuilt ? Number(this.data.yearBuilt) : null
-    if (!this.data.reservedCommunityTypes?.id) this.data.reservedCommunityTypes = null
+    if (!this.data.reservedCommunityTypes?.id) {
+      this.data.reservedCommunityTypes = null
+      this.data.includeCommunityDisclaimer = null
+      this.data.communityDisclaimerTitle = ""
+      this.data.communityDisclaimerDescription = ""
+    } else if (this.data.includeCommunityDisclaimerQuestion === YesNoEnum.no) {
+      this.data.communityDisclaimerTitle = ""
+      this.data.communityDisclaimerDescription = ""
+    }
     this.data.reviewOrderType =
       this.data.reviewOrderQuestion === "reviewOrderLottery"
         ? ReviewOrderTypeEnum.lottery

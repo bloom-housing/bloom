@@ -11,6 +11,7 @@ import {
   IsUrl,
   MaxLength,
   Validate,
+  ValidateIf,
   ValidateNested,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
@@ -19,6 +20,7 @@ import { AbstractDTO } from '../shared/abstract.dto';
 import {
   ApplicationAddressTypeEnum,
   ApplicationMethodsTypeEnum,
+  HomeTypeEnum,
   ListingsStatusEnum,
   LotteryStatusEnum,
   ReviewOrderTypeEnum,
@@ -621,13 +623,31 @@ class Listing extends AbstractDTO {
 
   @Expose()
   @ApiPropertyOptional()
+  @ValidateIf((o) => o.includeCommunityDisclaimer, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   communityDisclaimerTitle?: string;
 
   @Expose()
   @ApiPropertyOptional()
+  @ValidateIf((o) => o.includeCommunityDisclaimer, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   communityDisclaimerDescription?: string;
+
+  @Expose()
+  @IsEnum(HomeTypeEnum, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ApiPropertyOptional({
+    enum: HomeTypeEnum,
+    enumName: 'HomeTypeEnum',
+  })
+  homeType?: HomeTypeEnum;
 }
 
 export { Listing as default, Listing };
