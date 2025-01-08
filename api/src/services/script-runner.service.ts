@@ -1643,6 +1643,47 @@ export class ScriptRunnerService {
     return { success: true };
   }
 
+  /**
+   *
+   * @param req incoming request object
+   * @returns successDTO
+   * @description remove empty race inputs
+   */
+  async removeEmptyRaceInputs(req: ExpressRequest): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart('remove empty race inputs', requestingUser);
+    const allRaceDemographics = await this.prisma.demographics.findMany({
+      select: { id: true, race: true },
+      where: {
+        race: { isEmpty: false },
+      },
+    });
+
+    const emptyInputPattern = /:  +$/;
+    const cleanedDemoData = allRaceDemographics.reduce((cleanedArr, demo) => {
+      if (demo.race.some((raceInput) => emptyInputPattern.test(raceInput))) {
+        const cleanedInput = demo.race.map((raceInput) =>
+          raceInput.replace(emptyInputPattern, ''),
+        );
+        cleanedArr.push({ ...demo, race: cleanedInput });
+      }
+      return cleanedArr;
+    }, []);
+
+    cleanedDemoData.forEach(async (cleanedDemo) => {
+      await this.prisma.demographics.update({
+        where: {
+          id: cleanedDemo.id,
+        },
+        data: {
+          race: cleanedDemo.race,
+        },
+      });
+    });
+    await this.markScriptAsComplete('remove empty race inputs', requestingUser);
+    return { success: true };
+  }
+
   async addLotteryTranslationsHelper(createIfMissing?: boolean) {
     const enKeys = {
       lotteryReleased: {
