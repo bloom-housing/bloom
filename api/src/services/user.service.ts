@@ -717,25 +717,6 @@ export class UserService {
           confirmationUrl,
         );
       }
-
-      // Partner user that is given access to an additional jurisdiction
-    } else if (
-      forPartners &&
-      existingUser &&
-      'userRoles' in dto &&
-      existingUser?.userRoles?.isPartner &&
-      dto?.userRoles?.isPartner &&
-      this.jurisdictionMismatch(dto.jurisdictions, existingUser.jurisdictions)
-    ) {
-      const newJurisdictions = this.getMismatchedJurisdictions(
-        dto.jurisdictions,
-        existingUser.jurisdictions,
-      );
-      this.emailService.portalAccountUpdate(
-        newJurisdictions,
-        mapTo(User, newUser),
-        dto.appUrl,
-      );
     } else if (forPartners) {
       const confirmationUrl = this.getPartnersConfirmationUrl(
         this.configService.get('PARTNERS_PORTAL_URL'),
@@ -896,27 +877,17 @@ export class UserService {
     existingJurisdictions: IdDTO[],
   ): boolean {
     return (
-      this.getMismatchedJurisdictions(
-        incomingJurisdictions,
-        existingJurisdictions,
-      ).length > 0
+      incomingJurisdictions.reduce((misMatched, jurisdiction) => {
+        if (
+          !existingJurisdictions?.some(
+            (existingJuris) => existingJuris.id === jurisdiction.id,
+          )
+        ) {
+          misMatched.push(jurisdiction.id);
+        }
+        return misMatched;
+      }, []).length > 0
     );
-  }
-
-  getMismatchedJurisdictions(
-    incomingJurisdictions: IdDTO[],
-    existingJurisdictions: IdDTO[],
-  ) {
-    return incomingJurisdictions.reduce((misMatched, jurisdiction) => {
-      if (
-        !existingJurisdictions?.some(
-          (existingJuris) => existingJuris.id === jurisdiction.id,
-        )
-      ) {
-        misMatched.push(jurisdiction.id);
-      }
-      return misMatched;
-    }, []);
   }
 
   containsInvalidCharacters(value: string): boolean {
