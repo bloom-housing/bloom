@@ -878,27 +878,17 @@ export class UserService {
     existingJurisdictions: IdDTO[],
   ): boolean {
     return (
-      this.getMismatchedJurisdictions(
-        incomingJurisdictions,
-        existingJurisdictions,
-      ).length > 0
+      incomingJurisdictions.reduce((misMatched, jurisdiction) => {
+        if (
+          !existingJurisdictions?.some(
+            (existingJuris) => existingJuris.id === jurisdiction.id,
+          )
+        ) {
+          misMatched.push(jurisdiction.id);
+        }
+        return misMatched;
+      }, []).length > 0
     );
-  }
-
-  getMismatchedJurisdictions(
-    incomingJurisdictions: IdDTO[],
-    existingJurisdictions: IdDTO[],
-  ) {
-    return incomingJurisdictions.reduce((misMatched, jurisdiction) => {
-      if (
-        !existingJurisdictions?.some(
-          (existingJuris) => existingJuris.id === jurisdiction.id,
-        )
-      ) {
-        misMatched.push(jurisdiction.id);
-      }
-      return misMatched;
-    }, []);
   }
 
   containsInvalidCharacters(value: string): boolean {
