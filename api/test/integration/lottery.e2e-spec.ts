@@ -12,6 +12,12 @@ import {
   UnitTypeEnum,
   UnitTypes,
 } from '@prisma/client';
+import {
+  SESv2Client,
+  SendEmailCommand,
+  SendBulkEmailCommand,
+} from '@aws-sdk/client-sesv2';
+import { mockClient } from 'aws-sdk-client-mock';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import { randomUUID } from 'crypto';
@@ -34,8 +40,8 @@ import { multiselectQuestionFactory } from '../../prisma/seed-helpers/multiselec
 import { reservedCommunityTypeFactoryAll } from '../../prisma/seed-helpers/reserved-community-type-factory';
 import { LotteryService } from '../../src/services/lottery.service';
 import { ApplicationCsvQueryParams } from '../../src/dtos/applications/application-csv-query-params.dto';
-import { EmailService } from '../../src/services/email.service';
 import { permissionActions } from '../../src/enums/permissions/permission-actions-enum';
+import 'aws-sdk-client-mock-jest';
 
 describe('Lottery Controller Tests', () => {
   let app: INestApplication;
@@ -44,25 +50,9 @@ describe('Lottery Controller Tests', () => {
   let cookies = '';
   let adminAccessToken: string;
   let jurisdictionAId: string;
-  let jurisdictionAEmail: string;
   let unitTypeA: UnitTypes;
 
-  const testEmailService = {
-    /* eslint-disable @typescript-eslint/no-empty-function */
-    lotteryReleased: async () => {},
-    lotteryPublishedAdmin: async () => {},
-    lotteryPublishedApplicant: async () => {},
-  };
-
-  const mockLotteryReleased = jest.spyOn(testEmailService, 'lotteryReleased');
-  const mockLotteryPublishedAdmin = jest.spyOn(
-    testEmailService,
-    'lotteryPublishedAdmin',
-  );
-  const mockLotteryPublishedApplicant = jest.spyOn(
-    testEmailService,
-    'lotteryPublishedApplicant',
-  );
+  const mockSeSClient = mockClient(SESv2Client);
 
   const createMultiselectQuestion = async (
     jurisdictionId: string,
@@ -85,13 +75,26 @@ describe('Lottery Controller Tests', () => {
     return res.id;
   };
 
+  beforeEach(() => {
+    mockSeSClient.reset();
+    mockSeSClient.on(SendEmailCommand).resolves({
+      MessageId: randomUUID(),
+      $metadata: {
+        httpStatusCode: 200,
+      },
+    });
+    mockSeSClient.on(SendBulkEmailCommand).resolves({
+      BulkEmailEntryResults: [],
+      $metadata: {
+        httpStatusCode: 200,
+      },
+    });
+  });
+
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    })
-      .overrideProvider(EmailService)
-      .useValue(testEmailService)
-      .compile();
+    }).compile();
 
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
@@ -102,12 +105,14 @@ describe('Lottery Controller Tests', () => {
       data: jurisdictionFactory(),
     });
     jurisdictionAId = jurisdiction.id;
-    jurisdictionAEmail = jurisdiction.emailFromAddress;
     await reservedCommunityTypeFactoryAll(jurisdictionAId, prisma);
     await unitTypeFactoryAll(prisma);
     unitTypeA = await unitTypeFactorySingle(prisma, UnitTypeEnum.oneBdrm);
     await prisma.translations.create({
       data: translationFactory(),
+    });
+    await prisma.translations.create({
+      data: translationFactory(undefined, undefined, LanguagesEnum.es),
     });
 
     const storedUser = await prisma.userAccounts.create({
@@ -887,16 +892,15 @@ describe('Lottery Controller Tests', () => {
         .expect(200);
       expect(res.body.success).toEqual(true);
 
-      expect(mockLotteryReleased).toBeCalledWith(
-        {
-          id: listing.id,
-          name: listing.name,
-          juris: expect.stringMatching(jurisdictionAId),
-        },
-        expect.arrayContaining([partnerUser.email, adminUser.email]),
-        process.env.PARTNERS_PORTAL_URL,
-        jurisdictionAEmail,
-      );
+      expect(mockSeSClient).toHaveReceivedCommandWith(SendBulkEmailCommand, {
+        FromEmailAddress: 'Doorway <no-reply@housingbayarea.org>',
+        BulkEmailEntries: expect.arrayContaining([
+          { Destination: { ToAddresses: [partnerUser.email] } },
+          { Destination: { ToAddresses: [adminUser.email] } },
+          { Destination: { ToAddresses: [expect.anything()] } },
+        ]),
+        DefaultContent: expect.anything(),
+      });
 
       const activityLogResult = await prisma.activityLog.findFirst({
         where: {
@@ -967,6 +971,7 @@ describe('Lottery Controller Tests', () => {
     });
 
     it('should update listing lottery status to publishedToPublic from releasedToPartners', async () => {
+      process.env.SITE_EMAIL = 'sampleSiteEmail@email.com';
       const listingData = await listingFactory(jurisdictionAId, prisma, {
         status: ListingsStatusEnum.closed,
         lotteryStatus: LotteryStatusEnum.releasedToPartners,
@@ -1071,28 +1076,61 @@ describe('Lottery Controller Tests', () => {
 
       expect(activityLogResult).not.toBeNull();
 
-      expect(mockLotteryPublishedAdmin).toBeCalledWith(
-        {
-          id: listing.id,
-          name: listing.name,
-          juris: expect.stringMatching(jurisdictionAId),
+      // should send three: one to partners, one to english applicants, one to spanish applicant
+      // site email should be sent with all of them
+      expect(mockSeSClient).toHaveReceivedCommandTimes(SendBulkEmailCommand, 3);
+      expect(mockSeSClient).toHaveReceivedCommandWith(SendBulkEmailCommand, {
+        FromEmailAddress: 'Doorway <no-reply@housingbayarea.org>',
+        BulkEmailEntries: expect.arrayContaining([
+          { Destination: { ToAddresses: [partnerUser.email] } },
+          { Destination: { ToAddresses: [adminUser.email] } },
+          { Destination: { ToAddresses: [expect.anything()] } },
+          { Destination: { ToAddresses: ['sampleSiteEmail@email.com'] } },
+        ]),
+        DefaultContent: {
+          Template: {
+            TemplateContent: {
+              Subject: `Lottery results have been published for ${listing.name}`,
+              Html: expect.anything(),
+            },
+            TemplateData: expect.anything(),
+          },
         },
-        expect.arrayContaining([partnerUser.email, adminUser.email]),
-        process.env.PARTNERS_PORTAL_URL,
-        jurisdictionAEmail,
-      );
-
-      expect(mockLotteryPublishedApplicant).toBeCalledWith(
-        {
-          id: listing.id,
-          name: listing.name,
-          juris: expect.stringMatching(jurisdictionAId),
+      });
+      expect(mockSeSClient).toHaveReceivedCommandWith(SendBulkEmailCommand, {
+        FromEmailAddress: 'Doorway <no-reply@housingbayarea.org>',
+        BulkEmailEntries: expect.arrayContaining([
+          { Destination: { ToAddresses: ['applicant@email.com'] } },
+          { Destination: { ToAddresses: ['applicant3@email.com'] } },
+          { Destination: { ToAddresses: ['sampleSiteEmail@email.com'] } },
+        ]),
+        DefaultContent: {
+          Template: {
+            TemplateContent: {
+              Subject: 'New Housing Lottery Results Available',
+              Html: expect.anything(),
+            },
+            TemplateData: expect.anything(),
+          },
         },
-        expect.objectContaining({
-          en: ['applicant@email.com', 'applicant3@email.com'],
-          es: ['applicant2@email.com'],
-        }),
-      );
+      });
+      expect(mockSeSClient).toHaveReceivedCommandWith(SendBulkEmailCommand, {
+        FromEmailAddress: 'Doorway <no-reply@housingbayarea.org>',
+        BulkEmailEntries: expect.arrayContaining([
+          { Destination: { ToAddresses: ['applicant2@email.com'] } },
+          { Destination: { ToAddresses: ['sampleSiteEmail@email.com'] } },
+        ]),
+        DefaultContent: {
+          Template: {
+            TemplateContent: {
+              Subject:
+                'Nuevos resultados de la lotería de vivienda disponibles',
+              Html: expect.anything(),
+            },
+            TemplateData: expect.anything(),
+          },
+        },
+      });
     });
   });
   describe('publicLotteryResults', () => {

@@ -473,7 +473,6 @@ export class ListingService implements OnModuleInit {
         { id: params.listingInfo.id, name: params.listingInfo.name },
         userInfo.emails,
         this.configService.get('PARTNERS_PORTAL_URL'),
-        userInfo.emailFromAddress,
       );
     }
     // admin updates status to changes requested when approval requires partner changes
@@ -497,7 +496,6 @@ export class ListingService implements OnModuleInit {
         },
         userInfo.emails,
         this.configService.get('PARTNERS_PORTAL_URL'),
-        userInfo.emailFromAddress,
       );
     }
     // check if status of active requires notification
@@ -520,7 +518,6 @@ export class ListingService implements OnModuleInit {
           { id: params.listingInfo.id, name: params.listingInfo.name },
           userInfo.emails,
           userInfo.publicUrl,
-          userInfo.emailFromAddress,
         );
       }
     }

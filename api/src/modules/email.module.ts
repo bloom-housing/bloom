@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { EmailService } from '../services/email.service';
@@ -15,6 +15,7 @@ import { GoogleTranslateService } from '../services/google-translate.service';
     TranslationService,
     ConfigService,
     GoogleTranslateService,
+    Logger,
   ],
   exports: [EmailService],
 })

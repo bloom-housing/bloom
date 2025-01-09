@@ -74,7 +74,6 @@ describe('Testing lottery service', () => {
             lotteryPublishedApplicant: lotteryPublishedApplicantMock,
           },
         },
-
         ConfigService,
         Logger,
         SchedulerRegistry,
@@ -722,7 +721,6 @@ describe('Testing lottery service', () => {
         { id: 'example id', juris: 'jurisId', name: 'example name' },
         ['admin@email.com', 'partner@email.com'],
         config.get('PARTNERS_PORTAL_URL'),
-        'no-reply@housingbayarea.org',
       );
     });
 

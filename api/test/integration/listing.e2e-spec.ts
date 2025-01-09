@@ -1,3 +1,8 @@
+import {
+  SendBulkEmailCommand,
+  SendEmailCommand,
+  SESv2Client,
+} from '@aws-sdk/client-sesv2';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import {
@@ -11,6 +16,8 @@ import {
   UnitTypeEnum,
   UserRoleEnum,
 } from '@prisma/client';
+import { mockClient } from 'aws-sdk-client-mock';
+import 'aws-sdk-client-mock-jest';
 import { randomUUID } from 'crypto';
 import { stringify } from 'qs';
 import request from 'supertest';
@@ -51,34 +58,37 @@ describe('Listing Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let jurisdictionAId: string;
-  let jurisdictionAEmail: string;
   let adminAccessToken: string;
 
-  const testEmailService = {
-    /* eslint-disable @typescript-eslint/no-empty-function */
-    requestApproval: async () => {},
-    changesRequested: async () => {},
-    listingApproved: async () => {},
-    listingOpportunity: async () => {},
-    lotteryReleased: async () => {},
-    lotteryPublishedAdmin: async () => {},
-    lotteryPublishedApplicant: async () => {},
-  };
-  const mockChangesRequested = jest.spyOn(testEmailService, 'changesRequested');
-  const mockRequestApproval = jest.spyOn(testEmailService, 'requestApproval');
-  const mockListingApproved = jest.spyOn(testEmailService, 'listingApproved');
-  const mockListingOpportunity = jest.spyOn(
-    testEmailService,
-    'listingOpportunity',
-  );
+  const mockSeSClient = mockClient(SESv2Client);
+  const mockListingOpportunity = jest.fn();
+
+  beforeEach(() => {
+    mockSeSClient.reset();
+    mockSeSClient.on(SendEmailCommand).resolves({
+      MessageId: randomUUID(),
+      $metadata: {
+        httpStatusCode: 200,
+      },
+    });
+    mockSeSClient.on(SendBulkEmailCommand).resolves({
+      BulkEmailEntryResults: [],
+      $metadata: {
+        httpStatusCode: 200,
+      },
+    });
+  });
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    })
-      .overrideProvider(EmailService)
-      .useValue(testEmailService)
-      .compile();
+    }).compile();
+
+    const emailService = moduleFixture.get(EmailService);
+
+    jest
+      .spyOn(emailService, 'listingOpportunity')
+      .mockImplementation(mockListingOpportunity);
 
     app = moduleFixture.createNestApplication();
     app.use(cookieParser());
@@ -88,7 +98,6 @@ describe('Listing Controller Tests', () => {
       data: jurisdictionFactory(),
     });
     jurisdictionAId = jurisdiction.id;
-    jurisdictionAEmail = jurisdiction.emailFromAddress;
     await reservedCommunityTypeFactoryAll(jurisdictionAId, prisma);
     await unitAccessibilityPriorityTypeFactoryAll(prisma);
     const adminUser = await prisma.userAccounts.create({
@@ -947,19 +956,29 @@ describe('Listing Controller Tests', () => {
       expect(listingPendingApprovalResponse.body.status).toBe(
         ListingsStatusEnum.pendingReview,
       );
-      expect(mockRequestApproval).toBeCalledWith(
-        expect.objectContaining({
-          id: jurisdictionA.id,
-        }),
-        { id: listing.id, name: val.name },
-        expect.arrayContaining([adminUser.email, jurisAdmin.email]),
-        process.env.PARTNERS_PORTAL_URL,
-        jurisdictionAEmail,
-      );
-      //ensure juris admin is not included since don't have approver permissions in alameda seed
-      expect(mockRequestApproval.mock.calls[0]['emails']).toEqual(
-        expect.not.arrayContaining([wrongJurisAdmin.email, partnerUser.email]),
-      );
+
+      expect(mockSeSClient).toHaveReceivedCommandTimes(SendBulkEmailCommand, 1);
+      expect(mockSeSClient).toHaveReceivedCommandWith(SendBulkEmailCommand, {
+        FromEmailAddress: 'Doorway <no-reply@housingbayarea.org>',
+        BulkEmailEntries: expect.arrayContaining([
+          { Destination: { ToAddresses: [jurisAdmin.email] } },
+          { Destination: { ToAddresses: [adminUser.email] } },
+        ]),
+        DefaultContent: {
+          Template: {
+            TemplateContent: {
+              Subject: `Listing approval requested`,
+              Html: expect.anything(),
+            },
+            TemplateData: expect.anything(),
+          },
+        },
+      });
+      const emailEntries =
+        mockSeSClient.call(0).args[0].input['BulkEmailEntries'];
+      expect(emailEntries).not.toContain({
+        Destination: { ToAddresses: [wrongJurisAdmin.email] },
+      });
     });
 
     it('update status to listing approved and notify appropriate users', async () => {
@@ -988,15 +1007,22 @@ describe('Listing Controller Tests', () => {
       expect(listingApprovedResponse.body.status).toBe(
         ListingsStatusEnum.active,
       );
-      expect(mockListingApproved).toBeCalledWith(
-        expect.objectContaining({
-          id: jurisdictionA.id,
-        }),
-        { id: listing.id, name: val.name },
-        expect.arrayContaining([partnerUser.email]),
-        jurisdictionA.publicUrl,
-        jurisdictionA.emailFromAddress,
-      );
+      expect(mockSeSClient).toHaveReceivedCommandTimes(SendBulkEmailCommand, 1);
+      expect(mockSeSClient).toHaveReceivedCommandWith(SendBulkEmailCommand, {
+        FromEmailAddress: 'Doorway <no-reply@housingbayarea.org>',
+        BulkEmailEntries: expect.arrayContaining([
+          { Destination: { ToAddresses: [partnerUser.email] } },
+        ]),
+        DefaultContent: {
+          Template: {
+            TemplateContent: {
+              Subject: `New published listing`,
+              Html: expect.anything(),
+            },
+            TemplateData: expect.anything(),
+          },
+        },
+      });
       expect(mockListingOpportunity).toBeCalledWith(
         expect.objectContaining({
           id: listing.id,
@@ -1031,15 +1057,22 @@ describe('Listing Controller Tests', () => {
       expect(listingChangesRequestedResponse.body.status).toBe(
         ListingsStatusEnum.changesRequested,
       );
-      expect(mockChangesRequested).toBeCalledWith(
-        expect.objectContaining({
-          id: adminUser.id,
-        }),
-        { id: listing.id, name: val.name, juris: expect.anything() },
-        expect.arrayContaining([partnerUser.email]),
-        process.env.PARTNERS_PORTAL_URL,
-        jurisdictionAEmail,
-      );
+      expect(mockSeSClient).toHaveReceivedCommandTimes(SendBulkEmailCommand, 1);
+      expect(mockSeSClient).toHaveReceivedCommandWith(SendBulkEmailCommand, {
+        FromEmailAddress: 'Doorway <no-reply@housingbayarea.org>',
+        BulkEmailEntries: expect.arrayContaining([
+          { Destination: { ToAddresses: [partnerUser.email] } },
+        ]),
+        DefaultContent: {
+          Template: {
+            TemplateContent: {
+              Subject: `Listing changes requested`,
+              Html: expect.anything(),
+            },
+            TemplateData: expect.anything(),
+          },
+        },
+      });
     });
   });
 

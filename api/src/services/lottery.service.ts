@@ -425,7 +425,6 @@ export class LotteryService {
       },
       partnerUserEmailInfo.emails,
       this.configService.get('PARTNERS_PORTAL_URL'),
-      partnerUserEmailInfo.emailFromAddress,
     );
 
     await this.emailService.lotteryPublishedApplicant(
@@ -523,7 +522,6 @@ export class LotteryService {
           },
           partnerUserEmailInfo.emails,
           this.configService.get('PARTNERS_PORTAL_URL'),
-          partnerUserEmailInfo.emailFromAddress,
         );
         break;
       }

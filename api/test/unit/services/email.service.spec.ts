@@ -17,9 +17,17 @@ import { User } from '../../../src/dtos/users/user.dto';
 import { ApplicationCreate } from '../../../src/dtos/applications/application-create.dto';
 import { of } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
+import { Logger } from '@nestjs/common';
+import { mockClient } from 'aws-sdk-client-mock';
+import {
+  SendBulkEmailCommand,
+  SendEmailCommand,
+  SESv2Client,
+} from '@aws-sdk/client-sesv2';
+import 'aws-sdk-client-mock-jest';
+import { randomUUID } from 'crypto';
 import dayjs from 'dayjs';
 
-let sendMock;
 let govSendMock;
 const translationServiceMock = {
   getMergedTranslations: () => {
@@ -44,6 +52,7 @@ const httpServiceMock = {
 describe('Testing email service', () => {
   let service: EmailService;
   let module: TestingModule;
+  const mockSeSClient = mockClient(SESv2Client);
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
@@ -59,6 +68,7 @@ describe('Testing email service', () => {
           useValue: jurisdictionServiceMock,
         },
         { provide: HttpService, useValue: httpServiceMock },
+        Logger,
         GoogleTranslateService,
       ],
     }).compile();
@@ -66,10 +76,21 @@ describe('Testing email service', () => {
 
   beforeEach(async () => {
     jest.useFakeTimers();
-    sendMock = jest.fn();
+    mockSeSClient.reset();
+    mockSeSClient.on(SendEmailCommand).resolves({
+      MessageId: randomUUID(),
+      $metadata: {
+        httpStatusCode: 200,
+      },
+    });
+    mockSeSClient.on(SendBulkEmailCommand).resolves({
+      BulkEmailEntryResults: [],
+      $metadata: {
+        httpStatusCode: 200,
+      },
+    });
     govSendMock = jest.fn();
     service = await module.resolve(EmailService);
-    service.sendSES = sendMock;
     service.govSend = govSendMock;
   });
 
@@ -87,12 +108,25 @@ describe('Testing email service', () => {
       'http://localhost:3000',
       'http://localhost:3000/?token=',
     );
-    expect(sendMock).toHaveBeenCalled();
-    expect(sendMock.mock.calls[0][0].to).toEqual(user.email);
-    expect(sendMock.mock.calls[0][0].subject).toEqual('Welcome');
-    expect(sendMock.mock.calls[0][0].html).toContain(
-      'Thank you for setting up your account on http://localhost:3000.',
-    );
+
+    expect(mockSeSClient).toHaveReceivedCommandWith(SendEmailCommand, {
+      FromEmailAddress: 'Doorway <no-reply@housingbayarea.org>',
+      Destination: { ToAddresses: [user.email] },
+      Content: {
+        Simple: {
+          Subject: {
+            Data: 'Welcome',
+          },
+          Body: {
+            Html: {
+              Data: expect.stringContaining(
+                'Thank you for setting up your account on http://localhost:3000.',
+              ),
+            },
+          },
+        },
+      },
+    });
   });
 
   it('testing invite email', async () => {
@@ -105,17 +139,24 @@ describe('Testing email service', () => {
       'http://localhost:3001',
       'http://localhost:3001/?token=',
     );
-    expect(sendMock).toHaveBeenCalled();
-    expect(sendMock.mock.calls[0][0].to).toEqual(user.email);
-    expect(sendMock.mock.calls[0][0].subject).toEqual(
-      'Welcome to the Partners Portal',
-    );
-    expect(sendMock.mock.calls[0][0].html).toContain(
-      'Welcome to the Partners Portal at http://localhost:3001',
-    );
-    expect(sendMock.mock.calls[0][0].html).toContain(
-      'You will now be able to manage listings and applications that you are a part of from one centralized location.',
-    );
+    expect(mockSeSClient).toHaveReceivedCommandWith(SendEmailCommand, {
+      FromEmailAddress: 'Doorway <no-reply@housingbayarea.org>',
+      Destination: { ToAddresses: [user.email] },
+      Content: {
+        Simple: {
+          Subject: {
+            Data: 'Welcome to the Partners Portal',
+          },
+          Body: {
+            Html: {
+              Data: expect.stringMatching(
+                'Welcome to the Partners Portal at http://localhost:300(\n|.)*You will now be able to manage listings and applications that you are a part of from one centralized location',
+              ),
+            },
+          },
+        },
+      },
+    });
   });
 
   it('testing change email', async () => {
@@ -126,18 +167,34 @@ describe('Testing email service', () => {
       'http://localhost:3001/confirmation',
       'newemail@example.com',
     );
-    expect(sendMock).toHaveBeenCalled();
-    expect(sendMock.mock.calls[0][0].to).toEqual('newemail@example.com');
-    expect(sendMock.mock.calls[0][0].subject).toEqual(
-      'Bloom email change request',
-    );
-    expect(sendMock.mock.calls[0][0].html).toContain(
+    expect(mockSeSClient).toHaveReceivedCommandWith(SendEmailCommand, {
+      FromEmailAddress: 'Doorway <no-reply@housingbayarea.org>',
+      Destination: { ToAddresses: ['newemail@example.com'] },
+      Content: {
+        Simple: {
+          Subject: {
+            Data: 'Doorway email change request',
+          },
+          Body: {
+            Html: {
+              Data: expect.anything(),
+            },
+          },
+        },
+      },
+    });
+
+    const html =
+      mockSeSClient.call(0).args[0].input['Content']['Simple']['Body']['Html'][
+        'Data'
+      ];
+    expect(html).toContain(
       'An email address change has been requested for your account.',
     );
-    expect(sendMock.mock.calls[0][0].html).toContain(
+    expect(html).toContain(
       'To confirm the change to your email address, please click the link below:',
     );
-    expect(sendMock.mock.calls[0][0].html).toContain(
+    expect(html).toContain(
       '<a href="http://localhost:3001/confirmation">Confirm email change</a>',
     );
   });
@@ -153,19 +210,36 @@ describe('Testing email service', () => {
       'http://localhost:3001',
       'resetToken',
     );
-    expect(sendMock).toHaveBeenCalled();
-    expect(sendMock.mock.calls[0][0].to).toEqual(user.email);
-    expect(sendMock.mock.calls[0][0].subject).toEqual('Forgot your password?');
-    expect(sendMock.mock.calls[0][0].html).toContain(
-      'A request to reset your Bloom Housing Portal website password for http://localhost:3001 has recently been made.',
+    expect(mockSeSClient).toHaveReceivedCommandWith(SendEmailCommand, {
+      FromEmailAddress: 'Doorway <no-reply@housingbayarea.org>',
+      Destination: { ToAddresses: ['bloom.bloomington@example.com'] },
+      Content: {
+        Simple: {
+          Subject: {
+            Data: 'Forgot your password?',
+          },
+          Body: {
+            Html: {
+              Data: expect.anything(),
+            },
+          },
+        },
+      },
+    });
+    const html =
+      mockSeSClient.call(0).args[0].input['Content']['Simple']['Body']['Html'][
+        'Data'
+      ];
+    expect(html).toContain(
+      'A request to reset your Bloom Housing Portal website password for http://localhost:3001 has recently been made',
     );
-    expect(sendMock.mock.calls[0][0].html).toContain(
+    expect(html).toContain(
       'If you did make this request, please click on the link below to reset your password:',
     );
-    expect(sendMock.mock.calls[0][0].html).toContain(
+    expect(html).toContain(
       '<a href="http://localhost:3001/reset-password?token&#x3D;resetToken">Change my password</a>',
     );
-    expect(sendMock.mock.calls[0][0].html).toContain(
+    expect(html).toContain(
       'Your password won&#x27;t change until you access the link above and create a new one.',
     );
   });
@@ -181,19 +255,36 @@ describe('Testing email service', () => {
       'http://localhost:3001?redirectUrl=redirect&listingId=123',
       'resetToken',
     );
-    expect(sendMock).toHaveBeenCalled();
-    expect(sendMock.mock.calls[0][0].to).toEqual(user.email);
-    expect(sendMock.mock.calls[0][0].subject).toEqual('Forgot your password?');
-    expect(sendMock.mock.calls[0][0].html).toContain(
-      'A request to reset your Bloom Housing Portal website password for http://localhost:3001 has recently been made.',
+    expect(mockSeSClient).toHaveReceivedCommandWith(SendEmailCommand, {
+      FromEmailAddress: 'Doorway <no-reply@housingbayarea.org>',
+      Destination: { ToAddresses: [user.email] },
+      Content: {
+        Simple: {
+          Subject: {
+            Data: 'Forgot your password?',
+          },
+          Body: {
+            Html: {
+              Data: expect.anything(),
+            },
+          },
+        },
+      },
+    });
+    const html =
+      mockSeSClient.call(0).args[0].input['Content']['Simple']['Body']['Html'][
+        'Data'
+      ];
+    expect(html).toContain(
+      'A request to reset your Bloom Housing Portal website password for http://localhost:3001 has recently been made',
     );
-    expect(sendMock.mock.calls[0][0].html).toContain(
+    expect(html).toContain(
       'If you did make this request, please click on the link below to reset your password:',
     );
-    expect(sendMock.mock.calls[0][0].html).toContain(
+    expect(html).toContain(
       '<a href="http://localhost:3001/reset-password?token&#x3D;resetToken&amp;redirectUrl&#x3D;redirect&amp;listingId&#x3D;123">Change my password</a>',
     );
-    expect(sendMock.mock.calls[0][0].html).toContain(
+    expect(html).toContain(
       'Your password won&#x27;t change until you access the link above and create a new one.',
     );
   });
@@ -236,27 +327,40 @@ describe('Testing email service', () => {
         application as ApplicationCreate,
         'http://localhost:3001',
       );
-      expect(sendMock).toHaveBeenCalled();
-      expect(sendMock.mock.calls[0][0].to).toEqual(
-        'applicant.email@example.com',
-      );
-      expect(sendMock.mock.calls[0][0].subject).toEqual(
-        'Your Application Confirmation',
-      );
-      expect(sendMock.mock.calls[0][0].html).toContain(
+      expect(mockSeSClient).toHaveReceivedCommandWith(SendEmailCommand, {
+        FromEmailAddress: 'Doorway <no-reply@housingbayarea.org>',
+        Destination: { ToAddresses: ['applicant.email@example.com'] },
+        Content: {
+          Simple: {
+            Subject: {
+              Data: 'Your Application Confirmation',
+            },
+            Body: {
+              Html: {
+                Data: expect.anything(),
+              },
+            },
+          },
+        },
+      });
+      const html =
+        mockSeSClient.call(0).args[0].input['Content']['Simple']['Body'][
+          'Html'
+        ]['Data'];
+      expect(html).toContain(
         '<td class="step step-complete"><img src="https://res.cloudinary.com/exygy/image/upload/v1652459517/core/step-left-active_vo3fnq.png" alt="indication of step completed" /></td>',
       );
-      expect(sendMock.mock.calls[0][0].html).toContain(
+      expect(html).toContain(
         '<td class="step step-complete"><span class="step-label" aria-current="true">Application <br />received</span></td>',
       );
-      expect(sendMock.mock.calls[0][0].html).toContain('What happens next?');
-      expect(sendMock.mock.calls[0][0].html).toContain(
+      expect(html).toContain('What happens next?');
+      expect(html).toContain(
         'Eligible applicants will be contacted on a first come first serve basis until vacancies are filled.',
       );
-      expect(sendMock.mock.calls[0][0].html).toContain(
+      expect(html).toContain(
         'Housing preferences, if applicable, will affect first come first serve order.',
       );
-      expect(sendMock.mock.calls[0][0].html).toContain(
+      expect(html).toContain(
         'If you are contacted for an interview, you will be asked to fill out a more detailed application and provide supporting documents',
       );
     });
@@ -266,30 +370,43 @@ describe('Testing email service', () => {
         application as ApplicationCreate,
         'http://localhost:3001',
       );
-      expect(sendMock).toHaveBeenCalled();
-      expect(sendMock.mock.calls[0][0].to).toEqual(
-        'applicant.email@example.com',
-      );
-      expect(sendMock.mock.calls[0][0].subject).toEqual(
-        'Your Application Confirmation',
-      );
-      expect(sendMock.mock.calls[0][0].html).toContain(
+      expect(mockSeSClient).toHaveReceivedCommandWith(SendEmailCommand, {
+        FromEmailAddress: 'Doorway <no-reply@housingbayarea.org>',
+        Destination: { ToAddresses: ['applicant.email@example.com'] },
+        Content: {
+          Simple: {
+            Subject: {
+              Data: 'Your Application Confirmation',
+            },
+            Body: {
+              Html: {
+                Data: expect.anything(),
+              },
+            },
+          },
+        },
+      });
+      const html =
+        mockSeSClient.call(0).args[0].input['Content']['Simple']['Body'][
+          'Html'
+        ]['Data'];
+      expect(html).toContain(
         '<td class="step step-complete"><img src="https://res.cloudinary.com/exygy/image/upload/v1652459517/core/step-left-active_vo3fnq.png" alt="indication of step completed" /></td>',
       );
-      expect(sendMock.mock.calls[0][0].html).toContain(
+      expect(html).toContain(
         '<td class="step step-complete"><span class="step-label" aria-current="true">Application <br />received</span></td>',
       );
-      expect(sendMock.mock.calls[0][0].html).toContain('What happens next?');
-      expect(sendMock.mock.calls[0][0].html).toContain(
+      expect(html).toContain('What happens next?');
+      expect(html).toContain(
         'Once the application period closes, eligible applicants will be placed in order based on lottery rank order.',
       );
-      expect(sendMock.mock.calls[0][0].html).toContain(
+      expect(html).toContain(
         'Housing preferences, if applicable, will affect lottery rank order.',
       );
-      expect(sendMock.mock.calls[0][0].html).toContain(
+      expect(html).toContain(
         'If you are contacted for an interview, you will be asked to fill out a more detailed application and provide supporting documents',
       );
-      expect(sendMock.mock.calls[0][0].html).toContain(
+      expect(html).toContain(
         'If you’re not changing the primary applicant or any household members, you can just submit another application.  We’ll take the last one submitted, per the duplicate application policy.',
       );
     });
@@ -299,30 +416,43 @@ describe('Testing email service', () => {
         application as ApplicationCreate,
         'http://localhost:3001',
       );
-      expect(sendMock).toHaveBeenCalled();
-      expect(sendMock.mock.calls[0][0].to).toEqual(
-        'applicant.email@example.com',
-      );
-      expect(sendMock.mock.calls[0][0].subject).toEqual(
-        'Your Application Confirmation',
-      );
-      expect(sendMock.mock.calls[0][0].html).toContain(
+      expect(mockSeSClient).toHaveReceivedCommandWith(SendEmailCommand, {
+        FromEmailAddress: 'Doorway <no-reply@housingbayarea.org>',
+        Destination: { ToAddresses: ['applicant.email@example.com'] },
+        Content: {
+          Simple: {
+            Subject: {
+              Data: 'Your Application Confirmation',
+            },
+            Body: {
+              Html: {
+                Data: expect.anything(),
+              },
+            },
+          },
+        },
+      });
+      const html =
+        mockSeSClient.call(0).args[0].input['Content']['Simple']['Body'][
+          'Html'
+        ]['Data'];
+      expect(html).toContain(
         '<td class="step step-complete"><img src="https://res.cloudinary.com/exygy/image/upload/v1652459517/core/step-left-active_vo3fnq.png" alt="indication of step completed" /></td>',
       );
-      expect(sendMock.mock.calls[0][0].html).toContain(
+      expect(html).toContain(
         '<td class="step step-complete"><span class="step-label" aria-current="true">Application <br />received</span></td>',
       );
-      expect(sendMock.mock.calls[0][0].html).toContain('What happens next?');
-      expect(sendMock.mock.calls[0][0].html).toContain(
+      expect(html).toContain('What happens next?');
+      expect(html).toContain(
         'Eligible applicants will be placed on the waitlist on a first come first serve basis until waitlist spots are filled.',
       );
-      expect(sendMock.mock.calls[0][0].html).toContain(
+      expect(html).toContain(
         'Housing preferences, if applicable, will affect waitlist order.',
       );
-      expect(sendMock.mock.calls[0][0].html).toContain(
+      expect(html).toContain(
         'If you are contacted for an interview, you will be asked to fill out a more detailed application and provide supporting documents',
       );
-      expect(sendMock.mock.calls[0][0].html).toContain(
+      expect(html).toContain(
         'You may be contacted while on the waitlist to confirm that you wish to remain on the waitlist',
       );
     });
@@ -330,7 +460,7 @@ describe('Testing email service', () => {
 
   describe('request approval', () => {
     it('should generate html body', async () => {
-      const emailArr = ['testOne@xample.com', 'testTwo@example.com'];
+      const emailArr = ['testOne@example.com', 'testTwo@example.com'];
       const service = await module.resolve(EmailService);
       await service.requestApproval(
         { name: 'test', id: '1234' },
@@ -338,41 +468,55 @@ describe('Testing email service', () => {
         emailArr,
         'http://localhost:3001',
       );
+      expect(mockSeSClient).toHaveReceivedCommandWith(SendBulkEmailCommand, {
+        FromEmailAddress: 'Doorway <no-reply@housingbayarea.org>',
+        BulkEmailEntries: expect.arrayContaining([
+          { Destination: { ToAddresses: ['testOne@example.com'] } },
+          { Destination: { ToAddresses: ['testTwo@example.com'] } },
+        ]),
+        DefaultContent: {
+          Template: {
+            TemplateContent: {
+              Subject: `Listing approval requested`,
+              Html: expect.anything(),
+            },
+            TemplateData: expect.anything(),
+          },
+        },
+      });
 
-      expect(sendMock).toHaveBeenCalled();
-      const emailMock = sendMock.mock.calls[0][0];
-      expect(emailMock.bcc).toEqual(emailArr);
-      expect(emailMock.subject).toEqual('Listing approval requested');
-      expect(emailMock.html).toMatch(
+      const html =
+        mockSeSClient.call(0).args[0].input['DefaultContent']['Template'][
+          'TemplateContent'
+        ]['Html'];
+      expect(html).toMatch(
         `<img src="https://housingbayarea.mtc.ca.gov/images/doorway-logo.png" alt="Bloom Housing Portal" width="300" height="65" class="header-image"/>`,
       );
 
-      expect(emailMock.html).toMatch('Hello,');
-      expect(emailMock.html).toMatch('Listing approval requested');
-      expect(emailMock.html).toMatch(
+      expect(html).toMatch('Hello,');
+      expect(html).toMatch('Listing approval requested');
+      expect(html).toMatch(
         `A Partner has submitted an approval request to publish the listing name listing.`,
       );
-      expect(emailMock.html).toMatch('Please log into the');
-      expect(emailMock.html).toMatch('Partners Portal');
-      expect(emailMock.html).toMatch(/http:\/\/localhost:3001/);
-      expect(emailMock.html).toMatch(
+      expect(html).toMatch('Please log into the');
+      expect(html).toMatch('Partners Portal');
+      expect(html).toMatch(/http:\/\/localhost:3001/);
+      expect(html).toMatch(
         'and navigate to the listing detail page to review and publish.',
       );
-      expect(emailMock.html).toMatch(
+      expect(html).toMatch(
         'To access the listing after logging in, please click the link below',
       );
-      expect(emailMock.html).toMatch('Review Listing');
-      expect(emailMock.html).toMatch(
-        /http:\/\/localhost:3001\/listings\/listingId/,
-      );
-      expect(emailMock.html).toMatch('Thank you,');
-      expect(emailMock.html).toMatch('Bloom Housing Portal');
+      expect(html).toMatch('Review Listing');
+      expect(html).toMatch(/http:\/\/localhost:3001\/listings\/listingId/);
+      expect(html).toMatch('Thank you,');
+      expect(html).toMatch('Bloom Housing Portal');
     });
   });
 
   describe('changes requested', () => {
     it('should generate html body', async () => {
-      const emailArr = ['testOne@xample.com', 'testTwo@example.com'];
+      const emailArr = ['testOne@example.com', 'testTwo@example.com'];
       const service = await module.resolve(EmailService);
       await service.changesRequested(
         { firstName: 'test', id: '1234' } as User,
@@ -381,43 +525,58 @@ describe('Testing email service', () => {
         'http://localhost:3001',
       );
 
-      expect(sendMock).toHaveBeenCalled();
-      const emailMock = sendMock.mock.calls[0][0];
-      expect(emailMock.bcc).toEqual(emailArr);
-      expect(emailMock.subject).toEqual('Listing changes requested');
-      expect(emailMock.html).toMatch(
+      expect(mockSeSClient).toHaveReceivedCommandWith(SendBulkEmailCommand, {
+        FromEmailAddress: 'Doorway <no-reply@housingbayarea.org>',
+        BulkEmailEntries: expect.arrayContaining([
+          { Destination: { ToAddresses: ['testOne@example.com'] } },
+          { Destination: { ToAddresses: ['testTwo@example.com'] } },
+        ]),
+        DefaultContent: {
+          Template: {
+            TemplateContent: {
+              Subject: `Listing changes requested`,
+              Html: expect.anything(),
+            },
+            TemplateData: expect.anything(),
+          },
+        },
+      });
+
+      const html =
+        mockSeSClient.call(0).args[0].input['DefaultContent']['Template'][
+          'TemplateContent'
+        ]['Html'];
+      expect(html).toMatch(
         `<img src="https://housingbayarea.mtc.ca.gov/images/doorway-logo.png" alt="Bloom Housing Portal" width="300" height="65" class="header-image"/>`,
       );
-      expect(emailMock.html).toMatch('Listing changes requested');
-      expect(emailMock.html).toMatch('Hello,');
-      expect(emailMock.html).toMatch(
+      expect(html).toMatch('Listing changes requested');
+      expect(html).toMatch('Hello,');
+      expect(html).toMatch(
         `An administrator is requesting changes to the listing name listing. Please log into the `,
       );
-      expect(emailMock.html).toMatch('Partners Portal');
-      expect(emailMock.html).toMatch(/http:\/\/localhost:3001/);
+      expect(html).toMatch('Partners Portal');
+      expect(html).toMatch(/http:\/\/localhost:3001/);
 
-      expect(emailMock.html).toMatch(
+      expect(html).toMatch(
         ' and navigate to the listing detail page to view the request and edit the listing.',
       );
-      expect(emailMock.html).toMatch(
+      expect(html).toMatch(
         'and navigate to the listing detail page to view the request and edit the listing.',
       );
-      expect(emailMock.html).toMatch(/http:\/\/localhost:3001/);
-      expect(emailMock.html).toMatch(
+      expect(html).toMatch(/http:\/\/localhost:3001/);
+      expect(html).toMatch(
         'To access the listing after logging in, please click the link below',
       );
-      expect(emailMock.html).toMatch('Edit Listing');
-      expect(emailMock.html).toMatch(
-        /http:\/\/localhost:3001\/listings\/listingId/,
-      );
-      expect(emailMock.html).toMatch('Thank you,');
-      expect(emailMock.html).toMatch('Bloom Housing Portal');
+      expect(html).toMatch('Edit Listing');
+      expect(html).toMatch(/http:\/\/localhost:3001\/listings\/listingId/);
+      expect(html).toMatch('Thank you,');
+      expect(html).toMatch('Bloom Housing Portal');
     });
   });
 
   describe('published listing', () => {
     it('should generate html body', async () => {
-      const emailArr = ['testOne@xample.com', 'testTwo@example.com'];
+      const emailArr = ['testOne@example.com', 'testTwo@example.com'];
       const service = await module.resolve(EmailService);
       await service.listingApproved(
         { name: 'test jurisdiction', id: 'jurisdictionId' },
@@ -426,27 +585,43 @@ describe('Testing email service', () => {
         'http://localhost:3000',
       );
 
-      expect(sendMock).toHaveBeenCalled();
-      const emailMock = sendMock.mock.calls[0][0];
-      expect(emailMock.bcc).toEqual(emailArr);
-      expect(emailMock.subject).toEqual('New published listing');
-      expect(emailMock.html).toMatch(
+      expect(mockSeSClient).toHaveReceivedCommandWith(SendBulkEmailCommand, {
+        FromEmailAddress: 'Doorway <no-reply@housingbayarea.org>',
+        BulkEmailEntries: expect.arrayContaining([
+          { Destination: { ToAddresses: ['testOne@example.com'] } },
+          { Destination: { ToAddresses: ['testTwo@example.com'] } },
+        ]),
+        DefaultContent: {
+          Template: {
+            TemplateContent: {
+              Subject: `New published listing`,
+              Html: expect.anything(),
+            },
+            TemplateData: expect.anything(),
+          },
+        },
+      });
+
+      const html =
+        mockSeSClient.call(0).args[0].input['DefaultContent']['Template'][
+          'TemplateContent'
+        ]['Html'];
+
+      expect(html).toMatch(
         `<img src="https://housingbayarea.mtc.ca.gov/images/doorway-logo.png" alt="Bloom Housing Portal" width="300" height="65" class="header-image"/>`,
       );
-      expect(emailMock.html).toMatch('New published listing');
-      expect(emailMock.html).toMatch('Hello,');
-      expect(emailMock.html).toMatch(
+      expect(html).toMatch('New published listing');
+      expect(html).toMatch('Hello,');
+      expect(html).toMatch(
         `The listing name listing has been approved and published by an administrator.`,
       );
-      expect(emailMock.html).toMatch(
+      expect(html).toMatch(
         'To view the published listing, please click on the link below',
       );
-      expect(emailMock.html).toMatch('View Listing');
-      expect(emailMock.html).toMatch(
-        /http:\/\/localhost:3000\/listing\/listingId/,
-      );
-      expect(emailMock.html).toMatch('Thank you,');
-      expect(emailMock.html).toMatch('Bloom Housing Portal');
+      expect(html).toMatch('View Listing');
+      expect(html).toMatch(/http:\/\/localhost:3000\/listing\/listingId/);
+      expect(html).toMatch('Thank you,');
+      expect(html).toMatch('Bloom Housing Portal');
     });
 
     it('should notify people of listing opportunity', async () => {

@@ -23,7 +23,7 @@ async function bootstrap() {
     // In local development use the built in logger for better readability
     logger:
       process.env.NODE_ENV === 'development'
-        ? ['error', 'warn', 'log', 'debug']
+        ? ['log']
         : WinstonModule.createLogger({
             instance: instance,
           }),
