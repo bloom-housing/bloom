@@ -64,10 +64,20 @@ export default class BooleansFormatter extends Formatter {
       when: this.data.paperApplicationChoice === YesNoEnum.yes,
       falseCase: () => (this.data.paperApplicationChoice === YesNoEnum.no ? false : null),
     })
-    this.processBoolean("lotteryOptIn", {
-      when: this.data.lotteryOptInQuestion === YesNoEnum.yes,
-      falseCase: () => (this.data.lotteryOptInQuestion === YesNoEnum.no ? false : null),
-    })
+
+    if (
+      this.data.reviewOrderQuestion !== "reviewOrderLottery" ||
+      this.data.listingAvailabilityQuestion === "openWaitlist"
+    ) {
+      this.data.lotteryOptIn = null
+    } else {
+      this.processBoolean("lotteryOptIn", {
+        when: this.data.lotteryOptInQuestion === YesNoEnum.yes,
+        falseCase: () => (this.data.lotteryOptInQuestion === YesNoEnum.no ? false : null),
+      })
+      if (this.data.lotteryOptIn === null) delete this.data.lotteryOptIn
+    }
+
     this.processBoolean("includeCommunityDisclaimer", {
       when: this.data.includeCommunityDisclaimerQuestion === YesNoEnum.yes,
       falseCase: () =>
