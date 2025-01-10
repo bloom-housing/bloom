@@ -237,29 +237,6 @@ export class EmailService {
     );
   }
 
-  /* send account update email */
-  async portalAccountUpdate(
-    jurisdictionIds: IdDTO[],
-    user: User,
-    appUrl: string,
-  ) {
-    const jurisdiction = await this.getJurisdiction(jurisdictionIds);
-    void (await this.loadTranslations(jurisdiction, user.language));
-    const emailFromAddress = await this.getEmailToSendFrom(
-      jurisdictionIds,
-      jurisdiction,
-    );
-    await this.send(
-      user.email,
-      emailFromAddress,
-      this.polyglot.t('invite.portalAccountUpdate'),
-      this.template('portal-account-update')({
-        user,
-        appUrl,
-      }),
-    );
-  }
-
   /* send change of email email */
   public async changeEmail(
     jurisdictionName: string,
