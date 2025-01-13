@@ -241,3 +241,19 @@ export const downloadExternalPDF = async (fileURL: string, fileName: string) => 
     console.log(err)
   }
 }
+
+export const oneLineAddress = (address: Address) => {
+  return `${address.street}${address.street2 ? `, ${address.street2}` : ""}, ${address.city}, ${
+    address.state
+  } ${address.zipCode}`
+}
+
+export const multiLineAddress = (address: Address) => {
+  return (
+    <>
+      {address.placeName && <span>{address.placeName}</span>}
+      <span>{`${address.street}${address.street2 ? `, ${address.street2}` : ""}`}</span>
+      <span>{`${address.city}, ${address.state} ${address.zipCode}`}</span>
+    </>
+  )
+}
