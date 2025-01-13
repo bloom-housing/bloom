@@ -294,7 +294,9 @@ export const getExportHeaders = (
         path: 'demographics.race',
         label: 'Race',
         format: (val: string[]): string =>
-          val.map((race) => convertDemographicRaceToReadable(race)).join(','),
+          val
+            ?.map((race) => convertDemographicRaceToReadable(race))
+            .join(',') || '',
       },
       {
         path: 'demographics.gender',
@@ -319,10 +321,10 @@ export const getExportHeaders = (
         label: 'How did you Hear?',
         format: (val: string[]): string =>
           val
-            .map((howDidYouHear) =>
+            ?.map((howDidYouHear) =>
               convertDemographicHowDidYouHearToReadable(howDidYouHear),
             )
-            .join(','),
+            .join(',') || '',
       },
     );
   }

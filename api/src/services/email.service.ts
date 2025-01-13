@@ -687,7 +687,7 @@ export class EmailService {
         if (lotteryEvent.startTime) {
           lotteryDateTime =
             lotteryDateTime +
-            `at ${dayjs(lotteryEvent.startTime)
+            ` at ${dayjs(lotteryEvent.startTime)
               .tz(process.env.TIME_ZONE)
               .format('h:mma z')}`;
         }
