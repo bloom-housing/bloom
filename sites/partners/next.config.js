@@ -42,7 +42,7 @@ module.exports = withBundleAnalyzer(
       backendProxyBase: BACKEND_PROXY_BASE,
       listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
       idleTimeout: process.env.IDLE_TIMEOUT,
-      showSmsMfa: (process.env.SHOW_SMS_MFA || "TRUE") === "TRUE", // SMS on by default
+      showSmsMfa: (process.env.SHOW_SMS_MFA || "FALSE") === "TRUE", // SMS off by default
       cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
       cloudinaryKey: process.env.CLOUDINARY_KEY,
       cloudinarySignedPreset: process.env.CLOUDINARY_SIGNED_PRESET,
