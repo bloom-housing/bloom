@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from "react"
+import React, { useContext, useMemo, useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Field, Textarea, FieldGroup } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
@@ -15,7 +15,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
   const formMethods = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, errors, clearErrors } = formMethods
+  const { register, watch, errors, clearErrors, setValue } = formMethods
 
   const jurisdiction = watch("jurisdictions.id")
 
@@ -34,6 +34,13 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
     "enableUtilitiesIncluded",
     jurisdiction
   )
+
+  useEffect(() => {
+    // clear the utilities values if the new jurisdiction doesn't have utilities included functionality
+    if (!enableUtilitiesIncluded) {
+      setValue("utilities", undefined)
+    }
+  }, [enableUtilitiesIncluded, setValue])
 
   return (
     <>
