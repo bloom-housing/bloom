@@ -42,47 +42,49 @@ const ApplicationTerms = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
-    setSubmitting(true)
-    const acceptedTerms = data.agree === "agree"
-    conductor.currentStep.save({ acceptedTerms })
-    application.acceptedTerms = acceptedTerms
-    application.completedSections = 6
+    if (!submitting) {
+      setSubmitting(true)
+      const acceptedTerms = data.agree === "agree"
+      conductor.currentStep.save({ acceptedTerms })
+      application.acceptedTerms = acceptedTerms
+      application.completedSections = 6
 
-    if (application?.programs?.length) {
-      untranslateMultiselectQuestion(application.programs, listing)
-    }
-    if (application?.preferences?.length) {
-      untranslateMultiselectQuestion(application.preferences, listing)
-    }
+      if (application?.programs?.length) {
+        untranslateMultiselectQuestion(application.programs, listing)
+      }
+      if (application?.preferences?.length) {
+        untranslateMultiselectQuestion(application.preferences, listing)
+      }
 
-    applicationsService
-      .submit({
-        body: {
-          ...application,
-          reviewStatus: ApplicationReviewStatusEnum.pending,
-          listings: {
-            id: listing.id,
-          },
-          appUrl: window.location.origin,
-          ...(profile && {
-            user: {
-              id: profile.id,
+      applicationsService
+        .submit({
+          body: {
+            ...application,
+            reviewStatus: ApplicationReviewStatusEnum.pending,
+            listings: {
+              id: listing.id,
             },
-          }),
-          // TODO remove this once this call is changed to the new backend
-        },
-      })
-      .then((result) => {
-        conductor.currentStep.save({ confirmationCode: result.confirmationCode })
-        return router.push("/applications/review/confirmation")
-      })
-      .catch((err) => {
-        setSubmitting(false)
-        setApiError(true)
-        window.scrollTo(0, 0)
-        console.error(`Error creating application: ${err}`)
-        throw err
-      })
+            appUrl: window.location.origin,
+            ...(profile && {
+              user: {
+                id: profile.id,
+              },
+            }),
+            // TODO remove this once this call is changed to the new backend
+          },
+        })
+        .then((result) => {
+          conductor.currentStep.save({ confirmationCode: result.confirmationCode })
+          return router.push("/applications/review/confirmation")
+        })
+        .catch((err) => {
+          setSubmitting(false)
+          setApiError(true)
+          window.scrollTo(0, 0)
+          console.error(`Error creating application: ${err}`)
+          throw err
+        })
+    }
   }
 
   const agreeField = [
@@ -118,6 +120,12 @@ const ApplicationTerms = () => {
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
     })
   }, [profile])
+
+  useEffect(() => {
+    if (application.confirmationCode) {
+      void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
+    }
+  }, [application])
 
   return (
     <FormsLayout>
