@@ -3,20 +3,32 @@ import { fireEvent, render, within } from "@testing-library/react"
 import { DetailUnits } from "../../../../../src/components/listings/PaperListingDetails/sections/DetailUnits"
 import { ListingContext } from "../../../../../src/components/listings/ListingContext"
 import { listing, unit } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  HomeTypeEnum,
+  ReviewOrderTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 
 describe("DetailUnits", () => {
   it("should render the detail units when no units exist", () => {
     const results = render(
-      <ListingContext.Provider
+      <AuthContext.Provider
         value={{
-          ...listing,
-          reviewOrderType: ReviewOrderTypeEnum.waitlist,
-          units: [],
+          doJurisdictionsHaveFeatureFlagOn: () => {
+            return false
+          },
         }}
       >
-        <DetailUnits setUnitDrawer={jest.fn()} />
-      </ListingContext.Provider>
+        <ListingContext.Provider
+          value={{
+            ...listing,
+            reviewOrderType: ReviewOrderTypeEnum.waitlist,
+            units: [],
+          }}
+        >
+          <DetailUnits setUnitDrawer={jest.fn()} />
+        </ListingContext.Provider>
+      </AuthContext.Provider>
     )
 
     // Above the table
@@ -27,6 +39,7 @@ describe("DetailUnits", () => {
     expect(results.getByText("Individual Units")).toBeInTheDocument()
     expect(results.getByText("What is the listing availability?")).toBeInTheDocument()
     expect(results.getByText("Open Waitlist")).toBeInTheDocument()
+    expect(results.queryAllByText("Home Type")).toHaveLength(0)
 
     // Table
     expect(results.getByText("None")).toBeInTheDocument()
@@ -35,15 +48,23 @@ describe("DetailUnits", () => {
   it("should render the detail units", () => {
     const callUnitDrawer = jest.fn()
     const results = render(
-      <ListingContext.Provider
+      <AuthContext.Provider
         value={{
-          ...listing,
-          reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
-          disableUnitsAccordion: true,
+          doJurisdictionsHaveFeatureFlagOn: () => {
+            return false
+          },
         }}
       >
-        <DetailUnits setUnitDrawer={callUnitDrawer} />
-      </ListingContext.Provider>
+        <ListingContext.Provider
+          value={{
+            ...listing,
+            reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+            disableUnitsAccordion: true,
+          }}
+        >
+          <DetailUnits setUnitDrawer={callUnitDrawer} />
+        </ListingContext.Provider>
+      </AuthContext.Provider>
     )
 
     // Above the table
@@ -74,5 +95,61 @@ describe("DetailUnits", () => {
 
     fireEvent.click(within(action).getByText("View"))
     expect(callUnitDrawer).toBeCalledWith(unit)
+  })
+
+  describe("Home Type", () => {
+    it("should render the home type if enabled", () => {
+      const callUnitDrawer = jest.fn()
+      const results = render(
+        <AuthContext.Provider
+          value={{
+            doJurisdictionsHaveFeatureFlagOn: () => {
+              return true
+            },
+          }}
+        >
+          <ListingContext.Provider
+            value={{
+              ...listing,
+              reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+              disableUnitsAccordion: true,
+              homeType: HomeTypeEnum.apartment,
+            }}
+          >
+            <DetailUnits setUnitDrawer={callUnitDrawer} />
+          </ListingContext.Provider>
+        </AuthContext.Provider>
+      )
+
+      expect(results.getByText("Listing Units")).toBeInTheDocument()
+      expect(results.getByText("Home Type")).toBeInTheDocument()
+      expect(results.getByText("Apartment")).toBeInTheDocument()
+    })
+    it("should render 'none' home type if enabled and no home type set", () => {
+      const callUnitDrawer = jest.fn()
+      const results = render(
+        <AuthContext.Provider
+          value={{
+            doJurisdictionsHaveFeatureFlagOn: () => {
+              return true
+            },
+          }}
+        >
+          <ListingContext.Provider
+            value={{
+              ...listing,
+              reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+              disableUnitsAccordion: true,
+            }}
+          >
+            <DetailUnits setUnitDrawer={callUnitDrawer} />
+          </ListingContext.Provider>
+        </AuthContext.Provider>
+      )
+
+      expect(results.getByText("Listing Units")).toBeInTheDocument()
+      expect(results.getByText("Home Type")).toBeInTheDocument()
+      expect(results.getByText("None")).toBeInTheDocument()
+    })
   })
 })

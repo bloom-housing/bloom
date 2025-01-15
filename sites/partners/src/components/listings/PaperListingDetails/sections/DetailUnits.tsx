@@ -13,7 +13,7 @@ type DetailUnitsProps = {
 
 const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
   const listing = useContext(ListingContext)
-  const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   const unitTableHeaders = {
     number: "listings.unit.number",
