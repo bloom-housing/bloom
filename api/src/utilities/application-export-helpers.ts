@@ -371,7 +371,7 @@ export const constructMultiselectQuestionHeaders = (
         ?.filter((option) => option.collectAddress)
         .forEach((option) => {
           headers.push({
-            path: `${applicationSection}.${question.text}.address`,
+            path: `${applicationSection}.${question.text}.${option.text}.address`,
             label: `${labelString} ${question.text} - ${option.text} - Address`,
             format: (val: ApplicationMultiselectQuestion): string => {
               return multiselectQuestionFormat(val, option.text, 'address');
