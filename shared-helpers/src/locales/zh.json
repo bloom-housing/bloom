@@ -576,6 +576,7 @@
   "listings.allUnits": "所有單位",
   "listings.allUnitsReservedFor": "保留給 %{type} 的所有單位",
   "listings.annualIncome": "每年 %{income}",
+  "listings.applicationAlreadySubmitted": "您已經提交了此清單的申請。",
   "listings.applicationDeadline": "申請截止日期",
   "listings.applicationFCFS": "先申請先服務",
   "listings.applicationFee": "申請費",

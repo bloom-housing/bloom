@@ -571,6 +571,7 @@
   "listings.allUnits": "All Units",
   "listings.allUnitsReservedFor": "All units reserved for %{type}",
   "listings.annualIncome": "%{income} per year",
+  "listings.applicationAlreadySubmitted": "You have already submitted an application for this listing.",
   "listings.applicationDeadline": "Application Due Date",
   "listings.applicationFCFS": "First Come First Serve",
   "listings.applicationFee": "Application Fee",

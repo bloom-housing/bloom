@@ -576,6 +576,7 @@
   "listings.allUnits": "Lahat ng Unit",
   "listings.allUnitsReservedFor": "Ang lahat ng unit ay nakareserba para sa %{type}",
   "listings.annualIncome": "%{income} kada taon",
+  "listings.applicationAlreadySubmitted": "Nagsumite ka na ng aplikasyon para sa listahang ito.",
   "listings.applicationDeadline": "Due Date ng Application",
   "listings.applicationFCFS": "Kung Sino Ang Mauna Ay Siyang Makakakuha",
   "listings.applicationFee": "Bayad sa Application",

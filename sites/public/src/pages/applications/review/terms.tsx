@@ -10,6 +10,7 @@ import {
   pushGtmEvent,
   AuthContext,
   listingSectionQuestions,
+  useToastyRef,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
@@ -27,6 +28,7 @@ const ApplicationTerms = () => {
   const router = useRouter()
   const { conductor, application, listing } = useFormConductor("terms")
   const { applicationsService, profile } = useContext(AuthContext)
+  const toastyRef = useToastyRef()
   const [apiError, setApiError] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
@@ -42,7 +44,8 @@ const ApplicationTerms = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
-    if (!submitting) {
+    // blocks multiple clicks and previously submitted applications
+    if (!submitting && !application.confirmationCode) {
       setSubmitting(true)
       const acceptedTerms = data.agree === "agree"
       conductor.currentStep.save({ acceptedTerms })
@@ -114,18 +117,22 @@ const ApplicationTerms = () => {
   }, [listing])
 
   useEffect(() => {
+    if (application.confirmationCode && router.isReady) {
+      const { addToast } = toastyRef.current
+      addToast(t("listings.applicationAlreadySubmitted"), { variant: "alert" })
+      profile
+        ? void router.push(`/${router.locale}/account/applications`)
+        : void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
+    }
+  }, [application, router, profile])
+
+  useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
       pageTitle: "Application - Terms",
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
     })
   }, [profile])
-
-  useEffect(() => {
-    if (application.confirmationCode) {
-      void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
-    }
-  }, [application])
 
   return (
     <FormsLayout>

@@ -576,6 +576,7 @@
   "listings.allUnits": "Tất cả các Căn nhà",
   "listings.allUnitsReservedFor": "Tất cả các căn nhà được dành cho %{type}",
   "listings.annualIncome": "%{income} mỗi năm",
+  "listings.applicationAlreadySubmitted": "Bạn đã nộp đơn đăng ký cho danh sách này.",
   "listings.applicationDeadline": "Hạn nộp Đơn ghi danh",
   "listings.applicationFCFS": "Ai Nộp đơn Trước Được Nhận trước",
   "listings.applicationFee": "Lệ phí Ghi danh",

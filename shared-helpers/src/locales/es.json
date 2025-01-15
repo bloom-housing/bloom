@@ -580,6 +580,7 @@
   "listings.allUnits": "Todas las viviendas",
   "listings.allUnitsReservedFor": "Todas las viviendas reservadas para %{type}",
   "listings.annualIncome": "%{income} al año",
+  "listings.applicationAlreadySubmitted": "Ya ha enviado una solicitud para este listado.",
   "listings.applicationDeadline": "Fecha límite de solicitud",
   "listings.applicationFCFS": "Atención por orden de llegada",
   "listings.applicationFee": "Cargo de solicitud",
