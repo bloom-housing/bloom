@@ -16,7 +16,7 @@ const LeasingAgent = () => {
   const [phoneField, setPhoneField] = useState(leasingAgentPhoneField)
 
   const getErrorMessage = (fieldKey: string) => {
-    if (fieldHasError(errors?.leasingAgentAddress) && !getValues(fieldKey)) {
+    if (fieldHasError(errors?.listingsLeasingAgentAddress) && !getValues(fieldKey)) {
       return t("errors.partialAddress")
     }
   }
