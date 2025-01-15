@@ -353,6 +353,7 @@ describe('Listing Controller Tests', () => {
       communityDisclaimerDescription: shouldIncludeCommunityDisclaimer
         ? 'example description'
         : undefined,
+      homeType: 'apartment',
     };
   };
 

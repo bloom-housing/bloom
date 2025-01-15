@@ -1,6 +1,7 @@
 import React, { useContext, useMemo } from "react"
 import { t, MinimalTable } from "@bloom-housing/ui-components"
 import { Button, FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "../../ListingContext"
 import { UnitDrawer } from "../DetailsUnitDrawer"
 import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -12,6 +13,7 @@ type DetailUnitsProps = {
 
 const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
   const listing = useContext(ListingContext)
+  const { profile } = useContext(AuthContext)
 
   const unitTableHeaders = {
     number: "listings.unit.number",
@@ -58,8 +60,20 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
     return t("t.none")
   }, [listing])
 
+  const enableHomeType =
+    profile?.jurisdictions
+      ?.find((j) => j.id === listing.jurisdictions.id)
+      ?.featureFlags?.find((flag) => flag.name === "homeType")?.active || false
+
   return (
     <SectionWithGrid heading={t("listings.units")} inset>
+      {enableHomeType && (
+        <Grid.Row>
+          <FieldValue id="homeType" label={t("listings.homeType")}>
+            {listing.homeType ? t(`homeType.${listing.homeType}`) : t("t.none")}
+          </FieldValue>
+        </Grid.Row>
+      )}
       <Grid.Row>
         <FieldValue
           id="unitTypesOrIndividual"

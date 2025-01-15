@@ -38,6 +38,7 @@ import {
 } from './seed-helpers/map-layer-factory';
 import { ValidationMethod } from '../src/enums/multiselect-questions/validation-method-enum';
 import { householdMemberFactorySingle } from './seed-helpers/household-member-factory';
+import { featureFlagFactory } from './seed-helpers/feature-flag-factory';
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
@@ -53,6 +54,12 @@ export const stagingSeed = async (
   });
   const sanJoseJurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('San Jose'),
+  });
+  // Seed feature flags
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory('homeType', true, 'Home Type feature', [
+      jurisdiction.id,
+    ]),
   });
   // create admin user
   await prismaClient.userAccounts.create({
