@@ -585,7 +585,7 @@
   "listings.applicationPerApplicantAgeDescription": "mỗi ứng viên từ 18 tuổi trở lên",
   "listings.applications": "Đơn đăng ký",
   "listings.applicationsClosed": "Ngừng nhận Đơn ghi danh",
-  "listings.applicationsClosedRedirect": "Danh sách này không còn chấp nhận các ứng dụng.",
+  "listings.applicationsClosedRedirect": "Đơn này đã được nộp rồi.",
   "listings.apply.applicationWillBeAvailableOn": "Đơn ghi danh sẽ có sẵn để tải xuống và tới nhận vào %{openDate}",
   "listings.apply.applyOnline": "Ghi danh Trực tuyến",
   "listings.apply.downloadApplication": "Tải xuống Đơn ghi danh",

@@ -574,7 +574,7 @@
   "listings.annualIncome": "٪ {الدخل} في السنة",
   "listings.annualIncomeRange": "٪ {from} إلى٪ {to} سنويًا",
   "listings.applicationAddress": "تبوك",
-  "listings.applicationAlreadySubmitted": "لقد قمت بالفعل بتقديم طلب للحصول على هذه القائمة.",
+  "listings.applicationAlreadySubmitted": "لقد تم تقديم هذا الطلب بالفعل.",
   "listings.applicationDeadline": "تاريخ استحقاق الطلب",
   "listings.applicationDropOffQuestion": "هل يمكن إسقاط الطلبات؟",
   "listings.applicationDueTime": "وقت التقديم",

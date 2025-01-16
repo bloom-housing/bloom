@@ -589,7 +589,7 @@
   "listings.applicationPerApplicantAgeDescription": "por solicitante de 18 años o más",
   "listings.applications": "Solicitudes",
   "listings.applicationsClosed": "Solicitudes cerradas",
-  "listings.applicationsClosedRedirect": "Esta lista ya no acepta solicitudes.",
+  "listings.applicationsClosedRedirect": "Esta solicitud ya ha sido enviada.",
   "listings.apply.applicationWillBeAvailableOn": "La solicitud podrá ser descargada y recogida el %{openDate}",
   "listings.apply.applyOnline": "Haga su solicitud por Internet",
   "listings.apply.downloadApplication": "Descargar la Solicitud",

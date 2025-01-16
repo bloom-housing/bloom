@@ -585,7 +585,7 @@
   "listings.applicationPerApplicantAgeDescription": "每位年滿 18 歲的申請人",
   "listings.applications": "申請",
   "listings.applicationsClosed": "申請期限已經結束",
-  "listings.applicationsClosedRedirect": "此房源不再接受申请。",
+  "listings.applicationsClosedRedirect": "此申請已經提交。",
   "listings.apply.applicationWillBeAvailableOn": "申請表將可供下載，亦可在 %{openDate} 領取",
   "listings.apply.applyOnline": "線上申請",
   "listings.apply.downloadApplication": "下載申請表",
