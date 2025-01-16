@@ -122,9 +122,9 @@ const ApplicationTerms = () => {
       addToast(t("listings.applicationAlreadySubmitted"), { variant: "alert" })
       profile
         ? void router.push(`/${router.locale}/account/applications`)
-        : void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
+        : void router.push(`/${router.locale}/listing/${listing.id}/${listing.urlSlug}`)
     }
-  }, [application, router, profile])
+  }, [application, listing, profile, router, toastyRef])
 
   useEffect(() => {
     pushGtmEvent<PageView>({
