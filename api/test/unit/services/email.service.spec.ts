@@ -16,6 +16,7 @@ import { yellowstoneAddress } from '../../../prisma/seed-helpers/address-factory
 import { Application } from '../../../src/dtos/applications/application.dto';
 import { User } from '../../../src/dtos/users/user.dto';
 import { ApplicationCreate } from '../../../src/dtos/applications/application-create.dto';
+import { Logger } from '@nestjs/common';
 
 let sendMock;
 const translationServiceMock = {
@@ -40,6 +41,7 @@ describe('Testing email service', () => {
       imports: [ConfigModule],
       providers: [
         EmailService,
+        Logger,
         SendGridService,
         MailService,
         {

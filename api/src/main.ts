@@ -13,7 +13,7 @@ async function bootstrap() {
     logger:
       process.env.NODE_ENV === 'development'
         ? ['error', 'warn', 'log', 'debug']
-        : ['error', 'warn'],
+        : ['error', 'warn', 'log'],
   });
   const allowList = process.env.CORS_ORIGINS || [];
   const allowListRegex = process.env.CORS_REGEX

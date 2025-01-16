@@ -210,7 +210,7 @@ export class UserService {
         confirmationToken,
       );
 
-      this.emailService.changeEmail(
+      await this.emailService.changeEmail(
         dto.jurisdictions && dto.jurisdictions[0]
           ? dto.jurisdictions[0].name
           : jurisdictionName,
@@ -373,7 +373,7 @@ export class UserService {
           dto.appUrl,
           confirmationToken,
         );
-        this.emailService.welcome(
+        await this.emailService.welcome(
           storedUser.jurisdictions && storedUser.jurisdictions.length
             ? storedUser.jurisdictions[0].name
             : null,
@@ -386,7 +386,7 @@ export class UserService {
           dto.appUrl,
           confirmationToken,
         );
-        this.emailService.invitePartnerUser(
+        await this.emailService.invitePartnerUser(
           storedUser.jurisdictions,
           storedUser as unknown as User,
           dto.appUrl,
@@ -445,7 +445,7 @@ export class UserService {
         id: storedUser.id,
       },
     });
-    this.emailService.forgotPassword(
+    await this.emailService.forgotPassword(
       storedUser.jurisdictions,
       mapTo(User, storedUser),
       dto.appUrl,
@@ -718,7 +718,7 @@ export class UserService {
           dto.appUrl,
           confirmationToken,
         );
-        this.emailService.welcome(
+        await this.emailService.welcome(
           jurisdictionName,
           mapTo(User, newUser),
           dto.appUrl,
@@ -730,7 +730,7 @@ export class UserService {
         this.configService.get('PARTNERS_PORTAL_URL'),
         confirmationToken,
       );
-      this.emailService.invitePartnerUser(
+      await this.emailService.invitePartnerUser(
         dto.jurisdictions,
         mapTo(User, newUser),
         this.configService.get('PARTNERS_PORTAL_URL'),
