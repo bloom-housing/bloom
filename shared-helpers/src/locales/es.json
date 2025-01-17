@@ -791,6 +791,7 @@
   "pageDescription.additionalResources": "Le recomendamos que busque más viviendas económicas.",
   "pageDescription.listing": "Haga su solicitud de vivienda de precio accesible en %{listingName} en %{regionName}, construida en sociedad con Exygy.",
   "pageDescription.welcome": "Busque y haga su solicitud de vivienda de precio accesible en el Portal de vivienda de %{regionName}",
+  "pageTitle.accessibilityStatement": "Declaración de Accesibilidad",
   "pageTitle.additionalResources": "Más oportunidades de vivienda",
   "pageTitle.disclaimer": "Exenciones de respaldos",
   "pageTitle.getAssistance": "Obtener asistencia",

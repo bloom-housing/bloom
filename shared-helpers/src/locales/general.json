@@ -782,6 +782,7 @@
   "pageDescription.additionalResources": "We encourage you to browse other affordable housing resources.",
   "pageDescription.listing": "Apply for affordable housing at %{listingName} in %{regionName}, built in partnership with Exygy.",
   "pageDescription.welcome": "Search and apply for affordable housing on %{regionName}'s Housing Portal",
+  "pageTitle.accessibilityStatement": "Accessibility Statement",
   "pageTitle.additionalResources": "More Housing Opportunities",
   "pageTitle.disclaimer": "Disclaimer",
   "pageTitle.getAssistance": "Get Assistance",

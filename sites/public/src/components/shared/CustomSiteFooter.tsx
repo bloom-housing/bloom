@@ -38,6 +38,7 @@ const CustomSiteFooter = () => {
             <Link href="/">{t("footer.contact")}</Link>
             <Link href="/privacy">{t("pageTitle.privacy")}</Link>
             <Link href="/disclaimer">{t("pageTitle.disclaimer")}</Link>
+            <Link href="/accessibility">{t("pageTitle.accessibilityStatement")}</Link>
           </div>
         </div>
       </div>
