@@ -8,7 +8,7 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const DetailBuildingFeatures = () => {
   const listing = useContext(ListingContext)
-  const { profile } = useContext(AuthContext)
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   const getAccessibilityFeatures = () => {
     let featuresExist = false
@@ -25,9 +25,10 @@ const DetailBuildingFeatures = () => {
     return featuresExist ? features : <>{t("t.none")}</>
   }
 
-  const enableAccessibilityFeatures = profile?.jurisdictions?.find(
-    (j) => j.id === listing.jurisdictions.id
-  )?.enableAccessibilityFeatures
+  const enableAccessibilityFeatures = doJurisdictionsHaveFeatureFlagOn(
+    "enableAccessibilityFeatures",
+    listing.jurisdictions.id
+  )
 
   return (
     <SectionWithGrid heading={t("listings.sections.buildingFeaturesTitle")} inset>
@@ -69,7 +70,7 @@ const DetailBuildingFeatures = () => {
 
       {!enableAccessibilityFeatures ? null : (
         <Grid.Row>
-          <FieldValue label={"Accessibility Features"}>
+          <FieldValue id="accessibilityFeatures" label={"Accessibility Features"}>
             <ul className={"flex flex-wrap"}>{getAccessibilityFeatures()}</ul>
           </FieldValue>
         </Grid.Row>

@@ -76,19 +76,21 @@ export default class AdditionalMetadataFormatter extends Formatter {
       this.data.reviewOrderType = ReviewOrderTypeEnum.waitlist
     }
 
-    if (this.data.listingFeatures) {
+    if (this.data.accessibilityFeatures) {
       this.data.listingFeatures = listingFeatures.reduce((acc, current) => {
+        const isSelected = this.data.accessibilityFeatures.some((feature) => feature === current)
         return {
           ...acc,
-          [current]: this.data.listingFeatures && this.data.listingFeatures[current],
+          [current]: isSelected,
         }
       }, {})
     }
-    if (this.data.listingUtilities) {
+    if (this.data.utilities) {
       this.data.listingUtilities = listingUtilities.reduce((acc, current) => {
+        const isSelected = this.data.utilities.some((utility) => utility === current)
         return {
           ...acc,
-          [current]: this.data.listingUtilities && this.data.listingUtilities[current],
+          [current]: isSelected,
         }
       }, {})
     }
