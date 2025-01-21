@@ -558,7 +558,10 @@ export const ListingView = (props: ListingProps) => {
     return featuresExist ? <ul>{features}</ul> : null
   }
 
-  const accessibilityFeatures = getAccessibilityFeatures()
+  const enableAccessibilityFeatures = props.jurisdiction.featureFlags?.some(
+    (flag) => flag.name === "enableAccessibilityFeatures" && flag.active
+  )
+  const accessibilityFeatures = enableAccessibilityFeatures ? getAccessibilityFeatures() : null
 
   const getUtilitiesIncluded = () => {
     let utilitiesExist = false
@@ -593,7 +596,10 @@ export const ListingView = (props: ListingProps) => {
 
   const getFooterContent = () => {
     const footerContent: (string | React.ReactNode)[] = []
-    if (props.jurisdiction.enableUtilitiesIncluded) {
+    const enableUtilitiesIncluded = props.jurisdiction.featureFlags?.some(
+      (flag) => flag.name === "enableUtilitiesIncluded" && flag.active
+    )
+    if (enableUtilitiesIncluded) {
       const utilitiesDisplay = getUtilitiesIncluded()
       if (utilitiesDisplay) footerContent.push(utilitiesDisplay)
     }
@@ -960,7 +966,7 @@ export const ListingView = (props: ListingProps) => {
               {listing.servicesOffered && (
                 <Description term={t("t.servicesOffered")} description={listing.servicesOffered} />
               )}
-              {accessibilityFeatures && props.jurisdiction?.enableAccessibilityFeatures && (
+              {accessibilityFeatures && (
                 <Description term={t("t.accessibility")} description={accessibilityFeatures} />
               )}
               {listing.accessibility && (

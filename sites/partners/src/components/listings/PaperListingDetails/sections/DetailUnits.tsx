@@ -13,7 +13,7 @@ type DetailUnitsProps = {
 
 const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
   const listing = useContext(ListingContext)
-  const { profile } = useContext(AuthContext)
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   const unitTableHeaders = {
     number: "listings.unit.number",
@@ -60,10 +60,7 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
     return t("t.none")
   }, [listing])
 
-  const enableHomeType =
-    profile?.jurisdictions
-      ?.find((j) => j.id === listing.jurisdictions.id)
-      ?.featureFlags?.find((flag) => flag.name === "homeType")?.active || false
+  const enableHomeType = doJurisdictionsHaveFeatureFlagOn("homeType", listing.jurisdictions.id)
 
   return (
     <SectionWithGrid heading={t("listings.units")} inset>

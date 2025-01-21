@@ -5183,12 +5183,6 @@ export interface JurisdictionCreate {
   enableGeocodingRadiusMethod?: boolean
 
   /**  */
-  enableAccessibilityFeatures: boolean
-
-  /**  */
-  enableUtilitiesIncluded: boolean
-
-  /**  */
   allowSingleUseCodeLogin: boolean
 
   /**  */
@@ -5234,12 +5228,6 @@ export interface JurisdictionUpdate {
 
   /**  */
   enableGeocodingRadiusMethod?: boolean
-
-  /**  */
-  enableAccessibilityFeatures: boolean
-
-  /**  */
-  enableUtilitiesIncluded: boolean
 
   /**  */
   allowSingleUseCodeLogin: boolean
@@ -5319,12 +5307,6 @@ export interface Jurisdiction {
 
   /**  */
   enableGeocodingRadiusMethod?: boolean
-
-  /**  */
-  enableAccessibilityFeatures: boolean
-
-  /**  */
-  enableUtilitiesIncluded: boolean
 
   /**  */
   allowSingleUseCodeLogin: boolean
