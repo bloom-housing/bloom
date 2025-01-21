@@ -22,6 +22,36 @@ export type ListingsMapMarkersProps = {
   isDesktop: boolean
 }
 
+export const fitBounds = (
+  map: google.maps.Map,
+  mapMarkers: MapMarkerData[],
+  continueIfEmpty?: boolean
+) => {
+  const bounds = new window.google.maps.LatLngBounds()
+
+  if (!map) return
+  mapMarkers?.map((marker) => {
+    bounds.extend({
+      lat: marker.coordinate.lat,
+      lng: marker.coordinate.lng,
+    })
+  })
+
+  const visibleMarkers = mapMarkers?.filter((marker) =>
+    map.getBounds()?.contains(marker.coordinate)
+  )
+
+  if (!continueIfEmpty && visibleMarkers.length === 0) {
+    return
+  } else {
+    map.fitBounds(bounds, document.getElementById("listings-map").clientWidth * 0.05)
+    if (visibleMarkers.length === 1) {
+      const zoomLevel = getBoundsZoomLevel(bounds)
+      map.setZoom(zoomLevel - 7)
+    }
+  }
+}
+
 // Zoom in slowly by recursively setting the zoom level
 const animateZoom = (
   map: google.maps.Map,
@@ -166,30 +196,17 @@ export const MapClusterer = ({
     clusterer.clearMarkers()
     clusterer.addMarkers(Object.values(markers))
 
-    const bounds = new window.google.maps.LatLngBounds()
-
     if (!map) return
-    mapMarkers?.map((marker) => {
-      bounds.extend({
-        lat: marker.coordinate.lat,
-        lng: marker.coordinate.lng,
-      })
-    })
 
     // Only automatically size the map to fit all pins on first map load
     if (isFirstBoundsLoad === false) return
-    const visibleMarkers = mapMarkers?.filter((marker) =>
-      map.getBounds()?.contains(marker.coordinate)
-    )
 
-    if (visibleMarkers.length === 0) {
-      return
-    } else {
-      map.fitBounds(bounds, document.getElementById("listings-map").clientWidth * 0.05)
-      setTimeout(() => {
-        setIsFirstBoundsLoad(false)
-      }, 1000)
-    }
+    fitBounds(map, mapMarkers)
+
+    setTimeout(() => {
+      setIsFirstBoundsLoad(false)
+    }, 1000)
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clusterer, markers, currentMapMarkers])
 
