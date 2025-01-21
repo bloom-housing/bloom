@@ -111,7 +111,7 @@ describe('Testing application export service', () => {
       '"application 0 firstName","application 0 middleName","application 0 lastName","application 0 birthDay","application 0 birthMonth","application 0 birthYear","application 0 emailaddress","application 0 phoneNumber","application 0 phoneNumberType","additionalPhoneNumber 0",,"application 0 applicantAddress street","application 0 applicantAddress street2","application 0 applicantAddress city","application 0 applicantAddress state","application 0 applicantAddress zipCode",,,,,,"application 0 applicantWorkAddress street","application 0 applicantWorkAddress street2","application 0 applicantWorkAddress city","application 0 applicantWorkAddress state","application 0 applicantWorkAddress zipCode",,,,,,,,,,,,,"income 0","per month",,,,"true","true","true","Studio,One Bedroom",,,,,,,,,,,,,,,,,,,,';
 
     const mockedStream = new PassThrough();
-    exportResponse.getStream().pipe(mockedStream);
+    exportResponse.pipe(mockedStream);
 
     // In order to make sure the last expect statements are properly hit we need to wrap in a promise and resolve it
     const readable = await new Promise((resolve) => {
@@ -170,7 +170,7 @@ describe('Testing application export service', () => {
       '"application 0 firstName","application 0 middleName","application 0 lastName","application 0 birthDay","application 0 birthMonth","application 0 birthYear","application 0 emailaddress","application 0 phoneNumber","application 0 phoneNumberType","additionalPhoneNumber 0",,"application 0 applicantAddress street","application 0 applicantAddress street2","application 0 applicantAddress city","application 0 applicantAddress state","application 0 applicantAddress zipCode",,,,,,"application 0 applicantWorkAddress street","application 0 applicantWorkAddress street2","application 0 applicantWorkAddress city","application 0 applicantWorkAddress state","application 0 applicantWorkAddress zipCode",,,,,,,,,,,,,"income 0","per month",,,,"true","true","true","Studio,One Bedroom",,,,,,,"Decline to Respond",';
 
     const mockedStream = new PassThrough();
-    exportResponse.getStream().pipe(mockedStream);
+    exportResponse.pipe(mockedStream);
     const readable = await new Promise((resolve) => {
       mockedStream.on('data', async (d) => {
         const value = Buffer.from(d).toString();
@@ -233,7 +233,7 @@ describe('Testing application export service', () => {
     );
 
     const mockedStream = new PassThrough();
-    exportResponse.getStream().pipe(mockedStream);
+    exportResponse.pipe(mockedStream);
 
     // In order to make sure the last expect statements are properly hit we need to wrap in a promise and resolve it
     const readable = await new Promise((resolve) => {
@@ -299,7 +299,7 @@ describe('Testing application export service', () => {
     );
 
     const mockedStream = new PassThrough();
-    exportResponse.getStream().pipe(mockedStream);
+    exportResponse.pipe(mockedStream);
 
     // In order to make sure the last expect statements are properly hit we need to wrap in a promise and resolve it
     const readable = await new Promise((resolve) => {
@@ -368,7 +368,7 @@ describe('Testing application export service', () => {
     );
 
     const mockedStream = new PassThrough();
-    exportResponse.getStream().pipe(mockedStream);
+    exportResponse.pipe(mockedStream);
 
     // In order to make sure the last expect statements are properly hit we need to wrap in a promise and resolve it
     const readable = await new Promise((resolve) => {

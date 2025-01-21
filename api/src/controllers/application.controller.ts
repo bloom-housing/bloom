@@ -52,6 +52,7 @@ import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
 import { ApiKeyGuard } from '../guards/api-key.guard';
 import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
 import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-response.dto';
+import { zipExport } from '../utilities/zip-export';
 
 @Controller('applications')
 @ApiTags('applications')
@@ -115,7 +116,7 @@ export class ApplicationController {
     summary: 'Get applications as csv',
     operationId: 'listAsCsv',
   })
-  @Header('Content-Type', 'text/csv')
+  @Header('Content-Type', 'application/zip')
   @UseInterceptors(ExportLogInterceptor)
   async listAsCsv(
     @Request() req: ExpressRequest,
@@ -123,7 +124,20 @@ export class ApplicationController {
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationCsvQueryParams,
   ): Promise<StreamableFile> {
-    return await this.applicationExportService.csvExport(req, res, queryParams);
+    const user = mapTo(User, req['user']);
+    const readStream = await this.applicationExportService.csvExport(
+      req,
+      res,
+      queryParams,
+    );
+    return await zipExport(
+      readStream,
+      `listing-${queryParams.id}-applications-${
+        user.id
+      }-${new Date().getTime()}`,
+      `applications-${queryParams.id}-${new Date().getTime()}`,
+      false,
+    );
   }
 
   @Get(`spreadsheet`)
@@ -139,11 +153,20 @@ export class ApplicationController {
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationCsvQueryParams,
   ): Promise<StreamableFile> {
-    return await this.applicationExportService.spreadsheetExport(
+    const user = mapTo(User, req['user']);
+    const readStream = await this.applicationExportService.spreadsheetExport(
       req,
       res,
       queryParams,
       false,
+    );
+    return await zipExport(
+      readStream,
+      `listing-${queryParams.id}-applications-${
+        user.id
+      }-${new Date().getTime()}`,
+      `applications-${queryParams.id}-${new Date().getTime()}`,
+      true,
     );
   }
 

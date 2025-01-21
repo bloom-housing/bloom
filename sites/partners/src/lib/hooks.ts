@@ -511,37 +511,11 @@ export const createDateStringFromNow = (format = "YYYY-MM-DD_HH:mm:ss"): string 
   return dayjs(now).format(format)
 }
 
-export const useApplicationsExport = (
+export const useZipExport = (
   listingId: string,
   includeDemographics: boolean,
+  forLottery: boolean,
   spreadSheetExport = false
-) => {
-  if (spreadSheetExport) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    return useSpreadsheetExport(listingId, includeDemographics, false)
-  }
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { applicationsService } = useContext(AuthContext)
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const res = useCsvExport(
-    () =>
-      applicationsService.listAsCsv({
-        id: listingId,
-        includeDemographics,
-        timeZone: dayjs.tz.guess(),
-      }),
-    `applications-${listingId}-${createDateStringFromNow()}.csv`
-  )
-
-  return { onExport: res.onExport, exportLoading: res.csvExportLoading }
-}
-
-export const useSpreadsheetExport = (
-  listingId: string,
-  includeDemographics: boolean,
-  forLottery: boolean
 ) => {
   const { applicationsService, lotteryService } = useContext(AuthContext)
   const [exportLoading, setExportLoading] = useState(false)
@@ -555,8 +529,13 @@ export const useSpreadsheetExport = (
             { id: listingId, includeDemographics },
             { responseType: "arraybuffer" }
           )
-        : await applicationsService.listAsSpreadsheet(
+        : spreadSheetExport
+        ? await applicationsService.listAsSpreadsheet(
             { id: listingId, includeDemographics },
+            { responseType: "arraybuffer" }
+          )
+        : await applicationsService.listAsCsv(
+            { id: listingId, includeDemographics, timeZone: dayjs.tz.guess() },
             { responseType: "arraybuffer" }
           )
       const blob = new Blob([new Uint8Array(content)], { type: "application/zip" })
@@ -567,7 +546,7 @@ export const useSpreadsheetExport = (
       const dateString = dayjs(now).format("YYYY-MM-DD_HH-mm")
       link.setAttribute(
         "download",
-        `${listingId}-${dateString}-${forLottery ? "lottery" : "applications"}.zip`
+        `${forLottery ? "lottery" : "applications"}-${listingId}-${dateString}.zip`
       )
       document.body.appendChild(link)
       link.click()

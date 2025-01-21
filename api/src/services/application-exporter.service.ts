@@ -3,7 +3,7 @@ import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
 import archiver from 'archiver';
 import Excel, { Column } from 'exceljs';
 import { Request as ExpressRequest, Response } from 'express';
-import fs, { createReadStream } from 'fs';
+import fs, { createReadStream, ReadStream } from 'fs';
 import { join } from 'path';
 import { view } from './application.service';
 import { Application } from '../dtos/applications/application.dto';
@@ -54,7 +54,7 @@ export class ApplicationExporterService {
     req: ExpressRequest,
     res: Response,
     queryParams: QueryParams,
-  ): Promise<StreamableFile> {
+  ): Promise<ReadStream> {
     const user = mapTo(User, req['user']);
     await this.authorizeExport(user, queryParams.id);
 
@@ -66,8 +66,7 @@ export class ApplicationExporterService {
     );
 
     await this.createCsv(filename, queryParams);
-    const file = createReadStream(filename);
-    return new StreamableFile(file);
+    return createReadStream(filename);
   }
 
   /**
@@ -326,7 +325,7 @@ export class ApplicationExporterService {
     res: Response,
     queryParams: QueryParams,
     forLottery = true,
-  ): Promise<StreamableFile> {
+  ): Promise<ReadStream> {
     const user = mapTo(User, req['user']);
     await this.authorizeExport(user, queryParams.id);
 
@@ -342,13 +341,6 @@ export class ApplicationExporterService {
       useSharedStrings: false,
     });
 
-    const zipFilePath = join(
-      process.cwd(),
-      `src/temp/${forLottery ? 'lottery-' : ''}listing-${
-        queryParams.id
-      }-applications-${user.id}-${new Date().getTime()}.zip`,
-    );
-
     await this.createSpreadsheets(
       workbook,
       {
@@ -358,27 +350,7 @@ export class ApplicationExporterService {
     );
 
     await workbook.commit();
-    const readStream = createReadStream(filename);
-
-    return new Promise((resolve) => {
-      // Create a writable stream to the zip file
-      const output = fs.createWriteStream(zipFilePath);
-      const archive = archiver('zip', {
-        zlib: { level: 9 },
-      });
-      output.on('close', () => {
-        const zipFile = createReadStream(zipFilePath);
-        resolve(new StreamableFile(zipFile));
-      });
-
-      archive.pipe(output);
-      archive.append(readStream, {
-        name: `${forLottery ? 'lottery-' : ''}${
-          queryParams.id
-        }-${new Date().getTime()}.xlsx`,
-      });
-      archive.finalize();
-    });
+    return createReadStream(filename);
   }
 
   /**
@@ -720,7 +692,7 @@ export class ApplicationExporterService {
   }
 
   /**
-   * 
+   *
    * @param questions a collection of questions which can include more than preferences, the rest will be filtered out
    * @param listingId the id of the listing
    * @returns listing preferences sorted in ordinal order
