@@ -32,7 +32,6 @@ import {
   redlinedMap,
   simplifiedDCMap,
 } from './seed-helpers/map-layer-factory';
-<<<<<<< HEAD
 import { multiselectQuestionFactory } from './seed-helpers/multiselect-question-factory';
 import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
 import { translationFactory } from './seed-helpers/translation-factory';
@@ -40,13 +39,7 @@ import { unitAccessibilityPriorityTypeFactoryAll } from './seed-helpers/unit-acc
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { userFactory } from './seed-helpers/user-factory';
 import { featureFlagFactory } from './seed-helpers/feature-flag-factory';
-=======
-import { ValidationMethod } from '../src/enums/multiselect-questions/validation-method-enum';
-import { randomNoun } from './seed-helpers/word-generator';
-import { householdMemberFactorySingle } from './seed-helpers/household-member-factory';
-import { featureFlagFactory } from './seed-helpers/feature-flag-factory';
 
->>>>>>> 0e3d9c828 (fix: add home type feature to backend and partners (#4484))
 export const stagingSeed = async (
   prismaClient: PrismaClient,
   jurisdictionName: string,
