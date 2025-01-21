@@ -271,9 +271,7 @@ export const jurisdiction: Jurisdiction = {
   rentalAssistanceDefault:
     "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
   enablePartnerSettings: true,
-  enableAccessibilityFeatures: false,
   enableListingOpportunity: false,
-  enableUtilitiesIncluded: true,
   enableGeocodingPreferences: false,
   id: "67c22813-6080-441d-a496-03f2d06f2635",
   createdAt: new Date("2023-02-06T22:32:30.397Z"),

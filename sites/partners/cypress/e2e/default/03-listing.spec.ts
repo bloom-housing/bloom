@@ -229,12 +229,22 @@ describe("Listing Management Tests", () => {
     cy.getByID("depositMin").type(listing["depositMin"])
     cy.getByID("depositMax").type(listing["depositMax"])
     cy.getByID("costsNotIncluded").type(listing["costsNotIncluded"])
+    if (listing["utilities"]) {
+      listing["utilities"].forEach((utility: string) => {
+        cy.getByID(utility.toLowerCase()).check()
+      })
+    }
     cy.getByID("amenities").type(listing["amenities"])
     cy.getByID("accessibility").type(listing["accessibility"])
     cy.getByID("unitAmenities").type(listing["unitAmenities"])
     cy.getByID("smokingPolicy").type(listing["smokingPolicy"])
     cy.getByID("petPolicy").type(listing["petPolicy"])
     cy.getByID("servicesOffered").type(listing["servicesOffered"])
+    if (listing["accessibilityFeatures"]) {
+      listing["accessibilityFeatures"].forEach((feature: string) => {
+        cy.getByID(feature.toLowerCase()).check()
+      })
+    }
     cy.getByID("creditHistory").type(listing["creditHistory"])
     cy.getByID("rentalHistory").type(listing["rentalHistory"])
     cy.getByID("criminalBackground").type(listing["criminalBackground"])
@@ -362,12 +372,22 @@ describe("Listing Management Tests", () => {
     cy.getByID("depositMin").contains(listing["depositMin"])
     cy.getByID("depositMax").contains(listing["depositMax"])
     cy.getByID("costsNotIncluded").contains(listing["costsNotIncluded"])
+    if (listing["utilities"]) {
+      listing["utilities"].forEach((utility: string) => {
+        cy.getByID("utilities").contains(utility)
+      })
+    }
     cy.getByID("amenities").contains(listing["amenities"])
     cy.getByID("unitAmenities").contains(listing["unitAmenities"])
     cy.getByID("accessibility").contains(listing["accessibility"])
     cy.getByID("smokingPolicy").contains(listing["smokingPolicy"])
     cy.getByID("petPolicy").contains(listing["petPolicy"])
     cy.getByID("servicesOffered").contains(listing["servicesOffered"])
+    if (listing["accessibilityFeatures"]) {
+      listing["accessibilityFeatures"].forEach((feature: string) => {
+        cy.getByID("accessibilityFeatures").contains(feature)
+      })
+    }
     cy.getByID("creditHistory").contains(listing["creditHistory"])
     cy.getByID("rentalHistory").contains(listing["rentalHistory"])
     cy.getByID("criminalBackground").contains(listing["criminalBackground"])

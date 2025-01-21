@@ -63,5 +63,7 @@
   "endTime.hours": "11",
   "endTime.minutes": "05",
   "note": "Basic Note",
-  "editedName": "Basic Listing Edited Name"
+  "editedName": "Basic Listing Edited Name",
+  "utilities": ["Water", "Trash", "Phone"],
+  "accessibilityFeatures": ["Elevator", "Mobility", "Visual"]
 }

@@ -148,6 +148,22 @@ export const stagingSeed = async (
       jurisdiction.id,
     ]),
   });
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory(
+      'enableAccessibilityFeatures',
+      true,
+      "When true, the 'accessibility features' section is displayed in listing creation/edit and the public listing view",
+      [jurisdiction.id],
+    ),
+  });
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory(
+      'enableUtilitiesIncluded',
+      true,
+      "When true, the 'utilities included' section is displayed in listing creation/edit and the public listing view",
+      [jurisdiction.id],
+    ),
+  });
   // create admin user
   await prismaClient.userAccounts.create({
     data: await userFactory({
