@@ -81,9 +81,9 @@ export const stagingSeed = async (
   });
   await prismaClient.featureFlags.create({
     data: featureFlagFactory(
-      'showCloseListingButton',
-      true,
-      'When true, close button is displayed on the listing edit form',
+      'hideCloseListingButton',
+      false,
+      'When true, close button is hidden on the listing edit form',
       [jurisdiction.id],
     ),
   });
