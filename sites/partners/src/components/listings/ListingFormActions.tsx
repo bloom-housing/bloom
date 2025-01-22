@@ -77,6 +77,10 @@ const ListingFormActions = ({
     (jurisdiction) => jurisdiction.id === listing?.jurisdictions?.id
   )
 
+  const showCloseButton = listingJurisdiction?.featureFlags?.find(
+    (flag) => flag.name === "showCloseListingButton"
+  )?.active
+
   const recordUpdated = useMemo(() => {
     if (!listing) return null
 
@@ -467,7 +471,9 @@ const ListingFormActions = ({
         listing.status === ListingsStatusEnum.active &&
         type === ListingFormActionsType.edit
       ) {
-        elements.push(closeButton)
+        if (showCloseButton !== false) {
+          elements.push(closeButton)
+        }
         elements.push(unpublishButton)
         elements.push(saveContinueButton)
         elements.push(cancelButton)
