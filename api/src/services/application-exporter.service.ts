@@ -1,6 +1,5 @@
-import { Injectable, StreamableFile } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
-import archiver from 'archiver';
 import Excel, { Column } from 'exceljs';
 import { Request as ExpressRequest, Response } from 'express';
 import fs, { createReadStream, ReadStream } from 'fs';
