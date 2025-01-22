@@ -18,7 +18,7 @@ describe("Submit", function () {
     )
 
     cy.submitApplication("Elm Village", ElmVillageApplication, false, true, false)
-    cy.submitApplication("Blue Sky Apartments", ElmVillageApplication, true, true, true)
+    cy.submitApplication("Elm Village", ElmVillageApplication, true, true, true)
   })
 
   it("should submit a minimal application for the Test: Default, No Preferences", function () {
