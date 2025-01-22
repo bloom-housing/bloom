@@ -102,7 +102,7 @@ export const ElmVillageApplication: Application = {
     firstName: "First Name",
     middleName: "Middle Name",
     lastName: "Last Name",
-    birthMonth: "07",
+    birthMonth: "7",
     birthDay: "17",
     birthYear: "1996",
     emailAddress: "test@bloom.com",
@@ -166,7 +166,7 @@ export const ElmVillageApplication: Application = {
       firstName: "Member Name",
       middleName: "Member Middle Name",
       lastName: "Member Last Name",
-      birthMonth: "07",
+      birthMonth: "7",
       birthDay: "17",
       birthYear: "1996",
       householdMemberAddress: {
