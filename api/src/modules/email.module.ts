@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { MailService } from '@sendgrid/mail';
 import { EmailService } from '../services/email.service';
@@ -18,6 +18,7 @@ import { SendGridService } from '../services/sendgrid.service';
     GoogleTranslateService,
     SendGridService,
     MailService,
+    Logger,
   ],
   exports: [EmailService],
 })
