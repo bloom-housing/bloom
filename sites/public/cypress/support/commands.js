@@ -185,8 +185,6 @@ Cypress.Commands.add("step2PrimaryApplicantAddresses", (application, autofill) =
 })
 
 Cypress.Commands.add("step3AlternateContactType", (application, autofill) => {
-  // When autofill, test thinks I should be on /alternate-contact-contact page
-
   if (!autofill) {
     const alternateContactTypeIndex = alternateContactTypeRadioOrder.indexOf(
       application.alternateContact.type
@@ -208,6 +206,7 @@ Cypress.Commands.add("step4AlternateContactName", (application, autofill) => {
     cy.getByTestId("app-alternate-last-name").type(application.alternateContact.lastName)
   }
 
+  cy.wait(1000)
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
@@ -240,7 +239,9 @@ Cypress.Commands.add("step5AlternateContactInfo", (application, autofill) => {
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
-  cy.isNextRouteValid("alternateContactInfo") // wants to go to liveAlone
+
+  // TODO: Will break if application.householdMember.length === 0
+  cy.isNextRouteValid("alternateContactInfo", autofill ? 1 : 0)
 })
 
 Cypress.Commands.add("step6HouseholdSize", (application, autofill) => {
@@ -349,6 +350,7 @@ Cypress.Commands.add("step8PreferredUnits", (application, autofill) => {
     })
   }
 
+  cy.wait(1000)
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
@@ -385,19 +387,17 @@ Cypress.Commands.add("step9Accessibility", (application, autofill) => {
   }
 })
 
-Cypress.Commands.add("step12Programs", (application, autofill) => {
+Cypress.Commands.add("step12Programs", (application) => {
   application.programs.forEach((program) => {
-    if (!autofill) {
-      if (!program.claimed) {
-        // Selects the last instance, which is decline
-        cy.getByTestId("app-question-option").check()
-      } else {
-        program.options.forEach((option, index) => {
-          if (option.checked) {
-            cy.getByTestId("app-question-option").eq(index).check()
-          }
-        })
-      }
+    if (!program.claimed) {
+      // Selects the last instance, which is decline
+      cy.getByTestId("app-question-option").check()
+    } else {
+      program.options.forEach((option, index) => {
+        if (option.checked) {
+          cy.getByTestId("app-question-option").eq(index).check()
+        }
+      })
     }
 
     cy.goNext()
@@ -469,29 +469,27 @@ Cypress.Commands.add("step14Income", (application, autofill) => {
   cy.checkErrorMessages("not.exist")
 })
 
-Cypress.Commands.add("step15SelectPreferences", (application, autofill) => {
+Cypress.Commands.add("step15SelectPreferences", (application) => {
   let preferenceClaimed = false
   application.preferences.forEach((preference) => {
-    if (!autofill) {
-      preferenceClaimed = true
-      preference.options.forEach((option, index) => {
-        if (option.checked) {
-          cy.getByTestId("app-question-option").eq(index).check()
-        }
-        if (option.address) {
-          cy.get(`[data-testid="address-street"]`).eq(index).type(option.address.street)
-          cy.get(`[data-testid="address-city"]`).eq(index).type(option.address.city)
-          cy.get(`[data-testid="address-state"]`).eq(index).select(option.address.state)
-          cy.get(`[data-testid="address-zipcode"]`).eq(index).type(option.address.zipCode)
-        }
-        if (option.addressHolder) {
-          cy.get(`[data-testid="addressHolder-name"]`).eq(index).type(option.addressHolder.name)
-          cy.get(`[data-testid="addressHolder-relationship"]`)
-            .eq(index)
-            .type(option.addressHolder.relationship)
-        }
-      })
-    }
+    preferenceClaimed = true
+    preference.options.forEach((option, index) => {
+      if (option.checked) {
+        cy.getByTestId("app-question-option").eq(index).check()
+      }
+      if (option.address) {
+        cy.get(`[data-testid="address-street"]`).eq(index).type(option.address.street)
+        cy.get(`[data-testid="address-city"]`).eq(index).type(option.address.city)
+        cy.get(`[data-testid="address-state"]`).eq(index).select(option.address.state)
+        cy.get(`[data-testid="address-zipcode"]`).eq(index).type(option.address.zipCode)
+      }
+      if (option.addressHolder) {
+        cy.get(`[data-testid="addressHolder-name"]`).eq(index).type(option.addressHolder.name)
+        cy.get(`[data-testid="addressHolder-relationship"]`)
+          .eq(index)
+          .type(option.addressHolder.relationship)
+      }
+    })
 
     // All options with an address need to have it verified
     const optionsWithAddress = preference.options.filter((option) => option.address)
@@ -532,6 +530,7 @@ Cypress.Commands.add("step17Demographics", (application, autofill) => {
     })
   }
 
+  cy.wait(1000)
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
@@ -740,7 +739,7 @@ Cypress.Commands.add(
       cy.step4AlternateContactName(application, autofill)
       cy.step5AlternateContactInfo(application, autofill)
     }
-    cy.step6HouseholdSize(application)
+    cy.step6HouseholdSize(application, autofill)
     if (application.householdMember.length > 0) {
       cy.step7AddHouseholdMembers(application, autofill)
     }
@@ -763,14 +762,14 @@ Cypress.Commands.add(
       cy.step11Student(application, programsExist, autofill)
 
       if (programsExist) {
-        cy.step12Programs(application, autofill)
+        cy.step12Programs(application)
       }
 
       cy.step13IncomeVouchers(application, autofill)
       cy.step14Income(application, autofill)
       if (preferencesExist) {
         if (application.preferences.length > 0) {
-          cy.step15SelectPreferences(application, autofill)
+          cy.step15SelectPreferences(application)
         } else {
           cy.step16GeneralPool()
         }

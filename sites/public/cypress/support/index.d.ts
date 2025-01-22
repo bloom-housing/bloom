@@ -26,10 +26,10 @@ declare namespace Cypress {
     step10Changes(application: Application, autofill?: boolean): Chainable
     step11Student(application: Application, programsExist: boolean, autofill?: boolean): Chainable
     step12Student(application: Application, autofill?: boolean): Chainable
-    step12Programs(application: Application, autofill?: boolean): Chainable
+    step12Programs(application: Application): Chainable
     step13IncomeVouchers(application: Application, autofill?: boolean): Chainable
     step14Income(application: Application, autofill?: boolean): Chainable
-    step15SelectPreferences(application: Application, autofill?: boolean): Chainable
+    step15SelectPreferences(application: Application): Chainable
     step16GeneralPool(): Chainable
     step17Demographics(application: Application, autofill?: boolean): Chainable
     step18Summary(application: Application, verify?: boolean): Chainable
