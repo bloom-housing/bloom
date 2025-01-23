@@ -1485,9 +1485,7 @@ describe("<ListingFormActions>", () => {
         <AuthContext.Provider
           value={{
             profile: adminUser,
-            doJurisdictionsHaveFeatureFlagOn: () => {
-              return false
-            },
+            doJurisdictionsHaveFeatureFlagOn,
           }}
         >
           <ListingContext.Provider
@@ -1829,9 +1827,7 @@ describe("<ListingFormActions>", () => {
           <AuthContext.Provider
             value={{
               profile: adminUser,
-              doJurisdictionsHaveFeatureFlagOn: () => {
-                return false
-              },
+              doJurisdictionsHaveFeatureFlagOn,
             }}
           >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
