@@ -79,7 +79,7 @@ const ListingFormActions = ({
 
   const hideCloseButton = doJurisdictionsHaveFeatureFlagOn(
     "hideCloseListingButton",
-    listing.jurisdictions.id
+    listingJurisdiction?.id
   )
 
   const recordUpdated = useMemo(() => {
