@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Inject, Injectable, Logger } from '@nestjs/common';
 import { ResponseError } from '@sendgrid/helpers/classes';
 import { MailDataRequired } from '@sendgrid/helpers/classes/mail';
 import fs from 'fs';
@@ -44,6 +44,8 @@ export class EmailService {
     private readonly sendGrid: SendGridService,
     private readonly translationService: TranslationService,
     private readonly jurisdictionService: JurisdictionService,
+    @Inject(Logger)
+    private logger = new Logger(EmailService.name),
   ) {
     this.polyglot = new Polyglot({
       phrases: {},
@@ -401,6 +403,9 @@ export class EmailService {
     try {
       const jurisdiction = await this.getJurisdiction([jurisdictionId]);
       void (await this.loadTranslations(jurisdiction));
+      this.logger.log(
+        `Sending request approval email for listing ${listingInfo.name} to ${emails.length} emails`,
+      );
       await this.send(
         emails,
         jurisdiction.emailFromAddress,
@@ -428,6 +433,9 @@ export class EmailService {
         ? await this.getJurisdiction([{ id: listingInfo.juris }])
         : user.jurisdictions[0];
       void (await this.loadTranslations(jurisdiction));
+      this.logger.log(
+        `Sending changes requested email for listing ${listingInfo.name} to ${emails.length} emails`,
+      );
       await this.send(
         emails,
         jurisdiction.emailFromAddress,
@@ -453,6 +461,9 @@ export class EmailService {
     try {
       const jurisdiction = await this.getJurisdiction([jurisdictionId]);
       void (await this.loadTranslations(jurisdiction));
+      this.logger.log(
+        `Sending listing approved email for listing ${listingInfo.name} to ${emails.length} emails`,
+      );
       await this.send(
         emails,
         jurisdiction.emailFromAddress,
@@ -548,6 +559,9 @@ export class EmailService {
         { id: listingInfo.juris },
       ]);
       void (await this.loadTranslations(jurisdiction));
+      this.logger.log(
+        `Sending lottery released email for listing ${listingInfo.name} to ${emails.length} emails`,
+      );
       await this.send(
         emails,
         jurisdiction.emailFromAddress,
@@ -576,6 +590,9 @@ export class EmailService {
         { id: listingInfo.juris },
       ]);
       void (await this.loadTranslations(jurisdiction));
+      this.logger.log(
+        `Sending lottery published admin email for listing ${listingInfo.name} to ${emails.length} emails`,
+      );
       await this.send(
         emails,
         jurisdiction.emailFromAddress,
@@ -607,6 +624,9 @@ export class EmailService {
 
       for (const language in emails) {
         void (await this.loadTranslations(null, language as LanguagesEnum));
+        this.logger.log(
+          `Sending lottery published ${language} email for listing ${listingInfo.name} to ${emails[language]?.length} emails`,
+        );
         await this.send(
           emails[language],
           jurisdiction.emailFromAddress,

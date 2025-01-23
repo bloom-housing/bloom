@@ -8,11 +8,12 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const DetailAdditionalFees = () => {
   const listing = useContext(ListingContext)
-  const { profile } = useContext(AuthContext)
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
-  const enableUtilitiesIncluded = profile?.jurisdictions?.find(
-    (j) => j.id === listing.jurisdictions.id
-  )?.enableUtilitiesIncluded
+  const enableUtilitiesIncluded = doJurisdictionsHaveFeatureFlagOn(
+    "enableUtilitiesIncluded",
+    listing.jurisdictions.id
+  )
 
   const getUtilitiesIncluded = () => {
     let utilitiesExist = false
@@ -52,7 +53,7 @@ const DetailAdditionalFees = () => {
       </Grid.Row>
       {enableUtilitiesIncluded && (
         <Grid.Row>
-          <FieldValue label={t("listings.sections.utilities")}>
+          <FieldValue id="utilities" label={t("listings.sections.utilities")}>
             <ul className={"flex flex-wrap"}>{getUtilitiesIncluded()}</ul>
           </FieldValue>
         </Grid.Row>
