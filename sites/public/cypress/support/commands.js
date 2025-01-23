@@ -204,9 +204,10 @@ Cypress.Commands.add("step4AlternateContactName", (application, autofill) => {
   if (!autofill) {
     cy.getByTestId("app-alternate-first-name").type(application.alternateContact.firstName)
     cy.getByTestId("app-alternate-last-name").type(application.alternateContact.lastName)
+  } else {
+    cy.wait(1000)
   }
 
-  cy.wait(1000)
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
@@ -240,7 +241,6 @@ Cypress.Commands.add("step5AlternateContactInfo", (application, autofill) => {
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
 
-  // TODO: Will break if application.householdMember.length === 0
   cy.isNextRouteValid("alternateContactInfo", autofill ? 1 : 0)
 })
 
@@ -348,9 +348,10 @@ Cypress.Commands.add("step8PreferredUnits", (application, autofill) => {
     application.preferredUnitTypes.forEach((prefUnit) => {
       cy.getByTestId(prefUnit.name).check()
     })
+  } else {
+    cy.wait(1000)
   }
 
-  cy.wait(1000)
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
@@ -380,30 +381,12 @@ Cypress.Commands.add("step9Accessibility", (application, autofill) => {
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
+  // if autofill, we don't know the following
   if (application.programs.length) {
     cy.isNextRouteValid("adaHouseholdMembers")
   } else {
     cy.isNextRouteValid("adaHouseholdMembers", 1)
   }
-})
-
-Cypress.Commands.add("step12Programs", (application) => {
-  application.programs.forEach((program) => {
-    if (!program.claimed) {
-      // Selects the last instance, which is decline
-      cy.getByTestId("app-question-option").check()
-    } else {
-      program.options.forEach((option, index) => {
-        if (option.checked) {
-          cy.getByTestId("app-question-option").eq(index).check()
-        }
-      })
-    }
-
-    cy.goNext()
-  })
-
-  cy.isNextRouteValid("programs")
 })
 
 Cypress.Commands.add("step10Changes", (application, autofill) => {
@@ -436,6 +419,26 @@ Cypress.Commands.add("step11Student", (application, programsExist, autofill) => 
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
   cy.isNextRouteValid("householdStudent", !programsExist ? 1 : 0)
+})
+
+Cypress.Commands.add("step12Programs", (application) => {
+  application.programs.forEach((program) => {
+    if (!program.claimed) {
+      // Selects the last instance, which is decline
+      cy.getByTestId("app-question-option").check()
+    } else {
+      program.options.forEach((option, index) => {
+        if (option.checked) {
+          cy.getByTestId("app-question-option").eq(index).check()
+        }
+      })
+    }
+
+    cy.log(program)
+    cy.goNext()
+  })
+
+  cy.isNextRouteValid("programs")
 })
 
 Cypress.Commands.add("step13IncomeVouchers", (application, autofill) => {
@@ -528,9 +531,10 @@ Cypress.Commands.add("step17Demographics", (application, autofill) => {
       const howDidYouHearIndex = howDidYouHearCheckboxesOrder.indexOf(howDidYouHear)
       cy.getByTestId("app-demographics-how-did-you-hear").eq(howDidYouHearIndex).check()
     })
+  } else {
+    cy.wait(1000)
   }
 
-  cy.wait(1000)
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
