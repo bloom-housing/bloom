@@ -1002,6 +1002,8 @@
   "listings.priorityUnits": "Các Căn nhà Ưu tiên",
   "listings.priorityUnitsDescription": "Tòa nhà này có các căn nhà ở được dành riêng cho quý vị nếu bất kỳ điều nào sau đây đúng với quý vị hoặc một người nào đó trong hộ gia đình của quý vị:",
   "listings.processInfo": "Thông tin về Quy trình",
+  "listings.propertyName": "Tên bất động sản",
+  "listings.propertyName.helper": "Nhập tên bất động sản đầy đủ hoặc một phần",
   "listings.publicLottery.header": "Xổ số Công cộng",
   "listings.remainingUnitsAfterPreferenceConsideration": "Sau khi tất cả những người nắm giữ phiếu chọn ưu tiên đã được xem xét, bất kỳ căn nhà còn lại sẽ dành cho các ứng viên hội đủ điều kiện khác.",
   "listings.remainingUnitsAfterPrograms": "Sau khi tất cả các chủ sở hữu ưu tiên đã được xem xét, mọi đơn vị còn lại sẽ được cung cấp cho những người nộp đơn đủ điều kiện khác.",

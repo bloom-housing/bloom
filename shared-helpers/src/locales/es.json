@@ -999,6 +999,8 @@
   "listings.priorityUnits": "Viviendas prioritarias",
   "listings.priorityUnitsDescription": "Esta edificación cuenta con viviendas apartadas si alguna de las siguientes condiciones se aplican a usted o a alguna persona de su hogar:",
   "listings.processInfo": "Información sobre el proceso",
+  "listings.propertyName": "Nombre de la propiedad",
+  "listings.propertyName.helper": "Ingrese el nombre completo o parcial de la propiedad",
   "listings.publicLottery.header": "Lotería pública",
   "listings.remainingUnitsAfterPreferenceConsideration": "Después de que se hayan tomado en consideración a los poseedores de preferencias, todas las viviendas restantes estarán a disposición de otros solicitantes calificados.",
   "listings.remainingUnitsAfterPrograms": "Una vez que se hayan considerado a todos los titulares de preferencias, las unidades restantes estarán disponibles para otros solicitantes calificados.",

@@ -86,6 +86,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
     bathrooms: null,
     minRent: "",
     monthlyRent: "",
+    propertyName: "",
     counties: countyLabels,
     availability: null,
     ids: undefined,
@@ -291,7 +292,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
               getValues={getValues}
               defaultValue={formValues.minRent}
               placeholder={t("t.minPrice")}
-              className="doorway-field"
+              className="doorway-field pb-6"
               inputClassName="rent-input"
               labelClassName="input-label"
             ></Field>
@@ -307,7 +308,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
               getValues={getValues}
               defaultValue={formValues.monthlyRent}
               placeholder={t("t.maxPrice")}
-              className="doorway-field"
+              className="doorway-field pb-6"
               inputClassName="rent-input"
               labelClassName="input-label"
             ></Field>

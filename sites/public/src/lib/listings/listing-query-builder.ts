@@ -40,6 +40,10 @@ export class ListingQueryBuilder {
     return this.addFilter(field, EnumListingFilterParamsComparison["<>"], value)
   }
 
+  whereLike(field: string, value: string) {
+    return this.addFilter(field, EnumListingFilterParamsComparison["LIKE"], value)
+  }
+
   whereIn(field: string, value: string[]) {
     return this.addFilter(field, EnumListingFilterParamsComparison["IN"], value)
   }

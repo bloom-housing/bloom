@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react"
-import { ListingSearchParams, parseSearchString } from "../../../lib/listings/search"
-import { t } from "@bloom-housing/ui-components"
+import React, { ChangeEvent, useCallback, useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
+import { FilterAvailabilityEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   ButtonGroup,
   ButtonGroupSpacing,
@@ -9,10 +9,10 @@ import {
   FieldGroup,
   FieldSingle,
 } from "@bloom-housing/doorway-ui-components"
+import { t } from "@bloom-housing/ui-components"
 import { Dialog } from "@bloom-housing/ui-seeds"
-import { useForm } from "react-hook-form"
 import { numericSearchFieldGenerator } from "./helpers"
-import { FilterAvailabilityEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { ListingSearchParams, parseSearchString } from "../../../lib/listings/search"
 
 const inputSectionStyle: React.CSSProperties = {
   margin: "0px 15px",
@@ -25,8 +25,7 @@ const hyphenContainerStyle: React.CSSProperties = {
 const hyphenStyle: React.CSSProperties = {
   fontSize: "2rem",
   position: "relative",
-  bottom: "1px",
-  padding: ".7rem",
+  padding: "0.5rem .7rem",
   width: "100%",
 }
 
@@ -43,6 +42,10 @@ const sectionTitleTopBorder: React.CSSProperties = {
 const rentStyle: React.CSSProperties = {
   margin: "0px 0px",
   display: "flex",
+}
+
+const propertySearchTitle: React.CSSProperties = {
+  paddingBlock: "var(--seeds-s4)",
 }
 
 const clearButtonStyle: React.CSSProperties = {
@@ -86,6 +89,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
     bathrooms: null,
     minRent: "",
     monthlyRent: "",
+    propertyName: "",
     counties: countyLabels,
     availability: null,
     ids: undefined,
@@ -122,6 +126,9 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     document.querySelector("#monthlyRent").value = null
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    document.querySelector("#propertyName").value = null
   }
 
   const onSubmit = () => {
@@ -210,6 +217,12 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
   const minRentFormatted = watch("minRent")
   const currencyFormatting = /,|\.\d{2}/g
 
+  const validateSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
+    // handle semicolon by searching text before since removing could lead to missing exact match
+    const searchableValue = e.target.value.split(";")[0]
+    updateValue("propertyName", searchableValue)
+  }
+
   // workarounds to leverage UI-C's currency formatting without full refactor
   useEffect(() => {
     if (typeof minRentFormatted !== "undefined") {
@@ -282,7 +295,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
               defaultValue={formValues.minRent}
               placeholder={t("t.minPrice")}
               className="doorway-field"
-              inputClassName="rent-input"
+              inputClassName="typed-input"
               labelClassName="input-label"
             ></Field>
             <div style={hyphenContainerStyle}>
@@ -298,10 +311,27 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
               defaultValue={formValues.monthlyRent}
               placeholder={t("t.maxPrice")}
               className="doorway-field"
-              inputClassName="rent-input"
+              inputClassName="typed-input"
               labelClassName="input-label"
             ></Field>
           </div>
+        </div>
+        <div style={inputSectionStyle}>
+          <div style={{ ...sectionTitle, ...propertySearchTitle }}>
+            {t("listings.propertyName")}
+          </div>
+          <Field
+            type="text"
+            id="propertyName"
+            name="propertyName"
+            subNote={t("listings.propertyName.helper")}
+            register={register}
+            onChange={validateSearchInput}
+            defaultValue={formValues.propertyName}
+            className="doorway-field pb-4"
+            inputClassName="typed-input"
+            labelClassName="input-label"
+          />
         </div>
 
         <div style={inputSectionStyle}>

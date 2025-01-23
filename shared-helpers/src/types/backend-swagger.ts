@@ -6541,6 +6541,7 @@ export enum EnumListingFilterParamsComparison {
   "IN" = "IN",
   ">=" = ">=",
   "<=" = "<=",
+  "LIKE" = "LIKE",
   "NA" = "NA",
 }
 export enum ListingViews {
@@ -6720,6 +6721,7 @@ export enum EnumMultiselectQuestionFilterParamsComparison {
   "IN" = "IN",
   ">=" = ">=",
   "<=" = "<=",
+  "LIKE" = "LIKE",
   "NA" = "NA",
 }
 export enum InputType {

@@ -46,6 +46,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
       bathrooms: null,
       minRent: "",
       monthlyRent: "",
+      propertyName: "",
       counties: props.counties.map((county) => county.label),
       availability: null,
       ids: undefined,
