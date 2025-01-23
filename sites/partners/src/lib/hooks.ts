@@ -514,8 +514,8 @@ export const createDateStringFromNow = (format = "YYYY-MM-DD_HH:mm:ss"): string 
 export const useZipExport = (
   listingId: string,
   includeDemographics: boolean,
-  forLottery: boolean,
-  spreadSheetExport = false
+  isLottery: boolean,
+  isSpreadsheet = false
 ) => {
   const { applicationsService, lotteryService } = useContext(AuthContext)
   const [exportLoading, setExportLoading] = useState(false)
@@ -524,29 +524,35 @@ export const useZipExport = (
   const onExport = useCallback(async () => {
     setExportLoading(true)
     try {
-      const content = forLottery
-        ? await lotteryService.lotteryResults(
-            { id: listingId, includeDemographics },
-            { responseType: "arraybuffer" }
-          )
-        : spreadSheetExport
-        ? await applicationsService.listAsSpreadsheet(
-            { id: listingId, includeDemographics },
-            { responseType: "arraybuffer" }
-          )
-        : await applicationsService.listAsCsv(
+      let content: any
+      if (isLottery) {
+        content = await lotteryService.lotteryResults(
+          { id: listingId, includeDemographics, timeZone: dayjs.tz.guess() },
+          { responseType: "arraybuffer" }
+        )
+      } else {
+        if (isSpreadsheet) {
+          content = await applicationsService.listAsSpreadsheet(
             { id: listingId, includeDemographics, timeZone: dayjs.tz.guess() },
             { responseType: "arraybuffer" }
           )
+        } else {
+          content = await applicationsService.listAsCsv(
+            { id: listingId, includeDemographics, timeZone: dayjs.tz.guess() },
+            { responseType: "arraybuffer" }
+          )
+        }
+      }
+
       const blob = new Blob([new Uint8Array(content)], { type: "application/zip" })
       const url = window.URL.createObjectURL(blob)
       const link = document.createElement("a")
       link.href = url
-      const now = new Date()
-      const dateString = dayjs(now).format("YYYY-MM-DD_HH-mm")
       link.setAttribute(
         "download",
-        `${forLottery ? "lottery" : "applications"}-${listingId}-${dateString}.zip`
+        `${isLottery ? "lottery" : "applications"}-${listingId}-${createDateStringFromNow(
+          "YYYY-MM-DD_HH-mm"
+        )}.zip`
       )
       document.body.appendChild(link)
       link.click()

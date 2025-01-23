@@ -3,7 +3,6 @@ import { PassThrough } from 'stream';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
 import { HttpModule } from '@nestjs/axios';
-import { Request as ExpressRequest, Response } from 'express';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { ApplicationCsvQueryParams } from '../../../src/dtos/applications/application-csv-query-params.dto';
 import { User } from '../../../src/dtos/users/user.dto';
@@ -97,12 +96,11 @@ describe('Testing application export service', () => {
     ]);
 
     const exportResponse = await service.csvExport(
-      { user: requestingUser } as unknown as ExpressRequest,
-      {} as unknown as Response,
       {
         listingId: randomUUID(),
         includeDemographics: false,
       } as unknown as ApplicationCsvQueryParams,
+      requestingUser.id,
     );
 
     const headerRow =
@@ -156,12 +154,11 @@ describe('Testing application export service', () => {
       ]);
 
     const exportResponse = await service.csvExport(
-      { user: requestingUser } as unknown as ExpressRequest,
-      {} as unknown as Response,
       {
         listingId: 'test',
         includeDemographics: true,
       } as unknown as ApplicationCsvQueryParams,
+      requestingUser.id,
     );
 
     const headerRow =
@@ -227,9 +224,8 @@ describe('Testing application export service', () => {
       .spyOn({ unitTypeToReadable }, 'unitTypeToReadable')
       .mockReturnValue('Studio');
     const exportResponse = await service.csvExport(
-      { user: requestingUser } as unknown as ExpressRequest,
-      {} as unknown as Response,
       { listingId: randomUUID() } as unknown as ApplicationCsvQueryParams,
+      requestingUser.id,
     );
 
     const mockedStream = new PassThrough();
@@ -290,12 +286,11 @@ describe('Testing application export service', () => {
       .spyOn({ unitTypeToReadable }, 'unitTypeToReadable')
       .mockReturnValue('Studio');
     const exportResponse = await service.csvExport(
-      { user: requestingUser } as unknown as ExpressRequest,
-      {} as unknown as Response,
       {
         listingId: randomUUID(),
         timeZone: 'America/New_York',
       } as unknown as ApplicationCsvQueryParams,
+      requestingUser.id,
     );
 
     const mockedStream = new PassThrough();
@@ -359,12 +354,11 @@ describe('Testing application export service', () => {
       .spyOn({ unitTypeToReadable }, 'unitTypeToReadable')
       .mockReturnValue('Studio');
     const exportResponse = await service.csvExport(
-      { user: requestingUser } as unknown as ExpressRequest,
-      {} as unknown as Response,
       {
         listingId: randomUUID(),
         timeZone: 'America/New_York',
       } as unknown as ApplicationCsvQueryParams,
+      requestingUser.id,
     );
 
     const mockedStream = new PassThrough();

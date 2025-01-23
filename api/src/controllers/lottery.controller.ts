@@ -38,7 +38,6 @@ import { PublicLotteryResult } from '../../src/dtos/lottery/lottery-public-resul
 import { PublicLotteryTotal } from '../../src/dtos/lottery/lottery-public-total.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { User } from '../../src/dtos/users/user.dto';
-import { zipExport } from '../utilities/zip-export';
 
 @Controller('lottery')
 @ApiTags('lottery')
@@ -85,16 +84,10 @@ export class LotteryController {
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationCsvQueryParams,
   ): Promise<StreamableFile> {
-    const user = mapTo(User, req['user']);
-    const readStream = await this.applicationExporterService.spreadsheetExport(
+    return await this.applicationExporterService.exporter(
       req,
-      res,
       queryParams,
-    );
-    return await zipExport(
-      readStream,
-      `listing-${queryParams.id}-lottery-${user.id}-${new Date().getTime()}`,
-      `lottery-${queryParams.id}-${new Date().getTime()}`,
+      true,
       true,
     );
   }

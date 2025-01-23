@@ -52,7 +52,6 @@ import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
 import { ApiKeyGuard } from '../guards/api-key.guard';
 import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
 import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-response.dto';
-import { zipExport } from '../utilities/zip-export';
 
 @Controller('applications')
 @ApiTags('applications')
@@ -120,22 +119,13 @@ export class ApplicationController {
   @UseInterceptors(ExportLogInterceptor)
   async listAsCsv(
     @Request() req: ExpressRequest,
-    @Res({ passthrough: true }) res: Response,
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationCsvQueryParams,
   ): Promise<StreamableFile> {
-    const user = mapTo(User, req['user']);
-    const readStream = await this.applicationExportService.csvExport(
+    return await this.applicationExportService.exporter(
       req,
-      res,
       queryParams,
-    );
-    return await zipExport(
-      readStream,
-      `listing-${queryParams.id}-applications-${
-        user.id
-      }-${new Date().getTime()}`,
-      `applications-${queryParams.id}-${new Date().getTime()}`,
+      false,
       false,
     );
   }
@@ -153,19 +143,10 @@ export class ApplicationController {
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationCsvQueryParams,
   ): Promise<StreamableFile> {
-    const user = mapTo(User, req['user']);
-    const readStream = await this.applicationExportService.spreadsheetExport(
+    return await this.applicationExportService.exporter(
       req,
-      res,
       queryParams,
       false,
-    );
-    return await zipExport(
-      readStream,
-      `listing-${queryParams.id}-applications-${
-        user.id
-      }-${new Date().getTime()}`,
-      `applications-${queryParams.id}-${new Date().getTime()}`,
       true,
     );
   }
