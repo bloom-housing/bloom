@@ -524,6 +524,7 @@ export const useZipExport = (
   const onExport = useCallback(async () => {
     setExportLoading(true)
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let content: any
       if (isLottery) {
         content = await lotteryService.lotteryResults(
