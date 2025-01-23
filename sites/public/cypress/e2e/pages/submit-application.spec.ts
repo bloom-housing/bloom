@@ -1,7 +1,7 @@
-import { ElmVillageApplication, minimalDataApplication } from "../../mockData/applicationData"
+import { ElmVillageApplication, autofillBlueSkyApplication } from "../../mockData/applicationData"
 
 describe("Submit", function () {
-  it.only("should submit an application for the Elm Village listing", function () {
+  it.only("should submit an application for the Elm Village listing, then autofill and submit an application for Blue Sky Apartments", function () {
     cy.intercept("GET", "/geocoding/v5/**", { fixture: "address" })
     // Interceptor for the address in the preference
     cy.intercept(
@@ -18,11 +18,6 @@ describe("Submit", function () {
     )
 
     cy.submitApplication("Elm Village", ElmVillageApplication, false, true, false)
-    cy.submitApplication("Elm Village", ElmVillageApplication, true, true, true)
-  })
-
-  it("should submit a minimal application for the Test: Default, No Preferences", function () {
-    cy.intercept("GET", "/geocoding/v5/**", { fixture: "address" })
-    cy.submitApplication("Blue Sky Apartments", minimalDataApplication, false, false)
+    cy.submitApplication("Blue Sky Apartments", autofillBlueSkyApplication, true, true, true)
   })
 })

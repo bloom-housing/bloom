@@ -194,38 +194,8 @@ export const ElmVillageApplication: Application = {
     {
       ...idDefaults,
       id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
-      name: "SRO" as UnitTypeEnum,
-      numBedrooms: 0,
-    },
-    {
-      ...idDefaults,
-      id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
-      name: "Studio" as UnitTypeEnum,
-      numBedrooms: 0,
-    },
-    {
-      ...idDefaults,
-      id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
       name: "1 Bedroom" as UnitTypeEnum,
       numBedrooms: 1,
-    },
-    {
-      ...idDefaults,
-      id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
-      name: "2 Bedroom" as UnitTypeEnum,
-      numBedrooms: 2,
-    },
-    {
-      ...idDefaults,
-      id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
-      name: "3 Bedroom" as UnitTypeEnum,
-      numBedrooms: 3,
-    },
-    {
-      ...idDefaults,
-      id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
-      name: "4 Bedroom" as UnitTypeEnum,
-      numBedrooms: 3,
     },
   ],
   demographics: {
@@ -305,6 +275,107 @@ export const ElmVillageApplication: Application = {
   status: ApplicationStatusEnum.draft,
   submissionType: ApplicationSubmissionTypeEnum.electronical,
   language: LanguagesEnum.en,
+}
+
+const BlueSkyProgramsAndPreferences = {
+  preferences: [],
+  programs: [
+    {
+      claimed: false,
+      key: "servedInMilitary",
+      options: [
+        {
+          key: "servedInMilitary",
+          checked: false,
+        },
+        {
+          key: "doNotConsider",
+          checked: false,
+        },
+        {
+          key: "preferNotToSay",
+          checked: false,
+        },
+      ],
+    },
+    {
+      key: "tay",
+      claimed: false,
+      options: [
+        {
+          key: "tay",
+          checked: false,
+        },
+        {
+          key: "doNotConsider",
+          checked: false,
+        },
+        {
+          key: "preferNotToSay",
+          checked: false,
+        },
+      ],
+    },
+    {
+      key: "disabilityOrMentalIllness",
+      claimed: false,
+      options: [
+        {
+          key: "disabilityOrMentalIllness",
+          checked: false,
+        },
+        {
+          key: "doNotConsider",
+          checked: false,
+        },
+        {
+          key: "preferNotToSay",
+          checked: false,
+        },
+      ],
+    },
+    {
+      key: "housingSituation",
+      claimed: false,
+      options: [
+        {
+          key: "notPermanent",
+          checked: false,
+        },
+        {
+          key: "homeless",
+          checked: false,
+        },
+        {
+          key: "doNotConsider",
+          checked: false,
+        },
+        {
+          key: "preferNotToSay",
+          checked: false,
+        },
+      ],
+    },
+    {
+      key: "rentBasedOnIncome",
+      claimed: false,
+      options: [
+        {
+          key: "flatRent",
+          checked: false,
+        },
+        {
+          key: "30Percent",
+          checked: false,
+        },
+      ],
+    },
+  ] as ApplicationMultiselectQuestion[],
+}
+
+export const autofillBlueSkyApplication: Application = {
+  ...ElmVillageApplication,
+  ...BlueSkyProgramsAndPreferences,
 }
 
 export const minimalDataApplication: Application = {
