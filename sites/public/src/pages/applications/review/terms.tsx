@@ -10,6 +10,7 @@ import {
   pushGtmEvent,
   AuthContext,
   listingSectionQuestions,
+  useToastyRef,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
@@ -27,6 +28,7 @@ const ApplicationTerms = () => {
   const router = useRouter()
   const { conductor, application, listing } = useFormConductor("terms")
   const { applicationsService, profile } = useContext(AuthContext)
+  const toastyRef = useToastyRef()
   const [apiError, setApiError] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
@@ -42,47 +44,50 @@ const ApplicationTerms = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
-    setSubmitting(true)
-    const acceptedTerms = data.agree === "agree"
-    conductor.currentStep.save({ acceptedTerms })
-    application.acceptedTerms = acceptedTerms
-    application.completedSections = 6
+    // blocks multiple clicks and previously submitted applications
+    if (!submitting && !application.confirmationCode) {
+      setSubmitting(true)
+      const acceptedTerms = data.agree === "agree"
+      conductor.currentStep.save({ acceptedTerms })
+      application.acceptedTerms = acceptedTerms
+      application.completedSections = 6
 
-    if (application?.programs?.length) {
-      untranslateMultiselectQuestion(application.programs, listing)
-    }
-    if (application?.preferences?.length) {
-      untranslateMultiselectQuestion(application.preferences, listing)
-    }
+      if (application?.programs?.length) {
+        untranslateMultiselectQuestion(application.programs, listing)
+      }
+      if (application?.preferences?.length) {
+        untranslateMultiselectQuestion(application.preferences, listing)
+      }
 
-    applicationsService
-      .submit({
-        body: {
-          ...application,
-          reviewStatus: ApplicationReviewStatusEnum.pending,
-          listings: {
-            id: listing.id,
-          },
-          appUrl: window.location.origin,
-          ...(profile && {
-            user: {
-              id: profile.id,
+      applicationsService
+        .submit({
+          body: {
+            ...application,
+            reviewStatus: ApplicationReviewStatusEnum.pending,
+            listings: {
+              id: listing.id,
             },
-          }),
-          // TODO remove this once this call is changed to the new backend
-        },
-      })
-      .then((result) => {
-        conductor.currentStep.save({ confirmationCode: result.confirmationCode })
-        return router.push("/applications/review/confirmation")
-      })
-      .catch((err) => {
-        setSubmitting(false)
-        setApiError(true)
-        window.scrollTo(0, 0)
-        console.error(`Error creating application: ${err}`)
-        throw err
-      })
+            appUrl: window.location.origin,
+            ...(profile && {
+              user: {
+                id: profile.id,
+              },
+            }),
+            // TODO remove this once this call is changed to the new backend
+          },
+        })
+        .then((result) => {
+          conductor.currentStep.save({ confirmationCode: result.confirmationCode })
+          return router.push("/applications/review/confirmation")
+        })
+        .catch((err) => {
+          setSubmitting(false)
+          setApiError(true)
+          window.scrollTo(0, 0)
+          console.error(`Error creating application: ${err}`)
+          throw err
+        })
+    }
   }
 
   const agreeField = [
@@ -110,6 +115,16 @@ const ApplicationTerms = () => {
         return { text: "" }
     }
   }, [listing])
+
+  useEffect(() => {
+    if (application.confirmationCode && router.isReady) {
+      const { addToast } = toastyRef.current
+      addToast(t("listings.applicationAlreadySubmitted"), { variant: "alert" })
+      profile
+        ? void router.push(`/${router.locale}/account/applications`)
+        : void router.push(`/${router.locale}/listing/${listing.id}/${listing.urlSlug}`)
+    }
+  }, [application, listing, profile, router, toastyRef])
 
   useEffect(() => {
     pushGtmEvent<PageView>({
