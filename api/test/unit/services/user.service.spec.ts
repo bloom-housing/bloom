@@ -18,6 +18,7 @@ import { PermissionService } from '../../../src/services/permission.service';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
 import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
 import { UserViews } from '../../../src/enums/user/view-enum';
+import { Logger } from '@nestjs/common';
 
 describe('Testing user service', () => {
   let service: UserService;
@@ -84,6 +85,7 @@ describe('Testing user service', () => {
         SendGridService,
         TranslationService,
         JurisdictionService,
+        Logger,
         {
           provide: SendGridService,
           useValue: SendGridServiceMock,
