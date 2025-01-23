@@ -1434,6 +1434,58 @@ export class ScriptRunnerService {
   }
 
   /**
+   * @param req incoming request object
+   * @returns successDTO
+   * @description updates the "what happens next" content in lottery email
+   */
+  async updatesWhatHappensInLotteryEmail(
+    req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart(
+      'update what happens next content in lottery email',
+      requestingUser,
+    );
+
+    await this.updateTranslationsForLanguage(LanguagesEnum.en, {
+      lotteryAvailable: {
+        whatHappensContent:
+          'The property manager will begin to contact applicants in the order of lottery rank, within each lottery preference. When the units are all filled, the property manager will stop contacting applicants. All the units could be filled before the property manager reaches your rank. If this happens, you will not be contacted.',
+      },
+    });
+    await this.updateTranslationsForLanguage(LanguagesEnum.es, {
+      lotteryAvailable: {
+        whatHappensContent:
+          'El administrador de la propiedad comenzará a comunicarse con los solicitantes en el orden de clasificación de la lotería, dentro de cada preferencia de la lotería. Cuando todas las unidades estén ocupadas, el administrador de la propiedad dejará de comunicarse con los solicitantes. Es posible que todas las unidades estén ocupadas antes de que el administrador de la propiedad alcance su clasificación. Si esto sucede, no se comunicarán con usted.',
+      },
+    });
+    await this.updateTranslationsForLanguage(LanguagesEnum.tl, {
+      lotteryAvailable: {
+        whatHappensContent:
+          'Ang tagapamahala ng ari-arian ay magsisimulang makipag-ugnayan sa mga aplikante sa pagkakasunud-sunod ng ranggo ng lottery, sa loob ng bawat kagustuhan sa lottery. Kapag napuno na ang lahat ng unit, hihinto na ang property manager sa pakikipag-ugnayan sa mga aplikante. Maaaring mapunan ang lahat ng unit bago maabot ng property manager ang iyong ranggo. Kung mangyari ito, hindi ka makontak.',
+      },
+    });
+    await this.updateTranslationsForLanguage(LanguagesEnum.vi, {
+      lotteryAvailable: {
+        whatHappensContent:
+          'Người quản lý bất động sản sẽ bắt đầu liên hệ với người nộp đơn theo thứ hạng xổ số, trong mỗi sở thích xổ số. Khi tất cả các đơn vị đã được lấp đầy, người quản lý bất động sản sẽ ngừng liên hệ với người nộp đơn. Tất cả các đơn vị có thể được lấp đầy trước khi người quản lý bất động sản đạt đến thứ hạng của bạn. Nếu điều này xảy ra, bạn sẽ không được liên hệ.',
+      },
+    });
+    await this.updateTranslationsForLanguage(LanguagesEnum.zh, {
+      lotteryAvailable: {
+        whatHappensContent:
+          '物业经理将按照抽签顺序开始联系申请人，每个抽签偏好内都是如此。当所有单元都已满时，物业经理将停止联系申请人。在物业经理达到您的排名之前，所有单元都可能已满。如果发生这种情况，您将不会被联系。',
+      },
+    });
+
+    await this.markScriptAsComplete(
+      'update what happens next content in lottery email',
+      requestingUser,
+    );
+    return { success: true };
+  }
+
+  /**
     Adds all existing feature flags across Bloom to the database
   */
   async addFeatureFlags(req: ExpressRequest): Promise<SuccessDTO> {
