@@ -84,10 +84,11 @@ export class LotteryController {
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationCsvQueryParams,
   ): Promise<StreamableFile> {
-    return await this.applicationExporterService.spreadsheetExport(
+    return await this.applicationExporterService.exporter(
       req,
-      res,
       queryParams,
+      true,
+      true,
     );
   }
 
