@@ -822,9 +822,10 @@ export class EmailService {
               appUrl: jurisdiction.publicUrl,
             },
             signInUrl: `${jurisdiction.publicUrl}/${language}/sign-in`,
-            // These two URLs are placeholders and must be updated per jurisdiction
-            notificationsUrl: 'https://www.exygy.com',
-            helpCenterUrl: 'https://www.exygy.com',
+            termsUrl: 'https://mtc.ca.gov/doorway-housing-portal-terms-use',
+            notificationsUrl:
+              'https://public.govdelivery.com/accounts/CAMTC/signup/36832',
+            helpCenterUrl: `${jurisdiction.publicUrl}/help/questions#how-do-lottery-results-work-section`,
           }),
         },
         'lotteryPublishedApplicant',
