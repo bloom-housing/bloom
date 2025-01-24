@@ -241,7 +241,8 @@ Cypress.Commands.add("step5AlternateContactInfo", (application, autofill) => {
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
 
-  cy.isNextRouteValid("alternateContactInfo", autofill ? 1 : 0)
+  const nextStep = autofill ? 1 : 0
+  cy.isNextRouteValid("alternateContactInfo", nextStep)
 })
 
 Cypress.Commands.add("step6HouseholdSize", (application, autofill) => {
