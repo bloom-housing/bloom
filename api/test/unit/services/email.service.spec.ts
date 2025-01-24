@@ -682,23 +682,36 @@ describe('Testing email service', () => {
 
   describe('lottery published for applicant', () => {
     it('should generate html body', async () => {
-      const emailArr = ['testOne@xample.com', 'testTwo@example.com'];
+      const emailArr = ['testOne@example.com', 'testTwo@example.com'];
       const service = await module.resolve(EmailService);
       await service.lotteryPublishedApplicant(
         { name: 'listing name', id: 'listingId', juris: 'jurisdictionId' },
         { en: emailArr },
       );
 
-      expect(sendMock).toHaveBeenCalled();
-      const emailMock = sendMock.mock.calls[0][0];
-      expect(emailMock.to).toEqual(emailArr);
-      expect(emailMock.subject).toEqual(
-        'New Housing Lottery Results Available',
-      );
-      expect(emailMock.html).toMatch(
-        /href="https:\/\/example\.com\/en\/sign-in"/,
-      );
-      expect(emailMock.html).toMatch(/please visit https:\/\/example\.com/);
+      expect(mockSeSClient).toHaveReceivedCommandWith(SendBulkEmailCommand, {
+        FromEmailAddress: 'Doorway <no-reply@housingbayarea.org>',
+        BulkEmailEntries: expect.arrayContaining([
+          { Destination: { ToAddresses: ['testOne@example.com'] } },
+          { Destination: { ToAddresses: ['testTwo@example.com'] } },
+        ]),
+        DefaultContent: {
+          Template: {
+            TemplateContent: {
+              Subject: `New Housing Lottery Results Available`,
+              Html: expect.anything(),
+            },
+            TemplateData: expect.anything(),
+          },
+        },
+      });
+      const html =
+        mockSeSClient.call(0).args[0].input['DefaultContent']['Template'][
+          'TemplateContent'
+        ]['Html'];
+
+      expect(html).toMatch(/href="https:\/\/example\.com\/en\/sign-in"/);
+      expect(html).toMatch(/please visit https:\/\/example\.com/);
     });
   });
 });
