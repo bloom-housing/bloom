@@ -241,8 +241,7 @@ Cypress.Commands.add("step5AlternateContactInfo", (application, autofill) => {
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
 
-  const nextStep = autofill ? 1 : 0
-  cy.isNextRouteValid("alternateContactInfo", nextStep)
+  cy.isNextRouteValid("alternateContactInfo", autofill ? 1 : 0)
 })
 
 Cypress.Commands.add("step6HouseholdSize", (application, autofill) => {
@@ -342,7 +341,6 @@ Cypress.Commands.add("step7AddHouseholdMembers", (application, autofill) => {
     cy.checkErrorMessages("not.exist")
     cy.location("pathname").should("include", "/applications/household/add-members")
   })
-
   cy.goNext()
 })
 
@@ -437,7 +435,6 @@ Cypress.Commands.add("step12Programs", (application) => {
       })
     }
 
-    cy.log(program)
     cy.goNext()
   })
 
