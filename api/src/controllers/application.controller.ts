@@ -115,15 +115,19 @@ export class ApplicationController {
     summary: 'Get applications as csv',
     operationId: 'listAsCsv',
   })
-  @Header('Content-Type', 'text/csv')
+  @Header('Content-Type', 'application/zip')
   @UseInterceptors(ExportLogInterceptor)
   async listAsCsv(
     @Request() req: ExpressRequest,
-    @Res({ passthrough: true }) res: Response,
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationCsvQueryParams,
   ): Promise<StreamableFile> {
-    return await this.applicationExportService.csvExport(req, res, queryParams);
+    return await this.applicationExportService.exporter(
+      req,
+      queryParams,
+      false,
+      false,
+    );
   }
 
   @Get(`spreadsheet`)
@@ -139,11 +143,11 @@ export class ApplicationController {
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationCsvQueryParams,
   ): Promise<StreamableFile> {
-    return await this.applicationExportService.spreadsheetExport(
+    return await this.applicationExportService.exporter(
       req,
-      res,
       queryParams,
       false,
+      true,
     );
   }
 
