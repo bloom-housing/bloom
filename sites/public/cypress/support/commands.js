@@ -241,6 +241,11 @@ Cypress.Commands.add("step5AlternateContactInfo", (application, autofill) => {
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
 
+  autofill &
+    cy.location("pathname").then((pathname) => {
+      cy.log(`Step5 current pathname: ${pathname}`)
+    })
+
   cy.isNextRouteValid("alternateContactInfo", autofill ? 1 : 0)
 })
 
@@ -248,13 +253,19 @@ Cypress.Commands.add("step6HouseholdSize", (application, autofill) => {
   if (application.householdMember.length > 0) {
     if (!autofill) {
       cy.getByID("householdSizeLiveWithOthers").click()
-    } else {
-      cy.wait(1000)
     }
     cy.goNext()
     cy.checkErrorAlert("not.exist")
     cy.checkErrorMessages("not.exist")
+    autofill &
+      cy.location("pathname").then((pathname) => {
+        cy.log(`Step6a (before pathname check) current pathname: ${pathname}`)
+      })
     cy.location("pathname").should("include", "applications/household/members-info")
+    autofill &
+      cy.location("pathname").then((pathname) => {
+        cy.log(`Step6a (after pathname check) current pathname: ${pathname}`)
+      })
   } else {
     if (!autofill) {
       cy.getByID("householdSizeLiveAlone").click()
