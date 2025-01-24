@@ -10,6 +10,7 @@ import {
   pushGtmEvent,
   AuthContext,
   listingSectionQuestions,
+  MessageContext,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
@@ -26,6 +27,7 @@ const ApplicationTerms = () => {
   const router = useRouter()
   const { conductor, application, listing } = useFormConductor("terms")
   const { applicationsService, authService, loadProfile, profile } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
   const [apiError, setApiError] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [sessionVoided, setSessionVoided] = useState(false)
@@ -47,68 +49,80 @@ const ApplicationTerms = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
-    setSubmitting(true)
-    const acceptedTerms = data.agree
-    conductor.currentStep.save({ acceptedTerms })
-    application.acceptedTerms = acceptedTerms
-    application.completedSections = 6
+    // blocks multiple clicks and previously submitted applications
+    if (!submitting && !application.confirmationCode) {
+      setSubmitting(true)
+      const acceptedTerms = data.agree
+      conductor.currentStep.save({ acceptedTerms })
+      application.acceptedTerms = acceptedTerms
+      application.completedSections = 6
 
-    if (application.programs?.length) {
-      untranslateMultiselectQuestion(application.programs, listing)
-    }
-    if (application.preferences?.length) {
-      untranslateMultiselectQuestion(application.preferences, listing)
-    }
+      if (application.programs?.length) {
+        untranslateMultiselectQuestion(application.programs, listing)
+      }
+      if (application.preferences?.length) {
+        untranslateMultiselectQuestion(application.preferences, listing)
+      }
 
-    if (application.demographics.spokenLanguage === "notListed") {
+      if (application.demographics.spokenLanguage === "notListed") {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        application.demographics.spokenLanguage = `${application.demographics.spokenLanguage}:${application.demographics.spokenLanguageNotListed}`
+      }
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      application.demographics.spokenLanguage = `${application.demographics.spokenLanguage}:${application.demographics.spokenLanguageNotListed}`
-    }
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    delete application.demographics.spokenLanguageNotListed
+      delete application.demographics.spokenLanguageNotListed
 
-    authService
-      .requestNewToken()
-      .then(() => {
-        applicationsService
-          .submit({
-            body: {
-              ...application,
-              reviewStatus: ApplicationReviewStatusEnum.pending,
-              listings: {
-                id: listing.id,
-              },
-              appUrl: window.location.origin,
-              ...(profile && {
-                user: {
-                  id: profile.id,
+      authService
+        .requestNewToken()
+        .then(() => {
+          applicationsService
+            .submit({
+              body: {
+                ...application,
+                reviewStatus: ApplicationReviewStatusEnum.pending,
+                listings: {
+                  id: listing.id,
                 },
-              }),
-              // TODO remove this once this call is changed to the new backend
-            },
-          })
-          .then((result) => {
-            conductor.currentStep.save({ confirmationCode: result.confirmationCode })
-            return router.push("/applications/review/confirmation")
-          })
-          .catch((err) => {
-            setSubmitting(false)
-            setApiError(true)
-            window.scrollTo(0, 0)
-            console.error(`Error creating application: ${err}`)
-            throw err
-          })
-      })
-      .catch((e) => {
-        // We need to have a valid user when submitting an application.
-        // If their session is no longer valid we should send them back to login
-        // This can happen either by auth token being too old or the user logged in a different session and voided this one
-        console.error(e)
-        setSessionVoided(true)
-      })
+                appUrl: window.location.origin,
+                ...(profile && {
+                  user: {
+                    id: profile.id,
+                  },
+                }),
+                // TODO remove this once this call is changed to the new backend
+              },
+            })
+            .then((result) => {
+              conductor.currentStep.save({ confirmationCode: result.confirmationCode })
+              return router.push("/applications/review/confirmation")
+            })
+            .catch((err) => {
+              setSubmitting(false)
+              setApiError(true)
+              window.scrollTo(0, 0)
+              console.error(`Error creating application: ${err}`)
+              throw err
+            })
+        })
+        .catch((e) => {
+          // We need to have a valid user when submitting an application.
+          // If their session is no longer valid we should send them back to login
+          // This can happen either by auth token being too old or the user logged in a different session and voided this one
+          console.error(e)
+          setSessionVoided(true)
+        })
+    }
   }
+
+  useEffect(() => {
+    if (application.confirmationCode && router.isReady) {
+      addToast(t("listings.applicationAlreadySubmitted"), { variant: "alert" })
+      profile
+        ? void router.push(`/${router.locale}/account/applications`)
+        : void router.push(`/${router.locale}/listing/${listing.id}/${listing.urlSlug}`)
+    }
+  }, [application, listing, profile, router])
 
   useEffect(() => {
     pushGtmEvent<PageView>({
