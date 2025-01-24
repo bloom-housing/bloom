@@ -25,6 +25,10 @@ export default class UnitsFormatter extends Formatter {
         case "oneBdrm":
           unit.numBedrooms = 1
           break
+        case "studio":
+        case "SRO":
+          unit.numBedrooms = 0
+          break
         default:
           unit.numBedrooms = null
       }
