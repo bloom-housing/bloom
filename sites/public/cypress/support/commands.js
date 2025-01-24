@@ -249,6 +249,8 @@ Cypress.Commands.add("step6HouseholdSize", (application, autofill) => {
   if (application.householdMember.length > 0) {
     if (!autofill) {
       cy.getByID("householdSizeLiveWithOthers").click()
+    } else {
+      cy.wait(1000)
     }
     cy.goNext()
     cy.checkErrorAlert("not.exist")
@@ -382,7 +384,7 @@ Cypress.Commands.add("step9Accessibility", (application, autofill) => {
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
-  // if autofill, we don't know the following
+
   if (application.programs.length) {
     cy.isNextRouteValid("adaHouseholdMembers")
   } else {
