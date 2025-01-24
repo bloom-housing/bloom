@@ -85,7 +85,7 @@ let partnerUser: User = {
   userRoles: { isPartner: true },
 }
 
-const doJurisdictionsHaveFeatureFlagOn = () => {
+let doJurisdictionsHaveFeatureFlagOn = () => {
   return false
 }
 
@@ -1841,6 +1841,26 @@ describe("<ListingFormActions>", () => {
         expect(getByText("Post Results")).toBeTruthy()
         expect(getByText("Exit")).toBeTruthy()
       })
+    })
+  })
+  describe("as admin with hideCloseListingButton flag enabled", () => {
+    beforeAll(() => {
+      doJurisdictionsHaveFeatureFlagOn = () => true
+    })
+    it("should not render the close button", () => {
+      const { queryByText } = render(
+        <AuthContext.Provider
+          value={{
+            profile: adminUser,
+            doJurisdictionsHaveFeatureFlagOn,
+          }}
+        >
+          <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
+            <ListingFormActions type={ListingFormActionsType.edit} />
+          </ListingContext.Provider>
+        </AuthContext.Provider>
+      )
+      expect(queryByText("Close")).toBeFalsy()
     })
   })
 })
