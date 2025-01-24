@@ -252,6 +252,10 @@ Cypress.Commands.add("step6HouseholdSize", (application, autofill) => {
   if (application.householdMember.length > 0) {
     if (!autofill) {
       cy.getByID("householdSizeLiveWithOthers").click()
+    } else {
+      cy.contains(
+        "Before adding other people, make sure that they aren't named on any other application for this listing."
+      )
     }
     cy.goNext()
     cy.checkErrorAlert("not.exist")
