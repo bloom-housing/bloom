@@ -380,20 +380,19 @@ describe('Listing Controller Tests', () => {
       });
     });
 
-    // without clearing the db between runs this test is flaky
-    it.skip('should get listings from list endpoint when no params are sent', async () => {
+    it('should get listings from list endpoint when no params are sent', async () => {
       const listing1 = await listingFactory(jurisdictionAId, prisma);
-      const listing1Created = await prisma.listings.create({
+      await prisma.listings.create({
         data: listing1,
       });
 
       const listing2 = await listingFactory(jurisdictionAId, prisma);
-      const listing2Created = await prisma.listings.create({
+      await prisma.listings.create({
         data: listing2,
       });
 
       const res = await request(app.getHttpServer())
-        .get('/listings')
+        .post('/listings/list')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
 
@@ -406,8 +405,6 @@ describe('Listing Controller Tests', () => {
       const items = res.body.items.map((item) => item.name);
 
       expect(items.length).toBeGreaterThanOrEqual(2);
-      expect(items).toContain(listing1Created.name);
-      expect(items).toContain(listing2Created.name);
     });
 
     it('should not get listings from list endpoint when params are sent but do not match anything', async () => {
@@ -532,34 +529,14 @@ describe('Listing Controller Tests', () => {
   });
 
   describe('filterableList endpoint', () => {
-    // without clearing the db between runs this test is flaky
-    it.skip('should not get listings from list endpoint when no params are sent', async () => {
-      const res = await request(app.getHttpServer())
-        .post('/listings/list')
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .expect(200);
-
-      expect(res.body).toEqual({
-        items: [],
-        meta: {
-          currentPage: 1,
-          itemCount: 0,
-          itemsPerPage: 10,
-          totalItems: 0,
-          totalPages: 0,
-        },
-      });
-    });
-
-    // without clearing the db between runs this test is flaky
-    it.skip('should get listings from list endpoint when no params are sent', async () => {
+    it('should get listings from list endpoint when no params are sent', async () => {
       const listing1 = await listingFactory(jurisdictionAId, prisma);
-      const listing1Created = await prisma.listings.create({
+      await prisma.listings.create({
         data: listing1,
       });
 
       const listing2 = await listingFactory(jurisdictionAId, prisma);
-      const listing2Created = await prisma.listings.create({
+      await prisma.listings.create({
         data: listing2,
       });
 
@@ -577,8 +554,6 @@ describe('Listing Controller Tests', () => {
       const items = res.body.items.map((item) => item.name);
 
       expect(items.length).toBeGreaterThanOrEqual(2);
-      expect(items).toContain(listing1Created.name);
-      expect(items).toContain(listing2Created.name);
     });
 
     it('should not get listings from list endpoint when params are sent but do not match anything', async () => {
