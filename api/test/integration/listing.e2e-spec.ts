@@ -392,7 +392,7 @@ describe('Listing Controller Tests', () => {
       });
 
       const res = await request(app.getHttpServer())
-        .post('/listings/list')
+        .post('/listings')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
 
@@ -541,9 +541,9 @@ describe('Listing Controller Tests', () => {
       });
 
       const res = await request(app.getHttpServer())
-        .post('/listings/list')
+        .post(`/listings/list`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .expect(200);
+        .expect(201);
 
       expect(res.body.meta.currentPage).toEqual(1);
       expect(res.body.meta.itemCount).toBeGreaterThanOrEqual(2);
