@@ -570,6 +570,7 @@
   "listings.annualIncome": "%{আয়} প্রতি বছর",
   "listings.annualIncomeRange": "%{থেকে} থেকে %{থেকে} প্রতি বছর",
   "listings.applicationAddress": "ঠিকানা",
+  "listings.applicationAlreadySubmitted": "এই আবেদনটি ইতিমধ্যেই জমা দেওয়া হয়েছে।",
   "listings.applicationDeadline": "আবেদনের শেষ তারিখ",
   "listings.applicationDropOffQuestion": "আবেদন কি বাদ দেওয়া যাবে?",
   "listings.applicationDueTime": "আবেদনের নির্ধারিত সময়",
