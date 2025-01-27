@@ -45,7 +45,7 @@ export const fitBounds = (
     return
   } else {
     map.fitBounds(bounds, document.getElementById("listings-map").clientWidth * 0.05)
-    if (visibleMarkers.length === 1) {
+    if (mapMarkers.length === 1) {
       const zoomLevel = getBoundsZoomLevel(bounds)
       map.setZoom(zoomLevel - 7)
     }

@@ -16,12 +16,11 @@ type ListingsListProps = {
   onPageChange: (page: number) => void
   loading: boolean
   mapMarkers: ListingMapMarker[] | null
+  isDesktop: boolean
 }
 
 const ListingsList = (props: ListingsListProps) => {
   const map = useMap()
-
-  if (!map) return null
 
   const moreMarkersOnMap = props.mapMarkers.length > 0
   const listingsDiv = (
@@ -36,20 +35,22 @@ const ListingsList = (props: ListingsListProps) => {
           title={moreMarkersOnMap ? t("t.noVisibleListings") : t("t.noMatchingListings")}
           description={moreMarkersOnMap ? t("t.tryChangingArea") : t("t.tryRemovingFilters")}
         >
-          {moreMarkersOnMap && (
+          {props.isDesktop && moreMarkersOnMap && (
             <Button
               onClick={() => {
-                fitBounds(
-                  map,
-                  props.mapMarkers.map((marker, index) => {
-                    return {
-                      id: marker.id,
-                      key: index,
-                      coordinate: { lat: marker.lat, lng: marker.lng },
-                    }
-                  }),
-                  true
-                )
+                if (map) {
+                  fitBounds(
+                    map,
+                    props.mapMarkers.map((marker, index) => {
+                      return {
+                        id: marker.id,
+                        key: index,
+                        coordinate: { lat: marker.lat, lng: marker.lng },
+                      }
+                    }),
+                    true
+                  )
+                }
               }}
             >
               {t("t.recenterMap")}
