@@ -5,6 +5,7 @@ import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const DetailBuildingFeatures = () => {
   const listing = useContext(ListingContext)
@@ -26,7 +27,7 @@ const DetailBuildingFeatures = () => {
   }
 
   const enableAccessibilityFeatures = doJurisdictionsHaveFeatureFlagOn(
-    "enableAccessibilityFeatures",
+    FeatureFlagEnum.enableAccessibilityFeatures,
     listing.jurisdictions.id
   )
 
