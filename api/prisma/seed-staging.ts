@@ -160,6 +160,14 @@ export const stagingSeed = async (
       [jurisdiction.id],
     ),
   });
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory(
+      'hideCloseListingButton',
+      false,
+      'When true, close button is hidden on the listing edit form',
+      [jurisdiction.id],
+    ),
+  });
   // create admin user
   await prismaClient.userAccounts.create({
     data: await userFactory({
