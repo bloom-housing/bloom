@@ -17,11 +17,12 @@ export default class EventsFormatter extends Formatter {
         )
     )
     if (
+      this.data.listingAvailabilityQuestion !== "openWaitlist" &&
+      this.data.reviewOrderQuestion === "reviewOrderLottery" &&
       this.data.lotteryDate &&
       this.data.lotteryDate.day &&
       this.data.lotteryDate.month &&
-      this.data.lotteryDate.year &&
-      this.data.reviewOrderQuestion === "reviewOrderLottery"
+      this.data.lotteryDate.year
     ) {
       events.push({
         type: ListingEventsTypeEnum.publicLottery,

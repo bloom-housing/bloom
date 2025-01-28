@@ -6,8 +6,8 @@
 -- the enum.
 ALTER TYPE "languages_enum"
 ADD
-    VALUE 'bn';
+    VALUE IF NOT EXISTS 'bn';
 
 ALTER TYPE "languages_enum"
 ADD
-    VALUE 'ar';
+    VALUE IF NOT EXISTS 'ar';

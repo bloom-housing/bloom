@@ -40,7 +40,7 @@
     "axios-cookiejar-support": "4.0.6",
     "clone-deep": "^4.0.1",
     "dayjs": "^1.10.7",
-    "dd-trace": "^5.28.0",
+    "dd-trace": "^5.30.0",
     "dotenv": "^8.2.0",
     "markdown-to-jsx": "^6.11.4",
     "next": "^13.2.4",

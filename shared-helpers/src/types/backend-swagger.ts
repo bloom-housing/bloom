@@ -236,6 +236,28 @@ export class ListingsService {
     })
   }
   /**
+   * Get a paginated set of listings
+   */
+  filterableList(
+    params: {
+      /** requestBody */
+      body?: ListingsQueryParams
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PaginatedListing> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/list"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Get listings and units as zip
    */
   listAsCsv(
@@ -2317,6 +2339,22 @@ export class ScriptRunnerService {
   hideProgramsFromListings(options: IRequestOptions = {}): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/scriptRunner/hideProgramsFromListings"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * A script that updates the "what happens next" content in lottery email
+   */
+  updatesWhatHappensInLotteryEmail(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/updatesWhatHappensInLotteryEmail"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
@@ -5046,12 +5084,6 @@ export interface JurisdictionCreate {
   enableGeocodingRadiusMethod?: boolean
 
   /**  */
-  enableAccessibilityFeatures: boolean
-
-  /**  */
-  enableUtilitiesIncluded: boolean
-
-  /**  */
   allowSingleUseCodeLogin: boolean
 
   /**  */
@@ -5097,12 +5129,6 @@ export interface JurisdictionUpdate {
 
   /**  */
   enableGeocodingRadiusMethod?: boolean
-
-  /**  */
-  enableAccessibilityFeatures: boolean
-
-  /**  */
-  enableUtilitiesIncluded: boolean
 
   /**  */
   allowSingleUseCodeLogin: boolean
@@ -5182,12 +5208,6 @@ export interface Jurisdiction {
 
   /**  */
   enableGeocodingRadiusMethod?: boolean
-
-  /**  */
-  enableAccessibilityFeatures: boolean
-
-  /**  */
-  enableUtilitiesIncluded: boolean
 
   /**  */
   allowSingleUseCodeLogin: boolean
