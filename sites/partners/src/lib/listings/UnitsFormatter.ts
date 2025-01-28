@@ -26,7 +26,7 @@ export default class UnitsFormatter extends Formatter {
           unit.numBedrooms = 1
           break
         default:
-          unit.numBedrooms = null
+          unit.numBedrooms = 0
       }
 
       Object.keys(unit).forEach((key) => {
