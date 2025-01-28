@@ -205,7 +205,7 @@ Cypress.Commands.add("step4AlternateContactName", (application, autofill) => {
     cy.getByTestId("app-alternate-first-name").type(application.alternateContact.firstName)
     cy.getByTestId("app-alternate-last-name").type(application.alternateContact.lastName)
   } else {
-    cy.wait(1000)
+    cy.contains("Who is your alternate contact?")
   }
 
   cy.goNext()
@@ -352,7 +352,7 @@ Cypress.Commands.add("step8PreferredUnits", (application, autofill) => {
       cy.getByTestId(prefUnit.name).check()
     })
   } else {
-    cy.wait(1000)
+    cy.contains("What unit sizes are you interested in?")
   }
 
   cy.goNext()
@@ -534,7 +534,7 @@ Cypress.Commands.add("step17Demographics", (application, autofill) => {
       cy.getByTestId("app-demographics-how-did-you-hear").eq(howDidYouHearIndex).check()
     })
   } else {
-    cy.wait(1000)
+    cy.contains("Which best describes your ethnicity?")
   }
 
   cy.goNext()
