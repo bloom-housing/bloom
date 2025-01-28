@@ -236,6 +236,28 @@ export class ListingsService {
     })
   }
   /**
+   * Get a paginated set of listings
+   */
+  filterableList(
+    params: {
+      /** requestBody */
+      body?: ListingsQueryParams
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PaginatedListing> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/list"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Get listings and units as zip
    */
   listAsCsv(
