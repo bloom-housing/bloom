@@ -79,13 +79,15 @@ export class ListingController {
   @Post('list')
   @ApiOperation({
     summary: 'Get a paginated set of listings',
-    operationId: 'list',
+    operationId: 'filterableList',
   })
   @PermissionAction(permissionActions.read)
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOkResponse({ type: PaginatedListingDto })
-  public async getPaginatedSet(@Body() queryParams: ListingsQueryParams) {
+  public async getFilterablePaginatedSet(
+    @Body() queryParams: ListingsQueryParams,
+  ) {
     return await this.listingService.list(queryParams);
   }
 

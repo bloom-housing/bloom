@@ -308,6 +308,87 @@ export class ListingsService {
     })
   }
   /**
+   * Get a paginated set of listings
+   */
+  filterableList(
+    params: {
+      /** requestBody */
+      body?: ListingsQueryParams
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PaginatedListing> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/list"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get listings and units as zip
+   */
+  listAsCsv(
+    params: {
+      /**  */
+      timeZone?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/csv"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { timeZone: params["timeZone"] }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get listing map markers
+   */
+  mapMarkers(options: IRequestOptions = {}): Promise<ListingMapMarker[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/mapMarkers"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get listing for external consumption by id
+   */
+  externalRetrieve(
+    params: {
+      /**  */
+      id: string
+      /**  */
+      view?: ListingViews
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/external/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { view: params["view"] }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Duplicate listing
    */
   duplicate(

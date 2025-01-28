@@ -392,15 +392,14 @@ describe('Listing Controller Tests', () => {
       });
     });
 
-    // without clearing the db between runs this test is flaky
-    it.skip('should get listings from list endpoint when no params are sent', async () => {
+    it('should get listings from list endpoint when no params are sent', async () => {
       const listing1 = await listingFactory(jurisdictionAId, prisma);
-      const listing1Created = await prisma.listings.create({
+      await prisma.listings.create({
         data: listing1,
       });
 
       const listing2 = await listingFactory(jurisdictionAId, prisma);
-      const listing2Created = await prisma.listings.create({
+      await prisma.listings.create({
         data: listing2,
       });
 
@@ -418,8 +417,6 @@ describe('Listing Controller Tests', () => {
       const items = res.body.items.map((item) => item.name);
 
       expect(items.length).toBeGreaterThanOrEqual(2);
-      expect(items).toContain(listing1Created.name);
-      expect(items).toContain(listing2Created.name);
     });
 
     it('should not get listings from list endpoint when params are sent but do not match anything', async () => {
@@ -472,6 +469,158 @@ describe('Listing Controller Tests', () => {
 
       const listing2 = await listingFactory(jurisdictionAId, prisma, {
         listing: { name: 'filterListing2' } as Prisma.ListingsCreateInput,
+      });
+      const listing2Created = await prisma.listings.create({
+        data: listing2,
+      });
+
+      const orderedNames = [listing1Created.name, listing2Created.name].sort(
+        (a, b) => a.localeCompare(b),
+      );
+
+      let queryParams: ListingsQueryParams = {
+        limit: 1,
+        page: 1,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare.IN,
+            name: orderedNames.toString(),
+          },
+        ],
+        orderBy: [ListingOrderByKeys.name],
+        orderDir: [OrderByEnum.ASC],
+      };
+      let query = stringify(queryParams as any);
+
+      let res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.meta).toEqual({
+        currentPage: 1,
+        itemCount: 1,
+        itemsPerPage: 1,
+        totalItems: 2,
+        totalPages: 2,
+      });
+
+      expect(res.body.items.length).toEqual(1);
+      expect(res.body.items[0].name).toEqual(orderedNames[0]);
+
+      queryParams = {
+        limit: 1,
+        page: 2,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare.IN,
+            name: orderedNames.toString(),
+          },
+        ],
+        orderBy: [ListingOrderByKeys.name],
+        orderDir: [OrderByEnum.ASC],
+      };
+      query = stringify(queryParams as any);
+
+      res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.meta).toEqual({
+        currentPage: 2,
+        itemCount: 1,
+        itemsPerPage: 1,
+        totalItems: 2,
+        totalPages: 2,
+      });
+      expect(res.body.items.length).toEqual(1);
+      expect(res.body.items[0].name).toEqual(orderedNames[1]);
+    });
+  });
+
+  describe('filterableList endpoint', () => {
+    it('should get listings from list endpoint when no params are sent', async () => {
+      const listing1 = await listingFactory(jurisdictionAId, prisma);
+      await prisma.listings.create({
+        data: listing1,
+      });
+
+      const listing2 = await listingFactory(jurisdictionAId, prisma);
+      await prisma.listings.create({
+        data: listing2,
+      });
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.meta.currentPage).toEqual(1);
+      expect(res.body.meta.itemCount).toBeGreaterThanOrEqual(2);
+      expect(res.body.meta.itemsPerPage).toEqual(10);
+      expect(res.body.meta.totalItems).toBeGreaterThanOrEqual(2);
+      expect(res.body.meta.totalPages).toBeGreaterThanOrEqual(1);
+
+      const items = res.body.items.map((item) => item.name);
+
+      expect(items.length).toBeGreaterThanOrEqual(2);
+    });
+
+    it('should not get listings from list endpoint when params are sent but do not match anything', async () => {
+      const queryParams: ListingsQueryParams = {
+        limit: 1,
+        page: 1,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare['='],
+            jurisdiction: randomUUID(),
+          },
+          {
+            $comparison: Compare.IN,
+            name: 'random name',
+          },
+          {
+            $comparison: Compare['='],
+            status: 'active',
+          },
+        ],
+      };
+      const query = stringify(queryParams as any);
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body).toEqual({
+        items: [],
+        meta: {
+          currentPage: 1,
+          itemCount: 0,
+          itemsPerPage: 1,
+          totalItems: 0,
+          totalPages: 0,
+        },
+      });
+    });
+
+    it('should get listings from list endpoint when params are sent', async () => {
+      const listing1 = await listingFactory(jurisdictionAId, prisma, {
+        listing: { name: 'filterListing3' } as Prisma.ListingsCreateInput,
+      });
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+
+      const listing2 = await listingFactory(jurisdictionAId, prisma, {
+        listing: { name: 'filterListing4' } as Prisma.ListingsCreateInput,
       });
       const listing2Created = await prisma.listings.create({
         data: listing2,
