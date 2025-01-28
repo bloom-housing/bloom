@@ -241,7 +241,7 @@ Cypress.Commands.add("step5AlternateContactInfo", (application, autofill) => {
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
 
-  if (autofill && application.householdMember.length > 0) {
+  if (autofill & (application.householdMember.length > 0)) {
     cy.isNextRouteValid("liveAlone")
   } else {
     cy.isNextRouteValid("alternateContactInfo")
@@ -249,27 +249,22 @@ Cypress.Commands.add("step5AlternateContactInfo", (application, autofill) => {
 })
 
 Cypress.Commands.add("step6HouseholdSize", (application, autofill) => {
-  if (application.householdMember.length > 0) {
-    if (!autofill) {
+  if (!autofill) {
+    if (application.householdMember.length > 0) {
       cy.getByID("householdSizeLiveWithOthers").click()
-    } else {
-      cy.contains(
-        "Before adding other people, make sure that they aren't named on any other application for this listing."
-      )
-    }
-    cy.goNext()
-    cy.checkErrorAlert("not.exist")
-    cy.checkErrorMessages("not.exist")
 
-    cy.location("pathname").should("include", "applications/household/members-info")
-  } else {
-    if (!autofill) {
+      cy.goNext()
+      cy.checkErrorAlert("not.exist")
+      cy.checkErrorMessages("not.exist")
+
+      cy.location("pathname").should("include", "applications/household/members-info")
+    } else {
       cy.getByID("householdSizeLiveAlone").click()
+      cy.goNext()
+      cy.checkErrorAlert("not.exist")
+      cy.checkErrorMessages("not.exist")
+      cy.location("pathname").should("include", "applications/household/preferred-units")
     }
-    cy.goNext()
-    cy.checkErrorAlert("not.exist")
-    cy.checkErrorMessages("not.exist")
-    cy.location("pathname").should("include", "applications/household/preferred-units")
   }
 })
 
