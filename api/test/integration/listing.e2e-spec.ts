@@ -392,7 +392,7 @@ describe('Listing Controller Tests', () => {
       });
 
       const res = await request(app.getHttpServer())
-        .post('/listings')
+        .get('/listings')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
 
