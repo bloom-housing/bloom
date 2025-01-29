@@ -313,4 +313,17 @@ export class ScirptRunnerController {
   ): Promise<SuccessDTO> {
     return await this.scriptRunnerService.removeEmptyRaceInputs(req);
   }
+
+  @Put('resetMissingTranslations')
+  @ApiOperation({
+    summary:
+      'Script to reset the translations in non-english that were missing',
+    operationId: 'resetMissingTranslations',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async resetMissingTranslations(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.resetMissingTranslations(req);
+  }
 }
