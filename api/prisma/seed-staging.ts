@@ -87,6 +87,14 @@ export const stagingSeed = async (
       [jurisdiction.id],
     ),
   });
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory(
+      'enableUnitGroups',
+      false,
+      'When true, uses unit groups instead of units',
+      [jurisdiction.id],
+    ),
+  });
   // create admin user
   await prismaClient.userAccounts.create({
     data: await userFactory({
