@@ -88,6 +88,21 @@ export class ListingController {
     return await this.listingService.list(queryParams);
   }
 
+  @Post('list')
+  @ApiOperation({
+    summary: 'Get a paginated set of listings',
+    operationId: 'filterableList',
+  })
+  @PermissionAction(permissionActions.read)
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOkResponse({ type: PaginatedListingDto })
+  public async getFilterablePaginatedSet(
+    @Body() queryParams: ListingsQueryParams,
+  ) {
+    return await this.listingService.list(queryParams);
+  }
+
   @Get(`csv`)
   @ApiOperation({
     summary: 'Get listings and units as zip',
