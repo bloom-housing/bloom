@@ -1976,553 +1976,527 @@ export class ScriptRunnerService {
       requestingUser,
     );
 
-    await this.prisma.translations.update({
-      where: {
-        jurisdictionId_language: {
-          jurisdictionId: null,
-          language: 'es',
+    await this.updateTranslationsForLanguage(
+      'es',
+      {
+        confirmation: {
+          subject: 'Confirmación de su solicitud',
+          eligible: {
+            fcfs: 'Los solicitantes elegibles serán contactados por orden de llegada hasta que se llenen las vacantes.',
+            lottery:
+              'Una vez que finalice el período de solicitud, los solicitantes elegibles serán ubicados según el orden del sorteo.',
+            waitlist:
+              'Los solicitantes elegibles serán colocados en la lista de espera por orden de llegada hasta que se llenen los espacios disponibles.',
+            fcfsPreference:
+              'Las preferencias de vivienda, si aplican, afectarán el orden de llegada.',
+            waitlistContact:
+              'Es posible que se le contacte mientras esté en la lista de espera para confirmar si desea permanecer en ella.',
+            lotteryPreference:
+              'Las preferencias de vivienda, si aplican, afectarán el orden del sorteo.',
+            waitlistPreference:
+              'Las preferencias de vivienda, si aplican, afectarán el orden de la lista de espera.',
+          },
+          interview:
+            'Si se le contacta para una entrevista, se le pedirá que complete una solicitud más detallada y proporcione documentos de respaldo.',
+          otherChanges:
+            'Para otros cambios, por favor contacte doorway@bayareametro.gov.',
+          whatToExpect: {
+            FCFS: 'Los solicitantes serán contactados por el agente de la propiedad por orden de llegada hasta que se llenen las vacantes.',
+            lottery:
+              'Los solicitantes serán contactados por el agente según el orden del sorteo hasta que se llenen las vacantes.',
+            noLottery:
+              'Los solicitantes serán contactados por el agente según el orden de la lista de espera hasta que se llenen las vacantes.',
+          },
+          whileYouWait:
+            'Mientras espera, hay cosas que puede hacer para prepararse para los posibles próximos pasos y futuras oportunidades.',
+          shouldBeChosen:
+            'Si su solicitud es elegida, prepárese para completar una solicitud más detallada y proporcionar los documentos de respaldo requeridos.',
+          whatHappensNext: '¿Qué sucede después?',
+          whatToExpectNext: 'Qué esperar después:',
+          needToMakeUpdates: '¿Necesita hacer actualizaciones?',
+          applicationsClosed: 'Solicitud <br />cerrada',
+          applicationsRanked: 'Solicitud <br />clasificada',
+          eligibleApplicants: {
+            FCFS: 'Los solicitantes elegibles serán colocados en orden según el principio de <strong>primer llegado, primer servido</strong>.',
+            lottery:
+              'Los solicitantes elegibles serán colocados en orden <strong>según la preferencia y el rango de la lotería</strong>.',
+            lotteryDate: 'El sorteo se llevará a cabo el %{lotteryDate}.',
+          },
+          applicationReceived: 'Solicitud <br />recibida',
+          prepareForNextSteps: 'Prepárese para los siguientes pasos',
+          thankYouForApplying:
+            'Gracias por postular. Hemos recibido su solicitud para',
+          readHowYouCanPrepare:
+            'Lea sobre cómo puede prepararse para los siguientes pasos',
+          yourConfirmationNumber: 'Su número de confirmación',
+          applicationPeriodCloses:
+            'Una vez que cierre el período de solicitud, el administrador de la propiedad comenzará a procesar las solicitudes.',
+          contactedForAnInterview:
+            'Si se le contacta para una entrevista, deberá completar una solicitud más detallada y proporcionar documentos de respaldo.',
+          submitAnotherApplication:
+            'Si no está cambiando al solicitante principal ni a ningún miembro del hogar, puede enviar otra solicitud. Tomaremos la última presentada, según la política de solicitudes duplicadas.',
+          gotYourConfirmationNumber: 'Recibimos su solicitud para',
+        },
+        changeEmail: {
+          message:
+            'Se ha solicitado un cambio de dirección de correo electrónico para su cuenta',
+          changeMyEmail: 'Confirmar cambio de correo electrónico',
+          onChangeEmailMessage:
+            'Para confirmar el cambio de su dirección de correo electrónico, haga clic en el enlace a continuación',
+        },
+        footer: {
+          footer:
+            'Autoridad de Finanzas de Vivienda del Área de la Bahía (BAHFA)',
+          thankYou: 'Gracias',
+        },
+        forgotPassword: {
+          subject: '¿Olvidaste tu contraseña?',
+          callToAction:
+            'Si hiciste esta solicitud, por favor haz clic en el enlace a continuación para restablecer tu contraseña:',
+          passwordInfo:
+            'Tu contraseña no cambiará hasta que accedas al enlace anterior y crees una nueva.',
+          resetRequest:
+            'Se ha realizado una solicitud para restablecer tu contraseña del portal de Bloom Housing para %{appUrl}.',
+          ignoreRequest:
+            'Si no solicitaste esto, por favor ignora este correo electrónico.',
+          changePassword: 'Change my password',
+        },
+        leasingAgent: {
+          officeHours: 'Horas de oficina:',
+          propertyManager: 'Administrador de la propiedad',
+          contactAgentToUpdateInfo:
+            'Si necesita actualizar la información en su solicitud, no vuelva a postular. En su lugar, comuníquese con el agente de esta propiedad.',
+        },
+        lotteryAvailable: {
+          header: 'Nuevos resultados de la lotería de viviendas disponibles',
+          signIn: 'Inicie sesión para ver sus resultados',
+          termsOfUse: 'Términos de uso',
+          resultsAvailable:
+            'Los resultados están disponibles para una lotería de viviendas para %{listingName}. Consulte su cuenta en el Portal de Vivienda Doorway para más información',
+          duplicatesDetails:
+            'Doorway generalmente no acepta solicitudes duplicadas. Una solicitud duplicada es aquella en la que alguien también aparece en otra solicitud para la misma oportunidad de vivienda. Para obtener más información sobre cómo manejamos las solicitudes duplicadas, consulte nuestra',
+          whatHappensHeader: '¿Qué sucede después?',
+          whatHappensContent:
+            'El administrador de la propiedad comenzará a contactar a los solicitantes por su método de contacto preferido. Lo harán en el orden de clasificación de la lotería, dentro de cada preferencia de lotería. Cuando se llenen todas las unidades, el administrador de la propiedad dejará de contactar a los solicitantes. Todas las unidades podrían llenarse antes de que el administrador de la propiedad llegue a su rango. Si esto sucede, no se le contactará.',
+          otherOpportunities1:
+            'Para ver otras oportunidades de vivienda, visite %{appUrl}. Puede registrarse para recibir notificaciones de nuevas oportunidades de solicitud, aquí',
+          otherOpportunities2: 'aquí',
+          otherOpportunities3:
+            'Si desea aprender sobre cómo funcionan las loterías, consulte la sección de loterías del Centro de ayuda del Portal de Vivienda Doorway',
+          otherOpportunities4: 'Doorway Housing Portal Centro de ayuda',
+        },
+        register: {
+          welcome: 'Bienvenido',
+          welcomeMessage:
+            'Gracias por configurar tu cuenta en %{appUrl}. Ahora será más fácil para ti comenzar, guardar y enviar solicitudes en línea para las publicaciones que aparezcan en el sitio.',
+          confirmMyAccount: 'Confirmar mi cuenta',
+          toConfirmAccountMessage:
+            'Para completar la creación de su cuenta, haga clic en el enlace a continuación:',
+        },
+        rentalOpportunity: {
+          viewListingNotice:
+            'Consulte el listado para obtener la información más actualizada',
+        },
+        singleUseCodeEmail: {
+          message:
+            'Usa el siguiente código para iniciar sesión en tu cuenta de Doorway. Este código será válido por 10 minutos. Nunca compartas este código.',
+          greeting: 'Hola',
+          singleUseCode: '%{singleUseCode}',
+        },
+        t: {
+          hello: 'Hola',
+          seeListing: 'See Listing',
+          editListing: 'Edit Listing',
+          viewListing: 'View Listing',
+          reviewListing: 'Review Listing',
+          partnersPortal: 'Partners Portal',
         },
       },
-      data: {
-        translations: {
-          confirmation: {
-            subject: 'Confirmación de su solicitud',
-            eligible: {
-              fcfs: 'Los solicitantes elegibles serán contactados por orden de llegada hasta que se llenen las vacantes.',
-              lottery:
-                'Una vez que finalice el período de solicitud, los solicitantes elegibles serán ubicados según el orden del sorteo.',
-              waitlist:
-                'Los solicitantes elegibles serán colocados en la lista de espera por orden de llegada hasta que se llenen los espacios disponibles.',
-              fcfsPreference:
-                'Las preferencias de vivienda, si aplican, afectarán el orden de llegada.',
-              waitlistContact:
-                'Es posible que se le contacte mientras esté en la lista de espera para confirmar si desea permanecer en ella.',
-              lotteryPreference:
-                'Las preferencias de vivienda, si aplican, afectarán el orden del sorteo.',
-              waitlistPreference:
-                'Las preferencias de vivienda, si aplican, afectarán el orden de la lista de espera.',
-            },
-            interview:
-              'Si se le contacta para una entrevista, se le pedirá que complete una solicitud más detallada y proporcione documentos de respaldo.',
-            otherChanges:
-              'Para otros cambios, por favor contacte doorway@bayareametro.gov.',
-            whatToExpect: {
-              FCFS: 'Los solicitantes serán contactados por el agente de la propiedad por orden de llegada hasta que se llenen las vacantes.',
-              lottery:
-                'Los solicitantes serán contactados por el agente según el orden del sorteo hasta que se llenen las vacantes.',
-              noLottery:
-                'Los solicitantes serán contactados por el agente según el orden de la lista de espera hasta que se llenen las vacantes.',
-            },
-            whileYouWait:
-              'Mientras espera, hay cosas que puede hacer para prepararse para los posibles próximos pasos y futuras oportunidades.',
-            shouldBeChosen:
-              'Si su solicitud es elegida, prepárese para completar una solicitud más detallada y proporcionar los documentos de respaldo requeridos.',
-            whatHappensNext: '¿Qué sucede después?',
-            whatToExpectNext: 'Qué esperar después:',
-            needToMakeUpdates: '¿Necesita hacer actualizaciones?',
-            applicationsClosed: 'Solicitud <br />cerrada',
-            applicationsRanked: 'Solicitud <br />clasificada',
-            eligibleApplicants: {
-              FCFS: 'Los solicitantes elegibles serán colocados en orden según el principio de <strong>primer llegado, primer servido</strong>.',
-              lottery:
-                'Los solicitantes elegibles serán colocados en orden <strong>según la preferencia y el rango de la lotería</strong>.',
-              lotteryDate: 'El sorteo se llevará a cabo el %{lotteryDate}.',
-            },
-            applicationReceived: 'Solicitud <br />recibida',
-            prepareForNextSteps: 'Prepárese para los siguientes pasos',
-            thankYouForApplying:
-              'Gracias por postular. Hemos recibido su solicitud para',
-            readHowYouCanPrepare:
-              'Lea sobre cómo puede prepararse para los siguientes pasos',
-            yourConfirmationNumber: 'Su número de confirmación',
-            applicationPeriodCloses:
-              'Una vez que cierre el período de solicitud, el administrador de la propiedad comenzará a procesar las solicitudes.',
-            contactedForAnInterview:
-              'Si se le contacta para una entrevista, deberá completar una solicitud más detallada y proporcionar documentos de respaldo.',
-            submitAnotherApplication:
-              'Si no está cambiando al solicitante principal ni a ningún miembro del hogar, puede enviar otra solicitud. Tomaremos la última presentada, según la política de solicitudes duplicadas.',
-            gotYourConfirmationNumber: 'Recibimos su solicitud para',
-          },
-          changeEmail: {
-            message:
-              'Se ha solicitado un cambio de dirección de correo electrónico para su cuenta',
-            changeMyEmail: 'Confirmar cambio de correo electrónico',
-            onChangeEmailMessage:
-              'Para confirmar el cambio de su dirección de correo electrónico, haga clic en el enlace a continuación',
-          },
-          footer: {
-            footer:
-              'Autoridad de Finanzas de Vivienda del Área de la Bahía (BAHFA)',
-            thankYou: 'Gracias',
-          },
-          forgotPassword: {
-            subject: '¿Olvidaste tu contraseña?',
-            callToAction:
-              'Si hiciste esta solicitud, por favor haz clic en el enlace a continuación para restablecer tu contraseña:',
-            passwordInfo:
-              'Tu contraseña no cambiará hasta que accedas al enlace anterior y crees una nueva.',
-            resetRequest:
-              'Se ha realizado una solicitud para restablecer tu contraseña del portal de Bloom Housing para %{appUrl}.',
-            ignoreRequest:
-              'Si no solicitaste esto, por favor ignora este correo electrónico.',
-            changePassword: 'Change my password',
-          },
-          leasingAgent: {
-            officeHours: 'Horas de oficina:',
-            propertyManager: 'Administrador de la propiedad',
-            contactAgentToUpdateInfo:
-              'Si necesita actualizar la información en su solicitud, no vuelva a postular. En su lugar, comuníquese con el agente de esta propiedad.',
-          },
-          lotteryAvailable: {
-            header: 'Nuevos resultados de la lotería de viviendas disponibles',
-            signIn: 'Inicie sesión para ver sus resultados',
-            termsOfUse: 'Términos de uso',
-            resultsAvailable:
-              'Los resultados están disponibles para una lotería de viviendas para %{listingName}. Consulte su cuenta en el Portal de Vivienda Doorway para más información',
-            duplicatesDetails:
-              'Doorway generalmente no acepta solicitudes duplicadas. Una solicitud duplicada es aquella en la que alguien también aparece en otra solicitud para la misma oportunidad de vivienda. Para obtener más información sobre cómo manejamos las solicitudes duplicadas, consulte nuestra',
-            whatHappensHeader: '¿Qué sucede después?',
-            whatHappensContent:
-              'El administrador de la propiedad comenzará a contactar a los solicitantes por su método de contacto preferido. Lo harán en el orden de clasificación de la lotería, dentro de cada preferencia de lotería. Cuando se llenen todas las unidades, el administrador de la propiedad dejará de contactar a los solicitantes. Todas las unidades podrían llenarse antes de que el administrador de la propiedad llegue a su rango. Si esto sucede, no se le contactará.',
-            otherOpportunities1:
-              'Para ver otras oportunidades de vivienda, visite %{appUrl}. Puede registrarse para recibir notificaciones de nuevas oportunidades de solicitud, aquí',
-            otherOpportunities2: 'aquí',
-            otherOpportunities3:
-              'Si desea aprender sobre cómo funcionan las loterías, consulte la sección de loterías del Centro de ayuda del Portal de Vivienda Doorway',
-            otherOpportunities4: 'Doorway Housing Portal Centro de ayuda',
-          },
-          register: {
-            welcome: 'Bienvenido',
-            welcomeMessage:
-              'Gracias por configurar tu cuenta en %{appUrl}. Ahora será más fácil para ti comenzar, guardar y enviar solicitudes en línea para las publicaciones que aparezcan en el sitio.',
-            confirmMyAccount: 'Confirmar mi cuenta',
-            toConfirmAccountMessage:
-              'Para completar la creación de su cuenta, haga clic en el enlace a continuación:',
-          },
-          rentalOpportunity: {
-            viewListingNotice:
-              'Consulte el listado para obtener la información más actualizada',
-          },
-          singleUseCodeEmail: {
-            message:
-              'Usa el siguiente código para iniciar sesión en tu cuenta de Doorway. Este código será válido por 10 minutos. Nunca compartas este código.',
-            greeting: 'Hola',
-            singleUseCode: '%{singleUseCode}',
-          },
-          t: {
-            hello: 'Hola',
-            seeListing: 'See Listing',
-            editListing: 'Edit Listing',
-            viewListing: 'View Listing',
-            reviewListing: 'Review Listing',
-            partnersPortal: 'Partners Portal',
-          },
-        },
-      },
-    });
+      true,
+    );
 
-    await this.prisma.translations.update({
-      where: {
-        jurisdictionId_language: {
-          jurisdictionId: null,
-          language: 'vi',
+    await this.updateTranslationsForLanguage(
+      'vi',
+      {
+        changeEmail: {
+          message:
+            'An email address change has been requested for your account.',
+          changeMyEmail: 'Xác nhận thay đổi email',
+          onChangeEmailMessage:
+            'Để xác nhận thay đổi địa chỉ email của bạn, vui lòng nhấp vào liên kết bên dưới',
+        },
+        confirmation: {
+          subject: 'Xác nhận đơn xin của bạn',
+          eligible: {
+            fcfs: 'Các ứng viên đủ điều kiện sẽ được liên hệ theo thứ tự nộp hồ sơ cho đến khi hết chỗ trống.',
+            lottery:
+              'Sau khi thời gian nộp hồ sơ kết thúc, các ứng viên đủ điều kiện sẽ được sắp xếp theo thứ tự xổ số.',
+            waitlist:
+              'Các ứng viên đủ điều kiện sẽ được sắp xếp vào danh sách chờ theo thứ tự nộp hồ sơ cho đến khi hết chỗ.',
+            fcfsPreference:
+              'Sở thích nhà ở, nếu áp dụng, sẽ ảnh hưởng đến thứ tự nộp hồ sơ.',
+            waitlistContact:
+              'Bạn có thể được liên hệ khi đang trong danh sách chờ để xác nhận rằng bạn muốn tiếp tục trong danh sách.',
+            lotteryPreference:
+              'Sở thích nhà ở, nếu áp dụng, sẽ ảnh hưởng đến thứ tự xổ số.',
+            waitlistPreference:
+              'Sở thích nhà ở, nếu áp dụng, sẽ ảnh hưởng đến thứ tự trong danh sách chờ.',
+          },
+          interview:
+            'Nếu bạn được liên hệ để phỏng vấn, bạn sẽ được yêu cầu điền vào đơn chi tiết hơn và cung cấp các tài liệu hỗ trợ.',
+          otherChanges:
+            'Đối với các thay đổi khác, vui lòng liên hệ doorway@bayareametro.gov.',
+          whatToExpect: {
+            FCFS: 'Các ứng viên sẽ được liên hệ bởi đại lý tài sản theo thứ tự nộp hồ sơ cho đến khi hết chỗ trống.',
+            lottery:
+              'Các ứng viên sẽ được liên hệ bởi đại lý theo thứ tự xổ số cho đến khi hết chỗ trống.',
+            noLottery:
+              'Các ứng viên sẽ được liên hệ bởi đại lý theo thứ tự danh sách chờ cho đến khi hết chỗ trống.',
+          },
+          whileYouWait:
+            'Trong khi chờ đợi, có những việc bạn có thể làm để chuẩn bị cho các bước tiếp theo và cơ hội trong tương lai.',
+          shouldBeChosen:
+            'Nếu đơn xin của bạn được chọn, hãy sẵn sàng điền vào đơn chi tiết hơn và cung cấp các tài liệu hỗ trợ cần thiết.',
+          whatHappensNext: 'Chuyện gì xảy ra tiếp theo?',
+          whatToExpectNext: 'Điều gì sẽ xảy ra tiếp theo:',
+          needToMakeUpdates: 'Cần cập nhật không?',
+          applicationsClosed: 'Đơn đăng ký <br />đã đóng',
+          applicationsRanked: 'Đơn đăng ký <br />được xếp hạng',
+          eligibleApplicants: {
+            FCFS: 'Những người nộp đơn đủ điều kiện sẽ được sắp xếp theo <strong>nguyên tắc ai đến trước, phục vụ trước</strong>.',
+            lottery:
+              'Những người nộp đơn đủ điều kiện sẽ được sắp xếp theo <strong>ưu tiên và thứ hạng xổ số</strong>.',
+            lotteryDate: 'Xổ số sẽ được tổ chức vào ngày %{lotteryDate}.',
+          },
+          applicationReceived: 'Đơn đăng ký <br />đã nhận',
+          prepareForNextSteps: 'Chuẩn bị cho các bước tiếp theo',
+          thankYouForApplying:
+            'Cảm ơn bạn đã đăng ký. Chúng tôi đã nhận được đơn đăng ký của bạn cho',
+          readHowYouCanPrepare:
+            'Đọc về cách bạn có thể chuẩn bị cho các bước tiếp theo',
+          yourConfirmationNumber: 'Mã xác nhận của bạn',
+          applicationPeriodCloses:
+            'Khi kết thúc thời gian đăng ký, người quản lý tài sản sẽ bắt đầu xử lý các đơn đăng ký.',
+          contactedForAnInterview:
+            'Nếu bạn được liên hệ để phỏng vấn, bạn sẽ cần điền vào đơn đăng ký chi tiết hơn và cung cấp các tài liệu hỗ trợ.',
+          submitAnotherApplication:
+            'Nếu bạn không thay đổi người nộp đơn chính hoặc bất kỳ thành viên nào trong gia đình, bạn có thể chỉ cần nộp một đơn đăng ký khác. Chúng tôi sẽ lấy đơn cuối cùng đã nộp, theo chính sách đơn đăng ký trùng lặp.',
+          gotYourConfirmationNumber:
+            'Chúng tôi đã nhận đơn đăng ký của bạn cho',
+        },
+        footer: {
+          footer: 'Cơ quan Tài chính Nhà ở Khu Vực Vịnh (BAHFA)',
+          thankYou: 'Cảm ơn bạn',
+        },
+        forgotPassword: {
+          subject: 'Quên mật khẩu của bạn?',
+          callToAction:
+            'Nếu bạn đã thực hiện yêu cầu này, vui lòng nhấp vào liên kết bên dưới để đặt lại mật khẩu của bạn:',
+          passwordInfo:
+            'Mật khẩu của bạn sẽ không thay đổi cho đến khi bạn truy cập vào liên kết trên và tạo một mật khẩu mới.',
+          resetRequest:
+            'Một yêu cầu để đặt lại mật khẩu của bạn trên trang web Cổng thông tin Nhà ở Bloom cho %{appUrl} vừa được thực hiện.',
+          ignoreRequest:
+            'Nếu bạn không yêu cầu điều này, vui lòng bỏ qua email này.',
+        },
+        lotteryAvailable: {
+          header: 'Kết quả xổ số nhà ở mới có sẵn',
+          signIn: 'Đăng nhập để xem kết quả của bạn',
+          termsOfUse: 'Điều khoản sử dụng',
+          resultsAvailable:
+            'Kết quả có sẵn cho xổ số nhà ở cho %{listingName}. Xem tài khoản Cổng thông tin Nhà ở Doorway của bạn để biết thêm thông tin',
+          duplicatesDetails:
+            'Doorway thường không chấp nhận các đơn đăng ký trùng lặp. Một đơn đăng ký trùng lặp là đơn đăng ký có người cũng xuất hiện trong đơn đăng ký khác cho cùng một cơ hội nhà ở. Để biết thông tin chi tiết về cách chúng tôi xử lý các đơn trùng lặp, vui lòng xem',
+          whatHappensHeader: 'Chuyện gì sẽ xảy ra tiếp theo?',
+          whatHappensContent:
+            'Quản lý tài sản sẽ bắt đầu liên lạc với các ứng viên theo phương thức liên lạc ưa thích của họ. Họ sẽ làm như vậy theo thứ tự xếp hạng xổ số, trong mỗi sở thích xổ số. Khi tất cả các căn hộ được lấp đầy, quản lý tài sản sẽ ngừng liên lạc với các ứng viên. Tất cả các căn hộ có thể đã đầy trước khi quản lý tài sản đến xếp hạng của bạn. Nếu điều này xảy ra, bạn sẽ không được liên lạc.',
+          otherOpportunities1:
+            'Để xem các cơ hội nhà ở khác, vui lòng truy cập %{appUrl}. Bạn có thể đăng ký nhận thông báo về các cơ hội đăng ký mới, tại đây',
+          otherOpportunities2: 'đây',
+          otherOpportunities3:
+            'Nếu bạn muốn tìm hiểu cách thức xổ số hoạt động, vui lòng xem phần xổ số của Trung tâm trợ giúp Cổng thông tin Nhà ở Doorway',
+        },
+        leasingAgent: {
+          officeHours: 'Giờ làm việc:',
+          propertyManager: 'Quản lý tài sản',
+          contactAgentToUpdateInfo:
+            'Nếu bạn cần cập nhật thông tin trong đơn đăng ký của mình, đừng nộp đơn lại. Thay vào đó, hãy liên hệ với đại lý của danh sách này.',
+        },
+        register: {
+          welcome: 'Welcome',
+          welcomeMessage:
+            'Cảm ơn bạn đã thiết lập tài khoản của mình trên %{appUrl}. Bây giờ bạn sẽ dễ dàng bắt đầu, lưu và gửi các đơn đăng ký trực tuyến cho các danh sách xuất hiện trên trang web.',
+          confirmMyAccount: 'Xác nhận tài khoản của tôi',
+          toConfirmAccountMessage:
+            'Để hoàn tất việc tạo tài khoản của bạn, vui lòng nhấp vào liên kết bên dưới:',
+        },
+        rentalOpportunity: {
+          viewListingNotice:
+            'Vui lòng xem danh sách để biết thông tin mới nhất',
+        },
+        singleUseCodeEmail: {
+          message:
+            'Sử dụng mã sau để đăng nhập vào tài khoản Doorway của bạn. Mã này sẽ có giá trị trong 10 phút. Không bao giờ chia sẻ mã này.',
+          greeting: 'Chào',
+          singleUseCode: '%{singleUseCode}',
+        },
+        t: {
+          hello: 'Chào',
         },
       },
-      data: {
-        translations: {
-          changeEmail: {
-            message:
-              'An email address change has been requested for your account.',
-            changeMyEmail: 'Xác nhận thay đổi email',
-            onChangeEmailMessage:
-              'Để xác nhận thay đổi địa chỉ email của bạn, vui lòng nhấp vào liên kết bên dưới',
-          },
-          confirmation: {
-            subject: 'Xác nhận đơn xin của bạn',
-            eligible: {
-              fcfs: 'Các ứng viên đủ điều kiện sẽ được liên hệ theo thứ tự nộp hồ sơ cho đến khi hết chỗ trống.',
-              lottery:
-                'Sau khi thời gian nộp hồ sơ kết thúc, các ứng viên đủ điều kiện sẽ được sắp xếp theo thứ tự xổ số.',
-              waitlist:
-                'Các ứng viên đủ điều kiện sẽ được sắp xếp vào danh sách chờ theo thứ tự nộp hồ sơ cho đến khi hết chỗ.',
-              fcfsPreference:
-                'Sở thích nhà ở, nếu áp dụng, sẽ ảnh hưởng đến thứ tự nộp hồ sơ.',
-              waitlistContact:
-                'Bạn có thể được liên hệ khi đang trong danh sách chờ để xác nhận rằng bạn muốn tiếp tục trong danh sách.',
-              lotteryPreference:
-                'Sở thích nhà ở, nếu áp dụng, sẽ ảnh hưởng đến thứ tự xổ số.',
-              waitlistPreference:
-                'Sở thích nhà ở, nếu áp dụng, sẽ ảnh hưởng đến thứ tự trong danh sách chờ.',
-            },
-            interview:
-              'Nếu bạn được liên hệ để phỏng vấn, bạn sẽ được yêu cầu điền vào đơn chi tiết hơn và cung cấp các tài liệu hỗ trợ.',
-            otherChanges:
-              'Đối với các thay đổi khác, vui lòng liên hệ doorway@bayareametro.gov.',
-            whatToExpect: {
-              FCFS: 'Các ứng viên sẽ được liên hệ bởi đại lý tài sản theo thứ tự nộp hồ sơ cho đến khi hết chỗ trống.',
-              lottery:
-                'Các ứng viên sẽ được liên hệ bởi đại lý theo thứ tự xổ số cho đến khi hết chỗ trống.',
-              noLottery:
-                'Các ứng viên sẽ được liên hệ bởi đại lý theo thứ tự danh sách chờ cho đến khi hết chỗ trống.',
-            },
-            whileYouWait:
-              'Trong khi chờ đợi, có những việc bạn có thể làm để chuẩn bị cho các bước tiếp theo và cơ hội trong tương lai.',
-            shouldBeChosen:
-              'Nếu đơn xin của bạn được chọn, hãy sẵn sàng điền vào đơn chi tiết hơn và cung cấp các tài liệu hỗ trợ cần thiết.',
-            whatHappensNext: 'Chuyện gì xảy ra tiếp theo?',
-            whatToExpectNext: 'Điều gì sẽ xảy ra tiếp theo:',
-            needToMakeUpdates: 'Cần cập nhật không?',
-            applicationsClosed: 'Đơn đăng ký <br />đã đóng',
-            applicationsRanked: 'Đơn đăng ký <br />được xếp hạng',
-            eligibleApplicants: {
-              FCFS: 'Những người nộp đơn đủ điều kiện sẽ được sắp xếp theo <strong>nguyên tắc ai đến trước, phục vụ trước</strong>.',
-              lottery:
-                'Những người nộp đơn đủ điều kiện sẽ được sắp xếp theo <strong>ưu tiên và thứ hạng xổ số</strong>.',
-              lotteryDate: 'Xổ số sẽ được tổ chức vào ngày %{lotteryDate}.',
-            },
-            applicationReceived: 'Đơn đăng ký <br />đã nhận',
-            prepareForNextSteps: 'Chuẩn bị cho các bước tiếp theo',
-            thankYouForApplying:
-              'Cảm ơn bạn đã đăng ký. Chúng tôi đã nhận được đơn đăng ký của bạn cho',
-            readHowYouCanPrepare:
-              'Đọc về cách bạn có thể chuẩn bị cho các bước tiếp theo',
-            yourConfirmationNumber: 'Mã xác nhận của bạn',
-            applicationPeriodCloses:
-              'Khi kết thúc thời gian đăng ký, người quản lý tài sản sẽ bắt đầu xử lý các đơn đăng ký.',
-            contactedForAnInterview:
-              'Nếu bạn được liên hệ để phỏng vấn, bạn sẽ cần điền vào đơn đăng ký chi tiết hơn và cung cấp các tài liệu hỗ trợ.',
-            submitAnotherApplication:
-              'Nếu bạn không thay đổi người nộp đơn chính hoặc bất kỳ thành viên nào trong gia đình, bạn có thể chỉ cần nộp một đơn đăng ký khác. Chúng tôi sẽ lấy đơn cuối cùng đã nộp, theo chính sách đơn đăng ký trùng lặp.',
-            gotYourConfirmationNumber:
-              'Chúng tôi đã nhận đơn đăng ký của bạn cho',
-          },
-          footer: {
-            footer: 'Cơ quan Tài chính Nhà ở Khu Vực Vịnh (BAHFA)',
-            thankYou: 'Cảm ơn bạn',
-          },
-          forgotPassword: {
-            subject: 'Quên mật khẩu của bạn?',
-            callToAction:
-              'Nếu bạn đã thực hiện yêu cầu này, vui lòng nhấp vào liên kết bên dưới để đặt lại mật khẩu của bạn:',
-            passwordInfo:
-              'Mật khẩu của bạn sẽ không thay đổi cho đến khi bạn truy cập vào liên kết trên và tạo một mật khẩu mới.',
-            resetRequest:
-              'Một yêu cầu để đặt lại mật khẩu của bạn trên trang web Cổng thông tin Nhà ở Bloom cho %{appUrl} vừa được thực hiện.',
-            ignoreRequest:
-              'Nếu bạn không yêu cầu điều này, vui lòng bỏ qua email này.',
-          },
-          lotteryAvailable: {
-            header: 'Kết quả xổ số nhà ở mới có sẵn',
-            signIn: 'Đăng nhập để xem kết quả của bạn',
-            termsOfUse: 'Điều khoản sử dụng',
-            resultsAvailable:
-              'Kết quả có sẵn cho xổ số nhà ở cho %{listingName}. Xem tài khoản Cổng thông tin Nhà ở Doorway của bạn để biết thêm thông tin',
-            duplicatesDetails:
-              'Doorway thường không chấp nhận các đơn đăng ký trùng lặp. Một đơn đăng ký trùng lặp là đơn đăng ký có người cũng xuất hiện trong đơn đăng ký khác cho cùng một cơ hội nhà ở. Để biết thông tin chi tiết về cách chúng tôi xử lý các đơn trùng lặp, vui lòng xem',
-            whatHappensHeader: 'Chuyện gì sẽ xảy ra tiếp theo?',
-            whatHappensContent:
-              'Quản lý tài sản sẽ bắt đầu liên lạc với các ứng viên theo phương thức liên lạc ưa thích của họ. Họ sẽ làm như vậy theo thứ tự xếp hạng xổ số, trong mỗi sở thích xổ số. Khi tất cả các căn hộ được lấp đầy, quản lý tài sản sẽ ngừng liên lạc với các ứng viên. Tất cả các căn hộ có thể đã đầy trước khi quản lý tài sản đến xếp hạng của bạn. Nếu điều này xảy ra, bạn sẽ không được liên lạc.',
-            otherOpportunities1:
-              'Để xem các cơ hội nhà ở khác, vui lòng truy cập %{appUrl}. Bạn có thể đăng ký nhận thông báo về các cơ hội đăng ký mới, tại đây',
-            otherOpportunities2: 'đây',
-            otherOpportunities3:
-              'Nếu bạn muốn tìm hiểu cách thức xổ số hoạt động, vui lòng xem phần xổ số của Trung tâm trợ giúp Cổng thông tin Nhà ở Doorway',
-          },
-          leasingAgent: {
-            officeHours: 'Giờ làm việc:',
-            propertyManager: 'Quản lý tài sản',
-            contactAgentToUpdateInfo:
-              'Nếu bạn cần cập nhật thông tin trong đơn đăng ký của mình, đừng nộp đơn lại. Thay vào đó, hãy liên hệ với đại lý của danh sách này.',
-          },
-          register: {
-            welcome: 'Welcome',
-            welcomeMessage:
-              'Cảm ơn bạn đã thiết lập tài khoản của mình trên %{appUrl}. Bây giờ bạn sẽ dễ dàng bắt đầu, lưu và gửi các đơn đăng ký trực tuyến cho các danh sách xuất hiện trên trang web.',
-            confirmMyAccount: 'Xác nhận tài khoản của tôi',
-            toConfirmAccountMessage:
-              'Để hoàn tất việc tạo tài khoản của bạn, vui lòng nhấp vào liên kết bên dưới:',
-          },
-          rentalOpportunity: {
-            viewListingNotice:
-              'Vui lòng xem danh sách để biết thông tin mới nhất',
-          },
-          singleUseCodeEmail: {
-            message:
-              'Sử dụng mã sau để đăng nhập vào tài khoản Doorway của bạn. Mã này sẽ có giá trị trong 10 phút. Không bao giờ chia sẻ mã này.',
-            greeting: 'Chào',
-            singleUseCode: '%{singleUseCode}',
-          },
-          t: {
-            hello: 'Chào',
-          },
-        },
-      },
-    });
+      true,
+    );
 
-    await this.prisma.translations.update({
-      where: {
-        jurisdictionId_language: {
-          jurisdictionId: null,
-          language: 'zh',
+    await this.updateTranslationsForLanguage(
+      'zh',
+      {
+        changeEmail: {
+          message: '已請求更改您的帳戶電子郵件地址',
+          changeMyEmail: '確認電子郵件更改',
+          onChangeEmailMessage:
+            '若要確認您的電子郵件地址更改，請點擊下面的鏈接',
+        },
+        confirmation: {
+          subject: '您的申請確認',
+          eligible: {
+            fcfs: '符合資格的申請人將按先同先服基礎連絡直到完成為止。',
+            lottery: '申請期間結束後，符合資格的申請人將按抽結後順序排序。',
+            waitlist: '符合資格的申請人將按先同先服基礎排入候選名單直到完成。',
+            fcfsPreference: '住宅優先者，如透透功能將影響先同先服。',
+            waitlistContact:
+              '在候選名單時可能會被聯絡，以確認您願意繼續位於候選名單。',
+            lotteryPreference: '住宅優先者，如透透功能將影響抽結順序。',
+            waitlistPreference: '住宅優先者，如透透功能將影響候選名單順序。',
+          },
+          interview:
+            '如果被聯絡參加面試，您將被要求填寫更詳細的申請表並提供相關文件。',
+          otherChanges: '如需其他更改，請聯絡 doorway@bayareametro.gov。',
+          whatToExpect: {
+            FCFS: '申請人將由物業代理按先同先服順序聯絡，直到填滿空缺為止。',
+            lottery: '申請人將根據抽籤順序由代理聯絡直到填滿空缺為止。',
+            noLottery: '申請人將根據候補名單順序由代理聯絡直到填滿空缺為止。',
+          },
+          whileYouWait: '等候期間，您可以準備一些潛在的下一步和未來的機會。',
+          shouldBeChosen:
+            '如果您的申請被選中，請準備填寫更詳細的申請表並提供所需的支持文件。',
+          whatHappensNext: '接下來會發生什麼？',
+          whatToExpectNext: '接下來的期望：',
+          needToMakeUpdates: '需要進行更新嗎？',
+          applicationsClosed: '申請 <br />已關閉',
+          applicationsRanked: '申請 <br />已排序',
+          eligibleApplicants: {
+            FCFS: '符合資格的申請人將根據<strong>先到先得</strong>原則排序。',
+            lottery:
+              '符合資格的申請人將根據<strong>優先順序和抽籤排名</strong>排序。',
+            lotteryDate: '抽籤將於 %{lotteryDate} 進行。',
+          },
+          applicationReceived: '申請 <br />已接收',
+          prepareForNextSteps: '準備下一步',
+          thankYouForApplying: '感謝您的申請。我們已收到您的申請',
+          readHowYouCanPrepare: '閱讀如何準備下一步',
+          yourConfirmationNumber: '您的確認號碼',
+          applicationPeriodCloses: '當申請期間結束後，物業經理將開始處理申請。',
+          contactedForAnInterview:
+            '如果您被聯繫進行面試，您需要填寫更詳細的申請並提供支持文件。',
+          submitAnotherApplication:
+            '如果您沒有更改主要申請人或任何家庭成員，您可以只提交另一份申請。我們會根據重複申請政策接受最後提交的申請。',
+          gotYourConfirmationNumber: '我們已收到您的申請',
+        },
+        footer: {
+          footer: '海灣區住房金融管理局（BAHFA）',
+          thankYou: '謝謝',
+        },
+        forgotPassword: {
+          subject: '忘記密碼？',
+          callToAction: '如果您進行了此請求，請點擊下面的鏈接重設您的密碼：',
+          passwordInfo:
+            '您的密碼不會更改，直到您訪問上述鏈接並創建一個新密碼。',
+          resetRequest:
+            '最近有人請求重設您在 %{appUrl} 上的 Bloom Housing Portal 網站密碼。',
+          ignoreRequest: '如果您沒有請求這個，請忽略這封電子郵件。',
+          changePassword: 'Change my password',
+        },
+        lotteryAvailable: {
+          header: '新的住房抽籤結果可用',
+          signIn: '登入以查看您的結果',
+          termsOfUse: '使用條款',
+          resultsAvailable:
+            '關於%{listingName}的住房抽籤結果已可用。請查看您的Doorway住房入口網站帳戶以了解更多信息',
+          duplicatesDetails:
+            'Doorway 通常不接受重複申請。重複申請是指某人也出現在另一個申請中，該申請是針對相同的住房機會。要了解我們如何處理重複申請的詳細信息，請參閱',
+          whatHappensHeader: '接下來會發生什麼？',
+          whatHappensContent:
+            '物業經理將開始按照申請人的首選聯絡方式聯繫他們。他們會按照抽籤排名的順序進行聯絡，每個抽籤偏好中均有排序。當所有單位都被填滿時，物業經理將停止聯繫申請人。所有單位可能在物業經理達到您的排名之前就已經填滿。如果發生這種情況，您將不會被聯繫。',
+          otherOpportunities1:
+            '若要查看其他住房機會，請訪問 %{appUrl}。您可以在此處註冊以接收有關新申請機會的通知',
+          otherOpportunities2: '這裡',
+          otherOpportunities3:
+            '如果您想了解抽籤如何運作，請查看Doorway住房入口網站幫助中心的抽籤部分',
+          otherOpportunities4: 'Doorway Housing Portal 幫助中心',
+        },
+        leasingAgent: {
+          officeHours: '辦公時間：',
+          propertyManager: '物業經理',
+          contactAgentToUpdateInfo:
+            '如果您需要更新申請中的信息，請不要再次申請。請與此房源的代理聯繫。',
+        },
+        register: {
+          welcome: '歡迎',
+          welcomeMessage:
+            '感謝您在 %{appUrl} 上設置帳戶。現在，您將更容易開始、保存和提交網站上顯示的房源的在線申請。',
+          confirmMyAccount: '確認我的帳戶',
+          toConfirmAccountMessage: '若要完成您的帳戶創建，請點擊下面的鏈接：',
+        },
+        rentalOpportunity: { viewListingNotice: '请查看列表以获取最新信息' },
+        singleUseCodeEmail: {
+          message:
+            '使用以下代碼登入您的Doorway帳戶。此代碼將在10分鐘內有效。切勿分享此代碼。',
+          greeting: '你好',
+          singleUseCode: '%{singleUseCode}',
+        },
+        t: {
+          hello: '你好',
         },
       },
-      data: {
-        translations: {
-          changeEmail: {
-            message: '已請求更改您的帳戶電子郵件地址',
-            changeMyEmail: '確認電子郵件更改',
-            onChangeEmailMessage:
-              '若要確認您的電子郵件地址更改，請點擊下面的鏈接',
-          },
-          confirmation: {
-            subject: '您的申請確認',
-            eligible: {
-              fcfs: '符合資格的申請人將按先同先服基礎連絡直到完成為止。',
-              lottery: '申請期間結束後，符合資格的申請人將按抽結後順序排序。',
-              waitlist:
-                '符合資格的申請人將按先同先服基礎排入候選名單直到完成。',
-              fcfsPreference: '住宅優先者，如透透功能將影響先同先服。',
-              waitlistContact:
-                '在候選名單時可能會被聯絡，以確認您願意繼續位於候選名單。',
-              lotteryPreference: '住宅優先者，如透透功能將影響抽結順序。',
-              waitlistPreference: '住宅優先者，如透透功能將影響候選名單順序。',
-            },
-            interview:
-              '如果被聯絡參加面試，您將被要求填寫更詳細的申請表並提供相關文件。',
-            otherChanges: '如需其他更改，請聯絡 doorway@bayareametro.gov。',
-            whatToExpect: {
-              FCFS: '申請人將由物業代理按先同先服順序聯絡，直到填滿空缺為止。',
-              lottery: '申請人將根據抽籤順序由代理聯絡直到填滿空缺為止。',
-              noLottery: '申請人將根據候補名單順序由代理聯絡直到填滿空缺為止。',
-            },
-            whileYouWait: '等候期間，您可以準備一些潛在的下一步和未來的機會。',
-            shouldBeChosen:
-              '如果您的申請被選中，請準備填寫更詳細的申請表並提供所需的支持文件。',
-            whatHappensNext: '接下來會發生什麼？',
-            whatToExpectNext: '接下來的期望：',
-            needToMakeUpdates: '需要進行更新嗎？',
-            applicationsClosed: '申請 <br />已關閉',
-            applicationsRanked: '申請 <br />已排序',
-            eligibleApplicants: {
-              FCFS: '符合資格的申請人將根據<strong>先到先得</strong>原則排序。',
-              lottery:
-                '符合資格的申請人將根據<strong>優先順序和抽籤排名</strong>排序。',
-              lotteryDate: '抽籤將於 %{lotteryDate} 進行。',
-            },
-            applicationReceived: '申請 <br />已接收',
-            prepareForNextSteps: '準備下一步',
-            thankYouForApplying: '感謝您的申請。我們已收到您的申請',
-            readHowYouCanPrepare: '閱讀如何準備下一步',
-            yourConfirmationNumber: '您的確認號碼',
-            applicationPeriodCloses:
-              '當申請期間結束後，物業經理將開始處理申請。',
-            contactedForAnInterview:
-              '如果您被聯繫進行面試，您需要填寫更詳細的申請並提供支持文件。',
-            submitAnotherApplication:
-              '如果您沒有更改主要申請人或任何家庭成員，您可以只提交另一份申請。我們會根據重複申請政策接受最後提交的申請。',
-            gotYourConfirmationNumber: '我們已收到您的申請',
-          },
-          footer: {
-            footer: '海灣區住房金融管理局（BAHFA）',
-            thankYou: '謝謝',
-          },
-          forgotPassword: {
-            subject: '忘記密碼？',
-            callToAction: '如果您進行了此請求，請點擊下面的鏈接重設您的密碼：',
-            passwordInfo:
-              '您的密碼不會更改，直到您訪問上述鏈接並創建一個新密碼。',
-            resetRequest:
-              '最近有人請求重設您在 %{appUrl} 上的 Bloom Housing Portal 網站密碼。',
-            ignoreRequest: '如果您沒有請求這個，請忽略這封電子郵件。',
-            changePassword: 'Change my password',
-          },
-          lotteryAvailable: {
-            header: '新的住房抽籤結果可用',
-            signIn: '登入以查看您的結果',
-            termsOfUse: '使用條款',
-            resultsAvailable:
-              '關於%{listingName}的住房抽籤結果已可用。請查看您的Doorway住房入口網站帳戶以了解更多信息',
-            duplicatesDetails:
-              'Doorway 通常不接受重複申請。重複申請是指某人也出現在另一個申請中，該申請是針對相同的住房機會。要了解我們如何處理重複申請的詳細信息，請參閱',
-            whatHappensHeader: '接下來會發生什麼？',
-            whatHappensContent:
-              '物業經理將開始按照申請人的首選聯絡方式聯繫他們。他們會按照抽籤排名的順序進行聯絡，每個抽籤偏好中均有排序。當所有單位都被填滿時，物業經理將停止聯繫申請人。所有單位可能在物業經理達到您的排名之前就已經填滿。如果發生這種情況，您將不會被聯繫。',
-            otherOpportunities1:
-              '若要查看其他住房機會，請訪問 %{appUrl}。您可以在此處註冊以接收有關新申請機會的通知',
-            otherOpportunities2: '這裡',
-            otherOpportunities3:
-              '如果您想了解抽籤如何運作，請查看Doorway住房入口網站幫助中心的抽籤部分',
-            otherOpportunities4: 'Doorway Housing Portal 幫助中心',
-          },
-          leasingAgent: {
-            officeHours: '辦公時間：',
-            propertyManager: '物業經理',
-            contactAgentToUpdateInfo:
-              '如果您需要更新申請中的信息，請不要再次申請。請與此房源的代理聯繫。',
-          },
-          register: {
-            welcome: '歡迎',
-            welcomeMessage:
-              '感謝您在 %{appUrl} 上設置帳戶。現在，您將更容易開始、保存和提交網站上顯示的房源的在線申請。',
-            confirmMyAccount: '確認我的帳戶',
-            toConfirmAccountMessage: '若要完成您的帳戶創建，請點擊下面的鏈接：',
-          },
-          rentalOpportunity: { viewListingNotice: '请查看列表以获取最新信息' },
-          singleUseCodeEmail: {
-            message:
-              '使用以下代碼登入您的Doorway帳戶。此代碼將在10分鐘內有效。切勿分享此代碼。',
-            greeting: '你好',
-            singleUseCode: '%{singleUseCode}',
-          },
-          t: {
-            hello: '你好',
-          },
-        },
-      },
-    });
+      true,
+    );
 
-    await this.prisma.translations.update({
-      where: {
-        jurisdictionId_language: {
-          jurisdictionId: null,
-          language: 'tl',
+    await this.updateTranslationsForLanguage(
+      'tl',
+      {
+        changeEmail: {
+          message:
+            'Mayroong kahilingan para baguhin ang email address ng iyong account',
+          changeMyEmail: 'Kumpirmahin ang pagbabago ng email',
+          onChangeEmailMessage:
+            'Upang kumpirmahin ang pagbabago ng iyong email address, mangyaring i-click ang link sa ibaba',
+        },
+        confirmation: {
+          subject: 'Kumpirmasyon ng Iyong Aplikasyon',
+          eligible: {
+            fcfs: 'Ang mga kwalipikadong aplikante ay kokontakin ayon sa prinsipyo ng unang dumating, unang makakakuha hanggang mapunan ang mga bakanteng puwesto.',
+            lottery:
+              'Kapag natapos ang panahon ng aplikasyon, ang mga kwalipikadong aplikante ay isasaayos batay sa pagkakasunud-sunod ng loterya.',
+            waitlist:
+              'Ang mga kwalipikadong aplikante ay ilalagay sa listahan ng paghihintay ayon sa prinsipyo ng unang dumating, unang makakakuha hanggang mapuno ang listahan.',
+            fcfsPreference:
+              'Ang mga prayoridad sa pabahay, kung naaangkop, ay makakaapekto sa prinsipyo ng unang dumating, unang makakakuha.',
+            waitlistContact:
+              'Maaaring makontak ka habang nasa listahan ng paghihintay upang kumpirmahin na nais mong manatili rito.',
+            lotteryPreference:
+              'Ang mga prayoridad sa pabahay, kung naaangkop, ay makakaapekto sa pagkakasunud-sunod ng loterya.',
+            waitlistPreference:
+              'Ang mga prayoridad sa pabahay, kung naaangkop, ay makakaapekto sa pagkakasunud-sunod ng listahan ng paghihintay.',
+          },
+          interview:
+            'Kung makontak ka para sa isang panayam, hihilingin kang magpasa ng mas detalyadong aplikasyon at magbigay ng mga sumusuportang dokumento.',
+          otherChanges:
+            'Para sa iba pang pagbabago, makipag-ugnayan sa doorway@bayareametro.gov.',
+          whatToExpect: {
+            FCFS: 'Ang mga aplikante ay kokontakin ng ahente ng ari-arian ayon sa prinsipyo ng unang dumating, unang makakakuha hanggang mapunan ang mga bakante.',
+            lottery:
+              'Ang mga aplikante ay kokontakin ng ahente batay sa pagkakasunud-sunod ng loterya hanggang mapunan ang mga bakante.',
+            noLottery:
+              'Ang mga aplikante ay kokontakin ng ahente batay sa pagkakasunud-sunod ng listahan ng paghihintay hanggang mapunan ang mga bakante.',
+          },
+          whileYouWait:
+            'Habang naghihintay, may mga bagay na maaari mong gawin upang maghanda para sa mga susunod na hakbang at mga oportunidad sa hinaharap.',
+          shouldBeChosen:
+            'Kung ang iyong aplikasyon ay mapili, maging handang magpasa ng mas detalyadong aplikasyon at magbigay ng kinakailangang mga sumusuportang dokumento.',
+          whatHappensNext: 'Ano ang susunod na mangyayari?',
+          whatToExpectNext: 'Ano ang aasahan sa susunod:',
+          needToMakeUpdates: 'Kailangan bang mag-update?',
+          applicationsClosed: 'Aplikasyon <br />sarado',
+          applicationsRanked: 'Aplikasyon <br />na-ranggo',
+          eligibleApplicants: {
+            FCFS: 'Ang mga kwalipikadong aplikante ay ilalagay batay sa <strong>unang dumating, unang pagsisilbi</strong>.',
+            lottery:
+              'Ang mga kwalipikadong aplikante ay ilalagay batay sa <strong>pagpili at ranggo sa loterya</strong>.',
+            lotteryDate: 'Ang loterya ay gaganapin sa %{lotteryDate}.',
+          },
+          applicationReceived: 'Aplikasyon <br />natanggap',
+          prepareForNextSteps: 'Maghanda para sa mga susunod na hakbang',
+          thankYouForApplying:
+            'Salamat sa pag-aapply. Natanggap namin ang iyong aplikasyon para sa',
+          readHowYouCanPrepare:
+            'Basahin kung paano ka makakapaghanda para sa mga susunod na hakbang',
+          yourConfirmationNumber: 'Ang iyong Confirmation Number',
+          applicationPeriodCloses:
+            'Kapag natapos na ang panahon ng aplikasyon, sisimulan ng tagapamahala ng ari-arian ang pagproseso ng mga aplikasyon.',
+          contactedForAnInterview:
+            'Kung ikaw ay makontak para sa isang interbyu, kailangan mong mag-fill out ng mas detalyadong aplikasyon at magbigay ng mga dokumentong sumusuporta.',
+          submitAnotherApplication:
+            'Kung hindi mo binabago ang pangunahing aplikante o anumang miyembro ng sambahayan, maaari ka lamang magsumite ng isa pang aplikasyon. Aaminin namin ang huling isinumite, ayon sa patakaran ng duplicate na aplikasyon.',
+          gotYourConfirmationNumber:
+            'Nakuha namin ang iyong aplikasyon para sa',
+        },
+        footer: {
+          line1:
+            'Doorway Housing Portal is a program of the Bay Area Housing Finance Authority (BAHFA)',
+          line2: '',
+          footer: 'Bay Area Housing Finance Authority (BAHFA)',
+          thankYou: 'Salamat',
+        },
+        forgotPassword: {
+          subject: 'Nakalimutan mo ba ang iyong password?',
+          callToAction:
+            'Kung ikaw ang nag-request nito, mangyaring i-click ang link sa ibaba upang i-reset ang iyong password: [Change my_password]',
+          passwordInfo:
+            'Hindi magbabago ang iyong password hanggang hindi mo naa-access ang link sa itaas at gumawa ng bago.',
+          resetRequest:
+            'Mayroon nang isang kahilingan upang i-reset ang iyong Bloom Housing Portal website password para sa %{appUrl}.',
+          ignoreRequest:
+            'Kung hindi mo ito hiniling, mangyaring huwag pansinin ang email na ito.',
+          changePassword: 'Change my password',
+        },
+        lotteryAvailable: {
+          header: 'Mga Bagong Resulta ng Loteriya ng Pabahay na Magagamit',
+          signIn: 'Mag-sign In upang Tingnan ang Iyong mga Resulta',
+          termsOfUse: 'Mga Tuntunin ng Paggamit',
+          resultsAvailable:
+            'Magagamit ang mga resulta para sa isang loterya ng pabahay para sa %{listingName}. Tingnan ang iyong Doorway Housing Portal account para sa karagdagang impormasyon',
+          duplicatesDetails:
+            'Karaniwang hindi tinatanggap ng Doorway ang mga dobleng aplikasyon. Ang dobleng aplikasyon ay isang aplikasyon kung saan may isa ring tao na lumalabas sa ibang aplikasyon para sa parehong pagkakataon sa pabahay. Para sa mas detalyadong impormasyon kung paano namin pinangangasiwaan ang mga dobleng aplikasyon, mangyaring tingnan ang aming',
+          whatHappensHeader: 'Ano ang mangyayari pagkatapos nito?',
+          whatHappensContent:
+            'Ang tagapamahala ng ari-arian ay magsisimulang makipag-ugnayan sa mga aplikante gamit ang kanilang piniling paraan ng pakikipag-ugnayan. Gagawin nila ito ayon sa pagkakasunud-sunod ng ranggo sa loterya, sa loob ng bawat pagpipilian ng loterya. Kapag puno na ang mga unit, titigil ang tagapamahala ng ari-arian sa pakikipag-ugnayan sa mga aplikante. Maaaring mapuno ang lahat ng unit bago marating ng tagapamahala ng ari-arian ang iyong ranggo. Kung mangyari ito, hindi ka makokontak.',
+          otherOpportunities1:
+            'Upang makita ang iba pang mga pagkakataon sa pabahay, mangyaring bisitahin ang %{appUrl}. Maaari kang mag-sign up upang makatanggap ng mga abiso tungkol sa mga bagong pagkakataon sa aplikasyon, dito',
+          otherOpportunities2: 'dito',
+          otherOpportunities3:
+            'Kung nais mong malaman kung paano gumagana ang mga loterya, mangyaring tingnan ang seksyon ng loterya sa Doorway Housing Portal Help Center',
+          otherOpportunities4: 'Doorway Housing Portal Help Center',
+        },
+        leasingAgent: {
+          officeHours: 'Oras ng opisina:',
+          propertyManager: 'Tagapamahala ng Ari-arian',
+          contactAgentToUpdateInfo:
+            'Kung kailangan mong i-update ang impormasyon sa iyong aplikasyon, huwag mag-aplay muli. Sa halip, makipag-ugnayan sa ahente para sa listahang ito.',
+        },
+        register: {
+          welcome: 'Maligayang pagdating',
+          welcomeMessage:
+            'Salamat sa pag-set up ng iyong account sa %{appUrl}. Mas madali na ngayon para sa iyo na magsimula, mag-save, at mag-submit ng mga online na aplikasyon para sa mga listahan na lumalabas sa site.',
+          confirmMyAccount: 'Kumpirmahin ang aking account',
+          toConfirmAccountMessage:
+            'Upang kumpletuhin ang paglikha ng iyong account, mangyaring i-click ang link sa ibaba:',
+        },
+        rentalOpportunity: {
+          viewListingNotice:
+            'Mangyaring tingnan ang listahan para sa pinakabagong impormasyon',
+        },
+        singleUseCodeEmail: {
+          message:
+            'Gamitin ang sumusunod na code upang mag-sign in sa iyong Doorway account. Ang code na ito ay magiging wasto sa loob ng 10 minuto. Huwag kailanman ibahagi ang code na ito.',
+          greeting: 'Hi',
+          singleUseCode: '%{singleUseCode}',
+        },
+        t: {
+          hello: 'Kamusta',
         },
       },
-      data: {
-        translations: {
-          changeEmail: {
-            message:
-              'Mayroong kahilingan para baguhin ang email address ng iyong account',
-            changeMyEmail: 'Kumpirmahin ang pagbabago ng email',
-            onChangeEmailMessage:
-              'Upang kumpirmahin ang pagbabago ng iyong email address, mangyaring i-click ang link sa ibaba',
-          },
-          confirmation: {
-            subject: 'Kumpirmasyon ng Iyong Aplikasyon',
-            eligible: {
-              fcfs: 'Ang mga kwalipikadong aplikante ay kokontakin ayon sa prinsipyo ng unang dumating, unang makakakuha hanggang mapunan ang mga bakanteng puwesto.',
-              lottery:
-                'Kapag natapos ang panahon ng aplikasyon, ang mga kwalipikadong aplikante ay isasaayos batay sa pagkakasunud-sunod ng loterya.',
-              waitlist:
-                'Ang mga kwalipikadong aplikante ay ilalagay sa listahan ng paghihintay ayon sa prinsipyo ng unang dumating, unang makakakuha hanggang mapuno ang listahan.',
-              fcfsPreference:
-                'Ang mga prayoridad sa pabahay, kung naaangkop, ay makakaapekto sa prinsipyo ng unang dumating, unang makakakuha.',
-              waitlistContact:
-                'Maaaring makontak ka habang nasa listahan ng paghihintay upang kumpirmahin na nais mong manatili rito.',
-              lotteryPreference:
-                'Ang mga prayoridad sa pabahay, kung naaangkop, ay makakaapekto sa pagkakasunud-sunod ng loterya.',
-              waitlistPreference:
-                'Ang mga prayoridad sa pabahay, kung naaangkop, ay makakaapekto sa pagkakasunud-sunod ng listahan ng paghihintay.',
-            },
-            interview:
-              'Kung makontak ka para sa isang panayam, hihilingin kang magpasa ng mas detalyadong aplikasyon at magbigay ng mga sumusuportang dokumento.',
-            otherChanges:
-              'Para sa iba pang pagbabago, makipag-ugnayan sa doorway@bayareametro.gov.',
-            whatToExpect: {
-              FCFS: 'Ang mga aplikante ay kokontakin ng ahente ng ari-arian ayon sa prinsipyo ng unang dumating, unang makakakuha hanggang mapunan ang mga bakante.',
-              lottery:
-                'Ang mga aplikante ay kokontakin ng ahente batay sa pagkakasunud-sunod ng loterya hanggang mapunan ang mga bakante.',
-              noLottery:
-                'Ang mga aplikante ay kokontakin ng ahente batay sa pagkakasunud-sunod ng listahan ng paghihintay hanggang mapunan ang mga bakante.',
-            },
-            whileYouWait:
-              'Habang naghihintay, may mga bagay na maaari mong gawin upang maghanda para sa mga susunod na hakbang at mga oportunidad sa hinaharap.',
-            shouldBeChosen:
-              'Kung ang iyong aplikasyon ay mapili, maging handang magpasa ng mas detalyadong aplikasyon at magbigay ng kinakailangang mga sumusuportang dokumento.',
-            whatHappensNext: 'Ano ang susunod na mangyayari?',
-            whatToExpectNext: 'Ano ang aasahan sa susunod:',
-            needToMakeUpdates: 'Kailangan bang mag-update?',
-            applicationsClosed: 'Aplikasyon <br />sarado',
-            applicationsRanked: 'Aplikasyon <br />na-ranggo',
-            eligibleApplicants: {
-              FCFS: 'Ang mga kwalipikadong aplikante ay ilalagay batay sa <strong>unang dumating, unang pagsisilbi</strong>.',
-              lottery:
-                'Ang mga kwalipikadong aplikante ay ilalagay batay sa <strong>pagpili at ranggo sa loterya</strong>.',
-              lotteryDate: 'Ang loterya ay gaganapin sa %{lotteryDate}.',
-            },
-            applicationReceived: 'Aplikasyon <br />natanggap',
-            prepareForNextSteps: 'Maghanda para sa mga susunod na hakbang',
-            thankYouForApplying:
-              'Salamat sa pag-aapply. Natanggap namin ang iyong aplikasyon para sa',
-            readHowYouCanPrepare:
-              'Basahin kung paano ka makakapaghanda para sa mga susunod na hakbang',
-            yourConfirmationNumber: 'Ang iyong Confirmation Number',
-            applicationPeriodCloses:
-              'Kapag natapos na ang panahon ng aplikasyon, sisimulan ng tagapamahala ng ari-arian ang pagproseso ng mga aplikasyon.',
-            contactedForAnInterview:
-              'Kung ikaw ay makontak para sa isang interbyu, kailangan mong mag-fill out ng mas detalyadong aplikasyon at magbigay ng mga dokumentong sumusuporta.',
-            submitAnotherApplication:
-              'Kung hindi mo binabago ang pangunahing aplikante o anumang miyembro ng sambahayan, maaari ka lamang magsumite ng isa pang aplikasyon. Aaminin namin ang huling isinumite, ayon sa patakaran ng duplicate na aplikasyon.',
-            gotYourConfirmationNumber:
-              'Nakuha namin ang iyong aplikasyon para sa',
-          },
-          footer: {
-            line1:
-              'Doorway Housing Portal is a program of the Bay Area Housing Finance Authority (BAHFA)',
-            line2: '',
-            footer: 'Bay Area Housing Finance Authority (BAHFA)',
-            thankYou: 'Salamat',
-          },
-          forgotPassword: {
-            subject: 'Nakalimutan mo ba ang iyong password?',
-            callToAction:
-              'Kung ikaw ang nag-request nito, mangyaring i-click ang link sa ibaba upang i-reset ang iyong password: [Change my_password]',
-            passwordInfo:
-              'Hindi magbabago ang iyong password hanggang hindi mo naa-access ang link sa itaas at gumawa ng bago.',
-            resetRequest:
-              'Mayroon nang isang kahilingan upang i-reset ang iyong Bloom Housing Portal website password para sa %{appUrl}.',
-            ignoreRequest:
-              'Kung hindi mo ito hiniling, mangyaring huwag pansinin ang email na ito.',
-            changePassword: 'Change my password',
-          },
-          lotteryAvailable: {
-            header: 'Mga Bagong Resulta ng Loteriya ng Pabahay na Magagamit',
-            signIn: 'Mag-sign In upang Tingnan ang Iyong mga Resulta',
-            termsOfUse: 'Mga Tuntunin ng Paggamit',
-            resultsAvailable:
-              'Magagamit ang mga resulta para sa isang loterya ng pabahay para sa %{listingName}. Tingnan ang iyong Doorway Housing Portal account para sa karagdagang impormasyon',
-            duplicatesDetails:
-              'Karaniwang hindi tinatanggap ng Doorway ang mga dobleng aplikasyon. Ang dobleng aplikasyon ay isang aplikasyon kung saan may isa ring tao na lumalabas sa ibang aplikasyon para sa parehong pagkakataon sa pabahay. Para sa mas detalyadong impormasyon kung paano namin pinangangasiwaan ang mga dobleng aplikasyon, mangyaring tingnan ang aming',
-            whatHappensHeader: 'Ano ang mangyayari pagkatapos nito?',
-            whatHappensContent:
-              'Ang tagapamahala ng ari-arian ay magsisimulang makipag-ugnayan sa mga aplikante gamit ang kanilang piniling paraan ng pakikipag-ugnayan. Gagawin nila ito ayon sa pagkakasunud-sunod ng ranggo sa loterya, sa loob ng bawat pagpipilian ng loterya. Kapag puno na ang mga unit, titigil ang tagapamahala ng ari-arian sa pakikipag-ugnayan sa mga aplikante. Maaaring mapuno ang lahat ng unit bago marating ng tagapamahala ng ari-arian ang iyong ranggo. Kung mangyari ito, hindi ka makokontak.',
-            otherOpportunities1:
-              'Upang makita ang iba pang mga pagkakataon sa pabahay, mangyaring bisitahin ang %{appUrl}. Maaari kang mag-sign up upang makatanggap ng mga abiso tungkol sa mga bagong pagkakataon sa aplikasyon, dito',
-            otherOpportunities2: 'dito',
-            otherOpportunities3:
-              'Kung nais mong malaman kung paano gumagana ang mga loterya, mangyaring tingnan ang seksyon ng loterya sa Doorway Housing Portal Help Center',
-            otherOpportunities4: 'Doorway Housing Portal Help Center',
-          },
-          leasingAgent: {
-            officeHours: 'Oras ng opisina:',
-            propertyManager: 'Tagapamahala ng Ari-arian',
-            contactAgentToUpdateInfo:
-              'Kung kailangan mong i-update ang impormasyon sa iyong aplikasyon, huwag mag-aplay muli. Sa halip, makipag-ugnayan sa ahente para sa listahang ito.',
-          },
-          register: {
-            welcome: 'Maligayang pagdating',
-            welcomeMessage:
-              'Salamat sa pag-set up ng iyong account sa %{appUrl}. Mas madali na ngayon para sa iyo na magsimula, mag-save, at mag-submit ng mga online na aplikasyon para sa mga listahan na lumalabas sa site.',
-            confirmMyAccount: 'Kumpirmahin ang aking account',
-            toConfirmAccountMessage:
-              'Upang kumpletuhin ang paglikha ng iyong account, mangyaring i-click ang link sa ibaba:',
-          },
-          rentalOpportunity: {
-            viewListingNotice:
-              'Mangyaring tingnan ang listahan para sa pinakabagong impormasyon',
-          },
-          singleUseCodeEmail: {
-            message:
-              'Gamitin ang sumusunod na code upang mag-sign in sa iyong Doorway account. Ang code na ito ay magiging wasto sa loob ng 10 minuto. Huwag kailanman ibahagi ang code na ito.',
-            greeting: 'Hi',
-            singleUseCode: '%{singleUseCode}',
-          },
-          t: {
-            hello: 'Kamusta',
-          },
-        },
-      },
-    });
+      true,
+    );
 
     await this.markScriptAsComplete(
       'reset missing translations',
