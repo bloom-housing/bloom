@@ -1009,6 +1009,14 @@ describe('Testing Permissioning of endpoints as public user', () => {
         .expect(200);
     });
 
+    it('should succeed for filterableList endpoint', async () => {
+      await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(201);
+    });
+
     it('should succeed for retrieveListings endpoint', async () => {
       const multiselectQuestion1 = await prisma.multiselectQuestions.create({
         data: multiselectQuestionFactory(jurisdictionAId, {
