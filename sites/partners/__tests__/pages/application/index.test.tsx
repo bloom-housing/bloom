@@ -27,6 +27,21 @@ beforeAll(() => {
   server.listen()
 })
 
+beforeEach(() => {
+  document.cookie = "access-token-available=True"
+  server.use(
+    rest.get("http://localhost/api/adapter/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
+      return res(ctx.json(listing))
+    }),
+    rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+      return res(ctx.json(user))
+    }),
+    rest.delete("http://localhost/api/adapter/applications", (_req, res, ctx) => {
+      return res(ctx.json({}))
+    })
+  )
+})
+
 afterEach(() => {
   server.resetHandlers()
   window.sessionStorage.clear()
@@ -36,19 +51,13 @@ afterAll(() => {
   server.close()
 })
 
-describe("application", () => {
+describe("partners_application_index", () => {
   it("should return null on no application", () => {
     mockNextRouter({ id: "application_1" })
     document.cookie = "access-token-available=True"
     server.use(
       rest.get("http://localhost:3100/applications/application_1", (_req, res, ctx) => {
         return res(ctx.json({}))
-      }),
-      rest.get("http://localhost/api/adapter/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
-        return res(ctx.json(listing))
-      }),
-      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json(user))
       })
     )
 
@@ -63,12 +72,6 @@ describe("application", () => {
     server.use(
       rest.get("http://localhost:3100/applications/application_1", (_req, res, ctx) => {
         return res(ctx.json(application))
-      }),
-      rest.get("http://localhost/api/adapter/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
-        return res(ctx.json(listing))
-      }),
-      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json(user))
       })
     )
 
@@ -311,12 +314,6 @@ describe("application", () => {
     server.use(
       rest.get("http://localhost:3100/applications/application_1", (_req, res, ctx) => {
         return res(ctx.json(application))
-      }),
-      rest.get("http://localhost/api/adapter/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
-        return res(ctx.json(listing))
-      }),
-      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json(user))
       })
     )
 
@@ -332,15 +329,6 @@ describe("application", () => {
     server.use(
       rest.get("http://localhost:3100/applications/application_1", (_req, res, ctx) => {
         return res(ctx.json(application))
-      }),
-      rest.get("http://localhost/api/adapter/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
-        return res(ctx.json(listing))
-      }),
-      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json(user))
-      }),
-      rest.delete("http://localhost/api/adapter/applications", (_req, res, ctx) => {
-        return res(ctx.json({}))
       })
     )
 
@@ -391,15 +379,6 @@ describe("application", () => {
             ],
           })
         )
-      }),
-      rest.get("http://localhost/api/adapter/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
-        return res(ctx.json(listing))
-      }),
-      rest.get("http://localhost:3100/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
-        return res(ctx.json(listing))
-      }),
-      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json(user))
       })
     )
 
@@ -410,7 +389,9 @@ describe("application", () => {
     expect(queryByText("Household Member Details")).not.toBeInTheDocument()
     expect(queryByText("Done")).not.toBeInTheDocument()
 
-    const viewButton = within(housholdMembersSection.parentElement).getByText("View")
+    const viewButton = await waitFor(() =>
+      within(housholdMembersSection.parentElement).getByText("View")
+    )
     expect(viewButton).toBeInTheDocument()
 
     fireEvent.click(viewButton)
@@ -464,15 +445,6 @@ describe("application", () => {
             ],
           })
         )
-      }),
-      rest.get("http://localhost/api/adapter/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
-        return res(ctx.json(listing))
-      }),
-      rest.get("http://localhost:3100/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
-        return res(ctx.json(listing))
-      }),
-      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json(user))
       })
     )
 
@@ -483,7 +455,9 @@ describe("application", () => {
     expect(queryByText("Household Member Details")).not.toBeInTheDocument()
     expect(queryByText("Done")).not.toBeInTheDocument()
 
-    const viewButton = within(housholdMembersSection.parentElement).getByText("View")
+    const viewButton = await waitFor(() =>
+      within(housholdMembersSection.parentElement).getByText("View")
+    )
     expect(viewButton).toBeInTheDocument()
 
     fireEvent.click(viewButton)
@@ -540,15 +514,6 @@ describe("application", () => {
             ],
           })
         )
-      }),
-      rest.get("http://localhost/api/adapter/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
-        return res(ctx.json(listing))
-      }),
-      rest.get("http://localhost:3100/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
-        return res(ctx.json(listing))
-      }),
-      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json(user))
       })
     )
 
@@ -559,7 +524,9 @@ describe("application", () => {
     expect(queryByText("Household Member Details")).not.toBeInTheDocument()
     expect(queryByText("Done")).not.toBeInTheDocument()
 
-    const viewButton = within(housholdMembersSection.parentElement).getByText("View")
+    const viewButton = await waitFor(() =>
+      within(housholdMembersSection.parentElement).getByText("View")
+    )
     expect(viewButton).toBeInTheDocument()
 
     fireEvent.click(viewButton)
@@ -618,15 +585,6 @@ describe("application", () => {
             ],
           })
         )
-      }),
-      rest.get("http://localhost/api/adapter/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
-        return res(ctx.json(listing))
-      }),
-      rest.get("http://localhost:3100/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
-        return res(ctx.json(listing))
-      }),
-      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json(user))
       })
     )
 
@@ -637,7 +595,9 @@ describe("application", () => {
     expect(queryByText("Household Member Details")).not.toBeInTheDocument()
     expect(queryByText("Done")).not.toBeInTheDocument()
 
-    const viewButton = within(housholdMembersSection.parentElement).getByText("View")
+    const viewButton = await waitFor(() =>
+      within(housholdMembersSection.parentElement).getByText("View")
+    )
     expect(viewButton).toBeInTheDocument()
 
     fireEvent.click(viewButton)
