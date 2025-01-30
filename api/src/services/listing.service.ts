@@ -15,11 +15,11 @@ import {
   LanguagesEnum,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
+  MonthlyRentDeterminationTypeEnum,
   Prisma,
   ReviewOrderTypeEnum,
-  UserRoleEnum,
   UnitTypeEnum,
-  MonthlyRentDeterminationTypeEnum,
+  UserRoleEnum,
 } from '@prisma/client';
 import dayjs from 'dayjs';
 import { firstValueFrom } from 'rxjs';
@@ -656,6 +656,9 @@ export class ListingService implements OnModuleInit {
         jurisdictionId: dto.jurisdictions.id,
       },
     );
+    if (dto.units && dto.unitGroups) {
+      throw new BadRequestException('Cannot provide both units and unitGroups');
+    }
 
     const rawJurisdiction = await this.prisma.jurisdictions.findFirst({
       where: {
@@ -886,7 +889,7 @@ export class ListingService implements OnModuleInit {
                 })),
               }
             : undefined,
-        unitGroup:
+        unitGroups:
           enableUnitGroups && dto.unitGroups
             ? {
                 create: dto.unitGroups.map((group) => ({
@@ -1302,6 +1305,9 @@ export class ListingService implements OnModuleInit {
         jurisdictionId: storedListing.jurisdictionId,
       },
     );
+    if (dto.units && dto.unitGroups) {
+      throw new BadRequestException('Cannot provide both units and unitGroups');
+    }
 
     const rawJurisdiction = await this.prisma.jurisdictions.findFirst({
       where: {
@@ -1315,6 +1321,62 @@ export class ListingService implements OnModuleInit {
     const enableUnitGroups = rawJurisdiction.featureFlags?.find(
       (featureFlag) => featureFlag.name === 'enableUnitGroups',
     )?.active;
+
+    // //TODO: REMOVE THIS AFTER TESTING
+    // const mockUnitGroup = {
+    //   id: undefined,
+    //   createdAt: undefined,
+    //   updatedAt: undefined,
+    //   maxOccupancy: 2,
+    //   minOccupancy: 1,
+    //   floorMin: 1,
+    //   floorMax: 5,
+    //   totalCount: 10,
+    //   totalAvailable: 8,
+    //   bathroomMin: '1',
+    //   bathroomMax: '1',
+    //   openWaitlist: true,
+    //   sqFeetMin: '400',
+    //   sqFeetMax: '500',
+    //   unitTypes: [
+    //     {
+    //       id: 'f8483334-7234-40b1-b417-894693a3485e',
+    //       name: UnitTypeEnum.studio,
+    //       numBedrooms: 0,
+    //       createdAt: undefined,
+    //       updatedAt: undefined,
+    //     },
+    //   ],
+    //   unitGroupAmiLevels: [
+    //     {
+    //       id: 'fad51864-fc4f-41de-b578-dfc29ff3c850',
+    //       createdAt: undefined,
+    //       updatedAt: undefined,
+    //       amiPercentage: 30,
+    //       monthlyRentDeterminationType:
+    //         MonthlyRentDeterminationTypeEnum.percentageOfIncome,
+    //       percentageOfIncomeValue: '30',
+    //       flatRentValue: '2000',
+    //       amiChart: {
+    //         id: '584eeded-739e-49eb-a00a-900fbd466fd2',
+    //         name: 'AMI Chart 2023-1',
+    //         items: [],
+    //         createdAt: undefined,
+    //         updatedAt: undefined,
+    //         jurisdictions: {
+    //           id: dto.jurisdictions.id,
+    //           name: dto.jurisdictions.name,
+    //         },
+    //       },
+    //     },
+    //   ],
+    // };
+
+    // //TODO: REMOVE THIS AFTER TESTING
+    // if (enableUnitGroups) {
+    //   dto.units = undefined;
+    //   dto.unitGroups = [mockUnitGroup];
+    // }
 
     dto.unitsAvailable =
       dto.reviewOrderType !== ReviewOrderTypeEnum.waitlist &&
@@ -1660,7 +1722,7 @@ export class ListingService implements OnModuleInit {
                   })),
                 }
               : undefined,
-          unitGroup:
+          unitGroups:
             enableUnitGroups && dto.unitGroups
               ? {
                   create: dto.unitGroups.map((group) => ({
