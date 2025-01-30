@@ -3,7 +3,10 @@ import { useFormContext } from "react-hook-form"
 import { t, Textarea, FieldGroup } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { listingFeatures, AuthContext } from "@bloom-housing/shared-helpers"
-import { ListingFeatures } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  ListingFeatures,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type BuildingFeaturesProps = {
@@ -28,7 +31,7 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
   }, [register, props.existingFeatures])
 
   const enableAccessibilityFeatures = doJurisdictionsHaveFeatureFlagOn(
-    "enableAccessibilityFeatures",
+    FeatureFlagEnum.enableAccessibilityFeatures,
     jurisdiction
   )
 

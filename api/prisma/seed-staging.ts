@@ -59,9 +59,12 @@ export const stagingSeed = async (
   });
   // Seed feature flags
   await prismaClient.featureFlags.create({
-    data: featureFlagFactory('homeType', true, 'Home Type feature', [
-      jurisdiction.id,
-    ]),
+    data: featureFlagFactory(
+      'enableHomeType',
+      true,
+      "When true, the 'Home Type' section is displayed in listing creation/edit and the public listing view",
+      [jurisdiction.id],
+    ),
   });
   await prismaClient.featureFlags.create({
     data: featureFlagFactory(
@@ -483,6 +486,8 @@ export const stagingSeed = async (
             },
           ],
         },
+        listingFeatures: undefined,
+        listingUtilities: undefined,
       },
       units: [
         {

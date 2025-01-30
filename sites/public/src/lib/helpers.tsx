@@ -16,6 +16,7 @@ import {
 import {
   Address,
   ApplicationMultiselectQuestion,
+  Jurisdiction,
   Listing,
   ListingsStatusEnum,
   ReviewOrderTypeEnum,
@@ -240,4 +241,8 @@ export const downloadExternalPDF = async (fileURL: string, fileName: string) => 
   } catch (err) {
     console.log(err)
   }
+}
+
+export const isFeatureFlagOn = (jurisdiction: Jurisdiction, featureFlag: string) => {
+  return jurisdiction.featureFlags?.some((flag) => flag.name === featureFlag && flag.active)
 }
