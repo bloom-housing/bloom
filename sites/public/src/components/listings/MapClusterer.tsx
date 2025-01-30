@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState, useContext } from "react"
 import { InfoWindow, useMap } from "@vis.gl/react-google-maps"
-import { MarkerClusterer } from "@googlemaps/markerclusterer"
+import { MarkerClusterer, SuperClusterAlgorithm } from "@googlemaps/markerclusterer"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { MapMarkerData } from "./ListingsMap"
 import { MapMarker } from "./MapMarker"
@@ -164,8 +164,9 @@ export const MapClusterer = ({
           const clusterMarker = document.createElement("div")
           clusterMarker.className = styles["cluster-icon"]
           clusterMarker.textContent = cluster.count.toString()
-          const DEFAULT_REM = 1.5
-          const calculatedSize = DEFAULT_REM + 0.02 * cluster.count
+          const DEFAULT_REM = 2
+          let calculatedSize = DEFAULT_REM + 0.04 * cluster.count
+          if (calculatedSize > 3.5) calculatedSize = 3.5
           clusterMarker.style.width = `${calculatedSize}rem`
           clusterMarker.style.height = `${calculatedSize}rem`
           clusterMarker.setAttribute("data-testid", "map-cluster")
@@ -179,6 +180,7 @@ export const MapClusterer = ({
           })
         },
       },
+      algorithm: new SuperClusterAlgorithm({ radius: 80 }),
       onClusterClick: (_, cluster, map) => {
         setInfoWindowIndex(null)
         const zoomLevel = getBoundsZoomLevel(cluster.bounds)
