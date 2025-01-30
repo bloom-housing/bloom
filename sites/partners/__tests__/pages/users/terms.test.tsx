@@ -1,9 +1,9 @@
+/* eslint-disable import/no-named-as-default */
 import React from "react"
 import { setupServer } from "msw/lib/node"
 import { fireEvent, mockNextRouter, render, waitFor } from "../../testUtils"
 import TermsPage from "../../../src/pages/users/terms"
 import { rest } from "msw"
-import userEvent from "@testing-library/user-event"
 
 const server = setupServer()
 
