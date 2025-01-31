@@ -59,7 +59,7 @@ describe("reset-password", () => {
 
     it("should show only password input error", async () => {
       const { getByLabelText, getByText, queryByText } = render(<ResetPassword />)
-      const passowrdInput = getByLabelText("Password")
+      const passwordInput = getByLabelText("Password")
       const submitButton = getByText("Change Password", { selector: "button" })
 
       await waitFor(() => fireEvent.click(submitButton))
@@ -67,7 +67,7 @@ describe("reset-password", () => {
       expect(queryByText("The passwords do not match")).not.toBeInTheDocument()
 
       //Should hide password input error after input
-      await waitFor(() => userEvent.type(passowrdInput, "abcd"))
+      await waitFor(() => userEvent.type(passwordInput, "abcd"))
       expect(queryByText("Please enter new login password")).not.toBeInTheDocument()
       expect(queryByText("The passwords do not match")).not.toBeInTheDocument()
     })
@@ -75,11 +75,11 @@ describe("reset-password", () => {
     it("should show only confirmation error", async () => {
       const { getByLabelText, getByText, queryByText } = render(<ResetPassword />)
 
-      const passowrdInput = getByLabelText("Password")
+      const passwordInput = getByLabelText("Password")
       const submitButton = getByText("Change Password", { selector: "button" })
 
       await waitFor(async () => {
-        await userEvent.type(passowrdInput, "abcd")
+        await userEvent.type(passwordInput, "abcd")
         fireEvent.click(submitButton)
       })
       expect(queryByText("Please enter new login password")).not.toBeInTheDocument()
@@ -89,12 +89,12 @@ describe("reset-password", () => {
     it("should show confirmation error on missmatching passwords", async () => {
       const { getByLabelText, getByText, queryByText } = render(<ResetPassword />)
 
-      const passowrdInput = getByLabelText("Password")
+      const passwordInput = getByLabelText("Password")
       const passwordConfirmInput = getByLabelText("Password Confirmation")
       const submitButton = getByText("Change Password", { selector: "button" })
 
       await waitFor(async () => {
-        await userEvent.type(passowrdInput, "abcd")
+        await userEvent.type(passwordInput, "abcd")
         await userEvent.type(passwordConfirmInput, "efgh")
         fireEvent.click(submitButton)
       })
@@ -127,12 +127,12 @@ describe("reset-password", () => {
 
     const { getByLabelText, getByText } = render(<ResetPassword />)
 
-    const passowrdInput = getByLabelText("Password")
+    const passwordInput = getByLabelText("Password")
     const passwordConfirmInput = getByLabelText("Password Confirmation")
     const submitButton = getByText("Change Password", { selector: "button" })
 
     await waitFor(async () => {
-      await userEvent.type(passowrdInput, "abcd")
+      await userEvent.type(passwordInput, "abcd")
       await userEvent.type(passwordConfirmInput, "abcd")
       fireEvent.click(submitButton)
       expect(pushMock).toHaveBeenCalledWith("/")
@@ -155,12 +155,12 @@ describe("reset-password", () => {
 
     const { getByLabelText, getByText } = render(<ResetPassword />)
 
-    const passowrdInput = getByLabelText("Password")
+    const passwordInput = getByLabelText("Password")
     const passwordConfirmInput = getByLabelText("Password Confirmation")
     const submitButton = getByText("Change Password", { selector: "button" })
 
     await waitFor(async () => {
-      await userEvent.type(passowrdInput, "abcd")
+      await userEvent.type(passwordInput, "abcd")
       await userEvent.type(passwordConfirmInput, "abcd")
       fireEvent.click(submitButton)
     })
@@ -212,12 +212,12 @@ describe("reset-password", () => {
       setupErrorMock(code)
       const { getByLabelText, getByText } = render(<ResetPassword />)
 
-      const passowrdInput = getByLabelText("Password")
+      const passwordInput = getByLabelText("Password")
       const passwordConfirmInput = getByLabelText("Password Confirmation")
       const submitButton = getByText("Change Password", { selector: "button" })
 
       await waitFor(async () => {
-        await userEvent.type(passowrdInput, "abcd")
+        await userEvent.type(passwordInput, "abcd")
         await userEvent.type(passwordConfirmInput, "abcd")
         fireEvent.click(submitButton)
       })
@@ -231,12 +231,12 @@ describe("reset-password", () => {
       setupErrorMock(code)
       const { getByLabelText, getByText } = render(<ResetPassword />)
 
-      const passowrdInput = getByLabelText("Password")
+      const passwordInput = getByLabelText("Password")
       const passwordConfirmInput = getByLabelText("Password Confirmation")
       const submitButton = getByText("Change Password", { selector: "button" })
 
       await waitFor(async () => {
-        await userEvent.type(passowrdInput, "abcd")
+        await userEvent.type(passwordInput, "abcd")
         await userEvent.type(passwordConfirmInput, "abcd")
         fireEvent.click(submitButton)
       })
@@ -250,12 +250,12 @@ describe("reset-password", () => {
       setupErrorMock(code)
       const { getByLabelText, getByText } = render(<ResetPassword />)
 
-      const passowrdInput = getByLabelText("Password")
+      const passwordInput = getByLabelText("Password")
       const passwordConfirmInput = getByLabelText("Password Confirmation")
       const submitButton = getByText("Change Password", { selector: "button" })
 
       await waitFor(async () => {
-        await userEvent.type(passowrdInput, "abcd")
+        await userEvent.type(passwordInput, "abcd")
         await userEvent.type(passwordConfirmInput, "abcd")
         fireEvent.click(submitButton)
       })
@@ -269,12 +269,12 @@ describe("reset-password", () => {
       setupErrorMock(code)
       const { getByLabelText, getByText } = render(<ResetPassword />)
 
-      const passowrdInput = getByLabelText("Password")
+      const passwordInput = getByLabelText("Password")
       const passwordConfirmInput = getByLabelText("Password Confirmation")
       const submitButton = getByText("Change Password", { selector: "button" })
 
       await waitFor(async () => {
-        await userEvent.type(passowrdInput, "abcd")
+        await userEvent.type(passwordInput, "abcd")
         await userEvent.type(passwordConfirmInput, "abcd")
         fireEvent.click(submitButton)
       })
