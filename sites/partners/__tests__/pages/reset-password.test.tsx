@@ -57,13 +57,14 @@ describe("reset-password", () => {
       expect(queryByText("Token not found. Please request for a new one.")).not.toBeInTheDocument()
     })
 
-    it.skip("should show only password input error", async () => {
-      const { getByLabelText, getByText, queryByText } = render(<ResetPassword />)
+    it("should show only password input error", async () => {
+      const { getByLabelText, getByText, findByText, queryByText } = render(<ResetPassword />)
       const passwordInput = getByLabelText("Password")
       const submitButton = getByText("Change Password", { selector: "button" })
 
       await waitFor(() => fireEvent.click(submitButton))
-      expect(getByText("Please enter new login password")).toBeInTheDocument()
+      const passwordErrorMessage = await findByText("Please enter new login password")
+      expect(passwordErrorMessage).toBeInTheDocument()
       expect(queryByText("The passwords do not match")).not.toBeInTheDocument()
 
       //Should hide password input error after input
@@ -72,8 +73,8 @@ describe("reset-password", () => {
       expect(queryByText("The passwords do not match")).not.toBeInTheDocument()
     })
 
-    it.skip("should show only confirmation error", async () => {
-      const { getByLabelText, getByText, queryByText } = render(<ResetPassword />)
+    it("should show only confirmation error", async () => {
+      const { getByLabelText, getByText, queryByText, findByText } = render(<ResetPassword />)
 
       const passwordInput = getByLabelText("Password")
       const submitButton = getByText("Change Password", { selector: "button" })
@@ -82,12 +83,14 @@ describe("reset-password", () => {
         await userEvent.type(passwordInput, "abcd")
         fireEvent.click(submitButton)
       })
+
+      const passwordConfirmErrorMessage = await findByText("The passwords do not match")
       expect(queryByText("Please enter new login password")).not.toBeInTheDocument()
-      expect(getByText("The passwords do not match")).toBeInTheDocument()
+      expect(passwordConfirmErrorMessage).toBeInTheDocument()
     })
 
-    it.skip("should show confirmation error on missmatching passwords", async () => {
-      const { getByLabelText, getByText, queryByText } = render(<ResetPassword />)
+    it("should show confirmation error on missmatching passwords", async () => {
+      const { getByLabelText, getByText, queryByText, findByText } = render(<ResetPassword />)
 
       const passwordInput = getByLabelText("Password")
       const passwordConfirmInput = getByLabelText("Password Confirmation")
@@ -99,8 +102,9 @@ describe("reset-password", () => {
         fireEvent.click(submitButton)
       })
 
+      const passwordConfirmErrorMessage = await findByText("The passwords do not match")
       expect(queryByText("Please enter new login password")).not.toBeInTheDocument()
-      expect(getByText("The passwords do not match")).toBeInTheDocument()
+      expect(passwordConfirmErrorMessage).toBeInTheDocument()
 
       //should disappear on matching passwords
       await waitFor(async () => {
