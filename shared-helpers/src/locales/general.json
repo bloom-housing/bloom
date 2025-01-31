@@ -1258,7 +1258,7 @@
   "t.range": "%{from} to %{to}",
   "t.readLess": "read less",
   "t.readMore": "read more",
-  "t.recenterMap": "Recenter map view",
+  "t.recenterMap": "Recenter",
   "t.relationship": "Relationship",
   "t.rent": "Rent",
   "t.review": "Review",

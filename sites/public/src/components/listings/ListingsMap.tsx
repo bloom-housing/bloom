@@ -7,6 +7,7 @@ import { MapControl } from "../shared/MapControl"
 import { MapClusterer } from "./MapClusterer"
 import styles from "./ListingsCombined.module.scss"
 import { ListingSearchParams } from "../../lib/listings/search"
+import { MapRecenter } from "../shared/MapRecenter"
 
 const defaultCenter = {
   lat: 37.579795,
@@ -81,6 +82,7 @@ const ListingsMap = (props: ListingsMapProps) => {
         clickableIcons={false}
       >
         <MapControl />
+        <MapRecenter mapMarkers={props.listings} visibleMapMarkers={props.visibleMarkers?.length} />
         <MapClusterer
           mapMarkers={markers}
           infoWindowIndex={infoWindowIndex}

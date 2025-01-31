@@ -69,7 +69,6 @@ const ListingsCombined = (props: ListingsCombinedProps) => {
                 onPageChange={props.onPageChange}
                 loading={getListLoading() || (props.isFirstBoundsLoad && props.isDesktop)}
                 mapMarkers={props.markers}
-                isDesktop={props.isDesktop}
               />
             </div>
             <div>
@@ -150,7 +149,6 @@ const ListingsCombined = (props: ListingsCombinedProps) => {
                   loading={getListLoading() || (props.isFirstBoundsLoad && props.isDesktop)}
                   onPageChange={props.onPageChange}
                   mapMarkers={props.markers}
-                  isDesktop={props.isDesktop}
                 />
                 <CustomSiteFooter />
               </div>

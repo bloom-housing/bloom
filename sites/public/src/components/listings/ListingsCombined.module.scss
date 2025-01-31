@@ -106,6 +106,7 @@
     padding: 0;
     min-height: var(--seeds-s40);
     margin-bottom: var(--seeds-s4);
+    z-index: 1;
   }
 
   [class*="loading-overlay__spinner"] {
