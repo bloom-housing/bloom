@@ -120,7 +120,7 @@ export default () => {
               onClick={() => {
                 useDetails = true
               }}
-              data-testid={"autofill-accept"}
+              id={"autofill-accept"}
               type={"submit"}
             >
               {t("application.autofill.start")}
