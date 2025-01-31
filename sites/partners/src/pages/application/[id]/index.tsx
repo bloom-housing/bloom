@@ -34,7 +34,7 @@ export default function ApplicationsList() {
   {
     /* TODO: add listing name in a listing response */
   }
-  const { listingDto } = useSingleListingData(application?.listings.id)
+  const { listingDto } = useSingleListingData(application?.listings?.id)
 
   const { applicationsService } = useContext(AuthContext)
   const [errorAlert, setErrorAlert] = useState(false)

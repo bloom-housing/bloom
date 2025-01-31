@@ -182,7 +182,7 @@ export const application: Application = {
       sameAddress: YesNoEnum.no,
       workInRegion: YesNoEnum.yes,
       householdMemberAddress: {
-        id: "applicant_work_address_id",
+        id: "member_address_id",
         createdAt: new Date(),
         updatedAt: new Date(),
         placeName: "Arches National Park",
@@ -230,6 +230,7 @@ export const application: Application = {
     latitude: 36.016779,
     longitude: -112.15888,
   },
+  applicationLotteryPositions: [],
   listings: {
     id: "Uvbk5qurpB2WI9V6WnNdH",
   },

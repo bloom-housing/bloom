@@ -36,7 +36,7 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
       (a, b) => a.orderId - b.orderId
     )
     return orderedHouseholdMembers?.map((item) => ({
-      name: { content: `${item.firstName} ${item.middleName} ${item.lastName}` },
+      name: { content: `${item.firstName} ${item.middleName || ""} ${item.lastName}` },
       relationship: {
         content: item.relationship
           ? t(`application.form.options.relationship.${item.relationship}`)
