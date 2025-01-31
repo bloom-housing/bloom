@@ -37,7 +37,7 @@ const translationServiceMock = {
 
 const jurisdictionServiceMock = {
   findOne: () => {
-    return { name: 'Jurisdiction 1' };
+    return { name: 'Jurisdiction 1', publicUrl: 'https://example.com' };
   },
 };
 const httpServiceMock = {
@@ -677,6 +677,41 @@ describe('Testing email service', () => {
       expect(emailMock).toMatch(
         /<td>\s*3200 Old Faithful Inn Rd, Yellowstone National Park WY 82190\s*<\/td>/,
       );
+    });
+  });
+
+  describe('lottery published for applicant', () => {
+    it('should generate html body', async () => {
+      const emailArr = ['testOne@example.com', 'testTwo@example.com'];
+      const service = await module.resolve(EmailService);
+      await service.lotteryPublishedApplicant(
+        { name: 'listing name', id: 'listingId', juris: 'jurisdictionId' },
+        { en: emailArr },
+      );
+
+      expect(mockSeSClient).toHaveReceivedCommandWith(SendBulkEmailCommand, {
+        FromEmailAddress: 'Doorway <no-reply@housingbayarea.org>',
+        BulkEmailEntries: expect.arrayContaining([
+          { Destination: { ToAddresses: ['testOne@example.com'] } },
+          { Destination: { ToAddresses: ['testTwo@example.com'] } },
+        ]),
+        DefaultContent: {
+          Template: {
+            TemplateContent: {
+              Subject: `New Housing Lottery Results Available`,
+              Html: expect.anything(),
+            },
+            TemplateData: expect.anything(),
+          },
+        },
+      });
+      const html =
+        mockSeSClient.call(0).args[0].input['DefaultContent']['Template'][
+          'TemplateContent'
+        ]['Html'];
+
+      expect(html).toMatch(/href="https:\/\/example\.com\/en\/sign-in"/);
+      expect(html).toMatch(/please visit https:\/\/example\.com/);
     });
   });
 });
