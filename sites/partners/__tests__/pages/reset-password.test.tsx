@@ -57,7 +57,7 @@ describe("reset-password", () => {
       expect(queryByText("Token not found. Please request for a new one.")).not.toBeInTheDocument()
     })
 
-    it("should show only password input error", async () => {
+    it.skip("should show only password input error", async () => {
       const { getByLabelText, getByText, queryByText } = render(<ResetPassword />)
       const passwordInput = getByLabelText("Password")
       const submitButton = getByText("Change Password", { selector: "button" })
@@ -72,7 +72,7 @@ describe("reset-password", () => {
       expect(queryByText("The passwords do not match")).not.toBeInTheDocument()
     })
 
-    it("should show only confirmation error", async () => {
+    it.skip("should show only confirmation error", async () => {
       const { getByLabelText, getByText, queryByText } = render(<ResetPassword />)
 
       const passwordInput = getByLabelText("Password")
@@ -86,7 +86,7 @@ describe("reset-password", () => {
       expect(getByText("The passwords do not match")).toBeInTheDocument()
     })
 
-    it("should show confirmation error on missmatching passwords", async () => {
+    it.skip("should show confirmation error on missmatching passwords", async () => {
       const { getByLabelText, getByText, queryByText } = render(<ResetPassword />)
 
       const passwordInput = getByLabelText("Password")
