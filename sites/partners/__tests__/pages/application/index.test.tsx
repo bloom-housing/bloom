@@ -143,7 +143,7 @@ describe("partners_application_index", () => {
     expect(getAllByText("Zip Code")).toHaveLength(3)
   })
 
-  it("should display no contact Alterante Contact sction info", () => {
+  it("should display no contact Alternate Contact section info", () => {
     const { getByText, queryByText, getAllByText } = render(
       <ApplicationContext.Provider
         value={{
