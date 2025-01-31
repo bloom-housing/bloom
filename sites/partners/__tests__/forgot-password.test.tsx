@@ -1,11 +1,10 @@
 /* eslint-disable import/no-named-as-default */
 import React from "react"
 import { setupServer } from "msw/lib/node"
-import { findByText, fireEvent, getByLabelText, mockNextRouter, render, waitFor } from "./testUtils"
+import { fireEvent, mockNextRouter, render, waitFor } from "./testUtils"
 import ForgotPassword from "../src/pages/forgot-password"
 import userEvent from "@testing-library/user-event"
 import { rest } from "msw"
-import { NetworkErrorMessage } from "@bloom-housing/shared-helpers"
 
 const server = setupServer()
 window.scrollTo = jest.fn()
