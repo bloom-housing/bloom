@@ -385,7 +385,7 @@ Cypress.Commands.add("step9Accessibility", (application, autofill) => {
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
 
-  if (application.programs.length) {
+  if (autofill || application.programs.length) {
     cy.isNextRouteValid("adaHouseholdMembers")
   } else {
     cy.isNextRouteValid("adaHouseholdMembers", 1)
