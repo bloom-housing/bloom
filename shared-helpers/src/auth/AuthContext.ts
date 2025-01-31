@@ -1,4 +1,4 @@
-import { GenericRouter, NavigationContext } from "@bloom-housing/ui-components"
+import { GenericRouter } from "@bloom-housing/ui-components"
 import {
   createContext,
   createElement,
@@ -35,6 +35,7 @@ import {
   LotteryService,
 } from "../types/backend-swagger"
 import { getListingRedirectUrl } from "../utilities/getListingRedirectUrl"
+import { useRouter } from "next/router"
 
 type ContextProps = {
   amiChartsService: AmiChartsService
@@ -136,7 +137,7 @@ const axiosConfig = (router: GenericRouter) => {
 export const AuthContext = createContext<Partial<ContextProps>>({})
 export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ children }) => {
   const { apiUrl } = useContext(ConfigContext)
-  const { router } = useContext(NavigationContext)
+  const router = useRouter()
   const [state, dispatch] = useReducer(reducer, {
     loading: false,
     initialStateLoaded: false,
@@ -195,7 +196,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
         dispatch(stopLoading())
 
         if (redirect) {
-          router.push(redirect)
+          await router.push(redirect)
         }
       }
     },
