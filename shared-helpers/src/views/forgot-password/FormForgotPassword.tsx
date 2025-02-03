@@ -1,20 +1,13 @@
-import React, { useContext } from "react"
+import React from "react"
 import { Button } from "@bloom-housing/ui-seeds"
-import {
-  Field,
-  Form,
-  t,
-  AlertBox,
-  AlertNotice,
-  ErrorMessage,
-  NavigationContext,
-} from "@bloom-housing/ui-components"
+import { Field, Form, t, AlertBox, AlertNotice, ErrorMessage } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { NetworkErrorReset, NetworkStatusContent } from "../../auth/catchNetworkError"
 import type { UseFormMethods } from "react-hook-form"
 import { BloomCard } from "../components/BloomCard"
 import { emailRegex } from "../../utilities/regex"
 import styles from "./FormForgotPassword.module.scss"
+import { useRouter } from "next/router"
 
 export type FormForgotPasswordProps = {
   control: FormForgotPasswordControl
@@ -46,7 +39,7 @@ const FormForgotPassword = ({
     window.scrollTo(0, 0)
   }
 
-  const { router } = useContext(NavigationContext)
+  const router = useRouter()
 
   return (
     <BloomCard title={t("authentication.forgotPassword.sendEmail")} iconSymbol={"profile"}>
