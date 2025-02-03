@@ -2077,7 +2077,7 @@ export class ScriptRunnerService {
             'Doorway generalmente no acepta solicitudes duplicadas. Una solicitud duplicada es aquella en la que alguien también aparece en otra solicitud para la misma oportunidad de vivienda. Para obtener más información sobre cómo manejamos las solicitudes duplicadas, consulte nuestra',
           whatHappensHeader: '¿Qué sucede después?',
           whatHappensContent:
-            'El administrador de la propiedad comenzará a contactar a los solicitantes por su método de contacto preferido. Lo harán en el orden de clasificación de la lotería, dentro de cada preferencia de lotería. Cuando se llenen todas las unidades, el administrador de la propiedad dejará de contactar a los solicitantes. Todas las unidades podrían llenarse antes de que el administrador de la propiedad llegue a su rango. Si esto sucede, no se le contactará.',
+            'El administrador de la propiedad comenzará a comunicarse con los solicitantes en el orden de clasificación de la lotería, dentro de cada preferencia de la lotería. Cuando todas las unidades estén ocupadas, el administrador de la propiedad dejará de comunicarse con los solicitantes. Es posible que todas las unidades estén ocupadas antes de que el administrador de la propiedad alcance su clasificación. Si esto sucede, no se comunicarán con usted.',
           otherOpportunities1:
             'Para ver otras oportunidades de vivienda, visite %{appUrl}. Puede registrarse para recibir notificaciones de nuevas oportunidades de solicitud, aquí',
           otherOpportunities2: 'aquí',
@@ -2209,7 +2209,7 @@ export class ScriptRunnerService {
             'Doorway thường không chấp nhận các đơn đăng ký trùng lặp. Một đơn đăng ký trùng lặp là đơn đăng ký có người cũng xuất hiện trong đơn đăng ký khác cho cùng một cơ hội nhà ở. Để biết thông tin chi tiết về cách chúng tôi xử lý các đơn trùng lặp, vui lòng xem',
           whatHappensHeader: 'Chuyện gì sẽ xảy ra tiếp theo?',
           whatHappensContent:
-            'Quản lý tài sản sẽ bắt đầu liên lạc với các ứng viên theo phương thức liên lạc ưa thích của họ. Họ sẽ làm như vậy theo thứ tự xếp hạng xổ số, trong mỗi sở thích xổ số. Khi tất cả các căn hộ được lấp đầy, quản lý tài sản sẽ ngừng liên lạc với các ứng viên. Tất cả các căn hộ có thể đã đầy trước khi quản lý tài sản đến xếp hạng của bạn. Nếu điều này xảy ra, bạn sẽ không được liên lạc.',
+            'Người quản lý bất động sản sẽ bắt đầu liên hệ với người nộp đơn theo thứ hạng xổ số, trong mỗi sở thích xổ số. Khi tất cả các đơn vị đã được lấp đầy, người quản lý bất động sản sẽ ngừng liên hệ với người nộp đơn. Tất cả các đơn vị có thể được lấp đầy trước khi người quản lý bất động sản đạt đến thứ hạng của bạn. Nếu điều này xảy ra, bạn sẽ không được liên hệ.',
           otherOpportunities1:
             'Để xem các cơ hội nhà ở khác, vui lòng truy cập %{appUrl}. Bạn có thể đăng ký nhận thông báo về các cơ hội đăng ký mới, tại đây',
           otherOpportunities2: 'đây',
@@ -2326,7 +2326,7 @@ export class ScriptRunnerService {
             'Doorway 通常不接受重複申請。重複申請是指某人也出現在另一個申請中，該申請是針對相同的住房機會。要了解我們如何處理重複申請的詳細信息，請參閱',
           whatHappensHeader: '接下來會發生什麼？',
           whatHappensContent:
-            '物業經理將開始按照申請人的首選聯絡方式聯繫他們。他們會按照抽籤排名的順序進行聯絡，每個抽籤偏好中均有排序。當所有單位都被填滿時，物業經理將停止聯繫申請人。所有單位可能在物業經理達到您的排名之前就已經填滿。如果發生這種情況，您將不會被聯繫。',
+            '物业经理将按照抽签顺序开始联系申请人，每个抽签偏好内都是如此。当所有单元都已满时，物业经理将停止联系申请人。在物业经理达到您的排名之前，所有单元都可能已满。如果发生这种情况，您将不会被联系。',
           otherOpportunities1:
             '若要查看其他住房機會，請訪問 %{appUrl}。您可以在此處註冊以接收有關新申請機會的通知',
           otherOpportunities2: '這裡',
@@ -2459,7 +2459,7 @@ export class ScriptRunnerService {
             'Karaniwang hindi tinatanggap ng Doorway ang mga dobleng aplikasyon. Ang dobleng aplikasyon ay isang aplikasyon kung saan may isa ring tao na lumalabas sa ibang aplikasyon para sa parehong pagkakataon sa pabahay. Para sa mas detalyadong impormasyon kung paano namin pinangangasiwaan ang mga dobleng aplikasyon, mangyaring tingnan ang aming',
           whatHappensHeader: 'Ano ang mangyayari pagkatapos nito?',
           whatHappensContent:
-            'Ang tagapamahala ng ari-arian ay magsisimulang makipag-ugnayan sa mga aplikante gamit ang kanilang piniling paraan ng pakikipag-ugnayan. Gagawin nila ito ayon sa pagkakasunud-sunod ng ranggo sa loterya, sa loob ng bawat pagpipilian ng loterya. Kapag puno na ang mga unit, titigil ang tagapamahala ng ari-arian sa pakikipag-ugnayan sa mga aplikante. Maaaring mapuno ang lahat ng unit bago marating ng tagapamahala ng ari-arian ang iyong ranggo. Kung mangyari ito, hindi ka makokontak.',
+            'Ang tagapamahala ng ari-arian ay magsisimulang makipag-ugnayan sa mga aplikante sa pagkakasunud-sunod ng ranggo ng lottery, sa loob ng bawat kagustuhan sa lottery. Kapag napuno na ang lahat ng unit, hihinto na ang property manager sa pakikipag-ugnayan sa mga aplikante. Maaaring mapunan ang lahat ng unit bago maabot ng property manager ang iyong ranggo. Kung mangyari ito, hindi ka makontak.',
           otherOpportunities1:
             'Upang makita ang iba pang mga pagkakataon sa pabahay, mangyaring bisitahin ang %{appUrl}. Maaari kang mag-sign up upang makatanggap ng mga abiso tungkol sa mga bagong pagkakataon sa aplikasyon, dito',
           otherOpportunities2: 'dito',
