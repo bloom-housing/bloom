@@ -669,7 +669,7 @@ export class ListingService implements OnModuleInit {
       },
     });
 
-    const enableUnitGroups = rawJurisdiction.featureFlags?.find(
+    const enableUnitGroups = rawJurisdiction?.featureFlags?.find(
       (featureFlag) => featureFlag.name === 'enableUnitGroups',
     )?.active;
 
@@ -1318,65 +1318,100 @@ export class ListingService implements OnModuleInit {
       },
     });
 
-    const enableUnitGroups = rawJurisdiction.featureFlags?.find(
+    const enableUnitGroups = rawJurisdiction?.featureFlags?.find(
       (featureFlag) => featureFlag.name === 'enableUnitGroups',
     )?.active;
 
     // //TODO: REMOVE THIS AFTER TESTING
-    // const mockUnitGroup = {
-    //   id: undefined,
-    //   createdAt: undefined,
-    //   updatedAt: undefined,
-    //   maxOccupancy: 2,
-    //   minOccupancy: 1,
-    //   floorMin: 1,
-    //   floorMax: 5,
-    //   totalCount: 10,
-    //   totalAvailable: 8,
-    //   bathroomMin: '1',
-    //   bathroomMax: '1',
-    //   openWaitlist: true,
-    //   sqFeetMin: '400',
-    //   sqFeetMax: '500',
-    //   unitTypes: [
-    //     {
-    //       id: 'f8483334-7234-40b1-b417-894693a3485e',
-    //       name: UnitTypeEnum.studio,
-    //       numBedrooms: 0,
-    //       createdAt: undefined,
-    //       updatedAt: undefined,
-    //     },
-    //   ],
-    //   unitGroupAmiLevels: [
-    //     {
-    //       id: 'fad51864-fc4f-41de-b578-dfc29ff3c850',
-    //       createdAt: undefined,
-    //       updatedAt: undefined,
-    //       amiPercentage: 30,
-    //       monthlyRentDeterminationType:
-    //         MonthlyRentDeterminationTypeEnum.percentageOfIncome,
-    //       percentageOfIncomeValue: '30',
-    //       flatRentValue: '2000',
-    //       amiChart: {
-    //         id: '584eeded-739e-49eb-a00a-900fbd466fd2',
-    //         name: 'AMI Chart 2023-1',
-    //         items: [],
-    //         createdAt: undefined,
-    //         updatedAt: undefined,
-    //         jurisdictions: {
-    //           id: dto.jurisdictions.id,
-    //           name: dto.jurisdictions.name,
-    //         },
-    //       },
-    //     },
-    //   ],
-    // };
+    const mockUnitGroup = {
+      id: undefined,
+      createdAt: undefined,
+      updatedAt: undefined,
+      maxOccupancy: 2,
+      minOccupancy: 1,
+      floorMin: 1,
+      floorMax: 5,
+      totalCount: 10,
+      totalAvailable: 8,
+      bathroomMin: '1',
+      bathroomMax: '1',
+      openWaitlist: true,
+      sqFeetMin: '400',
+      sqFeetMax: '500',
+      unitTypes: [
+        {
+          id: 'f8483334-7234-40b1-b417-894693a3485e',
+          name: UnitTypeEnum.studio,
+          numBedrooms: 0,
+          createdAt: undefined,
+          updatedAt: undefined,
+        },
+        {
+          id: '48010269-0ad3-4eea-aaf3-0262f47b8327',
+          name: UnitTypeEnum.oneBdrm,
+          numBedrooms: 1,
+          createdAt: undefined,
+          updatedAt: undefined,
+        },
+        {
+          id: '0e220e18-db48-4fa1-8643-722cac0074d1',
+          name: UnitTypeEnum.twoBdrm,
+          numBedrooms: 2,
+          createdAt: undefined,
+          updatedAt: undefined,
+        },
+      ],
+      unitGroupAmiLevels: [
+        {
+          id: undefined,
+          createdAt: undefined,
+          updatedAt: undefined,
+          amiPercentage: 30,
+          monthlyRentDeterminationType:
+            MonthlyRentDeterminationTypeEnum.percentageOfIncome,
+          percentageOfIncomeValue: '30',
+          flatRentValue: '2000',
+          amiChart: {
+            id: '584eeded-739e-49eb-a00a-900fbd466fd2',
+            name: 'AMI Chart 2023-1',
+            items: [],
+            createdAt: undefined,
+            updatedAt: undefined,
+            jurisdictions: {
+              id: dto.jurisdictions.id,
+              name: dto.jurisdictions.name,
+            },
+          },
+        },
+        {
+          id: undefined,
+          createdAt: undefined,
+          updatedAt: undefined,
+          amiPercentage: 30,
+          monthlyRentDeterminationType:
+            MonthlyRentDeterminationTypeEnum.flatRent,
+          percentageOfIncomeValue: '10',
+          flatRentValue: '2000',
+          amiChart: {
+            id: 'b4453a08-f319-4031-8351-68ce1bd4b3a1',
+            name: 'New AMI Chart',
+            items: [],
+            createdAt: undefined,
+            updatedAt: undefined,
+            jurisdictions: {
+              id: dto.jurisdictions.id,
+              name: dto.jurisdictions.name,
+            },
+          },
+        },
+      ],
+    };
 
-    // //TODO: REMOVE THIS AFTER TESTING
-    // if (enableUnitGroups) {
-    //   dto.units = undefined;
-    //   dto.unitGroups = [mockUnitGroup];
-    // }
+    //TODO: REMOVE THIS AFTER TESTING
+    if (enableUnitGroups) {
+      dto.units = undefined;
+      dto.unitGroups = [mockUnitGroup];
+    }
 
     dto.unitsAvailable =
       dto.reviewOrderType !== ReviewOrderTypeEnum.waitlist &&

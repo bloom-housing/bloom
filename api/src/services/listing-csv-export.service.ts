@@ -36,8 +36,8 @@ import { ListingMultiselectQuestion } from '../dtos/listings/listing-multiselect
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { UnitType } from 'src/dtos/unit-types/unit-type.dto';
 import { UnitGroupAmiLevel } from 'src/dtos/unit-groups/unit-group-ami-level.dto';
-import { getRentTypes } from 'src/utilities/unit-utilities';
-import { unitTypeToReadable } from 'src/utilities/application-export-helpers';
+import { getRentTypes } from '../utilities/unit-utilities';
+import { unitTypeToReadable } from '../utilities/application-export-helpers';
 
 views.csv = {
   ...views.details,
