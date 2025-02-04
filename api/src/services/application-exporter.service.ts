@@ -1,13 +1,14 @@
 import { Injectable, StreamableFile } from '@nestjs/common';
 import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
-import archiver from 'archiver';
+import dayjs from 'dayjs';
 import Excel, { Column } from 'exceljs';
-import { Request as ExpressRequest, Response } from 'express';
-import fs, { createReadStream } from 'fs';
+import { Request as ExpressRequest } from 'express';
+import fs, { createReadStream, ReadStream } from 'fs';
 import { join } from 'path';
 import { view } from './application.service';
 import { Application } from '../dtos/applications/application.dto';
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
+import { MultiselectQuestion } from '../dtos/multiselect-questions/multiselect-question.dto';
 import { ApplicationMultiselectQuestion } from '../dtos/applications/application-multiselect-question.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { User } from '../dtos/users/user.dto';
@@ -20,6 +21,7 @@ import { PrismaService } from './prisma.service';
 import { CsvHeader } from '../types/CsvExportInterface';
 import { getExportHeaders } from '../utilities/application-export-helpers';
 import { mapTo } from '../utilities/mapTo';
+import { zipExport } from '../utilities/zip-export';
 
 view.csv = {
   ...view.details,
@@ -42,31 +44,69 @@ export class ApplicationExporterService {
     private permissionService: PermissionService,
   ) {}
 
-  // csv export functions
   /**
    *
-   * @param queryParams
    * @param req
+   * @param queryParams
+   * @param isLottery a boolean indicating if the export is a lottery
+   * @param isSpreadsheet a boolean indicating if the export is a spreadsheet
    * @returns a promise containing a streamable file
    */
-  async csvExport<QueryParams extends ApplicationCsvQueryParams>(
+  async exporter<QueryParams extends ApplicationCsvQueryParams>(
     req: ExpressRequest,
-    res: Response,
     queryParams: QueryParams,
+    isLottery: boolean,
+    isSpreadsheet: boolean,
   ): Promise<StreamableFile> {
     const user = mapTo(User, req['user']);
     await this.authorizeExport(user, queryParams.id);
 
+    let filename: string;
+    let readStream: ReadStream;
+    let zipFilename: string;
+    const now = new Date();
+    const dateString = dayjs(now).format('YYYY-MM-DD_HH-mm');
+    if (isLottery) {
+      readStream = await this.spreadsheetExport(queryParams, user.id, true);
+      zipFilename = `listing-${queryParams.id}-lottery-${
+        user.id
+      }-${now.getTime()}`;
+      filename = `lottery-${queryParams.id}-${dateString}`;
+    } else {
+      if (isSpreadsheet) {
+        readStream = await this.spreadsheetExport(queryParams, user.id, false);
+      } else {
+        readStream = await this.csvExport(queryParams, user.id);
+      }
+      zipFilename = `listing-${queryParams.id}-applications-${
+        user.id
+      }-${now.getTime()}`;
+      filename = `applications-${queryParams.id}-${dateString}`;
+    }
+
+    return await zipExport(readStream, zipFilename, filename, isSpreadsheet);
+  }
+
+  // csv export functions
+  /**
+   *
+   * @param queryParams
+   * @param user_id
+   * @returns a promise containing a file read stream
+   */
+  async csvExport<QueryParams extends ApplicationCsvQueryParams>(
+    queryParams: QueryParams,
+    user_id: string,
+  ): Promise<ReadStream> {
     const filename = join(
       process.cwd(),
-      `src/temp/listing-${queryParams.id}-applications-${
-        user.id
-      }-${new Date().getTime()}.csv`,
+      `src/temp/listing-${
+        queryParams.id
+      }-applications-${user_id}-${new Date().getTime()}.csv`,
     );
 
     await this.createCsv(filename, queryParams);
-    const file = createReadStream(filename);
-    return new StreamableFile(file);
+    return createReadStream(filename);
   }
 
   /**
@@ -317,36 +357,26 @@ export class ApplicationExporterService {
   /**
    *
    * @param queryParams
-   * @param req
-   * @returns generates the lottery export file via helper function and returns the streamable file
+   * @param user
+   * @param forLottery
+   * @returns generates the applications or lottery spreadsheet export and returns a promise containing a file read stream
    */
   async spreadsheetExport<QueryParams extends ApplicationCsvQueryParams>(
-    req: ExpressRequest,
-    res: Response,
     queryParams: QueryParams,
+    user_id: string,
     forLottery = true,
-  ): Promise<StreamableFile> {
-    const user = mapTo(User, req['user']);
-    await this.authorizeExport(user, queryParams.id);
-
+  ): Promise<ReadStream> {
     const filename = join(
       process.cwd(),
       `src/temp/${forLottery ? 'lottery-' : ''}listing-${
         queryParams.id
-      }-applications-${user.id}-${new Date().getTime()}.xlsx`,
+      }-applications-${user_id}-${new Date().getTime()}.xlsx`,
     );
 
     const workbook = new Excel.stream.xlsx.WorkbookWriter({
       filename,
       useSharedStrings: false,
     });
-
-    const zipFilePath = join(
-      process.cwd(),
-      `src/temp/${forLottery ? 'lottery-' : ''}listing-${
-        queryParams.id
-      }-applications-${user.id}-${new Date().getTime()}.zip`,
-    );
 
     await this.createSpreadsheets(
       workbook,
@@ -357,27 +387,7 @@ export class ApplicationExporterService {
     );
 
     await workbook.commit();
-    const readStream = createReadStream(filename);
-
-    return new Promise((resolve) => {
-      // Create a writable stream to the zip file
-      const output = fs.createWriteStream(zipFilePath);
-      const archive = archiver('zip', {
-        zlib: { level: 9 },
-      });
-      output.on('close', () => {
-        const zipFile = createReadStream(zipFilePath);
-        resolve(new StreamableFile(zipFile));
-      });
-
-      archive.pipe(output);
-      archive.append(readStream, {
-        name: `${forLottery ? 'lottery-' : ''}${
-          queryParams.id
-        }-${new Date().getTime()}.xlsx`,
-      });
-      archive.finalize();
-    });
+    return createReadStream(filename);
   }
 
   /**
@@ -464,18 +474,18 @@ export class ApplicationExporterService {
     );
 
     if (forLottery) {
-      const preferences = multiSelectQuestions.filter(
-        (question) =>
-          question.applicationSection ===
-          MultiselectQuestionsApplicationSectionEnum.preferences,
+      const sortedPreferences = await this.sortPreferencesByOrdinal(
+        multiSelectQuestions,
+        queryParams.id,
       );
-      for (const preference of preferences) {
+
+      for (const preference of sortedPreferences) {
         await this.generateSpreadsheetData(
           workbook,
           mappedApps,
           columns,
           queryParams,
-          forLottery,
+          true,
           {
             id: preference.id,
             name: preference.text,
@@ -716,6 +726,44 @@ export class ApplicationExporterService {
       });
     }
     return res;
+  }
+
+  /**
+   *
+   * @param questions a collection of questions which can include more than preferences, the rest will be filtered out
+   * @param listingId the id of the listing
+   * @returns listing preferences sorted in ordinal order
+   */
+  async sortPreferencesByOrdinal(
+    questions: MultiselectQuestion[],
+    listingId: string,
+  ) {
+    const preferences = questions.filter(
+      (question) =>
+        question.applicationSection ===
+        MultiselectQuestionsApplicationSectionEnum.preferences,
+    );
+
+    // pull in the preference questions by ordinal
+    const listingPreferencesByOrdinal =
+      await this.prisma.listingMultiselectQuestions.findMany({
+        where: {
+          listingId: listingId,
+          multiselectQuestionId: {
+            in: [...preferences.map((preference) => preference.id)],
+          },
+        },
+        orderBy: {
+          ordinal: 'asc',
+        },
+      });
+
+    // get a sorted list of preferences via listing preference ordinal
+    return listingPreferencesByOrdinal.map((item) =>
+      preferences.find(
+        (preference) => preference.id === item.multiselectQuestionId,
+      ),
+    );
   }
 
   // shared functions
