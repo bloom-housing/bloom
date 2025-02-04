@@ -434,6 +434,14 @@ describe('Testing listing service', () => {
         internet: true,
       },
       homeType: 'apartment',
+      listingNeighborhoodAmenities: {
+        groceryStores: 'stores',
+        pharmacies: 'pharmacies',
+        healthCareResources: 'health care',
+        parksAndCommunityCenters: 'parks',
+        schools: 'schools',
+        publicTransportation: 'public transportation',
+      },
     };
   };
 
@@ -2021,6 +2029,16 @@ describe('Testing listing service', () => {
               mobility: true,
             },
           },
+          listingNeighborhoodAmenities: {
+            create: {
+              groceryStores: 'stores',
+              pharmacies: 'pharmacies',
+              healthCareResources: 'health care',
+              parksAndCommunityCenters: 'parks',
+              schools: 'schools',
+              publicTransportation: 'public transportation',
+            },
+          },
           jurisdictions: {
             connect: {
               id: expect.anything(),
@@ -2997,6 +3015,16 @@ describe('Testing listing service', () => {
               hearing: true,
               visual: false,
               mobility: true,
+            },
+          },
+          listingNeighborhoodAmenities: {
+            update: {
+              groceryStores: 'stores',
+              pharmacies: 'pharmacies',
+              healthCareResources: 'health care',
+              parksAndCommunityCenters: 'parks',
+              schools: 'schools',
+              publicTransportation: 'public transportation',
             },
           },
           jurisdictions: {
