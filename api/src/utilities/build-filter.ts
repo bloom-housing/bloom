@@ -57,6 +57,11 @@ export function buildFilter(filter: filter): any {
       lte: filterValue,
       ...mode,
     });
+  } else if (comparison === Compare['LIKE']) {
+    toReturn.push({
+      contains: filterValue,
+      ...mode,
+    });
   } else if (Compare.NA) {
     throw new HttpException(
       `Filter "${filter.key}" expected to be handled by a custom filter handler, but one was not implemented.`,
