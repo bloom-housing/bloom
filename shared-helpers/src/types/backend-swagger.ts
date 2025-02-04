@@ -160,7 +160,7 @@ export class ListingsService {
       /**  */
       limit?: number | "all"
       /**  */
-      filter?: ListingFilterParams[]
+      filter?: any | null[]
       /**  */
       view?: ListingViews
       /**  */
@@ -2693,7 +2693,7 @@ export interface ListingsQueryParams {
   limit?: number | "all"
 
   /**  */
-  filter?: string[]
+  filter?: []
 
   /**  */
   view?: ListingViews
@@ -2713,25 +2713,61 @@ export interface ListingFilterParams {
   $comparison: EnumListingFilterParamsComparison
 
   /**  */
-  name?: string
+  availability?: FilterAvailabilityEnum
 
   /**  */
-  status?: ListingsStatusEnum
-
-  /**  */
-  neighborhood?: string
+  bathrooms?: number
 
   /**  */
   bedrooms?: number
 
   /**  */
-  zipcode?: string
+  city?: string
 
   /**  */
-  leasingAgents?: string
+  counties?: string[]
+
+  /**  */
+  homeTypes?: HomeTypeEnum[]
+
+  /**  */
+  ids?: string[]
+
+  /**  */
+  isVerified?: boolean
 
   /**  */
   jurisdiction?: string
+
+  /**  */
+  leasingAgent?: string
+
+  /**  */
+  listingFeatures?: string[]
+
+  /**  */
+  monthlyRent?: number
+
+  /**  */
+  name?: string
+
+  /**  */
+  neighborhood?: string
+
+  /**  */
+  regions?: RegionEnum[]
+
+  /**  */
+  reservedCommunityTypes?: string[]
+
+  /**  */
+  section8Acceptance?: boolean
+
+  /**  */
+  status?: ListingsStatusEnum
+
+  /**  */
+  zipCode?: string
 }
 
 export interface ListingsRetrieveParams {
@@ -6295,6 +6331,25 @@ export enum OrderByEnum {
   "desc" = "desc",
 }
 
+export enum FilterAvailabilityEnum {
+  "waitlistOpen" = "waitlistOpen",
+  "unitsAvailable" = "unitsAvailable",
+}
+
+export enum HomeTypeEnum {
+  "apartment" = "apartment",
+  "duplex" = "duplex",
+  "house" = "house",
+  "townhome" = "townhome",
+}
+
+export enum RegionEnum {
+  "Greater_Downtown" = "Greater_Downtown",
+  "Eastside" = "Eastside",
+  "Southwest" = "Southwest",
+  "Westside" = "Westside",
+}
+
 export enum ListingsStatusEnum {
   "active" = "active",
   "pending" = "pending",
@@ -6308,6 +6363,7 @@ export enum EnumListingFilterParamsComparison {
   "IN" = "IN",
   ">=" = ">=",
   "<=" = "<=",
+  "LIKE" = "LIKE",
   "NA" = "NA",
 }
 export enum ApplicationAddressTypeEnum {
@@ -6379,13 +6435,6 @@ export enum UnitTypeEnum {
 export enum UnitRentTypeEnum {
   "fixed" = "fixed",
   "percentageOfIncome" = "percentageOfIncome",
-}
-
-export enum HomeTypeEnum {
-  "apartment" = "apartment",
-  "duplex" = "duplex",
-  "house" = "house",
-  "townhome" = "townhome",
 }
 
 export enum AfsView {
@@ -6473,6 +6522,7 @@ export enum EnumMultiselectQuestionFilterParamsComparison {
   "IN" = "IN",
   ">=" = ">=",
   "<=" = "<=",
+  "LIKE" = "LIKE",
   "NA" = "NA",
 }
 export enum InputType {
