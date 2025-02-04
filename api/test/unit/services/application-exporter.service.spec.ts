@@ -3,7 +3,6 @@ import { PassThrough } from 'stream';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
 import { HttpModule } from '@nestjs/axios';
-import { Request as ExpressRequest, Response } from 'express';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { ApplicationCsvQueryParams } from '../../../src/dtos/applications/application-csv-query-params.dto';
 import { User } from '../../../src/dtos/users/user.dto';
@@ -97,12 +96,11 @@ describe('Testing application export service', () => {
     ]);
 
     const exportResponse = await service.csvExport(
-      { user: requestingUser } as unknown as ExpressRequest,
-      {} as unknown as Response,
       {
         id: randomUUID(),
         includeDemographics: false,
       } as unknown as ApplicationCsvQueryParams,
+      requestingUser.id,
     );
 
     const headerRow =
@@ -111,7 +109,7 @@ describe('Testing application export service', () => {
       '"application 0 firstName","application 0 middleName","application 0 lastName","application 0 birthDay","application 0 birthMonth","application 0 birthYear","application 0 emailaddress","application 0 phoneNumber","application 0 phoneNumberType","additionalPhoneNumber 0","application 0 applicantAddress street","application 0 applicantAddress street2","application 0 applicantAddress city","application 0 applicantAddress state","application 0 applicantAddress zipCode",,,,,,,,,,,,,,,,,,"income 0","per month",,,,"true","true","true","Studio,One Bedroom",,,,,,,,,,,,,,,,,,,';
 
     const mockedStream = new PassThrough();
-    exportResponse.getStream().pipe(mockedStream);
+    exportResponse.pipe(mockedStream);
 
     // In order to make sure the last expect statements are properly hit we need to wrap in a promise and resolve it
     const readable = await new Promise((resolve) => {
@@ -156,12 +154,11 @@ describe('Testing application export service', () => {
       ]);
 
     const exportResponse = await service.csvExport(
-      { user: requestingUser } as unknown as ExpressRequest,
-      {} as unknown as Response,
       {
         id: 'test',
         includeDemographics: true,
       } as unknown as ApplicationCsvQueryParams,
+      requestingUser.id,
     );
 
     const headerRow =
@@ -170,7 +167,7 @@ describe('Testing application export service', () => {
       '"application 0 firstName","application 0 middleName","application 0 lastName","application 0 birthDay","application 0 birthMonth","application 0 birthYear","application 0 emailaddress","application 0 phoneNumber","application 0 phoneNumberType","additionalPhoneNumber 0","application 0 applicantAddress street","application 0 applicantAddress street2","application 0 applicantAddress city","application 0 applicantAddress state","application 0 applicantAddress zipCode",,,,,,,,,,,,,,,,,,"income 0","per month",,,,"true","true","true","Studio,One Bedroom",,,,,,"Indigenous",,,,"Other"';
 
     const mockedStream = new PassThrough();
-    exportResponse.getStream().pipe(mockedStream);
+    exportResponse.pipe(mockedStream);
     const readable = await new Promise((resolve) => {
       mockedStream.on('data', async (d) => {
         const value = Buffer.from(d).toString();
@@ -227,13 +224,12 @@ describe('Testing application export service', () => {
       .spyOn({ unitTypeToReadable }, 'unitTypeToReadable')
       .mockReturnValue('Studio');
     const exportResponse = await service.csvExport(
-      { user: requestingUser } as unknown as ExpressRequest,
-      {} as unknown as Response,
-      { id: randomUUID() } as unknown as ApplicationCsvQueryParams,
+      { listingId: randomUUID() } as unknown as ApplicationCsvQueryParams,
+      requestingUser.id,
     );
 
     const mockedStream = new PassThrough();
-    exportResponse.getStream().pipe(mockedStream);
+    exportResponse.pipe(mockedStream);
 
     // In order to make sure the last expect statements are properly hit we need to wrap in a promise and resolve it
     const readable = await new Promise((resolve) => {
@@ -290,16 +286,15 @@ describe('Testing application export service', () => {
       .spyOn({ unitTypeToReadable }, 'unitTypeToReadable')
       .mockReturnValue('Studio');
     const exportResponse = await service.csvExport(
-      { user: requestingUser } as unknown as ExpressRequest,
-      {} as unknown as Response,
       {
         id: randomUUID(),
         timeZone: 'America/New_York',
       } as unknown as ApplicationCsvQueryParams,
+      requestingUser.id,
     );
 
     const mockedStream = new PassThrough();
-    exportResponse.getStream().pipe(mockedStream);
+    exportResponse.pipe(mockedStream);
 
     // In order to make sure the last expect statements are properly hit we need to wrap in a promise and resolve it
     const readable = await new Promise((resolve) => {
@@ -359,16 +354,15 @@ describe('Testing application export service', () => {
       .spyOn({ unitTypeToReadable }, 'unitTypeToReadable')
       .mockReturnValue('Studio');
     const exportResponse = await service.csvExport(
-      { user: requestingUser } as unknown as ExpressRequest,
-      {} as unknown as Response,
       {
         listingId: randomUUID(),
         timeZone: 'America/New_York',
       } as unknown as ApplicationCsvQueryParams,
+      requestingUser.id,
     );
 
     const mockedStream = new PassThrough();
-    exportResponse.getStream().pipe(mockedStream);
+    exportResponse.pipe(mockedStream);
 
     // In order to make sure the last expect statements are properly hit we need to wrap in a promise and resolve it
     const readable = await new Promise((resolve) => {

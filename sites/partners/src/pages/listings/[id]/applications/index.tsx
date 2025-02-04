@@ -19,7 +19,7 @@ import {
   useSingleListingData,
   useFlaggedApplicationsList,
   useApplicationsData,
-  useApplicationsExport,
+  useZipExport,
 } from "../../../../lib/hooks"
 import { ListingStatusBar } from "../../../../components/listings/ListingStatusBar"
 import Layout from "../../../../layouts"
@@ -50,12 +50,13 @@ const ApplicationsList = () => {
   )
   const includeDemographicsPartner =
     profile?.userRoles?.isPartner && listingJurisdiction?.enablePartnerDemographics
-  const { onExport, exportLoading } = useApplicationsExport(
+  const { onExport, exportLoading } = useZipExport(
     listingId,
     (profile?.userRoles?.isAdmin ||
       profile?.userRoles?.isJurisdictionalAdmin ||
       includeDemographicsPartner) ??
       false,
+    false,
     !!process.env.applicationExportAsSpreadsheet
   )
 
