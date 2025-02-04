@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { HomeTypeEnum, ListingsStatusEnum, RegionEnum } from '@prisma/client';
-import { Expose, Transform, TransformFnParams } from 'class-transformer';
+import { Expose } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
