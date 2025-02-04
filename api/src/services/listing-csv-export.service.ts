@@ -581,6 +581,30 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           label: 'Services Offered',
         },
         {
+          path: 'listingNeighborhoodAmenities.groceryStores',
+          label: 'Grocery Stores',
+        },
+        {
+          path: 'listingNeighborhoodAmenities.publicTransportation',
+          label: 'Public Transportation',
+        },
+        {
+          path: 'listingNeighborhoodAmenities.schools',
+          label: 'Schools',
+        },
+        {
+          path: 'listingNeighborhoodAmenities.parksAndCommunityCenters',
+          label: 'Parks and Community Centers',
+        },
+        {
+          path: 'listingNeighborhoodAmenities.pharmacies',
+          label: 'Pharmacies',
+        },
+        {
+          path: 'listingNeighborhoodAmenities.healthCareResources',
+          label: 'Health Care Resources',
+        },
+        {
           path: 'creditHistory',
           label: 'Eligibility Rules - Credit History',
         },

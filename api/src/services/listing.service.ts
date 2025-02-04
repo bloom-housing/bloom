@@ -895,6 +895,13 @@ export class ListingService implements OnModuleInit {
               },
             }
           : undefined,
+        listingNeighborhoodAmenities: dto.listingNeighborhoodAmenities
+          ? {
+              create: {
+                ...dto.listingNeighborhoodAmenities,
+              },
+            }
+          : undefined,
         requestedChangesUser: undefined,
         publishedAt:
           dto.status === ListingsStatusEnum.active ? new Date() : undefined,
@@ -1610,6 +1617,13 @@ export class ListingService implements OnModuleInit {
             ? {
                 create: {
                   ...dto.listingsResult,
+                },
+              }
+            : undefined,
+          listingNeighborhoodAmenities: dto.listingNeighborhoodAmenities
+            ? {
+                update: {
+                  ...dto.listingNeighborhoodAmenities,
                 },
               }
             : undefined,
