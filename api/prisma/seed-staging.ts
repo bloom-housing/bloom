@@ -16,8 +16,8 @@ import dayjs from 'dayjs';
 import { ValidationMethod } from '../src/enums/multiselect-questions/validation-method-enum';
 import {
   rockyMountainAddress,
-  yosemiteAddress,
   stagingRealisticAddresses,
+  yosemiteAddress,
 } from './seed-helpers/address-factory';
 import { amiChartFactory } from './seed-helpers/ami-chart-factory';
 import { applicationFactory } from './seed-helpers/application-factory';
@@ -154,7 +154,6 @@ export const stagingSeed = async (
       password: 'abcdef',
     }),
   });
-
   // create a jurisdictional admin
   await prismaClient.userAccounts.create({
     data: await userFactory({
@@ -1338,96 +1337,23 @@ export const stagingSeed = async (
       }
     },
   );
-  await prismaClient.userAccounts.create({
-    data: await userFactory({
-      roles: { isAdmin: true },
-      email: 'admin1@example.com',
-      confirmedAt: new Date(),
-      jurisdictionIds: [jurisdiction.id],
-      acceptedTerms: true,
-      password: 'abcdef',
-    }),
-  });
-  await prismaClient.userAccounts.create({
-    data: await userFactory({
-      roles: { isAdmin: true },
-      email: 'admin2@example.com',
-      confirmedAt: new Date(),
-      jurisdictionIds: [jurisdiction.id],
-      acceptedTerms: true,
-      password: 'abcdef',
-    }),
-  });
-  await prismaClient.userAccounts.create({
-    data: await userFactory({
-      roles: { isAdmin: true },
-      email: 'admin3@example.com',
-      confirmedAt: new Date(),
-      jurisdictionIds: [jurisdiction.id],
-      acceptedTerms: true,
-      password: 'abcdef',
-    }),
-  });
-  await prismaClient.userAccounts.create({
-    data: await userFactory({
-      roles: { isAdmin: true },
-      email: 'admin4@example.com',
-      confirmedAt: new Date(),
-      jurisdictionIds: [jurisdiction.id],
-      acceptedTerms: true,
-      password: 'abcdef',
-    }),
-  });
-  await prismaClient.userAccounts.create({
-    data: await userFactory({
-      roles: { isAdmin: true },
-      email: 'admin5@example.com',
-      confirmedAt: new Date(),
-      jurisdictionIds: [jurisdiction.id],
-      acceptedTerms: true,
-      password: 'abcdef',
-    }),
-  });
-  await prismaClient.userAccounts.create({
-    data: await userFactory({
-      roles: { isAdmin: true },
-      email: 'admin6@example.com',
-      confirmedAt: new Date(),
-      jurisdictionIds: [jurisdiction.id],
-      acceptedTerms: true,
-      password: 'abcdef',
-    }),
-  });
-  await prismaClient.userAccounts.create({
-    data: await userFactory({
-      roles: { isAdmin: true },
-      email: 'admin7@example.com',
-      confirmedAt: new Date(),
-      jurisdictionIds: [jurisdiction.id],
-      acceptedTerms: true,
-      password: 'abcdef',
-    }),
-  });
-  await prismaClient.userAccounts.create({
-    data: await userFactory({
-      roles: { isAdmin: true },
-      email: 'admin8@example.com',
-      confirmedAt: new Date(),
-      jurisdictionIds: [jurisdiction.id],
-      acceptedTerms: true,
-      password: 'abcdef',
-    }),
-  });
-  await prismaClient.userAccounts.create({
-    data: await userFactory({
-      roles: { isAdmin: true },
-      email: 'admin9@example.com',
-      confirmedAt: new Date(),
-      jurisdictionIds: [jurisdiction.id],
-      acceptedTerms: true,
-      password: 'abcdef',
-    }),
-  });
+  // Creating a bunch of admin accounts if the environment variable is set to do load testing
+  const adminAccounts: number =
+    process.env.ADMIN_ACCOUNTS != undefined
+      ? Number(process.env.ADMIN_ACCOUNTS)
+      : 1;
+  for (let i = 0; i < adminAccounts; i++) {
+    await prismaClient.userAccounts.create({
+      data: await userFactory({
+        roles: { isAdmin: true },
+        email: `admin${i}@example.com`,
+        confirmedAt: new Date(),
+        jurisdictionIds: [jurisdiction.id],
+        acceptedTerms: true,
+        password: 'abcdef',
+      }),
+    });
+  }
   if (largeSeed) {
     Object.values(stagingRealisticAddresses).forEach(async (addr, index) => {
       const listing = await listingFactory(
