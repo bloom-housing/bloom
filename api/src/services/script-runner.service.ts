@@ -1976,6 +1976,15 @@ export class ScriptRunnerService {
       requestingUser,
     );
 
+    // delete all jurisdiction specific translations
+    await this.prisma.translations.deleteMany({
+      where: {
+        jurisdictionId: {
+          not: null,
+        },
+      },
+    });
+
     await this.updateTranslationsForLanguage(
       'es',
       {
@@ -2059,7 +2068,7 @@ export class ScriptRunnerService {
             'Se ha realizado una solicitud para restablecer tu contraseña del portal de Bloom Housing para %{appUrl}.',
           ignoreRequest:
             'Si no solicitaste esto, por favor ignora este correo electrónico.',
-          changePassword: 'Change my password',
+          changePassword: 'Cambiar mi contraseña',
         },
         leasingAgent: {
           officeHours: 'Horas de oficina:',
@@ -2198,6 +2207,7 @@ export class ScriptRunnerService {
             'Một yêu cầu để đặt lại mật khẩu của bạn trên trang web Cổng thông tin Nhà ở Bloom cho %{appUrl} vừa được thực hiện.',
           ignoreRequest:
             'Nếu bạn không yêu cầu điều này, vui lòng bỏ qua email này.',
+          changePassword: 'Thay đổi mật khẩu của tôi',
         },
         lotteryAvailable: {
           header: 'Kết quả xổ số nhà ở mới có sẵn',
@@ -2314,7 +2324,7 @@ export class ScriptRunnerService {
           resetRequest:
             '最近有人請求重設您在 %{appUrl} 上的 Bloom Housing Portal 網站密碼。',
           ignoreRequest: '如果您沒有請求這個，請忽略這封電子郵件。',
-          changePassword: 'Change my password',
+          changePassword: '更改我的密碼',
         },
         lotteryAvailable: {
           header: '新的住房抽籤結果可用',
@@ -2440,14 +2450,14 @@ export class ScriptRunnerService {
         forgotPassword: {
           subject: 'Nakalimutan mo ba ang iyong password?',
           callToAction:
-            'Kung ikaw ang nag-request nito, mangyaring i-click ang link sa ibaba upang i-reset ang iyong password: [Change my_password]',
+            'Kung ikaw ang nag-request nito, mangyaring i-click ang link sa ibaba upang i-reset ang iyong password: ',
           passwordInfo:
             'Hindi magbabago ang iyong password hanggang hindi mo naa-access ang link sa itaas at gumawa ng bago.',
           resetRequest:
             'Mayroon nang isang kahilingan upang i-reset ang iyong Bloom Housing Portal website password para sa %{appUrl}.',
           ignoreRequest:
             'Kung hindi mo ito hiniling, mangyaring huwag pansinin ang email na ito.',
-          changePassword: 'Change my password',
+          changePassword: 'Baguhin ang aking password',
         },
         lotteryAvailable: {
           header: 'Mga Bagong Resulta ng Loteriya ng Pabahay na Magagamit',
