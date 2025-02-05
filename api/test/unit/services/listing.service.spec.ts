@@ -481,6 +481,7 @@ describe('Testing listing service', () => {
           },
           listingFeatures: true,
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           applicationMethods: {
             include: {
               paperApplications: {
@@ -611,6 +612,7 @@ describe('Testing listing service', () => {
           },
           listingFeatures: true,
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           units: {
             include: {
               unitTypes: true,
@@ -702,6 +704,7 @@ describe('Testing listing service', () => {
           },
           listingFeatures: true,
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           units: {
             include: {
               unitTypes: true,
@@ -1038,6 +1041,7 @@ describe('Testing listing service', () => {
           },
           listingFeatures: true,
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           units: {
             include: {
               unitTypes: true,
@@ -1112,6 +1116,7 @@ describe('Testing listing service', () => {
           },
           listingFeatures: true,
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           units: {
             include: {
               unitTypes: true,
@@ -1155,6 +1160,7 @@ describe('Testing listing service', () => {
           },
           listingFeatures: true,
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           applicationMethods: {
             include: {
               paperApplications: {
@@ -1538,6 +1544,7 @@ describe('Testing listing service', () => {
           },
           listingFeatures: true,
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           units: {
             include: {
               unitTypes: true,
@@ -1640,6 +1647,7 @@ describe('Testing listing service', () => {
           },
           listingFeatures: true,
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           applicationMethods: {
             include: {
               paperApplications: {
@@ -1777,6 +1785,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsApplicationMailingAddress: true,
@@ -1877,6 +1886,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsApplicationMailingAddress: true,
@@ -2210,6 +2220,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsApplicationMailingAddress: true,
@@ -2342,6 +2353,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsBuildingAddress: true,
@@ -2434,6 +2446,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsBuildingAddress: true,
@@ -2517,6 +2530,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsBuildingAddress: true,
@@ -2633,6 +2647,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsBuildingAddress: true,
           reservedCommunityTypes: true,
         },
@@ -2732,6 +2747,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsBuildingAddress: true,
@@ -2870,6 +2886,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsApplicationMailingAddress: true,
