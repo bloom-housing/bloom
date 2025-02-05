@@ -78,6 +78,7 @@ export const views: Partial<Record<ListingViews, Prisma.ListingsInclude>> = {
     },
     listingFeatures: true,
     listingUtilities: true,
+    listingNeighborhoodAmenities: true,
   },
 };
 
