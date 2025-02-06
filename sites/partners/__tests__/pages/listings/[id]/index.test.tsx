@@ -1623,6 +1623,8 @@ describe("listing data", () => {
         copyDialogHeader = queryByText("Copy Listing", { selector: "h1" })
         expect(copyDialogHeader).not.toBeInTheDocument()
       })
+    })
+
     it("should setup listing preview button", async () => {
       document.cookie = "access-token-available=True"
       server.use(
