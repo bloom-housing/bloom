@@ -25,7 +25,7 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
     items: {
       $ref: getSchemaPath(ListingFilterParams),
     },
-    example: { $comparison: '=', status: 'active' },
+    example: [{ $comparison: '=', status: 'active' }],
   })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(16, { groups: [ValidationsGroupsEnum.default] })
@@ -48,7 +48,8 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   @ApiPropertyOptional({
     enum: ListingOrderByKeys,
     enumName: 'ListingOrderByKeys',
-    example: '["updatedAt"]',
+    example: ['mostRecentlyUpdated'],
+    default: ['mostRecentlyUpdated'],
   })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(16, { groups: [ValidationsGroupsEnum.default] })
@@ -66,8 +67,8 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   @ApiPropertyOptional({
     enum: OrderByEnum,
     enumName: 'OrderByEnum',
-    example: '["desc"]',
-    default: '["desc"]',
+    example: ['desc'],
+    default: ['desc'],
   })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(16, { groups: [ValidationsGroupsEnum.default] })
