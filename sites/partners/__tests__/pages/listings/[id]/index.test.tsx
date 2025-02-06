@@ -1,9 +1,9 @@
 /* eslint-disable import/no-named-as-default */
 import React from "react"
 import { setupServer } from "msw/lib/node"
-import { mockNextRouter, render } from "../../../testUtils"
+import { fireEvent, mockNextRouter, render, within } from "../../../testUtils"
 import { ListingContext } from "../../../../src/components/listings/ListingContext"
-import { listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { jurisdiction, listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import DetailListingData from "../../../../src/components/listings/PaperListingDetails/sections/DetailListingData"
 import DetailListingIntro from "../../../../src/components/listings/PaperListingDetails/sections/DetailListingIntro"
 import DetailBuildingDetails from "../../../../src/components/listings/PaperListingDetails/sections/DetailBuildingDetails"
@@ -38,9 +38,27 @@ const server = setupServer()
 
 window.scrollTo = jest.fn()
 
+const MOCK_CONTEXT = {
+  params: {
+    id: "Uvbk5qurpB2WI9V6WnNdH",
+  },
+  req: {
+    headers: {
+      "x-forwarded-for": "127.0.0.1",
+    },
+    socket: {
+      remoteAddress: "127.0.0.1",
+    },
+  },
+}
+
 beforeAll(() => {
-  server.listen()
   mockNextRouter()
+  server.listen()
+})
+
+beforeEach(() => {
+  server.use(rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => res(ctx.json(user))))
 })
 
 afterEach(() => {
@@ -1344,4 +1362,364 @@ describe("listing data", () => {
     })
   })
 
+  describe("should display a proper listing status", () => {
+    const AVAILABLE_STATUS_OPTIONS = [
+      {
+        statusEnum: ListingsStatusEnum.active,
+        tagString: "Open",
+      },
+      {
+        statusEnum: ListingsStatusEnum.changesRequested,
+        tagString: "Changes Requested",
+      },
+      {
+        statusEnum: ListingsStatusEnum.closed,
+        tagString: "Closed",
+      },
+      {
+        statusEnum: ListingsStatusEnum.pending,
+        tagString: "Draft",
+      },
+      {
+        statusEnum: ListingsStatusEnum.pendingReview,
+        tagString: "Pending Review",
+      },
+    ].map((item) =>
+      Object.assign(item, {
+        toString: function () {
+          return this.tagString
+        },
+      })
+    )
+
+    it.each(AVAILABLE_STATUS_OPTIONS)(
+      "should display proper string for %s status",
+      async (status) => {
+        document.cookie = "access-token-available=True"
+        server.use(
+          rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+            return res(ctx.json(user))
+          }),
+          rest.get("http://localhost:3100/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
+            return res(ctx.json(listing))
+          })
+        )
+        jest.spyOn(console, "error").mockImplementation()
+
+        const result = await getServerSideProps(MOCK_CONTEXT)
+
+        const { findByText } = render(
+          <AuthContext.Provider
+            value={{
+              profile: {
+                ...user,
+                listings: [],
+                jurisdictions: [jurisdiction],
+              },
+              doJurisdictionsHaveFeatureFlagOn: () => true,
+            }}
+          >
+            <ListingDetail
+              listing={{
+                ...result.props.listing,
+                status: status.statusEnum,
+              }}
+            />
+          </AuthContext.Provider>
+        )
+
+        const statusTag = await findByText(status.tagString)
+        expect(statusTag).toBeInTheDocument()
+      }
+    )
+  })
+
+  describe("should display working listing form actions buttons", () => {
+    it("should setup listign setup button", async () => {
+      document.cookie = "access-token-available=True"
+      server.use(
+        rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+          return res(ctx.json(user))
+        }),
+        rest.get("http://localhost:3100/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
+          return res(ctx.json(listing))
+        })
+      )
+      jest.spyOn(console, "error").mockImplementation()
+
+      const result = await getServerSideProps(MOCK_CONTEXT)
+
+      const { getByText } = render(
+        <AuthContext.Provider
+          value={{
+            profile: {
+              ...user,
+              listings: [],
+              jurisdictions: [jurisdiction],
+            },
+            doJurisdictionsHaveFeatureFlagOn: () => true,
+          }}
+        >
+          <ListingDetail listing={result.props.listing} />
+        </AuthContext.Provider>
+      )
+
+      const editButton = getByText("Edit")
+      expect(editButton).toBeInTheDocument()
+      expect(editButton).toHaveAttribute("href", "/listings/Uvbk5qurpB2WI9V6WnNdH/edit")
+    })
+
+    describe("should handle copy button request", () => {
+      it("should display copy lisitng dialog", async () => {
+        document.cookie = "access-token-available=True"
+        server.use(
+          rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+            return res(ctx.json(user))
+          }),
+          rest.get("http://localhost:3100/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
+            return res(ctx.json(listing))
+          })
+        )
+        jest.spyOn(console, "error").mockImplementation()
+
+        const result = await getServerSideProps(MOCK_CONTEXT)
+
+        const { getByText } = render(
+          <AuthContext.Provider
+            value={{
+              profile: {
+                ...user,
+                listings: [],
+                jurisdictions: [jurisdiction],
+              },
+              doJurisdictionsHaveFeatureFlagOn: () => true,
+            }}
+          >
+            <ListingDetail listing={result.props.listing} />
+          </AuthContext.Provider>
+        )
+
+        const copyButton = getByText("Copy", { selector: "button" })
+        expect(copyButton).toBeInTheDocument()
+
+        fireEvent.click(copyButton)
+
+        const copyDialogHeader = getByText("Copy Listing", { selector: "h1" })
+        expect(copyDialogHeader).toBeInTheDocument()
+
+        const copyDialogForm = copyDialogHeader.parentElement.parentElement
+        expect(
+          within(copyDialogForm).getByText(
+            "You are duplicating a listing to draft status. Please enter a unique name below and indicate whether or not you’d like to include existing unit data."
+          )
+        ).toBeInTheDocument()
+        expect(within(copyDialogForm).getByLabelText("Listing Name")).toBeInTheDocument()
+        expect(within(copyDialogForm).getByLabelText("Listing Name")).toHaveAttribute(
+          "value",
+          "Archer Studios Copy"
+        )
+        expect(within(copyDialogForm).getByLabelText("Unit data")).toBeInTheDocument()
+        expect(
+          within(copyDialogForm).getByText(
+            "Unit data will automatically be copied unless this box is unchecked."
+          )
+        ).toBeInTheDocument()
+        expect(within(copyDialogForm).getByText("Cancel")).toBeInTheDocument()
+        expect(within(copyDialogForm).getByText("Copy")).toBeInTheDocument()
+      })
+
+      it("should close dialog on cancel click", async () => {
+        document.cookie = "access-token-available=True"
+        server.use(
+          rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+            return res(ctx.json(user))
+          }),
+          rest.get("http://localhost:3100/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
+            return res(ctx.json(listing))
+          })
+        )
+        jest.spyOn(console, "error").mockImplementation()
+
+        const result = await getServerSideProps(MOCK_CONTEXT)
+
+        const { getByText, queryByText } = render(
+          <AuthContext.Provider
+            value={{
+              profile: {
+                ...user,
+                listings: [],
+                jurisdictions: [jurisdiction],
+              },
+              doJurisdictionsHaveFeatureFlagOn: () => true,
+            }}
+          >
+            <ListingDetail listing={result.props.listing} />
+          </AuthContext.Provider>
+        )
+
+        const copyButton = getByText("Copy", { selector: "button" })
+        expect(copyButton).toBeInTheDocument()
+
+        fireEvent.click(copyButton)
+
+        let copyDialogHeader = getByText("Copy Listing", { selector: "h1" })
+        expect(copyDialogHeader).toBeInTheDocument()
+
+        const copyDialogForm = copyDialogHeader.parentElement.parentElement
+        const cancelDialogButton = within(copyDialogForm).getByText("Cancel", {
+          selector: "button",
+        })
+
+        expect(cancelDialogButton).toBeInTheDocument()
+        fireEvent.click(cancelDialogButton)
+
+        copyDialogHeader = queryByText("Copy Listing", { selector: "h1" })
+        expect(copyDialogHeader).not.toBeInTheDocument()
+      })
+    it("should setup listing preview button", async () => {
+      document.cookie = "access-token-available=True"
+      server.use(
+        rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+          return res(ctx.json(user))
+        }),
+        rest.get("http://localhost:3100/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
+          return res(ctx.json(listing))
+        })
+      )
+      jest.spyOn(console, "error").mockImplementation()
+
+      const result = await getServerSideProps(MOCK_CONTEXT)
+
+      const { getByText } = render(
+        <AuthContext.Provider
+          value={{
+            profile: {
+              ...user,
+              listings: [],
+              jurisdictions: [{ ...jurisdiction, id: "id" }],
+            },
+            doJurisdictionsHaveFeatureFlagOn: () => true,
+          }}
+        >
+          <ListingDetail listing={result.props.listing} />
+        </AuthContext.Provider>
+      )
+
+      const previewButton = getByText("Preview")
+      expect(previewButton).toBeInTheDocument()
+      expect(previewButton).toHaveAttribute("href", "/preview/listings/Uvbk5qurpB2WI9V6WnNdH")
+    })
+  })
+
+  it("should display unit drawer details section", async () => {
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(ctx.json(user))
+      }),
+      rest.get("http://localhost:3100/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
+        return res(ctx.json(listing))
+      })
+    )
+    jest.spyOn(console, "error").mockImplementation()
+
+    const result = await getServerSideProps(MOCK_CONTEXT)
+
+    const { getByText, queryByText } = render(
+      <AuthContext.Provider
+        value={{
+          profile: {
+            ...user,
+            listings: [],
+            jurisdictions: [jurisdiction],
+          },
+          doJurisdictionsHaveFeatureFlagOn: () => true,
+        }}
+      >
+        <ListingDetail
+          listing={{
+            ...result.props.listing,
+            units: [
+              {
+                ...result.props.listing.units[0],
+                number: `#1`,
+                numBathrooms: 1,
+                unitAccessibilityPriorityTypes: {
+                  id: `ada_1`,
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                  name: `Test ADA_1`,
+                },
+              },
+            ],
+          }}
+        />
+      </AuthContext.Provider>
+    )
+
+    const unitSectionHeader = getByText("Listing Units", { selector: "h2" })
+    expect(unitSectionHeader).toBeInTheDocument()
+    const unitSection = unitSectionHeader.parentElement
+    expect(unitSection).toBeInTheDocument()
+    const unitViewButton = within(unitSection).getByText("View", { selector: "button" })
+    expect(unitViewButton).toBeInTheDocument()
+
+    fireEvent.click(unitViewButton)
+
+    let unitDrawerHeader = getByText("Unit", { selector: "h1" })
+    expect(unitDrawerHeader).toBeInTheDocument()
+
+    const unitDrawer = unitDrawerHeader.parentElement.parentElement
+
+    // Details section
+    const detailsSectionHeader = within(unitDrawer).getByText("Details", { selector: "h2" })
+    expect(detailsSectionHeader).toBeInTheDocument()
+    const detailsSection = detailsSectionHeader.parentElement
+    expect(within(detailsSection).getByText("Unit Number")).toBeInTheDocument()
+    expect(within(detailsSection).getByText("Unit Type")).toBeInTheDocument()
+    expect(within(detailsSection).getByText("Number of Bathrooms")).toBeInTheDocument()
+    expect(within(detailsSection).getByText("Unit Floor")).toBeInTheDocument()
+    expect(within(detailsSection).getByText("Square Footage")).toBeInTheDocument()
+    expect(within(detailsSection).getByText("Minimum Occupancy")).toBeInTheDocument()
+    expect(within(detailsSection).getByText("Max Occupancy")).toBeInTheDocument()
+    expect(within(detailsSection).getByText("#1")).toBeInTheDocument()
+    expect(within(detailsSection).getByText("Studio")).toBeInTheDocument()
+    expect(within(detailsSection).getByText("285")).toBeInTheDocument()
+    expect(within(detailsSection).getAllByText("1")).toHaveLength(2)
+    expect(within(detailsSection).getAllByText("2")).toHaveLength(2)
+
+    // Eligibility section
+    const eligibilitySectionHeader = within(unitDrawer).getByText("Eligibility", { selector: "h2" })
+    expect(eligibilitySectionHeader).toBeInTheDocument()
+    const eligibilitySection = eligibilitySectionHeader.parentElement
+    expect(within(eligibilitySection).getByText("AMI Chart")).toBeInTheDocument()
+    expect(within(eligibilitySection).getByText("n/a")).toBeInTheDocument()
+    expect(within(eligibilitySection).getByText("Percentage of AMI")).toBeInTheDocument()
+    expect(within(eligibilitySection).getByText("45.0")).toBeInTheDocument()
+    expect(within(eligibilitySection).getByText("Minimum Monthly Income")).toBeInTheDocument()
+    expect(within(eligibilitySection).getByText("2208.0")).toBeInTheDocument()
+    expect(within(eligibilitySection).getByText("Monthly Rent")).toBeInTheDocument()
+    expect(within(eligibilitySection).getByText("1104.0")).toBeInTheDocument()
+
+    // Accessibility section
+    const accessibilitySectionHeader = within(unitDrawer).getByText("Accessibility", {
+      selector: "h2",
+    })
+    expect(accessibilitySectionHeader).toBeInTheDocument()
+    const accessibilitySection = accessibilitySectionHeader.parentElement
+    expect(
+      within(accessibilitySection).getByText("Accessibility Priority Type")
+    ).toBeInTheDocument()
+    expect(within(accessibilitySection).getByText("Test ADA_1")).toBeInTheDocument()
+
+    // Should close on done
+    const doneButton = within(unitDrawer).getByText("Done", {
+      selector: "button",
+    })
+    expect(doneButton).toBeInTheDocument()
+    fireEvent.click(doneButton)
+
+    unitDrawerHeader = queryByText("Unit", { selector: "h1" })
+    expect(unitDrawerHeader).not.toBeInTheDocument()
+  })
 })
