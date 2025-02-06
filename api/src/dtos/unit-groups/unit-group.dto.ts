@@ -39,29 +39,29 @@ class UnitGroup extends AbstractDTO {
   totalAvailable?: number;
 
   @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
-  bathroomMin?: string;
+  bathroomMin?: number;
 
   @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
-  bathroomMax?: string;
+  bathroomMax?: number;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
-  openWaitlist = true;
+  openWaitlist?: boolean;
 
   @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
-  sqFeetMin?: string;
+  sqFeetMin?: number;
 
   @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
-  sqFeetMax?: string;
+  sqFeetMax?: number;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })

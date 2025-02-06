@@ -25,9 +25,9 @@ class UnitGroupAmiLevel extends AbstractDTO {
   percentageOfIncomeValue?: string;
 
   @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
-  flatRentValue?: string;
+  flatRentValue?: number;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
