@@ -15,10 +15,8 @@ import {
   LanguagesEnum,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
-  MonthlyRentDeterminationTypeEnum,
   Prisma,
   ReviewOrderTypeEnum,
-  UnitTypeEnum,
   UserRoleEnum,
 } from '@prisma/client';
 import dayjs from 'dayjs';
