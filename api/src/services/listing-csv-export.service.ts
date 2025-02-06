@@ -977,7 +977,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         format: (val: UnitGroupAmiLevel[]) =>
           [...new Set(val.map((level) => level.amiChart?.name))].join(', '),
       },
-      //TODO: Add when we have unit group summary
+      //TODO: Add when we have unit group summary -> update tests
       // {
       //   path: 'unitGroupSummary',
       //   label: 'AMI Levels',
@@ -994,7 +994,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         label: 'Rent Type',
         format: (levels: UnitGroupAmiLevel[]) => getRentTypes(levels),
       },
-      //TODO: Add when we have unit group summary
+      //TODO: Add when we have unit group summary -> update tests
       // {
       //   path: 'unitGroupSummary',
       //   label: 'Monthly Rent',

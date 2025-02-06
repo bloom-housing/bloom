@@ -41,6 +41,7 @@ export class ListingPublishedUpdate extends OmitType(ListingUpdate, [
   'rentalAssistance',
   'reviewOrderType',
   'units',
+  'unitGroups',
   'listingsBuildingAddress',
   'applicationDueDate',
 ]) {
@@ -159,13 +160,13 @@ export class ListingPublishedUpdate extends OmitType(ListingUpdate, [
       )?.active,
   )
   @Type(() => UnitCreate)
-  units: UnitCreate[];
+  units?: UnitCreate[];
 
   @Expose()
   @ApiProperty({ isArray: true, type: UnitGroupCreate })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitGroupCreate)
-  unitGroups: UnitGroupCreate[];
+  unitGroups?: UnitGroupCreate[];
 
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })

@@ -197,11 +197,34 @@ export class ListingService implements OnModuleInit {
       }
     }
 
+    const viewInclude = views[params.view ?? 'full'];
+
+    const finalInclude = params.enableUnitGroups
+      ? {
+          ...viewInclude,
+          units: undefined,
+          unitGroups: {
+            include: {
+              unitTypes: true,
+              unitGroupAmiLevels: {
+                include: {
+                  amiChart: {
+                    include: {
+                      jurisdictions: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        }
+      : viewInclude;
+
     const listingsRaw = await this.prisma.listings.findMany({
       skip: calculateSkip(params.limit, page),
       take: calculateTake(params.limit),
       orderBy: buildOrderByForListings(params.orderBy, params.orderDir),
-      include: views[params.view ?? 'full'],
+      include: finalInclude,
       where: whereClause,
     });
 
@@ -481,8 +504,13 @@ export class ListingService implements OnModuleInit {
     listingId: string,
     lang: LanguagesEnum = LanguagesEnum.en,
     view: ListingViews = ListingViews.full,
+    enableUnitGroups = false,
   ): Promise<Listing> {
-    const listingRaw = await this.findOrThrow(listingId, view);
+    const listingRaw = await this.findOrThrow(
+      listingId,
+      view,
+      enableUnitGroups,
+    );
 
     let result = mapTo(Listing, listingRaw);
 
@@ -910,6 +938,7 @@ export class ListingService implements OnModuleInit {
                       monthlyRentDeterminationType:
                         level.monthlyRentDeterminationType,
                       percentageOfIncomeValue: level.percentageOfIncomeValue,
+                      flatRentValue: level.flatRentValue,
                       amiChart: {
                         connect: { id: level.amiChart.id },
                       },
@@ -1179,9 +1208,32 @@ export class ListingService implements OnModuleInit {
     This will either find a listing or throw an error
     a listing view can be provided which will add the joins to produce that view correctly
   */
-  async findOrThrow(id: string, view?: ListingViews) {
+  async findOrThrow(
+    id: string,
+    view?: ListingViews,
+    enableUnitGroups?: boolean,
+  ) {
+    const viewInclude = view ? views[view] : undefined;
+    if (enableUnitGroups && viewInclude) {
+      viewInclude.units = undefined;
+      viewInclude.unitGroups = {
+        include: {
+          unitTypes: true,
+          unitGroupAmiLevels: {
+            include: {
+              amiChart: {
+                include: {
+                  jurisdictions: true,
+                },
+              },
+            },
+          },
+        },
+      };
+    }
+
     const listing = await this.prisma.listings.findUnique({
-      include: view ? views[view] : undefined,
+      include: viewInclude,
       where: {
         id,
       },
@@ -1322,96 +1374,96 @@ export class ListingService implements OnModuleInit {
       (featureFlag) => featureFlag.name === 'enableUnitGroups',
     )?.active;
 
-    // //TODO: REMOVE THIS AFTER TESTING
-    const mockUnitGroup = {
-      id: undefined,
-      createdAt: undefined,
-      updatedAt: undefined,
-      maxOccupancy: 2,
-      minOccupancy: 1,
-      floorMin: 1,
-      floorMax: 5,
-      totalCount: 10,
-      totalAvailable: 8,
-      bathroomMin: '1',
-      bathroomMax: '1',
-      openWaitlist: true,
-      sqFeetMin: '400',
-      sqFeetMax: '500',
-      unitTypes: [
-        {
-          id: 'f8483334-7234-40b1-b417-894693a3485e',
-          name: UnitTypeEnum.studio,
-          numBedrooms: 0,
-          createdAt: undefined,
-          updatedAt: undefined,
-        },
-        {
-          id: '48010269-0ad3-4eea-aaf3-0262f47b8327',
-          name: UnitTypeEnum.oneBdrm,
-          numBedrooms: 1,
-          createdAt: undefined,
-          updatedAt: undefined,
-        },
-        {
-          id: '0e220e18-db48-4fa1-8643-722cac0074d1',
-          name: UnitTypeEnum.twoBdrm,
-          numBedrooms: 2,
-          createdAt: undefined,
-          updatedAt: undefined,
-        },
-      ],
-      unitGroupAmiLevels: [
-        {
-          id: undefined,
-          createdAt: undefined,
-          updatedAt: undefined,
-          amiPercentage: 30,
-          monthlyRentDeterminationType:
-            MonthlyRentDeterminationTypeEnum.percentageOfIncome,
-          percentageOfIncomeValue: '30',
-          flatRentValue: '2000',
-          amiChart: {
-            id: '584eeded-739e-49eb-a00a-900fbd466fd2',
-            name: 'AMI Chart 2023-1',
-            items: [],
-            createdAt: undefined,
-            updatedAt: undefined,
-            jurisdictions: {
-              id: dto.jurisdictions.id,
-              name: dto.jurisdictions.name,
-            },
-          },
-        },
-        {
-          id: undefined,
-          createdAt: undefined,
-          updatedAt: undefined,
-          amiPercentage: 30,
-          monthlyRentDeterminationType:
-            MonthlyRentDeterminationTypeEnum.flatRent,
-          percentageOfIncomeValue: '10',
-          flatRentValue: '2000',
-          amiChart: {
-            id: 'b4453a08-f319-4031-8351-68ce1bd4b3a1',
-            name: 'New AMI Chart',
-            items: [],
-            createdAt: undefined,
-            updatedAt: undefined,
-            jurisdictions: {
-              id: dto.jurisdictions.id,
-              name: dto.jurisdictions.name,
-            },
-          },
-        },
-      ],
-    };
+    // // //TODO: REMOVE THIS AFTER TESTING
+    // const mockUnitGroup = {
+    //   id: undefined,
+    //   createdAt: undefined,
+    //   updatedAt: undefined,
+    //   maxOccupancy: 2,
+    //   minOccupancy: 1,
+    //   floorMin: 1,
+    //   floorMax: 5,
+    //   totalCount: 10,
+    //   totalAvailable: 8,
+    //   bathroomMin: '1',
+    //   bathroomMax: '1',
+    //   openWaitlist: true,
+    //   sqFeetMin: '400',
+    //   sqFeetMax: '500',
+    //   unitTypes: [
+    //     {
+    //       id: 'f8483334-7234-40b1-b417-894693a3485e',
+    //       name: UnitTypeEnum.studio,
+    //       numBedrooms: 0,
+    //       createdAt: undefined,
+    //       updatedAt: undefined,
+    //     },
+    //     {
+    //       id: '48010269-0ad3-4eea-aaf3-0262f47b8327',
+    //       name: UnitTypeEnum.oneBdrm,
+    //       numBedrooms: 1,
+    //       createdAt: undefined,
+    //       updatedAt: undefined,
+    //     },
+    //     {
+    //       id: '0e220e18-db48-4fa1-8643-722cac0074d1',
+    //       name: UnitTypeEnum.twoBdrm,
+    //       numBedrooms: 2,
+    //       createdAt: undefined,
+    //       updatedAt: undefined,
+    //     },
+    //   ],
+    //   unitGroupAmiLevels: [
+    //     {
+    //       id: undefined,
+    //       createdAt: undefined,
+    //       updatedAt: undefined,
+    //       amiPercentage: 30,
+    //       monthlyRentDeterminationType:
+    //         MonthlyRentDeterminationTypeEnum.percentageOfIncome,
+    //       percentageOfIncomeValue: '30',
+    //       flatRentValue: '2000',
+    //       amiChart: {
+    //         id: '584eeded-739e-49eb-a00a-900fbd466fd2',
+    //         name: 'AMI Chart 2023-1',
+    //         items: [],
+    //         createdAt: undefined,
+    //         updatedAt: undefined,
+    //         jurisdictions: {
+    //           id: dto.jurisdictions.id,
+    //           name: dto.jurisdictions.name,
+    //         },
+    //       },
+    //     },
+    //     {
+    //       id: undefined,
+    //       createdAt: undefined,
+    //       updatedAt: undefined,
+    //       amiPercentage: 30,
+    //       monthlyRentDeterminationType:
+    //         MonthlyRentDeterminationTypeEnum.flatRent,
+    //       percentageOfIncomeValue: '10',
+    //       flatRentValue: '2000',
+    //       amiChart: {
+    //         id: 'b4453a08-f319-4031-8351-68ce1bd4b3a1',
+    //         name: 'New AMI Chart',
+    //         items: [],
+    //         createdAt: undefined,
+    //         updatedAt: undefined,
+    //         jurisdictions: {
+    //           id: dto.jurisdictions.id,
+    //           name: dto.jurisdictions.name,
+    //         },
+    //       },
+    //     },
+    //   ],
+    // };
 
-    //TODO: REMOVE THIS AFTER TESTING
-    if (enableUnitGroups) {
-      dto.units = undefined;
-      dto.unitGroups = [mockUnitGroup];
-    }
+    // //TODO: REMOVE THIS AFTER TESTING
+    // if (enableUnitGroups) {
+    //   dto.units = undefined;
+    //   dto.unitGroups = [mockUnitGroup];
+    // }
 
     dto.unitsAvailable =
       dto.reviewOrderType !== ReviewOrderTypeEnum.waitlist &&
