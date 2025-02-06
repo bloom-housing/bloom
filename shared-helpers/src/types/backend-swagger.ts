@@ -169,6 +169,8 @@ export class ListingsService {
       orderDir?: OrderByEnum
       /**  */
       search?: string
+      /**  */
+      enableUnitGroups?: boolean
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedListing> {
@@ -184,6 +186,7 @@ export class ListingsService {
         orderBy: params["orderBy"],
         orderDir: params["orderDir"],
         search: params["search"],
+        enableUnitGroups: params["enableUnitGroups"],
       }
 
       /** 适配ios13，get请求不允许带body */
@@ -2706,6 +2709,9 @@ export interface ListingsQueryParams {
 
   /**  */
   search?: string
+
+  /**  */
+  enableUnitGroups?: boolean
 }
 
 export interface ListingFilterParams {
@@ -3234,6 +3240,85 @@ export interface Unit {
   unitAmiChartOverrides?: UnitAmiChartOverride
 }
 
+export interface UnitGroupAmiLevel {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  amiPercentage?: number
+
+  /**  */
+  monthlyRentDeterminationType?: EnumUnitGroupAmiLevelMonthlyRentDeterminationType
+
+  /**  */
+  percentageOfIncomeValue?: string
+
+  /**  */
+  flatRentValue?: number
+
+  /**  */
+  amiChart?: AmiChart
+}
+
+export interface UnitGroup {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  maxOccupancy?: number
+
+  /**  */
+  minOccupancy?: number
+
+  /**  */
+  floorMin?: number
+
+  /**  */
+  floorMax?: number
+
+  /**  */
+  totalCount?: number
+
+  /**  */
+  totalAvailable?: number
+
+  /**  */
+  bathroomMin?: number
+
+  /**  */
+  bathroomMax?: number
+
+  /**  */
+  openWaitlist?: boolean
+
+  /**  */
+  sqFeetMin?: number
+
+  /**  */
+  sqFeetMax?: number
+
+  /**  */
+  unitAccessibilityPriorityTypes?: UnitAccessibilityPriorityType
+
+  /**  */
+  unitGroupAmiLevels?: UnitGroupAmiLevel[]
+
+  /**  */
+  unitTypes?: UnitType[]
+}
+
 export interface MinMaxCurrency {
   /**  */
   min: string
@@ -3651,6 +3736,9 @@ export interface Listing {
   units: Unit[]
 
   /**  */
+  unitGroups?: UnitGroup[]
+
+  /**  */
   unitsSummarized?: UnitsSummarized
 
   /**  */
@@ -3785,6 +3873,50 @@ export interface UnitCreate {
 
   /**  */
   unitAmiChartOverrides?: UnitAmiChartOverrideCreate
+}
+
+export interface UnitGroupCreate {
+  /**  */
+  maxOccupancy?: number
+
+  /**  */
+  minOccupancy?: number
+
+  /**  */
+  floorMin?: number
+
+  /**  */
+  floorMax?: number
+
+  /**  */
+  totalCount?: number
+
+  /**  */
+  totalAvailable?: number
+
+  /**  */
+  bathroomMin?: number
+
+  /**  */
+  bathroomMax?: number
+
+  /**  */
+  openWaitlist?: boolean
+
+  /**  */
+  sqFeetMin?: number
+
+  /**  */
+  sqFeetMax?: number
+
+  /**  */
+  unitAccessibilityPriorityTypes?: UnitAccessibilityPriorityType
+
+  /**  */
+  unitGroupAmiLevels?: UnitGroupAmiLevel[]
+
+  /**  */
+  unitTypes?: UnitType[]
 }
 
 export interface AssetCreate {
@@ -4166,6 +4298,9 @@ export interface ListingCreate {
   units?: UnitCreate[]
 
   /**  */
+  unitGroups?: UnitGroupCreate[]
+
+  /**  */
   applicationMethods?: ApplicationMethodCreate[]
 
   /**  */
@@ -4450,6 +4585,9 @@ export interface ListingUpdate {
 
   /**  */
   units?: UnitCreate[]
+
+  /**  */
+  unitGroups?: UnitGroupCreate[]
 
   /**  */
   applicationMethods?: ApplicationMethodCreate[]
@@ -6380,7 +6518,10 @@ export enum UnitRentTypeEnum {
   "fixed" = "fixed",
   "percentageOfIncome" = "percentageOfIncome",
 }
-
+export enum EnumUnitGroupAmiLevelMonthlyRentDeterminationType {
+  "flatRent" = "flatRent",
+  "percentageOfIncome" = "percentageOfIncome",
+}
 export enum HomeTypeEnum {
   "apartment" = "apartment",
   "duplex" = "duplex",
