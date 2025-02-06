@@ -33,6 +33,7 @@ import DetailApplicationDates from "../../../../src/components/listings/PaperLis
 import DetailListingPhotos from "../../../../src/components/listings/PaperListingDetails/sections/DetailListingPhotos"
 import DetailListingNotes from "../../../../src/components/listings/PaperListingDetails/sections/DetailNotes"
 import ListingDetail, { getServerSideProps } from "../../../../src/pages/listings/[id]"
+import DetailPrograms from "../../../../src/components/listings/PaperListingDetails/sections/DetailPrograms"
 
 const server = setupServer()
 
@@ -533,6 +534,52 @@ describe("listing data", () => {
       expect(getAllByText(/Test Name_\d{1}/)).toHaveLength(2)
       expect(getByText("Description")).toBeInTheDocument()
       expect(getAllByText(/Test Description_\d{1}/)).toHaveLength(2)
+    })
+
+    it("should display Housing Programs section", () => {
+      const { getByText, getAllByText } = render(
+        <ListingContext.Provider
+          value={{
+            ...listing,
+            listingMultiselectQuestions: [
+              {
+                multiselectQuestions: {
+                  id: "program_id_0",
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                  jurisdictions: [],
+                  text: "Test Program Name_1",
+                  description: "Test Program Description_1",
+                  applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+                },
+              },
+              {
+                multiselectQuestions: {
+                  id: "program_id_1",
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                  jurisdictions: [],
+                  text: "Test Program Name_2",
+                  description: "Test Program Description_2",
+                  applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+                },
+              },
+            ],
+          }}
+        >
+          <DetailPrograms />
+        </ListingContext.Provider>
+      )
+
+      expect(getByText("Housing Programs")).toBeInTheDocument()
+      expect(getByText("Active Programs")).toBeInTheDocument()
+      expect(getByText("Order")).toBeInTheDocument()
+      expect(getByText("1")).toBeInTheDocument()
+      expect(getByText("2")).toBeInTheDocument()
+      expect(getByText("Name")).toBeInTheDocument()
+      expect(getAllByText(/Test Program Name_\d{1}/)).toHaveLength(2)
+      expect(getByText("Description")).toBeInTheDocument()
+      expect(getAllByText(/Test Program Description_\d{1}/)).toHaveLength(2)
     })
 
     it("should display Additional Fees section", () => {
