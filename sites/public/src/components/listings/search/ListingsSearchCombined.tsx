@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react"
-import { UserStatus } from "../../../lib/constants"
+import { useMap } from "@vis.gl/react-google-maps"
 import { ListingList, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
 import {
@@ -7,6 +7,7 @@ import {
   generateSearchQuery,
   parseSearchString,
 } from "../../../lib/listings/search"
+import { UserStatus } from "../../../lib/constants"
 import { searchListings, searchMapMarkers } from "../../../lib/listings/listing-service"
 import styles from "./ListingsSearch.module.scss"
 import { ListingsCombined } from "../ListingsCombined"
@@ -75,8 +76,18 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
   // This can be changed later if needed
   const pageSize = 25
 
+  const map = useMap()
+
   const search = async (page: number, changingFilter?: boolean) => {
     // If a user pans over empty space, reset the listings to empty instead of refetching
+
+    const oldMarkersSearch = JSON.stringify(
+      currentMarkers?.sort((a, b) => a.coordinate.lat - b.coordinate.lat)
+    )
+    const newMarkersSearch = JSON.stringify(
+      visibleMarkers?.sort((a, b) => a.coordinate.lat - b.coordinate.lat)
+    )
+
     if (visibleMarkers?.length === 0 && !changingFilter) {
       setSearchResults({
         listings: [],
@@ -106,6 +117,8 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
     // Don't search the listings if the filter is changing - first search the markers, which will update the listings
     if (
       (!isFirstBoundsLoad &&
+        !!map &&
+        oldMarkersSearch !== newMarkersSearch &&
         !changingFilter &&
         (isDesktop || listView) &&
         !(visibleMarkers?.length === 0 && changingFilter)) ||
@@ -144,7 +157,9 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
     })
 
     // On desktop, keep list loading set to true until map is finished with its first load
-    if (!isFirstBoundsLoad || !isDesktop) setIsLoading(false)
+    if ((!isFirstBoundsLoad && newMarkersSearch !== undefined && !changingFilter) || !isDesktop) {
+      setIsLoading(false)
+    }
 
     document.getElementById("listings-outer-container")?.scrollTo(0, 0)
     document.getElementById("listings-list")?.scrollTo(0, 0)
@@ -233,6 +248,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
   }, [isFirstBoundsLoad])
 
   const onFormSubmit = (params: ListingSearchParams) => {
+    setIsLoading(true)
     setSearchFilter(params)
   }
 

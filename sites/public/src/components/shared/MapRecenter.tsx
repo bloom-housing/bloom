@@ -9,6 +9,7 @@ import styles from "./MapRecenter.module.scss"
 type MapRecenterProps = {
   visibleMapMarkers: number
   mapMarkers: ListingMapMarker[] | null
+  isLoading: boolean
 }
 
 const MapRecenter = (props: MapRecenterProps) => {
@@ -17,7 +18,8 @@ const MapRecenter = (props: MapRecenterProps) => {
   if (
     !map ||
     props.visibleMapMarkers === undefined ||
-    props.visibleMapMarkers === props.mapMarkers.length
+    props.visibleMapMarkers === props.mapMarkers.length ||
+    props.isLoading
   )
     return null
 
@@ -38,6 +40,7 @@ const MapRecenter = (props: MapRecenterProps) => {
           )
         }}
         size={"sm"}
+        variant={"primary-outlined"}
       >
         {t("t.recenterMap")}
       </Button>

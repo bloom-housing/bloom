@@ -25,7 +25,8 @@ export type ListingsMapMarkersProps = {
 export const fitBounds = (
   map: google.maps.Map,
   mapMarkers: MapMarkerData[],
-  continueIfEmpty?: boolean
+  continueIfEmpty?: boolean,
+  setIsFirstBoundsLoad?: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   const bounds = new window.google.maps.LatLngBounds()
 
@@ -49,6 +50,9 @@ export const fitBounds = (
       const zoomLevel = getBoundsZoomLevel(bounds)
       map.setZoom(zoomLevel - 7)
     }
+  }
+  if (setIsFirstBoundsLoad) {
+    setIsFirstBoundsLoad(false)
   }
 }
 
@@ -134,7 +138,7 @@ export const MapClusterer = ({
       resetVisibleMarkers()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapMarkers])
+  }, [mapMarkers, map])
 
   const fetchInfoWindow = async (listingId: string) => {
     try {
@@ -203,14 +207,10 @@ export const MapClusterer = ({
     // Only automatically size the map to fit all pins on first map load
     if (isFirstBoundsLoad === false) return
 
-    fitBounds(map, mapMarkers)
-
-    setTimeout(() => {
-      setIsFirstBoundsLoad(false)
-    }, 1000)
+    fitBounds(map, mapMarkers, false, setIsFirstBoundsLoad)
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clusterer, markers, currentMapMarkers])
+  }, [clusterer, markers, currentMapMarkers, map])
 
   // Keeps track of the markers on the map, passed to each marker
   const setMarkerRef = useCallback(

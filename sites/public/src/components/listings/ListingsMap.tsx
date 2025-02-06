@@ -28,6 +28,7 @@ type ListingsMapProps = {
   isFirstBoundsLoad: boolean
   setIsFirstBoundsLoad: React.Dispatch<React.SetStateAction<boolean>>
   isDesktop: boolean
+  isLoading: boolean
 }
 
 export type MapMarkerData = {
@@ -82,7 +83,11 @@ const ListingsMap = (props: ListingsMapProps) => {
         clickableIcons={false}
       >
         <MapControl />
-        <MapRecenter mapMarkers={props.listings} visibleMapMarkers={props.visibleMarkers?.length} />
+        <MapRecenter
+          mapMarkers={props.listings}
+          visibleMapMarkers={props.visibleMarkers?.length}
+          isLoading={props.isLoading}
+        />
         <MapClusterer
           mapMarkers={markers}
           infoWindowIndex={infoWindowIndex}
