@@ -760,7 +760,7 @@ describe("listing data", () => {
       })
 
       it("should display selection criteria file", async () => {
-        const { getByText, queryByText, findByRole } = render(
+        const { getByText, findByRole } = render(
           <ListingContext.Provider
             value={{
               ...listing,
