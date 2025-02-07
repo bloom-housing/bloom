@@ -294,7 +294,9 @@ export const getExportHeaders = (
         path: 'demographics.race',
         label: 'Race',
         format: (val: string[]): string =>
-          val.map((race) => convertDemographicRaceToReadable(race)).join(','),
+          val
+            ?.map((race) => convertDemographicRaceToReadable(race))
+            .join(',') || '',
       },
       {
         path: 'demographics.gender',
@@ -319,10 +321,10 @@ export const getExportHeaders = (
         label: 'How did you Hear?',
         format: (val: string[]): string =>
           val
-            .map((howDidYouHear) =>
+            ?.map((howDidYouHear) =>
               convertDemographicHowDidYouHearToReadable(howDidYouHear),
             )
-            .join(','),
+            .join(',') || '',
       },
     );
   }
@@ -369,7 +371,7 @@ export const constructMultiselectQuestionHeaders = (
         ?.filter((option) => option.collectAddress)
         .forEach((option) => {
           headers.push({
-            path: `${applicationSection}.${question.text}.address`,
+            path: `${applicationSection}.${question.text}.${option.text}.address`,
             label: `${labelString} ${question.text} - ${option.text} - Address`,
             format: (val: ApplicationMultiselectQuestion): string => {
               return multiselectQuestionFormat(val, option.text, 'address');

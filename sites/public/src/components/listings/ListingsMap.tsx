@@ -1,6 +1,5 @@
 import React, { useState } from "react"
-import { APIProvider, Map } from "@vis.gl/react-google-maps"
-import { useJsApiLoader } from "@react-google-maps/api"
+import { Map } from "@vis.gl/react-google-maps"
 import { Heading } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 import { ListingMapMarker } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -8,6 +7,7 @@ import { MapControl } from "../shared/MapControl"
 import { MapClusterer } from "./MapClusterer"
 import styles from "./ListingsCombined.module.scss"
 import { ListingSearchParams } from "../../lib/listings/search"
+import { MapRecenter } from "../shared/MapRecenter"
 
 const defaultCenter = {
   lat: 37.579795,
@@ -28,6 +28,7 @@ type ListingsMapProps = {
   isFirstBoundsLoad: boolean
   setIsFirstBoundsLoad: React.Dispatch<React.SetStateAction<boolean>>
   isDesktop: boolean
+  isLoading: boolean
 }
 
 export type MapMarkerData = {
@@ -60,15 +61,9 @@ const getMarkers = (listings: ListingMapMarker[]) => {
 }
 
 const ListingsMap = (props: ListingsMapProps) => {
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: props.googleMapsApiKey,
-  })
-
   const [infoWindowIndex, setInfoWindowIndex] = useState<number>(null)
 
   const markers: MapMarkerData[] | null = getMarkers(props.listings)
-
-  if (!isLoaded) return <></>
 
   return (
     <div id={"listings-map"} className={styles["listings-map"]}>
@@ -78,31 +73,34 @@ const ListingsMap = (props: ListingsMapProps) => {
       <Heading className={"sr-only"} priority={2}>
         {t("t.listingsMap")}
       </Heading>
-      <APIProvider apiKey={props.googleMapsApiKey}>
-        <Map
-          mapId={props.googleMapsMapId}
-          style={containerStyle}
-          gestureHandling={"greedy"}
-          disableDefaultUI={true}
-          defaultZoom={defaultZoom}
-          defaultCenter={defaultCenter}
-          clickableIcons={false}
-        >
-          <MapControl />
-          <MapClusterer
-            mapMarkers={markers}
-            infoWindowIndex={infoWindowIndex}
-            setInfoWindowIndex={setInfoWindowIndex}
-            setVisibleMarkers={props.setVisibleMarkers}
-            visibleMarkers={props.visibleMarkers}
-            setIsLoading={props.setIsLoading}
-            searchFilter={props.searchFilter}
-            isFirstBoundsLoad={props.isFirstBoundsLoad}
-            setIsFirstBoundsLoad={props.setIsFirstBoundsLoad}
-            isDesktop={props.isDesktop}
-          />
-        </Map>
-      </APIProvider>
+      <Map
+        mapId={props.googleMapsMapId}
+        style={containerStyle}
+        gestureHandling={"greedy"}
+        disableDefaultUI={true}
+        defaultZoom={defaultZoom}
+        defaultCenter={defaultCenter}
+        clickableIcons={false}
+      >
+        <MapControl />
+        <MapRecenter
+          mapMarkers={props.listings}
+          visibleMapMarkers={props.visibleMarkers?.length}
+          isLoading={props.isLoading}
+        />
+        <MapClusterer
+          mapMarkers={markers}
+          infoWindowIndex={infoWindowIndex}
+          setInfoWindowIndex={setInfoWindowIndex}
+          setVisibleMarkers={props.setVisibleMarkers}
+          visibleMarkers={props.visibleMarkers}
+          setIsLoading={props.setIsLoading}
+          searchFilter={props.searchFilter}
+          isFirstBoundsLoad={props.isFirstBoundsLoad}
+          setIsFirstBoundsLoad={props.setIsFirstBoundsLoad}
+          isDesktop={props.isDesktop}
+        />
+      </Map>
     </div>
   )
 }

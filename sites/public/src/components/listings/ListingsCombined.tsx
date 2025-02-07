@@ -1,4 +1,5 @@
 import React from "react"
+import { useJsApiLoader } from "@react-google-maps/api"
 import { Listing, ListingMapMarker } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import CustomSiteFooter from "../shared/CustomSiteFooter"
 import { ListingsMap, MapMarkerData } from "./ListingsMap"
@@ -33,6 +34,12 @@ type ListingsCombinedProps = {
 }
 
 const ListingsCombined = (props: ListingsCombinedProps) => {
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: props.googleMapsApiKey,
+  })
+
+  if (!isLoaded) return <></>
+
   const getListLoading = () => {
     if (!props.googleMapsApiKey || !props.googleMapsMapId || !props.loading) return false
     return true
@@ -59,6 +66,7 @@ const ListingsCombined = (props: ListingsCombinedProps) => {
               lastPage={props.searchResults.lastPage}
               onPageChange={props.onPageChange}
               loading={getListLoading() || (props.isFirstBoundsLoad && props.isDesktop)}
+              mapMarkers={props.markers}
             />
           </div>
           <div>
@@ -93,6 +101,7 @@ const ListingsCombined = (props: ListingsCombinedProps) => {
             isFirstBoundsLoad={props.isFirstBoundsLoad}
             setIsFirstBoundsLoad={props.setIsFirstBoundsLoad}
             isDesktop={props.isDesktop}
+            isLoading={props.loading}
           />
         </div>
       </div>
@@ -124,6 +133,7 @@ const ListingsCombined = (props: ListingsCombinedProps) => {
               isFirstBoundsLoad={props.isFirstBoundsLoad}
               setIsFirstBoundsLoad={props.setIsFirstBoundsLoad}
               isDesktop={props.isDesktop}
+              isLoading={props.loading}
             />
           </div>
           <div id="listings-outer-container" className={styles["listings-outer-container"]}>
@@ -134,6 +144,7 @@ const ListingsCombined = (props: ListingsCombinedProps) => {
                 lastPage={props.searchResults.lastPage}
                 loading={getListLoading() || (props.isFirstBoundsLoad && props.isDesktop)}
                 onPageChange={props.onPageChange}
+                mapMarkers={props.markers}
               />
               <CustomSiteFooter />
             </div>

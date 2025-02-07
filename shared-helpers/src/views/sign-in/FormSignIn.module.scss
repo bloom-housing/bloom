@@ -1,8 +1,6 @@
 .forgot-password {
   float: right;
   font-size: var(--seeds-font-size-sm);
-  text-decoration-line: underline;
-  color: var(--seeds-color-blue-900);
 }
 
 .sign-in-error-container {
@@ -16,13 +14,6 @@
 .create-account-header {
   font-weight: var(--seeds-font-weight-semibold);
   margin-bottom: var(--seeds-s6);
-}
-
-.forgot-password {
-  float: right;
-  font-size: var(--seeds-font-size-sm);
-  text-decoration-line: underline;
-  color: var(--seeds-color-blue-900);
 }
 
 .sign-in-error {

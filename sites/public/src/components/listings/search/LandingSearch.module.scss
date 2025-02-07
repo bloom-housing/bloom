@@ -1,7 +1,7 @@
 .input-section {
   display: flex;
   flex-direction: column;
-  @apply p-2;
+  padding: var(--bloom-s4);
   @media (min-width: $screen-md) {
     flex-direction: row;
   }

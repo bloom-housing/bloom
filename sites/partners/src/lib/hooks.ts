@@ -512,37 +512,11 @@ export const createDateStringFromNow = (format = "YYYY-MM-DD_HH:mm:ss"): string 
   return dayjs(now).format(format)
 }
 
-export const useApplicationsExport = (
+export const useZipExport = (
   listingId: string,
   includeDemographics: boolean,
-  spreadSheetExport = false
-) => {
-  if (spreadSheetExport) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    return useSpreadsheetExport(listingId, includeDemographics, false)
-  }
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { applicationsService } = useContext(AuthContext)
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const res = useCsvExport(
-    () =>
-      applicationsService.listAsCsv({
-        id: listingId,
-        includeDemographics,
-        timeZone: dayjs.tz.guess(),
-      }),
-    `applications-${listingId}-${createDateStringFromNow()}.csv`
-  )
-
-  return { onExport: res.onExport, exportLoading: res.csvExportLoading }
-}
-
-export const useSpreadsheetExport = (
-  listingId: string,
-  includeDemographics: boolean,
-  forLottery: boolean
+  isLottery: boolean,
+  isSpreadsheet = false
 ) => {
   const { applicationsService, lotteryService } = useContext(AuthContext)
   const [exportLoading, setExportLoading] = useState(false)
@@ -551,24 +525,36 @@ export const useSpreadsheetExport = (
   const onExport = useCallback(async () => {
     setExportLoading(true)
     try {
-      const content = forLottery
-        ? await lotteryService.lotteryResults(
-            { id: listingId, includeDemographics },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let content: any
+      if (isLottery) {
+        content = await lotteryService.lotteryResults(
+          { id: listingId, includeDemographics, timeZone: dayjs.tz.guess() },
+          { responseType: "arraybuffer" }
+        )
+      } else {
+        if (isSpreadsheet) {
+          content = await applicationsService.listAsSpreadsheet(
+            { id: listingId, includeDemographics, timeZone: dayjs.tz.guess() },
             { responseType: "arraybuffer" }
           )
-        : await applicationsService.listAsSpreadsheet(
-            { id: listingId, includeDemographics },
+        } else {
+          content = await applicationsService.listAsCsv(
+            { id: listingId, includeDemographics, timeZone: dayjs.tz.guess() },
             { responseType: "arraybuffer" }
           )
+        }
+      }
+
       const blob = new Blob([new Uint8Array(content)], { type: "application/zip" })
       const url = window.URL.createObjectURL(blob)
       const link = document.createElement("a")
       link.href = url
-      const now = new Date()
-      const dateString = dayjs(now).format("YYYY-MM-DD_HH-mm")
       link.setAttribute(
         "download",
-        `${listingId}-${dateString}-${forLottery ? "lottery" : "applications"}.zip`
+        `${isLottery ? "lottery" : "applications"}-${listingId}-${createDateStringFromNow(
+          "YYYY-MM-DD_HH-mm"
+        )}.zip`
       )
       document.body.appendChild(link)
       link.click()

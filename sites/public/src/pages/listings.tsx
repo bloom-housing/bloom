@@ -1,5 +1,6 @@
 import React from "react"
 import Head from "next/head"
+import { APIProvider } from "@vis.gl/react-google-maps"
 import { Heading } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 import { MetaTags } from "../components/shared/MetaTags"
@@ -44,14 +45,16 @@ export default function ListingsPage(props: ListingsProps) {
         {t("nav.listings")}
       </Heading>
       {props.showAllMapPins === "TRUE" ? (
-        <ListingsSearchCombined
-          googleMapsApiKey={props.googleMapsApiKey}
-          googleMapsMapId={props.googleMapsMapId}
-          searchString={searchString}
-          bedrooms={props.bedrooms}
-          bathrooms={props.bathrooms}
-          counties={locations}
-        />
+        <APIProvider apiKey={props.googleMapsApiKey}>
+          <ListingsSearchCombined
+            googleMapsApiKey={props.googleMapsApiKey}
+            googleMapsMapId={props.googleMapsMapId}
+            searchString={searchString}
+            bedrooms={props.bedrooms}
+            bathrooms={props.bathrooms}
+            counties={locations}
+          />
+        </APIProvider>
       ) : (
         <ListingsSearchCombinedDeprecated
           googleMapsApiKey={props.googleMapsApiKey}

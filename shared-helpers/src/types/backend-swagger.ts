@@ -2517,6 +2517,22 @@ export class ScriptRunnerService {
     })
   }
   /**
+   * A script that updates the "what happens next" content in lottery email
+   */
+  updatesWhatHappensInLotteryEmail(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/updatesWhatHappensInLotteryEmail"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * A script that adds existing feature flags into the feature flag table
    */
   addFeatureFlags(options: IRequestOptions = {}): Promise<SuccessDTO> {
@@ -2538,6 +2554,38 @@ export class ScriptRunnerService {
   updatedHouseholdMemberRelationships(options: IRequestOptions = {}): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/scriptRunner/updatedHouseholdMemberRelationships"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * A script that removes empty race inputs
+   */
+  removeEmptyRaceInputs(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/removeEmptyRaceInputs"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Script to reset the translations in non-english that were missing
+   */
+  resetMissingTranslations(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/resetMissingTranslations"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
@@ -6541,6 +6589,7 @@ export enum EnumListingFilterParamsComparison {
   "IN" = "IN",
   ">=" = ">=",
   "<=" = "<=",
+  "LIKE" = "LIKE",
   "NA" = "NA",
 }
 export enum ListingViews {
@@ -6720,6 +6769,7 @@ export enum EnumMultiselectQuestionFilterParamsComparison {
   "IN" = "IN",
   ">=" = ">=",
   "<=" = "<=",
+  "LIKE" = "LIKE",
   "NA" = "NA",
 }
 export enum InputType {

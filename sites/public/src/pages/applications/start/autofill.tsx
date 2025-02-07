@@ -67,22 +67,21 @@ export default () => {
 
   useEffect(() => {
     if (!previousApplication && initialStateLoaded) {
-      // Temporarily turning autofill off
-      // if (profile) {
-      //   void applicationsService
-      //     .mostRecentlyCreated({
-      //       userId: profile.id,
-      //     })
-      //     .then((res) => {
-      //       if (res && res.applicant) {
-      //         setPreviousApplication(new AutofillCleaner(res).clean())
-      //       } else {
-      //         onSubmit()
-      //       }
-      //     })
-      // } else {
-      //   onSubmit()
-      // }
+      if (profile) {
+        void applicationsService
+          .mostRecentlyCreated({
+            userId: profile.id,
+          })
+          .then((res) => {
+            if (res && res.applicant) {
+              setPreviousApplication(new AutofillCleaner(res).clean())
+            } else {
+              onSubmit()
+            }
+          })
+      } else {
+        onSubmit()
+      }
       onSubmit()
     }
   }, [profile, applicationsService, onSubmit, previousApplication, initialStateLoaded])

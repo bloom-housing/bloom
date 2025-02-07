@@ -32,7 +32,7 @@ const NewApplication = () => {
           title={
             <>
               <p className="font-sans font-semibold uppercase text-2xl">
-                {t("t.edit")}: {application.applicant.firstName} {application.applicant.lastName}
+                {t("t.edit")}: {application.applicant?.firstName} {application.applicant?.lastName}
               </p>
 
               <p className="font-sans text-base mt-1">

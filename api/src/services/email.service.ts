@@ -687,7 +687,7 @@ export class EmailService {
         if (lotteryEvent.startTime) {
           lotteryDateTime =
             lotteryDateTime +
-            `at ${dayjs(lotteryEvent.startTime)
+            ` at ${dayjs(lotteryEvent.startTime)
               .tz(process.env.TIME_ZONE)
               .format('h:mma z')}`;
         }
@@ -821,7 +821,7 @@ export class EmailService {
               listingName: listingInfo.name,
               appUrl: jurisdiction.publicUrl,
             },
-            appUrl: jurisdiction.publicUrl,
+            signInUrl: `${jurisdiction.publicUrl}/${language}/sign-in`,
             termsUrl: 'https://mtc.ca.gov/doorway-housing-portal-terms-use',
             notificationsUrl:
               'https://public.govdelivery.com/accounts/CAMTC/signup/36832',

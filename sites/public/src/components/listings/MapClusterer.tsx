@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState, useContext } from "react"
 import { InfoWindow, useMap } from "@vis.gl/react-google-maps"
-import { MarkerClusterer } from "@googlemaps/markerclusterer"
+import { MarkerClusterer, SuperClusterAlgorithm } from "@googlemaps/markerclusterer"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { MapMarkerData } from "./ListingsMap"
 import { MapMarker } from "./MapMarker"
@@ -20,6 +20,40 @@ export type ListingsMapMarkersProps = {
   isFirstBoundsLoad: boolean
   setIsFirstBoundsLoad: React.Dispatch<React.SetStateAction<boolean>>
   isDesktop: boolean
+}
+
+export const fitBounds = (
+  map: google.maps.Map,
+  mapMarkers: MapMarkerData[],
+  continueIfEmpty?: boolean,
+  setIsFirstBoundsLoad?: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  const bounds = new window.google.maps.LatLngBounds()
+
+  if (!map) return
+  mapMarkers?.map((marker) => {
+    bounds.extend({
+      lat: marker.coordinate.lat,
+      lng: marker.coordinate.lng,
+    })
+  })
+
+  const visibleMarkers = mapMarkers?.filter((marker) =>
+    map.getBounds()?.contains(marker.coordinate)
+  )
+
+  if (!continueIfEmpty && visibleMarkers.length === 0) {
+    return
+  } else {
+    map.fitBounds(bounds, document.getElementById("listings-map").clientWidth * 0.05)
+    if (mapMarkers.length === 1) {
+      const zoomLevel = getBoundsZoomLevel(bounds)
+      map.setZoom(zoomLevel - 7)
+    }
+  }
+  if (setIsFirstBoundsLoad) {
+    setIsFirstBoundsLoad(false)
+  }
 }
 
 // Zoom in slowly by recursively setting the zoom level
@@ -104,7 +138,7 @@ export const MapClusterer = ({
       resetVisibleMarkers()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapMarkers])
+  }, [mapMarkers, map])
 
   const fetchInfoWindow = async (listingId: string) => {
     try {
@@ -134,8 +168,9 @@ export const MapClusterer = ({
           const clusterMarker = document.createElement("div")
           clusterMarker.className = styles["cluster-icon"]
           clusterMarker.textContent = cluster.count.toString()
-          const DEFAULT_REM = 1.5
-          const calculatedSize = DEFAULT_REM + 0.02 * cluster.count
+          const DEFAULT_REM = 2
+          let calculatedSize = DEFAULT_REM + 0.04 * cluster.count
+          if (calculatedSize > 3.5) calculatedSize = 3.5
           clusterMarker.style.width = `${calculatedSize}rem`
           clusterMarker.style.height = `${calculatedSize}rem`
           clusterMarker.setAttribute("data-testid", "map-cluster")
@@ -149,6 +184,7 @@ export const MapClusterer = ({
           })
         },
       },
+      algorithm: new SuperClusterAlgorithm({ radius: 80 }),
       onClusterClick: (_, cluster, map) => {
         setInfoWindowIndex(null)
         const zoomLevel = getBoundsZoomLevel(cluster.bounds)
@@ -166,32 +202,15 @@ export const MapClusterer = ({
     clusterer.clearMarkers()
     clusterer.addMarkers(Object.values(markers))
 
-    const bounds = new window.google.maps.LatLngBounds()
-
     if (!map) return
-    mapMarkers?.map((marker) => {
-      bounds.extend({
-        lat: marker.coordinate.lat,
-        lng: marker.coordinate.lng,
-      })
-    })
 
     // Only automatically size the map to fit all pins on first map load
     if (isFirstBoundsLoad === false) return
-    const visibleMarkers = mapMarkers?.filter((marker) =>
-      map.getBounds()?.contains(marker.coordinate)
-    )
 
-    if (visibleMarkers.length === 0) {
-      return
-    } else {
-      map.fitBounds(bounds, document.getElementById("listings-map").clientWidth * 0.05)
-      setTimeout(() => {
-        setIsFirstBoundsLoad(false)
-      }, 1000)
-    }
+    fitBounds(map, mapMarkers, false, setIsFirstBoundsLoad)
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clusterer, markers, currentMapMarkers])
+  }, [clusterer, markers, currentMapMarkers, map])
 
   // Keeps track of the markers on the map, passed to each marker
   const setMarkerRef = useCallback(

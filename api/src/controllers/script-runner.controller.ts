@@ -264,6 +264,19 @@ export class ScirptRunnerController {
     );
   }
 
+  @Put('updatesWhatHappensInLotteryEmail')
+  @ApiOperation({
+    summary:
+      'A script that updates the "what happens next" content in lottery email',
+    operationId: 'updatesWhatHappensInLotteryEmail',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async updatesWhatHappensInLotteryEmail(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.updatesWhatHappensInLotteryEmail(req);
+  }
+
   @Put('addFeatureFlags')
   @ApiOperation({
     summary:
@@ -299,5 +312,18 @@ export class ScirptRunnerController {
     @Request() req: ExpressRequest,
   ): Promise<SuccessDTO> {
     return await this.scriptRunnerService.removeEmptyRaceInputs(req);
+  }
+
+  @Put('resetMissingTranslations')
+  @ApiOperation({
+    summary:
+      'Script to reset the translations in non-english that were missing',
+    operationId: 'resetMissingTranslations',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async resetMissingTranslations(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.resetMissingTranslations(req);
   }
 }

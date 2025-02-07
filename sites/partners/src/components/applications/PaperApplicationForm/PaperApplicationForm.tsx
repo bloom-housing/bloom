@@ -160,6 +160,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
           void router.push(`/application/${result.id}`)
         } else {
           reset()
+          setHouseholdMembers([])
           clearErrors()
           setAlert(null)
           await router.push(`/listings/${listingId}/applications/add`)
