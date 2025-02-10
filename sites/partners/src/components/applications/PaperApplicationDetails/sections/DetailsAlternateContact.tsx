@@ -31,11 +31,9 @@ const DetailsAlternateContact = () => {
           })()}
         </FieldValue>
 
-        {
-          <FieldValue label={t("application.details.agency")} testId="alternateContact.agency">
-            {application.alternateContact?.agency || t("t.n/a")}
-          </FieldValue>
-        }
+        <FieldValue label={t("application.details.agency")} testId="alternateContact.agency">
+          {application.alternateContact?.agency || t("t.n/a")}
+        </FieldValue>
 
         <FieldValue label={t("t.email")} testId="alternateContact.emailAddress">
           {application.alternateContact?.emailAddress || t("t.n/a")}
