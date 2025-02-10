@@ -97,6 +97,5 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
     example: false,
     type: Boolean,
   })
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   enableUnitGroups?: boolean;
 }
