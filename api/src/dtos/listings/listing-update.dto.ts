@@ -1,6 +1,11 @@
 import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import { IsDefined, Validate, ValidateNested } from 'class-validator';
+import {
+  IsBoolean,
+  IsDefined,
+  Validate,
+  ValidateNested,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { IdDTO } from '../shared/id.dto';
@@ -157,4 +162,9 @@ export class ListingUpdate extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDTO)
   requestedChangesUser?: IdDTO;
+
+  @Expose()
+  @ApiPropertyOptional()
+  @IsBoolean()
+  isVerified?: boolean;
 }

@@ -7,6 +7,7 @@ import {
   IsEmail,
   IsEnum,
   IsNumber,
+  IsOptional,
   IsString,
   IsUrl,
   MaxLength,
@@ -648,6 +649,11 @@ class Listing extends AbstractDTO {
     enumName: 'HomeTypeEnum',
   })
   homeType?: HomeTypeEnum;
+
+  @Expose()
+  @IsBoolean()
+  @ApiPropertyOptional()
+  isVerified?: boolean;
 }
 
 export { Listing as default, Listing };
