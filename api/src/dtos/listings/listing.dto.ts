@@ -7,7 +7,6 @@ import {
   IsEmail,
   IsEnum,
   IsNumber,
-  IsOptional,
   IsString,
   IsUrl,
   MaxLength,
