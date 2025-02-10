@@ -26,6 +26,7 @@ import {
 import { ListingCsvQueryParams } from '../dtos/listings/listing-csv-query-params.dto';
 import { User } from '../dtos/users/user.dto';
 import { formatLocalDate } from '../utilities/format-local-date';
+import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 import { ListingReviewOrder } from '../enums/listings/review-order-enum';
 import { isEmpty } from '../utilities/is-empty';
 import { ListingEvent } from '../dtos/listings/listing-event.dto';
@@ -35,6 +36,8 @@ import Listing from '../dtos/listings/listing.dto';
 import { mapTo } from '../utilities/mapTo';
 import { ListingMultiselectQuestion } from '../dtos/listings/listing-multiselect-question.dto';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
+import { ListingUtilities } from '../dtos/listings/listing-utility.dto';
+import { ListingFeatures } from '../dtos/listings/listing-feature.dto';
 
 views.csv = {
   ...views.details,
@@ -420,11 +423,62 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     ];
 
     if (
-      this.doAnyJurisdictionHaveFeatureFlagSet(user.jurisdictions, 'homeType')
+      this.doAnyJurisdictionHaveFeatureFlagSet(
+        user.jurisdictions,
+        FeatureFlagEnum.enableHomeType,
+      )
     ) {
       headers.push({
         path: 'homeType',
         label: 'Home Type',
+      });
+    }
+    if (
+      this.doAnyJurisdictionHaveFeatureFlagSet(
+        user.jurisdictions,
+        FeatureFlagEnum.enableUtilitiesIncluded,
+      )
+    ) {
+      headers.push({
+        path: 'listingUtilities',
+        label: 'Utilities Included',
+        format: (val: ListingUtilities): string => {
+          if (!val) return '';
+          const selectedValues = Object.entries(val).reduce(
+            (combined, entry) => {
+              if (entry[1] === true) {
+                combined.push(entry[0]);
+              }
+              return combined;
+            },
+            [],
+          );
+          return selectedValues.join(', ');
+        },
+      });
+    }
+    if (
+      this.doAnyJurisdictionHaveFeatureFlagSet(
+        user.jurisdictions,
+        FeatureFlagEnum.enableAccessibilityFeatures,
+      )
+    ) {
+      headers.push({
+        path: 'listingFeatures',
+        label: 'Property Amenities',
+        format: (val: ListingFeatures): string => {
+          if (!val) return '';
+          const selectedValues = Object.entries(val).reduce(
+            (combined, entry) => {
+              if (entry[1] === true) {
+                combined.push(entry[0]);
+              }
+              return combined;
+            },
+            [],
+          );
+          return selectedValues.join(', ');
+        },
       });
     }
 

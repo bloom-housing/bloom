@@ -43,7 +43,7 @@ import {
 import dayjs from "dayjs"
 import { ErrorPage } from "../../pages/_error"
 import { useGetApplicationStatusProps } from "../../lib/hooks"
-import { getGenericAddress, openInFuture } from "../../lib/helpers"
+import { getGenericAddress, isFeatureFlagOn, openInFuture } from "../../lib/helpers"
 import { GetApplication } from "./GetApplication"
 import { SubmitApplication } from "./SubmitApplication"
 import { ListingGoogleMap } from "./ListingGoogleMap"
@@ -54,6 +54,7 @@ import {
   ApplicationAddressTypeEnum,
   ApplicationMethod,
   ApplicationMethodsTypeEnum,
+  FeatureFlagEnum,
   Jurisdiction,
   Listing,
   ListingEvent,
@@ -565,8 +566,9 @@ export const ListingView = (props: ListingProps) => {
     return featuresExist ? <ul>{features}</ul> : null
   }
 
-  const enableAccessibilityFeatures = props.jurisdiction.featureFlags?.some(
-    (flag) => flag.name === "enableAccessibilityFeatures" && flag.active
+  const enableAccessibilityFeatures = isFeatureFlagOn(
+    props.jurisdiction,
+    FeatureFlagEnum.enableAccessibilityFeatures
   )
   const accessibilityFeatures = enableAccessibilityFeatures ? getAccessibilityFeatures() : null
 
@@ -603,8 +605,9 @@ export const ListingView = (props: ListingProps) => {
 
   const getFooterContent = () => {
     const footerContent: (string | React.ReactNode)[] = []
-    const enableUtilitiesIncluded = props.jurisdiction.featureFlags?.some(
-      (flag) => flag.name === "enableUtilitiesIncluded" && flag.active
+    const enableUtilitiesIncluded = isFeatureFlagOn(
+      props.jurisdiction,
+      FeatureFlagEnum.enableUtilitiesIncluded
     )
     if (enableUtilitiesIncluded) {
       const utilitiesDisplay = getUtilitiesIncluded()

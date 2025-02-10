@@ -9,6 +9,7 @@ import {
 import { Button, Dialog, Drawer, FieldValue, Grid, Tag } from "@bloom-housing/ui-seeds"
 import {
   FeatureFlag,
+  FeatureFlagEnum,
   HomeTypeEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -90,7 +91,9 @@ const FormUnits = ({
   // If hometype feature flag is not turned on for selected jurisdiction we need to reset the value
   useEffect(() => {
     if (featureFlags) {
-      const isHomeTypeEnabled = featureFlags.some((flag) => flag.name === "homeType")
+      const isHomeTypeEnabled = featureFlags.some(
+        (flag) => flag.name === FeatureFlagEnum.enableHomeType
+      )
       setHomeTypeEnabled(isHomeTypeEnabled)
       if (!isHomeTypeEnabled) {
         setValue("homeType", "")
