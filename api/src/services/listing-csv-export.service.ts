@@ -493,6 +493,54 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         label: 'Home Type',
       });
     }
+    if (
+      doAnyJurisdictionHaveFeatureFlagSet(
+        user.jurisdictions,
+        FeatureFlagEnum.enableUtilitiesIncluded,
+      )
+    ) {
+      headers.push({
+        path: 'listingUtilities',
+        label: 'Utilities Included',
+        format: (val: ListingUtilities): string => {
+          if (!val) return '';
+          const selectedValues = Object.entries(val).reduce(
+            (combined, entry) => {
+              if (entry[1] === true) {
+                combined.push(entry[0]);
+              }
+              return combined;
+            },
+            [],
+          );
+          return selectedValues.join(', ');
+        },
+      });
+    }
+    if (
+      doAnyJurisdictionHaveFeatureFlagSet(
+        user.jurisdictions,
+        FeatureFlagEnum.enableAccessibilityFeatures,
+      )
+    ) {
+      headers.push({
+        path: 'listingFeatures',
+        label: 'Property Amenities',
+        format: (val: ListingFeatures): string => {
+          if (!val) return '';
+          const selectedValues = Object.entries(val).reduce(
+            (combined, entry) => {
+              if (entry[1] === true) {
+                combined.push(entry[0]);
+              }
+              return combined;
+            },
+            [],
+          );
+          return selectedValues.join(', ');
+        },
+      });
+    }
 
     if (
       doAnyJurisdictionHaveFeatureFlagSet(
