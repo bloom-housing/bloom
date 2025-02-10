@@ -51,8 +51,6 @@ export default function ListingDetail(props: ListingProps) {
 
   if (!listing) return null
 
-  console.log("Listing Data: ", listing)
-
   return (
     <ListingContext.Provider value={listing}>
       <ListingGuard>
