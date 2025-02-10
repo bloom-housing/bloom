@@ -165,6 +165,6 @@ export class ListingUpdate extends OmitType(Listing, [
 
   @Expose()
   @ApiPropertyOptional()
-  @IsBoolean()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   isVerified?: boolean;
 }
