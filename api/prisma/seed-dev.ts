@@ -102,7 +102,7 @@ export const devSeeding = async (
     data: featureFlagFactory(
       'enableIsVerified',
       false,
-      'When true, the listing can ba maeked to had its contents manually verified by a user',
+      'When true, the listing can ba have its contents manually verified by a user',
       [jurisdiction.id],
     ),
   });
