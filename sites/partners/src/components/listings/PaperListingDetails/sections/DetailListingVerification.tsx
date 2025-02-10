@@ -15,7 +15,7 @@ const DetailListingVerification = () => {
   )
 
   if (!enableIsVerified) {
-    return <></>
+    return null
   }
 
   return (
