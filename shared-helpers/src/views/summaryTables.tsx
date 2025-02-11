@@ -159,39 +159,32 @@ export const UnitTables = (props: UnitTablesProps) => {
         )
         const unitsFormatted = [] as StandardTableData
         let floorSection: React.ReactNode
-        units
-          .sort((unitA, unitB) => (unitA.numBathrooms || 0) - (unitB.numBathrooms || 0))
-          .sort((unitA, unitB) => parseInt(unitA.sqFeet || "0") - parseInt(unitB.sqFeet || "0"))
-          .sort((unitA, unitB) => (unitA.floor || 0) - (unitB.floor || 0))
-          .sort((unitA, unitB) => (unitA.number || "").localeCompare(unitB.number || ""))
-          .forEach((unit: Unit) => {
-            unitsFormatted.push({
-              number: { content: unit.number },
-              sqFeet: {
-                content: (
-                  <>
-                    {unit.sqFeet ? (
-                      <>
-                        <strong>{parseInt(unit.sqFeet)}</strong> {t("t.sqFeet")}
-                      </>
-                    ) : (
-                      <></>
-                    )}
-                  </>
-                ),
-              },
-              numBathrooms: {
-                content: (
-                  <strong>
-                    {unit.numBathrooms === 0
-                      ? t("listings.unit.sharedBathroom")
-                      : unit.numBathrooms}
-                  </strong>
-                ),
-              },
-              floor: { content: <strong>{unit.floor}</strong> },
-            })
+        units.forEach((unit: Unit) => {
+          unitsFormatted.push({
+            number: { content: unit.number },
+            sqFeet: {
+              content: (
+                <>
+                  {unit.sqFeet ? (
+                    <>
+                      <strong>{parseInt(unit.sqFeet)}</strong> {t("t.sqFeet")}
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </>
+              ),
+            },
+            numBathrooms: {
+              content: (
+                <strong>
+                  {unit.numBathrooms === 0 ? t("listings.unit.sharedBathroom") : unit.numBathrooms}
+                </strong>
+              ),
+            },
+            floor: { content: <strong>{unit.floor}</strong> },
           })
+        })
 
         let areaRangeSection: React.ReactNode
         if (unitSummary.areaRange?.min || unitSummary.areaRange?.max) {
