@@ -571,4 +571,5 @@ export const listing: Listing = {
     },
   ],
   isExternal: false,
+  listingImages: [],
 }

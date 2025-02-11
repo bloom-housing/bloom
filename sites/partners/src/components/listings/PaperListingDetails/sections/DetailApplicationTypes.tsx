@@ -38,11 +38,14 @@ const DetailApplicationTypes = () => {
   return (
     <SectionWithGrid heading={t("listings.sections.applicationTypesTitle")} inset>
       <Grid.Row columns={2}>
-        <FieldValue id="digitalApplication" label={"Online Applications"}>
+        <FieldValue id="digitalApplication" label={t("listings.applicationType.onlineApplication")}>
           {getDetailBoolean(listing.digitalApplication)}
         </FieldValue>
         {digitalMethod && (
-          <FieldValue id="digitalMethod.type" label={"Common Digital Application"}>
+          <FieldValue
+            id="digitalMethod.type"
+            label={t("listings.applicationType.digitalApplication")}
+          >
             {digitalMethod?.type === ApplicationMethodsTypeEnum.ExternalLink
               ? t("t.no")
               : t("t.yes")}
@@ -58,13 +61,13 @@ const DetailApplicationTypes = () => {
         )}
       </Grid.Row>
       <Grid.Row>
-        <FieldValue id="paperApplication" label={"Paper Applications"}>
+        <FieldValue id="paperApplication" label={t("listings.applicationType.paperApplication")}>
           {getDetailBoolean(listing.paperApplication)}
         </FieldValue>
       </Grid.Row>
       {paperApplicationsTableRows.length > 0 && (
         <Grid.Row>
-          <FieldValue label={"Paper Applications"}>
+          <FieldValue label={t("listings.applicationType.paperApplication")}>
             <MinimalTable
               id="paperApplicationTable"
               headers={paperApplicationsTableHeaders}
@@ -74,6 +77,22 @@ const DetailApplicationTypes = () => {
           </FieldValue>
         </Grid.Row>
       )}
+
+      <Grid.Row columns={2}>
+        <FieldValue id="referralOpportunity" label={t("listings.applicationType.referral")}>
+          {getDetailBoolean(listing.referralOpportunity)}
+        </FieldValue>
+        {referralMethod && (
+          <>
+            <FieldValue id="referralContactPhone" label={t("listings.referralContactPhone")}>
+              {referralMethod.phoneNumber}
+            </FieldValue>
+            <FieldValue id="referralSummary" label={t("listings.referralSummary")}>
+              {referralMethod.externalReference}
+            </FieldValue>
+          </>
+        )}
+      </Grid.Row>
     </SectionWithGrid>
   )
 }
