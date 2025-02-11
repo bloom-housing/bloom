@@ -85,6 +85,14 @@ export const stagingSeed = async (
   });
   await prismaClient.featureFlags.create({
     data: featureFlagFactory(
+      'enableNeighborhoodAmenities',
+      true,
+      "When true, the 'neighborhood amenities' section is displayed in listing creation/edit and the public listing view",
+      [jurisdiction.id],
+    ),
+  });
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory(
       'hideCloseListingButton',
       false,
       'When true, close button is hidden on the listing edit form',
