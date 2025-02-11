@@ -1129,7 +1129,24 @@ describe('Listing Controller Tests', () => {
       const ids = res.body.items.map((listing) => listing.id);
       expect(ids).toContain(listing1.id);
     });
-    it('should return a listing based on search', async () => {});
+    it('should return a listing based on search', async () => {
+      const query: ListingsQueryParams = {
+        page: 1,
+        view: ListingViews.base,
+        search: listing1.name,
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toBeGreaterThanOrEqual(1);
+
+      const ids = res.body.items.map((listing) => listing.id);
+      expect(ids).toContain(listing1.id);
+    });
   });
 
   describe('retrieve listings endpoint', () => {
