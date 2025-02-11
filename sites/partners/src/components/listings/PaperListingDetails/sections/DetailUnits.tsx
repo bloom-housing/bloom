@@ -4,7 +4,10 @@ import { Button, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "../../ListingContext"
 import { UnitDrawer } from "../DetailsUnitDrawer"
-import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  ReviewOrderTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type DetailUnitsProps = {
@@ -60,7 +63,10 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
     return t("t.none")
   }, [listing])
 
-  const enableHomeType = doJurisdictionsHaveFeatureFlagOn("homeType", listing.jurisdictions.id)
+  const enableHomeType = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableHomeType,
+    listing.jurisdictions.id
+  )
 
   return (
     <SectionWithGrid heading={t("listings.units")} inset>

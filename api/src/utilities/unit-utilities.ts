@@ -373,24 +373,33 @@ export const getUnitsSummary = (unit: Unit, existingSummary?: UnitSummary) => {
   const summary = existingSummary;
 
   // Income Range
-  summary.minIncomeRange = minMaxCurrency(
-    summary.minIncomeRange,
-    getRoundedNumber(unit.monthlyIncomeMin),
-  );
+  if (unit.monthlyIncomeMin) {
+    summary.minIncomeRange = minMaxCurrency(
+      summary.minIncomeRange,
+      getRoundedNumber(unit.monthlyIncomeMin),
+    );
+  }
 
   // Occupancy Range
-  summary.occupancyRange = minMax(summary.occupancyRange, unit.minOccupancy);
-  summary.occupancyRange = minMax(summary.occupancyRange, unit.maxOccupancy);
+  if (unit.minOccupancy) {
+    summary.occupancyRange = minMax(summary.occupancyRange, unit.minOccupancy);
+  }
+  if (unit.maxOccupancy) {
+    summary.occupancyRange = minMax(summary.occupancyRange, unit.maxOccupancy);
+  }
 
   // Rent Ranges
-  summary.rentAsPercentIncomeRange = minMax(
-    summary.rentAsPercentIncomeRange,
-    parseFloat(unit.monthlyRentAsPercentOfIncome),
-  );
-  summary.rentRange = minMaxCurrency(
-    summary.rentRange,
-    getRoundedNumber(unit.monthlyRent),
-  );
+  if (unit.monthlyRentAsPercentOfIncome) {
+    summary.rentAsPercentIncomeRange = minMax(
+      summary.rentAsPercentIncomeRange,
+      parseFloat(unit.monthlyRentAsPercentOfIncome),
+    );
+  }
+  if (unit.monthlyRent)
+    summary.rentRange = minMaxCurrency(
+      summary.rentRange,
+      getRoundedNumber(unit.monthlyRent),
+    );
 
   // Floor Range
   if (unit.floor) {
@@ -398,7 +407,9 @@ export const getUnitsSummary = (unit: Unit, existingSummary?: UnitSummary) => {
   }
 
   // Area Range
-  summary.areaRange = minMax(summary.areaRange, parseFloat(unit.sqFeet));
+  if (unit.sqFeet) {
+    summary.areaRange = minMax(summary.areaRange, parseFloat(unit.sqFeet));
+  }
 
   return summary;
 };
