@@ -40,7 +40,6 @@ import { ValidationMethod } from '../src/enums/multiselect-questions/validation-
 import { randomNoun } from './seed-helpers/word-generator';
 import { householdMemberFactorySingle } from './seed-helpers/household-member-factory';
 import { featureFlagFactory } from './seed-helpers/feature-flag-factory';
-import { ListingNeighborhoodAmenities } from 'src/dtos/listings/listing-neighborhood-amenities.dto';
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
