@@ -6,6 +6,7 @@ import {
   IsBoolean,
   IsEnum,
   IsNumber,
+  IsNumberString,
   IsString,
   IsUUID,
 } from 'class-validator';
@@ -110,10 +111,10 @@ export class ListingFilterParams extends BaseFilter {
   @Expose()
   @ApiPropertyOptional({
     type: Number,
-    example: 1000,
+    example: '1000',
   })
-  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.monthlyRent]?: number;
+  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.monthlyRent]?: string;
 
   @Expose()
   @ApiPropertyOptional({

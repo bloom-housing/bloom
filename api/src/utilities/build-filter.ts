@@ -31,7 +31,12 @@ export function buildFilter(filter: filter): any {
     toReturn.push({
       in: String(filterValue)
         .split(',')
-        .map((s) => s.trim().toLowerCase())
+        .map((s) => {
+          if (!filter.caseSensitive) {
+            return s.trim().toLowerCase();
+          }
+          return s.trim();
+        })
         .filter((s) => s.length !== 0),
       ...mode,
     });

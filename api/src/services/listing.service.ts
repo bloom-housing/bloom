@@ -522,7 +522,9 @@ export class ListingService implements OnModuleInit {
           filters.push({
             OR: builtFilter.map((filt) => ({
               userAccounts: {
-                id: filt,
+                some: {
+                  id: filt,
+                },
               },
             })),
           });
@@ -542,11 +544,14 @@ export class ListingService implements OnModuleInit {
             $include_nulls: false,
             value: filter[ListingFilterKeys.monthlyRent],
             key: ListingFilterKeys.monthlyRent,
+            caseSensitive: true,
           });
           filters.push({
             OR: builtFilter.map((filt) => ({
               units: {
-                [ListingFilterKeys.monthlyRent]: filt,
+                some: {
+                  [ListingFilterKeys.monthlyRent]: filt,
+                },
               },
             })),
           });
@@ -599,10 +604,8 @@ export class ListingService implements OnModuleInit {
           });
           filters.push({
             OR: builtFilter.map((filt) => ({
-              reservedCommunityType: {
-                some: {
-                  name: filt,
-                },
+              [ListingFilterKeys.reservedCommunityTypes]: {
+                name: filt,
               },
             })),
           });
