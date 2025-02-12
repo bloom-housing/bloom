@@ -34,7 +34,8 @@ export function ValidateUnitsRequired(validationOptions?: ValidationOptions) {
 
           return hasUnitGroupsEnabled || (value && value.length > 0);
         },
-        defaultMessage: () => 'At least one unit is required',
+        defaultMessage: (args: ValidationArguments) =>
+          `${args.property} must contain at least 1 elements`,
       },
     });
   };
