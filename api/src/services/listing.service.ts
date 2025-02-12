@@ -89,6 +89,20 @@ views.base = {
       unitAmiChartOverrides: true,
     },
   },
+  unitGroups: {
+    include: {
+      unitTypes: true,
+      unitGroupAmiLevels: {
+        include: {
+          amiChart: {
+            include: {
+              jurisdictions: true,
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 views.full = {
@@ -124,6 +138,20 @@ views.full = {
         include: {
           jurisdictions: true,
           unitGroupAmiLevels: true,
+        },
+      },
+    },
+  },
+  unitGroups: {
+    include: {
+      unitTypes: true,
+      unitGroupAmiLevels: {
+        include: {
+          amiChart: {
+            include: {
+              jurisdictions: true,
+            },
+          },
         },
       },
     },
@@ -195,34 +223,11 @@ export class ListingService implements OnModuleInit {
       }
     }
 
-    const viewInclude = views[params.view ?? 'full'];
-
-    const finalInclude = params.enableUnitGroups
-      ? {
-          ...viewInclude,
-          units: undefined,
-          unitGroups: {
-            include: {
-              unitTypes: true,
-              unitGroupAmiLevels: {
-                include: {
-                  amiChart: {
-                    include: {
-                      jurisdictions: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
-        }
-      : viewInclude;
-
     const listingsRaw = await this.prisma.listings.findMany({
       skip: calculateSkip(params.limit, page),
       take: calculateTake(params.limit),
       orderBy: buildOrderByForListings(params.orderBy, params.orderDir),
-      include: finalInclude,
+      include: views[params.view ?? 'full'],
       where: whereClause,
     });
 
@@ -682,8 +687,12 @@ export class ListingService implements OnModuleInit {
         jurisdictionId: dto.jurisdictions.id,
       },
     );
-    if (dto.units && dto.unitGroups) {
-      throw new BadRequestException('Cannot provide both units and unitGroups');
+
+    if (dto.units?.length > 0 && dto.unitGroups?.length > 0) {
+      throw new BadRequestException({
+        message: 'Cannot provide both units and unitGroups',
+        status: 400,
+      });
     }
 
     const rawJurisdiction = await this.prisma.jurisdictions.findFirst({
@@ -1355,8 +1364,12 @@ export class ListingService implements OnModuleInit {
         jurisdictionId: storedListing.jurisdictionId,
       },
     );
-    if (dto.units && dto.unitGroups) {
-      throw new BadRequestException('Cannot provide both units and unitGroups');
+
+    if (dto.units?.length > 0 && dto.unitGroups?.length > 0) {
+      throw new BadRequestException({
+        message: 'Cannot provide both units and unitGroups',
+        status: 400,
+      });
     }
 
     const rawJurisdiction = await this.prisma.jurisdictions.findFirst({
