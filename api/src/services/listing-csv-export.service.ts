@@ -478,6 +478,24 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         label: 'Home Type',
       });
     }
+
+    if (
+      this.doAnyJurisdictionHaveFeatureFlagSet(
+        user.jurisdictions,
+        FeatureFlagEnum.enableUnitGroups,
+      )
+    ) {
+      headers.push({
+        path: 'unitGroups.length',
+        label: 'Number of Unit Groups',
+      });
+    } else {
+      headers.push({
+        path: 'units.length',
+        label: 'Number of Units',
+      });
+    }
+
     if (
       this.doAnyJurisdictionHaveFeatureFlagSet(
         user.jurisdictions,
@@ -524,23 +542,6 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           );
           return selectedValues.join(', ');
         },
-      });
-    }
-
-    if (
-      this.doAnyJurisdictionHaveFeatureFlagSet(
-        user.jurisdictions,
-        FeatureFlagEnum.enableUnitGroups,
-      )
-    ) {
-      headers.push({
-        path: 'unitGroups.length',
-        label: 'Number of Unit Groups',
-      });
-    } else {
-      headers.push({
-        path: 'units.length',
-        label: 'Number of Units',
       });
     }
 
