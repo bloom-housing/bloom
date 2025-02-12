@@ -5,7 +5,6 @@ import { ListingFilterParams } from './listings-filter-params.dto';
 import {
   ArrayMaxSize,
   IsArray,
-  IsBoolean,
   IsEnum,
   IsString,
   MinLength,
