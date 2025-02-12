@@ -4,8 +4,8 @@ import {
   ValidationArguments,
 } from 'class-validator';
 import { PrismaService } from '../services/prisma.service';
-import { ListingPublishedUpdate } from 'src/dtos/listings/listing-published-update.dto';
-import { FeatureFlagEnum } from 'src/enums/feature-flags/feature-flags-enum';
+import { ListingPublishedUpdate } from '../dtos/listings/listing-published-update.dto';
+import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 
 export function ValidateUnitsRequired(validationOptions?: ValidationOptions) {
   return function (object: object, propertyName: string) {

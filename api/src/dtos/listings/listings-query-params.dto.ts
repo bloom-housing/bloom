@@ -90,11 +90,4 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
     groups: [ValidationsGroupsEnum.default],
   })
   search?: string;
-
-  @Expose()
-  @ApiPropertyOptional({
-    example: false,
-    type: Boolean,
-  })
-  enableUnitGroups?: boolean;
 }

@@ -169,8 +169,6 @@ export class ListingsService {
       orderDir?: OrderByEnum
       /**  */
       search?: string
-      /**  */
-      enableUnitGroups?: boolean
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedListing> {
@@ -186,7 +184,6 @@ export class ListingsService {
         orderBy: params["orderBy"],
         orderDir: params["orderDir"],
         search: params["search"],
-        enableUnitGroups: params["enableUnitGroups"],
       }
 
       /** 适配ios13，get请求不允许带body */
@@ -2709,9 +2706,6 @@ export interface ListingsQueryParams {
 
   /**  */
   search?: string
-
-  /**  */
-  enableUnitGroups?: boolean
 }
 
 export interface ListingFilterParams {
@@ -3257,7 +3251,7 @@ export interface UnitGroupAmiLevel {
   monthlyRentDeterminationType?: EnumUnitGroupAmiLevelMonthlyRentDeterminationType
 
   /**  */
-  percentageOfIncomeValue?: string
+  percentageOfIncomeValue?: number
 
   /**  */
   flatRentValue?: number
@@ -3875,6 +3869,23 @@ export interface UnitCreate {
   unitAmiChartOverrides?: UnitAmiChartOverrideCreate
 }
 
+export interface UnitGroupAmiLevelCreate {
+  /**  */
+  amiPercentage?: number
+
+  /**  */
+  monthlyRentDeterminationType?: EnumUnitGroupAmiLevelCreateMonthlyRentDeterminationType
+
+  /**  */
+  percentageOfIncomeValue?: number
+
+  /**  */
+  flatRentValue?: number
+
+  /**  */
+  amiChart?: IdDTO
+}
+
 export interface UnitGroupCreate {
   /**  */
   maxOccupancy?: number
@@ -3910,13 +3921,13 @@ export interface UnitGroupCreate {
   sqFeetMax?: number
 
   /**  */
-  unitAccessibilityPriorityTypes?: UnitAccessibilityPriorityType
+  unitAccessibilityPriorityTypes?: IdDTO
 
   /**  */
-  unitGroupAmiLevels?: UnitGroupAmiLevel[]
+  unitTypes?: IdDTO[]
 
   /**  */
-  unitTypes?: UnitType[]
+  unitGroupAmiLevels?: UnitGroupAmiLevelCreate[]
 }
 
 export interface AssetCreate {
@@ -6528,7 +6539,10 @@ export enum HomeTypeEnum {
   "house" = "house",
   "townhome" = "townhome",
 }
-
+export enum EnumUnitGroupAmiLevelCreateMonthlyRentDeterminationType {
+  "flatRent" = "flatRent",
+  "percentageOfIncome" = "percentageOfIncome",
+}
 export enum AfsView {
   "pending" = "pending",
   "pendingNameAndDoB" = "pendingNameAndDoB",
@@ -6615,6 +6629,7 @@ export enum FeatureFlagEnum {
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
   "hideCloseListingButton" = "hideCloseListingButton",
+  "enableUnitGroups" = "enableUnitGroups",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {
   "=" = "=",

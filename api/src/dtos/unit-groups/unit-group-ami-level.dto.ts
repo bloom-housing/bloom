@@ -20,9 +20,9 @@ class UnitGroupAmiLevel extends AbstractDTO {
   monthlyRentDeterminationType: MonthlyRentDeterminationTypeEnum;
 
   @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
-  percentageOfIncomeValue?: string;
+  percentageOfIncomeValue?: number;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
