@@ -1291,8 +1291,10 @@ describe('Testing listing service', () => {
             OR: [
               {
                 userAccounts: {
-                  id: {
-                    equals: leasingAgentId,
+                  some: {
+                    id: {
+                      equals: leasingAgentId,
+                    },
                   },
                 },
               },
@@ -1333,7 +1335,7 @@ describe('Testing listing service', () => {
     });
 
     it('should return a where clause for filter monthlyRent', () => {
-      const monthlyRent = 1500;
+      const monthlyRent = '1500';
       const filter = [
         { $comparison: '=', monthlyRent: monthlyRent } as ListingFilterParams,
       ];
@@ -1345,9 +1347,10 @@ describe('Testing listing service', () => {
             OR: [
               {
                 units: {
-                  monthlyRent: {
-                    equals: monthlyRent,
-                    mode: 'insensitive',
+                  some: {
+                    monthlyRent: {
+                      equals: monthlyRent,
+                    },
                   },
                 },
               },
@@ -1405,7 +1408,6 @@ describe('Testing listing service', () => {
 
     it('should return a where clause for filter regions', () => {
       const regions = [RegionEnum.Eastside, RegionEnum.Greater_Downtown];
-      const regionsLowerCase = regions.map((rct) => rct.toLowerCase());
       const filter = [
         { $comparison: 'IN', regions: regions } as ListingFilterParams,
       ];
@@ -1417,7 +1419,7 @@ describe('Testing listing service', () => {
             OR: [
               {
                 region: {
-                  in: regionsLowerCase,
+                  in: regions,
                 },
               },
             ],
@@ -1426,7 +1428,7 @@ describe('Testing listing service', () => {
       });
     });
 
-    it('should return a where clause for rfilter eservedCommunityTypes', () => {
+    it('should return a where clause for filter reservedCommunityTypes', () => {
       const reservedCommunityTypes = ['Seniors', 'Veterans'];
       const reservedLowerCase = reservedCommunityTypes.map((rct) =>
         rct.toLowerCase(),
@@ -1444,12 +1446,10 @@ describe('Testing listing service', () => {
           {
             OR: [
               {
-                reservedCommunityType: {
-                  some: {
-                    name: {
-                      in: reservedLowerCase,
-                      mode: 'insensitive',
-                    },
+                reservedCommunityTypes: {
+                  name: {
+                    in: reservedLowerCase,
+                    mode: 'insensitive',
                   },
                 },
               },

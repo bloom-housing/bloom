@@ -48,8 +48,6 @@ import { addressFactory } from '../../prisma/seed-helpers/address-factory';
 import { AddressCreate } from '../../src/dtos/addresses/address-create.dto';
 import { EmailService } from '../../src/services/email.service';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
-import Listing from '../../src/dtos/listings/listing.dto';
-import { mapTo } from '../../src/utilities/mapTo';
 import { unitFactorySingle } from '../../prisma/seed-helpers/unit-factory';
 
 describe('Listing Controller Tests', () => {
