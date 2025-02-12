@@ -42,6 +42,7 @@ import { PermissionService } from '../../../src/services/permission.service';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
 import { ApplicationService } from '../../../src/services/application.service';
 import { GeocodingService } from '../../../src/services/geocoding.service';
+import { FeatureFlagEnum } from 'src/enums/feature-flags/feature-flags-enum';
 
 /*
   generates a super simple mock listing for us to test logic with
@@ -2483,7 +2484,7 @@ describe('Testing listing service', () => {
         id: 'jurisdiction-id',
         featureFlags: [
           {
-            name: 'enableUnitGroups',
+            name: FeatureFlagEnum.enableUnitGroups,
             active: true,
           },
         ],
@@ -3177,7 +3178,7 @@ describe('Testing listing service', () => {
         id: 'jurisdiction-id',
         featureFlags: [
           {
-            name: 'enableUnitGroups',
+            name: FeatureFlagEnum.enableUnitGroups,
             active: true,
           },
         ],

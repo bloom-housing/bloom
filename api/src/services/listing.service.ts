@@ -53,6 +53,7 @@ import {
   summarizeUnitsByTypeAndRent,
   summarizeUnits,
 } from '../utilities/unit-utilities';
+import { FeatureFlagEnum } from 'src/enums/feature-flags/feature-flags-enum';
 
 export type getListingsArgs = {
   skip: number;
@@ -705,7 +706,7 @@ export class ListingService implements OnModuleInit {
     });
 
     const enableUnitGroups = rawJurisdiction?.featureFlags?.find(
-      (featureFlag) => featureFlag.name === 'enableUnitGroups',
+      (featureFlag) => featureFlag.name === FeatureFlagEnum.enableUnitGroups,
     )?.active;
 
     dto.unitsAvailable =
@@ -1382,7 +1383,7 @@ export class ListingService implements OnModuleInit {
     });
 
     const enableUnitGroups = rawJurisdiction?.featureFlags?.find(
-      (featureFlag) => featureFlag.name === 'enableUnitGroups',
+      (featureFlag) => featureFlag.name === FeatureFlagEnum.enableUnitGroups,
     )?.active;
 
     dto.unitsAvailable =

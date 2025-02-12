@@ -125,7 +125,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
 
     const enableUnitGroups = this.doAnyJurisdictionHaveFeatureFlagSet(
       user.jurisdictions,
-      'enableUnitGroups',
+      FeatureFlagEnum.enableUnitGroups,
     );
 
     const include = {
@@ -530,7 +530,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     if (
       this.doAnyJurisdictionHaveFeatureFlagSet(
         user.jurisdictions,
-        'enableUnitGroups',
+        FeatureFlagEnum.enableUnitGroups,
       )
     ) {
       headers.push({
