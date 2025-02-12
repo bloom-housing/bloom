@@ -613,7 +613,6 @@ describe('Listing Controller Tests', () => {
 
       expect(items.length).toBeGreaterThanOrEqual(2);
     });
-
     it('should not get listings from list endpoint when params are sent but do not match anything', async () => {
       const queryParams: ListingsQueryParams = {
         limit: 1,
@@ -922,7 +921,7 @@ describe('Listing Controller Tests', () => {
         filter: [
           {
             $comparison: Compare['='],
-            monthlyRent: '1000',
+            monthlyRent: '30000',
           },
         ],
       };
@@ -936,8 +935,8 @@ describe('Listing Controller Tests', () => {
       expect(res.body.items.length).toBeGreaterThanOrEqual(1);
 
       const ids = res.body.items.map((listing) => listing.id);
-      expect(ids).toContain(listing2.id);
-      expect(ids).not.toContain(listing1.id);
+      expect(ids).toContain(listing1.id);
+      expect(ids).not.toContain(listing2.id);
     });
     it('should return a listing based on filter name', async () => {
       const orderedNames = [listing1.name, listing2.name].sort((a, b) =>
