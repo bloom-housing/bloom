@@ -893,6 +893,7 @@ describe('Listing Controller Tests', () => {
     });
     it('should return a listing based on filter listingFeatures', async () => {
       const query: ListingsQueryParams = {
+        limit: 20,
         page: 1,
         view: ListingViews.base,
         filter: [
