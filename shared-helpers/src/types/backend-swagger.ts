@@ -5187,7 +5187,7 @@ export interface FeatureFlag {
   updatedAt: Date
 
   /**  */
-  name: string
+  name: FeatureFlagEnum
 
   /**  */
   description: string
@@ -6240,7 +6240,7 @@ export interface FeatureFlagAssociate {
 
 export interface FeatureFlagCreate {
   /**  */
-  name: string
+  name: FeatureFlagEnum
 
   /**  */
   description: string
@@ -6515,6 +6515,14 @@ export enum UserRoleEnum {
   "partner" = "partner",
   "admin" = "admin",
   "jurisdictionAdmin" = "jurisdictionAdmin",
+}
+
+export enum FeatureFlagEnum {
+  "example" = "example",
+  "enableHomeType" = "enableHomeType",
+  "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
+  "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
+  "hideCloseListingButton" = "hideCloseListingButton",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {
   "=" = "=",

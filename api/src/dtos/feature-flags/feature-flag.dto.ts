@@ -10,14 +10,19 @@ import { ApiProperty } from '@nestjs/swagger';
 import { AbstractDTO } from '../shared/abstract.dto';
 import { IdDTO } from '../shared/id.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
+import { FeatureFlagEnum } from '../../enums/feature-flags/feature-flags-enum';
 
 export class FeatureFlag extends AbstractDTO {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
-  name: string;
+  @ApiProperty({
+    enum: FeatureFlagEnum,
+    enumName: 'FeatureFlagEnum',
+    example: 'sampleFeatureFlag',
+  })
+  name: FeatureFlagEnum | string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })

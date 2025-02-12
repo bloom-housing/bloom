@@ -4,7 +4,10 @@ import { t, Field, Textarea, FieldGroup } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
 import { AuthContext, listingUtilities } from "@bloom-housing/shared-helpers"
-import { ListingUtilities } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  ListingUtilities,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type AdditionalFeesProps = {
@@ -31,7 +34,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
   }, [props.existingUtilities, register])
 
   const enableUtilitiesIncluded = doJurisdictionsHaveFeatureFlagOn(
-    "enableUtilitiesIncluded",
+    FeatureFlagEnum.enableUtilitiesIncluded,
     jurisdiction
   )
 
