@@ -129,10 +129,17 @@ export class EmailService {
       return;
     }
 
+    // for production govDelivery sends the "Doorway Housing Portal" email should be used. That does not exist in staging
+    const fromEmailAddress = !this.configService
+      .get<string>('GOVDELIVERY_API_URL')
+      .includes('stage')
+      ? '121723' // This is the id value of the email
+      : '';
+
     // juice inlines css to allow for email styling
     const inlineHtml = juice(rawHtml);
     const govEmailXml = `<bulletin>\n <subject>${subject}</subject>\n  <body><![CDATA[\n     
-      ${inlineHtml}\n   ]]></body>\n   <sms_body nil='true'></sms_body>\n   <publish_rss type='boolean'>false</publish_rss>\n   <open_tracking type='boolean'>true</open_tracking>\n   <click_tracking type='boolean'>true</click_tracking>\n   <share_content_enabled type='boolean'>true</share_content_enabled>\n   <topics type='array'>\n     <topic>\n       <code>${GOVDELIVERY_TOPIC}</code>\n     </topic>\n   </topics>\n   <categories type='array' />\n </bulletin>`;
+      ${inlineHtml}\n   ]]></body>\n   <sms_body nil='true'></sms_body>\n   <from_address_id>${fromEmailAddress}</from_address_id>\n   <publish_rss type='boolean'>false</publish_rss>\n   <open_tracking type='boolean'>true</open_tracking>\n   <click_tracking type='boolean'>true</click_tracking>\n   <share_content_enabled type='boolean'>true</share_content_enabled>\n   <topics type='array'>\n     <topic>\n       <code>${GOVDELIVERY_TOPIC}</code>\n     </topic>\n   </topics>\n   <categories type='array' />\n </bulletin>`;
 
     await firstValueFrom(
       this.httpService.post(GOVDELIVERY_API_URL, govEmailXml, {
@@ -585,11 +592,9 @@ export class EmailService {
     void (await this.loadTranslations(jurisdiction, LanguagesEnum.en));
     const compiledTemplate = this.template('listing-opportunity');
 
-    if (this.configService.get<string>('NODE_ENV') == 'production') {
-      this.logger.log(
-        `Preparing to send a listing opportunity email for ${listing.name} from ${jurisdiction.emailFromAddress}...`,
-      );
-    }
+    this.logger.log(
+      `Preparing to send a listing opportunity email for ${listing.name} from govDelivery...`,
+    );
 
     // Gather all variables from each unit into one place
     const units: {
