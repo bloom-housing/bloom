@@ -877,13 +877,20 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           format: (val: User[]): string =>
             val.map((user) => `${user.firstName} ${user.lastName}`).join(', '),
         },
-        {
-          path: 'isVerified',
-          label: 'Is Listing Verified',
-          format: this.formatYesNo,
-        },
       ],
     );
+
+    if (
+      this.doAnyJurisdictionHaveFeatureFlagSet(
+        user.jurisdictions,
+        FeatureFlagEnum.enableIsVerified,
+      )
+    )
+      headers.push({
+        path: 'isVerified',
+        label: 'Is Listing Verified',
+        format: this.formatYesNo,
+      });
 
     return headers;
   }
