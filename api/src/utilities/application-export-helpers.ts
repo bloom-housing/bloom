@@ -349,7 +349,7 @@ export const constructMultiselectQuestionHeaders = (
     .filter((question) => question.applicationSection === applicationSection)
     .forEach((question) => {
       headers.push({
-        path: `${applicationSection}.${question.text}.claimed`,
+        path: `${applicationSection}.${question.id}.claimed`,
         label: `${labelString} ${question.text}`,
         format: (val: any): string => {
           const claimedString: string[] = [];
@@ -371,7 +371,10 @@ export const constructMultiselectQuestionHeaders = (
         ?.filter((option) => option.collectAddress)
         .forEach((option) => {
           headers.push({
-            path: `${applicationSection}.${question.text}.${option.text}.address`,
+            path: `${applicationSection}.${question.id}.${option.text.replace(
+              '.',
+              '',
+            )}.address`,
             label: `${labelString} ${question.text} - ${option.text} - Address`,
             format: (val: ApplicationMultiselectQuestion): string => {
               return multiselectQuestionFormat(val, option.text, 'address');
@@ -379,7 +382,10 @@ export const constructMultiselectQuestionHeaders = (
           });
           if (option.validationMethod) {
             headers.push({
-              path: `${applicationSection}.${question.text}.geocodingVerified`,
+              path: `${applicationSection}.${question.id}.${option.text.replace(
+                '.',
+                '',
+              )}.geocodingVerified`,
               label: `${labelString} ${question.text} - ${option.text} - Passed Address Check`,
               format: (val: ApplicationMultiselectQuestion): string => {
                 return multiselectQuestionFormat(
@@ -392,7 +398,10 @@ export const constructMultiselectQuestionHeaders = (
           }
           if (option.collectName) {
             headers.push({
-              path: `${applicationSection}.${question.text}.addressHolderName`,
+              path: `${applicationSection}.${question.id}.${option.text.replace(
+                '.',
+                '',
+              )}.addressHolderName`,
               label: `${labelString} ${question.text} - ${option.text} - Name of Address Holder`,
               format: (val: ApplicationMultiselectQuestion): string => {
                 return multiselectQuestionFormat(
@@ -405,7 +414,10 @@ export const constructMultiselectQuestionHeaders = (
           }
           if (option.collectRelationship) {
             headers.push({
-              path: `${applicationSection}.${question.text}.addressHolderRelationship`,
+              path: `${applicationSection}.${question.id}.${option.text.replace(
+                '.',
+                '',
+              )}.addressHolderRelationship`,
               label: `${labelString} ${question.text} - ${option.text} - Relationship to Address Holder`,
               format: (val: ApplicationMultiselectQuestion): string => {
                 return multiselectQuestionFormat(

@@ -274,7 +274,8 @@ export class ApplicationExporterService {
                         parsePreference = false;
                         // there aren't typically many preferences, but if there, then a object map should be created and used
                         const preference = preferences.find(
-                          (preference) => preference.key === curr,
+                          (preference) =>
+                            preference.multiselectQuestionId === curr,
                         );
                         multiselectQuestionValue = true;
                         return preference;
@@ -288,7 +289,7 @@ export class ApplicationExporterService {
                         parsePreference = false;
                         // there aren't typically many programs, but if there, then a object map should be created and used
                         const program = programs.find(
-                          (prog) => prog.key === curr,
+                          (prog) => prog.multiselectQuestionId === curr,
                         );
                         multiselectQuestionValue = true;
                         return program;
@@ -625,12 +626,12 @@ export class ApplicationExporterService {
               parsePreference = false;
               // there aren't typically many preferences, but if there, then a object map should be created and used
               const preference = preferences.find(
-                (preference) => preference.key === curr,
+                (preference) => preference.multiselectQuestionId === curr,
               );
               multiselectQuestionValue = true;
               return preference;
             } else if (parseProgram) {
-              // curr should equal the preference id we're pulling from
+              // curr should equal the program id we're pulling from
               if (!programs) {
                 programs =
                   (app.programs as unknown as ApplicationMultiselectQuestion[]) ||
@@ -639,7 +640,7 @@ export class ApplicationExporterService {
               parsePreference = false;
               // there aren't typically many programs, but if there, then a object map should be created and used
               const program = programs.find(
-                (preference) => preference.key === curr,
+                (program) => program.multiselectQuestionId === curr,
               );
               multiselectQuestionValue = true;
               return program;
