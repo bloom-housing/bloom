@@ -160,7 +160,45 @@ export class ListingsService {
       /**  */
       limit?: number | "all"
       /**  */
-      filter?: any | null[]
+      $comparison: string
+      /**  */
+      availability?: FilterAvailabilityEnum
+      /**  */
+      bathrooms?: number
+      /**  */
+      bedrooms?: number
+      /**  */
+      city?: string
+      /**  */
+      counties?: []
+      /**  */
+      homeTypes?: HomeTypeEnum[]
+      /**  */
+      ids?: []
+      /**  */
+      isVerified?: boolean
+      /**  */
+      jurisdiction?: string
+      /**  */
+      leasingAgent?: string
+      /**  */
+      listingFeatures?: []
+      /**  */
+      monthlyRent?: number
+      /**  */
+      name?: string
+      /**  */
+      neighborhood?: string
+      /**  */
+      regions?: RegionEnum[]
+      /**  */
+      reservedCommunityTypes?: []
+      /**  */
+      section8Acceptance?: boolean
+      /**  */
+      status?: ListingsStatusEnum
+      /**  */
+      zipCode?: string
       /**  */
       view?: ListingViews
       /**  */
@@ -179,7 +217,26 @@ export class ListingsService {
       configs.params = {
         page: params["page"],
         limit: params["limit"],
-        filter: params["filter"],
+        $comparison: params["$comparison"],
+        availability: params["availability"],
+        bathrooms: params["bathrooms"],
+        bedrooms: params["bedrooms"],
+        city: params["city"],
+        counties: params["counties"],
+        homeTypes: params["homeTypes"],
+        ids: params["ids"],
+        isVerified: params["isVerified"],
+        jurisdiction: params["jurisdiction"],
+        leasingAgent: params["leasingAgent"],
+        listingFeatures: params["listingFeatures"],
+        monthlyRent: params["monthlyRent"],
+        name: params["name"],
+        neighborhood: params["neighborhood"],
+        regions: params["regions"],
+        reservedCommunityTypes: params["reservedCommunityTypes"],
+        section8Acceptance: params["section8Acceptance"],
+        status: params["status"],
+        zipCode: params["zipCode"],
         view: params["view"],
         orderBy: params["orderBy"],
         orderDir: params["orderDir"],
@@ -2685,29 +2742,6 @@ export interface SuccessDTO {
   success: boolean
 }
 
-export interface ListingsQueryParams {
-  /**  */
-  page?: number
-
-  /**  */
-  limit?: number | "all"
-
-  /**  */
-  filter?: []
-
-  /**  */
-  view?: ListingViews
-
-  /**  */
-  orderBy?: ListingOrderByKeys
-
-  /**  */
-  orderDir?: OrderByEnum
-
-  /**  */
-  search?: string
-}
-
 export interface ListingFilterParams {
   /**  */
   $comparison: EnumListingFilterParamsComparison
@@ -2768,6 +2802,29 @@ export interface ListingFilterParams {
 
   /**  */
   zipCode?: string
+}
+
+export interface ListingsQueryParams {
+  /**  */
+  page?: number
+
+  /**  */
+  limit?: number | "all"
+
+  /**  */
+  filter?: ListingFilterParams[]
+
+  /**  */
+  view?: ListingViews
+
+  /**  */
+  orderBy?: ListingOrderByKeys
+
+  /**  */
+  orderDir?: OrderByEnum
+
+  /**  */
+  search?: string
 }
 
 export interface ListingsRetrieveParams {
@@ -6306,31 +6363,6 @@ export interface PublicLotteryTotal {
   multiselectQuestionId?: string
 }
 
-export enum ListingViews {
-  "fundamentals" = "fundamentals",
-  "base" = "base",
-  "full" = "full",
-  "details" = "details",
-  "csv" = "csv",
-}
-
-export enum ListingOrderByKeys {
-  "mostRecentlyUpdated" = "mostRecentlyUpdated",
-  "applicationDates" = "applicationDates",
-  "mostRecentlyClosed" = "mostRecentlyClosed",
-  "mostRecentlyPublished" = "mostRecentlyPublished",
-  "name" = "name",
-  "waitlistOpen" = "waitlistOpen",
-  "status" = "status",
-  "unitsAvailable" = "unitsAvailable",
-  "marketingType" = "marketingType",
-}
-
-export enum OrderByEnum {
-  "asc" = "asc",
-  "desc" = "desc",
-}
-
 export enum FilterAvailabilityEnum {
   "waitlistOpen" = "waitlistOpen",
   "unitsAvailable" = "unitsAvailable",
@@ -6366,6 +6398,31 @@ export enum EnumListingFilterParamsComparison {
   "LIKE" = "LIKE",
   "NA" = "NA",
 }
+export enum ListingViews {
+  "fundamentals" = "fundamentals",
+  "base" = "base",
+  "full" = "full",
+  "details" = "details",
+  "csv" = "csv",
+}
+
+export enum ListingOrderByKeys {
+  "mostRecentlyUpdated" = "mostRecentlyUpdated",
+  "applicationDates" = "applicationDates",
+  "mostRecentlyClosed" = "mostRecentlyClosed",
+  "mostRecentlyPublished" = "mostRecentlyPublished",
+  "name" = "name",
+  "waitlistOpen" = "waitlistOpen",
+  "status" = "status",
+  "unitsAvailable" = "unitsAvailable",
+  "marketingType" = "marketingType",
+}
+
+export enum OrderByEnum {
+  "asc" = "asc",
+  "desc" = "desc",
+}
+
 export enum ApplicationAddressTypeEnum {
   "leasingAgent" = "leasingAgent",
 }
