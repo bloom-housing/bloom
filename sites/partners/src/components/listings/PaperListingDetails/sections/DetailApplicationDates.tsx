@@ -5,11 +5,11 @@ import { Button, Card, Drawer, FieldValue, Grid, Link } from "@bloom-housing/ui-
 import {
   ListingEvent,
   ListingEventsTypeEnum,
+  MarketingTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingContext } from "../../ListingContext"
-import { getDetailFieldDate, getDetailFieldTime } from "./helpers"
+import { getDetailFieldDate, getDetailFieldString, getDetailFieldTime } from "./helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
-
 const DetailApplicationDates = () => {
   const listing = useContext(ListingContext)
 
@@ -21,6 +21,11 @@ const DetailApplicationDates = () => {
     endTime: "t.endTime",
     url: "t.link",
     view: "",
+  }
+
+  const marketingTypeHeaders = {
+    [MarketingTypeEnum.marketing]: "listings.marketing",
+    [MarketingTypeEnum.comingSoon]: "listings.underConstruction",
   }
 
   const openHouseEvents = useMemo(
@@ -135,6 +140,17 @@ const DetailApplicationDates = () => {
             </Button>
           </Drawer.Footer>
         </Drawer>
+
+        <Grid.Row columns={3}>
+          <FieldValue id="marketingStatus" label={t("listings.marketingSection.status")}>
+            {getDetailFieldString(t(marketingTypeHeaders[listing.marketingType]))}
+          </FieldValue>
+          <FieldValue id="marketingSeasonDate" label={t("listings.marketingSection.date")}>
+            {listing.marketingSeason && t(`seasons.${listing.marketingSeason}`)}{" "}
+            {listing.marketingDate && dayjs(listing.marketingDate).year()}
+            {!listing.marketingSeason && !listing.marketingDate && t("t.none")}
+          </FieldValue>
+        </Grid.Row>
       </SectionWithGrid>
     </>
   )

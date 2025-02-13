@@ -3684,6 +3684,15 @@ export interface Listing {
   communityDisclaimerDescription?: string
 
   /**  */
+  marketingType?: MarketingTypeEnum
+
+  /**  */
+  marketingDate?: Date
+
+  /**  */
+  marketingSeason?: MarketingSeasonEnum
+
+  /**  */
   homeType?: HomeTypeEnum
 }
 
@@ -4157,6 +4166,15 @@ export interface ListingCreate {
   communityDisclaimerDescription?: string
 
   /**  */
+  marketingType?: MarketingTypeEnum
+
+  /**  */
+  marketingDate?: Date
+
+  /**  */
+  marketingSeason?: MarketingSeasonEnum
+
+  /**  */
   homeType?: HomeTypeEnum
 
   /**  */
@@ -4441,6 +4459,15 @@ export interface ListingUpdate {
 
   /**  */
   communityDisclaimerDescription?: string
+
+  /**  */
+  marketingType?: MarketingTypeEnum
+
+  /**  */
+  marketingDate?: Date
+
+  /**  */
+  marketingSeason?: MarketingSeasonEnum
 
   /**  */
   homeType?: HomeTypeEnum
@@ -6379,6 +6406,18 @@ export enum UnitTypeEnum {
 export enum UnitRentTypeEnum {
   "fixed" = "fixed",
   "percentageOfIncome" = "percentageOfIncome",
+}
+
+export enum MarketingTypeEnum {
+  "marketing" = "marketing",
+  "comingSoon" = "comingSoon",
+}
+
+export enum MarketingSeasonEnum {
+  "spring" = "spring",
+  "summer" = "summer",
+  "fall" = "fall",
+  "winter" = "winter",
 }
 
 export enum HomeTypeEnum {
