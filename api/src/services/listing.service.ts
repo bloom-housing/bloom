@@ -32,6 +32,7 @@ import { ListingCreate } from '../dtos/listings/listing-create.dto';
 import { ListingDuplicate } from '../dtos/listings/listing-duplicate.dto';
 import { ListingMapMarker } from '../dtos/listings/listing-map-marker.dto';
 import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
+import { ListingsQueryBody } from '../dtos/listings/listings-query-body.dto';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
 import { ListingUpdate } from '../dtos/listings/listing-update.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
@@ -171,7 +172,7 @@ export class ListingService implements OnModuleInit {
     this set can either be paginated or not depending on the params
     it will return both the set of listings, and some meta information to help with pagination
   */
-  async list(params: ListingsQueryParams): Promise<{
+  async list(params: ListingsQueryBody | ListingsQueryParams): Promise<{
     items: Listing[];
     meta: {
       currentPage: number;

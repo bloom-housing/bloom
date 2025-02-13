@@ -160,45 +160,7 @@ export class ListingsService {
       /**  */
       limit?: number | "all"
       /**  */
-      $comparison: string
-      /**  */
-      availability?: FilterAvailabilityEnum
-      /**  */
-      bathrooms?: number
-      /**  */
-      bedrooms?: number
-      /**  */
-      city?: string
-      /**  */
-      counties?: []
-      /**  */
-      homeTypes?: HomeTypeEnum[]
-      /**  */
-      ids?: []
-      /**  */
-      isVerified?: boolean
-      /**  */
-      jurisdiction?: string
-      /**  */
-      leasingAgent?: string
-      /**  */
-      listingFeatures?: []
-      /**  */
-      monthlyRent?: number
-      /**  */
-      name?: string
-      /**  */
-      neighborhood?: string
-      /**  */
-      regions?: RegionEnum[]
-      /**  */
-      reservedCommunityTypes?: []
-      /**  */
-      section8Acceptance?: boolean
-      /**  */
-      status?: ListingsStatusEnum
-      /**  */
-      zipCode?: string
+      filter?: ListingFilterParams[]
       /**  */
       view?: ListingViews
       /**  */
@@ -217,26 +179,7 @@ export class ListingsService {
       configs.params = {
         page: params["page"],
         limit: params["limit"],
-        $comparison: params["$comparison"],
-        availability: params["availability"],
-        bathrooms: params["bathrooms"],
-        bedrooms: params["bedrooms"],
-        city: params["city"],
-        counties: params["counties"],
-        homeTypes: params["homeTypes"],
-        ids: params["ids"],
-        isVerified: params["isVerified"],
-        jurisdiction: params["jurisdiction"],
-        leasingAgent: params["leasingAgent"],
-        listingFeatures: params["listingFeatures"],
-        monthlyRent: params["monthlyRent"],
-        name: params["name"],
-        neighborhood: params["neighborhood"],
-        regions: params["regions"],
-        reservedCommunityTypes: params["reservedCommunityTypes"],
-        section8Acceptance: params["section8Acceptance"],
-        status: params["status"],
-        zipCode: params["zipCode"],
+        filter: params["filter"],
         view: params["view"],
         orderBy: params["orderBy"],
         orderDir: params["orderDir"],
@@ -298,7 +241,7 @@ export class ListingsService {
   filterableList(
     params: {
       /** requestBody */
-      body?: ListingsQueryParams
+      body?: ListingsQueryBody
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedListing> {
@@ -2804,7 +2747,7 @@ export interface ListingFilterParams {
   zipCode?: string
 }
 
-export interface ListingsQueryParams {
+export interface ListingsQueryBody {
   /**  */
   page?: number
 
@@ -2813,6 +2756,29 @@ export interface ListingsQueryParams {
 
   /**  */
   filter?: ListingFilterParams[]
+
+  /**  */
+  view?: ListingViews
+
+  /**  */
+  orderBy?: ListingOrderByKeys
+
+  /**  */
+  orderDir?: OrderByEnum
+
+  /**  */
+  search?: string
+}
+
+export interface ListingsQueryParams {
+  /**  */
+  page?: number
+
+  /**  */
+  limit?: number | "all"
+
+  /**  */
+  filter?: string[]
 
   /**  */
   view?: ListingViews

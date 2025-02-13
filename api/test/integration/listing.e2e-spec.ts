@@ -21,6 +21,7 @@ import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
 import { listingFactory } from '../../prisma/seed-helpers/listing-factory';
+import { ListingsQueryBody } from '../../src/dtos/listings/listings-query-body.dto';
 import { ListingsQueryParams } from '../../src/dtos/listings/listings-query-params.dto';
 import { Compare } from '../../src/dtos/shared/base-filter.dto';
 import { ListingOrderByKeys } from '../../src/enums/listings/order-by-enum';
@@ -667,7 +668,7 @@ describe('Listing Controller Tests', () => {
       });
     });
     it('should return a listing based on filter bathrooms', async () => {
-      const query: ListingsQueryParams = {
+      const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         filter: [
@@ -693,7 +694,7 @@ describe('Listing Controller Tests', () => {
       expect(res.body.items[0].id).toEqual(listing1.id);
     });
     it('should return a listing based on filter bedrooms', async () => {
-      const query: ListingsQueryParams = {
+      const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         filter: [
@@ -724,7 +725,7 @@ describe('Listing Controller Tests', () => {
           id: listing1.buildingAddressId,
         },
       });
-      const query: ListingsQueryParams = {
+      const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         filter: [
@@ -755,7 +756,7 @@ describe('Listing Controller Tests', () => {
           id: listing2.buildingAddressId,
         },
       });
-      const query: ListingsQueryParams = {
+      const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         filter: [
@@ -781,7 +782,7 @@ describe('Listing Controller Tests', () => {
       expect(res.body.items[0].id).toEqual(listing2.id);
     });
     it('should return a listing based on filter homeTypes', async () => {
-      const query: ListingsQueryParams = {
+      const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         filter: [
@@ -807,7 +808,7 @@ describe('Listing Controller Tests', () => {
       expect(res.body.items[0].id).toEqual(listing1.id);
     });
     it('should return a listing based on filter ids', async () => {
-      const query: ListingsQueryParams = {
+      const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         filter: [
@@ -840,7 +841,7 @@ describe('Listing Controller Tests', () => {
       expect(res.body.items[0].id).toBe(listing2.id);
     });
     it('should return a listing based on filter isVerified', async () => {
-      const query: ListingsQueryParams = {
+      const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         filter: [
@@ -866,7 +867,7 @@ describe('Listing Controller Tests', () => {
       expect(res.body.items[0].id).toEqual(listing1.id);
     });
     it('should return a listing based on filter jurisdiction', async () => {
-      const query: ListingsQueryParams = {
+      const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         filter: [
@@ -897,7 +898,7 @@ describe('Listing Controller Tests', () => {
         }),
       });
 
-      const query: ListingsQueryParams = {
+      const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         filter: [
@@ -923,7 +924,7 @@ describe('Listing Controller Tests', () => {
       expect(res.body.items[0].id).toEqual(listing1.id);
     });
     it('should return a listing based on filter listingFeatures', async () => {
-      const query: ListingsQueryParams = {
+      const query: ListingsQueryBody = {
         limit: 20,
         page: 1,
         view: ListingViews.base,
@@ -950,7 +951,7 @@ describe('Listing Controller Tests', () => {
       expect(res.body.items[0].id).toEqual(listing1.id);
     });
     it('should return a listing based on filter monthlyRent', async () => {
-      const query: ListingsQueryParams = {
+      const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         filter: [
@@ -980,7 +981,7 @@ describe('Listing Controller Tests', () => {
         a.localeCompare(b),
       );
 
-      const query: ListingsQueryParams = {
+      const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         filter: [
@@ -1016,7 +1017,7 @@ describe('Listing Controller Tests', () => {
       expect(res.body.items[1].name).toEqual(orderedNames[1]);
     });
     it('should return a listing based on filter neighborhood', async () => {
-      const query: ListingsQueryParams = {
+      const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         filter: [
@@ -1042,7 +1043,7 @@ describe('Listing Controller Tests', () => {
       expect(res.body.items[0].id).toEqual(listing1.id);
     });
     it('should return a listing based on filter regions', async () => {
-      const query: ListingsQueryParams = {
+      const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         filter: [
@@ -1075,7 +1076,7 @@ describe('Listing Controller Tests', () => {
           },
         });
 
-      const query: ListingsQueryParams = {
+      const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         filter: [
@@ -1102,7 +1103,7 @@ describe('Listing Controller Tests', () => {
       expect(ids).toContain(listing2.id);
     });
     it('should return a listing based on filter section8Acceptance', async () => {
-      const query: ListingsQueryParams = {
+      const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         filter: [
@@ -1128,7 +1129,7 @@ describe('Listing Controller Tests', () => {
       expect(res.body.items[0].id).toEqual(listing2.id);
     });
     it('should return a listing based on filter status', async () => {
-      const query: ListingsQueryParams = {
+      const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         filter: [
@@ -1159,7 +1160,7 @@ describe('Listing Controller Tests', () => {
           id: listing1.buildingAddressId,
         },
       });
-      const query: ListingsQueryParams = {
+      const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         filter: [
@@ -1185,7 +1186,7 @@ describe('Listing Controller Tests', () => {
       expect(res.body.items[0].id).toEqual(listing1.id);
     });
     it('should return a listing based on search', async () => {
-      const query: ListingsQueryParams = {
+      const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         search: listing1.name,
