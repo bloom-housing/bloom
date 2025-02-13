@@ -183,7 +183,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion, featureFlags }: Uni
 
   const enableSection8Question = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableSection8Question,
-    listing.jurisdictions.id
+    listing?.jurisdictions?.id
   )
 
   return (
