@@ -162,9 +162,4 @@ export class ListingUpdate extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDTO)
   requestedChangesUser?: IdDTO;
-
-  @Expose()
-  @ApiPropertyOptional()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  isVerified?: boolean;
 }
