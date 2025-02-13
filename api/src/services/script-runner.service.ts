@@ -20,6 +20,7 @@ import { AmiChartCreate } from '../dtos/ami-charts/ami-chart-create.dto';
 import { AmiChartUpdate } from '../dtos/ami-charts/ami-chart-update.dto';
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
 import { HouseholdMemberRelationship } from '../../src/enums/applications/household-member-relationship-enum';
+import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
 
 /**
   this is the service for running scripts
@@ -749,7 +750,9 @@ export class ScriptRunnerService {
   ): Promise<SuccessDTO> {
     const requestingUser = mapTo(User, req['user']);
     await this.markScriptAsRunStart(
-      `data transfer public users and applications ${dataTransferDTO.jurisdiction}`,
+      `data transfer public users and applications ${
+        dataTransferDTO.jurisdiction
+      } page ${dataTransferDTO.page || 1}`,
       requestingUser,
     );
 
@@ -784,6 +787,9 @@ export class ScriptRunnerService {
         `${dataTransferDTO.jurisdiction} county doesn't exist in foreign database`,
       );
     }
+
+    const skip = calculateSkip(5000, dataTransferDTO.page || 1);
+    const take = calculateTake(5000);
 
     const publicUsers = await client.userAccounts.findMany({
       include: {
@@ -824,12 +830,15 @@ export class ScriptRunnerService {
         userRoles: null,
         applications: { some: {} },
       },
+      skip,
+      take,
     });
 
     if (publicUsers?.length) {
-      console.log(`migrating ${publicUsers.length} public users`);
-      let totalApplications = 0,
-        currentUserCount = 0;
+      console.log(
+        `migrating page ${dataTransferDTO.page || 1} of public users`,
+      );
+      let currentUserCount = 0;
       for (const publicUser of publicUsers) {
         let user = await this.prisma.userAccounts.findFirst({
           where: { email: publicUser.email },
@@ -887,7 +896,6 @@ export class ScriptRunnerService {
                   },
                 },
               });
-              totalApplications++;
             } catch (e) {
               console.log('e', e);
               console.log(
@@ -898,13 +906,11 @@ export class ScriptRunnerService {
         }
         currentUserCount++;
         // console logs for progress of migration
-        if (currentUserCount % 20 === 0) {
-          console.log(
-            `Progress: ${currentUserCount} users and ${totalApplications} applications`,
-          );
+        if (currentUserCount % 500 === 0) {
+          console.log(`Progress: ${currentUserCount} users migrated`);
         }
       }
-      console.log(`migrated ${totalApplications} applications`);
+      console.log(`migrated page ${dataTransferDTO.page || 1} of public users`);
     }
 
     // disconnect from foreign db
@@ -912,7 +918,9 @@ export class ScriptRunnerService {
 
     // script runner standard spin down
     await this.markScriptAsComplete(
-      `data transfer public users and applications ${dataTransferDTO.jurisdiction}`,
+      `data transfer public users and applications ${
+        dataTransferDTO.jurisdiction
+      } page ${dataTransferDTO.page || 1}`,
       requestingUser,
     );
 

@@ -1488,11 +1488,8 @@ describe('Testing script runner service', () => {
           },
         },
       });
-      expect(console.log).toBeCalledWith('migrating 26 public users');
-      expect(console.log).toBeCalledWith(
-        'Progress: 20 users and 21 applications',
-      );
-      expect(console.log).toBeCalledWith('migrated 27 applications');
+      expect(console.log).toBeCalledWith('migrated page 1 of public users');
+      expect(console.log).toBeCalledWith('migrated page 1 of public users');
     });
   });
 

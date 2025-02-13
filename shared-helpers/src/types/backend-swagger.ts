@@ -6460,6 +6460,9 @@ export interface DataTransferDTO {
 
   /**  */
   jurisdiction: string
+
+  /**  */
+  page?: number
 }
 
 export interface AmiChartImportDTO {

@@ -1,6 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
-import { IsDefined, IsString } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Expose, Type } from 'class-transformer';
+import { IsDefined, IsNumber, IsString } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
 export class DataTransferDTO {
@@ -15,4 +15,10 @@ export class DataTransferDTO {
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   jurisdiction: string;
+
+  @Expose()
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  @Type(() => Number)
+  page?: number;
 }
