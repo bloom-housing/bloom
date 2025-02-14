@@ -53,7 +53,7 @@ const DetailBuildingDetails = () => {
                 id="buildingAdress.region"
                 label={t("t.region")}
               >
-                {listing.region.toString().replace("_", " ") || t("t.n/a")}
+                {listing.region ? listing.region.toString().replace("_", " ") : t("t.n/a")}
               </FieldValue>
             ) : (
               <FieldValue
