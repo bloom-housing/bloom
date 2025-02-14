@@ -1,11 +1,6 @@
 import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import {
-  IsBoolean,
-  IsDefined,
-  Validate,
-  ValidateNested,
-} from 'class-validator';
+import { IsDefined, Validate, ValidateNested } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { IdDTO } from '../shared/id.dto';
