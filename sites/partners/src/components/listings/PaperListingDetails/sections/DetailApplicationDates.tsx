@@ -6,14 +6,21 @@ import {
   ListingEvent,
   ListingEventsTypeEnum,
   MarketingTypeEnum,
+  FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldDate, getDetailFieldString, getDetailFieldTime } from "./helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { AuthContext } from "@bloom-housing/shared-helpers/src/auth/AuthContext"
 const DetailApplicationDates = () => {
   const listing = useContext(ListingContext)
-
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const [drawer, setDrawer] = useState<ListingEvent | null>(null)
+
+  const enableMarketingStatus = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableMarketingStatus,
+    listing?.jurisdictions?.id
+  )
 
   const openHouseHeaders = {
     date: "t.date",
@@ -141,16 +148,18 @@ const DetailApplicationDates = () => {
           </Drawer.Footer>
         </Drawer>
 
-        <Grid.Row columns={3}>
-          <FieldValue id="marketingStatus" label={t("listings.marketingSection.status")}>
-            {getDetailFieldString(t(marketingTypeHeaders[listing.marketingType]))}
-          </FieldValue>
-          <FieldValue id="marketingSeasonDate" label={t("listings.marketingSection.date")}>
-            {listing.marketingSeason && t(`seasons.${listing.marketingSeason}`)}{" "}
-            {listing.marketingDate && dayjs(listing.marketingDate).year()}
-            {!listing.marketingSeason && !listing.marketingDate && t("t.none")}
-          </FieldValue>
-        </Grid.Row>
+        {enableMarketingStatus && (
+          <Grid.Row columns={3}>
+            <FieldValue id="marketingStatus" label={t("listings.marketingSection.status")}>
+              {getDetailFieldString(t(marketingTypeHeaders[listing.marketingType]))}
+            </FieldValue>
+            <FieldValue id="marketingSeasonDate" label={t("listings.marketingSection.date")}>
+              {listing.marketingSeason && t(`seasons.${listing.marketingSeason}`)}{" "}
+              {listing.marketingDate && dayjs(listing.marketingDate).year()}
+              {!listing.marketingSeason && !listing.marketingDate && t("t.none")}
+            </FieldValue>
+          </Grid.Row>
+        )}
       </SectionWithGrid>
     </>
   )
