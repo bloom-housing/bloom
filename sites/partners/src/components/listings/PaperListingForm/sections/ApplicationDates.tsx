@@ -47,7 +47,7 @@ const ApplicationDates = ({
 
   const enableMarketingStatus = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableMarketingStatus,
-    listing.jurisdictions.id
+    listing?.jurisdictions?.id
   )
 
   const openHouseTableData = useMemo(() => {
@@ -218,12 +218,14 @@ const ApplicationDates = ({
                 <div className={"flex flex-col"}>
                   <p className={"field-label pb-0"}>{t("listings.marketingSection.date")}</p>
                   <div className={"flex items-baseline h-auto"}>
-                    <FieldValue className="w-2/3">
+                    <div className="w-2/3">
                       <Select
                         id="marketingSeason"
                         name="marketingSeason"
                         defaultValue={listing?.marketingSeason}
                         register={register}
+                        label={t("listings.marketingSection.seasons")}
+                        labelClassName="sr-only"
                         controlClassName="control"
                         options={[
                           "",
@@ -234,7 +236,7 @@ const ApplicationDates = ({
                         ]}
                         keyPrefix="seasons"
                       />
-                    </FieldValue>
+                    </div>
 
                     <Field
                       name={"marketingStartDate"}
