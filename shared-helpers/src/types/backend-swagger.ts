@@ -241,7 +241,7 @@ export class ListingsService {
   filterableList(
     params: {
       /** requestBody */
-      body?: ListingsQueryParams
+      body?: ListingsQueryBody
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedListing> {
@@ -2703,6 +2703,91 @@ export interface SuccessDTO {
   success: boolean
 }
 
+export interface ListingFilterParams {
+  /**  */
+  $comparison: EnumListingFilterParamsComparison
+
+  /**  */
+  availability?: FilterAvailabilityEnum
+
+  /**  */
+  bathrooms?: number
+
+  /**  */
+  bedrooms?: number
+
+  /**  */
+  city?: string
+
+  /**  */
+  counties?: string[]
+
+  /**  */
+  homeTypes?: HomeTypeEnum[]
+
+  /**  */
+  ids?: string[]
+
+  /**  */
+  isVerified?: boolean
+
+  /**  */
+  jurisdiction?: string
+
+  /**  */
+  leasingAgent?: string
+
+  /**  */
+  listingFeatures?: string[]
+
+  /**  */
+  monthlyRent?: number
+
+  /**  */
+  name?: string
+
+  /**  */
+  neighborhood?: string
+
+  /**  */
+  regions?: RegionEnum[]
+
+  /**  */
+  reservedCommunityTypes?: string[]
+
+  /**  */
+  section8Acceptance?: boolean
+
+  /**  */
+  status?: ListingsStatusEnum
+
+  /**  */
+  zipCode?: string
+}
+
+export interface ListingsQueryBody {
+  /**  */
+  page?: number
+
+  /**  */
+  limit?: number | "all"
+
+  /**  */
+  filter?: ListingFilterParams[]
+
+  /**  */
+  view?: ListingViews
+
+  /**  */
+  orderBy?: ListingOrderByKeys
+
+  /**  */
+  orderDir?: OrderByEnum
+
+  /**  */
+  search?: string
+}
+
 export interface ListingsQueryParams {
   /**  */
   page?: number
@@ -2724,32 +2809,6 @@ export interface ListingsQueryParams {
 
   /**  */
   search?: string
-}
-
-export interface ListingFilterParams {
-  /**  */
-  $comparison: EnumListingFilterParamsComparison
-
-  /**  */
-  name?: string
-
-  /**  */
-  status?: ListingsStatusEnum
-
-  /**  */
-  neighborhood?: string
-
-  /**  */
-  bedrooms?: number
-
-  /**  */
-  zipcode?: string
-
-  /**  */
-  leasingAgents?: string
-
-  /**  */
-  jurisdiction?: string
 }
 
 export interface ListingsRetrieveParams {
@@ -6303,6 +6362,41 @@ export interface PublicLotteryTotal {
   multiselectQuestionId?: string
 }
 
+export enum FilterAvailabilityEnum {
+  "waitlistOpen" = "waitlistOpen",
+  "unitsAvailable" = "unitsAvailable",
+}
+
+export enum HomeTypeEnum {
+  "apartment" = "apartment",
+  "duplex" = "duplex",
+  "house" = "house",
+  "townhome" = "townhome",
+}
+
+export enum RegionEnum {
+  "Greater_Downtown" = "Greater_Downtown",
+  "Eastside" = "Eastside",
+  "Southwest" = "Southwest",
+  "Westside" = "Westside",
+}
+
+export enum ListingsStatusEnum {
+  "active" = "active",
+  "pending" = "pending",
+  "closed" = "closed",
+  "pendingReview" = "pendingReview",
+  "changesRequested" = "changesRequested",
+}
+export enum EnumListingFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "<=" = "<=",
+  "LIKE" = "LIKE",
+  "NA" = "NA",
+}
 export enum ListingViews {
   "fundamentals" = "fundamentals",
   "base" = "base",
@@ -6328,21 +6422,6 @@ export enum OrderByEnum {
   "desc" = "desc",
 }
 
-export enum ListingsStatusEnum {
-  "active" = "active",
-  "pending" = "pending",
-  "closed" = "closed",
-  "pendingReview" = "pendingReview",
-  "changesRequested" = "changesRequested",
-}
-export enum EnumListingFilterParamsComparison {
-  "=" = "=",
-  "<>" = "<>",
-  "IN" = "IN",
-  ">=" = ">=",
-  "<=" = "<=",
-  "NA" = "NA",
-}
 export enum ApplicationAddressTypeEnum {
   "leasingAgent" = "leasingAgent",
 }
@@ -6410,13 +6489,6 @@ export enum UnitTypeEnum {
 export enum UnitRentTypeEnum {
   "fixed" = "fixed",
   "percentageOfIncome" = "percentageOfIncome",
-}
-
-export enum HomeTypeEnum {
-  "apartment" = "apartment",
-  "duplex" = "duplex",
-  "house" = "house",
-  "townhome" = "townhome",
 }
 
 export enum AfsView {
@@ -6505,6 +6577,7 @@ export enum EnumMultiselectQuestionFilterParamsComparison {
   "IN" = "IN",
   ">=" = ">=",
   "<=" = "<=",
+  "LIKE" = "LIKE",
   "NA" = "NA",
 }
 export enum InputType {
