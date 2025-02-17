@@ -1,7 +1,10 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
 
-import { LeasingAgent } from "../../../../src/components/listing/listing_sections/LeasingAgent"
+import {
+  formatPhone,
+  LeasingAgent,
+} from "../../../../src/components/listing/listing_sections/LeasingAgent"
 
 afterEach(cleanup)
 
@@ -38,7 +41,7 @@ describe("<LeasingAgent>", () => {
     expect(getByText("Agent title")).toBeDefined()
     expect(getByRole("link", { name: `Call ${phoneNumber}` })).toHaveAttribute(
       "href",
-      "tel:123 4567890"
+      "tel:1234567890"
     )
     expect(getByRole("link", { name: "Email" })).toHaveAttribute("href", "mailto:leasing@agent.com")
     expect(getByText("Due to high call volume you may hear a message.")).toBeDefined()
@@ -50,5 +53,17 @@ describe("<LeasingAgent>", () => {
     )
     expect(getByText("Office Hours")).toBeDefined()
     expect(getByText("Leasing office hours")).toBeDefined()
+  })
+})
+
+describe("formatPhone", () => {
+  it("removes dashes", () => {
+    expect(formatPhone("123-456-7890")).toBe("1234567890")
+  })
+  it("removes parentheses", () => {
+    expect(formatPhone("(123)4567890")).toBe("1234567890")
+  })
+  it("removes spaces", () => {
+    expect(formatPhone("123 456 7890")).toBe("1234567890")
   })
 })

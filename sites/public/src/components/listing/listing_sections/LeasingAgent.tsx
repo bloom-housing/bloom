@@ -14,6 +14,10 @@ type LeasingAgentProps = {
   title?: string
 }
 
+export const formatPhone = (phone: string) => {
+  return phone.replace(/[-() ]/g, "")
+}
+
 export const LeasingAgent = ({
   address,
   email,
@@ -36,7 +40,7 @@ export const LeasingAgent = ({
         {phone && (
           <>
             <p className={"seeds-m-bs-header seeds-m-be-text"}>
-              <Link href={`tel:${phone.replace(/[-()]/g, "")}`}>{`${t("t.call")} ${phone}`}</Link>
+              <Link href={`tel:${formatPhone(phone)}`}>{`${t("t.call")} ${phone}`}</Link>
             </p>
             <p>{t("leasingAgent.dueToHighCallVolume")}</p>
           </>
