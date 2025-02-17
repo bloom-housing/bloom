@@ -313,7 +313,7 @@ export class ListingsService {
   filterableList(
     params: {
       /** requestBody */
-      body?: ListingsQueryParams
+      body?: ListingsQueryBody
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedListing> {
@@ -2986,49 +2986,64 @@ export interface ListingFilterParams {
   $comparison: EnumListingFilterParamsComparison
 
   /**  */
-  name?: string
-
-  /**  */
-  status?: ListingsStatusEnum
-
-  /**  */
-  neighborhood?: string
-
-  /**  */
-  bedrooms?: number
+  availability?: FilterAvailabilityEnum
 
   /**  */
   bathrooms?: number
 
   /**  */
-  zipcode?: string
-
-  /**  */
-  leasingAgents?: string
-
-  /**  */
-  jurisdiction?: string
-
-  /**  */
-  isExternal?: boolean
-
-  /**  */
-  availability?: FilterAvailabilityEnum
+  bedrooms?: number
 
   /**  */
   city?: string
 
   /**  */
-  monthlyRent?: number
-
-  /**  */
   counties?: string[]
 
   /**  */
+  homeTypes?: HomeTypeEnum[]
+
+  /**  */
   ids?: string[]
+
+  /**  */
+  isVerified?: boolean
+
+  /**  */
+  jurisdiction?: string
+
+  /**  */
+  leasingAgent?: string
+
+  /**  */
+  listingFeatures?: string[]
+
+  /**  */
+  monthlyRent?: number
+
+  /**  */
+  name?: string
+
+  /**  */
+  neighborhood?: string
+
+  /**  */
+  regions?: RegionEnum[]
+
+  /**  */
+  reservedCommunityTypes?: string[]
+
+  /**  */
+  section8Acceptance?: boolean
+
+  /**  */
+  status?: ListingsStatusEnum
+
+  /**  */
+  zipCode?: string
 }
 
-export interface ListingsQueryParams {
+export interface ListingsQueryBody {
   /**  */
   page?: number
 
@@ -3042,10 +3057,33 @@ export interface ListingsQueryParams {
   view?: ListingViews
 
   /**  */
-  orderBy?: ListingOrderByKeys[]
+  orderBy?: ListingOrderByKeys
 
   /**  */
-  orderDir?: OrderByEnum[]
+  orderDir?: OrderByEnum
+
+  /**  */
+  search?: string
+}
+
+export interface ListingsQueryParams {
+  /**  */
+  page?: number
+
+  /**  */
+  limit?: number | "all"
+
+  /**  */
+  filter?: string[]
+
+  /**  */
+  view?: ListingViews
+
+  /**  */
+  orderBy?: ListingOrderByKeys
+
+  /**  */
+  orderDir?: OrderByEnum
 
   /**  */
   search?: string
@@ -6655,17 +6693,31 @@ export interface PublicLotteryTotal {
   multiselectQuestionId?: string
 }
 
+export enum FilterAvailabilityEnum {
+  "waitlistOpen" = "waitlistOpen",
+  "unitsAvailable" = "unitsAvailable",
+}
+
+export enum HomeTypeEnum {
+  "apartment" = "apartment",
+  "duplex" = "duplex",
+  "house" = "house",
+  "townhome" = "townhome",
+}
+
+export enum RegionEnum {
+  "Greater_Downtown" = "Greater_Downtown",
+  "Eastside" = "Eastside",
+  "Southwest" = "Southwest",
+  "Westside" = "Westside",
+}
+
 export enum ListingsStatusEnum {
   "active" = "active",
   "pending" = "pending",
   "closed" = "closed",
   "pendingReview" = "pendingReview",
   "changesRequested" = "changesRequested",
-}
-
-export enum FilterAvailabilityEnum {
-  "waitlistOpen" = "waitlistOpen",
-  "unitsAvailable" = "unitsAvailable",
 }
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
