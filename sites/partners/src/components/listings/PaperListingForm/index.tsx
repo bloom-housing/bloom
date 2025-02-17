@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
 import dayjs from "dayjs"
-import { t, Form, AlertBox, LoadingOverlay, LatitudeLongitude } from "@bloom-housing/ui-components"
+import { t, Form, AlertBox, LoadingOverlay, LatitudeLongitude, Textarea } from "@bloom-housing/ui-components"
 import { Button, Icon, Tabs } from "@bloom-housing/ui-seeds"
 import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
 import ChevronRightIcon from "@heroicons/react/20/solid/ChevronRightIcon"
@@ -52,6 +52,7 @@ import PublishListingDialog from "./dialogs/PublishListingDialog"
 import LiveConfirmationDialog from "./dialogs/LiveConfirmationDialog"
 import ListingApprovalDialog from "./dialogs/ListingApprovalDialog"
 import SaveBeforeExitDialog from "./dialogs/SaveBeforeExitDialog"
+import NeighborhoodAmenities from "./sections/NeighborhoodAmenities"
 
 type ListingFormProps = {
   listing?: FormListing
@@ -93,6 +94,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
     defaultValues,
     shouldUnregister: false,
   })
+  const { register } = formMethods
 
   const router = useRouter()
 
@@ -390,6 +392,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                           />
                           <AdditionalFees existingUtilities={listing?.listingUtilities} />
                           <BuildingFeatures existingFeatures={listing?.listingFeatures} />
+                          <NeighborhoodAmenities></NeighborhoodAmenities>
                           <AdditionalEligibility defaultText={listing?.rentalAssistance} />
                           <BuildingSelectionCriteria />
                           <AdditionalDetails />
