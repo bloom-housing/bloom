@@ -31,29 +31,26 @@ export const LeasingAgent = ({
         <Heading size={"lg"} priority={2} className={"seeds-m-be-header"}>
           {t("leasingAgent.contact")}
         </Heading>
-        <div>{name && <p className={`${styles["thin-heading"]} seeds-m-be-text`}>{name}</p>}</div>
-        <div>{title && <p>{title}</p>}</div>
-        <div>
-          {phone && (
+        {name && <p className={`${styles["thin-heading"]} seeds-m-be-text`}>{name}</p>}
+        {title && <p>{title}</p>}
+        {phone && (
+          <>
             <p className={"seeds-m-bs-header seeds-m-be-text"}>
               <Link href={`tel:${phone.replace(/[-()]/g, "")}`}>{`${t("t.call")} ${phone}`}</Link>
             </p>
-          )}
-        </div>
-        <div>{phone && <p>{t("leasingAgent.dueToHighCallVolume")}</p>}</div>
-        <div>
-          {email && (
-            <p className={"seeds-m-bs-header"}>
-              <Link href={`mailto:${email}`}>{t("t.email")}</Link>
-            </p>
-          )}
-        </div>
+            <p>{t("leasingAgent.dueToHighCallVolume")}</p>
+          </>
+        )}
+        {email && (
+          <p className={"seeds-m-bs-header"}>
+            <Link href={`mailto:${email}`}>{t("t.email")}</Link>
+          </p>
+        )}
         {address && (
           <div className={"seeds-m-bs-header"}>
             <Address address={address} getDirections={true} />
           </div>
         )}
-
         {officeHours && (
           <div className={"seeds-m-bs-header"}>
             <Heading

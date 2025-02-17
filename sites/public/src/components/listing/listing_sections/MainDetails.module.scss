@@ -11,13 +11,17 @@
   }
 }
 
-.listing-address {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  @media (--sm-only) {
-    .view-on-map {
-      margin-top: var(--seeds-s3);
+.listing-address-container {
+  margin-block-start: var(--seeds-s2);
+  color: var(--seeds-text-color-dark);
+
+  .listing-address {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-block-start: calc(-1 * var(--seeds-s3));
+    .flex-margin {
+      margin-block-start: var(--seeds-s3);
     }
   }
 }

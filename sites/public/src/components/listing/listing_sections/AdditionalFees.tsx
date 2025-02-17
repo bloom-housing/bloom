@@ -58,7 +58,7 @@ export const AdditionalFees = ({
               )}
             </div>
             {costsNotIncluded && <div className={"seeds-m-be-content"}>{costsNotIncluded}</div>}
-            {utilitiesIncluded.length && (
+            {!!utilitiesIncluded.length && (
               <div className={"seeds-m-be-content"}>
                 <Heading size={"md"} priority={4}>
                   {t("listings.sections.utilities")}

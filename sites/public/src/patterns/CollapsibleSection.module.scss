@@ -8,7 +8,11 @@
     .header-content {
       width: 100%;
       color: var(--seeds-text-color);
-      padding: var(--seeds-spacer-content);
+      padding-inline: var(--seeds-spacer-section);
+      padding-block: var(--seeds-spacer-content);
+      @media (--sm-only) {
+        padding-inline: var(--seeds-s4);
+      }
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -35,6 +39,9 @@
     line-height: normal;
     font-weight: lighter;
     padding-inline: var(--seeds-spacer-section);
+    @media (--sm-only) {
+      padding-inline: var(--seeds-s4);
+    }
     display: flex;
     align-items: center;
     color: var(--seeds-color-primary);

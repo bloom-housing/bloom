@@ -3,6 +3,7 @@ import PlusIcon from "@heroicons/react/24/solid/PlusIcon"
 import MinusIcon from "@heroicons/react/24/solid/MinusIcon"
 import { Heading, Icon } from "@bloom-housing/ui-seeds"
 import styles from "./CollapsibleSection.module.scss"
+import { t } from "@bloom-housing/ui-components"
 
 interface CollapsibleSectionProps {
   /** All content under the title */
@@ -36,7 +37,7 @@ export const CollapsibleSection = (props: CollapsibleSectionProps) => {
       <div className={"sr-only"}>{HeadingContent}</div>
       <button
         onClick={() => setCollapsed(!collapsed)}
-        aria-label={!collapsed ? "Collapse section" : "Expand section"}
+        aria-label={!collapsed ? t("t.collapseSection") : t("t.expandSection")}
         aria-expanded={!collapsed}
         aria-controls={props.title}
         className={styles["collapsible-button"]}

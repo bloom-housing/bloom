@@ -24,41 +24,39 @@ export const RentSummary = ({ amiValues, reviewOrderType, unitsSummarized }: Ren
 
   return (
     <div className={styles["rent-summary"]}>
-      <div>
-        <Heading size={"lg"} className={"seeds-m-be-header"} priority={2}>
-          {t("t.rent")}
-        </Heading>
-        {amiValues.length > 1 &&
-          amiValues.map((percent) => {
-            const byAMI = unitsSummarized.byAMI.find((item) => {
-              return parseInt(item.percent, 10) === percent
-            })
+      <Heading size={"lg"} className={"seeds-m-be-header"} priority={2}>
+        {t("t.rent")}
+      </Heading>
+      {amiValues.length > 1 &&
+        amiValues.map((percent) => {
+          const byAMI = unitsSummarized.byAMI.find((item) => {
+            return parseInt(item.percent, 10) === percent
+          })
 
-            const groupedUnits = byAMI ? getSummariesTable(byAMI.byUnitType, reviewOrderType) : []
+          const groupedUnits = byAMI ? getSummariesTable(byAMI.byUnitType, reviewOrderType) : []
 
-            return (
-              <React.Fragment key={percent}>
-                <Heading size={"md"} priority={3} className={"seeds-m-bs-content"}>
-                  {t("listings.percentAMIUnit", { percent: percent })}
-                </Heading>
-                <div className={"seeds-m-bs-header"}>
-                  <StandardTable
-                    headers={unitSummariesHeaders}
-                    data={groupedUnits}
-                    responsiveCollapse={true}
-                  />
-                </div>
-              </React.Fragment>
-            )
-          })}
-        {amiValues.length === 1 && (
-          <StandardTable
-            headers={unitSummariesHeaders}
-            data={getSummariesTable(unitsSummarized.byUnitTypeAndRent, reviewOrderType)}
-            responsiveCollapse={true}
-          />
-        )}
-      </div>
+          return (
+            <React.Fragment key={percent}>
+              <Heading size={"md"} priority={3} className={"seeds-m-bs-content"}>
+                {t("listings.percentAMIUnit", { percent: percent })}
+              </Heading>
+              <div className={"seeds-m-bs-header"}>
+                <StandardTable
+                  headers={unitSummariesHeaders}
+                  data={groupedUnits}
+                  responsiveCollapse={true}
+                />
+              </div>
+            </React.Fragment>
+          )
+        })}
+      {amiValues.length === 1 && (
+        <StandardTable
+          headers={unitSummariesHeaders}
+          data={getSummariesTable(unitsSummarized.byUnitTypeAndRent, reviewOrderType)}
+          responsiveCollapse={true}
+        />
+      )}
     </div>
   )
 }
