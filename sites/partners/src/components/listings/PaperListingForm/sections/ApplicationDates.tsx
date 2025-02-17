@@ -244,17 +244,33 @@ const ApplicationDates = ({
                         listing?.marketingDate ? dayjs(listing.marketingDate).year() : null
                       }
                       register={register}
+                      validation={{
+                        validate: {
+                          yearRange: (value: string) => {
+                            if (!value?.length) return true
+
+                            const numVal = parseInt(value)
+                            if (isNaN(numVal)) return false
+                            return !(numVal < 1900 || numVal > dayjs().year() + 10)
+                          },
+                        },
+                      }}
                       inputProps={{
                         onChange: (e) => {
                           fieldHasError(errors?.marketingDate) && clearErrors("marketingDate")
+                          fieldHasError(errors?.marketingStartDate) &&
+                            clearErrors("marketingStartDate")
                           if (!setValue) return
                           setValue("marketingStartDate", maskNumber(e.target.value))
                         },
                         maxLength: 4,
                       }}
                       className="w-1/3"
-                      error={fieldHasError(errors?.marketingDate)}
-                      errorMessage={fieldMessage(errors?.marketingDate)}
+                      error={
+                        fieldHasError(errors?.marketingDate) ||
+                        fieldHasError(errors?.marketingStartDate)
+                      }
+                      errorMessage={fieldMessage(errors?.marketingDate) || t("errors.dateError")}
                     />
                   </div>
                   <p className="field-sub-note">{t("listings.marketingSection.dateSubtitle")}</p>
