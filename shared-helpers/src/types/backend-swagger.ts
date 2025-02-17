@@ -6513,6 +6513,7 @@ export enum FeatureFlagEnum {
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
   "hideCloseListingButton" = "hideCloseListingButton",
+  "enableMarketingStatus" = "enableMarketingStatus",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {
   "=" = "=",

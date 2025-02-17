@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react"
+import React, { useState, useMemo, useContext } from "react"
 import { useFormContext } from "react-hook-form"
 import { getDetailFieldDate, getDetailFieldTime } from "../../PaperListingDetails/sections/helpers"
 import dayjs from "dayjs"
@@ -19,7 +19,10 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 import {
   MarketingTypeEnum,
   MarketingSeasonEnum,
+  FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import { fieldMessage, fieldHasError } from "../../../../lib/helpers"
 
 type ApplicationDatesProps = {
   openHouseEvents: TempEvent[]
@@ -39,6 +42,13 @@ const ApplicationDates = ({
     url: "t.link",
     action: "",
   }
+
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+
+  const enableMarketingStatus = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableMarketingStatus,
+    listing.jurisdictions.id
+  )
 
   const openHouseTableData = useMemo(() => {
     return openHouseEvents.map((event) => {
@@ -82,7 +92,7 @@ const ApplicationDates = ({
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { errors, register, setValue, watch } = formMethods
+  const { errors, register, setValue, watch, clearErrors } = formMethods
 
   const [drawerOpenHouse, setDrawerOpenHouse] = useState<TempEvent | boolean>(false)
   const [modalDeleteOpenHouse, setModalDeleteOpenHouse] = useState<TempEvent | null>(null)
@@ -176,80 +186,83 @@ const ApplicationDates = ({
             />
           </Grid.Cell>
         </Grid.Row>
-        <Grid.Row columns={2}>
-          <Grid.Cell>
-            <FieldValue label={t("listings.marketingSection.status")}>
-              <FieldGroup
-                name="marketingType"
-                type="radio"
-                register={register}
-                fields={[
-                  {
-                    label: t("listings.marketing"),
-                    value: MarketingTypeEnum.marketing,
-                    id: "marketingStatusMarketing",
-                    defaultChecked:
-                      !listing?.marketingType ||
-                      listing?.marketingType === MarketingTypeEnum.marketing,
-                  },
-                  {
-                    label: t("listings.underConstruction"),
-                    value: MarketingTypeEnum.comingSoon,
-                    id: "marketingStatusComingSoon",
-                    defaultChecked:
-                      !listing?.marketingType ||
-                      listing?.marketingType === MarketingTypeEnum.comingSoon,
-                  },
-                ]}
-              />
-            </FieldValue>
-          </Grid.Cell>
-          {marketingTypeChoice === MarketingTypeEnum.comingSoon && (
+        {enableMarketingStatus && (
+          <Grid.Row columns={2}>
             <Grid.Cell>
-              <div className={"flex flex-col"}>
-                <p className={"field-label pb-0"}>{t("listings.marketingSection.date")}</p>
-                <div className={"flex items-baseline h-auto"}>
-                  <FieldValue className="w-2/3">
-                    <Select
-                      id="marketingSeason"
-                      name="marketingSeason"
-                      defaultValue={listing?.marketingSeason}
-                      register={register}
-                      controlClassName="control"
-                      options={[
-                        "",
-                        MarketingSeasonEnum.spring,
-                        MarketingSeasonEnum.summer,
-                        MarketingSeasonEnum.fall,
-                        MarketingSeasonEnum.winter,
-                      ]}
-                      keyPrefix="seasons"
-                    />
-                  </FieldValue>
-
-                  <Field
-                    name={"marketingStartDate"}
-                    id={"marketingStartDate"}
-                    placeholder={t("account.settings.placeholders.year")}
-                    defaultValue={
-                      listing?.marketingDate ? dayjs(listing.marketingDate).year() : null
-                    }
-                    register={register}
-                    inputProps={{
-                      onChange: (e) => {
-                        if (!setValue) return
-                        setValue("marketingStartDate", maskNumber(e.target.value))
-                      },
-                      maxLength: 4,
-                    }}
-                    className="w-1/3"
-                  />
-                </div>
-                <p className="field-sub-note">{t("listings.marketingSection.dateSubtitle")}</p>
-              </div>
+              <FieldValue label={t("listings.marketingSection.status")}>
+                <FieldGroup
+                  name="marketingType"
+                  type="radio"
+                  register={register}
+                  fields={[
+                    {
+                      label: t("listings.marketing"),
+                      value: MarketingTypeEnum.marketing,
+                      id: "marketingStatusMarketing",
+                      defaultChecked:
+                        !listing?.marketingType ||
+                        listing?.marketingType === MarketingTypeEnum.marketing,
+                    },
+                    {
+                      label: t("listings.underConstruction"),
+                      value: MarketingTypeEnum.comingSoon,
+                      id: "marketingStatusComingSoon",
+                      defaultChecked: listing?.marketingType === MarketingTypeEnum.comingSoon,
+                    },
+                  ]}
+                />
+              </FieldValue>
             </Grid.Cell>
-          )}
-        </Grid.Row>
+            {marketingTypeChoice === MarketingTypeEnum.comingSoon && (
+              <Grid.Cell>
+                <div className={"flex flex-col"}>
+                  <p className={"field-label pb-0"}>{t("listings.marketingSection.date")}</p>
+                  <div className={"flex items-baseline h-auto"}>
+                    <FieldValue className="w-2/3">
+                      <Select
+                        id="marketingSeason"
+                        name="marketingSeason"
+                        defaultValue={listing?.marketingSeason}
+                        register={register}
+                        controlClassName="control"
+                        options={[
+                          "",
+                          MarketingSeasonEnum.spring,
+                          MarketingSeasonEnum.summer,
+                          MarketingSeasonEnum.fall,
+                          MarketingSeasonEnum.winter,
+                        ]}
+                        keyPrefix="seasons"
+                      />
+                    </FieldValue>
+
+                    <Field
+                      name={"marketingStartDate"}
+                      id={"marketingStartDate"}
+                      placeholder={t("account.settings.placeholders.year")}
+                      defaultValue={
+                        listing?.marketingDate ? dayjs(listing.marketingDate).year() : null
+                      }
+                      register={register}
+                      inputProps={{
+                        onChange: (e) => {
+                          fieldHasError(errors?.marketingDate) && clearErrors("marketingDate")
+                          if (!setValue) return
+                          setValue("marketingStartDate", maskNumber(e.target.value))
+                        },
+                        maxLength: 4,
+                      }}
+                      className="w-1/3"
+                      error={fieldHasError(errors?.marketingDate)}
+                      errorMessage={fieldMessage(errors?.marketingDate)}
+                    />
+                  </div>
+                  <p className="field-sub-note">{t("listings.marketingSection.dateSubtitle")}</p>
+                </div>
+              </Grid.Cell>
+            )}
+          </Grid.Row>
+        )}
         <Grid.Row>
           <Grid.Cell className="grid-inset-section">
             {!!openHouseTableData.length && (
