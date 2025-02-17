@@ -3,7 +3,7 @@ import { StandardTableData, t } from "@bloom-housing/ui-components"
 import { Listing, UnitTypeEnum } from "../types/backend-swagger"
 
 export const getOccupancy = (minOcc?: number | null, maxOcc?: number | null) => {
-  if (minOcc && maxOcc && minOcc !== maxOcc && minOcc < maxOcc) {
+  if (minOcc && maxOcc && minOcc < maxOcc) {
     return `${minOcc}-${maxOcc} ${t("t.people")}`
   }
   if (minOcc && maxOcc && minOcc === maxOcc) {
