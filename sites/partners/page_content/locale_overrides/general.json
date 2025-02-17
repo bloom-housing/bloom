@@ -309,6 +309,7 @@
   "listings.mapPreviewNoAddress": "Enter an address to preview the map",
   "listings.marketingSection.status": "Marketing Status",
   "listings.marketingSection.date": "Marketing Start Date",
+  "listings.marketingSection.dateSubtitle": "When the opportunity becomes available to the public",
   "listings.maxAnnualIncome": "Maximum Annual Income",
   "listings.newListing": "New Listing",
   "listings.pdfHelperText": "Select PDF file",

@@ -2,11 +2,24 @@ import React, { useState, useMemo } from "react"
 import { useFormContext } from "react-hook-form"
 import { getDetailFieldDate, getDetailFieldTime } from "../../PaperListingDetails/sections/helpers"
 import dayjs from "dayjs"
-import { t, DateField, TimeField, MinimalTable } from "@bloom-housing/ui-components"
-import { Button, Dialog, Drawer, Link, Grid } from "@bloom-housing/ui-seeds"
+import {
+  t,
+  DateField,
+  TimeField,
+  MinimalTable,
+  FieldGroup,
+  Field,
+  Select,
+  maskNumber,
+} from "@bloom-housing/ui-components"
+import { Button, Dialog, Drawer, Link, Grid, FieldValue } from "@bloom-housing/ui-seeds"
 import { FormListing, TempEvent } from "../../../../lib/listings/formTypes"
 import { OpenHouseForm } from "../OpenHouseForm"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import {
+  MarketingTypeEnum,
+  MarketingSeasonEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type ApplicationDatesProps = {
   openHouseEvents: TempEvent[]
@@ -96,6 +109,8 @@ const ApplicationDates = ({
 
   const hasDueDateError = errors?.applicationDueDate || errors?.applicationDueDateField
 
+  const marketingTypeChoice = watch("marketingType")
+
   return (
     <>
       <hr className="spacer-section-above spacer-section" />
@@ -160,6 +175,80 @@ const ApplicationDates = ({
               }}
             />
           </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row columns={2}>
+          <Grid.Cell>
+            <FieldValue label={t("listings.marketingSection.status")}>
+              <FieldGroup
+                name="marketingType"
+                type="radio"
+                register={register}
+                fields={[
+                  {
+                    label: t("listings.marketing"),
+                    value: MarketingTypeEnum.marketing,
+                    id: "marketingStatusMarketing",
+                    defaultChecked:
+                      !listing?.marketingType ||
+                      listing?.marketingType === MarketingTypeEnum.marketing,
+                  },
+                  {
+                    label: t("listings.underConstruction"),
+                    value: MarketingTypeEnum.comingSoon,
+                    id: "marketingStatusComingSoon",
+                    defaultChecked:
+                      !listing?.marketingType ||
+                      listing?.marketingType === MarketingTypeEnum.comingSoon,
+                  },
+                ]}
+              />
+            </FieldValue>
+          </Grid.Cell>
+          {marketingTypeChoice === MarketingTypeEnum.comingSoon && (
+            <Grid.Cell>
+              <div className={"flex flex-col"}>
+                <p className={"field-label pb-0"}>{t("listings.marketingSection.date")}</p>
+                <div className={"flex items-baseline h-auto"}>
+                  <FieldValue className="w-2/3">
+                    <Select
+                      id="marketingSeason"
+                      name="marketingSeason"
+                      defaultValue={listing?.marketingSeason}
+                      register={register}
+                      controlClassName="control"
+                      options={[
+                        "",
+                        MarketingSeasonEnum.spring,
+                        MarketingSeasonEnum.summer,
+                        MarketingSeasonEnum.fall,
+                        MarketingSeasonEnum.winter,
+                      ]}
+                      keyPrefix="seasons"
+                    />
+                  </FieldValue>
+
+                  <Field
+                    name={"marketingStartDate"}
+                    id={"marketingStartDate"}
+                    placeholder={t("account.settings.placeholders.year")}
+                    defaultValue={
+                      listing?.marketingDate ? dayjs(listing.marketingDate).year() : null
+                    }
+                    register={register}
+                    inputProps={{
+                      onChange: (e) => {
+                        if (!setValue) return
+                        setValue("marketingStartDate", maskNumber(e.target.value))
+                      },
+                      maxLength: 4,
+                    }}
+                    className="w-1/3"
+                  />
+                </div>
+                <p className="field-sub-note">{t("listings.marketingSection.dateSubtitle")}</p>
+              </div>
+            </Grid.Cell>
+          )}
         </Grid.Row>
         <Grid.Row>
           <Grid.Cell className="grid-inset-section">
