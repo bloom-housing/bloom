@@ -123,7 +123,7 @@ const Layout = (props) => {
           notice={siteNotice}
           mainContentId="main-content"
           title={t("nav.siteTitle")}
-          languages={languages.map((lang) => {
+          languages={languages?.map((lang) => {
             return {
               label: lang.label,
               onClick: () =>
@@ -136,7 +136,7 @@ const Layout = (props) => {
           strings={{ skipToMainContent: t("t.skipToMainContent") }}
         />
         <main id="main-content" className="md:overflow-x-hidden">
-          {toastMessagesRef.current.map((toastMessage) => (
+          {toastMessagesRef.current?.map((toastMessage) => (
             <Toast {...toastMessage.props} testId="toast-alert" key={toastMessage.timestamp}>
               {toastMessage.message}
             </Toast>
