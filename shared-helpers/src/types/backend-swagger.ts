@@ -3379,7 +3379,25 @@ export interface ApplicationLotteryTotal {
   total: number
 }
 
-export interface ListingNeighborhoodAmenities {}
+export interface ListingNeighborhoodAmenities {
+  /**  */
+  groceryStores?: string
+
+  /**  */
+  publicTransportation?: string
+
+  /**  */
+  schools?: string
+
+  /**  */
+  parksAndCommunityCenters?: string
+
+  /**  */
+  pharmacies?: string
+
+  /**  */
+  healthCareResources?: string
+}
 
 export interface Listing {
   /**  */
