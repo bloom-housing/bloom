@@ -106,6 +106,10 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       process.cwd(),
       `src/temp/units-${user.id}-${new Date().getTime()}.csv`,
     );
+    const unitGroupsFilePath = join(
+      process.cwd(),
+      `src/temp/unit-groups-${user.id}-${new Date().getTime()}.csv`,
+    );
 
     if (queryParams.timeZone) {
       this.timeZone = queryParams.timeZone;
@@ -128,26 +132,30 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       FeatureFlagEnum.enableUnitGroups,
     );
 
+    const hasUnits =
+      !enableUnitGroups ||
+      this.doAnyJurisdictionHaveFalsyFeatureFlagValue(
+        user.jurisdictions,
+        FeatureFlagEnum.enableUnitGroups,
+      );
+
     const include = {
       ...views.csv,
-      ...(enableUnitGroups && {
-        unitGroups: {
-          include: {
-            unitTypes: true,
-            unitAccessibilityPriorityTypes: true,
-            unitGroupAmiLevels: {
-              include: {
-                amiChart: {
-                  include: {
-                    jurisdictions: true,
-                  },
+      unitGroups: {
+        include: {
+          unitTypes: true,
+          unitAccessibilityPriorityTypes: true,
+          unitGroupAmiLevels: {
+            include: {
+              amiChart: {
+                include: {
+                  jurisdictions: true,
                 },
               },
             },
           },
         },
-        units: undefined,
-      }),
+      },
     };
 
     const listings = await this.prisma.listings.findMany({
@@ -162,18 +170,25 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
 
     const listingCsv = createReadStream(listingFilePath);
 
+    if (enableUnitGroups) {
+      await this.createUnitCsv(
+        unitGroupsFilePath,
+        listings as unknown as Listing[],
+        true,
+      );
+    }
+
     await this.createUnitCsv(
       unitFilePath,
       listings as unknown as Listing[],
-      enableUnitGroups,
+      false,
     );
     const unitCsv = createReadStream(unitFilePath);
+
     return new Promise((resolve) => {
-      // Create a writable stream to the zip file
       const output = fs.createWriteStream(zipFilePath);
-      const archive = archiver('zip', {
-        zlib: { level: 9 },
-      });
+      const archive = archiver('zip', { zlib: { level: 9 } });
+
       output.on('close', () => {
         const zipFile = createReadStream(zipFilePath);
         resolve(new StreamableFile(zipFile));
@@ -181,7 +196,13 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
 
       archive.pipe(output);
       archive.append(listingCsv, { name: 'listings.csv' });
-      archive.append(unitCsv, { name: 'units.csv' });
+      if (hasUnits) {
+        archive.append(unitCsv, { name: 'units.csv' });
+      }
+      if (enableUnitGroups) {
+        const unitGroupsCsv = createReadStream(unitGroupsFilePath);
+        archive.append(unitGroupsCsv, { name: 'unitGroups.csv' });
+      }
       archive.finalize();
     });
   }
@@ -276,7 +297,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
             })) || [],
         )
       : listings.flatMap((listing) =>
-          listing.units.map((unit) => ({
+          (listing.units || []).map((unit) => ({
             listing: { id: listing.id, name: listing.name },
             unit,
           })),
@@ -372,6 +393,17 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
   ) => {
     return jurisdictions.some((juris) => {
       return juris.featureFlags.some(
+        (flag) => flag.name === featureFlagName && flag.active,
+      );
+    });
+  };
+
+  doAnyJurisdictionHaveFalsyFeatureFlagValue = (
+    jurisdictions: Jurisdiction[],
+    featureFlagName: string,
+  ) => {
+    return jurisdictions.some((juris) => {
+      return !juris.featureFlags.some(
         (flag) => flag.name === featureFlagName && flag.active,
       );
     });
@@ -489,7 +521,13 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         path: 'unitGroups.length',
         label: 'Number of Unit Groups',
       });
-    } else {
+    }
+    if (
+      this.doAnyJurisdictionHaveFalsyFeatureFlagValue(
+        user.jurisdictions,
+        FeatureFlagEnum.enableUnitGroups,
+      )
+    ) {
       headers.push({
         path: 'units.length',
         label: 'Number of Units',
