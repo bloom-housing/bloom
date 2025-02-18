@@ -113,7 +113,7 @@ export function useListingsData({
 
   const { listingsService } = useContext(AuthContext)
 
-  const fetcher = () => listingsService.list({ body: { ...params } })
+  const fetcher = () => listingsService.filterableList({ body: { ...params } })
 
   const paramsString = qs.stringify(params)
 
