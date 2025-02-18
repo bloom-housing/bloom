@@ -909,12 +909,10 @@ export class ListingService implements OnModuleInit {
       (featureFlag) => featureFlag.name === FeatureFlagEnum.enableUnitGroups,
     )?.active;
 
+    //For unit groups it will return 0 (as we don't use it for it)
     dto.unitsAvailable =
-      dto.reviewOrderType !== ReviewOrderTypeEnum.waitlist &&
-      (enableUnitGroups ? dto?.unitGroups?.length : dto?.units?.length)
-        ? enableUnitGroups
-          ? dto?.unitGroups?.length
-          : dto?.units?.length
+      dto.reviewOrderType !== ReviewOrderTypeEnum.waitlist && dto.units
+        ? dto.units.length
         : 0;
 
     const rawListing = await this.prisma.listings.create({
@@ -1586,12 +1584,10 @@ export class ListingService implements OnModuleInit {
       (featureFlag) => featureFlag.name === FeatureFlagEnum.enableUnitGroups,
     )?.active;
 
+    //For unit groups it will return 0 (as we don't use it for it)
     dto.unitsAvailable =
-      dto.reviewOrderType !== ReviewOrderTypeEnum.waitlist &&
-      (enableUnitGroups ? dto?.unitGroups?.length : dto?.units?.length)
-        ? enableUnitGroups
-          ? dto?.unitGroups?.length
-          : dto?.units?.length
+      dto.reviewOrderType !== ReviewOrderTypeEnum.waitlist && dto.units
+        ? dto.units.length
         : 0;
 
     // We need to save the assets before saving it to the listing_images table
