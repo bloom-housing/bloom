@@ -36,7 +36,8 @@ describe("<LeasingAgent>", () => {
         title={"Agent title"}
       />
     )
-    expect(getByText("Contact Leasing Agent")).toBeDefined()
+    // Note: this is different for Detroit
+    expect(getByText("Leasing Contact Information")).toBeDefined()
     expect(getByText("Agent Name")).toBeDefined()
     expect(getByText("Agent title")).toBeDefined()
     expect(getByRole("link", { name: `Call ${phoneNumber}` })).toHaveAttribute(
@@ -44,7 +45,8 @@ describe("<LeasingAgent>", () => {
       "tel:1234567890"
     )
     expect(getByRole("link", { name: "Email" })).toHaveAttribute("href", "mailto:leasing@agent.com")
-    expect(getByText("Due to high call volume you may hear a message.")).toBeDefined()
+    // Note: this is not in Detroit
+    // expect(getByText("Due to high call volume you may hear a message.")).toBeDefined()
     expect(getByText("Address street, Address unit")).toBeDefined()
     expect(getByText("Address city, CA 67890")).toBeDefined()
     expect(getByRole("link", { name: "Get Directions" })).toHaveAttribute(

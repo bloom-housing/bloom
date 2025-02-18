@@ -22,6 +22,7 @@ import {
   ReviewOrderTypeEnum,
   UnitsSummarized,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { useRouter } from "next/router"
 
 export const getGenericAddress = (bloomAddress: Address) => {
   return bloomAddress
@@ -246,4 +247,18 @@ export const downloadExternalPDF = async (fileURL: string, fileName: string) => 
 
 export const isFeatureFlagOn = (jurisdiction: Jurisdiction, featureFlag: string) => {
   return jurisdiction.featureFlags?.some((flag) => flag.name === featureFlag && flag.active)
+}
+
+// RenderIf component to render content based on language (used in markdown components)
+export const RenderIf = (props: { language: string; children: JSX.Element }) => {
+  const router = useRouter()
+
+  if (
+    props.language == "all" ||
+    props.language == router.locale ||
+    (router.locale == "en" && props.language == "default")
+  ) {
+    return props.children
+  }
+  return null
 }
