@@ -126,7 +126,7 @@ const Layout = (props: LayoutProps) => {
           logoSrc="/images/doorway-logo.png"
           homeURL="/"
           mainContentId="main-content"
-          languages={languages.map((lang) => {
+          languages={languages?.map((lang) => {
             return {
               label: lang.label,
               onClick: () =>
@@ -147,7 +147,7 @@ const Layout = (props: LayoutProps) => {
           strings={{ skipToMainContent: t("t.skipToMainContent") }}
         />
         <main id="main-content" className="md:overflow-x-hidden relative">
-          {toastMessagesRef.current.map((toastMessage) => (
+          {toastMessagesRef.current?.map((toastMessage) => (
             <Toast {...toastMessage.props} testId="toast-alert" key={toastMessage.timestamp}>
               {toastMessage.message}
             </Toast>

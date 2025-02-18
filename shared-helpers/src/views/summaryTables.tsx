@@ -14,6 +14,13 @@ const getTranslationFromCurrencyString = (value: string) => {
   return value
 }
 
+export const unitsHeaders = {
+  number: "t.unit",
+  sqFeet: "t.area",
+  numBathrooms: "listings.bath",
+  floor: "t.floor",
+}
+
 export const unitSummariesTable = (
   summaries: UnitSummary[],
   listingReviewOrder: ReviewOrderTypeEnum,
@@ -140,72 +147,130 @@ interface UnitTablesProps {
   disableAccordion?: boolean
 }
 
+export const getUnitTableData = (units: Unit[], unitSummary: UnitSummary) => {
+  const availableUnits = units.filter(
+    (unit: Unit) => unit.unitTypes?.name == unitSummary.unitTypes.name
+  )
+
+  let floorSection: React.ReactNode
+  const unitsFormatted = availableUnits.map((unit: Unit) => {
+    return {
+      number: { content: unit.number },
+      sqFeet: {
+        content: (
+          <>
+            {unit.sqFeet ? (
+              <>
+                <strong>{parseInt(unit.sqFeet)}</strong> {t("t.sqFeet")}
+              </>
+            ) : (
+              <></>
+            )}
+          </>
+        ),
+      },
+      numBathrooms: {
+        content: (
+          <strong>
+            {unit.numBathrooms === 0 ? t("listings.unit.sharedBathroom") : unit.numBathrooms}
+          </strong>
+        ),
+      },
+      floor: { content: <strong>{unit.floor}</strong> },
+    }
+  })
+
+  let areaRangeSection: React.ReactNode
+  if (unitSummary.areaRange?.min || unitSummary.areaRange?.max) {
+    areaRangeSection = `, ${formatRange(unitSummary.areaRange)} ${t("t.squareFeet")}`
+  }
+
+  if (unitSummary.floorRange && unitSummary.floorRange.min) {
+    floorSection = `, ${formatRange(unitSummary.floorRange, true)} 
+        ${unitSummary.floorRange.max > unitSummary.floorRange.min ? t("t.floors") : t("t.floor")}`
+  }
+
+  const barContent = (
+    <div className={"toggle-header-content"}>
+      <strong>{t("listings.unitTypes." + unitSummary.unitTypes.name)}</strong>:&nbsp;
+      {unitsLabel(availableUnits)}
+      {areaRangeSection}
+      {floorSection}
+    </div>
+  )
+
+  return {
+    availableUnits,
+    areaRangeSection,
+    floorSection,
+    unitsFormatted,
+    barContent,
+  }
+}
+
 export const UnitTables = (props: UnitTablesProps) => {
   const unitSummaries = props.unitSummaries || []
-
-  const unitsHeaders = {
-    number: "t.unit",
-    sqFeet: "t.area",
-    numBathrooms: "listings.bath",
-    floor: "t.floor",
-  }
 
   return (
     <>
       {unitSummaries.map((unitSummary: UnitSummary, index) => {
-        const units = props.units.filter(
-          (unit: Unit) => unit.unitTypes?.name == unitSummary.unitTypes.name
-        )
-        const unitsFormatted = [] as StandardTableData
-        let floorSection: React.ReactNode
-        units.forEach((unit: Unit) => {
-          unitsFormatted.push({
-            number: { content: unit.number },
-            sqFeet: {
-              content: (
-                <>
-                  {unit.sqFeet ? (
-                    <>
-                      {parseInt(unit.sqFeet)} {t("t.sqFeet")}
-                    </>
-                  ) : (
-                    <></>
-                  )}
-                </>
-              ),
-            },
-            numBathrooms: {
-              content:
-                unit.numBathrooms === 0 ? t("listings.unit.sharedBathroom") : unit.numBathrooms,
-            },
-            floor: { content: unit.floor },
-          })
-        })
+        // TODO: remove this commented out code
+        // <<<<<<< HEAD
+        //         const units = props.units.filter(
+        //           (unit: Unit) => unit.unitTypes?.name == unitSummary.unitTypes.name
+        //         )
+        //         const unitsFormatted = [] as StandardTableData
+        //         let floorSection: React.ReactNode
+        //         units.forEach((unit: Unit) => {
+        //           unitsFormatted.push({
+        //             number: { content: unit.number },
+        //             sqFeet: {
+        //               content: (
+        //                 <>
+        //                   {unit.sqFeet ? (
+        //                     <>
+        //                       {parseInt(unit.sqFeet)} {t("t.sqFeet")}
+        //                     </>
+        //                   ) : (
+        //                     <></>
+        //                   )}
+        //                 </>
+        //               ),
+        //             },
+        //             numBathrooms: {
+        //               content:
+        //                 unit.numBathrooms === 0 ? t("listings.unit.sharedBathroom") : unit.numBathrooms,
+        //             },
+        //             floor: { content: unit.floor },
+        //           })
+        //         })
 
-        let areaRangeSection: React.ReactNode
-        if (unitSummary.areaRange?.min || unitSummary.areaRange?.max) {
-          areaRangeSection = `, ${formatRange(unitSummary.areaRange)} ${t("t.squareFeet")}`
-        }
+        //         let areaRangeSection: React.ReactNode
+        //         if (unitSummary.areaRange?.min || unitSummary.areaRange?.max) {
+        //           areaRangeSection = `, ${formatRange(unitSummary.areaRange)} ${t("t.squareFeet")}`
+        //         }
 
-        if (unitSummary.floorRange && unitSummary.floorRange.min) {
-          floorSection = `, ${formatRange(unitSummary.floorRange, true)} 
-              ${
-                unitSummary.floorRange.max > unitSummary.floorRange.min
-                  ? t("t.floors")
-                  : t("t.floor")
-              }`
-        }
+        //         if (unitSummary.floorRange && unitSummary.floorRange.min) {
+        //           floorSection = `, ${formatRange(unitSummary.floorRange, true)}
+        //               ${
+        //                 unitSummary.floorRange.max > unitSummary.floorRange.min
+        //                   ? t("t.floors")
+        //                   : t("t.floor")
+        //               }`
+        //         }
 
-        const getBarContent = () => {
-          return (
-            <h3 className={"toggle-header-content"}>
-              {t("listings.unitTypes." + unitSummary.unitTypes.name)}:&nbsp;
-              {unitsLabel(units)}
-              {areaRangeSection}
-              {floorSection}
-            </h3>
-          )
-        }
+        //         const getBarContent = () => {
+        //           return (
+        //             <h3 className={"toggle-header-content"}>
+        //               {t("listings.unitTypes." + unitSummary.unitTypes.name)}:&nbsp;
+        //               {unitsLabel(units)}
+        //               {areaRangeSection}
+        //               {floorSection}
+        //             </h3>
+        //           )
+        //         }
+        // =======
+        const results = getUnitTableData(props.units, unitSummary)
 
         const getExpandableContent = () => {
           return (
@@ -213,7 +278,7 @@ export const UnitTables = (props: UnitTablesProps) => {
               <StandardTable
                 className="table-container"
                 headers={unitsHeaders}
-                data={unitsFormatted}
+                data={results.unitsFormatted}
               />
             </div>
           )
@@ -221,7 +286,7 @@ export const UnitTables = (props: UnitTablesProps) => {
 
         return (
           <ContentAccordion
-            customBarContent={getBarContent()}
+            customBarContent={results.barContent}
             customExpandedContent={getExpandableContent()}
             disableAccordion={props.disableAccordion}
             accordionTheme={"blue"}

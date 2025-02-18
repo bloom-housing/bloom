@@ -480,7 +480,7 @@ describe("listing data", () => {
 
     it("should display missing Housing Preferences section", () => {
       const { getByText, queryByText } = render(
-        <ListingContext.Provider value={listing}>
+        <ListingContext.Provider value={{ ...listing, listingMultiselectQuestions: [] }}>
           <DetailPreferences />
         </ListingContext.Provider>
       )
@@ -812,7 +812,7 @@ describe("listing data", () => {
         )
       ).toBeInTheDocument()
       expect(getByText("Special Notes")).toBeInTheDocument()
-      expect(getByText("None")).toBeInTheDocument()
+      expect(getByText("Special notes description")).toBeInTheDocument()
     })
 
     describe("should display Rankings & Results section", () => {

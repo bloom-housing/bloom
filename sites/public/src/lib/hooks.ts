@@ -2,20 +2,20 @@ import { useContext, useEffect, useState } from "react"
 import axios from "axios"
 //import qs from "qs"
 import { useRouter } from "next/router"
-import { ApplicationStatusProps } from "@bloom-housing/ui-components"
 import {
-  // EnumListingFilterParamsComparison,
+  EnumListingFilterParamsComparison,
   Jurisdiction,
   Listing,
-  // ListingFilterParams,
-  // ListingOrderByKeys,
-  // ListingsStatusEnum,
-  // OrderByEnum,
+  ListingFilterParams,
+  ListingOrderByKeys,
+  ListingsStatusEnum,
+  OrderByEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./applications/AppSubmissionContext"
 import { getListingApplicationStatus } from "./helpers"
 import { useRequireLoggedInUser, isInternalLink } from "@bloom-housing/shared-helpers"
+import { runtimeConfig } from "./runtime-config"
 
 export const useRedirectToPrevPage = (defaultPath = "/") => {
   const router = useRouter()
@@ -59,21 +59,22 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
   return props
 }
 
-// These functions were sparsely used and/or completely ignored, so I'm commenting
-// them out.  If it turns out they are needed later then it should be easy to add
-// them back by uncommenting, but make sure the logic still matches expectations.
-/*
-export async function fetchBaseListingData({
-  additionalFilters,
-  orderBy,
-  orderDir,
-  limit,
-}: {
-  additionalFilters?: ListingFilterParams[]
-  orderBy?: ListingOrderByKeys[]
-  orderDir?: OrderByEnum[]
-  limit?: string
-}) {
+
+export async function fetchBaseListingData(
+  {
+    additionalFilters,
+    orderBy,
+    orderDir,
+    limit,
+  }: {
+    additionalFilters?: ListingFilterParams[]
+    orderBy?: ListingOrderByKeys[]
+    orderDir?: OrderByEnum[]
+    limit?: string
+  },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  req: any
+) {
   let listings = []
   try {
     let filter: ListingFilterParams[] = []
@@ -99,7 +100,7 @@ export async function fetchBaseListingData({
       params.orderDir = orderDir
     }
 
-    const response = await axios.get(getListingServiceUrl(), {
+    const response = await axios.get(runtimeConfig.getListingServiceUrl(), {
       params,
       paramsSerializer: (params) => {
         return qs.stringify(params)
@@ -152,7 +153,7 @@ export async function fetchClosedListings(req: any) {
     req
   )
 }
-*/
+
 
 let jurisdiction: Jurisdiction | null = null
 

@@ -43,6 +43,7 @@ module.exports = withBundleAnalyzer({
     cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
     showProfessionalPartners: process.env.SHOW_PROFESSIONAL_PARTNERS === "TRUE",
     showPublicLottery: process.env.SHOW_PUBLIC_LOTTERY === "TRUE",
+    showNewSeedsDesigns: process.env.SHOW_NEW_SEEDS_DESIGNS === "TRUE",
     showMandatedAccounts: process.env.SHOW_MANDATED_ACCOUNTS === "TRUE",
     showPwdless: process.env.SHOW_PWDLESS === "TRUE",
     notificationsSignUpUrl: process.env.NOTIFICATIONS_SIGN_UP_URL || null,
