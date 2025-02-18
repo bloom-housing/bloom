@@ -1,15 +1,8 @@
 import React, { useContext } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import {
-  SiteHeader,
-  SiteFooter,
-  FooterNav,
-  FooterSection,
-  t,
-  MenuLink,
-} from "@bloom-housing/ui-components"
-import { AuthContext, ExygyFooter, MessageContext } from "@bloom-housing/shared-helpers"
+import { SiteHeader, SiteFooter, FooterNav, t, MenuLink } from "@bloom-housing/ui-components"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { Toast } from "@bloom-housing/ui-seeds"
 
 const Layout = (props) => {
@@ -74,9 +67,6 @@ const Layout = (props) => {
         </main>
         <SiteFooter>
           <FooterNav copyright={`© ${currentYear} • All Rights Reserved`} />
-          <FooterSection className="bg-black" small>
-            <ExygyFooter />
-          </FooterSection>
         </SiteFooter>
       </div>
     </div>
