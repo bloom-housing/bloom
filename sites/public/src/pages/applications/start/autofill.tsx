@@ -82,7 +82,6 @@ export default () => {
       } else {
         onSubmit()
       }
-      onSubmit()
     }
   }, [profile, applicationsService, onSubmit, previousApplication, initialStateLoaded])
 
