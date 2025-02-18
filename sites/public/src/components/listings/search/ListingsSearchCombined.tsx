@@ -146,6 +146,13 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
         setIsLoading(false)
         setIsFirstBoundsLoad(false)
       }
+
+      // If the filter change resulted in the same markers, set loading to false
+      const oldMarkers = JSON.stringify(searchResults.markers?.sort((a, b) => a.lat - b.lat))
+      const updatedMarkers = JSON.stringify(newMarkers?.sort((a, b) => a.lat - b.lat))
+      if (oldMarkers === updatedMarkers) {
+        setIsLoading(false)
+      }
     }
 
     setSearchResults({
@@ -248,6 +255,8 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
   }, [isFirstBoundsLoad])
 
   const onFormSubmit = (params: ListingSearchParams) => {
+    // If the search filter did not change, don't re-search listings
+    if (JSON.stringify(params) === JSON.stringify(searchFilter)) return
     setIsLoading(true)
     setSearchFilter(params)
   }
