@@ -1654,7 +1654,8 @@ export class ListingService implements OnModuleInit {
     // Wrap the deletion and update in one transaction so that units aren't lost if update fails
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const transactions = await this.prisma.$transaction([
-      // Conditionally delete either units or unitGroups based on feature flag
+      // delete units and unitGroups with unitGroupAmiLevels
+      // technically there should be either units or unitGroups, not both
       this.prisma.unitGroupAmiLevels.deleteMany({
         where: {
           unitGroup: {
