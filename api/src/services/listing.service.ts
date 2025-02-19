@@ -53,6 +53,7 @@ import {
   summarizeUnitsByTypeAndRent,
   summarizeUnits,
 } from '../utilities/unit-utilities';
+import { fillModelStringFields } from '../utilities/model-fields';
 
 export type getListingsArgs = {
   skip: number;
@@ -1313,6 +1314,11 @@ export class ListingService implements OnModuleInit {
     const previousNeighborhoodAmenitiesId =
       storedListing.listingNeighborhoodAmenities?.id;
 
+    const fullNeighborhoodAmenities = fillModelStringFields(
+      'ListingNeighborhoodAmenities',
+      dto.listingNeighborhoodAmenities,
+    );
+
     // Wrap the deletion and update in one transaction so that units aren't lost if update fails
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const transactions = await this.prisma.$transaction([
@@ -1649,10 +1655,10 @@ export class ListingService implements OnModuleInit {
                     id: previousNeighborhoodAmenitiesId,
                   },
                   create: {
-                    ...dto.listingNeighborhoodAmenities,
+                    ...fullNeighborhoodAmenities,
                   },
                   update: {
-                    ...dto.listingNeighborhoodAmenities,
+                    ...fullNeighborhoodAmenities,
                   },
                 },
               }
