@@ -2834,7 +2834,9 @@ describe('Testing listing service', () => {
               },
             ],
           },
-          unitGroups: undefined,
+          unitGroups: {
+            create: [],
+          },
           unitsSummary: {
             create: [
               {
@@ -3122,8 +3124,11 @@ describe('Testing listing service', () => {
           status: ListingsStatusEnum.pending,
           displayWaitlistSize: false,
           contentUpdatedAt: expect.any(Date),
-          unitsAvailable: 1,
+          unitsAvailable: 0,
           listingEvents: {
+            create: [],
+          },
+          units: {
             create: [],
           },
           unitGroups: {
@@ -3864,7 +3869,7 @@ describe('Testing listing service', () => {
           listingsBuildingSelectionCriteriaFile: {
             disconnect: true,
           },
-          unitsAvailable: 1,
+          unitsAvailable: 0,
           unitGroups: {
             create: [
               {
@@ -4214,7 +4219,9 @@ describe('Testing listing service', () => {
               },
             ],
           },
-          unitGroups: undefined,
+          unitGroups: {
+            create: [],
+          },
           unitsSummary: {
             create: [
               {
