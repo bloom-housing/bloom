@@ -94,7 +94,6 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
     defaultValues,
     shouldUnregister: false,
   })
-  const { register } = formMethods
 
   const router = useRouter()
 
