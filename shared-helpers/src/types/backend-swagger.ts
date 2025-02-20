@@ -2976,10 +2976,10 @@ export interface ListingsQueryBody {
   view?: ListingViews
 
   /**  */
-  orderBy?: ListingOrderByKeys
+  orderBy?: ListingOrderByKeys[]
 
   /**  */
-  orderDir?: OrderByEnum
+  orderDir?: OrderByEnum[]
 
   /**  */
   search?: string
