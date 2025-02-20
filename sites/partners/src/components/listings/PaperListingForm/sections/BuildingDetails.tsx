@@ -154,7 +154,7 @@ const BuildingDetails = ({
 
   const enableRegions = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableRegions,
-    listing.jurisdictions.id
+    listing?.jurisdictions?.id
   )
 
   const { neighborhood, region } = watch(["neighborhood", "region"])
