@@ -55,7 +55,7 @@ const getListingCardSubtitle = (address: Address) => {
   return address ? `${street}, ${city} ${state}, ${zipCode}` : null
 }
 
-const getListingTableData = (
+export const getListingTableData = (
   unitsSummarized: UnitsSummarized,
   listingReviewOrder: ReviewOrderTypeEnum
 ) => {
@@ -102,6 +102,14 @@ export const getListingApplicationStatus = (listing: Listing): StatusBarType => 
   if (listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe) {
     subContent = content
     content = t("listings.applicationFCFS")
+  }
+
+  if (
+    listing.reviewOrderType === ReviewOrderTypeEnum.waitlist &&
+    listing.status !== ListingsStatusEnum.closed
+  ) {
+    subContent = content
+    content = t("listings.waitlist.open")
   }
 
   return {
