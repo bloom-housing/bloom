@@ -1316,7 +1316,7 @@ export class ListingService implements OnModuleInit {
 
     const fullNeighborhoodAmenities = fillModelStringFields(
       'ListingNeighborhoodAmenities',
-      dto.listingNeighborhoodAmenities,
+      (dto.listingNeighborhoodAmenities as Record<string, string>) || {},
     );
 
     // Wrap the deletion and update in one transaction so that units aren't lost if update fails
