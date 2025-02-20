@@ -3438,6 +3438,26 @@ export interface ApplicationLotteryTotal {
   total: number
 }
 
+export interface ListingNeighborhoodAmenities {
+  /**  */
+  groceryStores?: string
+
+  /**  */
+  publicTransportation?: string
+
+  /**  */
+  schools?: string
+
+  /**  */
+  parksAndCommunityCenters?: string
+
+  /**  */
+  pharmacies?: string
+
+  /**  */
+  healthCareResources?: string
+}
+
 export interface Listing {
   /**  */
   id: string
@@ -3744,6 +3764,9 @@ export interface Listing {
 
   /**  */
   homeType?: HomeTypeEnum
+
+  /**  */
+  listingNeighborhoodAmenities?: ListingNeighborhoodAmenities
 }
 
 export interface PaginationMeta {
@@ -4219,6 +4242,9 @@ export interface ListingCreate {
   homeType?: HomeTypeEnum
 
   /**  */
+  listingNeighborhoodAmenities?: ListingNeighborhoodAmenities
+
+  /**  */
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
@@ -4503,6 +4529,9 @@ export interface ListingUpdate {
 
   /**  */
   homeType?: HomeTypeEnum
+
+  /**  */
+  listingNeighborhoodAmenities?: ListingNeighborhoodAmenities
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
@@ -6545,6 +6574,7 @@ export enum FeatureFlagEnum {
   "enableHomeType" = "enableHomeType",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
+  "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
   "hideCloseListingButton" = "hideCloseListingButton",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {

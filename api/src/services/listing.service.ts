@@ -54,6 +54,7 @@ import {
   summarizeUnitsByTypeAndRent,
   summarizeUnits,
 } from '../utilities/unit-utilities';
+import { fillModelStringFields } from '../utilities/model-fields';
 
 export type getListingsArgs = {
   skip: number;
@@ -79,6 +80,7 @@ export const views: Partial<Record<ListingViews, Prisma.ListingsInclude>> = {
     },
     listingFeatures: true,
     listingUtilities: true,
+    listingNeighborhoodAmenities: true,
   },
 };
 
@@ -1095,6 +1097,13 @@ export class ListingService implements OnModuleInit {
               },
             }
           : undefined,
+        listingNeighborhoodAmenities: dto.listingNeighborhoodAmenities
+          ? {
+              create: {
+                ...dto.listingNeighborhoodAmenities,
+              },
+            }
+          : undefined,
         requestedChangesUser: undefined,
         publishedAt:
           dto.status === ListingsStatusEnum.active ? new Date() : undefined,
@@ -1500,6 +1509,16 @@ export class ListingService implements OnModuleInit {
     // Delete all assets tied to listing events before creating new ones
     await this.updateListingEvents(dto.id);
 
+    const previousFeaturesId = storedListing.listingFeatures?.id;
+    const previousUtilitiesId = storedListing.listingUtilities?.id;
+    const previousNeighborhoodAmenitiesId =
+      storedListing.listingNeighborhoodAmenities?.id;
+
+    const fullNeighborhoodAmenities = fillModelStringFields(
+      'ListingNeighborhoodAmenities',
+      dto.listingNeighborhoodAmenities,
+    );
+
     // Wrap the deletion and update in one transaction so that units aren't lost if update fails
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const transactions = await this.prisma.$transaction([
@@ -1660,8 +1679,16 @@ export class ListingService implements OnModuleInit {
                 },
           listingUtilities: dto.listingUtilities
             ? {
-                create: {
-                  ...dto.listingUtilities,
+                upsert: {
+                  where: {
+                    id: previousUtilitiesId,
+                  },
+                  create: {
+                    ...dto.listingUtilities,
+                  },
+                  update: {
+                    ...dto.listingUtilities,
+                  },
                 },
               }
             : undefined,
@@ -1681,8 +1708,16 @@ export class ListingService implements OnModuleInit {
             : undefined,
           listingFeatures: dto.listingFeatures
             ? {
-                create: {
-                  ...dto.listingFeatures,
+                upsert: {
+                  where: {
+                    id: previousFeaturesId,
+                  },
+                  create: {
+                    ...dto.listingFeatures,
+                  },
+                  update: {
+                    ...dto.listingFeatures,
+                  },
                 },
               }
             : undefined,
@@ -1813,6 +1848,21 @@ export class ListingService implements OnModuleInit {
                 },
               }
             : undefined,
+          listingNeighborhoodAmenities: dto.listingNeighborhoodAmenities
+            ? {
+                upsert: {
+                  where: {
+                    id: previousNeighborhoodAmenitiesId,
+                  },
+                  create: {
+                    ...fullNeighborhoodAmenities,
+                  },
+                  update: {
+                    ...fullNeighborhoodAmenities,
+                  },
+                },
+              }
+            : undefined,
         },
         include: views.details,
         where: {
@@ -1828,6 +1878,7 @@ export class ListingService implements OnModuleInit {
     if (!rawListing) {
       throw new HttpException('listing failed to save', 500);
     }
+
     const listingApprovalPermissions = (
       await this.prisma.jurisdictions.findFirst({
         where: { id: dto.jurisdictions.id },
