@@ -6398,13 +6398,6 @@ export enum OrderByEnum {
   "desc" = "desc",
 }
 
-export enum RegionEnum {
-  "Greater_Downtown" = "Greater_Downtown",
-  "Eastside" = "Eastside",
-  "Southwest" = "Southwest",
-  "Westside" = "Westside",
-}
-
 export enum ApplicationAddressTypeEnum {
   "leasingAgent" = "leasingAgent",
 }
