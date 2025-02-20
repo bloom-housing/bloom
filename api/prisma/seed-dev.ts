@@ -17,6 +17,8 @@ import { translationFactory } from './seed-helpers/translation-factory';
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { userFactory } from './seed-helpers/user-factory';
 import { randomName } from './seed-helpers/word-generator';
+import { featureFlagFactory } from './seed-helpers/feature-flag-factory';
+
 const listingStatusEnumArray = Object.values(ListingsStatusEnum);
 const createMultiselect = async (
   jurisdictionId: string,
@@ -209,6 +211,16 @@ export const devSeeding = async (
     await createMultiselect(jurisdiction.id, prismaClient),
   );
   await reservedCommunityTypeFactoryAll(jurisdiction.id, prismaClient);
+
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory(
+      'enableSection8Question',
+      false,
+      'When true, the Section 8 listing data will be visible',
+      [jurisdiction.id],
+    ),
+  });
+
   for (let index = 0; index < LISTINGS_TO_SEED; index++) {
     const applications = [];
     for (let j = 0; j < APPLICATIONS_PER_LISTINGS; j++) {

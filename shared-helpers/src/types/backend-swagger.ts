@@ -4091,6 +4091,9 @@ export interface Listing {
 
   /**  */
   homeType?: HomeTypeEnum
+
+  /**  */
+  section8Acceptance?: boolean
 }
 
 export interface PaginationMeta {
@@ -4630,6 +4633,9 @@ export interface ListingCreate {
   homeType?: HomeTypeEnum
 
   /**  */
+  section8Acceptance?: boolean
+
+  /**  */
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
@@ -4920,6 +4926,9 @@ export interface ListingUpdate {
 
   /**  */
   homeType?: HomeTypeEnum
+
+  /**  */
+  section8Acceptance?: boolean
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
@@ -6961,12 +6970,6 @@ export enum UnitRentTypeEnum {
 export enum EnumUnitGroupAmiLevelMonthlyRentDeterminationType {
   "flatRent" = "flatRent",
   "percentageOfIncome" = "percentageOfIncome",
-}
-export enum HomeTypeEnum {
-  "apartment" = "apartment",
-  "duplex" = "duplex",
-  "house" = "house",
-  "townhome" = "townhome",
 }
 export enum EnumUnitGroupAmiLevelCreateMonthlyRentDeterminationType {
   "flatRent" = "flatRent",
