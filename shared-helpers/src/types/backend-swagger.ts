@@ -3747,6 +3747,9 @@ export interface Listing {
 
   /**  */
   isVerified?: boolean
+
+  /**  */
+  section8Acceptance?: boolean
 }
 
 export interface PaginationMeta {
@@ -4225,6 +4228,9 @@ export interface ListingCreate {
   isVerified?: boolean
 
   /**  */
+  section8Acceptance?: boolean
+
+  /**  */
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
@@ -4512,6 +4518,9 @@ export interface ListingUpdate {
 
   /**  */
   isVerified?: boolean
+
+  /**  */
+  section8Acceptance?: boolean
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
@@ -6555,6 +6564,7 @@ export enum FeatureFlagEnum {
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
   "hideCloseListingButton" = "hideCloseListingButton",
+  "enableSection8Question" = "enableSection8Question",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {
   "=" = "=",

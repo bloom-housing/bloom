@@ -653,6 +653,11 @@ class Listing extends AbstractDTO {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   isVerified?: boolean;
+
+  @Expose()
+  @ApiPropertyOptional()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  section8Acceptance?: boolean;
 }
 
 export { Listing as default, Listing };
