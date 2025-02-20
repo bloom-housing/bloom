@@ -15,11 +15,13 @@ import { ConfirmationRequest } from '../../src/dtos/users/confirmation-request.d
 import { UserService } from '../../src/services/user.service';
 import { UserCreate } from '../../src/dtos/users/user-create.dto';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
+import { listingFactory } from '../../prisma/seed-helpers/listing-factory';
 import { applicationFactory } from '../../prisma/seed-helpers/application-factory';
 import { UserInvite } from '../../src/dtos/users/user-invite.dto';
 import { EmailService } from '../../src/services/email.service';
 import { Login } from '../../src/dtos/auth/login.dto';
 import { RequestMfaCode } from '../../src/dtos/mfa/request-mfa-code.dto';
+import { ModificationEnum } from '../../src/enums/shared/modification-enum';
 
 describe('User Controller Tests', () => {
   let app: INestApplication;
@@ -823,6 +825,94 @@ describe('User Controller Tests', () => {
       expect(res.body.success).toEqual(true);
 
       expect(emailService.sendSingleUseCode).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('modify favorite listings endpoint', () => {
+    let favoriteListingsCookies;
+    let jurisdictionId;
+    let removeListingId;
+
+    beforeAll(async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+
+      jurisdictionId = jurisdiction.id;
+
+      const removeListing = await prisma.listings.create({
+        data: await listingFactory(jurisdictionId, prisma),
+      });
+
+      removeListingId = removeListing.id;
+
+      const userA = await prisma.userAccounts.create({
+        data: await userFactory({
+          password: 'Abcdef12345!',
+          favoriteListings: [removeListingId],
+        }),
+      });
+
+      const resLogIn = await request(app.getHttpServer())
+        .post('/auth/login')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          email: userA.email,
+          password: 'Abcdef12345!',
+        } as Login)
+        .expect(201);
+
+      favoriteListingsCookies = resLogIn.headers['set-cookie'];
+    });
+
+    it('should add a listing to favorite listing', async () => {
+      const addListing = await prisma.listings.create({
+        data: await listingFactory(jurisdictionId, prisma),
+      });
+
+      const res = await request(app.getHttpServer())
+        .put(`/user/modifyFavoriteListings`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: addListing.id,
+          action: ModificationEnum.add,
+        })
+        .set('Cookie', favoriteListingsCookies)
+        .expect(201);
+
+      expect(res.body.favoriteListings).toContain(addListing.id);
+    });
+
+    it('should remove a listing from favorite listing', async () => {
+      const res = await request(app.getHttpServer())
+        .put(`/user/modifyFavoriteListings`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: removeListingId,
+          action: ModificationEnum.remove,
+        })
+        .set('Cookie', favoriteListingsCookies)
+        .expect(201);
+
+      expect(res.body.favoriteListings).not.toContain(removeListingId);
+    });
+
+    it('should throw a not found error when listing does not exist', async () => {
+      const invalidId = randomUUID();
+
+      const res = await request(app.getHttpServer())
+        .put(`/user/modifyFavoriteListings`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: invalidId,
+          action: ModificationEnum.add,
+        })
+        .set('Cookie', favoriteListingsCookies)
+        .expect(404);
+
+      expect(res.body.message).toEqual(
+        `listingId ${invalidId} was requested but not found`,
+      );
     });
   });
 });

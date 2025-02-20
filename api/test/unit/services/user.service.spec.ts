@@ -2476,7 +2476,7 @@ describe('Testing user service', () => {
       });
     });
 
-    it('should throw a listing not found error', async () => {
+    it('should throw a not found error when listing does not exist', async () => {
       const userId = randomUUID();
       const listingId = randomUUID();
 

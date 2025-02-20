@@ -212,14 +212,14 @@ export class UserController {
     return await this.userService.isUserConfirmationTokenValid(dto);
   }
 
-  @Put(`associateJurisdictions`)
+  @Put(`modifyFavoriteListings`)
   @ApiOperation({
-    summary: 'Associate and disassociate listings with user favorites',
-    operationId: 'associateJurisdictions',
+    summary: 'Add or remove a listing from user favorites',
+    operationId: 'modifyFavoriteListings',
   })
   @ApiOkResponse({ type: UserFavoriteListing })
   @UseGuards(JwtAuthGuard, UserProfilePermissionGuard)
-  async associateJurisdictions(
+  async modifyFavoriteListings(
     @Request() req: ExpressRequest,
     @Body() dto: UserFavoriteListing,
   ): Promise<User> {
