@@ -50,6 +50,7 @@ export class ListingsQueryBody extends PaginationAllowsAllQueryParams {
     enumName: 'ListingOrderByKeys',
     example: ['mostRecentlyUpdated'],
     default: ['mostRecentlyUpdated'],
+    isArray: true,
   })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(16, { groups: [ValidationsGroupsEnum.default] })
@@ -69,6 +70,7 @@ export class ListingsQueryBody extends PaginationAllowsAllQueryParams {
     enumName: 'OrderByEnum',
     example: ['desc'],
     default: ['desc'],
+    isArray: true,
   })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(16, { groups: [ValidationsGroupsEnum.default] })

@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { HomeTypeEnum, ListingsStatusEnum, RegionEnum } from '@prisma/client';
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
@@ -29,16 +29,18 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiPropertyOptional({
-    example: 2,
+    example: '2',
   })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Number)
   [ListingFilterKeys.bathrooms]?: number;
 
   @Expose()
   @ApiPropertyOptional({
-    example: 3,
+    example: '3',
   })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Number)
   [ListingFilterKeys.bedrooms]?: number;
 
   @Expose()
