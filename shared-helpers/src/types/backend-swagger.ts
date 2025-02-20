@@ -3891,6 +3891,9 @@ export interface Listing {
 
   /**  */
   homeType?: HomeTypeEnum
+
+  /**  */
+  section8Acceptance?: boolean
 }
 
 export interface PaginationMeta {
@@ -4436,6 +4439,9 @@ export interface ListingCreate {
   homeType?: HomeTypeEnum
 
   /**  */
+  section8Acceptance?: boolean
+
+  /**  */
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
@@ -4732,6 +4738,9 @@ export interface ListingUpdate {
 
   /**  */
   homeType?: HomeTypeEnum
+
+  /**  */
+  section8Acceptance?: boolean
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
