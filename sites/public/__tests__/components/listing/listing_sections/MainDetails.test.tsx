@@ -52,7 +52,7 @@ describe("<MainDetails>", () => {
     expect(getByTestId("listing-tags")).toBeDefined()
     expect(getByText("Available Units")).toBeDefined()
   })
-  it("shows units available tag", () => {
+  it("shows units available tag for fcfs", () => {
     const { getByTestId, getByText } = render(
       <MainDetails
         listing={{
