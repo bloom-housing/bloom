@@ -42,12 +42,9 @@ export const getListingTags = (listing: Listing): ListingTag[] => {
       variant: "primary",
     })
   }
-  if (
-    listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe ||
-    listing.reviewOrderType === ReviewOrderTypeEnum.lottery
-  ) {
+  if (listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe) {
     listingTags.push({
-      title: t("listings.availableUnits"),
+      title: t("listings.applicationFCFS"),
       variant: "success",
     })
   }
