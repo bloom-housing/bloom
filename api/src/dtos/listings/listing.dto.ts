@@ -651,6 +651,11 @@ class Listing extends AbstractDTO {
   homeType?: HomeTypeEnum;
 
   @Expose()
+  @ApiPropertyOptional()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  section8Acceptance?: boolean;
+
+  @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingNeighborhoodAmenities)
   @ApiPropertyOptional({ type: ListingNeighborhoodAmenities })
