@@ -1402,6 +1402,7 @@ export class ListingService implements OnModuleInit {
               },
             }
           : undefined,
+        isVerified: !!dto.isVerified,
       },
     });
 
@@ -2279,6 +2280,7 @@ export class ListingService implements OnModuleInit {
               }
             : undefined,
           section8Acceptance: !!dto.section8Acceptance,
+          isVerified: !!dto.isVerified,
         },
         include: views.details,
         where: {

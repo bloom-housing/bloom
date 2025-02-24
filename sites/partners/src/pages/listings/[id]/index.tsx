@@ -38,6 +38,7 @@ import DetailPreferences from "../../../components/listings/PaperListingDetails/
 import DetailCommunityType from "../../../components/listings/PaperListingDetails/sections/DetailCommunityType"
 import DetailPrograms from "../../../components/listings/PaperListingDetails/sections/DetailPrograms"
 import DetailListingNotes from "../../../components/listings/PaperListingDetails/sections/DetailNotes"
+import DetailListingVerification from "../../../components/listings/PaperListingDetails/sections/DetailListingVerification"
 import { logger } from "../../../logger"
 
 interface ListingProps {
@@ -123,6 +124,7 @@ export default function ListingDetail(props: ListingProps) {
                     <DetailApplicationTypes />
                     <DetailApplicationAddress />
                     <DetailApplicationDates />
+                    <DetailListingVerification />
                   </div>
 
                   <div className="w-full md:w-3/12 md:pl-6">
