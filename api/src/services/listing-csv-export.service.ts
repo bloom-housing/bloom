@@ -903,6 +903,18 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       ],
     );
 
+    if (
+      this.doAnyJurisdictionHaveFeatureFlagSet(
+        user.jurisdictions,
+        FeatureFlagEnum.enableIsVerified,
+      )
+    )
+      headers.push({
+        path: 'isVerified',
+        label: 'Is Listing Verified',
+        format: this.formatYesNo,
+      });
+
     return headers;
   }
 
