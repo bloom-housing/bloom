@@ -5,6 +5,7 @@ import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpe
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
 import pageContent from "../md_content/disclaimer.md"
+import { ContentPage } from "../patterns/ContentPage"
 
 const Disclaimer = () => {
   const { profile } = useContext(AuthContext)
@@ -21,10 +22,14 @@ const Disclaimer = () => {
 
   return (
     <Layout>
-      <PageHeader inverse={true} title={pageTitle} />
-      <MarkdownSection>
-        <Markdown>{pageContent.toString()}</Markdown>
-      </MarkdownSection>
+      <ContentPage
+        heading={t("pageTitle.disclaimer")}
+        subheading="A design approach is a general philosophy that may or may not include a guide for specific methods."
+      >
+        <MarkdownSection>
+          <Markdown>{pageContent.toString()}</Markdown>
+        </MarkdownSection>
+      </ContentPage>
     </Layout>
   )
 }
