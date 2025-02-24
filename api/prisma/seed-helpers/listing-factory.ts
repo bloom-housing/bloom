@@ -136,7 +136,9 @@ export const listingFactory = async (
     name: randomName(),
     paperApplication: Math.random() < 0.5,
     referralOpportunity: Math.random() < 0.5,
-    reviewOrderType: optionalParams?.reviewOrderType ?? undefined,
+    reviewOrderType:
+      optionalParams?.reviewOrderType ??
+      ReviewOrderTypeEnum.firstComeFirstServe,
     status: optionalParams?.status || ListingsStatusEnum.active,
     unitsAvailable: units?.length || 0,
 

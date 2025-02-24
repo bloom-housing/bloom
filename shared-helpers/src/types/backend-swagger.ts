@@ -164,9 +164,9 @@ export class ListingsService {
       /**  */
       view?: ListingViews
       /**  */
-      orderBy?: ListingOrderByKeys
+      orderBy?: ListingOrderByKeys[]
       /**  */
-      orderDir?: OrderByEnum
+      orderDir?: OrderByEnum[]
       /**  */
       search?: string
     } = {} as any,
@@ -2761,10 +2761,10 @@ export interface ListingsQueryBody {
   view?: ListingViews
 
   /**  */
-  orderBy?: ListingOrderByKeys
+  orderBy?: ListingOrderByKeys[]
 
   /**  */
-  orderDir?: OrderByEnum
+  orderDir?: OrderByEnum[]
 
   /**  */
   search?: string
@@ -2784,10 +2784,10 @@ export interface ListingsQueryParams {
   view?: ListingViews
 
   /**  */
-  orderBy?: ListingOrderByKeys
+  orderBy?: ListingOrderByKeys[]
 
   /**  */
-  orderDir?: OrderByEnum
+  orderDir?: OrderByEnum[]
 
   /**  */
   search?: string
@@ -3826,6 +3826,12 @@ export interface Listing {
 
   /**  */
   homeType?: HomeTypeEnum
+
+  /**  */
+  isVerified?: boolean
+
+  /**  */
+  section8Acceptance?: boolean
 }
 
 export interface PaginationMeta {
@@ -4362,6 +4368,12 @@ export interface ListingCreate {
   homeType?: HomeTypeEnum
 
   /**  */
+  isVerified?: boolean
+
+  /**  */
+  section8Acceptance?: boolean
+
+  /**  */
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
@@ -4649,6 +4661,12 @@ export interface ListingUpdate {
 
   /**  */
   homeType?: HomeTypeEnum
+
+  /**  */
+  isVerified?: boolean
+
+  /**  */
+  section8Acceptance?: boolean
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
@@ -6701,7 +6719,9 @@ export enum FeatureFlagEnum {
   "enableHomeType" = "enableHomeType",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
+  "enableIsVerified" = "enableIsVerified",
   "hideCloseListingButton" = "hideCloseListingButton",
+  "enableSection8Question" = "enableSection8Question",
   "enableUnitGroups" = "enableUnitGroups",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {

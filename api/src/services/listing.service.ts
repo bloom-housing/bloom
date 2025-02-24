@@ -1201,6 +1201,7 @@ export class ListingService implements OnModuleInit {
         publishedAt:
           dto.status === ListingsStatusEnum.active ? new Date() : undefined,
         contentUpdatedAt: new Date(),
+        section8Acceptance: !!dto.section8Acceptance,
         copyOf: copyOfId
           ? {
               connect: {
@@ -1208,6 +1209,7 @@ export class ListingService implements OnModuleInit {
               },
             }
           : undefined,
+        isVerified: !!dto.isVerified,
       },
     });
 
@@ -2024,6 +2026,8 @@ export class ListingService implements OnModuleInit {
                 },
               }
             : undefined,
+          section8Acceptance: !!dto.section8Acceptance,
+          isVerified: !!dto.isVerified,
         },
         include: views.details,
         where: {
