@@ -544,7 +544,7 @@ describe('Testing listing service', () => {
           },
           {
             [ListingFilterKeys.jurisdiction]: 'Jurisdiction',
-            $comparison: Compare.IN,
+            $comparison: Compare['='],
           },
         ],
       };
@@ -588,7 +588,7 @@ describe('Testing listing service', () => {
               OR: [
                 {
                   jurisdictionId: {
-                    in: ['jurisdiction'],
+                    equals: 'Jurisdiction',
                   },
                 },
               ],
@@ -656,7 +656,7 @@ describe('Testing listing service', () => {
               OR: [
                 {
                   jurisdictionId: {
-                    in: ['jurisdiction'],
+                    equals: 'Jurisdiction',
                   },
                 },
               ],
