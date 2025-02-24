@@ -3768,6 +3768,9 @@ export interface Listing {
   homeType?: HomeTypeEnum
 
   /**  */
+  isVerified?: boolean
+
+  /**  */
   section8Acceptance?: boolean
 }
 
@@ -4244,6 +4247,9 @@ export interface ListingCreate {
   homeType?: HomeTypeEnum
 
   /**  */
+  isVerified?: boolean
+
+  /**  */
   section8Acceptance?: boolean
 
   /**  */
@@ -4531,6 +4537,9 @@ export interface ListingUpdate {
 
   /**  */
   homeType?: HomeTypeEnum
+
+  /**  */
+  isVerified?: boolean
 
   /**  */
   section8Acceptance?: boolean
