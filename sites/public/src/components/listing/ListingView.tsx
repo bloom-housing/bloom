@@ -683,7 +683,7 @@ export const ListingView = (props: ListingProps) => {
             />
           )}
           {listing.section8Acceptance && (
-            <div className="mt-2">
+            <div className="my-2">
               <Markdown className="custom-counter__subtitle">
                 {t("listings.section8VoucherInfo")}
               </Markdown>
