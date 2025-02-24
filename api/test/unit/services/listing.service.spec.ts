@@ -292,6 +292,7 @@ describe('Testing listing service', () => {
           },
         },
       ],
+      section8Acceptance: true,
       listingMultiselectQuestions: [
         {
           id: randomUUID(),
@@ -2280,6 +2281,7 @@ describe('Testing listing service', () => {
               id: expect.anything(),
             },
           },
+          section8Acceptance: false,
           status: ListingsStatusEnum.pending,
           displayWaitlistSize: false,
           unitsSummary: undefined,
@@ -2557,6 +2559,7 @@ describe('Testing listing service', () => {
               },
             ],
           },
+          section8Acceptance: true,
           unitsSummary: {
             create: [
               {
@@ -2710,6 +2713,7 @@ describe('Testing listing service', () => {
           listingEvents: {
             create: [],
           },
+          section8Acceptance: false,
           copyOf: {
             connect: {
               id: expect.anything(),
@@ -3233,6 +3237,7 @@ describe('Testing listing service', () => {
           listingsBuildingSelectionCriteriaFile: {
             disconnect: true,
           },
+          section8Acceptance: false,
           unitsAvailable: 0,
         },
         where: {
@@ -3535,6 +3540,7 @@ describe('Testing listing service', () => {
               },
             ],
           },
+          section8Acceptance: true,
           unitsSummary: {
             create: [
               {

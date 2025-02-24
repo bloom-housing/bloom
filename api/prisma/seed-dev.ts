@@ -105,6 +105,15 @@ export const devSeeding = async (
   });
   await reservedCommunityTypeFactoryAll(jurisdiction.id, prismaClient);
 
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory(
+      'enableSection8Question',
+      false,
+      'When true, the Section 8 listing data will be visible',
+      [jurisdiction.id],
+    ),
+  });
+
   for (let index = 0; index < LISTINGS_TO_SEED; index++) {
     const applications = [];
 
