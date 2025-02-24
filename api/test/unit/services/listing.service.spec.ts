@@ -521,6 +521,7 @@ describe('Testing listing service', () => {
         internet: true,
       },
       homeType: 'apartment',
+      isVerified: true,
       marketingType: MarketingTypeEnum.marketing,
     };
   };
@@ -2456,6 +2457,7 @@ describe('Testing listing service', () => {
           displayWaitlistSize: false,
           unitsSummary: null,
           listingEvents: [],
+          isVerified: true,
         } as ListingCreate,
         user,
       );
@@ -2552,6 +2554,7 @@ describe('Testing listing service', () => {
           listingEvents: {
             create: [],
           },
+          isVerified: true,
         },
       });
 
@@ -2644,6 +2647,7 @@ describe('Testing listing service', () => {
         },
         data: {
           ...val,
+          isVerified: true,
           contentUpdatedAt: expect.anything(),
           publishedAt: expect.anything(),
           assets: {
@@ -2910,6 +2914,7 @@ describe('Testing listing service', () => {
           displayWaitlistSize: false,
           unitsSummary: null,
           listingEvents: [],
+          isVerified: false,
         } as ListingCreate,
         user,
         'original id',
@@ -2999,6 +3004,7 @@ describe('Testing listing service', () => {
               id: expect.anything(),
             },
           },
+          isVerified: false,
           status: ListingsStatusEnum.pending,
           displayWaitlistSize: false,
           unitsSummary: undefined,
@@ -3745,6 +3751,7 @@ describe('Testing listing service', () => {
           },
           section8Acceptance: false,
           unitsAvailable: 0,
+          isVerified: false,
         },
         where: {
           id: expect.anything(),
@@ -4266,6 +4273,7 @@ describe('Testing listing service', () => {
               ...exampleAsset,
             },
           },
+          isVerified: true,
         },
         where: {
           id: expect.anything(),
