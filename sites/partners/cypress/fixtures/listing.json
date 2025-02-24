@@ -14,6 +14,7 @@
   "reservedCommunityDescription": "Basic Test Description",
   "communityDisclaimerTitle": "Basic Test Title",
   "communityDisclaimerDescription": "Basic Test Description",
+  "homeType": "Apartment",
   "number": "2",
   "unitType.id": "One Bedroom",
   "numBathrooms": "2",
@@ -62,5 +63,7 @@
   "endTime.hours": "11",
   "endTime.minutes": "05",
   "note": "Basic Note",
-  "editedName": "Basic Listing Edited Name"
+  "editedName": "Basic Listing Edited Name",
+  "utilities": ["Water", "Trash", "Phone"],
+  "accessibilityFeatures": ["Elevator", "Mobility", "Visual"]
 }

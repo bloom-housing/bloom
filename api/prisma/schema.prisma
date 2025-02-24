@@ -345,8 +345,6 @@ model Jurisdictions {
   rentalAssistanceDefault     String                   @map("rental_assistance_default")
   enablePartnerSettings       Boolean                  @default(false) @map("enable_partner_settings")
   enablePartnerDemographics   Boolean                  @default(false) @map("enable_partner_demographics")
-  enableAccessibilityFeatures Boolean                  @default(false) @map("enable_accessibility_features")
-  enableUtilitiesIncluded     Boolean                  @default(false) @map("enable_utilities_included")
   enableGeocodingPreferences  Boolean                  @default(false) @map("enable_geocoding_preferences")
   enableListingOpportunity    Boolean                  @default(false) @map("enable_listing_opportunity")
   enableGeocodingRadiusMethod Boolean                  @default(false) @map("enable_geocoding_radius_method")

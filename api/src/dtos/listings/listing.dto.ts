@@ -20,6 +20,7 @@ import { AbstractDTO } from '../shared/abstract.dto';
 import {
   ApplicationAddressTypeEnum,
   ApplicationMethodsTypeEnum,
+  HomeTypeEnum,
   ListingsStatusEnum,
   LotteryStatusEnum,
   ReviewOrderTypeEnum,
@@ -642,6 +643,16 @@ class Listing extends AbstractDTO {
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   communityDisclaimerDescription?: string;
+
+  @Expose()
+  @IsEnum(HomeTypeEnum, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ApiPropertyOptional({
+    enum: HomeTypeEnum,
+    enumName: 'HomeTypeEnum',
+  })
+  homeType?: HomeTypeEnum;
 }
 
 export { Listing as default, Listing };

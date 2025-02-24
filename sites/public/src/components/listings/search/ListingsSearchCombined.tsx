@@ -116,13 +116,16 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
     // Wait until markers have been fetched for the first time before searching listings for the first time
     // Don't search the listings if the filter is changing - first search the markers, which will update the listings
     if (
+      // Mobile view doesn't rely on the map
+      !isDesktop ||
+      // A page change should still fetch listings as the map markers won't change
+      page !== searchResults.currentPage ||
       (!isFirstBoundsLoad &&
         !!map &&
         oldMarkersSearch !== newMarkersSearch &&
         !changingFilter &&
         (isDesktop || listView) &&
-        !(visibleMarkers?.length === 0 && changingFilter)) ||
-      !isDesktop
+        !(visibleMarkers?.length === 0 && changingFilter))
     ) {
       setIsLoading(true)
       const result = await searchListings(

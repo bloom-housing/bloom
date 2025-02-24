@@ -86,6 +86,7 @@ type ContextProps = {
     singleUseCode: string,
     agreedToTermsOfService?: boolean
   ) => Promise<User | undefined>
+  doJurisdictionsHaveFeatureFlagOn: (featureFlag: string, jurisdiction?: string) => boolean
 }
 
 // Internal Provider State
@@ -387,6 +388,15 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
       } finally {
         dispatch(stopLoading())
       }
+    },
+    doJurisdictionsHaveFeatureFlagOn: (featureFlag: string, jurisdictionId?: string) => {
+      let jurisdictions = state.profile?.jurisdictions || []
+      if (jurisdictionId) {
+        jurisdictions = jurisdictions?.filter((j) => j.id === jurisdictionId)
+      }
+      return jurisdictions.some(
+        (j) => j.featureFlags.find((flag) => flag.name === featureFlag)?.active || false
+      )
     },
   }
   return createElement(AuthContext.Provider, { value: contextValues }, children)
