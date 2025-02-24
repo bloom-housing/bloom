@@ -435,6 +435,18 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     if (
       this.doAnyJurisdictionHaveFeatureFlagSet(
         user.jurisdictions,
+        FeatureFlagEnum.enableSection8Question,
+      )
+    ) {
+      headers.push({
+        path: 'section8Acceptance',
+        label: 'Accept Section 8',
+        format: this.formatYesNo,
+      });
+    }
+    if (
+      this.doAnyJurisdictionHaveFeatureFlagSet(
+        user.jurisdictions,
         FeatureFlagEnum.enableUtilitiesIncluded,
       )
     ) {
@@ -918,6 +930,18 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         },
       ],
     );
+
+    if (
+      this.doAnyJurisdictionHaveFeatureFlagSet(
+        user.jurisdictions,
+        FeatureFlagEnum.enableIsVerified,
+      )
+    )
+      headers.push({
+        path: 'isVerified',
+        label: 'Is Listing Verified',
+        format: this.formatYesNo,
+      });
 
     return headers;
   }

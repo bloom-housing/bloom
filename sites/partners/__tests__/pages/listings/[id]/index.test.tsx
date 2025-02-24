@@ -34,6 +34,7 @@ import DetailListingPhotos from "../../../../src/components/listings/PaperListin
 import DetailListingNotes from "../../../../src/components/listings/PaperListingDetails/sections/DetailNotes"
 import ListingDetail, { getServerSideProps } from "../../../../src/pages/listings/[id]"
 import DetailPrograms from "../../../../src/components/listings/PaperListingDetails/sections/DetailPrograms"
+import DetailListingVerification from "../../../../src/components/listings/PaperListingDetails/sections/DetailListingVerification"
 
 const server = setupServer()
 
@@ -412,6 +413,7 @@ describe("listing data", () => {
         <ListingContext.Provider
           value={{
             ...listing,
+            section8Acceptance: false,
             units: [],
           }}
         >
@@ -431,27 +433,37 @@ describe("listing data", () => {
       expect(queryByText("Rent")).not.toBeInTheDocument()
       expect(queryByText("SQ FT")).not.toBeInTheDocument()
       expect(queryByText("ADA")).not.toBeInTheDocument()
+      expect(queryByText("Do you accept Section 8 Housing Choice Vouchers")).not.toBeInTheDocument()
+      expect(queryByText("No")).not.toBeInTheDocument()
     })
 
     it("should display Listing Units section", () => {
       const { getByText, getAllByText } = render(
-        <ListingContext.Provider
+        <AuthContext.Provider
           value={{
-            ...listing,
-            units: listing.units.map((entry, idx) => ({
-              ...entry,
-              number: `#${idx + 1}`,
-              unitAccessibilityPriorityTypes: {
-                id: `ada_${idx}`,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                name: `Test ADA_${idx}`,
-              },
-            })),
+            profile: { ...user, jurisdictions: [], listings: [] },
+            doJurisdictionsHaveFeatureFlagOn: () => true,
           }}
         >
-          <DetailUnits setUnitDrawer={() => jest.fn()} />
-        </ListingContext.Provider>
+          <ListingContext.Provider
+            value={{
+              ...listing,
+              units: listing.units.map((entry, idx) => ({
+                ...entry,
+                number: `#${idx + 1}`,
+                unitAccessibilityPriorityTypes: {
+                  id: `ada_${idx}`,
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                  name: `Test ADA_${idx}`,
+                },
+              })),
+              section8Acceptance: true,
+            }}
+          >
+            <DetailUnits setUnitDrawer={() => jest.fn()} />
+          </ListingContext.Provider>
+        </AuthContext.Provider>
       )
 
       expect(getByText("Do you want to show unit types or individual units?")).toBeInTheDocument()
@@ -473,6 +485,9 @@ describe("listing data", () => {
       expect(getAllByText("285")).toHaveLength(6)
       expect(getAllByText(/Test ADA_\d{1}/)).toHaveLength(6)
       expect(getAllByText("View")).toHaveLength(6)
+
+      expect(getByText("Do you accept Section 8 Housing Choice Vouchers")).toBeInTheDocument()
+      expect(getByText("Yes")).toBeInTheDocument()
     })
 
     it("should display missing Housing Preferences section", () => {
@@ -1405,6 +1420,56 @@ describe("listing data", () => {
         expect(urlButton).toHaveAttribute("href", "http://test.url.com")
 
         expect(getByText("View")).toBeInTheDocument()
+      })
+    })
+
+    describe("should display Verification section", () => {
+      it("section should be hiden when jurisdiction flag is not set", () => {
+        const { queryByText } = render(
+          <AuthContext.Provider
+            value={{
+              profile: { ...user, jurisdictions: [], listings: [] },
+              doJurisdictionsHaveFeatureFlagOn: () => false,
+            }}
+          >
+            <ListingContext.Provider
+              value={{
+                ...listing,
+                isVerified: true,
+              }}
+            >
+              <DetailListingVerification />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        )
+
+        expect(queryByText("Verification")).not.toBeInTheDocument()
+        expect(queryByText("I verify that this lisiting data is valid")).not.toBeInTheDocument()
+        expect(queryByText("Yes")).not.toBeInTheDocument()
+      })
+
+      it("should render section when jurisdiction flag is set", () => {
+        const { getByText } = render(
+          <AuthContext.Provider
+            value={{
+              profile: { ...user, jurisdictions: [], listings: [] },
+              doJurisdictionsHaveFeatureFlagOn: () => true,
+            }}
+          >
+            <ListingContext.Provider
+              value={{
+                ...listing,
+                isVerified: true,
+              }}
+            >
+              <DetailListingVerification />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        )
+
+        expect(getByText("Verification")).toBeInTheDocument()
+        expect(getByText("I verify that this lisiting data is valid")).toBeInTheDocument()
+        expect(getByText("Yes")).toBeInTheDocument()
       })
     })
   })

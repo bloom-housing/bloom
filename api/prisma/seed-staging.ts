@@ -93,6 +93,22 @@ export const stagingSeed = async (
   });
   await prismaClient.featureFlags.create({
     data: featureFlagFactory(
+      'enableIsVerified',
+      false,
+      'When true, the listing can ba have its contents manually verified by a user',
+      [jurisdiction.id],
+    ),
+  });
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory(
+      'enableSection8Question',
+      false,
+      'When true, the Section 8 listing data will be visible',
+      [jurisdiction.id],
+    ),
+  });
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory(
       FeatureFlagEnum.enableMarketingStatus,
       false,
       "When true, the 'marketing status' sub-section is displayed in listing creation/edit and the public listing view",
