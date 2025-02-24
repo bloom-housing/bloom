@@ -3175,6 +3175,8 @@ describe('Testing listing service', () => {
               },
             ],
           },
+          isVerified: false,
+          section8Acceptance: false,
         },
       });
 
@@ -3916,6 +3918,8 @@ describe('Testing listing service', () => {
               },
             ],
           },
+          isVerified: false,
+          section8Acceptance: false,
         },
         where: {
           id: expect.anything(),
