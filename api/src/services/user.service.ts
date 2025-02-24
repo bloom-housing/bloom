@@ -998,15 +998,15 @@ export class UserService {
       );
     }
 
-    let dateClause;
+    let dataClause;
     switch (dto.action) {
       case ModificationEnum.add:
-        dateClause = {
+        dataClause = {
           connect: { id: dto.id },
         };
         break;
       case ModificationEnum.remove:
-        dateClause = {
+        dataClause = {
           disconnect: { id: dto.id },
         };
         break;
@@ -1014,7 +1014,7 @@ export class UserService {
 
     const rawResults = await this.prisma.userAccounts.update({
       data: {
-        favoriteListings: dateClause,
+        favoriteListings: dataClause,
       },
       include: views.full,
       where: {
