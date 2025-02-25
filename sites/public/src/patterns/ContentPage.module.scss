@@ -1,6 +1,5 @@
 .content-page {
-  // 24 heading top, 16 heading bottom, 8 intrasection splits
-  --content-page-padding-desktop: var(--seeds-spacer-header);
+  --content-page-padding-desktop: var(--seeds-spacer-container);
   --content-page-padding-mobile: var(--seeds-s8);
 
   .header-container {
@@ -10,7 +9,7 @@
   .header {
     padding: var(--content-page-padding-desktop);
     margin: auto;
-    max-width: var(--seeds-width-5xl);
+    max-width: var(--seeds-width-3xl);
 
     @media (--md-down) {
       padding: var(--content-page-padding-mobile);
@@ -27,9 +26,9 @@
 
   .body {
     font-family: var(--seeds-font-alt-sans);
-    padding: var(--padding-desktop);
+    padding: var(--content-page-padding-desktop);
     margin: auto;
-    max-width: var(--seeds-width-5xl);
+    max-width: var(--seeds-width-3xl);
     @media (--md-down) {
       padding: var(--content-page-padding-mobile);
     }
@@ -41,11 +40,11 @@
     h6 {
       font-family: var(--seeds-font-alt-sans);
       font-weight: var(--seeds-font-weight-bold);
+      padding-top: var(--seeds-spacer-content);
     }
 
-    h2,
-    h3 {
-      padding-block: var(--seeds-spacer-content) var(--seeds-s4);
+    h2:first-child {
+      padding-top: 0;
     }
 
     h2 {
@@ -71,6 +70,31 @@
     }
     h6 {
       font-size: var(--seeds-type-heading-size-md);
+    }
+
+    ol,
+    ul,
+    p {
+      padding-top: var(--seeds-spacer-header);
+    }
+
+    li + li,
+    p + p {
+      padding-top: var(--seeds-spacer-text);
+    }
+
+    ul {
+      list-style: disc;
+      list-style-position: inside;
+    }
+
+    ol {
+      list-style: decimal;
+      list-style-position: inside;
+    }
+
+    hr {
+      margin-block: var(--seeds-spacer-header);
     }
   }
 }

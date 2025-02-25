@@ -26,9 +26,7 @@ const Disclaimer = () => {
         heading={t("pageTitle.disclaimer")}
         subheading="A design approach is a general philosophy that may or may not include a guide for specific methods."
       >
-        <MarkdownSection>
-          <Markdown>{pageContent.toString()}</Markdown>
-        </MarkdownSection>
+        <Markdown>{pageContent.toString()}</Markdown>
       </ContentPage>
     </Layout>
   )
