@@ -115,6 +115,14 @@ export const stagingSeed = async (
       [jurisdiction.id],
     ),
   });
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory(
+      FeatureFlagEnum.enableMarketingStatus,
+      false,
+      "When true, the 'marketing status' sub-section is displayed in listing creation/edit and the public listing view",
+      [jurisdiction.id],
+    ),
+  });
   // create admin user
   await prismaClient.userAccounts.create({
     data: await userFactory({
