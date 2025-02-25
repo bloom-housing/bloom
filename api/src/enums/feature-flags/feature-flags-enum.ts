@@ -7,5 +7,6 @@ export enum FeatureFlagEnum {
   enableUtilitiesIncluded = 'enableUtilitiesIncluded',
   enableIsVerified = 'enableIsVerified',
   hideCloseListingButton = 'hideCloseListingButton',
+  enableRegions = 'enableRegions',
   enableSection8Question = 'enableSection8Question',
 }
