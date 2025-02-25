@@ -28,7 +28,7 @@ type ListingTag = {
   variant: TagVariant
 }
 
-export const getListingTags = (listing: Listing): ListingTag[] => {
+export const getListingTags = (listing: Listing, hideReviewTags?: boolean): ListingTag[] => {
   const listingTags: ListingTag[] = []
   if (listing.reservedCommunityTypes) {
     listingTags.push({
@@ -36,24 +36,34 @@ export const getListingTags = (listing: Listing): ListingTag[] => {
       variant: "highlight-warm",
     })
   }
-  if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
-    listingTags.push({
-      title: t("listings.waitlist.open"),
-      variant: "primary",
-    })
+
+  if (!hideReviewTags) {
+    if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
+      listingTags.push({
+        title: t("listings.waitlist.open"),
+        variant: "primary",
+      })
+    }
+    if (listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe) {
+      listingTags.push({
+        title: t("listings.applicationFCFS"),
+        variant: "warn",
+      })
+    }
+    if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) {
+      listingTags.push({
+        title: "Lottery",
+        variant: "success",
+      })
+    }
+    if (listing.marketingType === MarketingTypeEnum.comingSoon) {
+      listingTags.push({
+        title: t("listings.underConstruction"),
+        variant: "secondary",
+      })
+    }
   }
-  if (listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe) {
-    listingTags.push({
-      title: t("listings.applicationFCFS"),
-      variant: "success",
-    })
-  }
-  if (listing.marketingType === MarketingTypeEnum.comingSoon) {
-    listingTags.push({
-      title: t("listings.underConstruction"),
-      variant: "secondary",
-    })
-  }
+
   return listingTags
 }
 

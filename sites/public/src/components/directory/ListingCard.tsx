@@ -1,12 +1,16 @@
 import React from "react"
 import InfoIcon from "@heroicons/react/24/solid/InformationCircleIcon"
-import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  Listing,
+  ReviewOrderTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import styles from "./ListingCard.module.scss"
 import { imageUrlFromListing, oneLineAddress } from "@bloom-housing/shared-helpers"
 import { StackedTable, t } from "@bloom-housing/ui-components"
 import { Card, Heading, Icon, Link, Message, Tag } from "@bloom-housing/ui-seeds"
 import { getListingTags } from "../listing/listing_sections/MainDetails"
 import { getListingApplicationStatusSeeds, getListingStackedTableData } from "../../lib/helpers"
+import { CommonMessageVariant } from "@bloom-housing/ui-seeds/src/blocks/shared/CommonMessage"
 
 export interface ListingCardProps {
   listing: Listing
@@ -14,11 +18,8 @@ export interface ListingCardProps {
 
 export const ListingCard = ({ listing }: ListingCardProps) => {
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
-  const listingTags = getListingTags(listing)
+  const listingTags = getListingTags(listing, true)
   const status = getListingApplicationStatusSeeds(listing)
-  const statusContent = []
-  if (status?.content) statusContent.push(status.content)
-  if (status?.subContent) statusContent.push(status.subContent)
   // TODO: Add favorites if toggled on
   const actions = [
     // <Button
@@ -32,6 +33,32 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
     //   Favorite
     // </Button>,
   ]
+
+  const getMessageData = (): {
+    prefix: string
+    className: string
+  } => {
+    if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) {
+      return {
+        prefix: "Lottery",
+        className: "lottery-message",
+      }
+    }
+    if (listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe) {
+      return {
+        prefix: "First come first serve",
+        className: "fcfs-message",
+      }
+    }
+    if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
+      return {
+        prefix: "Open waitlist",
+        className: "waitlist-message",
+      }
+    }
+  }
+
+  const messageData = getMessageData()
 
   return (
     <li className={styles["list-item"]}>
@@ -62,6 +89,22 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
                   })}
                 </div>
               )}
+              {!!status.content && (
+                <Message
+                  className={`${styles["due-date"]} ${styles[messageData.className]}`}
+                  customIcon={
+                    <Icon size="md" className={styles["primary-color-icon"]}>
+                      <InfoIcon />
+                    </Icon>
+                  }
+                  variant={"primary"}
+                >
+                  <div className={styles["due-date-content"]}>
+                    <div className={styles["date-review-order"]}>{messageData.prefix}</div>
+                    <div>{status.content}</div>
+                  </div>
+                </Message>
+              )}
               <div className={styles["unit-table"]}>
                 <StackedTable
                   headers={{
@@ -72,25 +115,6 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
                   stackedData={getListingStackedTableData(listing.unitsSummarized)}
                 />
               </div>
-
-              {statusContent.length > 0 && (
-                <Message
-                  className={styles["due-date"]}
-                  customIcon={
-                    <Icon size="md" className={styles["primary-color-icon"]}>
-                      <InfoIcon />
-                    </Icon>
-                  }
-                >
-                  <div className={styles["due-date-content"]}>
-                    <div>
-                      {statusContent.map((content, index) => {
-                        return <div key={index}>{content}</div>
-                      })}
-                    </div>
-                  </div>
-                </Message>
-              )}
 
               {actions.length > 0 && (
                 <div className={styles["action-container"]}>{actions.map((action) => action)}</div>
