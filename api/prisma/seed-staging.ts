@@ -61,7 +61,7 @@ export const stagingSeed = async (
   // Seed feature flags
   await prismaClient.featureFlags.create({
     data: featureFlagFactory(
-      'enableHomeType',
+      FeatureFlagEnum.enableHomeType,
       true,
       "When true, the 'Home Type' section is displayed in listing creation/edit and the public listing view",
       [jurisdiction.id],
@@ -69,7 +69,7 @@ export const stagingSeed = async (
   });
   await prismaClient.featureFlags.create({
     data: featureFlagFactory(
-      'enableAccessibilityFeatures',
+      FeatureFlagEnum.enableAccessibilityFeatures,
       true,
       "When true, the 'accessibility features' section is displayed in listing creation/edit and the public listing view",
       [jurisdiction.id],
@@ -77,7 +77,7 @@ export const stagingSeed = async (
   });
   await prismaClient.featureFlags.create({
     data: featureFlagFactory(
-      'enableUtilitiesIncluded',
+      FeatureFlagEnum.enableUtilitiesIncluded,
       true,
       "When true, the 'utilities included' section is displayed in listing creation/edit and the public listing view",
       [jurisdiction.id],
@@ -85,7 +85,7 @@ export const stagingSeed = async (
   });
   await prismaClient.featureFlags.create({
     data: featureFlagFactory(
-      'hideCloseListingButton',
+      FeatureFlagEnum.hideCloseListingButton,
       false,
       'When true, close button is hidden on the listing edit form',
       [jurisdiction.id],
@@ -104,6 +104,14 @@ export const stagingSeed = async (
       'enableSection8Question',
       false,
       'When true, the Section 8 listing data will be visible',
+      [jurisdiction.id],
+    ),
+  });
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory(
+      FeatureFlagEnum.enableUnitGroups,
+      false,
+      'When true, uses unit groups instead of units',
       [jurisdiction.id],
     ),
   });

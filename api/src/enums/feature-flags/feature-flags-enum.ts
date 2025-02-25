@@ -9,4 +9,5 @@ export enum FeatureFlagEnum {
   hideCloseListingButton = 'hideCloseListingButton',
   enableMarketingStatus = 'enableMarketingStatus',
   enableSection8Question = 'enableSection8Question',
+  enableUnitGroups = 'enableUnitGroups',
 }
