@@ -1,10 +1,13 @@
-import React, { useContext, useMemo } from "react"
+import React, { useContext, useMemo, useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Field, Textarea, FieldGroup } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
 import { AuthContext, listingUtilities } from "@bloom-housing/shared-helpers"
-import { ListingUtilities } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  ListingUtilities,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type AdditionalFeesProps = {
@@ -13,24 +16,34 @@ type AdditionalFeesProps = {
 
 const AdditionalFees = (props: AdditionalFeesProps) => {
   const formMethods = useFormContext()
-  const { profile } = useContext(AuthContext)
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, errors, clearErrors } = formMethods
+  const { register, watch, errors, clearErrors, setValue } = formMethods
 
-  const jurisdiction = watch("jurisdiction.id")
+  const jurisdiction = watch("jurisdictions.id")
 
   const utilitiesFields = useMemo(() => {
-    return listingUtilities.map((utility) => ({
-      id: utility,
-      label: t(`listings.utilities.${utility}`),
-      defaultChecked: props.existingUtilities ? props.existingUtilities[utility] : false,
-      register,
-    }))
+    return listingUtilities.map((utility) => {
+      return {
+        id: utility,
+        label: t(`listings.utilities.${utility}`),
+        defaultChecked: props.existingUtilities ? props.existingUtilities[utility] : false,
+        register,
+      }
+    })
   }, [props.existingUtilities, register])
 
-  const enableUtilitiesIncluded = profile?.jurisdictions?.find(
-    (j) => j.id === jurisdiction
-  )?.enableUtilitiesIncluded
+  const enableUtilitiesIncluded = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableUtilitiesIncluded,
+    jurisdiction
+  )
+
+  useEffect(() => {
+    // clear the utilities values if the new jurisdiction doesn't have utilities included functionality
+    if (!enableUtilitiesIncluded) {
+      setValue("utilities", undefined)
+    }
+  }, [enableUtilitiesIncluded, setValue])
 
   return (
     <>
@@ -109,10 +122,9 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
         {enableUtilitiesIncluded && (
           <Grid.Row>
             <FieldValue label={t("listings.sections.utilities")}>
-              {/* TODO: default checked doesn't appear to be working even in main */}
               <FieldGroup
                 type="checkbox"
-                name="listingUtilities"
+                name="utilities"
                 fields={utilitiesFields}
                 register={register}
                 fieldGroupClassName="grid grid-cols-2 mt-4"

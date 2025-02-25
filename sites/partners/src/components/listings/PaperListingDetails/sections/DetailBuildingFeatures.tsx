@@ -5,10 +5,11 @@ import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const DetailBuildingFeatures = () => {
   const listing = useContext(ListingContext)
-  const { profile } = useContext(AuthContext)
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   const getAccessibilityFeatures = () => {
     let featuresExist = false
@@ -25,9 +26,10 @@ const DetailBuildingFeatures = () => {
     return featuresExist ? features : <>{t("t.none")}</>
   }
 
-  const enableAccessibilityFeatures = profile?.jurisdictions?.find(
-    (j) => j.id === listing.jurisdictions.id
-  )?.enableAccessibilityFeatures
+  const enableAccessibilityFeatures = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableAccessibilityFeatures,
+    listing.jurisdictions.id
+  )
 
   return (
     <SectionWithGrid heading={t("listings.sections.buildingFeaturesTitle")} inset>
@@ -69,7 +71,7 @@ const DetailBuildingFeatures = () => {
 
       {!enableAccessibilityFeatures ? null : (
         <Grid.Row>
-          <FieldValue label={"Accessibility Features"}>
+          <FieldValue id="accessibilityFeatures" label={"Accessibility Features"}>
             <ul className={"flex flex-wrap"}>{getAccessibilityFeatures()}</ul>
           </FieldValue>
         </Grid.Row>

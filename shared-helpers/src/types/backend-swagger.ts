@@ -3924,6 +3924,9 @@ export interface Listing {
 
   /**  */
   communityDisclaimerDescription?: string
+
+  /**  */
+  homeType?: HomeTypeEnum
 }
 
 export interface PaginationMeta {
@@ -4399,6 +4402,9 @@ export interface ListingCreate {
   communityDisclaimerDescription?: string
 
   /**  */
+  homeType?: HomeTypeEnum
+
+  /**  */
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
@@ -4683,6 +4689,9 @@ export interface ListingUpdate {
 
   /**  */
   communityDisclaimerDescription?: string
+
+  /**  */
+  homeType?: HomeTypeEnum
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
@@ -5335,12 +5344,6 @@ export interface JurisdictionCreate {
   enableGeocodingRadiusMethod?: boolean
 
   /**  */
-  enableAccessibilityFeatures: boolean
-
-  /**  */
-  enableUtilitiesIncluded: boolean
-
-  /**  */
   allowSingleUseCodeLogin: boolean
 
   /**  */
@@ -5391,12 +5394,6 @@ export interface JurisdictionUpdate {
   enableGeocodingRadiusMethod?: boolean
 
   /**  */
-  enableAccessibilityFeatures: boolean
-
-  /**  */
-  enableUtilitiesIncluded: boolean
-
-  /**  */
   allowSingleUseCodeLogin: boolean
 
   /**  */
@@ -5417,7 +5414,7 @@ export interface FeatureFlag {
   updatedAt: Date
 
   /**  */
-  name: string
+  name: FeatureFlagEnum
 
   /**  */
   description: string
@@ -5477,12 +5474,6 @@ export interface Jurisdiction {
 
   /**  */
   enableGeocodingRadiusMethod?: boolean
-
-  /**  */
-  enableAccessibilityFeatures: boolean
-
-  /**  */
-  enableUtilitiesIncluded: boolean
 
   /**  */
   allowSingleUseCodeLogin: boolean
@@ -6508,7 +6499,7 @@ export interface FeatureFlagAssociate {
 
 export interface FeatureFlagCreate {
   /**  */
-  name: string
+  name: FeatureFlagEnum
 
   /**  */
   description: string
@@ -6689,6 +6680,13 @@ export enum UnitRentTypeEnum {
   "percentageOfIncome" = "percentageOfIncome",
 }
 
+export enum HomeTypeEnum {
+  "apartment" = "apartment",
+  "duplex" = "duplex",
+  "house" = "house",
+  "townhome" = "townhome",
+}
+
 export enum AfsView {
   "pending" = "pending",
   "pendingNameAndDoB" = "pendingNameAndDoB",
@@ -6765,6 +6763,14 @@ export enum UserRoleEnum {
   "admin" = "admin",
   "jurisdictionAdmin" = "jurisdictionAdmin",
   "limitedJurisdictionAdmin" = "limitedJurisdictionAdmin",
+}
+
+export enum FeatureFlagEnum {
+  "example" = "example",
+  "enableHomeType" = "enableHomeType",
+  "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
+  "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
+  "hideCloseListingButton" = "hideCloseListingButton",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {
   "=" = "=",

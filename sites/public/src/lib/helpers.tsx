@@ -11,6 +11,7 @@ import {
 import {
   Address,
   ApplicationMultiselectQuestion,
+  Jurisdiction,
   Listing,
   ListingsStatusEnum,
   ReviewOrderTypeEnum,
@@ -289,4 +290,8 @@ export const getBoundsZoomLevel = (bounds: google.maps.LatLngBounds) => {
   const lngZoom = zoom(mapElement.clientWidth, WORLD_DIM.width, lngFraction)
 
   return Math.min(latZoom, lngZoom, ZOOM_MAX)
+}
+
+export const isFeatureFlagOn = (jurisdiction: Jurisdiction, featureFlag: string) => {
+  return jurisdiction.featureFlags?.some((flag) => flag.name === featureFlag && flag.active)
 }
