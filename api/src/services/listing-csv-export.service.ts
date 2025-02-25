@@ -43,7 +43,7 @@ import { unitTypeToReadable } from '../utilities/application-export-helpers';
 import {
   doAnyJurisdictionHaveFalsyFeatureFlagValue,
   doAnyJurisdictionHaveFeatureFlagSet,
-} from 'src/utilities/feature-flag-utilities';
+} from '../utilities/feature-flag-utilities';
 
 views.csv = {
   ...views.details,
