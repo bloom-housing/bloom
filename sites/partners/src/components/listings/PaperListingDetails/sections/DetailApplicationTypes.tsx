@@ -19,6 +19,10 @@ const DetailApplicationTypes = () => {
     (method) => method.type === ApplicationMethodsTypeEnum.FileDownload
   )
 
+  const referralMethod = listing.applicationMethods.find(
+    (method) => method.type === ApplicationMethodsTypeEnum.Referral
+  )
+
   const paperApplicationsTableHeaders = {
     fileName: "t.fileName",
     language: "t.language",
