@@ -2,12 +2,34 @@
   &:not(:last-child) {
     margin-block-end: var(--seeds-spacer-content);
   }
+
+  :focus-within.listing-card-container {
+    outline: var(--seeds-focus-ring-outline);
+    box-shadow: var(--seeds-focus-ring-box-shadow);
+    box-sizing: border-box;
+  }
+
+  :focus-within a:focus {
+    outline: none;
+    box-shadow: none;
+  }
+
   .listing-card-container {
     position: relative;
     --card-spacing: 0;
 
+    .name,
+    a {
+      color: var(--seeds-color-blue-500);
+    }
+
     &:hover {
-      box-shadow: 0px 0px 3px 3px var(--seeds-border-color);
+      outline: var(--seeds-border-2) solid var(--seeds-border-color);
+      box-sizing: border-box;
+      .name,
+      a {
+        color: var(--seeds-color-blue-900);
+      }
     }
 
     .listing-card {
@@ -47,7 +69,6 @@
         }
         .name {
           font-size: var(--seeds-type-heading-size-3xl);
-          color: var(--seeds-color-primary);
           font-weight: var(--seeds-font-weight-semibold);
           margin-block-end: var(--seeds-s1);
           @media (--md-down) {
@@ -110,6 +131,7 @@
           --message-max-width: 100%;
           --message-border-radius: var(--seeds-rounded);
           --common-message-link-gap: 0;
+          --common-message-font: var(--seeds-font-alt-sans);
           margin-block-start: var(--seeds-s3);
 
           .due-date-content {

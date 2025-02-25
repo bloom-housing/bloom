@@ -126,7 +126,10 @@ export const getListingApplicationStatus = (listing: Listing): StatusBarType => 
   }
 }
 
-export const getListingApplicationStatusSeeds = (listing: Listing): StatusBarType => {
+export const getListingApplicationStatusSeeds = (
+  listing: Listing,
+  hideTime?: boolean
+): StatusBarType => {
   if (!listing) return
   let content = ""
   let formattedDate = ""
@@ -144,11 +147,13 @@ export const getListingApplicationStatusSeeds = (listing: Listing): StatusBarTyp
     } else if (listing.applicationDueDate) {
       const dueDate = dayjs(listing.applicationDueDate)
       formattedDate = dueDate.format("MMM DD, YYYY")
-      formattedDate = formattedDate + ` ${t("t.at")} ` + dueDate.format("h:mmA")
+      formattedDate = !hideTime
+        ? formattedDate + ` ${t("t.at")} ` + dueDate.format("h:mmA")
+        : formattedDate
 
       // if due date is in future, listing is open
       if (dayjs() < dueDate) {
-        content = t("listings.applicationDeadline")
+        content = t("listings.applicationDue")
       } else {
         status = ApplicationStatusType.Closed
         content = t("listings.applicationsClosed")

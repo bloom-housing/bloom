@@ -237,7 +237,7 @@ export const stackedUnitSummariesTable = (
 
     // If a listing has mixed rent type units, show more generic information
     if (hasPercentUnits && hasCurrencyUnits) {
-      return `% ${t("t.ofIncome")}, or up to $${ranges.maxDollarRent?.toLocaleString()}`
+      return `% ${t("t.ofIncome")}, ${t("t.orUpTo")} $${ranges.maxDollarRent?.toLocaleString()}`
     }
 
     // Otherwise show more specific ranges

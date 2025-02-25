@@ -10,7 +10,6 @@ import { StackedTable, t } from "@bloom-housing/ui-components"
 import { Card, Heading, Icon, Link, Message, Tag } from "@bloom-housing/ui-seeds"
 import { getListingTags } from "../listing/listing_sections/MainDetails"
 import { getListingApplicationStatusSeeds, getListingStackedTableData } from "../../lib/helpers"
-import { CommonMessageVariant } from "@bloom-housing/ui-seeds/src/blocks/shared/CommonMessage"
 
 export interface ListingCardProps {
   listing: Listing
@@ -19,7 +18,7 @@ export interface ListingCardProps {
 export const ListingCard = ({ listing }: ListingCardProps) => {
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
   const listingTags = getListingTags(listing, true)
-  const status = getListingApplicationStatusSeeds(listing)
+  const status = getListingApplicationStatusSeeds(listing, true)
   // TODO: Add favorites if toggled on
   const actions = [
     // <Button
@@ -40,19 +39,19 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
   } => {
     if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) {
       return {
-        prefix: "Lottery",
+        prefix: t("listings.lottery"),
         className: "lottery-message",
       }
     }
     if (listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe) {
       return {
-        prefix: "First come first serve",
+        prefix: t("listings.applicationFCFS"),
         className: "fcfs-message",
       }
     }
     if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
       return {
-        prefix: "Open waitlist",
+        prefix: t("listings.waitlist.open"),
         className: "waitlist-message",
       }
     }
