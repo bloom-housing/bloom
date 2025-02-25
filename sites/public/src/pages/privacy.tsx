@@ -5,6 +5,7 @@ import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpe
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
 import pageContent from "../md_content/privacy_policy.md"
+import { ContentPage } from "../patterns/ContentPage"
 
 const Privacy = () => {
   const { profile } = useContext(AuthContext)
@@ -17,14 +18,11 @@ const Privacy = () => {
     })
   }, [profile])
 
-  const pageTitle = <>{t("pageTitle.privacy")}</>
-
   return (
     <Layout>
-      <PageHeader title={pageTitle} inverse />
-      <MarkdownSection>
+      <ContentPage heading={t("pageTitle.privacy")}>
         <Markdown>{pageContent.toString()}</Markdown>
-      </MarkdownSection>
+      </ContentPage>
     </Layout>
   )
 }

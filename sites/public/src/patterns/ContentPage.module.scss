@@ -16,12 +16,20 @@
     }
   }
 
-  .header-text {
-    color: var(--seeds-color-on-inverse);
-    font-family: var(--seeds-font-alt-sans);
+  .header-text-group {
+    h1,
+    p {
+      color: var(--seeds-color-on-inverse);
+      font-family: var(--seeds-font-alt-sans);
+    }
     p {
       font-size: var(--seeds-font-size-lg);
     }
+  }
+
+  .header-text {
+    color: var(--seeds-color-on-inverse);
+    font-family: var(--seeds-font-alt-sans);
   }
 
   .body {

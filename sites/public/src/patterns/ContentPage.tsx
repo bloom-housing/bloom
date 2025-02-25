@@ -15,25 +15,21 @@ export interface ContentPageProps extends ContentPageHeaderProps {
 }
 
 const ContentPageHeader = (props: ContentPageHeaderProps) => {
-  const HeaderTitle = (
-    <Heading size="4xl" priority={1} className={styles["header-text"]}>
-      {props.heading}
-    </Heading>
-  )
-
   return (
     <div className={styles["header-container"]}>
       <div className={styles["header"]}>
         {props.subheading ? (
           <HeadingGroup
-            heading={HeaderTitle}
+            heading={props.heading}
             subheading={props.subheading}
-            headingPriority={1}
             size="4xl"
-            className={styles["header-text"]}
+            headingPriority={1}
+            className={styles["header-text-group"]}
           ></HeadingGroup>
         ) : (
-          HeaderTitle
+          <Heading size="4xl" priority={1} className={styles["header-text"]}>
+            {props.heading}
+          </Heading>
         )}
       </div>
     </div>
