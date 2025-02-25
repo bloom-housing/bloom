@@ -8,4 +8,5 @@ export enum FeatureFlagEnum {
   enableIsVerified = 'enableIsVerified',
   hideCloseListingButton = 'hideCloseListingButton',
   enableSection8Question = 'enableSection8Question',
+  enableUnitGroups = 'enableUnitGroups',
 }
