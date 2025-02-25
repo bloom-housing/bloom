@@ -18,13 +18,11 @@ const Disclaimer = () => {
     })
   }, [profile])
 
-  const pageTitle = <>{t("pageTitle.disclaimer")}</>
-
   return (
     <Layout>
       <ContentPage
         heading={t("pageTitle.disclaimer")}
-        subheading="A design approach is a general philosophy that may or may not include a guide for specific methods."
+        subheading={t("pageDescription.additionalResources")}
       >
         <Markdown>{pageContent.toString()}</Markdown>
       </ContentPage>
