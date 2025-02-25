@@ -14,7 +14,6 @@ import { randomName } from './word-generator';
 import { addressFactory } from './address-factory';
 import { reservedCommunityTypesFindOrCreate } from './reserved-community-type-factory';
 import { unitFactoryMany } from './unit-factory';
-import { reservedCommunityTypeFactoryGet } from './reserved-community-type-factory';
 import { randomBoolean } from './boolean-generator';
 
 const cloudinaryIds = [
