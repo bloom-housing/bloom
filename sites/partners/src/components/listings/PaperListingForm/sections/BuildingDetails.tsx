@@ -22,7 +22,6 @@ import {
   RegionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { neighborhoodRegions } from "../../../../lib/listings/Neighborhoods"
-import { GridRow } from "@bloom-housing/ui-seeds/src/layout/Grid"
 
 interface MapBoxFeature {
   center: number[] // Index 0: longitude, Index 1: latitude
@@ -230,7 +229,7 @@ const BuildingDetails = ({
           </GridCell>
         </Grid.Row>
         <Grid.Row columns={6}>
-          <Grid.Cell className="seeds-grid-span-2">
+          <Grid.Cell className={!enableRegions ? "seeds-grid-span-2" : ""}>
             <Field
               label={t("application.contact.city")}
               name={"listingsBuildingAddress.city"}
@@ -253,6 +252,7 @@ const BuildingDetails = ({
               }}
               register={register}
             />
+            <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
           </Grid.Cell>
           <Grid.Cell>
             <FieldValue
@@ -317,8 +317,18 @@ const BuildingDetails = ({
               register={register}
             />
           </Grid.Cell>
-          <Grid.Cell className="seeds-grid-span-2">
-            {enableRegions ? (
+          <GridCell className={!enableRegions && "seeds-grid-span-2"}>
+            <Field
+              label={t("listings.yearBuilt")}
+              name={"yearBuilt"}
+              id={"yearBuilt"}
+              placeholder={t("listings.yearBuilt")}
+              type={"number"}
+              register={register}
+            />
+          </GridCell>
+          {enableRegions && (
+            <Grid.Cell className="seeds-grid-span-2">
               <FieldValue label={t("t.region")}>
                 <Select
                   id="region"
@@ -335,35 +345,9 @@ const BuildingDetails = ({
                   }))}
                 />
               </FieldValue>
-            ) : (
-              <Field
-                label={t("listings.yearBuilt")}
-                name={"yearBuilt"}
-                id={"yearBuilt"}
-                placeholder={t("listings.yearBuilt")}
-                type={"number"}
-                register={register}
-              />
-            )}
-          </Grid.Cell>
+            </Grid.Cell>
+          )}
         </Grid.Row>
-        <GridRow columns={3}>
-          <GridCell>
-            <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
-          </GridCell>
-          <GridCell className="col-start-3">
-            {enableRegions && (
-              <Field
-                label={t("listings.yearBuilt")}
-                name={"yearBuilt"}
-                id={"yearBuilt"}
-                placeholder={t("listings.yearBuilt")}
-                type={"number"}
-                register={register}
-              />
-            )}
-          </GridCell>
-        </GridRow>
         <Grid.Row columns={3}>
           <Grid.Cell className="seeds-grid-span-2">
             <FieldValue label={t("listings.mapPreview")}>
