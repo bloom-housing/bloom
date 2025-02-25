@@ -40,7 +40,7 @@
   "application.start.whatToExpect.waitlist.steps": "1. 首先，我們將詢問您打算和誰住在一起。\n2. 然後，我們會詢問您的收入。\n3. 最後，我們將瞭解您是否有資格享受任何經濟適用房優惠（如果適用）。",
   "application.timeout.afterMessage": "我們關心您的安全。 由於不活動，我們結束了您的會話。 請啟動一個新的應用程序以繼續。",
   "footer.ACPortal": "阿拉米達縣住房門戶網站",
-  "footer.copyRight": "聖荷西市 © 2020 • 版權所有",
+  "footer.copyright": "© 聖荷西市 • 版權所有",
   "footer.disclaimer": "免責聲明",
   "footer.DoorwayHousingPortal": "Doorway 房屋門戶",
   "footer.forAdditionalOpportunities": "查詢灣區其他住房機會，請瀏覽：",

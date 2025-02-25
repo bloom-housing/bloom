@@ -75,7 +75,7 @@
   "application.start.whatToExpect.info1": "First we’ll ask about you and the people you plan to live with. Then, we’ll ask you about your income. Finally, we’ll give you an opportunity to review all of your application data before submitting.",
   "application.timeout.afterMessage": "We care about your security. We ended your session due to inactivity. Please start a new application to continue.",
   "footer.ACPortal": "Alameda County Housing Portal",
-  "footer.copyRight": "City of San José © 2020 • All Rights Reserved",
+  "footer.copyright": "© City of San José • All Rights Reserved",
   "footer.disclaimer": "Disclaimer",
   "footer.DoorwayHousingPortal": "Doorway Housing Portal",
   "footer.forAdditionalOpportunities": "For additional Bay Area opportunities, please visit:",

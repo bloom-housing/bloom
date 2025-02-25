@@ -53,7 +53,7 @@
   "application.start.whatToExpect.steps": "1. 首先，我們會詢問您預計同住的人員。\n2. 接著，我們會詢問您的收入。\n3. 最後，我們就會知道您是否符合任何可負擔住房抽籤優先順序的資格。",
   "application.start.whatToExpect.waitlist.finePrint": "* 申請人申請的是開放的候補名單，而不是當前可用的公寓。\n* 請注意，對于每個名單，每個家庭成員只能出現在一個申請中。\n* 當出現空置房時，物業經理會按照「先申請先入住」的原則與合格的申請人聯絡。\n* 我們將對您提供的所有資訊進行核實，並確認您的資格。\n* 如果您做出了任何欺詐性陳述，您的申請可能會被刪除。\n* 對於提供住房優惠的物業，如果我們無法核實您請求的住房優惠，您將不會收到該優惠，但也不會受到其他懲罰。",
   "application.start.whatToExpect.waitlist.steps": "1. 首先，我們將詢問您打算和誰住在一起。\n2. 然後，我們會詢問您的收入。\n3. 最後，我們將瞭解您是否有資格享受任何經濟適用房優惠（如果適用）。",
-  "footer.copyRight": "阿拉米達縣 © 2020 • 版權所有",
+  "footer.copyright": "© 阿拉米達縣 • 版權所有",
   "footer.disclaimer": "免責聲明",
   "footer.DoorwayHousingPortal": "Doorway 房屋門戶",
   "footer.forAdditionalOpportunities": "查詢灣區其他住房機會，請瀏覽：",

@@ -19,10 +19,14 @@ export const JurisdictionFooterSection = () => {
         <p className="mt-10 text-sm">
           {t("footer.forAdditionalOpportunities")}
           <br />
-          <a className="px-2" href={process.env.doorwayUrl} target="_blank" rel="noreferrer">
-            {t("footer.DoorwayHousingPortal")}
-          </a>
-          |
+          {process.env.doorwayUrl && (
+            <>
+              <a className="px-2" href={process.env.doorwayUrl} target="_blank" rel="noreferrer">
+                {t("footer.DoorwayHousingPortal")}
+              </a>
+              |
+            </>
+          )}
           <a className="px-2" href={t("footer.SFHousingUrl")} target="_blank" rel="noreferrer">
             {t("footer.SFHousingPortal")}
           </a>
@@ -48,7 +52,7 @@ export const JurisdictionFooterSection = () => {
           alt="Equal Housing Opportunity Logo"
         />
       </FooterSection>
-      <FooterNav copyright={t("footer.copyRight")}>
+      <FooterNav copyright={t("footer.copyright")}>
         <a href="https://www.surveymonkey.com/r/2QLBYML" target="_blank" rel="noreferrer">
           {t("footer.giveFeedback")}
         </a>

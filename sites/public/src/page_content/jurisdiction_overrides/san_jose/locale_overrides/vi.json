@@ -40,7 +40,7 @@
   "application.start.whatToExpect.waitlist.steps": "1. Trước tiên, chúng tôi sẽ hỏi quý vị về những người quý vị dự định sống cùng.\n2. Sau đó, chúng tôi sẽ hỏi về thu nhập của quý vị.\n3. Cuối cùng, chúng tôi sẽ xem quý vị có hội đủ điều kiện nhận bất kỳ ưu tiên nào về nhà ở giá hợp lý không, nếu có.",
   "application.timeout.afterMessage": "Chúng tôi quan tâm đến an toàn của bạn. Chúng tôi đã kết thúc phiên của bạn do không hoạt động. Vui lòng bắt đầu một ứng dụng mới để tiếp tục.",
   "footer.ACPortal": "Cổng thông tin nhà ở Quận Alameda",
-  "footer.copyRight": "Thành Phố San Jose © 2020 • Giữ Mọi Bản quyền",
+  "footer.copyright": "© Thành Phố San Jose • Giữ Mọi Bản quyền",
   "footer.disclaimer": "Tuyên bố miễn trách nhiệm",
   "footer.DoorwayHousingPortal": "Cổng thông tin nhà ở của Doorway",
   "footer.forAdditionalOpportunities": "Để có thêm các cơ hội tại Bay Area, vui lòng truy cập:",
