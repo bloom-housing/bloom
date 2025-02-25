@@ -37,6 +37,7 @@ import { Neighborhood } from "./listing_sections/Neighborhood"
 import { RentSummary } from "./listing_sections/RentSummary"
 import { UnitSummaries } from "./listing_sections/UnitSummaries"
 import styles from "./ListingViewSeeds.module.scss"
+import Markdown from "markdown-to-jsx"
 
 interface ListingProps {
   jurisdiction?: Jurisdiction
@@ -174,9 +175,19 @@ export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProp
             reviewOrderType={listing.reviewOrderType}
             unitsSummarized={listing.unitsSummarized}
           />
+          {listing.section8Acceptance && (
+            <div className="my-2">
+              <Markdown className="custom-counter__subtitle">
+                {t("listings.section8VoucherInfo")}
+              </Markdown>
+            </div>
+          )}
           <div className={styles["main-content"]}>
             <div className={styles["hide-desktop"]}>{ApplyBar}</div>
-            <Eligibility eligibilitySections={getEligibilitySections(listing)} />
+            <Eligibility
+              eligibilitySections={getEligibilitySections(listing)}
+              section8Acceptance={listing.section8Acceptance}
+            />
             <Features features={getFeatures(listing, jurisdiction)}>{UnitFeatures}</Features>
             <Neighborhood address={listing.listingsBuildingAddress} name={listing.name} />
             <AdditionalInformation additionalInformation={getAdditionalInformation(listing)} />
