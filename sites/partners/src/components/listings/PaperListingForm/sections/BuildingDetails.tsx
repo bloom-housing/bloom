@@ -152,12 +152,12 @@ const BuildingDetails = ({
       : defaultMessage
   }
 
+  const { neighborhood, region, jurisdictions } = watch(["neighborhood", "region", "jurisdictions"])
+
   const enableRegions = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableRegions,
-    listing?.jurisdictions?.id
+    jurisdictions?.id
   )
-
-  const { neighborhood, region } = watch(["neighborhood", "region"])
 
   useEffect(() => {
     const matchingConfig = neighborhoodRegions.find((entry) => entry.name == neighborhood)
