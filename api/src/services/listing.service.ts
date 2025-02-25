@@ -56,7 +56,7 @@ import {
   summarizeUnits,
 } from '../utilities/unit-utilities';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
-import { Jurisdiction } from 'src/dtos/jurisdictions/jurisdiction.dto';
+import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 
 export type getListingsArgs = {
   skip: number;
