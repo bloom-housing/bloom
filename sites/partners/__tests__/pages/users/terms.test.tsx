@@ -40,32 +40,45 @@ afterEach(() => {
 afterAll(() => server.close())
 
 describe("User Terms", () => {
-  it("should render terms modal", async () => {
+  it("should render terms modal", () => {
     mockNextRouter()
-    const { getByText, getByLabelText, findByText } = render(<TermsPage />)
-    const markdownContent = await findByText("Example Terms")
-    expect(getByText("Please review the Terms of Service")).toBeInTheDocument()
-    expect(getByText("To continue you must accept the Terms of Service")).toBeInTheDocument()
-    expect(markdownContent).toBeInTheDocument()
-    expect(getByLabelText("I accept the Terms of Service")).toBeInTheDocument()
+    const { getByText, getByLabelText } = render(<TermsPage />)
+    expect(getByText("Review Terms of Service"))
+    expect(getByText("You must accept the Terms of Use before continuing.")).toBeInTheDocument()
+    expect(getByText("Terms of Use", { selector: "h2" })).toBeInTheDocument()
+    expect(
+      getByText(
+        /I have reviewed the(.*) for this Website, as that term is defined in the Terms of Use, and agree to comply with all requirements described therein that relate to my use as a Professional Partner or Local Government. If I am agreeing to comply with the Terms of Use on behalf of a Professional Partner or Local Government, I warrant that I am authorized to enter into agreements such as the Terms of Use on behalf of such Professional Partner or Local Government./
+      )
+    ).toBeInTheDocument()
+    const termsOfUseLink = getByText("Terms of Use", { selector: "a" })
+    expect(termsOfUseLink).toBeInTheDocument()
+    expect(termsOfUseLink).toHaveAttribute(
+      "href",
+      "https://mtc.ca.gov/doorway-housing-portal-terms-use"
+    )
+    expect(
+      getByLabelText("I have reviewed, understand and agree to the Terms of Use.")
+    ).toBeInTheDocument()
     expect(getByText("Submit")).toBeInTheDocument()
   })
 
-  it("should show error on no accept", async () => {
+  it("should change submit button state on change", () => {
     mockNextRouter()
-    const { getByText, queryByText, getByLabelText, findByText } = render(<TermsPage />)
+    const { getByText, getByLabelText } = render(<TermsPage />)
 
     const submitButton = getByText("Submit")
-    const agreeCheckbox = getByLabelText("I accept the Terms of Service")
-    // Check if the error is not rendered before any action from the user
-    expect(queryByText("You must agree to the terms in order to continue")).not.toBeInTheDocument()
-    fireEvent.click(submitButton)
-    expect(await findByText("You must agree to the terms in order to continue")).toBeInTheDocument()
+    const agreeCheckbox = getByLabelText(
+      "I have reviewed, understand and agree to the Terms of Use."
+    )
+    // Check if the submit button is disabled
+    expect(submitButton).toHaveAttribute("disabled")
+    // Check if the button becomes available after checkbox change
     fireEvent.click(agreeCheckbox)
-    // Check if the error will disappear after user checks the agreement
-    expect(
-      await findByText("You must agree to the terms in order to continue")
-    ).not.toBeInTheDocument()
+    expect(submitButton).not.toHaveAttribute("disabled")
+    // Should revert to disabled on unclick
+    fireEvent.click(agreeCheckbox)
+    expect(submitButton).toHaveAttribute("disabled")
   })
 
   it("should navigate to dashboard on submit", async () => {
@@ -73,7 +86,9 @@ describe("User Terms", () => {
     const { findByText, getByLabelText } = render(<TermsPage />)
 
     const submitButton = await findByText("Submit")
-    const agreeCheckbox = getByLabelText("I accept the Terms of Service")
+    const agreeCheckbox = getByLabelText(
+      "I have reviewed, understand and agree to the Terms of Use."
+    )
     await waitFor(() => fireEvent.click(agreeCheckbox))
     fireEvent.click(submitButton)
     await waitFor(() => expect(pushMock).toHaveBeenCalledWith("/"))
