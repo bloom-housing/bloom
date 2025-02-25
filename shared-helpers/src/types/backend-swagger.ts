@@ -1801,49 +1801,6 @@ export class UserService {
     })
   }
   /**
-   * Get user by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      id: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<User> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/{id}"
-      url = url.replace("{id}", params["id"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update user
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: UserUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<User> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/{id}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
    * Forgot Password
    */
   forgotPassword(
@@ -1971,6 +1928,71 @@ export class UserService {
       let data = params.body
 
       configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Add or remove a listing from user favorites
+   */
+  modifyFavoriteListings(
+    params: {
+      /** requestBody */
+      body?: UserFavoriteListing
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UserFavoriteListing> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/modifyFavoriteListings"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update user
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: UserUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/{id}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get user by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      id: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -2761,10 +2783,10 @@ export interface ListingsQueryBody {
   view?: ListingViews
 
   /**  */
-  orderBy?: ListingOrderByKeys
+  orderBy?: ListingOrderByKeys[]
 
   /**  */
-  orderDir?: OrderByEnum
+  orderDir?: OrderByEnum[]
 
   /**  */
   search?: string
@@ -3746,6 +3768,9 @@ export interface Listing {
   homeType?: HomeTypeEnum
 
   /**  */
+  isVerified?: boolean
+
+  /**  */
   section8Acceptance?: boolean
 }
 
@@ -4222,6 +4247,9 @@ export interface ListingCreate {
   homeType?: HomeTypeEnum
 
   /**  */
+  isVerified?: boolean
+
+  /**  */
   section8Acceptance?: boolean
 
   /**  */
@@ -4509,6 +4537,9 @@ export interface ListingUpdate {
 
   /**  */
   homeType?: HomeTypeEnum
+
+  /**  */
+  isVerified?: boolean
 
   /**  */
   section8Acceptance?: boolean
@@ -5979,6 +6010,9 @@ export interface User {
 
   /**  */
   activeRefreshToken?: string
+
+  /**  */
+  favoriteListings?: IdDTO[]
 }
 
 export interface UserFilterParams {
@@ -5992,56 +6026,6 @@ export interface PaginatedUser {
 
   /**  */
   meta: PaginationMeta
-}
-
-export interface UserUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  listings: IdDTO[]
-
-  /**  */
-  userRoles?: UserRole
-
-  /**  */
-  language?: LanguagesEnum
-
-  /**  */
-  agreedToTermsOfService: boolean
-
-  /**  */
-  email?: string
-
-  /**  */
-  newEmail?: string
-
-  /**  */
-  password?: string
-
-  /**  */
-  currentPassword?: string
-
-  /**  */
-  appUrl?: string
-
-  /**  */
-  jurisdictions?: IdDTO[]
 }
 
 export interface UserCreate {
@@ -6068,6 +6052,9 @@ export interface UserCreate {
 
   /**  */
   agreedToTermsOfService: boolean
+
+  /**  */
+  favoriteListings?: IdDTO[]
 
   /**  */
   newEmail?: string
@@ -6117,6 +6104,9 @@ export interface UserInvite {
   language?: LanguagesEnum
 
   /**  */
+  favoriteListings?: IdDTO[]
+
+  /**  */
   newEmail?: string
 
   /**  */
@@ -6137,6 +6127,67 @@ export interface RequestSingleUseCode {
 export interface ConfirmationRequest {
   /**  */
   token: string
+}
+
+export interface UserFavoriteListing {
+  /**  */
+  id: string
+
+  /**  */
+  action: ModificationEnum
+}
+
+export interface UserUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  listings: IdDTO[]
+
+  /**  */
+  userRoles?: UserRole
+
+  /**  */
+  language?: LanguagesEnum
+
+  /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
+  favoriteListings?: IdDTO[]
+
+  /**  */
+  email?: string
+
+  /**  */
+  newEmail?: string
+
+  /**  */
+  password?: string
+
+  /**  */
+  currentPassword?: string
+
+  /**  */
+  appUrl?: string
+
+  /**  */
+  jurisdictions?: IdDTO[]
 }
 
 export interface Login {
@@ -6585,6 +6636,11 @@ export enum ApplicationsFilterEnum {
   "lottery" = "lottery",
   "closed" = "closed",
   "open" = "open",
+}
+
+export enum ModificationEnum {
+  "add" = "add",
+  "remove" = "remove",
 }
 
 export enum MfaType {

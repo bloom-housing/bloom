@@ -17,7 +17,6 @@ import { unitFactoryMany } from './unit-factory';
 import { reservedCommunityTypeFactoryGet } from './reserved-community-type-factory';
 import { randomBoolean } from './boolean-generator';
 
-
 const cloudinaryIds = [
   'dev/blake-wheeler-zBHU08hdzhY-unsplash_swqash',
   'dev/krzysztof-hepner-V7Q0Oh3Az-c-unsplash_xoj7sr',
@@ -138,7 +137,9 @@ export const listingFactory = async (
     name: randomName(),
     paperApplication: Math.random() < 0.5,
     referralOpportunity: Math.random() < 0.5,
-    reviewOrderType: optionalParams?.reviewOrderType ?? undefined,
+    reviewOrderType:
+      optionalParams?.reviewOrderType ??
+      ReviewOrderTypeEnum.firstComeFirstServe,
     status: optionalParams?.status || ListingsStatusEnum.active,
     unitsAvailable: units?.length || 0,
 
