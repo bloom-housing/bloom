@@ -245,7 +245,10 @@ describe("listing data", () => {
         const listingImages = getAllByRole("img")
         expect(listingImages).toHaveLength(2)
         listingImages.forEach((imageElement) => {
-          expect(imageElement).toHaveAttribute("src", "asset_file_id")
+          expect(imageElement).toHaveAttribute(
+            "src",
+            "https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/asset_file_id.jpg"
+          )
           expect(imageElement).toHaveAttribute("alt", "Listing Photo")
         })
       })
@@ -261,17 +264,17 @@ describe("listing data", () => {
       expect(getByText("Building Details")).toBeInTheDocument()
       expect(getByText("Building Address")).toBeInTheDocument()
       expect(getByText("Street Address")).toBeInTheDocument()
-      expect(getByText("98 Archer Street")).toBeInTheDocument()
+      expect(getByText("98 Archer Place")).toBeInTheDocument()
       expect(getByText("City")).toBeInTheDocument()
-      expect(getByText("San Jose")).toBeInTheDocument()
+      expect(getByText("Solano")).toBeInTheDocument()
       expect(getByText("Longitude")).toBeInTheDocument()
-      expect(getByText("-121.91071")).toBeInTheDocument()
+      expect(getByText("-121.81524")).toBeInTheDocument()
       expect(getByText("State")).toBeInTheDocument()
       expect(getByText("CA")).toBeInTheDocument()
       expect(getByText("Latitude")).toBeInTheDocument()
-      expect(getByText("37.36537")).toBeInTheDocument()
+      expect(getByText("37.44522")).toBeInTheDocument()
       expect(getByText("Zip Code")).toBeInTheDocument()
-      expect(getByText("95112")).toBeInTheDocument()
+      expect(getByText("95620")).toBeInTheDocument()
       expect(getByText("Neighborhood")).toBeInTheDocument()
       expect(getByText("Rosemary Gardens Park")).toBeInTheDocument()
       expect(getByText("Year Built")).toBeInTheDocument()
@@ -784,10 +787,7 @@ describe("listing data", () => {
 
         const previewImage = await findByRole("img")
         expect(previewImage).toBeInTheDocument()
-        expect(previewImage).toHaveAttribute(
-          "src",
-          "https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/example_file.jpg"
-        )
+        expect(previewImage).toHaveAttribute("src", "example_file")
         expect(previewImage).toHaveAttribute("alt", "PDF preview")
       })
     })
@@ -977,15 +977,15 @@ describe("listing data", () => {
       expect(getByText("Monday, Tuesday & Friday, 9:00AM - 5:00PM")).toBeInTheDocument()
       expect(getByText("Leasing Agent Address")).toBeInTheDocument()
       expect(getByText("Street Address or PO Box")).toBeInTheDocument()
-      expect(getByText("98 Archer Street")).toBeInTheDocument()
+      expect(getByText("98 Archer Place")).toBeInTheDocument()
       expect(getByText("Apt or Unit #")).toBeInTheDocument()
       expect(getByText("#12")).toBeInTheDocument()
       expect(getByText("City")).toBeInTheDocument()
-      expect(getByText("San Jose")).toBeInTheDocument()
+      expect(getByText("Dixon")).toBeInTheDocument()
       expect(getByText("State")).toBeInTheDocument()
       expect(getByText("CA")).toBeInTheDocument()
       expect(getByText("Zip Code")).toBeInTheDocument()
-      expect(getByText("95112")).toBeInTheDocument()
+      expect(getByText("95620")).toBeInTheDocument()
     })
 
     describe("should display Application Types section", () => {
