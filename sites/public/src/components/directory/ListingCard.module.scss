@@ -4,10 +4,7 @@
   }
   .listing-card-container {
     position: relative;
-
-    @media (--sm-only) {
-      --card-spacing: var(--card-spacing-sm);
-    }
+    --card-spacing: 0;
 
     &:hover {
       box-shadow: 0px 0px 3px 3px var(--seeds-border-color);
@@ -43,11 +40,10 @@
       .details {
         order: 1;
         width: calc(100% / 7 * 4);
-        padding-inline-start: var(--seeds-spacer-content);
+        padding: var(--seeds-spacer-content);
         @media (--md-down) {
           width: 100%;
-          padding-inline: 0;
-          padding-block-start: var(--seeds-spacer-text);
+          padding: var(--seeds-s4);
         }
         .name {
           font-size: var(--seeds-type-heading-size-3xl);
@@ -72,23 +68,53 @@
           }
         }
         .unit-table {
-          margin-block-start: var(--seeds-spacer-content);
+          margin-block-start: var(--seeds-s3);
+        }
+        .lottery-message {
+          --message-border: var(--seeds-border-2) solid var(--seeds-color-green-300);
+
+          background-color: var(--seeds-color-green-100);
+          .primary-color-icon {
+            color: var(--seeds-color-green-700);
+          }
+          .date-review-order {
+            color: var(--seeds-color-green-700);
+            font-weight: var(--seeds-font-weight-bold);
+          }
+        }
+        .fcfs-message {
+          --message-border: var(--seeds-border-2) solid var(--seeds-color-yellow-300);
+
+          background-color: var(--seeds-color-yellow-100);
+          .primary-color-icon {
+            color: var(--seeds-color-yellow-900);
+          }
+          .date-review-order {
+            color: var(--seeds-color-yellow-900);
+            font-weight: var(--seeds-font-weight-bold);
+          }
+        }
+        .waitlist-message {
+          --message-border: var(--seeds-border-2) solid var(--seeds-color-blue-300);
+
+          background-color: var(--seeds-color-blue-100);
+          .primary-color-icon {
+            color: var(--seeds-color-blue-700);
+          }
+          .date-review-order {
+            font-weight: var(--seeds-font-weight-bold);
+            color: var(--seeds-color-blue-700);
+          }
         }
         .due-date {
-          --message-border: var(--seeds-border-2) solid var(--seeds-color-primary-light);
           --message-max-width: 100%;
           --message-border-radius: var(--seeds-rounded);
           --common-message-link-gap: 0;
           margin-block-start: var(--seeds-s3);
-          background-color: var(--seeds-bg-color-surface-primary);
-          .primary-color-icon {
-            color: var(--seeds-color-primary-dark);
-          }
+
           .due-date-content {
             display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
           }
         }
       }

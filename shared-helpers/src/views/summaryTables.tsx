@@ -231,27 +231,45 @@ export const stackedUnitSummariesTable = (
     )} $${ranges.maxIncome.toLocaleString()}`
   }
   const getRentText = (ranges: StackedSummary) => {
-    let rentText = ""
-    if (ranges.minDollarRent !== null && ranges.maxDollarRent !== null) {
-      if (ranges.minDollarRent === ranges.maxDollarRent)
-        rentText = `$${ranges.minDollarRent.toLocaleString()}`
-      else
-        rentText = `$${ranges.minDollarRent.toLocaleString()} ${t(
-          "t.to"
-        )} $${ranges.maxDollarRent.toLocaleString()}`
+    const hasPercentUnits = ranges.minPercentageRent !== null && ranges.maxPercentageRent !== null
+    const hasCurrencyUnits = ranges.minDollarRent !== null && ranges.maxDollarRent !== null
+    if (!hasPercentUnits && !hasCurrencyUnits) return t("t.n/a")
+
+    // If a listing has mixed rent type units, show more generic information
+    if (hasPercentUnits && hasCurrencyUnits) {
+      return `% ${t("t.ofIncome")}, or up to $${ranges.maxDollarRent?.toLocaleString()}`
     }
-    if (ranges.minPercentageRent !== null && ranges.maxPercentageRent !== null) {
+
+    // Otherwise show more specific ranges
+    let rentText = ""
+    if (hasPercentUnits && !hasCurrencyUnits) {
       if (ranges.minPercentageRent === ranges.maxPercentageRent) {
-        if (rentText) rentText = rentText + " / "
-        rentText = rentText + `${ranges.minPercentageRent}% ${t("t.income")}`
+        rentText = rentText + `${ranges.minPercentageRent}% ${t("t.ofIncome")}`
       } else {
-        if (rentText) rentText = rentText + " / "
         rentText =
           rentText +
-          `${ranges.minPercentageRent}% ${t("t.to")} ${ranges.maxPercentageRent}% ${t("t.income")}`
+          `${ranges.minPercentageRent}% ${t("t.to")} ${ranges.maxPercentageRent}% ${t(
+            "t.ofIncome"
+          )}`
       }
     }
-    if (!rentText) rentText = t("t.n/a")
+
+    if (!hasPercentUnits && hasCurrencyUnits) {
+      if (ranges.minDollarRent !== null && ranges.maxDollarRent !== null) {
+        if (ranges.minDollarRent === ranges.maxDollarRent) {
+          if (rentText) rentText = rentText + `, ${t("t.or")} `
+          rentText = rentText + `$${ranges.minDollarRent.toLocaleString()}`
+        } else {
+          if (rentText) rentText = rentText + `, ${t("t.or")} `
+          rentText =
+            rentText +
+            `$${ranges.minDollarRent.toLocaleString()} ${t(
+              "t.to"
+            )} $${ranges.maxDollarRent.toLocaleString()}`
+        }
+      }
+    }
+
     return rentText
   }
 
