@@ -11,7 +11,7 @@ import { UnitAccessibilityPriorityType } from '../dtos/unit-accessibility-priori
 import { AmiChartItem } from '../dtos/units/ami-chart-item.dto';
 import { UnitAmiChartOverride } from '../dtos/units/ami-chart-override.dto';
 import { isEmpty } from 'class-validator';
-import UnitGroupAmiLevel from 'src/dtos/unit-groups/unit-group-ami-level.dto';
+import UnitGroupAmiLevel from '../dtos/unit-groups/unit-group-ami-level.dto';
 
 type AnyDict = { [key: string]: unknown };
 type UnitMap = {

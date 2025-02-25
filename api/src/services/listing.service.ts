@@ -55,6 +55,8 @@ import {
   summarizeUnitsByTypeAndRent,
   summarizeUnits,
 } from '../utilities/unit-utilities';
+import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
+import { Jurisdiction } from 'src/dtos/jurisdictions/jurisdiction.dto';
 
 export type getListingsArgs = {
   skip: number;
@@ -898,9 +900,10 @@ export class ListingService implements OnModuleInit {
       },
     });
 
-    const enableUnitGroups = rawJurisdiction?.featureFlags?.find(
-      (featureFlag) => featureFlag.name === FeatureFlagEnum.enableUnitGroups,
-    )?.active;
+    const enableUnitGroups = doJurisdictionHaveFeatureFlagSet(
+      rawJurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableUnitGroups,
+    );
 
     if (
       (enableUnitGroups && dto.units?.length > 0) ||
@@ -1577,9 +1580,10 @@ export class ListingService implements OnModuleInit {
       },
     });
 
-    const enableUnitGroups = rawJurisdiction?.featureFlags?.find(
-      (featureFlag) => featureFlag.name === FeatureFlagEnum.enableUnitGroups,
-    )?.active;
+    const enableUnitGroups = doJurisdictionHaveFeatureFlagSet(
+      rawJurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableUnitGroups,
+    );
 
     if (
       (enableUnitGroups && dto.units?.length > 0) ||

@@ -34,13 +34,16 @@ import Unit from '../dtos/units/unit.dto';
 import Listing from '../dtos/listings/listing.dto';
 import { mapTo } from '../utilities/mapTo';
 import { ListingMultiselectQuestion } from '../dtos/listings/listing-multiselect-question.dto';
-import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { ListingUtilities } from '../dtos/listings/listing-utility.dto';
 import { ListingFeatures } from '../dtos/listings/listing-feature.dto';
-import { UnitType } from 'src/dtos/unit-types/unit-type.dto';
-import { UnitGroupAmiLevel } from 'src/dtos/unit-groups/unit-group-ami-level.dto';
+import { UnitType } from '../dtos/unit-types/unit-type.dto';
+import { UnitGroupAmiLevel } from '../dtos/unit-groups/unit-group-ami-level.dto';
 import { getRentTypes } from '../utilities/unit-utilities';
 import { unitTypeToReadable } from '../utilities/application-export-helpers';
+import {
+  doAnyJurisdictionHaveFalsyFeatureFlagValue,
+  doAnyJurisdictionHaveFeatureFlagSet,
+} from 'src/utilities/feature-flag-utilities';
 
 views.csv = {
   ...views.details,
@@ -127,14 +130,14 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       });
     });
 
-    const enableUnitGroups = this.doAnyJurisdictionHaveFeatureFlagSet(
+    const enableUnitGroups = doAnyJurisdictionHaveFeatureFlagSet(
       user.jurisdictions,
       FeatureFlagEnum.enableUnitGroups,
     );
 
     const hasUnits =
       !enableUnitGroups ||
-      this.doAnyJurisdictionHaveFalsyFeatureFlagValue(
+      doAnyJurisdictionHaveFalsyFeatureFlagValue(
         user.jurisdictions,
         FeatureFlagEnum.enableUnitGroups,
       );
@@ -178,12 +181,13 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       );
     }
 
-    await this.createUnitCsv(
-      unitFilePath,
-      listings as unknown as Listing[],
-      false,
-    );
-    const unitCsv = createReadStream(unitFilePath);
+    if (hasUnits) {
+      await this.createUnitCsv(
+        unitFilePath,
+        listings as unknown as Listing[],
+        false,
+      );
+    }
 
     return new Promise((resolve) => {
       const output = fs.createWriteStream(zipFilePath);
@@ -197,6 +201,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       archive.pipe(output);
       archive.append(listingCsv, { name: 'listings.csv' });
       if (hasUnits) {
+        const unitCsv = createReadStream(unitFilePath);
         archive.append(unitCsv, { name: 'units.csv' });
       }
       if (enableUnitGroups) {
@@ -387,28 +392,6 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     return fieldValue;
   };
 
-  doAnyJurisdictionHaveFeatureFlagSet = (
-    jurisdictions: Jurisdiction[],
-    featureFlagName: string,
-  ) => {
-    return jurisdictions.some((juris) => {
-      return juris.featureFlags.some(
-        (flag) => flag.name === featureFlagName && flag.active,
-      );
-    });
-  };
-
-  doAnyJurisdictionHaveFalsyFeatureFlagValue = (
-    jurisdictions: Jurisdiction[],
-    featureFlagName: string,
-  ) => {
-    return jurisdictions.some((juris) => {
-      return !juris.featureFlags.some(
-        (flag) => flag.name === featureFlagName && flag.active,
-      );
-    });
-  };
-
   async getCsvHeaders(user: User): Promise<CsvHeader[]> {
     const headers: CsvHeader[] = [
       {
@@ -500,7 +483,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     ];
 
     if (
-      this.doAnyJurisdictionHaveFeatureFlagSet(
+      doAnyJurisdictionHaveFeatureFlagSet(
         user.jurisdictions,
         FeatureFlagEnum.enableHomeType,
       )
@@ -512,7 +495,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     }
 
     if (
-      this.doAnyJurisdictionHaveFeatureFlagSet(
+      doAnyJurisdictionHaveFeatureFlagSet(
         user.jurisdictions,
         FeatureFlagEnum.enableUnitGroups,
       )
@@ -523,7 +506,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       });
     }
     if (
-      this.doAnyJurisdictionHaveFalsyFeatureFlagValue(
+      doAnyJurisdictionHaveFalsyFeatureFlagValue(
         user.jurisdictions,
         FeatureFlagEnum.enableUnitGroups,
       )
@@ -535,7 +518,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     }
 
     if (
-      this.doAnyJurisdictionHaveFeatureFlagSet(
+      doAnyJurisdictionHaveFeatureFlagSet(
         user.jurisdictions,
         FeatureFlagEnum.enableSection8Question,
       )
@@ -547,7 +530,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       });
     }
     if (
-      this.doAnyJurisdictionHaveFeatureFlagSet(
+      doAnyJurisdictionHaveFeatureFlagSet(
         user.jurisdictions,
         FeatureFlagEnum.enableUtilitiesIncluded,
       )
@@ -571,7 +554,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       });
     }
     if (
-      this.doAnyJurisdictionHaveFeatureFlagSet(
+      doAnyJurisdictionHaveFeatureFlagSet(
         user.jurisdictions,
         FeatureFlagEnum.enableAccessibilityFeatures,
       )
@@ -992,7 +975,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     );
 
     if (
-      this.doAnyJurisdictionHaveFeatureFlagSet(
+      doAnyJurisdictionHaveFeatureFlagSet(
         user.jurisdictions,
         FeatureFlagEnum.enableIsVerified,
       )
