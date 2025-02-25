@@ -11,6 +11,7 @@ import {
   UnitTypeEnum,
   UserRoleEnum,
   MonthlyRentDeterminationTypeEnum,
+  MarketingTypeEnum,
 } from '@prisma/client';
 import { Logger } from '@nestjs/common';
 import { SchedulerRegistry } from '@nestjs/schedule';
@@ -520,6 +521,7 @@ describe('Testing listing service', () => {
         internet: true,
       },
       homeType: 'apartment',
+      marketingType: MarketingTypeEnum.marketing,
     };
   };
 
@@ -3098,6 +3100,7 @@ describe('Testing listing service', () => {
               ],
             },
           ],
+          marketingType: undefined,
         } as ListingCreate,
         user,
       );

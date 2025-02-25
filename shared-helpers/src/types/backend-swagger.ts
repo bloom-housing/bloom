@@ -3865,6 +3865,15 @@ export interface Listing {
   communityDisclaimerDescription?: string
 
   /**  */
+  marketingType?: MarketingTypeEnum
+
+  /**  */
+  marketingDate?: Date
+
+  /**  */
+  marketingSeason?: MarketingSeasonEnum
+
+  /**  */
   homeType?: HomeTypeEnum
 }
 
@@ -4399,6 +4408,15 @@ export interface ListingCreate {
   communityDisclaimerDescription?: string
 
   /**  */
+  marketingType?: MarketingTypeEnum
+
+  /**  */
+  marketingDate?: Date
+
+  /**  */
+  marketingSeason?: MarketingSeasonEnum
+
+  /**  */
   homeType?: HomeTypeEnum
 
   /**  */
@@ -4686,6 +4704,15 @@ export interface ListingUpdate {
 
   /**  */
   communityDisclaimerDescription?: string
+
+  /**  */
+  marketingType?: MarketingTypeEnum
+
+  /**  */
+  marketingDate?: Date
+
+  /**  */
+  marketingSeason?: MarketingSeasonEnum
 
   /**  */
   homeType?: HomeTypeEnum
@@ -6669,6 +6696,17 @@ export enum EnumUnitGroupAmiLevelMonthlyRentDeterminationType {
   "flatRent" = "flatRent",
   "percentageOfIncome" = "percentageOfIncome",
 }
+export enum MarketingTypeEnum {
+  "marketing" = "marketing",
+  "comingSoon" = "comingSoon",
+}
+
+export enum MarketingSeasonEnum {
+  "spring" = "spring",
+  "summer" = "summer",
+  "fall" = "fall",
+  "winter" = "winter",
+}
 export enum EnumUnitGroupAmiLevelCreateMonthlyRentDeterminationType {
   "flatRent" = "flatRent",
   "percentageOfIncome" = "percentageOfIncome",
@@ -6759,7 +6797,11 @@ export enum FeatureFlagEnum {
   "enableHomeType" = "enableHomeType",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
+  "enableIsVerified" = "enableIsVerified",
   "hideCloseListingButton" = "hideCloseListingButton",
+  "enableMarketingStatus" = "enableMarketingStatus",
+  "enableSection8Question" = "enableSection8Question",
+  "enableUnitGroups" = "enableUnitGroups",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {
   "=" = "=",
