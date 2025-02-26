@@ -15,6 +15,19 @@ export interface ListingCardProps {
   listing: Listing
 }
 
+export const getMessageData = (reviewOrder: ReviewOrderTypeEnum): string => {
+  switch (reviewOrder) {
+    case ReviewOrderTypeEnum.lottery:
+      return t("listings.lottery")
+    case ReviewOrderTypeEnum.firstComeFirstServe:
+      return t("listings.applicationFCFS")
+    case ReviewOrderTypeEnum.waitlist:
+      return t("listings.waitlist.open")
+    default:
+      return ""
+  }
+}
+
 export const ListingCard = ({ listing }: ListingCardProps) => {
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
   const listingTags = getListingTags(listing, true)
@@ -32,20 +45,6 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
     //   Favorite
     // </Button>,
   ]
-
-  const getMessageData = (): string => {
-    if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) {
-      return t("listings.lottery")
-    }
-    if (listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe) {
-      return t("listings.applicationFCFS")
-    }
-    if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
-      return t("listings.waitlist.open")
-    }
-  }
-
-  const messageData = getMessageData()
 
   return (
     <li className={styles["list-item"]}>
@@ -87,7 +86,9 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
                   variant={"primary"}
                 >
                   <div className={styles["due-date-content"]}>
-                    <div className={styles["date-review-order"]}>{messageData}</div>
+                    <div className={styles["date-review-order"]}>
+                      {getMessageData(listing.reviewOrderType)}
+                    </div>
                     <div>{status.content}</div>
                   </div>
                 </Message>

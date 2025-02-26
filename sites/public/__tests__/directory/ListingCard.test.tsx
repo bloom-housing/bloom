@@ -24,6 +24,9 @@ describe("<ListingCard>", () => {
       "href",
       `/listing/${listing.id}/${listing.urlSlug}`
     )
+    expect(view.getByText("1 BR")).toBeDefined()
+    expect(view.getByText("$150")).toBeDefined()
+    expect(view.getByText("% of income, or up to $1,200")).toBeDefined()
   })
   it("still shows see details button without listing statuses", () => {
     jest.spyOn(helpers, "getListingApplicationStatus").mockReturnValue(null)
