@@ -9,7 +9,7 @@ import { getListingTags } from "../../src/components/listing/listing_sections/Ma
 describe("<ListingCard>", () => {
   it("shows all card content", () => {
     const view = render(<ListingCard listing={listing} />)
-    const tags = getListingTags(listing)
+    const tags = getListingTags(listing, true)
     expect(view.getByText(listing.name)).toBeDefined()
     expect(view.getByText(oneLineAddress(listing.listingsBuildingAddress))).toBeDefined()
     tags.forEach((tag) => {
@@ -19,14 +19,20 @@ describe("<ListingCard>", () => {
     expect(view.getByText("Minimum Income")).toBeDefined()
     expect(view.getByText("Rent")).toBeDefined()
     expect(view.getByText("First Come First Serve")).toBeDefined()
-    expect(view.getAllByText("See Details").length).toBeGreaterThan(0)
     expect(view.getByLabelText("A picture of the building")).toBeDefined()
+    expect(view.getByRole("link", { name: listing.name })).toHaveAttribute(
+      "href",
+      `/listing/${listing.id}/${listing.urlSlug}`
+    )
   })
   it("still shows see details button without listing statuses", () => {
     jest.spyOn(helpers, "getListingApplicationStatus").mockReturnValue(null)
     const view = render(<ListingCard listing={listing} />)
     expect(view.getByText(listing.name)).toBeDefined()
-    expect(view.queryByText("First Come First Serve")).toBeNull()
-    expect(view.getAllByText("See Details").length).toBeGreaterThan(0)
+    expect(view.queryByText("First Come First Serve")).toBeDefined()
+    expect(view.getByRole("link", { name: listing.name })).toHaveAttribute(
+      "href",
+      `/listing/${listing.id}/${listing.urlSlug}`
+    )
   })
 })

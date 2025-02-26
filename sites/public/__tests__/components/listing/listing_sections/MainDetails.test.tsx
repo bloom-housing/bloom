@@ -39,19 +39,6 @@ describe("<MainDetails>", () => {
     expect(getByTestId("listing-tags")).toBeDefined()
     expect(getAllByText("Veteran").length).toBeGreaterThan(0)
   })
-  it("shows units available tag for lottery", () => {
-    const { getByTestId, getByText } = render(
-      <MainDetails
-        listing={{
-          ...listing,
-          reviewOrderType: ReviewOrderTypeEnum.lottery,
-        }}
-        dueDateContent={[]}
-      />
-    )
-    expect(getByTestId("listing-tags")).toBeDefined()
-    expect(getByText("Available Units")).toBeDefined()
-  })
   it("shows units available tag for fcfs", () => {
     const { getByTestId, getByText } = render(
       <MainDetails

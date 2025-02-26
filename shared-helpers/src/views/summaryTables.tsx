@@ -110,11 +110,27 @@ export const unitSummariesTable = (
   return unitSummaries
 }
 
-export const mergeSummaryRows = (summaries: UnitSummary[]) => {
+type StackedSummary = {
+  minDollarRent: number | null
+  maxDollarRent: number | null
+  minPercentageRent: number | null
+  maxPercentageRent: number | null
+  minIncome: number | null
+  maxIncome: number | null
+  minUnitType: number | null
+  maxUnitType: number | null
+  minUnitName: string | null
+  maxUnitName: string | null
+}
+
+// Massage the data in an array of unit summaries to calculate the min and max values of each data point across the full set
+// This is essentially a new type of unit summary. We should move this to the backend when we rewrite summaries.
+export const mergeSummaryRows = (summaries: UnitSummary[]): StackedSummary => {
   return summaries
     .sort((summaryA, summaryB) => summaryA.unitTypes.numBedrooms - summaryB.unitTypes.numBedrooms)
     .reduce(
       (acc, curr) => {
+        // Replace an old value with a new one if the new one exceeds the defined limit (either less or more) and is valid
         const replaceIfExceeds = (
           less: boolean,
           current: number | null,
@@ -206,21 +222,7 @@ export const mergeSummaryRows = (summaries: UnitSummary[]) => {
 export const stackedUnitSummariesTable = (
   summaries: UnitSummary[]
 ): Record<string, StackedTableRow>[] => {
-  type StackedSummary = {
-    minDollarRent: number | null
-    maxDollarRent: number | null
-    minPercentageRent: number | null
-    maxPercentageRent: number | null
-    minIncome: number | null
-    maxIncome: number | null
-    minUnitType: number | null
-    maxUnitType: number | null
-    minUnitName: string | null
-    maxUnitName: string | null
-  }
-
-  // TODO: Move this to the backend, could conflict with wanting to rewrite the summaries in general so did not do that here
-  const ranges: StackedSummary = mergeSummaryRows(summaries)
+  const ranges = mergeSummaryRows(summaries)
 
   const getUnitText = (ranges: StackedSummary) => {
     if (ranges.minUnitType === ranges.maxUnitType)
