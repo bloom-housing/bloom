@@ -3,13 +3,20 @@
     margin-block-end: var(--seeds-spacer-content);
   }
 
+  :focus-within a:focus {
+    outline: none;
+    box-shadow: none;
+  }
+
+  // When the listing link is focused, put the focus style instead on the whole card
   :focus-within.listing-card-container {
     outline: var(--seeds-focus-ring-outline);
     box-shadow: var(--seeds-focus-ring-box-shadow);
     box-sizing: border-box;
   }
 
-  :focus-within a:focus {
+  // If an internal card button is focused, turn the card-level focus-within off so only the button has focus
+  :has(button:focus).listing-card-container {
     outline: none;
     box-shadow: none;
   }
@@ -91,48 +98,23 @@
         .unit-table {
           margin-block-start: var(--seeds-s3);
         }
-        .lottery-message {
-          --message-border: var(--seeds-border-2) solid var(--seeds-color-green-300);
 
-          background-color: var(--seeds-color-green-100);
-          .primary-color-icon {
-            color: var(--seeds-color-green-700);
-          }
-          .date-review-order {
-            color: var(--seeds-color-green-700);
-            font-weight: var(--seeds-font-weight-bold);
-          }
-        }
-        .fcfs-message {
-          --message-border: var(--seeds-border-2) solid var(--seeds-color-yellow-300);
-
-          background-color: var(--seeds-color-yellow-100);
-          .primary-color-icon {
-            color: var(--seeds-color-yellow-900);
-          }
-          .date-review-order {
-            color: var(--seeds-color-yellow-900);
-            font-weight: var(--seeds-font-weight-bold);
-          }
-        }
-        .waitlist-message {
-          --message-border: var(--seeds-border-2) solid var(--seeds-color-blue-300);
-
-          background-color: var(--seeds-color-blue-100);
-          .primary-color-icon {
-            color: var(--seeds-color-blue-700);
-          }
-          .date-review-order {
-            font-weight: var(--seeds-font-weight-bold);
-            color: var(--seeds-color-blue-700);
-          }
-        }
         .due-date {
           --message-max-width: 100%;
           --message-border-radius: var(--seeds-rounded);
           --common-message-link-gap: 0;
           --common-message-font: var(--seeds-font-alt-sans);
           margin-block-start: var(--seeds-s3);
+          --message-border: var(--seeds-border-2) solid var(--seeds-color-primary-light);
+
+          background-color: var(--seeds-color-primary-lighter);
+          .primary-color-icon {
+            color: var(--seeds-color-primary-dark);
+          }
+          .date-review-order {
+            font-weight: var(--seeds-font-weight-bold);
+            color: var(--seeds-color-primary-dark);
+          }
 
           .due-date-content {
             display: flex;

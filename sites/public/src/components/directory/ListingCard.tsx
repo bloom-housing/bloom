@@ -33,27 +33,15 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
     // </Button>,
   ]
 
-  const getMessageData = (): {
-    prefix: string
-    className: string
-  } => {
+  const getMessageData = (): string => {
     if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) {
-      return {
-        prefix: t("listings.lottery"),
-        className: "lottery-message",
-      }
+      return t("listings.lottery")
     }
     if (listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe) {
-      return {
-        prefix: t("listings.applicationFCFS"),
-        className: "fcfs-message",
-      }
+      return t("listings.applicationFCFS")
     }
     if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
-      return {
-        prefix: t("listings.waitlist.open"),
-        className: "waitlist-message",
-      }
+      return t("listings.waitlist.open")
     }
   }
 
@@ -90,7 +78,7 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
               )}
               {!!status.content && (
                 <Message
-                  className={`${styles["due-date"]} ${styles[messageData.className]}`}
+                  className={`${styles["due-date"]}`}
                   customIcon={
                     <Icon size="md" className={styles["primary-color-icon"]}>
                       <InfoIcon />
@@ -99,7 +87,7 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
                   variant={"primary"}
                 >
                   <div className={styles["due-date-content"]}>
-                    <div className={styles["date-review-order"]}>{messageData.prefix}</div>
+                    <div className={styles["date-review-order"]}>{messageData}</div>
                     <div>{status.content}</div>
                   </div>
                 </Message>

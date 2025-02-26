@@ -46,14 +46,8 @@ export const getListingTags = (listing: Listing, hideReviewTags?: boolean): List
     }
     if (listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe) {
       listingTags.push({
-        title: t("listings.applicationFCFS"),
-        variant: "warn",
-      })
-    }
-    if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) {
-      listingTags.push({
-        title: "Lottery",
-        variant: "success",
+        title: t("listings.availableUnits"),
+        variant: "primary",
       })
     }
     if (listing.marketingType === MarketingTypeEnum.comingSoon) {
