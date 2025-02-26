@@ -176,10 +176,8 @@ export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProp
             unitsSummarized={listing.unitsSummarized}
           />
           {listing.section8Acceptance && (
-            <div className="my-2">
-              <Markdown className="custom-counter__subtitle">
-                {t("listings.section8VoucherInfo")}
-              </Markdown>
+            <div className="seeds-m-bs-text">
+              <Markdown>{t("listings.section8VoucherInfo")}</Markdown>
             </div>
           )}
           <div className={styles["main-content"]}>

@@ -20,11 +20,9 @@ export const Eligibility = ({ eligibilitySections, section8Acceptance }: Eligibi
         <div>
           {t("listings.sections.eligibilitySubtitle")}
           {section8Acceptance && (
-            <>
-              <br />
-              <br />
+            <div className={"seeds-m-bs-content"}>
               <Markdown>{t("listings.section8VoucherInfo")}</Markdown>
-            </>
+            </div>
           )}
         </div>
       }
