@@ -131,16 +131,13 @@ describe("partners_application_index", () => {
     expect(getByText("Email")).toBeInTheDocument()
     expect(getByText("Phone")).toBeInTheDocument()
     expect(getByText("Second Phone")).toBeInTheDocument()
-    expect(getByText("Preferred Contact")).toBeInTheDocument()
-    expect(getByText("Work in Region")).toBeInTheDocument()
     expect(getByText("Residence Address")).toBeInTheDocument()
     expect(getByText("Mailing Address")).toBeInTheDocument()
-    expect(getByText("Work Address")).toBeInTheDocument()
-    expect(getAllByText("Street Address")).toHaveLength(3)
-    expect(getAllByText("Apt or Unit #")).toHaveLength(3)
-    expect(getAllByText("City")).toHaveLength(3)
-    expect(getAllByText("State")).toHaveLength(3)
-    expect(getAllByText("Zip Code")).toHaveLength(3)
+    expect(getAllByText("Street Address")).toHaveLength(2)
+    expect(getAllByText("Apt or Unit #")).toHaveLength(2)
+    expect(getAllByText("City")).toHaveLength(2)
+    expect(getAllByText("State")).toHaveLength(2)
+    expect(getAllByText("Zip Code")).toHaveLength(2)
   })
 
   it("should display no contact Alternate Contact section info", () => {
@@ -239,8 +236,6 @@ describe("partners_application_index", () => {
     expect(getByText("11/25/1966")).toBeInTheDocument()
     expect(getByText("Same Residence")).toBeInTheDocument()
     expect(getByText("No")).toBeInTheDocument()
-    expect(getByText("Work in Region")).toBeInTheDocument()
-    expect(getByText("Yes")).toBeInTheDocument()
     expect(getAllByText("View")).toHaveLength(1)
   })
 
@@ -281,8 +276,14 @@ describe("partners_application_index", () => {
   })
 
   it("should display Declared Houshold Income info", () => {
+    mockNextRouter({ id: "application_1" })
     const { getByText } = render(
-      <ApplicationContext.Provider value={application}>
+      <ApplicationContext.Provider
+        value={{
+          ...application,
+          incomeVouchers: ["issuedVouchers", "none", "rentalAssistance"],
+        }}
+      >
         <DetailsHouseholdIncome />
       </ApplicationContext.Provider>
     )
@@ -292,8 +293,12 @@ describe("partners_application_index", () => {
     expect(getByText("$40,000")).toBeInTheDocument()
     expect(getByText("Monthly Income")).toBeInTheDocument()
     expect(getByText("n/a")).toBeInTheDocument()
-    expect(getByText("Housing Voucher or Subsidy")).toBeInTheDocument()
-    expect(getByText("Yes")).toBeInTheDocument()
+    expect(getByText("Issued Vouchers or Rental Assistance")).toBeInTheDocument()
+    expect(
+      getByText(
+        /Section 8 or Housing Authority Issued Vouchers(.*)None of the above(.*)Rental assistance from other sources/
+      )
+    ).toBeInTheDocument()
   })
 
   it("should display Terms section info", () => {
@@ -412,19 +417,12 @@ describe("partners_application_index", () => {
     expect(
       within(householdMemberDetailsSection).getByText("Same Address as Primary")
     ).toBeInTheDocument()
-    expect(
-      within(householdMemberDetailsSection).getByText("Work in the region?")
-    ).toBeInTheDocument()
-    expect(within(householdMemberDetailsSection).getAllByText("No")).toHaveLength(1)
     expect(within(householdMemberDetailsSection).getAllByText("Yes")).toHaveLength(1)
     expect(within(householdMemberDetailsSection).getByText("Relationship")).toBeInTheDocument()
     expect(within(householdMemberDetailsSection).getByText("Friend")).toBeInTheDocument()
 
     expect(
       within(householdMemberDetailsSection).queryByText("Residence Address")
-    ).not.toBeInTheDocument()
-    expect(
-      within(householdMemberDetailsSection).queryByText("Work Address")
     ).not.toBeInTheDocument()
   })
 
@@ -479,136 +477,5 @@ describe("partners_application_index", () => {
     expect(within(householdMemberDetailsSection).getByText("UT")).toBeInTheDocument()
     expect(within(householdMemberDetailsSection).getByText("Zip Code")).toBeInTheDocument()
     expect(within(householdMemberDetailsSection).getByText("84532")).toBeInTheDocument()
-
-    expect(
-      within(householdMemberDetailsSection).queryByText("Work Address")
-    ).not.toBeInTheDocument()
-  })
-
-  it("should open Houshold Member Drawer with work address only", async () => {
-    mockNextRouter({ id: "application_1" })
-    document.cookie = "access-token-available=True"
-    server.use(
-      rest.get("http://localhost:3100/applications/application_1", (_req, res, ctx) => {
-        return res(
-          ctx.json({
-            ...application,
-            householdMember: [
-              {
-                ...application.householdMember[0],
-                sameAddress: YesNoEnum.yes,
-                workInRegion: YesNoEnum.yes,
-                householdMemberWorkAddress: {
-                  id: "member_work_adress_id",
-                  createdAt: new Date(),
-                  updatedAt: new Date(),
-                  placeName: "Riverside Medical Center",
-                  city: "Grand Rapids",
-                  county: "Kent",
-                  state: "MI",
-                  street: "2745 Cherry Ridge Drive",
-                  street2: "Suite 302",
-                  zipCode: "49546",
-                },
-              },
-            ],
-          })
-        )
-      })
-    )
-
-    const { getByText, findByText, queryByText } = render(<ApplicationsList />)
-    const housholdMembersSection = await findByText("Household Members")
-    expect(housholdMembersSection).toBeInTheDocument()
-    expect(queryByText("Household Member")).not.toBeInTheDocument()
-    expect(queryByText("Household Member Details")).not.toBeInTheDocument()
-    expect(queryByText("Done")).not.toBeInTheDocument()
-
-    const viewButton = await waitFor(() =>
-      within(housholdMembersSection.parentElement).getByText("View")
-    )
-    expect(viewButton).toBeInTheDocument()
-
-    fireEvent.click(viewButton)
-
-    expect(getByText("Household Member")).toBeInTheDocument()
-    expect(getByText("Done")).toBeInTheDocument()
-
-    expect(getByText("Household Member Details")).toBeInTheDocument()
-    const householdMemberDetailsSection = getByText("Household Member Details").parentElement
-
-    expect(within(householdMemberDetailsSection).getByText("Work Address")).toBeInTheDocument()
-    expect(within(householdMemberDetailsSection).getByText("Street Address")).toBeInTheDocument()
-    expect(
-      within(householdMemberDetailsSection).getByText("2745 Cherry Ridge Drive")
-    ).toBeInTheDocument()
-    expect(within(householdMemberDetailsSection).getByText("Apt or Unit #")).toBeInTheDocument()
-    expect(within(householdMemberDetailsSection).getByText("Suite 302")).toBeInTheDocument()
-    expect(within(householdMemberDetailsSection).getByText("City")).toBeInTheDocument()
-    expect(within(householdMemberDetailsSection).getByText("Grand Rapids")).toBeInTheDocument()
-    expect(within(householdMemberDetailsSection).getByText("State")).toBeInTheDocument()
-    expect(within(householdMemberDetailsSection).getByText("MI")).toBeInTheDocument()
-    expect(within(householdMemberDetailsSection).getByText("Zip Code")).toBeInTheDocument()
-    expect(within(householdMemberDetailsSection).getByText("49546")).toBeInTheDocument()
-
-    expect(
-      within(householdMemberDetailsSection).queryByText("Residence Address")
-    ).not.toBeInTheDocument()
-  })
-
-  it("should open Houshold Member Drawer both addresses", async () => {
-    mockNextRouter({ id: "application_1" })
-    document.cookie = "access-token-available=True"
-    server.use(
-      rest.get("http://localhost:3100/applications/application_1", (_req, res, ctx) => {
-        return res(
-          ctx.json({
-            ...application,
-            householdMember: [
-              {
-                ...application.householdMember[0],
-                sameAddress: YesNoEnum.no,
-                workInRegion: YesNoEnum.yes,
-                householdMemberWorkAddress: {
-                  id: "member_work_adress_id",
-                  createdAt: new Date(),
-                  updatedAt: new Date(),
-                  placeName: "Riverside Medical Center",
-                  city: "Grand Rapids",
-                  county: "Kent",
-                  state: "MI",
-                  street: "2745 Cherry Ridge Drive",
-                  street2: "Suite 302",
-                  zipCode: "49546",
-                },
-              },
-            ],
-          })
-        )
-      })
-    )
-
-    const { getByText, findByText, queryByText } = render(<ApplicationsList />)
-    const housholdMembersSection = await findByText("Household Members")
-    expect(housholdMembersSection).toBeInTheDocument()
-    expect(queryByText("Household Member")).not.toBeInTheDocument()
-    expect(queryByText("Household Member Details")).not.toBeInTheDocument()
-    expect(queryByText("Done")).not.toBeInTheDocument()
-
-    const viewButton = await waitFor(() =>
-      within(housholdMembersSection.parentElement).getByText("View")
-    )
-    expect(viewButton).toBeInTheDocument()
-
-    fireEvent.click(viewButton)
-
-    expect(getByText("Household Member")).toBeInTheDocument()
-    expect(getByText("Done")).toBeInTheDocument()
-
-    expect(getByText("Household Member Details")).toBeInTheDocument()
-    const householdMemberDetailsSection = getByText("Household Member Details").parentElement
-
-    expect(within(householdMemberDetailsSection).getByText("Work Address")).toBeInTheDocument()
-    expect(within(householdMemberDetailsSection).getByText("Residence Address")).toBeInTheDocument()
   })
 })
