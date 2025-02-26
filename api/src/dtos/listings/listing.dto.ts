@@ -24,6 +24,8 @@ import {
   ListingsStatusEnum,
   LotteryStatusEnum,
   RegionEnum,
+  MarketingSeasonEnum,
+  MarketingTypeEnum,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
 import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
@@ -36,6 +38,7 @@ import { ListingImage } from './listing-image.dto';
 import { ListingFeatures } from './listing-feature.dto';
 import { ListingUtilities } from './listing-utility.dto';
 import { Unit } from '../units/unit.dto';
+import { UnitGroup } from '../unit-groups/unit-group.dto';
 import { UnitsSummarized } from '../units/unit-summarized.dto';
 import { UnitsSummary } from '../units/units-summary.dto';
 import { IdDTO } from '../shared/id.dto';
@@ -571,6 +574,12 @@ class Listing extends AbstractDTO {
   units: Unit[];
 
   @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => UnitGroup)
+  @ApiPropertyOptional({ type: UnitGroup, isArray: true })
+  unitGroups?: UnitGroup[];
+
+  @Expose()
   @ApiPropertyOptional({ type: UnitsSummarized })
   unitsSummarized?: UnitsSummarized;
 
@@ -647,6 +656,32 @@ class Listing extends AbstractDTO {
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   communityDisclaimerDescription?: string;
+
+  @Expose()
+  @IsEnum(MarketingTypeEnum, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional({
+    enum: MarketingTypeEnum,
+    enumName: 'MarketingTypeEnum',
+  })
+  marketingType: MarketingTypeEnum;
+
+  @Expose()
+  @Type(() => Date)
+  @ValidateIf((o) => o.marketingType === MarketingTypeEnum.comingSoon, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  marketingDate?: Date | null;
+
+  @Expose()
+  @IsEnum(MarketingSeasonEnum, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional({
+    enum: MarketingSeasonEnum,
+    enumName: 'MarketingSeasonEnum',
+  })
+  marketingSeason?: MarketingSeasonEnum | null;
 
   @Expose()
   @IsEnum(HomeTypeEnum, {
