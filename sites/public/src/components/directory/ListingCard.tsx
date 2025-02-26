@@ -76,7 +76,7 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
                   })}
                 </div>
               )}
-              {!!status.content && (
+              {!!status?.content && (
                 <Message
                   className={`${styles["due-date"]}`}
                   customIcon={
