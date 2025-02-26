@@ -1,33 +1,33 @@
 import React from "react"
 import { Heading, HeadingGroup } from "@bloom-housing/ui-seeds"
-import styles from "./ContentPage.module.scss"
+import styles from "./PageHeaderLayout.module.scss"
 
-export interface ContentPageHeaderProps {
+export interface PageHeaderProps {
   /** Heading at the top of the page header */
   heading: string
   /** Description below the heading */
   subheading?: React.ReactNode
 }
 
-export interface ContentPageProps extends ContentPageHeaderProps {
+export interface PageHeaderLayoutProps extends PageHeaderProps {
   /** All content under the header banner */
   children: React.ReactNode
 }
 
-const ContentPageHeader = (props: ContentPageHeaderProps) => {
+const PageHeader = (props: PageHeaderProps) => {
   return (
-    <div className={styles["header-container"]}>
-      <div className={styles["header"]}>
+    <div className={styles["page-header-container"]}>
+      <div className={styles["page-header"]}>
         {props.subheading ? (
           <HeadingGroup
             heading={props.heading}
             subheading={props.subheading}
             size="4xl"
             headingPriority={1}
-            className={styles["header-text-group"]}
+            className={styles["page-header-text-group"]}
           ></HeadingGroup>
         ) : (
-          <Heading size="4xl" priority={1} className={styles["header-text"]}>
+          <Heading size="4xl" priority={1} className={styles["page-header-text"]}>
             {props.heading}
           </Heading>
         )}
@@ -36,9 +36,9 @@ const ContentPageHeader = (props: ContentPageHeaderProps) => {
   )
 }
 
-export const ContentPage = (props: ContentPageProps) => (
-  <div className={styles["content-page"]}>
-    <ContentPageHeader heading={props.heading} subheading={props.subheading} />
+export const PageHeaderLayout = (props: PageHeaderLayoutProps) => (
+  <div className={styles["page-header-layout"]}>
+    <PageHeader heading={props.heading} subheading={props.subheading} />
     <div className={styles["body"]}>{props.children}</div>
   </div>
 )

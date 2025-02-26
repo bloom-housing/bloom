@@ -5,7 +5,8 @@ import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpe
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
 import pageContent from "../md_content/privacy_policy.md"
-import { ContentPage } from "../patterns/ContentPage"
+import { PageHeaderLayout } from "../patterns/PageHeaderLayout"
+import styles from "../patterns/PageHeaderLayout.module.scss"
 
 const Privacy = () => {
   const { profile } = useContext(AuthContext)
@@ -20,9 +21,9 @@ const Privacy = () => {
 
   return (
     <Layout>
-      <ContentPage heading={t("pageTitle.privacy")}>
-        <Markdown>{pageContent.toString()}</Markdown>
-      </ContentPage>
+      <PageHeaderLayout heading={t("pageTitle.privacy")}>
+        <Markdown className={styles["markdown"]}>{pageContent.toString()}</Markdown>
+      </PageHeaderLayout>
     </Layout>
   )
 }
