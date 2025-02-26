@@ -1070,7 +1070,7 @@ describe("<ListingFormActions>", () => {
       it("renders correct buttons in a closed edit state if lottery is turned on", () => {
         process.env.showLottery = "TRUE"
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider value={{ profile: adminUser, doJurisdictionsHaveFeatureFlagOn }}>
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
@@ -1683,7 +1683,9 @@ describe("<ListingFormActions>", () => {
       })
       it("renders correct buttons in a draft detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: limitedJurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{ profile: limitedJurisdictionAdminUser, doJurisdictionsHaveFeatureFlagOn }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -1696,7 +1698,9 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: limitedJurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{ profile: limitedJurisdictionAdminUser, doJurisdictionsHaveFeatureFlagOn }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -1708,7 +1712,9 @@ describe("<ListingFormActions>", () => {
       })
       it("renders correct buttons in a closed detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: limitedJurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{ profile: limitedJurisdictionAdminUser, doJurisdictionsHaveFeatureFlagOn }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -1878,7 +1884,9 @@ describe("<ListingFormActions>", () => {
       })
       it("renders correct buttons in a closed detail state", () => {
         const { getByText, queryByText } = render(
-          <AuthContext.Provider value={{ profile: limitedJurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{ profile: limitedJurisdictionAdminUser, doJurisdictionsHaveFeatureFlagOn }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -1891,7 +1899,9 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a closed edit state", () => {
         const { getByText, queryByText } = render(
-          <AuthContext.Provider value={{ profile: limitedJurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{ profile: limitedJurisdictionAdminUser, doJurisdictionsHaveFeatureFlagOn }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>

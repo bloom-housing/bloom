@@ -367,7 +367,6 @@ describe('Testing listing service', () => {
               ],
               unitGroupAmiLevels: [
                 {
-                  id: randomUUID(),
                   amiPercentage: 10,
                   monthlyRentDeterminationType:
                     MonthlyRentDeterminationTypeEnum.percentageOfIncome,
@@ -377,7 +376,6 @@ describe('Testing listing service', () => {
             },
           ]
         : [],
-      section8Acceptance: true,
       listingMultiselectQuestions: [
         {
           id: randomUUID(),
@@ -2385,6 +2383,7 @@ describe('Testing listing service', () => {
         'listingId',
         LanguagesEnum.en,
         ListingViews.base,
+        false,
         true,
       );
 
@@ -2460,7 +2459,7 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
-
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
       await service.create(
         {
           name: 'example listing name',
@@ -2591,7 +2590,7 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
-
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
       const val = constructFullListingData();
 
       await service.create(val as ListingCreate, user);
@@ -2860,7 +2859,6 @@ describe('Testing listing service', () => {
           unitGroups: {
             create: [],
           },
-          section8Acceptance: true,
           unitsSummary: {
             create: [
               {
@@ -2914,7 +2912,7 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
-
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
       await service.create(
         {
           name: 'example listing name',
@@ -3189,8 +3187,6 @@ describe('Testing listing service', () => {
               },
             ],
           },
-          isVerified: false,
-          section8Acceptance: false,
         },
       });
 
@@ -3814,14 +3810,6 @@ describe('Testing listing service', () => {
         ],
       });
 
-      const unitTypes = [
-        {
-          id: 'unit-type-1',
-          name: UnitTypeEnum.studio,
-          numBedrooms: 0,
-        },
-      ];
-
       await service.update(
         {
           id: randomUUID(),
@@ -3853,15 +3841,22 @@ describe('Testing listing service', () => {
               bathroomMin: 1,
               bathroomMax: 2,
               openWaitlist: false,
-              unitTypes: unitTypes,
+              unitTypes: [
+                {
+                  id: randomUUID(),
+                },
+              ],
+              unitAccessibilityPriorityTypes: {
+                id: randomUUID(),
+              },
               unitGroupAmiLevels: [
                 {
-                  amiPercentage: 80,
+                  amiPercentage: 0,
                   monthlyRentDeterminationType:
                     MonthlyRentDeterminationTypeEnum.flatRent,
                   percentageOfIncomeValue: null,
                   flatRentValue: 1000,
-                  amiChart: { id: 'ami-chart-id' },
+                  amiChart: { id: randomUUID() },
                 },
               ],
             },
@@ -3912,18 +3907,23 @@ describe('Testing listing service', () => {
                 bathroomMax: 2,
                 openWaitlist: false,
                 unitTypes: {
-                  connect: [{ id: 'unit-type-1' }],
+                  connect: [{ id: expect.anything() }],
+                },
+                unitAccessibilityPriorityTypes: {
+                  connect: {
+                    id: expect.anything(),
+                  },
                 },
                 unitGroupAmiLevels: {
                   create: [
                     {
-                      amiPercentage: 80,
+                      amiPercentage: 0,
                       monthlyRentDeterminationType:
                         MonthlyRentDeterminationTypeEnum.flatRent,
                       percentageOfIncomeValue: null,
                       flatRentValue: 1000,
                       amiChart: {
-                        connect: { id: 'ami-chart-id' },
+                        connect: { id: expect.anything() },
                       },
                     },
                   ],
@@ -3931,8 +3931,6 @@ describe('Testing listing service', () => {
               },
             ],
           },
-          isVerified: false,
-          section8Acceptance: false,
         },
         where: {
           id: expect.anything(),
@@ -4263,7 +4261,6 @@ describe('Testing listing service', () => {
           unitGroups: {
             create: [],
           },
-          section8Acceptance: true,
           unitsSummary: {
             create: [
               {
