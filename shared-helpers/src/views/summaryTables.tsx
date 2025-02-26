@@ -109,24 +109,9 @@ export const unitSummariesTable = (
 
   return unitSummaries
 }
-export const stackedUnitSummariesTable = (
-  summaries: UnitSummary[]
-): Record<string, StackedTableRow>[] => {
-  type StackedSummary = {
-    minDollarRent: number | null
-    maxDollarRent: number | null
-    minPercentageRent: number | null
-    maxPercentageRent: number | null
-    minIncome: number | null
-    maxIncome: number | null
-    minUnitType: number | null
-    maxUnitType: number | null
-    minUnitName: string | null
-    maxUnitName: string | null
-  }
 
-  // TODO: Move this to the backend if we want these new kinds of summaries
-  const ranges: StackedSummary = summaries
+export const mergeSummaryRows = (summaries: UnitSummary[]) => {
+  return summaries
     .sort((summaryA, summaryB) => summaryA.unitTypes.numBedrooms - summaryB.unitTypes.numBedrooms)
     .reduce(
       (acc, curr) => {
@@ -168,12 +153,12 @@ export const stackedUnitSummariesTable = (
           minDollarRent: replaceIfExceeds(
             true,
             acc.minDollarRent,
-            parseInt(curr.rentRange.min.replace(/[$,]+/g, ""))
+            parseInt(curr.rentRange.min?.replace(/[$,]+/g, ""))
           ),
           maxDollarRent: replaceIfExceeds(
             false,
             acc.maxDollarRent,
-            parseInt(curr.rentRange.max.replace(/[$,]+/g, ""))
+            parseInt(curr.rentRange.max?.replace(/[$,]+/g, ""))
           ),
           minPercentageRent: replaceIfExceeds(
             true,
@@ -188,12 +173,12 @@ export const stackedUnitSummariesTable = (
           minIncome: replaceIfExceeds(
             true,
             acc.minIncome,
-            parseInt(curr.minIncomeRange.min.replace(/[$,]+/g, ""))
+            parseInt(curr.minIncomeRange.min?.replace(/[$,]+/g, ""))
           ),
           maxIncome: replaceIfExceeds(
             false,
             acc.maxIncome,
-            parseInt(curr.minIncomeRange.max.replace(/[$,]+/g, ""))
+            parseInt(curr.minIncomeRange.max?.replace(/[$,]+/g, ""))
           ),
           minUnitType: replaceIfExceeds(true, acc.minUnitType, curr.unitTypes.numBedrooms),
           maxUnitType: replaceIfExceeds(false, acc.maxUnitType, curr.unitTypes.numBedrooms),
@@ -216,6 +201,27 @@ export const stackedUnitSummariesTable = (
         maxUnitName: null,
       }
     )
+}
+
+export const stackedUnitSummariesTable = (
+  summaries: UnitSummary[]
+): Record<string, StackedTableRow>[] => {
+  type StackedSummary = {
+    minDollarRent: number | null
+    maxDollarRent: number | null
+    minPercentageRent: number | null
+    maxPercentageRent: number | null
+    minIncome: number | null
+    maxIncome: number | null
+    minUnitType: number | null
+    maxUnitType: number | null
+    minUnitName: string | null
+    maxUnitName: string | null
+  }
+
+  // TODO: Move this to the backend, could conflict with wanting to rewrite the summaries in general so did not do that here
+  const ranges: StackedSummary = mergeSummaryRows(summaries)
+
   const getUnitText = (ranges: StackedSummary) => {
     if (ranges.minUnitType === ranges.maxUnitType)
       return t(`listings.unitTypes.${ranges.minUnitName}`)
@@ -233,42 +239,37 @@ export const stackedUnitSummariesTable = (
   const getRentText = (ranges: StackedSummary) => {
     const hasPercentUnits = ranges.minPercentageRent !== null && ranges.maxPercentageRent !== null
     const hasCurrencyUnits = ranges.minDollarRent !== null && ranges.maxDollarRent !== null
-    if (!hasPercentUnits && !hasCurrencyUnits) return t("t.n/a")
 
     // If a listing has mixed rent type units, show more generic information
     if (hasPercentUnits && hasCurrencyUnits) {
-      return `% ${t("t.ofIncome")}, ${t("t.orUpTo")} $${ranges.maxDollarRent?.toLocaleString()}`
+      return `${t("t.ofIncome")}, ${t("t.orUpTo")} $${ranges.maxDollarRent?.toLocaleString()}`
     }
 
     // Otherwise show more specific ranges
-    let rentText = ""
     if (hasPercentUnits && !hasCurrencyUnits) {
       if (ranges.minPercentageRent === ranges.maxPercentageRent) {
-        rentText = rentText + t("t.numOfIncome", { num: ranges.minPercentageRent })
+        return t("t.numOfIncome", { num: ranges.minPercentageRent })
       } else {
-        rentText =
-          rentText +
-          t("t.rangeOfIncome", { min: ranges.minPercentageRent, max: ranges.maxPercentageRent })
+        return t("t.rangeOfIncome", {
+          min: ranges.minPercentageRent,
+          max: ranges.maxPercentageRent,
+        })
       }
     }
 
     if (!hasPercentUnits && hasCurrencyUnits) {
       if (ranges.minDollarRent !== null && ranges.maxDollarRent !== null) {
         if (ranges.minDollarRent === ranges.maxDollarRent) {
-          if (rentText) rentText = rentText + `, ${t("t.or")} `
-          rentText = rentText + `$${ranges.minDollarRent.toLocaleString()}`
+          return `$${ranges.minDollarRent.toLocaleString()}`
         } else {
-          if (rentText) rentText = rentText + `, ${t("t.or")} `
-          rentText =
-            rentText +
-            `$${ranges.minDollarRent.toLocaleString()} ${t(
-              "t.to"
-            )} $${ranges.maxDollarRent.toLocaleString()}`
+          return `$${ranges.minDollarRent.toLocaleString()} ${t(
+            "t.to"
+          )} $${ranges.maxDollarRent.toLocaleString()}`
         }
       }
     }
 
-    return rentText
+    return t("t.n/a")
   }
 
   const rowData = {
