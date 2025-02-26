@@ -244,13 +244,11 @@ export const stackedUnitSummariesTable = (
     let rentText = ""
     if (hasPercentUnits && !hasCurrencyUnits) {
       if (ranges.minPercentageRent === ranges.maxPercentageRent) {
-        rentText = rentText + `${ranges.minPercentageRent}% ${t("t.ofIncome")}`
+        rentText = rentText + t("t.numOfIncome", { num: ranges.minPercentageRent })
       } else {
         rentText =
           rentText +
-          `${ranges.minPercentageRent}% ${t("t.to")} ${ranges.maxPercentageRent}% ${t(
-            "t.ofIncome"
-          )}`
+          t("t.rangeOfIncome", { min: ranges.minPercentageRent, max: ranges.maxPercentageRent })
       }
     }
 
