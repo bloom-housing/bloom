@@ -30,7 +30,7 @@ const DetailBuildingDetails = () => {
               {listing.listingsBuildingAddress?.street}
             </FieldValue>
             <FieldValue id="neighborhood" label={t("t.neighborhood")}>
-              {listing?.neighborhood}
+              {listing?.neighborhood || t("t.n/a")}
             </FieldValue>
           </Grid.Row>
           <Grid.Row columns={6}>
