@@ -41,7 +41,7 @@ export const ListingDirectory = (props: ListingDirectoryProps) => {
 
       <div className={styles["listing-directory"]}>
         <div className={styles["content-wrapper"]}>
-          {/* TODO Show open/closed listings once we have designs for pagination */}
+          {/* TODO: Show both open and closed listings once we have designs for pagination: Issue #4448 */}
           <>
             {props.openListings.length > 0 ? (
               <ul>

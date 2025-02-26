@@ -2,6 +2,7 @@ import React from "react"
 import InfoIcon from "@heroicons/react/24/solid/InformationCircleIcon"
 import {
   Listing,
+  ListingsStatusEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import styles from "./ListingCard.module.scss"
@@ -9,7 +10,7 @@ import { imageUrlFromListing, oneLineAddress } from "@bloom-housing/shared-helpe
 import { StackedTable, t } from "@bloom-housing/ui-components"
 import { Card, Heading, Icon, Link, Message, Tag } from "@bloom-housing/ui-seeds"
 import { getListingTags } from "../listing/listing_sections/MainDetails"
-import { getListingApplicationStatusSeeds, getListingStackedTableData } from "../../lib/helpers"
+import { getListingApplicationStatus, getListingStackedTableData } from "../../lib/helpers"
 
 export interface ListingCardProps {
   listing: Listing
@@ -31,7 +32,7 @@ export const getMessageData = (reviewOrder: ReviewOrderTypeEnum): string => {
 export const ListingCard = ({ listing }: ListingCardProps) => {
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
   const listingTags = getListingTags(listing, true)
-  const status = getListingApplicationStatusSeeds(listing, true)
+  const status = getListingApplicationStatus(listing, true, true)
   // TODO: Add favorites if toggled on
   const actions = [
     // <Button
@@ -50,7 +51,7 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
     <li className={styles["list-item"]}>
       <Card className={styles["listing-card-container"]}>
         <Card.Section>
-          <div className={styles["listing-card"]}>
+          <div className={styles["listing-card-content"]}>
             <div className={styles["details"]}>
               <Link
                 className={styles["main-link"]}
@@ -86,9 +87,11 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
                   variant={"primary"}
                 >
                   <div className={styles["due-date-content"]}>
-                    <div className={styles["date-review-order"]}>
-                      {getMessageData(listing.reviewOrderType)}
-                    </div>
+                    {listing.status === ListingsStatusEnum.active && (
+                      <div className={styles["date-review-order"]}>
+                        {getMessageData(listing.reviewOrderType)}
+                      </div>
+                    )}
                     <div>{status.content}</div>
                   </div>
                 </Message>

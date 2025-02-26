@@ -71,67 +71,14 @@ export const getListingStackedTableData = (unitsSummarized: UnitsSummarized) => 
     : []
 }
 
-export const getListingApplicationStatus = (listing: Listing): StatusBarType => {
-  if (!listing) return
-  let content = ""
-  let subContent = ""
-  let formattedDate = ""
-  let status = ApplicationStatusType.Open
-
-  if (openInFuture(listing)) {
-    const date = listing.applicationOpenDate
-    const openDate = dayjs(date)
-    formattedDate = openDate.format("MMM D, YYYY")
-    content = t("listings.applicationOpenPeriod")
-  } else {
-    if (listing.status === ListingsStatusEnum.closed) {
-      status = ApplicationStatusType.Closed
-      content = t("listings.applicationsClosed")
-    } else if (listing.applicationDueDate) {
-      const dueDate = dayjs(listing.applicationDueDate)
-      formattedDate = dueDate.format("MMM DD, YYYY")
-      formattedDate = formattedDate + ` ${t("t.at")} ` + dueDate.format("h:mmA")
-
-      // if due date is in future, listing is open
-      if (dayjs() < dueDate) {
-        content = t("listings.applicationDeadline")
-      } else {
-        status = ApplicationStatusType.Closed
-        content = t("listings.applicationsClosed")
-      }
-    }
-  }
-
-  if (formattedDate !== "") {
-    content = content + `: ${formattedDate}`
-  }
-
-  if (listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe) {
-    subContent = content
-    content = t("listings.applicationFCFS")
-  }
-
-  if (
-    listing.reviewOrderType === ReviewOrderTypeEnum.waitlist &&
-    listing.status !== ListingsStatusEnum.closed
-  ) {
-    subContent = content
-    content = t("listings.applicationOpenPeriod")
-  }
-
-  return {
-    status,
-    content,
-    subContent,
-  }
-}
-
-export const getListingApplicationStatusSeeds = (
+export const getListingApplicationStatus = (
   listing: Listing,
-  hideTime?: boolean
+  hideTime?: boolean,
+  hideReviewOrder?: boolean
 ): StatusBarType => {
   if (!listing) return
   let content = ""
+  let subContent = ""
   let formattedDate = ""
   let status = ApplicationStatusType.Open
 
@@ -167,10 +114,17 @@ export const getListingApplicationStatusSeeds = (
     content = content + `: ${formattedDate}`
   }
 
+  if (!hideReviewOrder) {
+    if (listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe) {
+      subContent = content
+      content = t("listings.applicationFCFS")
+    }
+  }
+
   return {
     status,
     content,
-    subContent: "",
+    subContent,
   }
 }
 
