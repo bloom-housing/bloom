@@ -229,7 +229,7 @@ const BuildingDetails = ({
           </GridCell>
         </Grid.Row>
         <Grid.Row columns={6}>
-          <Grid.Cell className={!enableRegions ? "seeds-grid-span-2" : ""}>
+          <Grid.Cell className={"seeds-grid-span-2"}>
             <Field
               label={t("application.contact.city")}
               name={"listingsBuildingAddress.city"}
@@ -317,18 +317,8 @@ const BuildingDetails = ({
               register={register}
             />
           </Grid.Cell>
-          <GridCell className={!enableRegions && "seeds-grid-span-2"}>
-            <Field
-              label={t("listings.yearBuilt")}
-              name={"yearBuilt"}
-              id={"yearBuilt"}
-              placeholder={t("listings.yearBuilt")}
-              type={"number"}
-              register={register}
-            />
-          </GridCell>
-          {enableRegions && (
-            <Grid.Cell className="seeds-grid-span-2">
+          <Grid.Cell className="seeds-grid-span-2">
+            {enableRegions ? (
               <FieldValue label={t("t.region")}>
                 <Select
                   id="region"
@@ -345,9 +335,32 @@ const BuildingDetails = ({
                   }))}
                 />
               </FieldValue>
-            </Grid.Cell>
-          )}
+            ) : (
+              <Field
+                label={t("listings.yearBuilt")}
+                name={"yearBuilt"}
+                id={"yearBuilt"}
+                placeholder={t("listings.yearBuilt")}
+                type={"number"}
+                register={register}
+              />
+            )}
+          </Grid.Cell>
         </Grid.Row>
+        {enableRegions && (
+          <Grid.Row columns={3}>
+            <Grid.Cell>
+              <Field
+                label={t("listings.yearBuilt")}
+                name={"yearBuilt"}
+                id={"yearBuilt"}
+                placeholder={t("listings.yearBuilt")}
+                type={"number"}
+                register={register}
+              />
+            </Grid.Cell>
+          </Grid.Row>
+        )}
         <Grid.Row columns={3}>
           <Grid.Cell className="seeds-grid-span-2">
             <FieldValue label={t("listings.mapPreview")}>
