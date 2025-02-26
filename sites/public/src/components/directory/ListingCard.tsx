@@ -5,12 +5,12 @@ import {
   ListingsStatusEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import styles from "./ListingCard.module.scss"
 import { imageUrlFromListing, oneLineAddress } from "@bloom-housing/shared-helpers"
 import { StackedTable, t } from "@bloom-housing/ui-components"
 import { Card, Heading, Icon, Link, Message, Tag } from "@bloom-housing/ui-seeds"
-import { getListingTags } from "../listing/listing_sections/MainDetails"
 import { getListingApplicationStatus, getListingStackedTableData } from "../../lib/helpers"
+import { getListingTags } from "../listing/listing_sections/MainDetails"
+import styles from "./ListingCard.module.scss"
 
 export interface ListingCardProps {
   listing: Listing

@@ -1,8 +1,8 @@
 import React from "react"
+import { setupServer } from "msw/lib/node"
 import { render } from "@testing-library/react"
 import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { ListingDirectory } from "../../src/components/directory/ListingDirectory"
-import { setupServer } from "msw/lib/node"
 import { mockNextRouter } from "../testUtils"
 
 const server = setupServer()

@@ -1,6 +1,6 @@
 import React from "react"
-import { fetchClosedListings, fetchOpenListings } from "../lib/hooks"
 import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { fetchClosedListings, fetchOpenListings } from "../lib/hooks"
 import { ListingDirectory } from "../components/directory/ListingDirectory"
 import { ListingDirectoryDeprecated } from "../components/directory/ListingDirectoryDeprecated"
 
