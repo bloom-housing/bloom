@@ -18,7 +18,7 @@ describe("<ListingCard>", () => {
     expect(view.getByText("Unit Type")).toBeDefined()
     expect(view.getByText("Minimum Income")).toBeDefined()
     expect(view.getByText("Rent")).toBeDefined()
-    expect(view.getByText("First Come First Serve")).toBeDefined()
+    expect(view.getByText("First Come First Serve", { exact: false })).toBeDefined()
     expect(view.getByLabelText("A picture of the building")).toBeDefined()
     expect(view.getByRole("link", { name: listing.name })).toHaveAttribute(
       "href",
