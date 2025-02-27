@@ -5,5 +5,9 @@ export enum FeatureFlagEnum {
   enableHomeType = 'enableHomeType',
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
   enableUtilitiesIncluded = 'enableUtilitiesIncluded',
+  enableIsVerified = 'enableIsVerified',
   hideCloseListingButton = 'hideCloseListingButton',
+  enableMarketingStatus = 'enableMarketingStatus',
+  enableSection8Question = 'enableSection8Question',
+  enableUnitGroups = 'enableUnitGroups',
 }
