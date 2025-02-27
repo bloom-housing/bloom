@@ -37,7 +37,6 @@ import { Neighborhood } from "./listing_sections/Neighborhood"
 import { RentSummary } from "./listing_sections/RentSummary"
 import { UnitSummaries } from "./listing_sections/UnitSummaries"
 import styles from "./ListingViewSeeds.module.scss"
-import Markdown from "markdown-to-jsx"
 
 interface ListingProps {
   jurisdiction?: Jurisdiction
