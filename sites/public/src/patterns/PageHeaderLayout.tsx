@@ -16,21 +16,23 @@ export interface PageHeaderLayoutProps extends PageHeaderProps {
 
 const PageHeader = (props: PageHeaderProps) => {
   return (
-    <div className={styles["page-header-container"]}>
-      <div className={styles["page-header"]}>
-        {props.subheading ? (
-          <HeadingGroup
-            heading={props.heading}
-            subheading={props.subheading}
-            size="4xl"
-            headingPriority={1}
-            className={styles["page-header-text-group"]}
-          ></HeadingGroup>
-        ) : (
-          <Heading size="4xl" priority={1} className={styles["page-header-text"]}>
-            {props.heading}
-          </Heading>
-        )}
+    <div className={styles["page-header-background"]}>
+      <div className={styles["page-header-outer"]}>
+        <div className={styles["page-header-inner"]}>
+          {props.subheading ? (
+            <HeadingGroup
+              heading={props.heading}
+              subheading={props.subheading}
+              size="4xl"
+              headingPriority={1}
+              className={styles["page-header-text-group"]}
+            ></HeadingGroup>
+          ) : (
+            <Heading size="4xl" priority={1} className={styles["page-header-text"]}>
+              {props.heading}
+            </Heading>
+          )}
+        </div>
       </div>
     </div>
   )
@@ -39,6 +41,6 @@ const PageHeader = (props: PageHeaderProps) => {
 export const PageHeaderLayout = (props: PageHeaderLayoutProps) => (
   <div className={styles["page-header-layout"]}>
     <PageHeader heading={props.heading} subheading={props.subheading} />
-    <div className={styles["body"]}>{props.children}</div>
+    <div className={styles["page-content-outer"]}>{props.children}</div>
   </div>
 )
