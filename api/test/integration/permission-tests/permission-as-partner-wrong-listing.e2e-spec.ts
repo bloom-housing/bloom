@@ -1015,6 +1015,14 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
         .expect(201);
     });
 
+    it('should succeed for filterableList endpoint', async () => {
+      await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(201);
+    });
+
     it('should succeed for retrieveListings endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/listings/byMultiselectQuestion/${listingMulitselectQuestion}`)

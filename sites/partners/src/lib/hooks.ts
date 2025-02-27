@@ -96,7 +96,7 @@ export function useListingsData({
   if (roles?.isPartner) {
     params.filter.push({
       $comparison: EnumListingFilterParamsComparison["="],
-      leasingAgents: userId,
+      leasingAgent: userId,
     })
   } else if (roles?.isJurisdictionalAdmin || roles?.isLimitedJurisdictionalAdmin) {
     params.filter.push({
@@ -113,7 +113,7 @@ export function useListingsData({
 
   const { listingsService } = useContext(AuthContext)
 
-  const fetcher = () => listingsService.list({ body: { ...params } })
+  const fetcher = () => listingsService.filterableList({ body: { ...params } })
 
   const paramsString = qs.stringify(params)
 
