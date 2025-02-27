@@ -174,12 +174,8 @@ export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProp
             amiValues={getAmiValues(listing)}
             reviewOrderType={listing.reviewOrderType}
             unitsSummarized={listing.unitsSummarized}
+            section8Acceptance={listing.section8Acceptance}
           />
-          {listing.section8Acceptance && (
-            <div className="seeds-m-bs-text">
-              <Markdown>{t("listings.section8VoucherInfo")}</Markdown>
-            </div>
-          )}
           <div className={styles["main-content"]}>
             <div className={styles["hide-desktop"]}>{ApplyBar}</div>
             <Eligibility
