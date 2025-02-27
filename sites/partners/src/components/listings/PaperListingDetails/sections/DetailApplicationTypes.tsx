@@ -19,10 +19,6 @@ const DetailApplicationTypes = () => {
     (method) => method.type === ApplicationMethodsTypeEnum.FileDownload
   )
 
-  const referralMethod = listing.applicationMethods.find(
-    (method) => method.type === ApplicationMethodsTypeEnum.Referral
-  )
-
   const paperApplicationsTableHeaders = {
     fileName: "t.fileName",
     language: "t.language",
@@ -81,22 +77,6 @@ const DetailApplicationTypes = () => {
           </FieldValue>
         </Grid.Row>
       )}
-
-      <Grid.Row columns={2}>
-        <FieldValue id="referralOpportunity" label={t("listings.applicationType.referral")}>
-          {getDetailBoolean(listing.referralOpportunity)}
-        </FieldValue>
-        {referralMethod && (
-          <>
-            <FieldValue id="referralContactPhone" label={t("listings.referralContactPhone")}>
-              {referralMethod.phoneNumber}
-            </FieldValue>
-            <FieldValue id="referralSummary" label={t("listings.referralSummary")}>
-              {referralMethod.externalReference}
-            </FieldValue>
-          </>
-        )}
-      </Grid.Row>
     </SectionWithGrid>
   )
 }
