@@ -2385,6 +2385,7 @@ describe('Testing listing service', () => {
         'listingId',
         LanguagesEnum.en,
         ListingViews.base,
+        false,
         true,
       );
 
@@ -3189,8 +3190,6 @@ describe('Testing listing service', () => {
               },
             ],
           },
-          isVerified: false,
-          section8Acceptance: false,
         },
       });
 
@@ -3814,14 +3813,6 @@ describe('Testing listing service', () => {
         ],
       });
 
-      const unitTypes = [
-        {
-          id: 'unit-type-1',
-          name: UnitTypeEnum.studio,
-          numBedrooms: 0,
-        },
-      ];
-
       await service.update(
         {
           id: randomUUID(),
@@ -3853,15 +3844,20 @@ describe('Testing listing service', () => {
               bathroomMin: 1,
               bathroomMax: 2,
               openWaitlist: false,
-              unitTypes: unitTypes,
+              unitTypes: {
+                id: randomUUID(),
+              },
+              unitAccessibilityPriorityTypes: {
+                id: randomUUID(),
+              },
               unitGroupAmiLevels: [
                 {
-                  amiPercentage: 80,
+                  amiPercentage: 0,
                   monthlyRentDeterminationType:
                     MonthlyRentDeterminationTypeEnum.flatRent,
                   percentageOfIncomeValue: null,
                   flatRentValue: 1000,
-                  amiChart: { id: 'ami-chart-id' },
+                  amiChart: { id: randomUUID() },
                 },
               ],
             },
@@ -3900,30 +3896,35 @@ describe('Testing listing service', () => {
           unitGroups: {
             create: [
               {
-                totalAvailable: 5,
+                totalAvailable: 8,
                 totalCount: 10,
                 floorMin: 1,
                 floorMax: 5,
-                maxOccupancy: 3,
+                maxOccupancy: 2,
                 minOccupancy: 1,
-                sqFeetMin: 500,
-                sqFeetMax: 800,
+                sqFeetMin: 400,
+                sqFeetMax: 500,
                 bathroomMin: 1,
-                bathroomMax: 2,
-                openWaitlist: false,
+                bathroomMax: 1,
+                openWaitlist: true,
                 unitTypes: {
-                  connect: [{ id: 'unit-type-1' }],
+                  connect: [{ id: expect.anything() }],
+                },
+                unitAccessibilityPriorityTypes: {
+                  connect: {
+                    id: expect.anything(),
+                  },
                 },
                 unitGroupAmiLevels: {
                   create: [
                     {
-                      amiPercentage: 80,
+                      amiPercentage: 30,
                       monthlyRentDeterminationType:
-                        MonthlyRentDeterminationTypeEnum.flatRent,
-                      percentageOfIncomeValue: null,
-                      flatRentValue: 1000,
+                        MonthlyRentDeterminationTypeEnum.percentageOfIncome,
+                      percentageOfIncomeValue: 30,
+                      flatRentValue: 2000,
                       amiChart: {
-                        connect: { id: 'ami-chart-id' },
+                        connect: { id: expect.anything() },
                       },
                     },
                   ],
@@ -3931,8 +3932,6 @@ describe('Testing listing service', () => {
               },
             ],
           },
-          isVerified: false,
-          section8Acceptance: false,
         },
         where: {
           id: expect.anything(),
@@ -4263,7 +4262,6 @@ describe('Testing listing service', () => {
           unitGroups: {
             create: [],
           },
-          section8Acceptance: true,
           unitsSummary: {
             create: [
               {
