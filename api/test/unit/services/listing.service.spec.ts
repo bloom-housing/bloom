@@ -367,7 +367,6 @@ describe('Testing listing service', () => {
               ],
               unitGroupAmiLevels: [
                 {
-                  id: randomUUID(),
                   amiPercentage: 10,
                   monthlyRentDeterminationType:
                     MonthlyRentDeterminationTypeEnum.percentageOfIncome,
@@ -377,7 +376,6 @@ describe('Testing listing service', () => {
             },
           ]
         : [],
-      section8Acceptance: true,
       listingMultiselectQuestions: [
         {
           id: randomUUID(),
@@ -2861,7 +2859,6 @@ describe('Testing listing service', () => {
           unitGroups: {
             create: [],
           },
-          section8Acceptance: true,
           unitsSummary: {
             create: [
               {
@@ -3844,9 +3841,11 @@ describe('Testing listing service', () => {
               bathroomMin: 1,
               bathroomMax: 2,
               openWaitlist: false,
-              unitTypes: {
-                id: randomUUID(),
-              },
+              unitTypes: [
+                {
+                  id: randomUUID(),
+                },
+              ],
               unitAccessibilityPriorityTypes: {
                 id: randomUUID(),
               },
@@ -3896,17 +3895,17 @@ describe('Testing listing service', () => {
           unitGroups: {
             create: [
               {
-                totalAvailable: 8,
+                totalAvailable: 5,
                 totalCount: 10,
                 floorMin: 1,
                 floorMax: 5,
-                maxOccupancy: 2,
+                maxOccupancy: 3,
                 minOccupancy: 1,
-                sqFeetMin: 400,
-                sqFeetMax: 500,
+                sqFeetMin: 500,
+                sqFeetMax: 800,
                 bathroomMin: 1,
-                bathroomMax: 1,
-                openWaitlist: true,
+                bathroomMax: 2,
+                openWaitlist: false,
                 unitTypes: {
                   connect: [{ id: expect.anything() }],
                 },
@@ -3918,11 +3917,11 @@ describe('Testing listing service', () => {
                 unitGroupAmiLevels: {
                   create: [
                     {
-                      amiPercentage: 30,
+                      amiPercentage: 0,
                       monthlyRentDeterminationType:
-                        MonthlyRentDeterminationTypeEnum.percentageOfIncome,
-                      percentageOfIncomeValue: 30,
-                      flatRentValue: 2000,
+                        MonthlyRentDeterminationTypeEnum.flatRent,
+                      percentageOfIncomeValue: null,
+                      flatRentValue: 1000,
                       amiChart: {
                         connect: { id: expect.anything() },
                       },
