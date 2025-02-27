@@ -87,12 +87,15 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
                   variant={"primary"}
                 >
                   <div className={styles["due-date-content"]}>
-                    {listing.status === ListingsStatusEnum.active && (
-                      <div className={styles["date-review-order"]}>
-                        {getMessageData(listing.reviewOrderType)}
-                      </div>
-                    )}
-                    <div>{status.content}</div>
+                    <span>
+                      {listing.status === ListingsStatusEnum.active && (
+                        <span className={styles["date-review-order"]}>
+                          {getMessageData(listing.reviewOrderType)}
+                          {`: `}
+                        </span>
+                      )}
+                      {status.content}
+                    </span>
                   </div>
                 </Message>
               )}
