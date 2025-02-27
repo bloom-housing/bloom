@@ -3620,6 +3620,9 @@ export interface Listing {
   neighborhood?: string
 
   /**  */
+  region?: RegionEnum
+
+  /**  */
   petPolicy?: string
 
   /**  */
@@ -4250,6 +4253,9 @@ export interface ListingCreate {
   neighborhood?: string
 
   /**  */
+  region?: RegionEnum
+
+  /**  */
   petPolicy?: string
 
   /**  */
@@ -4552,6 +4558,9 @@ export interface ListingUpdate {
 
   /**  */
   neighborhood?: string
+
+  /**  */
+  region?: RegionEnum
 
   /**  */
   petPolicy?: string
@@ -6834,6 +6843,7 @@ export enum FeatureFlagEnum {
   "enableIsVerified" = "enableIsVerified",
   "hideCloseListingButton" = "hideCloseListingButton",
   "enableMarketingStatus" = "enableMarketingStatus",
+  "enableRegions" = "enableRegions",
   "enableSection8Question" = "enableSection8Question",
   "enableUnitGroups" = "enableUnitGroups",
 }

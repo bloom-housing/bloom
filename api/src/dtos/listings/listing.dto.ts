@@ -23,6 +23,9 @@ import {
   HomeTypeEnum,
   ListingsStatusEnum,
   LotteryStatusEnum,
+  RegionEnum,
+  MarketingSeasonEnum,
+  MarketingTypeEnum,
   MarketingSeasonEnum,
   MarketingTypeEnum,
   ReviewOrderTypeEnum,
@@ -107,6 +110,14 @@ class Listing extends AbstractDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   neighborhood?: string;
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional({
+    enum: RegionEnum,
+    enumName: 'RegionEnum',
+  })
+  region?: RegionEnum;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })

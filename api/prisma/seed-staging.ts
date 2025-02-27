@@ -91,6 +91,14 @@ export const stagingSeed = async (
   });
   await prismaClient.featureFlags.create({
     data: featureFlagFactory(
+      'enableRegions',
+      false,
+      'When true, the region can be defined for the building address',
+      [jurisdiction.id],
+    ),
+  });
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory(
       'enableIsVerified',
       false,
       'When true, the listing can ba have its contents manually verified by a user',
