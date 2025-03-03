@@ -113,6 +113,17 @@ export const getListingApplicationStatus = (listing: Listing): StatusBarType => 
   }
 }
 
+export const getApplicationSeason = (listing: Listing) => {
+  let label = t("listings.apply.applicationSeason")
+  if (listing?.marketingSeason) {
+    label = label.concat(` ${t(`seasons.${listing.marketingSeason}`)}`)
+  }
+  if (listing?.marketingDate) {
+    label = label.concat(` ${dayjs(listing.marketingDate).year()}`)
+  }
+  return label
+}
+
 const unitSummariesHeaders = {
   unitType: "t.unitType",
   minimumIncome: "t.minimumIncome",
