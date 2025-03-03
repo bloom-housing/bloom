@@ -19,7 +19,7 @@ export const userFactory = async (optionalParams?: {
   roles?: Prisma.UserRolesUncheckedCreateWithoutUserAccountsInput;
   singleUseCode?: string;
 }): Promise<Prisma.UserAccountsCreateInput> => ({
-  agreedToTermsOfService: optionalParams?.acceptedTerms || false,
+  agreedToTermsOfService: optionalParams?.acceptedTerms ?? true,
   confirmedAt: optionalParams?.confirmedAt || null,
   email:
     optionalParams?.email?.toLocaleLowerCase() ||
@@ -62,6 +62,8 @@ export const userFactory = async (optionalParams?: {
   userRoles: {
     create: {
       isAdmin: optionalParams?.roles?.isAdmin || false,
+      isLimitedJurisdictionalAdmin:
+        optionalParams?.roles?.isLimitedJurisdictionalAdmin || false,
       isJurisdictionalAdmin:
         optionalParams?.roles?.isJurisdictionalAdmin || false,
       isPartner: optionalParams?.roles?.isPartner || false,
