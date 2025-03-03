@@ -2,8 +2,8 @@ import React from "react"
 import { setupServer } from "msw/lib/node"
 import { render } from "@testing-library/react"
 import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { ListingDirectory } from "../../src/components/directory/ListingDirectory"
-import { mockNextRouter } from "../testUtils"
+import { ListingBrowse } from "../../../src/components/browse/ListingBrowse"
+import { mockNextRouter } from "../../testUtils"
 
 const server = setupServer()
 
@@ -16,14 +16,14 @@ afterEach(() => server.resetHandlers())
 
 afterAll(() => server.close())
 
-describe("<ListingDirectory>", () => {
+describe("<ListingBrowse>", () => {
   it("shows empty state", () => {
-    const view = render(<ListingDirectory openListings={[]} closedListings={[]} />)
+    const view = render(<ListingBrowse openListings={[]} closedListings={[]} />)
     expect(view.getByText("No listings currently have open applications.")).toBeDefined()
   })
   it("shows multiple open listings", () => {
     const view = render(
-      <ListingDirectory
+      <ListingBrowse
         openListings={[
           { ...listing, name: "ListingA" },
           { ...listing, name: "ListingB" },

@@ -8,7 +8,7 @@ import { MetaTags } from "../../components/shared/MetaTags"
 import { getListings } from "../../lib/helpers"
 import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
-export interface ListingDirectoryDeprecatedProps {
+export interface ListingBrowseDeprecatedProps {
   openListings: Listing[]
   closedListings: Listing[]
 }
@@ -38,7 +38,7 @@ const closedListings = (listings) => {
   )
 }
 
-export const ListingDirectoryDeprecated = (props: ListingDirectoryDeprecatedProps) => {
+export const ListingBrowseDeprecated = (props: ListingBrowseDeprecatedProps) => {
   const { profile } = useContext(AuthContext)
   const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })

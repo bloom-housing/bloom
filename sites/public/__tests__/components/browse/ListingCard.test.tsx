@@ -2,9 +2,9 @@ import React from "react"
 import { render } from "@testing-library/react"
 import { oneLineAddress } from "@bloom-housing/shared-helpers"
 import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { ListingCard } from "../../src/components/directory/ListingCard"
-import * as helpers from "../../src/lib/helpers"
-import { getListingTags } from "../../src/components/listing/listing_sections/MainDetails"
+import { ListingCard } from "../../../src/components/browse/ListingCard"
+import * as helpers from "../../../src/lib/helpers"
+import { getListingTags } from "../../../src/components/listing/listing_sections/MainDetails"
 
 describe("<ListingCard>", () => {
   it("shows all card content", () => {

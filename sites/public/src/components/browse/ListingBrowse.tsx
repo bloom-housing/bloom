@@ -8,14 +8,14 @@ import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { ListingCard } from "./ListingCard"
-import styles from "./ListingDirectory.module.scss"
+import styles from "./ListingBrowse.module.scss"
 
-export interface ListingDirectoryProps {
+export interface ListingBrowseProps {
   openListings: Listing[]
   closedListings: Listing[]
 }
 
-export const ListingDirectory = (props: ListingDirectoryProps) => {
+export const ListingBrowse = (props: ListingBrowseProps) => {
   const { profile } = useContext(AuthContext)
   const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })

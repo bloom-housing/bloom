@@ -1,8 +1,8 @@
 import React from "react"
 import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { fetchClosedListings, fetchOpenListings } from "../lib/hooks"
-import { ListingDirectory } from "../components/directory/ListingDirectory"
-import { ListingDirectoryDeprecated } from "../components/directory/ListingDirectoryDeprecated"
+import { ListingBrowse } from "../components/browse/ListingBrowse"
+import { ListingBrowseDeprecated } from "../components/browse/ListingBrowseDeprecated"
 
 export interface ListingsProps {
   openListings: Listing[]
@@ -13,9 +13,9 @@ export default function ListingsPage(props: ListingsProps) {
   return (
     <>
       {process.env.showNewSeedsDesigns ? (
-        <ListingDirectory openListings={props.openListings} closedListings={props.closedListings} />
+        <ListingBrowse openListings={props.openListings} closedListings={props.closedListings} />
       ) : (
-        <ListingDirectoryDeprecated
+        <ListingBrowseDeprecated
           openListings={props.openListings}
           closedListings={props.closedListings}
         />
