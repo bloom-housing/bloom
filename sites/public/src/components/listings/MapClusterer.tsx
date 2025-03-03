@@ -169,7 +169,7 @@ export const MapClusterer = ({
           clusterMarker.className = styles["cluster-icon"]
           clusterMarker.textContent = cluster.count.toString()
           const DEFAULT_REM = 2
-          let calculatedSize = DEFAULT_REM + 0.04 * cluster.count
+          let calculatedSize = DEFAULT_REM + 0.03 * cluster.count
           if (calculatedSize > 3.5) calculatedSize = 3.5
           clusterMarker.style.width = `${calculatedSize}rem`
           clusterMarker.style.height = `${calculatedSize}rem`
@@ -184,7 +184,7 @@ export const MapClusterer = ({
           })
         },
       },
-      algorithm: new SuperClusterAlgorithm({ radius: 80 }),
+      algorithm: new SuperClusterAlgorithm({ radius: 110 }),
       onClusterClick: (_, cluster, map) => {
         setInfoWindowIndex(null)
         const zoomLevel = getBoundsZoomLevel(cluster.bounds)
