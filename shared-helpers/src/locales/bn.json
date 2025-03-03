@@ -583,6 +583,7 @@
   "listings.applicationTitle": "আবেদনের উপাত্ত",
   "listings.applications": "অ্যাপ্লিকেশন",
   "listings.applicationsSubmitted": "আবেদন জমা দেওয়া হয়েছে",
+  "listings.apply.applicationSeason": "বাসিন্দাদের আবেদন করতে হবে",
   "listings.apply.applicationWillBeAvailableOn": "%{OpenDate} এ ডাউনলোড এবং পিক -আপের জন্য আবেদন পাওয়া যাবে",
   "listings.apply.applicationsMustBeReceivedByDeadline": "আবেদনপত্র সময়সীমার মধ্যে গ্রহণ করতে হবে এবং পোস্টমার্ক বিবেচনা করা হবে না।",
   "listings.apply.applyOnline": "অনলাইনে আবেদন",
