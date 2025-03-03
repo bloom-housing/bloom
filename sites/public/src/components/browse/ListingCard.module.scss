@@ -70,6 +70,7 @@
       }
 
       .details {
+        // The intent of setting this order is so that the listing name is read first by a screen reader instead of the image, even though the image would appear first in the DOM
         order: 1;
         width: calc(100% / 7 * 4);
         padding: var(--seeds-spacer-content);

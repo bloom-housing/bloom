@@ -123,6 +123,27 @@ type StackedSummary = {
   maxUnitName: string | null
 }
 
+// Replace an old value with a new one if the new one exceeds the defined limit (either less or more) and is valid
+export const replaceIfExceeds = (less: boolean, current: number | null, updated: number | null) => {
+  const isValid = (test: number | null) => {
+    return test !== null && !isNaN(test)
+  }
+  if (!isValid(current) && isValid(updated)) {
+    return updated
+  }
+  if (!isValid(updated) && isValid(current)) {
+    return current
+  }
+  if (isValid(current) && isValid(updated) && current !== null && updated !== null) {
+    if (less) {
+      return updated < current ? updated : current
+    } else {
+      return updated > current ? updated : current
+    }
+  }
+  return null
+}
+
 // Massage the data in an array of unit summaries to calculate the min and max values of each data point across the full set
 // This is essentially a new type of unit summary. We should move this to the backend when we rewrite summaries.
 export const mergeSummaryRows = (summaries: UnitSummary[]): StackedSummary => {
@@ -130,30 +151,6 @@ export const mergeSummaryRows = (summaries: UnitSummary[]): StackedSummary => {
     .sort((summaryA, summaryB) => summaryA.unitTypes.numBedrooms - summaryB.unitTypes.numBedrooms)
     .reduce(
       (acc, curr) => {
-        // Replace an old value with a new one if the new one exceeds the defined limit (either less or more) and is valid
-        const replaceIfExceeds = (
-          less: boolean,
-          current: number | null,
-          updated: number | null
-        ) => {
-          const isValid = (test: number | null) => {
-            return test !== null && !isNaN(test)
-          }
-          if (!isValid(current) && isValid(updated)) {
-            return updated
-          }
-          if (!isValid(updated) && isValid(current)) {
-            return current
-          }
-          if (isValid(current) && isValid(updated) && current !== null && updated !== null) {
-            if (less) {
-              return updated < current ? updated : current
-            } else {
-              return updated > current ? updated : current
-            }
-          }
-          return null
-        }
         const updatedMinUnitType = replaceIfExceeds(
           true,
           acc.minUnitType,
