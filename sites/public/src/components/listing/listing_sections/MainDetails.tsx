@@ -1,6 +1,7 @@
 import * as React from "react"
 import {
   Listing,
+  MarketingTypeEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Heading, Link, Tag } from "@bloom-housing/ui-seeds"
@@ -15,6 +16,7 @@ import { DueDate } from "./DueDate"
 import { Availability } from "./Availability"
 import listingStyles from "../ListingViewSeeds.module.scss"
 import styles from "./MainDetails.module.scss"
+import { getApplicationSeason } from "../../../lib/helpers"
 
 type MainDetailsProps = {
   dueDateContent: string[]
@@ -44,6 +46,12 @@ export const getListingTags = (listing: Listing): ListingTag[] => {
     listingTags.push({
       title: t("listings.availableUnits"),
       variant: "primary",
+    })
+  }
+  if (listing.marketingType === MarketingTypeEnum.comingSoon) {
+    listingTags.push({
+      title: t("listings.underConstruction"),
+      variant: "secondary",
     })
   }
   return listingTags
@@ -108,7 +116,11 @@ export const MainDetails = ({ dueDateContent, listing }: MainDetailsProps) => {
 
         <p className={"seeds-m-bs-3"}>{listing.developer}</p>
         <div className={`${listingStyles["hide-desktop"]} seeds-m-b-3`}>
-          <DueDate content={dueDateContent} />
+          {listing.marketingType === MarketingTypeEnum.comingSoon ? (
+            <DueDate content={[getApplicationSeason(listing)]} />
+          ) : (
+            <DueDate content={dueDateContent} />
+          )}
         </div>
       </div>
       <div className={listingStyles["hide-desktop"]}>
