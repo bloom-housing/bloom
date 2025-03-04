@@ -39,8 +39,10 @@ const PageHeader = (props: PageHeaderProps) => {
 }
 
 export const PageHeaderLayout = (props: PageHeaderLayoutProps) => (
-  <div className={styles["page-header-layout"]}>
+  <div>
     <PageHeader heading={props.heading} subheading={props.subheading} />
-    <div className={styles["page-content-outer"]}>{props.children}</div>
+    <div className={styles["page-content-outer"]}>
+      <div className={styles["page-content-inner"]}>{props.children}</div>
+    </div>
   </div>
 )
