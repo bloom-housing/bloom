@@ -127,9 +127,9 @@ const CreateAccount = () => {
                     controlClassName={styles["create-account-input"]}
                     name="firstName"
                     validation={{ required: true, maxLength: 64 }}
-                    error={errors.givenName}
+                    error={errors.firstName}
                     errorMessage={
-                      errors.givenName?.type === "maxLength"
+                      errors.firstName?.type === "maxLength"
                         ? t("errors.maxLength", { length: 64 })
                         : t("errors.firstNameError")
                     }
