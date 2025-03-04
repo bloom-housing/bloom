@@ -23,7 +23,7 @@ import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
 import SignUpBenefits from "../components/account/SignUpBenefits"
 import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
 
-export default () => {
+const CreateAccount = () => {
   const { createUser, resendConfirmation } = useContext(AuthContext)
   const [confirmationResent, setConfirmationResent] = useState<boolean>(false)
   const signUpCopy = process.env.showMandatedAccounts
@@ -337,3 +337,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default CreateAccount
