@@ -77,12 +77,4 @@ export const uploadToS3Again = async (
   } catch (e) {
     throw new InternalServerErrorException(e);
   }
-
-  await generatePresignedGetURL(
-    bucket,
-    region,
-    key,
-    accessKeyId,
-    secretAccessKey,
-  );
 };
