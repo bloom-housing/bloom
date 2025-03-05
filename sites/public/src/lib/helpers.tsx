@@ -7,6 +7,7 @@ import {
   getSummariesTable,
   IMAGE_FALLBACK_URL,
   cleanMultiselectString,
+  getStackedSummariesTable,
 } from "@bloom-housing/shared-helpers"
 import {
   Address,
@@ -44,7 +45,7 @@ const getListingCardSubtitle = (address: Address) => {
   return address ? `${street}, ${city} ${state}, ${zipCode}` : null
 }
 
-const getListingTableData = (
+export const getListingTableData = (
   unitsSummarized: UnitsSummarized,
   listingReviewOrder: ReviewOrderTypeEnum,
   includeRentandMinimumIncome: boolean
@@ -66,7 +67,17 @@ export const getListingUrl = (listing: Listing) => {
   }
 }
 
-export const getListingApplicationStatus = (listing: Listing): StatusBarType => {
+export const getListingStackedTableData = (unitsSummarized: UnitsSummarized) => {
+  return unitsSummarized !== undefined
+    ? getStackedSummariesTable(unitsSummarized.byUnitTypeAndRent)
+    : []
+}
+
+export const getListingApplicationStatus = (
+  listing: Listing,
+  hideTime?: boolean,
+  hideReviewOrder?: boolean
+): StatusBarType => {
   if (!listing) return
   let content = ""
   let subContent = ""
@@ -85,25 +96,31 @@ export const getListingApplicationStatus = (listing: Listing): StatusBarType => 
     } else if (listing.applicationDueDate) {
       const dueDate = dayjs(listing.applicationDueDate)
       formattedDate = dueDate.format("MMM DD, YYYY")
-      formattedDate = formattedDate + ` ${t("t.at")} ` + dueDate.format("h:mmA")
+      formattedDate = !hideTime
+        ? formattedDate + ` ${t("t.at")} ` + dueDate.format("h:mmA")
+        : formattedDate
 
       // if due date is in future, listing is open
       if (dayjs() < dueDate) {
-        content = t("listings.applicationDeadline")
+        content = t("listings.applicationDue")
       } else {
         status = ApplicationStatusType.Closed
         content = t("listings.applicationsClosed")
       }
+    } else {
+      content = t("listings.applicationOpenPeriod")
     }
   }
 
-  if (formattedDate != "") {
+  if (formattedDate !== "") {
     content = content + `: ${formattedDate}`
   }
 
-  if (listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe) {
-    subContent = content
-    content = t("listings.applicationFCFS")
+  if (!hideReviewOrder) {
+    if (listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe) {
+      subContent = content
+      content = t("listings.applicationFCFS")
+    }
   }
 
   return {
