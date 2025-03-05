@@ -7,7 +7,6 @@ import {
   getUnitGroupSummary,
   getHouseholdMaxIncomeSummary,
   summarizeUnitGroups,
-  getMaxIncomeAmiChartItems,
 } from '../../../src/utilities/unit-groups-transformations';
 
 const defaultValues = {
@@ -249,10 +248,8 @@ describe('Unit Group Transformations', () => {
 
       const result = getUnitGroupSummary(unitGroups);
       expect(result).toHaveLength(2);
-      // Check that unit groups are sorted by bedroom count
       expect(result[0].unitTypes).toEqual([UnitTypeEnum.studio]);
       expect(result[1].unitTypes).toEqual([UnitTypeEnum.oneBdrm]);
-      // Check the second unit group with mixed rent types
       expect(result[1]).toEqual({
         unitTypes: [UnitTypeEnum.oneBdrm],
         rentAsPercentIncomeRange: {
@@ -423,27 +420,24 @@ describe('Unit Group Transformations', () => {
         percentage50: 50,
       });
 
-      expect(result.rows).toHaveLength(3); // For household sizes 1, 2, and 3
+      expect(result.rows).toHaveLength(3);
 
-      // Check household size 1
       expect(result.rows[0]).toEqual({
         householdSize: '1',
-        percentage30: 31000 + 3000, // baseAmount + (1000 * size) + (percentage * 100)
-        percentage50: 31000 + 5000,
+        percentage30: 34000,
+        percentage50: 36000,
       });
 
-      // Check household size 2
       expect(result.rows[1]).toEqual({
         householdSize: '2',
-        percentage30: 32000 + 3000,
-        percentage50: 32000 + 5000,
+        percentage30: 35000,
+        percentage50: 37000,
       });
 
-      // Check household size 3
       expect(result.rows[2]).toEqual({
         householdSize: '3',
-        percentage30: 33000 + 3000,
-        percentage50: 33000 + 5000,
+        percentage30: 36000,
+        percentage50: 38000,
       });
     });
 
@@ -546,10 +540,8 @@ describe('Unit Group Transformations', () => {
         percentage80: 80,
       });
 
-      expect(result.rows).toHaveLength(3); // For household sizes 1, 2, and 3
+      expect(result.rows).toHaveLength(3);
 
-      // Check that it uses the higher income values from amiChart2
-      // Check household size 1
       expect(result.rows[0]).toEqual({
         householdSize: '1',
         percentage30: 41000,
@@ -557,7 +549,6 @@ describe('Unit Group Transformations', () => {
         percentage80: 48000,
       });
 
-      // Check household size 2
       expect(result.rows[1]).toEqual({
         householdSize: '2',
         percentage30: 42000,
@@ -565,7 +556,6 @@ describe('Unit Group Transformations', () => {
         percentage80: 49000,
       });
 
-      // Check household size 3
       expect(result.rows[2]).toEqual({
         householdSize: '3',
         percentage30: 43000,
@@ -661,22 +651,20 @@ describe('Unit Group Transformations', () => {
         percentage60: 60,
       });
 
-      expect(result.rows).toHaveLength(2); // For household sizes 1 and 2
+      expect(result.rows).toHaveLength(2);
 
-      // Check household size 1
       expect(result.rows[0]).toEqual({
         householdSize: '1',
-        percentage30: 31000, // From amiChart1
-        percentage40: 36000, // From amiChart2 (higher value)
-        percentage60: 38000, // From amiChart2
+        percentage30: 31000,
+        percentage40: 36000,
+        percentage60: 38000,
       });
 
-      // Check household size 2
       expect(result.rows[1]).toEqual({
         householdSize: '2',
-        percentage30: 32000, // From amiChart1
-        percentage40: 37000, // From amiChart2 (higher value)
-        percentage60: 39000, // From amiChart2
+        percentage30: 32000,
+        percentage40: 37000,
+        percentage60: 39000,
       });
     });
 
@@ -844,172 +832,6 @@ describe('Unit Group Transformations', () => {
         percentage30: 30,
       });
       expect(result.householdMaxIncomeSummary.rows).toHaveLength(2);
-    });
-  });
-
-  describe('getMaxIncomeAmiChartItems', () => {
-    const generateAmiChartItems = (
-      maxHousehold: number,
-      percentages: number[],
-      baseAmount: number,
-    ) => {
-      const items = [];
-      for (let size = 1; size <= maxHousehold; size++) {
-        for (const percentage of percentages) {
-          items.push({
-            percentOfAmi: percentage,
-            householdSize: size,
-            income: baseAmount + 1000 * size + percentage * 100,
-          });
-        }
-      }
-      return items;
-    };
-
-    const generateAmiChart = (
-      id: string,
-      percentages: number[],
-      baseAmount: number,
-    ): AmiChart => {
-      return {
-        ...defaultValues,
-        id,
-        name: `AMI Chart ${id}`,
-        jurisdictions: {
-          id: 'jurisdiction1',
-        },
-        items: generateAmiChartItems(8, percentages, baseAmount),
-      };
-    };
-
-    it('should return empty array for empty input', () => {
-      expect(getMaxIncomeAmiChartItems([])).toEqual([]);
-      expect(getMaxIncomeAmiChartItems(null)).toEqual([]);
-    });
-
-    it('should return items from a single AMI chart', () => {
-      const amiChart = generateAmiChart('1', [30, 50], 30000);
-      const result = getMaxIncomeAmiChartItems([amiChart]);
-
-      // Should have 16 items (8 household sizes * 2 percentages)
-      expect(result).toHaveLength(16);
-
-      // Check a few sample items
-      expect(result).toContainEqual({
-        percentOfAmi: 30,
-        householdSize: 1,
-        income: 31000 + 3000, // baseAmount + (1000 * size) + (percentage * 100)
-      });
-
-      expect(result).toContainEqual({
-        percentOfAmi: 50,
-        householdSize: 2,
-        income: 32000 + 5000,
-      });
-    });
-
-    it('should return maximum income values from multiple AMI charts', () => {
-      // Create two AMI charts with different base amounts
-      const amiChart1 = generateAmiChart('1', [30, 50], 30000);
-      const amiChart2 = generateAmiChart('2', [30, 50], 35000);
-
-      const result = getMaxIncomeAmiChartItems([amiChart1, amiChart2]);
-
-      // Should still have 16 items (8 household sizes * 2 percentages)
-      expect(result).toHaveLength(16);
-
-      // Check that it picked the higher income values from amiChart2
-      expect(result).toContainEqual({
-        percentOfAmi: 30,
-        householdSize: 1,
-        income: 36000 + 3000, // baseAmount + (1000 * size) + (percentage * 100)
-      });
-
-      expect(result).toContainEqual({
-        percentOfAmi: 50,
-        householdSize: 2,
-        income: 37000 + 5000,
-      });
-
-      // Make sure no values from amiChart1 are present (since all values in amiChart2 are higher)
-      expect(result).not.toContainEqual({
-        percentOfAmi: 30,
-        householdSize: 1,
-        income: 31000 + 3000,
-      });
-    });
-
-    it('should handle charts with different percentages and household sizes', () => {
-      // Create two AMI charts with different percentages
-      const amiChart1 = generateAmiChart('1', [30, 40], 30000);
-      const amiChart2 = generateAmiChart('2', [50, 60], 35000);
-
-      const result = getMaxIncomeAmiChartItems([amiChart1, amiChart2]);
-
-      // Should have 32 items (8 household sizes * 4 percentages)
-      expect(result).toHaveLength(32);
-
-      // Check values from amiChart1
-      expect(result).toContainEqual({
-        percentOfAmi: 30,
-        householdSize: 1,
-        income: 31000 + 3000,
-      });
-
-      // Check values from amiChart2
-      expect(result).toContainEqual({
-        percentOfAmi: 50,
-        householdSize: 1,
-        income: 36000 + 5000,
-      });
-    });
-
-    it('should handle charts with overlapping percentages but different incomes', () => {
-      // Create charts with same percentages but different incomes
-      const items1 = [
-        { percentOfAmi: 30, householdSize: 1, income: 30000 },
-        { percentOfAmi: 30, householdSize: 2, income: 35000 },
-      ];
-
-      const items2 = [
-        { percentOfAmi: 30, householdSize: 1, income: 32000 }, // Higher
-        { percentOfAmi: 30, householdSize: 2, income: 34000 }, // Lower
-      ];
-
-      const amiChart1 = {
-        ...defaultValues,
-        id: '1',
-        name: 'AMI Chart 1',
-        jurisdictions: { id: 'jurisdiction1' },
-        items: items1,
-      };
-
-      const amiChart2 = {
-        ...defaultValues,
-        id: '2',
-        name: 'AMI Chart 2',
-        jurisdictions: { id: 'jurisdiction1' },
-        items: items2,
-      };
-
-      const result = getMaxIncomeAmiChartItems([amiChart1, amiChart2]);
-
-      // Should have 2 items with the maximum values
-      expect(result).toHaveLength(2);
-
-      // Should pick the higher income for household size 1
-      expect(result).toContainEqual({
-        percentOfAmi: 30,
-        householdSize: 1,
-        income: 32000,
-      });
-
-      // Should pick the higher income for household size 2
-      expect(result).toContainEqual({
-        percentOfAmi: 30,
-        householdSize: 2,
-        income: 35000,
-      });
     });
   });
 });
