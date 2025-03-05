@@ -47,6 +47,7 @@ import { User } from '../users/user.dto';
 import { requestedChangesUserMapper } from '../../utilities/requested-changes-user';
 import { LotteryDateParamValidator } from '../../utilities/lottery-date-validator';
 import { ApplicationLotteryTotal } from '../applications/application-lottery-total.dto';
+import { UnitGroupsSummarized } from '../unit-groups/unit-groups-summarized.dto';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -582,6 +583,12 @@ class Listing extends AbstractDTO {
   @Expose()
   @ApiPropertyOptional({ type: UnitsSummarized })
   unitsSummarized?: UnitsSummarized;
+
+  @Expose()
+  @ApiPropertyOptional({ type: UnitGroupsSummarized })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => UnitGroupsSummarized)
+  unitGroupsSummarized?: UnitGroupsSummarized;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })

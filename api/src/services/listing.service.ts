@@ -57,6 +57,10 @@ import {
 } from '../utilities/unit-utilities';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
+import {
+  addUnitGroupsSummarized,
+  summarizeUnitGroups,
+} from '../utilities/unit-groups-transformations';
 
 export type getListingsArgs = {
   skip: number;
@@ -247,6 +251,8 @@ export class ListingService implements OnModuleInit {
         };
       }
     });
+
+    addUnitGroupsSummarized(listings);
 
     const paginationInfo = buildPaginationMetaInfo(
       params,
@@ -710,13 +716,8 @@ export class ListingService implements OnModuleInit {
     listingId: string,
     lang: LanguagesEnum = LanguagesEnum.en,
     view: ListingViews = ListingViews.full,
-    enableUnitGroups = false,
   ): Promise<Listing> {
-    const listingRaw = await this.findOrThrow(
-      listingId,
-      view,
-      enableUnitGroups,
-    );
+    const listingRaw = await this.findOrThrow(listingId, view);
 
     let result = mapTo(Listing, listingRaw);
 
@@ -724,7 +725,12 @@ export class ListingService implements OnModuleInit {
       result = await this.translationService.translateListing(result, lang);
     }
 
-    await this.addUnitsSummarized(result);
+    if (result.unitGroups.length > 0) {
+      await this.addUnitGroupsSummary(result);
+    } else {
+      await this.addUnitsSummarized(result);
+    }
+
     return result;
   }
 
@@ -1376,7 +1382,6 @@ export class ListingService implements OnModuleInit {
           id: requestingUser.id,
         },
       });
-
       await this.prisma.activityLog.create({
         data: {
           module: 'user',
@@ -1421,29 +1426,8 @@ export class ListingService implements OnModuleInit {
     This will either find a listing or throw an error
     a listing view can be provided which will add the joins to produce that view correctly
   */
-  async findOrThrow(
-    id: string,
-    view?: ListingViews,
-    enableUnitGroups?: boolean,
-  ) {
+  async findOrThrow(id: string, view?: ListingViews) {
     const viewInclude = view ? views[view] : undefined;
-    if (enableUnitGroups && viewInclude) {
-      viewInclude.units = undefined;
-      viewInclude.unitGroups = {
-        include: {
-          unitTypes: true,
-          unitGroupAmiLevels: {
-            include: {
-              amiChart: {
-                include: {
-                  jurisdictions: true,
-                },
-              },
-            },
-          },
-        },
-      };
-    }
 
     const listing = await this.prisma.listings.findUnique({
       include: viewInclude,
@@ -2138,6 +2122,35 @@ export class ListingService implements OnModuleInit {
       });
       const amiCharts = mapTo(AmiChart, amiChartsRaw);
       listing.unitsSummarized = summarizeUnits(listing, amiCharts);
+    }
+    return listing;
+  };
+
+  // Add unit group summaries to a single listing
+  addUnitGroupsSummary = async (listing: Listing) => {
+    if (Array.isArray(listing.unitGroups) && listing.unitGroups.length > 0) {
+      // Extract amiCharts directly from the unitGroupAmiLevels
+      const amiCharts = listing.unitGroups.reduce(
+        (charts: AmiChart[], unitGroup) => {
+          if (unitGroup.unitGroupAmiLevels) {
+            unitGroup.unitGroupAmiLevels.forEach((level) => {
+              if (
+                level.amiChart &&
+                !charts.some((chart) => chart.id === level.amiChart.id)
+              ) {
+                charts.push(level.amiChart);
+              }
+            });
+          }
+          return charts;
+        },
+        [],
+      );
+
+      listing.unitGroupsSummarized = summarizeUnitGroups(
+        listing.unitGroups,
+        amiCharts,
+      );
     }
     return listing;
   };

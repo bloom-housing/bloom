@@ -2364,7 +2364,6 @@ describe('Testing listing service', () => {
         'listingId',
         LanguagesEnum.en,
         ListingViews.base,
-        true,
       );
 
       expect(listing.unitGroups).toEqual(mockedListing.unitGroups);
@@ -2393,6 +2392,12 @@ describe('Testing listing service', () => {
                   },
                 },
               },
+            },
+          },
+          units: {
+            include: {
+              unitTypes: true,
+              unitAmiChartOverrides: true,
             },
           },
         },
