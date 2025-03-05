@@ -1,12 +1,12 @@
 import React, { useEffect, useContext } from "react"
 import Head from "next/head"
-import { ListingsGroup, PageHeader, t } from "@bloom-housing/ui-components"
+import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingList, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import { ListingsGroup, PageHeader, t } from "@bloom-housing/ui-components"
+import { getListings } from "../../lib/helpers"
+import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
-import { MetaTags } from "../../components/shared/MetaTags"
-import { getListings } from "../../lib/helpers"
-import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export interface ListingBrowseDeprecatedProps {
   openListings: Listing[]
