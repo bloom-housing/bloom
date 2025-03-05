@@ -21,7 +21,7 @@ const Privacy = () => {
 
   return (
     <Layout>
-      <PageHeaderLayout heading={t("pageTitle.privacy")}>
+      <PageHeaderLayout heading={t("pageTitle.privacy")} inverse>
         <Markdown className={styles["markdown"]}>{pageContent.toString()}</Markdown>
       </PageHeaderLayout>
     </Layout>
