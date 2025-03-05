@@ -133,6 +133,7 @@ describe('Listing Controller Tests', () => {
     adminAccessToken = res.header?.['set-cookie'].find((cookie) =>
       cookie.startsWith('access-token='),
     );
+    await unitTypeFactoryAll(prisma);
   });
 
   afterAll(async () => {
@@ -154,7 +155,6 @@ describe('Listing Controller Tests', () => {
       });
     }
 
-    await unitTypeFactoryAll(prisma);
     const unitType = await unitTypeFactorySingle(prisma, UnitTypeEnum.SRO);
     const amiChart = await prisma.amiChart.create({
       data: amiChartFactory(10, jurisdictionA.id),
