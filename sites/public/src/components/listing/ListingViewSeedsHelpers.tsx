@@ -154,7 +154,10 @@ export const getFeatures = (
     (flag) => flag.name === "enableRegions" && flag.active
   )
   if (enableRegionFeature && listing.region) {
-    features.push({ heading: t("t.region"), subheading: listing.region })
+    features.push({
+      heading: t("t.region"),
+      subheading: listing.region.toString().replace("_", " "),
+    })
   }
   if (listing.yearBuilt) {
     features.push({ heading: t("t.built"), subheading: listing.yearBuilt })
