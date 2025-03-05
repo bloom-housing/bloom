@@ -1,7 +1,6 @@
 import React from "react"
 import { UseFormMethods } from "react-hook-form"
 import dayjs from "dayjs"
-import Markdown from "markdown-to-jsx"
 import { Button, Dialog, Link } from "@bloom-housing/ui-seeds"
 import {
   ApplicationAddressTypeEnum,
@@ -150,6 +149,15 @@ export const getFeatures = (
   const features = []
   if (listing.neighborhood) {
     features.push({ heading: t("t.neighborhood"), subheading: listing.neighborhood })
+  }
+  const enableRegionFeature = jurisdiction.featureFlags.some(
+    (flag) => flag.name === "enableRegions" && flag.active
+  )
+  if (enableRegionFeature && listing.region) {
+    features.push({
+      heading: t("t.region"),
+      subheading: listing.region.toString().replace("_", " "),
+    })
   }
   if (listing.yearBuilt) {
     features.push({ heading: t("t.built"), subheading: listing.yearBuilt })
