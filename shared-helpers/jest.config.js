@@ -5,7 +5,7 @@ process.env.TZ = "UTC"
 
 module.exports = {
   testRegex: ["/*.test.tsx$", "/*.test.ts$"],
-  collectCoverageFrom: ["**/*.ts", "!**/*.tsx"],
+  collectCoverageFrom: ["**/*.ts", "**/*.tsx"],
   coverageReporters: ["lcov", "text"],
   coverageDirectory: "test-coverage",
   coverageThreshold: {
