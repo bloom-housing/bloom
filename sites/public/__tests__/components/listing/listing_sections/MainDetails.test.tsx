@@ -52,7 +52,7 @@ describe("<MainDetails>", () => {
     expect(getByTestId("listing-tags")).toBeDefined()
     expect(getAllByText("Veteran").length).toBeGreaterThan(0)
   })
-  it("shows units available tag", () => {
+  it("shows units available tag for fcfs", () => {
     const { getByTestId, getByText } = render(
       <MainDetails
         listing={{
