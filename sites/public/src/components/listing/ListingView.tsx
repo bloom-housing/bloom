@@ -702,6 +702,13 @@ export const ListingView = (props: ListingProps) => {
               responsiveCollapse={true}
             />
           )}
+          {listing.section8Acceptance && (
+            <div className="my-2">
+              <Markdown className="custom-counter__subtitle">
+                {t("listings.section8VoucherInfo")}
+              </Markdown>
+            </div>
+          )}
         </div>
       </div>
       <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3 border-gray-400 border-b">
@@ -763,7 +770,18 @@ export const ListingView = (props: ListingProps) => {
 
             <ListSection
               title={t("listings.householdMaximumIncome")}
-              subtitle={householdMaximumIncomeSubheader}
+              subtitle={
+                <div>
+                  {householdMaximumIncomeSubheader}
+                  {listing.section8Acceptance && (
+                    <>
+                      <br />
+                      <br />
+                      <Markdown>{t("listings.section8VoucherInfo")}</Markdown>
+                    </>
+                  )}
+                </div>
+              }
             >
               <StandardTable
                 headers={hmiHeaders}

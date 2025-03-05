@@ -631,6 +631,7 @@
   "listings.enterLotteryForWaitlist": "Submit an application for an open slot on the waitlist for %{units} units.",
   "listings.featuresCards": "Features Cards",
   "listings.forIncomeCalculations": "For income calculations, household size includes everyone (all ages) living in the unit.",
+  "listings.section8VoucherInfo": "If you have a <strong>Section 8 Housing Choice Voucher</strong>, the income requirements do not apply and you will pay rent based on your income",
   "listings.forIncomeCalculationsBMR": "Income calculations are based on unit type",
   "listings.hideClosedListings": "Hide Closed Listings",
   "listings.homeType": "Home Type",
