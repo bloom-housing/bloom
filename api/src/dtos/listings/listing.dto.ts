@@ -48,6 +48,7 @@ import { requestedChangesUserMapper } from '../../utilities/requested-changes-us
 import { LotteryDateParamValidator } from '../../utilities/lottery-date-validator';
 import { ApplicationLotteryTotal } from '../applications/application-lottery-total.dto';
 import { ListingNeighborhoodAmenities } from './listing-neighborhood-amenities.dto';
+import { IsOptionalIf } from '../../decorators/validate-listing-publish.decorator';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -92,6 +93,7 @@ class Listing extends AbstractDTO {
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   developer?: string;
 
@@ -651,9 +653,12 @@ class Listing extends AbstractDTO {
 
   @Expose()
   @ApiPropertyOptional()
-  @ValidateIf((o) => o.includeCommunityDisclaimer, {
-    groups: [ValidationsGroupsEnum.default],
-  })
+  // @ValidateIf((o) => o.includeCommunityDisclaimer, {
+  //   groups: [ValidationsGroupsEnum.default],
+  // })
+  // @IsOptionalIf((o) => o.includeCommunityDisclaimer, {
+  //   groups: [ValidationsGroupsEnum.default],
+  // })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   communityDisclaimerDescription?: string;
@@ -709,6 +714,9 @@ class Listing extends AbstractDTO {
   @Type(() => ListingNeighborhoodAmenities)
   @ApiPropertyOptional({ type: ListingNeighborhoodAmenities })
   listingNeighborhoodAmenities?: ListingNeighborhoodAmenities;
+
+  @Expose()
+  requiredFields?: string[];
 }
 
 export { Listing as default, Listing };
