@@ -7,8 +7,8 @@ import {
   Listing,
   ListingsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import ApplicationsList from "../../../src/pages/listings/[id]/applications/index"
-import { mockNextRouter, render } from "../../testUtils"
+import ApplicationsList from "../../../../src/pages/listings/[id]/applications/index"
+import { mockNextRouter, render } from "../../../testUtils"
 
 const server = setupServer()
 
