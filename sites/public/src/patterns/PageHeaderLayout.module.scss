@@ -1,0 +1,124 @@
+.page-header-background {
+  background-color: var(--seeds-bg-color-surface-primary-inverse);
+  display: flex;
+  justify-content: center;
+}
+.page-header-outer {
+  margin: var(--seeds-spacer-container) var(--seeds-s4);
+  max-width: var(--seeds-width-5xl);
+  width: 100%;
+  @media (--md-down) {
+    margin: var(--seeds-s8) var(--seeds-s4);
+  }
+}
+
+.page-header-inner {
+  max-width: var(--seeds-width-3xl);
+}
+
+.page-header-text-group {
+  --subheading-font-size: var(--seeds-font-size-lg);
+  --heading-color: var(--seeds-color-on-inverse);
+  --subheading-color: var(--seeds-color-on-inverse);
+  --subheading-margin: var(--seeds-s6) 0;
+
+  h1,
+  p {
+    font-family: var(--seeds-font-alt-sans);
+  }
+
+  h1 {
+    font-weight: var(--seeds-font-weight-semibold);
+  }
+}
+
+.page-header-text {
+  color: var(--seeds-color-on-inverse);
+  font-family: var(--seeds-font-alt-sans);
+}
+
+.page-content-outer {
+  display: flex;
+  justify-content: center;
+  margin: var(--seeds-spacer-container) var(--seeds-s4);
+  @media (--md-down) {
+    margin: var(--seeds-s6) var(--seeds-s4);
+  }
+}
+
+.page-content-inner {
+  max-width: var(--seeds-width-5xl);
+  width: 100%;
+}
+
+.markdown {
+  max-width: var(--seeds-width-3xl);
+  font-family: var(--seeds-font-alt-sans);
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--seeds-font-alt-sans);
+    font-weight: var(--seeds-font-weight-semibold);
+    padding-top: 1.5em;
+  }
+
+  h2:first-child {
+    padding-top: 0;
+  }
+
+  h2 {
+    font-size: var(--seeds-type-heading-size-3xl);
+    @media (--md-down) {
+      font-size: var(--seeds-type-heading-size-3xl-mobile);
+    }
+  }
+  h3 {
+    font-size: (--seeds-type-heading-size-2xl);
+    @media (--md-down) {
+      font-size: var(--seeds-type-heading-size-2xl-mobile);
+    }
+  }
+  h4 {
+    font-size: (--seeds-font-size-xl);
+    @media (--md-down) {
+      font-size: var(--seeds-type-heading-size-lg);
+    }
+  }
+  h5 {
+    font-size: var(--seeds-font-size-lg);
+  }
+  h6 {
+    font-size: var(--seeds-type-heading-size-md);
+  }
+
+  ol,
+  ul,
+  p {
+    padding-top: 1em;
+  }
+
+  ul {
+    list-style: disc;
+    list-style-position: inside;
+  }
+
+  ol {
+    list-style: decimal;
+    list-style-position: inside;
+  }
+
+  li + li {
+    padding-top: var(--seeds-spacer-text);
+  }
+
+  hr {
+    margin-top: var(--seeds-spacer-content);
+  }
+
+  a {
+    color: var(--seeds-color-primary);
+    text-decoration: underline;
+  }
+}
