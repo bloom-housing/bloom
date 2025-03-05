@@ -1,11 +1,11 @@
-import { S3RequestPresigner } from '@aws-sdk/s3-request-presigner';
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { parseUrl } from '@smithy/url-parser';
 import { formatUrl } from '@aws-sdk/util-format-url';
 import { Hash } from '@smithy/hash-node';
 import { HttpRequest } from '@smithy/protocol-http';
-import { readFileSync } from 'fs';
 import { InternalServerErrorException } from '@nestjs/common';
+import { parseUrl } from '@smithy/url-parser';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { readFileSync } from 'fs';
+import { S3RequestPresigner } from '@aws-sdk/s3-request-presigner';
 
 /**
  *
