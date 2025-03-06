@@ -56,6 +56,7 @@ phases:
         --env APP_SECRET="${APP_SECRET:-dummy-value-that-is-at-least-16-character-long}"
         --env CLOUDINARY_SECRET="${CLOUDINARY_SECRET:-dummy_secret}"
         --env CLOUDINARY_KEY="${CLOUDINARY_KEY:-dummy_key}"
+        --env ADMIN_ACCOUNTS="${ADMIN_ACCOUNTS:100}"
         --env PARTNERS_BASE_URL="${PARTNERS_BASE_URL:-http://localhost:3001/not-used}"
         --env PARTNERS_PORTAL_URL="${PARTNERS_PORTAL_URL:-http://localhost:3001/not-used}"
         --env SKIP_MIGRATIONS=FALSE
