@@ -7,14 +7,21 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { getSummariesTable } from "@bloom-housing/shared-helpers"
 import styles from "./RentSummary.module.scss"
+import Markdown from "markdown-to-jsx"
 
 type RentSummaryProps = {
   amiValues: number[]
   reviewOrderType: ReviewOrderTypeEnum
   unitsSummarized: UnitsSummarized
+  section8Acceptance: boolean
 }
 
-export const RentSummary = ({ amiValues, reviewOrderType, unitsSummarized }: RentSummaryProps) => {
+export const RentSummary = ({
+  amiValues,
+  reviewOrderType,
+  unitsSummarized,
+  section8Acceptance,
+}: RentSummaryProps) => {
   const unitSummariesHeaders = {
     unitType: "t.unitType",
     minimumIncome: "t.minimumIncome",
@@ -57,6 +64,7 @@ export const RentSummary = ({ amiValues, reviewOrderType, unitsSummarized }: Ren
           responsiveCollapse={true}
         />
       )}
+      {section8Acceptance && <Markdown>{t("listings.section8VoucherInfo")}</Markdown>}
     </div>
   )
 }

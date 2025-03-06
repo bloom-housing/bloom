@@ -3,7 +3,10 @@ import { render, cleanup } from "@testing-library/react"
 import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { MainDetails } from "../../../../src/components/listing/listing_sections/MainDetails"
 import { oneLineAddress } from "@bloom-housing/shared-helpers"
-import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  MarketingTypeEnum,
+  ReviewOrderTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 afterEach(cleanup)
 
@@ -49,7 +52,7 @@ describe("<MainDetails>", () => {
     expect(getByTestId("listing-tags")).toBeDefined()
     expect(getAllByText("Veteran").length).toBeGreaterThan(0)
   })
-  it("shows units available tag", () => {
+  it("shows units available tag for fcfs", () => {
     const { getByTestId, getByText } = render(
       <MainDetails
         listing={{
@@ -74,5 +77,18 @@ describe("<MainDetails>", () => {
     )
     expect(getByTestId("listing-tags")).toBeDefined()
     expect(getByText("Open Waitlist")).toBeDefined()
+  })
+  it("shows under construction tag", () => {
+    const { getByTestId, getByText } = render(
+      <MainDetails
+        listing={{
+          ...listing,
+          marketingType: MarketingTypeEnum.comingSoon,
+        }}
+        dueDateContent={[]}
+      />
+    )
+    expect(getByTestId("listing-tags")).toBeDefined()
+    expect(getByText("Under Construction")).toBeDefined()
   })
 })
