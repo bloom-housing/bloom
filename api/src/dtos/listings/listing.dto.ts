@@ -670,7 +670,7 @@ class Listing extends AbstractDTO {
     enum: MarketingTypeEnum,
     enumName: 'MarketingTypeEnum',
   })
-  marketingType: MarketingTypeEnum;
+  marketingType?: MarketingTypeEnum;
 
   @Expose()
   @Type(() => Date)
