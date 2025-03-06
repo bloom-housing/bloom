@@ -57,10 +57,7 @@ import {
 } from '../utilities/unit-utilities';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
-import {
-  addUnitGroupsSummarized,
-  summarizeUnitGroups,
-} from '../utilities/unit-groups-transformations';
+import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
 
 export type getListingsArgs = {
   skip: number;
@@ -726,7 +723,7 @@ export class ListingService implements OnModuleInit {
     }
 
     if (result.unitGroups.length > 0) {
-      await this.addUnitGroupsSummary(result);
+      addUnitGroupsSummarized(result);
     } else {
       await this.addUnitsSummarized(result);
     }
@@ -2122,35 +2119,6 @@ export class ListingService implements OnModuleInit {
       });
       const amiCharts = mapTo(AmiChart, amiChartsRaw);
       listing.unitsSummarized = summarizeUnits(listing, amiCharts);
-    }
-    return listing;
-  };
-
-  // Add unit group summaries to a single listing
-  addUnitGroupsSummary = async (listing: Listing) => {
-    if (Array.isArray(listing.unitGroups) && listing.unitGroups.length > 0) {
-      // Extract amiCharts directly from the unitGroupAmiLevels
-      const amiCharts = listing.unitGroups.reduce(
-        (charts: AmiChart[], unitGroup) => {
-          if (unitGroup.unitGroupAmiLevels) {
-            unitGroup.unitGroupAmiLevels.forEach((level) => {
-              if (
-                level.amiChart &&
-                !charts.some((chart) => chart.id === level.amiChart.id)
-              ) {
-                charts.push(level.amiChart);
-              }
-            });
-          }
-          return charts;
-        },
-        [],
-      );
-
-      listing.unitGroupsSummarized = summarizeUnitGroups(
-        listing.unitGroups,
-        amiCharts,
-      );
     }
     return listing;
   };

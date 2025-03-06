@@ -49,8 +49,8 @@ import {
   doAnyJurisdictionHaveFalsyFeatureFlagValue,
   doAnyJurisdictionHaveFeatureFlagSet,
 } from '../utilities/feature-flag-utilities';
+import { UnitGroupSummary } from '../dtos/unit-groups/unit-group-summary.dto';
 import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
-import { UnitGroupSummary } from 'src/dtos/unit-groups/unit-group-summary.dto';
 
 views.csv = {
   ...views.details,
@@ -156,7 +156,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
 
     // Add unit groups summarized to listings
     // should be removed when unit summarized stored in db
-    addUnitGroupsSummarized(listings as unknown as Listing[]);
+    await addUnitGroupsSummarized(listings as unknown as Listing[]);
 
     await this.createCsv(listingFilePath, queryParams, {
       listings: listings as unknown as Listing[],

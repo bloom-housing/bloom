@@ -222,27 +222,56 @@ export const summarizeUnitGroups = (
   return data;
 };
 
-// Add unit group summaries to multiple listings
-export const addUnitGroupsSummarized = (listings: Listing[]) => {
+const extractAmiChartsFromUnitGroups = (
+  unitGroups: UnitGroup[],
+): AmiChart[] => {
+  return unitGroups.reduce((charts: AmiChart[], unitGroup) => {
+    if (unitGroup.unitGroupAmiLevels) {
+      unitGroup.unitGroupAmiLevels.forEach((level) => {
+        if (
+          level.amiChart &&
+          !charts.some((chart) => chart.id === level.amiChart.id)
+        ) {
+          charts.push(level.amiChart);
+        }
+      });
+    }
+    return charts;
+  }, []);
+};
+
+// Add unit group summaries to a single listing or multiple listings
+export const addUnitGroupsSummarized = (
+  listingOrListings: Listing | Listing[],
+): Listing | Listing[] => {
+  // Handle single listing case
+  if (!Array.isArray(listingOrListings)) {
+    const listing = listingOrListings;
+    if (Array.isArray(listing.unitGroups) && listing.unitGroups.length > 0) {
+      const amiCharts = extractAmiChartsFromUnitGroups(listing.unitGroups);
+      listing.unitGroupsSummarized = summarizeUnitGroups(
+        listing.unitGroups,
+        amiCharts,
+      );
+    }
+    return listing;
+  }
+
+  // Handle multiple listings case
+  const listings = listingOrListings;
   if (!listings || listings.length === 0) {
     return listings;
   }
 
-  const unitGroupMap = listings.reduce((acc, listing) => {
-    if (listing.unitGroups && listing.unitGroups.length > 0) {
-      acc[listing.id] = listing.unitGroups.map((unitGroup) => ({
-        ...unitGroup,
-        listingId: listing.id,
-      }));
-    }
-    return acc;
-  }, {});
-
   listings.forEach((listing) => {
-    listing.unitGroupsSummarized = summarizeUnitGroups(
-      unitGroupMap[listing.id] || [],
-      [],
-    );
+    if (Array.isArray(listing.unitGroups) && listing.unitGroups.length > 0) {
+      const amiCharts = extractAmiChartsFromUnitGroups(listing.unitGroups);
+      listing.unitGroupsSummarized = summarizeUnitGroups(
+        listing.unitGroups,
+        amiCharts,
+      );
+    }
   });
+
   return listings;
 };
