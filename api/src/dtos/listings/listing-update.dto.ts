@@ -45,6 +45,7 @@ export class ListingUpdate extends OmitType(Listing, [
   'publishedAt',
   'showWaitlist',
   'unitsSummarized',
+  'unitGroupsSummarized',
   'closedAt',
   'afsLastRunAt',
   'urlSlug',
