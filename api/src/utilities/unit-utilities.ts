@@ -577,7 +577,10 @@ export const formatRange = (
   return `${prefix}${min}${postfix} - ${prefix}${max}${postfix}`;
 };
 
-export function formatRentRange(rent: MinMax, percent: MinMax): string {
+export function formatRentRange(
+  rent: MinMax | MinMaxCurrency,
+  percent: MinMax,
+): string {
   let toReturn = '';
   if (rent) {
     toReturn += formatRange(rent.min, rent.max, '', '');

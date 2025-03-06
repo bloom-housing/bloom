@@ -1142,7 +1142,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         label: 'Monthly Rent',
         format: (unitGroupSummary: UnitGroupSummary) =>
           formatRentRange(
-            unitGroupSummary.rentRange as any,
+            unitGroupSummary.rentRange,
             unitGroupSummary.rentAsPercentIncomeRange,
           ),
       },
