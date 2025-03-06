@@ -4,7 +4,7 @@ import styles from "./PageHeaderLayout.module.scss"
 
 export interface PageHeaderProps {
   /** Heading at the top of the page header */
-  heading: string
+  heading: React.ReactNode
   /** Description below the heading */
   subheading?: React.ReactNode
 }
@@ -12,6 +12,8 @@ export interface PageHeaderProps {
 export interface PageHeaderLayoutProps extends PageHeaderProps {
   /** All content under the header banner */
   children: React.ReactNode
+  /** Determines header banner styling */
+  inverse?: boolean
 }
 
 const PageHeader = (props: PageHeaderProps) => {
@@ -26,7 +28,7 @@ const PageHeader = (props: PageHeaderProps) => {
               size="4xl"
               headingPriority={1}
               className={styles["page-header-text-group"]}
-            ></HeadingGroup>
+            />
           ) : (
             <Heading size="4xl" priority={1} className={styles["page-header-text"]}>
               {props.heading}
@@ -38,11 +40,16 @@ const PageHeader = (props: PageHeaderProps) => {
   )
 }
 
-export const PageHeaderLayout = (props: PageHeaderLayoutProps) => (
-  <div>
-    <PageHeader heading={props.heading} subheading={props.subheading} />
-    <div className={styles["page-content-outer"]}>
-      <div className={styles["page-content-inner"]}>{props.children}</div>
+export const PageHeaderLayout = (props: PageHeaderLayoutProps) => {
+  const classNames = [styles["page-header-layout"]]
+  if (props.inverse) classNames.push(styles["is-inverse"])
+
+  return (
+    <div className={classNames.join(" ")}>
+      <PageHeader heading={props.heading} subheading={props.subheading} />
+      <div className={styles["page-content-outer"]}>
+        <div className={styles["page-content-inner"]}>{props.children}</div>
+      </div>
     </div>
-  </div>
-)
+  )
+}
