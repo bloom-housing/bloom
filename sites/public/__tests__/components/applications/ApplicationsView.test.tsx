@@ -196,7 +196,6 @@ describe("<ApplicationsView>", () => {
   it("should show the page with only proper applications count", async () => {
     server.use(
       rest.get("http://localhost/api/adapter/applications/publicAppsView", (_req, res, ctx) => {
-        console.log(_req)
         return res(ctx.json(getApplications(1, 2, 3)))
       })
     )
@@ -236,7 +235,6 @@ describe("<ApplicationsView>", () => {
     beforeEach(() => {
       server.use(
         rest.get("http://localhost/api/adapter/applications/publicAppsView", (_req, res, ctx) => {
-          console.log(_req)
           return res(ctx.json(getApplications(1, 1, 1)))
         })
       )
