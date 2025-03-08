@@ -3,10 +3,11 @@ import dayjs from "dayjs"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import { Message, Toast } from "@bloom-housing/ui-seeds"
-import { SiteHeader, MenuLink, t } from "@bloom-housing/ui-components"
+import { MenuLink, t } from "@bloom-housing/ui-components"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
-import styles from "./application.module.scss"
 import CustomSiteFooter from "../components/shared/CustomSiteFooter"
+import { SiteHeader } from "../patterns/SiteHeader"
+import styles from "./application.module.scss"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
@@ -93,7 +94,7 @@ const Layout = (props) => {
             </Message>
           </div>
         )}
-        <SiteHeader
+        {/* <UICSiteHeader
           logoSrc="/images/logo_glyph.svg"
           homeURL="/"
           notice={
@@ -114,6 +115,17 @@ const Layout = (props) => {
           menuLinks={menuLinks}
           logoWidth={"base"}
           strings={{ skipToMainContent: t("t.skipToMainContent") }}
+        /> */}
+        <SiteHeader
+          title={"Bay Area Housing Portal"}
+          languages={languages?.map((lang) => {
+            return {
+              label: lang.label,
+              onClick: () =>
+                void router.push(router.asPath, router.asPath, { locale: lang.prefix || "en" }),
+              active: t("config.routePrefix") === lang.prefix,
+            }
+          })}
         />
         <main id="main-content" className="md:overflow-x-hidden">
           {toastMessagesRef.current?.map((toastMessage) => (
