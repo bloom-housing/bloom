@@ -1,5 +1,6 @@
 import React from "react"
 import dayjs from "dayjs"
+import InfoIcon from "@heroicons/react/20/solid/InformationCircleIcon"
 import {
   t,
   ListingCard,
@@ -20,9 +21,13 @@ import {
   Jurisdiction,
   Listing,
   ListingsStatusEnum,
+  MarketingTypeEnum,
   ReviewOrderTypeEnum,
   UnitsSummarized,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { CommonMessageVariant } from "@bloom-housing/ui-seeds/src/blocks/shared/CommonMessage"
+import { Icon, Message } from "@bloom-housing/ui-seeds"
+import styles from "./helpers.module.scss"
 
 export const getGenericAddress = (bloomAddress: Address) => {
   return bloomAddress
@@ -126,6 +131,82 @@ export const getListingApplicationStatus = (
     content,
     subContent,
   }
+}
+
+export const getStatusPrefix = (
+  listing: Listing,
+  enableMarketingStatus: boolean
+): { label: string; variant: CommonMessageVariant } => {
+  if (enableMarketingStatus && listing.marketingType === MarketingTypeEnum.comingSoon)
+    return { label: t("listings.underConstruction"), variant: "warn" }
+  if (
+    listing.status === ListingsStatusEnum.closed ||
+    (listing.applicationDueDate && dayjs() > dayjs(listing.applicationDueDate))
+  ) {
+    return { label: t("listings.applicationsClosed"), variant: "alert" }
+  }
+  switch (listing.reviewOrderType) {
+    case ReviewOrderTypeEnum.lottery:
+      return { label: t("listings.lottery"), variant: "primary" }
+    case ReviewOrderTypeEnum.waitlist:
+      return { label: t("listings.waitlist.open"), variant: "secondary" }
+    default:
+      return { label: t("listings.applicationFCFS"), variant: "primary" }
+  }
+}
+
+export const getListingStatusMessage = (
+  listing: Listing,
+  jurisdiction: Jurisdiction,
+  hideTime?: boolean
+) => {
+  if (!listing) return
+  let content = ""
+  let formattedDate = ""
+  const enableMarketingStatus = isFeatureFlagOn(jurisdiction, "enableMarketingStatus")
+  const prefix = getStatusPrefix(listing, enableMarketingStatus)
+
+  if (listing.status !== ListingsStatusEnum.closed) {
+    if (listing.applicationDueDate) {
+      const dueDate = dayjs(listing.applicationDueDate)
+      formattedDate = dueDate.format("MMM DD, YYYY")
+      formattedDate = !hideTime
+        ? formattedDate + ` ${t("t.at")} ` + dueDate.format("h:mmA")
+        : formattedDate
+
+      if (dayjs() < dueDate) {
+        content = t("listings.applicationDue")
+        if (formattedDate) content = content + ": "
+      }
+    } else {
+      content = t("listings.applicationOpenPeriod")
+    }
+
+    if (formattedDate !== "") {
+      content = content + `${formattedDate}`
+    }
+
+    if (listing.marketingType === MarketingTypeEnum.comingSoon && enableMarketingStatus) {
+      content = getApplicationSeason(listing)
+    }
+  }
+
+  return (
+    <Message
+      className={styles["status-bar"]}
+      customIcon={
+        <Icon size="md" className={styles["primary-color-icon"]}>
+          <InfoIcon />
+        </Icon>
+      }
+      variant={prefix.variant}
+    >
+      <div className={styles["due-date-content"]}>
+        <div className={styles["date-review-order"]}>{prefix.label}</div>
+        <div>{content}</div>
+      </div>
+    </Message>
+  )
 }
 
 export const getApplicationSeason = (listing: Listing) => {
