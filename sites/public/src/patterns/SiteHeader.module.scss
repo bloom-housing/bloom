@@ -1,0 +1,92 @@
+.site-header-container {
+  font-family: var(--seeds-font-alt-sans);
+  .language-wrapper {
+    background-color: var(--seeds-bg-color-inverse);
+    .language-container {
+      width: 100%;
+      color: var(--seeds-color-on-inverse-muted);
+      font-weight: var(--seeds-font-weight-semibold);
+      display: flex;
+      justify-content: flex-end;
+      padding: var(--seeds-s2);
+      .language {
+        &:not(:last-child) {
+          margin-inline-end: var(--seeds-s6);
+        }
+      }
+      .active-language {
+        color: var(--seeds-color-white);
+      }
+    }
+  }
+
+  .message-wrapper {
+    background-color: var(--seeds-color-primary-dark);
+    .message-container {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      padding: var(--seeds-s1);
+      padding-inline: var(--seeds-s2);
+
+      color: var(--seeds-color-white);
+      font-size: var(--seeds-type-label-size);
+    }
+  }
+
+  .navigation-wrapper {
+    background-color: var(--seeds-bg-color-surface);
+    .navigation-container {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      justify-content: space-between;
+      .title-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        .icon {
+          margin-inline-end: var(--seeds-s4);
+          color: var(--seeds-color-primary);
+        }
+        .title {
+          color: var(--seeds-text-color-darker);
+          padding: var(--seeds-s4) var(--seeds-s4) var(--seeds-s4) 0;
+        }
+      }
+      .links-container {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+        .link {
+          padding: var(--seeds-s4);
+          border-bottom: var(--seeds-border-2) solid transparent;
+          box-sizing: border-box;
+          color: var(--seeds-text-color);
+          font-weight: var(--seeds-font-weight-bold);
+          font-size: var(--seeds-type-body-size);
+          &:hover {
+            border-bottom: var(--seeds-border-2) solid var(--seeds-color-primary);
+          }
+        }
+      }
+    }
+  }
+}
+
+.header-container {
+  width: 100%;
+  font-family: var(--seeds-font-alt-sans);
+  .header-wrapper {
+    max-width: var(--seeds-width-5xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+    .content {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
