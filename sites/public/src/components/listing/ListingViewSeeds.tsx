@@ -5,13 +5,12 @@ import {
   Listing,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
-  MarketingTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
 import { pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
 import { Heading } from "@bloom-housing/ui-seeds"
 import { ErrorPage } from "../../pages/_error"
-import { getApplicationSeason, getListingApplicationStatus } from "../../lib/helpers"
+import { getListingApplicationStatus, getListingStatusMessage } from "../../lib/helpers"
 import {
   getAdditionalInformation,
   getAmiValues,
@@ -188,11 +187,7 @@ export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProp
           </div>
         </div>
         <div className={`${styles["right-bar"]} ${styles["hide-mobile"]}`}>
-          {listing.marketingType === MarketingTypeEnum.comingSoon ? (
-            <DueDate content={[getApplicationSeason(listing)]} />
-          ) : (
-            <DueDate content={[statusContent?.content, statusContent?.subContent]} />
-          )}
+          {getListingStatusMessage(listing, jurisdiction, false)}
           <Availability
             reservedCommunityDescription={listing.reservedCommunityDescription}
             reservedCommunityType={listing.reservedCommunityTypes}

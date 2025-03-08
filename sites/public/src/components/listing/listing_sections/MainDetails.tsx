@@ -65,7 +65,7 @@ export const MainDetails = ({ dueDateContent, listing }: MainDetailsProps) => {
   if (!listing) return
   const googleMapsHref =
     "https://www.google.com/maps/place/" + oneLineAddress(listing.listingsBuildingAddress)
-  const listingTags = getListingTags(listing)
+  const listingTags = getListingTags(listing, true)
   return (
     <div>
       <ImageCard

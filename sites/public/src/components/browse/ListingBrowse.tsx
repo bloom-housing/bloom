@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react"
 import Head from "next/head"
 import { Heading } from "@bloom-housing/ui-seeds"
-import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext, ListingList, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import { PageHeader, t } from "@bloom-housing/ui-components"
 import { MetaTags } from "../../components/shared/MetaTags"
@@ -13,6 +13,7 @@ import styles from "./ListingBrowse.module.scss"
 export interface ListingBrowseProps {
   openListings: Listing[]
   closedListings: Listing[]
+  jurisdiction: Jurisdiction
 }
 
 export const ListingBrowse = (props: ListingBrowseProps) => {
@@ -46,7 +47,9 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
             {props.openListings.length > 0 ? (
               <ul>
                 {props.openListings.map((listing, index) => {
-                  return <ListingCard listing={listing} key={index} />
+                  return (
+                    <ListingCard listing={listing} key={index} jurisdiction={props.jurisdiction} />
+                  )
                 })}
               </ul>
             ) : (
