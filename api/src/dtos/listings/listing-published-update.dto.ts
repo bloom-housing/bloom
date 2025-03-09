@@ -25,6 +25,7 @@ import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator'
 import { ReviewOrderTypeEnum } from '@prisma/client';
 import { UnitGroupCreate } from '../unit-groups/unit-group-create.dto';
 import { ValidateUnitsRequired } from '../../decorators/validate-units-required.decorator';
+import { ValidateListingPublish } from '../../decorators/validate-listing-publish.decorator';
 
 export class ListingPublishedUpdate extends OmitType(ListingUpdate, [
   'assets',
@@ -54,6 +55,9 @@ export class ListingPublishedUpdate extends OmitType(ListingUpdate, [
   assets: AssetCreate[];
 
   @Expose()
+  @ValidateListingPublish('listingsBuildingAddress', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreate)
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

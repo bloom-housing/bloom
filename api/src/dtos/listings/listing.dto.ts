@@ -48,7 +48,7 @@ import { requestedChangesUserMapper } from '../../utilities/requested-changes-us
 import { LotteryDateParamValidator } from '../../utilities/lottery-date-validator';
 import { ApplicationLotteryTotal } from '../applications/application-lottery-total.dto';
 import { ListingNeighborhoodAmenities } from './listing-neighborhood-amenities.dto';
-import { IsOptionalIf } from '../../decorators/validate-listing-publish.decorator';
+import { ValidateListingPublish } from '../../decorators/validate-listing-publish.decorator';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -497,6 +497,9 @@ class Listing extends AbstractDTO {
   listingEvents: ListingEvent[];
 
   @Expose()
+  @ValidateListingPublish('listingsBuildingAddress', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Address)
@@ -653,12 +656,9 @@ class Listing extends AbstractDTO {
 
   @Expose()
   @ApiPropertyOptional()
-  // @ValidateIf((o) => o.includeCommunityDisclaimer, {
-  //   groups: [ValidationsGroupsEnum.default],
-  // })
-  // @IsOptionalIf((o) => o.includeCommunityDisclaimer, {
-  //   groups: [ValidationsGroupsEnum.default],
-  // })
+  @ValidateIf((o) => o.includeCommunityDisclaimer, {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   communityDisclaimerDescription?: string;

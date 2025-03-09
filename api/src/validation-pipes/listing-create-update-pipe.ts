@@ -70,7 +70,6 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
       //   }
       // });
 
-      console.log('pre-value', value.reviewOrderType);
       const transformed = await super.transform(
         {
           ...value,
@@ -78,9 +77,7 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
         },
         {
           ...metadata,
-          metatype: value.id
-            ? this.statusToListingValidationModelMapForUpdate[value.status]
-            : this.statusToListingValidationModelMapForCreate[value.status],
+          metatype: value.id ? ListingUpdate : ListingCreate,
         },
       );
       // console.log(transformed);
