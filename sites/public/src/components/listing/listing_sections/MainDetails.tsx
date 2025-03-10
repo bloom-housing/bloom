@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { Dispatch, SetStateAction } from "react"
 import {
   Jurisdiction,
   Listing,
@@ -24,6 +24,7 @@ type MainDetailsProps = {
   jurisdiction: Jurisdiction
   showFavoriteButton?: boolean
   listingFavorited?: boolean
+  setListingFavorited?: Dispatch<SetStateAction<boolean>>
 }
 
 type ListingTag = {
@@ -65,10 +66,11 @@ export const getListingTags = (listing: Listing, hideReviewTags?: boolean): List
 }
 
 export const MainDetails = ({
-  dueDateContent,
   jurisdiction,
-  showFavoriteButton,
   listing,
+  listingFavorited,
+  setListingFavorited,
+  showFavoriteButton,
 }: MainDetailsProps) => {
   if (!listing) return
 
@@ -129,7 +131,9 @@ export const MainDetails = ({
         <p className={"seeds-m-bs-3"}>{listing.developer}</p>
         {showFavoriteButton && (
           <p className={"seeds-m-bs-3"}>
-            <FavoriteButton>Favorite</FavoriteButton>
+            <FavoriteButton favorited={listingFavorited} setFavorited={setListingFavorited}>
+              Favorite
+            </FavoriteButton>
           </p>
         )}
       </div>

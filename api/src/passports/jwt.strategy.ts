@@ -35,6 +35,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       include: {
         listings: true,
         userRoles: true,
+        favoriteListings: true,
         jurisdictions: {
           include: {
             featureFlags: {
