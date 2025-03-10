@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import {
+  FeatureFlagEnum,
   Jurisdiction,
   Listing,
   ListingEventsTypeEnum,
@@ -12,7 +13,7 @@ import { t } from "@bloom-housing/ui-components"
 import { AuthContext, pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
 import { Heading } from "@bloom-housing/ui-seeds"
 import { ErrorPage } from "../../pages/_error"
-import { getListingApplicationStatus } from "../../lib/helpers"
+import { isFeatureFlagOn, getListingApplicationStatus } from "../../lib/helpers"
 import {
   getAdditionalInformation,
   getAmiValues,
@@ -38,6 +39,7 @@ import { Neighborhood } from "./listing_sections/Neighborhood"
 import { RentSummary } from "./listing_sections/RentSummary"
 import { UnitSummaries } from "./listing_sections/UnitSummaries"
 import styles from "./ListingViewSeeds.module.scss"
+import { useProfileFavoriteListings } from "../../lib/hooks"
 
 interface ListingProps {
   jurisdiction?: Jurisdiction
@@ -46,14 +48,24 @@ interface ListingProps {
 }
 
 export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProps) => {
-  const { userService, profile } = useContext(AuthContext)
+  const { userService } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
 
   const [showDownloadModal, setShowDownloadModal] = useState(false)
   const [listingFavorited, setListingFavorited] = useState(false)
+  const favoriteListings = useProfileFavoriteListings()
 
+  useEffect(() => {
+    setListingFavorited(favoriteListings.some((item) => item.id === listing?.id))
+  }, [setListingFavorited, favoriteListings, listing?.id])
+
+  if (!listing) {
+    return <ErrorPage />
+  }
+
+  // Code for setting/unsetting favorite status for the listing
   const updateFavorite = async () => {
     setListingFavorited(!listingFavorited)
     await userService.modifyFavoriteListings({
@@ -62,14 +74,6 @@ export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProp
         action: listingFavorited ? ModificationEnum.remove : ModificationEnum.add,
       },
     })
-  }
-
-  useEffect(() => {
-    setListingFavorited(profile?.favoriteListings?.some((item) => item.id === listing?.id))
-  }, [setListingFavorited, profile])
-
-  if (!listing) {
-    return <ErrorPage />
   }
 
   const lotteryResultsEvent = listing.listingEvents?.find(
@@ -142,9 +146,7 @@ export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProp
         depositMax={listing.depositMax}
         depositMin={listing.depositMin}
         utilitiesIncluded={
-          jurisdiction?.featureFlags?.some(
-            (flag) => flag.name === "enableUtilitiesIncluded" && flag.active
-          )
+          isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUtilitiesIncluded)
             ? getUtilitiesIncluded(listing)
             : []
         }
@@ -187,7 +189,10 @@ export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProp
             listing={listing}
             dueDateContent={[statusContent?.content, statusContent?.subContent]}
             jurisdiction={jurisdiction}
-            showFavoriteButton={true}
+            showFavoriteButton={isFeatureFlagOn(
+              jurisdiction,
+              FeatureFlagEnum.enableListingFavoriting
+            )}
             listingFavorited={listingFavorited}
             setListingFavorited={updateFavorite}
           />

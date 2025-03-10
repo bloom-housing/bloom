@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useState } from "react"
 import axios from "axios"
 import qs from "qs"
 import { useRouter } from "next/router"
@@ -10,10 +10,11 @@ import {
   ListingOrderByKeys,
   ListingsStatusEnum,
   OrderByEnum,
+  PaginatedListing,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./applications/AppSubmissionContext"
-import { useRequireLoggedInUser, isInternalLink } from "@bloom-housing/shared-helpers"
+import { useRequireLoggedInUser, isInternalLink, AuthContext } from "@bloom-housing/shared-helpers"
 
 export const useRedirectToPrevPage = (defaultPath = "/") => {
   const router = useRouter()
@@ -41,6 +42,43 @@ export const useFormConductor = (stepName: string) => {
     conductor.skipCurrentStepIfNeeded()
   }, [conductor])
   return context
+}
+
+export const useProfileFavoriteListings = () => {
+  const { profile, listingsService, userService } = useContext(AuthContext)
+  const [loading, setLoading] = useState(true)
+  const [listings, setListings] = useState<PaginatedListing>({ items: [] } as PaginatedListing)
+
+  useEffect(() => {
+    if (profile && loading) {
+      void userService.profile().then((reloadedProfile) => {
+        if (reloadedProfile.favoriteListings.length > 0)
+          listingsService
+            .list({
+              filter: [
+                {
+                  $comparison: EnumListingFilterParamsComparison.IN,
+                  ids: reloadedProfile.favoriteListings.map((item) => item.id),
+                },
+              ],
+              limit: "all",
+            })
+            .then((res) => {
+              setListings(res)
+            })
+            .catch((err) => {
+              console.error(`Error fetching listings: ${err}`)
+              //setError(err)
+            })
+            .finally(() => setLoading(false))
+        else {
+          setListings({ items: [] } as PaginatedListing)
+        }
+      })
+    }
+  }, [profile, loading, userService, listingsService])
+
+  return listings.items
 }
 
 export async function fetchBaseListingData(

@@ -12,6 +12,7 @@ interface BloomCardProps {
   headerLink?: React.ReactNode
   headingPriority?: 1 | 2 | 3 | 4 | 5 | 6
   iconClass?: string
+  iconOutlined?: boolean
   iconSymbol?: CustomIconType
   id?: string
   subtitle?: string | React.ReactNode
@@ -57,6 +58,7 @@ const BloomCard = (props: BloomCardProps) => {
             <Icon
               size="2xl"
               className={`${styles["card-icon"]} ${props.iconClass ? props.iconClass : ""}`}
+              outlined={props.iconOutlined}
             >
               {customIcon}
             </Icon>
