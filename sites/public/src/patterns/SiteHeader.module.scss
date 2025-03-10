@@ -60,6 +60,9 @@
         align-items: flex-end;
         .dropdown-link-container {
           position: relative;
+          .link:has(+ .submenu-container:hover) {
+            border-bottom: var(--seeds-border-2) solid var(--seeds-color-primary);
+          }
         }
         .link {
           padding: var(--seeds-s4);
@@ -74,7 +77,7 @@
           display: flex;
           align-items: center;
           .dropdown-icon {
-            margin-left: var(--seeds-s1);
+            margin-inline-start: var(--seeds-s1);
           }
         }
         li ul {
@@ -99,7 +102,7 @@
             }
             .submenu-link {
               width: 100%;
-              text-align: left;
+              text-align: start;
               display: inline-block;
               padding: var(--seeds-s4);
               color: var(--seeds-text-color-light);
