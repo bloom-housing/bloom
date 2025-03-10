@@ -46,7 +46,11 @@ function Dashboard(props: DashboardProps) {
         : props.router.query.alert
       setAlertMessage(alert)
     }
-  }, [props.router, profile])
+
+    if (isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.showListingFavoriting)) {
+      window.localStorage.setItem("bloom-show-favorites-menu-item", "true")
+    }
+  }, [props.router, props.jurisdiction, profile])
 
   const closeAlert = () => {
     void props.router.push("/account/dashboard", undefined, { shallow: true })
