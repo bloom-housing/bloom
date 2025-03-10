@@ -28,7 +28,6 @@
       justify-content: flex-end;
       padding: var(--seeds-s1);
       padding-inline: var(--seeds-s2);
-
       color: var(--seeds-color-white);
       font-size: var(--seeds-type-label-size);
     }
@@ -51,7 +50,9 @@
         }
         .title {
           color: var(--seeds-text-color-darker);
-          padding: var(--seeds-s4) var(--seeds-s4) var(--seeds-s4) 0;
+          padding-inline-start: 0;
+          padding-inline-end: var(--seeds-s4);
+          padding-block: var(--seeds-s4);
         }
       }
       .links-container {
@@ -95,6 +96,7 @@
           border-bottom-left-radius: var(--seeds-rounded-md);
           border-bottom-right-radius: var(--seeds-rounded-md);
           overflow: hidden;
+          z-index: calc(var(--seeds-z-index-overlay) + 1);
 
           .submenu-item {
             &:not(:last-child) {
