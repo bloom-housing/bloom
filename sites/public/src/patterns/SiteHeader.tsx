@@ -49,8 +49,8 @@ const HeaderLink = (props: HeaderLinkProps) => {
             } else {
               return (
                 <li className={styles["submenu-item"]} key={index}>
-                  <button className={styles["submenu-link"]} onClick={props.link.onClick}>
-                    {props.link.label}
+                  <button className={styles["submenu-link"]} onClick={subMenuLink.onClick}>
+                    {subMenuLink.label}
                   </button>
                 </li>
               )
