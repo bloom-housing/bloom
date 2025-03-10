@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import {
   Jurisdiction,
@@ -6,6 +6,7 @@ import {
   ListingEventsTypeEnum,
   ListingsStatusEnum,
   MarketingTypeEnum,
+  ModificationEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
 import { AuthContext, pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
@@ -46,15 +47,27 @@ interface ListingProps {
 }
 
 export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProps) => {
-  const { profile } = useContext(AuthContext)
+  const { userService, profile } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
 
   const [showDownloadModal, setShowDownloadModal] = useState(false)
-  const [listingFavorited, setListingFavorited] = useState(
-    profile.favoriteListings?.some((item) => item.id === listing?.id)
-  )
+  const [listingFavorited, setListingFavorited] = useState(false)
+
+  const updateFavorite = async () => {
+    setListingFavorited(!listingFavorited)
+    await userService.modifyFavoriteListings({
+      body: {
+        id: listing.id,
+        action: listingFavorited ? ModificationEnum.remove : ModificationEnum.add,
+      },
+    })
+  }
+
+  useEffect(() => {
+    setListingFavorited(profile?.favoriteListings?.some((item) => item.id === listing?.id))
+  }, [setListingFavorited, profile])
 
   if (!listing) {
     return <ErrorPage />
@@ -174,6 +187,9 @@ export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProp
           <MainDetails
             listing={listing}
             dueDateContent={[statusContent?.content, statusContent?.subContent]}
+            showFavoriteButton={true}
+            listingFavorited={listingFavorited}
+            setListingFavorited={updateFavorite}
           />
           <RentSummary
             amiValues={getAmiValues(listing)}

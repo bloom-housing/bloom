@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { Dispatch, SetStateAction } from "react"
 import {
   Listing,
   MarketingTypeEnum,
@@ -24,6 +24,7 @@ type MainDetailsProps = {
   listing: Listing
   showFavoriteButton?: boolean
   listingFavorited?: boolean
+  setListingFavorited?: Dispatch<SetStateAction<boolean>>
 }
 
 type ListingTag = {
@@ -64,7 +65,13 @@ export const getListingTags = (listing: Listing, hideReviewTags?: boolean): List
   return listingTags
 }
 
-export const MainDetails = ({ dueDateContent, showFavoriteButton, listing }: MainDetailsProps) => {
+export const MainDetails = ({
+  dueDateContent,
+  listing,
+  showFavoriteButton,
+  listingFavorited,
+  setListingFavorited,
+}: MainDetailsProps) => {
   if (!listing) return
 
   const googleMapsHref =
@@ -126,7 +133,9 @@ export const MainDetails = ({ dueDateContent, showFavoriteButton, listing }: Mai
 
         {showFavoriteButton && (
           <p className={"seeds-m-bs-3"}>
-            <FavoriteButton>Favorite</FavoriteButton>
+            <FavoriteButton favorited={listingFavorited} setFavorited={setListingFavorited}>
+              Favorite
+            </FavoriteButton>
           </p>
         )}
 
