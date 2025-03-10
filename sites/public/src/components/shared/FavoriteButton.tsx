@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction } from "react"
-import HeartIcon from "@heroicons/react/24/solid/HeartIcon"
 import { Button, Icon } from "@bloom-housing/ui-seeds"
+import { CustomIconMap } from "@bloom-housing/shared-helpers"
 
 export interface FavoriteButtonProps {
   favorited: boolean
@@ -15,11 +15,7 @@ const FavoriteButton = (props: FavoriteButtonProps) => {
     <Button
       variant={buttonVariant}
       size="sm"
-      leadIcon={
-        <Icon>
-          <HeartIcon />
-        </Icon>
-      }
+      leadIcon={<Icon>{CustomIconMap.heartIconSolid}</Icon>}
       onClick={() => props.setFavorited(!props.favorited)}
     >
       {props.children}

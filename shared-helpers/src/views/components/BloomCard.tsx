@@ -6,6 +6,7 @@ import { CustomIconMap, CustomIconType } from "../CustomIconMap"
 
 interface BloomCardProps {
   iconSymbol?: CustomIconType
+  iconOutlined?: boolean
   title?: string
   subtitle?: string | React.ReactNode
   children: React.ReactElement
@@ -51,7 +52,7 @@ const BloomCard = (props: BloomCardProps) => {
       {title && (
         <Card.Header divider={props.variant === "block" ? undefined : "inset"}>
           {customIcon && (
-            <Icon size="2xl" className={styles["card-icon"]}>
+            <Icon size="2xl" className={styles["card-icon"]} outlined={props.iconOutlined}>
               {customIcon}
             </Icon>
           )}

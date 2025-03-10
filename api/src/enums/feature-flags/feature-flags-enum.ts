@@ -11,4 +11,5 @@ export enum FeatureFlagEnum {
   enableRegions = 'enableRegions',
   enableSection8Question = 'enableSection8Question',
   enableUnitGroups = 'enableUnitGroups',
+  showListingFavoriting = 'showListingFavoriting',
 }

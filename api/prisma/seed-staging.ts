@@ -131,6 +131,14 @@ export const stagingSeed = async (
       [jurisdiction.id],
     ),
   });
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory(
+      FeatureFlagEnum.showListingFavoriting,
+      true,
+      'When true, a Favorite button is shown for public listings and users can view their favorited listings',
+      [jurisdiction.id],
+    ),
+  });
   // create admin user
   await prismaClient.userAccounts.create({
     data: await userFactory({
