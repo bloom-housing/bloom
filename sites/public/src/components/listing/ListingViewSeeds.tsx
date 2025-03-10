@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import { useForm } from "react-hook-form"
 import {
   Jurisdiction,
@@ -7,7 +7,7 @@ import {
   ListingsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
-import { pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
+import { AuthContext, pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
 import { Heading } from "@bloom-housing/ui-seeds"
 import { ErrorPage } from "../../pages/_error"
 import { getListingApplicationStatus } from "../../lib/helpers"
@@ -44,10 +44,15 @@ interface ListingProps {
 }
 
 export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProps) => {
+  const { profile } = useContext(AuthContext)
+
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
 
   const [showDownloadModal, setShowDownloadModal] = useState(false)
+  const [listingFavorited, setListingFavorited] = useState(
+    profile.favoriteListings?.some((item) => item.id === listing?.id)
+  )
 
   if (!listing) {
     return <ErrorPage />
