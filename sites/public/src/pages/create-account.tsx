@@ -116,9 +116,9 @@ const CreateAccount = () => {
                   divider={"inset"}
                   className={accountCardStyles["account-card-settings-section"]}
                 >
-                  <label className={styles["create-account-header"]} htmlFor="firstName">
+                  <legend className={styles["create-account-header"]}>
                     {t("application.name.yourName")}
-                  </label>
+                  </legend>
 
                   <label className={styles["create-account-field"]} htmlFor="firstName">
                     {t("application.name.firstOrGivenName")}
