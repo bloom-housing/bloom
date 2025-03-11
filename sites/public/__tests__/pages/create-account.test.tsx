@@ -1,8 +1,9 @@
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { fireEvent, mockNextRouter, render, waitFor } from "../testUtils"
+import { fireEvent, mockNextRouter, render, waitFor, screen, act } from "../testUtils"
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import React from "react"
 import CreateAccount from "../../src/pages/create-account"
+import userEvent from "@testing-library/user-event"
 
 beforeAll(() => {
   mockNextRouter()
@@ -26,89 +27,127 @@ const renderCreateAccountPage = () =>
 
 describe("Create Account Page", () => {
   it("should render the page with all fileds, buttons and links", () => {
-    const { getByLabelText, getByText } = renderCreateAccountPage()
+    renderCreateAccountPage()
 
-    expect(getByText("Create Account", { selector: "h1" })).toBeInTheDocument()
-    expect(getByLabelText("Your Name")).toBeInTheDocument()
-    expect(getByLabelText("First or Given Name")).toBeInTheDocument()
-    expect(getByLabelText("Middle name (optional)")).toBeInTheDocument()
-    expect(getByLabelText("Last or Family Name")).toBeInTheDocument()
-    expect(getByText("Your date of birth")).toBeInTheDocument()
-    expect(getByLabelText("Month")).toBeInTheDocument()
-    expect(getByLabelText("Day")).toBeInTheDocument()
-    expect(getByLabelText("Year")).toBeInTheDocument()
+    const verifyInitialInput = (input: HTMLElement) => {
+      expect(input).toBeInTheDocument()
+      expect(input).toBeValid()
+      expect(input).toBeEnabled()
+    }
+
+    expect(screen.getByRole("heading", { name: /create account/i, level: 1 })).toBeInTheDocument()
+
+    expect(screen.getByText("Your Name", { selector: "legend" })).toBeInTheDocument()
+    verifyInitialInput(screen.getByRole("textbox", { name: /first or given name/i }))
+    verifyInitialInput(screen.getByRole("textbox", { name: /middle name \(optional\)/i }))
+    verifyInitialInput(screen.getByRole("textbox", { name: /last or family name/i }))
+
+    expect(screen.getByText("Your date of birth", { selector: "legend" })).toBeInTheDocument()
+    verifyInitialInput(screen.getByRole("textbox", { name: /month/i }))
+    verifyInitialInput(screen.getByRole("textbox", { name: /day/i }))
+    verifyInitialInput(screen.getByRole("textbox", { name: /year/i }))
     expect(
-      getByText("This is collected to verify that you are at least 18 years old.")
+      screen.getByText("This is collected to verify that you are at least 18 years old.", {
+        selector: "p",
+      })
     ).toBeInTheDocument()
-    expect(getByText("For example: 01 19 2000")).toBeInTheDocument()
-    expect(getByLabelText("Your Email Address")).toBeInTheDocument()
-    expect(getByLabelText("Password")).toBeInTheDocument()
+    expect(screen.getByText("For example: 01 19 2000", { selector: "p" })).toBeInTheDocument()
+
+    verifyInitialInput(screen.getByRole("textbox", { name: /your email address/i }))
+
+    const passwordInput = screen.getByLabelText(/^password/i, { selector: "input" })
+    verifyInitialInput(passwordInput)
+    expect(passwordInput).toHaveAttribute("type", "password")
     expect(
-      getByText(
+      screen.getByText(
         "Must be at least 12 characters and include at least one lowercase letter, one uppercase letter, one number, and one special character (#?!@$%^&*-)."
       )
     ).toBeInTheDocument()
-    expect(getByLabelText("Re-enter your password")).toBeInTheDocument()
-    expect(getByText("Create Account", { selector: "button" }))
-    expect(getByText("Already have an account?", { selector: "h2" })).toBeInTheDocument()
-    const signInlink = getByText("Sign In", { selector: "a" })
-    expect(signInlink).toBeInTheDocument()
-    expect(signInlink).toHaveAttribute("href", "/sign-in")
+    const passwordConfirmInput = screen.getByLabelText(/re-enter your password/i, {
+      selector: "input",
+    })
+    verifyInitialInput(passwordConfirmInput)
+    expect(passwordConfirmInput).toHaveAttribute("type", "password")
+
+    const createAccountButton = screen.getByRole("button", { name: /create account/i })
+    expect(createAccountButton).toBeInTheDocument()
+    expect(createAccountButton).toBeEnabled()
+
+    expect(
+      screen.getByRole("heading", { level: 2, name: /already have an account\?/i })
+    ).toBeInTheDocument()
+
+    const signInLink = screen.getByRole("link", { name: /sign in/i })
+    expect(signInLink).toBeInTheDocument()
+    expect(signInLink).toHaveAttribute("href", "/sign-in")
   })
 
   describe("Field validation errors", () => {
     it("should show no alerts on initial load", () => {
-      const { queryByText } = renderCreateAccountPage()
+      renderCreateAccountPage()
 
-      expect(queryByText("Please enter a First Name")).not.toBeInTheDocument()
-      expect(queryByText("Must not be more than 64 characters.")).not.toBeInTheDocument()
-      expect(queryByText("Please enter a Last Name")).not.toBeInTheDocument()
+      expect(screen.queryByText("Please enter a First Name")).not.toBeInTheDocument()
+      expect(screen.queryByText("Must not be more than 64 characters.")).not.toBeInTheDocument()
+      expect(screen.queryByText("Please enter a Last Name")).not.toBeInTheDocument()
       expect(
-        queryByText("Please enter a valid Date of Birth, must be 18 or older")
+        screen.queryByText("Please enter a valid Date of Birth, must be 18 or older")
       ).not.toBeInTheDocument()
-      expect(queryByText("Please enter a valid email address")).not.toBeInTheDocument()
-      expect(queryByText("Please enter a valid password")).not.toBeInTheDocument()
-      expect(queryByText("The passwords do not match")).not.toBeInTheDocument()
+      expect(screen.queryByText("Please enter a valid email address")).not.toBeInTheDocument()
+      expect(screen.queryByText("Please enter a valid password")).not.toBeInTheDocument()
+      expect(screen.queryByText("The passwords do not match")).not.toBeInTheDocument()
     })
 
     it("show alerts on 'Create Account' click without filling any fields", async () => {
-      const { findByText, getByText, queryByText } = renderCreateAccountPage()
+      renderCreateAccountPage()
 
-      const createAccountButton = getByText("Create Account", { selector: "button" })
+      const createAccountButton = screen.getByRole("button", { name: /create account/i })
       expect(createAccountButton).toBeInTheDocument()
-      fireEvent.click(createAccountButton)
+      await userEvent.click(createAccountButton)
 
-      expect(await findByText("Please enter a First Name")).toBeInTheDocument()
-      expect(getByText("Please enter a Last Name")).toBeInTheDocument()
+      expect(screen.getByRole("textbox", { name: /first or given name/i })).toBeInvalid()
+      expect(screen.getByText("Please enter a First Name")).toBeInTheDocument()
+
+      expect(screen.getByRole("textbox", { name: /last or family name/i })).toBeInvalid()
+      expect(screen.getByText("Please enter a Last Name")).toBeInTheDocument()
+
+      expect(screen.getByRole("textbox", { name: /month/i })).toBeInvalid()
+      expect(screen.getByRole("textbox", { name: /day/i })).toBeInvalid()
+      expect(screen.getByRole("textbox", { name: /year/i })).toBeInvalid()
       expect(
-        getByText("Please enter a valid Date of Birth, must be 18 or older")
+        screen.getByText("Please enter a valid Date of Birth, must be 18 or older")
       ).toBeInTheDocument()
-      expect(getByText("Please enter a valid email address")).toBeInTheDocument()
-      expect(getByText("Please enter a valid password")).toBeInTheDocument()
 
-      expect(queryByText("Must not be more than 64 characters.")).not.toBeInTheDocument()
-      expect(queryByText("The passwords do not match")).not.toBeInTheDocument()
+      expect(screen.getByRole("textbox", { name: /your email address/i })).toBeInvalid()
+      expect(screen.getByText("Please enter a valid email address")).toBeInTheDocument()
+
+      expect(screen.getByLabelText(/^password/i, { selector: "input" })).toBeInvalid()
+      expect(screen.getByText("Please enter a valid password")).toBeInTheDocument()
+
+      expect(screen.queryByText("Must not be more than 64 characters.")).not.toBeInTheDocument()
+      expect(screen.queryByText("The passwords do not match")).not.toBeInTheDocument()
     })
 
     it("show max character limit error for string fields", async () => {
-      const { getByLabelText, findAllByText, getByText, queryByText } = renderCreateAccountPage()
+      renderCreateAccountPage()
 
-      const createAccountButton = getByText("Create Account", { selector: "button" })
-      const firstNameField = getByLabelText("First or Given Name")
-      const middleNameField = getByLabelText("Middle name (optional)")
-      const lastNameField = getByLabelText("Last or Family Name")
-
+      const createAccountButton = screen.getByRole("button", { name: /create account/i })
+      const firstNameField = screen.getByRole("textbox", { name: /first or given name/i })
+      const middleNameField = screen.getByRole("textbox", { name: /middle name \(optional\)/i })
+      const lastNameField = screen.getByRole("textbox", { name: /last or family name/i })
       expect(firstNameField).toBeInTheDocument()
       expect(middleNameField).toBeInTheDocument()
       expect(lastNameField).toBeInTheDocument()
       expect(createAccountButton).toBeInTheDocument()
-      fireEvent.change(firstNameField, { target: { value: Array(65).fill("a").join("") } })
-      fireEvent.change(middleNameField, { target: { value: Array(65).fill("a").join("") } })
-      fireEvent.change(lastNameField, { target: { value: Array(65).fill("a").join("") } })
+      await userEvent.type(firstNameField, Array(65).fill("a").join(""))
+      await userEvent.type(middleNameField, Array(65).fill("a").join(""))
+      await userEvent.type(lastNameField, Array(65).fill("a").join(""))
       fireEvent.click(createAccountButton)
-      expect(await findAllByText("Must not be more than 64 characters.")).toHaveLength(3)
-      expect(queryByText("Please enter a First Name")).not.toBeInTheDocument()
-      expect(queryByText("Please enter a Last Name")).not.toBeInTheDocument()
+      expect(await screen.findAllByText("Must not be more than 64 characters.")).toHaveLength(3)
+      expect(firstNameField).toBeInvalid()
+      expect(middleNameField).toBeInvalid()
+      expect(lastNameField).toBeInvalid()
+      expect(screen.queryByText("Please enter a First Name")).not.toBeInTheDocument()
+      expect(screen.queryByText("Please enter a Last Name")).not.toBeInTheDocument()
     })
 
     describe("show password error on invalid passwords", () => {
@@ -216,84 +255,95 @@ describe("Create Account Page", () => {
       it.each(TEST_PASSWORDS)("%s", async (entry) => {
         const { password, valid } = entry
 
-        const { getByText, getByLabelText, queryByText, findByText } = renderCreateAccountPage()
+        act(() => {
+          renderCreateAccountPage()
+        })
 
-        const createAccountButton = getByText("Create Account", { selector: "button" })
-        const passwordField = getByLabelText("Password")
-        expect(passwordField).toBeInTheDocument()
+        const createAccountButton = screen.getByRole("button", { name: /create account/i })
+        const passwordInput = screen.getByLabelText(/^password/i, { selector: "input" })
+        expect(passwordInput).toBeInTheDocument()
         expect(createAccountButton).toBeInTheDocument()
 
-        await waitFor(() => {
-          fireEvent.change(passwordField, { target: { value: password } })
-        })
-        fireEvent.click(createAccountButton)
+        await act(() => userEvent.type(passwordInput, password))
+        await act(() => userEvent.click(createAccountButton))
 
         if (valid) {
-          expect(queryByText("Please enter a valid password")).not.toBeInTheDocument()
+          await waitFor(() => {
+            expect(screen.queryByText("Please enter a valid password")).not.toBeInTheDocument()
+          })
+          expect(passwordInput).toBeValid()
         } else {
-          expect(await findByText("Please enter a valid password")).toBeInTheDocument()
+          expect(await screen.findByText("Please enter a valid password")).toBeInTheDocument()
+          expect(passwordInput).toBeInvalid()
         }
       })
     })
 
     it("show error on password on missmatching passwords", async () => {
-      const { getByLabelText, findByText, getByText, queryByText } = renderCreateAccountPage()
+      renderCreateAccountPage()
 
-      const createAccountButton = getByText("Create Account", { selector: "button" })
-      const passwordField = getByLabelText("Password")
-      const repeatPasswordField = getByLabelText("Re-enter your password")
-      expect(passwordField).toBeInTheDocument()
-      expect(repeatPasswordField).toBeInTheDocument()
+      const createAccountButton = screen.getByRole("button", { name: /create account/i })
+      const passwordInput = screen.getByLabelText(/^password/i, { selector: "input" })
+      const passwordConfirmInput = screen.getByLabelText(/re-enter your password/i, {
+        selector: "input",
+      })
+
+      expect(passwordInput).toBeInTheDocument()
+      expect(passwordConfirmInput).toBeInTheDocument()
       expect(createAccountButton).toBeInTheDocument()
 
-      fireEvent.change(passwordField, { target: { value: "P@ssw0rd#123" } })
-      fireEvent.change(repeatPasswordField, { target: { value: "Test" } })
-      fireEvent.click(createAccountButton)
+      await userEvent.type(passwordInput, "P@ssw0rd#123")
+      await userEvent.type(passwordConfirmInput, "Test")
+      await userEvent.click(createAccountButton)
 
-      expect(queryByText("Please enter a valid password")).not.toBeInTheDocument()
-      expect(await findByText("The passwords do not match")).toBeInTheDocument()
+      expect(passwordInput).toBeValid()
+      expect(passwordConfirmInput).toBeInvalid()
+      expect(screen.queryByText("Please enter a valid password")).not.toBeInTheDocument()
+      expect(await screen.findByText("The passwords do not match")).toBeInTheDocument()
     })
   })
 
   it("should navigate show confirm modal on account create", async () => {
-    const { getByLabelText, getByText, queryByText, getByTestId } = renderCreateAccountPage()
+    renderCreateAccountPage()
 
-    fireEvent.change(getByLabelText("First or Given Name"), { target: { value: "John" } })
-    fireEvent.change(getByLabelText("Middle name (optional)"), { target: { value: "Admin" } })
-    fireEvent.change(getByLabelText("Last or Family Name"), { target: { value: "Doe" } })
-    fireEvent.change(getByTestId("dob-field-month"), { target: { value: "2" } })
-    fireEvent.change(getByTestId("dob-field-day"), { target: { value: "2" } })
-    fireEvent.change(getByTestId("dob-field-year"), { target: { value: "2000" } })
-    fireEvent.change(getByLabelText("Your Email Address"), {
-      target: { value: "test@example.com" },
-    })
-    fireEvent.change(getByLabelText("Password"), { target: { value: "P@ssw0rd#123" } })
-    fireEvent.change(getByLabelText("Re-enter your password"), {
-      target: { value: "P@ssw0rd#123" },
-    })
+    expect(screen.getByRole("heading", { name: /create account/i, level: 1 })).toBeInTheDocument()
+    await userEvent.type(screen.getByRole("textbox", { name: /first or given name/i }), "John")
+    await userEvent.type(screen.getByRole("textbox", { name: /middle name/i }), "Admin")
+    await userEvent.type(screen.getByRole("textbox", { name: /last or family name/i }), "Doe")
 
-    const createAccountButton = getByText("Create Account", { selector: "button" })
+    await userEvent.type(screen.getByRole("textbox", { name: /month/i }), "2")
+    await userEvent.type(screen.getByRole("textbox", { name: /day/i }), "4")
+    await userEvent.type(screen.getByRole("textbox", { name: /year/i }), "2000")
+
+    await userEvent.type(
+      screen.getByRole("textbox", { name: /your email address/i }),
+      "johndoe@example.com"
+    )
+
+    await act(() =>
+      userEvent.type(screen.getByLabelText(/^password/i, { selector: "input" }), "P@ssw0rd#123")
+    )
+    await act(() =>
+      userEvent.type(
+        screen.getByLabelText(/re-enter your password/i, {
+          selector: "input",
+        }),
+        "P@ssw0rd#123"
+      )
+    )
+
+    const createAccountButton = screen.getByRole("button", { name: /create account/i })
     expect(createAccountButton).toBeInTheDocument()
+    await act(() => userEvent.click(createAccountButton))
 
-    await waitFor(() => fireEvent.click(createAccountButton))
-
-    expect(queryByText("Please enter a First Name")).not.toBeInTheDocument()
-    expect(queryByText("Must not be more than 64 characters.")).not.toBeInTheDocument()
-    expect(queryByText("Please enter a Last Name")).not.toBeInTheDocument()
+    expect(screen.queryByText("Please enter a First Name")).not.toBeInTheDocument()
+    expect(screen.queryByText("Must not be more than 64 characters.")).not.toBeInTheDocument()
+    expect(screen.queryByText("Please enter a Last Name")).not.toBeInTheDocument()
     expect(
-      queryByText("Please enter a valid Date of Birth, must be 18 or older")
+      screen.queryByText("Please enter a valid Date of Birth, must be 18 or older")
     ).not.toBeInTheDocument()
-    expect(queryByText("Please enter a valid email address")).not.toBeInTheDocument()
-    expect(queryByText("Please enter a valid password")).not.toBeInTheDocument()
-    expect(queryByText("The passwords do not match")).not.toBeInTheDocument()
-
-    // expect(await findByText("Confirmation needed")).toBeInTheDocument()
-    // expect(await findByText("An email has been sent to test@example.com")).toBeInTheDocument()
-    // expect(
-    //   await findByText(
-    //     "Please click on the link in the email we sent you in order to complete account creation."
-    //   )
-    // ).toBeInTheDocument()
-    // expect(await findByText("Resend the email", { selector: "button" })).toBeInTheDocument()
+    expect(screen.queryByText("Please enter a valid email address")).not.toBeInTheDocument()
+    expect(screen.queryByText("Please enter a valid password")).not.toBeInTheDocument()
+    expect(screen.queryByText("The passwords do not match")).not.toBeInTheDocument()
   })
 })
