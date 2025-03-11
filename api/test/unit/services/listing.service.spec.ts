@@ -45,6 +45,7 @@ import { permissionActions } from '../../../src/enums/permissions/permission-act
 import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
 import { ApplicationService } from '../../../src/services/application.service';
 import { GeocodingService } from '../../../src/services/geocoding.service';
+import { ListingNeighborhoodAmenities } from 'src/dtos/listings/listing-neighborhood-amenities.dto';
 
 /*
   generates a super simple mock listing for us to test logic with
@@ -3786,6 +3787,29 @@ describe('Testing listing service', () => {
           listingsBuildingSelectionCriteriaFile: {
             disconnect: true,
           },
+          listingNeighborhoodAmenities: {
+            upsert: {
+              create: {
+                groceryStores: null,
+                healthCareResources: null,
+                parksAndCommunityCenters: null,
+                pharmacies: null,
+                publicTransportation: null,
+                schools: null,
+              },
+              update: {
+                groceryStores: null,
+                healthCareResources: null,
+                parksAndCommunityCenters: null,
+                pharmacies: null,
+                publicTransportation: null,
+                schools: null,
+              },
+              where: {
+                id: undefined,
+              },
+            },
+          },
           section8Acceptance: false,
           unitsAvailable: 0,
           isVerified: false,
@@ -3907,6 +3931,29 @@ describe('Testing listing service', () => {
           jurisdictions: {
             connect: {
               id: expect.anything(),
+            },
+          },
+          listingNeighborhoodAmenities: {
+            upsert: {
+              create: {
+                groceryStores: null,
+                healthCareResources: null,
+                parksAndCommunityCenters: null,
+                pharmacies: null,
+                publicTransportation: null,
+                schools: null,
+              },
+              update: {
+                groceryStores: null,
+                healthCareResources: null,
+                parksAndCommunityCenters: null,
+                pharmacies: null,
+                publicTransportation: null,
+                schools: null,
+              },
+              where: {
+                id: undefined,
+              },
             },
           },
           status: ListingsStatusEnum.pending,
