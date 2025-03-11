@@ -2395,6 +2395,7 @@ describe('Testing listing service', () => {
           listingMultiselectQuestions: {
             include: { multiselectQuestions: true },
           },
+          listingNeighborhoodAmenities: true,
           listingFeatures: true,
           listingUtilities: true,
           unitGroups: {
