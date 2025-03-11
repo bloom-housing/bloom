@@ -7,6 +7,7 @@ import {
   MultiselectQuestion,
   PaperApplication,
   PaperApplicationCreate,
+  RegionEnum,
   Unit,
   User,
   YesNoEnum,
@@ -71,6 +72,7 @@ export type FormListing = Omit<Listing, "countyCode"> & {
     day: string
     year: string
   }
+  marketingStartDate?: number
   reviewOrderQuestion?: string
   lotteryOptInQuestion?: YesNoEnum
   listingAvailabilityQuestion?: string
@@ -151,7 +153,8 @@ export const formDefaults: FormListing = {
   developer: null,
   householdSizeMax: 0,
   householdSizeMin: 0,
-  neighborhood: "",
+  neighborhood: undefined,
+  region: RegionEnum.Greater_Downtown,
   petPolicy: "",
   smokingPolicy: "",
   unitsAvailable: 0,

@@ -5,12 +5,13 @@ import {
   Listing,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
+  MarketingTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
 import { pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
 import { Heading } from "@bloom-housing/ui-seeds"
 import { ErrorPage } from "../../pages/_error"
-import { getListingApplicationStatus } from "../../lib/helpers"
+import { getApplicationSeason, getListingApplicationStatus } from "../../lib/helpers"
 import {
   getAdditionalInformation,
   getAmiValues,
@@ -173,17 +174,25 @@ export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProp
             amiValues={getAmiValues(listing)}
             reviewOrderType={listing.reviewOrderType}
             unitsSummarized={listing.unitsSummarized}
+            section8Acceptance={listing.section8Acceptance}
           />
           <div className={styles["main-content"]}>
             <div className={styles["hide-desktop"]}>{ApplyBar}</div>
-            <Eligibility eligibilitySections={getEligibilitySections(listing)} />
+            <Eligibility
+              eligibilitySections={getEligibilitySections(listing)}
+              section8Acceptance={listing.section8Acceptance}
+            />
             <Features features={getFeatures(listing, jurisdiction)}>{UnitFeatures}</Features>
             <Neighborhood address={listing.listingsBuildingAddress} name={listing.name} />
             <AdditionalInformation additionalInformation={getAdditionalInformation(listing)} />
           </div>
         </div>
         <div className={`${styles["right-bar"]} ${styles["hide-mobile"]}`}>
-          <DueDate content={[statusContent?.content, statusContent?.subContent]} />
+          {listing.marketingType === MarketingTypeEnum.comingSoon ? (
+            <DueDate content={[getApplicationSeason(listing)]} />
+          ) : (
+            <DueDate content={[statusContent?.content, statusContent?.subContent]} />
+          )}
           <Availability
             reservedCommunityDescription={listing.reservedCommunityDescription}
             reservedCommunityType={listing.reservedCommunityTypes}

@@ -95,8 +95,24 @@ export const devSeeding = async (
   const multiselectQuestions = await Promise.all(
     await createMultiselect(jurisdiction.id, prismaClient),
   );
-
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory(
+      'enableRegions',
+      false,
+      'When true, the region can be defined for the building address',
+      [jurisdiction.id],
+    ),
+  });
   await reservedCommunityTypeFactoryAll(jurisdiction.id, prismaClient);
+
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory(
+      'enableIsVerified',
+      false,
+      'When true, the listing can ba have its contents manually verified by a user',
+      [jurisdiction.id],
+    ),
+  });
 
   await prismaClient.featureFlags.create({
     data: featureFlagFactory(

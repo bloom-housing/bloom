@@ -17,6 +17,7 @@ import {
   ListingEventsTypeEnum,
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
+  RegionEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import DetailAdditionalFees from "../../../../src/components/listings/PaperListingDetails/sections/DetailAdditionalFees"
@@ -34,6 +35,7 @@ import DetailListingPhotos from "../../../../src/components/listings/PaperListin
 import DetailListingNotes from "../../../../src/components/listings/PaperListingDetails/sections/DetailNotes"
 import ListingDetail, { getServerSideProps } from "../../../../src/pages/listings/[id]"
 import DetailPrograms from "../../../../src/components/listings/PaperListingDetails/sections/DetailPrograms"
+import DetailListingVerification from "../../../../src/components/listings/PaperListingDetails/sections/DetailListingVerification"
 
 const server = setupServer()
 
@@ -251,9 +253,9 @@ describe("listing data", () => {
       })
     })
 
-    it("should display Building Details section", () => {
-      const { getByText } = render(
-        <ListingContext.Provider value={listing}>
+    it("should display Building Details section - without region", () => {
+      const { getByText, queryByText } = render(
+        <ListingContext.Provider value={{ ...listing, region: RegionEnum.Southwest }}>
           <DetailBuildingDetails />
         </ListingContext.Provider>
       )
@@ -276,6 +278,44 @@ describe("listing data", () => {
       expect(getByText("Rosemary Gardens Park")).toBeInTheDocument()
       expect(getByText("Year Built")).toBeInTheDocument()
       expect(getByText("2012")).toBeInTheDocument()
+      expect(queryByText("Region")).not.toBeInTheDocument()
+      expect(queryByText("Southwest")).not.toBeInTheDocument()
+    })
+
+    it("should display Building Details section - with region", () => {
+      const { getByText } = render(
+        <AuthContext.Provider
+          value={{
+            profile: { ...user, jurisdictions: [], listings: [] },
+            doJurisdictionsHaveFeatureFlagOn: () => true,
+          }}
+        >
+          <ListingContext.Provider value={{ ...listing, region: RegionEnum.Southwest }}>
+            <DetailBuildingDetails />
+          </ListingContext.Provider>
+        </AuthContext.Provider>
+      )
+
+      expect(getByText("Building Details")).toBeInTheDocument()
+      expect(getByText("Building Address")).toBeInTheDocument()
+      expect(getByText("Street Address")).toBeInTheDocument()
+      expect(getByText("98 Archer Street")).toBeInTheDocument()
+      expect(getByText("City")).toBeInTheDocument()
+      expect(getByText("San Jose")).toBeInTheDocument()
+      expect(getByText("Longitude")).toBeInTheDocument()
+      expect(getByText("-121.91071")).toBeInTheDocument()
+      expect(getByText("State")).toBeInTheDocument()
+      expect(getByText("CA")).toBeInTheDocument()
+      expect(getByText("Latitude")).toBeInTheDocument()
+      expect(getByText("37.36537")).toBeInTheDocument()
+      expect(getByText("Zip Code")).toBeInTheDocument()
+      expect(getByText("95112")).toBeInTheDocument()
+      expect(getByText("Neighborhood")).toBeInTheDocument()
+      expect(getByText("Rosemary Gardens Park")).toBeInTheDocument()
+      expect(getByText("Year Built")).toBeInTheDocument()
+      expect(getByText("2012")).toBeInTheDocument()
+      expect(getByText("Region")).toBeInTheDocument()
+      expect(getByText("Southwest")).toBeInTheDocument()
     })
 
     describe("should display Community Type section", () => {
@@ -1419,6 +1459,56 @@ describe("listing data", () => {
         expect(urlButton).toHaveAttribute("href", "http://test.url.com")
 
         expect(getByText("View")).toBeInTheDocument()
+      })
+    })
+
+    describe("should display Verification section", () => {
+      it("section should be hiden when jurisdiction flag is not set", () => {
+        const { queryByText } = render(
+          <AuthContext.Provider
+            value={{
+              profile: { ...user, jurisdictions: [], listings: [] },
+              doJurisdictionsHaveFeatureFlagOn: () => false,
+            }}
+          >
+            <ListingContext.Provider
+              value={{
+                ...listing,
+                isVerified: true,
+              }}
+            >
+              <DetailListingVerification />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        )
+
+        expect(queryByText("Verification")).not.toBeInTheDocument()
+        expect(queryByText("I verify that this lisiting data is valid")).not.toBeInTheDocument()
+        expect(queryByText("Yes")).not.toBeInTheDocument()
+      })
+
+      it("should render section when jurisdiction flag is set", () => {
+        const { getByText } = render(
+          <AuthContext.Provider
+            value={{
+              profile: { ...user, jurisdictions: [], listings: [] },
+              doJurisdictionsHaveFeatureFlagOn: () => true,
+            }}
+          >
+            <ListingContext.Provider
+              value={{
+                ...listing,
+                isVerified: true,
+              }}
+            >
+              <DetailListingVerification />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        )
+
+        expect(getByText("Verification")).toBeInTheDocument()
+        expect(getByText("I verify that this lisiting data is valid")).toBeInTheDocument()
+        expect(getByText("Yes")).toBeInTheDocument()
       })
     })
   })
