@@ -1,6 +1,6 @@
 import React from "react"
 import ChevronDown from "@heroicons/react/20/solid/ChevronDownIcon"
-import { Heading, Icon } from "@bloom-housing/ui-seeds"
+import { Heading, Icon, Link } from "@bloom-housing/ui-seeds"
 import styles from "./SiteHeader.module.scss"
 
 export interface HeaderLink {
@@ -41,9 +41,9 @@ const HeaderLink = (props: HeaderLinkProps) => {
             if (subMenuLink.href) {
               return (
                 <li className={styles["submenu-item"]} key={index}>
-                  <a className={styles["submenu-link"]} href={subMenuLink.href}>
+                  <Link className={styles["submenu-link"]} href={subMenuLink.href}>
                     {subMenuLink.label}
-                  </a>
+                  </Link>
                 </li>
               )
             } else {
@@ -64,9 +64,9 @@ const HeaderLink = (props: HeaderLinkProps) => {
     if (props.link.href) {
       return (
         <li>
-          <a className={styles["link"]} href={props.link.href}>
+          <Link className={styles["link"]} href={props.link.href}>
             {props.link.label}
-          </a>
+          </Link>
         </li>
       )
     } else {
@@ -151,7 +151,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
       </HeadingWrapper>
       <HeadingWrapper className={styles["navigation-wrapper"]}>
         <div className={styles["navigation-container"]}>
-          <a className={styles["title-container"]} href={props.titleLink}>
+          <Link className={styles["title-container"]} href={props.titleLink}>
             {props.logo && (
               <div
                 className={`${styles["logo"]} ${props.logoClassName ? props.logoClassName : ""}`}
@@ -162,7 +162,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
             <div className={styles["title"]}>
               <Heading size={"xl"}>{props.title}</Heading>
             </div>
-          </a>
+          </Link>
           <ul className={styles["links-container"]}>
             {props.links?.map((link, index) => {
               return <HeaderLink link={link} key={index} />
