@@ -45,7 +45,6 @@ import { permissionActions } from '../../../src/enums/permissions/permission-act
 import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
 import { ApplicationService } from '../../../src/services/application.service';
 import { GeocodingService } from '../../../src/services/geocoding.service';
-import { ListingNeighborhoodAmenities } from 'src/dtos/listings/listing-neighborhood-amenities.dto';
 
 /*
   generates a super simple mock listing for us to test logic with
