@@ -113,7 +113,7 @@ const Layout = (props) => {
         {getInMaintenance() && (
           <div className={styles["site-alert-banner-container"]}>
             <Message className={styles["site-alert-banner-content"]} variant={"primary"}>
-              <Markdown>{t("alert.maintenance")}</Markdown>
+              <Markdown>{t("alert.transitionv3")}</Markdown>
             </Message>
           </div>
         )}
