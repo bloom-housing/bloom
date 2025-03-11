@@ -10,6 +10,8 @@ beforeAll(() => {
   window.scrollTo = jest.fn()
 })
 
+const createUserFn = jest.fn()
+
 const renderCreateAccountPage = () =>
   render(
     <AuthContext.Provider
@@ -19,6 +21,7 @@ const renderCreateAccountPage = () =>
           listings: [],
           jurisdictions: [],
         },
+        createUser: createUserFn,
       }}
     >
       <CreateAccount />
@@ -345,5 +348,9 @@ describe("Create Account Page", () => {
     expect(screen.queryByText("Please enter a valid email address")).not.toBeInTheDocument()
     expect(screen.queryByText("Please enter a valid password")).not.toBeInTheDocument()
     expect(screen.queryByText("The passwords do not match")).not.toBeInTheDocument()
+
+    await waitFor(() => {
+      expect(createUserFn).toHaveBeenCalled()
+    })
   })
 })
