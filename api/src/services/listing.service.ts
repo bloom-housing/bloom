@@ -2067,21 +2067,19 @@ export class ListingService implements OnModuleInit {
             : undefined,
           section8Acceptance: !!dto.section8Acceptance,
           isVerified: !!dto.isVerified,
-          listingNeighborhoodAmenities: dto.listingNeighborhoodAmenities
-            ? {
-                upsert: {
-                  where: {
-                    id: previousNeighborhoodAmenitiesId,
-                  },
-                  create: {
-                    ...fullNeighborhoodAmenities,
-                  },
-                  update: {
-                    ...fullNeighborhoodAmenities,
-                  },
-                },
-              }
-            : undefined,
+          listingNeighborhoodAmenities: {
+            upsert: {
+              where: {
+                id: previousNeighborhoodAmenitiesId,
+              },
+              create: {
+                ...fullNeighborhoodAmenities,
+              },
+              update: {
+                ...fullNeighborhoodAmenities,
+              },
+            },
+          },
         },
         include: views.details,
         where: {
