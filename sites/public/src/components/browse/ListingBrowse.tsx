@@ -1,16 +1,21 @@
-import React, { useEffect, useContext } from "react"
+import React, { useEffect, useContext, useState } from "react"
 import Head from "next/head"
+import { useRouter } from "next/router"
 import { Button, Heading } from "@bloom-housing/ui-seeds"
-import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  Jurisdiction,
+  Listing,
+  ModificationEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext, ListingList, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import { PageHeader, t } from "@bloom-housing/ui-components"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
+import MaxWidthLayout from "../../layouts/max-width"
+import { useProfileFavoriteListings } from "../../lib/hooks"
 import { ListingCard } from "./ListingCard"
 import styles from "./ListingBrowse.module.scss"
-import { useRouter } from "next/router"
-import MaxWidthLayout from "../../layouts/max-width"
 
 export interface ListingBrowseProps {
   openListings: Listing[]
@@ -25,11 +30,43 @@ export interface ListingBrowseProps {
   }
 }
 
+const isListingFavorited = (listing, favoriteListings) => {
+  return favoriteListings.some((item) => item.id === listing.id)
+}
+
 export const ListingBrowse = (props: ListingBrowseProps) => {
   const router = useRouter()
-  const { profile } = useContext(AuthContext)
+  const { profile, userService } = useContext(AuthContext)
   const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
+
+  const [favoriteListings, setFavoriteListings] = useState<Listing[]>([])
+
+  const originalFavoriteListings = useProfileFavoriteListings()
+
+  useEffect(() => {
+    setFavoriteListings(originalFavoriteListings)
+  }, [originalFavoriteListings, setFavoriteListings])
+
+  const updateFavorite = async (listing, listingFavorited) => {
+    await userService.modifyFavoriteListings({
+      body: {
+        id: listing.id,
+        action: listingFavorited ? ModificationEnum.add : ModificationEnum.remove,
+      },
+    })
+  }
+
+  const setFavoritedFn = (listing) => {
+    return (listingFavorited) => {
+      void updateFavorite(listing, listingFavorited)
+      if (listingFavorited) {
+        setFavoriteListings([...favoriteListings, listing])
+      } else {
+        setFavoriteListings([...favoriteListings.filter((item) => item.id != listing.id)])
+      }
+    }
+  }
 
   useEffect(() => {
     pushGtmEvent<ListingList>({
@@ -88,6 +125,8 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                             listing={listing}
                             key={index}
                             jurisdiction={props.jurisdiction}
+                            favorited={isListingFavorited(listing, favoriteListings)}
+                            setFavorited={setFavoritedFn(listing)}
                           />
                         )
                       })}
@@ -99,6 +138,8 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                             listing={listing}
                             key={index}
                             jurisdiction={props.jurisdiction}
+                            favorited={isListingFavorited(listing, favoriteListings)}
+                            setFavorited={setFavoritedFn(listing)}
                           />
                         )
                       })}

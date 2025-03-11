@@ -6,14 +6,13 @@ import {
   Listing,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
-  MarketingTypeEnum,
   ModificationEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
 import { AuthContext, pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
 import { Heading } from "@bloom-housing/ui-seeds"
 import { ErrorPage } from "../../pages/_error"
-import { isFeatureFlagOn, getListingApplicationStatus } from "../../lib/helpers"
+import { getListingApplicationStatus, isFeatureFlagOn } from "../../lib/helpers"
 import {
   getAdditionalInformation,
   getAmiValues,
@@ -66,12 +65,12 @@ export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProp
   }
 
   // Code for setting/unsetting favorite status for the listing
-  const updateFavorite = async () => {
-    setListingFavorited(!listingFavorited)
+  const updateFavorite = async (nowFavorited) => {
+    setListingFavorited(nowFavorited)
     await userService.modifyFavoriteListings({
       body: {
         id: listing.id,
-        action: listingFavorited ? ModificationEnum.remove : ModificationEnum.add,
+        action: nowFavorited ? ModificationEnum.add : ModificationEnum.remove,
       },
     })
   }
