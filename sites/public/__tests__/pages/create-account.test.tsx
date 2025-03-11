@@ -1,36 +1,30 @@
-import { AuthContext } from "@bloom-housing/shared-helpers"
 import { fireEvent, mockNextRouter, render, waitFor, screen, act } from "../testUtils"
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import React from "react"
 import CreateAccount from "../../src/pages/create-account"
 import userEvent from "@testing-library/user-event"
+import { setupServer } from "msw/lib/node"
+import { rest } from "msw"
+
+const server = setupServer()
 
 beforeAll(() => {
+  server.listen()
   mockNextRouter()
   window.scrollTo = jest.fn()
 })
 
-const createUserFn = jest.fn()
+afterEach(() => {
+  server.resetHandlers()
+  window.localStorage.clear()
+  window.sessionStorage.clear()
+})
 
-const renderCreateAccountPage = () =>
-  render(
-    <AuthContext.Provider
-      value={{
-        profile: {
-          ...user,
-          listings: [],
-          jurisdictions: [],
-        },
-        createUser: createUserFn,
-      }}
-    >
-      <CreateAccount />
-    </AuthContext.Provider>
-  )
+afterAll(() => server.close())
 
 describe("Create Account Page", () => {
   it("should render the page with all fileds, buttons and links", () => {
-    renderCreateAccountPage()
+    render(<CreateAccount />)
 
     const verifyInitialInput = (input: HTMLElement) => {
       expect(input).toBeInTheDocument()
@@ -80,14 +74,14 @@ describe("Create Account Page", () => {
       screen.getByRole("heading", { level: 2, name: /already have an account\?/i })
     ).toBeInTheDocument()
 
-    const signInLink = screen.getByRole("link", { name: /sign in/i })
+    const signInLink = screen.getByText(/sign in/i, { selector: "a" })
     expect(signInLink).toBeInTheDocument()
     expect(signInLink).toHaveAttribute("href", "/sign-in")
   })
 
   describe("Field validation errors", () => {
     it("should show no alerts on initial load", () => {
-      renderCreateAccountPage()
+      render(<CreateAccount />)
 
       expect(screen.queryByText("Please enter a First Name")).not.toBeInTheDocument()
       expect(screen.queryByText("Must not be more than 64 characters.")).not.toBeInTheDocument()
@@ -101,11 +95,11 @@ describe("Create Account Page", () => {
     })
 
     it("show alerts on 'Create Account' click without filling any fields", async () => {
-      renderCreateAccountPage()
+      render(<CreateAccount />)
 
       const createAccountButton = screen.getByRole("button", { name: /create account/i })
       expect(createAccountButton).toBeInTheDocument()
-      await userEvent.click(createAccountButton)
+      await act(() => userEvent.click(createAccountButton))
 
       expect(screen.getByRole("textbox", { name: /first or given name/i })).toBeInvalid()
       expect(screen.getByText("Please enter a First Name")).toBeInTheDocument()
@@ -131,7 +125,7 @@ describe("Create Account Page", () => {
     })
 
     it("show max character limit error for string fields", async () => {
-      renderCreateAccountPage()
+      render(<CreateAccount />)
 
       const createAccountButton = screen.getByRole("button", { name: /create account/i })
       const firstNameField = screen.getByRole("textbox", { name: /first or given name/i })
@@ -259,7 +253,7 @@ describe("Create Account Page", () => {
         const { password, valid } = entry
 
         act(() => {
-          renderCreateAccountPage()
+          render(<CreateAccount />)
         })
 
         const createAccountButton = screen.getByRole("button", { name: /create account/i })
@@ -283,7 +277,7 @@ describe("Create Account Page", () => {
     })
 
     it("show error on password on missmatching passwords", async () => {
-      renderCreateAccountPage()
+      render(<CreateAccount />)
 
       const createAccountButton = screen.getByRole("button", { name: /create account/i })
       const passwordInput = screen.getByLabelText(/^password/i, { selector: "input" })
@@ -295,9 +289,9 @@ describe("Create Account Page", () => {
       expect(passwordConfirmInput).toBeInTheDocument()
       expect(createAccountButton).toBeInTheDocument()
 
-      await userEvent.type(passwordInput, "P@ssw0rd#123")
-      await userEvent.type(passwordConfirmInput, "Test")
-      await userEvent.click(createAccountButton)
+      await act(() => userEvent.type(passwordInput, "P@ssw0rd#123"))
+      await act(() => userEvent.type(passwordConfirmInput, "Test"))
+      await act(() => userEvent.click(createAccountButton))
 
       expect(passwordInput).toBeValid()
       expect(passwordConfirmInput).toBeInvalid()
@@ -306,34 +300,156 @@ describe("Create Account Page", () => {
     })
   })
 
-  it("should navigate show confirm modal on account create", async () => {
-    renderCreateAccountPage()
+  describe("shoud show proper API call error responses", () => {
+    const ERROR_RESPONSES = [
+      {
+        title: "Account confirmed",
+        status: 400,
+        message: "accountConfirmed",
+        value: "Your account is already confirmed.",
+      },
+      {
+        title: "Not matching email",
+        status: 400,
+        message: "emailMismatch",
+        value: "The emails do not match",
+      },
+      {
+        title: "Email not found",
+        status: 400,
+        message: "emailNotFound",
+        value: "Email not found. Please register first.",
+      },
+      {
+        title: "Internal",
+        status: 400,
+        message: "errorSaving",
+        value:
+          /Oops! Looks like something went wrong. Please try again. Contact your housing department if you're still experiencing issues./i,
+      },
+      {
+        title: "Password mismatch",
+        status: 400,
+        message: "passwordMismatch",
+        value: "The passwords do not match",
+      },
+      {
+        title: "To weak password",
+        status: 400,
+        message: "passwordTooWeak",
+        value:
+          "Password is too weak. Must be at least 12 characters and include at least one lowercase letter, one uppercase letter, one number, and one special character (#?!@$%^&*-).",
+      },
+      {
+        title: "Expired token",
+        status: 400,
+        message: "tokenExpired",
+        value: "Your link has expired.",
+      },
+      {
+        title: "Email in use 409",
+        status: 409,
+        value: "Email is already in use",
+      },
+      {
+        title: "Generic",
+        status: 401, // Used 401 code here to mock a unhandled status code.
+        value:
+          /Something went wrong while creating your account. Please try again. Contact your housing department if you're still experiencing issues./i,
+      },
+    ].map((entry) =>
+      Object.assign(entry, {
+        toString: function () {
+          return this.title
+        },
+      })
+    )
+
+    it.each(ERROR_RESPONSES)("show the %s error response message", async (response) => {
+      const { message, value, status } = response
+      server.use(
+        rest.post("http://localhost/api/adapter/user", (_req, res, ctx) => {
+          if (message) {
+            return res(
+              ctx.status(status),
+              ctx.json({
+                message: message,
+              })
+            )
+          } else {
+            return res(ctx.status(status))
+          }
+        })
+      )
+      render(<CreateAccount />)
+
+      expect(screen.getByRole("heading", { name: /create account/i, level: 1 })).toBeInTheDocument()
+
+      await act(async () => {
+        await userEvent.type(screen.getByRole("textbox", { name: /first or given name/i }), "John")
+        await userEvent.type(screen.getByRole("textbox", { name: /middle name/i }), "Admin")
+        await userEvent.type(screen.getByRole("textbox", { name: /last or family name/i }), "Doe")
+        await userEvent.type(screen.getByRole("textbox", { name: /month/i }), "2")
+        await userEvent.type(screen.getByRole("textbox", { name: /day/i }), "4")
+        await userEvent.type(screen.getByRole("textbox", { name: /year/i }), "2000")
+        await userEvent.type(
+          screen.getByRole("textbox", { name: /your email address/i }),
+          "johndoe@example.com"
+        )
+        await userEvent.type(
+          screen.getByLabelText(/^password/i, { selector: "input" }),
+          "P@ssw0rd#123"
+        )
+        await userEvent.type(
+          screen.getByLabelText(/re-enter your password/i, {
+            selector: "input",
+          }),
+          "P@ssw0rd#123"
+        )
+      })
+
+      const createAccountButton = screen.getByRole("button", { name: /create account/i })
+      expect(createAccountButton).toBeInTheDocument()
+      await act(() => userEvent.click(createAccountButton))
+
+      expect(await screen.findByText(value)).toBeInTheDocument()
+    })
+  })
+
+  it("should navigate to confirmation modal on success", async () => {
+    process.env.showPwdless = "TRUE"
+    const { pushMock } = mockNextRouter()
+    server.use(
+      rest.post("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(ctx.json(user))
+      })
+    )
+    render(<CreateAccount />)
 
     expect(screen.getByRole("heading", { name: /create account/i, level: 1 })).toBeInTheDocument()
-    await userEvent.type(screen.getByRole("textbox", { name: /first or given name/i }), "John")
-    await userEvent.type(screen.getByRole("textbox", { name: /middle name/i }), "Admin")
-    await userEvent.type(screen.getByRole("textbox", { name: /last or family name/i }), "Doe")
 
-    await userEvent.type(screen.getByRole("textbox", { name: /month/i }), "2")
-    await userEvent.type(screen.getByRole("textbox", { name: /day/i }), "4")
-    await userEvent.type(screen.getByRole("textbox", { name: /year/i }), "2000")
-
-    await userEvent.type(
-      screen.getByRole("textbox", { name: /your email address/i }),
-      "johndoe@example.com"
-    )
-
-    await act(() =>
-      userEvent.type(screen.getByLabelText(/^password/i, { selector: "input" }), "P@ssw0rd#123")
-    )
-    await act(() =>
-      userEvent.type(
+    await act(async () => {
+      await userEvent.type(screen.getByRole("textbox", { name: /first or given name/i }), "John")
+      await userEvent.type(screen.getByRole("textbox", { name: /middle name/i }), "Admin")
+      await userEvent.type(screen.getByRole("textbox", { name: /last or family name/i }), "Doe")
+      await userEvent.type(screen.getByRole("textbox", { name: /month/i }), "2")
+      await userEvent.type(screen.getByRole("textbox", { name: /day/i }), "4")
+      await userEvent.type(screen.getByRole("textbox", { name: /year/i }), "2000")
+      await userEvent.type(
+        screen.getByRole("textbox", { name: /your email address/i }),
+        "johndoe@example.com"
+      )
+      await userEvent.type(
+        screen.getByLabelText(/^password/i, { selector: "input" }),
+        "P@ssw0rd#123"
+      )
+      await userEvent.type(
         screen.getByLabelText(/re-enter your password/i, {
           selector: "input",
         }),
         "P@ssw0rd#123"
       )
-    )
+    })
 
     const createAccountButton = screen.getByRole("button", { name: /create account/i })
     expect(createAccountButton).toBeInTheDocument()
@@ -350,7 +466,10 @@ describe("Create Account Page", () => {
     expect(screen.queryByText("The passwords do not match")).not.toBeInTheDocument()
 
     await waitFor(() => {
-      expect(createUserFn).toHaveBeenCalled()
+      expect(pushMock).toBeCalledWith({
+        pathname: "/verify",
+        query: { email: "johndoe@example.com", flowType: "create" },
+      })
     })
   })
 })
