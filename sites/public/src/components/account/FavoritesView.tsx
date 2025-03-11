@@ -5,8 +5,9 @@ import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger
 import { PageHeader, t } from "@bloom-housing/ui-components"
 import Layout from "../../layouts/application"
 import { MetaTags } from "../shared/MetaTags"
-import { getListings } from "../../lib/helpers"
 import { UserStatus } from "../../lib/constants"
+import { ListingCard } from "../browse/ListingCard"
+import styles from "../browse/ListingBrowse.module.scss"
 
 interface FavoritesViewProps {
   listings: Listing[]
@@ -33,7 +34,15 @@ const FavoritesView = (props: FavoritesViewProps) => {
         </Head>
         <MetaTags title={t("account.myFavorites")} description="" />
         <PageHeader title={t("account.myFavorites")} />
-        {getListings(props.listings)}
+        <div className={styles["listing-directory"]}>
+          <div className={styles["content-wrapper"]}>
+            <ul>
+              {props.listings.map((listing, index) => {
+                return <ListingCard listing={listing} key={index} />
+              })}
+            </ul>
+          </div>
+        </div>
       </Layout>
     </RequireLogin>
   )

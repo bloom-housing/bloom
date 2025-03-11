@@ -13,7 +13,11 @@ import { t } from "@bloom-housing/ui-components"
 import { AuthContext, pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
 import { Heading } from "@bloom-housing/ui-seeds"
 import { ErrorPage } from "../../pages/_error"
-import { getApplicationSeason, getListingApplicationStatus, isFeatureFlagOn } from "../../lib/helpers"
+import {
+  getApplicationSeason,
+  getListingApplicationStatus,
+  isFeatureFlagOn,
+} from "../../lib/helpers"
 import {
   getAdditionalInformation,
   getAmiValues,
@@ -67,12 +71,12 @@ export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProp
   }
 
   // Code for setting/unsetting favorite status for the listing
-  const updateFavorite = async () => {
-    setListingFavorited(!listingFavorited)
+  const updateFavorite = async (nowFavorited) => {
+    setListingFavorited(nowFavorited)
     await userService.modifyFavoriteListings({
       body: {
         id: listing.id,
-        action: listingFavorited ? ModificationEnum.remove : ModificationEnum.add,
+        action: nowFavorited ? ModificationEnum.add : ModificationEnum.remove,
       },
     })
   }
