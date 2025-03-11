@@ -1,5 +1,5 @@
 import React from "react"
-import InfoIcon from "@heroicons/react/24/solid/InformationCircleIcon"
+import InfoIcon from "@heroicons/react/20/solid/InformationCircleIcon"
 import {
   Listing,
   ListingsStatusEnum,

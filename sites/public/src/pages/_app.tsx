@@ -83,6 +83,23 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     }
   }, [locale, router.events])
 
+  useEffect(() => {
+    const font1 = document.createElement("link")
+    font1.type = "font/woff2"
+    font1.rel = "preload"
+    font1.as = "font"
+    font1.href = "./node-modules/@bloom-housing/ui-seeds/src/fonts/Lato/lato-latin-400-normal.woff"
+
+    const font2 = document.createElement("link")
+    font1.type = "font/woff2"
+    font1.rel = "preload"
+    font1.as = "font"
+    font1.href = "./node-modules/@bloom-housing/ui-seeds/src/fonts/Lato/lato-latin-700-normal.woff"
+
+    document.head.appendChild(font1)
+    document.head.appendChild(font2)
+  }, [])
+
   // Investigating performance issues in #3051
   // useEffect(() => {
   //   if (process.env.NODE_ENV !== "production") {

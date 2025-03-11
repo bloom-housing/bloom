@@ -16,7 +16,7 @@
     box-sizing: border-box;
   }
 
-  // If a button inside the card is focused, turn the card-level focus, so only the button has visual focus
+  // If a button inside the card is focused, turn off the card-level focus, so only the button has visual focus
   :has(button:focus).listing-card-container {
     outline: none;
     box-shadow: none;
