@@ -1,85 +1,203 @@
 import React from "react"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { ResetPassword } from "../../src/pages/reset-password"
-import { AuthService } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { setupServer } from "msw/lib/node"
-import { render, waitFor, fireEvent, mockNextRouter } from "../testUtils"
+import { render, mockNextRouter, screen, act, waitFor } from "../testUtils"
+import userEvent from "@testing-library/user-event"
+import { rest } from "msw"
 
+window.scrollTo = jest.fn()
 const server = setupServer()
 
 beforeAll(() => {
   server.listen()
-  mockNextRouter({ token: "abcdef" })
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  jest.spyOn(console, "error").mockImplementation(() => {})
-  window.scrollTo = jest.fn()
+  mockNextRouter({ token: "ex4mpl3-tok3n" })
 })
 
 afterEach(() => server.resetHandlers())
 
 afterAll(() => server.close())
 
-const renderResetPasswordPage = () =>
-  render(
-    <AuthContext.Provider
-      value={{
-        profile: { ...user, jurisdictions: [], listings: [] },
-        authService: new AuthService(),
-      }}
-    >
-      <ResetPassword />
-    </AuthContext.Provider>
-  )
-
 describe("Public Reset Password Page", () => {
   it("should render all page contents, inputs and buttons", () => {
-    const { getByText, getByLabelText } = renderResetPasswordPage()
+    render(<ResetPassword />)
 
-    expect(getByText("Change Password", { selector: "h1" })).toBeInTheDocument()
-    expect(getByLabelText("Password")).toBeInTheDocument()
-    expect(getByLabelText("Password Confirmation")).toBeInTheDocument()
-    expect(getByText("Change Password", { selector: "button" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: /change password/i, level: 1 })).toBeInTheDocument()
+    const passwordInput = screen.getByLabelText(/^password$/i, { selector: "input" })
+    expect(passwordInput).toBeInTheDocument()
+    expect(passwordInput).toHaveAttribute("type", "password")
+    const confirmPasswordInput = screen.getByLabelText(/password confirmation/i, {
+      selector: "input",
+    })
+    expect(confirmPasswordInput).toBeInTheDocument()
+    expect(confirmPasswordInput).toHaveAttribute("type", "password")
+    expect(screen.getByRole("button", { name: /change password/i })).toBeInTheDocument()
   })
 
   describe("show validation errors", () => {
     it("show no errors messages on initial render", () => {
-      const { queryByText } = renderResetPasswordPage()
-      expect(queryByText("Please enter new login password")).not.toBeInTheDocument()
-      expect(queryByText("The passwords do not match")).not.toBeInTheDocument()
+      render(<ResetPassword />)
+      expect(screen.getByLabelText(/^password$/i, { selector: "input" })).toBeValid()
+      expect(screen.queryByText("Please enter new login password")).not.toBeInTheDocument()
+      expect(screen.getByLabelText(/password confirmation/i, { selector: "input" })).toBeValid()
+      expect(screen.queryByText("The passwords do not match")).not.toBeInTheDocument()
     })
 
     it("show missing password on empty input", async () => {
-      const { getByText, getByLabelText, findByText, queryByText } = renderResetPasswordPage()
-      fireEvent.change(getByLabelText("Password"), { target: { value: "" } })
-      fireEvent.click(getByText("Change Password", { selector: "button" }))
+      render(<ResetPassword />)
 
-      expect(await findByText("Please enter new login password")).toBeInTheDocument()
-      expect(queryByText("The passwords do not match")).not.toBeInTheDocument()
+      const passwordInput = screen.getByLabelText(/^password$/i, { selector: "input" })
+      const confirmPasswordInput = screen.getByLabelText(/password confirmation/i, {
+        selector: "input",
+      })
+
+      await act(() => userEvent.click(screen.getByRole("button", { name: /change password/i })))
+
+      expect(passwordInput).toBeInvalid()
+      expect(confirmPasswordInput).toBeValid()
+      expect(await screen.findByText("Please enter new login password")).toBeInTheDocument()
+      expect(screen.queryByText("The passwords do not match")).not.toBeInTheDocument()
     })
 
     it("show not matching password error on empty password confiramtion input", async () => {
-      const { getByText, getByLabelText, findByText, queryByText } = renderResetPasswordPage()
-      fireEvent.change(getByLabelText("Password"), { target: { value: "Password_1" } })
-      fireEvent.change(getByLabelText("Password Confirmation"), { target: { value: "Password_2" } })
+      render(<ResetPassword />)
 
-      await waitFor(() => fireEvent.click(getByText("Change Password", { selector: "button" })))
+      const passwordInput = screen.getByLabelText(/^password$/i, { selector: "input" })
+      const confirmPasswordInput = screen.getByLabelText(/password confirmation/i, {
+        selector: "input",
+      })
 
-      expect(queryByText("Please enter new login password")).not.toBeInTheDocument()
-      expect(await findByText("The passwords do not match")).toBeInTheDocument()
+      await act(() => userEvent.type(passwordInput, "Password_1"))
+      await act(() => userEvent.type(confirmPasswordInput, "Password_2"))
+      await act(() => userEvent.click(screen.getByRole("button", { name: /change password/i })))
+
+      expect(passwordInput).toBeValid()
+      expect(confirmPasswordInput).toBeInvalid()
+      expect(screen.queryByText("Please enter new login password")).not.toBeInTheDocument()
+      expect(await screen.findByText("The passwords do not match")).toBeInTheDocument()
+    })
+  })
+
+  describe("should show proper error messages", () => {
+    const ERROR_RESPONSES = [
+      {
+        title: "Email not Found",
+        message: "emailNotFound",
+        value:
+          "Email not found. Please make sure your email has an account with us and is confirmed.",
+      },
+      {
+        title: "Password to Weak",
+        message: "passwordTooWeak",
+        value:
+          "Password is too weak. Must be at least 12 characters and include at least one lowercase letter, one uppercase letter, one number, and one special character (#?!@$%^&*-).",
+      },
+      {
+        title: "Expired Token",
+        message: "tokenExpired",
+        value: "Reset password token expired. Please request for a new one.",
+      },
+      {
+        title: "Missing Token",
+        message: "tokenMissing",
+        value: "Token not found. Please request for a new one.",
+      },
+    ].map((entry) =>
+      Object.assign(entry, {
+        toString: function () {
+          return this.title
+        },
+      })
+    )
+
+    it.each(ERROR_RESPONSES)("should show 400 %s error", async (response) => {
+      const { message, value } = response
+
+      server.use(
+        rest.put("http://localhost/api/adapter/auth/update-password", (_req, res, ctx) => {
+          return res(
+            ctx.status(400),
+            ctx.json({
+              message: message,
+            })
+          )
+        })
+      )
+      render(<ResetPassword />)
+
+      const passwordInput = screen.getByLabelText(/^password$/i, { selector: "input" })
+      const confirmPasswordInput = screen.getByLabelText(/password confirmation/i, {
+        selector: "input",
+      })
+
+      await act(() => userEvent.type(passwordInput, "Password"))
+      await act(() => userEvent.type(confirmPasswordInput, "Password"))
+      await act(() => userEvent.click(screen.getByRole("button", { name: /change password/i })))
+
+      expect(await screen.findByText(value)).toBeInTheDocument()
     })
 
-    it("should catch 400 status error", async () => {
-      const { getByText, getByLabelText, queryByText, findByText } = renderResetPasswordPage()
-      await waitFor(() => {
-        fireEvent.change(getByLabelText("Password"), { target: { value: "Password" } })
-        fireEvent.change(getByLabelText("Password Confirmation"), { target: { value: "Password" } })
-      })
-      fireEvent.click(getByText("Change Password", { selector: "button" }))
+    it("should show generic error message", async () => {
+      // Hide the controlled console.error() call on generic network error
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      // jest.spyOn(console, "error").mockImplementation(() => {})
+      server.use(
+        rest.put("http://localhost/api/adapter/auth/update-password", (_req, res, ctx) => {
+          return res(ctx.status(401))
+        })
+      )
+      render(<ResetPassword />)
 
-      expect(queryByText("Please enter new login password")).not.toBeInTheDocument()
-      expect(queryByText("The passwords do not match")).not.toBeInTheDocument()
-      expect(await findByText("Token not found. Please request for a new one.")).toBeInTheDocument()
+      const passwordInput = screen.getByLabelText(/^password$/i, { selector: "input" })
+      const confirmPasswordInput = screen.getByLabelText(/password confirmation/i, {
+        selector: "input",
+      })
+
+      await act(() => userEvent.type(passwordInput, "Password"))
+      await act(() => userEvent.type(confirmPasswordInput, "Password"))
+      await act(() => userEvent.click(screen.getByRole("button", { name: /change password/i })))
+
+      expect(
+        await screen.findByText(
+          "There was an error. Please try again, or contact support for help."
+        )
+      ).toBeInTheDocument()
+    })
+  })
+
+  it.only("should navigate on sucess", async () => {
+    const { pushMock } = mockNextRouter({ token: "ex4mpl3-tok3n" })
+    server.use(
+      rest.put("http://localhost/api/adapter/auth/update-password", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            success: true,
+          })
+        )
+      }),
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({ ...user, firstName: "John", listings: [], agreedToTermsOfService: true })
+        )
+      })
+    )
+    render(<ResetPassword />)
+
+    const passwordInput = screen.getByLabelText(/^password$/i, { selector: "input" })
+    const confirmPasswordInput = screen.getByLabelText(/password confirmation/i, {
+      selector: "input",
+    })
+
+    await act(() => userEvent.type(passwordInput, "Password"))
+    await act(() => userEvent.type(confirmPasswordInput, "Password"))
+    await act(() => userEvent.click(screen.getByRole("button", { name: /change password/i })))
+
+    expect(screen.queryByText("Please enter new login password")).not.toBeInTheDocument()
+    expect(screen.queryByText("The passwords do not match")).not.toBeInTheDocument()
+
+    expect(await screen.findByText("Welcome back, John!"))
+    await waitFor(() => {
+      expect(pushMock).toHaveBeenCalledWith("/account/applications")
     })
   })
 })
