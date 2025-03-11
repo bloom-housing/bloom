@@ -1,5 +1,8 @@
 .site-header-container {
   font-family: var(--seeds-font-alt-sans);
+  a {
+    text-decoration: none;
+  }
   .language-wrapper {
     background-color: var(--seeds-bg-color-inverse);
     .language-container {
