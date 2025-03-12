@@ -40,7 +40,9 @@ export const RentSummary = ({
             return parseInt(item.percent, 10) === percent
           })
 
-          const groupedUnits = byAMI ? getSummariesTable(byAMI.byUnitType, reviewOrderType) : []
+          const groupedUnits = byAMI
+            ? getStackedUnitSummaryDetailsTable(byAMI.byUnitType, reviewOrderType)
+            : []
 
           return (
             <React.Fragment key={percent}>
@@ -48,11 +50,7 @@ export const RentSummary = ({
                 {t("listings.percentAMIUnit", { percent: percent })}
               </Heading>
               <div className={"seeds-m-bs-header"}>
-                <StandardTable
-                  headers={unitSummariesHeaders}
-                  data={groupedUnits}
-                  responsiveCollapse={true}
-                />
+                <StackedTable headers={unitSummariesHeaders} stackedData={groupedUnits} />
               </div>
             </React.Fragment>
           )
