@@ -21,6 +21,7 @@ import {
   Jurisdiction,
   Listing,
   ListingsStatusEnum,
+  MarketingSeasonEnum,
   MarketingTypeEnum,
   ReviewOrderTypeEnum,
   UnitsSummarized,
@@ -155,20 +156,20 @@ export const getStatusPrefix = (
   }
 }
 
-export const getListingStatusMessage = (
-  listing: Listing,
-  jurisdiction: Jurisdiction,
+export const getListingStatusMessageContent = (
+  status: ListingsStatusEnum,
+  applicationDueDate: Date,
+  enableMarketingStatus: boolean,
+  marketingType: MarketingTypeEnum,
+  marketingSeason: MarketingSeasonEnum,
+  marketingDate: Date,
   hideTime?: boolean
 ) => {
-  if (!listing) return
   let content = ""
   let formattedDate = ""
-  const enableMarketingStatus = isFeatureFlagOn(jurisdiction, "enableMarketingStatus")
-  const prefix = getStatusPrefix(listing, enableMarketingStatus)
-
-  if (listing.status !== ListingsStatusEnum.closed) {
-    if (listing.applicationDueDate) {
-      const dueDate = dayjs(listing.applicationDueDate)
+  if (status !== ListingsStatusEnum.closed) {
+    if (applicationDueDate) {
+      const dueDate = dayjs(applicationDueDate)
       formattedDate = dueDate.format("MMM DD, YYYY")
       formattedDate = !hideTime
         ? formattedDate + ` ${t("t.at")} ` + dueDate.format("h:mmA")
@@ -186,10 +187,23 @@ export const getListingStatusMessage = (
       content = content + `${formattedDate}`
     }
 
-    if (listing.marketingType === MarketingTypeEnum.comingSoon && enableMarketingStatus) {
-      content = getApplicationSeason(listing)
+    if (marketingType === MarketingTypeEnum.comingSoon && enableMarketingStatus) {
+      content = getApplicationSeason(marketingSeason, marketingDate)
     }
   }
+  return content
+}
+
+export const getListingStatusMessage = (
+  listing: Listing,
+  jurisdiction: Jurisdiction,
+  hideTime?: boolean
+) => {
+  if (!listing) return
+
+  listing.applicationDueDate
+  const enableMarketingStatus = isFeatureFlagOn(jurisdiction, "enableMarketingStatus")
+  const prefix = getStatusPrefix(listing, enableMarketingStatus)
 
   return (
     <Message
@@ -203,19 +217,29 @@ export const getListingStatusMessage = (
     >
       <div className={styles["due-date-content"]}>
         <div className={styles["date-review-order"]}>{prefix.label}</div>
-        <div>{content}</div>
+        <div>
+          {getListingStatusMessageContent(
+            listing.status,
+            listing.applicationDueDate,
+            enableMarketingStatus,
+            listing.marketingType,
+            listing.marketingSeason,
+            listing.marketingDate,
+            hideTime
+          )}
+        </div>
       </div>
     </Message>
   )
 }
 
-export const getApplicationSeason = (listing: Listing) => {
+export const getApplicationSeason = (marketingSeason: MarketingSeasonEnum, marketingDate: Date) => {
   let label = t("listings.apply.applicationSeason")
-  if (listing?.marketingSeason) {
-    label = label.concat(` ${t(`seasons.${listing.marketingSeason}`)}`)
+  if (marketingSeason) {
+    label = label.concat(` ${t(`seasons.${marketingSeason}`)}`)
   }
-  if (listing?.marketingDate) {
-    label = label.concat(` ${dayjs(listing.marketingDate).year()}`)
+  if (marketingDate) {
+    label = label.concat(` ${dayjs(marketingDate).year()}`)
   }
   return label
 }

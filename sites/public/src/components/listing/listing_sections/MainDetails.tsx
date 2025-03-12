@@ -1,5 +1,6 @@
 import * as React from "react"
 import {
+  Jurisdiction,
   Listing,
   MarketingTypeEnum,
   ReviewOrderTypeEnum,
@@ -12,15 +13,14 @@ import {
   imageUrlFromListing,
   oneLineAddress,
 } from "@bloom-housing/shared-helpers"
-import { DueDate } from "./DueDate"
 import { Availability } from "./Availability"
 import listingStyles from "../ListingViewSeeds.module.scss"
 import styles from "./MainDetails.module.scss"
-import { getApplicationSeason } from "../../../lib/helpers"
 
 type MainDetailsProps = {
   dueDateContent: string[]
   listing: Listing
+  jurisdiction: Jurisdiction
 }
 
 type ListingTag = {
@@ -61,7 +61,7 @@ export const getListingTags = (listing: Listing, hideReviewTags?: boolean): List
   return listingTags
 }
 
-export const MainDetails = ({ dueDateContent, listing }: MainDetailsProps) => {
+export const MainDetails = ({ jurisdiction, listing }: MainDetailsProps) => {
   if (!listing) return
   const googleMapsHref =
     "https://www.google.com/maps/place/" + oneLineAddress(listing.listingsBuildingAddress)
@@ -119,23 +119,9 @@ export const MainDetails = ({ dueDateContent, listing }: MainDetailsProps) => {
         )}
 
         <p className={"seeds-m-bs-3"}>{listing.developer}</p>
-        <div className={`${listingStyles["hide-desktop"]} seeds-m-b-3`}>
-          {listing.marketingType === MarketingTypeEnum.comingSoon ? (
-            <DueDate content={[getApplicationSeason(listing)]} />
-          ) : (
-            <DueDate content={dueDateContent} />
-          )}
-        </div>
       </div>
-      <div className={listingStyles["hide-desktop"]}>
-        <Availability
-          reservedCommunityDescription={listing.reservedCommunityDescription}
-          reservedCommunityType={listing.reservedCommunityTypes}
-          reviewOrder={listing.reviewOrderType}
-          status={listing.status}
-          unitsAvailable={listing.unitsAvailable}
-          waitlistOpenSpots={listing.waitlistOpenSpots}
-        />
+      <div className={`${listingStyles["hide-desktop"]} seeds-m-bs-content`}>
+        <Availability listing={listing} jurisdiction={jurisdiction} />
       </div>
     </div>
   )
