@@ -138,9 +138,6 @@ describe("Public Reset Password Page", () => {
     })
 
     it("should show generic error message", async () => {
-      // Hide the controlled console.error() call on generic network error
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      // jest.spyOn(console, "error").mockImplementation(() => {})
       server.use(
         rest.put("http://localhost/api/adapter/auth/update-password", (_req, res, ctx) => {
           return res(ctx.status(401))
