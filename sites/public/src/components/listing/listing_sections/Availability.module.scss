@@ -3,3 +3,9 @@
     font-weight: var(--seeds-font-weight-semibold);
   }
 }
+
+.bold-subheader {
+  margin-block-start: var(--seeds-spacer-label);
+  color: var(--seeds-text-color-light);
+  font-weight: 700;
+}

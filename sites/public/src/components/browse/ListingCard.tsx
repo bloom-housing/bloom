@@ -65,7 +65,7 @@ export const ListingCard = ({ listing, jurisdiction }: ListingCardProps) => {
               )}
               {!!status?.content && (
                 <div className={"seeds-m-bs-3"}>
-                  {getListingStatusMessage(listing, jurisdiction, true)}
+                  {getListingStatusMessage(listing, jurisdiction, null, true)}
                 </div>
               )}
               <div className={styles["unit-table"]}>
