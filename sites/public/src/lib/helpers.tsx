@@ -144,7 +144,7 @@ export const getStatusPrefix = (
     listing.status === ListingsStatusEnum.closed ||
     (listing.applicationDueDate && dayjs() > dayjs(listing.applicationDueDate))
   ) {
-    return { label: t("listings.applicationsClosed"), variant: "alert" }
+    return { label: t("listings.applicationsClosed"), variant: "secondary-inverse" }
   }
   switch (listing.reviewOrderType) {
     case ReviewOrderTypeEnum.lottery:
@@ -197,13 +197,15 @@ export const getListingStatusMessageContent = (
 export const getListingStatusMessage = (
   listing: Listing,
   jurisdiction: Jurisdiction,
+  content?: React.ReactNode,
   hideTime?: boolean
 ) => {
   if (!listing) return
 
-  listing.applicationDueDate
   const enableMarketingStatus = isFeatureFlagOn(jurisdiction, "enableMarketingStatus")
   const prefix = getStatusPrefix(listing, enableMarketingStatus)
+
+  console.log({ prefix })
 
   return (
     <Message
@@ -215,20 +217,24 @@ export const getListingStatusMessage = (
       }
       variant={prefix.variant}
     >
-      <div className={styles["due-date-content"]}>
-        <div className={styles["date-review-order"]}>{prefix.label}</div>
-        <div>
-          {getListingStatusMessageContent(
-            listing.status,
-            listing.applicationDueDate,
-            enableMarketingStatus,
-            listing.marketingType,
-            listing.marketingSeason,
-            listing.marketingDate,
-            hideTime
-          )}
+      {content ? (
+        content
+      ) : (
+        <div className={styles["due-date-content"]}>
+          <div className={styles["date-review-order"]}>{prefix.label}</div>
+          <div>
+            {getListingStatusMessageContent(
+              listing.status,
+              listing.applicationDueDate,
+              enableMarketingStatus,
+              listing.marketingType,
+              listing.marketingSeason,
+              listing.marketingDate,
+              hideTime
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </Message>
   )
 }
