@@ -59,7 +59,7 @@ describe("Public Reset Password Page", () => {
       expect(screen.queryByText("The passwords do not match")).not.toBeInTheDocument()
     })
 
-    it("show not matching password error on empty password confiramtion input", async () => {
+    it("show not matching password error on empty password confirmation input", async () => {
       render(<ResetPassword />)
 
       const passwordInput = screen.getByLabelText(/^password$/i, { selector: "input" })
@@ -165,7 +165,7 @@ describe("Public Reset Password Page", () => {
     })
   })
 
-  it.only("should navigate on sucess", async () => {
+  it.only("should navigate on success", async () => {
     const { pushMock } = mockNextRouter({ token: "ex4mpl3-tok3n" })
     server.use(
       rest.put("http://localhost/api/adapter/auth/update-password", (_req, res, ctx) => {
