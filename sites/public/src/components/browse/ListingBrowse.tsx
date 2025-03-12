@@ -45,13 +45,30 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
           {/* TODO: Show both open and closed listings once we have designs for pagination: Issue #4448 */}
           <>
             {props.openListings.length > 0 ? (
-              <ul>
-                {props.openListings.map((listing, index) => {
-                  return (
-                    <ListingCard listing={listing} key={index} jurisdiction={props.jurisdiction} />
-                  )
-                })}
-              </ul>
+              <>
+                <ul>
+                  {props.openListings.map((listing, index) => {
+                    return (
+                      <ListingCard
+                        listing={listing}
+                        key={index}
+                        jurisdiction={props.jurisdiction}
+                      />
+                    )
+                  })}
+                </ul>
+                <ul className={"seeds-m-bs-content"}>
+                  {props.closedListings.map((listing, index) => {
+                    return (
+                      <ListingCard
+                        listing={listing}
+                        key={index}
+                        jurisdiction={props.jurisdiction}
+                      />
+                    )
+                  })}
+                </ul>
+              </>
             ) : (
               <div className={styles["empty-state"]}>
                 <Heading size={"xl"} priority={2} className={styles["empty-heading"]}>
