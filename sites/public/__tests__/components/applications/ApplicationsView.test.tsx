@@ -1,6 +1,6 @@
 import React from "react"
-import { cleanup, fireEvent } from "@testing-library/react"
-import { mockNextRouter, render, waitFor, within } from "../../testUtils"
+import { cleanup } from "@testing-library/react"
+import { mockNextRouter, render, waitFor, within, screen } from "../../testUtils"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import ApplicationsView, {
   ApplicationsIndexEnum,
@@ -15,8 +15,10 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { setupServer } from "msw/lib/node"
 import { rest } from "msw"
+import userEvent from "@testing-library/user-event"
 
 const server = setupServer()
+window.scrollTo = jest.fn()
 
 const mockRouter: GenericRouter = {
   pathname: "",
@@ -30,7 +32,6 @@ const mockRouter: GenericRouter = {
 
 beforeAll(() => {
   server.listen()
-  window.scrollTo = jest.fn()
   mockNextRouter()
   process.env.showPublicLottery = "TRUE"
 })
@@ -83,6 +84,19 @@ function getApplications(openCount = 0, closedCount = 0, lotteryCount = 0): Publ
   }
 }
 
+function renderApplicationsView(filterType = ApplicationsIndexEnum.all) {
+  return render(
+    <AuthContext.Provider
+      value={{
+        profile: { ...user, jurisdictions: [], listings: [] },
+        applicationsService: new ApplicationsService(),
+      }}
+    >
+      <ApplicationsView filterType={filterType} />
+    </AuthContext.Provider>
+  )
+}
+
 describe("<ApplicationsView>", () => {
   it("should redirect to sign-in page for non logged user", async () => {
     render(
@@ -107,134 +121,107 @@ describe("<ApplicationsView>", () => {
   })
 
   it("should render the page with application fetching error", async () => {
-    //eslint-disable-next-line @typescript-eslint/no-empty-function
-    jest.spyOn(console, "error").mockImplementation(() => {})
     server.use(
-      rest.get("http://localhost/api/adapter/applications/publicAppsView", (_req, res, ctx) => {
-        return res(ctx.status(410))
-      })
+      rest.get(
+        "http://localhost:3100/applications/applications/publicAppsView",
+        (_req, res, ctx) => {
+          return res()
+        }
+      )
     )
-
-    const { getByText, findByText } = render(
-      <AuthContext.Provider
-        value={{
-          profile: { ...user, jurisdictions: [], listings: [] },
-          applicationsService: new ApplicationsService(),
-        }}
-      >
-        <ApplicationsView filterType={ApplicationsIndexEnum.all} />
-      </AuthContext.Provider>
-    )
+    renderApplicationsView()
 
     // Dashboard heading
-    expect(getByText("My Applications", { selector: "h1" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 1, name: /my applications/i })).toBeInTheDocument()
     expect(
-      getByText("See lottery dates and listings for properties for which you've applied")
+      screen.getByText("See lottery dates and listings for properties for which you've applied")
     ).toBeInTheDocument()
 
     // Application section (Missing fallback component)
-    expect(await findByText("Error fetching applications", { selector: "h2" })).toBeInTheDocument()
+    expect(
+      await screen.findByRole("heading", { level: 2, name: /error fetching applications/i })
+    ).toBeInTheDocument()
   })
 
   it("should render the page with no existing applications", async () => {
     server.use(
-      rest.get("http://localhost/api/adapter/applications/publicAppsView", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
         return res(ctx.json(getApplications()))
       })
     )
-    const { getByTestId, getByText, findByText } = render(
-      <AuthContext.Provider
-        value={{
-          profile: { ...user, jurisdictions: [], listings: [] },
-          applicationsService: new ApplicationsService(),
-        }}
-      >
-        <ApplicationsView filterType={ApplicationsIndexEnum.all} />
-      </AuthContext.Provider>
-    )
+
+    renderApplicationsView()
 
     // Dashboard heading
-    expect(getByText("My Applications", { selector: "h1" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 1, name: /my applications/i })).toBeInTheDocument()
     expect(
-      getByText("See lottery dates and listings for properties for which you've applied")
+      screen.getByText("See lottery dates and listings for properties for which you've applied")
     ).toBeInTheDocument()
 
     // Application section (Missing fallback component)
     expect(
-      await findByText("It looks like you haven't applied to any listings yet.")
+      await screen.findByText("It looks like you haven't applied to any listings yet.")
     ).toBeInTheDocument()
-    expect(await findByText("Browse Listings", { selector: "a" })).toBeInTheDocument()
-    expect(await findByText("Browse Listings", { selector: "a" })).toHaveAttribute(
-      "href",
-      "/listings"
-    )
+    const browseListingsButton = await screen.findByRole("link", { name: /Browse Listings/i })
+    expect(browseListingsButton).toBeInTheDocument()
+    expect(browseListingsButton).toHaveAttribute("href", "/listings")
 
     // Tab Panel
-    const allApplicationsTab = getByTestId("total-applications-tab")
+    const allApplicationsTab = screen.getByTestId("total-applications-tab")
     expect(
       within(allApplicationsTab).getByText("All my applications", { selector: "span" })
     ).toBeInTheDocument()
     expect(within(allApplicationsTab).getByText("0")).toBeInTheDocument()
 
-    const closedApplicationsTab = getByTestId("closed-applications-tab")
+    const closedApplicationsTab = screen.getByTestId("closed-applications-tab")
     expect(
       within(closedApplicationsTab).getByText("Applications closed", { selector: "span" })
     ).toBeInTheDocument()
     expect(within(closedApplicationsTab).getByText("0")).toBeInTheDocument()
 
-    const openApplicationsTab = getByTestId("open-applications-tab")
+    const openApplicationsTab = screen.getByTestId("open-applications-tab")
     expect(
       within(openApplicationsTab).getByText("Accepting applications", { selector: "span" })
     ).toBeInTheDocument()
     expect(within(openApplicationsTab).getByText("0")).toBeInTheDocument()
 
-    const lotteryTab = getByTestId("lottery-runs-tab")
+    const lotteryTab = screen.getByTestId("lottery-runs-tab")
     expect(within(lotteryTab).getByText("Lottery run", { selector: "span" })).toBeInTheDocument()
     expect(within(lotteryTab).getByText("0")).toBeInTheDocument()
   })
 
   it("should show the page with only proper applications count", async () => {
     server.use(
-      rest.get("http://localhost/api/adapter/applications/publicAppsView", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
         return res(ctx.json(getApplications(1, 2, 3)))
       })
     )
-
-    const { getByTestId, findAllByText, queryByText } = render(
-      <AuthContext.Provider
-        value={{
-          profile: { ...user, jurisdictions: [], listings: [] },
-          applicationsService: new ApplicationsService(),
-        }}
-      >
-        <ApplicationsView filterType={ApplicationsIndexEnum.open} />
-      </AuthContext.Provider>
-    )
+    renderApplicationsView(ApplicationsIndexEnum.open)
 
     expect(
-      queryByText("It looks like you haven't applied to any listings yet.")
+      screen.queryByText("It looks like you haven't applied to any listings yet.")
     ).not.toBeInTheDocument()
 
-    expect(await findAllByText("View application", { selector: "a" })).toHaveLength(6)
-    expect(await findAllByText("See Listing", { selector: "a" })).toHaveLength(6)
+    expect(await screen.findAllByRole("link", { name: /view application/i })).toHaveLength(6)
+    expect(await screen.findAllByRole("link", { name: /see listing/i })).toHaveLength(6)
 
-    const allApplicationsTab = getByTestId("total-applications-tab")
+    const allApplicationsTab = screen.getByTestId("total-applications-tab")
     expect(within(allApplicationsTab).getByText("6")).toBeInTheDocument()
 
-    const closedApplicationsTab = getByTestId("closed-applications-tab")
+    const closedApplicationsTab = screen.getByTestId("closed-applications-tab")
     expect(within(closedApplicationsTab).getByText("2")).toBeInTheDocument()
 
-    const openApplicationsTab = getByTestId("open-applications-tab")
+    const openApplicationsTab = screen.getByTestId("open-applications-tab")
     expect(within(openApplicationsTab).getByText("1")).toBeInTheDocument()
 
-    const lotteryTab = getByTestId("lottery-runs-tab")
+    const lotteryTab = screen.getByTestId("lottery-runs-tab")
     expect(within(lotteryTab).getByText("3")).toBeInTheDocument()
   })
 
   describe("should navigate to filtered views on tab click", () => {
     beforeEach(() => {
       server.use(
-        rest.get("http://localhost/api/adapter/applications/publicAppsView", (_req, res, ctx) => {
+        rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
           return res(ctx.json(getApplications(1, 1, 1)))
         })
       )
@@ -242,22 +229,13 @@ describe("<ApplicationsView>", () => {
 
     it("should navigate to all applications view", async () => {
       const { pushMock } = mockNextRouter()
-      const { getByTestId, findAllByText } = render(
-        <AuthContext.Provider
-          value={{
-            profile: { ...user, jurisdictions: [], listings: [] },
-            applicationsService: new ApplicationsService(),
-          }}
-        >
-          <ApplicationsView filterType={ApplicationsIndexEnum.open} />
-        </AuthContext.Provider>
-      )
+      renderApplicationsView()
 
-      expect(await findAllByText("View application", { selector: "a" })).toHaveLength(3)
-      expect(await findAllByText("See Listing", { selector: "a" })).toHaveLength(3)
+      expect(await screen.findAllByRole("link", { name: /view application/i })).toHaveLength(3)
+      expect(await screen.findAllByRole("link", { name: /see listing/i })).toHaveLength(3)
 
-      const allAplicationsTab = getByTestId("total-applications-tab")
-      fireEvent.click(allAplicationsTab)
+      const allAplicationsTab = screen.getByTestId("total-applications-tab")
+      await userEvent.click(allAplicationsTab)
       await waitFor(() => {
         expect(pushMock).toHaveBeenCalledWith("/account/applications")
       })
@@ -265,22 +243,13 @@ describe("<ApplicationsView>", () => {
 
     it("should navigate to open application only view", async () => {
       const { pushMock } = mockNextRouter()
-      const { getByTestId, findAllByText } = render(
-        <AuthContext.Provider
-          value={{
-            profile: { ...user, jurisdictions: [], listings: [] },
-            applicationsService: new ApplicationsService(),
-          }}
-        >
-          <ApplicationsView filterType={ApplicationsIndexEnum.open} />
-        </AuthContext.Provider>
-      )
+      renderApplicationsView()
 
-      expect(await findAllByText("View application", { selector: "a" })).toHaveLength(3)
-      expect(await findAllByText("See Listing", { selector: "a" })).toHaveLength(3)
+      expect(await screen.findAllByRole("link", { name: /view application/i })).toHaveLength(3)
+      expect(await screen.findAllByRole("link", { name: /see listing/i })).toHaveLength(3)
 
-      const openApplicationsTab = getByTestId("open-applications-tab")
-      fireEvent.click(openApplicationsTab)
+      const openApplicationsTab = screen.getByTestId("open-applications-tab")
+      await userEvent.click(openApplicationsTab)
       await waitFor(() => {
         expect(pushMock).toHaveBeenCalledWith("/account/applications/open")
       })
@@ -288,22 +257,13 @@ describe("<ApplicationsView>", () => {
 
     it("should navigate to closed application only view", async () => {
       const { pushMock } = mockNextRouter()
-      const { getByTestId, findAllByText } = render(
-        <AuthContext.Provider
-          value={{
-            profile: { ...user, jurisdictions: [], listings: [] },
-            applicationsService: new ApplicationsService(),
-          }}
-        >
-          <ApplicationsView filterType={ApplicationsIndexEnum.open} />
-        </AuthContext.Provider>
-      )
+      renderApplicationsView()
 
-      expect(await findAllByText("View application", { selector: "a" })).toHaveLength(3)
-      expect(await findAllByText("See Listing", { selector: "a" })).toHaveLength(3)
+      expect(await screen.findAllByRole("link", { name: /view application/i })).toHaveLength(3)
+      expect(await screen.findAllByRole("link", { name: /see listing/i })).toHaveLength(3)
 
-      const closedApplicationsTab = getByTestId("closed-applications-tab")
-      fireEvent.click(closedApplicationsTab)
+      const closedApplicationsTab = screen.getByTestId("closed-applications-tab")
+      await userEvent.click(closedApplicationsTab)
       await waitFor(() => {
         expect(pushMock).toHaveBeenCalledWith("/account/applications/closed")
       })
@@ -311,22 +271,13 @@ describe("<ApplicationsView>", () => {
 
     it("should navigate to lottery runs only view", async () => {
       const { pushMock } = mockNextRouter()
-      const { getByTestId, findAllByText } = render(
-        <AuthContext.Provider
-          value={{
-            profile: { ...user, jurisdictions: [], listings: [] },
-            applicationsService: new ApplicationsService(),
-          }}
-        >
-          <ApplicationsView filterType={ApplicationsIndexEnum.open} />
-        </AuthContext.Provider>
-      )
+      renderApplicationsView()
 
-      expect(await findAllByText("View application", { selector: "a" })).toHaveLength(3)
-      expect(await findAllByText("See Listing", { selector: "a" })).toHaveLength(3)
+      expect(await screen.findAllByRole("link", { name: /view application/i })).toHaveLength(3)
+      expect(await screen.findAllByRole("link", { name: /see listing/i })).toHaveLength(3)
 
-      const lotteryTab = getByTestId("lottery-runs-tab")
-      fireEvent.click(lotteryTab)
+      const lotteryTab = screen.getByTestId("lottery-runs-tab")
+      await userEvent.click(lotteryTab)
       await waitFor(() => {
         expect(pushMock).toHaveBeenCalledWith("/account/applications/lottery")
       })
