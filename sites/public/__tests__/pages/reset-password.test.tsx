@@ -162,7 +162,7 @@ describe("Public Reset Password Page", () => {
     })
   })
 
-  it.only("should navigate on success", async () => {
+  it("should navigate on success", async () => {
     const { pushMock } = mockNextRouter({ token: "ex4mpl3-tok3n" })
     server.use(
       rest.put("http://localhost/api/adapter/auth/update-password", (_req, res, ctx) => {
