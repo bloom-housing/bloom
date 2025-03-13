@@ -15,6 +15,7 @@ import FavoriteButton from "../shared/FavoriteButton"
 
 export interface ListingCardProps {
   listing: Listing
+  showFavoriteButton?: boolean
   favorited?: boolean
   setFavorited?: React.Dispatch<React.SetStateAction<boolean>>
 }
@@ -32,18 +33,24 @@ export const getMessageData = (reviewOrder: ReviewOrderTypeEnum): string => {
   }
 }
 
-export const ListingCard = ({ listing, favorited, setFavorited }: ListingCardProps) => {
+export const ListingCard = ({
+  listing,
+  showFavoriteButton,
+  favorited,
+  setFavorited,
+}: ListingCardProps) => {
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
   const listingTags = getListingTags(listing, true)
   const status = getListingApplicationStatus(listing, true, true)
   const actions = []
 
-  // TODO: this needs to be feature flag
-  actions.push(
-    <FavoriteButton favorited={favorited} setFavorited={setFavorited}>
-      Fav!
-    </FavoriteButton>
-  )
+  if (showFavoriteButton) {
+    actions.push(
+      <FavoriteButton favorited={favorited} setFavorited={setFavorited}>
+        {t("listings.favorite")}
+      </FavoriteButton>
+    )
+  }
 
   return (
     <li className={styles["list-item"]}>

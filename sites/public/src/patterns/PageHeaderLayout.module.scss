@@ -1,6 +1,9 @@
 .page-header-layout {
   --page-header-layout-banner-bg-color: var(--seeds-bg-color-surface-primary);
   --page-header-layout-banner-text-color: var(--seeds-color-on-surface);
+  --page-header-layout-content-bg-color: transparent;
+
+  background-color: var(--page-header-layout-content-bg-color);
 
   &.is-inverse {
     --page-header-layout-banner-bg-color: var(--seeds-bg-color-surface-primary-inverse);

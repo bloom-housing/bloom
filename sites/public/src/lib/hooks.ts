@@ -5,9 +5,11 @@ import { useRouter } from "next/router"
 import {
   EnumListingFilterParamsComparison,
   Jurisdiction,
+  Listing,
   ListingFilterParams,
   ListingOrderByKeys,
   ListingsStatusEnum,
+  ModificationEnum,
   OrderByEnum,
   PaginatedListing,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -48,6 +50,15 @@ export const useProfileFavoriteListings = () => {
   const [loading, setLoading] = useState(true)
   const [listings, setListings] = useState<PaginatedListing>({ items: [] } as PaginatedListing)
 
+  const updateFavorite = async (listing: Listing, favorited: boolean) => {
+    await userService.modifyFavoriteListings({
+      body: {
+        id: listing.id,
+        action: favorited ? ModificationEnum.add : ModificationEnum.remove,
+      },
+    })
+  }
+
   useEffect(() => {
     if (profile && loading) {
       void userService.profile().then((reloadedProfile) => {
@@ -77,7 +88,10 @@ export const useProfileFavoriteListings = () => {
     }
   }, [profile, loading, userService, listingsService])
 
-  return listings.items
+  return [listings.items, updateFavorite] as [
+    Listing[],
+    (listing: Listing, favorited: boolean) => Promise<void>
+  ]
 }
 
 export async function fetchBaseListingData(
