@@ -44,11 +44,13 @@ export const useFormConductor = (stepName: string) => {
 
 export async function fetchBaseListingData(
   {
+    page,
     additionalFilters,
     orderBy,
     orderDir,
     limit,
   }: {
+    page?: number
     additionalFilters?: ListingFilterParams[]
     orderBy?: ListingOrderByKeys[]
     orderDir?: OrderByEnum[]
@@ -57,7 +59,7 @@ export async function fetchBaseListingData(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   req: any
 ) {
-  let listings = []
+  let listings
   try {
     const { id: jurisdictionId } = await fetchJurisdictionByName(req)
 
@@ -75,6 +77,7 @@ export async function fetchBaseListingData(
       filter = filter.concat(additionalFilters)
     }
     const params: {
+      page?: number
       view: string
       limit: string
       filter: ListingFilterParams[]
@@ -84,6 +87,9 @@ export async function fetchBaseListingData(
       view: "base",
       limit: limit || "all",
       filter,
+    }
+    if (page) {
+      params.page = page
     }
     if (orderBy) {
       params.orderBy = orderBy
@@ -102,7 +108,7 @@ export async function fetchBaseListingData(
       },
     })
 
-    listings = response.data?.items
+    listings = response.data
   } catch (e) {
     console.log("fetchBaseListingData error: ", e)
   }
@@ -111,9 +117,10 @@ export async function fetchBaseListingData(
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function fetchOpenListings(req: any) {
+export async function fetchOpenListings(req: any, page: number) {
   return await fetchBaseListingData(
     {
+      page: page,
       additionalFilters: [
         {
           $comparison: EnumListingFilterParamsComparison["="],
@@ -128,9 +135,10 @@ export async function fetchOpenListings(req: any) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function fetchClosedListings(req: any) {
+export async function fetchClosedListings(req: any, page: number) {
   return await fetchBaseListingData(
     {
+      page: page,
       additionalFilters: [
         {
           $comparison: EnumListingFilterParamsComparison["="],
