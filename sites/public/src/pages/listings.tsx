@@ -13,6 +13,7 @@ export interface ListingsProps {
 export default function ListingsPage(props: ListingsProps) {
   return (
     <>
+      <FilterDrawer></FilterDrawer>
       {process.env.showNewSeedsDesigns ? (
         <ListingBrowse openListings={props.openListings} closedListings={props.closedListings} />
       ) : (
