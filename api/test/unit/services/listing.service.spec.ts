@@ -522,6 +522,14 @@ describe('Testing listing service', () => {
       },
       homeType: 'apartment',
       isVerified: true,
+      listingNeighborhoodAmenities: {
+        groceryStores: 'stores',
+        pharmacies: 'pharmacies',
+        healthCareResources: 'health care',
+        parksAndCommunityCenters: 'parks',
+        schools: 'schools',
+        publicTransportation: 'public transportation',
+      },
     };
   };
 
@@ -561,6 +569,7 @@ describe('Testing listing service', () => {
           },
           listingFeatures: true,
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           applicationMethods: {
             include: {
               paperApplications: {
@@ -717,6 +726,7 @@ describe('Testing listing service', () => {
           },
           listingFeatures: true,
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           units: {
             include: {
               unitTypes: true,
@@ -830,6 +840,7 @@ describe('Testing listing service', () => {
           },
           listingFeatures: true,
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           units: {
             include: {
               unitTypes: true,
@@ -1177,6 +1188,7 @@ describe('Testing listing service', () => {
           },
           listingFeatures: true,
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           units: {
             include: {
               unitTypes: true,
@@ -1738,6 +1750,7 @@ describe('Testing listing service', () => {
           },
           listingFeatures: true,
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           units: {
             include: {
               unitTypes: true,
@@ -1795,6 +1808,7 @@ describe('Testing listing service', () => {
           },
           listingFeatures: true,
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           applicationMethods: {
             include: {
               paperApplications: {
@@ -2192,6 +2206,7 @@ describe('Testing listing service', () => {
           },
           listingFeatures: true,
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           units: {
             include: {
               unitTypes: true,
@@ -2308,6 +2323,7 @@ describe('Testing listing service', () => {
           },
           listingFeatures: true,
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           applicationMethods: {
             include: {
               paperApplications: {
@@ -2401,6 +2417,7 @@ describe('Testing listing service', () => {
           listingMultiselectQuestions: {
             include: { multiselectQuestions: true },
           },
+          listingNeighborhoodAmenities: true,
           listingFeatures: true,
           listingUtilities: true,
           unitGroups: {
@@ -2513,6 +2530,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsApplicationMailingAddress: true,
@@ -2629,6 +2647,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsApplicationMailingAddress: true,
@@ -2794,6 +2813,16 @@ describe('Testing listing service', () => {
               hearing: true,
               visual: false,
               mobility: true,
+            },
+          },
+          listingNeighborhoodAmenities: {
+            create: {
+              groceryStores: 'stores',
+              pharmacies: 'pharmacies',
+              healthCareResources: 'health care',
+              parksAndCommunityCenters: 'parks',
+              schools: 'schools',
+              publicTransportation: 'public transportation',
             },
           },
           jurisdictions: {
@@ -2972,6 +3001,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsApplicationMailingAddress: true,
@@ -3276,6 +3306,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsBuildingAddress: true,
@@ -3382,6 +3413,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsBuildingAddress: true,
@@ -3479,6 +3511,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsBuildingAddress: true,
@@ -3609,6 +3642,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsBuildingAddress: true,
           reservedCommunityTypes: true,
         },
@@ -3709,6 +3743,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsBuildingAddress: true,
@@ -3771,6 +3806,29 @@ describe('Testing listing service', () => {
           },
           listingsBuildingSelectionCriteriaFile: {
             disconnect: true,
+          },
+          listingNeighborhoodAmenities: {
+            upsert: {
+              create: {
+                groceryStores: null,
+                healthCareResources: null,
+                parksAndCommunityCenters: null,
+                pharmacies: null,
+                publicTransportation: null,
+                schools: null,
+              },
+              update: {
+                groceryStores: null,
+                healthCareResources: null,
+                parksAndCommunityCenters: null,
+                pharmacies: null,
+                publicTransportation: null,
+                schools: null,
+              },
+              where: {
+                id: undefined,
+              },
+            },
           },
           section8Acceptance: false,
           unitsAvailable: 0,
@@ -3894,6 +3952,29 @@ describe('Testing listing service', () => {
               id: expect.anything(),
             },
           },
+          listingNeighborhoodAmenities: {
+            upsert: {
+              create: {
+                groceryStores: null,
+                healthCareResources: null,
+                parksAndCommunityCenters: null,
+                pharmacies: null,
+                publicTransportation: null,
+                schools: null,
+              },
+              update: {
+                groceryStores: null,
+                healthCareResources: null,
+                parksAndCommunityCenters: null,
+                pharmacies: null,
+                publicTransportation: null,
+                schools: null,
+              },
+              where: {
+                id: undefined,
+              },
+            },
+          },
           status: ListingsStatusEnum.pending,
           displayWaitlistSize: false,
           unitsSummary: undefined,
@@ -4014,6 +4095,42 @@ describe('Testing listing service', () => {
 
       await service.update(val as ListingUpdate, user);
 
+      const nestedUtilitiesUpdate = {
+        water: false,
+        gas: true,
+        trash: false,
+        sewer: true,
+        electricity: false,
+        cable: true,
+        phone: false,
+        internet: true,
+      };
+      const nestedFeaturesUpdate = {
+        elevator: true,
+        wheelchairRamp: false,
+        serviceAnimalsAllowed: true,
+        accessibleParking: false,
+        parkingOnSite: true,
+        inUnitWasherDryer: false,
+        laundryInBuilding: true,
+        barrierFreeEntrance: false,
+        rollInShower: true,
+        grabBars: false,
+        heatingInUnit: true,
+        acInUnit: false,
+        hearing: true,
+        visual: false,
+        mobility: true,
+      };
+      const nestedNeighborhoodAmenities = {
+        groceryStores: 'stores',
+        pharmacies: 'pharmacies',
+        healthCareResources: 'health care',
+        parksAndCommunityCenters: 'parks',
+        schools: 'schools',
+        publicTransportation: 'public transportation',
+      };
+
       expect(prisma.listings.update).toHaveBeenCalledWith({
         include: {
           applicationMethods: {
@@ -4043,6 +4160,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsApplicationMailingAddress: true,
@@ -4164,15 +4282,12 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: {
-            create: {
-              water: false,
-              gas: true,
-              trash: false,
-              sewer: true,
-              electricity: false,
-              cable: true,
-              phone: false,
-              internet: true,
+            upsert: {
+              where: {
+                id: undefined,
+              },
+              create: nestedUtilitiesUpdate,
+              update: nestedUtilitiesUpdate,
             },
           },
           listingsApplicationMailingAddress: {
@@ -4186,22 +4301,21 @@ describe('Testing listing service', () => {
             },
           },
           listingFeatures: {
-            create: {
-              elevator: true,
-              wheelchairRamp: false,
-              serviceAnimalsAllowed: true,
-              accessibleParking: false,
-              parkingOnSite: true,
-              inUnitWasherDryer: false,
-              laundryInBuilding: true,
-              barrierFreeEntrance: false,
-              rollInShower: true,
-              grabBars: false,
-              heatingInUnit: true,
-              acInUnit: false,
-              hearing: true,
-              visual: false,
-              mobility: true,
+            upsert: {
+              where: {
+                id: undefined,
+              },
+              create: nestedFeaturesUpdate,
+              update: nestedFeaturesUpdate,
+            },
+          },
+          listingNeighborhoodAmenities: {
+            upsert: {
+              where: {
+                id: undefined,
+              },
+              create: nestedNeighborhoodAmenities,
+              update: nestedNeighborhoodAmenities,
             },
           },
           jurisdictions: {
