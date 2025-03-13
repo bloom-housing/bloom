@@ -4,10 +4,19 @@ import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const DetailNeighborhoodAmenities = () => {
   const listing = useContext(ListingContext)
-  return (
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+
+  const enableNeighborhoodAmenities = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableNeighborhoodAmenities,
+    listing.jurisdictions.id
+  )
+
+  return enableNeighborhoodAmenities ? (
     <SectionWithGrid heading={t("listings.sections.neighborhoodAmenitiesTitle")} inset>
       <Grid.Row>
         <FieldValue
@@ -55,6 +64,8 @@ const DetailNeighborhoodAmenities = () => {
         </FieldValue>
       </Grid.Row>
     </SectionWithGrid>
+  ) : (
+    <></>
   )
 }
 
