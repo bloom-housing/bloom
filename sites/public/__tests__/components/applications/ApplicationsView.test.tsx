@@ -49,16 +49,23 @@ afterAll(() => {
   server.close()
 })
 
-function getApplications(openCount = 0, closedCount = 0, lotteryCount = 0): PublicAppsViewResponse {
+function getApplications(
+  openCount = 0,
+  closedCount = 0,
+  lotteryCount = 0,
+  filterType = ApplicationsIndexEnum.all
+): PublicAppsViewResponse {
   return {
     displayApplications: [
-      ...(openCount
+      ...(openCount &&
+      (filterType === ApplicationsIndexEnum.all || filterType === ApplicationsIndexEnum.open)
         ? Array(openCount).fill({
             ...application,
             listings: { ...listing, status: ListingsStatusEnum.active },
           })
         : []),
-      ...(closedCount
+      ...(closedCount &&
+      (filterType === ApplicationsIndexEnum.all || filterType === ApplicationsIndexEnum.closed)
         ? Array(closedCount).fill({
             ...application,
             listings: {
@@ -68,7 +75,8 @@ function getApplications(openCount = 0, closedCount = 0, lotteryCount = 0): Publ
             },
           })
         : []),
-      ...(lotteryCount
+      ...(lotteryCount &&
+      (filterType === ApplicationsIndexEnum.all || filterType === ApplicationsIndexEnum.lottery)
         ? Array(lotteryCount).fill({
             ...application,
             listings: { ...listing, status: ListingsStatusEnum.closed },
@@ -143,51 +151,139 @@ describe("<ApplicationsView>", () => {
     ).toBeInTheDocument()
   })
 
-  it("should render the page with no existing applications", async () => {
-    server.use(
-      rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
-        return res(ctx.json(getApplications()))
-      })
-    )
+  describe("should render page with proper missing applications message", () => {
+    it("should render the page without any existing applications", async () => {
+      server.use(
+        rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
+          return res(ctx.json(getApplications()))
+        })
+      )
 
-    renderApplicationsView()
+      renderApplicationsView()
 
-    // Dashboard heading
-    expect(screen.getByRole("heading", { level: 1, name: /my applications/i })).toBeInTheDocument()
-    expect(
-      screen.getByText("See lottery dates and listings for properties for which you've applied")
-    ).toBeInTheDocument()
+      // Dashboard heading
+      expect(
+        screen.getByRole("heading", { level: 1, name: /my applications/i })
+      ).toBeInTheDocument()
+      expect(
+        screen.getByText("See lottery dates and listings for properties for which you've applied")
+      ).toBeInTheDocument()
 
-    // Application section (Missing fallback component)
-    expect(
-      await screen.findByText("It looks like you haven't applied to any listings yet.")
-    ).toBeInTheDocument()
-    const browseListingsButton = await screen.findByRole("link", { name: /Browse Listings/i })
-    expect(browseListingsButton).toBeInTheDocument()
-    expect(browseListingsButton).toHaveAttribute("href", "/listings")
+      // Application section (Missing fallback component)
+      expect(
+        await screen.findByText("It looks like you haven't applied to any listings yet.")
+      ).toBeInTheDocument()
+      const browseListingsButton = await screen.findByRole("link", { name: /Browse Listings/i })
+      expect(browseListingsButton).toBeInTheDocument()
+      expect(browseListingsButton).toHaveAttribute("href", "/listings")
 
-    // Tab Panel
-    const allApplicationsTab = screen.getByTestId("total-applications-tab")
-    expect(
-      within(allApplicationsTab).getByText("All my applications", { selector: "span" })
-    ).toBeInTheDocument()
-    expect(within(allApplicationsTab).getByText("0")).toBeInTheDocument()
+      // Tab Panel
+      const allApplicationsTab = screen.getByTestId("total-applications-tab")
+      expect(
+        within(allApplicationsTab).getByText("All my applications", { selector: "span" })
+      ).toBeInTheDocument()
+      expect(within(allApplicationsTab).getByText("0")).toBeInTheDocument()
 
-    const closedApplicationsTab = screen.getByTestId("closed-applications-tab")
-    expect(
-      within(closedApplicationsTab).getByText("Applications closed", { selector: "span" })
-    ).toBeInTheDocument()
-    expect(within(closedApplicationsTab).getByText("0")).toBeInTheDocument()
+      const closedApplicationsTab = screen.getByTestId("closed-applications-tab")
+      expect(
+        within(closedApplicationsTab).getByText("Applications closed", { selector: "span" })
+      ).toBeInTheDocument()
+      expect(within(closedApplicationsTab).getByText("0")).toBeInTheDocument()
 
-    const openApplicationsTab = screen.getByTestId("open-applications-tab")
-    expect(
-      within(openApplicationsTab).getByText("Accepting applications", { selector: "span" })
-    ).toBeInTheDocument()
-    expect(within(openApplicationsTab).getByText("0")).toBeInTheDocument()
+      const openApplicationsTab = screen.getByTestId("open-applications-tab")
+      expect(
+        within(openApplicationsTab).getByText("Accepting applications", { selector: "span" })
+      ).toBeInTheDocument()
+      expect(within(openApplicationsTab).getByText("0")).toBeInTheDocument()
 
-    const lotteryTab = screen.getByTestId("lottery-runs-tab")
-    expect(within(lotteryTab).getByText("Lottery run", { selector: "span" })).toBeInTheDocument()
-    expect(within(lotteryTab).getByText("0")).toBeInTheDocument()
+      const lotteryTab = screen.getByTestId("lottery-runs-tab")
+      expect(within(lotteryTab).getByText("Lottery run", { selector: "span" })).toBeInTheDocument()
+      expect(within(lotteryTab).getByText("0")).toBeInTheDocument()
+    })
+
+    it("should show missing lottery runs when on the matching tab", async () => {
+      server.use(
+        rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
+          return res(ctx.json(getApplications(2, 2, 0, ApplicationsIndexEnum.lottery)))
+        })
+      )
+
+      renderApplicationsView(ApplicationsIndexEnum.lottery)
+      // Tab Panel
+      const allApplicationsTab = screen.getByTestId("total-applications-tab")
+      expect(await within(allApplicationsTab).findByText("4")).toBeInTheDocument()
+
+      const closedApplicationsTab = screen.getByTestId("closed-applications-tab")
+      expect(within(closedApplicationsTab).getByText("2")).toBeInTheDocument()
+
+      const openApplicationsTab = screen.getByTestId("open-applications-tab")
+      expect(within(openApplicationsTab).getByText("2")).toBeInTheDocument()
+
+      const lotteryTab = screen.getByTestId("lottery-runs-tab")
+      expect(within(lotteryTab).getByText("0")).toBeInTheDocument()
+
+      expect(
+        await screen.findByText(
+          "None of the listings you've applied to have released lottery results."
+        )
+      ).toBeInTheDocument()
+    })
+
+    it("should show missing closed application when on the matching tab", async () => {
+      server.use(
+        rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
+          return res(ctx.json(getApplications(2, 0, 2, ApplicationsIndexEnum.closed)))
+        })
+      )
+
+      renderApplicationsView(ApplicationsIndexEnum.closed)
+      // Tab Panel
+      const allApplicationsTab = screen.getByTestId("total-applications-tab")
+      expect(await within(allApplicationsTab).findByText("4")).toBeInTheDocument()
+
+      const closedApplicationsTab = screen.getByTestId("closed-applications-tab")
+      expect(within(closedApplicationsTab).getByText("0")).toBeInTheDocument()
+
+      const openApplicationsTab = screen.getByTestId("open-applications-tab")
+      expect(within(openApplicationsTab).getByText("2")).toBeInTheDocument()
+
+      const lotteryTab = screen.getByTestId("lottery-runs-tab")
+      expect(within(lotteryTab).getByText("2")).toBeInTheDocument()
+
+      expect(
+        await screen.findByText(
+          "The listings you've applied to are either still accepting applications or already have lottery results posted."
+        )
+      ).toBeInTheDocument()
+    })
+
+    it("should show missing open application when on the matching tab", async () => {
+      server.use(
+        rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
+          return res(ctx.json(getApplications(0, 2, 2, ApplicationsIndexEnum.open)))
+        })
+      )
+
+      renderApplicationsView(ApplicationsIndexEnum.open)
+      // Tab Panel
+      const allApplicationsTab = screen.getByTestId("total-applications-tab")
+      expect(await within(allApplicationsTab).findByText("4")).toBeInTheDocument()
+
+      const closedApplicationsTab = screen.getByTestId("closed-applications-tab")
+      expect(within(closedApplicationsTab).getByText("2")).toBeInTheDocument()
+
+      const openApplicationsTab = screen.getByTestId("open-applications-tab")
+      expect(within(openApplicationsTab).getByText("0")).toBeInTheDocument()
+
+      const lotteryTab = screen.getByTestId("lottery-runs-tab")
+      expect(within(lotteryTab).getByText("2")).toBeInTheDocument()
+
+      expect(
+        await screen.findByText(
+          "None of the listings you've applied to are still accepting applications."
+        )
+      ).toBeInTheDocument()
+    })
   })
 
   it("should show the page with only proper applications count", async () => {
