@@ -833,7 +833,7 @@ describe('Testing script runner service', () => {
         scriptName,
       },
     });
-    expect(prisma.featureFlags.create).toHaveBeenCalledTimes(16);
+    expect(prisma.featureFlags.create).toHaveBeenCalledTimes(17);
   });
 
   // | ---------- HELPER TESTS BELOW ---------- | //
