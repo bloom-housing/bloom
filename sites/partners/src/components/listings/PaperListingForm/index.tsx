@@ -392,7 +392,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                           />
                           <AdditionalFees existingUtilities={listing?.listingUtilities} />
                           <BuildingFeatures existingFeatures={listing?.listingFeatures} />
-                          <NeighborhoodAmenities></NeighborhoodAmenities>
+                          <NeighborhoodAmenities />
                           <AdditionalEligibility defaultText={listing?.rentalAssistance} />
                           <BuildingSelectionCriteria />
                           <AdditionalDetails />
