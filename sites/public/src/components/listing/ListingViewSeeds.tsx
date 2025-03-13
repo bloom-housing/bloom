@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import {
   FeatureFlagEnum,
@@ -6,10 +6,10 @@ import {
   Listing,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
-  ModificationEnum,
+  User,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
-import { AuthContext, pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
+import { pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
 import { Heading } from "@bloom-housing/ui-seeds"
 import { ErrorPage } from "../../pages/_error"
 import { getListingApplicationStatus, isFeatureFlagOn } from "../../lib/helpers"
@@ -41,20 +41,19 @@ import styles from "./ListingViewSeeds.module.scss"
 import { useProfileFavoriteListings } from "../../lib/hooks"
 
 interface ListingProps {
-  jurisdiction?: Jurisdiction
   listing: Listing
+  jurisdiction?: Jurisdiction
+  profile?: User
   preview?: boolean
 }
 
-export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProps) => {
-  const { userService } = useContext(AuthContext)
-
+export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: ListingProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
 
   const [showDownloadModal, setShowDownloadModal] = useState(false)
   const [listingFavorited, setListingFavorited] = useState(false)
-  const favoriteListings = useProfileFavoriteListings()
+  const [favoriteListings, updateFavorite] = useProfileFavoriteListings()
 
   useEffect(() => {
     setListingFavorited(favoriteListings.some((item) => item.id === listing?.id))
@@ -65,14 +64,9 @@ export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProp
   }
 
   // Code for setting/unsetting favorite status for the listing
-  const updateFavorite = async (nowFavorited) => {
-    setListingFavorited(nowFavorited)
-    await userService.modifyFavoriteListings({
-      body: {
-        id: listing.id,
-        action: nowFavorited ? ModificationEnum.add : ModificationEnum.remove,
-      },
-    })
+  const saveFavorite = (favorited) => {
+    setListingFavorited(favorited)
+    void updateFavorite(listing, favorited)
   }
 
   const lotteryResultsEvent = listing.listingEvents?.find(
@@ -188,12 +182,11 @@ export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProp
             listing={listing}
             dueDateContent={[statusContent?.content, statusContent?.subContent]}
             jurisdiction={jurisdiction}
-            showFavoriteButton={isFeatureFlagOn(
-              jurisdiction,
-              FeatureFlagEnum.enableListingFavoriting
-            )}
+            showFavoriteButton={
+              profile && isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableListingFavoriting)
+            }
             listingFavorited={listingFavorited}
-            setListingFavorited={updateFavorite}
+            setListingFavorited={saveFavorite}
           />
           <RentSummary
             amiValues={getAmiValues(listing)}

@@ -1,20 +1,31 @@
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import Head from "next/head"
 import { AuthContext, PageView, pushGtmEvent, RequireLogin } from "@bloom-housing/shared-helpers"
-import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { PageHeader, t } from "@bloom-housing/ui-components"
+import {
+  FeatureFlagEnum,
+  Jurisdiction,
+  Listing,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { t } from "@bloom-housing/ui-components"
 import Layout from "../../layouts/application"
 import { MetaTags } from "../shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
 import { ListingCard } from "../browse/ListingCard"
 import styles from "../browse/ListingBrowse.module.scss"
+import favoritesStyles from "./FavoritesView.module.scss"
+import { useProfileFavoriteListings } from "../../lib/hooks"
+import { isFeatureFlagOn } from "../../lib/helpers"
+import { PageHeaderLayout } from "../../patterns/PageHeaderLayout"
+import { Button, Heading } from "@bloom-housing/ui-seeds"
 
 interface FavoritesViewProps {
-  listings: Listing[]
+  jurisdiction: Jurisdiction
 }
 
-const FavoritesView = (props: FavoritesViewProps) => {
+const FavoritesView = ({ jurisdiction }: FavoritesViewProps) => {
   const { profile } = useContext(AuthContext)
+  const [listings, updateFavorite] = useProfileFavoriteListings()
+  const [favoriteListings, setFavoriteListings] = useState<Listing[]>([])
 
   useEffect(() => {
     if (profile) {
@@ -24,7 +35,20 @@ const FavoritesView = (props: FavoritesViewProps) => {
         status: UserStatus.LoggedIn,
       })
     }
-  })
+
+    setFavoriteListings(listings)
+  }, [profile, listings, setFavoriteListings])
+
+  const saveFavoriteFn = (listing) => {
+    return (listingFavorited) => {
+      void updateFavorite(listing, listingFavorited)
+      if (listingFavorited) {
+        setFavoriteListings([...favoriteListings, listing])
+      } else {
+        setFavoriteListings([...favoriteListings.filter((item) => item.id != listing.id)])
+      }
+    }
+  }
 
   return (
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
@@ -33,16 +57,49 @@ const FavoritesView = (props: FavoritesViewProps) => {
           <title>{t("account.myFavorites")}</title>
         </Head>
         <MetaTags title={t("account.myFavorites")} description="" />
-        <PageHeader title={t("account.myFavorites")} />
-        <div className={styles["listing-directory"]}>
-          <div className={styles["content-wrapper"]}>
-            <ul>
-              {props.listings.map((listing, index) => {
-                return <ListingCard listing={listing} key={index} />
-              })}
-            </ul>
-          </div>
-        </div>
+        <PageHeaderLayout
+          heading={t("account.myFavorites")}
+          inverse
+          className={listings.length === 0 ? favoritesStyles["favorites-none-layout"] : ""}
+        >
+          {listings.length === 0 ? (
+            <div style={{ display: "grid", gap: "var(--seeds-s4)" }}>
+              <Heading priority={2} size="3xl" className="font-alt-sans">
+                It looks like you haven’t favorited any listings yet.
+              </Heading>
+              <p>
+                <Button size="sm" variant="primary-outlined" href="/listings">
+                  Browse listings
+                </Button>
+              </p>
+            </div>
+          ) : (
+            <div className={styles["listing-directory"]}>
+              <div
+                className={[styles["content-wrapper"], favoritesStyles["favorites-listings"]].join(
+                  " "
+                )}
+              >
+                <ul>
+                  {listings.map((listing, index) => {
+                    return (
+                      <ListingCard
+                        listing={listing}
+                        key={index}
+                        showFavoriteButton={isFeatureFlagOn(
+                          jurisdiction,
+                          FeatureFlagEnum.showListingFavoriting
+                        )}
+                        favorited={favoriteListings.some((item) => item.id === listing.id)}
+                        setFavorited={saveFavoriteFn(listing)}
+                      />
+                    )
+                  })}
+                </ul>
+              </div>
+            </div>
+          )}
+        </PageHeaderLayout>
       </Layout>
     </RequireLogin>
   )

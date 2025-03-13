@@ -132,7 +132,7 @@ export const MainDetails = ({
         {showFavoriteButton && (
           <p className={"seeds-m-bs-3"}>
             <FavoriteButton favorited={listingFavorited} setFavorited={setListingFavorited}>
-              Favorite
+              {t("listings.favorite")}
             </FavoriteButton>
           </p>
         )}

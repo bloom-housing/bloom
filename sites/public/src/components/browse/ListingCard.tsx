@@ -22,6 +22,7 @@ export interface ListingCardProps {
 
 export const ListingCard = ({
   listing,
+  showFavoriteButton,
   jurisdiction,
   favorited,
   setFavorited,
@@ -31,12 +32,13 @@ export const ListingCard = ({
   const status = getListingApplicationStatus(listing, true, true)
   const actions = []
 
-  // TODO: this needs to be feature flag
-  actions.push(
-    <FavoriteButton favorited={favorited} setFavorited={setFavorited}>
-      Fav!
-    </FavoriteButton>
-  )
+  if (showFavoriteButton) {
+    actions.push(
+      <FavoriteButton favorited={favorited} setFavorited={setFavorited}>
+        {t("listings.favorite")}
+      </FavoriteButton>
+    )
+  }
 
   return (
     <li className={styles["list-item"]}>
