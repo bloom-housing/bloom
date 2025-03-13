@@ -386,5 +386,5 @@ export const downloadExternalPDF = async (fileURL: string, fileName: string) => 
 }
 
 export const isFeatureFlagOn = (jurisdiction: Jurisdiction, featureFlag: string) => {
-  return jurisdiction.featureFlags?.some((flag) => flag.name === featureFlag && flag.active)
+  return jurisdiction?.featureFlags?.some((flag) => flag.name === featureFlag && flag.active)
 }
