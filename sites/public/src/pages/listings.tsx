@@ -8,6 +8,13 @@ export interface ListingsProps {
   openListings: Listing[]
   closedListings: Listing[]
   jurisdiction: Jurisdiction
+  paginationData: {
+    currentPage: number
+    itemCount: number
+    itemsPerPage: number
+    totalItems: number
+    totalPages: number
+  }
 }
 
 export default function ListingsPage(props: ListingsProps) {
@@ -18,6 +25,7 @@ export default function ListingsPage(props: ListingsProps) {
           openListings={props.openListings}
           closedListings={props.closedListings}
           jurisdiction={props.jurisdiction}
+          paginationData={props.paginationData}
         />
       ) : (
         <ListingBrowseDeprecated
@@ -40,6 +48,7 @@ export async function getServerSideProps(context: { req: any }) {
       openListings: await openListings,
       closedListings: await closedListings,
       jurisdiction: await jurisdiction,
+      paginationData: (await openListings)?.meta,
     },
   }
 }

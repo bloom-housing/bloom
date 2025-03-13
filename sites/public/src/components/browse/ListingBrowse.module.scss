@@ -1,7 +1,8 @@
 .listing-directory {
   display: flex;
   width: 100%;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   font-family: var(--seeds-font-alt-sans);
 
   ul {
@@ -34,5 +35,14 @@
     @media (--md-down) {
       font-size: var(--seeds-font-size-xl);
     }
+  }
+
+  .pagination-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding-inline: var(--seeds-s12);
+    padding-block: var(--seeds-s4);
+    background-color: var(--seeds-bg-color-canvas);
   }
 }
