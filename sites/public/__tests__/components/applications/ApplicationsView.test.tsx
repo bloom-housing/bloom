@@ -107,6 +107,12 @@ function renderApplicationsView(filterType = ApplicationsIndexEnum.all) {
 
 describe("<ApplicationsView>", () => {
   it("should redirect to sign-in page for non logged user", async () => {
+    server.use(
+      rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
+        return res()
+      })
+    )
+
     render(
       <NavigationContext.Provider
         value={{
@@ -130,12 +136,9 @@ describe("<ApplicationsView>", () => {
 
   it("should render the page with application fetching error", async () => {
     server.use(
-      rest.get(
-        "http://localhost:3100/applications/applications/publicAppsView",
-        (_req, res, ctx) => {
-          return res()
-        }
-      )
+      rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
+        return res(ctx.status(500)) // Return status code 500 to mock an server fetching error
+      })
     )
     renderApplicationsView()
 
