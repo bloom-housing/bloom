@@ -8,17 +8,18 @@ import { readFileSync } from 'fs';
 import { S3RequestPresigner } from '@aws-sdk/s3-request-presigner';
 
 /**
- *
+ * @param accessKeyId the AWS service account access key
  * @param bucket the s3 bucket the object lives inside of
- * @param region the region the s3 bucket exists in. Specified in AWS
  * @param key the key for the object we want a presigned url for
+ * @param region the region the s3 bucket exists in. Specified in AWS
+ * @param secretAccessKey the AWS service account secret key
  * @returns the presigned url for downloading a file
  */
 export const generatePresignedGetURL = async (
-  bucket: string,
-  region: string,
-  key: string,
   accessKeyId: string,
+  bucket: string,
+  key: string,
+  region: string,
   secretAccessKey: string,
 ): Promise<string> => {
   const url = parseUrl(`https://${bucket}.s3.${region}.amazonaws.com/${key}`);
@@ -40,23 +41,23 @@ export const generatePresignedGetURL = async (
 
 /**
  *
- * @param pathToFile path to file we want to uplaod
- * @param fileType  the ContentType for the file we want to upload
- * @param region the AWS region for the bucket
- * @param bucket  the AWS S3 bucket
- * @param key the "key" for the file that will get uploaded
  * @param accessKeyId the AWS service account access key
+ * @param bucket  the AWS S3 bucket
+ * @param fileType  the ContentType for the file we want to upload
+ * @param key the "key" for the file that will get uploaded
+ * @param pathToFile path to file we want to uplaod
+ * @param region the AWS region for the bucket
  * @param secretAccessKey the AWS service account secret key
  */
-export const uploadToS3Again = async (
-  pathToFile: string,
-  fileType: string,
-  region: string,
-  bucket: string,
-  key: string,
+export const uploadToS3 = async (
   accessKeyId: string,
+  bucket: string,
+  fileType: string,
+  key: string,
+  pathToFile: string,
+  region: string,
   secretAccessKey: string,
-) => {
+): Promise<void> => {
   try {
     const client = new S3Client({
       region,
