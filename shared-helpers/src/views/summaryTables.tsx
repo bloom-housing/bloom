@@ -125,9 +125,9 @@ export const getStackedUnitSummaryDetailsTable = (
           )} ${getTranslationFromCurrencyString(unitSummary.minIncomeRange.max)}`
 
     const getRent = (rentMin: string, rentMax: string, percent = false) => {
-      const unit = percent ? `% ${t("t.income")}` : ""
+      const unit = percent ? t("t.ofIncome") : ""
       return rentMin == rentMax
-        ? `${getTranslationFromCurrencyString(rentMin)} ${rentMin !== "t.n/a" && unit}`
+        ? `${getTranslationFromCurrencyString(rentMin)}${rentMin !== "t.n/a" && unit}`
         : `${getTranslationFromCurrencyString(rentMin)}
           ${` ${t("t.to")} `}
           ${getTranslationFromCurrencyString(rentMax)}
