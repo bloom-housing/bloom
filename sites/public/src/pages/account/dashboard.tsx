@@ -49,7 +49,9 @@ function Dashboard(props: DashboardProps) {
 
     window.localStorage.setItem(
       "bloom-show-favorites-menu-item",
-      isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.showListingFavoriting).toString()
+      (
+        isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.showListingFavoriting) === true
+      ).toString()
     )
   }, [props.router, props.jurisdiction, profile])
 

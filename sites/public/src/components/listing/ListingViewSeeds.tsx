@@ -66,7 +66,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
         setListingFavorited(listingIds.includes(listing?.id))
       })
     }
-  }, [fetchFavoriteListingIds, profile, setListingFavorited, userService, listing?.id])
+  }, [profile, setListingFavorited, userService, listing?.id])
 
   if (!listing) {
     return <ErrorPage />
