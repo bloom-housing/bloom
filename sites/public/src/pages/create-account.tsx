@@ -23,7 +23,7 @@ import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
 import SignUpBenefits from "../components/account/SignUpBenefits"
 import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
 
-export default () => {
+const CreateAccount = () => {
   const { createUser, resendConfirmation } = useContext(AuthContext)
   const [confirmationResent, setConfirmationResent] = useState<boolean>(false)
   const signUpCopy = process.env.showMandatedAccounts
@@ -116,9 +116,9 @@ export default () => {
                   divider={"inset"}
                   className={accountCardStyles["account-card-settings-section"]}
                 >
-                  <label className={styles["create-account-header"]} htmlFor="firstName">
+                  <legend className={styles["create-account-header"]}>
                     {t("application.name.yourName")}
-                  </label>
+                  </legend>
 
                   <label className={styles["create-account-field"]} htmlFor="firstName">
                     {t("application.name.firstOrGivenName")}
@@ -127,9 +127,9 @@ export default () => {
                     controlClassName={styles["create-account-input"]}
                     name="firstName"
                     validation={{ required: true, maxLength: 64 }}
-                    error={errors.givenName}
+                    error={errors.firstName}
                     errorMessage={
-                      errors.givenName?.type === "maxLength"
+                      errors.firstName?.type === "maxLength"
                         ? t("errors.maxLength", { length: 64 })
                         : t("errors.firstNameError")
                     }
@@ -337,3 +337,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default CreateAccount
