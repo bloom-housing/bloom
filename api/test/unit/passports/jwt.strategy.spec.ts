@@ -44,6 +44,7 @@ describe('Testing jwt strategy', () => {
       include: {
         userRoles: true,
         listings: true,
+        favoriteListings: true,
         jurisdictions: {
           include: {
             featureFlags: {
@@ -92,6 +93,7 @@ describe('Testing jwt strategy', () => {
       include: {
         userRoles: true,
         listings: true,
+        favoriteListings: true,
         jurisdictions: {
           include: {
             featureFlags: {
@@ -144,6 +146,7 @@ describe('Testing jwt strategy', () => {
       include: {
         userRoles: true,
         listings: true,
+        favoriteListings: true,
         jurisdictions: {
           include: {
             featureFlags: {
@@ -202,6 +205,7 @@ describe('Testing jwt strategy', () => {
       include: {
         userRoles: true,
         listings: true,
+        favoriteListings: true,
         jurisdictions: {
           include: {
             featureFlags: {
