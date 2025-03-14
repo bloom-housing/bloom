@@ -81,7 +81,9 @@ const SignIn = (props: SignInProps) => {
 
     window.localStorage.setItem(
       "bloom-show-favorites-menu-item",
-      isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.showListingFavoriting).toString()
+      (
+        isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.showListingFavoriting) === true
+      ).toString()
     )
   }, [props.jurisdiction])
 

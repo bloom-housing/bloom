@@ -42,7 +42,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
         setFavoriteListingIds(listingIds)
       })
     }
-  }, [profile, props.openListings, fetchFavoriteListingIds, setFavoriteListingIds, userService])
+  }, [profile, props.openListings, setFavoriteListingIds, userService])
 
   const saveFavoriteFn = (listingId: string) => {
     return (listingFavorited) => {
