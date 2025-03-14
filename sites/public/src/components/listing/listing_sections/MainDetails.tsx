@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { Dispatch, SetStateAction } from "react"
 import {
   Listing,
   MarketingTypeEnum,
@@ -17,10 +17,14 @@ import { Availability } from "./Availability"
 import listingStyles from "../ListingViewSeeds.module.scss"
 import styles from "./MainDetails.module.scss"
 import { getApplicationSeason } from "../../../lib/helpers"
+import FavoriteButton from "../../shared/FavoriteButton"
 
 type MainDetailsProps = {
   dueDateContent: string[]
   listing: Listing
+  showFavoriteButton?: boolean
+  listingFavorited?: boolean
+  setListingFavorited?: Dispatch<SetStateAction<boolean>>
 }
 
 type ListingTag = {
@@ -61,8 +65,15 @@ export const getListingTags = (listing: Listing, hideReviewTags?: boolean): List
   return listingTags
 }
 
-export const MainDetails = ({ dueDateContent, listing }: MainDetailsProps) => {
+export const MainDetails = ({
+  dueDateContent,
+  listing,
+  showFavoriteButton,
+  listingFavorited,
+  setListingFavorited,
+}: MainDetailsProps) => {
   if (!listing) return
+
   const googleMapsHref =
     "https://www.google.com/maps/place/" + oneLineAddress(listing.listingsBuildingAddress)
   const listingTags = getListingTags(listing)
@@ -119,6 +130,15 @@ export const MainDetails = ({ dueDateContent, listing }: MainDetailsProps) => {
         )}
 
         <p className={"seeds-m-bs-3"}>{listing.developer}</p>
+
+        {showFavoriteButton && (
+          <p className={"seeds-m-bs-3"}>
+            <FavoriteButton favorited={listingFavorited} setFavorited={setListingFavorited}>
+              {t("listings.favorite")}
+            </FavoriteButton>
+          </p>
+        )}
+
         <div className={`${listingStyles["hide-desktop"]} seeds-m-b-3`}>
           {listing.marketingType === MarketingTypeEnum.comingSoon ? (
             <DueDate content={[getApplicationSeason(listing)]} />

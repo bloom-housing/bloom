@@ -14,6 +14,8 @@ export interface PageHeaderLayoutProps extends PageHeaderProps {
   children: React.ReactNode
   /** Determines header banner styling */
   inverse?: boolean
+  /** Class name applied to container */
+  className?: string
 }
 
 const PageHeader = (props: PageHeaderProps) => {
@@ -43,6 +45,7 @@ const PageHeader = (props: PageHeaderProps) => {
 export const PageHeaderLayout = (props: PageHeaderLayoutProps) => {
   const classNames = [styles["page-header-layout"]]
   if (props.inverse) classNames.push(styles["is-inverse"])
+  if (props.className) classNames.push(props.className)
 
   return (
     <div className={classNames.join(" ")}>

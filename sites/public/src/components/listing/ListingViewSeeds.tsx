@@ -1,17 +1,25 @@
-import React, { useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import {
+  FeatureFlagEnum,
   Jurisdiction,
   Listing,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
   MarketingTypeEnum,
+  User,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
-import { pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
+import { AuthContext, pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
 import { Heading } from "@bloom-housing/ui-seeds"
 import { ErrorPage } from "../../pages/_error"
-import { getApplicationSeason, getListingApplicationStatus } from "../../lib/helpers"
+import {
+  fetchFavoriteListingIds,
+  getApplicationSeason,
+  getListingApplicationStatus,
+  isFeatureFlagOn,
+  saveListingFavorite,
+} from "../../lib/helpers"
 import {
   getAdditionalInformation,
   getAmiValues,
@@ -40,19 +48,36 @@ import { UnitSummaries } from "./listing_sections/UnitSummaries"
 import styles from "./ListingViewSeeds.module.scss"
 
 interface ListingProps {
-  jurisdiction?: Jurisdiction
   listing: Listing
+  jurisdiction?: Jurisdiction
+  profile?: User
   preview?: boolean
 }
 
-export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProps) => {
+export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: ListingProps) => {
+  const { userService } = useContext(AuthContext)
+
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
 
   const [showDownloadModal, setShowDownloadModal] = useState(false)
+  const [listingFavorited, setListingFavorited] = useState(false)
+
+  useEffect(() => {
+    if (profile) {
+      void fetchFavoriteListingIds(userService).then((listingIds) => {
+        setListingFavorited(listingIds.includes(listing?.id))
+      })
+    }
+  }, [profile, setListingFavorited, userService, listing?.id])
 
   if (!listing) {
     return <ErrorPage />
+  }
+
+  const saveFavorite = (favorited) => {
+    setListingFavorited(favorited)
+    void saveListingFavorite(userService, listing.id, favorited)
   }
 
   const lotteryResultsEvent = listing.listingEvents?.find(
@@ -125,9 +150,7 @@ export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProp
         depositMax={listing.depositMax}
         depositMin={listing.depositMin}
         utilitiesIncluded={
-          jurisdiction?.featureFlags?.some(
-            (flag) => flag.name === "enableUtilitiesIncluded" && flag.active
-          )
+          isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUtilitiesIncluded)
             ? getUtilitiesIncluded(listing)
             : []
         }
@@ -169,6 +192,11 @@ export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProp
           <MainDetails
             listing={listing}
             dueDateContent={[statusContent?.content, statusContent?.subContent]}
+            showFavoriteButton={
+              profile && isFeatureFlagOn(jurisdiction, FeatureFlagEnum.showListingFavoriting)
+            }
+            listingFavorited={listingFavorited}
+            setListingFavorited={saveFavorite}
           />
           <RentSummary
             amiValues={getAmiValues(listing)}
