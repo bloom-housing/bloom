@@ -1,22 +1,24 @@
 import * as React from "react"
-import { Card, HeadingGroup } from "@bloom-housing/ui-seeds"
+import { Card, Heading } from "@bloom-housing/ui-seeds"
 import {
-  IdDTO,
+  Jurisdiction,
+  Listing,
   ListingsStatusEnum,
+  MarketingTypeEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
-import { getReservedTitle } from "../ListingViewSeedsHelpers"
 import listingStyles from "../ListingViewSeeds.module.scss"
+import {
+  getListingStatusMessage,
+  getListingStatusMessageContent,
+  isFeatureFlagOn,
+} from "../../../lib/helpers"
 import styles from "./Availability.module.scss"
 
 type AvailabilityProps = {
-  reservedCommunityDescription: string
-  reservedCommunityType: IdDTO
-  reviewOrder: ReviewOrderTypeEnum
-  status: ListingsStatusEnum
-  unitsAvailable: number
-  waitlistOpenSpots: number
+  listing: Listing
+  jurisdiction: Jurisdiction
 }
 
 export const getAvailabilitySubheading = (
@@ -45,45 +47,70 @@ export const getAvailabilityContent = (reviewOrderType: ReviewOrderTypeEnum) => 
   }
 }
 
-export const Availability = ({
-  reservedCommunityDescription,
-  reservedCommunityType,
-  reviewOrder,
-  status,
-  unitsAvailable,
-  waitlistOpenSpots,
-}: AvailabilityProps) => {
-  if (status === ListingsStatusEnum.closed && !reservedCommunityType) return
+export const getAvailabilityHeading = (reviewOrderType: ReviewOrderTypeEnum) => {
+  switch (reviewOrderType) {
+    case ReviewOrderTypeEnum.lottery:
+      return t("listings.lottery")
+    case ReviewOrderTypeEnum.waitlist:
+      return t("listings.waitlist.open")
+    default:
+      return t("listings.applicationFCFS")
+  }
+}
+
+export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
+  const subheading = getAvailabilitySubheading(listing.waitlistOpenSpots, listing.unitsAvailable)
+  const content = getAvailabilityContent(listing.reviewOrderType)
   return (
-    <Card
-      className={`${listingStyles["muted-card"]} ${listingStyles["mobile-full-width-card"]} seeds-m-bs-content`}
-    >
-      {reservedCommunityType && (
-        <Card.Section divider="inset">
-          <HeadingGroup
-            heading={getReservedTitle(reservedCommunityType)}
-            subheading={t(`listings.reservedCommunityTypes.${reservedCommunityType.name}`)}
-            size={"lg"}
-            className={`${listingStyles["heading-group"]} ${styles["emphasized-heading-group"]}`}
-          />
-          <p>{reservedCommunityDescription}</p>
-        </Card.Section>
+    <>
+      {(listing.marketingType === MarketingTypeEnum.comingSoon ||
+        listing.status === ListingsStatusEnum.closed) && (
+        <div className={"seeds-m-be-content"}>{getListingStatusMessage(listing, jurisdiction)}</div>
       )}
-      {status !== ListingsStatusEnum.closed && (
-        <Card.Section>
-          <HeadingGroup
-            heading={
-              reviewOrder === ReviewOrderTypeEnum.waitlist
-                ? t("listings.waitlist.isOpen")
-                : t("listings.vacantUnitsAvailable")
-            }
-            subheading={getAvailabilitySubheading(waitlistOpenSpots, unitsAvailable)}
-            size={"lg"}
-            className={`${listingStyles["heading-group"]} ${styles["emphasized-heading-group"]}`}
-          />
-          <p>{getAvailabilityContent(reviewOrder)}</p>
+      <Card className={`${listingStyles["mobile-full-width-card"]}`}>
+        <Card.Section divider="flush">
+          <Heading priority={2} size={"lg"}>
+            {t("t.availability")}
+          </Heading>
         </Card.Section>
-      )}
-    </Card>
+
+        <Card.Section divider={"flush"}>
+          <Heading priority={3} size={"md"}>
+            {getAvailabilityHeading(listing.reviewOrderType)}
+          </Heading>
+          <p className={styles["bold-subheader"]}>
+            {listing.reviewOrderType === ReviewOrderTypeEnum.waitlist
+              ? t("listings.waitlist.isOpen")
+              : t("listings.vacantUnitsAvailable")}
+          </p>
+          <p className={`${listingStyles["thin-heading-sm"]} seeds-m-bs-label`}>
+            {getListingStatusMessageContent(
+              listing.status,
+              listing.applicationDueDate,
+              isFeatureFlagOn(jurisdiction, "enableMarketingStatus"),
+              listing.marketingType,
+              listing.marketingSeason,
+              listing.marketingDate,
+              false
+            )}
+          </p>
+          {content && <p className={"seeds-m-bs-label"}>{content}</p>}
+          {subheading && <p className={`seeds-m-bs-label`}>{subheading}</p>}
+        </Card.Section>
+        {listing.reservedCommunityTypes && (
+          <Card.Section divider="flush">
+            <Heading size={"md"} priority={3}>
+              {t("listings.reservedCommunityTitleDefault")}
+            </Heading>
+            <p className={styles["bold-subheader"]}>
+              {t(`listings.reservedCommunityTypes.${listing.reservedCommunityTypes.name}`)}
+            </p>
+            {listing.reservedCommunityDescription && (
+              <p className={"seeds-m-bs-label"}>{listing.reservedCommunityDescription}</p>
+            )}
+          </Card.Section>
+        )}
+      </Card>
+    </>
   )
 }
