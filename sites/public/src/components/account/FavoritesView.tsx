@@ -14,7 +14,7 @@ import { ListingCard } from "../browse/ListingCard"
 import styles from "../browse/ListingBrowse.module.scss"
 import favoritesStyles from "./FavoritesView.module.scss"
 import { useProfileFavoriteListings } from "../../lib/hooks"
-import { isFeatureFlagOn } from "../../lib/helpers"
+import { isFeatureFlagOn, saveListingFavorite } from "../../lib/helpers"
 import { PageHeaderLayout } from "../../patterns/PageHeaderLayout"
 import { Button, Heading } from "@bloom-housing/ui-seeds"
 
@@ -23,8 +23,8 @@ interface FavoritesViewProps {
 }
 
 const FavoritesView = ({ jurisdiction }: FavoritesViewProps) => {
-  const { profile } = useContext(AuthContext)
-  const [listings, updateFavorite] = useProfileFavoriteListings()
+  const { profile, userService } = useContext(AuthContext)
+  const listings = useProfileFavoriteListings()
   const [favoriteListings, setFavoriteListings] = useState<Listing[]>([])
 
   useEffect(() => {
@@ -34,14 +34,14 @@ const FavoritesView = ({ jurisdiction }: FavoritesViewProps) => {
         pageTitle: `My Favorites`,
         status: UserStatus.LoggedIn,
       })
-    }
 
-    setFavoriteListings(listings)
+      setFavoriteListings(listings)
+    }
   }, [profile, listings, setFavoriteListings])
 
   const saveFavoriteFn = (listing) => {
     return (listingFavorited) => {
-      void updateFavorite(listing, listingFavorited)
+      void saveListingFavorite(userService, listing.id, listingFavorited)
       if (listingFavorited) {
         setFavoriteListings([...favoriteListings, listing])
       } else {

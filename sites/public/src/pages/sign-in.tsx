@@ -79,9 +79,10 @@ const SignIn = (props: SignInProps) => {
       status: UserStatus.NotLoggedIn,
     })
 
-    if (isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.showListingFavoriting)) {
-      window.localStorage.setItem("bloom-show-favorites-menu-item", "true")
-    }
+    window.localStorage.setItem(
+      "bloom-show-favorites-menu-item",
+      isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.showListingFavoriting).toString()
+    )
   }, [props.jurisdiction])
 
   const onVerify = useCallback((token) => {

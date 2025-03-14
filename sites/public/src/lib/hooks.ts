@@ -6,17 +6,16 @@ import {
   EnumListingFilterParamsComparison,
   FeatureFlagEnum,
   Jurisdiction,
-  Listing,
   ListingFilterParams,
   ListingOrderByKeys,
   ListingsStatusEnum,
-  ModificationEnum,
   OrderByEnum,
   PaginatedListing,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./applications/AppSubmissionContext"
 import { useRequireLoggedInUser, isInternalLink, AuthContext } from "@bloom-housing/shared-helpers"
+import { fetchFavoriteListingIds } from "./helpers"
 
 export const useRedirectToPrevPage = (defaultPath = "/") => {
   const router = useRouter()
@@ -51,25 +50,16 @@ export const useProfileFavoriteListings = () => {
   const [loading, setLoading] = useState(true)
   const [listings, setListings] = useState<PaginatedListing>({ items: [] } as PaginatedListing)
 
-  const updateFavorite = async (listing: Listing, favorited: boolean) => {
-    await userService.modifyFavoriteListings({
-      body: {
-        id: listing.id,
-        action: favorited ? ModificationEnum.add : ModificationEnum.remove,
-      },
-    })
-  }
-
   useEffect(() => {
     if (profile && loading) {
-      void userService.profile().then((reloadedProfile) => {
-        if (reloadedProfile.favoriteListings.length > 0)
+      void fetchFavoriteListingIds(userService).then((listingIds) => {
+        if (listingIds.length > 0) {
           listingsService
             .list({
               filter: [
                 {
                   $comparison: EnumListingFilterParamsComparison.IN,
-                  ids: reloadedProfile.favoriteListings.map((item) => item.id),
+                  ids: listingIds,
                 },
               ],
               limit: "all",
@@ -82,17 +72,14 @@ export const useProfileFavoriteListings = () => {
               //setError(err)
             })
             .finally(() => setLoading(false))
-        else {
+        } else {
           setListings({ items: [] } as PaginatedListing)
         }
       })
     }
   }, [profile, loading, userService, listingsService])
 
-  return [listings.items, updateFavorite] as [
-    Listing[],
-    (listing: Listing, favorited: boolean) => Promise<void>
-  ]
+  return listings.items
 }
 
 export async function fetchBaseListingData(

@@ -47,9 +47,10 @@ function Dashboard(props: DashboardProps) {
       setAlertMessage(alert)
     }
 
-    if (isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.showListingFavoriting)) {
-      window.localStorage.setItem("bloom-show-favorites-menu-item", "true")
-    }
+    window.localStorage.setItem(
+      "bloom-show-favorites-menu-item",
+      isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.showListingFavoriting).toString()
+    )
   }, [props.router, props.jurisdiction, profile])
 
   const closeAlert = () => {
