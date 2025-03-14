@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import {
   FeatureFlagEnum,
@@ -10,13 +10,15 @@ import {
   User,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
-import { pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
+import { AuthContext, pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
 import { Heading } from "@bloom-housing/ui-seeds"
 import { ErrorPage } from "../../pages/_error"
 import {
+  fetchFavoriteListingIds,
   getApplicationSeason,
   getListingApplicationStatus,
   isFeatureFlagOn,
+  saveListingFavorite,
 } from "../../lib/helpers"
 import {
   getAdditionalInformation,
@@ -44,7 +46,6 @@ import { Neighborhood } from "./listing_sections/Neighborhood"
 import { RentSummary } from "./listing_sections/RentSummary"
 import { UnitSummaries } from "./listing_sections/UnitSummaries"
 import styles from "./ListingViewSeeds.module.scss"
-import { useProfileFavoriteListings } from "../../lib/hooks"
 
 interface ListingProps {
   listing: Listing
@@ -54,25 +55,29 @@ interface ListingProps {
 }
 
 export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: ListingProps) => {
+  const { userService } = useContext(AuthContext)
+
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
 
   const [showDownloadModal, setShowDownloadModal] = useState(false)
   const [listingFavorited, setListingFavorited] = useState(false)
-  const [favoriteListings, updateFavorite] = useProfileFavoriteListings()
 
   useEffect(() => {
-    setListingFavorited(favoriteListings.some((item) => item.id === listing?.id))
-  }, [setListingFavorited, favoriteListings, listing?.id])
+    if (profile) {
+      void fetchFavoriteListingIds(userService).then((listingIds) => {
+        setListingFavorited(listingIds.includes(listing?.id))
+      })
+    }
+  }, [fetchFavoriteListingIds, profile, setListingFavorited, userService, listing?.id])
 
   if (!listing) {
     return <ErrorPage />
   }
 
-  // Code for setting/unsetting favorite status for the listing
   const saveFavorite = (favorited) => {
     setListingFavorited(favorited)
-    void updateFavorite(listing, favorited)
+    void saveListingFavorite(userService, listing.id, favorited)
   }
 
   const lotteryResultsEvent = listing.listingEvents?.find(

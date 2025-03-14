@@ -20,8 +20,10 @@ import {
   Jurisdiction,
   Listing,
   ListingsStatusEnum,
+  ModificationEnum,
   ReviewOrderTypeEnum,
   UnitsSummarized,
+  UserService,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export const getGenericAddress = (bloomAddress: Address) => {
@@ -274,4 +276,24 @@ export const downloadExternalPDF = async (fileURL: string, fileName: string) => 
 
 export const isFeatureFlagOn = (jurisdiction: Jurisdiction, featureFlag: string) => {
   return jurisdiction?.featureFlags?.some((flag) => flag.name === featureFlag && flag.active)
+}
+
+export const saveListingFavorite = async (
+  userService: UserService,
+  listingId: string,
+  favorited: boolean
+) => {
+  await userService.modifyFavoriteListings({
+    body: {
+      id: listingId,
+      action: favorited ? ModificationEnum.add : ModificationEnum.remove,
+    },
+  })
+}
+
+export const fetchFavoriteListingIds = async (userService: UserService) => {
+  // A fresh profile fetch is necessary, rather than using the cached profile data from AuthContext
+  const profile = await userService.profile()
+
+  return profile.favoriteListings?.map((item) => item.id) || []
 }
