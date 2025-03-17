@@ -129,6 +129,7 @@ export async function fetchOpenListings(req: any, page: number) {
       ],
       orderBy: [ListingOrderByKeys.mostRecentlyPublished],
       orderDir: [OrderByEnum.desc],
+      limit: process.env.maxOpenListings,
     },
     req
   )
