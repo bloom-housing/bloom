@@ -1,11 +1,11 @@
 import * as React from "react"
 import { Heading } from "@bloom-housing/ui-seeds"
-import { StackedTable, StandardTable, t } from "@bloom-housing/ui-components"
+import { StackedTable, t } from "@bloom-housing/ui-components"
 import {
   ReviewOrderTypeEnum,
   UnitsSummarized,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { getStackedUnitSummaryDetailsTable, getSummariesTable } from "@bloom-housing/shared-helpers"
+import { getStackedUnitSummaryDetailsTable } from "@bloom-housing/shared-helpers"
 import styles from "./RentSummary.module.scss"
 import Markdown from "markdown-to-jsx"
 
