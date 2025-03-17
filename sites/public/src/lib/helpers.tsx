@@ -205,8 +205,6 @@ export const getListingStatusMessage = (
   const enableMarketingStatus = isFeatureFlagOn(jurisdiction, "enableMarketingStatus")
   const prefix = getStatusPrefix(listing, enableMarketingStatus)
 
-  console.log({ prefix })
-
   return (
     <Message
       className={styles["status-bar"]}

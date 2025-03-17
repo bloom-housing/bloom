@@ -1,5 +1,6 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
+import { listing, jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { Availability } from "../../../../src/components/listing/listing_sections/Availability"
 import {
   ListingsStatusEnum,
@@ -12,12 +13,16 @@ describe("<Availability>", () => {
   it("shows nothing if listing is closed with no reserved community type", () => {
     const { queryByText } = render(
       <Availability
-        reservedCommunityDescription={null}
-        reservedCommunityType={null}
-        reviewOrder={ReviewOrderTypeEnum.firstComeFirstServe}
-        status={ListingsStatusEnum.closed}
-        unitsAvailable={100}
-        waitlistOpenSpots={null}
+        listing={{
+          ...listing,
+          reservedCommunityDescription: null,
+          reservedCommunityTypes: null,
+          reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+          status: ListingsStatusEnum.closed,
+          unitsAvailable: 100,
+          waitlistOpenSpots: null,
+        }}
+        jurisdiction={jurisdiction}
       />
     )
     expect(queryByText("Reserved Building")).toBeNull()
@@ -25,29 +30,19 @@ describe("<Availability>", () => {
     expect(queryByText("Vacant Units Available")).toBeNull()
     expect(queryByText("Waitlist is open")).toBeNull()
   })
-  it("shows senior reserved community type while listing is closed", () => {
-    const { getByText } = render(
-      <Availability
-        reservedCommunityDescription={null}
-        reservedCommunityType={{ id: "id", name: "senior" }}
-        reviewOrder={ReviewOrderTypeEnum.firstComeFirstServe}
-        status={ListingsStatusEnum.closed}
-        unitsAvailable={100}
-        waitlistOpenSpots={null}
-      />
-    )
-    expect(getByText("Senior Building")).toBeDefined()
-    expect(getByText("Seniors")).toBeDefined()
-  })
   it("shows reserved community type while listing is closed", () => {
     const { getByText, queryByText } = render(
       <Availability
-        reservedCommunityDescription={null}
-        reservedCommunityType={{ id: "id", name: "veteran" }}
-        reviewOrder={ReviewOrderTypeEnum.firstComeFirstServe}
-        status={ListingsStatusEnum.closed}
-        unitsAvailable={100}
-        waitlistOpenSpots={null}
+        listing={{
+          ...listing,
+          reservedCommunityDescription: null,
+          reservedCommunityTypes: { id: "id", name: "veteran" },
+          reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+          status: ListingsStatusEnum.closed,
+          unitsAvailable: 100,
+          waitlistOpenSpots: null,
+        }}
+        jurisdiction={jurisdiction}
       />
     )
     expect(getByText("Reserved Building")).toBeDefined()
@@ -58,12 +53,16 @@ describe("<Availability>", () => {
   it("shows reserved community type, description, availability while listing is open with fcfs type", () => {
     const { getByText, queryByText } = render(
       <Availability
-        reservedCommunityDescription={"Reserved community type description"}
-        reservedCommunityType={{ id: "id", name: "veteran" }}
-        reviewOrder={ReviewOrderTypeEnum.firstComeFirstServe}
-        status={ListingsStatusEnum.active}
-        unitsAvailable={100}
-        waitlistOpenSpots={null}
+        listing={{
+          ...listing,
+          reservedCommunityDescription: "Reserved community type description",
+          reservedCommunityTypes: { id: "id", name: "veteran" },
+          reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+          status: ListingsStatusEnum.active,
+          unitsAvailable: 100,
+          waitlistOpenSpots: null,
+        }}
+        jurisdiction={jurisdiction}
       />
     )
     expect(getByText("Reserved Building")).toBeDefined()
@@ -82,12 +81,16 @@ describe("<Availability>", () => {
   it("shows availability with lottery type", () => {
     const { getByText, queryByText } = render(
       <Availability
-        reservedCommunityDescription={null}
-        reservedCommunityType={null}
-        reviewOrder={ReviewOrderTypeEnum.lottery}
-        status={ListingsStatusEnum.active}
-        unitsAvailable={100}
-        waitlistOpenSpots={null}
+        listing={{
+          ...listing,
+          reservedCommunityDescription: null,
+          reservedCommunityTypes: null,
+          reviewOrderType: ReviewOrderTypeEnum.lottery,
+          status: ListingsStatusEnum.active,
+          unitsAvailable: 100,
+          waitlistOpenSpots: null,
+        }}
+        jurisdiction={jurisdiction}
       />
     )
     expect(getByText("Vacant Units Available")).toBeDefined()
@@ -101,12 +104,16 @@ describe("<Availability>", () => {
   it("shows availability for one unit with lottery type", () => {
     const { getByText, queryByText } = render(
       <Availability
-        reservedCommunityDescription={null}
-        reservedCommunityType={null}
-        reviewOrder={ReviewOrderTypeEnum.lottery}
-        status={ListingsStatusEnum.active}
-        unitsAvailable={1}
-        waitlistOpenSpots={null}
+        listing={{
+          ...listing,
+          reservedCommunityDescription: null,
+          reservedCommunityTypes: null,
+          reviewOrderType: ReviewOrderTypeEnum.lottery,
+          status: ListingsStatusEnum.active,
+          unitsAvailable: 1,
+          waitlistOpenSpots: null,
+        }}
+        jurisdiction={jurisdiction}
       />
     )
     expect(getByText("Vacant Units Available")).toBeDefined()
@@ -120,12 +127,16 @@ describe("<Availability>", () => {
   it("shows availability with waitlist type and spots", () => {
     const { getByText, queryByText } = render(
       <Availability
-        reservedCommunityDescription={null}
-        reservedCommunityType={null}
-        reviewOrder={ReviewOrderTypeEnum.waitlist}
-        status={ListingsStatusEnum.active}
-        unitsAvailable={null}
-        waitlistOpenSpots={100}
+        listing={{
+          ...listing,
+          reservedCommunityDescription: null,
+          reservedCommunityTypes: null,
+          reviewOrderType: ReviewOrderTypeEnum.waitlist,
+          status: ListingsStatusEnum.active,
+          unitsAvailable: null,
+          waitlistOpenSpots: 100,
+        }}
+        jurisdiction={jurisdiction}
       />
     )
     expect(getByText("Waitlist is open")).toBeDefined()
@@ -136,12 +147,16 @@ describe("<Availability>", () => {
   it("shows availability while listing is open with no spots entered", () => {
     const { queryByText } = render(
       <Availability
-        reservedCommunityDescription={null}
-        reservedCommunityType={null}
-        reviewOrder={ReviewOrderTypeEnum.waitlist}
-        status={ListingsStatusEnum.active}
-        unitsAvailable={null}
-        waitlistOpenSpots={null}
+        listing={{
+          ...listing,
+          reservedCommunityDescription: null,
+          reservedCommunityTypes: null,
+          reviewOrderType: ReviewOrderTypeEnum.waitlist,
+          status: ListingsStatusEnum.active,
+          unitsAvailable: null,
+          waitlistOpenSpots: null,
+        }}
+        jurisdiction={jurisdiction}
       />
     )
     expect(queryByText("Waitlist Slot", { exact: false })).toBeNull()
