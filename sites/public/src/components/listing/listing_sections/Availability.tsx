@@ -36,10 +36,13 @@ export const getAvailabilitySubheading = (
   return null
 }
 
-export const getAvailabilityContent = (reviewOrderType: ReviewOrderTypeEnum) => {
+export const getAvailabilityContent = (
+  reviewOrderType: ReviewOrderTypeEnum,
+  status: ListingsStatusEnum
+) => {
   switch (reviewOrderType) {
     case ReviewOrderTypeEnum.waitlist:
-      return t("listings.waitlist.submitForWaitlist")
+      return status !== ListingsStatusEnum.closed ? t("listings.waitlist.submitForWaitlist") : null
     case ReviewOrderTypeEnum.firstComeFirstServe:
       return t("listings.eligibleApplicants.FCFS")
     default:
@@ -52,19 +55,28 @@ export const getAvailabilityHeading = (reviewOrderType: ReviewOrderTypeEnum) => 
     case ReviewOrderTypeEnum.lottery:
       return t("listings.lottery")
     case ReviewOrderTypeEnum.waitlist:
-      return t("listings.waitlist.open")
+      return t("listings.waitlist.label")
     default:
       return t("listings.applicationFCFS")
   }
 }
 
 export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
+  const statusMessage = getListingStatusMessageContent(
+    listing.status,
+    listing.applicationDueDate,
+    isFeatureFlagOn(jurisdiction, "enableMarketingStatus"),
+    listing.marketingType,
+    listing.marketingSeason,
+    listing.marketingDate,
+    false
+  )
+  const content = getAvailabilityContent(listing.reviewOrderType, listing.status)
   const subheading = getAvailabilitySubheading(listing.waitlistOpenSpots, listing.unitsAvailable)
-  const content = getAvailabilityContent(listing.reviewOrderType)
+
   return (
     <>
-      {(listing.marketingType === MarketingTypeEnum.comingSoon ||
-        listing.status === ListingsStatusEnum.closed) && (
+      {listing.status === ListingsStatusEnum.closed && (
         <div className={"seeds-m-be-content"}>{getListingStatusMessage(listing, jurisdiction)}</div>
       )}
       <Card className={`${listingStyles["mobile-full-width-card"]}`}>
@@ -76,24 +88,22 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
 
         <Card.Section divider={"flush"}>
           <Heading priority={3} size={"md"}>
-            {getAvailabilityHeading(listing.reviewOrderType)}
+            {listing.marketingType === MarketingTypeEnum.comingSoon
+              ? t("listings.underConstruction")
+              : getAvailabilityHeading(listing.reviewOrderType)}
           </Heading>
-          <p className={styles["bold-subheader"]}>
-            {listing.reviewOrderType === ReviewOrderTypeEnum.waitlist
-              ? t("listings.waitlist.isOpen")
-              : t("listings.vacantUnitsAvailable")}
-          </p>
-          <p className={`${listingStyles["thin-heading-sm"]} seeds-m-bs-label`}>
-            {getListingStatusMessageContent(
-              listing.status,
-              listing.applicationDueDate,
-              isFeatureFlagOn(jurisdiction, "enableMarketingStatus"),
-              listing.marketingType,
-              listing.marketingSeason,
-              listing.marketingDate,
-              false
-            )}
-          </p>
+          {listing.status !== ListingsStatusEnum.closed && (
+            <p className={styles["bold-subheader"]}>
+              {listing.reviewOrderType === ReviewOrderTypeEnum.waitlist
+                ? t("listings.waitlist.isOpen")
+                : t("listings.vacantUnitsAvailable")}
+            </p>
+          )}
+          {statusMessage && (
+            <p className={`${listingStyles["thin-heading-sm"]} seeds-m-bs-label`}>
+              {statusMessage}
+            </p>
+          )}
           {content && <p className={"seeds-m-bs-label"}>{content}</p>}
           {subheading && <p className={`seeds-m-bs-label`}>{subheading}</p>}
         </Card.Section>
