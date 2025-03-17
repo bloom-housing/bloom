@@ -76,9 +76,13 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
 
   return (
     <>
-      {listing.status === ListingsStatusEnum.closed && (
-        <div className={"seeds-m-be-content"}>{getListingStatusMessage(listing, jurisdiction)}</div>
-      )}
+      <div className={styles["status-messages"]}>
+        {listing.status === ListingsStatusEnum.closed && (
+          <div className={"seeds-m-be-content"}>
+            {getListingStatusMessage(listing, jurisdiction)}
+          </div>
+        )}
+      </div>
       <Card className={`${listingStyles["mobile-full-width-card"]}`}>
         <Card.Section divider="flush">
           <Heading priority={2} size={"lg"}>
