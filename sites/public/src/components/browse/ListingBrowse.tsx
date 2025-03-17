@@ -53,27 +53,29 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
 
       <div className={styles["listing-directory"]}>
         <div className={styles["content-wrapper"]}>
-          {/* TODO: Show both open and closed listings once we have designs for pagination: Issue #4448 */}
-          <>
-            {props.openListings.length > 0 ? (
-              <ul>
-                {props.openListings.map((listing, index) => {
-                  return <ListingCard listing={listing} key={index} />
-                })}
-              </ul>
-            ) : (
-              <div className={styles["empty-state"]}>
-                <Heading size={"xl"} priority={2} className={styles["empty-heading"]}>
-                  {t("listings.noOpenListings")}
-                </Heading>
-              </div>
-            )}
-          </>
+          <div className={styles["content"]}>
+            {/* TODO: Show both open and closed listings once we have designs for pagination: Issue #4448 */}
+            <>
+              {props.openListings.length > 0 ? (
+                <ul>
+                  {props.openListings.map((listing, index) => {
+                    return <ListingCard listing={listing} key={index} />
+                  })}
+                </ul>
+              ) : (
+                <div className={styles["empty-state"]}>
+                  <Heading size={"xl"} priority={2} className={styles["empty-heading"]}>
+                    {t("listings.noOpenListings")}
+                  </Heading>
+                </div>
+              )}
+            </>
+          </div>
         </div>
         {props.paginationData && (
-          <Grid className={styles["pagination-wrapper"]}>
-            <Grid.Row columns={3}>
-              <GridCell>
+          <div className={styles["pagination-wrapper"]}>
+            <div className={styles["pagination-content"]}>
+              <div className={styles["previous-button"]}>
                 {isPreviousPageAvailable && (
                   <Button
                     onClick={() =>
@@ -89,14 +91,14 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                     {t("t.previous")}
                   </Button>
                 )}
-              </GridCell>
-              <GridCell className={styles["page-info"]}>
+              </div>
+              <div className={styles["page-info"]}>
                 {t("listings.browseListings.pageInfo", {
                   currentPage: props.paginationData.currentPage,
                   totalPages: props.paginationData.totalPages,
                 })}
-              </GridCell>
-              <GridCell className={styles["next-button"]}>
+              </div>
+              <div className={styles["next-button"]}>
                 {isNextPageAvailable && (
                   <Button
                     onClick={() =>
@@ -112,9 +114,9 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                     {t("t.next")}
                   </Button>
                 )}
-              </GridCell>
-            </Grid.Row>
-          </Grid>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </Layout>
