@@ -1,35 +1,8 @@
-import React, { useEffect, useContext } from "react"
-import { t } from "@bloom-housing/ui-components"
-import Markdown from "markdown-to-jsx"
-import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
-import { UserStatus } from "../lib/constants"
-import Layout from "../layouts/application"
-import pageContent from "../md_content/disclaimer.md"
-import { PageHeaderLayout } from "../patterns/PageHeaderLayout"
-import styles from "../patterns/PageHeaderLayout.module.scss"
+import React from "react"
+import DisclaimerSeeds from "../components/content-pages/DisclaimerSeeds"
+import DisclaimerDeprecated from "../components/content-pages/DisclaimerDeprecated"
 
-const Disclaimer = () => {
-  const { profile } = useContext(AuthContext)
-
-  useEffect(() => {
-    pushGtmEvent<PageView>({
-      event: "pageView",
-      pageTitle: "Disclaimer",
-      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
-    })
-  }, [profile])
-
-  return (
-    <Layout>
-      <PageHeaderLayout
-        heading={t("pageTitle.disclaimer")}
-        subheading="A design approach is a general philosophy that may or may not include a guide for specific methods."
-        inverse
-      >
-        <Markdown className={styles["markdown"]}>{pageContent.toString()}</Markdown>
-      </PageHeaderLayout>
-    </Layout>
-  )
-}
+const Disclaimer = () =>
+  process.env.showNewSeedsDesigns ? <DisclaimerSeeds /> : <DisclaimerDeprecated />
 
 export default Disclaimer
