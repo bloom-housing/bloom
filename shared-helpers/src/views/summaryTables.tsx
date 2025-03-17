@@ -114,6 +114,7 @@ export const getStackedUnitSummaryDetailsTable = (
   summaries: UnitSummary[],
   listingReviewOrder: ReviewOrderTypeEnum
 ) => {
+  let rentNotAvailable = false
   const unitSummaries = summaries?.map((unitSummary) => {
     const unitPluralization =
       unitSummary.totalAvailable === 1 ? t("listings.vacantUnit") : t("listings.vacantUnits")
@@ -126,6 +127,7 @@ export const getStackedUnitSummaryDetailsTable = (
 
     const getRent = (rentMin: string, rentMax: string, percent = false) => {
       const unit = percent ? t("t.ofIncome") : ""
+      if (rentMin === "t.n/a") rentNotAvailable = true
       return rentMin === rentMax
         ? `${getTranslationFromCurrencyString(rentMin)}${rentMin !== "t.n/a" ? unit : ""}`
         : `${getTranslationFromCurrencyString(rentMin)}
@@ -163,7 +165,7 @@ export const getStackedUnitSummaryDetailsTable = (
       },
       rent: {
         cellText: rent,
-        cellSubText: rent !== "t.n/a" ? t("t.perMonth") : "",
+        cellSubText: rentNotAvailable ? "" : t("t.perMonth"),
       },
       availability: {
         cellText: availability,
