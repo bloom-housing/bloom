@@ -90,6 +90,12 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                   </Button>
                 )}
               </GridCell>
+              <GridCell className={styles["page-info"]}>
+                {t("listings.browseListings.pageInfo", {
+                  currentPage: props.paginationData.currentPage,
+                  totalPages: props.paginationData.totalPages,
+                })}
+              </GridCell>
               <GridCell className={styles["next-button"]}>
                 {isNextPageAvailable && (
                   <Button
