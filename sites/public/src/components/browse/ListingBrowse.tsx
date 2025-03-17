@@ -1,9 +1,9 @@
 import React, { useEffect, useContext } from "react"
 import Head from "next/head"
-import { Button, Heading } from "@bloom-housing/ui-seeds"
+import { Button, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext, ListingList, pushGtmEvent } from "@bloom-housing/shared-helpers"
-import { PageHeader, t } from "@bloom-housing/ui-components"
+import { GridCell, PageHeader, t } from "@bloom-housing/ui-components"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
@@ -39,6 +39,9 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
     })
   }, [profile, props.openListings])
 
+  const isNextPageAvailable = props.paginationData.currentPage < props.paginationData.totalPages
+  const isPreviousPageAvailable = props.paginationData.currentPage > 1
+
   return (
     <Layout>
       <Head>
@@ -68,36 +71,44 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
           </>
         </div>
         {props.paginationData && (
-          <div className={styles["pagination-wrapper"]}>
-            <Button
-              disabled={props.paginationData.currentPage <= 1}
-              onClick={() =>
-                props.paginationData.currentPage > 0 &&
-                router.push({
-                  pathname: router.pathname,
-                  query: `page=${(props.paginationData.currentPage - 1).toString()}`,
-                })
-              }
-              variant="primary-outlined"
-              size="sm"
-            >
-              {t("t.previous")}
-            </Button>
-            <Button
-              disabled={props.paginationData.currentPage >= props.paginationData.totalPages}
-              onClick={() =>
-                props.paginationData.currentPage < props.paginationData.totalPages &&
-                router.push({
-                  pathname: router.pathname,
-                  query: `page=${(props.paginationData.currentPage + 1).toString()}`,
-                })
-              }
-              variant="primary-outlined"
-              size="sm"
-            >
-              {t("t.next")}
-            </Button>
-          </div>
+          <Grid className={styles["pagination-wrapper"]}>
+            <Grid.Row columns={3}>
+              <GridCell>
+                {isPreviousPageAvailable && (
+                  <Button
+                    onClick={() =>
+                      props.paginationData.currentPage > 0 &&
+                      router.push({
+                        pathname: router.pathname,
+                        query: `page=${(props.paginationData.currentPage - 1).toString()}`,
+                      })
+                    }
+                    variant="primary-outlined"
+                    size="sm"
+                  >
+                    {t("t.previous")}
+                  </Button>
+                )}
+              </GridCell>
+              <GridCell className={styles["next-button"]}>
+                {isNextPageAvailable && (
+                  <Button
+                    onClick={() =>
+                      props.paginationData.currentPage < props.paginationData.totalPages &&
+                      router.push({
+                        pathname: router.pathname,
+                        query: `page=${(props.paginationData.currentPage + 1).toString()}`,
+                      })
+                    }
+                    variant="primary-outlined"
+                    size="sm"
+                  >
+                    {t("t.next")}
+                  </Button>
+                )}
+              </GridCell>
+            </Grid.Row>
+          </Grid>
         )}
       </div>
     </Layout>

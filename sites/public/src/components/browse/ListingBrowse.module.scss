@@ -39,10 +39,17 @@
 
   .pagination-wrapper {
     width: 100%;
-    display: flex;
-    justify-content: space-between;
     padding-inline: var(--seeds-s12);
     padding-block: var(--seeds-s4);
     background-color: var(--seeds-bg-color-canvas);
+
+    .next-button {
+      margin-left: auto;
+    }
+
+    .page-info {
+      margin-inline: auto;
+      margin-block: auto;
+    }
   }
 }
