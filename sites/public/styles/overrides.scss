@@ -8,7 +8,8 @@
     [class*="stacked-table"] {
       --bloom-font-size-base: var(--seeds-type-label-size);
       tr {
-        background-color: var(--seeds-bg-color-canvas);
+        background-color: var(--seeds-bg-color-muted);
+        margin-bottom: 0;
       }
       tr:nth-of-type(even) {
         background-color: var(--seeds-color-white);
