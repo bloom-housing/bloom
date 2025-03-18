@@ -343,6 +343,7 @@ describe("<Availability>", () => {
     expect(view.getAllByText("Under Construction").length).toBe(2)
     expect(view.queryByText("First Come First Serve")).toBeNull()
     expect(view.queryByText("Vacant Units Available")).toBeNull()
+    expect(view.getByText("Residents should apply in Spring 2026")).toBeDefined()
     expect(view.queryByText("Application Due:", { exact: false })).toBeNull()
     expect(
       view.getByText(
