@@ -116,53 +116,55 @@ const CreateAccount = () => {
                   divider={"inset"}
                   className={accountCardStyles["account-card-settings-section"]}
                 >
-                  <legend className={styles["create-account-header"]}>
-                    {t("application.name.yourName")}
-                  </legend>
+                  <fieldset id="userName">
+                    <legend className={styles["create-account-header"]}>
+                      {t("application.name.yourName")}
+                    </legend>
 
-                  <label className={styles["create-account-field"]} htmlFor="firstName">
-                    {t("application.name.firstOrGivenName")}
-                  </label>
-                  <Field
-                    controlClassName={styles["create-account-input"]}
-                    name="firstName"
-                    validation={{ required: true, maxLength: 64 }}
-                    error={errors.firstName}
-                    errorMessage={
-                      errors.firstName?.type === "maxLength"
-                        ? t("errors.maxLength", { length: 64 })
-                        : t("errors.firstNameError")
-                    }
-                    register={register}
-                  />
+                    <label className={styles["create-account-field"]} htmlFor="firstName">
+                      {t("application.name.firstOrGivenName")}
+                    </label>
+                    <Field
+                      controlClassName={styles["create-account-input"]}
+                      name="firstName"
+                      validation={{ required: true, maxLength: 64 }}
+                      error={errors.firstName}
+                      errorMessage={
+                        errors.firstName?.type === "maxLength"
+                          ? t("errors.maxLength", { length: 64 })
+                          : t("errors.firstNameError")
+                      }
+                      register={register}
+                    />
 
-                  <label className={styles["create-account-field"]} htmlFor="middleName">
-                    {t("application.name.middleNameOptional")}
-                  </label>
-                  <Field
-                    name="middleName"
-                    register={register}
-                    error={errors.middleName}
-                    validation={{ maxLength: 64 }}
-                    errorMessage={t("errors.maxLength", { length: 64 })}
-                    controlClassName={styles["create-account-input"]}
-                  />
+                    <label className={styles["create-account-field"]} htmlFor="middleName">
+                      {t("application.name.middleNameOptional")}
+                    </label>
+                    <Field
+                      name="middleName"
+                      register={register}
+                      error={errors.middleName}
+                      validation={{ maxLength: 64 }}
+                      errorMessage={t("errors.maxLength", { length: 64 })}
+                      controlClassName={styles["create-account-input"]}
+                    />
 
-                  <label className={styles["create-account-field"]} htmlFor="lastName">
-                    {t("application.name.lastOrFamilyName")}
-                  </label>
-                  <Field
-                    name="lastName"
-                    validation={{ required: true, maxLength: 64 }}
-                    error={errors.lastName}
-                    register={register}
-                    errorMessage={
-                      errors.lastName?.type === "maxLength"
-                        ? t("errors.maxLength", { length: 64 })
-                        : t("errors.lastNameError")
-                    }
-                    controlClassName={styles["create-account-input"]}
-                  />
+                    <label className={styles["create-account-field"]} htmlFor="lastName">
+                      {t("application.name.lastOrFamilyName")}
+                    </label>
+                    <Field
+                      name="lastName"
+                      validation={{ required: true, maxLength: 64 }}
+                      error={errors.lastName}
+                      register={register}
+                      errorMessage={
+                        errors.lastName?.type === "maxLength"
+                          ? t("errors.maxLength", { length: 64 })
+                          : t("errors.lastNameError")
+                      }
+                      controlClassName={styles["create-account-input"]}
+                    />
+                  </fieldset>
                 </CardSection>
                 <CardSection
                   divider={"inset"}
