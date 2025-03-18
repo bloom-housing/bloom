@@ -69,7 +69,6 @@ export const useProfileFavoriteListings = () => {
             })
             .catch((err) => {
               console.error(`Error fetching listings: ${err}`)
-              //setError(err)
             })
             .finally(() => setLoading(false))
         } else {

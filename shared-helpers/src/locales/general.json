@@ -35,6 +35,7 @@
   "account.myFavorites": "My Favorites",
   "account.myFavoritesSubtitle": "Save listings and check back for updates",
   "account.noApplications": "It looks like you haven't applied to any listings yet.",
+  "account.noFavorites": "It looks like you haven't favorited any listings yet.",
   "account.noClosedApplications": "The listings you've applied to are either still accepting applications or already have lottery results posted.",
   "account.noClosedApplicationsSimplified": "None of the listings you've applied to have closed.",
   "account.noLotteryApplications": "None of the listings you've applied to have released lottery results.",

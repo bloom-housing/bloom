@@ -65,11 +65,11 @@ const FavoritesView = ({ jurisdiction }: FavoritesViewProps) => {
           {listings.length === 0 ? (
             <div style={{ display: "grid", gap: "var(--seeds-s4)" }}>
               <Heading priority={2} size="3xl" className="font-alt-sans">
-                It looks like you haven’t favorited any listings yet.
+                {t("account.noFavorites")}
               </Heading>
               <p>
                 <Button size="sm" variant="primary-outlined" href="/listings">
-                  Browse listings
+                  {t("listings.browseListings")}
                 </Button>
               </p>
             </div>
