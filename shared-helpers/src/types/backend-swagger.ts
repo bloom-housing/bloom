@@ -3637,6 +3637,26 @@ export interface ApplicationLotteryTotal {
   total: number
 }
 
+export interface ListingNeighborhoodAmenities {
+  /**  */
+  groceryStores?: string
+
+  /**  */
+  publicTransportation?: string
+
+  /**  */
+  schools?: string
+
+  /**  */
+  parksAndCommunityCenters?: string
+
+  /**  */
+  pharmacies?: string
+
+  /**  */
+  healthCareResources?: string
+}
+
 export interface Listing {
   /**  */
   id: string
@@ -3967,6 +3987,9 @@ export interface Listing {
 
   /**  */
   section8Acceptance?: boolean
+
+  /**  */
+  listingNeighborhoodAmenities?: ListingNeighborhoodAmenities
 }
 
 export interface PaginationMeta {
@@ -4521,6 +4544,9 @@ export interface ListingCreate {
   section8Acceptance?: boolean
 
   /**  */
+  listingNeighborhoodAmenities?: ListingNeighborhoodAmenities
+
+  /**  */
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
@@ -4826,6 +4852,9 @@ export interface ListingUpdate {
 
   /**  */
   section8Acceptance?: boolean
+
+  /**  */
+  listingNeighborhoodAmenities?: ListingNeighborhoodAmenities
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
@@ -6910,6 +6939,7 @@ export enum FeatureFlagEnum {
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
   "enableIsVerified" = "enableIsVerified",
+  "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
   "hideCloseListingButton" = "hideCloseListingButton",
   "enableMarketingStatus" = "enableMarketingStatus",
   "enableRegions" = "enableRegions",
