@@ -107,7 +107,7 @@ const CreateAccount = () => {
           <BloomCard iconSymbol="profile" title={t("account.createAccount")} headingPriority={1}>
             <>
               {requestError && (
-                <AlertBox className="" onClose={() => setRequestError(undefined)} type="alert">
+                <AlertBox onClose={() => setRequestError(undefined)} type="alert">
                   {requestError}
                 </AlertBox>
               )}
