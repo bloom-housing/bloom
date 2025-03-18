@@ -6,47 +6,47 @@
   color: var(--seeds-color-on-surface);
 
   &[data-variant="primary"] {
-    background-color: var(--seeds-color-primary-lighter);
-    --message-border: var(--seeds-border-2) solid var(--seeds-color-primary-light);
+    background-color: var(--seeds-color-blue-100);
+    --message-border: var(--seeds-border-2) solid var(--seeds-color-blue-300);
     .primary-color-icon {
-      color: var(--seeds-color-primary-dark);
+      color: var(--seeds-color-blue-700);
     }
     .date-review-order {
-      color: var(--seeds-color-primary-dark);
+      color: var(--seeds-color-blue-700);
     }
   }
 
   &[data-variant="secondary"] {
-    background-color: var(--seeds-color-secondary-lighter);
-    --message-border: var(--seeds-border-2) solid var(--seeds-color-secondary-light);
+    background-color: var(--seeds-color-gray-100);
+    --message-border: var(--seeds-border-2) solid var(--seeds-color-gray-400);
 
     .primary-color-icon {
-      color: var(--seeds-color-secondary-darker);
+      color: var(--seeds-color-gray-900);
     }
     .date-review-order {
-      color: var(--seeds-color-secondary-darker);
+      color: var(--seeds-color-gray-900);
     }
   }
 
   &[data-variant="warn"] {
-    background-color: var(--seeds-color-warn-lighter);
-    --message-border: var(--seeds-border-2) solid var(--seeds-color-warn-light);
+    background-color: var(--seeds-color-yellow-100);
+    --message-border: var(--seeds-border-2) solid var(--seeds-color-yellow-300);
     .primary-color-icon {
-      color: var(--seeds-color-warn-darker);
+      color: var(--seeds-color-yellow-900);
     }
     .date-review-order {
-      color: var(--seeds-color-warn-darker);
+      color: var(--seeds-color-yellow-900);
     }
   }
 
-  &[data-variant="alert"] {
-    background-color: var(--seeds-color-alert-lighter);
-    --message-border: var(--seeds-border-2) solid var(--seeds-color-alert-light);
+  &[data-variant="secondary-inverse"] {
+    background-color: var(--seeds-color-black);
+    --message-border: var(--seeds-border-2) solid var(--seeds-color-black);
     .primary-color-icon {
-      color: var(--seeds-color-alert-darker);
+      color: var(--seeds-color-white);
     }
     .date-review-order {
-      color: var(--seeds-color-alert-darker);
+      color: var(--seeds-color-white);
     }
   }
 

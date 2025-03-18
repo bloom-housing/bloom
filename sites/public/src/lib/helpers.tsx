@@ -138,14 +138,15 @@ export const getStatusPrefix = (
   listing: Listing,
   enableMarketingStatus: boolean
 ): { label: string; variant: CommonMessageVariant } => {
-  if (enableMarketingStatus && listing.marketingType === MarketingTypeEnum.comingSoon)
-    return { label: t("listings.underConstruction"), variant: "warn" }
   if (
     listing.status === ListingsStatusEnum.closed ||
     (listing.applicationDueDate && dayjs() > dayjs(listing.applicationDueDate))
   ) {
     return { label: t("listings.applicationsClosed"), variant: "secondary-inverse" }
   }
+  if (enableMarketingStatus && listing.marketingType === MarketingTypeEnum.comingSoon)
+    return { label: t("listings.underConstruction"), variant: "warn" }
+
   switch (listing.reviewOrderType) {
     case ReviewOrderTypeEnum.lottery:
       return { label: t("listings.lottery"), variant: "primary" }
@@ -198,7 +199,8 @@ export const getListingStatusMessage = (
   listing: Listing,
   jurisdiction: Jurisdiction,
   content?: React.ReactNode,
-  hideTime?: boolean
+  hideTime?: boolean,
+  hideDate?: boolean
 ) => {
   if (!listing) return
 
@@ -220,17 +222,19 @@ export const getListingStatusMessage = (
       ) : (
         <div className={styles["due-date-content"]}>
           <div className={styles["date-review-order"]}>{prefix.label}</div>
-          <div>
-            {getListingStatusMessageContent(
-              listing.status,
-              listing.applicationDueDate,
-              enableMarketingStatus,
-              listing.marketingType,
-              listing.marketingSeason,
-              listing.marketingDate,
-              hideTime
-            )}
-          </div>
+          {!hideDate && (
+            <div>
+              {getListingStatusMessageContent(
+                listing.status,
+                listing.applicationDueDate,
+                enableMarketingStatus,
+                listing.marketingType,
+                listing.marketingSeason,
+                listing.marketingDate,
+                hideTime
+              )}
+            </div>
+          )}
         </div>
       )}
     </Message>

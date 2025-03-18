@@ -29,9 +29,7 @@ export const getAvailabilitySubheading = (
     return `${waitlistOpenSpots} ${t("listings.waitlist.openSlots")}`
   }
   if (unitsAvailable) {
-    return `${unitsAvailable} ${
-      unitsAvailable === 1 ? t("listings.vacantUnit") : t("listings.vacantUnits")
-    }`
+    return `${unitsAvailable} ${unitsAvailable === 1 ? t("t.unit") : t("t.units")}`
   }
   return null
 }
@@ -62,10 +60,11 @@ export const getAvailabilityHeading = (reviewOrderType: ReviewOrderTypeEnum) => 
 }
 
 export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
+  const enableMarketingStatus = isFeatureFlagOn(jurisdiction, "enableMarketingStatus")
   const statusMessage = getListingStatusMessageContent(
     listing.status,
     listing.applicationDueDate,
-    isFeatureFlagOn(jurisdiction, "enableMarketingStatus"),
+    enableMarketingStatus,
     listing.marketingType,
     listing.marketingSeason,
     listing.marketingDate,
@@ -74,12 +73,15 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
   const content = getAvailabilityContent(listing.reviewOrderType, listing.status)
   const subheading = getAvailabilitySubheading(listing.waitlistOpenSpots, listing.unitsAvailable)
 
+  const hideAvailabilityDetails =
+    listing.status === ListingsStatusEnum.closed ||
+    (enableMarketingStatus && listing.marketingType === MarketingTypeEnum.comingSoon)
   return (
     <>
       <div className={styles["status-messages"]}>
-        {listing.status === ListingsStatusEnum.closed && (
+        {hideAvailabilityDetails && (
           <div className={"seeds-m-be-content"}>
-            {getListingStatusMessage(listing, jurisdiction)}
+            {getListingStatusMessage(listing, jurisdiction, null, false, true)}
           </div>
         )}
       </div>
@@ -92,11 +94,11 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
 
         <Card.Section divider={"flush"}>
           <Heading priority={3} size={"md"}>
-            {listing.marketingType === MarketingTypeEnum.comingSoon
+            {enableMarketingStatus && listing.marketingType === MarketingTypeEnum.comingSoon
               ? t("listings.underConstruction")
               : getAvailabilityHeading(listing.reviewOrderType)}
           </Heading>
-          {listing.status !== ListingsStatusEnum.closed && (
+          {!hideAvailabilityDetails && (
             <p className={styles["bold-subheader"]}>
               {listing.reviewOrderType === ReviewOrderTypeEnum.waitlist
                 ? t("listings.waitlist.isOpen")
