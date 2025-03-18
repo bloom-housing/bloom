@@ -29,6 +29,7 @@ export const getUnitGroupSummary = (
 ): UnitGroupSummary[] => {
   const summary: UnitGroupSummary[] = [];
 
+  //Sort unit groups by the lowest possible number of bedrooms in unit types (lowest to highest)
   const sortedUnitGroups = unitGroups?.sort(
     (a, b) =>
       a.unitTypes.sort((c, d) => c.numBedrooms - d.numBedrooms)[0].numBedrooms -
@@ -247,7 +248,7 @@ export const addUnitGroupsSummarized = (
   // Handle single listing case
   if (!Array.isArray(listingOrListings)) {
     const listing = listingOrListings;
-    if (Array.isArray(listing.unitGroups) && listing.unitGroups.length > 0) {
+    if (listing.unitGroups?.length > 0) {
       const amiCharts = extractAmiChartsFromUnitGroups(listing.unitGroups);
       listing.unitGroupsSummarized = summarizeUnitGroups(
         listing.unitGroups,
@@ -264,7 +265,7 @@ export const addUnitGroupsSummarized = (
   }
 
   listings.forEach((listing) => {
-    if (Array.isArray(listing.unitGroups) && listing.unitGroups.length > 0) {
+    if (listing.unitGroups?.length > 0) {
       const amiCharts = extractAmiChartsFromUnitGroups(listing.unitGroups);
       listing.unitGroupsSummarized = summarizeUnitGroups(
         listing.unitGroups,
