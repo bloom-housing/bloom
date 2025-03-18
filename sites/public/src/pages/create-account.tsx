@@ -96,14 +96,14 @@ const CreateAccount = () => {
   }
 
   return (
-    <FormsLayout className={signUpCopy && "sm:max-w-lg md:max-w-full"}>
-      <div className={signUpCopy && signUpBenefitsStyles["benefits-container"]}>
+    <FormsLayout className={signUpCopy ? "sm:max-w-lg md:max-w-full" : undefined}>
+      <div className={signUpCopy ? signUpBenefitsStyles["benefits-container"] : undefined}>
         {signUpCopy && (
           <div className={signUpBenefitsStyles["benefits-display-hide"]}>
             <SignUpBenefitsHeadingGroup mobileView={true} />
           </div>
         )}
-        <div className={signUpCopy && signUpBenefitsStyles["benefits-form-container"]}>
+        <div className={signUpCopy ? signUpBenefitsStyles["benefits-form-container"] : undefined}>
           <BloomCard iconSymbol="profile" title={t("account.createAccount")} headingPriority={1}>
             <>
               {requestError && (
