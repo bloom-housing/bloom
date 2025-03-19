@@ -3475,6 +3475,104 @@ export interface UnitsSummarized {
   hmi: HMI
 }
 
+export interface UnitGroupSummary {
+  /**  */
+  unitTypes?: string[]
+
+  /**  */
+  rentAsPercentIncomeRange?: MinMax
+
+  /**  */
+  rentRange?: MinMaxCurrency
+
+  /**  */
+  amiPercentageRange: MinMax
+
+  /**  */
+  openWaitlist: boolean
+
+  /**  */
+  unitVacancies: number
+
+  /**  */
+  floorRange?: MinMax
+
+  /**  */
+  sqFeetRange?: MinMax
+
+  /**  */
+  bathroomRange?: MinMax
+}
+
+export interface HMIColumns {
+  /**  */
+  "20"?: number
+
+  /**  */
+  "25"?: number
+
+  /**  */
+  "30"?: number
+
+  /**  */
+  "35"?: number
+
+  /**  */
+  "40"?: number
+
+  /**  */
+  "45"?: number
+
+  /**  */
+  "50"?: number
+
+  /**  */
+  "55"?: number
+
+  /**  */
+  "60"?: number
+
+  /**  */
+  "70"?: number
+
+  /**  */
+  "80"?: number
+
+  /**  */
+  "100"?: number
+
+  /**  */
+  "120"?: number
+
+  /**  */
+  "125"?: number
+
+  /**  */
+  "140"?: number
+
+  /**  */
+  "150"?: number
+
+  /**  */
+  householdSize: string
+}
+
+export interface HouseholdMaxIncomeSummary {
+  /**  */
+  columns: HMIColumns
+
+  /**  */
+  rows: HMIColumns[]
+}
+
+export interface UnitGroupsSummarized {
+  /**  */
+  unitGroupSummary: UnitGroupSummary[]
+
+  /**  */
+  householdMaxIncomeSummary: HouseholdMaxIncomeSummary
+}
+
 export interface UnitsSummary {
   /**  */
   id: string
@@ -3838,6 +3936,9 @@ export interface Listing {
 
   /**  */
   unitsSummarized?: UnitsSummarized
+
+  /**  */
+  unitGroupsSummarized?: UnitGroupsSummarized
 
   /**  */
   unitsSummary?: UnitsSummary[]
