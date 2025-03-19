@@ -21,7 +21,8 @@ import { PrismaService } from './prisma.service';
 import { CsvHeader } from '../types/CsvExportInterface';
 import { getExportHeaders } from '../utilities/application-export-helpers';
 import { mapTo } from '../utilities/mapTo';
-import { zipExport } from '../utilities/zip-export';
+import { zipExport, zipExportSecure } from '../utilities/zip-export';
+import { generatePresignedGetURL, uploadToS3 } from '../utilities/s3-helpers';
 
 view.csv = {
   ...view.details,
@@ -85,6 +86,71 @@ export class ApplicationExporterService {
     }
 
     return await zipExport(readStream, zipFilename, filename, isSpreadsheet);
+  }
+
+  /**
+   *
+   * @param req
+   * @param queryParams
+   * @param isLottery a boolean indicating if the export is a lottery
+   * @param isSpreadsheet a boolean indicating if the export is a spreadsheet
+   * @returns a promise containing a secure download url
+   */
+  async exporterSecure<QueryParams extends ApplicationCsvQueryParams>(
+    req: ExpressRequest,
+    queryParams: QueryParams,
+    isLottery: boolean,
+    isSpreadsheet: boolean,
+  ): Promise<string> {
+    const user = mapTo(User, req['user']);
+    await this.authorizeExport(user, queryParams.id);
+
+    let filename: string;
+    let readStream: ReadStream;
+    let zipFilename: string;
+    const now = new Date();
+    const dateString = dayjs(now).format('YYYY-MM-DD_HH-mm');
+    if (isLottery) {
+      readStream = await this.spreadsheetExport(queryParams, user.id, true);
+      zipFilename = `listing-${queryParams.id}-lottery-${
+        user.id
+      }-${now.getTime()}`;
+      filename = `lottery-${queryParams.id}-${dateString}`;
+    } else {
+      if (isSpreadsheet) {
+        readStream = await this.spreadsheetExport(queryParams, user.id, false);
+      } else {
+        readStream = await this.csvExport(queryParams, user.id);
+      }
+      zipFilename = `listing-${queryParams.id}-applications-${
+        user.id
+      }-${now.getTime()}`;
+      filename = `applications-${queryParams.id}-${dateString}`;
+    }
+
+    const path = await zipExportSecure(
+      readStream,
+      zipFilename,
+      filename,
+      isSpreadsheet,
+    );
+
+    await uploadToS3(
+      process.env.S3_ACCESS_TOKEN,
+      process.env.S3_BUCKET,
+      `${isLottery ? 'lottery' : 'applications'}_export_${now.getTime()}.zip`,
+      path,
+      process.env.S3_REGION,
+      process.env.S3_SECRET_TOKEN,
+    );
+
+    return await generatePresignedGetURL(
+      process.env.S3_ACCESS_TOKEN,
+      process.env.S3_BUCKET,
+      `${isLottery ? 'lottery' : 'applications'}_export_${now.getTime()}.zip`,
+      process.env.S3_REGION,
+      process.env.S3_SECRET_TOKEN,
+    );
   }
 
   // csv export functions
