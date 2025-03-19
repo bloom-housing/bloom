@@ -146,7 +146,10 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
               selectedIndex={props.filterType}
             >
               <Tabs.TabList>
-                <Tabs.Tab className={styles["application-count-tab"]}>
+                <Tabs.Tab
+                  className={styles["application-count-tab"]}
+                  data-testid="total-applications-tab"
+                >
                   <span>{t("account.allMyApplications")}</span>
                   <span>{applicationsCount?.total}</span>
                 </Tabs.Tab>
@@ -154,15 +157,22 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
                   className={`${styles["application-count-tab"]} ${
                     !showPublicLottery ? styles["application-hide-tab"] : ""
                   }`}
+                  data-testid="lottery-runs-tab"
                 >
                   <span>{t("account.lotteryRun")}</span>
                   <span>{applicationsCount?.lottery}</span>
                 </Tabs.Tab>
-                <Tabs.Tab className={styles["application-count-tab"]}>
+                <Tabs.Tab
+                  className={styles["application-count-tab"]}
+                  data-testid="closed-applications-tab"
+                >
                   <span>{t("account.closedApplications")}</span>
                   <span>{applicationsCount?.closed}</span>
                 </Tabs.Tab>
-                <Tabs.Tab className={styles["application-count-tab"]}>
+                <Tabs.Tab
+                  className={styles["application-count-tab"]}
+                  data-testid="open-applications-tab"
+                >
                   <span>{t("account.openApplications")}</span>
                   <span>{applicationsCount?.open}</span>
                 </Tabs.Tab>
