@@ -6,36 +6,36 @@
   color: var(--seeds-color-on-surface);
 
   &[data-variant="primary"] {
-    background-color: var(--seeds-color-blue-100);
-    --message-border: var(--seeds-border-2) solid var(--seeds-color-blue-300);
+    background-color: var(--seeds-color-primary-lighter);
+    --message-border: var(--seeds-border-2) solid var(--seeds-color-primary-light);
     .primary-color-icon {
-      color: var(--seeds-color-blue-700);
+      color: var(--seeds-color-primary-dark);
     }
     .date-review-order {
-      color: var(--seeds-color-blue-700);
+      color: var(--seeds-color-primary-dark);
     }
   }
 
   &[data-variant="secondary"] {
-    background-color: var(--seeds-color-gray-100);
-    --message-border: var(--seeds-border-2) solid var(--seeds-color-gray-400);
+    background-color: var(--seeds-color-secondary-lighter);
+    --message-border: var(--seeds-border-2) solid var(--seeds-color-secondary-light);
 
     .primary-color-icon {
-      color: var(--seeds-color-gray-900);
+      color: var(--seeds-color-secondary-darker);
     }
     .date-review-order {
-      color: var(--seeds-color-gray-900);
+      color: var(--seeds-color-secondary-darker);
     }
   }
 
   &[data-variant="warn"] {
-    background-color: var(--seeds-color-yellow-100);
-    --message-border: var(--seeds-border-2) solid var(--seeds-color-yellow-300);
+    background-color: var(--seeds-color-warn-lighter);
+    --message-border: var(--seeds-border-2) solid var(--seeds-color-warn-light);
     .primary-color-icon {
-      color: var(--seeds-color-yellow-900);
+      color: var(--seeds-color-warn-darker);
     }
     .date-review-order {
-      color: var(--seeds-color-yellow-900);
+      color: var(--seeds-color-warn-darker);
     }
   }
 
