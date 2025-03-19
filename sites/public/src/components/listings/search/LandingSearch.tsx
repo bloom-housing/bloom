@@ -1,17 +1,15 @@
 import React, { useState, useEffect, ChangeEvent } from "react"
 import { useForm } from "react-hook-form"
+import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import { FilterAvailabilityEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   ButtonGroup,
   FieldGroup,
   FieldSingle,
-  Button,
   ButtonGroupSpacing,
   Field,
-  AppearanceSizeType,
 } from "@bloom-housing/doorway-ui-components"
-import { LinkButton, t, Card } from "@bloom-housing/ui-components"
-import { Dialog } from "@bloom-housing/ui-seeds"
+import { t, Card } from "@bloom-housing/ui-components"
 import { numericSearchFieldGenerator } from "./helpers"
 import styles from "./LandingSearch.module.scss"
 import { FormOption } from "./ListingsSearchModal"
@@ -210,20 +208,16 @@ export function LandingSearch(props: LandingSearchProps) {
       </div>
 
       <div className="flex justify-start p-2">
-        <LinkButton
-          href={createListingsUrl(formValues)}
-          className="is-primary is-borderless bg-primary-dark text-3xs md:text-xs text-white mr-8"
-          size={AppearanceSizeType.small}
-        >
+        <Button href={createListingsUrl(formValues)} className="mr-8">
           {t("nav.viewListings")}
-        </LinkButton>
+        </Button>
 
         <Button
-          className="is-borderless is-inline is-unstyled underline text-primary uppercase tracking-widest text-3xs md:text-xs"
-          size={AppearanceSizeType.small}
+          className="uppercase tracking-widest text-3xs md:text-xs mt-3"
           onClick={() => {
             setOpenCountyMapModal(!openCountyMapModal)
           }}
+          variant={"text"}
         >
           {t("welcome.viewCountyMap")}
         </Button>

@@ -1,8 +1,8 @@
 import * as React from "react"
 import { Listing, ListingMapMarker } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { Heading } from "@bloom-housing/ui-seeds"
+import { Button, Heading } from "@bloom-housing/ui-seeds"
 import { ZeroListingsItem } from "@bloom-housing/doorway-ui-components"
-import { LoadingOverlay, t, InfoCard, LinkButton } from "@bloom-housing/ui-components"
+import { LoadingOverlay, t, InfoCard } from "@bloom-housing/ui-components"
 import { getListings } from "../../lib/helpers"
 import { Pagination } from "./Pagination"
 import styles from "./ListingsCombined.module.scss"
@@ -42,13 +42,13 @@ const ListingsList = (props: ListingsListProps) => {
           subtitle={t("t.subscribeToListingAlerts")}
           className="is-normal-primary-lighter"
         >
-          <LinkButton
+          <Button
             href={process.env.notificationsSignUpUrl}
-            newTab={true}
             className="is-primary"
+            hideExternalLinkIcon={true}
           >
             {t("t.signUp")}
-          </LinkButton>
+          </Button>
         </InfoCard>
       )}
       <InfoCard
@@ -56,18 +56,23 @@ const ListingsList = (props: ListingsListProps) => {
         subtitle={t("t.emergencyShelter")}
         className="is-normal-secondary-lighter"
       >
-        <LinkButton href="/help/housing-help" className="is-secondary">
+        <Button href="/help/housing-help" className="capitalize" variant="secondary">
           {t("t.helpCenter")}
-        </LinkButton>
+        </Button>
       </InfoCard>
       <InfoCard
         title={t("t.housingInSanFrancisco")}
         subtitle={t("t.seeSanFranciscoListings")}
         className="is-normal-secondary-lighter"
       >
-        <LinkButton href="https://housing.sfgov.org/" newTab={true} className="is-secondary">
+        <Button
+          href="https://housing.sfgov.org/"
+          className="capitalize"
+          variant="secondary"
+          hideExternalLinkIcon={true}
+        >
           {t("t.seeListings")}
-        </LinkButton>
+        </Button>
       </InfoCard>
     </div>
   )

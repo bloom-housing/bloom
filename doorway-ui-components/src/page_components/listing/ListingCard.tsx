@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react"
 import Link from "next/link"
+import { Button as SeedsButton } from "@bloom-housing/ui-seeds"
 import {
   Heading,
   AppearanceStyleType,
@@ -8,9 +9,7 @@ import {
   Icon,
   IconFillColors,
   Tag,
-  LinkButton,
   StackedTableProps,
-  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { ImageCard, ImageCardProps, ImageTag } from "../../blocks/ImageCard"
 import { AppearanceShadeType } from "../../global/AppearanceTypes"
@@ -230,15 +229,14 @@ const ListingCard = (props: ListingCardProps) => {
           <div className={footerContainerClass ?? "listings-row_footer"}>
             {footerButtons?.map((footerButton, index) => {
               return (
-                <LinkButton
+                <SeedsButton
                   href={footerButton.href}
                   ariaHidden={footerButton.ariaHidden}
                   key={index}
-                  className={"is-secondary doorway-button"}
-                  size={AppearanceSizeType.small}
+                  variant="secondary"
                 >
                   {footerButton.text}
-                </LinkButton>
+                </SeedsButton>
               )
             })}
           </div>
