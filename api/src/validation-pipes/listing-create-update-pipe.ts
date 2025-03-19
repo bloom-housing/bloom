@@ -48,6 +48,7 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
         where: { id: value.jurisdictions.id },
       });
 
+      // example list for demonstration
       const defaultRequiredFields = [
         'listingsBuildingAddress',
         'assets',

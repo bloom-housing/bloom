@@ -98,13 +98,20 @@ export class ListingPublishedUpdate extends OmitType(ListingUpdate, [
   listingImages: ListingImageCreate[];
 
   @Expose()
-  @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
+  @ValidateListingPublish('leasingAgentEmail', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   @EnforceLowerCase()
+  @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   leasingAgentEmail: string;
 
   @Expose()
+  @ValidateListingPublish('leasingAgentName', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

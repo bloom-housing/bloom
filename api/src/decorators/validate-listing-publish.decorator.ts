@@ -1,3 +1,4 @@
+import { ListingsStatusEnum } from '@prisma/client';
 import { ValidationOptions, ValidateIf } from 'class-validator';
 
 export function ValidateListingPublish(
@@ -6,8 +7,11 @@ export function ValidateListingPublish(
 ) {
   return ValidateIf(
     (o) => {
-      console.log('o', o);
-      return o['requiredFields'].includes(field);
+      return (
+        (o['requiredFields'].includes(field) &&
+          o['status'] === ListingsStatusEnum.active) ||
+        o[field]
+      );
     },
     {
       ...validationOptions,
