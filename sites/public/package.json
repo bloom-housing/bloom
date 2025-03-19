@@ -64,6 +64,7 @@
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "5.17.0",
     "@testing-library/react": "14.0.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/markdown-to-jsx": "^6.11.2",
     "@types/node": "^12.12.67",
     "@types/react": "^18.0.33",
