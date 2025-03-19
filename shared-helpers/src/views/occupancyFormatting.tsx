@@ -40,6 +40,21 @@ export const occupancyTable = (listing: Listing): StandardTableData => {
   return occupancyData
 }
 
+export const stackedOccupancyTable = (listing: Listing) => {
+  if (listing.unitsSummarized && listing.unitsSummarized.byUnitType) {
+    return listing.unitsSummarized.byUnitType.map((unitSummary) => {
+      const occupancy = getOccupancy(unitSummary.occupancyRange.min, unitSummary.occupancyRange.max)
+
+      return {
+        unitType: {
+          cellText: t("listings.unitTypes." + unitSummary.unitTypes.name),
+        },
+        occupancy: { cellText: occupancy },
+      }
+    })
+  } else return []
+}
+
 export const getOccupancyDescription = (listing: Listing) => {
   const unitsSummarized = listing.unitsSummarized
   if (
