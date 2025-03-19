@@ -42,14 +42,39 @@
     padding-inline: var(--seeds-s12);
     padding-block: var(--seeds-s4);
     background-color: var(--seeds-bg-color-canvas);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
 
-    .next-button {
-      margin-left: auto;
+    @media (--md-down) {
+      padding-inline: var(--seeds-s4);
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .previous-button {
+      @media (--md-down) {
+        grid-row-start: 2;
+      }
     }
 
     .page-info {
-      margin-inline: auto;
-      margin-block: auto;
+      display: inline;
+      justify-self: center;
+      align-self: center;
+
+      @media (--md-down) {
+        grid-row-start: 1;
+        grid-column: span 2;
+        justify-self: center;
+        align-self: center;
+      }
+    }
+
+    .next-button {
+      justify-self: end;
+
+      @media (--md-down) {
+        grid-row-start: 2;
+      }
     }
   }
 }
