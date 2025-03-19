@@ -1,0 +1,61 @@
+.status-bar {
+  --common-message-link-gap: 0;
+  --common-message-font: var(--seeds-font-alt-sans);
+  --message-max-width: 100%;
+  --message-border-radius: var(--seeds-rounded);
+  color: var(--seeds-color-on-surface);
+
+  &[data-variant="primary"] {
+    background-color: var(--seeds-color-primary-lighter);
+    --message-border: var(--seeds-border-2) solid var(--seeds-color-primary-light);
+    .primary-color-icon {
+      color: var(--seeds-color-primary-dark);
+    }
+    .date-review-order {
+      color: var(--seeds-color-primary-dark);
+    }
+  }
+
+  &[data-variant="secondary"] {
+    background-color: var(--seeds-color-secondary-lighter);
+    --message-border: var(--seeds-border-2) solid var(--seeds-color-secondary-light);
+
+    .primary-color-icon {
+      color: var(--seeds-color-secondary-darker);
+    }
+    .date-review-order {
+      color: var(--seeds-color-secondary-darker);
+    }
+  }
+
+  &[data-variant="warn"] {
+    background-color: var(--seeds-color-warn-lighter);
+    --message-border: var(--seeds-border-2) solid var(--seeds-color-warn-light);
+    .primary-color-icon {
+      color: var(--seeds-color-warn-darker);
+    }
+    .date-review-order {
+      color: var(--seeds-color-warn-darker);
+    }
+  }
+
+  &[data-variant="secondary-inverse"] {
+    background-color: var(--seeds-color-black);
+    --message-border: var(--seeds-border-2) solid var(--seeds-color-black);
+    .primary-color-icon {
+      color: var(--seeds-color-white);
+    }
+    .date-review-order {
+      color: var(--seeds-color-white);
+    }
+  }
+
+  .date-review-order {
+    font-weight: var(--seeds-font-weight-bold);
+  }
+
+  .due-date-content {
+    display: flex;
+    flex-direction: column;
+  }
+}
