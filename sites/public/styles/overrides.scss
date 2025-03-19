@@ -6,11 +6,13 @@
   --seeds-font-alt-sans: "Montserrat", "Open Sans", "Helvetica", "Arial", "Verdana", "sans-serif";
   --seeds-font-sans: "Montserrat", "Open Sans", "Helvetica", "Arial", "Verdana", "sans-serif";
   --seeds-font-serif: "Montserrat", "Droid Serif", "Georgia", "Times", "serif";
-  --seeds-color-primary-darker: #0b221f;
-  --seeds-color-primary-dark: #1a5049;
+  --seeds-color-primary-darker: #133a35;
+  --seeds-color-primary-dark: #1f6058;
   --seeds-color-primary: #297e73;
-  --seeds-color-primary-light: #59c9ba;
-  --seeds-color-primary-lighter: #b5e7e0;
+  --seeds-color-primary-light: #c5ece7;
+  --seeds-color-primary-lighter: #ecf9f7;
+  --seeds-bg-color-surface-primary: var(--seeds-color-primary-lighter);
+  --seeds-bg-color-surface-primary-inverse: var(--seeds-color-primary-dark);
 
   // Seeds component & class token overrides
   .seeds-button {
