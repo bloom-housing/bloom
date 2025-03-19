@@ -3,9 +3,10 @@ import { Hash } from '@smithy/hash-node';
 import { HttpRequest } from '@smithy/protocol-http';
 import { InternalServerErrorException } from '@nestjs/common';
 import { parseUrl } from '@smithy/url-parser';
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { readFileSync } from 'fs';
+import { S3Client } from '@aws-sdk/client-s3';
+import { createReadStream } from 'fs';
 import { S3RequestPresigner } from '@aws-sdk/s3-request-presigner';
+import { Upload } from '@aws-sdk/lib-storage';
 
 /**
  * @param accessKeyId the AWS service account access key
@@ -35,7 +36,7 @@ export const generatePresignedGetURL = async (
   const signedUrlObject = await presigner.presign(new HttpRequest(url), {
     expiresIn: 1000 * 60 * 5, // expires 5 minutes after generation
   });
-  console.log('37:', formatUrl(signedUrlObject));
+
   return formatUrl(signedUrlObject);
 };
 
@@ -52,7 +53,6 @@ export const generatePresignedGetURL = async (
 export const uploadToS3 = async (
   accessKeyId: string,
   bucket: string,
-  fileType: string,
   key: string,
   pathToFile: string,
   region: string,
@@ -66,15 +66,20 @@ export const uploadToS3 = async (
         secretAccessKey,
       },
     });
-    const file = readFileSync(pathToFile);
-    const command = new PutObjectCommand({
-      Bucket: bucket,
-      Key: key,
-      Body: file,
-      ContentLength: file.length,
-      ContentType: fileType,
+    const file = createReadStream(pathToFile);
+
+    const upload = new Upload({
+      params: {
+        Bucket: bucket,
+        Key: key,
+        Body: file,
+      },
+      client,
     });
-    await client.send(command);
+
+    await upload.done();
+    file.destroy();
+    client.destroy();
   } catch (e) {
     throw new InternalServerErrorException(e);
   }
