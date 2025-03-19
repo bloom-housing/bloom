@@ -92,6 +92,26 @@ export class LotteryController {
     );
   }
 
+  @Get(`getLotteryResultsSecure`)
+  @ApiOperation({
+    summary: 'Get applications lottery results',
+    operationId: 'lotteryResultsSecure',
+  })
+  @UseInterceptors(ExportLogInterceptor)
+  async lotteryExportSecure(
+    @Request() req: ExpressRequest,
+    @Res({ passthrough: true }) res: Response,
+    @Query(new ValidationPipe(defaultValidationPipeOptions))
+    queryParams: ApplicationCsvQueryParams,
+  ): Promise<string> {
+    return await this.applicationExporterService.exporterSecure(
+      req,
+      queryParams,
+      true,
+      true,
+    );
+  }
+
   @Put('lotteryStatus')
   @ApiOperation({
     summary: 'Change the listing lottery status',

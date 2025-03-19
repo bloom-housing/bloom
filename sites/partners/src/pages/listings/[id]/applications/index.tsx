@@ -16,6 +16,7 @@ import {
   useFlaggedApplicationsList,
   useApplicationsData,
   useZipExport,
+  useZipExportSecure,
 } from "../../../../lib/hooks"
 import { ListingStatusBar } from "../../../../components/listings/ListingStatusBar"
 import Layout from "../../../../layouts"
@@ -49,7 +50,8 @@ const ApplicationsList = () => {
       includeDemographicsPartner) ??
       false,
     false,
-    !!process.env.applicationExportAsSpreadsheet
+    !!process.env.applicationExportAsSpreadsheet,
+    !!process.env.useSecureDownloadPathway
   )
 
   const listingName = listingDto?.name
