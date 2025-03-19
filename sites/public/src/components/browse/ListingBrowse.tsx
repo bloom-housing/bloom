@@ -40,8 +40,9 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
     })
   }, [profile, props.openListings])
 
-  const isNextPageAvailable = props.paginationData.currentPage < props.paginationData.totalPages
-  const isPreviousPageAvailable = props.paginationData.currentPage > 1
+  const isNextPageAvailable =
+    props.paginationData && props.paginationData.currentPage < props.paginationData.totalPages
+  const isPreviousPageAvailable = props.paginationData && props.paginationData.currentPage > 1
 
   return (
     <Layout>
