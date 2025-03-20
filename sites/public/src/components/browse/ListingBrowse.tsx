@@ -1,7 +1,11 @@
-import React, { useEffect, useContext } from "react"
+import React, { useEffect, useContext, useState } from "react"
 import Head from "next/head"
 import { Heading } from "@bloom-housing/ui-seeds"
-import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  Jurisdiction,
+  Listing,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext, ListingList, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import { PageHeader, t } from "@bloom-housing/ui-components"
 import { MetaTags } from "../../components/shared/MetaTags"
@@ -9,16 +13,20 @@ import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
 import { ListingCard } from "./ListingCard"
 import styles from "./ListingBrowse.module.scss"
+import { fetchFavoriteListingIds, isFeatureFlagOn, saveListingFavorite } from "../../lib/helpers"
 
 export interface ListingBrowseProps {
   openListings: Listing[]
   closedListings: Listing[]
+  jurisdiction: Jurisdiction
 }
 
 export const ListingBrowse = (props: ListingBrowseProps) => {
-  const { profile } = useContext(AuthContext)
+  const { profile, userService } = useContext(AuthContext)
   const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
+
+  const [favoriteListingIds, setFavoriteListingIds] = useState<string[]>([])
 
   useEffect(() => {
     pushGtmEvent<ListingList>({
@@ -28,7 +36,24 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
       numberOfListings: props.openListings.length,
       listingIds: props.openListings.map((listing) => listing.id),
     })
-  }, [profile, props.openListings])
+
+    if (profile) {
+      void fetchFavoriteListingIds(profile.id, userService).then((listingIds) => {
+        setFavoriteListingIds(listingIds)
+      })
+    }
+  }, [profile, props.openListings, setFavoriteListingIds, userService])
+
+  const saveFavoriteFn = (listingId: string) => {
+    return (listingFavorited) => {
+      void saveListingFavorite(userService, listingId, listingFavorited)
+      if (listingFavorited) {
+        setFavoriteListingIds([...favoriteListingIds, listingId])
+      } else {
+        setFavoriteListingIds([...favoriteListingIds.filter((id) => id != listingId)])
+      }
+    }
+  }
 
   return (
     <Layout>
@@ -46,7 +71,18 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
             {props.openListings.length > 0 ? (
               <ul>
                 {props.openListings.map((listing, index) => {
-                  return <ListingCard listing={listing} key={index} />
+                  return (
+                    <ListingCard
+                      listing={listing}
+                      key={index}
+                      showFavoriteButton={
+                        profile &&
+                        isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.showListingFavoriting)
+                      }
+                      favorited={favoriteListingIds.includes(listing.id)}
+                      setFavorited={saveFavoriteFn(listing.id)}
+                    />
+                  )
                 })}
               </ul>
             ) : (
