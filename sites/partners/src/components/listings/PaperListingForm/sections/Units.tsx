@@ -20,6 +20,7 @@ import { useFormContext, useWatch } from "react-hook-form"
 import { TempUnit } from "../../../../lib/listings/formTypes"
 import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import UnitGroupForm from "../UnitGroupForm"
 
 type UnitProps = {
   units: TempUnit[]
@@ -186,6 +187,11 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion, featureFlags }: Uni
     listing?.jurisdictions?.id
   )
 
+  const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableUnitGroups,
+    listing?.jurisdictions?.id
+  )
+
   return (
     <>
       <hr className="spacer-section-above spacer-section" />
@@ -207,47 +213,48 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion, featureFlags }: Uni
             </FieldValue>
           </Grid.Row>
         )}
-        <Grid.Row columns={2}>
-          <FieldValue label={t("listings.unitTypesOrIndividual")} className="mb-1">
-            <FieldGroup
-              name="disableUnitsAccordion"
-              type="radio"
-              register={register}
-              fields={disableUnitsAccordionOptions}
-              fieldClassName="m-0"
-              fieldGroupClassName="flex h-12 items-center"
-            />
-          </FieldValue>
-          <FieldValue label={t("listings.listingAvailabilityQuestion")} className={"mb-1"}>
-            <FieldGroup
-              name="listingAvailabilityQuestion"
-              type="radio"
-              register={register}
-              groupSubNote={t("listings.requiredToPublish")}
-              error={fieldHasError(errors?.listingAvailability) && listingAvailability === null}
-              errorMessage={fieldMessage(errors?.listingAvailability)}
-              fieldClassName="m-0"
-              fieldGroupClassName="flex h-12 items-center"
-              fields={[
-                {
-                  label: t("listings.availableUnits"),
-                  value: "availableUnits",
-                  id: "availableUnits",
-                  dataTestId: "listingAvailability.availableUnits",
-                  defaultChecked: listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlist,
-                },
-                {
-                  label: t("listings.waitlist.open"),
-                  value: "openWaitlist",
-                  id: "openWaitlist",
-                  dataTestId: "listingAvailability.openWaitlist",
-                  defaultChecked: listing?.reviewOrderType === ReviewOrderTypeEnum.waitlist,
-                },
-              ]}
-            />
-          </FieldValue>
-        </Grid.Row>
-
+        {!enableUnitGroups && (
+          <Grid.Row columns={2}>
+            <FieldValue label={t("listings.unitTypesOrIndividual")} className="mb-1">
+              <FieldGroup
+                name="disableUnitsAccordion"
+                type="radio"
+                register={register}
+                fields={disableUnitsAccordionOptions}
+                fieldClassName="m-0"
+                fieldGroupClassName="flex h-12 items-center"
+              />
+            </FieldValue>
+            <FieldValue label={t("listings.listingAvailabilityQuestion")} className={"mb-1"}>
+              <FieldGroup
+                name="listingAvailabilityQuestion"
+                type="radio"
+                register={register}
+                groupSubNote={t("listings.requiredToPublish")}
+                error={fieldHasError(errors?.listingAvailability) && listingAvailability === null}
+                errorMessage={fieldMessage(errors?.listingAvailability)}
+                fieldClassName="m-0"
+                fieldGroupClassName="flex h-12 items-center"
+                fields={[
+                  {
+                    label: t("listings.availableUnits"),
+                    value: "availableUnits",
+                    id: "availableUnits",
+                    dataTestId: "listingAvailability.availableUnits",
+                    defaultChecked: listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlist,
+                  },
+                  {
+                    label: t("listings.waitlist.open"),
+                    value: "openWaitlist",
+                    id: "openWaitlist",
+                    dataTestId: "listingAvailability.openWaitlist",
+                    defaultChecked: listing?.reviewOrderType === ReviewOrderTypeEnum.waitlist,
+                  },
+                ]}
+              />
+            </FieldValue>
+          </Grid.Row>
+        )}
         <SectionWithGrid.HeadingRow>{t("listings.units")}</SectionWithGrid.HeadingRow>
         <Grid.Row>
           <Grid.Cell className="grid-inset-section">
@@ -325,27 +332,38 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion, featureFlags }: Uni
               : t("t.draft")}
           </Tag>
         </Drawer.Header>
-        <UnitForm
-          onSubmit={(unit) => {
-            saveUnit(unit)
-          }}
-          onClose={(openNextUnit: boolean, openCurrentUnit: boolean, defaultUnit: TempUnit) => {
-            setDefaultUnit(defaultUnit)
-            if (openNextUnit) {
-              if (defaultUnit) {
-                addToast(t("listings.unit.unitCopied"), { variant: "success" })
-              }
-              editUnit(nextId)
-            } else if (!openCurrentUnit) {
+        {enableUnitGroups ? (
+          <UnitGroupForm
+            onSubmit={(unit) => {
+              saveUnit(unit)
+            }}
+            onClose={() => {
               setUnitDrawerOpen(false)
-            } else {
-              addToast(t("listings.unit.unitSaved"), { variant: "success" })
-            }
-          }}
-          draft={!units.some((unit) => unit.tempId === defaultUnit?.tempId)}
-          defaultUnit={defaultUnit}
-          nextId={nextId}
-        />
+            }}
+          />
+        ) : (
+          <UnitForm
+            onSubmit={(unit) => {
+              saveUnit(unit)
+            }}
+            onClose={(openNextUnit: boolean, openCurrentUnit: boolean, defaultUnit: TempUnit) => {
+              setDefaultUnit(defaultUnit)
+              if (openNextUnit) {
+                if (defaultUnit) {
+                  addToast(t("listings.unit.unitCopied"), { variant: "success" })
+                }
+                editUnit(nextId)
+              } else if (!openCurrentUnit) {
+                setUnitDrawerOpen(false)
+              } else {
+                addToast(t("listings.unit.unitSaved"), { variant: "success" })
+              }
+            }}
+            draft={!units.some((unit) => unit.tempId === defaultUnit?.tempId)}
+            defaultUnit={defaultUnit}
+            nextId={nextId}
+          />
+        )}
       </Drawer>
 
       <Dialog isOpen={!!unitDeleteModal} onClose={() => setUnitDeleteModal(null)}>
