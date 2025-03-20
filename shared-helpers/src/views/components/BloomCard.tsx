@@ -3,7 +3,7 @@ import Card from "@bloom-housing/ui-seeds/src/blocks/Card"
 import React from "react"
 import styles from "./BloomCard.module.scss"
 import { CustomIconMap, CustomIconType } from "../CustomIconMap"
-import { ClickableCard } from "../../../../sites/public/src/patterns/ClickableCard"
+import { ClickableCard } from "./ClickableCard"
 
 interface BloomCardProps {
   children: React.ReactElement

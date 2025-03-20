@@ -1,14 +1,14 @@
 import React from "react"
 import { Card } from "@bloom-housing/ui-seeds"
-import styles from "./ClickableCard.module.scss"
 import { CardProps } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import styles from "./ClickableCard.module.scss"
 
 /**
  * ClickableCard transforms a Seeds Card component to be clickable, such that the full card is actionable based on a single internal anchor tag.
  * It must contain one anchor tag, and the full card will act as a link.
  * You are still able to add internal buttons, which will be separately actionable.
  * */
-export interface ClickableCardProps {
+interface ClickableCardProps {
   /** Props to pass onto the Card component */
   cardProps?: Omit<CardProps, "children">
   /** Content within the Card wrapper */
