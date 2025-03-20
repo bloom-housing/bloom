@@ -9,6 +9,7 @@ import { imageUrlFromListing, oneLineAddress } from "@bloom-housing/shared-helpe
 import { StackedTable, t } from "@bloom-housing/ui-components"
 import { Card, Heading, Icon, Link, Message, Tag } from "@bloom-housing/ui-seeds"
 import { getListingApplicationStatus, getListingStackedTableData } from "../../lib/helpers"
+import { ClickableCard } from "../../patterns/ClickableCard"
 import { getListingTags } from "../listing/listing_sections/MainDetails"
 import styles from "./ListingCard.module.scss"
 
@@ -49,7 +50,7 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
 
   return (
     <li className={styles["list-item"]}>
-      <Card className={styles["listing-card-container"]}>
+      <ClickableCard className={styles["listing-card-container"]}>
         <Card.Section>
           <div className={styles["listing-card-content"]}>
             <div className={styles["details"]}>
@@ -124,7 +125,7 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
             </div>
           </div>
         </Card.Section>
-      </Card>
+      </ClickableCard>
     </li>
   )
 }
