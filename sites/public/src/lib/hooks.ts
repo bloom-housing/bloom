@@ -51,7 +51,7 @@ export const useProfileFavoriteListings = () => {
 
   useEffect(() => {
     if (profile && loading) {
-      void fetchFavoriteListingIds(userService).then((listingIds) => {
+      void fetchFavoriteListingIds(profile.id, userService).then((listingIds) => {
         if (listingIds.length > 0) {
           listingsService
             .list({
