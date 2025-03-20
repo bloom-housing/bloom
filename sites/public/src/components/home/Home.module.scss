@@ -31,6 +31,9 @@
       }
       .hero-button {
         margin-block-start: var(--seeds-s8);
+        @media (--sm-only) {
+          margin-block-start: var(--seeds-s2);
+        }
       }
     }
   }
