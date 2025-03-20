@@ -3,6 +3,8 @@
   .hero-container {
     background-color: var(--seeds-bg-color-surface-primary-inverse);
     padding-block: var(--seeds-s24);
+    --max-width-layout-desktop-margin-block: 0;
+    --max-width-layout-mobile-margin-block: 0;
     @media (--sm-only) {
       padding-block: var(--seeds-s8);
     }
