@@ -62,7 +62,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
 
   useEffect(() => {
     if (profile) {
-      void fetchFavoriteListingIds(userService).then((listingIds) => {
+      void fetchFavoriteListingIds(profile.id, userService).then((listingIds) => {
         setListingFavorited(listingIds.includes(listing?.id))
       })
     }

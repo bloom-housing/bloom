@@ -404,9 +404,6 @@ export const saveListingFavorite = async (
   })
 }
 
-export const fetchFavoriteListingIds = async (userService: UserService) => {
-  // A fresh profile fetch is necessary, rather than using the cached profile data from AuthContext
-  const profile = await userService.profile()
-
-  return profile.favoriteListings?.map((item) => item.id) || []
+export const fetchFavoriteListingIds = async (userId: string, userService: UserService) => {
+  return (await userService.favoriteListings({ id: userId })).map((item) => item.id)
 }

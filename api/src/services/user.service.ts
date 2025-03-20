@@ -58,15 +58,19 @@ const views: Partial<Record<UserViews, Prisma.UserAccountsInclude>> = {
   },
 };
 
-views.full = {
-  ...views.base,
-  listings: true,
+views.favorites = {
   favoriteListings: {
     select: {
       id: true,
       name: true,
     },
   },
+};
+
+views.full = {
+  ...views.base,
+  ...views.favorites,
+  listings: true,
 };
 
 type findByOptions = {
@@ -983,6 +987,15 @@ export class UserService {
     await this.emailService.sendSingleUseCode(mapTo(User, user), singleUseCode);
 
     return { success: true };
+  }
+
+  async favoriteListings(userId: string): Promise<IdDTO[]> {
+    const rawUser = await this.findUserOrError(
+      { userId: userId },
+      UserViews.favorites,
+    );
+
+    return mapTo(IdDTO, rawUser.favoriteListings);
   }
 
   async modifyFavoriteListings(dto: UserFavoriteListing, requestingUser: User) {

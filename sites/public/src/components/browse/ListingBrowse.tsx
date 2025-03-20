@@ -52,7 +52,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
     })
 
     if (profile) {
-      void fetchFavoriteListingIds(userService).then((listingIds) => {
+      void fetchFavoriteListingIds(profile.id, userService).then((listingIds) => {
         setFavoriteListingIds(listingIds)
       })
     }
