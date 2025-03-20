@@ -66,6 +66,7 @@ export const Home = (props: HomeProps) => {
                         key={"sign-up"}
                         href={props.jurisdiction.notificationsSignUpUrl}
                         variant="primary-outlined"
+                        size={"sm"}
                       >
                         {t("welcome.signUpToday")}
                       </Button>
@@ -87,6 +88,7 @@ export const Home = (props: HomeProps) => {
                       key={"additional-resources"}
                       href="/additional-resources"
                       variant="primary-outlined"
+                      size={"sm"}
                     >
                       {t("welcome.viewAdditionalHousingTruncated")}
                     </Button>
