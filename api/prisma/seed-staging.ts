@@ -5,6 +5,7 @@ import {
   LanguagesEnum,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
+  MonthlyRentDeterminationTypeEnum,
   MultiselectQuestions,
   MultiselectQuestionsApplicationSectionEnum,
   Prisma,
@@ -39,113 +40,79 @@ import {
 import { ValidationMethod } from '../src/enums/multiselect-questions/validation-method-enum';
 import { randomNoun } from './seed-helpers/word-generator';
 import { householdMemberFactorySingle } from './seed-helpers/household-member-factory';
-import { featureFlagFactory } from './seed-helpers/feature-flag-factory';
+import { createAllFeatureFlags } from './seed-helpers/feature-flag-factory';
 import { FeatureFlagEnum } from '../src/enums/feature-flags/feature-flags-enum';
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
   jurisdictionName: string,
 ) => {
-  // create main jurisdiction
-  const jurisdiction = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory(jurisdictionName, [UserRoleEnum.admin]),
-  });
-  // add another jurisdiction
-  let otherJusisName = randomNoun();
-  while (otherJusisName < jurisdictionName) {
-    otherJusisName = randomNoun();
-  }
-  const additionalJurisdiction = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory(otherJusisName),
-  });
   // Seed feature flags
-  await prismaClient.featureFlags.create({
-    data: featureFlagFactory(
-      FeatureFlagEnum.enableHomeType,
-      true,
-      "When true, the 'Home Type' section is displayed in listing creation/edit and the public listing view",
-      [jurisdiction.id],
-    ),
+  await createAllFeatureFlags(prismaClient);
+  // create main jurisdiction
+  const mainJurisdiction = await prismaClient.jurisdictions.create({
+    data: jurisdictionFactory(jurisdictionName, {
+      listingApprovalPermissions: [UserRoleEnum.admin],
+      featureFlags: [
+        FeatureFlagEnum.enableHomeType,
+        FeatureFlagEnum.enableAccessibilityFeatures,
+        FeatureFlagEnum.enableUtilitiesIncluded,
+        FeatureFlagEnum.enableIsVerified,
+        FeatureFlagEnum.enableNeighborhoodAmenities,
+        FeatureFlagEnum.enableMarketingStatus,
+        FeatureFlagEnum.enableSection8Question,
+        FeatureFlagEnum.enableSingleUseCode,
+        FeatureFlagEnum.enableGeocodingPreferences,
+        FeatureFlagEnum.enableGeocodingRadiusMethod,
+        FeatureFlagEnum.enableListingOpportunity,
+        FeatureFlagEnum.enablePartnerDemographics,
+        FeatureFlagEnum.enablePartnerSettings,
+      ],
+    }),
   });
-  await prismaClient.featureFlags.create({
-    data: featureFlagFactory(
-      FeatureFlagEnum.enableAccessibilityFeatures,
-      true,
-      "When true, the 'accessibility features' section is displayed in listing creation/edit and the public listing view",
-      [jurisdiction.id],
-    ),
+  // unit group jurisdiction
+  const lakeviewJurisdiction = await prismaClient.jurisdictions.create({
+    data: jurisdictionFactory('Lakeview', {
+      featureFlags: [
+        FeatureFlagEnum.enableUnitGroups,
+        FeatureFlagEnum.hideCloseListingButton,
+        FeatureFlagEnum.enableHomeType,
+        FeatureFlagEnum.enableAccessibilityFeatures,
+        FeatureFlagEnum.enableUtilitiesIncluded,
+        FeatureFlagEnum.enableIsVerified,
+        FeatureFlagEnum.enableNeighborhoodAmenities,
+        FeatureFlagEnum.enableMarketingStatus,
+        FeatureFlagEnum.enableRegions,
+        FeatureFlagEnum.enableSection8Question,
+        FeatureFlagEnum.enableSingleUseCode,
+        FeatureFlagEnum.enableGeocodingPreferences,
+        FeatureFlagEnum.enableGeocodingRadiusMethod,
+        FeatureFlagEnum.enableListingOpportunity,
+        FeatureFlagEnum.enablePartnerDemographics,
+        FeatureFlagEnum.enablePartnerSettings,
+      ],
+    }),
   });
-  await prismaClient.featureFlags.create({
-    data: featureFlagFactory(
-      FeatureFlagEnum.enableUtilitiesIncluded,
-      true,
-      "When true, the 'utilities included' section is displayed in listing creation/edit and the public listing view",
-      [jurisdiction.id],
-    ),
+  // "Core" features enabled jurisdiction
+  const bridgeBayJurisdiction = await prismaClient.jurisdictions.create({
+    data: jurisdictionFactory('Bridge Bay', {
+      featureFlags: [
+        FeatureFlagEnum.enableGeocodingPreferences,
+        FeatureFlagEnum.enableGeocodingRadiusMethod,
+        FeatureFlagEnum.enableListingOpportunity,
+        FeatureFlagEnum.enablePartnerDemographics,
+        FeatureFlagEnum.enablePartnerSettings,
+      ],
+    }),
   });
-  await prismaClient.featureFlags.create({
-    data: featureFlagFactory(
-      FeatureFlagEnum.enableNeighborhoodAmenities,
-      true,
-      "When true, the 'neighborhood amenities' section is displayed in listing creation/edit and the public listing view",
-      [jurisdiction.id],
-    ),
-  });
-  await prismaClient.featureFlags.create({
-    data: featureFlagFactory(
-      FeatureFlagEnum.hideCloseListingButton,
-      false,
-      'When true, close button is hidden on the listing edit form',
-      [jurisdiction.id],
-    ),
-  });
-  await prismaClient.featureFlags.create({
-    data: featureFlagFactory(
-      'enableRegions',
-      false,
-      'When true, the region can be defined for the building address',
-      [jurisdiction.id],
-    ),
-  });
-  await prismaClient.featureFlags.create({
-    data: featureFlagFactory(
-      'enableIsVerified',
-      false,
-      'When true, the listing can ba have its contents manually verified by a user',
-      [jurisdiction.id],
-    ),
-  });
-  await prismaClient.featureFlags.create({
-    data: featureFlagFactory(
-      'enableSection8Question',
-      false,
-      'When true, the Section 8 listing data will be visible',
-      [jurisdiction.id],
-    ),
-  });
-  await prismaClient.featureFlags.create({
-    data: featureFlagFactory(
-      FeatureFlagEnum.enableUnitGroups,
-      false,
-      'When true, uses unit groups instead of units',
-      [jurisdiction.id],
-    ),
-  });
-  await prismaClient.featureFlags.create({
-    data: featureFlagFactory(
-      FeatureFlagEnum.enableMarketingStatus,
-      false,
-      "When true, the 'marketing status' sub-section is displayed in listing creation/edit and the public listing view",
-      [jurisdiction.id],
-    ),
-  });
+
   // create admin user
   await prismaClient.userAccounts.create({
     data: await userFactory({
       roles: { isAdmin: true },
       email: 'admin@example.com',
       confirmedAt: new Date(),
-      jurisdictionIds: [jurisdiction.id, additionalJurisdiction.id],
+      jurisdictionIds: [mainJurisdiction.id, lakeviewJurisdiction.id],
       acceptedTerms: true,
       password: 'abcdef',
     }),
@@ -156,7 +123,7 @@ export const stagingSeed = async (
       roles: { isJurisdictionalAdmin: true },
       email: 'jurisdiction-admin@example.com',
       confirmedAt: new Date(),
-      jurisdictionIds: [jurisdiction.id],
+      jurisdictionIds: [mainJurisdiction.id],
       acceptedTerms: true,
     }),
   });
@@ -166,7 +133,7 @@ export const stagingSeed = async (
       roles: { isPartner: true },
       email: 'partner@example.com',
       confirmedAt: new Date(),
-      jurisdictionIds: [jurisdiction.id],
+      jurisdictionIds: [mainJurisdiction.id],
       acceptedTerms: true,
     }),
   });
@@ -175,7 +142,7 @@ export const stagingSeed = async (
       roles: { isAdmin: true },
       email: 'unverified@example.com',
       confirmedAt: new Date(),
-      jurisdictionIds: [jurisdiction.id],
+      jurisdictionIds: [mainJurisdiction.id],
       acceptedTerms: false,
     }),
   });
@@ -184,7 +151,7 @@ export const stagingSeed = async (
       roles: { isAdmin: true },
       email: 'mfauser@bloom.com',
       confirmedAt: new Date(),
-      jurisdictionIds: [jurisdiction.id],
+      jurisdictionIds: [mainJurisdiction.id],
       acceptedTerms: true,
       mfaEnabled: true,
       singleUseCode: '12345',
@@ -194,13 +161,30 @@ export const stagingSeed = async (
     data: await userFactory({
       email: 'public-user@example.com',
       confirmedAt: new Date(),
-      jurisdictionIds: [jurisdiction.id],
+      jurisdictionIds: [mainJurisdiction.id],
       password: 'abcdef',
+    }),
+  });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: {
+        isAdmin: false,
+        isPartner: true,
+        isJurisdictionalAdmin: false,
+      },
+      email: `partner-user@example.com`,
+      confirmedAt: new Date(),
+      jurisdictionIds: [
+        mainJurisdiction.id,
+        lakeviewJurisdiction.id,
+        bridgeBayJurisdiction.id,
+      ],
+      acceptedTerms: true,
     }),
   });
   // add jurisdiction specific translations and default ones
   await prismaClient.translations.create({
-    data: translationFactory(jurisdiction.id, jurisdiction.name),
+    data: translationFactory(mainJurisdiction.id, mainJurisdiction.name),
   });
   await prismaClient.translations.create({
     data: translationFactory(undefined, undefined, LanguagesEnum.es),
@@ -210,20 +194,28 @@ export const stagingSeed = async (
   });
   // build ami charts
   const amiChart = await prismaClient.amiChart.create({
-    data: amiChartFactory(10, jurisdiction.id),
+    data: amiChartFactory(10, mainJurisdiction.id),
   });
   await prismaClient.amiChart.create({
-    data: amiChartFactory(8, additionalJurisdiction.id),
+    data: amiChartFactory(8, lakeviewJurisdiction.id),
   });
   // Create map layers
   await prismaClient.mapLayers.create({
-    data: mapLayerFactory(jurisdiction.id, 'Redlined Districts', redlinedMap),
+    data: mapLayerFactory(
+      mainJurisdiction.id,
+      'Redlined Districts',
+      redlinedMap,
+    ),
   });
   const mapLayer = await prismaClient.mapLayers.create({
-    data: mapLayerFactory(jurisdiction.id, 'Washington DC', simplifiedDCMap),
+    data: mapLayerFactory(
+      mainJurisdiction.id,
+      'Washington DC',
+      simplifiedDCMap,
+    ),
   });
   const cityEmployeeQuestion = await prismaClient.multiselectQuestions.create({
-    data: multiselectQuestionFactory(jurisdiction.id, {
+    data: multiselectQuestionFactory(mainJurisdiction.id, {
       multiselectQuestion: {
         text: 'City Employees',
         description: 'Employees of the local city.',
@@ -240,7 +232,7 @@ export const stagingSeed = async (
     }),
   });
   const workInCityQuestion = await prismaClient.multiselectQuestions.create({
-    data: multiselectQuestionFactory(jurisdiction.id, {
+    data: multiselectQuestionFactory(mainJurisdiction.id, {
       optOut: true,
       multiselectQuestion: {
         text: 'Work in the city',
@@ -271,7 +263,7 @@ export const stagingSeed = async (
   });
   const veteranProgramQuestion = await prismaClient.multiselectQuestions.create(
     {
-      data: multiselectQuestionFactory(jurisdiction.id, {
+      data: multiselectQuestionFactory(mainJurisdiction.id, {
         multiselectQuestion: {
           text: 'Veteran',
           description:
@@ -289,7 +281,7 @@ export const stagingSeed = async (
   );
   const multiselectQuestionPrograms =
     await prismaClient.multiselectQuestions.create({
-      data: multiselectQuestionFactory(jurisdiction.id, {
+      data: multiselectQuestionFactory(mainJurisdiction.id, {
         multiselectQuestion: {
           text: 'Housing Situation',
           description:
@@ -320,10 +312,11 @@ export const stagingSeed = async (
   // create pre-determined values
   const unitTypes = await unitTypeFactoryAll(prismaClient);
   await unitAccessibilityPriorityTypeFactoryAll(prismaClient);
-  await reservedCommunityTypeFactoryAll(jurisdiction.id, prismaClient);
+  await reservedCommunityTypeFactoryAll(mainJurisdiction.id, prismaClient);
   // list of predefined listings WARNING: images only work if image setup is cloudinary on exygy account
   [
     {
+      jurisdictionId: mainJurisdiction.id,
       listing: {
         additionalApplicationSubmissionNotes: null,
         digitalApplication: true,
@@ -465,6 +458,7 @@ export const stagingSeed = async (
       applications: [await applicationFactory(), await applicationFactory()],
     },
     {
+      jurisdictionId: mainJurisdiction.id,
       listing: {
         additionalApplicationSubmissionNotes: null,
         digitalApplication: true,
@@ -733,6 +727,7 @@ export const stagingSeed = async (
       ],
     },
     {
+      jurisdictionId: mainJurisdiction.id,
       listing: {
         additionalApplicationSubmissionNotes: null,
         digitalApplication: true,
@@ -856,6 +851,7 @@ export const stagingSeed = async (
       ],
     },
     {
+      jurisdictionId: mainJurisdiction.id,
       listing: {
         additionalApplicationSubmissionNotes: null,
         digitalApplication: true,
@@ -961,6 +957,7 @@ export const stagingSeed = async (
       },
     },
     {
+      jurisdictionId: mainJurisdiction.id,
       listing: {
         additionalApplicationSubmissionNotes: null,
         digitalApplication: true,
@@ -1046,6 +1043,7 @@ export const stagingSeed = async (
       multiselectQuestions: [workInCityQuestion],
     },
     {
+      jurisdictionId: mainJurisdiction.id,
       listing: {
         additionalApplicationSubmissionNotes: null,
         digitalApplication: true,
@@ -1282,21 +1280,152 @@ export const stagingSeed = async (
         },
       ],
     },
+    {
+      jurisdictionId: lakeviewJurisdiction.id,
+      listing: {
+        additionalApplicationSubmissionNotes: null,
+        digitalApplication: true,
+        commonDigitalApplication: true,
+        paperApplication: false,
+        referralOpportunity: false,
+        assets: [],
+        accessibility: null,
+        amenities: null,
+        buildingTotalUnits: 0,
+        developer: 'Bloom',
+        householdSizeMax: 0,
+        householdSizeMin: 0,
+        neighborhood: 'Hollywood',
+        petPolicy: null,
+        smokingPolicy: null,
+        unitAmenities: null,
+        servicesOffered: null,
+        yearBuilt: null,
+        applicationDueDate: null,
+        applicationOpenDate: dayjs(new Date()).subtract(70, 'days').toDate(),
+        applicationFee: null,
+        applicationOrganization: null,
+        applicationPickUpAddressOfficeHours: null,
+        applicationPickUpAddressType: null,
+        applicationDropOffAddressOfficeHours: null,
+        applicationDropOffAddressType: null,
+        applicationMailingAddressType: null,
+        buildingSelectionCriteria: null,
+        costsNotIncluded: null,
+        creditHistory: null,
+        criminalBackground: null,
+        depositMin: '0',
+        depositMax: '0',
+        depositHelperText:
+          "or one month's rent may be higher for lower credit scores",
+        disableUnitsAccordion: false,
+        leasingAgentEmail: 'bloom@exygy.com',
+        leasingAgentName: 'Bloom Bloomington',
+        leasingAgentOfficeHours: null,
+        leasingAgentPhone: '(555) 555-5555',
+        leasingAgentTitle: null,
+        name: 'Lakeview villa',
+        postmarkedApplicationsReceivedByDate: null,
+        programRules: null,
+        rentalAssistance:
+          'Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.',
+        rentalHistory: null,
+        requiredDocuments: null,
+        specialNotes: null,
+        waitlistCurrentSize: null,
+        waitlistMaxSize: null,
+        whatToExpect:
+          'Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.',
+        status: ListingsStatusEnum.active,
+        reviewOrderType: ReviewOrderTypeEnum.waitlist,
+        unitsAvailable: 0,
+        displayWaitlistSize: false,
+        reservedCommunityDescription: null,
+        reservedCommunityMinAge: null,
+        resultLink: null,
+        isWaitlistOpen: false,
+        waitlistOpenSpots: null,
+        customMapPin: false,
+        contentUpdatedAt: new Date(),
+        publishedAt: new Date(),
+        listingsBuildingAddress: {
+          create: yellowstoneAddress,
+        },
+        listingsApplicationPickUpAddress: undefined,
+        listingsLeasingAgentAddress: undefined,
+        listingsApplicationDropOffAddress: undefined,
+        listingsApplicationMailingAddress: undefined,
+        reservedCommunityTypes: undefined,
+        listingImages: {
+          create: {
+            ordinal: 0,
+            assets: {
+              create: {
+                label: 'cloudinaryBuilding',
+                fileId: 'dev/apartment_building_2_b7ujdd',
+              },
+            },
+          },
+        },
+        listingNeighborhoodAmenities: {
+          create: {
+            groceryStores: 'There are grocery stores',
+            pharmacies: 'There are pharmacies',
+            healthCareResources: 'There is health care',
+            parksAndCommunityCenters: 'There are parks',
+            schools: 'There are schools',
+            publicTransportation: 'There is public transportation',
+          },
+        },
+      },
+      unitGroups: [
+        {
+          floorMin: 1,
+          floorMax: 2,
+          maxOccupancy: 3,
+          minOccupancy: 1,
+          bathroomMin: 1,
+          bathroomMax: 1,
+          totalCount: 10,
+          totalAvailable: 5,
+          sqFeetMin: '750.00',
+          sqFeetMax: '1000.00',
+          // amiChart: { connect: { id: amiChart.id } },
+          unitGroupAmiLevels: {
+            create: {
+              amiPercentage: 30,
+              monthlyRentDeterminationType:
+                MonthlyRentDeterminationTypeEnum.flatRent,
+              flatRentValue: 1400.0,
+              amiChart: { connect: { id: amiChart.id } },
+            },
+          },
+          unitTypes: {
+            connect: {
+              id: unitTypes[0].id,
+            },
+          },
+        },
+      ],
+    },
   ].map(
     async (
       value: {
+        jurisdictionId: string;
         listing: Prisma.ListingsCreateInput;
         units?: Prisma.UnitsCreateWithoutListingsInput[];
+        unitGroups?: Prisma.UnitGroupCreateWithoutListingsInput[];
         multiselectQuestions?: MultiselectQuestions[];
         applications?: Prisma.ApplicationsCreateInput[];
       },
       index,
     ) => {
-      const listing = await listingFactory(jurisdiction.id, prismaClient, {
+      const listing = await listingFactory(value.jurisdictionId, prismaClient, {
         amiChart: amiChart,
-        numberOfUnits: index,
+        numberOfUnits: (!value.unitGroups && index) || 0,
         listing: value.listing,
         units: value.units,
+        unitGroups: value.unitGroups,
         multiselectQuestions: value.multiselectQuestions,
         applications: value.applications,
         afsLastRunSetInPast: true,
@@ -1304,22 +1433,22 @@ export const stagingSeed = async (
       const savedListing = await prismaClient.listings.create({
         data: listing,
       });
-      if (index === 0) {
-        await prismaClient.userAccounts.create({
-          data: await userFactory({
-            roles: {
-              isAdmin: false,
-              isPartner: true,
-              isJurisdictionalAdmin: false,
-            },
-            email: 'partner-user@example.com',
-            confirmedAt: new Date(),
-            jurisdictionIds: [jurisdiction.id, additionalJurisdiction.id],
-            acceptedTerms: true,
-            listings: [savedListing.id],
-          }),
-        });
-      }
+      await prismaClient.userAccounts.create({
+        data: await userFactory({
+          roles: {
+            isAdmin: false,
+            isPartner: true,
+            isJurisdictionalAdmin: false,
+          },
+          email: `partner-user-${savedListing.name
+            .toLowerCase()
+            .replace(' ', '')}@example.com`,
+          confirmedAt: new Date(),
+          jurisdictionIds: [savedListing.jurisdictionId],
+          acceptedTerms: true,
+          listings: [savedListing.id],
+        }),
+      });
     },
   );
 };
