@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import ChevronDown from "@heroicons/react/20/solid/ChevronDownIcon"
+import ChevronUp from "@heroicons/react/20/solid/ChevronUpIcon"
 import MenuIcon from "@heroicons/react/20/solid/Bars3Icon"
 import { Button, Heading, Icon, Link } from "@bloom-housing/ui-seeds"
 import styles from "./SiteHeader.module.scss"
@@ -15,35 +16,51 @@ export interface HeaderLink {
 interface HeaderLinkProps {
   link: HeaderLink
   openSubMenus: string[]
+  toggleSubMenu: () => void
 }
 
-// export interface MenuLink {
-//   className?: string
-//   href?: string
-//   iconClassName?: string
-//   iconElement?: React.ReactNode
-//   iconSrc?: string
-//   onClick?: () => void
-//   subMenuLinks?: MenuLink[]
-//   title: string
-// }
-
-const DesktopHeaderLink = (props: HeaderLinkProps) => {
+const HeaderLink = (props: HeaderLinkProps) => {
+  const openSubMenu = props.openSubMenus.indexOf(props.link.label) >= 0
   if (props.link.subMenuLinks?.length) {
     // Dropdown
     return (
-      <li className={styles["dropdown-link-container"]}>
-        <button className={styles["link"]} onClick={props.link.onClick}>
+      <li className={styles["dropdown-link-container"]} role={"menuitem"}>
+        <button
+          className={`${styles["link"]} ${
+            openSubMenu ? styles["show-submenu-button"] : styles["hide-submenu-button"]
+          }`}
+          aria-haspopup={"menu"}
+          onClick={props.link.onClick}
+          aria-expanded={openSubMenu}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              event.preventDefault()
+              props.toggleSubMenu()
+            }
+            if (event.key === "Escape") {
+              props.toggleSubMenu()
+            }
+            if (event.key === "ArrowUp") {
+              //todo
+            }
+          }}
+        >
           {props.link.label}
           <Icon size={"md"} className={styles["dropdown-icon"]}>
-            <ChevronDown />
+            {openSubMenu ? <ChevronUp /> : <ChevronDown />}
           </Icon>
         </button>
-        <ul className={styles["submenu-container"]}>
+        <ul
+          className={`${styles["submenu-container"]} ${
+            openSubMenu ? styles["show-submenu"] : styles["hide-submenu"]
+          }`}
+          role={"menu"}
+          aria-orientation="vertical"
+        >
           {props.link.subMenuLinks.map((subMenuLink, index) => {
             if (subMenuLink.href) {
               return (
-                <li className={styles["submenu-item"]} key={index}>
+                <li className={styles["submenu-item"]} key={index} role={"menuitem"}>
                   <Link className={styles["submenu-link"]} href={subMenuLink.href}>
                     {subMenuLink.label}
                   </Link>
@@ -51,7 +68,7 @@ const DesktopHeaderLink = (props: HeaderLinkProps) => {
               )
             } else {
               return (
-                <li className={styles["submenu-item"]} key={index}>
+                <li className={styles["submenu-item"]} key={index} role={"menuitem"}>
                   <button className={styles["submenu-link"]} onClick={subMenuLink.onClick}>
                     {subMenuLink.label}
                   </button>
@@ -66,7 +83,7 @@ const DesktopHeaderLink = (props: HeaderLinkProps) => {
     // Single link
     if (props.link.href) {
       return (
-        <li>
+        <li role={"menuitem"}>
           <Link className={styles["link"]} href={props.link.href}>
             {props.link.label}
           </Link>
@@ -74,74 +91,8 @@ const DesktopHeaderLink = (props: HeaderLinkProps) => {
       )
     } else {
       return (
-        <li>
+        <li role={"menuitem"}>
           <button className={styles["link"]} onClick={props.link.onClick}>
-            {props.link.label}
-          </button>
-        </li>
-      )
-    }
-  }
-}
-
-const MobileHeaderLink = (props: HeaderLinkProps) => {
-  const openSubMenu = props.openSubMenus.indexOf(props.link.label) >= 0
-  if (props.link.subMenuLinks?.length) {
-    // Dropdown
-    return (
-      <li className={styles["mobile-dropdown-link-container"]}>
-        <button
-          className={`${styles["mobile-link"]} ${
-            openSubMenu ? styles["show-submenu-button"] : styles["hide-submenu-button"]
-          }`}
-          onClick={props.link.onClick}
-        >
-          {props.link.label}
-          <Icon size={"md"} className={styles["dropdown-icon"]}>
-            <ChevronDown />
-          </Icon>
-        </button>
-        <ul
-          className={`${styles["mobile-submenu-container"]} ${
-            openSubMenu ? styles["show-submenu"] : styles["hide-submenu"]
-          }`}
-        >
-          {props.link.subMenuLinks.map((subMenuLink, index) => {
-            if (subMenuLink.href) {
-              return (
-                <li className={styles["mobile-submenu-item"]} key={index}>
-                  <Link className={styles["mobile-submenu-link"]} href={subMenuLink.href}>
-                    {subMenuLink.label}
-                  </Link>
-                </li>
-              )
-            } else {
-              return (
-                <li className={styles["mobile-submenu-item"]} key={index}>
-                  <button className={styles["mobile-submenu-link"]} onClick={subMenuLink.onClick}>
-                    {subMenuLink.label}
-                  </button>
-                </li>
-              )
-            }
-          })}
-        </ul>
-      </li>
-    )
-  } else {
-    // Single link
-    if (props.link.href) {
-      return (
-        <li>
-          <Link className={styles["mobile-link"]} href={props.link.href}>
-            {props.link.label}
-          </Link>
-        </li>
-      )
-    } else {
-      return (
-        <li>
-          <button className={styles["mobile-link"]} onClick={props.link.onClick}>
             {props.link.label}
           </button>
         </li>
@@ -200,19 +151,12 @@ interface SiteHeaderProps {
 }
 
 export const SiteHeader = (props: SiteHeaderProps) => {
-  const [linksWrapping, setLinksWrapping] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [openSubMenus, setOpenSubMenus] = useState([])
 
   // Detects if element has wrapped onto the next line
   useEffect(() => {
     const handler = () => {
-      const element = document.getElementById("links-container-desktop")
-      if (element.offsetTop > 60) {
-        setLinksWrapping(true)
-      } else {
-        setLinksWrapping(false)
-      }
       setOpenSubMenus([])
       setMobileMenuOpen(false)
     }
@@ -223,6 +167,15 @@ export const SiteHeader = (props: SiteHeaderProps) => {
       window.removeEventListener("resize", handler)
     }
   }, [])
+
+  const toggleSubMenu = (label: string) => {
+    setOpenSubMenus(
+      openSubMenus.indexOf(label) >= 0
+        ? openSubMenus.filter((menu) => menu !== label)
+        : [...openSubMenus, label]
+    )
+    return
+  }
 
   return (
     <nav className={styles["site-header-container"]} aria-label={"Main"}>
@@ -260,21 +213,19 @@ export const SiteHeader = (props: SiteHeaderProps) => {
               {props.subtitle && <p className={styles["title-subheading"]}>{props.subtitle}</p>}
             </div>
           </Link>
-          <ul
-            className={`${styles["links-container-desktop"]} ${
-              linksWrapping ? styles["links-container-wrapping"] : ""
-            }`}
-            id={"links-container-desktop"}
-          >
+          <ul className={`${styles["links-container-desktop"]}`} role={"menubar"}>
             {props.links?.map((link, index) => {
-              return <DesktopHeaderLink link={link} key={index} openSubMenus={openSubMenus} />
+              return (
+                <HeaderLink
+                  link={link}
+                  key={index}
+                  openSubMenus={openSubMenus}
+                  toggleSubMenu={() => toggleSubMenu(link.label)}
+                />
+              )
             })}
           </ul>
-          <div
-            className={`${styles["links-container-mobile"]} ${
-              linksWrapping ? styles["links-container-wrapping"] : ""
-            }`}
-          >
+          <div className={`${styles["links-container-mobile"]}`}>
             <Button
               variant={"primary-outlined"}
               className={styles["menu-button"]}
@@ -292,18 +243,21 @@ export const SiteHeader = (props: SiteHeaderProps) => {
         </div>
       </HeadingWrapper>
       {mobileMenuOpen && (
-        <div className={styles["mobile-submenu-container"]}>
-          <ul>
+        <div className={`${styles["submenu-container"]} ${styles["mobile-submenu-container"]}`}>
+          <ul role={"menubar"} aria-orientation="vertical">
             {props.links?.map((link, index) => {
               if (link.subMenuLinks)
                 link.onClick = () => {
-                  setOpenSubMenus(
-                    openSubMenus.indexOf(link.label) >= 0
-                      ? openSubMenus.filter((menu) => menu !== link.label)
-                      : [...openSubMenus, link.label]
-                  )
+                  toggleSubMenu(link.label)
                 }
-              return <MobileHeaderLink link={link} key={index} openSubMenus={openSubMenus} />
+              return (
+                <HeaderLink
+                  link={link}
+                  key={index}
+                  openSubMenus={openSubMenus}
+                  toggleSubMenu={() => toggleSubMenu(link.label)}
+                />
+              )
             })}
           </ul>
         </div>
