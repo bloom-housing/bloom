@@ -166,6 +166,34 @@ const getHeaderLinks = (
         },
       ],
     })
+    headerLinks.push({
+      label: "account 2",
+      subMenuLinks: [
+        {
+          label: t("nav.myDashboard"),
+          href: "/account/dashboard",
+        },
+        {
+          label: t("account.myApplications"),
+          href: "/account/applications",
+        },
+        {
+          label: t("account.accountSettings"),
+          href: "/account/edit",
+        },
+        {
+          label: t("nav.signOut"),
+          onClick: () => {
+            const signOutFxn = async () => {
+              await router.push("/sign-in")
+              await signOut()
+              addToast(t(`authentication.signOut.success`), { variant: "primary" })
+            }
+            void signOutFxn()
+          },
+        },
+      ],
+    })
   } else {
     headerLinks.push({
       label: t("nav.signIn"),
@@ -194,7 +222,8 @@ const Layout = (props) => {
         </Head>
         {process.env.showNewSeedsDesigns ? (
           <SiteHeader
-            title={"Bay Area Housing Portal"}
+            title={"Alameda County Housing Portal"}
+            // subtitle={"City of Detroit"}
             languages={languages?.map((lang) => {
               return {
                 label: lang.label,
