@@ -4,6 +4,7 @@ import Card from "@bloom-housing/ui-seeds/src/blocks/Card"
 import React from "react"
 import styles from "./BloomCard.module.scss"
 import { CustomIconMap, CustomIconType } from "../CustomIconMap"
+import { ClickableCard } from "./ClickableCard"
 
 interface BloomCardProps {
   customIcon?: CustomIconType
@@ -16,6 +17,7 @@ interface BloomCardProps {
   className?: string
   iconClassName?: string
   variant?: "form" | "block"
+  clickable?: boolean
   headerLink?: React.ReactNode
 }
 
@@ -54,8 +56,8 @@ const BloomCard = (props: BloomCardProps) => {
 
   const title = getTitle()
 
-  return (
-    <Card spacing="lg" className={classNames.join(" ")}>
+  const cardContent = (
+    <>
       {title && (
         <Card.Header divider={props.variant === "block" ? undefined : "inset"}>
           {props?.customIcon && (
@@ -70,9 +72,22 @@ const BloomCard = (props: BloomCardProps) => {
           {title}
         </Card.Header>
       )}
-
       {props.children}
-    </Card>
+    </>
+  )
+
+  return (
+    <>
+      {props.clickable ? (
+        <ClickableCard cardProps={{ spacing: "lg" }} className={classNames.join(" ")}>
+          {cardContent}
+        </ClickableCard>
+      ) : (
+        <Card spacing="lg" className={classNames.join(" ")}>
+          {cardContent}
+        </Card>
+      )}
+    </>
   )
 }
 
