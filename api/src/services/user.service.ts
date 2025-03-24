@@ -989,6 +989,11 @@ export class UserService {
     return { success: true };
   }
 
+  /**
+   * Returns the names & ids of any listings a user has favorited
+   * @param userId - typically the user who is logged in
+   * @returns an array of Id DTOs
+   */
   async favoriteListings(userId: string): Promise<IdDTO[]> {
     const rawUser = await this.findUserOrError(
       { userId: userId },
