@@ -396,12 +396,16 @@ export const saveListingFavorite = async (
   listingId: string,
   favorited: boolean
 ) => {
-  await userService.modifyFavoriteListings({
-    body: {
-      id: listingId,
-      action: favorited ? ModificationEnum.add : ModificationEnum.remove,
-    },
-  })
+  try {
+    await userService.modifyFavoriteListings({
+      body: {
+        id: listingId,
+        action: favorited ? ModificationEnum.add : ModificationEnum.remove,
+      },
+    })
+  } catch (err) {
+    console.log(err)
+  }
 }
 
 export const fetchFavoriteListingIds = async (userId: string, userService: UserService) => {
