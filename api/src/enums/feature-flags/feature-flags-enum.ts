@@ -20,10 +20,12 @@ export enum FeatureFlagEnum {
   enablePartnerSettings = 'enablePartnerSettings',
 }
 
+// List of all of existing flags and their descriptions.
+// This should be the source of all feature flags in our system
 export const featureFlagMap: { name: string; description: string }[] = [
   {
     name: FeatureFlagEnum.enableHomeType,
-    description: 'When true, uses unit groups instead of units',
+    description: 'When true, home type feature is turned on',
   },
   {
     name: FeatureFlagEnum.enableAccessibilityFeatures,
@@ -43,11 +45,11 @@ export const featureFlagMap: { name: string; description: string }[] = [
   {
     name: FeatureFlagEnum.enableNeighborhoodAmenities,
     description:
-      "When true, the 'neighborhood amenities' section is displayed in listing creation/edit and the public listing view	",
+      "When true, the 'neighborhood amenities' section is displayed in listing creation/edit and the public listing view",
   },
   {
     name: FeatureFlagEnum.hideCloseListingButton,
-    description: 'When true, close button is hidden on the listing edit form	',
+    description: 'When true, close button is hidden on the listing edit form',
   },
   {
     name: FeatureFlagEnum.enableMarketingStatus,
@@ -70,7 +72,7 @@ export const featureFlagMap: { name: string; description: string }[] = [
   {
     name: FeatureFlagEnum.enableSingleUseCode,
     description:
-      'When true, the backend allows for logging into this jurisdiction using the single use code flow	',
+      'When true, the backend allows for logging into this jurisdiction using the single use code flow',
   },
   {
     name: FeatureFlagEnum.enableGeocodingPreferences,
