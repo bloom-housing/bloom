@@ -19,7 +19,7 @@ export interface HeaderLink {
 interface HeaderLinkProps {
   link: HeaderLink
   openSubMenu: string
-  toggleSubMenu: () => void
+  toggleSubMenu: (label: string, setFocus: boolean) => void
   clickRef: React.MutableRefObject<any>
   setOpenSubmenu: React.Dispatch<React.SetStateAction<string>>
   setMobileMenuOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -29,6 +29,7 @@ interface HeaderLinkProps {
 }
 
 const HeaderLink = (props: HeaderLinkProps) => {
+  const parentLink = useRef(null)
   const openSubMenu = props.openSubMenu === props.link.label
   if (props.link.subMenuLinks?.length) {
     // Dropdown
@@ -40,21 +41,22 @@ const HeaderLink = (props: HeaderLinkProps) => {
           }`}
           onClick={(event) => {
             event.stopPropagation()
-            props.toggleSubMenu()
+            props.toggleSubMenu(props.link.label, false)
           }}
           aria-expanded={openSubMenu}
           aria-controls={`${props.link.label}-submenu`}
-          id={`${props.link.label}-menu`}
+          ref={parentLink}
           onKeyDown={(event) => {
             if (event.key === "Enter") {
               event.preventDefault()
-              props.toggleSubMenu()
+              props.toggleSubMenu(props.link.label, true)
             }
             if (event.key === "ArrowDown") {
-              props.toggleSubMenu()
+              event.preventDefault()
+              props.toggleSubMenu(props.link.label, true)
             }
             if (event.key === "Escape") {
-              props.toggleSubMenu()
+              props.toggleSubMenu(props.link.label, false)
             }
             if (event.shiftKey && event.key === "Tab") {
               if (props.firstItem) {
@@ -101,7 +103,7 @@ const HeaderLink = (props: HeaderLinkProps) => {
                         }
                         if (event.key === "Escape") {
                           props.setOpenSubmenu(null)
-                          document.getElementById(`${props.link.label}-menu`).focus()
+                          parentLink?.current?.focus()
                         }
                         if (event.key === "ArrowDown") {
                           event.preventDefault() // Prevent page scroll
@@ -302,17 +304,17 @@ export const SiteHeader = (props: SiteHeaderProps) => {
     }
   }, [])
 
-  useEffect(() => {
-    if (openSubMenu) {
-      document.getElementById(`submenu-link-${0}`).focus()
-    }
-  }, [openSubMenu])
+  const setFocusToFirstElement = () => {
+    document.getElementById(`submenu-link-${0}`).focus()
+    return
+  }
 
-  const toggleSubMenu = (label: string) => {
+  const toggleSubMenu = (label: string, setFocus: boolean) => {
     if (openSubMenu === label) {
       setOpenSubMenu(null)
     } else {
       setOpenSubMenu(label)
+      if (setFocus) setTimeout(() => setFocusToFirstElement(), 0)
     }
     return
   }
@@ -360,7 +362,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
                   link={link}
                   key={index}
                   openSubMenu={openSubMenu}
-                  toggleSubMenu={() => toggleSubMenu(link.label)}
+                  toggleSubMenu={toggleSubMenu}
                   clickRef={submenuRef}
                   setOpenSubmenu={setOpenSubMenu}
                   lastItem={index === props.links?.length - 1}
@@ -400,14 +402,14 @@ export const SiteHeader = (props: SiteHeaderProps) => {
             {props.links?.map((link, index) => {
               if (link.subMenuLinks)
                 link.onClick = () => {
-                  toggleSubMenu(link.label)
+                  toggleSubMenu(link.label, false)
                 }
               return (
                 <HeaderLink
                   link={link}
                   key={index}
                   openSubMenu={openSubMenu}
-                  toggleSubMenu={() => toggleSubMenu(link.label)}
+                  toggleSubMenu={toggleSubMenu}
                   clickRef={null}
                   setOpenSubmenu={setOpenSubMenu}
                   lastItem={index === props.links?.length - 1}
