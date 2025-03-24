@@ -44,6 +44,7 @@ const HeaderLink = (props: HeaderLinkProps) => {
           }}
           aria-expanded={openSubMenu}
           aria-controls={`${props.link.label}-submenu`}
+          id={`${props.link.label}-menu`}
           onKeyDown={(event) => {
             if (event.key === "Enter") {
               event.preventDefault()
@@ -55,10 +56,12 @@ const HeaderLink = (props: HeaderLinkProps) => {
             if (event.key === "Escape") {
               props.toggleSubMenu()
             }
-            if (event.key === "Escape") {
-              props.toggleSubMenu()
+            if (event.shiftKey && event.key === "Tab") {
+              if (props.firstItem) {
+                props.setMobileMenuOpen(false)
+              }
             }
-            if (event.key === "Tab") {
+            if (!event.shiftKey && event.key === "Tab") {
               if (props.lastItem) {
                 props.setMobileMenuOpen(false)
               }
@@ -86,22 +89,28 @@ const HeaderLink = (props: HeaderLinkProps) => {
                       className={styles["submenu-link"]}
                       href={subMenuLink.href}
                       onKeyDown={(event) => {
-                        if (event.key === "Tab") {
-                          if (index === props.link.subMenuLinks.length - 1) {
-                            props.setOpenSubmenu(null)
-                          }
-                        }
                         if (event.shiftKey && event.key === "Tab") {
                           if (index === 0) {
                             props.setOpenSubmenu(null)
                           }
                         }
+                        if (!event.shiftKey && event.key === "Tab") {
+                          if (index === props.link.subMenuLinks.length - 1) {
+                            props.setOpenSubmenu(null)
+                          }
+                        }
+                        if (event.key === "Escape") {
+                          props.setOpenSubmenu(null)
+                          document.getElementById(`${props.link.label}-menu`).focus()
+                        }
                         if (event.key === "ArrowDown") {
+                          event.preventDefault() // Prevent page scroll
                           if (index < props.link.subMenuLinks.length - 1) {
                             document.getElementById(`submenu-link-${index + 1}`).focus()
                           }
                         }
                         if (event.key === "ArrowUp") {
+                          event.preventDefault() // Prevent page scroll
                           if (index > 0) {
                             document.getElementById(`submenu-link-${index - 1}`).focus()
                           }
@@ -121,22 +130,24 @@ const HeaderLink = (props: HeaderLinkProps) => {
                       className={styles["submenu-link"]}
                       onClick={subMenuLink.onClick}
                       onKeyDown={(event) => {
-                        if (event.key === "Tab") {
-                          if (index === props.link.subMenuLinks.length - 1) {
-                            props.setOpenSubmenu(null)
-                          }
-                        }
                         if (event.shiftKey && event.key === "Tab") {
                           if (index === 0) {
                             props.setOpenSubmenu(null)
                           }
                         }
+                        if (!event.shiftKey && event.key === "Tab") {
+                          if (index === props.link.subMenuLinks.length - 1) {
+                            props.setOpenSubmenu(null)
+                          }
+                        }
                         if (event.key === "ArrowDown") {
+                          event.preventDefault() // Prevent page scroll
                           if (index < props.link.subMenuLinks.length - 1) {
                             document.getElementById(`submenu-link-${index + 1}`).focus()
                           }
                         }
                         if (event.key === "ArrowUp") {
+                          event.preventDefault() // Prevent page scroll
                           if (index > 0) {
                             document.getElementById(`submenu-link-${index - 1}`).focus()
                           }
@@ -163,6 +174,18 @@ const HeaderLink = (props: HeaderLinkProps) => {
             className={styles["link"]}
             href={props.link.href}
             aria-current={props.currentPath === props.link.href}
+            onKeyDown={(event) => {
+              if (event.shiftKey && event.key === "Tab") {
+                if (props.firstItem) {
+                  props.setMobileMenuOpen(false)
+                }
+              }
+              if (!event.shiftKey && event.key === "Tab") {
+                if (props.lastItem) {
+                  props.setMobileMenuOpen(false)
+                }
+              }
+            }}
           >
             {props.link.label}
           </LinkComponent>
@@ -171,7 +194,22 @@ const HeaderLink = (props: HeaderLinkProps) => {
     } else {
       return (
         <li>
-          <button className={styles["link"]} onClick={props.link.onClick}>
+          <button
+            className={styles["link"]}
+            onClick={props.link.onClick}
+            onKeyDown={(event) => {
+              if (event.shiftKey && event.key === "Tab") {
+                if (props.firstItem) {
+                  props.setMobileMenuOpen(false)
+                }
+              }
+              if (!event.shiftKey && event.key === "Tab") {
+                if (props.lastItem) {
+                  props.setMobileMenuOpen(false)
+                }
+              }
+            }}
+          >
             {props.link.label}
           </button>
         </li>
