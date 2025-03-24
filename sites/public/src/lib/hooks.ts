@@ -4,6 +4,7 @@ import qs from "qs"
 import { useRouter } from "next/router"
 import {
   EnumListingFilterParamsComparison,
+  FeatureFlagEnum,
   Jurisdiction,
   ListingFilterParams,
   ListingOrderByKeys,
@@ -60,8 +61,9 @@ export async function fetchBaseListingData(
   req: any
 ) {
   let listings
+  let pagination
   try {
-    const { id: jurisdictionId } = await fetchJurisdictionByName(req)
+    const { id: jurisdictionId, featureFlags } = await fetchJurisdictionByName(req)
 
     if (!jurisdictionId) {
       return listings
@@ -88,7 +90,12 @@ export async function fetchBaseListingData(
       limit: limit || "all",
       filter,
     }
-    if (page) {
+
+    const enablePagination =
+      featureFlags.find((flag) => flag.name === FeatureFlagEnum.enableListingPagination)?.active ||
+      false
+
+    if (page && enablePagination) {
       params.page = page
     }
     if (orderBy) {
@@ -108,12 +115,16 @@ export async function fetchBaseListingData(
       },
     })
 
-    listings = response.data
+    listings = response.data.items
+    pagination = enablePagination ? response.data.meta : null
   } catch (e) {
     console.log("fetchBaseListingData error: ", e)
   }
 
-  return listings
+  return {
+    items: listings,
+    meta: pagination,
+  }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
