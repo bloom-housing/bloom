@@ -18,6 +18,7 @@ export enum FeatureFlagEnum {
   enableListingOpportunity = 'enableListingOpportunity',
   enablePartnerDemographics = 'enablePartnerDemographics',
   enablePartnerSettings = 'enablePartnerSettings',
+  enableListingsPagination = 'enableListingPagination',
 }
 
 // List of all of existing flags and their descriptions.

@@ -107,6 +107,14 @@ export const stagingSeed = async (
     }),
   });
 
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory(
+      'enableListingPagination',
+      false,
+      'When true listings browser will display pagination controls section',
+      [jurisdiction.id],
+    ),
+  });
   // create admin user
   await prismaClient.userAccounts.create({
     data: await userFactory({
