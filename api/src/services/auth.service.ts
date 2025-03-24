@@ -50,6 +50,7 @@ export const ACCESS_TOKEN_AVAILABLE_OPTIONS: CookieOptions = {
   ...AUTH_COOKIE_OPTIONS,
   httpOnly: false,
 };
+
 type IdAndEmail = {
   id: string;
   email: string;
