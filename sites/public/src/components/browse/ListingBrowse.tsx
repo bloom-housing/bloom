@@ -92,46 +92,49 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
           </>
         </div>
         {props.paginationData && (
-          <div className={styles["pagination-wrapper"]}>
-            <div className={styles["previous-button"]}>
-              {isPreviousPageAvailable && (
-                <Button
-                  onClick={() =>
-                    props.paginationData.currentPage > 0 &&
-                    router.push({
-                      pathname: router.pathname,
-                      query: `page=${(props.paginationData.currentPage - 1).toString()}`,
-                    })
-                  }
-                  variant="primary-outlined"
-                  size="sm"
-                >
-                  {t("t.previous")}
-                </Button>
-              )}
-            </div>
-            <div className={styles["page-info"]}>
-              {t("listings.browseListings.pageInfo", {
-                currentPage: props.paginationData.currentPage,
-                totalPages: props.paginationData.totalPages,
-              })}
-            </div>
-            <div className={styles["next-button"]}>
-              {isNextPageAvailable && (
-                <Button
-                  onClick={() =>
-                    props.paginationData.currentPage < props.paginationData.totalPages &&
-                    router.push({
-                      pathname: router.pathname,
-                      query: `page=${(props.paginationData.currentPage + 1).toString()}`,
-                    })
-                  }
-                  variant="primary-outlined"
-                  size="sm"
-                >
-                  {t("t.next")}
-                </Button>
-              )}
+          <div className={styles["pagination-container"]}>
+            <div className={styles["pagination-content-wrapper"]}>
+              {" "}
+              <div className={styles["previous-button"]}>
+                {isPreviousPageAvailable && (
+                  <Button
+                    onClick={() =>
+                      props.paginationData.currentPage > 0 &&
+                      router.push({
+                        pathname: router.pathname,
+                        query: `page=${(props.paginationData.currentPage - 1).toString()}`,
+                      })
+                    }
+                    variant="primary-outlined"
+                    size="sm"
+                  >
+                    {t("t.previous")}
+                  </Button>
+                )}
+              </div>
+              <div className={styles["page-info"]}>
+                {t("listings.browseListings.pageInfo", {
+                  currentPage: props.paginationData.currentPage,
+                  totalPages: props.paginationData.totalPages,
+                })}
+              </div>
+              <div className={styles["next-button"]}>
+                {isNextPageAvailable && (
+                  <Button
+                    onClick={() =>
+                      props.paginationData.currentPage < props.paginationData.totalPages &&
+                      router.push({
+                        pathname: router.pathname,
+                        query: `page=${(props.paginationData.currentPage + 1).toString()}`,
+                      })
+                    }
+                    variant="primary-outlined"
+                    size="sm"
+                  >
+                    {t("t.next")}
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         )}
