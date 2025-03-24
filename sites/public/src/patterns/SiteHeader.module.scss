@@ -115,14 +115,17 @@
         flex-direction: row;
         align-items: flex-end;
         flex-wrap: wrap;
+        margin-left: auto;
+        justify-content: flex-end;
       }
       .links-container-mobile {
         display: none;
         @media (--sm-only) {
           display: flex;
+          min-width: fit-content;
         }
         align-items: center;
-        padding: var(--seeds-s2);
+        padding: var(--seeds-s1_5);
 
         .menu-button {
           height: fit-content;
@@ -167,15 +170,6 @@
 
     .dropdown-icon {
       margin-inline-start: var(--seeds-s1);
-    }
-  }
-
-  @media (--sm-and-up) {
-    li ul {
-      display: none;
-    }
-    li:hover ul {
-      display: block;
     }
   }
 

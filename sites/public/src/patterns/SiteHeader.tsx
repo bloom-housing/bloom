@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import ChevronDown from "@heroicons/react/20/solid/ChevronDownIcon"
 import ChevronUp from "@heroicons/react/20/solid/ChevronUpIcon"
 import MenuIcon from "@heroicons/react/20/solid/Bars3Icon"
 import { Button, Heading, Icon, Link } from "@bloom-housing/ui-seeds"
 import styles from "./SiteHeader.module.scss"
 import { t } from "@bloom-housing/ui-components"
+import { NavigationContext } from "@bloom-housing/ui-seeds/src/global/NavigationContext"
+import { useContext } from "react"
+import LinkComponent from "../components/core/LinkComponent"
 
 export interface HeaderLink {
   label: string
@@ -15,33 +18,50 @@ export interface HeaderLink {
 
 interface HeaderLinkProps {
   link: HeaderLink
-  openSubMenus: string[]
+  openSubMenu: string
   toggleSubMenu: () => void
+  clickRef: React.MutableRefObject<any>
+  setOpenSubmenu: React.Dispatch<React.SetStateAction<string>>
+  setMobileMenuOpen: React.Dispatch<React.SetStateAction<boolean>>
+  lastItem: boolean
+  firstItem: boolean
+  currentPath: string
 }
 
 const HeaderLink = (props: HeaderLinkProps) => {
-  const openSubMenu = props.openSubMenus.indexOf(props.link.label) >= 0
+  const openSubMenu = props.openSubMenu === props.link.label
   if (props.link.subMenuLinks?.length) {
     // Dropdown
     return (
-      <li className={styles["dropdown-link-container"]} role={"menuitem"}>
+      <li className={styles["dropdown-link-container"]}>
         <button
           className={`${styles["link"]} ${
             openSubMenu ? styles["show-submenu-button"] : styles["hide-submenu-button"]
           }`}
-          aria-haspopup={"menu"}
-          onClick={props.link.onClick}
+          onClick={(event) => {
+            event.stopPropagation()
+            props.toggleSubMenu()
+          }}
           aria-expanded={openSubMenu}
+          aria-controls={`${props.link.label}-submenu`}
           onKeyDown={(event) => {
             if (event.key === "Enter") {
               event.preventDefault()
               props.toggleSubMenu()
             }
+            if (event.key === "ArrowDown") {
+              props.toggleSubMenu()
+            }
             if (event.key === "Escape") {
               props.toggleSubMenu()
             }
-            if (event.key === "ArrowUp") {
-              //todo
+            if (event.key === "Escape") {
+              props.toggleSubMenu()
+            }
+            if (event.key === "Tab") {
+              if (props.lastItem) {
+                props.setMobileMenuOpen(false)
+              }
             }
           }}
         >
@@ -50,48 +70,107 @@ const HeaderLink = (props: HeaderLinkProps) => {
             {openSubMenu ? <ChevronUp /> : <ChevronDown />}
           </Icon>
         </button>
-        <ul
-          className={`${styles["submenu-container"]} ${
-            openSubMenu ? styles["show-submenu"] : styles["hide-submenu"]
-          }`}
-          role={"menu"}
-          aria-orientation="vertical"
-        >
-          {props.link.subMenuLinks.map((subMenuLink, index) => {
-            if (subMenuLink.href) {
-              return (
-                <li className={styles["submenu-item"]} key={index} role={"menuitem"}>
-                  <Link className={styles["submenu-link"]} href={subMenuLink.href}>
-                    {subMenuLink.label}
-                  </Link>
-                </li>
-              )
-            } else {
-              return (
-                <li className={styles["submenu-item"]} key={index} role={"menuitem"}>
-                  <button className={styles["submenu-link"]} onClick={subMenuLink.onClick}>
-                    {subMenuLink.label}
-                  </button>
-                </li>
-              )
-            }
-          })}
-        </ul>
+        {openSubMenu && (
+          <ul
+            className={`${styles["submenu-container"]} ${
+              openSubMenu ? styles["show-submenu"] : styles["hide-submenu"]
+            }`}
+            ref={props.clickRef}
+            id={`${props.link.label}-submenu`}
+          >
+            {props.link.subMenuLinks.map((subMenuLink, index) => {
+              if (subMenuLink.href) {
+                return (
+                  <li className={styles["submenu-item"]} key={index}>
+                    <LinkComponent
+                      className={styles["submenu-link"]}
+                      href={subMenuLink.href}
+                      onKeyDown={(event) => {
+                        if (event.key === "Tab") {
+                          if (index === props.link.subMenuLinks.length - 1) {
+                            props.setOpenSubmenu(null)
+                          }
+                        }
+                        if (event.shiftKey && event.key === "Tab") {
+                          if (index === 0) {
+                            props.setOpenSubmenu(null)
+                          }
+                        }
+                        if (event.key === "ArrowDown") {
+                          if (index < props.link.subMenuLinks.length - 1) {
+                            document.getElementById(`submenu-link-${index + 1}`).focus()
+                          }
+                        }
+                        if (event.key === "ArrowUp") {
+                          if (index > 0) {
+                            document.getElementById(`submenu-link-${index - 1}`).focus()
+                          }
+                        }
+                      }}
+                      id={`submenu-link-${index}`}
+                      aria-current={props.currentPath === subMenuLink.href}
+                    >
+                      {subMenuLink.label}
+                    </LinkComponent>
+                  </li>
+                )
+              } else {
+                return (
+                  <li className={styles["submenu-item"]} key={index}>
+                    <button
+                      className={styles["submenu-link"]}
+                      onClick={subMenuLink.onClick}
+                      onKeyDown={(event) => {
+                        if (event.key === "Tab") {
+                          if (index === props.link.subMenuLinks.length - 1) {
+                            props.setOpenSubmenu(null)
+                          }
+                        }
+                        if (event.shiftKey && event.key === "Tab") {
+                          if (index === 0) {
+                            props.setOpenSubmenu(null)
+                          }
+                        }
+                        if (event.key === "ArrowDown") {
+                          if (index < props.link.subMenuLinks.length - 1) {
+                            document.getElementById(`submenu-link-${index + 1}`).focus()
+                          }
+                        }
+                        if (event.key === "ArrowUp") {
+                          if (index > 0) {
+                            document.getElementById(`submenu-link-${index - 1}`).focus()
+                          }
+                        }
+                      }}
+                      id={`submenu-link-${index}`}
+                    >
+                      {subMenuLink.label}
+                    </button>
+                  </li>
+                )
+              }
+            })}
+          </ul>
+        )}
       </li>
     )
   } else {
     // Single link
     if (props.link.href) {
       return (
-        <li role={"menuitem"}>
-          <Link className={styles["link"]} href={props.link.href}>
+        <li>
+          <LinkComponent
+            className={styles["link"]}
+            href={props.link.href}
+            aria-current={props.currentPath === props.link.href}
+          >
             {props.link.label}
-          </Link>
+          </LinkComponent>
         </li>
       )
     } else {
       return (
-        <li role={"menuitem"}>
+        <li>
           <button className={styles["link"]} onClick={props.link.onClick}>
             {props.link.label}
           </button>
@@ -151,29 +230,52 @@ interface SiteHeaderProps {
 }
 
 export const SiteHeader = (props: SiteHeaderProps) => {
+  const { LinkComponent } = useContext(NavigationContext)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [openSubMenus, setOpenSubMenus] = useState([])
+  const [openSubMenu, setOpenSubMenu] = useState<string>(null)
+  const [currentPath, setCurrentPath] = useState(null)
+  const submenuRef = useRef(null)
+  const mobileRef = useRef(null)
 
-  // Detects if element has wrapped onto the next line
   useEffect(() => {
-    const handler = () => {
-      setOpenSubMenus([])
+    const resizeHandler = () => {
+      setOpenSubMenu(null)
       setMobileMenuOpen(false)
     }
 
-    window.addEventListener("resize", handler)
+    const clickOutsideHandler = (event) => {
+      // Close the desktop dropdowns and mobile menu when clicking off of those elements
+      const clickOutsideSubmenu =
+        !!submenuRef?.current && !submenuRef?.current?.contains(event.target)
+      const clickOutsideMobile = !!mobileRef?.current && !mobileRef?.current?.contains(event.target)
+      if ((clickOutsideSubmenu && !mobileRef?.current) || clickOutsideMobile) {
+        setOpenSubMenu(null)
+        setMobileMenuOpen(false)
+      }
+    }
+
+    window.addEventListener("click", clickOutsideHandler)
+    window.addEventListener("resize", resizeHandler)
+    setCurrentPath(window.location.pathname)
 
     return () => {
-      window.removeEventListener("resize", handler)
+      window.removeEventListener("click", clickOutsideHandler)
+      window.removeEventListener("resize", resizeHandler)
     }
   }, [])
 
+  useEffect(() => {
+    if (openSubMenu) {
+      document.getElementById(`submenu-link-${0}`).focus()
+    }
+  }, [openSubMenu])
+
   const toggleSubMenu = (label: string) => {
-    setOpenSubMenus(
-      openSubMenus.indexOf(label) >= 0
-        ? openSubMenus.filter((menu) => menu !== label)
-        : [...openSubMenus, label]
-    )
+    if (openSubMenu === label) {
+      setOpenSubMenu(null)
+    } else {
+      setOpenSubMenu(label)
+    }
     return
   }
 
@@ -213,14 +315,20 @@ export const SiteHeader = (props: SiteHeaderProps) => {
               {props.subtitle && <p className={styles["title-subheading"]}>{props.subtitle}</p>}
             </div>
           </Link>
-          <ul className={`${styles["links-container-desktop"]}`} role={"menubar"}>
+          <ul className={`${styles["links-container-desktop"]}`}>
             {props.links?.map((link, index) => {
               return (
                 <HeaderLink
                   link={link}
                   key={index}
-                  openSubMenus={openSubMenus}
+                  openSubMenu={openSubMenu}
                   toggleSubMenu={() => toggleSubMenu(link.label)}
+                  clickRef={submenuRef}
+                  setOpenSubmenu={setOpenSubMenu}
+                  lastItem={index === props.links?.length - 1}
+                  firstItem={index === 0}
+                  setMobileMenuOpen={setMobileMenuOpen}
+                  currentPath={currentPath}
                 />
               )
             })}
@@ -230,7 +338,10 @@ export const SiteHeader = (props: SiteHeaderProps) => {
               variant={"primary-outlined"}
               className={styles["menu-button"]}
               size={"sm"}
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              onClick={(event) => {
+                event.stopPropagation()
+                setMobileMenuOpen(!mobileMenuOpen)
+              }}
               tailIcon={
                 <Icon>
                   <MenuIcon />
@@ -243,8 +354,11 @@ export const SiteHeader = (props: SiteHeaderProps) => {
         </div>
       </HeadingWrapper>
       {mobileMenuOpen && (
-        <div className={`${styles["submenu-container"]} ${styles["mobile-submenu-container"]}`}>
-          <ul role={"menubar"} aria-orientation="vertical">
+        <div
+          className={`${styles["submenu-container"]} ${styles["mobile-submenu-container"]}`}
+          ref={mobileRef}
+        >
+          <ul>
             {props.links?.map((link, index) => {
               if (link.subMenuLinks)
                 link.onClick = () => {
@@ -254,8 +368,14 @@ export const SiteHeader = (props: SiteHeaderProps) => {
                 <HeaderLink
                   link={link}
                   key={index}
-                  openSubMenus={openSubMenus}
+                  openSubMenu={openSubMenu}
                   toggleSubMenu={() => toggleSubMenu(link.label)}
+                  clickRef={null}
+                  setOpenSubmenu={setOpenSubMenu}
+                  lastItem={index === props.links?.length - 1}
+                  firstItem={index === 0}
+                  setMobileMenuOpen={setMobileMenuOpen}
+                  currentPath={currentPath}
                 />
               )
             })}
