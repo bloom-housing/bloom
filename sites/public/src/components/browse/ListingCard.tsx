@@ -5,7 +5,7 @@ import {
   ListingsStatusEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { imageUrlFromListing, oneLineAddress } from "@bloom-housing/shared-helpers"
+import { imageUrlFromListing, oneLineAddress, ClickableCard } from "@bloom-housing/shared-helpers"
 import { StackedTable, t } from "@bloom-housing/ui-components"
 import { Card, Heading, Icon, Link, Message, Tag } from "@bloom-housing/ui-seeds"
 import { getListingApplicationStatus, getListingStackedTableData } from "../../lib/helpers"
@@ -49,7 +49,7 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
 
   return (
     <li className={styles["list-item"]}>
-      <Card className={styles["listing-card-container"]}>
+      <ClickableCard className={styles["listing-card-container"]}>
         <Card.Section>
           <div className={styles["listing-card-content"]}>
             <div className={styles["details"]}>
@@ -124,7 +124,7 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
             </div>
           </div>
         </Card.Section>
-      </Card>
+      </ClickableCard>
     </li>
   )
 }
