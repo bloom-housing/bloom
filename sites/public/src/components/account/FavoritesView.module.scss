@@ -3,5 +3,5 @@
 }
 
 .favorites-listings {
-  margin-inline: 0 !important; /* override standard browse layout */
+  --listing-directory-content-inline-padding: 0;
 }

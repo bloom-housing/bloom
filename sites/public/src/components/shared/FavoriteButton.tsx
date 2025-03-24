@@ -15,7 +15,11 @@ const FavoriteButton = (props: FavoriteButtonProps) => {
     <Button
       variant={buttonVariant}
       size="sm"
-      leadIcon={<Icon>{CustomIconMap.heartIconSolid}</Icon>}
+      leadIcon={
+        <Icon outlined={!props.favorited}>
+          {props.favorited ? CustomIconMap.heartIconSolid : CustomIconMap.heartIcon}
+        </Icon>
+      }
       onClick={() => props.setFavorited(!props.favorited)}
     >
       {props.children}
