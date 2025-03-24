@@ -3,28 +3,8 @@
     margin-block-end: var(--seeds-spacer-content);
   }
 
-  // Don't put the focus state on the listing name link, because we are redirecting visual focus to the full card
-  :focus-within a:focus {
-    outline: none;
-    box-shadow: none;
-  }
-
-  // When the listing link is focused, put the focus style instead on the whole card
-  :focus-within.listing-card-container {
-    outline: var(--seeds-focus-ring-outline);
-    box-shadow: var(--seeds-focus-ring-box-shadow);
-    box-sizing: border-box;
-  }
-
-  // If a button inside the card is focused, turn the card-level focus, so only the button has visual focus
-  :has(button:focus).listing-card-container {
-    outline: none;
-    box-shadow: none;
-  }
-
   .listing-card-container {
     --card-spacing: 0;
-    position: relative;
 
     .name,
     a {
@@ -32,8 +12,6 @@
     }
 
     &:hover {
-      outline: var(--seeds-border-2) solid var(--seeds-border-color);
-      box-sizing: border-box;
       .name,
       a {
         color: var(--seeds-color-blue-900);
@@ -157,20 +135,6 @@
         margin-block-start: var(--seeds-s3);
         position: relative;
       }
-    }
-
-    // Expand the clickable area of the listing name link to the full card
-    // https://inclusive-components.design/cards/
-    .main-link::before {
-      content: "";
-      position: absolute;
-      display: block;
-      height: 100%;
-      width: 100%;
-      left: 0;
-      top: 0;
-      right: 0;
-      bottom: 0;
     }
   }
 

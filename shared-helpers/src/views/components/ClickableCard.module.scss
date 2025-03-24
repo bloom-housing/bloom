@@ -1,0 +1,50 @@
+.container {
+  position: relative;
+  &:not(:last-child) {
+    margin-block-end: var(--seeds-spacer-content);
+  }
+
+  // Don't put the focus state on the link, because we are redirecting visual focus to the full card
+  :focus-within a:focus {
+    outline: none;
+    box-shadow: none;
+  }
+
+  // When the link is focused, put the focus style instead on the whole card
+  :focus-within.clickable-card {
+    outline: var(--seeds-focus-ring-outline);
+    box-shadow: var(--seeds-focus-ring-box-shadow);
+    box-sizing: border-box;
+  }
+
+  // If a button inside the card is focused, turn the card-level focus, so only the button has visual focus
+  :has(button:focus).clickable-card {
+    outline: none;
+    box-shadow: none;
+  }
+
+  .clickable-card {
+    &:hover {
+      outline: var(--seeds-border-2) solid var(--seeds-border-color);
+      box-sizing: border-box;
+    }
+
+    button {
+      position: relative;
+    }
+
+    // Expand the clickable area of the link to the full card
+    // https://inclusive-components.design/cards/
+    a::before {
+      content: "";
+      position: absolute;
+      display: block;
+      height: 100%;
+      width: 100%;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+    }
+  }
+}
