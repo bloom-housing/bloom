@@ -3,12 +3,17 @@ import InfoIcon from "@heroicons/react/24/solid/InformationCircleIcon"
 import {
   Listing,
   ListingsStatusEnum,
+  MarketingTypeEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { imageUrlFromListing, oneLineAddress } from "@bloom-housing/shared-helpers"
 import { StackedTable, t } from "@bloom-housing/ui-components"
 import { Card, Heading, Icon, Link, Message, Tag } from "@bloom-housing/ui-seeds"
-import { getListingApplicationStatus, getListingStackedTableData } from "../../lib/helpers"
+import {
+  getListingApplicationStatus,
+  getListingStackedGroupTableData,
+  getListingStackedTableData,
+} from "../../lib/helpers"
 import { getListingTags } from "../listing/listing_sections/MainDetails"
 import styles from "./ListingCard.module.scss"
 
@@ -100,14 +105,28 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
                 </Message>
               )}
               <div className={styles["unit-table"]}>
-                <StackedTable
-                  headers={{
-                    unitType: "t.unitType",
-                    minimumIncome: "t.minimumIncome",
-                    rent: "t.rent",
-                  }}
-                  stackedData={getListingStackedTableData(listing.unitsSummarized)}
-                />
+                {listing.unitGroups.length > 0 ? (
+                  <StackedTable
+                    headers={{
+                      unitType: "t.unitType",
+                      rent: "t.rent",
+                      availability: "t.availability",
+                    }}
+                    stackedData={getListingStackedGroupTableData(
+                      listing.unitGroupsSummarized,
+                      listing.marketingType === MarketingTypeEnum.comingSoon
+                    )}
+                  />
+                ) : (
+                  <StackedTable
+                    headers={{
+                      unitType: "t.unitType",
+                      minimumIncome: "t.minimumIncome",
+                      rent: "t.rent",
+                    }}
+                    stackedData={getListingStackedTableData(listing.unitsSummarized)}
+                  />
+                )}
               </div>
 
               {actions.length > 0 && (

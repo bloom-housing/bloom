@@ -2,10 +2,11 @@ import * as React from "react"
 import { Heading } from "@bloom-housing/ui-seeds"
 import { StandardTable, t } from "@bloom-housing/ui-components"
 import {
+  Listing,
   ReviewOrderTypeEnum,
   UnitsSummarized,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { getSummariesTable } from "@bloom-housing/shared-helpers"
+import { getSummariesTable, getUnitGroupSummariesTable } from "@bloom-housing/shared-helpers"
 import styles from "./RentSummary.module.scss"
 import Markdown from "markdown-to-jsx"
 
@@ -14,6 +15,7 @@ type RentSummaryProps = {
   reviewOrderType: ReviewOrderTypeEnum
   unitsSummarized: UnitsSummarized
   section8Acceptance: boolean
+  listing: Listing
 }
 
 export const RentSummary = ({
@@ -21,6 +23,7 @@ export const RentSummary = ({
   reviewOrderType,
   unitsSummarized,
   section8Acceptance,
+  listing,
 }: RentSummaryProps) => {
   const unitSummariesHeaders = {
     unitType: "t.unitType",
@@ -28,6 +31,8 @@ export const RentSummary = ({
     rent: "t.rent",
     availability: "t.availability",
   }
+
+  const { headers, data } = getUnitGroupSummariesTable(listing)
 
   return (
     <div className={styles["rent-summary"]}>
@@ -57,6 +62,7 @@ export const RentSummary = ({
             </React.Fragment>
           )
         })}
+      <StandardTable headers={headers} data={data} responsiveCollapse={true} />
       {amiValues.length === 1 && (
         <StandardTable
           headers={unitSummariesHeaders}
