@@ -54,27 +54,28 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
 
       <div className={styles["listing-directory"]}>
         <div className={styles["content-wrapper"]}>
-          {/* TODO: Show both open and closed listings once we have designs for pagination: Issue #4448 */}
-          <>
-            {props.openListings.length > 0 ? (
-              <ul>
-                {props.openListings.map((listing, index) => {
-                  return <ListingCard listing={listing} key={index} />
-                })}
-              </ul>
-            ) : (
-              <div className={styles["empty-state"]}>
-                <Heading size={"xl"} priority={2} className={styles["empty-heading"]}>
-                  {t("listings.noOpenListings")}
-                </Heading>
-              </div>
-            )}
-          </>
+          <div className={styles["content"]}>
+            {/* TODO: Show both open and closed listings once we have designs for pagination: Issue #4448 */}
+            <>
+              {props.openListings.length > 0 ? (
+                <ul>
+                  {props.openListings.map((listing, index) => {
+                    return <ListingCard listing={listing} key={index} />
+                  })}
+                </ul>
+              ) : (
+                <div className={styles["empty-state"]}>
+                  <Heading size={"xl"} priority={2} className={styles["empty-heading"]}>
+                    {t("listings.noOpenListings")}
+                  </Heading>
+                </div>
+              )}
+            </>
+          </div>
         </div>
         {props.paginationData && (
           <div className={styles["pagination-container"]}>
             <div className={styles["pagination-content-wrapper"]}>
-              {" "}
               <div className={styles["previous-button"]}>
                 {isPreviousPageAvailable && (
                   <Button
