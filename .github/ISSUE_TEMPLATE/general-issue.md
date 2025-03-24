@@ -4,23 +4,18 @@ about: Issues for a feature
 title: "[Issue Title]"
 labels: ''
 assignees: ''
-
 ---
+- [ ] General
+- [ ] Backend
+- [ ] Public
+- [ ] Partners
 
-**What is this feature or what feature is this part of?**
-A clear and concise description of what the problem is.
+## Background / Issue
+*Description of the issue or feature goes here*
+## Technical Context
+*Any additional technical context that would assist with delivery goes here*
+## Acceptance Criteria
+*Expected outcome of this ticket goes here*
+## QA Notes
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
-
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
-
-**Additional context**
-Add any other context or screenshots about the feature request here.
-
-**What is the acceptance criteria/definition of done?**
-A clear and concise description of the acceptance criteria required to close this issue.
-
-**QA Review Instructions**
-This is to be filled out by the developer who completes this issue, before passing to QA.
+** Please provide as much information as possible (screenshots, documentation, etc)**
