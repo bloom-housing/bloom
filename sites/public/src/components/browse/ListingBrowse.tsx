@@ -56,7 +56,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
       <div className={styles["listing-directory"]}>
         <div className={styles["content-wrapper"]}>
           {/* TODO: Show both open and closed listings once we have designs for pagination: Issue #4448 */}
-          <>
+          <div className={styles["content"]}>
             {props.openListings.length > 0 ? (
               <>
                 <ul>
@@ -89,12 +89,11 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                 </Heading>
               </div>
             )}
-          </>
+          </div>
         </div>
         {props.paginationData && (
           <div className={styles["pagination-container"]}>
             <div className={styles["pagination-content-wrapper"]}>
-              {" "}
               <div className={styles["previous-button"]}>
                 {isPreviousPageAvailable && (
                   <Button
