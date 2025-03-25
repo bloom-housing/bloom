@@ -32,7 +32,7 @@ export const RentSummary = ({
     availability: "t.availability",
   }
 
-  const { headers, data } = getUnitGroupSummariesTable(listing)
+  const { headers, data: unitGroupSummariesData } = getUnitGroupSummariesTable(listing)
 
   return (
     <div className={styles["rent-summary"]}>
@@ -53,19 +53,19 @@ export const RentSummary = ({
                 {t("listings.percentAMIUnit", { percent: percent })}
               </Heading>
               <div className={"seeds-m-bs-header"}>
-                {data ? (
-                  <StandardTable headers={headers} data={data} responsiveCollapse={true} />
-                ) : (
-                  <StandardTable
-                    headers={unitSummariesHeaders}
-                    data={groupedUnits}
-                    responsiveCollapse={true}
-                  />
-                )}
+                <StandardTable
+                  headers={unitSummariesHeaders}
+                  data={groupedUnits}
+                  responsiveCollapse={true}
+                />
               </div>
             </React.Fragment>
           )
         })}
+      {unitGroupSummariesData && (
+        <StandardTable headers={headers} data={unitGroupSummariesData} responsiveCollapse={true} />
+      )}
+
       {amiValues.length === 1 && (
         <StandardTable
           headers={unitSummariesHeaders}
