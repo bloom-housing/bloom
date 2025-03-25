@@ -27,7 +27,6 @@ body:
     attributes:
       label: Is there any additional context?
       description: What additional context can you provide?
-      default: 0
     validations:
       required: false
   - type: dropdown
