@@ -598,68 +598,6 @@ export const useZipExport = (
   }
 }
 
-export const useZipExportSecure = (
-  listingId: string,
-  includeDemographics: boolean,
-  isLottery: boolean,
-  isSpreadsheet = false
-) => {
-  const { applicationsService, lotteryService } = useContext(AuthContext)
-  const [exportLoading, setExportLoading] = useState(false)
-  const { addToast } = useContext(MessageContext)
-
-  const onExport = useCallback(async () => {
-    setExportLoading(true)
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      let content: any
-      if (isLottery) {
-        content = await lotteryService.lotteryResults({
-          id: listingId,
-          includeDemographics,
-          timeZone: dayjs.tz.guess(),
-        })
-      } else {
-        if (isSpreadsheet) {
-          content = await applicationsService.listAsSpreadsheet({
-            id: listingId,
-            includeDemographics,
-            timeZone: dayjs.tz.guess(),
-          })
-        } else {
-          content = await applicationsService.listAsCsv({
-            id: listingId,
-            includeDemographics,
-            timeZone: dayjs.tz.guess(),
-          })
-        }
-      }
-
-      const link = document.createElement("a")
-      link.href = content
-      link.setAttribute(
-        "download",
-        `${isLottery ? "lottery" : "applications"}-${listingId}-${createDateStringFromNow(
-          "YYYY-MM-DD_HH-mm"
-        )}.zip`
-      )
-      document.body.appendChild(link)
-      link.click()
-      link.parentNode.removeChild(link)
-      addToast(t("t.exportSuccess"), { variant: "success" })
-    } catch (err) {
-      console.log(err)
-      addToast(t("account.settings.alerts.genericError"), { variant: "alert" })
-    }
-    setExportLoading(false)
-  }, [])
-
-  return {
-    onExport,
-    exportLoading,
-  }
-}
-
 export const useUsersExport = () => {
   const { userService } = useContext(AuthContext)
 
