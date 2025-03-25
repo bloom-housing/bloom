@@ -18,4 +18,4 @@ assignees: ''
 *Expected outcome of this ticket goes here*
 ## QA Notes
 
-** Please provide as much information as possible (screenshots, documentation, etc)**
+** Please provide as much information as possible (screenshots, documentation, etc **
