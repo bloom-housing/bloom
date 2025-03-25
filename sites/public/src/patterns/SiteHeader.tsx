@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react"
 import ChevronDown from "@heroicons/react/20/solid/ChevronDownIcon"
 import ChevronUp from "@heroicons/react/20/solid/ChevronUpIcon"
 import MenuIcon from "@heroicons/react/20/solid/Bars3Icon"
-import { Button, Heading, Icon, Link } from "@bloom-housing/ui-seeds"
+import { Button, Icon, Link } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 import LinkComponent from "../components/core/LinkComponent"
 import styles from "./SiteHeader.module.scss"
@@ -306,6 +306,7 @@ interface SiteHeaderProps {
   links: HeaderLink[]
   logo?: React.ReactNode
   logoClassName?: string
+  mainContentId?: string
   message?: React.ReactNode
   subtitle?: string
   title: string
@@ -348,7 +349,12 @@ export const SiteHeader = (props: SiteHeaderProps) => {
   }, [])
 
   return (
-    <nav className={styles["site-header-container"]} aria-label={"Main"}>
+    <header className={styles["site-header-container"]}>
+      {props.mainContentId && (
+        <a className={`${styles["skip-link"]}`} href={`#${props.mainContentId}`}>
+          {t("t.skipToMainContent")}
+        </a>
+      )}
       <HeadingWrapper className={styles["language-wrapper"]}>
         <div className={styles["language-container"]}>
           {props.languages?.map((language, index) => {
@@ -366,86 +372,88 @@ export const SiteHeader = (props: SiteHeaderProps) => {
       <HeadingWrapper className={styles["message-wrapper"]}>
         <div className={styles["message-container"]}>{props.message ?? ""}</div>
       </HeadingWrapper>
-      <HeadingWrapper className={styles["navigation-wrapper"]}>
-        <div className={styles["navigation-container"]}>
-          <Link className={styles["title-container"]} href={props.titleLink}>
-            {props.logo && (
-              <div
-                className={`${styles["logo"]} ${props.logoClassName ? props.logoClassName : ""}`}
-              >
-                {props.logo}
+      <nav aria-label={"Main"}>
+        <HeadingWrapper className={styles["navigation-wrapper"]}>
+          <div className={styles["navigation-container"]}>
+            <Link className={styles["title-container"]} href={props.titleLink}>
+              {props.logo && (
+                <div
+                  className={`${styles["logo"]} ${props.logoClassName ? props.logoClassName : ""}`}
+                >
+                  {props.logo}
+                </div>
+              )}
+              <div className={styles["title"]}>
+                <div className={`${styles["title-heading"]} text-heading-xl`}>{props.title}</div>
+                {props.subtitle && <p className={styles["title-subheading"]}>{props.subtitle}</p>}
               </div>
-            )}
-            <div className={styles["title"]}>
-              <div className={`${styles["title-heading"]} text-heading-xl`}>{props.title}</div>
-              {props.subtitle && <p className={styles["title-subheading"]}>{props.subtitle}</p>}
-            </div>
-          </Link>
-          <ul className={`${styles["links-container-desktop"]}`}>
-            {props.links?.map((link, index) => {
-              return (
-                <HeaderLink
-                  clickRef={submenuRef}
-                  currentPath={currentPath}
-                  firstItem={index === 0}
-                  key={index}
-                  lastItem={index === props.links?.length - 1}
-                  link={link}
-                  openSubmenu={openSubmenu}
-                  setMobileMenuOpen={setMobileMenuOpen}
-                  setOpenSubmenu={setOpenSubmenu}
-                />
-              )
-            })}
-          </ul>
-          <div className={`${styles["links-container-mobile"]}`}>
-            <Button
-              variant={"primary-outlined"}
-              className={styles["menu-button"]}
-              size={"sm"}
-              onClick={(event) => {
-                event.stopPropagation()
-                setMobileMenuOpen(!mobileMenuOpen)
-              }}
-              tailIcon={
-                <Icon>
-                  <MenuIcon />
-                </Icon>
-              }
-            >
-              {t("t.menu")}
-            </Button>
-          </div>
-        </div>
-      </HeadingWrapper>
-      {mobileMenuOpen && (
-        <div
-          className={`${styles["submenu-container"]} ${styles["mobile-submenu-container"]}`}
-          ref={mobileRef}
-        >
-          <ul>
-            {props.links?.map((link, index) => {
-              if (link.subMenuLinks)
-                link.onClick = () => {
-                  toggleSubmenu(link.label, false, openSubmenu, setOpenSubmenu)
+            </Link>
+            <ul className={`${styles["links-container-desktop"]}`}>
+              {props.links?.map((link, index) => {
+                return (
+                  <HeaderLink
+                    clickRef={submenuRef}
+                    currentPath={currentPath}
+                    firstItem={index === 0}
+                    key={index}
+                    lastItem={index === props.links?.length - 1}
+                    link={link}
+                    openSubmenu={openSubmenu}
+                    setMobileMenuOpen={setMobileMenuOpen}
+                    setOpenSubmenu={setOpenSubmenu}
+                  />
+                )
+              })}
+            </ul>
+            <div className={`${styles["links-container-mobile"]}`}>
+              <Button
+                variant={"primary-outlined"}
+                className={styles["menu-button"]}
+                size={"sm"}
+                onClick={(event) => {
+                  event.stopPropagation()
+                  setMobileMenuOpen(!mobileMenuOpen)
+                }}
+                tailIcon={
+                  <Icon>
+                    <MenuIcon />
+                  </Icon>
                 }
-              return (
-                <HeaderLink
-                  clickRef={null}
-                  currentPath={currentPath}
-                  firstItem={index === 0}
-                  key={index}
-                  lastItem={index === props.links?.length - 1}
-                  link={link}
-                  openSubmenu={openSubmenu}
-                  setMobileMenuOpen={setMobileMenuOpen}
-                  setOpenSubmenu={setOpenSubmenu}
-                />
-              )
-            })}
-          </ul>
-        </div>
-      )}
-    </nav>
+              >
+                {t("t.menu")}
+              </Button>
+            </div>
+          </div>
+        </HeadingWrapper>
+        {mobileMenuOpen && (
+          <div
+            className={`${styles["submenu-container"]} ${styles["mobile-submenu-container"]}`}
+            ref={mobileRef}
+          >
+            <ul>
+              {props.links?.map((link, index) => {
+                if (link.subMenuLinks)
+                  link.onClick = () => {
+                    toggleSubmenu(link.label, false, openSubmenu, setOpenSubmenu)
+                  }
+                return (
+                  <HeaderLink
+                    clickRef={null}
+                    currentPath={currentPath}
+                    firstItem={index === 0}
+                    key={index}
+                    lastItem={index === props.links?.length - 1}
+                    link={link}
+                    openSubmenu={openSubmenu}
+                    setMobileMenuOpen={setMobileMenuOpen}
+                    setOpenSubmenu={setOpenSubmenu}
+                  />
+                )
+              })}
+            </ul>
+          </div>
+        )}
+      </nav>
+    </header>
   )
 }

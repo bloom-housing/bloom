@@ -166,34 +166,6 @@ const getHeaderLinks = (
         },
       ],
     })
-    headerLinks.push({
-      label: "account 2",
-      subMenuLinks: [
-        {
-          label: t("nav.myDashboard"),
-          href: "/account/dashboard",
-        },
-        {
-          label: t("account.myApplications"),
-          href: "/account/applications",
-        },
-        {
-          label: t("account.accountSettings"),
-          href: "/account/edit",
-        },
-        {
-          label: t("nav.signOut"),
-          onClick: () => {
-            const signOutFxn = async () => {
-              await router.push("/sign-in")
-              await signOut()
-              addToast(t(`authentication.signOut.success`), { variant: "primary" })
-            }
-            void signOutFxn()
-          },
-        },
-      ],
-    })
   } else {
     headerLinks.push({
       label: t("nav.signIn"),
@@ -222,8 +194,7 @@ const Layout = (props) => {
         </Head>
         {process.env.showNewSeedsDesigns ? (
           <SiteHeader
-            title={"Alameda County Housing Portal"}
-            // subtitle={"City of Detroit"}
+            title={t("nav.siteTitle")}
             languages={languages?.map((lang) => {
               return {
                 label: lang.label,
@@ -239,6 +210,7 @@ const Layout = (props) => {
                 <HomeIcon />
               </Icon>
             }
+            mainContentId="main-content"
           />
         ) : (
           getSiteHeaderDeprecated(router, profile, signOut, addToast, languages, getInMaintenance())

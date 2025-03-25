@@ -4,6 +4,34 @@
     text-decoration: none;
   }
 
+  // Hide the skip link visually unless it is focused
+  .skip-link {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+    &:focus {
+      position: absolute;
+      width: auto;
+      height: auto;
+      padding: 0;
+      margin: 0;
+      overflow: visible;
+      clip: auto;
+      white-space: normal;
+      z-index: 20;
+      padding: var(--seeds-s2) var(--seeds-s4);
+      text-decoration: underline;
+      font-size: var(--seeds-type-body-size);
+      background-color: var(--seeds-bg-color-surface);
+    }
+  }
+
   a,
   button {
     position: relative;
