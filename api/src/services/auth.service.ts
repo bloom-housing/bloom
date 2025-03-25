@@ -28,7 +28,7 @@ import { UserService } from './user.service';
 const secure =
   process.env.NODE_ENV !== 'development' && process.env.HTTPS_OFF !== 'true';
 const sameSite =
-  process.env.NODE_ENV === 'development' && process.env.NO_SAME_SITE !== 'true'
+  process.env.NODE_ENV === 'development' || process.env.NO_SAME_SITE !== 'false'
     ? 'strict'
     : 'none';
 const TOKEN_COOKIE_MAXAGE = 86400000; // 24 hours
