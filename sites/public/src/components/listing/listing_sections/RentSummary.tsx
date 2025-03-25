@@ -53,16 +53,19 @@ export const RentSummary = ({
                 {t("listings.percentAMIUnit", { percent: percent })}
               </Heading>
               <div className={"seeds-m-bs-header"}>
-                <StandardTable
-                  headers={unitSummariesHeaders}
-                  data={groupedUnits}
-                  responsiveCollapse={true}
-                />
+                {data ? (
+                  <StandardTable headers={headers} data={data} responsiveCollapse={true} />
+                ) : (
+                  <StandardTable
+                    headers={unitSummariesHeaders}
+                    data={groupedUnits}
+                    responsiveCollapse={true}
+                  />
+                )}
               </div>
             </React.Fragment>
           )
         })}
-      <StandardTable headers={headers} data={data} responsiveCollapse={true} />
       {amiValues.length === 1 && (
         <StandardTable
           headers={unitSummariesHeaders}
