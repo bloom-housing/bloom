@@ -58,6 +58,7 @@ import {
 import { fillModelStringFields } from '../utilities/model-fields';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
+import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
 
 export type getListingsArgs = {
   skip: number;
@@ -249,6 +250,8 @@ export class ListingService implements OnModuleInit {
         };
       }
     });
+
+    addUnitGroupsSummarized(listings);
 
     const paginationInfo = buildPaginationMetaInfo(
       params,
@@ -712,13 +715,8 @@ export class ListingService implements OnModuleInit {
     listingId: string,
     lang: LanguagesEnum = LanguagesEnum.en,
     view: ListingViews = ListingViews.full,
-    enableUnitGroups = false,
   ): Promise<Listing> {
-    const listingRaw = await this.findOrThrow(
-      listingId,
-      view,
-      enableUnitGroups,
-    );
+    const listingRaw = await this.findOrThrow(listingId, view);
 
     let result = mapTo(Listing, listingRaw);
 
@@ -726,7 +724,12 @@ export class ListingService implements OnModuleInit {
       result = await this.translationService.translateListing(result, lang);
     }
 
-    await this.addUnitsSummarized(result);
+    if (result.unitGroups.length > 0) {
+      addUnitGroupsSummarized(result);
+    } else {
+      await this.addUnitsSummarized(result);
+    }
+
     return result;
   }
 
@@ -1385,7 +1388,6 @@ export class ListingService implements OnModuleInit {
           id: requestingUser.id,
         },
       });
-
       await this.prisma.activityLog.create({
         data: {
           module: 'user',
@@ -1430,29 +1432,8 @@ export class ListingService implements OnModuleInit {
     This will either find a listing or throw an error
     a listing view can be provided which will add the joins to produce that view correctly
   */
-  async findOrThrow(
-    id: string,
-    view?: ListingViews,
-    enableUnitGroups?: boolean,
-  ) {
+  async findOrThrow(id: string, view?: ListingViews) {
     const viewInclude = view ? views[view] : undefined;
-    if (enableUnitGroups && viewInclude) {
-      viewInclude.units = undefined;
-      viewInclude.unitGroups = {
-        include: {
-          unitTypes: true,
-          unitGroupAmiLevels: {
-            include: {
-              amiChart: {
-                include: {
-                  jurisdictions: true,
-                },
-              },
-            },
-          },
-        },
-      };
-    }
 
     const listing = await this.prisma.listings.findUnique({
       include: viewInclude,
