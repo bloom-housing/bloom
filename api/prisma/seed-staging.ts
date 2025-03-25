@@ -1389,7 +1389,6 @@ export const stagingSeed = async (
           totalAvailable: 5,
           sqFeetMin: '750.00',
           sqFeetMax: '1000.00',
-          // amiChart: { connect: { id: amiChart.id } },
           unitGroupAmiLevels: {
             create: {
               amiPercentage: 30,
