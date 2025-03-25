@@ -5,13 +5,12 @@ import {
   Listing,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
-  MarketingTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
 import { pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
 import { Heading } from "@bloom-housing/ui-seeds"
 import { ErrorPage } from "../../pages/_error"
-import { getApplicationSeason, getListingApplicationStatus } from "../../lib/helpers"
+import { getListingApplicationStatus } from "../../lib/helpers"
 import {
   getAdditionalInformation,
   getAmiValues,
@@ -26,7 +25,6 @@ import { AdditionalInformation } from "./listing_sections/AdditionalInformation"
 import { Apply } from "./listing_sections/Apply"
 import { Availability } from "./listing_sections/Availability"
 import { DateSection } from "./listing_sections/DateSection"
-import { DueDate } from "./listing_sections/DueDate"
 import { Eligibility } from "./listing_sections/Eligibility"
 import { Features } from "./listing_sections/Features"
 import { FurtherInformation } from "./listing_sections/FurtherInformation"
@@ -146,8 +144,8 @@ export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProp
         )}
         lotteryResultsEvent={lotteryResultsEvent}
       />
-      {OpenHouses}
       <Apply listing={listing} preview={preview} setShowDownloadModal={setShowDownloadModal} />
+      {OpenHouses}
       {LotteryEvent}
       {ReferralApplication}
       {WhatToExpect}
@@ -169,6 +167,7 @@ export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProp
           <MainDetails
             listing={listing}
             dueDateContent={[statusContent?.content, statusContent?.subContent]}
+            jurisdiction={jurisdiction}
           />
           <RentSummary
             amiValues={getAmiValues(listing)}
@@ -189,19 +188,7 @@ export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProp
           </div>
         </div>
         <div className={`${styles["right-bar"]} ${styles["hide-mobile"]}`}>
-          {listing.marketingType === MarketingTypeEnum.comingSoon ? (
-            <DueDate content={[getApplicationSeason(listing)]} />
-          ) : (
-            <DueDate content={[statusContent?.content, statusContent?.subContent]} />
-          )}
-          <Availability
-            reservedCommunityDescription={listing.reservedCommunityDescription}
-            reservedCommunityType={listing.reservedCommunityTypes}
-            reviewOrder={listing.reviewOrderType}
-            status={listing.status}
-            unitsAvailable={listing.unitsAvailable}
-            waitlistOpenSpots={listing.waitlistOpenSpots}
-          />
+          <Availability listing={listing} jurisdiction={jurisdiction} />
           {ApplyBar}
         </div>
       </div>
