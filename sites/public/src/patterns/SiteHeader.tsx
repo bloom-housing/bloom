@@ -3,36 +3,127 @@ import ChevronDown from "@heroicons/react/20/solid/ChevronDownIcon"
 import ChevronUp from "@heroicons/react/20/solid/ChevronUpIcon"
 import MenuIcon from "@heroicons/react/20/solid/Bars3Icon"
 import { Button, Heading, Icon, Link } from "@bloom-housing/ui-seeds"
-import styles from "./SiteHeader.module.scss"
 import { t } from "@bloom-housing/ui-components"
-import { NavigationContext } from "@bloom-housing/ui-seeds/src/global/NavigationContext"
-import { useContext } from "react"
 import LinkComponent from "../components/core/LinkComponent"
+import styles from "./SiteHeader.module.scss"
+
+/** Sets focus on the first submenu link */
+const setFocusToFirstElement = () => {
+  document.getElementById(`submenu-link-${0}`).focus()
+  return
+}
+
+/** Toggles the open state of a submenu, and if setFocus is true, sets focus to the first element in the submenu */
+const toggleSubmenu = (
+  label: string,
+  setFocus: boolean,
+  openSubmenu: string,
+  setOpenSubmenu: (value: React.SetStateAction<string>) => void
+) => {
+  if (openSubmenu === label) {
+    setOpenSubmenu(null)
+  } else {
+    setOpenSubmenu(label)
+    if (setFocus) setTimeout(() => setFocusToFirstElement(), 0)
+  }
+  return
+}
 
 export interface HeaderLink {
-  label: string
+  /** Link URL, will use an anchor element */
   href?: string
+  /** Link label */
+  label: string
+  /** Button onClick, will use a button element */
   onClick?: () => void
+  /** An optional list of links for a dropdown submenu, only supports one nested menu */
   subMenuLinks?: HeaderLink[]
 }
 
 interface HeaderLinkProps {
-  link: HeaderLink
-  openSubMenu: string
-  toggleSubMenu: (label: string, setFocus: boolean) => void
-  clickRef: React.MutableRefObject<any>
-  setOpenSubmenu: React.Dispatch<React.SetStateAction<string>>
-  setMobileMenuOpen: React.Dispatch<React.SetStateAction<boolean>>
-  lastItem: boolean
-  firstItem: boolean
+  /** Assigned to the submenu, used to determine if a user clicks off of it in order to close it  */
+  clickRef: React.RefObject<HTMLUListElement>
+  /** The window's current path, used to set aria-current on links  */
   currentPath: string
+  /** If this is the first item in the list of links  */
+  firstItem: boolean
+  /** If this is the last item in the list of links  */
+  lastItem: boolean
+  /** Link data, including the URL/onClick and label  */
+  link: HeaderLink
+  /** If this link's submenu is open  */
+  openSubmenu: string
+  /** Function to change the state of the mobile links menu being open  */
+  setMobileMenuOpen: React.Dispatch<React.SetStateAction<boolean>>
+  /** Function to change the state of a submenu being open  */
+  setOpenSubmenu: React.Dispatch<React.SetStateAction<string>>
+}
+
+const menuKeyDown = (
+  event: React.KeyboardEvent<HTMLAnchorElement | HTMLButtonElement>,
+  firstItem: boolean,
+  lastItem: boolean,
+  setMobileMenuOpen: (value: React.SetStateAction<boolean>) => void
+) => {
+  if (event.shiftKey && event.key === "Tab") {
+    if (firstItem) {
+      setMobileMenuOpen(false)
+    }
+  }
+  if (!event.shiftKey && event.key === "Tab") {
+    if (lastItem) {
+      setMobileMenuOpen(false)
+    }
+  }
+  return
+}
+
+const submenuKeyDown = (
+  event: React.KeyboardEvent<HTMLAnchorElement | HTMLButtonElement>,
+  index: number,
+  setOpenSubmenu: (value: React.SetStateAction<string>) => void,
+  subMenuLinks: HeaderLink[],
+  parentLabel: string
+) => {
+  // When a user shift-tabs on the first item in a submenu, close the submenu
+  if (event.shiftKey && event.key === "Tab") {
+    if (index === 0) {
+      setOpenSubmenu(null)
+    }
+  }
+  // When a user tabs on the last item in a submenu, close the submenu
+  if (!event.shiftKey && event.key === "Tab") {
+    if (index === subMenuLinks.length - 1) {
+      setOpenSubmenu(null)
+    }
+  }
+  // When a user presses escape, close the submenu and focus on the parent
+  if (event.key === "Escape") {
+    setOpenSubmenu(null)
+    document.getElementById(parentLabel).focus()
+  }
+  // When a user presses the down arrow, go to the next item in the submenu if not at the end
+  if (event.key === "ArrowDown") {
+    event.preventDefault() // Prevent page scroll
+    if (index < subMenuLinks.length - 1) {
+      document.getElementById(`submenu-link-${index + 1}`).focus()
+    }
+  }
+  // When a user presses the up arrow, go to the previous item in the submenu if not at the beginning
+  if (event.key === "ArrowUp") {
+    event.preventDefault() // Prevent page scroll
+    if (index > 0) {
+      document.getElementById(`submenu-link-${index - 1}`).focus()
+    }
+  }
+  return
 }
 
 const HeaderLink = (props: HeaderLinkProps) => {
   const parentLink = useRef(null)
-  const openSubMenu = props.openSubMenu === props.link.label
+  const openSubMenu = props.openSubmenu === props.link.label
   if (props.link.subMenuLinks?.length) {
-    // Dropdown
+    // Navigation item contains a submenu
     return (
       <li className={styles["dropdown-link-container"]}>
         <button
@@ -41,28 +132,30 @@ const HeaderLink = (props: HeaderLinkProps) => {
           }`}
           onClick={(event) => {
             event.stopPropagation()
-            props.toggleSubMenu(props.link.label, false)
+            toggleSubmenu(props.link.label, false, props.openSubmenu, props.setOpenSubmenu)
           }}
           aria-expanded={openSubMenu}
           aria-controls={`${props.link.label}-submenu`}
           ref={parentLink}
+          id={props.link.label}
           onKeyDown={(event) => {
+            // When a user presses enter, open the submenu & focus on the first element
             if (event.key === "Enter") {
               event.preventDefault()
-              props.toggleSubMenu(props.link.label, true)
+              toggleSubmenu(props.link.label, true, props.openSubmenu, props.setOpenSubmenu)
             }
+            // When a user presses the down arrow, open the submenu & focus on the first element
             if (event.key === "ArrowDown") {
-              event.preventDefault()
-              props.toggleSubMenu(props.link.label, true)
+              event.preventDefault() // Prevent page scroll
+              toggleSubmenu(props.link.label, true, props.openSubmenu, props.setOpenSubmenu)
             }
-            if (event.key === "Escape") {
-              props.toggleSubMenu(props.link.label, false)
-            }
+            // When a user shift-tabs on the first item in the main menu, close the mobile menu
             if (event.shiftKey && event.key === "Tab") {
               if (props.firstItem) {
                 props.setMobileMenuOpen(false)
               }
             }
+            // When a user tabs on the last item in the main menu, close the mobile menu
             if (!event.shiftKey && event.key === "Tab") {
               if (props.lastItem) {
                 props.setMobileMenuOpen(false)
@@ -85,38 +178,20 @@ const HeaderLink = (props: HeaderLinkProps) => {
           >
             {props.link.subMenuLinks.map((subMenuLink, index) => {
               if (subMenuLink.href) {
+                // Navigation item is a link
                 return (
                   <li className={styles["submenu-item"]} key={index}>
                     <LinkComponent
                       className={styles["submenu-link"]}
                       href={subMenuLink.href}
                       onKeyDown={(event) => {
-                        if (event.shiftKey && event.key === "Tab") {
-                          if (index === 0) {
-                            props.setOpenSubmenu(null)
-                          }
-                        }
-                        if (!event.shiftKey && event.key === "Tab") {
-                          if (index === props.link.subMenuLinks.length - 1) {
-                            props.setOpenSubmenu(null)
-                          }
-                        }
-                        if (event.key === "Escape") {
-                          props.setOpenSubmenu(null)
-                          parentLink?.current?.focus()
-                        }
-                        if (event.key === "ArrowDown") {
-                          event.preventDefault() // Prevent page scroll
-                          if (index < props.link.subMenuLinks.length - 1) {
-                            document.getElementById(`submenu-link-${index + 1}`).focus()
-                          }
-                        }
-                        if (event.key === "ArrowUp") {
-                          event.preventDefault() // Prevent page scroll
-                          if (index > 0) {
-                            document.getElementById(`submenu-link-${index - 1}`).focus()
-                          }
-                        }
+                        submenuKeyDown(
+                          event,
+                          index,
+                          props.setOpenSubmenu,
+                          props.link.subMenuLinks,
+                          props.link.label
+                        )
                       }}
                       id={`submenu-link-${index}`}
                       aria-current={props.currentPath === subMenuLink.href}
@@ -126,34 +201,20 @@ const HeaderLink = (props: HeaderLinkProps) => {
                   </li>
                 )
               } else {
+                // Navigation item is a button
                 return (
                   <li className={styles["submenu-item"]} key={index}>
                     <button
                       className={styles["submenu-link"]}
                       onClick={subMenuLink.onClick}
                       onKeyDown={(event) => {
-                        if (event.shiftKey && event.key === "Tab") {
-                          if (index === 0) {
-                            props.setOpenSubmenu(null)
-                          }
-                        }
-                        if (!event.shiftKey && event.key === "Tab") {
-                          if (index === props.link.subMenuLinks.length - 1) {
-                            props.setOpenSubmenu(null)
-                          }
-                        }
-                        if (event.key === "ArrowDown") {
-                          event.preventDefault() // Prevent page scroll
-                          if (index < props.link.subMenuLinks.length - 1) {
-                            document.getElementById(`submenu-link-${index + 1}`).focus()
-                          }
-                        }
-                        if (event.key === "ArrowUp") {
-                          event.preventDefault() // Prevent page scroll
-                          if (index > 0) {
-                            document.getElementById(`submenu-link-${index - 1}`).focus()
-                          }
-                        }
+                        submenuKeyDown(
+                          event,
+                          index,
+                          props.setOpenSubmenu,
+                          props.link.subMenuLinks,
+                          props.link.label
+                        )
                       }}
                       id={`submenu-link-${index}`}
                     >
@@ -168,7 +229,7 @@ const HeaderLink = (props: HeaderLinkProps) => {
       </li>
     )
   } else {
-    // Single link
+    // Navigation item does not contain a submenu
     if (props.link.href) {
       return (
         <li>
@@ -177,16 +238,7 @@ const HeaderLink = (props: HeaderLinkProps) => {
             href={props.link.href}
             aria-current={props.currentPath === props.link.href}
             onKeyDown={(event) => {
-              if (event.shiftKey && event.key === "Tab") {
-                if (props.firstItem) {
-                  props.setMobileMenuOpen(false)
-                }
-              }
-              if (!event.shiftKey && event.key === "Tab") {
-                if (props.lastItem) {
-                  props.setMobileMenuOpen(false)
-                }
-              }
+              menuKeyDown(event, props.firstItem, props.lastItem, props.setMobileMenuOpen)
             }}
           >
             {props.link.label}
@@ -200,16 +252,7 @@ const HeaderLink = (props: HeaderLinkProps) => {
             className={styles["link"]}
             onClick={props.link.onClick}
             onKeyDown={(event) => {
-              if (event.shiftKey && event.key === "Tab") {
-                if (props.firstItem) {
-                  props.setMobileMenuOpen(false)
-                }
-              }
-              if (!event.shiftKey && event.key === "Tab") {
-                if (props.lastItem) {
-                  props.setMobileMenuOpen(false)
-                }
-              }
+              menuKeyDown(event, props.firstItem, props.lastItem, props.setMobileMenuOpen)
             }}
           >
             {props.link.label}
@@ -253,33 +296,33 @@ const HeadingWrapper = (props: HeadingWrapperProps) => {
 }
 
 export type Language = {
+  active: boolean
   label: string
   onClick: () => void
-  active: boolean
 }
 
 interface SiteHeaderProps {
-  title: string
-  subtitle?: string
   languages: Language[]
   links: HeaderLink[]
-  message?: React.ReactNode
-  titleLink: string
   logo?: React.ReactNode
   logoClassName?: string
+  message?: React.ReactNode
+  subtitle?: string
+  title: string
+  titleLink: string
 }
 
 export const SiteHeader = (props: SiteHeaderProps) => {
-  const { LinkComponent } = useContext(NavigationContext)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [openSubMenu, setOpenSubMenu] = useState<string>(null)
+  const [openSubmenu, setOpenSubmenu] = useState<string>(null)
   const [currentPath, setCurrentPath] = useState(null)
   const submenuRef = useRef(null)
   const mobileRef = useRef(null)
 
   useEffect(() => {
     const resizeHandler = () => {
-      setOpenSubMenu(null)
+      // Close the submenus and the mobile menu when resizing the screen
+      setOpenSubmenu(null)
       setMobileMenuOpen(false)
     }
 
@@ -289,7 +332,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
         !!submenuRef?.current && !submenuRef?.current?.contains(event.target)
       const clickOutsideMobile = !!mobileRef?.current && !mobileRef?.current?.contains(event.target)
       if ((clickOutsideSubmenu && !mobileRef?.current) || clickOutsideMobile) {
-        setOpenSubMenu(null)
+        setOpenSubmenu(null)
         setMobileMenuOpen(false)
       }
     }
@@ -304,21 +347,6 @@ export const SiteHeader = (props: SiteHeaderProps) => {
     }
   }, [])
 
-  const setFocusToFirstElement = () => {
-    document.getElementById(`submenu-link-${0}`).focus()
-    return
-  }
-
-  const toggleSubMenu = (label: string, setFocus: boolean) => {
-    if (openSubMenu === label) {
-      setOpenSubMenu(null)
-    } else {
-      setOpenSubMenu(label)
-      if (setFocus) setTimeout(() => setFocusToFirstElement(), 0)
-    }
-    return
-  }
-
   return (
     <nav className={styles["site-header-container"]} aria-label={"Main"}>
       <HeadingWrapper className={styles["language-wrapper"]}>
@@ -326,10 +354,10 @@ export const SiteHeader = (props: SiteHeaderProps) => {
           {props.languages?.map((language, index) => {
             return (
               <LanguageButton
-                label={language.label}
-                onClick={language.onClick}
                 active={language.active}
                 key={index}
+                label={language.label}
+                onClick={language.onClick}
               />
             )
           })}
@@ -349,9 +377,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
               </div>
             )}
             <div className={styles["title"]}>
-              <Heading size={"xl"} className={styles["title-heading"]}>
-                {props.title}
-              </Heading>
+              <div className={`${styles["title-heading"]} text-heading-xl`}>{props.title}</div>
               {props.subtitle && <p className={styles["title-subheading"]}>{props.subtitle}</p>}
             </div>
           </Link>
@@ -359,16 +385,15 @@ export const SiteHeader = (props: SiteHeaderProps) => {
             {props.links?.map((link, index) => {
               return (
                 <HeaderLink
-                  link={link}
-                  key={index}
-                  openSubMenu={openSubMenu}
-                  toggleSubMenu={toggleSubMenu}
                   clickRef={submenuRef}
-                  setOpenSubmenu={setOpenSubMenu}
-                  lastItem={index === props.links?.length - 1}
-                  firstItem={index === 0}
-                  setMobileMenuOpen={setMobileMenuOpen}
                   currentPath={currentPath}
+                  firstItem={index === 0}
+                  key={index}
+                  lastItem={index === props.links?.length - 1}
+                  link={link}
+                  openSubmenu={openSubmenu}
+                  setMobileMenuOpen={setMobileMenuOpen}
+                  setOpenSubmenu={setOpenSubmenu}
                 />
               )
             })}
@@ -402,20 +427,19 @@ export const SiteHeader = (props: SiteHeaderProps) => {
             {props.links?.map((link, index) => {
               if (link.subMenuLinks)
                 link.onClick = () => {
-                  toggleSubMenu(link.label, false)
+                  toggleSubmenu(link.label, false, openSubmenu, setOpenSubmenu)
                 }
               return (
                 <HeaderLink
-                  link={link}
-                  key={index}
-                  openSubMenu={openSubMenu}
-                  toggleSubMenu={toggleSubMenu}
                   clickRef={null}
-                  setOpenSubmenu={setOpenSubMenu}
-                  lastItem={index === props.links?.length - 1}
-                  firstItem={index === 0}
-                  setMobileMenuOpen={setMobileMenuOpen}
                   currentPath={currentPath}
+                  firstItem={index === 0}
+                  key={index}
+                  lastItem={index === props.links?.length - 1}
+                  link={link}
+                  openSubmenu={openSubmenu}
+                  setMobileMenuOpen={setMobileMenuOpen}
+                  setOpenSubmenu={setOpenSubmenu}
                 />
               )
             })}

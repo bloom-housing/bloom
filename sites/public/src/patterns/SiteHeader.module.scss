@@ -49,6 +49,7 @@
 
   .navigation-wrapper {
     background-color: var(--seeds-bg-color-surface);
+    border-block-end: var(--seeds-border-1) solid var(--seeds-border-color);
     .navigation-container {
       display: flex;
       flex-direction: row;
@@ -115,7 +116,7 @@
         flex-direction: row;
         align-items: flex-end;
         flex-wrap: wrap;
-        margin-left: auto;
+        margin-inline-start: auto;
         justify-content: flex-end;
       }
       .links-container-mobile {
@@ -139,7 +140,7 @@
   }
   @media (--sm-and-up) {
     .link:has(+ .submenu-container:hover) {
-      border-bottom: var(--seeds-border-2) solid var(--seeds-color-primary);
+      border-block-end: var(--seeds-border-2) solid var(--seeds-color-primary);
     }
   }
 
@@ -151,17 +152,17 @@
     align-items: center;
 
     @media (--sm-and-up) {
-      border-bottom: var(--seeds-border-2) solid transparent;
+      border-block-end: var(--seeds-border-2) solid transparent;
       font-weight: var(--seeds-font-weight-bold);
       font-size: var(--seeds-type-body-size);
       &:hover {
-        border-bottom: var(--seeds-border-2) solid var(--seeds-color-primary);
+        border-block-end: var(--seeds-border-2) solid var(--seeds-color-primary);
       }
     }
 
     @media (--sm-only) {
       width: 100%;
-      border-left: var(--seeds-s1) solid transparent;
+      border-inline-start: var(--seeds-s1) solid transparent;
       &:hover {
         background-color: var(--seeds-bg-color-surface-primary);
         color: var(--seeds-color-primary);
@@ -181,13 +182,13 @@
       display: none;
     }
     .show-submenu-button {
-      border-left: var(--seeds-s1) solid var(--seeds-color-primary);
+      border-inline-start: var(--seeds-s1) solid var(--seeds-color-primary);
     }
   }
 
   .mobile-submenu-container {
     li:not(:last-child) {
-      border-bottom: var(--seeds-border-1) solid var(--seeds-border-color);
+      border-block-end: var(--seeds-border-1) solid var(--seeds-border-color);
     }
   }
 
@@ -208,7 +209,7 @@
 
     .submenu-item {
       &:not(:last-child) {
-        border-bottom: var(--seeds-border-1) solid var(--seeds-border-color);
+        border-block-end: var(--seeds-border-1) solid var(--seeds-border-color);
       }
 
       &:hover {
@@ -218,9 +219,9 @@
 
       @media (--sm-only) {
         width: 100%;
-        padding-left: var(--seeds-s4);
+        padding-inline-start: var(--seeds-s4);
         &:first-child {
-          border-top: var(--seeds-border-1) solid var(--seeds-border-color);
+          border-block-start: var(--seeds-border-1) solid var(--seeds-border-color);
         }
       }
 
