@@ -263,7 +263,7 @@ describe('Unit Group Transformations', () => {
       ];
 
       const result = getUnitGroupSummary(unitGroups);
-      console.log('JAJO', result);
+
       expect(result).toHaveLength(2);
       expect(result[0].unitTypes).toEqual([
         {

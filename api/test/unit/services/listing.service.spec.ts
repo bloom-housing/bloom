@@ -80,12 +80,6 @@ const mockListing = (
           floorMax: i + 1,
           sqFeetMin: i * 100,
           sqFeetMax: i * 100 + 100,
-          bathroomMin: i,
-          bathroomMax: i + 1,
-          floorMin: i,
-          floorMax: i + 1,
-          sqFeetMin: i * 100,
-          sqFeetMax: i * 100 + 100,
           unitTypes: [
             {
               id: `unitType ${i}`,
@@ -104,25 +98,6 @@ const mockListing = (
               monthlyRentDeterminationType:
                 MonthlyRentDeterminationTypeEnum.percentageOfIncome,
               percentageOfIncomeValue: (i * 10) % 100,
-              amiChart: {
-                id: `AMI${i}`,
-                items: [],
-                name: `AMI Name ${i}`,
-                createdAt: date,
-                updatedAt: date,
-                jurisdictions: {
-                  id: 'jurisdiction ID',
-                },
-              },
-            },
-            {
-              id: `unitGroupAmiLevel ${i} 2`,
-              createdAt: date,
-              updatedAt: date,
-              amiPercentage: 30 + i * 10,
-              monthlyRentDeterminationType:
-                MonthlyRentDeterminationTypeEnum.percentageOfIncome,
-              percentageOfIncomeValue: 30 + ((i * 10) % 100),
               amiChart: {
                 id: `AMI${i}`,
                 items: [],
@@ -2525,12 +2500,6 @@ describe('Testing listing service', () => {
                   },
                 },
               },
-            },
-          },
-          units: {
-            include: {
-              unitTypes: true,
-              unitAmiChartOverrides: true,
             },
           },
           units: {
