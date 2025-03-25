@@ -105,7 +105,7 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
                 </Message>
               )}
               <div className={styles["unit-table"]}>
-                {listing.unitGroups.length > 0 ? (
+                {listing.unitGroups?.length > 0 ? (
                   <StackedTable
                     headers={{
                       unitType: "t.unitType",
