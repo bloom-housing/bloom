@@ -40,12 +40,18 @@ import { ListingUtilities } from '../dtos/listings/listing-utility.dto';
 import { ListingFeatures } from '../dtos/listings/listing-feature.dto';
 import { UnitType } from '../dtos/unit-types/unit-type.dto';
 import { UnitGroupAmiLevel } from '../dtos/unit-groups/unit-group-ami-level.dto';
-import { getRentTypes } from '../utilities/unit-utilities';
+import {
+  formatRange,
+  formatRentRange,
+  getRentTypes,
+} from '../utilities/unit-utilities';
 import { unitTypeToReadable } from '../utilities/application-export-helpers';
 import {
   doAnyJurisdictionHaveFalsyFeatureFlagValue,
   doAnyJurisdictionHaveFeatureFlagSet,
 } from '../utilities/feature-flag-utilities';
+import { UnitGroupSummary } from '../dtos/unit-groups/unit-group-summary.dto';
+import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
 
 views.csv = {
   ...views.details,
@@ -79,7 +85,6 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     private prisma: PrismaService,
     @Inject(Logger)
     private logger = new Logger(ListingCsvExporterService.name),
-    private schedulerRegistry: SchedulerRegistry,
   ) {}
 
   /**
@@ -145,29 +150,14 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         FeatureFlagEnum.enableUnitGroups,
       );
 
-    const include = {
-      ...views.csv,
-      unitGroups: {
-        include: {
-          unitTypes: true,
-          unitAccessibilityPriorityTypes: true,
-          unitGroupAmiLevels: {
-            include: {
-              amiChart: {
-                include: {
-                  jurisdictions: true,
-                },
-              },
-            },
-          },
-        },
-      },
-    };
-
     const listings = await this.prisma.listings.findMany({
-      include,
+      include: views.csv,
       where: whereClause,
     });
+
+    // Add unit groups summarized to listings
+    // should be removed when unit summarized stored in db
+    await addUnitGroupsSummarized(listings as unknown as Listing[]);
 
     await this.createCsv(listingFilePath, queryParams, {
       listings: listings as unknown as Listing[],
@@ -299,9 +289,11 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     const data = enableUnitGroups
       ? listings.flatMap(
           (listing) =>
-            listing.unitGroups?.map((unitGroup) => ({
+            listing.unitGroups?.map((unitGroup, index) => ({
               listing: { id: listing.id, name: listing.name },
               unitGroup,
+              unitGroupSummary:
+                listing.unitGroupsSummarized?.unitGroupSummary?.[index],
             })) || [],
         )
       : listings.flatMap((listing) =>
@@ -1182,30 +1174,32 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         format: (val: UnitGroupAmiLevel[]) =>
           [...new Set(val.map((level) => level.amiChart?.name))].join(', '),
       },
-      //TODO: Add when we have unit group summary -> update tests
-      // {
-      //   path: 'unitGroupSummary',
-      //   label: 'AMI Levels',
-      //   format: (summary: UnitGroupSummary) =>
-      //     formatRange(
-      //       summary.amiPercentageRange?.min,
-      //       summary.amiPercentageRange?.max,
-      //       '',
-      //       '%',
-      //     ),
-      // },
+      {
+        path: 'unitGroupSummary',
+        label: 'AMI Levels',
+        format: (unitGroupSummary: UnitGroupSummary) => {
+          return formatRange(
+            unitGroupSummary?.amiPercentageRange?.min,
+            unitGroupSummary?.amiPercentageRange?.max,
+            '',
+            '%',
+          );
+        },
+      },
       {
         path: 'unitGroup.unitGroupAmiLevels',
         label: 'Rent Type',
         format: (levels: UnitGroupAmiLevel[]) => getRentTypes(levels),
       },
-      //TODO: Add when we have unit group summary -> update tests
-      // {
-      //   path: 'unitGroupSummary',
-      //   label: 'Monthly Rent',
-      //   format: (summary: UnitGroupSummary) =>
-      //     formatRentRange(summary.rentRange, summary.rentAsPercentIncomeRange),
-      // },
+      {
+        path: 'unitGroupSummary',
+        label: 'Monthly Rent',
+        format: (unitGroupSummary: UnitGroupSummary) =>
+          formatRentRange(
+            unitGroupSummary.rentRange,
+            unitGroupSummary.rentAsPercentIncomeRange,
+          ),
+      },
       {
         path: 'unitGroup.totalCount',
         label: 'Affordable Unit Group Quantity',
