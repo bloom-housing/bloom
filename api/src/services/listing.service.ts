@@ -876,7 +876,9 @@ export class ListingService implements OnModuleInit {
 
     let result = mapTo(Listing, listingRaw);
 
-    if (lang && lang !== LanguagesEnum.en) {
+    // because we don't need auto translations on the public site map pin pop ups
+    // we skip the translation step
+    if (!combined && lang && lang !== LanguagesEnum.en) {
       result = await this.translationService.translateListing(result, lang);
     }
 
