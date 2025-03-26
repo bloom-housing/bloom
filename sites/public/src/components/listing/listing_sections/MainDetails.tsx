@@ -16,11 +16,9 @@ import {
 import { Availability } from "./Availability"
 import listingStyles from "../ListingViewSeeds.module.scss"
 import styles from "./MainDetails.module.scss"
-import { getApplicationSeason } from "../../../lib/helpers"
 import FavoriteButton from "../../shared/FavoriteButton"
 
 type MainDetailsProps = {
-  dueDateContent: string[]
   listing: Listing
   jurisdiction: Jurisdiction
   showFavoriteButton?: boolean
@@ -67,7 +65,6 @@ export const getListingTags = (listing: Listing, hideReviewTags?: boolean): List
 }
 
 export const MainDetails = ({
-  dueDateContent,
   listing,
   jurisdiction,
   showFavoriteButton,
@@ -135,7 +132,7 @@ export const MainDetails = ({
       </div>
 
       {showFavoriteButton && (
-        <p className={"seeds-m-bs-content"}>
+        <p className={"seeds-m-bs-3"}>
           <FavoriteButton favorited={listingFavorited} setFavorited={setListingFavorited}>
             {t("listings.favorite")}
           </FavoriteButton>
