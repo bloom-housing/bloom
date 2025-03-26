@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react"
 import Head from "next/head"
 import { Button, Heading } from "@bloom-housing/ui-seeds"
-import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext, ListingList, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import { PageHeader, t } from "@bloom-housing/ui-components"
 import { MetaTags } from "../../components/shared/MetaTags"
@@ -14,6 +14,7 @@ import { useRouter } from "next/router"
 export interface ListingBrowseProps {
   openListings: Listing[]
   closedListings: Listing[]
+  jurisdiction: Jurisdiction
   paginationData?: {
     currentPage: number
     itemCount: number
@@ -58,11 +59,30 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
             {/* TODO: Show both open and closed listings once we have designs for pagination: Issue #4448 */}
             <>
               {props.openListings.length > 0 ? (
-                <ul>
-                  {props.openListings.map((listing, index) => {
-                    return <ListingCard listing={listing} key={index} />
+              <>
+                  <ul>
+                    {props.openListings.map((listing, index) => {
+                      return (
+                      <ListingCard
+                        listing={listing}
+                        key={index}
+                        jurisdiction={props.jurisdiction}
+                      />
+                    )
                   })}
                 </ul>
+                <ul className={"seeds-m-bs-content"}>
+                  {props.closedListings.map((listing, index) => {
+                    return (
+                      <ListingCard
+                        listing={listing}
+                        key={index}
+                        jurisdiction={props.jurisdiction}
+                      />
+                    )
+                    })}
+                  </ul>
+              </>
               ) : (
                 <div className={styles["empty-state"]}>
                   <Heading size={"xl"} priority={2} className={styles["empty-heading"]}>

@@ -1,7 +1,7 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
 import { fireEvent, render, screen, waitFor } from "@testing-library/react"
-import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { listing, jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { ListingBrowse } from "../../../src/components/browse/ListingBrowse"
 import { mockNextRouter } from "../../testUtils"
 
@@ -18,7 +18,9 @@ afterAll(() => server.close())
 
 describe("<ListingBrowse>", () => {
   it("shows empty state", () => {
-    render(<ListingBrowse openListings={[]} closedListings={[]} />)
+    render(
+      <ListingBrowse openListings={[]} closedListings={[]} jurisdiction={jurisdiction} />
+    )
     expect(screen.getByText("No listings currently have open applications.")).toBeDefined()
     expect(screen.queryByRole("button", { name: /previous/i })).not.toBeInTheDocument()
     expect(screen.queryByRole("button", { name: /next/i })).not.toBeInTheDocument()
@@ -40,6 +42,7 @@ describe("<ListingBrowse>", () => {
           totalItems: 2,
           itemCount: 2,
         }}
+        jurisdiction={jurisdiction}
       />
     )
     expect(view.queryByText("No listings currently have open applications.")).toBeNull()

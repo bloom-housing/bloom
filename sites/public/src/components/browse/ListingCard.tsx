@@ -1,35 +1,22 @@
 import React from "react"
-import InfoIcon from "@heroicons/react/24/solid/InformationCircleIcon"
-import {
-  Listing,
-  ListingsStatusEnum,
-  ReviewOrderTypeEnum,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { imageUrlFromListing, oneLineAddress, ClickableCard } from "@bloom-housing/shared-helpers"
 import { StackedTable, t } from "@bloom-housing/ui-components"
-import { Card, Heading, Icon, Link, Message, Tag } from "@bloom-housing/ui-seeds"
-import { getListingApplicationStatus, getListingStackedTableData } from "../../lib/helpers"
+import { Card, Heading, Link, Tag } from "@bloom-housing/ui-seeds"
+import {
+  getListingApplicationStatus,
+  getListingStackedTableData,
+  getListingStatusMessage,
+} from "../../lib/helpers"
 import { getListingTags } from "../listing/listing_sections/MainDetails"
 import styles from "./ListingCard.module.scss"
 
 export interface ListingCardProps {
   listing: Listing
+  jurisdiction: Jurisdiction
 }
 
-export const getMessageData = (reviewOrder: ReviewOrderTypeEnum): string => {
-  switch (reviewOrder) {
-    case ReviewOrderTypeEnum.lottery:
-      return t("listings.lottery")
-    case ReviewOrderTypeEnum.firstComeFirstServe:
-      return t("listings.applicationFCFS")
-    case ReviewOrderTypeEnum.waitlist:
-      return t("listings.waitlist.open")
-    default:
-      return ""
-  }
-}
-
-export const ListingCard = ({ listing }: ListingCardProps) => {
+export const ListingCard = ({ listing, jurisdiction }: ListingCardProps) => {
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
   const listingTags = getListingTags(listing, true)
   const status = getListingApplicationStatus(listing, true, true)
@@ -77,29 +64,11 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
                 </div>
               )}
               {!!status?.content && (
-                <Message
-                  className={`${styles["due-date"]}`}
-                  customIcon={
-                    <Icon size="md" className={styles["primary-color-icon"]}>
-                      <InfoIcon />
-                    </Icon>
-                  }
-                  variant={"primary"}
-                >
-                  <div className={styles["due-date-content"]}>
-                    <span>
-                      {listing.status === ListingsStatusEnum.active && (
-                        <span className={styles["date-review-order"]}>
-                          {getMessageData(listing.reviewOrderType)}
-                          {`: `}
-                        </span>
-                      )}
-                      {status.content}
-                    </span>
-                  </div>
-                </Message>
+                <div className={"seeds-m-bs-3"}>
+                  {getListingStatusMessage(listing, jurisdiction, null, true)}
+                </div>
               )}
-              <div className={styles["unit-table"]}>
+              <div className={`${styles["unit-table"]} styled-stacked-table`}>
                 <StackedTable
                   headers={{
                     unitType: "t.unitType",
