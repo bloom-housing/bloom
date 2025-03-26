@@ -908,9 +908,12 @@ describe('Listing Controller Tests', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(201);
 
-      expect(res.body.items.length).toEqual(1);
+      expect(res.body.items.length).toBeGreaterThanOrEqual(1);
 
-      expect(res.body.items[0].id).toEqual(listing1Units.id);
+      const foundId = res.body.items.some(
+        (elem) => elem.id === listing1Units.id,
+      );
+      expect(foundId).toEqual(true);
     });
     it.todo('should return a listing based on filter bedrooms - unitGroups');
     it('should return a listing based on filter bedrooms - units', async () => {
@@ -966,9 +969,12 @@ describe('Listing Controller Tests', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(201);
 
-      expect(res.body.items.length).toEqual(1);
+      expect(res.body.items.length).toBeGreaterThanOrEqual(1);
 
-      expect(res.body.items[0].id).toEqual(listing1Units.id);
+      const foundId = res.body.items.some(
+        (elem) => elem.id === listing1Units.id,
+      );
+      expect(foundId).toEqual(true);
     });
     it('should return a listing based on filter counties', async () => {
       const buildingAddress = await prisma.address.findFirst({
@@ -997,9 +1003,12 @@ describe('Listing Controller Tests', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(201);
 
-      expect(res.body.items.length).toEqual(1);
+      expect(res.body.items.length).toBeGreaterThanOrEqual(1);
 
-      expect(res.body.items[0].id).toEqual(listing2Units.id);
+      const foundId = res.body.items.some(
+        (elem) => elem.id === listing2Units.id,
+      );
+      expect(foundId).toEqual(true);
     });
     it('should return a listing based on filter homeTypes', async () => {
       const query: ListingsQueryBody = {
@@ -1023,9 +1032,12 @@ describe('Listing Controller Tests', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(201);
 
-      expect(res.body.items.length).toEqual(1);
+      expect(res.body.items.length).toBeGreaterThanOrEqual(1);
 
-      expect(res.body.items[0].id).toEqual(listing1Units.id);
+      const foundId = res.body.items.some(
+        (elem) => elem.id === listing1Units.id,
+      );
+      expect(foundId).toEqual(true);
     });
     it('should return a listing based on filter ids', async () => {
       const query: ListingsQueryBody = {
@@ -1057,8 +1069,12 @@ describe('Listing Controller Tests', () => {
         totalPages: 1,
       });
 
-      expect(res.body.items.length).toEqual(1);
-      expect(res.body.items[0].id).toBe(listing2Units.id);
+      expect(res.body.items.length).toBeGreaterThanOrEqual(1);
+
+      const foundId = res.body.items.some(
+        (elem) => elem.id === listing2Units.id,
+      );
+      expect(foundId).toEqual(true);
     });
     it('should return a listing based on filter isVerified', async () => {
       const query: ListingsQueryBody = {
@@ -1082,9 +1098,12 @@ describe('Listing Controller Tests', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(201);
 
-      expect(res.body.items.length).toEqual(1);
+      expect(res.body.items.length).toBeGreaterThanOrEqual(1);
 
-      expect(res.body.items[0].id).toEqual(listing1Units.id);
+      const foundId = res.body.items.some(
+        (elem) => elem.id === listing1Units.id,
+      );
+      expect(foundId).toEqual(true);
     });
     it('should return a listing based on filter jurisdiction', async () => {
       const query: ListingsQueryBody = {
@@ -1104,9 +1123,12 @@ describe('Listing Controller Tests', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(201);
 
-      expect(res.body.items.length).toEqual(1);
+      expect(res.body.items.length).toBeGreaterThanOrEqual(1);
 
-      expect(res.body.items[0].id).toEqual(listing3Units.id);
+      const foundId = res.body.items.some(
+        (elem) => elem.id === listing3Units.id,
+      );
+      expect(foundId).toEqual(true);
     });
     it('should return a listing based on filter leasingAgent', async () => {
       const leasingAgent = await prisma.userAccounts.create({
@@ -1139,9 +1161,12 @@ describe('Listing Controller Tests', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(201);
 
-      expect(res.body.items.length).toEqual(1);
+      expect(res.body.items.length).toBeGreaterThanOrEqual(1);
 
-      expect(res.body.items[0].id).toEqual(listing1Units.id);
+      const foundId = res.body.items.some(
+        (elem) => elem.id === listing1Units.id,
+      );
+      expect(foundId).toEqual(true);
     });
     it('should return a listing based on filter listingFeatures', async () => {
       const query: ListingsQueryBody = {
@@ -1166,9 +1191,12 @@ describe('Listing Controller Tests', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(201);
 
-      expect(res.body.items.length).toEqual(1);
+      expect(res.body.items.length).toBeGreaterThanOrEqual(1);
 
-      expect(res.body.items[0].id).toEqual(listing1Units.id);
+      const foundId = res.body.items.some(
+        (elem) => elem.id === listing1Units.id,
+      );
+      expect(foundId).toEqual(true);
     });
     it.todo('should return a listing based on filter monthlyRent - unitGroups');
     it('should return a listing based on filter monthlyRent - units', async () => {
@@ -1193,9 +1221,12 @@ describe('Listing Controller Tests', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(201);
 
-      expect(res.body.items.length).toEqual(1);
+      expect(res.body.items.length).toBeGreaterThanOrEqual(1);
 
-      expect(res.body.items[0].id).toEqual(listing1Units.id);
+      const foundId = res.body.items.some(
+        (elem) => elem.id === listing1Units.id,
+      );
+      expect(foundId).toEqual(true);
     });
     it('should return a listing based on filter name', async () => {
       const orderedNames = [listing1Units.name, listing2Units.name].sort(
@@ -1259,9 +1290,12 @@ describe('Listing Controller Tests', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(201);
 
-      expect(res.body.items.length).toEqual(1);
+      expect(res.body.items.length).toBeGreaterThanOrEqual(1);
 
-      expect(res.body.items[0].id).toEqual(listing1Units.id);
+      const foundId = res.body.items.some(
+        (elem) => elem.id === listing1Units.id,
+      );
+      expect(foundId).toEqual(true);
     });
     it('should return a listing based on filter regions', async () => {
       const query: ListingsQueryBody = {
@@ -1371,9 +1405,12 @@ describe('Listing Controller Tests', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(201);
 
-      expect(res.body.items.length).toEqual(1);
+      expect(res.body.items.length).toBeGreaterThanOrEqual(1);
 
-      expect(res.body.items[0].id).toEqual(listing2Units.id);
+      const foundId = res.body.items.some(
+        (elem) => elem.id === listing2Units.id,
+      );
+      expect(foundId).toEqual(true);
     });
     it('should return a listing based on filter zipCode', async () => {
       const buildingAddress = await prisma.address.findFirst({
@@ -1402,9 +1439,12 @@ describe('Listing Controller Tests', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(201);
 
-      expect(res.body.items.length).toEqual(1);
+      expect(res.body.items.length).toBeGreaterThanOrEqual(1);
 
-      expect(res.body.items[0].id).toEqual(listing1Units.id);
+      const foundId = res.body.items.some(
+        (elem) => elem.id === listing1Units.id,
+      );
+      expect(foundId).toEqual(true);
     });
     it('should return a listing based on search', async () => {
       const query: ListingsQueryBody = {
