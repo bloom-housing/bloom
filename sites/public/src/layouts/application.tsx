@@ -140,7 +140,7 @@ const getHeaderLinks = (
   if (profile) {
     headerLinks.push({
       label: t("nav.myAccount"),
-      subMenuLinks: [
+      submenuLinks: [
         {
           label: t("nav.myDashboard"),
           href: "/account/dashboard",
@@ -216,14 +216,16 @@ const Layout = (props) => {
         ) : (
           getSiteHeaderDeprecated(router, profile, signOut, addToast, languages, getInMaintenance())
         )}
-        <main id="main-content" className="md:overflow-x-hidden">
-          {toastMessagesRef.current?.map((toastMessage) => (
-            <Toast {...toastMessage.props} testId="toast-alert" key={toastMessage.timestamp}>
-              {toastMessage.message}
-            </Toast>
-          ))}
-          {props.children}
-        </main>
+        <div id="main-content" tabIndex={-1} aria-label={"Main content"}>
+          <main className="md:overflow-x-hidden">
+            {toastMessagesRef.current?.map((toastMessage) => (
+              <Toast {...toastMessage.props} testId="toast-alert" key={toastMessage.timestamp}>
+                {toastMessage.message}
+              </Toast>
+            ))}
+            {props.children}
+          </main>
+        </div>
       </div>
 
       <CustomSiteFooter />

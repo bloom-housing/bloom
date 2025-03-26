@@ -37,7 +37,7 @@ export interface HeaderLink {
   /** Button onClick, will use a button element */
   onClick?: () => void
   /** An optional list of links for a dropdown submenu, only supports one nested menu */
-  subMenuLinks?: HeaderLink[]
+  submenuLinks?: HeaderLink[]
 }
 
 interface HeaderLinkProps {
@@ -65,11 +65,13 @@ const menuKeyDown = (
   lastItem: boolean,
   setMobileMenuOpen: (value: React.SetStateAction<boolean>) => void
 ) => {
+  // When a user shift-tabs on the first item in the main menu, close the mobile menu
   if (event.shiftKey && event.key === "Tab") {
     if (firstItem) {
       setMobileMenuOpen(false)
     }
   }
+  // When a user tabs on the last item in the main menu, close the mobile menu
   if (!event.shiftKey && event.key === "Tab") {
     if (lastItem) {
       setMobileMenuOpen(false)
@@ -82,7 +84,7 @@ const submenuKeyDown = (
   event: React.KeyboardEvent<HTMLAnchorElement | HTMLButtonElement>,
   index: number,
   setOpenSubmenu: (value: React.SetStateAction<string>) => void,
-  subMenuLinks: HeaderLink[],
+  submenuLinks: HeaderLink[],
   parentLabel: string
 ) => {
   // When a user shift-tabs on the first item in a submenu, close the submenu
@@ -93,7 +95,7 @@ const submenuKeyDown = (
   }
   // When a user tabs on the last item in a submenu, close the submenu
   if (!event.shiftKey && event.key === "Tab") {
-    if (index === subMenuLinks.length - 1) {
+    if (index === submenuLinks.length - 1) {
       setOpenSubmenu(null)
     }
   }
@@ -105,7 +107,7 @@ const submenuKeyDown = (
   // When a user presses the down arrow, go to the next item in the submenu if not at the end
   if (event.key === "ArrowDown") {
     event.preventDefault() // Prevent page scroll
-    if (index < subMenuLinks.length - 1) {
+    if (index < submenuLinks.length - 1) {
       document.getElementById(`submenu-link-${index + 1}`).focus()
     }
   }
@@ -122,7 +124,7 @@ const submenuKeyDown = (
 const HeaderLink = (props: HeaderLinkProps) => {
   const parentLink = useRef(null)
   const openSubMenu = props.openSubmenu === props.link.label
-  if (props.link.subMenuLinks?.length) {
+  if (props.link.submenuLinks?.length) {
     // Navigation item contains a submenu
     return (
       <li className={styles["dropdown-link-container"]}>
@@ -176,27 +178,27 @@ const HeaderLink = (props: HeaderLinkProps) => {
             ref={props.clickRef}
             id={`${props.link.label}-submenu`}
           >
-            {props.link.subMenuLinks.map((subMenuLink, index) => {
-              if (subMenuLink.href) {
+            {props.link.submenuLinks.map((submenuLink, index) => {
+              if (submenuLink.href) {
                 // Navigation item is a link
                 return (
                   <li className={styles["submenu-item"]} key={index}>
                     <LinkComponent
                       className={styles["submenu-link"]}
-                      href={subMenuLink.href}
+                      href={submenuLink.href}
                       onKeyDown={(event) => {
                         submenuKeyDown(
                           event,
                           index,
                           props.setOpenSubmenu,
-                          props.link.subMenuLinks,
+                          props.link.submenuLinks,
                           props.link.label
                         )
                       }}
                       id={`submenu-link-${index}`}
-                      aria-current={props.currentPath === subMenuLink.href}
+                      aria-current={props.currentPath === submenuLink.href}
                     >
-                      {subMenuLink.label}
+                      {submenuLink.label}
                     </LinkComponent>
                   </li>
                 )
@@ -206,19 +208,19 @@ const HeaderLink = (props: HeaderLinkProps) => {
                   <li className={styles["submenu-item"]} key={index}>
                     <button
                       className={styles["submenu-link"]}
-                      onClick={subMenuLink.onClick}
+                      onClick={submenuLink.onClick}
                       onKeyDown={(event) => {
                         submenuKeyDown(
                           event,
                           index,
                           props.setOpenSubmenu,
-                          props.link.subMenuLinks,
+                          props.link.submenuLinks,
                           props.link.label
                         )
                       }}
                       id={`submenu-link-${index}`}
                     >
-                      {subMenuLink.label}
+                      {submenuLink.label}
                     </button>
                   </li>
                 )
@@ -444,7 +446,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
           >
             <ul>
               {props.links?.map((link, index) => {
-                if (link.subMenuLinks)
+                if (link.submenuLinks)
                   link.onClick = () => {
                     toggleSubmenu(link.label, false, openSubmenu, setOpenSubmenu)
                   }

@@ -2,6 +2,7 @@
   --site-header-title-color: var(--seeds-text-color-darker);
   --site-header-link-color: var(--seeds-text-color);
   --site-header-link-font-weight-desktop: var(--seeds-font-weight-bold);
+  --site-header-block-end-border: var(--seeds-border-1) solid var(--seeds-border-color);
 
   font-family: var(--seeds-font-alt-sans);
   a {
@@ -81,7 +82,7 @@
 
   .navigation-wrapper {
     background-color: var(--seeds-bg-color-surface);
-    border-block-end: var(--seeds-border-1) solid var(--seeds-border-color);
+    border-block-end: var(--site-header-block-end-border);
     .navigation-container {
       display: flex;
       flex-direction: row;
