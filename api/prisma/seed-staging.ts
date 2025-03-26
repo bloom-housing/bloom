@@ -203,7 +203,11 @@ export const stagingSeed = async (
     data: translationFactory(jurisdiction.id, jurisdiction.name),
   });
   await prismaClient.translations.create({
-    data: translationFactory(undefined, undefined, LanguagesEnum.es),
+    data: translationFactory(
+      jurisdiction.id,
+      jurisdiction.name,
+      LanguagesEnum.es,
+    ),
   });
   await prismaClient.translations.create({
     data: translationFactory(),
