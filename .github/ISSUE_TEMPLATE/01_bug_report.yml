@@ -11,14 +11,14 @@ body:
     id: description
     attributes:
       label: What is the issue?
-      description: describe the issue including screenshots if possible
+      description: Describe what the issue is including screenshots if possible
       placeholder: 
     validations:
       required: true
   - type: textarea
     id: reproducing-steps
     attributes:
-      label: How to reproduce the bug
+      label: How can you reproduce the bug?
       description: Please provide the full steps to reproduce the issue
     validations:
       required: true
@@ -26,7 +26,7 @@ body:
     id: additional-context
     attributes:
       label: Is there any additional context?
-      description: What additional context can you provide?
+      description: Add any additional information that might be relevant (log outputs, background information, etc)
     validations:
       required: false
   - type: dropdown
@@ -41,9 +41,14 @@ body:
         - Microsoft Edge
     validations:
       required: true
-  - type: textarea
-    id: logs
+  - type: dropdown
+    id: device
     attributes:
-      label: Relevant log output
-      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
-      render: shell
+      label: Where are you seeing this issue?
+      multiple: true
+      options:
+        - Desktop
+        - Mobile
+    validations:
+      required: true
+
