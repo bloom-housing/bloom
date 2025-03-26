@@ -1,9 +1,6 @@
 import {
-  ApplicationAddressTypeEnum,
-  ApplicationMethodsTypeEnum,
   ApplicationSubmissionTypeEnum,
   LanguagesEnum,
-  ListingEventsTypeEnum,
   ListingsStatusEnum,
   MonthlyRentDeterminationTypeEnum,
   MultiselectQuestions,
@@ -15,20 +12,13 @@ import {
 } from '@prisma/client';
 import dayjs from 'dayjs';
 import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
-import {
-  featuresAndUtilites,
-  listingFactory,
-} from './seed-helpers/listing-factory';
+import { listingFactory } from './seed-helpers/listing-factory';
 import { amiChartFactory } from './seed-helpers/ami-chart-factory';
 import { userFactory } from './seed-helpers/user-factory';
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { unitAccessibilityPriorityTypeFactoryAll } from './seed-helpers/unit-accessibility-priority-type-factory';
 import { multiselectQuestionFactory } from './seed-helpers/multiselect-question-factory';
-import {
-  yellowstoneAddress,
-  yosemiteAddress,
-  rockyMountainAddress,
-} from './seed-helpers/address-factory';
+import { yellowstoneAddress } from './seed-helpers/address-factory';
 import { applicationFactory } from './seed-helpers/application-factory';
 import { translationFactory } from './seed-helpers/translation-factory';
 import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
