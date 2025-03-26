@@ -8,6 +8,16 @@ import { createReadStream } from 'fs';
 import { S3RequestPresigner } from '@aws-sdk/s3-request-presigner';
 import { Upload } from '@aws-sdk/lib-storage';
 
+export const checkArgs = (args: Record<string, string>): void => {
+  Object.keys(args).forEach((key) => {
+    if (!args[key]) {
+      throw new InternalServerErrorException(
+        `S3 env variable ${key} is missing`,
+      );
+    }
+  });
+};
+
 /**
  * @param accessKeyId the AWS service account access key
  * @param bucket the s3 bucket the object lives inside of
@@ -23,6 +33,12 @@ export const generatePresignedGetURL = async (
   region: string,
   secretAccessKey: string,
 ): Promise<string> => {
+  checkArgs({
+    accessKeyId,
+    bucket,
+    region,
+    secretAccessKey,
+  });
   const url = parseUrl(`https://${bucket}.s3.${region}.amazonaws.com/${key}`);
   const presigner = new S3RequestPresigner({
     credentials: {
@@ -58,6 +74,12 @@ export const uploadToS3 = async (
   region: string,
   secretAccessKey: string,
 ): Promise<void> => {
+  checkArgs({
+    accessKeyId,
+    bucket,
+    region,
+    secretAccessKey,
+  });
   try {
     const client = new S3Client({
       region,
