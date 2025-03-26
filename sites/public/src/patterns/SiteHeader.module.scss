@@ -1,4 +1,8 @@
 .site-header-container {
+  --site-header-title-color: var(--seeds-text-color-darker);
+  --site-header-link-color: var(--seeds-text-color);
+  --site-header-link-font-weight-desktop: var(--seeds-font-weight-bold);
+
   font-family: var(--seeds-font-alt-sans);
   a {
     text-decoration: none;
@@ -104,6 +108,9 @@
           svg {
             width: var(--seeds-s12);
           }
+          img {
+            max-height: var(--seeds-s16);
+          }
           @media (--sm-only) {
             font-size: var(--seeds-font-size-sm);
             margin-inline-end: var(--seeds-s2);
@@ -113,7 +120,7 @@
           }
         }
         .title {
-          color: var(--seeds-text-color-darker);
+          color: var(--site-header-title-color);
           padding-inline-start: 0;
           padding-inline-end: var(--seeds-s4);
           padding-block: var(--seeds-s4);
@@ -175,13 +182,13 @@
   .link {
     padding: var(--seeds-s4);
     box-sizing: border-box;
-    color: var(--seeds-text-color);
+    color: var(--site-header-link-color);
     display: flex;
     align-items: center;
 
     @media (--sm-and-up) {
       border-block-end: var(--seeds-border-2) solid transparent;
-      font-weight: var(--seeds-font-weight-bold);
+      font-weight: var(--site-header-link-font-weight-desktop);
       font-size: var(--seeds-type-body-size);
       &:hover {
         border-block-end: var(--seeds-border-2) solid var(--seeds-color-primary);

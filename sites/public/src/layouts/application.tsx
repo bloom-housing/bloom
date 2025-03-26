@@ -211,6 +211,7 @@ const Layout = (props) => {
               </Icon>
             }
             mainContentId="main-content"
+            showMessageBar={true}
           />
         ) : (
           getSiteHeaderDeprecated(router, profile, signOut, addToast, languages, getInMaintenance())

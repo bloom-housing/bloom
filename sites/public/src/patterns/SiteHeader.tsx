@@ -302,14 +302,16 @@ export type Language = {
 }
 
 interface SiteHeaderProps {
+  className?: string
   languages: Language[]
   links: HeaderLink[]
   logo?: React.ReactNode
   logoClassName?: string
   mainContentId?: string
   message?: React.ReactNode
+  showMessageBar?: boolean
   subtitle?: string
-  title: string
+  title?: string
   titleLink: string
 }
 
@@ -349,7 +351,9 @@ export const SiteHeader = (props: SiteHeaderProps) => {
   }, [])
 
   return (
-    <header className={styles["site-header-container"]}>
+    <header
+      className={`${styles["site-header-container"]} ${props.className ? props.className : ""}`}
+    >
       {props.mainContentId && (
         <a className={`${styles["skip-link"]}`} href={`#${props.mainContentId}`}>
           {t("t.skipToMainContent")}
@@ -369,9 +373,11 @@ export const SiteHeader = (props: SiteHeaderProps) => {
           })}
         </div>
       </HeadingWrapper>
-      <HeadingWrapper className={styles["message-wrapper"]}>
-        <div className={styles["message-container"]}>{props.message ?? ""}</div>
-      </HeadingWrapper>
+      {props.showMessageBar && (
+        <HeadingWrapper className={styles["message-wrapper"]}>
+          <div className={styles["message-container"]}>{props.message ?? ""}</div>
+        </HeadingWrapper>
+      )}
       <nav aria-label={"Main"}>
         <HeadingWrapper className={styles["navigation-wrapper"]}>
           <div className={styles["navigation-container"]}>
@@ -383,10 +389,16 @@ export const SiteHeader = (props: SiteHeaderProps) => {
                   {props.logo}
                 </div>
               )}
-              <div className={styles["title"]}>
-                <div className={`${styles["title-heading"]} text-heading-xl`}>{props.title}</div>
-                {props.subtitle && <p className={styles["title-subheading"]}>{props.subtitle}</p>}
-              </div>
+              {(props.title || props.subtitle) && (
+                <div className={styles["title"]}>
+                  {props.title && (
+                    <div className={`${styles["title-heading"]} text-heading-xl`}>
+                      {props.title}
+                    </div>
+                  )}
+                  {props.subtitle && <p className={styles["title-subheading"]}>{props.subtitle}</p>}
+                </div>
+              )}
             </Link>
             <ul className={`${styles["links-container-desktop"]}`}>
               {props.links?.map((link, index) => {
