@@ -325,18 +325,21 @@ export const getEligibilitySections = (listing: Listing): EligibilitySection[] =
   }
 
   // HMI
-  eligibilityFeatures.push({
-    header: t("listings.householdMaximumIncome"),
-    subheader: listing?.units[0]?.bmrProgramChart
-      ? t("listings.forIncomeCalculationsBMR")
-      : t("listings.forIncomeCalculations"),
-    content: (
-      <StackedTable
-        headers={listing?.unitsSummarized?.hmi?.columns as TableHeaders}
-        stackedData={getStackedHmiData(listing)}
-      />
-    ),
-  })
+  //TODO: Handle HMI for unit groups
+  if (listing?.units && listing?.units.length > 0) {
+    eligibilityFeatures.push({
+      header: t("listings.householdMaximumIncome"),
+      subheader: listing?.units[0]?.bmrProgramChart
+        ? t("listings.forIncomeCalculationsBMR")
+        : t("listings.forIncomeCalculations"),
+      content: (
+        <StackedTable
+          headers={listing?.unitsSummarized?.hmi?.columns as TableHeaders}
+          stackedData={getStackedHmiData(listing)}
+        />
+      ),
+    })
+  }
 
   // Occupancy
   eligibilityFeatures.push({

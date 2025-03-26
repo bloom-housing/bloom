@@ -489,12 +489,10 @@ export const getAvailabilityTextForGroup = (
   // Track all statuses across groups
   const statusSet = new Set<string>()
   let totalVacantUnits = 0
-  let hasOpenWaitlist = false
 
   // Collect information from all groups
   groups.forEach((group) => {
     if (group.openWaitlist) {
-      hasOpenWaitlist = true
       statusSet.add(t("listings.waitlist.open"))
     }
 
@@ -820,20 +818,15 @@ export const getUnitGroupSummariesTable = (listing: Listing) => {
 
   // unit group summary
   groupedUnitData = listing?.unitGroupsSummarized?.unitGroupSummary.map((group) => {
+    const isComingSoon =
+      listing.marketingType && listing.marketingType === MarketingTypeEnum.comingSoon
+
     let rentRange = null
     let rentAsPercentIncomeRange = null
     if (group.rentRange && group.rentRange.min === group.rentRange.max) {
       rentRange = group.rentRange.min
     } else if (group.rentRange) {
       rentRange = `${group.rentRange.min} - ${group.rentRange.max}`
-    }
-
-    if (rentRange) {
-      rentRange = (
-        <span>
-          <strong>{rentRange}</strong> {t("t.perMonth")}
-        </span>
-      )
     }
 
     if (
@@ -846,24 +839,13 @@ export const getUnitGroupSummariesTable = (listing: Listing) => {
     }
 
     if (rentAsPercentIncomeRange) {
-      rentAsPercentIncomeRange = (
-        <span>
-          <strong>{rentAsPercentIncomeRange}%</strong> {t("t.income")}
-        </span>
-      )
+      rentAsPercentIncomeRange = `${rentAsPercentIncomeRange}% ${t("t.income")}`
     }
 
-    const isComingSoon =
-      listing.marketingType && listing.marketingType === MarketingTypeEnum.comingSoon
-
-    let rent: React.ReactNode = null
+    let rent = null
 
     if (rentRange && rentAsPercentIncomeRange) {
-      rent = (
-        <div>
-          {rentRange}, {rentAsPercentIncomeRange}
-        </div>
-      )
+      rent = `${rentRange}, ${rentAsPercentIncomeRange}`
     } else if (rentRange) {
       rent = rentRange
     } else if (rentAsPercentIncomeRange) {
@@ -882,26 +864,19 @@ export const getUnitGroupSummariesTable = (listing: Listing) => {
 
     return {
       unitType: {
-        content: (
-          <>
-            {group.unitTypes
-              ?.map((type) => (
-                <strong key={type.name}>{t(`listings.unitTypes.${type.name}`)}</strong>
-              ))
-              .reduce((acc, curr, index) => [acc, index !== 0 ? ", " : "", curr], [])}
-          </>
-        ),
+        cellText: group.unitTypes?.map((type) => t(`listings.unitTypes.${type.name}`)).join(", "),
       },
-      rent: { content: rent ?? t("listings.unitsSummary.notAvailable") },
+      rent: {
+        cellText: rent,
+        cellSubText: rent ? t("t.perMonth") : "",
+      },
       availability: {
-        content: (
-          <>
-            <strong>{availability.text}</strong>
-            {availability.subText && <div>{availability.subText}</div>}
-          </>
-        ),
+        cellText: availability.text,
+        cellSubText: availability.subText,
       },
-      ami: { content: ami ?? t("listings.unitsSummary.notAvailable") },
+      ami: {
+        cellText: ami ?? t("listings.unitsSummary.notAvailable"),
+      },
     }
   })
 
