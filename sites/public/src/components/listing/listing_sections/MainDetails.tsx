@@ -1,5 +1,6 @@
 import React, { Dispatch, SetStateAction } from "react"
 import {
+  Jurisdiction,
   Listing,
   MarketingTypeEnum,
   ReviewOrderTypeEnum,
@@ -12,7 +13,6 @@ import {
   imageUrlFromListing,
   oneLineAddress,
 } from "@bloom-housing/shared-helpers"
-import { DueDate } from "./DueDate"
 import { Availability } from "./Availability"
 import listingStyles from "../ListingViewSeeds.module.scss"
 import styles from "./MainDetails.module.scss"
@@ -22,6 +22,7 @@ import FavoriteButton from "../../shared/FavoriteButton"
 type MainDetailsProps = {
   dueDateContent: string[]
   listing: Listing
+  jurisdiction: Jurisdiction
   showFavoriteButton?: boolean
   listingFavorited?: boolean
   setListingFavorited?: Dispatch<SetStateAction<boolean>>
@@ -68,6 +69,7 @@ export const getListingTags = (listing: Listing, hideReviewTags?: boolean): List
 export const MainDetails = ({
   dueDateContent,
   listing,
+  jurisdiction,
   showFavoriteButton,
   listingFavorited,
   setListingFavorited,
@@ -76,7 +78,7 @@ export const MainDetails = ({
 
   const googleMapsHref =
     "https://www.google.com/maps/place/" + oneLineAddress(listing.listingsBuildingAddress)
-  const listingTags = getListingTags(listing)
+  const listingTags = getListingTags(listing, true)
   return (
     <div>
       <ImageCard
@@ -130,32 +132,18 @@ export const MainDetails = ({
         )}
 
         <p className={"seeds-m-bs-3"}>{listing.developer}</p>
-
-        {showFavoriteButton && (
-          <p className={"seeds-m-bs-3"}>
-            <FavoriteButton favorited={listingFavorited} setFavorited={setListingFavorited}>
-              {t("listings.favorite")}
-            </FavoriteButton>
-          </p>
-        )}
-
-        <div className={`${listingStyles["hide-desktop"]} seeds-m-b-3`}>
-          {listing.marketingType === MarketingTypeEnum.comingSoon ? (
-            <DueDate content={[getApplicationSeason(listing)]} />
-          ) : (
-            <DueDate content={dueDateContent} />
-          )}
-        </div>
       </div>
-      <div className={listingStyles["hide-desktop"]}>
-        <Availability
-          reservedCommunityDescription={listing.reservedCommunityDescription}
-          reservedCommunityType={listing.reservedCommunityTypes}
-          reviewOrder={listing.reviewOrderType}
-          status={listing.status}
-          unitsAvailable={listing.unitsAvailable}
-          waitlistOpenSpots={listing.waitlistOpenSpots}
-        />
+
+      {showFavoriteButton && (
+        <p className={"seeds-m-bs-content"}>
+          <FavoriteButton favorited={listingFavorited} setFavorited={setListingFavorited}>
+            {t("listings.favorite")}
+          </FavoriteButton>
+        </p>
+      )}
+
+      <div className={`${listingStyles["hide-desktop"]} seeds-m-bs-content`}>
+        <Availability listing={listing} jurisdiction={jurisdiction} />
       </div>
     </div>
   )

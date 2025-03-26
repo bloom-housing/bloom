@@ -99,12 +99,12 @@ describe('Testing listing csv export service', () => {
         unitGroupAmiLevels: [
           {
             id: randomUUID(),
-            amiPercentage: 30,
+            monthlyRentDeterminationType: 'percentOfIncome',
             amiChart: { id: randomUUID(), name: 'Ami Chart Name' },
           },
           {
             id: randomUUID(),
-            amiPercentage: 50,
+            monthlyRentDeterminationType: 'flatRent',
             amiChart: { id: randomUUID(), name: 'Ami Chart Name' },
           },
         ],
@@ -114,6 +114,20 @@ describe('Testing listing csv export service', () => {
         id: 'listing1-ID',
         name: 'listing1-Name',
         unitGroups: [unitGroup],
+        unitGroupsSummarized: {
+          unitGroupSummary: [
+            {
+              rentRange: {
+                min: 3000,
+                max: 4000,
+              },
+              amiPercentageRange: {
+                min: 30,
+                max: 50,
+              },
+            },
+          ],
+        },
       };
 
       await service.createUnitCsv(
@@ -127,12 +141,11 @@ describe('Testing listing csv export service', () => {
 
       // Check headers
       expect(content).toContain(
-        'Listing Id,Listing Name,Unit Group Id,Unit Types,AMI Chart,Rent Type,Affordable Unit Group Quantity,Unit Group Vacancies,Waitlist Status,Minimum Occupancy,Maximum Occupancy,Minimum Sq ft,Maximum Sq ft,Minimum Floor,Maximum Floor,Minimum Bathrooms,Maximum Bathrooms',
+        'Listing Id,Listing Name,Unit Group Id,Unit Types,AMI Chart,AMI Levels,Rent Type,Monthly Rent,Affordable Unit Group Quantity,Unit Group Vacancies,Waitlist Status,Minimum Occupancy,Maximum Occupancy,Minimum Sq ft,Maximum Sq ft,Minimum Floor,Maximum Floor,Minimum Bathrooms,Maximum Bathrooms',
       );
 
-      // Check content - note the empty value between commas for Rent Type
       expect(content).toContain(
-        `"listing1-ID","listing1-Name","${unitGroup.id}","Studio, One Bedroom","Ami Chart Name",,"5","2","No","1","3","800","1000","1","3","1","2"`,
+        `"listing1-ID","listing1-Name","${unitGroup.id}","Studio, One Bedroom","Ami Chart Name","30% - 50%","Percent Of Income, Flat Rent","3000 - 4000","5","2","No","1","3","800","1000","1","3","1","2"`,
       );
     });
   });
