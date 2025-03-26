@@ -2459,7 +2459,7 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
-
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
       await service.create(
         {
           name: 'example listing name',
@@ -2590,7 +2590,7 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
-
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
       const val = constructFullListingData();
 
       await service.create(val as ListingCreate, user);
@@ -2912,7 +2912,7 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
-
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
       await service.create(
         {
           name: 'example listing name',
