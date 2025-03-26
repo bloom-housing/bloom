@@ -6,6 +6,7 @@ import {
   EnumListingFilterParamsComparison,
   FeatureFlagEnum,
   Jurisdiction,
+  Listing,
   ListingFilterParams,
   ListingOrderByKeys,
   ListingsStatusEnum,
@@ -73,12 +74,13 @@ export const useProfileFavoriteListings = () => {
             .finally(() => setLoading(false))
         } else {
           setListings({ items: [] } as PaginatedListing)
+          setLoading(false)
         }
       })
     }
   }, [profile, loading, userService, listingsService])
 
-  return listings.items
+  return [listings.items, loading] as [Listing[], boolean]
 }
 
 export async function fetchBaseListingData(

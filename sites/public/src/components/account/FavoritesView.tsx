@@ -6,7 +6,7 @@ import {
   Jurisdiction,
   Listing,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { t } from "@bloom-housing/ui-components"
+import { LoadingOverlay, t } from "@bloom-housing/ui-components"
 import Layout from "../../layouts/application"
 import { MetaTags } from "../shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
@@ -24,7 +24,7 @@ interface FavoritesViewProps {
 
 const FavoritesView = ({ jurisdiction }: FavoritesViewProps) => {
   const { profile, userService } = useContext(AuthContext)
-  const listings = useProfileFavoriteListings()
+  const [listings, loading] = useProfileFavoriteListings()
   const [favoriteListings, setFavoriteListings] = useState<Listing[]>([])
 
   useEffect(() => {
@@ -62,43 +62,47 @@ const FavoritesView = ({ jurisdiction }: FavoritesViewProps) => {
           inverse
           className={listings.length === 0 ? favoritesStyles["favorites-none-layout"] : ""}
         >
-          {listings.length === 0 ? (
-            <div style={{ display: "grid", gap: "var(--seeds-s4)" }}>
-              <Heading priority={2} size="3xl" className="font-alt-sans">
-                {t("account.noFavorites")}
-              </Heading>
-              <p>
-                <Button size="sm" variant="primary-outlined" href="/listings">
-                  {t("listings.browseListings")}
-                </Button>
-              </p>
-            </div>
-          ) : (
-            <div className={styles["listing-directory"]}>
-              <div
-                className={[styles["content-wrapper"], favoritesStyles["favorites-listings"]].join(
-                  " "
-                )}
-              >
-                <ul>
-                  {listings.map((listing, index) => {
-                    return (
-                      <ListingCard
-                        listing={listing}
-                        key={index}
-                        showFavoriteButton={isFeatureFlagOn(
-                          jurisdiction,
-                          FeatureFlagEnum.showListingFavoriting
-                        )}
-                        favorited={favoriteListings.some((item) => item.id === listing.id)}
-                        setFavorited={saveFavoriteFn(listing)}
-                      />
-                    )
-                  })}
-                </ul>
+          <LoadingOverlay isLoading={loading}>
+            {!loading && listings.length === 0 ? (
+              <div style={{ display: "grid", gap: "var(--seeds-s4)" }}>
+                <Heading priority={2} size="3xl" className="font-alt-sans">
+                  {t("account.noFavorites")}
+                </Heading>
+                <p>
+                  <Button size="sm" variant="primary-outlined" href="/listings">
+                    {t("listings.browseListings")}
+                  </Button>
+                </p>
               </div>
-            </div>
-          )}
+            ) : (
+              <div className={styles["listing-directory"]}>
+                <div
+                  className={[
+                    styles["content-wrapper"],
+                    favoritesStyles["favorites-listings"],
+                  ].join(" ")}
+                >
+                  <ul>
+                    {listings.map((listing, index) => {
+                      return (
+                        <ListingCard
+                          key={index}
+                          listing={listing}
+                          jurisdiction={jurisdiction}
+                          showFavoriteButton={isFeatureFlagOn(
+                            jurisdiction,
+                            FeatureFlagEnum.showListingFavoriting
+                          )}
+                          favorited={favoriteListings.some((item) => item.id === listing.id)}
+                          setFavorited={saveFavoriteFn(listing)}
+                        />
+                      )
+                    })}
+                  </ul>
+                </div>
+              </div>
+            )}
+          </LoadingOverlay>
         </PageHeaderLayout>
       </Layout>
     </RequireLogin>

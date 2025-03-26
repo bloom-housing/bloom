@@ -85,7 +85,6 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
     "paperApplicationLanguage",
     paperApplications?.length ? paperApplications[0].fileURL : undefined
   )
-  const statusContent = getListingApplicationStatus(listing)
 
   const OpenHouses = (
     <DateSection
@@ -188,7 +187,6 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
         <div className={styles["left-bar"]}>
           <MainDetails
             listing={listing}
-            dueDateContent={[statusContent?.content, statusContent?.subContent]}
             jurisdiction={jurisdiction}
             showFavoriteButton={
               profile && isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableListingFavoriting)

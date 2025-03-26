@@ -19,7 +19,6 @@ import listingStyles from "../ListingViewSeeds.module.scss"
 import styles from "./MainDetails.module.scss"
 
 type MainDetailsProps = {
-  dueDateContent: string[]
   listing: Listing
   jurisdiction: Jurisdiction
   showFavoriteButton?: boolean
@@ -137,6 +136,15 @@ export const MainDetails = ({
           </p>
         )}
       </div>
+
+      {showFavoriteButton && (
+        <p className={"seeds-m-bs-3"}>
+          <FavoriteButton favorited={listingFavorited} setFavorited={setListingFavorited}>
+            {t("listings.favorite")}
+          </FavoriteButton>
+        </p>
+      )}
+
       <div className={`${listingStyles["hide-desktop"]} seeds-m-bs-content`}>
         <Availability listing={listing} jurisdiction={jurisdiction} />
       </div>
