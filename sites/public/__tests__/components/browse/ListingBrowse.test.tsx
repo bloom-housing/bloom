@@ -62,6 +62,7 @@ describe("<ListingBrowse>", () => {
             { ...listing, name: "ListingB" },
           ]}
           closedListings={[]}
+          jurisdiction={jurisdiction}
           paginationData={{
             currentPage: 1,
             totalPages: 2,
@@ -95,6 +96,7 @@ describe("<ListingBrowse>", () => {
             { ...listing, name: "ListingB" },
           ]}
           closedListings={[]}
+          jurisdiction={jurisdiction}
           paginationData={{
             currentPage: 2,
             totalPages: 2,
@@ -128,6 +130,7 @@ describe("<ListingBrowse>", () => {
             { ...listing, name: "ListingB" },
           ]}
           closedListings={[]}
+          jurisdiction={jurisdiction}
           paginationData={{
             currentPage: 2,
             totalPages: 3,

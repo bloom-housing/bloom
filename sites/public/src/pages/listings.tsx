@@ -45,8 +45,9 @@ export async function getServerSideProps(context: { req: any }) {
 
   return {
     props: {
-      openListings: await openListings,
-      closedListings: await closedListings,
+      openListings: (await openListings)?.items || [],
+      closedListings: (await closedListings)?.items || [],
+      paginationData: (await openListings)?.meta,
       jurisdiction: await jurisdiction,
       paginationData: (await openListings)?.meta,
     },
