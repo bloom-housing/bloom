@@ -18,9 +18,7 @@ afterAll(() => server.close())
 
 describe("<ListingBrowse>", () => {
   it("shows empty state", () => {
-    render(
-      <ListingBrowse openListings={[]} closedListings={[]} jurisdiction={jurisdiction} />
-    )
+    render(<ListingBrowse openListings={[]} closedListings={[]} jurisdiction={jurisdiction} />)
     expect(screen.getByText("No listings currently have open applications.")).toBeDefined()
     expect(screen.queryByRole("button", { name: /previous/i })).not.toBeInTheDocument()
     expect(screen.queryByRole("button", { name: /next/i })).not.toBeInTheDocument()
@@ -64,6 +62,7 @@ describe("<ListingBrowse>", () => {
             { ...listing, name: "ListingB" },
           ]}
           closedListings={[]}
+          jurisdiction={jurisdiction}
           paginationData={{
             currentPage: 1,
             totalPages: 2,
@@ -97,6 +96,7 @@ describe("<ListingBrowse>", () => {
             { ...listing, name: "ListingB" },
           ]}
           closedListings={[]}
+          jurisdiction={jurisdiction}
           paginationData={{
             currentPage: 2,
             totalPages: 2,
@@ -130,6 +130,7 @@ describe("<ListingBrowse>", () => {
             { ...listing, name: "ListingB" },
           ]}
           closedListings={[]}
+          jurisdiction={jurisdiction}
           paginationData={{
             currentPage: 2,
             totalPages: 3,
