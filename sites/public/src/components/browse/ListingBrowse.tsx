@@ -54,6 +54,17 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
       <PageHeader title={t("pageTitle.rent")} />
 
       <div className={styles["listing-directory"]}>
+        {props.paginationData && (
+          <div className={styles["browser-header"]}>
+            <div className={styles["browser-header-content"]}></div>
+            <Heading priority={5} size="lg">
+              {t("listings.browseListings.countInfo", {
+                currentCount: props.paginationData.itemCount,
+                totalCount: props.paginationData.totalItems,
+              })}
+            </Heading>
+          </div>
+        )}
         <div className={styles["content-wrapper"]}>
           {/* TODO: Show both open and closed listings once we have designs for pagination: Issue #4448 */}
           <div className={styles["content"]}>
