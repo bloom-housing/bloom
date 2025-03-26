@@ -161,7 +161,7 @@ export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProp
   )
 
   return (
-    <article className={styles["listing-view"]}>
+    <article className={`${styles["listing-view"]} styled-stacked-table`}>
       <div className={styles["content-wrapper"]}>
         <div className={styles["left-bar"]}>
           <MainDetails

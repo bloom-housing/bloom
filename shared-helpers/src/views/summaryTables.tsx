@@ -117,6 +117,72 @@ export const unitSummariesTable = (
   return unitSummaries
 }
 
+export const getStackedUnitSummaryDetailsTable = (
+  summaries: UnitSummary[],
+  listingReviewOrder: ReviewOrderTypeEnum
+) => {
+  let rentNotAvailable = false
+  const unitSummaries = summaries?.map((unitSummary) => {
+    const unitPluralization =
+      unitSummary.totalAvailable === 1 ? t("listings.vacantUnit") : t("listings.vacantUnits")
+    const minIncome =
+      unitSummary.minIncomeRange.min === unitSummary.minIncomeRange.max
+        ? getTranslationFromCurrencyString(unitSummary.minIncomeRange.min)
+        : `${getTranslationFromCurrencyString(unitSummary.minIncomeRange.min)} ${t(
+            "t.to"
+          )} ${getTranslationFromCurrencyString(unitSummary.minIncomeRange.max)}`
+
+    const getRent = (rentMin: string, rentMax: string, percent = false) => {
+      const unit = percent ? t("t.ofIncome") : ""
+      if (rentMin === "t.n/a") rentNotAvailable = true
+      return rentMin === rentMax
+        ? `${getTranslationFromCurrencyString(rentMin)}${rentMin !== "t.n/a" ? unit : ""}`
+        : `${getTranslationFromCurrencyString(rentMin)}
+          ${` ${t("t.to")} `}
+          ${getTranslationFromCurrencyString(rentMax)}
+          ${unit}`
+    }
+
+    // Use rent as percent income if available, otherwise use exact rent
+    const rent = unitSummary.rentAsPercentIncomeRange.min
+      ? getRent(
+          unitSummary.rentAsPercentIncomeRange.min.toString(),
+          unitSummary.rentAsPercentIncomeRange.max.toString(),
+          true
+        )
+      : getRent(unitSummary.rentRange.min, unitSummary.rentRange.max)
+
+    let availability = ""
+    if (listingReviewOrder !== ReviewOrderTypeEnum.waitlist) {
+      availability =
+        unitSummary.totalAvailable > 0
+          ? `${unitSummary.totalAvailable} ${unitPluralization}`
+          : t("listings.waitlist.open")
+    } else if (listingReviewOrder === ReviewOrderTypeEnum.waitlist) {
+      availability = t("listings.waitlist.open")
+    }
+
+    return {
+      unitType: {
+        cellText: t(`listings.unitTypes.${unitSummary.unitTypes?.name}`),
+      },
+      minimumIncome: {
+        cellText: minIncome,
+        cellSubText: unitSummary.minIncomeRange.min !== "t.n/a" ? t("t.perMonth") : "",
+      },
+      rent: {
+        cellText: rent,
+        cellSubText: rentNotAvailable ? "" : t("t.perMonth"),
+      },
+      availability: {
+        cellText: availability,
+      },
+    }
+  })
+
+  return unitSummaries
+}
+
 type StackedSummary = {
   minDollarRent: number | null
   maxDollarRent: number | null
@@ -641,6 +707,58 @@ export const getUnitTableData = (units: Unit[], unitSummary: UnitSummary) => {
   if (unitSummary.floorRange && unitSummary.floorRange.min) {
     floorSection = `, ${formatRange(unitSummary.floorRange, true)} 
         ${unitSummary.floorRange.max > unitSummary.floorRange.min ? t("t.floors") : t("t.floor")}`
+  }
+
+  const barContent = (
+    <div className={"toggle-header-content"}>
+      <strong>{t("listings.unitTypes." + unitSummary.unitTypes.name)}</strong>:&nbsp;
+      {unitsLabel(availableUnits)}
+      {areaRangeSection}
+      {floorSection}
+    </div>
+  )
+
+  return {
+    availableUnits,
+    areaRangeSection,
+    floorSection,
+    unitsFormatted,
+    barContent,
+  }
+}
+
+export const getStackedUnitTableData = (units: Unit[], unitSummary: UnitSummary) => {
+  const availableUnits = units.filter(
+    (unit: Unit) => unit.unitTypes?.name == unitSummary.unitTypes.name
+  )
+
+  let floorSection: React.ReactNode
+  const unitsFormatted = availableUnits.map((unit: Unit) => {
+    return {
+      number: { cellText: unit.number ? unit.number : "" },
+      sqFeet: {
+        cellText: unit.sqFeet ? `${unit.sqFeet} ${t("t.sqFeet")}` : "",
+      },
+      numBathrooms: {
+        cellText:
+          unit.numBathrooms === 0
+            ? t("listings.unit.sharedBathroom")
+            : unit.numBathrooms
+            ? unit.numBathrooms.toString()
+            : "",
+      },
+      floor: { cellText: unit.floor ? unit.floor.toString() : "" },
+    }
+  })
+
+  let areaRangeSection: React.ReactNode
+  if (unitSummary.areaRange?.min || unitSummary.areaRange?.max) {
+    areaRangeSection = `, ${formatRange(unitSummary.areaRange)} ${t("t.squareFeet")}`
+  }
+
+  if (unitSummary.floorRange && unitSummary.floorRange.min) {
+    floorSection = `, ${formatRange(unitSummary.floorRange, true)} 
+          ${unitSummary.floorRange.max > unitSummary.floorRange.min ? t("t.floors") : t("t.floor")}`
   }
 
   const barContent = (
