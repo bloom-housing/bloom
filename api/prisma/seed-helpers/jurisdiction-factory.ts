@@ -3,8 +3,11 @@ import { randomName } from './word-generator';
 
 export const jurisdictionFactory = (
   jurisdictionName = randomName(),
-  listingApprovalPermissions?: UserRoleEnum[],
-  duplicateListingPermissions?: UserRoleEnum[],
+  optionalFields?: {
+    listingApprovalPermissions?: UserRoleEnum[];
+    duplicateListingPermissions?: UserRoleEnum[];
+    featureFlags?: string[];
+  },
 ): Prisma.JurisdictionsCreateInput => ({
   name: jurisdictionName,
   notificationsSignUpUrl: 'https://www.exygy.com',
@@ -17,9 +20,16 @@ export const jurisdictionFactory = (
   enablePartnerSettings: true,
   enableGeocodingPreferences: true,
   enableGeocodingRadiusMethod: false,
-  listingApprovalPermissions: listingApprovalPermissions || [],
-  duplicateListingPermissions: duplicateListingPermissions || [
+  listingApprovalPermissions: optionalFields?.listingApprovalPermissions || [],
+  duplicateListingPermissions: optionalFields?.duplicateListingPermissions || [
     UserRoleEnum.admin,
     UserRoleEnum.jurisdictionAdmin,
   ],
+  featureFlags: optionalFields?.featureFlags
+    ? {
+        connect: optionalFields.featureFlags.map((flag) => {
+          return { name: flag };
+        }),
+      }
+    : undefined,
 });
