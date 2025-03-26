@@ -108,7 +108,7 @@ function renderApplicationsView(filterType = ApplicationsIndexEnum.all) {
 describe("<ApplicationsView>", () => {
   it("should redirect to sign-in page for non logged user", async () => {
     server.use(
-      rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
+      rest.get("http://localhost:3100/applications/publicAppsView", (_req, res) => {
         return res()
       })
     )
