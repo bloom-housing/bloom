@@ -9,15 +9,22 @@ import {
   RequireLogin,
   BloomCard,
 } from "@bloom-housing/shared-helpers"
+import {
+  FeatureFlagEnum,
+  Jurisdiction,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Layout from "../../layouts/application"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
+import { isFeatureFlagOn } from "../../lib/helpers"
+import { fetchJurisdictionByName } from "../../lib/hooks"
 import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
 
 import styles from "./account.module.scss"
 
 interface DashboardProps {
   router: NextRouter
+  jurisdiction: Jurisdiction
 }
 
 function Dashboard(props: DashboardProps) {
@@ -38,7 +45,14 @@ function Dashboard(props: DashboardProps) {
         : props.router.query.alert
       setAlertMessage(alert)
     }
-  }, [props.router, profile])
+
+    window.localStorage.setItem(
+      "bloom-show-favorites-menu-item",
+      (
+        isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.showListingFavoriting) === true
+      ).toString()
+    )
+  }, [props.router, props.jurisdiction, profile])
 
   const closeAlert = () => {
     void props.router.push("/account/dashboard", undefined, { shallow: true })
@@ -103,6 +117,32 @@ function Dashboard(props: DashboardProps) {
                     </Card.Section>
                   </BloomCard>
                 </Grid.Cell>
+                {isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.showListingFavoriting) ? (
+                  <Grid.Cell>
+                    <BloomCard
+                      iconSymbol="heartIcon"
+                      iconOutlined={true}
+                      title={t("account.myFavorites")}
+                      subtitle={t("account.myFavoritesSubtitle")}
+                      id="account-dashboard-favorites"
+                      variant={"block"}
+                      headingPriority={2}
+                    >
+                      <Card.Section>
+                        <Button
+                          size="sm"
+                          href={"/account/favorites"}
+                          variant="primary-outlined"
+                          id={"account-dashboard-favorites"}
+                        >
+                          {t("account.viewFavorites")}
+                        </Button>
+                      </Card.Section>
+                    </BloomCard>
+                  </Grid.Cell>
+                ) : (
+                  <></>
+                )}
               </Grid.Row>
             </Grid>
           </div>
@@ -113,3 +153,12 @@ function Dashboard(props: DashboardProps) {
 }
 
 export default withRouter(Dashboard)
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function getStaticProps() {
+  const jurisdiction = await fetchJurisdictionByName()
+
+  return {
+    props: { jurisdiction },
+  }
+}

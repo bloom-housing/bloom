@@ -106,7 +106,6 @@ export const stagingSeed = async (
       featureFlags: [],
     }),
   });
-
   // create admin user
   await prismaClient.userAccounts.create({
     data: await userFactory({
