@@ -3,25 +3,18 @@ import Head from "next/head"
 import {
   FeatureFlagEnum,
   Jurisdiction,
-  RegionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { GridCell, t } from "@bloom-housing/ui-components"
-import { Button, Card, Grid, Heading, Icon } from "@bloom-housing/ui-seeds"
-import {
-  PageView,
-  pushGtmEvent,
-  AuthContext,
-  BloomCard,
-  ClickableCard,
-} from "@bloom-housing/shared-helpers"
+import { t } from "@bloom-housing/ui-components"
+import { Button, Card, Grid, Heading } from "@bloom-housing/ui-seeds"
+import { PageView, pushGtmEvent, AuthContext, BloomCard } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
 import { ConfirmationModal } from "../../components/account/ConfirmationModal"
 import { MetaTags } from "../../components/shared/MetaTags"
 import MaxWidthLayout from "../../layouts/max-width"
 import styles from "./Home.module.scss"
-import { GridRow } from "@bloom-housing/ui-seeds/src/layout/Grid"
-import MapPinIcon from "@heroicons/react/24/outline/MapPinIcon"
+import { HomeSection } from "./HomeSection"
+import { HomeRegions } from "./HomeRegions"
 
 interface HomeProps {
   jurisdiction: Jurisdiction
@@ -46,8 +39,6 @@ export const Home = (props: HomeProps) => {
     props.jurisdiction.featureFlags.find((flag) => flag.name === FeatureFlagEnum.enableRegions)
       ?.active || false
 
-  const availableRegions = Object.values(RegionEnum).map((region) => region.replace("_", " "))
-
   return (
     <Layout>
       <Head>
@@ -67,30 +58,9 @@ export const Home = (props: HomeProps) => {
           </div>
         </MaxWidthLayout>
         {enableRegions && (
-          <MaxWidthLayout>
-            <div className={styles["section-header"]}>
-              <Icon outlined size="xl" className={styles["section-header-icon"]}>
-                <MapPinIcon />
-              </Icon>
-              <Heading size="3xl" priority={2} className={styles["section-header-title"]}>
-                {t("welcome.cityRegions")}
-              </Heading>
-            </div>
-            <Grid>
-              <GridRow columns={4}>
-                {availableRegions.map((region) => (
-                  <GridCell key={region}>
-                    <ClickableCard className={styles["region-card"]}>
-                      <div className="" role="img" />
-                      <Heading priority={5} size="lg" className={styles["region-card-name"]}>
-                        {region}
-                      </Heading>
-                    </ClickableCard>
-                  </GridCell>
-                ))}
-              </GridRow>
-            </Grid>
-          </MaxWidthLayout>
+          <HomeSection sectionTitle={t("welcome.cityRegions")} sectionIcon="mapPin">
+            <HomeRegions />
+          </HomeSection>
         )}
         <MaxWidthLayout>
           <Grid spacing="lg" className={styles["account-card-container"]}>

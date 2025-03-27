@@ -38,32 +38,6 @@
     }
   }
 
-  .section-header {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: var(--seeds-s2_5);
-    margin-top: var(--seeds-spacer-container);
-    margin-bottom: var(--seeds-spacer-content);
-
-    .section-header-icon {
-      color: var(--seeds-color-black)
-    }
-
-    .section-header-title {
-      color: var(--seeds-text-color-darker);
-      font-family: var(--seeds-font-sans);
-      font-weight: var(--seeds-font-weight-semibold);
-    }
-  }
-
-  .region-card {
-    .region-card-name {
-      padding: var(--seeds-s6);
-      color: var(--seeds-color-primary);
-      text-decoration: underline;
-    }
-  }
   .resource {
     height: 100%;
     h2 {
