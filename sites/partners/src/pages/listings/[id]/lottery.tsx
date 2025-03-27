@@ -64,7 +64,9 @@ const Lottery = (props: { listing: Listing | undefined }) => {
       profile?.userRoles?.isJurisdictionalAdmin ||
       includeDemographicsPartner) ??
       false,
-    true
+    true,
+    false,
+    !!process.env.useSecureDownloadPathway
   )
   const { data } = useFlaggedApplicationsMeta(listing?.id)
   const { lotteryActivityLogData } = useLotteryActivityLog(listing?.id)

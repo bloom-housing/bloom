@@ -37,3 +37,24 @@ export const zipExport = (
     archive.finalize();
   });
 };
+
+export const zipExportSecure = async (
+  readStream: ReadStream,
+  zipFilename: string,
+  filename: string,
+  isSpreadsheet: boolean,
+): Promise<string> => {
+  const zipFilePath = join(process.cwd(), `src/temp/${zipFilename}.zip`);
+
+  const output = fs.createWriteStream(zipFilePath);
+  const archive = archiver('zip', {
+    zlib: { level: 9 },
+  });
+
+  archive.pipe(output);
+  archive.append(readStream, {
+    name: `${filename}.${isSpreadsheet ? 'xlsx' : 'csv'}`,
+  });
+  await archive.finalize();
+  return zipFilePath;
+};

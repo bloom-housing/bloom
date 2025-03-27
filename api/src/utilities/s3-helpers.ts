@@ -3,9 +3,20 @@ import { Hash } from '@smithy/hash-node';
 import { HttpRequest } from '@smithy/protocol-http';
 import { InternalServerErrorException } from '@nestjs/common';
 import { parseUrl } from '@smithy/url-parser';
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { readFileSync } from 'fs';
+import { S3Client } from '@aws-sdk/client-s3';
+import { createReadStream } from 'fs';
 import { S3RequestPresigner } from '@aws-sdk/s3-request-presigner';
+import { Upload } from '@aws-sdk/lib-storage';
+
+export const checkArgs = (args: Record<string, string>): void => {
+  Object.keys(args).forEach((key) => {
+    if (!args[key]) {
+      throw new InternalServerErrorException(
+        `S3 env variable ${key} is missing`,
+      );
+    }
+  });
+};
 
 /**
  * @param accessKeyId the AWS service account access key
@@ -22,6 +33,12 @@ export const generatePresignedGetURL = async (
   region: string,
   secretAccessKey: string,
 ): Promise<string> => {
+  checkArgs({
+    accessKeyId,
+    bucket,
+    region,
+    secretAccessKey,
+  });
   const url = parseUrl(`https://${bucket}.s3.${region}.amazonaws.com/${key}`);
   const presigner = new S3RequestPresigner({
     credentials: {
@@ -35,7 +52,7 @@ export const generatePresignedGetURL = async (
   const signedUrlObject = await presigner.presign(new HttpRequest(url), {
     expiresIn: 1000 * 60 * 5, // expires 5 minutes after generation
   });
-  console.log('37:', formatUrl(signedUrlObject));
+
   return formatUrl(signedUrlObject);
 };
 
@@ -52,12 +69,17 @@ export const generatePresignedGetURL = async (
 export const uploadToS3 = async (
   accessKeyId: string,
   bucket: string,
-  fileType: string,
   key: string,
   pathToFile: string,
   region: string,
   secretAccessKey: string,
 ): Promise<void> => {
+  checkArgs({
+    accessKeyId,
+    bucket,
+    region,
+    secretAccessKey,
+  });
   try {
     const client = new S3Client({
       region,
@@ -66,15 +88,20 @@ export const uploadToS3 = async (
         secretAccessKey,
       },
     });
-    const file = readFileSync(pathToFile);
-    const command = new PutObjectCommand({
-      Bucket: bucket,
-      Key: key,
-      Body: file,
-      ContentLength: file.length,
-      ContentType: fileType,
+    const file = createReadStream(pathToFile);
+
+    const upload = new Upload({
+      params: {
+        Bucket: bucket,
+        Key: key,
+        Body: file,
+      },
+      client,
     });
-    await client.send(command);
+
+    await upload.done();
+    file.destroy();
+    client.destroy();
   } catch (e) {
     throw new InternalServerErrorException(e);
   }

@@ -49,7 +49,8 @@ const ApplicationsList = () => {
       includeDemographicsPartner) ??
       false,
     false,
-    !!process.env.applicationExportAsSpreadsheet
+    !!process.env.applicationExportAsSpreadsheet,
+    !!process.env.useSecureDownloadPathway
   )
 
   const listingName = listingDto?.name
