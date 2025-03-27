@@ -138,7 +138,7 @@ export const MainDetails = ({
       </div>
 
       {showFavoriteButton && (
-        <p className={"seeds-m-bs-3"}>
+        <p className={"seeds-m-bs-3"} id="favorite-button-section">
           <FavoriteButton favorited={listingFavorited} setFavorited={setListingFavorited}>
             {t("listings.favorite")}
           </FavoriteButton>
