@@ -28,8 +28,10 @@ import { UserService } from './user.service';
 const secure =
   process.env.NODE_ENV !== 'development' && process.env.HTTPS_OFF !== 'true';
 const sameSite =
-  process.env.NODE_ENV === 'development' || process.env.NO_SAME_SITE !== 'false'
+  process.env.NODE_ENV === 'development'
     ? 'strict'
+    : process.env.SAME_SITE === 'true'
+    ? 'lax'
     : 'none';
 const TOKEN_COOKIE_MAXAGE = 86400000; // 24 hours
 export const TOKEN_COOKIE_NAME = 'access-token';
