@@ -83,7 +83,15 @@ describe('Unit Group Transformations', () => {
       const result = getUnitGroupSummary(unitGroups);
       expect(result).toHaveLength(1);
       expect(result[0]).toEqual({
-        unitTypes: [UnitTypeEnum.studio],
+        unitTypes: [
+          {
+            id: 'type1',
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+            name: UnitTypeEnum.studio,
+            numBedrooms: 0,
+          },
+        ],
         rentAsPercentIncomeRange: undefined,
         rentRange: {
           min: '$1000',
@@ -147,7 +155,15 @@ describe('Unit Group Transformations', () => {
       const result = getUnitGroupSummary(unitGroups);
       expect(result).toHaveLength(1);
       expect(result[0]).toEqual({
-        unitTypes: [UnitTypeEnum.oneBdrm],
+        unitTypes: [
+          {
+            id: 'type1',
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+            name: UnitTypeEnum.oneBdrm,
+            numBedrooms: 1,
+          },
+        ],
         rentAsPercentIncomeRange: {
           min: 30,
           max: 30,
@@ -247,36 +263,57 @@ describe('Unit Group Transformations', () => {
       ];
 
       const result = getUnitGroupSummary(unitGroups);
+
       expect(result).toHaveLength(2);
-      expect(result[0].unitTypes).toEqual([UnitTypeEnum.studio]);
-      expect(result[1].unitTypes).toEqual([UnitTypeEnum.oneBdrm]);
-      expect(result[1]).toEqual({
-        unitTypes: [UnitTypeEnum.oneBdrm],
-        rentAsPercentIncomeRange: {
+      expect(result[0].unitTypes).toEqual([
+        {
+          id: 'type1',
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+          name: UnitTypeEnum.studio,
+          numBedrooms: 0,
+        },
+      ]);
+      expect(result[1].unitTypes).toEqual([
+        {
+          id: 'type2',
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+          name: UnitTypeEnum.oneBdrm,
+          numBedrooms: 1,
+        },
+      ]);
+      expect(result[0]).toEqual({
+        unitTypes: [
+          {
+            id: 'type1',
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+            name: UnitTypeEnum.studio,
+            numBedrooms: 0,
+          },
+        ],
+        rentRange: {
+          min: '$1000',
+          max: '$1000',
+        },
+        amiPercentageRange: {
           min: 30,
           max: 30,
         },
-        rentRange: {
-          min: '$1500',
-          max: '$1500',
-        },
-        amiPercentageRange: {
-          min: 50,
-          max: 80,
-        },
-        openWaitlist: false,
-        unitVacancies: 3,
+        openWaitlist: true,
+        unitVacancies: 5,
         bathroomRange: {
           min: 1,
-          max: 2,
+          max: 1,
         },
         floorRange: {
-          min: 2,
-          max: 4,
+          min: 1,
+          max: 1,
         },
         sqFeetRange: {
-          min: 700,
-          max: 900,
+          min: 500,
+          max: 500,
         },
       });
     });
@@ -823,7 +860,13 @@ describe('Unit Group Transformations', () => {
       // Check unit group summary
       expect(result.unitGroupSummary).toHaveLength(1);
       expect(result.unitGroupSummary[0].unitTypes).toEqual([
-        UnitTypeEnum.studio,
+        {
+          id: 'type1',
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+          name: UnitTypeEnum.studio,
+          numBedrooms: 0,
+        },
       ]);
 
       // Check household max income summary
