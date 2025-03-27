@@ -27,10 +27,13 @@ import { UserService } from './user.service';
 // since our local env doesn't have an https cert we can't be secure. Hosted envs should be secure
 const secure =
   process.env.NODE_ENV !== 'development' && process.env.HTTPS_OFF !== 'true';
-const sameSite =
-  process.env.NODE_ENV === 'development' || process.env.NO_SAME_SITE !== 'false'
-    ? 'strict'
-    : 'none';
+let sameSite: boolean | 'strict' | 'lax' | 'none' = 'none';
+if (process.env.NODE_ENV === 'development') {
+  sameSite = 'lax';
+} else if (process.env.SAME_SITE === 'true') {
+  sameSite = 'strict';
+}
+
 const TOKEN_COOKIE_MAXAGE = 86400000; // 24 hours
 export const TOKEN_COOKIE_NAME = 'access-token';
 export const REFRESH_COOKIE_NAME = 'refresh-token';
