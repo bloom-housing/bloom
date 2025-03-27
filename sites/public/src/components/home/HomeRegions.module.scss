@@ -1,7 +1,23 @@
+.region-card-container {
+  height: 100%;
+}
+
 .region-card {
+  height: 100%;
+
   .region-card-name {
     padding: var(--seeds-s6);
     color: var(--seeds-color-primary);
     text-decoration: underline;
+  }
+
+  .region-card-image {
+    height: var(--seeds-s44);
+
+    img {
+      object-fit: cover;
+      height: 100%;
+      width: 100%;
+    }
   }
 }
