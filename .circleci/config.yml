@@ -39,6 +39,7 @@ executors:
       CLOUDINARY_KEY: "key"
       CLOUDINARY_SIGNED_PRESET: "signedpreset"
       CLOUDINARY_CLOUD_NAME: "exygy"
+      SHOW_NEW_SEEDS_DESIGNS: "TRUE"
 
   standard-node:
     docker:
