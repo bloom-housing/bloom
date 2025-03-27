@@ -95,6 +95,16 @@ export class FeatureFlagController {
     );
   }
 
+  @Post(`/addAllNew`)
+  @ApiOperation({
+    summary: 'Add all new feature flags',
+    operationId: 'addAllNewFeatureFlags',
+  })
+  @ApiOkResponse()
+  async addAllNewFeatureFlags(): Promise<SuccessDTO> {
+    return await this.featureFlagService.addAllNewFeatureFlags();
+  }
+
   @Get(`:featureFlagId`)
   @ApiOperation({
     summary: 'Get a feature flag by id',

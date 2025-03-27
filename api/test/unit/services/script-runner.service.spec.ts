@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   LanguagesEnum,
@@ -37,6 +38,7 @@ describe('Testing script runner service', () => {
         AmiChartService,
         FeatureFlagService,
         JurisdictionService,
+        Logger,
       ],
     }).compile();
 

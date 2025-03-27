@@ -20,7 +20,7 @@ import { MapLayerModule } from './map-layer.module';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { ThrottleGuard } from '../guards/throttler.guard';
-import { ScirptRunnerModule } from './script-runner.module';
+import { ScriptRunnerModule } from './script-runner.module';
 import { LotteryModule } from './lottery.module';
 import { FeatureFlagModule } from './feature-flag.module';
 
@@ -41,7 +41,7 @@ import { FeatureFlagModule } from './feature-flag.module';
     AuthModule,
     ApplicationFlaggedSetModule,
     MapLayerModule,
-    ScirptRunnerModule,
+    ScriptRunnerModule,
     LotteryModule,
     FeatureFlagModule,
     ThrottlerModule.forRoot([
@@ -77,7 +77,7 @@ import { FeatureFlagModule } from './feature-flag.module';
     AuthModule,
     ApplicationFlaggedSetModule,
     MapLayerModule,
-    ScirptRunnerModule,
+    ScriptRunnerModule,
     LotteryModule,
     FeatureFlagModule,
   ],

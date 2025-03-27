@@ -25,7 +25,7 @@ import { ApiKeyGuard } from '../guards/api-key.guard';
 @ApiTags('scriptRunner')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 @UseGuards(ApiKeyGuard, OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
-export class ScirptRunnerController {
+export class ScriptRunnerController {
   constructor(private readonly scriptRunnerService: ScriptRunnerService) {}
 
   @Put('exampleScript')

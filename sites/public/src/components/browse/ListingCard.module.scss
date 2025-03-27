@@ -113,29 +113,4 @@
       }
     }
   }
-
-  // Temporary until we have Seeds tables to manipulate UIC StackedTable component
-  [class*="stacked-table"] {
-    text-transform: none;
-    --bloom-font-size-base: var(--seeds-type-label-size);
-    tr {
-      background-color: var(--seeds-bg-color-canvas);
-    }
-    tr:first-child {
-      margin-block-end: 0;
-    }
-    th {
-      background-color: white;
-      padding-block: var(--seeds-s1);
-      padding-inline: var(--seeds-s2);
-      letter-spacing: normal;
-    }
-    td {
-      padding: var(--seeds-s2);
-    }
-    td,
-    th {
-      font-size: var(--seeds-type-caption-size);
-    }
-  }
 }

@@ -15,7 +15,8 @@ import {
 import {
   FieldGroup,
   Form,
-  StandardTable,
+  getTranslationWithArguments,
+  StackedTable,
   StandardTableData,
   t,
   TableHeaders,
@@ -23,7 +24,7 @@ import {
 import {
   cloudinaryPdfFromId,
   getOccupancyDescription,
-  occupancyTable,
+  stackedOccupancyTable,
 } from "@bloom-housing/shared-helpers"
 import { downloadExternalPDF } from "../../lib/helpers"
 import { CardList, ContentCardProps } from "../../patterns/CardList"
@@ -223,6 +224,24 @@ export const getHmiData = (listing: Listing): StandardTableData => {
   })
 }
 
+export const getStackedHmiData = (listing: Listing) => {
+  return (
+    listing?.unitsSummarized?.hmi?.rows.map((row) => {
+      const amiRows = Object.keys(row).reduce((acc, rowContent) => {
+        acc[rowContent] = { cellText: getTranslationWithArguments(row[rowContent].toString()) }
+        return acc
+      }, {})
+
+      return {
+        ...amiRows,
+        sizeColumn: {
+          cellText: listing.units[0].bmrProgramChart ? t(row["sizeColumn"]) : row["sizeColumn"],
+        },
+      }
+    }) || []
+  )
+}
+
 export type AddressLocation = "dropOff" | "pickUp" | "mailIn"
 
 export const getAddress = (
@@ -314,11 +333,9 @@ export const getEligibilitySections = (listing: Listing): EligibilitySection[] =
       ? t("listings.forIncomeCalculationsBMR")
       : t("listings.forIncomeCalculations"),
     content: (
-      <StandardTable
-        headers={listing?.unitsSummarized?.hmi?.columns as TableHeaders}
-        data={getHmiData(listing)}
-        responsiveCollapse={true}
-        translateData={true}
+      <StackedTable
+        headers={(listing?.unitsSummarized?.hmi?.columns || []) as TableHeaders}
+        stackedData={getStackedHmiData(listing)}
       />
     ),
   })
@@ -328,13 +345,12 @@ export const getEligibilitySections = (listing: Listing): EligibilitySection[] =
     header: t("t.occupancy"),
     subheader: getOccupancyDescription(listing),
     content: (
-      <StandardTable
+      <StackedTable
         headers={{
           unitType: "t.unitType",
           occupancy: "t.occupancy",
         }}
-        data={occupancyTable(listing)}
-        responsiveCollapse={false}
+        stackedData={stackedOccupancyTable(listing)}
       />
     ),
   })

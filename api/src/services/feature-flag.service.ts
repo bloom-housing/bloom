@@ -2,6 +2,8 @@ import {
   Injectable,
   BadRequestException,
   NotFoundException,
+  Logger,
+  Inject,
 } from '@nestjs/common';
 import { JurisdictionService } from './jurisdiction.service';
 import { PrismaService } from './prisma.service';
@@ -11,6 +13,7 @@ import { FeatureFlagCreate } from '../dtos/feature-flags/feature-flag-create.dto
 import { FeatureFlagUpdate } from '../dtos/feature-flags/feature-flag-update.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { mapTo } from '../utilities/mapTo';
+import { featureFlagMap } from '../enums/feature-flags/feature-flags-enum';
 
 /**
       this is the service for feature flags
@@ -21,6 +24,8 @@ export class FeatureFlagService {
   constructor(
     private prisma: PrismaService,
     private jurisdictionService: JurisdictionService,
+    @Inject(Logger)
+    private readonly logger = new Logger(FeatureFlagService.name),
   ) {}
 
   /**
@@ -203,5 +208,23 @@ export class FeatureFlagService {
       },
     });
     return mapTo(FeatureFlag, rawResults);
+  }
+
+  /*
+   * Adds all of the feature flags from enums/feature-flags/feature-flags-enum
+   * if flag already exists, the insert is skipped
+   */
+  async addAllNewFeatureFlags(): Promise<SuccessDTO> {
+    this.logger.log('Adding feature flags to the DB');
+    const created = await this.prisma.featureFlags.createMany({
+      data: featureFlagMap.map((flag) => {
+        return { ...flag, active: true };
+      }),
+      skipDuplicates: true,
+    });
+    this.logger.log(`Added ${created.count} feature flags`);
+    return {
+      success: true,
+    } as SuccessDTO;
   }
 }

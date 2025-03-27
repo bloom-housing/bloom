@@ -74,7 +74,7 @@ export const ListingCard = ({
                   {getListingStatusMessage(listing, jurisdiction, null, true)}
                 </div>
               )}
-              <div className={styles["unit-table"]}>
+              <div className={`${styles["unit-table"]} styled-stacked-table`}>
                 <StackedTable
                   headers={{
                     unitType: "t.unitType",

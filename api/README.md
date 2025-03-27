@@ -36,9 +36,9 @@ Install project dependencies with `yarn install` from within the api directory.
 
 ## Starting locally
 
-The following command will generate and build the Prisma schema and setup the database with seeded data: `yarn setup:dev`.
+The following command will generate and build the Prisma schema and setup the database with seeded data: `yarn setup`. The seeded data closely matches the jurisdictions we use in the core environment with appropriate feature flags set. The full list of possible feature flags can be found [here](src/enums/feature-flags/feature-flags-enum.ts)
 
-If you would prefer to have it setup with more realistic data you can instead run: `yarn setup`.
+If you would prefer to have more randomly generated data you can run: `yarn setup:dev`.
 
 If this is your first time running this command and you see `psql: error: FATAL: database "<username>" does not exist` you may need to run `createdb <username>` first.
 
