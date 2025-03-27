@@ -1,5 +1,6 @@
 describe("My favorites page", function () {
-  it("renders the my favorites page", function () {
+  // TODO: reenable once we have Seeds pages in production & CI builds
+  it.skip("renders the my favorites page", function () {
     cy.visit("/sign-in")
     cy.signIn()
     cy.url().should("include", "/account/dashboard")
