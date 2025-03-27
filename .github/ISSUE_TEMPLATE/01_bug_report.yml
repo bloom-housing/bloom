@@ -1,0 +1,54 @@
+name: Bug Report
+description: File a bug report.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please fill out all of the following fields
+  - type: textarea
+    id: description
+    attributes:
+      label: What is the issue?
+      description: Describe what the issue is including screenshots if possible
+      placeholder: 
+    validations:
+      required: true
+  - type: textarea
+    id: reproducing-steps
+    attributes:
+      label: How can you reproduce the bug?
+      description: Please provide the full steps to reproduce the issue
+    validations:
+      required: true
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Is there any additional context?
+      description: Add any additional information that might be relevant (log outputs, background information, etc)
+    validations:
+      required: false
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: What browsers are you seeing the problem on?
+      multiple: true
+      options:
+        - Firefox
+        - Chrome
+        - Safari
+        - Microsoft Edge
+    validations:
+      required: true
+  - type: dropdown
+    id: device
+    attributes:
+      label: Where are you seeing this issue?
+      multiple: true
+      options:
+        - Desktop
+        - Mobile
+    validations:
+      required: true
+
