@@ -12,10 +12,8 @@
 }
 
 .footer-content-container {
-  padding-inline: var(--seeds-s6);
   padding-block: var(--seeds-s12);
   @media (--md-down) {
-    padding-inline: var(--seeds-s6);
     padding-block: var(--seeds-s8);
   }
   width: 100%;
@@ -29,7 +27,6 @@
   flex-direction: column;
   align-items: flex-start;
   margin: auto;
-  max-width: var(--seeds-screen-lg);
 }
 
 .icon-container {
