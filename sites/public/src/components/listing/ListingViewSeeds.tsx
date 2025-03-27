@@ -12,12 +12,7 @@ import { t } from "@bloom-housing/ui-components"
 import { AuthContext, pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
 import { Heading } from "@bloom-housing/ui-seeds"
 import { ErrorPage } from "../../pages/_error"
-import {
-  fetchFavoriteListingIds,
-  getListingApplicationStatus,
-  isFeatureFlagOn,
-  saveListingFavorite,
-} from "../../lib/helpers"
+import { fetchFavoriteListingIds, isFeatureFlagOn, saveListingFavorite } from "../../lib/helpers"
 import {
   getAdditionalInformation,
   getAmiValues,
