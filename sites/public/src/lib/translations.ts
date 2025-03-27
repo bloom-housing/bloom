@@ -7,6 +7,8 @@ import bengaliTranslations from "@bloom-housing/shared-helpers/src/locales/bn.js
 import arabicTranslations from "@bloom-housing/shared-helpers/src/locales/ar.json"
 
 import additionalGeneralTranslations from "../../page_content/locale_overrides/general.json"
+import additionalSpanishTranslations from "../../page_content/locale_overrides/es.json"
+import additionalBengaliTranslations from "../../page_content/locale_overrides/bn.json"
 
 export const translations = {
   general: generalTranslations,
@@ -18,4 +20,8 @@ export const translations = {
   ar: arabicTranslations,
 } as Record<string, any>
 
-export const overrideTranslations = { en: additionalGeneralTranslations } as Record<string, any>
+export const overrideTranslations = {
+  en: additionalGeneralTranslations,
+  es: additionalSpanishTranslations,
+  bn: additionalBengaliTranslations,
+} as Record<string, any>
