@@ -216,8 +216,13 @@ const Layout = (props) => {
         ) : (
           getSiteHeaderDeprecated(router, profile, signOut, addToast, languages, getInMaintenance())
         )}
-        <div id="main-content" tabIndex={-1} aria-label={"Main content"}>
-          <main className="md:overflow-x-hidden">
+        <div
+          id="main-content"
+          tabIndex={-1}
+          aria-label={"Main content"}
+          className="md:overflow-x-hidden main-container"
+        >
+          <main>
             {toastMessagesRef.current?.map((toastMessage) => (
               <Toast {...toastMessage.props} testId="toast-alert" key={toastMessage.timestamp}>
                 {toastMessage.message}
