@@ -225,19 +225,21 @@ export const getHmiData = (listing: Listing): StandardTableData => {
 }
 
 export const getStackedHmiData = (listing: Listing) => {
-  return listing?.unitsSummarized?.hmi?.rows.map((row) => {
-    const amiRows = Object.keys(row).reduce((acc, rowContent) => {
-      acc[rowContent] = { cellText: getTranslationWithArguments(row[rowContent].toString()) }
-      return acc
-    }, {})
+  return (
+    listing?.unitsSummarized?.hmi?.rows.map((row) => {
+      const amiRows = Object.keys(row).reduce((acc, rowContent) => {
+        acc[rowContent] = { cellText: getTranslationWithArguments(row[rowContent].toString()) }
+        return acc
+      }, {})
 
-    return {
-      ...amiRows,
-      sizeColumn: {
-        cellText: listing.units[0].bmrProgramChart ? t(row["sizeColumn"]) : row["sizeColumn"],
-      },
-    }
-  })
+      return {
+        ...amiRows,
+        sizeColumn: {
+          cellText: listing.units[0].bmrProgramChart ? t(row["sizeColumn"]) : row["sizeColumn"],
+        },
+      }
+    }) || []
+  )
 }
 
 export type AddressLocation = "dropOff" | "pickUp" | "mailIn"
@@ -325,21 +327,18 @@ export const getEligibilitySections = (listing: Listing): EligibilitySection[] =
   }
 
   // HMI
-  //TODO: Handle HMI for unit groups
-  if (listing?.units && listing?.units.length > 0) {
-    eligibilityFeatures.push({
-      header: t("listings.householdMaximumIncome"),
-      subheader: listing?.units[0]?.bmrProgramChart
-        ? t("listings.forIncomeCalculationsBMR")
-        : t("listings.forIncomeCalculations"),
-      content: (
-        <StackedTable
-          headers={listing?.unitsSummarized?.hmi?.columns as TableHeaders}
-          stackedData={getStackedHmiData(listing)}
-        />
-      ),
-    })
-  }
+  eligibilityFeatures.push({
+    header: t("listings.householdMaximumIncome"),
+    subheader: listing?.units[0]?.bmrProgramChart
+      ? t("listings.forIncomeCalculationsBMR")
+      : t("listings.forIncomeCalculations"),
+    content: (
+      <StackedTable
+        headers={(listing?.unitsSummarized?.hmi?.columns || []) as TableHeaders}
+        stackedData={getStackedHmiData(listing)}
+      />
+    ),
+  })
 
   // Occupancy
   eligibilityFeatures.push({

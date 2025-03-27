@@ -1558,10 +1558,12 @@ describe('Listing Controller Tests', () => {
       adminAccessToken;
     beforeAll(async () => {
       jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory('jurisdictionA', [
-          UserRoleEnum.admin,
-          UserRoleEnum.jurisdictionAdmin,
-        ]),
+        data: jurisdictionFactory('jurisdictionA', {
+          listingApprovalPermissions: [
+            UserRoleEnum.admin,
+            UserRoleEnum.jurisdictionAdmin,
+          ],
+        }),
       });
       const jurisdictionB = await prisma.jurisdictions.create({
         data: jurisdictionFactory('jurisdictionB'),
