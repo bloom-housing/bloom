@@ -115,6 +115,8 @@ const Users = () => {
     limit: "all",
   })
 
+  console.log("error", error)
+
   if (error) return <div>{t("t.errorOccurred")}</div>
 
   return (
