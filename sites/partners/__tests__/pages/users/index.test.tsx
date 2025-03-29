@@ -1,9 +1,4 @@
-import {
-  AuthContext,
-  AuthProvider,
-  ConfigProvider,
-  MessageProvider,
-} from "@bloom-housing/shared-helpers"
+import { AuthProvider, ConfigProvider, MessageProvider } from "@bloom-housing/shared-helpers"
 import { fireEvent, render } from "@testing-library/react"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
@@ -11,7 +6,6 @@ import React from "react"
 import Users from "../../../src/pages/users"
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { mockNextRouter } from "../../testUtils"
-import { User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const server = setupServer()
 
