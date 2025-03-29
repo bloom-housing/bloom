@@ -147,6 +147,7 @@ const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions 
                 <Field
                   id="jurisdiction_all"
                   name="jurisdiction_all"
+                  dataTestId={"jurisdiction-all"}
                   label={t("users.allJurisdictions")}
                   register={register}
                   type="checkbox"
