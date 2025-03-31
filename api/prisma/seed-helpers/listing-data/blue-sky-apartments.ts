@@ -1,6 +1,7 @@
 import {
   ApplicationAddressTypeEnum,
   ApplicationMethodsTypeEnum,
+  HomeTypeEnum,
   ListingsStatusEnum,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
@@ -53,6 +54,7 @@ export const blueSkyApartments = {
   depositHelperText:
     "or one month's rent may be higher for lower credit scores",
   disableUnitsAccordion: false,
+  homeType: HomeTypeEnum.apartment,
   leasingAgentEmail: 'joe@smithrealty.com',
   leasingAgentName: 'Joe Smith',
   leasingAgentOfficeHours: '9:00am - 5:00pm, Monday-Friday',
