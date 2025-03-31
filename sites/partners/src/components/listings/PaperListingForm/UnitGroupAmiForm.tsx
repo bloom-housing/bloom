@@ -2,11 +2,12 @@ import { Button, Card, Drawer, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import SectionWithGrid from "../../shared/SectionWithGrid"
 import { Field, FieldGroup, Select, t } from "@bloom-housing/ui-components"
 import { useForm, useFormContext, useWatch } from "react-hook-form"
-import { useContext, useEffect, useState } from "react"
+import { useCallback, useContext, useEffect, useState } from "react"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { arrayToFormOptions } from "../../../lib/helpers"
+import { arrayToFormOptions, fieldHasError } from "../../../lib/helpers"
 import {
   AmiChart,
+  AmiChartItem,
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useAmiChartList } from "../../../lib/hooks"
@@ -19,6 +20,7 @@ const UnitGroupAmiForm = ({ onClose }: UnitGroupAmiFormProps) => {
   const { amiChartsService } = useContext(AuthContext)
 
   const [amiChartsOptions, setAmiChartsOptions] = useState([])
+  const [amiChartPercentageOptions, setAmiChartPercentageOptions] = useState([])
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -27,21 +29,51 @@ const UnitGroupAmiForm = ({ onClose }: UnitGroupAmiFormProps) => {
   const { data: amiCharts = [] } = useAmiChartList(jurisdiction)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, control } = useForm()
+  const { register, control, clearErrors, setValue } = useForm()
 
-  const amiPercentage: string = useWatch({
-    control,
-    name: "amiPercentage",
-  })
   const amiChartID: string = useWatch({
     control,
-    name: "amiChart.id",
+    name: "amiChart",
   })
 
   const rentType: string = useWatch({
     control,
     name: "rentType",
   })
+
+  const fetchAmiChart = useCallback(
+    async (chartId: string) => {
+      try {
+        const thisAmiChart = await amiChartsService.retrieve({
+          amiChartId: chartId,
+        })
+        const amiChartData = thisAmiChart.items
+        const uniquePercentages = Array.from(
+          new Set(amiChartData.map((item: AmiChartItem) => item.percentOfAmi))
+        ).sort(function (a: number, b: number) {
+          return a - b
+        })
+        setAmiChartPercentageOptions(
+          uniquePercentages.map((percentage) => {
+            return {
+              label: percentage.toString(),
+              value: percentage,
+            }
+          })
+        )
+        return amiChartData
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    [amiChartsService]
+  )
+
+  useEffect(() => {
+    if (amiChartID) {
+      void fetchAmiChart(amiChartID)
+    }
+  }, [amiChartID, fetchAmiChart])
 
   useEffect(() => {
     if (amiCharts.length === 0 || amiChartsOptions.length) return
@@ -72,20 +104,32 @@ const UnitGroupAmiForm = ({ onClose }: UnitGroupAmiFormProps) => {
                   <Select
                     label={t("listings.unit.amiChart")}
                     name="amiChart"
+                    placeholder={t("listings.unit.amiChart")}
                     options={[{ label: t("t.selectOne"), value: "" }, ...amiChartsOptions]}
                     labelClassName="sr-only"
                     controlClassName="control"
                     register={register}
+                    error={fieldHasError(errors?.amiChart)}
+                    errorMessage={t("errors.requiredFieldError")}
+                    validation={{ required: true }}
+                    inputProps={{
+                      onChange: () => {
+                        setValue("amiPercentage", undefined)
+                        clearErrors("amiPercentage")
+                        clearErrors("amiChart.id")
+                      },
+                    }}
                   />
                 </FieldValue>
                 <FieldValue label={t("listings.unit.amiPercentage")}>
                   <Select
                     label={t("listings.unit.amiPercentage")}
-                    name="amiChart"
-                    options={[{ label: t("t.selectOne"), value: "" }]}
+                    name="amiPercentage"
+                    options={[{ label: t("t.selectOne"), value: "" }, ...amiChartPercentageOptions]}
                     labelClassName="sr-only"
                     controlClassName="control"
                     register={register}
+                    disabled={!amiChartID}
                   />
                 </FieldValue>
                 <FieldValue label={t("listings.unit.rentType")}>
