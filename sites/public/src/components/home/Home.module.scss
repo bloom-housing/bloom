@@ -2,37 +2,55 @@
   font-family: var(--seeds-font-alt-sans);
   .hero-container {
     background-color: var(--seeds-bg-color-surface-primary-inverse);
+    background-image: url("/images/hero-main.jpg");
+    background-size: cover;
+    background-position: center;
+    margin-inline: var(--seeds-s4);
     padding-block: var(--seeds-s24);
+    padding-inline: var(--seeds-s12);
+    border-radius: var(--seeds-rounded-xl);
     --max-width-layout-desktop-margin-block: 0;
     --max-width-layout-mobile-margin-block: 0;
     @media (--sm-only) {
-      padding-block: var(--seeds-s8);
+      margin-inline: 0;
+      padding-block: var(--seeds-s6);
+      padding-inline: var(--seeds-s4);
+      border-radius: 0;
     }
     .hero {
-      max-width: var(--seeds-screen-md);
-      color: var(--seeds-color-on-inverse);
+      max-width: var(--seeds-screen-sm);
+      color: var(--seeds-color-gray-800);
+      background-color: rgba(255,255,255, 0.95);
+      border-radius: var(--seeds-rounded-xl);
+      padding: var(--seeds-s8);
 
+      @media (--sm-only) {
+        padding: var(--seeds-s6);
+      }
+      
       .heading {
         font-family: var(--seeds-font-alt-sans);
-        font-size: var(--seeds-font-size-6xl);
-        color: var(--seeds-color-on-inverse);
-        font-weight: var(--seeds-font-weight-semibold);
+        font-size: var(--seeds-font-size-5xl);
+        font-weight: var(--seeds-font-weight-bold);
         @media (--sm-only) {
           font-size: var(--seeds-font-size-3xl);
         }
       }
       .subtitle {
-        margin-block-start: var(--seeds-spacer-content);
-        font-size: var(--seeds-font-size-2xl);
+        margin-block: var(--seeds-spacer-content);
+        font-size: var(--seeds-font-size-lg);
+        color: var(--seeds-color-gray-750);
         @media (--sm-only) {
           margin-block-start: var(--seeds-spacer-header);
           font-size: var(--seeds-font-size-base);
         }
       }
       .hero-button {
-        margin-block-start: var(--seeds-s8);
+        margin-inline-end: var(--seeds-s2_5);
         @media (--sm-only) {
-          margin-block-start: var(--seeds-s2);
+          margin-block-start: var(--seeds-s2_5);
+          padding: var(--button-padding-sm);
+          font-size: var(--button-font-size-sm);
         }
       }
     }

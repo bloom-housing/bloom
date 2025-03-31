@@ -26,7 +26,7 @@ export const Home = (props: HomeProps) => {
     })
   }, [profile])
 
-  const heroTitle = `${t("welcome.title")} ${t("region.name")}`
+  const heroTitle = t("welcome.title")
 
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
 
@@ -43,9 +43,14 @@ export const Home = (props: HomeProps) => {
               {heroTitle}
             </Heading>
             <p className={styles["subtitle"]}>{t("welcome.subtitle")}</p>
-            <Button href="/listings" variant="primary-outlined" className={styles["hero-button"]}>
-              {t("welcome.seeRentalListings")}
-            </Button>
+            <div className={styles["hero-buttons"]}>
+              <Button href="/listings" variant="warn" className={styles["hero-button"]}>
+                {t("welcome.seeRentalListings")}
+              </Button>
+              <Button href="/finder" variant="primary" className={styles["hero-button"]}>
+                {t("welcome.findRentalsForYou")}
+              </Button>
+            </div>
           </div>
         </MaxWidthLayout>
         <MaxWidthLayout>
