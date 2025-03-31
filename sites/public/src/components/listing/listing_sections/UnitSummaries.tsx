@@ -1,7 +1,11 @@
 import * as React from "react"
 import { Unit, UnitSummary } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { StandardTable } from "@bloom-housing/ui-components"
-import { getUnitTableData, unitsHeaders } from "@bloom-housing/shared-helpers"
+import { StackedTable } from "@bloom-housing/ui-components"
+import {
+  getStackedUnitTableData,
+  getUnitTableData,
+  unitsHeaders,
+} from "@bloom-housing/shared-helpers"
 import { ExpandableSection } from "../../../patterns/ExpandableSection"
 
 type UnitSummariesProps = {
@@ -32,7 +36,10 @@ export const UnitSummaries = ({
               disableCollapse={disableUnitsAccordion}
               uniqueId={`unit-feature-${index}`}
             >
-              <StandardTable headers={unitsHeaders} data={unitTableData.unitsFormatted} />
+              <StackedTable
+                headers={unitsHeaders}
+                stackedData={getStackedUnitTableData(units, summary).unitsFormatted}
+              />
             </ExpandableSection>
           </div>
         )
