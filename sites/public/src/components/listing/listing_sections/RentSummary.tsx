@@ -1,11 +1,11 @@
 import * as React from "react"
 import { Heading } from "@bloom-housing/ui-seeds"
-import { StandardTable, t } from "@bloom-housing/ui-components"
+import { StackedTable, t } from "@bloom-housing/ui-components"
 import {
   ReviewOrderTypeEnum,
   UnitsSummarized,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { getSummariesTable } from "@bloom-housing/shared-helpers"
+import { getStackedUnitSummaryDetailsTable } from "@bloom-housing/shared-helpers"
 import styles from "./RentSummary.module.scss"
 import Markdown from "markdown-to-jsx"
 
@@ -40,7 +40,9 @@ export const RentSummary = ({
             return parseInt(item.percent, 10) === percent
           })
 
-          const groupedUnits = byAMI ? getSummariesTable(byAMI.byUnitType, reviewOrderType) : []
+          const groupedUnits = byAMI
+            ? getStackedUnitSummaryDetailsTable(byAMI.byUnitType, reviewOrderType)
+            : []
 
           return (
             <React.Fragment key={percent}>
@@ -48,20 +50,18 @@ export const RentSummary = ({
                 {t("listings.percentAMIUnit", { percent: percent })}
               </Heading>
               <div className={"seeds-m-bs-header"}>
-                <StandardTable
-                  headers={unitSummariesHeaders}
-                  data={groupedUnits}
-                  responsiveCollapse={true}
-                />
+                <StackedTable headers={unitSummariesHeaders} stackedData={groupedUnits} />
               </div>
             </React.Fragment>
           )
         })}
       {amiValues.length === 1 && (
-        <StandardTable
+        <StackedTable
           headers={unitSummariesHeaders}
-          data={getSummariesTable(unitsSummarized.byUnitTypeAndRent, reviewOrderType)}
-          responsiveCollapse={true}
+          stackedData={getStackedUnitSummaryDetailsTable(
+            unitsSummarized.byUnitTypeAndRent,
+            reviewOrderType
+          )}
         />
       )}
       {section8Acceptance && <Markdown>{t("listings.section8VoucherInfo")}</Markdown>}

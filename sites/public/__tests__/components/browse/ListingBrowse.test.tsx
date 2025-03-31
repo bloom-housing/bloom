@@ -1,7 +1,7 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
 import { render } from "@testing-library/react"
-import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { listing, jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { ListingBrowse } from "../../../src/components/browse/ListingBrowse"
 import { mockNextRouter } from "../../testUtils"
 
@@ -18,7 +18,9 @@ afterAll(() => server.close())
 
 describe("<ListingBrowse>", () => {
   it("shows empty state", () => {
-    const view = render(<ListingBrowse openListings={[]} closedListings={[]} />)
+    const view = render(
+      <ListingBrowse openListings={[]} closedListings={[]} jurisdiction={jurisdiction} />
+    )
     expect(view.getByText("No listings currently have open applications.")).toBeDefined()
   })
   it("shows multiple open listings", () => {
@@ -29,6 +31,7 @@ describe("<ListingBrowse>", () => {
           { ...listing, name: "ListingB" },
         ]}
         closedListings={[]}
+        jurisdiction={jurisdiction}
       />
     )
     expect(view.queryByText("No listings currently have open applications.")).toBeNull()
