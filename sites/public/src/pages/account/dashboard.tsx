@@ -14,7 +14,6 @@ import Layout from "../../layouts/application"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
 import MaxWidthLayout from "../../layouts/max-width"
-
 import styles from "./account.module.scss"
 
 interface DashboardProps {
@@ -59,7 +58,7 @@ function Dashboard(props: DashboardProps) {
           </AlertBox>
         )}
         <section className="bg-gray-300 border-t border-gray-450">
-          <MaxWidthLayout>
+          <MaxWidthLayout className={styles["dashboard-max-width-layout"]}>
             <h1 className={"sr-only"}>{t("nav.myDashboard")}</h1>
             <Grid spacing="lg" className={styles["account-card-container"]}>
               <Grid.Row columns={2}>
