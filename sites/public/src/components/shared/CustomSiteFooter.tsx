@@ -34,15 +34,13 @@ const CustomSiteFooter = () => {
       <MaxWidthLayout
         className={`${styles["footer-content-container"]} ${styles["copyright-content-container"]}`}
       >
-        <div>
-          <div className={`${styles["footer"]} ${styles["copyright"]}`}>
-            <div className={styles["copyright-text"]}>{t("footer.copyright")}</div>
-            <div className={styles.links}>
-              <Link href="/">{t("footer.giveFeedback")}</Link>
-              <Link href="/">{t("footer.contact")}</Link>
-              <Link href="/privacy">{t("pageTitle.privacy")}</Link>
-              <Link href="/disclaimer">{t("pageTitle.disclaimer")}</Link>
-            </div>
+        <div className={`${styles["footer"]} ${styles["copyright"]}`}>
+          <div className={styles["copyright-text"]}>{t("footer.copyright")}</div>
+          <div className={styles.links}>
+            <Link href="/">{t("footer.giveFeedback")}</Link>
+            <Link href="/">{t("footer.contact")}</Link>
+            <Link href="/privacy">{t("pageTitle.privacy")}</Link>
+            <Link href="/disclaimer">{t("pageTitle.disclaimer")}</Link>
           </div>
         </div>
       </MaxWidthLayout>
