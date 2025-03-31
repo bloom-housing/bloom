@@ -5,6 +5,7 @@ import MenuIcon from "@heroicons/react/20/solid/Bars3Icon"
 import { Button, Icon, Link } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 import LinkComponent from "../components/core/LinkComponent"
+import MaxWidthLayout from "../layouts/max-width"
 import styles from "./SiteHeader.module.scss"
 
 /** Sets focus on the first submenu link */
@@ -290,9 +291,11 @@ interface HeadingWrapperProps {
 const HeadingWrapper = (props: HeadingWrapperProps) => {
   return (
     <div className={`${styles["header-container"]} ${props.className ? props.className : ""}`}>
-      <div className={styles["header-wrapper"]}>
-        <div className={styles["content"]}>{props.children}</div>
-      </div>
+      <MaxWidthLayout>
+        <div className={styles["header-wrapper"]}>
+          <div className={styles["content"]}>{props.children}</div>
+        </div>
+      </MaxWidthLayout>
     </div>
   )
 }

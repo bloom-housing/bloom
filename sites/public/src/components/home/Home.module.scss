@@ -37,19 +37,23 @@
       }
     }
   }
-  .resource {
-    height: 100%;
-    h2 {
-      font-family: var(--seeds-font-alt-sans);
-      font-weight: var(--seeds-font-weight-semibold);
-    }
-    .resource-icon {
-      color: var(--seeds-color-primary);
-      background-color: var(--seeds-bg-color-surface-primary);
-      border-radius: var(--seeds-rounded-full);
-      padding: var(--seeds-s2);
-      svg {
-        fill: none;
+  .resource-container {
+    background-color: var(--seeds-bg-color-canvas);
+    padding-block: var(--seeds-spacer-container);
+    .resource {
+      height: 100%;
+      h2 {
+        font-family: var(--seeds-font-alt-sans);
+        font-weight: var(--seeds-font-weight-semibold);
+      }
+      .resource-icon {
+        color: var(--seeds-color-primary);
+        background-color: var(--seeds-bg-color-surface-primary);
+        border-radius: var(--seeds-rounded-full);
+        padding: var(--seeds-s2);
+        svg {
+          fill: none;
+        }
       }
     }
   }

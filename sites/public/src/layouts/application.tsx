@@ -206,7 +206,7 @@ const Layout = (props) => {
             links={getHeaderLinks(router, profile, signOut, addToast)}
             titleLink={"/"}
             logo={
-              <Icon size={"xl"}>
+              <Icon size={"lg"}>
                 <HomeIcon />
               </Icon>
             }
