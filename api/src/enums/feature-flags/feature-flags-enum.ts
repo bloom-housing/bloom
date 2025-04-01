@@ -99,4 +99,9 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.enablePartnerSettings,
     description: "When true, the 'settings' tab in the partner site is visible",
   },
+  {
+    name: FeatureFlagEnum.enableListingsPagination,
+    description:
+      'When true listings browser will display pagination controls section',
+  },
 ];
