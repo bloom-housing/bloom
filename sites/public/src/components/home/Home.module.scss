@@ -5,33 +5,30 @@
     background-image: url("/images/hero-main.jpg");
     background-size: cover;
     background-position: center;
+    width: auto;
     margin-inline: var(--seeds-s4);
     padding-block: var(--seeds-s24);
-    padding-inline: var(--seeds-s12);
     border-radius: var(--seeds-rounded-xl);
-    --max-width-layout-desktop-margin-block: 0;
-    --max-width-layout-mobile-margin-block: 0;
     @media (--sm-only) {
       margin-inline: 0;
-      padding-block: var(--seeds-s6);
-      padding-inline: var(--seeds-s4);
+      padding-block: var(--seeds-spacer-content);
       border-radius: 0;
     }
     .hero {
       max-width: var(--seeds-screen-sm);
-      color: var(--seeds-color-gray-800);
-      background-color: rgba(255,255,255, 0.95);
+      background-color: rgba(255, 255, 255, 0.95);
       border-radius: var(--seeds-rounded-xl);
       padding: var(--seeds-s8);
 
       @media (--sm-only) {
-        padding: var(--seeds-s6);
+        padding: var(--seeds-spacer-content);
       }
-      
+
       .heading {
         font-family: var(--seeds-font-alt-sans);
         font-size: var(--seeds-font-size-5xl);
         font-weight: var(--seeds-font-weight-bold);
+        color: var(--seeds-text-color-dark);
         @media (--sm-only) {
           font-size: var(--seeds-font-size-3xl);
         }
@@ -39,7 +36,7 @@
       .subtitle {
         margin-block: var(--seeds-spacer-content);
         font-size: var(--seeds-font-size-lg);
-        color: var(--seeds-color-gray-750);
+        color: var(--seeds-text-color);
         @media (--sm-only) {
           margin-block-start: var(--seeds-spacer-header);
           font-size: var(--seeds-font-size-base);
@@ -55,19 +52,23 @@
       }
     }
   }
-  .resource {
-    height: 100%;
-    h2 {
-      font-family: var(--seeds-font-alt-sans);
-      font-weight: var(--seeds-font-weight-semibold);
-    }
-    .resource-icon {
-      color: var(--seeds-color-primary);
-      background-color: var(--seeds-bg-color-surface-primary);
-      border-radius: var(--seeds-rounded-full);
-      padding: var(--seeds-s2);
-      svg {
-        fill: none;
+  .resource-container {
+    background-color: var(--seeds-bg-color-surface);
+    padding-block: var(--seeds-spacer-container);
+    .resource {
+      height: 100%;
+      h2 {
+        font-family: var(--seeds-font-alt-sans);
+        font-weight: var(--seeds-font-weight-semibold);
+      }
+      .resource-icon {
+        color: var(--seeds-color-primary);
+        background-color: var(--seeds-bg-color-surface-primary);
+        border-radius: var(--seeds-rounded-full);
+        padding: var(--seeds-s2);
+        svg {
+          fill: none;
+        }
       }
     }
   }

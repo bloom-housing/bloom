@@ -1,38 +1,41 @@
 import React from "react"
 import Link from "next/link"
 import { t } from "@bloom-housing/ui-components"
+import MaxWidthLayout from "../../layouts/max-width"
 import styles from "./CustomSiteFooter.module.scss"
 import Markdown from "markdown-to-jsx"
 
 const CustomSiteFooter = () => {
   return (
-    <footer className={styles["footer-container"]}>
-      <div className={styles["footer-content-container"]}>
-        <div className={styles["footer"]}>
-          <div className={styles["icon-container"]}>
-            <img
-              className={styles["jurisdiction-icon"]}
-              src="/images/detroit-logo-white.png"
-              alt={t("footer.logoAlt")}
-            />
-          </div>
-          <div className={styles["text-container"]}>
-            <p>{t("footer.description")}</p>
-          </div>
+    <footer>
+      <MaxWidthLayout className={styles["footer-container"]}>
+        <div className={styles["footer-content-container"]}>
+          <div className={styles["footer"]}>
+            <div className={styles["icon-container"]}>
+              <img
+                className={styles["jurisdiction-icon"]}
+                src="/images/detroit-logo-white.png"
+                alt={t("footer.logoAlt")}
+              />
+            </div>
+            <div className={styles["text-container"]}>
+              <p>{t("footer.description")}</p>
+            </div>
 
-          <div className={styles["text-container"]}>
-            <p>{t("footer.forListingQuestions")}</p>
-            <p>{t("footer.pleaseContact")}</p>
-          </div>
-          <div className={styles["text-container"]}>
-            <p>{t("footer.forGeneralInquiries")}</p>
-            <p>
-              <Markdown>{t("footer.contactInfo")}</Markdown>
-            </p>
+            <div className={styles["text-container"]}>
+              <p>{t("footer.forListingQuestions")}</p>
+              <p>{t("footer.pleaseContact")}</p>
+            </div>
+            <div className={styles["text-container"]}>
+              <p>{t("footer.forGeneralInquiries")}</p>
+              <p>
+                <Markdown>{t("footer.contactInfo")}</Markdown>
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-      <div
+      </MaxWidthLayout>
+      <MaxWidthLayout
         className={`${styles["footer-content-container"]} ${styles["copyright-content-container"]}`}
       >
         <div className={`${styles["footer"]} ${styles["copyright"]}`}>
@@ -44,7 +47,7 @@ const CustomSiteFooter = () => {
             <Link href="/accessibility">{t("pageTitle.accessibilityStatement")}</Link>
           </div>
         </div>
-      </div>
+      </MaxWidthLayout>
     </footer>
   )
 }
