@@ -60,14 +60,6 @@ const getSiteHeaderDeprecated = (
           title: t("account.myApplications"),
           href: "/account/applications",
         },
-        ...(showFavorites
-          ? [
-              {
-                title: t("account.myFavorites"),
-                href: "/account/favorites",
-              },
-            ]
-          : []),
         {
           title: t("account.accountSettings"),
           href: "/account/edit",
