@@ -634,6 +634,7 @@
   "listings.eligibleApplicants.FCFS": "Ang mga kwalipikadong aplikante ay ilalagay sa waitlist sa batayang first come first serve hanggang sa mapuno ang mga puwesto ng waitlist.",
   "listings.enterLotteryForWaitlist": "Magsumite ng application para sa bukas ng slot ng waitlist para sa %{units} na unit.",
   "listings.favorite": "Paborito",
+  "listings.favoriteSaveError": "Ang listahan ay hindi na-save sa mga paborito - subukang muli",
   "listings.featuresCards": "Mga Feature Card",
   "listings.forIncomeCalculations": "Para sa mga kalkulasyon ng kita, ang laki ng sambahayan ay kinabibilangan ng bawat isa (lahat ng edad) na nakatira sa unit.",
   "listings.forIncomeCalculationsBMR": "Ang mga kalkulasyon ng kita ay batay sa uri ng unit",

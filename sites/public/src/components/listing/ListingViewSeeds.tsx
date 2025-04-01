@@ -9,7 +9,12 @@ import {
   User,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
-import { AuthContext, pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
+import {
+  AuthContext,
+  MessageContext,
+  pdfUrlFromListingEvents,
+  ResponseException,
+} from "@bloom-housing/shared-helpers"
 import { Heading } from "@bloom-housing/ui-seeds"
 import { ErrorPage } from "../../pages/_error"
 import { fetchFavoriteListingIds, isFeatureFlagOn, saveListingFavorite } from "../../lib/helpers"
@@ -48,6 +53,7 @@ interface ListingProps {
 
 export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: ListingProps) => {
   const { userService } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
@@ -68,8 +74,18 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
   }
 
   const saveFavorite = (favorited) => {
-    setListingFavorited(favorited)
-    void saveListingFavorite(userService, listing.id, favorited)
+    saveListingFavorite(userService, listing.id, favorited)
+      .then(() => {
+        setListingFavorited(favorited)
+      })
+      .catch((err) => {
+        if (err instanceof ResponseException) {
+          addToast(err.message, { variant: "alert" })
+        } else {
+          // Unknown exception
+          console.error(err)
+        }
+      })
   }
 
   const lotteryResultsEvent = listing.listingEvents?.find(

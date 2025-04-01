@@ -634,6 +634,7 @@
   "listings.eligibleApplicants.FCFS": "Những người nộp đơn hội đủ điều kiện sẽ được liên lạc trên cơ sở ai đến trước được phục vụ trước cho đến khi hết căn hộ trống.",
   "listings.enterLotteryForWaitlist": "Gửi đơn ghi danh một suất mở trong danh sách chờ cho %{units} căn nhà.",
   "listings.favorite": "Yêu thích",
+  "listings.favoriteSaveError": "Danh sách không được lưu vào mục yêu thích - hãy thử lại",
   "listings.featuresCards": "Tính năng Thẻ",
   "listings.forIncomeCalculations": "Để tính thu nhập, quy mô hộ gia đình bao gồm tất cả mọi người (mọi lứa tuổi) sống trong căn nhà.",
   "listings.forIncomeCalculationsBMR": "Tính thu nhập dựa trên loại căn nhà",

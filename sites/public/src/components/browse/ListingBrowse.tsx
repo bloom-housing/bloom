@@ -7,7 +7,13 @@ import {
   Listing,
   FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { AuthContext, ListingList, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import {
+  AuthContext,
+  ListingList,
+  MessageContext,
+  pushGtmEvent,
+  ResponseException,
+} from "@bloom-housing/shared-helpers"
 import { PageHeader, t } from "@bloom-housing/ui-components"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
@@ -37,6 +43,7 @@ const isListingFavorited = (listing, favoriteListings) => {
 export const ListingBrowse = (props: ListingBrowseProps) => {
   const router = useRouter()
   const { profile, userService } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
   const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
 
@@ -60,12 +67,22 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
 
   const saveFavoriteFn = (listingId: string) => {
     return (listingFavorited) => {
-      void saveListingFavorite(userService, listingId, listingFavorited)
-      if (listingFavorited) {
-        setFavoriteListingIds([...favoriteListingIds, listingId])
-      } else {
-        setFavoriteListingIds([...favoriteListingIds.filter((id) => id != listingId)])
-      }
+      saveListingFavorite(userService, listingId, listingFavorited)
+        .then(() => {
+          if (listingFavorited) {
+            setFavoriteListingIds([...favoriteListingIds, listingId])
+          } else {
+            setFavoriteListingIds([...favoriteListingIds.filter((id) => id != listingId)])
+          }
+        })
+        .catch((err) => {
+          if (err instanceof ResponseException) {
+            addToast(err.message, { variant: "alert" })
+          } else {
+            // Unknown exception
+            console.error(err)
+          }
+        })
     }
   }
 
