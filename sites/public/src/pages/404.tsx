@@ -29,7 +29,7 @@ const ErrorPage = () => {
         {t("errors.notFound.message")}
       </Hero>
       <div className="homepage-extra">
-        <MaxWidthLayout>
+        <MaxWidthLayout className={"seeds-p-b-container"}>
           <>
             <p>{t("welcome.seeMoreOpportunities")}</p>
             <Button variant="primary-outlined" href="/help/housing-help">
