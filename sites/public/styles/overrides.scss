@@ -125,6 +125,11 @@
     top: 0.35rem;
     height: 3px;
   }
+  .main-container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
 
   .styled-stacked-table {
     // Temporary until we have Seeds tables to manipulate UIC StackedTable component

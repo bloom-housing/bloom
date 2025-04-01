@@ -1464,7 +1464,7 @@ describe("listing data", () => {
         )
 
         expect(queryByText("Verification")).not.toBeInTheDocument()
-        expect(queryByText("I verify that this lisiting data is valid")).not.toBeInTheDocument()
+        expect(queryByText("I verify that this listing data is valid")).not.toBeInTheDocument()
         expect(queryByText("Yes")).not.toBeInTheDocument()
       })
 
@@ -1488,7 +1488,7 @@ describe("listing data", () => {
         )
 
         expect(getByText("Verification")).toBeInTheDocument()
-        expect(getByText("I verify that this lisiting data is valid")).toBeInTheDocument()
+        expect(getByText("I verify that this listing data is valid")).toBeInTheDocument()
         expect(getByText("Yes")).toBeInTheDocument()
       })
     })
