@@ -9,17 +9,17 @@ import {
   RequireLogin,
   BloomCard,
 } from "@bloom-housing/shared-helpers"
+import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
+import Layout from "../../layouts/application"
 import {
   FeatureFlagEnum,
   Jurisdiction,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import Layout from "../../layouts/application"
-import { MetaTags } from "../../components/shared/MetaTags"
-import { UserStatus } from "../../lib/constants"
 import { isFeatureFlagOn } from "../../lib/helpers"
 import { fetchJurisdictionByName } from "../../lib/hooks"
-import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
-
+import { MetaTags } from "../../components/shared/MetaTags"
+import { UserStatus } from "../../lib/constants"
+import MaxWidthLayout from "../../layouts/max-width"
 import styles from "./account.module.scss"
 
 interface DashboardProps {
@@ -72,7 +72,7 @@ function Dashboard(props: DashboardProps) {
           </AlertBox>
         )}
         <section className="bg-gray-300 border-t border-gray-450">
-          <div className="max-w-5xl mx-auto sm:py-8">
+          <MaxWidthLayout className={styles["dashboard-max-width-layout"]}>
             <h1 className={"sr-only"}>{t("nav.myDashboard")}</h1>
             <Grid spacing="lg" className={styles["account-card-container"]}>
               <Grid.Row columns={2}>
@@ -145,7 +145,7 @@ function Dashboard(props: DashboardProps) {
                 )}
               </Grid.Row>
             </Grid>
-          </div>
+          </MaxWidthLayout>
         </section>
       </Layout>
     </RequireLogin>

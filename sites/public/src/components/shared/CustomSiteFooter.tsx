@@ -1,34 +1,37 @@
 import React from "react"
 import Link from "next/link"
 import { t } from "@bloom-housing/ui-components"
+import MaxWidthLayout from "../../layouts/max-width"
 import styles from "./CustomSiteFooter.module.scss"
 
 const CustomSiteFooter = () => {
   return (
-    <footer className={styles["footer-container"]}>
-      <div className={styles["footer-content-container"]}>
-        <div className={styles["footer"]}>
-          <div className={styles["icon-container"]}>
-            <a href={"/"} className={styles["jurisdiction-icon"]}>
-              <img src="/images/default-housing-logo.svg" alt={"Jurisdiction Logo"} />
-            </a>
-          </div>
-          <div className={styles["text-container"]}>
-            <span>{t("footer.content.projectOf")}</span>
-            <Link href={"/"}>Mayor's Office of Housing Development</Link>
-          </div>
-          <div className={styles["text-container"]}>
-            <span>{t("footer.content.partnership")}</span>
-            <Link href={"/"}>Bloomington Department of Technology</Link>
-            <Link href={"/"}>Mayor's Office of Civic Innovation</Link>
-          </div>
-          <div className={styles["text-container"]}>
-            <p>{t("footer.content.applicationQuestions")}</p>
-            <p>{t("footer.content.programQuestions")}</p>
+    <footer>
+      <MaxWidthLayout className={styles["footer-container"]}>
+        <div className={styles["footer-content-container"]}>
+          <div className={styles["footer"]}>
+            <div className={styles["icon-container"]}>
+              <a href={"/"} className={styles["jurisdiction-icon"]}>
+                <img src="/images/default-housing-logo.svg" alt={"Jurisdiction Logo"} />
+              </a>
+            </div>
+            <div className={styles["text-container"]}>
+              <span>{t("footer.content.projectOf")}</span>
+              <Link href={"/"}>Mayor's Office of Housing Development</Link>
+            </div>
+            <div className={styles["text-container"]}>
+              <span>{t("footer.content.partnership")}</span>
+              <Link href={"/"}>Bloomington Department of Technology</Link>
+              <Link href={"/"}>Mayor's Office of Civic Innovation</Link>
+            </div>
+            <div className={styles["text-container"]}>
+              <p>{t("footer.content.applicationQuestions")}</p>
+              <p>{t("footer.content.programQuestions")}</p>
+            </div>
           </div>
         </div>
-      </div>
-      <div
+      </MaxWidthLayout>
+      <MaxWidthLayout
         className={`${styles["footer-content-container"]} ${styles["copyright-content-container"]}`}
       >
         <div className={`${styles["footer"]} ${styles["copyright"]}`}>
@@ -40,7 +43,7 @@ const CustomSiteFooter = () => {
             <Link href="/disclaimer">{t("pageTitle.disclaimer")}</Link>
           </div>
         </div>
-      </div>
+      </MaxWidthLayout>
     </footer>
   )
 }
