@@ -1,11 +1,7 @@
 import React, { useEffect, useContext } from "react"
 import Head from "next/head"
-<<<<<<< HEAD
-import { Button, Grid, Heading } from "@bloom-housing/ui-seeds"
-=======
-import { useRouter } from "next/router"
 import { Button, Heading } from "@bloom-housing/ui-seeds"
->>>>>>> 6c6713894 (refactor: testing padding)
+import { useRouter } from "next/router"
 import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext, ListingList, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import { PageHeader, t } from "@bloom-housing/ui-components"
