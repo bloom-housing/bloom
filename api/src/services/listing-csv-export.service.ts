@@ -511,7 +511,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       });
     }
     if (
-      this.doAnyJurisdictionHaveFeatureFlagSet(
+      doAnyJurisdictionHaveFeatureFlagSet(
         user.jurisdictions,
         FeatureFlagEnum.enableUtilitiesIncluded,
       )
