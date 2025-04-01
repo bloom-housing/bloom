@@ -7,7 +7,6 @@
     background-position: center;
     margin-inline: var(--seeds-s4);
     padding-block: var(--seeds-s24);
-    padding-inline: var(--seeds-s12);
     border-radius: var(--seeds-rounded-xl);
     --max-width-layout-desktop-margin-block: 0;
     --max-width-layout-mobile-margin-block: 0;
@@ -20,14 +19,14 @@
     .hero {
       max-width: var(--seeds-screen-sm);
       color: var(--seeds-color-gray-800);
-      background-color: rgba(255,255,255, 0.95);
+      background-color: rgba(255, 255, 255, 0.95);
       border-radius: var(--seeds-rounded-xl);
       padding: var(--seeds-s8);
 
       @media (--sm-only) {
         padding: var(--seeds-s6);
       }
-      
+
       .heading {
         font-family: var(--seeds-font-alt-sans);
         font-size: var(--seeds-font-size-5xl);
@@ -55,19 +54,23 @@
       }
     }
   }
-  .resource {
-    height: 100%;
-    h2 {
-      font-family: var(--seeds-font-alt-sans);
-      font-weight: var(--seeds-font-weight-semibold);
-    }
-    .resource-icon {
-      color: var(--seeds-color-primary);
-      background-color: var(--seeds-bg-color-surface-primary);
-      border-radius: var(--seeds-rounded-full);
-      padding: var(--seeds-s2);
-      svg {
-        fill: none;
+  .resource-container {
+    background-color: var(--seeds-bg-color-canvas);
+    padding-block: var(--seeds-spacer-container);
+    .resource {
+      height: 100%;
+      h2 {
+        font-family: var(--seeds-font-alt-sans);
+        font-weight: var(--seeds-font-weight-semibold);
+      }
+      .resource-icon {
+        color: var(--seeds-color-primary);
+        background-color: var(--seeds-bg-color-surface-primary);
+        border-radius: var(--seeds-rounded-full);
+        padding: var(--seeds-s2);
+        svg {
+          fill: none;
+        }
       }
     }
   }
