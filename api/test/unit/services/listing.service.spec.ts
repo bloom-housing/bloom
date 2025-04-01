@@ -74,6 +74,12 @@ const mockListing = (
           openWaitlist: i % 2 === 0,
           totalCount: 10,
           totalAvailable: 5,
+          bathroomMin: i,
+          bathroomMax: i + 1,
+          floorMin: i,
+          floorMax: i + 1,
+          sqFeetMin: i * 100,
+          sqFeetMax: i * 100 + 100,
           unitTypes: [
             {
               id: `unitType ${i}`,
@@ -92,6 +98,25 @@ const mockListing = (
               monthlyRentDeterminationType:
                 MonthlyRentDeterminationTypeEnum.percentageOfIncome,
               percentageOfIncomeValue: (i * 10) % 100,
+              amiChart: {
+                id: `AMI${i}`,
+                items: [],
+                name: `AMI Name ${i}`,
+                createdAt: date,
+                updatedAt: date,
+                jurisdictions: {
+                  id: 'jurisdiction ID',
+                },
+              },
+            },
+            {
+              id: `unitGroupAmiLevel ${i} 2`,
+              createdAt: date,
+              updatedAt: date,
+              amiPercentage: 30 + i * 10,
+              monthlyRentDeterminationType:
+                MonthlyRentDeterminationTypeEnum.percentageOfIncome,
+              percentageOfIncomeValue: 30 + ((i * 10) % 100),
               amiChart: {
                 id: `AMI${i}`,
                 items: [],
@@ -2380,10 +2405,59 @@ describe('Testing listing service', () => {
         'listingId',
         LanguagesEnum.en,
         ListingViews.base,
-        true,
       );
 
       expect(listing.unitGroups).toEqual(mockedListing.unitGroups);
+      expect(listing.unitGroupsSummarized.unitGroupSummary[0]).toEqual({
+        unitTypes: [UnitTypeEnum.SRO],
+        rentAsPercentIncomeRange: {
+          min: 0,
+          max: 30,
+        },
+        amiPercentageRange: {
+          min: 0,
+          max: 30,
+        },
+        openWaitlist: true,
+        unitVacancies: 5,
+        bathroomRange: {
+          min: 0,
+          max: 1,
+        },
+        floorRange: {
+          min: 0,
+          max: 1,
+        },
+        sqFeetRange: {
+          min: 0,
+          max: 100,
+        },
+      });
+      expect(listing.unitGroupsSummarized.unitGroupSummary[2]).toEqual({
+        unitTypes: [UnitTypeEnum.oneBdrm],
+        rentAsPercentIncomeRange: {
+          min: 20,
+          max: 50,
+        },
+        amiPercentageRange: {
+          min: 20,
+          max: 50,
+        },
+        openWaitlist: true,
+        unitVacancies: 5,
+        bathroomRange: {
+          min: 2,
+          max: 3,
+        },
+        floorRange: {
+          min: 2,
+          max: 3,
+        },
+        sqFeetRange: {
+          min: 200,
+          max: 300,
+        },
+      });
 
       expect(prisma.listings.findUnique).toHaveBeenCalledWith({
         where: { id: 'listingId' },
@@ -2410,6 +2484,12 @@ describe('Testing listing service', () => {
                   },
                 },
               },
+            },
+          },
+          units: {
+            include: {
+              unitTypes: true,
+              unitAmiChartOverrides: true,
             },
           },
         },
