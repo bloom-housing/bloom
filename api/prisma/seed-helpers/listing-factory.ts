@@ -99,14 +99,16 @@ export const listingFactory = async (
     });
   }
 
-  const unitsAvailable = units
-    ? units.length
-    : unitGroups
-    ? unitGroups.reduce(
-        (unitsAvailable, { totalAvailable }) => unitsAvailable + totalAvailable,
-        0,
-      )
-    : 0;
+  let unitsAvailable = 0;
+
+  if (units) {
+    unitsAvailable = units.length;
+  } else if (unitGroups) {
+    unitsAvailable = unitGroups.reduce(
+      (unitsAvailable, { totalAvailable }) => unitsAvailable + totalAvailable,
+      0,
+    );
+  }
 
   let reservedCommunityType: ReservedCommunityTypes;
   if (
