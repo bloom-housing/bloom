@@ -48,8 +48,8 @@ export const Home = (props: HomeProps) => {
             </Button>
           </div>
         </MaxWidthLayout>
-        <MaxWidthLayout>
-          <Grid spacing="lg" className={styles["account-card-container"]}>
+        <MaxWidthLayout className={styles["resource-container"]}>
+          <Grid spacing="lg">
             <Grid.Row columns={2}>
               {props.jurisdiction && props.jurisdiction.notificationsSignUpUrl && (
                 <Grid.Cell>
@@ -76,7 +76,7 @@ export const Home = (props: HomeProps) => {
               )}
               <Grid.Cell>
                 <BloomCard
-                  iconSymbol="home"
+                  iconSymbol="house"
                   title={t("welcome.seeMoreOpportunitiesTruncated")}
                   variant={"block"}
                   headingPriority={2}
