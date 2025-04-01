@@ -62,6 +62,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableListingOpportunity,
         FeatureFlagEnum.enablePartnerDemographics,
         FeatureFlagEnum.enablePartnerSettings,
+        FeatureFlagEnum.enableListingsPagination,
       ],
     }),
   });
@@ -85,6 +86,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableListingOpportunity,
         FeatureFlagEnum.enablePartnerDemographics,
         FeatureFlagEnum.enablePartnerSettings,
+        FeatureFlagEnum.enableListingsPagination,
       ],
     }),
   });
@@ -97,6 +99,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableListingOpportunity,
         FeatureFlagEnum.enablePartnerDemographics,
         FeatureFlagEnum.enablePartnerSettings,
+        FeatureFlagEnum.enableListingsPagination,
       ],
     }),
   });
@@ -105,15 +108,6 @@ export const stagingSeed = async (
     data: jurisdictionFactory('Nada Hill', {
       featureFlags: [],
     }),
-  });
-
-  await prismaClient.featureFlags.create({
-    data: featureFlagFactory(
-      'enableListingPagination',
-      false,
-      'When true listings browser will display pagination controls section',
-      [jurisdiction.id],
-    ),
   });
 
   // create admin user
