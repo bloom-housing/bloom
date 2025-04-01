@@ -649,6 +649,7 @@
   "listings.events.deleteThisEvent": "احذف هذا الحدث",
   "listings.events.openHouseNotes": "ملاحظات البيت المفتوح",
   "listings.favorite": "مفضل",
+  "listings.favoriteSaveError": "لم يتم حفظ القائمة في المفضلة - حاول مرة أخرى",
   "listings.featuresCards": "بطاقات الميزات",
   "listings.firstComeFirstServe": "الخدمة بأسبقية الوصول",
   "listings.forIncomeCalculations": "بالنسبة لحسابات الدخل ، يشمل حجم الأسرة جميع (جميع الأعمار) الذين يعيشون في الوحدة.",

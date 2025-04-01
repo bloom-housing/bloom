@@ -14,6 +14,7 @@ import {
   IMAGE_FALLBACK_URL,
   cleanMultiselectString,
   getStackedSummariesTable,
+  ResponseException,
 } from "@bloom-housing/shared-helpers"
 import {
   Address,
@@ -391,6 +392,9 @@ export const isFeatureFlagOn = (jurisdiction: Jurisdiction, featureFlag: string)
   return jurisdiction?.featureFlags?.some((flag) => flag.name === featureFlag && flag.active)
 }
 
+/**
+ * @throws {ResponseError}
+ */
 export const saveListingFavorite = async (
   userService: UserService,
   listingId: string,
@@ -404,7 +408,8 @@ export const saveListingFavorite = async (
       },
     })
   } catch (err) {
-    console.log(err)
+    console.error(err)
+    throw new ResponseException(t("listings.favoriteSaveError"))
   }
 }
 

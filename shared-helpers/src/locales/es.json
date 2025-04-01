@@ -639,6 +639,7 @@
   "listings.eligibleApplicants.FCFS": "Se contactará a los solicitantes elegibles por orden hasta que se cubran las vacantes.",
   "listings.enterLotteryForWaitlist": "Enviar una solicitud para un lugar abierto en la lista de espera de %{units} viviendas.",
   "listings.favorite": "Favorito",
+  "listings.favoriteSaveError": "El listado no se guardó en favoritos: inténtalo de nuevo.",
   "listings.featuresCards": "Tarjetas de características",
   "listings.forIncomeCalculations": "Para realizar el cálculo de los ingresos, el número de miembros del hogar incluye a todas las personas (de todas las edades) que residan en la vivienda.",
   "listings.forIncomeCalculationsBMR": "Los cálculos de los ingresos están basados en el tipo de vivienda",

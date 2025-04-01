@@ -634,6 +634,7 @@
   "listings.eligibleApplicants.FCFS": "我們將按照「先申請先入住」的原則聯絡合格的申請人，直至空置房被入住為止。",
   "listings.enterLotteryForWaitlist": "提交申請表，列入 %{units} 個單位候補名單的空缺名額。",
   "listings.favorite": "最喜欢的",
+  "listings.favoriteSaveError": "列表未保存至收藏夹 - 重试",
   "listings.featuresCards": "物業特點說明卡",
   "listings.forIncomeCalculations": "收入計算、家庭人數（包括所有住在單位內所有年齡的人）。",
   "listings.forIncomeCalculationsBMR": "收入計算是以單位類型為準",

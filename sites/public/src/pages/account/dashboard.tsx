@@ -49,7 +49,7 @@ function Dashboard(props: DashboardProps) {
     window.localStorage.setItem(
       "bloom-show-favorites-menu-item",
       (
-        isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.showListingFavoriting) === true
+        isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableListingFavoriting) === true
       ).toString()
     )
   }, [props.router, props.jurisdiction, profile])
@@ -117,7 +117,7 @@ function Dashboard(props: DashboardProps) {
                     </Card.Section>
                   </BloomCard>
                 </Grid.Cell>
-                {isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.showListingFavoriting) ? (
+                {isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableListingFavoriting) ? (
                   <Grid.Cell>
                     <BloomCard
                       iconSymbol="heartIcon"

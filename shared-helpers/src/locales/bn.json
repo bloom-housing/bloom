@@ -639,6 +639,7 @@
   "listings.events.deleteThisEvent": "এই ইভেন্টটি মুছুন",
   "listings.events.openHouseNotes": "ওপেন হাউস নোট",
   "listings.favorite": "প্রিয়",
+  "listings.favoriteSaveError": "পছন্দের তালিকায় সংরক্ষণ করা হয়নি - আবার চেষ্টা করুন",
   "listings.featuresCards": "বৈশিষ্ট্য কার্ড",
   "listings.firstComeFirstServe": "আগে আসলে আগে পাবেন",
   "listings.forIncomeCalculations": "আয়ের হিসাবের জন্য, পরিবারের আকারে ইউনিটে বসবাসকারী সবাই (সব বয়সী) অন্তর্ভুক্ত।",

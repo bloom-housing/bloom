@@ -18,7 +18,7 @@ export enum FeatureFlagEnum {
   enableListingOpportunity = 'enableListingOpportunity',
   enablePartnerDemographics = 'enablePartnerDemographics',
   enablePartnerSettings = 'enablePartnerSettings',
-  showListingFavoriting = 'showListingFavoriting',
+  enableListingFavoriting = 'enableListingFavoriting',
 }
 
 // List of all of existing flags and their descriptions.
@@ -100,7 +100,7 @@ export const featureFlagMap: { name: string; description: string }[] = [
     description: "When true, the 'settings' tab in the partner site is visible",
   },
   {
-    name: FeatureFlagEnum.showListingFavoriting,
+    name: FeatureFlagEnum.enableListingFavoriting,
     description:
       'When true, a Favorite button is shown for public listings and users can view their favorited listings',
   },
