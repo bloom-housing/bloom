@@ -76,7 +76,7 @@ export const Home = (props: HomeProps) => {
               )}
               <Grid.Cell>
                 <BloomCard
-                  iconSymbol="home"
+                  iconSymbol="house"
                   title={t("welcome.seeMoreOpportunitiesTruncated")}
                   variant={"block"}
                   headingPriority={2}

@@ -6,7 +6,7 @@ import styles from "./CustomSiteFooter.module.scss"
 
 const CustomSiteFooter = () => {
   return (
-    <footer className={styles["footer-container"]}>
+    <footer>
       <MaxWidthLayout className={styles["footer-container"]}>
         <div className={styles["footer-content-container"]}>
           <div className={styles["footer"]}>
