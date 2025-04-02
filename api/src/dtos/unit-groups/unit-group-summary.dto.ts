@@ -10,12 +10,13 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { MinMaxCurrency } from '../shared/min-max-currency.dto';
 import { MinMax } from '../shared/min-max.dto';
+import { UnitType } from '../unit-types/unit-type.dto';
 
 export class UnitGroupSummary {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
-  @ApiPropertyOptional({ type: [String] })
-  unitTypes?: string[] | null;
+  @ApiPropertyOptional({ type: [UnitType] })
+  unitTypes?: UnitType[] | null;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
