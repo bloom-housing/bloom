@@ -9,6 +9,8 @@ import {
   PaperApplicationCreate,
   RegionEnum,
   Unit,
+  UnitGroup,
+  UnitGroupAmiLevel,
   User,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -178,6 +180,15 @@ export type TempUnit = Unit & {
   maxIncomeHouseholdSize6?: string
   maxIncomeHouseholdSize7?: string
   maxIncomeHouseholdSize8?: string
+}
+
+export type TempAmiLevel = UnitGroupAmiLevel & {
+  tempId?: number
+}
+
+export type TempUnitGroup = Omit<UnitGroup, "unitGroupAmiLevels"> & {
+  tempId?: number
+  unitGroupAmiLevels: TempAmiLevel[]
 }
 
 export type TempEvent = ListingEvent & {

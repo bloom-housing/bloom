@@ -1,29 +1,48 @@
-import { Button, Card, Drawer, FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { Button, Card, Dialog, Drawer, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import SectionWithGrid from "../../shared/SectionWithGrid"
-import { Field, FieldGroup, numberOptions, Select, t } from "@bloom-housing/ui-components"
-import { useEffect, useState } from "react"
+import {
+  Field,
+  FieldGroup,
+  MinimalTable,
+  numberOptions,
+  Select,
+  t,
+} from "@bloom-housing/ui-components"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useForm, useFormContext, useWatch } from "react-hook-form"
 import { DrawerHeader } from "@bloom-housing/ui-seeds/src/overlays/Drawer"
 import { useAmiChartList, useUnitPriorityList, useUnitTypeList } from "../../../lib/hooks"
 import {
   AmiChart,
+  EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
   UnitAccessibilityPriorityType,
   UnitType,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { arrayToFormOptions, fieldHasError } from "../../../lib/helpers"
-import { TempUnit } from "../../../lib/listings/formTypes"
+import { TempAmiLevel, TempUnit, TempUnitGroup } from "../../../lib/listings/formTypes"
 import UnitGroupAmiForm from "./UnitGroupAmiForm"
 
 type UnitGroupFormProps = {
   onSubmit: (unit: TempUnit) => void
   onClose: () => void
+  defaultUnitGroup?: TempUnitGroup
 }
 
-const UnitGroupForm = ({ onClose }: UnitGroupFormProps) => {
-  const [addAmiDrawerOpen, setAmiDrawerOpen] = useState(false)
+const UnitGroupForm = ({ onClose, onSubmit, defaultUnitGroup }: UnitGroupFormProps) => {
   const [amiChartsOptions, setAmiChartsOptions] = useState([])
   const [unitPrioritiesOptions, setUnitPrioritiesOptions] = useState([])
   const [unitTypesOptions, setUnitTypesOptions] = useState([])
+  const [amiDeleteModal, setAmiDeleteModal] = useState<number | null>(null)
+  const [amiLevels, setAmiLevels] = useState<TempAmiLevel[]>([])
+  const [amiSummary, setAmiSummary] = useState<number | null>(null)
+
+  const amiTableHeaders = {
+    amiChartName: "listings.unit.amiChart",
+    amiPercentage: "listings.unit.amiLevel",
+    monthlyRentDeterminationType: "listings.unit.rentType",
+    rentValue: "listings.unit.monthlyRent",
+    action: "",
+  }
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -101,9 +120,112 @@ const UnitGroupForm = ({ onClose }: UnitGroupFormProps) => {
   useEffect(() => {
     if (unitTypes.length === 0 || unitTypesOptions.length) return
     setUnitTypesOptions(
-      arrayToFormOptions<UnitType>(unitTypes, "name", "id", "listings.unit.typeOptions")
+      unitTypes.map((unitType) => {
+        return {
+          id: unitType.id,
+          label: t(`listings.unit.typeOptions.${unitType.name}`),
+          value: unitType.id,
+        }
+      })
     )
   }, [unitTypesOptions, unitTypes])
+
+  useEffect(() => {
+    if (defaultUnitGroup) {
+      setAmiLevels(defaultUnitGroup.unitGroupAmiLevels)
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const saveAmiSummary = (newAmiLevel: TempAmiLevel) => {
+    const exisits = amiLevels?.some((amiLevel) => amiLevel.tempId === newAmiLevel.tempId)
+    if (exisits) {
+      setAmiLevels(
+        amiLevels.map((amiLevel) =>
+          amiLevel.tempId === newAmiLevel.tempId ? newAmiLevel : amiLevel
+        )
+      )
+    } else {
+      if (amiLevels) {
+        setAmiLevels((current) => [...current, newAmiLevel])
+      } else {
+        setAmiLevels([newAmiLevel])
+      }
+    }
+  }
+
+  const deleteAmiLevel = useCallback(
+    (tempId: number) => {
+      const updatedAmiLevels = amiLevels
+        .filter((entry) => entry.tempId !== tempId)
+        .map((updatedAmiLevel, index) => ({
+          ...updatedAmiLevel,
+          tempId: index + 1,
+        }))
+
+      setAmiLevels(updatedAmiLevels)
+      setAmiDeleteModal(null)
+    },
+    [amiLevels]
+  )
+
+  const amiLevelsTableData = useMemo(
+    () =>
+      amiLevels?.map((ami) => {
+        const selectedAmiChart = amiChartsOptions.find((chart) => chart.value === ami.amiChart)
+
+        let rentValue = undefined
+        let monthlyRentDeterminationType = undefined
+        if (
+          ami.monthlyRentDeterminationType ===
+          EnumUnitGroupAmiLevelMonthlyRentDeterminationType.flatRent
+        ) {
+          rentValue = `${ami.flatRentValue ? `$${ami.flatRentValue}` : ""}`
+          monthlyRentDeterminationType = t("listings.unit.fixed")
+        } else if (
+          ami.monthlyRentDeterminationType ===
+          EnumUnitGroupAmiLevelMonthlyRentDeterminationType.percentageOfIncome
+        ) {
+          rentValue = `${ami.percentageOfIncomeValue ? `${ami.percentageOfIncomeValue}%` : ""}`
+          monthlyRentDeterminationType = t("listings.unit.percentage")
+        }
+
+        return {
+          amiChartName: { content: selectedAmiChart?.label || "" },
+          amiPercentage: { content: `${ami.amiPercentage ? `${ami.amiPercentage}%` : ""}` },
+          monthlyRentDeterminationType: { content: monthlyRentDeterminationType },
+          rentValue: { content: rentValue },
+          action: {
+            content: (
+              <div className="flex gap-3">
+                <Button
+                  type="button"
+                  className="front-semibold"
+                  variant="text"
+                  size="sm"
+                  onClick={() => {
+                    setAmiSummary(ami.tempId)
+                  }}
+                >
+                  {t("t.edit")}
+                </Button>
+                <Button
+                  type="button"
+                  className="front-semibold text-alert"
+                  variant="text"
+                  size="sm"
+                  onClick={() => setAmiDeleteModal(ami.tempId)}
+                >
+                  {t("t.delete")}
+                </Button>
+              </div>
+            ),
+          },
+        }
+      }),
+    [amiLevels, amiChartsOptions]
+  )
+
   return (
     <>
       <Drawer.Content>
@@ -327,8 +449,15 @@ const UnitGroupForm = ({ onClose }: UnitGroupFormProps) => {
             <hr className="spacer-section-above spacer-section" />
             <SectionWithGrid heading={t("listings.sections.eligibilityTitle")}>
               <Grid.Cell className="grid-inset-section">
+                {!!amiLevels.length && (
+                  <div className="mb-5">
+                    <MinimalTable headers={amiTableHeaders} data={amiLevelsTableData} />
+                  </div>
+                )}
                 <Button
-                  onClick={() => setAmiDrawerOpen(true)}
+                  onClick={() => {
+                    setAmiSummary((amiLevels.length || 0) + 1)
+                  }}
                   id="addAmiLevelButton"
                   type="button"
                   variant="primary-outlined"
@@ -351,14 +480,39 @@ const UnitGroupForm = ({ onClose }: UnitGroupFormProps) => {
       </Drawer.Footer>
 
       <Drawer
-        isOpen={addAmiDrawerOpen}
-        onClose={() => setAmiDrawerOpen(false)}
+        isOpen={!!amiSummary}
+        onClose={() => setAmiSummary(null)}
         ariaLabelledBy="add-ami-level-drawer-header"
         nested
       >
         <DrawerHeader id="add-ami-level-drawer-header">{t("listings.unit.amiAdd")}</DrawerHeader>
-        <UnitGroupAmiForm onClose={() => setAmiDrawerOpen(false)} />
+        <UnitGroupAmiForm
+          onClose={() => setAmiSummary(null)}
+          onSubmit={(amiLevel) => saveAmiSummary(amiLevel)}
+          amiChartsOptions={amiChartsOptions}
+          amiLevels={amiLevels}
+          currentTempId={amiSummary}
+        />
       </Drawer>
+
+      <Dialog isOpen={!!amiDeleteModal} onClose={() => setAmiDeleteModal(null)}>
+        <Dialog.Header>{t("listings.unit.amiDelete")}</Dialog.Header>
+        <Dialog.Content>{t("listings.unit.amiDeleteConf")}</Dialog.Content>
+        <Dialog.Footer>
+          <Button variant="alert" onClick={() => deleteAmiLevel(amiDeleteModal)} size="sm">
+            {t("t.delete")}
+          </Button>
+          <Button
+            onClick={() => {
+              setAmiDeleteModal(null)
+            }}
+            variant="primary-outlined"
+            size="sm"
+          >
+            {t("t.cancel")}
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
     </>
   )
 }

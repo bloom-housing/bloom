@@ -394,6 +394,8 @@
   "listings.unit.amiLevel": "AMI Level",
   "listings.unit.amiPercentage": "Percentage of AMI",
   "listings.unit.amiAdd": "Add AMI Level",
+  "listings.unit.amiDelete": "Delete this AMI Level",
+  "listings.unit.amiDeleteConf": "Do you really want to delete this AMI level?",
   "listings.unit.delete": "Delete this Unit",
   "listings.unit.deleteConf": "Do you really want to delete this unit?",
   "listings.unit.details": "Details",

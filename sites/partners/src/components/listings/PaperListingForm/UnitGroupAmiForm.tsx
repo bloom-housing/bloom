@@ -1,35 +1,37 @@
 import { Button, Card, Drawer, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import SectionWithGrid from "../../shared/SectionWithGrid"
-import { Field, FieldGroup, Select, t } from "@bloom-housing/ui-components"
-import { useForm, useFormContext, useWatch } from "react-hook-form"
+import { Field, FieldGroup, Form, Select, SelectOption, t } from "@bloom-housing/ui-components"
+import { useForm, useWatch } from "react-hook-form"
 import { useCallback, useContext, useEffect, useState } from "react"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { arrayToFormOptions, fieldHasError } from "../../../lib/helpers"
+import { fieldHasError } from "../../../lib/helpers"
 import {
-  AmiChart,
   AmiChartItem,
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { useAmiChartList } from "../../../lib/hooks"
+import { TempAmiLevel } from "../../../lib/listings/formTypes"
 
 type UnitGroupAmiFormProps = {
+  onSubmit: (amiLevel: TempAmiLevel) => void
   onClose: () => void
+  amiChartsOptions: SelectOption[]
+  amiLevels: TempAmiLevel[]
+  currentTempId: number
 }
 
-const UnitGroupAmiForm = ({ onClose }: UnitGroupAmiFormProps) => {
+const UnitGroupAmiForm = ({
+  onSubmit,
+  onClose,
+  amiLevels,
+  currentTempId,
+  amiChartsOptions,
+}: UnitGroupAmiFormProps) => {
   const { amiChartsService } = useContext(AuthContext)
 
-  const [amiChartsOptions, setAmiChartsOptions] = useState([])
   const [amiChartPercentageOptions, setAmiChartPercentageOptions] = useState([])
 
-  const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { watch, errors } = formMethods
-  const jurisdiction: string = watch("jurisdictions.id")
-  const { data: amiCharts = [] } = useAmiChartList(jurisdiction)
-
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, control, clearErrors, setValue } = useForm()
+  const { register, control, trigger, clearErrors, setValue, getValues, errors, reset } = useForm()
 
   const amiChartID: string = useWatch({
     control,
@@ -38,7 +40,7 @@ const UnitGroupAmiForm = ({ onClose }: UnitGroupAmiFormProps) => {
 
   const rentType: string = useWatch({
     control,
-    name: "rentType",
+    name: "monthlyRentDeterminationType",
   })
 
   const fetchAmiChart = useCallback(
@@ -57,7 +59,7 @@ const UnitGroupAmiForm = ({ onClose }: UnitGroupAmiFormProps) => {
           uniquePercentages.map((percentage) => {
             return {
               label: percentage.toString(),
-              value: percentage,
+              value: percentage.toString(),
             }
           })
         )
@@ -75,10 +77,31 @@ const UnitGroupAmiForm = ({ onClose }: UnitGroupAmiFormProps) => {
     }
   }, [amiChartID, fetchAmiChart])
 
-  useEffect(() => {
-    if (amiCharts.length === 0 || amiChartsOptions.length) return
-    setAmiChartsOptions(arrayToFormOptions<AmiChart>(amiCharts, "name", "id"))
-  }, [amiCharts, amiChartsOptions])
+  async function onFormSubmit() {
+    const validation = await trigger()
+    if (!validation) return
+
+    const data = getValues()
+
+    const formData = {
+      id: null,
+      createdAt: undefined,
+      updatedAt: undefined,
+      ...data,
+    }
+
+    const current = amiLevels.find((summary) => summary.tempId === currentTempId)
+    if (current) {
+      onSubmit({ ...formData, id: current.id, tempId: current.tempId })
+    } else {
+      onSubmit({
+        ...formData,
+        id: undefined,
+        tempId: amiLevels.length + 1,
+      })
+    }
+    onClose()
+  }
 
   const rentTypeOptions = [
     {
@@ -93,8 +116,15 @@ const UnitGroupAmiForm = ({ onClose }: UnitGroupAmiFormProps) => {
     },
   ]
 
+  useEffect(() => {
+    const amiLevel = amiLevels.find((entry) => entry.tempId === currentTempId)
+    if (amiLevel) {
+      reset({ ...amiLevel })
+    }
+  }, [amiLevels, currentTempId, reset, amiChartPercentageOptions])
+
   return (
-    <>
+    <Form onSubmit={() => false}>
       <Drawer.Content>
         <Card>
           <Card.Section>
@@ -116,7 +146,7 @@ const UnitGroupAmiForm = ({ onClose }: UnitGroupAmiFormProps) => {
                       onChange: () => {
                         setValue("amiPercentage", undefined)
                         clearErrors("amiPercentage")
-                        clearErrors("amiChart.id")
+                        clearErrors("amiChart")
                       },
                     }}
                   />
@@ -130,14 +160,18 @@ const UnitGroupAmiForm = ({ onClose }: UnitGroupAmiFormProps) => {
                     controlClassName="control"
                     register={register}
                     disabled={!amiChartID}
+                    validation={{ required: true }}
                   />
                 </FieldValue>
                 <FieldValue label={t("listings.unit.rentType")}>
                   <FieldGroup
-                    name="rentType"
+                    name="monthlyRentDeterminationType"
                     type="radio"
                     fields={rentTypeOptions}
                     register={register}
+                    error={errors?.monthlyRentDeterminationType}
+                    errorMessage={t("errors.requiredFieldError")}
+                    validation={{ required: true }}
                   />
                 </FieldValue>
                 {rentType === EnumUnitGroupAmiLevelMonthlyRentDeterminationType.flatRent ? (
@@ -150,6 +184,8 @@ const UnitGroupAmiForm = ({ onClose }: UnitGroupAmiFormProps) => {
                       register={register}
                       type="number"
                       error={errors?.flatRentValue}
+                      errorMessage={t("errors.requiredFieldError")}
+                      validation={{ required: true }}
                     />
                   </FieldValue>
                 ) : (
@@ -162,6 +198,8 @@ const UnitGroupAmiForm = ({ onClose }: UnitGroupAmiFormProps) => {
                       register={register}
                       type="number"
                       error={errors?.percentageOfIncomeValue}
+                      errorMessage={t("errors.requiredFieldError")}
+                      validation={{ required: true }}
                     />
                   </FieldValue>
                 )}
@@ -171,7 +209,13 @@ const UnitGroupAmiForm = ({ onClose }: UnitGroupAmiFormProps) => {
         </Card>
       </Drawer.Content>
       <Drawer.Footer>
-        <Button type="button" variant="primary" size="sm" id={"amiLevelSaveButton"}>
+        <Button
+          type="button"
+          variant="primary"
+          size="sm"
+          id={"amiLevelSaveButton"}
+          onClick={() => onFormSubmit()}
+        >
           {t("t.save")}
         </Button>
 
@@ -179,7 +223,7 @@ const UnitGroupAmiForm = ({ onClose }: UnitGroupAmiFormProps) => {
           {t("t.cancel")}
         </Button>
       </Drawer.Footer>
-    </>
+    </Form>
   )
 }
 
