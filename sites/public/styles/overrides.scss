@@ -29,6 +29,12 @@
     -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
   }
 
+  .main-container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+
   .styled-stacked-table {
     // Temporary until we have Seeds tables to manipulate UIC StackedTable component
     [class*="stacked-table"] {
