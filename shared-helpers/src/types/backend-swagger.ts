@@ -2543,6 +2543,22 @@ export class FeatureFlagsService {
     })
   }
   /**
+   * Add all new feature flags
+   */
+  addAllNewFeatureFlags(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/featureFlags/addAllNew"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Get a feature flag by id
    */
   retrieve(
@@ -6980,6 +6996,13 @@ export enum FeatureFlagEnum {
   "enableRegions" = "enableRegions",
   "enableSection8Question" = "enableSection8Question",
   "enableUnitGroups" = "enableUnitGroups",
+  "enableSingleUseCode" = "enableSingleUseCode",
+  "enableGeocodingPreferences" = "enableGeocodingPreferences",
+  "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
+  "enableListingOpportunity" = "enableListingOpportunity",
+  "enablePartnerDemographics" = "enablePartnerDemographics",
+  "enablePartnerSettings" = "enablePartnerSettings",
+  "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {
   "=" = "=",

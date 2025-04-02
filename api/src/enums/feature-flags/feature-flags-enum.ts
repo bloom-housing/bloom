@@ -18,6 +18,7 @@ export enum FeatureFlagEnum {
   enableListingOpportunity = 'enableListingOpportunity',
   enablePartnerDemographics = 'enablePartnerDemographics',
   enablePartnerSettings = 'enablePartnerSettings',
+  disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
 }
 
 // List of all of existing flags and their descriptions.
@@ -97,5 +98,9 @@ export const featureFlagMap: { name: string; description: string }[] = [
   {
     name: FeatureFlagEnum.enablePartnerSettings,
     description: "When true, the 'settings' tab in the partner site is visible",
+  },
+  {
+    name: FeatureFlagEnum.disableJurisdictionalAdmin,
+    description: 'When true, jurisdictional admins cannot be created',
   },
 ];
