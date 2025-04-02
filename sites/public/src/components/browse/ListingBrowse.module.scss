@@ -1,4 +1,14 @@
 .listing-directory {
+  --listing-directory-content-inline-padding: var(--seeds-s2);
+  --listing-directory-content-block-padding: var(--seeds-s6);
+
+  @media (--sm-and-up) {
+    --listing-directory-content-inline-padding: var(--seeds-spacer-content);
+  }
+  @media (--sm-and-up) {
+    --listing-directory-content-block-padding: var(--seeds-spacer-container);
+  }
+
   display: flex;
   width: 100%;
   justify-content: center;
@@ -13,14 +23,8 @@
     max-width: var(--seeds-screen-lg);
     display: flex;
     flex-direction: column;
-    margin-inline: var(--seeds-s2);
-    padding-block: var(--seeds-s6);
-    @media (--sm-and-up) {
-      margin-inline: var(--seeds-spacer-content);
-    }
-    @media (--sm-and-up) {
-      padding-block: var(--seeds-spacer-container);
-    }
+    margin-inline: var(--listing-directory-content-inline-padding);
+    padding-block: var(--listing-directory-content-block-padding);
   }
 
   .empty-state {

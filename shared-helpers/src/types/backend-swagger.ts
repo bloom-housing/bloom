@@ -1991,6 +1991,27 @@ export class UserService {
     })
   }
   /**
+   * Get the ids of the user favorites
+   */
+  favoriteListings(
+    params: {
+      /**  */
+      id: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<IdDTO[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/favoriteListings/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Add or remove a listing from user favorites
    */
   modifyFavoriteListings(
@@ -2560,6 +2581,22 @@ export class FeatureFlagsService {
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
       let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Add all new feature flags
+   */
+  addAllNewFeatureFlags(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/featureFlags/addAllNew"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = null
 
       configs.data = data
 
@@ -7035,6 +7072,13 @@ export enum FeatureFlagEnum {
   "enableRegions" = "enableRegions",
   "enableSection8Question" = "enableSection8Question",
   "enableUnitGroups" = "enableUnitGroups",
+  "enableSingleUseCode" = "enableSingleUseCode",
+  "enableGeocodingPreferences" = "enableGeocodingPreferences",
+  "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
+  "enableListingOpportunity" = "enableListingOpportunity",
+  "enablePartnerDemographics" = "enablePartnerDemographics",
+  "enablePartnerSettings" = "enablePartnerSettings",
+  "enableListingFavoriting" = "enableListingFavoriting",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {
   "=" = "=",

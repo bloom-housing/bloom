@@ -72,7 +72,7 @@ export default function ListingPage(props: ListingProps) {
       </Head>
       <MetaTags title={listing.name} image={metaImage} description={metaDescription} />
       {process.env.showNewSeedsDesigns ? (
-        <ListingViewSeeds listing={listing} jurisdiction={props.jurisdiction} />
+        <ListingViewSeeds listing={listing} profile={profile} jurisdiction={props.jurisdiction} />
       ) : (
         <ListingView listing={listing} jurisdiction={props.jurisdiction} />
       )}
