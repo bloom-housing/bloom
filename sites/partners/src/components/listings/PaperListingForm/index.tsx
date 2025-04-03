@@ -219,6 +219,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
               preferences,
               programs,
               units,
+              unitGroups,
               openHouseEvents,
               profile: profile,
               latLong,
@@ -296,6 +297,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
     //eslint-disable-next-line react-hooks/exhaustive-deps
     [
       units,
+      unitGroups,
       openHouseEvents,
       editMode,
       listingsService,

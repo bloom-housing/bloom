@@ -201,6 +201,7 @@ export type FormMetadata = {
   preferences: MultiselectQuestion[]
   programs: MultiselectQuestion[]
   units: TempUnit[]
+  unitGroups: TempUnitGroup[]
   openHouseEvents: TempEvent[]
   profile: User
   latLong: LatitudeLongitude
