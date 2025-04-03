@@ -32,6 +32,7 @@ export default class ListingDataPipeline {
       import("./BooleansFormatter"),
       import("./WaitlistFormatter"),
       import("./UnitsFormatter"),
+      import("./UnitGroupsFormatter"),
       import("./EventsFormatter"),
       import("./JurisdictionFormatter"),
       import("./AdditionalMetadataFormatter"),
