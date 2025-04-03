@@ -178,7 +178,7 @@ export const ListingViewSeeds = ({ jurisdiction, listing, preview }: ListingProp
           <div className={styles["main-content"]}>
             <div className={styles["hide-desktop"]}>{ApplyBar}</div>
             <Eligibility
-              eligibilitySections={getEligibilitySections(listing)}
+              eligibilitySections={getEligibilitySections(jurisdiction, listing)}
               section8Acceptance={listing.section8Acceptance}
             />
             <Features features={getFeatures(listing, jurisdiction)}>{UnitFeatures}</Features>
