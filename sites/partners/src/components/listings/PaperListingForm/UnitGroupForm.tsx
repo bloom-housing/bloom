@@ -25,9 +25,10 @@ type UnitGroupFormProps = {
   onSubmit: (unit: TempUnitGroup) => void
   onClose: () => void
   defaultUnitGroup?: TempUnitGroup
+  nextId: number
 }
 
-const UnitGroupForm = ({ onClose, onSubmit, defaultUnitGroup }: UnitGroupFormProps) => {
+const UnitGroupForm = ({ onClose, onSubmit, defaultUnitGroup, nextId }: UnitGroupFormProps) => {
   const [loading, setLoading] = useState(true)
   const [amiChartsOptions, setAmiChartsOptions] = useState([])
   const [unitPrioritiesOptions, setUnitPrioritiesOptions] = useState([])
@@ -267,8 +268,10 @@ const UnitGroupForm = ({ onClose, onSubmit, defaultUnitGroup }: UnitGroupFormPro
       createdAt: undefined,
       updatedAt: undefined,
       ...data,
+      tempId: nextId,
+      unitGroupAmiLevels: amiLevelsData,
     }
-    onSubmit({ ...formData, unitGroupAmiLevels: amiLevelsData })
+    onSubmit(formData)
     onClose()
   }
 

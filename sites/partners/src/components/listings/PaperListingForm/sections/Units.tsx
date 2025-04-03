@@ -116,7 +116,13 @@ const FormUnits = ({
     }),
   ]
 
-  const nextId = units && units.length > 0 ? units[units.length - 1]?.tempId + 1 : 1
+  const nextId = enableUnitGroups
+    ? units && units.length > 0
+      ? units[units.length - 1]?.tempId + 1
+      : 1
+    : unitGroups && unitGroups.length > 0
+    ? unitGroups[unitGroups.length - 1]?.tempId + 1
+    : 1
 
   const unitTableHeaders = enableUnitGroups
     ? {
@@ -199,6 +205,21 @@ const FormUnits = ({
       setUnitDeleteModal(null)
     },
     [setUnitDeleteModal, setUnits, units]
+  )
+
+  const deleteUnitGroup = useCallback(
+    (tempId: number) => {
+      const updatedUnitGroups = unitGroups
+        .filter((unit) => unit.tempId !== tempId)
+        .map((updatedUnit, index) => ({
+          ...updatedUnit,
+          tempId: index + 1,
+        }))
+
+      setUnitGroups(updatedUnitGroups)
+      setUnitDeleteModal(null)
+    },
+    [setUnitDeleteModal, setUnitGroups, unitGroups]
   )
 
   function saveUnit(newUnit: TempUnit) {
@@ -490,6 +511,7 @@ const FormUnits = ({
             onClose={() => {
               setUnitDrawerOpen(false)
             }}
+            nextId={nextId}
           />
         ) : (
           <UnitForm
@@ -524,7 +546,13 @@ const FormUnits = ({
           {enableUnitGroups ? t("listings.unitGroup.deleteConf") : t("listings.unit.deleteConf")}
         </Dialog.Content>
         <Dialog.Footer>
-          <Button variant="alert" onClick={() => deleteUnit(unitDeleteModal)} size="sm">
+          <Button
+            variant="alert"
+            onClick={() =>
+              enableUnitGroups ? deleteUnitGroup(unitDeleteModal) : deleteUnit(unitDeleteModal)
+            }
+            size="sm"
+          >
             {t("t.delete")}
           </Button>
           <Button
