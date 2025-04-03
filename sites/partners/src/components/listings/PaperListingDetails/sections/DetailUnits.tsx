@@ -59,7 +59,7 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
   const unitTableData = useMemo(
     () =>
       enableUnitGroups
-        ? listing.unitGroups.map((unitGroup) => {
+        ? listing?.unitGroups.map((unitGroup) => {
             let amiRange: MinMax, rentRange: MinMax, percentIncomeRange: MinMax
 
             unitGroup.unitGroupAmiLevels.forEach((ami) => {
