@@ -16,19 +16,19 @@ import {
   AmiChart,
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
   UnitAccessibilityPriorityType,
-  UnitType,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { arrayToFormOptions, fieldHasError } from "../../../lib/helpers"
-import { TempAmiLevel, TempUnit, TempUnitGroup } from "../../../lib/listings/formTypes"
+import { TempAmiLevel, TempUnitGroup } from "../../../lib/listings/formTypes"
 import UnitGroupAmiForm from "./UnitGroupAmiForm"
 
 type UnitGroupFormProps = {
-  onSubmit: (unit: TempUnit) => void
+  onSubmit: (unit: TempUnitGroup) => void
   onClose: () => void
   defaultUnitGroup?: TempUnitGroup
 }
 
 const UnitGroupForm = ({ onClose, onSubmit, defaultUnitGroup }: UnitGroupFormProps) => {
+  const [loading, setLoading] = useState(true)
   const [amiChartsOptions, setAmiChartsOptions] = useState([])
   const [unitPrioritiesOptions, setUnitPrioritiesOptions] = useState([])
   const [unitTypesOptions, setUnitTypesOptions] = useState([])
@@ -56,23 +56,26 @@ const UnitGroupForm = ({ onClose, onSubmit, defaultUnitGroup }: UnitGroupFormPro
   const { data: unitTypes = [] } = useUnitTypeList()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, trigger, setValue, control } = useForm()
+  const { register, errors, trigger, setValue, control, getValues } = useForm()
 
   // Controls for validating occupancy
   const minOccupancy: number = useWatch({ control, name: "minOccupancy" })
   const maxOccupancy: number = useWatch({ control, name: "maxOccupancy" })
 
   // Controls for validating square footage
-  const minSquareFootage: number = useWatch({ control, name: "minSquareFootage" })
-  const maxSquareFootage: number = useWatch({ control, name: "maxSquareFootage" })
+  const sqFeetMin: number = useWatch({ control, name: "sqFeetMin" })
+  const sqFeetMax: number = useWatch({ control, name: "sqFeetMax" })
 
   // Controls for validating floor
-  const minFloor: number = useWatch({ control, name: "minFloor" })
-  const maxFloor: number = useWatch({ control, name: "maxFloor" })
+  const floorMin: number = useWatch({ control, name: "floorMin" })
+  const floorMax: number = useWatch({ control, name: "floorMax" })
 
   // Controls for validating number of bathrooms
-  const minBathrooms: number = useWatch({ control, name: "minBathrooms" })
-  const maxBathrooms: number = useWatch({ control, name: "maxBathrooms" })
+  const bathroomMin: number = useWatch({ control, name: "bathroomMin" })
+  const bathroomMax: number = useWatch({ control, name: "bathroomMax" })
+
+  const totalAvailable: number = useWatch({ control, name: "totalAvailable" })
+  const totalCount: number = useWatch({ control, name: "totalCount" })
 
   const numberOccupancyOptions = 8
   const numberFloorsOptions = 11
@@ -226,6 +229,49 @@ const UnitGroupForm = ({ onClose, onSubmit, defaultUnitGroup }: UnitGroupFormPro
     [amiLevels, amiChartsOptions]
   )
 
+  async function onFormSubmit() {
+    setLoading(true)
+    const validation = await trigger()
+    if (!validation) {
+      setLoading(false)
+      return
+    }
+
+    const data = getValues()
+
+    if (data.unitTypes?.length) {
+      const types = data.unitTypes
+        .map((entry) => unitTypes.find((type) => type.id === entry))
+        .filter((entry) => !!entry)
+
+      data.unitTypes = types
+    } else {
+      delete data.unitTypes
+    }
+
+    let amiLevelsData
+    if (amiLevels) {
+      amiLevelsData = amiLevels?.map((level) => ({
+        ...level,
+        amiChart: amiCharts.find((a) => a.id === level.amiChart.id),
+      }))
+    } else if (data?.amiLevels) {
+      data.amiLevels = data.amiLevels.map((level) => ({
+        ...level,
+        amiChart: amiCharts.find((a) => a.id === level.amiChart.id),
+      }))
+    }
+
+    const formData = {
+      id: null,
+      createdAt: undefined,
+      updatedAt: undefined,
+      ...data,
+    }
+    onSubmit({ ...formData, unitGroupAmiLevels: amiLevelsData })
+    onClose()
+  }
+
   return (
     <>
       <Drawer.Content>
@@ -243,6 +289,11 @@ const UnitGroupForm = ({ onClose, onSubmit, defaultUnitGroup }: UnitGroupFormPro
                     fields={unitTypesOptions}
                     register={register}
                     fieldGroupClassName="grid grid-cols-2"
+                    fieldClassName="m-0"
+                    error={fieldHasError(errors?.unitTypes)}
+                    errorMessage={t("errors.requiredFieldError")}
+                    validation={{ required: true }}
+                    dataTestId="unitTypesCheckBoxes"
                   />
                 </Grid.Row>
               </fieldset>
@@ -252,10 +303,22 @@ const UnitGroupForm = ({ onClose, onSubmit, defaultUnitGroup }: UnitGroupFormPro
                 <FieldValue label={t("listings.unit.affordableGroupQuantity")}>
                   <Field
                     label={t("listings.unit.affordableGroupQuantity")}
-                    name="groupQuantity"
+                    id="totalCount"
+                    name="totalCount"
                     placeholder={t("listings.unit.affordableGroupQuantity")}
-                    readerOnly
                     register={register}
+                    readerOnly
+                    type="number"
+                    error={fieldHasError(errors?.totalCount)}
+                    errorMessage={t("errors.totalCountLessThanTotalAvailableError")}
+                    validation={{ min: totalAvailable }}
+                    inputProps={{
+                      onBlur: () => {
+                        void trigger("totalCount")
+                        void trigger("totalAvailable")
+                      },
+                    }}
+                    dataTestId="totalCount"
                   />
                 </FieldValue>
               </Grid.Row>
@@ -307,34 +370,36 @@ const UnitGroupForm = ({ onClose, onSubmit, defaultUnitGroup }: UnitGroupFormPro
                 <FieldValue label={t("listings.unit.minSquareFootage")}>
                   <Field
                     label={t("listings.unit.minSquareFootage")}
-                    name="minSquareFootage"
+                    id="sqFeetMin"
+                    name="sqFeetMin"
                     placeholder={t("listings.unit.minSquareFootage")}
                     register={register}
                     readerOnly
                     type="number"
                     errorMessage={t("errors.minGreaterThanMaxFootageError")}
-                    error={fieldHasError(errors?.minSquareFootage)}
-                    validation={{ max: maxSquareFootage }}
+                    error={fieldHasError(errors?.sqFeetMin)}
+                    validation={{ max: sqFeetMax }}
                     onChange={() => {
-                      void trigger("minSquareFootage")
-                      void trigger("maxSquareFootage")
+                      void trigger("sqFeetMin")
+                      void trigger("sqFeetMax")
                     }}
                   />
                 </FieldValue>
                 <FieldValue label={t("listings.unit.maxSquareFootage")}>
                   <Field
                     label={t("listings.unit.maxSquareFootage")}
-                    name="maxSquareFootage"
+                    id="sqFeetMax"
+                    name="sqFeetMax"
                     placeholder={t("listings.unit.maxSquareFootage")}
                     register={register}
                     readerOnly
                     type="number"
                     errorMessage={t("errors.maxLessThanMinFootageError")}
-                    error={fieldHasError(errors?.maxSquareFootage)}
-                    validation={{ min: minSquareFootage }}
+                    error={fieldHasError(errors?.sqFeetMax)}
+                    validation={{ min: sqFeetMin }}
                     onChange={() => {
-                      void trigger("minSquareFootage")
-                      void trigger("maxSquareFootage")
+                      void trigger("sqFeetMin")
+                      void trigger("sqFeetMax")
                     }}
                   />
                 </FieldValue>
@@ -345,17 +410,17 @@ const UnitGroupForm = ({ onClose, onSubmit, defaultUnitGroup }: UnitGroupFormPro
                     labelClassName="sr-only"
                     controlClassName="control"
                     label={t("listings.unit.minFloor")}
-                    name="minFloor"
-                    id="minFloor"
+                    name="floorMin"
+                    id="floorMin"
                     options={numberOptions(numberFloorsOptions)}
                     register={register}
                     errorMessage={t("errors.maxLessThanMinFloorError")}
-                    error={fieldHasError(errors?.minFloor)}
-                    validation={{ max: maxFloor || numberFloorsOptions }}
+                    error={fieldHasError(errors?.floorMin)}
+                    validation={{ max: floorMax || numberFloorsOptions }}
                     inputProps={{
                       onChange: () => {
-                        void trigger("minFloor")
-                        void trigger("maxFloor")
+                        void trigger("floorMin")
+                        void trigger("floorMax")
                       },
                     }}
                   />
@@ -365,17 +430,17 @@ const UnitGroupForm = ({ onClose, onSubmit, defaultUnitGroup }: UnitGroupFormPro
                     labelClassName="sr-only"
                     controlClassName="control"
                     label={t("listings.unit.maxFloor")}
-                    name="maxFloor"
-                    id="maxFloor"
+                    name="floorMax"
+                    id="floorMax"
                     options={numberOptions(numberFloorsOptions)}
                     register={register}
                     errorMessage={t("errors.minGreaterThanMaxFloorError")}
-                    error={fieldHasError(errors?.maxFloor)}
-                    validation={{ min: minFloor }}
+                    error={fieldHasError(errors?.floorMax)}
+                    validation={{ min: floorMin }}
                     inputProps={{
                       onChange: () => {
-                        void trigger("minFloor")
-                        void trigger("maxFloor")
+                        void trigger("floorMin")
+                        void trigger("floorMax")
                       },
                     }}
                   />
@@ -387,17 +452,17 @@ const UnitGroupForm = ({ onClose, onSubmit, defaultUnitGroup }: UnitGroupFormPro
                     labelClassName="sr-only"
                     controlClassName="control"
                     label={t("listings.unit.minBathrooms")}
-                    name="minBathrooms"
-                    id="minBathrooms"
+                    name="bathroomMin"
+                    id="bathroomMin"
                     options={bathroomOptions}
                     register={register}
                     errorMessage={t("errors.minGreaterThanMaxBathroomsError")}
-                    error={fieldHasError(errors.minBathrooms)}
-                    validation={{ max: maxBathrooms }}
+                    error={fieldHasError(errors.bathroomMin)}
+                    validation={{ max: bathroomMax }}
                     inputProps={{
                       onChange: () => {
-                        void trigger("minBathrooms")
-                        void trigger("maxBathrooms")
+                        void trigger("bathroomMin")
+                        void trigger("bathroomMax")
                       },
                     }}
                   />
@@ -407,17 +472,17 @@ const UnitGroupForm = ({ onClose, onSubmit, defaultUnitGroup }: UnitGroupFormPro
                     labelClassName="sr-only"
                     controlClassName="control"
                     label={t("listings.unit.maxBathrooms")}
-                    name="maxBathrooms"
-                    id="maxBathrooms"
+                    name="bathroomMax"
+                    id="bathroomMax"
                     options={bathroomOptions}
                     register={register}
                     errorMessage={t("errors.maxLessThanMinBathroomsError")}
                     error={fieldHasError(errors.maxBathrooms)}
-                    validation={{ min: minBathrooms }}
+                    validation={{ min: bathroomMin }}
                     inputProps={{
                       onChange: () => {
-                        void trigger("minBathrooms")
-                        void trigger("maxBathrooms")
+                        void trigger("bathroomMin")
+                        void trigger("bathroomMax")
                       },
                     }}
                   />
@@ -431,17 +496,33 @@ const UnitGroupForm = ({ onClose, onSubmit, defaultUnitGroup }: UnitGroupFormPro
                   <Field
                     label={t("listings.unit.groupVacancies")}
                     placeholder={t("listings.unit.groupVacancies")}
-                    id="unitGroupVacancies"
-                    name="unitGroupVacancies"
+                    id="totalAvailable"
+                    name="totalAvailable"
+                    register={register}
+                    type="number"
+                    error={errors?.totalAvailable !== undefined}
+                    errorMessage={t("errors.totalAvailableGreaterThanTotalCountError")}
+                    validation={{ max: totalCount || totalAvailable }}
+                    inputProps={{
+                      onBlur: () => {
+                        void trigger("totalCount")
+                        void trigger("totalAvailable")
+                      },
+                    }}
                     readerOnly
                   />
                 </FieldValue>
                 <FieldValue label={t("listings.unit.waitlistStatus")}>
                   <FieldGroup
-                    name="waitlistStatus"
+                    name="openWaitlist"
                     type="radio"
                     fields={waitlistStatusOptions}
                     register={register}
+                    fieldClassName="m-0"
+                    fieldGroupClassName="flex h-12 items-center"
+                    error={errors?.openWaitlist !== undefined}
+                    errorMessage={t("errors.requiredFieldError")}
+                    dataTestId="openWaitListQuestion"
                   />
                 </FieldValue>
               </Grid.Row>
@@ -470,7 +551,13 @@ const UnitGroupForm = ({ onClose, onSubmit, defaultUnitGroup }: UnitGroupFormPro
         </Card>
       </Drawer.Content>
       <Drawer.Footer>
-        <Button type="button" variant="primary" size="sm" id={"unitFormSaveAndExitButton"}>
+        <Button
+          type="button"
+          variant="primary"
+          size="sm"
+          id={"unitFormSaveAndExitButton"}
+          onClick={() => onFormSubmit()}
+        >
           {t("t.saveExit")}
         </Button>
 
