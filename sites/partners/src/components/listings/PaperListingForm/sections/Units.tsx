@@ -475,7 +475,7 @@ const FormUnits = ({
         )}
       </SectionWithGrid>
 
-      <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
+      {!enableUnitGroups && <p className="field-sub-note">{t("listings.requiredToPublish")}</p>}
       {fieldHasError(errors?.units) && (
         <span className={"text-xs text-alert"} id="units-error">
           {t("errors.requiredFieldError")}
