@@ -4,19 +4,35 @@ import { DetailUnits } from "../../../../../src/components/listings/PaperListing
 import { ListingContext } from "../../../../../src/components/listings/ListingContext"
 import { listing, unit } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
+  FeatureFlagEnum,
   HomeTypeEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+
+function mockJurisdictionsHaveFeatureFlagOn(
+  featureFlag: string,
+  enableHomeType = true,
+  enableSection8Question = true,
+  enableUnitGroups = false
+) {
+  switch (featureFlag) {
+    case FeatureFlagEnum.enableHomeType:
+      return enableHomeType
+    case FeatureFlagEnum.enableSection8Question:
+      return enableSection8Question
+    case FeatureFlagEnum.enableUnitGroups:
+      return enableUnitGroups
+  }
+}
 
 describe("DetailUnits", () => {
   it("should render the detail units when no units exist", () => {
     const results = render(
       <AuthContext.Provider
         value={{
-          doJurisdictionsHaveFeatureFlagOn: () => {
-            return false
-          },
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag, false),
         }}
       >
         <ListingContext.Provider
@@ -50,9 +66,8 @@ describe("DetailUnits", () => {
     const results = render(
       <AuthContext.Provider
         value={{
-          doJurisdictionsHaveFeatureFlagOn: () => {
-            return false
-          },
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, false),
         }}
       >
         <ListingContext.Provider
@@ -103,9 +118,8 @@ describe("DetailUnits", () => {
       const results = render(
         <AuthContext.Provider
           value={{
-            doJurisdictionsHaveFeatureFlagOn: () => {
-              return true
-            },
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+              mockJurisdictionsHaveFeatureFlagOn(featureFlag),
           }}
         >
           <ListingContext.Provider
@@ -130,9 +144,8 @@ describe("DetailUnits", () => {
       const results = render(
         <AuthContext.Provider
           value={{
-            doJurisdictionsHaveFeatureFlagOn: () => {
-              return true
-            },
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+              mockJurisdictionsHaveFeatureFlagOn(featureFlag),
           }}
         >
           <ListingContext.Provider
