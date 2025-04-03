@@ -155,6 +155,18 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
       setUnits(tempUnits)
     }
 
+    if (listing?.unitGroups) {
+      const tempUnitGroups = listing.unitGroups.map((unitGroup, i) => ({
+        ...unitGroup,
+        unitGroupAmiLevels: unitGroup.unitGroupAmiLevels.map((amiEntry, i) => ({
+          ...amiEntry,
+          tempId: i + 1,
+        })),
+        tempId: i + 1,
+      }))
+      setUnitGroups(tempUnitGroups)
+    }
+
     if (listing?.listingEvents) {
       setOpenHouseEvents(
         listing.listingEvents
@@ -169,7 +181,14 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
           .sort((a, b) => (dayjs(a.startTime).isAfter(b.startTime) ? 1 : -1))
       )
     }
-  }, [listing?.units, listing?.listingEvents, setUnits, setOpenHouseEvents])
+  }, [
+    listing?.units,
+    listing?.unitGroups,
+    listing?.listingEvents,
+    setUnits,
+    setUnitGroups,
+    setOpenHouseEvents,
+  ])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getValues, setError, clearErrors, reset, watch } = formMethods
