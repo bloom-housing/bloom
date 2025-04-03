@@ -24,11 +24,18 @@ import UnitGroupAmiForm from "./UnitGroupAmiForm"
 type UnitGroupFormProps = {
   onSubmit: (unit: TempUnitGroup) => void
   onClose: () => void
-  defaultUnitGroup?: TempUnitGroup
+  defaultUnitGroup: TempUnitGroup | undefined
+  draft: boolean
   nextId: number
 }
 
-const UnitGroupForm = ({ onClose, onSubmit, defaultUnitGroup, nextId }: UnitGroupFormProps) => {
+const UnitGroupForm = ({
+  onClose,
+  onSubmit,
+  defaultUnitGroup,
+  draft,
+  nextId,
+}: UnitGroupFormProps) => {
   const [loading, setLoading] = useState(true)
   const [amiChartsOptions, setAmiChartsOptions] = useState([])
   const [unitPrioritiesOptions, setUnitPrioritiesOptions] = useState([])
@@ -57,7 +64,7 @@ const UnitGroupForm = ({ onClose, onSubmit, defaultUnitGroup, nextId }: UnitGrou
   const { data: unitTypes = [] } = useUnitTypeList()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, trigger, setValue, control, getValues } = useForm()
+  const { register, errors, trigger, setValue, control, getValues, reset } = useForm()
 
   // Controls for validating occupancy
   const minOccupancy: number = useWatch({ control, name: "minOccupancy" })
@@ -134,10 +141,19 @@ const UnitGroupForm = ({ onClose, onSubmit, defaultUnitGroup, nextId }: UnitGrou
     )
   }, [unitTypesOptions, unitTypes])
 
+  // reset values to a default unit group for edit
   useEffect(() => {
     if (defaultUnitGroup) {
-      setAmiLevels(defaultUnitGroup.unitGroupAmiLevels)
+      if (defaultUnitGroup.unitGroupAmiLevels.length) {
+        setAmiLevels(defaultUnitGroup.unitGroupAmiLevels)
+      }
+
+      reset({
+        ...defaultUnitGroup,
+        unitTypes: defaultUnitGroup?.unitTypes?.map((elem) => elem.id ?? elem.toString()),
+      })
     }
+    setLoading(false)
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -268,7 +284,6 @@ const UnitGroupForm = ({ onClose, onSubmit, defaultUnitGroup, nextId }: UnitGrou
       createdAt: undefined,
       updatedAt: undefined,
       ...data,
-      tempId: nextId,
       tempId: draft ? nextId : defaultUnitGroup.tempId,
       unitGroupAmiLevels: amiLevelsData,
     }

@@ -511,6 +511,8 @@ const FormUnits = ({
             onClose={() => {
               setUnitDrawerOpen(false)
             }}
+            defaultUnitGroup={defaultUnitGroup}
+            draft={!unitGroups.some((unitGroup) => unitGroup.tempId === defaultUnitGroup?.tempId)}
             nextId={nextId}
           />
         ) : (
