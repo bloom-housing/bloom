@@ -176,7 +176,7 @@ const UnitGroupForm = ({ onClose, onSubmit, defaultUnitGroup, nextId }: UnitGrou
   const amiLevelsTableData = useMemo(
     () =>
       amiLevels?.map((ami) => {
-        const selectedAmiChart = amiChartsOptions.find((chart) => chart.value === ami.amiChart)
+        const selectedAmiChart = amiChartsOptions.find((chart) => chart.value === ami.amiChart.id)
 
         let rentValue = undefined
         let monthlyRentDeterminationType = undefined
@@ -269,6 +269,7 @@ const UnitGroupForm = ({ onClose, onSubmit, defaultUnitGroup, nextId }: UnitGrou
       updatedAt: undefined,
       ...data,
       tempId: nextId,
+      tempId: draft ? nextId : defaultUnitGroup.tempId,
       unitGroupAmiLevels: amiLevelsData,
     }
     onSubmit(formData)

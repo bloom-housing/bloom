@@ -35,7 +35,7 @@ const UnitGroupAmiForm = ({
 
   const amiChartID: string = useWatch({
     control,
-    name: "amiChart",
+    name: "amiChart.id",
   })
 
   const rentType: string = useWatch({
@@ -133,7 +133,8 @@ const UnitGroupAmiForm = ({
                 <FieldValue label={t("listings.unit.amiChart")}>
                   <Select
                     label={t("listings.unit.amiChart")}
-                    name="amiChart"
+                    id="amiChart.id"
+                    name="amiChart.id"
                     placeholder={t("listings.unit.amiChart")}
                     options={[{ label: t("t.selectOne"), value: "" }, ...amiChartsOptions]}
                     labelClassName="sr-only"
@@ -146,7 +147,7 @@ const UnitGroupAmiForm = ({
                       onChange: () => {
                         setValue("amiPercentage", undefined)
                         clearErrors("amiPercentage")
-                        clearErrors("amiChart")
+                        clearErrors("amiChart.id")
                       },
                     }}
                   />
