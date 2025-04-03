@@ -8,32 +8,84 @@ import {
 } from "@bloom-housing/ui-components"
 import { Button, Dialog, Drawer, FieldValue, Grid, Tag } from "@bloom-housing/ui-seeds"
 import {
+  EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
   FeatureFlag,
   FeatureFlagEnum,
   HomeTypeEnum,
+  MinMax,
   ReviewOrderTypeEnum,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import UnitForm from "../UnitForm"
 import { useFormContext, useWatch } from "react-hook-form"
-import { TempUnit } from "../../../../lib/listings/formTypes"
+import { TempUnit, TempUnitGroup } from "../../../../lib/listings/formTypes"
 import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import UnitGroupForm from "../UnitGroupForm"
 
 type UnitProps = {
   units: TempUnit[]
+  unitGroups: TempUnitGroup[]
   setUnits: (units: TempUnit[]) => void
+  setUnitGroups: (unitGroups: TempUnitGroup[]) => void
   disableUnitsAccordion: boolean
   featureFlags?: FeatureFlag[]
 }
 
-const FormUnits = ({ units, setUnits, disableUnitsAccordion, featureFlags }: UnitProps) => {
+function minMaxFinder(range: MinMax, value: number): MinMax {
+  if (range === undefined) {
+    return {
+      min: value,
+      max: value,
+    }
+  } else {
+    range.min = Math.min(range.min, value)
+    range.max = Math.max(range.max, value)
+
+    return range
+  }
+}
+
+const formatRange = (
+  min: string | number,
+  max: string | number,
+  prefix = "",
+  postfix = ""
+): string => {
+  if (!min && !max) return ""
+  if (min == max || !max) return `${prefix}${min}${postfix}`
+  if (!min) return `${prefix}${max}${postfix}`
+  return `${prefix}${min}${postfix} - ${prefix}${max}${postfix}`
+}
+
+function formatRentRange(rent: MinMax, percent: MinMax): string {
+  let toReturn = ""
+  if (rent) {
+    toReturn += formatRange(rent.min, rent.max)
+  }
+  if (rent && percent) {
+    toReturn += ", "
+  }
+  if (percent) {
+    toReturn += formatRange(percent.min, percent.max, "", "%")
+  }
+  return toReturn
+}
+
+const FormUnits = ({
+  units,
+  unitGroups,
+  setUnits,
+  setUnitGroups,
+  disableUnitsAccordion,
+  featureFlags,
+}: UnitProps) => {
   const { addToast } = useContext(MessageContext)
   const [unitDrawerOpen, setUnitDrawerOpen] = useState(false)
   const [unitDeleteModal, setUnitDeleteModal] = useState<number | null>(null)
   const [defaultUnit, setDefaultUnit] = useState<TempUnit | null>(null)
+  const [defaultUnitGroup, setDefaultUnitGroup] = useState<TempUnitGroup | null>(null)
   const [homeTypeEnabled, setHomeTypeEnabled] = useState(false)
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
@@ -41,6 +93,16 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion, featureFlags }: Uni
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, clearErrors, getValues, control, setValue } = formMethods
   const listing = getValues()
+
+  const enableSection8Question = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableSection8Question,
+    listing?.jurisdictions?.id
+  )
+
+  const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableUnitGroups,
+    listing?.jurisdictions?.id
+  )
 
   const listingAvailability = useWatch({
     control,
@@ -56,15 +118,26 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion, featureFlags }: Uni
 
   const nextId = units && units.length > 0 ? units[units.length - 1]?.tempId + 1 : 1
 
-  const unitTableHeaders = {
-    number: "listings.unit.number",
-    unitType: "listings.unit.type",
-    amiPercentage: "listings.unit.ami",
-    monthlyRent: "listings.unit.rent",
-    sqFeet: "listings.unit.sqft",
-    unitAccessibilityPriorityTypes: "listings.unit.priorityType",
-    action: "",
-  }
+  const unitTableHeaders = enableUnitGroups
+    ? {
+        unitType: "listings.unit.type",
+        number: "listings.unit.totalCount",
+        amiPercentage: "listings.unit.ami",
+        monthlyRent: "listings.unit.rent",
+        occupancy: "listings.unit.occupancy",
+        sqFeet: "listings.unit.sqft",
+        bath: "listings.unit.bath",
+        action: "",
+      }
+    : {
+        number: "listings.unit.number",
+        unitType: "listings.unit.type",
+        amiPercentage: "listings.unit.ami",
+        monthlyRent: "listings.unit.rent",
+        sqFeet: "listings.unit.sqft",
+        unitAccessibilityPriorityTypes: "listings.unit.priorityType",
+        action: "",
+      }
 
   useEffect(() => {
     if (
@@ -105,6 +178,14 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion, featureFlags }: Uni
     [units]
   )
 
+  const editUnitGroup = useCallback(
+    (tempId: number) => {
+      setDefaultUnitGroup(unitGroups.filter((unitGroup) => unitGroup.tempId === tempId)[0])
+      setUnitDrawerOpen(true)
+    },
+    [unitGroups]
+  )
+
   const deleteUnit = useCallback(
     (tempId: number) => {
       const updatedUnits = units
@@ -130,43 +211,119 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion, featureFlags }: Uni
     }
   }
 
+  function saveUnitGroup(newUnitGroup: TempUnitGroup) {
+    const exists = unitGroups.some((unitGroup) => unitGroup.tempId === newUnitGroup.tempId)
+    if (exists) {
+      const updateUnits = unitGroups.map((unitGroup) =>
+        unitGroup.tempId === newUnitGroup.tempId ? newUnitGroup : unitGroup
+      )
+      setUnitGroups(updateUnits)
+    } else {
+      setUnitGroups([...unitGroups, newUnitGroup])
+    }
+  }
+
   const unitTableData: StandardTableData = useMemo(
     () =>
-      units.map((unit) => ({
-        number: { content: unit.number },
-        unitType: { content: unit.unitTypes && t(`listings.unitTypes.${unit.unitTypes.name}`) },
-        amiPercentage: { content: unit.amiPercentage },
-        monthlyRent: { content: unit.monthlyRent },
-        sqFeet: { content: unit.sqFeet },
-        unitAccessibilityPriorityTypes: { content: unit.unitAccessibilityPriorityTypes?.name },
-        action: {
-          content: (
-            <div className="flex gap-3">
-              <Button
-                type="button"
-                className="font-semibold"
-                onClick={() => editUnit(unit.tempId)}
-                variant="text"
-                size="sm"
-              >
-                {t("t.edit")}
-              </Button>
-              <Button
-                type="button"
-                className="font-semibold text-alert"
-                onClick={() => setUnitDeleteModal(unit.tempId)}
-                variant="text"
-                size="sm"
-              >
-                {t("t.delete")}
-              </Button>
-            </div>
-          ),
-        },
-      })),
-    [editUnit, units]
-  )
+      enableUnitGroups
+        ? unitGroups.map((unitGroup) => {
+            let amiRange: MinMax, rentRange: MinMax, percentIncomeRange: MinMax
 
+            unitGroup.unitGroupAmiLevels.forEach((ami) => {
+              if (ami.amiPercentage) {
+                amiRange = minMaxFinder(amiRange, ami.amiPercentage)
+              }
+              if (
+                ami.flatRentValue &&
+                ami.monthlyRentDeterminationType ===
+                  EnumUnitGroupAmiLevelMonthlyRentDeterminationType.flatRent
+              ) {
+                rentRange = minMaxFinder(rentRange, ami.flatRentValue)
+              }
+              if (
+                ami.percentageOfIncomeValue &&
+                ami.monthlyRentDeterminationType ===
+                  EnumUnitGroupAmiLevelMonthlyRentDeterminationType.percentageOfIncome
+              ) {
+                percentIncomeRange = minMaxFinder(percentIncomeRange, ami.percentageOfIncomeValue)
+              }
+            })
+
+            return {
+              unitType: {
+                content:
+                  unitGroup?.unitTypes
+                    .map((unitType) => t(`listings.unitTypes.${unitType.name}`))
+                    .join(", ") || "",
+              },
+              number: { content: unitGroup.totalCount },
+              amiPercentage: {
+                content: amiRange && formatRange(amiRange.min, amiRange.max, "", "%"),
+              },
+              monthlyRent: { content: formatRentRange(rentRange, percentIncomeRange) },
+              occupancy: { content: formatRange(unitGroup.minOccupancy, unitGroup.maxOccupancy) },
+              sqFeet: { content: formatRange(unitGroup.sqFeetMin, unitGroup.sqFeetMax) },
+              bath: { content: formatRange(unitGroup.bathroomMin, unitGroup.bathroomMax) },
+              action: {
+                content: (
+                  <div className="flex gap-3">
+                    <Button
+                      type="button"
+                      className="font-semibold"
+                      onClick={() => editUnitGroup(unitGroup.tempId)}
+                      variant="text"
+                      size="sm"
+                    >
+                      {t("t.edit")}
+                    </Button>
+                    <Button
+                      type="button"
+                      className="font-semibold text-alert"
+                      onClick={() => setUnitDeleteModal(unitGroup.tempId)}
+                      variant="text"
+                      size="sm"
+                    >
+                      {t("t.delete")}
+                    </Button>
+                  </div>
+                ),
+              },
+            }
+          })
+        : units.map((unit) => ({
+            number: { content: unit.number },
+            unitType: { content: unit.unitTypes && t(`listings.unitTypes.${unit.unitTypes.name}`) },
+            amiPercentage: { content: unit.amiPercentage },
+            monthlyRent: { content: unit.monthlyRent },
+            sqFeet: { content: unit.sqFeet },
+            unitAccessibilityPriorityTypes: { content: unit.unitAccessibilityPriorityTypes?.name },
+            action: {
+              content: (
+                <div className="flex gap-3">
+                  <Button
+                    type="button"
+                    className="font-semibold"
+                    onClick={() => editUnit(unit.tempId)}
+                    variant="text"
+                    size="sm"
+                  >
+                    {t("t.edit")}
+                  </Button>
+                  <Button
+                    type="button"
+                    className="font-semibold text-alert"
+                    onClick={() => setUnitDeleteModal(unit.tempId)}
+                    variant="text"
+                    size="sm"
+                  >
+                    {t("t.delete")}
+                  </Button>
+                </div>
+              ),
+            },
+          })),
+    [editUnit, units, unitGroups, editUnitGroup, enableUnitGroups]
+  )
   const disableUnitsAccordionOptions = [
     {
       id: "unitTypes",
@@ -181,16 +338,6 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion, featureFlags }: Uni
       dataTestId: "individual-units",
     },
   ]
-
-  const enableSection8Question = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableSection8Question,
-    listing?.jurisdictions?.id
-  )
-
-  const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableUnitGroups,
-    listing?.jurisdictions?.id
-  )
 
   return (
     <>
@@ -258,11 +405,12 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion, featureFlags }: Uni
         <SectionWithGrid.HeadingRow>{t("listings.units")}</SectionWithGrid.HeadingRow>
         <Grid.Row>
           <Grid.Cell className="grid-inset-section">
-            {!!units.length && (
+            {(enableUnitGroups ? !!unitGroups.length : !!units.length) && (
               <div className="mb-5">
                 <MinimalTable headers={unitTableHeaders} data={unitTableData} />
               </div>
             )}
+
             <Button
               id="addUnitsButton"
               type="button"
@@ -334,8 +482,10 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion, featureFlags }: Uni
         </Drawer.Header>
         {enableUnitGroups ? (
           <UnitGroupForm
-            onSubmit={(unit) => {
-              saveUnit(unit)
+            onSubmit={(unitGroup) => {
+              console.table(unitGroup)
+              console.table(unitGroup.unitGroupAmiLevels)
+              saveUnitGroup(unitGroup)
             }}
             onClose={() => {
               setUnitDrawerOpen(false)
@@ -367,8 +517,12 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion, featureFlags }: Uni
       </Drawer>
 
       <Dialog isOpen={!!unitDeleteModal} onClose={() => setUnitDeleteModal(null)}>
-        <Dialog.Header>{t("listings.unit.delete")}</Dialog.Header>
-        <Dialog.Content>{t("listings.unit.deleteConf")}</Dialog.Content>
+        <Dialog.Header>
+          {enableUnitGroups ? t("listings.unitGroup.delete") : t("listings.unit.delete")}
+        </Dialog.Header>
+        <Dialog.Content>
+          {enableUnitGroups ? t("listings.unitGroup.deleteConf") : t("listings.unit.deleteConf")}
+        </Dialog.Content>
         <Dialog.Footer>
           <Button variant="alert" onClick={() => deleteUnit(unitDeleteModal)} size="sm">
             {t("t.delete")}

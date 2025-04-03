@@ -21,6 +21,7 @@ import {
   FormListing,
   TempEvent,
   TempUnit,
+  TempUnitGroup,
   formDefaults,
 } from "../../../lib/listings/formTypes"
 import ListingDataPipeline from "../../../lib/listings/ListingDataPipeline"
@@ -105,6 +106,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [units, setUnits] = useState<TempUnit[]>([])
+  const [unitGroups, setUnitGroups] = useState<TempUnitGroup[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
   const [preferences, setPreferences] = useState<MultiselectQuestion[]>(
     listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.preferences)?.map(
@@ -291,6 +293,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
         }
       }
     },
+    //eslint-disable-next-line react-hooks/exhaustive-deps
     [
       units,
       openHouseEvents,
@@ -351,7 +354,9 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                           <CommunityType listing={listing} />
                           <Units
                             units={units}
+                            unitGroups={unitGroups}
                             setUnits={setUnits}
+                            setUnitGroups={setUnitGroups}
                             disableUnitsAccordion={listing?.disableUnitsAccordion}
                             featureFlags={activeFeatureFlags}
                           />
