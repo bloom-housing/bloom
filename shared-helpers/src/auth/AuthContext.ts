@@ -81,7 +81,11 @@ type ContextProps = {
   ) => Promise<RequestMfaCodeResponse | undefined>
   requestSingleUseCode: (email: string) => Promise<SuccessDTO | undefined>
   loginViaSingleUseCode: (email: string, singleUseCode: string) => Promise<User | undefined>
-  doJurisdictionsHaveFeatureFlagOn: (featureFlag: string, jurisdiction?: string) => boolean
+  doJurisdictionsHaveFeatureFlagOn: (
+    featureFlag: string,
+    jurisdiction?: string,
+    onlyIfAllJurisdictionsHaveItEnabled?: boolean
+  ) => boolean
 }
 
 // Internal Provider State
@@ -381,11 +385,22 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
         dispatch(stopLoading())
       }
     },
-    doJurisdictionsHaveFeatureFlagOn: (featureFlag: string, jurisdictionId?: string) => {
+    doJurisdictionsHaveFeatureFlagOn: (
+      featureFlag: string,
+      jurisdictionId?: string,
+      onlyIfAllJurisdictionsHaveItEnabled?: boolean
+    ) => {
       let jurisdictions = state.profile?.jurisdictions || []
       if (jurisdictionId) {
         jurisdictions = jurisdictions?.filter((j) => j.id === jurisdictionId)
       }
+      // Return true only if all jurisdictions have the flag turned on
+      if (onlyIfAllJurisdictionsHaveItEnabled) {
+        return jurisdictions.every(
+          (j) => j.featureFlags.find((flag) => flag.name === featureFlag)?.active || false
+        )
+      }
+      // Otherwise return true if at least one jurisdiction has the flag turned on
       return jurisdictions.some(
         (j) => j.featureFlags.find((flag) => flag.name === featureFlag)?.active || false
       )

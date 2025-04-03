@@ -4,6 +4,7 @@ import LockClosedIcon from "@heroicons/react/24/solid/LockClosedIcon"
 import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
 import Clock from "@heroicons/react/24/outline/ClockIcon"
 import HomeModernIcon from "@heroicons/react/24/outline/HomeModernIcon"
+import HouseIcon from "@heroicons/react/24/outline/HomeIcon"
 import EnvelopeIcon from "@heroicons/react/24/outline/EnvelopeIcon"
 
 export const CustomIconMap = {
@@ -14,6 +15,7 @@ export const CustomIconMap = {
   clock: <Clock />,
   home: <HomeModernIcon />,
   envelope: <EnvelopeIcon />,
+  house: <HouseIcon />,
 }
 
 export type CustomIconType = keyof typeof CustomIconMap
