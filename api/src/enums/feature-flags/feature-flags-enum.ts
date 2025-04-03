@@ -3,6 +3,7 @@
 // Keep alphabetized for readability.
 export enum FeatureFlagEnum {
   example = 'example', // sample feature flag for testing purposes
+  disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
@@ -26,6 +27,10 @@ export enum FeatureFlagEnum {
 // This should be the source of all feature flags in our system.
 // Keep alphabetized for readability.
 export const featureFlagMap: { name: string; description: string }[] = [
+  {
+    name: FeatureFlagEnum.disableJurisdictionalAdmin,
+    description: 'When true, jurisdictional admins cannot be created',
+  },
   {
     name: FeatureFlagEnum.enableAccessibilityFeatures,
     description:
