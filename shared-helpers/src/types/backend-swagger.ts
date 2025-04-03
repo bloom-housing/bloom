@@ -6945,6 +6945,7 @@ export enum FeatureFlagEnum {
   "enableRegions" = "enableRegions",
   "enableSection8Question" = "enableSection8Question",
   "enableUnitGroups" = "enableUnitGroups",
+  "swapCommunityTypeWithPrograms" = "swapCommunityTypeWithPrograms",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {
   "=" = "=",

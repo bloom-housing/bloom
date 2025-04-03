@@ -6,6 +6,7 @@ import {
   ApplicationAddressTypeEnum,
   ApplicationMethod,
   ApplicationMethodsTypeEnum,
+  FeatureFlagEnum,
   IdDTO,
   Jurisdiction,
   Listing,
@@ -306,11 +307,18 @@ export type EligibilitySection = {
   note?: string
 }
 
-export const getEligibilitySections = (listing: Listing): EligibilitySection[] => {
+export const getEligibilitySections = (
+  jurisdiction: Jurisdiction,
+  listing: Listing
+): EligibilitySection[] => {
   const eligibilityFeatures: EligibilitySection[] = []
 
+  const swapCommunityTypeWithPrograms = jurisdiction.featureFlags.some(
+    (flag) => flag.name === FeatureFlagEnum.swapCommunityTypeWithPrograms && flag.active
+  )
+
   // Reserved community type
-  if (listing.reservedCommunityTypes) {
+  if (!swapCommunityTypeWithPrograms && listing.reservedCommunityTypes) {
     eligibilityFeatures.push({
       header: getReservedTitle(listing.reservedCommunityTypes),
       content: (
@@ -393,9 +401,15 @@ export const getEligibilitySections = (listing: Listing): EligibilitySection[] =
   )
   if (programs?.length > 0) {
     eligibilityFeatures.push({
-      header: t("listings.sections.housingProgramsTitle"),
-      subheader: t("listings.sections.housingProgramsSubtitle"),
-      note: t("listings.remainingUnitsAfterPrograms"),
+      header: !swapCommunityTypeWithPrograms
+        ? t("listings.sections.housingProgramsTitle")
+        : t("listings.reservedCommunityTypes"),
+      subheader: !swapCommunityTypeWithPrograms
+        ? t("listings.sections.housingProgramsSubtitle")
+        : t("listings.reservedCommunityTypesDescription"),
+      note: !swapCommunityTypeWithPrograms
+        ? t("listings.sections.remainingUnitsAfterPrograms")
+        : t("listings.reservedCommunityTypesNote"),
       content: (
         <CardList
           cardContent={programs.map((question) => {
