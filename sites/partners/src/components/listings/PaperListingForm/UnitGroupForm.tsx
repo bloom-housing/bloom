@@ -36,7 +36,6 @@ const UnitGroupForm = ({
   draft,
   nextId,
 }: UnitGroupFormProps) => {
-  const [loading, setLoading] = useState(true)
   const [amiChartsOptions, setAmiChartsOptions] = useState([])
   const [unitPrioritiesOptions, setUnitPrioritiesOptions] = useState([])
   const [unitTypesOptions, setUnitTypesOptions] = useState([])
@@ -153,7 +152,6 @@ const UnitGroupForm = ({
         unitTypes: defaultUnitGroup?.unitTypes?.map((elem) => elem.id ?? elem.toString()),
       })
     }
-    setLoading(false)
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -247,10 +245,8 @@ const UnitGroupForm = ({
   )
 
   async function onFormSubmit() {
-    setLoading(true)
     const validation = await trigger()
     if (!validation) {
-      setLoading(false)
       return
     }
 
