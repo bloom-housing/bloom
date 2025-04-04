@@ -4,9 +4,9 @@ import {
   Prisma,
 } from '@prisma/client';
 import dayjs from 'dayjs';
-import { yellowstoneAddress } from '../address-factory';
+import { glacierAddress } from '../address-factory';
 
-export const lakeviewVilla: Prisma.ListingsCreateInput = {
+export const sunshineFlats: Prisma.ListingsCreateInput = {
   additionalApplicationSubmissionNotes: null,
   digitalApplication: true,
   commonDigitalApplication: true,
@@ -15,19 +15,19 @@ export const lakeviewVilla: Prisma.ListingsCreateInput = {
   assets: [],
   accessibility: null,
   amenities: null,
-  buildingTotalUnits: 0,
-  developer: 'Bloom',
-  householdSizeMax: 0,
-  householdSizeMin: 0,
-  neighborhood: 'Greater Downtown area',
-  region: 'Greater_Downtown',
+  buildingTotalUnits: 12,
+  developer: 'Sunny side realtors',
+  householdSizeMax: 4,
+  householdSizeMin: 1,
+  neighborhood: 'West End area',
+  region: 'Eastside',
   petPolicy: null,
   smokingPolicy: null,
   unitAmenities: null,
   servicesOffered: null,
   yearBuilt: null,
   applicationDueDate: null,
-  applicationOpenDate: dayjs(new Date()).subtract(70, 'days').toDate(),
+  applicationOpenDate: dayjs(new Date()).subtract(2, 'days').toDate(),
   applicationFee: null,
   applicationOrganization: null,
   applicationPickUpAddressOfficeHours: null,
@@ -49,7 +49,7 @@ export const lakeviewVilla: Prisma.ListingsCreateInput = {
   leasingAgentOfficeHours: null,
   leasingAgentPhone: '(555) 555-5555',
   leasingAgentTitle: null,
-  name: 'Lakeview Villa',
+  name: 'Sunshine Flats',
   postmarkedApplicationsReceivedByDate: null,
   programRules: null,
   rentalAssistance:
@@ -62,7 +62,7 @@ export const lakeviewVilla: Prisma.ListingsCreateInput = {
   whatToExpect:
     'Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.',
   status: ListingsStatusEnum.active,
-  reviewOrderType: ReviewOrderTypeEnum.waitlist,
+  reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
   unitsAvailable: 0,
   displayWaitlistSize: false,
   reservedCommunityDescription: null,
@@ -74,7 +74,7 @@ export const lakeviewVilla: Prisma.ListingsCreateInput = {
   contentUpdatedAt: new Date(),
   publishedAt: new Date(),
   listingsBuildingAddress: {
-    create: yellowstoneAddress,
+    create: glacierAddress,
   },
   listingsApplicationPickUpAddress: undefined,
   listingsLeasingAgentAddress: undefined,
@@ -87,19 +87,16 @@ export const lakeviewVilla: Prisma.ListingsCreateInput = {
       assets: {
         create: {
           label: 'cloudinaryBuilding',
-          fileId: 'dev/unnamed_fkxrj2',
+          fileId: 'dev/sunshine-flats_naated',
         },
       },
     },
   },
   listingNeighborhoodAmenities: {
     create: {
-      groceryStores: 'There are grocery stores',
-      pharmacies: 'There are pharmacies',
-      healthCareResources: 'There is health care',
-      parksAndCommunityCenters: 'There are parks',
-      schools: 'There are schools',
-      publicTransportation: 'There is public transportation',
+      groceryStores: 'Flower fresh',
+      schools: 'lakeview middle school',
+      publicTransportation: 'A train, Y express bus',
     },
   },
 };
