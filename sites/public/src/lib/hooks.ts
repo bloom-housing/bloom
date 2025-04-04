@@ -4,6 +4,7 @@ import qs from "qs"
 import { useRouter } from "next/router"
 import {
   EnumListingFilterParamsComparison,
+  FeatureFlagEnum,
   Jurisdiction,
   ListingFilterParams,
   ListingOrderByKeys,
@@ -44,11 +45,13 @@ export const useFormConductor = (stepName: string) => {
 
 export async function fetchBaseListingData(
   {
+    page,
     additionalFilters,
     orderBy,
     orderDir,
     limit,
   }: {
+    page?: number
     additionalFilters?: ListingFilterParams[]
     orderBy?: ListingOrderByKeys[]
     orderDir?: OrderByEnum[]
@@ -57,9 +60,10 @@ export async function fetchBaseListingData(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   req: any
 ) {
-  let listings = []
+  let listings
+  let pagination
   try {
-    const { id: jurisdictionId } = await fetchJurisdictionByName(req)
+    const { id: jurisdictionId, featureFlags } = await fetchJurisdictionByName(req)
 
     if (!jurisdictionId) {
       return listings
@@ -75,6 +79,7 @@ export async function fetchBaseListingData(
       filter = filter.concat(additionalFilters)
     }
     const params: {
+      page?: number
       view: string
       limit: string
       filter: ListingFilterParams[]
@@ -84,6 +89,14 @@ export async function fetchBaseListingData(
       view: "base",
       limit: limit || "all",
       filter,
+    }
+
+    const enablePagination =
+      featureFlags.find((flag) => flag.name === FeatureFlagEnum.enableListingPagination)?.active ||
+      false
+
+    if (page && enablePagination) {
+      params.page = page
     }
     if (orderBy) {
       params.orderBy = orderBy
@@ -102,18 +115,23 @@ export async function fetchBaseListingData(
       },
     })
 
-    listings = response.data?.items
+    listings = response.data.items
+    pagination = enablePagination ? response.data.meta : null
   } catch (e) {
     console.log("fetchBaseListingData error: ", e)
   }
 
-  return listings
+  return {
+    items: listings,
+    meta: pagination,
+  }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function fetchOpenListings(req: any) {
+export async function fetchOpenListings(req: any, page: number) {
   return await fetchBaseListingData(
     {
+      page: page,
       additionalFilters: [
         {
           $comparison: EnumListingFilterParamsComparison["="],
@@ -122,15 +140,17 @@ export async function fetchOpenListings(req: any) {
       ],
       orderBy: [ListingOrderByKeys.mostRecentlyPublished],
       orderDir: [OrderByEnum.desc],
+      limit: process.env.maxOpenListings,
     },
     req
   )
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function fetchClosedListings(req: any) {
+export async function fetchClosedListings(req: any, page: number) {
   return await fetchBaseListingData(
     {
+      page: page,
       additionalFilters: [
         {
           $comparison: EnumListingFilterParamsComparison["="],
