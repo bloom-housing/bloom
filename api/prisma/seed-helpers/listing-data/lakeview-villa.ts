@@ -1,8 +1,12 @@
-import { ListingsStatusEnum, ReviewOrderTypeEnum } from '@prisma/client';
+import {
+  ListingsStatusEnum,
+  ReviewOrderTypeEnum,
+  Prisma,
+} from '@prisma/client';
 import dayjs from 'dayjs';
 import { yellowstoneAddress } from '../address-factory';
 
-export const lakeviewVilla = {
+export const lakeviewVilla: Prisma.ListingsCreateInput = {
   additionalApplicationSubmissionNotes: null,
   digitalApplication: true,
   commonDigitalApplication: true,
@@ -15,7 +19,8 @@ export const lakeviewVilla = {
   developer: 'Bloom',
   householdSizeMax: 0,
   householdSizeMin: 0,
-  neighborhood: 'Hollywood',
+  neighborhood: 'Greater Downtown area',
+  region: 'Greater_Downtown',
   petPolicy: null,
   smokingPolicy: null,
   unitAmenities: null,
@@ -82,7 +87,7 @@ export const lakeviewVilla = {
       assets: {
         create: {
           label: 'cloudinaryBuilding',
-          fileId: 'dev/apartment_building_2_b7ujdd',
+          fileId: 'dev/unnamed_fkxrj2',
         },
       },
     },
