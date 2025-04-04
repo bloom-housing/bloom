@@ -10,6 +10,7 @@ import Layout from "../../layouts/application"
 import { ListingCard } from "./ListingCard"
 import styles from "./ListingBrowse.module.scss"
 import { useRouter } from "next/router"
+import MaxWidthLayout from "../../layouts/max-width"
 
 export interface ListingBrowseProps {
   openListings: Listing[]
@@ -55,99 +56,111 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
 
       <div className={styles["listing-directory"]}>
         {props.paginationData && (
-          <div className={styles["browser-header"]}>
-            <div className={styles["browser-header-content"]}></div>
-            <Heading priority={5} size="lg">
-              {t("listings.browseListings.countInfo", {
-                currentCount: props.paginationData.itemCount,
-                totalCount: props.paginationData.totalItems,
-              })}
-            </Heading>
+          <div className={styles["browse-header"]}>
+            <MaxWidthLayout className={styles["minimal-max-width-layout"]}>
+              <div className={styles["browse-header-content"]}>
+                <span className={styles["showing-listing"]}>
+                  {t("listings.browseListings.countInfo", {
+                    currentCount: props.paginationData.itemCount,
+                    totalCount: props.paginationData.totalItems,
+                  })}
+                </span>
+                <span>
+                  <Button size={"sm"} variant={"primary-outlined"}>
+                    Filter
+                  </Button>
+                </span>
+              </div>
+            </MaxWidthLayout>
           </div>
         )}
         <div className={styles["content-wrapper"]}>
-          <div className={styles["content"]}>
-            {/* TODO: Show both open and closed listings once we have designs for pagination: Issue #4448 */}
-            <>
-              {props.openListings.length > 0 ? (
-                <>
-                  <ul>
-                    {props.openListings.map((listing, index) => {
-                      return (
-                        <ListingCard
-                          listing={listing}
-                          key={index}
-                          jurisdiction={props.jurisdiction}
-                        />
-                      )
-                    })}
-                  </ul>
-                  <ul className={"seeds-m-bs-content"}>
-                    {props.closedListings.map((listing, index) => {
-                      return (
-                        <ListingCard
-                          listing={listing}
-                          key={index}
-                          jurisdiction={props.jurisdiction}
-                        />
-                      )
-                    })}
-                  </ul>
-                </>
-              ) : (
-                <div className={styles["empty-state"]}>
-                  <Heading size={"xl"} priority={2} className={styles["empty-heading"]}>
-                    {t("listings.noOpenListings")}
-                  </Heading>
-                </div>
-              )}
-            </>
-          </div>
+          <MaxWidthLayout className={styles["listings-max-width-layout"]}>
+            <div className={styles["content"]}>
+              {/* TODO: Show both open and closed listings once we have designs for pagination: Issue #4448 */}
+              <>
+                {props.openListings.length > 0 ? (
+                  <>
+                    <ul>
+                      {props.openListings.map((listing, index) => {
+                        return (
+                          <ListingCard
+                            listing={listing}
+                            key={index}
+                            jurisdiction={props.jurisdiction}
+                          />
+                        )
+                      })}
+                    </ul>
+                    <ul className={"seeds-m-bs-content"}>
+                      {props.closedListings.map((listing, index) => {
+                        return (
+                          <ListingCard
+                            listing={listing}
+                            key={index}
+                            jurisdiction={props.jurisdiction}
+                          />
+                        )
+                      })}
+                    </ul>
+                  </>
+                ) : (
+                  <div className={styles["empty-state"]}>
+                    <Heading size={"xl"} priority={2} className={styles["empty-heading"]}>
+                      {t("listings.noOpenListings")}
+                    </Heading>
+                  </div>
+                )}
+              </>
+            </div>
+          </MaxWidthLayout>
         </div>
         {props.paginationData && (
           <div className={styles["pagination-container"]}>
-            <div className={styles["pagination-content-wrapper"]}>
-              <div className={styles["previous-button"]}>
-                {isPreviousPageAvailable && (
-                  <Button
-                    onClick={() =>
-                      props.paginationData.currentPage > 0 &&
-                      router.push({
-                        pathname: router.pathname,
-                        query: `page=${(props.paginationData.currentPage - 1).toString()}`,
-                      })
-                    }
-                    variant="primary-outlined"
-                    size="sm"
-                  >
-                    {t("t.previous")}
-                  </Button>
-                )}
+            <MaxWidthLayout className={styles["minimal-max-width-layout"]}>
+              <div className={styles["pagination-content-wrapper"]}>
+                <div className={styles["previous-button"]}>
+                  {isPreviousPageAvailable && (
+                    <Button
+                      onClick={() =>
+                        props.paginationData.currentPage > 0 &&
+                        router.push({
+                          pathname: router.pathname,
+                          query: `page=${(props.paginationData.currentPage - 1).toString()}`,
+                        })
+                      }
+                      variant="primary-outlined"
+                      size="sm"
+                    >
+                      {t("t.previous")}
+                    </Button>
+                  )}
+                </div>
+                <div className={styles["page-info"]}>
+                  {t("listings.browseListings.pageInfo", {
+                    currentPage: props.paginationData.currentPage,
+                    totalPages: props.paginationData.totalPages,
+                  })}
+                </div>
+                <div className={styles["next-button"]}>
+                  {isNextPageAvailable && (
+                    <Button
+                      onClick={() =>
+                        props.paginationData.currentPage < props.paginationData.totalPages &&
+                        router.push({
+                          pathname: router.pathname,
+                          query: `page=${(props.paginationData.currentPage + 1).toString()}`,
+                        })
+                      }
+                      variant="primary-outlined"
+                      size="sm"
+                    >
+                      {t("t.next")}
+                    </Button>
+                  )}
+                </div>
               </div>
-              <div className={styles["page-info"]}>
-                {t("listings.browseListings.pageInfo", {
-                  currentPage: props.paginationData.currentPage,
-                  totalPages: props.paginationData.totalPages,
-                })}
-              </div>
-              <div className={styles["next-button"]}>
-                {isNextPageAvailable && (
-                  <Button
-                    onClick={() =>
-                      props.paginationData.currentPage < props.paginationData.totalPages &&
-                      router.push({
-                        pathname: router.pathname,
-                        query: `page=${(props.paginationData.currentPage + 1).toString()}`,
-                      })
-                    }
-                    variant="primary-outlined"
-                    size="sm"
-                  >
-                    {t("t.next")}
-                  </Button>
-                )}
-              </div>
-            </div>
+            </MaxWidthLayout>
           </div>
         )}
       </div>
