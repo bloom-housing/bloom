@@ -1672,6 +1672,13 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@casbin/expression-eval@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/@casbin/expression-eval/-/expression-eval-5.3.0.tgz#4721504cbc1fcd7e334c01e44f257ca1f9e2550b"
+  integrity sha512-mMTHMYXcnBBv/zMvxMpcdVyt2bfw8Y0GnmRLbkFQ1CVJZb4XZp7xWjRh7ymOLuJdsu58rci9gmOOv/99DtJvPA==
+  dependencies:
+    jsep "^0.3.0"
+
 "@colors/colors@1.5.0":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@colors/colors/-/colors-1.5.0.tgz#bb504579c1cae923e6576a4f5da43d25f97bdbd9"
@@ -4453,10 +4460,10 @@ axios@^1.2.2:
     form-data "^4.0.0"
     proxy-from-env "^1.1.0"
 
-axios@^1.7.7:
-  version "1.7.8"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.7.8.tgz#1997b1496b394c21953e68c14aaa51b7b5de3d6e"
-  integrity sha512-Uu0wb7KNqK2t5K+YQyVCLM76prD5sRFjKHbJYCP1J7JFGEQ6nN7HWn9+04LAeiJ3ji54lgS/gZCH1oxyrf1SPw==
+axios@^1.8.3:
+  version "1.8.3"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.8.3.tgz#9ebccd71c98651d547162a018a1a95a4b4ed4de8"
+  integrity sha512-iP4DebzoNlP/YN2dpwCgb8zoCmhtkajzS48JvwmkSkXvPI3DHc7m+XYL5tGnSlJtR6nImXZmdCuN5aP8dh1d8A==
   dependencies:
     follow-redirects "^1.15.6"
     form-data "^4.0.0"
@@ -4784,15 +4791,15 @@ caniuse-lite@^1.0.30001669:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001684.tgz#0eca437bab7d5f03452ff0ef9de8299be6b08e16"
   integrity sha512-G1LRwLIQjBQoyq0ZJGqGIJUXzJ8irpbjHLpVRXDvBEScFJ9b17sgK6vlx0GAJFE21okD7zXl08rRRUfq6HdoEQ==
 
-casbin@5.27.1:
-  version "5.27.1"
-  resolved "https://registry.yarnpkg.com/casbin/-/casbin-5.27.1.tgz#ebebae1e0c555301c7e1ee83204863e9db0d3b1c"
-  integrity sha512-nAbUyMfeVasZDZ39/OX+Y8AzpiAGvhYI58l/3BKuDZSnqC+Rpja/DmcHPt0wcUgJxfMkG/yo0dCmMhnSXZq49A==
+casbin@^5.27.1:
+  version "5.38.0"
+  resolved "https://registry.yarnpkg.com/casbin/-/casbin-5.38.0.tgz#b7483437276056e0f992a27913ec5f8018942730"
+  integrity sha512-0VI0j18XtftaMj3nnv6CM3h0EvtB8IWPdxWD1t1myyUBOUboMSsMrU9PUtYFX9oAAXRpY2DWNTF1mXUG+QcYvw==
   dependencies:
+    "@casbin/expression-eval" "^5.3.0"
     await-lock "^2.0.1"
     buffer "^6.0.3"
-    csv-parse "^5.3.5"
-    expression-eval "^5.0.0"
+    csv-parse "^5.5.6"
     minimatch "^7.4.2"
 
 chainsaw@~0.1.0:
@@ -5282,10 +5289,10 @@ css-what@^6.1.0:
   resolved "https://registry.yarnpkg.com/css-what/-/css-what-6.1.0.tgz#fb5effcf76f1ddea2c81bdfaa4de44e79bac70f4"
   integrity sha512-HTUrgRJ7r4dsZKU6GjmpfRK1O76h97Z8MfS1G0FozR+oF2kG6Vfe8JE6zwrkbxigziPHinCJ+gCPjA9EaBDtRw==
 
-csv-parse@^5.3.5:
-  version "5.5.2"
-  resolved "https://registry.yarnpkg.com/csv-parse/-/csv-parse-5.5.2.tgz#ab525e642093dccff7c5cca5c7b71fd3e99fe8f2"
-  integrity sha512-YRVtvdtUNXZCMyK5zd5Wty1W6dNTpGKdqQd4EQ8tl/c6KW1aMBB1Kg1ppky5FONKmEqGJ/8WjLlTNLPne4ioVA==
+csv-parse@^5.5.6:
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/csv-parse/-/csv-parse-5.6.0.tgz#219beace2a3e9f28929999d2aa417d3fb3071c7f"
+  integrity sha512-l3nz3euub2QMg5ouu5U09Ew9Wf6/wQ8I++ch1loQ0ljmzhmfZYrH9fflS22i/PQEvsPvxCwxgz5q7UB8K1JO4Q==
 
 d3-array@1:
   version "1.2.4"
@@ -5993,13 +6000,6 @@ express@4.21.1, express@^4.21.1:
     type-is "~1.6.18"
     utils-merge "1.0.1"
     vary "~1.1.2"
-
-expression-eval@^5.0.0:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/expression-eval/-/expression-eval-5.0.1.tgz#845758fa9ba64d9edc7b6804ae404934a6cfee6b"
-  integrity sha512-7SL4miKp19lI834/F6y156xlNg+i9Q41tteuGNCq9C06S78f1bm3BXuvf0+QpQxv369Pv/P2R7Hb17hzxLpbDA==
-  dependencies:
-    jsep "^0.3.0"
 
 extend@^3.0.2:
   version "3.0.2"
