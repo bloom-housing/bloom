@@ -616,6 +616,8 @@
   "listings.availableUnitsDescription": "Applicants will be reviewed in lottery rank order until all vacancies are filled.",
   "listings.bath": "bath",
   "listings.browseListings": "Browse Listings",
+  "listings.browseListings.countInfo": "Showing %{currentCount} of %{totalCount} listings",
+  "listings.browseListings.pageInfo": "Page %{currentPage} of %{totalPages}",
   "listings.buildingImageAltText": "A picture of the building",
   "listings.buildingSelectionCriteria": "Building Criteria Selection",
   "listings.cc&r": "Covenants, Conditions and Restrictions (CC&R's)",
