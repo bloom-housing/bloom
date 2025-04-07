@@ -36,7 +36,7 @@
     "@mapbox/mapbox-sdk": "^0.13.0",
     "@sentry/nextjs": "^7.61.0",
     "autoprefixer": "^10.3.4",
-    "axios": "^0.28.0",
+    "axios": "^1.8.3",
     "axios-cookiejar-support": "4.0.6",
     "clone-deep": "^4.0.1",
     "dayjs": "^1.10.7",
