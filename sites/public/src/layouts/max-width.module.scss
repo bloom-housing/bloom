@@ -14,10 +14,6 @@
       margin-block: var(--max-width-layout-desktop-margin-block);
       padding-inline: var(--seeds-spacer-container);
     }
-
-    p:not(:last-child) {
-      margin-block-end: var(--seeds-s4);
-    }
   }
 
   .layout-max-width-content {

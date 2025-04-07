@@ -26,7 +26,7 @@ const ErrorPage = () => {
       <div className="homepage-extra">
         <MaxWidthLayout className={"seeds-p-b-container"}>
           <>
-            <p>{t("welcome.seeMoreOpportunities")}</p>
+            <p className={"seeds-m-be-header"}>{t("welcome.seeMoreOpportunities")}</p>
             <Button variant="primary-outlined" href="/help/housing-help">
               {t("welcome.viewAdditionalHousing")}
             </Button>
