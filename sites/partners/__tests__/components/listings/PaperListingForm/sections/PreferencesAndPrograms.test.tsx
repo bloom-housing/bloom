@@ -1,14 +1,14 @@
 import React from "react"
-import { render } from "@testing-library/react"
 import { setupServer } from "msw/node"
-import PreferencesAndPrograms from "../../../../../src/components/listings/PaperListingForm/sections/PreferencesAndPrograms"
 import { FormProvider, useForm } from "react-hook-form"
-import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
 import {
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+import { render } from "@testing-library/react"
+import PreferencesAndPrograms from "../../../../../src/components/listings/PaperListingForm/sections/PreferencesAndPrograms"
+import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
 
 const FormComponent = ({ children, values }: { values?: FormListing; children }) => {
   const formMethods = useForm<FormListing>({
@@ -32,10 +32,31 @@ afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
 describe("PreferencesAndPrograms", () => {
-  describe("programs", () => {
+  describe("Preferences", () => {
+    it.todo("should render the preference section when no preferences have been added")
+
+    it.todo("should render the preference section when preferences have been added")
+
+    it.todo("should open drawer and add a preference")
+
+    it.todo("should delete a preference")
+
+    it.todo("should reorder preference list")
+  })
+  describe("Programs", () => {
+    it.todo("should render the program section when no programs have been added")
+
+    it.todo("should render the program section when programs have been added")
+
+    it.todo("should open drawer and add a program")
+
+    it.todo("should delete a program")
+
+    it.todo("should reorder program list")
+
+    // default state
     describe("when feature flag swapCommunityTypesWithPrograms is false", () => {
-      // default state
-      it("should show programs section as programs", () => {
+      it("should show programs section copy as programs", () => {
         const programs: MultiselectQuestion[] = [
           {
             id: "programId",
@@ -75,10 +96,12 @@ describe("PreferencesAndPrograms", () => {
         expect(results.getByText("Edit Programs")).toBeTruthy()
         expect(results.queryByText("Community")).toBeFalsy()
       })
+
+      it.todo("should show drawer copy as programs")
     })
 
     describe("when feature flag swapCommunityTypesWithPrograms is true", () => {
-      it("should show programs section as community types", () => {
+      it("should show programs section copy as community types", () => {
         const programs: MultiselectQuestion[] = [
           {
             id: "communityId",
@@ -113,9 +136,16 @@ describe("PreferencesAndPrograms", () => {
         expect(
           results.getByText("Tell us about any additional community types related to this listing.")
         ).toBeTruthy()
+        expect(
+          results.getByText(
+            "Please choose the populations your building serves, based on your building's financing and regulatory agreements"
+          )
+        ).toBeTruthy()
         expect(results.getByText("Edit Communities")).toBeTruthy()
         expect(results.queryByText("Program")).toBeFalsy()
       })
     })
+
+    it.todo("should show drawer copy as community types")
   })
 })
