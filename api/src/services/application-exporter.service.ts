@@ -394,7 +394,7 @@ export class ApplicationExporterService {
               (application.programs as unknown as ApplicationMultiselectQuestion[]) ||
               [];
           }
-          parsePreference = false;
+          parseProgram = false;
           // there aren't typically many programs, but if there, then a object map should be created and used
           const program = programs.find(
             (prog) => prog.multiselectQuestionId === curr,
