@@ -58,6 +58,7 @@ const ProgramsAndPreferences = ({
         formKey={"preference"}
         applicationSection={MultiselectQuestionsApplicationSectionEnum.preferences}
       />
+
       <SelectAndOrder
         addText={
           !swapCommunityTypeWithPrograms

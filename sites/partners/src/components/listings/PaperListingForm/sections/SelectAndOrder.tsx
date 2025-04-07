@@ -96,7 +96,7 @@ const SelectAndOrder = ({
         name: { content: item.text },
         additionalFields: {
           content: (
-            <>{item?.options.some((item) => item.collectAddress) && additionalFieldsTag()}</>
+            <>{item?.options?.some((item) => item.collectAddress) && additionalFieldsTag()}</>
           ),
         },
         action: {
@@ -127,7 +127,7 @@ const SelectAndOrder = ({
         name: { content: item.text },
         additionalFields: {
           content: (
-            <>{item?.options.some((item) => item.collectAddress) && additionalFieldsTag()}</>
+            <>{item?.options?.some((item) => item.collectAddress) && additionalFieldsTag()}</>
           ),
         },
         action: {
