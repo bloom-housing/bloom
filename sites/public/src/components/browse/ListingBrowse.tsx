@@ -59,7 +59,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
           <div className={styles["browse-header"]}>
             <MaxWidthLayout className={styles["minimal-max-width-layout"]}>
               <div className={styles["browse-header-content"]}>
-                <span className={styles["showing-listing"]}>
+                <span className={styles["showing-listings"]}>
                   {t("listings.browseListings.countInfo", {
                     currentCount: props.paginationData.itemCount,
                     totalCount: props.paginationData.totalItems,
