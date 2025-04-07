@@ -148,6 +148,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableListingOpportunity,
         FeatureFlagEnum.enablePartnerDemographics,
         FeatureFlagEnum.enablePartnerSettings,
+        FeatureFlagEnum.enableListingsPagination,
       ],
     }),
   });
@@ -171,6 +172,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableListingOpportunity,
         FeatureFlagEnum.enablePartnerDemographics,
         FeatureFlagEnum.enablePartnerSettings,
+        FeatureFlagEnum.enableListingsPagination,
         FeatureFlagEnum.disableJurisdictionalAdmin,
       ],
     }),
@@ -184,6 +186,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableListingOpportunity,
         FeatureFlagEnum.enablePartnerDemographics,
         FeatureFlagEnum.enablePartnerSettings,
+        FeatureFlagEnum.enableListingsPagination,
       ],
     }),
   });

@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from "react"
 import axios from "axios"
-//import qs from "qs"
+import qs from "qs"
 import { useRouter } from "next/router"
 import {
   EnumListingFilterParamsComparison,
+  FeatureFlagEnum,
   Jurisdiction,
   Listing,
   ListingFilterParams,
@@ -11,6 +12,7 @@ import {
   ListingsStatusEnum,
   OrderByEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { ApplicationStatusProps } from "@bloom-housing/ui-components"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./applications/AppSubmissionContext"
 import { getListingApplicationStatus } from "./helpers"
@@ -59,14 +61,15 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
   return props
 }
 
-
 export async function fetchBaseListingData(
   {
+    page,
     additionalFilters,
     orderBy,
     orderDir,
     limit,
   }: {
+    page?: number
     additionalFilters?: ListingFilterParams[]
     orderBy?: ListingOrderByKeys[]
     orderDir?: OrderByEnum[]
@@ -75,14 +78,26 @@ export async function fetchBaseListingData(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   req: any
 ) {
-  let listings = []
+  let listings
+  let pagination
   try {
-    let filter: ListingFilterParams[] = []
+    const { id: jurisdictionId, featureFlags } = await fetchJurisdictionByName(req)
+
+    if (!jurisdictionId) {
+      return listings
+    }
+    let filter: ListingFilterParams[] = [
+      {
+        $comparison: EnumListingFilterParamsComparison["="],
+        jurisdiction: jurisdictionId,
+      },
+    ]
 
     if (additionalFilters) {
       filter = filter.concat(additionalFilters)
     }
     const params: {
+      page?: number
       view: string
       limit: string
       filter: ListingFilterParams[]
@@ -92,6 +107,14 @@ export async function fetchBaseListingData(
       view: "base",
       limit: limit || "all",
       filter,
+    }
+
+    const enablePagination =
+      featureFlags.find((flag) => flag.name === FeatureFlagEnum.enableListingPagination)?.active ||
+      false
+
+    if (page && enablePagination) {
+      params.page = page
     }
     if (orderBy) {
       params.orderBy = orderBy
@@ -111,18 +134,23 @@ export async function fetchBaseListingData(
       },
     })
 
-    listings = response.data?.items
+    listings = response.data.items
+    pagination = enablePagination ? response.data.meta : null
   } catch (e) {
     console.log("fetchBaseListingData error: ", e)
   }
 
-  return listings
+  return {
+    items: listings,
+    meta: pagination,
+  }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function fetchOpenListings(req: any) {
+export async function fetchOpenListings(req: any, page: number) {
   return await fetchBaseListingData(
     {
+      page: page,
       additionalFilters: [
         {
           $comparison: EnumListingFilterParamsComparison["="],
@@ -131,15 +159,17 @@ export async function fetchOpenListings(req: any) {
       ],
       orderBy: [ListingOrderByKeys.mostRecentlyPublished],
       orderDir: [OrderByEnum.desc],
+      limit: process.env.maxOpenListings,
     },
     req
   )
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function fetchClosedListings(req: any) {
+export async function fetchClosedListings(req: any, page: number) {
   return await fetchBaseListingData(
     {
+      page: page,
       additionalFilters: [
         {
           $comparison: EnumListingFilterParamsComparison["="],
@@ -154,12 +184,9 @@ export async function fetchClosedListings(req: any) {
   )
 }
 
-
 let jurisdiction: Jurisdiction | null = null
 
 export async function fetchJurisdictionByName(
-  backendApiBase: string,
-  jurisdictionName: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   req: any
 ) {
@@ -167,6 +194,8 @@ export async function fetchJurisdictionByName(
     if (jurisdiction) {
       return jurisdiction
     }
+
+    const jurisdictionName = process.env.jurisdictionName
 
     const headers: Record<string, string> = {
       "x-forwarded-for": req.headers["x-forwarded-for"] ?? req.socket.remoteAddress,
@@ -177,7 +206,7 @@ export async function fetchJurisdictionByName(
     }
 
     const jurisdictionRes = await axios.get(
-      `${backendApiBase}/jurisdictions/byName/${jurisdictionName}`,
+      `${process.env.backendApiBase}/jurisdictions/byName/${jurisdictionName}`,
       {
         headers,
       }

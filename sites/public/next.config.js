@@ -56,6 +56,7 @@ module.exports = withBundleAnalyzer({
     fileService: process.env.FILE_SERVICE,
     reCaptchaKey: process.env.RECAPTCHA_KEY,
     maxClosedListings: process.env.MAX_CLOSED_LISTINGS,
+    maxOpenListings: process.env.MAX_OPEN_LISTINGS,
     rtlLanguages: process.env.RTL_LANGUAGES || "ar",
   },
   i18n: {

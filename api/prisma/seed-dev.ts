@@ -238,6 +238,15 @@ export const devSeeding = async (
     ),
   });
 
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory(
+      'enableListingPagination',
+      false,
+      'When true listings browser will display pagination controls section',
+      [jurisdiction.id],
+    ),
+  });
+
   for (let index = 0; index < LISTINGS_TO_SEED; index++) {
     const applications = [];
     for (let j = 0; j < APPLICATIONS_PER_LISTINGS; j++) {
