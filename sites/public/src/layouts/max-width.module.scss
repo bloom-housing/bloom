@@ -7,17 +7,18 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    margin-block: var(--max-width-layout-desktop-margin-block);
+    margin-block: var(--max-width-layout-mobile-margin-block);
     padding-inline: var(--seeds-s4);
 
     @media (--md-and-up) {
-      margin-block: var(--max-width-layout-mobile-margin-block);
+      margin-block: var(--max-width-layout-desktop-margin-block);
       padding-inline: var(--seeds-spacer-container);
     }
   }
 
   .layout-max-width-content {
     max-width: var(--seeds-screen-lg);
+    margin: auto;
     width: 100%;
   }
 }

@@ -4,11 +4,12 @@ import { t, Field, FieldGroup, Select } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
 import { RoleOption, AuthContext } from "@bloom-housing/shared-helpers"
 import SectionWithGrid from "../shared/SectionWithGrid"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, getValues, setValue, watch } = useFormContext()
-  const { profile } = useContext(AuthContext)
+  const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const selectedRoles = watch("userRoles")
   const selectedJurisdictions = watch("jurisdictions")
 
@@ -111,6 +112,11 @@ const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions 
 
   if (profile?.userRoles?.isAdmin) {
     if (selectedRoles === RoleOption.JurisdictionalAdmin) {
+      // if disableJurisdictionalAdmin is flagged on for a jurisdiction remove it from selectable options
+      const filteredJurisdictionOptions = jurisdictionOptions.filter(
+        (option) =>
+          !doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.disableJurisdictionalAdmin, option.id)
+      )
       return (
         <SectionWithGrid heading={t("t.jurisdiction")}>
           <Grid.Row columns={4}>
@@ -123,7 +129,7 @@ const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions 
                 register={register}
                 controlClassName="control"
                 keyPrefix="users"
-                options={jurisdictionOptions}
+                options={filteredJurisdictionOptions}
                 error={!!errors?.jurisdictions}
                 errorMessage={t("errors.requiredFieldError")}
                 validation={{ required: true }}
@@ -141,6 +147,7 @@ const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions 
                 <Field
                   id="jurisdiction_all"
                   name="jurisdiction_all"
+                  dataTestId={"jurisdiction-all"}
                   label={t("users.allJurisdictions")}
                   register={register}
                   type="checkbox"
