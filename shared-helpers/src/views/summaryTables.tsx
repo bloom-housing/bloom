@@ -877,7 +877,6 @@ export const getUnitGroupSummariesTable = (listing: Listing) => {
       },
       availability: {
         cellText: availability.text,
-        cellSubText: availability.subText,
       },
       ami: {
         cellText: ami ?? t("listings.unitsSummary.notAvailable"),
