@@ -137,14 +137,6 @@ export const MainDetails = ({
         )}
       </div>
 
-      {showFavoriteButton && (
-        <p className={"seeds-m-bs-3"} id="favorite-button-section">
-          <FavoriteButton favorited={listingFavorited} setFavorited={setListingFavorited}>
-            {t("listings.favorite")}
-          </FavoriteButton>
-        </p>
-      )}
-
       <div className={`${listingStyles["hide-desktop"]} seeds-m-bs-content`}>
         <Availability listing={listing} jurisdiction={jurisdiction} />
       </div>
