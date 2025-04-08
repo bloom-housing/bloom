@@ -617,7 +617,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "per month", cellText: "$1,200" },
         unitType: { cellSubText: "", cellText: "1 BR" },
-        availability: { cellSubText: "", cellText: "Not available" },
+        availability: { cellText: "Not available" },
       },
     ])
   })
@@ -626,7 +626,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "per month", cellText: "$1,200 to $1,500" },
         unitType: { cellSubText: "", cellText: "1 BR" },
-        availability: { cellSubText: "", cellText: "Not available" },
+        availability: { cellText: "Not available" },
       },
     ])
   })
@@ -635,7 +635,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "per month", cellText: "30% of income" },
         unitType: { cellSubText: "", cellText: "1 BR" },
-        availability: { cellSubText: "", cellText: "Not available" },
+        availability: { cellText: "Not available" },
       },
     ])
   })
@@ -644,7 +644,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "per month", cellText: "5% to 20% of income" },
         unitType: { cellSubText: "", cellText: "1 BR" },
-        availability: { cellSubText: "", cellText: "Not available" },
+        availability: { cellText: "Not available" },
       },
     ])
   })
@@ -653,7 +653,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "per month", cellText: "% of income, or up to $750" },
         unitType: { cellSubText: "", cellText: "1 BR - 3 BR" },
-        availability: { cellSubText: "", cellText: "Not available" },
+        availability: { cellText: "Not available" },
       },
     ])
   })
@@ -662,7 +662,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "", cellText: "n/a" },
         unitType: { cellSubText: "", cellText: "1 BR" },
-        availability: { cellSubText: "", cellText: "Not available" },
+        availability: { cellText: "Not available" },
       },
     ])
   })
@@ -671,7 +671,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "per month", cellText: "$1,200 to $1,500" },
         unitType: { cellSubText: "", cellText: "1 BR - 2 BR" },
-        availability: { cellSubText: "", cellText: "Not available" },
+        availability: { cellText: "Not available" },
       },
     ])
   })
@@ -693,7 +693,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "", cellText: "n/a" },
         unitType: { cellSubText: "", cellText: "1 BR" },
-        availability: { cellSubText: "", cellText: "Open Waitlist" },
+        availability: { cellText: "Open Waitlist" },
       },
     ])
   })
@@ -716,8 +716,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
         rent: { cellSubText: "", cellText: "n/a" },
         unitType: { cellSubText: "", cellText: "1 BR" },
         availability: {
-          cellSubText: "3 Vacant Units",
-          cellText: "Not available",
+          cellText: "3 Vacant Units",
         },
       },
     ])
@@ -739,7 +738,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "", cellText: "n/a" },
         unitType: { cellSubText: "", cellText: "1 BR" },
-        availability: { cellSubText: "", cellText: "Under Construction" },
+        availability: { cellText: "Under Construction" },
       },
     ])
   })

@@ -444,7 +444,12 @@ export const stackedUnitSummariesTable = (
 export const getAvailabilityText = (
   group: UnitGroupSummary,
   isComingSoon?: boolean
-): { text: string; subText: string } => {
+): { text: string } => {
+  if (isComingSoon) {
+    return {
+      text: t("listings.underConstruction"),
+    }
+  }
   const hasVacantUnits = group.unitVacancies > 0
   const waitlistStatus = group.openWaitlist
     ? t("listings.waitlist.open")
@@ -453,12 +458,16 @@ export const getAvailabilityText = (
   // Create an array of status elements to combine
   const statusElements = []
 
-  if (group.openWaitlist) {
-    statusElements.push(waitlistStatus)
+  if (hasVacantUnits) {
+    statusElements.push(
+      `${group.unitVacancies} ${
+        group.unitVacancies === 1 ? t("listings.vacantUnit") : t("listings.vacantUnits")
+      }`
+    )
   }
 
-  if (isComingSoon) {
-    statusElements.push(t("listings.underConstruction"))
+  if (group.openWaitlist) {
+    statusElements.push(waitlistStatus)
   }
 
   // Combine statuses with proper formatting
@@ -473,19 +482,20 @@ export const getAvailabilityText = (
   }
 
   const text = availability ?? t("listings.unitsSummary.notAvailable")
-  const subText = hasVacantUnits
-    ? `${group.unitVacancies} ${
-        group.unitVacancies === 1 ? t("listings.vacantUnit") : t("listings.vacantUnits")
-      }`
-    : ""
 
-  return { text, subText }
+  return { text }
 }
 
 export const getAvailabilityTextForGroup = (
   groups: UnitGroupSummary[],
   isComingSoon?: boolean
-): { text: string; subText: string } => {
+): { text: string } => {
+  // Add coming soon status if needed
+  if (isComingSoon) {
+    return {
+      text: t("listings.underConstruction"),
+    }
+  }
   // Track all statuses across groups
   const statusSet = new Set<string>()
   let totalVacantUnits = 0
@@ -501,12 +511,14 @@ export const getAvailabilityTextForGroup = (
     }
   })
 
-  // Add coming soon status if needed
-  if (isComingSoon) {
-    statusSet.add(t("listings.underConstruction"))
-  }
-
   const statusElements = Array.from(statusSet)
+  if (totalVacantUnits > 0) {
+    statusElements.unshift(
+      `${totalVacantUnits} ${
+        totalVacantUnits === 1 ? t("listings.vacantUnit") : t("listings.vacantUnits")
+      }`
+    )
+  }
 
   // Combine statuses with proper formatting
   let availability = null
@@ -520,14 +532,8 @@ export const getAvailabilityTextForGroup = (
   }
 
   const text = availability ?? t("listings.unitsSummary.notAvailable")
-  const subText =
-    totalVacantUnits > 0
-      ? `${totalVacantUnits} ${
-          totalVacantUnits === 1 ? t("listings.vacantUnit") : t("listings.vacantUnits")
-        }`
-      : ""
 
-  return { text, subText }
+  return { text }
 }
 
 export const stackedUnitGroupsSummariesTable = (
@@ -595,7 +601,6 @@ export const stackedUnitGroupsSummariesTable = (
     },
     availability: {
       cellText: availability.text,
-      cellSubText: availability.subText,
     },
   }
 
