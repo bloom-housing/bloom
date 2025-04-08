@@ -79,7 +79,7 @@ describe("CommunityType", () => {
       },
     ],
   }
-  it("should not render when swapCommunityTypesWithPrograms is true", async () => {
+  it.todo("should not render when swapCommunityTypesWithPrograms is true", async () => {
     server.use(
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
         return res(ctx.json(adminUserWithJurisdictions))

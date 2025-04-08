@@ -87,14 +87,14 @@ describe("PreferencesAndPrograms", () => {
           </AuthContext.Provider>
         )
 
-        expect(results.getByText("Housing Programs")).toBeTruthy()
+        expect(results.getByText("Housing Programs")).toBeInTheDocument()
         expect(
           results.getByText(
             "Tell us about any additional housing programs related to this listing."
           )
-        ).toBeTruthy()
-        expect(results.getByText("Edit Programs")).toBeTruthy()
-        expect(results.queryByText("Community")).toBeFalsy()
+        ).toBeInTheDocument()
+        expect(results.getByText("Edit Programs")).toBeInTheDocument()
+        expect(results.queryByText("Community", { exact: false })).toBeFalsy()
       })
 
       it.todo("should show drawer copy as programs")
@@ -132,20 +132,20 @@ describe("PreferencesAndPrograms", () => {
           </AuthContext.Provider>
         )
 
-        expect(results.getByText("Community Types")).toBeTruthy()
+        expect(results.getByText("Community Types")).toBeInTheDocument()
         expect(
           results.getByText("Tell us about any additional community types related to this listing.")
-        ).toBeTruthy()
+        ).toBeInTheDocument()
         expect(
           results.getByText(
-            "Please choose the populations your building serves, based on your building's financing and regulatory agreements"
+            "Please choose the populations your building serves, based on your building's financing and regulatory agreements."
           )
-        ).toBeTruthy()
-        expect(results.getByText("Edit Communities")).toBeTruthy()
-        expect(results.queryByText("Program")).toBeFalsy()
+        ).toBeInTheDocument()
+        expect(results.getByText("Edit Communities")).toBeInTheDocument()
+        expect(results.queryByText("Program", { exact: false })).toBeFalsy()
       })
-    })
 
-    it.todo("should show drawer copy as community types")
+      it.todo("should show drawer copy as community types")
+    })
   })
 })
