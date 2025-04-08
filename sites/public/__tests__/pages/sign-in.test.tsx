@@ -1,10 +1,10 @@
-import React, { useState } from "react"
+import React from "react"
 import { render, fireEvent, waitFor, act } from "@testing-library/react"
 import { useRouter } from "next/router"
 import { MessageContext, AuthContext } from "@bloom-housing/shared-helpers"
-import { User } from "../../../../shared-helpers/src/types/backend-swagger"
+import { User, UserService } from "../../../../shared-helpers/src/types/backend-swagger"
 import { SignIn as SignInComponent } from "../../src/pages/sign-in"
-import Verify from "../../src/pages/verify"
+import { Verify } from "../../src/pages/verify"
 
 const initialStateLoaded = false
 let profile: User | undefined
@@ -590,7 +590,7 @@ describe("Resend confirmation flow", () => {
           login: mockLogin,
           userService: {
             resendConfirmation: mockResendConfirmation,
-          } as any,
+          } as unknown as UserService,
         }}
       >
         <MessageContext.Provider value={TOAST_MESSAGE}>
