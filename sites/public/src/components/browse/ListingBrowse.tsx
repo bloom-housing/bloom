@@ -36,10 +36,6 @@ export interface ListingBrowseProps {
   }
 }
 
-const isListingFavorited = (listing, favoriteListings) => {
-  return favoriteListings.some((item) => item.id === listing.id)
-}
-
 export const ListingBrowse = (props: ListingBrowseProps) => {
   const router = useRouter()
   const { profile, userService } = useContext(AuthContext)

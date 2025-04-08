@@ -34,7 +34,11 @@ export const ListingCard = ({
 
   if (showFavoriteButton) {
     actions.push(
-      <FavoriteButton favorited={favorited} setFavorited={setFavorited}>
+      <FavoriteButton
+        favorited={favorited}
+        setFavorited={setFavorited}
+        key={t("listings.favorite")}
+      >
         {t("listings.favorite")}
       </FavoriteButton>
     )
