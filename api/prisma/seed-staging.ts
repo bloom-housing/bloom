@@ -86,6 +86,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enablePartnerDemographics,
         FeatureFlagEnum.enablePartnerSettings,
         FeatureFlagEnum.disableJurisdictionalAdmin,
+        FeatureFlagEnum.swapCommunityTypeWithPrograms,
       ],
     }),
   });
