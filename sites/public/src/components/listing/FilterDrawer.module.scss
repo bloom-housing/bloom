@@ -1,15 +1,21 @@
 .filter-drawer {
-  --drawer-width: var(--sizes-width-xl);
+  --drawer-width: var(--seeds-width-xl);
+  font-family: var(--seeds-font-alt-sans);
+  .filter-section {
+    padding-block-end: var(--seeds-spacer-content);
+    border-bottom-width: var(--seeds-border-1);
+  }
   .filter-section-label {
-    font-family: var(--seeds-font-alt-sans);
+    font-size: var(--seeds-type-label-size);
     padding-block-end: var(--seeds-spacer-label);
   }
   .filter-checkbox-label {
     color: var(--seeds-text-color-darker);
     font-weight: 400;
   }
-  .filter-section {
-    padding-block-end: var(--seeds-spacer-content);
-    border-bottom-width: var(--seeds-border-1);
+
+  .rent-input-section {
+    column-gap: var(--seeds-s4);
+    padding-block-end: var(--seeds-spacer-label);
   }
 }

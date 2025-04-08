@@ -1,7 +1,7 @@
-import React, { useEffect, useContext } from "react"
+import React, { useEffect, useContext, useState } from "react"
 import Head from "next/head"
-import { Button, Heading } from "@bloom-housing/ui-seeds"
 import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { Button, Heading } from "@bloom-housing/ui-seeds"
 import { AuthContext, ListingList, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import { PageHeader, t } from "@bloom-housing/ui-components"
 import { MetaTags } from "../../components/shared/MetaTags"
@@ -11,6 +11,7 @@ import { ListingCard } from "./ListingCard"
 import styles from "./ListingBrowse.module.scss"
 import { useRouter } from "next/router"
 import MaxWidthLayout from "../../layouts/max-width"
+import FilterDrawer from "../listing/FilterDrawer"
 
 export interface ListingBrowseProps {
   openListings: Listing[]
@@ -28,6 +29,7 @@ export interface ListingBrowseProps {
 export const ListingBrowse = (props: ListingBrowseProps) => {
   const router = useRouter()
   const { profile } = useContext(AuthContext)
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState<boolean>(false)
   const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
 
@@ -53,7 +55,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
 
       <MetaTags title={t("nav.siteTitle")} description={metaDescription} />
       <PageHeader title={t("pageTitle.rent")} />
-
+      <FilterDrawer isOpen={isFilterDrawerOpen} onClose={() => setIsFilterDrawerOpen(false)} />
       <div className={styles["listing-directory"]}>
         {props.paginationData && (
           <div className={styles["browse-header"]}>
