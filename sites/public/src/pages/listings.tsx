@@ -7,6 +7,13 @@ import { ListingBrowseDeprecated } from "../components/browse/ListingBrowseDepre
 export interface ListingsProps {
   openListings: Listing[]
   closedListings: Listing[]
+  paginationData: {
+    currentPage: number
+    itemCount: number
+    itemsPerPage: number
+    totalItems: number
+    totalPages: number
+  }
   jurisdiction: Jurisdiction
 }
 
@@ -18,6 +25,7 @@ export default function ListingsPage(props: ListingsProps) {
           openListings={props.openListings}
           closedListings={props.closedListings}
           jurisdiction={props.jurisdiction}
+          paginationData={props.paginationData}
         />
       ) : (
         <ListingBrowseDeprecated
@@ -30,15 +38,16 @@ export default function ListingsPage(props: ListingsProps) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getServerSideProps(context: { req: any }) {
-  const openListings = fetchOpenListings(context.req)
-  const closedListings = fetchClosedListings(context.req)
+export async function getServerSideProps(context: { req: any; query: any }) {
+  const openListings = fetchOpenListings(context.req, Number(context.query.page) || 1)
+  const closedListings = fetchClosedListings(context.req, Number(context.query.page) || 1)
   const jurisdiction = fetchJurisdictionByName(context.req)
 
   return {
     props: {
-      openListings: await openListings,
-      closedListings: await closedListings,
+      openListings: (await openListings)?.items || [],
+      closedListings: (await closedListings)?.items || [],
+      paginationData: (await openListings)?.meta,
       jurisdiction: await jurisdiction,
     },
   }
