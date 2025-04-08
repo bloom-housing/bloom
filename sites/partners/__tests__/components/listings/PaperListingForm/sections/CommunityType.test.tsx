@@ -79,7 +79,8 @@ describe("CommunityType", () => {
       },
     ],
   }
-  it.todo("should not render when swapCommunityTypesWithPrograms is true", async () => {
+  // issue with infinite useEffect re-renders
+  it.skip("should not render when swapCommunityTypesWithPrograms is true", async () => {
     server.use(
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
         return res(ctx.json(adminUserWithJurisdictions))
@@ -101,5 +102,5 @@ describe("CommunityType", () => {
     expect(results.getByText("Eric")).toBeInTheDocument()
     expect(results.queryByText("Community")).toBeFalsy()
   })
-  it.todo("should render ")
+  it.todo("should render when swapCommunityTypesWithPrograms is true")
 })

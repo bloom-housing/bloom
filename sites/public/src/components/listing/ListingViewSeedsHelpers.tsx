@@ -408,7 +408,7 @@ export const getEligibilitySections = (
         ? t("listings.sections.housingProgramsSubtitle")
         : t("listings.reservedCommunityTypesDescription"),
       note: !swapCommunityTypeWithPrograms
-        ? t("listings.sections.remainingUnitsAfterPrograms")
+        ? t("listings.remainingUnitsAfterPrograms")
         : t("listings.reservedCommunityTypesNote"),
       content: (
         <CardList
