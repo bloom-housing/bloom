@@ -23,6 +23,7 @@ import { fetchFavoriteListingIds, isFeatureFlagOn, saveListingFavorite } from ".
 import { PageHeaderSection } from "../../patterns/PageHeaderLayout"
 import { ListingCard } from "./ListingCard"
 import styles from "./ListingBrowse.module.scss"
+import FilterDrawer from "../listing/FilterDrawer"
 
 export interface ListingBrowseProps {
   openListings: Listing[]
@@ -41,6 +42,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
   const router = useRouter()
   const { profile, userService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState<boolean>(false)
   const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
 
@@ -94,6 +96,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
       </Head>
       <MetaTags title={t("nav.siteTitle")} description={metaDescription} />
       <PageHeaderSection heading={t("pageTitle.rent")} inverse={true} />
+      <FilterDrawer isOpen={isFilterDrawerOpen} onClose={() => setIsFilterDrawerOpen(false)} />
       <div className={styles["listing-directory"]}>
         {props.paginationData && (
           <div className={styles["browse-header"]}>
