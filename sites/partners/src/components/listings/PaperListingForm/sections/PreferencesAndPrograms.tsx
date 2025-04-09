@@ -38,6 +38,37 @@ const ProgramsAndPreferences = ({
     jurisdiction
   )
 
+  const programComponent = !swapCommunityTypeWithPrograms ? (
+    <SelectAndOrder
+      addText={t("listings.addProgram")}
+      drawerTitle={t("listings.addPrograms")}
+      editText={t("listings.editPrograms")}
+      listingData={programs || []}
+      setListingData={setPrograms}
+      subtitle={t("listings.sections.housingProgramsSubtext")}
+      title={t("listings.sections.housingProgramsTitle")}
+      drawerButtonText={t("listings.selectPrograms")}
+      dataFetcher={useJurisdictionalMultiselectQuestionList}
+      formKey={"program"}
+      applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
+    />
+  ) : (
+    <SelectAndOrder
+      addText={t("listings.addCommunityTypes")}
+      drawerTitle={t("listings.addCommunityTypes")}
+      editText={t("listings.editCommunities")}
+      listingData={programs || []}
+      setListingData={setPrograms}
+      subtitle={t("listings.sections.communityType.tellUs")}
+      title={t("listings.communityTypes")}
+      drawerButtonText={t("listings.selectCommunityTypes")}
+      dataFetcher={useJurisdictionalMultiselectQuestionList}
+      formKey={"program"}
+      applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
+      subNote={`${t("listing.choosePopulations")}.`}
+    />
+  )
+
   return (
     <>
       <SelectAndOrder
@@ -59,44 +90,7 @@ const ProgramsAndPreferences = ({
         applicationSection={MultiselectQuestionsApplicationSectionEnum.preferences}
       />
 
-      <SelectAndOrder
-        addText={
-          !swapCommunityTypeWithPrograms
-            ? t("listings.addProgram")
-            : t("listings.addCommunityTypes")
-        }
-        drawerTitle={
-          !swapCommunityTypeWithPrograms
-            ? t("listings.addPrograms")
-            : t("listings.addCommunityTypes")
-        }
-        editText={
-          !swapCommunityTypeWithPrograms
-            ? t("listings.editPrograms")
-            : t("listings.editCommunities")
-        }
-        listingData={programs || []}
-        setListingData={setPrograms}
-        subtitle={
-          !swapCommunityTypeWithPrograms
-            ? t("listings.sections.housingProgramsSubtext")
-            : t("listings.sections.communityType.tellUs")
-        }
-        title={
-          !swapCommunityTypeWithPrograms
-            ? t("listings.sections.housingProgramsTitle")
-            : t("listings.reservedCommunityTypes")
-        }
-        drawerButtonText={
-          !swapCommunityTypeWithPrograms
-            ? t("listings.selectPrograms")
-            : t("listings.selectCommunityTypes")
-        }
-        dataFetcher={useJurisdictionalMultiselectQuestionList}
-        formKey={"program"}
-        applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
-        subNote={!swapCommunityTypeWithPrograms ? "" : `${t("listing.choosePopulations")}.`}
-      />
+      {programComponent}
     </>
   )
 }

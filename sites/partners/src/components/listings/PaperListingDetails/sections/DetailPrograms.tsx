@@ -41,7 +41,7 @@ const DetailPrograms = () => {
       heading={
         !swapCommunityTypeWithPrograms
           ? t("listings.sections.housingProgramsTitle")
-          : t("listings.reservedCommunityTypes")
+          : t("listings.communityTypes")
       }
       inset
       bypassGrid

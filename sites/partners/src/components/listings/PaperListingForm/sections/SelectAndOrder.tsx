@@ -288,10 +288,10 @@ const SelectAndOrder = ({
             >
               {listingData.length ? editText : addText}
             </Button>
-            {subNote && <p className="field-sub-note">{subNote}</p>}
           </Grid.Cell>
         </Grid.Row>
       </SectionWithGrid>
+      {subNote && <p className="field-sub-note">{subNote}</p>}
 
       <Drawer
         isOpen={!!tableDrawer}
