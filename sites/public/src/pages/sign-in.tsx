@@ -28,7 +28,6 @@ import SignUpBenefits from "../components/account/SignUpBenefits"
 import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
 import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
 import { isFeatureFlagOn } from "../lib/helpers"
-import { jurisdiction } from "../../../../shared-helpers/__tests__/testHelpers"
 
 interface SignInProps {
   jurisdiction: Jurisdiction
@@ -88,7 +87,7 @@ const SignIn = (props: SignInProps) => {
       pageTitle: "Sign In",
       status: UserStatus.NotLoggedIn,
     })
-    if (jurisdiction) {
+    if (props.jurisdiction) {
       setLocalStorage()
     }
   }, [])
