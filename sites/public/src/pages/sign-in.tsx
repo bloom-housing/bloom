@@ -28,6 +28,7 @@ import SignUpBenefits from "../components/account/SignUpBenefits"
 import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
 import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
 import { isFeatureFlagOn } from "../lib/helpers"
+import { jurisdiction } from "../../../../shared-helpers/__tests__/testHelpers"
 
 interface SignInProps {
   jurisdiction: Jurisdiction
@@ -72,19 +73,28 @@ const SignIn = (props: SignInProps) => {
     isLoading: isResendConfirmationLoading,
   } = useMutate<SuccessDTO>()
 
-  useEffect(() => {
-    pushGtmEvent<PageView>({
-      event: "pageView",
-      pageTitle: "Sign In",
-      status: UserStatus.NotLoggedIn,
-    })
-
+  const setLocalStorage = () => {
     window.localStorage.setItem(
       "bloom-show-favorites-menu-item",
       (
         isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableListingFavoriting) === true
       ).toString()
     )
+  }
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Sign In",
+      status: UserStatus.NotLoggedIn,
+    })
+    if (jurisdiction) {
+      setLocalStorage()
+    }
+  }, [])
+
+  useEffect(() => {
+    setLocalStorage()
   }, [props.jurisdiction])
 
   const onVerify = useCallback((token) => {
