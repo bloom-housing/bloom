@@ -204,6 +204,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
             }
             listingFavorited={listingFavorited}
             setListingFavorited={saveFavorite}
+            showHomeType={isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableHomeType)}
           />
           <RentSummary
             amiValues={getAmiValues(listing)}

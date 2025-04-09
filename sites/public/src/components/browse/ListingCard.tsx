@@ -18,17 +18,19 @@ export interface ListingCardProps {
   showFavoriteButton?: boolean
   favorited?: boolean
   setFavorited?: React.Dispatch<React.SetStateAction<boolean>>
+  showHomeType?: boolean
 }
 
 export const ListingCard = ({
   listing,
-  showFavoriteButton,
   jurisdiction,
+  showFavoriteButton,
   favorited,
   setFavorited,
+  showHomeType,
 }: ListingCardProps) => {
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
-  const listingTags = getListingTags(listing, true)
+  const listingTags = getListingTags(listing, true, !showHomeType)
   const status = getListingApplicationStatus(listing, true, true)
   const actions = []
 
