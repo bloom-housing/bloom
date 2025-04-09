@@ -109,8 +109,12 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                   })}
                 </span>
                 <span>
-                  <Button size={"sm"} variant={"primary-outlined"}>
-                    Filter
+                  <Button
+                    size={"sm"}
+                    onClick={() => setIsFilterDrawerOpen(true)}
+                    variant={"primary-outlined"}
+                  >
+                    {t("t.filter")}
                   </Button>
                 </span>
               </div>
