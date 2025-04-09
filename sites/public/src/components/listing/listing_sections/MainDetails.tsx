@@ -33,6 +33,14 @@ type ListingTag = {
 
 export const getListingTags = (listing: Listing, hideReviewTags?: boolean): ListingTag[] => {
   const listingTags: ListingTag[] = []
+
+  if (listing.homeType) {
+    listingTags.push({
+      title: t(`homeType.${listing.homeType}`),
+      variant: "highlight-cool",
+    })
+  }
+
   if (listing.reservedCommunityTypes) {
     listingTags.push({
       title: t(`listings.reservedCommunityTypes.${listing.reservedCommunityTypes.name}`),
