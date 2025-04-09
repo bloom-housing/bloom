@@ -1,5 +1,5 @@
 import React from "react"
-import { fireEvent, render, within } from "@testing-library/react"
+import { fireEvent, render, screen, within } from "@testing-library/react"
 import { DetailUnits } from "../../../../../src/components/listings/PaperListingDetails/sections/DetailUnits"
 import { ListingContext } from "../../../../../src/components/listings/ListingContext"
 import { listing, unit } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
@@ -30,7 +30,7 @@ function mockJurisdictionsHaveFeatureFlagOn(
 
 describe("DetailUnits", () => {
   it("should render the detail units when no units exist", () => {
-    const results = render(
+    render(
       <AuthContext.Provider
         value={{
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
@@ -50,22 +50,22 @@ describe("DetailUnits", () => {
     )
 
     // Above the table
-    expect(results.getByText("Listing Units")).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 2, name: /listing units/i })).toBeInTheDocument()
     expect(
-      results.getByText("Do you want to show unit types or individual units?")
+      screen.getByText("Do you want to show unit types or individual units?")
     ).toBeInTheDocument()
-    expect(results.getByText("Individual Units")).toBeInTheDocument()
-    expect(results.getByText("What is the listing availability?")).toBeInTheDocument()
-    expect(results.getByText("Open Waitlist")).toBeInTheDocument()
-    expect(results.queryAllByText("Home Type")).toHaveLength(0)
+    expect(screen.getByText("Individual Units")).toBeInTheDocument()
+    expect(screen.getByText("What is the listing availability?")).toBeInTheDocument()
+    expect(screen.getByText("Open Waitlist")).toBeInTheDocument()
+    expect(screen.queryAllByText("Home Type")).toHaveLength(0)
 
     // Table
-    expect(results.getByText("None")).toBeInTheDocument()
+    expect(screen.getByText("None")).toBeInTheDocument()
   })
 
   it("should render the detail units", () => {
     const callUnitDrawer = jest.fn()
-    const results = render(
+    render(
       <AuthContext.Provider
         value={{
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
@@ -85,16 +85,16 @@ describe("DetailUnits", () => {
     )
 
     // Above the table
-    expect(results.getByText("Listing Units")).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 2, name: /listing units/i })).toBeInTheDocument()
     expect(
-      results.getByText("Do you want to show unit types or individual units?")
+      screen.getByText("Do you want to show unit types or individual units?")
     ).toBeInTheDocument()
-    expect(results.getByText("Unit Types")).toBeInTheDocument()
-    expect(results.getByText("What is the listing availability?")).toBeInTheDocument()
-    expect(results.getByText("Available Units")).toBeInTheDocument()
+    expect(screen.getByText("Unit Types")).toBeInTheDocument()
+    expect(screen.getByText("What is the listing availability?")).toBeInTheDocument()
+    expect(screen.getByText("Available Units")).toBeInTheDocument()
 
     // Table
-    const table = results.getByRole("table")
+    const table = screen.getByRole("table")
     const headAndBody = within(table).getAllByRole("rowgroup")
     expect(headAndBody).toHaveLength(2)
     const [head, body] = headAndBody
@@ -110,12 +110,12 @@ describe("DetailUnits", () => {
     expect(sqft).toHaveTextContent(unit.sqFeet || "")
     expect(ada).toBeEmptyDOMElement()
 
-    fireEvent.click(within(action).getByText("View"))
+    fireEvent.click(within(action).getByRole("button", { name: /view/i }))
     expect(callUnitDrawer).toBeCalledWith(unit)
   })
 
   it("should render the detail units when no unit groups exist", () => {
-    const results = render(
+    render(
       <AuthContext.Provider
         value={{
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
@@ -136,21 +136,21 @@ describe("DetailUnits", () => {
     )
 
     // Above the table
-    expect(results.getByText("Listing Units")).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 2, name: /listing units/i })).toBeInTheDocument()
     expect(
-      results.getByText("Do you want to show unit types or individual units?")
+      screen.getByText("Do you want to show unit types or individual units?")
     ).toBeInTheDocument()
-    expect(results.getByText("Individual Units")).toBeInTheDocument()
-    expect(results.getByText("What is the listing availability?")).toBeInTheDocument()
-    expect(results.getByText("Open Waitlist")).toBeInTheDocument()
-    expect(results.queryAllByText("Home Type")).toHaveLength(0)
+    expect(screen.getByText("Individual Units")).toBeInTheDocument()
+    expect(screen.getByText("What is the listing availability?")).toBeInTheDocument()
+    expect(screen.getByText("Open Waitlist")).toBeInTheDocument()
+    expect(screen.queryAllByText("Home Type")).toHaveLength(0)
 
     // Table
-    expect(results.getByText("None")).toBeInTheDocument()
+    expect(screen.getByText("None")).toBeInTheDocument()
   })
 
   it("should render the detail units with unit groups", () => {
-    const results = render(
+    render(
       <AuthContext.Provider
         value={{
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
@@ -238,17 +238,17 @@ describe("DetailUnits", () => {
     )
 
     // Above the table
-    expect(results.getByText("Listing Units")).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 2, name: /listing units/i })).toBeInTheDocument()
     expect(
-      results.getByText("Do you want to show unit types or individual units?")
+      screen.getByText("Do you want to show unit types or individual units?")
     ).toBeInTheDocument()
-    expect(results.getByText("Individual Units")).toBeInTheDocument()
-    expect(results.getByText("What is the listing availability?")).toBeInTheDocument()
-    expect(results.getByText("Open Waitlist")).toBeInTheDocument()
-    expect(results.queryAllByText("Home Type")).toHaveLength(0)
+    expect(screen.getByText("Individual Units")).toBeInTheDocument()
+    expect(screen.getByText("What is the listing availability?")).toBeInTheDocument()
+    expect(screen.getByText("Open Waitlist")).toBeInTheDocument()
+    expect(screen.queryAllByText("Home Type")).toHaveLength(0)
 
     // Table
-    const table = results.getByRole("table")
+    const table = screen.getByRole("table")
     const headAndBody = within(table).getAllByRole("rowgroup")
     expect(headAndBody).toHaveLength(2)
     const [head, body] = headAndBody
@@ -283,7 +283,7 @@ describe("DetailUnits", () => {
   describe("Home Type", () => {
     it("should render the home type if enabled", () => {
       const callUnitDrawer = jest.fn()
-      const results = render(
+      render(
         <AuthContext.Provider
           value={{
             doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
@@ -303,13 +303,13 @@ describe("DetailUnits", () => {
         </AuthContext.Provider>
       )
 
-      expect(results.getByText("Listing Units")).toBeInTheDocument()
-      expect(results.getByText("Home Type")).toBeInTheDocument()
-      expect(results.getByText("Apartment")).toBeInTheDocument()
+      expect(screen.getByRole("heading", { level: 2, name: /listing units/i })).toBeInTheDocument()
+      expect(screen.getByText("Home Type")).toBeInTheDocument()
+      expect(screen.getByText("Apartment")).toBeInTheDocument()
     })
     it("should render 'none' home type if enabled and no home type set", () => {
       const callUnitDrawer = jest.fn()
-      const results = render(
+      render(
         <AuthContext.Provider
           value={{
             doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
@@ -328,9 +328,9 @@ describe("DetailUnits", () => {
         </AuthContext.Provider>
       )
 
-      expect(results.getByText("Listing Units")).toBeInTheDocument()
-      expect(results.getByText("Home Type")).toBeInTheDocument()
-      expect(results.getByText("None")).toBeInTheDocument()
+      expect(screen.getByRole("heading", { level: 2, name: /listing units/i })).toBeInTheDocument()
+      expect(screen.getByText("Home Type")).toBeInTheDocument()
+      expect(screen.getByText("None")).toBeInTheDocument()
     })
   })
 })
