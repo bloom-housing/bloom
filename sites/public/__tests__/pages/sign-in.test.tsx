@@ -280,6 +280,50 @@ describe("Passwordless Sign In page", () => {
       })
     })
   })
+
+  it("logs in with password after clicking 'Use your password instead' button", async () => {
+    const mockLogin = jest.fn().mockResolvedValue({ firstName: "User" })
+    const mockAddToast = jest.fn()
+    const mockRouter = { query: {}, push: jest.fn() }
+    ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
+
+    const { getByRole, getByLabelText } = render(
+      <AuthContext.Provider
+        value={{
+          initialStateLoaded: true,
+          login: mockLogin,
+        }}
+      >
+        <MessageContext.Provider value={{ ...TOAST_MESSAGE, addToast: mockAddToast }}>
+          <SignInComponent />
+        </MessageContext.Provider>
+      </AuthContext.Provider>
+    )
+
+    fireEvent.click(getByRole("button", { name: "Use your password instead" }))
+
+    fireEvent.change(getByLabelText("Email"), { target: { value: "user@example.com" } })
+    fireEvent.change(getByLabelText("Password"), { target: { value: "password123" } })
+    fireEvent.click(getByRole("button", { name: /sign in/i }))
+
+    await waitFor(() => {
+      expect(mockLogin).toHaveBeenCalledWith(
+        "user@example.com",
+        "password123",
+        undefined,
+        undefined,
+        undefined,
+        undefined
+      )
+      expect(mockAddToast).toHaveBeenCalledWith("Welcome back, User!", {
+        variant: "success",
+      })
+      expect(mockRouter.push).toHaveBeenCalledWith({
+        pathname: "/account/dashboard",
+        query: {},
+      })
+    })
+  })
 })
 
 describe("Mandated accounts", () => {
@@ -541,7 +585,6 @@ describe("Resend confirmation flow", () => {
 
     const resendButton = getByRole("button", { name: /resend/i })
     expect(resendButton).toBeInTheDocument()
-    // Find and click the resend button
     fireEvent.click(resendButton)
 
     expect(await findByText("Resend Code")).toBeInTheDocument()
@@ -578,8 +621,6 @@ describe("Resend confirmation flow", () => {
       },
     }
     const mockLogin = jest.fn().mockRejectedValue(mockError)
-
-    // Mock the user service with a successful response
     const mockResendConfirmation = jest.fn().mockResolvedValue({})
 
     const { getByLabelText, getByRole, findByText } = render(
