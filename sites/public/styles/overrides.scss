@@ -135,6 +135,9 @@
     // Temporary until we have Seeds tables to manipulate UIC StackedTable component
     [class*="stacked-table"] {
       --bloom-font-size-base: var(--seeds-type-label-size);
+      .stacked-table-subtext {
+        color: var(--seeds-text-color);
+      }
       tr {
         background-color: var(--seeds-bg-color-muted);
         margin-bottom: 0;
