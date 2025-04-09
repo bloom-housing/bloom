@@ -47,7 +47,6 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
     listing?.jurisdictions?.id,
     true
   )
-  console.warn(disableCommonApplication)
 
   /*
     Set state for methods, drawer, upload progress, and more
@@ -303,39 +302,37 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             </Grid.Cell>
           )}
         </Grid.Row>
-        {((commonDigitalApplicationChoice &&
-          commonDigitalApplicationChoice === YesNoEnum.no &&
-          digitalApplicationChoice === YesNoEnum.yes) ||
-          (digitalApplicationChoice === YesNoEnum.yes &&
-            !commonDigitalApplicationChoice &&
-            (disableCommonApplication || listing?.commonDigitalApplication === false))) && (
-          <Grid.Row columns={1}>
-            <Grid.Cell>
-              <Field
-                label={t("listings.customOnlineApplicationUrl")}
-                name="customOnlineApplicationUrl"
-                id="customOnlineApplicationUrl"
-                placeholder="https://"
-                inputProps={{
-                  value: methods.digital?.externalReference
-                    ? methods.digital.externalReference
-                    : "",
-                  onChange: (e) => {
-                    setMethods({
-                      ...methods,
-                      digital: {
-                        ...methods.digital,
-                        externalReference: e.target.value,
-                      },
-                    })
-                  },
-                }}
-                error={fieldHasError(errors?.applicationMethods?.[0]?.externalReference)}
-                errorMessage={fieldMessage(errors?.applicationMethods?.[0]?.externalReference)}
-              />
-            </Grid.Cell>
-          </Grid.Row>
-        )}
+        {digitalApplicationChoice === YesNoEnum.yes &&
+          (!disableCommonApplication ||
+            commonDigitalApplicationChoice === YesNoEnum.no ||
+            (!commonDigitalApplicationChoice && listing?.commonDigitalApplication === false)) && (
+            <Grid.Row columns={1}>
+              <Grid.Cell>
+                <Field
+                  label={t("listings.customOnlineApplicationUrl")}
+                  name="customOnlineApplicationUrl"
+                  id="customOnlineApplicationUrl"
+                  placeholder="https://"
+                  inputProps={{
+                    value: methods.digital?.externalReference
+                      ? methods.digital.externalReference
+                      : "",
+                    onChange: (e) => {
+                      setMethods({
+                        ...methods,
+                        digital: {
+                          ...methods.digital,
+                          externalReference: e.target.value,
+                        },
+                      })
+                    },
+                  }}
+                  error={fieldHasError(errors?.applicationMethods?.[0]?.externalReference)}
+                  errorMessage={fieldMessage(errors?.applicationMethods?.[0]?.externalReference)}
+                />
+              </Grid.Cell>
+            </Grid.Row>
+          )}
 
         <Grid.Row columns={2}>
           <Grid.Cell>
