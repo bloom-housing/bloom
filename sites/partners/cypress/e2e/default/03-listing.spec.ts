@@ -160,7 +160,9 @@ describe("Listing Management Tests", () => {
     cy.getByID("listingsBuildingAddress.zipCode").type(listing["buildingAddress.zipCode"])
     cy.getByID("yearBuilt").type(listing["yearBuilt"])
     cy.get(".addressPopup").contains(listing["buildingAddress.street"])
-    cy.getByID("reservedCommunityTypes.id").select(listing["reservedCommunityType.id"])
+    cy.getByID("reservedCommunityTypes.id").select(listing["reservedCommunityType.id"], {
+      force: true,
+    })
     cy.getByID("reservedCommunityDescription").type(listing["reservedCommunityDescription"])
     cy.getByID("includeCommunityDisclaimerYes").check()
     cy.getByID("communityDisclaimerTitle").type(listing["communityDisclaimerTitle"])

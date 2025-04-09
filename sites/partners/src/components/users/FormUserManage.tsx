@@ -2,14 +2,13 @@ import React, { useMemo, useContext, useState, useCallback } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { t, Form, Field, Select, useMutate } from "@bloom-housing/ui-components"
 import { Button, Card, Dialog, Drawer, Grid, Tag } from "@bloom-housing/ui-seeds"
+import { RoleOption, AuthContext, MessageContext, emailRegex } from "@bloom-housing/shared-helpers"
 import {
-  RoleOption,
-  roleKeys,
-  AuthContext,
-  MessageContext,
-  emailRegex,
-} from "@bloom-housing/shared-helpers"
-import { Listing, User, UserRole } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+  FeatureFlagEnum,
+  Listing,
+  User,
+  UserRole,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { JurisdictionAndListingSelection } from "./JurisdictionAndListingSelection"
 import SectionWithGrid from "../shared/SectionWithGrid"
 
@@ -51,11 +50,22 @@ const FormUserManage = ({
   onCancel,
   onDrawerClose,
 }: FormUserManageProps) => {
-  const { userService, profile } = useContext(AuthContext)
+  const { userService, profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
-  const jurisdictionList = profile.jurisdictions
+  const jurisdictionList = profile?.jurisdictions
 
   const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false)
+
+  const possibleUserRoles = [RoleOption.Partner]
+  if (
+    !profile?.userRoles?.isPartner &&
+    !doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.disableJurisdictionalAdmin, undefined, true)
+  ) {
+    possibleUserRoles.push(RoleOption.JurisdictionalAdmin)
+  }
+  if (profile?.userRoles?.isAdmin) {
+    possibleUserRoles.push(RoleOption.Administrator)
+  }
 
   let defaultValues: FormUserManageValues = {}
   if (mode === "edit") {
@@ -65,7 +75,7 @@ const FormUserManage = ({
       email: user.email,
       userRoles: determineUserRole(user.userRoles),
       user_listings: user.listings?.map((item) => item.id) ?? [],
-      jurisdiction_all: jurisdictionList.length === user.jurisdictions.length,
+      jurisdiction_all: jurisdictionList?.length === user.jurisdictions.length,
       jurisdictions: user.jurisdictions.map((elem) => elem.id),
     }
   } else if (profile?.userRoles?.isJurisdictionalAdmin) {
@@ -81,27 +91,29 @@ const FormUserManage = ({
   const { register, errors, getValues, trigger, setValue } = methods
 
   const jurisdictionOptions = useMemo(() => {
-    return jurisdictionList
-      .map((juris) => ({
-        id: juris.id,
-        label: juris.name,
-        value: juris.id,
-        inputProps: {
-          onChange: () => {
-            if (getValues("jurisdictions").length === jurisdictionList.length) {
-              setValue("jurisdiction_all", true)
-            } else {
-              setValue("jurisdiction_all", false)
-            }
+    return (
+      jurisdictionList
+        ?.map((juris) => ({
+          id: juris.id,
+          label: juris.name,
+          value: juris.id,
+          inputProps: {
+            onChange: () => {
+              if (getValues("jurisdictions").length === jurisdictionList.length) {
+                setValue("jurisdiction_all", true)
+              } else {
+                setValue("jurisdiction_all", false)
+              }
+            },
           },
-        },
-      }))
-      .sort((a, b) => (a.label < b.label ? -1 : 1))
+        }))
+        .sort((a, b) => (a.label < b.label ? -1 : 1)) || []
+    )
   }, [jurisdictionList, getValues, setValue])
 
   const listingsOptions = useMemo(() => {
     const jurisdictionalizedListings = {}
-    jurisdictionList.forEach((juris) => {
+    jurisdictionList?.forEach((juris) => {
       jurisdictionalizedListings[juris.id] = []
     })
     listings.sort((a, b) => a.name.localeCompare(b.name))
@@ -381,14 +393,7 @@ const FormUserManage = ({
                           register={register}
                           controlClassName="control"
                           keyPrefix="users"
-                          options={roleKeys
-                            .filter((elem) => {
-                              if (profile?.userRoles?.isJurisdictionalAdmin) {
-                                return elem !== RoleOption.Administrator
-                              }
-                              return true
-                            })
-                            .sort((a, b) => (a < b ? -1 : 1))}
+                          options={possibleUserRoles.sort((a, b) => (a < b ? -1 : 1))}
                           error={!!errors?.userRoles}
                           errorMessage={t("errors.requiredFieldError")}
                           validation={{ required: true }}

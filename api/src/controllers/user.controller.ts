@@ -212,6 +212,19 @@ export class UserController {
     return await this.userService.isUserConfirmationTokenValid(dto);
   }
 
+  @Get('favoriteListings/:id')
+  @ApiOperation({
+    summary: 'Get the ids of the user favorites',
+    operationId: 'favoriteListings',
+  })
+  @ApiOkResponse({ type: IdDTO, isArray: true })
+  @UseGuards(JwtAuthGuard, UserProfilePermissionGuard)
+  async favoriteListings(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) userId: string,
+  ): Promise<IdDTO[]> {
+    return await this.userService.favoriteListings(userId);
+  }
+
   @Put(`modifyFavoriteListings`)
   @ApiOperation({
     summary: 'Add or remove a listing from user favorites',
