@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import dayjs from "dayjs"
 import { NextRouter, useRouter } from "next/router"
 import Head from "next/head"
@@ -123,7 +123,8 @@ const getHeaderLinks = (
   router: NextRouter,
   profile: User,
   signOut: () => Promise<void>,
-  addToast: (message: string, props: ToastProps) => void
+  addToast: (message: string, props: ToastProps) => void,
+  showFavorites: boolean
 ) => {
   const headerLinks: HeaderLink[] = [
     {
@@ -149,6 +150,14 @@ const getHeaderLinks = (
           label: t("account.myApplications"),
           href: "/account/applications",
         },
+        ...(showFavorites
+          ? [
+              {
+                label: t("account.myFavorites"),
+                href: "/account/favorites",
+              },
+            ]
+          : []),
         {
           label: t("account.accountSettings"),
           href: "/account/edit",
@@ -180,6 +189,14 @@ const Layout = (props) => {
   const { toastMessagesRef, addToast } = useContext(MessageContext)
   const router = useRouter()
 
+  const [showFavorites, setShowFavorites] = useState(false)
+
+  useEffect(() => {
+    if (window.localStorage.getItem("bloom-show-favorites-menu-item") === "true") {
+      setShowFavorites(true)
+    }
+  }, [setShowFavorites])
+
   const languages =
     router?.locales?.map((item) => ({
       prefix: item === "en" ? "" : item,
@@ -203,7 +220,7 @@ const Layout = (props) => {
                 active: t("config.routePrefix") === lang.prefix,
               }
             })}
-            links={getHeaderLinks(router, profile, signOut, addToast)}
+            links={getHeaderLinks(router, profile, signOut, addToast, showFavorites)}
             titleLink={"/"}
             logo={
               <Icon size={"lg"}>
