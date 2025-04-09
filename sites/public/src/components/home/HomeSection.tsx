@@ -16,18 +16,20 @@ export const HomeSection = ({
   const customIcon = sectionIcon ? CustomIconMap[sectionIcon] : undefined
 
   return (
-    <MaxWidthLayout>
-      <div className={styles["section-header"]}>
-        {customIcon && (
-          <Icon outlined size="xl" className={styles["section-header-icon"]}>
-            {customIcon}
-          </Icon>
-        )}
-        <Heading size="3xl" priority={2} className={styles["section-header-title"]}>
-          {sectionTitle}
-        </Heading>
-      </div>
-      <div>{children}</div>
-    </MaxWidthLayout>
+    <div className={styles["muted-background"]}>
+      <MaxWidthLayout>
+        <div className={styles["section-header"]}>
+          {customIcon && (
+            <Icon outlined size="xl" className={styles["section-header-icon"]}>
+              {customIcon}
+            </Icon>
+          )}
+          <Heading size="3xl" priority={2} className={styles["section-header-title"]}>
+            {sectionTitle}
+          </Heading>
+        </div>
+        <div>{children}</div>
+      </MaxWidthLayout>
+    </div>
   )
 }
