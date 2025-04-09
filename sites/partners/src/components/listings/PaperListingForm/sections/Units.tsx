@@ -465,8 +465,6 @@ const FormUnits = ({
         {enableUnitGroups ? (
           <UnitGroupForm
             onSubmit={(unitGroup) => {
-              console.table(unitGroup)
-              console.table(unitGroup.unitGroupAmiLevels)
               saveUnitGroup(unitGroup)
             }}
             onClose={() => {
