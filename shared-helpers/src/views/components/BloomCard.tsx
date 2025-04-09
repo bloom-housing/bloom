@@ -19,6 +19,9 @@ interface BloomCardProps {
   variant?: "form" | "block"
   clickable?: boolean
   headerLink?: React.ReactNode
+  iconClass?: string
+  iconOutlined?: boolean
+  iconSymbol?: CustomIconType
 }
 
 const BloomCard = (props: BloomCardProps) => {
@@ -61,7 +64,11 @@ const BloomCard = (props: BloomCardProps) => {
       {title && (
         <Card.Header divider={props.variant === "block" ? undefined : "inset"}>
           {props?.customIcon && (
-            <Icon size="2xl" className={iconClassNames.join(" ")}>
+            <Icon
+              size="2xl"
+              className={`${styles["card-icon"]} ${props.iconClass ? props.iconClass : ""}`}
+              outlined={props.iconOutlined}
+            >
               {CustomIconMap[props?.customIcon]}
             </Icon>
           )}

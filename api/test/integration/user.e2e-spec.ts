@@ -904,6 +904,7 @@ describe('User Controller Tests', () => {
 
   describe('modify favorite listings endpoint', () => {
     let favoriteListingsCookies = '';
+    let userA;
     let jurisdictionId;
     let removeListingId;
 
@@ -920,7 +921,7 @@ describe('User Controller Tests', () => {
 
       removeListingId = removeListing.id;
 
-      const userA = await prisma.userAccounts.create({
+      userA = await prisma.userAccounts.create({
         data: await userFactory({
           confirmedAt: new Date(),
           favoriteListings: [removeListingId],
@@ -946,7 +947,17 @@ describe('User Controller Tests', () => {
         data: await listingFactory(jurisdictionId, prisma),
       });
 
-      const res = await request(app.getHttpServer())
+      // Verify favorites endpoint
+      let res = await request(app.getHttpServer())
+        .get(`/user/favoriteListings/${userA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', favoriteListingsCookies)
+        .expect(200);
+
+      expect(res.body.length).toBeGreaterThanOrEqual(1);
+
+      // Favorite a new listing
+      res = await request(app.getHttpServer())
         .put(`/user/modifyFavoriteListings`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
@@ -956,10 +967,19 @@ describe('User Controller Tests', () => {
         .set('Cookie', favoriteListingsCookies)
         .expect(200);
 
-      expect(res.body.favoriteListings.length).toBeGreaterThanOrEqual(1);
-
+      expect(res.body.favoriteListings.length).toBeGreaterThanOrEqual(2);
       const ids = res.body.favoriteListings.map((listing) => listing.id);
       expect(ids).toContain(addListing.id);
+
+      // Verify favorites endpoint after the new favorite
+      res = await request(app.getHttpServer())
+        .get(`/user/favoriteListings/${userA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', favoriteListingsCookies)
+        .expect(200);
+
+      expect(res.body.length).toBeGreaterThanOrEqual(2);
+      expect(res.body.map((listing) => listing.id)).toContain(addListing.id);
     });
 
     it('should remove a listing from favorite listing', async () => {

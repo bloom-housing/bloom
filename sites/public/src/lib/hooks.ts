@@ -11,12 +11,13 @@ import {
   ListingOrderByKeys,
   ListingsStatusEnum,
   OrderByEnum,
+  PaginatedListing,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ApplicationStatusProps } from "@bloom-housing/ui-components"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./applications/AppSubmissionContext"
-import { getListingApplicationStatus } from "./helpers"
-import { useRequireLoggedInUser, isInternalLink } from "@bloom-housing/shared-helpers"
+import { getListingApplicationStatus, fetchFavoriteListingIds } from "./helpers"
+import { useRequireLoggedInUser, isInternalLink, AuthContext } from "@bloom-housing/shared-helpers"
 import { runtimeConfig } from "./runtime-config"
 
 export const useRedirectToPrevPage = (defaultPath = "/") => {
@@ -59,6 +60,45 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
   }, [listing])
 
   return props
+}
+
+export const useProfileFavoriteListings = () => {
+  const { profile, listingsService, userService } = useContext(AuthContext)
+  const [loading, setLoading] = useState(true)
+  const [listings, setListings] = useState<PaginatedListing>({ items: [] } as PaginatedListing)
+
+  useEffect(() => {
+    if (profile && loading) {
+      void fetchFavoriteListingIds(profile.id, userService).then((listingIds) => {
+        if (listingIds.length > 0) {
+          listingsService
+            .filterableList({
+              body: {
+                filter: [
+                  {
+                    $comparison: EnumListingFilterParamsComparison.IN,
+                    ids: listingIds,
+                  },
+                ],
+                limit: "all",
+              },
+            })
+            .then((res) => {
+              setListings(res)
+            })
+            .catch((err) => {
+              console.error(`Error fetching listings: ${err}`)
+            })
+            .finally(() => setLoading(false))
+        } else {
+          setListings({ items: [] } as PaginatedListing)
+          setLoading(false)
+        }
+      })
+    }
+  }, [profile, loading, userService, listingsService])
+
+  return [listings.items, loading] as [Listing[], boolean]
 }
 
 export async function fetchBaseListingData(
@@ -188,7 +228,7 @@ let jurisdiction: Jurisdiction | null = null
 
 export async function fetchJurisdictionByName(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  req: any
+  req?: any
 ) {
   try {
     if (jurisdiction) {

@@ -13,25 +13,12 @@ import { runtimeConfig } from "../lib/runtime-config"
 import Layout from "../layouts/application"
 
 export interface ListingsProps {
-<<<<<<< HEAD
   listingsEndpoint: string
   googleMapsApiKey: string
   googleMapsMapId: string
   showAllMapPins: string
   bedrooms: FormOption[]
   bathrooms: FormOption[]
-=======
-  openListings: Listing[]
-  closedListings: Listing[]
-  paginationData: {
-    currentPage: number
-    itemCount: number
-    itemsPerPage: number
-    totalItems: number
-    totalPages: number
-  }
-  jurisdiction: Jurisdiction
->>>>>>> 0b8018c32 (feat: public listings pagination (#4704))
 }
 
 export default function ListingsPage(props: ListingsProps) {
@@ -48,7 +35,6 @@ export default function ListingsPage(props: ListingsProps) {
     searchString = searchParam
   }
   return (
-<<<<<<< HEAD
     <Layout hideFooter={true}>
       <Head>
         <title>{pageTitle}</title>
@@ -69,16 +55,6 @@ export default function ListingsPage(props: ListingsProps) {
             counties={locations}
           />
         </APIProvider>
-=======
-    <>
-      {process.env.showNewSeedsDesigns ? (
-        <ListingBrowse
-          openListings={props.openListings}
-          closedListings={props.closedListings}
-          jurisdiction={props.jurisdiction}
-          paginationData={props.paginationData}
-        />
->>>>>>> 0b8018c32 (feat: public listings pagination (#4704))
       ) : (
         <ListingsSearchCombinedDeprecated
           googleMapsApiKey={props.googleMapsApiKey}
