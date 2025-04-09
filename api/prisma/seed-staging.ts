@@ -103,6 +103,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enablePartnerDemographics,
         FeatureFlagEnum.enablePartnerSettings,
         FeatureFlagEnum.enableListingsPagination,
+        FeatureFlagEnum.disableCommonApplication,
       ],
     }),
   });

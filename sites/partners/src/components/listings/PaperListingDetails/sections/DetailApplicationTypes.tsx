@@ -1,19 +1,31 @@
 import React, { useContext } from "react"
 import { t, MinimalTable, StandardTableData } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import { ApplicationMethodsTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  ApplicationMethodsTypeEnum,
+  FeatureFlagEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingContext } from "../../ListingContext"
 import { getDetailBoolean } from "./helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 
 const DetailApplicationTypes = () => {
   const listing = useContext(ListingContext)
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
-  const digitalMethod = listing.applicationMethods.find(
-    (method) =>
-      method.type === ApplicationMethodsTypeEnum.Internal ||
-      method.type === ApplicationMethodsTypeEnum.ExternalLink
+  const disableCommonApplication = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableCommonApplication,
+    listing?.jurisdictions?.id
   )
+
+  const digitalMethod =
+    !disableCommonApplication &&
+    listing.applicationMethods.find(
+      (method) =>
+        method.type === ApplicationMethodsTypeEnum.Internal ||
+        method.type === ApplicationMethodsTypeEnum.ExternalLink
+    )
   const paperMethod = listing.applicationMethods.find(
     (method) => method.type === ApplicationMethodsTypeEnum.FileDownload
   )
