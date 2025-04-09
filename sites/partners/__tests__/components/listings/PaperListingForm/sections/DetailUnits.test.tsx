@@ -4,9 +4,11 @@ import { DetailUnits } from "../../../../../src/components/listings/PaperListing
 import { ListingContext } from "../../../../../src/components/listings/ListingContext"
 import { listing, unit } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
+  EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
   FeatureFlagEnum,
   HomeTypeEnum,
   ReviewOrderTypeEnum,
+  UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 
@@ -110,6 +112,172 @@ describe("DetailUnits", () => {
 
     fireEvent.click(within(action).getByText("View"))
     expect(callUnitDrawer).toBeCalledWith(unit)
+  })
+
+  it("should render the detail units when no unit groups exist", () => {
+    const results = render(
+      <AuthContext.Provider
+        value={{
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, true, false),
+        }}
+      >
+        <ListingContext.Provider
+          value={{
+            ...listing,
+            reviewOrderType: ReviewOrderTypeEnum.waitlist,
+            units: [],
+            unitGroups: [],
+          }}
+        >
+          <DetailUnits setUnitDrawer={jest.fn()} />
+        </ListingContext.Provider>
+      </AuthContext.Provider>
+    )
+
+    // Above the table
+    expect(results.getByText("Listing Units")).toBeInTheDocument()
+    expect(
+      results.getByText("Do you want to show unit types or individual units?")
+    ).toBeInTheDocument()
+    expect(results.getByText("Individual Units")).toBeInTheDocument()
+    expect(results.getByText("What is the listing availability?")).toBeInTheDocument()
+    expect(results.getByText("Open Waitlist")).toBeInTheDocument()
+    expect(results.queryAllByText("Home Type")).toHaveLength(0)
+
+    // Table
+    expect(results.getByText("None")).toBeInTheDocument()
+  })
+
+  it("should render the detail units with unit groups", () => {
+    const results = render(
+      <AuthContext.Provider
+        value={{
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, true, true),
+        }}
+      >
+        <ListingContext.Provider
+          value={{
+            ...listing,
+            reviewOrderType: ReviewOrderTypeEnum.waitlist,
+            units: [],
+            unitGroups: [
+              {
+                id: "caae49d5-028f-4da3-a97b-6a79246816e9",
+                createdAt: new Date(2025, 4, 8),
+                updatedAt: new Date(2025, 4, 8),
+                unitTypes: [
+                  {
+                    id: "test_id_1",
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    name: UnitTypeEnum.twoBdrm,
+                    numBedrooms: 2,
+                  },
+                  {
+                    id: "test_id_1",
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    name: UnitTypeEnum.SRO,
+                    numBedrooms: 5,
+                  },
+                ],
+                totalCount: 2,
+                minOccupancy: 1,
+                maxOccupancy: 4,
+                sqFeetMin: 20,
+                sqFeetMax: 64,
+                bathroomMin: 1,
+                bathroomMax: 2,
+                unitGroupAmiLevels: [
+                  {
+                    id: "test_ami_id_1",
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    amiPercentage: 25,
+                    monthlyRentDeterminationType:
+                      EnumUnitGroupAmiLevelMonthlyRentDeterminationType.flatRent,
+                    flatRentValue: 1500,
+                  },
+                  {
+                    id: "test_ami_id_2",
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    amiPercentage: 25,
+                    monthlyRentDeterminationType:
+                      EnumUnitGroupAmiLevelMonthlyRentDeterminationType.flatRent,
+                    flatRentValue: 2400,
+                  },
+                  {
+                    id: "test_ami_id_3",
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    amiPercentage: 30,
+                    monthlyRentDeterminationType:
+                      EnumUnitGroupAmiLevelMonthlyRentDeterminationType.percentageOfIncome,
+                    percentageOfIncomeValue: 10,
+                  },
+                  {
+                    id: "test_ami_id_4",
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    amiPercentage: 30,
+                    monthlyRentDeterminationType:
+                      EnumUnitGroupAmiLevelMonthlyRentDeterminationType.percentageOfIncome,
+                    percentageOfIncomeValue: 20,
+                  },
+                ],
+              },
+            ],
+          }}
+        >
+          <DetailUnits setUnitDrawer={jest.fn()} />
+        </ListingContext.Provider>
+      </AuthContext.Provider>
+    )
+
+    // Above the table
+    expect(results.getByText("Listing Units")).toBeInTheDocument()
+    expect(
+      results.getByText("Do you want to show unit types or individual units?")
+    ).toBeInTheDocument()
+    expect(results.getByText("Individual Units")).toBeInTheDocument()
+    expect(results.getByText("What is the listing availability?")).toBeInTheDocument()
+    expect(results.getByText("Open Waitlist")).toBeInTheDocument()
+    expect(results.queryAllByText("Home Type")).toHaveLength(0)
+
+    // Table
+    const table = results.getByRole("table")
+    const headAndBody = within(table).getAllByRole("rowgroup")
+    expect(headAndBody).toHaveLength(2)
+    const [head, body] = headAndBody
+
+    const columnHeaders = within(head).getAllByRole("columnheader")
+    expect(columnHeaders).toHaveLength(7)
+
+    expect(columnHeaders[0]).toHaveTextContent("Unit Type")
+    expect(columnHeaders[1]).toHaveTextContent("# of Units")
+    expect(columnHeaders[2]).toHaveTextContent("AMI")
+    expect(columnHeaders[3]).toHaveTextContent("Rent")
+    expect(columnHeaders[4]).toHaveTextContent("Occupancy")
+    expect(columnHeaders[5]).toHaveTextContent("SQ FT")
+    expect(columnHeaders[6]).toHaveTextContent("Bath")
+
+    const rows = within(body).getAllByRole("row")
+    expect(rows).toHaveLength(1)
+    // Validate first row
+    const [unitType, unitsNumber, ami, rent, occupancy, sqFeet, bath] = within(
+      rows[0]
+    ).getAllByRole("cell")
+
+    expect(unitType).toHaveTextContent("2 BR, SRO")
+    expect(unitsNumber).toHaveTextContent("2")
+    expect(ami).toHaveTextContent("25% - 30%")
+    expect(rent).toHaveTextContent("1500 - 2400, 10% - 20%")
+    expect(occupancy).toHaveTextContent("1 - 4")
+    expect(sqFeet).toHaveTextContent("20 - 64")
+    expect(bath).toHaveTextContent("1 - 2")
   })
 
   describe("Home Type", () => {
