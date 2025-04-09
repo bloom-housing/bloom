@@ -62,6 +62,8 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableListingOpportunity,
         FeatureFlagEnum.enablePartnerDemographics,
         FeatureFlagEnum.enablePartnerSettings,
+        FeatureFlagEnum.enableListingsPagination,
+        FeatureFlagEnum.enableListingFavoriting,
       ],
     }),
   });
@@ -85,7 +87,9 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableListingOpportunity,
         FeatureFlagEnum.enablePartnerDemographics,
         FeatureFlagEnum.enablePartnerSettings,
+        FeatureFlagEnum.enableListingsPagination,
         FeatureFlagEnum.disableJurisdictionalAdmin,
+        FeatureFlagEnum.enableListingFavoriting,
       ],
     }),
   });
@@ -98,6 +102,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableListingOpportunity,
         FeatureFlagEnum.enablePartnerDemographics,
         FeatureFlagEnum.enablePartnerSettings,
+        FeatureFlagEnum.enableListingsPagination,
       ],
     }),
   });
@@ -107,7 +112,6 @@ export const stagingSeed = async (
       featureFlags: [],
     }),
   });
-
   // create admin user
   await prismaClient.userAccounts.create({
     data: await userFactory({

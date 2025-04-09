@@ -12,6 +12,7 @@ export enum FeatureFlagEnum {
   enableRegions = 'enableRegions',
   enableSection8Question = 'enableSection8Question',
   enableUnitGroups = 'enableUnitGroups',
+  enableListingsPagination = 'enableListingPagination',
   enableSingleUseCode = 'enableSingleUseCode',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
@@ -19,6 +20,7 @@ export enum FeatureFlagEnum {
   enablePartnerDemographics = 'enablePartnerDemographics',
   enablePartnerSettings = 'enablePartnerSettings',
   disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
+  enableListingFavoriting = 'enableListingFavoriting',
 }
 
 // List of all of existing flags and their descriptions.
@@ -98,6 +100,16 @@ export const featureFlagMap: { name: string; description: string }[] = [
   {
     name: FeatureFlagEnum.enablePartnerSettings,
     description: "When true, the 'settings' tab in the partner site is visible",
+  },
+  {
+    name: FeatureFlagEnum.enableListingsPagination,
+    description:
+      'When true listings browser will display pagination controls section',
+  },
+  {
+    name: FeatureFlagEnum.enableListingFavoriting,
+    description:
+      'When true, a Favorite button is shown for public listings and users can view their favorited listings',
   },
   {
     name: FeatureFlagEnum.disableJurisdictionalAdmin,
