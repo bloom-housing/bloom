@@ -90,10 +90,12 @@ const SignIn = (props: SignInProps) => {
     if (props.jurisdiction) {
       setLocalStorage()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     setLocalStorage()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.jurisdiction])
 
   const onVerify = useCallback((token) => {
