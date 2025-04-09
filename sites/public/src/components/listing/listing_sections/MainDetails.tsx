@@ -21,9 +21,10 @@ import styles from "./MainDetails.module.scss"
 type MainDetailsProps = {
   listing: Listing
   jurisdiction: Jurisdiction
-  showFavoriteButton?: boolean
   listingFavorited?: boolean
   setListingFavorited?: Dispatch<SetStateAction<boolean>>
+  showFavoriteButton?: boolean
+  showHomeType?: boolean
 }
 
 type ListingTag = {
@@ -31,10 +32,14 @@ type ListingTag = {
   variant: TagVariant
 }
 
-export const getListingTags = (listing: Listing, hideReviewTags?: boolean): ListingTag[] => {
+export const getListingTags = (
+  listing: Listing,
+  hideReviewTags?: boolean,
+  hideHomeTypeTag?: boolean
+): ListingTag[] => {
   const listingTags: ListingTag[] = []
 
-  if (listing.homeType) {
+  if (!hideHomeTypeTag && listing.homeType) {
     listingTags.push({
       title: t(`homeType.${listing.homeType}`),
       variant: "highlight-cool",
@@ -78,12 +83,13 @@ export const MainDetails = ({
   listingFavorited,
   setListingFavorited,
   showFavoriteButton,
+  showHomeType,
 }: MainDetailsProps) => {
   if (!listing) return
 
   const googleMapsHref =
     "https://www.google.com/maps/place/" + oneLineAddress(listing.listingsBuildingAddress)
-  const listingTags = getListingTags(listing, true)
+  const listingTags = getListingTags(listing, true, !showHomeType)
   return (
     <div>
       <ImageCard
