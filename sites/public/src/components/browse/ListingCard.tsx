@@ -15,29 +15,39 @@ import {
 } from "../../lib/helpers"
 import { getListingTags } from "../listing/listing_sections/MainDetails"
 import styles from "./ListingCard.module.scss"
+import FavoriteButton from "../shared/FavoriteButton"
 
 export interface ListingCardProps {
   listing: Listing
   jurisdiction: Jurisdiction
+  showFavoriteButton?: boolean
+  favorited?: boolean
+  setFavorited?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const ListingCard = ({ listing, jurisdiction }: ListingCardProps) => {
+export const ListingCard = ({
+  listing,
+  showFavoriteButton,
+  jurisdiction,
+  favorited,
+  setFavorited,
+}: ListingCardProps) => {
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
   const listingTags = getListingTags(listing, true)
   const status = getListingApplicationStatus(listing, true, true)
-  // TODO: Add favorites if toggled on
-  const actions = [
-    // <Button
-    //   onClick={() => alert("hi")}
-    //   size={"sm"}
-    //   variant={"primary-outlined"}
-    //   className={`${styles["action-button"]}}`}
-    //   ariaLabel={`Favorite ${listing.name}`}
-    //   key={"Favorite"}
-    // >
-    //   Favorite
-    // </Button>,
-  ]
+  const actions = []
+
+  if (showFavoriteButton) {
+    actions.push(
+      <FavoriteButton
+        favorited={favorited}
+        setFavorited={setFavorited}
+        key={t("listings.favorite")}
+      >
+        {t("listings.favorite")}
+      </FavoriteButton>
+    )
+  }
 
   return (
     <li className={styles["list-item"]}>

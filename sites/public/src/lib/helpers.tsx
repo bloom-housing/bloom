@@ -14,6 +14,7 @@ import {
   IMAGE_FALLBACK_URL,
   cleanMultiselectString,
   getStackedSummariesTable,
+  ResponseException,
   getStackedGroupSummariesTable,
 } from "@bloom-housing/shared-helpers"
 import {
@@ -24,9 +25,11 @@ import {
   ListingsStatusEnum,
   MarketingSeasonEnum,
   MarketingTypeEnum,
+  ModificationEnum,
   ReviewOrderTypeEnum,
   UnitGroupsSummarized,
   UnitsSummarized,
+  UserService,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { CommonMessageVariant } from "@bloom-housing/ui-seeds/src/blocks/shared/CommonMessage"
 import { Icon, Message } from "@bloom-housing/ui-seeds"
@@ -397,5 +400,30 @@ export const downloadExternalPDF = async (fileURL: string, fileName: string) => 
 }
 
 export const isFeatureFlagOn = (jurisdiction: Jurisdiction, featureFlag: string) => {
-  return jurisdiction.featureFlags?.some((flag) => flag.name === featureFlag && flag.active)
+  return jurisdiction?.featureFlags?.some((flag) => flag.name === featureFlag && flag.active)
+}
+
+/**
+ * @throws {ResponseError}
+ */
+export const saveListingFavorite = async (
+  userService: UserService,
+  listingId: string,
+  favorited: boolean
+) => {
+  try {
+    await userService.modifyFavoriteListings({
+      body: {
+        id: listingId,
+        action: favorited ? ModificationEnum.add : ModificationEnum.remove,
+      },
+    })
+  } catch (err) {
+    console.error(err)
+    throw new ResponseException(t("listings.favoriteSaveError"))
+  }
+}
+
+export const fetchFavoriteListingIds = async (userId: string, userService: UserService) => {
+  return (await userService.favoriteListings({ id: userId })).map((item) => item.id)
 }

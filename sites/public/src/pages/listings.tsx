@@ -39,16 +39,16 @@ export default function ListingsPage(props: ListingsProps) {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getServerSideProps(context: { req: any; query: any }) {
-  const openListings = fetchOpenListings(context.req, Number(context.query.page) || 1)
-  const closedListings = fetchClosedListings(context.req, Number(context.query.page) || 1)
-  const jurisdiction = fetchJurisdictionByName(context.req)
+  const openListings = await fetchOpenListings(context.req, Number(context.query.page) || 1)
+  const closedListings = await fetchClosedListings(context.req, Number(context.query.page) || 1)
+  const jurisdiction = await fetchJurisdictionByName(context.req)
 
   return {
     props: {
-      openListings: (await openListings)?.items || [],
-      closedListings: (await closedListings)?.items || [],
-      paginationData: (await openListings)?.meta,
-      jurisdiction: await jurisdiction,
+      openListings: openListings?.items || [],
+      closedListings: closedListings?.items || [],
+      paginationData: openListings?.items?.length ? openListings.meta : null,
+      jurisdiction: jurisdiction,
     },
   }
 }
