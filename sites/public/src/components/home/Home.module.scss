@@ -3,8 +3,6 @@
   .hero-container {
     background-color: var(--seeds-bg-color-surface-primary-inverse);
     padding-block: var(--seeds-s24);
-    --max-width-layout-desktop-margin-block: 0;
-    --max-width-layout-mobile-margin-block: 0;
     @media (--sm-only) {
       padding-block: var(--seeds-s8);
     }
@@ -37,20 +35,23 @@
       }
     }
   }
-
-  .resource {
-    height: 100%;
-    h2 {
-      font-family: var(--seeds-font-alt-sans);
-      font-weight: var(--seeds-font-weight-semibold);
-    }
-    .resource-icon {
-      color: var(--seeds-color-primary);
-      background-color: var(--seeds-bg-color-surface-primary);
-      border-radius: var(--seeds-rounded-full);
-      padding: var(--seeds-s2);
-      svg {
-        fill: none;
+  .resource-container {
+    background-color: var(--seeds-bg-color-canvas);
+    padding-block: var(--seeds-spacer-container);
+    .resource {
+      height: 100%;
+      h2 {
+        font-family: var(--seeds-font-alt-sans);
+        font-weight: var(--seeds-font-weight-semibold);
+      }
+      .resource-icon {
+        color: var(--seeds-color-primary);
+        background-color: var(--seeds-bg-color-surface-primary);
+        border-radius: var(--seeds-rounded-full);
+        padding: var(--seeds-s2);
+        svg {
+          fill: none;
+        }
       }
     }
   }
