@@ -77,13 +77,12 @@ const FormUnits = ({
     }),
   ]
 
-  const nextId = enableUnitGroups
-    ? units && units.length > 0
-      ? units[units.length - 1]?.tempId + 1
-      : 1
-    : unitGroups && unitGroups.length > 0
-    ? unitGroups[unitGroups.length - 1]?.tempId + 1
-    : 1
+  let nextId
+  if (enableUnitGroups) {
+    nextId = unitGroups && unitGroups.length > 0 ? unitGroups[unitGroups.length - 1]?.tempId + 1 : 1
+  } else {
+    nextId = units && units.length > 0 ? units[units.length - 1]?.tempId + 1 : 1
+  }
 
   const unitTableHeaders = enableUnitGroups
     ? {
