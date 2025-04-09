@@ -67,19 +67,30 @@ const SignIn = (props: SignInProps) => {
     isLoading: isResendConfirmationLoading,
   } = useMutate<SuccessDTO>()
 
-  useEffect(() => {
-    pushGtmEvent<PageView>({
-      event: "pageView",
-      pageTitle: "Sign In",
-      status: UserStatus.NotLoggedIn,
-    })
-
+  const setLocalStorage = () => {
     window.localStorage.setItem(
       "bloom-show-favorites-menu-item",
       (
         isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableListingFavoriting) === true
       ).toString()
     )
+  }
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Sign In",
+      status: UserStatus.NotLoggedIn,
+    })
+    if (props.jurisdiction) {
+      setLocalStorage()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    setLocalStorage()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.jurisdiction])
 
   const onSubmit = async (data: { email: string; password: string }) => {
