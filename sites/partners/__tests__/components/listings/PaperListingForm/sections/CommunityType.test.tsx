@@ -1,14 +1,10 @@
 import React from "react"
+import { rest } from "msw"
 import { setupServer } from "msw/node"
 import { FormProvider, useForm } from "react-hook-form"
-import {
-  ReservedCommunityType,
-  User,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { AuthContext, AuthProvider } from "@bloom-housing/shared-helpers"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import CommunityType from "../../../../../src/components/listings/PaperListingForm/sections/CommunityType"
 import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
-import { rest } from "msw"
 import { mockNextRouter, render } from "../../../../testUtils"
 
 const FormComponent = ({ children, values }: { values?: FormListing; children }) => {
@@ -80,7 +76,7 @@ describe("CommunityType", () => {
     ],
   }
   // issue with infinite useEffect re-renders
-  it.skip("should not render when swapCommunityTypesWithPrograms is true", async () => {
+  it.skip("should not render when swapCommunityTypesWithPrograms is true", () => {
     server.use(
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
         return res(ctx.json(adminUserWithJurisdictions))
@@ -91,15 +87,20 @@ describe("CommunityType", () => {
     )
     document.cookie = "access-token-available=True"
 
-    console.log("pre-render")
     const results = render(
-      <FormComponent>
-        <CommunityType />
-      </FormComponent>
+      <AuthContext.Provider
+        value={{
+          doJurisdictionsHaveFeatureFlagOn: () => {
+            return true
+          },
+        }}
+      >
+        <FormComponent>
+          <CommunityType />
+        </FormComponent>
+      </AuthContext.Provider>
     )
-    await results.findByText("Morgan")
-    results.debug()
-    expect(results.getByText("Eric")).toBeInTheDocument()
+
     expect(results.queryByText("Community")).toBeFalsy()
   })
   it.todo("should render when swapCommunityTypesWithPrograms is true")

@@ -2,7 +2,6 @@ import React from "react"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   ListingMultiselectQuestion,
-  MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
