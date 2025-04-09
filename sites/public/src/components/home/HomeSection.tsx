@@ -16,7 +16,7 @@ export const HomeSection = ({
   const customIcon = sectionIcon ? CustomIconMap[sectionIcon] : undefined
 
   return (
-    <MaxWidthLayout>
+    <MaxWidthLayout className={styles["muted-background"]}>
       <div className={styles["section-header"]}>
         {customIcon && (
           <Icon outlined size="xl" className={styles["section-header-icon"]}>

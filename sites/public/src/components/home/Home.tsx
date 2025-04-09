@@ -36,7 +36,7 @@ export const Home = (props: HomeProps) => {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
 
   const enableRegions =
-    props.jurisdiction.featureFlags.find((flag) => flag.name === FeatureFlagEnum.enableRegions)
+    props.jurisdiction?.featureFlags.find((flag) => flag.name === FeatureFlagEnum.enableRegions)
       ?.active || false
 
   return (
