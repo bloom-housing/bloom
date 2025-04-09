@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form"
 import { t, useMutate } from "@bloom-housing/ui-components"
 import { useRouter } from "next/router"
 import FormsLayout from "../layouts/forms"
-import { useRedirectToPrevPage } from "../lib/hooks"
+import { fetchJurisdictionByName, useRedirectToPrevPage } from "../lib/hooks"
 import {
   PageView,
   pushGtmEvent,
@@ -18,12 +18,21 @@ import {
   FormSignInPwdless,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
-import { SuccessDTO } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  Jurisdiction,
+  SuccessDTO,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SignUpBenefits from "../components/account/SignUpBenefits"
 import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
 import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
+import { isFeatureFlagOn } from "../lib/helpers"
 
-const SignIn = () => {
+interface SignInProps {
+  jurisdiction: Jurisdiction
+}
+
+const SignIn = (props: SignInProps) => {
   const { addToast } = useContext(MessageContext)
   const router = useRouter()
 
@@ -64,7 +73,14 @@ const SignIn = () => {
       pageTitle: "Sign In",
       status: UserStatus.NotLoggedIn,
     })
-  }, [])
+
+    window.localStorage.setItem(
+      "bloom-show-favorites-menu-item",
+      (
+        isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableListingFavoriting) === true
+      ).toString()
+    )
+  }, [props.jurisdiction])
 
   const onSubmit = async (data: { email: string; password: string }) => {
     const { email, password } = data
@@ -240,3 +256,12 @@ const SignIn = () => {
 }
 
 export { SignIn as default, SignIn }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function getStaticProps() {
+  const jurisdiction = await fetchJurisdictionByName()
+
+  return {
+    props: { jurisdiction },
+  }
+}
