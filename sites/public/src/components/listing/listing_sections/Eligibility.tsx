@@ -32,17 +32,16 @@ export const Eligibility = ({ eligibilitySections, section8Acceptance }: Eligibi
       <ol>
         {eligibilitySections.map((section, index) => {
           return (
-            <div key={index}>
-              <OrderedSection
-                order={index + 1}
-                title={section.header}
-                subtitle={section.subheader}
-                note={section.note}
-              >
-                {section.content}
-              </OrderedSection>
-              {index < eligibilitySections.length - 1 && <hr />}
-            </div>
+            <OrderedSection
+              order={index + 1}
+              title={section.header}
+              subtitle={section.subheader}
+              note={section.note}
+              key={index}
+              divider={index < eligibilitySections.length - 1}
+            >
+              {section.content}
+            </OrderedSection>
           )
         })}
       </ol>

@@ -9,7 +9,9 @@ export enum FeatureFlagEnum {
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
   enableIsVerified = 'enableIsVerified',
+  enableListingFavoriting = 'enableListingFavoriting',
   enableListingOpportunity = 'enableListingOpportunity',
+  enableListingsPagination = 'enableListingPagination',
   enableMarketingStatus = 'enableMarketingStatus',
   enableNeighborhoodAmenities = 'enableNeighborhoodAmenities',
   enablePartnerDemographics = 'enablePartnerDemographics',
@@ -56,9 +58,19 @@ export const featureFlagMap: { name: string; description: string }[] = [
       'When true, the listing can ba have its contents manually verified by a user',
   },
   {
+    name: FeatureFlagEnum.enableListingFavoriting,
+    description:
+      'When true, a Favorite button is shown for public listings and users can view their favorited listings',
+  },
+  {
     name: FeatureFlagEnum.enableListingOpportunity,
     description:
       "When true, any newly published listing will send a gov delivery email to everyone that has signed up for the 'listing alerts'",
+  },
+    {
+    name: FeatureFlagEnum.enableListingsPagination,
+    description:
+      'When true listings browser will display pagination controls section',
   },
   {
     name: FeatureFlagEnum.enableMarketingStatus,
