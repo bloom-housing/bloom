@@ -1,9 +1,10 @@
 import React from "react"
-import { render, fireEvent, waitFor } from "@testing-library/react"
+import { render, fireEvent, waitFor, act } from "@testing-library/react"
 import { useRouter } from "next/router"
 import { MessageContext, AuthContext } from "@bloom-housing/shared-helpers"
-import { User } from "../../../../shared-helpers/src/types/backend-swagger"
+import { User, UserService } from "../../../../shared-helpers/src/types/backend-swagger"
 import { SignIn as SignInComponent } from "../../src/pages/sign-in"
+import { Verify } from "../../src/pages/verify"
 
 const initialStateLoaded = false
 let profile: User | undefined
@@ -49,6 +50,48 @@ describe("Sign In Page", () => {
 
     expect(getByText("Don't have an account?", { selector: "h2" })).toBeInTheDocument()
     expect(getByRole("link", { name: /create account/i })).toBeInTheDocument()
+  })
+
+  it("shows success toast with user's first name on successful login", async () => {
+    const mockUser = { firstName: "User", id: "user-123" }
+    const mockLogin = jest.fn().mockResolvedValue(mockUser)
+    const mockAddToast = jest.fn()
+    const mockRouter = { query: {}, push: jest.fn() }
+    ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
+
+    const { getByLabelText, getByRole } = render(
+      <AuthContext.Provider
+        value={{
+          initialStateLoaded: true,
+          profile: undefined,
+          login: mockLogin,
+        }}
+      >
+        <MessageContext.Provider value={{ ...TOAST_MESSAGE, addToast: mockAddToast }}>
+          <SignInComponent />
+        </MessageContext.Provider>
+      </AuthContext.Provider>
+    )
+
+    // Complete login
+    fireEvent.change(getByLabelText("Email"), { target: { value: "user@example.com" } })
+    fireEvent.change(getByLabelText("Password"), { target: { value: "password123" } })
+    fireEvent.click(getByRole("button", { name: /sign in/i }))
+
+    // Verify toast is shown with the correct message
+    await waitFor(() => {
+      expect(mockLogin).toHaveBeenCalledWith(
+        "user@example.com",
+        "password123",
+        undefined,
+        undefined,
+        undefined,
+        undefined
+      )
+      expect(mockAddToast).toHaveBeenCalledWith("Welcome back, User!", {
+        variant: "success",
+      })
+    })
   })
 
   describe("Field validation errors", () => {
@@ -197,9 +240,426 @@ describe("Passwordless Sign In page", () => {
       expect(getByRole("button", { name: "Use your password instead" })).toBeInTheDocument()
     })
   })
+
+  it("successfully redirects to verify page on passwordless code request", async () => {
+    const mockRouter = {
+      query: {},
+      push: jest.fn(),
+    }
+    ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
+
+    const mockRequestSingleUseCode = jest.fn().mockResolvedValue({})
+
+    const { getByLabelText, getByRole } = render(
+      <AuthContext.Provider
+        value={{
+          initialStateLoaded: true,
+          profile: undefined,
+          requestSingleUseCode: mockRequestSingleUseCode,
+        }}
+      >
+        <MessageContext.Provider value={TOAST_MESSAGE}>
+          <SignInComponent />
+        </MessageContext.Provider>
+      </AuthContext.Provider>
+    )
+
+    // Enter email and click "Get code" button
+    fireEvent.change(getByLabelText("Email"), { target: { value: "user@example.com" } })
+    fireEvent.click(getByRole("button", { name: "Get code to sign in" }))
+
+    // Verify redirect to verify page with correct parameters
+    await waitFor(() => {
+      expect(mockRequestSingleUseCode).toHaveBeenCalledWith("user@example.com")
+      expect(mockRouter.push).toHaveBeenCalledWith({
+        pathname: "/verify",
+        query: {
+          email: "user@example.com",
+          flowType: "login",
+        },
+      })
+    })
+  })
+
+  it("logs in with password after clicking 'Use your password instead' button", async () => {
+    const mockLogin = jest.fn().mockResolvedValue({ firstName: "User" })
+    const mockAddToast = jest.fn()
+    const mockRouter = { query: {}, push: jest.fn() }
+    ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
+
+    const { getByRole, getByLabelText } = render(
+      <AuthContext.Provider
+        value={{
+          initialStateLoaded: true,
+          login: mockLogin,
+        }}
+      >
+        <MessageContext.Provider value={{ ...TOAST_MESSAGE, addToast: mockAddToast }}>
+          <SignInComponent />
+        </MessageContext.Provider>
+      </AuthContext.Provider>
+    )
+
+    fireEvent.click(getByRole("button", { name: "Use your password instead" }))
+
+    fireEvent.change(getByLabelText("Email"), { target: { value: "user@example.com" } })
+    fireEvent.change(getByLabelText("Password"), { target: { value: "password123" } })
+    fireEvent.click(getByRole("button", { name: /sign in/i }))
+
+    await waitFor(() => {
+      expect(mockLogin).toHaveBeenCalledWith(
+        "user@example.com",
+        "password123",
+        undefined,
+        undefined,
+        undefined,
+        undefined
+      )
+      expect(mockAddToast).toHaveBeenCalledWith("Welcome back, User!", {
+        variant: "success",
+      })
+      expect(mockRouter.push).toHaveBeenCalledWith({
+        pathname: "/account/dashboard",
+        query: {},
+      })
+    })
+  })
 })
 
 describe("Mandated accounts", () => {
-  it.todo("Desktop test(s)")
-  it.todo("Mobile test(s)")
+  let originalShowMandatedAccounts
+  let originalShowPwdless
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+    ;(useRouter as jest.Mock).mockReturnValue({
+      query: { listingId: "listing-123", redirectUrl: "/applications/start/choose-language" },
+      push: jest.fn(),
+    })
+
+    originalShowMandatedAccounts = process.env.showMandatedAccounts
+    originalShowPwdless = process.env.showPwdless
+    process.env.showMandatedAccounts = "TRUE"
+    process.env.showPwdless = ""
+  })
+
+  afterEach(() => {
+    process.env.showMandatedAccounts = originalShowMandatedAccounts
+    process.env.showPwdless = originalShowPwdless
+  })
+
+  const renderSignInWithMandatedAccounts = () =>
+    render(
+      <MessageContext.Provider value={TOAST_MESSAGE}>
+        <SignInComponent />
+      </MessageContext.Provider>
+    )
+
+  describe("Desktop view", () => {
+    it("shows sign-in form", () => {
+      const { getByText, getByLabelText, getByRole } = renderSignInWithMandatedAccounts()
+
+      expect(getByText("Sign In", { selector: "h1" })).toBeInTheDocument()
+      expect(getByLabelText("Email")).toBeInTheDocument()
+      expect(getByLabelText("Password")).toBeInTheDocument()
+      expect(getByRole("button", { name: /sign in/i })).toBeInTheDocument()
+      expect(getByRole("link", { name: /forgot password/i })).toBeInTheDocument()
+
+      expect(getByText("Don't have an account?", { selector: "h2" })).toBeInTheDocument()
+      expect(getByRole("link", { name: /create account/i })).toBeInTheDocument()
+    })
+
+    it("redirects to application page with listing ID after successful sign-in", async () => {
+      const mockRouter = {
+        query: {
+          listingId: "listing-123",
+          redirectUrl: "/applications/start/choose-language",
+        },
+        push: jest.fn(),
+      }
+      ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
+
+      const mockUser = { firstName: "Test", id: "user-123" }
+      const mockLogin = jest.fn().mockResolvedValue(mockUser)
+      const mockAddToast = jest.fn()
+
+      const { getByLabelText, getByRole } = render(
+        <AuthContext.Provider
+          value={{
+            initialStateLoaded: true,
+            profile: undefined,
+            login: mockLogin,
+          }}
+        >
+          <MessageContext.Provider value={{ ...TOAST_MESSAGE, addToast: mockAddToast }}>
+            <SignInComponent />
+          </MessageContext.Provider>
+        </AuthContext.Provider>
+      )
+
+      fireEvent.change(getByLabelText("Email"), { target: { value: "user@example.com" } })
+      fireEvent.change(getByLabelText("Password"), { target: { value: "password123" } })
+      fireEvent.click(getByRole("button", { name: /sign in/i }))
+
+      await waitFor(() => {
+        expect(mockLogin).toHaveBeenCalled()
+        expect(mockAddToast).toHaveBeenCalledWith("Welcome back, Test!", {
+          variant: "success",
+        })
+        expect(mockRouter.push).toHaveBeenCalledWith({
+          pathname: "/applications/start/choose-language",
+          query: { listingId: "listing-123" },
+        })
+      })
+    })
+
+    describe("Mobile view", () => {
+      beforeEach(() => {
+        // Mocking window inner width to simulate mobile viewport
+        Object.defineProperty(window, "innerWidth", {
+          writable: true,
+          configurable: true,
+          value: 375, // Mobile width
+        })
+
+        // Trigger resize event to ensure components respond to the new size
+        window.dispatchEvent(new Event("resize"))
+      })
+
+      afterEach(() => {
+        // Reset window size
+        Object.defineProperty(window, "innerWidth", {
+          writable: true,
+          configurable: true,
+          value: 1024, // Desktop width
+        })
+        act(() => {
+          window.dispatchEvent(new Event("resize"))
+        })
+      })
+
+      it("shows sign-in form with listing redirect parameters on mobile", () => {
+        const { getByText, getByLabelText, getByRole } = renderSignInWithMandatedAccounts()
+
+        expect(getByText("Sign In", { selector: "h1" })).toBeInTheDocument()
+        expect(getByLabelText("Email")).toBeInTheDocument()
+        expect(getByLabelText("Password")).toBeInTheDocument()
+        expect(getByRole("button", { name: /sign in/i })).toBeInTheDocument()
+        expect(getByRole("link", { name: /forgot password/i })).toBeInTheDocument()
+
+        expect(getByText("Don't have an account?", { selector: "h2" })).toBeInTheDocument()
+        expect(getByRole("link", { name: /create account/i })).toBeInTheDocument()
+      })
+
+      it("shows success toast after successful login with password", async () => {
+        const mockLogin = jest.fn().mockResolvedValue({ firstName: "User" })
+        const mockAddToast = jest.fn()
+
+        const { getByLabelText, getByRole } = render(
+          <AuthContext.Provider
+            value={{
+              initialStateLoaded: true,
+              profile: undefined,
+              login: mockLogin,
+            }}
+          >
+            <MessageContext.Provider value={{ ...TOAST_MESSAGE, addToast: mockAddToast }}>
+              <SignInComponent />
+            </MessageContext.Provider>
+          </AuthContext.Provider>
+        )
+
+        fireEvent.change(getByLabelText("Email"), { target: { value: "user@example.com" } })
+        fireEvent.change(getByLabelText("Password"), { target: { value: "password123" } })
+        fireEvent.click(getByRole("button", { name: /sign in/i }))
+
+        await waitFor(() => {
+          expect(mockLogin).toHaveBeenCalled()
+          expect(mockAddToast).toHaveBeenCalledWith("Welcome back, User!", {
+            variant: "success",
+          })
+        })
+      })
+    })
+  })
+})
+
+describe("User is not confirmed flow", () => {
+  let originalShowPwdless
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+    ;(useRouter as jest.Mock).mockReturnValue({
+      query: {},
+      push: jest.fn(),
+    })
+
+    originalShowPwdless = process.env.showPwdless
+    process.env.showPwdless = ""
+  })
+
+  afterEach(() => {
+    process.env.showPwdless = originalShowPwdless
+  })
+
+  it("shows confirmation modal when login fails with 'not confirmed' error", async () => {
+    // Mock login to throw an error with the "not confirmed" message
+    const mockError = {
+      response: {
+        status: 401,
+        data: {
+          message: "Account with email user@example.com exists but is not confirmed",
+        },
+      },
+    }
+    const mockLogin = jest.fn().mockRejectedValue(mockError)
+
+    const { getByLabelText, getByRole, findByText } = render(
+      <AuthContext.Provider
+        value={{
+          initialStateLoaded: true,
+          profile: undefined,
+          login: mockLogin,
+        }}
+      >
+        <MessageContext.Provider value={TOAST_MESSAGE}>
+          <SignInComponent />
+        </MessageContext.Provider>
+      </AuthContext.Provider>
+    )
+
+    fireEvent.change(getByLabelText("Email"), { target: { value: "user@example.com" } })
+    fireEvent.change(getByLabelText("Password"), { target: { value: "password123" } })
+    fireEvent.click(getByRole("button", { name: /sign in/i }))
+
+    expect(await findByText("Your account is not confirmed")).toBeInTheDocument()
+  })
+})
+
+describe("Resend confirmation flow", () => {
+  let originalShowPwdless
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+    ;(useRouter as jest.Mock).mockReturnValue({
+      query: {},
+      push: jest.fn(),
+    })
+
+    originalShowPwdless = process.env.showPwdless
+    process.env.showPwdless = ""
+  })
+
+  afterEach(() => {
+    process.env.showPwdless = originalShowPwdless
+  })
+
+  it("shows resend confirmation modal then closes it after successful resend on verify page", async () => {
+    const mockUser = { firstName: "User", id: "user-123" }
+    const mockLogin = jest.fn().mockResolvedValue(mockUser)
+    const mockAddToast = jest.fn()
+    const mockRouter = {
+      query: {
+        email: "user@example.com",
+        flowType: "login",
+      },
+      push: jest.fn(),
+    }
+    ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
+    const mockRequestSingleUseCode = jest.fn().mockResolvedValue({})
+
+    const { getByRole, findByText } = render(
+      <AuthContext.Provider
+        value={{
+          initialStateLoaded: true,
+          profile: undefined,
+          login: mockLogin,
+          requestSingleUseCode: mockRequestSingleUseCode,
+        }}
+      >
+        <MessageContext.Provider value={{ ...TOAST_MESSAGE, addToast: mockAddToast }}>
+          <Verify />
+        </MessageContext.Provider>
+      </AuthContext.Provider>
+    )
+
+    const resendButton = getByRole("button", { name: /resend/i })
+    expect(resendButton).toBeInTheDocument()
+    fireEvent.click(resendButton)
+
+    expect(await findByText("Resend Code")).toBeInTheDocument()
+    const resendCodeButton = await findByText("Resend Code")
+    fireEvent.click(resendCodeButton)
+
+    const resendCodeConfirmationButton = await findByText("Resend the code")
+    expect(resendCodeConfirmationButton).toBeInTheDocument()
+
+    expect(
+      await findByText(
+        "If there is an account made with user@example.com, we’ll send a new code. Be aware, the code will expire in 10 minutes."
+      )
+    ).toBeInTheDocument()
+
+    fireEvent.click(resendCodeConfirmationButton)
+
+    expect(
+      await findByText(
+        "A new code has been sent to user@example.com. Be aware, the code will expire in 10 minutes."
+      )
+    ).toBeInTheDocument()
+    expect(mockRequestSingleUseCode).toHaveBeenCalledWith("user@example.com")
+  })
+
+  it("correctly calls resendConfirmation when clicking resend button", async () => {
+    // Mock login to throw an error with the "not confirmed" message
+    const mockError = {
+      response: {
+        status: 401,
+        data: {
+          message: "Account with email user@example.com exists but is not confirmed",
+        },
+      },
+    }
+    const mockLogin = jest.fn().mockRejectedValue(mockError)
+    const mockResendConfirmation = jest.fn().mockResolvedValue({})
+
+    const { getByLabelText, getByRole, findByText } = render(
+      <AuthContext.Provider
+        value={{
+          initialStateLoaded: true,
+          profile: undefined,
+          login: mockLogin,
+          userService: {
+            resendConfirmation: mockResendConfirmation,
+          } as unknown as UserService,
+        }}
+      >
+        <MessageContext.Provider value={TOAST_MESSAGE}>
+          <SignInComponent />
+        </MessageContext.Provider>
+      </AuthContext.Provider>
+    )
+
+    // Log in to trigger the error
+    fireEvent.change(getByLabelText("Email"), { target: { value: "user@example.com" } })
+    fireEvent.change(getByLabelText("Password"), { target: { value: "password123" } })
+    fireEvent.click(getByRole("button", { name: /sign in/i }))
+
+    // Verify the confirmation modal appears
+    const modalHeader = await findByText("Your account is not confirmed")
+    expect(modalHeader).toBeInTheDocument()
+
+    // Find and click the resend email button
+    const resendButton = await findByText("Resend the email")
+    fireEvent.click(resendButton)
+
+    await waitFor(() => {
+      expect(mockResendConfirmation).toHaveBeenCalledWith({
+        body: expect.objectContaining({
+          email: "user@example.com",
+          appUrl: window.location.origin,
+        }),
+      })
+    })
+  })
 })
