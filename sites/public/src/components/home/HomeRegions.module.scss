@@ -1,0 +1,25 @@
+.region-card-container {
+  height: 100%;
+}
+
+.region-card {
+  height: 100%;
+
+  .region-card-name {
+    padding: var(--seeds-s6);
+    color: var(--seeds-color-blue-500);
+    text-decoration: underline;
+    font-size: var(--seeds-type-heading-size-lg);
+    font-weight: var(--seeds-font-weight-bold);
+  }
+
+  .region-card-image {
+    height: var(--seeds-s40);
+
+    img {
+      object-fit: cover;
+      height: 100%;
+      width: 100%;
+    }
+  }
+}
