@@ -57,12 +57,14 @@ const FormUnits = ({
 
   const enableSection8Question = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableSection8Question,
-    listing?.jurisdictions?.id
+    listing?.jurisdictions?.id,
+    !listing.jurisdictions?.id
   )
 
   const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableUnitGroups,
-    listing?.jurisdictions?.id
+    listing?.jurisdictions?.id,
+    !listing.jurisdictions?.id
   )
 
   const listingAvailability = useWatch({
