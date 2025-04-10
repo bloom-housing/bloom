@@ -509,7 +509,6 @@ export class ListingService implements OnModuleInit {
             })),
           });
         }
-        // TODO: Handle bathrooms for unit groups
         if (filter[ListingFilterKeys.bathrooms]) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
@@ -528,7 +527,6 @@ export class ListingService implements OnModuleInit {
             })),
           });
         }
-        // TODO: Handle bedrooms for unit groups
         if (filter[ListingFilterKeys.bedrooms]) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
@@ -538,13 +536,26 @@ export class ListingService implements OnModuleInit {
             caseSensitive: true,
           });
           filters.push({
-            OR: builtFilter.map((filt) => ({
-              units: {
-                some: {
-                  numBedrooms: filt,
+            OR: [
+              ...builtFilter.map((filt) => ({
+                units: {
+                  some: {
+                    numBedrooms: filt,
+                  },
                 },
-              },
-            })),
+              })),
+              ...builtFilter.map((filt) => ({
+                unitGroups: {
+                  some: {
+                    unitTypes: {
+                      some: {
+                        numBedrooms: filt,
+                      },
+                    },
+                  },
+                },
+              })),
+            ],
           });
         }
         if (filter[ListingFilterKeys.city]) {
@@ -660,7 +671,6 @@ export class ListingService implements OnModuleInit {
             })),
           });
         }
-        // TODO: Handle monthly rent for unit groups
         if (filter[ListingFilterKeys.monthlyRent]) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
@@ -670,13 +680,29 @@ export class ListingService implements OnModuleInit {
             caseSensitive: true,
           });
           filters.push({
-            OR: builtFilter.map((filt) => ({
-              units: {
-                some: {
-                  [ListingFilterKeys.monthlyRent]: filt,
+            OR: [
+              ...builtFilter.map((filt) => ({
+                units: {
+                  some: {
+                    [ListingFilterKeys.monthlyRent]: filt,
+                  },
                 },
-              },
-            })),
+              })),
+              ...builtFilter.map((filt) => ({
+                unitGroups: {
+                  some: {
+                    unitGroupAmiLevels: {
+                      some: {
+                        OR: [
+                          { flatRentValue: filt },
+                          { percentageOfIncomeValue: { not: null } },
+                        ],
+                      },
+                    },
+                  },
+                },
+              })),
+            ],
           });
         }
         if (filter[ListingFilterKeys.name]) {
