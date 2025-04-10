@@ -1,0 +1,42 @@
+.site-layout {
+  background-color: var(--seeds-bg-color-canvas);
+
+  .site-content {
+    margin-block: var(--seeds-s12);
+    margin-inline: auto;
+    @media (--md-and-up) {
+      display: flex;
+    }
+
+    .resources-section-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: var(--seeds-s8);
+    }
+
+    .contact-card {
+      padding: var(--seeds-s6);
+      display: flex;
+      flex-direction: column;
+      gap: var(--seeds-s6);
+
+      .contact-card-subsection {
+        display: flex;
+        flex-direction: column;
+        gap: var(--seeds-s4);
+      }
+
+      .contact-card-title {
+        font-weight: var(--seeds-font-weight-semibold);
+      }
+
+      .contact-card-description {
+        color: var(--seeds-color-gray-700);
+      }
+
+      .contact-card-info {
+        font-weight: var(--seeds-font-weight-bold);
+      }
+    }
+  }
+}
