@@ -1,3 +1,12 @@
 {
-  "t.formSubmitted": "Submitting form, wait"
+  "t.formSubmitted": "Submitting form, wait",
+  "resources.immedieteHousingTitle": "Immediate housing assistance",
+  "resources.immedieteHousingSubtitle": "If you're fleeing domestic violence, sexual assault or human trafficking and in immediate danger, call 911.",
+  "resources.housingProgramsTitle": "Alameda County Housing & Community Development (HCD) Housing Programs",
+  "resources.alamedaResourceFinderTitle": "211 Alameda County Resource Finder",
+  "resources.alamedaResourceFinder": "Information on the Alameda County Housing & Community Development (HCD) Department’s policies and programs.",
+  "resources.contactTitle": "Contact",
+  "resources.contactDescription": "For listing and application questions, please contact the Property Agent displayed on the listing.",
+  "resources.contactInfo": "Alameda County's Housing & Development Department (HCD)",
+  "resources.contactEmail": "example@admin.com"
 }
