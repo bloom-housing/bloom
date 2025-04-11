@@ -47,7 +47,7 @@ export const stagingSeed = async (
   // create main jurisdiction with as many feature flags turned on as possible
   const mainJurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory(jurisdictionName, {
-      listingApprovalPermissions: [UserRoleEnum.admin],
+      listingApprovalPermissions: [UserRoleEnum.admin, UserRoleEnum.partner],
       featureFlags: [
         FeatureFlagEnum.enableHomeType,
         FeatureFlagEnum.enableAccessibilityFeatures,
@@ -896,7 +896,7 @@ export const stagingSeed = async (
           },
           email: `partner-user-${savedListing.name
             .toLowerCase()
-            .replace(' ', '')}@example.com`,
+            .replaceAll(' ', '-')}@example.com`,
           confirmedAt: new Date(),
           jurisdictionIds: [savedListing.jurisdictionId],
           acceptedTerms: true,
