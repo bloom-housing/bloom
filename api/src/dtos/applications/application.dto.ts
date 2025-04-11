@@ -275,4 +275,7 @@ export class Application extends AbstractDTO {
   @Type(() => ApplicationLotteryPosition)
   @ApiProperty({ type: ApplicationLotteryPosition, isArray: true })
   applicationLotteryPositions: ApplicationLotteryPosition[];
+
+  @ApiProperty({ required: false })
+  riskScore?: number;
 }

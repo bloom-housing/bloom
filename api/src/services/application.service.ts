@@ -36,6 +36,8 @@ import { MostRecentApplicationQueryParams } from '../dtos/applications/most-rece
 import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
 import { ApplicationsFilterEnum } from '../enums/applications/filter-enum';
 import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-response.dto';
+import { HttpService } from '@nestjs/axios';
+import { firstValueFrom } from 'rxjs';
 
 export const view: Partial<
   Record<ApplicationViews, Prisma.ApplicationsInclude>
@@ -272,6 +274,7 @@ export class ApplicationService {
     private emailService: EmailService,
     private permissionService: PermissionService,
     private geocodingService: GeocodingService,
+    private httpService: HttpService
   ) {}
 
   /*
@@ -757,6 +760,8 @@ export class ApplicationService {
       include: view.details,
     });
 
+    
+
     const mappedApplication = mapTo(Application, rawApplication);
     if (dto.applicant.emailAddress && forPublic) {
       this.emailService.applicationConfirmation(
@@ -764,6 +769,25 @@ export class ApplicationService {
         mappedApplication,
         listing.jurisdictions?.publicUrl,
       );
+    }
+
+    const features = [
+      parseFloat(dto.income?.replace(/[^0-9.]/g, '')) || 30000, // Default to $30k if missing
+      dto.householdSize || 1, // Default to 1 if missing
+      dto.housingStatus === 'homeless' ? 0 : dto.housingStatus === 'renting' ? 1 : 2,
+      dto.incomeVouchers ? 1 : 0,
+      dto.householdExpectingChanges ? 1 : 0,
+      dto.householdStudent ? 1 : 0,
+    ];
+
+    try {
+      const response = await firstValueFrom(
+        this.httpService.post('http://model-service:5000/predict', { features })
+      );
+      mappedApplication.riskScore = response.data.risk_score; // Attach to response only
+    } catch (error) {
+      console.error('Model service error:', error.message);
+      // Continue without riskScore if the call fails
     }
     // Update the lastApplicationUpdateAt to now after every submission
     await this.updateListingApplicationEditTimestamp(listing.id);
