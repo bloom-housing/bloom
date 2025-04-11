@@ -47,7 +47,7 @@ export const lakeviewVilla: Prisma.ListingsCreateInput = {
   leasingAgentEmail: 'bloom@exygy.com',
   leasingAgentName: 'Bloom Bloomington',
   leasingAgentOfficeHours: null,
-  leasingAgentPhone: '(555) 555-5555',
+  leasingAgentPhone: '(313) 555-5555',
   leasingAgentTitle: null,
   name: 'Lakeview Villa',
   postmarkedApplicationsReceivedByDate: null,

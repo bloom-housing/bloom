@@ -47,7 +47,7 @@ export const sunshineFlats: Prisma.ListingsCreateInput = {
   leasingAgentEmail: 'bloom@exygy.com',
   leasingAgentName: 'Bloom Bloomington',
   leasingAgentOfficeHours: null,
-  leasingAgentPhone: '(555) 555-5555',
+  leasingAgentPhone: '(313) 555-5555',
   leasingAgentTitle: null,
   name: 'Sunshine Flats',
   postmarkedApplicationsReceivedByDate: null,
