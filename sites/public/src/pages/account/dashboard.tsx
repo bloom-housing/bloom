@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react"
 import Head from "next/head"
-import { NextRouter, withRouter } from "next/router"
+import { useRouter } from "next/router"
 import {
   FeatureFlagEnum,
   Jurisdiction,
@@ -24,13 +24,13 @@ import { fetchJurisdictionByName } from "../../lib/hooks"
 import styles from "./account.module.scss"
 
 interface DashboardProps {
-  router: NextRouter
   jurisdiction: Jurisdiction
 }
 
 function Dashboard(props: DashboardProps) {
   const { profile } = useContext(AuthContext)
   const [alertMessage, setAlertMessage] = useState<string | null>(null)
+  const router = useRouter()
 
   useEffect(() => {
     if (profile) {
@@ -40,10 +40,8 @@ function Dashboard(props: DashboardProps) {
         status: UserStatus.LoggedIn,
       })
     }
-    if (props.router.query?.alert) {
-      const alert = Array.isArray(props.router.query.alert)
-        ? props.router.query.alert[0]
-        : props.router.query.alert
+    if (router.query?.alert) {
+      const alert = Array.isArray(router.query.alert) ? router.query.alert[0] : router.query.alert
       setAlertMessage(alert)
     }
 
@@ -53,10 +51,10 @@ function Dashboard(props: DashboardProps) {
         isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableListingFavoriting) === true
       ).toString()
     )
-  }, [props.router, props.jurisdiction, profile])
+  }, [router, props.jurisdiction, profile])
 
   const closeAlert = () => {
-    void props.router.push("/account/dashboard", undefined, { shallow: true })
+    void router.push("/account/dashboard", undefined, { shallow: true })
     setAlertMessage(null)
   }
 
@@ -153,7 +151,7 @@ function Dashboard(props: DashboardProps) {
   )
 }
 
-export default withRouter(Dashboard)
+export default Dashboard
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getStaticProps() {
