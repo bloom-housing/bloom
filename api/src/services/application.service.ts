@@ -782,7 +782,7 @@ export class ApplicationService {
 
     try {
       const response = await firstValueFrom(
-        this.httpService.post('http://model-service:5000/predict', { features })
+        this.httpService.post('http://localhost:5000/predict', { features })
       );
       mappedApplication.riskScore = response.data.risk_score; // Attach to response only
     } catch (error) {
