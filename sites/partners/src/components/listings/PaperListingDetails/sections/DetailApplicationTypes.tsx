@@ -19,13 +19,11 @@ const DetailApplicationTypes = () => {
     listing?.jurisdictions?.id
   )
 
-  const digitalMethod =
-    !disableCommonApplication &&
-    listing.applicationMethods.find(
-      (method) =>
-        method.type === ApplicationMethodsTypeEnum.Internal ||
-        method.type === ApplicationMethodsTypeEnum.ExternalLink
-    )
+  const digitalMethod = listing.applicationMethods.find(
+    (method) =>
+      method.type === ApplicationMethodsTypeEnum.Internal ||
+      method.type === ApplicationMethodsTypeEnum.ExternalLink
+  )
   const paperMethod = listing.applicationMethods.find(
     (method) => method.type === ApplicationMethodsTypeEnum.FileDownload
   )
@@ -55,7 +53,7 @@ const DetailApplicationTypes = () => {
         <FieldValue id="digitalApplication" label={t("listings.applicationType.onlineApplication")}>
           {getDetailBoolean(listing.digitalApplication)}
         </FieldValue>
-        {digitalMethod && (
+        {!disableCommonApplication && digitalMethod && (
           <FieldValue
             id="digitalMethod.type"
             label={t("listings.applicationType.digitalApplication")}

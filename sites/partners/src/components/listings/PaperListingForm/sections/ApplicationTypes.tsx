@@ -37,16 +37,11 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // watch fields
+  const jurisdiction: string = watch("jurisdictions.id")
   const digitalApplicationChoice = watch("digitalApplicationChoice")
   const commonDigitalApplicationChoice = watch("commonDigitalApplicationChoice")
   const paperApplicationChoice = watch("paperApplicationChoice")
   const referralOpportunityChoice = watch("referralOpportunityChoice")
-
-  const disableCommonApplication = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.disableCommonApplication,
-    listing?.jurisdictions?.id,
-    true
-  )
 
   /*
     Set state for methods, drawer, upload progress, and more
@@ -71,6 +66,10 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
     })
     setDrawerState(false)
   }
+
+  const disableCommonApplication = jurisdiction
+    ? doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.disableCommonApplication, jurisdiction)
+    : false
 
   const yesNoRadioOptions = [
     {
@@ -303,7 +302,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
           )}
         </Grid.Row>
         {digitalApplicationChoice === YesNoEnum.yes &&
-          (!disableCommonApplication ||
+          (disableCommonApplication ||
             commonDigitalApplicationChoice === YesNoEnum.no ||
             (!commonDigitalApplicationChoice && listing?.commonDigitalApplication === false)) && (
             <Grid.Row columns={1}>
@@ -333,7 +332,6 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               </Grid.Cell>
             </Grid.Row>
           )}
-
         <Grid.Row columns={2}>
           <Grid.Cell>
             <p
@@ -442,7 +440,6 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             </Grid.Cell>
           </Grid.Row>
         )}
-
         <Grid.Row columns={1}>
           <Grid.Cell>
             <p
