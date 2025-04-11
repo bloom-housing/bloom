@@ -1,4 +1,5 @@
 import {
+  ApplicationMethodsTypeEnum,
   ApplicationSubmissionTypeEnum,
   LanguagesEnum,
   ListingsStatusEnum,
@@ -90,6 +91,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableListingsPagination,
         FeatureFlagEnum.disableJurisdictionalAdmin,
         FeatureFlagEnum.enableListingFavoriting,
+        FeatureFlagEnum.disableCommonApplication,
       ],
     }),
   });
@@ -740,7 +742,13 @@ export const stagingSeed = async (
       listing: {
         additionalApplicationSubmissionNotes: null,
         digitalApplication: true,
-        commonDigitalApplication: true,
+        commonDigitalApplication: false,
+        applicationMethods: {
+          create: {
+            type: ApplicationMethodsTypeEnum.ExternalLink,
+            externalReference: 'https://example.com/application',
+          },
+        },
         paperApplication: false,
         referralOpportunity: false,
         assets: [],

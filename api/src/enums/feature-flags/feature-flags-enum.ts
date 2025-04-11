@@ -19,8 +19,9 @@ export enum FeatureFlagEnum {
   enableListingOpportunity = 'enableListingOpportunity',
   enablePartnerDemographics = 'enablePartnerDemographics',
   enablePartnerSettings = 'enablePartnerSettings',
-  disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
   enableListingFavoriting = 'enableListingFavoriting',
+  disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
+  disableCommonApplication = 'disableCommonApplication',
 }
 
 // List of all of existing flags and their descriptions.
@@ -114,5 +115,9 @@ export const featureFlagMap: { name: string; description: string }[] = [
   {
     name: FeatureFlagEnum.disableJurisdictionalAdmin,
     description: 'When true, jurisdictional admins cannot be created',
+  },
+  {
+    name: FeatureFlagEnum.disableCommonApplication,
+    description: 'When true, the digital common application is not an option for listings',
   },
 ];
