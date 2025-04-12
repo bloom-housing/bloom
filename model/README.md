@@ -112,13 +112,13 @@ kubectl apply -f service.yaml
 To forward the service to your machine's port:
 
 ```bash
-kubectl port-forward service/housing-service 5000:5000
+kubectl port-forward housing-service-loadbalancer 5000:5000
 ```
 
 Or to open it in your browser:
 
 ```bash
-minikube service housing-service
+minikube service housing-service-loadbalancer
 ```
 
 ---
