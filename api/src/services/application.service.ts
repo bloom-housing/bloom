@@ -773,7 +773,7 @@ export class ApplicationService {
     // Application is created, now we need to call the ML model to get the risk score
     // Anonymous features are passed to the model
     const features = {
-      income: parseFloat(dto.income?.replace(/[^0-9.]/g, '')) || 30000,
+      income: parseFloat(dto.income?.replace(/[^0-9.]/g, '')) || 0,
       household_size: dto.householdSize || 1,
       housing_status: dto.housingStatus === 'homeless' ? 0 : dto.housingStatus === 'renting' ? 1 : 2,
       income_vouchers: dto.incomeVouchers ? 1 : 0,
