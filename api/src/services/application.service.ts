@@ -770,25 +770,26 @@ export class ApplicationService {
         listing.jurisdictions?.publicUrl,
       );
     }
-
-    const features = [
-      parseFloat(dto.income?.replace(/[^0-9.]/g, '')) || 30000, // Default to $30k if missing
-      dto.householdSize || 1, // Default to 1 if missing
-      dto.housingStatus === 'homeless' ? 0 : dto.housingStatus === 'renting' ? 1 : 2,
-      dto.incomeVouchers ? 1 : 0,
-      dto.householdExpectingChanges ? 1 : 0,
-      dto.householdStudent ? 1 : 0,
-    ];
-
+    // Application is created, now we need to call the ML model to get the risk score
+    // Anonymous features are passed to the model
+    const features = {
+      income: parseFloat(dto.income?.replace(/[^0-9.]/g, '')) || 30000,
+      household_size: dto.householdSize || 1,
+      housing_status: dto.housingStatus === 'homeless' ? 0 : dto.housingStatus === 'renting' ? 1 : 2,
+      income_vouchers: dto.incomeVouchers ? 1 : 0,
+      household_expecting_changes: dto.householdExpectingChanges ? 1 : 0,
+      household_student: dto.householdStudent ? 1 : 0,
+    };
+    
     try {
       const response = await firstValueFrom(
         this.httpService.post('http://localhost:5000/predict', { features })
       );
-      mappedApplication.riskScore = response.data.risk_score; // Attach to response only
+      mappedApplication.riskScore = response.data.risk_score;
     } catch (error) {
       console.error('Model service error:', error.message);
-      // Continue without riskScore if the call fails
     }
+    
     // Update the lastApplicationUpdateAt to now after every submission
     await this.updateListingApplicationEditTimestamp(listing.id);
 

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: housing-service-loadbalancer
+spec:
+  selector:
+    app: housing-service
+  ports:
+    - protocol: TCP
+      port: 80        # External port (can be any port)
+      targetPort: 5000 # Internal port where the app is running
+  type: LoadBalancer

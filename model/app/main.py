@@ -23,8 +23,10 @@ def predict():
         if not data or "features" not in data:
             return jsonify({"error": "Missing 'features' in request body"}), 400
 
-        # Validate input
-        features = data["features"]
+        feature_dict = data["features"]
+        
+        # These can obviously be changed to match the model's expected input
+        # This are just the mock features I used to train the model
         expected_features = [
             "income",
             "household_size",
@@ -33,12 +35,15 @@ def predict():
             "household_expecting_changes",
             "household_student"
         ]
-        if len(features) != len(expected_features):
-            return jsonify({"error": f"Input must contain exactly {len(expected_features)} features: {expected_features}"}), 400
 
-        # Preprocess input
-        df = pd.DataFrame([features], columns=expected_features)
-        input_data = df[expected_features].to_numpy()
+        # Validate input
+        missing = [key for key in expected_features if key not in feature_dict]
+        if missing:
+            return jsonify({"error": f"Missing keys: {missing}"}), 400
+
+        df = pd.DataFrame([feature_dict], columns=expected_features)
+        input_data = df.to_numpy()
+
 
         # Make prediction
         risk_score = model.predict_proba(input_data)[0][1]  # Probability of high risk (class 1)
