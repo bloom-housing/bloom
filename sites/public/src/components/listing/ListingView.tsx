@@ -937,6 +937,7 @@ export const ListingView = (props: ListingProps) => {
                 contactPhoneNumber={`${t("t.call")} ${listing.leasingAgentPhone}`}
                 contactPhoneNumberNote={t("leasingAgent.dueToHighCallVolume")}
                 contactTitle={listing.leasingAgentTitle}
+                contactCompany={{ name: listing.developer, website: listing.managementWebsite }}
                 strings={{
                   email: t("t.email"),
                   website: t("t.website"),
