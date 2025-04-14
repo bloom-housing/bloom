@@ -175,35 +175,37 @@ const UnitGroupAmiForm = ({
                     validation={{ required: true }}
                   />
                 </FieldValue>
-                {rentType === EnumUnitGroupAmiLevelMonthlyRentDeterminationType.flatRent ? (
-                  <FieldValue label={t("listings.unit.monthlyRent")}>
-                    <Field
-                      label={t("listings.unit.monthlyRent")}
-                      name="flatRentValue"
-                      id="flatRentValue"
-                      readerOnly
-                      register={register}
-                      type="number"
-                      error={errors?.flatRentValue}
-                      errorMessage={t("errors.requiredFieldError")}
-                      validation={{ required: true }}
-                    />
-                  </FieldValue>
-                ) : (
-                  <FieldValue label={t("listings.unit.percentage")}>
-                    <Field
-                      label={t("listings.unit.percentage")}
-                      name="percentageOfIncomeValue"
-                      id="percentageOfIncomeValue"
-                      readerOnly
-                      register={register}
-                      type="number"
-                      error={errors?.percentageOfIncomeValue}
-                      errorMessage={t("errors.requiredFieldError")}
-                      validation={{ required: true }}
-                    />
-                  </FieldValue>
-                )}
+
+                {rentType &&
+                  (rentType === EnumUnitGroupAmiLevelMonthlyRentDeterminationType.flatRent ? (
+                    <FieldValue label={t("listings.unit.monthlyRent")}>
+                      <Field
+                        label={t("listings.unit.monthlyRent")}
+                        name="flatRentValue"
+                        id="flatRentValue"
+                        readerOnly
+                        register={register}
+                        type="number"
+                        error={errors?.flatRentValue}
+                        errorMessage={t("errors.requiredFieldError")}
+                        validation={{ required: true }}
+                      />
+                    </FieldValue>
+                  ) : (
+                    <FieldValue label={t("listings.unit.percentage")}>
+                      <Field
+                        label={t("listings.unit.percentage")}
+                        name="percentageOfIncomeValue"
+                        id="percentageOfIncomeValue"
+                        readerOnly
+                        register={register}
+                        type="number"
+                        error={errors?.percentageOfIncomeValue}
+                        errorMessage={t("errors.requiredFieldError")}
+                        validation={{ required: true }}
+                      />
+                    </FieldValue>
+                  ))}
               </Grid.Row>
             </SectionWithGrid>
           </Card.Section>
