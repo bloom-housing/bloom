@@ -7084,6 +7084,7 @@ export enum FeatureFlagEnum {
   "enablePartnerSettings" = "enablePartnerSettings",
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
   "enableListingFavoriting" = "enableListingFavoriting",
+  "enableCompanyWebsite" = "enableCompanyWebsite",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {
   "=" = "=",
