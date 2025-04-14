@@ -325,7 +325,12 @@ const FormUnits = ({
   return (
     <>
       <hr className="spacer-section-above spacer-section" />
-      <SectionWithGrid heading={t("listings.units")} subheading={t("listings.unitsDescription")}>
+      <SectionWithGrid
+        heading={t("listings.units")}
+        subheading={t(
+          enableUnitGroups ? "listings.unitGroupsDescription" : "listings.unitsDescription"
+        )}
+      >
         {homeTypeEnabled && (
           <Grid.Row columns={2}>
             <FieldValue label={t("listings.homeType")}>
@@ -404,7 +409,7 @@ const FormUnits = ({
                 clearErrors("units")
               }}
             >
-              {t("listings.unit.add")}
+              {t(enableUnitGroups ? "listings.unitGroupd.add" : "listings.unit.add")}
             </Button>
           </Grid.Cell>
         </Grid.Row>
@@ -450,7 +455,7 @@ const FormUnits = ({
         ariaLabelledBy="units-drawer-header"
       >
         <Drawer.Header id="units-drawer-header">
-          {t("listings.unit.add")}
+          {t(enableUnitGroups ? "listings.unitGroupd.add" : "listings.unit.add")}
           <Tag
             variant={
               units.some((unit) => unit.tempId === defaultUnit?.tempId)
