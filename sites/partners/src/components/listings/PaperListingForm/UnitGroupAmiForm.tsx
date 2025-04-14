@@ -162,6 +162,8 @@ const UnitGroupAmiForm = ({
                     controlClassName="control"
                     register={register}
                     disabled={!amiChartID}
+                    error={fieldHasError(errors?.amiPercentage)}
+                    errorMessage={t("errors.requiredFieldError")}
                     validation={{ required: true }}
                   />
                 </FieldValue>
@@ -171,7 +173,7 @@ const UnitGroupAmiForm = ({
                     type="radio"
                     fields={rentTypeOptions}
                     register={register}
-                    error={errors?.monthlyRentDeterminationType}
+                    error={fieldHasError(errors?.monthlyRentDeterminationType)}
                     errorMessage={t("errors.requiredFieldError")}
                     validation={{ required: true }}
                   />
