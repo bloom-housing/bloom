@@ -23,7 +23,7 @@ import { fetchFavoriteListingIds, isFeatureFlagOn, saveListingFavorite } from ".
 import { PageHeaderSection } from "../../patterns/PageHeaderLayout"
 import { ListingCard } from "./ListingCard"
 import styles from "./ListingBrowse.module.scss"
-import FilterDrawer from "../listing/FilterDrawer"
+import { FilterDrawer } from "../listing/FilterDrawer"
 
 export interface ListingBrowseProps {
   openListings: Listing[]

@@ -1,4 +1,4 @@
-import { Field, FieldGroup, Form, GridCell, t } from "@bloom-housing/ui-components"
+import { Field, Form, t } from "@bloom-housing/ui-components"
 import { Button, Drawer, Grid } from "@bloom-housing/ui-seeds"
 import { useForm, UseFormMethods } from "react-hook-form"
 import { listingFeatures } from "@bloom-housing/shared-helpers"
@@ -31,22 +31,6 @@ export interface FilterDrawerProps {
   onClose: () => void
 }
 
-const getBdrmTranslation = (key) => {
-  const strBase = "listingFilters.bedroomsOptions"
-  switch (key) {
-    case "studio":
-      return t(`${strBase}.studioPlus`)
-    case "oneBdrm":
-      return t(`${strBase}.onePlus`)
-    case "twoBdrm":
-      return t(`${strBase}.twoPlus`)
-    case "threeBdrm":
-      return t(`${strBase}.threePlus`)
-    case "fourBdrm":
-      return t(`${strBase}.fourPlus`)
-  }
-}
-
 // remove doorway specific enum references
 const filterAvailabilityCleaned = Object.keys(FilterAvailabilityEnum).filter(
   (elem) => elem != FilterAvailabilityEnum.waitlistOpen
@@ -64,6 +48,22 @@ const buildDefaultFilterFields = (stringBase: string, keyArr: string[]): FilterF
     }
   })
 
+const getBdrmTranslation = (key) => {
+  const strBase = "listingFilters.bedroomsOptions"
+  switch (key) {
+    case "studio":
+      return t(`${strBase}.studioPlus`)
+    case "oneBdrm":
+      return t(`${strBase}.onePlus`)
+    case "twoBdrm":
+      return t(`${strBase}.twoPlus`)
+    case "threeBdrm":
+      return t(`${strBase}.threePlus`)
+    case "fourBdrm":
+      return t(`${strBase}.fourPlus`)
+  }
+}
+
 const CheckboxGroup = (props: CheckboxGroupProps) => {
   return (
     <fieldset className={styles["filter-section"]}>
@@ -71,7 +71,7 @@ const CheckboxGroup = (props: CheckboxGroupProps) => {
         <legend>{props.groupLabel}</legend>
       </Grid.Row>
       <Grid.Row columns={props.customRowNumber ?? 3}>
-        {props.fields.map((field, idx) => {
+        {props.fields.map((field) => {
           return (
             <Grid.Cell>
               <Field

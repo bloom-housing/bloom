@@ -3,7 +3,6 @@ import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/b
 import { fetchClosedListings, fetchJurisdictionByName, fetchOpenListings } from "../lib/hooks"
 import { ListingBrowse } from "../components/browse/ListingBrowse"
 import { ListingBrowseDeprecated } from "../components/browse/ListingBrowseDeprecated"
-import { FilterDrawer } from "../components/listing/FilterDrawer"
 
 export interface ListingsProps {
   openListings: Listing[]
