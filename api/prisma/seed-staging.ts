@@ -44,6 +44,8 @@ export const stagingSeed = async (
   jurisdictionName: string,
   largeSeed?: boolean,
 ) => {
+  // Seed feature flags
+  await createAllFeatureFlags(prismaClient);
   //doorway-specific permissions
   const listingApprovalPermissions = [UserRoleEnum.admin];
   const duplicateListingPermissions = [
@@ -128,8 +130,6 @@ export const stagingSeed = async (
     Sonoma: sonomaCounty.id,
     'San Francisco': sanFranciscoCounty.id,
   };
-  // Seed feature flags
-  await createAllFeatureFlags(prismaClient);
   // create main jurisdiction with as many feature flags turned on as possible
   const mainJurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory(jurisdictionName, {
