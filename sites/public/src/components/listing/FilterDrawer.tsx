@@ -9,12 +9,16 @@ import {
   HomeTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import styles from "./FilterDrawer.module.scss"
-import { useEffect } from "react"
+
+export interface FilterField {
+  key: string
+  label: string
+  // defaultValue: boolean
+}
 
 export interface CheckboxGroupProps {
-  label: string
-  keyArr: string[]
-  stringBase: string | string[]
+  groupLabel: string
+  fields: FilterField[]
   register: UseFormMethods["register"]
   customRowNumber?: number
 }
@@ -27,42 +31,53 @@ export interface FilterDrawerProps {
   onClose: () => void
 }
 
-const getBdrmTranslationArr = (strArr: string[]) => {
-  const strBase = "listingFilters.bedroomsOptions."
-  const translationArr = []
-  strArr.forEach((str) => {
-    if (str === "studio") {
-      translationArr.push(t(`${strBase}studioPlus`))
-    } else if (str === "oneBdrm") {
-      translationArr.push(t(`${strBase}onePlus`))
-    } else if (str === "twoBdrm") {
-      translationArr.push(t(`${strBase}twoPlus`))
-    } else if (str === "threeBdrm") {
-      translationArr.push(t(`${strBase}threePlus`))
-    } else if (str === "fourBdrm") {
-      translationArr.push(t(`${strBase}fourPlus`))
+const getBdrmTranslation = (key) => {
+  const strBase = "listingFilters.bedroomsOptions"
+  switch (key) {
+    case "studio":
+      return t(`${strBase}.studioPlus`)
+    case "oneBdrm":
+      return t(`${strBase}.onePlus`)
+    case "twoBdrm":
+      return t(`${strBase}.twoPlus`)
+    case "threeBdrm":
+      return t(`${strBase}.threePlus`)
+    case "fourBdrm":
+      return t(`${strBase}.fourPlus`)
+  }
+}
+
+// remove doorway specific enum references
+const filterAvailabilityCleaned = Object.keys(FilterAvailabilityEnum).filter(
+  (elem) => elem != FilterAvailabilityEnum.waitlistOpen
+)
+
+const unitTypeCleaned = Object.keys(UnitTypeEnum).filter(
+  (unitType) => unitType !== UnitTypeEnum.SRO && unitType != UnitTypeEnum.fiveBdrm
+)
+
+const buildDefaultFilterFields = (stringBase: string, keyArr: string[]): FilterField[] =>
+  keyArr.map((key) => {
+    return {
+      key: key,
+      label: t(`${stringBase}.${key}`),
     }
   })
-  return translationArr
-}
 
 const CheckboxGroup = (props: CheckboxGroupProps) => {
   return (
     <fieldset className={styles["filter-section"]}>
       <Grid.Row className={styles["filter-section-label"]}>
-        <legend>{props.label}</legend>
+        <legend>{props.groupLabel}</legend>
       </Grid.Row>
       <Grid.Row columns={props.customRowNumber ?? 3}>
-        {props.keyArr.map((key, idx) => {
-          const fieldLabel = Array.isArray(props.stringBase)
-            ? props.stringBase[idx]
-            : t(`${props.stringBase}.${key}`)
+        {props.fields.map((field, idx) => {
           return (
             <Grid.Cell>
               <Field
-                id={key}
-                name={key}
-                label={fieldLabel}
+                id={field.key}
+                name={field.key}
+                label={field.label}
                 labelClassName={styles["filter-checkbox-label"]}
                 type="checkbox"
                 register={props.register}
@@ -135,13 +150,11 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             errorMessage={t("errors.maxLessThanMinRentError")}
             validation={{ min: minRent }}
             register={props.register}
-            inputProps={{
-              onBlur: () => {
-                void trigger("minRent")
-                void trigger("maxRent")
-              },
-              min: 0,
+            onChange={() => {
+              void trigger("minRent")
+              void trigger("maxRent")
             }}
+            inputProps={{ min: 0 }}
           ></Field>
         </Grid.Cell>
       </Grid.Row>
@@ -160,70 +173,71 @@ const FilterDrawer = (props: FilterDrawerProps) => {
   )
 
   return (
-    <Drawer
-      isOpen={props.isOpen}
-      className={styles["filter-drawer"]}
-      onClose={props.onClose}
-      ariaLabelledBy="drawer-heading"
-      ariaDescribedBy="drawer-content"
-    >
-      <Drawer.Header id="drawer-heading">{t("t.filter")}</Drawer.Header>
-      <Drawer.Content id="drawer-content">
-        <Form onSubmit={() => false}>
+    <Form onSubmit={() => false}>
+      <Drawer
+        isOpen={props.isOpen}
+        className={styles["filter-drawer"]}
+        onClose={props.onClose}
+        ariaLabelledBy="drawer-heading"
+        ariaDescribedBy="drawer-content"
+      >
+        <Drawer.Header id="drawer-heading">{t("t.filter")}</Drawer.Header>
+        <Drawer.Content id="drawer-content">
           <CheckboxGroup
-            label={t("publicFilter.confirmedListings")}
-            keyArr={["showConfirmedListings"]}
-            stringBase={[t("publicFilter.confirmedListingsFieldLabel")]}
+            groupLabel={t("publicFilter.confirmedListings")}
+            fields={[
+              {
+                key: "showConfirmedListings",
+                label: t("publicFilter.confirmedListingsFieldLabel"),
+              },
+            ]}
             register={register}
             customRowNumber={1}
           />
           <CheckboxGroup
-            label={t("t.availability")}
-            keyArr={Object.keys(FilterAvailabilityEnum).filter(
-              (elem) => elem != FilterAvailabilityEnum.waitlistOpen
-            )}
-            stringBase={t("listings")}
+            groupLabel={t("t.availability")}
+            fields={buildDefaultFilterFields("listings", filterAvailabilityCleaned)}
             register={register}
           />
           <CheckboxGroup
-            label={t("listings.homeType")}
-            keyArr={Object.keys(HomeTypeEnum)}
-            stringBase={"homeType"}
+            groupLabel={t("listings.homeType")}
+            fields={buildDefaultFilterFields("homeType", Object.keys(HomeTypeEnum))}
             register={register}
           />
           <CheckboxGroup
-            label={t("publicFilter.bedroomSize")}
-            keyArr={Object.keys(UnitTypeEnum).filter(
-              (unitType) => unitType !== UnitTypeEnum.SRO && unitType != UnitTypeEnum.fiveBdrm
-            )}
-            stringBase={getBdrmTranslationArr(Object.keys(UnitTypeEnum))}
+            groupLabel={t("publicFilter.bedroomSize")}
+            fields={unitTypeCleaned.map((unitType) => {
+              return {
+                key: unitType,
+                label: getBdrmTranslation(unitType),
+              }
+            })}
             register={register}
           />
           <RentSection register={register} />
-          {/* fix string building for region */}
           <CheckboxGroup
-            label={t("t.region")}
-            keyArr={Object.keys(RegionEnum)}
-            stringBase={"listingFilters.region"}
+            groupLabel={t("t.region")}
+            fields={Object.keys(RegionEnum).map((region) => {
+              return { key: region, label: region.replace("_", " ") }
+            })}
             register={register}
           />
           <CheckboxGroup
-            label={t("eligibility.accessibility.title")}
-            keyArr={listingFeatures}
-            stringBase={"eligibility.accessibility"}
+            groupLabel={t("eligibility.accessibility.title")}
+            fields={buildDefaultFilterFields("eligibility.accessibility", listingFeatures)}
             register={register}
           />
-        </Form>
-      </Drawer.Content>
-      <Drawer.Footer>
-        <Button variant="primary" onClick={() => onFormSubmit()} size="sm">
-          {t("listings.showMatchingListings")}
-        </Button>
-        <Button variant="primary-outlined" size="sm" onClick={props.onClose}>
-          {t("t.cancel")}
-        </Button>
-      </Drawer.Footer>
-    </Drawer>
+        </Drawer.Content>
+        <Drawer.Footer>
+          <Button variant="primary" onClick={() => onFormSubmit()} size="sm">
+            {t("listings.showMatchingListings")}
+          </Button>
+          <Button variant="primary-outlined" size="sm" onClick={props.onClose}>
+            {t("t.cancel")}
+          </Button>
+        </Drawer.Footer>
+      </Drawer>
+    </Form>
   )
 }
 
