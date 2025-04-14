@@ -1,12 +1,45 @@
 import React from "react"
-import { render, cleanup } from "@testing-library/react"
+import { render, cleanup, screen } from "@testing-library/react"
 import { Neighborhood } from "../../../../src/components/listing/listing_sections/Neighborhood"
 
 afterEach(cleanup)
 
 describe("<Neighborhood>", () => {
   it("shows all content", () => {
-    const { getByText, getAllByText } = render(
+    render(
+      <Neighborhood
+        address={{
+          id: "id",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          city: "Address city",
+          street: "Address street",
+          street2: "Address unit",
+          zipCode: "67890",
+          state: "CA",
+          latitude: 1,
+          longitude: 2,
+        }}
+        name={"Listing name"}
+        neighborhood={"Westend"}
+        region={"Downtown"}
+        neighborhoodAmenities={{ groceryStores: "Market", pharmacies: "Health store" }}
+      />
+    )
+    expect(screen.getAllByText("Neighborhood").length).toBe(3)
+    expect(screen.getAllByText("Location and transportation").length).toBe(2)
+    expect(screen.getByText("Get Directions")).toBeDefined()
+    expect(screen.getByText("Westend")).toBeDefined()
+    expect(screen.getByText("Region")).toBeDefined()
+    expect(screen.getByText("Downtown")).toBeDefined()
+    expect(screen.getByText("Within 2 miles")).toBeDefined()
+    expect(screen.getByText("Grocery Stores")).toBeDefined()
+    expect(screen.getByText("Market")).toBeDefined()
+    expect(screen.getByText("Pharmacies")).toBeDefined()
+    expect(screen.getByText("Health store")).toBeDefined()
+  })
+  it("hides optional content", () => {
+    render(
       <Neighborhood
         address={{
           id: "id",
@@ -23,8 +56,10 @@ describe("<Neighborhood>", () => {
         name={"Listing name"}
       />
     )
-    expect(getAllByText("Neighborhood").length).toBeGreaterThan(0)
-    expect(getAllByText("Location and transportation").length).toBeGreaterThan(0)
-    expect(getByText("Get Directions")).toBeDefined()
+    expect(screen.getAllByText("Neighborhood").length).toBe(2)
+    expect(screen.getAllByText("Location and transportation").length).toBe(2)
+    expect(screen.getByText("Get Directions")).toBeDefined()
+    expect(screen.queryByText("Region")).toBeNull()
+    expect(screen.queryByText("Within 2 miles")).toBeNull()
   })
 })

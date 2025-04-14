@@ -26,9 +26,9 @@ export const Neighborhood = ({
   region,
 }: NeighborhoodProps) => {
   const googleMapsHref = "https://www.google.com/maps/place/" + oneLineAddress(address)
-  const hasNeighborhoodAmenities = Object.values(neighborhoodAmenities).some(
-    (value) => value !== null && value !== undefined
-  )
+  const hasNeighborhoodAmenities = neighborhoodAmenities
+    ? Object.values(neighborhoodAmenities).some((value) => value !== null && value !== undefined)
+    : null
 
   return (
     <CollapsibleSection
@@ -68,7 +68,7 @@ export const Neighborhood = ({
               headingPriority={3}
               className={`${styles["heading-group"]} seeds-m-bs-section`}
             />
-            {Object.keys(neighborhoodAmenities).map((amenity) => {
+            {Object.keys(neighborhoodAmenities).map((amenity, index) => {
               if (!neighborhoodAmenities[amenity]) return
               return (
                 <HeadingGroup
@@ -77,6 +77,7 @@ export const Neighborhood = ({
                   size={"lg"}
                   headingPriority={4}
                   className={`${styles["heading-group"]} ${styles["nested-heading-group"]} seeds-m-bs-content`}
+                  key={index}
                 />
               )
             })}
