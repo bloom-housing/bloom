@@ -91,8 +91,6 @@ const LeasingAgent = () => {
               placeholder={t("leasingAgent.title")}
               register={register}
             />
-          </Grid.Cell>
-          <Grid.Cell>
             <Field
               label={t("leasingAgent.managementWebsite")}
               name={"managementWebsite"}
