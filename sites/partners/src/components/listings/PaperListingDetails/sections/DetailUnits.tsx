@@ -141,24 +141,26 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
           </FieldValue>
         </Grid.Row>
       )}
-      <Grid.Row>
-        <FieldValue
-          id="unitTypesOrIndividual"
-          testId={"unit-types-or-individual"}
-          label={t("listings.unitTypesOrIndividual")}
-          children={
-            listing.disableUnitsAccordion
-              ? t("listings.unit.unitTypes")
-              : t("listings.unit.individualUnits")
-          }
-        />
-        <FieldValue
-          id="listings.listingAvailabilityQuestion"
-          testId={"listing-availability-question"}
-          label={t("listings.listingAvailabilityQuestion")}
-          children={listingAvailabilityText}
-        />
-      </Grid.Row>
+      {!enableUnitGroups && (
+        <Grid.Row>
+          <FieldValue
+            id="unitTypesOrIndividual"
+            testId={"unit-types-or-individual"}
+            label={t("listings.unitTypesOrIndividual")}
+            children={
+              listing.disableUnitsAccordion
+                ? t("listings.unit.unitTypes")
+                : t("listings.unit.individualUnits")
+            }
+          />
+          <FieldValue
+            id="listings.listingAvailabilityQuestion"
+            testId={"listing-availability-question"}
+            label={t("listings.listingAvailabilityQuestion")}
+            children={listingAvailabilityText}
+          />
+        </Grid.Row>
+      )}
       <Grid.Row>
         <Grid.Cell>
           {(enableUnitGroups ? !!listing.unitGroups : !!listing.units.length) ? (
