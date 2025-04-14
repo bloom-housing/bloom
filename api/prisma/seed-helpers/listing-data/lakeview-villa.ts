@@ -1,8 +1,13 @@
-import { ListingsStatusEnum, ReviewOrderTypeEnum } from '@prisma/client';
+import {
+  ListingsStatusEnum,
+  ReviewOrderTypeEnum,
+  Prisma,
+  RegionEnum,
+} from '@prisma/client';
 import dayjs from 'dayjs';
 import { yellowstoneAddress } from '../address-factory';
 
-export const lakeviewVilla = {
+export const lakeviewVilla: Prisma.ListingsCreateInput = {
   additionalApplicationSubmissionNotes: null,
   digitalApplication: true,
   commonDigitalApplication: true,
@@ -15,7 +20,8 @@ export const lakeviewVilla = {
   developer: 'Bloom',
   householdSizeMax: 0,
   householdSizeMin: 0,
-  neighborhood: 'Hollywood',
+  neighborhood: 'Greater Downtown area',
+  region: RegionEnum.Greater_Downtown,
   petPolicy: null,
   smokingPolicy: null,
   unitAmenities: null,
@@ -42,7 +48,7 @@ export const lakeviewVilla = {
   leasingAgentEmail: 'bloom@exygy.com',
   leasingAgentName: 'Bloom Bloomington',
   leasingAgentOfficeHours: null,
-  leasingAgentPhone: '(555) 555-5555',
+  leasingAgentPhone: '(313) 555-5555',
   leasingAgentTitle: null,
   name: 'Lakeview Villa',
   postmarkedApplicationsReceivedByDate: null,
@@ -82,7 +88,7 @@ export const lakeviewVilla = {
       assets: {
         create: {
           label: 'cloudinaryBuilding',
-          fileId: 'dev/apartment_building_2_b7ujdd',
+          fileId: 'dev/unnamed_fkxrj2',
         },
       },
     },
