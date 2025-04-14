@@ -229,7 +229,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
               neighborhood={listing.neighborhood}
               region={
                 isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableRegions)
-                  ? listing.region.toString().replace("_", " ")
+                  ? listing.region?.toString().replace("_", " ")
                   : null
               }
             />

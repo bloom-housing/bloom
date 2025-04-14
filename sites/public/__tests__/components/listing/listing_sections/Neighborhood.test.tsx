@@ -26,16 +26,17 @@ describe("<Neighborhood>", () => {
         neighborhoodAmenities={{ groceryStores: "Market", pharmacies: "Health store" }}
       />
     )
-    expect(screen.getAllByText("Neighborhood").length).toBe(3)
+    expect(screen.getAllByRole("heading", { name: "Neighborhood", level: 2 }).length).toBe(2)
+    expect(screen.getByRole("heading", { name: "Neighborhood", level: 3 })).toBeDefined()
     expect(screen.getAllByText("Location and transportation").length).toBe(2)
-    expect(screen.getByText("Get Directions")).toBeDefined()
+    expect(screen.getByRole("link", { name: "Get Directions (opens in a new tab)" })).toBeDefined()
     expect(screen.getByText("Westend")).toBeDefined()
-    expect(screen.getByText("Region")).toBeDefined()
+    expect(screen.getByRole("heading", { name: "Region", level: 3 })).toBeDefined()
     expect(screen.getByText("Downtown")).toBeDefined()
-    expect(screen.getByText("Within 2 miles")).toBeDefined()
-    expect(screen.getByText("Grocery Stores")).toBeDefined()
+    expect(screen.getByRole("heading", { name: "Within 2 miles", level: 3 })).toBeDefined()
+    expect(screen.getByRole("heading", { name: "Grocery Stores", level: 4 })).toBeDefined()
     expect(screen.getByText("Market")).toBeDefined()
-    expect(screen.getByText("Pharmacies")).toBeDefined()
+    expect(screen.getByRole("heading", { name: "Pharmacies", level: 4 })).toBeDefined()
     expect(screen.getByText("Health store")).toBeDefined()
   })
   it("hides optional content", () => {
@@ -56,9 +57,9 @@ describe("<Neighborhood>", () => {
         name={"Listing name"}
       />
     )
-    expect(screen.getAllByText("Neighborhood").length).toBe(2)
+    expect(screen.getAllByRole("heading", { name: "Neighborhood", level: 2 }).length).toBe(2)
     expect(screen.getAllByText("Location and transportation").length).toBe(2)
-    expect(screen.getByText("Get Directions")).toBeDefined()
+    expect(screen.getByRole("link", { name: "Get Directions (opens in a new tab)" })).toBeDefined()
     expect(screen.queryByText("Region")).toBeNull()
     expect(screen.queryByText("Within 2 miles")).toBeNull()
   })
