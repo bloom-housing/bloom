@@ -240,11 +240,11 @@ describe("DetailUnits", () => {
     // Above the table
     expect(screen.getByRole("heading", { level: 2, name: /listing units/i })).toBeInTheDocument()
     expect(
-      screen.getByText("Do you want to show unit types or individual units?")
-    ).toBeInTheDocument()
-    expect(screen.getByText("Individual Units")).toBeInTheDocument()
-    expect(screen.getByText("What is the listing availability?")).toBeInTheDocument()
-    expect(screen.getByText("Open Waitlist")).toBeInTheDocument()
+      screen.queryByText("Do you want to show unit types or individual units?")
+    ).not.toBeInTheDocument()
+    expect(screen.queryByText("Individual Units")).not.toBeInTheDocument()
+    expect(screen.queryByText("What is the listing availability?")).not.toBeInTheDocument()
+    expect(screen.queryByText("Open Waitlist")).not.toBeInTheDocument()
     expect(screen.queryAllByText("Home Type")).toHaveLength(0)
 
     // Table
