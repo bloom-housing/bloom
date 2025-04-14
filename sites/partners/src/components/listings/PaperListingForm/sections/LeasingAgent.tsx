@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
+import { isURL } from "class-validator"
 import { t, Textarea, Field, PhoneField, Select } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { stateKeys } from "@bloom-housing/shared-helpers"
@@ -10,7 +11,7 @@ const LeasingAgent = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, control, errors, clearErrors, watch, getValues } = formMethods
+  const { register, control, errors, clearErrors, watch, getValues, trigger } = formMethods
 
   const leasingAgentPhoneField: string = watch("leasingAgentPhone")
   const [phoneField, setPhoneField] = useState(leasingAgentPhoneField)
@@ -89,6 +90,28 @@ const LeasingAgent = () => {
               id={"leasingAgentTitle"}
               placeholder={t("leasingAgent.title")}
               register={register}
+            />
+          </Grid.Cell>
+          <Grid.Cell>
+            <Field
+              label={t("leasingAgent.managementWebsite")}
+              name={"managementWebsite"}
+              id={"managementWebsite"}
+              placeholder={t("leasingAgent.managementWebsitePlaceholder")}
+              register={register}
+              validation={{
+                validate: (value) =>
+                  !value || isURL(value, { require_protocol: true }) || t("errors.urlError"),
+              }}
+              error={fieldHasError(errors?.managementWebsite)}
+              errorMessage={t("errors.urlError")}
+              type="url"
+              inputProps={{
+                onChange: (e) =>
+                  e.currentTarget.value
+                    ? trigger("managementWebsite")
+                    : clearErrors("managementWebsite"),
+              }}
             />
           </Grid.Cell>
           <Grid.Cell className="seeds-grid-span-2">
