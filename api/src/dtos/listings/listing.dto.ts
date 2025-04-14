@@ -26,8 +26,6 @@ import {
   RegionEnum,
   MarketingSeasonEnum,
   MarketingTypeEnum,
-  MarketingSeasonEnum,
-  MarketingTypeEnum,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
 import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';

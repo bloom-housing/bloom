@@ -412,6 +412,7 @@ describe('Testing listing service', () => {
             },
           ]
         : [],
+      section8Acceptance: true,
       listingMultiselectQuestions: [
         {
           id: randomUUID(),
@@ -3102,6 +3103,7 @@ describe('Testing listing service', () => {
           unitGroups: {
             create: [],
           },
+          section8Acceptance: true,
           unitsSummary: {
             create: [
               {
@@ -4380,6 +4382,8 @@ describe('Testing listing service', () => {
               },
             ],
           },
+          isVerified: false,
+          section8Acceptance: false,
         },
         where: {
           id: expect.anything(),
@@ -4731,6 +4735,7 @@ describe('Testing listing service', () => {
           unitGroups: {
             create: [],
           },
+          section8Acceptance: true,
           unitsSummary: {
             create: [
               {

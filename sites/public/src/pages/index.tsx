@@ -1,7 +1,5 @@
 import React from "react"
 import { fetchJurisdictionByName } from "../lib/hooks"
-import Markdown from "markdown-to-jsx"
-import RenderIf from "../RenderIf"
 import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Home } from "../components/home/Home"
 import { HomeDeprecated } from "../components/home/HomeDeprecated"

@@ -222,6 +222,7 @@
   "listings.details.updatedDate": "Date Updated",
   "listings.developer": "Housing Developer",
   "listings.dropOffAddress": "Drop Off Address",
+  "listings.dueDateQuestion": "Is there an application due date?",
   "listings.editPhotos": "Edit Photos",
   "listings.editPreferences": "Edit Preferences",
   "listings.events.deleteConf": "Do you really want to delete this event?",

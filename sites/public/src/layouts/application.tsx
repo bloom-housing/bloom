@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from "react"
 import dayjs from "dayjs"
 import { NextRouter, useRouter } from "next/router"
 import Head from "next/head"
-import HomeIcon from "@heroicons/react/24/solid/HomeIcon"
 import Markdown from "markdown-to-jsx"
+import HomeIcon from "@heroicons/react/24/solid/HomeIcon"
 import { JurisdictionFooterSection as SanMateoFooter } from "../page_content/jurisdiction_overrides/san_mateo/jurisdiction-footer-section"
 import { JurisdictionFooterSection as SanJoseFooter } from "../page_content/jurisdiction_overrides/san_jose/JurisdictionFooterSection"
 import { JurisdictionFooterSection as AlamedaFooter } from "../page_content/jurisdiction_overrides/alameda/JurisdictionFooterSection"
@@ -103,6 +103,13 @@ const getSiteHeaderDeprecated = (
 
   return (
     <>
+      {transitionMessage && (
+        <div className={styles["site-alert-banner-container"]}>
+          <Message className={styles["site-alert-banner-content"]} variant={"primary"}>
+            <Markdown>{transitionMessage}</Markdown>
+          </Message>
+        </div>
+      )}
       {inMaintenance && (
         <div className={styles["site-alert-banner-container"]}>
           <Message className={styles["site-alert-banner-content"]} variant={"alert"}>

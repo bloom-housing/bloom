@@ -916,6 +916,7 @@ describe("listing data", () => {
             value={{
               ...listing,
               reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+              applicationDueDate: undefined,
               listingEvents: [],
               isWaitlistOpen: true,
               waitlistOpenSpots: 4,

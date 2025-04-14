@@ -4,6 +4,7 @@ import { LanguagesEnum } from "@bloom-housing/shared-helpers/src/types/backend-s
 import Link from "next/link"
 import { useRouter } from "next/router"
 import styles from "../../../components/shared/CustomSiteFooter.module.scss"
+import MaxWidthLayout from "../../../layouts/max-width"
 
 export interface FooterProps {
   locale?: string
@@ -26,41 +27,43 @@ export const JurisdictionFooterSection = () => {
   const router = useRouter()
   return (
     <footer className={styles["footer-container"]}>
-      <div className={styles["footer-content-container"]}>
-        <div className={styles["footer"]}>
-          <div className={styles["icon-container"]}>
-            <a
-              href={"/"}
-              className={styles["jurisdiction-icon"]}
-              style={{ width: "var(--seeds-s32)", height: "var(--seeds-s30)" }}
-            >
-              <img src="/images/san-jose-logo-white.png" alt={"San José"} />
-            </a>
-          </div>
-          <div className={styles["text-container"]}>
-            <span>{t("footer.header")}</span>
-          </div>
-          <div className={styles["text-container"]}>{t("footer.forListingQuestions")}</div>
-          <div className={styles["text-container"]}>{t("footer.forGeneralInquiries")}</div>
-          <div className={styles["text-container"]}>
-            <div>{t("footer.forAdditionalOpportunities")}</div>
-            <div>
-              {process.env.doorwayUrl && (
-                <>
-                  <Link href={process.env.doorwayUrl}>{t("footer.DoorwayHousingPortal")}</Link> |
-                  {"  "}
-                </>
-              )}
-              <Link href={t("footer.SFHousingUrl")}>{t("footer.SFHousingPortal")}</Link> |{"  "}
-              <Link href={"https://housing.acgov.org/"}>{t("footer.ACPortal")}</Link>
+      <MaxWidthLayout className={styles["footer-container"]}>
+        <div className={styles["footer-content-container"]}>
+          <div className={styles["footer"]}>
+            <div className={styles["icon-container"]}>
+              <a
+                href={"/"}
+                className={styles["jurisdiction-icon"]}
+                style={{ width: "var(--seeds-s32)", height: "var(--seeds-s30)" }}
+              >
+                <img src="/images/san-jose-logo-white.png" alt={"San José"} />
+              </a>
+            </div>
+            <div className={styles["text-container"]}>
+              <span>{t("footer.header")}</span>
+            </div>
+            <div className={styles["text-container"]}>{t("footer.forListingQuestions")}</div>
+            <div className={styles["text-container"]}>{t("footer.forGeneralInquiries")}</div>
+            <div className={styles["text-container"]}>
+              <div>{t("footer.forAdditionalOpportunities")}</div>
+              <div>
+                {process.env.doorwayUrl && (
+                  <>
+                    <Link href={process.env.doorwayUrl}>{t("footer.DoorwayHousingPortal")}</Link> |
+                    {"  "}
+                  </>
+                )}
+                <Link href={t("footer.SFHousingUrl")}>{t("footer.SFHousingPortal")}</Link> |{"  "}
+                <Link href={"https://housing.acgov.org/"}>{t("footer.ACPortal")}</Link>
+              </div>
+            </div>
+            <div className={styles["text-container"]}>
+              <img src="/images/eho-logo-white.svg" alt="Equal Housing Opportunity Logo" />
             </div>
           </div>
-          <div className={styles["text-container"]}>
-            <img src="/images/eho-logo-white.svg" alt="Equal Housing Opportunity Logo" />
-          </div>
         </div>
-      </div>
-      <div
+      </MaxWidthLayout>
+      <MaxWidthLayout
         className={`${styles["footer-content-container"]} ${styles["copyright-content-container"]}`}
       >
         <div className={`${styles["footer"]} ${styles["copyright"]}`}>
@@ -72,7 +75,7 @@ export const JurisdictionFooterSection = () => {
             <Link href="/privacy">{t("pageTitle.privacy")}</Link>
           </div>
         </div>
-      </div>
+      </MaxWidthLayout>
     </footer>
   )
 }
