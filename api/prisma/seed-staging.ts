@@ -811,7 +811,7 @@ export const stagingSeed = async (
               amiPercentage: 45,
               monthlyRentDeterminationType:
                 MonthlyRentDeterminationTypeEnum.flatRent,
-              percentageOfIncomeValue: 1800.0,
+              flatRentValue: 1800.0,
               amiChart: { connect: { id: amiChart.id } },
             },
           },

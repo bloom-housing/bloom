@@ -95,7 +95,7 @@ export const sunshineFlats: Prisma.ListingsCreateInput = {
   listingNeighborhoodAmenities: {
     create: {
       groceryStores: 'Flower fresh',
-      schools: 'lakeview middle school',
+      schools: 'Lakeview middle school',
       publicTransportation: 'A train, Y express bus',
     },
   },
