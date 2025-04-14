@@ -3914,6 +3914,9 @@ export interface Listing {
   /**  */
   leasingAgentTitle?: string
 
+  /** */
+  managementWebsite?: string
+
   /**  */
   name: string
 
