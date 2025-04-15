@@ -9,7 +9,21 @@
 .heading-group {
   --heading-color: var(--seeds-text-color-darker);
   --subheading-margin: var(--seeds-s1);
-  --subheading-margin-sm: var(--seeds-s2);
+  --subheading-margin-sm: var(--seeds-spacer-header);
+}
+
+.nested-heading-group {
+  margin-inline-start: var(--seeds-spacer-content);
+  --subheading-margin-sm: var(--seeds-spacer-label);
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-size: var(--seeds-type-body-size);
+  }
 }
 
 .listing-view {
