@@ -48,44 +48,28 @@ const buildDefaultFilterFields = (stringBase: string, keyArr: string[]): FilterF
     }
   })
 
-const getBdrmTranslation = (key) => {
-  const strBase = "listingFilters.bedroomsOptions"
-  switch (key) {
-    case "studio":
-      return t(`${strBase}.studioPlus`)
-    case "oneBdrm":
-      return t(`${strBase}.onePlus`)
-    case "twoBdrm":
-      return t(`${strBase}.twoPlus`)
-    case "threeBdrm":
-      return t(`${strBase}.threePlus`)
-    case "fourBdrm":
-      return t(`${strBase}.fourPlus`)
-  }
-}
-
 const CheckboxGroup = (props: CheckboxGroupProps) => {
   return (
     <fieldset className={styles["filter-section"]}>
-      <Grid.Row className={styles["filter-section-label"]}>
-        <legend>{props.groupLabel}</legend>
-      </Grid.Row>
-      <Grid.Row columns={props.customRowNumber ?? 3}>
-        {props.fields.map((field) => {
-          return (
-            <Grid.Cell>
-              <Field
-                id={field.key}
-                name={field.key}
-                label={field.label}
-                labelClassName={styles["filter-checkbox-label"]}
-                type="checkbox"
-                register={props.register}
-              ></Field>
-            </Grid.Cell>
-          )
-        })}
-      </Grid.Row>
+      <legend className={styles["filter-section-label"]}>{props.groupLabel}</legend>
+      <Grid spacing="sm">
+        <Grid.Row columns={props.customRowNumber ?? 3}>
+          {props.fields.map((field) => {
+            return (
+              <Grid.Cell>
+                <Field
+                  id={field.key}
+                  name={field.key}
+                  label={field.label}
+                  labelClassName={styles["filter-checkbox-label"]}
+                  type="checkbox"
+                  register={props.register}
+                ></Field>
+              </Grid.Cell>
+            )
+          })}
+        </Grid.Row>
+      </Grid>
     </fieldset>
   )
 }
@@ -107,68 +91,70 @@ const FilterDrawer = (props: FilterDrawerProps) => {
 
   const RentSection = (props: RentSectionProps) => (
     <fieldset className={styles["filter-section"]}>
-      <Grid.Row className={styles["filter-section-label"]}>
-        <legend>{t("t.rent")}</legend>
-      </Grid.Row>
-      <Grid.Row className={styles["rent-input-section"]}>
-        <Grid.Cell>
-          <Field
-            id="minRent"
-            name="minRent"
-            label={t("publicFilter.minRent")}
-            type="currency"
-            prepend="$"
-            getValues={getValues}
-            setValue={setValue}
-            error={errors?.minRent !== undefined}
-            errorMessage={
-              errors?.minRent?.type === "min"
-                ? t("errors.negativeMinRent")
-                : t("errors.minGreaterThanMaxRentError")
-            }
-            validation={{ max: maxRent || minRent }}
-            register={props.register}
-            inputProps={{
-              onBlur: () => {
-                void trigger("minRent")
-                void trigger("maxRent")
-              },
-              min: 0,
-            }}
-          ></Field>
-        </Grid.Cell>
-        <Grid.Cell>
-          <Field
-            id="maxRent"
-            name="maxRent"
-            label={t("publicFilter.maxRent")}
-            type="currency"
-            prepend="$"
-            getValues={getValues}
-            setValue={setValue}
-            error={errors?.maxRent !== undefined}
-            errorMessage={t("errors.maxLessThanMinRentError")}
-            validation={{ min: minRent }}
-            register={props.register}
-            onChange={() => {
-              void trigger("minRent")
-              void trigger("maxRent")
-            }}
-            inputProps={{ min: 0 }}
-          ></Field>
-        </Grid.Cell>
-      </Grid.Row>
-      <Grid.Row>
-        <Grid.Cell>
-          <Field
-            name="section8Acceptance"
-            label={t("listingFilters.section8")}
-            labelClassName={styles["filter-checkbox-label"]}
-            type="checkbox"
-            register={props.register}
-          ></Field>
-        </Grid.Cell>
-      </Grid.Row>
+      <legend className={styles["filter-section-label"]}>{t("t.rent")}</legend>
+      <Grid spacing="sm">
+        <Grid.Row>
+          <Grid.Cell>
+            <Field
+              id="minRent"
+              name="minRent"
+              label={t("listings.minRent")}
+              type="currency"
+              prepend="$"
+              register={props.register}
+              getValues={getValues}
+              setValue={setValue}
+              // error={errors?.minRent !== undefined}
+              // errorMessage={
+              //   errors?.minRent?.type === "min"
+              //     ? t("errors.negativeMinRent")
+              //     : t("errors.minGreaterThanMaxRentError")
+              // }
+              // validation={{ max: maxRent || minRent }}
+              // inputProps={{
+              //   onBlur: () => {
+              //     void trigger("minRent")
+              //     void trigger("maxRent")
+              //   },
+              //   min: 0,
+              // }}
+            ></Field>
+          </Grid.Cell>
+          <Grid.Cell>
+            <Field
+              id="maxRent"
+              name="maxRent"
+              label={t("listings.maxRent")}
+              type="currency"
+              prepend="$"
+              register={props.register}
+              getValues={getValues}
+              setValue={setValue}
+              // error={errors?.maxRent !== undefined}
+              // errorMessage={t("errors.maxLessThanMinRentError")}
+              // validation={{ min: minRent }}
+              // inputProps={{
+              //   onBlur: () => {
+              //     void trigger("minRent")
+              //     void trigger("maxRent")
+              //   },
+              //   min: 0,
+              // }}
+            ></Field>
+          </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row key="0">
+          <Grid.Cell>
+            <Field
+              name="section8Acceptance"
+              label={t("listings.section8Acceptance")}
+              labelClassName={styles["filter-checkbox-label"]}
+              type="checkbox"
+              register={props.register}
+            ></Field>
+          </Grid.Cell>
+        </Grid.Row>
+      </Grid>
     </fieldset>
   )
 
@@ -184,11 +170,11 @@ const FilterDrawer = (props: FilterDrawerProps) => {
         <Drawer.Header id="drawer-heading">{t("t.filter")}</Drawer.Header>
         <Drawer.Content id="drawer-content">
           <CheckboxGroup
-            groupLabel={t("publicFilter.confirmedListings")}
+            groupLabel={t("listings.confirmedListings")}
             fields={[
               {
                 key: "showConfirmedListings",
-                label: t("publicFilter.confirmedListingsFieldLabel"),
+                label: t("listings.confirmedListingsOnly"),
               },
             ]}
             register={register}
@@ -196,22 +182,17 @@ const FilterDrawer = (props: FilterDrawerProps) => {
           />
           <CheckboxGroup
             groupLabel={t("t.availability")}
-            fields={buildDefaultFilterFields("listings", filterAvailabilityCleaned)}
+            fields={buildDefaultFilterFields("listings.availability", filterAvailabilityCleaned)}
             register={register}
           />
           <CheckboxGroup
             groupLabel={t("listings.homeType")}
-            fields={buildDefaultFilterFields("homeType", Object.keys(HomeTypeEnum))}
+            fields={buildDefaultFilterFields("listings.homeType", Object.keys(HomeTypeEnum))}
             register={register}
           />
           <CheckboxGroup
-            groupLabel={t("publicFilter.bedroomSize")}
-            fields={unitTypeCleaned.map((unitType) => {
-              return {
-                key: unitType,
-                label: getBdrmTranslation(unitType),
-              }
-            })}
+            groupLabel={t("listings.unitTypes.bedroomSize")}
+            fields={buildDefaultFilterFields("listings.unitTypes.expanded", unitTypeCleaned)}
             register={register}
           />
           <RentSection register={register} />

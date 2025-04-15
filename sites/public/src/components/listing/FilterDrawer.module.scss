@@ -12,10 +12,6 @@
   .filter-checkbox-label {
     color: var(--seeds-text-color-darker);
     font-weight: 400;
-  }
-
-  .rent-input-section {
-    column-gap: var(--seeds-s4);
-    padding-block-end: var(--seeds-spacer-label);
+    padding-bottom: 0;
   }
 }
