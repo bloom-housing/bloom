@@ -209,6 +209,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
             }
             listingFavorited={listingFavorited}
             setListingFavorited={saveFavorite}
+            showHomeType={isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableHomeType)}
           />
           <RentSummary
             amiValues={getAmiValues(listing)}
@@ -219,7 +220,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
           <div className={styles["main-content"]}>
             <div className={styles["hide-desktop"]}>{ApplyBar}</div>
             <Eligibility
-              eligibilitySections={getEligibilitySections(listing)}
+              eligibilitySections={getEligibilitySections(jurisdiction, listing)}
               section8Acceptance={listing.section8Acceptance}
             />
             <Features features={getFeatures(listing, jurisdiction)}>{UnitFeatures}</Features>
