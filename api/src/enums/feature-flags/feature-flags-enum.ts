@@ -21,6 +21,7 @@ export enum FeatureFlagEnum {
   enablePartnerSettings = 'enablePartnerSettings',
   disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
   enableListingFavoriting = 'enableListingFavoriting',
+  enableCompanyWebsite = 'enableCompanyWebsite',
 }
 
 // List of all of existing flags and their descriptions.

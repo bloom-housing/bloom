@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useContext } from "react"
 import { useFormContext } from "react-hook-form"
 import { isURL } from "class-validator"
 import { t, Textarea, Field, PhoneField, Select } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import { stateKeys } from "@bloom-housing/shared-helpers"
+import { stateKeys, AuthContext } from "@bloom-housing/shared-helpers"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { fieldMessage, fieldHasError } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
@@ -12,8 +13,15 @@ const LeasingAgent = () => {
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, control, errors, clearErrors, watch, getValues, trigger } = formMethods
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   const leasingAgentPhoneField: string = watch("leasingAgentPhone")
+  const jurisdiction = watch("jurisdictions.id")
+
+  const enableCompanyWebsite = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableCompanyWebsite,
+    jurisdiction
+  )
   const [phoneField, setPhoneField] = useState(leasingAgentPhoneField)
 
   const getErrorMessage = (fieldKey: string) => {
@@ -91,26 +99,28 @@ const LeasingAgent = () => {
               placeholder={t("leasingAgent.title")}
               register={register}
             />
-            <Field
-              label={t("leasingAgent.managementWebsite")}
-              name={"managementWebsite"}
-              id={"managementWebsite"}
-              placeholder={t("leasingAgent.managementWebsitePlaceholder")}
-              register={register}
-              validation={{
-                validate: (value) =>
-                  !value || isURL(value, { require_protocol: true }) || t("errors.urlError"),
-              }}
-              error={fieldHasError(errors?.managementWebsite)}
-              errorMessage={t("errors.urlError")}
-              type="url"
-              inputProps={{
-                onChange: (e) =>
-                  e.currentTarget.value
-                    ? trigger("managementWebsite")
-                    : clearErrors("managementWebsite"),
-              }}
-            />
+            {enableCompanyWebsite && (
+              <Field
+                label={t("leasingAgent.managementWebsite")}
+                name={"managementWebsite"}
+                id={"managementWebsite"}
+                placeholder={t("leasingAgent.managementWebsitePlaceholder")}
+                register={register}
+                validation={{
+                  validate: (value) =>
+                    !value || isURL(value, { require_protocol: true }) || t("errors.urlError"),
+                }}
+                error={fieldHasError(errors?.managementWebsite)}
+                errorMessage={t("errors.urlError")}
+                type="url"
+                inputProps={{
+                  onChange: (e) =>
+                    e.currentTarget.value
+                      ? trigger("managementWebsite")
+                      : clearErrors("managementWebsite"),
+                }}
+              />
+            )}
           </Grid.Cell>
           <Grid.Cell className="seeds-grid-span-2">
             <Textarea
