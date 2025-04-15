@@ -60,7 +60,7 @@ model/
 
 5. **Test the endpoint**:
 
-   (In a separate terminal at the root of the repo)
+   (in a separate terminal, from the model/ directory):
 
    ```bash
    python utils/test_prediction.py
