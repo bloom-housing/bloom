@@ -138,6 +138,10 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                             }
                             favorited={favoriteListingIds.includes(listing.id)}
                             setFavorited={saveFavoriteFn(listing.id)}
+                            showHomeType={isFeatureFlagOn(
+                              props.jurisdiction,
+                              FeatureFlagEnum.enableHomeType
+                            )}
                           />
                         )
                       })}
