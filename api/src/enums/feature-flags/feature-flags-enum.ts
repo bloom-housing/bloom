@@ -23,6 +23,7 @@ export enum FeatureFlagEnum {
   enableUtilitiesIncluded = 'enableUtilitiesIncluded',
   hideCloseListingButton = 'hideCloseListingButton',
   swapCommunityTypeWithPrograms = 'swapCommunityTypeWithPrograms',
+  enableWaitlistAdditionalFields = 'enableWaitlistAdditionalFields',
 }
 
 // List of all of existing flags and their descriptions.
@@ -67,7 +68,7 @@ export const featureFlagMap: { name: string; description: string }[] = [
     description:
       "When true, any newly published listing will send a gov delivery email to everyone that has signed up for the 'listing alerts'",
   },
-    {
+  {
     name: FeatureFlagEnum.enableListingsPagination,
     description:
       'When true listings browser will display pagination controls section',
@@ -122,5 +123,10 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.swapCommunityTypeWithPrograms,
     description:
       'When true, the programs section on the frontend is displayed as community types.',
+  },
+  {
+    name: FeatureFlagEnum.enableWaitlistAdditionalFields,
+    description:
+      'When true, the waitlist additional fields are displayed in the waitlist section of the listing form',
   },
 ];
