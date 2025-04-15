@@ -219,7 +219,21 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
               section8Acceptance={listing.section8Acceptance}
             />
             <Features features={getFeatures(listing, jurisdiction)}>{UnitFeatures}</Features>
-            <Neighborhood address={listing.listingsBuildingAddress} name={listing.name} />
+            <Neighborhood
+              address={listing.listingsBuildingAddress}
+              name={listing.name}
+              neighborhoodAmenities={
+                isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableNeighborhoodAmenities)
+                  ? listing.listingNeighborhoodAmenities
+                  : null
+              }
+              neighborhood={listing.neighborhood}
+              region={
+                isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableRegions)
+                  ? listing.region?.toString().replace("_", " ")
+                  : null
+              }
+            />
             <AdditionalInformation additionalInformation={getAdditionalInformation(listing)} />
           </div>
         </div>
