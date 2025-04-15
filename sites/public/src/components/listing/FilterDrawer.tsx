@@ -1,6 +1,6 @@
 import { Field, Form, t } from "@bloom-housing/ui-components"
 import { Button, Drawer, Grid } from "@bloom-housing/ui-seeds"
-import { useForm, UseFormMethods } from "react-hook-form"
+import { useForm, UseFormMethods, useWatch } from "react-hook-form"
 import { listingFeatures } from "@bloom-housing/shared-helpers"
 import {
   FilterAvailabilityEnum,
@@ -9,6 +9,7 @@ import {
   HomeTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import styles from "./FilterDrawer.module.scss"
+import { useEffect } from "react"
 
 export interface FilterField {
   key: string
@@ -56,7 +57,7 @@ const CheckboxGroup = (props: CheckboxGroupProps) => {
         <Grid.Row columns={props.customRowNumber ?? 3}>
           {props.fields.map((field) => {
             return (
-              <Grid.Cell>
+              <Grid.Cell key={`${field.label}-cell`}>
                 <Field
                   id={field.key}
                   name={field.key}
@@ -76,10 +77,18 @@ const CheckboxGroup = (props: CheckboxGroupProps) => {
 
 const FilterDrawer = (props: FilterDrawerProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, trigger, getValues, setValue, watch: formWatch, errors } = useForm()
+  const { control, register, trigger, getValues, setValue, watch: formWatch, errors } = useForm()
+  // const minRent: number = useWatch({
+  //   control,
+  //   name: "minRent",
+  // })
+  // const maxRent: number = useWatch({
+  //   control,
+  //   name: "maxRent",
+  // })
+
   const minRent = formWatch("minRent")
   const maxRent = formWatch("maxRent")
-
   async function onFormSubmit() {
     const validation = await trigger()
     console.log(validation)
@@ -88,6 +97,9 @@ const FilterDrawer = (props: FilterDrawerProps) => {
     const data = getValues()
     console.log(data)
   }
+  useEffect(() => {
+    console.log(errors)
+  }, [errors])
 
   const RentSection = (props: RentSectionProps) => (
     <fieldset className={styles["filter-section"]}>
@@ -104,20 +116,21 @@ const FilterDrawer = (props: FilterDrawerProps) => {
               register={props.register}
               getValues={getValues}
               setValue={setValue}
-              // error={errors?.minRent !== undefined}
-              // errorMessage={
-              //   errors?.minRent?.type === "min"
-              //     ? t("errors.negativeMinRent")
-              //     : t("errors.minGreaterThanMaxRentError")
-              // }
-              // validation={{ max: maxRent || minRent }}
-              // inputProps={{
-              //   onBlur: () => {
-              //     void trigger("minRent")
-              //     void trigger("maxRent")
-              //   },
-              //   min: 0,
-              // }}
+              error={errors?.minRent !== undefined}
+              defaultValue={8}
+              errorMessage={
+                errors?.minRent?.type === "min"
+                  ? t("errors.negativeMinRent")
+                  : t("errors.minGreaterThanMaxRentError")
+              }
+              validation={{ max: maxRent || minRent }}
+              inputProps={{
+                onBlur: () => {
+                  void trigger("minRent")
+                  void trigger("maxRent")
+                },
+                min: 0,
+              }}
             ></Field>
           </Grid.Cell>
           <Grid.Cell>
@@ -130,16 +143,16 @@ const FilterDrawer = (props: FilterDrawerProps) => {
               register={props.register}
               getValues={getValues}
               setValue={setValue}
-              // error={errors?.maxRent !== undefined}
-              // errorMessage={t("errors.maxLessThanMinRentError")}
-              // validation={{ min: minRent }}
-              // inputProps={{
-              //   onBlur: () => {
-              //     void trigger("minRent")
-              //     void trigger("maxRent")
-              //   },
-              //   min: 0,
-              // }}
+              error={errors?.maxRent !== undefined}
+              errorMessage={t("errors.maxLessThanMinRentError")}
+              validation={{ min: minRent }}
+              inputProps={{
+                onChange: () => {
+                  void trigger("minRent")
+                  void trigger("maxRent")
+                },
+                min: 0,
+              }}
             ></Field>
           </Grid.Cell>
         </Grid.Row>
