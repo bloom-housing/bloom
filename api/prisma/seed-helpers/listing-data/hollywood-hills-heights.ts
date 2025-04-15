@@ -42,7 +42,7 @@ export const hollywoodHillsHeights = {
   leasingAgentEmail: 'bloom@exygy.com',
   leasingAgentName: 'Bloom Bloomington',
   leasingAgentOfficeHours: null,
-  leasingAgentPhone: '(555) 555-5555',
+  leasingAgentPhone: '(651) 555-5555',
   leasingAgentTitle: null,
   name: 'Hollywood Hills Heights',
   postmarkedApplicationsReceivedByDate: null,
