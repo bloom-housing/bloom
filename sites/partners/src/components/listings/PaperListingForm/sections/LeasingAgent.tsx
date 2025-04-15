@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from "react"
 import { useFormContext } from "react-hook-form"
-import { isURL } from "class-validator"
 import { t, Textarea, Field, PhoneField, Select } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { stateKeys, AuthContext } from "@bloom-housing/shared-helpers"
@@ -106,18 +105,10 @@ const LeasingAgent = () => {
                 id={"managementWebsite"}
                 placeholder={t("leasingAgent.managementWebsitePlaceholder")}
                 register={register}
-                validation={{
-                  validate: (value) =>
-                    !value || isURL(value, { require_protocol: true }) || t("errors.urlError"),
-                }}
                 error={fieldHasError(errors?.managementWebsite)}
-                errorMessage={t("errors.urlError")}
-                type="url"
+                errorMessage={fieldMessage(errors?.managementWebsite)}
                 inputProps={{
-                  onChange: (e) =>
-                    e.currentTarget.value
-                      ? trigger("managementWebsite")
-                      : clearErrors("managementWebsite"),
+                  onChange: () => clearErrors("managementWebsite"),
                 }}
               />
             )}
