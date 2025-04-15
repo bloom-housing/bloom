@@ -64,6 +64,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enablePartnerSettings,
         FeatureFlagEnum.enableListingsPagination,
         FeatureFlagEnum.enableListingFavoriting,
+        FeatureFlagEnum.enableCompanyWebsite,
       ],
     }),
   });
@@ -90,6 +91,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableListingsPagination,
         FeatureFlagEnum.disableJurisdictionalAdmin,
         FeatureFlagEnum.enableListingFavoriting,
+        FeatureFlagEnum.enableCompanyWebsite,
       ],
     }),
   });

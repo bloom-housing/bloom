@@ -116,4 +116,9 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.disableJurisdictionalAdmin,
     description: 'When true, jurisdictional admins cannot be created',
   },
+  {
+    name: FeatureFlagEnum.enableCompanyWebsite,
+    description:
+      'When true, allows partners to add company website information',
+  },
 ];
