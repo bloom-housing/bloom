@@ -1,6 +1,7 @@
 import * as React from "react"
 import { Card, Heading } from "@bloom-housing/ui-seeds"
 import {
+  FeatureFlagEnum,
   Jurisdiction,
   Listing,
   ListingsStatusEnum,
@@ -60,7 +61,12 @@ export const getAvailabilityHeading = (reviewOrderType: ReviewOrderTypeEnum) => 
 }
 
 export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
-  const enableMarketingStatus = isFeatureFlagOn(jurisdiction, "enableMarketingStatus")
+  const enableMarketingStatus = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableMarketingStatus)
+  const swapCommunityTypeWithPrograms = isFeatureFlagOn(
+    jurisdiction,
+    FeatureFlagEnum.swapCommunityTypeWithPrograms
+  )
+
   const statusMessage = getListingStatusMessageContent(
     listing.status,
     listing.applicationDueDate,
@@ -113,7 +119,7 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
           {content && <p className={"seeds-m-bs-label"}>{content}</p>}
           {subheading && <p className={`seeds-m-bs-label`}>{subheading}</p>}
         </Card.Section>
-        {listing.reservedCommunityTypes && (
+        {!swapCommunityTypeWithPrograms && listing.reservedCommunityTypes && (
           <Card.Section divider="flush">
             <Heading size={"md"} priority={3}>
               {t("listings.reservedCommunityTitleDefault")}
