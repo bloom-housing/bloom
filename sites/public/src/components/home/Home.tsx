@@ -1,6 +1,9 @@
 import React, { useContext, useEffect } from "react"
 import Head from "next/head"
-import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  Jurisdiction,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
 import { Button, Card, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { PageView, pushGtmEvent, AuthContext, BloomCard } from "@bloom-housing/shared-helpers"
@@ -10,6 +13,8 @@ import { ConfirmationModal } from "../../components/account/ConfirmationModal"
 import { MetaTags } from "../../components/shared/MetaTags"
 import MaxWidthLayout from "../../layouts/max-width"
 import styles from "./Home.module.scss"
+import { HomeSection } from "./HomeSection"
+import { HomeRegions } from "./HomeRegions"
 
 interface HomeProps {
   jurisdiction: Jurisdiction
@@ -30,6 +35,10 @@ export const Home = (props: HomeProps) => {
 
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
 
+  const enableRegions =
+    props.jurisdiction?.featureFlags.find((flag) => flag.name === FeatureFlagEnum.enableRegions)
+      ?.active || false
+
   return (
     <Layout>
       <Head>
@@ -48,6 +57,11 @@ export const Home = (props: HomeProps) => {
             </Button>
           </div>
         </MaxWidthLayout>
+        {enableRegions && (
+          <HomeSection sectionTitle={t("welcome.cityRegions")} sectionIcon="mapPin">
+            <HomeRegions />
+          </HomeSection>
+        )}
         <MaxWidthLayout className={styles["resource-container"]}>
           <Grid spacing="lg">
             <Grid.Row columns={2}>
