@@ -3914,7 +3914,7 @@ export interface Listing {
   /**  */
   leasingAgentTitle?: string
 
-  /** */
+  /**  */
   managementWebsite?: string
 
   /**  */
@@ -4557,6 +4557,9 @@ export interface ListingCreate {
   leasingAgentTitle?: string
 
   /**  */
+  managementWebsite?: string
+
+  /**  */
   name: string
 
   /**  */
@@ -4865,6 +4868,9 @@ export interface ListingUpdate {
 
   /**  */
   leasingAgentTitle?: string
+
+  /**  */
+  managementWebsite?: string
 
   /**  */
   name: string
