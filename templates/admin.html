@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CasaLingua Admin Panel</title>
+  <style>
+    body { font-family: sans-serif; background: #f0f0f0; padding: 20px; }
+    .box { background: #fff; padding: 20px; border-radius: 6px; box-shadow: 0 0 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
+    label, input, select { display: block; width: 100%; margin-bottom: 10px; font-size: 1em; }
+    h2 { margin-top: 30px; }
+    .log, .env { background: #eee; padding: 10px; border-radius: 4px; margin-top: 5px; font-family: monospace; }
+  </style>
+</head>
+<body>
+  <h1>⚙️ CasaLingua Admin Panel</h1>
+
+  <form method="POST" class="box">
+    <h2>🔧 Settings</h2>
+
+    <label for="simplification_model">Simplification Model:</label>
+    <input type="text" name="simplification_model" value="{{ settings.simplification_model }}">
+
+    <label for="translation_model">Translation Model:</label>
+    <input type="text" name="translation_model" value="{{ settings.translation_model }}">
+
+    <label>
+      <input type="checkbox" name="enable_chain_of_thought" {% if settings.enable_chain_of_thought %}checked{% endif %}>
+      Enable Chain-of-Thought Reasoning
+    </label>
+
+    <label>
+      <input type="checkbox" name="enable_pii_masking" {% if settings.enable_pii_masking %}checked{% endif %}>
+      Enable PII Masking
+    </label>
+
+    <label>
+      <input type="checkbox" name="verbose_logging" {% if settings.verbose_logging %}checked{% endif %}>
+      Enable Verbose Logging
+    </label>
+
+    <button type="submit">💾 Save Settings</button>
+  </form>
+
+  <div class="box">
+    <h2>🖥️ System Environment</h2>
+    {% for k, v in env.items() %}
+      <div class="env"><strong>{{ k }}:</strong> {{ v }}</div>
+    {% endfor %}
+
+    <h3>🧠 Recommended Defaults</h3>
+    {% for k, v in recommended.items() %}
+      <div class="env"><strong>{{ k }}:</strong> {{ v }}</div>
+    {% endfor %}
+  </div>
+
+  <div class="box">
+    <h2>📝 Recent Audit Logs</h2>
+    {% for log in logs %}
+      <div class="log">{{ log }}</div>
+    {% endfor %}
+  </div>
+</body>
+</html>

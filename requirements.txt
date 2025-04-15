@@ -1,0 +1,37 @@
+# =============================
+# CasaLingua - requirements.txt
+# Version: 0.20.1
+# =============================
+
+# Core Web Framework
+fastapi
+uvicorn
+flask
+
+# Text Processing
+transformers
+sentencepiece
+spacy
+textstat
+
+# ASR / OCR (optional tools)
+openai-whisper
+pytesseract
+opencv-python
+
+# Language & NLP Tools
+langdetect
+langcodes
+
+# Redis for session handling
+redis
+
+# Utility
+python-multipart
+python-dotenv
+
+# For PDF/Image handling (optional)
+pymupdf
+
+# Terminal styling for CLI
+rich

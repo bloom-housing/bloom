@@ -1,125 +1,269 @@
-# Bloom Affordable Housing Platform
+# CasaLingua – Where Language Feels Like Home
 
-Bloom is [Exygy](https://www.exygy.com/)’s affordable housing platform. Bloom's goal is to be a single entry point for affordable housing seekers and application management for developers. You can read more about the platform on [bloomhousing.com](https://bloomhousing.com/).
 
-## Overview
 
-![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white) ![NestJS](https://img.shields.io/badge/nestjs-%23E0234E.svg?style=for-the-badge&logo=nestjs&logoColor=white) ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white) ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white) ![SASS](https://img.shields.io/badge/SASS-hotpink.svg?style=for-the-badge&logo=SASS&logoColor=white) ![Jest](https://img.shields.io/badge/-jest-%23C21325?style=for-the-badge&logo=jest&logoColor=white) ![cypress](https://img.shields.io/badge/-cypress-%23E5E5E5?style=for-the-badge&logo=cypress&logoColor=058a5e) ![Testing-Library](https://img.shields.io/badge/-TestingLibrary-%23E33332?style=for-the-badge&logo=testing-library&logoColor=white)
-
-Bloom consists of a client/server architecture using [Next.js](https://nextjs.org) for the frontend applications and [NestJS](https://nestjs.com), [Prisma](https://www.prisma.io/), and [Postgres](https://www.postgresql.org/) on the backend.
-
-### Structure
-
-Bloom uses a monorepo-style repository containing multiple user-facing applications and backend services. The three main high-level packages are `api`, `sites`, and `shared-helpers`. Additionally, Bloom's UI leverages the in-house packages `@bloom-housing/ui-seeds` and `@bloom-housing/ui-components`.
-
-The `sites` folder contains reference implementations for both the public and partner applications:
+**Version:** 0.20.1  
+**Author:** TEAM 1 – James Wilson  
+**License:** MIT
 
 ---
 
-- `sites/public` is the applicant-facing site available to the general public. It provides the ability to browse and apply for available listings either using the Common Application (which we build and maintain) or an external link to a third-party online or paper application.
-- Visit [sites/public/README](https://github.com/bloom-housing/bloom/blob/main/sites/public/README.md) for more details.
-
-- `sites/partners` is the site designed for housing developers, property managers, and city/county (jurisdiction) employees. For application management, it offers the ability to view, edit, and export applications for listings and other administrative tasks. For listing management, it offers the ability to create, edit, and publish listings. A login is required to use the Partners Portal.
-- Visit [sites/partners/README](https://github.com/bloom-housing/bloom/blob/main/sites/partners/README.md) for more details.
+## 🌐 About CasaLingua
+CasaLingua is a fully offline, ethical AI system for simplifying and translating complex housing-related documents into accessible formats. It supports multilingual access, human-in-the-loop editing, PII masking, and integration with platforms like Bloom Housing.
 
 ---
 
-- `api` is the container for the key backend services (e.g. listings, applications, users). Information is stored in a Postgres database and served over HTTPS to the front-end (either at build time for things that can be server-rendered, or at run time). Services expose a REST API.
-- Visit [api/README](https://github.com/bloom-housing/bloom/blob/main/api/README.md) for more details.
+## 🚀 Features
+- 📄 Legal document simplification (LLM)
+- 🌍 Translation (MarianMT or NLLB)
+- 🔐 PII detection and redaction
+- 🧑‍⚖️ Reviewer edits and compliance flagging
+- 🖥️ Flask GUI for testing + Admin Panel
+- 📊 CLI diagnostics with environment detection
+- 💬 Redis-backed session tracking
+- 🤖 Fastlane parallel AI pipelines
 
 ---
 
-- `shared-helpers` contains types, functions, and components that are shared between the public and partners sites.
-- Visit [shared-helpers/README](https://github.com/bloom-housing/bloom/blob/main/shared-helpers/README.md) for more details.
+## 📦 Setup Instructions
+
+Collecting fastapi
+  Using cached fastapi-0.115.12-py3-none-any.whl (95 kB)
+Collecting uvicorn
+  Using cached uvicorn-0.34.1-py3-none-any.whl (62 kB)
+Collecting flask
+  Using cached flask-3.1.0-py3-none-any.whl (102 kB)
+Collecting transformers
+  Downloading transformers-4.51.3-py3-none-any.whl (10.4 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.4/10.4 MB 82.8 MB/s eta 0:00:00
+Collecting sentencepiece
+  Downloading sentencepiece-0.2.0-cp310-cp310-macosx_11_0_arm64.whl (1.2 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 62.6 MB/s eta 0:00:00
+Collecting spacy
+  Downloading spacy-3.8.5-cp310-cp310-macosx_11_0_arm64.whl (6.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.3/6.3 MB 91.9 MB/s eta 0:00:00
+Collecting textstat
+  Using cached textstat-0.7.5-py3-none-any.whl (105 kB)
+Collecting openai-whisper
+  Downloading openai-whisper-20240930.tar.gz (800 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 800.5/800.5 kB 68.1 MB/s eta 0:00:00
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting pytesseract
+  Downloading pytesseract-0.3.13-py3-none-any.whl (14 kB)
+Collecting opencv-python
+  Using cached opencv_python-4.11.0.86-cp37-abi3-macosx_13_0_arm64.whl (37.3 MB)
+Collecting langdetect
+  Downloading langdetect-1.0.9.tar.gz (981 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 981.5/981.5 kB 71.7 MB/s eta 0:00:00
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'done'
+Collecting langcodes
+  Using cached langcodes-3.5.0-py3-none-any.whl (182 kB)
+Collecting redis
+  Downloading redis-5.2.1-py3-none-any.whl (261 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 261.5/261.5 kB 37.2 MB/s eta 0:00:00
+Collecting python-multipart
+  Using cached python_multipart-0.0.20-py3-none-any.whl (24 kB)
+Collecting python-dotenv
+  Using cached python_dotenv-1.1.0-py3-none-any.whl (20 kB)
+Collecting pymupdf
+  Downloading pymupdf-1.25.5-cp39-abi3-macosx_11_0_arm64.whl (18.6 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 18.6/18.6 MB 93.4 MB/s eta 0:00:00
+Collecting rich
+  Using cached rich-14.0.0-py3-none-any.whl (243 kB)
+Collecting starlette<0.47.0,>=0.40.0
+  Using cached starlette-0.46.2-py3-none-any.whl (72 kB)
+Collecting pydantic!=1.8,!=1.8.1,!=2.0.0,!=2.0.1,!=2.1.0,<3.0.0,>=1.7.4
+  Using cached pydantic-2.11.3-py3-none-any.whl (443 kB)
+Collecting typing-extensions>=4.8.0
+  Using cached typing_extensions-4.13.2-py3-none-any.whl (45 kB)
+Collecting click>=7.0
+  Using cached click-8.1.8-py3-none-any.whl (98 kB)
+Collecting h11>=0.8
+  Using cached h11-0.14.0-py3-none-any.whl (58 kB)
+Collecting itsdangerous>=2.2
+  Using cached itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+Collecting Jinja2>=3.1.2
+  Using cached jinja2-3.1.6-py3-none-any.whl (134 kB)
+Collecting Werkzeug>=3.1
+  Using cached werkzeug-3.1.3-py3-none-any.whl (224 kB)
+Collecting blinker>=1.9
+  Using cached blinker-1.9.0-py3-none-any.whl (8.5 kB)
+Collecting regex!=2019.12.17
+  Using cached regex-2024.11.6-cp310-cp310-macosx_11_0_arm64.whl (284 kB)
+Collecting huggingface-hub<1.0,>=0.30.0
+  Using cached huggingface_hub-0.30.2-py3-none-any.whl (481 kB)
+Collecting pyyaml>=5.1
+  Using cached PyYAML-6.0.2-cp310-cp310-macosx_11_0_arm64.whl (171 kB)
+Collecting tokenizers<0.22,>=0.21
+  Using cached tokenizers-0.21.1-cp39-abi3-macosx_11_0_arm64.whl (2.7 MB)
+Collecting requests
+  Using cached requests-2.32.3-py3-none-any.whl (64 kB)
+Collecting filelock
+  Using cached filelock-3.18.0-py3-none-any.whl (16 kB)
+Collecting safetensors>=0.4.3
+  Using cached safetensors-0.5.3-cp38-abi3-macosx_11_0_arm64.whl (418 kB)
+Collecting numpy>=1.17
+  Using cached numpy-2.2.4-cp310-cp310-macosx_14_0_arm64.whl (5.4 MB)
+Collecting packaging>=20.0
+  Using cached packaging-24.2-py3-none-any.whl (65 kB)
+Collecting tqdm>=4.27
+  Using cached tqdm-4.67.1-py3-none-any.whl (78 kB)
+Collecting srsly<3.0.0,>=2.4.3
+  Downloading srsly-2.5.1-cp310-cp310-macosx_11_0_arm64.whl (634 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 634.4/634.4 kB 53.7 MB/s eta 0:00:00
+Collecting typer<1.0.0,>=0.3.0
+  Downloading typer-0.15.2-py3-none-any.whl (45 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 45.1/45.1 kB 4.9 MB/s eta 0:00:00
+Collecting spacy-legacy<3.1.0,>=3.0.11
+  Using cached spacy_legacy-3.0.12-py2.py3-none-any.whl (29 kB)
+Collecting cymem<2.1.0,>=2.0.2
+  Downloading cymem-2.0.11-cp310-cp310-macosx_11_0_arm64.whl (41 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41.7/41.7 kB 5.8 MB/s eta 0:00:00
+Collecting weasel<0.5.0,>=0.1.0
+  Using cached weasel-0.4.1-py3-none-any.whl (50 kB)
+Collecting spacy-loggers<2.0.0,>=1.0.0
+  Using cached spacy_loggers-1.0.5-py3-none-any.whl (22 kB)
+Collecting thinc<8.4.0,>=8.3.4
+  Downloading thinc-8.3.6-cp310-cp310-macosx_11_0_arm64.whl (844 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 844.9/844.9 kB 49.7 MB/s eta 0:00:00
+Collecting catalogue<2.1.0,>=2.0.6
+  Using cached catalogue-2.0.10-py3-none-any.whl (17 kB)
+Collecting preshed<3.1.0,>=3.0.2
+  Downloading preshed-3.0.9-cp310-cp310-macosx_11_0_arm64.whl (127 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 127.8/127.8 kB 12.9 MB/s eta 0:00:00
+Requirement already satisfied: setuptools in ./.venv/lib/python3.10/site-packages (from spacy->-r requirements.txt (line 14)) (65.5.0)
+Collecting wasabi<1.2.0,>=0.9.1
+  Using cached wasabi-1.1.3-py3-none-any.whl (27 kB)
+Collecting murmurhash<1.1.0,>=0.28.0
+  Downloading murmurhash-1.0.12-cp310-cp310-macosx_11_0_arm64.whl (26 kB)
+Collecting cmudict
+  Using cached cmudict-1.0.32-py3-none-any.whl (939 kB)
+Collecting pyphen
+  Using cached pyphen-0.17.2-py3-none-any.whl (2.1 MB)
+Collecting more-itertools
+  Downloading more_itertools-10.6.0-py3-none-any.whl (63 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 63.0/63.0 kB 7.2 MB/s eta 0:00:00
+Collecting tiktoken
+  Downloading tiktoken-0.9.0-cp310-cp310-macosx_11_0_arm64.whl (1.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.0/1.0 MB 66.3 MB/s eta 0:00:00
+Collecting torch
+  Using cached torch-2.6.0-cp310-none-macosx_11_0_arm64.whl (66.5 MB)
+Collecting numba
+  Downloading numba-0.61.2-cp310-cp310-macosx_11_0_arm64.whl (2.8 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.8/2.8 MB 87.0 MB/s eta 0:00:00
+Collecting Pillow>=8.0.0
+  Downloading pillow-11.2.1-cp310-cp310-macosx_11_0_arm64.whl (3.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.0/3.0 MB 87.0 MB/s eta 0:00:00
+Collecting six
+  Using cached six-1.17.0-py2.py3-none-any.whl (11 kB)
+Collecting language-data>=1.2
+  Using cached language_data-1.3.0-py3-none-any.whl (5.4 MB)
+Collecting async-timeout>=4.0.3
+  Downloading async_timeout-5.0.1-py3-none-any.whl (6.2 kB)
+Collecting pygments<3.0.0,>=2.13.0
+  Using cached pygments-2.19.1-py3-none-any.whl (1.2 MB)
+Collecting markdown-it-py>=2.2.0
+  Using cached markdown_it_py-3.0.0-py3-none-any.whl (87 kB)
+Collecting fsspec>=2023.5.0
+  Using cached fsspec-2025.3.2-py3-none-any.whl (194 kB)
+Collecting MarkupSafe>=2.0
+  Using cached MarkupSafe-3.0.2-cp310-cp310-macosx_11_0_arm64.whl (12 kB)
+Collecting marisa-trie>=1.1.0
+  Downloading marisa_trie-1.2.1-cp310-cp310-macosx_11_0_arm64.whl (174 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 174.7/174.7 kB 22.3 MB/s eta 0:00:00
+Collecting mdurl~=0.1
+  Using cached mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+Collecting typing-inspection>=0.4.0
+  Using cached typing_inspection-0.4.0-py3-none-any.whl (14 kB)
+Collecting pydantic-core==2.33.1
+  Using cached pydantic_core-2.33.1-cp310-cp310-macosx_11_0_arm64.whl (1.9 MB)
+Collecting annotated-types>=0.6.0
+  Using cached annotated_types-0.7.0-py3-none-any.whl (13 kB)
+Collecting certifi>=2017.4.17
+  Using cached certifi-2025.1.31-py3-none-any.whl (166 kB)
+Collecting idna<4,>=2.5
+  Using cached idna-3.10-py3-none-any.whl (70 kB)
+Collecting charset-normalizer<4,>=2
+  Using cached charset_normalizer-3.4.1-cp310-cp310-macosx_10_9_universal2.whl (198 kB)
+Collecting urllib3<3,>=1.21.1
+  Using cached urllib3-2.4.0-py3-none-any.whl (128 kB)
+Collecting anyio<5,>=3.6.2
+  Using cached anyio-4.9.0-py3-none-any.whl (100 kB)
+Collecting blis<1.4.0,>=1.3.0
+  Downloading blis-1.3.0-cp310-cp310-macosx_11_0_arm64.whl (1.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 72.0 MB/s eta 0:00:00
+Collecting confection<1.0.0,>=0.0.1
+  Using cached confection-0.1.5-py3-none-any.whl (35 kB)
+Collecting shellingham>=1.3.0
+  Using cached shellingham-1.5.4-py2.py3-none-any.whl (9.8 kB)
+Collecting cloudpathlib<1.0.0,>=0.7.0
+  Downloading cloudpathlib-0.21.0-py3-none-any.whl (52 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 52.7/52.7 kB 8.4 MB/s eta 0:00:00
+Collecting smart-open<8.0.0,>=5.2.1
+  Using cached smart_open-7.1.0-py3-none-any.whl (61 kB)
+Collecting importlib-metadata>=5
+  Using cached importlib_metadata-8.6.1-py3-none-any.whl (26 kB)
+Collecting importlib-resources>=5
+  Using cached importlib_resources-6.5.2-py3-none-any.whl (37 kB)
+Collecting llvmlite<0.45,>=0.44.0dev0
+  Downloading llvmlite-0.44.0-cp310-cp310-macosx_11_0_arm64.whl (26.2 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 26.2/26.2 MB 88.1 MB/s eta 0:00:00
+Collecting networkx
+  Using cached networkx-3.4.2-py3-none-any.whl (1.7 MB)
+Collecting sympy==1.13.1
+  Using cached sympy-1.13.1-py3-none-any.whl (6.2 MB)
+Collecting mpmath<1.4,>=1.1.0
+  Using cached mpmath-1.3.0-py3-none-any.whl (536 kB)
+Collecting exceptiongroup>=1.0.2
+  Using cached exceptiongroup-1.2.2-py3-none-any.whl (16 kB)
+Collecting sniffio>=1.1
+  Using cached sniffio-1.3.1-py3-none-any.whl (10 kB)
+Collecting zipp>=3.20
+  Using cached zipp-3.21.0-py3-none-any.whl (9.6 kB)
+Collecting wrapt
+  Using cached wrapt-1.17.2-cp310-cp310-macosx_11_0_arm64.whl (38 kB)
+Building wheels for collected packages: openai-whisper
+  Building wheel for openai-whisper (pyproject.toml): started
+  Building wheel for openai-whisper (pyproject.toml): finished with status 'done'
+  Created wheel for openai-whisper: filename=openai_whisper-20240930-py3-none-any.whl size=803405 sha256=0ac0187af84044ff94371850eb7e9a39efe008f1831c75a366629479ea6f6987
+  Stored in directory: /Users/jameswilson/Library/Caches/pip/wheels/dd/4a/1f/d1c4bf3b9133c8168fe617ed979cab7b14fe381d059ffb9d83
+Successfully built openai-whisper
+Installing collected packages: sentencepiece, mpmath, cymem, zipp, wrapt, wasabi, urllib3, typing-extensions, tqdm, sympy, spacy-loggers, spacy-legacy, sniffio, six, shellingham, safetensors, regex, pyyaml, python-multipart, python-dotenv, pyphen, pymupdf, pygments, Pillow, packaging, numpy, networkx, murmurhash, more-itertools, mdurl, MarkupSafe, marisa-trie, llvmlite, itsdangerous, importlib-resources, idna, h11, fsspec, filelock, exceptiongroup, click, charset-normalizer, certifi, catalogue, blinker, async-timeout, annotated-types, Werkzeug, uvicorn, typing-inspection, srsly, smart-open, requests, redis, pytesseract, pydantic-core, preshed, opencv-python, numba, markdown-it-py, language-data, langdetect, Jinja2, importlib-metadata, cloudpathlib, blis, anyio, torch, tiktoken, starlette, rich, pydantic, langcodes, huggingface-hub, flask, cmudict, typer, tokenizers, textstat, openai-whisper, fastapi, confection, weasel, transformers, thinc, spacy
+  Running setup.py install for langdetect: started
+  Running setup.py install for langdetect: finished with status 'done'
+Successfully installed Jinja2-3.1.6 MarkupSafe-3.0.2 Pillow-11.2.1 Werkzeug-3.1.3 annotated-types-0.7.0 anyio-4.9.0 async-timeout-5.0.1 blinker-1.9.0 blis-1.3.0 catalogue-2.0.10 certifi-2025.1.31 charset-normalizer-3.4.1 click-8.1.8 cloudpathlib-0.21.0 cmudict-1.0.32 confection-0.1.5 cymem-2.0.11 exceptiongroup-1.2.2 fastapi-0.115.12 filelock-3.18.0 flask-3.1.0 fsspec-2025.3.2 h11-0.14.0 huggingface-hub-0.30.2 idna-3.10 importlib-metadata-8.6.1 importlib-resources-6.5.2 itsdangerous-2.2.0 langcodes-3.5.0 langdetect-1.0.9 language-data-1.3.0 llvmlite-0.44.0 marisa-trie-1.2.1 markdown-it-py-3.0.0 mdurl-0.1.2 more-itertools-10.6.0 mpmath-1.3.0 murmurhash-1.0.12 networkx-3.4.2 numba-0.61.2 numpy-2.2.4 openai-whisper-20240930 opencv-python-4.11.0.86 packaging-24.2 preshed-3.0.9 pydantic-2.11.3 pydantic-core-2.33.1 pygments-2.19.1 pymupdf-1.25.5 pyphen-0.17.2 pytesseract-0.3.13 python-dotenv-1.1.0 python-multipart-0.0.20 pyyaml-6.0.2 redis-5.2.1 regex-2024.11.6 requests-2.32.3 rich-14.0.0 safetensors-0.5.3 sentencepiece-0.2.0 shellingham-1.5.4 six-1.17.0 smart-open-7.1.0 sniffio-1.3.1 spacy-3.8.5 spacy-legacy-3.0.12 spacy-loggers-1.0.5 srsly-2.5.1 starlette-0.46.2 sympy-1.13.1 textstat-0.7.5 thinc-8.3.6 tiktoken-0.9.0 tokenizers-0.21.1 torch-2.6.0 tqdm-4.67.1 transformers-4.51.3 typer-0.15.2 typing-extensions-4.13.2 typing-inspection-0.4.0 urllib3-2.4.0 uvicorn-0.34.1 wasabi-1.1.3 weasel-0.4.1 wrapt-1.17.2 zipp-3.21.0
 
 ---
 
-- `@bloom-housing/ui-seeds` (Seeds) is our component library based on our internal design system. It is comprised of React components and design system tokens. The published ui-seeds [Storybook](https://storybook.js.org/) can be found [here](https://storybook-ui-seeds.netlify.app/?path=/story/tokens-introduction--page). For further details visit the [ui-seeds repository](https://github.com/bloom-housing/ui-seeds) and our [external design documentation](https://zeroheight.com/5e69dd4e1/p/938cb5-seeds-design-system) on Zeroheight.
+## 📁 Structure Overview
 
-- `@bloom-housing/ui-components` (UIC) is also an internal component library - but it is being slowly replaced with `ui-seeds` which is the next iteration. The published ui-components storybook can be found [here](https://storybook.bloom.exygy.dev/). For further details visit the [ui-components repository](https://github.com/bloom-housing/ui-components).
+| Path                      | Description                                 |
+|---------------------------|---------------------------------------------|
+|                 | FastAPI launch point                         |
+|                    | Flask GUI app for user testing               |
+|            | Admin UI to change model settings + toggles  |
+|               | LLM pipeline components                      |
+|                    | API routing and schema validation            |
+|                 | Reviewer tools with audit logging            |
+|                | Session + context tracker (Redis)            |
+|              | Jinja2 HTML for GUI + Admin Panel            |
+|             | CLI environment report                       |
+|             | Hardware-aware recommendations               |
 
-## Getting started for developers
+---
 
-If this is your first time working with Bloom, please be sure to check out the `sites/public`, `sites/partners`, and `api` README files for important and specific configuration information. After doing so, you can proceed with the below setup instructions.
+## ❤️ Philosophy
+> "Language should never be a barrier to safe housing."
 
-## Starting locally
+CasaLingua exists to remove that barrier—ethically, securely, and beautifully.
 
-### Dependencies
+---
 
-Run `yarn install` at root and from within the api directory.
-
-If you don't have yarn installed, you can install homebrew with [these instructions](https://brew.sh/) and then do so with `brew install yarn`.
-
-### Local environment variables
-
-Configuration of each app and service is read from environment variables. There is an `.env.template` file in `sites/public`, `sites/partners`, and `api` that must be copied to an `.env` at the same level. Some keys are secret and are internally available. The template files include default values and descriptions of each variable.
-
-### VSCode Extensions
-
-If you use VSCode, these are some recommended extensions.
-
-With the [Prettier plugin](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) installed, ⌘⇧P Open User Settings, search for and enable `Format on Save`, and then ⌘⇧P Reload Window. When you save a file locally, it should automatically format according to our configuration.
-
-The [Postgres explorer plugin](https://marketplace.visualstudio.com/items?itemName=ckolkman.vscode-postgres) will let you inspect your local database (more setup instructions in the [api README](https://github.com/bloom-housing/bloom/blob/main/api/README.md)).
-
-The [Code Spell Checker plugin](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker) will flag spelling errors.
-
-The [CSS variable autocomplete plugin](https://marketplace.visualstudio.com/items?itemName=vunguyentuan.vscode-css-variables&ssr=false#overview) will pull in all CSS variable definitions from ui-seeds for autocompletion (more setup instructions in the [public README](https://github.com/bloom-housing/bloom/blob/main/sites/public/README.md)).
-
-The [CSS module autocomplete plugin](https://marketplace.visualstudio.com/items?itemName=clinyong.vscode-css-modules) which provides autocomplete for CSS module files.
-
-### Running a local test server
-
-Running `yarn dev:all` from root runs 3 processes for both apps and the backend services on 3 different ports:
-
-- 3000 for the public app
-- 3001 for the partners app
-- 3100 for the api
-
-You can also run each process individually from separate terminals with the following command in each directory: `yarn dev`.
-
-### Bloom UIC development
-
-Because Bloom's ui-components package is a separate open source repository, developing in Bloom while concurrently iterating in ui-components requires linking the folders with the following steps:
-
-### Directory setup
-
-1. Clone both Bloom and the [ui-components repository](https://github.com/bloom-housing/ui-components) on the same directory level.
-
-### Symlinking UIC
-
-1. In the Bloom directory, run `yarn link:uic`.
-2. Open the next.config.js file in the public and partner's directory.
-3. Uncomment the experimental property at the bottom of each file.
-4. Follow the directions above to run Bloom locally.
-   These steps allow you to edit your local version of ui-components and the changes will be reflected in the node_modules in Bloom.
-
-### Unlinking UIC
-
-1. In the Bloom directory, run `yarn unlink:uic`.
-2. Open the next.config.js file in the public and partner's directory.
-3. Comment out the experimental property at the bottom of each file.
-4. Follow the directions above to run Bloom locally.
-   Bloom will now be consuming the published version of @bloom-housing/ui-components specified in package.json and no local ui-component changes will be reflected.
-
-## Contributing
-
-Contributions to the core Bloom applications and services are welcomed. To help us meet the project's goals around quality and maintainability, we ask that all contributors read, understand, and agree to our guidelines.
-
-### Issue tracking
-
-Our development tasks are managed through GitHub issues and development in the vast majority of cases should be tied to an issue. Please feel free to submit issues even if you don't plan on implementing them yourself. Before creating an issue, check first to see if one already exists. When creating an issue fill out all of the provided fields and add as much information as possible including screenshots if possible. Please don't start work on an issue without checking in with the Bloom team first as it may already be in development! You can tag us (@ludtkemorgan, @emilyjablonski, @yazeedloonat) to get started on an issue or ask any questions.
-
-### Committing
-
-We are also using [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/), a specification for commit messages that indicates what type and level of change each commit is.
-
-On commit, two steps automatically run: (1) linting and (2) a verification of the conventional commit standard. You can either, instead of running `git commit`, globally install commitizen (`npm install -g commitizen`) and then commit with `git cz` which will run a commit message CLI (the CLI asks a series of questions about your changeset and builds the commit message for you in the conventional commit format), or alternatively run `git commit` with your own message if you are confident it follows the conventional standard, and the linter will fail if it does not.
-
-### Pull Requests
-
-Pull requests are opened to the main branch. When opening a pull request please fill out the entire pull request template which includes tagging the issue your PR is related to, a description of your PR, including details for the reviewer about how to test your PR, and a testing checklist.
-
-When your PR is ready for review, add the `needs review(s)` label to surface it to our internal team. If you put up a PR that is not yet ready for eyes, add the `wip` label.
-
-As a reviewer on a PR, try not to leave only comments, but a clear next step action. If the PR requires further discussion or changes, mark it with Requested Changes. If a PR looks good to you (or even if there are small changes requested that won't require an additional review), please mark it with Approved and comment on the last few changes needed. This helps other reviewers better understand the state of PRs at the list view and prevents an additional unnecessary review cycle.
+## 📄 License
+MIT

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CasaLingua Demo Interface</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+    textarea, select, input { width: 100%; margin-bottom: 10px; padding: 10px; font-size: 1em; }
+    pre { background: #fff; padding: 15px; border: 1px solid #ccc; overflow-x: auto; }
+    .box { background: #fff; padding: 20px; margin-top: 20px; border-radius: 6px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
+    .flag { color: darkred; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>🏠 CasaLingua – Text Simplification + Review</h1>
+  <form method="POST">
+    <label for="document">Paste your document text:</label>
+    <textarea name="document" rows="10" required>{{ original or '' }}</textarea>
+
+    <label for="language">Select output language:</label>
+    <select name="language">
+      <option value="en" {% if language == 'en' %}selected{% endif %}>English only</option>
+      <option value="es" {% if language == 'es' %}selected{% endif %}>Spanish</option>
+    </select>
+
+    <label for="reviewer_id">Reviewer ID:</label>
+    <input type="text" name="reviewer_id" placeholder="e.g. jmwilson01" value="{{ reviewer_id or '' }}">
+
+    <button type="submit">🧠 Simplify & Review</button>
+  </form>
+
+  {% if simplified %}
+  <div class="box">
+    <h2>Simplified Output</h2>
+    <pre>{{ simplified }}</pre>
+
+    <h3>Translated ({{ language.upper() }})</h3>
+    <pre>{{ translated }}</pre>
+
+    <h3>Compliance Check</h3>
+    <pre>{{ compliance.notes }}</pre>
+
+    <h3>PII Flags</h3>
+    <ul>
+      {% for flag in flags %}
+      <li class="flag">🔒 {{ flag }}</li>
+      {% endfor %}
+    </ul>
+
+    <h3>Detected Entities (Snapshot)</h3>
+    <ul>
+      {% for k, v in entity_snapshot.items() %}
+      <li><strong>{{ k.replace('_', ' ').title() }}:</strong> {{ v }}</li>
+      {% endfor %}
+    </ul>
+
+    <h3>Final Reviewer Text (Editable)</h3>
+    <textarea rows="6">{{ reviewer_output }}</textarea>
+  </div>
+  {% endif %}
+</body>
+</html>
