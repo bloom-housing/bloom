@@ -48,14 +48,19 @@ model/
 
 4. **Start the Flask app**:
 
+   First, move into the `app/` directory:
+
    ```bash
-   python app/main.py
+   cd app
+   python main.py
    ```
 
    The microservice will be running at:  
    `http://localhost:5000/predict`
 
 5. **Test the endpoint**:
+
+   (In a separate terminal at the root of the repo)
 
    ```bash
    python utils/test_prediction.py
@@ -68,7 +73,7 @@ model/
 1. **Build the image**:
 
    ```bash
-   docker build -t housing-service .
+   docker build -t housing-service .  
    ```
 
 2. **Run the container**:
@@ -157,7 +162,7 @@ Sends anonymized housing-related features to get a risk score prediction.
 
 #### ⚠️ Errors
 
-- `400`: Missing or malformed fields
+- `400`: Missing or malformed fields  
 - `500`: Internal server error (e.g., model not found)
 
 ---
