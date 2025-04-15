@@ -1,6 +1,6 @@
 import { Field, Form, t } from "@bloom-housing/ui-components"
 import { Button, Drawer, Grid } from "@bloom-housing/ui-seeds"
-import { useForm, UseFormMethods, useWatch } from "react-hook-form"
+import { useForm, UseFormMethods } from "react-hook-form"
 import { listingFeatures } from "@bloom-housing/shared-helpers"
 import {
   FilterAvailabilityEnum,
@@ -9,7 +9,6 @@ import {
   HomeTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import styles from "./FilterDrawer.module.scss"
-import { useEffect } from "react"
 
 export interface FilterField {
   key: string
@@ -23,8 +22,11 @@ export interface CheckboxGroupProps {
   register: UseFormMethods["register"]
   customRowNumber?: number
 }
+
 export interface RentSectionProps {
   register: UseFormMethods["register"]
+  getValues: UseFormMethods["getValues"]
+  setValue: UseFormMethods["setValue"]
 }
 
 export interface FilterDrawerProps {
@@ -75,101 +77,62 @@ const CheckboxGroup = (props: CheckboxGroupProps) => {
   )
 }
 
+const RentSection = (props: RentSectionProps) => (
+  <fieldset className={styles["filter-section"]}>
+    <legend className={styles["filter-section-label"]}>{t("t.rent")}</legend>
+    <Grid spacing="sm">
+      <Grid.Row>
+        <Grid.Cell>
+          <Field
+            id="minRent"
+            name="minRent"
+            label={t("listings.minRent")}
+            type="currency"
+            prepend="$"
+            register={props.register}
+            getValues={props.getValues}
+            setValue={props.setValue}
+          ></Field>
+        </Grid.Cell>
+        <Grid.Cell>
+          <Field
+            id="maxRent"
+            name="maxRent"
+            label={t("listings.maxRent")}
+            type="currency"
+            prepend="$"
+            register={props.register}
+            getValues={props.getValues}
+            setValue={props.setValue}
+          ></Field>
+        </Grid.Cell>
+      </Grid.Row>
+      <Grid.Row key="0">
+        <Grid.Cell>
+          <Field
+            name="section8Acceptance"
+            label={t("listings.section8Acceptance")}
+            labelClassName={styles["filter-checkbox-label"]}
+            type="checkbox"
+            register={props.register}
+          ></Field>
+        </Grid.Cell>
+      </Grid.Row>
+    </Grid>
+  </fieldset>
+)
+
 const FilterDrawer = (props: FilterDrawerProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { control, register, trigger, getValues, setValue, watch: formWatch, errors } = useForm()
-  // const minRent: number = useWatch({
-  //   control,
-  //   name: "minRent",
-  // })
-  // const maxRent: number = useWatch({
-  //   control,
-  //   name: "maxRent",
-  // })
+  const { register, trigger, getValues, setValue } = useForm()
 
-  const minRent = formWatch("minRent")
-  const maxRent = formWatch("maxRent")
   async function onFormSubmit() {
     const validation = await trigger()
-    console.log(validation)
     if (!validation) return
 
     const data = getValues()
     console.log(data)
   }
-  useEffect(() => {
-    console.log(errors)
-  }, [errors])
-
-  const RentSection = (props: RentSectionProps) => (
-    <fieldset className={styles["filter-section"]}>
-      <legend className={styles["filter-section-label"]}>{t("t.rent")}</legend>
-      <Grid spacing="sm">
-        <Grid.Row>
-          <Grid.Cell>
-            <Field
-              id="minRent"
-              name="minRent"
-              label={t("listings.minRent")}
-              type="currency"
-              prepend="$"
-              register={props.register}
-              getValues={getValues}
-              setValue={setValue}
-              error={errors?.minRent !== undefined}
-              defaultValue={8}
-              errorMessage={
-                errors?.minRent?.type === "min"
-                  ? t("errors.negativeMinRent")
-                  : t("errors.minGreaterThanMaxRentError")
-              }
-              validation={{ max: maxRent || minRent }}
-              inputProps={{
-                onBlur: () => {
-                  void trigger("minRent")
-                  void trigger("maxRent")
-                },
-                min: 0,
-              }}
-            ></Field>
-          </Grid.Cell>
-          <Grid.Cell>
-            <Field
-              id="maxRent"
-              name="maxRent"
-              label={t("listings.maxRent")}
-              type="currency"
-              prepend="$"
-              register={props.register}
-              getValues={getValues}
-              setValue={setValue}
-              error={errors?.maxRent !== undefined}
-              errorMessage={t("errors.maxLessThanMinRentError")}
-              validation={{ min: minRent }}
-              inputProps={{
-                onChange: () => {
-                  void trigger("minRent")
-                  void trigger("maxRent")
-                },
-                min: 0,
-              }}
-            ></Field>
-          </Grid.Cell>
-        </Grid.Row>
-        <Grid.Row key="0">
-          <Grid.Cell>
-            <Field
-              name="section8Acceptance"
-              label={t("listings.section8Acceptance")}
-              labelClassName={styles["filter-checkbox-label"]}
-              type="checkbox"
-              register={props.register}
-            ></Field>
-          </Grid.Cell>
-        </Grid.Row>
-      </Grid>
-    </fieldset>
-  )
 
   return (
     <Form onSubmit={() => false}>
@@ -208,7 +171,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             fields={buildDefaultFilterFields("listings.unitTypes.expanded", unitTypeCleaned)}
             register={register}
           />
-          <RentSection register={register} />
+          <RentSection register={register} getValues={getValues} setValue={setValue} />
           <CheckboxGroup
             groupLabel={t("t.region")}
             fields={Object.keys(RegionEnum).map((region) => {
