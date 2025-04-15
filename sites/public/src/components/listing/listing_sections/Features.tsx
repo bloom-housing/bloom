@@ -27,7 +27,7 @@ export const Features = ({ children, features }: FeaturesProps) => {
               subheading={feature.subheading}
               size={"lg"}
               headingPriority={3}
-              className={`${styles["heading-group"]} seeds-m-be-content`}
+              className={`${styles["heading-group"]} seeds-m-be-section`}
               key={index}
             />
           )
