@@ -859,9 +859,12 @@ export const getUnitGroupSummariesTable = (listing: Listing) => {
 
     let ami = null
 
-    if (group.amiPercentageRange && group.amiPercentageRange.min === group.amiPercentageRange.max) {
+    if (
+      group.amiPercentageRange?.min &&
+      group.amiPercentageRange.min === group.amiPercentageRange.max
+    ) {
       ami = `${group.amiPercentageRange.min}%`
-    } else if (group.amiPercentageRange) {
+    } else if (group.amiPercentageRange?.min && group.amiPercentageRange?.max) {
       ami = `${group.amiPercentageRange.min} - ${group.amiPercentageRange.max}%`
     }
 
@@ -872,7 +875,7 @@ export const getUnitGroupSummariesTable = (listing: Listing) => {
         cellText: group.unitTypes?.map((type) => t(`listings.unitTypes.${type.name}`)).join(", "),
       },
       rent: {
-        cellText: rent,
+        cellText: rent ?? t("listings.unitsSummary.notAvailable"),
         cellSubText: rent ? t("t.perMonth") : "",
       },
       availability: {
