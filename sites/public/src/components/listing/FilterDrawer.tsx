@@ -59,7 +59,7 @@ const CheckboxGroup = (props: CheckboxGroupProps) => {
         <Grid.Row columns={props.customRowNumber ?? 3}>
           {props.fields.map((field) => {
             return (
-              <Grid.Cell key={`${field.label}-cell`}>
+              <Grid.Cell key={`${field.key}-cell`}>
                 <Field
                   id={field.key}
                   name={field.key}
@@ -162,7 +162,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             register={register}
           />
           <CheckboxGroup
-            groupLabel={t("listings.homeType")}
+            groupLabel={t("listings.homeType.lower")}
             fields={buildDefaultFilterFields("listings.homeType", Object.keys(HomeTypeEnum))}
             register={register}
           />
