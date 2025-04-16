@@ -106,7 +106,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
   const ListingTabs = (
     <MaxWidthLayout>
       <Tabs className={styles["tabs"]} onSelect={selectionHandler} selectedIndex={props.tab}>
-        <Tabs.TabList size={"sm"}>
+        <Tabs.TabList>
           <Tabs.Tab>{t("t.open")}</Tabs.Tab>
           <Tabs.Tab>{t("listings.closed")}</Tabs.Tab>
         </Tabs.TabList>
