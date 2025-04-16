@@ -49,7 +49,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion, featureFlags }: Uni
   const homeTypes = [
     "",
     ...Object.values(HomeTypeEnum).map((val) => {
-      return { value: val, label: t(`homeType.${val}`) }
+      return { value: val, label: t(`listings.homeType.${val}`) }
     }),
   ]
 
