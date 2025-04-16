@@ -29,7 +29,7 @@ export const AdditionalFees = ({
         depositMax ||
         costsNotIncluded ||
         utilitiesIncluded.length) && (
-        <Card className={"seeds-m-bs-content"}>
+        <Card className={"seeds-m-bs-header"}>
           <Card.Section>
             <Heading size={"lg"} priority={3} className={"seeds-m-be-header"}>
               {t("listings.sections.additionalFees")}
