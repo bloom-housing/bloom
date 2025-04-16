@@ -7,6 +7,7 @@ import {
   RegionEnum,
   UnitTypeEnum,
   HomeTypeEnum,
+  ListingFilterKeys,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import styles from "./FilterDrawer.module.scss"
 
@@ -43,10 +44,14 @@ const unitTypeCleaned = Object.keys(UnitTypeEnum).filter(
   (unitType) => unitType !== UnitTypeEnum.SRO && unitType != UnitTypeEnum.fiveBdrm
 )
 
-const buildDefaultFilterFields = (stringBase: string, keyArr: string[]): FilterField[] =>
+const buildDefaultFilterFields = (
+  filterType: ListingFilterKeys,
+  stringBase: string,
+  keyArr: string[]
+): FilterField[] =>
   keyArr.map((key) => {
     return {
-      key: key,
+      key: `${filterType}.${key}`,
       label: t(`${stringBase}.${key}`),
     }
   })
@@ -84,8 +89,8 @@ const RentSection = (props: RentSectionProps) => (
       <Grid.Row>
         <Grid.Cell>
           <Field
-            id="minRent"
-            name="minRent"
+            id={`${ListingFilterKeys.monthlyRent}.minRent`}
+            name={`${ListingFilterKeys.monthlyRent}.minRent`}
             label={t("listings.minRent")}
             type="currency"
             prepend="$"
@@ -96,8 +101,8 @@ const RentSection = (props: RentSectionProps) => (
         </Grid.Cell>
         <Grid.Cell>
           <Field
-            id="maxRent"
-            name="maxRent"
+            id={`${ListingFilterKeys.monthlyRent}.maxRent`}
+            name={`${ListingFilterKeys.monthlyRent}.maxRent`}
             label={t("listings.maxRent")}
             type="currency"
             prepend="$"
@@ -110,7 +115,8 @@ const RentSection = (props: RentSectionProps) => (
       <Grid.Row key="0">
         <Grid.Cell>
           <Field
-            name="section8Acceptance"
+            id={ListingFilterKeys.section8Acceptance}
+            name={ListingFilterKeys.section8Acceptance}
             label={t("listings.section8Acceptance")}
             labelClassName={styles["filter-checkbox-label"]}
             type="checkbox"
@@ -158,30 +164,49 @@ const FilterDrawer = (props: FilterDrawerProps) => {
           />
           <CheckboxGroup
             groupLabel={t("t.availability")}
-            fields={buildDefaultFilterFields("listings.availability", filterAvailabilityCleaned)}
+            fields={buildDefaultFilterFields(
+              ListingFilterKeys.availability,
+              "listings.availability",
+              filterAvailabilityCleaned
+            )}
             register={register}
           />
           <CheckboxGroup
             groupLabel={t("listings.homeType.lower")}
-            fields={buildDefaultFilterFields("listings.homeType", Object.keys(HomeTypeEnum))}
+            fields={buildDefaultFilterFields(
+              ListingFilterKeys.homeTypes,
+              "listings.homeType",
+              Object.keys(HomeTypeEnum)
+            )}
             register={register}
           />
           <CheckboxGroup
             groupLabel={t("listings.unitTypes.bedroomSize")}
-            fields={buildDefaultFilterFields("listings.unitTypes.expanded", unitTypeCleaned)}
+            fields={buildDefaultFilterFields(
+              ListingFilterKeys.bedrooms,
+              "listings.unitTypes.expanded",
+              unitTypeCleaned
+            )}
             register={register}
           />
           <RentSection register={register} getValues={getValues} setValue={setValue} />
           <CheckboxGroup
             groupLabel={t("t.region")}
             fields={Object.keys(RegionEnum).map((region) => {
-              return { key: region, label: region.replace("_", " ") }
+              return {
+                key: `${ListingFilterKeys.regions}.${region}`,
+                label: region.replace("_", " "),
+              }
             })}
             register={register}
           />
           <CheckboxGroup
             groupLabel={t("eligibility.accessibility.title")}
-            fields={buildDefaultFilterFields("eligibility.accessibility", listingFeatures)}
+            fields={buildDefaultFilterFields(
+              ListingFilterKeys.listingFeatures,
+              "eligibility.accessibility",
+              listingFeatures
+            )}
             register={register}
           />
         </Drawer.Content>
