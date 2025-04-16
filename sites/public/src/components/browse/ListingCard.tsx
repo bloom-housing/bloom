@@ -1,10 +1,15 @@
 import React from "react"
-import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  Jurisdiction,
+  Listing,
+  MarketingTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { imageUrlFromListing, oneLineAddress, ClickableCard } from "@bloom-housing/shared-helpers"
 import { StackedTable, t } from "@bloom-housing/ui-components"
 import { Card, Heading, Link, Tag } from "@bloom-housing/ui-seeds"
 import {
   getListingApplicationStatus,
+  getListingStackedGroupTableData,
   getListingStackedTableData,
   getListingStatusMessage,
 } from "../../lib/helpers"
@@ -81,14 +86,28 @@ export const ListingCard = ({
                 </div>
               )}
               <div className={`${styles["unit-table"]} styled-stacked-table`}>
-                <StackedTable
-                  headers={{
-                    unitType: "t.unitType",
-                    minimumIncome: "t.minimumIncome",
-                    rent: "t.rent",
-                  }}
-                  stackedData={getListingStackedTableData(listing.unitsSummarized)}
-                />
+                {listing.unitGroups?.length > 0 ? (
+                  <StackedTable
+                    headers={{
+                      unitType: "t.unitType",
+                      rent: "t.rent",
+                      availability: "t.availability",
+                    }}
+                    stackedData={getListingStackedGroupTableData(
+                      listing.unitGroupsSummarized,
+                      listing.marketingType === MarketingTypeEnum.comingSoon
+                    )}
+                  />
+                ) : (
+                  <StackedTable
+                    headers={{
+                      unitType: "t.unitType",
+                      minimumIncome: "t.minimumIncome",
+                      rent: "t.rent",
+                    }}
+                    stackedData={getListingStackedTableData(listing.unitsSummarized)}
+                  />
+                )}
               </div>
 
               {actions.length > 0 && (
