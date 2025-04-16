@@ -149,18 +149,6 @@ export const getFeatures = (
   jurisdiction: Jurisdiction
 ): { heading: string; subheading: string }[] => {
   const features = []
-  if (listing.neighborhood) {
-    features.push({ heading: t("t.neighborhood"), subheading: listing.neighborhood })
-  }
-  const enableRegionFeature = jurisdiction.featureFlags.some(
-    (flag) => flag.name === "enableRegions" && flag.active
-  )
-  if (enableRegionFeature && listing.region) {
-    features.push({
-      heading: t("t.region"),
-      subheading: listing.region.toString().replace("_", " "),
-    })
-  }
   if (listing.yearBuilt) {
     features.push({ heading: t("t.built"), subheading: listing.yearBuilt })
   }
