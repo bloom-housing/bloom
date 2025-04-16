@@ -11,7 +11,7 @@ export const jurisdictionFactory = (
 ): Prisma.JurisdictionsCreateInput => ({
   name: jurisdictionName,
   notificationsSignUpUrl: 'https://www.exygy.com',
-  languages: [LanguagesEnum.en],
+  languages: [LanguagesEnum.en, LanguagesEnum.es],
   partnerTerms: 'Example Terms',
   publicUrl: 'http://localhost:3000',
   emailFromAddress: 'Bloom <bloom-no-reply@exygy.dev>',
