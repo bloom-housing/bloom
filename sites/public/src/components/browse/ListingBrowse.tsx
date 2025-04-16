@@ -145,7 +145,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
           <MaxWidthLayout className={styles["listings-max-width-layout"]}>
             <div className={styles["content"]}>
               <>
-                {props.listings.length > 0 ? (
+                {props.listings?.length > 0 ? (
                   <ul>
                     {props.listings.map((listing, index) => {
                       return (
