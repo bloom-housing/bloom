@@ -2,7 +2,7 @@
   background-color: var(--seeds-bg-color-canvas);
 
   .site-content {
-    margin-block: var(--seeds-s12);
+    margin-block: var(--seeds-spacer-container);
     margin-inline: auto;
     @media (--md-and-up) {
       display: flex;
@@ -11,14 +11,14 @@
     .resources-section-wrapper {
       display: flex;
       flex-direction: column;
-      gap: var(--seeds-s8);
+      gap: var(--seeds-spacer-section);
     }
 
     .contact-card {
-      padding: var(--seeds-s6);
+      padding: var(--seeds-spacer-content);
       display: flex;
       flex-direction: column;
-      gap: var(--seeds-s6);
+      gap: var(--seeds-spacer-content);
 
       .contact-card-subsection {
         display: flex;
@@ -31,11 +31,20 @@
       }
 
       .contact-card-description {
-        color: var(--seeds-color-gray-700);
+        color: var(--seeds-text-color-light);
       }
 
       .contact-card-info {
         font-weight: var(--seeds-font-weight-bold);
+      }
+    }
+
+    .aside-section {
+      margin-block-start: var(--seeds-spacer-content);
+      @media (--md-and-up) {
+        padding-inline-start: var(--seeds-s8);
+        margin-block-start: unset;
+        width: var(--seeds-width-6xl);
       }
     }
   }

@@ -14,7 +14,7 @@ const ResourceSection = ({
   return (
     <div>
       <div className={styles["resource-section-header"]}>
-        <Heading className={styles["resource-section-title"]} priority={3}>
+        <Heading className={styles["resource-section-title"]} priority={2}>
           {sectionTitle}
         </Heading>
         {sectionSubtitle && (

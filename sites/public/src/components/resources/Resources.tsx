@@ -1,13 +1,13 @@
-import MaxWidthLayout from "../../layouts/max-width"
-import styles from "./Resources.module.scss"
-import { Card, Grid } from "@bloom-housing/ui-seeds"
-import { GridRow } from "@bloom-housing/ui-seeds/src/layout/Grid"
+import Link from "next/link"
 import Head from "next/head"
+import { Card, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { t, PageHeader } from "@bloom-housing/ui-components"
+import { GridRow } from "@bloom-housing/ui-seeds/src/layout/Grid"
+import MaxWidthLayout from "../../layouts/max-width"
 import Layout from "../../layouts/application"
 import ResourceSection from "./ResourceSection"
 import ResourceCard from "./ResourceCard"
-import Link from "next/link"
+import styles from "./Resources.module.scss"
 
 const Resources = () => {
   const pageTitle = t("pageTitle.additionalResources")
@@ -33,7 +33,7 @@ const Resources = () => {
               sectionTitle={t("resources.immedieteHousingTitle")}
               sectionSubtitle={t("resources.immedieteHousingSubtitle")}
             >
-              <Grid>
+              <Grid spacing="sm">
                 <GridRow columns={2}>
                   <ResourceCard
                     title={t("resources.alamedaResourceFinderTitle")}
@@ -89,10 +89,12 @@ const Resources = () => {
               </Grid>
             </ResourceSection>
           </div>
-          <aside className="pt-4 pb-10 md:w-4/12 md:pl-4 md:py-0">
+          <aside className={styles["aside-section"]}>
             <Card className={styles["contact-card"]}>
               <div className={styles["contact-card-subsection"]}>
-                <p className={styles["contact-card-title"]}>{t("resources.contactTitle")}</p>
+                <Heading size="xl" priority={4}>
+                  {t("resources.contactTitle")}
+                </Heading>
                 <p className={styles["contact-card-description"]}>
                   {t("resources.contactDescription")}
                 </p>
