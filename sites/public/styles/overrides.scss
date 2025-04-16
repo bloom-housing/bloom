@@ -145,4 +145,19 @@
       margin-left: 0.6rem;
     }
   }
+
+  // Used in Bloom core for theming testing purposes only
+  .lakeview {
+    --seeds-color-primary-darker: #133a35;
+    --seeds-color-primary-dark: #1f6058;
+    --seeds-color-primary: #297e73;
+    --seeds-color-primary-light: #c5ece7;
+    --seeds-color-primary-lighter: #ecf9f7;
+    --seeds-bg-color-surface-primary: var(--seeds-color-primary-lighter);
+    --seeds-bg-color-surface-primary-inverse: var(--seeds-color-primary-darker);
+    .seeds-button {
+      --button-border-radius-sm: var(--seeds-rounded-3xl);
+      --button-border-radius-md: var(--seeds-rounded-3xl);
+    }
+  }
 }
