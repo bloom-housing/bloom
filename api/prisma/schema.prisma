@@ -1023,6 +1023,13 @@ model ScriptRuns {
   @@map("script_runs")
 }
 
+model ListingTransferMap {
+  listingId String @id() @map("listing_id") @db.Uuid
+  oldId     String @map("old_id") @db.Uuid
+
+  @@map("listing_transfer_map")
+}
+
 view ApplicationFlaggedSetPossibilities {
   key           String
   listingId     String @map("listing_id") @db.Uuid
