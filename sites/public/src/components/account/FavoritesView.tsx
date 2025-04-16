@@ -114,6 +114,10 @@ const FavoritesView = ({ jurisdiction }: FavoritesViewProps) => {
                             )}
                             favorited={favoriteListings.some((item) => item.id === listing.id)}
                             setFavorited={saveFavoriteFn(listing)}
+                            showHomeType={isFeatureFlagOn(
+                              jurisdiction,
+                              FeatureFlagEnum.enableHomeType
+                            )}
                           />
                         )
                       })}
