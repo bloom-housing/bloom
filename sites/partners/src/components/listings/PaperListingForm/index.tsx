@@ -21,6 +21,7 @@ import {
   FormListing,
   TempEvent,
   TempUnit,
+  TempUnitGroup,
   formDefaults,
 } from "../../../lib/listings/formTypes"
 import ListingDataPipeline from "../../../lib/listings/ListingDataPipeline"
@@ -39,11 +40,9 @@ import ApplicationAddress from "./sections/ApplicationAddress"
 import ApplicationDates from "./sections/ApplicationDates"
 import LotteryResults from "./sections/LotteryResults"
 import ApplicationTypes from "./sections/ApplicationTypes"
-import SelectAndOrder from "./sections/SelectAndOrder"
 import CommunityType from "./sections/CommunityType"
 import BuildingSelectionCriteria from "./sections/BuildingSelectionCriteria"
 import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
-import { useJurisdictionalMultiselectQuestionList } from "../../../lib/hooks"
 import { StatusBar } from "../../../components/shared/StatusBar"
 import { getListingStatusTag } from "../helpers"
 import RequestChangesDialog from "./dialogs/RequestChangesDialog"
@@ -54,6 +53,7 @@ import ListingApprovalDialog from "./dialogs/ListingApprovalDialog"
 import SaveBeforeExitDialog from "./dialogs/SaveBeforeExitDialog"
 import ListingVerification from "./sections/ListingVerification"
 import NeighborhoodAmenities from "./sections/NeighborhoodAmenities"
+import PreferencesAndPrograms from "./sections/PreferencesAndPrograms"
 
 type ListingFormProps = {
   listing?: FormListing
@@ -105,6 +105,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [units, setUnits] = useState<TempUnit[]>([])
+  const [unitGroups, setUnitGroups] = useState<TempUnitGroup[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
   const [preferences, setPreferences] = useState<MultiselectQuestion[]>(
     listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.preferences)?.map(
@@ -153,6 +154,18 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
       setUnits(tempUnits)
     }
 
+    if (listing?.unitGroups) {
+      const tempUnitGroups = listing.unitGroups.map((unitGroup, i) => ({
+        ...unitGroup,
+        unitGroupAmiLevels: unitGroup.unitGroupAmiLevels.map((amiEntry, i) => ({
+          ...amiEntry,
+          tempId: i + 1,
+        })),
+        tempId: i + 1,
+      }))
+      setUnitGroups(tempUnitGroups)
+    }
+
     if (listing?.listingEvents) {
       setOpenHouseEvents(
         listing.listingEvents
@@ -167,7 +180,14 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
           .sort((a, b) => (dayjs(a.startTime).isAfter(b.startTime) ? 1 : -1))
       )
     }
-  }, [listing?.units, listing?.listingEvents, setUnits, setOpenHouseEvents])
+  }, [
+    listing?.units,
+    listing?.unitGroups,
+    listing?.listingEvents,
+    setUnits,
+    setUnitGroups,
+    setOpenHouseEvents,
+  ])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getValues, setError, clearErrors, reset, watch } = formMethods
@@ -217,6 +237,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
               preferences,
               programs,
               units,
+              unitGroups,
               openHouseEvents,
               profile: profile,
               latLong,
@@ -291,8 +312,10 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
         }
       }
     },
+    //eslint-disable-next-line react-hooks/exhaustive-deps
     [
       units,
+      unitGroups,
       openHouseEvents,
       editMode,
       listingsService,
@@ -351,44 +374,18 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                           <CommunityType listing={listing} />
                           <Units
                             units={units}
+                            unitGroups={unitGroups}
                             setUnits={setUnits}
+                            setUnitGroups={setUnitGroups}
                             disableUnitsAccordion={listing?.disableUnitsAccordion}
                             featureFlags={activeFeatureFlags}
                           />
-                          <SelectAndOrder
-                            addText={t("listings.addPreference")}
-                            drawerTitle={t("listings.addPreferences")}
-                            drawerSubtitle={
-                              process.env.showLottery && listing?.lotteryOptIn
-                                ? t("listings.lotteryPreferenceSubtitle")
-                                : null
-                            }
-                            editText={t("listings.editPreferences")}
-                            listingData={preferences || []}
-                            setListingData={setPreferences}
-                            subtitle={t("listings.sections.housingPreferencesSubtext")}
-                            title={t("listings.sections.housingPreferencesTitle")}
-                            drawerButtonText={t("listings.selectPreferences")}
-                            dataFetcher={useJurisdictionalMultiselectQuestionList}
-                            formKey={"preference"}
-                            applicationSection={
-                              MultiselectQuestionsApplicationSectionEnum.preferences
-                            }
-                          />
-                          <SelectAndOrder
-                            addText={"Add program"}
-                            drawerTitle={"Add programs"}
-                            editText={"Edit programs"}
-                            listingData={programs || []}
-                            setListingData={setPrograms}
-                            subtitle={
-                              "Tell us about any additional housing programs related to this listing."
-                            }
-                            title={"Housing Programs"}
-                            drawerButtonText={"Select programs"}
-                            dataFetcher={useJurisdictionalMultiselectQuestionList}
-                            formKey={"program"}
-                            applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
+                          <PreferencesAndPrograms
+                            listing={listing}
+                            preferences={preferences || []}
+                            setPreferences={setPreferences}
+                            programs={programs || []}
+                            setPrograms={setPrograms}
                           />
                           <AdditionalFees existingUtilities={listing?.listingUtilities} />
                           <BuildingFeatures existingFeatures={listing?.listingFeatures} />
