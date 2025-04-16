@@ -10,6 +10,7 @@ import {
   cleanMultiselectString,
   getStackedSummariesTable,
   ResponseException,
+  getStackedGroupSummariesTable,
 } from "@bloom-housing/shared-helpers"
 import {
   Address,
@@ -21,6 +22,7 @@ import {
   MarketingTypeEnum,
   ModificationEnum,
   ReviewOrderTypeEnum,
+  UnitGroupsSummarized,
   UnitsSummarized,
   UserService,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -79,6 +81,15 @@ export const getListingUrl = (listing: Listing) => {
 export const getListingStackedTableData = (unitsSummarized: UnitsSummarized) => {
   return unitsSummarized !== undefined
     ? getStackedSummariesTable(unitsSummarized.byUnitTypeAndRent)
+    : []
+}
+
+export const getListingStackedGroupTableData = (
+  unitGroupsSummarized: UnitGroupsSummarized,
+  isComingSoon?: boolean
+) => {
+  return unitGroupsSummarized !== undefined
+    ? getStackedGroupSummariesTable(unitGroupsSummarized.unitGroupSummary, isComingSoon)
     : []
 }
 

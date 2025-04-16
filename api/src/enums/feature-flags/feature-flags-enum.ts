@@ -93,6 +93,21 @@ export const featureFlagMap: { name: string; description: string }[] = [
       "When true, any newly published listing will send a gov delivery email to everyone that has signed up for the 'listing alerts'",
   },
   {
+    name: FeatureFlagEnum.enableListingsPagination,
+    description:
+      'When true listings browser will display pagination controls section',
+  },
+  {
+    name: FeatureFlagEnum.enableMarketingStatus,
+    description:
+      "When true, the 'marketing status' sub-section is displayed in listing creation/edit and the public listing view",
+  },
+  {
+    name: FeatureFlagEnum.enableNeighborhoodAmenities,
+    description:
+      "When true, the 'neighborhood amenities' section is displayed in listing creation/edit and the public listing view",
+  },
+  {
     name: FeatureFlagEnum.enablePartnerDemographics,
     description:
       'When true, demographics data is included in application or lottery exports for partners',

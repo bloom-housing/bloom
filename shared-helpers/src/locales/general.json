@@ -1056,6 +1056,7 @@
   "listings.underConstruction": "Under Construction",
   "listings.unitsAreFor": "These units are for %{type}.",
   "listings.unitsHaveAccessibilityFeaturesFor": "These units have accessibility features for people with %{type}.",
+  "listings.unitsSummary.notAvailable": "Not available",
   "listings.unitTypes.any": "Any",
   "listings.unitTypes.fiveBdrm": "5 beds",
   "listings.unitTypes.fourBdrm": "4 beds",

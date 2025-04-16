@@ -2582,7 +2582,15 @@ describe('Testing listing service', () => {
 
       expect(listing.unitGroups).toEqual(mockedListing.unitGroups);
       expect(listing.unitGroupsSummarized.unitGroupSummary[0]).toEqual({
-        unitTypes: [UnitTypeEnum.SRO],
+        unitTypes: [
+          {
+            id: 'unitType 0',
+            createdAt: date,
+            updatedAt: date,
+            name: 'SRO',
+            numBedrooms: 0,
+          },
+        ],
         rentAsPercentIncomeRange: {
           min: 0,
           max: 30,
@@ -2607,7 +2615,15 @@ describe('Testing listing service', () => {
         },
       });
       expect(listing.unitGroupsSummarized.unitGroupSummary[2]).toEqual({
-        unitTypes: [UnitTypeEnum.oneBdrm],
+        unitTypes: [
+          {
+            id: 'unitType 2',
+            createdAt: date,
+            updatedAt: date,
+            name: 'oneBdrm',
+            numBedrooms: 2,
+          },
+        ],
         rentAsPercentIncomeRange: {
           min: 20,
           max: 50,
