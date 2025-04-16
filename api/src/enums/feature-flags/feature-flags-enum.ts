@@ -67,7 +67,7 @@ export const featureFlagMap: { name: string; description: string }[] = [
     description:
       "When true, any newly published listing will send a gov delivery email to everyone that has signed up for the 'listing alerts'",
   },
-    {
+  {
     name: FeatureFlagEnum.enableListingsPagination,
     description:
       'When true listings browser will display pagination controls section',
