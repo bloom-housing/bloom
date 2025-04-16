@@ -148,11 +148,11 @@
 
   // Used in Bloom core for theming testing purposes only
   .lakeview {
-    --seeds-color-primary-darker: #133a35;
-    --seeds-color-primary-dark: #1f6058;
-    --seeds-color-primary: #297e73;
-    --seeds-color-primary-light: #c5ece7;
-    --seeds-color-primary-lighter: #ecf9f7;
+    --seeds-color-primary-darker: #4e2169;
+    --seeds-color-primary-dark: #6e2598;
+    --seeds-color-primary: #773e98;
+    --seeds-color-primary-light: #f2daff;
+    --seeds-color-primary-lighter: #f9f4fa;
     --seeds-bg-color-surface-primary: var(--seeds-color-primary-lighter);
     --seeds-bg-color-surface-primary-inverse: var(--seeds-color-primary-darker);
     .seeds-button {
