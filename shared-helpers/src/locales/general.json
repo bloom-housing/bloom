@@ -946,6 +946,7 @@
   "t.none": "None",
   "t.noneFound": "None found.",
   "t.occupancy": "Occupancy",
+  "t.flatRent": "Flat Rent",
   "t.ofIncome": "% of income",
   "t.rangeOfIncome": "%{min}% to %{max}% of income",
   "t.numOfIncome": "%{num}% of income",
