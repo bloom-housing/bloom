@@ -14,12 +14,13 @@ import {
   pushGtmEvent,
   ResponseException,
 } from "@bloom-housing/shared-helpers"
-import { PageHeader, t } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
 import MaxWidthLayout from "../../layouts/max-width"
 import { fetchFavoriteListingIds, isFeatureFlagOn, saveListingFavorite } from "../../lib/helpers"
+import { PageHeaderSection } from "../../patterns/PageHeaderLayout"
 import { ListingCard } from "./ListingCard"
 import styles from "./ListingBrowse.module.scss"
 
@@ -91,10 +92,8 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
       <Head>
         <title>{pageTitle}</title>
       </Head>
-
       <MetaTags title={t("nav.siteTitle")} description={metaDescription} />
-      <PageHeader title={t("pageTitle.rent")} />
-
+      <PageHeaderSection heading={t("pageTitle.rent")} inverse={true} />
       <div className={styles["listing-directory"]}>
         {props.paginationData && (
           <div className={styles["browse-header"]}>
@@ -138,6 +137,10 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                             }
                             favorited={favoriteListingIds.includes(listing.id)}
                             setFavorited={saveFavoriteFn(listing.id)}
+                            showHomeType={isFeatureFlagOn(
+                              props.jurisdiction,
+                              FeatureFlagEnum.enableHomeType
+                            )}
                           />
                         )
                       })}
