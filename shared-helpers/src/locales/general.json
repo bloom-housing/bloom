@@ -650,7 +650,6 @@
   "listings.favoriteSaveError": "Listing was not saved to favorites - try again",
   "listings.forIncomeCalculationsBMR": "Income calculations are based on unit type",
   "listings.hideClosedListings": "Hide Closed Listings",
-  "listings.comingSoon": "Coming Soon",
   "listings.homeType": "Home type",
   "listings.homeType.apartment": "Apartment",
   "listings.homeType.duplex": "Duplex",
@@ -844,7 +843,6 @@
   "progressNav.completed": "completed",
   "progressNav.notCompleted": "not completed",
   "progressNav.srHeading": "Progress",
-
   "region.name": "Bloomington",
   "seasons.fall": "Fall",
   "seasons.spring": "Spring",
