@@ -30,32 +30,32 @@ const Resources = () => {
         <article className={styles["site-content"]}>
           <div className={styles["resources-section-wrapper"]}>
             <ResourceSection
-              sectionTitle={t("resources.immedieteHousingTitle")}
-              sectionSubtitle={t("resources.immedieteHousingSubtitle")}
+              sectionTitle={t("resources.immediateHousingTitle")}
+              sectionSubtitle={t("resources.immediateHousingSubtitle")}
             >
               <Grid spacing="sm">
                 <GridRow columns={2}>
                   <ResourceCard
-                    title={t("resources.alamedaResourceFinderTitle")}
+                    title={t("resources.mockCardTitle")}
                     href="/"
-                    content={t("resources.alamedaResourceFinder")}
+                    content={t("resources.mockCardDescription")}
                   />
                   <ResourceCard
-                    title={t("resources.alamedaResourceFinderTitle")}
+                    title={t("resources.mockCardTitle")}
                     href="/"
-                    content={t("resources.alamedaResourceFinder")}
+                    content={t("resources.mockCardDescription")}
                   />
                 </GridRow>
                 <GridRow columns={2}>
                   <ResourceCard
-                    title={t("resources.alamedaResourceFinderTitle")}
+                    title={t("resources.mockCardTitle")}
                     href="/"
-                    content={t("resources.alamedaResourceFinder")}
+                    content={t("resources.mockCardDescription")}
                   />
                   <ResourceCard
-                    title={t("resources.alamedaResourceFinderTitle")}
+                    title={t("resources.mockCardTitle")}
                     href="/"
-                    content={t("resources.alamedaResourceFinder")}
+                    content={t("resources.mockCardDescription")}
                   />
                 </GridRow>
               </Grid>
@@ -64,26 +64,26 @@ const Resources = () => {
               <Grid>
                 <GridRow columns={2}>
                   <ResourceCard
-                    title={t("resources.alamedaResourceFinderTitle")}
+                    title={t("resources.mockCardTitle")}
                     href="/"
-                    content={t("resources.alamedaResourceFinder")}
+                    content={t("resources.mockCardDescription")}
                   />
                   <ResourceCard
-                    title={t("resources.alamedaResourceFinderTitle")}
+                    title={t("resources.mockCardTitle")}
                     href="/"
-                    content={t("resources.alamedaResourceFinder")}
+                    content={t("resources.mockCardDescription")}
                   />
                 </GridRow>
                 <GridRow columns={2}>
                   <ResourceCard
-                    title={t("resources.housingProgramsTitle")}
+                    title={t("resources.mockCardTitle")}
                     href="/"
-                    content={t("resources.alamedaResourceFinder")}
+                    content={t("resources.mockCardDescription")}
                   />
                   <ResourceCard
-                    title={t("resources.housingProgramsTitle")}
+                    title={t("resources.mockCardTitle")}
                     href="/"
-                    content={t("resources.alamedaResourceFinder")}
+                    content={t("resources.mockCardDescription")}
                   />
                 </GridRow>
               </Grid>
