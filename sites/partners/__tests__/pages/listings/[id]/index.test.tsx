@@ -13,6 +13,7 @@ import DetailPreferences from "../../../../src/components/listings/PaperListingD
 import {
   ApplicationAddressTypeEnum,
   ApplicationMethodsTypeEnum,
+  FeatureFlagEnum,
   LanguagesEnum,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
@@ -72,6 +73,27 @@ afterEach(() => {
 afterAll(() => {
   server.close()
 })
+
+function mockJurisdictionsHaveFeatureFlagOn(
+  featureFlag: string,
+  enableHomeType = true,
+  enableSection8Question = true,
+  enableUnitGroups = false,
+  enableIsVerified = true
+) {
+  switch (featureFlag) {
+    case FeatureFlagEnum.enableHomeType:
+      return enableHomeType
+    case FeatureFlagEnum.enableSection8Question:
+      return enableSection8Question
+    case FeatureFlagEnum.enableUnitGroups:
+      return enableUnitGroups
+    case FeatureFlagEnum.enableIsVerified:
+      return enableIsVerified
+    default:
+      return true
+  }
+}
 
 describe("listing data", () => {
   describe("should display all listing data", () => {
@@ -290,7 +312,8 @@ describe("listing data", () => {
         <AuthContext.Provider
           value={{
             profile: { ...user, jurisdictions: [], listings: [] },
-            doJurisdictionsHaveFeatureFlagOn: () => true,
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+              mockJurisdictionsHaveFeatureFlagOn(featureFlag),
           }}
         >
           <ListingContext.Provider value={{ ...listing, region: RegionEnum.Southwest }}>
@@ -484,7 +507,8 @@ describe("listing data", () => {
         <AuthContext.Provider
           value={{
             profile: { ...user, jurisdictions: [], listings: [] },
-            doJurisdictionsHaveFeatureFlagOn: () => true,
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+              mockJurisdictionsHaveFeatureFlagOn(featureFlag),
           }}
         >
           <ListingContext.Provider
@@ -727,7 +751,8 @@ describe("listing data", () => {
                 jurisdictions: [],
                 listings: [],
               },
-              doJurisdictionsHaveFeatureFlagOn: () => true,
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                mockJurisdictionsHaveFeatureFlagOn(featureFlag),
             }}
           >
             <ListingContext.Provider
@@ -1449,7 +1474,8 @@ describe("listing data", () => {
           <AuthContext.Provider
             value={{
               profile: { ...user, jurisdictions: [], listings: [] },
-              doJurisdictionsHaveFeatureFlagOn: () => false,
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                mockJurisdictionsHaveFeatureFlagOn(featureFlag, true, true, false, false),
             }}
           >
             <ListingContext.Provider
@@ -1473,7 +1499,8 @@ describe("listing data", () => {
           <AuthContext.Provider
             value={{
               profile: { ...user, jurisdictions: [], listings: [] },
-              doJurisdictionsHaveFeatureFlagOn: () => true,
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                mockJurisdictionsHaveFeatureFlagOn(featureFlag),
             }}
           >
             <ListingContext.Provider
@@ -1548,7 +1575,8 @@ describe("listing data", () => {
                 listings: [],
                 jurisdictions: [jurisdiction],
               },
-              doJurisdictionsHaveFeatureFlagOn: () => true,
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                mockJurisdictionsHaveFeatureFlagOn(featureFlag),
             }}
           >
             <ListingDetail
@@ -1589,7 +1617,8 @@ describe("listing data", () => {
               listings: [],
               jurisdictions: [jurisdiction],
             },
-            doJurisdictionsHaveFeatureFlagOn: () => true,
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+              mockJurisdictionsHaveFeatureFlagOn(featureFlag),
           }}
         >
           <ListingDetail listing={result.props.listing} />
@@ -1624,7 +1653,8 @@ describe("listing data", () => {
                 listings: [],
                 jurisdictions: [jurisdiction],
               },
-              doJurisdictionsHaveFeatureFlagOn: () => true,
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                mockJurisdictionsHaveFeatureFlagOn(featureFlag),
             }}
           >
             <ListingDetail listing={result.props.listing} />
@@ -1682,7 +1712,8 @@ describe("listing data", () => {
                 listings: [],
                 jurisdictions: [jurisdiction],
               },
-              doJurisdictionsHaveFeatureFlagOn: () => true,
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                mockJurisdictionsHaveFeatureFlagOn(featureFlag),
             }}
           >
             <ListingDetail listing={result.props.listing} />
@@ -1732,7 +1763,8 @@ describe("listing data", () => {
               listings: [],
               jurisdictions: [{ ...jurisdiction, id: "id" }],
             },
-            doJurisdictionsHaveFeatureFlagOn: () => true,
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+              mockJurisdictionsHaveFeatureFlagOn(featureFlag),
           }}
         >
           <ListingDetail listing={result.props.listing} />
@@ -1767,7 +1799,8 @@ describe("listing data", () => {
             listings: [],
             jurisdictions: [jurisdiction],
           },
-          doJurisdictionsHaveFeatureFlagOn: () => true,
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag),
         }}
       >
         <ListingDetail

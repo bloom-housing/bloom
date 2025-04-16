@@ -736,5 +736,6 @@ export const listing: Listing = {
     },
   ],
   isExternal: false,
+  unitGroups: [],
   listingImages: [],
 }
