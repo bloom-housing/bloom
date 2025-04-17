@@ -13,6 +13,7 @@
   .page-header-background {
     background-color: var(--page-header-layout-banner-bg-color);
     display: flex;
+    flex-direction: column;
     justify-content: center;
   }
   .page-header-outer {
@@ -51,6 +52,7 @@
 
   .page-content-outer {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     margin-block: var(--seeds-spacer-container);
     @media (--md-down) {

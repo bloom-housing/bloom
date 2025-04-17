@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useState } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { Button, Heading } from "@bloom-housing/ui-seeds"
+import { Button, Heading, Tabs } from "@bloom-housing/ui-seeds"
 import {
   Jurisdiction,
   Listing,
@@ -24,9 +24,13 @@ import { PageHeaderSection } from "../../patterns/PageHeaderLayout"
 import { ListingCard } from "./ListingCard"
 import styles from "./ListingBrowse.module.scss"
 
+export enum TabsIndexEnum {
+  open,
+  closed,
+}
+
 export interface ListingBrowseProps {
-  openListings: Listing[]
-  closedListings: Listing[]
+  listings: Listing[]
   jurisdiction: Jurisdiction
   paginationData?: {
     currentPage: number
@@ -35,6 +39,7 @@ export interface ListingBrowseProps {
     totalItems: number
     totalPages: number
   }
+  tab: TabsIndexEnum
 }
 
 export const ListingBrowse = (props: ListingBrowseProps) => {
@@ -51,8 +56,8 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
       event: "pageView",
       pageTitle: "Rent Affordable Housing - Housing Portal",
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
-      numberOfListings: props.openListings.length,
-      listingIds: props.openListings.map((listing) => listing.id),
+      numberOfListings: props.listings.length,
+      listingIds: props.listings.map((listing) => listing.id),
     })
 
     if (profile) {
@@ -60,7 +65,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
         setFavoriteListingIds(listingIds)
       })
     }
-  }, [profile, props.openListings, setFavoriteListingIds, userService])
+  }, [profile, props.listings, setFavoriteListingIds, userService])
 
   const saveFavoriteFn = (listingId: string) => {
     return (listingFavorited) => {
@@ -87,13 +92,35 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
     props.paginationData && props.paginationData.currentPage < props.paginationData.totalPages
   const isPreviousPageAvailable = props.paginationData && props.paginationData.currentPage > 1
 
+  const selectionHandler = (index: number) => {
+    switch (index) {
+      case TabsIndexEnum.open:
+        void router.push("/listings")
+        break
+      case TabsIndexEnum.closed:
+        void router.push("/listings-closed")
+        break
+    }
+  }
+
+  const ListingTabs = (
+    <MaxWidthLayout>
+      <Tabs className={styles["tabs"]} onSelect={selectionHandler} selectedIndex={props.tab}>
+        <Tabs.TabList>
+          <Tabs.Tab>{t("t.open")}</Tabs.Tab>
+          <Tabs.Tab>{t("listings.closed")}</Tabs.Tab>
+        </Tabs.TabList>
+      </Tabs>
+    </MaxWidthLayout>
+  )
+
   return (
     <Layout>
       <Head>
         <title>{pageTitle}</title>
       </Head>
       <MetaTags title={t("nav.siteTitle")} description={metaDescription} />
-      <PageHeaderSection heading={t("pageTitle.rent")} inverse={true} />
+      <PageHeaderSection heading={t("pageTitle.rent")} inverse={true} content={ListingTabs} />
       <div className={styles["listing-directory"]}>
         {props.paginationData && (
           <div className={styles["browse-header"]}>
@@ -117,59 +144,38 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
         <div className={styles["content-wrapper"]}>
           <MaxWidthLayout className={styles["listings-max-width-layout"]}>
             <div className={styles["content"]}>
-              {/* TODO: Show both open and closed listings once we have designs for pagination: Issue #4448 */}
               <>
-                {props.openListings.length > 0 ? (
-                  <>
-                    <ul>
-                      {props.openListings.map((listing, index) => {
-                        return (
-                          <ListingCard
-                            listing={listing}
-                            key={index}
-                            jurisdiction={props.jurisdiction}
-                            showFavoriteButton={
-                              profile &&
-                              isFeatureFlagOn(
-                                props.jurisdiction,
-                                FeatureFlagEnum.enableListingFavoriting
-                              )
-                            }
-                            favorited={favoriteListingIds.includes(listing.id)}
-                            setFavorited={saveFavoriteFn(listing.id)}
-                            showHomeType={isFeatureFlagOn(
+                {props.listings?.length > 0 ? (
+                  <ul>
+                    {props.listings.map((listing, index) => {
+                      return (
+                        <ListingCard
+                          listing={listing}
+                          key={index}
+                          jurisdiction={props.jurisdiction}
+                          showFavoriteButton={
+                            profile &&
+                            isFeatureFlagOn(
                               props.jurisdiction,
-                              FeatureFlagEnum.enableHomeType
-                            )}
-                          />
-                        )
-                      })}
-                    </ul>
-                    <ul className={"seeds-m-bs-content"}>
-                      {props.closedListings.map((listing, index) => {
-                        return (
-                          <ListingCard
-                            listing={listing}
-                            key={index}
-                            jurisdiction={props.jurisdiction}
-                            showFavoriteButton={
-                              profile &&
-                              isFeatureFlagOn(
-                                props.jurisdiction,
-                                FeatureFlagEnum.enableListingFavoriting
-                              )
-                            }
-                            favorited={favoriteListingIds.includes(listing.id)}
-                            setFavorited={saveFavoriteFn(listing.id)}
-                          />
-                        )
-                      })}
-                    </ul>
-                  </>
+                              FeatureFlagEnum.enableListingFavoriting
+                            )
+                          }
+                          favorited={favoriteListingIds.includes(listing.id)}
+                          setFavorited={saveFavoriteFn(listing.id)}
+                          showHomeType={isFeatureFlagOn(
+                            props.jurisdiction,
+                            FeatureFlagEnum.enableHomeType
+                          )}
+                        />
+                      )
+                    })}
+                  </ul>
                 ) : (
                   <div className={styles["empty-state"]}>
                     <Heading size={"xl"} priority={2} className={styles["empty-heading"]}>
-                      {t("listings.noOpenListings")}
+                      {props.tab === TabsIndexEnum.open
+                        ? t("listings.noOpenListings")
+                        : t("listings.noClosedListings")}
                     </Heading>
                   </div>
                 )}

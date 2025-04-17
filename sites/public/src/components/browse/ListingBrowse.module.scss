@@ -104,3 +104,9 @@
   --max-width-layout-mobile-margin-block: var(--seeds-s4);
   --max-width-layout-desktop-margin-block: var(--seeds-s12);
 }
+
+.tabs {
+  @media (--sm-only) {
+    margin-block-end: var(--seeds-s4);
+  }
+}
