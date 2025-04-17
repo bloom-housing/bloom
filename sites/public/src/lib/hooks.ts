@@ -101,6 +101,7 @@ export async function fetchBaseListingData(
         "x-forwarded-for": req.headers["x-forwarded-for"] ?? req.socket.remoteAddress,
       },
     })
+    
 
     listings = response.data?.items
   } catch (e) {
@@ -112,6 +113,7 @@ export async function fetchBaseListingData(
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchOpenListings(req: any) {
+  console.log("URL:", process.env.listingServiceUrl)
   return await fetchBaseListingData(
     {
       additionalFilters: [

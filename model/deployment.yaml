@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: housing-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: housing-service
+  template:
+    metadata:
+      labels:
+        app: housing-service
+    spec:
+      containers:
+      - name: housing-service
+        image: housing-service:latest
+        imagePullPolicy: Never # Prevent pulling the image from a registry for local testing
+        ports:
+        - containerPort: 5000

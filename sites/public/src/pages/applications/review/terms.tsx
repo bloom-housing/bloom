@@ -77,7 +77,8 @@ const ApplicationTerms = () => {
           },
         })
         .then((result) => {
-          conductor.currentStep.save({ confirmationCode: result.confirmationCode })
+          conductor.currentStep.save({ confirmationCode: result.confirmationCode, riskScore: result.riskScore })
+          console.log(`Risk score returned from server: ${result.riskScore}`);
           return router.push("/applications/review/confirmation")
         })
         .catch((err) => {

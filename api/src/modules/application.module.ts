@@ -9,6 +9,7 @@ import { MultiselectQuestionModule } from './multiselect-question.module';
 import { PermissionModule } from './permission.module';
 import { PrismaModule } from './prisma.module';
 import { UnitTypeModule } from './unit-type.module';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { UnitTypeModule } from './unit-type.module';
     MultiselectQuestionModule,
     PermissionModule,
     UnitTypeModule,
+    HttpModule
   ],
   controllers: [ApplicationController],
   providers: [ApplicationService, GeocodingService],
