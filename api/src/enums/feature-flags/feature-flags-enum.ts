@@ -31,6 +31,11 @@ export enum FeatureFlagEnum {
 // Keep alphabetized for readability.
 export const featureFlagMap: { name: string; description: string }[] = [
   {
+    name: FeatureFlagEnum.disableCommonApplication,
+    description:
+      'When true, the digital common application is not an option for listings',
+  },
+  {
     name: FeatureFlagEnum.disableJurisdictionalAdmin,
     description: 'When true, jurisdictional admins cannot be created',
   },
@@ -123,9 +128,5 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.swapCommunityTypeWithPrograms,
     description:
       'When true, the programs section on the frontend is displayed as community types.',
-  },
-  {
-    name: FeatureFlagEnum.disableCommonApplication,
-    description: 'When true, the digital common application is not an option for listings',
   },
 ];
