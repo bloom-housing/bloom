@@ -37,7 +37,6 @@
     "ag-grid-community": "^26.0.0",
     "axios": "^1.8.3",
     "axios-cookiejar-support": "4.0.6",
-    "class-validator": "^0.14.1",
     "clone-deep": "^4.0.1",
     "dayjs": "^1.10.7",
     "dd-trace": "^5.30.0",
