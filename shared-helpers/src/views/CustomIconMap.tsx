@@ -8,6 +8,7 @@ import HeartIconSolid from "@heroicons/react/24/solid/HeartIcon"
 import HomeModernIcon from "@heroicons/react/24/outline/HomeModernIcon"
 import HouseIcon from "@heroicons/react/24/outline/HomeIcon"
 import EnvelopeIcon from "@heroicons/react/24/outline/EnvelopeIcon"
+import MapPinIcon from "@heroicons/react/24/outline/MapPinIcon"
 
 export const CustomIconMap = {
   application: Application,
@@ -19,6 +20,7 @@ export const CustomIconMap = {
   heartIconSolid: <HeartIconSolid />,
   home: <HomeModernIcon />,
   envelope: <EnvelopeIcon />,
+  mapPin: <MapPinIcon />,
   house: <HouseIcon />,
 }
 

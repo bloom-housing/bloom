@@ -1,5 +1,6 @@
 import {
   ApplicationMethodsTypeEnum,
+  ListingEventsTypeEnum,
   ListingsStatusEnum,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
@@ -9,6 +10,16 @@ import { featuresAndUtilites } from '../listing-factory';
 export const elmVillage = {
   additionalApplicationSubmissionNotes: null,
   digitalApplication: true,
+  listingEvents: {
+    create: [
+      {
+        type: ListingEventsTypeEnum.publicLottery,
+        startDate: dayjs(new Date()).add(7, 'months').toDate(),
+        startTime: dayjs(new Date()).add(7, 'months').add(1, 'hour').toDate(),
+        endTime: dayjs(new Date()).add(7, 'months').add(2, 'hour').toDate(),
+      },
+    ],
+  },
   commonDigitalApplication: true,
   paperApplication: false,
   referralOpportunity: false,

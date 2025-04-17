@@ -3601,7 +3601,7 @@ export interface UnitsSummarized {
 
 export interface UnitGroupSummary {
   /**  */
-  unitTypes?: string[]
+  unitTypes?: UnitType[]
 
   /**  */
   rentAsPercentIncomeRange?: MinMax
@@ -7062,26 +7062,27 @@ export enum UserRoleEnum {
 
 export enum FeatureFlagEnum {
   "example" = "example",
-  "enableHomeType" = "enableHomeType",
+  "disableCommonApplication" = "disableCommonApplication",
+  "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
-  "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
-  "enableIsVerified" = "enableIsVerified",
-  "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
-  "hideCloseListingButton" = "hideCloseListingButton",
-  "enableMarketingStatus" = "enableMarketingStatus",
-  "enableRegions" = "enableRegions",
-  "enableSection8Question" = "enableSection8Question",
-  "enableUnitGroups" = "enableUnitGroups",
-  "enableListingPagination" = "enableListingPagination",
-  "enableSingleUseCode" = "enableSingleUseCode",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
+  "enableHomeType" = "enableHomeType",
+  "enableIsVerified" = "enableIsVerified",
+  "enableListingFavoriting" = "enableListingFavoriting",
   "enableListingOpportunity" = "enableListingOpportunity",
+  "enableListingPagination" = "enableListingPagination",
+  "enableMarketingStatus" = "enableMarketingStatus",
+  "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
   "enablePartnerDemographics" = "enablePartnerDemographics",
   "enablePartnerSettings" = "enablePartnerSettings",
-  "enableListingFavoriting" = "enableListingFavoriting",
-  "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
-  "disableCommonApplication" = "disableCommonApplication",
+  "enableRegions" = "enableRegions",
+  "enableSection8Question" = "enableSection8Question",
+  "enableSingleUseCode" = "enableSingleUseCode",
+  "enableUnitGroups" = "enableUnitGroups",
+  "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
+  "hideCloseListingButton" = "hideCloseListingButton",
+  "swapCommunityTypeWithPrograms" = "swapCommunityTypeWithPrograms",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {
   "=" = "=",
