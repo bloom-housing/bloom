@@ -509,7 +509,7 @@ export class ListingService implements OnModuleInit {
             })),
           });
         }
-        if (filter[ListingFilterKeys.bathrooms]) {
+        if (filter[ListingFilterKeys.bathrooms] !== undefined) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
             $include_nulls: false,
@@ -527,7 +527,7 @@ export class ListingService implements OnModuleInit {
             })),
           });
         }
-        if (filter[ListingFilterKeys.bedrooms]) {
+        if (filter[ListingFilterKeys.bedrooms] !== undefined) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
             $include_nulls: false,
