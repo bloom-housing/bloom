@@ -23,7 +23,7 @@ afterAll(() => {
 
 describe("<Dashboard>", () => {
   mockNextRouter()
-  it("shoould render dashboard card without favourites", () => {
+  it("should render dashboard card without favorites", () => {
     render(
       <AuthContext.Provider
         value={{
@@ -59,7 +59,7 @@ describe("<Dashboard>", () => {
     expect(viewApplicationButton).toBeInTheDocument()
     expect(viewApplicationButton).toHaveAttribute("href", "/account/applications")
 
-    //Account setings card
+    //Account settings card
     expect(
       within(accountSettingsCard).getByRole("heading", { level: 2, name: /account settings/i })
     ).toBeInTheDocument()
@@ -74,7 +74,7 @@ describe("<Dashboard>", () => {
     expect(updateAccountSettingsButton).toHaveAttribute("href", "/account/edit")
   })
 
-  it("should render the favorites dashboard card when falg enabled", () => {
+  it("should render the favorites dashboard card when flag enabled", () => {
     render(
       <AuthContext.Provider
         value={{
@@ -109,17 +109,17 @@ describe("<Dashboard>", () => {
     const dashboardCards = screen.getAllByRole("gridcell")
     expect(dashboardCards).toHaveLength(3)
 
-    const myFavouritesCard = dashboardCards.pop()
+    const myFavoritesCard = dashboardCards.pop()
 
-    //Favourites card
+    //Favorites card
     expect(
-      within(myFavouritesCard).getByRole("heading", { level: 2, name: /my favorites/i })
+      within(myFavoritesCard).getByRole("heading", { level: 2, name: /my favorites/i })
     ).toBeInTheDocument()
     expect(
-      within(myFavouritesCard).getByText("Save listings and check back for updates")
+      within(myFavoritesCard).getByText("Save listings and check back for updates")
     ).toBeInTheDocument()
 
-    const viewFavoritesButton = within(myFavouritesCard).getByRole("link", {
+    const viewFavoritesButton = within(myFavoritesCard).getByRole("link", {
       name: /view favorites/i,
     })
     expect(viewFavoritesButton).toBeInTheDocument()
