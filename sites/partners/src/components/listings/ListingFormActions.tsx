@@ -47,7 +47,7 @@ const ListingFormActions = ({
   setErrorAlert,
 }: ListingFormActionsProps) => {
   const listing = useContext(ListingContext)
-  const { profile, listingsService } = useContext(AuthContext)
+  const { profile, listingsService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
   const router = useRouter()
 
@@ -77,6 +77,11 @@ const ListingFormActions = ({
 
   const listingJurisdiction = profile?.jurisdictions?.find(
     (jurisdiction) => jurisdiction.id === listing?.jurisdictions?.id
+  )
+
+  const hideCloseButton = doJurisdictionsHaveFeatureFlagOn(
+    "hideCloseListingButton",
+    listingJurisdiction?.id
   )
 
   const recordUpdated = useMemo(() => {
@@ -471,7 +476,9 @@ const ListingFormActions = ({
         listing.status === ListingsStatusEnum.active &&
         type === ListingFormActionsType.edit
       ) {
-        elements.push(closeButton)
+        if (!hideCloseButton) {
+          elements.push(closeButton)
+        }
         elements.push(unpublishButton)
         elements.push(saveContinueButton)
         elements.push(cancelButton)
