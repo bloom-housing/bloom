@@ -72,6 +72,13 @@ describe("<Dashboard>", () => {
     })
     expect(updateAccountSettingsButton).toBeInTheDocument()
     expect(updateAccountSettingsButton).toHaveAttribute("href", "/account/edit")
+
+    // My Favorites Card - should not ring-accent-cool-darker
+    expect(
+      screen.queryByRole("heading", { level: 2, name: /my favorites/i })
+    ).not.toBeInTheDocument()
+    expect(screen.queryByText("Save listings and check back for updates")).not.toBeInTheDocument()
+    expect(screen.queryByRole("link", { name: /view favorites/i })).not.toBeInTheDocument()
   })
 
   it("should render the favorites dashboard card when flag enabled", () => {
