@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import {
   t,
@@ -19,12 +19,14 @@ import { Button, Card, Drawer, Grid } from "@bloom-housing/ui-seeds"
 import {
   ApplicationMethodCreate,
   ApplicationMethodsTypeEnum,
+  FeatureFlagEnum,
   LanguagesEnum,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { FormListing } from "../../../../lib/listings/formTypes"
 import { uploadAssetAndSetData } from "../../../../lib/assets"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 
 interface Methods {
   digital: ApplicationMethodCreate
@@ -35,10 +37,18 @@ interface Methods {
 const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, errors, getValues } = useFormContext()
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+
   // watch fields
+  const jurisdiction: string = watch("jurisdictions.id")
   const digitalApplicationChoice = watch("digitalApplicationChoice")
   const commonDigitalApplicationChoice = watch("commonDigitalApplicationChoice")
   const paperApplicationChoice = watch("paperApplicationChoice")
+<<<<<<< HEAD
+=======
+  const referralOpportunityChoice = watch("referralOpportunityChoice")
+
+>>>>>>> ab5bc08ab (feat: add feature flag for disabling common app (#4791))
   /*
     Set state for methods, drawer, upload progress, and more
   */
@@ -62,6 +72,10 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
     })
     setDrawerState(false)
   }
+
+  const disableCommonApplication = jurisdiction
+    ? doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.disableCommonApplication, jurisdiction)
+    : false
 
   const yesNoRadioOptions = [
     {
@@ -223,7 +237,9 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                         ...methods,
                         digital: {
                           ...methods.digital,
-                          type: ApplicationMethodsTypeEnum.Internal,
+                          type: disableCommonApplication
+                            ? ApplicationMethodsTypeEnum.ExternalLink
+                            : ApplicationMethodsTypeEnum.Internal,
                         },
                       })
                     },
@@ -245,8 +261,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               ]}
             />
           </Grid.Cell>
-
-          {digitalApplicationChoice === YesNoAnswer.Yes && (
+          {!disableCommonApplication && digitalApplicationChoice === YesNoEnum.yes && (
             <Grid.Cell>
               <p className="field-label m-4 ml-0">{t("listings.usingCommonDigitalApplication")}</p>
 
@@ -294,43 +309,39 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             </Grid.Cell>
           )}
         </Grid.Row>
-
-        {((commonDigitalApplicationChoice &&
-          commonDigitalApplicationChoice === YesNoEnum.no &&
-          digitalApplicationChoice === YesNoEnum.yes) ||
-          (digitalApplicationChoice === YesNoEnum.yes &&
-            !commonDigitalApplicationChoice &&
-            listing?.commonDigitalApplication === false)) && (
-          <Grid.Row columns={1}>
-            <Grid.Cell>
-              <Field
-                label={t("listings.customOnlineApplicationUrl")}
-                name="customOnlineApplicationUrl"
-                id="customOnlineApplicationUrl"
-                placeholder="https://"
-                subNote={t("listings.requiredToPublish")}
-                inputProps={{
-                  value: methods.digital?.externalReference
-                    ? methods.digital.externalReference
-                    : "",
-                  onChange: (e) => {
-                    setMethods({
-                      ...methods,
-                      digital: {
-                        ...methods.digital,
-                        type: ApplicationMethodsTypeEnum.ExternalLink,
-                        externalReference: e.target.value,
-                      },
-                    })
-                  },
-                }}
-                error={fieldHasError(errors?.applicationMethods?.[0]?.externalReference)}
-                errorMessage={fieldMessage(errors?.applicationMethods?.[0]?.externalReference)}
-              />
-            </Grid.Cell>
-          </Grid.Row>
-        )}
-
+        {digitalApplicationChoice === YesNoEnum.yes &&
+          (disableCommonApplication ||
+            commonDigitalApplicationChoice === YesNoEnum.no ||
+            (!commonDigitalApplicationChoice && listing?.commonDigitalApplication === false)) && (
+              <Grid.Row columns={1}>
+              <Grid.Cell>
+                <Field
+                  label={t("listings.customOnlineApplicationUrl")}
+                  name="customOnlineApplicationUrl"
+                  id="customOnlineApplicationUrl"
+                  placeholder="https://"
+                  subNote={t("listings.requiredToPublish")}
+                  inputProps={{
+                    value: methods.digital?.externalReference
+                      ? methods.digital.externalReference
+                      : "",
+                    onChange: (e) => {
+                      setMethods({
+                        ...methods,
+                        digital: {
+                          ...methods.digital,
+                          type: ApplicationMethodsTypeEnum.ExternalLink,
+                          externalReference: e.target.value,
+                        },
+                      })
+                    },
+                  }}
+                  error={fieldHasError(errors?.applicationMethods?.[0]?.externalReference)}
+                  errorMessage={fieldMessage(errors?.applicationMethods?.[0]?.externalReference)}
+                />
+              </Grid.Cell>
+            </Grid.Row>
+          )}
         <Grid.Row columns={2}>
           <Grid.Cell>
             <p
@@ -440,6 +451,115 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             </Grid.Cell>
           </Grid.Row>
         )}
+        {/* 
+        // referral opportunity removed from Doorway
+         <Grid.Row columns={1}>
+        <Grid.Cell>
+          <p
+            className={`field-label m-4 ml-0 ${
+              fieldHasError(errors?.referralOpportunity) &&
+              referralOpportunityChoice === null &&
+              "text-alert"
+            }`}
+          >
+            {t("listings.isReferralOpportunity")}
+          </p>
+
+          <FieldGroup
+            name="referralOpportunityChoice"
+            type="radio"
+            register={register}
+            groupSubNote={t("listings.requiredToPublish")}
+            error={
+              fieldHasError(errors?.referralOpportunity) && referralOpportunityChoice === null
+            }
+            errorMessage={fieldMessage(errors?.referralOpportunity)}
+            fields={[
+              {
+                ...yesNoRadioOptions[0],
+                id: "referralOpportunityYes",
+                defaultChecked: listing?.referralOpportunity === true ?? null,
+                inputProps: {
+                  onChange: () => {
+                    setMethods({
+                      ...methods,
+                      referral: {
+                        ...methods.referral,
+                        type: ApplicationMethodsTypeEnum.Referral,
+                      },
+                    })
+                  },
+                },
+              },
+              {
+                ...yesNoRadioOptions[1],
+                id: "referralOpportunityNo",
+                defaultChecked: listing?.referralOpportunity === false ?? null,
+                inputProps: {
+                  onChange: () => {
+                    setMethods({
+                      ...methods,
+                      referral: null,
+                    })
+                  },
+                },
+              },
+            ]}
+          />
+        </Grid.Cell>
+        // </Grid.Row>
+        // {referralOpportunityChoice === YesNoEnum.yes && (
+        <Grid.Row columns={3}>
+          <Grid.Cell>
+            <PhoneField
+              label={t("listings.referralContactPhone")}
+              name="referralContactPhone"
+              id="referralContactPhone"
+              placeholder={t("t.phoneNumberPlaceholder")}
+              mask={() => (
+                <PhoneMask
+                  name="referralContactPhone"
+                  value={methods.referral ? methods.referral.phoneNumber : ""}
+                  placeholder={t("t.phoneNumberPlaceholder")}
+                  onChange={(e) => {
+                    setMethods({
+                      ...methods,
+                      referral: {
+                        ...methods.referral,
+                        phoneNumber: e.target.value,
+                      },
+                    })
+                  }}
+                />
+              )}
+              controlClassName={"control"}
+            />
+          </Grid.Cell>
+          <Grid.Cell className="seeds-grid-span-2">
+            <Textarea
+              label={t("listings.referralSummary")}
+              rows={3}
+              fullWidth={true}
+              placeholder={t("t.descriptionTitle")}
+              name="referralSummary"
+              id="referralSummary"
+              maxLength={500}
+              inputProps={{
+                value: methods.referral ? methods.referral.externalReference : "",
+                onChange: (e) => {
+                  setMethods({
+                    ...methods,
+                    referral: {
+                      ...methods.referral,
+                      externalReference: e.target.value,
+                    },
+                  })
+                },
+              }}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+        // )} */}
       </SectionWithGrid>
 
       <Drawer

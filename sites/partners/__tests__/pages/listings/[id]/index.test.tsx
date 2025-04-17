@@ -1258,6 +1258,50 @@ describe("listing data", () => {
         expect(queryByText("Custom Online Application URL")).not.toBeInTheDocument()
         expect(queryByText("Test Refference")).not.toBeInTheDocument()
       })
+
+      it("should hide digital application choice when disable flag is on", () => {
+        const { getByText, getAllByText, queryByText } = render(
+          <AuthContext.Provider
+            value={{
+              profile: { ...user, jurisdictions: [], listings: [] },
+              doJurisdictionsHaveFeatureFlagOn: () => true,
+            }}
+          >
+            <ListingContext.Provider
+              value={{
+                ...listing,
+                applicationMethods: [
+                  {
+                    id: "method_id",
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    type: ApplicationMethodsTypeEnum.ExternalLink,
+                    externalReference: "https://example.com/application",
+                  },
+                ],
+                digitalApplication: false,
+                paperApplication: false,
+                referralOpportunity: false,
+              }}
+            >
+              <DetailApplicationTypes />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        )
+
+        expect(getByText("Application Types")).toBeInTheDocument()
+        expect(getByText("Online Applications")).toBeInTheDocument()
+        expect(getByText("Paper Applications")).toBeInTheDocument()
+        expect(getByText("Custom Online Application URL")).toBeInTheDocument()
+        expect(getByText("https://example.com/application")).toBeInTheDocument()
+        expect(getByText("Referral")).toBeInTheDocument()
+        expect(getAllByText("No")).toHaveLength(3)
+        expect(queryByText("Common Digital Application")).not.toBeInTheDocument()
+        expect(queryByText("Referral Contact Phone")).not.toBeInTheDocument()
+        expect(queryByText("Referral Summary")).not.toBeInTheDocument()
+        expect(queryByText("File Name")).not.toBeInTheDocument()
+        expect(queryByText("Language")).not.toBeInTheDocument()
+      })
     })
 
     describe("should display Application Address section", () => {

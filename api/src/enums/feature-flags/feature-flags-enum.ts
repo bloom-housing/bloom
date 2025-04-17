@@ -2,8 +2,12 @@
 // Note, these are just used to keep backend and frontend in sync. We store feature flags as strings so this list might not include every flag
 export enum FeatureFlagEnum {
   example = 'example', // sample feature flag for testing purposes
-  enableHomeType = 'enableHomeType',
+  disableCommonApplication = 'disableCommonApplication',
+  disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
+  enableGeocodingPreferences = 'enableGeocodingPreferences',
+  enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
+  enableHomeType = 'enableHomeType',
   enableUtilitiesIncluded = 'enableUtilitiesIncluded',
   enableIsVerified = 'enableIsVerified',
   enableNeighborhoodAmenities = 'enableNeighborhoodAmenities',
@@ -14,12 +18,9 @@ export enum FeatureFlagEnum {
   enableUnitGroups = 'enableUnitGroups',
   enableListingsPagination = 'enableListingPagination',
   enableSingleUseCode = 'enableSingleUseCode',
-  enableGeocodingPreferences = 'enableGeocodingPreferences',
-  enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableListingOpportunity = 'enableListingOpportunity',
   enablePartnerDemographics = 'enablePartnerDemographics',
   enablePartnerSettings = 'enablePartnerSettings',
-  disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
   enableListingFavoriting = 'enableListingFavoriting',
 }
 
@@ -29,6 +30,15 @@ export const featureFlagMap: { name: string; description: string }[] = [
   {
     name: FeatureFlagEnum.enableHomeType,
     description: 'When true, home type feature is turned on',
+  },
+  {
+    name: FeatureFlagEnum.disableCommonApplication,
+    description:
+      'When true, the digital common application is not an option for listings',
+  },
+  {
+    name: FeatureFlagEnum.disableJurisdictionalAdmin,
+    description: 'When true, jurisdictional admins cannot be created',
   },
   {
     name: FeatureFlagEnum.enableAccessibilityFeatures,

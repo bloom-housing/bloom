@@ -181,6 +181,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableListingsPagination,
         FeatureFlagEnum.disableJurisdictionalAdmin,
         FeatureFlagEnum.enableListingFavoriting,
+        FeatureFlagEnum.disableCommonApplication,
       ],
     }),
   });
