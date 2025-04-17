@@ -91,6 +91,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.swapCommunityTypeWithPrograms,
         FeatureFlagEnum.enableListingFavoriting,
         FeatureFlagEnum.enableCompanyWebsite,
+        FeatureFlagEnum.disableCommonApplication,
       ],
     }),
   });

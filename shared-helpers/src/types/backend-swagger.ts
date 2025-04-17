@@ -3601,7 +3601,7 @@ export interface UnitsSummarized {
 
 export interface UnitGroupSummary {
   /**  */
-  unitTypes?: string[]
+  unitTypes?: UnitType[]
 
   /**  */
   rentAsPercentIncomeRange?: MinMax
@@ -7071,6 +7071,11 @@ export enum UserRoleEnum {
 
 export enum FeatureFlagEnum {
   "example" = "example",
+  "disableCommonApplication" = "disableCommonApplication",
+  "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
+  "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
+  "enableGeocodingPreferences" = "enableGeocodingPreferences",
+  "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
