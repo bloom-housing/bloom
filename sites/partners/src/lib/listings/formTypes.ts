@@ -156,7 +156,7 @@ export const formDefaults: FormListing = {
   householdSizeMax: 0,
   householdSizeMin: 0,
   neighborhood: undefined,
-  region: RegionEnum.Greater_Downtown,
+  region: undefined,
   petPolicy: "",
   smokingPolicy: "",
   unitsAvailable: 0,
