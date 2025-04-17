@@ -53,12 +53,17 @@ import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { unitFactorySingle } from '../../prisma/seed-helpers/unit-factory';
 import { FilterAvailabilityEnum } from '../../src/enums/listings/filter-availability-enum';
 import { unitGroupFactorySingle } from '../../prisma/seed-helpers/unit-group-factory';
+import { randomName } from '../../prisma/seed-helpers/word-generator';
+import { FeatureFlagEnum } from '../../src/enums/feature-flags/feature-flags-enum';
+import { createAllFeatureFlags } from '../../prisma/seed-helpers/feature-flag-factory';
 
 describe('Listing Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let jurisdictionAId: string;
   let adminAccessToken: string;
+  let unitTypeOneBed;
+  let unitTypeThreeBed;
 
   const testEmailService = {
     /* eslint-disable @typescript-eslint/no-empty-function */
@@ -113,6 +118,13 @@ describe('Listing Controller Tests', () => {
     app.use(cookieParser());
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     await app.init();
+    await unitTypeFactoryAll(prisma);
+    unitTypeOneBed = await unitTypeFactorySingle(prisma, UnitTypeEnum.oneBdrm);
+    unitTypeThreeBed = await unitTypeFactorySingle(
+      prisma,
+      UnitTypeEnum.threeBdrm,
+    );
+    await createAllFeatureFlags(prisma);
     const jurisdiction = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
@@ -136,7 +148,6 @@ describe('Listing Controller Tests', () => {
     adminAccessToken = res.header?.['set-cookie'].find((cookie) =>
       cookie.startsWith('access-token='),
     );
-    await unitTypeFactoryAll(prisma);
   });
 
   afterAll(async () => {
@@ -548,15 +559,6 @@ describe('Listing Controller Tests', () => {
     let jurisdictionDWithUnitGroups;
 
     beforeAll(async () => {
-      const unitTypeOneBed = await unitTypeFactorySingle(
-        prisma,
-        UnitTypeEnum.oneBdrm,
-      );
-      const unitTypeThreeBed = await unitTypeFactorySingle(
-        prisma,
-        UnitTypeEnum.threeBdrm,
-      );
-
       jurisdictionB = await prisma.jurisdictions.create({
         data: jurisdictionFactory(),
       });
@@ -1663,6 +1665,61 @@ describe('Listing Controller Tests', () => {
       expect(newDBValues[0].units).toHaveLength(2);
     });
 
+    it('should duplicate listing, include unit groups', async () => {
+      const jurisdictionWithUnitGroupsEnabled =
+        await prisma.jurisdictions.create({
+          data: jurisdictionFactory(randomName(), {
+            featureFlags: [FeatureFlagEnum.enableUnitGroups],
+          }),
+        });
+      const listingData = await listingFactory(
+        jurisdictionWithUnitGroupsEnabled.id,
+        prisma,
+        {
+          numberOfUnits: 0,
+          unitGroups: [
+            unitGroupFactorySingle(unitTypeThreeBed),
+            unitGroupFactorySingle(unitTypeOneBed),
+            unitGroupFactorySingle(unitTypeOneBed),
+          ],
+        },
+      );
+      const listing = await prisma.listings.create({
+        data: listingData,
+        include: {
+          units: true,
+          unitGroups: true,
+        },
+      });
+
+      const newName = `${listing.name} duplicate`;
+
+      const res = await request(app.getHttpServer())
+        .post('/listings/duplicate')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          includeUnits: true,
+          name: newName,
+          storedListing: {
+            id: listing.id,
+          },
+        })
+        .set('Cookie', adminAccessToken)
+        .expect(201);
+
+      expect(res.body.name).toEqual(newName);
+      expect(res.body.unitGroups.length).toBe(listing.unitGroups.length);
+
+      const newDBValues = await prisma.listings.findMany({
+        include: {
+          unitGroups: true,
+        },
+        where: { name: newName },
+      });
+      expect(newDBValues.length).toBeGreaterThanOrEqual(1);
+      expect(newDBValues[0].unitGroups).toHaveLength(3);
+    });
+
     it('should duplicate listing, exclude units', async () => {
       const jurisdictionA = await prisma.jurisdictions.create({
         data: jurisdictionFactory(),
@@ -1694,6 +1751,50 @@ describe('Listing Controller Tests', () => {
 
       expect(res.body.name).toEqual(newName);
       expect(res.body.units).toEqual([]);
+
+      const newListing = await prisma.listings.findFirst({
+        select: {
+          copyOfId: true,
+        },
+        where: { id: res.body.id },
+      });
+      expect(newListing.copyOfId).toEqual(listing.id);
+    });
+
+    it('should duplicate listing, exclude units with unit groups', async () => {
+      const jurisdictionA = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
+      const listingData = await listingFactory(jurisdictionA.id, prisma, {
+        numberOfUnits: 0,
+        unitGroups: [unitGroupFactorySingle(unitTypeThreeBed)],
+      });
+      const listing = await prisma.listings.create({
+        data: listingData,
+        include: {
+          units: true,
+          unitGroups: true,
+        },
+      });
+      const newName = 'duplicate name 2';
+
+      const res = await request(app.getHttpServer())
+        .post('/listings/duplicate')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          includeUnits: false,
+          name: newName,
+          storedListing: {
+            id: listing.id,
+          },
+        })
+        .set('Cookie', adminAccessToken)
+        .expect(201);
+
+      expect(res.body.name).toEqual(newName);
+      expect(res.body.units).toEqual([]);
+      expect(res.body.unitGroups).toEqual([]);
 
       const newListing = await prisma.listings.findFirst({
         select: {
