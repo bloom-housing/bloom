@@ -359,15 +359,6 @@ const BuildingDetails = ({
                 </Link>
               </li>
               <li className="list-disc list-inside">
-                {t("county.goToOtherPortalsAlamedaSanMateo")}
-                <Link href="https://partners.housingbayarea.org/">
-                  {" "}
-                  <Icon>
-                    <ArrowTopRightOnSquareIcon />
-                  </Icon>{" "}
-                </Link>
-              </li>
-              <li className="list-disc list-inside">
                 {t("county.goToOtherPortalsSanFrancisco")}
                 <Link href="https://www.partner.housing.sfgov.org/">
                   {" "}

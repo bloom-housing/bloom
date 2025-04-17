@@ -19,6 +19,7 @@ import { AmiChartImportDTO } from '../dtos/script-runner/ami-chart-import.dto';
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
 import { CommunityTypeDTO } from '../dtos/script-runner/community-type.dto';
 import { ApiKeyGuard } from '../guards/api-key.guard';
+import { AssetTransferDTO } from '../dtos/script-runner/asset-transfer.dto';
 
 @Controller('scriptRunner')
 @ApiTags('scriptRunner')
@@ -66,6 +67,23 @@ export class ScirptRunnerController {
     @Request() req: ExpressRequest,
   ): Promise<SuccessDTO> {
     return await this.scriptRunnerService.transferJurisdictionListingData(
+      req,
+      dataTransferDTO,
+    );
+  }
+
+  @Put('transferListingAssetData')
+  @ApiOperation({
+    summary:
+      'A script that pulls listing asset data from one source into the current db',
+    operationId: 'transferListingAssetData',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async transferListingAssetData(
+    @Body() dataTransferDTO: AssetTransferDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.transferListingAssetData(
       req,
       dataTransferDTO,
     );

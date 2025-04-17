@@ -21,6 +21,9 @@ import { AmiChartUpdate } from '../dtos/ami-charts/ami-chart-update.dto';
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
 import { HouseholdMemberRelationship } from '../../src/enums/applications/household-member-relationship-enum';
 import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
+import axios from 'axios';
+import { AssetTransferDTO } from '../dtos/script-runner/asset-transfer.dto';
+import { AssetService } from './asset.service';
 
 /**
   this is the service for running scripts
@@ -31,6 +34,7 @@ export class ScriptRunnerService {
   constructor(
     private amiChartService: AmiChartService,
     private featureFlagService: FeatureFlagService,
+    private assetService: AssetService,
     private prisma: PrismaService,
   ) {}
 
@@ -438,6 +442,13 @@ export class ScriptRunnerService {
           },
         });
 
+        await this.prisma.listingTransferMap.create({
+          data: {
+            listingId: createdListing.id,
+            oldId: listing['id'],
+          },
+        });
+
         // upload units
         const units: any[] = await client.$queryRawUnsafe(
           `SELECT u.*, ut.name FROM units u, unit_types ut WHERE ut.id = u.unit_type_id AND u.listing_id = '${listing['id']}'`,
@@ -600,6 +611,155 @@ export class ScriptRunnerService {
     // script runner standard spin down
     await this.markScriptAsComplete(
       `data transfer listings ${dataTransferDTO.jurisdiction}`,
+      requestingUser,
+    );
+    return { success: true };
+  }
+
+  /**
+   *
+   * @param req incoming request object
+   * @param dataTransferDTO data transfer endpoint args. Should contain foreign db connection string
+   * @returns successDTO
+   * @description transfers assets for listings in the specified space into the new space
+   */
+  async transferListingAssetData(
+    req: ExpressRequest,
+    dataTransferDTO: AssetTransferDTO,
+    prisma?: PrismaClient,
+  ): Promise<SuccessDTO> {
+    // script runner standard start up
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart(
+      `data transfer assets ${dataTransferDTO.jurisdiction} page: ${
+        dataTransferDTO.page || 1
+      }`,
+      requestingUser,
+    );
+
+    // connect to foreign db based on incoming connection string
+    const client =
+      prisma ||
+      new PrismaClient({
+        datasources: {
+          db: {
+            url: dataTransferDTO.connectionString,
+          },
+        },
+      });
+    await client.$connect();
+
+    const doorwayJurisdiction = await this.prisma.jurisdictions.findFirst({
+      where: { name: dataTransferDTO.jurisdiction },
+    });
+
+    if (!doorwayJurisdiction) {
+      throw new Error(
+        `${dataTransferDTO.jurisdiction} county doesn't exist in Doorway database`,
+      );
+    }
+
+    // get jurisdiction
+    const jurisdiction: { id: string }[] =
+      await client.$queryRaw`SELECT id, name FROM jurisdictions WHERE name = ${dataTransferDTO.jurisdiction}`;
+
+    if (!jurisdiction) {
+      throw new Error(
+        `${dataTransferDTO.jurisdiction} county doesn't exist in foreign database`,
+      );
+    }
+
+    const take = calculateTake(40);
+    const skip = calculateSkip(take, dataTransferDTO.page || 1);
+    const listingTransferMap = await this.prisma.listingTransferMap.findMany({
+      take,
+      skip,
+    });
+    console.log(
+      `Found ${listingTransferMap.length} listings on page ${
+        dataTransferDTO.page || 1
+      } out of a possible 40 for this page`,
+    );
+    // loop over each new listing id <-> old listing id relation
+    for (let i = 0; i < listingTransferMap.length; i++) {
+      const oldAssetInfo: {
+        ordinal: number;
+        created_at: Date;
+        updated_at: Date;
+        file_id: string;
+        label: string;
+      }[] = await client.$queryRaw`SELECT
+            li.ordinal,
+            a.created_at,
+            a.updated_at,
+            a.file_id,
+            label
+        FROM listing_images li
+            JOIN assets a ON a.id = li.image_id
+        WHERE li.listing_id = ${listingTransferMap[i].oldId} :: UUID
+          AND a.file_id IS NOT NULL AND a.file_id != ''`;
+      console.log(
+        `moving ${oldAssetInfo.length || 0} assets for listing: ${
+          listingTransferMap[i].oldId
+        }:`,
+      );
+      // loop over each listing image on the old listing
+      for (let j = 0; j < oldAssetInfo.length; j++) {
+        // pull down image from cloudinary
+        const image = await axios.get(
+          `https://res.cloudinary.com/${dataTransferDTO.cloudinaryName}/image/upload/${oldAssetInfo[j].file_id}.jpg`,
+          {
+            responseType: 'arraybuffer',
+          },
+        );
+        const newFileId = (oldAssetInfo[j].file_id as string)
+          .replace('housingbayarea/', '')
+          .replace('dev/', '');
+
+        // upload image to s3
+        const res = await this.assetService.upload(newFileId, {
+          filename: null,
+          buffer: image.data,
+          fieldname: null,
+          originalname: `${newFileId}.jpg`,
+          encoding: null,
+          mimetype: 'image/jpeg',
+          size: image.data.length,
+          destination: null,
+          path: null,
+          stream: null,
+        });
+
+        // update new listing with these assets
+        await this.prisma.listings.update({
+          where: {
+            id: listingTransferMap[i].listingId,
+          },
+          data: {
+            listingImages: {
+              create: {
+                assets: {
+                  create: {
+                    fileId: res.url,
+                    label: 'cloudinaryBuilding',
+                  },
+                },
+                ordinal: oldAssetInfo[j].ordinal,
+              },
+            },
+          },
+        });
+      }
+    }
+
+    // disconnect from foreign db
+    await client.$disconnect();
+
+    // script runner standard spin down
+    await this.markScriptAsComplete(
+      `data transfer assets ${dataTransferDTO.jurisdiction} page: ${
+        dataTransferDTO.page || 1
+      }`,
       requestingUser,
     );
     return { success: true };
