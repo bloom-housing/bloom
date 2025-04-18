@@ -325,7 +325,6 @@ const BuildingDetails = ({
                 <Select
                   id="region"
                   name="region"
-                  // placeholder={t("listings.sections.regionPlaceholder")}
                   register={register}
                   inputProps={{
                     className: "w-full",
