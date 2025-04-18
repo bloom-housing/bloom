@@ -18,10 +18,7 @@ const Feedback = () => {
 
   return (
     <Layout>
-      <PageHeaderLayout
-        heading={t("pageTitle.feedback")}
-        inverse
-      >
+      <PageHeaderLayout heading={t("pageTitle.feedback")} inverse>
         <iframe
           src="https://docs.google.com/forms/d/e/1FAIpQLSe8Npioi4fChtWbTZUsfE23lEoeFXVn9vlCAHA9lMGWsQUAGA/viewform?embedded=true"
           width="100%"
