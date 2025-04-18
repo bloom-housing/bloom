@@ -92,11 +92,11 @@ describe("<UnitSummaries>", () => {
     )
     expect(getAllByTestId("listing-unit-summary").length).toBe(2)
     expect(getAllByLabelText("Expand section").length).toBeGreaterThan(0)
-    expect(getAllByText("1 BR").length).toBeGreaterThan(0)
+    expect(getAllByText("1 bed").length).toBeGreaterThan(0)
     expect(
       getAllByText("2 units, 300 - 350 square feet, 2nd - 4th floors", { exact: false }).length
     ).toBeGreaterThan(0)
-    expect(getAllByText("2 BR").length).toBeGreaterThan(0)
+    expect(getAllByText("2 beds").length).toBeGreaterThan(0)
 
     expect(
       getAllByText("3 units, 500 - 600 square feet, 3rd - 5th floors", {
@@ -116,11 +116,11 @@ describe("<UnitSummaries>", () => {
     expect(getAllByTestId("listing-unit-summary").length).toBe(2)
     expect(queryByLabelText("Expand section")).toBeNull()
 
-    expect(getAllByText("1 BR").length).toBeGreaterThan(0)
+    expect(getAllByText("1 bed").length).toBeGreaterThan(0)
     expect(
       getAllByText("2 units, 300 - 350 square feet, 2nd - 4th floors", { exact: false }).length
     ).toBeGreaterThan(0)
-    expect(getAllByText("2 BR").length).toBeGreaterThan(0)
+    expect(getAllByText("2 beds").length).toBeGreaterThan(0)
 
     expect(
       getAllByText("3 units, 500 - 600 square feet, 3rd - 5th floors", {
