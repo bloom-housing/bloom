@@ -120,6 +120,7 @@ const FormPrimaryApplicant = () => {
               errorMessage={t("errors.phoneNumberError")}
               control={control}
               controlClassName="control"
+              dataTestId="phoneNumber"
             />
           </Grid.Cell>
           <Grid.Cell>
@@ -148,6 +149,7 @@ const FormPrimaryApplicant = () => {
               errorMessage={t("errors.phoneNumberError")}
               control={control}
               controlClassName="control"
+              dataTestId="additionalPhoneNumber"
             />
           </Grid.Cell>
           <Grid.Cell>

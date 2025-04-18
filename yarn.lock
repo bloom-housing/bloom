@@ -2021,10 +2021,10 @@
     tailwindcss-rtl "^0.9.0"
     typesafe-actions "^5.1.0"
 
-"@bloom-housing/ui-seeds@1.19.1":
-  version "1.19.1"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.19.1.tgz#7ebb17f1c07c5e59f126fafd0442479be0206d72"
-  integrity sha512-+cPy67q/UaGpAi71Uf4i38wDfT3U2wTXgqk5wCyFftaDlbw38kVd0m6dS0tVt+eMLZlmWSX2s3RWPcHkT/Ahjw==
+"@bloom-housing/ui-seeds@1.19.3":
+  version "1.19.3"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.19.3.tgz#801a44803f94c05b7175dfddec9b8440a76e23c8"
+  integrity sha512-kK33J1PVkeA97woiJH34qzFMC5GD7ztnavPg/gwhmqCC079vVeJjPW3X4YqSCpN7ngKjzLEoCYE6sPr6JV+egA==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.3.0"
     "@fortawesome/react-fontawesome" "^0.2.0"
