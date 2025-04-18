@@ -211,7 +211,7 @@ const BuildingDetails = ({
                   }}
                   register={register}
                   options={[
-                    { value: undefined, label: t("listings.sections.neighborhoodPlaceholder") },
+                    { value: "", label: t("listings.sections.neighborhoodPlaceholder") },
                     ...neighborhoodRegions.map((entry) => ({
                       value: entry.name,
                       label: entry.name,
@@ -332,7 +332,7 @@ const BuildingDetails = ({
                     onChange: () => setValue("neighborhood", undefined),
                   }}
                   options={[
-                    { value: undefined, label: t("listings.sections.regionPlaceholder") },
+                    { value: "", label: t("listings.sections.regionPlaceholder") },
                     ...Object.keys(RegionEnum).map((entry) => ({
                       value: entry,
                       label: entry.toString().replace("_", " "),
