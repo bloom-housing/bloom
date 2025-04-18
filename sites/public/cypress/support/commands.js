@@ -153,32 +153,34 @@ Cypress.Commands.add("step2PrimaryApplicantAddresses", (application, autofill) =
       )
     }
 
-    application.contactPreferences.forEach((contactPreference) => {
-      const contactPreferenceIndex = contactPreferencesCheckboxesOrder.indexOf(contactPreference)
-      cy.getByTestId("app-primary-contact-preference").eq(contactPreferenceIndex).check()
-    })
+    // commented out because Doorway does not utilize the contact preference question
+    // application.contactPreferences.forEach((contactPreference) => {
+    //   const contactPreferenceIndex = contactPreferencesCheckboxesOrder.indexOf(contactPreference)
+    //   cy.getByTestId("app-primary-contact-preference").eq(contactPreferenceIndex).check()
+    // })
   }
 
-  if (application.applicant.workInRegion === "yes") {
-    cy.getByTestId("app-primary-work-in-region-yes").check()
-    cy.getByTestId("app-primary-work-address-street").type(
-      application.applicant.applicantWorkAddress.street
-    )
-    cy.getByTestId("app-primary-work-address-street2").type(
-      application.applicant.applicantWorkAddress.street2
-    )
-    cy.getByTestId("app-primary-work-address-city").type(
-      application.applicant.applicantWorkAddress.city
-    )
-    cy.getByTestId("app-primary-work-address-state").select(
-      application.applicant.applicantWorkAddress.state
-    )
-    cy.getByTestId("app-primary-work-address-zip").type(
-      application.applicant.applicantWorkAddress.zipCode
-    )
-  } else {
-    cy.getByTestId("app-primary-work-in-region-no").check()
-  }
+  // Commented out because Doorway does not utilize the work in region question
+  // if (application.applicant.workInRegion === "yes") {
+  //   cy.getByTestId("app-primary-work-in-region-yes").check()
+  //   cy.getByTestId("app-primary-work-address-street").type(
+  //     application.applicant.applicantWorkAddress.street
+  //   )
+  //   cy.getByTestId("app-primary-work-address-street2").type(
+  //     application.applicant.applicantWorkAddress.street2
+  //   )
+  //   cy.getByTestId("app-primary-work-address-city").type(
+  //     application.applicant.applicantWorkAddress.city
+  //   )
+  //   cy.getByTestId("app-primary-work-address-state").select(
+  //     application.applicant.applicantWorkAddress.state
+  //   )
+  //   cy.getByTestId("app-primary-work-address-zip").type(
+  //     application.applicant.applicantWorkAddress.zipCode
+  //   )
+  // } else {
+  //   cy.getByTestId("app-primary-work-in-region-no").check()
+  // }
 
   cy.goNext()
   cy.checkErrorAlert("not.exist")
@@ -207,7 +209,9 @@ Cypress.Commands.add("step3AlternateContactType", (application, autofill) => {
 
 Cypress.Commands.add("step4AlternateContactName", (application, autofill) => {
   if (!autofill) {
-    cy.getByTestId("app-alternate-first-name").type(application.alternateContact.firstName)
+    cy.getByTestId("app-alternate-first-name").type(application.alternateContact.firstName, {
+      force: true,
+    })
     cy.getByTestId("app-alternate-last-name").type(application.alternateContact.lastName)
   } else {
     cy.contains("Who is your alternate contact?")
@@ -319,26 +323,27 @@ Cypress.Commands.add("step7AddHouseholdMembers", (application, autofill) => {
         cy.getByTestId("app-household-member-same-address").eq(0).check()
       }
 
-      if (householdMember.workInRegion === "yes") {
-        cy.getByTestId("app-household-member-work-in-region").eq(0).check()
-        cy.getByTestId("app-household-member-work-address-street").type(
-          householdMember.householdMemberWorkAddress.street
-        )
-        cy.getByTestId("app-household-member-work-address-street2").type(
-          householdMember.householdMemberWorkAddress.street2
-        )
-        cy.getByTestId("app-household-member-work-address-city").type(
-          householdMember.householdMemberWorkAddress.city
-        )
-        cy.getByTestId("app-household-member-work-address-state").select(
-          householdMember.householdMemberWorkAddress.state
-        )
-        cy.getByTestId("app-household-member-work-address-zip").type(
-          householdMember.householdMemberWorkAddress.zipCode
-        )
-      } else {
-        cy.getByTestId("app-household-member-work-in-region").eq(1).check()
-      }
+      // Commented out because Doorway does not utilize the work In Region question
+      // if (householdMember.workInRegion === "yes") {
+      //   cy.getByTestId("app-household-member-work-in-region").eq(0).check()
+      //   cy.getByTestId("app-household-member-work-address-street").type(
+      //     householdMember.householdMemberWorkAddress.street
+      //   )
+      //   cy.getByTestId("app-household-member-work-address-street2").type(
+      //     householdMember.householdMemberWorkAddress.street2
+      //   )
+      //   cy.getByTestId("app-household-member-work-address-city").type(
+      //     householdMember.householdMemberWorkAddress.city
+      //   )
+      //   cy.getByTestId("app-household-member-work-address-state").select(
+      //     householdMember.householdMemberWorkAddress.state
+      //   )
+      //   cy.getByTestId("app-household-member-work-address-zip").type(
+      //     householdMember.householdMemberWorkAddress.zipCode
+      //   )
+      // } else {
+      //   cy.getByTestId("app-household-member-work-in-region").eq(1).check()
+      // }
 
       cy.getByTestId("app-household-member-relationship").select(householdMember.relationship)
     }
@@ -539,7 +544,7 @@ Cypress.Commands.add("step17Demographics", (application, autofill) => {
       cy.getByTestId("app-demographics-how-did-you-hear").eq(howDidYouHearIndex).check()
     })
   } else {
-    cy.contains("Which best describes your ethnicity?")
+    cy.contains("Which best describes your race/ethnicity?")
   }
 
   cy.goNext()
