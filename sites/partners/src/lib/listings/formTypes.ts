@@ -132,6 +132,7 @@ export const formDefaults: FormListing = {
   leasingAgentOfficeHours: "",
   leasingAgentPhone: null,
   leasingAgentTitle: "",
+  managementWebsite: "",
   name: null,
   postMarkDate: null,
   postmarkedApplicationsReceivedByDate: null,

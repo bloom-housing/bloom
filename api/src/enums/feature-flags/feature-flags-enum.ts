@@ -10,13 +10,14 @@ export enum FeatureFlagEnum {
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
   enableIsVerified = 'enableIsVerified',
-  enableListingFavoriting = 'enableListingFavoriting',
   enableListingOpportunity = 'enableListingOpportunity',
   enableListingsPagination = 'enableListingPagination',
   enableMarketingStatus = 'enableMarketingStatus',
   enableNeighborhoodAmenities = 'enableNeighborhoodAmenities',
   enablePartnerDemographics = 'enablePartnerDemographics',
   enablePartnerSettings = 'enablePartnerSettings',
+  enableListingFavoriting = 'enableListingFavoriting',
+  enableCompanyWebsite = 'enableCompanyWebsite',
   enableRegions = 'enableRegions',
   enableSection8Question = 'enableSection8Question',
   enableSingleUseCode = 'enableSingleUseCode',
@@ -128,5 +129,10 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.swapCommunityTypeWithPrograms,
     description:
       'When true, the programs section on the frontend is displayed as community types.',
+  },
+  {
+    name: FeatureFlagEnum.enableCompanyWebsite,
+    description:
+      'When true, allows partners to add company website information',
   },
 ];
