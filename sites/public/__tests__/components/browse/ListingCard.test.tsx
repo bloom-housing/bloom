@@ -9,7 +9,7 @@ describe("<ListingCard>", () => {
     const view = render(<ListingCard listing={listing} />)
     const tags = getListingTags(listing, true)
     expect(view.getByText(listing.name)).toBeDefined()
-    expect(view.getByText("98 Archer Street, San Jose, CA 95112")).toBeDefined()
+    expect(view.getByText("98 Archer Place, Dixon, CA 95620")).toBeDefined()
     tags.forEach((tag) => {
       expect(view.getByText(tag.title)).toBeDefined()
     })
@@ -22,7 +22,7 @@ describe("<ListingCard>", () => {
       "href",
       `/listing/${listing.id}/${listing.urlSlug}`
     )
-    expect(view.getByText("1 BR")).toBeDefined()
+    expect(view.getByText("1 bed")).toBeDefined()
     expect(view.getByText("$150")).toBeDefined()
     expect(view.getByText("% of income, or up to $1,200")).toBeDefined()
   })
