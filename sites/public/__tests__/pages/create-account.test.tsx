@@ -411,6 +411,14 @@ describe("Create Account Page", () => {
       const createAccountButton = screen.getByRole("button", { name: /create account/i })
       expect(createAccountButton).toBeInTheDocument()
       await act(() => userEvent.click(createAccountButton))
+      await act(() =>
+        userEvent.click(
+          screen.getByRole("checkbox", {
+            name: "I have reviewed, understand and agree to the Terms of Use.",
+          })
+        )
+      )
+      await act(() => userEvent.click(screen.getByRole("button", { name: "Finish" })))
 
       expect(await screen.findByText(value)).toBeInTheDocument()
     })
@@ -464,6 +472,29 @@ describe("Create Account Page", () => {
     expect(screen.queryByText("Please enter a valid email address")).not.toBeInTheDocument()
     expect(screen.queryByText("Please enter a valid password")).not.toBeInTheDocument()
     expect(screen.queryByText("The passwords do not match")).not.toBeInTheDocument()
+
+    // Terms form should appear
+    expect(screen.getByRole("heading", { name: "Review Terms of Use" })).toBeInTheDocument()
+    expect(
+      screen.getByText("You must accept the Terms of Use before creating an account.")
+    ).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 2, name: "Terms of Use" })).toBeInTheDocument()
+    expect(screen.getAllByRole("link", { name: "Terms of Use" })).toHaveLength(2)
+    expect(screen.getByText("I have reviewed the", { exact: false })).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        "I understand that if I do not use my account for three years, my account and all its data will be deleted.",
+        { exact: false }
+      )
+    ).toBeInTheDocument()
+    const confirmCheckbox = screen.getByRole("checkbox", {
+      name: "I have reviewed, understand and agree to the Terms of Use.",
+    })
+    expect(confirmCheckbox).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Finish" })).toBeDisabled()
+    await act(() => userEvent.click(confirmCheckbox))
+    expect(screen.getByRole("button", { name: "Finish" })).toBeEnabled()
+    await act(() => userEvent.click(screen.getByRole("button", { name: "Finish" })))
 
     await waitFor(() => {
       expect(pushMock).toBeCalledWith({
