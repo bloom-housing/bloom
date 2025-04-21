@@ -82,17 +82,6 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     }
   }, [locale, router.events])
 
-  // Investigating performance issues in #3051
-  // useEffect(() => {
-  //   if (process.env.NODE_ENV !== "production") {
-  //     // eslint-disable-next-line @typescript-eslint/no-var-requires
-  //     const axe = require("@axe-core/react")
-  //     void axe(React, ReactDOM, 5000)
-  //   }
-  // }, [])
-
-  // HACK ALERT: we need to add the Next link context to both doorway uic and
-  // uic in order for routing to work
   // NOTE: Seeds and UI-Components both use a NavigationContext to help internal links use Next's
   // routing system, so we'll include both here until UIC is no longer in use.
 
