@@ -2069,6 +2069,26 @@
     tailwindcss-rtl "^0.9.0"
     typesafe-actions "^5.1.0"
 
+"@bloom-housing/ui-seeds@1.19.1":
+  version "1.19.1"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.19.1.tgz#7ebb17f1c07c5e59f126fafd0442479be0206d72"
+  integrity sha512-+cPy67q/UaGpAi71Uf4i38wDfT3U2wTXgqk5wCyFftaDlbw38kVd0m6dS0tVt+eMLZlmWSX2s3RWPcHkT/Ahjw==
+  dependencies:
+    "@fortawesome/fontawesome-svg-core" "^6.3.0"
+    "@fortawesome/react-fontawesome" "^0.2.0"
+    "@heroicons/react" "^2.0.18"
+    "@types/markdown-to-jsx" "^6.11.2"
+    "@types/mdx" "^2.0.3"
+    "@types/node" "^16.7.13"
+    "@types/react" "^18.0.0"
+    "@types/react-dom" "^18.0.0"
+    focus-trap-react "^10.2.1"
+    markdown-to-jsx "^6.11.4"
+    react "^18.2.0"
+    react-dom "^18.2.0"
+    react-tabs "^6.0.0"
+    typescript "^4.4.2"
+
 "@bloom-housing/ui-seeds@1.19.3":
   version "1.19.3"
   resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.19.3.tgz#801a44803f94c05b7175dfddec9b8440a76e23c8"
@@ -3930,10 +3950,10 @@
   resolved "https://registry.yarnpkg.com/@types/ms/-/ms-0.7.34.tgz#10964ba0dee6ac4cd462e2795b6bebd407303433"
   integrity sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==
 
-"@types/node-polyglot@^2.4.1":
-  version "2.4.1"
-  resolved "https://registry.npmjs.org/@types/node-polyglot/-/node-polyglot-2.4.1.tgz"
-  integrity sha512-TmMOqSuxyo71Snxa9SSwkMB1e/UvrTLsKPOYMizkDX2JSDZXeiQXgUBwNwfNtLP879Btq+GwkdsE9ojk7EKITA==
+"@types/node-polyglot@^2.5.0":
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/@types/node-polyglot/-/node-polyglot-2.5.0.tgz#5bb545c2c4b6ff9ebed1f9930357c7d137c463ae"
+  integrity sha512-GY0UiBTWM3qclfdCs2BM1mwW9Hs5fSksNXeoTkeHHZ90pHXTtjvQ+fe9GR9NdqFhALBiD7CEAGIIqnQ4eQ5VEw==
 
 "@types/node@*":
   version "20.3.1"
