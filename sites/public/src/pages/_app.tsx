@@ -28,6 +28,8 @@ import LinkComponent from "../components/core/LinkComponent"
 // Note: import overrides.scss last so that it overrides styles defined in imports above
 import "../../styles/overrides.scss"
 
+const rtlLocales = process.env.rtlLanguages.split(",")
+
 function BloomApp({ Component, router, pageProps }: AppProps) {
   const { locale } = router
   const [initialized, setInitialized] = useState(false)
@@ -85,7 +87,15 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
 
       document.body.dataset.customScriptsLoaded = "true"
     }
-  })
+
+    if (rtlLocales.includes(locale)) {
+      if (document.documentElement.getAttribute("dir") !== "rtl") {
+        document.documentElement.setAttribute("dir", "rtl")
+      }
+    } else {
+      document.documentElement.setAttribute("dir", "ltr")
+    }
+  }, [locale, router.events])
 
   // Investigating performance issues in #3051
   // useEffect(() => {

@@ -1,0 +1,106 @@
+.listing-directory {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  font-family: var(--seeds-font-alt-sans);
+
+  ul {
+    list-style-type: none;
+  }
+
+  .browse-header {
+    width: 100%;
+    background-color: var(--seeds-bg-color-surface);
+    border-block-end: 1px solid var(--seeds-border-color);
+    .browse-header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .showing-listings {
+        font-size: var(--seeds-type-heading-size-lg);
+        font-weight: var(--seeds-font-weight-bold);
+      }
+      button {
+        margin-inline-start: var(--seeds-s4);
+      }
+    }
+  }
+
+  .content-wrapper {
+    width: 100%;
+
+    .content {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .empty-state {
+    @media (--sm-only) {
+      padding: var(--seeds-spacer-content);
+    }
+  }
+
+  .empty-heading {
+    font-size: var(--seeds-font-size-2xl);
+    @media (--md-down) {
+      font-size: var(--seeds-font-size-xl);
+    }
+  }
+
+  .pagination-container {
+    width: 100%;
+    background-color: var(--seeds-bg-color-canvas);
+
+    .pagination-content-wrapper {
+      margin-inline: auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+
+      @media (--md-down) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .previous-button {
+        @media (--md-down) {
+          grid-row-start: 2;
+        }
+      }
+
+      .page-info {
+        display: inline;
+        justify-self: center;
+        align-self: center;
+        color: var(--seeds-text-color);
+        font-weight: var(--seeds-font-weight-bold);
+
+        @media (--md-down) {
+          grid-row-start: 1;
+          justify-self: start;
+          align-self: center;
+          padding-block-end: var(--seeds-spacer-content);
+        }
+      }
+
+      .next-button {
+        justify-self: end;
+
+        @media (--md-down) {
+          grid-row-start: 2;
+        }
+      }
+    }
+  }
+}
+
+.minimal-max-width-layout {
+  --max-width-layout-mobile-margin-block: var(--seeds-s4);
+  --max-width-layout-desktop-margin-block: var(--seeds-s4);
+}
+
+.listings-max-width-layout {
+  --max-width-layout-mobile-margin-block: var(--seeds-s4);
+  --max-width-layout-desktop-margin-block: var(--seeds-s12);
+}

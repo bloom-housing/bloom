@@ -3,6 +3,61 @@
     -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
   }
 
+  .main-container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+
+  .styled-stacked-table {
+    // Temporary until we have Seeds tables to manipulate UIC StackedTable component
+    [class*="stacked-table"] {
+      --bloom-font-size-base: var(--seeds-type-label-size);
+      .stacked-table-subtext {
+        color: var(--seeds-text-color);
+      }
+      tr {
+        background-color: var(--seeds-bg-color-muted);
+        margin-bottom: 0;
+      }
+      tr:nth-of-type(even) {
+        background-color: var(--seeds-color-white);
+      }
+      tr:first-child {
+        margin-block-end: 0;
+      }
+      @media (min-width: theme("screens.md")) {
+        td:last-child {
+          text-align: left;
+          > div {
+            text-align: left;
+          }
+        }
+        th:last-child {
+          text-align: left;
+        }
+      }
+
+      th {
+        background-color: white;
+        padding-block: var(--seeds-s1);
+        padding-inline: var(--seeds-s2);
+        letter-spacing: normal;
+        text-transform: capitalize;
+      }
+      ::before {
+        text-transform: capitalize;
+      }
+      td {
+        padding: var(--seeds-s2);
+      }
+      td,
+      th {
+        font-size: var(--seeds-type-caption-size);
+      }
+    }
+  }
+
   .listing-multiselect-card {
     --card-border-radius: var(--seeds-s1);
     --card-content-padding-block: var(--seeds-s3);
@@ -17,7 +72,7 @@
         color: var(--seeds-text-color-dark);
         text-transform: uppercase;
         font-weight: bold;
-        letter-spacing: .025rem;
+        letter-spacing: 0.025rem;
       }
     }
   }

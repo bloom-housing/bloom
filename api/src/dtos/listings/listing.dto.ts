@@ -23,6 +23,7 @@ import {
   HomeTypeEnum,
   ListingsStatusEnum,
   LotteryStatusEnum,
+  RegionEnum,
   MarketingSeasonEnum,
   MarketingTypeEnum,
   ReviewOrderTypeEnum,
@@ -46,6 +47,8 @@ import { User } from '../users/user.dto';
 import { requestedChangesUserMapper } from '../../utilities/requested-changes-user';
 import { LotteryDateParamValidator } from '../../utilities/lottery-date-validator';
 import { ApplicationLotteryTotal } from '../applications/application-lottery-total.dto';
+import { ListingNeighborhoodAmenities } from './listing-neighborhood-amenities.dto';
+import { UnitGroupsSummarized } from '../unit-groups/unit-groups-summarized.dto';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -107,6 +110,14 @@ class Listing extends AbstractDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   neighborhood?: string;
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional({
+    enum: RegionEnum,
+    enumName: 'RegionEnum',
+  })
+  region?: RegionEnum;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
@@ -575,6 +586,12 @@ class Listing extends AbstractDTO {
   unitsSummarized?: UnitsSummarized;
 
   @Expose()
+  @ApiPropertyOptional({ type: UnitGroupsSummarized })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => UnitGroupsSummarized)
+  unitGroupsSummarized?: UnitGroupsSummarized;
+
+  @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @ApiPropertyOptional({ type: UnitsSummary, isArray: true })
   @Type(() => UnitsSummary)
@@ -683,6 +700,22 @@ class Listing extends AbstractDTO {
     enumName: 'HomeTypeEnum',
   })
   homeType?: HomeTypeEnum;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  isVerified?: boolean;
+
+  @Expose()
+  @ApiPropertyOptional()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  section8Acceptance?: boolean;
+
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingNeighborhoodAmenities)
+  @ApiPropertyOptional({ type: ListingNeighborhoodAmenities })
+  listingNeighborhoodAmenities?: ListingNeighborhoodAmenities;
 }
 
 export { Listing as default, Listing };

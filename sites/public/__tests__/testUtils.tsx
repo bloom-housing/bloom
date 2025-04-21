@@ -68,11 +68,17 @@ export * from "@testing-library/react"
 // eslint-disable-next-line import/export
 export { customRender as render }
 
-export const mockNextRouter = () => {
+export const mockNextRouter = (query?: any) => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const useRouter = jest.spyOn(require("next/router"), "useRouter")
+  const pushMock = jest.fn()
+  const backMock = jest.fn()
   useRouter.mockImplementation(() => ({
     pathname: "/",
+    query: query ?? "",
+    push: pushMock,
+    back: backMock,
   }))
-  return useRouter
+
+  return { useRouter, pushMock, backMock }
 }

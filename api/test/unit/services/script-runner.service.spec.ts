@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   LanguagesEnum,
@@ -37,6 +38,7 @@ describe('Testing script runner service', () => {
         AmiChartService,
         FeatureFlagService,
         JurisdictionService,
+        Logger,
       ],
     }).compile();
 
@@ -135,7 +137,7 @@ describe('Testing script runner service', () => {
     prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
     prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
     prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
-    prisma.translations.findFirst = jest.fn().mockResolvedValue(undefined);
+    prisma.translations.findMany = jest.fn().mockResolvedValue(undefined);
     prisma.translations.update = jest.fn().mockResolvedValue(null);
     prisma.translations.create = jest.fn().mockReturnValue({
       language: LanguagesEnum.en,
@@ -833,7 +835,7 @@ describe('Testing script runner service', () => {
         scriptName,
       },
     });
-    expect(prisma.featureFlags.create).toHaveBeenCalledTimes(16);
+    expect(prisma.featureFlags.create).toHaveBeenCalledTimes(17);
   });
 
   // | ---------- HELPER TESTS BELOW ---------- | //
