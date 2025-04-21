@@ -1,0 +1,6 @@
+Flask
+faster-whisper
+transformers
+torch
+gTTS
+pyttsx3

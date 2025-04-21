@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Exygy Voice-to-Form Assistant</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="header" role="banner">
+    <h1>🌟 Exygy AI Assistant</h1>
+    <p>Multilingual voice-based form filling with ethics and accessibility</p>
+  </div>
+
+  <div class="accessibility-controls" role="region" aria-label="Accessibility Options">
+    <button onclick="document.body.classList.toggle('high-contrast')">🌓 Toggle High Contrast</button>
+    <button onclick="document.body.classList.toggle('dyslexia-font')">🔠 Toggle Dyslexia Font</button>
+    <button onclick="document.getElementById('modal').style.display='block'">❓ How This Works</button>
+  </div>
+
+
+  <section aria-label="Consent Notice">
+    <p><strong>Note:</strong> This tool processes your voice locally. No data is stored without your consent.</p>
+  </section>
+
+  <form action="/" method="POST" enctype="multipart/form-data" aria-label="Voice Upload Form">
+    <label for="audiofile">🎙️ Upload or Record Your Voice:</label>
+    <input type="file" name="audiofile" aria-describedby="fileHelp" required>
+    <button type="submit">Process Audio</button>
+  </form>
+
+  <div class="recording-controls">
+    <button id="recordBtn" aria-label="Start or stop recording">Start Recording</button>
+    <p id="status"></p>
+    <audio id="playback" controls></audio>
+  </div>
+
+  <div class="accessibility-controls" role="region" aria-label="Accessibility Options">
+    <button onclick="document.body.classList.toggle('high-contrast')">🌓 Toggle High Contrast</button>
+    <button onclick="document.body.classList.toggle('dyslexia-font')">🔠 Toggle Dyslexia Font</button>
+    <button onclick="document.getElementById('modal').style.display='block'">❓ How This Works</button>
+  </div>
+
+
+  {% if result %}
+    <section class="form-output" aria-live="polite">
+      <h2>📝 Generated Form (editable)</h2>
+      <ul>
+        {% for key, value in result.items() %}
+          <li><label>{{ key }}: <input type="text" value="{{ value }}" /></label></li>
+        {% endfor %}
+      </ul>
+      <h3>🔊 Summary (in your language)</h3>
+      <audio controls>
+        <source src="{{ url_for('static', filename='audio_summary.mp3') }}" type="audio/mp3">
+      </audio>
+    </section>
+  {% endif %}
+
+  <script>
+    let mediaRecorder;
+    let audioChunks = [];
+
+    document.getElementById('recordBtn').onclick = async () => {
+      const status = document.getElementById('status');
+      const button = document.getElementById('recordBtn');
+
+      if (mediaRecorder && mediaRecorder.state === "recording") {
+        mediaRecorder.stop();
+        button.textContent = "Start Recording";
+        status.textContent = "Recording stopped.";
+        return;
+      }
+
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+
+      mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+      mediaRecorder.onstop = async () => {
+        const blob = new Blob(audioChunks, { type: 'audio/wav' });
+        const url = URL.createObjectURL(blob);
+        document.getElementById('playback').src = url;
+
+        const formData = new FormData();
+        formData.append('audiofile', blob, 'recorded_audio.wav');
+
+        fetch("/", { method: "POST", body: formData }).then(() => location.reload());
+      };
+
+      audioChunks = [];
+      mediaRecorder.start();
+      button.textContent = "Stop Recording";
+      status.textContent = "🎤 Recording in progress...";
+    };
+  </script>
+
+  <!-- How This Works Modal -->
+  <div id="modal" style="display:none; position:fixed; top:10%; left:10%; width:80%; background:white; border:2px solid black; padding:20px; z-index:1000; max-height:80%; overflow:auto;">
+    <h2>🔍 How This Works</h2>
+    <ol>
+      <li><strong>Upload or Record</strong>: You provide an audio file or use your mic.</li>
+      <li><strong>Transcription (Whisper)</strong>: Converts speech to text, detects language.</li>
+      <li><strong>Translation</strong>: Translates to English if needed.</li>
+      <li><strong>NER + Field Inference</strong>: Extracts form fields from what you said.</li>
+      <li><strong>Editable Output</strong>: Lets you review, correct, and confirm entries.</li>
+      <li><strong>Spoken Summary</strong>: You hear the summary in your language.</li>
+    </ol>
+    <p><button onclick="document.getElementById('modal').style.display='none'">Close</button></p>
+  </div>
+
+</body>
+</html>
