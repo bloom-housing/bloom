@@ -1,5 +1,6 @@
-import * as React from "react"
+import React, { Dispatch, SetStateAction } from "react"
 import {
+  Jurisdiction,
   Listing,
   MarketingTypeEnum,
   ReviewOrderTypeEnum,
@@ -12,15 +13,18 @@ import {
   imageUrlFromListing,
   oneLineAddress,
 } from "@bloom-housing/shared-helpers"
-import { DueDate } from "./DueDate"
+import FavoriteButton from "../../shared/FavoriteButton"
 import { Availability } from "./Availability"
 import listingStyles from "../ListingViewSeeds.module.scss"
 import styles from "./MainDetails.module.scss"
-import { getApplicationSeason } from "../../../lib/helpers"
 
 type MainDetailsProps = {
-  dueDateContent: string[]
   listing: Listing
+  jurisdiction: Jurisdiction
+  listingFavorited?: boolean
+  setListingFavorited?: Dispatch<SetStateAction<boolean>>
+  showFavoriteButton?: boolean
+  showHomeType?: boolean
 }
 
 type ListingTag = {
@@ -28,8 +32,20 @@ type ListingTag = {
   variant: TagVariant
 }
 
-export const getListingTags = (listing: Listing, hideReviewTags?: boolean): ListingTag[] => {
+export const getListingTags = (
+  listing: Listing,
+  hideReviewTags?: boolean,
+  hideHomeTypeTag?: boolean
+): ListingTag[] => {
   const listingTags: ListingTag[] = []
+
+  if (!hideHomeTypeTag && listing.homeType) {
+    listingTags.push({
+      title: t(`homeType.${listing.homeType}`),
+      variant: "highlight-cool",
+    })
+  }
+
   if (listing.reservedCommunityTypes) {
     listingTags.push({
       title: t(`listings.reservedCommunityTypes.${listing.reservedCommunityTypes.name}`),
@@ -61,11 +77,19 @@ export const getListingTags = (listing: Listing, hideReviewTags?: boolean): List
   return listingTags
 }
 
-export const MainDetails = ({ dueDateContent, listing }: MainDetailsProps) => {
+export const MainDetails = ({
+  jurisdiction,
+  listing,
+  listingFavorited,
+  setListingFavorited,
+  showFavoriteButton,
+  showHomeType,
+}: MainDetailsProps) => {
   if (!listing) return
+
   const googleMapsHref =
     "https://www.google.com/maps/place/" + oneLineAddress(listing.listingsBuildingAddress)
-  const listingTags = getListingTags(listing)
+  const listingTags = getListingTags(listing, true, !showHomeType)
   return (
     <div>
       <ImageCard
@@ -117,25 +141,18 @@ export const MainDetails = ({ dueDateContent, listing }: MainDetailsProps) => {
             })}
           </div>
         )}
-
         <p className={"seeds-m-bs-3"}>{listing.developer}</p>
-        <div className={`${listingStyles["hide-desktop"]} seeds-m-b-3`}>
-          {listing.marketingType === MarketingTypeEnum.comingSoon ? (
-            <DueDate content={[getApplicationSeason(listing)]} />
-          ) : (
-            <DueDate content={dueDateContent} />
-          )}
-        </div>
+        {showFavoriteButton && (
+          <p className={"seeds-m-bs-3"}>
+            <FavoriteButton favorited={listingFavorited} setFavorited={setListingFavorited}>
+              {t("listings.favorite")}
+            </FavoriteButton>
+          </p>
+        )}
       </div>
-      <div className={listingStyles["hide-desktop"]}>
-        <Availability
-          reservedCommunityDescription={listing.reservedCommunityDescription}
-          reservedCommunityType={listing.reservedCommunityTypes}
-          reviewOrder={listing.reviewOrderType}
-          status={listing.status}
-          unitsAvailable={listing.unitsAvailable}
-          waitlistOpenSpots={listing.waitlistOpenSpots}
-        />
+
+      <div className={`${listingStyles["hide-desktop"]} seeds-m-bs-content`}>
+        <Availability listing={listing} jurisdiction={jurisdiction} />
       </div>
     </div>
   )

@@ -6,6 +6,7 @@ import {
   ApplicationAddressTypeEnum,
   ApplicationMethod,
   ApplicationMethodsTypeEnum,
+  FeatureFlagEnum,
   IdDTO,
   Jurisdiction,
   Listing,
@@ -15,7 +16,8 @@ import {
 import {
   FieldGroup,
   Form,
-  StandardTable,
+  getTranslationWithArguments,
+  StackedTable,
   StandardTableData,
   t,
   TableHeaders,
@@ -23,9 +25,9 @@ import {
 import {
   cloudinaryPdfFromId,
   getOccupancyDescription,
-  occupancyTable,
+  stackedOccupancyTable,
 } from "@bloom-housing/shared-helpers"
-import { downloadExternalPDF } from "../../lib/helpers"
+import { downloadExternalPDF, isFeatureFlagOn } from "../../lib/helpers"
 import { CardList, ContentCardProps } from "../../patterns/CardList"
 import { OrderedCardList } from "../../patterns/OrderedCardList"
 import { ReadMore } from "../../patterns/ReadMore"
@@ -147,18 +149,6 @@ export const getFeatures = (
   jurisdiction: Jurisdiction
 ): { heading: string; subheading: string }[] => {
   const features = []
-  if (listing.neighborhood) {
-    features.push({ heading: t("t.neighborhood"), subheading: listing.neighborhood })
-  }
-  const enableRegionFeature = jurisdiction.featureFlags.some(
-    (flag) => flag.name === "enableRegions" && flag.active
-  )
-  if (enableRegionFeature && listing.region) {
-    features.push({
-      heading: t("t.region"),
-      subheading: listing.region.toString().replace("_", " "),
-    })
-  }
   if (listing.yearBuilt) {
     features.push({ heading: t("t.built"), subheading: listing.yearBuilt })
   }
@@ -221,6 +211,24 @@ export const getHmiData = (listing: Listing): StandardTableData => {
       },
     }
   })
+}
+
+export const getStackedHmiData = (listing: Listing) => {
+  return (
+    listing?.unitsSummarized?.hmi?.rows.map((row) => {
+      const amiRows = Object.keys(row).reduce((acc, rowContent) => {
+        acc[rowContent] = { cellText: getTranslationWithArguments(row[rowContent].toString()) }
+        return acc
+      }, {})
+
+      return {
+        ...amiRows,
+        sizeColumn: {
+          cellText: listing.units[0].bmrProgramChart ? t(row["sizeColumn"]) : row["sizeColumn"],
+        },
+      }
+    }) || []
+  )
 }
 
 export type AddressLocation = "dropOff" | "pickUp" | "mailIn"
@@ -287,11 +295,19 @@ export type EligibilitySection = {
   note?: string
 }
 
-export const getEligibilitySections = (listing: Listing): EligibilitySection[] => {
+export const getEligibilitySections = (
+  jurisdiction: Jurisdiction,
+  listing: Listing
+): EligibilitySection[] => {
   const eligibilityFeatures: EligibilitySection[] = []
 
+  const swapCommunityTypeWithPrograms = isFeatureFlagOn(
+    jurisdiction,
+    FeatureFlagEnum.swapCommunityTypeWithPrograms
+  )
+
   // Reserved community type
-  if (listing.reservedCommunityTypes) {
+  if (!swapCommunityTypeWithPrograms && listing.reservedCommunityTypes) {
     eligibilityFeatures.push({
       header: getReservedTitle(listing.reservedCommunityTypes),
       content: (
@@ -314,11 +330,9 @@ export const getEligibilitySections = (listing: Listing): EligibilitySection[] =
       ? t("listings.forIncomeCalculationsBMR")
       : t("listings.forIncomeCalculations"),
     content: (
-      <StandardTable
-        headers={listing?.unitsSummarized?.hmi?.columns as TableHeaders}
-        data={getHmiData(listing)}
-        responsiveCollapse={true}
-        translateData={true}
+      <StackedTable
+        headers={(listing?.unitsSummarized?.hmi?.columns || []) as TableHeaders}
+        stackedData={getStackedHmiData(listing)}
       />
     ),
   })
@@ -328,13 +342,12 @@ export const getEligibilitySections = (listing: Listing): EligibilitySection[] =
     header: t("t.occupancy"),
     subheader: getOccupancyDescription(listing),
     content: (
-      <StandardTable
+      <StackedTable
         headers={{
           unitType: "t.unitType",
           occupancy: "t.occupancy",
         }}
-        data={occupancyTable(listing)}
-        responsiveCollapse={false}
+        stackedData={stackedOccupancyTable(listing)}
       />
     ),
   })
@@ -376,21 +389,39 @@ export const getEligibilitySections = (listing: Listing): EligibilitySection[] =
     MultiselectQuestionsApplicationSectionEnum.programs
   )
   if (programs?.length > 0) {
-    eligibilityFeatures.push({
-      header: t("listings.sections.housingProgramsTitle"),
-      subheader: t("listings.sections.housingProgramsSubtitle"),
-      note: t("listings.remainingUnitsAfterPrograms"),
-      content: (
-        <CardList
-          cardContent={programs.map((question) => {
-            return {
-              heading: question.multiselectQuestions.text,
-              description: question.multiselectQuestions.description,
-            }
-          })}
-        />
-      ),
-    })
+    eligibilityFeatures.push(
+      !swapCommunityTypeWithPrograms
+        ? {
+            header: t("listings.sections.housingProgramsTitle"),
+            subheader: t("listings.sections.housingProgramsSubtitle"),
+            note: t("listings.remainingUnitsAfterPrograms"),
+            content: (
+              <CardList
+                cardContent={programs.map((question) => {
+                  return {
+                    heading: question.multiselectQuestions.text,
+                    description: question.multiselectQuestions.description,
+                  }
+                })}
+              />
+            ),
+          }
+        : {
+            header: t("listings.communityTypes"),
+            subheader: t("listings.communityTypesDescription"),
+            note: t("listings.communityTypesNote"),
+            content: (
+              <CardList
+                cardContent={programs.map((question) => {
+                  return {
+                    heading: question.multiselectQuestions.text,
+                    description: question.multiselectQuestions.description,
+                  }
+                })}
+              />
+            ),
+          }
+    )
   }
 
   // Additional Eligibility Rules

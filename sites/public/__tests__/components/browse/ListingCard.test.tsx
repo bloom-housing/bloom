@@ -1,12 +1,23 @@
 import React from "react"
 import { render } from "@testing-library/react"
-import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { listing, jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { ListingCard } from "../../../src/components/browse/ListingCard"
 import { getListingTags } from "../../../src/components/listing/listing_sections/MainDetails"
+import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import dayjs from "dayjs"
 
 describe("<ListingCard>", () => {
   it("shows all card content", () => {
-    const view = render(<ListingCard listing={listing} />)
+    const view = render(
+      <ListingCard
+        listing={{
+          ...listing,
+          status: ListingsStatusEnum.active,
+          applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
+        }}
+        jurisdiction={jurisdiction}
+      />
+    )
     const tags = getListingTags(listing, true)
     expect(view.getByText(listing.name)).toBeDefined()
     expect(view.getByText("98 Archer Street, San Jose, CA 95112")).toBeDefined()
