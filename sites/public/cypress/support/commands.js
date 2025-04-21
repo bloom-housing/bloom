@@ -15,7 +15,7 @@ Cypress.Commands.add("signIn", (email, password) => {
 })
 
 Cypress.Commands.add("signOut", () => {
-  cy.get(`[data-testid="My Account-4"]`).trigger("mouseover")
+  cy.get(`[data-testid="My Account-5"]`).trigger("mouseover")
   // TODO: once the favorites feature is being tested, this is Sign Out-4:
   cy.get(`[data-testid="Sign Out-3"]`).trigger("click")
 })
