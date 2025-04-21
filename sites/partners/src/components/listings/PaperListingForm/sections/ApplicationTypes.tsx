@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import {
   t,
@@ -17,11 +17,13 @@ import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../..
 import {
   ApplicationMethodCreate,
   ApplicationMethodsTypeEnum,
+  FeatureFlagEnum,
   LanguagesEnum,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { FormListing } from "../../../../lib/listings/formTypes"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 
 interface Methods {
   digital: ApplicationMethodCreate
@@ -32,11 +34,15 @@ interface Methods {
 const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, errors, getValues } = useFormContext()
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+
   // watch fields
+  const jurisdiction: string = watch("jurisdictions.id")
   const digitalApplicationChoice = watch("digitalApplicationChoice")
   const commonDigitalApplicationChoice = watch("commonDigitalApplicationChoice")
   const paperApplicationChoice = watch("paperApplicationChoice")
   const referralOpportunityChoice = watch("referralOpportunityChoice")
+
   /*
     Set state for methods, drawer, upload progress, and more
   */
@@ -60,6 +66,10 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
     })
     setDrawerState(false)
   }
+
+  const disableCommonApplication = jurisdiction
+    ? doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.disableCommonApplication, jurisdiction)
+    : false
 
   const yesNoRadioOptions = [
     {
@@ -219,7 +229,9 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                         ...methods,
                         digital: {
                           ...methods.digital,
-                          type: ApplicationMethodsTypeEnum.Internal,
+                          type: disableCommonApplication
+                            ? ApplicationMethodsTypeEnum.ExternalLink
+                            : ApplicationMethodsTypeEnum.Internal,
                         },
                       })
                     },
@@ -241,7 +253,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               ]}
             />
           </Grid.Cell>
-          {digitalApplicationChoice === YesNoEnum.yes && (
+          {!disableCommonApplication && digitalApplicationChoice === YesNoEnum.yes && (
             <Grid.Cell>
               <p className="field-label m-4 ml-0">{t("listings.usingCommonDigitalApplication")}</p>
 
@@ -289,40 +301,37 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             </Grid.Cell>
           )}
         </Grid.Row>
-        {((commonDigitalApplicationChoice &&
-          commonDigitalApplicationChoice === YesNoEnum.no &&
-          digitalApplicationChoice === YesNoEnum.yes) ||
-          (digitalApplicationChoice === YesNoEnum.yes &&
-            !commonDigitalApplicationChoice &&
-            listing?.commonDigitalApplication === false)) && (
-          <Grid.Row columns={1}>
-            <Grid.Cell>
-              <Field
-                label={t("listings.customOnlineApplicationUrl")}
-                name="customOnlineApplicationUrl"
-                id="customOnlineApplicationUrl"
-                placeholder="https://"
-                inputProps={{
-                  value: methods.digital?.externalReference
-                    ? methods.digital.externalReference
-                    : "",
-                  onChange: (e) => {
-                    setMethods({
-                      ...methods,
-                      digital: {
-                        ...methods.digital,
-                        externalReference: e.target.value,
-                      },
-                    })
-                  },
-                }}
-                error={fieldHasError(errors?.applicationMethods?.[0]?.externalReference)}
-                errorMessage={fieldMessage(errors?.applicationMethods?.[0]?.externalReference)}
-              />
-            </Grid.Cell>
-          </Grid.Row>
-        )}
-
+        {digitalApplicationChoice === YesNoEnum.yes &&
+          (disableCommonApplication ||
+            commonDigitalApplicationChoice === YesNoEnum.no ||
+            (!commonDigitalApplicationChoice && listing?.commonDigitalApplication === false)) && (
+            <Grid.Row columns={1}>
+              <Grid.Cell>
+                <Field
+                  label={t("listings.customOnlineApplicationUrl")}
+                  name="customOnlineApplicationUrl"
+                  id="customOnlineApplicationUrl"
+                  placeholder="https://"
+                  inputProps={{
+                    value: methods.digital?.externalReference
+                      ? methods.digital.externalReference
+                      : "",
+                    onChange: (e) => {
+                      setMethods({
+                        ...methods,
+                        digital: {
+                          ...methods.digital,
+                          externalReference: e.target.value,
+                        },
+                      })
+                    },
+                  }}
+                  error={fieldHasError(errors?.applicationMethods?.[0]?.externalReference)}
+                  errorMessage={fieldMessage(errors?.applicationMethods?.[0]?.externalReference)}
+                />
+              </Grid.Cell>
+            </Grid.Row>
+          )}
         <Grid.Row columns={2}>
           <Grid.Cell>
             <p
@@ -431,7 +440,6 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             </Grid.Cell>
           </Grid.Row>
         )}
-
         <Grid.Row columns={1}>
           <Grid.Cell>
             <p

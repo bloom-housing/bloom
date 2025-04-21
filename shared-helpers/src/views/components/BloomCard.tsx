@@ -3,17 +3,21 @@ import Card from "@bloom-housing/ui-seeds/src/blocks/Card"
 import React from "react"
 import styles from "./BloomCard.module.scss"
 import { CustomIconMap, CustomIconType } from "../CustomIconMap"
+import { ClickableCard } from "./ClickableCard"
 
 interface BloomCardProps {
-  iconSymbol?: CustomIconType
-  title?: string
-  subtitle?: string | React.ReactNode
   children: React.ReactElement
-  id?: string
-  headingPriority?: 1 | 2 | 3 | 4 | 5 | 6
   className?: string
-  variant?: "form" | "block"
+  clickable?: boolean
   headerLink?: React.ReactNode
+  headingPriority?: 1 | 2 | 3 | 4 | 5 | 6
+  iconClass?: string
+  iconOutlined?: boolean
+  iconSymbol?: CustomIconType
+  id?: string
+  subtitle?: string | React.ReactNode
+  title?: string
+  variant?: "form" | "block"
 }
 
 const BloomCard = (props: BloomCardProps) => {
@@ -46,12 +50,16 @@ const BloomCard = (props: BloomCardProps) => {
 
   const title = getTitle()
 
-  return (
-    <Card spacing="lg" className={classNames.join(" ")}>
+  const cardContent = (
+    <>
       {title && (
         <Card.Header divider={props.variant === "block" ? undefined : "inset"}>
           {customIcon && (
-            <Icon size="2xl" className={styles["card-icon"]}>
+            <Icon
+              size="2xl"
+              className={`${styles["card-icon"]} ${props.iconClass ? props.iconClass : ""}`}
+              outlined={props.iconOutlined}
+            >
               {customIcon}
             </Icon>
           )}
@@ -59,9 +67,22 @@ const BloomCard = (props: BloomCardProps) => {
           {title}
         </Card.Header>
       )}
-
       {props.children}
-    </Card>
+    </>
+  )
+
+  return (
+    <>
+      {props.clickable ? (
+        <ClickableCard cardProps={{ spacing: "lg" }} className={classNames.join(" ")}>
+          {cardContent}
+        </ClickableCard>
+      ) : (
+        <Card spacing="lg" className={classNames.join(" ")}>
+          {cardContent}
+        </Card>
+      )}
+    </>
   )
 }
 

@@ -2,8 +2,8 @@ import React, { useState } from "react"
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon"
 import MinusIcon from "@heroicons/react/24/solid/MinusIcon"
 import { Heading, Icon } from "@bloom-housing/ui-seeds"
-import styles from "./CollapsibleSection.module.scss"
 import { t } from "@bloom-housing/ui-components"
+import styles from "./CollapsibleSection.module.scss"
 
 interface CollapsibleSectionProps {
   /** All content under the title */
@@ -30,6 +30,8 @@ export const CollapsibleSection = (props: CollapsibleSectionProps) => {
     </>
   )
 
+  const controlsId = props.title.replaceAll(" ", "")
+
   return (
     <div
       className={`${styles["collapsible-section"]} ${collapsed ? styles["collapsed-section"] : ""}`}
@@ -39,7 +41,7 @@ export const CollapsibleSection = (props: CollapsibleSectionProps) => {
         onClick={() => setCollapsed(!collapsed)}
         aria-label={!collapsed ? t("t.collapseSection") : t("t.expandSection")}
         aria-expanded={!collapsed}
-        aria-controls={props.title}
+        aria-controls={controlsId}
         className={styles["collapsible-button"]}
       >
         <div className={styles["header"]}>
@@ -62,7 +64,7 @@ export const CollapsibleSection = (props: CollapsibleSectionProps) => {
       {!collapsed && (
         <div
           className={`${styles["content"]} ${props.contentClassName ? props.contentClassName : ""}`}
-          id={props.title}
+          id={controlsId}
         >
           {props.children}
         </div>

@@ -1,55 +1,59 @@
 import React from "react"
-import InfoIcon from "@heroicons/react/24/solid/InformationCircleIcon"
 import {
+  Jurisdiction,
   Listing,
-  ListingsStatusEnum,
-  ReviewOrderTypeEnum,
+  MarketingTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { imageUrlFromListing, oneLineAddress } from "@bloom-housing/shared-helpers"
+import { imageUrlFromListing, oneLineAddress, ClickableCard } from "@bloom-housing/shared-helpers"
 import { StackedTable, t } from "@bloom-housing/ui-components"
-import { Card, Heading, Icon, Link, Message, Tag } from "@bloom-housing/ui-seeds"
-import { getListingApplicationStatus, getListingStackedTableData } from "../../lib/helpers"
+import { Card, Heading, Link, Tag } from "@bloom-housing/ui-seeds"
+import {
+  getListingApplicationStatus,
+  getListingStackedGroupTableData,
+  getListingStackedTableData,
+  getListingStatusMessage,
+} from "../../lib/helpers"
 import { getListingTags } from "../listing/listing_sections/MainDetails"
 import styles from "./ListingCard.module.scss"
+import FavoriteButton from "../shared/FavoriteButton"
 
 export interface ListingCardProps {
   listing: Listing
+  jurisdiction: Jurisdiction
+  showFavoriteButton?: boolean
+  favorited?: boolean
+  setFavorited?: React.Dispatch<React.SetStateAction<boolean>>
+  showHomeType?: boolean
 }
 
-export const getMessageData = (reviewOrder: ReviewOrderTypeEnum): string => {
-  switch (reviewOrder) {
-    case ReviewOrderTypeEnum.lottery:
-      return t("listings.lottery")
-    case ReviewOrderTypeEnum.firstComeFirstServe:
-      return t("listings.applicationFCFS")
-    case ReviewOrderTypeEnum.waitlist:
-      return t("listings.waitlist.open")
-    default:
-      return ""
-  }
-}
-
-export const ListingCard = ({ listing }: ListingCardProps) => {
+export const ListingCard = ({
+  listing,
+  jurisdiction,
+  showFavoriteButton,
+  favorited,
+  setFavorited,
+  showHomeType,
+}: ListingCardProps) => {
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
-  const listingTags = getListingTags(listing, true)
+  const listingTags = getListingTags(listing, true, !showHomeType)
   const status = getListingApplicationStatus(listing, true, true)
-  // TODO: Add favorites if toggled on
-  const actions = [
-    // <Button
-    //   onClick={() => alert("hi")}
-    //   size={"sm"}
-    //   variant={"primary-outlined"}
-    //   className={`${styles["action-button"]}}`}
-    //   ariaLabel={`Favorite ${listing.name}`}
-    //   key={"Favorite"}
-    // >
-    //   Favorite
-    // </Button>,
-  ]
+  const actions = []
+
+  if (showFavoriteButton) {
+    actions.push(
+      <FavoriteButton
+        favorited={favorited}
+        setFavorited={setFavorited}
+        key={t("listings.favorite")}
+      >
+        {t("listings.favorite")}
+      </FavoriteButton>
+    )
+  }
 
   return (
     <li className={styles["list-item"]}>
-      <Card className={styles["listing-card-container"]}>
+      <ClickableCard className={styles["listing-card-container"]}>
         <Card.Section>
           <div className={styles["listing-card-content"]}>
             <div className={styles["details"]}>
@@ -77,37 +81,33 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
                 </div>
               )}
               {!!status?.content && (
-                <Message
-                  className={`${styles["due-date"]}`}
-                  customIcon={
-                    <Icon size="md" className={styles["primary-color-icon"]}>
-                      <InfoIcon />
-                    </Icon>
-                  }
-                  variant={"primary"}
-                >
-                  <div className={styles["due-date-content"]}>
-                    <span>
-                      {listing.status === ListingsStatusEnum.active && (
-                        <span className={styles["date-review-order"]}>
-                          {getMessageData(listing.reviewOrderType)}
-                          {`: `}
-                        </span>
-                      )}
-                      {status.content}
-                    </span>
-                  </div>
-                </Message>
+                <div className={"seeds-m-bs-3"}>
+                  {getListingStatusMessage(listing, jurisdiction, null, true)}
+                </div>
               )}
-              <div className={styles["unit-table"]}>
-                <StackedTable
-                  headers={{
-                    unitType: "t.unitType",
-                    minimumIncome: "t.minimumIncome",
-                    rent: "t.rent",
-                  }}
-                  stackedData={getListingStackedTableData(listing.unitsSummarized)}
-                />
+              <div className={`${styles["unit-table"]} styled-stacked-table`}>
+                {listing.unitGroups?.length > 0 ? (
+                  <StackedTable
+                    headers={{
+                      unitType: "t.unitType",
+                      rent: "t.rent",
+                      availability: "t.availability",
+                    }}
+                    stackedData={getListingStackedGroupTableData(
+                      listing.unitGroupsSummarized,
+                      listing.marketingType === MarketingTypeEnum.comingSoon
+                    )}
+                  />
+                ) : (
+                  <StackedTable
+                    headers={{
+                      unitType: "t.unitType",
+                      minimumIncome: "t.minimumIncome",
+                      rent: "t.rent",
+                    }}
+                    stackedData={getListingStackedTableData(listing.unitsSummarized)}
+                  />
+                )}
               </div>
 
               {actions.length > 0 && (
@@ -124,7 +124,7 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
             </div>
           </div>
         </Card.Section>
-      </Card>
+      </ClickableCard>
     </li>
   )
 }
