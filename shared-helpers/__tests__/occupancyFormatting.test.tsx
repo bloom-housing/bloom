@@ -170,11 +170,11 @@ describe("occupancy formatting helper stacked table", () => {
     expect(stackedOccupancyTable(testListing)).toStrictEqual([
       {
         occupancy: { cellText: "2-6 people" },
-        unitType: { cellText: "3 BR" },
+        unitType: { cellText: "3 beds" },
       },
       {
         occupancy: { cellText: "at least 1 person" },
-        unitType: { cellText: "2 BR" },
+        unitType: { cellText: "2 beds" },
       },
       {
         occupancy: { cellText: "1 person" },

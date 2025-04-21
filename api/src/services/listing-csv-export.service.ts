@@ -8,7 +8,6 @@ import {
   Logger,
   StreamableFile,
 } from '@nestjs/common';
-import { SchedulerRegistry } from '@nestjs/schedule';
 import {
   Request as ExpressRequest,
   Response as ExpressResponse,

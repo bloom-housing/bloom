@@ -171,8 +171,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
         listingStatus={listing.status}
         lotteryResultsPdfUrl={pdfUrlFromListingEvents(
           [lotteryResultsEvent],
-          ListingEventsTypeEnum.lotteryResults,
-          process.env.cloudinaryCloudName
+          ListingEventsTypeEnum.lotteryResults
         )}
         lotteryResultsEvent={lotteryResultsEvent}
       />

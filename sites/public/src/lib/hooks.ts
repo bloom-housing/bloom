@@ -237,12 +237,14 @@ export async function fetchJurisdictionByName(
 
     const jurisdictionName = process.env.jurisdictionName
 
-    const headers: Record<string, string> = {
-      "x-forwarded-for": req.headers["x-forwarded-for"] ?? req.socket.remoteAddress,
-    }
+    const headers = {}
 
     if (process.env.API_PASS_KEY) {
-      headers.passkey = process.env.API_PASS_KEY
+      headers["passkey"] = process.env.API_PASS_KEY
+    }
+
+    if (req) {
+      headers["x-forwarded-for"] = req.headers["x-forwarded-for"] ?? req.socket.remoteAddress
     }
 
     const jurisdictionRes = await axios.get(

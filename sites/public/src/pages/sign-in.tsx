@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState, useCallback } from "react"
-import axios from "axios"
+import { isAxiosError } from "axios"
 import { useRouter } from "next/router"
 import { GoogleReCaptcha } from "react-google-recaptcha-v3"
 import { useForm } from "react-hook-form"
@@ -161,7 +161,7 @@ const SignIn = (props: SignInProps) => {
         await singleUseCodeFlow(email, true)
       }
       const { status } = error.response || {}
-      const responseMessage = axios.isAxiosError(error) ? error.response?.data.message : ""
+      const responseMessage = isAxiosError(error) ? error.response?.data.message : ""
       if (status === 400 && responseMessage?.includes("has not accepted the terms of service")) {
         setOpenTermsModal(true)
       } else {
@@ -200,7 +200,7 @@ const SignIn = (props: SignInProps) => {
           await singleUseCodeFlow(email, true)
         }
         const { status } = error.response || {}
-        const responseMessage = axios.isAxiosError(error) ? error.response?.data.message : ""
+        const responseMessage = isAxiosError(error) ? error.response?.data.message : ""
         if (status === 400 && responseMessage?.includes("has not accepted the terms of service")) {
           setOpenTermsModal(true)
         } else {
