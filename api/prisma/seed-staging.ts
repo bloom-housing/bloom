@@ -89,6 +89,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.disableJurisdictionalAdmin,
         FeatureFlagEnum.swapCommunityTypeWithPrograms,
         FeatureFlagEnum.enableListingFavoriting,
+        FeatureFlagEnum.disableCommonApplication,
       ],
     }),
   });
@@ -198,7 +199,11 @@ export const stagingSeed = async (
     data: translationFactory(mainJurisdiction.id, mainJurisdiction.name),
   });
   await prismaClient.translations.create({
-    data: translationFactory(undefined, undefined, LanguagesEnum.es),
+    data: translationFactory(
+      mainJurisdiction.id,
+      mainJurisdiction.name,
+      LanguagesEnum.es,
+    ),
   });
   await prismaClient.translations.create({
     data: translationFactory(),
