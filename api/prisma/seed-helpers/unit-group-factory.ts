@@ -18,6 +18,7 @@ export const unitGroupFactorySingle = (
     amiChart?: AmiChart;
     openWaitlist?: boolean;
     otherFields?: Prisma.UnitGroupCreateWithoutListingsInput;
+    unitGroupAmiLevelsFlatRentValue?: number;
   },
 ): Prisma.UnitGroupCreateWithoutListingsInput => {
   const bedrooms = unitType.numBedrooms || randomInt(6);
@@ -42,8 +43,14 @@ export const unitGroupFactorySingle = (
         {
           amiPercentage: 10,
           monthlyRentDeterminationType:
-            MonthlyRentDeterminationTypeEnum.percentageOfIncome,
-          percentageOfIncomeValue: 10,
+            optionalParams?.unitGroupAmiLevelsFlatRentValue
+              ? MonthlyRentDeterminationTypeEnum.flatRent
+              : MonthlyRentDeterminationTypeEnum.percentageOfIncome,
+          percentageOfIncomeValue:
+            optionalParams?.unitGroupAmiLevelsFlatRentValue ? undefined : 10,
+          flatRentValue: optionalParams?.unitGroupAmiLevelsFlatRentValue
+            ? optionalParams.unitGroupAmiLevelsFlatRentValue
+            : undefined,
           amiChart: optionalParams?.amiChart
             ? { connect: { id: optionalParams.amiChart.id } }
             : undefined,
