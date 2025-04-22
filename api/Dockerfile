@@ -1,31 +1,21 @@
-
-# Base image
 FROM node:18
 
-# Create working directory
+RUN apt-get update \
+  && apt-get install -y postgresql-client \
+  && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /usr/src/api
 
-# Copy package.json
-COPY package.json ./
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
-# Copy yarn.lcok
-COPY yarn.lock ./
-
-# run yarn install
-RUN yarn install
-
-# Copy source code into docker image
 COPY . .
-
-# Copy .env
-COPY .env ./
-
-# run build commands
 RUN yarn prisma generate
 RUN yarn build
 
-# Expose port 3100 for api
-EXPOSE 3100
+COPY entrypoint.sh .
+RUN chmod +x entrypoint.sh
 
-# Start api
-CMD ["yarn", "dev"]
+EXPOSE 3100
+ENTRYPOINT ["./entrypoint.sh"]
+
