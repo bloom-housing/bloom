@@ -24,90 +24,89 @@ const Resources = () => {
         inverse
         heading={pageTitle}
         subheading={t("pageDescription.additionalResources")}
+        className={styles["site-layout"]}
       >
-        <MaxWidthLayout className={styles["site-layout"]}>
-          <article className={styles["site-content"]}>
-            <div className={styles["resources-section-wrapper"]}>
-              <ResourceSection
-                sectionTitle={t("resources.immediateHousingTitle")}
-                sectionSubtitle={t("resources.immediateHousingSubtitle")}
-              >
-                <Grid spacing="sm">
-                  <GridRow columns={2}>
-                    <ResourceCard
-                      title={t("resources.mockCardTitle")}
-                      href="/"
-                      content={t("resources.mockCardDescription")}
-                    />
-                    <ResourceCard
-                      title={t("resources.mockCardTitle")}
-                      href="/"
-                      content={t("resources.mockCardDescription")}
-                    />
-                  </GridRow>
-                  <GridRow columns={2}>
-                    <ResourceCard
-                      title={t("resources.mockCardTitle")}
-                      href="/"
-                      content={t("resources.mockCardDescription")}
-                    />
-                    <ResourceCard
-                      title={t("resources.mockCardTitle")}
-                      href="/"
-                      content={t("resources.mockCardDescription")}
-                    />
-                  </GridRow>
-                </Grid>
-              </ResourceSection>
-              <ResourceSection sectionTitle={t("resources.housingProgramsTitle")}>
-                <Grid>
-                  <GridRow columns={2}>
-                    <ResourceCard
-                      title={t("resources.mockCardTitle")}
-                      href="/"
-                      content={t("resources.mockCardDescription")}
-                    />
-                    <ResourceCard
-                      title={t("resources.mockCardTitle")}
-                      href="/"
-                      content={t("resources.mockCardDescription")}
-                    />
-                  </GridRow>
-                  <GridRow columns={2}>
-                    <ResourceCard
-                      title={t("resources.mockCardTitle")}
-                      href="/"
-                      content={t("resources.mockCardDescription")}
-                    />
-                    <ResourceCard
-                      title={t("resources.mockCardTitle")}
-                      href="/"
-                      content={t("resources.mockCardDescription")}
-                    />
-                  </GridRow>
-                </Grid>
-              </ResourceSection>
-            </div>
-            <aside className={styles["aside-section"]}>
-              <Card className={styles["contact-card"]}>
-                <div className={styles["contact-card-subsection"]}>
-                  <Heading size="xl" priority={2}>
-                    {t("resources.contactTitle")}
-                  </Heading>
-                  <p className={styles["contact-card-description"]}>
-                    {t("resources.contactDescription")}
-                  </p>
-                </div>
-                <div className={styles["contact-card-subsection"]}>
-                  <p className={styles["contact-card-info"]}>{t("resources.contactInfo")}</p>
-                  <Link href={`mailto:${t("resources.contactEmail")}`}>
-                    {t("resources.contactEmail")}
-                  </Link>
-                </div>
-              </Card>
-            </aside>
-          </article>
-        </MaxWidthLayout>
+        <article className={styles["site-content"]}>
+          <div className={styles["resources-section-wrapper"]}>
+            <ResourceSection
+              sectionTitle={t("resources.immediateHousingTitle")}
+              sectionSubtitle={t("resources.immediateHousingSubtitle")}
+            >
+              <Grid spacing="sm">
+                <GridRow columns={2}>
+                  <ResourceCard
+                    title={t("resources.mockCardTitle")}
+                    href="/"
+                    content={t("resources.mockCardDescription")}
+                  />
+                  <ResourceCard
+                    title={t("resources.mockCardTitle")}
+                    href="/"
+                    content={t("resources.mockCardDescription")}
+                  />
+                </GridRow>
+                <GridRow columns={2}>
+                  <ResourceCard
+                    title={t("resources.mockCardTitle")}
+                    href="/"
+                    content={t("resources.mockCardDescription")}
+                  />
+                  <ResourceCard
+                    title={t("resources.mockCardTitle")}
+                    href="/"
+                    content={t("resources.mockCardDescription")}
+                  />
+                </GridRow>
+              </Grid>
+            </ResourceSection>
+            <ResourceSection sectionTitle={t("resources.housingProgramsTitle")}>
+              <Grid>
+                <GridRow columns={2}>
+                  <ResourceCard
+                    title={t("resources.mockCardTitle")}
+                    href="/"
+                    content={t("resources.mockCardDescription")}
+                  />
+                  <ResourceCard
+                    title={t("resources.mockCardTitle")}
+                    href="/"
+                    content={t("resources.mockCardDescription")}
+                  />
+                </GridRow>
+                <GridRow columns={2}>
+                  <ResourceCard
+                    title={t("resources.mockCardTitle")}
+                    href="/"
+                    content={t("resources.mockCardDescription")}
+                  />
+                  <ResourceCard
+                    title={t("resources.mockCardTitle")}
+                    href="/"
+                    content={t("resources.mockCardDescription")}
+                  />
+                </GridRow>
+              </Grid>
+            </ResourceSection>
+          </div>
+          <aside className={styles["aside-section"]}>
+            <Card className={styles["contact-card"]}>
+              <div className={styles["contact-card-subsection"]}>
+                <Heading size="xl" priority={2}>
+                  {t("resources.contactTitle")}
+                </Heading>
+                <p className={styles["contact-card-description"]}>
+                  {t("resources.contactDescription")}
+                </p>
+              </div>
+              <div className={styles["contact-card-subsection"]}>
+                <p className={styles["contact-card-info"]}>{t("resources.contactInfo")}</p>
+                <Link href={`mailto:${t("resources.contactEmail")}`}>
+                  {t("resources.contactEmail")}
+                </Link>
+              </div>
+            </Card>
+          </aside>
+        </article>
       </PageHeaderLayout>
     </Layout>
   )
