@@ -725,14 +725,14 @@ describe('Listing Controller Tests', () => {
         },
       });
     });
-    it('should return a listing based on filter availability - closedWaitlist', async () => {
+    it('should return a listing based on filter availabilities - closedWaitlist', async () => {
       const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         filter: [
           {
-            $comparison: Compare['='],
-            availability: FilterAvailabilityEnum.closedWaitlist,
+            $comparison: Compare['IN'],
+            availabilities: [FilterAvailabilityEnum.closedWaitlist],
           },
           {
             $comparison: Compare['='],
@@ -751,14 +751,14 @@ describe('Listing Controller Tests', () => {
 
       expect(res.body.items[0].id).toEqual(listing5WithUnitGroups.id);
     });
-    it('should return a listing based on filter availability - comingSoon', async () => {
+    it('should return a listing based on filter availabilities - comingSoon', async () => {
       const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         filter: [
           {
-            $comparison: Compare['='],
-            availability: FilterAvailabilityEnum.comingSoon,
+            $comparison: Compare['IN'],
+            availabilities: [FilterAvailabilityEnum.comingSoon],
           },
           {
             $comparison: Compare['='],
@@ -777,14 +777,14 @@ describe('Listing Controller Tests', () => {
 
       expect(res.body.items[0].id).toEqual(listing6WithUnitGroups.id);
     });
-    it('should return a listing based on filter availability - openWaitlist', async () => {
+    it('should return a listing based on filter availabilities - openWaitlist', async () => {
       const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         filter: [
           {
-            $comparison: Compare['='],
-            availability: FilterAvailabilityEnum.openWaitlist,
+            $comparison: Compare['IN'],
+            availabilities: [FilterAvailabilityEnum.openWaitlist],
           },
           {
             $comparison: Compare['='],
@@ -803,14 +803,14 @@ describe('Listing Controller Tests', () => {
 
       expect(res.body.items[0].id).toEqual(listing4WithUnitGroups.id);
     });
-    it('should return a listing based on filter availability - waitlistOpen', async () => {
+    it('should return a listing based on filter availabilities - waitlistOpen', async () => {
       const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         filter: [
           {
-            $comparison: Compare['='],
-            availability: FilterAvailabilityEnum.waitlistOpen,
+            $comparison: Compare['IN'],
+            availabilities: [FilterAvailabilityEnum.waitlistOpen],
           },
           {
             $comparison: Compare['='],
@@ -829,14 +829,14 @@ describe('Listing Controller Tests', () => {
 
       expect(res.body.items[0].id).toEqual(listing2WithUnits.id);
     });
-    it('should return a listing based on filter availability - unitsAvailable - unitGroups', async () => {
+    it('should return a listing based on filter availabilities - unitsAvailable - unitGroups', async () => {
       const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         filter: [
           {
-            $comparison: Compare['>='],
-            availability: FilterAvailabilityEnum.unitsAvailable,
+            $comparison: Compare['IN'],
+            availabilities: [FilterAvailabilityEnum.unitsAvailable],
           },
           {
             $comparison: Compare['='],
@@ -858,14 +858,14 @@ describe('Listing Controller Tests', () => {
       expect(ids).toContain(listing5WithUnitGroups.id);
       expect(ids).toContain(listing6WithUnitGroups.id);
     });
-    it('should return a listing based on filter availability - unitsAvailable - units', async () => {
+    it('should return a listing based on filter availabilities - unitsAvailable - units', async () => {
       const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         filter: [
           {
-            $comparison: Compare['>='],
-            availability: FilterAvailabilityEnum.unitsAvailable,
+            $comparison: Compare['IN'],
+            availabilities: [FilterAvailabilityEnum.unitsAvailable],
           },
           {
             $comparison: Compare['='],

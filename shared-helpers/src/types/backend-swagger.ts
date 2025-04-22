@@ -2836,7 +2836,7 @@ export interface ListingFilterParams {
   $comparison: EnumListingFilterParamsComparison
 
   /**  */
-  availability?: FilterAvailabilityEnum
+  availabilities?: FilterAvailabilityEnum[]
 
   /**  */
   bathrooms?: number

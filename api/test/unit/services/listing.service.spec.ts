@@ -1330,11 +1330,11 @@ describe('Testing listing service', () => {
   });
 
   describe('Test buildWhereClause helper', () => {
-    it('should return a where clause for filter availability - closedWaitlist', () => {
+    it('should return a where clause for filter availabilities - closedWaitlist', () => {
       const filter = [
         {
-          $comparison: '=',
-          availability: FilterAvailabilityEnum.closedWaitlist,
+          $comparison: 'IN',
+          availabilities: [FilterAvailabilityEnum.closedWaitlist],
         } as ListingFilterParams,
       ];
       const whereClause = service.buildWhereClause(filter, '');
@@ -1363,11 +1363,11 @@ describe('Testing listing service', () => {
       });
     });
 
-    it('should return a where clause for filter availability - comingSoon', () => {
+    it('should return a where clause for filter availabilities - comingSoon', () => {
       const filter = [
         {
-          $comparison: '=',
-          availability: FilterAvailabilityEnum.comingSoon,
+          $comparison: 'IN',
+          availabilities: [FilterAvailabilityEnum.comingSoon],
         } as ListingFilterParams,
       ];
       const whereClause = service.buildWhereClause(filter, '');
@@ -1387,11 +1387,11 @@ describe('Testing listing service', () => {
       });
     });
 
-    it('should return a where clause for filter availability - openWaitlist', () => {
+    it('should return a where clause for filter availabilities - openWaitlist', () => {
       const filter = [
         {
-          $comparison: '=',
-          availability: FilterAvailabilityEnum.openWaitlist,
+          $comparison: 'IN',
+          availabilities: [FilterAvailabilityEnum.openWaitlist],
         } as ListingFilterParams,
       ];
       const whereClause = service.buildWhereClause(filter, '');
@@ -1420,11 +1420,11 @@ describe('Testing listing service', () => {
       });
     });
 
-    it('should return a where clause for filter availability - waitlistOpen', () => {
+    it('should return a where clause for filter availabilities - waitlistOpen', () => {
       const filter = [
         {
-          $comparison: '=',
-          availability: FilterAvailabilityEnum.waitlistOpen,
+          $comparison: 'IN',
+          availabilities: [FilterAvailabilityEnum.waitlistOpen],
         } as ListingFilterParams,
       ];
       const whereClause = service.buildWhereClause(filter, '');
@@ -1444,11 +1444,11 @@ describe('Testing listing service', () => {
       });
     });
 
-    it('should return a where clause for filter availability - unitsAvailable', () => {
+    it('should return a where clause for filter availabilities - unitsAvailable', () => {
       const filter = [
         {
-          $comparison: '>=',
-          availability: FilterAvailabilityEnum.unitsAvailable,
+          $comparison: 'IN',
+          availabilities: [FilterAvailabilityEnum.unitsAvailable],
         } as ListingFilterParams,
       ];
       const whereClause = service.buildWhereClause(filter, '');
@@ -1513,7 +1513,13 @@ describe('Testing listing service', () => {
               {
                 unitGroups: {
                   some: {
-                    unitTypes: { some: { numBedrooms: { equals: 2 } } },
+                    unitTypes: {
+                      some: {
+                        numBedrooms: {
+                          equals: 2,
+                        },
+                      },
+                    },
                   },
                 },
               },
@@ -1765,7 +1771,11 @@ describe('Testing listing service', () => {
                               equals: monthlyRent,
                             },
                           },
-                          { percentageOfIncomeValue: { not: null } },
+                          {
+                            percentageOfIncomeValue: {
+                              not: null,
+                            },
+                          },
                         ],
                       },
                     },
