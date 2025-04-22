@@ -402,6 +402,50 @@ export class ListingService implements OnModuleInit {
       caseSensitive: true,
     });
 
+    // detect combined >=/<= monthlyRent filters and add one range filter
+    const rentParams =
+      params?.filter((f) => f[ListingFilterKeys.monthlyRent] !== undefined) ||
+      [];
+    const minRent = rentParams.find((f) => f.$comparison === Compare['>=']);
+    const maxRent = rentParams.find((f) => f.$comparison === Compare['<=']);
+    if (minRent && maxRent) {
+      const min = minRent[ListingFilterKeys.monthlyRent];
+      const max = maxRent[ListingFilterKeys.monthlyRent];
+      filters.push({
+        OR: [
+          {
+            units: {
+              some: {
+                AND: [
+                  { monthlyRent: { gte: min } },
+                  { monthlyRent: { lte: max } },
+                ],
+              },
+            },
+          },
+          {
+            unitGroups: {
+              some: {
+                unitGroupAmiLevels: {
+                  some: {
+                    OR: [
+                      {
+                        AND: [
+                          { flatRentValue: { gte: min } },
+                          { flatRentValue: { lte: max } },
+                        ],
+                      },
+                      { percentageOfIncomeValue: { not: null } },
+                    ],
+                  },
+                },
+              },
+            },
+          },
+        ],
+      });
+    }
+
     if (params?.length) {
       params.forEach((filter) => {
         if (
@@ -672,6 +716,7 @@ export class ListingService implements OnModuleInit {
           });
         }
         if (filter[ListingFilterKeys.monthlyRent]) {
+          if (minRent && maxRent) return;
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
             $include_nulls: false,
