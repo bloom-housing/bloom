@@ -24,6 +24,7 @@ import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
 import axios from 'axios';
 import { AssetTransferDTO } from '../dtos/script-runner/asset-transfer.dto';
 import { AssetService } from './asset.service';
+import { OrderByEnum } from '../enums/shared/order-by-enum';
 
 /**
   this is the service for running scripts
@@ -988,10 +989,12 @@ export class ScriptRunnerService {
           some: { id: jurisdiction[0].id },
         },
         userRoles: null,
-        applications: { some: {} },
       },
       skip,
       take,
+      orderBy: {
+        id: OrderByEnum.ASC,
+      },
     });
 
     if (publicUsers?.length) {
