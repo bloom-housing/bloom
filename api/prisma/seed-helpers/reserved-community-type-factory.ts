@@ -38,7 +38,7 @@ export const reservedCommunityTypeFactoryAll = async (
 
 export const reservedCommunityTypeFactoryGet = async (
   prismaClient: PrismaClient,
-  jurisdictionId: string,
+  jurisdictionId?: string,
   name?: string,
 ): Promise<ReservedCommunityTypes> => {
   // if name is not given pick one randomly from the above list
@@ -73,12 +73,11 @@ export const reservedCommunityTypesFindOrCreate = async (
 ): Promise<ReservedCommunityTypes> => {
   const reservedCommunityType = await reservedCommunityTypeFactoryGet(
     prismaClient,
-    jurisdictionId,
   );
   if (reservedCommunityType) {
-    return await reservedCommunityTypeFactoryGet(prismaClient, jurisdictionId);
+    return reservedCommunityType;
   }
 
   await reservedCommunityTypeFactoryAll(jurisdictionId, prismaClient);
-  return await reservedCommunityTypeFactoryGet(prismaClient, jurisdictionId);
+  return await reservedCommunityTypeFactoryGet(prismaClient);
 };

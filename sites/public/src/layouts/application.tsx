@@ -8,7 +8,6 @@ import { JurisdictionFooterSection as SanMateoFooter } from "../page_content/jur
 import { JurisdictionFooterSection as SanJoseFooter } from "../page_content/jurisdiction_overrides/san_jose/JurisdictionFooterSection"
 import { JurisdictionFooterSection as AlamedaFooter } from "../page_content/jurisdiction_overrides/alameda/JurisdictionFooterSection"
 import { JursidictionSiteNotice as SanJoseNotice } from "../page_content/jurisdiction_overrides/san_jose/jurisdiction-site-notice"
-import { JursidictionSiteNotice as AlamedaNotice } from "../page_content/jurisdiction_overrides/alameda/jurisdiction-site-notice"
 import { Message, Toast, Icon } from "@bloom-housing/ui-seeds"
 import { MenuLink, t, SiteHeader as UICSiteHeader } from "@bloom-housing/ui-components"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
@@ -92,7 +91,7 @@ const getSiteHeaderDeprecated = (
   let siteNotice = <div></div>
   let transitionMessage = null
   if (process.env.jurisdictionName === "Alameda") {
-    siteNotice = <AlamedaNotice />
+    transitionMessage = t("alert.transitionv3")
   }
   if (process.env.jurisdictionName === "San Jose") {
     siteNotice = <SanJoseNotice />

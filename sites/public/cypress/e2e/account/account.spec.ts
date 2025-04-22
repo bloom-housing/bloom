@@ -19,7 +19,7 @@ describe("User accounts", () => {
     // Change the name fields
     cy.getByTestId("account-first-name").clear().type(updatedPublicUser.firstName)
     cy.getByTestId("account-middle-name").clear().type(updatedPublicUser.middleName)
-    cy.getByTestId("account-last-name").clear().type(updatedPublicUser.lastName)
+    cy.getByTestId("account-last-name").clear({ force: true }).type(updatedPublicUser.lastName)
     cy.getByID("account-submit-name").click()
     cy.getByTestId("alert-box").contains("Name update successful")
     cy.get("[aria-label='close alert']").click()
