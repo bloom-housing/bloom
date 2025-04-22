@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Head from "next/head"
 import { Card, Grid, Heading } from "@bloom-housing/ui-seeds"
-import { t, PageHeader } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 import { GridRow } from "@bloom-housing/ui-seeds/src/layout/Grid"
 import MaxWidthLayout from "../../layouts/max-width"
 import Layout from "../../layouts/application"
