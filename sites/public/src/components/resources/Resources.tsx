@@ -3,11 +3,11 @@ import Head from "next/head"
 import { Card, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 import { GridRow } from "@bloom-housing/ui-seeds/src/layout/Grid"
+import { PageHeaderLayout } from "../../patterns/PageHeaderLayout"
 import Layout from "../../layouts/application"
 import ResourceSection from "./ResourceSection"
 import ResourceCard from "./ResourceCard"
 import styles from "./Resources.module.scss"
-import { PageHeaderLayout } from "../../patterns/PageHeaderLayout"
 
 const Resources = () => {
   const pageTitle = t("pageTitle.additionalResources")
