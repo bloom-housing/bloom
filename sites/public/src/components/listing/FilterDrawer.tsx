@@ -72,7 +72,7 @@ const CheckboxGroup = (props: CheckboxGroupProps) => {
                   labelClassName={styles["filter-checkbox-label"]}
                   type="checkbox"
                   register={props.register}
-                ></Field>
+                />
               </Grid.Cell>
             )
           })}
