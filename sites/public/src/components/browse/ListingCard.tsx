@@ -6,7 +6,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { imageUrlFromListing, oneLineAddress, ClickableCard } from "@bloom-housing/shared-helpers"
 import { StackedTable, t } from "@bloom-housing/ui-components"
-import { Card, Heading, Link, Tag } from "@bloom-housing/ui-seeds"
+import { Card, Heading, Link, Tag, Icon } from "@bloom-housing/ui-seeds"
 import {
   getListingApplicationStatus,
   getListingStackedGroupTableData,
@@ -74,7 +74,10 @@ export const ListingCard = ({
                   {listingTags.map((tag, index) => {
                     return (
                       <Tag variant={tag.variant} key={index} className={styles["tag"]}>
-                        {tag.title}
+                        <span>
+                          {tag.icon && <Icon>{tag.icon}</Icon>}
+                          {tag.title}
+                        </span>
                       </Tag>
                     )
                   })}

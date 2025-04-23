@@ -17,6 +17,7 @@ import FavoriteButton from "../../shared/FavoriteButton"
 import { Availability } from "./Availability"
 import listingStyles from "../ListingViewSeeds.module.scss"
 import styles from "./MainDetails.module.scss"
+import { CheckIcon } from "@heroicons/react/20/solid"
 
 type MainDetailsProps = {
   listing: Listing
@@ -30,6 +31,7 @@ type MainDetailsProps = {
 type ListingTag = {
   title: string
   variant: TagVariant
+  icon?: React.ReactNode
 }
 
 export const getListingTags = (
@@ -38,6 +40,14 @@ export const getListingTags = (
   hideHomeTypeTag?: boolean
 ): ListingTag[] => {
   const listingTags: ListingTag[] = []
+
+  if (listing.isVerified) {
+    listingTags.push({
+      title: t("listings.verifiedListing"),
+      variant: "warn-inverse",
+      icon: <CheckIcon />,
+    })
+  }
 
   if (!hideHomeTypeTag && listing.homeType) {
     listingTags.push({
