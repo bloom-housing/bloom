@@ -60,6 +60,17 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiPropertyOptional({
+    isArray: true,
+    example: [1],
+    default: [1],
+  })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default], each: true })
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Number)
+  [ListingFilterKeys.bedroomTypes]?: number[];
+
+  @Expose()
+  @ApiPropertyOptional({
     type: String,
     example: 'San Jose',
   })

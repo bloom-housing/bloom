@@ -28,8 +28,11 @@ export function buildFilter(filter: filter): any {
   }
 
   if (comparison === Compare.IN) {
-    toReturn.push({
-      in: String(filterValue)
+    let listValues;
+    if (Array.isArray(filterValue)) {
+      listValues = filterValue;
+    } else {
+      listValues = String(filterValue)
         .split(',')
         .map((s) => {
           if (!filter.caseSensitive) {
@@ -37,7 +40,10 @@ export function buildFilter(filter: filter): any {
           }
           return s.trim();
         })
-        .filter((s) => s.length !== 0),
+        .filter((s) => s.length !== 0);
+    }
+    toReturn.push({
+      in: listValues,
       ...mode,
     });
   } else if (comparison === Compare['<>']) {

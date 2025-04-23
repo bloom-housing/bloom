@@ -1130,6 +1130,60 @@ describe('Listing Controller Tests', () => {
 
       expect(res.body.items[0].id).toEqual(listing2WithUnits.id);
     });
+    it('should return a listing based on filter bedroomTypes - unitGroups', async () => {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare['IN'],
+            bedroomTypes: [3],
+          },
+          {
+            $comparison: Compare['='],
+            jurisdiction: jurisdictionDWithUnitGroups.id,
+          },
+        ],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toEqual(2);
+
+      const ids = res.body.items.map((listing) => listing.id);
+      expect(ids).toContain(listing4WithUnitGroups.id);
+      expect(ids).toContain(listing5WithUnitGroups.id);
+    });
+    it('should return a listing based on filter bedroomTypes - units', async () => {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare['IN'],
+            bedroomTypes: [3],
+          },
+          {
+            $comparison: Compare['='],
+            jurisdiction: jurisdictionB.id,
+          },
+        ],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toEqual(1);
+
+      expect(res.body.items[0].id).toEqual(listing2WithUnits.id);
+    });
     it('should return a listing based on filter city', async () => {
       const buildingAddress = await prisma.address.findFirst({
         where: {

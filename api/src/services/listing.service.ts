@@ -695,6 +695,37 @@ export class ListingService implements OnModuleInit {
             ],
           });
         }
+        if (filter[ListingFilterKeys.bedroomTypes] !== undefined) {
+          const builtFilter = buildFilter({
+            $comparison: filter.$comparison,
+            $include_nulls: false,
+            value: filter[ListingFilterKeys.bedroomTypes],
+            key: ListingFilterKeys.bedroomTypes,
+            caseSensitive: true,
+          });
+          filters.push({
+            OR: [
+              ...builtFilter.map((filt) => ({
+                units: {
+                  some: {
+                    numBedrooms: filt,
+                  },
+                },
+              })),
+              ...builtFilter.map((filt) => ({
+                unitGroups: {
+                  some: {
+                    unitTypes: {
+                      some: {
+                        numBedrooms: filt,
+                      },
+                    },
+                  },
+                },
+              })),
+            ],
+          });
+        }
         if (filter[ListingFilterKeys.city]) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,

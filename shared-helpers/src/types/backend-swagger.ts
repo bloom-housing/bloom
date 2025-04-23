@@ -2848,6 +2848,9 @@ export interface ListingFilterParams {
   bedrooms?: number
 
   /**  */
+  bedroomTypes?: []
+
+  /**  */
   city?: string
 
   /**  */

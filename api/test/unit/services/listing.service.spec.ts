@@ -1667,6 +1667,44 @@ describe('Testing listing service', () => {
       });
     });
 
+    it('should return a where clause for filter bedroomTypes', () => {
+      const filter = [
+        { $comparison: 'IN', bedroomTypes: [2] } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                units: {
+                  some: {
+                    numBedrooms: {
+                      in: [2],
+                    },
+                  },
+                },
+              },
+              {
+                unitGroups: {
+                  some: {
+                    unitTypes: {
+                      some: {
+                        numBedrooms: {
+                          in: [2],
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
     it('should return a where clause for filter city', () => {
       const cityName = 'cityName';
       const filter = [
