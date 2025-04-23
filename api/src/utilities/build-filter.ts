@@ -29,7 +29,11 @@ export function buildFilter(filter: filter): any {
 
   if (comparison === Compare.IN) {
     let listValues;
-    if (Array.isArray(filterValue)) {
+    if (
+      Array.isArray(filterValue) &&
+      filterValue.length > 0 &&
+      typeof filterValue[0] !== 'string'
+    ) {
       listValues = filterValue;
     } else {
       listValues = String(filterValue)
