@@ -989,6 +989,7 @@ export class ListingService implements OnModuleInit {
         }
       });
     }
+    // console.log(filters[0].OR);
 
     if (search) {
       filters.push({

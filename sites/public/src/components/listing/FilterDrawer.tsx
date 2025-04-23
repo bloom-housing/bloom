@@ -1,15 +1,20 @@
 import { Field, Form, t } from "@bloom-housing/ui-components"
 import { Button, Drawer, Grid } from "@bloom-housing/ui-seeds"
 import { useForm, UseFormMethods } from "react-hook-form"
-import { listingFeatures } from "@bloom-housing/shared-helpers"
+import { AuthContext, listingFeatures } from "@bloom-housing/shared-helpers"
 import {
+  EnumListingFilterParamsComparison,
   FilterAvailabilityEnum,
   RegionEnum,
   UnitTypeEnum,
   HomeTypeEnum,
   ListingFilterKeys,
+  ListingsQueryBody,
+  ListingViews,
+  ListingFilterParams,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import styles from "./FilterDrawer.module.scss"
+import { useContext } from "react"
 
 export interface FilterField {
   key: string
@@ -43,6 +48,15 @@ const filterAvailabilityCleaned = Object.keys(FilterAvailabilityEnum).filter(
 const unitTypeCleaned = Object.keys(UnitTypeEnum).filter(
   (unitType) => unitType !== UnitTypeEnum.SRO && unitType != UnitTypeEnum.fiveBdrm
 )
+export const unitTypeMapping = {
+  [UnitTypeEnum.studio]: 0,
+  [UnitTypeEnum.SRO]: 0,
+  [UnitTypeEnum.oneBdrm]: 1,
+  [UnitTypeEnum.twoBdrm]: 2,
+  [UnitTypeEnum.threeBdrm]: 3,
+  [UnitTypeEnum.fourBdrm]: 4,
+  [UnitTypeEnum.fiveBdrm]: 5,
+}
 
 const buildDefaultFilterFields = (
   filterType: ListingFilterKeys,
@@ -131,13 +145,103 @@ const RentSection = (props: RentSectionProps) => (
 const FilterDrawer = (props: FilterDrawerProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, trigger, getValues, setValue } = useForm()
+  const { listingsService } = useContext(AuthContext)
+  const arrayFilters: ListingFilterKeys[] = [
+    ListingFilterKeys.counties,
+    ListingFilterKeys.homeTypes,
+    ListingFilterKeys.listingFeatures,
+    ListingFilterKeys.regions,
+    ListingFilterKeys.reservedCommunityTypes,
+  ]
+  const booleanFilters: ListingFilterKeys[] = [
+    ListingFilterKeys.isVerified,
+    ListingFilterKeys.section8Acceptance,
+  ]
+  const indvidualFilters: ListingFilterKeys[] = [
+    ListingFilterKeys.availability,
+    ListingFilterKeys.bathrooms,
+    ListingFilterKeys.bedrooms,
+    ListingFilterKeys.jurisdiction,
+  ]
 
   async function onFormSubmit() {
     const validation = await trigger()
     if (!validation) return
-
     const data = getValues()
-    console.log(data)
+    const filters: ListingFilterParams[] = []
+    Object.entries(data).forEach(([filterType, userSelections]) => {
+      if (indvidualFilters.includes(ListingFilterKeys[filterType])) {
+        Object.entries(userSelections).forEach((field: [ListingFilterKeys, any]) => {
+          if (field[1]) {
+            const filter = {
+              $comparison: EnumListingFilterParamsComparison["="],
+            }
+            if (filterType === ListingFilterKeys.bedrooms) {
+              filter[filterType] = unitTypeMapping[field[0]]
+            } else {
+              filter[filterType] = field[0]
+            }
+            filters.push(filter)
+          }
+        })
+      } else if (arrayFilters.includes(ListingFilterKeys[filterType])) {
+        const selectedFields = []
+        Object.entries(userSelections).forEach((field: [ListingFilterKeys, any]) => {
+          if (field[1]) {
+            selectedFields.push(field[0])
+          }
+        })
+        if (selectedFields.length > 0) {
+          const filter = {
+            $comparison: EnumListingFilterParamsComparison["IN"],
+          }
+          filter[filterType] = selectedFields
+          filters.push(filter)
+        }
+      } else if (booleanFilters.includes(ListingFilterKeys[filterType]) && userSelections) {
+        const filter = {
+          $comparison: EnumListingFilterParamsComparison["="],
+        }
+        filter[filterType] = userSelections
+        filters.push(filter)
+      } else if (filterType === ListingFilterKeys.monthlyRent) {
+        if (userSelections["minRent"]) {
+          const filter = {
+            $comparison: EnumListingFilterParamsComparison[">="],
+          }
+          filter[ListingFilterKeys.monthlyRent] = userSelections["minRent"]
+          filters.push(filter)
+        }
+        if (userSelections["maxRent"]) {
+          const filter = {
+            $comparison: EnumListingFilterParamsComparison["<="],
+          }
+          filter[ListingFilterKeys.monthlyRent] = userSelections["maxRent"]
+          filters.push(filter)
+        }
+      }
+    })
+    console.log(filters)
+    const query: ListingsQueryBody = {
+      page: 1,
+      view: ListingViews.base,
+      filter: filters,
+    }
+    const filteredListings = await listingsService.filterableList({ body: query })
+    console.log(filteredListings.items)
+
+    // await fetchBaseListingData(
+    //   {
+    //     page: 1,
+    //     additionalFilters: filters,
+    //     orderBy: [ListingOrderByKeys.mostRecentlyPublished],
+    //     orderDir: [OrderByEnum.desc],
+    //     limit: process.env.maxOpenListings,
+    //   },
+    //   context.req
+    // )
+
+    // console.log(data)
   }
 
   return (
@@ -155,7 +259,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             groupLabel={t("listings.confirmedListings")}
             fields={[
               {
-                key: "showConfirmedListings",
+                key: ListingFilterKeys.isVerified,
                 label: t("listings.confirmedListingsOnly"),
               },
             ]}
