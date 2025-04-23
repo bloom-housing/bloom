@@ -11,7 +11,6 @@ import ListingsSearchCombinedDeprecated from "../components/listings/search/List
 import { FormOption } from "../components/listings/search/ListingsSearchModal"
 import { runtimeConfig } from "../lib/runtime-config"
 import Layout from "../layouts/application"
-
 export interface ListingsProps {
   listingsEndpoint: string
   googleMapsApiKey: string
