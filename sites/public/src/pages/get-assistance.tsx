@@ -1,5 +1,5 @@
-import { AuthContext, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import { useContext, useEffect } from "react"
+import { AuthContext, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import Assistance from "../components/assistance/Assistance"
 

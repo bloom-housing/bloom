@@ -1,10 +1,10 @@
 import Head from "next/head"
+import Link from "next/link"
+import { Card, t } from "@bloom-housing/ui-components"
+import { Heading } from "@bloom-housing/ui-seeds"
 import Layout from "../../layouts/application"
 import { PageHeaderLayout } from "../../patterns/PageHeaderLayout"
-import { Card, t } from "@bloom-housing/ui-components"
 import AssistanceItem from "./AssistanceItem"
-import { Heading } from "@bloom-housing/ui-seeds"
-import Link from "next/link"
 import styles from "./Assistance.module.scss"
 
 const Assistance = () => {
