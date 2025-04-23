@@ -2948,6 +2948,11 @@ export interface ListingsQueryParams {
   search?: string
 }
 
+export interface ListingFilterKeyDTO {
+  /**  */
+  value?: ListingFilterKeys
+}
+
 export interface ListingsRetrieveParams {
   /**  */
   view?: ListingViews
@@ -6898,6 +6903,28 @@ export enum ListingOrderByKeys {
 export enum OrderByEnum {
   "asc" = "asc",
   "desc" = "desc",
+}
+
+export enum ListingFilterKeys {
+  "availability" = "availability",
+  "bathrooms" = "bathrooms",
+  "bedrooms" = "bedrooms",
+  "city" = "city",
+  "counties" = "counties",
+  "homeTypes" = "homeTypes",
+  "ids" = "ids",
+  "isVerified" = "isVerified",
+  "jurisdiction" = "jurisdiction",
+  "leasingAgent" = "leasingAgent",
+  "listingFeatures" = "listingFeatures",
+  "monthlyRent" = "monthlyRent",
+  "name" = "name",
+  "neighborhood" = "neighborhood",
+  "regions" = "regions",
+  "reservedCommunityTypes" = "reservedCommunityTypes",
+  "section8Acceptance" = "section8Acceptance",
+  "status" = "status",
+  "zipCode" = "zipCode",
 }
 
 export enum ApplicationAddressTypeEnum {

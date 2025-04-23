@@ -23,6 +23,7 @@ import { fetchFavoriteListingIds, isFeatureFlagOn, saveListingFavorite } from ".
 import { PageHeaderSection } from "../../patterns/PageHeaderLayout"
 import { ListingCard } from "./ListingCard"
 import styles from "./ListingBrowse.module.scss"
+import { FilterDrawer } from "../listing/FilterDrawer"
 
 export enum TabsIndexEnum {
   open,
@@ -46,6 +47,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
   const router = useRouter()
   const { profile, userService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState<boolean>(false)
   const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
 
@@ -120,7 +122,8 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
         <title>{pageTitle}</title>
       </Head>
       <MetaTags title={t("nav.siteTitle")} description={metaDescription} />
-      <PageHeaderSection heading={t("pageTitle.rent")} inverse={true} content={ListingTabs} />
+      <PageHeaderSection heading={t("pageTitle.rent")} inverse={true} />
+      <FilterDrawer isOpen={isFilterDrawerOpen} onClose={() => setIsFilterDrawerOpen(false)} />
       <div className={styles["listing-directory"]}>
         {props.paginationData && (
           <div className={styles["browse-header"]}>
@@ -133,8 +136,12 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                   })}
                 </span>
                 <span>
-                  <Button size={"sm"} variant={"primary-outlined"}>
-                    Filter
+                  <Button
+                    size={"sm"}
+                    onClick={() => setIsFilterDrawerOpen(true)}
+                    variant={"primary-outlined"}
+                  >
+                    {t("t.filter")}
                   </Button>
                 </span>
               </div>
