@@ -5,7 +5,7 @@ import {
   MarketingTypeEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { Heading, Link, Tag } from "@bloom-housing/ui-seeds"
+import { Heading, Link, Tag, Icon } from "@bloom-housing/ui-seeds"
 import { TagVariant } from "@bloom-housing/ui-seeds/src/text/Tag"
 import { ImageCard, t } from "@bloom-housing/ui-components"
 import {
@@ -144,8 +144,11 @@ export const MainDetails = ({
           <div className={`${styles["listing-tags"]} seeds-m-bs-3`} data-testid={"listing-tags"}>
             {listingTags.map((tag, index) => {
               return (
-                <Tag variant={tag.variant} key={index}>
-                  {tag.title}
+                <Tag variant={tag.variant} key={index} className={styles["tag"]}>
+                  <span>
+                    {tag.icon && <Icon>{tag.icon}</Icon>}
+                    {tag.title}
+                  </span>
                 </Tag>
               )
             })}
