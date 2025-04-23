@@ -33,6 +33,17 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiPropertyOptional({
+    enum: FilterAvailabilityEnum,
+    enumName: 'FilterAvailabilityEnum',
+    example: 'waitlistOpen',
+  })
+  @IsEnum(FilterAvailabilityEnum, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  [ListingFilterKeys.availability]?: FilterAvailabilityEnum;
+
+  @Expose()
+  @ApiPropertyOptional({
     example: '2',
   })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })

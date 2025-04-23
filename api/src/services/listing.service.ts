@@ -541,6 +541,111 @@ export class ListingService implements OnModuleInit {
             OR: orOptions.flat(),
           });
         }
+        if (
+          filter[ListingFilterKeys.availability] ===
+          FilterAvailabilityEnum.closedWaitlist
+        ) {
+          const builtFilter = buildFilter({
+            $comparison: filter.$comparison,
+            $include_nulls: false,
+            value: false,
+            key: ListingFilterKeys.availability,
+            caseSensitive: true,
+          });
+          filters.push({
+            OR: [
+              {
+                AND: builtFilter
+                  .map((filt) => ({
+                    unitGroups: {
+                      some: { [FilterAvailabilityEnum.openWaitlist]: filt },
+                    },
+                  }))
+                  .concat(
+                    notUnderConstruction.map((filt) => ({
+                      marketingType: filt,
+                    })),
+                  ),
+              },
+            ],
+          });
+        } else if (
+          filter[ListingFilterKeys.availability] ===
+          FilterAvailabilityEnum.comingSoon
+        ) {
+          const builtFilter = buildFilter({
+            $comparison: filter.$comparison,
+            $include_nulls: false,
+            value: filter[ListingFilterKeys.availability],
+            key: ListingFilterKeys.availability,
+            caseSensitive: true,
+          });
+          filters.push({
+            OR: builtFilter.map((filt) => ({
+              marketingType: filt,
+            })),
+          });
+        } else if (
+          filter[ListingFilterKeys.availability] ===
+          FilterAvailabilityEnum.openWaitlist
+        ) {
+          const builtFilter = buildFilter({
+            $comparison: filter.$comparison,
+            $include_nulls: false,
+            value: true,
+            key: ListingFilterKeys.availability,
+            caseSensitive: true,
+          });
+          filters.push({
+            OR: [
+              {
+                AND: builtFilter
+                  .map((filt) => ({
+                    unitGroups: {
+                      some: { [FilterAvailabilityEnum.openWaitlist]: filt },
+                    },
+                  }))
+                  .concat(
+                    notUnderConstruction.map((filt) => ({
+                      marketingType: filt,
+                    })),
+                  ),
+              },
+            ],
+          });
+        } else if (
+          filter[ListingFilterKeys.availability] ===
+          FilterAvailabilityEnum.waitlistOpen
+        ) {
+          const builtFilter = buildFilter({
+            $comparison: filter.$comparison,
+            $include_nulls: false,
+            value: ReviewOrderTypeEnum.waitlist,
+            key: ListingFilterKeys.availability,
+            caseSensitive: true,
+          });
+          filters.push({
+            OR: builtFilter.map((filt) => ({
+              reviewOrderType: filt,
+            })),
+          });
+        } else if (
+          filter[ListingFilterKeys.availability] ===
+          FilterAvailabilityEnum.unitsAvailable
+        ) {
+          const builtFilter = buildFilter({
+            $comparison: filter.$comparison,
+            $include_nulls: false,
+            value: 1,
+            key: ListingFilterKeys.availability,
+            caseSensitive: true,
+          });
+          filters.push({
+            OR: builtFilter.map((filt) => ({
+              unitsAvailable: filt,
+            })),
+          });
+        }
         if (filter[ListingFilterKeys.bathrooms] !== undefined) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,

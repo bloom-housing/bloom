@@ -1,5 +1,6 @@
 export enum ListingFilterKeys {
   availabilities = 'availabilities',
+  availability = 'availability',
   bathrooms = 'bathrooms',
   bedrooms = 'bedrooms',
   city = 'city',
