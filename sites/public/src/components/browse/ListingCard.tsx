@@ -1,5 +1,6 @@
 import React from "react"
 import {
+  FeatureFlagEnum,
   Jurisdiction,
   Listing,
   MarketingTypeEnum,
@@ -34,8 +35,11 @@ export const ListingCard = ({
   setFavorited,
   showHomeType,
 }: ListingCardProps) => {
+  const enableIsVerified = jurisdiction.featureFlags.find(
+    (flag) => flag.name === FeatureFlagEnum.enableIsVerified
+  )?.active
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
-  const listingTags = getListingTags(listing, true, !showHomeType)
+  const listingTags = getListingTags(listing, true, !showHomeType, enableIsVerified)
   const status = getListingApplicationStatus(listing, true, true)
   const actions = []
 

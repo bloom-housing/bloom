@@ -1,5 +1,7 @@
 import React, { Dispatch, SetStateAction } from "react"
+import { CheckIcon } from "@heroicons/react/16/solid"
 import {
+  FeatureFlagEnum,
   Jurisdiction,
   Listing,
   MarketingTypeEnum,
@@ -17,7 +19,6 @@ import FavoriteButton from "../../shared/FavoriteButton"
 import { Availability } from "./Availability"
 import listingStyles from "../ListingViewSeeds.module.scss"
 import styles from "./MainDetails.module.scss"
-import { CheckIcon } from "@heroicons/react/20/solid"
 
 type MainDetailsProps = {
   listing: Listing
@@ -37,11 +38,12 @@ type ListingTag = {
 export const getListingTags = (
   listing: Listing,
   hideReviewTags?: boolean,
-  hideHomeTypeTag?: boolean
+  hideHomeTypeTag?: boolean,
+  enableIsVerified?: boolean
 ): ListingTag[] => {
   const listingTags: ListingTag[] = []
 
-  if (listing.isVerified) {
+  if (enableIsVerified && listing.isVerified) {
     listingTags.push({
       title: t("listings.verifiedListing"),
       variant: "warn-inverse",
@@ -96,10 +98,13 @@ export const MainDetails = ({
   showHomeType,
 }: MainDetailsProps) => {
   if (!listing) return
+  const enableIsVerified = jurisdiction.featureFlags.find(
+    (flag) => flag.name === FeatureFlagEnum.enableIsVerified
+  )?.active
 
   const googleMapsHref =
     "https://www.google.com/maps/place/" + oneLineAddress(listing.listingsBuildingAddress)
-  const listingTags = getListingTags(listing, true, !showHomeType)
+  const listingTags = getListingTags(listing, true, !showHomeType, enableIsVerified)
   return (
     <div>
       <ImageCard
