@@ -1531,9 +1531,11 @@ export class ListingService implements OnModuleInit {
                       level.monthlyRentDeterminationType,
                     percentageOfIncomeValue: level.percentageOfIncomeValue,
                     flatRentValue: level.flatRentValue,
-                    amiChart: {
-                      connect: { id: level.amiChart.id },
-                    },
+                    amiChart: level.amiChart?.id
+                      ? {
+                          connect: { id: level.amiChart.id },
+                        }
+                      : undefined,
                   })),
                 },
                 unitAccessibilityPriorityTypes:
@@ -1730,6 +1732,7 @@ export class ListingService implements OnModuleInit {
 
     if (!dto.includeUnits) {
       delete mappedListing['units'];
+      delete mappedListing['unitGroups'];
     }
 
     const newListingData: ListingCreate = {
