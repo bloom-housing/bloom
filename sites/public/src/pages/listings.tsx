@@ -1,7 +1,7 @@
 import React from "react"
 import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { fetchClosedListings, fetchJurisdictionByName, fetchOpenListings } from "../lib/hooks"
-import { ListingBrowse } from "../components/browse/ListingBrowse"
+import { ListingBrowse, TabsIndexEnum } from "../components/browse/ListingBrowse"
 import { ListingBrowseDeprecated } from "../components/browse/ListingBrowseDeprecated"
 
 export interface ListingsProps {
@@ -22,8 +22,8 @@ export default function ListingsPage(props: ListingsProps) {
     <>
       {process.env.showNewSeedsDesigns ? (
         <ListingBrowse
-          openListings={props.openListings}
-          closedListings={props.closedListings}
+          listings={props.openListings}
+          tab={TabsIndexEnum.open}
           jurisdiction={props.jurisdiction}
           paginationData={props.paginationData}
         />
