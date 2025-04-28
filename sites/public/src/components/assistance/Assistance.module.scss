@@ -16,6 +16,17 @@
         width: var(--seeds-width-2-3rd); 
       }
     }
+
+    .item {
+      height: min-content;
+
+      .item-link {
+        padding: var(--seeds-spacer-section);
+      }
+
+      .item-icon {
+        color: var(--seeds-color-black);
+      }
     }
   }
 }

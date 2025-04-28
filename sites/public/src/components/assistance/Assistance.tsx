@@ -4,8 +4,8 @@ import { Card, t } from "@bloom-housing/ui-components"
 import { Heading } from "@bloom-housing/ui-seeds"
 import Layout from "../../layouts/application"
 import { PageHeaderLayout } from "../../patterns/PageHeaderLayout"
-import AssistanceItem from "./AssistanceItem"
 import styles from "./Assistance.module.scss"
+import { BloomCard } from "@bloom-housing/shared-helpers"
 
 const Assistance = () => {
   const pageTitle = t("pageTitle.getAssistance")
@@ -22,20 +22,34 @@ const Assistance = () => {
       >
         <article className={styles["site-content"]}>
           <div className={styles["items-wrapper"]}>
-            <AssistanceItem
-              iconSymbol="home"
+            <BloomCard
               title={t("assistance.applyToHousingTitle")}
-              description={t("assistance.applyToHousingDescription")}
-              linkText={t("assistance.applyToHousingLink")}
-              href="/how-it-works"
-            />
-            <AssistanceItem
-              iconSymbol="door"
+              subtitle={t("assistance.applyToHousingDescription")}
+              headingPriority={2}
+              iconSymbol={"home"}
+              iconOutlined={true}
+              variant={"block"}
+              className={styles["item"]}
+              iconClass={styles["item-icon"]}
+            >
+              <Card.Section className={styles["item-link"]}>
+                <Link href={"/how-it-works"}>{t("assistance.applyToHousingLink")}</Link>
+              </Card.Section>
+            </BloomCard>
+            <BloomCard
               title={t("assistance.additionalHousingTitle")}
-              description={t("assistance.additionalHousingDescription")}
-              linkText={t("assistance.additionalHousingLink")}
-              href="test"
-            />
+              subtitle={t("assistance.additionalHousingDescription")}
+              headingPriority={2}
+              iconSymbol={"door"}
+              iconOutlined={true}
+              variant={"block"}
+              className={styles["item"]}
+              iconClass={styles["item-icon"]}
+            >
+              <Card.Section className={styles["item-link"]}>
+                <Link href={"/additional-resources"}>{t("assistance.additionalHousingLink")}</Link>
+              </Card.Section>
+            </BloomCard>
           </div>
           <aside className={styles["aside-section"]}>
             <Card className={styles["contact-card"]}>
