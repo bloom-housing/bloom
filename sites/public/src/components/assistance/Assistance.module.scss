@@ -8,10 +8,14 @@
     }
 
     .items-wrapper {
-      width: var(--seeds-width-2-3rd);
       display: flex;
       flex-direction: column;
       gap: var(--seeds-s4);
+
+      @media (--md-and-up) {
+        width: var(--seeds-width-2-3rd); 
+      }
+    }
     }
   }
 }
