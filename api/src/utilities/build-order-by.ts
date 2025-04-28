@@ -17,6 +17,9 @@ export const buildOrderByForListings = (
     return undefined;
   }
 
+  orderBy.push(ListingOrderByKeys.name);
+  orderDir.push(OrderByEnum.ASC);
+
   return orderBy.map((param, index) => {
     switch (param) {
       case ListingOrderByKeys.mostRecentlyUpdated:
