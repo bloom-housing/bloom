@@ -17,6 +17,7 @@ interface BloomCardProps {
   id?: string
   subtitle?: string | React.ReactNode
   title?: string
+  altHeading?: boolean
   variant?: "form" | "block"
 }
 
@@ -27,11 +28,12 @@ const BloomCard = (props: BloomCardProps) => {
   const customIcon = props.iconSymbol ? CustomIconMap[props.iconSymbol] : undefined
 
   const getTitle = () => {
+    const headingSize = props.altHeading ? "3xl" : "2xl"
     if (props.title) {
       if (props.subtitle) {
         return (
           <HeadingGroup
-            size="2xl"
+            size={headingSize}
             heading={props.title}
             subheading={props.subtitle}
             className={styles["card-heading-group"]}
@@ -40,7 +42,11 @@ const BloomCard = (props: BloomCardProps) => {
         )
       }
       return (
-        <Heading size="2xl" priority={props.headingPriority || 1}>
+        <Heading
+          size={headingSize}
+          priority={props.headingPriority || 1}
+          className={props.altHeading ? "font-alt-sans font-semibold" : undefined}
+        >
           {props.title}
         </Heading>
       )
@@ -56,8 +62,10 @@ const BloomCard = (props: BloomCardProps) => {
         <Card.Header divider={props.variant === "block" ? undefined : "inset"}>
           {customIcon && (
             <Icon
-              size="2xl"
-              className={`${styles["card-icon"]} ${props.iconClass ? props.iconClass : ""}`}
+              size={props.altHeading ? undefined : "2xl"}
+              className={`${styles["card-icon"]} ${props.iconClass ? props.iconClass : ""} ${
+                props.altHeading ? styles["card-circled-icon"] : ""
+              }`}
               outlined={props.iconOutlined}
             >
               {customIcon}
