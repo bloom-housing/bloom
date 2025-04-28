@@ -87,7 +87,10 @@ jobs:
           cache-version: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: setup db and seed
-          command: yarn test:backend:new:dbsetup:withseed
+          command: |
+            echo 'export SHOW_NEW_SEEDS_DESIGNS=TRUE' >> "$BASH_ENV"
+            source "$BASH_ENV"
+            yarn test:backend:new:dbsetup:withseed
       - run:
           name: run backend
           command: yarn dev
