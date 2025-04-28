@@ -46,6 +46,11 @@ export const featureFlagMap: { name: string; description: string }[] = [
       "When true, the 'accessibility features' section is displayed in listing creation/edit and the public listing view",
   },
   {
+    name: FeatureFlagEnum.enableCompanyWebsite,
+    description:
+      'When true, allows partners to add company website information',
+  },
+  {
     name: FeatureFlagEnum.enableGeocodingPreferences,
     description:
       'When true, preferences can be created with geocoding functionality and when an application is created/updated on a listing that is geocoding then the application gets geocoded',
@@ -129,10 +134,5 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.swapCommunityTypeWithPrograms,
     description:
       'When true, the programs section on the frontend is displayed as community types.',
-  },
-  {
-    name: FeatureFlagEnum.enableCompanyWebsite,
-    description:
-      'When true, allows partners to add company website information',
   },
 ];
