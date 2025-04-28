@@ -2,27 +2,27 @@
 // Note, these are just used to keep backend and frontend in sync. We store feature flags as strings so this list might not include every flag.
 // Keep alphabetized for readability.
 export enum FeatureFlagEnum {
-  example = 'example', // sample feature flag for testing purposes
   disableCommonApplication = 'disableCommonApplication',
   disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
+  enableCompanyWebsite = 'enableCompanyWebsite',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
   enableIsVerified = 'enableIsVerified',
+  enableListingFavoriting = 'enableListingFavoriting',
   enableListingOpportunity = 'enableListingOpportunity',
-  enableListingsPagination = 'enableListingPagination',
+  enableListingsPagination = 'enableListingsPagination',
   enableMarketingStatus = 'enableMarketingStatus',
   enableNeighborhoodAmenities = 'enableNeighborhoodAmenities',
   enablePartnerDemographics = 'enablePartnerDemographics',
   enablePartnerSettings = 'enablePartnerSettings',
-  enableListingFavoriting = 'enableListingFavoriting',
-  enableCompanyWebsite = 'enableCompanyWebsite',
   enableRegions = 'enableRegions',
   enableSection8Question = 'enableSection8Question',
   enableSingleUseCode = 'enableSingleUseCode',
   enableUnitGroups = 'enableUnitGroups',
   enableUtilitiesIncluded = 'enableUtilitiesIncluded',
+  example = 'example', // sample feature flag for testing purposes
   hideCloseListingButton = 'hideCloseListingButton',
   swapCommunityTypeWithPrograms = 'swapCommunityTypeWithPrograms',
 }
