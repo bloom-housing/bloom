@@ -7,7 +7,6 @@ import {
   MultiselectQuestion,
   PaperApplication,
   PaperApplicationCreate,
-  RegionEnum,
   Unit,
   UnitGroup,
   UnitGroupAmiLevel,
