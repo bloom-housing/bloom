@@ -41,8 +41,6 @@ import { blueSkyApartments } from './seed-helpers/listing-data/blue-sky-apartmen
 import { valleyHeightsSeniorCommunity } from './seed-helpers/listing-data/valley-heights-senior-community';
 import { littleVillageApartments } from './seed-helpers/listing-data/little-village-apartments';
 import { elmVillage } from './seed-helpers/listing-data/elm-village';
-import { lakeviewVilla } from './seed-helpers/listing-data/lakeview-villa';
-import { sunshineFlats } from './seed-helpers/listing-data/sunshine-flats';
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
@@ -968,7 +966,7 @@ export const stagingSeed = async (
           },
           email: `partner-user-${savedListing.name
             .toLowerCase()
-            .replace(' ', '')}@example.com`,
+            .replaceAll(' ', '-')}@example.com`,
           confirmedAt: new Date(),
           jurisdictionIds: [savedListing.jurisdictionId],
           acceptedTerms: true,
