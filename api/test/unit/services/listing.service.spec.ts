@@ -1477,6 +1477,47 @@ describe('Testing listing service', () => {
       });
     });
 
+    it('should return a where clause for filter availabilities - multiple', () => {
+      const filter = [
+        {
+          $comparison: 'IN',
+          availabilities: [
+            FilterAvailabilityEnum.openWaitlist,
+            FilterAvailabilityEnum.unitsAvailable,
+          ],
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                AND: [
+                  {
+                    unitGroups: {
+                      some: { openWaitlist: { equals: true } },
+                    },
+                  },
+                  {
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
+                  },
+                ],
+              },
+              {
+                unitsAvailable: {
+                  gte: 1,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
     it('should return a where clause for filter availability - closedWaitlist', () => {
       const filter = [
         {
@@ -1678,7 +1719,7 @@ describe('Testing listing service', () => {
 
     it('should return a where clause for filter bedroomTypes', () => {
       const filter = [
-        { $comparison: 'IN', bedroomTypes: [2] } as ListingFilterParams,
+        { $comparison: 'IN', bedroomTypes: [2, 4] } as ListingFilterParams,
       ];
       const whereClause = service.buildWhereClause(filter, '');
 
@@ -1690,7 +1731,7 @@ describe('Testing listing service', () => {
                 units: {
                   some: {
                     numBedrooms: {
-                      in: [2],
+                      in: [2, 4],
                     },
                   },
                 },
@@ -1701,7 +1742,7 @@ describe('Testing listing service', () => {
                     unitTypes: {
                       some: {
                         numBedrooms: {
-                          in: [2],
+                          in: [2, 4],
                         },
                       },
                     },
