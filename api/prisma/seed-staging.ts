@@ -39,7 +39,6 @@ import { unitAccessibilityPriorityTypeFactoryAll } from './seed-helpers/unit-acc
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { userFactory } from './seed-helpers/user-factory';
 import { featureFlagFactory } from './seed-helpers/feature-flag-factory';
-import { FeatureFlagEnum } from '../src/enums/feature-flags/feature-flags-enum';
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
@@ -139,7 +138,7 @@ export const stagingSeed = async (
   // Seed feature flags
   await prismaClient.featureFlags.create({
     data: featureFlagFactory(
-      FeatureFlagEnum.enableHomeType,
+      'enableHomeType',
       true,
       "When true, the 'Home Type' section is displayed in listing creation/edit and the public listing view",
       [jurisdiction.id],
@@ -147,7 +146,7 @@ export const stagingSeed = async (
   });
   await prismaClient.featureFlags.create({
     data: featureFlagFactory(
-      FeatureFlagEnum.enableAccessibilityFeatures,
+      'enableAccessibilityFeatures',
       true,
       "When true, the 'accessibility features' section is displayed in listing creation/edit and the public listing view",
       [jurisdiction.id],
@@ -155,41 +154,9 @@ export const stagingSeed = async (
   });
   await prismaClient.featureFlags.create({
     data: featureFlagFactory(
-      FeatureFlagEnum.enableUtilitiesIncluded,
+      'enableUtilitiesIncluded',
       true,
       "When true, the 'utilities included' section is displayed in listing creation/edit and the public listing view",
-      [jurisdiction.id],
-    ),
-  });
-  await prismaClient.featureFlags.create({
-    data: featureFlagFactory(
-      FeatureFlagEnum.hideCloseListingButton,
-      false,
-      'When true, close button is hidden on the listing edit form',
-      [jurisdiction.id],
-    ),
-  });
-  await prismaClient.featureFlags.create({
-    data: featureFlagFactory(
-      'enableIsVerified',
-      false,
-      'When true, the listing can ba have its contents manually verified by a user',
-      [jurisdiction.id],
-    ),
-  });
-  await prismaClient.featureFlags.create({
-    data: featureFlagFactory(
-      'enableSection8Question',
-      false,
-      'When true, the Section 8 listing data will be visible',
-      [jurisdiction.id],
-    ),
-  });
-  await prismaClient.featureFlags.create({
-    data: featureFlagFactory(
-      FeatureFlagEnum.enableUnitGroups,
-      false,
-      'When true, uses unit groups instead of units',
       [jurisdiction.id],
     ),
   });

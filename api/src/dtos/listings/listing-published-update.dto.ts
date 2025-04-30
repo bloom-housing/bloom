@@ -23,8 +23,6 @@ import { ListingImageCreate } from './listing-image-create.dto';
 import { AddressCreate } from '../addresses/address-create.dto';
 import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
 import { ReviewOrderTypeEnum } from '@prisma/client';
-import { UnitGroupCreate } from '../unit-groups/unit-group-create.dto';
-import { ValidateUnitsRequired } from '../../decorators/validate-units-required.decorator';
 
 export class ListingPublishedUpdate extends OmitType(ListingUpdate, [
   'assets',
@@ -42,7 +40,6 @@ export class ListingPublishedUpdate extends OmitType(ListingUpdate, [
   'rentalAssistance',
   'reviewOrderType',
   'units',
-  'unitGroups',
   'listingsBuildingAddress',
   'applicationDueDate',
 ]) {
@@ -152,16 +149,10 @@ export class ListingPublishedUpdate extends OmitType(ListingUpdate, [
   @Expose()
   @ApiProperty({ isArray: true, type: UnitCreate })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @ValidateUnitsRequired({ groups: [ValidationsGroupsEnum.default] })
+  @ArrayMinSize(1, { groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(256, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitCreate)
-  units?: UnitCreate[];
-
-  @Expose()
-  @ApiProperty({ isArray: true, type: UnitGroupCreate })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => UnitGroupCreate)
-  unitGroups?: UnitGroupCreate[];
+  units: UnitCreate[];
 
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })

@@ -35,7 +35,6 @@ import { ListingImage } from './listing-image.dto';
 import { ListingFeatures } from './listing-feature.dto';
 import { ListingUtilities } from './listing-utility.dto';
 import { Unit } from '../units/unit.dto';
-import { UnitGroup } from '../unit-groups/unit-group.dto';
 import { UnitsSummarized } from '../units/unit-summarized.dto';
 import { UnitsSummary } from '../units/units-summary.dto';
 import { IdDTO } from '../shared/id.dto';
@@ -561,12 +560,6 @@ class Listing extends AbstractDTO {
   @Type(() => Unit)
   @ApiProperty({ type: Unit, isArray: true })
   units: Unit[];
-
-  @Expose()
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => UnitGroup)
-  @ApiPropertyOptional({ type: UnitGroup, isArray: true })
-  unitGroups?: UnitGroup[];
 
   @Expose()
   @ApiPropertyOptional({ type: UnitsSummarized })

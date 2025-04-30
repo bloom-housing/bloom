@@ -43,7 +43,6 @@ import { ListingViews } from '../enums/listings/view-enum';
 import { FilterAvailabilityEnum } from '../enums/listings/filter-availability-enum';
 import { ListingFilterKeys } from '../enums/listings/filter-key-enum';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
-import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 import { buildFilter } from '../utilities/build-filter';
 import { buildOrderByForListings } from '../utilities/build-order-by';
 import { startCronJob } from '../utilities/cron-job-starter';
@@ -59,8 +58,6 @@ import {
   summarizeUnits,
 } from '../utilities/unit-utilities';
 import { ListingOrderByKeys } from '../enums/listings/order-by-enum';
-import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
-import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 
 export type getListingsArgs = {
   skip: number;
@@ -95,20 +92,6 @@ views.base = {
     include: {
       unitTypes: true,
       unitAmiChartOverrides: true,
-    },
-  },
-  unitGroups: {
-    include: {
-      unitTypes: true,
-      unitGroupAmiLevels: {
-        include: {
-          amiChart: {
-            include: {
-              jurisdictions: true,
-            },
-          },
-        },
-      },
     },
   },
 };
@@ -146,20 +129,6 @@ views.full = {
         include: {
           jurisdictions: true,
           unitGroupAmiLevels: true,
-        },
-      },
-    },
-  },
-  unitGroups: {
-    include: {
-      unitTypes: true,
-      unitGroupAmiLevels: {
-        include: {
-          amiChart: {
-            include: {
-              jurisdictions: true,
-            },
-          },
         },
       },
     },
@@ -900,11 +869,10 @@ export class ListingService implements OnModuleInit {
     lang: LanguagesEnum = LanguagesEnum.en,
     view: ListingViews = ListingViews.full,
     combined?: boolean,
-    enableUnitGroups = false,
   ): Promise<Listing> {
     const listingRaw = combined
       ? await this.findOrThrowCombined(listingId)
-      : await this.findOrThrow(listingId, view, enableUnitGroups);
+      : await this.findOrThrow(listingId, view);
 
     let result = mapTo(Listing, listingRaw);
 
@@ -1081,33 +1049,6 @@ export class ListingService implements OnModuleInit {
       },
     );
 
-    const rawJurisdiction = await this.prisma.jurisdictions.findFirst({
-      where: {
-        id: dto.jurisdictions.id,
-      },
-      include: {
-        featureFlags: true,
-      },
-    });
-
-    const enableUnitGroups = doJurisdictionHaveFeatureFlagSet(
-      rawJurisdiction as Jurisdiction,
-      FeatureFlagEnum.enableUnitGroups,
-    );
-
-    if (
-      (enableUnitGroups && dto.units?.length > 0) ||
-      (!enableUnitGroups && dto.unitGroups?.length > 0)
-    ) {
-      throw new BadRequestException({
-        message: `Cannot provide ${
-          enableUnitGroups ? 'units' : 'unitGroups'
-        } with enableUnitGroups flag set to ${enableUnitGroups}`,
-        status: 400,
-      });
-    }
-
-    //For unit groups it will return 0 (as we don't use it for it)
     dto.unitsAvailable =
       dto.reviewOrderType !== ReviewOrderTypeEnum.waitlist && dto.units
         ? dto.units.length
@@ -1316,48 +1257,6 @@ export class ListingService implements OnModuleInit {
                       },
                     }
                   : undefined,
-              })),
-            }
-          : undefined,
-        unitGroups: dto.unitGroups
-          ? {
-              create: dto.unitGroups.map((group) => ({
-                bathroomMax: group.bathroomMax,
-                bathroomMin: group.bathroomMin,
-                floorMax: group.floorMax,
-                floorMin: group.floorMin,
-                maxOccupancy: group.maxOccupancy,
-                minOccupancy: group.minOccupancy,
-                openWaitlist: group.openWaitlist,
-                sqFeetMax: group.sqFeetMax,
-                sqFeetMin: group.sqFeetMin,
-                totalAvailable: group.totalAvailable,
-                totalCount: group.totalCount,
-                unitGroupAmiLevels: {
-                  create: group.unitGroupAmiLevels.map((level) => ({
-                    amiPercentage: level.amiPercentage,
-                    monthlyRentDeterminationType:
-                      level.monthlyRentDeterminationType,
-                    percentageOfIncomeValue: level.percentageOfIncomeValue,
-                    flatRentValue: level.flatRentValue,
-                    amiChart: {
-                      connect: { id: level.amiChart.id },
-                    },
-                  })),
-                },
-                unitAccessibilityPriorityTypes:
-                  group.unitAccessibilityPriorityTypes
-                    ? {
-                        connect: {
-                          id: group.unitAccessibilityPriorityTypes.id,
-                        },
-                      }
-                    : undefined,
-                unitTypes: {
-                  connect: group.unitTypes.map((type) => ({
-                    id: type.id,
-                  })),
-                },
               })),
             }
           : undefined,
@@ -1626,32 +1525,9 @@ export class ListingService implements OnModuleInit {
     This will either find a listing or throw an error
     a listing view can be provided which will add the joins to produce that view correctly
   */
-  async findOrThrow(
-    id: string,
-    view?: ListingViews,
-    enableUnitGroups?: boolean,
-  ) {
-    const viewInclude = view ? views[view] : undefined;
-    if (enableUnitGroups && viewInclude) {
-      viewInclude.units = undefined;
-      viewInclude.unitGroups = {
-        include: {
-          unitTypes: true,
-          unitGroupAmiLevels: {
-            include: {
-              amiChart: {
-                include: {
-                  jurisdictions: true,
-                },
-              },
-            },
-          },
-        },
-      };
-    }
-
+  async findOrThrow(id: string, view?: ListingViews) {
     const listing = await this.prisma.listings.findUnique({
-      include: viewInclude,
+      include: view ? views[view] : undefined,
       where: {
         id,
       },
@@ -1818,33 +1694,6 @@ export class ListingService implements OnModuleInit {
       }
     }
 
-    const rawJurisdiction = await this.prisma.jurisdictions.findFirst({
-      where: {
-        id: dto.jurisdictions.id,
-      },
-      include: {
-        featureFlags: true,
-      },
-    });
-
-    const enableUnitGroups = doJurisdictionHaveFeatureFlagSet(
-      rawJurisdiction as Jurisdiction,
-      FeatureFlagEnum.enableUnitGroups,
-    );
-
-    if (
-      (enableUnitGroups && dto.units?.length > 0) ||
-      (!enableUnitGroups && dto.unitGroups?.length > 0)
-    ) {
-      throw new BadRequestException({
-        message: `Cannot provide ${
-          enableUnitGroups ? 'units' : 'unitGroups'
-        } with enableUnitGroups flag set to ${enableUnitGroups}`,
-        status: 400,
-      });
-    }
-
-    //For unit groups it will return 0 (as we don't use it for it)
     dto.unitsAvailable =
       dto.reviewOrderType !== ReviewOrderTypeEnum.waitlist && dto.units
         ? dto.units.length
@@ -1907,20 +1756,7 @@ export class ListingService implements OnModuleInit {
     // Wrap the deletion and update in one transaction so that units aren't lost if update fails
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const transactions = await this.prisma.$transaction([
-      // delete units and unitGroups with unitGroupAmiLevels
-      // technically there should be either units or unitGroups, not both
-      this.prisma.unitGroupAmiLevels.deleteMany({
-        where: {
-          unitGroup: {
-            listingId: storedListing.id,
-          },
-        },
-      }),
-      this.prisma.unitGroup.deleteMany({
-        where: {
-          listingId: storedListing.id,
-        },
-      }),
+      // delete all connected units before recreating in update
       this.prisma.units.deleteMany({
         where: {
           listingId: storedListing.id,
@@ -2178,53 +2014,6 @@ export class ListingService implements OnModuleInit {
                         },
                       }
                     : undefined,
-                })),
-              }
-            : undefined,
-          unitGroups: dto.unitGroups
-            ? {
-                create: dto.unitGroups.map((group) => ({
-                  bathroomMax: group.bathroomMax,
-                  bathroomMin: group.bathroomMin,
-                  floorMax: group.floorMax,
-                  floorMin: group.floorMin,
-                  maxOccupancy: group.maxOccupancy,
-                  minOccupancy: group.minOccupancy,
-                  openWaitlist: group.openWaitlist,
-                  sqFeetMin: group.sqFeetMin,
-                  sqFeetMax: group.sqFeetMax,
-                  totalCount: group.totalCount,
-                  totalAvailable: group.totalAvailable,
-                  unitTypes: group.unitTypes
-                    ? {
-                        connect: group.unitTypes.map((type) => ({
-                          id: type.id,
-                        })),
-                      }
-                    : undefined,
-                  unitGroupAmiLevels: group.unitGroupAmiLevels
-                    ? {
-                        create: group.unitGroupAmiLevels.map((level) => ({
-                          amiPercentage: level.amiPercentage,
-                          flatRentValue: level.flatRentValue,
-                          monthlyRentDeterminationType:
-                            level.monthlyRentDeterminationType,
-                          percentageOfIncomeValue:
-                            level.percentageOfIncomeValue,
-                          amiChart: {
-                            connect: { id: level.amiChart.id },
-                          },
-                        })),
-                      }
-                    : undefined,
-                  unitAccessibilityPriorityTypes:
-                    group.unitAccessibilityPriorityTypes
-                      ? {
-                          connect: {
-                            id: group.unitAccessibilityPriorityTypes.id,
-                          },
-                        }
-                      : undefined,
                 })),
               }
             : undefined,

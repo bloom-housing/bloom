@@ -35,16 +35,9 @@ import Unit from '../dtos/units/unit.dto';
 import Listing from '../dtos/listings/listing.dto';
 import { mapTo } from '../utilities/mapTo';
 import { ListingMultiselectQuestion } from '../dtos/listings/listing-multiselect-question.dto';
+import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { ListingUtilities } from '../dtos/listings/listing-utility.dto';
 import { ListingFeatures } from '../dtos/listings/listing-feature.dto';
-import { UnitType } from '../dtos/unit-types/unit-type.dto';
-import { UnitGroupAmiLevel } from '../dtos/unit-groups/unit-group-ami-level.dto';
-import { getRentTypes } from '../utilities/unit-utilities';
-import { unitTypeToReadable } from '../utilities/application-export-helpers';
-import {
-  doAnyJurisdictionHaveFalsyFeatureFlagValue,
-  doAnyJurisdictionHaveFeatureFlagSet,
-} from '../utilities/feature-flag-utilities';
 
 views.csv = {
   ...views.details,
@@ -111,10 +104,6 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       process.cwd(),
       `src/temp/units-${user.id}-${new Date().getTime()}.csv`,
     );
-    const unitGroupsFilePath = join(
-      process.cwd(),
-      `src/temp/unit-groups-${user.id}-${new Date().getTime()}.csv`,
-    );
 
     if (queryParams.timeZone) {
       this.timeZone = queryParams.timeZone;
@@ -132,39 +121,8 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       });
     });
 
-    const enableUnitGroups = doAnyJurisdictionHaveFeatureFlagSet(
-      user.jurisdictions,
-      FeatureFlagEnum.enableUnitGroups,
-    );
-
-    const hasUnits =
-      !enableUnitGroups ||
-      doAnyJurisdictionHaveFalsyFeatureFlagValue(
-        user.jurisdictions,
-        FeatureFlagEnum.enableUnitGroups,
-      );
-
-    const include = {
-      ...views.csv,
-      unitGroups: {
-        include: {
-          unitTypes: true,
-          unitAccessibilityPriorityTypes: true,
-          unitGroupAmiLevels: {
-            include: {
-              amiChart: {
-                include: {
-                  jurisdictions: true,
-                },
-              },
-            },
-          },
-        },
-      },
-    };
-
     const listings = await this.prisma.listings.findMany({
-      include,
+      include: views.csv,
       where: whereClause,
     });
 
@@ -172,29 +130,16 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       listings: listings as unknown as Listing[],
       user,
     });
-
     const listingCsv = createReadStream(listingFilePath);
 
-    if (enableUnitGroups) {
-      await this.createUnitCsv(
-        unitGroupsFilePath,
-        listings as unknown as Listing[],
-        true,
-      );
-    }
-
-    if (hasUnits) {
-      await this.createUnitCsv(
-        unitFilePath,
-        listings as unknown as Listing[],
-        false,
-      );
-    }
-
+    await this.createUnitCsv(unitFilePath, listings as unknown as Listing[]);
+    const unitCsv = createReadStream(unitFilePath);
     return new Promise((resolve) => {
+      // Create a writable stream to the zip file
       const output = fs.createWriteStream(zipFilePath);
-      const archive = archiver('zip', { zlib: { level: 9 } });
-
+      const archive = archiver('zip', {
+        zlib: { level: 9 },
+      });
       output.on('close', () => {
         const zipFile = createReadStream(zipFilePath);
         resolve(new StreamableFile(zipFile));
@@ -202,14 +147,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
 
       archive.pipe(output);
       archive.append(listingCsv, { name: 'listings.csv' });
-      if (hasUnits) {
-        const unitCsv = createReadStream(unitFilePath);
-        archive.append(unitCsv, { name: 'units.csv' });
-      }
-      if (enableUnitGroups) {
-        const unitGroupsCsv = createReadStream(unitGroupsFilePath);
-        archive.append(unitGroupsCsv, { name: 'unitGroups.csv' });
-      }
+      archive.append(unitCsv, { name: 'units.csv' });
       archive.finalize();
     });
   }
@@ -286,30 +224,19 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     });
   }
 
-  async createUnitCsv(
-    filename: string,
-    listings: Listing[],
-    enableUnitGroups?: boolean,
-  ): Promise<void> {
-    const csvHeaders = enableUnitGroups
-      ? this.getUnitGroupCsvHeaders()
-      : this.getUnitCsvHeaders();
-
-    const data = enableUnitGroups
-      ? listings.flatMap(
-          (listing) =>
-            listing.unitGroups?.map((unitGroup) => ({
-              listing: { id: listing.id, name: listing.name },
-              unitGroup,
-            })) || [],
-        )
-      : listings.flatMap((listing) =>
-          (listing.units || []).map((unit) => ({
-            listing: { id: listing.id, name: listing.name },
-            unit,
-          })),
-        );
-
+  async createUnitCsv(filename: string, listings: Listing[]): Promise<void> {
+    const csvHeaders = this.getUnitCsvHeaders();
+    // flatten those listings
+    const units = listings.flatMap((listing) =>
+      listing.units.map((unit) => ({
+        listing: {
+          id: listing.id,
+          name: listing.name,
+        },
+        unit,
+      })),
+    );
+    // TODO: the below is essentially the same as above in this.createCsv
     return new Promise((resolve, reject) => {
       const writableStream = fs.createWriteStream(`${filename}`);
       writableStream
@@ -325,7 +252,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           writableStream.write(
             csvHeaders.map((header) => header.label).join(',') + '\n',
           );
-          data.forEach((item) => {
+          units.forEach((unit) => {
             let row = '';
             csvHeaders.forEach((header, index) => {
               let value = header.path.split('.').reduce((acc, curr) => {
@@ -339,13 +266,13 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
                   return '';
                 }
                 return acc[curr];
-              }, item);
+              }, unit);
               value = value === undefined ? '' : value === null ? '' : value;
               if (header.format) {
                 value = header.format(value);
               }
 
-              row += value ? `"${value.toString().replace(/"/g, `""`)}"` : '';
+              row += value;
               if (index < csvHeaders.length - 1) {
                 row += ',';
               }
@@ -392,6 +319,17 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     if (isEmpty(fieldValue) || fieldValue === 0 || fieldValue === '0')
       return '';
     return fieldValue;
+  };
+
+  doAnyJurisdictionHaveFeatureFlagSet = (
+    jurisdictions: Jurisdiction[],
+    featureFlagName: string,
+  ) => {
+    return jurisdictions.some((juris) => {
+      return juris.featureFlags.some(
+        (flag) => flag.name === featureFlagName && flag.active,
+      );
+    });
   };
 
   async getCsvHeaders(user: User): Promise<CsvHeader[]> {
@@ -485,7 +423,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     ];
 
     if (
-      doAnyJurisdictionHaveFeatureFlagSet(
+      this.doAnyJurisdictionHaveFeatureFlagSet(
         user.jurisdictions,
         FeatureFlagEnum.enableHomeType,
       )
@@ -495,44 +433,8 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         label: 'Home Type',
       });
     }
-
     if (
-      doAnyJurisdictionHaveFeatureFlagSet(
-        user.jurisdictions,
-        FeatureFlagEnum.enableUnitGroups,
-      )
-    ) {
-      headers.push({
-        path: 'unitGroups.length',
-        label: 'Number of Unit Groups',
-      });
-    }
-    if (
-      doAnyJurisdictionHaveFalsyFeatureFlagValue(
-        user.jurisdictions,
-        FeatureFlagEnum.enableUnitGroups,
-      )
-    ) {
-      headers.push({
-        path: 'units.length',
-        label: 'Number of Units',
-      });
-    }
-
-    if (
-      doAnyJurisdictionHaveFeatureFlagSet(
-        user.jurisdictions,
-        FeatureFlagEnum.enableSection8Question,
-      )
-    ) {
-      headers.push({
-        path: 'section8Acceptance',
-        label: 'Accept Section 8',
-        format: this.formatYesNo,
-      });
-    }
-    if (
-      doAnyJurisdictionHaveFeatureFlagSet(
+      this.doAnyJurisdictionHaveFeatureFlagSet(
         user.jurisdictions,
         FeatureFlagEnum.enableUtilitiesIncluded,
       )
@@ -556,7 +458,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       });
     }
     if (
-      doAnyJurisdictionHaveFeatureFlagSet(
+      this.doAnyJurisdictionHaveFeatureFlagSet(
         user.jurisdictions,
         FeatureFlagEnum.enableAccessibilityFeatures,
       )
@@ -582,6 +484,10 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
 
     headers.push(
       ...[
+        {
+          path: 'units.length',
+          label: 'Number of Units',
+        },
         {
           path: 'reviewOrderType',
           label: 'Listing Availability',
@@ -976,18 +882,6 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       ],
     );
 
-    if (
-      doAnyJurisdictionHaveFeatureFlagSet(
-        user.jurisdictions,
-        FeatureFlagEnum.enableIsVerified,
-      )
-    )
-      headers.push({
-        path: 'isVerified',
-        label: 'Is Listing Verified',
-        format: this.formatYesNo,
-      });
-
     return headers;
   }
 
@@ -1049,104 +943,6 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
             : !isEmpty(val.monthlyRent)
             ? 'Fixed amount'
             : '',
-      },
-    ];
-  }
-
-  getUnitGroupCsvHeaders(): CsvHeader[] {
-    return [
-      {
-        path: 'listing.id',
-        label: 'Listing Id',
-      },
-      {
-        path: 'listing.name',
-        label: 'Listing Name',
-      },
-      {
-        path: 'unitGroup.id',
-        label: 'Unit Group Id',
-      },
-      {
-        path: 'unitGroup.unitTypes',
-        label: 'Unit Types',
-        format: (val: UnitType[]) =>
-          val.map((unitType) => unitTypeToReadable(unitType.name)).join(', '),
-      },
-      {
-        path: 'unitGroup.unitGroupAmiLevels',
-        label: 'AMI Chart',
-        format: (val: UnitGroupAmiLevel[]) =>
-          [...new Set(val.map((level) => level.amiChart?.name))].join(', '),
-      },
-      //TODO: Add when we have unit group summary -> update tests
-      // {
-      //   path: 'unitGroupSummary',
-      //   label: 'AMI Levels',
-      //   format: (summary: UnitGroupSummary) =>
-      //     formatRange(
-      //       summary.amiPercentageRange?.min,
-      //       summary.amiPercentageRange?.max,
-      //       '',
-      //       '%',
-      //     ),
-      // },
-      {
-        path: 'unitGroup.unitGroupAmiLevels',
-        label: 'Rent Type',
-        format: (levels: UnitGroupAmiLevel[]) => getRentTypes(levels),
-      },
-      //TODO: Add when we have unit group summary -> update tests
-      // {
-      //   path: 'unitGroupSummary',
-      //   label: 'Monthly Rent',
-      //   format: (summary: UnitGroupSummary) =>
-      //     formatRentRange(summary.rentRange, summary.rentAsPercentIncomeRange),
-      // },
-      {
-        path: 'unitGroup.totalCount',
-        label: 'Affordable Unit Group Quantity',
-      },
-      {
-        path: 'unitGroup.totalAvailable',
-        label: 'Unit Group Vacancies',
-      },
-      {
-        path: 'unitGroup.openWaitlist',
-        label: 'Waitlist Status',
-        format: this.formatYesNo,
-      },
-      {
-        path: 'unitGroup.minOccupancy',
-        label: 'Minimum Occupancy',
-      },
-      {
-        path: 'unitGroup.maxOccupancy',
-        label: 'Maximum Occupancy',
-      },
-      {
-        path: 'unitGroup.sqFeetMin',
-        label: 'Minimum Sq ft',
-      },
-      {
-        path: 'unitGroup.sqFeetMax',
-        label: 'Maximum Sq ft',
-      },
-      {
-        path: 'unitGroup.floorMin',
-        label: 'Minimum Floor',
-      },
-      {
-        path: 'unitGroup.floorMax',
-        label: 'Maximum Floor',
-      },
-      {
-        path: 'unitGroup.bathroomMin',
-        label: 'Minimum Bathrooms',
-      },
-      {
-        path: 'unitGroup.bathroomMax',
-        label: 'Maximum Bathrooms',
       },
     ];
   }

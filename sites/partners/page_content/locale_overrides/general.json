@@ -509,8 +509,6 @@
   "settings.preferenceValidatingAddress.howManyMiles": "How many miles is the qualifying geographic radius?",
   "settings.preferenceValidatingAddress.selectMapLayer": "Select a map layer",
   "settings.preferenceValidatingAddress.selectMapLayerDescription": "Select your map layer based on your district. If you don't see your map contact us",
-  "settings.preferenceChangesRequiredEdit": "Changes required before editing",
-  "settings.preferenceEditError": "This preference is already attached to a listing and needs to be removed before it can be edited.",
   "settings.preferenceValidatingAddress": "Do you need help validating the address?",
   "t.add": "Add",
   "t.addItem": "Add item",

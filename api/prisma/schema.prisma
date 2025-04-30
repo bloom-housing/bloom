@@ -619,7 +619,7 @@ model Listings {
   userAccounts                          UserAccounts[]
   userAccountFavorites                  UserAccounts[]                @relation("favorite_listings")
   units                                 Units[]
-  unitGroups                            UnitGroup[]
+  unitGroup                             UnitGroup[]
   userPreferences                       UserPreferences[]
   unitsSummary                          UnitsSummary[]
   requestedChanges                      String?                       @map("requested_changes")
@@ -722,7 +722,7 @@ model UnitAccessibilityPriorityTypes {
   updatedAt    DateTime       @updatedAt @map("updated_at") @db.Timestamp(6)
   name         String
   units        Units[]
-  unitGroups   UnitGroup[]
+  unitGroup    UnitGroup[]
   unitsSummary UnitsSummary[]
 
   @@map("unit_accessibility_priority_types")
@@ -963,8 +963,6 @@ model ListingNeighborhoodAmenities {
 }
 
 model UnitGroup {
-  createdAt                      DateTime                        @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt                      DateTime                        @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
   maxOccupancy                   Int?                            @map("max_occupancy")
   minOccupancy                   Int?                            @map("min_occupancy")
   floorMin                       Int?                            @map("floor_min")
@@ -988,8 +986,6 @@ model UnitGroup {
 }
 
 model UnitGroupAmiLevels {
-  createdAt                    DateTime                         @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt                    DateTime                         @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
   id                           String                           @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   amiPercentage                Int?                             @map("ami_percentage")
   monthlyRentDeterminationType MonthlyRentDeterminationTypeEnum @map("monthly_rent_determination_type")

@@ -10,7 +10,6 @@ import {
   ReviewOrderTypeEnum,
   UnitTypeEnum,
   UserRoleEnum,
-  MonthlyRentDeterminationTypeEnum,
 } from '@prisma/client';
 import { Logger } from '@nestjs/common';
 import { SchedulerRegistry } from '@nestjs/schedule';
@@ -19,7 +18,7 @@ import { randomUUID } from 'crypto';
 import { HttpModule, HttpService } from '@nestjs/axios';
 import { of } from 'rxjs';
 import { PrismaService } from '../../../src/services/prisma.service';
-import { ListingService, views } from '../../../src/services/listing.service';
+import { ListingService } from '../../../src/services/listing.service';
 import { ListingsQueryParams } from '../../../src/dtos/listings/listings-query-params.dto';
 import { ListingOrderByKeys } from '../../../src/enums/listings/order-by-enum';
 import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
@@ -27,7 +26,6 @@ import { ListingFilterKeys } from '../../../src/enums/listings/filter-key-enum';
 import { Compare } from '../../../src/dtos/shared/base-filter.dto';
 import { ListingFilterParams } from '../../../src/dtos/listings/listings-filter-params.dto';
 import { Unit } from '../../../src/dtos/units/unit.dto';
-import { UnitGroup } from '../../../src/dtos/unit-groups/unit-group.dto';
 import { UnitTypeSort } from '../../../src/utilities/unit-utilities';
 import { Listing } from '../../../src/dtos/listings/listing.dto';
 import { ListingViews } from '../../../src/enums/listings/view-enum';
@@ -42,7 +40,6 @@ import { User } from '../../../src/dtos/users/user.dto';
 import { EmailService } from '../../../src/services/email.service';
 import { PermissionService } from '../../../src/services/permission.service';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
-import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
 import { ApplicationService } from '../../../src/services/application.service';
 import { GeocodingService } from '../../../src/services/geocoding.service';
 
@@ -52,115 +49,62 @@ import { GeocodingService } from '../../../src/services/geocoding.service';
 const mockListing = (
   pos: number,
   genUnits?: { numberToMake: number; date: Date },
-  useUnitGroups = false,
 ) => {
-  const toReturn = {
-    id: pos,
-    name: `listing ${pos + 1}`,
-    units: [],
-    unitGroups: [],
-  };
+  const toReturn = { id: pos, name: `listing ${pos + 1}`, units: undefined };
   if (genUnits) {
+    const units: Unit[] = [];
     const { numberToMake, date } = genUnits;
-    if (useUnitGroups) {
-      const unitGroups: UnitGroup[] = [];
-      for (let i = 0; i < numberToMake; i++) {
-        unitGroups.push({
-          id: `unitGroup ${i}`,
+    for (let i = 0; i < numberToMake; i++) {
+      units.push({
+        id: `unit ${i}`,
+        createdAt: date,
+        updatedAt: date,
+        amiPercentage: `${i}`,
+        annualIncomeMin: `${i}`,
+        monthlyIncomeMin: `${i}`,
+        floor: i,
+        annualIncomeMax: `${i}`,
+        maxOccupancy: i,
+        minOccupancy: i,
+        monthlyRent: `${i}`,
+        numBathrooms: i,
+        numBedrooms: i,
+        number: `unit ${i}`,
+        sqFeet: `${i}`,
+        monthlyRentAsPercentOfIncome: `${i % UnitTypeSort.length}`,
+        bmrProgramChart: !(i % 2),
+        unitTypes: {
+          id: `unitType ${i}`,
           createdAt: date,
           updatedAt: date,
-          maxOccupancy: i + 2,
-          minOccupancy: i + 1,
-          openWaitlist: i % 2 === 0,
-          totalCount: 10,
-          totalAvailable: 5,
-          unitTypes: [
-            {
-              id: `unitType ${i}`,
-              createdAt: date,
-              updatedAt: date,
-              name: UnitTypeSort[i % UnitTypeSort.length] as UnitTypeEnum,
-              numBedrooms: i,
-            },
-          ],
-          unitGroupAmiLevels: [
-            {
-              id: `unitGroupAmiLevel ${i}`,
-              createdAt: date,
-              updatedAt: date,
-              amiPercentage: i * 10,
-              monthlyRentDeterminationType:
-                MonthlyRentDeterminationTypeEnum.percentageOfIncome,
-              percentageOfIncomeValue: (i * 10) % 100,
-              amiChart: {
-                id: `AMI${i}`,
-                items: [],
-                name: `AMI Name ${i}`,
-                createdAt: date,
-                updatedAt: date,
-                jurisdictions: {
-                  id: 'jurisdiction ID',
-                },
-              },
-            },
-          ],
-        });
-      }
-      toReturn.unitGroups = unitGroups;
-    } else {
-      const units: Unit[] = [];
-      for (let i = 0; i < numberToMake; i++) {
-        units.push({
-          id: `unit ${i}`,
-          createdAt: date,
-          updatedAt: date,
-          amiPercentage: `${i}`,
-          annualIncomeMin: `${i}`,
-          monthlyIncomeMin: `${i}`,
-          floor: i,
-          annualIncomeMax: `${i}`,
-          maxOccupancy: i,
-          minOccupancy: i,
-          monthlyRent: `${i}`,
-          numBathrooms: i,
+          name: UnitTypeSort[i % UnitTypeSort.length] as UnitTypeEnum,
           numBedrooms: i,
-          number: `unit ${i}`,
-          sqFeet: `${i}`,
-          monthlyRentAsPercentOfIncome: `${i % UnitTypeSort.length}`,
-          bmrProgramChart: !(i % 2),
-          unitTypes: {
-            id: `unitType ${i}`,
-            createdAt: date,
-            updatedAt: date,
-            name: UnitTypeSort[i % UnitTypeSort.length] as UnitTypeEnum,
-            numBedrooms: i,
-          },
-          unitAmiChartOverrides: {
-            id: `unitAmiChartOverrides ${i}`,
-            createdAt: date,
-            updatedAt: date,
-            items: [
-              {
-                percentOfAmi: i,
-                householdSize: i,
-                income: i,
-              },
-            ],
-          },
-          amiChart: {
-            id: `AMI${i}`,
-            items: [],
-            name: `AMI Name ${i}`,
-            createdAt: date,
-            updatedAt: date,
-            jurisdictions: {
-              id: 'jurisdiction ID',
+        },
+        unitAmiChartOverrides: {
+          id: `unitAmiChartOverrides ${i}`,
+          createdAt: date,
+          updatedAt: date,
+          items: [
+            {
+              percentOfAmi: i,
+              householdSize: i,
+              income: i,
             },
+          ],
+        },
+        amiChart: {
+          id: `AMI${i}`,
+          items: [],
+          name: `AMI Name ${i}`,
+          createdAt: date,
+          updatedAt: date,
+          jurisdictions: {
+            id: 'jurisdiction ID',
           },
-        });
-      }
-      toReturn.units = units;
+        },
+      });
     }
+    toReturn.units = units;
   }
 
   return toReturn;
@@ -169,11 +113,10 @@ const mockListing = (
 const mockListingSet = (
   pos: number,
   genUnits?: { numberToMake: number; date: Date },
-  useUnitGroups = false,
 ) => {
   const toReturn = [];
   for (let i = 0; i < pos; i++) {
-    toReturn.push(mockListing(i, genUnits, useUnitGroups));
+    toReturn.push(mockListing(i, genUnits));
   }
   return toReturn;
 };
@@ -287,7 +230,6 @@ describe('Testing listing service', () => {
 
   const constructFullListingData = (
     listingId?: string,
-    useUnitGroups = false,
   ): ListingPublishedCreate | ListingPublishedUpdate => {
     return {
       id: listingId ?? undefined,
@@ -311,71 +253,45 @@ describe('Testing listing service', () => {
       referralOpportunity: false,
       rentalAssistance: 'rental assistance',
       reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
-      units: useUnitGroups
-        ? []
-        : [
-            {
-              amiPercentage: '1',
-              annualIncomeMin: '2',
-              monthlyIncomeMin: '3',
-              floor: 4,
-              annualIncomeMax: '5',
-              maxOccupancy: 6,
-              minOccupancy: 7,
-              monthlyRent: '8',
-              numBathrooms: 9,
-              numBedrooms: 10,
-              number: '11',
-              sqFeet: '12',
-              monthlyRentAsPercentOfIncome: '13',
-              bmrProgramChart: true,
-              unitTypes: {
-                id: randomUUID(),
+      units: [
+        {
+          amiPercentage: '1',
+          annualIncomeMin: '2',
+          monthlyIncomeMin: '3',
+          floor: 4,
+          annualIncomeMax: '5',
+          maxOccupancy: 6,
+          minOccupancy: 7,
+          monthlyRent: '8',
+          numBathrooms: 9,
+          numBedrooms: 10,
+          number: '11',
+          sqFeet: '12',
+          monthlyRentAsPercentOfIncome: '13',
+          bmrProgramChart: true,
+          unitTypes: {
+            id: randomUUID(),
+          },
+          amiChart: {
+            id: randomUUID(),
+          },
+          unitAccessibilityPriorityTypes: {
+            id: randomUUID(),
+          },
+          unitRentTypes: {
+            id: randomUUID(),
+          },
+          unitAmiChartOverrides: {
+            items: [
+              {
+                percentOfAmi: 10,
+                householdSize: 20,
+                income: 30,
               },
-              amiChart: {
-                id: randomUUID(),
-              },
-              unitAccessibilityPriorityTypes: {
-                id: randomUUID(),
-              },
-              unitRentTypes: {
-                id: randomUUID(),
-              },
-              unitAmiChartOverrides: {
-                items: [
-                  {
-                    percentOfAmi: 10,
-                    householdSize: 20,
-                    income: 30,
-                  },
-                ],
-              },
-            },
-          ],
-      unitGroups: useUnitGroups
-        ? [
-            {
-              maxOccupancy: 10,
-              minOccupancy: 1,
-              openWaitlist: true,
-              totalCount: 10,
-              totalAvailable: 5,
-              unitTypes: [
-                {
-                  id: randomUUID(),
-                },
-              ],
-              unitGroupAmiLevels: [
-                {
-                  amiPercentage: 10,
-                  monthlyRentDeterminationType:
-                    MonthlyRentDeterminationTypeEnum.percentageOfIncome,
-                  percentageOfIncomeValue: 10,
-                },
-              ],
-            },
-          ]
-        : [],
+            ],
+          },
+        },
+      ],
       listingMultiselectQuestions: [
         {
           id: randomUUID(),
@@ -593,20 +509,6 @@ describe('Testing listing service', () => {
               },
             },
           },
-          unitGroups: {
-            include: {
-              unitTypes: true,
-              unitGroupAmiLevels: {
-                include: {
-                  amiChart: {
-                    include: {
-                      jurisdictions: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
         },
       });
 
@@ -721,20 +623,6 @@ describe('Testing listing service', () => {
               unitAmiChartOverrides: true,
             },
           },
-          unitGroups: {
-            include: {
-              unitTypes: true,
-              unitGroupAmiLevels: {
-                include: {
-                  amiChart: {
-                    include: {
-                      jurisdictions: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
         },
       });
 
@@ -832,20 +720,6 @@ describe('Testing listing service', () => {
             include: {
               unitTypes: true,
               unitAmiChartOverrides: true,
-            },
-          },
-          unitGroups: {
-            include: {
-              unitTypes: true,
-              unitGroupAmiLevels: {
-                include: {
-                  amiChart: {
-                    include: {
-                      jurisdictions: true,
-                    },
-                  },
-                },
-              },
             },
           },
         },
@@ -1179,20 +1053,6 @@ describe('Testing listing service', () => {
             include: {
               unitTypes: true,
               unitAmiChartOverrides: true,
-            },
-          },
-          unitGroups: {
-            include: {
-              unitTypes: true,
-              unitGroupAmiLevels: {
-                include: {
-                  amiChart: {
-                    include: {
-                      jurisdictions: true,
-                    },
-                  },
-                },
-              },
             },
           },
         },
@@ -1742,20 +1602,6 @@ describe('Testing listing service', () => {
               unitAmiChartOverrides: true,
             },
           },
-          unitGroups: {
-            include: {
-              unitTypes: true,
-              unitGroupAmiLevels: {
-                include: {
-                  amiChart: {
-                    include: {
-                      jurisdictions: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
         },
       });
     });
@@ -1823,20 +1669,6 @@ describe('Testing listing service', () => {
                 include: {
                   jurisdictions: true,
                   unitGroupAmiLevels: true,
-                },
-              },
-            },
-          },
-          unitGroups: {
-            include: {
-              unitTypes: true,
-              unitGroupAmiLevels: {
-                include: {
-                  amiChart: {
-                    include: {
-                      jurisdictions: true,
-                    },
-                  },
                 },
               },
             },
@@ -2196,20 +2028,6 @@ describe('Testing listing service', () => {
               unitAmiChartOverrides: true,
             },
           },
-          unitGroups: {
-            include: {
-              unitTypes: true,
-              unitGroupAmiLevels: {
-                include: {
-                  amiChart: {
-                    include: {
-                      jurisdictions: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
         },
       });
 
@@ -2340,20 +2158,6 @@ describe('Testing listing service', () => {
               },
             },
           },
-          unitGroups: {
-            include: {
-              unitTypes: true,
-              unitGroupAmiLevels: {
-                include: {
-                  amiChart: {
-                    include: {
-                      jurisdictions: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
         },
       });
 
@@ -2361,59 +2165,6 @@ describe('Testing listing service', () => {
         where: {
           id: {
             in: mockedListing.units.map((unit) => unit.amiChart.id),
-          },
-        },
-      });
-    });
-
-    it('should get records from findOne() with base view found and unitGroups', async () => {
-      const date = new Date();
-      const mockedListing = mockListing(
-        0,
-        {
-          numberToMake: 10,
-          date,
-        },
-        true,
-      );
-
-      prisma.listings.findUnique = jest.fn().mockResolvedValue(mockedListing);
-
-      const listing: Listing = await service.findOne(
-        'listingId',
-        LanguagesEnum.en,
-        ListingViews.base,
-        false,
-        true,
-      );
-
-      expect(listing.unitGroups).toEqual(mockedListing.unitGroups);
-
-      expect(prisma.listings.findUnique).toHaveBeenCalledWith({
-        where: { id: 'listingId' },
-        include: {
-          jurisdictions: true,
-          listingsBuildingAddress: true,
-          reservedCommunityTypes: true,
-          listingImages: { include: { assets: true } },
-          listingMultiselectQuestions: {
-            include: { multiselectQuestions: true },
-          },
-          listingFeatures: true,
-          listingUtilities: true,
-          unitGroups: {
-            include: {
-              unitTypes: true,
-              unitGroupAmiLevels: {
-                include: {
-                  amiChart: {
-                    include: {
-                      jurisdictions: true,
-                    },
-                  },
-                },
-              },
-            },
           },
         },
       });
@@ -2459,7 +2210,7 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
-      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
+
       await service.create(
         {
           name: 'example listing name',
@@ -2533,20 +2284,6 @@ describe('Testing listing service', () => {
               unitTypes: true,
             },
           },
-          unitGroups: {
-            include: {
-              unitTypes: true,
-              unitGroupAmiLevels: {
-                include: {
-                  amiChart: {
-                    include: {
-                      jurisdictions: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
         },
         data: {
           name: 'example listing name',
@@ -2590,7 +2327,7 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
-      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
+
       const val = constructFullListingData();
 
       await service.create(val as ListingCreate, user);
@@ -2645,20 +2382,6 @@ describe('Testing listing service', () => {
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
-            },
-          },
-          unitGroups: {
-            include: {
-              unitTypes: true,
-              unitGroupAmiLevels: {
-                include: {
-                  amiChart: {
-                    include: {
-                      jurisdictions: true,
-                    },
-                  },
-                },
-              },
             },
           },
         },
@@ -2856,9 +2579,6 @@ describe('Testing listing service', () => {
               },
             ],
           },
-          unitGroups: {
-            create: [],
-          },
           unitsSummary: {
             create: [
               {
@@ -2912,7 +2632,7 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
-      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
+
       await service.create(
         {
           name: 'example listing name',
@@ -2987,20 +2707,6 @@ describe('Testing listing service', () => {
               unitTypes: true,
             },
           },
-          unitGroups: {
-            include: {
-              unitTypes: true,
-              unitGroupAmiLevels: {
-                include: {
-                  amiChart: {
-                    include: {
-                      jurisdictions: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
         },
         data: {
           name: 'example listing name',
@@ -3040,162 +2746,6 @@ describe('Testing listing service', () => {
         permissionActions.create,
         {
           jurisdictionId: expect.anything(),
-        },
-      );
-    });
-
-    it('should create a listing with unit groups when enableUnitGroups is true', async () => {
-      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
-        id: 'jurisdiction-id',
-        featureFlags: [
-          {
-            name: FeatureFlagEnum.enableUnitGroups,
-            active: true,
-          },
-        ],
-      });
-
-      prisma.listings.create = jest.fn().mockResolvedValue({
-        id: 'example id',
-        name: 'example name',
-      });
-
-      const unitGroupAmiChart = {
-        id: 'ami-chart-id',
-      };
-
-      const unitTypes = [
-        {
-          id: 'unit-type-1',
-          name: UnitTypeEnum.studio,
-          numBedrooms: 0,
-        },
-        {
-          id: 'unit-type-2',
-          name: UnitTypeEnum.oneBdrm,
-          numBedrooms: 1,
-        },
-      ];
-
-      await service.create(
-        {
-          name: 'example listing name',
-          depositMin: '5',
-          assets: [
-            {
-              fileId: randomUUID(),
-              label: 'example asset',
-            },
-          ],
-          jurisdictions: {
-            id: randomUUID(),
-          },
-          status: ListingsStatusEnum.pending,
-          displayWaitlistSize: false,
-          unitsSummary: null,
-          listingEvents: [],
-          units: [],
-          unitGroups: [
-            {
-              totalAvailable: 5,
-              totalCount: 10,
-              floorMin: 1,
-              floorMax: 5,
-              maxOccupancy: 3,
-              minOccupancy: 1,
-              sqFeetMin: 500,
-              sqFeetMax: 800,
-              bathroomMin: 1,
-              bathroomMax: 2,
-              openWaitlist: false,
-              unitTypes: unitTypes,
-              unitGroupAmiLevels: [
-                {
-                  amiPercentage: 80,
-                  monthlyRentDeterminationType:
-                    MonthlyRentDeterminationTypeEnum.flatRent,
-                  percentageOfIncomeValue: null,
-                  flatRentValue: 1000,
-                  amiChart: unitGroupAmiChart,
-                },
-              ],
-            },
-          ],
-        } as ListingCreate,
-        user,
-      );
-
-      expect(prisma.listings.create).toHaveBeenCalledWith({
-        include: views.details,
-        data: {
-          name: 'example listing name',
-          depositMin: '5',
-          assets: {
-            create: [
-              {
-                fileId: expect.any(String),
-                label: 'example asset',
-              },
-            ],
-          },
-          jurisdictions: {
-            connect: {
-              id: expect.any(String),
-            },
-          },
-          status: ListingsStatusEnum.pending,
-          displayWaitlistSize: false,
-          contentUpdatedAt: expect.any(Date),
-          unitsAvailable: 0,
-          listingEvents: {
-            create: [],
-          },
-          units: {
-            create: [],
-          },
-          unitGroups: {
-            create: [
-              {
-                totalAvailable: 5,
-                totalCount: 10,
-                floorMin: 1,
-                floorMax: 5,
-                maxOccupancy: 3,
-                minOccupancy: 1,
-                sqFeetMin: 500,
-                sqFeetMax: 800,
-                bathroomMin: 1,
-                bathroomMax: 2,
-                openWaitlist: false,
-                unitTypes: {
-                  connect: unitTypes.map((type) => ({ id: type.id })),
-                },
-                unitGroupAmiLevels: {
-                  create: [
-                    {
-                      amiPercentage: 80,
-                      monthlyRentDeterminationType:
-                        MonthlyRentDeterminationTypeEnum.flatRent,
-                      percentageOfIncomeValue: null,
-                      flatRentValue: 1000,
-                      amiChart: {
-                        connect: { id: 'ami-chart-id' },
-                      },
-                    },
-                  ],
-                },
-              },
-            ],
-          },
-        },
-      });
-
-      expect(canOrThrowMock).toHaveBeenCalledWith(
-        user,
-        'listing',
-        permissionActions.create,
-        {
-          jurisdictionId: expect.any(String),
         },
       );
     });
@@ -3287,20 +2837,6 @@ describe('Testing listing service', () => {
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
-            },
-          },
-          unitGroups: {
-            include: {
-              unitTypes: true,
-              unitGroupAmiLevels: {
-                include: {
-                  amiChart: {
-                    include: {
-                      jurisdictions: true,
-                    },
-                  },
-                },
-              },
             },
           },
         },
@@ -3395,20 +2931,6 @@ describe('Testing listing service', () => {
               unitTypes: true,
             },
           },
-          unitGroups: {
-            include: {
-              unitTypes: true,
-              unitGroupAmiLevels: {
-                include: {
-                  amiChart: {
-                    include: {
-                      jurisdictions: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
         },
       });
     });
@@ -3490,20 +3012,6 @@ describe('Testing listing service', () => {
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
-            },
-          },
-          unitGroups: {
-            include: {
-              unitTypes: true,
-              unitGroupAmiLevels: {
-                include: {
-                  amiChart: {
-                    include: {
-                      jurisdictions: true,
-                    },
-                  },
-                },
-              },
             },
           },
         },
@@ -3722,20 +3230,6 @@ describe('Testing listing service', () => {
               unitTypes: true,
             },
           },
-          unitGroups: {
-            include: {
-              unitTypes: true,
-              unitGroupAmiLevels: {
-                include: {
-                  amiChart: {
-                    include: {
-                      jurisdictions: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
         },
         data: {
           name: 'example listing name',
@@ -3763,174 +3257,6 @@ describe('Testing listing service', () => {
             disconnect: true,
           },
           unitsAvailable: 0,
-        },
-        where: {
-          id: expect.anything(),
-        },
-      });
-
-      expect(canOrThrowMock).toHaveBeenCalledWith(
-        user,
-        'listing',
-        permissionActions.update,
-        {
-          id: 'example id',
-        },
-      );
-    });
-
-    it('should update a listing with unit groups when enableUnitGroups is true', async () => {
-      prisma.listings.findUnique = jest.fn().mockResolvedValue({
-        id: 'example id',
-        name: 'example name',
-      });
-      prisma.listings.update = jest.fn().mockResolvedValue({
-        id: 'example id',
-        name: 'example name',
-      });
-      prisma.listingEvents.findMany = jest.fn().mockResolvedValue([]);
-      prisma.listingEvents.update = jest.fn().mockResolvedValue({
-        id: 'example id',
-        name: 'example name',
-      });
-      prisma.assets.delete = jest.fn().mockResolvedValue({
-        id: 'example id',
-        name: 'example name',
-      });
-      prisma.$transaction = jest
-        .fn()
-        .mockResolvedValue([{ id: 'example id', name: 'example name' }]);
-      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
-        id: 'jurisdiction-id',
-        featureFlags: [
-          {
-            name: FeatureFlagEnum.enableUnitGroups,
-            active: true,
-          },
-        ],
-      });
-
-      await service.update(
-        {
-          id: randomUUID(),
-          name: 'example listing name',
-          depositMin: '5',
-          assets: [
-            {
-              fileId: randomUUID(),
-              label: 'example asset',
-            },
-          ],
-          jurisdictions: {
-            id: randomUUID(),
-          },
-          status: ListingsStatusEnum.pending,
-          displayWaitlistSize: false,
-          unitsSummary: null,
-          listingEvents: [],
-          unitGroups: [
-            {
-              totalAvailable: 5,
-              totalCount: 10,
-              floorMin: 1,
-              floorMax: 5,
-              maxOccupancy: 3,
-              minOccupancy: 1,
-              sqFeetMin: 500,
-              sqFeetMax: 800,
-              bathroomMin: 1,
-              bathroomMax: 2,
-              openWaitlist: false,
-              unitTypes: [
-                {
-                  id: randomUUID(),
-                },
-              ],
-              unitAccessibilityPriorityTypes: {
-                id: randomUUID(),
-              },
-              unitGroupAmiLevels: [
-                {
-                  amiPercentage: 0,
-                  monthlyRentDeterminationType:
-                    MonthlyRentDeterminationTypeEnum.flatRent,
-                  percentageOfIncomeValue: null,
-                  flatRentValue: 1000,
-                  amiChart: { id: randomUUID() },
-                },
-              ],
-            },
-          ],
-        } as ListingUpdate,
-        user,
-      );
-
-      expect(prisma.listings.update).toHaveBeenCalledWith({
-        include: views.details,
-        data: {
-          name: 'example listing name',
-          contentUpdatedAt: expect.anything(),
-          depositMin: '5',
-          assets: [
-            {
-              fileId: expect.anything(),
-              label: 'example asset',
-            },
-          ],
-          jurisdictions: {
-            connect: {
-              id: expect.anything(),
-            },
-          },
-          status: ListingsStatusEnum.pending,
-          displayWaitlistSize: false,
-          unitsSummary: undefined,
-          listingEvents: {
-            create: [],
-          },
-          listingsBuildingSelectionCriteriaFile: {
-            disconnect: true,
-          },
-          unitsAvailable: 0,
-          unitGroups: {
-            create: [
-              {
-                totalAvailable: 5,
-                totalCount: 10,
-                floorMin: 1,
-                floorMax: 5,
-                maxOccupancy: 3,
-                minOccupancy: 1,
-                sqFeetMin: 500,
-                sqFeetMax: 800,
-                bathroomMin: 1,
-                bathroomMax: 2,
-                openWaitlist: false,
-                unitTypes: {
-                  connect: [{ id: expect.anything() }],
-                },
-                unitAccessibilityPriorityTypes: {
-                  connect: {
-                    id: expect.anything(),
-                  },
-                },
-                unitGroupAmiLevels: {
-                  create: [
-                    {
-                      amiPercentage: 0,
-                      monthlyRentDeterminationType:
-                        MonthlyRentDeterminationTypeEnum.flatRent,
-                      percentageOfIncomeValue: null,
-                      flatRentValue: 1000,
-                      amiChart: {
-                        connect: { id: expect.anything() },
-                      },
-                    },
-                  ],
-                },
-              },
-            ],
-          },
         },
         where: {
           id: expect.anything(),
@@ -4052,20 +3378,6 @@ describe('Testing listing service', () => {
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
-            },
-          },
-          unitGroups: {
-            include: {
-              unitTypes: true,
-              unitGroupAmiLevels: {
-                include: {
-                  amiChart: {
-                    include: {
-                      jurisdictions: true,
-                    },
-                  },
-                },
-              },
             },
           },
         },
@@ -4257,9 +3569,6 @@ describe('Testing listing service', () => {
                 },
               },
             ],
-          },
-          unitGroups: {
-            create: [],
           },
           unitsSummary: {
             create: [
