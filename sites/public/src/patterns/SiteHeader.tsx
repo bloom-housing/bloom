@@ -468,6 +468,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
                     firstItem={index === 0}
                     key={index}
                     lastItem={index === props.links?.length - 1}
+                    index={index}
                     link={link}
                     openSubmenu={openSubmenu}
                     setMobileMenuOpen={setMobileMenuOpen}
