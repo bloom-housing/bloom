@@ -57,7 +57,8 @@ const ApplicationsList = () => {
       includeDemographicsPartner) ??
       false,
     false,
-    !!process.env.applicationExportAsSpreadsheet
+    !!process.env.applicationExportAsSpreadsheet,
+    !!process.env.useSecureDownloadPathway
   )
 
   const shouldExpireData = !profile?.userRoles?.isAdmin

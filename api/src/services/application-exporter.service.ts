@@ -1,27 +1,28 @@
-import { ForbiddenException, Injectable, StreamableFile } from '@nestjs/common';
-import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
-import dayjs from 'dayjs';
-import Excel, { Column } from 'exceljs';
-import { Request as ExpressRequest } from 'express';
-import fs, { createReadStream, ReadStream } from 'fs';
-import { join } from 'path';
-import { view } from './application.service';
 import { Application } from '../dtos/applications/application.dto';
 import { ApplicationCsvQueryParams } from '../dtos/applications/application-csv-query-params.dto';
-import { MultiselectQuestion } from '../dtos/multiselect-questions/multiselect-question.dto';
 import { ApplicationMultiselectQuestion } from '../dtos/applications/application-multiselect-question.dto';
+import { CsvHeader } from '../types/CsvExportInterface';
+import dayjs from 'dayjs';
+import Excel, { Column } from 'exceljs';
+import { ForbiddenException, Injectable, StreamableFile } from '@nestjs/common';
+import fs, { createReadStream, ReadStream } from 'fs';
+import { generatePresignedGetURL, uploadToS3 } from '../utilities/s3-helpers';
+import { getExportHeaders } from '../utilities/application-export-helpers';
 import { IdDTO } from '../dtos/shared/id.dto';
-import { User } from '../dtos/users/user.dto';
+import { join } from 'path';
+import { ListingService } from './listing.service';
+import { mapTo } from '../utilities/mapTo';
+import { MultiselectQuestion } from '../dtos/multiselect-questions/multiselect-question.dto';
+import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
+import { MultiselectQuestionService } from './multiselect-question.service';
 import { OrderByEnum } from '../enums/shared/order-by-enum';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
-import { ListingService } from './listing.service';
-import { MultiselectQuestionService } from './multiselect-question.service';
 import { PermissionService } from './permission.service';
 import { PrismaService } from './prisma.service';
-import { CsvHeader } from '../types/CsvExportInterface';
-import { getExportHeaders } from '../utilities/application-export-helpers';
-import { mapTo } from '../utilities/mapTo';
-import { zipExport } from '../utilities/zip-export';
+import { Request as ExpressRequest } from 'express';
+import { User } from '../dtos/users/user.dto';
+import { view } from './application.service';
+import { zipExport, zipExportSecure } from '../utilities/zip-export';
 
 view.csv = {
   ...view.details,
@@ -85,6 +86,71 @@ export class ApplicationExporterService {
     }
 
     return await zipExport(readStream, zipFilename, filename, isSpreadsheet);
+  }
+
+  /**
+   *
+   * @param req
+   * @param queryParams
+   * @param isLottery a boolean indicating if the export is a lottery
+   * @param isSpreadsheet a boolean indicating if the export is a spreadsheet
+   * @returns a promise containing a secure download url
+   */
+  async exporterSecure<QueryParams extends ApplicationCsvQueryParams>(
+    req: ExpressRequest,
+    queryParams: QueryParams,
+    isLottery: boolean,
+    isSpreadsheet: boolean,
+  ): Promise<string> {
+    const user = mapTo(User, req['user']);
+    await this.authorizeExport(user, queryParams.id);
+
+    let filename: string;
+    let readStream: ReadStream;
+    let zipFilename: string;
+    const now = new Date();
+    const dateString = dayjs(now).format('YYYY-MM-DD_HH-mm');
+    if (isLottery) {
+      readStream = await this.spreadsheetExport(queryParams, user.id, true);
+      zipFilename = `listing-${queryParams.id}-lottery-${
+        user.id
+      }-${now.getTime()}`;
+      filename = `lottery-${queryParams.id}-${dateString}`;
+    } else {
+      if (isSpreadsheet) {
+        readStream = await this.spreadsheetExport(queryParams, user.id, false);
+      } else {
+        readStream = await this.csvExport(queryParams, user.id);
+      }
+      zipFilename = `listing-${queryParams.id}-applications-${
+        user.id
+      }-${now.getTime()}`;
+      filename = `applications-${queryParams.id}-${dateString}`;
+    }
+
+    const path = await zipExportSecure(
+      readStream,
+      zipFilename,
+      filename,
+      isSpreadsheet,
+    );
+
+    const key = `${isLottery ? 'lottery' : 'applications'}_export_${dayjs(
+      now,
+    ).format('YYYY_MM_DD_HH_mm')}.zip`;
+    await uploadToS3(
+      process.env.ASSET_FS_PRIVATE_CONFIG_s3_BUCKET,
+      key,
+      path,
+      process.env.ASSET_FS_CONFIG_s3_REGION,
+    );
+
+    return await generatePresignedGetURL(
+      process.env.ASSET_FS_PRIVATE_CONFIG_s3_BUCKET,
+      key,
+      process.env.ASSET_FS_CONFIG_s3_REGION,
+      Number(process.env.TTL_SECURE_FILES || '0'),
+    );
   }
 
   // csv export functions

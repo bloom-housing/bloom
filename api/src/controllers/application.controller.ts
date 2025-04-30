@@ -151,6 +151,47 @@ export class ApplicationController {
     );
   }
 
+  @Get(`csvSecure`)
+  @ApiOperation({
+    summary: 'Get applications as csv',
+    operationId: 'listAsCsvSecure',
+  })
+  @UseInterceptors(ExportLogInterceptor)
+  @ApiOkResponse({ type: String })
+  async listAsCsvSecure(
+    @Request() req: ExpressRequest,
+    @Query(new ValidationPipe(defaultValidationPipeOptions))
+    queryParams: ApplicationCsvQueryParams,
+  ): Promise<string> {
+    return await this.applicationExportService.exporterSecure(
+      req,
+      queryParams,
+      false,
+      false,
+    );
+  }
+
+  @Get(`spreadsheetSecure`)
+  @ApiOperation({
+    summary: 'Get applications as spreadsheet',
+    operationId: 'listAsSpreadsheetSecure',
+  })
+  @UseInterceptors(ExportLogInterceptor)
+  @ApiOkResponse({ type: String })
+  async spreadsheetExportSecure(
+    @Request() req: ExpressRequest,
+    @Res({ passthrough: true }) res: Response,
+    @Query(new ValidationPipe(defaultValidationPipeOptions))
+    queryParams: ApplicationCsvQueryParams,
+  ): Promise<string> {
+    return await this.applicationExportService.exporterSecure(
+      req,
+      queryParams,
+      false,
+      true,
+    );
+  }
+
   @Get(`:applicationId`)
   @ApiOperation({
     summary: 'Get application by id',
