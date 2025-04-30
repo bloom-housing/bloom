@@ -71,7 +71,7 @@ Cypress.Commands.add("loginWithMfa", () => {
 })
 
 Cypress.Commands.add("signOut", () => {
-  cy.get("button").contains("Sign Out").click()
+  cy.get("button").contains("Sign out").click()
   cy.get("input#email")
 })
 
