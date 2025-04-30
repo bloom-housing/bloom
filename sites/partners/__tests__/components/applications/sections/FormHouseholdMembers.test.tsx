@@ -232,12 +232,12 @@ describe("<FormHouseholdMembers>", () => {
   })
 
   it("should open delete modal on delete household member click", async () => {
+    const mockSetHouseholdMember = jest.fn()
     render(
       <FormProviderWrapper>
         <FormHouseholdMembers
           householdMembers={[mockHouseholdMember]}
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          setHouseholdMembers={() => {}}
+          setHouseholdMembers={mockSetHouseholdMember}
         />
       </FormProviderWrapper>
     )
@@ -256,9 +256,23 @@ describe("<FormHouseholdMembers>", () => {
     expect(within(popupContainer).getByText(/do you really want to delete this member\?/i))
     expect(within(popupContainer).getByRole("button", { name: /cancel/i }))
     expect(within(popupContainer).getByRole("button", { name: /delete/i }))
+
+    await act(() =>
+      userEvent.click(within(popupContainer).getByRole("button", { name: /delete/i }))
+    )
+
+    expect(
+      screen.queryAllByRole("heading", {
+        level: 1,
+        name: /delete this member\?/i,
+      })
+    ).toHaveLength(0)
+
+    expect(mockSetHouseholdMember).toHaveBeenCalledWith([])
   })
 
   it("should open filled-out drawer on edit member click", async () => {
+    const mockSetHouseholdMembers = jest.fn()
     render(
       <FormProviderWrapper>
         <FormHouseholdMembers
@@ -268,8 +282,7 @@ describe("<FormHouseholdMembers>", () => {
               householdMemberWorkAddress: mockHouseholdMember.householdMemberAddress,
             },
           ]}
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          setHouseholdMembers={() => {}}
+          setHouseholdMembers={mockSetHouseholdMembers}
         />
       </FormProviderWrapper>
     )
@@ -298,5 +311,24 @@ describe("<FormHouseholdMembers>", () => {
     expect(within(workAddress.parentElement).getByLabelText(/no/i)).not.toBeChecked()
     expect(within(primaryAdress.parentElement).getByLabelText(/yes/i)).not.toBeChecked()
     expect(within(primaryAdress.parentElement).getByLabelText(/no/i)).toBeChecked()
+
+    await userEvent.type(within(drawerContainer).getByLabelText(/first name/i), "athon")
+    await act(() => userEvent.click(screen.getByRole("button", { name: "Submit" })))
+
+    expect(mockSetHouseholdMembers).toHaveBeenCalledWith([
+      {
+        ...mockHouseholdMember,
+        firstName: "Johnathon",
+        dateOfBirth: {
+          birthDay: "28",
+          birthMonth: "3",
+          birthYear: "1998",
+        },
+        householdMemberWorkAddress: expect.anything(),
+        householdMemberAddress: expect.anything(),
+        createdAt: undefined,
+        updatedAt: undefined,
+      },
+    ])
   })
 })
