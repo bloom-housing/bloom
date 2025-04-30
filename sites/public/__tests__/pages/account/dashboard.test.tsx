@@ -144,7 +144,8 @@ describe("<Dashboard>", () => {
           },
         }}
       >
-        <Dashboard jurisdiction={{
+        <Dashboard
+          jurisdiction={{
             ...jurisdiction,
             featureFlags: [
               ...jurisdiction.featureFlags,
@@ -159,7 +160,8 @@ describe("<Dashboard>", () => {
                 jurisdictions: [],
               },
             ],
-          }} />
+          }}
+        />
       </AuthContext.Provider>
     )
 
@@ -180,7 +182,9 @@ describe("<Dashboard>", () => {
     expect(
       screen.queryByRole("heading", { level: 2, name: /my applications/i })
     ).not.toBeInTheDocument()
-    expect(screen.queryByText("See lottery dates and listings for properties for which you've applied")).not.toBeInTheDocument()
+    expect(
+      screen.queryByText("See lottery dates and listings for properties for which you've applied")
+    ).not.toBeInTheDocument()
     expect(screen.queryByRole("link", { name: /view applications/i })).not.toBeInTheDocument()
   })
 })
