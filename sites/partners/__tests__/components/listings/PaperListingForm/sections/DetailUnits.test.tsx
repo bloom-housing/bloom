@@ -271,7 +271,7 @@ describe("DetailUnits", () => {
       rows[0]
     ).getAllByRole("cell")
 
-    expect(unitType).toHaveTextContent("2 BR, SRO")
+    expect(unitType).toHaveTextContent("2 beds, SRO")
     expect(unitsNumber).toHaveTextContent("2")
     expect(ami).toHaveTextContent("25% - 30%")
     expect(rent).toHaveTextContent("1500 - 2400, 10% - 20%")

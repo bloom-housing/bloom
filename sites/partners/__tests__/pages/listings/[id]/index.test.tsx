@@ -1294,8 +1294,9 @@ describe("listing data", () => {
         expect(getByText("Paper Applications")).toBeInTheDocument()
         expect(getByText("Custom Online Application URL")).toBeInTheDocument()
         expect(getByText("https://example.com/application")).toBeInTheDocument()
-        expect(getByText("Referral")).toBeInTheDocument()
-        expect(getAllByText("No")).toHaveLength(3)
+        // Referral question is not asked in Doorway
+        // expect(getByText("Referral")).toBeInTheDocument()
+        expect(getAllByText("No")).toHaveLength(2)
         expect(queryByText("Common Digital Application")).not.toBeInTheDocument()
         expect(queryByText("Referral Contact Phone")).not.toBeInTheDocument()
         expect(queryByText("Referral Summary")).not.toBeInTheDocument()

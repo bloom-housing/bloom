@@ -68,7 +68,6 @@ describe("<FormHouseholdMembers>", () => {
     expect(within(drawerContainer).getByLabelText(/year/i)).toBeInTheDocument()
     expect(within(drawerContainer).getByLabelText(/relationship/i)).toBeInTheDocument()
     expect(within(drawerContainer).getByText(/same address as primary/i)).toBeInTheDocument()
-    expect(within(drawerContainer).getByText(/work in region/i)).toBeInTheDocument()
 
     expect(within(drawerContainer).getByRole("button", { name: /submit/i }))
     expect(within(drawerContainer).getByRole("button", { name: /cancel/i }))
@@ -114,7 +113,8 @@ describe("<FormHouseholdMembers>", () => {
     expect(screen.getAllByLabelText(/zip code/i)).toHaveLength(1)
   })
 
-  it("show word address fields when does not work in the region", async () => {
+  // Work in region is not asked in Doorway
+  it.skip("show word address fields when does not work in the region", async () => {
     render(
       <FormProviderWrapper>
         {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
@@ -165,7 +165,7 @@ describe("<FormHouseholdMembers>", () => {
     const drawerContainer = drawerTitle.parentElement.parentElement
 
     const yesRadioButton = within(
-      within(drawerContainer).getByText(/work in region/i).parentElement
+      within(drawerContainer).getByText(/same address as primary/i).parentElement
     ).getByLabelText(/yes/i)
     const noRadioButton = within(
       within(drawerContainer).getByText(/same address as primary/i).parentElement
@@ -180,12 +180,13 @@ describe("<FormHouseholdMembers>", () => {
     })
 
     expect(screen.getByText(/residence address/i)).toBeInTheDocument()
-    expect(screen.getByText(/work address/i)).toBeInTheDocument()
-    expect(screen.getAllByLabelText(/street address/i)).toHaveLength(2)
-    expect(screen.getAllByLabelText(/apt or unit #/i)).toHaveLength(2)
-    expect(screen.getAllByLabelText(/city/i)).toHaveLength(2)
-    expect(screen.getAllByLabelText(/state/i)).toHaveLength(2)
-    expect(screen.getAllByLabelText(/zip code/i)).toHaveLength(2)
+    // Work address is not asked in Doorway
+    // expect(screen.getByText(/work address/i)).toBeInTheDocument()
+    expect(screen.getAllByLabelText(/street address/i)).toHaveLength(1)
+    expect(screen.getAllByLabelText(/apt or unit #/i)).toHaveLength(1)
+    expect(screen.getAllByLabelText(/city/i)).toHaveLength(1)
+    expect(screen.getAllByLabelText(/state/i)).toHaveLength(1)
+    expect(screen.getAllByLabelText(/zip code/i)).toHaveLength(1)
   })
 
   it("should render hosuehold members table", () => {
@@ -208,25 +209,25 @@ describe("<FormHouseholdMembers>", () => {
     const [head, body] = headAndBody
 
     const tableHeaders = within(head).getAllByRole("columnheader")
-    expect(tableHeaders).toHaveLength(6)
-    const [name, relationship, dob, residence, work, action] = tableHeaders
+    expect(tableHeaders).toHaveLength(5)
+    const [name, relationship, dob, residence, action] = tableHeaders
     expect(name).toHaveTextContent(/name/i)
     expect(relationship).toHaveTextContent(/relationship/i)
     expect(dob).toHaveTextContent(/date of birth/i)
     expect(residence).toHaveTextContent(/same residence/i)
-    expect(work).toHaveTextContent(/work in region/i)
+    // work in region is not asked in Doorway
+    // expect(work).toHaveTextContent(/work in region/i)
     expect(action).toHaveTextContent(/actions/i)
 
     const tableBodyRows = within(body).getAllByRole("row")
     expect(tableBodyRows).toHaveLength(1)
-    const [nameVal, relationshipVal, dobVal, residenceVal, workVal, actionVal] = within(
+    const [nameVal, relationshipVal, dobVal, residenceVal, actionVal] = within(
       tableBodyRows[0]
     ).getAllByRole("cell")
     expect(nameVal).toHaveTextContent("John Smith")
     expect(relationshipVal).toHaveTextContent("Cousin")
     expect(dobVal).toHaveTextContent("3/28/1998")
     expect(residenceVal).toHaveTextContent("No")
-    expect(workVal).toHaveTextContent("Yes")
     expect(within(actionVal).getByRole("button", { name: /edit/i }))
     expect(within(actionVal).getByRole("button", { name: /delete/i }))
   })
@@ -291,11 +292,10 @@ describe("<FormHouseholdMembers>", () => {
     expect(within(drawerContainer).getByLabelText(/year/i)).toHaveValue("1998")
     expect(within(drawerContainer).getByLabelText(/relationship/i)).toHaveValue("cousin")
 
-    const workAddress = within(drawerContainer).getByText(/work in region/i)
+    // work address is not a question we ask in Doorway
+    // const workAddress = within(drawerContainer).getByText(/work in region/i)
     const primaryAdress = within(drawerContainer).getByText(/same address as primary/i)
 
-    expect(within(workAddress.parentElement).getByLabelText(/yes/i)).toBeChecked()
-    expect(within(workAddress.parentElement).getByLabelText(/no/i)).not.toBeChecked()
     expect(within(primaryAdress.parentElement).getByLabelText(/yes/i)).not.toBeChecked()
     expect(within(primaryAdress.parentElement).getByLabelText(/no/i)).toBeChecked()
   })

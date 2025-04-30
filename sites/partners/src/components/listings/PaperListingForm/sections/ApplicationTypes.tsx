@@ -44,11 +44,6 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   const digitalApplicationChoice = watch("digitalApplicationChoice")
   const commonDigitalApplicationChoice = watch("commonDigitalApplicationChoice")
   const paperApplicationChoice = watch("paperApplicationChoice")
-<<<<<<< HEAD
-=======
-  const referralOpportunityChoice = watch("referralOpportunityChoice")
-
->>>>>>> ab5bc08ab (feat: add feature flag for disabling common app (#4791))
   /*
     Set state for methods, drawer, upload progress, and more
   */
@@ -313,7 +308,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
           (disableCommonApplication ||
             commonDigitalApplicationChoice === YesNoEnum.no ||
             (!commonDigitalApplicationChoice && listing?.commonDigitalApplication === false)) && (
-              <Grid.Row columns={1}>
+            <Grid.Row columns={1}>
               <Grid.Cell>
                 <Field
                   label={t("listings.customOnlineApplicationUrl")}

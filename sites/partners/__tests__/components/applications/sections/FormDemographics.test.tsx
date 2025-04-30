@@ -26,15 +26,14 @@ describe("<FormDemographics>", () => {
     )
 
     expect(screen.getByText(/race/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/american indian \/ alaskan native/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/asian/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/black \/ african american/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/native hawaiian \/ other pacific islander/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/black/i)).toBeInTheDocument()
+    expect(
+      screen.getByLabelText(/Middle Eastern, West African or North African/i)
+    ).toBeInTheDocument()
+    expect(screen.getByLabelText(/pacific islander/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/white/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/other \/ multiracial/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/decline to respond/i)).toBeInTheDocument()
 
-    expect(screen.queryByLabelText(/Asian Indian/i)).not.toBeInTheDocument()
     expect(screen.queryByLabelText(/Chinese/i)).not.toBeInTheDocument()
     expect(screen.queryByLabelText(/Filipino/i)).not.toBeInTheDocument()
     expect(screen.queryByLabelText(/Japanese/i)).not.toBeInTheDocument()
@@ -46,20 +45,16 @@ describe("<FormDemographics>", () => {
     expect(screen.queryByLabelText(/Samoan/i)).not.toBeInTheDocument()
     expect(screen.queryByLabelText(/^Other Pacific Islander$/i)).not.toBeInTheDocument()
 
-    expect(screen.getByLabelText(/ethnicity/i)).toBeInTheDocument()
-
     expect(screen.getByText(/how did you hear about us/i))
     expect(screen.getByLabelText(/bus ad/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/developer website/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/email alert/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/flyer/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/friend/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/housing counselor/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/^other$/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/radio ad/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/alameda county hcd website/i)).toBeInTheDocument()
-    expect(screen.queryByLabelText(/government website/i)).not.toBeInTheDocument()
-    expect(screen.queryByLabelText(/property website/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/government website/i)).toBeInTheDocument()
+    expect(screen.queryByLabelText(/property website/i)).toBeInTheDocument()
   })
 
   it("should expand suboptions when main key is checked", async () => {
@@ -78,25 +73,27 @@ describe("<FormDemographics>", () => {
     )
 
     const asianCheckbox = screen.getByLabelText(/asian/i)
-    const hawaiianPacificCheckbox = screen.getByLabelText(
-      /native hawaiian \/ other pacific islander/i
-    )
+    const latinoCheckbox = screen.getByLabelText(/latino/i)
 
     await act(async () => {
       await userEvent.click(asianCheckbox)
-      await userEvent.click(hawaiianPacificCheckbox)
+      await userEvent.click(latinoCheckbox)
     })
 
-    expect(screen.getByLabelText(/Asian Indian/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/Chinese/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/Filipino/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/Japanese/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/Korean/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Mongolian/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/Vietnamese/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Central Asian/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/South Asian/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Southeast Asian/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/Other Asian/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/^Native Hawaiian$/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/Guamanian or Chamorro/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/Samoan/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/^Other Pacific Islander$/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Caribbean/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Central American/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Mexican/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/South American/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Other Latino/i)).toBeInTheDocument()
   })
 })

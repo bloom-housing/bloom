@@ -27,19 +27,21 @@ describe("<FormPrimaryApplicant>", () => {
     expect(within(dobSection).getByLabelText(/month/i)).toBeInTheDocument()
     expect(within(dobSection).getByLabelText(/day/i)).toBeInTheDocument()
     expect(within(dobSection).getByLabelText(/year/i)).toBeInTheDocument()
-    expect(screen.getAllByLabelText(/email/i)).toHaveLength(2)
-    expect(screen.getAllByText(/^phone$/i)).toHaveLength(2)
+    expect(screen.getAllByLabelText(/email/i)).toHaveLength(1)
+    expect(screen.getAllByText(/^phone$/i)).toHaveLength(1)
 
     expect(screen.getByLabelText(/what type of number is this\?/i)).toBeInTheDocument()
     expect(screen.getByText(/^additional phone$/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/additional phone type/i)).toBeInTheDocument()
 
-    expect(screen.getByText(/preferred contact type/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/letter/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/text/i)).toBeInTheDocument()
-    expect(screen.getByText(/work in the region\?/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/yes/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/no/i)).toBeInTheDocument()
+    // Preferred contact type is not asked in Doorway
+    // expect(screen.getByText(/preferred contact type/i)).toBeInTheDocument()
+    // expect(screen.getByLabelText(/letter/i)).toBeInTheDocument()
+    // expect(screen.getByLabelText(/text/i)).toBeInTheDocument()
+    // Work in region is not asked in Doorway
+    // expect(screen.getByText(/work in the region\?/i)).toBeInTheDocument()
+    // expect(screen.getByLabelText(/yes/i)).toBeInTheDocument()
+    // expect(screen.getByLabelText(/no/i)).toBeInTheDocument()
 
     expect(screen.getByText(/residence address/i)).toBeInTheDocument()
     expect(screen.getAllByLabelText(/street address/i)).toHaveLength(1)
@@ -100,7 +102,8 @@ describe("<FormPrimaryApplicant>", () => {
     expect(additionalPhoneTypeSelect).toBeEnabled()
   })
 
-  it("show work address fields an work in the region is checked", async () => {
+  // Work address is not a question in Doorway
+  it.skip("show work address fields an work in the region is checked", async () => {
     render(
       <FormProviderWrapper>
         <FormPrimaryApplicant />

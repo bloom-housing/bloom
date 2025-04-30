@@ -22,7 +22,15 @@ describe("<FormHouseholdIncome>", () => {
     expect(screen.getByLabelText(/per month/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/annual income/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/monthly income/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/housing voucher or subsidy/i)).toBeInTheDocument()
+    // Note: this is the "Housing Voucher or Subsidy" question in core
+    expect(screen.getByText("Issued Vouchers or Rental Assistance")).toBeInTheDocument()
+    expect(
+      screen.getByRole("checkbox", { name: /Section 8 or Housing Authority Issued Vouchers/i })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole("checkbox", { name: /Rental assistance from other sources/i })
+    ).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: /None of the above/i })).toBeInTheDocument()
   })
 
   it("should disable income value fields until income period is selected", async () => {
