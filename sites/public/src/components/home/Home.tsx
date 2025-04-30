@@ -62,9 +62,6 @@ export const Home = (props: HomeProps) => {
             <HomeRegions />
           </HomeSection>
         )}
-        <Heading id="Seeds-header" size="xl">
-          This is a SEEDS DESIGN
-        </Heading>
         <MaxWidthLayout className={styles["resource-container"]}>
           <Grid spacing="lg">
             <Grid.Row columns={2}>
