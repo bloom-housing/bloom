@@ -1,8 +1,7 @@
 .site-layout {
-  background-color: var(--seeds-bg-color-canvas);
+  --page-header-layout-content-bg-color: var(--seeds-bg-color-canvas);
 
   .site-content {
-    margin-block: var(--seeds-spacer-container);
     margin-inline: auto;
     @media (--md-and-up) {
       display: flex;
