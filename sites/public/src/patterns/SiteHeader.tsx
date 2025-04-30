@@ -201,7 +201,7 @@ const HeaderLink = (props: HeaderLinkProps) => {
                       }}
                       id={`submenu-link-${index}`}
                       aria-current={props.currentPath === submenuLink.href}
-                      data-testid={`${props.link.label}-${index}`}
+                      data-testid={`${submenuLink.label}-${index}`}
                     >
                       {submenuLink.label}
                     </LinkComponent>
@@ -224,7 +224,7 @@ const HeaderLink = (props: HeaderLinkProps) => {
                         )
                       }}
                       id={`submenu-link-${index}`}
-                      data-testid={`${props.link.label}-${props.index}`}
+                      data-testid={`${submenuLink.label}-${index}`}
                     >
                       {submenuLink.label}
                     </button>
