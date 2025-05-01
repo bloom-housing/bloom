@@ -39,3 +39,8 @@
 .card-heading-group {
   --subheading-color: var(--seeds-text-color-light);
 }
+
+.card-alt-heading-font {
+  font-family: var(--seeds-font-alt-sans);
+  font-weight: var(--seeds-font-weight-semibold);
+}

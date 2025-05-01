@@ -45,7 +45,7 @@ const BloomCard = (props: BloomCardProps) => {
         <Heading
           size={headingSize}
           priority={props.headingPriority || 1}
-          className={props.altHeading ? "font-alt-sans font-semibold" : undefined}
+          className={props.altHeading ? styles["card-alt-heading-font"] : undefined}
         >
           {props.title}
         </Heading>

@@ -92,9 +92,6 @@ const FavoritesView = ({ jurisdiction }: FavoritesViewProps) => {
                 altHeading
               >
                 <Card.Section>
-                  {/* <Heading priority={2} size="3xl" className="font-alt-sans">
-                    {t("account.noFavorites")}
-                  </Heading> */}
                   <p>
                     <Button size="sm" variant="primary-outlined" href="/listings">
                       {t("listings.browseListings")}
