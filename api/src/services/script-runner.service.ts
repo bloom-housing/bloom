@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, HttpException } from '@nestjs/common';
 import {
   LanguagesEnum,
   MultiselectQuestionsApplicationSectionEnum,
@@ -7,9 +7,11 @@ import {
   ReviewOrderTypeEnum,
 } from '@prisma/client';
 import { Request as ExpressRequest } from 'express';
+import https from 'https';
 import { AmiChartService } from './ami-chart.service';
 import { EmailService } from './email.service';
 import { FeatureFlagService } from './feature-flag.service';
+import { MultiselectQuestionService } from './multiselect-question.service';
 import { PrismaService } from './prisma.service';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { User } from '../dtos/users/user.dto';
@@ -20,6 +22,7 @@ import { Application } from '../dtos/applications/application.dto';
 import { AmiChartImportDTO } from '../dtos/script-runner/ami-chart-import.dto';
 import { AmiChartCreate } from '../dtos/ami-charts/ami-chart-create.dto';
 import { AmiChartUpdate } from '../dtos/ami-charts/ami-chart-update.dto';
+import MultiselectQuestion from '../dtos/multiselect-questions/multiselect-question.dto';
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
 
 /**
@@ -32,6 +35,7 @@ export class ScriptRunnerService {
     private amiChartService: AmiChartService,
     private emailService: EmailService,
     private featureFlagService: FeatureFlagService,
+    private multiselectQuestionService: MultiselectQuestionService,
     private prisma: PrismaService,
   ) {}
 
@@ -516,6 +520,165 @@ export class ScriptRunnerService {
   }
 
   /**
+   *
+   * @param req incoming request object
+   * @returns successDTO
+   * @description migrates the preferences and programs in Detroit to the multiselectQuestions table
+   */
+  async migrateDetroitToMultiselectQuestions(
+    req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart(
+      'migrate Detroit to multiselect questions',
+      requestingUser,
+    );
+
+    const translations = {};
+
+    for (let i = 0; i < this.translationURLs.length; i++) {
+      const { url, key } = this.translationURLs[i];
+      translations[key] = await this.getTranslationFile(url);
+    }
+
+    // begin migration from preferences
+    const preferences: {
+      id;
+      title;
+      subtitle;
+      description;
+      links;
+      form_metadata;
+    }[] = await this.prisma.$queryRawUnsafe(`
+      SELECT 
+        p.id,
+        p.title,
+        p.subtitle,
+        p.description,
+        p.links,
+        p.form_metadata
+      FROM preferences p
+    `);
+
+    for (let i = 0; i < preferences.length; i++) {
+      const pref = preferences[i];
+      const jurisInfo: { id; name }[] = await this.prisma.$queryRawUnsafe(`
+          SELECT
+            j.id,
+            j.name
+          FROM jurisdictions_preferences_preferences jp
+            JOIN jurisdictions j ON jp.jurisdictions_id = j.id
+          WHERE jp.preferences_id = '${pref.id}'
+      `);
+      const { optOutText, options } = this.resolveOptionValues(
+        pref.form_metadata,
+        'preferences',
+        jurisInfo?.length ? jurisInfo[0].name : '',
+        true,
+        translations,
+      );
+      const res: MultiselectQuestion =
+        await this.multiselectQuestionService.create({
+          text: pref.title,
+          subText: pref.subtitle,
+          description: pref.description,
+          links: pref.links ?? null,
+          hideFromListing: this.resolveHideFromListings(pref),
+          optOutText: optOutText ?? null,
+          options: options,
+          applicationSection:
+            MultiselectQuestionsApplicationSectionEnum.preferences,
+          jurisdictions: jurisInfo.map((juris) => {
+            return { id: juris.id };
+          }),
+        });
+    }
+
+    // begin migration from programs
+    const programs: {
+      id;
+      title;
+      subtitle;
+      description;
+      form_metadata;
+    }[] = await this.prisma.$queryRawUnsafe(`
+      SELECT 
+        p.id,
+        p.title,
+        p.subtitle,
+        p.description,
+        p.form_metadata
+      FROM programs p
+    `);
+
+    for (let i = 0; i < programs.length; i++) {
+      const prog = programs[i];
+      const jurisInfo: { id; name }[] = await this.prisma.$queryRawUnsafe(`
+          SELECT
+            j.id,
+            j.name
+          FROM jurisdictions_programs_programs jp
+            JOIN jurisdictions j ON jp.jurisdictions_id = j.id
+          WHERE jp.programs_id = '${prog.id}'
+        `);
+
+      const { optOutText, options } = this.resolveOptionValues(
+        prog.form_metadata,
+        'programs',
+        jurisInfo?.length ? jurisInfo[0].name : '',
+        false,
+        translations,
+      );
+
+      const res: MultiselectQuestion =
+        await this.multiselectQuestionService.create({
+          text: prog.title,
+          subText: prog.subtitle,
+          description: prog.description,
+          links: null,
+          hideFromListing: this.resolveHideFromListings(prog),
+          optOutText: optOutText ?? null,
+          options: options,
+          applicationSection:
+            MultiselectQuestionsApplicationSectionEnum.programs,
+          jurisdictions: jurisInfo.map((juris) => {
+            return { id: juris.id };
+          }),
+        });
+
+      const listingsInfo: { ordinal; listing_id }[] = await this.prisma
+        .$queryRawUnsafe(`
+        SELECT
+          ordinal,
+          listing_id
+        FROM listing_programs
+        WHERE program_id = '${prog.id}';
+      `);
+      for (let i = 0; i < listingsInfo.length; i++) {
+        await this.prisma.listings.update({
+          data: {
+            listingMultiselectQuestions: {
+              create: {
+                ordinal: listingsInfo[i].ordinal,
+                multiselectQuestionId: res.id,
+              },
+            },
+          },
+          where: {
+            id: listingsInfo[i].listing_id,
+          },
+        });
+      }
+    }
+
+    await this.markScriptAsComplete(
+      'migrate Detroit to multiselect questions',
+      requestingUser,
+    );
+    return { success: true };
+  }
+
+  /**
     this is simply an example
   */
   async example(req: ExpressRequest): Promise<SuccessDTO> {
@@ -868,6 +1031,238 @@ export class ScriptRunnerService {
       description:
         "When true, show the 'sms' button option when a user goes through multi factor authentication",
       active: false,
+    },
+  ];
+
+  private resolveHideFromListings(pref): boolean {
+    if (pref.form_metadata && 'hideFromListing' in pref.form_metadata) {
+      if (pref.form_metadata.hideFromListing) {
+        return true;
+      }
+      return false;
+    }
+    return null;
+  }
+
+  private resolveOptionValues(
+    formMetaData,
+    type,
+    juris,
+    isForPreferences,
+    translations,
+  ) {
+    let optOutText = null;
+    const options = [];
+    let shouldPush = true;
+
+    formMetaData?.options?.forEach((option, index) => {
+      const toPush: Record<string, any> = {
+        ordinal: index + 1,
+        text: this.getTranslated(
+          type,
+          formMetaData.key,
+          option.key === 'preferNotToSay'
+            ? 'preferNotToSay'
+            : `${option.key}.label`,
+          juris,
+          translations,
+        ),
+      };
+
+      if (
+        !isForPreferences &&
+        (!formMetaData.type || formMetaData.type !== 'checkbox') &&
+        index !== formMetaData.options.length - 1
+      ) {
+        toPush.exclusive = true;
+      } else if (
+        option.exclusive &&
+        (formMetaData.hideGenericDecline || formMetaData.type === 'checkbox') &&
+        index !== formMetaData.options.length - 1
+      ) {
+        // for all but the last exlusive option push into options array
+        toPush.exclusive = true;
+      } else if (
+        option.exclusive &&
+        (formMetaData.hideGenericDecline || formMetaData.type === 'checkbox') &&
+        index === formMetaData.options.length - 1
+      ) {
+        // for the last exclusive option add as optOutText
+        optOutText = this.getTranslated(
+          type,
+          formMetaData.key,
+          option.key === 'preferNotToSay'
+            ? 'preferNotToSay'
+            : `${option.key}.label`,
+          juris,
+          translations,
+        );
+        shouldPush = false;
+      } else if (
+        !isForPreferences &&
+        (!formMetaData.type || formMetaData.type !== 'checkbox') &&
+        index === formMetaData.options.length - 1
+      ) {
+        // for the last exclusive option add as optOutText
+        optOutText = this.getTranslated(
+          type,
+          formMetaData.key,
+          option.key === 'preferNotToSay'
+            ? 'preferNotToSay'
+            : `${option.key}.label`,
+          juris,
+          translations,
+        );
+        shouldPush = false;
+      }
+
+      if (option.description) {
+        toPush.description = this.getTranslated(
+          type,
+          formMetaData.key,
+          option.key === 'preferNotToSay'
+            ? 'preferNotToSay'
+            : `${option.key}.description`,
+          juris,
+          translations,
+        );
+      }
+
+      if (option?.extraData.some((extraData) => extraData.type === 'address')) {
+        toPush.collectAddress = true;
+      }
+
+      if (shouldPush) {
+        options.push(toPush);
+      } else {
+        shouldPush = true;
+      }
+    });
+
+    return {
+      optOutText,
+      options: options.length ? options : null,
+    };
+  }
+
+  private getTranslated(type, prefKey, translationKey, juris, translations) {
+    let searchKey = `application.${type}.${prefKey}.${translationKey}`;
+    if (translationKey === 'preferNotToSay') {
+      searchKey = 't.preferNotToSay';
+    }
+
+    if (juris === 'Detroit') {
+      if (translations['detroitPublic'][searchKey]) {
+        return translations['detroitPublic'][searchKey];
+      } else if (translations['detroitPartners'][searchKey]) {
+        return translations['detroitPartners'][searchKey];
+      } else if (translations['detroitCore'][searchKey]) {
+        return translations['detroitCore'][searchKey];
+      }
+    } else if (['Alameda', 'San Mateo', 'San Jose'].includes(juris)) {
+      if (juris === 'Alameda' && translations['alamedaPublic'][searchKey]) {
+        return translations['alamedaPublic'][searchKey];
+      } else if (
+        juris === 'San Mateo' &&
+        translations['smcPublic'][searchKey]
+      ) {
+        return translations['smcPublic'][searchKey];
+      } else if (juris === 'San Jose' && translations['sjPublic'][searchKey]) {
+        return translations['sjPublic'][searchKey];
+      } else if (translations['hbaPublic'][searchKey]) {
+        return translations['hbaPublic'][searchKey];
+      } else if (translations['hbaPartners'][searchKey]) {
+        return translations['hbaPartners'][searchKey];
+      } else if (translations['hbaCore'][searchKey]) {
+        return translations['hbaCore'][searchKey];
+      }
+    }
+
+    if (translations['generalPublic'][searchKey]) {
+      return translations['generalPublic'][searchKey];
+    } else if (translations['generalPartners'][searchKey]) {
+      return translations['generalPartners'][searchKey];
+    } else if (translations['generalCore'][searchKey]) {
+      return translations['generalCore'][searchKey];
+    }
+    return 'no translation';
+  }
+
+  private getTranslationFile(url) {
+    return new Promise((resolve, reject) =>
+      https
+        .get(url, (res) => {
+          let body = '';
+
+          res.on('data', (chunk) => {
+            body += chunk;
+          });
+
+          res.on('end', () => {
+            try {
+              const json = JSON.parse(body);
+              resolve(json);
+            } catch (error) {
+              console.error('on end error:', error.message);
+              reject(`parsing broke: ${url}`);
+            }
+          });
+        })
+        .on('error', (error) => {
+          console.error('on error error:', error.message);
+          reject(`getting broke: ${url}`);
+        }),
+    );
+  }
+
+  translationURLs = [
+    {
+      url: 'https://raw.githubusercontent.com/bloom-housing/bloom/dev/ui-components/src/locales/general.json',
+      key: 'generalCore',
+    },
+    {
+      url: 'https://raw.githubusercontent.com/bloom-housing/bloom/dev/sites/partners/page_content/locale_overrides/general.json',
+      key: 'generalPartners',
+    },
+    {
+      url: 'https://raw.githubusercontent.com/bloom-housing/bloom/dev/sites/public/page_content/locale_overrides/general.json',
+      key: 'generalPublic',
+    },
+    {
+      url: 'https://raw.githubusercontent.com/housingbayarea/bloom/dev/ui-components/src/locales/general.json',
+      key: 'hbaCore',
+    },
+    {
+      url: 'https://raw.githubusercontent.com/housingbayarea/bloom/dev/sites/partners/page_content/locale_overrides/general.json',
+      key: 'hbaPartners',
+    },
+    {
+      url: 'https://raw.githubusercontent.com/housingbayarea/bloom/dev/sites/public/page_content/locale_overrides/general.json',
+      key: 'hbaPublic',
+    },
+    {
+      url: 'https://raw.githubusercontent.com/CityOfDetroit/bloom/9f2084c107ec865e3c13393e600a5ac45ee5f424/detroit-ui-components/src/locales/general.json',
+      key: 'detroitCore',
+    },
+    {
+      url: 'https://raw.githubusercontent.com/CityOfDetroit/bloom/dev/sites/partners/src/page_content/locale_overrides/general.json',
+      key: 'detroitPartners',
+    },
+    {
+      url: 'https://raw.githubusercontent.com/CityOfDetroit/bloom/dev/sites/public/src/page_content/locale_overrides/general.json',
+      key: 'detroitPublic',
+    },
+    {
+      url: 'https://raw.githubusercontent.com/housingbayarea/bloom/0.3_alameda/sites/public/page_content/locale_overrides/general.json',
+      key: 'alamedaPublic',
+    },
+    {
+      url: 'https://raw.githubusercontent.com/housingbayarea/bloom/0.3_smc/sites/public/page_content/locale_overrides/general.json',
+      key: 'smcPublic',
+    },
+    {
+      url: 'https://raw.githubusercontent.com/housingbayarea/bloom/san-jose/sites/public/page_content/locale_overrides/general.json',
+      key: 'sjPublic',
     },
   ];
 }

@@ -208,4 +208,19 @@ export class ScriptRunnerController {
   async addFeatureFlags(@Request() req: ExpressRequest): Promise<SuccessDTO> {
     return await this.scriptRunnerService.addFeatureFlags(req);
   }
+
+  @Put('migrateDetroitToMultiselectQuestions')
+  @ApiOperation({
+    summary:
+      'A script that moves preferences and programs to multiselect questions in Detroit db',
+    operationId: 'migrateDetroitToMultiselectQuestions',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async migrateDetroitToMultiselectQuestions(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.migrateDetroitToMultiselectQuestions(
+      req,
+    );
+  }
 }
