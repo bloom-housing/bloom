@@ -11,6 +11,7 @@ import { HeaderLink, SiteHeader } from "../patterns/SiteHeader"
 import styles from "./application.module.scss"
 import { User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ToastProps } from "@bloom-housing/ui-seeds/src/blocks/Toast"
+import Markdown from "markdown-to-jsx"
 
 const isMessageActive = (windowEnv: string) => {
   let isActive = false
@@ -90,14 +91,14 @@ const getSiteHeaderDeprecated = (
       {showMaintenanceMessage && (
         <div className={`${styles["site-banner-container"]} ${styles["site-banner-alert-bg"]}`}>
           <Message className={styles["site-alert-banner-content"]} variant={"alert"}>
-            {t("alert.maintenance")}
+            <Markdown>{t("alert.maintenance")}</Markdown>
           </Message>
         </div>
       )}
       {showGenericSiteMessage && (
         <div className={`${styles["site-banner-container"]} ${styles["site-banner-primary-bg"]}`}>
           <Message className={styles["site-alert-banner-content"]} variant={"primary"}>
-            {t("siteMessage.generic")}
+            <Markdown>{t("siteMessage.generic")}</Markdown>
           </Message>
         </div>
       )}
