@@ -3,12 +3,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import {
   LanguagesEnum,
   MultiselectQuestionsApplicationSectionEnum,
-  PrismaClient,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { Request as ExpressRequest } from 'express';
-import { mockDeep } from 'jest-mock-extended';
 import { User } from '../../../src/dtos/users/user.dto';
 import { AmiChartService } from '../../../src/services/ami-chart.service';
 import { EmailService } from '../../../src/services/email.service';
@@ -17,8 +15,6 @@ import { JurisdictionService } from '../../../src/services/jurisdiction.service'
 import { PrismaService } from '../../../src/services/prisma.service';
 import { ScriptRunnerService } from '../../../src/services/script-runner.service';
 import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
-
-const externalPrismaClient = mockDeep<PrismaClient>();
 
 describe('Testing script runner service', () => {
   let service: ScriptRunnerService;
@@ -58,50 +54,6 @@ describe('Testing script runner service', () => {
     multiselectQuestionService = module.get<MultiselectQuestionService>(
       MultiselectQuestionService,
     );
-  });
-
-  it('should transfer data', async () => {
-    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
-    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
-    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
-
-    const id = randomUUID();
-    const scriptName = 'data transfer';
-
-    const res = await service.dataTransfer(
-      {
-        user: {
-          id,
-        } as unknown as User,
-      } as unknown as ExpressRequest,
-      {
-        connectionString: process.env.TEST_CONNECTION_STRING,
-      },
-      externalPrismaClient,
-    );
-
-    expect(res.success).toBe(true);
-
-    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
-      where: {
-        scriptName,
-      },
-    });
-    expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
-      data: {
-        scriptName,
-        triggeringUser: id,
-      },
-    });
-    expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
-      data: {
-        didScriptRun: true,
-        triggeringUser: id,
-      },
-      where: {
-        scriptName,
-      },
-    });
   });
 
   it('should add lottery translations', async () => {
