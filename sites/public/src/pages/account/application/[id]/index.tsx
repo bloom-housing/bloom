@@ -32,7 +32,6 @@ export default () => {
           listingsService
             ?.retrieve({ id: app.listings.id, view: ListingViews.base })
             .then((retrievedListing) => {
-              // TODO: fix this once this page is migrated
               setListing(retrievedListing)
               setLoading(false)
             })
