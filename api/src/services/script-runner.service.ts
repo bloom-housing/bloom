@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException, HttpException } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import {
   LanguagesEnum,
   MultiselectQuestionsApplicationSectionEnum,
@@ -534,21 +534,20 @@ export class ScriptRunnerService {
         true,
         translations,
       );
-      const res: MultiselectQuestion =
-        await this.multiselectQuestionService.create({
-          text: pref.title,
-          subText: pref.subtitle,
-          description: pref.description,
-          links: pref.links ?? null,
-          hideFromListing: this.resolveHideFromListings(pref),
-          optOutText: optOutText ?? null,
-          options: options,
-          applicationSection:
-            MultiselectQuestionsApplicationSectionEnum.preferences,
-          jurisdictions: jurisInfo.map((juris) => {
-            return { id: juris.id };
-          }),
-        });
+      await this.multiselectQuestionService.create({
+        text: pref.title,
+        subText: pref.subtitle,
+        description: pref.description,
+        links: pref.links ?? null,
+        hideFromListing: this.resolveHideFromListings(pref),
+        optOutText: optOutText ?? null,
+        options: options,
+        applicationSection:
+          MultiselectQuestionsApplicationSectionEnum.preferences,
+        jurisdictions: jurisInfo.map((juris) => {
+          return { id: juris.id };
+        }),
+      });
     }
 
     // begin migration from programs
