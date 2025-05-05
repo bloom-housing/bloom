@@ -834,6 +834,7 @@
   "seasons.summer": "Summer",
   "seasons.winter": "Winter",
   "states.AL": "Alabama",
+  "siteMessage.generic": "This is a generic site message to inform users of important information to consider as they search for affordable housing and supportive resources. For more information, check out this <a className='lined' href='https://www.example.com/' target='_blank'>example site</a>.",
   "states.AK": "Alaska",
   "states.AR": "Arkansas",
   "states.AZ": "Arizona",

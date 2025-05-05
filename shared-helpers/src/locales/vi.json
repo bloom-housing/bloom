@@ -819,6 +819,7 @@
   "progressNav.notCompleted": "chưa hoàn thành",
   "progressNav.srHeading": "Tiến trình",
   "region.name": "Địa phương",
+  "siteMessage.generic": "Đây là thông báo trang web chung để thông báo cho người dùng những thông tin quan trọng cần cân nhắc khi họ tìm kiếm nhà ở giá rẻ và các nguồn hỗ trợ. Để biết thêm thông tin, hãy xem <a className='lined' href='https://www.example.com/' target='_blank'>trang web mẫu</a> này.",
   "states.AK": "Alaska",
   "states.AL": "Alabama",
   "states.AR": "Arkansas",
