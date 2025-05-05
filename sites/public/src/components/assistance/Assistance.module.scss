@@ -20,12 +20,23 @@
     .item {
       height: min-content;
 
+      h2 {
+        font-family: var(--seeds-font-alt-sans);
+        font-weight: var(--seeds-font-weight-semibold);
+      }
+
       .item-link {
         padding: var(--seeds-spacer-section);
       }
 
       .item-icon {
-        color: var(--seeds-color-black);
+        color: var(--seeds-color-primary);
+        background-color: var(--seeds-bg-color-surface-primary);
+        border-radius: var(--seeds-rounded-full);
+        padding: var(--seeds-s2);
+        svg {
+          fill: none;
+        }
       }
     }
   }
