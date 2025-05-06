@@ -771,6 +771,11 @@ describe("listing data", () => {
                   hearing: true,
                   visual: true,
                   mobility: true,
+                  barrierFreeUnitEntrance: true,
+                  loweredLightSwitch: true,
+                  barrierFreeBathroom: true,
+                  wideDoorways: true,
+                  loweredCabinets: true,
                 },
               }}
             >
