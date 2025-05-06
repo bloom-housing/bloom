@@ -118,9 +118,11 @@ const Layout = (props: LayoutProps) => {
         <Head>
           <title>{t("nav.siteTitle")}</title>
         </Head>
-        {/* temporary change to infra maintenance, should return to alert.maintenance after window */}
-        <AlertBanner maintenanceWindow={process.env.maintenanceWindow} variant={"primary"}>
-          <Markdown>{t("alert.infraMaintenance")}</Markdown>
+        <AlertBanner windowEnv={process.env.maintenanceWindow} variant={"alert"}>
+          <Markdown>{t("alert.maintenance")}</Markdown>
+        </AlertBanner>
+        <AlertBanner windowEnv={process.env.siteMessageWindow} variant={"primary"}>
+          <Markdown>{t("siteMessage.achpTranstion")}</Markdown>
         </AlertBanner>
         <SiteHeader
           logoSrc="/images/doorway-logo.png"

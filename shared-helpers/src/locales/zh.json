@@ -1165,6 +1165,7 @@
   "session.voided.context2": " 沒有提交。請重新登入以提交您的申請。",
   "session.voided.context3": "您將被重新導向到登入頁面。",
   "session.voided.ok": "好的",
+  "siteMessage.achpTranstion": "歡迎阿拉米達縣住房門戶網站用戶！ 要了解有關 Doorway 的更多信息，請訪問：<a className='lined' href='https://mtc.ca.gov/achp-to-doorway' target='_blank'>https://mtc.ca.gov/achp-to-doorway</a>。",
   "states.AK": "Alaska（阿拉斯加州）",
   "states.AL": "Alabama（阿拉巴馬州）",
   "states.AR": "Arkansas（阿肯色州）",

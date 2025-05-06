@@ -1115,6 +1115,7 @@
   "session.voided.context2": " was not submitted. Please sign in again to submit your application.",
   "session.voided.context3": "You will be redirected to the sign in page.",
   "session.voided.ok": "OK",
+  "siteMessage.achpTranstion": "Welcome Alameda County Housing Portal users!  To learn more about the differences with Doorway, please visit:<a className='lined' href='https://mtc.ca.gov/achp-to-doorway' target='_blank'>https://mtc.ca.gov/achp-to-doorway</a>.",
   "states.AK": "Alaska",
   "states.AL": "Alabama",
   "states.AR": "Arkansas",

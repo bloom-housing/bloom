@@ -47,6 +47,7 @@ module.exports = withBundleAnalyzer({
     showPwdless: process.env.SHOW_PWDLESS === "TRUE",
     notificationsSignUpUrl: process.env.NOTIFICATIONS_SIGN_UP_URL || null,
     maintenanceWindow: process.env.MAINTENANCE_WINDOW,
+    siteMessageWindow: process.env.SITE_MESSAGE_WINDOW,
     mtcDataUrl: process.env.MTC_DATA_URL,
     awsS3BucketName: process.env.AWS_S3_BUCKET_NAME,
     awsAccessKey: process.env.AWS_ACCESS_KEY_ID,

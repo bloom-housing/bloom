@@ -1165,6 +1165,7 @@
   "session.voided.context2": " đã không được nộp. Vui lòng đăng nhập lại để gửi đơn đăng ký của bạn.",
   "session.voided.context3": "Bạn sẽ được chuyển hướng đến trang đăng nhập.",
   "session.voided.ok": "ĐƯỢC RỒI",
+  "siteMessage.achpTranstion": "Chào mừng người dùng Cổng thông tin nhà ở của Quận Alameda! Để tìm hiểu thêm về sự khác biệt với Doorway, vui lòng truy cập:<a className='lined' href='https://mtc.ca.gov/achp-to-doorway' target='_blank'>https://mtc.ca.gov/achp-to-doorway</a>.",
   "states.AK": "Alaska",
   "states.AL": "Alabama",
   "states.AR": "Arkansas",

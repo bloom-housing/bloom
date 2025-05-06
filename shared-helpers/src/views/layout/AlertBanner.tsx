@@ -5,27 +5,27 @@ import styles from "./AlertBanner.module.scss"
 
 export type AlertBannerProps = {
   children: React.ReactNode
-  maintenanceWindow?: string
+  windowEnv?: string
   variant?: "primary" | "alert"
 }
 
-const AlertBanner = ({ children, maintenanceWindow, variant }: AlertBannerProps) => {
-  const getInMaintenance = () => {
-    let inMaintenance = false
-    const maintenanceWindowSplit = maintenanceWindow?.split(",")
-    if (maintenanceWindowSplit?.length === 2) {
+const AlertBanner = ({ children, windowEnv, variant }: AlertBannerProps) => {
+  const isMessageActive = () => {
+    let isActive = false
+    const messageWindow = windowEnv?.split(",")
+    if (messageWindow?.length === 2) {
       const convertWindowToDate = (windowString: string) =>
         dayjs(windowString, "YYYY-MM-DD HH:mm Z")
-      const startWindow = convertWindowToDate(maintenanceWindowSplit[0])
-      const endWindow = convertWindowToDate(maintenanceWindowSplit[1])
+      const startWindow = convertWindowToDate(messageWindow[0])
+      const endWindow = convertWindowToDate(messageWindow[1])
       const now = dayjs()
-      inMaintenance = now > startWindow && now < endWindow
+      isActive = now > startWindow && now < endWindow
     }
-    return inMaintenance
+    return isActive
   }
 
   return (
-    getInMaintenance() && (
+    isMessageActive() && (
       <div className={styles["site-alert-banner-container"]} data-variant={variant}>
         <Message className={styles["site-alert-banner-content"]} variant={variant}>
           <>{children}</>

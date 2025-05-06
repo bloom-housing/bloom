@@ -1162,6 +1162,7 @@
   "session.voided.context2": " no fue presentado. Inicie sesión nuevamente para enviar su solicitud.",
   "session.voided.context3": "Serás redirigido a la página de inicio de sesión.",
   "session.voided.ok": "DE ACUERDO",
+  "siteMessage.achpTranstion": "¡Bienvenidos usuarios del Portal de Vivienda del Condado de Alameda! Para obtener más información sobre las diferencias con Doorway, visiten: <a className='lined' href='https://mtc.ca.gov/achp-to-doorway' target='_blank'>https://mtc.ca.gov/achp-to-doorway</a>.",
   "states.AK": "Alaska",
   "states.AL": "Alabama",
   "states.AR": "Arkansas",
