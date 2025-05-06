@@ -6,7 +6,11 @@ import { Icon } from "@bloom-housing/ui-seeds"
 import styles from "./MapControl.module.scss"
 import { t } from "@bloom-housing/ui-components"
 
-const MapControl = () => {
+type MapControlProps = {
+  setInfoWindowIndex?: React.Dispatch<React.SetStateAction<number>>
+}
+
+const MapControl = (props: MapControlProps) => {
   const map = useMap()
 
   if (!map) return null
@@ -15,7 +19,10 @@ const MapControl = () => {
     <div aria-label={t("t.mapControls")} role="group" className={styles["map-control"]}>
       <button
         className={`${styles["control-style"]} ${styles["in-style"]}`}
-        onClick={() => map.setZoom(map.getZoom() + 1)}
+        onClick={() => {
+          map.setZoom(map.getZoom() + 1)
+          if (props.setInfoWindowIndex) props.setInfoWindowIndex(null)
+        }}
         aria-label={t("t.zoomIn")}
         data-testid="map-zoom-in"
       >
@@ -25,7 +32,10 @@ const MapControl = () => {
       </button>
       <button
         className={`${styles["control-style"]} ${styles["out-style"]}`}
-        onClick={() => map.setZoom(map.getZoom() - 1)}
+        onClick={() => {
+          map.setZoom(map.getZoom() - 1)
+          if (props.setInfoWindowIndex) props.setInfoWindowIndex(null)
+        }}
         aria-label={t("t.zoomOut")}
         data-testid="map-zoom-out"
       >

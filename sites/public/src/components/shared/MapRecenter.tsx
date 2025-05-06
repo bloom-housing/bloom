@@ -41,6 +41,7 @@ const MapRecenter = (props: MapRecenterProps) => {
         }}
         size={"sm"}
         variant={"primary-outlined"}
+        id={"map-recenter-button"}
       >
         {t("t.recenterMap")}
       </Button>

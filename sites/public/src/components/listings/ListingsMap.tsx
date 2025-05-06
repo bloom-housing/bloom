@@ -82,7 +82,8 @@ const ListingsMap = (props: ListingsMapProps) => {
         defaultCenter={defaultCenter}
         clickableIcons={false}
       >
-        <MapControl />
+        <MapControl setInfoWindowIndex={setInfoWindowIndex} />
+
         <MapRecenter
           mapMarkers={props.listings}
           visibleMapMarkers={props.visibleMarkers?.length}

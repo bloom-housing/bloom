@@ -37,7 +37,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
   const [listView, setListView] = useState<boolean>(true)
   const [visibleMarkers, setVisibleMarkers] = useState<MapMarkerData[]>(null)
   const [currentMarkers, setCurrentMarkers] = useState<MapMarkerData[]>(null)
-  const [isDesktop, setIsDesktop] = useState(true)
+  const [isDesktop, setIsDesktop] = useState(undefined)
   const [isLoading, setIsLoading] = useState(true)
   const [isFirstBoundsLoad, setIsFirstBoundsLoad] = useState<boolean>(true)
 
@@ -80,7 +80,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
 
   const search = async (page: number, changingFilter?: boolean) => {
     // If a user pans over empty space, reset the listings to empty instead of refetching
-
+    if (isDesktop === undefined) return
     const oldMarkersSearch = JSON.stringify(
       currentMarkers?.sort((a, b) => a.coordinate.lat - b.coordinate.lat)
     )
@@ -119,7 +119,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
       // Mobile view doesn't rely on the map
       !isDesktop ||
       // A page change should still fetch listings as the map markers won't change
-      page !== searchResults.currentPage ||
+      (searchResults.currentPage !== 0 && page !== searchResults.currentPage) ||
       (!isFirstBoundsLoad &&
         !!map &&
         oldMarkersSearch !== newMarkersSearch &&
@@ -210,9 +210,8 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
     async function searchListings() {
       await search(1, true)
     }
-    if (!isDesktop) {
-      void searchListings()
-    }
+
+    void searchListings()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDesktop])
 

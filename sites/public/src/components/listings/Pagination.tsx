@@ -58,7 +58,12 @@ export function Pagination(props: PaginationProps) {
     const styleType = isCurrent ? AppearanceStyleType.primary : null
 
     pageButtons.push(
-      <Button styleType={styleType} onClick={onClick} size={AppearanceSizeType.small}>
+      <Button
+        styleType={styleType}
+        onClick={onClick}
+        size={AppearanceSizeType.small}
+        id={`pagination-${i}`}
+      >
         {i}
       </Button>
     )
