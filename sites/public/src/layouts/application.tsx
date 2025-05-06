@@ -16,17 +16,17 @@ import styles from "./application.module.scss"
 import { User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ToastProps } from "@bloom-housing/ui-seeds/src/blocks/Toast"
 
-const getInMaintenance = () => {
-  let inMaintenance = false
-  const maintenanceWindow = process.env.maintenanceWindow?.split(",")
-  if (maintenanceWindow?.length === 2) {
+const isMessageActive = (windowEnv: string) => {
+  let isActive = false
+  const messageWindow = windowEnv?.split(",")
+  if (messageWindow?.length === 2) {
     const convertWindowToDate = (windowString: string) => dayjs(windowString, "YYYY-MM-DD HH:mm Z")
-    const startWindow = convertWindowToDate(maintenanceWindow[0])
-    const endWindow = convertWindowToDate(maintenanceWindow[1])
+    const startWindow = convertWindowToDate(messageWindow[0])
+    const endWindow = convertWindowToDate(messageWindow[1])
     const now = dayjs()
-    inMaintenance = now > startWindow && now < endWindow
+    isActive = now > startWindow && now < endWindow
   }
-  return inMaintenance
+  return isActive
 }
 
 const getSiteHeaderDeprecated = (
@@ -38,7 +38,8 @@ const getSiteHeaderDeprecated = (
     prefix: string
     label: string
   }[],
-  inMaintenance: boolean
+  showGenericSiteMessage: boolean,
+  showMaintenanceMessage: boolean
 ) => {
   const menuLinks: MenuLink[] = [
     {
@@ -91,7 +92,7 @@ const getSiteHeaderDeprecated = (
   let siteNotice = <div></div>
   let transitionMessage = null
   if (process.env.jurisdictionName === "Alameda") {
-    transitionMessage = t("alert.transitionv3")
+    transitionMessage = t("alert.transitionv4")
   }
   if (process.env.jurisdictionName === "San Jose") {
     siteNotice = <SanJoseNotice />
@@ -103,16 +104,24 @@ const getSiteHeaderDeprecated = (
   return (
     <>
       {transitionMessage && (
-        <div className={styles["site-alert-banner-container"]}>
+        <div className={`${styles["site-banner-container"]} ${styles["site-banner-primary-bg"]}`}>
           <Message className={styles["site-alert-banner-content"]} variant={"primary"}>
             <Markdown>{transitionMessage}</Markdown>
           </Message>
         </div>
       )}
-      {inMaintenance && (
-        <div className={styles["site-alert-banner-container"]}>
+
+      {showMaintenanceMessage && (
+        <div className={`${styles["site-banner-container"]} ${styles["site-banner-alert-bg"]}`}>
           <Message className={styles["site-alert-banner-content"]} variant={"alert"}>
-            {t("alert.maintenance")}
+            <Markdown>{t("alert.maintenance")}</Markdown>
+          </Message>
+        </div>
+      )}
+      {showGenericSiteMessage && (
+        <div className={`${styles["site-banner-container"]} ${styles["site-banner-primary-bg"]}`}>
+          <Message className={styles["site-alert-banner-content"]} variant={"primary"}>
+            <Markdown>{t("siteMessage.generic")}</Markdown>
           </Message>
         </div>
       )}
@@ -250,7 +259,15 @@ const Layout = (props) => {
             showMessageBar={true}
           />
         ) : (
-          getSiteHeaderDeprecated(router, profile, signOut, addToast, languages, getInMaintenance())
+          getSiteHeaderDeprecated(
+            router,
+            profile,
+            signOut,
+            addToast,
+            languages,
+            isMessageActive(process.env.siteMessageWindow),
+            isMessageActive(process.env.maintenanceWindow)
+          )
         )}
         <div
           id="main-content"

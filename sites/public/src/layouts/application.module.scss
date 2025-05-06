@@ -1,9 +1,16 @@
-.site-alert-banner-container {
-  background-color: var(--seeds-color-primary-light);
+.site-banner-container {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.site-banner-alert-bg {
+  background-color: var(--seeds-color-alert-light);
+}
+
+.site-banner-primary-bg {
+  background-color: var(--seeds-color-primary-light);
 }
 
 .site-alert-banner-content {
