@@ -818,6 +818,7 @@
   "progressNav.notCompleted": "没完成",
   "progressNav.srHeading": "进度",
   "region.name": "當地地區",
+  "siteMessage.generic": "這是一條通用的網站消息，旨在告知用戶在搜索經濟適用房和支持資源時需要考慮的重要信息。更多信息，請查看此<a className='lined' href='https://www.example.com/' target='_blank'>示例網站</a>。",
   "states.AK": "Alaska（阿拉斯加州）",
   "states.AL": "Alabama（阿拉巴馬州）",
   "states.AR": "Arkansas（阿肯色州）",
