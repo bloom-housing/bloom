@@ -1,7 +1,7 @@
 import { defineConfig } from "cypress"
 
 export default defineConfig({
-  defaultCommandTimeout: 100000,
+  defaultCommandTimeout: 60000,
   projectId: "f32m8f",
   pageLoadTimeout: 100000,
   video: true,

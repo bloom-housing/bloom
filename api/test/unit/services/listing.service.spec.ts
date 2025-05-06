@@ -4023,13 +4023,20 @@ describe('Testing listing service', () => {
   });
 
   describe('Test mapMarkers endpoint', () => {
-    it('should find all active listings', async () => {
-      prisma.combinedListings.findMany = jest
-        .fn()
-        .mockResolvedValue([
-          constructFullListingData(),
-          constructFullListingData(),
-        ]);
+    it('should find all active listings map markers', async () => {
+      prisma.mapMarkers.findMany = jest.fn().mockResolvedValue([
+        {
+          id: randomUUID(),
+          latitude: '45.0000000000',
+          longitude: '-93.32161970414693',
+        },
+        {
+          id: randomUUID(),
+          latitude: '45.0000000000',
+          longitude: '-93.32161970414693',
+        },
+        ,
+      ]);
 
       prisma.$queryRawUnsafe = jest
         .fn()
@@ -4039,16 +4046,115 @@ describe('Testing listing service', () => {
 
       await service.mapMarkers(params);
 
-      expect(prisma.combinedListings.findMany).toHaveBeenCalledWith({
+      expect(prisma.$queryRawUnsafe).toHaveBeenCalledTimes(0);
+
+      expect(prisma.mapMarkers.findMany).toHaveBeenCalledWith({
         select: {
           id: true,
-          listingsBuildingAddress: true,
+          latitude: true,
+          longitude: true,
+        },
+        where: {
+          status: ListingsStatusEnum.active,
+          id: undefined,
+        },
+      });
+    });
+
+    it('should find all filtered listings map markers', async () => {
+      prisma.mapMarkers.findMany = jest.fn().mockResolvedValue([
+        {
+          id: randomUUID(),
+          latitude: '45.0000000000',
+          longitude: '-93.32161970414693',
+        },
+      ]);
+
+      const generatedListingId = randomUUID();
+      prisma.$queryRawUnsafe = jest
+        .fn()
+        .mockResolvedValue([{ id: generatedListingId }]);
+
+      const params: ListingsQueryParams = {
+        filter: [
+          {
+            [ListingFilterKeys.name]: 'Listing,name',
+            $comparison: Compare.IN,
+          },
+          {
+            [ListingFilterKeys.bedrooms]: 2,
+            $comparison: Compare['>='],
+          },
+          {
+            [ListingFilterKeys.jurisdiction]: 'Jurisdiction',
+            $comparison: Compare['='],
+          },
+        ],
+      };
+
+      await service.mapMarkers(params);
+
+      expect(prisma.mapMarkers.findMany).toHaveBeenCalledWith({
+        select: {
+          id: true,
+          latitude: true,
+          longitude: true,
         },
         where: {
           status: ListingsStatusEnum.active,
           id: {
-            in: expect.any(Array),
+            in: [generatedListingId],
           },
+        },
+      });
+    });
+
+    it('should find all listings map markers if counties is filtered', async () => {
+      prisma.mapMarkers.findMany = jest.fn().mockResolvedValue([
+        {
+          id: randomUUID(),
+          latitude: '45.0000000000',
+          longitude: '-93.32161970414693',
+        },
+      ]);
+
+      const generatedListingId = randomUUID();
+      prisma.$queryRawUnsafe = jest
+        .fn()
+        .mockResolvedValue([{ id: generatedListingId }]);
+
+      const params: ListingsQueryParams = {
+        filter: [
+          {
+            [ListingFilterKeys.counties]: [
+              'Alameda',
+              'Contra Costa',
+              'Marin',
+              'Napa',
+              'San Francisco',
+              'San Mateo',
+              'Santa Clara',
+              'Solano',
+              'Sonoma',
+            ],
+            $comparison: Compare.IN,
+          },
+        ],
+      };
+
+      await service.mapMarkers(params);
+
+      expect(prisma.$queryRawUnsafe).toHaveBeenCalledTimes(0);
+
+      expect(prisma.mapMarkers.findMany).toHaveBeenCalledWith({
+        select: {
+          id: true,
+          latitude: true,
+          longitude: true,
+        },
+        where: {
+          status: ListingsStatusEnum.active,
+          id: undefined,
         },
       });
     });

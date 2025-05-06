@@ -141,6 +141,8 @@ views.details = {
 };
 
 const LISTING_CRON_JOB_NAME = 'LISTING_CRON_JOB';
+// Number of counties that Doorway supports
+const TOTAL_COUNTY_COUNT = 9;
 /*
   this is the service for listings
   it handles all the backend's business logic for reading in listing(s)
@@ -241,7 +243,8 @@ export class ListingService implements OnModuleInit {
     const onlyLettersPattern = /^[A-Za-z ]+$/;
     const whereClauseArray = [];
     const queryParameters = [];
-    if (params?.filter?.length) {
+    let includeUnitFiltering = false;
+    if (params?.filter?.length && this.findIfThereAreAnyFilters(params)) {
       params.filter.forEach((filter) => {
         if (filter[ListingFilterKeys.counties]) {
           const countyArray = [];
@@ -262,6 +265,7 @@ export class ListingService implements OnModuleInit {
           whereClauseArray.push(`combined.id in (${listingsArray})`);
         }
         if (filter[ListingFilterKeys.bedrooms]) {
+          includeUnitFiltering = true;
           whereClauseArray.push(
             `(combined_units->>'numBedrooms') =  '${Math.floor(
               filter[ListingFilterKeys.bedrooms],
@@ -269,6 +273,7 @@ export class ListingService implements OnModuleInit {
           );
         }
         if (filter[ListingFilterKeys.bathrooms]) {
+          includeUnitFiltering = true;
           whereClauseArray.push(
             `(combined_units->>'numBathrooms') =  '${Math.floor(
               filter[ListingFilterKeys.bathrooms],
@@ -287,6 +292,7 @@ export class ListingService implements OnModuleInit {
           whereClauseArray.push(`combined.units_available >= 1`);
         }
         if (filter[ListingFilterKeys.monthlyRent]) {
+          includeUnitFiltering = true;
           const comparison = filter['$comparison'];
           whereClauseArray.push(
             `(combined_units->>'monthlyRent')::FLOAT ${comparison} '${
@@ -312,10 +318,18 @@ export class ListingService implements OnModuleInit {
     whereClauseArray.push("combined.status = 'active'");
 
     const whereClause = whereClauseArray?.length
-      ? `where ${whereClauseArray.join(' AND ')}`
+      ? `${whereClauseArray.join(' AND ')}`
       : '';
+
+    // Only add the unit joins if we need to filter on those fields
     const rawQuery = `select DISTINCT combined.id AS id
-    From combined_listings combined, jsonb_array_elements(combined.units) combined_units
+    From combined_listings combined ${
+      includeUnitFiltering
+        ? `, combined_listings_units combined_listings_units, jsonb_array_elements(combined_listings_units.units) combined_units where combined.id = combined_listings_units.id ${
+            whereClause ? 'AND ' : ''
+          }`
+        : 'where '
+    }
     ${whereClause}`;
 
     // The raw unsafe query is not ideal. But for the use case we have it is the only way
@@ -339,7 +353,6 @@ export class ListingService implements OnModuleInit {
   }> {
     const listingIds = await this.buildListingsWhereClause(params);
     const count = listingIds?.length;
-
     // if passed in page and limit would result in no results because there aren't that many listings
     // revert back to the first page
     let page = params.page;
@@ -353,9 +366,13 @@ export class ListingService implements OnModuleInit {
       skip: calculateSkip(params.limit, page),
       take: calculateTake(params.limit),
       where: {
-        id: {
-          in: listingIds.map((listing) => listing.id),
-        },
+        status: ListingsStatusEnum.active,
+        // Only filter by id if there are filters
+        id: this.findIfThereAreAnyFilters(params)
+          ? {
+              in: listingIds.map((listing) => listing.id),
+            }
+          : undefined,
       },
       orderBy: buildOrderByForListings(
         [ListingOrderByKeys.mostRecentlyPublished],
@@ -363,20 +380,24 @@ export class ListingService implements OnModuleInit {
       ) as Prisma.CombinedListingsOrderByWithRelationInput[],
     });
 
-    listingsRaw.forEach((listing) => {
-      if (
-        !listing.unitsSummarized &&
-        Array.isArray(listing.units) &&
-        listing.units.length > 0
-      ) {
-        listing.unitsSummarized = {
-          byUnitTypeAndRent: summarizeUnitsByTypeAndRent(
-            listing.units as unknown as Unit[],
-            listing as unknown as Listing,
-          ),
-        } as unknown as Prisma.JsonObject;
+    // Get units for each listing if it doesn't already exist
+    for (const listing of listingsRaw) {
+      if (!listing.unitsSummarized) {
+        const units = await this.prisma.combinedListingsUnits.findFirst({
+          where: {
+            id: listing.id,
+          },
+        });
+        if (units) {
+          listing.unitsSummarized = {
+            byUnitTypeAndRent: summarizeUnitsByTypeAndRent(
+              units.units as unknown as Unit[],
+              listing as unknown as Listing,
+            ),
+          } as unknown as Prisma.JsonObject;
+        }
       }
-    });
+    }
 
     const paginationInfo = buildPaginationMetaInfo(
       params,
@@ -1553,7 +1574,13 @@ export class ListingService implements OnModuleInit {
         `listingId ${id} was requested but not found`,
       );
     }
-    return listing;
+    const units = await this.prisma.combinedListingsUnits.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    return { ...listing, units: units?.units || [] };
   }
 
   /*
@@ -2345,29 +2372,48 @@ export class ListingService implements OnModuleInit {
     return listing.jurisdictionId;
   }
 
-  async mapMarkers(params: ListingsQueryParams): Promise<ListingMapMarker[]> {
-    const listingIds = await this.buildListingsWhereClause(params);
+  // When only filtering on county we don't actually need to filter if the county count is all of them we support
+  findIfThereAreAnyFilters(params: ListingsQueryParams): boolean {
+    return !!params.filter?.find((filter) => {
+      if (filter[ListingFilterKeys.counties]) {
+        if (filter[ListingFilterKeys.counties].length !== TOTAL_COUNTY_COUNT) {
+          return true;
+        }
+      } else {
+        return true;
+      }
+    });
+  }
 
-    const listingsRaw = await this.prisma.combinedListings.findMany({
+  async mapMarkers(params: ListingsQueryParams): Promise<ListingMapMarker[]> {
+    let listingIds = [];
+    const areThereAnyFilters = this.findIfThereAreAnyFilters(params);
+
+    if (areThereAnyFilters) {
+      listingIds = await this.buildListingsWhereClause(params);
+    }
+
+    const mapMarkersRaw = await this.prisma.mapMarkers.findMany({
       select: {
         id: true,
-        listingsBuildingAddress: true,
+        latitude: true,
+        longitude: true,
       },
       where: {
         status: ListingsStatusEnum.active,
-        id: {
-          in: listingIds.map((listing) => listing.id),
-        },
+        id: areThereAnyFilters
+          ? {
+              in: listingIds.map((listing) => listing.id),
+            }
+          : undefined,
       },
     });
 
-    const listings = mapTo(Listing, listingsRaw);
-
-    return listings.map((listing) => {
+    return mapMarkersRaw.map((mapMarker) => {
       return {
-        id: listing.id,
-        lat: listing.listingsBuildingAddress.latitude,
-        lng: listing.listingsBuildingAddress.longitude,
+        id: mapMarker.id,
+        lat: Number(mapMarker.latitude),
+        lng: Number(mapMarker.longitude),
       } as ListingMapMarker;
     });
   }

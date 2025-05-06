@@ -13,14 +13,17 @@ import {
   UserRoleEnum,
 } from '@prisma/client';
 import dayjs from 'dayjs';
+import { randomInt } from 'node:crypto';
 import { ValidationMethod } from '../src/enums/multiselect-questions/validation-method-enum';
 import {
+  realBayAreaPlaces,
   rockyMountainAddress,
   stagingRealisticAddresses,
   yosemiteAddress,
 } from './seed-helpers/address-factory';
 import { amiChartFactory } from './seed-helpers/ami-chart-factory';
 import { applicationFactory } from './seed-helpers/application-factory';
+import { randomBoolean } from './seed-helpers/boolean-generator';
 import { householdMemberFactorySingle } from './seed-helpers/household-member-factory';
 import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
 import {
@@ -1387,10 +1390,35 @@ export const stagingSeed = async (
         prismaClient,
         {
           amiChart: amiChart,
-          numberOfUnits: 4,
+          // most listings are under 10 units but there are some that get up to 175. This simulates that spread
+          numberOfUnits:
+            Math.random() < 0.9 ? randomInt(1, 10) : randomInt(10, 200),
           digitalApp: !!(index % 2),
+          status: ListingsStatusEnum.active,
           address: addr,
           publishedAt: dayjs(new Date()).subtract(5, 'days').toDate(),
+        },
+      );
+      await prismaClient.listings.create({
+        data: listing,
+      });
+    });
+
+    // Add closed and pending listings
+    Object.values(realBayAreaPlaces).forEach(async (addr, index) => {
+      const listing = await listingFactory(
+        jurisdictionNameMap[addr.county],
+        prismaClient,
+        {
+          amiChart: amiChart,
+          // most listings are under 10 units but there are some that get up to 175. This simulates that spread
+          numberOfUnits:
+            Math.random() < 0.9 ? randomInt(1, 10) : randomInt(10, 200),
+          digitalApp: !!(index % 2),
+          status: randomBoolean()
+            ? ListingsStatusEnum.pending
+            : ListingsStatusEnum.closed,
+          address: addr,
         },
       );
       await prismaClient.listings.create({

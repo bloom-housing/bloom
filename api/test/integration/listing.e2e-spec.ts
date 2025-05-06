@@ -52,17 +52,22 @@ import {
   reservedCommunityTypeFactoryGet,
 } from '../../prisma/seed-helpers/reserved-community-type-factory';
 import { ListingPublishedCreate } from '../../src/dtos/listings/listing-published-create.dto';
-import { addressFactory } from '../../prisma/seed-helpers/address-factory';
+import {
+  addressFactory,
+  realBayAreaPlaces,
+} from '../../prisma/seed-helpers/address-factory';
 import { AddressCreate } from '../../src/dtos/addresses/address-create.dto';
 import { EmailService } from '../../src/services/email.service';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { unitFactorySingle } from '../../prisma/seed-helpers/unit-factory';
+import { translationFactory } from '../../prisma/seed-helpers/translation-factory';
 
 describe('Listing Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let jurisdictionAId: string;
   let adminAccessToken: string;
+  let unitTypes;
 
   const mockSeSClient = mockClient(SESv2Client);
   const mockListingOpportunity = jest.fn();
@@ -149,6 +154,10 @@ describe('Listing Controller Tests', () => {
     adminAccessToken = res.header?.['set-cookie'].find((cookie) =>
       cookie.startsWith('access-token='),
     );
+    unitTypes = await unitTypeFactoryAll(prisma);
+    await prisma.translations.create({
+      data: translationFactory(),
+    });
   });
 
   afterAll(async () => {
@@ -170,7 +179,6 @@ describe('Listing Controller Tests', () => {
       });
     }
 
-    await unitTypeFactoryAll(prisma);
     const unitType = await unitTypeFactorySingle(prisma, UnitTypeEnum.SRO);
     const amiChart = await prisma.amiChart.create({
       data: amiChartFactory(10, jurisdictionA.id),
@@ -1814,12 +1822,25 @@ describe('Listing Controller Tests', () => {
   });
 
   describe('mapMarkers endpoint', () => {
-    it('should find all active listings', async () => {
+    let listing1, closedListing, listing2;
+    beforeAll(async () => {
       const listingData = await listingFactory(jurisdictionAId, prisma, {
         numberOfUnits: 2,
+        address: realBayAreaPlaces[1],
       });
-      const listing = await prisma.listings.create({
+      listing1 = await prisma.listings.create({
         data: listingData,
+        include: {
+          units: true,
+        },
+      });
+
+      const listing2Data = await listingFactory(jurisdictionAId, prisma, {
+        numberOfUnits: 2,
+        address: realBayAreaPlaces[5],
+      });
+      listing2 = await prisma.listings.create({
+        data: listing2Data,
         include: {
           units: true,
         },
@@ -1829,13 +1850,14 @@ describe('Listing Controller Tests', () => {
         status: ListingsStatusEnum.closed,
         numberOfUnits: 2,
       });
-      const closedListing = await prisma.listings.create({
+      closedListing = await prisma.listings.create({
         data: closedListingData,
         include: {
           units: true,
         },
       });
-
+    });
+    it('should find all active listings', async () => {
       const res = await request(app.getHttpServer())
         .post('/listings/mapMarkers')
         .set({ passkey: process.env.API_PASS_KEY || '' })
@@ -1845,8 +1867,327 @@ describe('Listing Controller Tests', () => {
       expect(res.body.length).toBeGreaterThanOrEqual(1);
 
       const ids = res.body.map((marker) => marker.id);
-      expect(ids).toContain(listing.id);
+      expect(ids).toContain(listing1.id);
+      expect(ids).toContain(listing2.id);
       expect(ids).not.toContain(closedListing.id);
+    });
+
+    it('should find filtered listings', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/listings/mapMarkers')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          filter: [
+            {
+              $comparison: Compare.IN,
+              counties: ['Santa Clara'],
+            },
+          ],
+        } as ListingsQueryParams)
+        .expect(201);
+
+      expect(res.body.length).toBeGreaterThanOrEqual(1);
+
+      const ids = res.body.map((marker) => marker.id);
+      expect(ids).toContain(listing1.id);
+      expect(ids).not.toContain(listing2.id);
+      expect(ids).not.toContain(closedListing.id);
+    });
+  });
+
+  describe('get listing by id endpoint', () => {
+    it('should get listing by id including units', async () => {
+      const listingData = await listingFactory(jurisdictionAId, prisma, {
+        units: [
+          {
+            amiPercentage: '30',
+            monthlyIncomeMin: '2000',
+            floor: 1,
+            maxOccupancy: 4,
+            minOccupancy: 1,
+            monthlyRent: '1200.00',
+            numBathrooms: 1,
+            numBedrooms: 0,
+            number: '101',
+            sqFeet: '750.00',
+            unitTypes: {
+              connect: {
+                id: unitTypes[0].id,
+              },
+            },
+          },
+          {
+            amiPercentage: '30',
+            monthlyIncomeMin: '2000',
+            floor: 1,
+            maxOccupancy: 3,
+            minOccupancy: 1,
+            numBathrooms: 1,
+            numBedrooms: 1,
+            number: '101',
+            sqFeet: '750.00',
+            unitTypes: {
+              connect: {
+                id: unitTypes[1].id,
+              },
+            },
+          },
+        ],
+      });
+      const listing = await prisma.listings.create({
+        data: listingData,
+        include: {
+          units: true,
+        },
+      });
+      const res = await request(app.getHttpServer())
+        .get(`/listings/${listing.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(200);
+
+      expect(res.body).not.toBeNull;
+      expect(res.body.id).toEqual(listing.id);
+      expect(res.body.name).toEqual(listing.name);
+      expect(res.body.unitsAvailable).toEqual(2);
+      expect(res.body.units.length).toEqual(2);
+      expect(res.body.unitsSummarized).toEqual({
+        amiPercentages: ['30'],
+        byAMI: [
+          {
+            byUnitType: [
+              {
+                areaRange: { max: 750, min: 750 },
+                floorRange: { max: 1, min: 1 },
+                minIncomeRange: { max: '$2,000', min: '$2,000' },
+                occupancyRange: { max: 4, min: 1 },
+                rentAsPercentIncomeRange: { max: null, min: null },
+                rentRange: { max: '$1,200', min: '$1,200' },
+                totalAvailable: 1,
+                unitTypes: {
+                  createdAt: expect.anything(),
+                  id: expect.anything(),
+                  name: 'studio',
+                  numBedrooms: 0,
+                  updatedAt: expect.anything(),
+                },
+              },
+              {
+                areaRange: { max: 750, min: 750 },
+                floorRange: { max: 1, min: 1 },
+                minIncomeRange: { max: '$2,000', min: '$2,000' },
+                occupancyRange: { max: 3, min: 1 },
+                rentAsPercentIncomeRange: { max: null, min: null },
+                rentRange: { max: 't.n/a', min: 't.n/a' },
+                totalAvailable: 1,
+                unitTypes: {
+                  createdAt: expect.anything(),
+                  id: expect.anything(),
+                  name: 'oneBdrm',
+                  numBedrooms: 1,
+                  updatedAt: expect.anything(),
+                },
+              },
+            ],
+            percent: '30',
+          },
+        ],
+        byUnitType: [
+          {
+            areaRange: { max: 750, min: 750 },
+            floorRange: { max: 1, min: 1 },
+            minIncomeRange: { max: '$2,000', min: '$2,000' },
+            occupancyRange: { max: 4, min: 1 },
+            rentAsPercentIncomeRange: { max: null, min: null },
+            rentRange: { max: '$1,200', min: '$1,200' },
+            totalAvailable: 0,
+            unitTypes: {
+              createdAt: expect.anything(),
+              id: expect.anything(),
+              name: 'studio',
+              numBedrooms: 0,
+              updatedAt: expect.anything(),
+            },
+          },
+          {
+            areaRange: { max: 750, min: 750 },
+            floorRange: { max: 1, min: 1 },
+            minIncomeRange: { max: '$2,000', min: '$2,000' },
+            occupancyRange: { max: 3, min: 1 },
+            rentAsPercentIncomeRange: { max: null, min: null },
+            rentRange: { max: 't.n/a', min: 't.n/a' },
+            totalAvailable: 0,
+            unitTypes: {
+              createdAt: expect.anything(),
+              id: expect.anything(),
+              name: 'oneBdrm',
+              numBedrooms: 1,
+              updatedAt: expect.anything(),
+            },
+          },
+        ],
+        byUnitTypeAndRent: [
+          {
+            areaRange: { max: 750, min: 750 },
+            floorRange: { max: 1, min: 1 },
+            minIncomeRange: { max: '$2,000', min: '$2,000' },
+            occupancyRange: { max: 4, min: 1 },
+            rentAsPercentIncomeRange: { max: null, min: null },
+            rentRange: { max: '$1,200', min: '$1,200' },
+            totalAvailable: 1,
+            unitTypes: {
+              createdAt: expect.anything(),
+              id: expect.anything(),
+              name: 'studio',
+              numBedrooms: 0,
+              updatedAt: expect.anything(),
+            },
+          },
+          {
+            areaRange: { max: 750, min: 750 },
+            floorRange: { max: 1, min: 1 },
+            minIncomeRange: { max: '$2,000', min: '$2,000' },
+            occupancyRange: { max: 3, min: 1 },
+            rentAsPercentIncomeRange: { max: null, min: null },
+            rentRange: { max: 't.n/a', min: 't.n/a' },
+            totalAvailable: 1,
+            unitTypes: {
+              createdAt: expect.anything(),
+              id: expect.anything(),
+              name: 'oneBdrm',
+              numBedrooms: 1,
+              updatedAt: expect.anything(),
+            },
+          },
+        ],
+        hmi: {
+          columns: {
+            maxIncomeMonth: 'listings.maxIncomeMonth',
+            maxIncomeYear: 'listings.maxIncomeYear',
+            sizeColumn: 'listings.householdSize',
+          },
+          rows: [],
+        },
+        priorityTypes: [],
+        unitTypes: expect.arrayContaining([
+          {
+            createdAt: expect.anything(),
+            id: expect.anything(),
+            name: 'oneBdrm',
+            numBedrooms: 1,
+            updatedAt: expect.anything(),
+          },
+          {
+            createdAt: expect.anything(),
+            id: expect.anything(),
+            name: 'studio',
+            numBedrooms: 0,
+            updatedAt: expect.anything(),
+          },
+        ]),
+      });
+    });
+
+    it('should get listing by id including units for combined', async () => {
+      const listingData = await listingFactory(jurisdictionAId, prisma, {
+        units: [
+          {
+            amiPercentage: '30',
+            monthlyIncomeMin: '2000',
+            floor: 1,
+            maxOccupancy: 4,
+            minOccupancy: 1,
+            monthlyRent: '1200.00',
+            numBathrooms: 1,
+            numBedrooms: 0,
+            number: '101',
+            sqFeet: '750.00',
+            unitTypes: {
+              connect: {
+                id: unitTypes[0].id,
+              },
+            },
+          },
+        ],
+      });
+      const listing = await prisma.listings.create({
+        data: listingData,
+        include: {
+          units: true,
+        },
+      });
+      const res = await request(app.getHttpServer())
+        .get(`/listings/${listing.id}?combined=true`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(200);
+
+      expect(res.body).not.toBeNull;
+      expect(res.body.id).toEqual(listing.id);
+      expect(res.body.name).toEqual(listing.name);
+      expect(res.body.unitsAvailable).toEqual(1);
+      expect(res.body.units.length).toEqual(1);
+      expect(res.body.unitsSummarized).toEqual({
+        amiPercentages: ['30'],
+        byAMI: [
+          {
+            byUnitType: [
+              {
+                areaRange: { max: 750, min: 750 },
+                floorRange: { max: 1, min: 1 },
+                minIncomeRange: { max: '$2,000', min: '$2,000' },
+                occupancyRange: { max: 4, min: 1 },
+                rentAsPercentIncomeRange: { max: null, min: null },
+                rentRange: { max: '$1,200', min: '$1,200' },
+                totalAvailable: 1,
+                unitTypes: {
+                  id: expect.anything(),
+                  name: 'studio',
+                },
+              },
+            ],
+            percent: '30',
+          },
+        ],
+        byUnitType: [
+          {
+            areaRange: { max: 750, min: 750 },
+            floorRange: { max: 1, min: 1 },
+            minIncomeRange: { max: '$2,000', min: '$2,000' },
+            occupancyRange: { max: 4, min: 1 },
+            rentAsPercentIncomeRange: { max: null, min: null },
+            rentRange: { max: '$1,200', min: '$1,200' },
+            totalAvailable: 0,
+            unitTypes: {
+              id: expect.anything(),
+              name: 'studio',
+            },
+          },
+        ],
+        byUnitTypeAndRent: [
+          {
+            areaRange: { max: 750, min: 750 },
+            floorRange: { max: 1, min: 1 },
+            minIncomeRange: { max: '$2,000', min: '$2,000' },
+            occupancyRange: { max: 4, min: 1 },
+            rentAsPercentIncomeRange: { max: null, min: null },
+            rentRange: { max: '$1,200', min: '$1,200' },
+            totalAvailable: 1,
+            unitTypes: {
+              id: expect.anything(),
+              name: 'studio',
+            },
+          },
+        ],
+        hmi: {
+          columns: {
+            maxIncomeMonth: 'listings.maxIncomeMonth',
+            maxIncomeYear: 'listings.maxIncomeYear',
+            sizeColumn: 'listings.householdSize',
+          },
+          rows: [],
+        },
+        priorityTypes: [],
+        unitTypes: [{ id: expect.anything(), name: 'studio' }],
+      });
     });
   });
 });
