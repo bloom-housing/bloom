@@ -3,12 +3,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import {
   LanguagesEnum,
   MultiselectQuestionsApplicationSectionEnum,
-  PrismaClient,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { Request as ExpressRequest } from 'express';
-import { mockDeep } from 'jest-mock-extended';
 import { User } from '../../../src/dtos/users/user.dto';
 import { AmiChartService } from '../../../src/services/ami-chart.service';
 import { EmailService } from '../../../src/services/email.service';
@@ -16,13 +14,13 @@ import { FeatureFlagService } from '../../../src/services/feature-flag.service';
 import { JurisdictionService } from '../../../src/services/jurisdiction.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { ScriptRunnerService } from '../../../src/services/script-runner.service';
-
-const externalPrismaClient = mockDeep<PrismaClient>();
+import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
 
 describe('Testing script runner service', () => {
   let service: ScriptRunnerService;
   let prisma: PrismaService;
   let emailService: EmailService;
+  let multiselectQuestionService: MultiselectQuestionService;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -39,56 +37,23 @@ describe('Testing script runner service', () => {
         FeatureFlagService,
         JurisdictionService,
         Logger,
+        {
+          provide: MultiselectQuestionService,
+          useValue: {
+            create: jest.fn().mockResolvedValue({
+              id: 'new id',
+            }),
+          },
+        },
       ],
     }).compile();
 
     service = module.get<ScriptRunnerService>(ScriptRunnerService);
     emailService = module.get<EmailService>(EmailService);
     prisma = module.get<PrismaService>(PrismaService);
-  });
-
-  it('should transfer data', async () => {
-    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
-    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
-    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
-
-    const id = randomUUID();
-    const scriptName = 'data transfer';
-
-    const res = await service.dataTransfer(
-      {
-        user: {
-          id,
-        } as unknown as User,
-      } as unknown as ExpressRequest,
-      {
-        connectionString: process.env.TEST_CONNECTION_STRING,
-      },
-      externalPrismaClient,
+    multiselectQuestionService = module.get<MultiselectQuestionService>(
+      MultiselectQuestionService,
     );
-
-    expect(res.success).toBe(true);
-
-    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
-      where: {
-        scriptName,
-      },
-    });
-    expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
-      data: {
-        scriptName,
-        triggeringUser: id,
-      },
-    });
-    expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
-      data: {
-        didScriptRun: true,
-        triggeringUser: id,
-      },
-      where: {
-        scriptName,
-      },
-    });
   });
 
   it('should add lottery translations', async () => {
@@ -772,6 +737,83 @@ describe('Testing script runner service', () => {
     });
     expect(prisma.featureFlags.create).toHaveBeenCalledTimes(17);
   });
+
+  it('should ', async () => {
+    const id = randomUUID();
+    const scriptName = 'migrate Detroit to multiselect questions';
+
+    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+    prisma.$queryRawUnsafe = jest.fn().mockResolvedValue([
+      {
+        id: 'example id',
+        title: 'example title',
+        subtitle: 'example subtitle',
+        description: 'example description',
+        links: [{ url: 'https://www.example.com', title: 'Link Title' }],
+        form_metadata: {
+          key: 'liveWork',
+          options: [
+            { key: 'live', extraData: [] },
+            { key: 'work', extraData: [] },
+          ],
+          hideFromListing: true,
+        },
+        name: 'example name',
+        listing_id: 'example listing_id',
+        ordinal: 1,
+      },
+    ]);
+    prisma.multiselectQuestions.create = jest.fn().mockResolvedValue({
+      id: 'new id',
+    });
+    prisma.listings.update = jest.fn().mockResolvedValue(null);
+
+    const res = await service.migrateDetroitToMultiselectQuestions({
+      user: {
+        id,
+      } as unknown as User,
+    } as unknown as ExpressRequest);
+
+    expect(res.success).toBe(true);
+
+    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
+      where: {
+        scriptName,
+      },
+    });
+    expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
+      data: {
+        scriptName,
+        triggeringUser: id,
+      },
+    });
+    expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
+      data: {
+        didScriptRun: true,
+        triggeringUser: id,
+      },
+      where: {
+        scriptName,
+      },
+    });
+    expect(prisma.$queryRawUnsafe).toHaveBeenCalledTimes(5);
+    expect(multiselectQuestionService.create).toHaveBeenCalledTimes(2);
+    expect(prisma.listings.update).toHaveBeenCalledWith({
+      data: {
+        listingMultiselectQuestions: {
+          create: {
+            ordinal: 1,
+            multiselectQuestionId: 'new id',
+          },
+        },
+      },
+      where: {
+        id: 'example listing_id',
+      },
+    });
+  }, 100000);
 
   // | ---------- HELPER TESTS BELOW ---------- | //
   it('should mark script run as started if no script run present in db', async () => {
