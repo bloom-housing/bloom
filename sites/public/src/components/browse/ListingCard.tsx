@@ -58,6 +58,7 @@ export const ListingCard = ({
           <div className={styles["listing-card-content"]}>
             <div className={styles["details"]}>
               <Link
+                id="listing-seeds-link"
                 className={styles["main-link"]}
                 href={`/listing/${listing.id}/${listing.urlSlug}`}
               >
