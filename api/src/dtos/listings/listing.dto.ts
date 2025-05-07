@@ -282,6 +282,15 @@ class Listing extends AbstractDTO {
   leasingAgentTitle?: string;
 
   @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  @IsUrl(
+    { require_protocol: true, protocols: ['http', 'https'] },
+    { groups: [ValidationsGroupsEnum.default] },
+  )
+  managementWebsite?: string;
+
+  @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
