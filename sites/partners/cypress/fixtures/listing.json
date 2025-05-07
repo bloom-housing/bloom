@@ -66,6 +66,6 @@
   "accessibilityFeatures": [
     ["elevator", "Elevator"],
     ["mobility", "Units for those with mobility disabilities"],
-    ["visual:Units", "for those with visual disabilities"]
+    ["visual", "Units for those with visual disabilities"]
   ]
 }
