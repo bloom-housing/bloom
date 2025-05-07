@@ -63,5 +63,9 @@
   "note": "Basic Note",
   "editedName": "Basic Listing Edited Name",
   "utilities": ["Water", "Trash", "Phone"],
-  "accessibilityFeatures": ["Elevator", "Mobility", "Visual"]
+  "accessibilityFeatures": [
+    "Elevator",
+    "Units for those with mobility disabilities",
+    "Units for those with visual disabilities"
+  ]
 }
