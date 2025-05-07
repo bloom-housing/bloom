@@ -64,8 +64,8 @@
   "editedName": "Basic Listing Edited Name",
   "utilities": ["Water", "Trash", "Phone"],
   "accessibilityFeatures": [
-    "elevator:Elevator",
-    "mobility:Units for those with mobility disabilities",
-    "visual:Units for those with visual disabilities"
+    ["elevator", "Elevator"],
+    ["mobility", "Units for those with mobility disabilities"],
+    ["visual:Units", "for those with visual disabilities"]
   ]
 }
