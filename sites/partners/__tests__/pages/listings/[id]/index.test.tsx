@@ -771,6 +771,11 @@ describe("listing data", () => {
                   hearing: true,
                   visual: true,
                   mobility: true,
+                  barrierFreeUnitEntrance: true,
+                  loweredLightSwitch: true,
+                  barrierFreeBathroom: true,
+                  wideDoorways: true,
+                  loweredCabinets: true,
                 },
               }}
             >
@@ -782,18 +787,23 @@ describe("listing data", () => {
         expect(getByText("Elevator")).toBeInTheDocument()
         expect(getByText("Wheelchair Ramp")).toBeInTheDocument()
         expect(getByText("Service Animals Allowed")).toBeInTheDocument()
-        expect(getByText("Accessible Parking")).toBeInTheDocument()
+        expect(getByText("Accessible Parking Spots")).toBeInTheDocument()
         expect(getByText("Parking On Site")).toBeInTheDocument()
-        expect(getByText("In Unit Washer Dryer")).toBeInTheDocument()
+        expect(getByText("In-unit washer/dryer")).toBeInTheDocument()
         expect(getByText("Laundry in Building")).toBeInTheDocument()
-        expect(getByText("Barrier Free Entrance")).toBeInTheDocument()
-        expect(getByText("Roll in Shower")).toBeInTheDocument()
-        expect(getByText("Grab Bars")).toBeInTheDocument()
+        expect(getByText("Barrier-free (no-step) property entrance")).toBeInTheDocument()
+        expect(getByText("Roll-in showers")).toBeInTheDocument()
+        expect(getByText("Grab bars in bathrooms")).toBeInTheDocument()
         expect(getByText("Heating in Unit")).toBeInTheDocument()
         expect(getByText("AC in Unit")).toBeInTheDocument()
-        expect(getByText("Hearing")).toBeInTheDocument()
-        expect(getByText("Visual")).toBeInTheDocument()
-        expect(getByText("Mobility")).toBeInTheDocument()
+        expect(getByText("Units for those with hearing disabilities")).toBeInTheDocument()
+        expect(getByText("Units for those with visual disabilities")).toBeInTheDocument()
+        expect(getByText("Units for those with mobility disabilities")).toBeInTheDocument()
+        expect(getByText("Lowered cabinets and countertops")).toBeInTheDocument()
+        expect(getByText("Lowered light switches")).toBeInTheDocument()
+        expect(getByText("Wide unit doorways for wheelchairs")).toBeInTheDocument()
+        expect(getByText("Barrier-free bathrooms")).toBeInTheDocument()
+        expect(getByText("Barrier-free (no-step) unit entrances"))
       })
     })
 

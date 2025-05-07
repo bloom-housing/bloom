@@ -547,6 +547,11 @@ describe('Testing listing service', () => {
         hearing: true,
         visual: false,
         mobility: true,
+        barrierFreeUnitEntrance: false,
+        loweredLightSwitch: true,
+        barrierFreeBathroom: false,
+        wideDoorways: true,
+        loweredCabinets: false,
       },
       listingUtilities: {
         water: false,
@@ -3361,6 +3366,11 @@ describe('Testing listing service', () => {
               hearing: true,
               visual: false,
               mobility: true,
+              barrierFreeUnitEntrance: false,
+              loweredLightSwitch: true,
+              barrierFreeBathroom: false,
+              wideDoorways: true,
+              loweredCabinets: false,
             },
           },
           listingNeighborhoodAmenities: {
@@ -3847,6 +3857,11 @@ describe('Testing listing service', () => {
               hearing: true,
               visual: false,
               mobility: true,
+              barrierFreeUnitEntrance: false,
+              loweredLightSwitch: true,
+              barrierFreeBathroom: false,
+              wideDoorways: true,
+              loweredCabinets: false,
             },
           },
           listingNeighborhoodAmenities: {
@@ -4804,6 +4819,11 @@ describe('Testing listing service', () => {
         hearing: true,
         visual: false,
         mobility: true,
+        barrierFreeUnitEntrance: false,
+        loweredLightSwitch: true,
+        barrierFreeBathroom: false,
+        wideDoorways: true,
+        loweredCabinets: false,
       };
       const nestedNeighborhoodAmenities = {
         groceryStores: 'stores',

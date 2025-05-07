@@ -708,6 +708,11 @@ export const constructFullListingData = async (
       hearing: true,
       visual: false,
       mobility: true,
+      barrierFreeUnitEntrance: false,
+      loweredLightSwitch: true,
+      barrierFreeBathroom: false,
+      wideDoorways: true,
+      loweredCabinets: false,
     },
     listingUtilities: {
       water: false,
