@@ -62,6 +62,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enablePartnerSettings,
         FeatureFlagEnum.enableListingsPagination,
         FeatureFlagEnum.enableListingFavoriting,
+        FeatureFlagEnum.enableWaitlistAdditionalFields,
       ],
     }),
   });
@@ -90,6 +91,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.swapCommunityTypeWithPrograms,
         FeatureFlagEnum.enableListingFavoriting,
         FeatureFlagEnum.disableCommonApplication,
+        FeatureFlagEnum.enableWaitlistAdditionalFields,
       ],
     }),
   });
