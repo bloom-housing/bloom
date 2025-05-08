@@ -145,6 +145,15 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiPropertyOptional({
+    type: Array,
+    example: ['abcdef'],
+  })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default], each: true })
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.multiselectQuestions]?: string[];
+
+  @Expose()
+  @ApiPropertyOptional({
     example: 'Coliseum',
   })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
