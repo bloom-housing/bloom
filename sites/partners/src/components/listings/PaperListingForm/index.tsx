@@ -21,6 +21,7 @@ import {
   FormListing,
   TempEvent,
   TempUnit,
+  TempUnitGroup,
   formDefaults,
 } from "../../../lib/listings/formTypes"
 import ListingDataPipeline from "../../../lib/listings/ListingDataPipeline"
@@ -105,6 +106,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [units, setUnits] = useState<TempUnit[]>([])
+  const [unitGroups, setUnitGroups] = useState<TempUnitGroup[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
   const [preferences, setPreferences] = useState<MultiselectQuestion[]>(
     listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.preferences)?.map(
@@ -153,6 +155,18 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
       setUnits(tempUnits)
     }
 
+    if (listing?.unitGroups) {
+      const tempUnitGroups = listing.unitGroups.map((unitGroup, i) => ({
+        ...unitGroup,
+        unitGroupAmiLevels: unitGroup.unitGroupAmiLevels.map((amiEntry, i) => ({
+          ...amiEntry,
+          tempId: i + 1,
+        })),
+        tempId: i + 1,
+      }))
+      setUnitGroups(tempUnitGroups)
+    }
+
     if (listing?.listingEvents) {
       setOpenHouseEvents(
         listing.listingEvents
@@ -167,7 +181,14 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
           .sort((a, b) => (dayjs(a.startTime).isAfter(b.startTime) ? 1 : -1))
       )
     }
-  }, [listing?.units, listing?.listingEvents, setUnits, setOpenHouseEvents])
+  }, [
+    listing?.units,
+    listing?.unitGroups,
+    listing?.listingEvents,
+    setUnits,
+    setUnitGroups,
+    setOpenHouseEvents,
+  ])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getValues, setError, clearErrors, reset, watch } = formMethods
@@ -215,6 +236,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
             preferences,
             programs,
             units,
+            unitGroups,
             openHouseEvents,
             profile: profile,
             latLong,
@@ -285,8 +307,10 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
         }
       }
     },
+    //eslint-disable-next-line react-hooks/exhaustive-deps
     [
       units,
+      unitGroups,
       openHouseEvents,
       editMode,
       listingsService,
@@ -345,7 +369,9 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                           <CommunityType listing={listing} />
                           <Units
                             units={units}
+                            unitGroups={unitGroups}
                             setUnits={setUnits}
+                            setUnitGroups={setUnitGroups}
                             disableUnitsAccordion={listing?.disableUnitsAccordion}
                             featureFlags={activeFeatureFlags}
                           />

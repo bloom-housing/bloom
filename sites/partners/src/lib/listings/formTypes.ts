@@ -9,6 +9,8 @@ import {
   PaperApplicationCreate,
   RegionEnum,
   Unit,
+  UnitGroup,
+  UnitGroupAmiLevel,
   User,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -179,6 +181,15 @@ export type TempUnit = Unit & {
   maxIncomeHouseholdSize8?: string
 }
 
+export type TempAmiLevel = UnitGroupAmiLevel & {
+  tempId?: number
+}
+
+export type TempUnitGroup = Omit<UnitGroup, "unitGroupAmiLevels"> & {
+  tempId?: number
+  unitGroupAmiLevels: TempAmiLevel[]
+}
+
 export type TempEvent = ListingEvent & {
   tempId?: string
 }
@@ -189,6 +200,7 @@ export type FormMetadata = {
   preferences: MultiselectQuestion[]
   programs: MultiselectQuestion[]
   units: TempUnit[]
+  unitGroups: TempUnitGroup[]
   openHouseEvents: TempEvent[]
   profile: User
   latLong: LatitudeLongitude
