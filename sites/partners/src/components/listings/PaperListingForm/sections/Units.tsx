@@ -16,7 +16,7 @@ import {
   ReviewOrderTypeEnum,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import { MessageContext } from "@bloom-housing/shared-helpers"
 import UnitForm from "../UnitForm"
 import { useFormContext, useWatch } from "react-hook-form"
 import { TempUnit, TempUnitGroup } from "../../../../lib/listings/formTypes"
@@ -48,24 +48,18 @@ const FormUnits = ({
   const [defaultUnit, setDefaultUnit] = useState<TempUnit | null>(null)
   const [defaultUnitGroup, setDefaultUnitGroup] = useState<TempUnitGroup | null>(null)
   const [homeTypeEnabled, setHomeTypeEnabled] = useState(false)
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, clearErrors, getValues, control, setValue } = formMethods
   const listing = getValues()
 
-  const enableSection8Question = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableSection8Question,
-    listing?.jurisdictions?.id,
-    !listing.jurisdictions?.id
-  )
+  const enableSection8Question =
+    featureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableSection8Question)?.active ||
+    false
 
-  const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableUnitGroups,
-    listing?.jurisdictions?.id,
-    !listing.jurisdictions?.id
-  )
+  const enableUnitGroups =
+    featureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableUnitGroups)?.active || false
 
   const listingAvailability = useWatch({
     control,
