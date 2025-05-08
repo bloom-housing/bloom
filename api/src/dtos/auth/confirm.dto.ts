@@ -1,4 +1,4 @@
-import { IsString, Matches, MaxLength } from 'class-validator';
+import { IsString, Matches } from 'class-validator';
 import { Expose } from 'class-transformer';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { passwordRegex } from '../../utilities/password-regex';
@@ -8,7 +8,6 @@ export class Confirm {
   @Expose()
   @ApiProperty()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   token: string;
 
   @Expose()
