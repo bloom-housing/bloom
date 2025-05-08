@@ -702,6 +702,9 @@ describe('Testing listing service', () => {
           {
             name: 'asc',
           },
+          {
+            name: 'asc',
+          },
         ],
         where: {
           AND: [
@@ -834,6 +837,9 @@ describe('Testing listing service', () => {
         skip: 0,
         take: 30,
         orderBy: [
+          {
+            name: 'asc',
+          },
           {
             name: 'asc',
           },
@@ -1152,6 +1158,9 @@ describe('Testing listing service', () => {
         skip: 10,
         take: 10,
         orderBy: [
+          {
+            name: 'asc',
+          },
           {
             name: 'asc',
           },
