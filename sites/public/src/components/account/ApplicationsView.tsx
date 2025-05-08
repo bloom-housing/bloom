@@ -1,8 +1,8 @@
 import React, { useEffect, useState, Fragment, useContext } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { t, LoadingOverlay } from "@bloom-housing/ui-components"
-import { Button, Card, Heading, Tabs } from "@bloom-housing/ui-seeds"
+import { t } from "@bloom-housing/ui-components"
+import { Button, Card, LoadingState, Heading, Tabs } from "@bloom-housing/ui-seeds"
 import {
   PageView,
   pushGtmEvent,
@@ -184,16 +184,12 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
               subtitle={t("account.myApplicationsSubtitle")}
               headingPriority={1}
             >
-              <>
-                <LoadingOverlay isLoading={loading}>
-                  <Fragment>
-                    {applications?.map((application, index) => {
-                      return <StatusItemWrapper key={index} application={application} />
-                    })}
-                  </Fragment>
-                </LoadingOverlay>
+              <LoadingState loading={loading}>
+                {applications?.map((application, index) => {
+                  return <StatusItemWrapper key={index} application={application} />
+                })}
                 {!applications?.length && !loading && noApplicationsSection()}
-              </>
+              </LoadingState>
             </BloomCard>
           </div>
         </section>
