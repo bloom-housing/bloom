@@ -146,10 +146,9 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
   const [submitForApprovalDialog, setSubmitForApprovalDialog] = useState(false)
   const [requestChangesDialog, setRequestChangesDialog] = useState(false)
 
-  const enableUnitGroups = activeFeatureFlags?.find(
-    (flag) => (flag.name === FeatureFlagEnum.enableUnitGroups)
-  )?.active || false;
-
+  const enableUnitGroups =
+    activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableUnitGroups)?.active ||
+    false
 
   useEffect(() => {
     if (listing?.units) {

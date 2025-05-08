@@ -54,13 +54,12 @@ const FormUnits = ({
   const { register, errors, clearErrors, getValues, control, setValue } = formMethods
   const listing = getValues()
 
-  const enableSection8Question = featureFlags?.find(
-    (flag) => (flag.name === FeatureFlagEnum.enableSection8Question)
-  )?.active || false;
+  const enableSection8Question =
+    featureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableSection8Question)?.active ||
+    false
 
-  const enableUnitGroups = featureFlags?.find(
-    (flag) => (flag.name === FeatureFlagEnum.enableUnitGroups)
-  )?.active || false;
+  const enableUnitGroups =
+    featureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableUnitGroups)?.active || false
 
   const listingAvailability = useWatch({
     control,
