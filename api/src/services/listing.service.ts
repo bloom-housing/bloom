@@ -899,6 +899,22 @@ export class ListingService implements OnModuleInit {
             })),
           });
         }
+        if (filter[ListingFilterKeys.multiselectQuestions]) {
+          const builtFilter = buildFilter({
+            $comparison: filter.$comparison,
+            $include_nulls: false,
+            value: filter[ListingFilterKeys.multiselectQuestions],
+            key: ListingFilterKeys.multiselectQuestions,
+            caseSensitive: true,
+          });
+          filters.push({
+            OR: builtFilter.map((filt) => ({
+              listingMultiselectQuestions: {
+                some: { multiselectQuestionId: filt },
+              },
+            })),
+          });
+        }
         if (filter[ListingFilterKeys.regions]) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
