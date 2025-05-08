@@ -8,6 +8,7 @@ import ChevronRightIcon from "@heroicons/react/20/solid/ChevronRightIcon"
 import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlag,
+  FeatureFlagEnum,
   ListingCreate,
   ListingEventsTypeEnum,
   ListingUpdate,
@@ -145,6 +146,11 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
   const [submitForApprovalDialog, setSubmitForApprovalDialog] = useState(false)
   const [requestChangesDialog, setRequestChangesDialog] = useState(false)
 
+  const enableUnitGroups = activeFeatureFlags?.find(
+    (flag) => (flag.name === FeatureFlagEnum.enableUnitGroups)
+  )?.active || false;
+
+
   useEffect(() => {
     if (listing?.units) {
       const tempUnits = listing.units.map((unit, i) => ({
@@ -236,8 +242,8 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
             const dataPipeline = new ListingDataPipeline(formData, {
               preferences,
               programs,
-              units,
-              unitGroups,
+              units: !enableUnitGroups ? units : [], // Clear existing units if unit groups flag has been enabled
+              unitGroups: enableUnitGroups ? unitGroups : [], // Clear exiting unit groups if the unit groups flag has been disbaled
               openHouseEvents,
               profile: profile,
               latLong,
@@ -331,6 +337,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
       setError,
       profile,
       addToast,
+      enableUnitGroups,
     ]
   )
 
