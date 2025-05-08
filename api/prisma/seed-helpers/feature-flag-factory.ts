@@ -8,6 +8,7 @@ export const createAllFeatureFlags = async (prismaClient: PrismaClient) => {
     data: featureFlagMap.map((flag) => {
       return { ...flag, active: true };
     }),
+    skipDuplicates: true,
   });
 };
 
