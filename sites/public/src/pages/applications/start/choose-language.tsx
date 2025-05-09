@@ -100,7 +100,7 @@ const ApplicationChooseLanguage = () => {
       conductor.listing = context.listing
       setListing(context.listing)
     }
-  }, [router, conductor, context, listingId, initialStateLoaded, profile, listingsService])
+  }, [router, conductor, context, listingId, initialStateLoaded, profile, listingsService, jurisdictionsService])
 
   useEffect(() => {
     const { addToast } = toastyRef.current
@@ -127,13 +127,13 @@ const ApplicationChooseLanguage = () => {
       conductor.currentStep.save({
         language,
       })
-      void loadListing(listingId, setListing, conductor, context, language, listingsService).then(
+      void loadListing(listingId, setListing, conductor, context, language, listingsService, jurisdictionsService).then(
         () => {
           void router.push(conductor.determineNextUrl(), null, { locale: language })
         }
       )
     },
-    [conductor, context, listingId, router, listingsService]
+    [conductor, context, listingId, router, listingsService, jurisdictionsService]
   )
 
   const statusContent = getListingApplicationStatus(listing)
