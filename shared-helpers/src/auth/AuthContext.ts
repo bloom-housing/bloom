@@ -33,6 +33,7 @@ import {
   serviceOptions,
   SuccessDTO,
   LotteryService,
+  LanguagesEnum,
 } from "../types/backend-swagger"
 import { getListingRedirectUrl } from "../utilities/getListingRedirectUrl"
 import { useRouter } from "next/router"
@@ -86,6 +87,7 @@ type ContextProps = {
     jurisdiction?: string,
     onlyIfAllJurisdictionsHaveItEnabled?: boolean
   ) => boolean
+  getJurisdictionLanguages: (jurisdictionId: string) => LanguagesEnum[]
 }
 
 // Internal Provider State
@@ -404,6 +406,10 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
       return jurisdictions.some(
         (j) => j.featureFlags.find((flag) => flag.name === featureFlag)?.active || false
       )
+    },
+    getJurisdictionLanguages: (jurisdictionId: string) => {
+      const jurisdictions = state.profile?.jurisdictions || []
+      return jurisdictions.find((j) => j.id === jurisdictionId)?.languages || []
     },
   }
   return createElement(AuthContext.Provider, { value: contextValues }, children)
