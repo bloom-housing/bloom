@@ -36,7 +36,7 @@ const loadListing = async (
   context,
   language,
   listingsService: ListingsService,
-  jurisdictionsService: JurisdictionsService,
+  jurisdictionsService: JurisdictionsService
 ) => {
   const listingResponse = await listingsService.retrieve(
     { id: listingId },
@@ -45,9 +45,9 @@ const loadListing = async (
     }
   )
 
-  const  jurisdictionResponse = await jurisdictionsService.retrieve(
-    { jurisdictionId: listingResponse.jurisdictions.id}
-  )
+  const jurisdictionResponse = await jurisdictionsService.retrieve({
+    jurisdictionId: listingResponse.jurisdictions.id,
+  })
 
   conductor.listing = listingResponse
   const applicationConfig = retrieveApplicationConfig(conductor.listing) // TODO: load from backend
@@ -63,7 +63,8 @@ const ApplicationChooseLanguage = () => {
   const router = useRouter()
   const [listing, setListing] = useState(null)
   const context = useContext(AppSubmissionContext)
-  const { initialStateLoaded, profile, listingsService, jurisdictionsService } = useContext(AuthContext)
+  const { initialStateLoaded, profile, listingsService, jurisdictionsService } =
+    useContext(AuthContext)
   const toastyRef = useToastyRef()
   const { conductor } = context
 
@@ -86,7 +87,15 @@ const ApplicationChooseLanguage = () => {
       }
     }
     if (!context.listing || context.listing.id !== listingId) {
-      void loadListing(listingId, setListing, conductor, context, "en", listingsService, jurisdictionsService)
+      void loadListing(
+        listingId,
+        setListing,
+        conductor,
+        context,
+        "en",
+        listingsService,
+        jurisdictionsService
+      )
     } else {
       conductor.listing = context.listing
       setListing(context.listing)

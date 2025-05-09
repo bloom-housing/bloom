@@ -51,7 +51,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
     paper: null,
     referral: null,
   })
-  const [selectedLanguage, setSelectedLanguage] = useState('')
+  const [selectedLanguage, setSelectedLanguage] = useState("")
   const [drawerState, setDrawerState] = useState(false)
   const [progressValue, setProgressValue] = useState(0)
   const [cloudinaryData, setCloudinaryData] = useState({
@@ -123,7 +123,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   if (cloudinaryData.url != "") {
     previewPaperApplicationsTableRows.push({
       fileName: { content: `${cloudinaryData.id.split("/").slice(-1).join()}.pdf` },
-      language: { content: !!selectedLanguage ? t(`languages.${selectedLanguage}`) : '' },
+      language: { content: !!selectedLanguage ? t(`languages.${selectedLanguage}`) : "" },
       actions: {
         content: (
           <Button
@@ -571,14 +571,15 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                     options={[
                       {
                         label: t("t.selectLanguage"),
-                        value: '',
+                        value: "",
                       },
                       ...availableJurisdictionLanguages.map((item) => ({
-                      label: t(`languages.${item}`),
-                      value: item,
-                    }))]}
+                        label: t(`languages.${item}`),
+                        value: item,
+                      })),
+                    ]}
                     defaultValue={selectedLanguage}
-                    validation={{required: true}}
+                    validation={{ required: true }}
                     inputProps={{
                       onChange: (e) => {
                         setSelectedLanguage(e.target.value)
