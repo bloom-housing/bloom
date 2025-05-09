@@ -123,7 +123,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   if (cloudinaryData.url != "") {
     previewPaperApplicationsTableRows.push({
       fileName: { content: `${cloudinaryData.id.split("/").slice(-1).join()}.pdf` },
-      language: { content: !!selectedLanguage ? t(`languages.${selectedLanguage}`) : "" },
+      language: { content: selectedLanguage ? t(`languages.${selectedLanguage}`) : "" },
       actions: {
         content: (
           <Button
