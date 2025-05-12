@@ -2836,6 +2836,9 @@ export interface ListingFilterParams {
   $comparison: EnumListingFilterParamsComparison
 
   /**  */
+  availabilities?: FilterAvailabilityEnum[]
+
+  /**  */
   availability?: FilterAvailabilityEnum
 
   /**  */
@@ -2843,6 +2846,9 @@ export interface ListingFilterParams {
 
   /**  */
   bedrooms?: number
+
+  /**  */
+  bedroomTypes?: []
 
   /**  */
   city?: string
@@ -2870,6 +2876,9 @@ export interface ListingFilterParams {
 
   /**  */
   monthlyRent?: number
+
+  /**  */
+  multiselectQuestions?: string[]
 
   /**  */
   name?: string

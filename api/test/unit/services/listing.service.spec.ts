@@ -702,6 +702,9 @@ describe('Testing listing service', () => {
           {
             name: 'asc',
           },
+          {
+            name: 'asc',
+          },
         ],
         where: {
           AND: [
@@ -860,6 +863,9 @@ describe('Testing listing service', () => {
         skip: 0,
         take: 30,
         orderBy: [
+          {
+            name: 'asc',
+          },
           {
             name: 'asc',
           },
@@ -1203,6 +1209,9 @@ describe('Testing listing service', () => {
           {
             name: 'asc',
           },
+          {
+            name: 'asc',
+          },
         ],
         where: {
           AND: [
@@ -1330,6 +1339,185 @@ describe('Testing listing service', () => {
   });
 
   describe('Test buildWhereClause helper', () => {
+    it('should return a where clause for filter availabilities - closedWaitlist', () => {
+      const filter = [
+        {
+          $comparison: 'IN',
+          availabilities: [FilterAvailabilityEnum.closedWaitlist],
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                AND: [
+                  {
+                    unitGroups: {
+                      some: { openWaitlist: { equals: false } },
+                    },
+                  },
+                  {
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter availabilities - comingSoon', () => {
+      const filter = [
+        {
+          $comparison: 'IN',
+          availabilities: [FilterAvailabilityEnum.comingSoon],
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                marketingType: {
+                  equals: MarketingTypeEnum.comingSoon,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter availabilities - openWaitlist', () => {
+      const filter = [
+        {
+          $comparison: 'IN',
+          availabilities: [FilterAvailabilityEnum.openWaitlist],
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                AND: [
+                  {
+                    unitGroups: {
+                      some: { openWaitlist: { equals: true } },
+                    },
+                  },
+                  {
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter availabilities - waitlistOpen', () => {
+      const filter = [
+        {
+          $comparison: 'IN',
+          availabilities: [FilterAvailabilityEnum.waitlistOpen],
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                reviewOrderType: {
+                  equals: ReviewOrderTypeEnum.waitlist,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter availabilities - unitsAvailable', () => {
+      const filter = [
+        {
+          $comparison: 'IN',
+          availabilities: [FilterAvailabilityEnum.unitsAvailable],
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                unitsAvailable: {
+                  gte: 1,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter availabilities - multiple', () => {
+      const filter = [
+        {
+          $comparison: 'IN',
+          availabilities: [
+            FilterAvailabilityEnum.openWaitlist,
+            FilterAvailabilityEnum.unitsAvailable,
+          ],
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                AND: [
+                  {
+                    unitGroups: {
+                      some: { openWaitlist: { equals: true } },
+                    },
+                  },
+                  {
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
+                  },
+                ],
+              },
+              {
+                unitsAvailable: {
+                  gte: 1,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
     it('should return a where clause for filter availability - closedWaitlist', () => {
       const filter = [
         {
@@ -1513,7 +1701,51 @@ describe('Testing listing service', () => {
               {
                 unitGroups: {
                   some: {
-                    unitTypes: { some: { numBedrooms: { equals: 2 } } },
+                    unitTypes: {
+                      some: {
+                        numBedrooms: {
+                          equals: 2,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter bedroomTypes', () => {
+      const filter = [
+        { $comparison: 'IN', bedroomTypes: [2, 4] } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                units: {
+                  some: {
+                    numBedrooms: {
+                      in: [2, 4],
+                    },
+                  },
+                },
+              },
+              {
+                unitGroups: {
+                  some: {
+                    unitTypes: {
+                      some: {
+                        numBedrooms: {
+                          in: [2, 4],
+                        },
+                      },
+                    },
                   },
                 },
               },
@@ -1765,9 +1997,42 @@ describe('Testing listing service', () => {
                               equals: monthlyRent,
                             },
                           },
-                          { percentageOfIncomeValue: { not: null } },
+                          {
+                            percentageOfIncomeValue: {
+                              not: null,
+                            },
+                          },
                         ],
                       },
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter multiselectQuestions', () => {
+      const uuids = [randomUUID(), randomUUID()];
+      const filter = [
+        {
+          $comparison: 'IN',
+          multiselectQuestions: uuids,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                listingMultiselectQuestions: {
+                  some: {
+                    multiselectQuestionId: {
+                      in: uuids,
                     },
                   },
                 },

@@ -566,11 +566,10 @@ describe("<Apply>", () => {
       />
     )
     expect(getByText("How to Apply")).toBeDefined()
-    const dueDateString = getDateString(dueDate, `MMM DD, YYYY [${t("t.at")}] hh:mm A`)
     const postmarkString = getDateString(postmarkDate, `MMM DD, YYYY [${t("t.at")}] hh:mm A`)
     expect(
       getByText(
-        `Applications must be received by the deadline. If sending by U.S. Mail, the application must be postmarked by ${dueDateString} and received by mail no later than ${postmarkString}. Applications received after ${postmarkString} via mail will not be accepted even if they are postmarked by ${dueDateString}. ${listing.developer} is not responsible for lost or delayed mail.`
+        `Applications must be received by the deadline. If sending by U.S. Mail, the application must be postmarked by ${postmarkString}. ${listing.developer} is not responsible for lost or delayed mail.`
       )
     )
 
@@ -630,9 +629,10 @@ describe("<Apply>", () => {
     )
     expect(getByText("How to Apply")).toBeDefined()
     const dueDateString = getDateString(dueDate, `MMM DD, YYYY [${t("t.at")}] hh:mm A`)
+
     expect(
       getByText(
-        `Applications must be received by the deadline. If sending by U.S. Mail, the application must be postmarked by ${dueDateString}. ${listing.developer} is not responsible for lost or delayed mail.`
+        `Applications must be received by the deadline. If sending by U.S. Mail, the application must be received by ${dueDateString}. ${listing.developer} is not responsible for lost or delayed mail.`
       )
     )
 
