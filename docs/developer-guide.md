@@ -109,6 +109,6 @@ All models and services are hot-loadable based on:
     * Bias detection placeholders
     * Human oversight workflows
     * Transparent output verification
-
-For endpoint details, refer to the [API Reference](./api-reference.md). For usage instructions, see the [User Guide](./user-guide.md).
 ---
+For endpoint details, refer to the [API Reference](./api-reference.md). For usage instructions, see the [User Guide](./user-guide.md).
+
