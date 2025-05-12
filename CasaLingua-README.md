@@ -11,23 +11,33 @@ CasaLingua ensures that language is never a reason someone doesn’t understand 
 
 ---
 
+## 🧰 Project Goals
+  - Simplify legal and technical housing documents into plain language
+  - Translate simplified content into multiple languages with cultural sensitivity
+  - Support human-in-the-loop review workflows for accuracy and trust
+  - Deploy on low-power hardware or integrate into large-scale housing systems like Bloom
+
+---
+
 ## :gear: Key Capabilities
 - **Multimodal Input Support**: Accepts PDFs, DOCX, audio, text, and image-based documents (OCR)
+- **Language Detection**: Auto-detects input language to route throught appropriate pipelines
 - **Legal Text Simplification**: Converts complex clauses into plain language—tailored by jurisdiction and reading level
 - **Multilingual Translation**: Translates content with cultural and regional accuracy using LLMs fine-tuned on housing domains
-- **PII Detection**: Redacts personal identifiers automatically
-- **TTS Output (Optional)**: Generates audio for translated and simplified text
-- **Human Review Interface**: Side-by-side review tools with semantic drift and model transparency overlays
+- **PII Detection & Redaction**: Redacts personal identifiers or sensitive information automatically
+- **TTS Output (Optional)**: Generates audio output for translated and simplified text
+- **Human Review Interface**: Side-by-side review tools with semantic drift and SHAP model transparency overlays
 
 ---
 
 ## :building_construction: System Architecture
-CasaLingua is built on FastAPI with a modular backend and supports parallelized NLP pipelines:
+CasaLingua is modular, built on FastAPI and Python, with concurrent pipelines for:
 - Language Detection
 - Legal Simplification (RAG + transformers)
 - Translation (MarianMT, BLOOM, etc.)
 - Anonymization and TTS
-- Admin-configurable model loading and session control
+- OCR & Audio Transcription
+- Admin-configurable model loading, API key access, and session control
 
 ---
 
@@ -68,18 +78,18 @@ CasaLingua is pre-configured for:
 
 ## :link: Integration with Bloom
 CasaLingua integrates directly into the Bloom Housing platform with secure, role-gated API routes. Use cases include:
-- Simplified leases
-- Translated checklists and program guides
+- Simplified lease reviews
+- Translated eligibility checklists and program guides
 - Rights explanations in plain language
+- Plain-language support letters
 
 ---
 
 ## :computer: Quickstart (Local Dev)
 ```bash
-# 1. Clone the Bloom monorepo
-cd ~/bloom
+# 1. Clone and install the Bloom monorepo
 
-# 2. Create and seed database
+# 2. Seed the bloom_prisma database on Postgres (port 5433)
 psql -U bloom -p 5433 -c 'CREATE DATABASE bloom_prisma;'
 yarn db:seed:development --jurisdictionName Bloomington
 
@@ -91,7 +101,9 @@ yarn setup:dev
 cd ../sites/public
 yarn dev -H 0.0.0.0 -p 3000
 
-# 5. Open http://localhost:3000 or /api/health
+# 5. Access the CasaLingua interface via /api/translate, /simplify, etc.
+
+# 6. Open diagnostics via /api/health; check logs in app/audit
 ```
 
 ---
@@ -103,8 +115,9 @@ yarn dev -H 0.0.0.0 -p 3000
 
 ---
 
-## :shield: Ethical Compliance
-CasaLingua adheres to Exygy’s Responsible AI Framework:
+## :shield: Licensing and Ethical Compliance
+CasaLingua adheres to Exygy’s Responsible AI guidelines for fairness, transparency and human oversight. Audit trails and model fingerprints are built-in for accountability.
+Framework:
 - Human-in-the-loop design
 - Bias-aware simplification and translation
 - Model transparency via SHAP overlays and alignment logging
