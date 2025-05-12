@@ -28,12 +28,11 @@ const BloomCard = (props: BloomCardProps) => {
   const customIcon = props.iconSymbol ? CustomIconMap[props.iconSymbol] : undefined
 
   const getTitle = () => {
-    const headingSize = props.altHeading ? "3xl" : "2xl"
     if (props.title) {
       if (props.subtitle) {
         return (
           <HeadingGroup
-            size={headingSize}
+            size="2xl"
             heading={props.title}
             subheading={props.subtitle}
             className={styles["card-heading-group"]}
@@ -43,7 +42,7 @@ const BloomCard = (props: BloomCardProps) => {
       }
       return (
         <Heading
-          size={headingSize}
+          size="2xl"
           priority={props.headingPriority || 1}
           className={props.altHeading ? styles["card-alt-heading-font"] : undefined}
         >
