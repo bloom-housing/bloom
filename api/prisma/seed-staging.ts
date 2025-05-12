@@ -880,7 +880,7 @@ export const stagingSeed = async (
           },
           email: `partner-user-${savedListing.name
             .toLowerCase()
-            .replace(' ', '')}@example.com`,
+            .replaceAll(' ', '-')}@example.com`,
           confirmedAt: new Date(),
           jurisdictionIds: [savedListing.jurisdictionId],
           acceptedTerms: true,
