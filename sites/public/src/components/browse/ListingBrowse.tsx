@@ -122,7 +122,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
         <title>{pageTitle}</title>
       </Head>
       <MetaTags title={t("nav.siteTitle")} description={metaDescription} />
-      <PageHeaderSection heading={t("pageTitle.rent")} inverse={true} />
+      <PageHeaderSection heading={t("pageTitle.rent")} inverse={true} content={ListingTabs} />
       <FilterDrawer isOpen={isFilterDrawerOpen} onClose={() => setIsFilterDrawerOpen(false)} />
       <div className={styles["listing-directory"]}>
         {props.paginationData && (
