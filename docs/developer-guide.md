@@ -14,72 +14,102 @@ app/
 ├── audit/
 ├── admin/
 ```
-Config files: `.env`, `template.env`, `install.sh`, `health_check.py`
+Supporting files include:
+* Config files: `.env`, `template.env`, `production.json` - Configuration
+* Bootstrap and diagnostics: `install.sh`, `health_check.py`
 
 ---
 
-## Setup
+## Local Development Setup
+### 1. System Requirements
+* Python 3.10+
+* PostgreSQL 15 (running on port `5433`)
+* Node.js/Yarn (for Bloom integration or Admin UI)
+
+### 2. Installation
 
 ```bash
-# PostgreSQL running on port 5433
+# Clone Bloom Monorepo
+cd ~/bloom
+
+# Set up Postgres
 psql -U bloom -p 5433
 CREATE DATABASE bloom_prisma;
-```
 
-# Backend
-```bash
+# Backend setup
 cd ~/bloom/api
+cp .env.template .env
+export DATABASE_URL=postgresql://bloom:bloompass@127.0.0.1:5433/bloom_prisma
+
+# Start services
 yarn setup:dev
 yarn db:seed:development --jurisdictionName Bloomington
 ```
 
-# Frontend
+## 3. Frontend (Optional)
 ```bash
 cd ~/bloom/sites/public
-yarn dev
+cp .env.template .env
+export NEXT_PUBLIC_JURISDICTION_NAME=Bloomington
+
+yarn dev -H 0.0.0.0 -p 3000
 ```
+---
 
-# Pipelines
-- Language detection
+# Model and Pipeline Overview
+## Key Components
+  * Language Detector – Auto routes input to correct NLP task
+  * Simplifier – RAG + transformer-backed clause simplifier with jurisdiction and reading level controls
+  * Translator – MarianMT, BLOOM, or LoRA-quantized custom models
+  * PII Anonymizer – Regex + NER-based redactor
+  * TTS (Optional) – `pyttsx3` fallback for offline narration
 
-- Simplification: RAG + Transformer + Rule-based fallback
+## Model Registry (`app/core/registry.py`)
+All models and services are hot-loadable based on:
+  * Hardware availability
+  * Task class (`translation`, `simplification`, etc.)
+  * Admin settings
 
-- Translation: MarianMT, BLOOM, LoRA
+# Developer Features
+  * Rich logging (`colorama`, `loguru`, `structlog`)
+  * `@rate_limit`, `@auth_required`, and `@role_protected` decorators
+  * Modular pipeline swapping (hot-replace `simplify.py` logic)
+  * Local session memory per request (no persistent PII)
+  * SHAP + alignment overlays for human reviewer workflows
 
-- TTS: pyttsx3 fallback
+# Health, Testing, and Debugging
+## Health Checks
+  * `GET /health` – Basic readiness
+  * `GET /admin/status` – Detailed model/service diagnostics
+  * `health_check.py` – CLI tool for smoke tests
+## Testing
+  * Unit: `pytest`, `pytest-asyncio`, `faker`
+  * Coverage: `pytest-cov`
+  * E2E (coming soon): Model contract + integration tests
 
-- PII/NER anonymizer
-
-# Model Loading
-- Registry in `core/registry.py`
-
-- Task-class aware model selection
-
-- Hot-swappable via Admin panel
-
-# Testing
-- `pytest`, `pytest-asyncio`, `faker`
-
-- `GET /health` for live pings`
-
-- Coverage with `pytest-cov`
-
-- E2E testing: in progress
+# Troubleshooting Tips
+  * TypeScript mismatch (e.g. `ReadonlyDeep_2`) → use `any` or remove internal Prisma type export
+  * Prisma `.update()` missing relations → use `include: {...}` for activity logs and sub-relations
+  * WebSocket hot reload devtool error → harmless
+  * Ensure `NEXT_PUBLIC_JURISDICTION_NAME` is set for frontend to avoid Axios errors
 
 # Deployment Notes
-- NGINX proxy `/ → frontend`, `/api → backend`
+  * Docker support in progress (`docker-compose.yml`)
+  * Recommended: systemd unit files for production startup
+  * NGINX proxy routing: `/ → frontend`, `/api → FastAPI`
+  * HTTPS via Let’s Encrypt or self-signed cert
 
-- Optional Docker (WIP)
+# Compliance and Auditing
+  * All sessions are hashed + ephemeral
+  * Audit logs include:
+    * Pipeline stages
+    * Confidence scores
+    * Simplification alignment and flagged drifts
+  * Alignment with [Exygy Responsible AI Framework](https://exygy.com/) includes:
+    * Bias detection placeholders
+    * Human oversight workflows
+    * Transparent output verification
 
-- HTTPS via Let's Encrypt
-
-- Suggested: `systemd` for resilience
-
-# Responsible AI Features
-- Session logging with hash + ephemeral cache
-
-- SHAP overlays and semantic drift
-
-- Compliant with Exygy’s bias, audit, and reviewer framework
+For endpoint details, refer to the [API Reference](./docs/api-reference.md). For usage instructions, see the [User Guide](./docs/user-guide.md).
 
 ---
