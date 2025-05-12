@@ -5,24 +5,16 @@ export const getPostmarkString = (
   postmarkReceivedByDate: string | null,
   developer: string | null
 ) => {
-  if (applicationDueDate) {
-    return postmarkReceivedByDate
-      ? t("listings.apply.submitPaperDueDatePostMark", {
-          applicationDueDate,
-          postmarkReceivedByDate,
-          developer,
-        })
-      : t("listings.apply.submitPaperDueDateNoPostMark", {
-          applicationDueDate,
-          developer,
-        })
+  if (postmarkReceivedByDate) {
+    return t("listings.apply.submitPaperPostMark", {
+      postmarkReceivedByDate,
+      developer,
+    })
+  } else if (applicationDueDate) {
+    return t("listings.apply.submitPaperDueDateNoPostMark", { applicationDueDate, developer })
+  } else if (developer) {
+    return t("listings.apply.submitPaperNoDueDateNoPostMark", { developer })
   } else {
-    if (postmarkReceivedByDate) {
-      return t("listings.apply.submitPaperNoDueDatePostMark", { postmarkReceivedByDate, developer })
-    }
-    if (developer) {
-      return t("listings.apply.submitPaperNoDueDateNoPostMark", { developer })
-    }
     return ""
   }
 }
