@@ -1,4 +1,4 @@
-# CasaLingua
+# CasaLingua README
 
 CasaLingua is a multilingual, AI-powered translation and simplification tool that makes complex housing documents more accessible. Developed as an add-on to the Bloom Housing platform, CasaLingua empowers tenants, landlords, and housing navigators with legally accurate, culturally relevant content—delivered in plain language.
 
