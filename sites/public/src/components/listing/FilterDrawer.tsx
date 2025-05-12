@@ -12,14 +12,16 @@ import {
   ListingsQueryBody,
   ListingViews,
   ListingFilterParams,
+  Listing,
+  ListingFeatures,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import styles from "./FilterDrawer.module.scss"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 
 export interface FilterField {
   key: string
   label: string
-  // defaultValue: boolean
+  defaultChecked: boolean
 }
 
 export interface CheckboxGroupProps {
@@ -33,11 +35,14 @@ export interface RentSectionProps {
   register: UseFormMethods["register"]
   getValues: UseFormMethods["getValues"]
   setValue: UseFormMethods["setValue"]
+  filterState: FilterData
 }
 
 export interface FilterDrawerProps {
   isOpen: boolean
   onClose: () => void
+  totalListings: Listing[]
+  setListings: React.Dispatch<React.SetStateAction<Listing[]>>
 }
 
 // remove doorway specific enum references
@@ -45,28 +50,43 @@ const filterAvailabilityCleaned = Object.keys(FilterAvailabilityEnum).filter(
   (elem) => elem != FilterAvailabilityEnum.waitlistOpen
 )
 
+//todo: should we include sro?
 const unitTypeCleaned = Object.keys(UnitTypeEnum).filter(
-  (unitType) => unitType !== UnitTypeEnum.SRO && unitType != UnitTypeEnum.fiveBdrm
+  (unitType) => unitType !== UnitTypeEnum.SRO
 )
+
 export const unitTypeMapping = {
   [UnitTypeEnum.studio]: 0,
-  [UnitTypeEnum.SRO]: 0,
   [UnitTypeEnum.oneBdrm]: 1,
   [UnitTypeEnum.twoBdrm]: 2,
   [UnitTypeEnum.threeBdrm]: 3,
   [UnitTypeEnum.fourBdrm]: 4,
   [UnitTypeEnum.fiveBdrm]: 5,
 }
+ListingFilterKeys.section8Acceptance
+export interface FilterData {
+  availability: Record<FilterAvailabilityEnum, boolean>
+  bedroomTypes: Record<UnitTypeEnum, boolean>
+  homeType: Record<HomeTypeEnum, boolean>
+  isVerified: boolean
+  listingFeatures: Record<keyof ListingFeatures, boolean>
+  monthlyRent: Record<"maxRent" | "minRent", number>
+  regions: Record<RegionEnum, boolean>
+  section8Acceptance: boolean
+}
 
 const buildDefaultFilterFields = (
   filterType: ListingFilterKeys,
   stringBase: string,
-  keyArr: string[]
+  keyArr: string[],
+  existingData: FilterData
 ): FilterField[] =>
   keyArr.map((key) => {
+    console.log(existingData?.[filterType]?.[key])
     return {
       key: `${filterType}.${key}`,
       label: t(`${stringBase}.${key}`),
+      defaultChecked: existingData?.[filterType]?.[key] ?? false,
     }
   })
 
@@ -86,6 +106,7 @@ const CheckboxGroup = (props: CheckboxGroupProps) => {
                   labelClassName={styles["filter-checkbox-label"]}
                   type="checkbox"
                   register={props.register}
+                  inputProps={{ defaultChecked: field.defaultChecked }}
                 />
               </Grid.Cell>
             )
@@ -111,6 +132,7 @@ const RentSection = (props: RentSectionProps) => (
             register={props.register}
             getValues={props.getValues}
             setValue={props.setValue}
+            defaultValue={props.filterState?.[ListingFilterKeys.monthlyRent]?.minRent}
           ></Field>
         </Grid.Cell>
         <Grid.Cell>
@@ -123,6 +145,7 @@ const RentSection = (props: RentSectionProps) => (
             register={props.register}
             getValues={props.getValues}
             setValue={props.setValue}
+            defaultValue={props.filterState?.[ListingFilterKeys.monthlyRent]?.maxRent}
           ></Field>
         </Grid.Cell>
       </Grid.Row>
@@ -135,6 +158,9 @@ const RentSection = (props: RentSectionProps) => (
             labelClassName={styles["filter-checkbox-label"]}
             type="checkbox"
             register={props.register}
+            inputProps={{
+              defaultChecked: props.filterState?.[ListingFilterKeys.section8Acceptance] ?? false,
+            }}
           ></Field>
         </Grid.Cell>
       </Grid.Row>
@@ -142,32 +168,34 @@ const RentSection = (props: RentSectionProps) => (
   </fieldset>
 )
 
+const arrayFilters: ListingFilterKeys[] = [
+  ListingFilterKeys.bedroomTypes,
+  ListingFilterKeys.counties,
+  ListingFilterKeys.homeTypes,
+  ListingFilterKeys.listingFeatures,
+  ListingFilterKeys.regions,
+  ListingFilterKeys.reservedCommunityTypes,
+]
+const booleanFilters: ListingFilterKeys[] = [
+  ListingFilterKeys.isVerified,
+  ListingFilterKeys.section8Acceptance,
+]
+const indvidualFilters: ListingFilterKeys[] = [
+  ListingFilterKeys.bathrooms,
+  ListingFilterKeys.jurisdiction,
+]
 const FilterDrawer = (props: FilterDrawerProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, trigger, getValues, setValue } = useForm()
+  const [filterState, setFilterState] = useState<FilterData>()
   const { listingsService } = useContext(AuthContext)
-  const arrayFilters: ListingFilterKeys[] = [
-    ListingFilterKeys.counties,
-    ListingFilterKeys.homeTypes,
-    ListingFilterKeys.listingFeatures,
-    ListingFilterKeys.regions,
-    ListingFilterKeys.reservedCommunityTypes,
-  ]
-  const booleanFilters: ListingFilterKeys[] = [
-    ListingFilterKeys.isVerified,
-    ListingFilterKeys.section8Acceptance,
-  ]
-  const indvidualFilters: ListingFilterKeys[] = [
-    ListingFilterKeys.availability,
-    ListingFilterKeys.bathrooms,
-    ListingFilterKeys.bedrooms,
-    ListingFilterKeys.jurisdiction,
-  ]
 
   async function onFormSubmit() {
     const validation = await trigger()
     if (!validation) return
     const data = getValues()
+    setFilterState(data as FilterData)
+    console.log(data)
     const filters: ListingFilterParams[] = []
     Object.entries(data).forEach(([filterType, userSelections]) => {
       if (indvidualFilters.includes(ListingFilterKeys[filterType])) {
@@ -176,11 +204,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             const filter = {
               $comparison: EnumListingFilterParamsComparison["="],
             }
-            if (filterType === ListingFilterKeys.bedrooms) {
-              filter[filterType] = unitTypeMapping[field[0]]
-            } else {
-              filter[filterType] = field[0]
-            }
+            filter[filterType] = field[0]
             filters.push(filter)
           }
         })
@@ -188,7 +212,11 @@ const FilterDrawer = (props: FilterDrawerProps) => {
         const selectedFields = []
         Object.entries(userSelections).forEach((field: [ListingFilterKeys, any]) => {
           if (field[1]) {
-            selectedFields.push(field[0])
+            if (filterType === ListingFilterKeys.bedroomTypes) {
+              selectedFields.push(unitTypeMapping[field[0]])
+            } else {
+              selectedFields.push(field[0])
+            }
           }
         })
         if (selectedFields.length > 0) {
@@ -199,53 +227,47 @@ const FilterDrawer = (props: FilterDrawerProps) => {
           filters.push(filter)
         }
       } else if (booleanFilters.includes(ListingFilterKeys[filterType]) && userSelections) {
+        console.log(userSelections)
         const filter = {
           $comparison: EnumListingFilterParamsComparison["="],
         }
-        filter[filterType] = userSelections
+        filter[filterType] = true
         filters.push(filter)
       } else if (filterType === ListingFilterKeys.monthlyRent) {
         if (userSelections["minRent"]) {
           const filter = {
             $comparison: EnumListingFilterParamsComparison[">="],
           }
-          filter[ListingFilterKeys.monthlyRent] = userSelections["minRent"]
+          filter[ListingFilterKeys.monthlyRent] = userSelections["minRent"]?.replace(",", "")
           filters.push(filter)
         }
         if (userSelections["maxRent"]) {
           const filter = {
             $comparison: EnumListingFilterParamsComparison["<="],
           }
-          filter[ListingFilterKeys.monthlyRent] = userSelections["maxRent"]
+          filter[ListingFilterKeys.monthlyRent] = userSelections["maxRent"]?.replace(",", "")
           filters.push(filter)
         }
       }
     })
-    console.log(filters)
-    const query: ListingsQueryBody = {
-      page: 1,
-      view: ListingViews.base,
-      filter: filters,
+    if (filters.length > 0) {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.base,
+        filter: filters,
+      }
+      console.log(filters)
+      const filteredListings = await listingsService.filterableList({ body: query })
+      console.log(filteredListings.items)
+      props.setListings(filteredListings.items)
+    } else {
+      props.setListings(props.totalListings)
     }
-    const filteredListings = await listingsService.filterableList({ body: query })
-    console.log(filteredListings.items)
-
-    // await fetchBaseListingData(
-    //   {
-    //     page: 1,
-    //     additionalFilters: filters,
-    //     orderBy: [ListingOrderByKeys.mostRecentlyPublished],
-    //     orderDir: [OrderByEnum.desc],
-    //     limit: process.env.maxOpenListings,
-    //   },
-    //   context.req
-    // )
-
-    // console.log(data)
+    props.onClose()
   }
 
   return (
-    <Form onSubmit={() => false}>
+    <Form>
       <Drawer
         isOpen={props.isOpen}
         className={styles["filter-drawer"]}
@@ -261,6 +283,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
               {
                 key: ListingFilterKeys.isVerified,
                 label: t("listings.confirmedListingsOnly"),
+                defaultChecked: filterState?.[ListingFilterKeys.isVerified],
               },
             ]}
             register={register}
@@ -271,7 +294,8 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             fields={buildDefaultFilterFields(
               ListingFilterKeys.availability,
               "listings.availability",
-              filterAvailabilityCleaned
+              filterAvailabilityCleaned,
+              filterState
             )}
             register={register}
           />
@@ -280,26 +304,34 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             fields={buildDefaultFilterFields(
               ListingFilterKeys.homeTypes,
               "listings.homeType",
-              Object.keys(HomeTypeEnum)
+              Object.keys(HomeTypeEnum),
+              filterState
             )}
             register={register}
           />
           <CheckboxGroup
             groupLabel={t("listings.unitTypes.bedroomSize")}
             fields={buildDefaultFilterFields(
-              ListingFilterKeys.bedrooms,
+              ListingFilterKeys.bedroomTypes,
               "listings.unitTypes.expanded",
-              unitTypeCleaned
+              unitTypeCleaned,
+              filterState
             )}
             register={register}
           />
-          <RentSection register={register} getValues={getValues} setValue={setValue} />
+          <RentSection
+            register={register}
+            getValues={getValues}
+            setValue={setValue}
+            filterState={filterState}
+          />
           <CheckboxGroup
             groupLabel={t("t.region")}
             fields={Object.keys(RegionEnum).map((region) => {
               return {
                 key: `${ListingFilterKeys.regions}.${region}`,
                 label: region.replace("_", " "),
+                defaultChecked: filterState?.[ListingFilterKeys.regions]?.[region],
               }
             })}
             register={register}
@@ -309,7 +341,8 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             fields={buildDefaultFilterFields(
               ListingFilterKeys.listingFeatures,
               "eligibility.accessibility",
-              listingFeatures
+              listingFeatures,
+              filterState
             )}
             register={register}
           />

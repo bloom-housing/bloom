@@ -48,6 +48,8 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
   const { profile, userService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState<boolean>(false)
+  // todo change to empty initial and then check url
+  const [listings, setListings] = useState<Listing[]>(props.listings)
   const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
 
@@ -115,6 +117,9 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
       </Tabs>
     </MaxWidthLayout>
   )
+  useEffect(() => {
+    console.log("listings", listings)
+  }, [listings])
 
   return (
     <Layout>
@@ -123,7 +128,12 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
       </Head>
       <MetaTags title={t("nav.siteTitle")} description={metaDescription} />
       <PageHeaderSection heading={t("pageTitle.rent")} inverse={true} content={ListingTabs} />
-      <FilterDrawer isOpen={isFilterDrawerOpen} onClose={() => setIsFilterDrawerOpen(false)} />
+      <FilterDrawer
+        isOpen={isFilterDrawerOpen}
+        onClose={() => setIsFilterDrawerOpen(false)}
+        totalListings={props.listings}
+        setListings={setListings}
+      />
       <div className={styles["listing-directory"]}>
         {props.paginationData && (
           <div className={styles["browse-header"]}>
@@ -152,9 +162,9 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
           <MaxWidthLayout className={styles["listings-max-width-layout"]}>
             <div className={styles["content"]}>
               <>
-                {props.listings?.length > 0 ? (
+                {listings?.length > 0 ? (
                   <ul>
-                    {props.listings.map((listing, index) => {
+                    {listings.map((listing, index) => {
                       return (
                         <ListingCard
                           listing={listing}
