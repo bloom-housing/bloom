@@ -110,6 +110,5 @@ All models and services are hot-loadable based on:
     * Human oversight workflows
     * Transparent output verification
 
-For endpoint details, refer to the [API Reference](./docs/api-reference.md). For usage instructions, see the [User Guide](./docs/user-guide.md).
-
+For endpoint details, refer to the [API Reference](./api-reference.md). For usage instructions, see the [User Guide](./user-guide.md).
 ---
