@@ -5,6 +5,7 @@ This guide provides technical implementation details, setup instructions, and ar
 ---
 
 ## Project Structure
+```
 app/
 ├── api/routes/
 ├── core/pipeline/
@@ -12,7 +13,7 @@ app/
 ├── utils/
 ├── audit/
 ├── admin/
-
+```
 Config files: `.env`, `template.env`, `install.sh`, `health_check.py`
 
 ---
