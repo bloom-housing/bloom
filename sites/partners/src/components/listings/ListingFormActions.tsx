@@ -62,7 +62,8 @@ const ListingFormActions = ({
   const isListingApprover =
     profile?.userRoles.isAdmin ||
     (profile?.userRoles.isJurisdictionalAdmin &&
-      listingApprovalPermissions?.includes(UserRoleEnum.jurisdictionAdmin))
+      listingApprovalPermissions?.includes(UserRoleEnum.jurisdictionAdmin)) ||
+    (profile?.userRoles.isPartner && listingApprovalPermissions?.includes(UserRoleEnum.partner))
 
   const duplicateListingPermissions = jurisdiction?.duplicateListingPermissions
   const isListingCopier =
@@ -627,7 +628,7 @@ const ListingFormActions = ({
     else if (profile?.userRoles.isPartner) {
       // new unsaved listing
       if (type === ListingFormActionsType.add) {
-        elements.push(isListingApprover ? publishButton : submitButton)
+        elements.push(isListingApprover || !isListingApprovalEnabled ? publishButton : submitButton)
         elements.push(saveDraftButton)
         elements.push(cancelButton)
       }
@@ -645,7 +646,7 @@ const ListingFormActions = ({
         listing.status === ListingsStatusEnum.pending &&
         type === ListingFormActionsType.edit
       ) {
-        elements.push(isListingApprover ? publishButton : submitButton)
+        elements.push(isListingApprover || !isListingApprovalEnabled ? publishButton : submitButton)
         elements.push(saveContinueButton)
         elements.push(cancelButton)
       }
@@ -663,7 +664,7 @@ const ListingFormActions = ({
         listing.status === ListingsStatusEnum.pendingReview &&
         type === ListingFormActionsType.edit
       ) {
-        elements.push(isListingApprover ? publishButton : submitButton)
+        elements.push(isListingApprover || !isListingApprovalEnabled ? publishButton : submitButton)
         elements.push(saveContinueButton)
         elements.push(cancelButton)
       }
@@ -682,7 +683,7 @@ const ListingFormActions = ({
         listing.status === ListingsStatusEnum.changesRequested &&
         type === ListingFormActionsType.edit
       ) {
-        elements.push(isListingApprover ? publishButton : submitButton)
+        elements.push(isListingApprover || !isListingApprovalEnabled ? publishButton : submitButton)
         elements.push(saveContinueButton)
         elements.push(cancelButton)
       }
