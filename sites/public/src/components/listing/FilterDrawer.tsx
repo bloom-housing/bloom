@@ -182,10 +182,11 @@ const booleanFilters: ListingFilterKeys[] = [
   ListingFilterKeys.isVerified,
   ListingFilterKeys.section8Acceptance,
 ]
-const indvidualFilters: ListingFilterKeys[] = [
-  ListingFilterKeys.bathrooms,
-  ListingFilterKeys.jurisdiction,
-]
+// special cases not yet implemented
+// const indvidualFilters: ListingFilterKeys[] = [
+//   ListingFilterKeys.bathrooms,
+//   ListingFilterKeys.jurisdiction,
+// ]
 const FilterDrawer = (props: FilterDrawerProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, trigger, handleSubmit, getValues, setValue } = useForm()
@@ -195,25 +196,23 @@ const FilterDrawer = (props: FilterDrawerProps) => {
   const onSubmit = async (data) => {
     const validation = await trigger()
     if (!validation) return
-    console.log("in submit", data)
     setFilterState(data as FilterData)
     const filters: ListingFilterParams[] = [
       { $comparison: EnumListingFilterParamsComparison["="], status: ListingsStatusEnum.active },
     ]
     Object.entries(data).forEach(([filterType, userSelections]) => {
-      console.log(filterType)
-      if (indvidualFilters.includes(ListingFilterKeys[filterType])) {
-        console.log(userSelections)
-        Object.entries(userSelections).forEach((field: [ListingFilterKeys, any]) => {
-          if (field[1]) {
-            const filter = {
-              $comparison: EnumListingFilterParamsComparison["="],
-            }
-            filter[filterType] = field[0]
-            filters.push(filter)
-          }
-        })
-      } else if (arrayFilters.includes(ListingFilterKeys[filterType])) {
+      // if (indvidualFilters.includes(ListingFilterKeys[filterType])) {
+      //   Object.entries(userSelections).forEach((field: [ListingFilterKeys, any]) => {
+      //     if (field[1]) {
+      //       const filter = {
+      //         $comparison: EnumListingFilterParamsComparison["="],
+      //       }
+      //       filter[filterType] = field[0]
+      //       filters.push(filter)
+      //     }
+      //   })
+      // } else
+      if (arrayFilters.includes(ListingFilterKeys[filterType])) {
         const selectedFields = []
         Object.entries(userSelections).forEach((field: [ListingFilterKeys, any]) => {
           if (field[1]) {
@@ -249,14 +248,12 @@ const FilterDrawer = (props: FilterDrawerProps) => {
           const filter = {
             $comparison: EnumListingFilterParamsComparison["<="],
           }
-          console.log("here", userSelections["maxRent"]?.replace(",", ""))
 
           filter[ListingFilterKeys.monthlyRent] = userSelections["maxRent"]?.replace(",", "")
           filters.push(filter)
         }
       }
     })
-    console.log("be filters", filters)
     //active filtering by default
     if (filters.length > 1) {
       const query: ListingsQueryBody = {
@@ -275,7 +272,6 @@ const FilterDrawer = (props: FilterDrawerProps) => {
   }
   const onError = () => {
     window.scrollTo(0, 0)
-    console.log("I'm begging")
   }
   return (
     <Drawer
