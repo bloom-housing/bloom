@@ -113,6 +113,11 @@ describe('Listing Controller Tests', () => {
     hearing: true,
     visual: false,
     mobility: true,
+    barrierFreeUnitEntrance: false,
+    loweredLightSwitch: true,
+    barrierFreeBathroom: false,
+    wideDoorways: true,
+    loweredCabinets: false,
   };
   const listingUtilities = {
     water: false,

@@ -241,8 +241,8 @@ describe("Listing Management Tests", () => {
     cy.getByID("petPolicy").type(listing["petPolicy"])
     cy.getByID("servicesOffered").type(listing["servicesOffered"])
     if (listing["accessibilityFeatures"]) {
-      listing["accessibilityFeatures"].forEach((feature: string) => {
-        cy.getByID(feature.toLowerCase()).check()
+      listing["accessibilityFeatures"].forEach((feature: string[]) => {
+        cy.getByID(feature[0]).check()
       })
     }
     cy.getByID("creditHistory").type(listing["creditHistory"])
@@ -384,8 +384,8 @@ describe("Listing Management Tests", () => {
     cy.getByID("petPolicy").contains(listing["petPolicy"])
     cy.getByID("servicesOffered").contains(listing["servicesOffered"])
     if (listing["accessibilityFeatures"]) {
-      listing["accessibilityFeatures"].forEach((feature: string) => {
-        cy.getByID("accessibilityFeatures").contains(feature)
+      listing["accessibilityFeatures"].forEach((feature: string[]) => {
+        cy.getByID("accessibilityFeatures").contains(feature[1])
       })
     }
     cy.getByID("creditHistory").contains(listing["creditHistory"])
