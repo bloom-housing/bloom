@@ -1,0 +1,35 @@
+flowchart TD
+    A[Document Upload] --> B[Document Parser]
+    B --> C[Content Classifier]
+    
+    C --> D[SimplificationLLM]
+    D --> |Raw Simplified Text| E[RuleEngine]
+    E --> |Apply Housing Rules| F[LegalCheck]
+    
+    F --> |Validation| G[Translation Module]
+    G --> |Multilingual Output| H[Cultural Adaptation]
+    
+    subgraph "Knowledge Base"
+        I[(TermDB)]
+        J[(PolicyDB)]
+        K[(Legal Precedents)]
+    end
+    
+    I -.-> E
+    J -.-> E
+    K -.-> F
+    
+    H --> L[Quality Check]
+    L --> M[Document Formatter]
+    M --> N[Version Control]
+    N --> O[Publishing API]
+    
+    subgraph "Continuous Improvement"
+        P[User Feedback]
+        Q[Expert Reviews]
+        R[Model Retraining]
+    end
+    
+    P --> R
+    Q --> R
+    R -.-> D
