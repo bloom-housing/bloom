@@ -499,7 +499,7 @@
   "authentication.timeout.text": "Para protektahan ang iyong pagkakakilanlan, mag-e-expire ang iyong sesyon sa loob ng isang minuto dahil sa kawalan ng aktibidad. Mawawala sa iyo ang anumang hindi na-save na impormasyon at ila-log out ka kung pipiliin mong hindi tumugon.",
   "config.routePrefix": "tl",
   "eligibility.accessibility.acInUnit": "AC sa Unit", 
-  "eligibility.accessibility.accessibleParking": "Accessible Parking Spot", 
+  "eligibility.accessibility.accessibleParking": "Accessible na Paradahan", 
   "eligibility.accessibility.barrierFreeBathroom": "Mga banyong walang harang", 
   "eligibility.accessibility.barrierFreeEntrance": "Walang hadlang (no-step) na pasukan ng ari-arian", 
   "eligibility.accessibility.barrierFreeUnitEntrance": "Mga pasukan ng unit na walang hadlang (no-step)", 
