@@ -11,7 +11,7 @@ const LeasingAgent = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, control, errors, clearErrors, watch, getValues, trigger } = formMethods
+  const { register, control, errors, clearErrors, watch, getValues } = formMethods
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   const leasingAgentPhoneField: string = watch("leasingAgentPhone")
