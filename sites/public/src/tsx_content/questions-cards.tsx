@@ -313,7 +313,7 @@ export function questionsLinkableCards(): React.ReactElement<CardProps>[] {
               </ul>
             </span>
           </DoorwayCollapsibleSection>
-          <DoorwayCollapsibleSection title={"Additional questions?"}>
+          <DoorwayCollapsibleSection title={t("help.faq.lotteryResults.additionalQuestions")}>
             <span>
               {t("help.faq.lotteryResults.additionalQuestionsResp1")}{" "}
               <a href={`mailto:doorway@housingbayarea.org`}>
