@@ -937,11 +937,27 @@ view CombinedListings {
   unitsSummarized           Json?               @map("units_summarized")
   listingImages             Json?               @map("listing_images")
   reservedCommunityTypes    Json?               @map("reserved_community_types")
-  units                     Json?
   isExternal                Boolean?            @map("is_external")
   urlSlug                   String?             @map("url_slug")
 
   @@map("combined_listings")
+}
+
+view CombinedListingsUnits {
+  id                        String              @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  units                     Json?
+
+   @@map("combined_listings_units")
+}
+
+view MapMarkers {
+  id                        String              @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  status                    String
+  latitude                  String?
+  longitude                 String?
+  isExternal                Boolean?            @map("is_external")
+
+  @@map("map_marker")
 }
 
 // END Doorway specific

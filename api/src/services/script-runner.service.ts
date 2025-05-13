@@ -675,6 +675,9 @@ export class ScriptRunnerService {
     const listingTransferMap = await this.prisma.listingTransferMap.findMany({
       take,
       skip,
+      orderBy: {
+        listingId: OrderByEnum.ASC,
+      },
     });
     console.log(
       `Found ${listingTransferMap.length} listings on page ${

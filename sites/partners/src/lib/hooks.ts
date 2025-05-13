@@ -516,7 +516,8 @@ export const useZipExport = (
   listingId: string,
   includeDemographics: boolean,
   isLottery: boolean,
-  isSpreadsheet = false
+  isSpreadsheet = false,
+  useSecurePathway = false
 ) => {
   const { applicationsService, lotteryService } = useContext(AuthContext)
   const [exportLoading, setExportLoading] = useState(false)
@@ -528,26 +529,51 @@ export const useZipExport = (
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let content: any
       if (isLottery) {
-        content = await lotteryService.lotteryResults(
-          { id: listingId, includeDemographics, timeZone: dayjs.tz.guess() },
-          { responseType: "arraybuffer" }
-        )
+        content = useSecurePathway
+          ? await lotteryService.lotteryResultsSecure({
+              id: listingId,
+              includeDemographics,
+              timeZone: dayjs.tz.guess(),
+            })
+          : await lotteryService.lotteryResults(
+              { id: listingId, includeDemographics, timeZone: dayjs.tz.guess() },
+              { responseType: "arraybuffer" }
+            )
       } else {
         if (isSpreadsheet) {
-          content = await applicationsService.listAsSpreadsheet(
-            { id: listingId, includeDemographics, timeZone: dayjs.tz.guess() },
-            { responseType: "arraybuffer" }
-          )
+          content = useSecurePathway
+            ? await applicationsService.listAsSpreadsheetSecure({
+                id: listingId,
+                includeDemographics,
+                timeZone: dayjs.tz.guess(),
+              })
+            : await applicationsService.listAsSpreadsheet(
+                { id: listingId, includeDemographics, timeZone: dayjs.tz.guess() },
+                { responseType: "arraybuffer" }
+              )
         } else {
-          content = await applicationsService.listAsCsv(
-            { id: listingId, includeDemographics, timeZone: dayjs.tz.guess() },
-            { responseType: "arraybuffer" }
-          )
+          content = useSecurePathway
+            ? await applicationsService.listAsCsvSecure({
+                id: listingId,
+                includeDemographics,
+                timeZone: dayjs.tz.guess(),
+              })
+            : await applicationsService.listAsCsv(
+                { id: listingId, includeDemographics, timeZone: dayjs.tz.guess() },
+                { responseType: "arraybuffer" }
+              )
         }
       }
 
-      const blob = new Blob([new Uint8Array(content)], { type: "application/zip" })
-      const url = window.URL.createObjectURL(blob)
+      let url: string
+
+      if (useSecurePathway) {
+        url = content
+      } else {
+        const blob = new Blob([new Uint8Array(content)], { type: "application/zip" })
+        url = window.URL.createObjectURL(blob)
+      }
+
       const link = document.createElement("a")
       link.href = url
       link.setAttribute(
