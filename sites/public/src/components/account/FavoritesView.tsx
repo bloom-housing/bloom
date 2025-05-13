@@ -24,7 +24,7 @@ import favoritesStyles from "./FavoritesView.module.scss"
 import { useProfileFavoriteListings } from "../../lib/hooks"
 import { isFeatureFlagOn, saveListingFavorite } from "../../lib/helpers"
 import { PageHeaderLayout } from "../../patterns/PageHeaderLayout"
-import { Button, Card, Heading, LoadingState } from "@bloom-housing/ui-seeds"
+import { Button, Card, LoadingState } from "@bloom-housing/ui-seeds"
 
 interface FavoritesViewProps {
   jurisdiction: Jurisdiction
