@@ -286,8 +286,8 @@ const FilterDrawer = (props: FilterDrawerProps) => {
       ariaDescribedBy="drawer-content"
     >
       <Drawer.Header id="drawer-heading">{t("t.filter")}</Drawer.Header>
-      <Form onSubmit={handleSubmit(onSubmit, onError)}>
-        <Drawer.Content id="drawer-content">
+      <Drawer.Content id="drawer-content">
+        <Form onSubmit={handleSubmit(onSubmit, onError)} id="filter">
           <CheckboxGroup
             groupLabel={t("listings.confirmedListings")}
             fields={[
@@ -357,16 +357,16 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             )}
             register={register}
           />
-        </Drawer.Content>
-        <Drawer.Footer>
-          <Button type="submit" variant="primary" size="sm">
-            {t("listings.showMatchingListings")}
-          </Button>
-          <Button variant="primary-outlined" size="sm" onClick={props.onClose}>
-            {t("t.cancel")}
-          </Button>
-        </Drawer.Footer>
-      </Form>
+        </Form>
+      </Drawer.Content>
+      <Drawer.Footer>
+        <Button type="submit" variant="primary" size="sm" nativeButtonProps={{ form: "filter" }}>
+          {t("listings.showMatchingListings")}
+        </Button>
+        <Button variant="primary-outlined" size="sm" onClick={props.onClose}>
+          {t("t.cancel")}
+        </Button>
+      </Drawer.Footer>
     </Drawer>
   )
 }
