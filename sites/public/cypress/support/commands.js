@@ -727,10 +727,8 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
       })
   }
 
-  if (!Cypress.env("showSeedsDesign")) {
-    pushMultiselect("preferences")
-    pushMultiselect("programs")
-  }
+  pushMultiselect("preferences")
+  pushMultiselect("programs")
 
   if (verify) {
     fields.forEach(({ id, fieldValue }) => {
