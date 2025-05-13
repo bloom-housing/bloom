@@ -242,7 +242,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
               preferences,
               programs,
               units: !enableUnitGroups ? units : [], // Clear existing units if unit groups flag has been enabled
-              unitGroups: enableUnitGroups ? unitGroups : [], // Clear exiting unit groups if the unit groups flag has been disbaled
+              unitGroups: enableUnitGroups ? unitGroups : [], // Clear existing unit groups if the unit groups flag has been disabled
               openHouseEvents,
               profile: profile,
               latLong,
