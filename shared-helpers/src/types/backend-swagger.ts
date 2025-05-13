@@ -2878,6 +2878,9 @@ export interface ListingFilterParams {
   monthlyRent?: number
 
   /**  */
+  multiselectQuestions?: string[]
+
+  /**  */
   name?: string
 
   /**  */
@@ -3259,6 +3262,21 @@ export interface ListingFeatures {
 
   /**  */
   mobility?: boolean
+
+  /**  */
+  barrierFreeUnitEntrance?: boolean
+
+  /**  */
+  loweredLightSwitch?: boolean
+
+  /**  */
+  barrierFreeBathroom?: boolean
+
+  /**  */
+  wideDoorways?: boolean
+
+  /**  */
+  loweredCabinets?: boolean
 }
 
 export interface ListingUtilities {
