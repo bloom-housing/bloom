@@ -490,11 +490,37 @@ export class ScriptRunnerService {
       'migrate Detroit to multiselect questions',
       requestingUser,
     );
+    const translationURLs = [
+      {
+        url: 'https://raw.githubusercontent.com/bloom-housing/bloom/dev/ui-components/src/locales/general.json',
+        key: 'generalCore',
+      },
+      {
+        url: 'https://raw.githubusercontent.com/bloom-housing/bloom/dev/sites/partners/page_content/locale_overrides/general.json',
+        key: 'generalPartners',
+      },
+      {
+        url: 'https://raw.githubusercontent.com/bloom-housing/bloom/dev/sites/public/page_content/locale_overrides/general.json',
+        key: 'generalPublic',
+      },
+      {
+        url: 'https://raw.githubusercontent.com/CityOfDetroit/bloom/9f2084c107ec865e3c13393e600a5ac45ee5f424/detroit-ui-components/src/locales/general.json',
+        key: 'detroitCore',
+      },
+      {
+        url: 'https://raw.githubusercontent.com/CityOfDetroit/bloom/dev/sites/partners/src/page_content/locale_overrides/general.json',
+        key: 'detroitPartners',
+      },
+      {
+        url: 'https://raw.githubusercontent.com/CityOfDetroit/bloom/dev/sites/public/src/page_content/locale_overrides/general.json',
+        key: 'detroitPublic',
+      },
+    ];
 
     const translations = {};
 
-    for (let i = 0; i < this.translationURLs.length; i++) {
-      const { url, key } = this.translationURLs[i];
+    for (let i = 0; i < translationURLs.length; i++) {
+      const { url, key } = translationURLs[i];
       translations[key] = await this.getTranslationFile(url);
     }
 
@@ -531,7 +557,6 @@ export class ScriptRunnerService {
         pref.form_metadata,
         'preferences',
         jurisInfo?.length ? jurisInfo[0].name : '',
-        true,
         translations,
       );
       await this.multiselectQuestionService.create({
@@ -578,14 +603,6 @@ export class ScriptRunnerService {
           WHERE jp.programs_id = '${prog.id}'
         `);
 
-      const { optOutText, options } = this.resolveOptionValues(
-        prog.form_metadata,
-        'programs',
-        jurisInfo?.length ? jurisInfo[0].name : '',
-        false,
-        translations,
-      );
-
       const res: MultiselectQuestion =
         await this.multiselectQuestionService.create({
           text: prog.title,
@@ -593,8 +610,8 @@ export class ScriptRunnerService {
           description: prog.description,
           links: null,
           hideFromListing: this.resolveHideFromListings(prog),
-          optOutText: optOutText ?? null,
-          options: options,
+          optOutText: null,
+          options: null,
           applicationSection:
             MultiselectQuestionsApplicationSectionEnum.programs,
           jurisdictions: jurisInfo.map((juris) => {
@@ -990,7 +1007,7 @@ export class ScriptRunnerService {
     },
   ];
 
-  private resolveHideFromListings(pref): boolean {
+  resolveHideFromListings(pref): boolean {
     if (pref.form_metadata && 'hideFromListing' in pref.form_metadata) {
       if (pref.form_metadata.hideFromListing) {
         return true;
@@ -1000,13 +1017,7 @@ export class ScriptRunnerService {
     return null;
   }
 
-  private resolveOptionValues(
-    formMetaData,
-    type,
-    juris,
-    isForPreferences,
-    translations,
-  ) {
+  resolveOptionValues(formMetaData, type, juris, translations) {
     let optOutText = null;
     const options = [];
     let shouldPush = true;
@@ -1026,37 +1037,15 @@ export class ScriptRunnerService {
       };
 
       if (
-        !isForPreferences &&
-        (!formMetaData.type || formMetaData.type !== 'checkbox') &&
-        index !== formMetaData.options.length - 1
-      ) {
-        toPush.exclusive = true;
-      } else if (
         option.exclusive &&
-        (formMetaData.hideGenericDecline || formMetaData.type === 'checkbox') &&
+        formMetaData.hideGenericDecline &&
         index !== formMetaData.options.length - 1
       ) {
         // for all but the last exlusive option push into options array
         toPush.exclusive = true;
       } else if (
         option.exclusive &&
-        (formMetaData.hideGenericDecline || formMetaData.type === 'checkbox') &&
-        index === formMetaData.options.length - 1
-      ) {
-        // for the last exclusive option add as optOutText
-        optOutText = this.getTranslated(
-          type,
-          formMetaData.key,
-          option.key === 'preferNotToSay'
-            ? 'preferNotToSay'
-            : `${option.key}.label`,
-          juris,
-          translations,
-        );
-        shouldPush = false;
-      } else if (
-        !isForPreferences &&
-        (!formMetaData.type || formMetaData.type !== 'checkbox') &&
+        formMetaData.hideGenericDecline &&
         index === formMetaData.options.length - 1
       ) {
         // for the last exclusive option add as optOutText
@@ -1101,7 +1090,7 @@ export class ScriptRunnerService {
     };
   }
 
-  private getTranslated(type, prefKey, translationKey, juris, translations) {
+  getTranslated(type, prefKey, translationKey, juris, translations) {
     let searchKey = `application.${type}.${prefKey}.${translationKey}`;
     if (translationKey === 'preferNotToSay') {
       searchKey = 't.preferNotToSay';
@@ -1115,23 +1104,6 @@ export class ScriptRunnerService {
       } else if (translations['detroitCore'][searchKey]) {
         return translations['detroitCore'][searchKey];
       }
-    } else if (['Alameda', 'San Mateo', 'San Jose'].includes(juris)) {
-      if (juris === 'Alameda' && translations['alamedaPublic'][searchKey]) {
-        return translations['alamedaPublic'][searchKey];
-      } else if (
-        juris === 'San Mateo' &&
-        translations['smcPublic'][searchKey]
-      ) {
-        return translations['smcPublic'][searchKey];
-      } else if (juris === 'San Jose' && translations['sjPublic'][searchKey]) {
-        return translations['sjPublic'][searchKey];
-      } else if (translations['hbaPublic'][searchKey]) {
-        return translations['hbaPublic'][searchKey];
-      } else if (translations['hbaPartners'][searchKey]) {
-        return translations['hbaPartners'][searchKey];
-      } else if (translations['hbaCore'][searchKey]) {
-        return translations['hbaCore'][searchKey];
-      }
     }
 
     if (translations['generalPublic'][searchKey]) {
@@ -1144,7 +1116,7 @@ export class ScriptRunnerService {
     return 'no translation';
   }
 
-  private getTranslationFile(url) {
+  getTranslationFile(url) {
     return new Promise((resolve, reject) =>
       https
         .get(url, (res) => {
@@ -1170,55 +1142,4 @@ export class ScriptRunnerService {
         }),
     );
   }
-
-  translationURLs = [
-    {
-      url: 'https://raw.githubusercontent.com/bloom-housing/bloom/dev/ui-components/src/locales/general.json',
-      key: 'generalCore',
-    },
-    {
-      url: 'https://raw.githubusercontent.com/bloom-housing/bloom/dev/sites/partners/page_content/locale_overrides/general.json',
-      key: 'generalPartners',
-    },
-    {
-      url: 'https://raw.githubusercontent.com/bloom-housing/bloom/dev/sites/public/page_content/locale_overrides/general.json',
-      key: 'generalPublic',
-    },
-    {
-      url: 'https://raw.githubusercontent.com/housingbayarea/bloom/dev/ui-components/src/locales/general.json',
-      key: 'hbaCore',
-    },
-    {
-      url: 'https://raw.githubusercontent.com/housingbayarea/bloom/dev/sites/partners/page_content/locale_overrides/general.json',
-      key: 'hbaPartners',
-    },
-    {
-      url: 'https://raw.githubusercontent.com/housingbayarea/bloom/dev/sites/public/page_content/locale_overrides/general.json',
-      key: 'hbaPublic',
-    },
-    {
-      url: 'https://raw.githubusercontent.com/CityOfDetroit/bloom/9f2084c107ec865e3c13393e600a5ac45ee5f424/detroit-ui-components/src/locales/general.json',
-      key: 'detroitCore',
-    },
-    {
-      url: 'https://raw.githubusercontent.com/CityOfDetroit/bloom/dev/sites/partners/src/page_content/locale_overrides/general.json',
-      key: 'detroitPartners',
-    },
-    {
-      url: 'https://raw.githubusercontent.com/CityOfDetroit/bloom/dev/sites/public/src/page_content/locale_overrides/general.json',
-      key: 'detroitPublic',
-    },
-    {
-      url: 'https://raw.githubusercontent.com/housingbayarea/bloom/0.3_alameda/sites/public/page_content/locale_overrides/general.json',
-      key: 'alamedaPublic',
-    },
-    {
-      url: 'https://raw.githubusercontent.com/housingbayarea/bloom/0.3_smc/sites/public/page_content/locale_overrides/general.json',
-      key: 'smcPublic',
-    },
-    {
-      url: 'https://raw.githubusercontent.com/housingbayarea/bloom/san-jose/sites/public/page_content/locale_overrides/general.json',
-      key: 'sjPublic',
-    },
-  ];
 }

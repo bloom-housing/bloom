@@ -738,7 +738,7 @@ describe('Testing script runner service', () => {
     expect(prisma.featureFlags.create).toHaveBeenCalledTimes(17);
   });
 
-  it('should ', async () => {
+  it('should migrate preferences and programs to the multiselect question table', async () => {
     const id = randomUUID();
     const scriptName = 'migrate Detroit to multiselect questions';
 
@@ -910,6 +910,234 @@ describe('Testing script runner service', () => {
       where: {
         scriptName,
       },
+    });
+  });
+
+  describe('migrateDetroitToMultiselectQuestions helpers', () => {
+    const translations = {
+      generalCore: {
+        'application.type.core.translationKey': 'general core translation',
+        't.preferNotToSay': 'general core prefer not to say',
+      },
+      generalPartners: {
+        'application.type.partners.translationKey':
+          'general partners translation',
+      },
+      generalPublic: {
+        'application.type.public.translationKey': 'general public translation',
+      },
+      detroitCore: {
+        'application.type.core.translationKey': 'detroit core translation',
+      },
+      detroitPartners: {
+        'application.type.partners.translationKey':
+          'detroit partners translation',
+      },
+      detroitPublic: {
+        'application.type.public.translationKey': 'detroit public translation',
+        'application.preferences.liveWork.live.label': 'Live in city',
+        'application.preferences.liveWork.work.label': 'Work in city',
+        'application.preferences.PBV.residency.label': 'Residency',
+        'application.preferences.PBV.homeless.label': 'Homeless',
+        'application.preferences.PBV.homeless.description':
+          'Unhoused or in temporary housing',
+        'application.preferences.PBV.noneApplyButConsider.label':
+          'None Apply But Consider',
+        'application.preferences.PBV.doNotConsider.label': 'Do Not Consider',
+      },
+    };
+
+    describe('test resolvehideFromListing', () => {
+      it('should find hideFromListing in object and return true', () => {
+        const pref = { form_metadata: { hideFromListing: true } };
+
+        const res = service.resolveHideFromListings(pref);
+
+        expect(res).toBe(true);
+      });
+
+      it('should find hideFromListing in object and return false', () => {
+        const pref = { form_metadata: { hideFromListing: false } };
+
+        const res = service.resolveHideFromListings(pref);
+
+        expect(res).toBe(false);
+      });
+
+      it('should not find hideFromListing in object and return null', () => {
+        const pref1 = {};
+
+        const res1 = service.resolveHideFromListings(pref1);
+
+        expect(res1).toBeNull();
+
+        const pref2 = { form_metadata: {} };
+
+        const res2 = service.resolveHideFromListings(pref2);
+
+        expect(res2).toBeNull();
+      });
+    });
+
+    describe('test resolveOptionValues', () => {
+      it('should resolve simple option values', () => {
+        const formMetaData = {
+          key: 'liveWork',
+          options: [
+            { key: 'live', extraData: [] },
+            { key: 'work', extraData: [] },
+          ],
+        };
+
+        const res = service.resolveOptionValues(
+          formMetaData,
+          'preferences',
+          'Detroit',
+          translations,
+        );
+
+        expect(res).toStrictEqual({
+          optOutText: null,
+          options: [
+            { ordinal: 1, text: 'Live in city' },
+            { ordinal: 2, text: 'Work in city' },
+          ],
+        });
+      });
+
+      it('should resolve complex option values', () => {
+        const formMetaData = {
+          key: 'PBV',
+          options: [
+            {
+              key: 'residency',
+              extraData: [
+                { key: 'name', type: 'text' },
+                { key: 'address', type: 'address' },
+              ],
+            },
+            { key: 'homeless', extraData: [], description: true },
+            {
+              key: 'noneApplyButConsider',
+              exclusive: true,
+              extraData: [],
+            },
+            {
+              key: 'doNotConsider',
+              exclusive: true,
+              extraData: [],
+              description: false,
+            },
+          ],
+          hideGenericDecline: true,
+        };
+
+        const res = service.resolveOptionValues(
+          formMetaData,
+          'preferences',
+          'Detroit',
+          translations,
+        );
+
+        expect(res).toStrictEqual({
+          optOutText: 'Do Not Consider',
+          options: [
+            { ordinal: 1, text: 'Residency', collectAddress: true },
+            {
+              ordinal: 2,
+              text: 'Homeless',
+              description: 'Unhoused or in temporary housing',
+            },
+            { ordinal: 3, text: 'None Apply But Consider', exclusive: true },
+          ],
+        });
+      });
+    });
+
+    describe('test getTranslated', () => {
+      it('should return no translation when no searchkey is matched', () => {
+        const res = service.getTranslated('', '', '', '', translations);
+
+        expect(res).toBe('no translation');
+      });
+
+      it('should return preferNotToSay when translationKey is preferNotToSay', () => {
+        const res = service.getTranslated(
+          '',
+          '',
+          'preferNotToSay',
+          '',
+          translations,
+        );
+
+        expect(res).toBe('general core prefer not to say');
+      });
+
+      it('should return jurisdiction specific translation if found', () => {
+        const res = service.getTranslated(
+          'type',
+          'core',
+          'translationKey',
+          'Detroit',
+          translations,
+        );
+
+        expect(res).toBe('detroit core translation');
+      });
+
+      it('should return generic translation if jurisdiction not found', () => {
+        const res = service.getTranslated(
+          'type',
+          'core',
+          'translationKey',
+          'juris',
+          translations,
+        );
+
+        expect(res).toBe('general core translation');
+      });
+
+      it('should return translation based on full searchkey', () => {
+        const generalPartnersRes = service.getTranslated(
+          'type',
+          'partners',
+          'translationKey',
+          '',
+          translations,
+        );
+
+        expect(generalPartnersRes).toBe('general partners translation');
+
+        const generalPublicRes = service.getTranslated(
+          'type',
+          'public',
+          'translationKey',
+          '',
+          translations,
+        );
+
+        expect(generalPublicRes).toBe('general public translation');
+
+        const detroitPartnersRes = service.getTranslated(
+          'type',
+          'partners',
+          'translationKey',
+          'Detroit',
+          translations,
+        );
+
+        expect(detroitPartnersRes).toBe('detroit partners translation');
+
+        const detroitPublicRes = service.getTranslated(
+          'type',
+          'public',
+          'translationKey',
+          'Detroit',
+          translations,
+        );
+
+        expect(detroitPublicRes).toBe('detroit public translation');
+      });
     });
   });
 });
