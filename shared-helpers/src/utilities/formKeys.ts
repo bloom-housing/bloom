@@ -270,6 +270,11 @@ export const listingFeatures = [
   "hearing",
   "mobility",
   "visual",
+  "barrierFreeUnitEntrance",
+  "loweredLightSwitch",
+  "barrierFreeBathroom",
+  "wideDoorways",
+  "loweredCabinets",
 ]
 
 export enum RoleOption {
