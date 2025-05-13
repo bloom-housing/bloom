@@ -50,6 +50,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState<boolean>(false)
   // todo change to empty initial and then check url
   const [listings, setListings] = useState<Listing[]>(props.listings)
+  const [filtered, setFiltered] = useState<boolean>(false)
   const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
 
@@ -60,8 +61,8 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
       event: "pageView",
       pageTitle: "Rent Affordable Housing - Housing Portal",
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
-      numberOfListings: props.listings.length,
-      listingIds: props.listings.map((listing) => listing.id),
+      numberOfListings: listings.length,
+      listingIds: listings.map((listing) => listing.id),
     })
 
     if (profile) {
@@ -69,7 +70,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
         setFavoriteListingIds(listingIds)
       })
     }
-  }, [profile, props.listings, setFavoriteListingIds, userService])
+  }, [profile, listings, setFavoriteListingIds, userService])
 
   const saveFavoriteFn = (listingId: string) => {
     return (listingFavorited) => {
@@ -133,6 +134,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
         onClose={() => setIsFilterDrawerOpen(false)}
         totalListings={props.listings}
         setListings={setListings}
+        setFiltered={setFiltered}
       />
       <div className={styles["listing-directory"]}>
         {props.paginationData && (

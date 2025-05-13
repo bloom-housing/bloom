@@ -14,6 +14,7 @@ import {
   ListingFilterParams,
   Listing,
   ListingFeatures,
+  ListingsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import styles from "./FilterDrawer.module.scss"
 import { useContext, useState } from "react"
@@ -43,6 +44,7 @@ export interface FilterDrawerProps {
   onClose: () => void
   totalListings: Listing[]
   setListings: React.Dispatch<React.SetStateAction<Listing[]>>
+  setFiltered: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 // remove doorway specific enum references
@@ -82,7 +84,6 @@ const buildDefaultFilterFields = (
   existingData: FilterData
 ): FilterField[] =>
   keyArr.map((key) => {
-    console.log(existingData?.[filterType]?.[key])
     return {
       key: `${filterType}.${key}`,
       label: t(`${stringBase}.${key}`),
@@ -175,6 +176,7 @@ const arrayFilters: ListingFilterKeys[] = [
   ListingFilterKeys.listingFeatures,
   ListingFilterKeys.regions,
   ListingFilterKeys.reservedCommunityTypes,
+  ListingFilterKeys.availabilities,
 ]
 const booleanFilters: ListingFilterKeys[] = [
   ListingFilterKeys.isVerified,
@@ -186,19 +188,22 @@ const indvidualFilters: ListingFilterKeys[] = [
 ]
 const FilterDrawer = (props: FilterDrawerProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, trigger, getValues, setValue } = useForm()
+  const { register, trigger, handleSubmit, getValues, setValue } = useForm()
   const [filterState, setFilterState] = useState<FilterData>()
   const { listingsService } = useContext(AuthContext)
 
-  async function onFormSubmit() {
+  const onSubmit = async (data) => {
     const validation = await trigger()
     if (!validation) return
-    const data = getValues()
+    console.log("in submit", data)
     setFilterState(data as FilterData)
-    console.log(data)
-    const filters: ListingFilterParams[] = []
+    const filters: ListingFilterParams[] = [
+      { $comparison: EnumListingFilterParamsComparison["="], status: ListingsStatusEnum.active },
+    ]
     Object.entries(data).forEach(([filterType, userSelections]) => {
+      console.log(filterType)
       if (indvidualFilters.includes(ListingFilterKeys[filterType])) {
+        console.log(userSelections)
         Object.entries(userSelections).forEach((field: [ListingFilterKeys, any]) => {
           if (field[1]) {
             const filter = {
@@ -227,7 +232,6 @@ const FilterDrawer = (props: FilterDrawerProps) => {
           filters.push(filter)
         }
       } else if (booleanFilters.includes(ListingFilterKeys[filterType]) && userSelections) {
-        console.log(userSelections)
         const filter = {
           $comparison: EnumListingFilterParamsComparison["="],
         }
@@ -245,37 +249,44 @@ const FilterDrawer = (props: FilterDrawerProps) => {
           const filter = {
             $comparison: EnumListingFilterParamsComparison["<="],
           }
+          console.log("here", userSelections["maxRent"]?.replace(",", ""))
+
           filter[ListingFilterKeys.monthlyRent] = userSelections["maxRent"]?.replace(",", "")
           filters.push(filter)
         }
       }
     })
-    if (filters.length > 0) {
+    console.log("be filters", filters)
+    //active filtering by default
+    if (filters.length > 1) {
       const query: ListingsQueryBody = {
         page: 1,
         view: ListingViews.base,
         filter: filters,
       }
-      console.log(filters)
       const filteredListings = await listingsService.filterableList({ body: query })
-      console.log(filteredListings.items)
       props.setListings(filteredListings.items)
+      props.setFiltered(true)
     } else {
       props.setListings(props.totalListings)
+      props.setFiltered(false)
     }
     props.onClose()
   }
-
+  const onError = () => {
+    window.scrollTo(0, 0)
+    console.log("I'm begging")
+  }
   return (
-    <Form>
-      <Drawer
-        isOpen={props.isOpen}
-        className={styles["filter-drawer"]}
-        onClose={props.onClose}
-        ariaLabelledBy="drawer-heading"
-        ariaDescribedBy="drawer-content"
-      >
-        <Drawer.Header id="drawer-heading">{t("t.filter")}</Drawer.Header>
+    <Drawer
+      isOpen={props.isOpen}
+      className={styles["filter-drawer"]}
+      onClose={props.onClose}
+      ariaLabelledBy="drawer-heading"
+      ariaDescribedBy="drawer-content"
+    >
+      <Drawer.Header id="drawer-heading">{t("t.filter")}</Drawer.Header>
+      <Form onSubmit={handleSubmit(onSubmit, onError)}>
         <Drawer.Content id="drawer-content">
           <CheckboxGroup
             groupLabel={t("listings.confirmedListings")}
@@ -292,7 +303,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
           <CheckboxGroup
             groupLabel={t("t.availability")}
             fields={buildDefaultFilterFields(
-              ListingFilterKeys.availability,
+              ListingFilterKeys.availabilities,
               "listings.availability",
               filterAvailabilityCleaned,
               filterState
@@ -348,15 +359,15 @@ const FilterDrawer = (props: FilterDrawerProps) => {
           />
         </Drawer.Content>
         <Drawer.Footer>
-          <Button variant="primary" onClick={() => onFormSubmit()} size="sm">
+          <Button type="submit" variant="primary" size="sm">
             {t("listings.showMatchingListings")}
           </Button>
           <Button variant="primary-outlined" size="sm" onClick={props.onClose}>
             {t("t.cancel")}
           </Button>
         </Drawer.Footer>
-      </Drawer>
-    </Form>
+      </Form>
+    </Drawer>
   )
 }
 
