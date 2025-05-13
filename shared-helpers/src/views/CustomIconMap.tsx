@@ -10,6 +10,7 @@ import HouseIcon from "@heroicons/react/24/outline/HomeIcon"
 import EnvelopeIcon from "@heroicons/react/24/outline/EnvelopeIcon"
 import Cog8ToothIcon from "@heroicons/react/24/solid/Cog8ToothIcon"
 import MapPinIcon from "@heroicons/react/24/outline/MapPinIcon"
+import ListBulletIcon from "@heroicons/react/24/outline/ListBulletIcon"
 
 export const CustomIconMap = {
   application: Application,
@@ -24,6 +25,7 @@ export const CustomIconMap = {
   gear: <Cog8ToothIcon />,
   mapPin: <MapPinIcon />,
   house: <HouseIcon />,
+  listBullet: <ListBulletIcon />,
 }
 
 export type CustomIconType = keyof typeof CustomIconMap

@@ -13,9 +13,8 @@ import {
   AlertTypes,
   DOBField,
   DOBFieldValues,
-  LoadingOverlay,
 } from "@bloom-housing/ui-components"
-import { Button, Card } from "@bloom-housing/ui-seeds"
+import { Button, Card, LoadingState } from "@bloom-housing/ui-seeds"
 import Link from "next/link"
 import {
   PageView,
@@ -222,252 +221,250 @@ const Edit = () => {
           subtitle={t("account.accountSettingsSubtitle")}
           headingPriority={1}
         >
-          <LoadingOverlay isLoading={loading}>
-            <>
-              <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
-                {nameAlert && (
-                  <AlertBox
-                    type={nameAlert.type}
-                    onClose={() => setNameAlert(null)}
-                    className="mb-4"
-                    inverted
-                    closeable
-                  >
-                    {nameAlert.message}
-                  </AlertBox>
-                )}
-                <Form id="update-name" onSubmit={nameHandleSubmit(onNameSubmit)}>
-                  <label className={styles["account-settings-label"]} htmlFor="firstName">
-                    {t("application.name.yourName")}
-                  </label>
-                  <Field
-                    label={t("application.contact.givenName")}
-                    className="my-3"
-                    controlClassName="mt-2"
-                    name="firstName"
-                    error={nameErrors.firstName}
-                    validation={{ maxLength: 64 }}
-                    errorMessage={
-                      nameErrors.firstName?.type === "maxLength"
-                        ? t("errors.maxLength", { length: 64 })
-                        : t("errors.firstNameError")
-                    }
-                    register={nameRegister}
-                    defaultValue={user ? user.firstName : null}
-                    dataTestId={"account-first-name"}
-                  />
+          <LoadingState loading={loading}>
+            <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
+              {nameAlert && (
+                <AlertBox
+                  type={nameAlert.type}
+                  onClose={() => setNameAlert(null)}
+                  className="mb-4"
+                  inverted
+                  closeable
+                >
+                  {nameAlert.message}
+                </AlertBox>
+              )}
+              <Form id="update-name" onSubmit={nameHandleSubmit(onNameSubmit)}>
+                <label className={styles["account-settings-label"]} htmlFor="firstName">
+                  {t("application.name.yourName")}
+                </label>
+                <Field
+                  label={t("application.contact.givenName")}
+                  className="my-3"
+                  controlClassName="mt-2"
+                  name="firstName"
+                  error={nameErrors.firstName}
+                  validation={{ maxLength: 64 }}
+                  errorMessage={
+                    nameErrors.firstName?.type === "maxLength"
+                      ? t("errors.maxLength", { length: 64 })
+                      : t("errors.firstNameError")
+                  }
+                  register={nameRegister}
+                  defaultValue={user ? user.firstName : null}
+                  dataTestId={"account-first-name"}
+                />
+
+                <Field
+                  name="middleName"
+                  className="mb-3"
+                  register={nameRegister}
+                  defaultValue={user ? user?.middleName : null}
+                  label={t("application.name.middleNameOptional")}
+                  error={nameErrors.middleName}
+                  validation={{ maxLength: 64 }}
+                  errorMessage={t("errors.maxLength", { length: 64 })}
+                  dataTestId={"account-middle-name"}
+                />
+
+                <Field
+                  name="lastName"
+                  placeholder={t("application.name.lastName")}
+                  className="mb-6"
+                  error={nameErrors.lastName}
+                  register={nameRegister}
+                  defaultValue={user ? user.lastName : null}
+                  label={t("application.contact.familyName")}
+                  validation={{ maxLength: 64 }}
+                  errorMessage={
+                    nameErrors.lastName?.type === "maxLength"
+                      ? t("errors.maxLength", { length: 64 })
+                      : t("errors.lastNameError")
+                  }
+                  dataTestId={"account-last-name"}
+                />
+                <Button
+                  type="submit"
+                  size="sm"
+                  variant="primary-outlined"
+                  loadingMessage={nameLoading ? t("t.loading") : undefined}
+                  id={"account-submit-name"}
+                >
+                  {t("account.settings.update")}
+                </Button>
+              </Form>
+            </Card.Section>
+
+            <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
+              {dobAlert && (
+                <AlertBox
+                  type={dobAlert.type}
+                  onClose={() => setDobAlert(null)}
+                  className="mb-4"
+                  inverted
+                  closeable
+                >
+                  {dobAlert.message}
+                </AlertBox>
+              )}
+              <Form id="update-birthdate" onSubmit={dobHandleSubmit(onBirthdateSubmit)}>
+                <DOBField
+                  id="dateOfBirth"
+                  name="dateOfBirth"
+                  register={dobRegister}
+                  error={dobErrors?.dateOfBirth}
+                  watch={dobWatch}
+                  validateAge18={true}
+                  required={true}
+                  errorMessage={t("errors.dateOfBirthErrorAge")}
+                  defaultDOB={{
+                    birthDay: user ? dayjs(new Date(user.dob)).utc().format("DD") : null,
+                    birthMonth: user ? dayjs(new Date(user.dob)).utc().format("MM") : null,
+                    birthYear: user ? dayjs(new Date(user.dob)).utc().format("YYYY") : null,
+                  }}
+                  label={t("application.name.yourDateOfBirth")}
+                />
+                <p className={"field-sub-note"}>{t("application.name.dobHelper")}</p>
+                <Button
+                  type="submit"
+                  size="sm"
+                  variant="primary-outlined"
+                  className="mt-6"
+                  loadingMessage={birthdateLoading ? t("t.loading") : undefined}
+                  id={"account-submit-dob"}
+                >
+                  {t("account.settings.update")}
+                </Button>
+              </Form>
+            </Card.Section>
+
+            <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
+              {emailAlert && (
+                <AlertBox
+                  type={emailAlert.type}
+                  onClose={() => setEmailAlert(null)}
+                  inverted
+                  closeable
+                  className={"mb-4"}
+                >
+                  {emailAlert.message}
+                </AlertBox>
+              )}
+              <Form id="update-email" onSubmit={emailHandleSubmit(onEmailSubmit)}>
+                <label className={styles["account-settings-label"]} htmlFor="email">
+                  {t("application.name.yourEmailAddress")}
+                </label>
+                <Field
+                  type="email"
+                  name="email"
+                  label={`${t("t.email")}`}
+                  placeholder="example@web.com"
+                  className="mt-3 mb-6"
+                  validation={{ pattern: emailRegex }}
+                  error={emailErrors.email}
+                  errorMessage={`${t("errors.emailAddressError")}`}
+                  register={emailRegister}
+                  defaultValue={user ? user.email : null}
+                  dataTestId={"account-email"}
+                />
+                <Button
+                  type="submit"
+                  size="sm"
+                  variant="primary-outlined"
+                  loadingMessage={emailLoading ? t("t.loading") : undefined}
+                  id={"account-submit-email"}
+                >
+                  {t("account.settings.update")}
+                </Button>
+              </Form>
+            </Card.Section>
+
+            <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
+              {passwordAlert && (
+                <AlertBox
+                  type={passwordAlert.type}
+                  onClose={() => setPasswordAlert(null)}
+                  className="mb-4"
+                  inverted
+                  closeable
+                >
+                  {passwordAlert.message}
+                </AlertBox>
+              )}
+              <Form id="update-password" onSubmit={pwdHandleSubmit(onPasswordSubmit)}>
+                <fieldset>
+                  <legend className={styles["account-settings-label"]}>
+                    {t("authentication.createAccount.password")}
+                  </legend>
+                  <p className="field-note mt-2 mb-3">{t("account.settings.passwordRemember")}</p>
+                  <div className={"flex flex-col"}>
+                    <Field
+                      type="password"
+                      name="currentPassword"
+                      label={t("account.settings.currentPassword")}
+                      error={pwdErrors.currentPassword}
+                      register={pwdRegister}
+                      className={"mb-1"}
+                      dataTestId={"account-current-password"}
+                    />
+                    <span className="float-left text-sm font-semibold mt-2">
+                      <Link href="/forgot-password">
+                        {t("authentication.signIn.forgotPassword")}
+                      </Link>
+                    </span>
+                  </div>
 
                   <Field
-                    name="middleName"
-                    className="mb-3"
-                    register={nameRegister}
-                    defaultValue={user ? user?.middleName : null}
-                    label={t("application.name.middleNameOptional")}
-                    error={nameErrors.middleName}
-                    validation={{ maxLength: 64 }}
-                    errorMessage={t("errors.maxLength", { length: 64 })}
-                    dataTestId={"account-middle-name"}
-                  />
-
-                  <Field
-                    name="lastName"
-                    placeholder={t("application.name.lastName")}
-                    className="mb-6"
-                    error={nameErrors.lastName}
-                    register={nameRegister}
-                    defaultValue={user ? user.lastName : null}
-                    label={t("application.contact.familyName")}
-                    validation={{ maxLength: 64 }}
-                    errorMessage={
-                      nameErrors.lastName?.type === "maxLength"
-                        ? t("errors.maxLength", { length: 64 })
-                        : t("errors.lastNameError")
-                    }
-                    dataTestId={"account-last-name"}
-                  />
-                  <Button
-                    type="submit"
-                    size="sm"
-                    variant="primary-outlined"
-                    loadingMessage={nameLoading ? t("t.loading") : undefined}
-                    id={"account-submit-name"}
-                  >
-                    {t("account.settings.update")}
-                  </Button>
-                </Form>
-              </Card.Section>
-
-              <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
-                {dobAlert && (
-                  <AlertBox
-                    type={dobAlert.type}
-                    onClose={() => setDobAlert(null)}
-                    className="mb-4"
-                    inverted
-                    closeable
-                  >
-                    {dobAlert.message}
-                  </AlertBox>
-                )}
-                <Form id="update-birthdate" onSubmit={dobHandleSubmit(onBirthdateSubmit)}>
-                  <DOBField
-                    id="dateOfBirth"
-                    name="dateOfBirth"
-                    register={dobRegister}
-                    error={dobErrors?.dateOfBirth}
-                    watch={dobWatch}
-                    validateAge18={true}
-                    required={true}
-                    errorMessage={t("errors.dateOfBirthErrorAge")}
-                    defaultDOB={{
-                      birthDay: user ? dayjs(new Date(user.dob)).utc().format("DD") : null,
-                      birthMonth: user ? dayjs(new Date(user.dob)).utc().format("MM") : null,
-                      birthYear: user ? dayjs(new Date(user.dob)).utc().format("YYYY") : null,
+                    type="password"
+                    name="password"
+                    label={t("account.settings.newPassword")}
+                    labelClassName="mt-4"
+                    className="mt-4"
+                    note={t("authentication.createAccount.passwordInfo")}
+                    validation={{
+                      minLength: MIN_PASSWORD_LENGTH,
+                      pattern: passwordRegex,
                     }}
-                    label={t("application.name.yourDateOfBirth")}
+                    error={pwdErrors.password}
+                    errorMessage={t("authentication.signIn.passwordError")}
+                    register={pwdRegister}
+                    dataTestId={"account-password"}
                   />
-                  <p className={"field-sub-note"}>{t("application.name.dobHelper")}</p>
-                  <Button
-                    type="submit"
-                    size="sm"
-                    variant="primary-outlined"
-                    className="mt-6"
-                    loadingMessage={birthdateLoading ? t("t.loading") : undefined}
-                    id={"account-submit-dob"}
-                  >
-                    {t("account.settings.update")}
-                  </Button>
-                </Form>
-              </Card.Section>
 
-              <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
-                {emailAlert && (
-                  <AlertBox
-                    type={emailAlert.type}
-                    onClose={() => setEmailAlert(null)}
-                    inverted
-                    closeable
-                    className={"mb-4"}
-                  >
-                    {emailAlert.message}
-                  </AlertBox>
-                )}
-                <Form id="update-email" onSubmit={emailHandleSubmit(onEmailSubmit)}>
-                  <label className={styles["account-settings-label"]} htmlFor="email">
-                    {t("application.name.yourEmailAddress")}
-                  </label>
                   <Field
-                    type="email"
-                    name="email"
-                    label={`${t("t.email")}`}
-                    placeholder="example@web.com"
-                    className="mt-3 mb-6"
-                    validation={{ pattern: emailRegex }}
-                    error={emailErrors.email}
-                    errorMessage={`${t("errors.emailAddressError")}`}
-                    register={emailRegister}
-                    defaultValue={user ? user.email : null}
-                    dataTestId={"account-email"}
+                    type="password"
+                    name="passwordConfirmation"
+                    label={t("account.settings.confirmNewPassword")}
+                    className="mt-4 mb-6"
+                    validation={{
+                      validate: (value) =>
+                        value === password.current ||
+                        t("authentication.createAccount.errors.passwordMismatch"),
+                    }}
+                    error={pwdErrors.passwordConfirmation}
+                    errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
+                    register={pwdRegister}
+                    dataTestId={"account-password-confirmation"}
                   />
+
                   <Button
                     type="submit"
                     size="sm"
                     variant="primary-outlined"
-                    loadingMessage={emailLoading ? t("t.loading") : undefined}
-                    id={"account-submit-email"}
+                    loadingMessage={passwordLoading ? t("t.loading") : undefined}
+                    id={"account-submit-password"}
                   >
                     {t("account.settings.update")}
                   </Button>
-                </Form>
-              </Card.Section>
-
-              <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
-                {passwordAlert && (
-                  <AlertBox
-                    type={passwordAlert.type}
-                    onClose={() => setPasswordAlert(null)}
-                    className="mb-4"
-                    inverted
-                    closeable
-                  >
-                    {passwordAlert.message}
-                  </AlertBox>
-                )}
-                <Form id="update-password" onSubmit={pwdHandleSubmit(onPasswordSubmit)}>
-                  <fieldset>
-                    <legend className={styles["account-settings-label"]}>
-                      {t("authentication.createAccount.password")}
-                    </legend>
-                    <p className="field-note mt-2 mb-3">{t("account.settings.passwordRemember")}</p>
-                    <div className={"flex flex-col"}>
-                      <Field
-                        type="password"
-                        name="currentPassword"
-                        label={t("account.settings.currentPassword")}
-                        error={pwdErrors.currentPassword}
-                        register={pwdRegister}
-                        className={"mb-1"}
-                        dataTestId={"account-current-password"}
-                      />
-                      <span className="float-left text-sm font-semibold mt-2">
-                        <Link href="/forgot-password">
-                          {t("authentication.signIn.forgotPassword")}
-                        </Link>
-                      </span>
-                    </div>
-
-                    <Field
-                      type="password"
-                      name="password"
-                      label={t("account.settings.newPassword")}
-                      labelClassName="mt-4"
-                      className="mt-4"
-                      note={t("authentication.createAccount.passwordInfo")}
-                      validation={{
-                        minLength: MIN_PASSWORD_LENGTH,
-                        pattern: passwordRegex,
-                      }}
-                      error={pwdErrors.password}
-                      errorMessage={t("authentication.signIn.passwordError")}
-                      register={pwdRegister}
-                      dataTestId={"account-password"}
-                    />
-
-                    <Field
-                      type="password"
-                      name="passwordConfirmation"
-                      label={t("account.settings.confirmNewPassword")}
-                      className="mt-4 mb-6"
-                      validation={{
-                        validate: (value) =>
-                          value === password.current ||
-                          t("authentication.createAccount.errors.passwordMismatch"),
-                      }}
-                      error={pwdErrors.passwordConfirmation}
-                      errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
-                      register={pwdRegister}
-                      dataTestId={"account-password-confirmation"}
-                    />
-
-                    <Button
-                      type="submit"
-                      size="sm"
-                      variant="primary-outlined"
-                      loadingMessage={passwordLoading ? t("t.loading") : undefined}
-                      id={"account-submit-password"}
-                    >
-                      {t("account.settings.update")}
-                    </Button>
-                  </fieldset>
-                </Form>
-              </Card.Section>
-              <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
-                <p className={styles["account-settings-disclaimer"]}>
-                  {t("account.settings.dataRemovalDisclaimer")}
-                </p>
-              </Card.Section>
-            </>
-          </LoadingOverlay>
+                </fieldset>
+              </Form>
+            </Card.Section>
+            <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
+              <p className={styles["account-settings-disclaimer"]}>
+                {t("account.settings.dataRemovalDisclaimer")}
+              </p>
+            </Card.Section>
+          </LoadingState>
         </BloomCard>
       </FormsLayout>
     </RequireLogin>
