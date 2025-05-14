@@ -24,7 +24,7 @@ export const CustomIconMap = {
   envelope: <EnvelopeIcon />,
   mapPin: <MapPinIcon />,
   house: <HouseIcon />,
-  bulletList: <ListBulletIcon />
+  listBullet: <ListBulletIcon />,
 }
 
 export type CustomIconType = keyof typeof CustomIconMap
