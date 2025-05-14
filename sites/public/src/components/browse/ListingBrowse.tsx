@@ -6,6 +6,8 @@ import {
   Jurisdiction,
   Listing,
   FeatureFlagEnum,
+  ListingsQueryBody,
+  ListingViews,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   AuthContext,
@@ -23,29 +25,43 @@ import { fetchFavoriteListingIds, isFeatureFlagOn, saveListingFavorite } from ".
 import { PageHeaderSection } from "../../patterns/PageHeaderLayout"
 import { ListingCard } from "./ListingCard"
 import styles from "./ListingBrowse.module.scss"
+import { FilterDrawer } from "../listing/FilterDrawer"
+import {
+  decodeStringtoFilterData,
+  encodeFilterDataToBackendFilters,
+  encodeFilterDataToString,
+  FilterData,
+  removeUnselectedFilterData,
+} from "../listing/FilterDrawerHelper"
 
 export enum TabsIndexEnum {
   open,
   closed,
 }
 
+export interface PaginationData {
+  currentPage: number
+  itemCount: number
+  itemsPerPage: number
+  totalItems: number
+  totalPages: number
+}
+
 export interface ListingBrowseProps {
   listings: Listing[]
   jurisdiction: Jurisdiction
-  paginationData?: {
-    currentPage: number
-    itemCount: number
-    itemsPerPage: number
-    totalItems: number
-    totalPages: number
-  }
+  paginationData?: PaginationData
   tab: TabsIndexEnum
 }
 
 export const ListingBrowse = (props: ListingBrowseProps) => {
   const router = useRouter()
-  const { profile, userService } = useContext(AuthContext)
+  const { profile, listingsService, userService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState<boolean>(false)
+  const [listings, setListings] = useState<Listing[]>(props.listings)
+  const [paginationData, setPagingationData] = useState<PaginationData>(props.paginationData)
+  const [filterState, setFilterState] = useState<FilterData>({})
   const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
 
@@ -56,8 +72,8 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
       event: "pageView",
       pageTitle: "Rent Affordable Housing - Housing Portal",
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
-      numberOfListings: props.listings.length,
-      listingIds: props.listings.map((listing) => listing.id),
+      numberOfListings: listings?.length,
+      listingIds: listings?.map((listing) => listing.id),
     })
 
     if (profile) {
@@ -65,7 +81,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
         setFavoriteListingIds(listingIds)
       })
     }
-  }, [profile, props.listings, setFavoriteListingIds, userService])
+  }, [profile, listings, setFavoriteListingIds, userService])
 
   const saveFavoriteFn = (listingId: string) => {
     return (listingFavorited) => {
@@ -89,8 +105,8 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
   }
 
   const isNextPageAvailable =
-    props.paginationData && props.paginationData.currentPage < props.paginationData.totalPages
-  const isPreviousPageAvailable = props.paginationData && props.paginationData.currentPage > 1
+    paginationData && paginationData.currentPage < paginationData.totalPages
+  const isPreviousPageAvailable = paginationData && paginationData.currentPage > 1
 
   const selectionHandler = (index: number) => {
     switch (index) {
@@ -101,6 +117,35 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
         void router.push("/listings-closed")
         break
     }
+  }
+
+  const onFilterSubmit = async (data: FilterData) => {
+    console.log("_____________________")
+    console.log("full filter data", data)
+    const cleanedFilterData = removeUnselectedFilterData(data)
+    const queryString = encodeFilterDataToString(cleanedFilterData)
+    setIsFilterDrawerOpen(false)
+    //router.push url below
+    const encodedUrl = `/listings/filtered?${queryString}`
+    console.log("encoded", encodedUrl)
+    //on new page useEffect on router.query as dependency and hook to pull lisitng data
+    const decodedFilterState = decodeStringtoFilterData(
+      encodedUrl.slice(encodedUrl.indexOf("?") + 1)
+    )
+    //set filter state automatically through url
+    console.log("decodedFromURL", decodedFilterState)
+    setFilterState(decodedFilterState)
+
+    const filters = encodeFilterDataToBackendFilters(decodedFilterState)
+    console.log(filters)
+    const query: ListingsQueryBody = {
+      page: 1,
+      view: ListingViews.base,
+      filter: filters,
+    }
+    const paginatedListings = await listingsService.filterableList({ body: query })
+    setListings(paginatedListings.items ?? [])
+    setPagingationData(paginatedListings.items.length ? paginatedListings.meta : null)
   }
 
   const ListingTabs = (
@@ -121,33 +166,43 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
       </Head>
       <MetaTags title={t("nav.siteTitle")} description={metaDescription} />
       <PageHeaderSection heading={t("pageTitle.rent")} inverse={true} content={ListingTabs} />
+      <FilterDrawer
+        isOpen={isFilterDrawerOpen}
+        onClose={() => setIsFilterDrawerOpen(false)}
+        onSubmit={(data) => onFilterSubmit(data)}
+        totalListings={props.listings}
+        filterState={filterState}
+      />
       <div className={styles["listing-directory"]}>
-        {props.paginationData && (
-          <div className={styles["browse-header"]}>
-            <MaxWidthLayout className={styles["minimal-max-width-layout"]}>
-              <div className={styles["browse-header-content"]}>
-                <span className={styles["showing-listings"]}>
-                  {t("listings.browseListings.countInfo", {
-                    currentCount: props.paginationData.itemCount,
-                    totalCount: props.paginationData.totalItems,
+        <div className={styles["browse-header"]}>
+          <MaxWidthLayout className={styles["minimal-max-width-layout"]}>
+            <div className={styles["browse-header-content"]}>
+              <span className={styles["showing-listings"]}>
+                {paginationData &&
+                  t("listings.browseListings.countInfo", {
+                    currentCount: paginationData.itemCount,
+                    totalCount: paginationData.totalItems,
                   })}
-                </span>
-                <span>
-                  <Button size={"sm"} variant={"primary-outlined"}>
-                    Filter
-                  </Button>
-                </span>
-              </div>
-            </MaxWidthLayout>
-          </div>
-        )}
+              </span>
+              <span>
+                <Button
+                  size={"sm"}
+                  onClick={() => setIsFilterDrawerOpen(true)}
+                  variant={"primary-outlined"}
+                >
+                  {t("t.filter")}
+                </Button>
+              </span>
+            </div>
+          </MaxWidthLayout>
+        </div>
         <div className={styles["content-wrapper"]}>
           <MaxWidthLayout className={styles["listings-max-width-layout"]}>
             <div className={styles["content"]}>
               <>
-                {props.listings?.length > 0 ? (
+                {listings?.length > 0 ? (
                   <ul>
-                    {props.listings.map((listing, index) => {
+                    {listings.map((listing, index) => {
                       return (
                         <ListingCard
                           listing={listing}
@@ -183,7 +238,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
             </div>
           </MaxWidthLayout>
         </div>
-        {props.paginationData && (
+        {paginationData && (
           <div className={styles["pagination-container"]}>
             <MaxWidthLayout className={styles["minimal-max-width-layout"]}>
               <div className={styles["pagination-content-wrapper"]}>
@@ -191,10 +246,10 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                   {isPreviousPageAvailable && (
                     <Button
                       onClick={() =>
-                        props.paginationData.currentPage > 0 &&
+                        paginationData.currentPage > 0 &&
                         router.push({
                           pathname: router.pathname,
-                          query: `page=${(props.paginationData.currentPage - 1).toString()}`,
+                          query: `page=${(paginationData.currentPage - 1).toString()}`,
                         })
                       }
                       variant="primary-outlined"
@@ -206,18 +261,18 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                 </div>
                 <div className={styles["page-info"]}>
                   {t("listings.browseListings.pageInfo", {
-                    currentPage: props.paginationData.currentPage,
-                    totalPages: props.paginationData.totalPages,
+                    currentPage: paginationData.currentPage,
+                    totalPages: paginationData.totalPages,
                   })}
                 </div>
                 <div className={styles["next-button"]}>
                   {isNextPageAvailable && (
                     <Button
                       onClick={() =>
-                        props.paginationData.currentPage < props.paginationData.totalPages &&
+                        paginationData.currentPage < paginationData.totalPages &&
                         router.push({
                           pathname: router.pathname,
-                          query: `page=${(props.paginationData.currentPage + 1).toString()}`,
+                          query: `page=${(paginationData.currentPage + 1).toString()}`,
                         })
                       }
                       variant="primary-outlined"

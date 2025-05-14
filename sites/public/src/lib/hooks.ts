@@ -205,6 +205,24 @@ export async function fetchClosedListings(req: any, page: number) {
   )
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function fetchFilteredListings(
+  req: any,
+  page: number,
+  filters: ListingFilterParams[]
+) {
+  return await fetchBaseListingData(
+    {
+      page: page,
+      additionalFilters: filters,
+      orderBy: [ListingOrderByKeys.mostRecentlyPublished],
+      orderDir: [OrderByEnum.desc],
+      limit: process.env.maxOpenListings,
+    },
+    req
+  )
+}
+
 let jurisdiction: Jurisdiction | null = null
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
