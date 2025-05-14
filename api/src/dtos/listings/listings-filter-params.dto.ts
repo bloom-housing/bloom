@@ -20,6 +20,21 @@ export class ListingFilterParams extends BaseFilter {
   @ApiPropertyOptional({
     enum: FilterAvailabilityEnum,
     enumName: 'FilterAvailabilityEnum',
+    isArray: true,
+    example: ['unitsAvailable'],
+    default: ['unitsAvailable'],
+  })
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(FilterAvailabilityEnum, {
+    groups: [ValidationsGroupsEnum.default],
+    each: true,
+  })
+  [ListingFilterKeys.availabilities]?: FilterAvailabilityEnum[];
+
+  @Expose()
+  @ApiPropertyOptional({
+    enum: FilterAvailabilityEnum,
+    enumName: 'FilterAvailabilityEnum',
     example: 'waitlistOpen',
   })
   @IsEnum(FilterAvailabilityEnum, {
@@ -42,6 +57,16 @@ export class ListingFilterParams extends BaseFilter {
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => Number)
   [ListingFilterKeys.bedrooms]?: number;
+
+  @Expose()
+  @ApiPropertyOptional({
+    isArray: true,
+    example: [1],
+    default: [1],
+  })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default], each: true })
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.bedroomTypes]?: number[];
 
   @Expose()
   @ApiPropertyOptional({
@@ -117,6 +142,15 @@ export class ListingFilterParams extends BaseFilter {
   })
   @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
   [ListingFilterKeys.monthlyRent]?: string;
+
+  @Expose()
+  @ApiPropertyOptional({
+    type: Array,
+    example: ['abcdef'],
+  })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default], each: true })
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.multiselectQuestions]?: string[];
 
   @Expose()
   @ApiPropertyOptional({
