@@ -40,7 +40,7 @@ const Assistance = () => {
               title={t("assistance.additionalHousingTitle")}
               subtitle={t("assistance.additionalHousingDescription")}
               headingPriority={2}
-              iconSymbol={"bulletList"}
+              iconSymbol={"listBullet"}
               iconOutlined={true}
               variant={"block"}
               className={styles["item"]}
