@@ -6935,6 +6935,7 @@ export enum ListingFilterKeys {
   "leasingAgent" = "leasingAgent",
   "listingFeatures" = "listingFeatures",
   "monthlyRent" = "monthlyRent",
+  "multiselectQuestions" = "multiselectQuestions",
   "name" = "name",
   "neighborhood" = "neighborhood",
   "regions" = "regions",
