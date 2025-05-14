@@ -1,9 +1,8 @@
-import { Field, Form, t } from "@bloom-housing/ui-components"
-import { Button, Drawer, Grid } from "@bloom-housing/ui-seeds"
-import { useForm, UseFormMethods } from "react-hook-form"
-import { AuthContext, listingFeatures } from "@bloom-housing/shared-helpers"
+import { Form, t } from "@bloom-housing/ui-components"
+import { Button, Drawer } from "@bloom-housing/ui-seeds"
+import { useForm } from "react-hook-form"
+import { listingFeatures } from "@bloom-housing/shared-helpers"
 import {
-  EnumListingFilterParamsComparison,
   FilterAvailabilityEnum,
   RegionEnum,
   UnitTypeEnum,
