@@ -1,4 +1,10 @@
 {
+  "assistance.applyToHousingTitle": "How to apply to affordable housing",
+  "assistance.applyToHousingDescription": "You can find and apply for affordable rental opportunities.",
+  "assistance.applyToHousingLink": "Read about how it works",
+  "assistance.additionalHousingTitle": "Additional housing opportunities and resources",
+  "assistance.additionalHousingDescription": "We encourage you to browse other affordable housing resources.",
+  "assistance.additionalHousingLink": "View opportunities and resources",
   "professionalPartners.dev.howCanIGetInvolved": "How can we get involved with Portal development discussions and learn about what’s coming?",
   "professionalPartners.dev.howCanIGetInvolvedResp1a": "We will send email updates to our professional partners and jurisdiction contacts about new features. We also host bi-monthly meetings of professional partners and jurisdictions via Zoom.  To join our mailing list, email",
   "professionalPartners.dev.howCanIGetInvolvedResp1b": " doorway@bayareametro.gov.",
@@ -57,5 +63,14 @@
   "professionalPartners.jurisdictions.whatIsTheRoleResp2": "doorway@bayareametro.gov.",
   "professionalPartners.partnersEmail": "partners@housingbayarea.org",
   "professionalPartners.whatIsTheDoorway": "What is the Doorway Housing Portal?",
+  "resources.immediateHousingTitle": "Immediate housing assistance",
+  "resources.immediateHousingSubtitle": "If you're fleeing domestic violence, sexual assault or human trafficking and in immediate danger, call 911.",
+  "resources.housingProgramsTitle": "Bloomington's Housing & Community Development housing programs",
+  "resources.mockCardTitle": "Lorem Ipsum",
+  "resources.mockCardDescription": "Lorem ipsum dolor sit amet consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  "resources.contactTitle": "Contact",
+  "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  "resources.contactInfo": "Bloomington's Housing & Community Development Department",
+  "resources.contactEmail": "bloomington@housing.org",
   "t.formSubmitted": "Submitting form, wait"
 }
