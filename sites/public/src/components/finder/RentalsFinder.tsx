@@ -110,6 +110,7 @@ export default function RentalsFinder() {
                   onClick={onPreviousClick}
                   leadIcon={<Icon>{CustomIconMap.chevronLeft}</Icon>}
                   variant={"text"}
+                  className={styles['back-button']}
                 >
                   {t("t.back")}
                 </Button>
