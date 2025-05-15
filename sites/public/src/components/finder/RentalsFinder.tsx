@@ -25,7 +25,7 @@ export default function RentalsFinder() {
   const formMethods = useForm()
 
   const rentalFinderSections: FinderSection[] = [{
-    sectionTitle: 'Home Section Title',
+    sectionTitle: 'Housing Needs',
     sectionSteps: [
       {
         question: t("finder.bedrooms.question"),
