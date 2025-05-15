@@ -110,6 +110,49 @@ jobs:
           path: sites/public/cypress/videos
       - store_artifacts:
           path: sites/public/cypress/screenshots
+  cypress-public-seeds:
+    executor: cypress-node
+    resource_class: large
+    steps:
+      - checkout
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - node/install-packages:
+          app-dir: sites/public
+          pkg-manager: yarn
+          cache-version: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - node/install-packages:
+          app-dir: api
+          pkg-manager: yarn
+          cache-version: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - run:
+          name: setup db and seed
+          command: |
+            echo 'export SHOW_NEW_SEEDS_DESIGNS=TRUE' >> "$BASH_ENV"
+            source "$BASH_ENV"
+            yarn test:backend:new:dbsetup:withseed
+      - run:
+          name: run backend
+          command: yarn dev
+          background: true
+          working_directory: api
+      - run:
+          name: build and run public
+          command: yarn dev:server-wait-new && yarn build && yarn start
+          background: true
+          working_directory: sites/public
+      - run:
+          name: wait
+          command: yarn dev:public-wait
+          working_directory: sites/public
+      - run:
+          name: Run Cypress
+          command: npx cypress run
+          working_directory: sites/public
+      - store_artifacts:
+          path: sites/public/cypress/videos
+      - store_artifacts:
+          path: sites/public/cypress/screenshots
   cypress-partners:
     executor: cypress-node
     resource_class: large
@@ -230,6 +273,10 @@ workflows:
           requires:
             - setup
       - cypress-public:
+          requires:
+            - setup
+            - setup-backend
+      - cypress-public-seeds:
           requires:
             - setup
             - setup-backend
