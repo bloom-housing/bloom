@@ -169,6 +169,8 @@
   "leasingAgent.namePlaceholder": "Full Name",
   "leasingAgent.officeHoursPlaceholder": "ex: 9:00am - 5:00pm, Monday to Friday",
   "leasingAgent.title": "Leasing Agent Title",
+  "leasingAgent.managementWebsite": "Company Website",
+  "leasingAgent.managementWebsitePlaceholder": "https://www.google.com",
   "listings.actions.close": "Close",
   "listings.actions.draft": "Save as Draft",
   "listings.actions.postResults": "Post Results",
