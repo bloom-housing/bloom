@@ -4195,6 +4195,9 @@ export interface Listing {
   leasingAgentTitle?: string
 
   /**  */
+  managementWebsite?: string
+
+  /**  */
   name: string
 
   /**  */
@@ -4837,6 +4840,9 @@ export interface ListingCreate {
   leasingAgentTitle?: string
 
   /**  */
+  managementWebsite?: string
+
+  /**  */
   name: string
 
   /**  */
@@ -5148,6 +5154,9 @@ export interface ListingUpdate {
 
   /**  */
   leasingAgentTitle?: string
+
+  /**  */
+  managementWebsite?: string
 
   /**  */
   name: string
@@ -7407,31 +7416,29 @@ export enum UserRoleEnum {
 }
 
 export enum FeatureFlagEnum {
-  "example" = "example",
   "disableCommonApplication" = "disableCommonApplication",
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
+  "enableCompanyWebsite" = "enableCompanyWebsite",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
-  "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
-  "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
   "enableIsVerified" = "enableIsVerified",
-  "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
-  "hideCloseListingButton" = "hideCloseListingButton",
-  "enableMarketingStatus" = "enableMarketingStatus",
-  "enableRegions" = "enableRegions",
-  "enableSection8Question" = "enableSection8Question",
-  "enableUnitGroups" = "enableUnitGroups",
-  "enableListingPagination" = "enableListingPagination",
-  "enableSingleUseCode" = "enableSingleUseCode",
-  "enableGeocodingPreferences" = "enableGeocodingPreferences",
-  "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
+  "enableListingFavoriting" = "enableListingFavoriting",
   "enableListingOpportunity" = "enableListingOpportunity",
+  "enableListingsPagination" = "enableListingsPagination",
+  "enableMarketingStatus" = "enableMarketingStatus",
+  "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
   "enablePartnerDemographics" = "enablePartnerDemographics",
   "enablePartnerSettings" = "enablePartnerSettings",
-  "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
-  "enableListingFavoriting" = "enableListingFavoriting",
+  "enableRegions" = "enableRegions",
+  "enableSection8Question" = "enableSection8Question",
+  "enableSingleUseCode" = "enableSingleUseCode",
+  "enableUnitGroups" = "enableUnitGroups",
+  "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
+  "example" = "example",
+  "hideCloseListingButton" = "hideCloseListingButton",
+  "swapCommunityTypeWithPrograms" = "swapCommunityTypeWithPrograms",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {
   "=" = "=",
