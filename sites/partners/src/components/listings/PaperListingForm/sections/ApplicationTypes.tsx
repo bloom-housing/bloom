@@ -205,10 +205,11 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
         <Grid.Row columns={2}>
           <Grid.Cell>
             <p
-              className={`field-label m-4 ml-0 ${fieldHasError(errors?.digitalApplication) &&
+              className={`field-label m-4 ml-0 ${
+                fieldHasError(errors?.digitalApplication) &&
                 digitalApplicationChoice === null &&
                 "text-alert"
-                }`}
+              }`}
             >
               {t("listings.isDigitalApplication")}
             </p>
@@ -337,10 +338,11 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
         <Grid.Row columns={2}>
           <Grid.Cell>
             <p
-              className={`field-label m-4 ml-0 ${fieldHasError(errors?.paperApplication) &&
+              className={`field-label m-4 ml-0 ${
+                fieldHasError(errors?.paperApplication) &&
                 paperApplicationChoice === null &&
                 "text-alert"
-                }`}
+              }`}
             >
               {t("listings.isPaperApplication")}
             </p>
@@ -442,10 +444,11 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
         <Grid.Row columns={1}>
           <Grid.Cell>
             <p
-              className={`field-label m-4 ml-0 ${fieldHasError(errors?.referralOpportunity) &&
+              className={`field-label m-4 ml-0 ${
+                fieldHasError(errors?.referralOpportunity) &&
                 referralOpportunityChoice === null &&
                 "text-alert"
-                }`}
+              }`}
             >
               {t("listings.isReferralOpportunity")}
             </p>
