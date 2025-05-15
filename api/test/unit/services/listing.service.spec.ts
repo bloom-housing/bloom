@@ -547,6 +547,11 @@ describe('Testing listing service', () => {
         hearing: true,
         visual: false,
         mobility: true,
+        barrierFreeUnitEntrance: false,
+        loweredLightSwitch: true,
+        barrierFreeBathroom: false,
+        wideDoorways: true,
+        loweredCabinets: false,
       },
       listingUtilities: {
         water: false,
@@ -2014,6 +2019,35 @@ describe('Testing listing service', () => {
       });
     });
 
+    it('should return a where clause for filter multiselectQuestions', () => {
+      const uuids = [randomUUID(), randomUUID()];
+      const filter = [
+        {
+          $comparison: 'IN',
+          multiselectQuestions: uuids,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                listingMultiselectQuestions: {
+                  some: {
+                    multiselectQuestionId: {
+                      in: uuids,
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
     it('should return a where clause for filter name', () => {
       const name = 'listingName';
       const filter = [
@@ -3361,6 +3395,11 @@ describe('Testing listing service', () => {
               hearing: true,
               visual: false,
               mobility: true,
+              barrierFreeUnitEntrance: false,
+              loweredLightSwitch: true,
+              barrierFreeBathroom: false,
+              wideDoorways: true,
+              loweredCabinets: false,
             },
           },
           listingNeighborhoodAmenities: {
@@ -3847,6 +3886,11 @@ describe('Testing listing service', () => {
               hearing: true,
               visual: false,
               mobility: true,
+              barrierFreeUnitEntrance: false,
+              loweredLightSwitch: true,
+              barrierFreeBathroom: false,
+              wideDoorways: true,
+              loweredCabinets: false,
             },
           },
           listingNeighborhoodAmenities: {
@@ -4804,6 +4848,11 @@ describe('Testing listing service', () => {
         hearing: true,
         visual: false,
         mobility: true,
+        barrierFreeUnitEntrance: false,
+        loweredLightSwitch: true,
+        barrierFreeBathroom: false,
+        wideDoorways: true,
+        loweredCabinets: false,
       };
       const nestedNeighborhoodAmenities = {
         groceryStores: 'stores',
