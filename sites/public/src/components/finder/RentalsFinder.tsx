@@ -1,7 +1,7 @@
 import { BloomCard, CustomIconMap } from "@bloom-housing/shared-helpers";
 import styles from './RentalsFinder.module.scss'
-import { Button, CheckboxGroup, Heading, HeadingGroup, Icon } from "@bloom-housing/ui-seeds";
-import { CardSection, Field, ProgressNav, StepHeader, t } from "@bloom-housing/ui-components";
+import { Button, Heading, HeadingGroup, Icon } from "@bloom-housing/ui-seeds";
+import { CardSection, ProgressNav, StepHeader, t } from "@bloom-housing/ui-components";
 import FinderMultiselectQuestion from "./FinderMultiselectQuestion";
 import { FormProvider, useForm } from "react-hook-form";
 import { useState } from "react";
