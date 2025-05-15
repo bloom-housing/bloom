@@ -1,7 +1,7 @@
 import { BloomCard, CustomIconMap } from "@bloom-housing/shared-helpers";
 import styles from './RentalsFinder.module.scss'
 import { Button, CheckboxGroup, Heading, HeadingGroup, Icon } from "@bloom-housing/ui-seeds";
-import { CardSection, Field, t } from "@bloom-housing/ui-components";
+import { CardSection, Field, ProgressNav, StepHeader, t } from "@bloom-housing/ui-components";
 import FinderMultiselectQuestion from "./FinderMultiselectQuestion";
 import { FormProvider, useForm } from "react-hook-form";
 import { useState } from "react";
@@ -25,7 +25,7 @@ export default function RentalsFinder() {
   const formMethods = useForm()
 
   const rentalFinderSections: FinderSection[] = [{
-    sectionTitle: '',
+    sectionTitle: 'Home Section Title',
     sectionSteps: [
       {
         fieldGroupName: 'bedRoomSize',
@@ -53,7 +53,12 @@ export default function RentalsFinder() {
             }]}
           />
         )
-      }, {
+      }
+    ]
+  }, {
+    sectionTitle: 'Region Section Title',
+    sectionSteps: [
+      {
         fieldGroupName: 'region',
         question: t("finder.region.question"),
         subtitle: t("finder.region.subtitle"),
@@ -70,6 +75,8 @@ export default function RentalsFinder() {
       }
     ]
   }]
+
+  const sectionLabels = rentalFinderSections.map((section) => section.sectionTitle)
 
   const activeQuestion = rentalFinderSections[sectionIndex]?.sectionSteps[stepIndex]
   const isLastSection = sectionIndex === rentalFinderSections.length - 1
@@ -100,7 +107,22 @@ export default function RentalsFinder() {
       <div className={styles['questionnaire-container']}>
         <div className={styles['questionnaire-header']}>
           <Heading priority={3} size="2xl" className={styles['title']}>Find listings for you</Heading>
-          {/* TODO: Implement header progress bar */}
+          <ProgressNav
+            labels={sectionLabels}
+            currentPageSection={sectionIndex + 1}
+            completedSections={sectionIndex}
+            style="bar"
+            removeSrHeader
+            mounted={true}
+          />
+          <StepHeader
+            currentStep={sectionIndex + 1}
+            totalSteps={rentalFinderSections.length}
+            stepPreposition={t("finder.progress.stepPreposition")}
+            stepLabeling={sectionLabels}
+            priority={2}
+            className={styles['step-header']}
+          />
         </div>
         <BloomCard className={styles['questionnaire-card']}>
           <CardSection>

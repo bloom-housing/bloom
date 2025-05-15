@@ -15,6 +15,9 @@
     .questionnaire-header {
       font-family: var(--seeds-font-alt-sans);
       margin-block-end: var(--seeds-s6);
+      display: grid;
+      grid-template-columns: 1fr;
+      row-gap: var(--seeds-s4);
 
       @media (--md-down) {
         background-color: var(--seeds-bg-color-surface);

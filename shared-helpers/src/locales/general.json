@@ -563,6 +563,7 @@
   "finder.bedrooms.fourMoreBdrm": "4 or more bedrooms",
   "finder.region.question": "What areas of Detroit would you like to live in?",
   "finder.region.subtitle": "We will use your selections to find you rentals that may match your housing needs.",
+  "finder.progress.stepPreposition": "of",
   "homeType.apartment": "Apartment",
   "homeType.duplex": "Duplex",
   "homeType.house": "Single-Family House",
