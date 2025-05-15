@@ -6,9 +6,9 @@ import FinderMultiselectQuestion from "./FinderMultiselectQuestion";
 import { FormProvider, useForm } from "react-hook-form";
 import { useState } from "react";
 import { RegionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger";
+import FinderRentQuestion from "./FinderRentQuestion";
 
 type FinderStep = {
-  fieldGroupName: string
   content: React.ReactNode
   question: string
   subtitle: string
@@ -28,7 +28,6 @@ export default function RentalsFinder() {
     sectionTitle: 'Home Section Title',
     sectionSteps: [
       {
-        fieldGroupName: 'bedRoomSize',
         question: t("finder.bedrooms.question"),
         subtitle: t("finder.bedrooms.subtitle"),
         content: (
@@ -53,13 +52,8 @@ export default function RentalsFinder() {
             }]}
           />
         )
-      }
-    ]
-  }, {
-    sectionTitle: 'Region Section Title',
-    sectionSteps: [
+      },
       {
-        fieldGroupName: 'region',
         question: t("finder.region.question"),
         subtitle: t("finder.region.subtitle"),
         content: (
@@ -71,6 +65,17 @@ export default function RentalsFinder() {
               value: region,
             }))}
           />
+        )
+      }
+    ]
+  }, {
+    sectionTitle: 'Rent',
+    sectionSteps: [
+      {
+        question: t("finder.rent.question"),
+        subtitle: t("finder.rent.subtitle"),
+        content: (
+          <FinderRentQuestion />
         )
       }
     ]
