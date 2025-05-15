@@ -26,6 +26,21 @@
   color: var(--seeds-color-primary);
 }
 
+.card-circled-icon {
+  font-size: var(--seeds-font-size-6xl);
+  background-color: var(--seeds-bg-color-surface-primary);
+  border-radius: var(--seeds-rounded-full);
+  padding: var(--seeds-s3);
+  svg {
+    fill: none;
+  }
+}
+
 .card-heading-group {
   --subheading-color: var(--seeds-text-color-light);
+}
+
+.card-alt-heading-font {
+  font-family: var(--seeds-font-alt-sans);
+  font-weight: var(--seeds-font-weight-semibold);
 }
