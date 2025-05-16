@@ -202,16 +202,36 @@ describe('Testing user service', () => {
             {
               OR: [
                 {
-                  firstName: {
-                    contains: 'search value',
-                    mode: 'insensitive',
-                  },
+                  OR: [
+                    {
+                      firstName: {
+                        contains: 'search',
+                        mode: 'insensitive',
+                      },
+                    },
+                    {
+                      lastName: {
+                        contains: 'search',
+                        mode: 'insensitive',
+                      },
+                    },
+                  ],
                 },
                 {
-                  lastName: {
-                    contains: 'search value',
-                    mode: 'insensitive',
-                  },
+                  OR: [
+                    {
+                      firstName: {
+                        contains: 'value',
+                        mode: 'insensitive',
+                      },
+                    },
+                    {
+                      lastName: {
+                        contains: 'value',
+                        mode: 'insensitive',
+                      },
+                    },
+                  ],
                 },
                 {
                   email: {
