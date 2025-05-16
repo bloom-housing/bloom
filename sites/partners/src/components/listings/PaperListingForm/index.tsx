@@ -152,9 +152,8 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
     false
 
   const enableSection8 =
-    activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableSection8Question)?.active ||
-    false
-
+    activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableSection8Question)
+      ?.active || false
 
   useEffect(() => {
     if (listing?.units) {
