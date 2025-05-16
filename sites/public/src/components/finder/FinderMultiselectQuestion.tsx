@@ -14,7 +14,10 @@ type FinderMultiselectQuestionProps = {
 }
 
 export default function FinderMultiselectQuestion(props: FinderMultiselectQuestionProps) {
-  const { register } = useFormContext()
+  const formMethods = useFormContext()
+
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register } = formMethods
 
   return (
     <fieldset className={styles["fieldset"]}>

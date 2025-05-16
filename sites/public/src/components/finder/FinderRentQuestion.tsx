@@ -5,7 +5,10 @@ import styles from "./FinderRentQuestion.module.scss"
 //TODO: Update component when new designs are available
 
 export default function FinderRentQuestion() {
-  const { register } = useFormContext()
+  const formMethods = useFormContext()
+
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register } = formMethods
 
   return (
     <>
