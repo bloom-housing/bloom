@@ -1,12 +1,12 @@
-import { BloomCard, CustomIconMap } from "@bloom-housing/shared-helpers";
-import styles from './RentalsFinder.module.scss'
-import { Button, Heading, HeadingGroup, Icon } from "@bloom-housing/ui-seeds";
-import { CardSection, ProgressNav, StepHeader, t } from "@bloom-housing/ui-components";
-import FinderMultiselectQuestion from "./FinderMultiselectQuestion";
-import { FormProvider, useForm } from "react-hook-form";
-import { useState } from "react";
-import { RegionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger";
-import FinderRentQuestion from "./FinderRentQuestion";
+import { BloomCard, CustomIconMap } from "@bloom-housing/shared-helpers"
+import styles from "./RentalsFinder.module.scss"
+import { Button, Heading, HeadingGroup, Icon } from "@bloom-housing/ui-seeds"
+import { CardSection, ProgressNav, StepHeader, t } from "@bloom-housing/ui-components"
+import FinderMultiselectQuestion from "./FinderMultiselectQuestion"
+import { FormProvider, useForm } from "react-hook-form"
+import { useState } from "react"
+import { RegionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import FinderRentQuestion from "./FinderRentQuestion"
 
 type FinderStep = {
   content: React.ReactNode
@@ -15,7 +15,7 @@ type FinderStep = {
 }
 
 type FinderSection = {
-  sectionTitle: string;
+  sectionTitle: string
   sectionSteps: FinderStep[]
 }
 
@@ -24,62 +24,69 @@ export default function RentalsFinder() {
   const [sectionIndex, setSectionIndex] = useState<number>(0)
   const formMethods = useForm()
 
-  const rentalFinderSections: FinderSection[] = [{
-    sectionTitle: 'Housing Needs',
-    sectionSteps: [
-      {
-        question: t("finder.bedrooms.question"),
-        subtitle: t("finder.bedrooms.subtitle"),
-        content: (
-          <FinderMultiselectQuestion
-            legend={t("finder.multiselectLegend")}
-            fieldGroupName="bedrooms_count"
-            options={[{
-              label: t("application.household.preferredUnit.options.studio"),
-              value: 'studio',
-            }, {
-              label: t("application.household.preferredUnit.options.oneBdrm"),
-              value: 'oneBdrm'
-            }, {
-              label: t("application.household.preferredUnit.options.twoBdrm"),
-              value: 'twoBdrm'
-            }, {
-              label: t("application.household.preferredUnit.options.threeBdrm"),
-              value: "threBdrm"
-            }, {
-              label: t("finder.bedrooms.fourMoreBdrm"),
-              value: "fourMoreBdrm",
-            }]}
-          />
-        )
-      },
-      {
-        question: t("finder.region.question"),
-        subtitle: t("finder.region.subtitle"),
-        content: (
-          <FinderMultiselectQuestion
-            legend={t("finder.multiselectLegend")}
-            fieldGroupName="region"
-            options={Object.keys(RegionEnum).map((region) => ({
-              label: region.replace('_', " "),
-              value: region,
-            }))}
-          />
-        )
-      }
-    ]
-  }, {
-    sectionTitle: 'Rent',
-    sectionSteps: [
-      {
-        question: t("finder.rent.question"),
-        subtitle: t("finder.rent.subtitle"),
-        content: (
-          <FinderRentQuestion />
-        )
-      }
-    ]
-  }]
+  const rentalFinderSections: FinderSection[] = [
+    {
+      sectionTitle: "Housing Needs",
+      sectionSteps: [
+        {
+          question: t("finder.bedrooms.question"),
+          subtitle: t("finder.bedrooms.subtitle"),
+          content: (
+            <FinderMultiselectQuestion
+              legend={t("finder.multiselectLegend")}
+              fieldGroupName="bedrooms_count"
+              options={[
+                {
+                  label: t("application.household.preferredUnit.options.studio"),
+                  value: "studio",
+                },
+                {
+                  label: t("application.household.preferredUnit.options.oneBdrm"),
+                  value: "oneBdrm",
+                },
+                {
+                  label: t("application.household.preferredUnit.options.twoBdrm"),
+                  value: "twoBdrm",
+                },
+                {
+                  label: t("application.household.preferredUnit.options.threeBdrm"),
+                  value: "threBdrm",
+                },
+                {
+                  label: t("finder.bedrooms.fourMoreBdrm"),
+                  value: "fourMoreBdrm",
+                },
+              ]}
+            />
+          ),
+        },
+        {
+          question: t("finder.region.question"),
+          subtitle: t("finder.region.subtitle"),
+          content: (
+            <FinderMultiselectQuestion
+              legend={t("finder.multiselectLegend")}
+              fieldGroupName="region"
+              options={Object.keys(RegionEnum).map((region) => ({
+                label: region.replace("_", " "),
+                value: region,
+              }))}
+            />
+          ),
+        },
+      ],
+    },
+    {
+      sectionTitle: "Rent",
+      sectionSteps: [
+        {
+          question: t("finder.rent.question"),
+          subtitle: t("finder.rent.subtitle"),
+          content: <FinderRentQuestion />,
+        },
+      ],
+    },
+  ]
 
   const sectionLabels = rentalFinderSections.map((section) => section.sectionTitle)
 
@@ -108,10 +115,12 @@ export default function RentalsFinder() {
   }
 
   return (
-    <div className={styles['finder-container']}>
-      <div className={styles['questionnaire-container']}>
-        <div className={styles['questionnaire-header']}>
-          <Heading priority={3} size="2xl" className={styles['title']}>Find listings for you</Heading>
+    <div className={styles["finder-container"]}>
+      <div className={styles["questionnaire-container"]}>
+        <div className={styles["questionnaire-header"]}>
+          <Heading priority={3} size="2xl" className={styles["title"]}>
+            Find listings for you
+          </Heading>
           <ProgressNav
             labels={sectionLabels}
             currentPageSection={sectionIndex + 1}
@@ -126,24 +135,25 @@ export default function RentalsFinder() {
             stepPreposition={t("finder.progress.stepPreposition")}
             stepLabeling={sectionLabels}
             priority={2}
-            className={styles['step-header']}
+            className={styles["step-header"]}
           />
         </div>
-        <BloomCard className={styles['questionnaire-card']}>
+        <BloomCard className={styles["questionnaire-card"]}>
           <CardSection>
-            <div className={styles['header-wrapper']}>
+            <div className={styles["header-wrapper"]}>
               <div>
-                {!(sectionIndex === 0 && stepIndex === 0) && <Button
-                  onClick={onPreviousClick}
-                  leadIcon={<Icon>{CustomIconMap.chevronLeft}</Icon>}
-                  variant={"text"}
-                  className={styles['back-button']}
-                >
-                  {t("t.back")}
-                </Button>
-                }
+                {!(sectionIndex === 0 && stepIndex === 0) && (
+                  <Button
+                    onClick={onPreviousClick}
+                    leadIcon={<Icon>{CustomIconMap.chevronLeft}</Icon>}
+                    variant={"text"}
+                    className={styles["back-button"]}
+                  >
+                    {t("t.back")}
+                  </Button>
+                )}
                 <HeadingGroup
-                  className={styles['heading-group']}
+                  className={styles["heading-group"]}
                   heading={activeQuestion.question}
                   subheading={activeQuestion.subtitle}
                   headingPriority={3}
@@ -151,18 +161,17 @@ export default function RentalsFinder() {
                 />
               </div>
             </div>
-            <div className={styles['questions-wrapper']}>
-              <FormProvider {...formMethods}>
-                {activeQuestion.content}
-              </FormProvider>
+            <div className={styles["questions-wrapper"]}>
+              <FormProvider {...formMethods}>{activeQuestion.content}</FormProvider>
             </div>
-            <div className={styles['button-wrapper']}>
-              {(isLastSection && isLastStep) ?
-                <Button >{t("t.finish")}</Button> :
-                <Button onClick={onNextClick}>{t("t.next")}</Button>}
-
+            <div className={styles["button-wrapper"]}>
+              {isLastSection && isLastStep ? (
+                <Button>{t("t.finish")}</Button>
+              ) : (
+                <Button onClick={onNextClick}>{t("t.next")}</Button>
+              )}
             </div>
-            <div className={styles['footer']}>
+            <div className={styles["footer"]}>
               <Button variant="text">Skip this and show me listings</Button>
             </div>
           </CardSection>

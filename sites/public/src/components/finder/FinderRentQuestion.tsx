@@ -1,6 +1,6 @@
 import { Field, t } from "@bloom-housing/ui-components"
 import { useFormContext } from "react-hook-form"
-import styles from './FinderRentQuestion.module.scss'
+import styles from "./FinderRentQuestion.module.scss"
 
 //TODO: Update component when new designs are available
 
@@ -9,7 +9,7 @@ export default function FinderRentQuestion() {
 
   return (
     <>
-      <div className={styles['rent-input-wrapper']}>
+      <div className={styles["rent-input-wrapper"]}>
         <Field
           register={register}
           type="currency"
@@ -33,7 +33,7 @@ export default function FinderRentQuestion() {
         bordered
         name="includeSection8"
         label={t("finder.rent.section8")}
-        labelClassName={styles['checkbox-label']}
+        labelClassName={styles["checkbox-label"]}
       />
     </>
   )
