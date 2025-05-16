@@ -1,0 +1,9 @@
+.rent-input-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: var(--seeds-s4);
+}
+
+.checkbox-label {
+  margin-inline-start: unset !important;
+}
