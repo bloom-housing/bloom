@@ -15,6 +15,7 @@ import {
   ListingsStatusEnum,
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
+  YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useForm, FormProvider } from "react-hook-form"
 import {
@@ -150,6 +151,11 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
     activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableUnitGroups)?.active ||
     false
 
+  const enableSection8 =
+    activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableSection8Question)?.active ||
+    false
+
+
   useEffect(() => {
     if (listing?.units) {
       const tempUnits = listing.units.map((unit, i) => ({
@@ -236,6 +242,10 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
           setLoading(true)
           clearErrors()
           const successful = await formMethods.trigger()
+
+          if (!enableSection8) {
+            formData.listingSection8Acceptance = YesNoEnum.no
+          }
 
           if (successful) {
             const dataPipeline = new ListingDataPipeline(formData, {
