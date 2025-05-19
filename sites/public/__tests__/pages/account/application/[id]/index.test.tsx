@@ -208,8 +208,8 @@ describe("Account Listing View", () => {
 
     const alternateEmailSection = screen.getByTestId("app-summary-alternate-email")
     expect(alternateEmailSection).toBeInTheDocument()
-    expect(within(alternateEmailSection).getByText(/email/i)).toBeInTheDocument()
-    expect(within(alternateEmailSection).getByText(/alternate@mail\.com/i)).toBeInTheDocument()
+    expect(within(alternateEmailSection).getByText(/^email$/i)).toBeInTheDocument()
+    expect(within(alternateEmailSection).getByText(/alternate@email\.com/i)).toBeInTheDocument()
 
     const alternatePhoneSection = screen.getByTestId("app-summary-alternate-phone")
     expect(alternatePhoneSection).toBeInTheDocument()

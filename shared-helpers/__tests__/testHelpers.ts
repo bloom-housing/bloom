@@ -219,7 +219,7 @@ export const application: Application = {
     lastName: "Alternate Last",
     agency: "Alternate Agency",
     phoneNumber: "(789) 012-3456",
-    emailAddress: "alternate@mail.com",
+    emailAddress: "alternate@email.com",
     address: {
       id: "alternate_work_address_id",
       createdAt: new Date(),
