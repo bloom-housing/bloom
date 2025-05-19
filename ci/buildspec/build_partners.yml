@@ -38,6 +38,7 @@ phases:
         --build-arg "SHOW_LOTTERY=${SHOW_LOTTERY}"
         --build-arg "LOTTERY_DAYS_TILL_EXPIRY=${LOTTERY_DAYS_TILL_EXPIRY}"
         --build-arg "LIMIT_CLOSED_LISTING_ACTIONS=${LIMIT_CLOSED_LISTING_ACTIONS}"
+        --build-arg "USE_SECURE_DOWNLOAD_PATHWAY=${USE_SECURE_DOWNLOAD_PATHWAY}"
         -t sites/partners:test
 
       # Run tests
@@ -60,6 +61,7 @@ phases:
         --build-arg "SHOW_LOTTERY=${SHOW_LOTTERY}"
         --build-arg "LOTTERY_DAYS_TILL_EXPIRY=${LOTTERY_DAYS_TILL_EXPIRY}"
         --build-arg "LIMIT_CLOSED_LISTING_ACTIONS=${LIMIT_CLOSED_LISTING_ACTIONS}"
+        --build-arg "USE_SECURE_DOWNLOAD_PATHWAY=${USE_SECURE_DOWNLOAD_PATHWAY}"
         -t sites/partners:run-candidate
 
       # Tag the run image
