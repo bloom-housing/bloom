@@ -1,7 +1,9 @@
 export enum ListingFilterKeys {
+  availabilities = 'availabilities',
   availability = 'availability',
   bathrooms = 'bathrooms',
   bedrooms = 'bedrooms',
+  bedroomTypes = 'bedroomTypes',
   city = 'city',
   counties = 'counties',
   homeTypes = 'homeTypes',
@@ -11,6 +13,7 @@ export enum ListingFilterKeys {
   leasingAgent = 'leasingAgent',
   listingFeatures = 'listingFeatures',
   monthlyRent = 'monthlyRent',
+  multiselectQuestions = 'multiselectQuestions',
   name = 'name',
   neighborhood = 'neighborhood',
   regions = 'regions',
