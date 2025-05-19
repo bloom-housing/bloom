@@ -10,7 +10,6 @@ import {
   ListingsService,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import userEvent from "@testing-library/user-event"
-import { replace } from "cypress/types/lodash"
 
 const server = setupServer()
 
@@ -53,7 +52,8 @@ describe("Account Listing View", () => {
     )
 
     // Prevent the network console error on 404 status to avoid confusion
-    jest.spyOn(console, "error").mockImplementation(() => {})
+    // eslint-disable @typescript-eslint/no-empty-function
+    jest.spyOn(console, "error").mockImplementation(() => { })
     renderApplicationView()
 
     expect(await screen.findByRole("heading", { level: 1, name: /error/i })).toBeInTheDocument()
@@ -71,7 +71,8 @@ describe("Account Listing View", () => {
     )
 
     // Prevent the network console error on 403 status to avoid confusion
-    jest.spyOn(console, "error").mockImplementation(() => {})
+    // eslint-disable @typescript-eslint/no-empty-function
+    jest.spyOn(console, "error").mockImplementation(() => { })
     renderApplicationView()
 
     expect(await screen.findByRole("heading", { level: 1, name: /error/i })).toBeInTheDocument()
@@ -329,7 +330,8 @@ describe("Account Listing View", () => {
   })
 
   it("should run windo print on button click", async () => {
-    const windowSpy = jest.spyOn(window, "print").mockImplementation(() => {})
+    // eslint-disable @typescript-eslint/no-empty-function
+    const windowSpy = jest.spyOn(window, "print").mockImplementation(() => { })
 
     server.use(
       rest.get("http://localhost:3100/applications/application_1", (_req, res, ctx) => {
