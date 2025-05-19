@@ -1,8 +1,8 @@
 import React, { useEffect, useState, Fragment, useContext } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { t, LoadingOverlay } from "@bloom-housing/ui-components"
-import { Button, Card, Heading, Tabs } from "@bloom-housing/ui-seeds"
+import { t } from "@bloom-housing/ui-components"
+import { Button, Card, LoadingState, Heading, Tabs } from "@bloom-housing/ui-seeds"
 import {
   PageView,
   pushGtmEvent,
@@ -146,7 +146,10 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
               selectedIndex={props.filterType}
             >
               <Tabs.TabList>
-                <Tabs.Tab className={styles["application-count-tab"]}>
+                <Tabs.Tab
+                  className={styles["application-count-tab"]}
+                  data-testid="total-applications-tab"
+                >
                   <span>{t("account.allMyApplications")}</span>
                   <span>{applicationsCount?.total}</span>
                 </Tabs.Tab>
@@ -154,15 +157,22 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
                   className={`${styles["application-count-tab"]} ${
                     !showPublicLottery ? styles["application-hide-tab"] : ""
                   }`}
+                  data-testid="lottery-runs-tab"
                 >
                   <span>{t("account.lotteryRun")}</span>
                   <span>{applicationsCount?.lottery}</span>
                 </Tabs.Tab>
-                <Tabs.Tab className={styles["application-count-tab"]}>
+                <Tabs.Tab
+                  className={styles["application-count-tab"]}
+                  data-testid="closed-applications-tab"
+                >
                   <span>{t("account.closedApplications")}</span>
                   <span>{applicationsCount?.closed}</span>
                 </Tabs.Tab>
-                <Tabs.Tab className={styles["application-count-tab"]}>
+                <Tabs.Tab
+                  className={styles["application-count-tab"]}
+                  data-testid="open-applications-tab"
+                >
                   <span>{t("account.openApplications")}</span>
                   <span>{applicationsCount?.open}</span>
                 </Tabs.Tab>
@@ -174,16 +184,12 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
               subtitle={t("account.myApplicationsSubtitle")}
               headingPriority={1}
             >
-              <>
-                <LoadingOverlay isLoading={loading}>
-                  <Fragment>
-                    {applications?.map((application, index) => {
-                      return <StatusItemWrapper key={index} application={application} />
-                    })}
-                  </Fragment>
-                </LoadingOverlay>
+              <LoadingState loading={loading}>
+                {applications?.map((application, index) => {
+                  return <StatusItemWrapper key={index} application={application} />
+                })}
                 {!applications?.length && !loading && noApplicationsSection()}
-              </>
+              </LoadingState>
             </BloomCard>
           </div>
         </section>

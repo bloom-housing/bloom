@@ -160,7 +160,9 @@ describe("Listing Management Tests", () => {
     cy.getByID("listingsBuildingAddress.zipCode").type(listing["buildingAddress.zipCode"])
     cy.getByID("yearBuilt").type(listing["yearBuilt"])
     cy.get(".addressPopup").contains(listing["buildingAddress.street"])
-    cy.getByID("reservedCommunityTypes.id").select(listing["reservedCommunityType.id"])
+    cy.getByID("reservedCommunityTypes.id").select(listing["reservedCommunityType.id"], {
+      force: true,
+    })
     cy.getByID("reservedCommunityDescription").type(listing["reservedCommunityDescription"])
     cy.getByID("includeCommunityDisclaimerYes").check()
     cy.getByID("communityDisclaimerTitle").type(listing["communityDisclaimerTitle"])
@@ -216,8 +218,8 @@ describe("Listing Management Tests", () => {
     cy.getByID("petPolicy").type(listing["petPolicy"])
     cy.getByID("servicesOffered").type(listing["servicesOffered"])
     if (listing["accessibilityFeatures"]) {
-      listing["accessibilityFeatures"].forEach((feature: string) => {
-        cy.getByID(feature.toLowerCase()).check()
+      listing["accessibilityFeatures"].forEach((feature: string[]) => {
+        cy.getByID(feature[0]).check()
       })
     }
     cy.getByID("creditHistory").type(listing["creditHistory"])
@@ -356,8 +358,8 @@ describe("Listing Management Tests", () => {
     cy.getByID("petPolicy").contains(listing["petPolicy"])
     cy.getByID("servicesOffered").contains(listing["servicesOffered"])
     if (listing["accessibilityFeatures"]) {
-      listing["accessibilityFeatures"].forEach((feature: string) => {
-        cy.getByID("accessibilityFeatures").contains(feature)
+      listing["accessibilityFeatures"].forEach((feature: string[]) => {
+        cy.getByID("accessibilityFeatures").contains(feature[1])
       })
     }
     cy.getByID("creditHistory").contains(listing["creditHistory"])

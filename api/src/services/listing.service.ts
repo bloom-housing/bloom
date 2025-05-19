@@ -15,6 +15,7 @@ import {
   LanguagesEnum,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
+  MarketingTypeEnum,
   Prisma,
   ReviewOrderTypeEnum,
   UserRoleEnum,
@@ -27,6 +28,7 @@ import { PermissionService } from './permission.service';
 import { PrismaService } from './prisma.service';
 import { TranslationService } from './translation.service';
 import { AmiChart } from '../dtos/ami-charts/ami-chart.dto';
+import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { Listing } from '../dtos/listings/listing.dto';
 import { ListingCreate } from '../dtos/listings/listing-create.dto';
 import { ListingDuplicate } from '../dtos/listings/listing-duplicate.dto';
@@ -35,13 +37,15 @@ import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto
 import { ListingsQueryBody } from '../dtos/listings/listings-query-body.dto';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
 import { ListingUpdate } from '../dtos/listings/listing-update.dto';
+import { Compare } from '../dtos/shared/base-filter.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { User } from '../dtos/users/user.dto';
+import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
+import { FilterAvailabilityEnum } from '../enums/listings/filter-availability-enum';
 import { ListingViews } from '../enums/listings/view-enum';
 import { ListingFilterKeys } from '../enums/listings/filter-key-enum';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
-import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 import { buildFilter } from '../utilities/build-filter';
 import { buildOrderByForListings } from '../utilities/build-order-by';
 import { startCronJob } from '../utilities/cron-job-starter';
@@ -57,7 +61,7 @@ import {
 } from '../utilities/unit-utilities';
 import { fillModelStringFields } from '../utilities/model-fields';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
-import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
+import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
 
 export type getListingsArgs = {
   skip: number;
@@ -250,6 +254,8 @@ export class ListingService implements OnModuleInit {
       }
     });
 
+    addUnitGroupsSummarized(listings);
+
     const paginationInfo = buildPaginationMetaInfo(
       params,
       count,
@@ -389,41 +395,258 @@ export class ListingService implements OnModuleInit {
   ): Prisma.ListingsWhereInput {
     const filters: Prisma.ListingsWhereInput[] = [];
 
+    const notUnderConstruction = buildFilter({
+      $comparison: Compare['<>'],
+      $include_nulls: false,
+      value: FilterAvailabilityEnum.comingSoon,
+      key: ListingFilterKeys.availabilities,
+      caseSensitive: true,
+    });
+
+    // detect combined >=/<= monthlyRent filters and add one range filter
+    const rentParams =
+      params?.filter((f) => f[ListingFilterKeys.monthlyRent] !== undefined) ||
+      [];
+    const minRent = rentParams.find((f) => f.$comparison === Compare['>=']);
+    const maxRent = rentParams.find((f) => f.$comparison === Compare['<=']);
+    if (minRent && maxRent) {
+      const min = minRent[ListingFilterKeys.monthlyRent];
+      const max = maxRent[ListingFilterKeys.monthlyRent];
+      filters.push({
+        OR: [
+          {
+            units: {
+              some: {
+                AND: [
+                  { monthlyRent: { gte: min } },
+                  { monthlyRent: { lte: max } },
+                ],
+              },
+            },
+          },
+          {
+            unitGroups: {
+              some: {
+                unitGroupAmiLevels: {
+                  some: {
+                    OR: [
+                      {
+                        AND: [
+                          { flatRentValue: { gte: min } },
+                          { flatRentValue: { lte: max } },
+                        ],
+                      },
+                      { percentageOfIncomeValue: { not: null } },
+                    ],
+                  },
+                },
+              },
+            },
+          },
+        ],
+      });
+    }
+
     if (params?.length) {
       params.forEach((filter) => {
-        // TODO: handling availibility for units and unitGroups
-        // if (
-        //   filter[ListingFilterKeys.availability] ===
-        //   FilterAvailabilityEnum.waitlistOpen
-        // ) {
-        //   const builtFilter = buildFilter({
-        //     $comparison: filter.$comparison,
-        //     $include_nulls: false,
-        //     value: ReviewOrderTypeEnum.waitlist,
-        //     key: 'reviewOrderType',
-        //   });
-        //   filters.push({
-        //     OR: builtFilter.map((filt) => ({
-        //       reviewOrderType: filt,
-        //     })),
-        //   });
-        // } else if (
-        //   filter[ListingFilterKeys.availability] ===
-        //   FilterAvailabilityEnum.unitsAvailable
-        // ) {
-        //   const builtFilter = buildFilter({
-        //     $comparison: Compare['>='],
-        //     $include_nulls: false,
-        //     value: 1,
-        //     key: 'reviewOrderType',
-        //   });
-        //   filters.push({
-        //     OR: builtFilter.map((filt) => ({
-        //       reviewOrderType: filt,
-        //     })),
-        //   });
-        // }
-        if (filter[ListingFilterKeys.bathrooms]) {
+        if (filter[ListingFilterKeys.availabilities]) {
+          const orOptions = filter[ListingFilterKeys.availabilities].map(
+            (availability) => {
+              if (availability === FilterAvailabilityEnum.closedWaitlist) {
+                const builtFilter = buildFilter({
+                  $comparison: Compare['='],
+                  $include_nulls: false,
+                  value: false,
+                  key: ListingFilterKeys.availabilities,
+                  caseSensitive: true,
+                });
+                return {
+                  AND: builtFilter
+                    .map((filt) => ({
+                      unitGroups: {
+                        some: {
+                          [FilterAvailabilityEnum.openWaitlist]: filt,
+                        },
+                      },
+                    }))
+                    .concat(
+                      notUnderConstruction.map((filt) => ({
+                        marketingType: filt,
+                      })),
+                    ),
+                };
+              } else if (availability === FilterAvailabilityEnum.comingSoon) {
+                const builtFilter = buildFilter({
+                  $comparison: Compare['='],
+                  $include_nulls: false,
+                  value: MarketingTypeEnum.comingSoon,
+                  key: ListingFilterKeys.availabilities,
+                  caseSensitive: true,
+                });
+                return builtFilter.map((filt) => ({
+                  marketingType: filt,
+                }));
+              } else if (availability === FilterAvailabilityEnum.openWaitlist) {
+                const builtFilter = buildFilter({
+                  $comparison: Compare['='],
+                  $include_nulls: false,
+                  value: true,
+                  key: ListingFilterKeys.availabilities,
+                  caseSensitive: true,
+                });
+                return {
+                  AND: builtFilter
+                    .map((filt) => ({
+                      unitGroups: {
+                        some: {
+                          [FilterAvailabilityEnum.openWaitlist]: filt,
+                        },
+                      },
+                    }))
+                    .concat(
+                      notUnderConstruction.map((filt) => ({
+                        marketingType: filt,
+                      })),
+                    ),
+                };
+              } else if (availability === FilterAvailabilityEnum.waitlistOpen) {
+                const builtFilter = buildFilter({
+                  $comparison: Compare['='],
+                  $include_nulls: false,
+                  value: ReviewOrderTypeEnum.waitlist,
+                  key: ListingFilterKeys.availabilities,
+                  caseSensitive: true,
+                });
+                return builtFilter.map((filt) => ({
+                  reviewOrderType: filt,
+                }));
+              } else if (
+                availability === FilterAvailabilityEnum.unitsAvailable
+              ) {
+                const builtFilter = buildFilter({
+                  $comparison: Compare['>='],
+                  $include_nulls: false,
+                  value: 1,
+                  key: ListingFilterKeys.availabilities,
+                  caseSensitive: true,
+                });
+                return builtFilter.map((filt) => ({
+                  unitsAvailable: filt,
+                }));
+              }
+            },
+          );
+
+          filters.push({
+            OR: orOptions.flat(),
+          });
+        }
+        if (
+          filter[ListingFilterKeys.availability] ===
+          FilterAvailabilityEnum.closedWaitlist
+        ) {
+          const builtFilter = buildFilter({
+            $comparison: filter.$comparison,
+            $include_nulls: false,
+            value: false,
+            key: ListingFilterKeys.availability,
+            caseSensitive: true,
+          });
+          filters.push({
+            OR: [
+              {
+                AND: builtFilter
+                  .map((filt) => ({
+                    unitGroups: {
+                      some: { [FilterAvailabilityEnum.openWaitlist]: filt },
+                    },
+                  }))
+                  .concat(
+                    notUnderConstruction.map((filt) => ({
+                      marketingType: filt,
+                    })),
+                  ),
+              },
+            ],
+          });
+        } else if (
+          filter[ListingFilterKeys.availability] ===
+          FilterAvailabilityEnum.comingSoon
+        ) {
+          const builtFilter = buildFilter({
+            $comparison: filter.$comparison,
+            $include_nulls: false,
+            value: filter[ListingFilterKeys.availability],
+            key: ListingFilterKeys.availability,
+            caseSensitive: true,
+          });
+          filters.push({
+            OR: builtFilter.map((filt) => ({
+              marketingType: filt,
+            })),
+          });
+        } else if (
+          filter[ListingFilterKeys.availability] ===
+          FilterAvailabilityEnum.openWaitlist
+        ) {
+          const builtFilter = buildFilter({
+            $comparison: filter.$comparison,
+            $include_nulls: false,
+            value: true,
+            key: ListingFilterKeys.availability,
+            caseSensitive: true,
+          });
+          filters.push({
+            OR: [
+              {
+                AND: builtFilter
+                  .map((filt) => ({
+                    unitGroups: {
+                      some: { [FilterAvailabilityEnum.openWaitlist]: filt },
+                    },
+                  }))
+                  .concat(
+                    notUnderConstruction.map((filt) => ({
+                      marketingType: filt,
+                    })),
+                  ),
+              },
+            ],
+          });
+        } else if (
+          filter[ListingFilterKeys.availability] ===
+          FilterAvailabilityEnum.waitlistOpen
+        ) {
+          const builtFilter = buildFilter({
+            $comparison: filter.$comparison,
+            $include_nulls: false,
+            value: ReviewOrderTypeEnum.waitlist,
+            key: ListingFilterKeys.availability,
+            caseSensitive: true,
+          });
+          filters.push({
+            OR: builtFilter.map((filt) => ({
+              reviewOrderType: filt,
+            })),
+          });
+        } else if (
+          filter[ListingFilterKeys.availability] ===
+          FilterAvailabilityEnum.unitsAvailable
+        ) {
+          const builtFilter = buildFilter({
+            $comparison: filter.$comparison,
+            $include_nulls: false,
+            value: 1,
+            key: ListingFilterKeys.availability,
+            caseSensitive: true,
+          });
+          filters.push({
+            OR: builtFilter.map((filt) => ({
+              unitsAvailable: filt,
+            })),
+          });
+        }
+        if (filter[ListingFilterKeys.bathrooms] !== undefined) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
             $include_nulls: false,
@@ -441,7 +664,7 @@ export class ListingService implements OnModuleInit {
             })),
           });
         }
-        if (filter[ListingFilterKeys.bedrooms]) {
+        if (filter[ListingFilterKeys.bedrooms] !== undefined) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
             $include_nulls: false,
@@ -450,13 +673,57 @@ export class ListingService implements OnModuleInit {
             caseSensitive: true,
           });
           filters.push({
-            OR: builtFilter.map((filt) => ({
-              units: {
-                some: {
-                  numBedrooms: filt,
+            OR: [
+              ...builtFilter.map((filt) => ({
+                units: {
+                  some: {
+                    numBedrooms: filt,
+                  },
                 },
-              },
-            })),
+              })),
+              ...builtFilter.map((filt) => ({
+                unitGroups: {
+                  some: {
+                    unitTypes: {
+                      some: {
+                        numBedrooms: filt,
+                      },
+                    },
+                  },
+                },
+              })),
+            ],
+          });
+        }
+        if (filter[ListingFilterKeys.bedroomTypes] !== undefined) {
+          const builtFilter = buildFilter({
+            $comparison: filter.$comparison,
+            $include_nulls: false,
+            value: filter[ListingFilterKeys.bedroomTypes],
+            key: ListingFilterKeys.bedroomTypes,
+            caseSensitive: true,
+          });
+          filters.push({
+            OR: [
+              ...builtFilter.map((filt) => ({
+                units: {
+                  some: {
+                    numBedrooms: filt,
+                  },
+                },
+              })),
+              ...builtFilter.map((filt) => ({
+                unitGroups: {
+                  some: {
+                    unitTypes: {
+                      some: {
+                        numBedrooms: filt,
+                      },
+                    },
+                  },
+                },
+              })),
+            ],
           });
         }
         if (filter[ListingFilterKeys.city]) {
@@ -573,6 +840,7 @@ export class ListingService implements OnModuleInit {
           });
         }
         if (filter[ListingFilterKeys.monthlyRent]) {
+          if (minRent && maxRent) return;
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
             $include_nulls: false,
@@ -581,13 +849,29 @@ export class ListingService implements OnModuleInit {
             caseSensitive: true,
           });
           filters.push({
-            OR: builtFilter.map((filt) => ({
-              units: {
-                some: {
-                  [ListingFilterKeys.monthlyRent]: filt,
+            OR: [
+              ...builtFilter.map((filt) => ({
+                units: {
+                  some: {
+                    [ListingFilterKeys.monthlyRent]: filt,
+                  },
                 },
-              },
-            })),
+              })),
+              ...builtFilter.map((filt) => ({
+                unitGroups: {
+                  some: {
+                    unitGroupAmiLevels: {
+                      some: {
+                        OR: [
+                          { flatRentValue: filt },
+                          { percentageOfIncomeValue: { not: null } },
+                        ],
+                      },
+                    },
+                  },
+                },
+              })),
+            ],
           });
         }
         if (filter[ListingFilterKeys.name]) {
@@ -612,6 +896,22 @@ export class ListingService implements OnModuleInit {
           filters.push({
             OR: builtFilter.map((filt) => ({
               [ListingFilterKeys.neighborhood]: filt,
+            })),
+          });
+        }
+        if (filter[ListingFilterKeys.multiselectQuestions]) {
+          const builtFilter = buildFilter({
+            $comparison: filter.$comparison,
+            $include_nulls: false,
+            value: filter[ListingFilterKeys.multiselectQuestions],
+            key: ListingFilterKeys.multiselectQuestions,
+            caseSensitive: true,
+          });
+          filters.push({
+            OR: builtFilter.map((filt) => ({
+              listingMultiselectQuestions: {
+                some: { multiselectQuestionId: filt },
+              },
             })),
           });
         }
@@ -712,13 +1012,8 @@ export class ListingService implements OnModuleInit {
     listingId: string,
     lang: LanguagesEnum = LanguagesEnum.en,
     view: ListingViews = ListingViews.full,
-    enableUnitGroups = false,
   ): Promise<Listing> {
-    const listingRaw = await this.findOrThrow(
-      listingId,
-      view,
-      enableUnitGroups,
-    );
+    const listingRaw = await this.findOrThrow(listingId, view);
 
     let result = mapTo(Listing, listingRaw);
 
@@ -726,7 +1021,12 @@ export class ListingService implements OnModuleInit {
       result = await this.translationService.translateListing(result, lang);
     }
 
-    await this.addUnitsSummarized(result);
+    if (result.unitGroups.length > 0) {
+      addUnitGroupsSummarized(result);
+    } else {
+      await this.addUnitsSummarized(result);
+    }
+
     return result;
   }
 
@@ -919,10 +1219,15 @@ export class ListingService implements OnModuleInit {
       });
     }
 
-    //For unit groups it will return 0 (as we don't use it for it)
     dto.unitsAvailable =
       dto.reviewOrderType !== ReviewOrderTypeEnum.waitlist && dto.units
         ? dto.units.length
+        : dto.unitGroups
+        ? dto.unitGroups.reduce(
+            (unitsAvailable, { totalAvailable }) =>
+              unitsAvailable + totalAvailable,
+            0,
+          )
         : 0;
 
     const rawListing = await this.prisma.listings.create({
@@ -1152,9 +1457,11 @@ export class ListingService implements OnModuleInit {
                       level.monthlyRentDeterminationType,
                     percentageOfIncomeValue: level.percentageOfIncomeValue,
                     flatRentValue: level.flatRentValue,
-                    amiChart: {
-                      connect: { id: level.amiChart.id },
-                    },
+                    amiChart: level.amiChart?.id
+                      ? {
+                          connect: { id: level.amiChart.id },
+                        }
+                      : undefined,
                   })),
                 },
                 unitAccessibilityPriorityTypes:
@@ -1334,6 +1641,7 @@ export class ListingService implements OnModuleInit {
 
     if (!dto.includeUnits) {
       delete mappedListing['units'];
+      delete mappedListing['unitGroups'];
     }
 
     const newListingData: ListingCreate = {
@@ -1385,7 +1693,6 @@ export class ListingService implements OnModuleInit {
           id: requestingUser.id,
         },
       });
-
       await this.prisma.activityLog.create({
         data: {
           module: 'user',
@@ -1430,29 +1737,8 @@ export class ListingService implements OnModuleInit {
     This will either find a listing or throw an error
     a listing view can be provided which will add the joins to produce that view correctly
   */
-  async findOrThrow(
-    id: string,
-    view?: ListingViews,
-    enableUnitGroups?: boolean,
-  ) {
+  async findOrThrow(id: string, view?: ListingViews) {
     const viewInclude = view ? views[view] : undefined;
-    if (enableUnitGroups && viewInclude) {
-      viewInclude.units = undefined;
-      viewInclude.unitGroups = {
-        include: {
-          unitTypes: true,
-          unitGroupAmiLevels: {
-            include: {
-              amiChart: {
-                include: {
-                  jurisdictions: true,
-                },
-              },
-            },
-          },
-        },
-      };
-    }
 
     const listing = await this.prisma.listings.findUnique({
       include: viewInclude,
@@ -1615,6 +1901,12 @@ export class ListingService implements OnModuleInit {
       incomingDto.reviewOrderType !== ReviewOrderTypeEnum.waitlist &&
       incomingDto.units
         ? incomingDto.units.length
+        : incomingDto.unitGroups
+        ? incomingDto.unitGroups.reduce(
+            (unitsAvailable, { totalAvailable }) =>
+              unitsAvailable + totalAvailable,
+            0,
+          )
         : 0;
 
     // We need to save the assets before saving it to the listing_images table

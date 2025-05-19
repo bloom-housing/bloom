@@ -13,6 +13,8 @@ interface OrderedSectionProps {
   subtitle?: string
   /** Title of the section */
   title: string
+  /** If a divider should appear after this section */
+  divider?: boolean
 }
 
 export const OrderedSection = (props: OrderedSectionProps) => {
@@ -34,6 +36,7 @@ export const OrderedSection = (props: OrderedSectionProps) => {
           {props.note && <p className={styles["note"]}>{props.note}</p>}
         </div>
       </div>
+      {props.divider && <hr />}
     </li>
   )
 }

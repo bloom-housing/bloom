@@ -49,6 +49,7 @@ import { LotteryDateParamValidator } from '../../utilities/lottery-date-validato
 import { ApplicationLotteryTotal } from '../applications/application-lottery-total.dto';
 import { ListingNeighborhoodAmenities } from './listing-neighborhood-amenities.dto';
 import { ValidateListingPublish } from '../../decorators/validate-listing-publish.decorator';
+import { UnitGroupsSummarized } from '../unit-groups/unit-groups-summarized.dto';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -281,6 +282,15 @@ class Listing extends AbstractDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   leasingAgentTitle?: string;
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  @IsUrl(
+    { require_protocol: true, protocols: ['http', 'https'] },
+    { groups: [ValidationsGroupsEnum.default] },
+  )
+  managementWebsite?: string;
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -590,6 +600,12 @@ class Listing extends AbstractDTO {
   unitsSummarized?: UnitsSummarized;
 
   @Expose()
+  @ApiPropertyOptional({ type: UnitGroupsSummarized })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => UnitGroupsSummarized)
+  unitGroupsSummarized?: UnitGroupsSummarized;
+
+  @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @ApiPropertyOptional({ type: UnitsSummary, isArray: true })
   @Type(() => UnitsSummary)
@@ -669,7 +685,7 @@ class Listing extends AbstractDTO {
     enum: MarketingTypeEnum,
     enumName: 'MarketingTypeEnum',
   })
-  marketingType: MarketingTypeEnum;
+  marketingType?: MarketingTypeEnum;
 
   @Expose()
   @Type(() => Date)

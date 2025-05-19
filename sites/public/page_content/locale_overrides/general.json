@@ -1,3 +1,18 @@
 {
-  "t.formSubmitted": "Submitting form, wait"
+  "assistance.applyToHousingTitle": "How to apply to affordable housing",
+  "assistance.applyToHousingDescription": "You can find and apply for affordable rental opportunities.",
+  "assistance.applyToHousingLink": "Read about how it works",
+  "assistance.additionalHousingTitle": "Additional housing opportunities and resources",
+  "assistance.additionalHousingDescription": "We encourage you to browse other affordable housing resources.",
+  "assistance.additionalHousingLink": "View opportunities and resources",
+  "t.formSubmitted": "Submitting form, wait",
+  "resources.immediateHousingTitle": "Immediate housing assistance",
+  "resources.immediateHousingSubtitle": "If you're fleeing domestic violence, sexual assault or human trafficking and in immediate danger, call 911.",
+  "resources.housingProgramsTitle": "Bloomington's Housing & Community Development housing programs",
+  "resources.mockCardTitle": "Lorem Ipsum",
+  "resources.mockCardDescription": "Lorem ipsum dolor sit amet consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  "resources.contactTitle": "Contact",
+  "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  "resources.contactInfo": "Bloomington's Housing & Community Development Department",
+  "resources.contactEmail": "bloomington@housing.org"
 }

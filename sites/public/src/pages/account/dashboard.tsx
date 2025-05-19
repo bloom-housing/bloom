@@ -1,6 +1,10 @@
 import React, { useEffect, useState, useContext } from "react"
 import Head from "next/head"
-import { NextRouter, withRouter } from "next/router"
+import { useRouter } from "next/router"
+import {
+  FeatureFlagEnum,
+  Jurisdiction,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t, AlertBox } from "@bloom-housing/ui-components"
 import {
   PageView,
@@ -9,20 +13,24 @@ import {
   RequireLogin,
   BloomCard,
 } from "@bloom-housing/shared-helpers"
+import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
 import Layout from "../../layouts/application"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
-import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
+import MaxWidthLayout from "../../layouts/max-width"
+import { isFeatureFlagOn } from "../../lib/helpers"
+import { fetchJurisdictionByName } from "../../lib/hooks"
 
 import styles from "./account.module.scss"
 
 interface DashboardProps {
-  router: NextRouter
+  jurisdiction: Jurisdiction
 }
 
 function Dashboard(props: DashboardProps) {
   const { profile } = useContext(AuthContext)
   const [alertMessage, setAlertMessage] = useState<string | null>(null)
+  const router = useRouter()
 
   useEffect(() => {
     if (profile) {
@@ -32,16 +40,21 @@ function Dashboard(props: DashboardProps) {
         status: UserStatus.LoggedIn,
       })
     }
-    if (props.router.query?.alert) {
-      const alert = Array.isArray(props.router.query.alert)
-        ? props.router.query.alert[0]
-        : props.router.query.alert
+    if (router.query?.alert) {
+      const alert = Array.isArray(router.query.alert) ? router.query.alert[0] : router.query.alert
       setAlertMessage(alert)
     }
-  }, [props.router, profile])
+
+    window.localStorage.setItem(
+      "bloom-show-favorites-menu-item",
+      (
+        isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableListingFavoriting) === true
+      ).toString()
+    )
+  }, [router, props.jurisdiction, profile])
 
   const closeAlert = () => {
-    void props.router.push("/account/dashboard", undefined, { shallow: true })
+    void router.push("/account/dashboard", undefined, { shallow: true })
     setAlertMessage(null)
   }
 
@@ -58,7 +71,7 @@ function Dashboard(props: DashboardProps) {
           </AlertBox>
         )}
         <section className="bg-gray-300 border-t border-gray-450">
-          <div className="max-w-5xl mx-auto sm:py-8">
+          <MaxWidthLayout className={styles["dashboard-max-width-layout"]}>
             <h1 className={"sr-only"}>{t("nav.myDashboard")}</h1>
             <Grid spacing="lg" className={styles["account-card-container"]}>
               <Grid.Row columns={2}>
@@ -103,13 +116,48 @@ function Dashboard(props: DashboardProps) {
                     </Card.Section>
                   </BloomCard>
                 </Grid.Cell>
+                {isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableListingFavoriting) ? (
+                  <Grid.Cell>
+                    <BloomCard
+                      iconSymbol="heartIcon"
+                      iconOutlined={true}
+                      title={t("account.myFavorites")}
+                      subtitle={t("account.myFavoritesSubtitle")}
+                      id="account-dashboard-favorites"
+                      variant={"block"}
+                      headingPriority={2}
+                    >
+                      <Card.Section>
+                        <Button
+                          size="sm"
+                          href={"/account/favorites"}
+                          variant="primary-outlined"
+                          id={"account-dashboard-favorites"}
+                        >
+                          {t("account.viewFavorites")}
+                        </Button>
+                      </Card.Section>
+                    </BloomCard>
+                  </Grid.Cell>
+                ) : (
+                  <></>
+                )}
               </Grid.Row>
             </Grid>
-          </div>
+          </MaxWidthLayout>
         </section>
       </Layout>
     </RequireLogin>
   )
 }
 
-export default withRouter(Dashboard)
+export default Dashboard
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function getStaticProps() {
+  const jurisdiction = await fetchJurisdictionByName()
+
+  return {
+    props: { jurisdiction },
+  }
+}

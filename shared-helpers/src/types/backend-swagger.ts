@@ -1576,6 +1576,64 @@ export class ApplicationsService {
     })
   }
   /**
+   * Get applications as csv
+   */
+  listAsCsvSecure(
+    params: {
+      /**  */
+      id: string
+      /**  */
+      includeDemographics?: boolean
+      /**  */
+      timeZone?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/csvSecure"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        id: params["id"],
+        includeDemographics: params["includeDemographics"],
+        timeZone: params["timeZone"],
+      }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get applications as spreadsheet
+   */
+  listAsSpreadsheetSecure(
+    params: {
+      /**  */
+      id: string
+      /**  */
+      includeDemographics?: boolean
+      /**  */
+      timeZone?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/spreadsheetSecure"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        id: params["id"],
+        includeDemographics: params["includeDemographics"],
+        timeZone: params["timeZone"],
+      }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Get application by id
    */
   retrieve(
@@ -1928,6 +1986,27 @@ export class UserService {
       let data = params.body
 
       configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get the ids of the user favorites
+   */
+  favoriteListings(
+    params: {
+      /**  */
+      id: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<IdDTO[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/favoriteListings/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -2509,6 +2588,22 @@ export class FeatureFlagsService {
     })
   }
   /**
+   * Add all new feature flags
+   */
+  addAllNewFeatureFlags(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/featureFlags/addAllNew"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Get a feature flag by id
    */
   retrieve(
@@ -2570,6 +2665,35 @@ export class LotteryService {
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/lottery/getLotteryResults"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        id: params["id"],
+        includeDemographics: params["includeDemographics"],
+        timeZone: params["timeZone"],
+      }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get applications lottery results
+   */
+  lotteryResultsSecure(
+    params: {
+      /**  */
+      id: string
+      /**  */
+      includeDemographics?: boolean
+      /**  */
+      timeZone?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/lottery/getLotteryResultsSecure"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = {
@@ -2712,6 +2836,9 @@ export interface ListingFilterParams {
   $comparison: EnumListingFilterParamsComparison
 
   /**  */
+  availabilities?: FilterAvailabilityEnum[]
+
+  /**  */
   availability?: FilterAvailabilityEnum
 
   /**  */
@@ -2719,6 +2846,9 @@ export interface ListingFilterParams {
 
   /**  */
   bedrooms?: number
+
+  /**  */
+  bedroomTypes?: []
 
   /**  */
   city?: string
@@ -2746,6 +2876,9 @@ export interface ListingFilterParams {
 
   /**  */
   monthlyRent?: number
+
+  /**  */
+  multiselectQuestions?: string[]
 
   /**  */
   name?: string
@@ -3129,6 +3262,21 @@ export interface ListingFeatures {
 
   /**  */
   mobility?: boolean
+
+  /**  */
+  barrierFreeUnitEntrance?: boolean
+
+  /**  */
+  loweredLightSwitch?: boolean
+
+  /**  */
+  barrierFreeBathroom?: boolean
+
+  /**  */
+  wideDoorways?: boolean
+
+  /**  */
+  loweredCabinets?: boolean
 }
 
 export interface ListingUtilities {
@@ -3475,6 +3623,104 @@ export interface UnitsSummarized {
   hmi: HMI
 }
 
+export interface UnitGroupSummary {
+  /**  */
+  unitTypes?: UnitType[]
+
+  /**  */
+  rentAsPercentIncomeRange?: MinMax
+
+  /**  */
+  rentRange?: MinMaxCurrency
+
+  /**  */
+  amiPercentageRange: MinMax
+
+  /**  */
+  openWaitlist: boolean
+
+  /**  */
+  unitVacancies: number
+
+  /**  */
+  floorRange?: MinMax
+
+  /**  */
+  sqFeetRange?: MinMax
+
+  /**  */
+  bathroomRange?: MinMax
+}
+
+export interface HMIColumns {
+  /**  */
+  "20"?: number
+
+  /**  */
+  "25"?: number
+
+  /**  */
+  "30"?: number
+
+  /**  */
+  "35"?: number
+
+  /**  */
+  "40"?: number
+
+  /**  */
+  "45"?: number
+
+  /**  */
+  "50"?: number
+
+  /**  */
+  "55"?: number
+
+  /**  */
+  "60"?: number
+
+  /**  */
+  "70"?: number
+
+  /**  */
+  "80"?: number
+
+  /**  */
+  "100"?: number
+
+  /**  */
+  "120"?: number
+
+  /**  */
+  "125"?: number
+
+  /**  */
+  "140"?: number
+
+  /**  */
+  "150"?: number
+
+  /**  */
+  householdSize: string
+}
+
+export interface HouseholdMaxIncomeSummary {
+  /**  */
+  columns: HMIColumns
+
+  /**  */
+  rows: HMIColumns[]
+}
+
+export interface UnitGroupsSummarized {
+  /**  */
+  unitGroupSummary: UnitGroupSummary[]
+
+  /**  */
+  householdMaxIncomeSummary: HouseholdMaxIncomeSummary
+}
+
 export interface UnitsSummary {
   /**  */
   id: string
@@ -3693,6 +3939,9 @@ export interface Listing {
   leasingAgentTitle?: string
 
   /**  */
+  managementWebsite?: string
+
+  /**  */
   name: string
 
   /**  */
@@ -3838,6 +4087,9 @@ export interface Listing {
 
   /**  */
   unitsSummarized?: UnitsSummarized
+
+  /**  */
+  unitGroupsSummarized?: UnitGroupsSummarized
 
   /**  */
   unitsSummary?: UnitsSummary[]
@@ -4329,6 +4581,9 @@ export interface ListingCreate {
   leasingAgentTitle?: string
 
   /**  */
+  managementWebsite?: string
+
+  /**  */
   name: string
 
   /**  */
@@ -4637,6 +4892,9 @@ export interface ListingUpdate {
 
   /**  */
   leasingAgentTitle?: string
+
+  /**  */
+  managementWebsite?: string
 
   /**  */
   name: string
@@ -6604,6 +6862,9 @@ export interface PublicLotteryTotal {
 }
 
 export enum FilterAvailabilityEnum {
+  "closedWaitlist" = "closedWaitlist",
+  "comingSoon" = "comingSoon",
+  "openWaitlist" = "openWaitlist",
   "waitlistOpen" = "waitlistOpen",
   "unitsAvailable" = "unitsAvailable",
 }
@@ -6834,16 +7095,28 @@ export enum UserRoleEnum {
 
 export enum FeatureFlagEnum {
   "example" = "example",
-  "enableHomeType" = "enableHomeType",
+  "disableCommonApplication" = "disableCommonApplication",
+  "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
-  "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
+  "enableGeocodingPreferences" = "enableGeocodingPreferences",
+  "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
+  "enableHomeType" = "enableHomeType",
   "enableIsVerified" = "enableIsVerified",
-  "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
-  "hideCloseListingButton" = "hideCloseListingButton",
+  "enableListingOpportunity" = "enableListingOpportunity",
+  "enableListingPagination" = "enableListingPagination",
   "enableMarketingStatus" = "enableMarketingStatus",
+  "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
+  "enablePartnerDemographics" = "enablePartnerDemographics",
+  "enablePartnerSettings" = "enablePartnerSettings",
+  "enableListingFavoriting" = "enableListingFavoriting",
+  "enableCompanyWebsite" = "enableCompanyWebsite",
   "enableRegions" = "enableRegions",
   "enableSection8Question" = "enableSection8Question",
+  "enableSingleUseCode" = "enableSingleUseCode",
   "enableUnitGroups" = "enableUnitGroups",
+  "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
+  "hideCloseListingButton" = "hideCloseListingButton",
+  "swapCommunityTypeWithPrograms" = "swapCommunityTypeWithPrograms",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {
   "=" = "=",

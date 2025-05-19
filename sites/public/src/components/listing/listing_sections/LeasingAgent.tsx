@@ -12,6 +12,7 @@ type LeasingAgentProps = {
   officeHours?: string
   phone?: string
   title?: string
+  managementWebsite?: string
 }
 
 export const formatPhone = (phone: string) => {
@@ -25,8 +26,9 @@ export const LeasingAgent = ({
   officeHours,
   phone,
   title,
+  managementWebsite,
 }: LeasingAgentProps) => {
-  if (!address && !email && !name && !officeHours && !phone) return
+  if (!address && !email && !name && !officeHours && !phone && !managementWebsite) return
   return (
     <Card
       className={`${styles["mobile-full-width-card"]} ${styles["mobile-no-bottom-border"]} seeds-m-bs-content`}
@@ -48,6 +50,18 @@ export const LeasingAgent = ({
         {email && (
           <p className={"seeds-m-bs-header"}>
             <Link href={`mailto:${email}`}>{t("t.email")}</Link>
+          </p>
+        )}
+        {managementWebsite && (
+          <p className={"seeds-m-bs-header"}>
+            <a
+              href={managementWebsite}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${styles["primary-link"]} underline`}
+            >
+              {t("t.website")}
+            </a>
           </p>
         )}
         {address && (

@@ -4,6 +4,7 @@ import {
   ApplicationMethodsTypeEnum,
   ApplicationStatusEnum,
   ApplicationSubmissionTypeEnum,
+  FeatureFlagEnum,
   HouseholdMemberRelationship,
   IncomePeriodEnum,
   Jurisdiction,
@@ -273,7 +274,7 @@ export const jurisdiction: Jurisdiction = {
   publicUrl: "",
   featureFlags: [
     {
-      name: "enableUtilitiesIncluded",
+      name: FeatureFlagEnum.enableUtilitiesIncluded,
       id: "id",
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -734,5 +735,6 @@ export const listing: Listing = {
       monthlyRentAsPercentOfIncome: undefined,
     },
   ],
+  unitGroups: [],
   listingImages: [],
 }

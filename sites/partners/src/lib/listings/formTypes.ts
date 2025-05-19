@@ -7,8 +7,9 @@ import {
   MultiselectQuestion,
   PaperApplication,
   PaperApplicationCreate,
-  RegionEnum,
   Unit,
+  UnitGroup,
+  UnitGroupAmiLevel,
   User,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -130,6 +131,7 @@ export const formDefaults: FormListing = {
   leasingAgentOfficeHours: "",
   leasingAgentPhone: null,
   leasingAgentTitle: "",
+  managementWebsite: "",
   name: null,
   postMarkDate: null,
   postmarkedApplicationsReceivedByDate: null,
@@ -154,7 +156,7 @@ export const formDefaults: FormListing = {
   householdSizeMax: 0,
   householdSizeMin: 0,
   neighborhood: undefined,
-  region: RegionEnum.Greater_Downtown,
+  region: undefined,
   petPolicy: "",
   smokingPolicy: "",
   unitsAvailable: 0,
@@ -180,6 +182,15 @@ export type TempUnit = Unit & {
   maxIncomeHouseholdSize8?: string
 }
 
+export type TempAmiLevel = UnitGroupAmiLevel & {
+  tempId?: number
+}
+
+export type TempUnitGroup = Omit<UnitGroup, "unitGroupAmiLevels"> & {
+  tempId?: number
+  unitGroupAmiLevels: TempAmiLevel[]
+}
+
 export type TempEvent = ListingEvent & {
   tempId?: string
 }
@@ -190,6 +201,7 @@ export type FormMetadata = {
   preferences: MultiselectQuestion[]
   programs: MultiselectQuestion[]
   units: TempUnit[]
+  unitGroups: TempUnitGroup[]
   openHouseEvents: TempEvent[]
   profile: User
   latLong: LatitudeLongitude

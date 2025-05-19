@@ -3,28 +3,8 @@
     margin-block-end: var(--seeds-spacer-content);
   }
 
-  // Don't put the focus state on the listing name link, because we are redirecting visual focus to the full card
-  :focus-within a:focus {
-    outline: none;
-    box-shadow: none;
-  }
-
-  // When the listing link is focused, put the focus style instead on the whole card
-  :focus-within.listing-card-container {
-    outline: var(--seeds-focus-ring-outline);
-    box-shadow: var(--seeds-focus-ring-box-shadow);
-    box-sizing: border-box;
-  }
-
-  // If a button inside the card is focused, turn the card-level focus, so only the button has visual focus
-  :has(button:focus).listing-card-container {
-    outline: none;
-    box-shadow: none;
-  }
-
   .listing-card-container {
     --card-spacing: 0;
-    position: relative;
 
     .name,
     a {
@@ -32,8 +12,6 @@
     }
 
     &:hover {
-      outline: var(--seeds-border-2) solid var(--seeds-border-color);
-      box-sizing: border-box;
       .name,
       a {
         color: var(--seeds-color-blue-900);
@@ -100,35 +78,14 @@
             &:not(:last-child) {
               margin-inline-end: var(--seeds-s2);
             }
+            svg {
+              margin-inline-end: var(--seeds-s1);
+            }
           }
         }
 
         .unit-table {
           margin-block-start: var(--seeds-s3);
-        }
-
-        .due-date {
-          --common-message-link-gap: 0;
-          --common-message-font: var(--seeds-font-alt-sans);
-          --message-border: var(--seeds-border-2) solid var(--seeds-color-primary-light);
-          --message-max-width: 100%;
-          --message-border-radius: var(--seeds-rounded);
-          margin-block-start: var(--seeds-s3);
-          background-color: var(--seeds-color-primary-lighter);
-
-          .primary-color-icon {
-            color: var(--seeds-color-primary-dark);
-          }
-
-          .date-review-order {
-            font-weight: var(--seeds-font-weight-bold);
-            color: var(--seeds-color-primary-dark);
-          }
-
-          .due-date-content {
-            display: flex;
-            flex-direction: column;
-          }
         }
       }
 
@@ -157,45 +114,6 @@
         margin-block-start: var(--seeds-s3);
         position: relative;
       }
-    }
-
-    // Expand the clickable area of the listing name link to the full card
-    // https://inclusive-components.design/cards/
-    .main-link::before {
-      content: "";
-      position: absolute;
-      display: block;
-      height: 100%;
-      width: 100%;
-      left: 0;
-      top: 0;
-      right: 0;
-      bottom: 0;
-    }
-  }
-
-  // Temporary until we have Seeds tables to manipulate UIC StackedTable component
-  [class*="stacked-table"] {
-    text-transform: none;
-    --bloom-font-size-base: var(--seeds-type-label-size);
-    tr {
-      background-color: var(--seeds-bg-color-canvas);
-    }
-    tr:first-child {
-      margin-block-end: 0;
-    }
-    th {
-      background-color: white;
-      padding-block: var(--seeds-s1);
-      padding-inline: var(--seeds-s2);
-      letter-spacing: normal;
-    }
-    td {
-      padding: var(--seeds-s2);
-    }
-    td,
-    th {
-      font-size: var(--seeds-type-caption-size);
     }
   }
 }
