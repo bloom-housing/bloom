@@ -21,6 +21,11 @@ describe('Testing script runner service', () => {
   let prisma: PrismaService;
   let emailService: EmailService;
   let multiselectQuestionService: MultiselectQuestionService;
+  let mockConsoleLog;
+
+  beforeEach(() => {
+    mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
+  });
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -53,6 +58,31 @@ describe('Testing script runner service', () => {
     prisma = module.get<PrismaService>(PrismaService);
     multiselectQuestionService = module.get<MultiselectQuestionService>(
       MultiselectQuestionService,
+    );
+  });
+
+  afterEach(() => {
+    mockConsoleLog.mockRestore();
+  });
+
+  it('should transfer data', async () => {
+    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+
+    const id = randomUUID();
+    const scriptName = 'data transfer';
+
+    const res = await service.dataTransfer(
+      {
+        user: {
+          id,
+        } as unknown as User,
+      } as unknown as ExpressRequest,
+      {
+        connectionString: process.env.TEST_CONNECTION_STRING,
+      },
+      externalPrismaClient,
     );
   });
 
@@ -649,6 +679,9 @@ describe('Testing script runner service', () => {
         lotteryOptIn: null,
       },
     });
+    expect(mockConsoleLog).toHaveBeenCalledWith(
+      'updated lottery opt in for 1 listings',
+    );
   });
 
   it('should hide programs from listing detail page', async () => {
@@ -736,6 +769,9 @@ describe('Testing script runner service', () => {
       },
     });
     expect(prisma.featureFlags.create).toHaveBeenCalledTimes(17);
+    expect(mockConsoleLog).toHaveBeenCalledWith(
+      'Number of feature flags created: 17',
+    );
   });
 
   it('should migrate preferences and programs to the multiselect question table', async () => {

@@ -4,9 +4,17 @@ import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString, getDetailAddress } from "./helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const DetailLeasingAgent = () => {
   const listing = useContext(ListingContext)
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+
+  const enableCompanyWebsite = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableCompanyWebsite,
+    listing.jurisdictions.id
+  )
 
   return (
     <SectionWithGrid heading={t("listings.sections.leasingAgentTitle")} inset>
@@ -27,6 +35,12 @@ const DetailLeasingAgent = () => {
         <FieldValue id="leasingAgentTitle" label={t("leasingAgent.title")}>
           {getDetailFieldString(listing.leasingAgentTitle)}
         </FieldValue>
+
+        {enableCompanyWebsite && (
+          <FieldValue id="managementWebsite" label={t("leasingAgent.managementWebsite")}>
+            {getDetailFieldString(listing.managementWebsite)}
+          </FieldValue>
+        )}
 
         <FieldValue
           id="leasingAgentOfficeHours"
