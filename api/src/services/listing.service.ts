@@ -1024,8 +1024,6 @@ export class ListingService implements OnModuleInit {
       result = await this.translationService.translateListing(result, lang);
     }
 
-    console.log('results.unitGroups', result);
-
     if (result.unitGroups?.length > 0) {
       addUnitGroupsSummarized(result);
     } else {

@@ -89,9 +89,9 @@ export const elmVillage = {
   customMapPin: false,
   contentUpdatedAt: new Date(),
   publishedAt: new Date(),
-  listingsBuildingAddress: {
-    create: stagingRealisticAddresses[4],
-  },
+  // listingsBuildingAddress: {
+  //   create: stagingRealisticAddresses[4],
+  // },
   listingsApplicationPickUpAddress: undefined,
   listingsApplicationDropOffAddress: undefined,
   reservedCommunityTypes: undefined,

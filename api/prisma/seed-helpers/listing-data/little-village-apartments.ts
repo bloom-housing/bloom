@@ -70,9 +70,9 @@ export const littleVillageApartments = {
   listingsApplicationPickUpAddress: undefined,
   listingsApplicationDropOffAddress: undefined,
   listingsApplicationMailingAddress: undefined,
-  listingsBuildingAddress: {
-    create: stagingRealisticAddresses[3],
-  },
+  // listingsBuildingAddress: {
+  //   create: stagingRealisticAddresses[3],
+  // },
   listingImages: {
     create: [
       {

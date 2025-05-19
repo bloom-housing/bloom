@@ -68,9 +68,9 @@ export const hollywoodHillsHeights = {
   customMapPin: false,
   contentUpdatedAt: new Date(),
   publishedAt: new Date(),
-  listingsBuildingAddress: {
-    create: stagingRealisticAddresses[0],
-  },
+  // listingsBuildingAddress: {
+  //   create: stagingRealisticAddresses[0],
+  // },
   listingsApplicationPickUpAddress: undefined,
   listingsLeasingAgentAddress: undefined,
   listingsApplicationDropOffAddress: undefined,

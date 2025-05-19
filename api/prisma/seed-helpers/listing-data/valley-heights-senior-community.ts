@@ -69,9 +69,9 @@ export const valleyHeightsSeniorCommunity = {
   contentUpdatedAt: dayjs(new Date()).subtract(1, 'days').toDate(),
   publishedAt: dayjs(new Date()).subtract(3, 'days').toDate(),
   closedAt: dayjs(new Date()).subtract(5, 'days').toDate(),
-  listingsBuildingAddress: {
-    create: stagingRealisticAddresses[1],
-  },
+  // listingsBuildingAddress: {
+  //   create: stagingRealisticAddresses[1],
+  // },
   listingsApplicationPickUpAddress: undefined,
   listingsLeasingAgentAddress: undefined,
   listingsApplicationDropOffAddress: undefined,

@@ -837,96 +837,97 @@ export const stagingSeed = async (
         },
       ],
     },
-    {
-      jurisdictionId: lakeviewJurisdiction.id,
-      listing: lakeviewVilla,
-      unitGroups: [
-        {
-          floorMin: 1,
-          floorMax: 2,
-          maxOccupancy: 3,
-          minOccupancy: 1,
-          bathroomMin: 1,
-          bathroomMax: 1,
-          totalCount: 10,
-          totalAvailable: 5,
-          sqFeetMin: '750.00',
-          sqFeetMax: '1000.00',
-          unitGroupAmiLevels: {
-            create: {
-              amiPercentage: 30,
-              monthlyRentDeterminationType:
-                MonthlyRentDeterminationTypeEnum.flatRent,
-              flatRentValue: 1400.0,
-              amiChart: { connect: { id: amiChart.id } },
-            },
-          },
-          unitTypes: {
-            connect: {
-              id: unitTypes[0].id,
-            },
-          },
-        },
-      ],
-    },
-    {
-      jurisdictionId: lakeviewJurisdiction.id,
-      listing: sunshineFlats,
-      unitGroups: [
-        {
-          floorMin: 1,
-          floorMax: 1,
-          maxOccupancy: 6,
-          minOccupancy: 1,
-          bathroomMin: 1,
-          bathroomMax: 2,
-          totalCount: 12,
-          totalAvailable: 12,
-          sqFeetMin: '750.00',
-          sqFeetMax: '1600.00',
-          unitGroupAmiLevels: {
-            create: {
-              amiPercentage: 45,
-              monthlyRentDeterminationType:
-                MonthlyRentDeterminationTypeEnum.percentageOfIncome,
-              percentageOfIncomeValue: 30.0,
-              amiChart: { connect: { id: amiChart.id } },
-            },
-          },
-          unitTypes: {
-            connect: {
-              id: unitTypes[1].id,
-            },
-          },
-        },
-        {
-          floorMin: 2,
-          floorMax: 2,
-          maxOccupancy: 6,
-          minOccupancy: 3,
-          bathroomMin: 2,
-          bathroomMax: 2,
-          totalCount: 6,
-          totalAvailable: 6,
-          sqFeetMin: '1200.00',
-          sqFeetMax: '1800.00',
-          unitGroupAmiLevels: {
-            create: {
-              amiPercentage: 45,
-              monthlyRentDeterminationType:
-                MonthlyRentDeterminationTypeEnum.flatRent,
-              flatRentValue: 1800.0,
-              amiChart: { connect: { id: amiChart.id } },
-            },
-          },
-          unitTypes: {
-            connect: {
-              id: unitTypes[3].id,
-            },
-          },
-        },
-      ],
-    },
+    // lakeview listings shouldn't be in Doorway, but keeping here for keeping the same as Core
+    // {
+    //   jurisdictionId: lakeviewJurisdiction.id,
+    //   listing: lakeviewVilla,
+    //   unitGroups: [
+    //     {
+    //       floorMin: 1,
+    //       floorMax: 2,
+    //       maxOccupancy: 3,
+    //       minOccupancy: 1,
+    //       bathroomMin: 1,
+    //       bathroomMax: 1,
+    //       totalCount: 10,
+    //       totalAvailable: 5,
+    //       sqFeetMin: '750.00',
+    //       sqFeetMax: '1000.00',
+    //       unitGroupAmiLevels: {
+    //         create: {
+    //           amiPercentage: 30,
+    //           monthlyRentDeterminationType:
+    //             MonthlyRentDeterminationTypeEnum.flatRent,
+    //           flatRentValue: 1400.0,
+    //           amiChart: { connect: { id: amiChart.id } },
+    //         },
+    //       },
+    //       unitTypes: {
+    //         connect: {
+    //           id: unitTypes[0].id,
+    //         },
+    //       },
+    //     },
+    //   ],
+    // },
+    // {
+    //   jurisdictionId: lakeviewJurisdiction.id,
+    //   listing: sunshineFlats,
+    //   unitGroups: [
+    //     {
+    //       floorMin: 1,
+    //       floorMax: 1,
+    //       maxOccupancy: 6,
+    //       minOccupancy: 1,
+    //       bathroomMin: 1,
+    //       bathroomMax: 2,
+    //       totalCount: 12,
+    //       totalAvailable: 12,
+    //       sqFeetMin: '750.00',
+    //       sqFeetMax: '1600.00',
+    //       unitGroupAmiLevels: {
+    //         create: {
+    //           amiPercentage: 45,
+    //           monthlyRentDeterminationType:
+    //             MonthlyRentDeterminationTypeEnum.percentageOfIncome,
+    //           percentageOfIncomeValue: 30.0,
+    //           amiChart: { connect: { id: amiChart.id } },
+    //         },
+    //       },
+    //       unitTypes: {
+    //         connect: {
+    //           id: unitTypes[1].id,
+    //         },
+    //       },
+    //     },
+    //     {
+    //       floorMin: 2,
+    //       floorMax: 2,
+    //       maxOccupancy: 6,
+    //       minOccupancy: 3,
+    //       bathroomMin: 2,
+    //       bathroomMax: 2,
+    //       totalCount: 6,
+    //       totalAvailable: 6,
+    //       sqFeetMin: '1200.00',
+    //       sqFeetMax: '1800.00',
+    //       unitGroupAmiLevels: {
+    //         create: {
+    //           amiPercentage: 45,
+    //           monthlyRentDeterminationType:
+    //             MonthlyRentDeterminationTypeEnum.flatRent,
+    //           flatRentValue: 1800.0,
+    //           amiChart: { connect: { id: amiChart.id } },
+    //         },
+    //       },
+    //       unitTypes: {
+    //         connect: {
+    //           id: unitTypes[3].id,
+    //         },
+    //       },
+    //     },
+    //   ],
+    // },
   ].map(
     async (
       value: {
@@ -939,11 +940,6 @@ export const stagingSeed = async (
       },
       index,
     ) => {
-      // <<<<<<< HEAD
-      //       const jurisdictionId =
-      //         index > 2 ? additionalJurisdiction.id : jurisdiction.id;
-      //       const listing = await listingFactory(jurisdictionId, prismaClient, {
-      // =======
       const listing = await listingFactory(value.jurisdictionId, prismaClient, {
         amiChart: amiChart,
         numberOfUnits: (!value.unitGroups && index) || 0,
