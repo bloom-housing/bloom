@@ -25,7 +25,7 @@ const SubmittedApplicationView = ({
 }: SubmittedApplicationViewProps) => {
   const confirmationDate = useMemo(() => {
     return dayjs(application.submissionDate).format(DATE_FORMAT)
-  }, [])
+  }, [application.submissionDate])
 
   return (
     <>
