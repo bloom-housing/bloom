@@ -52,8 +52,8 @@ describe("Account Listing View", () => {
     )
 
     // Prevent the network console error on 404 status to avoid confusion
-    // eslint-disable @typescript-eslint/no-empty-function
-    jest.spyOn(console, "error").mockImplementation(() => { })
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    jest.spyOn(console, "error").mockImplementation(() => {})
     renderApplicationView()
 
     expect(await screen.findByRole("heading", { level: 1, name: /error/i })).toBeInTheDocument()
@@ -71,8 +71,8 @@ describe("Account Listing View", () => {
     )
 
     // Prevent the network console error on 403 status to avoid confusion
-    // eslint-disable @typescript-eslint/no-empty-function
-    jest.spyOn(console, "error").mockImplementation(() => { })
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    jest.spyOn(console, "error").mockImplementation(() => {})
     renderApplicationView()
 
     expect(await screen.findByRole("heading", { level: 1, name: /error/i })).toBeInTheDocument()
@@ -330,8 +330,8 @@ describe("Account Listing View", () => {
   })
 
   it("should run windo print on button click", async () => {
-    // eslint-disable @typescript-eslint/no-empty-function
-    const windowSpy = jest.spyOn(window, "print").mockImplementation(() => { })
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    const windowSpy = jest.spyOn(window, "print").mockImplementation(() => {})
 
     server.use(
       rest.get("http://localhost:3100/applications/application_1", (_req, res, ctx) => {
