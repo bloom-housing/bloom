@@ -95,3 +95,6 @@ dump.rdb
 
 # pg dumps
 *.dump
+
+# Development planning files
+memory-bank/
