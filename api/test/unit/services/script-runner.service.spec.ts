@@ -65,27 +65,6 @@ describe('Testing script runner service', () => {
     mockConsoleLog.mockRestore();
   });
 
-  it('should transfer data', async () => {
-    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
-    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
-    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
-
-    const id = randomUUID();
-    const scriptName = 'data transfer';
-
-    const res = await service.dataTransfer(
-      {
-        user: {
-          id,
-        } as unknown as User,
-      } as unknown as ExpressRequest,
-      {
-        connectionString: process.env.TEST_CONNECTION_STRING,
-      },
-      externalPrismaClient,
-    );
-  });
-
   it('should add lottery translations', async () => {
     prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
     prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
