@@ -58,7 +58,7 @@
     "@csstools/postcss-global-data": "^3.0.0",
     "@cypress/code-coverage": "^3.10.1",
     "@cypress/webpack-preprocessor": "^6.0.2",
-    "@netlify/plugin-nextjs": "4.41.3",
+    "@netlify/plugin-nextjs": "5.11.1",
     "@next/bundle-analyzer": "^10.1.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "5.17.0",
