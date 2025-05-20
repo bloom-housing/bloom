@@ -2,8 +2,9 @@
   display: flex;
   flex-direction: row;
   gap: var(--seeds-s4);
-}
-
-.checkbox-label {
-  margin-inline-start: unset !important;
+  @media (--md-down) {
+    flex-direction: column;
+    gap: 0;
+    margin-block-end: var(--seeds-s4);
+  }
 }

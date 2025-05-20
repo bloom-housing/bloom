@@ -1,5 +1,6 @@
-import { Field, t } from "@bloom-housing/ui-components"
 import { useFormContext } from "react-hook-form"
+import { Field, t } from "@bloom-housing/ui-components"
+import finderStyles from "./RentalsFinder.module.scss"
 import styles from "./FinderRentQuestion.module.scss"
 
 //TODO: Update component when new designs are available
@@ -36,7 +37,8 @@ export default function FinderRentQuestion() {
         bordered
         name="includeSection8"
         label={t("finder.rent.section8")}
-        labelClassName={styles["checkbox-label"]}
+        className={finderStyles["question-checkbox"]}
+        labelClassName={finderStyles["question-label"]}
       />
     </>
   )
