@@ -1985,6 +1985,11 @@
     slash "^3.0.0"
     tiny-glob "^0.2.9"
 
+"@netlify/plugin-nextjs@5.11.1":
+  version "5.11.1"
+  resolved "https://registry.yarnpkg.com/@netlify/plugin-nextjs/-/plugin-nextjs-5.11.1.tgz#d505d9fffc746d8af7932133536d94d443c1ce53"
+  integrity sha512-JD4JtrhW3R0uDaROfNzmhVoYFvj+GS2ARq7YXVXNFxo+rNyU4wJ6nuDZFTsuoEp4nbIVsm2oPaXyjgqk4pd1EA==
+
 "@netlify/serverless-functions-api@1.13.0":
   version "1.13.0"
   resolved "https://registry.npmjs.org/@netlify/serverless-functions-api/-/serverless-functions-api-1.13.0.tgz"
