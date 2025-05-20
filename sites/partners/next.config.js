@@ -51,6 +51,7 @@ module.exports = withBundleAnalyzer(
       lotteryDaysTillExpiry: process.env.LOTTERY_DAYS_TILL_EXPIRY,
       applicationExportAsSpreadsheet: process.env.APPLICATION_EXPORT_AS_SPREADSHEET === "TRUE",
       limitClosedListingActions: process.env.LIMIT_CLOSED_LISTING_ACTIONS === "TRUE",
+      featureListingsApproval: process.env.FEATURE_LISTINGS_APPROVAL,
     },
     i18n: {
       locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],

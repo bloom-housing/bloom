@@ -70,12 +70,6 @@ export class SingleUseCodeStrategy extends PassportStrategy(
       );
     }
 
-    if (!juris.allowSingleUseCodeLogin) {
-      throw new BadRequestException(
-        `Single use code login is not setup for ${jurisName}`,
-      );
-    }
-
     const rawUser = await this.prisma.userAccounts.findFirst({
       include: {
         userRoles: true,
