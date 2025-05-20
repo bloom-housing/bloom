@@ -11,7 +11,6 @@ export const retrieveApplicationConfig = (listing: Listing, isPreview?: boolean)
   const config = {
     isPreview,
     sections: ["you", "household"],
-    languages: ["en", "es", "zh", "vi", "tl"],
     steps: [
       {
         name: "chooseLanguage",

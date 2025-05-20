@@ -37,7 +37,7 @@ interface Methods {
 const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, errors, getValues } = useFormContext()
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const { doJurisdictionsHaveFeatureFlagOn, getJurisdictionLanguages } = useContext(AuthContext)
 
   // watch fields
   const jurisdiction: string = watch("jurisdictions.id")
@@ -52,7 +52,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
     paper: null,
     referral: null,
   })
-  const [selectedLanguage, setSelectedLanguage] = useState(LanguagesEnum.en)
+  const [selectedLanguage, setSelectedLanguage] = useState("")
   const [drawerState, setDrawerState] = useState(false)
   const [progressValue, setProgressValue] = useState(0)
   const [cloudinaryData, setCloudinaryData] = useState({
@@ -71,6 +71,8 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   const disableCommonApplication = jurisdiction
     ? doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.disableCommonApplication, jurisdiction)
     : false
+
+  const availableJurisdictionLanguages = jurisdiction ? getJurisdictionLanguages(jurisdiction) : []
 
   const yesNoRadioOptions = [
     {
@@ -96,7 +98,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
         fileId: cloudinaryData.id,
         label: selectedLanguage,
       },
-      language: selectedLanguage,
+      language: selectedLanguage as LanguagesEnum,
     })
     setMethods({
       ...methods,
@@ -118,11 +120,12 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   /*
     Show a preview of the uploaded file within the drawer
   */
+
   const previewPaperApplicationsTableRows: StandardTableData = []
   if (cloudinaryData.url != "") {
     previewPaperApplicationsTableRows.push({
       fileName: { content: pdfFileNameFromFileId(cloudinaryData.id) },
-      language: { content: t(`languages.${selectedLanguage}`) },
+      language: { content: selectedLanguage ? t(`languages.${selectedLanguage}`) : "" },
       actions: {
         content: (
           <Button
@@ -399,7 +402,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   headers={paperApplicationsTableHeaders}
                   data={methods.paper.paperApplications.map((item) => ({
                     fileName: { content: pdfFileNameFromFileId(item.assets.fileId) },
-                    language: { content: t(`languages.${item.language}`) },
+                    language: { content: item.language ? t(`languages.${item.language}`) : "" },
                     actions: {
                       content: (
                         <div className="flex">
@@ -436,8 +439,6 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 variant="primary-outlined"
                 size="sm"
                 onClick={() => {
-                  // default the application to English:
-                  setSelectedLanguage(LanguagesEnum.en)
                   setDrawerState(true)
                 }}
               >
@@ -575,11 +576,15 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   </p>
                   <Select
                     name="paperApplicationLanguage"
-                    options={Object.values(LanguagesEnum).map((item) => ({
-                      label: t(`languages.${item}`),
-                      value: item,
-                    }))}
+                    options={[
+                      ...availableJurisdictionLanguages.map((item) => ({
+                        label: t(`languages.${item}`),
+                        value: item,
+                      })),
+                    ]}
+                    placeholder={t("t.selectLanguage")}
                     defaultValue={selectedLanguage}
+                    validation={{ required: true }}
                     inputProps={{
                       onChange: (e) => {
                         setSelectedLanguage(e.target.value)
