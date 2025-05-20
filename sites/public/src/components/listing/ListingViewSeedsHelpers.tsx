@@ -119,29 +119,34 @@ export const getHasNonReferralMethods = (listing: Listing) => {
 }
 
 export const getAccessibilityFeatures = (listing: Listing) => {
-  let featuresExist = false
-  const features = Object.keys(listing?.listingFeatures ?? {}).map((feature, index) => {
-    if (listing?.listingFeatures[feature]) {
-      featuresExist = true
+  const enabledFeatures = Object.entries(listing?.listingFeatures ?? {})
+    .filter(([_, value]) => value)
+    .map((item) => item[0])
+  if (enabledFeatures.length > 0) {
+    return enabledFeatures.map((feature, index) => {
       return `${t(`eligibility.accessibility.${feature}`)}${
-        index < Object.keys(listing?.listingFeatures ?? {}).length - 1 ? ", " : ""
+        index < enabledFeatures.length - 1 ? ", " : ""
       }`
-    }
-  })
-  return featuresExist ? features : null
+    })
+  }
+
+  return []
 }
 
 export const getUtilitiesIncluded = (listing: Listing) => {
-  let utilitiesExist = false
-  const utilities = Object.keys(listing?.listingUtilities ?? {}).map((utility, index) => {
-    if (listing?.listingUtilities[utility]) {
-      utilitiesExist = true
+  const enabledUtilities = Object.entries(listing?.listingUtilities ?? {})
+    .filter(([_, value]) => value)
+    .map((item) => item[0])
+
+  if (enabledUtilities.length > 0) {
+    return enabledUtilities.map((utility, index) => {
       return `${t(`listings.utilities.${utility}`)}${
-        index < Object.keys(listing?.listingUtilities ?? {}).length - 1 ? ", " : ""
+        index < enabledUtilities.length - 1 ? ", " : ""
       }`
-    }
-  })
-  return utilitiesExist ? utilities : []
+    })
+  }
+
+  return []
 }
 
 export const getFeatures = (
@@ -183,7 +188,7 @@ export const getFeatures = (
   const enableAccessibilityFeatures = jurisdiction?.featureFlags?.some(
     (flag) => flag.name === "enableAccessibilityFeatures" && flag.active
   )
-  if (accessibilityFeatures && enableAccessibilityFeatures) {
+  if (!!accessibilityFeatures.length && enableAccessibilityFeatures) {
     features.push({ heading: t("t.accessibility"), subheading: accessibilityFeatures })
   }
   if (listing.accessibility) {

@@ -78,4 +78,29 @@ export class ListingFeatures {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   mobility?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  barrierFreeUnitEntrance?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  loweredLightSwitch?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  barrierFreeBathroom?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  wideDoorways?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  loweredCabinets?: boolean;
 }
