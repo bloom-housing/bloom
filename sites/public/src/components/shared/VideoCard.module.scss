@@ -1,0 +1,21 @@
+.video-card-header {
+  background-color: var(--seeds-color-primary-darker);
+  color: var(--seeds-color-on-inverse);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-block-end: var(--seeds-spacer-header);
+}
+
+.video-card-title {
+  color: var(--bloom-color-primary);
+  text-decoration: underline;
+  font-size: var(--seeds-type-heading-size-lg);
+  font-weight: var(--seeds-font-weight-bold);
+  margin-block-end: var(--seeds-spacer-label);
+  text-align: start;
+}
+
+.video-card-content {
+  color: var(--seeds-text-color-light);
+}
