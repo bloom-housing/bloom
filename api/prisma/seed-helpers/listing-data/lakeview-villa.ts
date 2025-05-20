@@ -1,11 +1,23 @@
-import { ListingsStatusEnum, ReviewOrderTypeEnum } from '@prisma/client';
+import {
+  ListingsStatusEnum,
+  ReviewOrderTypeEnum,
+  Prisma,
+  RegionEnum,
+  ApplicationMethodsTypeEnum,
+} from '@prisma/client';
 import dayjs from 'dayjs';
 import { yellowstoneAddress } from '../address-factory';
 
 export const lakeviewVilla = {
   additionalApplicationSubmissionNotes: null,
   digitalApplication: true,
-  commonDigitalApplication: true,
+  commonDigitalApplication: false,
+  applicationMethods: {
+    create: {
+      type: ApplicationMethodsTypeEnum.ExternalLink,
+      externalReference: 'https://example.com/application',
+    },
+  },
   paperApplication: false,
   referralOpportunity: false,
   assets: [],
