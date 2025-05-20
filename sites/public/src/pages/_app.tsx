@@ -114,12 +114,16 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   // NOTE: Seeds and UI-Components both use a NavigationContext to help internal links use Next's
   // routing system, so we'll include both here until UIC is no longer in use.
 
+  const jurisdictionClassname = process.env.jurisdictionName.replace(" ", "-").toLowerCase()
+
   const pageContent = (
     <ConfigProvider apiUrl={process.env.backendApiBase}>
       <AuthProvider>
         <MessageProvider>
           <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
-          <Component {...pageProps} />
+          <div className={`${process.env.NODE_ENV !== "production" ? jurisdictionClassname : ""}`}>
+            <Component {...pageProps} />
+          </div>
         </MessageProvider>
       </AuthProvider>
     </ConfigProvider>
