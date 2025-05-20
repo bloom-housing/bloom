@@ -9,6 +9,7 @@ import arabicTranslations from "@bloom-housing/shared-helpers/src/locales/ar.jso
 import additionalGeneralTranslations from "../../page_content/locale_overrides/general.json"
 import additionalSpanishTranslations from "../../page_content/locale_overrides/es.json"
 import additionalBengaliTranslations from "../../page_content/locale_overrides/bn.json"
+import additionalArabicTranslations from "../../page_content/locale_overrides/ar.json"
 
 export const translations = {
   general: generalTranslations,
@@ -18,10 +19,13 @@ export const translations = {
   tl: tagalogTranslations,
   bn: bengaliTranslations,
   ar: arabicTranslations,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } as Record<string, any>
 
 export const overrideTranslations = {
   en: additionalGeneralTranslations,
   es: additionalSpanishTranslations,
   bn: additionalBengaliTranslations,
+  ar: additionalArabicTranslations,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } as Record<string, any>

@@ -10,7 +10,7 @@ export interface ResourceCardProps {
 const ResourceCard = ({ title, href, content }: ResourceCardProps) => {
   return (
     <Card className={styles["resource-card"]}>
-      <Link href={href} className={styles["resource-card-title"]}>
+      <Link hideExternalLinkIcon={true} href={href} className={styles["resource-card-title"]}>
         {title}
       </Link>
       <div className={styles["resource-card-content"]}>{content}</div>
