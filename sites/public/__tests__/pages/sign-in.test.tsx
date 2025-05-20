@@ -80,7 +80,14 @@ describe("Sign In Page", () => {
 
     // Verify toast is shown with the correct message
     await waitFor(() => {
-      expect(mockLogin).toHaveBeenCalledWith("user@example.com", "password123")
+      expect(mockLogin).toHaveBeenCalledWith(
+        "user@example.com",
+        "password123",
+        undefined,
+        undefined,
+        undefined,
+        undefined
+      )
       expect(mockAddToast).toHaveBeenCalledWith("Welcome back, User!", {
         variant: "success",
       })
@@ -300,7 +307,14 @@ describe("Passwordless Sign In page", () => {
     fireEvent.click(getByRole("button", { name: /sign in/i }))
 
     await waitFor(() => {
-      expect(mockLogin).toHaveBeenCalledWith("user@example.com", "password123")
+      expect(mockLogin).toHaveBeenCalledWith(
+        "user@example.com",
+        "password123",
+        undefined,
+        undefined,
+        undefined,
+        undefined
+      )
       expect(mockAddToast).toHaveBeenCalledWith("Welcome back, User!", {
         variant: "success",
       })
