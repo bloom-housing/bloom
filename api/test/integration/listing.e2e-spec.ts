@@ -665,8 +665,9 @@ describe('Listing Controller Tests', () => {
             marketingType: MarketingTypeEnum.comingSoon,
           } as Prisma.ListingsCreateInput,
           unitGroups: [
-            unitGroupFactorySingle(unitTypeThreeBed, {
+            unitGroupFactorySingle(unitTypeOneBed, {
               openWaitlist: undefined,
+              unitGroupAmiLevelsFlatRentValue: 1000,
             }),
           ],
         },
@@ -892,7 +893,6 @@ describe('Listing Controller Tests', () => {
       expect(ids).toContain(listing1WithUnits.id);
       expect(ids).toContain(listing2WithUnits.id);
     });
-    it.todo('should return a listing based on filter bathrooms - unitGroups');
     it('should return a listing based on filter bathrooms - units', async () => {
       const query: ListingsQueryBody = {
         page: 1,
@@ -922,7 +922,34 @@ describe('Listing Controller Tests', () => {
       );
       expect(foundId).toEqual(true);
     });
-    it.todo('should return a listing based on filter bedrooms - unitGroups');
+    it('should return a listing based on filter bedrooms - unitGroups', async () => {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare['='],
+            bedrooms: 3,
+          },
+          {
+            $comparison: Compare['='],
+            jurisdiction: jurisdictionDWithUnitGroups.id,
+          },
+        ],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toEqual(2);
+
+      const ids = res.body.items.map((listing) => listing.id);
+      expect(ids).toContain(listing4WithUnitGroups.id);
+      expect(ids).toContain(listing5WithUnitGroups.id);
+    });
     it('should return a listing based on filter bedrooms - units', async () => {
       const query: ListingsQueryBody = {
         page: 1,
@@ -1205,7 +1232,63 @@ describe('Listing Controller Tests', () => {
       );
       expect(foundId).toEqual(true);
     });
-    it.todo('should return a listing based on filter monthlyRent - unitGroups');
+    it('should return all listings with percentageOfIncome based on filter monthlyRent - unitGroups ', async () => {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare['='],
+            monthlyRent: '3000',
+          },
+          {
+            $comparison: Compare['='],
+            jurisdiction: jurisdictionDWithUnitGroups.id,
+          },
+        ],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toEqual(2);
+
+      const ids = res.body.items.map((listing) => listing.id);
+      expect(ids).toContain(listing4WithUnitGroups.id);
+      expect(ids).toContain(listing5WithUnitGroups.id);
+    });
+    it('should return all listings with percentageOfIncome and flatRent based on filter monthlyRent - unitGroups', async () => {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare['='],
+            monthlyRent: '1000',
+          },
+          {
+            $comparison: Compare['='],
+            jurisdiction: jurisdictionDWithUnitGroups.id,
+          },
+        ],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toEqual(3);
+
+      const ids = res.body.items.map((listing) => listing.id);
+      expect(ids).toContain(listing4WithUnitGroups.id);
+      expect(ids).toContain(listing5WithUnitGroups.id);
+      expect(ids).toContain(listing6WithUnitGroups.id);
+    });
     it('should return a listing based on filter monthlyRent - units', async () => {
       const query: ListingsQueryBody = {
         page: 1,
