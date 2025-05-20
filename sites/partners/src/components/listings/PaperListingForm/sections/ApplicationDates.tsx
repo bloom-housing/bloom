@@ -117,6 +117,7 @@ const ApplicationDates = ({
     setModalDeleteOpenHouse(null)
   }
 
+  const hasDueDateError = errors?.applicationDueDate || errors?.applicationDueDateField
   const marketingTypeChoice = watch("marketingType")
 
   return (
@@ -133,7 +134,15 @@ const ApplicationDates = ({
               name={"applicationDueDateField"}
               id={"applicationDueDateField"}
               register={register}
+              setValue={setValue}
               watch={watch}
+              error={
+                hasDueDateError && {
+                  month: hasDueDateError,
+                  day: hasDueDateError,
+                  year: hasDueDateError,
+                }
+              }
               note={t("listings.whenApplicationsClose")}
               defaultDate={{
                 month: listing?.applicationDueDate
@@ -154,17 +163,19 @@ const ApplicationDates = ({
               name={"applicationDueTimeField"}
               id={"applicationDueTimeField"}
               register={register}
+              setValue={setValue}
               watch={watch}
+              error={errors?.applicationDueDate || errors?.applicationDueTimeField}
               defaultValues={{
                 hours: listing?.applicationDueDate
                   ? dayjs(new Date(listing?.applicationDueDate)).format("hh")
-                  : "05",
+                  : null,
                 minutes: listing?.applicationDueDate
                   ? dayjs(new Date(listing?.applicationDueDate)).format("mm")
-                  : "00",
+                  : null,
                 seconds: listing?.applicationDueDate
                   ? dayjs(new Date(listing?.applicationDueDate)).format("ss")
-                  : "00",
+                  : null,
                 period: listing?.applicationDueDate
                   ? new Date(listing?.applicationDueDate).getHours() >= 12
                     ? "pm"

@@ -63,13 +63,6 @@ const DetailRankingsAndResults = () => {
           </Grid.Row>
         </>
       )}
-      {getReviewOrderType() === ReviewOrderTypeEnum.firstComeFirstServe && (
-        <Grid.Row>
-          <FieldValue id="dueDateQuestion" label={t("listings.dueDateQuestion")}>
-            {listing.applicationDueDate ? t("t.yes") : t("t.no")}
-          </FieldValue>
-        </Grid.Row>
-      )}
       {listing.reviewOrderType === ReviewOrderTypeEnum.waitlist && (
         <>
           <Grid.Row>

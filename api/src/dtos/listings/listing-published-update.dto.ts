@@ -4,12 +4,14 @@ import {
   ArrayMaxSize,
   ArrayMinSize,
   IsBoolean,
+  IsDate,
   IsDefined,
   IsEmail,
   IsEnum,
   IsPhoneNumber,
   IsString,
   MaxLength,
+  ValidateIf,
   ValidateNested,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
@@ -42,6 +44,7 @@ export class ListingPublishedUpdate extends OmitType(ListingUpdate, [
   'units',
   'unitGroups',
   'listingsBuildingAddress',
+  'applicationDueDate',
 ]) {
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
@@ -153,6 +156,23 @@ export class ListingPublishedUpdate extends OmitType(ListingUpdate, [
   @ArrayMaxSize(256, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitCreate)
   units?: UnitCreate[];
+
+  @Expose()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateIf(
+    (o) =>
+      !(
+        o.applicationDueDate == undefined &&
+        o.reviewOrderType == ReviewOrderTypeEnum.waitlist
+      ),
+    {
+      groups: [ValidationsGroupsEnum.default],
+    },
+  )
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  @ApiProperty()
+  applicationDueDate: Date;
 
   @Expose()
   @ApiProperty({ isArray: true, type: UnitGroupCreate })

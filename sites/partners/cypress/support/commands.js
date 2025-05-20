@@ -393,7 +393,8 @@ Cypress.Commands.add("verifyTerms", (application) => {
 })
 
 Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, jurisdiction) => {
-  // Create and publish minimal lottery listing
+  // Create and publish minimal FCFS or Lottery listing
+  // TODO: test Open Waitlist, though maybe with integration test instead
   cy.getByID("addListingButton").contains("Add Listing").click()
   cy.contains("New Listing")
   cy.fixture("minimalListing").then((listing) => {
@@ -446,6 +447,12 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
     cy.getByID("commonDigitalApplicationChoiceYes").check()
     cy.getByID("paperApplicationNo").check()
     cy.getByID("referralOpportunityNo").check()
+    cy.getByID("applicationDueDateField.month").type(listing["date.month"])
+    cy.getByID("applicationDueDateField.day").type(listing["date.day"])
+    cy.getByID("applicationDueDateField.year").type((new Date().getFullYear() + 1).toString())
+    cy.getByID("applicationDueTimeField.hours").type(listing["date.hours"])
+    cy.getByID("applicationDueTimeField.minutes").type(listing["date.minutes"])
+    cy.getByID("applicationDueTimeField.period").select("PM")
   })
 
   if (isApproval) {
