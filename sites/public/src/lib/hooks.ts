@@ -180,7 +180,7 @@ export async function fetchOpenListings(req: any, page: number) {
       ],
       orderBy: [ListingOrderByKeys.mostRecentlyPublished],
       orderDir: [OrderByEnum.desc],
-      limit: process.env.maxOpenListings,
+      limit: process.env.maxBrowseListings,
     },
     req
   )
@@ -199,7 +199,7 @@ export async function fetchClosedListings(req: any, page: number) {
       ],
       orderBy: [ListingOrderByKeys.mostRecentlyClosed],
       orderDir: [OrderByEnum.desc],
-      limit: process.env.maxClosedListings,
+      limit: process.env.maxBrowseListings,
     },
     req
   )

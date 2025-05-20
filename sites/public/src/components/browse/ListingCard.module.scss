@@ -78,6 +78,9 @@
             &:not(:last-child) {
               margin-inline-end: var(--seeds-s2);
             }
+            svg {
+              margin-inline-end: var(--seeds-s1);
+            }
           }
         }
 

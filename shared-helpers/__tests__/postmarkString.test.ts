@@ -15,8 +15,7 @@ describe("postmark string helper", () => {
   })
   it("includes postmarks, includes due date", () => {
     expect(getPostmarkString("November 29th, 2021", "November 30th, 2021", "Developer")).toBe(
-      t("listings.apply.submitPaperDueDatePostMark", {
-        applicationDueDate: "November 29th, 2021",
+      t("listings.apply.submitPaperPostMark", {
         postmarkReceivedByDate: "November 30th, 2021",
         developer: "Developer",
       })
@@ -24,7 +23,7 @@ describe("postmark string helper", () => {
   })
   it("includes postmarks, excludes due date", () => {
     expect(getPostmarkString(null, "November 30th, 2021", "Developer")).toBe(
-      t("listings.apply.submitPaperNoDueDatePostMark", {
+      t("listings.apply.submitPaperPostMark", {
         postmarkReceivedByDate: "November 30th, 2021",
         developer: "Developer",
       })
