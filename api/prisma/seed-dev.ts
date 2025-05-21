@@ -125,7 +125,7 @@ export const devSeeding = async (
 
   await prismaClient.featureFlags.create({
     data: featureFlagFactory(
-      'enableListingPagination',
+      'enableListingsPagination',
       false,
       'When true listings browser will display pagination controls section',
       [jurisdiction.id],
