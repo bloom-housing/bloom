@@ -14,23 +14,25 @@ describe("<RentalsFinder>", () => {
     render(<RentalsFinder />)
 
     // Check header content
-    const [sectionOne, sectionTwo] = screen.getAllByRole("listitem")
+    const finderHeaderTitle = screen.getByRole("heading", { name: /find listings for you/i, level: 1 })
+    expect(finderHeaderTitle).toBeInTheDocument()
+
+    const finderHeader = finderHeaderTitle.parentElement
+
+    const [sectionOne, sectionTwo] = within(finderHeader).getAllByRole("listitem")
     expect(within(sectionOne).getByText(/housing needs/i)).toBeInTheDocument()
     expect(sectionOne).toHaveClass("is-active")
     expect(within(sectionTwo).getByText(/rent/i)).toBeInTheDocument()
     expect(sectionTwo).toHaveClass("is-disabled")
 
-    const stepHeader = screen.getByRole("heading", { level: 2 })
+    const stepHeader = within(finderHeader).getByRole("heading", { level: 2 })
     expect(within(stepHeader).getByText(/housing needs/i)).toBeInTheDocument()
     expect(within(stepHeader).getByText(/of \d/i)).toBeInTheDocument()
     expect(within(stepHeader).getByText("1")).toBeInTheDocument()
 
     // Check question content
     expect(
-      screen.getByRole("heading", { name: /find listings for you/i, level: 3 })
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole("heading", { name: /how many bedrooms do you need\?/i, level: 3 })
+      screen.getByRole("heading", { name: /how many bedrooms do you need\?/i, level: 2 })
     ).toBeInTheDocument()
     expect(
       screen.getByText(/we'll use your selection to highlight possible rentals that match/i)
@@ -53,13 +55,18 @@ describe("<RentalsFinder>", () => {
   it("should update content on next button click", async () => {
     render(<RentalsFinder />)
 
-    const [sectionOne, sectionTwo] = screen.getAllByRole("listitem")
+    const finderHeaderTitle = screen.getByRole("heading", { name: /find listings for you/i, level: 1 })
+    expect(finderHeaderTitle).toBeInTheDocument()
+
+    const finderHeader = finderHeaderTitle.parentElement
+
+    const [sectionOne, sectionTwo] = within(finderHeader).getAllByRole("listitem")
     expect(within(sectionOne).getByText(/housing needs/i)).toBeInTheDocument()
     expect(sectionOne).toHaveClass("is-active")
     expect(within(sectionTwo).getByText(/rent/i)).toBeInTheDocument()
     expect(sectionTwo).toHaveClass("is-disabled")
 
-    const stepHeader = screen.getByRole("heading", { level: 2 })
+    const stepHeader = within(finderHeader).getByRole("heading", { level: 2 })
     expect(within(stepHeader).getByText(/housing needs/i)).toBeInTheDocument()
     expect(within(stepHeader).getByText(/of \d/i)).toBeInTheDocument()
     expect(within(stepHeader).getByText("1")).toBeInTheDocument()
@@ -78,8 +85,8 @@ describe("<RentalsFinder>", () => {
 
     expect(
       screen.getByRole("heading", {
-        name: /what areas of Detroit would you like to live in\?/i,
-        level: 3,
+        name: /what areas would you like to live in\?/i,
+        level: 2,
       })
     ).toBeInTheDocument()
     expect(
@@ -110,7 +117,7 @@ describe("<RentalsFinder>", () => {
     expect(within(stepHeader).getByText("2")).toBeInTheDocument()
 
     expect(
-      screen.getByRole("heading", { name: /how much rent can you afford to pay\?/i, level: 3 })
+      screen.getByRole("heading", { name: /how much rent can you afford to pay\?/i, level: 2 })
     ).toBeInTheDocument()
     expect(
       screen.getByText(
@@ -137,8 +144,8 @@ describe("<RentalsFinder>", () => {
 
     expect(
       screen.getByRole("heading", {
-        name: /what areas of Detroit would you like to live in\?/i,
-        level: 3,
+        name: /what areas would you like to live in\?/i,
+        level: 2,
       })
     ).toBeInTheDocument()
     expect(
