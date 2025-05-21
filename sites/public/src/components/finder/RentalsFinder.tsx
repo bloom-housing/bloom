@@ -1,12 +1,13 @@
-import { BloomCard, CustomIconMap } from "@bloom-housing/shared-helpers"
-import styles from "./RentalsFinder.module.scss"
-import { Button, Heading, HeadingGroup, Icon } from "@bloom-housing/ui-seeds"
-import { CardSection, ProgressNav, StepHeader, t } from "@bloom-housing/ui-components"
-import FinderMultiselectQuestion from "./FinderMultiselectQuestion"
-import { FormProvider, useForm } from "react-hook-form"
 import { useState } from "react"
+import { FormProvider, useForm } from "react-hook-form"
 import { RegionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { Button, Heading, Icon } from "@bloom-housing/ui-seeds"
+import { ProgressNav, StepHeader, t } from "@bloom-housing/ui-components"
+import { BloomCard, CustomIconMap } from "@bloom-housing/shared-helpers"
+import FinderMultiselectQuestion from "./FinderMultiselectQuestion"
 import FinderRentQuestion from "./FinderRentQuestion"
+import styles from "./RentalsFinder.module.scss"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 type FinderStep = {
   content: React.ReactNode
@@ -26,7 +27,7 @@ export default function RentalsFinder() {
 
   const rentalFinderSections: FinderSection[] = [
     {
-      sectionTitle: "Housing Needs",
+      sectionTitle: t("finder.housingSectionTitle"),
       sectionSteps: [
         {
           question: t("finder.bedrooms.question"),
@@ -77,7 +78,7 @@ export default function RentalsFinder() {
       ],
     },
     {
-      sectionTitle: "Rent",
+      sectionTitle: t("finder.rentSectionTitle"),
       sectionSteps: [
         {
           question: t("finder.rent.question"),
@@ -118,8 +119,8 @@ export default function RentalsFinder() {
     <div className={styles["finder-container"]}>
       <div className={styles["questionnaire-container"]}>
         <div className={styles["questionnaire-header"]}>
-          <Heading priority={3} size="2xl" className={styles["title"]}>
-            Find listings for you
+          <Heading priority={1} size="2xl" className={styles["title"]}>
+            {t("finder.finderTitle")}
           </Heading>
           <ProgressNav
             labels={sectionLabels}
@@ -138,43 +139,47 @@ export default function RentalsFinder() {
             className={styles["step-header"]}
           />
         </div>
-        <BloomCard className={styles["questionnaire-card"]}>
-          <CardSection>
-            <div className={styles["header-wrapper"]}>
-              <div>
-                {!(sectionIndex === 0 && stepIndex === 0) && (
-                  <Button
-                    onClick={onPreviousClick}
-                    leadIcon={<Icon>{CustomIconMap.chevronLeft}</Icon>}
-                    variant={"text"}
-                    className={styles["back-button"]}
-                  >
-                    {t("t.back")}
-                  </Button>
-                )}
-                <HeadingGroup
-                  className={styles["heading-group"]}
-                  heading={activeQuestion.question}
-                  subheading={activeQuestion.subtitle}
-                  headingPriority={3}
-                  size="2xl"
-                />
-              </div>
-            </div>
-            <div className={styles["questions-wrapper"]}>
-              <FormProvider {...formMethods}>{activeQuestion.content}</FormProvider>
-            </div>
-            <div className={styles["button-wrapper"]}>
-              {isLastSection && isLastStep ? (
-                <Button>{t("t.finish")}</Button>
-              ) : (
-                <Button onClick={onNextClick}>{t("t.next")}</Button>
+        <BloomCard
+          className={styles["questionnaire-card"]}
+          headerLink={
+            <>
+              {!(sectionIndex === 0 && stepIndex === 0) && (
+                <Button
+                  onClick={onPreviousClick}
+                  leadIcon={<Icon>{CustomIconMap.chevronLeft}</Icon>}
+                  variant={"text"}
+                  className={styles["back-button"]}
+                >
+                  {t("t.back")}
+                </Button>
               )}
-            </div>
-            <div className={styles["footer"]}>
-              <Button variant="text">Skip this and show me listings</Button>
-            </div>
-          </CardSection>
+            </>
+          }
+          title={activeQuestion.question}
+          subtitle={activeQuestion.subtitle}
+          headingPriority={2}
+        >
+          <>
+            <CardSection className={styles["questions-section"]} divider="flush">
+              <div className={styles["questions-wrapper"]}>
+                <FormProvider {...formMethods}>{activeQuestion.content}</FormProvider>
+              </div>
+            </CardSection>
+            <CardSection className={styles["button-section"]} divider="flush">
+              <div className={styles["button-wrapper"]}>
+                {isLastSection && isLastStep ? (
+                  <Button>{t("t.finish")}</Button>
+                ) : (
+                  <Button onClick={onNextClick}>{t("t.next")}</Button>
+                )}
+              </div>
+            </CardSection>
+            <CardSection>
+              <div className={styles["footer"]}>
+                <Button variant="text">{t("finder.skip")}</Button>
+              </div>
+            </CardSection>
+          </>
         </BloomCard>
       </div>
     </div>

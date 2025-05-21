@@ -33,59 +33,26 @@
     }
 
     .questionnaire-card {
-      @media (--md-down) {
-        border-radius: 0;
-        border-right: none;
-        border-bottom: none;
-        border-left: none;
+      h2 {
+        font-family: var(--seeds-font-alt-sans);
       }
-
-      .header-wrapper {
-        padding-inline: var(--seeds-s12);
-        padding-block-start: var(--seeds-s8);
-        padding-block-end: var(--seeds-s4);
-
-        @media (--md-down) {
-          padding-inline: var(--seeds-s4);
-        }
-
-        .back-button {
-          margin-block-end: var(--seeds-s6);
-        }
-
-        .heading-group {
-          h3 ~ p {
-            color: var(--seeds-text-color-light);
-          }
-        }
+      .back-button {
+        margin-block-end: var(--seeds-s6);
       }
-
-      .questions-wrapper {
-        padding-inline: var(--seeds-s12);
-        padding-block-end: var(--seeds-s8);
-
-        @media (--md-down) {
-          padding-inline: var(--seeds-s4);
-        }
+      .questions-section {
+        border: 0;
       }
-
-      .button-wrapper {
-        padding-inline: var(--seeds-s12);
-        padding-block: var(--seeds-s8);
+      .button-section {
         background-color: var(--seeds-color-primary-lighter);
-
-        @media (--md-down) {
-          padding-inline: var(--seeds-s4);
-        }
+        border: 0;
       }
+    }
 
-      .footer {
-        padding-inline: var(--seeds-s12);
-        padding-block: var(--seeds-s8);
-
-        @media (--md-down) {
-          padding-inline: var(--seeds-s4);
-        }
+    .question-checkbox {
+      margin-bottom: unset;
+      .question-label {
+        margin-inline-start: unset;
+        padding-right: var(--seeds-s4);
       }
     }
   }
