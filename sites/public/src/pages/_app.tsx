@@ -98,15 +98,6 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     }
   }, [locale, router.events])
 
-  // Investigating performance issues in #3051
-  // useEffect(() => {
-  //   if (process.env.NODE_ENV !== "production") {
-  //     // eslint-disable-next-line @typescript-eslint/no-var-requires
-  //     const axe = require("@axe-core/react")
-  //     void axe(React, ReactDOM, 5000)
-  //   }
-  // }, [])
-
   if (!initialized) {
     return null
   }
