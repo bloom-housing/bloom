@@ -427,3 +427,7 @@ export const saveListingFavorite = async (
 export const fetchFavoriteListingIds = async (userId: string, userService: UserService) => {
   return (await userService.favoriteListings({ id: userId })).map((item) => item.id)
 }
+
+export const isTrue = (value: boolean | "true" | "false") => {
+  return value === true || value === "true"
+}

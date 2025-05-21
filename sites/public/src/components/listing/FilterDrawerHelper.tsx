@@ -13,16 +13,17 @@ import styles from "./FilterDrawer.module.scss"
 import { UseFormMethods } from "react-hook-form"
 import { Grid } from "@bloom-housing/ui-seeds"
 import { Field, t } from "@bloom-housing/ui-components"
+import { isTrue } from "../../lib/helpers"
 
 export interface FilterData {
-  availability?: Record<FilterAvailabilityEnum, boolean>
-  bedroomTypes?: Record<UnitTypeEnum, boolean>
-  homeType?: Record<HomeTypeEnum, boolean>
-  isVerified?: boolean
-  listingFeatures?: Record<keyof ListingFeatures, boolean>
+  availability?: Record<FilterAvailabilityEnum, boolean | "true" | "false">
+  bedroomTypes?: Record<UnitTypeEnum, boolean | "true" | "false">
+  homeType?: Record<HomeTypeEnum, boolean | "true" | "false">
+  isVerified?: boolean | "true" | "false"
+  listingFeatures?: Record<keyof ListingFeatures, boolean | "true" | "false">
   monthlyRent?: Record<"maxRent" | "minRent", string>
-  regions?: Record<RegionEnum, boolean>
-  section8Acceptance?: boolean
+  regions?: Record<RegionEnum, boolean | "true" | "false">
+  section8Acceptance?: boolean | "true" | "false"
 }
 
 export interface FilterField {
@@ -85,7 +86,7 @@ export const buildDefaultFilterFields = (
     return {
       key: `${filterType}.${key}`,
       label: t(`${stringBase}.${key}`),
-      defaultChecked: existingData?.[filterType]?.[key] ?? false,
+      defaultChecked: isTrue(existingData?.[filterType]?.[key]),
     }
   })
 
@@ -158,7 +159,7 @@ export const RentSection = (props: RentSectionProps) => (
             type="checkbox"
             register={props.register}
             inputProps={{
-              defaultChecked: props.filterState?.[ListingFilterKeys.section8Acceptance] ?? false,
+              defaultChecked: isTrue(props.filterState?.[ListingFilterKeys.section8Acceptance]),
             }}
           ></Field>
         </Grid.Cell>

@@ -131,7 +131,7 @@ export async function fetchBaseListingData(
     }
 
     const enablePagination =
-      featureFlags.find((flag) => flag.name === FeatureFlagEnum.enableListingPagination)?.active ||
+      featureFlags.find((flag) => flag.name === FeatureFlagEnum.enableListingsPagination)?.active ||
       false
 
     if (page && enablePagination) {

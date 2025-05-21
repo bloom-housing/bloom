@@ -16,6 +16,7 @@ import {
   FilterData,
   RentSection,
 } from "./FilterDrawerHelper"
+import { isTrue } from "../../lib/helpers"
 
 export interface FilterDrawerProps {
   filterState: FilterData
@@ -55,7 +56,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
               {
                 key: ListingFilterKeys.isVerified,
                 label: t("listings.confirmedListingsOnly"),
-                defaultChecked: props.filterState?.[ListingFilterKeys.isVerified],
+                defaultChecked: isTrue(props.filterState?.[ListingFilterKeys.isVerified]),
               },
             ]}
             register={register}

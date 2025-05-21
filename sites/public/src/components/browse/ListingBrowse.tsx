@@ -61,7 +61,9 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
+
   const filterQuery = getFilterQueryFromURL(router.asPath)
+  const enableFiltering = isFeatureFlagOn(props.jurisdiction, "enableListingsFiltering")
 
   useEffect(() => {
     pushGtmEvent<ListingList>({
@@ -126,8 +128,8 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
     if (updatedFilterQuery != filterQuery) {
       setIsLoading(true)
       router.pathname.includes("listings-closed")
-        ? void router.push(`/listings-closed/filtered?filters:${updatedFilterQuery}`)
-        : void router.push(`/listings/filtered?filters:${updatedFilterQuery}`)
+        ? void router.push(`/listings-closed?filters:${updatedFilterQuery}`)
+        : void router.push(`/listings?filters:${updatedFilterQuery}`)
     }
   }
 
@@ -167,15 +169,17 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                       totalCount: props.paginationData.totalItems,
                     })}
                 </span>
-                <span>
-                  <Button
-                    size={"sm"}
-                    onClick={() => setIsFilterDrawerOpen(true)}
-                    variant={"primary-outlined"}
-                  >
-                    {t("t.filter")}
-                  </Button>
-                </span>
+                {enableFiltering && (
+                  <span>
+                    <Button
+                      size={"sm"}
+                      onClick={() => setIsFilterDrawerOpen(true)}
+                      variant={"primary-outlined"}
+                    >
+                      {t("t.filter")}
+                    </Button>
+                  </span>
+                )}
               </div>
             </MaxWidthLayout>
           </div>
