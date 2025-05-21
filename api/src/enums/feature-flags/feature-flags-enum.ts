@@ -12,7 +12,7 @@ export enum FeatureFlagEnum {
   enableIsVerified = 'enableIsVerified',
   enableListingFavoriting = 'enableListingFavoriting',
   enableListingOpportunity = 'enableListingOpportunity',
-  enableListingsPagination = 'enableListingsPagination',
+  enableListingPagination = 'enableListingPagination',
   enableMarketingStatus = 'enableMarketingStatus',
   enableNeighborhoodAmenities = 'enableNeighborhoodAmenities',
   enablePartnerDemographics = 'enablePartnerDemographics',
@@ -81,7 +81,7 @@ export const featureFlagMap: { name: string; description: string }[] = [
       "When true, any newly published listing will send a gov delivery email to everyone that has signed up for the 'listing alerts'",
   },
   {
-    name: FeatureFlagEnum.enableListingsPagination,
+    name: FeatureFlagEnum.enableListingPagination,
     description:
       'When true listings browser will display pagination controls section',
   },
