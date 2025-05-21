@@ -63,7 +63,7 @@ describe("Account Listing View", () => {
     expect(backButton).toHaveAttribute("href", "/account/applications")
   })
 
-  it("should show annauthorized error state", async () => {
+  it("should show unauthorized error state", async () => {
     server.use(
       rest.get("http://localhost:3100/applications/application_1", (_req, res, ctx) => {
         return res(ctx.status(403))
@@ -329,7 +329,7 @@ describe("Account Listing View", () => {
     ).toBeInTheDocument()
   })
 
-  it("should run windo print on button click", async () => {
+  it("should run window print on button click", async () => {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     const windowSpy = jest.spyOn(window, "print").mockImplementation(() => {})
 
