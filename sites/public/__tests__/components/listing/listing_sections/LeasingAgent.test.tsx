@@ -34,6 +34,7 @@ describe("<LeasingAgent>", () => {
         officeHours={"Leasing office hours"}
         phone={phoneNumber}
         title={"Agent title"}
+        managementWebsite={"https://example.com"}
       />
     )
     // Note: this is different for Detroit
@@ -45,6 +46,7 @@ describe("<LeasingAgent>", () => {
       "tel:1234567890"
     )
     expect(getByRole("link", { name: "Email" })).toHaveAttribute("href", "mailto:leasing@agent.com")
+    expect(getByRole("link", { name: "Website" })).toHaveAttribute("href", "https://example.com")
     // Note: this is not in Detroit
     // expect(getByText("Due to high call volume you may hear a message.")).toBeDefined()
     expect(getByText("Address street, Address unit")).toBeDefined()
