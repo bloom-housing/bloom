@@ -1,5 +1,6 @@
 import { Field } from "@bloom-housing/ui-components"
 import styles from "./FinderMultiselectQuestion.module.scss"
+import finderStyles from "./RentalsFinder.module.scss"
 import { useFormContext } from "react-hook-form"
 
 export type FinderQuestion = {
@@ -30,8 +31,8 @@ export default function FinderMultiselectQuestion(props: FinderMultiselectQuesti
           key={option.label}
           label={option.label}
           register={register}
-          className={styles["question-checkbox"]}
-          labelClassName={styles["question-label"]}
+          className={finderStyles["question-checkbox"]}
+          labelClassName={finderStyles["question-label"]}
           inputProps={{
             value: option.value,
           }}

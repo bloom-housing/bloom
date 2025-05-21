@@ -4,16 +4,7 @@
   row-gap: var(--seeds-s3);
 
   .fieldset-legend {
-    font-family: var(--seeds-font-sans);
     color: var(--seeds-text-color-light);
     margin-block-end: var(--seeds-s3);
-  }
-
-  .question-checkbox {
-    margin-bottom: unset;
-  }
-
-  .question-label {
-    margin-inline-start: unset !important;
   }
 }
