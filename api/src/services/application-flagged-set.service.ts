@@ -537,7 +537,11 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
       },
     });
     this.logger.warn(
-      `running duplicates check on ${outOfDateListings.length} listings`,
+      `running duplicates check on ${
+        outOfDateListings.length
+      } listings. Listings - ${outOfDateListings
+        ?.map((listing) => listing.id)
+        .toString()}`,
     );
     for (const listing of outOfDateListings) {
       // find all flagged keys for this listing that applies to more than one listing
@@ -718,23 +722,30 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
           }
           // If generated is the same as in the db than do nothing, otherwise create a new one
         } else {
-          await this.prisma.applicationFlaggedSet.create({
-            data: {
-              ruleKey: flaggedGroup.ruleKey,
-              rule: flaggedGroup.rule,
-              listings: {
-                connect: {
-                  id: listing.id,
+          try {
+            await this.prisma.applicationFlaggedSet.create({
+              data: {
+                ruleKey: flaggedGroup.ruleKey,
+                rule: flaggedGroup.rule,
+                listings: {
+                  connect: {
+                    id: listing.id,
+                  },
+                },
+                status: FlaggedSetStatusEnum.pending,
+                applications: {
+                  connect: flaggedGroup.applications.map((application) => {
+                    return { id: application };
+                  }),
                 },
               },
-              status: FlaggedSetStatusEnum.pending,
-              applications: {
-                connect: flaggedGroup.applications.map((application) => {
-                  return { id: application };
-                }),
-              },
-            },
-          });
+            });
+          } catch (e) {
+            this.logger.error(
+              `${CRON_JOB_NAME} unable to create flag set for rule ${flaggedGroup.rule} and rule key ${flaggedGroup.ruleKey} on listing ${listing.id}`,
+            );
+            this.logger.error(e);
+          }
         }
       }
       // set the last run at date to the listings
