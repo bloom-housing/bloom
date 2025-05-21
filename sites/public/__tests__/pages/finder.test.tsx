@@ -14,7 +14,10 @@ describe("<RentalsFinder>", () => {
     render(<RentalsFinder />)
 
     // Check header content
-    const finderHeaderTitle = screen.getByRole("heading", { name: /find listings for you/i, level: 1 })
+    const finderHeaderTitle = screen.getByRole("heading", {
+      name: /find listings for you/i,
+      level: 1,
+    })
     expect(finderHeaderTitle).toBeInTheDocument()
 
     const finderHeader = finderHeaderTitle.parentElement
@@ -55,7 +58,10 @@ describe("<RentalsFinder>", () => {
   it("should update content on next button click", async () => {
     render(<RentalsFinder />)
 
-    const finderHeaderTitle = screen.getByRole("heading", { name: /find listings for you/i, level: 1 })
+    const finderHeaderTitle = screen.getByRole("heading", {
+      name: /find listings for you/i,
+      level: 1,
+    })
     expect(finderHeaderTitle).toBeInTheDocument()
 
     const finderHeader = finderHeaderTitle.parentElement
