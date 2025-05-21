@@ -1,7 +1,9 @@
 export enum ListingFilterKeys {
+  availabilities = 'availabilities',
   availability = 'availability',
   bathrooms = 'bathrooms',
   bedrooms = 'bedrooms',
+  bedroomTypes = 'bedroomTypes',
   city = 'city',
   counties = 'counties',
   homeTypes = 'homeTypes',
