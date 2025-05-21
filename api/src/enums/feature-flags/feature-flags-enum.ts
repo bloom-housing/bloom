@@ -6,6 +6,7 @@ export enum FeatureFlagEnum {
   disableCommonApplication = 'disableCommonApplication',
   disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
+  enableCompanyWebsite = 'enableCompanyWebsite',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
@@ -43,6 +44,11 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.enableAccessibilityFeatures,
     description:
       "When true, the 'accessibility features' section is displayed in listing creation/edit and the public listing view",
+  },
+  {
+    name: FeatureFlagEnum.enableCompanyWebsite,
+    description:
+      'When true, allows partners to add company website information',
   },
   {
     name: FeatureFlagEnum.enableGeocodingPreferences,

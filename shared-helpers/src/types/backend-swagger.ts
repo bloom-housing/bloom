@@ -3877,6 +3877,9 @@ export interface Listing {
   leasingAgentTitle?: string
 
   /**  */
+  managementWebsite?: string
+
+  /**  */
   name: string
 
   /**  */
@@ -4516,6 +4519,9 @@ export interface ListingCreate {
   leasingAgentTitle?: string
 
   /**  */
+  managementWebsite?: string
+
+  /**  */
   name: string
 
   /**  */
@@ -4824,6 +4830,9 @@ export interface ListingUpdate {
 
   /**  */
   leasingAgentTitle?: string
+
+  /**  */
+  managementWebsite?: string
 
   /**  */
   name: string
@@ -7028,6 +7037,7 @@ export enum FeatureFlagEnum {
   "disableCommonApplication" = "disableCommonApplication",
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
+  "enableCompanyWebsite" = "enableCompanyWebsite",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
