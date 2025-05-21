@@ -54,6 +54,7 @@ const arrayFilters: ListingFilterKeys[] = [
   ListingFilterKeys.reservedCommunityTypes,
   ListingFilterKeys.availabilities,
 ]
+
 const booleanFilters: ListingFilterKeys[] = [
   ListingFilterKeys.isVerified,
   ListingFilterKeys.section8Acceptance,
@@ -225,22 +226,21 @@ export const encodeFilterDataToBackendFilters = (data: FilterData): ListingFilte
 }
 
 export const getFilterQueryFromURL = (url: string): string => {
-  console.log(url)
   let filterQuery = ""
+  // clean up next's context.req.url encoding that is unhelpful for our pattern
   const cleanedUrl = url.replace("%3A", ":")
   if (cleanedUrl.includes("filters:")) {
     filterQuery = cleanedUrl.slice(cleanedUrl.indexOf("filters:") + "filters:".length)
   }
-  console.log(filterQuery)
   return filterQuery
 }
 
-export const encodeFilterDataToString = (data: FilterData): string => {
+export const encodeFilterDataToQuery = (data: FilterData): string => {
   const cleanedFilterData = removeUnselectedFilterData(data)
   return qs.stringify(cleanedFilterData)
 }
 
-export const decodeStringtoFilterData = (queryString: string): FilterData => {
+export const decodeQueryToFilterData = (queryString: string): FilterData => {
   return qs.parse(queryString)
 }
 

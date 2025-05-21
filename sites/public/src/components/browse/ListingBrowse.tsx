@@ -25,8 +25,8 @@ import { ListingCard } from "./ListingCard"
 import styles from "./ListingBrowse.module.scss"
 import { FilterDrawer } from "../listing/FilterDrawer"
 import {
-  decodeStringtoFilterData,
-  encodeFilterDataToString,
+  decodeQueryToFilterData,
+  encodeFilterDataToQuery,
   FilterData,
   getFilterQueryFromURL,
 } from "../listing/FilterDrawerHelper"
@@ -55,13 +55,12 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
   const router = useRouter()
   const { profile, userService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
+  const [favoriteListingIds, setFavoriteListingIds] = useState<string[]>([])
+  const [filterState, setFilterState] = useState<FilterData>({})
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [filterState, setFilterState] = useState<FilterData>({})
   const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
-
-  const [favoriteListingIds, setFavoriteListingIds] = useState<string[]>([])
   const filterQuery = getFilterQueryFromURL(router.asPath)
 
   useEffect(() => {
@@ -81,7 +80,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
   }, [profile, props.listings, setFavoriteListingIds, userService])
 
   useEffect(() => {
-    const filterData = decodeStringtoFilterData(filterQuery)
+    const filterData = decodeQueryToFilterData(filterQuery)
     setFilterState(filterData)
   }, [router.asPath, filterQuery])
 
@@ -122,13 +121,13 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
   }
 
   const onFilterSubmit = (data: FilterData) => {
-    const queryString = encodeFilterDataToString(data)
+    const updatedFilterQuery = encodeFilterDataToQuery(data)
     setIsFilterDrawerOpen(false)
-    if (queryString != filterQuery) {
+    if (updatedFilterQuery != filterQuery) {
       setIsLoading(true)
       router.pathname.includes("listings-closed")
-        ? void router.push(`/listings-closed/filtered?filters:${queryString}`)
-        : void router.push(`/listings/filtered?filters:${queryString}`)
+        ? void router.push(`/listings-closed/filtered?filters:${updatedFilterQuery}`)
+        : void router.push(`/listings/filtered?filters:${updatedFilterQuery}`)
     }
   }
 

@@ -3,7 +3,7 @@ import { fetchJurisdictionByName, fetchOpenListings } from "../../lib/hooks"
 import { ListingBrowse, TabsIndexEnum } from "../../components/browse/ListingBrowse"
 import { ListingsProps } from "../listings"
 import {
-  decodeStringtoFilterData,
+  decodeQueryToFilterData,
   encodeFilterDataToBackendFilters,
   getFilterQueryFromURL,
 } from "../../components/listing/FilterDrawerHelper"
@@ -25,8 +25,8 @@ export default function ListingsPageFiltered(props: ListingsProps) {
 
 // // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getServerSideProps(context: { req: any; query: any }) {
-  const filterState = decodeStringtoFilterData(getFilterQueryFromURL(context.req.url))
-  const filters = encodeFilterDataToBackendFilters(filterState)
+  const filterData = decodeQueryToFilterData(getFilterQueryFromURL(context.req.url))
+  const filters = encodeFilterDataToBackendFilters(filterData)
   const filteredListings = await fetchOpenListings(
     context.req,
     Number(context.query.page) || 1,
