@@ -22,6 +22,7 @@ export enum FeatureFlagEnum {
   enableSingleUseCode = 'enableSingleUseCode',
   enableUnitGroups = 'enableUnitGroups',
   enableUtilitiesIncluded = 'enableUtilitiesIncluded',
+  enableAdditionalResources = 'enableAdditionalResources',
   example = 'example', // sample feature flag for testing purposes
   hideCloseListingButton = 'hideCloseListingButton',
   swapCommunityTypeWithPrograms = 'swapCommunityTypeWithPrograms',

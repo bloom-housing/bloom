@@ -1,6 +1,9 @@
 import { BloomCard } from "@bloom-housing/shared-helpers"
 import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
-import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  Jurisdiction,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
 import styles from "./HomeResources.module.scss"
 interface HomeResourcesProps {
@@ -8,9 +11,14 @@ interface HomeResourcesProps {
 }
 
 export const HomeResources = (props: HomeResourcesProps) => {
+  const enableAdditionalResources =
+    props.jurisdiction?.featureFlags.find(
+      (flag) => flag.name === FeatureFlagEnum.enableAdditionalResources
+    )?.active || false
+
   return (
     <Grid spacing="lg">
-      <Grid.Row columns={3}>
+      <Grid.Row columns={enableAdditionalResources ? 3 : 2}>
         {props.jurisdiction && props.jurisdiction.notificationsSignUpUrl && (
           <Grid.Cell>
             <BloomCard
@@ -55,27 +63,29 @@ export const HomeResources = (props: HomeResourcesProps) => {
             </Card.Section>
           </BloomCard>
         </Grid.Cell>
-        <Grid.Cell>
-          <BloomCard
-            iconSymbol="questionMarkCircle"
-            title={t("welcome.learnHousingBasics")}
-            variant={"block"}
-            headingPriority={2}
-            className={styles["resource"]}
-            iconClass={styles["resource-icon"]}
-          >
-            <Card.Section>
-              <Button
-                key={"learn-more"}
-                href="/housing-basics"
-                variant="primary-outlined"
-                size={"sm"}
-              >
-                {t("welcome.learnMore")}
-              </Button>
-            </Card.Section>
-          </BloomCard>
-        </Grid.Cell>
+        {enableAdditionalResources && (
+          <Grid.Cell>
+            <BloomCard
+              iconSymbol="questionMarkCircle"
+              title={t("welcome.learnHousingBasics")}
+              variant={"block"}
+              headingPriority={2}
+              className={styles["resource"]}
+              iconClass={styles["resource-icon"]}
+            >
+              <Card.Section>
+                <Button
+                  key={"learn-more"}
+                  href="/housing-basics"
+                  variant="primary-outlined"
+                  size={"sm"}
+                >
+                  {t("welcome.learnMore")}
+                </Button>
+              </Card.Section>
+            </BloomCard>
+          </Grid.Cell>
+        )}
       </Grid.Row>
     </Grid>
   )
