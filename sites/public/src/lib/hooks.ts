@@ -162,8 +162,8 @@ export async function fetchBaseListingData(
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchOpenListings(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   req: any,
   page: number,
   additionalFilters: ListingFilterParams[] = []
@@ -186,8 +186,8 @@ export async function fetchOpenListings(
   )
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchClosedListings(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   req: any,
   page: number,
   additionalFilters: ListingFilterParams[] = []

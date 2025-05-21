@@ -167,11 +167,12 @@ export const RentSection = (props: RentSectionProps) => (
   </fieldset>
 )
 
+// built to support filtering by url decoding and filtering by state directly from form data
 export const encodeFilterDataToBackendFilters = (data: FilterData): ListingFilterParams[] => {
   const filters: ListingFilterParams[] = []
   Object.entries(data).forEach(([filterType, userSelections]) => {
     if (indvidualFilters.includes(ListingFilterKeys[filterType])) {
-      Object.entries(userSelections).forEach((field: [ListingFilterKeys, any]) => {
+      Object.entries(userSelections).forEach((field) => {
         if (field[1]) {
           const filter = {
             $comparison: EnumListingFilterParamsComparison["="],
@@ -182,7 +183,7 @@ export const encodeFilterDataToBackendFilters = (data: FilterData): ListingFilte
       })
     } else if (arrayFilters.includes(ListingFilterKeys[filterType])) {
       const selectedFields = []
-      Object.entries(userSelections).forEach((field: [ListingFilterKeys, any]) => {
+      Object.entries(userSelections).forEach((field) => {
         if (field[1]) {
           if (filterType === ListingFilterKeys.bedroomTypes) {
             selectedFields.push(unitTypeMapping[field[0]])
@@ -198,7 +199,11 @@ export const encodeFilterDataToBackendFilters = (data: FilterData): ListingFilte
         filter[filterType] = selectedFields
         filters.push(filter)
       }
-    } else if (booleanFilters.includes(ListingFilterKeys[filterType]) && userSelections) {
+    } else if (
+      booleanFilters.includes(ListingFilterKeys[filterType]) &&
+      // filter data direct from form is boolean, decoded from url is string
+      (userSelections == true || userSelections === "true")
+    ) {
       const filter = {
         $comparison: EnumListingFilterParamsComparison["="],
       }

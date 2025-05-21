@@ -23,7 +23,7 @@ export default function ListingsPageFiltered(props: ListingsProps) {
   )
 }
 
-// // eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getServerSideProps(context: { req: any; query: any }) {
   const filterData = decodeQueryToFilterData(getFilterQueryFromURL(context.req.url))
   const filters = encodeFilterDataToBackendFilters(filterData)
