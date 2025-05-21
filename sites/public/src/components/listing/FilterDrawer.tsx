@@ -8,7 +8,6 @@ import {
   UnitTypeEnum,
   HomeTypeEnum,
   ListingFilterKeys,
-  Listing,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import styles from "./FilterDrawer.module.scss"
 import {
@@ -19,11 +18,10 @@ import {
 } from "./FilterDrawerHelper"
 
 export interface FilterDrawerProps {
+  filterState: FilterData
   isOpen: boolean
   onClose: () => void
   onSubmit: (data: FilterData) => void
-  totalListings: Listing[]
-  filterState: FilterData
 }
 
 // remove doorway specific enum references

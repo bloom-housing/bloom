@@ -1,5 +1,5 @@
 import React from "react"
-import { fetchJurisdictionByName, fetchOpenListings } from "../../lib/hooks"
+import { fetchClosedListings, fetchJurisdictionByName } from "../../lib/hooks"
 import { ListingBrowse, TabsIndexEnum } from "../../components/browse/ListingBrowse"
 import { ListingsProps } from "../listings"
 import {
@@ -14,8 +14,8 @@ export default function ListingsPageFiltered(props: ListingsProps) {
 
   return (
     <ListingBrowse
-      listings={props.openListings}
-      tab={TabsIndexEnum.open}
+      listings={props.closedListings}
+      tab={TabsIndexEnum.closed}
       jurisdiction={props.jurisdiction}
       paginationData={props.paginationData}
       key={router.asPath}
@@ -27,7 +27,7 @@ export default function ListingsPageFiltered(props: ListingsProps) {
 export async function getServerSideProps(context: { req: any; query: any }) {
   const filterState = decodeStringtoFilterData(getFilterQueryFromURL(context.req.url))
   const filters = encodeFilterDataToBackendFilters(filterState)
-  const filteredListings = await fetchOpenListings(
+  const filteredListings = await fetchClosedListings(
     context.req,
     Number(context.query.page) || 1,
     filters
@@ -36,7 +36,7 @@ export async function getServerSideProps(context: { req: any; query: any }) {
 
   return {
     props: {
-      openListings: filteredListings?.items || [],
+      closedListings: filteredListings?.items || [],
       paginationData: filteredListings?.items?.length ? filteredListings.meta : null,
       jurisdiction: jurisdiction,
     },

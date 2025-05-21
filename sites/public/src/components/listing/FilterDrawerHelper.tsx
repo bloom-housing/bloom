@@ -6,7 +6,6 @@ import {
   ListingFeatures,
   ListingFilterKeys,
   ListingFilterParams,
-  ListingsStatusEnum,
   RegionEnum,
   UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -167,13 +166,8 @@ export const RentSection = (props: RentSectionProps) => (
   </fieldset>
 )
 
-export const encodeFilterDataToBackendFilters = (
-  data: FilterData,
-  status: ListingsStatusEnum = ListingsStatusEnum.active
-): ListingFilterParams[] => {
-  const filters: ListingFilterParams[] = [
-    { $comparison: EnumListingFilterParamsComparison["="], status: status },
-  ]
+export const encodeFilterDataToBackendFilters = (data: FilterData): ListingFilterParams[] => {
+  const filters: ListingFilterParams[] = []
   Object.entries(data).forEach(([filterType, userSelections]) => {
     if (indvidualFilters.includes(ListingFilterKeys[filterType])) {
       Object.entries(userSelections).forEach((field: [ListingFilterKeys, any]) => {
@@ -230,8 +224,20 @@ export const encodeFilterDataToBackendFilters = (
   return filters
 }
 
+export const getFilterQueryFromURL = (url: string): string => {
+  console.log(url)
+  let filterQuery = ""
+  const cleanedUrl = url.replace("%3A", ":")
+  if (cleanedUrl.includes("filters:")) {
+    filterQuery = cleanedUrl.slice(cleanedUrl.indexOf("filters:") + "filters:".length)
+  }
+  console.log(filterQuery)
+  return filterQuery
+}
+
 export const encodeFilterDataToString = (data: FilterData): string => {
-  return qs.stringify(data)
+  const cleanedFilterData = removeUnselectedFilterData(data)
+  return qs.stringify(cleanedFilterData)
 }
 
 export const decodeStringtoFilterData = (queryString: string): FilterData => {
