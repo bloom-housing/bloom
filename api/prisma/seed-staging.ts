@@ -64,6 +64,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableListingFavoriting,
         FeatureFlagEnum.enableCompanyWebsite,
       ],
+      languages: Object.values(LanguagesEnum),
     }),
   });
   // jurisdiction with unit groups enabled
@@ -106,6 +107,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enablePartnerSettings,
         FeatureFlagEnum.enableListingsPagination,
       ],
+      languages: [LanguagesEnum.en, LanguagesEnum.es, LanguagesEnum.vi],
     }),
   });
   // Jurisdiction with no feature flags enabled
