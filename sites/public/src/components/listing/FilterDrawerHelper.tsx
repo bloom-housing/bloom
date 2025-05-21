@@ -228,7 +228,7 @@ export const encodeFilterDataToBackendFilters = (data: FilterData): ListingFilte
 export const getFilterQueryFromURL = (url: string): string => {
   let filterQuery = ""
   // clean up next's context.req.url encoding that is unhelpful for our pattern
-  const cleanedUrl = url.replace("%3A", ":")
+  const cleanedUrl = url?.replace("%3A", ":")
   if (cleanedUrl.includes("filters:")) {
     filterQuery = cleanedUrl.slice(cleanedUrl.indexOf("filters:") + "filters:".length)
   }
