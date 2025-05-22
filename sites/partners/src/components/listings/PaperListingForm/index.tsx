@@ -8,6 +8,7 @@ import ChevronRightIcon from "@heroicons/react/20/solid/ChevronRightIcon"
 import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlag,
+  FeatureFlagEnum,
   ListingCreate,
   ListingEventsTypeEnum,
   ListingUpdate,
@@ -224,6 +225,10 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
     void onSubmit(formData, action === "continue")
   }
 
+  const enableUnitGroups =
+    activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableUnitGroups)?.active ||
+    false
+
   const onSubmit = useCallback(
     async (formData: FormListing, continueEditing: boolean) => {
       if (!loading) {
@@ -242,6 +247,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
               profile: profile,
               latLong,
               customMapPositionChosen,
+              enableUnitGroups,
             })
             const formattedData = await dataPipeline.run()
             let result

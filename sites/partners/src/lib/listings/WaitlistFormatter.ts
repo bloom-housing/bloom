@@ -6,7 +6,7 @@ export default class WaitlistFormatter extends Formatter {
   process() {
     const showWaitlist =
       this.data.waitlistOpenQuestion === YesNoEnum.yes &&
-      this.data.listingAvailabilityQuestion === "openWaitlist"
+      (this.data.listingAvailabilityQuestion === "openWaitlist" || this.metadata.enableUnitGroups)
 
     this.processBoolean("isWaitlistOpen", {
       when: showWaitlist,

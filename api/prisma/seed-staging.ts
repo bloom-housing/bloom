@@ -63,6 +63,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableListingPagination,
         FeatureFlagEnum.enableListingFavoriting,
         FeatureFlagEnum.enableCompanyWebsite,
+        FeatureFlagEnum.enableWaitlistAdditionalFields,
       ],
       languages: Object.values(LanguagesEnum),
     }),
@@ -93,6 +94,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableListingFavoriting,
         FeatureFlagEnum.enableCompanyWebsite,
         FeatureFlagEnum.disableCommonApplication,
+        FeatureFlagEnum.enableWaitlistAdditionalFields,
       ],
     }),
   });
