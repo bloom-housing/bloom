@@ -1,6 +1,10 @@
 /* eslint-env node */
 /* eslint-disable @typescript-eslint/no-var-requires */
 
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+})
+
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
 }
@@ -24,7 +28,7 @@ const HOUSING_COUNSELOR_SERVICE_URL = process.env.HOUSING_COUNSELOR_SERVICE_URL
 const bloomTheme = require("./tailwind.config.js")
 const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(bloomTheme)
 
-module.exports = {
+module.exports = withBundleAnalyzer({
   env: {
     backendApiBase: BACKEND_API_BASE,
     listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
@@ -58,18 +62,17 @@ module.exports = {
     "@bloom-housing/shared-helpers",
     "@bloom-housing/ui-components",
   ],
-  webpack: (config, options) => {
+  webpack: (config) => {
     config.module.rules.push({
       test: /\.md$/,
       type: "asset/source",
     })
-    console.log("options", options.nextRuntime)
+
     return config
   },
-  // output: "standalone",
   // Uncomment line below before building when using symlink for UI-C
   // experimental: { esmExternals: "loose" },
-}
+})
 
 if (process.env.SENTRY_ORG) {
   // Injected content via Sentry wizard below

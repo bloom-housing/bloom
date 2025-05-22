@@ -73,7 +73,6 @@ module.exports = withBundleAnalyzer(
       })
       return config
     },
-    output: "standalone",
     // Uncomment line below before building when using symlink for UI-C
     // experimental: { esmExternals: "loose" },
   })
