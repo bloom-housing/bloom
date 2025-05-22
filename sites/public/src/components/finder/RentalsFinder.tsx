@@ -1,5 +1,5 @@
 import { FormProvider, useForm } from "react-hook-form"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { BloomCard, CustomIconMap, listingFeatures } from "@bloom-housing/shared-helpers"
 import { RegionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ProgressNav, StepHeader, t } from "@bloom-housing/ui-components"
@@ -28,7 +28,7 @@ export default function RentalsFinder() {
   const [sectionIndex, setSectionIndex] = useState<number>(0)
   const formMethods = useForm()
 
-  const rentalFinderSections: FinderSection[] = [
+  const rentalFinderSections: FinderSection[] = useMemo(() => [
     {
       sectionTitle: t("finder.housingSectionTitle"),
       sectionSteps: [
@@ -112,7 +112,7 @@ export default function RentalsFinder() {
           subtitle: t("finder.building.subtitle"),
           content: (
             <FinderMultiselectQuestion
-              legend={t("")}
+              legend={t("finder.multiselectLegend")}
               fieldGroupName="communityType"
               options={buildingTypes.map((type) => ({
                 label: t(`finder.building.${type}`),
@@ -132,7 +132,7 @@ export default function RentalsFinder() {
         },
       ],
     },
-  ]
+  ], [])
 
   const sectionLabels = rentalFinderSections
     .filter((section) => !!section.sectionTitle)
