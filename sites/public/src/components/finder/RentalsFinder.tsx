@@ -162,6 +162,10 @@ export default function RentalsFinder() {
     }
   }
 
+  const onSkipClick = () => {
+    setSectionIndex(rentalFinderSections.length - 1)
+    setStepIndex(0)
+  }
   return (
     <div className={styles["finder-container"]}>
       <div className={styles["questionnaire-container"]}>
@@ -226,7 +230,7 @@ export default function RentalsFinder() {
             {sectionIndex <= sectionLabels.length - 1 && (
               <CardSection>
                 <div className={styles["footer"]}>
-                  <Button variant="text">{t("finder.skip")}</Button>
+                  <Button variant="text" onClick={onSkipClick}>{t("finder.skip")}</Button>
                 </div>
               </CardSection>
             )}
