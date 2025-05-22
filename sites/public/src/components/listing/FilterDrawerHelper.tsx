@@ -1,0 +1,313 @@
+import {
+  EnumListingFilterParamsComparison,
+  FilterAvailabilityEnum,
+  HomeTypeEnum,
+  ListingFeatures,
+  ListingFilterKeys,
+  ListingFilterParams,
+  RegionEnum,
+  UnitTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import styles from "./FilterDrawer.module.scss"
+import { UseFormMethods } from "react-hook-form"
+import { Grid } from "@bloom-housing/ui-seeds"
+import { Field, t } from "@bloom-housing/ui-components"
+import { isTrue } from "../../lib/helpers"
+import { encode, ParsedUrlQuery } from "querystring"
+
+export interface FilterData {
+  availability?: Record<FilterAvailabilityEnum, boolean | "true" | "false">
+  bedroomTypes?: Record<UnitTypeEnum, boolean | "true" | "false">
+  homeType?: Record<HomeTypeEnum, boolean | "true" | "false">
+  isVerified?: boolean | "true" | "false"
+  listingFeatures?: Record<keyof ListingFeatures, boolean | "true" | "false">
+  monthlyRent?: Record<"maxRent" | "minRent", string>
+  regions?: Record<RegionEnum, boolean | "true" | "false">
+  section8Acceptance?: boolean | "true" | "false"
+}
+
+export interface FilterField {
+  key: string
+  label: string
+  defaultChecked: boolean
+}
+
+export interface CheckboxGroupProps {
+  groupLabel: string
+  fields: FilterField[]
+  register: UseFormMethods["register"]
+  customRowNumber?: number
+}
+
+export interface RentSectionProps {
+  register: UseFormMethods["register"]
+  getValues: UseFormMethods["getValues"]
+  setValue: UseFormMethods["setValue"]
+  filterState: FilterData
+}
+
+const arrayFilters: ListingFilterKeys[] = [
+  ListingFilterKeys.bedroomTypes,
+  ListingFilterKeys.counties,
+  ListingFilterKeys.homeTypes,
+  ListingFilterKeys.listingFeatures,
+  ListingFilterKeys.regions,
+  ListingFilterKeys.reservedCommunityTypes,
+  ListingFilterKeys.availabilities,
+]
+
+const booleanFilters: ListingFilterKeys[] = [
+  ListingFilterKeys.isVerified,
+  ListingFilterKeys.section8Acceptance,
+]
+
+// two filters below have yet to be implemented, captured in part 4
+const indvidualFilters: ListingFilterKeys[] = [
+  ListingFilterKeys.bathrooms,
+  ListingFilterKeys.jurisdiction,
+]
+
+export const unitTypeMapping = {
+  [UnitTypeEnum.studio]: 0,
+  [UnitTypeEnum.oneBdrm]: 1,
+  [UnitTypeEnum.twoBdrm]: 2,
+  [UnitTypeEnum.threeBdrm]: 3,
+  [UnitTypeEnum.fourBdrm]: 4,
+  [UnitTypeEnum.fiveBdrm]: 5,
+}
+
+export const buildDefaultFilterFields = (
+  filterType: ListingFilterKeys,
+  stringBase: string,
+  keyArr: string[],
+  existingData: FilterData
+): FilterField[] =>
+  keyArr.map((key) => {
+    return {
+      key: `${filterType}.${key}`,
+      label: t(`${stringBase}.${key}`),
+      defaultChecked: isTrue(existingData?.[filterType]?.[key]),
+    }
+  })
+
+export const CheckboxGroup = (props: CheckboxGroupProps) => {
+  return (
+    <fieldset className={styles["filter-section"]}>
+      <legend className={styles["filter-section-label"]}>{props.groupLabel}</legend>
+      <Grid spacing="sm">
+        <Grid.Row columns={props.customRowNumber ?? 3}>
+          {props.fields.map((field) => {
+            return (
+              <Grid.Cell key={`${field.key}-cell`}>
+                <Field
+                  id={field.key}
+                  name={field.key}
+                  label={field.label}
+                  labelClassName={styles["filter-checkbox-label"]}
+                  type="checkbox"
+                  register={props.register}
+                  inputProps={{ defaultChecked: field.defaultChecked }}
+                />
+              </Grid.Cell>
+            )
+          })}
+        </Grid.Row>
+      </Grid>
+    </fieldset>
+  )
+}
+
+export const RentSection = (props: RentSectionProps) => (
+  <fieldset className={styles["filter-section"]}>
+    <legend className={styles["filter-section-label"]}>{t("t.rent")}</legend>
+    <Grid spacing="sm">
+      <Grid.Row>
+        <Grid.Cell>
+          <Field
+            id={`${ListingFilterKeys.monthlyRent}.minRent`}
+            name={`${ListingFilterKeys.monthlyRent}.minRent`}
+            label={t("listings.minRent")}
+            type="currency"
+            prepend="$"
+            register={props.register}
+            getValues={props.getValues}
+            setValue={props.setValue}
+            defaultValue={props.filterState?.[ListingFilterKeys.monthlyRent]?.minRent}
+          ></Field>
+        </Grid.Cell>
+        <Grid.Cell>
+          <Field
+            id={`${ListingFilterKeys.monthlyRent}.maxRent`}
+            name={`${ListingFilterKeys.monthlyRent}.maxRent`}
+            label={t("listings.maxRent")}
+            type="currency"
+            prepend="$"
+            register={props.register}
+            getValues={props.getValues}
+            setValue={props.setValue}
+            defaultValue={props.filterState?.[ListingFilterKeys.monthlyRent]?.maxRent}
+          ></Field>
+        </Grid.Cell>
+      </Grid.Row>
+      <Grid.Row key="0">
+        <Grid.Cell>
+          <Field
+            id={ListingFilterKeys.section8Acceptance}
+            name={ListingFilterKeys.section8Acceptance}
+            label={t("listings.section8Acceptance")}
+            labelClassName={styles["filter-checkbox-label"]}
+            type="checkbox"
+            register={props.register}
+            inputProps={{
+              defaultChecked: isTrue(props.filterState?.[ListingFilterKeys.section8Acceptance]),
+            }}
+          ></Field>
+        </Grid.Cell>
+      </Grid.Row>
+    </Grid>
+  </fieldset>
+)
+
+// built to support filtering by url decoding and filtering by state directly from form data
+export const encodeFilterDataToBackendFilters = (data: FilterData = {}): ListingFilterParams[] => {
+  const filters: ListingFilterParams[] = []
+  Object.entries(data).forEach(([filterType, userSelections]) => {
+    // individual filters not yet implemented
+    if (indvidualFilters.includes(ListingFilterKeys[filterType])) {
+      Object.entries(userSelections).forEach((field) => {
+        if (field[1]) {
+          const filter = {
+            $comparison: EnumListingFilterParamsComparison["="],
+          }
+          filter[filterType] = field[0]
+          filters.push(filter)
+        }
+      })
+    } else if (arrayFilters.includes(ListingFilterKeys[filterType])) {
+      const selectedFields = []
+      Object.entries(userSelections).forEach((field) => {
+        if (field[1]) {
+          if (filterType === ListingFilterKeys.bedroomTypes) {
+            selectedFields.push(unitTypeMapping[field[0]])
+          } else {
+            selectedFields.push(field[0])
+          }
+        }
+      })
+      if (selectedFields.length > 0) {
+        const filter = {
+          $comparison: EnumListingFilterParamsComparison["IN"],
+        }
+        filter[filterType] = selectedFields
+        filters.push(filter)
+      }
+    } else if (
+      booleanFilters.includes(ListingFilterKeys[filterType]) &&
+      // filter data direct from form is boolean, decoded from url is string
+      (userSelections == true || userSelections === "true")
+    ) {
+      const filter = {
+        $comparison: EnumListingFilterParamsComparison["="],
+      }
+      filter[filterType] = true
+      filters.push(filter)
+    } else if (filterType === ListingFilterKeys.monthlyRent) {
+      if (userSelections["minRent"]) {
+        const filter = {
+          $comparison: EnumListingFilterParamsComparison[">="],
+        }
+        filter[ListingFilterKeys.monthlyRent] = userSelections["minRent"]?.replace(",", "")
+        filters.push(filter)
+      }
+      if (userSelections["maxRent"]) {
+        const filter = {
+          $comparison: EnumListingFilterParamsComparison["<="],
+        }
+
+        filter[ListingFilterKeys.monthlyRent] = userSelections["maxRent"]?.replace(",", "")
+        filters.push(filter)
+      }
+    }
+  })
+  return filters
+}
+
+export const isFiltered = (contextQuery: ParsedUrlQuery) => {
+  return Object.keys(contextQuery).some((param) => Object.keys(ListingFilterKeys).includes(param))
+}
+
+export const getFilterQueryFromURL = (url: ParsedUrlQuery) => {
+  delete url["page"]
+  return encode(url)
+}
+
+export const encodeFilterDataToQuery = (data: FilterData): string => {
+  const queryArr = []
+  const cleanedFilterData = removeUnselectedFilterData(data)
+  Object.entries(cleanedFilterData).forEach(([filterType, userSelections]) => {
+    if (arrayFilters.includes(ListingFilterKeys[filterType])) {
+      const arrParam = `${ListingFilterKeys[filterType]}=${Object.keys(userSelections).join(",")}`
+      queryArr.push(arrParam)
+    } else if (booleanFilters.includes(ListingFilterKeys[filterType])) {
+      const booleanParam = `${ListingFilterKeys[filterType]}=true`
+      queryArr.push(booleanParam)
+    } else if (
+      (filterType === ListingFilterKeys.monthlyRent && userSelections["minRent"]) ||
+      userSelections["maxRent"]
+    ) {
+      const rentParam = `${ListingFilterKeys[filterType]}=${Object.values(userSelections).join(
+        "-"
+      )}`
+      queryArr.push(rentParam)
+    }
+  })
+  return queryArr.join("&")
+}
+
+export const decodeQueryToFilterData = (parsedQuery: ParsedUrlQuery): FilterData => {
+  const filterData = {}
+  Object.entries(parsedQuery).forEach(([filterType, userSelections]) => {
+    if (arrayFilters.includes(ListingFilterKeys[filterType])) {
+      typeof userSelections === "string" &&
+        userSelections.split(",").forEach((userSelection) => {
+          if (filterData[filterType]) {
+            filterData[filterType][userSelection] = true
+          } else {
+            filterData[filterType] = { [userSelection]: true }
+          }
+        })
+    } else if (booleanFilters.includes(ListingFilterKeys[filterType]) && isTrue(userSelections)) {
+      filterData[filterType] = true
+    } else if (filterType === ListingFilterKeys.monthlyRent && typeof userSelections === "string") {
+      //custom separator to avoid conflicts with higher values with commas
+      const rentArr = userSelections.split("-")
+      filterData[filterType] = { minRent: rentArr[0], maxRent: rentArr[1] }
+    }
+  })
+  return filterData
+}
+
+export const removeUnselectedFilterData = (data: FilterData): FilterData => {
+  const cleanedFilterData: FilterData = {}
+  Object.entries(data).forEach(([filterType, userSelections]) => {
+    if (arrayFilters.includes(ListingFilterKeys[filterType])) {
+      Object.entries(userSelections).forEach((field) => {
+        if (field[1]) {
+          if (cleanedFilterData[filterType]) {
+            cleanedFilterData[filterType][field[0]] = field[1]
+          } else {
+            cleanedFilterData[filterType] = { [field[0]]: field[1] }
+          }
+        }
+      })
+    } else if (booleanFilters.includes(ListingFilterKeys[filterType]) && userSelections) {
+      cleanedFilterData[filterType] = userSelections
+    } else if (
+      (filterType === ListingFilterKeys.monthlyRent && userSelections["minRent"]) ||
+      userSelections["maxRent"]
+    ) {
+      cleanedFilterData[filterType] = userSelections
+    }
+  })
+  return cleanedFilterData
+}
