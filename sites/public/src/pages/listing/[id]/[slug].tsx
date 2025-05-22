@@ -102,5 +102,8 @@ export const getStaticProps: GetStaticProps = async (context: {
   }
   const jurisdiction = fetchJurisdictionByName()
 
-  return { props: { listing: response.data, jurisdiction: await jurisdiction }, revalidate: 30 }
+  return {
+    props: { listing: response.data, jurisdiction: await jurisdiction },
+    revalidate: Number(process.env.cacheRevalidate),
+  }
 }
