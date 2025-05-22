@@ -60,6 +60,11 @@ module.exports = withBundleAnalyzer(
     sassOptions: {
       additionalData: tailwindVars,
     },
+    transpilePackages: [
+      "@bloom-housing/ui-seeds",
+      "@bloom-housing/shared-helpers",
+      "@bloom-housing/ui-components",
+    ],
     webpack: (config) => {
       config.module.rules.push({
         test: /\.md$/,
