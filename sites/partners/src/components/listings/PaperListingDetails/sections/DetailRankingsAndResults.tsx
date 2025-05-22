@@ -22,6 +22,11 @@ const DetailRankingsAndResults = () => {
     listing.jurisdictions.id
   )
 
+  const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableUnitGroups,
+    listing.jurisdictions.id
+  )
+
   const lotteryEvent = getLotteryEvent(listing)
   const getReviewOrderType = () => {
     if (!listing.reviewOrderType) {
@@ -32,7 +37,7 @@ const DetailRankingsAndResults = () => {
   }
   return (
     <SectionWithGrid heading={t("listings.sections.rankingsResultsTitle")} inset>
-      {listing.reviewOrderType !== ReviewOrderTypeEnum.waitlist && (
+      {(listing.reviewOrderType !== ReviewOrderTypeEnum.waitlist || enableUnitGroups) && (
         <Grid.Row>
           <FieldValue id="reviewOrderQuestion" label={t("listings.reviewOrderQuestion")}>
             {getReviewOrderType() === ReviewOrderTypeEnum.firstComeFirstServe
@@ -72,7 +77,7 @@ const DetailRankingsAndResults = () => {
           </Grid.Row>
         </>
       )}
-      {listing.reviewOrderType === ReviewOrderTypeEnum.waitlist && (
+      {(listing.reviewOrderType === ReviewOrderTypeEnum.waitlist || enableUnitGroups) && (
         <>
           <Grid.Row>
             <FieldValue id="waitlist.openQuestion" label={t("listings.waitlist.openQuestion")}>

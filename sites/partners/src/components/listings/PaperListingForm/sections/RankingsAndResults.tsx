@@ -58,9 +58,20 @@ const RankingsAndResults = ({ listing, isAdmin }: RankingsAndResultsProps) => {
     name: "jurisdictions.id",
   })
 
+  const enableWaitlistAdditionalFields = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableWaitlistAdditionalFields,
+    selectedJurisdictionId
+  )
+
+  const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableUnitGroups,
+    selectedJurisdictionId
+  )
+
   // Ensure the lottery fields only show when it's "available units" listing
   const showLotteryFields =
-    availabilityQuestion !== "openWaitlist" && reviewOrder === "reviewOrderLottery"
+    (availabilityQuestion !== "openWaitlist" || enableUnitGroups) &&
+    reviewOrder === "reviewOrderLottery"
 
   const yesNoRadioOptions = [
     {
@@ -73,23 +84,13 @@ const RankingsAndResults = ({ listing, isAdmin }: RankingsAndResultsProps) => {
     },
   ]
 
-  const enableWaitlistAdditionalFields = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableWaitlistAdditionalFields,
-    selectedJurisdictionId
-  )
-
-  const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableUnitGroups,
-    selectedJurisdictionId
-  )
-
   return (
     <>
       <SectionWithGrid
         heading={t("listings.sections.rankingsResultsTitle")}
         subheading={t("listings.sections.rankingsResultsSubtitle")}
       >
-        {availabilityQuestion !== "openWaitlist" && (
+        {(availabilityQuestion !== "openWaitlist" || enableUnitGroups) && (
           <Grid.Row columns={2} className={"flex items-center"}>
             <Grid.Cell>
               <p className="field-label m-4 ml-0">{t("listings.reviewOrderQuestion")}</p>
