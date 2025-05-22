@@ -1,0 +1,40 @@
+/* Default Style */
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #f5f5f5;
+  color: #222;
+}
+
+/* Header styling */
+.header {
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+/* Recording + form area */
+form, .recording-controls, .form-output {
+  margin-top: 20px;
+}
+
+/* Accessibility Themes */
+body.high-contrast {
+  background-color: #000;
+  color: #fff;
+}
+
+body.dyslexia-font {
+  font-family: 'OpenDyslexic', Arial, sans-serif;
+}
+
+/* Toggle buttons */
+.accessibility-controls {
+  margin-top: 10px;
+}
+
+.accessibility-controls button {
+  margin-right: 10px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+}

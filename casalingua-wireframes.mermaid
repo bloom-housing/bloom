@@ -1,0 +1,30 @@
+flowchart TD
+    subgraph "Document Upload Interface"
+        A[Upload Document] --> B{Document Type}
+        B -->|Housing Application| C[Housing Application Processing]
+        B -->|Lease Agreement| D[Lease Agreement Processing]
+        B -->|Housing Policy| E[Housing Policy Processing]
+        
+        C --> F[Language Selection]
+        D --> F
+        E --> F
+        
+        F --> G[Simplification Level Selection]
+        G --> H[Processing...]
+        H --> I[Display Original vs Simplified]
+    end
+    
+    subgraph "Document Comparison View"
+        I --> J[Side-by-Side View]
+        J --> K[Highlight Complex Terms]
+        J --> L[Audio Playback Option]
+        J --> M[Export Options]
+    end
+    
+    subgraph "Admin Interface"
+        N[Review Simplified Documents] --> O{Approve?}
+        O -->|Yes| P[Publish Document]
+        O -->|No| Q[Suggest Edits]
+        Q --> R[AI Reprocessing]
+        R --> N
+    end
