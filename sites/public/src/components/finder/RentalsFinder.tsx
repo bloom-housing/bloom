@@ -1,13 +1,13 @@
-import { useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
-import { RegionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { Button, Heading, Icon } from "@bloom-housing/ui-seeds"
-import { ProgressNav, StepHeader, t } from "@bloom-housing/ui-components"
+import { useState } from "react"
 import { BloomCard, CustomIconMap } from "@bloom-housing/shared-helpers"
+import { RegionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { ProgressNav, StepHeader, t } from "@bloom-housing/ui-components"
+import { Button, Heading, Icon } from "@bloom-housing/ui-seeds"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FinderMultiselectQuestion from "./FinderMultiselectQuestion"
 import FinderRentQuestion from "./FinderRentQuestion"
 import styles from "./RentalsFinder.module.scss"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 type FinderStep = {
   content: React.ReactNode

@@ -1,7 +1,8 @@
+import { useFormContext } from "react-hook-form"
 import { Field } from "@bloom-housing/ui-components"
 import styles from "./FinderMultiselectQuestion.module.scss"
 import finderStyles from "./RentalsFinder.module.scss"
-import { useFormContext } from "react-hook-form"
+
 
 export type FinderQuestion = {
   label: string
