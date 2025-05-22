@@ -28,10 +28,13 @@
 
 .listing-tags {
   margin-bottom: calc(-1 * var(--seeds-s1));
-  span {
-    margin-bottom: var(--seeds-s1);
+  .tag {
+    margin-block-end: var(--seeds-s1);
     &:not(:last-child) {
       margin-inline-end: var(--seeds-s2);
+    }
+    svg {
+      margin-inline-end: var(--seeds-s1);
     }
   }
 }

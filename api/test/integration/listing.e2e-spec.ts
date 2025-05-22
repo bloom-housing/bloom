@@ -8,6 +8,7 @@ import {
   ListingEventsTypeEnum,
   ListingsStatusEnum,
   MarketingTypeEnum,
+  MultiselectQuestionsApplicationSectionEnum,
   Prisma,
   RegionEnum,
   ReviewOrderTypeEnum,
@@ -94,6 +95,11 @@ describe('Listing Controller Tests', () => {
     hearing: true,
     visual: false,
     mobility: true,
+    barrierFreeUnitEntrance: false,
+    loweredLightSwitch: true,
+    barrierFreeBathroom: false,
+    wideDoorways: true,
+    loweredCabinets: false,
   };
   const listingUtilities = {
     water: false,
@@ -557,10 +563,28 @@ describe('Listing Controller Tests', () => {
     let jurisdictionB;
     let jurisdictionC;
     let jurisdictionDWithUnitGroups;
+    let multiselectQuestionPreference;
+    let multiselectQuestionProgram;
 
     beforeAll(async () => {
       jurisdictionB = await prisma.jurisdictions.create({
         data: jurisdictionFactory(),
+      });
+      multiselectQuestionPreference = await prisma.multiselectQuestions.create({
+        data: multiselectQuestionFactory(jurisdictionB.id, {
+          multiselectQuestion: {
+            applicationSection:
+              MultiselectQuestionsApplicationSectionEnum.preferences,
+          },
+        }),
+      });
+      multiselectQuestionProgram = await prisma.multiselectQuestions.create({
+        data: multiselectQuestionFactory(jurisdictionB.id, {
+          multiselectQuestion: {
+            applicationSection:
+              MultiselectQuestionsApplicationSectionEnum.programs,
+          },
+        }),
       });
       const listing1Input = await listingFactory(jurisdictionB.id, prisma, {
         listing: {
@@ -570,6 +594,7 @@ describe('Listing Controller Tests', () => {
           region: RegionEnum.Eastside,
           section8Acceptance: false,
         } as Prisma.ListingsCreateInput,
+        multiselectQuestions: [multiselectQuestionPreference],
         optionalFeatures: {
           acInUnit: true,
         },
@@ -596,6 +621,7 @@ describe('Listing Controller Tests', () => {
           region: RegionEnum.Southwest,
           section8Acceptance: true,
         } as Prisma.ListingsCreateInput,
+        multiselectQuestions: [multiselectQuestionProgram],
         optionalFeatures: {
           acInUnit: false,
         },
@@ -726,6 +752,167 @@ describe('Listing Controller Tests', () => {
           totalPages: 0,
         },
       });
+    });
+    it('should return a listing based on filter availabilities - closedWaitlist', async () => {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare['IN'],
+            availabilities: [FilterAvailabilityEnum.closedWaitlist],
+          },
+          {
+            $comparison: Compare['='],
+            jurisdiction: jurisdictionDWithUnitGroups.id,
+          },
+        ],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toEqual(1);
+
+      expect(res.body.items[0].id).toEqual(listing5WithUnitGroups.id);
+    });
+    it('should return a listing based on filter availabilities - comingSoon', async () => {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare['IN'],
+            availabilities: [FilterAvailabilityEnum.comingSoon],
+          },
+          {
+            $comparison: Compare['='],
+            jurisdiction: jurisdictionDWithUnitGroups.id,
+          },
+        ],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toEqual(1);
+
+      expect(res.body.items[0].id).toEqual(listing6WithUnitGroups.id);
+    });
+    it('should return a listing based on filter availabilities - openWaitlist', async () => {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare['IN'],
+            availabilities: [FilterAvailabilityEnum.openWaitlist],
+          },
+          {
+            $comparison: Compare['='],
+            jurisdiction: jurisdictionDWithUnitGroups.id,
+          },
+        ],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toEqual(1);
+
+      expect(res.body.items[0].id).toEqual(listing4WithUnitGroups.id);
+    });
+    it('should return a listing based on filter availabilities - waitlistOpen', async () => {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare['IN'],
+            availabilities: [FilterAvailabilityEnum.waitlistOpen],
+          },
+          {
+            $comparison: Compare['='],
+            jurisdiction: jurisdictionB.id,
+          },
+        ],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toEqual(1);
+
+      expect(res.body.items[0].id).toEqual(listing2WithUnits.id);
+    });
+    it('should return a listing based on filter availabilities - unitsAvailable - unitGroups', async () => {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare['IN'],
+            availabilities: [FilterAvailabilityEnum.unitsAvailable],
+          },
+          {
+            $comparison: Compare['='],
+            jurisdiction: jurisdictionDWithUnitGroups.id,
+          },
+        ],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toEqual(3);
+
+      const ids = res.body.items.map((listing) => listing.id);
+      expect(ids).toContain(listing4WithUnitGroups.id);
+      expect(ids).toContain(listing5WithUnitGroups.id);
+      expect(ids).toContain(listing6WithUnitGroups.id);
+    });
+    it('should return a listing based on filter availabilities - unitsAvailable - units', async () => {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare['IN'],
+            availabilities: [FilterAvailabilityEnum.unitsAvailable],
+          },
+          {
+            $comparison: Compare['='],
+            jurisdiction: jurisdictionB.id,
+          },
+        ],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toEqual(2);
+
+      const ids = res.body.items.map((listing) => listing.id);
+      expect(ids).toContain(listing1WithUnits.id);
+      expect(ids).toContain(listing2WithUnits.id);
     });
     it('should return a listing based on filter availability - closedWaitlist', async () => {
       const query: ListingsQueryBody = {
@@ -953,6 +1140,60 @@ describe('Listing Controller Tests', () => {
           {
             $comparison: Compare['='],
             bedrooms: 3,
+          },
+          {
+            $comparison: Compare['='],
+            jurisdiction: jurisdictionB.id,
+          },
+        ],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toEqual(1);
+
+      expect(res.body.items[0].id).toEqual(listing2WithUnits.id);
+    });
+    it('should return a listing based on filter bedroomTypes - unitGroups', async () => {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare['IN'],
+            bedroomTypes: [3],
+          },
+          {
+            $comparison: Compare['='],
+            jurisdiction: jurisdictionDWithUnitGroups.id,
+          },
+        ],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toEqual(2);
+
+      const ids = res.body.items.map((listing) => listing.id);
+      expect(ids).toContain(listing4WithUnitGroups.id);
+      expect(ids).toContain(listing5WithUnitGroups.id);
+    });
+    it('should return a listing based on filter bedroomTypes - units', async () => {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare['IN'],
+            bedroomTypes: [3],
           },
           {
             $comparison: Compare['='],
@@ -1283,6 +1524,79 @@ describe('Listing Controller Tests', () => {
       expect(ids).toContain(listing4WithUnitGroups.id);
       expect(ids).toContain(listing5WithUnitGroups.id);
       expect(ids).toContain(listing6WithUnitGroups.id);
+    });
+    it('should return a listing based on filter multiselectQuestions', async () => {
+      const queryPrefence: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare.IN,
+            multiselectQuestions: [multiselectQuestionPreference.id],
+          },
+          {
+            $comparison: Compare['='],
+            jurisdiction: jurisdictionB.id,
+          },
+        ],
+      };
+
+      const queryProgram: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare.IN,
+            multiselectQuestions: [multiselectQuestionProgram.id],
+          },
+          {
+            $comparison: Compare['='],
+            jurisdiction: jurisdictionB.id,
+          },
+        ],
+      };
+
+      const resPreference = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(queryPrefence)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(resPreference.body.meta).toEqual({
+        currentPage: 1,
+        itemCount: 1,
+        itemsPerPage: 10,
+        totalItems: 1,
+        totalPages: 1,
+      });
+
+      expect(resPreference.body.items.length).toBeGreaterThanOrEqual(1);
+
+      const foundId1 = resPreference.body.items.some(
+        (elem) => elem.id === listing1WithUnits.id,
+      );
+      expect(foundId1).toEqual(true);
+
+      const resProgram = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(queryProgram)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(resProgram.body.meta).toEqual({
+        currentPage: 1,
+        itemCount: 1,
+        itemsPerPage: 10,
+        totalItems: 1,
+        totalPages: 1,
+      });
+
+      expect(resProgram.body.items.length).toBeGreaterThanOrEqual(1);
+
+      const foundId2 = resProgram.body.items.some(
+        (elem) => elem.id === listing2WithUnits.id,
+      );
+      expect(foundId2).toEqual(true);
     });
     it('should return a listing based on filter monthlyRent - units', async () => {
       const query: ListingsQueryBody = {
