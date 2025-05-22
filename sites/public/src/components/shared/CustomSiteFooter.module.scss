@@ -77,6 +77,7 @@
   display: flex;
   flex-direction: column;
   margin-bottom: var(--seeds-s4);
+  font-family: var(--seeds-font-sans);
 }
 
 .text-container:last-of-type {
@@ -85,6 +86,7 @@
 
 .copyright-text {
   min-width: var(--seeds-s72);
+  font-family: var(--seeds-font-sans);
 }
 
 .links {
@@ -93,6 +95,7 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   margin-bottom: calc(-1 * var(--seeds-s2));
+  font-family: var(--seeds-font-sans);
   a {
     color: var(--seeds-color-on-inverse-muted);
     margin-left: var(--seeds-s6);
