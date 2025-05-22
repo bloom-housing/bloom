@@ -150,6 +150,10 @@ const getHeaderLinks = (
       href: process.env.housingCounselorServiceUrl,
     })
   }
+  headerLinks.push({
+    label: t("pageTitle.about"),
+    href: "/about",
+  })
   if (profile) {
     headerLinks.push({
       label: t("nav.myAccount"),
