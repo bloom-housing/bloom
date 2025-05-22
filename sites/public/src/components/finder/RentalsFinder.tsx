@@ -21,13 +21,7 @@ type FinderSection = {
   sectionSteps: FinderStep[]
 }
 
-const buildingTypes = [
-  'withDisabilities',
-  'senior55',
-  'senior62',
-  'homeless',
-  'veterans'
-]
+const buildingTypes = ["withDisabilities", "senior55", "senior62", "homeless", "veterans"]
 
 export default function RentalsFinder() {
   const [stepIndex, setStepIndex] = useState<number>(0)
@@ -93,51 +87,56 @@ export default function RentalsFinder() {
     },
     {
       sectionTitle: t("t.accessibility"),
-      sectionSteps: [{
-        question: t("finder.accessibility.question"),
-        subtitle: t("finder.accessibility.subtitle"),
-        content: (
-          <FinderMultiselectQuestion
-            legend={t("finder.multiselectLegend")}
-            fieldGroupName="accessibility"
-            options={listingFeatures.map((feature) => ({
-              label: t(`eligibility.accessibility.${feature}`),
-              value: feature,
-            }))}
-          />)
-      }],
+      sectionSteps: [
+        {
+          question: t("finder.accessibility.question"),
+          subtitle: t("finder.accessibility.subtitle"),
+          content: (
+            <FinderMultiselectQuestion
+              legend={t("finder.multiselectLegend")}
+              fieldGroupName="accessibility"
+              options={listingFeatures.map((feature) => ({
+                label: t(`eligibility.accessibility.${feature}`),
+                value: feature,
+              }))}
+            />
+          ),
+        },
+      ],
     },
     {
       sectionTitle: t("finder.buildingSectionTitle"),
-      sectionSteps: [{
-        question: t('finder.building.question'),
-        subtitle: t('finder.building.subtitle'),
-        content: (
-          <FinderMultiselectQuestion
-            legend={t('')}
-            fieldGroupName="communityType"
-            options={buildingTypes.map((type) => ({
-              label: t(`finder.building.${type}`),
-              value: type,
-            }))}
-          />
-        )
-      }]
+      sectionSteps: [
+        {
+          question: t("finder.building.question"),
+          subtitle: t("finder.building.subtitle"),
+          content: (
+            <FinderMultiselectQuestion
+              legend={t("")}
+              fieldGroupName="communityType"
+              options={buildingTypes.map((type) => ({
+                label: t(`finder.building.${type}`),
+                value: type,
+              }))}
+            />
+          ),
+        },
+      ],
     },
     {
-      sectionSteps: [{
-        question: t("finder.disclaimer.question"),
-        subtitle: t("finder.disclaimer.subtitle"),
-        content: <FinderDisclaimer />
-      }]
-    }
+      sectionSteps: [
+        {
+          question: t("finder.disclaimer.question"),
+          subtitle: t("finder.disclaimer.subtitle"),
+          content: <FinderDisclaimer />,
+        },
+      ],
+    },
   ]
 
-  const sectionLabels = rentalFinderSections.filter(
-    (section) => !!section.sectionTitle
-  ).map(
-    (section) => section.sectionTitle
-  )
+  const sectionLabels = rentalFinderSections
+    .filter((section) => !!section.sectionTitle)
+    .map((section) => section.sectionTitle)
 
   const activeQuestion = rentalFinderSections[sectionIndex]?.sectionSteps[stepIndex]
   const isLastSection = sectionIndex === rentalFinderSections.length - 1
@@ -178,14 +177,16 @@ export default function RentalsFinder() {
             removeSrHeader
             mounted={true}
           />
-          {sectionIndex <= sectionLabels.length - 1 && <StepHeader
-            currentStep={sectionIndex + 1}
-            totalSteps={sectionLabels.length}
-            stepPreposition={t("finder.progress.stepPreposition")}
-            stepLabeling={sectionLabels}
-            priority={2}
-            className={styles["step-header"]}
-          />}
+          {sectionIndex <= sectionLabels.length - 1 && (
+            <StepHeader
+              currentStep={sectionIndex + 1}
+              totalSteps={sectionLabels.length}
+              stepPreposition={t("finder.progress.stepPreposition")}
+              stepLabeling={sectionLabels}
+              priority={2}
+              className={styles["step-header"]}
+            />
+          )}
         </div>
         <BloomCard
           className={styles["questionnaire-card"]}
@@ -222,11 +223,13 @@ export default function RentalsFinder() {
                 )}
               </div>
             </CardSection>
-            <CardSection>
-              <div className={styles["footer"]}>
-                <Button variant="text">{t("finder.skip")}</Button>
-              </div>
-            </CardSection>
+            {sectionIndex <= sectionLabels.length - 1 && (
+              <CardSection>
+                <div className={styles["footer"]}>
+                  <Button variant="text">{t("finder.skip")}</Button>
+                </div>
+              </CardSection>
+            )}
           </>
         </BloomCard>
       </div>

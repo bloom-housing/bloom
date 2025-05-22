@@ -1,5 +1,5 @@
-import { AlertBox, t } from "@bloom-housing/ui-components";
-import styles from './FinderDisclaimer.module.scss'
+import { AlertBox, t } from "@bloom-housing/ui-components"
+import styles from "./FinderDisclaimer.module.scss"
 
 export default function FinderDisclaimer() {
   return (
@@ -7,9 +7,9 @@ export default function FinderDisclaimer() {
       <AlertBox type="notice" closeable>
         {t("finder.disclaimer.alert")}
       </AlertBox>
-      <ul className={styles['disclaimer-info-list']}>
+      <ul className={styles["disclaimer-info-list"]}>
         {[1, 2, 3, 4, 5].map((num) => (
-          <li key={`disclaimer_${num}`} className={styles['disclaimer-info-point']}>
+          <li key={`disclaimer_${num}`} className={styles["disclaimer-info-point"]}>
             {t(`finder.disclaimer.info${num}`)}
           </li>
         ))}
