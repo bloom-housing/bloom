@@ -3,12 +3,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import {
   LanguagesEnum,
   MultiselectQuestionsApplicationSectionEnum,
-  PrismaClient,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { Request as ExpressRequest } from 'express';
-import { mockDeep } from 'jest-mock-extended';
 import { User } from '../../../src/dtos/users/user.dto';
 import { AmiChartService } from '../../../src/services/ami-chart.service';
 import { EmailService } from '../../../src/services/email.service';
@@ -16,13 +14,13 @@ import { FeatureFlagService } from '../../../src/services/feature-flag.service';
 import { JurisdictionService } from '../../../src/services/jurisdiction.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { ScriptRunnerService } from '../../../src/services/script-runner.service';
-
-const externalPrismaClient = mockDeep<PrismaClient>();
+import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
 
 describe('Testing script runner service', () => {
   let service: ScriptRunnerService;
   let prisma: PrismaService;
   let emailService: EmailService;
+  let multiselectQuestionService: MultiselectQuestionService;
   let mockConsoleLog;
 
   beforeEach(() => {
@@ -44,60 +42,27 @@ describe('Testing script runner service', () => {
         FeatureFlagService,
         JurisdictionService,
         Logger,
+        {
+          provide: MultiselectQuestionService,
+          useValue: {
+            create: jest.fn().mockResolvedValue({
+              id: 'new id',
+            }),
+          },
+        },
       ],
     }).compile();
 
     service = module.get<ScriptRunnerService>(ScriptRunnerService);
     emailService = module.get<EmailService>(EmailService);
     prisma = module.get<PrismaService>(PrismaService);
+    multiselectQuestionService = module.get<MultiselectQuestionService>(
+      MultiselectQuestionService,
+    );
   });
 
   afterEach(() => {
     mockConsoleLog.mockRestore();
-  });
-
-  it('should transfer data', async () => {
-    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
-    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
-    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
-
-    const id = randomUUID();
-    const scriptName = 'data transfer';
-
-    const res = await service.dataTransfer(
-      {
-        user: {
-          id,
-        } as unknown as User,
-      } as unknown as ExpressRequest,
-      {
-        connectionString: process.env.TEST_CONNECTION_STRING,
-      },
-      externalPrismaClient,
-    );
-
-    expect(res.success).toBe(true);
-
-    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
-      where: {
-        scriptName,
-      },
-    });
-    expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
-      data: {
-        scriptName,
-        triggeringUser: id,
-      },
-    });
-    expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
-      data: {
-        didScriptRun: true,
-        triggeringUser: id,
-      },
-      where: {
-        scriptName,
-      },
-    });
   });
 
   it('should add lottery translations', async () => {
@@ -788,6 +753,83 @@ describe('Testing script runner service', () => {
     );
   });
 
+  it('should migrate preferences and programs to the multiselect question table', async () => {
+    const id = randomUUID();
+    const scriptName = 'migrate Detroit to multiselect questions';
+
+    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+    prisma.$queryRawUnsafe = jest.fn().mockResolvedValue([
+      {
+        id: 'example id',
+        title: 'example title',
+        subtitle: 'example subtitle',
+        description: 'example description',
+        links: [{ url: 'https://www.example.com', title: 'Link Title' }],
+        form_metadata: {
+          key: 'liveWork',
+          options: [
+            { key: 'live', extraData: [] },
+            { key: 'work', extraData: [] },
+          ],
+          hideFromListing: true,
+        },
+        name: 'example name',
+        listing_id: 'example listing_id',
+        ordinal: 1,
+      },
+    ]);
+    prisma.multiselectQuestions.create = jest.fn().mockResolvedValue({
+      id: 'new id',
+    });
+    prisma.listings.update = jest.fn().mockResolvedValue(null);
+
+    const res = await service.migrateDetroitToMultiselectQuestions({
+      user: {
+        id,
+      } as unknown as User,
+    } as unknown as ExpressRequest);
+
+    expect(res.success).toBe(true);
+
+    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
+      where: {
+        scriptName,
+      },
+    });
+    expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
+      data: {
+        scriptName,
+        triggeringUser: id,
+      },
+    });
+    expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
+      data: {
+        didScriptRun: true,
+        triggeringUser: id,
+      },
+      where: {
+        scriptName,
+      },
+    });
+    expect(prisma.$queryRawUnsafe).toHaveBeenCalledTimes(5);
+    expect(multiselectQuestionService.create).toHaveBeenCalledTimes(2);
+    expect(prisma.listings.update).toHaveBeenCalledWith({
+      data: {
+        listingMultiselectQuestions: {
+          create: {
+            ordinal: 1,
+            multiselectQuestionId: 'new id',
+          },
+        },
+      },
+      where: {
+        id: 'example listing_id',
+      },
+    });
+  }, 100000);
+
   // | ---------- HELPER TESTS BELOW ---------- | //
   it('should mark script run as started if no script run present in db', async () => {
     prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
@@ -883,6 +925,234 @@ describe('Testing script runner service', () => {
       where: {
         scriptName,
       },
+    });
+  });
+
+  describe('migrateDetroitToMultiselectQuestions helpers', () => {
+    const translations = {
+      generalCore: {
+        'application.type.core.translationKey': 'general core translation',
+        't.preferNotToSay': 'general core prefer not to say',
+      },
+      generalPartners: {
+        'application.type.partners.translationKey':
+          'general partners translation',
+      },
+      generalPublic: {
+        'application.type.public.translationKey': 'general public translation',
+      },
+      detroitCore: {
+        'application.type.core.translationKey': 'detroit core translation',
+      },
+      detroitPartners: {
+        'application.type.partners.translationKey':
+          'detroit partners translation',
+      },
+      detroitPublic: {
+        'application.type.public.translationKey': 'detroit public translation',
+        'application.preferences.liveWork.live.label': 'Live in city',
+        'application.preferences.liveWork.work.label': 'Work in city',
+        'application.preferences.PBV.residency.label': 'Residency',
+        'application.preferences.PBV.homeless.label': 'Homeless',
+        'application.preferences.PBV.homeless.description':
+          'Unhoused or in temporary housing',
+        'application.preferences.PBV.noneApplyButConsider.label':
+          'None Apply But Consider',
+        'application.preferences.PBV.doNotConsider.label': 'Do Not Consider',
+      },
+    };
+
+    describe('test resolvehideFromListing', () => {
+      it('should find hideFromListing in object and return true', () => {
+        const pref = { form_metadata: { hideFromListing: true } };
+
+        const res = service.resolveHideFromListings(pref);
+
+        expect(res).toBe(true);
+      });
+
+      it('should find hideFromListing in object and return false', () => {
+        const pref = { form_metadata: { hideFromListing: false } };
+
+        const res = service.resolveHideFromListings(pref);
+
+        expect(res).toBe(false);
+      });
+
+      it('should not find hideFromListing in object and return null', () => {
+        const pref1 = {};
+
+        const res1 = service.resolveHideFromListings(pref1);
+
+        expect(res1).toBeNull();
+
+        const pref2 = { form_metadata: {} };
+
+        const res2 = service.resolveHideFromListings(pref2);
+
+        expect(res2).toBeNull();
+      });
+    });
+
+    describe('test resolveOptionValues', () => {
+      it('should resolve simple option values', () => {
+        const formMetaData = {
+          key: 'liveWork',
+          options: [
+            { key: 'live', extraData: [] },
+            { key: 'work', extraData: [] },
+          ],
+        };
+
+        const res = service.resolveOptionValues(
+          formMetaData,
+          'preferences',
+          'Detroit',
+          translations,
+        );
+
+        expect(res).toStrictEqual({
+          optOutText: null,
+          options: [
+            { ordinal: 1, text: 'Live in city' },
+            { ordinal: 2, text: 'Work in city' },
+          ],
+        });
+      });
+
+      it('should resolve complex option values', () => {
+        const formMetaData = {
+          key: 'PBV',
+          options: [
+            {
+              key: 'residency',
+              extraData: [
+                { key: 'name', type: 'text' },
+                { key: 'address', type: 'address' },
+              ],
+            },
+            { key: 'homeless', extraData: [], description: true },
+            {
+              key: 'noneApplyButConsider',
+              exclusive: true,
+              extraData: [],
+            },
+            {
+              key: 'doNotConsider',
+              exclusive: true,
+              extraData: [],
+              description: false,
+            },
+          ],
+          hideGenericDecline: true,
+        };
+
+        const res = service.resolveOptionValues(
+          formMetaData,
+          'preferences',
+          'Detroit',
+          translations,
+        );
+
+        expect(res).toStrictEqual({
+          optOutText: 'Do Not Consider',
+          options: [
+            { ordinal: 1, text: 'Residency', collectAddress: true },
+            {
+              ordinal: 2,
+              text: 'Homeless',
+              description: 'Unhoused or in temporary housing',
+            },
+            { ordinal: 3, text: 'None Apply But Consider', exclusive: true },
+          ],
+        });
+      });
+    });
+
+    describe('test getTranslated', () => {
+      it('should return no translation when no searchkey is matched', () => {
+        const res = service.getTranslated('', '', '', '', translations);
+
+        expect(res).toBe('no translation');
+      });
+
+      it('should return preferNotToSay when translationKey is preferNotToSay', () => {
+        const res = service.getTranslated(
+          '',
+          '',
+          'preferNotToSay',
+          '',
+          translations,
+        );
+
+        expect(res).toBe('general core prefer not to say');
+      });
+
+      it('should return jurisdiction specific translation if found', () => {
+        const res = service.getTranslated(
+          'type',
+          'core',
+          'translationKey',
+          'Detroit',
+          translations,
+        );
+
+        expect(res).toBe('detroit core translation');
+      });
+
+      it('should return generic translation if jurisdiction not found', () => {
+        const res = service.getTranslated(
+          'type',
+          'core',
+          'translationKey',
+          'juris',
+          translations,
+        );
+
+        expect(res).toBe('general core translation');
+      });
+
+      it('should return translation based on full searchkey', () => {
+        const generalPartnersRes = service.getTranslated(
+          'type',
+          'partners',
+          'translationKey',
+          '',
+          translations,
+        );
+
+        expect(generalPartnersRes).toBe('general partners translation');
+
+        const generalPublicRes = service.getTranslated(
+          'type',
+          'public',
+          'translationKey',
+          '',
+          translations,
+        );
+
+        expect(generalPublicRes).toBe('general public translation');
+
+        const detroitPartnersRes = service.getTranslated(
+          'type',
+          'partners',
+          'translationKey',
+          'Detroit',
+          translations,
+        );
+
+        expect(detroitPartnersRes).toBe('detroit partners translation');
+
+        const detroitPublicRes = service.getTranslated(
+          'type',
+          'public',
+          'translationKey',
+          'Detroit',
+          translations,
+        );
+
+        expect(detroitPublicRes).toBe('detroit public translation');
+      });
     });
   });
 });
